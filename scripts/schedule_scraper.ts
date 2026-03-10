@@ -610,6 +610,8 @@ async function main(): Promise<void> {
 
   await Promise.all(tasks);
 
+  results.sort((a, b) => a.courseCode.localeCompare(b.courseCode));
+
   const output = {
     termId: DEFAULT_TERM_ID,
     generatedAt: new Date().toISOString(),
