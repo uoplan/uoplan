@@ -1,0 +1,79 @@
+name: Daily catalogue and schedule scrape
+
+on:
+  schedule:
+    # 05:00 UTC ≈ midnight America/Toronto (standard) / 1am (DST)
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  daily-scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Backup existing JSON data
+        run: |
+          cp public/data/catalogue.json /tmp/catalogue_old.json
+          cp public/data/schedules.json /tmp/schedules_old.json
+
+      - name: Clear scraper caches (no cache mode)
+        run: rm -rf .cache
+
+      - name: Run catalogue scraper
+        run: pnpm run scrape:catalogue
+
+      - name: Run schedule scraper
+        run: pnpm run scrape:schedules
+
+      - name: Show JSON diffs (catalogue and schedules)
+        run: |
+          echo "::group::Diff catalogue.json"
+          diff -u /tmp/catalogue_old.json public/data/catalogue.json || true
+          echo "::endgroup::"
+          echo "::group::Diff schedules.json"
+          diff -u /tmp/schedules_old.json public/data/schedules.json || true
+          echo "::endgroup::"
+
+      - name: Check for data changes
+        id: check_changes
+        run: |
+          if git diff --quiet -- public/data/catalogue.json public/data/schedules.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push updated data
+        if: steps.check_changes.outputs.changed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/catalogue.json public/data/schedules.json
+          git commit -m "chore: update catalogue and schedules (daily scrape)"
+          git push origin HEAD:main
+
