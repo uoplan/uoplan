@@ -581,12 +581,13 @@ export const useAppStore = create<AppStore>((set, get) => ({
     };
     const remainingNeeded = effectiveTarget - pinned.length;
     let filteredOptionalPool: string[] = [];
+    let finalSchedules: GeneratedSchedule[] = [];
 
     if (remainingNeeded > 0) {
       const allPools = buildRequirementPools(remainingRequirements);
 
       // Adjust pool credits to account for pinned courses that already satisfy them.
-      const pools: RequirementPool[] = allPools
+      let pools: RequirementPool[] = allPools
         .map((pool) => {
           let pinnedCredits = 0;
           for (const code of pinned) {
@@ -599,6 +600,18 @@ export const useAppStore = create<AppStore>((set, get) => ({
         })
         .filter((pool) => pool.creditsNeeded > 0);
 
+      // Exclude course/or_course pools that have no schedulable non-honours candidate
+      // (e.g. CSI 4900). Those requirements are satisfied via honoursSelected and
+      // must not consume a slot in the schedule.
+      pools = pools.filter((pool) => {
+        if (pool.type !== 'course' && pool.type !== 'or_course') return true;
+        const hasSchedulableNonHonours = pool.candidateCourses.some((code) => {
+          if (isHonoursProject(code)) return false;
+          return !!cacheVal.getSchedule(code);
+        });
+        return hasSchedulableNonHonours;
+      });
+
       const coursesPerPool = computeCoursesPerPool(pools, remainingNeeded, cacheVal);
 
       const candidatesByRequirement = new Map<string, string[]>();
@@ -608,18 +621,10 @@ export const useAppStore = create<AppStore>((set, get) => ({
           if (
             !cacheVal.getSchedule(code) ||
             pinned.includes(code) ||
+            completedCourses.includes(code) ||
             !prereqEligibleSet.has(code) ||
             !courseMatchesFilters(code, filters)
           ) {
-            if (pool.type === 'discipline_elective') {
-              console.log('skipping course', code);
-            console.log({
-              cacheVal: !cacheVal.getSchedule(code),
-              pinned: pinned.includes(code),
-              prereqEligible: !prereqEligibleSet.has(code),
-              courseMatchesFilters: !courseMatchesFilters(code, filters),
-            })
-            }
             continue;
           }
           // For elective-style pools, also respect elective level buckets from the
@@ -651,30 +656,62 @@ export const useAppStore = create<AppStore>((set, get) => ({
           candidates.push(code);
         }
         if (candidates.length > 0) {
-          shuffleInPlace(candidates);
           candidatesByRequirement.set(pool.requirementId, candidates);
         }
       }
 
-      const chosenCodes = new Set<string>();
+      const maxAttempts = 20;
+      let lastChosenCodes: string[] = [];
+      let lastFilteredPool: string[] = [];
+      let schedules: ReturnType<typeof genSchedules> = [];
 
-      for (const pool of pools) {
-        let need = coursesPerPool.get(pool.requirementId) ?? 0;
-        if (need <= 0) continue;
-        const candidates = candidatesByRequirement.get(pool.requirementId) ?? [];
-        if (candidates.length === 0) continue;
-
-        for (const code of candidates) {
-          if (chosenCodes.size >= remainingNeeded) break;
-          if (chosenCodes.has(code)) continue;
-          if (pinned.includes(code)) continue;
-          chosenCodes.add(code);
-          need -= 1;
-          if (need <= 0) break;
+      for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+        // Shuffle each pool's candidates so we try different course combinations.
+        for (const list of candidatesByRequirement.values()) {
+          shuffleInPlace(list);
         }
+
+        const chosenCodes = new Set<string>();
+        for (const pool of pools) {
+          let need = coursesPerPool.get(pool.requirementId) ?? 0;
+          if (need <= 0) continue;
+          const candidates = candidatesByRequirement.get(pool.requirementId) ?? [];
+          if (candidates.length === 0) continue;
+
+          for (const code of candidates) {
+            if (chosenCodes.size >= remainingNeeded) break;
+            if (chosenCodes.has(code)) continue;
+            if (pinned.includes(code)) continue;
+            if (isHonoursProject(code)) continue;
+            chosenCodes.add(code);
+            need -= 1;
+            if (need <= 0) break;
+          }
+        }
+
+        const optionalPool = Array.from(chosenCodes)
+          .filter((code) => !isHonoursProject(code))
+          .filter((code) => !pinned.includes(code));
+
+        if (optionalPool.length + pinned.length < effectiveTarget) {
+          break;
+        }
+
+        lastChosenCodes = Array.from(chosenCodes);
+        lastFilteredPool = optionalPool;
+        shuffleInPlace(lastFilteredPool);
+
+        schedules =
+          pinned.length === 0
+            ? genSchedules(lastFilteredPool, effectiveTarget, cacheVal)
+            : generateSchedulesWithPinned(pinned, lastFilteredPool, effectiveTarget, cacheVal);
+
+        if (schedules.length > 0) break;
       }
 
-      // Debug logging for pool-based selection before we flatten to a single list.
+      finalSchedules = schedules;
+
+      // Debug logging (first attempt's chosen set or last if all failed).
       // eslint-disable-next-line no-console
       console.log('generateSchedules pools snapshot', {
         remainingNeeded,
@@ -694,28 +731,25 @@ export const useAppStore = create<AppStore>((set, get) => ({
             sampleCandidates: poolCandidates.slice(0, 15),
           };
         }),
-        candidatesByRequirement,
-        chosenCodes: Array.from(chosenCodes),
+        chosenCodes: lastChosenCodes,
         pinned,
         levelBuckets,
         languageBuckets,
         electiveLevelBuckets,
       });
 
-      filteredOptionalPool = Array.from(chosenCodes)
-        .filter((code) => !isHonoursProject(code))
-        .filter((code) => !pinned.includes(code));
+      filteredOptionalPool = lastFilteredPool;
     }
 
     if (remainingNeeded <= 0) {
       filteredOptionalPool = [];
+      finalSchedules =
+        pinned.length === 0
+          ? genSchedules([], effectiveTarget, cacheVal)
+          : generateSchedulesWithPinned(pinned, [], effectiveTarget, cacheVal);
     }
 
-    shuffleInPlace(filteredOptionalPool);
-
-    // If we cannot even assemble enough eligible courses to hit the target
-    // count (including pinned), surface a clear error instead of silently
-    // generating partial schedules.
+    // If we could not assemble enough eligible courses to hit the target, surface error.
     if (filteredOptionalPool.length + pinned.length < effectiveTarget) {
       const swapPool = [...new Set([...pinned, ...filteredOptionalPool])];
       set({
@@ -729,34 +763,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
     }
 
     const swapPool = [...new Set([...pinned, ...filteredOptionalPool])];
-
-    // Debugging: inspect schedule generation inputs
-    // eslint-disable-next-line no-console
-    console.log('generateSchedules input', {
-      selectedPerRequirement,
-      uniqueSelected: unique,
-      pinned,
-      honoursSelected,
-      remainingRequirements,
-      remainingNeeded,
-      candidateCount: filteredOptionalPool.length,
-       requirementMeta: remainingRequirements.map((r) => ({
-         requirementId: r.requirementId,
-         type: r.type,
-         title: r.title,
-         creditsNeeded: r.creditsNeeded,
-         candidateCount: r.candidateCourses.length,
-       })),
-      coursesThisSemester,
-      effectiveTarget,
-    });
-
-    const schedules =
-      pinned.length === 0
-        ? genSchedules(filteredOptionalPool, effectiveTarget, cacheVal)
-        : generateSchedulesWithPinned(pinned, filteredOptionalPool, effectiveTarget, cacheVal);
-
-    const limitedSchedules = schedules.slice(0, 10);
+    const limitedSchedules = finalSchedules.slice(0, 10);
 
     set({
       generatedSchedules: limitedSchedules,
