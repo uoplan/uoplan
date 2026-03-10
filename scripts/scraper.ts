@@ -840,6 +840,9 @@ async function main() {
 
   await Promise.all([...coursePromises, ...programPromises]);
 
+  allCourses.sort((a, b) => a.code.localeCompare(b.code));
+  allPrograms.sort((a, b) => a.url.localeCompare(b.url));
+
   const catalogue = CatalogueSchema.parse({
     courses: allCourses,
     programs: allPrograms.map(p => ({
