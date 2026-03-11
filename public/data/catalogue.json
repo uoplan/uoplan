@@ -84468,33 +84468,30 @@
         "text": "GNG 1106 or ITI 1120 for students enrolled in computer engineering (CEG) or computer science (CSI) or computing technology (CTI) programs or ITI 1120 for all other students",
         "children": [
           {
-            "type": "course",
-            "code": "GNG 1106",
-            "text": "GNG 1106"
-          },
-          {
-            "type": "course",
-            "code": "ITI 1120",
-            "text": "ITI 1120 for students enrolled in computer engineering (CEG)"
-          },
-          {
-            "type": "non_course",
-            "text": "computer science (CSI)",
-            "disciplines": [
-              "CSI"
-            ]
-          },
-          {
-            "type": "non_course",
-            "text": "computing technology (CTI) programs",
-            "disciplines": [
+            "type": "or_group",
+            "text": "GNG 1106 or ITI 1120",
+            "programs": [
+              "CEG",
+              "CSI",
               "CTI"
+            ],
+            "children": [
+              {
+                "type": "course",
+                "code": "GNG 1106",
+                "text": "GNG 1106"
+              },
+              {
+                "type": "course",
+                "code": "ITI 1120",
+                "text": "ITI 1120"
+              }
             ]
           },
           {
             "type": "course",
             "code": "ITI 1120",
-            "text": "ITI 1120 for all other students"
+            "text": "ITI 1120"
           }
         ]
       }
