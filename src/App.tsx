@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Box, Stack, Title, Alert, Loader, Text, Paper, Group, Button, Select, TextInput, Modal, Textarea, Badge } from '@mantine/core';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconArrowBackUp, IconArrowLeft, IconCheck, IconHelp, IconMenu2, IconRefresh, IconShare, IconX } from '@tabler/icons-react';
+import { IconArrowBackUp, IconCheck, IconHelp, IconMenu2, IconRefresh, IconShare, IconX } from '@tabler/icons-react';
 import 'driver.js/dist/driver.css';
 import { runTour } from './tour';
 import { useAppStore } from './store/appStore';
@@ -692,13 +692,17 @@ function App() {
               size="md"
               radius={0}
               style={{ flex: 1, border: 'none', height: 56 }}
-              leftSection={<IconArrowLeft size={22} />}
+              leftSection={<IconRefresh size={22} />}
+              loading={generatingOneMore}
+              disabled={generatingOneMore}
               onClick={() => {
-                setShowCalendar(false);
-                setActive(generateStepIndex);
+                setGeneratingOneMore(true);
+                generateSchedules({ appendFirstOnly: true }).then(() => {
+                  setGeneratingOneMore(false);
+                });
               }}
             >
-              Back
+              Try another
             </Button>
           </Box>
         )}
