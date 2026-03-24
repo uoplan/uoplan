@@ -108,6 +108,71 @@ function getAutoSelectedForRequirements(
   return out;
 }
 
+const TYPE_PRIORITY: Record<string, number> = {
+  course: 0,
+  discipline_elective: 1,
+  faculty_elective: 2,
+  non_discipline_elective: 3,
+  free_elective: 4,
+  elective: 4,
+};
+
+const NEVER_AUTO_ASSIGN_TYPES = new Set([
+  'or_group',
+  'or_course',
+  'pick',
+  'options_group',
+  'group',
+]);
+
+function getAutoSelectedSingleEligibleCompleted(
+  augmentedRemaining: RemainingRequirement[],
+  unassignedCompleted: string[],
+  cache: DataCache,
+  alreadySelected: Record<string, string[]>,
+): Record<string, string[]> {
+  // Track courses that appear in any never-auto-assign requirement; these are
+  // fully ineligible for auto-assignment regardless of other matches.
+  const blockedCourses = new Set<string>();
+  const courseToReqs = new Map<
+    string,
+    Array<{ reqId: string; priority: number }>
+  >();
+  for (const req of augmentedRemaining) {
+    if (NEVER_AUTO_ASSIGN_TYPES.has(req.type)) {
+      for (const candidate of req.candidateCourses) {
+        blockedCourses.add(normalizeCourseCode(candidate));
+      }
+      continue;
+    }
+    const priority = TYPE_PRIORITY[req.type];
+    if (priority === undefined) continue;
+    for (const candidate of req.candidateCourses) {
+      const norm = normalizeCourseCode(candidate);
+      const list = courseToReqs.get(norm) ?? [];
+      list.push({ reqId: req.requirementId, priority });
+      courseToReqs.set(norm, list);
+    }
+  }
+
+  const out: Record<string, string[]> = {};
+  for (const norm of unassignedCompleted) {
+    if (blockedCourses.has(norm)) continue;
+    const reqs = courseToReqs.get(norm);
+    if (!reqs?.length) continue;
+    const minPriority = Math.min(...reqs.map((r) => r.priority));
+    const best = reqs.filter((r) => r.priority === minPriority);
+    if (best.length !== 1) continue; // tie — ambiguous
+    const { reqId } = best[0];
+    const courseCode = cache.getCourse(norm)?.code ?? norm;
+    const existingForReq = alreadySelected[reqId] ?? out[reqId] ?? [];
+    if (!existingForReq.includes(courseCode)) {
+      out[reqId] = [...existingForReq, courseCode];
+    }
+  }
+  return out;
+}
+
 /** Extract unique discipline codes (e.g. "CSI", "CEG") from all `type === 'course'` entries in a program's requirements. */
 export function getDisciplineCodesForProgram(
   program: Program | null,
@@ -232,16 +297,37 @@ export function recomputeStateForProgram(
     courseMatchesFilters(code, filters),
   );
 
-  const unassignedCompletedCourses = unassignedCompleted.map(
-    (norm) => cache.getCourse(norm)?.code ?? norm,
+  // Auto-assign completed courses that are eligible for exactly one remaining requirement.
+  const autoSelectedCompleted = getAutoSelectedSingleEligibleCompleted(
+    augmentedRemaining,
+    unassignedCompleted,
+    cache,
+    { ...existingSelectedPerRequirement, ...autoSelected },
   );
 
   // Preserve nested selections (e.g. or_group option req-2-0) that are not in remaining;
-  // merge with autoSelected.
+  // merge with all auto-selections.
   const selectedPerRequirement = {
     ...existingSelectedPerRequirement,
     ...autoSelected,
+    ...autoSelectedCompleted,
   };
+
+  // Recompute unassigned using the final merged selections so the warning is immediately accurate.
+  const finalAssignedFromSelected = new Set<string>();
+  for (const codes of Object.values(selectedPerRequirement)) {
+    for (const code of codes) {
+      finalAssignedFromSelected.add(normalizeCourseCode(code));
+    }
+  }
+  const finalUnassignedCompletedCourses = [...completedNormalized]
+    .filter(
+      (norm) =>
+        !assignedFromExact.has(norm) &&
+        !finalAssignedFromSelected.has(norm) &&
+        !isWorkTerm(norm),
+    )
+    .map((norm) => cache.getCourse(norm)?.code ?? norm);
 
   return {
     remainingRequirements: augmentedRemaining,
@@ -251,6 +337,6 @@ export function recomputeStateForProgram(
     selectedOptionsPerRequirement: existingSelectedOptionsPerRequirement,
     prereqEligibleCourses,
     filteredPrereqEligibleCourses,
-    unassignedCompletedCourses,
+    unassignedCompletedCourses: finalUnassignedCompletedCourses,
   };
 }
