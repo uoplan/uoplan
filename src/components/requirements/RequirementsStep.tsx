@@ -13,13 +13,13 @@ import {
   Button,
 } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
-import type { DataCache } from "../lib/dataCache";
-import { normalizeCourseCode } from "../lib/dataCache";
+import type { DataCache } from "../../lib/dataCache";
+import { normalizeCourseCode } from "../../lib/dataCache";
 import type {
   RemainingRequirement,
   RequirementWithStatus,
   CompletedRequirementItem,
-} from "../lib/requirements";
+} from "../../lib/requirements";
 import {
   RequirementNode,
   ExpandRegistryContext,
