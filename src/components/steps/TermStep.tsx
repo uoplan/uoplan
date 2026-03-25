@@ -1,5 +1,5 @@
 import { Select, Stack, Text } from '@mantine/core';
-import type { Term } from '../schemas/terms';
+import type { Term } from '../../schemas/terms';
 
 interface TermStepProps {
   terms: Term[];
