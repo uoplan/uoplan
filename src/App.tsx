@@ -17,16 +17,18 @@ import { IconHelp, IconRefresh, IconShare } from "@tabler/icons-react";
 import { runTour } from "./tour";
 import { useAppStore } from "./store/appStore";
 import { useShallow } from "zustand/react/shallow";
-import { STEPS, StepNav } from "./components/StepNav";
-import { ResetModal } from "./components/ResetModal";
-import { CalendarPage } from "./components/CalendarPage";
-import { TermStep } from "./components/TermStep";
-import { ProgramStep } from "./components/ProgramStep";
-import { CompletedCoursesStep } from "./components/CompletedCoursesStep";
-import { RequirementsStep } from "./components/RequirementsStep";
-import { ScheduleCountStep } from "./components/ScheduleCountStep";
+import { STEPS, StepNav } from "./components/shared/StepNav";
+import { ResetModal } from "./components/shared/ResetModal";
+import { CalendarPage } from "./components/calendar/CalendarPage";
+import { TermStep } from "./components/steps/TermStep";
+import { ProgramStep } from "./components/steps/ProgramStep";
+import { CompletedCoursesStep } from "./components/steps/CompletedCoursesStep";
+import { RequirementsStep } from "./components/requirements/RequirementsStep";
+import { ScheduleCountStep } from "./components/steps/ScheduleCountStep";
 import { usePersistState } from "./hooks/usePersistState";
 import { useNavHistory } from "./hooks/useNavHistory";
+import { useTour } from "./hooks/useTour";
+import { useShareUrl } from "./hooks/useShareUrl";
 
 function App() {
   const {
@@ -119,22 +121,19 @@ function App() {
   const { active, setActive, showCalendar, setShowCalendar, resetNav } =
     useNavHistory();
   const [generating, setGenerating] = useState(false);
-  const [shareCopied, setShareCopied] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  // Use extracted hooks
+  const { shareCopied, handleCopyShare } = useShareUrl(getShareUrl);
+  useTour(!loading && !!indices, setActive);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
 
   usePersistState(!!indices);
-
-  useEffect(() => {
-    if (loading || !indices || localStorage.getItem("uoplan-tour-done")) return;
-    const t = setTimeout(() => runTour(setActive), 400);
-    return () => clearTimeout(t);
-  }, [loading, indices]);
 
   const programs = catalogue?.programs ?? [];
   const hasTerms = (terms?.length ?? 0) > 0;
@@ -342,14 +341,7 @@ function App() {
                         color="gray"
                         size="xs"
                         leftSection={<IconShare size={14} />}
-                        onClick={() => {
-                          const url = getShareUrl();
-                          if (url && navigator.clipboard?.writeText) {
-                            navigator.clipboard.writeText(url);
-                            setShareCopied(true);
-                            setTimeout(() => setShareCopied(false), 2000);
-                          }
-                        }}
+                        onClick={handleCopyShare}
                       >
                         {shareCopied ? "Link copied" : "Share"}
                       </Button>

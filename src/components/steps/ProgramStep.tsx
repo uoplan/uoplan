@@ -1,13 +1,13 @@
 import { useState, useRef, useMemo } from 'react';
 import { Select, MultiSelect, Stack, Text, Button, Alert, Loader } from '@mantine/core';
-import type { Program } from '../schemas/catalogue';
-import { useAppStore } from '../store/appStore';
+import type { Program } from '../../schemas/catalogue';
+import { useAppStore } from '../../store/appStore';
 import { useShallow } from 'zustand/react/shallow';
 import {
   parseTranscriptPdf,
   findBestMatchingProgram,
-} from '../lib/transcriptParser';
-import { normalizeCourseCode } from '../lib/dataCache';
+} from '../../lib/transcriptParser';
+import { normalizeCourseCode } from '../../lib/dataCache';
 
 interface ProgramStepProps {
   programs: Program[];
