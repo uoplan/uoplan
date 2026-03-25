@@ -1,6 +1,6 @@
 import { Paper, Menu, Text } from '@mantine/core';
-import type { CourseEnrollment } from '../lib/scheduleGenerator';
-import type { DataCache } from '../lib/dataCache';
+import type { CourseEnrollment } from '../../lib/scheduleGenerator';
+import type { DataCache } from '../../lib/dataCache';
 
 const COLORS = [
   'violet',

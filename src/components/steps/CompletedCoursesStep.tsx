@@ -1,8 +1,8 @@
 import { MultiSelect, Text, Stack } from '@mantine/core';
 import type { ComboboxItem } from '@mantine/core';
-import { createCourseOptions, renderCourseOption } from './CourseSelect';
-import type { DataCache } from '../lib/dataCache';
-import type { RemainingRequirement } from '../lib/requirements';
+import { createCourseOptions, renderCourseOption } from '../shared/CourseSelect';
+import type { DataCache } from '../../lib/dataCache';
+import type { RemainingRequirement } from '../../lib/requirements';
 
 interface CompletedCoursesStepProps {
   cache: DataCache | null;

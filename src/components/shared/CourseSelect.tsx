@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Select } from '@mantine/core';
 import type { ComboboxItem } from '@mantine/core';
-import type { DataCache } from '../lib/dataCache';
+import type { DataCache } from '../../lib/dataCache';
 
 interface CourseSelectProps {
   label?: string;
