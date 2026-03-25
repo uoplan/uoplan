@@ -1,7 +1,7 @@
 import { Paper, Stack, SimpleGrid } from '@mantine/core';
 import { CourseBlock } from './CourseBlock';
-import type { GeneratedSchedule } from '../lib/scheduleGenerator';
-import type { DataCache } from '../lib/dataCache';
+import type { GeneratedSchedule } from '../../lib/scheduleGenerator';
+import type { DataCache } from '../../lib/dataCache';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 const DAY_KEYS = ['Mo', 'Tu', 'We', 'Th', 'Fr'] as const;

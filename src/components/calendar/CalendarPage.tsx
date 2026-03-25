@@ -21,11 +21,12 @@ import {
   IconShare,
   IconX,
 } from "@tabler/icons-react";
-import { useAppStore } from "../store/appStore";
+import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { CalendarView } from "./CalendarView";
-import { ResetModal } from "./ResetModal";
-import { buildScheduleIcs, downloadTextFile } from "../lib/ics";
+import { ResetModal } from "../shared/ResetModal";
+import { buildScheduleIcs, downloadTextFile } from "../../lib/ics";
+import { useShareUrl } from "../../hooks/useShareUrl";
 
 interface CalendarPageProps {
   onBack: () => void;
@@ -64,12 +65,13 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
   const resetToDefault = useAppStore((s) => s.resetToDefault);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [shareCopied, setShareCopied] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [generatingOneMore, setGeneratingOneMore] = useState(false);
   const [timetableStartDate, setTimetableStartDate] = useState("");
   const [timetableEndDate, setTimetableEndDate] = useState("");
+
+  const { shareCopied, handleCopyShare } = useShareUrl(getShareUrl);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -135,15 +137,6 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
     const idx = (selectedScheduleIndex ?? 0) + 1;
     const filename = `uoplan-schedule-${idx}-${timetableStartDate}-to-${timetableEndDate}.ics`;
     downloadTextFile(filename, ics, "text/calendar;charset=utf-8");
-  };
-
-  const handleCopyShareLink = () => {
-    const url = getShareUrl();
-    if (url && navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(url);
-      setShareCopied(true);
-      setTimeout(() => setShareCopied(false), 2000);
-    }
   };
 
   return (
@@ -400,7 +393,7 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
               minRows={3}
               size="sm"
             />
-            <Button variant="filled" onClick={handleCopyShareLink}>
+            <Button variant="filled" onClick={handleCopyShare}>
               {shareCopied ? "Copied to clipboard" : "Copy shareable link"}
             </Button>
           </Stack>

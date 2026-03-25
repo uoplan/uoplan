@@ -1,12 +1,9 @@
 import type { Course, Catalogue } from '../schemas/catalogue';
 import type { CourseSchedule, SchedulesData } from '../schemas/schedules';
+import { normalizeCourseCode, isWorkTermCourse } from './utils/courseUtils';
 
-/** Normalize course code for consistent lookup (e.g. "AMM 5101" and "AMM5101" -> same key) */
-export function normalizeCourseCode(code: string): string {
-  const match = code.match(/^([A-Z]{3,4})\s*(\d{4,5}[A-Z]?)$/i);
-  if (!match) return code.trim();
-  return `${match[1].toUpperCase()} ${match[2]}`;
-}
+// Re-export for backwards compatibility
+export { normalizeCourseCode } from './utils/courseUtils';
 
 export interface DataCache {
   getCourse(code: string): Course | undefined;
@@ -16,10 +13,8 @@ export interface DataCache {
   getAllSchedules(): CourseSchedule[];
 }
 
-function isStageWorkTermCourse(course: Course): boolean {
-  const component = course.component?.trim().toLowerCase() ?? '';
-  return component.startsWith('stage / work term');
-}
+// Use the centralized utility
+const isStageWorkTermCourse = isWorkTermCourse;
 
 export function buildDataCache(catalogue: Catalogue, schedulesData: SchedulesData): DataCache {
   const courseMap = new Map<string, Course>();

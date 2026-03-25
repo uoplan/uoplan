@@ -19,13 +19,13 @@ import {
   Radio,
 } from "@mantine/core";
 import { IconCheck, IconChevronDown, IconX } from "@tabler/icons-react";
-import { createCourseOptions } from "./CourseSelect";
+import { createCourseOptions } from "../shared/CourseSelect";
 import type { ComboboxItem } from "@mantine/core";
-import type { DataCache } from "../lib/dataCache";
-import { normalizeCourseCode } from "../lib/dataCache";
-import { courseMatchesFilters } from "../lib/courseFilters";
-import { getEffectiveSchedule } from "../lib/scheduleFilters";
-import type { RequirementWithStatus } from "../lib/requirements";
+import type { DataCache } from "../../lib/dataCache";
+import { normalizeCourseCode } from "../../lib/dataCache";
+import { courseMatchesFilters } from "../../lib/courseFilters";
+import { getEffectiveSchedule } from "../../lib/scheduleFilters";
+import type { RequirementWithStatus } from "../../lib/requirements";
 
 export const REQUIREMENT_INDENT_PX = 12;
 export const REQUIREMENT_BASE_PADDING_PX = 10;

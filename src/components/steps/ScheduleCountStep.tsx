@@ -1,5 +1,5 @@
 import { Stack, NumberInput, Button, Alert, Group, MultiSelect, TextInput, Select, Checkbox, List, Text } from '@mantine/core';
-import type { DayOfWeek } from '../schemas/schedules';
+import type { DayOfWeek } from '../../schemas/schedules';
 
 const DAY_OPTIONS: { value: DayOfWeek; label: string }[] = [
   { value: 'Mo', label: 'Monday' },
