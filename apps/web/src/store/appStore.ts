@@ -59,7 +59,6 @@ export const useAppStore = create<AppStore>()((...a) => {
     schedulePoolMaps: [],
     selectedScheduleIndex: 0,
     generationError: null,
-    generationErrorDetails: null,
     unassignedCompletedCourses: [],
     swapHistory: [],
     generationMinStartMinutes: 8 * 60 + 30, // 8:30
@@ -116,7 +115,6 @@ export const useAppStore = create<AppStore>()((...a) => {
         schedulePoolMaps: [],
         selectedScheduleIndex: 0,
         generationError: null,
-        generationErrorDetails: null,
         unassignedCompletedCourses: [],
         swapHistory: [],
         generationSeed: generateRandomSeed(),

@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Group,
-  List,
   Select,
   Stack,
   Text,
@@ -25,6 +24,7 @@ import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { CalendarView } from "./CalendarView";
 import { ResetModal } from "../shared/ResetModal";
+import { GenerationErrorDetailBlocks } from "../GenerationErrorDetailBlocks";
 import { buildScheduleIcs, downloadTextFile } from "schedule";
 import { useShareUrl } from "../../hooks/useShareUrl";
 
@@ -39,7 +39,6 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
     swapHistory,
     indices,
     generationError,
-    generationErrorDetails,
     cache,
     professorRatings,
   } = useAppStore(
@@ -49,7 +48,6 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
       swapHistory: s.swapHistory,
       indices: s.indices,
       generationError: s.generationError,
-      generationErrorDetails: s.generationErrorDetails,
       cache: s.cache,
       professorRatings: s.professorRatings,
     })),
@@ -120,7 +118,7 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
     !Number.isNaN(Date.parse(`${timetableEndDate}T00:00:00Z`));
   const dateRangeOk = startOk && endOk && timetableStartDate <= timetableEndDate;
 
-  const genErrDetails = generationErrorDetails;
+  const genErrDetails = generationError?.details ?? null;
   const summarizeEmptyPoolsInGenError =
     genErrDetails &&
     genErrDetails.emptyPools.length > 4 &&
@@ -300,51 +298,17 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
         </Button>
 
         {generationError && (
-          <Alert color="red" variant="light" radius={0} py="xs">
-            <Stack gap="xs">
-              <Text size="sm">{generationError}</Text>
-              {genErrDetails &&
-                genErrDetails.totalAvailable < genErrDetails.totalNeeded && (
-                  <Text size="sm" fw={500}>
-                    Only {genErrDetails.totalAvailable} course
-                    {genErrDetails.totalAvailable !== 1 ? "s" : ""} can be
-                    scheduled with your current filters this term. Try reducing
-                    &quot;How many courses this semester&quot; to{" "}
-                    {genErrDetails.totalAvailable} or relax time, day, level,
-                    or prerequisite constraints.
-                  </Text>
-                )}
-              {genErrDetails &&
-                genErrDetails.emptyPools.length > 0 &&
-                summarizeEmptyPoolsInGenError && (
-                  <Text size="sm" c="dimmed">
-                    {genErrDetails.emptyPools.length} other requirements have no
-                    eligible courses this term (missing schedule, prerequisites,
-                    or level filters). That is common for future-term courses with
-                    no timetable yet; it is not the main limit on how many
-                    courses you can take now.
-                  </Text>
-                )}
-              {genErrDetails &&
-                genErrDetails.emptyPools.length > 0 &&
-                !summarizeEmptyPoolsInGenError && (
-                  <>
-                    <Text size="sm" fw={500}>
-                      Requirements with no eligible courses this term:
-                    </Text>
-                    <List size="sm" spacing={2}>
-                      {genErrDetails.emptyPools.map((p) => (
-                        <List.Item key={p.requirementId ?? p.label}>
-                          {p.requirementId &&
-                          (p.label === "course" || p.label === "or_course")
-                            ? p.requirementId
-                            : `${p.label}${p.requirementId ? ` (${p.requirementId})` : ""}`}
-                        </List.Item>
-                      ))}
-                    </List>
-                  </>
-                )}
-            </Stack>
+          <Alert
+            color="red"
+            variant="light"
+            radius={0}
+            py="xs"
+            title={generationError.message}
+          >
+            <GenerationErrorDetailBlocks
+              errorDetails={genErrDetails}
+              summarizeEmptyPools={!!summarizeEmptyPoolsInGenError}
+            />
           </Alert>
         )}
 

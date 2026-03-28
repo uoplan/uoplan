@@ -8,6 +8,20 @@ import type { Indices } from 'schemas'
 import type { Term } from 'schemas'
 import type { ProfessorRatingsMap } from "schedule";
 import type { DecodedState } from "schedule";
+import type { TimetableFailureDiagnostics } from "schedule";
+
+export interface GenerationErrorDetails {
+  emptyPools: Array<{ label: string; requirementId?: string }>;
+  totalAvailable: number;
+  totalNeeded: number;
+  timetableFailure?: TimetableFailureDiagnostics;
+}
+
+/** Primary message plus optional structured context for the expandable Details panel. */
+export type GenerationErrorState = {
+  message: string;
+  details: GenerationErrorDetails | null;
+};
 
 export interface AppState {
   catalogue: { courses: unknown[]; programs: Program[] } | null;
@@ -48,12 +62,7 @@ export interface AppState {
   chosenCourseToRequirementId: Record<string, string>;
   schedulePoolMaps: Record<string, string>[];
   selectedScheduleIndex: number;
-  generationError: string | null;
-  generationErrorDetails: {
-    emptyPools: Array<{ label: string; requirementId?: string }>;
-    totalAvailable: number;
-    totalNeeded: number;
-  } | null;
+  generationError: GenerationErrorState | null;
   unassignedCompletedCourses: string[];
   swapHistory: Array<{
     scheduleIndex: number;

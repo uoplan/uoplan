@@ -70,7 +70,6 @@ function App() {
     generationMinProfessorRating,
     generatedSchedules,
     generationError,
-    generationErrorDetails,
     filteredPrereqEligibleCourses,
     levelBuckets,
     languageBuckets,
@@ -104,7 +103,6 @@ function App() {
       generationMinProfessorRating: s.generationMinProfessorRating,
       generatedSchedules: s.generatedSchedules,
       generationError: s.generationError,
-      generationErrorDetails: s.generationErrorDetails,
       filteredPrereqEligibleCourses: s.filteredPrereqEligibleCourses,
       levelBuckets: s.levelBuckets,
       languageBuckets: s.languageBuckets,
@@ -593,8 +591,8 @@ function App() {
                       }
                       onGenerate={handleGenerate}
                       generating={generating}
-                      error={generationError}
-                      errorDetails={generationErrorDetails}
+                      error={generationError?.message ?? null}
+                      errorDetails={generationError?.details ?? null}
                       disableGenerate={unassignedCompletedCourses.length > 0}
                       disableGenerateReason={`You still need to assign ${unassignedCompletedCourses.length} completed course${unassignedCompletedCourses.length === 1 ? "" : "s"} in Requirements before you can generate schedules.`}
                     />

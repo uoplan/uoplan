@@ -1,4 +1,5 @@
 export * from './scheduleGenerator';
+export * from './generationDiagnostics';
 export * from './scheduleCandidates/kUserKGeneral';
 export * from './scheduleCandidates/explicitPoolPicks';
 export type { GlobalExplicitRule } from './scheduleCandidates/types';

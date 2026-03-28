@@ -1094,7 +1094,7 @@ async function main() {
   for (let y = currentYear; y >= OLDEST_YEAR; y--) years.push(y);
   await fs.writeFile(
     path.join(dataDir, 'catalogue.json'),
-    JSON.stringify({ years }),
+    JSON.stringify({ years }, null, 2),
     'utf-8',
   );
   console.log(`\nWrote catalogue.json manifest: years ${currentYear}–${OLDEST_YEAR}`);
