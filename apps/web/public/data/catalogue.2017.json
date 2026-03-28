@@ -123536,6 +123536,7 @@
     {
       "title": "Aboriginal Teacher Education Program - Certificate/BEd (Primary/Junior division)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/aboriginal-teacher-education-program-certificate-bed-primary-junior-division/",
+      "slug": "undergrad/aboriginal-teacher-education-program-certificate-bed-primary-junior-division",
       "requirements": [
         {
           "type": "course",
@@ -123658,6 +123659,7 @@
     {
       "title": "B.A. spécialisé bidisciplinaire en communication et lettres françaises",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/ba-specialise-bidisciplinaire-communication-lettres-francaises/",
+      "slug": "undergrad/ba-specialise-bidisciplinaire-communication-lettres-francaises",
       "requirements": [
         {
           "type": "group",
@@ -124015,6 +124017,7 @@
     {
       "title": "B.A. spécialisé en lettres françaises et Baccalauréat en éducation",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/ba-specialise-lettres-francaises-baccalaureat-education/",
+      "slug": "undergrad/ba-specialise-lettres-francaises-baccalaureat-education",
       "requirements": [
         {
           "type": "group",
@@ -124297,6 +124300,7 @@
     {
       "title": "B.A. spécialisé en lettres françaises",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/ba-specialise-lettres-francaises/",
+      "slug": "undergrad/ba-specialise-lettres-francaises",
       "requirements": [
         {
           "type": "group",
@@ -124646,6 +124650,7 @@
     {
       "title": "Bachelor of Arts with double Minor",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-arts-double-minor/",
+      "slug": "undergrad/bachelor-arts-double-minor",
       "requirements": [
         {
           "type": "course",
@@ -124753,6 +124758,7 @@
     {
       "title": "Bachelor of Arts with Major",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-arts-major/",
+      "slug": "undergrad/bachelor-arts-major",
       "requirements": [
         {
           "type": "course",
@@ -124855,6 +124861,7 @@
     {
       "title": "Bachelor of Arts with Minor",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-arts-minor/",
+      "slug": "undergrad/bachelor-arts-minor",
       "requirements": [
         {
           "type": "course",
@@ -124971,6 +124978,7 @@
     {
       "title": "Bachelor of Arts",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-arts/",
+      "slug": "undergrad/bachelor-arts",
       "requirements": [
         {
           "type": "course",
@@ -125087,6 +125095,7 @@
     {
       "title": "Bachelor of Fine Arts (BFA)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-fine-arts-bfa/",
+      "slug": "undergrad/bachelor-fine-arts-bfa",
       "requirements": [
         {
           "type": "course",
@@ -125473,6 +125482,7 @@
     {
       "title": "Bachelor of Music (BMus)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-music-bmus/",
+      "slug": "undergrad/bachelor-music-bmus",
       "requirements": [
         {
           "type": "course",
@@ -126566,6 +126576,7 @@
     {
       "title": "Bachelor of Music/Honours Bachelor of Science with Major",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-music-honours-bachelor-science-major/",
+      "slug": "undergrad/bachelor-music-honours-bachelor-science-major",
       "requirements": [
         {
           "type": "and",
@@ -126919,21 +126930,25 @@
     {
       "title": "Bachelor of Science with Double Minor",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-science-double-minor/",
+      "slug": "undergrad/bachelor-science-double-minor",
       "requirements": []
     },
     {
       "title": "Bachelor of Science with Major",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-science-major/",
+      "slug": "undergrad/bachelor-science-major",
       "requirements": []
     },
     {
       "title": "Bachelor of Science with Minor",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-science-minor/",
+      "slug": "undergrad/bachelor-science-minor",
       "requirements": []
     },
     {
       "title": "Bachelor of Science in Nursing for Registered Nurses",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-science-nursing-registered-nurses/",
+      "slug": "undergrad/bachelor-science-nursing-registered-nurses",
       "requirements": [
         {
           "type": "and",
@@ -127448,6 +127463,7 @@
     {
       "title": "Bachelor of Science in Nursing - Second Entry Program",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-science-nursing-second-entry-program/",
+      "slug": "undergrad/bachelor-science-nursing-second-entry-program",
       "requirements": [
         {
           "type": "course",
@@ -127564,6 +127580,7 @@
     {
       "title": "Bachelor of Science in Nursing",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-science-nursing/",
+      "slug": "undergrad/bachelor-science-nursing",
       "requirements": [
         {
           "type": "and",
@@ -127752,6 +127769,7 @@
     {
       "title": "Bachelor of Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-science/",
+      "slug": "undergrad/bachelor-science",
       "requirements": [
         {
           "type": "options_group",
@@ -128094,6 +128112,7 @@
     {
       "title": "Bachelor of Social Sciences with double Minor",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-social-sciences-double-minor/",
+      "slug": "undergrad/bachelor-social-sciences-double-minor",
       "requirements": [
         {
           "type": "course",
@@ -128179,6 +128198,7 @@
     {
       "title": "Bachelor of Social Sciences with Major",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-social-sciences-major/",
+      "slug": "undergrad/bachelor-social-sciences-major",
       "requirements": [
         {
           "type": "course",
@@ -128259,6 +128279,7 @@
     {
       "title": "Bachelor of Social Sciences with Minor",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-social-sciences-minor/",
+      "slug": "undergrad/bachelor-social-sciences-minor",
       "requirements": [
         {
           "type": "course",
@@ -128339,6 +128360,7 @@
     {
       "title": "Bachelor of Social Sciences",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bachelor-social-sciences/",
+      "slug": "undergrad/bachelor-social-sciences",
       "requirements": [
         {
           "type": "course",
@@ -128466,6 +128488,7 @@
     {
       "title": "BASc in Biomedical Mechanical Engineering and BSc in Computing Technology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-biomedical-mechanical-engineering-bsc-computing-technology/",
+      "slug": "undergrad/basc-biomedical-mechanical-engineering-bsc-computing-technology",
       "requirements": [
         {
           "type": "elective",
@@ -128582,6 +128605,7 @@
     {
       "title": "BASc in Biomedical Mechanical Engineering",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-biomedical-mechanical-engineering/",
+      "slug": "undergrad/basc-biomedical-mechanical-engineering",
       "requirements": [
         {
           "type": "and",
@@ -129013,6 +129037,7 @@
     {
       "title": "BASc in Chemical Engineering, Biomedical Engineering Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-chemical-engineering-biomedical-engineering-option/",
+      "slug": "undergrad/basc-chemical-engineering-biomedical-engineering-option",
       "requirements": [
         {
           "type": "elective",
@@ -129034,6 +129059,7 @@
     {
       "title": "BASc in Chemical Engineering and BSc in Computing Technology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-chemical-engineering-bsc-computing-technology/",
+      "slug": "undergrad/basc-chemical-engineering-bsc-computing-technology",
       "requirements": [
         {
           "type": "elective",
@@ -129204,6 +129230,7 @@
     {
       "title": "BASc in Chemical Engineering, Engineering Management and Entrepreneurship Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-chemical-engineering-engineering-management-entrepreneurship-option/",
+      "slug": "undergrad/basc-chemical-engineering-engineering-management-entrepreneurship-option",
       "requirements": [
         {
           "type": "elective",
@@ -129235,6 +129262,7 @@
     {
       "title": "BASc in Chemical Engineering, Environmental Engineering Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-chemical-engineering-environmental-engineering-option/",
+      "slug": "undergrad/basc-chemical-engineering-environmental-engineering-option",
       "requirements": [
         {
           "type": "elective",
@@ -129256,6 +129284,7 @@
     {
       "title": "BASc in Chemical Engineering",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-chemical-engineering/",
+      "slug": "undergrad/basc-chemical-engineering",
       "requirements": [
         {
           "type": "and",
@@ -129681,6 +129710,7 @@
     {
       "title": "BASc in Civil Engineering and BSc in Computing Technology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-civil-engineering-bsc-computing-technology/",
+      "slug": "undergrad/basc-civil-engineering-bsc-computing-technology",
       "requirements": [
         {
           "type": "elective",
@@ -129772,6 +129802,7 @@
     {
       "title": "BASc in Civil Engineering, Engineering Management and Entrepreneurship Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-civil-engineering-engineering-management-entrepreneurship-option/",
+      "slug": "undergrad/basc-civil-engineering-engineering-management-entrepreneurship-option",
       "requirements": [
         {
           "type": "elective",
@@ -129844,6 +129875,7 @@
     {
       "title": "BASc in Civil Engineering, Environmental and Water Resources Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-civil-engineering-environmental-water-resources-option/",
+      "slug": "undergrad/basc-civil-engineering-environmental-water-resources-option",
       "requirements": [
         {
           "type": "elective",
@@ -129911,6 +129943,7 @@
     {
       "title": "BASc in Civil Engineering, Structural and Geotechnical Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-civil-engineering-structural-geotechnical-option/",
+      "slug": "undergrad/basc-civil-engineering-structural-geotechnical-option",
       "requirements": [
         {
           "type": "elective",
@@ -129978,6 +130011,7 @@
     {
       "title": "BASc in Civil Engineering",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-civil-engineering/",
+      "slug": "undergrad/basc-civil-engineering",
       "requirements": [
         {
           "type": "and",
@@ -130402,6 +130436,7 @@
     {
       "title": "BASc in Computer Engineering, Engineering Management and Entrepreneurship Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-computer-engineering-engineering-management-entrepreneurship-option/",
+      "slug": "undergrad/basc-computer-engineering-engineering-management-entrepreneurship-option",
       "requirements": [
         {
           "type": "elective",
@@ -130495,6 +130530,7 @@
     {
       "title": "BASc in Computer Engineering",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-computer-engineering/",
+      "slug": "undergrad/basc-computer-engineering",
       "requirements": [
         {
           "type": "and",
@@ -130875,6 +130911,7 @@
     {
       "title": "BASc in Electrical Engineering and BSc in Computing Technology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-electrical-engineering-bsc-computing-technology/",
+      "slug": "undergrad/basc-electrical-engineering-bsc-computing-technology",
       "requirements": [
         {
           "type": "elective",
@@ -130987,6 +131024,7 @@
     {
       "title": "BASc in Electrical Engineering, Engineering Management and Entrepreneurship Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-electrical-engineering-engineering-management-entrepreneurship-option/",
+      "slug": "undergrad/basc-electrical-engineering-engineering-management-entrepreneurship-option",
       "requirements": [
         {
           "type": "elective",
@@ -131069,6 +131107,7 @@
     {
       "title": "BASc in Electrical Engineering",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-electrical-engineering/",
+      "slug": "undergrad/basc-electrical-engineering",
       "requirements": [
         {
           "type": "and",
@@ -131671,6 +131710,7 @@
     {
       "title": "BASc in Mechanical Engineering and BSc in Computing Technology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-mechanical-engineering-bsc-computing-technology/",
+      "slug": "undergrad/basc-mechanical-engineering-bsc-computing-technology",
       "requirements": [
         {
           "type": "elective",
@@ -131787,6 +131827,7 @@
     {
       "title": "BASc in Mechanical Engineering, Engineering Management and Entrepreneurship Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-mechanical-engineering-engineering-management-entrepreneurship-option/",
+      "slug": "undergrad/basc-mechanical-engineering-engineering-management-entrepreneurship-option",
       "requirements": [
         {
           "type": "elective",
@@ -131853,6 +131894,7 @@
     {
       "title": "BASc in Mechanical Engineering",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-mechanical-engineering/",
+      "slug": "undergrad/basc-mechanical-engineering",
       "requirements": [
         {
           "type": "and",
@@ -132266,6 +132308,7 @@
     {
       "title": "BASc in Software Engineering, Engineering Management and Entrepreneurship Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-software-engineering-engineering-management-entrepreneurship-option/",
+      "slug": "undergrad/basc-software-engineering-engineering-management-entrepreneurship-option",
       "requirements": [
         {
           "type": "elective",
@@ -132357,6 +132400,7 @@
     {
       "title": "BASc in Software Engineering",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/basc-software-engineering/",
+      "slug": "undergrad/basc-software-engineering",
       "requirements": [
         {
           "type": "and",
@@ -132820,6 +132864,7 @@
     {
       "title": "B.Sc. spécialisé en sciences/Baccalauréat en éducation - Cycles intermédiaire/supérieur",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/bsc-specialise-sciences-baccalaureat-education-cycles-intermediaire-superieur/",
+      "slug": "undergrad/bsc-specialise-sciences-baccalaureat-education-cycles-intermediaire-superieur",
       "requirements": [
         {
           "type": "and",
@@ -132994,6 +133039,7 @@
     {
       "title": "Certificat/Baccalauréat en éducation - Éducation technologique",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/certificat-baccalaureat-education-education-technologique/",
+      "slug": "undergrad/certificat-baccalaureat-education-education-technologique",
       "requirements": [
         {
           "type": "and",
@@ -133089,6 +133135,7 @@
     {
       "title": "Certificat en rédaction professionnelle et édition",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/certificat-redaction-professionnelle-edition/",
+      "slug": "undergrad/certificat-redaction-professionnelle-edition",
       "requirements": [
         {
           "type": "course",
@@ -133194,6 +133241,7 @@
     {
       "title": "Certificate in Francophone Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/certificate-francophone-studies/",
+      "slug": "undergrad/certificate-francophone-studies",
       "requirements": [
         {
           "type": "group",
@@ -133412,6 +133460,7 @@
     {
       "title": "Certificate in Human Resource Management",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/certificate-human-resource-management/",
+      "slug": "undergrad/certificate-human-resource-management",
       "requirements": [
         {
           "type": "course",
@@ -133473,6 +133522,7 @@
     {
       "title": "Certificate in Law",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/certificate-law/",
+      "slug": "undergrad/certificate-law",
       "requirements": [
         {
           "type": "course",
@@ -133723,6 +133773,7 @@
     {
       "title": "Certificate in Management",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/certificate-management/",
+      "slug": "undergrad/certificate-management",
       "requirements": [
         {
           "type": "course",
@@ -133995,6 +134046,7 @@
     {
       "title": "Certificate in Piano Pedagogy",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/certificate-piano-pedagogy/",
+      "slug": "undergrad/certificate-piano-pedagogy",
       "requirements": [
         {
           "type": "course",
@@ -134073,6 +134125,7 @@
     {
       "title": "Combined Program MD and PhD (Biochemistry Option)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/combined-program-md-phd-biochemistry-option/",
+      "slug": "undergrad/combined-program-md-phd-biochemistry-option",
       "requirements": [
         {
           "type": "course",
@@ -134224,6 +134277,7 @@
     {
       "title": "Combined Program MD and PhD (Biochemistry with Specialization in Human and Molecular Genetics Option)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/combined-program-md-phd-biochemistry-specialization-human-molecular-genetics-option/",
+      "slug": "undergrad/combined-program-md-phd-biochemistry-specialization-human-molecular-genetics-option",
       "requirements": [
         {
           "type": "course",
@@ -134375,6 +134429,7 @@
     {
       "title": "Combined Program MD and PhD (Biology Option)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/combined-program-md-phd-biology-option/",
+      "slug": "undergrad/combined-program-md-phd-biology-option",
       "requirements": [
         {
           "type": "course",
@@ -134526,6 +134581,7 @@
     {
       "title": "Combined Program MD and PhD (Cellular Molecular Medicine Option)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/combined-program-md-phd-cellular-molecular-medicine-option/",
+      "slug": "undergrad/combined-program-md-phd-cellular-molecular-medicine-option",
       "requirements": [
         {
           "type": "course",
@@ -134677,6 +134733,7 @@
     {
       "title": "Combined Program MD and PhD (Cellular Molecular Medicine with Specialization in Human and Molecular Genetics Option)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/combined-program-md-phd-cellular-molecular-medicine-specialization-human-molecular-genetics-option/",
+      "slug": "undergrad/combined-program-md-phd-cellular-molecular-medicine-specialization-human-molecular-genetics-option",
       "requirements": [
         {
           "type": "course",
@@ -134828,6 +134885,7 @@
     {
       "title": "Combined Program MD and PhD (Microbiology and Immunology Option)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/combined-program-md-phd-microbiology-immunology-option/",
+      "slug": "undergrad/combined-program-md-phd-microbiology-immunology-option",
       "requirements": [
         {
           "type": "course",
@@ -134979,6 +135037,7 @@
     {
       "title": "Combined Program MD and PhD (Microbiology and Immunology with Specialization in Human and Molecular Genetics Option)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/combined-program-md-phd-microbiology-immunology-specialization-human-molecular-genetics-option/",
+      "slug": "undergrad/combined-program-md-phd-microbiology-immunology-specialization-human-molecular-genetics-option",
       "requirements": [
         {
           "type": "course",
@@ -135130,6 +135189,7 @@
     {
       "title": "Combined Program MD and PhD (Neuroscience Option)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/combined-program-md-phd-neuroscience-option/",
+      "slug": "undergrad/combined-program-md-phd-neuroscience-option",
       "requirements": [
         {
           "type": "course",
@@ -135281,6 +135341,7 @@
     {
       "title": "Combined Program MD and PhD (Neuroscience with Specialization in Human and Molecular Genetics Option)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/combined-program-md-phd-neuroscience-specialization-human-molecular-genetics-option/",
+      "slug": "undergrad/combined-program-md-phd-neuroscience-specialization-human-molecular-genetics-option",
       "requirements": [
         {
           "type": "course",
@@ -135432,6 +135493,7 @@
     {
       "title": "Formation à l'enseignement - Cycles intermédiaire/supérieur",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/formation-a-lenseignement-cycles-intermediaire-superieur/",
+      "slug": "undergrad/formation-a-lenseignement-cycles-intermediaire-superieur",
       "requirements": [
         {
           "type": "course",
@@ -135761,6 +135823,7 @@
     {
       "title": "Formation à l'enseignement - Cycles moyen/intermédiaire",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/formation-a-lenseignement-cycles-moyen-intermediaire/",
+      "slug": "undergrad/formation-a-lenseignement-cycles-moyen-intermediaire",
       "requirements": [
         {
           "type": "course",
@@ -135972,6 +136035,7 @@
     {
       "title": "Formation à l'enseignement - Cycles primaire/moyen",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/formation-a-lenseignement-cycles-primaire-moyen/",
+      "slug": "undergrad/formation-a-lenseignement-cycles-primaire-moyen",
       "requirements": [
         {
           "type": "course",
@@ -136115,6 +136179,7 @@
     {
       "title": "Formation à l'enseignement en mode alternatif - B.Éd. (à temps partiel) - Cycles moyen/intermédiaire",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/formation-a-lenseignement-mode-alternatif-bed-a-temps-partiel-cycles-moyen-intermediaire/",
+      "slug": "undergrad/formation-a-lenseignement-mode-alternatif-bed-a-temps-partiel-cycles-moyen-intermediaire",
       "requirements": [
         {
           "type": "course",
@@ -136266,6 +136331,7 @@
     {
       "title": "Formation à l'enseignement en mode alternatif - B.Éd. (à temps partiel) - Cycles primaire/moyen",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/formation-a-lenseignement-mode-alternatif-bed-a-temps-partiel-cycles-primaire-moyen/",
+      "slug": "undergrad/formation-a-lenseignement-mode-alternatif-bed-a-temps-partiel-cycles-primaire-moyen",
       "requirements": [
         {
           "type": "course",
@@ -136389,6 +136455,7 @@
     {
       "title": "Honours BA in Communication",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-communication/",
+      "slug": "undergrad/honours-ba-communication",
       "requirements": [
         {
           "type": "course",
@@ -136592,6 +136659,7 @@
     {
       "title": "Honours BA in English",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-english/",
+      "slug": "undergrad/honours-ba-english",
       "requirements": [
         {
           "type": "group",
@@ -136926,6 +136994,7 @@
     {
       "title": "Honours BA in Environmental Studies (Bilingual Program)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-environmental-studies-bilingual-program/",
+      "slug": "undergrad/honours-ba-environmental-studies-bilingual-program",
       "requirements": [
         {
           "type": "course",
@@ -137199,6 +137268,7 @@
     {
       "title": "Honours BA in French Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-french-studies/",
+      "slug": "undergrad/honours-ba-french-studies",
       "requirements": [
         {
           "type": "course",
@@ -137508,6 +137578,7 @@
     {
       "title": "Honours BA in French-English Translation (two years)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-frenchenglish-translation-two-years/",
+      "slug": "undergrad/honours-ba-frenchenglish-translation-two-years",
       "requirements": [
         {
           "type": "course",
@@ -137711,6 +137782,7 @@
     {
       "title": "Honours BA in French-English Translation",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-frenchenglish-translation/",
+      "slug": "undergrad/honours-ba-frenchenglish-translation",
       "requirements": [
         {
           "type": "course",
@@ -137926,6 +137998,7 @@
     {
       "title": "Honours BA in French-Spanish-English Translation (two years)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-frenchspanishenglish-translation-two-years/",
+      "slug": "undergrad/honours-ba-frenchspanishenglish-translation-two-years",
       "requirements": [
         {
           "type": "course",
@@ -138044,6 +138117,7 @@
     {
       "title": "Honours BA in French-Spanish-English Translation",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-frenchspanishenglish-translation/",
+      "slug": "undergrad/honours-ba-frenchspanishenglish-translation",
       "requirements": [
         {
           "type": "course",
@@ -138284,6 +138358,7 @@
     {
       "title": "Honours BA in Geography",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-geography/",
+      "slug": "undergrad/honours-ba-geography",
       "requirements": [
         {
           "type": "course",
@@ -138568,6 +138643,7 @@
     {
       "title": "Honours BA in Greek and Roman Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-greek-roman-studies/",
+      "slug": "undergrad/honours-ba-greek-roman-studies",
       "requirements": [
         {
           "type": "course",
@@ -138855,6 +138931,7 @@
     {
       "title": "Honours BA in History",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-history/",
+      "slug": "undergrad/honours-ba-history",
       "requirements": [
         {
           "type": "course",
@@ -139059,6 +139136,7 @@
     {
       "title": "Honours BA in Linguistics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-linguistics/",
+      "slug": "undergrad/honours-ba-linguistics",
       "requirements": [
         {
           "type": "course",
@@ -139244,6 +139322,7 @@
     {
       "title": "Honours BA in Music",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-music/",
+      "slug": "undergrad/honours-ba-music",
       "requirements": [
         {
           "type": "course",
@@ -139547,6 +139626,7 @@
     {
       "title": "Honours BA in Philosophy",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-philosophy/",
+      "slug": "undergrad/honours-ba-philosophy",
       "requirements": [
         {
           "type": "course",
@@ -139952,6 +140032,7 @@
     {
       "title": "Honours BA in Psychology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-psychology/",
+      "slug": "undergrad/honours-ba-psychology",
       "requirements": [
         {
           "type": "course",
@@ -140130,6 +140211,7 @@
     {
       "title": "Honours BA in Religious Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-religious-studies/",
+      "slug": "undergrad/honours-ba-religious-studies",
       "requirements": [
         {
           "type": "course",
@@ -140376,6 +140458,7 @@
     {
       "title": "Honours BA in Second-Language Teaching - Teaching English as a Second Language",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-second-language-teaching-english-second-language/",
+      "slug": "undergrad/honours-ba-second-language-teaching-english-second-language",
       "requirements": [
         {
           "type": "course",
@@ -140649,6 +140732,7 @@
     {
       "title": "Honours BA in Second-Language Teaching - Teaching French as a Second Language",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-second-language-teaching-french-second-language/",
+      "slug": "undergrad/honours-ba-second-language-teaching-french-second-language",
       "requirements": [
         {
           "type": "course",
@@ -140989,6 +141073,7 @@
     {
       "title": "Honours BA in Spanish",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-spanish/",
+      "slug": "undergrad/honours-ba-spanish",
       "requirements": [
         {
           "type": "course",
@@ -141228,6 +141313,7 @@
     {
       "title": "Honours BA in Theatre",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-ba-theatre/",
+      "slug": "undergrad/honours-ba-theatre",
       "requirements": [
         {
           "type": "course",
@@ -141512,6 +141598,7 @@
     {
       "title": "Honours Bachelor of Commerce in Accounting",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-accounting/",
+      "slug": "undergrad/honours-bachelor-commerce-accounting",
       "requirements": [
         {
           "type": "course",
@@ -141730,6 +141817,7 @@
     {
       "title": "Honours Bachelor of Commerce and Juris Doctor",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-juris-doctor/",
+      "slug": "undergrad/honours-bachelor-commerce-juris-doctor",
       "requirements": [
         {
           "type": "and",
@@ -142081,6 +142169,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in Accounting) (Complementary Option in Entrepreneurship)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-accounting-complementary-option-entrepreneurship/",
+      "slug": "undergrad/honours-bachelor-commerce-option-accounting-complementary-option-entrepreneurship",
       "requirements": [
         {
           "type": "course",
@@ -142341,6 +142430,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in Accounting)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-accounting/",
+      "slug": "undergrad/honours-bachelor-commerce-option-accounting",
       "requirements": [
         {
           "type": "course",
@@ -142581,6 +142671,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in Finance) (Complementary Option in Entrepreneurship)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-finance-complementary-option-entrepreneurship/",
+      "slug": "undergrad/honours-bachelor-commerce-option-finance-complementary-option-entrepreneurship",
       "requirements": [
         {
           "type": "course",
@@ -142816,6 +142907,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in Finance)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-finance/",
+      "slug": "undergrad/honours-bachelor-commerce-option-finance",
       "requirements": [
         {
           "type": "course",
@@ -143031,6 +143123,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in Human Resource Management) (Complementary Option in Entrepreneurship)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-human-resource-management-complementary-option-entrepreneurship/",
+      "slug": "undergrad/honours-bachelor-commerce-option-human-resource-management-complementary-option-entrepreneurship",
       "requirements": [
         {
           "type": "course",
@@ -143239,6 +143332,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in Human Resource Management)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-human-resource-management/",
+      "slug": "undergrad/honours-bachelor-commerce-option-human-resource-management",
       "requirements": [
         {
           "type": "course",
@@ -143427,6 +143521,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in International Management) (Complementary Option in Entrepreneurship)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-international-management-complementary-option-entrepreneurship/",
+      "slug": "undergrad/honours-bachelor-commerce-option-international-management-complementary-option-entrepreneurship",
       "requirements": [
         {
           "type": "course",
@@ -143652,6 +143747,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in International Management)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-international-management/",
+      "slug": "undergrad/honours-bachelor-commerce-option-international-management",
       "requirements": [
         {
           "type": "course",
@@ -143857,6 +143953,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in Management) (Complementary Option in Entrepreneurship)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-management-complementary-option-entrepreneurship/",
+      "slug": "undergrad/honours-bachelor-commerce-option-management-complementary-option-entrepreneurship",
       "requirements": [
         {
           "type": "course",
@@ -144082,6 +144179,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in Management Information Systems and Analytics) (Complementary Option in Entrepreneurship)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-management-information-systems-analytics-complementary-option-entrepreneurship/",
+      "slug": "undergrad/honours-bachelor-commerce-option-management-information-systems-analytics-complementary-option-entrepreneurship",
       "requirements": [
         {
           "type": "course",
@@ -144312,6 +144410,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in Management Information Systems and Analytics)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-management-information-systems-analytics/",
+      "slug": "undergrad/honours-bachelor-commerce-option-management-information-systems-analytics",
       "requirements": [
         {
           "type": "course",
@@ -144522,6 +144621,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in Management)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-management/",
+      "slug": "undergrad/honours-bachelor-commerce-option-management",
       "requirements": [
         {
           "type": "course",
@@ -144727,6 +144827,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in Marketing) (Complementary Option in Entrepreneurship)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-marketing-complementary-option-entrepreneurship/",
+      "slug": "undergrad/honours-bachelor-commerce-option-marketing-complementary-option-entrepreneurship",
       "requirements": [
         {
           "type": "course",
@@ -144935,6 +145036,7 @@
     {
       "title": "Honours Bachelor of Commerce (Option in Marketing)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-commerce-option-marketing/",
+      "slug": "undergrad/honours-bachelor-commerce-option-marketing",
       "requirements": [
         {
           "type": "course",
@@ -145123,6 +145225,7 @@
     {
       "title": "Honours Bachelor of Digital Journalism",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-digital-journalism/",
+      "slug": "undergrad/honours-bachelor-digital-journalism",
       "requirements": [
         {
           "type": "course",
@@ -145429,6 +145532,7 @@
     {
       "title": "Honours Bachelor of Health Sciences",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-health-sciences/",
+      "slug": "undergrad/honours-bachelor-health-sciences",
       "requirements": [
         {
           "type": "and",
@@ -145667,6 +145771,7 @@
     {
       "title": "Honours Bachelor of Human Kinetics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-human-kinetics/",
+      "slug": "undergrad/honours-bachelor-human-kinetics",
       "requirements": [
         {
           "type": "and",
@@ -146115,6 +146220,7 @@
     {
       "title": "Honours Bachelor of Nutrition Sciences",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-nutrition-sciences/",
+      "slug": "undergrad/honours-bachelor-nutrition-sciences",
       "requirements": [
         {
           "type": "and",
@@ -146346,6 +146452,7 @@
     {
       "title": "Honours Bachelor of Public Relations",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-public-relations/",
+      "slug": "undergrad/honours-bachelor-public-relations",
       "requirements": [
         {
           "type": "course",
@@ -146618,6 +146725,7 @@
     {
       "title": "Honours Bachelor of Science in Translational and Molecular Medicine",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bachelor-science-translational-molecular-medicine/",
+      "slug": "undergrad/honours-bachelor-science-translational-molecular-medicine",
       "requirements": [
         {
           "type": "elective",
@@ -146893,6 +147001,7 @@
     {
       "title": "Honours BSc in Biochemistry / BASc in Chemical Engineering (Biotechnology) - Biomedical Engineering Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biochemistry-biotechnology-basc-chemical-engineering-biotechnology-biomedical-engineering-option/",
+      "slug": "undergrad/honours-bsc-biochemistry-biotechnology-basc-chemical-engineering-biotechnology-biomedical-engineering-option",
       "requirements": [
         {
           "type": "and",
@@ -147377,6 +147486,7 @@
     {
       "title": "Honours BSc in Biochemistry / BASc in Chemical Engineering (Biotechnology)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biochemistry-biotechnology-basc-chemical-engineering-biotechnology/",
+      "slug": "undergrad/honours-bsc-biochemistry-biotechnology-basc-chemical-engineering-biotechnology",
       "requirements": [
         {
           "type": "and",
@@ -147901,6 +148011,7 @@
     {
       "title": "Honours BSc in Biochemistry - Chemical Biology Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biochemistry-option-chemical-biology/",
+      "slug": "undergrad/honours-bsc-biochemistry-option-chemical-biology",
       "requirements": [
         {
           "type": "discipline_elective",
@@ -148143,6 +148254,7 @@
     {
       "title": "Honours BSc in Biochemistry - Microbiology and Immunology Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biochemistry-option-microbiology-immunology/",
+      "slug": "undergrad/honours-bsc-biochemistry-option-microbiology-immunology",
       "requirements": [
         {
           "type": "discipline_elective",
@@ -148425,6 +148537,7 @@
     {
       "title": "Honours BSc in Biochemistry - Synthetic Biology Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biochemistry-option-synthetic-biology/",
+      "slug": "undergrad/honours-bsc-biochemistry-option-synthetic-biology",
       "requirements": [
         {
           "type": "discipline_elective",
@@ -148689,6 +148802,7 @@
     {
       "title": "Honours BSc in Biochemistry",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biochemistry/",
+      "slug": "undergrad/honours-bsc-biochemistry",
       "requirements": [
         {
           "type": "discipline_elective",
@@ -148963,6 +149077,7 @@
     {
       "title": "Honours BSc in Biology - Cellular/Molecular Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biology-cellularmolecular-option/",
+      "slug": "undergrad/honours-bsc-biology-cellularmolecular-option",
       "requirements": [
         {
           "type": "discipline_elective",
@@ -149478,6 +149593,7 @@
     {
       "title": "Honours BSc in Biology - Ecology, Evolution, Behaviour Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biology-ecology-evolution-behaviour-option/",
+      "slug": "undergrad/honours-bsc-biology-ecology-evolution-behaviour-option",
       "requirements": [
         {
           "type": "discipline_elective",
@@ -150000,6 +150116,7 @@
     {
       "title": "Honours BSc in Biology - Physiology Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biology-physiology-option/",
+      "slug": "undergrad/honours-bsc-biology-physiology-option",
       "requirements": [
         {
           "type": "discipline_elective",
@@ -150632,6 +150749,7 @@
     {
       "title": "Honours BSc in Biology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biology/",
+      "slug": "undergrad/honours-bsc-biology",
       "requirements": [
         {
           "type": "discipline_elective",
@@ -151005,6 +151123,7 @@
     {
       "title": "Honours BSc in Biomedical Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biomedical-science/",
+      "slug": "undergrad/honours-bsc-biomedical-science",
       "requirements": [
         {
           "type": "course",
@@ -151195,6 +151314,7 @@
     {
       "title": "Honours BSc in Biomedical Science - Bioanalytical Science Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biomedical-scienceoption-bioanalytical-science/",
+      "slug": "undergrad/honours-bsc-biomedical-scienceoption-bioanalytical-science",
       "requirements": [
         {
           "type": "course",
@@ -151496,6 +151616,7 @@
     {
       "title": "Honours BSc in Biomedical Science - Biostatistics Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biomedical-scienceoption-biostatistics/",
+      "slug": "undergrad/honours-bsc-biomedical-scienceoption-biostatistics",
       "requirements": [
         {
           "type": "course",
@@ -151801,6 +151922,7 @@
     {
       "title": "Honours BSc in Biomedical Science - Cellular and Molecular Medicine Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biomedical-scienceoption-cellular-molecular-medicine/",
+      "slug": "undergrad/honours-bsc-biomedical-scienceoption-cellular-molecular-medicine",
       "requirements": [
         {
           "type": "course",
@@ -152170,6 +152292,7 @@
     {
       "title": "Honours BSc in Biomedical Science - Medicinal Chemistry Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biomedical-scienceoption-medicinal-chemistry/",
+      "slug": "undergrad/honours-bsc-biomedical-scienceoption-medicinal-chemistry",
       "requirements": [
         {
           "type": "course",
@@ -152515,6 +152638,7 @@
     {
       "title": "Honours BSc in Biomedical Science - Neuroscience Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biomedical-scienceoption-neuroscience/",
+      "slug": "undergrad/honours-bsc-biomedical-scienceoption-neuroscience",
       "requirements": [
         {
           "type": "course",
@@ -152923,6 +153047,7 @@
     {
       "title": "Honours BSc in Biopharmaceutical Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-biopharmaceutical-science/",
+      "slug": "undergrad/honours-bsc-biopharmaceutical-science",
       "requirements": [
         {
           "type": "course",
@@ -153563,6 +153688,7 @@
     {
       "title": "Honours BSc in Chemistry",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-chemistry/",
+      "slug": "undergrad/honours-bsc-chemistry",
       "requirements": [
         {
           "type": "course",
@@ -153888,6 +154014,7 @@
     {
       "title": "Honours BSc in Chemistry - Option Advanced Materials",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-chemistryoption-advanced-materials/",
+      "slug": "undergrad/honours-bsc-chemistryoption-advanced-materials",
       "requirements": [
         {
           "type": "course",
@@ -154273,6 +154400,7 @@
     {
       "title": "Honours BSc in Chemistry - EcoChemistry Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-chemistryoption-ecochemistry/",
+      "slug": "undergrad/honours-bsc-chemistryoption-ecochemistry",
       "requirements": [
         {
           "type": "course",
@@ -154792,6 +154920,7 @@
     {
       "title": "Honours BSc in Computer Science, Data Science Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-computer-science-data-science-option/",
+      "slug": "undergrad/honours-bsc-computer-science-data-science-option",
       "requirements": [
         {
           "type": "course",
@@ -155102,6 +155231,7 @@
     {
       "title": "Honours BSc in Computer Science, Management and Entrepreneurship Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-computer-science-management-entrepreneurship-option/",
+      "slug": "undergrad/honours-bsc-computer-science-management-entrepreneurship-option",
       "requirements": [
         {
           "type": "course",
@@ -155386,6 +155516,7 @@
     {
       "title": "Honours BSc in Computer Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-computer-science/",
+      "slug": "undergrad/honours-bsc-computer-science",
       "requirements": [
         {
           "type": "course",
@@ -155678,6 +155809,7 @@
     {
       "title": "Honours BSc in Environmental Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-environmental-science/",
+      "slug": "undergrad/honours-bsc-environmental-science",
       "requirements": [
         {
           "type": "course",
@@ -156214,6 +156346,7 @@
     {
       "title": "Honours BSc in Financial Mathematics and Economics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-financial-mathematics-economics/",
+      "slug": "undergrad/honours-bsc-financial-mathematics-economics",
       "requirements": [
         {
           "type": "discipline_elective",
@@ -156486,6 +156619,7 @@
     {
       "title": "Honours BSc in Geology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-geology/",
+      "slug": "undergrad/honours-bsc-geology",
       "requirements": [
         {
           "type": "course",
@@ -156764,6 +156898,7 @@
     {
       "title": "Honours BSc in Geology-Physics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-geologyphysics/",
+      "slug": "undergrad/honours-bsc-geologyphysics",
       "requirements": [
         {
           "type": "course",
@@ -156962,6 +157097,7 @@
     {
       "title": "Honours BSc in Human Kinetics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-human-kinetics/",
+      "slug": "undergrad/honours-bsc-human-kinetics",
       "requirements": [
         {
           "type": "group",
@@ -157353,6 +157489,7 @@
     {
       "title": "Honours BSc in Mathematics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-mathematics/",
+      "slug": "undergrad/honours-bsc-mathematics",
       "requirements": [
         {
           "type": "discipline_elective",
@@ -157519,6 +157656,7 @@
     {
       "title": "Honours BSc in Ophthalmic Medical Technology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-ophthalmic-medical-technology/",
+      "slug": "undergrad/honours-bsc-ophthalmic-medical-technology",
       "requirements": [
         {
           "type": "course",
@@ -157707,6 +157845,7 @@
     {
       "title": "Honours BSc in Physical Geography",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-physical-geography/",
+      "slug": "undergrad/honours-bsc-physical-geography",
       "requirements": [
         {
           "type": "course",
@@ -158012,6 +158151,7 @@
     {
       "title": "Honours BSc in Physics - Biological Physics Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-physics-option-biological-physics/",
+      "slug": "undergrad/honours-bsc-physics-option-biological-physics",
       "requirements": [
         {
           "type": "course",
@@ -158234,6 +158374,7 @@
     {
       "title": "Honours BSc in Physics - Photonics Option",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-physics-option-photonics/",
+      "slug": "undergrad/honours-bsc-physics-option-photonics",
       "requirements": [
         {
           "type": "group",
@@ -158463,6 +158604,7 @@
     {
       "title": "Honours BSc in Physics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-physics/",
+      "slug": "undergrad/honours-bsc-physics",
       "requirements": [
         {
           "type": "group",
@@ -158710,6 +158852,7 @@
     {
       "title": "Honours BSc in Physics / BASc in Electrical Engineering",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-physicsbasc-electrical-engineering/",
+      "slug": "undergrad/honours-bsc-physicsbasc-electrical-engineering",
       "requirements": [
         {
           "type": "and",
@@ -159272,6 +159415,7 @@
     {
       "title": "Honours BSc in Physics-Mathematics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-physicsmathematics/",
+      "slug": "undergrad/honours-bsc-physicsmathematics",
       "requirements": [
         {
           "type": "course",
@@ -159516,6 +159660,7 @@
     {
       "title": "Honours BSc in Psychology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-psychology/",
+      "slug": "undergrad/honours-bsc-psychology",
       "requirements": [
         {
           "type": "course",
@@ -159750,6 +159895,7 @@
     {
       "title": "Honours BSc in Statistics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsc-statistics/",
+      "slug": "undergrad/honours-bsc-statistics",
       "requirements": [
         {
           "type": "discipline_elective",
@@ -159933,6 +160079,7 @@
     {
       "title": "Honours BSocSc in Anthropology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-anthropology/",
+      "slug": "undergrad/honours-bsocsc-anthropology",
       "requirements": [
         {
           "type": "course",
@@ -160281,6 +160428,7 @@
     {
       "title": "Honours BSocSc in Conflict Studies and Human Rights",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-conflict-studies-human-rights/",
+      "slug": "undergrad/honours-bsocsc-conflict-studies-human-rights",
       "requirements": [
         {
           "type": "course",
@@ -160831,6 +160979,7 @@
     {
       "title": "Honours BSocSc in Criminology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-criminology/",
+      "slug": "undergrad/honours-bsocsc-criminology",
       "requirements": [
         {
           "type": "course",
@@ -161016,6 +161165,7 @@
     {
       "title": "Honours BSocSc in Economics and Public Policy",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-economics-public-policy/",
+      "slug": "undergrad/honours-bsocsc-economics-public-policy",
       "requirements": [
         {
           "type": "course",
@@ -161334,6 +161484,7 @@
     {
       "title": "Honours BSocSc in Economics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-economics/",
+      "slug": "undergrad/honours-bsocsc-economics",
       "requirements": [
         {
           "type": "course",
@@ -161478,6 +161629,7 @@
     {
       "title": "Honours BSocSc in Environmental Economics and Public Policy",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-environmental-economics-public-policy/",
+      "slug": "undergrad/honours-bsocsc-environmental-economics-public-policy",
       "requirements": [
         {
           "type": "course",
@@ -161928,6 +162080,7 @@
     {
       "title": "Honours BSocSc in International Development and Globalization",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-international-development-globalization/",
+      "slug": "undergrad/honours-bsocsc-international-development-globalization",
       "requirements": [
         {
           "type": "course",
@@ -162479,6 +162632,7 @@
     {
       "title": "Honours BSocSc in International Economics and Development",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-international-economics-development/",
+      "slug": "undergrad/honours-bsocsc-international-economics-development",
       "requirements": [
         {
           "type": "course",
@@ -162770,6 +162924,7 @@
     {
       "title": "Honours BSocSc in International Studies and Modern Languages",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-international-studies-modern-languages/",
+      "slug": "undergrad/honours-bsocsc-international-studies-modern-languages",
       "requirements": [
         {
           "type": "course",
@@ -163247,6 +163402,7 @@
     {
       "title": "Honours BSocSc in Political Science and Juris Doctor (JD)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-political-science-juris-doctor-jd/",
+      "slug": "undergrad/honours-bsocsc-political-science-juris-doctor-jd",
       "requirements": [
         {
           "type": "and",
@@ -163740,6 +163896,7 @@
     {
       "title": "Honours BSocSc in Political Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-political-science/",
+      "slug": "undergrad/honours-bsocsc-political-science",
       "requirements": [
         {
           "type": "course",
@@ -164062,6 +164219,7 @@
     {
       "title": "Honours BSocSc in Public Administration",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-public-administration/",
+      "slug": "undergrad/honours-bsocsc-public-administration",
       "requirements": [
         {
           "type": "course",
@@ -164436,6 +164594,7 @@
     {
       "title": "Honours BSocSc in Social Work",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-social-work/",
+      "slug": "undergrad/honours-bsocsc-social-work",
       "requirements": [
         {
           "type": "course",
@@ -164542,6 +164701,7 @@
     {
       "title": "Honours BSocSc in Sociology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/honours-bsocsc-sociology/",
+      "slug": "undergrad/honours-bsocsc-sociology",
       "requirements": [
         {
           "type": "course",
@@ -164784,6 +164944,7 @@
     {
       "title": "Joint Honours BA in Communication and Political Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-ba-communication-political-science/",
+      "slug": "undergrad/joint-honours-ba-communication-political-science",
       "requirements": [
         {
           "type": "course",
@@ -165301,6 +165462,7 @@
     {
       "title": "Joint Honours BA in Communication and Sociology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-ba-communication-sociology/",
+      "slug": "undergrad/joint-honours-ba-communication-sociology",
       "requirements": [
         {
           "type": "course",
@@ -165740,6 +165902,7 @@
     {
       "title": "Joint Honours BA in History and Political Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-ba-history-political-science/",
+      "slug": "undergrad/joint-honours-ba-history-political-science",
       "requirements": [
         {
           "type": "course",
@@ -166206,6 +166369,7 @@
     {
       "title": "Joint Honours BA in Philosophy and Political Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-ba-philosophy-political-science/",
+      "slug": "undergrad/joint-honours-ba-philosophy-political-science",
       "requirements": [
         {
           "type": "course",
@@ -166664,6 +166828,7 @@
     {
       "title": "Joint Honours BA in Psychology and Linguistics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-ba-psychology-linguistics/",
+      "slug": "undergrad/joint-honours-ba-psychology-linguistics",
       "requirements": [
         {
           "type": "course",
@@ -167043,6 +167208,7 @@
     {
       "title": "Joint Honours BSc in Computer Science and Mathematics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-bsc-computer-science-mathematics/",
+      "slug": "undergrad/joint-honours-bsc-computer-science-mathematics",
       "requirements": [
         {
           "type": "course",
@@ -167303,6 +167469,7 @@
     {
       "title": "Joint Honours BSc in Mathematics and Economics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-bsc-mathematics-economics/",
+      "slug": "undergrad/joint-honours-bsc-mathematics-economics",
       "requirements": [
         {
           "type": "course",
@@ -167536,6 +167703,7 @@
     {
       "title": "Joint Honours BSocSc in Anthropology and Sociology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-bsocsc-anthropology-sociology/",
+      "slug": "undergrad/joint-honours-bsocsc-anthropology-sociology",
       "requirements": [
         {
           "type": "course",
@@ -167878,6 +168046,7 @@
     {
       "title": "Joint Honours BSocSc in Communication and Political Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-bsocsc-communication-political-science/",
+      "slug": "undergrad/joint-honours-bsocsc-communication-political-science",
       "requirements": [
         {
           "type": "course",
@@ -168331,6 +168500,7 @@
     {
       "title": "Joint Honours BSocSc in Communication and Sociology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-bsocsc-communication-sociology/",
+      "slug": "undergrad/joint-honours-bsocsc-communication-sociology",
       "requirements": [
         {
           "type": "course",
@@ -168706,6 +168876,7 @@
     {
       "title": "Joint Honours BSocSc in Criminology and Women's Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-bsocsc-criminology-womens-studies/",
+      "slug": "undergrad/joint-honours-bsocsc-criminology-womens-studies",
       "requirements": [
         {
           "type": "course",
@@ -169273,6 +169444,7 @@
     {
       "title": "Joint Honours BSocSc in Economics and Political Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-bsocsc-economics-political-science/",
+      "slug": "undergrad/joint-honours-bsocsc-economics-political-science",
       "requirements": [
         {
           "type": "course",
@@ -169684,6 +169856,7 @@
     {
       "title": "Joint Honours BSocSc in History and Political Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-bsocsc-history-political-science/",
+      "slug": "undergrad/joint-honours-bsocsc-history-political-science",
       "requirements": [
         {
           "type": "course",
@@ -170086,6 +170259,7 @@
     {
       "title": "Joint Honours BSocSc in Mathematics and Economics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-bsocsc-mathematics-economics/",
+      "slug": "undergrad/joint-honours-bsocsc-mathematics-economics",
       "requirements": [
         {
           "type": "course",
@@ -170319,6 +170493,7 @@
     {
       "title": "Joint Honours BSocSc in Philosophy and Political Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-bsocsc-philosophy-political-science/",
+      "slug": "undergrad/joint-honours-bsocsc-philosophy-political-science",
       "requirements": [
         {
           "type": "course",
@@ -170740,6 +170915,7 @@
     {
       "title": "Joint Honours BSocSc in Public Administration and Political Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-bsocsc-public-administration-political-science/",
+      "slug": "undergrad/joint-honours-bsocsc-public-administration-political-science",
       "requirements": [
         {
           "type": "course",
@@ -171151,6 +171327,7 @@
     {
       "title": "Joint Honours BSocSc in Women's Studies and Political Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-bsocsc-womens-studies-political-science/",
+      "slug": "undergrad/joint-honours-bsocsc-womens-studies-political-science",
       "requirements": [
         {
           "type": "course",
@@ -171811,6 +171988,7 @@
     {
       "title": "Joint Honours BSocSc in Women's Studies and Sociology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-honours-bsocsc-womens-studies-sociology/",
+      "slug": "undergrad/joint-honours-bsocsc-womens-studies-sociology",
       "requirements": [
         {
           "type": "course",
@@ -172386,6 +172564,7 @@
     {
       "title": "Joint LLL-MBA Program",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/joint-lllmba-program/",
+      "slug": "undergrad/joint-lllmba-program",
       "requirements": [
         {
           "type": "and",
@@ -172609,6 +172788,7 @@
     {
       "title": "Juris Doctor (JD) / American University, Washington College of Law or Michigan State University, College of Law) - Incoming",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/juris-doctor-jd-american-university-washington-college-law-michigan-state-university-college-law-incoming/",
+      "slug": "undergrad/juris-doctor-jd-american-university-washington-college-law-michigan-state-university-college-law-incoming",
       "requirements": [
         {
           "type": "and",
@@ -172931,6 +173111,7 @@
     {
       "title": "Juris Doctor (JD) / American University, Washington College of Law or Michigan State University, College of Law) - Outgoing",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/juris-doctor-jd-american-university-washington-college-law-michigan-state-university-college-law-outgoing/",
+      "slug": "undergrad/juris-doctor-jd-american-university-washington-college-law-michigan-state-university-college-law-outgoing",
       "requirements": [
         {
           "type": "and",
@@ -173285,6 +173466,7 @@
     {
       "title": "Juris Doctor (JD) / Master of Arts (International Affairs) - Carleton University",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/juris-doctor-jd-master-arts-international-affairs-carleton-university/",
+      "slug": "undergrad/juris-doctor-jd-master-arts-international-affairs-carleton-university",
       "requirements": [
         {
           "type": "and",
@@ -173625,6 +173807,7 @@
     {
       "title": "Juris Doctor (JD) / Master in Business Administration (MBA)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/juris-doctor-jd-master-business-administration/",
+      "slug": "undergrad/juris-doctor-jd-master-business-administration",
       "requirements": [
         {
           "type": "and",
@@ -174090,6 +174273,7 @@
     {
       "title": "Juris Doctor (JD)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/juris-doctor-jd/",
+      "slug": "undergrad/juris-doctor-jd",
       "requirements": [
         {
           "type": "course",
@@ -174422,6 +174606,7 @@
     {
       "title": "Licentiate in Law (LLL) and Honours BSocSc in International Development and Globalization",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/licentiate-law-lll-honours-bsocsc-international-development-globalization/",
+      "slug": "undergrad/licentiate-law-lll-honours-bsocsc-international-development-globalization",
       "requirements": [
         {
           "type": "and",
@@ -175169,6 +175354,7 @@
     {
       "title": "Licentiate in Law (LLL)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/licentiate-law-lll/",
+      "slug": "undergrad/licentiate-law-lll",
       "requirements": [
         {
           "type": "course",
@@ -175432,6 +175618,7 @@
     {
       "title": "Majeure en lettres françaises et Baccalauréat en éducation",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/majeure-lettres-francaises-baccalaureat-education/",
+      "slug": "undergrad/majeure-lettres-francaises-baccalaureat-education",
       "requirements": [
         {
           "type": "group",
@@ -175726,6 +175913,7 @@
     {
       "title": "Majeure en lettres françaises",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/majeure-lettres-francaises/",
+      "slug": "undergrad/majeure-lettres-francaises",
       "requirements": [
         {
           "type": "course",
@@ -175980,6 +176168,7 @@
     {
       "title": "Major in Aboriginal Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-aboriginal-studies/",
+      "slug": "undergrad/major-aboriginal-studies",
       "requirements": [
         {
           "type": "course",
@@ -176232,6 +176421,7 @@
     {
       "title": "Major in Anthropology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-anthropology/",
+      "slug": "undergrad/major-anthropology",
       "requirements": [
         {
           "type": "course",
@@ -176346,6 +176536,7 @@
     {
       "title": "Major in Arabic Language and Culture",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-arabic-language-culture/",
+      "slug": "undergrad/major-arabic-language-culture",
       "requirements": [
         {
           "type": "course",
@@ -176493,6 +176684,7 @@
     {
       "title": "Major in Biochemistry",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-biochemistry/",
+      "slug": "undergrad/major-biochemistry",
       "requirements": [
         {
           "type": "course",
@@ -176656,6 +176848,7 @@
     {
       "title": "Major in Biology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-biology/",
+      "slug": "undergrad/major-biology",
       "requirements": [
         {
           "type": "course",
@@ -176814,6 +177007,7 @@
     {
       "title": "Major in Chemistry",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-chemistry/",
+      "slug": "undergrad/major-chemistry",
       "requirements": [
         {
           "type": "course",
@@ -176927,6 +177121,7 @@
     {
       "title": "Major in Communication",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-communication/",
+      "slug": "undergrad/major-communication",
       "requirements": [
         {
           "type": "course",
@@ -177006,6 +177201,7 @@
     {
       "title": "Major in Computer Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-computer-science/",
+      "slug": "undergrad/major-computer-science",
       "requirements": [
         {
           "type": "and",
@@ -177208,6 +177404,7 @@
     {
       "title": "Major in Criminology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-criminology/",
+      "slug": "undergrad/major-criminology",
       "requirements": [
         {
           "type": "course",
@@ -177293,6 +177490,7 @@
     {
       "title": "Major in Economics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-economics/",
+      "slug": "undergrad/major-economics",
       "requirements": [
         {
           "type": "course",
@@ -177388,6 +177586,7 @@
     {
       "title": "Major in English as a Second Language (ESL)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-english-second-language-esl/",
+      "slug": "undergrad/major-english-second-language-esl",
       "requirements": [
         {
           "type": "course",
@@ -177539,6 +177738,7 @@
     {
       "title": "Major in English",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-english/",
+      "slug": "undergrad/major-english",
       "requirements": [
         {
           "type": "course",
@@ -177821,6 +178021,7 @@
     {
       "title": "Major in Environmental Studies (Bilingual Program)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-environmental-studies-bilingual-program/",
+      "slug": "undergrad/major-environmental-studies-bilingual-program",
       "requirements": [
         {
           "type": "course",
@@ -177937,6 +178138,7 @@
     {
       "title": "Major in French as a Second Language (FLS)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-french-second-language-fls/",
+      "slug": "undergrad/major-french-second-language-fls",
       "requirements": [
         {
           "type": "course",
@@ -178111,6 +178313,7 @@
     {
       "title": "Major in French Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-french-studies/",
+      "slug": "undergrad/major-french-studies",
       "requirements": [
         {
           "type": "course",
@@ -178333,6 +178536,7 @@
     {
       "title": "Major in Geography",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-geography/",
+      "slug": "undergrad/major-geography",
       "requirements": [
         {
           "type": "course",
@@ -178477,6 +178681,7 @@
     {
       "title": "Major in Geology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-geology/",
+      "slug": "undergrad/major-geology",
       "requirements": [
         {
           "type": "course",
@@ -178597,6 +178802,7 @@
     {
       "title": "Major in Geomatics and Spatial Analysis",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-geomatics-spatial-analysis/",
+      "slug": "undergrad/major-geomatics-spatial-analysis",
       "requirements": [
         {
           "type": "group",
@@ -178716,6 +178922,7 @@
     {
       "title": "Major in German Language and Culture",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-german-language-culture/",
+      "slug": "undergrad/major-german-language-culture",
       "requirements": [
         {
           "type": "course",
@@ -178860,6 +179067,7 @@
     {
       "title": "Major in Greek and Roman Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-greek-roman-studies/",
+      "slug": "undergrad/major-greek-roman-studies",
       "requirements": [
         {
           "type": "course",
@@ -179048,6 +179256,7 @@
     {
       "title": "Major in History and Theory of Art",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-history-theory-art/",
+      "slug": "undergrad/major-history-theory-art",
       "requirements": [
         {
           "type": "course",
@@ -179109,6 +179318,7 @@
     {
       "title": "Major in History",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-history/",
+      "slug": "undergrad/major-history",
       "requirements": [
         {
           "type": "group",
@@ -179224,6 +179434,7 @@
     {
       "title": "Major in Italian Language and Culture",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-italian-language-culture/",
+      "slug": "undergrad/major-italian-language-culture",
       "requirements": [
         {
           "type": "course",
@@ -179313,6 +179524,7 @@
     {
       "title": "Major in Linguistics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-linguistics/",
+      "slug": "undergrad/major-linguistics",
       "requirements": [
         {
           "type": "course",
@@ -179408,6 +179620,7 @@
     {
       "title": "Major in Mathematics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-mathematics/",
+      "slug": "undergrad/major-mathematics",
       "requirements": [
         {
           "type": "discipline_elective",
@@ -179532,6 +179745,7 @@
     {
       "title": "Major in Medieval and Renaissance Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-medieval-renaissance-studies/",
+      "slug": "undergrad/major-medieval-renaissance-studies",
       "requirements": [
         {
           "type": "course",
@@ -179880,6 +180094,7 @@
     {
       "title": "Major in Music Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-music-studies/",
+      "slug": "undergrad/major-music-studies",
       "requirements": [
         {
           "type": "group",
@@ -180169,6 +180384,7 @@
     {
       "title": "Major in Philosophy",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-philosophy/",
+      "slug": "undergrad/major-philosophy",
       "requirements": [
         {
           "type": "group",
@@ -180571,6 +180787,7 @@
     {
       "title": "Major in Physics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-physics/",
+      "slug": "undergrad/major-physics",
       "requirements": [
         {
           "type": "course",
@@ -180758,6 +180975,7 @@
     {
       "title": "Major in Political Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-political-science/",
+      "slug": "undergrad/major-political-science",
       "requirements": [
         {
           "type": "course",
@@ -180844,6 +181062,7 @@
     {
       "title": "Major in Psychology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-psychology/",
+      "slug": "undergrad/major-psychology",
       "requirements": [
         {
           "type": "course",
@@ -180934,6 +181153,7 @@
     {
       "title": "Major in Public Administration",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-public-administration/",
+      "slug": "undergrad/major-public-administration",
       "requirements": [
         {
           "type": "course",
@@ -181252,6 +181472,7 @@
     {
       "title": "Major in Religious Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-religious-studies/",
+      "slug": "undergrad/major-religious-studies",
       "requirements": [
         {
           "type": "course",
@@ -181393,6 +181614,7 @@
     {
       "title": "Major in Russian Language and Culture",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-russian-language-culture/",
+      "slug": "undergrad/major-russian-language-culture",
       "requirements": [
         {
           "type": "and",
@@ -181461,6 +181683,7 @@
     {
       "title": "Major in Second-Language Teaching - Teaching English as a Second Language",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-second-language-teaching-english-second-language/",
+      "slug": "undergrad/major-second-language-teaching-english-second-language",
       "requirements": [
         {
           "type": "course",
@@ -181593,6 +181816,7 @@
     {
       "title": "Major in Second-Language Teaching - Teaching French as a Second Language",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-second-language-teaching-french-second-language/",
+      "slug": "undergrad/major-second-language-teaching-french-second-language",
       "requirements": [
         {
           "type": "course",
@@ -181787,6 +182011,7 @@
     {
       "title": "Major in Sociology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-sociology/",
+      "slug": "undergrad/major-sociology",
       "requirements": [
         {
           "type": "course",
@@ -182003,6 +182228,7 @@
     {
       "title": "Major in Spanish",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-spanish/",
+      "slug": "undergrad/major-spanish",
       "requirements": [
         {
           "type": "and",
@@ -182142,6 +182368,7 @@
     {
       "title": "Major in Statistics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-statistics/",
+      "slug": "undergrad/major-statistics",
       "requirements": [
         {
           "type": "discipline_elective",
@@ -182300,6 +182527,7 @@
     {
       "title": "Major in Theatre",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-theatre/",
+      "slug": "undergrad/major-theatre",
       "requirements": [
         {
           "type": "course",
@@ -182634,6 +182862,7 @@
     {
       "title": "Major in Visual Arts",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-visual-arts/",
+      "slug": "undergrad/major-visual-arts",
       "requirements": [
         {
           "type": "course",
@@ -182763,6 +182992,7 @@
     {
       "title": "Major in Women's Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-womens-studies/",
+      "slug": "undergrad/major-womens-studies",
       "requirements": [
         {
           "type": "course",
@@ -183085,6 +183315,7 @@
     {
       "title": "Major in World Cinemas",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/major-world-cinemas/",
+      "slug": "undergrad/major-world-cinemas",
       "requirements": [
         {
           "type": "course",
@@ -183280,6 +183511,7 @@
     {
       "title": "Mineure en écriture et style",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/mineure-ecriture-style/",
+      "slug": "undergrad/mineure-ecriture-style",
       "requirements": [
         {
           "type": "course",
@@ -183331,6 +183563,7 @@
     {
       "title": "Mineure en lettres françaises",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/mineure-lettres-francaises/",
+      "slug": "undergrad/mineure-lettres-francaises",
       "requirements": [
         {
           "type": "course",
@@ -183371,6 +183604,7 @@
     {
       "title": "Mineure en rédaction professionnelle et édition",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/mineure-redaction-professionnelle-edition/",
+      "slug": "undergrad/mineure-redaction-professionnelle-edition",
       "requirements": [
         {
           "type": "course",
@@ -183476,6 +183710,7 @@
     {
       "title": "Mineure en traduction vers le français",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/mineure-traduction-vers-francais/",
+      "slug": "undergrad/mineure-traduction-vers-francais",
       "requirements": [
         {
           "type": "course",
@@ -183557,6 +183792,7 @@
     {
       "title": "Minor in Aboriginal Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-aboriginal-studies/",
+      "slug": "undergrad/minor-aboriginal-studies",
       "requirements": [
         {
           "type": "course",
@@ -183717,6 +183953,7 @@
     {
       "title": "Minor in Advanced English as a Second Language",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-advanced-english-second-language/",
+      "slug": "undergrad/minor-advanced-english-second-language",
       "requirements": [
         {
           "type": "course",
@@ -183817,6 +184054,7 @@
     {
       "title": "Minor in Advanced French as a Second Language",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-advanced-french-second-language/",
+      "slug": "undergrad/minor-advanced-french-second-language",
       "requirements": [
         {
           "type": "course",
@@ -183962,6 +184200,7 @@
     {
       "title": "Minor in Anthropology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-anthropology/",
+      "slug": "undergrad/minor-anthropology",
       "requirements": [
         {
           "type": "course",
@@ -184039,6 +184278,7 @@
     {
       "title": "Minor in Applied Ethics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-applied-ethics/",
+      "slug": "undergrad/minor-applied-ethics",
       "requirements": [
         {
           "type": "course",
@@ -184169,6 +184409,7 @@
     {
       "title": "Minor in Arabic Language and Culture",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-arabic-language-culture/",
+      "slug": "undergrad/minor-arabic-language-culture",
       "requirements": [
         {
           "type": "course",
@@ -184284,6 +184525,7 @@
     {
       "title": "Minor in Asian Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-asian-studies/",
+      "slug": "undergrad/minor-asian-studies",
       "requirements": [
         {
           "type": "options_group",
@@ -184456,6 +184698,7 @@
     {
       "title": "Minor in Biochemistry",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-biochemistry/",
+      "slug": "undergrad/minor-biochemistry",
       "requirements": [
         {
           "type": "course",
@@ -184597,6 +184840,7 @@
     {
       "title": "Minor in Biology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-biology/",
+      "slug": "undergrad/minor-biology",
       "requirements": [
         {
           "type": "course",
@@ -184727,6 +184971,7 @@
     {
       "title": "Minor in Biophysics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-biophysics/",
+      "slug": "undergrad/minor-biophysics",
       "requirements": [
         {
           "type": "course",
@@ -184872,6 +185117,7 @@
     {
       "title": "Minor in Canadian Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-canadian-studies/",
+      "slug": "undergrad/minor-canadian-studies",
       "requirements": [
         {
           "type": "course",
@@ -185182,6 +185428,7 @@
     {
       "title": "Minor in Celtic Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-celtic-studies/",
+      "slug": "undergrad/minor-celtic-studies",
       "requirements": [
         {
           "type": "course",
@@ -185309,6 +185556,7 @@
     {
       "title": "Minor in Chemistry",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-chemistry/",
+      "slug": "undergrad/minor-chemistry",
       "requirements": [
         {
           "type": "course",
@@ -185349,6 +185597,7 @@
     {
       "title": "Minor in Communication",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-communication/",
+      "slug": "undergrad/minor-communication",
       "requirements": [
         {
           "type": "course",
@@ -185406,6 +185655,7 @@
     {
       "title": "Minor in Computer Science for Scientists",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-computer-science-scientists/",
+      "slug": "undergrad/minor-computer-science-scientists",
       "requirements": [
         {
           "type": "and",
@@ -185522,6 +185772,7 @@
     {
       "title": "Minor in Computer Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-computer-science/",
+      "slug": "undergrad/minor-computer-science",
       "requirements": [
         {
           "type": "course",
@@ -185698,6 +185949,7 @@
     {
       "title": "Minor in Criminology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-criminology/",
+      "slug": "undergrad/minor-criminology",
       "requirements": [
         {
           "type": "course",
@@ -185747,6 +185999,7 @@
     {
       "title": "Minor in Digital Humanities",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-digital-humanities/",
+      "slug": "undergrad/minor-digital-humanities",
       "requirements": [
         {
           "type": "course",
@@ -185933,6 +186186,7 @@
     {
       "title": "Minor in Economics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-economics/",
+      "slug": "undergrad/minor-economics",
       "requirements": [
         {
           "type": "course",
@@ -186005,6 +186259,7 @@
     {
       "title": "Minor in English as a Second Language (ESL)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-english-second-language-esl/",
+      "slug": "undergrad/minor-english-second-language-esl",
       "requirements": [
         {
           "type": "course",
@@ -186105,6 +186360,7 @@
     {
       "title": "Minor in English",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-english/",
+      "slug": "undergrad/minor-english",
       "requirements": [
         {
           "type": "course",
@@ -186177,6 +186433,7 @@
     {
       "title": "Minor in Environmental Studies (Bilingual Program)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-environmental-studies-bilingual-program/",
+      "slug": "undergrad/minor-environmental-studies-bilingual-program",
       "requirements": [
         {
           "type": "course",
@@ -186279,6 +186536,7 @@
     {
       "title": "Minor in Francophone Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-francophone-studies/",
+      "slug": "undergrad/minor-francophone-studies",
       "requirements": [
         {
           "type": "course",
@@ -186559,6 +186817,7 @@
     {
       "title": "Minor in French as a Second Language (FLS)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-french-second-language-fls/",
+      "slug": "undergrad/minor-french-second-language-fls",
       "requirements": [
         {
           "type": "course",
@@ -186669,6 +186928,7 @@
     {
       "title": "Minor in Geography",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-geography/",
+      "slug": "undergrad/minor-geography",
       "requirements": [
         {
           "type": "course",
@@ -186743,6 +187003,7 @@
     {
       "title": "Minor in Geology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-geology/",
+      "slug": "undergrad/minor-geology",
       "requirements": [
         {
           "type": "course",
@@ -186830,6 +187091,7 @@
     {
       "title": "Minor in Geomatics and Spatial Analysis",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-geomatics-spatial-analysis/",
+      "slug": "undergrad/minor-geomatics-spatial-analysis",
       "requirements": [
         {
           "type": "course",
@@ -186888,6 +187150,7 @@
     {
       "title": "Minor in German Language and Culture",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-german-language-culture/",
+      "slug": "undergrad/minor-german-language-culture",
       "requirements": [
         {
           "type": "course",
@@ -187006,6 +187269,7 @@
     {
       "title": "Minor in Gerontology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-gerontology/",
+      "slug": "undergrad/minor-gerontology",
       "requirements": [
         {
           "type": "course",
@@ -187164,6 +187428,7 @@
     {
       "title": "Minor in Global Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-global-studies/",
+      "slug": "undergrad/minor-global-studies",
       "requirements": [
         {
           "type": "course",
@@ -187320,6 +187585,7 @@
     {
       "title": "Minor in Greek and Roman Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-greek-roman-studies/",
+      "slug": "undergrad/minor-greek-roman-studies",
       "requirements": [
         {
           "type": "course",
@@ -187433,6 +187699,7 @@
     {
       "title": "Minor in Health Sciences",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-health-sciences/",
+      "slug": "undergrad/minor-health-sciences",
       "requirements": [
         {
           "type": "and",
@@ -187554,6 +187821,7 @@
     {
       "title": "Minor in History and Theory of Art",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-history-theory-art/",
+      "slug": "undergrad/minor-history-theory-art",
       "requirements": [
         {
           "type": "course",
@@ -187600,6 +187868,7 @@
     {
       "title": "Minor in History",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-history/",
+      "slug": "undergrad/minor-history",
       "requirements": [
         {
           "type": "group",
@@ -187661,6 +187930,7 @@
     {
       "title": "Minor in Italian Language and Culture",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-italian-language-culture/",
+      "slug": "undergrad/minor-italian-language-culture",
       "requirements": [
         {
           "type": "course",
@@ -187707,6 +187977,7 @@
     {
       "title": "Minor in Jewish Canadian Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-jewish-canadian-studies/",
+      "slug": "undergrad/minor-jewish-canadian-studies",
       "requirements": [
         {
           "type": "course",
@@ -187935,6 +188206,7 @@
     {
       "title": "Minor in Latin American Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-latin-american-studies/",
+      "slug": "undergrad/minor-latin-american-studies",
       "requirements": [
         {
           "type": "elective",
@@ -188106,6 +188378,7 @@
     {
       "title": "Minor in Law",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-law/",
+      "slug": "undergrad/minor-law",
       "requirements": [
         {
           "type": "course",
@@ -188353,6 +188626,7 @@
     {
       "title": "Minor in Leisure Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-leisure-studies/",
+      "slug": "undergrad/minor-leisure-studies",
       "requirements": [
         {
           "type": "and",
@@ -188484,6 +188758,7 @@
     {
       "title": "Minor in Life Sciences",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-life-sciences/",
+      "slug": "undergrad/minor-life-sciences",
       "requirements": [
         {
           "type": "course",
@@ -188674,6 +188949,7 @@
     {
       "title": "Minor in Linguistics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-linguistics/",
+      "slug": "undergrad/minor-linguistics",
       "requirements": [
         {
           "type": "course",
@@ -188724,6 +189000,7 @@
     {
       "title": "Minor in Management",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-management/",
+      "slug": "undergrad/minor-management",
       "requirements": [
         {
           "type": "course",
@@ -189001,6 +189278,7 @@
     {
       "title": "Minor in Mathematics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-mathematics/",
+      "slug": "undergrad/minor-mathematics",
       "requirements": [
         {
           "type": "options_group",
@@ -189134,6 +189412,7 @@
     {
       "title": "Minor in Medieval and Renaissance Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-medieval-renaissance-studies/",
+      "slug": "undergrad/minor-medieval-renaissance-studies",
       "requirements": [
         {
           "type": "course",
@@ -189374,6 +189653,7 @@
     {
       "title": "Minor in Music",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-music/",
+      "slug": "undergrad/minor-music",
       "requirements": [
         {
           "type": "course",
@@ -189473,6 +189753,7 @@
     {
       "title": "Minor in Philosophy",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-philosophy/",
+      "slug": "undergrad/minor-philosophy",
       "requirements": [
         {
           "type": "group",
@@ -189595,6 +189876,7 @@
     {
       "title": "Minor in Physics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-physics/",
+      "slug": "undergrad/minor-physics",
       "requirements": [
         {
           "type": "options_group",
@@ -189785,6 +190067,7 @@
     {
       "title": "Minor in Political Science",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-political-science/",
+      "slug": "undergrad/minor-political-science",
       "requirements": [
         {
           "type": "course",
@@ -189847,6 +190130,7 @@
     {
       "title": "Minor in Psychology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-psychology/",
+      "slug": "undergrad/minor-psychology",
       "requirements": [
         {
           "type": "course",
@@ -189887,6 +190171,7 @@
     {
       "title": "Minor in Public Administration",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-public-administration/",
+      "slug": "undergrad/minor-public-administration",
       "requirements": [
         {
           "type": "course",
@@ -190162,6 +190447,7 @@
     {
       "title": "Minor in Religious Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-religious-studies/",
+      "slug": "undergrad/minor-religious-studies",
       "requirements": [
         {
           "type": "course",
@@ -190284,6 +190570,7 @@
     {
       "title": "Minor in Russian Language and Culture",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-russian-language-culture/",
+      "slug": "undergrad/minor-russian-language-culture",
       "requirements": [
         {
           "type": "course",
@@ -190395,6 +190682,7 @@
     {
       "title": "Minor in Social Sciences of Health",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-social-sciences-health/",
+      "slug": "undergrad/minor-social-sciences-health",
       "requirements": [
         {
           "type": "course",
@@ -190634,6 +190922,7 @@
     {
       "title": "Minor in Social Work",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-social-work/",
+      "slug": "undergrad/minor-social-work",
       "requirements": [
         {
           "type": "course",
@@ -190679,6 +190968,7 @@
     {
       "title": "Minor in Sociology",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-sociology/",
+      "slug": "undergrad/minor-sociology",
       "requirements": [
         {
           "type": "course",
@@ -190719,6 +191009,7 @@
     {
       "title": "Minor in Spanish",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-spanish/",
+      "slug": "undergrad/minor-spanish",
       "requirements": [
         {
           "type": "and",
@@ -190771,6 +191062,7 @@
     {
       "title": "Minor in Statistics",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-statistics/",
+      "slug": "undergrad/minor-statistics",
       "requirements": [
         {
           "type": "options_group",
@@ -190959,6 +191251,7 @@
     {
       "title": "Minor in Theatre",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-theatre/",
+      "slug": "undergrad/minor-theatre",
       "requirements": [
         {
           "type": "course",
@@ -191019,6 +191312,7 @@
     {
       "title": "Minor in Translation into English",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-translation-english/",
+      "slug": "undergrad/minor-translation-english",
       "requirements": [
         {
           "type": "course",
@@ -191100,6 +191394,7 @@
     {
       "title": "Minor in United States Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-united-states-studies/",
+      "slug": "undergrad/minor-united-states-studies",
       "requirements": [
         {
           "type": "group",
@@ -191252,6 +191547,7 @@
     {
       "title": "Minor in Women's Studies",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-womens-studies/",
+      "slug": "undergrad/minor-womens-studies",
       "requirements": [
         {
           "type": "course",
@@ -191555,6 +191851,7 @@
     {
       "title": "Minor in World Cinemas",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/minor-world-cinemas/",
+      "slug": "undergrad/minor-world-cinemas",
       "requirements": [
         {
           "type": "course",
@@ -191695,6 +191992,7 @@
     {
       "title": "National Program (JD-LLL)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/national-program-jdlll-cml/",
+      "slug": "undergrad/national-program-jdlll-cml",
       "requirements": [
         {
           "type": "course",
@@ -191741,6 +192039,7 @@
     {
       "title": "National Program (JD/LLL)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/national-program-jdlll-drc/",
+      "slug": "undergrad/national-program-jdlll-drc",
       "requirements": [
         {
           "type": "course",
@@ -191822,6 +192121,7 @@
     {
       "title": "Programme de droit canadien – Juris Doctor (J.D.)/Licence en droit (LL.L.)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/programme-droit-canadien-juris-doctor-jd-licence-droit-lll/",
+      "slug": "undergrad/programme-droit-canadien-juris-doctor-jd-licence-droit-lll",
       "requirements": [
         {
           "type": "and",
@@ -192007,6 +192307,7 @@
     {
       "title": "Teacher Education - Intermediate/Senior division",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/teacher-education-intermediate-senior-division/",
+      "slug": "undergrad/teacher-education-intermediate-senior-division",
       "requirements": [
         {
           "type": "course",
@@ -192281,6 +192582,7 @@
     {
       "title": "Teacher Education - Junior/Intermediate division",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/teacher-education-junior-intermediate-division/",
+      "slug": "undergrad/teacher-education-junior-intermediate-division",
       "requirements": [
         {
           "type": "course",
@@ -192503,6 +192805,7 @@
     {
       "title": "Teacher Education - Primary/Junior division",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/teacher-education-primary-junior-division/",
+      "slug": "undergrad/teacher-education-primary-junior-division",
       "requirements": [
         {
           "type": "course",
@@ -192667,6 +192970,7 @@
     {
       "title": "Undergraduate Medical Education (MD Program)",
       "url": "https://catalogue.uottawa.ca/archive/2017-2018/en/undergrad/undergraduate-medical-education-md-program/",
+      "slug": "undergrad/undergraduate-medical-education-md-program",
       "requirements": [
         {
           "type": "course",
