@@ -120,7 +120,6 @@ export const createUrlSlice: StateCreator<
       includeClosedComponents: decoded.includeClosedComponents ?? false,
       generatedSchedules: [],
       generationError: null,
-      generationErrorDetails: null,
       constrainedPerRequirement,
       ...(decoded.selectedTermId != null ? { selectedTermId: decoded.selectedTermId } : {}),
       ...(decoded.firstYear != null ? { firstYear: decoded.firstYear } : {}),
