@@ -1,179 +1,30 @@
-## Schedule generation and requirement integration
+## Schedule generation
 
-This document summarizes how schedule generation works and how it now respects per-category (per-requirement) credit limits.
+How uoplan builds conflict-free timetables from program requirements and user choices.
 
----
+### Pipeline
 
-### High-level pipeline
+1. **Data** — `packages/schedule` provides `buildDataCache` over catalogue + schedule JSON. The web app loads this into Zustand as `cache`.
 
-- **Data cache**
-  - `buildDataCache` (in `src/lib/dataCache.ts`) loads:
-    - `catalogue.json` (courses + program requirements).
-    - `schedules.json` (per-course offerings).
-  - Provides helpers like `getCourse`, `getSchedule`, `getAllCourses`.
+2. **Requirements** — `computeRequirementsState` / `recomputeStateForProgram` produce `remainingRequirements`, `requirementTreeWithStatus`, and `selectedPerRequirement`. Assign-step auto-select skips honours when it is the only “schedulable” option; **`apps/web/src/lib/implicitHonours.ts`** infers that honours thesis for generation when no non-honours course has timetable data and the user has not cleared or replaced that slot.
 
-- **Requirements evaluation**
-  - `computeRequirementsState` (in `src/lib/requirements.ts`) walks the program requirement DSL for a given set of `completedCourses`.
-  - It returns:
-    - `remainingRequirements: RemainingRequirement[]` – open requirement “slots” with:
-      - `requirementId`
-      - `candidateCourses`
-      - `creditsNeeded`
-      - `pickedCount` (for some groups)
-      - `satisfiedBy` (completed courses already allocated).
-    - `requirementTreeWithStatus: RequirementWithStatus[]` – the full requirement tree annotated with completion status.
-  - For completed courses, each requirement node (`group`, `pick`, elective types, etc.) stops allocating from the pool once its `creditsNeeded` has been met.
+3. **Orchestration** — **`apps/web/src/lib/generateSchedulesAction.ts`** (invoked from `createSchedulesSlice` → `generateSchedules`):
+   - Pins honours (Constrain, Assign, or implicit) and optional explicit union from Constrain (`mergeGlobalExplicitRule`, `pickFromUserAndGeneralPools` from `packages/schedule`).
+   - Builds **`RequirementPool`s** via `buildRequirementPools` and allocates counts with **`computeCoursesPerPool`** (`apps/web/src/store/scheduleHelpers.ts`), adjusting credits for pinned courses **once per requirement** (`requirementIdForPinnedCourse`).
+   - Samples candidates per pool, then calls **`generateSchedules`** / **`generateSchedulesWithPinned`** in **`packages/schedule/src/scheduleGenerator.ts`** (backtracking over section combos; honours projects use empty timetables).
 
-- **User selections per requirement**
-  - `RequirementsStep` (in `src/components/RequirementsStep.tsx`) renders the requirement tree and:
-    - Shows a `MultiSelect` for nodes that expose a `requirementId` and `candidateCourses`.
-    - Stores selections in `selectedPerRequirement[requirementId]`.
-    - Displays guidance such as:
-      - How many credits are still needed for that requirement.
-      - A warning when the user selects more credits than the requirement needs.
+4. **Constraints** — `GenerationConstraints` (time window, days, professor rating, first-year credit cap, compressed schedule) are applied inside `scheduleGenerator.ts`.
 
-- **Schedule generation orchestration**
-  - `generateSchedules` in `src/store/appStore.ts` orchestrates:
-    - **Pinned courses**:
-      - Flatten `selectedPerRequirement` and dedupe.
-      - Filter to courses that have schedules and are not honours-project components.
-      - If the number of selected schedulable courses is **at most** the term target, these are forced into every schedule and count toward `coursesThisSemester`.
-      - If the number of selected schedulable courses **exceeds** the term target, selections are treated as the **initial candidate pool** (not all are forced into every schedule); schedules are generated from subsets of the selected courses, and only if none exist do we expand the pool with additional remaining-requirement candidates.
-    - **Requirement pools**:
-      - Convert each `RemainingRequirement` into a simple internal `RequirementPool`:
-        - `requirementId`
-        - `type`
-        - `label`
-        - `candidateCourses` (deduped)
-        - `creditsNeeded` (remaining credits for that requirement)
-        - `minCourses` (e.g., 1 for plain `course` slots).
-      - Adjust each pool’s `creditsNeeded` to account for pinned courses that already satisfy that requirement.
-      - Decide how many courses to pull from each pool for this term using the pool’s `creditsNeeded`, the average credits of its candidates, and the remaining course slots for the semester.
-    - **Per-pool candidate arrays and sampling**:
-      - For each active pool, build a candidate array by filtering `candidateCourses` by:
-        - Having a schedule (`cache.getSchedule`),
-        - Passing prerequisite checks,
-        - Matching current filters (level, language).
-      - Randomly shuffle each pool’s candidate list.
-      - For each pool, randomly pick up to its allocated number of courses, skipping duplicates and pinned codes. This directly implements the “each requirement has an array of options, pick from each” model.
-    - **Global elective top-up**:
-      - If per-pool sampling produces fewer courses than the term target, build a global elective pool from catalogue courses that:
-        - Have schedules,
-        - Are prereq-eligible and pass filters,
-        - Are not pinned, already chosen, or honours/research,
-        - And, optionally, still help reduce remaining credits when added.
-      - Randomly select additional electives from this pool until the target course count is reached or no more suitable courses exist.
-    - **Time-based schedule generation**:
-      - Calls `generateSchedules`/`generateSchedulesWithPinned` in `src/lib/scheduleGenerator.ts`.
-      - These functions know only about:
-        - Course codes.
-        - Section times.
-        - `targetCount` (number of courses per schedule).
+### Per-requirement credit caps
 
----
+`computeCoursesPerPool` allocates at most `ceil(creditsNeeded / 3)` courses per pool (subject to the semester non-honours target). There is no separate “global elective top-up” pass in the store; extra courses beyond the sum of those caps are not synthesized.
 
-### Respecting per-category credit limits
+### References
 
-Schedule generation itself remains purely time-based; per-category limits are enforced when building the pinned and optional pools.
-
-#### 1. `helpsRequirements` includes pinned selections
-
-- **Location**: `generateSchedules` in `src/store/appStore.ts`.
-- **Behavior**:
-  - Previously, `helpsRequirements(code)` evaluated a course only against `completedCourses`.
-  - It now uses a baseline that includes **both** completed and pinned courses:
-    - `baseForRequirementEval = [...completedCourses, ...pinned]`.
-    - `before` = `computeRequirementsState(program, baseForRequirementEval, cache).remaining`.
-    - `after` = `computeRequirementsState(program, [...baseForRequirementEval, code], cache).remaining`.
-    - A course is considered helpful only if the sum of all `creditsNeeded` across remaining requirements decreases.
-- **Effect**:
-  - Once a requirement is fully covered by pinned courses, additional candidates from that requirement usually no longer reduce the global remaining credits.
-  - Those extra candidates are therefore excluded from the optional pool, preventing them from being added just because they would have been helpful in isolation.
-
-#### 2. Capping optional candidates per requirement
-
-- **Location**: optional-pool construction in `generateSchedules` (`src/store/appStore.ts`).
-- **Behavior**:
-  - Before iterating `remainingRequirements`, the store precomputes:
-    - For each `RemainingRequirement` with a `requirementId`, `creditsNeeded`, and `candidateCourses`:
-      - `pinnedCreditsForReq` = sum of credits of pinned courses that are also in `candidateCourses`.
-      - `remainingCreditsForReq` = `max(0, creditsNeeded - pinnedCreditsForReq)`.
-    - These are stored in `remainingCreditsByRequirementId`.
-  - While populating `optionalPool` from each requirement’s `candidateCourses`:
-    - If `remainingCreditsByRequirementId[requirementId] <= 0`, candidates from that requirement are skipped.
-    - When a course is accepted into `optionalPool`, its credits are subtracted from the corresponding entry in `remainingCreditsByRequirementId`.
-- **Effect**:
-  - Each requirement contributes at most enough optional candidates (by credit total) to satisfy its remaining need **after** pinned courses have been considered.
-  - Requirements that are already effectively covered by pinned courses stop feeding candidates into the optional pool.
-
-Together with the updated `helpsRequirements`, this ensures that:
-
-- A requirement such as “3 credits of CSI 4000-level” does not keep adding multiple CSI courses to the optional pool once either:
-  - A pinned CSI course already covers it, or
-  - Enough optional CSI candidates have been earmarked to satisfy its remaining credits.
-- Other unmet requirements (e.g., “6 credits of non-computing non-math electives”) are prioritized when building the pool of additional courses.
-
----
-
-### What the generator guarantees (and what it does not)
-
-- **Guaranteed**:
-  - Each schedule contains exactly `coursesThisSemester` non-honours-project courses.
-  - No time conflicts between chosen sections.
-  - Pinned courses appear in every generated schedule.
-  - Optional courses that enter schedules come from a pool that:
-    - Considers per-requirement remaining credits.
-    - Treats already-pinned coverage as satisfying parts of requirements.
-
-- **Not guaranteed**:
-  - A single course is not strictly “bound” to a specific requirement when it can satisfy multiple; the requirements engine resolves that mapping when courses are later treated as completed.
-  - If there are not enough eligible courses to fill all unmet requirement categories, the generator may still include “extra” courses from already-satisfied categories to reach `coursesThisSemester`.
-  - User over-selection in `RequirementsStep` (pinning more courses than needed for a requirement) is respected as intent; the generator will keep those pinned courses, even if that leads to more category coverage than strictly required.
-
----
-
-### Generation constraints
-
-The `GenerationConstraints` interface in `src/lib/scheduleGenerator.ts` collects all filters applied when building schedules. Currently supported:
-
-| Field | Type | Effect |
-|---|---|---|
-| `minStartMinutes` | `number` | Earliest allowed class start time (minutes since midnight) |
-| `maxEndMinutes` | `number` | Latest allowed class end time |
-| `allowedDays` | `DayOfWeek[]` | Only these days may have classes |
-| `minProfessorRating` | `number?` | Sections whose instructor's RMP rating is below this are excluded |
-| `maxFirstYearCredits` | `number?` | Max total credits from 1000-level courses in the schedule |
-| `compressedSchedule` | `boolean?` | Each day may have at most one gap; that gap must be ≤ 90 minutes |
-
-#### 1000-level credit cap (`maxFirstYearCredits`)
-
-UOttawa limits 1000-level courses to **48 credits** globally for all undergrad programs.
-
-- The Generate step computes `completedFirstYearCredits` (sum of credits of already-completed 1000-level courses) and `selectedFirstYearCredits` (1000-level credits from courses selected in RequirementsStep that haven't been completed yet).
-- If `completedFirstYearCredits + selectedFirstYearCredits > 48`, a yellow warning is shown.
-- A checkbox — **"Limit 1000-level courses to 48 credits"** — is always shown when the student has any 1000-level credits. When enabled, `maxFirstYearCredits = 48 - completedFirstYearCredits` is passed as a constraint.
-- The constraint is enforced in `generateSchedules` and `generateSchedulesWithPinned`: any candidate course combination whose 1000-level credits exceed the budget is skipped.
-
-#### Compressed schedule (`compressedSchedule`)
-
-When enabled, generated schedules must have **at most one gap per day**, and that gap must be **≤ 90 minutes**.
-
-- Enforced via `satisfiesCompressedConstraint()` in `scheduleGenerator.ts`.
-- Applied to the complete set of enrollments just before they would be added to the output, in both `generateSchedules` and `generateSchedulesWithPinned`.
-- Checkbox label in the UI: **"Compressed schedule"**; description: "At most one break per day, up to 90 minutes."
-
----
-
-### UI guidance for over-selection
-
-- **Location**: `RequirementsStep` in `src/components/RequirementsStep.tsx`.
-- **Behavior**:
-  - For requirement nodes with `creditsNeeded > 0`, the UI computes:
-    - `selectedCredits` for the currently selected candidate courses.
-  - If `selectedCredits` exceeds `creditsNeeded`, the helper text:
-    - Switches to a warning message.
-    - Uses a more prominent color to indicate that extra courses may not count toward that requirement.
-- **Effect**:
-  - Users still have the flexibility to deliberately over-select (and thus pin) courses.
-  - The UI communicates that such over-selection goes beyond what the requirement strictly needs, aligning user expectations with the generator’s behavior.
-
+| Piece | Location |
+|-------|----------|
+| Pool building + allocation | `apps/web/src/store/scheduleHelpers.ts` |
+| Honours inference | `apps/web/src/lib/implicitHonours.ts` |
+| Full generation flow | `apps/web/src/lib/generateSchedulesAction.ts` |
+| Timetable backtracking | `packages/schedule/src/scheduleGenerator.ts` |
+| Explicit vs general pool split | `packages/schedule/src/scheduleCandidates/explicitPoolPicks.ts`, `kUserKGeneral.ts` |
