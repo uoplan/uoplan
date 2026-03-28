@@ -406,11 +406,13 @@ export function ConstrainStep({
       </Paper>
 
       <Text size="sm" c="dimmed">
-        Optionally pin specific courses for each requirement. Leave a
-        requirement empty to let the generator pick any eligible course.
-        Selecting up to the required number of courses pins them — the rest
-        will be filled automatically. Selecting more than needed restricts the
-        pool to only those courses.
+        Optionally choose courses you want considered for each requirement.
+        Leave a requirement empty to let the generator pick any eligible
+        course. For each requirement, up to min(needed, your picks) courses
+        are chosen only from your list; any remaining slots for that
+        requirement come from other eligible courses. If you list at least as
+        many picks as there are courses in your term, schedules use only those
+        courses.
       </Text>
 
       {missingSelections.length > 0 && (
