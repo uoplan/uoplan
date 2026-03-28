@@ -1,4 +1,6 @@
 import type { AppState } from "../store/appStore";
+import type { GenerationErrorDetails, GenerationErrorState } from "../store/types";
+import type { DataCache } from "schedule";
 import { createSeededRng } from "schedule";
 import {
   generateSchedules as genSchedules,
@@ -26,6 +28,7 @@ import {
   pickFromUserAndGeneralPools,
 } from "schedule";
 import { collectImplicitHonoursForSchedule } from "./implicitHonours";
+import { diagnoseTimetableFailure, type TimetableFailureDiagnostics } from "schedule";
 
 /**
  * Walks the requirement tree following the user's option selections and
@@ -87,6 +90,43 @@ function collectRequirementsFromSelectedBranches(
   return result;
 }
 
+function buildTimetableFailureDiagnostics(
+  poolDiagnostics: {
+    emptyPools: Array<{ label: string; requirementId?: string }>;
+    totalAvailable: number;
+    totalNeeded: number;
+  } | null,
+  pinned: string[],
+  filteredOptionalPool: string[],
+  coursesThisSemester: number,
+  effectiveCache: DataCache,
+  constraints: GenerationConstraints,
+): { details: GenerationErrorDetails; timetableFailure: TimetableFailureDiagnostics } {
+  const timetableFailure = diagnoseTimetableFailure({
+    pinnedCourseCodes: pinned,
+    optionalCourseCodes: filteredOptionalPool,
+    targetCount: coursesThisSemester,
+    cache: effectiveCache,
+    constraints,
+  });
+  const details: GenerationErrorDetails = {
+    emptyPools: poolDiagnostics?.emptyPools ?? [],
+    totalAvailable:
+      poolDiagnostics?.totalAvailable ??
+      pinned.length + filteredOptionalPool.length,
+    totalNeeded: poolDiagnostics?.totalNeeded ?? coursesThisSemester,
+    timetableFailure,
+  };
+  return { details, timetableFailure };
+}
+
+function generationErrorState(
+  message: string,
+  details: GenerationErrorDetails | null = null,
+): GenerationErrorState {
+  return { message, details };
+}
+
 export interface GenerateSchedulesResult {
   generatedSchedules: GeneratedSchedule[];
   swapPool: string[];
@@ -94,12 +134,7 @@ export interface GenerateSchedulesResult {
   schedulePoolMaps: Record<string, string>[];
   selectedScheduleIndex: number;
   swapHistory: never[];
-  generationError: string | null;
-  generationErrorDetails: {
-    emptyPools: Array<{ label: string; requirementId?: string }>;
-    totalAvailable: number;
-    totalNeeded: number;
-  } | null;
+  generationError: GenerationErrorState | null;
 }
 
 export async function generateSchedulesAction(
@@ -170,8 +205,9 @@ export async function generateSchedulesAction(
       schedulePoolMaps: state.schedulePoolMaps,
       selectedScheduleIndex: state.selectedScheduleIndex,
       swapHistory: [],
-      generationError: `Assign all completed courses to requirements before generating schedules. Unassigned: ${preview.join(", ")}${suffix}`,
-      generationErrorDetails: null,
+      generationError: generationErrorState(
+        `Assign all completed courses to requirements before generating schedules. Unassigned: ${preview.join(", ")}${suffix}`,
+      ),
     };
   }
 
@@ -355,8 +391,9 @@ export async function generateSchedulesAction(
       schedulePoolMaps: state.schedulePoolMaps,
       selectedScheduleIndex: state.selectedScheduleIndex,
       swapHistory: [],
-      generationError: "Please choose exactly one option in each \"or\" block before generating schedules.",
-      generationErrorDetails: null,
+      generationError: generationErrorState(
+        'Please choose exactly one option in each "or" block before generating schedules.',
+      ),
     };
   }
 
@@ -678,8 +715,10 @@ export async function generateSchedulesAction(
         schedulePoolMaps: state.schedulePoolMaps,
         selectedScheduleIndex: state.selectedScheduleIndex,
         swapHistory: [],
-        generationError: "Not enough eligible courses to generate another schedule. Try relaxing filters or changing selections.",
-        generationErrorDetails: poolDiagnostics,
+        generationError: generationErrorState(
+          "Not enough courses for another schedule.",
+          poolDiagnostics,
+        ),
       };
     }
     const swapPool = [...new Set([...pinned, ...filteredOptionalPool])];
@@ -690,8 +729,10 @@ export async function generateSchedulesAction(
       schedulePoolMaps: [],
       selectedScheduleIndex: 0,
       swapHistory: [],
-      generationError: "Not enough eligible courses match your filters and requirements to build a full schedule. Try relaxing filters or changing selections.",
-      generationErrorDetails: poolDiagnostics,
+      generationError: generationErrorState(
+        "Not enough courses match your filters.",
+        poolDiagnostics,
+      ),
     };
   }
 
@@ -717,11 +758,18 @@ export async function generateSchedulesAction(
       selectedScheduleIndex: newSchedules.length - 1,
       swapHistory: [],
       generationError: null,
-      generationErrorDetails: null,
     };
   }
 
   if (appendFirstOnly && limitedSchedules.length === 0) {
+    const { details, timetableFailure } = buildTimetableFailureDiagnostics(
+      poolDiagnostics,
+      pinned,
+      filteredOptionalPool,
+      coursesThisSemester,
+      effectiveCache,
+      constraints,
+    );
     return {
       generatedSchedules: state.generatedSchedules,
       swapPool: state.swapPool,
@@ -729,8 +777,30 @@ export async function generateSchedulesAction(
       schedulePoolMaps: state.schedulePoolMaps,
       selectedScheduleIndex: state.selectedScheduleIndex,
       swapHistory: [],
-      generationError: "Could not generate another schedule after 100 attempts. Try different selections or filters.",
-      generationErrorDetails: null,
+      generationError: generationErrorState(
+        `${timetableFailure.leadMessage} Couldn't find another combination.`,
+        details,
+      ),
+    };
+  }
+
+  if (limitedSchedules.length === 0) {
+    const { details, timetableFailure } = buildTimetableFailureDiagnostics(
+      poolDiagnostics,
+      pinned,
+      filteredOptionalPool,
+      coursesThisSemester,
+      effectiveCache,
+      constraints,
+    );
+    return {
+      generatedSchedules: limitedSchedules,
+      swapPool,
+      chosenCourseToRequirementId: lastChosenFromPool,
+      schedulePoolMaps: limitedPoolMaps,
+      selectedScheduleIndex: 0,
+      swapHistory: [],
+      generationError: generationErrorState(timetableFailure.leadMessage, details),
     };
   }
 
@@ -741,10 +811,6 @@ export async function generateSchedulesAction(
     schedulePoolMaps: limitedPoolMaps,
     selectedScheduleIndex: 0,
     swapHistory: [],
-    generationError:
-      limitedSchedules.length === 0
-        ? "No non-overlapping schedules could be generated with your selections."
-        : null,
-    generationErrorDetails: null,
+    generationError: null,
   };
 }

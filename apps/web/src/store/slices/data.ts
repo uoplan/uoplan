@@ -93,7 +93,6 @@ export const createDataSlice: StateCreator<
         cache,
         generatedSchedules: [],
         generationError: null,
-        generationErrorDetails: null,
         selectedScheduleIndex: 0,
         ...full,
         loading: false,
