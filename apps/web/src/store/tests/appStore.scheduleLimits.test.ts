@@ -132,16 +132,7 @@ describe('schedule generation respects per-category limits', () => {
       coursesThisSemester: 3,
     });
 
-    // Spy on console to avoid noisy debug logs from generateSchedules.
-    const originalLog = console.log;
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    console.log = () => {};
-
-    try {
-      await store.getState().generateSchedules();
-    } finally {
-      console.log = originalLog;
-    }
+    await store.getState().generateSchedules();
 
     const { generatedSchedules } = store.getState();
     expect(generatedSchedules.length).toBeGreaterThan(0);
@@ -213,15 +204,7 @@ describe('schedule generation respects per-category limits', () => {
       coursesThisSemester: 4,
     });
 
-    const originalLog = console.log;
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    console.log = () => {};
-
-    try {
-      await store.getState().generateSchedules();
-    } finally {
-      console.log = originalLog;
-    }
+    await store.getState().generateSchedules();
 
     const { generatedSchedules } = store.getState();
     expect(generatedSchedules.length).toBeGreaterThan(0);
@@ -271,15 +254,7 @@ describe('schedule generation respects per-category limits', () => {
       generatedSchedules: [],
     });
 
-    const originalLog = console.log;
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    console.log = () => {};
-
-    try {
-      await store.getState().generateSchedules();
-    } finally {
-      console.log = originalLog;
-    }
+    await store.getState().generateSchedules();
 
     const { generatedSchedules } = store.getState();
     expect(generatedSchedules.length).toBeGreaterThan(0);

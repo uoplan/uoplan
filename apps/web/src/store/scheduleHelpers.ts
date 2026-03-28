@@ -45,10 +45,18 @@ export function buildRequirementPools(
 /** Default credits per course when converting creditsNeeded to number of courses. */
 export const DEFAULT_CREDITS_PER_COURSE = 3;
 
+function poolCourseCap(pool: RequirementPool): number {
+  return Math.max(
+    pool.minCourses,
+    Math.ceil(pool.creditsNeeded / DEFAULT_CREDITS_PER_COURSE),
+  );
+}
+
 /**
- * Allocates remainingCourseSlots across pools so that each pool gets courses
- * proportional to creditsNeeded (ceil(creditsNeeded / 3)), and the total
- * equals remainingCourseSlots. Ensures we pick exactly that many courses total.
+ * Allocates up to `remainingCourseSlots` across requirement pools without exceeding
+ * per-pool credit caps (ceil(creditsNeeded / 3), at least minCourses). Total
+ * allocated is `min(remainingCourseSlots, sum of caps)`. Greedy: prefer pools
+ * with more remaining capacity, then higher creditsNeeded.
  */
 export function computeCoursesPerPool(
   pools: RequirementPool[],
@@ -60,68 +68,34 @@ export function computeCoursesPerPool(
     return result;
   }
 
-  // Ideal courses per pool from creditsNeeded only (no redundant min/cap).
-  const ideal = new Map<string, number>();
-  let totalIdeal = 0;
+  const cap = new Map<string, number>();
+  let sumCap = 0;
   for (const pool of pools) {
-    const need = Math.max(
-      pool.minCourses,
-      Math.ceil(pool.creditsNeeded / DEFAULT_CREDITS_PER_COURSE),
-    );
-    ideal.set(pool.requirementId, need);
-    totalIdeal += need;
+    const c = poolCourseCap(pool);
+    cap.set(pool.requirementId, c);
+    sumCap += c;
+    result.set(pool.requirementId, 0);
   }
 
-  if (totalIdeal === 0) return result;
+  if (sumCap === 0) return new Map();
 
-  if (totalIdeal <= remainingCourseSlots) {
-    // Give each pool its ideal; distribute the rest by most creditsNeeded first.
-    for (const pool of pools) {
-      result.set(pool.requirementId, ideal.get(pool.requirementId) ?? 0);
-    }
-    let extra = remainingCourseSlots - totalIdeal;
-    const byCreditsDesc = [...pools].sort(
-      (a, b) => b.creditsNeeded - a.creditsNeeded,
-    );
-    for (const pool of byCreditsDesc) {
-      if (extra <= 0) break;
-      const cur = result.get(pool.requirementId) ?? 0;
-      const poolIdeal = ideal.get(pool.requirementId) ?? 0;
-      if (cur < poolIdeal) {
-        result.set(pool.requirementId, cur + 1);
-        extra -= 1;
-      }
-    }
-  } else {
-    // Need to allocate exactly remainingCourseSlots; distribute by creditsNeeded proportion.
-    const totalCredits = pools.reduce((s, p) => s + p.creditsNeeded, 0);
-    if (totalCredits <= 0) return result;
-    const remainder: { reqId: string; frac: number }[] = [];
-    let allocated = 0;
-    for (const pool of pools) {
-      const frac = pool.creditsNeeded / totalCredits;
-      const n = Math.max(0, Math.floor(remainingCourseSlots * frac));
-      const cap = Math.min(n, ideal.get(pool.requirementId) ?? n);
-      result.set(pool.requirementId, cap);
-      allocated += cap;
-      remainder.push({
-        reqId: pool.requirementId,
-        frac:
-          remainingCourseSlots * frac - Math.floor(remainingCourseSlots * frac),
-      });
-    }
-    // Assign remaining slots to pools with largest fractional remainder.
-    remainder.sort((a, b) => b.frac - a.frac);
-    let left = remainingCourseSlots - allocated;
-    for (const { reqId } of remainder) {
-      if (left <= 0) break;
-      const cur = result.get(reqId) ?? 0;
-      const cap = ideal.get(reqId) ?? cur + 1;
-      if (cur < cap) {
-        result.set(reqId, cur + 1);
-        left -= 1;
-      }
-    }
+  const target = Math.min(remainingCourseSlots, sumCap);
+  let placed = 0;
+  while (placed < target) {
+    const next = [...pools]
+      .map((p) => {
+        const cur = result.get(p.requirementId) ?? 0;
+        const maxC = cap.get(p.requirementId) ?? 0;
+        return { pool: p, cur, maxC, room: maxC - cur };
+      })
+      .filter((x) => x.room > 0)
+      .sort((a, b) => {
+        if (b.room !== a.room) return b.room - a.room;
+        return b.pool.creditsNeeded - a.pool.creditsNeeded;
+      })[0];
+    if (!next) break;
+    result.set(next.pool.requirementId, next.cur + 1);
+    placed += 1;
   }
 
   return result;

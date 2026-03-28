@@ -4,6 +4,7 @@ import {
   isSectionAllowedByMinRating,
   type ProfessorRatingsMap,
 } from './professorRatings';
+import { isHonoursProject, normalizeCourseCode } from './utils/courseUtils';
 
 export interface TimeSlot {
   day: DayOfWeek;
@@ -195,6 +196,34 @@ export function getEnrollmentsForCourse(
   };
 }
 
+function canonicalCourseCode(code: string, cache: DataCache): string {
+  return cache.getCourse(normalizeCourseCode(code))?.code ?? code;
+}
+
+/**
+ * Builds a course enrollment for schedule generation. Honours / research-project
+ * courses (typically *900) have no fixed meeting times in the timetable data; they
+ * are modeled with empty `times` so they never time-conflict with other courses.
+ */
+function enrollmentForPicker(
+  code: string,
+  combo: SectionCombo,
+  cache: DataCache,
+): CourseEnrollment {
+  if (isHonoursProject(code, cache)) {
+    return {
+      courseCode: canonicalCourseCode(code, cache),
+      sectionCombo: combo,
+      times: [],
+    };
+  }
+  const schedule = cache.getSchedule(code);
+  if (!schedule) {
+    return { courseCode: code, sectionCombo: combo, times: [] };
+  }
+  return getEnrollmentsForCourse(schedule, combo);
+}
+
 /** True if the schedule has at most one gap per day, and that gap is ≤ 90 minutes.
  * Transitions of ≤ 10 minutes (e.g. 9:50→10:00) are treated as back-to-back and do not count as a gap. */
 function satisfiesCompressedConstraint(enrollments: CourseEnrollment[]): boolean {
@@ -246,6 +275,13 @@ export function generateSchedules(
   const coursesWithCombos: { code: string; combos: SectionCombo[] }[] = [];
 
   for (const code of courseCodes) {
+    if (isHonoursProject(code, cache)) {
+      coursesWithCombos.push({
+        code: canonicalCourseCode(code, cache),
+        combos: [{}],
+      });
+      continue;
+    }
     const schedule = cache.getSchedule(code);
     if (!schedule) continue;
     const combos = getValidSectionCombos(schedule, constraints);
@@ -264,10 +300,9 @@ export function generateSchedules(
     idx: number
   ): boolean {
     if (idx === items.length) {
-      const enrollments: CourseEnrollment[] = selected.map(({ code, combo }) => {
-        const s = cache.getSchedule(code);
-        return getEnrollmentsForCourse(s!, combo);
-      });
+      const enrollments: CourseEnrollment[] = selected.map(({ code, combo }) =>
+        enrollmentForPicker(code, combo, cache),
+      );
       if (constraints?.compressedSchedule && !satisfiesCompressedConstraint(enrollments)) {
         return false;
       }
@@ -276,13 +311,14 @@ export function generateSchedules(
     }
 
     const { code, combos } = items[idx];
-    const schedule = cache.getSchedule(code)!;
 
     for (const combo of combos) {
-      const candidate = getEnrollmentsForCourse(schedule, combo);
+      const candidate = enrollmentForPicker(code, combo, cache);
       const conflicts = selected.some(({ code: c, combo: co }) => {
-        const existing = getEnrollmentsForCourse(cache.getSchedule(c)!, co);
-        return enrollmentsOverlap(existing, candidate);
+        return enrollmentsOverlap(
+          enrollmentForPicker(c, co, cache),
+          candidate,
+        );
       });
       if (conflicts) continue;
 
@@ -321,6 +357,13 @@ export function generateSchedulesWithPinned(
 
   const pinned: { code: string; combos: SectionCombo[] }[] = [];
   for (const code of pinnedCourseCodes) {
+    if (isHonoursProject(code, cache)) {
+      pinned.push({
+        code: canonicalCourseCode(code, cache),
+        combos: [{}],
+      });
+      continue;
+    }
     const schedule = cache.getSchedule(code);
     if (!schedule) return [];
     const combos = getValidSectionCombos(schedule, constraints);
@@ -331,6 +374,13 @@ export function generateSchedulesWithPinned(
   const optional: { code: string; combos: SectionCombo[] }[] = [];
   for (const code of optionalCourseCodes) {
     if (pinnedCourseCodes.includes(code)) continue;
+    if (isHonoursProject(code, cache)) {
+      optional.push({
+        code: canonicalCourseCode(code, cache),
+        combos: [{}],
+      });
+      continue;
+    }
     const schedule = cache.getSchedule(code);
     if (!schedule) continue;
     const combos = getValidSectionCombos(schedule, constraints);
@@ -348,10 +398,9 @@ export function generateSchedulesWithPinned(
   ): void {
     const remainingSlots = targetCount - chosenPinned.length;
     if (remainingSlots <= 0) {
-      const enrollments: CourseEnrollment[] = chosenPinned.map(({ code, combo }) => {
-        const s = cache.getSchedule(code)!;
-        return getEnrollmentsForCourse(s, combo);
-      });
+      const enrollments: CourseEnrollment[] = chosenPinned.map(({ code, combo }) =>
+        enrollmentForPicker(code, combo, cache),
+      );
       if (constraints?.compressedSchedule && !satisfiesCompressedConstraint(enrollments)) {
         return;
       }
@@ -375,10 +424,9 @@ export function generateSchedulesWithPinned(
           }, 0);
           if (fyCredits > constraints.maxFirstYearCredits) return false;
         }
-        const enrollments: CourseEnrollment[] = all.map(({ code, combo }) => {
-          const s = cache.getSchedule(code)!;
-          return getEnrollmentsForCourse(s, combo);
-        });
+        const enrollments: CourseEnrollment[] = all.map(({ code, combo }) =>
+          enrollmentForPicker(code, combo, cache),
+        );
         if (constraints?.compressedSchedule && !satisfiesCompressedConstraint(enrollments)) {
           return false;
         }
@@ -388,19 +436,22 @@ export function generateSchedulesWithPinned(
       if (idx === items.length) return false;
 
       const { code, combos } = items[idx];
-      const schedule = cache.getSchedule(code)!;
 
       for (const combo of combos) {
-        const candidate = getEnrollmentsForCourse(schedule, combo);
+        const candidate = enrollmentForPicker(code, combo, cache);
         const conflictsPinned = chosenPinned.some(({ code: c, combo: co }) => {
-          const existing = getEnrollmentsForCourse(cache.getSchedule(c)!, co);
-          return enrollmentsOverlap(existing, candidate);
+          return enrollmentsOverlap(
+            enrollmentForPicker(c, co, cache),
+            candidate,
+          );
         });
         if (conflictsPinned) continue;
 
         const conflictsOpt = selected.some(({ code: c, combo: co }) => {
-          const existing = getEnrollmentsForCourse(cache.getSchedule(c)!, co);
-          return enrollmentsOverlap(existing, candidate);
+          return enrollmentsOverlap(
+            enrollmentForPicker(c, co, cache),
+            candidate,
+          );
         });
         if (conflictsOpt) continue;
 
@@ -427,13 +478,14 @@ export function generateSchedulesWithPinned(
     }
 
     const { code, combos } = items[idx];
-    const schedule = cache.getSchedule(code)!;
 
     for (const combo of combos) {
-      const candidate = getEnrollmentsForCourse(schedule, combo);
+      const candidate = enrollmentForPicker(code, combo, cache);
       const conflicts = selected.some(({ code: c, combo: co }) => {
-        const existing = getEnrollmentsForCourse(cache.getSchedule(c)!, co);
-        return enrollmentsOverlap(existing, candidate);
+        return enrollmentsOverlap(
+          enrollmentForPicker(c, co, cache),
+          candidate,
+        );
       });
       if (conflicts) continue;
 

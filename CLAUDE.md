@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-pnpm dev              # Start Vite dev server
+pnpm dev              # Start Vite dev server (apps/web)
 pnpm build            # Production build
 pnpm test             # Run tests once (vitest)
 pnpm test:watch       # Watch mode
@@ -17,44 +17,34 @@ Always use `pnpm`, never `npm`.
 
 ## Architecture
 
-**uoplan** is a course planner for University of Ottawa students. It's a single-page React app with a 5-step wizard (term → program → completed courses → requirements → schedule preferences), followed by a calendar view showing generated conflict-free timetables.
+**uoplan** is a course planner for University of Ottawa students: a React SPA with a wizard (term → program → completed courses → requirements → schedule preferences) and a calendar of generated timetables.
+
+**Monorepo**: `apps/web` (Vite + React), `packages/schedule` (shared scheduling + requirements logic), `packages/schemas`, `apps/scrapers`.
 
 ### Tech Stack
 
-React 19 + TypeScript, Zustand (state), Mantine (UI), FullCalendar, Vite + Vitest, Zod (schemas), Framer Motion, pdfjs-dist (transcript parsing).
+React 19 + TypeScript, Zustand, Mantine, FullCalendar, Vite + Vitest, Zod, Framer Motion, pdfjs-dist.
 
 ### Data Flow
 
 ```
-JSON data files (catalogue, schedules, terms)
-  → Zod schemas (src/schemas/)
-  → DataCache (src/lib/dataCache.ts) — normalized in-memory index
-  → Zustand store (src/store/appStore.ts) — all app state + computed state
-  → React components (src/components/)
+JSON (catalogue, schedules, terms)
+  → packages/schemas + DataCache (packages/schedule)
+  → Zustand (apps/web/src/store/)
+  → React (apps/web/src/components/)
 ```
 
-### Key Directories
+### Key paths
 
-- **`src/store/`** — Zustand store (`appStore.ts` is ~1700 lines and is the core of the app). Also contains `requirementCompute.ts` (requirement tree logic) and `scheduleHelpers.ts` (course pool building).
-- **`src/lib/`** — Pure business logic: schedule generation (backtracking algorithm), requirement parsing, course/schedule filtering, transcript PDF parsing, iCal export, URL state encoding.
-- **`src/schemas/`** — Zod type definitions for all data shapes: `catalogue.ts` (Course/Program), `schedules.ts` (enrollment sections), `terms.ts`, `indices.ts`.
-- **`src/components/`** — One component per wizard step, plus `CalendarPage.tsx` (shown after generation), `CalendarView.tsx` (FullCalendar wrapper), `CourseBlock.tsx`, `ScheduleCard.tsx`, `RequirementNode.tsx` (recursive requirement tree).
+- **`apps/web/src/store/`** — Zustand slices (`appStore.ts` composes them), `requirementCompute.ts`, `scheduleHelpers.ts` (requirement pools + `computeCoursesPerPool`).
+- **`apps/web/src/lib/`** — `generateSchedulesAction.ts` (schedule generation orchestration), `implicitHonours.ts`, URL state encoding, etc.
+- **`packages/schedule/`** — `scheduleGenerator.ts` (backtracking), `requirements.ts`, `scheduleCandidates/` (`kUserKGeneral`, `explicitPoolPicks`), filters, prerequisites.
+- **`apps/web/public/data/`** — Runtime JSON for catalogue/schedules.
 
-### Zustand Store Shape
+### Schedule generation
 
-The store (`appStore.ts`) holds:
-- **Data loading**: `catalogue`, `indices`, `schedulesData`, `cache` (DataCache), `loading`/`error`
-- **User selections**: `selectedTermId`, `program`, `completedCourses`, `selectedPerRequirement`, `coursesThisSemester`
-- **Schedule constraints**: `generationMinStartMinutes`, `generationMaxEndMinutes`, `generationAllowedDays`, `generationMinProfessorRating`, `generationLimitFirstYearCredits`, `generationCompressedSchedule`, `includeClosedComponents`
-- **Generated results**: `generatedSchedules`, `selectedScheduleIndex`, `swapHistory`, `schedulePoolMaps`
-- **Computed state** (derived): `remainingRequirements`, `requirementTreeWithStatus`, `levelBuckets`, `languageBuckets`
+Orchestration lives in **`apps/web/src/lib/generateSchedulesAction.ts`**. The pure timetable solver is **`packages/schedule/src/scheduleGenerator.ts`** (`generateSchedules`, `generateSchedulesWithPinned`). Pool sizing and pinned-credit rules use **`apps/web/src/store/scheduleHelpers.ts`** and helpers from **`packages/schedule/src/scheduleCandidates/`**.
 
-Key actions: `loadData()`, `setProgram()`, `setCompletedCourses()`, `setSelectedForRequirement()`, `generateSchedules()`, `swapCourseInSchedule()`, `getShareUrl()`.
+### URL sharing
 
-### Schedule Generation
-
-`src/lib/scheduleGenerator.ts` uses a backtracking algorithm to find conflict-free schedules given selected courses and constraints. `scheduleHelpers.ts` builds course pools used for post-generation swapping.
-
-### URL Sharing
-
-`src/lib/stateEncode.ts` encodes the full app state to base64 for shareable URLs. `appStore.ts` calls `getShareUrl()` / `loadEncodedState()`.
+`apps/web/src/store/slices/url.ts` (and related) encodes state for shareable URLs.

@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   enrollmentsOverlap,
   generateSchedules,
+  generateSchedulesWithPinned,
   getEnrollmentsForCourse,
   getValidSectionCombos,
 } from '../scheduleGenerator';
@@ -190,5 +191,66 @@ describe('generateSchedules', () => {
     const cache = buildDataCache(emptyCatalogue, schedulesData);
     const result = generateSchedules(['A 1000', 'B 2000'], 2, cache);
     expect(result).toHaveLength(0);
+  });
+
+  it('treats honours project (*900) as having no fixed meeting times', () => {
+    const catalogue: Catalogue = {
+      courses: [
+        {
+          code: 'CSI 4900',
+          title: 'Honours project',
+          credits: 6,
+          description: '',
+          component: 'LEC',
+        },
+      ],
+      programs: [],
+    };
+    const schedulesData: SchedulesData = {
+      termId: '2261',
+      schedules: [
+        makeSchedule('A 1000', [{ day: 'Mo', start: 480, end: 570 }]),
+        makeSchedule('B 2000', [{ day: 'Tu', start: 480, end: 570 }]),
+      ],
+    };
+    const cache = buildDataCache(catalogue, schedulesData);
+    const result = generateSchedules(['CSI 4900', 'A 1000', 'B 2000'], 3, cache);
+    expect(result.length).toBeGreaterThanOrEqual(1);
+    const codes = result[0].enrollments.map((e) => e.courseCode);
+    expect(codes).toContain('CSI 4900');
+    const honours = result[0].enrollments.find((e) => e.courseCode === 'CSI 4900');
+    expect(honours?.times).toEqual([]);
+  });
+});
+
+describe('generateSchedulesWithPinned', () => {
+  it('allows honours pinned courses without timetable sections', () => {
+    const catalogue: Catalogue = {
+      courses: [
+        {
+          code: 'CSI 4900',
+          title: 'Honours project',
+          credits: 6,
+          description: '',
+          component: 'LEC',
+        },
+      ],
+      programs: [],
+    };
+    const schedulesData: SchedulesData = {
+      termId: '2261',
+      schedules: [makeSchedule('A 1000', [{ day: 'Mo', start: 480, end: 570 }])],
+    };
+    const cache = buildDataCache(catalogue, schedulesData);
+    const result = generateSchedulesWithPinned(
+      ['CSI 4900'],
+      ['A 1000'],
+      2,
+      cache,
+    );
+    expect(result.length).toBeGreaterThanOrEqual(1);
+    expect(result[0].enrollments).toHaveLength(2);
+    const honours = result[0].enrollments.find((e) => e.courseCode === 'CSI 4900');
+    expect(honours?.times).toEqual([]);
   });
 });

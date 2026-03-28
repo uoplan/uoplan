@@ -1,4 +1,7 @@
 export * from './scheduleGenerator';
+export * from './scheduleCandidates/kUserKGeneral';
+export * from './scheduleCandidates/explicitPoolPicks';
+export type { GlobalExplicitRule } from './scheduleCandidates/types';
 export * from './scheduleFilters';
 export * from './courseFilters';
 export * from './professorRatings';
