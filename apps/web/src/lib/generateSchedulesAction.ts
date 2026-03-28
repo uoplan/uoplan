@@ -13,7 +13,12 @@ import { cacheWithClosedFilter, getEffectiveSchedule } from "schedule";
 import { courseMatchesFilters } from "schedule";
 import { normalizeCourseCode } from "schedule";
 import { buildRequirementPools, computeCoursesPerPool, shuffleInPlace, type RequirementPool } from "../store/scheduleHelpers";
-import { isHonoursProject } from "schedule";
+import {
+  isHonoursProject,
+  mergeGlobalExplicitRule,
+  pickFromUserAndGeneralPools,
+} from "schedule";
+import { collectImplicitHonoursForSchedule } from "./implicitHonours";
 
 /**
  * Walks the requirement tree following the user's option selections and
@@ -120,7 +125,9 @@ export async function generateSchedulesAction(
     generationCompressedSchedule,
   } = state;
 
-  if (!cache) return null;
+  if (!cache) {
+    return null;
+  }
   const cacheVal = cache;
 
   // Supplement remainingRequirements with requirements from within selected
@@ -186,39 +193,102 @@ export async function generateSchedulesAction(
   const completedSet = new Set(completedCourses.map(normalizeCourseCode));
   const prereqEligibleSet = new Set(prereqEligibleCourses);
 
-  // Honours courses explicitly constrained by the user.
+  // Honours projects: count toward semester load and are pinned (no timetable).
+  // Include both Constrain-step picks and Assign-step selections — users often
+  // only assign the thesis on the requirements tree without re-picking Constrain.
   const allConstrained = Object.values(constrainedPerRequirement).flat();
   const uniqueConstrained = [...new Set(allConstrained)];
-  const honoursSelected = uniqueConstrained
-    .filter((code) => isHonoursProject(code, cacheVal))
-    .filter((code) => !completedSet.has(normalizeCourseCode(code)))
-    .filter((code) => prereqEligibleSet.has(code));
+  const honoursSelected: string[] = [];
+  const seenHonours = new Set<string>();
+  for (const code of uniqueConstrained) {
+    if (!isHonoursProject(code, cacheVal)) continue;
+    const norm = normalizeCourseCode(code);
+    if (completedSet.has(norm)) continue;
+    if (!prereqEligibleSet.has(code)) continue;
+    if (seenHonours.has(norm)) continue;
+    seenHonours.add(norm);
+    honoursSelected.push(code);
+  }
+  for (const codes of Object.values(selectedPerRequirement)) {
+    for (const code of codes) {
+      if (!isHonoursProject(code, cacheVal)) continue;
+      const norm = normalizeCourseCode(code);
+      if (completedSet.has(norm)) continue;
+      if (!prereqEligibleSet.has(code)) continue;
+      if (seenHonours.has(norm)) continue;
+      seenHonours.add(norm);
+      honoursSelected.push(code);
+    }
+  }
+
+  const implicitHonoursPicks = collectImplicitHonoursForSchedule(
+    effectiveRemainingRequirements,
+    selectedPerRequirement,
+    completedSet,
+    prereqEligibleSet,
+    cacheVal,
+    includeClosedComponents,
+    seenHonours,
+  );
+  const implicitHonoursRequirementId = new Map<string, string>();
+  for (const { code, requirementId } of implicitHonoursPicks) {
+    honoursSelected.push(code);
+    implicitHonoursRequirementId.set(normalizeCourseCode(code), requirementId);
+  }
 
   const honoursCount = honoursSelected.length;
   const effectiveTarget = Math.max(0, coursesThisSemester - honoursCount);
 
-  // Build globally pinned courses from per-requirement constraints that are
-  // within budget (constrained count ≤ courses needed for that requirement).
-  const globalPinned: string[] = [];
-  for (const [reqId, constrainedCodes] of Object.entries(constrainedPerRequirement)) {
-    const req = effectiveRemainingRequirements.find((r) => r.requirementId === reqId);
-    const creditsNeeded = req?.creditsNeeded ?? 3;
-    const coursesNeeded = Math.ceil(creditsNeeded / 3);
-    const constrainedSchedulable = constrainedCodes.filter(
-      (code) =>
-        !isHonoursProject(code, cacheVal) &&
-        !!getEffectiveSchedule(cacheVal, code, includeClosedComponents) &&
-        !completedSet.has(normalizeCourseCode(code)) &&
-        prereqEligibleSet.has(code),
-    );
-    if (constrainedSchedulable.length > 0 && constrainedSchedulable.length <= coursesNeeded) {
-      for (const code of constrainedSchedulable) {
-        if (!globalPinned.includes(code)) globalPinned.push(code);
-      }
+  /** Schedulable non-honours constrained courses (union E). */
+  const explicitUnion: string[] = [];
+  const explicitSet = new Set<string>();
+  for (const code of uniqueConstrained) {
+    if (isHonoursProject(code, cacheVal)) continue;
+    if (
+      !getEffectiveSchedule(cacheVal, code, includeClosedComponents) ||
+      completedSet.has(normalizeCourseCode(code)) ||
+      !prereqEligibleSet.has(code)
+    ) {
+      continue;
+    }
+    if (!explicitSet.has(code)) {
+      explicitSet.add(code);
+      explicitUnion.push(code);
     }
   }
 
-  const pinned = [...globalPinned, ...honoursSelected];
+  const { pinAllExplicit, explicitOnly } = mergeGlobalExplicitRule(
+    explicitUnion.length,
+    effectiveTarget,
+  );
+
+  const pinned: string[] = [...honoursSelected];
+  if (pinAllExplicit) {
+    for (const code of explicitUnion) {
+      if (!pinned.includes(code)) pinned.push(code);
+    }
+  }
+
+  function requirementIdForConstrainedCode(code: string): string | undefined {
+    const norm = normalizeCourseCode(code);
+    for (const [reqId, codes] of Object.entries(constrainedPerRequirement)) {
+      if (codes.some((c) => normalizeCourseCode(c) === norm)) return reqId;
+    }
+    return undefined;
+  }
+
+  /** Requirement a pinned course is tied to (Constrain first, else Assign, else implicit honours). */
+  function requirementIdForPinnedCourse(code: string): string | undefined {
+    const fromConstrain = requirementIdForConstrainedCode(code);
+    if (fromConstrain != null) return fromConstrain;
+    const norm = normalizeCourseCode(code);
+    const implicitReq = implicitHonoursRequirementId.get(norm);
+    if (implicitReq != null) return implicitReq;
+    for (const [reqId, codes] of Object.entries(selectedPerRequirement)) {
+      if (codes.some((c) => normalizeCourseCode(c) === norm)) return reqId;
+    }
+    return undefined;
+  }
 
   const missingOptionGroups: string[] = [];
 
@@ -287,7 +357,11 @@ export async function generateSchedulesAction(
     levels: levelBuckets,
     languageBuckets,
   };
-  const remainingNeeded = effectiveTarget - pinned.length;
+
+  const nonHonoursPinnedCount = pinned.filter(
+    (c) => !isHonoursProject(c, cacheVal),
+  ).length;
+  const remainingNeeded = Math.max(0, effectiveTarget - nonHonoursPinnedCount);
   let filteredOptionalPool: string[] = [];
   let finalSchedules: GeneratedSchedule[] = [];
   let lastChosenFromPool: Record<string, string> = {};
@@ -321,84 +395,33 @@ export async function generateSchedulesAction(
   const yieldToMain = (): Promise<void> =>
     new Promise((resolve) => setTimeout(resolve, 0));
 
-  async function collectUniqueSchedulesFromCandidatePool(
-    candidatePool: string[],
-    mapsForNonPoolCodes: Record<string, string> = {},
-  ): Promise<{
-    schedules: GeneratedSchedule[];
-    poolMaps: Record<string, string>[];
-    usedPool: string[];
-  }> {
-    const maxAttempts = appendFirstOnly ? 100 : 300;
-    const targetUniqueSchedules = appendFirstOnly ? 1 : 25;
-    const seenCourseSets = new Set<string>();
-    const collectedSchedules: GeneratedSchedule[] = [];
-    const collectedPoolMaps: Record<string, string>[] = [];
-    let lastUsedPool: string[] = [];
-
-    const base = [...new Set(candidatePool)];
-    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
-      if (collectedSchedules.length >= targetUniqueSchedules) break;
-      if (attempt > 0 && attempt % 5 === 0) await yieldToMain();
-      const attemptPool = [...base];
-      shuffleInPlace(attemptPool, rng);
-      lastUsedPool = attemptPool;
-      const batch = genSchedules(
-        attemptPool,
-        effectiveTarget,
-        effectiveCache,
-        constraints,
-      );
-      const fullBatch = batch.filter(
-        (s) => s.enrollments.length >= effectiveTarget,
-      );
-      if (fullBatch.length === 0) continue;
-
-      const fingerprint = fullBatch[0].enrollments
-        .map((e) => e.courseCode)
-        .sort()
-        .join(",");
-      if (seenCourseSets.has(fingerprint)) continue;
-      seenCourseSets.add(fingerprint);
-      collectedSchedules.push(fullBatch[0]);
-      collectedPoolMaps.push(mapsForNonPoolCodes);
-    }
-
-    return {
-      schedules: collectedSchedules,
-      poolMaps: collectedPoolMaps,
-      usedPool: lastUsedPool,
-    };
-  }
-
   if (remainingNeeded > 0) {
     const allPools = buildRequirementPools(effectiveRemainingRequirements);
 
     let pools: RequirementPool[] = allPools
       .map((pool) => {
-        // Apply per-requirement constraints: if the user constrained more courses
-        // than needed for this requirement, restrict the pool to those courses only.
         const constrainedForPool =
           constrainedPerRequirement[pool.requirementId] ?? [];
-        const coursesNeeded = Math.ceil(pool.creditsNeeded / 3);
-        const constrainedSchedulable = constrainedForPool.filter(
-          (code) =>
-            !isHonoursProject(code, cacheVal) &&
-            !!getEffectiveSchedule(cacheVal, code, includeClosedComponents) &&
-            !completedSet.has(normalizeCourseCode(code)) &&
-            prereqEligibleSet.has(code),
-        );
-        const overConstrainedPool =
-          constrainedSchedulable.length > coursesNeeded
-            ? { ...pool, candidateCourses: constrainedSchedulable }
-            : pool;
-
         const selectedForPool =
-          selectedPerRequirement[overConstrainedPool.requirementId] ?? [];
+          selectedPerRequirement[pool.requirementId] ?? [];
         let pinnedCredits = 0;
         for (const code of pinned) {
-          if (!overConstrainedPool.candidateCourses.includes(code) &&
-              !constrainedForPool.includes(code)) continue;
+          // Count each pinned course toward at most one requirement: the one it is
+          // constrained to in Constrain. Otherwise the same code (e.g. honours thesis)
+          // often appears in many pools' candidate lists and would zero out every pool.
+          const primaryReqId = requirementIdForPinnedCourse(code);
+          if (primaryReqId != null) {
+            if (pool.requirementId !== primaryReqId) continue;
+            const course = cacheVal.getCourse(code);
+            pinnedCredits += course?.credits ?? 3;
+            continue;
+          }
+          if (
+            !pool.candidateCourses.includes(code) &&
+            !constrainedForPool.includes(code)
+          ) {
+            continue;
+          }
           const course = cacheVal.getCourse(code);
           pinnedCredits += course?.credits ?? 3;
         }
@@ -410,9 +433,9 @@ export async function generateSchedulesAction(
         }
         const remainingCredits = Math.max(
           0,
-          overConstrainedPool.creditsNeeded - pinnedCredits - completedSelectedCredits,
+          pool.creditsNeeded - pinnedCredits - completedSelectedCredits,
         );
-        return { ...overConstrainedPool, creditsNeeded: remainingCredits };
+        return { ...pool, creditsNeeded: remainingCredits };
       })
       .filter((pool) => pool.creditsNeeded > 0);
 
@@ -497,32 +520,68 @@ export async function generateSchedulesAction(
         shuffleInPlace(list, rng);
       }
 
-      const chosenCodes = new Set<string>();
+      const chosenCodes = new Set<string>(pinned);
       const chosenFromPool: Record<string, string> = {};
+      for (const code of pinned) {
+        if (isHonoursProject(code, cacheVal)) continue;
+        const reqId = requirementIdForPinnedCourse(code);
+        if (reqId) chosenFromPool[code] = reqId;
+      }
+
+      let poolPickFailed = false;
       for (const pool of pools) {
-        let need = coursesPerPool.get(pool.requirementId) ?? 0;
+        const need = coursesPerPool.get(pool.requirementId) ?? 0;
         if (need <= 0) continue;
+
+        const constrainedForPool =
+          constrainedPerRequirement[pool.requirementId] ?? [];
+        const S = constrainedForPool.filter((code) =>
+          isEligibleCandidate(code, pool.type),
+        );
+        const sSet = new Set(S);
         const candidates =
           candidatesByRequirement.get(pool.requirementId) ?? [];
-        if (candidates.length === 0) continue;
+        const G = candidates.filter((code) => !sSet.has(code));
 
-        for (const code of candidates) {
-          if (chosenCodes.size >= remainingNeeded) break;
-          if (chosenCodes.has(code)) continue;
-          if (pinned.includes(code)) continue;
-          if (isHonoursProject(code, cacheVal)) continue;
+        const SAvail = S.filter((code) => !chosenCodes.has(code));
+        const sPick = [...SAvail];
+        shuffleInPlace(sPick, rng);
+
+        let GAvail = G.filter((code) => !chosenCodes.has(code));
+        if (explicitOnly) {
+          GAvail = GAvail.filter((code) => explicitSet.has(code));
+        }
+        shuffleInPlace(GAvail, rng);
+
+        const { userPicks, generalPicks, ok } = pickFromUserAndGeneralPools({
+          need,
+          sAvailOrdered: sPick,
+          gAvailOrdered: GAvail,
+        });
+        if (!ok) {
+          poolPickFailed = true;
+          break;
+        }
+        for (const code of userPicks) {
           chosenCodes.add(code);
           chosenFromPool[code] = pool.requirementId;
-          need -= 1;
-          if (need <= 0) break;
+        }
+        for (const code of generalPicks) {
+          chosenCodes.add(code);
+          chosenFromPool[code] = pool.requirementId;
         }
       }
 
-      const optionalPool = Array.from(chosenCodes)
-        .filter((code) => !isHonoursProject(code, cacheVal))
-        .filter((code) => !pinned.includes(code));
+      if (poolPickFailed) {
+        continue;
+      }
 
-      if (optionalPool.length + pinned.length < effectiveTarget) {
+      const optionalPool = Array.from(chosenCodes).filter(
+        (code) => !pinned.includes(code),
+      );
+
+      const slotsFromOptional = coursesThisSemester - pinned.length;
+      if (optionalPool.length < slotsFromOptional) {
         break;
       }
 
@@ -533,20 +592,20 @@ export async function generateSchedulesAction(
         pinned.length === 0
           ? genSchedules(
               lastFilteredPool,
-              effectiveTarget,
+              coursesThisSemester,
               effectiveCache,
               constraints,
             )
           : generateSchedulesWithPinned(
               pinned,
               lastFilteredPool,
-              effectiveTarget,
+              coursesThisSemester,
               effectiveCache,
               constraints,
             );
 
       const fullBatch = batch.filter(
-        (s) => s.enrollments.length >= effectiveTarget,
+        (s) => s.enrollments.length >= coursesThisSemester,
       );
       if (fullBatch.length === 0) continue;
 
@@ -575,7 +634,7 @@ export async function generateSchedulesAction(
     poolDiagnostics = {
       emptyPools,
       totalAvailable: pinned.length + filteredOptionalPool.length,
-      totalNeeded: effectiveTarget,
+      totalNeeded: coursesThisSemester,
     };
   }
 
@@ -583,18 +642,19 @@ export async function generateSchedulesAction(
     filteredOptionalPool = [];
     finalSchedules =
       pinned.length === 0
-        ? genSchedules([], effectiveTarget, effectiveCache, constraints)
+        ? genSchedules([], coursesThisSemester, effectiveCache, constraints)
         : generateSchedulesWithPinned(
             pinned,
             [],
-            effectiveTarget,
+            coursesThisSemester,
             effectiveCache,
             constraints,
           );
     finalPoolMaps = finalSchedules.map(() => ({}));
   }
 
-  if (filteredOptionalPool.length + pinned.length < effectiveTarget) {
+  const optionalSlotsNeeded = coursesThisSemester - pinned.length;
+  if (filteredOptionalPool.length < optionalSlotsNeeded) {
     if (appendFirstOnly) {
       return {
         generatedSchedules: state.generatedSchedules,
