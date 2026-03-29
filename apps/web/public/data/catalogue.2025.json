@@ -15402,6 +15402,14 @@
             "text": "or Theatre (THE) at the 3000 level",
             "disciplines": [
               "THE"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "THE",
+                "levels": [
+                  3000
+                ]
+              }
             ]
           }
         ]
@@ -15493,6 +15501,14 @@
             "text": "ou Théâtre (THE) de niveau 3000",
             "disciplines": [
               "THE"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "THE",
+                "levels": [
+                  3000
+                ]
+              }
             ]
           }
         ]
@@ -15599,7 +15615,11 @@
               {
                 "type": "non_course",
                 "text": "6 crédits (P) de niveau 3000 dont 3 crédits parmi : ART 3926",
-                "credits": 6
+                "credits": 6,
+                "levels": [
+                  3000,
+                  3926
+                ]
               }
             ]
           },
@@ -15643,7 +15663,11 @@
               {
                 "type": "non_course",
                 "text": "6 crédits (P) de niveau 3000 dont 3 crédits parmi : ART 3933",
-                "credits": 6
+                "credits": 6,
+                "levels": [
+                  3000,
+                  3933
+                ]
               }
             ]
           },
@@ -15743,6 +15767,14 @@
             "text": "or Theatre (THE) at the 3000 level",
             "disciplines": [
               "THE"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "THE",
+                "levels": [
+                  3000
+                ]
+              }
             ]
           }
         ]
@@ -15758,7 +15790,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "6 crédits de cours ART (P) de niveau 3000 level",
-        "credits": 6
+        "credits": 6,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -15771,7 +15806,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "6 crédits de cours ART (P) de niveau 3000 level",
-        "credits": 6
+        "credits": 6,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -15797,7 +15835,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "6 crédits (P) de niveau 3000",
-        "credits": 6
+        "credits": 6,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -15813,6 +15854,14 @@
         "credits": 6,
         "disciplines": [
           "ART"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "ART",
+            "levels": [
+              3000
+            ]
+          }
         ]
       }
     },
@@ -16827,24 +16876,12 @@
             "text": "AUD 5529"
           },
           {
-            "type": "or_group",
+            "type": "non_course",
             "text": "42 crédits de cours en audiologie (AUD) ou réadaptation (REA)",
-            "children": [
-              {
-                "type": "non_course",
-                "text": "42 crédits de cours en audiologie (AUD)",
-                "credits": 42,
-                "disciplines": [
-                  "AUD"
-                ]
-              },
-              {
-                "type": "non_course",
-                "text": "réadaptation (REA)",
-                "disciplines": [
-                  "REA"
-                ]
-              }
+            "credits": 42,
+            "disciplines": [
+              "AUD",
+              "REA"
             ]
           }
         ]
@@ -18216,7 +18253,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "15 units offered by the Faculty of Science at the 3000 level and above",
-        "credits": 15
+        "credits": 15,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -18290,7 +18330,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "15 crédits offerts par la Faculté des sciences de niveau 3000 et plus",
-        "credits": 15
+        "credits": 15,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -21414,7 +21457,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "15 units in science at the 3000 level and above",
-        "credits": 15
+        "credits": 15,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -21650,7 +21696,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "15 crédits en science de niveau 3000 et plus",
-        "credits": 15
+        "credits": 15,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -25740,7 +25789,10 @@
               {
                 "type": "non_course",
                 "text": "CHM 3350 plus 6 units at the CHM 3000 level",
-                "credits": 6
+                "credits": 6,
+                "levels": [
+                  3000
+                ]
               }
             ]
           },
@@ -33097,24 +33149,12 @@
       "component": "LecturePrerequisite: 9 course units in communication (CMN) or in journalism (JOU). Reserved for students in the Honours BA, Joint Honours BA, and Major in communication, or the Honours Bachelor in digital journalism.",
       "prereqText": "9 course units in communication (CMN) or in journalism (JOU)",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "9 course units in communication (CMN) or in journalism (JOU)",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "9 course units in communication (CMN)",
-            "credits": 9,
-            "disciplines": [
-              "CMN"
-            ]
-          },
-          {
-            "type": "non_course",
-            "text": "in journalism (JOU)",
-            "disciplines": [
-              "JOU"
-            ]
-          }
+        "credits": 9,
+        "disciplines": [
+          "CMN",
+          "JOU"
         ]
       }
     },
@@ -33139,24 +33179,12 @@
       "component": "LecturePrerequisite: 9 course units in communication (CMN) or in journalism (JOU). Reserved for students in the Honours BA, Joint Honours BA, and Major in communication, or the Honours Bachelor in digital journalism.",
       "prereqText": "9 course units in communication (CMN) or in journalism (JOU)",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "9 course units in communication (CMN) or in journalism (JOU)",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "9 course units in communication (CMN)",
-            "credits": 9,
-            "disciplines": [
-              "CMN"
-            ]
-          },
-          {
-            "type": "non_course",
-            "text": "in journalism (JOU)",
-            "disciplines": [
-              "JOU"
-            ]
-          }
+        "credits": 9,
+        "disciplines": [
+          "CMN",
+          "JOU"
         ]
       }
     },
@@ -33263,24 +33291,12 @@
       "component": "Cours magistralPréalable : 9 crédits de cours en communication (CMN) ou en journalisme (JOU). Réservé aux étudiants inscrits au B.A. spécialisé, B.A. spécialisé bidisciplinaire, et majeure en communication, ou dans le baccalauréat spécialisé en journalisme numérique.",
       "prereqText": "9 crédits de cours en communication (CMN) ou en journalisme (JOU)",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "9 crédits de cours en communication (CMN) ou en journalisme (JOU)",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "9 crédits de cours en communication (CMN)",
-            "credits": 9,
-            "disciplines": [
-              "CMN"
-            ]
-          },
-          {
-            "type": "non_course",
-            "text": "en journalisme (JOU)",
-            "disciplines": [
-              "JOU"
-            ]
-          }
+        "credits": 9,
+        "disciplines": [
+          "CMN",
+          "JOU"
         ]
       }
     },
@@ -33305,24 +33321,12 @@
       "component": "Cours magistralPréalable : 9 crédits de cours en communication (CMN) ou en journalisme (JOU). Réservé aux étudiants inscrits au B.A. spécialisé, B.A. spécialisé bidisciplinaire, et majeure en communication, ou dans le baccalauréat spécialisé en journalisme numérique.",
       "prereqText": "9 crédits de cours en communication (CMN) ou en journalisme (JOU)",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "9 crédits de cours en communication (CMN) ou en journalisme (JOU)",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "9 crédits de cours en communication (CMN)",
-            "credits": 9,
-            "disciplines": [
-              "CMN"
-            ]
-          },
-          {
-            "type": "non_course",
-            "text": "en journalisme (JOU)",
-            "disciplines": [
-              "JOU"
-            ]
-          }
+        "credits": 9,
+        "disciplines": [
+          "CMN",
+          "JOU"
         ]
       }
     },
@@ -38701,34 +38705,35 @@
             "text": "MAT 1348"
           },
           {
-            "type": "or_group",
-            "text": "9 course units in computer engineering (CEG) or computer science (CSI) or software engineering (SEG) at the 3000 or 4000 level",
-            "children": [
+            "type": "non_course",
+            "text": "9 course units in computer engineering (CEG) or computer science (CSI) or software engineering (SEG) at the 3000/4000 level",
+            "credits": 9,
+            "disciplines": [
+              "CEG",
+              "CSI",
+              "SEG"
+            ],
+            "disciplineLevels": [
               {
-                "type": "non_course",
-                "text": "9 course units in computer engineering (CEG)",
-                "credits": 9,
-                "disciplines": [
-                  "CEG"
+                "discipline": "CEG",
+                "levels": [
+                  3000,
+                  4000
                 ]
               },
               {
-                "type": "non_course",
-                "text": "computer science (CSI)",
-                "disciplines": [
-                  "CSI"
+                "discipline": "CSI",
+                "levels": [
+                  3000,
+                  4000
                 ]
               },
               {
-                "type": "non_course",
-                "text": "software engineering (SEG) at the 3000",
-                "disciplines": [
-                  "SEG"
+                "discipline": "SEG",
+                "levels": [
+                  3000,
+                  4000
                 ]
-              },
-              {
-                "type": "non_course",
-                "text": "4000 level"
               }
             ]
           }
@@ -38743,27 +38748,27 @@
       "component": "LecturePrerequisites: 9 course units in computer science (CSI) or software engineering (SEG) at the 3000 or 4000 level.",
       "prereqText": "9 course units in computer science (CSI) or software engineering (SEG) at the 3000 or 4000 level",
       "prerequisites": {
-        "type": "or_group",
-        "text": "9 course units in computer science (CSI) or software engineering (SEG) at the 3000 or 4000 level",
-        "children": [
+        "type": "non_course",
+        "text": "9 course units in computer science (CSI) or software engineering (SEG) at the 3000/4000 level",
+        "credits": 9,
+        "disciplines": [
+          "CSI",
+          "SEG"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "9 course units in computer science (CSI)",
-            "credits": 9,
-            "disciplines": [
-              "CSI"
+            "discipline": "CSI",
+            "levels": [
+              3000,
+              4000
             ]
           },
           {
-            "type": "non_course",
-            "text": "software engineering (SEG) at the 3000",
-            "disciplines": [
-              "SEG"
+            "discipline": "SEG",
+            "levels": [
+              3000,
+              4000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "4000 level"
           }
         ]
       }
@@ -38776,27 +38781,27 @@
       "component": "LecturePrerequisites: 9 course units in computer science (CSI) or software engineering (SEG) at the 3000 or 4000 level.",
       "prereqText": "9 course units in computer science (CSI) or software engineering (SEG) at the 3000 or 4000 level",
       "prerequisites": {
-        "type": "or_group",
-        "text": "9 course units in computer science (CSI) or software engineering (SEG) at the 3000 or 4000 level",
-        "children": [
+        "type": "non_course",
+        "text": "9 course units in computer science (CSI) or software engineering (SEG) at the 3000/4000 level",
+        "credits": 9,
+        "disciplines": [
+          "CSI",
+          "SEG"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "9 course units in computer science (CSI)",
-            "credits": 9,
-            "disciplines": [
-              "CSI"
+            "discipline": "CSI",
+            "levels": [
+              3000,
+              4000
             ]
           },
           {
-            "type": "non_course",
-            "text": "software engineering (SEG) at the 3000",
-            "disciplines": [
-              "SEG"
+            "discipline": "SEG",
+            "levels": [
+              3000,
+              4000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "4000 level"
           }
         ]
       }
@@ -38879,27 +38884,27 @@
             "text": "MAT 1341"
           },
           {
-            "type": "or_group",
-            "text": "9 course units in computer science (CSI) or software engineering (SEG) at the 3000 or 4000 level",
-            "children": [
+            "type": "non_course",
+            "text": "9 course units in computer science (CSI) or software engineering (SEG) at the 3000/4000 level",
+            "credits": 9,
+            "disciplines": [
+              "CSI",
+              "SEG"
+            ],
+            "disciplineLevels": [
               {
-                "type": "non_course",
-                "text": "9 course units in computer science (CSI)",
-                "credits": 9,
-                "disciplines": [
-                  "CSI"
+                "discipline": "CSI",
+                "levels": [
+                  3000,
+                  4000
                 ]
               },
               {
-                "type": "non_course",
-                "text": "software engineering (SEG) at the 3000",
-                "disciplines": [
-                  "SEG"
+                "discipline": "SEG",
+                "levels": [
+                  3000,
+                  4000
                 ]
-              },
-              {
-                "type": "non_course",
-                "text": "4000 level"
               }
             ]
           }
@@ -39036,7 +39041,7 @@
           },
           {
             "type": "or_group",
-            "text": "((MAT 2371, STA 2100) or STA 2391) and 12 course units in CSI or SDS at the 3000 or 4000 level",
+            "text": "((MAT 2371, STA 2100) or STA 2391) and 12 course units in CSI or SDS at the 3000/4000 level",
             "children": [
               {
                 "type": "and_group",
@@ -39063,11 +39068,7 @@
               },
               {
                 "type": "non_course",
-                "text": "SDS at the 3000"
-              },
-              {
-                "type": "non_course",
-                "text": "4000 level"
+                "text": "SDS at the 3000/4000 level"
               }
             ]
           }
@@ -39141,34 +39142,35 @@
             "text": "MAT 1748"
           },
           {
-            "type": "or_group",
-            "text": "9 crédits de cours en informatique (CSI) ou génie informatique (CEG) ou génie logiciel (SEG) de niveau 3000 ou 4000",
-            "children": [
+            "type": "non_course",
+            "text": "9 crédits de cours en informatique (CSI) ou génie informatique (CEG) ou génie logiciel (SEG) de niveau 3000/4000",
+            "credits": 9,
+            "disciplines": [
+              "CSI",
+              "CEG",
+              "SEG"
+            ],
+            "disciplineLevels": [
               {
-                "type": "non_course",
-                "text": "9 crédits de cours en informatique (CSI)",
-                "credits": 9,
-                "disciplines": [
-                  "CSI"
+                "discipline": "CSI",
+                "levels": [
+                  3000,
+                  4000
                 ]
               },
               {
-                "type": "non_course",
-                "text": "génie informatique (CEG)",
-                "disciplines": [
-                  "CEG"
+                "discipline": "CEG",
+                "levels": [
+                  3000,
+                  4000
                 ]
               },
               {
-                "type": "non_course",
-                "text": "génie logiciel (SEG) de niveau 3000",
-                "disciplines": [
-                  "SEG"
+                "discipline": "SEG",
+                "levels": [
+                  3000,
+                  4000
                 ]
-              },
-              {
-                "type": "non_course",
-                "text": "4000"
               }
             ]
           }
@@ -39183,27 +39185,27 @@
       "component": "Cours magistralPréalables : 9 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000 ou 4000.",
       "prereqText": "9 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000 ou 4000",
       "prerequisites": {
-        "type": "or_group",
-        "text": "9 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000 ou 4000",
-        "children": [
+        "type": "non_course",
+        "text": "9 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000/4000",
+        "credits": 9,
+        "disciplines": [
+          "CSI",
+          "SEG"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "9 crédits de cours en informatique (CSI)",
-            "credits": 9,
-            "disciplines": [
-              "CSI"
+            "discipline": "CSI",
+            "levels": [
+              3000,
+              4000
             ]
           },
           {
-            "type": "non_course",
-            "text": "génie logiciel (SEG) de niveau 3000",
-            "disciplines": [
-              "SEG"
+            "discipline": "SEG",
+            "levels": [
+              3000,
+              4000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "4000"
           }
         ]
       }
@@ -39216,27 +39218,27 @@
       "component": "Cours magistralPréalables : 9 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000 ou 4000.",
       "prereqText": "9 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000 ou 4000",
       "prerequisites": {
-        "type": "or_group",
-        "text": "9 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000 ou 4000",
-        "children": [
+        "type": "non_course",
+        "text": "9 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000/4000",
+        "credits": 9,
+        "disciplines": [
+          "CSI",
+          "SEG"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "9 crédits de cours en informatique (CSI)",
-            "credits": 9,
-            "disciplines": [
-              "CSI"
+            "discipline": "CSI",
+            "levels": [
+              3000,
+              4000
             ]
           },
           {
-            "type": "non_course",
-            "text": "génie logiciel (SEG) de niveau 3000",
-            "disciplines": [
-              "SEG"
+            "discipline": "SEG",
+            "levels": [
+              3000,
+              4000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "4000"
           }
         ]
       }
@@ -39319,27 +39321,27 @@
             "text": "MAT 1741"
           },
           {
-            "type": "or_group",
-            "text": "9 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000 ou 4000",
-            "children": [
+            "type": "non_course",
+            "text": "9 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000/4000",
+            "credits": 9,
+            "disciplines": [
+              "CSI",
+              "SEG"
+            ],
+            "disciplineLevels": [
               {
-                "type": "non_course",
-                "text": "9 crédits de cours en informatique (CSI)",
-                "credits": 9,
-                "disciplines": [
-                  "CSI"
+                "discipline": "CSI",
+                "levels": [
+                  3000,
+                  4000
                 ]
               },
               {
-                "type": "non_course",
-                "text": "génie logiciel (SEG) de niveau 3000",
-                "disciplines": [
-                  "SEG"
+                "discipline": "SEG",
+                "levels": [
+                  3000,
+                  4000
                 ]
-              },
-              {
-                "type": "non_course",
-                "text": "4000"
               }
             ]
           }
@@ -39485,7 +39487,7 @@
           },
           {
             "type": "or_group",
-            "text": "((MAT 2771, STA 2500) ou STA 2791) et 12 crédits de cours en CSI ou SDS de niveau 3000 ou 4000",
+            "text": "((MAT 2771, STA 2500) ou STA 2791) et 12 crédits de cours en CSI ou SDS de niveau 3000/4000",
             "children": [
               {
                 "type": "and_group",
@@ -39512,11 +39514,7 @@
               },
               {
                 "type": "non_course",
-                "text": "SDS de niveau 3000"
-              },
-              {
-                "type": "non_course",
-                "text": "4000"
+                "text": "SDS de niveau 3000/4000"
               }
             ]
           }
@@ -39544,27 +39542,27 @@
       "component": "Recherche / ResearchPréalable : 18 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000 ou 4000. / Prerequisite: 18 course units in computer science (CSI) or software engineering (SEG) at the 3000 or 4000 level.",
       "prereqText": "18 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000 ou 4000",
       "prerequisites": {
-        "type": "or_group",
-        "text": "18 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000 ou 4000",
-        "children": [
+        "type": "non_course",
+        "text": "18 crédits de cours en informatique (CSI) ou génie logiciel (SEG) de niveau 3000/4000",
+        "credits": 18,
+        "disciplines": [
+          "CSI",
+          "SEG"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "18 crédits de cours en informatique (CSI)",
-            "credits": 18,
-            "disciplines": [
-              "CSI"
+            "discipline": "CSI",
+            "levels": [
+              3000,
+              4000
             ]
           },
           {
-            "type": "non_course",
-            "text": "génie logiciel (SEG) de niveau 3000",
-            "disciplines": [
-              "SEG"
+            "discipline": "SEG",
+            "levels": [
+              3000,
+              4000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "4000"
           }
         ]
       }
@@ -63612,18 +63610,14 @@
       "component": "Recherche / ResearchPrerequisites: 15 units at the 5000, 6000, 7000 or 8000 level",
       "prereqText": "15 units at the 5000, 6000, 7000 or 8000 level",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "15 units at the 5000, 6000, 7000 or 8000 level",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "15 units at the 5000, 6000, 7000",
-            "credits": 15
-          },
-          {
-            "type": "non_course",
-            "text": "8000 level"
-          }
+        "credits": 15,
+        "levels": [
+          5000,
+          6000,
+          7000,
+          8000
         ]
       }
     },
@@ -70777,20 +70771,19 @@
       "component": "Cours magistralPréalables : 18 crédits de cours en français langue seconde (FLS) de niveau 3000 ou 4000. Les auditeurs ne sont pas admis.",
       "prereqText": "18 crédits de cours en français langue seconde (FLS) de niveau 3000 ou 4000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "18 crédits de cours en français langue seconde (FLS) de niveau 3000 ou 4000",
-        "children": [
+        "credits": 18,
+        "disciplines": [
+          "FLS"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "18 crédits de cours en français langue seconde (FLS) de niveau 3000",
-            "credits": 18,
-            "disciplines": [
-              "FLS"
+            "discipline": "FLS",
+            "levels": [
+              3000,
+              4000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "4000"
           }
         ]
       }
@@ -71285,7 +71278,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71298,7 +71295,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71309,18 +71310,12 @@
       "component": "Cours magistralPréalable : 18 crédits de cours universitaires de niveau 1000 ou 2000.",
       "prereqText": "18 crédits de cours universitaires de niveau 1000 ou 2000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 ou 2000",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "18 crédits de cours universitaires de niveau 1000",
-            "credits": 18
-          },
-          {
-            "type": "non_course",
-            "text": "2000"
-          }
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
         ]
       }
     },
@@ -71332,18 +71327,12 @@
       "component": "Cours magistralPréalable : 18 crédits de cours universitaires de niveau 1000 ou 2000.",
       "prereqText": "18 crédits de cours universitaires de niveau 1000 ou 2000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 ou 2000",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "18 crédits de cours universitaires de niveau 1000",
-            "credits": 18
-          },
-          {
-            "type": "non_course",
-            "text": "2000"
-          }
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
         ]
       }
     },
@@ -71355,18 +71344,12 @@
       "component": "Cours magistralPréalable : 18 crédits de cours universitaires de niveau 1000 ou 2000.",
       "prereqText": "18 crédits de cours universitaires de niveau 1000 ou 2000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 ou 2000",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "18 crédits de cours universitaires de niveau 1000",
-            "credits": 18
-          },
-          {
-            "type": "non_course",
-            "text": "2000"
-          }
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
         ]
       }
     },
@@ -71378,18 +71361,12 @@
       "component": "Cours magistralPréalable : 18 crédits de cours universitaires de niveau 1000 ou 2000.",
       "prereqText": "18 crédits de cours universitaires de niveau 1000 ou 2000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 ou 2000",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "18 crédits de cours universitaires de niveau 1000",
-            "credits": 18
-          },
-          {
-            "type": "non_course",
-            "text": "2000"
-          }
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
         ]
       }
     },
@@ -71403,7 +71380,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71416,7 +71397,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71429,7 +71414,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71442,7 +71431,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71455,7 +71448,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71468,7 +71465,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71479,18 +71480,12 @@
       "component": "Cours magistralPréalable : 18 crédits de cours universitaires de niveau 1000 ou 2000.",
       "prereqText": "18 crédits de cours universitaires de niveau 1000 ou 2000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 ou 2000",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "18 crédits de cours universitaires de niveau 1000",
-            "credits": 18
-          },
-          {
-            "type": "non_course",
-            "text": "2000"
-          }
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
         ]
       }
     },
@@ -71502,18 +71497,12 @@
       "component": "Cours magistralPréalable : 18 crédits de cours universitaires de niveau 1000 ou 2000.",
       "prereqText": "18 crédits de cours universitaires de niveau 1000 ou 2000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 ou 2000",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "18 crédits de cours universitaires de niveau 1000",
-            "credits": 18
-          },
-          {
-            "type": "non_course",
-            "text": "2000"
-          }
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
         ]
       }
     },
@@ -71527,7 +71516,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71540,7 +71533,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71553,7 +71550,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71566,7 +71567,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71579,7 +71584,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71592,7 +71601,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71605,7 +71618,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71616,18 +71633,12 @@
       "component": "Cours magistralPréalable : 18 crédits de cours universitaires de niveau 1000 ou 2000.",
       "prereqText": "18 crédits de cours universitaires de niveau 1000 ou 2000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 ou 2000",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "18 crédits de cours universitaires de niveau 1000",
-            "credits": 18
-          },
-          {
-            "type": "non_course",
-            "text": "2000"
-          }
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
         ]
       }
     },
@@ -71641,7 +71652,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71654,7 +71669,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71667,7 +71686,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71680,7 +71703,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71693,7 +71720,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71706,7 +71737,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71719,7 +71754,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71732,7 +71771,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71745,7 +71788,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71758,7 +71805,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71771,7 +71822,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71784,7 +71839,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71797,7 +71856,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71810,7 +71873,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71823,7 +71890,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71834,18 +71905,12 @@
       "component": "Cours magistralPréalable : 18 crédits de cours universitaires de niveau 1000 ou 2000.",
       "prereqText": "18 crédits de cours universitaires de niveau 1000 ou 2000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 ou 2000",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "18 crédits de cours universitaires de niveau 1000",
-            "credits": 18
-          },
-          {
-            "type": "non_course",
-            "text": "2000"
-          }
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
         ]
       }
     },
@@ -71857,18 +71922,12 @@
       "component": "Cours magistralPréalable : 18 crédits de cours universitaires de niveau 1000 ou 2000.",
       "prereqText": "18 crédits de cours universitaires de niveau 1000 ou 2000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 ou 2000",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "18 crédits de cours universitaires de niveau 1000",
-            "credits": 18
-          },
-          {
-            "type": "non_course",
-            "text": "2000"
-          }
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
         ]
       }
     },
@@ -71882,7 +71941,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71895,7 +71958,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71908,7 +71975,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71921,7 +71992,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71934,7 +72009,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "18 crédits de cours universitaires de niveau 1000 et 2000",
-        "credits": 18
+        "credits": 18,
+        "levels": [
+          1000,
+          2000
+        ]
       }
     },
     {
@@ -71960,7 +72039,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "9 crédits de cours universitaires de niveau 3000",
-        "credits": 9
+        "credits": 9,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -71973,7 +72055,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "9 crédits de cours universitaires de niveau 3000",
-        "credits": 9
+        "credits": 9,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -71986,7 +72071,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "9 crédits de cours universitaires de niveau 3000",
-        "credits": 9
+        "credits": 9,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -71999,7 +72087,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "9 crédits de cours universitaires de niveau 3000",
-        "credits": 9
+        "credits": 9,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -72039,7 +72130,10 @@
           {
             "type": "non_course",
             "text": "9 crédits de cours universitaires de niveau 3000",
-            "credits": 9
+            "credits": 9,
+            "levels": [
+              3000
+            ]
           }
         ]
       }
@@ -72545,7 +72639,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "54 crédits universitaires incluant 6 crédits de niveau 3000",
-        "credits": 54
+        "credits": 54,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -72558,7 +72655,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "54 crédits universitaires incluant 6 crédits de niveau 3000",
-        "credits": 54
+        "credits": 54,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -72571,7 +72671,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "54 crédits universitaires incluant 6 crédits de niveau 3000",
-        "credits": 54
+        "credits": 54,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -72584,7 +72687,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "54 crédits universitaires incluant 6 crédits de niveau 3000",
-        "credits": 54
+        "credits": 54,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -72597,7 +72703,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "54 crédits universitaires incluant 6 crédits de niveau 3000",
-        "credits": 54
+        "credits": 54,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -72610,7 +72719,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "54 crédits universitaires incluant 6 crédits de niveau 3000",
-        "credits": 54
+        "credits": 54,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -72623,7 +72735,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "54 crédits universitaires incluant 6 crédits de niveau 3000",
-        "credits": 54
+        "credits": 54,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -72636,7 +72751,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "54 crédits universitaires incluant 6 crédits de niveau 3000",
-        "credits": 54
+        "credits": 54,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -72649,7 +72767,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "54 crédits universitaires incluant 6 crédits de niveau 3000",
-        "credits": 54
+        "credits": 54,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -75935,7 +76056,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "12 course units at the 3000 level offered by the Faculty of Science",
-        "credits": 12
+        "credits": 12,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -75948,7 +76072,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "12 course units at the 3000 level offered by the Faculty of Science",
-        "credits": 12
+        "credits": 12,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -75974,7 +76101,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "12 course units at the 3000 level offered by the Faculty of Science",
-        "credits": 12
+        "credits": 12,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -76009,7 +76139,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "12 course units at the 3000 level offered by the Faculty of Science",
-        "credits": 12
+        "credits": 12,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -76022,7 +76155,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "12 course units at the 3000 level offered by the Faculty of Science",
-        "credits": 12
+        "credits": 12,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -76195,7 +76331,10 @@
           {
             "type": "non_course",
             "text": "l'étudiante doit avoir complété 12 crédits au niveau 3000 dans le domaine",
-            "credits": 12
+            "credits": 12,
+            "levels": [
+              3000
+            ]
           }
         ]
       }
@@ -76218,7 +76357,10 @@
           {
             "type": "non_course",
             "text": "l'étudiante doit avoir complété 12 crédits au niveau 3000 dans le domaine",
-            "credits": 12
+            "credits": 12,
+            "levels": [
+              3000
+            ]
           }
         ]
       }
@@ -76233,7 +76375,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "12 crédits de cours de niveau 3000 offerts par la Faculté des sciences",
-        "credits": 12
+        "credits": 12,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -76246,7 +76391,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "12 crédits de cours de niveau 3000 offerts par la Faculté des sciences",
-        "credits": 12
+        "credits": 12,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -76272,7 +76420,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "12 crédits de cours de niveau 3000 offerts par la Faculté des sciences",
-        "credits": 12
+        "credits": 12,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -76307,7 +76458,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "12 crédits de cours de niveau 3000 offerts par la Faculté des sciences",
-        "credits": 12
+        "credits": 12,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -76320,7 +76474,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "12 crédits de cours de niveau 3000 offerts par la Faculté des sciences",
-        "credits": 12
+        "credits": 12,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -78479,6 +78636,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -78523,7 +78688,10 @@
               {
                 "type": "non_course",
                 "text": "((PHI 2197 or HIS 2197), 6 course units in Philosophy (PHI) at the 2000 level, 6 course units in philosophy (PHI))",
-                "credits": 6
+                "credits": 6,
+                "levels": [
+                  2000
+                ]
               }
             ]
           }
@@ -78547,6 +78715,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -78577,6 +78753,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -78614,6 +78798,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -78644,6 +78836,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -78674,6 +78874,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -78704,6 +78912,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -78734,6 +78950,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -78764,6 +78988,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -78794,6 +79026,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -78824,6 +79064,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -78950,6 +79198,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -78980,6 +79236,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79010,6 +79274,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79040,6 +79312,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79070,6 +79350,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79100,6 +79388,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79130,6 +79426,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79160,6 +79464,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79190,6 +79502,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79234,7 +79554,10 @@
               {
                 "type": "non_course",
                 "text": "((HIS 2597 ou PHI 2597), 6 crédits de cours en philosophie (PHI) de niveau 2000, 6 crédits de cours en philosophie (PHI))",
-                "credits": 6
+                "credits": 6,
+                "levels": [
+                  2000
+                ]
               }
             ]
           }
@@ -79258,6 +79581,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79288,6 +79619,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79325,6 +79664,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79355,6 +79702,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79385,6 +79740,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79415,6 +79778,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79445,6 +79816,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79475,6 +79854,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79501,6 +79888,14 @@
         "credits": 6,
         "disciplines": [
           "HIS"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "HIS",
+            "levels": [
+              2000
+            ]
+          }
         ]
       }
     },
@@ -79517,6 +79912,14 @@
         "credits": 6,
         "disciplines": [
           "HIS"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "HIS",
+            "levels": [
+              2000
+            ]
+          }
         ]
       }
     },
@@ -79537,6 +79940,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79567,6 +79978,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79597,6 +80016,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79627,6 +80054,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79657,6 +80092,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79687,6 +80130,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79717,6 +80168,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79747,6 +80206,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -79777,6 +80244,14 @@
             "credits": 6,
             "disciplines": [
               "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
             ]
           },
           {
@@ -85770,7 +86245,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "36 university course units, including at least 6 course units at the 3000 level",
-        "credits": 36
+        "credits": 36,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -85795,6 +86273,14 @@
             "credits": 6,
             "disciplines": [
               "LCM"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "LCM",
+                "levels": [
+                  3000
+                ]
+              }
             ]
           }
         ]
@@ -85810,7 +86296,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "36 crédits de cours universitaires, dont au moins 6 crédits au niveau 3000",
-        "credits": 36
+        "credits": 36,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -85835,6 +86324,14 @@
             "credits": 6,
             "disciplines": [
               "LCM"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "LCM",
+                "levels": [
+                  3000
+                ]
+              }
             ]
           }
         ]
@@ -85850,7 +86347,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "36 crédits de cours universitaires, dont au moins 6 crédits de cours de niveau 3000",
-        "credits": 36
+        "credits": 36,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -85863,7 +86363,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "36 crédits de cours universitaires, dont au moins 6 crédits de cours de niveau 3000",
-        "credits": 36
+        "credits": 36,
+        "levels": [
+          3000
+        ]
       }
     },
     {
@@ -90731,7 +91234,10 @@
           {
             "type": "non_course",
             "text": "12 crédits de cours MAT de niveau 2000",
-            "credits": 12
+            "credits": 12,
+            "levels": [
+              2000
+            ]
           },
           {
             "type": "non_course",
@@ -90754,7 +91260,10 @@
           {
             "type": "non_course",
             "text": "12 crédits de cours MAT de niveau 2000",
-            "credits": 12
+            "credits": 12,
+            "levels": [
+              2000
+            ]
           },
           {
             "type": "non_course",
@@ -92011,20 +92520,18 @@
       "component": "LecturePrerequisite: 12 course units in mathematics (MAT) at the 3000 level or above. Additional prerequisites may be imposed depending on the topic.",
       "prereqText": "12 course units in mathematics (MAT) at the 3000 level or above",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "12 course units in mathematics (MAT) at the 3000 level or above",
-        "children": [
+        "credits": 12,
+        "disciplines": [
+          "MAT"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "12 course units in mathematics (MAT) at the 3000 level",
-            "credits": 12,
-            "disciplines": [
-              "MAT"
+            "discipline": "MAT",
+            "levels": [
+              3000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "above"
           }
         ]
       }
@@ -92051,7 +92558,11 @@
           {
             "type": "non_course",
             "text": "(MAT 2141 or MAT 3341) and 12 university course units in mathematics (MAT) at the 3000 and 4000 level (or permission of the instructor)",
-            "credits": 12
+            "credits": 12,
+            "levels": [
+              3000,
+              4000
+            ]
           }
         ]
       }
@@ -92853,20 +93364,18 @@
       "component": "Cours magistralPréalable : 12 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur. Des préalables supplémentaires peuvent s'appliquer selon le sujet du cours.",
       "prereqText": "12 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "12 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur",
-        "children": [
+        "credits": 12,
+        "disciplines": [
+          "MAT"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "12 crédits de cours en mathématiques (MAT) de niveau 3000",
-            "credits": 12,
-            "disciplines": [
-              "MAT"
+            "discipline": "MAT",
+            "levels": [
+              3000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "supérieur"
           }
         ]
       }
@@ -92893,7 +93402,11 @@
           {
             "type": "non_course",
             "text": "(MAT 2541 ou MAT 3741) et 12 crédits de cours universitaires en mathématiques (MAT) de niveau 3000 et 4000 (ou la permission de l'instructeur)",
-            "credits": 12
+            "credits": 12,
+            "levels": [
+              3000,
+              4000
+            ]
           }
         ]
       }
@@ -93253,7 +93766,10 @@
           {
             "type": "non_course",
             "text": "24 crédits de cours MAT de niveau 3000",
-            "credits": 24
+            "credits": 24,
+            "levels": [
+              3000
+            ]
           },
           {
             "type": "non_course",
@@ -93364,20 +93880,18 @@
       "component": "Cours magistral / LecturePréalable : 12 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur. Des préalables supplémentaires peuvent s'appliquer selon le sujet du cours. / Prerequisite: 12 course units in mathematics (MAT) at the 3000 level or above. Additional prerequisites may be imposed depending on the topic",
       "prereqText": "12 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "12 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur",
-        "children": [
+        "credits": 12,
+        "disciplines": [
+          "MAT"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "12 crédits de cours en mathématiques (MAT) de niveau 3000",
-            "credits": 12,
-            "disciplines": [
-              "MAT"
+            "discipline": "MAT",
+            "levels": [
+              3000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "supérieur"
           }
         ]
       }
@@ -109249,20 +109763,18 @@
       "component": "LecturePrerequisite: 18 university course units in nursing (NSG) at the 3000 level or 4000 level.",
       "prereqText": "18 university course units in nursing (NSG) at the 3000 level or 4000 level",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "18 university course units in nursing (NSG) at the 3000 level or 4000 level",
-        "children": [
+        "credits": 18,
+        "disciplines": [
+          "NSG"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "18 university course units in nursing (NSG) at the 3000 level",
-            "credits": 18,
-            "disciplines": [
-              "NSG"
+            "discipline": "NSG",
+            "levels": [
+              3000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "4000 level"
           }
         ]
       }
@@ -109280,6 +109792,14 @@
         "credits": 26,
         "disciplines": [
           "NSG"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "NSG",
+            "levels": [
+              3000
+            ]
+          }
         ]
       }
     },
@@ -109373,6 +109893,15 @@
         "credits": 39,
         "disciplines": [
           "NSG"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "NSG",
+            "levels": [
+              3000,
+              4000
+            ]
+          }
         ]
       }
     },
@@ -109541,20 +110070,19 @@
       "component": "Cours magistralPréalable : 18 crédits de cours en sciences infirmières (NSG) au niveau 3000 ou 4000.",
       "prereqText": "18 crédits de cours en sciences infirmières (NSG) au niveau 3000 ou 4000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "18 crédits de cours en sciences infirmières (NSG) au niveau 3000 ou 4000",
-        "children": [
+        "credits": 18,
+        "disciplines": [
+          "NSG"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "18 crédits de cours en sciences infirmières (NSG) au niveau 3000",
-            "credits": 18,
-            "disciplines": [
-              "NSG"
+            "discipline": "NSG",
+            "levels": [
+              3000,
+              4000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "4000"
           }
         ]
       }
@@ -109572,6 +110100,14 @@
         "credits": 26,
         "disciplines": [
           "NSG"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "NSG",
+            "levels": [
+              3000
+            ]
+          }
         ]
       }
     },
@@ -109700,6 +110236,15 @@
         "credits": 39,
         "disciplines": [
           "NSG"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "NSG",
+            "levels": [
+              3000,
+              4000
+            ]
+          }
         ]
       }
     },
@@ -114864,24 +115409,12 @@
             "text": "ORA 5519"
           },
           {
-            "type": "or_group",
+            "type": "non_course",
             "text": "12 crédits de cours en orthophonie (ORA) ou en réadaptation (REA)",
-            "children": [
-              {
-                "type": "non_course",
-                "text": "12 crédits de cours en orthophonie (ORA)",
-                "credits": 12,
-                "disciplines": [
-                  "ORA"
-                ]
-              },
-              {
-                "type": "non_course",
-                "text": "en réadaptation (REA)",
-                "disciplines": [
-                  "REA"
-                ]
-              }
+            "credits": 12,
+            "disciplines": [
+              "ORA",
+              "REA"
             ]
           }
         ]
@@ -115093,24 +115626,12 @@
             "text": "ORA 5559"
           },
           {
-            "type": "or_group",
+            "type": "non_course",
             "text": "57 crédits de cours en orthophonie (ORA) ou sciences de la réadaptation (REA)",
-            "children": [
-              {
-                "type": "non_course",
-                "text": "57 crédits de cours en orthophonie (ORA)",
-                "credits": 57,
-                "disciplines": [
-                  "ORA"
-                ]
-              },
-              {
-                "type": "non_course",
-                "text": "sciences de la réadaptation (REA)",
-                "disciplines": [
-                  "REA"
-                ]
-              }
+            "credits": 57,
+            "disciplines": [
+              "ORA",
+              "REA"
             ]
           }
         ]
@@ -122974,7 +123495,7 @@
       "prereqText": "(PHY 1121, PHY 1122) or ((PHY 1321 or 1331), PHY 1322)",
       "prerequisites": {
         "type": "or_group",
-        "text": "(PHY 1121, PHY 1122) or ((PHY 1321 or 1331), PHY 1322)",
+        "text": "(PHY 1121, PHY 1122) or ((PHY 1321/1331), PHY 1322)",
         "children": [
           {
             "type": "and_group",
@@ -122992,7 +123513,7 @@
           },
           {
             "type": "and_group",
-            "text": "((PHY 1321 or 1331), PHY 1322)",
+            "text": "((PHY 1321/1331), PHY 1322)",
             "children": [
               {
                 "type": "course",
@@ -123484,7 +124005,7 @@
       "prereqText": "(PHY 1521, PHY 1522) ou ((PHY 1721 ou 1731), PHY 1722)",
       "prerequisites": {
         "type": "or_group",
-        "text": "(PHY 1521, PHY 1522) ou ((PHY 1721 ou 1731), PHY 1722)",
+        "text": "(PHY 1521, PHY 1522) ou ((PHY 1721/1731), PHY 1722)",
         "children": [
           {
             "type": "and_group",
@@ -123502,7 +124023,7 @@
           },
           {
             "type": "and_group",
-            "text": "((PHY 1721 ou 1731), PHY 1722)",
+            "text": "((PHY 1721/1731), PHY 1722)",
             "children": [
               {
                 "type": "course",
@@ -124666,7 +125187,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "12 crédits en physique au niveau 2000",
-        "credits": 12
+        "credits": 12,
+        "levels": [
+          2000
+        ]
       }
     },
     {
@@ -124695,6 +125219,14 @@
         "credits": 12,
         "disciplines": [
           "PHY"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "PHY",
+            "levels": [
+              3000
+            ]
+          }
         ]
       }
     },
@@ -124711,6 +125243,14 @@
         "credits": 12,
         "disciplines": [
           "PHY"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "PHY",
+            "levels": [
+              3000
+            ]
+          }
         ]
       }
     },
@@ -125434,6 +125974,14 @@
         "credits": 12,
         "disciplines": [
           "PHY"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "PHY",
+            "levels": [
+              3000
+            ]
+          }
         ]
       }
     },
@@ -139447,18 +139995,13 @@
       "component": "LecturePrerequisites: 21 course units offered by the Faculty of Science at the 2000, 3000 or 4000 level.",
       "prereqText": "21 course units offered by the Faculty of Science at the 2000, 3000 or 4000 level",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "21 course units offered by the Faculty of Science at the 2000, 3000 or 4000 level",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "21 course units offered by the Faculty of Science at the 2000, 3000",
-            "credits": 21
-          },
-          {
-            "type": "non_course",
-            "text": "4000 level"
-          }
+        "credits": 21,
+        "levels": [
+          2000,
+          3000,
+          4000
         ]
       }
     },
@@ -139470,18 +140013,13 @@
       "component": "Cours magistralPréalables: 21 crédits de cours offerts par la Faculté des sciences au niveau 2000, 3000 ou 4000.",
       "prereqText": "21 crédits de cours offerts par la Faculté des sciences au niveau 2000, 3000 ou 4000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "21 crédits de cours offerts par la Faculté des sciences au niveau 2000, 3000 ou 4000",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "21 crédits de cours offerts par la Faculté des sciences au niveau 2000, 3000",
-            "credits": 21
-          },
-          {
-            "type": "non_course",
-            "text": "4000"
-          }
+        "credits": 21,
+        "levels": [
+          2000,
+          3000,
+          4000
         ]
       }
     },
@@ -139519,18 +140057,13 @@
       "component": "LecturePrerequisites: 21 course units offered by the Faculty of Science at the 2000, 3000 or 4000 level. Limited enrolment.",
       "prereqText": "21 course units offered by the Faculty of Science at the 2000, 3000 or 4000 level",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "21 course units offered by the Faculty of Science at the 2000, 3000 or 4000 level",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "21 course units offered by the Faculty of Science at the 2000, 3000",
-            "credits": 21
-          },
-          {
-            "type": "non_course",
-            "text": "4000 level"
-          }
+        "credits": 21,
+        "levels": [
+          2000,
+          3000,
+          4000
         ]
       }
     },
@@ -139542,26 +140075,24 @@
       "component": "ResearchPrerequisites: 21 course units offered by the Faculty of Science at the 3000 or 4000 level, CMN 2135, SCI 3101. Limited enrolment.",
       "prereqText": "21 course units offered by the Faculty of Science at the 3000 or 4000 level, CMN 2135, SCI 3101",
       "prerequisites": {
-        "type": "or_group",
+        "type": "and_group",
         "text": "21 course units offered by the Faculty of Science at the 3000 or 4000 level, CMN 2135, SCI 3101",
         "children": [
           {
-            "type": "non_course",
-            "text": "21 course units offered by the Faculty of Science at the 3000",
-            "credits": 21
+            "type": "course",
+            "code": "CMN 2135"
           },
           {
-            "type": "and_group",
-            "text": "4000 level, CMN 2135, SCI 3101",
-            "children": [
-              {
-                "type": "course",
-                "code": "CMN 2135"
-              },
-              {
-                "type": "course",
-                "code": "SCI 3101"
-              }
+            "type": "course",
+            "code": "SCI 3101"
+          },
+          {
+            "type": "non_course",
+            "text": "21 course units offered by the Faculty of Science at the 3000 or 4000 level, CMN 2135, SCI 3101",
+            "credits": 21,
+            "levels": [
+              3000,
+              4000
             ]
           }
         ]
@@ -139623,18 +140154,13 @@
       "component": "Cours magistralPréalables : 21 crédits de cours offerts par la Faculté des sciences au niveau 2000, 3000 ou 4000. Cours contingenté.",
       "prereqText": "21 crédits de cours offerts par la Faculté des sciences au niveau 2000, 3000 ou 4000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "21 crédits de cours offerts par la Faculté des sciences au niveau 2000, 3000 ou 4000",
-        "children": [
-          {
-            "type": "non_course",
-            "text": "21 crédits de cours offerts par la Faculté des sciences au niveau 2000, 3000",
-            "credits": 21
-          },
-          {
-            "type": "non_course",
-            "text": "4000"
-          }
+        "credits": 21,
+        "levels": [
+          2000,
+          3000,
+          4000
         ]
       }
     },
@@ -139646,26 +140172,26 @@
       "component": "RecherchePréalables: 21 crédits de cours offerts par la Faculté des sciences de niveau 3000 ou 4000, CMN 2535, SCI 3501. Cours contingenté.",
       "prereqText": "21 crédits de cours offerts par la Faculté des sciences de niveau 3000 ou 4000, CMN 2535, SCI 3501",
       "prerequisites": {
-        "type": "or_group",
+        "type": "and_group",
         "text": "21 crédits de cours offerts par la Faculté des sciences de niveau 3000 ou 4000, CMN 2535, SCI 3501",
         "children": [
           {
-            "type": "non_course",
-            "text": "21 crédits de cours offerts par la Faculté des sciences de niveau 3000",
-            "credits": 21
+            "type": "course",
+            "code": "CMN 2535"
           },
           {
-            "type": "and_group",
-            "text": "4000, CMN 2535, SCI 3501",
-            "children": [
-              {
-                "type": "course",
-                "code": "CMN 2535"
-              },
-              {
-                "type": "course",
-                "code": "SCI 3501"
-              }
+            "type": "course",
+            "code": "SCI 3501"
+          },
+          {
+            "type": "non_course",
+            "text": "21 crédits de cours offerts par la Faculté des sciences de niveau 3000 ou 4000, CMN 2535, SCI 3501",
+            "credits": 21,
+            "levels": [
+              2535,
+              3000,
+              3501,
+              4000
             ]
           }
         ]
@@ -147644,7 +148170,10 @@
           {
             "type": "non_course",
             "text": "THE 1100 and 6 course units in theatre (THE) at the 2000 level",
-            "credits": 6
+            "credits": 6,
+            "levels": [
+              2000
+            ]
           }
         ]
       }
@@ -147721,6 +148250,14 @@
         "credits": 6,
         "disciplines": [
           "THE"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "THE",
+            "levels": [
+              2000
+            ]
+          }
         ]
       }
     },
@@ -147737,6 +148274,14 @@
         "credits": 6,
         "disciplines": [
           "THE"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "THE",
+            "levels": [
+              2000
+            ]
+          }
         ]
       }
     },
@@ -147753,6 +148298,14 @@
         "credits": 6,
         "disciplines": [
           "THE"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "THE",
+            "levels": [
+              2000
+            ]
+          }
         ]
       }
     },
@@ -147769,6 +148322,14 @@
         "credits": 6,
         "disciplines": [
           "THE"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "THE",
+            "levels": [
+              2000
+            ]
+          }
         ]
       }
     },
@@ -147844,7 +148405,10 @@
           {
             "type": "non_course",
             "text": "THE 1500 et 6 crédits de cours en théâtre (THE) de niveau 2000",
-            "credits": 6
+            "credits": 6,
+            "levels": [
+              2000
+            ]
           }
         ]
       }
@@ -147921,6 +148485,14 @@
         "credits": 6,
         "disciplines": [
           "THE"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "THE",
+            "levels": [
+              2000
+            ]
+          }
         ]
       }
     },
@@ -147937,6 +148509,14 @@
         "credits": 6,
         "disciplines": [
           "THE"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "THE",
+            "levels": [
+              2000
+            ]
+          }
         ]
       }
     },
@@ -147953,6 +148533,14 @@
         "credits": 6,
         "disciplines": [
           "THE"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "THE",
+            "levels": [
+              2000
+            ]
+          }
         ]
       }
     },
@@ -147969,6 +148557,14 @@
         "credits": 6,
         "disciplines": [
           "THE"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "THE",
+            "levels": [
+              2000
+            ]
+          }
         ]
       }
     },
@@ -148035,20 +148631,19 @@
       "component": "LecturePrerequisite: 6 course units in theatre (THE) at the 2000 or 3000 level.",
       "prereqText": "6 course units in theatre (THE) at the 2000 or 3000 level",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "6 course units in theatre (THE) at the 2000 or 3000 level",
-        "children": [
+        "credits": 6,
+        "disciplines": [
+          "THE"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "6 course units in theatre (THE) at the 2000",
-            "credits": 6,
-            "disciplines": [
-              "THE"
+            "discipline": "THE",
+            "levels": [
+              2000,
+              3000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "3000 level"
           }
         ]
       }
@@ -148066,6 +148661,14 @@
         "credits": 15,
         "disciplines": [
           "THE"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "THE",
+            "levels": [
+              2000
+            ]
+          }
         ]
       }
     },
@@ -148082,6 +148685,14 @@
         "credits": 15,
         "disciplines": [
           "THE"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "THE",
+            "levels": [
+              2000
+            ]
+          }
         ]
       }
     },
@@ -148093,20 +148704,19 @@
       "component": "LecturePrerequisite: 6 course units in theatre (THE) at the 2000 or 3000 level.",
       "prereqText": "6 course units in theatre (THE) at the 2000 or 3000 level",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "6 course units in theatre (THE) at the 2000 or 3000 level",
-        "children": [
+        "credits": 6,
+        "disciplines": [
+          "THE"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "6 course units in theatre (THE) at the 2000",
-            "credits": 6,
-            "disciplines": [
-              "THE"
+            "discipline": "THE",
+            "levels": [
+              2000,
+              3000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "3000 level"
           }
         ]
       }
@@ -148187,20 +148797,19 @@
       "component": "Cours magistralPréalable : 6 crédits de cours en théâtre (THE) de niveau 2000 ou 3000.",
       "prereqText": "6 crédits de cours en théâtre (THE) de niveau 2000 ou 3000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "6 crédits de cours en théâtre (THE) de niveau 2000 ou 3000",
-        "children": [
+        "credits": 6,
+        "disciplines": [
+          "THE"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "6 crédits de cours en théâtre (THE) de niveau 2000",
-            "credits": 6,
-            "disciplines": [
-              "THE"
+            "discipline": "THE",
+            "levels": [
+              2000,
+              3000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "3000"
           }
         ]
       }
@@ -148218,6 +148827,15 @@
         "credits": 15,
         "disciplines": [
           "THE"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "THE",
+            "levels": [
+              2000,
+              3000
+            ]
+          }
         ]
       }
     },
@@ -148234,6 +148852,15 @@
         "credits": 15,
         "disciplines": [
           "THE"
+        ],
+        "disciplineLevels": [
+          {
+            "discipline": "THE",
+            "levels": [
+              2000,
+              3000
+            ]
+          }
         ]
       }
     },
@@ -148245,20 +148872,19 @@
       "component": "Cours magistralPréalable : 6 crédits de cours en théâtre (THE) de niveau 2000 ou 3000.",
       "prereqText": "6 crédits de cours en théâtre (THE) de niveau 2000 ou 3000",
       "prerequisites": {
-        "type": "or_group",
+        "type": "non_course",
         "text": "6 crédits de cours en théâtre (THE) de niveau 2000 ou 3000",
-        "children": [
+        "credits": 6,
+        "disciplines": [
+          "THE"
+        ],
+        "disciplineLevels": [
           {
-            "type": "non_course",
-            "text": "6 crédits de cours en théâtre (THE) de niveau 2000",
-            "credits": 6,
-            "disciplines": [
-              "THE"
+            "discipline": "THE",
+            "levels": [
+              2000,
+              3000
             ]
-          },
-          {
-            "type": "non_course",
-            "text": "3000"
           }
         ]
       }
