@@ -146153,14 +146153,14 @@
       "title": "Descriptive Statistics",
       "credits": 3,
       "description": "Topics from descriptive statistics: histograms and boxplot; average and observed standard deviation; elementary probability; normal distribution; statistical estimation and hypothesis testing; correlation and regression. Examples analyzed with statistical software.",
-      "component": "Discussion Group, LectureThe courses ECO 2150, MAT 1371, MAT 2371, MAT 2377, MAT 2379, cannot be combined for units. This course cannot count for unit in any program in the Faculty of Science or Engineering."
+      "component": "Discussion Group, LectureThe courses ECO 2150, MAT 1371, MAT 2371, MAT 2377, MAT 2379, STA 1391, STA 2391, STA 2392, cannot be combined for units. This course cannot count for unit in any program in the Faculty of Science or Engineering. Previously MAT 1371."
     },
     {
       "code": "STA 1791",
       "title": "Statistique descriptive",
       "credits": 3,
       "description": "Des éléments de statistiques descriptives : histogrammes et diagramme à boîte et moustaches; moyenne et écart-type de l'échantillon; probabilités élémentaires; la loi normale; l'estimation statistique et tests d'hypothèses; corrélation et régression. Exemples analysés avec un logiciel statistique.",
-      "component": "Groupe de discussion, Cours magistralLes cours ECO 2550, MAT 1771, MAT 1772, MAT 2771, MAT 2777, MAT 2779, ne peuvent être combinés pour l'obtention de crédits. Ce cours ne peut pas compter pour fin de crédits dans un programme de la Faculté des Sciences ou de Génie."
+      "component": "Groupe de discussion, Cours magistralLes cours ECO 2550, MAT 1771, 2771, 2777, 2779, STA 1791, 2791 et 2792 ne peuvent être combinés pour l'obtention de crédits. Ce cours ne compte pas pour des crédits dans un programme de la Faculté des sciences ou de génie.. Antérieurement MAT 1771."
     },
     {
       "code": "STA 2100",
@@ -146179,8 +146179,8 @@
       "code": "STA 2391",
       "title": "Probability and Statistics for Engineers",
       "credits": 3,
-      "description": "A concise survey of: combinatorial analysis; probability and random variables; discrete and continuous densities and distribution functions; expectation and variance; normal (Gaussian), binomial and Poisson distributions; statistical estimation and hypothesis testing; method of least squares, correlation and regression. The emphasis is on statistics and quality control methods for engineers.",
-      "component": "LecturePrerequisite: MAT 1320 or MAT 1321 or MAT 1327 or MAT 1330. The course MAT 1322 or MAT 1325 or MAT 1332 is corequisite to MAT 2377.",
+      "description": "A concise survey of: combinatorial analysis; probability and random variables; discrete and continuous densities and distribution functions; expectation and variance; normal (Gaussian), binomial and Poisson distributions; statistical estimation and hypothesis testing; method of least squares, correlation and regression. The emphasis is on statistics and quality control methods for engineers. Previously MAT 2377.",
+      "component": "LecturePrerequisite: MAT 1320 or MAT 1321 or MAT 1327 or MAT 1330. The course MAT 1322 or MAT 1332 is corequisite to STA 2391. ADM 2303, ECO 2150, HSS 2381, MAT 1371–1372, 2371, 2375, 2377, 2379, PSY 2106, STA 1391, 2100, 2391–2392 cannot be combined for units.",
       "prereqText": "MAT 1320 or MAT 1321 or MAT 1327 or MAT 1330",
       "prerequisites": {
         "type": "or_group",
@@ -146213,8 +146213,8 @@
       "code": "STA 2392",
       "title": "Introduction to Biostatistics",
       "credits": 3,
-      "description": "Descriptive statistics using a software package. A concise survey of probability. The normal distribution. The central limit theorem and statistical estimation illustrated via simulation. Hypothesis testing, the design of experiments, paired sampling, categorical data and regression. Examples from the biosciences analyzed with statistical software. The courses ADM 2303, ECO 2150, HSS 2381, MAT 1371, MAT 1372, MAT 1373, MAT 2375, MAT 2377, MAT 2379, PSY 2106, STA 1391, STA 2100, STA 2391, STA 2392 cannot be combined for units. Previously MAT 2379.",
-      "component": "LecturePrerequisite: MAT 1320 or MAT 1321 or MAT 1327 or MAT 1330.",
+      "description": "Descriptive statistics using a software package. A concise survey of probability. The normal distribution. The central limit theorem and statistical estimation illustrated via simulation. Hypothesis testing, the design of experiments, paired sampling, categorical data and regression. Examples from the biosciences analyzed with statistical software.",
+      "component": "LecturePrerequisite: MAT 1320 or MAT 1321 or MAT 1327 or MAT 1330. ADM 2303, ECO 2150, HSS 2381, MAT 1371, MAT 1372, MAT 1373, MAT 2375, MAT 2377, MAT 2379, PSY 2106, STA 1391, STA 2100, STA 2391, STA 2392 cannot be combined for units. Previously MAT 2379.",
       "prereqText": "MAT 1320 or MAT 1321 or MAT 1327 or MAT 1330",
       "prerequisites": {
         "type": "or_group",
@@ -146248,7 +146248,7 @@
       "title": "Introduction à la statistique",
       "credits": 3,
       "description": "Introduction à la théorie de l'inférence statistique. Estimation paramétrique ponctuelle et par intervalle. Estimation par maximum de vraisemblance. Propriétés des estimateurs. Principes de tests d'hypothèses. Intervalles de confiance et tests d’hypothèses pour des moyennes et proportions (un et deux échantillon). Introduction aux modèles linéaires. Utilisation de logiciels de statistique.",
-      "component": "Laboratoire, Cours magistralPréalable : MAT 2771. Les cours MAT 2775, MAT 2777, MAT 2778, MAT 2779, ADM 2703, ECO 2550, HSS 2781, PSY 2506 ne peuvent être combinés pour l'obtention de crédits.",
+      "component": "Laboratoire, Cours magistralPréalable : MAT 2771. Les cours ADM 2703, ECO 2550, HSS 2781, MAT 2775, MAT 2777, MAT 2779, PSY 2506, STA 2500, STA 2791, STA 2792 ne peuvent être combinés pour l'obtention de crédits. Antérieurement MAT 2775.",
       "prereqText": "MAT 2771",
       "prerequisites": {
         "type": "course",
@@ -146260,8 +146260,8 @@
       "code": "STA 2791",
       "title": "Probabilités et statistique pour ingénieurs",
       "credits": 3,
-      "description": "Brève introduction aux sujets suivants: analyse combinatoire, probabilités et variables aléatoires, fonctions de densité et de répartition pour les variables de type discret ou continu. Espérance mathématique et variance; lois normale, binomiale et de Poisson; estimation et tests d'hypothèses; méthode des moindres carrés, corrélation et régression. La théorie est illustrée par des simulations. Le contenu du cours est orienté surtout vers la statistique et les méthodes de contrôle de la qualité pour les ingénieurs.",
-      "component": "Cours magistralPréalable : MAT 1720 ou MAT 1721 ou MAT 1727 ou MAT 1730. Le cours MAT 1722 ou MAT 1725 ou MAT 1732 est concomitant à MAT 2777.",
+      "description": "Brève introduction aux sujets suivants: analyse combinatoire, probabilités et variables aléatoires, fonctions de densité et de répartition pour les variables de type discret ou continu. Espérance mathématique et variance; lois normale, binomiale et de Poisson; estimation et tests d'hypothèses; méthode des moindres carrés, corrélation et régression. La théorie est illustrée par des simulations. Le contenu du cours est orienté surtout vers la statistique et les méthodes de contrôle de la qualité pour les ingénieurs. Les cours ADM 2703, ECO 2550, HSS 2781, MAT 1771, 1772, 2771, 2775, 2777, 2779, PSY 2506, STA 1791, 2500, 2791 et 2792 ne peuvent être combinés pour les crédits. Antérieurement MAT 2777.",
+      "component": "Cours magistralPréalable : MAT 1720 ou MAT 1721 ou MAT 1727 ou MAT 1730. Le cours MAT 1722 ou MAT 1725 ou MAT 1732 est concomitant à STA 2791.",
       "prereqText": "MAT 1720 ou MAT 1721 ou MAT 1727 ou MAT 1730",
       "prerequisites": {
         "type": "or_group",
@@ -146295,7 +146295,7 @@
       "title": "Introduction à la biostatistique",
       "credits": 3,
       "description": "La statistique descriptive via un logiciel statistique. Introduction à la théorie des probabilités. La densité normale. Le théorème limite central et l'estimation statistique via simulation. Les tests d'hypothèse, plans d'expérience, comparaison de deux échantillons, analyse des données catégoriques et régression. Les exemples en sciences biologiques sont analysés par un logiciel statistique. Les cours ADM 2703, ECO 2550, HSS 2781, MAT 1771, MAT 1772, MAT 1773, MAT 2775, MAT 2777, MAT 2779, PSY 2506, STA 1791, STA 2500, STA 2791, STA 2792 ne peuvent être combinés pour l'obtention de crédits. Antérieurement MAT 2779.",
-      "component": "Cours magistralPréalable : MAT 1720 ou MAT 1721 ou MAT 1727 ou MAT 1730.",
+      "component": "Cours magistralPréalable : MAT 1720 ou MAT 1721 ou MAT 1727 ou MAT 1730. ADM 2703, ECO 2550, HSS 2781, MAT 1771, 1772, 1773, 2775, 2777, 2779, PSY 2506, STA 1791, 2500, 2791 et 2792 ne peuvent être combinés pour les crédits. Antérieurement MAT 2779.",
       "prereqText": "MAT 1720 ou MAT 1721 ou MAT 1727 ou MAT 1730",
       "prerequisites": {
         "type": "or_group",
@@ -146329,7 +146329,7 @@
       "title": "Introduction to Mathematical Statistics",
       "credits": 3,
       "description": "Theory of statistical methods at an advanced mathematical level. Probability and limit theorems pertaining to statistical inference. Distribution theory and sampling distributions. Principles of parametric estimation. Likelihood-based inference and hypothesis tests. Introduction to non-parametric inference.",
-      "component": "LecturePrerequisites: MAT 3172, (MAT 3375 or STA 3300). The courses MAT 3175 and STA 3100 cannot be combined for units. Previously MAT 3175",
+      "component": "LecturePrerequisites: MAT 3172, (MAT 3375 or STA 3300). The courses MAT 3175 and STA 3100 cannot be combined for units. Previously MAT 3175.",
       "prereqText": "MAT 3172, (MAT 3375 or STA 3300)",
       "prerequisites": {
         "type": "and_group",
@@ -146851,7 +146851,7 @@
       "title": "Multivariate Statistical Methods",
       "credits": 3,
       "description": "Random vectors and matrices. Multivariate normal distribution and its properties. Inference on multivariate normal distribution: estimation, hypothesis testing. Principal component analysis. Cluster analysis. Linear discriminant analysis. Canonical correlation analysis. Analysis of data using statistical software packages.",
-      "component": "LecturePrerequisites: (MAT 2141 or MAT 2342), (MAT 3375 or STA 3300). The courses MAT 4375 and STA 4307 cannot be combined for units. Previously MAT4375.",
+      "component": "LecturePrerequisites: (MAT 2141 or MAT 2342), (MAT 3375 or STA 3300). The courses MAT 4375 and STA 4307 cannot be combined for units. Previously MAT 4375.",
       "prereqText": "(MAT 2141 or MAT 2342), (MAT 3375 or STA 3300)",
       "prerequisites": {
         "type": "and_group",
@@ -147072,12 +147072,23 @@
       "title": "Régression avancée",
       "credits": 3,
       "description": "Sujets choisis en régression linéaire : observations influentes, points de levier, choix de modèles, comparaison de modèles. Méthodes de régularisation : régression ridge, régression lasso. Régression robuste : valeur aberrante, point de rupture, fonction d’influence, M-estimateurs. Régression non paramétrique et méthodes de lissage : régression à noyau, régression polynomiale, fonctions splines à lissage. Autres sujets choisis par le professeur.",
-      "component": "Cours magistralPréalable : MAT 3775.",
-      "prereqText": "MAT 3775",
+      "component": "Cours magistralPréalable : MAT 3775 ou STA 3700. Les cours MAT 4780 et STA 4702 ne peuvent être combinés pour l'obtention de crédits. Antérieurement MAT 4780.",
+      "prereqText": "MAT 3775 ou STA 3700",
       "prerequisites": {
-        "type": "course",
-        "code": "MAT 3775",
-        "text": "MAT 3775"
+        "type": "or_group",
+        "text": "MAT 3775 ou STA 3700",
+        "children": [
+          {
+            "type": "course",
+            "code": "MAT 3775",
+            "text": "MAT 3775"
+          },
+          {
+            "type": "course",
+            "code": "STA 3700",
+            "text": "STA 3700"
+          }
+        ]
       }
     },
     {
