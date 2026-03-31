@@ -1,4 +1,4 @@
-import { normalizeCourseCode } from "./utils/courseUtils";
+import { normalizeCourseCode, isNonDegreeCourse } from "./utils/courseUtils";
 
 /** Course code pattern: 3–4 letters + 4–5 digits, optional letter suffix (e.g. ADM 1100, ESL 2121) */
 const COURSE_CODE_REGEX = /\b([A-Z]{3,4})\s*(\d{4,5}[A-Z]?)\b/gi;
@@ -221,8 +221,11 @@ export async function parseTranscriptPdf(
   }
 
   const fullText = textParts.join("\n");
+  // Filter out non-degree courses (ITD ethics courses don't count toward degree requirements)
+  const filteredCourses = [...allCodes].filter(code => !isNonDegreeCourse(code));
+  
   return {
-    courses: [...allCodes],
+    courses: filteredCourses,
     fullText,
     startingYear: parseStartingYear(fullText),
   };

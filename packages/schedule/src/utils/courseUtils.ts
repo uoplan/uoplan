@@ -86,6 +86,19 @@ export function isOptCourse(code: string): boolean {
 }
 
 /**
+ * Check if a course is a non-degree mandatory course (e.g., ethics).
+ * These courses are required for all uOttawa students but don't count 
+ * towards degree requirements and are not in the catalogue.
+ * Currently includes:
+ * - ITD 1100: Ethics in Engineering
+ * - ITD 1500: Design and Ethics
+ */
+export function isNonDegreeCourse(code: string): boolean {
+  const normalized = normalizeCourseCode(code);
+  return normalized === 'ITD 1100' || normalized === 'ITD 1500';
+}
+
+/**
  * Format a course code with its title for display.
  * e.g., "CSI 2101" + "Discrete Structures" -> "CSI 2101 - Discrete Structures"
  */
