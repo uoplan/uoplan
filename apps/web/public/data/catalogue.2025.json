@@ -215621,7 +215621,13 @@
               "type": "course",
               "code": "NUT 4185",
               "credits": 3
-            },
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Optional courses",
+          "options": [
             {
               "type": "group",
               "title": "9 optional course units from:",
@@ -215678,7 +215684,13 @@
                   "indented": true
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Elective courses",
+          "options": [
             {
               "type": "elective",
               "title": "30 elective course units",
