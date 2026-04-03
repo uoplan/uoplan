@@ -600,7 +600,7 @@ function App() {
                   <Group gap="xs">
                     <LanguageSwitcher onSwitch={handleLangSwitch} />
                     {indices && (
-                      <Tooltip label="Copied to clipboard!" opened={shareCopied} position="bottom" withArrow>
+                      <Tooltip label="Copied to clipboard!" opened={shareCopied} position="bottom" withArrow color="dark">
                         <Button
                           data-tour="share"
                           variant="subtle"

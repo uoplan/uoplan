@@ -357,7 +357,7 @@ export function BasicCalendarPage({ onBack }: BasicCalendarPageProps) {
         <Group gap="xs" wrap="wrap">
           <LanguageSwitcher />
           {indices && (
-            <Tooltip label="Copied to clipboard!" opened={shareCopied} position="bottom" withArrow>
+            <Tooltip label="Copied to clipboard!" opened={shareCopied} position="bottom" withArrow color="dark">
               <Button
                 variant="filled"
                 color="dark"
