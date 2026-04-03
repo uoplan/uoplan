@@ -7872,7 +7872,10 @@
             "credits": 54
           }
         ]
-      }
+      },
+      "aliases": [
+        "ANT 4132"
+      ]
     },
     {
       "code": "ANT 3133",
@@ -8331,7 +8334,10 @@
             "credits": 54
           }
         ]
-      }
+      },
+      "aliases": [
+        "ANT 4532"
+      ]
     },
     {
       "code": "ANT 3533",
@@ -11810,49 +11816,70 @@
       "title": "Selected Topics in Sport, Physical Activity and Health: Physiological Studies",
       "credits": 3,
       "description": "Critical analysis and discussion of recent theoretical and empirical papers presented and published in the physiology of exercise and health. Previously APA 6901.",
-      "component": "Seminar"
+      "component": "Seminar",
+      "aliases": [
+        "APA 6901"
+      ]
     },
     {
       "code": "APA 6103",
       "title": "Selected Topics in Sport, Physical Activity and Health: Biomechanics",
       "credits": 3,
       "description": "A critical analysis and discussion of recent theoretical and empirical papers presented and published in Movement Studies. Previously APA 6903.",
-      "component": "Seminar"
+      "component": "Seminar",
+      "aliases": [
+        "APA 6903"
+      ]
     },
     {
       "code": "APA 6104",
       "title": "Selected Topics in Sport, Physical Activity and Health: Sociocultural Studies",
       "credits": 3,
       "description": "A critical analysis and discussion of recent theoretical and empirical papers presented and published in the sociology of sport organizations as well as in the sociology of sport, physical activity and health. Previously APA 6904.",
-      "component": "Seminar"
+      "component": "Seminar",
+      "aliases": [
+        "APA 6904"
+      ]
     },
     {
       "code": "APA 6105",
       "title": "Selected Topics in Sport, Physical Activity and Health: Psychology and Pedagogy",
       "credits": 3,
       "description": "A critical analysis and discussion of recent theoretical and empirical papers presented and published in intervention as well as in psychology of sport, physical activity and health. Previously APA 6905.",
-      "component": "Seminar"
+      "component": "Seminar",
+      "aliases": [
+        "APA 6905"
+      ]
     },
     {
       "code": "APA 6109",
       "title": "Selected Topics in Sport, Physical Activity and Health: Motor Control and Learning",
       "credits": 3,
       "description": "Major concepts and principles of motor control and learning. Analysis of sensory, cognitive, neural and environmental factors that affect motor control and learning. Study of special populations and computational models using contemporary laboratory techniques. Previously APA 6909.",
-      "component": "Seminar"
+      "component": "Seminar",
+      "aliases": [
+        "APA 6909"
+      ]
     },
     {
       "code": "APA 6110",
       "title": "Selected Topics in Sport, Physical Activity and Health: Management",
       "credits": 3,
       "description": "Critical analysis and discussion of recent theoretical and empirical papaers published in the area of sport management. Previously APA 6910.",
-      "component": "Seminar"
+      "component": "Seminar",
+      "aliases": [
+        "APA 6910"
+      ]
     },
     {
       "code": "APA 6111",
       "title": "Selected Topics in Sport, Physical Activity and Health: Leisure Studies",
       "credits": 3,
       "description": "Critical analysis and discussion of recent research publications in leisure studies. Previously APA 6911.",
-      "component": "Lecture"
+      "component": "Lecture",
+      "aliases": [
+        "APA 6911"
+      ]
     },
     {
       "code": "APA 6302",
@@ -11892,7 +11919,10 @@
       "title": "Thèmes choisis en sport, activité physique et santé : Psychologie et pédagogie",
       "credits": 3,
       "description": "Analyse critique et discussion des recherches récentes publiées dans le domaine de l'intervention et de la psychologie du sport, de l'activité physique et de la santé. Antérieurement APA 6905.",
-      "component": "Séminaire"
+      "component": "Séminaire",
+      "aliases": [
+        "APA 6905"
+      ]
     },
     {
       "code": "APA 6702",
@@ -13004,7 +13034,11 @@
       "prerequisites": {
         "type": "non_course",
         "text": "Priority given to students registered in the Visual Arts programs"
-      }
+      },
+      "aliases": [
+        "ART 2161",
+        "ART 2361"
+      ]
     },
     {
       "code": "ART 1502",
@@ -13067,7 +13101,11 @@
       "title": "Histoires de l'art II",
       "credits": 3,
       "description": "Un aperçu mondial de l'histoire de l'art, de l'architecture et des idées, du début de la Renaissance jusqu'à la fin du 19e siècle. Les cours d'introduction ART 1760 et ART 1761, sont obligatoires pour tous les étudiants et étudiantes du Département d'arts visuels (Baccalauréat en arts visuels; Majeure en arts visuels; Majeure et mineure en histoire de l'art), et sont préalables à tous les cours obligatoires de niveau 3000. Antérieurement ART 2561 et ART 2761. Il est important de s'y inscrire en première année pour ne pas retarder la diplomation. (H).",
-      "component": "Cours magistralPriorité accordée aux étudiants et étudiantes inscrits aux programmes d'arts visuels."
+      "component": "Cours magistralPriorité accordée aux étudiants et étudiantes inscrits aux programmes d'arts visuels.",
+      "aliases": [
+        "ART 2561",
+        "ART 2761"
+      ]
     },
     {
       "code": "ART 1900",
@@ -14090,7 +14128,10 @@
             "text": "dessin"
           }
         ]
-      }
+      },
+      "aliases": [
+        "ART 3016"
+      ]
     },
     {
       "code": "ART 3917",
@@ -14116,7 +14157,10 @@
             "text": "dessin"
           }
         ]
-      }
+      },
+      "aliases": [
+        "ART 3016"
+      ]
     },
     {
       "code": "ART 3926",
@@ -14299,7 +14343,13 @@
             "text": "sculpture"
           }
         ]
-      }
+      },
+      "aliases": [
+        "ART 3041",
+        "ART 2941",
+        "ART 2942",
+        "ART 2943"
+      ]
     },
     {
       "code": "ART 3945",
@@ -14325,7 +14375,10 @@
             "text": "photographie"
           }
         ]
-      }
+      },
+      "aliases": [
+        "ART 3041"
+      ]
     },
     {
       "code": "ART 3952",
@@ -15160,7 +15213,11 @@
         "type": "course",
         "code": "CHM 2120",
         "text": "CHM 2120"
-      }
+      },
+      "aliases": [
+        "BCH 2140",
+        "BCH 2336"
+      ]
     },
     {
       "code": "BCH 2733",
@@ -15173,7 +15230,11 @@
         "type": "course",
         "code": "CHM 2520",
         "text": "CHM 2520"
-      }
+      },
+      "aliases": [
+        "BCH 2540",
+        "BCH 2736"
+      ]
     },
     {
       "code": "BCH 3120",
@@ -16506,7 +16567,10 @@
       "title": "Introduction to Organismal Biology",
       "credits": 3,
       "description": "Survey of the evidence for, and the fundamentals underlying the evolution of biological diversity. Topics include: Mechanisms of natural selection and speciation, major trends and changes in biotic diversity and extinction of organisms over time; organismal interactions at the population and community levels, including human impacts on the structure and function of ecological systems. Previously BIO 1120.",
-      "component": "Laboratory, LecturePrerequisite or corequisite: 4U Biology or BIO 1109."
+      "component": "Laboratory, LecturePrerequisite or corequisite: 4U Biology or BIO 1109.",
+      "aliases": [
+        "BIO 1120"
+      ]
     },
     {
       "code": "BIO 1140",
@@ -16529,7 +16593,10 @@
             "text": "BIO 1109"
           }
         ]
-      }
+      },
+      "aliases": [
+        "BIO 1110"
+      ]
     },
     {
       "code": "BIO 1300",
@@ -16550,7 +16617,10 @@
       "title": "Introduction à la biologie des organismes",
       "credits": 3,
       "description": "Vue d'ensemble des preuves et des principes fondamentaux de l'évolution de la biodiversité. Les sujets abordés incluent: les mécanismes de la sélection naturelle et de la spéciation, les tendances majeures et les changements dans la diversité biotique et de l'extinction dans le temps; interactions d'organismes au niveau des populations et des communautés, ainsi que leffet des humains sur la structure et les fonctions des systèmes écologiques. Antérieurement BIO 1520.",
-      "component": "Laboratoire, Cours magistralPréalable ou concomitant : Biologie 4U ou BIO 1509."
+      "component": "Laboratoire, Cours magistralPréalable ou concomitant : Biologie 4U ou BIO 1509.",
+      "aliases": [
+        "BIO 1520"
+      ]
     },
     {
       "code": "BIO 1540",
@@ -16573,7 +16643,10 @@
             "text": "BIO 1509"
           }
         ]
-      }
+      },
+      "aliases": [
+        "BIO 1510"
+      ]
     },
     {
       "code": "BIO 1700",
@@ -16606,7 +16679,10 @@
         "type": "course",
         "code": "BIO 1130",
         "text": "BIO 1130"
-      }
+      },
+      "aliases": [
+        "BIO 2109"
+      ]
     },
     {
       "code": "BIO 2133",
@@ -16619,7 +16695,10 @@
         "type": "course",
         "code": "BIO 1140",
         "text": "BIO 1140"
-      }
+      },
+      "aliases": [
+        "BIO 2123"
+      ]
     },
     {
       "code": "BIO 2135",
@@ -16643,7 +16722,10 @@
             "text": "BIO 1140"
           }
         ]
-      }
+      },
+      "aliases": [
+        "BIO 2125"
+      ]
     },
     {
       "code": "BIO 2137",
@@ -16667,7 +16749,10 @@
             "text": "BIO 1140"
           }
         ]
-      }
+      },
+      "aliases": [
+        "BIO 2127"
+      ]
     },
     {
       "code": "BIO 2510",
@@ -16700,7 +16785,10 @@
         "type": "course",
         "code": "BIO 1530",
         "text": "BIO 1530"
-      }
+      },
+      "aliases": [
+        "BIO 2509"
+      ]
     },
     {
       "code": "BIO 2533",
@@ -16713,7 +16801,10 @@
         "type": "course",
         "code": "BIO 1540",
         "text": "BIO 1540"
-      }
+      },
+      "aliases": [
+        "BIO 2523"
+      ]
     },
     {
       "code": "BIO 2535",
@@ -16737,7 +16828,10 @@
             "text": "BIO 1540"
           }
         ]
-      }
+      },
+      "aliases": [
+        "BIO 2525"
+      ]
     },
     {
       "code": "BIO 2537",
@@ -16761,7 +16855,10 @@
             "text": "BIO 1540"
           }
         ]
-      }
+      },
+      "aliases": [
+        "BIO 2527"
+      ]
     },
     {
       "code": "BIO 3009",
@@ -16820,7 +16917,10 @@
       "title": "Field Biology",
       "credits": 3,
       "description": "This course offers a wide variety of two-week field modules that examine the structure and functioning of ecological systems. The modules are offered under the aegis of the Ontario Universities Field Program in Biology (www.oupfb.ca). They provide hands-on experience with many different ecosystems, groups of organisms, and ecological techniques in the field. Supplemental fees apply, depending on the module(s) chosen. Students may take more than one module for units with the permission of the Department. Consult the Department of Biology for details about the subjects and locations of available modules. Previously BIO 3105.",
-      "component": "LaboratoryPermission of the Department is required."
+      "component": "LaboratoryPermission of the Department is required.",
+      "aliases": [
+        "BIO 3105"
+      ]
     },
     {
       "code": "BIO 3115",
@@ -16960,7 +17060,10 @@
         "type": "course",
         "code": "BIO 2137",
         "text": "BIO 2137"
-      }
+      },
+      "aliases": [
+        "BIO 4140"
+      ]
     },
     {
       "code": "BIO 3146",
@@ -16973,7 +17076,10 @@
         "type": "course",
         "code": "BIO 3140",
         "text": "BIO 3140"
-      }
+      },
+      "aliases": [
+        "BIO 3156"
+      ]
     },
     {
       "code": "BIO 3147",
@@ -17063,7 +17169,10 @@
         "type": "course",
         "code": "BIO 2135",
         "text": "BIO 2135"
-      }
+      },
+      "aliases": [
+        "BIO 3108"
+      ]
     },
     {
       "code": "BIO 3170",
@@ -17098,7 +17207,10 @@
         "type": "course",
         "code": "BIO 2129",
         "text": "BIO 2129"
-      }
+      },
+      "aliases": [
+        "BIO 3166"
+      ]
     },
     {
       "code": "BIO 3302",
@@ -17124,7 +17236,10 @@
         "type": "course",
         "code": "BIO 1140",
         "text": "BIO 1140"
-      }
+      },
+      "aliases": [
+        "BIO 3301"
+      ]
     },
     {
       "code": "BIO 3305",
@@ -17163,7 +17278,10 @@
         "type": "course",
         "code": "BIO 2135",
         "text": "BIO 2135"
-      }
+      },
+      "aliases": [
+        "BIO 3323"
+      ]
     },
     {
       "code": "BIO 3350",
@@ -17349,7 +17467,10 @@
         "type": "course",
         "code": "BIO 2537",
         "text": "BIO 2537"
-      }
+      },
+      "aliases": [
+        "BIO 4540"
+      ]
     },
     {
       "code": "BIO 3546",
@@ -17362,7 +17483,10 @@
         "type": "course",
         "code": "BIO 3540",
         "text": "BIO 3540"
-      }
+      },
+      "aliases": [
+        "BIO 3556"
+      ]
     },
     {
       "code": "BIO 3547",
@@ -17452,7 +17576,10 @@
         "type": "course",
         "code": "BIO 2535",
         "text": "BIO 2535"
-      }
+      },
+      "aliases": [
+        "BIO 3508"
+      ]
     },
     {
       "code": "BIO 3570",
@@ -17487,7 +17614,10 @@
         "type": "course",
         "code": "BIO 2529",
         "text": "BIO 2529"
-      }
+      },
+      "aliases": [
+        "BIO 3566"
+      ]
     },
     {
       "code": "BIO 3702",
@@ -18015,7 +18145,10 @@
             "code": "MAT 2379"
           }
         ]
-      }
+      },
+      "aliases": [
+        "BIO 4136"
+      ]
     },
     {
       "code": "BIO 4158",
@@ -18028,7 +18161,10 @@
         "type": "course",
         "code": "MAT 2379",
         "text": "MAT 2379"
-      }
+      },
+      "aliases": [
+        "BIO 4118"
+      ]
     },
     {
       "code": "BIO 4159",
@@ -18405,7 +18541,10 @@
             "code": "MAT 2779"
           }
         ]
-      }
+      },
+      "aliases": [
+        "BIO 4536"
+      ]
     },
     {
       "code": "BIO 4558",
@@ -18418,7 +18557,10 @@
         "type": "course",
         "code": "MAT 2779",
         "text": "MAT 2779"
-      }
+      },
+      "aliases": [
+        "BIO 4518"
+      ]
     },
     {
       "code": "BIO 4702",
@@ -22498,7 +22640,10 @@
             "text": "equivalent"
           }
         ]
-      }
+      },
+      "aliases": [
+        "CHM 1310"
+      ]
     },
     {
       "code": "CHM 1321",
@@ -22520,14 +22665,20 @@
             "text": "equivalent"
           }
         ]
-      }
+      },
+      "aliases": [
+        "CHM 1320"
+      ]
     },
     {
       "code": "CHM 1701",
       "title": "Principes de chimie",
       "credits": 3,
       "description": "Structures et propriétés de la matière; RPECV; stoechiométrie; lois des gaz; principes de cinétique et thermodynamique; aspects quantitatifs des réactions à l'équilibre; processus électrochimiques; introduction à la chimie organique, nomenclature et groupes fonctionnels.",
-      "component": "Tutoriel, Laboratoire, Cours magistralLes cours CHM1701, CHM1711 ne peuvent être combinés pour l'obtention de crédits. Antérieurement CHM1700. Doit s'inscrire à ce cours (CHM1701) si cours 4U ou CPO Chimie non complété."
+      "component": "Tutoriel, Laboratoire, Cours magistralLes cours CHM1701, CHM1711 ne peuvent être combinés pour l'obtention de crédits. Antérieurement CHM1700. Doit s'inscrire à ce cours (CHM1701) si cours 4U ou CPO Chimie non complété.",
+      "aliases": [
+        "CHM 1700"
+      ]
     },
     {
       "code": "CHM 1711",
@@ -22575,7 +22726,10 @@
             "text": "l'équivalent"
           }
         ]
-      }
+      },
+      "aliases": [
+        "CHM 1720"
+      ]
     },
     {
       "code": "CHM 2120",
@@ -22595,7 +22749,10 @@
       "title": "Laboratory of Organic Chemistry II",
       "credits": 3,
       "description": "Laboratory work associated with CHM 2120. Previously CHM 2126.",
-      "component": "LaboratoryCHM 2120 is corequisite to CHM 2123."
+      "component": "LaboratoryCHM 2120 is corequisite to CHM 2123.",
+      "aliases": [
+        "CHM 2126"
+      ]
     },
     {
       "code": "CHM 2128",
@@ -22928,7 +23085,11 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "CHM 2130",
+        "CHM 2136"
+      ]
     },
     {
       "code": "CHM 2353",
@@ -22957,7 +23118,11 @@
             "text": "CHM 1321"
           }
         ]
-      }
+      },
+      "aliases": [
+        "CHM 2352",
+        "CHM 2116"
+      ]
     },
     {
       "code": "CHM 2354",
@@ -23001,7 +23166,10 @@
       "title": "Laboratoire de chimie organique II",
       "credits": 3,
       "description": "Travaux pratiques accompagnant CHM 2520. Antérieurement CHM 2526.",
-      "component": "LaboratoireLe cours CHM 2520 est concomitant à CHM 2523."
+      "component": "LaboratoireLe cours CHM 2520 est concomitant à CHM 2523.",
+      "aliases": [
+        "CHM 2526"
+      ]
     },
     {
       "code": "CHM 2528",
@@ -23334,7 +23502,11 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "CHM 2530",
+        "CHM 2536"
+      ]
     },
     {
       "code": "CHM 2753",
@@ -23363,7 +23535,11 @@
             "text": "CHM 1721"
           }
         ]
-      }
+      },
+      "aliases": [
+        "CHM 2752",
+        "CHM 2516"
+      ]
     },
     {
       "code": "CHM 2754",
@@ -23387,7 +23563,11 @@
             "text": "CHM 1711"
           }
         ]
-      }
+      },
+      "aliases": [
+        "CHM 2554",
+        "CHM 2518"
+      ]
     },
     {
       "code": "CHM 3120",
@@ -23516,7 +23696,11 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "CHM 3150",
+        "CHM 3156"
+      ]
     },
     {
       "code": "CHM 3372",
@@ -23671,7 +23855,11 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "CHM 3550",
+        "CHM 3556"
+      ]
     },
     {
       "code": "CHM 3773",
@@ -23684,7 +23872,11 @@
         "type": "course",
         "code": "CHM 3140",
         "text": "CHM 3140"
-      }
+      },
+      "aliases": [
+        "CHM 3771",
+        "CHM 3736"
+      ]
     },
     {
       "code": "CHM 4010",
@@ -23706,7 +23898,11 @@
             "text": "l'étudiante doit avoir conservé une MPC minimale de 6"
           }
         ]
-      }
+      },
+      "aliases": [
+        "CHM 4006",
+        "CHM 4910"
+      ]
     },
     {
       "code": "CHM 40101",
@@ -23728,7 +23924,11 @@
             "text": "l'étudiante doit avoir conservé une MPC minimale de 6"
           }
         ]
-      }
+      },
+      "aliases": [
+        "CHM 4006",
+        "CHM 4910"
+      ]
     },
     {
       "code": "CHM 40102",
@@ -23741,7 +23941,12 @@
         "type": "course",
         "code": "CHM 40101",
         "text": "CHM 40101"
-      }
+      },
+      "aliases": [
+        "CHM 4006",
+        "CHM 4910",
+        "CHM 40101"
+      ]
     },
     {
       "code": "CHM 4016",
@@ -23969,7 +24174,10 @@
             "code": "CHM 2120"
           }
         ]
-      }
+      },
+      "aliases": [
+        "CHM 3125"
+      ]
     },
     {
       "code": "CHM 4182",
@@ -27506,14 +27714,20 @@
       "title": "Introduction to Public and Constitutional Law",
       "credits": 5,
       "description": "This course introduces students to the structure of the Canadian legal system, including: sources of law, the federal legislative process and statutory interpretation; the legal system's constitutional basis; the organization of courts and tribunals in Canada and appeal processes; and the role of the courts in overseeing legislative and administrative action. It also introduces students to basic principles of Canadian constitutional law: sources of the Canadian Constitution; constitutional supervision and the role of the courts; the advent of the Canadian Charter of Rights and Freedoms; the framework of the Charter; an introduction to the fundamental rights and freedoms protected by the Charter; and an introduction to constitutional remedies. Previously CML 1205.",
-      "component": "Lecture"
+      "component": "Lecture",
+      "aliases": [
+        "CML 1205"
+      ]
     },
     {
       "code": "CML 11161",
       "title": "Introduction to Public and Constitutional Law (Part 1 of 2)",
       "credits": 0,
       "description": "This course introduces students to the structure of the Canadian legal system, including: sources of law, the federal legislative process and statutory interpretation; the legal system's constitutional basis; the organization of courts and tribunals in Canada and appeal processes; and the role of the courts in overseeing legislative and administrative action. It also introduces students to basic principles of Canadian constitutional law: sources of the Canadian Constitution; constitutional supervision and the role of the courts; the advent of the Canadian Charter of Rights and Freedoms; the framework of the Charter; an introduction to the fundamental rights and freedoms protected by the Charter; and an introduction to constitutional remedies. (Part 1 of 2) Previously CML 1205.",
-      "component": "Lecture, Tutorial"
+      "component": "Lecture, Tutorial",
+      "aliases": [
+        "CML 1205"
+      ]
     },
     {
       "code": "CML 11162",
@@ -27526,7 +27740,10 @@
         "type": "course",
         "code": "CML 11161",
         "text": "CML 11161"
-      }
+      },
+      "aliases": [
+        "CML 1205"
+      ]
     },
     {
       "code": "CML 1203",
@@ -28855,7 +29072,10 @@
         "type": "course",
         "code": "CML 3303",
         "text": "CML 3303"
-      }
+      },
+      "aliases": [
+        "CML 3202"
+      ]
     },
     {
       "code": "CML 3303",
@@ -29077,7 +29297,10 @@
         "type": "course",
         "code": "CML 2305",
         "text": "CML 2305"
-      }
+      },
+      "aliases": [
+        "CML 2205"
+      ]
     },
     {
       "code": "CML 3364",
@@ -29624,7 +29847,10 @@
         "type": "course",
         "code": "CML 2712",
         "text": "CML 2712"
-      }
+      },
+      "aliases": [
+        "CML 2512"
+      ]
     },
     {
       "code": "CML 3568",
@@ -29888,14 +30114,20 @@
       "title": "Droit et criminologie",
       "credits": 3,
       "description": "Étude de la criminologie et de sa relation avec le droit : théories criminologiques sur les causes de la criminalité et sur le contrôle social; portée, limites et effets de la justice criminelle; contributions de la criminologie à la pratique du droit criminel; le rôle des acteurs; la judiciarisation et la sanction au-delà du droit criminel; les formes alternatives d'administration des conflits (justice réparatrice, réduction des méfaits, abolitionnisme pénal); les enjeux contemporains en droit pénal : le profilage, l'emprisonnement de masse, la surreprésentation des autochtones, la santé mentale, les drogues, etc. Antérieurement : CML 4511- Études en droit criminel - Droit et criminologie",
-      "component": "Séminaire"
+      "component": "Séminaire",
+      "aliases": [
+        "CML 4511"
+      ]
     },
     {
       "code": "CML 3722",
       "title": "Les peines",
       "credits": 3,
       "description": "Ce cours traite de questions telles que les procédures judiciaires, les fardeaux de la preuve appropriés, les facteurs aggravants et atténuants, les principes de base du Code criminel et de la common law, la situation des autochtones, la Loi sur le Système de Justice pénale pour les adolescents, la Loi réglementant certaines drogues et autres substances, la Charte canadienne des droits et libertés, les droits des victimes, les ordonnances ancillaires, les considérations au niveau de la mise en liberté après la peine ainsi que les pardons, et l'efficacité et conséquences des peines. Antérieurement : CML 4511 - Études en droit criminel - Les peines",
-      "component": "Séminaire"
+      "component": "Séminaire",
+      "aliases": [
+        "CML 4511"
+      ]
     },
     {
       "code": "CML 3723",
@@ -29909,7 +30141,10 @@
       "title": "Problèmes contemporains en droit pénal",
       "credits": 3,
       "description": "Ce cours traite de questions et problèmes communs dans la pratique de droit pénal, dont : le délai déraisonnable avant le procès, l'utilisation de la Charte canadienne des droits et libertés, l'efficacité et les conséquences des peines, les fardeaux de la preuve, les audiences sur le cautionnement, l'enquête préliminaire, le droit de consulter un(e) avocat(e), la classification des infractions, les choix procéduraux des parties, les rôles de la défense et la poursuite, les procès avec jury, la négociation des plaidoyers, le traitement des jeunes, le traitement des gens souffrant de troubles mentaux, la Loi réglementant certaines drogues et autres substances, les droits des victimes, le choix de langues, des exercices pratiques d'interrogatoire principal et contre-interrogatoire, et on fera un procès simulé en classe. Antérieurement : CML 4511 - Études en droit criminel - Problèmes contemporains en droit pénal",
-      "component": "Séminaire"
+      "component": "Séminaire",
+      "aliases": [
+        "CML 4511"
+      ]
     },
     {
       "code": "CML 3727",
@@ -30011,7 +30246,10 @@
         "type": "course",
         "code": "CML 2705",
         "text": "CML 2705"
-      }
+      },
+      "aliases": [
+        "CML 2805"
+      ]
     },
     {
       "code": "CML 3765",
@@ -30073,14 +30311,20 @@
         "type": "course",
         "code": "CML 3704",
         "text": "CML 3704"
-      }
+      },
+      "aliases": [
+        "CML 3504"
+      ]
     },
     {
       "code": "CML 3785",
       "title": "Clinique en droit des investissements et du commerce international",
       "credits": 3,
       "description": "Ce cours pratique (clinique) offre aux étudiantes, étudiants une occasion de traiter de questions juridiques spécifiques en matière de droit du commerce et de l'investissement provenant de vrais clients, notamment des gouvernements, des ONG, des organisations internationales et d'autres parties prenantes, sous la stricte supervision de professeurs et de mentors experts. Ce cours satisfait aux exigences du tribunal-école. Inscription par sélection. Antérieurement : CML 4508 - Études en droit international - Clinique en droit des investissements et du commerce international.",
-      "component": "Stage"
+      "component": "Stage",
+      "aliases": [
+        "CML 4508"
+      ]
     },
     {
       "code": "CML 3787",
@@ -30886,7 +31130,10 @@
       "title": "Droit maritime",
       "credits": 3,
       "description": "Le cours traite du transport maritime au niveau international et la responsabilité du transporteur maritime ou propriétaire du navire. Le transport maritime international des marchandises, des personnes, les abordages maritimes ainsi que l'assurance maritime sont également abordés. Le cours place le droit maritime dans le contexte du droit international, des conflits des lois, des études en droit comparé (droit civil-common law) et des transactions internationales. Antérieurement : CML4508- Études en droit international - Droit maritime",
-      "component": "Séminaire"
+      "component": "Séminaire",
+      "aliases": [
+        "CML 4508"
+      ]
     },
     {
       "code": "CML 4529",
@@ -31003,7 +31250,10 @@
       "title": "Droit international africain",
       "credits": 3,
       "description": "Ce cours a pour principal objectif de déconstruire le droit international présenté comme un outil de domination. Il familiarisera les étudiants avec la perspective des pays en développement sur le droit international, en particulier la perspective africaine. Le cours analysera en outre les institutions de développement et de mise oeuvre du droit international régional, avec un accent particulier sur les cours et autres institutions quasi-judiciaires de protection des droits de l'homme sur le continent. Enfin, il outillera et dotera les étudiants des habilités et des compétences qui leur permettront de plaider devant les institutions africaines des droits de l'homme (Cour et Commission) ou de se constituer amicus curiae pour certaines causes. Antérieurement : CML 4508 - Études en droit international - Droit international africain",
-      "component": "Cours magistralAucun cours préalable mais le cours de droit international public est recommandé."
+      "component": "Cours magistralAucun cours préalable mais le cours de droit international public est recommandé.",
+      "aliases": [
+        "CML 4508"
+      ]
     },
     {
       "code": "CML 4741",
@@ -31045,14 +31295,20 @@
       "title": "Litige en matière d'égalité / Equality Law Issues",
       "credits": 3,
       "description": "Ce cours fait un survol de la jurisprudence en droits de la personne et aborde les éléments pratiques liés à la gestion de vrais dossiers en droits de la personne, notamment la preuve, les interventions et les collaborations avec d'autres groupes militant pour l'égalité, la stratégie de litiges, les campagnes d'éducation, les relations avec les médias, l'action internationale et la réforme du droit. Une compréhension passive de l'anglais est souhaitable. La professeure alternera entre le français et l'anglais chaque semaine et les conférencier(e)s invité(e)s feront leurs présentations soit en anglais, soit en français. Les étudiant(e)s peuvent employer la langue de leur choix en classe. Les étudiant(e)s du programme français devront cependant rédiger leur travail écrit en français. Antérieurement : CML 4914 - Études intensives : Thème choisi en droit - Litige en matière d'égalité / This course provides an overview of statutory human rights in Canada and focuses on practical aspects relating to litigating human rights cases, such as evidence, interventions and collaboration with other equality seeking groups, litigation strategies, public education campaigns, media relations, international action, and law reform. A passive knowledge of French is desirable. The instructor will switch between languages from week to week and presentations by guest speakers will be in English or in French. English Program students may use the language of their choice in class and in written assignments. Previously: CML 4914 - Intensive Study : Select Legal Issues - Equality Law Issues",
-      "component": "Séminaire / Seminar"
+      "component": "Séminaire / Seminar",
+      "aliases": [
+        "CML 4914"
+      ]
     },
     {
       "code": "CML 4916",
       "title": "Le secret ministériel et la primauté du droit / Cabinet Secrecy and Rule of Law",
       "credits": 3,
       "description": "L'objectif du cours consiste à étudier, de manière critique, les principes à la base du secret des délibérations du Cabinet (ou secret ministériel), d'une perspective politique, juridique et théorique. Le cours sera enseigné de manière bilingue : la moitié des cours sera enseignée en français et l'autre moitié en anglais. Les diaporamas PowerPoint seront disponibles dans les deux langues officielles. Les étudiants pourront participer en classe, faire leur présentation orale et rédiger leur mémoire de recherche dans la langue officielle de leur choix (sous réserve des règlements scolaires). Antérieurement : CML 4914 - Études intensives : Thème choisi en droit - Le secret ministériel et la primauté du droit. / The objective of this course is to critically review the principles underpinning Cabinet secrecy from a political, legal and theoretical perspective. The course will be offered in a bilingual format, half of the classes will be taught in English and the other half in French. The PowerPoint slides will be available in both official languages. Students are free to intervene in class, do their oral presentation and write their research paper in the official language of their choice (subject to academic regulations). Previously: CML 4914 Intensive Study : Select Legal Issues - Cabinet Secrecy and Rule of Law.",
-      "component": "Séminaire / Seminar"
+      "component": "Séminaire / Seminar",
+      "aliases": [
+        "CML 4914"
+      ]
     },
     {
       "code": "CML 4917",
@@ -31064,7 +31320,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "a course in Canadian constitutional law and (Canadian) public law legislation"
-      }
+      },
+      "aliases": [
+        "CML 4914"
+      ]
     },
     {
       "code": "CML 5000",
@@ -31084,7 +31343,10 @@
         "type": "course",
         "code": "BIO 1140",
         "text": "BIO1140"
-      }
+      },
+      "aliases": [
+        "CMM 4350"
+      ]
     },
     {
       "code": "CMM 3750",
@@ -31097,7 +31359,10 @@
         "type": "course",
         "code": "BIO 1540",
         "text": "BIO1540"
-      }
+      },
+      "aliases": [
+        "CMM 4350"
+      ]
     },
     {
       "code": "CMM 4360",
@@ -34174,7 +34439,10 @@
             "credits": 15
           }
         ]
-      }
+      },
+      "aliases": [
+        "CRM 3314"
+      ]
     },
     {
       "code": "CRM 2314",
@@ -34197,7 +34465,10 @@
             "credits": 15
           }
         ]
-      }
+      },
+      "aliases": [
+        "CRM 3317"
+      ]
     },
     {
       "code": "CRM 2315",
@@ -34220,7 +34491,10 @@
             "credits": 15
           }
         ]
-      }
+      },
+      "aliases": [
+        "CRM 3303"
+      ]
     },
     {
       "code": "CRM 2700",
@@ -34485,7 +34759,10 @@
             "credits": 15
           }
         ]
-      }
+      },
+      "aliases": [
+        "CRM 3714"
+      ]
     },
     {
       "code": "CRM 2714",
@@ -34508,7 +34785,10 @@
             "credits": 15
           }
         ]
-      }
+      },
+      "aliases": [
+        "CRM 3717"
+      ]
     },
     {
       "code": "CRM 2715",
@@ -34531,7 +34811,10 @@
             "credits": 15
           }
         ]
-      }
+      },
+      "aliases": [
+        "CRM 3703"
+      ]
     },
     {
       "code": "CRM 3301",
@@ -35011,7 +35294,10 @@
             "credits": 24
           }
         ]
-      }
+      },
+      "aliases": [
+        "CRM 4304"
+      ]
     },
     {
       "code": "CRM 3701",
@@ -35514,7 +35800,10 @@
             "credits": 24
           }
         ]
-      }
+      },
+      "aliases": [
+        "CRM 4704"
+      ]
     },
     {
       "code": "CRM 4260",
@@ -35727,7 +36016,10 @@
             "credits": 15
           }
         ]
-      }
+      },
+      "aliases": [
+        "CRM 3326"
+      ]
     },
     {
       "code": "CRM 4660",
@@ -35940,7 +36232,10 @@
             "credits": 15
           }
         ]
-      }
+      },
+      "aliases": [
+        "CRM 3726"
+      ]
     },
     {
       "code": "CRM 5301",
@@ -44410,7 +44705,10 @@
         "type": "course",
         "code": "DLS 1100",
         "text": "DLS 1100"
-      }
+      },
+      "aliases": [
+        "DLS 3110"
+      ]
     },
     {
       "code": "DLS 2501",
@@ -49913,7 +50211,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "ECO 3150"
+      ]
     },
     {
       "code": "ECO 2151",
@@ -49946,7 +50247,10 @@
             "text": "ECO 2150"
           }
         ]
-      }
+      },
+      "aliases": [
+        "ECO 3151"
+      ]
     },
     {
       "code": "ECO 2199",
@@ -50267,7 +50571,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "ECO 3550"
+      ]
     },
     {
       "code": "ECO 2551",
@@ -50300,7 +50607,10 @@
             "text": "ECO 2550"
           }
         ]
-      }
+      },
+      "aliases": [
+        "ECO 3551"
+      ]
     },
     {
       "code": "ECO 2599",
@@ -50337,7 +50647,10 @@
         "type": "course",
         "code": "ECO 2142",
         "text": "ECO 2142"
-      }
+      },
+      "aliases": [
+        "ECO 4123"
+      ]
     },
     {
       "code": "ECO 3125",
@@ -50350,7 +50663,10 @@
         "type": "course",
         "code": "ECO 2144",
         "text": "ECO 2144"
-      }
+      },
+      "aliases": [
+        "ECO 2123"
+      ]
     },
     {
       "code": "ECO 3127",
@@ -50689,7 +51005,10 @@
         "type": "course",
         "code": "ECO 2542",
         "text": "ECO 2542"
-      }
+      },
+      "aliases": [
+        "ECO 4523"
+      ]
     },
     {
       "code": "ECO 3525",
@@ -50702,7 +51021,10 @@
         "type": "course",
         "code": "ECO 2544",
         "text": "ECO 2544"
-      }
+      },
+      "aliases": [
+        "ECO 2523"
+      ]
     },
     {
       "code": "ECO 3527",
@@ -51040,7 +51362,10 @@
         "type": "course",
         "code": "ECO 2145",
         "text": "ECO 2145"
-      }
+      },
+      "aliases": [
+        "ECO 3111"
+      ]
     },
     {
       "code": "ECO 4115",
@@ -51425,7 +51750,10 @@
         "type": "course",
         "code": "ECO 2545",
         "text": "ECO 2545"
-      }
+      },
+      "aliases": [
+        "ECO 3511"
+      ]
     },
     {
       "code": "ECO 4515",
@@ -62003,7 +62331,10 @@
             "text": "a language test"
           }
         ]
-      }
+      },
+      "aliases": [
+        "ESL 3331"
+      ]
     },
     {
       "code": "ESL 2341",
@@ -62150,7 +62481,10 @@
             "text": "a language test"
           }
         ]
-      }
+      },
+      "aliases": [
+        "ESL 4351"
+      ]
     },
     {
       "code": "ESL 3100",
@@ -66833,7 +67167,10 @@
           1000,
           2000
         ]
-      }
+      },
+      "aliases": [
+        "FRA 4530"
+      ]
     },
     {
       "code": "FRA 3544",
@@ -67067,7 +67404,10 @@
           1000,
           2000
         ]
-      }
+      },
+      "aliases": [
+        "FRA 4580"
+      ]
     },
     {
       "code": "FRA 3583",
@@ -67084,7 +67424,10 @@
           1000,
           2000
         ]
-      }
+      },
+      "aliases": [
+        "FRA 4583"
+      ]
     },
     {
       "code": "FRA 3587",
@@ -67101,7 +67444,10 @@
           1000,
           2000
         ]
-      }
+      },
+      "aliases": [
+        "FRA 4587"
+      ]
     },
     {
       "code": "FRA 3599",
@@ -67441,7 +67787,10 @@
           1000,
           2000
         ]
-      }
+      },
+      "aliases": [
+        "FRA 4775"
+      ]
     },
     {
       "code": "FRA 3780",
@@ -68501,7 +68850,10 @@
         "type": "non_course",
         "text": "54 university course units",
         "credits": 54
-      }
+      },
+      "aliases": [
+        "SCS 3210"
+      ]
     },
     {
       "code": "FSS 3295",
@@ -68514,7 +68866,10 @@
         "type": "non_course",
         "text": "54 university course units",
         "credits": 54
-      }
+      },
+      "aliases": [
+        "SCS 3195"
+      ]
     },
     {
       "code": "FSS 3301",
@@ -68607,7 +68962,10 @@
         "type": "non_course",
         "text": "54 crédits de cours universitaires",
         "credits": 54
-      }
+      },
+      "aliases": [
+        "SCS 3610"
+      ]
     },
     {
       "code": "FSS 3701",
@@ -68660,7 +69018,10 @@
         "type": "non_course",
         "text": "54 crédits de cours universitaires",
         "credits": 54
-      }
+      },
+      "aliases": [
+        "SCS 4010"
+      ]
     },
     {
       "code": "FSS 4100",
@@ -68686,7 +69047,10 @@
         "type": "non_course",
         "text": "81 university course units",
         "credits": 81
-      }
+      },
+      "aliases": [
+        "SCS 4150"
+      ]
     },
     {
       "code": "FSS 4210",
@@ -68699,7 +69063,10 @@
         "type": "non_course",
         "text": "81 university course units",
         "credits": 81
-      }
+      },
+      "aliases": [
+        "SCS 4210"
+      ]
     },
     {
       "code": "FSS 4301",
@@ -68751,7 +69118,10 @@
         "type": "non_course",
         "text": "81 crédits de cours universitaires",
         "credits": 81
-      }
+      },
+      "aliases": [
+        "SCS 4550"
+      ]
     },
     {
       "code": "FSS 4610",
@@ -68764,7 +69134,10 @@
         "type": "non_course",
         "text": "81 crédits de cours universitaires",
         "credits": 81
-      }
+      },
+      "aliases": [
+        "SCS 4610"
+      ]
     },
     {
       "code": "FSS 4701",
@@ -70307,7 +70680,10 @@
       "title": "Études de terrain I / Field Studies I",
       "credits": 3,
       "description": "Ce cours comprend une période de laboratoire de 4 heures par semaine durant le semestre d'hiver, suivi par un camp de terrain (~12 jours) qui demande la cartographie géologique et l'analyse structurale d'une région et d'établir sa place dans l'histoire tectonique des Appalaches. Le camp de terrain se tiendra après la période d'examen à la fin du mois d'avril. Des frais sont exigés pour défrayer les coûts de transport et de logement. Antérieurement GEO 2920. / The course consists of one 4-hour laboratory period per week, during the winter session, followed by a field camp (~12 days) involving geological mapping and structural analysis of a region and of its place in the tectonic history of the Appalachian belt. The field camp will be held following the end of the examination period, in late April. Fees are requested to cover accommodation and transportation. Previously GEO 2920.",
-      "component": "Cours magistral / LecturePrequisites: GEO 1111, GEO 1115."
+      "component": "Cours magistral / LecturePrequisites: GEO 1111, GEO 1115.",
+      "aliases": [
+        "GEO 2920"
+      ]
     },
     {
       "code": "GEO 2113",
@@ -71034,7 +71410,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "GEO 3152"
+      ]
     },
     {
       "code": "GEO 3372",
@@ -71335,7 +71714,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "GEO 3552"
+      ]
     },
     {
       "code": "GEO 3782",
@@ -71395,7 +71777,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "L'étudiant doit avoir suivi les cours de base obligatoires en sciences et les cours obligatoires de niveau 3000 dans le domaine et avoir une MPC minimale de 6,0"
-      }
+      },
+      "aliases": [
+        "GEO 4900"
+      ]
     },
     {
       "code": "GEO 40101",
@@ -71407,14 +71792,20 @@
       "prerequisites": {
         "type": "non_course",
         "text": "L'étudiant doit avoir suivi les cours de base obligatoires en sciences et les cours obligatoires de niveau 3000 dans le domaine et avoir une MPC minimale de 6,0"
-      }
+      },
+      "aliases": [
+        "GEO 4900"
+      ]
     },
     {
       "code": "GEO 40102",
       "title": "Projet de recherche (Partie 2 de 2) / Honours Project (2/2)",
       "credits": 6,
       "description": "Rédaction d'un mémoire de recherche (projets de terrain et de laboratoire) sur un sujet dirigé par un professeur du département. Les étudiants sont encouragés à choisir des sujets de recherche avec leur employeur durant l'été précédant leur année finale. Ils doivent assister aux séminaires du Centre Géoscientifique Ottawa-Carleton et présenter un séminaire de recherche. Antérieurement GEO 4900. Réservé aux étudiants inscrits à un programme de spécialisation en géologie, géologie-physique et géosciences de l'environnement. (Partie 2 de 2) / A report of research in the field and laboratory on a subject approved by the Department of Earth and Environmental Sciences and supervised by a faculty adviser. Students are encouraged to seek suitable thesis topics during summer employment preceding their final year. They are required to attend seminars of the Ottawa-Carleton Geoscience Centre and present a seminar on their thesis topic. Previously GEO 4900. Reserved for students registered in an Honours program in Geology, Geology-Physics, and Environmental Geosciences. (Part 2 of 2)",
-      "component": "Recherche / Research"
+      "component": "Recherche / Research",
+      "aliases": [
+        "GEO 4900"
+      ]
     },
     {
       "code": "GEO 4300",
@@ -79856,42 +80247,60 @@
       "title": "Information and Society",
       "credits": 3,
       "description": "Critical examination of roles, values, ethics, and policies associated with the creation, communication, and use of information in today's society. The course examines, from both an historical and a contemporary perspective, the socio-cultural, economic, legal, and technological dimensions of the information environment, and the role of the information professions with respect to promoting and safeguarding principles such as those that form the foundation of intellectual freedom and equitable access to information. Previously ISI 5105.",
-      "component": "Lecture"
+      "component": "Lecture",
+      "aliases": [
+        "ISI 5105"
+      ]
     },
     {
       "code": "ISI 5302",
       "title": "Knowledge Organization",
       "credits": 3,
       "description": "Theories, principles, and models underlying the organization of knowledge and the representation of information resources. The course examines various approaches to knowledge organization, drawing on theories based in philosophy, cognitive sciences, linguistics, and other related fields, and explores their application in ontologies, taxonomies, classification systems, indexing languages, folksonomies, and resource description schema. Previously ISI 5102.",
-      "component": "Lecture"
+      "component": "Lecture",
+      "aliases": [
+        "ISI 5102"
+      ]
     },
     {
       "code": "ISI 5303",
       "title": "Information Resource Management",
       "credits": 3,
       "description": "Concepts and practices related to the management of information resources evaluation, selection, acquisition, storage, conservation, and preservation. The course examines organizational and technological models and standards for the management of a variety of analog, digital, and networked resources. Previously ISI 6126.",
-      "component": "Lecture"
+      "component": "Lecture",
+      "aliases": [
+        "ISI 6126"
+      ]
     },
     {
       "code": "ISI 5304",
       "title": "Information Resource Discovery",
       "credits": 3,
       "description": "Theories and models relating to information seeking and use within both individual and institutional contexts. The course addresses the identification and representation of information needs, search strategies and techniques, ethical issues, and evaluation methods all within a variety of user communities and technological settings. The course also examines the information mediation process and services that facilitate information access. Previously ISI 5104.",
-      "component": "Lecture"
+      "component": "Lecture",
+      "aliases": [
+        "ISI 5104"
+      ]
     },
     {
       "code": "ISI 5305",
       "title": "Management Foundations for the Information Professional",
       "credits": 3,
       "description": "Core management theories, principles, and methods used to effectively plan, deliver, and control the provision of information services. The course addresses strategic planning, project management, human and financial management, collaboration and team building, communications and marketing, and the evaluation of programs and services. Previously ISI 5103.",
-      "component": "Lecture"
+      "component": "Lecture",
+      "aliases": [
+        "ISI 5103"
+      ]
     },
     {
       "code": "ISI 5307",
       "title": "Research and Evaluation an Information Studies",
       "credits": 3,
       "description": "Analysis of the research process from qualitative, quantitative, and evaluative perspectives. The course addresses each specific element of the research and evaluation process, articulation of a research problem or evaluation goal, data collection and analysis, and dissemination of findings through a combination of critical analysis of existing research and in-class experimentation. Previously ISI 5101.",
-      "component": "Lecture"
+      "component": "Lecture",
+      "aliases": [
+        "ISI 5101"
+      ]
     },
     {
       "code": "ISI 5310",
@@ -79905,14 +80314,20 @@
       "title": "Information et société",
       "credits": 3,
       "description": "Examen critique des rôles, des valeurs, de l'éthique et des politiques liées à la création, à la communication et à l'utilisation de l'information dans la société d'aujourd'hui. Le cours examine, tant à partir de perspectives historiques que d'un point de vue contemporain, les dimensions socioculturelles, économiques, juridiques, et technologiques de l'environnement de l'information, de même que le rôle joué par les professionnels de l'information à l'égard de la promotion et de la sauvegarde de principes comme ceux sur lesquels reposent les fondements de la liberté intellectuelle et de l'équité en matière d'accès à l'information. Antérieurement ISI 5505.",
-      "component": "Cours magistral"
+      "component": "Cours magistral",
+      "aliases": [
+        "ISI 5505"
+      ]
     },
     {
       "code": "ISI 5702",
       "title": "Organisation du savoir",
       "credits": 3,
       "description": "Théories, principes et modèles qui sous-tendent l'organisation du savoir et la représentation des ressources informationnelles. Le cours examine diverses approches relatives à l'organisation du savoir, en puisant à même les théories issues de la philosophie, des sciences cognitives, de la linguistique et d'autres domaines connexes, et explore leur application aux ontologies, aux taxonomies, aux systèmes de classification, aux langages d'indexation, aux folksonomies, et aux schémas de description des ressources. Antérieurement ISI 5502.",
-      "component": "Cours magistral"
+      "component": "Cours magistral",
+      "aliases": [
+        "ISI 5502"
+      ]
     },
     {
       "code": "ISI 5703",
@@ -79926,21 +80341,30 @@
       "title": "Repérage des ressources informationnelles",
       "credits": 3,
       "description": "Théories et modèles concernant la recherche d'information et son utilisation tant au niveau individuel qu'institutionnel. Le cours porte sur l'identification et la représentation des besoins informationnels, les stratégies et les techniques de recherche, les questions d'éthique, et les méthodes d'évaluation, le tout étant envisagé en fonction de différents types de communautés d'utilisateurs et de paramètres technologiques. Le cours examine également les processus et les services de médiation de l'information qui facilitent l'accès à celle-ci. Antérieurement ISI 5504.",
-      "component": "Cours magistral"
+      "component": "Cours magistral",
+      "aliases": [
+        "ISI 5504"
+      ]
     },
     {
       "code": "ISI 5705",
       "title": "Principes de gestion pour le professionnel de l'information",
       "credits": 3,
       "description": "Principales théories, méthodes et principes de gestion utilisés pour planifier, fournir et contrôler efficacement la prestation de services d'information. Le cours porte sur la planification stratégique, la gestion de projet, la gestion des ressources humaines et financières, la collaboration et l'esprit d'équipe, la communication et le marketing, et l'évaluation des programmes et des services. Antérieurement ISI 5503.",
-      "component": "Cours magistral"
+      "component": "Cours magistral",
+      "aliases": [
+        "ISI 5503"
+      ]
     },
     {
       "code": "ISI 5707",
       "title": "Recherche et évaluation en sciences de l'information",
       "credits": 3,
       "description": "Analyse du processus de recherche selon des perspectives qualitative, quantitative, et évaluative. À l'aide d'une approche combinant l'analyse critique de recherches existantes et des expérimentations en salle de classe, le cours aborde chaque élément spécifique du processus de recherche et d'évaluation : l'articulation d'un problème de recherche ou d'un objectif d'évaluation, la collecte et l'analyse de données, et la diffusion des résultats. Antérieurement ISI 5501.",
-      "component": "Cours magistral"
+      "component": "Cours magistral",
+      "aliases": [
+        "ISI 5501"
+      ]
     },
     {
       "code": "ISI 5710",
@@ -79994,7 +80418,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6100"
+      ]
     },
     {
       "code": "ISI 6310",
@@ -80007,7 +80434,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5160"
+      ]
     },
     {
       "code": "ISI 6311",
@@ -80020,7 +80450,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5161"
+      ]
     },
     {
       "code": "ISI 6312",
@@ -80033,7 +80466,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5162"
+      ]
     },
     {
       "code": "ISI 6313",
@@ -80046,7 +80482,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5164"
+      ]
     },
     {
       "code": "ISI 6314",
@@ -80059,7 +80498,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6130"
+      ]
     },
     {
       "code": "ISI 6321",
@@ -80072,7 +80514,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6121"
+      ]
     },
     {
       "code": "ISI 6322",
@@ -80085,7 +80530,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6122"
+      ]
     },
     {
       "code": "ISI 6323",
@@ -80098,7 +80546,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6148"
+      ]
     },
     {
       "code": "ISI 6330",
@@ -80111,7 +80562,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5120"
+      ]
     },
     {
       "code": "ISI 6331",
@@ -80124,7 +80578,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5121"
+      ]
     },
     {
       "code": "ISI 6332",
@@ -80137,7 +80594,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6123"
+      ]
     },
     {
       "code": "ISI 6341",
@@ -80150,7 +80610,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5141"
+      ]
     },
     {
       "code": "ISI 6342",
@@ -80163,7 +80626,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6127"
+      ]
     },
     {
       "code": "ISI 6343",
@@ -80176,7 +80642,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6131"
+      ]
     },
     {
       "code": "ISI 6351",
@@ -80189,7 +80658,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6129"
+      ]
     },
     {
       "code": "ISI 6352",
@@ -80202,7 +80674,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6142"
+      ]
     },
     {
       "code": "ISI 6353",
@@ -80228,7 +80703,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5112"
+      ]
     },
     {
       "code": "ISI 6361",
@@ -80264,7 +80742,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6145"
+      ]
     },
     {
       "code": "ISI 6372",
@@ -80290,7 +80771,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6140"
+      ]
     },
     {
       "code": "ISI 6382",
@@ -80303,7 +80787,10 @@
         "type": "non_course",
         "text": "12 units among compulsory core courses",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6144"
+      ]
     },
     {
       "code": "ISI 6700",
@@ -80316,7 +80803,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6500"
+      ]
     },
     {
       "code": "ISI 6710",
@@ -80329,7 +80819,10 @@
         "type": "non_course",
         "text": "12 units de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5560"
+      ]
     },
     {
       "code": "ISI 6711",
@@ -80342,7 +80835,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5561"
+      ]
     },
     {
       "code": "ISI 6712",
@@ -80355,7 +80851,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5562"
+      ]
     },
     {
       "code": "ISI 6713",
@@ -80368,7 +80867,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5564"
+      ]
     },
     {
       "code": "ISI 6714",
@@ -80381,7 +80883,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6530"
+      ]
     },
     {
       "code": "ISI 6721",
@@ -80394,7 +80899,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6521"
+      ]
     },
     {
       "code": "ISI 6722",
@@ -80407,7 +80915,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6522"
+      ]
     },
     {
       "code": "ISI 6723",
@@ -80420,7 +80931,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6548"
+      ]
     },
     {
       "code": "ISI 6730",
@@ -80433,7 +80947,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5520"
+      ]
     },
     {
       "code": "ISI 6731",
@@ -80446,7 +80963,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5521"
+      ]
     },
     {
       "code": "ISI 6732",
@@ -80459,7 +80979,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6523"
+      ]
     },
     {
       "code": "ISI 6741",
@@ -80472,7 +80995,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5541"
+      ]
     },
     {
       "code": "ISI 6742",
@@ -80485,7 +81011,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6527"
+      ]
     },
     {
       "code": "ISI 6743",
@@ -80498,7 +81027,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6531"
+      ]
     },
     {
       "code": "ISI 6751",
@@ -80511,7 +81043,10 @@
         "type": "non_course",
         "text": "12 units de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6529"
+      ]
     },
     {
       "code": "ISI 6752",
@@ -80524,7 +81059,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6542"
+      ]
     },
     {
       "code": "ISI 6753",
@@ -80550,7 +81088,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 5512"
+      ]
     },
     {
       "code": "ISI 6761",
@@ -80586,7 +81127,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6545"
+      ]
     },
     {
       "code": "ISI 6772",
@@ -80612,7 +81156,10 @@
         "type": "non_course",
         "text": "12 units de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6540"
+      ]
     },
     {
       "code": "ISI 6782",
@@ -80625,7 +81172,10 @@
         "type": "non_course",
         "text": "12 crédits de cours parmi les cours du tronc commun",
         "credits": 12
-      }
+      },
+      "aliases": [
+        "ISI 6544"
+      ]
     },
     {
       "code": "ISI 6995",
@@ -81166,49 +81716,70 @@
       "title": "History of the Jews of Canada",
       "credits": 3,
       "description": "Overview of the history of the Jewish community in Canada from the English regime to the contemporary period. Previously CDN 2105.",
-      "component": "Lecture"
+      "component": "Lecture",
+      "aliases": [
+        "CDN 2105"
+      ]
     },
     {
       "code": "JCS 2301",
       "title": "Introduction to Jewish Canadian Studies",
       "credits": 3,
       "description": "Multidisciplinary overview of Jewish Canadian Studies in the fields of history, literature, sociology and culture in general. Previously CDN 2301.",
-      "component": "Lecture"
+      "component": "Lecture",
+      "aliases": [
+        "CDN 2301"
+      ]
     },
     {
       "code": "JCS 2505",
       "title": "L'histoire des Juifs du Canada",
       "credits": 3,
       "description": "Survol de l'histoire de la communauté juive canadienne depuis les premières années du régime anglais jusqu'à la période contemporaine. Antérieurement CDN 2505.",
-      "component": "Cours magistral"
+      "component": "Cours magistral",
+      "aliases": [
+        "CDN 2505"
+      ]
     },
     {
       "code": "JCS 2701",
       "title": "Introduction aux études juives canadiennes",
       "credits": 3,
       "description": "Survol multidisciplinaire des études juives canadiennes dans les domaines de l'histoire, de la littérature, de la sociologie et de la culture en général. Antérieurement CDN 2701.",
-      "component": "Cours magistral"
+      "component": "Cours magistral",
+      "aliases": [
+        "CDN 2701"
+      ]
     },
     {
       "code": "JCS 3102",
       "title": "Selected Topics in Jewish Canadian Studies",
       "credits": 3,
       "description": "Topics to be offered in rotation as advertised by the department. Previously CDN 3102.",
-      "component": "Lecture"
+      "component": "Lecture",
+      "aliases": [
+        "CDN 3102"
+      ]
     },
     {
       "code": "JCS 3383",
       "title": "Jewish Canadian Writers",
       "credits": 3,
       "description": "A study of the works of Jewish Canadian writers in English. Previously CDN 3383.",
-      "component": "Lecture"
+      "component": "Lecture",
+      "aliases": [
+        "CDN 3383"
+      ]
     },
     {
       "code": "JCS 3502",
       "title": "Thèmes choisis en études juives canadiennes",
       "credits": 3,
       "description": "Les thèmes varient tous les ans. Consulter le département. Antérieurement CDN 3502.",
-      "component": "Cours magistral"
+      "component": "Cours magistral",
+      "aliases": [
+        "CDN 3502"
+      ]
     },
     {
       "code": "JOU 1150",
@@ -83552,7 +84123,10 @@
       "prerequisites": {
         "type": "non_course",
         "text": "Permission of the Department"
-      }
+      },
+      "aliases": [
+        "LIN 4997"
+      ]
     },
     {
       "code": "LIN 4392",
@@ -84681,7 +85255,10 @@
             "text": "an equivalent"
           }
         ]
-      }
+      },
+      "aliases": [
+        "MAT 1300"
+      ]
     },
     {
       "code": "MAT 1318",
@@ -85027,7 +85604,11 @@
             "text": "equivalent"
           }
         ]
-      }
+      },
+      "aliases": [
+        "MAT 2348",
+        "MAT 1362"
+      ]
     },
     {
       "code": "MAT 1362",
@@ -89176,7 +89757,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "MAT 3175"
+      ]
     },
     {
       "code": "MAT 4183",
@@ -90080,7 +90664,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "MAT 3575"
+      ]
     },
     {
       "code": "MAT 4583",
@@ -97035,7 +97622,10 @@
         "type": "course",
         "code": "MED 2302",
         "text": "Previously MED 2302"
-      }
+      },
+      "aliases": [
+        "MED 2302"
+      ]
     },
     {
       "code": "MED 13022",
@@ -97103,7 +97693,10 @@
         "type": "course",
         "code": "MED 17021",
         "text": "MED 17021"
-      }
+      },
+      "aliases": [
+        "MED 2702"
+      ]
     },
     {
       "code": "MED 2109",
@@ -97253,7 +97846,10 @@
             "code": "MED 1202"
           }
         ]
-      }
+      },
+      "aliases": [
+        "MED 2108"
+      ]
     },
     {
       "code": "MED 23021",
@@ -97283,7 +97879,10 @@
             "code": "MED 1202"
           }
         ]
-      }
+      },
+      "aliases": [
+        "MED 2108"
+      ]
     },
     {
       "code": "MED 23022",
@@ -97296,7 +97895,10 @@
         "type": "course",
         "code": "MED 23021",
         "text": "MED 23021"
-      }
+      },
+      "aliases": [
+        "MED 2108"
+      ]
     },
     {
       "code": "MED 2509",
@@ -97446,7 +98048,10 @@
             "code": "MED 1602"
           }
         ]
-      }
+      },
+      "aliases": [
+        "MED 2508"
+      ]
     },
     {
       "code": "MED 27021",
@@ -97476,7 +98081,10 @@
             "code": "MED 1602"
           }
         ]
-      }
+      },
+      "aliases": [
+        "MED 2508"
+      ]
     },
     {
       "code": "MED 27022",
@@ -97489,7 +98097,10 @@
         "type": "course",
         "code": "MED 27021",
         "text": "MED 27021"
-      }
+      },
+      "aliases": [
+        "MED 2508"
+      ]
     },
     {
       "code": "MED 4101",
@@ -98757,7 +99368,10 @@
         "type": "course",
         "code": "BIO 3124",
         "text": "BIO 3124"
-      }
+      },
+      "aliases": [
+        "MIC 5500"
+      ]
     },
     {
       "code": "MIC 4124",
@@ -98792,7 +99406,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "MIC 5224"
+      ]
     },
     {
       "code": "MIC 4125",
@@ -98816,7 +99433,10 @@
             "text": "BIO 3170"
           }
         ]
-      }
+      },
+      "aliases": [
+        "MIC 5124"
+      ]
     },
     {
       "code": "MIC 4126",
@@ -98840,7 +99460,10 @@
             "text": "BIO 3170"
           }
         ]
-      }
+      },
+      "aliases": [
+        "MIC 5326"
+      ]
     },
     {
       "code": "MIC 4525",
@@ -99237,21 +99860,30 @@
       "title": "Sight-Singing and Dictation I: Advanced",
       "credits": 3,
       "description": "Sight-singing and music dictation to improve reading and aural skills.",
-      "component": "Laboratory, LectureMUS 2306 is corequisite to MUS 1193. Reserved for students in the Bachelor of Music, the Honours in Music or the Major in Music Studies. Previously MUS 1990. This course is equivalent to MUS 1191, MUS 1192 and MUS 1194."
+      "component": "Laboratory, LectureMUS 2306 is corequisite to MUS 1193. Reserved for students in the Bachelor of Music, the Honours in Music or the Major in Music Studies. Previously MUS 1990. This course is equivalent to MUS 1191, MUS 1192 and MUS 1194.",
+      "aliases": [
+        "MUS 1990"
+      ]
     },
     {
       "code": "MUS 11931",
       "title": "Sight-Singing and Dictation I: Advanced (Part 1 of 2)",
       "credits": 0,
       "description": "Sight-singing and music dictation to improve reading and aural skills. (Part 1 of 2)",
-      "component": "LaboratoryMUS 2306 is corequisite to MUS 1193. Reserved for students in the Bachelor of Music, the Honours in Music or the Major in Music Studies. Previously MUS 1990. This course is equivalent to MUS 1191, MUS 1192 and MUS 1194."
+      "component": "LaboratoryMUS 2306 is corequisite to MUS 1193. Reserved for students in the Bachelor of Music, the Honours in Music or the Major in Music Studies. Previously MUS 1990. This course is equivalent to MUS 1191, MUS 1192 and MUS 1194.",
+      "aliases": [
+        "MUS 1990"
+      ]
     },
     {
       "code": "MUS 11932",
       "title": "Sight-Singing and Dictation I: Advanced (Part 2 of 2)",
       "credits": 3,
       "description": "Sight-singing and music dictation to improve reading and aural skills. (Part 2 of 2)",
-      "component": "LaboratoryMUS 2306 is corequisite to MUS 1193. Reserved for students in the Bachelor of Music, the Honours in Music or the Major in Music Studies. Previously MUS 1990. This course is equivalent to MUS 1191, MUS 1192 and MUS 1194."
+      "component": "LaboratoryMUS 2306 is corequisite to MUS 1193. Reserved for students in the Bachelor of Music, the Honours in Music or the Major in Music Studies. Previously MUS 1990. This course is equivalent to MUS 1191, MUS 1192 and MUS 1194.",
+      "aliases": [
+        "MUS 1990"
+      ]
     },
     {
       "code": "MUS 1194",
@@ -99333,21 +99965,30 @@
       "title": "Solfège et dictée musicale I : Niveau intermédiaire",
       "credits": 3,
       "description": "Exercices dynamiques destinés à améliorer la lecture, l'audition et la mémoire musicale.",
-      "component": "Laboratoire, Cours magistralMUS 2706 est concomitant à MUS 1592. Réservé aux étudiant(e)s inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique. Antérieurement MUS 1990. Ce cours est équivalent à MUS 1591, MUS 1593 et MUS 1594."
+      "component": "Laboratoire, Cours magistralMUS 2706 est concomitant à MUS 1592. Réservé aux étudiant(e)s inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique. Antérieurement MUS 1990. Ce cours est équivalent à MUS 1591, MUS 1593 et MUS 1594.",
+      "aliases": [
+        "MUS 1990"
+      ]
     },
     {
       "code": "MUS 15921",
       "title": "Solfège et dictée musicale I : Niveau intermédiaire (Partie 1 de 2)",
       "credits": 3,
       "description": "Exercices dynamiques destinés à améliorer la lecture, l'audition et la mémoire musicale. (Partie 1 de 2)",
-      "component": "LaboratoireMUS 2706 est concomitant à MUS 1592. Réservé aux étudiant(e)s inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique. Antérieurement MUS 1990. Ce cours est équivalent à MUS 1591, MUS 1593 et MUS 1594."
+      "component": "LaboratoireMUS 2706 est concomitant à MUS 1592. Réservé aux étudiant(e)s inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique. Antérieurement MUS 1990. Ce cours est équivalent à MUS 1591, MUS 1593 et MUS 1594.",
+      "aliases": [
+        "MUS 1990"
+      ]
     },
     {
       "code": "MUS 15922",
       "title": "Solfège et dictée musicale I : Niveau intermédiaire (Partie 2 de 2)",
       "credits": 3,
       "description": "Exercices dynamiques destinés à améliorer la lecture, l'audition et la mémoire musicale. (Partie 2 de 2)",
-      "component": "LaboratoireMUS 2706 est concomitant à MUS 1592. Réservé aux étudiant(e)s inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique. Antérieurement MUS 1990. Ce cours est équivalent à MUS 1591, MUS 1593 et MUS 1594."
+      "component": "LaboratoireMUS 2706 est concomitant à MUS 1592. Réservé aux étudiant(e)s inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique. Antérieurement MUS 1990. Ce cours est équivalent à MUS 1591, MUS 1593 et MUS 1594.",
+      "aliases": [
+        "MUS 1990"
+      ]
     },
     {
       "code": "MUS 1593",
@@ -99705,7 +100346,10 @@
             "credits": 3
           }
         ]
-      }
+      },
+      "aliases": [
+        "MUS 2990"
+      ]
     },
     {
       "code": "MUS 21911",
@@ -99744,7 +100388,10 @@
             "credits": 3
           }
         ]
-      }
+      },
+      "aliases": [
+        "MUS 2990"
+      ]
     },
     {
       "code": "MUS 21912",
@@ -99952,7 +100599,10 @@
         "type": "course",
         "code": "MUS 1194",
         "text": "MUS 1194"
-      }
+      },
+      "aliases": [
+        "MUS 2990"
+      ]
     },
     {
       "code": "MUS 21941",
@@ -99965,7 +100615,10 @@
         "type": "course",
         "code": "MUS 1194",
         "text": "MUS 1194"
-      }
+      },
+      "aliases": [
+        "MUS 2990"
+      ]
     },
     {
       "code": "MUS 21942",
@@ -100162,7 +100815,13 @@
             "credits": 3
           }
         ]
-      }
+      },
+      "aliases": [
+        "MUS 2990",
+        "MUS 2592",
+        "MUS 2593",
+        "MUS 2594"
+      ]
     },
     {
       "code": "MUS 25911",
@@ -100201,7 +100860,13 @@
             "credits": 3
           }
         ]
-      }
+      },
+      "aliases": [
+        "MUS 2990",
+        "MUS 2592",
+        "MUS 2593",
+        "MUS 2594"
+      ]
     },
     {
       "code": "MUS 25912",
@@ -100253,7 +100918,13 @@
             "credits": 3
           }
         ]
-      }
+      },
+      "aliases": [
+        "MUS 2990",
+        "MUS 2591",
+        "MUS 2593",
+        "MUS 2594"
+      ]
     },
     {
       "code": "MUS 25921",
@@ -100292,7 +100963,13 @@
             "credits": 3
           }
         ]
-      }
+      },
+      "aliases": [
+        "MUS 2990",
+        "MUS 2591",
+        "MUS 2593",
+        "MUS 2594"
+      ]
     },
     {
       "code": "MUS 25922",
@@ -100338,7 +101015,13 @@
             "credits": 3
           }
         ]
-      }
+      },
+      "aliases": [
+        "MUS 2990",
+        "MUS 2591",
+        "MUS 2592",
+        "MUS 2594"
+      ]
     },
     {
       "code": "MUS 25931",
@@ -100377,7 +101060,13 @@
             "credits": 3
           }
         ]
-      }
+      },
+      "aliases": [
+        "MUS 2990",
+        "MUS 2591",
+        "MUS 2592",
+        "MUS 2594"
+      ]
     },
     {
       "code": "MUS 25932",
@@ -100397,7 +101086,10 @@
         "type": "course",
         "code": "MUS 1594",
         "text": "MUS 1594"
-      }
+      },
+      "aliases": [
+        "MUS 2990"
+      ]
     },
     {
       "code": "MUS 25941",
@@ -100410,7 +101102,10 @@
         "type": "course",
         "code": "MUS 1594",
         "text": "MUS 1594"
-      }
+      },
+      "aliases": [
+        "MUS 2990"
+      ]
     },
     {
       "code": "MUS 25942",
@@ -101163,7 +101858,10 @@
             "credits": 6
           }
         ]
-      }
+      },
+      "aliases": [
+        "MUS 4320"
+      ]
     },
     {
       "code": "MUS 3321",
@@ -101202,7 +101900,10 @@
             "credits": 6
           }
         ]
-      }
+      },
+      "aliases": [
+        "MUS 4320"
+      ]
     },
     {
       "code": "MUS 3328",
@@ -101712,7 +102413,10 @@
             "credits": 6
           }
         ]
-      }
+      },
+      "aliases": [
+        "MUS 4720"
+      ]
     },
     {
       "code": "MUS 3721",
@@ -101751,7 +102455,10 @@
             "credits": 6
           }
         ]
-      }
+      },
+      "aliases": [
+        "MUS 4720"
+      ]
     },
     {
       "code": "MUS 3728",
@@ -107733,7 +108440,10 @@
         "type": "course",
         "code": "NUT 1304",
         "text": "NUT 1304"
-      }
+      },
+      "aliases": [
+        "NUT 1134"
+      ]
     },
     {
       "code": "NUT 2125",
@@ -107932,7 +108642,10 @@
             "code": "NUT 1304"
           }
         ]
-      }
+      },
+      "aliases": [
+        "NUT 3504"
+      ]
     },
     {
       "code": "NUT 2321",
@@ -108117,7 +108830,10 @@
         "type": "course",
         "code": "NUT 1704",
         "text": "NUT 1704"
-      }
+      },
+      "aliases": [
+        "NUT 1534"
+      ]
     },
     {
       "code": "NUT 2511",
@@ -108139,7 +108855,10 @@
             "code": "NUT 2525"
           }
         ]
-      }
+      },
+      "aliases": [
+        "NUT 3611"
+      ]
     },
     {
       "code": "NUT 2523",
@@ -108369,7 +109088,10 @@
             "code": "NUT 1704"
           }
         ]
-      }
+      },
+      "aliases": [
+        "NUT 3504"
+      ]
     },
     {
       "code": "NUT 2721",
@@ -116411,7 +117133,11 @@
         "disciplines": [
           "PHI"
         ]
-      }
+      },
+      "aliases": [
+        "PHI 3370",
+        "PHI 3380"
+      ]
     },
     {
       "code": "PHI 3377",
@@ -117451,7 +118177,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHS 4300"
+      ]
     },
     {
       "code": "PHS 3341",
@@ -117511,7 +118240,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHS 4700"
+      ]
     },
     {
       "code": "PHS 3741",
@@ -118103,7 +118835,11 @@
             "text": "4U Physics"
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 1101",
+        "PHY 1201"
+      ]
     },
     {
       "code": "PHY 1122",
@@ -118153,7 +118889,11 @@
             "text": "MAT 1321"
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 1104",
+        "PHY 1304"
+      ]
     },
     {
       "code": "PHY 1300",
@@ -118182,7 +118922,11 @@
             "text": "4U Physics"
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 1301",
+        "PHY 1201"
+      ]
     },
     {
       "code": "PHY 1322",
@@ -119511,7 +120255,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 2004"
+      ]
     },
     {
       "code": "PHY 29041",
@@ -119558,7 +120305,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 2004"
+      ]
     },
     {
       "code": "PHY 29042",
@@ -119571,7 +120321,10 @@
         "type": "course",
         "code": "PHY 29041",
         "text": "PHY 29041 / Prerequisite: PHY 29041"
-      }
+      },
+      "aliases": [
+        "PHY 2004"
+      ]
     },
     {
       "code": "PHY 2906",
@@ -119632,7 +120385,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 2206"
+      ]
     },
     {
       "code": "PHY 29061",
@@ -119693,7 +120449,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 2206"
+      ]
     },
     {
       "code": "PHY 29062",
@@ -119706,7 +120465,10 @@
         "type": "course",
         "code": "PHY 29061",
         "text": "PHY 29061 / Prerequisite: PHY 29061"
-      }
+      },
+      "aliases": [
+        "PHY 2206"
+      ]
     },
     {
       "code": "PHY 3310",
@@ -120103,7 +120865,10 @@
             "text": "PHY 2904"
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 3901"
+      ]
     },
     {
       "code": "PHY 3903",
@@ -120132,7 +120897,10 @@
         "type": "course",
         "code": "PHY 3902",
         "text": "PHY 3902"
-      }
+      },
+      "aliases": [
+        "PHY 3905"
+      ]
     },
     {
       "code": "PHY 4006",
@@ -120156,7 +120924,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 4005"
+      ]
     },
     {
       "code": "PHY 40061",
@@ -120180,7 +120951,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 4005"
+      ]
     },
     {
       "code": "PHY 40062",
@@ -120193,7 +120967,10 @@
         "type": "course",
         "code": "PHY 40061",
         "text": "PHY40061"
-      }
+      },
+      "aliases": [
+        "PHY 4005"
+      ]
     },
     {
       "code": "PHY 4140",
@@ -120244,7 +121021,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 4340"
+      ]
     },
     {
       "code": "PHY 4141",
@@ -120304,7 +121084,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 4341"
+      ]
     },
     {
       "code": "PHY 4311",
@@ -120652,7 +121435,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 4740"
+      ]
     },
     {
       "code": "PHY 4541",
@@ -120712,7 +121498,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 4741"
+      ]
     },
     {
       "code": "PHY 4711",
@@ -120887,7 +121676,10 @@
       "title": "Laboratoire de physique / Physics Laboratory",
       "credits": 3,
       "description": "L'étudiant fera des expériences de nature relativement complexe avec un minimum de direction. Utilisation de micro-ordinateurs pour l'analyse des données expérimentales. Antérieurement PHY 4904. / Experiments of a reasonably complex nature will be carried out by the student with a minimum of detailed supervision. Analysis of experimental data using microcomputers. Previously PHY 4904.",
-      "component": "Laboratoire / Laboratory"
+      "component": "Laboratoire / Laboratory",
+      "aliases": [
+        "PHY 4904"
+      ]
     },
     {
       "code": "PHY 4906",
@@ -120911,7 +121703,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "PHY 4905"
+      ]
     },
     {
       "code": "PHY 5100",
@@ -133599,7 +134394,10 @@
             "credits": 18
           }
         ]
-      }
+      },
+      "aliases": [
+        "SOC 3117"
+      ]
     },
     {
       "code": "SOC 2316",
@@ -133623,7 +134421,10 @@
             "credits": 18
           }
         ]
-      }
+      },
+      "aliases": [
+        "SOC 3142"
+      ]
     },
     {
       "code": "SOC 2501",
@@ -134006,7 +134807,10 @@
             "credits": 18
           }
         ]
-      }
+      },
+      "aliases": [
+        "SOC 3517"
+      ]
     },
     {
       "code": "SOC 2716",
@@ -134030,7 +134834,10 @@
             "credits": 18
           }
         ]
-      }
+      },
+      "aliases": [
+        "SOC 3542"
+      ]
     },
     {
       "code": "SOC 3101",
@@ -135576,7 +136383,10 @@
         "type": "course",
         "code": "SOC 3316",
         "text": "SOC 3316"
-      }
+      },
+      "aliases": [
+        "SOC 4117"
+      ]
     },
     {
       "code": "SOC 4330",
@@ -135977,7 +136787,10 @@
         "type": "course",
         "code": "SOC 3716",
         "text": "SOC 3716"
-      }
+      },
+      "aliases": [
+        "SOC 4517"
+      ]
     },
     {
       "code": "SOC 4730",
@@ -139571,7 +140384,10 @@
         "type": "course",
         "code": "THE 1101",
         "text": "THE 1101"
-      }
+      },
+      "aliases": [
+        "THE 4930"
+      ]
     },
     {
       "code": "THE 2500",
@@ -139851,7 +140667,10 @@
         "type": "course",
         "code": "THE 1501",
         "text": "THE 1501"
-      }
+      },
+      "aliases": [
+        "THE 4930"
+      ]
     },
     {
       "code": "THE 2940",
@@ -140029,7 +140848,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "THE 4315"
+      ]
     },
     {
       "code": "THE 3347",
@@ -140198,7 +141020,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "THE 4715"
+      ]
     },
     {
       "code": "THE 3746",
@@ -140455,7 +141280,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "THE 3310"
+      ]
     },
     {
       "code": "THE 4500",
@@ -140662,7 +141490,10 @@
             ]
           }
         ]
-      }
+      },
+      "aliases": [
+        "THE 3710"
+      ]
     },
     {
       "code": "THE 4905",
