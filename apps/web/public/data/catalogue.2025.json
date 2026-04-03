@@ -9538,20 +9538,6 @@
       "component": "Recherche / Research"
     },
     {
-      "code": "ANT 7990",
-      "title": "Projet de thèse / Thesis Proposal",
-      "credits": 0,
-      "description": "Rédaction d'un projet de thèse. Soumission du projet au comité de thèse. Noté S (satisfaisant) ou NS (non satisfaisant). / Drafting of a thesis proposal. Submission of proposal to the thesis committee. Graded S (Satisfactory) / NS (Not satisfactory).",
-      "component": "Recherche / Research"
-    },
-    {
-      "code": "ANT 7998",
-      "title": "Mémoire / Research Paper",
-      "credits": 0,
-      "description": "",
-      "component": "Recherche / Research"
-    },
-    {
       "code": "ANT 8500",
       "title": "Séminaire de doctorat",
       "credits": 3,
@@ -13182,13 +13168,6 @@
       "component": "Expérience pratique / Praticum"
     },
     {
-      "code": "API 6999",
-      "title": "Mémoire / Major Research Paper",
-      "credits": 6,
-      "description": "",
-      "component": "Recherche / Research"
-    },
-    {
       "code": "ARB 1911",
       "title": "Cours élémentaire d'arabe I / Elementary Arabic I",
       "credits": 3,
@@ -16113,13 +16092,6 @@
       "component": "Séminaire / Seminar"
     },
     {
-      "code": "ART 6999",
-      "title": "Mémoire / Major Research Paper",
-      "credits": 0,
-      "description": "Mémoire d'une longueur de 50 pages (sans compter la bibliographie) préparé sous la direction d'un ou deux membres du corps professoral choisis en accord avec la personne responsable des études supérieures. Le mémoire est évalué par le ou les personnes qui l'ont dirigé et un autre membre du corps professoral. Noté S (satisfaisant) / NS (non satisfaisant). / Research paper (about 50 pages, excluding the bibliography) prepared under the direction of one or two professors chosen in consultation with the director of graduate studies. The paper is evaluated by the (co-)supervisor(s) and another professor. Graded S (Satisfactory)/NS (Not satisfactory).",
-      "component": "Recherche / Research"
-    },
-    {
       "code": "ART 7999",
       "title": "Présentation de thèse / Thesis Presentation",
       "credits": 12,
@@ -17130,7 +17102,7 @@
       "title": "Introduction to Biochemistry",
       "credits": 3,
       "description": "The chemistry and biological properties of amino acids, proteins, nucleic acids, lipids, carbohydrates, and vitamins. The course includes laboratory and tutorial sessions. Priority given to students for whom this course is mandatory. Previously BCH 2140 and BCH 2336.",
-      "component": "Discussion Group, Laboratory, LecturePrerequisites: CHM 2120",
+      "component": "Laboratory, Lecture, Discussion GroupPrerequisites: CHM 2120",
       "prereqText": "CHM 2120",
       "prerequisites": {
         "type": "course",
@@ -17217,7 +17189,7 @@
       "title": "Molecular Biology Laboratory",
       "credits": 3,
       "description": "Basic techniques in molecular biology (recombinant DNA, vectors, plasmids, gene screening, protein analysis) and their use in genetic engineering and cloning research. This course cannot be combined for units with BIO 3151. Priority given to students for whom this course is compulsory.",
-      "component": "Discussion Group, LaboratoryPrerequisite: BCH 2333. BCH 3170 or BIO 3170 is corequisite to BCH 3356. The courses BCH 3356, BIO 3151 cannot be combined for units.",
+      "component": "Laboratory, Discussion GroupPrerequisite: BCH 2333. BCH 3170 or BIO 3170 is corequisite to BCH 3356. The courses BCH 3356, BIO 3151 cannot be combined for units.",
       "prereqText": "BCH 2333",
       "prerequisites": {
         "type": "course",
@@ -18135,37 +18107,6 @@
       }
     },
     {
-      "code": "BIL 7998",
-      "title": "Mémoire / Research Paper",
-      "credits": 6,
-      "description": "Mémoire d'une longueur de 12,500 mots (sans compter la bibliographie) préparé sous la direction d'un ou deux membres du corps professoral choisis en accord avec la personne responsable des études supérieures. Le mémoire est évalué par le ou les personnes qui l'ont dirigé et un autre membre du corps professoral. Noté S (satisfaisant) / NS (non satisfaisant). / Research paper (about 12,500 words, excluding the bibliography) prepared under the direction of one or two professors chosen in consultation with the director of graduate studies. The paper is evaluated by the (co-)advisor(s) and another professor. Graded S (Satisfactory)/NS (Not satisfactory).",
-      "component": "Recherche / ResearchPréalables : BIL 5501, BIL 55 02 et 12 crédits de cours au choix / Prerequisites: BIL 5101, BIL 5102 and 12 elective course units.",
-      "prereqText": "BIL 5501, BIL 55 02 et 12 crédits de cours au choix / Prerequisites: BIL 5101, BIL 5102 and 12 elective course units",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "BIL 5501, BIL 55 02 et 12 crédits de cours au choix / Prerequisites: BIL 5101, BIL 5102 and 12 elective course units",
-        "children": [
-          {
-            "type": "course",
-            "code": "BIL 5501"
-          },
-          {
-            "type": "course",
-            "code": "BIL 5101"
-          },
-          {
-            "type": "course",
-            "code": "BIL 5102"
-          },
-          {
-            "type": "non_course",
-            "text": "BIL 5501, BIL 55 02 et 12 crédits de cours au choix / Prerequisites: BIL 5101, BIL 5102 and 12 elective course units",
-            "credits": 12
-          }
-        ]
-      }
-    },
-    {
       "code": "BIM 3009",
       "title": "Stage de recherche / Research Practicum",
       "credits": 6,
@@ -18451,7 +18392,23 @@
       "title": "BioZoo: An Introduction Laboratory in Biology",
       "credits": 3,
       "description": "A set of computer-based labs that teach and apply the scientific method within different biological contexts from cells to populations. Students will gain experience framing problems, analyzing data quantitatively, and drawing evidence-based conclusions via scientific reasoning.",
-      "component": "Laboratory"
+      "component": "LaboratoryPrerequisite: BIO 1109 or 4U Biology.",
+      "prereqText": "BIO 1109 or 4U Biology",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "BIO 1109 or 4U Biology",
+        "children": [
+          {
+            "type": "course",
+            "code": "BIO 1109",
+            "text": "BIO 1109"
+          },
+          {
+            "type": "non_course",
+            "text": "4U Biology"
+          }
+        ]
+      }
     },
     {
       "code": "BIO 1300",
@@ -18518,7 +18475,23 @@
       "title": "BioZoo : Un laboratoire d’introduction en biologie",
       "credits": 3,
       "description": "Un ensemble de laboratoires informatisés qui enseignent et appliquent la méthode scientifique dans différents contextes biologiques, des cellules aux populations. Les étudiants acquerront de l'expérience en posant des problèmes, en analysant des données de manière quantitative et en tirant des conclusions fondées sur des preuves par le biais du raisonnement scientifique.",
-      "component": "Laboratoire"
+      "component": "LaboratoirePréalable : BIO 1509 ou Biologie 4U.",
+      "prereqText": "BIO 1509 ou Biologie 4U",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "BIO 1509 ou Biologie 4U",
+        "children": [
+          {
+            "type": "course",
+            "code": "BIO 1509",
+            "text": "BIO 1509"
+          },
+          {
+            "type": "non_course",
+            "text": "Biologie 4U"
+          }
+        ]
+      }
     },
     {
       "code": "BIO 1700",
@@ -28197,13 +28170,6 @@
       }
     },
     {
-      "code": "CLA 5999",
-      "title": "Mémoire / Research Paper",
-      "credits": 6,
-      "description": "Le mémoire, noté S (satisfaisant) ou NS (non satisfaisant), sera évalué par le professeur qui l'a dirigé et par un autre lecteur.",
-      "component": "Recherche / Research"
-    },
-    {
       "code": "CLA 6998",
       "title": "Examen de traduction / Translation examination",
       "credits": 6,
@@ -35054,26 +35020,6 @@
       }
     },
     {
-      "code": "CMN 6997",
-      "title": "Mémoire - projet majeur de fin d'études / Research Paper - Major Capstone Project",
-      "credits": 0,
-      "description": "Application des connaissances sur une problématique pratique et professionnelle en communication et santé. Ce mémoire peut prendre la forme d’une étude de cas pratique, d’une analyse de protocole, analyse d’une stratégie de communication, analyse d’un projet spécifique ou d’une initiative, etc. Il peut être effectué en partenariat ou au sein d’une organisation de santé. Noté S (satisfaisant) ou NS (non satisfaisant). / Application of knowledge to a practical and professional problem in health communication. This research paper can take the form of a case study, a protocol analysis, an analysis of a communication strategy, an analysis of a specific project or initiative, etc. It can be carried out in partnership or within a health organization. Graded S (Satisfactory) / NS (Not satisfactory)",
-      "component": "Recherche / Research"
-    },
-    {
-      "code": "CMN 6998",
-      "title": "Mémoire / Research Paper",
-      "credits": 0,
-      "description": "Le mémoire compte environ 50 pages. Après avoir été approuvé par le superviseur, le mémoire doit être évalué et noté par un autre professeur. Le mémoire consiste en l'approfondissement d'une question reliée à l'un des cours. Ce travail pourra être mené soit de façon théorique (à partir d'une analyse documentaire) ou de façon appliquée (à partir d'observations ou d'études de cas) dans le champ de spécialisation choisi. Noté S (satisfaisant) ou NS (non satisfaisant). / The research paper is approximately 50 pages long and is evaluated by another professor once the student's supervisor has approved it. The research paper analyses and broadens one of the topics discussed in the courses. The work surrounding the research paper can be theoretical in nature (for instance, based on a literature review) or can adopt a more empirical approach (based on observation or on a case study). The subject matter will relate to the student's chosen field of specialization. Graded S (Satisfactory) / NS (Not satisfactory).",
-      "component": "Recherche / ResearchPréalable: CMN 6990 / Prerequisite: CMN 6990",
-      "prereqText": "CMN 6990 / Prerequisite: CMN 6990",
-      "prerequisites": {
-        "type": "course",
-        "code": "CMN 6990",
-        "text": "CMN 6990 / Prerequisite: CMN 6990"
-      }
-    },
-    {
       "code": "CMN 8101",
       "title": "Research Methods I",
       "credits": 3,
@@ -38016,13 +37962,6 @@
       "component": "StagePermission of the Department is required."
     },
     {
-      "code": "CRM 6999",
-      "title": "Mémoire de recherche / Major Research Paper",
-      "credits": 6,
-      "description": "Obligatoire pour les étudiants inscrits au programme de M.A. (option mémoire). / Compulsory for students registered in the MA (Major Research Paper option).",
-      "component": "Recherche / Research"
-    },
-    {
       "code": "CRM 8100",
       "title": "Doctoral Seminar",
       "credits": 3,
@@ -40743,7 +40682,7 @@
       "title": "Mesures et arpentage",
       "credits": 3,
       "description": "Théorie et technique des mesures linéaires et angulaires. Instruments d'arpentage: niveau, théodolite, EDM et station total. Topographie et cartographie. Observations astronomiques solaires et astrales (Étoiles du Nord). Arpentage des routes: courbes horizontales et verticales. Mesures des volumes. Principes de la photogrammétrie. Travail pratique sur le terrain portant sur des mesures d'arpentage.",
-      "component": "Tutoriel, Cours magistral"
+      "component": "Cours magistral, Tutoriel"
     },
     {
       "code": "CVG 2581",
@@ -40803,7 +40742,7 @@
       "title": "Soil Mechanics I",
       "credits": 3,
       "description": "Fundamental characteristics of soils; total and effective stresses; permeability and seepage; stress and strain, shear strength; stress distribution; consolidation and settlements.",
-      "component": "Laboratory, Lecture, TutorialPrerequisites: CVG 2107, CVG 2140.",
+      "component": "Lecture, Tutorial, LaboratoryPrerequisites: CVG 2107, CVG 2140.",
       "prereqText": "CVG 2107, CVG 2140",
       "prerequisites": {
         "type": "and_group",
@@ -44791,13 +44730,6 @@
       "code": "DCL 7033",
       "title": "Recherche dirigée / Directed Research",
       "credits": 3,
-      "description": "",
-      "component": "Recherche / Research"
-    },
-    {
-      "code": "DCL 7066",
-      "title": "Mémoire de recherche / Research Paper",
-      "credits": 0,
       "description": "",
       "component": "Recherche / Research"
     },
@@ -50163,7 +50095,13 @@
       "title": "Introduction to International Human Rights Law and Institutions",
       "credits": 3,
       "description": "Introduction to international law of human rights and key international institutions to enforce the law. Role of Non-Governmental Organisations (NGOs) in the prevention of terrorism and elaboration of counter-terrorism strategies. Examination of case studies of real situations where struggles for human rights are being waged.",
-      "component": "LecturePrerequisite for ECH 2300"
+      "component": "LecturePrerequisite: 18 university units.",
+      "prereqText": "18 university units",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "18 university units",
+        "credits": 18
+      }
     },
     {
       "code": "ECH 23003",
@@ -50287,7 +50225,13 @@
       "title": "Introduction aux institutions et droits humains internationaux",
       "credits": 3,
       "description": "Introduction aux institutions internationales principales en matière d'application du droit. Le rôle des organisations non-gouvernementales (ONG) dans la prévention du terrorisme et l`élaboration de stratégies contre le terrorisme. Examen d'études de cas de situations réelles de luttes pour les droits de la personne.",
-      "component": "Cours magistralPréalable pour ECH 2700"
+      "component": "Cours magistralPréalable : 18 crédits universitaires.",
+      "prereqText": "18 crédits universitaires",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "18 crédits universitaires",
+        "credits": 18
+      }
     },
     {
       "code": "ECH 27003",
@@ -56387,13 +56331,6 @@
       "component": "Cours magistral / Lecture"
     },
     {
-      "code": "ECO 6999",
-      "title": "Mémoire / Major Paper",
-      "credits": 6,
-      "description": "",
-      "component": "Recherche / Research"
-    },
-    {
       "code": "ECO 7001",
       "title": "Travail de recherche de deuxième année / Second Year Research Paper",
       "credits": 3,
@@ -58120,13 +58057,6 @@
       "component": "Recherche / Research"
     },
     {
-      "code": "EDU 6999",
-      "title": "Mémoire de recherche / Major Research Paper",
-      "credits": 6,
-      "description": "Production d'une recherche à petite échelle. Les activités y étant liées incluent la préparation de la proposition de recherche et l'analyse des données, la soumission du mémoire et la présentation orale de ce dernier. / Completion of a small-scale research project. Activities include preparation of a research proposal, analysis of data, submission of the major research paper, and an oral presentation of the research.",
-      "component": "Recherche / Research"
-    },
-    {
       "code": "EDU 7000",
       "title": "Lecture dirigée / Directed",
       "credits": 3,
@@ -59629,7 +59559,7 @@
       "title": "Systèmes d'énergie électrique renouvelable",
       "credits": 3,
       "description": "Introduction à la production et au conditionnement de l énergie électrique. Nouvelles exigences. Technologies émergentes en énergie renouvelable. Fondements des systèmes électriques de puissance. Systèmes d énergie électrique renouvelable (énergie éolienne, énergie solaire). Intégration des réseaux. Impact de la distribution des points de production sur l opération d un réseau. Implantation et contrôle d un réseau intelligent.",
-      "component": "Laboratoire, Cours magistral, TutorielPréalables : ELG 2537, ELG 3716, ELG 3536, ELG 3555.",
+      "component": "Tutoriel, Laboratoire, Cours magistralPréalables : ELG 2537, ELG 3716, ELG 3536, ELG 3555.",
       "prereqText": "ELG 2537, ELG 3716, ELG 3536, ELG 3555",
       "prerequisites": {
         "type": "and_group",
@@ -63603,25 +63533,6 @@
       "component": "Seminar"
     },
     {
-      "code": "ENG 6999",
-      "title": "Major Research Paper",
-      "credits": 0,
-      "description": "The research paper is prepared under the direction of the research paper supervisor and is approved by the graduate committee. The research paper must be successfully completed by the end of the third session of full-time registration in the master's program. In the event of failure, the student must register for an additional session. A second failure leads to a grade of NS (Not satisfactory) on the transcript and to withdrawal from the program.",
-      "component": "Recherche / ResearchPrerequisites: 15 units at the 5000, 6000, 7000 or 8000 level",
-      "prereqText": "15 units at the 5000, 6000, 7000 or 8000 level",
-      "prerequisites": {
-        "type": "non_course",
-        "text": "15 units at the 5000, 6000, 7000 or 8000 level",
-        "credits": 15,
-        "levels": [
-          5000,
-          6000,
-          7000,
-          8000
-        ]
-      }
-    },
-    {
       "code": "ENG 7300",
       "title": "Modern Literature I",
       "credits": 3,
@@ -65940,19 +65851,6 @@
       "component": "Séminaire / SeminarL'évaluation se fera sur la base S (satisfaisant) ou NS (non satisfaisant). Permission du Département est requise. / Grading will be on a S (satisfactory) or NS (non satisfactory) basis. Permission of the Department is required."
     },
     {
-      "code": "ERG 6999",
-      "title": "Mémoire de recherche / Major Paper",
-      "credits": 6,
-      "description": "Sous la direction d'un membre du corps professoral, mise en oeuvre d'un projet de recherche relevant des principes élémentaires de recherche déjà acquis et rédaction du mémoire en présentant les résultats. L'étudiant doit faire approuver le choix de son directeur ainsi que de son sujet de mémoire par le directeur ou la directrice du programme ou son délégué avant de s'inscrire au troisième trimestre d'études (avril). Le mémoire consiste en l'approfondissement d'une question théorique ou appliquée reliée à l'ergothérapie à l'aide d'une méthodologie stricte. / Under the direction of a faculty member, implementation of research project applying the basic principles of research already acquired and writing a major paper presenting the results. The student should have the choice of his / her director as well as his / her major paper subject approved by the Program Director or his / her delegate before enrolling in the third term of study (April). The major paper addresses in-depth a theoretical or applied question related to occupational therapy using a strict methodology.",
-      "component": "Recherche / ResearchPréalable : ERG 5754. Les cours ERG 6999, ERG 6755 ne peuvent être combinés pour des fins de crédits. L'évaluation se fera sur la base S (satisfaisant) ou NS (non satisfaisant). / Prerequisite: ERG 5754. Courses ERG 6999, ERG 6755 cannot be combined for units. Grading will be on a S (satisfactory) or NS (non satisfactory) basis.",
-      "prereqText": "ERG 5754",
-      "prerequisites": {
-        "type": "course",
-        "code": "ERG 5754",
-        "text": "ERG 5754"
-      }
-    },
-    {
       "code": "ESL 0105",
       "title": "Pre-Academic Foundations in English as a Second Language",
       "credits": 0,
@@ -67966,13 +67864,6 @@
       "component": "Séminaire / Seminar"
     },
     {
-      "code": "ESP 7997",
-      "title": "Mémoire de maîtrise / M.A. Research Paper",
-      "credits": 0,
-      "description": "",
-      "component": "Recherche / Research"
-    },
-    {
       "code": "ESP 7998",
       "title": "Comprehensive Exam",
       "credits": 0,
@@ -68184,13 +68075,6 @@
         "type": "non_course",
         "text": "Connaissance passive de l'anglais"
       }
-    },
-    {
-      "code": "EVD 6999",
-      "title": "Mémoire / Research Paper",
-      "credits": 6,
-      "description": "",
-      "component": "Recherche / Research"
     },
     {
       "code": "EVD 7997",
@@ -69881,33 +69765,6 @@
             "type": "non_course",
             "text": "FEM 5503, FEM 5700 et 6 crédits de la banque de cours au choix",
             "credits": 6
-          }
-        ]
-      }
-    },
-    {
-      "code": "FEM 6999",
-      "title": "Mémoire / Research Paper",
-      "credits": 6,
-      "description": "Préalables : FEM 5503, FEM 5700 et 12 crédits de la banque de cours au choix. / Research Paper",
-      "component": "Recherche / ResearchPréalables : FEM5503, FEM5700 et 12 crédits de la banque de cours au choix. / Prerequisites: FEM 5103, FEM 5300 and 12 units from the list of electives.",
-      "prereqText": "FEM5503, FEM5700 et 12 crédits de la banque de cours au choix",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "FEM5503, FEM5700 et 12 crédits de la banque de cours au choix",
-        "children": [
-          {
-            "type": "course",
-            "code": "FEM 5503"
-          },
-          {
-            "type": "course",
-            "code": "FEM 5700"
-          },
-          {
-            "type": "non_course",
-            "text": "FEM5503, FEM5700 et 12 crédits de la banque de cours au choix",
-            "credits": 12
           }
         ]
       }
@@ -72348,13 +72205,6 @@
       "component": "Cours magistral"
     },
     {
-      "code": "FRA 7997",
-      "title": "Mémoire",
-      "credits": 0,
-      "description": "",
-      "component": "Recherche / Research"
-    },
-    {
       "code": "FRA 7998",
       "title": "Projet de thèse de maîtrise",
       "credits": 0,
@@ -74537,13 +74387,6 @@
       "credits": 3,
       "description": "Stage supervisé dans un organisme externe ou avec un professeur au sein du département de géographie, environnement et géomatique ou d'autres unités sur le campus. Les étudiants sont responsables de trouver leur propre stage. Durée de 100 heures de travail non-rénuméré avec une organisation, approuvé par le directeur du programme d'études supérieures et certifié par l'organisation qui accueille le stage. Noté S (Satisfaisant) ou NS (Non-satisfaisant). / Supervised Internship at an external agency or with a professor within the Department of Geography, Environment and Geomatics or other units on campus. Students are responsible for finding their own internship.100 hours of volunteer work, approved by the graduate program director and certified by the organization hosting the internship. Grade: S (Satisfactory) / NS (Not Satisfactory).",
       "component": "Stage / Work Term"
-    },
-    {
-      "code": "GEG 6003",
-      "title": "Mémoire / Major Research Paper",
-      "credits": 6,
-      "description": "Le mémoire vous permet de mener un travail de recherche approfondi sur un sujet précis. Noté S (satisfaisait) ou NS (non satisfaisant). / The major research paper (MRP) allows you to conduct in-depth research work on a specific subject. Graded S (Satisfactory) / NS (Not Satisfactory).",
-      "component": "Recherche / Research"
     },
     {
       "code": "GEG 6101",
@@ -82444,13 +82287,6 @@
       "component": "Séminaire"
     },
     {
-      "code": "HIS 6999",
-      "title": "Mémoire de maîtrise / Research Paper",
-      "credits": 0,
-      "description": "",
-      "component": "Recherche / Research"
-    },
-    {
       "code": "HIS 7103",
       "title": "Seminar in European History",
       "credits": 3,
@@ -86538,28 +86374,6 @@
       "component": "Recherche / Research"
     },
     {
-      "code": "LCM 6999",
-      "title": "Mémoire / Research Paper",
-      "credits": 6,
-      "description": "Mémoire entre 40 et 50 pages préparé sous la direction d'un ou deux membres du corps professoral choisis en accord avec le directeur du programme. / Paper (40-50 pages) completed under the supervision of one or two professors selected in consultation with the program director. The research paper will be evaluated by the supervisor (and co-supervisor) and one other professor.",
-      "component": "Recherche / ResearchPréalable : LCM 5901, LCM 5902 / Prerequisites : LCM 5901, LCM 5902",
-      "prereqText": "LCM 5901, LCM 5902 / Prerequisites : LCM 5901, LCM 5902",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "LCM 5901, LCM 5902 / Prerequisites : LCM 5901, LCM 5902",
-        "children": [
-          {
-            "type": "course",
-            "code": "LCM 5901"
-          },
-          {
-            "type": "course",
-            "code": "LCM 5902"
-          }
-        ]
-      }
-    },
-    {
       "code": "LIN 1300",
       "title": "What Is Language?",
       "credits": 3,
@@ -88284,13 +88098,6 @@
       "component": "Séminaire / Seminar"
     },
     {
-      "code": "LIN 7997",
-      "title": "Mémoire de maîtrise / M.A./ Research Paper",
-      "credits": 0,
-      "description": "",
-      "component": "Recherche / Research"
-    },
-    {
       "code": "LIN 8398",
       "title": "Doctoral Seminar",
       "credits": 0,
@@ -88767,7 +88574,7 @@
       "title": "Calculus for the Life Sciences I",
       "credits": 3,
       "description": "Derivatives: product and quotient rules, chain rule, derivative of exponential, logarithm and basic trigonometric functions, higher derivatives, curve sketching. Applications of the derivative to life sciences. Discrete dynamical systems: equilibrium points, stability, cobwebbing. Integrals: indefinite and definite integrals, fundamental theorem of calculus, antiderivatives, substitution, integration by parts. Applications of the integral to life sciences.",
-      "component": "Lecture, Discussion GroupPrerequisite: One of MAT 1339, Ontario 4U Calculus and Vectors (MCV4U) or an equivalent. The courses ADM 1305, MAT 1300, MAT 1308, MAT 1320, MAT 1321, MAT 1327, MAT 1329, MAT1330 cannot be combined for units.",
+      "component": "Discussion Group, LecturePrerequisite: One of MAT 1339, Ontario 4U Calculus and Vectors (MCV4U) or an equivalent. The courses ADM 1305, MAT 1300, MAT 1308, MAT 1320, MAT 1321, MAT 1327, MAT 1329, MAT1330 cannot be combined for units.",
       "prereqText": "One of MAT 1339, Ontario 4U Calculus and Vectors (MCV4U) or an equivalent",
       "prerequisites": {
         "type": "and_group",
@@ -97398,7 +97205,7 @@
       "title": "Biofluid Mechanics I",
       "credits": 3,
       "description": "Fundamental concepts of fluid mechanics as applied to biomedical engineering. Fundamentals of the human cardiovascular and respiratory systems. Fluid statics. Fundamental laws of fluid motion. Dimensional analysis and similitude. Internal flows. Laboratory experiments.",
-      "component": "Laboratory, Lecture, TutorialPrerequisites: MAT 2322, MAT 2384, MCG 2108, MCG 2130.",
+      "component": "Tutorial, Laboratory, LecturePrerequisites: MAT 2322, MAT 2384, MCG 2108, MCG 2130.",
       "prereqText": "MAT 2322, MAT 2384, MCG 2108, MCG 2130",
       "prerequisites": {
         "type": "and_group",
@@ -99342,7 +99149,7 @@
       "title": "Mechanical Engineering Laboratory",
       "credits": 3,
       "description": "Professional engineering practice and ethics, societal and environmental obligations of the engineer, workplace health and safety. Laboratory experiments on mechanical engineering systems.",
-      "component": "Seminar, Laboratory, LecturePrerequisites: MCG 3307, (MCG 3143 or MCG 3341).",
+      "component": "Laboratory, Lecture, SeminarPrerequisites: MCG 3307, (MCG 3143 or MCG 3341).",
       "prereqText": "MCG 3307, (MCG 3143 or MCG 3341)",
       "prerequisites": {
         "type": "and_group",
@@ -102139,6 +101946,48 @@
       "component": "Lecture"
     },
     {
+      "code": "MED 5110",
+      "title": "Critical disability studies in Biomedical and Medical research",
+      "credits": 3,
+      "description": "Explore the intersection of disability studies with biomedical and medical research. Critically analyze how disability is conceptualized in research, ethics and practice, and develop skills to incorporate inclusive and equitable approaches in scientific inquiry.",
+      "component": "Lecture"
+    },
+    {
+      "code": "MED 5111",
+      "title": "Biomedical Research Communication I",
+      "credits": 3,
+      "description": "Fundamental skills in the theory of communication in biomedical and medical spaces. Training in critical skills such as theory of communication and psychology to better their communication skills. Address the rapidly evolving world of communication, innovation and research using a biomedical lens.",
+      "component": "Lecture"
+    },
+    {
+      "code": "MED 5112",
+      "title": "Accessibility Studies in STEM and Biomedical sciences",
+      "credits": 3,
+      "description": "Equipping learners in the science, technology, engineering, mathematics (STEM) and biomedical researchers/educators in the foundational principles of accessibility how to design accessible content, lab experiences, datasets, and research practices that reduce barriers for people with disabilities and diverse learners. Apply Universal Design for Learning (UDL), implement WCAG 2.2 in web and document authoring, understand Ontario’s AODA regulatory context, and integrate Canadian research ethics (TCPS 2) into project planning. Emphasis on accessible communication (documents, media, data visualizations), assistive technologies, inclusive lab/course design, and equitable recruitment in clinical and community research.",
+      "component": "Lecture"
+    },
+    {
+      "code": "MED 5113",
+      "title": "Social Justice and the Public Trust in Medicine",
+      "credits": 3,
+      "description": "Explore the intersection of social justice, equity, and scientific communication, emphasizing the role of trust-building in achieving societal impact. Explore the knowledge, skills, and cultural competencies necessary to engage meaningfully with diverse communities and promote inclusive research practices.",
+      "component": "Seminar"
+    },
+    {
+      "code": "MED 5114",
+      "title": "Diverse perspectives in Biomed. Res. and Healthcare Systems:Lived Experiences and Ethical Engagement",
+      "credits": 3,
+      "description": "The stories and insights of people with lived and living experience of disability anchor this course. Learn from, and respond to, community members across diverse cultural, racial, and social contexts who choose to share their experiences within biomedical and health research ecosystems, including their interactions with health care systems. Explore how structural barriers, research practices, and institutional cultures shape the meaningful inclusion or continued marginalization of persons living with disability in research design, participation and leadership, drawing on interdisciplinary and cross cultural perspectives that honour community knowledge and uphold self determination.",
+      "component": "Seminar"
+    },
+    {
+      "code": "MED 5115",
+      "title": "Seminars in Accessibility in Biomedicine",
+      "credits": 3,
+      "description": "Presentation of two seminars or one seminar and one poster required during the year as well as regular attendance at the MASc Accessibility in Biomedicine seminar series.",
+      "component": "Seminar"
+    },
+    {
       "code": "MED 5301",
       "title": "Seminar",
       "credits": 3,
@@ -102173,6 +102022,48 @@
       "component": "Cours magistral"
     },
     {
+      "code": "MED 5510",
+      "title": "Études critiques sur le handicap dans la recherche biomédicale et médicale",
+      "credits": 3,
+      "description": "Explorer l’intersection des études du handicap et de la recherche biomédicale et médicale. Poser un regard critique sur la façon dont le handicap est conceptualisé du point de vue de la recherche, de l’éthique et de la pratique, et acquérir des compétences visant à intégrer des approches inclusives et équitables au domaine de la recherche scientifique.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "MED 5511",
+      "title": "Communication des sciences biomédicales I",
+      "credits": 3,
+      "description": "Compétences fondamentales en matière de théorie de la communication dans les domaines biomédical et médical. Formation sur les compétences critiques telles que la théorie de la communication et la psychologie afin d'améliorer leurs compétences en matière de communication. Répondre à l’évolution rapide de la communication de l'innovation et de la recherche dans une optique biomédicale.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "MED 5512",
+      "title": "Études sur l'accessibilité dans les STIM et les sciences biomédicales",
+      "credits": 3,
+      "description": "Amener les apprenantes et apprenants en sciences, technologie, ingénierie, mathématiques (STIM) et les chercheuses et chercheurs/éducatrices et éducateurs en sciences biomédicales à se familiariser avec les principes fondamentaux en matière d’accessibilité, notamment la manière de concevoir des contenus, des expériences en laboratoire, des ensembles de données et des pratiques de recherche accessibles qui réduisent les obstacles pour les personnes en situation de handicap et les apprenants et apprenantes de différents horizons. Appliquer la conception universelle de l’apprentissage et les Règles pour l’accessibilité des contenus Web (WCAG 2.2) dans la création de sites Web et de documents, comprendre le contexte réglementaire de la Loi sur l’accessibilité pour les personnes handicapées de l’Ontario (LAPHO), et intégrer la référence canadienne en matière d’éthique de la recherche (EPTC 2) à la planification de projets. Mettre l’accent sur la communication accessible (documents, médias, visualisation de données), les technologies adaptées, la conception inclusive de laboratoires/cours et le recrutement équitable dans la recherche clinique et communautaire.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "MED 5513",
+      "title": "Justice sociale et confiance du public en médecine",
+      "credits": 3,
+      "description": "Explorer les liens entre justice sociale, équité et communication scientifique, en mettant l'accent sur le rôle de l'établissement de la confiance dans la réalisation d'un impact sociétal. Explorer les connaissances, les compétences et les aptitudes culturelles nécessaires pour s'engager de manière significative auprès de communautés diverses et promouvoir des pratiques de recherche inclusives.",
+      "component": "Séminaire"
+    },
+    {
+      "code": "MED 5514",
+      "title": "Persp. diverses dans la rech. bioméd. et aux syst. de santé:expériences vécues et engagement éthique",
+      "credits": 3,
+      "description": "Les histoires et les savoirs de personnes ayant une expérience vécue et actuelle du handicap sont au cœur de ce cours. Nous apprendrons auprès de membres de la communauté issus de contextes culturels, raciaux et sociaux divers, et nous dialoguerons avec ceux qui souhaitent raconter leurs expériences au sein des écosystèmes de la recherche biomédicale et en santé, y compris leurs interactions avec les systèmes de soins, et nous leur réponderons. Nous explorerons comment les barrières structurelles, les pratiques de recherche et les cultures institutionnelles influent sur l’inclusion ou la marginalisation persistante des personnes vivant avec un handicap dans le domaine de la recherche - conception, participation et leadership en s'appuyant sur des perspectives interdisciplinaires et interculturelles qui valorisent les savoirs communautaires et soutiennent l’autodétermination.",
+      "component": "Séminaire"
+    },
+    {
+      "code": "MED 5515",
+      "title": "Séminaires sur l’accessibilité en biomédecine",
+      "credits": 3,
+      "description": "Présentation de deux séminaires ou d'un séminaire et d'un poster au cours de l'année, ainsi que participation régulière à la série de séminaires du M.A.Sc en accessibilité en biomédecine.",
+      "component": "Séminaire"
+    },
+    {
       "code": "MED 5900",
       "title": "Projet de recherche / Research Project",
       "credits": 6,
@@ -102181,13 +102072,20 @@
     },
     {
       "code": "MED 5901",
+      "title": "Cours autodirigé d’apprentissage expérientiel / Experiential Learning Self-directed Course",
+      "credits": 3,
+      "description": "Ce cours, conçu par les personnes apprenantes, explore des sujets novateurs en science clinique et en médecine translationnelle, en mettant l'accent sur l'intégration de diverses approches pour relever les défis du monde réel, du laboratoire à la société. Les étudiants élaboreront leurs propres objectifs d'apprentissage et, par le biais d'approches interdisciplinaires, ils apprendront à intégrer les idées de la communauté, les perspectives de l'industrie et les stratégies organisationnelles afin de créer des solutions ayant un impact sociétal tangible. Avec le mentorat du corps enseignant, les personnes apprenantes, individuellement ou en groupe, travailleront à cultiver des compétences en matière de recherche, de communication et de résolution de problèmes, adaptées à leurs objectifs académiques et professionnels individuels. Noté S (satisfaisant) ou NS (non satisfaisant). / This student-designed course explores innovative topics in clinical science and translational medicine, emphasizing the integration of diverse approaches to address real-world challenges from the lab bench to society. Students will craft their unique learning objectives and through interdisciplinary approaches, will learn to incorporate community insights, industry perspectives, and organizational strategies to create solutions with tangible societal impact. With mentorship from faculty, students, individually or in a group will work will cultivate skills in research, communication, and problem-solving, tailored to their individual academic and career goals.",
+      "component": "Recherche / Research"
+    },
+    {
+      "code": "MED 5911",
       "title": "CoCreate Health : Sprint d'innovation pour l'impact sociétal I / CoCreate Health: Innovation Sprint for Societal Impact I",
       "credits": 1.5,
       "description": "CoCreate Health est un cours dynamique et interdisciplinaire de type hackathon conçu pour permettre aux étudiants de s'attaquer de manière collaborative aux défis sociétaux urgents en matière de santé et de bien-être. Au cours d'un sprint intensif, des étudiants issus de divers horizons universitaires forment des équipes d'innovation afin de co-créer des solutions ayant un impact réel. / CoCreate Health is a dynamic, interdisciplinary hackathon-style course designed to empower students to collaboratively tackle pressing societal challenges in health and well-being. Over an intensive sprint, students from diverse academic backgrounds form innovation teams to co-create solutions with real-world impact.",
       "component": "Séminaire / SeminarL’évaluation se fera sur la base S (satisfaisant) ou NS (non satisfaisant). / Grading will be on a S (satisfactory) or NS (non-satisfactory) basis."
     },
     {
-      "code": "MED 5902",
+      "code": "MED 5912",
       "title": "CoCreate Health : Sprint d'innovation pour l'impact sociétal II / CoCreate Health: Innovation Sprint for Societal Impact II",
       "credits": 1.5,
       "description": "CoCreate Health est un cours dynamique et interdisciplinaire de type hackathon conçu pour permettre aux étudiants de s'attaquer de manière collaborative aux défis sociétaux urgents en matière de santé et de bien-être. Au cours d'un sprint intensif, des étudiants issus de divers horizons universitaires forment des équipes d'innovation afin de co-créer des solutions ayant un impact réel. / CoCreate Health is a dynamic, interdisciplinary hackathon-style course designed to empower students to collaboratively tackle pressing societal challenges in health and well-being. Over an intensive sprint, students from diverse academic backgrounds form innovation teams to co-create solutions with real-world impact.",
@@ -102283,6 +102181,20 @@
       "credits": 3,
       "description": "Thèmes variés choisis pour une étude approfondie.",
       "component": "Séminaire"
+    },
+    {
+      "code": "MED 7910",
+      "title": "Projet partenaire sur l'accessibilité en biomédecine / Accessibility in Biomedicine partner project",
+      "credits": 6,
+      "description": "Cours dirigé par l’étudiante ou l’étudiant et organisé en partenariat avec la communauté. Explorer les liens entre l’accessibilité, l’équité et l’innovation dans la recherche biomédicale et la biomédecine. En collaboration avec des militants des droits des personnes handicapées, des professionnels de la santé et des chercheurs biomédicaux, examiner de manière critique les obstacles à l'accès aux technologies biomédicales, aux pratiques cliniques et aux méthodologies de recherche. Cocréer un projet avec un partenaire communautaire ou un groupe de parties prenantes, en appliquant les principes de la recherche participative pour relever un défi réel en matière d'accessibilité dans le domaine de la biomédecine. Noté S (satisfaisant) ou NS (non satisfaisant). Student-led, community-partnered course explores the intersection of accessibility, equity, and innovation in biomedical research and biomedicine. Through collaboration with disability advocates, healthcare professionals, and biomedical researchers, critically examine barriers to access in biomedical technologies, clinical practices, and research methodologies. Co-create a project with a community partner or stakeholder group, applying principles of participatory research to address a real-world accessibility challenge in biomedicine. Graded S (Satisfactory) / NS (Not satisfactory).",
+      "component": "Recherche / Research"
+    },
+    {
+      "code": "MED 7911",
+      "title": "Projet intégrateur sur l'accessibilité en biomédecine -Capstone project Accessibility in Biomedicine",
+      "credits": 0,
+      "description": "Concevoir et mener une enquête indépendante sur les défis et les innovations en matière d'accessibilité dans le domaine biomédical. À l'aide du cadre CCIPLE, définir des objectifs d'apprentissage personnalisés afin d'explorer les pratiques inclusives dans la recherche et la technologie biomédicales et démontrer l’engagement critique, la réflexion interdisciplinaire et l’attachement à l'équité dans le domaine biomédical. Noté S (satisfaisant) ou NS (non satisfaisant). Design and lead an independent inquiry into accessibility challenges and innovations within the biomedical field. Using the SLICC framework, define personalized learning outcomes to explore inclusive practices in biomedical research and technology to demonstrate critical engagement, interdisciplinary thinking, and a commitment to equity in biomedicine. Graded S (Satisfactory) / NS (Not satisfactory).",
+      "component": "Recherche / Research"
     },
     {
       "code": "MED 8166",
@@ -107042,13 +106954,6 @@
       "credits": 3,
       "description": "",
       "component": "Cours magistral / Lecture"
-    },
-    {
-      "code": "MUS 6099",
-      "title": "Mémoire / Research Paper",
-      "credits": 6,
-      "description": "Mémoire, projet majeur de recherche-création, projet majeur de recherche numérique ou autre projet majeur de recherche en musique sous la supervision d’un professeur. / Major Research paper, major research-creation project, major digital research project or other major research project in Music under the supervision of a professor.",
-      "component": "Recherche / Research"
     },
     {
       "code": "MUS 6340",
@@ -112258,7 +112163,7 @@
       "title": "Expérience d'intégration (Partie 2 de 3)",
       "credits": 0,
       "description": "Intégration de la théorie et des compétences pratiques. Séminaires avec des conférenciers de divers environnements et discussions sur les avantages et les inconvénients du travail de spécialiste dans le domaine culinaire. Projets conçus pour développer un nouveau produit. (Partie 2 de 3)",
-      "component": "Cours magistral, LaboratoirePréalable : NUT 26111.",
+      "component": "Laboratoire, Cours magistralPréalable : NUT 26111.",
       "prereqText": "NUT 26111",
       "prerequisites": {
         "type": "course",
@@ -117366,13 +117271,6 @@
       "component": "Recherche / Research"
     },
     {
-      "code": "PAP 7998",
-      "title": "Mémoire / Research Paper",
-      "credits": 6,
-      "description": "L'inscription au mémoire est permise dès la deuxième session d'études. Le mémoire compte environ douze mille mots (50 pages). Il est évalué par la personne qui l'a dirigé et par un autre professeur nommé par le responsable des études supérieures. Le mémoire est noté alpha et la note (la moyenne des deux évaluations) paraîtra sur le relevé de notes. / Registration for the research paper is permitted in the second session. The research paper is approximately 12,000 words (50 pages) in length. lt is evaluated by the supervisor and by another professor appointed by the professor in charge of graduate studies. Research papers are graded alpha and the grade (the average of both evaluations) appears on the transcript.",
-      "component": "Recherche / Research"
-    },
-    {
       "code": "PAP 8111",
       "title": "Research Seminar in Public Administration II",
       "credits": 3,
@@ -122314,38 +122212,10 @@
       }
     },
     {
-      "code": "PHI 6995",
-      "title": "Mémoire et recherche (MA) / Major Research Paper (MA)",
-      "credits": 0,
-      "description": "",
-      "component": "Recherche / Research"
-    },
-    {
-      "code": "PHI 6996",
-      "title": "Mémoire et recherche (MA) / Major Research Paper (MA)",
-      "credits": 0,
-      "description": "",
-      "component": "Cours magistral / Lecture"
-    },
-    {
-      "code": "PHI 6997",
-      "title": "Mémoire et recherche (MA) / Major Research Paper (MA)",
-      "credits": 0,
-      "description": "",
-      "component": "Cours magistral / Lecture"
-    },
-    {
       "code": "PHI 6999",
       "title": "Élaboration et présentation du projet de thèse de maîtrise ès arts / Preparation and Presentation of the M.A. Thesis Project",
       "credits": 0,
       "description": "Rédaction du projet de thèse de maîtrise en consultation avec le superviseur, évaluation par le comité de thèse et, dans le cas d’une approbation, présentation et défense du projet dans le cadre d’un séminaire. La note donnée sera S (satisfaisant) ou NS (non satisfaisant). / Writing of the M.A. thesis project in consultation with the supervisor, evaluation by the thesis committee, and, in the case of approbation, presentation and defence of the project in a seminar. The course will be graded S (satisfactory) / NS (Not satisfactory).",
-      "component": "Recherche / Research"
-    },
-    {
-      "code": "PHI 8995",
-      "title": "Mémoire de recherche (PhD) / Major Reserach Paper (PhD)",
-      "credits": 0,
-      "description": "",
       "component": "Recherche / Research"
     },
     {
@@ -134314,13 +134184,6 @@
       }
     },
     {
-      "code": "POL 7979",
-      "title": "Mémoire / Research Paper",
-      "credits": 6,
-      "description": "",
-      "component": "Recherche / Research"
-    },
-    {
       "code": "POL 8100",
       "title": "Directed Readings",
       "credits": 3,
@@ -144478,13 +144341,6 @@
       "component": "Seminar"
     },
     {
-      "code": "SOC 7140",
-      "title": "Advanced Quantitative Methodology",
-      "credits": 3,
-      "description": "Overview of advanced methods of quantitative analysis of data, including multivariate analysis. Examination of use of these methods in the sociological literature. Application of these methods in a research project; definition of a research question and determination of a theoretical framework, selection of a quantitative approach, research ethics, development of data collection tools, collection of data.",
-      "component": "Seminar"
-    },
-    {
       "code": "SOC 7141",
       "title": "Advanced Qualitative Methodology",
       "credits": 3,
@@ -144677,13 +144533,6 @@
         "type": "non_course",
         "text": "moyenne de A-"
       }
-    },
-    {
-      "code": "SOC 7940",
-      "title": "Mémoire de recherche / Research Paper",
-      "credits": 3,
-      "description": "Mémoire Noté S (satisfaisait) ou NS (non satisfaisant). Research paper. Graded S (Satisfactory) or NS (Not satisfactory).",
-      "component": "Recherche / Research"
     },
     {
       "code": "SOC 7990",
@@ -145757,13 +145606,6 @@
           }
         ]
       }
-    },
-    {
-      "code": "SRS 5999",
-      "title": "Mémoire / Research Paper",
-      "credits": 6,
-      "description": "",
-      "component": "Recherche / Research"
     },
     {
       "code": "SRS 6100",
@@ -147419,7 +147261,7 @@
       "title": "Systems Engineering",
       "credits": 3,
       "description": "Controllability and observability, Euler-Lagrange equations, Pontryagin maximum principle, dynamic programming, linear quadratic regulator problem, matrix Ricatti differential equations and properties of their solution, design of optimal regulator based on steady state solution of the Ricatti differential equation, time optimal control, LaSalle bang-bang principle, applications to motor speed control, satellite attitude control, etc.",
-      "component": "Tutorial, Laboratory, Lecture"
+      "component": "Laboratory, Lecture, Tutorial"
     },
     {
       "code": "SYS 5110",
@@ -152240,13 +152082,6 @@
       "component": "Research"
     },
     {
-      "code": "TRA 7197",
-      "title": "Research Paper",
-      "credits": 6,
-      "description": "Research paper approximately 40 pages in length, focusing on a Translation Studies question chosen in consultation with the supervisor. Graded S (Satisfactory) or NS (Not satisfactory) by the supervisor and another professor in the program.",
-      "component": "Research"
-    },
-    {
       "code": "TRA 7911",
       "title": "Stage traduc. et termino. juri. / Stage traduc. et termino. juri.",
       "credits": 6,
@@ -152272,20 +152107,6 @@
       "title": "Fichier terminologique ou lexicographique commenté / Commented Terminology or Lexicography File",
       "credits": 6,
       "description": "Constitution d'un fichier terminologique, lexicographique ou phraséologique bilingue ou multilingue et commenté. Ce fichier, comportant au moins 15 notions ou 20 entrées, est précédé d'une introduction dans laquelle le candidat présente ses objectifs, sa méthode et le domaine d'application. Il est accompagné de commentaires qui doivent s'appuyer sur des connaissances théoriques et méthodologiques pertinentes. Noté S (satisfaisant) ou NS (non satisfaisant). / Compilation of a term, lexeme or phrase file in two or more languages. The file must cover at least 15 concepts or 20 vocabulary items. It must be preceded by an introduction describing the motivation for the work, the methodology used and the subject field of the concepts or the vocabulary. It must be accompanied by a commentary demonstrating that the student has acquired the relevant theoretical and methodological background knowledge. Graded S (Satisfactory) or NS (Not satisfactory).",
-      "component": "Recherche / Research"
-    },
-    {
-      "code": "TRA 7997",
-      "title": "Mémoire / Research Paper",
-      "credits": 6,
-      "description": "Mémoire d'environ 40 pages portant sur une question choisie en consultation avec le directeur. Noté S (satisfaisant) ou NS (non satisfaisant) par le directeur et un autre professeur du programme. / Research paper approximately 40 pages in length, focusing on a Translation Studies question chosen in consultation with the supervisor. Graded S (Satisfactory) or NS (Not satisfactory) by the supervisor and another professor in the program.",
-      "component": "Recherche / Research"
-    },
-    {
-      "code": "TRA 7998",
-      "title": "Travail de recherche / Research Paper",
-      "credits": 6,
-      "description": "",
       "component": "Recherche / Research"
     },
     {
@@ -153348,13 +153169,6 @@
           }
         ]
       }
-    },
-    {
-      "code": "TSO 6620",
-      "title": "Mémoire de recherche",
-      "credits": 6,
-      "description": "",
-      "component": "Recherche"
     },
     {
       "code": "TSO 6701",
@@ -209970,7 +209784,7 @@
             },
             {
               "type": "group",
-              "title": "3 course units from:",
+              "title": "9 course units from:",
               "credits": 9,
               "options": [
                 {
@@ -214657,15 +214471,34 @@
               ]
             },
             {
-              "type": "discipline_elective",
-              "title": "9 optional course units in mathematics (MAT) at the 3000 or 4000 level",
+              "type": "pick",
+              "title": "9 optional course units in mathematics (MAT) or statistics (STA) at the 3000 or 4000 level",
               "credits": 9,
-              "disciplineLevels": [
+              "options": [
                 {
-                  "discipline": "MAT",
-                  "levels": [
-                    3000,
-                    4000
+                  "type": "discipline_elective",
+                  "title": "Any MAT at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "MAT",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "discipline_elective",
+                  "title": "Any STA at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "STA",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
                   ]
                 }
               ]
@@ -217592,15 +217425,34 @@
               ]
             },
             {
-              "type": "discipline_elective",
-              "title": "18 optional course units in mathematics (MAT) at the 3000 or 4000 level",
+              "type": "pick",
+              "title": "18 optional course units in mathematics (MAT) or statistics (STA) at the 3000 or 4000 level",
               "credits": 18,
-              "disciplineLevels": [
+              "options": [
                 {
-                  "discipline": "MAT",
-                  "levels": [
-                    3000,
-                    4000
+                  "type": "discipline_elective",
+                  "title": "Any MAT at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "MAT",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "discipline_elective",
+                  "title": "Any STA at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "STA",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
                   ]
                 }
               ]
@@ -220507,15 +220359,34 @@
               ]
             },
             {
-              "type": "discipline_elective",
-              "title": "15 optional course units in mathematics (MAT) at the 3000 or 4000 level",
+              "type": "pick",
+              "title": "15 optional course units in mathematics (MAT) or statistics (STA) at the 3000 or 4000 level",
               "credits": 15,
-              "disciplineLevels": [
+              "options": [
                 {
-                  "discipline": "MAT",
-                  "levels": [
-                    3000,
-                    4000
+                  "type": "discipline_elective",
+                  "title": "Any MAT at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "MAT",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "discipline_elective",
+                  "title": "Any STA at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "STA",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
                   ]
                 }
               ]
@@ -234485,15 +234356,34 @@
               ]
             },
             {
-              "type": "discipline_elective",
-              "title": "12 optional course units in mathematics (MAT) at the 3000 or 4000 level",
+              "type": "pick",
+              "title": "12 optional course units in mathematics (MAT) or statistics (STA) at the 3000 or 4000 level",
               "credits": 12,
-              "disciplineLevels": [
+              "options": [
                 {
-                  "discipline": "MAT",
-                  "levels": [
-                    3000,
-                    4000
+                  "type": "discipline_elective",
+                  "title": "Any MAT at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "MAT",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "discipline_elective",
+                  "title": "Any STA at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "STA",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
                   ]
                 }
               ]
@@ -250850,15 +250740,34 @@
               ]
             },
             {
-              "type": "discipline_elective",
-              "title": "12 optional course units in mathematics (MAT) at the 3000 or 4000 level",
+              "type": "pick",
+              "title": "12 optional course units in mathematics (MAT) or statistics (STA) at the 3000 or 4000 level",
               "credits": 12,
-              "disciplineLevels": [
+              "options": [
                 {
-                  "discipline": "MAT",
-                  "levels": [
-                    3000,
-                    4000
+                  "type": "discipline_elective",
+                  "title": "Any MAT at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "MAT",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "discipline_elective",
+                  "title": "Any STA at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "STA",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
                   ]
                 }
               ]
@@ -254077,15 +253986,34 @@
               ]
             },
             {
-              "type": "discipline_elective",
-              "title": "6 optional course units in mathematics (MAT) at the 3000 or 4000 level",
+              "type": "pick",
+              "title": "6 optional course units in mathematics (MAT) or statistics (STA) at the 3000 or 4000 level",
               "credits": 6,
-              "disciplineLevels": [
+              "options": [
                 {
-                  "discipline": "MAT",
-                  "levels": [
-                    3000,
-                    4000
+                  "type": "discipline_elective",
+                  "title": "Any MAT at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "MAT",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "discipline_elective",
+                  "title": "Any STA at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "STA",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
                   ]
                 }
               ]
@@ -267976,7 +267904,7 @@
             },
             {
               "type": "group",
-              "title": "3 optional course units in mathematics (MAT) at the 2000, 3000 or 4000 level, or from the following list:",
+              "title": "3 optional course units in mathematics (MAT) or statistics (STA) at the 2000, 3000 or 4000 level, or from the following list:",
               "credits": 3,
               "options": [
                 {
