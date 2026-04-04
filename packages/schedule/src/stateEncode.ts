@@ -30,6 +30,8 @@ export function urlToSlug(url: string): string {
     .replace(/\/$/, '');
 }
 
+export const STATE_MAGIC = 0x554F504C; // "UOPL" in ASCII hex
+
 function programSlug(p: Program): string {
   return (p as Program & { slug?: string }).slug ?? urlToSlug(p.url);
 }
@@ -215,6 +217,7 @@ export function encodeState(
       : undefined,
     generationLimitFirstYearCredits: input.generationLimitFirstYearCredits,
     generationCompressedSchedule: input.generationCompressedSchedule,
+    magic: STATE_MAGIC,
   };
 
   // Requirements
@@ -260,6 +263,7 @@ export function peekTermAndYear(
 ): { termId: string | null; firstYear: number | null } | null {
   try {
     const state = ShareableState.decode(bytes);
+    if (state.magic !== STATE_MAGIC) return null;
     return { 
       termId: state.selectedTermId ?? null, 
       firstYear: state.firstYear ?? null 
@@ -279,6 +283,10 @@ export function decodeState(
     state = ShareableState.decode(buffer);
   } catch {
     return { error: 'Invalid state encoding' };
+  }
+
+  if (state.magic !== STATE_MAGIC) {
+    return { error: 'Incompatible or corrupted state data' };
   }
 
   let program: Program | null = null;

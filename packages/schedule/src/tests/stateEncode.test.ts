@@ -254,8 +254,8 @@ describe('peekTermAndYear', () => {
     expect(peeked!.firstYear).toBeNull();
   });
 
-  it('returns default on empty buffer', () => {
-    expect(peekTermAndYear(new Uint8Array(0))).toEqual({ termId: null, firstYear: null });
+  it('returns null on empty buffer', () => {
+    expect(peekTermAndYear(new Uint8Array(0))).toBeNull();
   });
 
   // it('returns null on version mismatch', () => {
