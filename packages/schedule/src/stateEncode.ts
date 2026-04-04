@@ -1,10 +1,9 @@
-import type { Program } from 'schemas';
+import type { Program, DayOfWeek } from 'schemas';
 import type { CourseLevelBucket, CourseLanguageBucket } from './courseFilters';
 import type { RemainingRequirement, RequirementWithStatus } from './requirements';
 import type { Indices } from 'schemas';
 import { isOptCourse, getCourseLevel } from './utils/courseUtils';
 
-/** Collect all requirement IDs from the tree in depth-first order (used for stable encoding). */
 export function requirementIdsFromTree(nodes: RequirementWithStatus[]): string[] {
   const out: string[] = [];
   function walk(n: RequirementWithStatus[]) {
@@ -17,11 +16,6 @@ export function requirementIdsFromTree(nodes: RequirementWithStatus[]): string[]
   return out;
 }
 
-/**
- * Derive a stable slug from a catalogue program URL. Works for both current and archive URLs:
- *   https://catalogue.uottawa.ca/en/undergrad/foo/         → undergrad/foo
- *   https://catalogue.uottawa.ca/archive/2024-2025/en/undergrad/foo/ → undergrad/foo
- */
 export function urlToSlug(url: string): string {
   return url
     .replace(/^https?:\/\/catalogue\.uottawa\.ca(?:\/archive\/\d{4}-\d{4})?\/en\//, '')
@@ -32,15 +26,17 @@ function programSlug(p: Program): string {
   return (p as Program & { slug?: string }).slug ?? urlToSlug(p.url);
 }
 
-const VERSION = 9;
-/** Oldest binary format still accepted by {@link decodeState}. */
-const MIN_DECODE_VERSION = 7;
+const VERSION = 10;
 const MAX_U16 = 0xffff;
 const MAX_U32 = 0xffffffff;
-/** Sentinel base for OPT transfer credit codes. Level 1000 → 0xFFF1, 2000 → 0xFFF2, etc. */
 const OPT_SENTINEL_BASE = 0xFFF0;
 
 export interface EncodeInput {
+  wizardMode: "basic" | "advanced" | null;
+  basicPinnedCourses: string[];
+  basicElectivesCount: number;
+  basicExcludedCategories: string[];
+
   selectedTermId: string | null;
   firstYear: number | null;
   program: Program | null;
@@ -54,16 +50,28 @@ export interface EncodeInput {
   generationSeed: number;
   selectedPerRequirement: Record<string, string[]>;
   selectedOptionsPerRequirement: Record<string, number>;
-  constrainedPerRequirement?: Record<string, string[]>;
-  /** Full requirement tree; used to get stable ordering of all requirement IDs (including parents). */
+  constrainedPerRequirement: Record<string, string[]>;
   requirementTreeWithStatus: RequirementWithStatus[];
   remainingRequirements: RemainingRequirement[];
   includeClosedComponents: boolean;
   virtualSectionsOnly: boolean;
   studentPrograms: string[];
+
+  requirementSlotsUserTouched: Record<string, true>;
+  generationMinStartMinutes: number;
+  generationMaxEndMinutes: number;
+  generationAllowedDays: DayOfWeek[];
+  generationMinProfessorRating: number | null;
+  generationLimitFirstYearCredits: boolean;
+  generationCompressedSchedule: boolean;
 }
 
 export interface DecodedState {
+  wizardMode: "basic" | "advanced" | null;
+  basicPinnedCourses: string[];
+  basicElectivesCount: number;
+  basicExcludedCategories: string[];
+
   selectedTermId: string | null;
   firstYear: number | null;
   program: Program | null;
@@ -81,6 +89,14 @@ export interface DecodedState {
   includeClosedComponents: boolean;
   virtualSectionsOnly: boolean;
   studentPrograms: string[];
+
+  touchedReqIndices: number[];
+  generationMinStartMinutes: number;
+  generationMaxEndMinutes: number;
+  generationAllowedDays: DayOfWeek[];
+  generationMinProfessorRating: number | null;
+  generationLimitFirstYearCredits: boolean;
+  generationCompressedSchedule: boolean;
 }
 
 export interface CatalogueLike {
@@ -91,7 +107,6 @@ export interface CatalogueLike {
 function levelToByte(b: CourseLevelBucket): number {
   return b === 'undergrad' ? 0 : 1;
 }
-
 function byteToLevel(b: number): CourseLevelBucket {
   return b === 0 ? 'undergrad' : 'grad';
 }
@@ -101,11 +116,24 @@ function langToByte(b: CourseLanguageBucket): number {
   if (b === 'fr') return 1;
   return 2;
 }
-
 function byteToLang(b: number): CourseLanguageBucket {
   if (b === 0) return 'en';
   if (b === 1) return 'fr';
   return 'other';
+}
+
+function dayToBit(d: DayOfWeek): number {
+  const days: DayOfWeek[] = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+  return 1 << days.indexOf(d);
+}
+
+function bitToDays(b: number): DayOfWeek[] {
+  const days: DayOfWeek[] = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+  const res: DayOfWeek[] = [];
+  for (let i = 0; i < days.length; i++) {
+    if ((b & (1 << i)) !== 0) res.push(days[i]);
+  }
+  return res;
 }
 
 function writeU16(view: DataView, offset: number, value: number): number {
@@ -135,31 +163,28 @@ function readU32(view: DataView, offset: number): { value: number; next: number 
   return { value: view.getUint32(offset, true), next: offset + 4 };
 }
 
-/**
- * Encode user state to a compact binary format. Returns null if indices/catalogue
- * don't contain the current program or courses (e.g. program not in indices).
- *
- * Binary layout (VERSION 8):
- *   U8  version
- *   U8  termId byte-length (0 = absent)
- *   [ASCII bytes for termId]
- *   U16 firstYear (0 = null/current)
- *   U16 programIndex (MAX_U16 = no program)
- *   U16 completedCount
- *   [U16 × completedCount]  — OPT codes use sentinels: OPT_SENTINEL_BASE + level/1000
- *   U8  levelBuckets count + [U8 × count]
- *   U8  languageBuckets count + [U8 × count]
- *   U8  electiveLevelBuckets count + [U16 × count]
- *   U8  coursesThisSemester
- *   U16 selectedScheduleIndex
- *   U32 generationSeed
- *   U8  includeClosedComponents
- *   U8  virtualSectionsOnly (VERSION 8+; absent in VERSION 7 → false)
- *   U16 optionSelections count + [U16 reqIndex, U16 optionIndex × count]
- *   U16 courseSelections count + [U16 reqIndex, U16 count, U16 × count] × count
- *   U8  studentPrograms count + [U8 byteLen + ASCII bytes] × count
- *   U16 constrainedSelections count + [U16 reqIndex, U16 count, U16 × count] × count
- */
+function writeString(view: DataView, offset: number, str: string): number {
+  let off = offset;
+  off = writeU8(view, off, Math.min(255, str.length));
+  for (let i = 0; i < Math.min(255, str.length); i++) {
+    off = writeU8(view, off, str.charCodeAt(i));
+  }
+  return off;
+}
+
+function readString(view: DataView, offset: number, maxLen: number): { value: string; next: number } {
+  let off = offset;
+  const { value: len, next: n1 } = readU8(view, off);
+  off = n1;
+  let str = '';
+  for (let i = 0; i < len && i < maxLen; i++) {
+    const { value: ch, next: n2 } = readU8(view, off);
+    off = n2;
+    str += String.fromCharCode(ch);
+  }
+  return { value: str, next: off };
+}
+
 export function encodeState(
   input: EncodeInput,
   _catalogue: CatalogueLike,
@@ -183,6 +208,9 @@ export function encodeState(
   for (const code of input.completedCourses) {
     if (!isOptCourse(code) && !courseCodeToIndex.has(code)) return null;
   }
+  for (const code of input.basicPinnedCourses) {
+    if (!courseCodeToIndex.has(code)) return null;
+  }
 
   const termIdBytes = input.selectedTermId
     ? Array.from(input.selectedTermId).map(c => c.charCodeAt(0))
@@ -192,45 +220,16 @@ export function encodeState(
   const reqIdToIndex = new Map<string, number>();
   orderedReqIds.forEach((id, i) => reqIdToIndex.set(id, i));
 
-  const size =
-    1 + // version
-    1 + termIdBytes.length + // termId
-    2 + // firstYear
-    2 + 2 + 2 + input.completedCourses.length * 2 + // programIndex + minorProgramIndex + completed
-    1 + input.levelBuckets.length +
-    1 + input.languageBuckets.length +
-    1 + input.electiveLevelBuckets.length * 2 +
-    1 + 2 + 4 + 1 + 1 + // coursesThisSemester, scheduleIndex, seed, includeClosed, virtualSectionsOnly
-    (2 + Object.keys(input.selectedOptionsPerRequirement).length * 4) +
-    (2 + (() => {
-      let n = 0;
-      for (const arr of Object.values(input.selectedPerRequirement)) {
-        n += 2 + 2 + arr.length * 2;
-      }
-      return n;
-    })()) +
-    (1 + input.studentPrograms.reduce((acc, p) => acc + 1 + p.length, 0)) +
-    (2 + (() => {
-      let n = 0;
-      for (const arr of Object.values(input.constrainedPerRequirement ?? {})) {
-        n += 2 + 2 + arr.length * 2;
-      }
-      return n;
-    })());
-
-  const buffer = new ArrayBuffer(Math.max(256, size));
+  const buffer = new ArrayBuffer(65536);
   const view = new DataView(buffer);
   let off = 0;
 
   off = writeU8(view, off, VERSION);
 
-  // termId
   off = writeU8(view, off, Math.min(255, termIdBytes.length));
   for (const b of termIdBytes) off = writeU8(view, off, b);
 
-  // firstYear (0 = null)
   off = writeU16(view, off, input.firstYear != null ? input.firstYear : 0);
-
   off = writeU16(view, off, programIndex === -1 ? MAX_U16 : programIndex);
   off = writeU16(view, off, minorProgramIndex === -1 ? MAX_U16 : minorProgramIndex);
 
@@ -287,18 +286,13 @@ export function encodeState(
     for (const idx of courseIndices) off = writeU16(view, off, idx);
   }
 
-  // Student programs: U8 count, then for each code: U8 byte-length + ASCII bytes.
   off = writeU8(view, off, Math.min(255, input.studentPrograms.length));
   for (const code of input.studentPrograms) {
-    off = writeU8(view, off, code.length);
-    for (let i = 0; i < code.length; i++) {
-      off = writeU8(view, off, code.charCodeAt(i));
-    }
+    off = writeString(view, off, code);
   }
 
-  // Constrained selections: same format as courseSelections.
   const constrainedEntries: Array<{ reqIndex: number; courseIndices: number[] }> = [];
-  for (const [reqId, codes] of Object.entries(input.constrainedPerRequirement ?? {})) {
+  for (const [reqId, codes] of Object.entries(input.constrainedPerRequirement)) {
     const reqIndex = reqIdToIndex.get(reqId);
     if (reqIndex === undefined) continue;
     const courseIndices = codes
@@ -316,23 +310,60 @@ export function encodeState(
     for (const idx of courseIndices) off = writeU16(view, off, idx);
   }
 
+  off = writeU8(view, off, input.wizardMode === "basic" ? 1 : input.wizardMode === "advanced" ? 2 : 0);
+
+  const basicPinned = input.basicPinnedCourses
+    .map(c => courseCodeToIndex.get(c))
+    .filter((i): i is number => i !== undefined);
+  off = writeU16(view, off, basicPinned.length);
+  for (const idx of basicPinned) {
+    off = writeU16(view, off, idx);
+  }
+
+  off = writeU8(view, off, input.basicElectivesCount);
+
+  off = writeU16(view, off, input.basicExcludedCategories.length);
+  for (const cat of input.basicExcludedCategories) {
+    off = writeString(view, off, cat);
+  }
+
+  const touchedReqs: number[] = [];
+  for (const reqId of Object.keys(input.requirementSlotsUserTouched)) {
+    const reqIndex = reqIdToIndex.get(reqId);
+    if (reqIndex !== undefined) touchedReqs.push(reqIndex);
+  }
+  off = writeU16(view, off, touchedReqs.length);
+  for (const idx of touchedReqs) {
+    off = writeU16(view, off, idx);
+  }
+
+  off = writeU16(view, off, input.generationMinStartMinutes);
+  off = writeU16(view, off, input.generationMaxEndMinutes);
+
+  let daysBitmask = 0;
+  for (const d of input.generationAllowedDays) {
+    daysBitmask |= dayToBit(d);
+  }
+  off = writeU8(view, off, daysBitmask);
+
+  const ratingU8 = input.generationMinProfessorRating === null ? 255 : Math.round(input.generationMinProfessorRating * 10);
+  off = writeU8(view, off, ratingU8);
+
+  off = writeU8(view, off, input.generationLimitFirstYearCredits ? 1 : 0);
+  off = writeU8(view, off, input.generationCompressedSchedule ? 1 : 0);
+
   return new Uint8Array(buffer, 0, off);
 }
 
 export type DecodeError = { error: string };
 
-/**
- * Read just the termId and firstYear from the binary header without decoding the rest
- * or needing a catalogue. Returns null if the version is unsupported or the buffer is
- * too short to contain the header.
- */
 export function peekTermAndYear(
   bytes: Uint8Array
 ): { termId: string | null; firstYear: number | null } | null {
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   if (bytes.length < 1) return null;
   const version = view.getUint8(0);
-  if (version < MIN_DECODE_VERSION || version > VERSION) return null;
+  if (version !== VERSION) return null;
   let off = 1;
 
   if (off + 1 > bytes.length) return null;
@@ -353,10 +384,6 @@ export function peekTermAndYear(
   return { termId, firstYear };
 }
 
-/**
- * Decode binary state. Returns DecodedState or DecodeError if version is unknown
- * or any referenced program/course is missing from the current catalogue.
- */
 export function decodeState(
   buffer: Uint8Array,
   catalogue: CatalogueLike,
@@ -364,18 +391,16 @@ export function decodeState(
 ): DecodedState | DecodeError {
   const view = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
   let off = 0;
+  
   if (buffer.length < 1) return { error: 'Invalid state: too short' };
   const { value: version, next: n0 } = readU8(view, off);
   off = n0;
-  if (version < MIN_DECODE_VERSION || version > VERSION) {
+  if (version !== VERSION) {
     return { error: 'Invalid or unsupported state version' };
   }
 
-  // termId
-  if (off + 1 > buffer.length) return { error: 'Invalid state: truncated' };
   const { value: termIdLen, next: n0b } = readU8(view, off);
   off = n0b;
-  if (off + termIdLen > buffer.length) return { error: 'Invalid state: truncated' };
   let selectedTermId: string | null = null;
   if (termIdLen > 0) {
     let s = '';
@@ -384,8 +409,6 @@ export function decodeState(
   }
   off += termIdLen;
 
-  // firstYear
-  if (off + 2 > buffer.length) return { error: 'Invalid state: truncated' };
   const { value: firstYearRaw, next: n0c } = readU16(view, off);
   off = n0c;
   const firstYear: number | null = firstYearRaw === 0 ? null : firstYearRaw;
@@ -393,13 +416,8 @@ export function decodeState(
   const { value: programIndex, next: n1 } = readU16(view, off);
   off = n1;
 
-  let minorProgramIndex = MAX_U16;
-  if (version >= 9) {
-    if (off + 2 > buffer.length) return { error: 'Invalid state: truncated' };
-    const { value: mIdx, next: n1m } = readU16(view, off);
-    minorProgramIndex = mIdx;
-    off = n1m;
-  }
+  const { value: minorProgramIndex, next: n1m } = readU16(view, off);
+  off = n1m;
 
   let program: Program | null = null;
   if (programIndex !== MAX_U16 && programIndex < indices.programs.length) {
@@ -421,7 +439,7 @@ export function decodeState(
   off = n2;
   const completedCourseCodes: string[] = [];
   const completedOptCounters = new Map<number, number>();
-  for (let i = 0; i < completedLen && off + 2 <= buffer.length; i++) {
+  for (let i = 0; i < completedLen; i++) {
     const { value: idx, next: n } = readU16(view, off);
     off = n;
     if (idx > OPT_SENTINEL_BASE) {
@@ -436,65 +454,54 @@ export function decodeState(
     }
   }
 
-  if (off + 1 > buffer.length) return { error: 'Invalid state: truncated' };
   const { value: levelLen, next: n3 } = readU8(view, off);
   off = n3;
   const levelBuckets: CourseLevelBucket[] = [];
-  for (let i = 0; i < levelLen && off + 1 <= buffer.length; i++) {
+  for (let i = 0; i < levelLen; i++) {
     const { value: b, next: n } = readU8(view, off);
     off = n;
     levelBuckets.push(byteToLevel(b));
   }
 
-  if (off + 1 > buffer.length) return { error: 'Invalid state: truncated' };
   const { value: langLen, next: n4 } = readU8(view, off);
   off = n4;
   const languageBuckets: CourseLanguageBucket[] = [];
-  for (let i = 0; i < langLen && off + 1 <= buffer.length; i++) {
+  for (let i = 0; i < langLen; i++) {
     const { value: b, next: n } = readU8(view, off);
     off = n;
     languageBuckets.push(byteToLang(b));
   }
 
-  if (off + 1 > buffer.length) return { error: 'Invalid state: truncated' };
   const { value: electiveLen, next: n5 } = readU8(view, off);
   off = n5;
   const electiveLevelBuckets: number[] = [];
-  for (let i = 0; i < electiveLen && off + 2 <= buffer.length; i++) {
+  for (let i = 0; i < electiveLen; i++) {
     const { value: v, next: n } = readU16(view, off);
     off = n;
     electiveLevelBuckets.push(v);
   }
 
-  if (off + 1 + 2 > buffer.length) return { error: 'Invalid state: truncated' };
   const { value: coursesThisSemester, next: n6 } = readU8(view, off);
   off = n6;
   const { value: selectedScheduleIndex, next: n7 } = readU16(view, off);
   off = n7;
 
-  if (off + 4 > buffer.length) return { error: 'Invalid state: truncated' };
   const { value: seed, next: nSeed } = readU32(view, off);
   off = nSeed;
   const generationSeed = seed >>> 0;
 
-  if (off + 1 > buffer.length) return { error: 'Invalid state: truncated' };
   const { value: incClosed, next: nInc } = readU8(view, off);
   off = nInc;
   const includeClosedComponents = incClosed !== 0;
 
-  let virtualSectionsOnly = false;
-  if (version >= 8) {
-    if (off + 1 > buffer.length) return { error: 'Invalid state: truncated' };
-    const { value: virt, next: nVirt } = readU8(view, off);
-    off = nVirt;
-    virtualSectionsOnly = virt !== 0;
-  }
+  const { value: virt, next: nVirt } = readU8(view, off);
+  off = nVirt;
+  const virtualSectionsOnly = virt !== 0;
 
-  if (off + 2 > buffer.length) return { error: 'Invalid state: truncated' };
   const { value: optCount, next: n8 } = readU16(view, off);
   off = n8;
   const optionSelections: Array<{ reqIndex: number; optionIndex: number }> = [];
-  for (let i = 0; i < optCount && off + 4 <= buffer.length; i++) {
+  for (let i = 0; i < optCount; i++) {
     const { value: reqIndex, next: na } = readU16(view, off);
     off = na;
     const { value: optionIndex, next: nb } = readU16(view, off);
@@ -502,19 +509,17 @@ export function decodeState(
     optionSelections.push({ reqIndex, optionIndex });
   }
 
-  if (off + 2 > buffer.length) return { error: 'Invalid state: truncated' };
   const { value: courseSelCount, next: n9 } = readU16(view, off);
   off = n9;
   const courseSelections: Array<{ reqIndex: number; courseCodes: string[] }> = [];
   const selectionOptCounters = new Map<number, number>();
   for (let i = 0; i < courseSelCount; i++) {
-    if (off + 2 + 2 > buffer.length) break;
     const { value: reqIndex, next: nc } = readU16(view, off);
     off = nc;
     const { value: numCourses, next: nd } = readU16(view, off);
     off = nd;
     const courseCodes: string[] = [];
-    for (let j = 0; j < numCourses && off + 2 <= buffer.length; j++) {
+    for (let j = 0; j < numCourses; j++) {
       const { value: idx, next: ne } = readU16(view, off);
       off = ne;
       if (idx > OPT_SENTINEL_BASE) {
@@ -530,55 +535,102 @@ export function decodeState(
     courseSelections.push({ reqIndex, courseCodes });
   }
 
-  // Student programs
   const studentPrograms: string[] = [];
-  if (off + 1 <= buffer.length) {
-    const { value: progCount, next: nPc } = readU8(view, off);
-    off = nPc;
-    for (let i = 0; i < progCount && off + 1 <= buffer.length; i++) {
-      const { value: codeLen, next: nCl } = readU8(view, off);
-      off = nCl;
-      let code = '';
-      for (let j = 0; j < codeLen && off + 1 <= buffer.length; j++) {
-        const { value: ch, next: nCh } = readU8(view, off);
-        off = nCh;
-        code += String.fromCharCode(ch);
-      }
-      if (code) studentPrograms.push(code);
-    }
+  const { value: progCount, next: nPc } = readU8(view, off);
+  off = nPc;
+  for (let i = 0; i < progCount; i++) {
+    const { value: code, next: nSt } = readString(view, off, 255);
+    off = nSt;
+    if (code) studentPrograms.push(code);
   }
 
-  // Constrained selections (VERSION 7+): same format as courseSelections.
   const constrainedSelections: Array<{ reqIndex: number; courseCodes: string[] }> = [];
-  if (off + 2 <= buffer.length) {
-    const { value: constrainedCount, next: nCs } = readU16(view, off);
-    off = nCs;
-    const constrainedOptCounters = new Map<number, number>();
-    for (let i = 0; i < constrainedCount; i++) {
-      if (off + 2 + 2 > buffer.length) break;
-      const { value: reqIndex, next: nCr } = readU16(view, off);
-      off = nCr;
-      const { value: numCourses, next: nCn } = readU16(view, off);
-      off = nCn;
-      const courseCodes: string[] = [];
-      for (let j = 0; j < numCourses && off + 2 <= buffer.length; j++) {
-        const { value: idx, next: nCe } = readU16(view, off);
-        off = nCe;
-        if (idx > OPT_SENTINEL_BASE) {
-          const level = (idx - OPT_SENTINEL_BASE) * 1000;
-          const count = constrainedOptCounters.get(level) ?? 0;
-          constrainedOptCounters.set(level, count + 1);
-          courseCodes.push(`OPT ${level + count}`);
-        } else if (idx < indices.courses.length) {
-          const code = indices.courses[idx];
-          if (catalogue.courses.some((c) => c.code === code)) courseCodes.push(code);
-        }
+  const { value: constrainedCount, next: nCs } = readU16(view, off);
+  off = nCs;
+  const constrainedOptCounters = new Map<number, number>();
+  for (let i = 0; i < constrainedCount; i++) {
+    const { value: reqIndex, next: nCr } = readU16(view, off);
+    off = nCr;
+    const { value: numCourses, next: nCn } = readU16(view, off);
+    off = nCn;
+    const courseCodes: string[] = [];
+    for (let j = 0; j < numCourses; j++) {
+      const { value: idx, next: nCe } = readU16(view, off);
+      off = nCe;
+      if (idx > OPT_SENTINEL_BASE) {
+        const level = (idx - OPT_SENTINEL_BASE) * 1000;
+        const count = constrainedOptCounters.get(level) ?? 0;
+        constrainedOptCounters.set(level, count + 1);
+        courseCodes.push(`OPT ${level + count}`);
+      } else if (idx < indices.courses.length) {
+        const code = indices.courses[idx];
+        if (catalogue.courses.some((c) => c.code === code)) courseCodes.push(code);
       }
-      constrainedSelections.push({ reqIndex, courseCodes });
     }
+    constrainedSelections.push({ reqIndex, courseCodes });
   }
+
+  const { value: wizByte, next: nWiz } = readU8(view, off);
+  off = nWiz;
+  const wizardMode = wizByte === 1 ? "basic" : wizByte === 2 ? "advanced" : null;
+
+  const basicPinnedCourses: string[] = [];
+  const { value: bpcLen, next: nBpcL } = readU16(view, off);
+  off = nBpcL;
+  for (let i = 0; i < bpcLen; i++) {
+    const { value: idx, next: nBpc } = readU16(view, off);
+    off = nBpc;
+    if (idx < indices.courses.length) basicPinnedCourses.push(indices.courses[idx]);
+  }
+
+  const { value: basicElectivesCount, next: nBec } = readU8(view, off);
+  off = nBec;
+
+  const basicExcludedCategories: string[] = [];
+  const { value: excLen, next: nExcL } = readU16(view, off);
+  off = nExcL;
+  for (let i = 0; i < excLen; i++) {
+    const { value: cat, next: nExc } = readString(view, off, 255);
+    off = nExc;
+    basicExcludedCategories.push(cat);
+  }
+
+  const touchedReqIndices: number[] = [];
+  const { value: tLen, next: nTLen } = readU16(view, off);
+  off = nTLen;
+  for (let i = 0; i < tLen; i++) {
+    const { value: idx, next: nIdx } = readU16(view, off);
+    off = nIdx;
+    touchedReqIndices.push(idx);
+  }
+
+  const { value: generationMinStartMinutes, next: nGMs } = readU16(view, off);
+  off = nGMs;
+
+  const { value: generationMaxEndMinutes, next: nGMe } = readU16(view, off);
+  off = nGMe;
+
+  const { value: daysBitmask, next: nDays } = readU8(view, off);
+  off = nDays;
+  const generationAllowedDays = bitToDays(daysBitmask);
+
+  const { value: ratingU8, next: nRat } = readU8(view, off);
+  off = nRat;
+  const generationMinProfessorRating = ratingU8 === 255 ? null : ratingU8 / 10;
+
+  const { value: genLimitFc, next: nGfc } = readU8(view, off);
+  off = nGfc;
+  const generationLimitFirstYearCredits = genLimitFc !== 0;
+
+  const { value: genComp, next: nGcm } = readU8(view, off);
+  off = nGcm;
+  const generationCompressedSchedule = genComp !== 0;
 
   return {
+    wizardMode,
+    basicPinnedCourses,
+    basicElectivesCount,
+    basicExcludedCategories,
     selectedTermId,
     firstYear,
     program,
@@ -596,6 +648,13 @@ export function decodeState(
     includeClosedComponents,
     virtualSectionsOnly,
     studentPrograms,
+    touchedReqIndices,
+    generationMinStartMinutes,
+    generationMaxEndMinutes,
+    generationAllowedDays,
+    generationMinProfessorRating,
+    generationLimitFirstYearCredits,
+    generationCompressedSchedule,
   };
 }
 

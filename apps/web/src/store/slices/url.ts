@@ -98,7 +98,10 @@ export const createUrlSlice: StateCreator<
     }
 
     const requirementSlotsUserTouched: Record<string, true> = Object.fromEntries(
-      Object.keys(selectedPerRequirement).map((k) => [k, true as const]),
+      decoded.touchedReqIndices
+        .map((idx) => reqIndexToId.get(idx))
+        .filter((id): id is string => id != null)
+        .map((id) => [id, true as const]),
     );
 
     const full = recomputeStateForProgram(
@@ -129,6 +132,16 @@ export const createUrlSlice: StateCreator<
       generationSeed: decoded.generationSeed >>> 0,
       includeClosedComponents: decoded.includeClosedComponents ?? false,
       virtualSectionsOnly: decoded.virtualSectionsOnly ?? false,
+      wizardMode: decoded.wizardMode,
+      basicPinnedCourses: decoded.basicPinnedCourses,
+      basicElectivesCount: decoded.basicElectivesCount,
+      basicExcludedCategories: decoded.basicExcludedCategories,
+      generationMinStartMinutes: decoded.generationMinStartMinutes,
+      generationMaxEndMinutes: decoded.generationMaxEndMinutes,
+      generationAllowedDays: decoded.generationAllowedDays,
+      generationMinProfessorRating: decoded.generationMinProfessorRating,
+      generationLimitFirstYearCredits: decoded.generationLimitFirstYearCredits,
+      generationCompressedSchedule: decoded.generationCompressedSchedule,
       generatedSchedules: [],
       generationError: null,
       constrainedPerRequirement,
@@ -162,6 +175,17 @@ export const createUrlSlice: StateCreator<
       includeClosedComponents: s.includeClosedComponents,
       virtualSectionsOnly: s.virtualSectionsOnly,
       studentPrograms: s.studentPrograms,
+      wizardMode: s.wizardMode,
+      basicPinnedCourses: s.basicPinnedCourses,
+      basicElectivesCount: s.basicElectivesCount,
+      basicExcludedCategories: s.basicExcludedCategories,
+      requirementSlotsUserTouched: s.requirementSlotsUserTouched,
+      generationMinStartMinutes: s.generationMinStartMinutes,
+      generationMaxEndMinutes: s.generationMaxEndMinutes,
+      generationAllowedDays: s.generationAllowedDays,
+      generationMinProfessorRating: s.generationMinProfessorRating,
+      generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
+      generationCompressedSchedule: s.generationCompressedSchedule,
     };
     return encodeStateToBase64(
       input,
@@ -193,6 +217,17 @@ export const createUrlSlice: StateCreator<
       includeClosedComponents: s.includeClosedComponents,
       virtualSectionsOnly: s.virtualSectionsOnly,
       studentPrograms: s.studentPrograms,
+      wizardMode: s.wizardMode,
+      basicPinnedCourses: s.basicPinnedCourses,
+      basicElectivesCount: s.basicElectivesCount,
+      basicExcludedCategories: s.basicExcludedCategories,
+      requirementSlotsUserTouched: s.requirementSlotsUserTouched,
+      generationMinStartMinutes: s.generationMinStartMinutes,
+      generationMaxEndMinutes: s.generationMaxEndMinutes,
+      generationAllowedDays: s.generationAllowedDays,
+      generationMinProfessorRating: s.generationMinProfessorRating,
+      generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
+      generationCompressedSchedule: s.generationCompressedSchedule,
     };
     const bytes = encodeState(
       input,

@@ -48,6 +48,10 @@ const indices: Indices = {
 
 function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
   return {
+    wizardMode: null,
+    basicPinnedCourses: [],
+    basicElectivesCount: 0,
+    basicExcludedCategories: [],
     selectedTermId: '202509',
     firstYear: null,
     program: programA,
@@ -61,11 +65,19 @@ function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
     generationSeed: 0xdeadbeef,
     selectedPerRequirement: {},
     selectedOptionsPerRequirement: {},
+    constrainedPerRequirement: {},
     requirementTreeWithStatus: [],
     remainingRequirements: [],
     includeClosedComponents: false,
     virtualSectionsOnly: false,
     studentPrograms: ['CSI', 'MAT'],
+    requirementSlotsUserTouched: {},
+    generationMinStartMinutes: 480,
+    generationMaxEndMinutes: 1320,
+    generationAllowedDays: ['Mo', 'Tu', 'We', 'Th', 'Fr'],
+    generationMinProfessorRating: null,
+    generationLimitFirstYearCredits: false,
+    generationCompressedSchedule: false,
     ...overrides,
   };
 }
