@@ -270,8 +270,11 @@ msgstr "Failed to parse transcript PDF"
 msgid "programStep.transcript.parsing"
 msgstr "Parsing..."
 
-msgid "programStep.transcript.programSet"
-msgstr "Program set to: {program}."
+msgid "programStep.transcript.programDetected"
+msgstr "Detected your program as"
+
+msgid "programStep.transcript.withMinor"
+msgstr "with a minor in"
 
 msgid "programStep.transcript.request"
 msgstr "Request transcript on uoZone"
