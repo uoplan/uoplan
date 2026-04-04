@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from 'react';
-import { Select, MultiSelect, Stack, Text, Button, Alert, Loader } from '@mantine/core';
+import { Select, MultiSelect, Stack, Text, Button, Alert, Loader, Badge } from '@mantine/core';
 import { tr } from "../../i18n";
 import type { Program } from 'schemas';
 import { useAppStore } from '../../store/appStore';
@@ -306,18 +306,23 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
               },
             )}
             {transcriptFeedback.programMatched && (
-              <>
-                {" "}
-                {tr("programStep.transcript.programSet", {
-                  program: transcriptFeedback.programMatched.title,
-                })}
-              </>
-            )}
-            {transcriptFeedback.minorMatched && (
-              <>
-                {" "}
-                (with minor: {transcriptFeedback.minorMatched.title})
-              </>
+              <div style={{ marginTop: '8px' }}>
+                <Text size="sm">
+                  {tr("programStep.transcript.programDetected")}{" "}
+                  <Badge color="green" variant="light" style={{ textTransform: 'none' }}>
+                    {transcriptFeedback.programMatched.title}
+                  </Badge>
+                  {transcriptFeedback.minorMatched && (
+                    <>
+                      {" "}
+                      {tr("programStep.transcript.withMinor")}{" "}
+                      <Badge color="green" variant="light" style={{ textTransform: 'none' }}>
+                        {transcriptFeedback.minorMatched.title}
+                      </Badge>
+                    </>
+                  )}
+                </Text>
+              </div>
             )}
           </Alert>
           {transcriptFeedback.skippedCodes.length > 0 && (

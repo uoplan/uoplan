@@ -270,8 +270,11 @@ msgstr "Impossible d'analyser le relevé PDF"
 msgid "programStep.transcript.parsing"
 msgstr "Analyse..."
 
-msgid "programStep.transcript.programSet"
-msgstr "Programme défini à : {program}."
+msgid "programStep.transcript.programDetected"
+msgstr "Programme détecté :"
+
+msgid "programStep.transcript.withMinor"
+msgstr "avec une mineure en"
 
 msgid "programStep.transcript.request"
 msgstr "Demander un relevé sur uoZone"
