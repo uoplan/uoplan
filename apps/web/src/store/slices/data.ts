@@ -316,7 +316,11 @@ export const createDataSlice: StateCreator<
               parsedCatalogue,
               indices,
             );
-            if (!("error" in decoded)) get().loadEncodedState(decoded);
+            if (!("error" in decoded)) {
+              get().loadEncodedState(decoded);
+            } else {
+              get().resetToDefault();
+            }
           }
         }
       }
