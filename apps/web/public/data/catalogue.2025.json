@@ -4315,6 +4315,13 @@
       "component": "Cours magistral / Lecture"
     },
     {
+      "code": "ADM 8888",
+      "title": "This course is for a test purpose",
+      "credits": 3,
+      "description": "This is for a test purpose",
+      "component": "Cours magistral"
+    },
+    {
       "code": "AFR 1100",
       "title": "Introduction to African Studies",
       "credits": 3,
@@ -9616,6 +9623,13 @@
       "title": "Cours recherche terrain / Field Research Course",
       "credits": 3,
       "description": "Cours intensif et comprimé qui comporte la participation à des activités de recherche terrain pendant une période de 3 ou 4 semaines. Les étudiants doivent participer pleinement à toutes les activités liées au cours, y compris les réunions préparatoires avant le départ et la période de recherche sur le terrain dans le pays sous la supervision du professeur. / Intensive and compressed course that has fieldwork activities for a period of 3 or 4 weeks. Students are expected to fully participate in all course-related activities, including pre-departure meetings and in-country field research under the supervision of the professor.",
+      "component": "Recherche / Research"
+    },
+    {
+      "code": "ANT 7990",
+      "title": "Projet de thèse / Thesis Proposal",
+      "credits": 0,
+      "description": "Rédaction d'un projet de thèse. Soumission du projet au comité de thèse. Noté S (satisfaisant) ou NS (non satisfaisant). / Drafting of a thesis proposal. Submission of proposal to the thesis committee. Graded S (Satisfactory) / NS (Not satisfactory).",
       "component": "Recherche / Research"
     },
     {
@@ -17243,7 +17257,7 @@
       "title": "Introduction to Biochemistry",
       "credits": 3,
       "description": "The chemistry and biological properties of amino acids, proteins, nucleic acids, lipids, carbohydrates, and vitamins. The course includes laboratory and tutorial sessions. Priority given to students for whom this course is mandatory. Previously BCH 2140 and BCH 2336.",
-      "component": "Laboratory, Lecture, Discussion GroupPrerequisites: CHM 2120",
+      "component": "Discussion Group, Laboratory, LecturePrerequisites: CHM 2120",
       "aliases": [
         "BCH 2140",
         "BCH 2336"
@@ -17338,7 +17352,7 @@
       "title": "Molecular Biology Laboratory",
       "credits": 3,
       "description": "Basic techniques in molecular biology (recombinant DNA, vectors, plasmids, gene screening, protein analysis) and their use in genetic engineering and cloning research. This course cannot be combined for units with BIO 3151. Priority given to students for whom this course is compulsory.",
-      "component": "Laboratory, Discussion GroupPrerequisite: BCH 2333. BCH 3170 or BIO 3170 is corequisite to BCH 3356. The courses BCH 3356, BIO 3151 cannot be combined for units.",
+      "component": "Discussion Group, LaboratoryPrerequisite: BCH 2333. BCH 3170 or BIO 3170 is corequisite to BCH 3356. The courses BCH 3356, BIO 3151 cannot be combined for units.",
       "prereqText": "BCH 2333",
       "prerequisites": {
         "type": "course",
@@ -22313,7 +22327,7 @@
       "title": "Architecture d'ordinateurs II",
       "credits": 3,
       "description": "Microprocesseurs et leur architecture générale. Architectures CISC et RISC. Micro-contrôleurs. Systèmes inclus. Conception des ordinateurs à base de microprocesseurs. Introduction à la co-conception logiciel- matériel.",
-      "component": "Tutoriel, Laboratoire, Cours magistralPréalable : CEG 2536.",
+      "component": "Laboratoire, Cours magistral, TutorielPréalable : CEG 2536.",
       "prereqText": "CEG 2536",
       "prerequisites": {
         "type": "course",
@@ -22788,7 +22802,7 @@
       "title": "Réseaux optiques",
       "credits": 3,
       "description": "Introduction aux réseaux optiques. Composants et systèmes pour commutation optique. Multiplexage en longueur d'onde. Réseaux WDM. Réseaux optiques en anneaux vs réseaux maillés optiques. Architecture de contrôle pour réseaux optiques. Algorithmes de routage et d'allocation de longueur d'onde. Mécanismes de protection et de restauration pour réseaux optiques. Études de cas en réseaux optiques.",
-      "component": "Cours magistral, Groupe de discussion, LaboratoirePréalable : CEG 3585.",
+      "component": "Groupe de discussion, Laboratoire, Cours magistralPréalable : CEG 3585.",
       "prereqText": "CEG 3585",
       "prerequisites": {
         "type": "course",
@@ -25502,7 +25516,7 @@
       "title": "Applications of Spectroscopy in Chemistry",
       "credits": 3,
       "description": "Introduction to infrared, visible and ultraviolet spectroscopy, multinuclear magnetic resonance (with emphasis on 1H and 13C), Fourier-transform. NMR, mass spectrometry.",
-      "component": "Lecture, Discussion GroupPrerequisite: CHM 2120.",
+      "component": "Discussion Group, LecturePrerequisite: CHM 2120.",
       "prereqText": "CHM 2120",
       "prerequisites": {
         "type": "course",
@@ -40973,7 +40987,7 @@
       "title": "Measurements I",
       "credits": 4,
       "description": "Principles and analysis of civil engineering measurements. Probability and normal distribution; systematic and random errors; probabilistic principles of errors; statistical treatment of experimental data. Basic theory of mechanical and electrical strain measurement systems. Measurements in water resources and geotechnical engineering.",
-      "component": "Research, Discussion Group, Laboratory, Lecture, Seminar, Work Term, Theory and Laboratory, TutorialPrerequisites: MAT 1320, MAT 1322, MAT 1341.",
+      "component": "Discussion Group, Laboratory, Lecture, Research, Seminar, Work Term, Theory and Laboratory, TutorialPrerequisites: MAT 1320, MAT 1322, MAT 1341.",
       "prereqText": "MAT 1320, MAT 1322, MAT 1341",
       "prerequisites": {
         "type": "and_group",
@@ -60414,7 +60428,7 @@
       "title": "Systèmes d'énergie électrique renouvelable",
       "credits": 3,
       "description": "Introduction à la production et au conditionnement de l énergie électrique. Nouvelles exigences. Technologies émergentes en énergie renouvelable. Fondements des systèmes électriques de puissance. Systèmes d énergie électrique renouvelable (énergie éolienne, énergie solaire). Intégration des réseaux. Impact de la distribution des points de production sur l opération d un réseau. Implantation et contrôle d un réseau intelligent.",
-      "component": "Tutoriel, Laboratoire, Cours magistralPréalables : ELG 2537, ELG 3716, ELG 3536, ELG 3555.",
+      "component": "Laboratoire, Cours magistral, TutorielPréalables : ELG 2537, ELG 3716, ELG 3536, ELG 3555.",
       "prereqText": "ELG 2537, ELG 3716, ELG 3536, ELG 3555",
       "prerequisites": {
         "type": "and_group",
@@ -81069,6 +81083,44 @@
       }
     },
     {
+      "code": "HIS 3791",
+      "title": "Études en histoire publique",
+      "credits": 3,
+      "description": "Exploration de la production de connaissances et récits historiques destinés à un large public par le biais de divers institutions, publications et modes de communication, avec un accent particulier sur l’impact de l’ère numérique sur les pratiques de l’histoire publique.",
+      "component": "Cours magistralPréalable : 6 crédits de cours en histoire (HIS) de niveau 2000, 6 crédits de cours en histoire (HIS).",
+      "prereqText": "6 crédits de cours en histoire (HIS) de niveau 2000, 6 crédits de cours en histoire (HIS)",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "6 crédits de cours en histoire (HIS) de niveau 2000, 6 crédits de cours en histoire (HIS)",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "6 crédits de cours en histoire (HIS) de niveau 2000",
+            "credits": 6,
+            "disciplines": [
+              "HIS"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "HIS",
+                "levels": [
+                  2000
+                ]
+              }
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "6 crédits de cours en histoire (HIS)",
+            "credits": 6,
+            "disciplines": [
+              "HIS"
+            ]
+          }
+        ]
+      }
+    },
+    {
       "code": "HIS 3797",
       "title": "Thèmes choisis en histoire",
       "credits": 3,
@@ -98396,7 +98448,7 @@
       "title": "Biofluid Mechanics I",
       "credits": 3,
       "description": "Fundamental concepts of fluid mechanics as applied to biomedical engineering. Fundamentals of the human cardiovascular and respiratory systems. Fluid statics. Fundamental laws of fluid motion. Dimensional analysis and similitude. Internal flows. Laboratory experiments.",
-      "component": "Tutorial, Laboratory, LecturePrerequisites: MAT 2322, MAT 2384, MCG 2108, MCG 2130.",
+      "component": "Laboratory, Lecture, TutorialPrerequisites: MAT 2322, MAT 2384, MCG 2108, MCG 2130.",
       "prereqText": "MAT 2322, MAT 2384, MCG 2108, MCG 2130",
       "prerequisites": {
         "type": "and_group",
@@ -101632,7 +101684,7 @@
       "title": "Mechatronics",
       "credits": 3,
       "description": "Models for passive and active components for electro-mechanical systems. Network representation of signals and energy transmission and conversion. Selection of sensors and actuators for the control of mechanical systems. Modelling and simulation for the design of mixed dynamic systems. Courses MCG 5184, MCG 4136 cannot be combined for units. This course is equivalent to MAAJ 5804 at Carleton University.",
-      "component": "Tutorial, Lecture"
+      "component": "Lecture, Tutorial"
     },
     {
       "code": "MCG 5185",
@@ -105530,7 +105582,7 @@
       "title": "Solfège et dictée musicale II : Général (Partie 2 de 2)",
       "credits": 3,
       "description": "Exercices dynamiques destinés à améliorer la lecture, l'audition et la mémoire musicale. (Partie 2 de 2)",
-      "component": "Laboratoire, TutorielPréalable : MUS 25911",
+      "component": "Laboratoire, TutorielPréalable : MUS 25911.",
       "prereqText": "MUS 25911",
       "prerequisites": {
         "type": "course",
@@ -105812,12 +105864,12 @@
       "title": "Cours d'instrument III / Applied Music III",
       "credits": 6,
       "description": "Leçons hebdomadaires à l'instrument principal. Comprend un demi-récital. / Weekly instruction on the student's principal instrument. Individual and studio-class instruction according to instrument.",
-      "component": "Tutoriel / TutorialPréalable: MUS 2030. Réservé aux étudiants et étudiantes inscrits au Baccalauréat en musique (B.Mus.). / Prerequisite: MUS 2032. Reserved for students registered in the Bachelor of Music (BMus).",
-      "prereqText": "MUS 2030",
+      "component": "Tutoriel / TutorialPréalable: MUS 2032. Réservé aux étudiants et étudiantes inscrits au Baccalauréat en musique (B.Mus.). / Prerequisite: MUS 2032. Reserved for students registered in the Bachelor of Music (BMus).",
+      "prereqText": "MUS 2032",
       "prerequisites": {
         "type": "course",
-        "code": "MUS 2030",
-        "text": "MUS 2030"
+        "code": "MUS 2032",
+        "text": "MUS 2032"
       }
     },
     {
@@ -105825,12 +105877,12 @@
       "title": "Cours d'instrument III (Partie 1 de 2) / Applied Music III (Part 1 of 2)",
       "credits": 0,
       "description": "Leçons hebdomadaires à l'instrument principal. Leçons individuelles et en groupe selon l'instrument enseigné. (Partie 1 de 2) / Weekly instruction on the student's principal instrument. Individual and studio-class instruction according to instrument. (Part 1 of 2)",
-      "component": "Tutoriel / TutorialPréalable: MUS 2030. Réservé aux étudiants et étudiantes inscrits au Baccalauréat en musique (B.Mus.). / Prerequisite: MUS 2032. Reserved for students registered in the Bachelor of Music (BMus).",
-      "prereqText": "MUS 2030",
+      "component": "Tutoriel / TutorialPréalable: MUS 2032. Réservé aux étudiants et étudiantes inscrits au Baccalauréat en musique (B.Mus.). / Prerequisite: MUS 2032. Reserved for students registered in the Bachelor of Music (BMus).",
+      "prereqText": "MUS 2032",
       "prerequisites": {
         "type": "course",
-        "code": "MUS 2030",
-        "text": "MUS 2030"
+        "code": "MUS 2032",
+        "text": "MUS 2032"
       }
     },
     {
@@ -146251,6 +146303,13 @@
       "component": "Seminar"
     },
     {
+      "code": "SOC 7140",
+      "title": "Advanced Quantitative Methodology",
+      "credits": 3,
+      "description": "Overview of advanced methods of quantitative analysis of data, including multivariate analysis. Examination of use of these methods in the sociological literature. Application of these methods in a research project; definition of a research question and determination of a theoretical framework, selection of a quantitative approach, research ethics, development of data collection tools, collection of data.",
+      "component": "Seminar"
+    },
+    {
       "code": "SOC 7141",
       "title": "Advanced Qualitative Methodology",
       "credits": 3,
@@ -149447,7 +149506,7 @@
       "title": "Introduction à la pratique théâtrale : Les métiers des coulisses",
       "credits": 3,
       "description": "Introduction à la théorie, à la terminologie et à la pratique théâtrale avec un accent particulier sur la technique et la production de l'événement théâtral.",
-      "component": "Cours magistral, Laboratoire"
+      "component": "Laboratoire, Cours magistral"
     },
     {
       "code": "THE 1502",
@@ -149981,21 +150040,12 @@
       "title": "Principes fondamentaux II / Fundamentals II",
       "credits": 3,
       "description": "Développement d'une séquence préparatoire physique et vocale. / Development of the preparatory physical and vocal sequence.",
-      "component": "Laboratoire / LaboratoryPréalable: THE 1540 / Prerequisite: THE 1940.",
-      "prereqText": "THE 1540 / Prerequisite: THE 1940",
+      "component": "Laboratoire / LaboratoryPréalable: THE 1940. / Prerequisite: THE 1940.",
+      "prereqText": "THE 1940",
       "prerequisites": {
-        "type": "and_group",
-        "text": "THE 1540 / Prerequisite: THE 1940",
-        "children": [
-          {
-            "type": "course",
-            "code": "THE 1540"
-          },
-          {
-            "type": "course",
-            "code": "THE 1940"
-          }
-        ]
+        "type": "course",
+        "code": "THE 1940",
+        "text": "THE 1940"
       }
     },
     {
@@ -151125,13 +151175,6 @@
       "title": "Proposition de thèse / Thesis Proposal",
       "credits": 0,
       "description": "Les étudiants doivent s'inscrire à THE 6990 au plus tard au cours de la deuxième session d'inscription au programme et avoir terminé le cours à la fin de la troisième session. Dans le cadre de ce cours, les étudiants effectuent des lectures intensives d'ouvrages dramaturgiques et théoriques directement reliés à leur domaine de recherche et rédigent leur projet de thèse sous la direction de leur directeur de thèse. Le projet de thèse doit être défendu devant le Comité des études supérieures et le directeur de thèse. L'étudiant dont le projet n'est pas accepté lors d'une première défense peut à nouveau présenter un projet à la session suivante. Si le projet n'est pas approuvé lors de la deuxième soumission, la note NS (non satisfaisant) sera attribuée pour le projet et l'étudiant sera retiré du programme. Le cours est noté S (satisfaisant) ou NS (non satisfaisant). / Students must enroll in THE 6990 no later than the 2nd session of registration in the program and complete it by the end of the third session. They read works, both dramaturgical and theoretical, directly related to their thesis topic, and prepare their thesis proposal under the guidance of their thesis adviser. The proposal must be defended before the Graduate Studies Committee and the student's supervisor. A student whose proposal is not accepted may submit and present a second proposal in the following session. Failure to obtain approval on the second attempt leads to a grade of NS (Not satisfactory) for the proposal and results in compulsory withdrawal from the program. The course is evaluated on an S (Satisfactory) / NS (Not satisfactory) basis.",
-      "component": "Recherche / Research"
-    },
-    {
-      "code": "THE 6999",
-      "title": "Mémoire / Major Research Paper",
-      "credits": 0,
-      "description": "Le mémoire est préparé sous la direction du superviseur et est approuvé par le comité des études supérieures. Le mémoire doit être achevé et reçu avec succès avant la fin du troisième semestre d'inscription à temps plein dans le programme de maîtrise. En cas d'échec, l'étudiant doit s'inscrire à une session supplémentaire. Un deuxième échec conduit à une note NS (non satisfaisante) sur le relevé de notes et à l'abandon du programme. Noté S (satisfaisant) ou NS (non satisfaisant). / The research paper is prepared under the direction of the research paper supervisor and is approved by the graduate committee. The research paper must be successfully completed by the end of the third session of full-time registration in the master's program. In the event of failure, the student must register for an additional session. A second failure leads to a grade of NS (Not satisfactory) on the transcript and to withdrawal from the program. Graded S (Satisfactory) / NS (Not satisfactory).",
       "component": "Recherche / Research"
     },
     {
@@ -219979,7 +220022,7 @@
       ]
     },
     {
-      "title": "Honours Bachelor of Science Nursing (Coming Soon)",
+      "title": "Honours Bachelor of Science Nursing (Coming in 2026)",
       "url": "https://catalogue.uottawa.ca/en/undergrad/honours-bsc-nursing/",
       "slug": "undergrad/honours-bsc-nursing",
       "requirements": [

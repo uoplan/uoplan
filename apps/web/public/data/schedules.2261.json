@@ -1,7 +1,7 @@
 {
   "termId": "2261",
-  "totalCourses": 11081,
-  "totalWithSchedules": 3087,
+  "totalCourses": 11084,
+  "totalWithSchedules": 3091,
   "schedules": [
     {
       "subject": "ADM",
@@ -9681,6 +9681,39 @@
       }
     },
     {
+      "subject": "ADM",
+      "catalogNumber": "8888",
+      "courseCode": "ADM 8888",
+      "title": "This course is for a test purpose Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Th 22:00 - 22:40 Staff 2026-04-09 - 2026-04-15",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 1320,
+                "endMinutes": 1360,
+                "virtual": false
+              }
+            ],
+            "instructors": [
+              "Staff"
+            ],
+            "meetingDates": [
+              "2026-04-09",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
       "subject": "AHL",
       "catalogNumber": "1100",
       "courseCode": "AHL 1100",
@@ -12520,6 +12553,32 @@
               "2026-04-04"
             ],
             "status": "Closed"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ANT",
+      "catalogNumber": "7990",
+      "courseCode": "ANT 7990",
+      "title": "Thesis Proposal Section Days & Times Instructor Meeting Dates Status Details S00-RECFullSess. N/A 00:00 - 00:00 Staff 2026-01-12 - 2026-04-15",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "S00-REC FullSess.",
+            "sectionCode": "S00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "instructors": [
+              "Staff"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
           }
         ]
       }
@@ -25504,37 +25563,6 @@
             ],
             "status": "Open"
           }
-        ],
-        "LEC": [
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 590,
-                "virtual": true
-              },
-              {
-                "day": "Th",
-                "startMinutes": 600,
-                "endMinutes": 680,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Odette Laneuville",
-              "Staff"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          }
         ]
       }
     },
@@ -26423,12 +26451,6 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": true
               }
             ],
             "instructors": [
@@ -26896,32 +26918,6 @@
             ],
             "instructors": [
               "Isabelle Catelas"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "BMG",
-      "catalogNumber": "5130",
-      "courseCode": "BMG 5130",
-      "title": "PhD Comprehensive Exam Section Days & Times Instructor Meeting Dates Status Details W00-RECFullSess. N/A 00:00 - 00:00 Staff 2026-01-12 - 2026-04-15",
-      "timeZone": "America/Toronto",
-      "components": {
-        "REC": [
-          {
-            "section": "W00-REC FullSess.",
-            "sectionCode": "W00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "instructors": [
-              "Staff"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -34652,6 +34648,39 @@
     },
     {
       "subject": "CLA",
+      "catalogNumber": "2783",
+      "courseCode": "CLA 2783",
+      "title": "Seminar in Museum Studies Section Days & Times Instructor Meeting Dates Status Details A00-SEMFullSess. Th 08:30 - 11:20 John Serrati 2026-01-12 - 2026-04-15",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "A00-SEM FullSess.",
+            "sectionCode": "A00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "John Serrati"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CLA",
       "catalogNumber": "3110",
       "courseCode": "CLA 3110",
       "title": "Topics in Ancient History I (+1 combined) Section Days & Times Instructor Meeting Dates Status Details C00-LECFullSess. Fr 11:30 - 12:50We 13:00 - 14:20 John SerratiJohn Serrati 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Topic: The Punic Wars",
@@ -39013,59 +39042,24 @@
       "subject": "CML",
       "catalogNumber": "3139",
       "courseCode": "CML 3139",
-      "title": "Selected Topics in Family Law Section Days & Times Instructor Meeting Dates Status Details J00-SEMSession F Mo 09:00 - 11:50Tu 09:00 - 11:50We 09:00 - 11:50Th 09:00 - 11:50Fr 09:00 - 11:50 Leighann BurnsLeighann BurnsLeighann BurnsLeighann BurnsLeighann Burns 2026-01-06 - 2026-01-232026-01-06 - 2026-01-232026-01-06 - 2026-01-232026-01-06 - 2026-01-232026-01-06 - 2026-01-23 Topic: Chasing Justice",
+      "title": "WTO/ELSA WTO Law Moot Section Days & Times Instructor Meeting Dates Status Details J00-TUTFullSess. N/A 00:00 - 00:00 Staff 2026-01-12 - 2026-04-15",
       "timeZone": "America/Toronto",
       "components": {
-        "SEM": [
+        "TUT": [
           {
-            "section": "J00-SEM Session F",
+            "section": "J00-TUT FullSess.",
             "sectionCode": "J00",
-            "component": "SEM",
+            "component": "TUT",
             "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false
-              },
-              {
-                "day": "We",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false
-              },
-              {
-                "day": "Th",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false
-              }
-            ],
+            "times": [],
             "instructors": [
-              "Leighann Burns",
-              "Leighann Burns",
-              "Leighann Burns",
-              "Leighann Burns",
-              "Leighann Burns"
+              "Staff"
             ],
             "meetingDates": [
-              "2026-01-06",
-              "2026-01-23"
+              "2026-01-12",
+              "2026-04-15"
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }
@@ -41115,85 +41109,6 @@
               "2026-04-15"
             ],
             "status": "Open"
-          },
-          {
-            "section": "J00-LEC Session F",
-            "sectionCode": "J00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 1020,
-                "endMinutes": 1190,
-                "virtual": true
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 1020,
-                "endMinutes": 1190,
-                "virtual": true
-              },
-              {
-                "day": "We",
-                "startMinutes": 1020,
-                "endMinutes": 1190,
-                "virtual": true
-              },
-              {
-                "day": "Th",
-                "startMinutes": 1020,
-                "endMinutes": 1190,
-                "virtual": true
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 1020,
-                "endMinutes": 1190,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Leslie Albert Walden",
-              "Leslie Albert Walden",
-              "Leslie Albert Walden",
-              "Leslie Albert Walden",
-              "Leslie Albert Walden"
-            ],
-            "meetingDates": [
-              "2026-01-06",
-              "2026-01-23"
-            ],
-            "status": "Open"
-          },
-          {
-            "section": "C00-LEC Session H",
-            "sectionCode": "C00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1020,
-                "endMinutes": 1130,
-                "virtual": true
-              },
-              {
-                "day": "Th",
-                "startMinutes": 1020,
-                "endMinutes": 1130,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Amy Salyzyn",
-              "Amy Salyzyn"
-            ],
-            "meetingDates": [
-              "2026-02-02",
-              "2026-04-15"
-            ],
-            "status": "Closed"
           }
         ]
       }
@@ -41916,65 +41831,6 @@
               "2026-04-15"
             ],
             "status": "Open"
-          }
-        ],
-        "TUT": [
-          {
-            "section": "HB00-TUT FullSess.",
-            "sectionCode": "HB00",
-            "component": "TUT",
-            "session": null,
-            "times": [],
-            "instructors": [
-              "Staff"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          },
-          {
-            "section": "J00-TUT FullSess.",
-            "sectionCode": "J00",
-            "component": "TUT",
-            "session": null,
-            "times": [],
-            "instructors": [
-              "Staff"
-            ],
-            "meetingDates": null,
-            "status": "Open"
-          },
-          {
-            "section": "JB00-TUT FullSess.",
-            "sectionCode": "JB00",
-            "component": "TUT",
-            "session": null,
-            "times": [],
-            "instructors": [
-              "Staff"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Closed"
-          },
-          {
-            "section": "JI00-TUT FullSess.",
-            "sectionCode": "JI00",
-            "component": "TUT",
-            "session": null,
-            "times": [],
-            "instructors": [
-              "Staff"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Closed"
           }
         ]
       }
@@ -45635,35 +45491,6 @@
               "2026-04-15"
             ],
             "status": "Closed"
-          },
-          {
-            "section": "B00-LEC FullSess.",
-            "sectionCode": "B00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 870,
-                "endMinutes": 950,
-                "virtual": true
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 960,
-                "endMinutes": 1040,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Luc Dupont",
-              "Luc Dupont"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
           }
         ]
       }
@@ -46198,7 +46025,7 @@
       "subject": "CMN",
       "catalogNumber": "2167",
       "courseCode": "CMN 2167",
-      "title": "Video I Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Th 08:30 - 11:20Th 08:30 - 11:20 Christopher JohnstoneChristopher Johnstone 2026-01-12 - 2026-01-222026-01-29 - 2026-04-15",
+      "title": "Video I Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Th 08:30 - 11:20Th 08:30 - 11:20 christopher johnstonechristopher johnstone 2026-01-12 - 2026-01-222026-01-29 - 2026-04-15",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -46222,8 +46049,8 @@
               }
             ],
             "instructors": [
-              "Christopher Johnstone",
-              "Christopher Johnstone"
+              "christopher johnstone",
+              "christopher johnstone"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -46333,10 +46160,60 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false
+              },
+              {
+                "day": "We",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": true
               }
             ],
             "instructors": [
               "Rumaisa Shaukat"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "C00-LEC FullSess.",
+            "sectionCode": "C00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Kyle Conway"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "D00-LEC FullSess.",
+            "sectionCode": "D00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Dina Salha"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -49277,39 +49154,6 @@
             ],
             "instructors": [
               "Luc Bonneville"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "CMN",
-      "catalogNumber": "8512",
-      "courseCode": "CMN 8512",
-      "title": "Financial Analysis and Decision Making Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Fr 00:00 - 00:00 Staff 2026-01-12 - 2026-04-15",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 0,
-                "endMinutes": 0,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Staff"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -53200,35 +53044,6 @@
               "2026-04-15"
             ],
             "status": "Open"
-          },
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 780,
-                "endMinutes": 860,
-                "virtual": true
-              },
-              {
-                "day": "Th",
-                "startMinutes": 780,
-                "endMinutes": 860,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Fadi Malek",
-              "Fadi Malek"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
           }
         ],
         "LAB": [
@@ -53253,50 +53068,6 @@
               "2026-04-15"
             ],
             "status": "Open"
-          },
-          {
-            "section": "A01-LAB FullSess.",
-            "sectionCode": "A01",
-            "component": "LAB",
-            "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 960,
-                "endMinutes": 1040,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Fadi Malek"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          },
-          {
-            "section": "A02-LAB FullSess.",
-            "sectionCode": "A02",
-            "component": "LAB",
-            "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 960,
-                "endMinutes": 1040,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Fadi Malek"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
           }
         ],
         "TUT": [
@@ -53315,28 +53086,6 @@
             ],
             "instructors": [
               "Bo Sun"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          },
-          {
-            "section": "A03-TUT FullSess.",
-            "sectionCode": "A03",
-            "component": "TUT",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 870,
-                "endMinutes": 950,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Fadi Malek"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -57781,6 +57530,39 @@
     },
     {
       "subject": "CVG",
+      "catalogNumber": "3141",
+      "courseCode": "CVG 3141",
+      "title": "Structural Dynamics Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Fr 08:30 - 11:20 Zhe Xiao 2026-01-12 - 2026-04-15",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Zhe Xiao"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CVG",
       "catalogNumber": "3147",
       "courseCode": "CVG 3147",
       "title": "Structural Steel Design I Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Tu 11:30 - 12:50Fr 13:00 - 14:20 Magdi MoharebStaff 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details A01-TUTFullSess. Th 13:00 - 14:20 Magdi Mohareb 2026-01-12 - 2026-04-15",
@@ -61050,6 +60832,40 @@
     },
     {
       "subject": "DCL",
+      "catalogNumber": "5730",
+      "courseCode": "DCL 5730",
+      "title": "Engagements financiers (+1 combined) Section Days & Times Instructor Meeting Dates Status Details AV00-SEMFullSess. We 09:00 - 11:50 Natacha BouffardVanessa Paquet-Duguay 2026-01-12 - 2026-04-15",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "AV00-SEM FullSess.",
+            "sectionCode": "AV00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false
+              }
+            ],
+            "instructors": [
+              "Natacha Bouffard",
+              "Vanessa Paquet-Duguay"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DCL",
       "catalogNumber": "5731",
       "courseCode": "DCL 5731",
       "title": "Problèmes choisis de droit de la personne I (+1 combined) Section Days & Times Instructor Meeting Dates Status Details B00-SEMFullSess. Th 08:30 - 11:20 Mona Paré 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details A00-SEMSession H We 17:00 - 20:50 Marieve Lacroix 2026-02-02 - 2026-04-15 Topic: Droit des personnes avancé",
@@ -62583,32 +62399,6 @@
               "2026-03-13"
             ],
             "status": "Closed"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "DCN",
-      "catalogNumber": "41002",
-      "courseCode": "DCN 41002",
-      "title": "Thesis project Section Days & Times Instructor Meeting Dates Status Details C00-RECFullSess. N/A 00:00 - 00:00 Staff 2026-01-12 - 2026-04-15",
-      "timeZone": "America/Toronto",
-      "components": {
-        "REC": [
-          {
-            "section": "C00-REC FullSess.",
-            "sectionCode": "C00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "instructors": [
-              "Staff"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
           }
         ]
       }
@@ -68820,6 +68610,35 @@
               "2026-04-15"
             ],
             "status": "Open"
+          },
+          {
+            "section": "B00-LEC FullSess.",
+            "sectionCode": "B00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 780,
+                "endMinutes": 870,
+                "virtual": true
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 780,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Jean-François Ratelle",
+              "Jean-François Ratelle"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
           }
         ]
       }
@@ -70100,6 +69919,46 @@
     },
     {
       "subject": "ECO",
+      "catalogNumber": "2518",
+      "courseCode": "ECO 2518",
+      "title": "Research Seminar in Economics of the Environment Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Mo 08:30 - 09:50Th 10:00 - 11:20 Aissata Boubacar MoumouniAissata Boubacar Moumouni 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 590,
+                "virtual": true
+              },
+              {
+                "day": "Th",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Aissata Boubacar Moumouni",
+              "Aissata Boubacar Moumouni"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ECO",
       "catalogNumber": "2543",
       "courseCode": "ECO 2543",
       "title": "Théorie macroéconomique II Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Th 19:00 - 21:50 Komlan Fiodendji 2026-01-12 - 2026-04-15",
@@ -70442,6 +70301,35 @@
             ],
             "instructors": [
               "Mohammed Rafiquzzaman"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 590,
+                "virtual": true
+              },
+              {
+                "day": "Th",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Aissata Boubacar Moumouni",
+              "Aissata Boubacar Moumouni"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -70859,6 +70747,29 @@
             "instructors": [
               "Vikram Manjunath",
               "Vikram Manjunath"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "B00-LEC FullSess.",
+            "sectionCode": "B00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Louis-Philippe Morin",
+              "Francesca Rondina"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -73143,32 +73054,10 @@
       "subject": "EDU",
       "catalogNumber": "5631",
       "courseCode": "EDU 5631",
-      "title": "Récits et éducation (+1 combined) Section Days & Times Instructor Meeting Dates Status Details DS00-LECFullSess. Tu 17:30 - 20:20 Gwenaelle Peyret 2026-01-12 - 2026-04-15",
+      "title": "Comportement organisationnel Section Days & Times Instructor Meeting Dates Status Details DA00-LECFullSess. N/A 00:00 - 00:00 Rodney Leurebourg 2026-01-12 - 2026-04-15",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
-          {
-            "section": "DS00-LEC FullSess.",
-            "sectionCode": "DS00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": false
-              }
-            ],
-            "instructors": [
-              "Gwenaelle Peyret"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          },
           {
             "section": "DA00-LEC FullSess.",
             "sectionCode": "DA00",
@@ -74246,39 +74135,6 @@
             ],
             "meetingDates": null,
             "status": "Closed"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "EDU",
-      "catalogNumber": "7220",
-      "courseCode": "EDU 7220",
-      "title": "Contemporary Issues in Education Section Days & Times Instructor Meeting Dates Status Details C00-LECFullSess. Fr 11:30 - 14:20 Richard Maclure 2026-01-12 - 2026-04-15",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "C00-LEC FullSess.",
-            "sectionCode": "C00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Richard Maclure"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
           }
         ]
       }
@@ -80068,7 +79924,7 @@
       "subject": "ENG",
       "catalogNumber": "1120",
       "courseCode": "ENG 1120",
-      "title": "Selected Topics in Literature and Composition Section Days & Times Instructor Meeting Dates Status Details AB00-LECFullSess. Mo 19:00 - 21:50 Patrick Williams 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AC00-LECFullSess. We 13:00 - 14:20Fr 11:30 - 12:50 Natalie TaylorNatalie Taylor 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AD00-LECFullSess. Tu 17:30 - 18:50Th 17:30 - 18:50 Bahare YousefiBahare Yousefi 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AE00-LECFullSess. Tu 08:30 - 09:50Fr 10:00 - 11:20 Natalie TaylorNatalie Taylor 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AF00-LECFullSess. We 10:00 - 11:20Fr 08:30 - 09:50 Maria Emmanouela LewisMaria Emmanouela Lewis 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AG00-LECFullSess. We 13:00 - 14:20Fr 11:30 - 12:50 John ColemanJohn Coleman 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AH00-LECFullSess. Mo 14:30 - 15:50Th 16:00 - 17:20 John ColemanJohn Coleman 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AI00-LECFullSess. Th 19:00 - 21:50 Kirsten Bussière 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AJ00-LECFullSess. Mo 13:00 - 14:20We 11:30 - 12:50 Elena IlinaElena Ilina 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AK00-LECFullSess. Fr 14:30 - 17:20 Jennifer Lynne Macquarrie 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AL00-LECFullSess. Mo 19:00 - 21:50 Elena Ilina 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AM00-LECFullSess. Fr 17:30 - 20:20 Miles Tittle 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AN00-LECFullSess. Fr 17:30 - 20:20 Kyle Murdock 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AO00-LECFullSess. We 08:30 - 11:20 Jessica Nash 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AP00-LECFullSess. Mo 08:30 - 11:20 Jennifer Lynne Macquarrie 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AQ00-LECFullSess. Mo 13:00 - 14:20We 11:30 - 12:50 Alyson LewisAlyson Lewis 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AR00-LECFullSess. Mo 13:00 - 14:20We 11:30 - 12:50 Polina SvadkovskaiaPolina Svadkovskaia 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AS00-LECFullSess. We 10:00 - 11:20Fr 08:30 - 09:50 Trevor TuckerTrevor Tucker 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AT00-LECFullSess. Mo 14:30 - 15:50Th 16:00 - 17:20 Alyson LewisAlyson Lewis 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AU00-LECFullSess. Tu 14:30 - 15:50Fr 16:00 - 17:20 Jessica SzorosJessica Szoros 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AV00-LECFullSess. Tu 19:00 - 21:50 Kyle Murdock 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AW00-LECFullSess. We 19:00 - 21:50 Lynda Morrissey 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AX00-LECFullSess. Th 19:00 - 21:50 Lynda Morrissey 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AY00-LECFullSess. Mo 08:30 - 09:50Th 10:00 - 11:20 Ila AhlawatIla Ahlawat 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AZ00-LECFullSess. Mo 13:00 - 14:20We 11:30 - 12:50 Jamie Roy BradleyJamie Roy Bradley 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details BC00-LECFullSess. Mo 19:00 - 21:50 Lisa Pike 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details BD00-LECFullSess. Mo 13:00 - 14:20We 11:30 - 12:50 Paul James GravesPaul James Graves 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15",
+      "title": "Selected Topics in Literature and Composition Section Days & Times Instructor Meeting Dates Status Details AB00-LECFullSess. Mo 19:00 - 21:50 Patrick Williams 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AC00-LECFullSess. We 13:00 - 14:20Fr 11:30 - 12:50 Natalie TaylorNatalie Taylor 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AD00-LECFullSess. Tu 17:30 - 18:50Th 17:30 - 18:50 Bahare YousefiBahare Yousefi 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AE00-LECFullSess. Tu 08:30 - 09:50Fr 10:00 - 11:20 Natalie TaylorNatalie Taylor 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AF00-LECFullSess. We 10:00 - 11:20Fr 08:30 - 09:50 Maria Emmanouela LewisMaria Emmanouela Lewis 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AG00-LECFullSess. We 13:00 - 14:20Fr 11:30 - 12:50 John ColemanJohn Coleman 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AH00-LECFullSess. Mo 14:30 - 15:50Th 16:00 - 17:20 John ColemanJohn Coleman 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AI00-LECFullSess. Th 19:00 - 21:50 Kirsten Bussière 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AJ00-LECFullSess. Mo 13:00 - 14:20We 11:30 - 12:50 Elena IlinaElena Ilina 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AK00-LECFullSess. Fr 14:30 - 17:20 Jennifer Lynne Macquarrie 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AL00-LECFullSess. Mo 19:00 - 21:50 Elena Ilina 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AM00-LECFullSess. Fr 17:30 - 20:20 Miles Tittle 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AN00-LECFullSess. Fr 17:30 - 20:20 Kyle Murdock 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AO00-LECFullSess. We 08:30 - 11:20 Jessica Nash 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AP00-LECFullSess. Mo 08:30 - 11:20 Jennifer Lynne Macquarrie 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AQ00-LECFullSess. Mo 13:00 - 14:20We 11:30 - 12:50 Alyson LewisAlyson Lewis 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AR00-LECFullSess. Mo 13:00 - 14:20We 11:30 - 12:50 Polina SvadkovskaiaPolina Svadkovskaia 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AS00-LECFullSess. We 10:00 - 11:20Fr 08:30 - 09:50 Trevor TuckerTrevor Tucker 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AT00-LECFullSess. Mo 14:30 - 15:50Th 16:00 - 17:20 Alyson LewisAlyson Lewis 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AU00-LECFullSess. Tu 14:30 - 15:50Fr 16:00 - 17:20 Jessica SzorosJessica Szoros 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AV00-LECFullSess. Tu 19:00 - 21:50 Kyle Murdock 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AW00-LECFullSess. We 19:00 - 21:50 Lynda Morrissey 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AX00-LECFullSess. Th 19:00 - 21:50 Lynda Morrissey 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AY00-LECFullSess. Mo 08:30 - 09:50Th 10:00 - 11:20 ILA AHLAWATILA AHLAWAT 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details AZ00-LECFullSess. Mo 13:00 - 14:20We 11:30 - 12:50 Jamie Roy BradleyJamie Roy Bradley 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details BC00-LECFullSess. Mo 19:00 - 21:50 Lisa Pike 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details BD00-LECFullSess. Mo 13:00 - 14:20We 11:30 - 12:50 Paul James GravesPaul James Graves 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -80682,8 +80538,8 @@
               }
             ],
             "instructors": [
-              "Ila Ahlawat",
-              "Ila Ahlawat"
+              "ILA AHLAWAT",
+              "ILA AHLAWAT"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -81468,6 +81324,76 @@
             ],
             "status": "Open"
           }
+        ],
+        "LEC": [
+          {
+            "section": "C00-LEC FullSess.",
+            "sectionCode": "C00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Osasuyi Emmanuel Okungbowa"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          }
+        ],
+        "DGD": [
+          {
+            "section": "C01-DGD FullSess.",
+            "sectionCode": "C01",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 590,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Kristie Patterson"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "C02-DGD FullSess.",
+            "sectionCode": "C02",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 590,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Kristie Patterson"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          }
         ]
       }
     },
@@ -81952,6 +81878,18 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 1050,
+                "endMinutes": 1130,
+                "virtual": true
+              },
+              {
+                "day": "Th",
+                "startMinutes": 1050,
+                "endMinutes": 1130,
+                "virtual": true
               }
             ],
             "instructors": [
@@ -84862,222 +84800,24 @@
       "subject": "ERG",
       "catalogNumber": "6742",
       "courseCode": "ERG 6742",
-      "title": "Intervention de l'ergothérapeute auprès des adultes (santé physique) Section Days & Times Instructor Meeting Dates Status Details A00-SEMTerm Mo 08:30 - 11:20Mo 08:30 - 11:20Mo 08:00 - 15:20Mo 08:00 - 15:20Mo 08:00 - 15:20Mo 08:00 - 15:20Mo 08:30 - 11:20Mo 08:30 - 11:20Mo 08:30 - 11:20Mo 08:30 - 11:20Mo 14:30 - 17:20Mo 08:30 - 11:20Mo 14:30 - 17:20Mo 08:30 - 11:20Mo 14:30 - 17:20Mo 14:30 - 17:20Mo 14:30 - 17:20Mo 14:30 - 17:20Mo 14:30 - 17:20Mo 14:30 - 17:20Mo 14:30 - 17:20Mo 14:30 - 17:20 Christine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy LajeunessChristine AlbertCaroline BorrisCindy Lajeuness 2026-01-12 - 2026-03-082026-01-12 - 2026-04-132026-04-20 - 2026-04-202026-04-20 - 2026-04-202026-04-20 - 2026-04-202026-04-20 - 2026-04-202026-01-12 - 2026-04-132026-01-12 - 2026-04-132026-01-12 - 2026-04-132026-01-12 - 2026-04-132026-03-09 - 2026-03-092026-03-10 - 2026-03-222026-03-23 - 2026-03-232026-03-24 - 2026-04-132026-03-09 - 2026-03-092026-03-09 - 2026-03-092026-03-23 - 2026-03-232026-03-23 - 2026-03-232026-03-09 - 2026-03-092026-03-23 - 2026-03-232026-03-09 - 2026-03-092026-03-23 - 2026-03-23",
+      "title": "Comprehensive Examination Section Days & Times Instructor Meeting Dates Status Details C00-RECFullSess. N/A 00:00 - 00:00 Staff 2026-01-12 - 2026-04-15",
       "timeZone": "America/Toronto",
       "components": {
-        "SEM": [
+        "REC": [
           {
-            "section": "A00-SEM Term",
-            "sectionCode": "A00",
-            "component": "SEM",
+            "section": "C00-REC FullSess.",
+            "sectionCode": "C00",
+            "component": "REC",
             "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 480,
-                "endMinutes": 920,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 480,
-                "endMinutes": 920,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 480,
-                "endMinutes": 920,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 480,
-                "endMinutes": 920,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": false
-              }
-            ],
+            "times": [],
             "instructors": [
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness",
-              "Christine Albert",
-              "Caroline Borris",
-              "Cindy Lajeuness"
+              "Staff"
             ],
             "meetingDates": [
               "2026-01-12",
-              "2026-03-08"
+              "2026-04-15"
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }
@@ -85494,28 +85234,6 @@
             "instructors": [
               "Nooshin Boroumand",
               "Nooshin Boroumand"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          },
-          {
-            "section": "B00-LEC FullSess.",
-            "sectionCode": "B00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Wafaa Morsy"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -85957,7 +85675,7 @@
       "subject": "ESP",
       "catalogNumber": "1992",
       "courseCode": "ESP 1992",
-      "title": "Elementary Spanish II Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Mo 16:00 - 17:20 Younes Hamani 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details A01-TLBFullSess. We 14:30 - 16:50 Carlos Cornejo-Rosello ChavezYounes Hamani 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details A02-TLBFullSess. We 19:00 - 21:20 Gabriela Romero 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details A03-TLBFullSess. Th 14:30 - 16:50 Carlos Cornejo-Rosello Chavez 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details A04-TLBFullSess. Th 08:30 - 10:50 Gabriela Romero 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details A05-TLBFullSess. Fr 14:30 - 16:50 Juan Manzo Ramirez 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B00-LECFullSess. Mo 11:30 - 12:50 Andrea Liliana Olivares Beltran 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B01-TLBFullSess. We 08:30 - 10:50 Younes Hamani 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B02-TLBFullSess. Tu 19:00 - 21:20 Carlos Arturo Cancino 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B03-TLBFullSess. Th 19:00 - 21:20 Carlos Arturo Cancino 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B04-TLBFullSess. We 14:30 - 16:50 Younes Hamani 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B05-TLBFullSess. Fr 08:30 - 10:50 Juan Manzo Ramirez 2026-01-12 - 2026-04-15",
+      "title": "Elementary Spanish II Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Mo 16:00 - 17:20 Younes Hamani 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details A01-TLBFullSess. We 14:30 - 16:50 Carlos Cornejo-Rosello ChavezYounes Hamani 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details A02-TLBFullSess. We 19:00 - 21:20 GABRIELA ROMERO 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details A03-TLBFullSess. Th 14:30 - 16:50 Carlos Cornejo-Rosello Chavez 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details A04-TLBFullSess. Th 08:30 - 10:50 GABRIELA ROMERO 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details A05-TLBFullSess. Fr 14:30 - 16:50 Juan Manzo Ramirez 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B00-LECFullSess. Mo 11:30 - 12:50 Andrea Liliana Olivares Beltran 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B01-TLBFullSess. We 08:30 - 10:50 Younes Hamani 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B02-TLBFullSess. Tu 19:00 - 21:20 Carlos Arturo Cancino 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B03-TLBFullSess. Th 19:00 - 21:20 Carlos Arturo Cancino 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B04-TLBFullSess. We 14:30 - 16:50 Younes Hamani 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B05-TLBFullSess. Fr 08:30 - 10:50 Juan Manzo Ramirez 2026-01-12 - 2026-04-15",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -86044,7 +85762,7 @@
               }
             ],
             "instructors": [
-              "Gabriela Romero"
+              "GABRIELA ROMERO"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -86088,7 +85806,7 @@
               }
             ],
             "instructors": [
-              "Gabriela Romero"
+              "GABRIELA ROMERO"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -86341,7 +86059,7 @@
       "subject": "ESP",
       "catalogNumber": "2992",
       "courseCode": "ESP 2992",
-      "title": "Intermediate Spanish II Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Mo 17:30 - 18:50We 17:30 - 18:50 Juan Manzo RamirezJuan Manzo Ramirez 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B00-LECFullSess. We 10:00 - 11:20Fr 08:30 - 09:50 Gabriela RomeroGabriela Romero 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15",
+      "title": "Intermediate Spanish II Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Mo 17:30 - 18:50We 17:30 - 18:50 Juan Manzo RamirezJuan Manzo Ramirez 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B00-LECFullSess. We 10:00 - 11:20Fr 08:30 - 09:50 GABRIELA ROMEROGABRIELA ROMERO 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -86394,8 +86112,8 @@
               }
             ],
             "instructors": [
-              "Gabriela Romero",
-              "Gabriela Romero"
+              "GABRIELA ROMERO",
+              "GABRIELA ROMERO"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -88258,6 +87976,66 @@
             "times": [],
             "instructors": [
               "Staff"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          }
+        ],
+        "LEC": [
+          {
+            "section": "C00-LEC FullSess.",
+            "sectionCode": "C00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 870,
+                "endMinutes": 950,
+                "virtual": true
+              },
+              {
+                "day": "Th",
+                "startMinutes": 960,
+                "endMinutes": 1040,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Apolline Glais",
+              "Apolline Glais"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "D00-LEC FullSess.",
+            "sectionCode": "D00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 590,
+                "virtual": true
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Apolline Glais",
+              "Apolline Glais"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -94298,103 +94076,6 @@
               "2026-04-15"
             ],
             "status": "Closed"
-          },
-          {
-            "section": "D00-LEC FullSess.",
-            "sectionCode": "D00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 600,
-                "endMinutes": 680,
-                "virtual": true
-              },
-              {
-                "day": "Th",
-                "startMinutes": 510,
-                "endMinutes": 590,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Jiying Zhao",
-              "Jiying Zhao"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          }
-        ],
-        "LAB": [
-          {
-            "section": "D01-LAB FullSess.",
-            "sectionCode": "D01",
-            "component": "LAB",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Jiying Zhao"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          },
-          {
-            "section": "D02-LAB FullSess.",
-            "sectionCode": "D02",
-            "component": "LAB",
-            "session": null,
-            "times": [
-              {
-                "day": "Th",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Jiying Zhao"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          },
-          {
-            "section": "D03-LAB FullSess.",
-            "sectionCode": "D03",
-            "component": "LAB",
-            "session": null,
-            "times": [
-              {
-                "day": "We",
-                "startMinutes": 600,
-                "endMinutes": 770,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Jiying Zhao"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
           }
         ]
       }
@@ -101893,28 +101574,11 @@
                 "day": "We",
                 "startMinutes": 510,
                 "endMinutes": 680,
-                "virtual": false
+                "virtual": true
               }
             ],
             "instructors": [
               "James W. Nelson Novoa"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          }
-        ],
-        "REC": [
-          {
-            "section": "C00-REC FullSess.",
-            "sectionCode": "C00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "instructors": [
-              "Staff"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -105526,6 +105190,39 @@
             ],
             "instructors": [
               "Melanie Knezevic"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "LIN",
+      "catalogNumber": "3320",
+      "courseCode": "LIN 3320",
+      "title": "Laboratory in Psycholinguistics Section Days & Times Instructor Meeting Dates Status Details A00-SEMFullSess. Fr 08:30 - 11:20 Tania Zamuner 2026-01-12 - 2026-04-15",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "A00-SEM FullSess.",
+            "sectionCode": "A00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Tania Zamuner"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -112024,7 +111721,7 @@
       "subject": "MAT",
       "catalogNumber": "5314",
       "courseCode": "MAT 5314",
-      "title": "Topics in Probability and Statistics Section Days & Times Instructor Meeting Dates Status Details C00-LECFullSess. We 16:00 - 17:20Fr 14:30 - 15:50 Dingke TangDingke Tang 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Topic: Casual Inference",
+      "title": "Topics in Probability and Statistics Section Days & Times Instructor Meeting Dates Status Details C00-LECFullSess. We 16:00 - 17:20Fr 14:30 - 15:50 DINGKE TANGDINGKE TANG 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15 Topic: Casual Inference",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -112048,8 +111745,8 @@
               }
             ],
             "instructors": [
-              "Dingke Tang",
-              "Dingke Tang"
+              "DINGKE TANG",
+              "DINGKE TANG"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -113494,29 +113191,43 @@
       "subject": "MBA",
       "catalogNumber": "6499",
       "courseCode": "MBA 6499",
-      "title": "Cyber Security Systems and Strategies Section Days & Times Instructor Meeting Dates Status Details BV00-LECTerm Mo 19:00 - 21:50 Umar Ruhi 2026-01-05 - 2026-02-09",
+      "title": "Management Consulting Project Section Days & Times Instructor Meeting Dates Status Details B00-RECTerm Tu 19:00 - 21:50Tu 19:00 - 21:50Tu 19:00 - 21:50 Murray KronickMurray KronickMurray Kronick 2026-01-06 - 2026-01-062026-02-03 - 2026-02-032026-03-31 - 2026-03-31",
       "timeZone": "America/Toronto",
       "components": {
-        "LEC": [
+        "REC": [
           {
-            "section": "BV00-LEC Term",
-            "sectionCode": "BV00",
-            "component": "LEC",
+            "section": "B00-REC Term",
+            "sectionCode": "B00",
+            "component": "REC",
             "session": null,
             "times": [
               {
-                "day": "Mo",
+                "day": "Tu",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": false
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": false
+              },
+              {
+                "day": "Tu",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false
               }
             ],
             "instructors": [
-              "Umar Ruhi"
+              "Murray Kronick",
+              "Murray Kronick",
+              "Murray Kronick"
             ],
             "meetingDates": [
-              "2026-01-05",
-              "2026-02-09"
+              "2026-01-06",
+              "2026-01-06"
             ],
             "status": "Open"
           }
@@ -116231,12 +115942,6 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 600,
-                "endMinutes": 680,
-                "virtual": true
               }
             ],
             "instructors": [
@@ -116266,39 +115971,6 @@
             ],
             "instructors": [
               "James McDonald"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          }
-        ],
-        "LAB": [
-          {
-            "section": "A01-LAB FullSess.",
-            "sectionCode": "A01",
-            "component": "LAB",
-            "session": null,
-            "times": [
-              {
-                "day": "Th",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": true
-              },
-              {
-                "day": "Th",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Eric Lanteigne",
-              "Mihaita Matei",
-              "Patrick François Ri",
-              "Staff"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -118210,40 +117882,6 @@
     },
     {
       "subject": "MED",
-      "catalogNumber": "6538",
-      "courseCode": "MED 6538",
-      "title": "Principles of Accounting and Finance for Engineers Section Days & Times Instructor Meeting Dates Status Details B00-LECFullSess. Th 19:00 - 21:50 Joseph AudiAmir Hossein Khataie 2026-01-12 - 2026-04-15",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "B00-LEC FullSess.",
-            "sectionCode": "B00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Th",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Joseph Audi",
-              "Amir Hossein Khataie"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "MED",
       "catalogNumber": "8166",
       "courseCode": "MED 8166",
       "title": "Professionalism and Professional Skills Section Days & Times Instructor Meeting Dates Status Details B00-SEMFullSess. N/A 00:00 - 00:00 Nadine Louise Wiper 2026-01-12 - 2026-04-15",
@@ -118305,22 +117943,10 @@
       "subject": "MED",
       "catalogNumber": "8566",
       "courseCode": "MED 8566",
-      "title": "Fondements théoriques sur l’enseignement en milieu clinique Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. N/A 00:00 - 00:00 Staff -",
+      "title": "Attitude et compétences professionnelles Section Days & Times Instructor Meeting Dates Status Details A00-LECTerm N/A 00:00 - 00:00 Nadine Louise Wiper 2026-01-01 - 2026-04-30",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [],
-            "instructors": [
-              "Staff"
-            ],
-            "meetingDates": null,
-            "status": "Closed"
-          },
           {
             "section": "A00-LEC Term",
             "sectionCode": "A00",
@@ -118674,38 +118300,24 @@
       "subject": "MGT",
       "catalogNumber": "5101",
       "courseCode": "MGT 5101",
-      "title": "Multivariate Research Methods Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Mo 08:30 - 11:20Mo 08:30 - 11:20 Jonathan Yu-Meng LiJonathan Yu-Meng Li 2026-01-12 - 2026-02-092026-02-23 - 2026-04-13",
+      "title": "Attitude et compétences professionnelles Section Days & Times Instructor Meeting Dates Status Details A00-LECTerm N/A 00:00 - 00:00 Nadine Louise Wiper 2026-01-01 - 2026-04-30",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
           {
-            "section": "A00-LEC FullSess.",
+            "section": "A00-LEC Term",
             "sectionCode": "A00",
             "component": "LEC",
             "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false
-              }
-            ],
+            "times": [],
             "instructors": [
-              "Jonathan Yu-Meng Li",
-              "Jonathan Yu-Meng Li"
+              "Nadine Louise Wiper"
             ],
             "meetingDates": [
-              "2026-01-12",
-              "2026-02-09"
+              "2026-01-01",
+              "2026-04-30"
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -121325,6 +120937,32 @@
     },
     {
       "subject": "MUS",
+      "catalogNumber": "1594",
+      "courseCode": "MUS 1594",
+      "title": "Comprehensive Examination Section Days & Times Instructor Meeting Dates Status Details C00-RECFullSess. N/A 00:00 - 00:00 Staff 2026-01-12 - 2026-04-15",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "C00-REC FullSess.",
+            "sectionCode": "C00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "instructors": [
+              "Staff"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "MUS",
       "catalogNumber": "19022",
       "courseCode": "MUS 19022",
       "title": "Class Piano I (Part 2 of 2) Section Days & Times Instructor Meeting Dates Status Details A00-TUTFullSess. Mo 08:30 - 09:20 Nadia Jacqueline Boucher 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details B00-TUTFullSess. Tu 11:30 - 12:20 Nadia Jacqueline Boucher 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details C00-TUTFullSess. Tu 08:30 - 09:20 Olivia Adams 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details D00-TUTFullSess. Th 11:30 - 12:20 Nadia Jacqueline Boucher 2026-01-12 - 2026-04-15",
@@ -121588,46 +121226,6 @@
             "instructors": [
               "Doreen Anne Taylor-Claxton",
               "Doreen Anne Taylor-Claxton"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "MUS",
-      "catalogNumber": "2194",
-      "courseCode": "MUS 2194",
-      "title": "Théorie et analyse II Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Mo 11:30 - 12:50Th 13:00 - 14:20 Roxane Lise PrevostRoxane Lise Prevost 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 690,
-                "endMinutes": 770,
-                "virtual": true
-              },
-              {
-                "day": "Th",
-                "startMinutes": 780,
-                "endMinutes": 860,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Roxane Lise Prevost",
-              "Roxane Lise Prevost"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -127297,7 +126895,7 @@
       "subject": "NSG",
       "catalogNumber": "53502",
       "courseCode": "NSG 53502",
-      "title": "Pathophysiology for the Nurse Practitioner (Part 2 of 2) Section Days & Times Instructor Meeting Dates Status Details A00-LECTerm We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50 Sihem DjoudiStaffStaffStaffStaffStaff 2026-01-07 - 2026-01-072026-01-21 - 2026-01-212026-02-04 - 2026-02-042026-02-25 - 2026-02-252026-03-11 - 2026-03-112026-03-25 - 2026-03-25",
+      "title": "Pathophysiology for the Nurse Practitioner (Part 2 of 2) Section Days & Times Instructor Meeting Dates Status Details A00-LECTerm We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50 Sihem DjoudiSihem DjoudiSihem DjoudiSihem DjoudiSihem DjoudiSihem Djoudi 2026-01-07 - 2026-01-072026-01-21 - 2026-01-212026-02-04 - 2026-02-042026-02-25 - 2026-02-252026-03-11 - 2026-03-112026-03-25 - 2026-03-25",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -127346,11 +126944,11 @@
             ],
             "instructors": [
               "Sihem Djoudi",
-              "Staff",
-              "Staff",
-              "Staff",
-              "Staff",
-              "Staff"
+              "Sihem Djoudi",
+              "Sihem Djoudi",
+              "Sihem Djoudi",
+              "Sihem Djoudi",
+              "Sihem Djoudi"
             ],
             "meetingDates": [
               "2026-01-07",
@@ -127365,7 +126963,7 @@
       "subject": "NSG",
       "catalogNumber": "53602",
       "courseCode": "NSG 53602",
-      "title": "Roles and Responsibilities of the Nurse Practitioner (Part 2 of 2) Section Days & Times Instructor Meeting Dates Status Details A00-LECTerm We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50 Julie BensonStaffStaffStaffStaffStaff 2026-01-14 - 2026-01-142026-01-28 - 2026-01-282026-02-11 - 2026-02-112026-03-04 - 2026-03-042026-03-18 - 2026-03-182026-04-01 - 2026-04-01",
+      "title": "Roles and Responsibilities of the Nurse Practitioner (Part 2 of 2) Section Days & Times Instructor Meeting Dates Status Details A00-LECTerm We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50We 18:00 - 20:50 Julie BensonJulie BensonJulie BensonJulie BensonJulie BensonJulie Benson 2026-01-14 - 2026-01-142026-01-28 - 2026-01-282026-02-11 - 2026-02-112026-03-04 - 2026-03-042026-03-18 - 2026-03-182026-04-01 - 2026-04-01",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -127414,11 +127012,11 @@
             ],
             "instructors": [
               "Julie Benson",
-              "Staff",
-              "Staff",
-              "Staff",
-              "Staff",
-              "Staff"
+              "Julie Benson",
+              "Julie Benson",
+              "Julie Benson",
+              "Julie Benson",
+              "Julie Benson"
             ],
             "meetingDates": [
               "2026-01-14",
@@ -127986,6 +127584,12 @@
                 "day": "Tu",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
+                "virtual": false
+              },
+              {
+                "day": "Th",
+                "startMinutes": 870,
+                "endMinutes": 1040,
                 "virtual": true
               }
             ],
@@ -128156,39 +127760,6 @@
             ],
             "instructors": [
               "Idrissa Beogo"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "NSG",
-      "catalogNumber": "7103",
-      "courseCode": "NSG 7103",
-      "title": "Qualitative Research in Nursing and Health Sciences (+1 combined) Section Days & Times Instructor Meeting Dates Status Details HC00-LECFullSess. Mo 08:30 - 11:20 Josephine Etowa 2026-01-12 - 2026-04-15",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "HC00-LEC FullSess.",
-            "sectionCode": "HC00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Josephine Etowa"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -129752,6 +129323,33 @@
     },
     {
       "subject": "NUT",
+      "catalogNumber": "4502",
+      "courseCode": "NUT 4502",
+      "title": "Stage en nutrition clinique Section Days & Times Instructor Meeting Dates Status Details A00-STGMulti-Term N/A 00:00 - 00:00 Geneviève GrenierChloé Le Quéré 2025-09-01 - 2026-08-31",
+      "timeZone": "America/Toronto",
+      "components": {
+        "STG": [
+          {
+            "section": "A00-STG Multi-Term",
+            "sectionCode": "A00",
+            "component": "STG",
+            "session": null,
+            "times": [],
+            "instructors": [
+              "Geneviève Grenier",
+              "Chloé Le Quéré"
+            ],
+            "meetingDates": [
+              "2025-09-01",
+              "2026-08-31"
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "NUT",
       "catalogNumber": "4531",
       "courseCode": "NUT 4531",
       "title": "Stage en nutrition publique et en santé des populations Section Days & Times Instructor Meeting Dates Status Details A00-STGMulti-Term N/A 00:00 - 00:00 Geneviève GrenierChloé Le Quéré 2025-09-01 - 2026-08-31",
@@ -130605,6 +130203,24 @@
               "2026-04-15"
             ],
             "status": "Closed"
+          }
+        ],
+        "REC": [
+          {
+            "section": "A00-REC Term",
+            "sectionCode": "A00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "instructors": [
+              "Mujda Nooristani",
+              "Anna Zumbansen"
+            ],
+            "meetingDates": [
+              "2026-01-01",
+              "2026-04-30"
+            ],
+            "status": "Open"
           }
         ]
       }
@@ -131899,7 +131515,7 @@
       "subject": "PAP",
       "catalogNumber": "4330",
       "courseCode": "PAP 4330",
-      "title": "Administrative Reforms Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Th 14:30 - 17:20 Mohammad Habibur Rahman 2026-01-12 - 2026-04-15",
+      "title": "Administrative Reforms Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Th 14:30 - 17:20 Mohammed Habibur Rahman 2026-01-12 - 2026-04-15",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -131917,7 +131533,7 @@
               }
             ],
             "instructors": [
-              "Mohammad Habibur Rahman"
+              "Mohammed Habibur Rahman"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -132060,7 +131676,7 @@
       "subject": "PAP",
       "catalogNumber": "4715",
       "courseCode": "PAP 4715",
-      "title": "Analyse des politiques publiques Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. We 19:00 - 21:50 Luc Bernier 2026-01-12 - 2026-04-15",
+      "title": "Genre et politiques publiques Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Mo 13:00 - 14:20We 11:30 - 12:50 Tida GoudiabyTida Goudiaby 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -132071,6 +131687,18 @@
             "session": null,
             "times": [
               {
+                "day": "Mo",
+                "startMinutes": 780,
+                "endMinutes": 860,
+                "virtual": false
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 770,
+                "virtual": false
+              },
+              {
                 "day": "We",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
@@ -132078,7 +131706,8 @@
               }
             ],
             "instructors": [
-              "Luc Bernier"
+              "Tida Goudiaby",
+              "Tida Goudiaby"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -136473,7 +136102,7 @@
       "subject": "PED",
       "catalogNumber": "36002",
       "courseCode": "PED 36002",
-      "title": "Stage I en milieu scolaire élémentaire (Partie 2 de 2) Section Days & Times Instructor Meeting Dates Status Details P01-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Julie MesJulie Mes 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P02-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Josée H. BédardJosée H. Bédard 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P03-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Louise Théoret-StefancsiscLouise Théoret-Stefancsisc 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P04-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Renée Chantal BelhumeurRenée Chantal Belhumeur 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P05-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Alain LacasseAlain Lacasse 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P06-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P07-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P08-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P09-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P10-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-14 Section Days & Times Instructor Meeting Dates Status Details P11-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P12-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P13-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P14-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P15-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P16-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P17-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details T01-DGDTerm Tu 14:30 - 17:20Fr 14:30 - 17:20 Linda TailleferLinda Taillefer 2026-02-10 - 2026-02-102026-04-24 - 2026-04-24 Section Days & Times Instructor Meeting Dates Status Details T02-DGDTerm Tu 14:30 - 17:20Fr 14:30 - 17:20 Nicaises LolaNicaises Lola 2026-02-10 - 2026-02-102026-04-24 - 2026-04-24 Section Days & Times Instructor Meeting Dates Status Details T03-DGDTerm N/A 00:00 - 00:00 Staff 2026-01-12 - 2026-04-30 Section Days & Times Instructor Meeting Dates Status Details T100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-09 - 2026-04-222026-03-09 - 2026-04-222026-03-09 - 2026-04-222026-03-09 - 2026-04-222026-03-09 - 2026-04-22 Section Days & Times Instructor Meeting Dates Status Details W01-DGDTerm Tu 13:00 - 15:50Fr 13:00 - 15:50 Roger LeblancRoger Leblanc 2026-02-10 - 2026-02-102026-04-24 - 2026-04-24 Section Days & Times Instructor Meeting Dates Status Details W02-DGDTerm Tu 13:00 - 15:50Fr 13:00 - 15:50 Nicole BaillargeonNicole Baillargeon 2026-02-10 - 2026-02-102026-04-24 - 2026-04-24 Section Days & Times Instructor Meeting Dates Status Details W100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-02 - 2026-04-172026-03-02 - 2026-04-172026-03-02 - 2026-04-172026-03-02 - 2026-04-172026-03-02 - 2026-04-17",
+      "title": "Stage I en milieu scolaire élémentaire (Partie 2 de 2) Section Days & Times Instructor Meeting Dates Status Details P01-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 JULIE MESJULIE MES 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P02-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Josée H. BédardJosée H. Bédard 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P03-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Louise Théoret-StefancsiscLouise Théoret-Stefancsisc 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P04-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Renée Chantal BelhumeurRenée Chantal Belhumeur 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P05-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Alain LacasseAlain Lacasse 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P06-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P07-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P08-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P09-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P10-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-14 Section Days & Times Instructor Meeting Dates Status Details P11-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P12-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P13-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P14-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P15-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P16-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details P17-DGDTerm N/A 00:00 - 00:00 Staff 2026-02-12 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details T01-DGDTerm Tu 14:30 - 17:20Fr 14:30 - 17:20 Linda TailleferLinda Taillefer 2026-02-10 - 2026-02-102026-04-24 - 2026-04-24 Section Days & Times Instructor Meeting Dates Status Details T02-DGDTerm Tu 14:30 - 17:20Fr 14:30 - 17:20 Nicaises LolaNicaises Lola 2026-02-10 - 2026-02-102026-04-24 - 2026-04-24 Section Days & Times Instructor Meeting Dates Status Details T03-DGDTerm N/A 00:00 - 00:00 Staff 2026-01-12 - 2026-04-30 Section Days & Times Instructor Meeting Dates Status Details T100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-09 - 2026-04-222026-03-09 - 2026-04-222026-03-09 - 2026-04-222026-03-09 - 2026-04-222026-03-09 - 2026-04-22 Section Days & Times Instructor Meeting Dates Status Details W01-DGDTerm Tu 13:00 - 15:50Fr 13:00 - 15:50 Roger LeblancRoger Leblanc 2026-02-10 - 2026-02-102026-04-24 - 2026-04-24 Section Days & Times Instructor Meeting Dates Status Details W02-DGDTerm Tu 13:00 - 15:50Fr 13:00 - 15:50 Nicole BaillargeonNicole Baillargeon 2026-02-10 - 2026-02-102026-04-24 - 2026-04-24 Section Days & Times Instructor Meeting Dates Status Details W100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-02 - 2026-04-172026-03-02 - 2026-04-172026-03-02 - 2026-04-172026-03-02 - 2026-04-172026-03-02 - 2026-04-17",
       "timeZone": "America/Toronto",
       "components": {
         "DGD": [
@@ -136497,8 +136126,8 @@
               }
             ],
             "instructors": [
-              "Julie Mes",
-              "Julie Mes"
+              "JULIE MES",
+              "JULIE MES"
             ],
             "meetingDates": [
               "2026-02-12",
@@ -137092,7 +136721,7 @@
       "subject": "PED",
       "catalogNumber": "36202",
       "courseCode": "PED 36202",
-      "title": "Stage I en milieu scolaire secondaire (Partie 1 de 2) Section Days & Times Instructor Meeting Dates Status Details M01-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Marc A. BlakeMarc A. Blake 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details M02-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Chantal CazabonChantal Cazabon 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details M03-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Valérie RoyValérie Roy 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details M100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-14 Section Days & Times Instructor Meeting Dates Status Details O01-DGDTerm Th 17:30 - 20:20Fr 11:30 - 14:20 Annick Jocelyne DucharmeAnnick Jocelyne Ducharme 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details O02-DGDTerm Th 17:30 - 20:20Fr 11:20 - 14:20 Gaby MyreGaby Myre 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details O03-DGDTerm Th 17:30 - 20:20Fr 11:30 - 14:20 StaffStaff 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details O100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-14 Section Days & Times Instructor Meeting Dates Status Details S01-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Adlin PRÉSUMÉAdlin PRÉSUMÉ 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details S02-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Susie OuelletteSusie Ouellette 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details S03-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Valérie RoyValérie Roy 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details S100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-14 Section Days & Times Instructor Meeting Dates Status Details U01-DGDTerm Mo 13:00 - 16:00Fr 13:00 - 16:00 StaffStaff 2026-02-09 - 2026-02-092026-04-24 - 2026-04-24 Section Days & Times Instructor Meeting Dates Status Details U100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-02 - 2026-04-172026-03-02 - 2026-04-172026-03-02 - 2026-04-172026-03-02 - 2026-04-172026-03-02 - 2026-04-17",
+      "title": "Stage I en milieu scolaire secondaire (Partie 2 de 2) Section Days & Times Instructor Meeting Dates Status Details M01-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Marc A. BlakeMarc A. Blake 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details M02-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Chantal CazabonChantal Cazabon 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details M03-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Valérie RoyValérie Roy 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details M100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-14 Section Days & Times Instructor Meeting Dates Status Details O01-DGDTerm Th 17:30 - 20:20Fr 11:30 - 14:20 Annick Jocelyne DucharmeAnnick Jocelyne Ducharme 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details O02-DGDTerm Th 17:30 - 20:20Fr 11:20 - 14:20 Gaby MyreGaby Myre 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details O03-DGDTerm Th 17:30 - 20:20Fr 11:30 - 14:20 StaffStaff 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details O100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-14 Section Days & Times Instructor Meeting Dates Status Details S01-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Adlin PRÉSUMÉAdlin PRÉSUMÉ 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details S02-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Susie OuelletteSusie Ouellette 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details S03-DGDTerm Th 11:30 - 14:20Fr 11:30 - 14:20 Valérie RoyValérie Roy 2026-02-12 - 2026-02-122026-04-17 - 2026-04-17 Section Days & Times Instructor Meeting Dates Status Details S100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-142026-03-02 - 2026-04-14 Section Days & Times Instructor Meeting Dates Status Details U01-DGDTerm Mo 13:00 - 16:00Fr 13:00 - 16:00 StaffStaff 2026-02-09 - 2026-02-092026-04-24 - 2026-04-24 Section Days & Times Instructor Meeting Dates Status Details U100-STGTerm Mo 08:00 - 17:00Tu 08:00 - 17:00We 08:00 - 17:00Th 08:00 - 17:00Fr 08:00 - 17:00 StaffStaffStaffStaffStaff 2026-03-02 - 2026-04-172026-03-02 - 2026-04-172026-03-02 - 2026-04-172026-03-02 - 2026-04-172026-03-02 - 2026-04-17",
       "timeZone": "America/Toronto",
       "components": {
         "DGD": [
@@ -139486,7 +139115,7 @@
       "subject": "PED",
       "catalogNumber": "4570",
       "courseCode": "PED 4570",
-      "title": "Recherche en éducation et projet intégrateur Section Days & Times Instructor Meeting Dates Status Details F200-LECTerm Mo 08:30 - 11:20 Alice Levasseur 2026-01-12 - 2026-02-20 Section Days & Times Instructor Meeting Dates Status Details F210-LECTerm Mo 11:30 - 14:20 Alice Levasseur 2026-01-12 - 2026-02-20 Section Days & Times Instructor Meeting Dates Status Details F220-LECTerm Mo 11:30 - 14:20 Catherine Déri 2026-01-12 - 2026-02-20 Section Days & Times Instructor Meeting Dates Status Details F230-LECTerm Mo 08:30 - 11:20 Catherine Déri 2026-01-12 - 2026-02-20 Section Days & Times Instructor Meeting Dates Status Details F240-LECTerm Tu 14:30 - 17:20 Béatrice de Montigny 2026-01-12 - 2026-02-20 Section Days & Times Instructor Meeting Dates Status Details T200-LECTerm We 18:00 - 20:50 Alain Ngouem 2026-01-12 - 2026-02-20 Section Days & Times Instructor Meeting Dates Status Details W200-LECTerm Fr 17:00 - 19:50 Karen Schiller 2026-01-12 - 2026-02-20",
+      "title": "Recherche en éducation et projet intégrateur Section Days & Times Instructor Meeting Dates Status Details F200-LECTerm Mo 08:30 - 11:20 Alice Levasseur 2026-01-12 - 2026-02-20 Section Days & Times Instructor Meeting Dates Status Details F210-LECTerm Mo 11:30 - 14:20 Alice Levasseur 2026-01-12 - 2026-02-20 Section Days & Times Instructor Meeting Dates Status Details F220-LECTerm Mo 11:30 - 14:20 Catherine Déri 2026-01-12 - 2026-02-20 Section Days & Times Instructor Meeting Dates Status Details F230-LECTerm Mo 08:30 - 11:20 Catherine Déri 2026-01-12 - 2026-02-20 Section Days & Times Instructor Meeting Dates Status Details F240-LECTerm Tu 14:30 - 17:20 Béatrice de Montigny 2026-01-12 - 2026-02-20 Section Days & Times Instructor Meeting Dates Status Details T200-LECTerm We 18:00 - 20:50 ALAIN NGOUEM 2026-01-12 - 2026-02-20 Section Days & Times Instructor Meeting Dates Status Details W200-LECTerm Fr 17:00 - 19:50 Karen Schiller 2026-01-12 - 2026-02-20",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -139614,7 +139243,7 @@
               }
             ],
             "instructors": [
-              "Alain Ngouem"
+              "ALAIN NGOUEM"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -141579,6 +141208,47 @@
             "instructors": [
               "Ilham Mekkioui",
               "Ilham Mekkioui"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHA",
+      "catalogNumber": "3520",
+      "courseCode": "PHA 3520",
+      "title": "Clinical Pharmacology Section Days & Times Instructor Meeting Dates Status Details B01-TUTFullSess. N/A 00:00 - 00:00 Staff 2026-01-12 - 2026-04-15 Section Days & Times Instructor Meeting Dates Status Details C01-TUTFullSess. N/A 00:00 - 00:00 Staff 2026-01-12 - 2026-04-15",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TUT": [
+          {
+            "section": "B01-TUT FullSess.",
+            "sectionCode": "B01",
+            "component": "TUT",
+            "session": null,
+            "times": [],
+            "instructors": [
+              "Staff"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "C01-TUT FullSess.",
+            "sectionCode": "C01",
+            "component": "TUT",
+            "session": null,
+            "times": [],
+            "instructors": [
+              "Staff"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -148126,7 +147796,7 @@
       "subject": "PHY",
       "catalogNumber": "1300",
       "courseCode": "PHY 1300",
-      "title": "The Big Bang and Beyond Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Mo 14:30 - 15:50Th 16:00 - 17:20 Arash MokhtariArash Mokhtari 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15",
+      "title": "The Big Bang and Beyond Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Mo 14:30 - 15:50Th 16:00 - 17:20 Arash Mokhtari ArdekaniArash Mokhtari Ardekani 2026-01-12 - 2026-04-152026-01-12 - 2026-04-15",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -148150,8 +147820,8 @@
               }
             ],
             "instructors": [
-              "Arash Mokhtari",
-              "Arash Mokhtari"
+              "Arash Mokhtari Ardekani",
+              "Arash Mokhtari Ardekani"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -153379,39 +153049,6 @@
             ],
             "instructors": [
               "Roger Rickwood"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "POL",
-      "catalogNumber": "4166",
-      "courseCode": "POL 4166",
-      "title": "Organisations internationales et gouvernance mondiale Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Tu 19:00 - 21:50 Mohammad-Ali Shirdel 2026-01-12 - 2026-04-15",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": false
-              }
-            ],
-            "instructors": [
-              "Mohammad-Ali Shirdel"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -164788,6 +164425,39 @@
     },
     {
       "subject": "SOC",
+      "catalogNumber": "7140",
+      "courseCode": "SOC 7140",
+      "title": "Advanced Quantitative Methodology Section Days & Times Instructor Meeting Dates Status Details A00-SEMFullSess. Fr 08:30 - 11:20 Phyllis Rippey 2026-01-12 - 2026-04-15",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "A00-SEM FullSess.",
+            "sectionCode": "A00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false
+              }
+            ],
+            "instructors": [
+              "Phyllis Rippey"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "SOC",
       "catalogNumber": "7170",
       "courseCode": "SOC 7170",
       "title": "Political Sociology Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. We 14:30 - 17:20 Gustave J. Goldmann 2026-01-12 - 2026-04-15",
@@ -165662,6 +165332,39 @@
     },
     {
       "subject": "SRS",
+      "catalogNumber": "3113",
+      "courseCode": "SRS 3113",
+      "title": "Contemporary Issues in Psychology of Religion Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Mo 14:30 - 17:20 Naomi Goldenberg 2026-01-12 - 2026-04-15",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": true
+              }
+            ],
+            "instructors": [
+              "Naomi Goldenberg"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "SRS",
       "catalogNumber": "3353",
       "courseCode": "SRS 3353",
       "title": "Contemporary Issues in Psychology of Religion Section Days & Times Instructor Meeting Dates Status Details A00-LECFullSess. Mo 14:30 - 17:20 Naomi Goldenberg 2026-01-12 - 2026-04-15",
@@ -166456,35 +166159,6 @@
             ],
             "instructors": [
               "Tina Goralski"
-            ],
-            "meetingDates": [
-              "2026-01-12",
-              "2026-04-15"
-            ],
-            "status": "Open"
-          },
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 600,
-                "endMinutes": 770,
-                "virtual": true
-              },
-              {
-                "day": "Th",
-                "startMinutes": 600,
-                "endMinutes": 770,
-                "virtual": true
-              }
-            ],
-            "instructors": [
-              "Attila Clemann",
-              "Attila Clemann"
             ],
             "meetingDates": [
               "2026-01-12",
@@ -171836,6 +171510,23 @@
               "2026-01-16"
             ],
             "status": "Closed"
+          }
+        ],
+        "REC": [
+          {
+            "section": "S00-REC FullSess.",
+            "sectionCode": "S00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "instructors": [
+              "Staff"
+            ],
+            "meetingDates": [
+              "2026-01-12",
+              "2026-04-15"
+            ],
+            "status": "Open"
           }
         ]
       }
