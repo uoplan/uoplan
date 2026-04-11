@@ -1,3 +1,6 @@
 {
-  "branches": ["main"]
+  "release-type": "node",
+  "packages": {
+    ".": {}
+  }
 }
