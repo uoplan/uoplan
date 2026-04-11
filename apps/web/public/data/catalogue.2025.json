@@ -158852,7 +158852,7 @@
       ]
     },
     {
-      "title": "Bachelor of Arts Interdisciplinary Studies (online)",
+      "title": "Bachelor of Arts Interdisciplinary Studies (online) (Coming in 2027)",
       "url": "https://catalogue.uottawa.ca/en/undergrad/bachelor-arts-interdisciplinary-studies-online/",
       "slug": "undergrad/bachelor-arts-interdisciplinary-studies-online",
       "requirements": [
@@ -158994,7 +158994,7 @@
       ]
     },
     {
-      "title": "Bachelor of Arts in Interdisciplinary Studies",
+      "title": "Bachelor of Arts Interdisciplinary Studies",
       "url": "https://catalogue.uottawa.ca/en/undergrad/bachelor-arts-interdisciplinary-studies/",
       "slug": "undergrad/bachelor-arts-interdisciplinary-studies",
       "requirements": [
@@ -179643,6 +179643,42 @@
         },
         {
           "type": "and",
+          "title": "Compulsory courses at the 2000 level",
+          "options": [
+            {
+              "type": "course",
+              "code": "MUS 2306",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "MUS 2307",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "MUS 2365",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "MUS 2366",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "MUS 2367",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "MUS 2368",
+              "credits": 3
+            }
+          ]
+        },
+        {
+          "type": "and",
           "title": "Compulsory course at the 4000 level",
           "options": [
             {
@@ -179656,43 +179692,6 @@
           "type": "and",
           "title": "Optional courses",
           "options": [
-            {
-              "type": "group",
-              "title": "18 course units from:",
-              "credits": 18,
-              "options": [
-                {
-                  "type": "course",
-                  "code": "MUS 2306",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "MUS 2307",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "MUS 2365",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "MUS 2366",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "MUS 2367",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "MUS 2368",
-                  "indented": true
-                }
-              ]
-            },
             {
               "type": "group",
               "title": "3 course units from:",
@@ -198423,6 +198422,11 @@
           "options": [
             {
               "type": "course",
+              "code": "MHA 5701",
+              "credits": 3
+            },
+            {
+              "type": "course",
               "code": "PHT 5512",
               "credits": 3
             },
@@ -200439,6 +200443,11 @@
           "options": [
             {
               "type": "course",
+              "code": "MHA 5701",
+              "credits": 3
+            },
+            {
+              "type": "course",
               "code": "PHT 5512",
               "credits": 3
             },
@@ -200559,6 +200568,11 @@
           "type": "and",
           "title": "Compulsory Courses",
           "options": [
+            {
+              "type": "course",
+              "code": "MHA 5701",
+              "credits": 3
+            },
             {
               "type": "course",
               "code": "PHT 5512",
@@ -204451,6 +204465,11 @@
           "options": [
             {
               "type": "course",
+              "code": "MHA 5701",
+              "credits": 3
+            },
+            {
+              "type": "course",
               "code": "PHT 5512",
               "credits": 3
             },
@@ -204564,13 +204583,12 @@
             {
               "type": "course",
               "code": "PHT 6906"
-            }
-          ]
-        },
-        {
-          "type": "and",
-          "title": "Compulsory Courses",
-          "options": [
+            },
+            {
+              "type": "course",
+              "code": "MHA 5701",
+              "credits": 3
+            },
             {
               "type": "course",
               "code": "PHT 5512",
