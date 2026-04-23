@@ -198883,13 +198883,12 @@
               "type": "course",
               "code": "HSS 4724",
               "credits": 3
-            }
-          ]
-        },
-        {
-          "type": "and",
-          "title": "Compulsory Courses",
-          "options": [
+            },
+            {
+              "type": "course",
+              "code": "MHA 5701",
+              "credits": 3
+            },
             {
               "type": "course",
               "code": "PHT 5512",
