@@ -9,6 +9,7 @@ import {
   createSchedulesSlice,
   createSelectionSlice,
 } from "./slices/index";
+import { DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS, DEFAULT_BASIC_LANGUAGE_BUCKETS, DEFAULT_BASIC_LEVEL_BUCKETS } from "../lib/electiveEligibility";
 
 
 export const useAppStore = create<AppStore>()((...a) => {
@@ -54,9 +55,9 @@ export const useAppStore = create<AppStore>()((...a) => {
     coursesThisSemester: 5,
     prereqEligibleCourses: [],
     filteredPrereqEligibleCourses: [],
-    levelBuckets: ["undergrad"],
-    languageBuckets: ["en", "other"],
-    electiveLevelBuckets: [1000, 2000],
+    levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
+    languageBuckets: [...DEFAULT_BASIC_LANGUAGE_BUCKETS],
+    electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
     currentSchedule: null,
     swapPool: [],
     chosenCourseToRequirementId: {},
@@ -119,9 +120,9 @@ export const useAppStore = create<AppStore>()((...a) => {
         coursesThisSemester: 5,
         prereqEligibleCourses: [],
         filteredPrereqEligibleCourses: [],
-        levelBuckets: ["undergrad"],
-        languageBuckets: ["en", "other"],
-        electiveLevelBuckets: [1000, 2000],
+        levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
+        languageBuckets: [...DEFAULT_BASIC_LANGUAGE_BUCKETS],
+        electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
         currentSchedule: null,
         swapPool: [],
         chosenCourseToRequirementId: {},
