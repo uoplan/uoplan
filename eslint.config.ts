@@ -11,6 +11,7 @@ export const baseConfig = defineConfig([
       "**/.turbo/**",
       "**/coverage/**",
       "**/*.config.ts",
+      '**/*.mjs',
       "apps/web/public/data/**",
     ],
   },
