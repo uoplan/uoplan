@@ -60803,7 +60803,7 @@
       "title": "Communications optiques et réseautage",
       "credits": 3,
       "description": "Revue d optique. Guides d'ondes diélectriques planaires et introduction à l optique intégrée. Fibres optiques et dispositifs à fibres (structures à bande interdite, réflecteurs Bragg). Théorie des communications par fibres optiques. Dégradation du signal dans les fibres optiques. Sources optiques. Photo-détecteurs. Émetteurs optiques. Amplificateurs optiques. Systèmes MRL.",
-      "component": "Cours magistral, Tutoriel, LaboratoirePréalables : ELG 3506 ou PHY 3720.",
+      "component": "Laboratoire, Cours magistral, TutorielPréalables : ELG 3506 ou PHY 3720.",
       "prereqText": "ELG 3506 ou PHY 3720",
       "prerequisites": {
         "type": "or_group",
@@ -85487,22 +85487,12 @@
       "title": "Interdisciplinary Health Research Communication and Knowledge Translation (Part 2 of 2)",
       "credits": 1.5,
       "description": "Exploring effective communication strategies and knowledge translation methods in interdisciplinary health science research. Study of the complexities of disseminating research findings across diverse audiences, including academics, policymakers, healthcare practitioners, and the public. Principles of clear and engaging communication in interdisciplinary collaboration, incorporating various mediums such as academic papers, presentations, social media, and public engagement activities. (Part 2 of 2)",
-      "component": "SeminarPrerequisite: HSS 61021.Graded S (satisfactory) or NS (non-satisfactory).",
-      "prereqText": "HSS 61021.Graded S (satisfactory) or NS (non-satisfactory)",
+      "component": "SeminarPrerequisite: HSS 61021. Graded S (satisfactory) or NS (non-satisfactory).",
+      "prereqText": "HSS 61021",
       "prerequisites": {
-        "type": "or_group",
-        "text": "HSS 61021.Graded S (satisfactory) or NS (non-satisfactory)",
-        "children": [
-          {
-            "type": "course",
-            "code": "HSS 61021",
-            "text": "HSS 61021.Graded S (satisfactory)"
-          },
-          {
-            "type": "non_course",
-            "text": "NS (non-satisfactory)"
-          }
-        ]
+        "type": "course",
+        "code": "HSS 61021",
+        "text": "HSS 61021"
       }
     },
     {
@@ -85626,7 +85616,7 @@
       "title": "Communication et mobilisation des connaissances en recherche en santé interdisciplinaire (2/2)",
       "credits": 1.5,
       "description": "Exploration des stratégies de communication efficaces et des méthodes de transfert de connaissances dans la recherche en sciences de la santé interdisciplinaire. Études des complexités de la diffusion des résultats de la recherche auprès de divers publics, y compris les universitaires, les décideurs politiques, les professionnels de la santé et le grand public. Principes d'une communication claire et engageante sur la collaboration interdisciplinaire, en incorporant divers médias tels que les articles académiques, les présentations, les médias sociaux et les activités d'engagement public. (2/2)",
-      "component": "SéminairePréalable HSS 65011. Noté S (satisfaisant) ou NS (non satisfaisant)."
+      "component": "SéminairePréalable HSS 65021. Noté S (satisfaisant) ou NS (non satisfaisant)."
     },
     {
       "code": "HSS 6503",
@@ -100742,19 +100732,19 @@
       "title": "Mechanical Vibration Analysis",
       "credits": 3,
       "description": "Analysis of natural frequencies of single degree and multi-degree-of-freedom discrete systems. Their response to excitation forces and amplitude. Analysis with complex variables. Analysis of natural frequencies of multi-degree-of-freedom and continuous systems such as beams and plates. Introduction to energy techniques for solving beam and plate problems.",
-      "component": "Lecture, TutorialPrerequisites: MCG 2108, MAT 3320.",
-      "prereqText": "MCG 2108, MAT 3320",
+      "component": "Lecture, TutorialPrerequisites: MAT 3320, MCG 2108.",
+      "prereqText": "MAT 3320, MCG 2108",
       "prerequisites": {
         "type": "and_group",
-        "text": "MCG 2108, MAT 3320",
+        "text": "MAT 3320, MCG 2108",
         "children": [
           {
             "type": "course",
-            "code": "MCG 2108"
+            "code": "MAT 3320"
           },
           {
             "type": "course",
-            "code": "MAT 3320"
+            "code": "MCG 2108"
           }
         ]
       }
@@ -123254,7 +123244,7 @@
       "title": "Logic II",
       "credits": 3,
       "description": "Topics may include: metatheory of classical logic, extensions and alternatives to classical first-order logic; philosophical logic; modal/intensional logic.",
-      "component": "Discussion Group, LecturePrerequisite: PHI 2170. This course has variable topics and may be taken several times if the themes are different.",
+      "component": "Lecture, Discussion GroupPrerequisite: PHI 2170. This course has variable topics and may be taken several times if the themes are different.",
       "prereqText": "PHI 2170",
       "prerequisites": {
         "type": "course",
@@ -260099,7 +260089,99 @@
       "title": "Microprogram Environmental Economics and Public Policy",
       "url": "https://catalogue.uottawa.ca/en/undergrad/microprogram-environmental-economics-public-policy/",
       "slug": "undergrad/microprogram-environmental-economics-public-policy",
-      "requirements": []
+      "requirements": [
+        {
+          "type": "and",
+          "title": "Compulsory Courses",
+          "options": [
+            {
+              "type": "course",
+              "code": "ECO 1104",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ECO 2118",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ECO 2144",
+              "credits": 3
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Optional Courses",
+          "options": [
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "ADM 1305",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 1300",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 1308",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 1320",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 1321",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 1327",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 1329",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 1330",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "ECO 2110",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ECO 3149",
+                  "indented": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "title": "Microprogram Food, Nutrition, and Health",
