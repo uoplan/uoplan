@@ -1,0 +1,31 @@
+{
+	"name": "uoplan-notifications",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-04-29",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"kv_namespaces": [
+		{
+			"binding": "WEBPUSH_SUBSCRIPTIONS",
+			"id": "ba766a014e684f69931d70eb9612d833"
+		}
+	],
+	"vars": {
+		"VAPID_PUBLIC_KEY": "BOh-leSM9bDtztY_UjyEzzu0-ycPoYFMqHscB6iANmA-XX2rJcaJ-E-Az11LegK8tTkdfANYFRXh_ewEpS88H9c",
+		"VAPID_SUBJECT": "mailto:admin@uoplan.party"
+	},
+	"routes": [
+		{
+			"pattern": "notifications.uoplan.party/*",
+			"zone_name": "uoplan.party"
+		},
+		{
+			"pattern": "notifications.uoplan.party",
+			"zone_name": "uoplan.party",
+			"custom_domain": true
+		}
+	],
+	"workers_dev": true,
+	"preview_urls": true
+}

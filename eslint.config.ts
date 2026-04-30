@@ -13,6 +13,8 @@ export const baseConfig = defineConfig([
       "**/*.config.ts",
       '**/*.mjs',
       "apps/web/public/data/**",
+      "**/public/**",
+      "apps/notifications/**",
     ],
   },
   js.configs.recommended,

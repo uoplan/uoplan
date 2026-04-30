@@ -1,0 +1,46 @@
+name: Send term notification
+
+on:
+  workflow_dispatch:
+    inputs:
+      term_name:
+        description: 'Term name to notify about (e.g. "Fall 2026")'
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      term_name:
+        required: true
+        type: string
+    secrets:
+      NOTIFY_SECRET:
+        required: true
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send push notification
+        env:
+          NOTIFY_SECRET: ${{ secrets.NOTIFY_SECRET }}
+        run: |
+          TERM_NAME="${{ inputs.term_name }}"
+          PAYLOAD=$(jq -n \
+            --arg title "uoplan — New Term Available" \
+            --arg body "$TERM_NAME is now on uoplan. Start planning your schedule!" \
+            --arg url "https://uoplan.party" \
+            '{title: $title, body: $body, url: $url}')
+
+          echo "Sending notification for: $TERM_NAME"
+          HTTP_CODE=$(curl -s -o /tmp/notif_response.json -w "%{http_code}" \
+            -X POST "https://notifications.uoplan.party/send" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $NOTIFY_SECRET" \
+            -d "$PAYLOAD")
+
+          echo "  HTTP $HTTP_CODE: $(cat /tmp/notif_response.json)"
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::warning::Notification request returned HTTP $HTTP_CODE"
+          fi

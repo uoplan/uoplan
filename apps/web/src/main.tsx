@@ -9,6 +9,10 @@ import { i18n, initializeI18n } from './i18n';
 
 await initializeI18n();
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(console.error);
+}
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <I18nProvider i18n={i18n}>
