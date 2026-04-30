@@ -44,6 +44,11 @@ message ScheduleSwap {
   uint32 course_code_index = 2;
 }
 
+message RequirementGroupSelection {
+  uint32 req_index = 1;
+  repeated string group_prefixes = 2;
+}
+
 message ShareableState {
   WizardMode wizard_mode = 1;
   repeated uint32 basic_pinned_courses = 2;
@@ -85,4 +90,5 @@ message ShareableState {
   uint32 active_step = 30;
   repeated ScheduleSwap swaps = 32;
   bool show_calendar = 33;
+  repeated RequirementGroupSelection constrained_group_selections = 34;
 }

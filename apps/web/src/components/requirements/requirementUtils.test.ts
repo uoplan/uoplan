@@ -1,6 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import type { DataCache } from "schedule";
 import type { RequirementWithStatus } from "schedule";
+import { isGroupToken } from "schedule";
+import { i18n } from "../../i18n";
 import {
   applyOptionSelections,
   countSatisfiedTopLevelRoots,
@@ -9,6 +11,11 @@ import {
   partitionIncompleteConstrainRoots,
   pruneOptionSelectionsForClear,
 } from "./requirementUtils";
+
+beforeAll(() => {
+  i18n.load("en", {});
+  i18n.activate("en");
+});
 
 function emptyScheduleCache(): DataCache {
   return {
@@ -594,5 +601,77 @@ describe("countSatisfiedTopLevelRoots", () => {
     expect(
       countSatisfiedTopLevelRoots(roots, { "req-1": ["SEG 3100"] }, null),
     ).toBe(1);
+  });
+});
+
+describe("getConstrainMultiSelectOptions — group entries", () => {
+  function makeNode(
+    candidateCourses: string[],
+  ): RequirementWithStatus {
+    return {
+      requirementId: "req-1",
+      type: "course",
+      title: "Test",
+      complete: false,
+      satisfiedBy: [],
+      candidateCourses,
+      creditsNeeded: 3,
+    } as unknown as RequirementWithStatus;
+  }
+
+  const ctx = {
+    ...defaultConstrainCtx,
+    cache: null, // null skips the schedule-availability filter, letting courses reach `filtered`
+    prereqEligible: new Set([
+      "CSI 2101", "CSI 2520", "CEG 2136", "CEG 3185", "MAT 1320",
+    ]),
+  };
+
+  it("adds group options before individual courses when prefix has 2+ courses", () => {
+    const node = makeNode(["CSI 2101", "CSI 2520", "CEG 2136", "CEG 3185", "MAT 1320"]);
+    const { options } = getConstrainMultiSelectOptions(node, {}, ctx);
+    const groupOptions = options.filter((o) => isGroupToken(o.value));
+    expect(groupOptions.length).toBe(2);
+    expect(groupOptions.map((o) => o.value)).toContain("group:CSI");
+    expect(groupOptions.map((o) => o.value)).toContain("group:CEG");
+    // MAT has only 1 course — no group for it
+    expect(groupOptions.map((o) => o.value)).not.toContain("group:MAT");
+  });
+
+  it("group options appear before individual course options", () => {
+    const node = makeNode(["CSI 2101", "CSI 2520", "MAT 1320"]);
+    const { options } = getConstrainMultiSelectOptions(node, {}, ctx);
+    const firstNonGroup = options.findIndex((o) => !isGroupToken(o.value));
+    const lastGroup = options.reduce(
+      (acc, o, i) => (isGroupToken(o.value) ? i : acc),
+      -1,
+    );
+    expect(lastGroup).toBeLessThan(firstNonGroup);
+  });
+
+  it("disables individual courses whose prefix is covered by a selected group token", () => {
+    const node = makeNode(["CSI 2101", "CSI 2520", "CEG 2136"]);
+    const { options } = getConstrainMultiSelectOptions(
+      node,
+      { "req-1": ["group:CSI"] },
+      ctx,
+    );
+    const csi2101 = options.find((o) => o.value === "CSI 2101");
+    const ceg2136 = options.find((o) => o.value === "CEG 2136");
+    expect(csi2101?.disabled).toBe(true);
+    expect(ceg2136?.disabled).toBe(false);
+  });
+
+  it("does not add group token to selectedForDisplay as a course", () => {
+    const node = makeNode(["CSI 2101", "CSI 2520"]);
+    const { selectedForDisplay } = getConstrainMultiSelectOptions(
+      node,
+      { "req-1": ["group:CSI"] },
+      ctx,
+    );
+    // group:CSI should be in selectedForDisplay (chip shown)
+    expect(selectedForDisplay).toContain("group:CSI");
+    // No individual CSI courses should be injected by the selection
+    expect(selectedForDisplay).not.toContain("CSI 2101");
   });
 });

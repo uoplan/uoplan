@@ -9,6 +9,9 @@ import {
   type GenerationConstraints,
   type RequirementWithStatus,
   type RemainingRequirement,
+  isGroupToken,
+  groupTokenPrefix,
+  subjectPrefix,
 } from "schedule";
 import {
   cacheWithClosedFilter,
@@ -164,6 +167,29 @@ interface GenerateSchedulesResult {
   generationError: GenerationErrorState | null;
 }
 
+function expandConstrainedPerRequirement(
+  raw: Record<string, string[]>,
+  candidatesByReqId: Map<string, string[]>,
+): Record<string, string[]> {
+  const result: Record<string, string[]> = {};
+  for (const [reqId, codes] of Object.entries(raw)) {
+    const candidates = candidatesByReqId.get(reqId) ?? [];
+    const expanded = new Set<string>();
+    for (const code of codes) {
+      if (isGroupToken(code)) {
+        const prefix = groupTokenPrefix(code);
+        for (const candidate of candidates) {
+          if (subjectPrefix(candidate) === prefix) expanded.add(candidate);
+        }
+      } else {
+        expanded.add(code);
+      }
+    }
+    if (expanded.size > 0) result[reqId] = [...expanded];
+  }
+  return result;
+}
+
 export async function generateSchedulesAction(
   state: AppState,
 ): Promise<GenerateSchedulesResult | null> {
@@ -177,7 +203,7 @@ export async function generateSchedulesAction(
     requirementTreeWithStatus,
     selectedPerRequirement,
     selectedOptionsPerRequirement,
-    constrainedPerRequirement,
+    constrainedPerRequirement: rawConstrainedPerRequirement,
     coursesThisSemester,
     completedCourses,
     prereqEligibleCourses,
@@ -217,6 +243,17 @@ export async function generateSchedulesAction(
     existingReqIds,
   );
   const effectiveRemainingRequirements = [...remainingRequirements, ...branchRequirements];
+
+  const candidatesByReqId = new Map<string, string[]>();
+  for (const req of effectiveRemainingRequirements) {
+    if (req.requirementId && req.candidateCourses) {
+      candidatesByReqId.set(req.requirementId, req.candidateCourses);
+    }
+  }
+  const constrainedPerRequirement = expandConstrainedPerRequirement(
+    rawConstrainedPerRequirement,
+    candidatesByReqId,
+  );
 
   const explicitExemptNormalized = new Set<string>();
   for (const codes of Object.values(constrainedPerRequirement)) {

@@ -10,6 +10,7 @@ import {
   withExtraCourses,
   isOptCourse,
   normalizeCourseCode,
+  makeGroupToken,
 } from "schedule";
 import { recomputeStateForProgram } from "../requirementCompute";
 import type { Course } from "schemas";
@@ -136,6 +137,16 @@ export const createUrlSlice: StateCreator<
         (code) => isOptCourse(normalizeCourseCode(code)) || inCatalogue.has(code),
       );
       if (valid.length) constrainedPerRequirement[reqId] = valid;
+    }
+
+    for (const { reqIndex, groupPrefixes } of decoded.constrainedGroupSelections) {
+      const reqId = reqIndexToId.get(reqIndex);
+      if (reqId == null) continue;
+      const tokens = groupPrefixes.map(makeGroupToken);
+      constrainedPerRequirement[reqId] = [
+        ...(constrainedPerRequirement[reqId] ?? []),
+        ...tokens,
+      ];
     }
 
     const requirementSlotsUserTouched: Record<string, true> = Object.fromEntries(

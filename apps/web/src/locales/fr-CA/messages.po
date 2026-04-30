@@ -594,6 +594,9 @@ msgstr "Sélectionnez des cours pour satisfaire cette exigence ({creditsRemainin
 msgid "requirementNode.coursesLabel"
 msgstr "Cours pour cette exigence"
 
+msgid "requirementNode.anyCourseGroup"
+msgstr "Tout cours {prefix}"
+
 msgid "termStep.label"
 msgstr "Sélectionnez votre session"
 

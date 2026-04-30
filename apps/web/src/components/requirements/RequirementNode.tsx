@@ -1,10 +1,7 @@
 import {
   useState,
-  
-  
   useMemo,
   memo,
-  
   type CSSProperties,
   type MouseEvent,
   type KeyboardEvent,
@@ -22,10 +19,10 @@ import {
   Radio,
 } from "@mantine/core";
 import type { PaperProps } from "@mantine/core";
-import { IconCheck, IconChevronDown, IconX } from "@tabler/icons-react";
+import { IconCheck, IconChevronDown, IconX, IconChartCohort } from "@tabler/icons-react";
 import type { ComboboxItem } from "@mantine/core";
 import type { DataCache } from "schedule";
-import { normalizeCourseCode } from "schedule";
+import { normalizeCourseCode, isGroupToken, groupTokenPrefix } from "schedule";
 import type { RequirementWithStatus } from "schedule";
 import {
   getConstrainMultiSelectOptions,
@@ -308,7 +305,7 @@ export const RequirementNode = memo(function RequirementNode({
     (node.complete && node.satisfiedBy.length > 0) || satisfiedBySelection;
   const hasRequirementId = node.requirementId != null;
   const { selectedForDisplay, options } = useMemo(() => {
-    return getConstrainMultiSelectOptions(node, selectedPerRequirement, {
+    const { selectedForDisplay, options } = getConstrainMultiSelectOptions(node, selectedPerRequirement, {
       cache,
       completedCourses,
       prereqEligible,
@@ -322,6 +319,21 @@ export const RequirementNode = memo(function RequirementNode({
       constrainedPerRequirement,
       completedOnly,
     });
+
+    // Re-sort: groups first when matching same prefix, otherwise alphabetical (ignoring "Any ")
+    options.sort((a, b) => {
+      // Get display strings for comparison, removing "Any " prefix for sorting
+      const getDisplayStr = (item: ComboboxItem) =>
+        isGroupToken(item.value) ? groupTokenPrefix(item.value) : item.label;
+
+      const aDisplay = getDisplayStr(a);
+      const bDisplay = getDisplayStr(b);
+
+      // Different prefixes: sort by display string alphabetically
+      return aDisplay.localeCompare(bDisplay);
+    });
+
+    return { selectedForDisplay, options };
   }, [
     node,
     prereqEligible,
@@ -402,6 +414,16 @@ export const RequirementNode = memo(function RequirementNode({
         searchable
         clearable
         renderOption={({ option }) => {
+          if (isGroupToken(option.value)) {
+            return (
+              <Group gap="xs" wrap="nowrap" align="center">
+                <Text span size="sm">
+                  {option.label}
+                </Text>
+                <IconChartCohort size={12} color="var(--mantine-color-gray-4)" />
+              </Group>
+            );
+          }
           const label = cache?.getCourse(option.value)?.title
             ? `${option.value} – ${cache.getCourse(option.value)?.title}`
             : option.value;

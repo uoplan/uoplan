@@ -3,6 +3,7 @@ import type { CourseLevelBucket, CourseLanguageBucket } from './courseFilters';
 import type { RemainingRequirement, RequirementWithStatus } from './requirements';
 import type { Indices } from 'schemas';
 import { isOptCourse, getCourseLevel } from './utils/courseUtils';
+import { isGroupToken, groupTokenPrefix } from './utils/groupToken';
 import type {
   DayOfWeek as ProtoDayOfWeek} from './proto/state';
 import {
@@ -97,6 +98,7 @@ export interface DecodedState {
   optionSelections: Array<{ reqIndex: number; optionIndex: number }>;
   courseSelections: Array<{ reqIndex: number; courseCodes: string[] }>;
   constrainedSelections: Array<{ reqIndex: number; courseCodes: string[] }>;
+  constrainedGroupSelections: Array<{ reqIndex: number; groupPrefixes: string[] }>;
   includeClosedComponents: boolean;
   virtualSectionsOnly: boolean;
   studentPrograms: string[];
@@ -214,6 +216,7 @@ export function encodeState(
     optionSelections: [],
     courseSelections: [],
     constrainedSelections: [],
+    constrainedGroupSelections: [],
     touchedReqIndices: [],
 
     includeClosedComponents: input.includeClosedComponents,
@@ -251,8 +254,22 @@ export function encodeState(
   for (const [reqId, codes] of Object.entries(input.constrainedPerRequirement)) {
     const reqIndex = reqIdToIndex.get(reqId);
     if (reqIndex !== undefined) {
-      const courseIndices = codes.map(encodeCourseCode).filter((i): i is number => i !== undefined);
-      if (courseIndices.length) state.constrainedSelections.push({ reqIndex, courseIndices });
+      const realCodes: string[] = [];
+      const groupPrefixes: string[] = [];
+      for (const c of codes) {
+        if (isGroupToken(c)) {
+          groupPrefixes.push(groupTokenPrefix(c));
+        } else {
+          realCodes.push(c);
+        }
+      }
+      if (realCodes.length) {
+        const courseIndices = realCodes.map(encodeCourseCode).filter((i): i is number => i !== undefined);
+        if (courseIndices.length) state.constrainedSelections.push({ reqIndex, courseIndices });
+      }
+      if (groupPrefixes.length) {
+        state.constrainedGroupSelections.push({ reqIndex, groupPrefixes });
+      }
     }
   }
 
@@ -351,6 +368,11 @@ export function decodeState(
     courseCodes: decodeCourseIndices(sel.courseIndices, constrainedOptCounters).filter(c => c && (isOptCourse(c) || catalogue.courses.some(catC => catC.code === c))),
   }));
 
+  const constrainedGroupSelections = state.constrainedGroupSelections.map(sel => ({
+    reqIndex: sel.reqIndex,
+    groupPrefixes: sel.groupPrefixes,
+  }));
+
   const basicPinnedCourses = state.basicPinnedCourses
     .map(idx => idx < indices.courses.length ? indices.courses[idx] : null)
     .filter((c): c is string => c !== null);
@@ -383,6 +405,7 @@ export function decodeState(
     optionSelections: state.optionSelections.map(o => ({ reqIndex: o.reqIndex, optionIndex: o.optionIndex })),
     courseSelections,
     constrainedSelections,
+    constrainedGroupSelections,
     
     includeClosedComponents: state.includeClosedComponents,
     virtualSectionsOnly: state.virtualSectionsOnly,

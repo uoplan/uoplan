@@ -306,6 +306,72 @@ describe('decodeState errors', () => {
   });
 });
 
+// ── group token round-trip ────────────────────────────────────────────────────
+
+describe("group token round-trip", () => {
+  it("encodes and decodes group tokens in constrainedPerRequirement", () => {
+    const input = makeInput({
+      requirementTreeWithStatus: [
+        {
+          requirementId: "req-0",
+          type: "course",
+          title: "Test",
+          complete: false,
+          satisfiedBy: [],
+          candidateCourses: ["CSI 2110", "MAT 1320"],
+          creditsNeeded: 3,
+        },
+      ] as unknown as EncodeInput["requirementTreeWithStatus"],
+      constrainedPerRequirement: {
+        "req-0": ["group:CSI", "MAT 1320"],
+      },
+    });
+
+    const bytes = encodeState(input, catalogue, indices);
+    expect(bytes).not.toBeNull();
+
+    const decoded = decodeState(bytes!, catalogue, indices);
+    expect("error" in decoded).toBe(false);
+    if ("error" in decoded) return;
+
+    expect(decoded.constrainedGroupSelections).toHaveLength(1);
+    expect(decoded.constrainedGroupSelections[0].groupPrefixes).toEqual(["CSI"]);
+    // Real course code preserved in constrainedSelections
+    expect(decoded.constrainedSelections[0].courseCodes).toContain("MAT 1320");
+  });
+
+  it("encodes only group tokens (no real codes) into constrainedGroupSelections", () => {
+    const input = makeInput({
+      requirementTreeWithStatus: [
+        {
+          requirementId: "req-0",
+          type: "course",
+          title: "Test",
+          complete: false,
+          satisfiedBy: [],
+          candidateCourses: [],
+          creditsNeeded: 3,
+        },
+      ] as unknown as EncodeInput["requirementTreeWithStatus"],
+      constrainedPerRequirement: { "req-0": ["group:CSI", "group:CEG"] },
+    });
+
+    const bytes = encodeState(input, catalogue, indices);
+    expect(bytes).not.toBeNull();
+
+    const decoded = decodeState(bytes!, catalogue, indices);
+    expect("error" in decoded).toBe(false);
+    if ("error" in decoded) return;
+
+    expect(decoded.constrainedGroupSelections[0].groupPrefixes).toEqual(["CSI", "CEG"]);
+    // No real codes — constrainedSelections should be empty for this req
+    const constrainedForReq = decoded.constrainedSelections.find(
+      (s) => s.reqIndex === decoded.constrainedGroupSelections[0].reqIndex,
+    );
+    expect(constrainedForReq?.courseCodes ?? []).toHaveLength(0);
+  });
+});
+
 // ── Base64 helpers ────────────────────────────────────────────────────────────
 
 describe('encodeStateToBase64 / decodeStateFromBase64', () => {
