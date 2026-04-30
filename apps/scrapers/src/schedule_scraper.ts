@@ -296,16 +296,12 @@ function parseScheduleHtml(
 ): CourseSchedule | null {
   const $ = cheerio.load(html);
 
-  const headerDiv = $('div[id^="win0divSSR_CLSRSLT_WRK_GROUPBOX2$"]').first();
-  let headerText = headerDiv.text().replace(/\s+/g, ' ').trim();
-  if (!headerText) {
-    headerText = `${subject} ${catalogNbr}`;
-  }
-
+  const headerAnchor = $('a[id^="SSR_CLSRSLT_WRK_GROUPBOX2$"]').first();
+  const anchorTitle = headerAnchor.attr('title') ?? '';
   let title: string | null = null;
-  const headerMatch = headerText.match(/^[A-Z]{3,4}\s*\d{4,5}[A-Z]?\s*-\s*(.+)$/);
-  if (headerMatch) {
-    title = headerMatch[1].trim();
+  const titleMatch = anchorTitle.match(/\s-\s(.+)$/);
+  if (titleMatch) {
+    title = titleMatch[1].trim();
   }
 
   const components: Record<string, ComponentSection[]> = {};
