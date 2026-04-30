@@ -7,6 +7,14 @@
     {
       "termId": "2265",
       "name": "2026 Spring/Summer Term"
+    },
+    {
+      "termId": "2269",
+      "name": "2026 Fall Term"
+    },
+    {
+      "termId": "2271",
+      "name": "2027 Winter Term"
     }
   ]
 }
