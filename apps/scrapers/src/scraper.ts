@@ -17,8 +17,8 @@ function getCurrentAcademicYear(): number {
   return now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1;
 }
 
-function buildBaseUrl(year: number): string {
-  if (year === getCurrentAcademicYear()) return ROOT_URL;
+function buildBaseUrl(year: number, currentYear: number): string {
+  if (year === currentYear) return ROOT_URL;
   return `${ROOT_URL}/archive/${year}-${year + 1}`;
 }
 
@@ -1289,7 +1289,7 @@ async function scrapeYearCatalogue(baseUrl: string): Promise<{ catalogue: Catalo
   return { catalogue, missingUrls };
 }
 
-async function scrapeYear(year: number, dataDir: string, force: boolean): Promise<string[]> {
+async function scrapeYear(year: number, dataDir: string, force: boolean, currentYear: number): Promise<string[]> {
   const outPath = path.join(dataDir, `catalogue.${year}.json`);
 
   if (!force) {
@@ -1302,7 +1302,7 @@ async function scrapeYear(year: number, dataDir: string, force: boolean): Promis
     }
   }
 
-  const baseUrl = buildBaseUrl(year);
+  const baseUrl = buildBaseUrl(year, currentYear);
   console.log(`\nScraping ${year}-${year + 1} from ${baseUrl}...`);
 
   const { catalogue, missingUrls } = await scrapeYearCatalogue(baseUrl);
@@ -1429,12 +1429,12 @@ async function main() {
 
   // Scrape archive years (skip if already present)
   for (let year = OLDEST_YEAR; year < currentYear; year++) {
-    const missing = await scrapeYear(year, dataDir, false);
+    const missing = await scrapeYear(year, dataDir, false, currentYear);
     if (missing.length) missingByYear[String(year)] = missing.sort();
   }
 
   // Always re-scrape the current year
-  const currentMissing = await scrapeYear(currentYear, dataDir, true);
+  const currentMissing = await scrapeYear(currentYear, dataDir, true, currentYear);
   if (currentMissing.length) {
     missingByYear[String(currentYear)] = currentMissing.sort();
   } else {
