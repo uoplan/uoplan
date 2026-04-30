@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Alert, Group, Switch, Text } from '@mantine/core';
+import { Alert, Box, Group, Loader, Switch, Text } from '@mantine/core';
 import { IconAlertTriangle, IconBell, IconBellOff } from '@tabler/icons-react';
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 
@@ -172,13 +172,27 @@ export function NotificationToggle() {
             Notify me when new terms are added
           </Text>
         </Group>
-        <Switch
-          checked={isSubscribed}
-          disabled={!!unsupportedReason || isDenied || loading}
-          onChange={isSubscribed ? handleDisable : handleEnable}
-          size="sm"
-          style={{ flexShrink: 0 }}
-        />
+        <Box style={{ position: 'relative', flexShrink: 0, display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+          <Switch
+            checked={isSubscribed}
+            disabled={!!unsupportedReason || isDenied || loading}
+            onChange={isSubscribed ? handleDisable : handleEnable}
+            size="sm"
+            style={{ '--switch-cursor': 'pointer', opacity: loading ? 0 : 1, transition: 'opacity 200ms ease', pointerEvents: loading ? 'none' : 'auto' } as React.CSSProperties}
+          />
+          <Loader
+            size="xs"
+            color="blue"
+            style={{
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              opacity: loading ? 1 : 0,
+              transition: 'opacity 200ms ease',
+              pointerEvents: 'none',
+            }}
+          />
+        </Box>
       </Group>
       {warningMessage && (
         <Alert
