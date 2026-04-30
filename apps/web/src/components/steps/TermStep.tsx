@@ -1,6 +1,7 @@
 import { Alert, Select, Stack, Text } from '@mantine/core';
 import type { Term } from 'schemas';
 import { tr } from '../../i18n';
+import { NotificationToggle } from './NotificationToggle';
 
 interface TermStepProps {
   terms: Term[];
@@ -30,6 +31,7 @@ export function TermStep({ terms, value, onChange }: TermStepProps) {
           {tr("termStep.note", )}
         </Text>
       </Alert>
+      <NotificationToggle />
     </Stack>
   );
 }

@@ -1,0 +1,19 @@
+{
+  "name": "notifications",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "wrangler types && tsc --noEmit"
+  },
+  "dependencies": {
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "@types/web-push": "^3.6.4",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.12.0"
+  }
+}

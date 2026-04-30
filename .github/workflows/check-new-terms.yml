@@ -1,0 +1,159 @@
+name: Check for new terms and notify
+
+on:
+  schedule:
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    outputs:
+      new_terms: ${{ steps.check_terms.outputs.new_terms }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check for new terms
+        id: check_terms
+        run: |
+          NEW_TERMS=$(pnpm check:terms 2>/dev/null) || { echo "new_terms=[]" >> "$GITHUB_OUTPUT"; exit 0; }
+          echo "new_terms=$NEW_TERMS" >> "$GITHUB_OUTPUT"
+          echo "New terms detected: $NEW_TERMS"
+
+      - name: Exit early if no new terms
+        if: steps.check_terms.outputs.new_terms == '[]'
+        run: |
+          echo "No new terms found. Nothing to do."
+
+      - name: Trigger daily scrape
+        if: steps.check_terms.outputs.new_terms != '[]'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BEFORE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          echo "Dispatching daily-scrape.yml at $BEFORE"
+          gh workflow run daily-scrape.yml
+
+          # Wait for the run to appear in the API
+          echo "Waiting for run to appear..."
+          sleep 20
+
+          for i in $(seq 1 24); do
+            RUN_ID=$(gh run list --workflow=daily-scrape.yml --limit=5 \
+              --json createdAt,databaseId \
+              --jq "[.[] | select(.createdAt > \"$BEFORE\")] | .[0].databaseId // empty")
+            if [ -n "$RUN_ID" ]; then
+              echo "Found triggered run: $RUN_ID"
+              echo "SCRAPE_RUN_ID=$RUN_ID" >> "$GITHUB_ENV"
+              break
+            fi
+            echo "Run not yet visible (attempt $i/24), retrying in 5s..."
+            sleep 5
+          done
+
+          if [ -z "$SCRAPE_RUN_ID" ]; then
+            echo "::error::Could not locate the triggered daily-scrape run"
+            exit 1
+          fi
+
+      - name: Wait for daily scrape to complete
+        if: steps.check_terms.outputs.new_terms != '[]'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Waiting for run $SCRAPE_RUN_ID to complete..."
+          while true; do
+            RESULT=$(gh run view "$SCRAPE_RUN_ID" --json status,conclusion)
+            STATUS=$(echo "$RESULT" | jq -r '.status')
+            CONCLUSION=$(echo "$RESULT" | jq -r '.conclusion')
+            echo "  status=$STATUS conclusion=$CONCLUSION"
+            if [ "$STATUS" = "completed" ]; then
+              if [ "$CONCLUSION" != "success" ]; then
+                echo "::error::daily-scrape run $SCRAPE_RUN_ID ended with conclusion: $CONCLUSION"
+                exit 1
+              fi
+              echo "daily-scrape completed successfully"
+              break
+            fi
+            sleep 60
+          done
+
+      - name: Get HEAD SHA after scrape push
+        if: steps.check_terms.outputs.new_terms != '[]'
+        run: |
+          NEW_SHA=$(git ls-remote origin main | cut -f1)
+          echo "NEW_SHA=$NEW_SHA" >> "$GITHUB_ENV"
+          echo "HEAD after scrape: $NEW_SHA"
+
+      - name: Wait for Cloudflare Pages build
+        if: steps.check_terms.outputs.new_terms != '[]'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TIMEOUT=600
+          START=$(date +%s)
+          echo "Polling CF Pages check-run for commit $NEW_SHA (timeout ${TIMEOUT}s)..."
+
+          while true; do
+            ELAPSED=$(( $(date +%s) - START ))
+            if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
+              echo "::error::Timed out after ${TIMEOUT}s waiting for Cloudflare Pages build"
+              exit 1
+            fi
+
+            # Look for a check whose name contains "cloudflare" or "pages" (case-insensitive)
+            CHECK=$(gh api "repos/$GITHUB_REPOSITORY/commits/$NEW_SHA/check-runs" \
+              --jq '[.check_runs[] | select(.name | test("cloudflare|pages"; "i"))] | .[0] | {status: .status, conclusion: .conclusion}' \
+              2>/dev/null || echo '{}')
+
+            CF_STATUS=$(echo "$CHECK" | jq -r '.status // "not_found"')
+            CF_CONCLUSION=$(echo "$CHECK" | jq -r '.conclusion // "null"')
+
+            echo "  CF Pages: status=$CF_STATUS conclusion=$CF_CONCLUSION (${ELAPSED}s elapsed)"
+
+            if [ "$CF_STATUS" = "completed" ]; then
+              if [ "$CF_CONCLUSION" = "success" ]; then
+                echo "Cloudflare Pages build succeeded"
+                break
+              else
+                echo "::error::Cloudflare Pages build ended with: $CF_CONCLUSION"
+                exit 1
+              fi
+            fi
+
+            sleep 30
+          done
+
+
+  notify:
+    needs: check
+    if: needs.check.outputs.new_terms != '[]'
+    strategy:
+      matrix:
+        term: ${{ fromJson(needs.check.outputs.new_terms) }}
+    uses: ./.github/workflows/notify-term.yml
+    with:
+      term_name: ${{ matrix.term.name }}
+    secrets:
+      NOTIFY_SECRET: ${{ secrets.NOTIFY_SECRET }}

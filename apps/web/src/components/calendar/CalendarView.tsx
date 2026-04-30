@@ -167,19 +167,21 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(
           size="lg"
           centered
         >
-          <SwapModalContent
-            schedule={schedule}
-            modalState={swap.modalState!}
-            result={swap.result}
-            loading={swap.loading}
-            candidateOptions={swap.candidateOptions}
-            query={swap.query}
-            setQuery={swap.setQuery}
-            closeModal={swap.closeModal}
-            cache={cache}
-            professorRatings={professorRatings}
-            onSwap={onSwap}
-          />
+          {swap.modalState && (
+            <SwapModalContent
+              schedule={schedule}
+              modalState={swap.modalState}
+              result={swap.result}
+              loading={swap.loading}
+              candidateOptions={swap.candidateOptions}
+              query={swap.query}
+              setQuery={swap.setQuery}
+              closeModal={swap.closeModal}
+              cache={cache}
+              professorRatings={professorRatings}
+              onSwap={onSwap}
+            />
+          )}
         </Modal>
       </Box>
     );
