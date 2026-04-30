@@ -594,6 +594,9 @@ msgstr "Select course(s) to fulfill this requirement ({creditsRemaining} credit{
 msgid "requirementNode.coursesLabel"
 msgstr "Courses for this requirement"
 
+msgid "requirementNode.anyCourseGroup"
+msgstr "Any {prefix} course"
+
 msgid "termStep.label"
 msgstr "Select your term"
 

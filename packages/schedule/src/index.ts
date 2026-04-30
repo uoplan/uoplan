@@ -11,6 +11,7 @@ export * from './dataCache';
 export * from './utils/courseUtils';
 export * from './utils/timeUtils';
 export * from './utils/uiUtils';
+export * from './utils/groupToken';
 export * from './ics';
 export * from './transcriptParser';
 export * from './stateEncode';

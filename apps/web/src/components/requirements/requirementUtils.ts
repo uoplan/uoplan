@@ -4,12 +4,17 @@ import {
   courseMatchesFilters,
   getEffectiveSchedule,
   isHonoursProject,
+  isGroupToken,
+  groupTokenPrefix,
+  makeGroupToken,
+  subjectPrefix,
 } from "schedule";
 import {
   isElectiveRequirementType,
   isWithinElectiveLevelCap,
   virtualScheduleFilterApplies,
 } from "../../lib/electiveEligibility";
+import { tr } from "../../i18n";
 
 function normalizeTitleForCompare(title: string | undefined): string {
   return (title ?? "").trim().replace(/\s+/g, " ").toLowerCase();
@@ -429,6 +434,7 @@ export function getConstrainMultiSelectOptions(
   const normalizedSeen = new Set<string>();
   const available: string[] = [];
   for (const c of selectedForDisplay) {
+    if (isGroupToken(c)) continue;
     const norm = normalizeCourseCode(c);
     if (normalizedSeen.has(norm)) continue;
     normalizedSeen.add(norm);
@@ -449,13 +455,39 @@ export function getConstrainMultiSelectOptions(
     return 0;
   });
 
-  const options = availableSorted.map((code) => {
+  // Prefixes covered by currently-selected group tokens
+  const selectedGroupPrefixes = new Set<string>(
+    selected.filter(isGroupToken).map(groupTokenPrefix),
+  );
+
+  // Count courses per prefix among available (real codes only)
+  const prefixCounts = new Map<string, number>();
+  for (const code of available) {
+    const pfx = subjectPrefix(code);
+    prefixCounts.set(pfx, (prefixCounts.get(pfx) ?? 0) + 1);
+  }
+
+  // Group options for prefixes with ≥ 2 courses, sorted alphabetically
+  const groupOptions: ConstrainMultiSelectOption[] = [...prefixCounts.entries()]
+    .filter(([, count]) => count >= 2) // single-course prefixes offer no real choice as a group
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([pfx]) => ({
+      value: makeGroupToken(pfx),
+      label: tr("requirementNode.anyCourseGroup", { prefix: pfx }),
+      disabled: false,
+    }));
+
+  // Individual course options — disable if prefix covered by a selected group
+  const courseOptions = availableSorted.map((code) => {
     const norm = normalizeCourseCode(code);
     const usedElsewhere =
       ctx.allAssignedCoursesNormalized.has(norm) &&
       !selectedForDisplay.includes(code);
-    return { value: code, label: code, disabled: usedElsewhere };
+    const coveredByGroup = selectedGroupPrefixes.has(subjectPrefix(code));
+    return { value: code, label: code, disabled: usedElsewhere || coveredByGroup };
   });
+
+  const options = [...groupOptions, ...courseOptions];
 
   return { selectedForDisplay, options };
 }
