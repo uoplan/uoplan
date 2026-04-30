@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Group, Switch, Text, Tooltip } from '@mantine/core';
-import { IconBell, IconBellOff } from '@tabler/icons-react';
+import { Alert, Group, Switch, Text } from '@mantine/core';
+import { IconAlertTriangle, IconBell, IconBellOff } from '@tabler/icons-react';
 
 const WORKER_URL =
   (import.meta.env.VITE_NOTIFICATIONS_URL as string | undefined) ??
@@ -118,32 +118,36 @@ export function NotificationToggle() {
   }
 
   const icon = isSubscribed ? <IconBell size={14} /> : <IconBellOff size={14} />;
-  const tooltipLabel = unsupportedReason ?? (isDenied ? 'Notifications blocked in browser settings' : undefined);
+  const warningMessage = unsupportedReason ?? (isDenied ? 'Notifications blocked in browser settings' : null);
 
   return (
-    <Group justify="space-between" align="center">
-      <Group gap="xs">
-        {icon}
-        <Text size="sm" c="dimmed">
-          Notify me when new terms are added
-        </Text>
+    <>
+      <Group justify="space-between" align="center" wrap="nowrap">
+        <Group gap="xs" wrap="nowrap" style={{ minWidth: 0 }}>
+          {icon}
+          <Text size="sm" c="dimmed" truncate>
+            Notify me when new terms are added
+          </Text>
+        </Group>
+        <Switch
+          checked={isSubscribed}
+          disabled={!!unsupportedReason || isDenied || loading}
+          onChange={isSubscribed ? handleDisable : handleEnable}
+          size="sm"
+          style={{ flexShrink: 0 }}
+        />
       </Group>
-      <Tooltip
-        label={tooltipLabel}
-        disabled={!tooltipLabel}
-        withArrow
-        multiline
-        w={200}
-      >
-        <span>
-          <Switch
-            checked={isSubscribed}
-            disabled={!!unsupportedReason || isDenied || loading}
-            onChange={isSubscribed ? handleDisable : handleEnable}
-            size="sm"
-          />
-        </span>
-      </Tooltip>
-    </Group>
+      {warningMessage && (
+        <Alert
+          color="yellow"
+          icon={<IconAlertTriangle size={16} />}
+          mt="xs"
+          p="xs"
+          radius="sm"
+        >
+          <Text size="xs">{warningMessage}</Text>
+        </Alert>
+      )}
+    </>
   );
 }
