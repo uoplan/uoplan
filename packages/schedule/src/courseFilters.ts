@@ -8,7 +8,7 @@ export interface CourseFilters {
 export type CourseLevelBucket = 'undergrad' | 'grad';
 
 function extractNumericPart(code: string): string | null {
-  const match = code.match(/(\d{4})/);
+  const match = code.match(/(\d{4,5})/);
   return match ? match[1] : null;
 }
 

@@ -64,16 +64,15 @@ export function parseCourseCode(code: string): {
 }
 
 /**
- * Get the level of a course (1000, 2000, etc.) from its code.
- * Returns the thousands digit * 1000.
+ * Get the level of a course (1000, 2000, 12000, etc.) from its code.
+ * Parses the full course number and floors to the nearest thousand.
  */
 export function getCourseLevel(code: string): number | null {
   const parsed = parseCourseCode(code);
   if (!parsed) return null;
-  const firstDigit = parsed.number.charAt(0);
-  const digit = parseInt(firstDigit, 10);
-  if (Number.isNaN(digit)) return null;
-  return digit * 1000;
+  const num = parseInt(parsed.number, 10);
+  if (Number.isNaN(num)) return null;
+  return Math.floor(num / 1000) * 1000;
 }
 
 /**
