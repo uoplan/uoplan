@@ -1,4 +1,4 @@
-import webpush from 'web-push';
+import { sendPushNotification } from './webpush.js';
 
 export interface Env {
   WEBPUSH_SUBSCRIPTIONS: KVNamespace;
@@ -71,8 +71,6 @@ async function handleSend(req: Request, env: Env): Promise<Response> {
 
   const { title, body, url } = payload;
 
-  webpush.setVapidDetails(env.VAPID_SUBJECT, env.VAPID_PUBLIC_KEY, env.VAPID_PRIVATE_KEY);
-
   let sent = 0;
   let failed = 0;
   let cleaned = 0;
@@ -81,7 +79,7 @@ async function handleSend(req: Request, env: Env): Promise<Response> {
 
   while (!listComplete) {
     const list = await env.WEBPUSH_SUBSCRIPTIONS.list({ prefix: 'sub:', cursor });
-    cursor = list.cursor ?? undefined;
+    cursor = (list as { cursor?: string }).cursor ?? undefined;
     listComplete = list.list_complete;
 
     await Promise.all(
@@ -90,7 +88,13 @@ async function handleSend(req: Request, env: Env): Promise<Response> {
         if (!subJson) return;
         const subscription = JSON.parse(subJson);
         try {
-          await webpush.sendNotification(subscription, JSON.stringify({ title, body, url }));
+          await sendPushNotification(
+            subscription,
+            JSON.stringify({ title, body, url }),
+            env.VAPID_SUBJECT,
+            env.VAPID_PUBLIC_KEY,
+            env.VAPID_PRIVATE_KEY,
+          );
           sent++;
         } catch (err: unknown) {
           const status = (err as { statusCode?: number }).statusCode;
