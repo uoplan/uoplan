@@ -35,15 +35,25 @@ function urlBase64ToUint8Array(base64: string): Uint8Array {
   const padding = '='.repeat((4 - (base64.length % 4)) % 4);
   const b64 = (base64 + padding).replace(/-/g, '+').replace(/_/g, '/');
   const raw = atob(b64);
-  return Uint8Array.from([...raw].map((c) => c.charCodeAt(0)));
+  return new Uint8Array([...raw].map((c) => c.charCodeAt(0)));
+}
+
+function getUnsupportedReason(): string | null {
+  if ('PushManager' in window) return null;
+  const isIOS =
+    /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (isIOS) {
+    return 'Add uoplan to your Home Screen to enable notifications';
+  }
+  return 'Push notifications are not supported in this browser';
 }
 
 export function NotificationToggle() {
   const [state, setState] = useState<NotifState>(loadState);
   const [loading, setLoading] = useState(false);
 
-  if (!('PushManager' in window)) return null;
-
+  const unsupportedReason = getUnsupportedReason();
   const isSubscribed = state.status === 'subscribed';
   const isDenied = state.status === 'denied';
 
@@ -65,7 +75,7 @@ export function NotificationToggle() {
       const reg = await navigator.serviceWorker.ready;
       const sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY) as unknown as ArrayBuffer,
       });
 
       await fetch(`${WORKER_URL}/subscribe`, {
@@ -108,6 +118,7 @@ export function NotificationToggle() {
   }
 
   const icon = isSubscribed ? <IconBell size={14} /> : <IconBellOff size={14} />;
+  const tooltipLabel = unsupportedReason ?? (isDenied ? 'Notifications blocked in browser settings' : undefined);
 
   return (
     <Group justify="space-between" align="center">
@@ -118,14 +129,16 @@ export function NotificationToggle() {
         </Text>
       </Group>
       <Tooltip
-        label="Notifications blocked in browser settings"
-        disabled={!isDenied}
+        label={tooltipLabel}
+        disabled={!tooltipLabel}
         withArrow
+        multiline
+        w={200}
       >
         <span>
           <Switch
             checked={isSubscribed}
-            disabled={isDenied || loading}
+            disabled={!!unsupportedReason || isDenied || loading}
             onChange={isSubscribed ? handleDisable : handleEnable}
             size="sm"
           />

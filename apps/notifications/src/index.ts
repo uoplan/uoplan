@@ -100,6 +100,7 @@ async function handleSend(req: Request, env: Env): Promise<Response> {
           } else {
             failed++;
           }
+          console.error('Failed to send notification:', err);
         }
       }),
     );
