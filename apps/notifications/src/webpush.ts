@@ -129,7 +129,8 @@ export async function sendPushNotification(
 	});
 
 	if (!response.ok && response.status !== 201) {
-		const err = new Error(`Push service responded ${response.status}`);
+		const body = await response.text().catch(() => '');
+		const err = new Error(`Push service responded ${response.status}: ${body}`);
 		(err as { statusCode?: number }).statusCode = response.status;
 		throw err;
 	}

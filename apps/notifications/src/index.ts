@@ -103,8 +103,8 @@ async function handleSend(req: Request, env: Env): Promise<Response> {
             cleaned++;
           } else {
             failed++;
+            console.error('Failed to send notification (status=%s):', status ?? 'unknown', err);
           }
-          console.error('Failed to send notification:', err);
         }
       }),
     );
