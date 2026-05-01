@@ -27,10 +27,12 @@ export function CalendarEventContent({
   ext,
   cache,
   colorMap,
+  isCompactLayout,
 }: {
   ext: CalendarEvent;
   cache: DataCache | null;
   colorMap: Record<string, number>;
+  isCompactLayout: boolean;
 }) {
   const courseTitle = useMemo(
     () => cache?.getCourse(ext.courseCode)?.title ?? "",
@@ -93,7 +95,7 @@ export function CalendarEventContent({
             </span>
           )}
         </div>
-        <div className="fc-uoplan-event-time-row">
+        <div className={isCompactLayout ? "fc-uoplan-event-time-row fc-uoplan-event-time-row--stacked" : "fc-uoplan-event-time-row"}>
           <span className="fc-uoplan-event-time">{timeRange}</span>
           {ext.gradeViz ? (
             <Tooltip
@@ -106,12 +108,14 @@ export function CalendarEventContent({
               withinPortal
               color="dark"
             >
-              <div>
+              <div className={isCompactLayout ? "fc-uoplan-event-grade-chip-wrap fc-uoplan-event-grade-chip-wrap--stacked" : "fc-uoplan-event-grade-chip-wrap"}>
                 <GradeDistributionCompactChip gradeViz={ext.gradeViz} />
               </div>
             </Tooltip>
           ) : (
-            <GradeDistributionCompactChip gradeViz={ext.gradeViz} />
+            <div className={isCompactLayout ? "fc-uoplan-event-grade-chip-wrap fc-uoplan-event-grade-chip-wrap--stacked" : "fc-uoplan-event-grade-chip-wrap"}>
+              <GradeDistributionCompactChip gradeViz={ext.gradeViz} />
+            </div>
           )}
         </div>
         <span

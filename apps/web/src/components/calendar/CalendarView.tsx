@@ -84,10 +84,15 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(
       (arg: { event: { extendedProps: unknown } }) => {
         const ext = arg.event.extendedProps as CalendarEvent;
         return (
-          <CalendarEventContent ext={ext} cache={cache} colorMap={colorMap} />
+          <CalendarEventContent
+            ext={ext}
+            cache={cache}
+            colorMap={colorMap}
+            isCompactLayout={isMobile}
+          />
         );
       },
-      [cache, colorMap]
+      [cache, colorMap, isMobile]
     );
 
     const handleEventClick = (info: { event: { extendedProps: unknown } }) => {
