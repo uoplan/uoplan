@@ -64,7 +64,7 @@ Library: `web-push` or `@block65/webcrypto-web-push` (Workers-compatible — ver
 
 **Worker vars (in `wrangler.json`):**
 - `VAPID_PUBLIC_KEY` — base64url-encoded public key (safe to expose)
-- `VAPID_SUBJECT` — `mailto:matteopolak@hotmail.com`
+- `VAPID_SUBJECT` — `mailto:<email>`
 
 ### CORS
 

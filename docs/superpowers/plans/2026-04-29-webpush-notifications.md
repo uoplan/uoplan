@@ -142,7 +142,7 @@ VITE_NOTIFICATIONS_URL=http://localhost:8787
   ],
   "vars": {
     "VAPID_PUBLIC_KEY": "REPLACE_AFTER_GENERATE",
-    "VAPID_SUBJECT": "mailto:matteopolak@hotmail.com"
+    "VAPID_SUBJECT": "mailto:<email>>"
   },
   "routes": [
     {
