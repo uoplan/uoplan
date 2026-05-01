@@ -326,16 +326,15 @@ export const RequirementNode = memo(function RequirementNode({
       completedOnly,
     });
 
-    // Re-sort: groups first when matching same prefix, otherwise alphabetical (ignoring "Any ")
+    // Re-sort: groups first when matching same prefix, otherwise alphabetical by course code
+    // (use value for courses so titles in label do not reorder the list)
     options.sort((a, b) => {
-      // Get display strings for comparison, removing "Any " prefix for sorting
       const getDisplayStr = (item: ComboboxItem) =>
-        isGroupToken(item.value) ? groupTokenPrefix(item.value) : item.label;
+        isGroupToken(item.value) ? groupTokenPrefix(item.value) : item.value;
 
       const aDisplay = getDisplayStr(a);
       const bDisplay = getDisplayStr(b);
 
-      // Different prefixes: sort by display string alphabetically
       return aDisplay.localeCompare(bDisplay);
     });
 
@@ -438,9 +437,7 @@ export const RequirementNode = memo(function RequirementNode({
               </Group>
             );
           }
-          const label = cache?.getCourse(option.value)?.title
-            ? `${option.value} – ${cache.getCourse(option.value)?.title}`
-            : option.value;
+          const label = option.label;
           const isSelected = selectedForDisplay.includes(option.value);
           const isCompleted = unassignedCompletedSetNormalized.has(
             normalizeCourseCode(option.value),

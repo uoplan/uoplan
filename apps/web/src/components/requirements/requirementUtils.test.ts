@@ -408,6 +408,45 @@ describe("getConstrainMultiSelectOptions", () => {
     const { options } = getConstrainMultiSelectOptions(node, {}, ctx);
     expect(options.map((o) => o.value)).toEqual(["SEG 3100"]);
   });
+
+  it("uses combined code and title as option label when cache has a title", () => {
+    const businessTitle = "Introduction to Business";
+    const cacheWithSchedules: DataCache = {
+      getCourse: () =>
+        ({
+          code: "ADM 1101",
+          title: businessTitle,
+          credits: 3,
+        }) as NonNullable<ReturnType<DataCache["getCourse"]>>,
+      resolveToCanonical: (code) => code,
+      getSchedule: (code) =>
+        ({
+          courseCode: code,
+          components: {},
+        }) as NonNullable<ReturnType<DataCache["getSchedule"]>>,
+      getCoursesByDiscipline: () => [],
+      getAllCourses: () => [],
+      getAllSchedules: () => [],
+    };
+    const node: RequirementWithStatus = {
+      type: "free_elective",
+      title: "Free",
+      complete: false,
+      satisfiedBy: [],
+      requirementId: "req-adm",
+      candidateCourses: ["ADM 1101"],
+      creditsNeeded: 3,
+    };
+    const ctx = {
+      ...defaultConstrainCtx,
+      cache: cacheWithSchedules,
+      prereqEligible: new Set(["ADM 1101"]),
+    };
+    const { options } = getConstrainMultiSelectOptions(node, {}, ctx);
+    const adm = options.find((o) => o.value === "ADM 1101");
+    expect(adm?.value).toBe("ADM 1101");
+    expect(adm?.label).toBe(`ADM 1101 – ${businessTitle}`);
+  });
 });
 
 describe("partitionIncompleteConstrainRoots", () => {

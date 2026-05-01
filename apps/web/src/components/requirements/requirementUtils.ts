@@ -490,7 +490,9 @@ export function getConstrainMultiSelectOptions(
       ctx.allAssignedCoursesNormalized.has(norm) &&
       !selectedForDisplay.includes(code);
     const coveredByGroup = selectedGroupPrefixes.has(subjectPrefix(code));
-    return { value: code, label: code, disabled: usedElsewhere || coveredByGroup };
+    const title = ctx.cache?.getCourse(norm)?.title;
+    const label = title ? `${code} – ${title}` : code;
+    return { value: code, label, disabled: usedElsewhere || coveredByGroup };
   });
 
   let options = [...groupOptions, ...courseOptions];
