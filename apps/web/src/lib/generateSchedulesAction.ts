@@ -5,6 +5,7 @@ import { createSeededRng } from "schedule";
 import {
   generateSchedulesWithPinned,
   getValidSectionCombos,
+  courseGpa,
   type GeneratedSchedule,
   type GenerationConstraints,
   type RequirementWithStatus,
@@ -52,6 +53,11 @@ import {
 
 const UNKNOWN_COURSE_LEVEL = 999_000;
 
+/** Pivot GPA (~B-): higher → boost weight when "prefer easier" is on. */
+const EASIER_GPA_PIVOT = 2.7;
+/** Base for exponential boost: weight multiplier = BASE^(gpa - pivot). */
+const EASIER_GPA_BASE = 3.0;
+
 /** Each level tier is this many times less likely than the one below it. */
 const LEVEL_WEIGHT_BASE = 2;
 /** Penalty multiplier for courses with non-course prerequisites (e.g. "permission of instructor"). */
@@ -69,6 +75,37 @@ function candidateWeight(level: number, hasNonCoursePrereq: boolean): number {
   let w = 1 / Math.pow(LEVEL_WEIGHT_BASE, tier - 1);
   if (hasNonCoursePrereq) w *= NON_COURSE_PREREQ_PENALTY;
   return w;
+}
+
+function reorderOptionalPoolByEasiness(
+  codes: string[],
+  cache: DataCache,
+  preferEasier: boolean,
+  rng: () => number,
+): void {
+  if (!preferEasier || codes.length <= 1) {
+    shuffleInPlace(codes, rng);
+    return;
+  }
+  const memo = new Map<string, number>();
+  function easierWeight(code: string): number {
+    let w = memo.get(code);
+    if (w !== undefined) return w;
+    const sched = cache.getSchedule(code);
+    const gpa = sched ? courseGpa(sched) : null;
+    w = gpa == null ? 1 : Math.pow(EASIER_GPA_BASE, gpa - EASIER_GPA_PIVOT);
+    memo.set(code, w);
+    return w;
+  }
+  const remaining = [...codes];
+  codes.length = 0;
+  while (remaining.length > 0) {
+    const weights = remaining.map(easierWeight);
+    const picked = weightedRandomPick(remaining, weights, rng);
+    codes.push(picked);
+    const idx = remaining.indexOf(picked);
+    remaining.splice(idx, 1);
+  }
 }
 
 function collectRequirementsFromSelectedBranches(
@@ -264,6 +301,7 @@ export async function generateSchedulesAction(
     virtualSectionsOnly,
     generationLimitFirstYearCredits,
     generationCompressedSchedule,
+    generationPreferEasier,
   } = state;
 
   if (!cache) {
@@ -776,6 +814,18 @@ export async function generateSchedulesAction(
       };
     }
 
+    const easierMemo = new Map<string, number>();
+    function easierMultiplierForCourse(code: string): number {
+      if (!generationPreferEasier) return 1;
+      let m = easierMemo.get(code);
+      if (m !== undefined) return m;
+      const sched = cacheVal.getSchedule(code);
+      const gpa = sched ? courseGpa(sched) : null;
+      m = gpa == null ? 1 : Math.pow(EASIER_GPA_BASE, gpa - EASIER_GPA_PIVOT);
+      easierMemo.set(code, m);
+      return m;
+    }
+
     function runPoolPickPass(
       perPoolNeed: Map<string, number>,
     ): PoolPickPassResult {
@@ -963,7 +1013,9 @@ export async function generateSchedulesAction(
             cands.push({
               pool,
               code,
-              weight: candidateWeight(level, hasNonCoursePrereq) / bucketSize,
+              weight:
+                (candidateWeight(level, hasNonCoursePrereq) / bucketSize) *
+                easierMultiplierForCourse(code),
             });
           }
         }
@@ -1233,6 +1285,7 @@ async function handleBasicGeneration(
     firstSeed,
     includeClosedComponents,
     virtualSectionsOnly,
+    generationPreferEasier,
     completedCourses,
     studentPrograms,
   } = state;
@@ -1298,7 +1351,7 @@ async function handleBasicGeneration(
     optionalPool.push(code);
   }
 
-  shuffleInPlace(optionalPool, rng);
+  reorderOptionalPoolByEasiness(optionalPool, effectiveCache, generationPreferEasier, rng);
 
   const batch = generateSchedulesWithPinned(
     pinned,

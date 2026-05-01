@@ -11,6 +11,10 @@ export const MeetingTimeSchema = z.object({
 });
 export type MeetingTime = z.infer<typeof MeetingTimeSchema>;
 
+/** Letter-grade histogram counts (from uo.grades.zone scrape). */
+export const GradeDistributionSchema = z.record(z.string(), z.number());
+export type GradeDistribution = z.infer<typeof GradeDistributionSchema>;
+
 export const ComponentSectionSchema = z.object({
   section: z.string(),
   sectionCode: z.string().nullable(),
@@ -20,6 +24,7 @@ export const ComponentSectionSchema = z.object({
   instructors: z.array(z.string()),
   meetingDates: z.array(z.string()).nullable(),
   status: z.string().nullable(),
+  distribution: GradeDistributionSchema.optional(),
 });
 export type ComponentSection = z.infer<typeof ComponentSectionSchema>;
 

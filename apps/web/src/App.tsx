@@ -96,6 +96,7 @@ function App() {
     virtualSectionsOnly,
     generationLimitFirstYearCredits,
     generationCompressedSchedule,
+    generationPreferEasier,
   } = useAppStore(
     useShallow((s) => ({
       catalogue: s.catalogue,
@@ -131,6 +132,7 @@ function App() {
       virtualSectionsOnly: s.virtualSectionsOnly,
       generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
       generationCompressedSchedule: s.generationCompressedSchedule,
+      generationPreferEasier: s.generationPreferEasier,
     })),
   );
 
@@ -160,6 +162,7 @@ function App() {
   const setVirtualSectionsOnly = useAppStore((s) => s.setVirtualSectionsOnly);
   const setGenerationLimitFirstYearCredits = useAppStore((s) => s.setGenerationLimitFirstYearCredits);
   const setGenerationCompressedSchedule = useAppStore((s) => s.setGenerationCompressedSchedule);
+  const setGenerationPreferEasier = useAppStore((s) => s.setGenerationPreferEasier);
   const resetToDefault = useAppStore((s) => s.resetToDefault);
 
   const {
@@ -756,6 +759,8 @@ function App() {
                       onCompressedScheduleChange={
                         setGenerationCompressedSchedule
                       }
+                      preferEasierCourses={generationPreferEasier}
+                      onPreferEasierCoursesChange={setGenerationPreferEasier}
                       onGenerate={handleGenerate}
                       generating={generating}
                       error={generationError?.message ?? null}

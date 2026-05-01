@@ -77,6 +77,7 @@ export const useAppStore = create<AppStore>()((...a) => {
     professorRatings: null,
     generationLimitFirstYearCredits: true,
     generationCompressedSchedule: false,
+    generationPreferEasier: false,
     activeStep: 0,
     showCalendar: false,
 

@@ -291,6 +291,12 @@ msgstr "At most one break per day, up to 90 minutes."
 msgid "scheduleCount.compressed.label"
 msgstr "Compressed schedule"
 
+msgid "scheduleCount.preferEasier.description"
+msgstr "When generating, courses with higher historical grade averages are more likely to be picked from each requirement pool."
+
+msgid "scheduleCount.preferEasier.label"
+msgstr "Prefer easier courses (past grade distributions)"
+
 msgid "scheduleCount.courses.label"
 msgstr "How many courses do you want this semester?"
 

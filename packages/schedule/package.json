@@ -10,7 +10,7 @@
     "typecheck": "tsc -b tsconfig.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "vitest run src/**/*.test.ts",
+    "test": "vitest run",
     "bench": "vitest bench"
   },
   "dependencies": {

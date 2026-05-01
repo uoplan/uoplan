@@ -79,6 +79,7 @@ function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
     generationMinProfessorRating: null,
     generationLimitFirstYearCredits: false,
     generationCompressedSchedule: false,
+    generationPreferEasier: false,
     activeStep: 0,
     showCalendar: false,
     ...overrides,
@@ -135,6 +136,16 @@ describe('encodeState / decodeState roundtrip', () => {
     expect(decoded.includeClosedComponents).toBe(false);
     expect(decoded.virtualSectionsOnly).toBe(false);
     expect(decoded.studentPrograms).toEqual(['CSI', 'MAT']);
+    expect(decoded.generationPreferEasier).toBe(false);
+  });
+
+  it('round-trips generationPreferEasier', () => {
+    const input = makeInput({ generationPreferEasier: true });
+    const bytes = encodeState(input, catalogue, indices)!;
+    const decoded = decodeState(bytes, catalogue, indices);
+    expect('error' in decoded).toBe(false);
+    if ('error' in decoded) return;
+    expect(decoded.generationPreferEasier).toBe(true);
   });
 
   it('round-trips firstYear', () => {

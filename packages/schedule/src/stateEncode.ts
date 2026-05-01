@@ -73,6 +73,7 @@ export interface EncodeInput {
   generationMinProfessorRating: number | null;
   generationLimitFirstYearCredits: boolean;
   generationCompressedSchedule: boolean;
+  generationPreferEasier: boolean;
   activeStep: number;
   showCalendar: boolean;
 }
@@ -110,6 +111,7 @@ export interface DecodedState {
   generationMinProfessorRating: number | null;
   generationLimitFirstYearCredits: boolean;
   generationCompressedSchedule: boolean;
+  generationPreferEasier: boolean;
   activeStep: number;
   showCalendar: boolean;
 }
@@ -230,6 +232,7 @@ export function encodeState(
       : undefined,
     generationLimitFirstYearCredits: input.generationLimitFirstYearCredits,
     generationCompressedSchedule: input.generationCompressedSchedule,
+    generationPreferEasier: input.generationPreferEasier,
     magic: STATE_MAGIC,
     activeStep: input.activeStep,
     showCalendar: input.showCalendar,
@@ -421,6 +424,7 @@ export function decodeState(
       : null,
     generationLimitFirstYearCredits: state.generationLimitFirstYearCredits,
     generationCompressedSchedule: state.generationCompressedSchedule,
+    generationPreferEasier: state.generationPreferEasier,
     activeStep: state.activeStep ?? 0,
     showCalendar: state.showCalendar ?? false,
   };
