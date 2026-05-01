@@ -6,7 +6,7 @@ import {
   type CourseLanguageBucket,
   type CourseLevelBucket,
 } from "schedule";
-import type { Program } from "schemas";
+import type { Program } from "schedule";
 import { getAutoSelectedForRequirements, getAutoSelectedSingleEligibleCompleted } from "./autoAssign";
 import { mergeProgramWithMinor } from "./minorMerge";
 import type { RecomputedState } from "./types";

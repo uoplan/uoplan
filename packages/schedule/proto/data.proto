@@ -1,0 +1,199 @@
+syntax = "proto3";
+
+package scheduledata;
+
+message CatalogueManifest {
+  repeated uint32 years = 1;
+}
+
+message CourseIndex {
+  uint32 index = 1;
+}
+
+message Indices {
+  repeated string courses = 1;
+  repeated string programs = 2;
+}
+
+message TermsData {
+  repeated Term terms = 1;
+}
+
+message Term {
+  uint32 term_id = 1;
+  string name = 2;
+}
+
+message RateMyProfessorsData {
+  uint32 result_count = 1;
+  repeated Professor professors = 2;
+}
+
+message Professor {
+  string id = 1;
+  optional uint32 legacy_id = 2;
+  string name = 3;
+  optional double rating = 4;
+  optional uint32 num_ratings = 5;
+}
+
+message Catalogue {
+  repeated string course_codes = 1;
+  repeated Course courses = 2;
+  repeated Program programs = 3;
+}
+
+message Course {
+  CourseIndex code = 1;
+  string title = 2;
+  double credits = 3;
+  optional string component = 4;
+  repeated CourseIndex aliases = 5;
+  bool has_prereq_text = 6;
+  optional CoursePrereqNode prerequisites = 8;
+}
+
+enum CoursePrereqNodeType {
+  COURSE_PREREQ_NODE_TYPE_UNSPECIFIED = 0;
+  COURSE_PREREQ_NODE_TYPE_COURSE = 1;
+  COURSE_PREREQ_NODE_TYPE_OR_GROUP = 2;
+  COURSE_PREREQ_NODE_TYPE_AND_GROUP = 3;
+  COURSE_PREREQ_NODE_TYPE_NON_COURSE = 4;
+}
+
+message CoursePrereqDisciplineLevel {
+  string discipline = 1;
+  repeated uint32 levels = 2;
+}
+
+message CoursePrereqNode {
+  CoursePrereqNodeType type = 1;
+  optional string code = 2;
+  optional double credits = 3;
+  repeated string disciplines = 4;
+  repeated uint32 levels = 5;
+  repeated CoursePrereqDisciplineLevel discipline_levels = 6;
+  repeated string programs = 7;
+  repeated CoursePrereqNode children = 8;
+  optional string text = 9;
+}
+
+enum RequirementType {
+  REQUIREMENT_TYPE_UNSPECIFIED = 0;
+  REQUIREMENT_TYPE_COURSE = 1;
+  REQUIREMENT_TYPE_ELECTIVE = 2;
+  REQUIREMENT_TYPE_GROUP = 3;
+  REQUIREMENT_TYPE_PICK = 4;
+  REQUIREMENT_TYPE_OPTIONS_GROUP = 5;
+  REQUIREMENT_TYPE_DISCIPLINE_ELECTIVE = 6;
+  REQUIREMENT_TYPE_FREE_ELECTIVE = 7;
+  REQUIREMENT_TYPE_NON_DISCIPLINE_ELECTIVE = 8;
+  REQUIREMENT_TYPE_FACULTY_ELECTIVE = 9;
+  REQUIREMENT_TYPE_SECTION = 10;
+  REQUIREMENT_TYPE_AND = 11;
+  REQUIREMENT_TYPE_OR_GROUP = 12;
+  REQUIREMENT_TYPE_OR_COURSE = 13;
+}
+
+message DisciplineLevel {
+  string discipline = 1;
+  repeated uint32 levels = 2;
+}
+
+message ProgramRequirement {
+  RequirementType type = 1;
+  optional string title = 2;
+  optional string code = 3;
+  optional double credits = 4;
+  repeated DisciplineLevel discipline_levels = 5;
+  repeated string excluded_disciplines = 6;
+  optional string faculty = 7;
+  optional bool indented = 8;
+  repeated ProgramRequirement options = 9;
+}
+
+message Program {
+  string title = 1;
+  string program_key = 2;
+  repeated ProgramRequirement requirements = 3;
+}
+
+enum DayOfWeek {
+  DAY_OF_WEEK_UNSPECIFIED = 0;
+  DAY_OF_WEEK_MO = 1;
+  DAY_OF_WEEK_TU = 2;
+  DAY_OF_WEEK_WE = 3;
+  DAY_OF_WEEK_TH = 4;
+  DAY_OF_WEEK_FR = 5;
+  DAY_OF_WEEK_SA = 6;
+  DAY_OF_WEEK_SU = 7;
+}
+
+message MeetingTime {
+  DayOfWeek day = 1;
+  uint32 start_minutes = 2;
+  uint32 end_minutes = 3;
+  bool virtual = 4;
+}
+
+message MeetingDateRange {
+  uint32 start_yyyymmdd = 1;
+  uint32 end_yyyymmdd = 2;
+}
+
+message GradeDistribution {
+  uint32 a_plus = 1;
+  uint32 a = 2;
+  uint32 a_minus = 3;
+  uint32 b_plus = 4;
+  uint32 b = 5;
+  uint32 c_plus = 6;
+  uint32 c = 7;
+  uint32 d_plus = 8;
+  uint32 d = 9;
+  uint32 e = 10;
+  uint32 f = 11;
+  uint32 ein = 12;
+  uint32 ns = 13;
+  uint32 nc = 14;
+  uint32 abs = 15;
+  uint32 p = 16;
+  uint32 s = 17;
+}
+
+enum SectionStatus {
+  SECTION_STATUS_UNSPECIFIED = 0;
+  SECTION_STATUS_OPEN = 1;
+  SECTION_STATUS_CLOSED = 2;
+}
+
+message ComponentSection {
+  string section = 1;
+  optional string section_code = 2;
+  optional string component = 3;
+  optional string session = 4;
+  repeated MeetingTime times = 5;
+  repeated string instructors = 6;
+  optional MeetingDateRange meeting_dates = 7;
+  SectionStatus status = 8;
+  optional GradeDistribution distribution = 9;
+}
+
+message ComponentSectionList {
+  repeated ComponentSection items = 1;
+}
+
+message CourseSchedule {
+  CourseIndex course = 1;
+  optional string title = 2;
+  string time_zone = 3;
+  map<string, ComponentSectionList> components = 4;
+}
+
+message SchedulesData {
+  uint32 term_id = 1;
+  repeated string course_codes = 2;
+  optional uint32 total_courses = 3;
+  optional uint32 total_with_schedules = 4;
+  repeated CourseSchedule schedules = 5;
+}

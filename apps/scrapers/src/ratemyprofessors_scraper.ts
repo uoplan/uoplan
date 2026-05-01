@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import got from 'got';
+import { SCRAPER_DATA_DIR } from './dataPaths.js';
 
 const GRAPHQL_URL = 'https://www.ratemyprofessors.com/graphql';
 const PAGE_SIZE = 1000;
@@ -159,7 +160,7 @@ async function main(): Promise<void> {
     await new Promise((r) => setTimeout(r, 300));
   }
 
-  const outDir = '../web/public/data';
+  const outDir = SCRAPER_DATA_DIR;
   await fs.mkdir(outDir, { recursive: true });
   const outPath = path.join(outDir, 'ratemyprofessors.json');
 

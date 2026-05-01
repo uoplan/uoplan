@@ -3,6 +3,7 @@ import { z } from 'zod';
 import pLimit from 'p-limit';
 import fs from 'fs/promises';
 import path from 'path';
+import { SCRAPER_DATA_DIR } from './dataPaths.js';
 
 const ROOT_URL = 'https://catalogue.uottawa.ca';
 const OLDEST_YEAR = 2017;
@@ -1413,7 +1414,7 @@ async function getAcademicYearFromTerms(dataDir: string): Promise<number> {
 }
 
 async function main() {
-  const dataDir = '../web/public/data';
+  const dataDir = SCRAPER_DATA_DIR;
   const currentYear = await getAcademicYearFromTerms(dataDir);
   await fs.mkdir(dataDir, { recursive: true });
 

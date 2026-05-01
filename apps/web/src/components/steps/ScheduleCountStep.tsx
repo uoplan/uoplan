@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stack, NumberInput, Button, Alert, Group, MultiSelect, TextInput, Select, Checkbox } from '@mantine/core';
-import type { DayOfWeek } from 'schemas';
+import type { DayOfWeek } from 'schedule';
 import type { GenerationErrorDetails } from '../../store/types';
 import { GenerationErrorDetailBlocks } from '../GenerationErrorDetailBlocks';
 import { tr } from "../../i18n";

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { Program, ProgramRequirement } from 'schemas';
+import type { Program, ProgramRequirement } from 'schedule';
 import type { DataCache } from 'schedule';
 import { mergeProgramWithMinor } from '../minorMerge';
 

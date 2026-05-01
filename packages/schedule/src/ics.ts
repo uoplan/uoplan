@@ -1,6 +1,6 @@
 import type { DataCache } from './dataCache';
 import type { GeneratedSchedule } from './generation';
-import type { DayOfWeek } from 'schemas';
+import type { DayOfWeek } from './dataTypes';
 
 const DEFAULT_TZID = 'America/Toronto';
 

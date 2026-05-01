@@ -1,9 +1,9 @@
 import { describe, expect, it, beforeEach } from 'vitest';
 import type { DataCache } from '../../dataCache';
 import { buildPrereqContext } from '../context';
-import type { Course } from 'schemas';
+import type { Course } from '../../dataTypes';
 import { meetsCoursePrereq, canTakeCourse } from '../evaluator';
-import type { CoursePrereqNode } from 'schemas';
+import type { CoursePrereqNode } from '../../dataTypes';
 
 describe('prerequisites', () => {
   let mockCache: DataCache;

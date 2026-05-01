@@ -10,8 +10,8 @@ import {
   type EncodeInput,
   type CatalogueLike,
 } from '../stateEncode';
-import type { Indices } from 'schemas';
-import type { Program } from 'schemas';
+import type { Indices } from '../dataTypes';
+import type { Program } from '../dataTypes';
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────
 

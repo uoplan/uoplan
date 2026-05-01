@@ -3,7 +3,7 @@ import { generateSchedulesWithPinned } from '../generator';
 import { buildDataCache } from '../../dataCache';
 import type { DataCache } from '../../dataCache';
 import { buildPrereqContext, canTakeCourse } from '../../prerequisites';
-import type { Catalogue, SchedulesData, DayOfWeek } from 'schemas';
+import type { Catalogue, SchedulesData, DayOfWeek } from '../../dataTypes';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 

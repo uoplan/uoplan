@@ -1,5 +1,5 @@
 import { Alert, Select, Stack, Text } from '@mantine/core';
-import type { Term } from 'schemas';
+import type { Term } from 'schedule';
 import { tr } from '../../i18n';
 import { NotificationToggle } from './NotificationToggle';
 

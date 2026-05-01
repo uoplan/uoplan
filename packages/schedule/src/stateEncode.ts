@@ -1,7 +1,7 @@
-import type { Program, DayOfWeek as SchemaDayOfWeek } from 'schemas';
+import type { Program, DayOfWeek as SchemaDayOfWeek } from './dataTypes';
 import type { CourseLevelBucket, CourseLanguageBucket } from './courseFilters';
 import type { RemainingRequirement, RequirementWithStatus } from './requirements';
-import type { Indices } from 'schemas';
+import type { Indices } from './dataTypes';
 import { isOptCourse, getCourseLevel } from './utils/courseUtils';
 import { isGroupToken, groupTokenPrefix } from './utils/groupToken';
 import type {

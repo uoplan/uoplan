@@ -1,4 +1,4 @@
-import type { CourseSchedule, ComponentSection } from 'schemas';
+import type { CourseSchedule, ComponentSection } from './dataTypes';
 import type { DataCache } from './dataCache';
 
 /**

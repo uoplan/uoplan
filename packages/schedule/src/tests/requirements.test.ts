@@ -5,8 +5,8 @@ import {
   collectCompletedRequirements,
 } from '../requirements';
 import { buildDataCache } from '../dataCache';
-import type { Catalogue, Program } from 'schemas';
-import type { SchedulesData } from 'schemas';
+import type { Catalogue, Program } from '../dataTypes';
+import type { SchedulesData } from '../dataTypes';
 
 const minimalCatalogue: Catalogue = {
   courses: [

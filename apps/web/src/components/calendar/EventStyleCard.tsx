@@ -1,7 +1,7 @@
 import { Box, Tooltip } from "@mantine/core";
 import type { DataCache } from "schedule";
 import type { CourseEnrollment } from "schedule";
-import type { ComponentSection } from "schemas";
+import type { ComponentSection } from "schedule";
 import {
   getRatingsForInstructors,
   getRatingDetailsForInstructors,

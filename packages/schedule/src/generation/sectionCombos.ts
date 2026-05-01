@@ -1,4 +1,4 @@
-import type { ComponentSection, CourseSchedule } from 'schemas';
+import type { ComponentSection, CourseSchedule } from '../dataTypes';
 import type { DataCache } from '../dataCache';
 import { isSectionAllowedByMinRating } from '../professorRatings';
 import { isHonoursProject, normalizeCourseCode } from '../utils/courseUtils';

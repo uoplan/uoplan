@@ -4,8 +4,8 @@
   "private": true,
   "packageManager": "pnpm@10.27.0",
   "scripts": {
-    "dev": "pnpm generate && pnpm --filter web dev",
-    "build": "pnpm generate && pnpm --filter web build",
+    "dev": "pnpm generate && pnpm --filter scrapers build:proto && pnpm --filter web dev",
+    "build": "pnpm generate && pnpm --filter scrapers build:proto && pnpm --filter web build",
     "deploy": "pnpm --filter notifications run deploy && pnpm build",
     "generate": "pnpm -r generate",
     "typecheck": "pnpm -r typecheck",
@@ -21,6 +21,7 @@
     "scrape:catalogue": "pnpm --filter scrapers scrape:catalogue",
     "scrape:schedules": "pnpm --filter scrapers scrape:schedules",
     "scrape:ratemyprofessors": "pnpm --filter scrapers scrape:ratemyprofessors",
+    "build:data-proto": "pnpm --filter scrapers build:proto",
     "check:terms": "pnpm --filter scrapers check:terms"
   },
   "devDependencies": {

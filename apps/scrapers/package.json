@@ -9,6 +9,7 @@
     "backfill:aliases": "node src/backfillAliases.ts",
     "scrape:schedules": "node src/schedule_scraper.ts",
     "scrape:ratemyprofessors": "node src/ratemyprofessors_scraper.ts",
+    "build:proto": "node --experimental-transform-types --experimental-specifier-resolution=node src/build_proto.ts",
     "check:terms": "node src/check_terms.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint .",
@@ -19,6 +20,7 @@
     "got": "^14.6.6",
     "jsdom": "^28.1.0",
     "p-limit": "^7.3.0",
+    "schedule": "workspace:^",
     "tough-cookie": "^6.0.1",
     "zod": "^4.3.6"
   },

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { Catalogue, Program } from "schemas";
-import type { SchedulesData } from "schemas";
+import type { Catalogue, Program } from "schedule";
+import type { SchedulesData } from "schedule";
 import { buildDataCache } from "schedule";
 import { recomputeStateForProgram } from "./requirementCompute";
 

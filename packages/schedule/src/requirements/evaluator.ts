@@ -1,4 +1,4 @@
-import type { ProgramRequirement } from 'schemas';
+import type { ProgramRequirement } from '../dataTypes';
 import { getCourseCredits, normalizeCourseCode } from '../utils/courseUtils';
 import type { RequirementContext } from './context';
 import type { ProcessOptions, ProcessResult, RequirementWithStatus } from './types';

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Course, CourseSchedule } from "schemas";
+import type { Course, CourseSchedule } from "schedule";
 import type { DataCache } from "schedule";
 import type { RemainingRequirement } from "schedule";
 import { normalizeCourseCode } from "schedule";

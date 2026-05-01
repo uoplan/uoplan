@@ -1,4 +1,4 @@
-import type { CourseSchedule } from 'schemas';
+import type { CourseSchedule } from './dataTypes';
 
 /** Ottawa-style letter grades → 4.3-scale points for GPA-style summaries. */
 export const GRADE_POINTS: Record<string, number> = {

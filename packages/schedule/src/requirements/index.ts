@@ -1,4 +1,4 @@
-import type { Program } from 'schemas';
+import type { Program } from '../dataTypes';
 import type { DataCache } from '../dataCache';
 import { RequirementContext } from './context';
 import { processRequirement } from './evaluator';

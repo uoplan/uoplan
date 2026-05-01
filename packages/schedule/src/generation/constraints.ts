@@ -1,4 +1,4 @@
-import type { DayOfWeek } from 'schemas';
+import type { DayOfWeek } from '../dataTypes';
 import type { CourseEnrollment, GenerationConstraints, TimeSlot } from './types';
 
 /** Default when the UI clears “days allowed” (empty array): same as initial app state (weekdays). */

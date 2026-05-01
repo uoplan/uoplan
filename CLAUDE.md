@@ -19,7 +19,7 @@ Always use `pnpm`, never `npm`.
 
 **uoplan** is a course planner for University of Ottawa students: a React SPA with a wizard (term → program → completed courses → requirements → schedule preferences) and a calendar of generated timetables.
 
-**Monorepo**: `apps/web` (Vite + React), `packages/schedule` (shared scheduling + requirements logic), `packages/schemas`, `apps/scrapers`.
+**Monorepo**: `apps/web` (Vite + React), `packages/schedule` (shared scheduling + requirements logic + protobuf schemas/types), `apps/scrapers`.
 
 ### Tech Stack
 
@@ -28,8 +28,10 @@ React 19 + TypeScript, Zustand, Mantine, FullCalendar, Vite + Vitest, Zod, Frame
 ### Data Flow
 
 ```
-JSON (catalogue, schedules, terms)
-  → packages/schemas + DataCache (packages/schedule)
+Source JSON (`apps/scrapers/data`)
+  → protobuf build step (`apps/scrapers/src/build_proto.ts`)
+  → runtime `.pb` assets (`apps/web/public/data`)
+  → protobuf decode + DataCache (packages/schedule)
   → Zustand (apps/web/src/store/)
   → React (apps/web/src/components/)
 ```
@@ -39,7 +41,8 @@ JSON (catalogue, schedules, terms)
 - **`apps/web/src/store/`** — Zustand slices (`appStore.ts` composes them), `requirementCompute.ts`, `scheduleHelpers.ts` (requirement pools + `computeCoursesPerPool`).
 - **`apps/web/src/lib/`** — `generateSchedulesAction.ts` (schedule generation orchestration), `implicitHonours.ts`, URL state encoding, etc.
 - **`packages/schedule/`** — `scheduleGenerator.ts` (backtracking), `requirements.ts`, `scheduleCandidates/` (`kUserKGeneral`, `explicitPoolPicks`), filters, prerequisites.
-- **`apps/web/public/data/`** — Runtime JSON for catalogue/schedules.
+- **`apps/scrapers/data/`** — Source JSON datasets committed for diffability.
+- **`apps/web/public/data/`** — Runtime protobuf (`.pb`) assets served to the client.
 
 ### Schedule generation
 

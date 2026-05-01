@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "scripts": {
-    "generate:proto": "protoc --ts_proto_out=./src/proto --proto_path=./proto ./proto/state.proto --ts_proto_opt=esModuleInterop=true,forceLong=long,useOptionals=messages,outputJsonMethods=false,outputPartialMethods=false",
+    "generate:proto": "protoc --ts_proto_out=./src/proto --proto_path=./proto ./proto/state.proto ./proto/data.proto --ts_proto_opt=esModuleInterop=true,forceLong=long,useOptionals=messages,outputJsonMethods=false,outputPartialMethods=false",
     "generate": "pnpm generate:proto",
     "typecheck": "tsc -b tsconfig.json",
     "lint": "eslint .",
@@ -15,8 +15,7 @@
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.11.0",
-    "pdfjs-dist": "^5.5.207",
-    "schemas": "workspace:*"
+    "pdfjs-dist": "^5.5.207"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",

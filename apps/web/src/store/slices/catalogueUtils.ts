@@ -3,7 +3,7 @@ import {
   normalizeCourseCode,
   removeMergedCoursesSupersededByAliases,
 } from "schedule";
-import type { Catalogue, Course } from "schemas";
+import type { Catalogue, Course } from "schedule";
 
 /**
  * Merges the latest catalogue with the year-specific catalogue for courses the user

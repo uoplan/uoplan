@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const dataDir = resolve(__dirname, "../public/data");
+const dataDir = resolve(__dirname, "../../scrapers/data");
 
 // Load real data
 const { terms }    = JSON.parse(readFileSync(join(dataDir, "terms.json"), "utf8"));

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { DataCache } from '../../dataCache';
 import { generateSchedules, generateSchedulesWithPinned } from '../generator';
 import type { GenerationConstraints, CourseEnrollment } from '../types';
-import type { Course, CourseSchedule } from 'schemas';
+import type { Course, CourseSchedule } from '../../dataTypes';
 
 describe('generator', () => {
   // Setup a mock cache for tests

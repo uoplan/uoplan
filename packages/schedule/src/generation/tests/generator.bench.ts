@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest';
 import { generateSchedules } from '../generator';
 import { buildDataCache } from '../../dataCache';
-import type { Catalogue, SchedulesData, CourseSchedule, Course } from 'schemas';
+import type { Catalogue, SchedulesData, CourseSchedule, Course } from '../../dataTypes';
 
 describe('scheduleGenerator benchmarks', () => {
     bench('dummy bench', () => {

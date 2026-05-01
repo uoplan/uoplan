@@ -1,4 +1,4 @@
-import type { ProgramRequirement } from 'schemas';
+import type { ProgramRequirement } from '../dataTypes';
 import type { DataCache } from '../dataCache';
 export function extractCourseCodes(req: ProgramRequirement): string[] {
   const codes: string[] = [];

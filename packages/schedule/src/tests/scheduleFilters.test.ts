@@ -4,7 +4,7 @@ import {
   getEffectiveSchedule,
   cacheWithPerCourseVirtualFilter,
 } from '../scheduleFilters';
-import type { CourseSchedule } from 'schemas';
+import type { CourseSchedule } from '../dataTypes';
 import type { DataCache } from '../dataCache';
 import { describe, it, expect } from 'vitest';
 

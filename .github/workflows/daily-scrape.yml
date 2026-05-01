@@ -53,7 +53,7 @@ jobs:
         if: inputs.terms != ''
         env:
           TERMS_CONTENT: ${{ inputs.terms }}
-        run: echo "$TERMS_CONTENT" > apps/web/public/data/terms.json
+        run: echo "$TERMS_CONTENT" > apps/scrapers/data/terms.json
 
       - name: Run catalogue scraper
         run: pnpm run scrape:catalogue
@@ -63,7 +63,7 @@ jobs:
         run: |
           {
             echo 'terms<<EOF'
-            jq -c '[.terms[].termId]' apps/web/public/data/terms.json
+            jq -c '[.terms[].termId]' apps/scrapers/data/terms.json
             echo EOF
           } >> "$GITHUB_OUTPUT"
 
@@ -71,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: catalogue-data
-          path: apps/web/public/data
+          path: apps/scrapers/data
           if-no-files-found: error
 
   schedule_term:
@@ -107,7 +107,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: catalogue-data
-          path: apps/web/public/data
+          path: apps/scrapers/data
 
       - name: Clear scraper caches (no cache mode)
         run: rm -rf .cache
@@ -121,7 +121,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: schedule-${{ matrix.term }}
-          path: apps/web/public/data/schedules.${{ matrix.term }}.json
+          path: apps/scrapers/data/schedules.${{ matrix.term }}.json
           if-no-files-found: error
 
   ratemyprofessors:
@@ -159,7 +159,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ratemyprofessors-data
-          path: apps/web/public/data/ratemyprofessors.json
+          path: apps/scrapers/data/ratemyprofessors.json
           if-no-files-found: error
 
   merge_and_push:
@@ -189,17 +189,17 @@ jobs:
           echo "CURRENT_YEAR=$CURRENT_YEAR" >> "$GITHUB_ENV"
 
           # Manifest and missing log
-          cp apps/web/public/data/catalogue.json /tmp/catalogue_manifest_old.json || true
-          cp apps/web/public/data/catalogue.missing.json /tmp/catalogue_missing_old.json || true
+          cp apps/scrapers/data/catalogue.json /tmp/catalogue_manifest_old.json || true
+          cp apps/scrapers/data/catalogue.missing.json /tmp/catalogue_missing_old.json || true
 
           # Only the current year is re-scraped every run
-          cp "apps/web/public/data/catalogue.${CURRENT_YEAR}.json" "/tmp/catalogue_current_old.json" || true
+          cp "apps/scrapers/data/catalogue.${CURRENT_YEAR}.json" "/tmp/catalogue_current_old.json" || true
 
-          cp apps/web/public/data/terms.json /tmp/terms_old.json || true
-          cp apps/web/public/data/ratemyprofessors.json /tmp/ratemyprofessors_old.json || true
+          cp apps/scrapers/data/terms.json /tmp/terms_old.json || true
+          cp apps/scrapers/data/ratemyprofessors.json /tmp/ratemyprofessors_old.json || true
           mkdir -p /tmp/schedules_old
           shopt -s nullglob
-          for f in apps/web/public/data/schedules.*.json; do
+          for f in apps/scrapers/data/schedules.*.json; do
             cp "$f" "/tmp/schedules_old/$(basename "$f")"
           done
           shopt -u nullglob
@@ -208,39 +208,39 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: catalogue-data
-          path: apps/web/public/data
+          path: apps/scrapers/data
 
       - name: Download per-term schedule JSONs
         uses: actions/download-artifact@v4
         with:
           pattern: schedule-*
-          path: apps/web/public/data
+          path: apps/scrapers/data
           merge-multiple: true
 
       - name: Download RateMyProfessors data
         uses: actions/download-artifact@v4
         with:
           name: ratemyprofessors-data
-          path: apps/web/public/data
+          path: apps/scrapers/data
 
       - name: Show JSON diffs (catalogue and schedules)
         run: |
           echo "::group::Diff catalogue.json (manifest)"
-          diff -u /tmp/catalogue_manifest_old.json apps/web/public/data/catalogue.json || true
+          diff -u /tmp/catalogue_manifest_old.json apps/scrapers/data/catalogue.json || true
           echo "::endgroup::"
 
           echo "::group::Diff catalogue.${CURRENT_YEAR}.json (current year)"
-          diff -u /tmp/catalogue_current_old.json "apps/web/public/data/catalogue.${CURRENT_YEAR}.json" || true
+          diff -u /tmp/catalogue_current_old.json "apps/scrapers/data/catalogue.${CURRENT_YEAR}.json" || true
           echo "::endgroup::"
 
           echo "::group::New archive catalogue files"
           shopt -s nullglob
-          for f in apps/web/public/data/catalogue.*.json; do
+          for f in apps/scrapers/data/catalogue.*.json; do
             base=$(basename "$f")
             # Skip manifest and current year (already diffed above)
             [ "$base" = "catalogue.json" ] && continue
             [ "$base" = "catalogue.${CURRENT_YEAR}.json" ] && continue
-            if ! git show "HEAD:apps/web/public/data/$base" &>/dev/null; then
+            if ! git show "HEAD:apps/scrapers/data/$base" &>/dev/null; then
               echo "New file: $f"
             fi
           done
@@ -248,20 +248,20 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::Diff catalogue.missing.json"
-          diff -u /tmp/catalogue_missing_old.json apps/web/public/data/catalogue.missing.json || true
+          diff -u /tmp/catalogue_missing_old.json apps/scrapers/data/catalogue.missing.json || true
           echo "::endgroup::"
 
           echo "::group::Diff terms.json"
-          diff -u /tmp/terms_old.json apps/web/public/data/terms.json || true
+          diff -u /tmp/terms_old.json apps/scrapers/data/terms.json || true
           echo "::endgroup::"
 
           echo "::group::Diff ratemyprofessors.json"
-          diff -u /tmp/ratemyprofessors_old.json apps/web/public/data/ratemyprofessors.json || true
+          diff -u /tmp/ratemyprofessors_old.json apps/scrapers/data/ratemyprofessors.json || true
           echo "::endgroup::"
 
           echo "::group::Diff schedules.*.json"
           shopt -s nullglob
-          for f in apps/web/public/data/schedules.*.json; do
+          for f in apps/scrapers/data/schedules.*.json; do
             old="/tmp/schedules_old/$(basename "$f")"
             if [ -f "$old" ]; then
               diff -u "$old" "$f" || true
@@ -277,13 +277,13 @@ jobs:
         run: |
           # git status --porcelain detects both modified tracked files and new untracked files
           CHANGED=$(git status --porcelain -- \
-            'apps/web/public/data/catalogue.json' \
-            'apps/web/public/data/catalogue.missing.json' \
-            apps/web/public/data/catalogue.*.json \
-            'apps/web/public/data/indices.json' \
-            apps/web/public/data/terms.json \
-            apps/web/public/data/ratemyprofessors.json \
-            apps/web/public/data/schedules.*.json \
+            'apps/scrapers/data/catalogue.json' \
+            'apps/scrapers/data/catalogue.missing.json' \
+            apps/scrapers/data/catalogue.*.json \
+            'apps/scrapers/data/indices.json' \
+            apps/scrapers/data/terms.json \
+            apps/scrapers/data/ratemyprofessors.json \
+            apps/scrapers/data/schedules.*.json \
           | wc -l)
           if [ "$CHANGED" -gt 0 ]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -300,14 +300,14 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           # main may advance while scrapers run — rebase our working changes onto latest main
-          git stash push -u -m "daily-scrape pre-sync" -- apps/web/public/data/
+          git stash push -u -m "daily-scrape pre-sync" -- apps/scrapers/data/
           if ! git pull --rebase origin main; then
             git stash pop
             exit 1
           fi
           git stash pop
 
-          git add apps/web/public/data/catalogue.json apps/web/public/data/catalogue.missing.json apps/web/public/data/catalogue.*.json apps/web/public/data/indices.json apps/web/public/data/terms.json apps/web/public/data/ratemyprofessors.json apps/web/public/data/schedules.*.json
+          git add apps/scrapers/data/catalogue.json apps/scrapers/data/catalogue.missing.json apps/scrapers/data/catalogue.*.json apps/scrapers/data/indices.json apps/scrapers/data/terms.json apps/scrapers/data/ratemyprofessors.json apps/scrapers/data/schedules.*.json
 
           BOT_EMAIL="github-actions[bot]@users.noreply.github.com"
           LAST_AUTHOR_EMAIL=$(git log -1 --format='%ae')

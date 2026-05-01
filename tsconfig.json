@@ -2,7 +2,6 @@
   "files": [],
   "references": [
     { "path": "./apps/web" },
-    { "path": "./apps/scrapers" },
-    { "path": "./packages/schemas" }
+    { "path": "./apps/scrapers" }
   ]
 }

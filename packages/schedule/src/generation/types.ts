@@ -1,4 +1,4 @@
-import type { ComponentSection, DayOfWeek } from 'schemas';
+import type { ComponentSection, DayOfWeek } from '../dataTypes';
 import type { ProfessorRatingsMap } from '../professorRatings';
 
 export interface TimeSlot {

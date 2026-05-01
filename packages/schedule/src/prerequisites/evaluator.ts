@@ -1,4 +1,4 @@
-import type { CoursePrereqNode } from 'schemas';
+import type { CoursePrereqNode } from '../dataTypes';
 import type { DataCache } from '../dataCache';
 import { normalizeCourseCode } from '../utils/courseUtils';
 import type { PrereqContext } from './types';

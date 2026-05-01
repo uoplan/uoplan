@@ -1,4 +1,4 @@
-import type { Program, ProgramRequirement } from 'schemas';
+import type { Program, ProgramRequirement } from '../dataTypes';
 import type { DataCache } from '../dataCache';
 import type { RemainingRequirement, RequirementWithStatus } from './types';
 

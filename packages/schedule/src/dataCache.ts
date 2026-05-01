@@ -1,5 +1,5 @@
-import type { Course, Catalogue } from 'schemas';
-import type { CourseSchedule, SchedulesData } from 'schemas';
+import type { Course, Catalogue } from './dataTypes';
+import type { CourseSchedule, SchedulesData } from './dataTypes';
 import { normalizeCourseCode, isWorkTermCourse } from './utils/courseUtils';
 
 // Re-export for backwards compatibility

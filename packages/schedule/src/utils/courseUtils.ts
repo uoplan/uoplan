@@ -1,4 +1,4 @@
-import type { Course } from 'schemas'
+import type { Course } from '../dataTypes'
 import type { DataCache } from "../dataCache";
 
 /**

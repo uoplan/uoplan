@@ -5,8 +5,8 @@ import {
   normalizeCourseCode,
   removeMergedCoursesSupersededByAliases,
 } from '../dataCache';
-import type { Catalogue } from 'schemas';
-import type { SchedulesData } from 'schemas';
+import type { Catalogue } from '../dataTypes';
+import type { SchedulesData } from '../dataTypes';
 
 const minimalCatalogue: Catalogue = {
   courses: [

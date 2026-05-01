@@ -1,5 +1,6 @@
 export * from './generation';
 export * from './generationDiagnostics';
+export * from './dataTypes';
 export * from './scheduleCandidates/kUserKGeneral';
 export * from './scheduleCandidates/explicitPoolPicks';
 export type { GlobalExplicitRule } from './scheduleCandidates/types';
@@ -18,3 +19,4 @@ export * from './transcriptParser';
 export * from './stateEncode';
 export * from './prerequisites';
 export * from './requirements';
+export * as DataProto from './proto/data';

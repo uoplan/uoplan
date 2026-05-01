@@ -11,6 +11,5 @@
     "sourceMap": true,
     "outDir": "dist"
   },
-  "include": ["src"],
-  "references": [{ "path": "../schemas" }]
+  "include": ["src"]
 }

@@ -1,12 +1,12 @@
 import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import * as cheerio from 'cheerio';
 import { got } from 'got';
 import { CookieJar } from 'tough-cookie';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { SCRAPER_DATA_DIR } from './dataPaths.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const TERMS_JSON = path.join(__dirname, '../../web/public/data/terms.json');
+const TERMS_JSON = path.join(SCRAPER_DATA_DIR, 'terms.json');
 const SEARCH_URL =
   'https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL';
 

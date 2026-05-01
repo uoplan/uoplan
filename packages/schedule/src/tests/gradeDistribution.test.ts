@@ -6,7 +6,7 @@ import {
   GRADE_POINTS,
   normalizeGradeVizDistribution,
 } from '../gradeDistribution';
-import type { ComponentSection, CourseSchedule } from 'schemas';
+import type { ComponentSection, CourseSchedule } from '../dataTypes';
 
 const minimalSection = (distribution: Record<string, number>): ComponentSection => ({
   section: 'X',

@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { diagnoseTimetableFailure } from '../generationDiagnostics';
 import { buildDataCache } from '../dataCache';
-import type { Catalogue } from 'schemas';
-import type { SchedulesData, CourseSchedule, DayOfWeek } from 'schemas';
+import type { Catalogue } from '../dataTypes';
+import type { SchedulesData, CourseSchedule, DayOfWeek } from '../dataTypes';
 
 const emptyCatalogue: Catalogue = { courses: [], programs: [] };
 

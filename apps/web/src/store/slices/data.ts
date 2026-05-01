@@ -2,15 +2,18 @@ import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
 import {
   type Catalogue,
-  CatalogueSchema,
   type Course,
+  DataProto,
+  fromProtoCatalogue,
+  fromProtoCatalogueManifest,
+  fromProtoIndices,
+  fromProtoRateMyProfessorsData,
+  fromProtoSchedulesData,
+  fromProtoTermsData,
   type Indices,
-  IndicesSchema,
   type Program,
   type SchedulesData,
-  SchedulesDataSchema,
-  TermsDataSchema,
-} from "schemas";
+} from "schedule";
 import {
   buildDataCache,
   normalizeCourseCode,
@@ -36,27 +39,10 @@ function buildCacheWithOpt(
 }
 
 
-function getManifestYears(input: unknown): number[] {
-  if (typeof input !== "object" || input === null) return [];
-  if (!("years" in input)) return [];
-  const years = input.years;
-  if (!Array.isArray(years)) return [];
-  return years.filter((year): year is number => typeof year === "number");
-}
-
-type ProfessorRatingsPayload = {
-  professors: Array<{
-    id?: string;
-    legacyId?: number;
-    name: string;
-    rating: number | null;
-    numRatings?: number;
-  }>;
-};
-
-function isProfessorRatingsPayload(input: unknown): input is ProfessorRatingsPayload {
-  if (typeof input !== "object" || input === null) return false;
-  return "professors" in input && Array.isArray(input.professors);
+async function fetchProtoBytes(path: string): Promise<Uint8Array> {
+  const res = await fetch(path);
+  if (!res.ok) throw new Error(`Failed to load ${path}`);
+  return new Uint8Array(await res.arrayBuffer());
 }
 
 interface DataSlice {
@@ -77,11 +63,8 @@ export const createDataSlice: StateCreator<
       const { catalogue, yearCatalogueCourses, completedCourses } = get();
       if (!catalogue) throw new Error("Catalogue not loaded");
 
-      const schedulesRes = await fetch(`/data/schedules.${termId}.json`);
-      if (!schedulesRes.ok) throw new Error("Failed to load schedules data");
-      const schedulesData: unknown = await schedulesRes.json();
-
-      const parsedSchedules = SchedulesDataSchema.parse(schedulesData);
+      const schedulesBytes = await fetchProtoBytes(`/data/schedules.${termId}.pb`);
+      const parsedSchedules = fromProtoSchedulesData(DataProto.SchedulesData.decode(schedulesBytes));
       const effectiveCatalogue = getMergedCatalogue(catalogue, yearCatalogueCourses, completedCourses);
       const cache = buildCacheWithOpt(effectiveCatalogue ?? catalogue, parsedSchedules, completedCourses);
 
@@ -132,10 +115,8 @@ export const createDataSlice: StateCreator<
           set({ cache });
         }
       } else {
-        const res = await fetch(`/data/catalogue.${year}.json`);
-        if (!res.ok) throw new Error(`Failed to load catalogue.${year}.json`);
-        const json: unknown = await res.json();
-        const parsed = CatalogueSchema.parse(json);
+        const bytes = await fetchProtoBytes(`/data/catalogue.${year}.pb`);
+        const parsed = fromProtoCatalogue(DataProto.Catalogue.decode(bytes));
         set({ yearCataloguePrograms: parsed.programs, yearCatalogueCourses: parsed.courses, yearCatalogueLoading: false });
         const { schedulesData, completedCourses } = get();
         const effectiveCatalogue = getMergedCatalogue(catalogue, parsed.courses, completedCourses);
@@ -155,34 +136,35 @@ export const createDataSlice: StateCreator<
     set({ loading: true, error: null });
     try {
       const [manifestRes, termsRes, indicesRes, rmpRes] = await Promise.all([
-        fetch("/data/catalogue.json"),
-        fetch("/data/terms.json"),
-        fetch("/data/indices.json").catch(() => null),
-        fetch("/data/ratemyprofessors.json").catch(() => null),
+        fetch("/data/catalogue.pb"),
+        fetch("/data/terms.pb"),
+        fetch("/data/indices.pb").catch(() => null),
+        fetch("/data/ratemyprofessors.pb").catch(() => null),
       ]);
       if (!manifestRes.ok || !termsRes.ok)
         throw new Error("Failed to load data");
 
-      const manifestJson: unknown = await manifestRes.json();
-      const availableYears = getManifestYears(manifestJson);
+      const manifestBytes = new Uint8Array(await manifestRes.arrayBuffer());
+      const availableYears = fromProtoCatalogueManifest(
+        DataProto.CatalogueManifest.decode(manifestBytes),
+      ).years;
       const latestYear = availableYears[0];
       if (!latestYear) throw new Error("Catalogue manifest has no years");
 
-      const catalogueRes = await fetch(`/data/catalogue.${latestYear}.json`);
-      if (!catalogueRes.ok) throw new Error(`Failed to load catalogue.${latestYear}.json`);
-      const catalogue: unknown = await catalogueRes.json();
-      const termsJson: unknown = await termsRes.json();
+      const catalogueBytes = await fetchProtoBytes(`/data/catalogue.${latestYear}.pb`);
+      const termsBytes = new Uint8Array(await termsRes.arrayBuffer());
 
-      const parsedCatalogue = CatalogueSchema.parse(catalogue);
-      const parsedTerms = TermsDataSchema.parse(termsJson);
+      const parsedCatalogue = fromProtoCatalogue(DataProto.Catalogue.decode(catalogueBytes));
+      const parsedTerms = fromProtoTermsData(DataProto.TermsData.decode(termsBytes));
 
       let professorRatings = null;
       if (rmpRes?.ok) {
         try {
-          const rmpJson: unknown = await rmpRes.json();
-          professorRatings = isProfessorRatingsPayload(rmpJson)
-            ? buildProfessorRatingsMap(rmpJson)
-            : null;
+          const rmpBytes = new Uint8Array(await rmpRes.arrayBuffer());
+          const rmpData = fromProtoRateMyProfessorsData(
+            DataProto.RateMyProfessorsData.decode(rmpBytes),
+          );
+          professorRatings = buildProfessorRatingsMap(rmpData);
         } catch {
           professorRatings = null;
         }
@@ -190,8 +172,8 @@ export const createDataSlice: StateCreator<
 
       let indices: Indices | null = null;
       if (indicesRes?.ok) {
-        const indicesJson: unknown = await indicesRes.json();
-        indices = IndicesSchema.parse(indicesJson);
+        const indicesBytes = new Uint8Array(await indicesRes.arrayBuffer());
+        indices = fromProtoIndices(DataProto.Indices.decode(indicesBytes));
       } else {
         indices = {
           courses: parsedCatalogue.courses.map((c) => c.code),
@@ -227,10 +209,10 @@ export const createDataSlice: StateCreator<
       let yearCatalogueCourses: Course[] | null = null;
       if (initialFirstYear !== null) {
         try {
-          const yearRes = await fetch(`/data/catalogue.${initialFirstYear}.json`);
+          const yearRes = await fetch(`/data/catalogue.${initialFirstYear}.pb`);
           if (yearRes.ok) {
-            const yearJson: unknown = await yearRes.json();
-            const parsedYear = CatalogueSchema.parse(yearJson);
+            const yearBytes = new Uint8Array(await yearRes.arrayBuffer());
+            const parsedYear = fromProtoCatalogue(DataProto.Catalogue.decode(yearBytes));
             yearCataloguePrograms = parsedYear.programs;
             yearCatalogueCourses = parsedYear.courses;
           }
@@ -239,10 +221,8 @@ export const createDataSlice: StateCreator<
         }
       }
 
-      const schedulesRes = await fetch(`/data/schedules.${initialTermId}.json`);
-      if (!schedulesRes.ok) throw new Error("Failed to load schedules data");
-      const schedulesData: unknown = await schedulesRes.json();
-      const parsedSchedules = SchedulesDataSchema.parse(schedulesData);
+      const schedulesBytes = await fetchProtoBytes(`/data/schedules.${initialTermId}.pb`);
+      const parsedSchedules = fromProtoSchedulesData(DataProto.SchedulesData.decode(schedulesBytes));
       const effectiveCatalogue = getMergedCatalogue(parsedCatalogue, yearCatalogueCourses, []);
       const cache = buildDataCache(effectiveCatalogue ?? parsedCatalogue, parsedSchedules);
 

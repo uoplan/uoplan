@@ -1,7 +1,7 @@
 import { useState, useRef, useMemo } from 'react';
 import { Select, MultiSelect, Stack, Text, Button, Alert, Loader, Badge } from '@mantine/core';
 import { tr } from "../../i18n";
-import type { Program } from 'schemas';
+import type { Program } from 'schedule';
 import { useAppStore } from '../../store/appStore';
 import { useShallow } from 'zustand/react/shallow';
 import {

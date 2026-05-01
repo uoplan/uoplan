@@ -13,7 +13,7 @@ import {
   makeGroupTokenInstance,
 } from "schedule";
 import { recomputeStateForProgram } from "../requirementCompute";
-import type { Course } from "schemas";
+import type { Course } from "schedule";
 
 interface UrlSlice {
   loadEncodedState: AppStore["loadEncodedState"];

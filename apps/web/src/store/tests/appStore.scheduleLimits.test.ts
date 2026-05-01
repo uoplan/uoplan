@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { buildDataCache } from 'schedule';
-import type { Catalogue, Program } from 'schemas';
-import type { SchedulesData } from 'schemas';
+import type { Catalogue, Program } from 'schedule';
+import type { SchedulesData } from 'schedule';
 import { computeRequirementsState } from 'schedule';
 import { useAppStore } from '../appStore';
 
