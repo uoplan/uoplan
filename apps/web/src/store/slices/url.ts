@@ -10,7 +10,7 @@ import {
   withExtraCourses,
   isOptCourse,
   normalizeCourseCode,
-  makeGroupToken,
+  makeGroupTokenInstance,
 } from "schedule";
 import { recomputeStateForProgram } from "../requirementCompute";
 import type { Course } from "schemas";
@@ -142,7 +142,7 @@ export const createUrlSlice: StateCreator<
     for (const { reqIndex, groupPrefixes } of decoded.constrainedGroupSelections) {
       const reqId = reqIndexToId.get(reqIndex);
       if (reqId == null) continue;
-      const tokens = groupPrefixes.map(makeGroupToken);
+      const tokens = groupPrefixes.map((prefix) => makeGroupTokenInstance(prefix));
       constrainedPerRequirement[reqId] = [
         ...(constrainedPerRequirement[reqId] ?? []),
         ...tokens,

@@ -597,6 +597,9 @@ msgstr "Cours pour cette exigence"
 msgid "requirementNode.anyCourseGroup"
 msgstr "Tout cours {prefix}"
 
+msgid "requirementNode.anyCourseGroupAdd"
+msgstr "Ajouter un cours {prefix}"
+
 msgid "termStep.label"
 msgstr "Sélectionnez votre session"
 

@@ -597,6 +597,9 @@ msgstr "Courses for this requirement"
 msgid "requirementNode.anyCourseGroup"
 msgstr "Any {prefix} course"
 
+msgid "requirementNode.anyCourseGroupAdd"
+msgstr "Add any {prefix} course"
+
 msgid "termStep.label"
 msgstr "Select your term"
 

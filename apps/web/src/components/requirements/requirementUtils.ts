@@ -360,10 +360,16 @@ export function getConstrainMultiSelectOptions(
     ? (selectedPerRequirement[node.requirementId] ?? [])
     : [];
 
-  const explicitExemptNormalized = new Set<string>([
-    ...(node.requirementId ? ctx.constrainedPerRequirement?.[node.requirementId] ?? [] : []),
-    ...selected,
-  ].map((c) => normalizeCourseCode(c)));
+  const explicitExemptNormalized = new Set<string>(
+    [
+      ...(node.requirementId
+        ? ctx.constrainedPerRequirement?.[node.requirementId] ?? []
+        : []),
+      ...selected,
+    ]
+      .filter((c) => !isGroupToken(c))
+      .map((c) => normalizeCourseCode(c)),
+  );
 
   const isElectiveType = isElectiveRequirementType(node.type);
   const isElectiveWithExclusions =
@@ -473,7 +479,7 @@ export function getConstrainMultiSelectOptions(
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([pfx]) => ({
       value: makeGroupToken(pfx),
-      label: tr("requirementNode.anyCourseGroup", { prefix: pfx }),
+      label: tr("requirementNode.anyCourseGroupAdd", { prefix: pfx }),
       disabled: false,
     }));
 
@@ -487,7 +493,22 @@ export function getConstrainMultiSelectOptions(
     return { value: code, label: code, disabled: usedElsewhere || coveredByGroup };
   });
 
-  const options = [...groupOptions, ...courseOptions];
+  let options = [...groupOptions, ...courseOptions];
+  const optionValues = new Set(options.map((o) => o.value));
+  for (const s of selected) {
+    if (!isGroupToken(s) || optionValues.has(s)) continue;
+    optionValues.add(s);
+    options = [
+      {
+        value: s,
+        label: tr("requirementNode.anyCourseGroup", {
+          prefix: groupTokenPrefix(s),
+        }),
+        disabled: false,
+      },
+      ...options,
+    ];
+  }
 
   return { selectedForDisplay, options };
 }

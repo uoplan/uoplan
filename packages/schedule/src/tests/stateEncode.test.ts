@@ -370,6 +370,37 @@ describe("group token round-trip", () => {
     );
     expect(constrainedForReq?.courseCodes ?? []).toHaveLength(0);
   });
+
+  it("preserves repeated Any-prefix picks as repeated groupPrefixes", () => {
+    const input = makeInput({
+      requirementTreeWithStatus: [
+        {
+          requirementId: "req-0",
+          type: "course",
+          title: "Test",
+          complete: false,
+          satisfiedBy: [],
+          candidateCourses: ["CSI 2110", "CSI 2911"],
+          creditsNeeded: 6,
+        },
+      ] as unknown as EncodeInput["requirementTreeWithStatus"],
+      constrainedPerRequirement: {
+        "req-0": ["group:CSI~inst-a", "group:CSI~inst-b"],
+      },
+    });
+
+    const bytes = encodeState(input, catalogue, indices);
+    expect(bytes).not.toBeNull();
+
+    const decoded = decodeState(bytes!, catalogue, indices);
+    expect("error" in decoded).toBe(false);
+    if ("error" in decoded) return;
+
+    expect(decoded.constrainedGroupSelections[0].groupPrefixes).toEqual([
+      "CSI",
+      "CSI",
+    ]);
+  });
 });
 
 // ── Base64 helpers ────────────────────────────────────────────────────────────

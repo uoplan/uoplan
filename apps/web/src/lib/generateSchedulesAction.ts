@@ -11,6 +11,7 @@ import {
   type RemainingRequirement,
   isGroupToken,
   groupTokenPrefix,
+  canonicalGroupToken,
   subjectPrefix,
 } from "schedule";
 import {
@@ -167,27 +168,68 @@ interface GenerateSchedulesResult {
   generationError: GenerationErrorState | null;
 }
 
-function expandConstrainedPerRequirement(
+interface ExpandConstrainedResult {
+  individualSelections: Record<string, string[]>;
+  groupTokenSelections: Map<string, Map<string, number>>; // reqId -> groupToken -> count
+}
+
+export function expandConstrainedPerRequirement(
   raw: Record<string, string[]>,
-  candidatesByReqId: Map<string, string[]>,
-): Record<string, string[]> {
-  const result: Record<string, string[]> = {};
+): ExpandConstrainedResult {
+  const individualSelections: Record<string, string[]> = {};
+  const groupTokenSelections: Map<string, Map<string, number>> = new Map();
+
   for (const [reqId, codes] of Object.entries(raw)) {
-    const candidates = candidatesByReqId.get(reqId) ?? [];
-    const expanded = new Set<string>();
+    const individualExpanded = new Set<string>();
+    const groupTokenCountMap = new Map<string, number>();
+
     for (const code of codes) {
       if (isGroupToken(code)) {
-        const prefix = groupTokenPrefix(code);
-        for (const candidate of candidates) {
-          if (subjectPrefix(candidate) === prefix) expanded.add(candidate);
-        }
+        const canonical = canonicalGroupToken(code);
+        const currentCount = groupTokenCountMap.get(canonical) ?? 0;
+        groupTokenCountMap.set(canonical, currentCount + 1);
       } else {
-        expanded.add(code);
+        individualExpanded.add(code);
       }
     }
-    if (expanded.size > 0) result[reqId] = [...expanded];
+
+    if (individualExpanded.size > 0) {
+      individualSelections[reqId] = [...individualExpanded];
+    }
+
+    if (groupTokenCountMap.size > 0) {
+      groupTokenSelections.set(reqId, groupTokenCountMap);
+    }
   }
-  return result;
+
+  return { individualSelections, groupTokenSelections };
+}
+
+/** reqId -> discipline prefix -> remaining "Any PREFIX course" picks */
+export function buildPendingGroupPickCounts(
+  groupTokenSelections: Map<string, Map<string, number>>,
+): Map<string, Map<string, number>> {
+  const out = new Map<string, Map<string, number>>();
+  for (const [reqId, tokenMap] of groupTokenSelections) {
+    const agg = new Map<string, number>();
+    for (const [canonicalToken, count] of tokenMap.entries()) {
+      if (count <= 0) continue;
+      const pfx = groupTokenPrefix(canonicalToken);
+      agg.set(pfx, (agg.get(pfx) ?? 0) + count);
+    }
+    if (agg.size > 0) out.set(reqId, agg);
+  }
+  return out;
+}
+
+function clonePendingGroupPickCounts(
+  src: Map<string, Map<string, number>>,
+): Map<string, Map<string, number>> {
+  const out = new Map<string, Map<string, number>>();
+  for (const [k, v] of src) {
+    out.set(k, new Map(v));
+  }
+  return out;
 }
 
 export async function generateSchedulesAction(
@@ -250,17 +292,25 @@ export async function generateSchedulesAction(
       candidatesByReqId.set(req.requirementId, req.candidateCourses);
     }
   }
-  const constrainedPerRequirement = expandConstrainedPerRequirement(
-    rawConstrainedPerRequirement,
-    candidatesByReqId,
-  );
+  const {
+    individualSelections: constrainedPerRequirement,
+    groupTokenSelections,
+  } = expandConstrainedPerRequirement(rawConstrainedPerRequirement);
 
   const explicitExemptNormalized = new Set<string>();
   for (const codes of Object.values(constrainedPerRequirement)) {
-    for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
+    for (const code of codes) {
+      if (!isGroupToken(code)) {
+        explicitExemptNormalized.add(normalizeCourseCode(code));
+      }
+    }
   }
   for (const codes of Object.values(selectedPerRequirement)) {
-    for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
+    for (const code of codes) {
+      if (!isGroupToken(code)) {
+        explicitExemptNormalized.add(normalizeCourseCode(code));
+      }
+    }
   }
 
   const requirementTypeById = new Map<string, string | undefined>();
@@ -567,6 +617,11 @@ export async function generateSchedulesAction(
           const course = cacheVal.getCourse(code);
           completedSelectedCredits += course?.credits ?? 3;
         }
+
+        // Group tokens ("Any X course") do not reduce pool credit caps: each token
+        // still occupies one generated course slot. Constraints are enforced in
+        // runPoolPickPass via forced prefix picks.
+
         const remainingCredits = Math.max(
           0,
           pool.creditsNeeded - pinnedCredits - completedSelectedCredits,
@@ -738,6 +793,20 @@ export async function generateSchedulesAction(
         if (n > 0) remaining.set(pool.requirementId, n);
       }
 
+      const pendingGroupPicks = clonePendingGroupPickCounts(
+        buildPendingGroupPickCounts(groupTokenSelections),
+      );
+      for (const code of pinned) {
+        if (isHonoursProject(code, cacheVal)) continue;
+        const rid = requirementIdForPinnedCourse(code);
+        if (!rid) continue;
+        const agg = pendingGroupPicks.get(rid);
+        if (!agg?.size) continue;
+        const pfx = subjectPrefix(code);
+        const cur = agg.get(pfx) ?? 0;
+        if (cur > 0) agg.set(pfx, cur - 1);
+      }
+
       const totalRemaining = (): number =>
         [...remaining.values()].reduce((a, b) => a + b, 0);
 
@@ -765,6 +834,39 @@ export async function generateSchedulesAction(
         const needG = r - needS;
         if (needG > GAvail.length) {
           return poolPickFailure(pool, r, SAvail.length, GAvail.length);
+        }
+
+        const pend = pendingGroupPicks.get(pool.requirementId);
+        if (pend?.size) {
+          let forcedInPool = 0;
+          for (const [pfx, rem] of pend.entries()) {
+            if (rem <= 0) continue;
+            if (!pool.candidateCourses.some((c) => subjectPrefix(c) === pfx)) {
+              continue;
+            }
+            forcedInPool += rem;
+          }
+          if (forcedInPool > r) {
+            return poolPickFailure(pool, r, SAvail.length, GAvail.length);
+          }
+          const orderedPrefixes = [...pend.entries()].sort(([a], [b]) =>
+            a.localeCompare(b),
+          );
+          for (const [pfx, rem] of orderedPrefixes) {
+            if (rem <= 0) continue;
+            if (!pool.candidateCourses.some((c) => subjectPrefix(c) === pfx)) {
+              continue;
+            }
+            const nPrefixAvail = candidates.filter(
+              (c) =>
+                subjectPrefix(c) === pfx &&
+                !chosenCodes.has(c) &&
+                isEligibleCandidate(c, pool.type),
+            ).length;
+            if (nPrefixAvail < rem) {
+              return poolPickFailure(pool, r, SAvail.length, GAvail.length);
+            }
+          }
         }
       }
 
@@ -803,8 +905,48 @@ export async function generateSchedulesAction(
             return poolPickFailure(pool, r, SAvail.length, GAvail.length);
           }
 
-          const pickFromS = needS > 0;
-          const list = pickFromS ? SAvail : GAvail;
+          let forcedPrefix: string | undefined;
+          const pendLoop = pendingGroupPicks.get(pool.requirementId);
+          if (pendLoop?.size) {
+            const ordered = [...pendLoop.entries()]
+              .filter(([, rem]) => rem > 0)
+              .sort(([a], [b]) => a.localeCompare(b));
+            for (const [pfx, rem] of ordered) {
+              if (rem <= 0) continue;
+              if (!pool.candidateCourses.some((c) => subjectPrefix(c) === pfx)) {
+                continue;
+              }
+              const hasAvail = candidates.some(
+                (c) =>
+                  subjectPrefix(c) === pfx &&
+                  !chosenCodes.has(c) &&
+                  isEligibleCandidate(c, pool.type),
+              );
+              if (hasAvail) {
+                forcedPrefix = pfx;
+                break;
+              }
+            }
+          }
+
+          let list: string[];
+          if (forcedPrefix != null) {
+            list = candidates.filter(
+              (c) =>
+                subjectPrefix(c) === forcedPrefix &&
+                !chosenCodes.has(c) &&
+                isEligibleCandidate(c, pool.type),
+            );
+            if (list.length === 0) {
+              return poolPickFailure(pool, r, SAvail.length, GAvail.length);
+            }
+          } else {
+            const pickFromS = needS > 0;
+            list = pickFromS ? SAvail : GAvail;
+            if (list.length === 0) {
+              continue;
+            }
+          }
 
           const levelCounts = new Map<number, number>();
           for (const code of list) {
@@ -840,6 +982,13 @@ export async function generateSchedulesAction(
         chosenFromPool[picked.code] = picked.pool.requirementId;
         const prev = remaining.get(picked.pool.requirementId) ?? 0;
         remaining.set(picked.pool.requirementId, prev - 1);
+
+        const pendAfter = pendingGroupPicks.get(picked.pool.requirementId);
+        if (pendAfter?.size) {
+          const pfx = subjectPrefix(picked.code);
+          const cur = pendAfter.get(pfx) ?? 0;
+          if (cur > 0) pendAfter.set(pfx, cur - 1);
+        }
       }
 
       if (totalRemaining() > 0) {

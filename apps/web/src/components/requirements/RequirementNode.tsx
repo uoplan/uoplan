@@ -22,7 +22,13 @@ import type { PaperProps } from "@mantine/core";
 import { IconCheck, IconChevronDown, IconX, IconChartCohort } from "@tabler/icons-react";
 import type { ComboboxItem } from "@mantine/core";
 import type { DataCache } from "schedule";
-import { normalizeCourseCode, isGroupToken, groupTokenPrefix } from "schedule";
+import {
+  normalizeCourseCode,
+  isGroupToken,
+  groupTokenPrefix,
+  canonicalGroupToken,
+  makeGroupTokenInstance,
+} from "schedule";
 import type { RequirementWithStatus } from "schedule";
 import {
   getConstrainMultiSelectOptions,
@@ -409,7 +415,15 @@ export const RequirementNode = memo(function RequirementNode({
         placeholder={tr("requirementNode.searchPlaceholder")}
         data={options}
         value={selectedForDisplay}
-        onChange={(courses) => onSelect(node.requirementId!, courses)}
+        hidePickedOptions
+        onChange={(courses) => {
+          const withInstances = courses.map((c) =>
+            isGroupToken(c) && c === canonicalGroupToken(c)
+              ? makeGroupTokenInstance(groupTokenPrefix(c))
+              : c,
+          );
+          onSelect(node.requirementId!, withInstances);
+        }}
         onClick={(e) => e.stopPropagation()}
         searchable
         clearable
