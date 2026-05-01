@@ -93,7 +93,11 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(
     const handleEventClick = (info: { event: { extendedProps: unknown } }) => {
       const ext = info.event.extendedProps as CalendarEvent;
       if (ext.enrollmentIndex != null) {
-        swap.openModal(ext.enrollmentIndex, ext.courseCode);
+        swap.openModal(ext.enrollmentIndex, ext.courseCode, {
+          virtual: ext.virtual,
+          componentSection: ext.componentSection,
+          gradeViz: ext.gradeViz,
+        });
       }
     };
 

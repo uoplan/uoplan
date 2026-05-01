@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import type { DataCache } from "schedule";
+import type { GradeVizData } from "schedule";
 
 /**
  * Type for the swap candidates getter function.
@@ -23,6 +24,7 @@ export interface SwapModalState {
   virtual?: boolean;
   /** Component/section line for the clicked block (e.g. "LEC - A01"). */
   componentSection?: string;
+  gradeViz?: GradeVizData | null;
 }
 
 /**
@@ -116,13 +118,14 @@ export function useSwapModal(
     (
       enrollmentIndex: number,
       courseCode: string,
-      ctx?: { virtual?: boolean; componentSection?: string },
+      ctx?: { virtual?: boolean; componentSection?: string; gradeViz?: GradeVizData | null },
     ) => {
       setSwapModal({
         enrollmentIndex,
         courseCode,
         virtual: ctx?.virtual,
         componentSection: ctx?.componentSection,
+        gradeViz: ctx?.gradeViz,
       });
       setSwapResult(EMPTY_SWAP_RESULT);
       setLoading(true);

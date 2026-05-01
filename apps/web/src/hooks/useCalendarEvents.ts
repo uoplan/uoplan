@@ -4,6 +4,8 @@ import type { ProfessorRatingsMap } from "schedule";
 import {
   getRatingsForInstructors,
   getRatingDetailsForInstructors,
+  normalizeGradeVizDistribution,
+  type GradeVizData,
 } from "schedule";
 import { addDays, minutesToDate, DAY_OFFSETS } from "schedule";
 
@@ -25,6 +27,7 @@ export interface CalendarEvent {
   professor: string;
   professorRatingValue?: number | null;
   professorRatingDetails?: Array<{ id?: string; legacyId?: number; name: string; rating: number; numRatings: number }>;
+  gradeViz?: GradeVizData | null;
 }
 
 /**
@@ -43,6 +46,18 @@ export function useCalendarEvents(
     if (!schedule) return [];
 
     return schedule.enrollments.flatMap((enrollment, enrollIdx) => {
+      const aggregateDistribution: Record<string, number> = {};
+      for (const { section } of Object.values(enrollment.sectionCombo)) {
+        const distribution = section.distribution;
+        if (!distribution) continue;
+        for (const [grade, countRaw] of Object.entries(distribution)) {
+          const count = Number(countRaw);
+          if (!Number.isFinite(count) || count <= 0) continue;
+          aggregateDistribution[grade] = (aggregateDistribution[grade] ?? 0) + count;
+        }
+      }
+      const gradeViz = normalizeGradeVizDistribution(aggregateDistribution);
+
       const out: CalendarEvent[] = [];
       let timeIdx = 0;
 
@@ -90,6 +105,7 @@ export function useCalendarEvents(
             professor,
             professorRatingValue,
             professorRatingDetails,
+            gradeViz,
           });
           timeIdx += 1;
         }
