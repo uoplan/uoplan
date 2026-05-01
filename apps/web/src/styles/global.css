@@ -218,6 +218,15 @@ a {
   max-width: 100%;
 }
 
+.fc-uoplan-event-time-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
 .fc-uoplan-event-professor {
   font-size: 10px;
   color: rgba(255, 255, 255, 0.75);
@@ -227,4 +236,91 @@ a {
   text-overflow: ellipsis;
   max-width: 100%;
   margin-top: auto;
+}
+
+.uoplan-grade-chip {
+  width: 80px;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.uoplan-grade-chip > span {
+  height: 100%;
+}
+
+.uoplan-grade-expanded-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  align-items: end;
+}
+
+.uoplan-grade-histogram-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.uoplan-grade-passing-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.uoplan-grade-histogram {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 2px;
+  min-height: 94px;
+  padding-top: 20px;
+  width: 100%;
+}
+
+.uoplan-grade-histogram-item {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.uoplan-grade-histogram-bar {
+  width: 100%;
+  min-height: 4px;
+  border-radius: 2px 2px 0 0;
+}
+
+.uoplan-grade-histogram-label {
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.uoplan-grade-histogram-item-sns {
+  flex: 1.5 1 0;
+}
+
+.uoplan-grade-histogram-bar-sns {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.uoplan-grade-histogram-bar-sns > span {
+  width: 100%;
+}
+
+@media (max-width: 720px) {
+  .uoplan-grade-expanded-layout {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
 }

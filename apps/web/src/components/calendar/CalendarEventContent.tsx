@@ -5,6 +5,7 @@ import { COURSE_COLORS, COURSE_COLOR_HEX, hexToRgb, ratingColorToCssVar, ratingT
 import type { CalendarEvent } from "../../hooks/useCalendarEvents";
 import { tr } from "../../i18n";
 import { ProfessorRatingTooltipLabel } from "./ProfessorRatingTooltipLabel";
+import { GradeDistributionCompactChip } from "./GradeDistributionViz";
 
 /**
  * Formats time range from minutes since midnight to 24-hour format string.
@@ -59,6 +60,12 @@ export function CalendarEventContent({
     () => formatTimeRange(ext.startMinutes, ext.endMinutes),
     [ext.startMinutes, ext.endMinutes],
   );
+  const aPlusPercent = useMemo(() => {
+    const gradeViz = ext.gradeViz;
+    if (!gradeViz || gradeViz.total <= 0) return 0;
+    const aPlusCount = gradeViz.histogram.find((entry) => entry.grade === "A+")?.count ?? 0;
+    return Math.round((aPlusCount / gradeViz.total) * 100);
+  }, [ext.gradeViz]);
 
   return (
     <div
@@ -86,7 +93,27 @@ export function CalendarEventContent({
             </span>
           )}
         </div>
-        <span className="fc-uoplan-event-time">{timeRange}</span>
+        <div className="fc-uoplan-event-time-row">
+          <span className="fc-uoplan-event-time">{timeRange}</span>
+          {ext.gradeViz ? (
+            <Tooltip
+              label={tr("calendar.grade.compactTooltip", {
+                passing: Math.round(ext.gradeViz.passingPercent),
+                aPlus: aPlusPercent,
+              })}
+              withArrow
+              position="top"
+              withinPortal
+              color="dark"
+            >
+              <div>
+                <GradeDistributionCompactChip gradeViz={ext.gradeViz} />
+              </div>
+            </Tooltip>
+          ) : (
+            <GradeDistributionCompactChip gradeViz={ext.gradeViz} />
+          )}
+        </div>
         <span
           className="fc-uoplan-event-professor"
           style={{

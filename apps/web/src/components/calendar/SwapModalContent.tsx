@@ -1,7 +1,9 @@
 import { Box, Button, Stack, Text } from "@mantine/core";
 import type { DataCache, GeneratedSchedule, ProfessorRatingsMap } from "schedule";
 import type { SwapCandidateOption, SwapModalState, SwapResult } from "../../hooks/useSwapModal";
+import { tr } from "../../i18n";
 import { EventStyleCard } from "./EventStyleCard";
+import { GradeDistributionExpanded } from "./GradeDistributionViz";
 import { SwapCourseDropdown } from "./SwapCourseDropdown";
 
 export function SwapModalContent({
@@ -76,6 +78,15 @@ export function SwapModalContent({
           </Text>
         )}
       </div>
+
+      {modalState.gradeViz && (
+        <div>
+          <Text size="xs" c="dimmed" tt="uppercase" fw={600} mb={6}>
+            {tr("calendar.grade.distribution")}
+          </Text>
+          <GradeDistributionExpanded gradeViz={modalState.gradeViz} />
+        </div>
+      )}
 
       <div>
         <Text size="sm" c="dimmed" mb="xs">

@@ -192,6 +192,27 @@ msgstr "Aucun horaire n'à encore ete généré. Completez les étapes ci-dessus
 msgid "calendar.event.virtual"
 msgstr "Virtuel"
 
+msgid "calendar.grade.distribution"
+msgstr "Distribution des notes"
+
+msgid "calendar.grade.passing"
+msgstr "{percent}% de reussite"
+
+msgid "calendar.grade.snsTooltip"
+msgstr "Repartition S/NS: {s} S, {ns} NS"
+
+msgid "calendar.grade.histogramTooltip"
+msgstr "{grade} : {count} etudiant{count, plural, one {} other {s}} ({percent} %)"
+
+msgid "calendar.grade.compactTooltip"
+msgstr "{passing} % de reussite · {aPlus} % A+"
+
+msgid "calendar.grade.passingAndAPlus"
+msgstr "{passing} % de reussite · {aPlus} % A+"
+
+msgid "calendar.grade.snsLabel"
+msgstr "S / NS"
+
 msgid "languageSwitcher.ariaLabel"
 msgstr "Choisir la langue de l'application"
 

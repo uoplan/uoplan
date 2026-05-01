@@ -129,6 +129,27 @@ msgstr "No schedules generated yet. Complete the steps above and click Generate.
 msgid "calendar.event.virtual"
 msgstr "Virtual"
 
+msgid "calendar.grade.distribution"
+msgstr "Grade distribution"
+
+msgid "calendar.grade.passing"
+msgstr "{percent}% passing"
+
+msgid "calendar.grade.snsTooltip"
+msgstr "S/NS split: {s} S, {ns} NS"
+
+msgid "calendar.grade.histogramTooltip"
+msgstr "{grade}: {count} students ({percent}%)"
+
+msgid "calendar.grade.compactTooltip"
+msgstr "{passing}% passing · {aPlus}% A+"
+
+msgid "calendar.grade.passingAndAPlus"
+msgstr "{passing}% passing · {aPlus}% A+"
+
+msgid "calendar.grade.snsLabel"
+msgstr "S / NS"
+
 msgid "calendarPage.downloadIcs"
 msgstr "Download ICS"
 

@@ -4,6 +4,7 @@ import {
   courseGpa,
   distributionGpa,
   GRADE_POINTS,
+  normalizeGradeVizDistribution,
 } from '../gradeDistribution';
 import type { ComponentSection, CourseSchedule } from 'schemas';
 
@@ -47,5 +48,35 @@ describe('gradeDistribution', () => {
     expect(agg.B).toBe(2);
     expect(agg.C).toBe(3);
     expect(courseGpa(schedule)).not.toBeNull();
+  });
+
+  it('normalizeGradeVizDistribution blends letter and pass/fail schemes', () => {
+    const viz = normalizeGradeVizDistribution({
+      F: 2,
+      EIN: 1,
+      D: 1,
+      C: 2,
+      B: 3,
+      S: 1,
+      'A-': 2,
+      A: 4,
+      P: 1,
+      NS: 1,
+    });
+
+    expect(viz).not.toBeNull();
+    if (!viz) return;
+
+    expect(viz.total).toBe(18);
+    expect(viz.buckets.find((b) => b.id === 'red')?.count).toBe(4); // F + EIN + NS
+    expect(viz.buckets.find((b) => b.id === 'blue')?.count).toBe(4); // B + S
+    expect(viz.buckets.find((b) => b.id === 'green')?.count).toBe(5); // A + P
+    expect(viz.passingPercent).toBeCloseTo((14 / 18) * 100, 5);
+  });
+
+  it('normalizeGradeVizDistribution returns null for empty or unknown data', () => {
+    expect(normalizeGradeVizDistribution({})).toBeNull();
+    expect(normalizeGradeVizDistribution({ XYZ: 10 })).toBeNull();
+    expect(normalizeGradeVizDistribution(null)).toBeNull();
   });
 });
