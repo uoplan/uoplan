@@ -931,13 +931,13 @@ function App() {
               {" • "}
               <Text
                 component="a"
-                href="https://github.com/matteopolak/uoplan"
+                href="https://github.com/uoplan/uoplan"
                 target="_blank"
                 rel="noopener noreferrer"
                 span
                 c="dimmed"
               >
-                github.com/matteopolak/uoplan
+                github.com/uoplan/uoplan
               </Text>
               {" • send feedback to "}
               <Text
