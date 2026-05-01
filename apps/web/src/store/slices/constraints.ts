@@ -11,6 +11,7 @@ interface ConstraintsSlice {
   setVirtualSectionsOnly: AppStore["setVirtualSectionsOnly"];
   setGenerationLimitFirstYearCredits: AppStore["setGenerationLimitFirstYearCredits"];
   setGenerationCompressedSchedule: AppStore["setGenerationCompressedSchedule"];
+  setGenerationPreferEasier: AppStore["setGenerationPreferEasier"];
 }
 
 export const createConstraintsSlice: StateCreator<
@@ -47,4 +48,6 @@ export const createConstraintsSlice: StateCreator<
     
   setGenerationCompressedSchedule: (v) =>
     set({ generationCompressedSchedule: v }),
+
+  setGenerationPreferEasier: (v) => set({ generationPreferEasier: v }),
 });

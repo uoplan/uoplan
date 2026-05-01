@@ -291,6 +291,12 @@ msgstr "Au plus une pause par jour, jusqu'à 90 minutes."
 msgid "scheduleCount.compressed.label"
 msgstr "Horaire compact"
 
+msgid "scheduleCount.preferEasier.description"
+msgstr "Lors de la génération, les cours avec des moyennes historiques plus élevées ont plus de chances d’être choisis dans chaque bassin d’exigences."
+
+msgid "scheduleCount.preferEasier.label"
+msgstr "Préférer les cours plus faciles (répartition des notes passées)"
+
 msgid "scheduleCount.courses.label"
 msgstr "Combien de cours voulez-vous cette session?"
 

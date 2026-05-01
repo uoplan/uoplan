@@ -91,4 +91,5 @@ message ShareableState {
   repeated ScheduleSwap swaps = 32;
   bool show_calendar = 33;
   repeated RequirementGroupSelection constrained_group_selections = 34;
+  bool generation_prefer_easier = 35;
 }

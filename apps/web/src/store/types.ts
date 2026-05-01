@@ -85,6 +85,8 @@ export interface AppState {
   virtualSectionsOnly: boolean;
   generationLimitFirstYearCredits: boolean;
   generationCompressedSchedule: boolean;
+  /** Bias pool picks toward courses with higher historical grade averages. */
+  generationPreferEasier: boolean;
   activeStep: number;
   showCalendar: boolean;
 }
@@ -146,6 +148,7 @@ export interface AppActions {
   setElectiveLevelBuckets: (buckets: number[]) => void;
   setGenerationLimitFirstYearCredits: (v: boolean) => void;
   setGenerationCompressedSchedule: (v: boolean) => void;
+  setGenerationPreferEasier: (v: boolean) => void;
   resetToDefault: () => void;
 }
 

@@ -39,6 +39,8 @@ interface ScheduleCountStepProps {
   onLimitFirstYearCreditsChange: (v: boolean) => void;
   compressedSchedule: boolean;
   onCompressedScheduleChange: (v: boolean) => void;
+  preferEasierCourses: boolean;
+  onPreferEasierCoursesChange: (v: boolean) => void;
   onGenerate: () => void;
   generating?: boolean;
   error?: string | null;
@@ -66,6 +68,8 @@ export function ScheduleCountStep({
   onLimitFirstYearCreditsChange,
   compressedSchedule,
   onCompressedScheduleChange,
+  preferEasierCourses,
+  onPreferEasierCoursesChange,
   onGenerate,
   generating = false,
   error,
@@ -165,6 +169,12 @@ export function ScheduleCountStep({
         description={tr("scheduleCount.compressed.description")}
         checked={compressedSchedule}
         onChange={(e) => onCompressedScheduleChange(e.currentTarget.checked)}
+      />
+      <Checkbox
+        label={tr("scheduleCount.preferEasier.label")}
+        description={tr("scheduleCount.preferEasier.description")}
+        checked={preferEasierCourses}
+        onChange={(e) => onPreferEasierCoursesChange(e.currentTarget.checked)}
       />
       {error && (
         <Alert color="red" variant="light" radius={0} title={error}>

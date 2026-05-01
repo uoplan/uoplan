@@ -57,6 +57,7 @@ function buildEncodeInput(s: AppStore): EncodeInput {
     generationMinProfessorRating: s.generationMinProfessorRating,
     generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
     generationCompressedSchedule: s.generationCompressedSchedule,
+    generationPreferEasier: s.generationPreferEasier,
     activeStep: s.activeStep,
     showCalendar: s.showCalendar,
   };
@@ -195,6 +196,7 @@ export const createUrlSlice: StateCreator<
       generationMinProfessorRating: decoded.generationMinProfessorRating,
       generationLimitFirstYearCredits: decoded.generationLimitFirstYearCredits,
       generationCompressedSchedule: decoded.generationCompressedSchedule,
+      generationPreferEasier: decoded.generationPreferEasier,
       activeStep: decoded.activeStep ?? 0,
       generationError: null,
       constrainedPerRequirement,
