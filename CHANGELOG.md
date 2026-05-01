@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.0.0-beta.5](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.4...uoplan-monorepo-v1.0.0-beta.5) (2026-05-01)
+
+
+### Features
+
+* add course disciplines in dropdown constraints ([7d65718](https://github.com/uoplan/uoplan/commit/7d65718aa5e29e3d13a1041f05c7ba38017cb35d))
+* add generation option to prefer easy courses ([36394f4](https://github.com/uoplan/uoplan/commit/36394f49f29e837a84585414575b13c383b609ef))
+* add grade breakdown visualizations ([631cbba](https://github.com/uoplan/uoplan/commit/631cbba6a286d096c80c4cce3884227fbc2404c3))
+* **grades:** add some grade data ([fc67e93](https://github.com/uoplan/uoplan/commit/fc67e93e28bc8a6311d0ef563b486620863fa741))
+* make time and graph visible on calendar event on mobile ([11e6b45](https://github.com/uoplan/uoplan/commit/11e6b45fe7a68967a00416f974bc3e2ba68b6898))
+* ship static content as protobuf instead of json ([47e54de](https://github.com/uoplan/uoplan/commit/47e54de1d9aa506acb6b70a372c52009203f5e7e))
+
+
+### Bug Fixes
+
+* handle 5-digit course codes properly ([4a9f881](https://github.com/uoplan/uoplan/commit/4a9f8812e168c0cefbf1523bb2a2f749da55ce0c))
+* include course title in dropdown filter ([bd6fef3](https://github.com/uoplan/uoplan/commit/bd6fef3a09082c3a5ddc3abee4981f6fc8a840ad))
+* **scraper:** parse titles for schedules more accurately ([f600ed2](https://github.com/uoplan/uoplan/commit/f600ed282b2ba3763b86c12bd43bed9af09c0284))
+* **ux:** support multiple course groups, make generation work with groups ([4462dc1](https://github.com/uoplan/uoplan/commit/4462dc129437b72c06e05c376bd361689095a3f3))
+
 ## [1.0.0-beta.4](https://github.com/matteopolak/uoplan/compare/uoplan-monorepo-v1.0.0-beta.3...uoplan-monorepo-v1.0.0-beta.4) (2026-04-30)
 
 
