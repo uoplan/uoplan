@@ -248,6 +248,37 @@ a {
   max-width: 100%;
 }
 
+.fc-uoplan-event-compact-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.fc-uoplan-event-compact-row .fc-uoplan-event-grade-chip-wrap--stacked {
+  flex: 1;
+  min-width: 0;
+}
+
+.fc-uoplan-event-rating-dot-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.fc-uoplan-event-rating-dot {
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+}
+
 .fc-uoplan-event-professor {
   font-size: 10px;
   color: rgba(255, 255, 255, 0.75);
@@ -346,19 +377,3 @@ a {
   }
 }
 
-@media (max-width: 768px) {
-  .fc-uoplan-event-time-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-
-  .fc-uoplan-event-grade-chip-wrap {
-    width: 100%;
-  }
-
-  .fc-uoplan-event-grade-chip-wrap .uoplan-grade-chip {
-    width: 100%;
-    max-width: 100%;
-  }
-}
