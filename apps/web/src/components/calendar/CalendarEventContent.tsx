@@ -87,98 +87,144 @@ export function CalendarEventContent({
         <span className="fc-uoplan-event-code" title={heading}>
           {heading}
         </span>
-        <div className="fc-uoplan-event-type-row">
-          <span className="fc-uoplan-event-type">{ext.componentSection}</span>
-          {ext.virtual && (
-            <span className="fc-uoplan-event-virtual">
-              {tr("calendar.event.virtual")}
-            </span>
-          )}
-        </div>
-        <div className={isCompactLayout ? "fc-uoplan-event-time-row fc-uoplan-event-time-row--stacked" : "fc-uoplan-event-time-row"}>
-          <span className="fc-uoplan-event-time">{timeRange}</span>
-          {ext.gradeViz ? (
-            <Tooltip
-              label={tr("calendar.grade.compactTooltip", {
-                passing: Math.round(ext.gradeViz.passingPercent),
-                aPlus: aPlusPercent,
-              })}
-              withArrow
-              position="top"
-              withinPortal
-              color="dark"
-            >
-              <div className={isCompactLayout ? "fc-uoplan-event-grade-chip-wrap fc-uoplan-event-grade-chip-wrap--stacked" : "fc-uoplan-event-grade-chip-wrap"}>
-                <GradeDistributionCompactChip gradeViz={ext.gradeViz} />
-              </div>
-            </Tooltip>
-          ) : (
-            <div className={isCompactLayout ? "fc-uoplan-event-grade-chip-wrap fc-uoplan-event-grade-chip-wrap--stacked" : "fc-uoplan-event-grade-chip-wrap"}>
-              <GradeDistributionCompactChip gradeViz={ext.gradeViz} />
-            </div>
-          )}
-        </div>
-        <span
-          className="fc-uoplan-event-professor"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            flexWrap: "nowrap",
-            minWidth: 0,
-            maxWidth: "100%",
-          }}
-        >
-          <span
-            className="fc-uoplan-event-professor-name"
-            style={{
-              minWidth: 0,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-            title={ext.professor}
-          >
-            {ext.professor}
-          </span>
-
-          {hasProfessorRating && (
-            <Tooltip
-              label={<ProfessorRatingTooltipLabel details={ext.professorRatingDetails} />}
-              withArrow
-              position="top"
-              withinPortal
-              color="dark"
-            >
-              <Box
-                component="a"
-                href={legacyId ? `https://www.ratemyprofessors.com/professor/${legacyId}` : undefined}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                style={{
-                  padding: 4,
-                  flexShrink: 0,
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+        {isCompactLayout ? (
+          <div className="fc-uoplan-event-compact-row">
+            {ext.gradeViz ? (
+              <Tooltip
+                label={tr("calendar.grade.compactTooltip", {
+                  passing: Math.round(ext.gradeViz.passingPercent),
+                  aPlus: aPlusPercent,
+                })}
+                withArrow
+                position="top"
+                withinPortal
+                color="dark"
+              >
+                <div className="fc-uoplan-event-grade-chip-wrap fc-uoplan-event-grade-chip-wrap--stacked">
+                  <GradeDistributionCompactChip gradeViz={ext.gradeViz} />
+                </div>
+              </Tooltip>
+            ) : null}
+            {hasProfessorRating && (
+              <Tooltip
+                label={<ProfessorRatingTooltipLabel details={ext.professorRatingDetails} />}
+                withArrow
+                position="top"
+                withinPortal
+                color="dark"
               >
                 <Box
-                  style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: 0,
-                    backgroundColor: markerColor,
-                    border: "1px solid rgba(0,0,0,0.45)",
-                    boxShadow: "0 0 0 1px rgba(255,255,255,0.08) inset",
-                  }}
-                />
-              </Box>
-            </Tooltip>
-          )}
-        </span>
+                  component="a"
+                  href={legacyId ? `https://www.ratemyprofessors.com/professor/${legacyId}` : undefined}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="fc-uoplan-event-rating-dot-wrap"
+                >
+                  <Box
+                    className="fc-uoplan-event-rating-dot"
+                    style={{ backgroundColor: markerColor }}
+                  />
+                </Box>
+              </Tooltip>
+            )}
+          </div>
+        ) : (
+          <>
+            <div className="fc-uoplan-event-type-row">
+              <span className="fc-uoplan-event-type">{ext.componentSection}</span>
+              {ext.virtual && (
+                <span className="fc-uoplan-event-virtual">
+                  {tr("calendar.event.virtual")}
+                </span>
+              )}
+            </div>
+            <div className="fc-uoplan-event-time-row">
+              <span className="fc-uoplan-event-time">{timeRange}</span>
+              {ext.gradeViz ? (
+                <Tooltip
+                  label={tr("calendar.grade.compactTooltip", {
+                    passing: Math.round(ext.gradeViz.passingPercent),
+                    aPlus: aPlusPercent,
+                  })}
+                  withArrow
+                  position="top"
+                  withinPortal
+                  color="dark"
+                >
+                  <div className="fc-uoplan-event-grade-chip-wrap">
+                    <GradeDistributionCompactChip gradeViz={ext.gradeViz} />
+                  </div>
+                </Tooltip>
+              ) : (
+                <div className="fc-uoplan-event-grade-chip-wrap">
+                  <GradeDistributionCompactChip gradeViz={ext.gradeViz} />
+                </div>
+              )}
+            </div>
+            <span
+              className="fc-uoplan-event-professor"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                flexWrap: "nowrap",
+                minWidth: 0,
+                maxWidth: "100%",
+              }}
+            >
+              <span
+                className="fc-uoplan-event-professor-name"
+                style={{
+                  minWidth: 0,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+                title={ext.professor}
+              >
+                {ext.professor}
+              </span>
+
+              {hasProfessorRating && (
+                <Tooltip
+                  label={<ProfessorRatingTooltipLabel details={ext.professorRatingDetails} />}
+                  withArrow
+                  position="top"
+                  withinPortal
+                  color="dark"
+                >
+                  <Box
+                    component="a"
+                    href={legacyId ? `https://www.ratemyprofessors.com/professor/${legacyId}` : undefined}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    style={{
+                      padding: 4,
+                      flexShrink: 0,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Box
+                      style={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: 0,
+                        backgroundColor: markerColor,
+                        border: "1px solid rgba(0,0,0,0.45)",
+                        boxShadow: "0 0 0 1px rgba(255,255,255,0.08) inset",
+                      }}
+                    />
+                  </Box>
+                </Tooltip>
+              )}
+            </span>
+          </>
+        )}
       </div>
     </div>
   );

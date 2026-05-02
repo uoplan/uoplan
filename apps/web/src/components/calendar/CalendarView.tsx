@@ -46,7 +46,8 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(
     onSwap,
     colorMap = EMPTY_COLOR_MAP,
   }, ref) {
-    const isMobile = useMediaQuery('(max-width: 768px)');
+    /** Match narrow split layouts (calendar + sidebar); ~xl breakpoint, closest standard to ~1140px. */
+    const isCompactCalendar = useMediaQuery('(max-width: 1200px)');
     const prefersReduced = useMediaQuery('(prefers-reduced-motion: reduce)') ?? false;
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -78,7 +79,7 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(
       });
     }, [events]);
 
-    const showWeekends = !isMobile || hasWeekendCourses;
+    const showWeekends = !isCompactCalendar || hasWeekendCourses;
 
     const eventContent = useCallback(
       (arg: { event: { extendedProps: unknown } }) => {
@@ -88,11 +89,11 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(
             ext={ext}
             cache={cache}
             colorMap={colorMap}
-            isCompactLayout={isMobile}
+            isCompactLayout={isCompactCalendar}
           />
         );
       },
-      [cache, colorMap, isMobile]
+      [cache, colorMap, isCompactCalendar]
     );
 
     const handleEventClick = (info: { event: { extendedProps: unknown } }) => {
