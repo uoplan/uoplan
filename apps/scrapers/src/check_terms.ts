@@ -4,7 +4,7 @@ import { got } from 'got';
 import { CookieJar } from 'tough-cookie';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { SCRAPER_DATA_DIR } from './dataPaths.js';
+import { SCRAPER_DATA_DIR } from './dataPaths.ts';
 
 const TERMS_JSON = path.join(SCRAPER_DATA_DIR, 'terms.json');
 const SEARCH_URL =
