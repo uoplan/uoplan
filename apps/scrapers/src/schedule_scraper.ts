@@ -5,6 +5,12 @@ import pLimit from 'p-limit';
 import { type Got, got } from 'got';
 import { CookieJar } from 'tough-cookie';
 import { SCRAPER_DATA_DIR } from './dataPaths.ts';
+import {
+  buildGradeLookups,
+  enrichSchedulesPayload,
+  formatGradeEnrichmentLine,
+  type GradeLookups,
+} from './enrichSchedulesWithGrades.ts';
 
 const BASE_URL =
   'https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL';
@@ -49,6 +55,8 @@ interface ComponentSection {
   instructors: string[];
   meetingDates: MeetingDateRange | null;
   status: string | null;
+  /** Filled by grade enrichment from `grades.json` when present. */
+  distribution?: Record<string, number>;
 }
 
 interface CourseSchedule {
@@ -621,6 +629,19 @@ async function fetchScheduleForCourse(
   return mergeVirtualIntoBase(base!, virtualOnly!);
 }
 
+async function tryLoadGradeLookups(): Promise<GradeLookups | null> {
+  const gradesPath = path.join(SCRAPER_DATA_DIR, 'grades.json');
+  try {
+    const raw = await fs.readFile(gradesPath, 'utf-8');
+    return buildGradeLookups(JSON.parse(raw) as unknown);
+  } catch (err: unknown) {
+    console.warn(
+      `Could not load ${gradesPath} for grade enrichment (${getErrorMessage(err)}). Schedules will omit distribution.`,
+    );
+    return null;
+  }
+}
+
 async function main(): Promise<void> {
   const onlySubject = process.env.ONLY_SUBJECT;
   const onlyCatalog = process.env.ONLY_CATALOG;
@@ -643,6 +664,8 @@ async function main(): Promise<void> {
   );
 
   console.log(`Initialized ${clientInfos.length} PeopleSoft session(s).`);
+
+  const gradeLookups = await tryLoadGradeLookups();
 
   for (const term of terms) {
     const catalogueYear = getCatalogueYearForTerm(term.name);
@@ -704,6 +727,12 @@ async function main(): Promise<void> {
       totalWithSchedules: results.length,
       schedules: results,
     };
+
+    if (gradeLookups) {
+      const enrichmentStats = { sectionsTotal: 0, matched: 0, fallback: 0, none: 0 };
+      enrichSchedulesPayload(output, gradeLookups, enrichmentStats);
+      console.log(formatGradeEnrichmentLine(`Grades (${term.termId})`, enrichmentStats));
+    }
 
     const outPath = path.join(SCRAPER_DATA_DIR, `schedules.${term.termId}.json`);
     await fs.writeFile(outPath, JSON.stringify(output, null, 2), 'utf-8');
