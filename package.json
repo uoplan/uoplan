@@ -20,6 +20,7 @@
     "deadcode": "knip",
     "scrape:catalogue": "pnpm --filter scrapers scrape:catalogue",
     "scrape:schedules": "pnpm --filter scrapers scrape:schedules",
+    "enrich:schedules": "pnpm --filter scrapers enrich:schedules",
     "scrape:ratemyprofessors": "pnpm --filter scrapers scrape:ratemyprofessors",
     "build:data-proto": "pnpm --filter scrapers build:proto",
     "check:terms": "pnpm --filter scrapers check:terms"

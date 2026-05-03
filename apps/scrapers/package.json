@@ -8,6 +8,7 @@
     "scrape:catalogue": "node src/scraper.ts",
     "backfill:aliases": "node src/backfillAliases.ts",
     "scrape:schedules": "node src/schedule_scraper.ts",
+    "enrich:schedules": "node --experimental-transform-types --experimental-specifier-resolution=node src/enrich_schedules_cli.ts",
     "scrape:ratemyprofessors": "node src/ratemyprofessors_scraper.ts",
     "build:proto": "node --experimental-transform-types --experimental-specifier-resolution=node src/build_proto.ts",
     "check:terms": "node src/check_terms.ts",
