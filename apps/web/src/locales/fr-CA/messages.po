@@ -213,6 +213,18 @@ msgstr "{passing} % de reussite · {aPlus} % A+"
 msgid "calendar.grade.snsLabel"
 msgstr "S / NS"
 
+msgid "calendar.swap.lockAria"
+msgstr "Ajouter le cours aux sélections pour la génération d'horaires"
+
+msgid "calendar.swap.lockTooltip"
+msgstr "Ajoute ce cours aux sélections utilisées pour générer les horaires."
+
+msgid "calendar.swap.alreadyLocked"
+msgstr "Déjà ajouté"
+
+msgid "calendar.swap.lockNoPool"
+msgstr "Impossible de rattacher ce cours à un sélecteur d'exigence."
+
 msgid "languageSwitcher.ariaLabel"
 msgstr "Choisir la langue de l'application"
 

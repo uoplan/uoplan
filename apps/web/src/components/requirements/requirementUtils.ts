@@ -237,6 +237,36 @@ export function applyOptionSelections(
 }
 
 /**
+ * Requirement IDs that actually render a constrain MultiSelect for this course,
+ * based on the same flattened tree as {@link ConstrainStep}.
+ */
+export function collectRequirementIdsWithCandidateCourse(
+  flattenedRoots: RequirementWithStatus[],
+  courseNorm: string,
+): string[] {
+  const ids: string[] = [];
+
+  function walk(nodes: RequirementWithStatus[]) {
+    for (const node of nodes) {
+      if (
+        node.requirementId &&
+        node.candidateCourses?.some(
+          (c) => normalizeCourseCode(c) === courseNorm,
+        )
+      ) {
+        ids.push(node.requirementId);
+      }
+      if (node.options?.length) {
+        walk(node.options);
+      }
+    }
+  }
+
+  walk(flattenedRoots);
+  return [...new Set(ids)];
+}
+
+/**
  * Adjust a requirement tree node to reflect manual course assignments from the
  * Assign step (`selectedPerRequirement`). For each node with a requirementId:
  * - If assigned credits >= creditsNeeded → mark complete, zero out creditsNeeded

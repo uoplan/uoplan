@@ -20,6 +20,10 @@ import {
   isWithinElectiveLevelBuckets,
   virtualScheduleFilterApplies,
 } from "../../lib/electiveEligibility";
+import {
+  applyOptionSelections,
+  collectRequirementIdsWithCandidateCourse,
+} from "../../components/requirements/requirementUtils";
 
 const validEnrollmentsByCourseCode = new Map<string, CourseEnrollment[]>();
 
@@ -38,6 +42,7 @@ interface SchedulesSlice {
   swapCourseInSchedule: AppStore["swapCourseInSchedule"];
   undoLastSwap: AppStore["undoLastSwap"];
   getSwapCandidates: AppStore["getSwapCandidates"];
+  lockCourseForAllSchedulesFromSwap: AppStore["lockCourseForAllSchedulesFromSwap"];
 }
 
 export const createSchedulesSlice: StateCreator<
@@ -516,5 +521,77 @@ export const createSchedulesSlice: StateCreator<
     }
     const poolCourses = [...candidateSet];
     return { candidates, poolCourses, requirementTitle, rejectedWithConflict };
+  },
+
+  lockCourseForAllSchedulesFromSwap: (enrollmentIndex) => {
+    const {
+      wizardMode,
+      currentSchedule,
+      cache,
+      basicPinnedCourses,
+      currentPoolMap,
+      chosenCourseToRequirementId,
+      remainingRequirements,
+      requirementTreeWithStatus,
+      selectedOptionsPerRequirement,
+    } = get();
+    if (!currentSchedule) return;
+    const enrollment = currentSchedule.enrollments[enrollmentIndex];
+    if (!enrollment) return;
+    const code = enrollment.courseCode;
+    const norm = normalizeCourseCode(code);
+    const canonical = cache?.getCourse(norm)?.code ?? code;
+
+    if (wizardMode === "basic") {
+      if (basicPinnedCourses.some((c) => normalizeCourseCode(c) === norm)) {
+        return;
+      }
+      get().setBasicPinnedCourses([...basicPinnedCourses, canonical]);
+      return;
+    }
+
+    if (wizardMode !== "advanced") return;
+
+    const flattened = applyOptionSelections(
+      requirementTreeWithStatus,
+      selectedOptionsPerRequirement,
+    );
+    let requirementIds = collectRequirementIdsWithCandidateCourse(
+      flattened,
+      norm,
+    );
+
+    if (requirementIds.length === 0) {
+      let poolId =
+        currentPoolMap[code] ?? chosenCourseToRequirementId[code] ?? undefined;
+      if (!poolId) {
+        for (const req of remainingRequirements) {
+          if (!req.requirementId || !req.candidateCourses?.length) continue;
+          if (
+            req.candidateCourses.some(
+              (c) => normalizeCourseCode(c) === norm,
+            )
+          ) {
+            poolId = req.requirementId;
+            break;
+          }
+        }
+      }
+      if (poolId) requirementIds = [poolId];
+    }
+
+    if (requirementIds.length === 0) return;
+
+    set((s) => {
+      let next = { ...s.constrainedPerRequirement };
+      let changed = false;
+      for (const rid of requirementIds) {
+        const prev = next[rid] ?? [];
+        if (prev.some((c) => normalizeCourseCode(c) === norm)) continue;
+        next = { ...next, [rid]: [...prev, canonical] };
+        changed = true;
+      }
+      return changed ? { constrainedPerRequirement: next } : {};
+    });
   },
 });
