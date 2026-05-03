@@ -143,6 +143,8 @@ export interface AppActions {
     requirementTitle?: string;
     rejectedWithConflict: Array<{ code: string; conflictsWith: string }>;
   };
+  /** Pin the course like "Pick specific courses" for its pool (no immediate regeneration). */
+  lockCourseForAllSchedulesFromSwap: (enrollmentIndex: number) => void;
   setLevelBuckets: (buckets: CourseLevelBucket[]) => void;
   setLanguageBuckets: (buckets: CourseLanguageBucket[]) => void;
   setElectiveLevelBuckets: (buckets: number[]) => void;

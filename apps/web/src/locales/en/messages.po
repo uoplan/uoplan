@@ -150,6 +150,18 @@ msgstr "{passing}% passing · {aPlus}% A+"
 msgid "calendar.grade.snsLabel"
 msgstr "S / NS"
 
+msgid "calendar.swap.lockAria"
+msgstr "Add course to schedule-generation selections"
+
+msgid "calendar.swap.lockTooltip"
+msgstr "Adds this course to the selections used when schedules are generated."
+
+msgid "calendar.swap.alreadyLocked"
+msgstr "Already added"
+
+msgid "calendar.swap.lockNoPool"
+msgstr "Can't attach this course to a requirement picker."
+
 msgid "calendarPage.downloadIcs"
 msgstr "Download ICS"
 

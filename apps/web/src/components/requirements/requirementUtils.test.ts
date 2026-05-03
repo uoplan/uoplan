@@ -1,10 +1,11 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import type { DataCache } from "schedule";
 import type { RequirementWithStatus } from "schedule";
-import { isGroupToken } from "schedule";
+import { isGroupToken, normalizeCourseCode } from "schedule";
 import { i18n } from "../../i18n";
 import {
   applyOptionSelections,
+  collectRequirementIdsWithCandidateCourse,
   countSatisfiedTopLevelRoots,
   getConstrainMultiSelectOptions,
   getOptionSecondarySummaryLine,
@@ -44,6 +45,66 @@ const defaultConstrainCtx = {
   virtualSectionsOnly: false,
   completedOnly: false,
 };
+
+describe("collectRequirementIdsWithCandidateCourse", () => {
+  it("returns requirement ids for nodes whose candidate list includes the course", () => {
+    const tree: RequirementWithStatus[] = [
+      {
+        type: "elective",
+        title: "Elective",
+        complete: false,
+        satisfiedBy: [],
+        creditsNeeded: 6,
+        requirementId: "req-elective",
+        candidateCourses: ["CSI 2132", "MAT 1341"],
+      },
+    ];
+    expect(
+      collectRequirementIdsWithCandidateCourse(
+        tree,
+        normalizeCourseCode("csi2132"),
+      ),
+    ).toEqual(["req-elective"]);
+  });
+
+  it("walks nested options and dedupes ids", () => {
+    const tree: RequirementWithStatus[] = [
+      {
+        type: "group",
+        title: "G",
+        complete: false,
+        satisfiedBy: [],
+        creditsNeeded: 0,
+        options: [
+          {
+            type: "elective",
+            title: "E",
+            complete: false,
+            satisfiedBy: [],
+            creditsNeeded: 3,
+            requirementId: "req-a",
+            candidateCourses: ["SEG 3100"],
+          },
+          {
+            type: "elective",
+            title: "E2",
+            complete: false,
+            satisfiedBy: [],
+            creditsNeeded: 3,
+            requirementId: "req-b",
+            candidateCourses: ["SEG 3100", "CSI 0000"],
+          },
+        ],
+      },
+    ];
+    expect(
+      collectRequirementIdsWithCandidateCourse(
+        tree,
+        normalizeCourseCode("SEG 3100"),
+      ).sort(),
+    ).toEqual(["req-a", "req-b"].sort());
+  });
+});
 
 describe("pruneOptionSelectionsForClear", () => {
   it("removes the requirement id and descendant req-path keys only", () => {
