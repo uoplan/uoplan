@@ -4,7 +4,7 @@ import * as cheerio from 'cheerio';
 import pLimit from 'p-limit';
 import { type Got, got } from 'got';
 import { CookieJar } from 'tough-cookie';
-import { SCRAPER_DATA_DIR } from './dataPaths.js';
+import { SCRAPER_DATA_DIR } from './dataPaths.ts';
 
 const BASE_URL =
   'https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL';

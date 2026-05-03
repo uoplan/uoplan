@@ -3,7 +3,7 @@ import { z } from 'zod';
 import pLimit from 'p-limit';
 import fs from 'fs/promises';
 import path from 'path';
-import { SCRAPER_DATA_DIR } from './dataPaths.js';
+import { SCRAPER_DATA_DIR } from './dataPaths.ts';
 
 const ROOT_URL = 'https://catalogue.uottawa.ca';
 const OLDEST_YEAR = 2017;

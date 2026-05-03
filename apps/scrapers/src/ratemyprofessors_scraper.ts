@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import got from 'got';
-import { SCRAPER_DATA_DIR } from './dataPaths.js';
+import { SCRAPER_DATA_DIR } from './dataPaths.ts';
 
 const GRAPHQL_URL = 'https://www.ratemyprofessors.com/graphql';
 const PAGE_SIZE = 1000;
