@@ -78,7 +78,7 @@ export function CalendarEventContent({
       })
     ) : null;
 
-  const gradeBottom = <GradeDistributionBottomBar gradeViz={ext.gradeViz} fallbackColor={hex} />;
+  const gradeBottom = <GradeDistributionBottomBar gradeViz={ext.gradeViz} />;
 
   return (
     <div

@@ -258,6 +258,10 @@ a {
   box-sizing: border-box;
 }
 
+.fc-uoplan-grade-bottom--no-grade-data {
+  background-color: var(--mantine-color-gray-5);
+}
+
 .fc-uoplan-grade-bottom--dist {
   display: flex;
   flex-direction: row;

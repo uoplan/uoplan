@@ -30,16 +30,13 @@ export function GradeDistributionCompactChip({
 /** Full-width horizontal strip at the bottom of a calendar event (constant column width). */
 export function GradeDistributionBottomBar({
   gradeViz,
-  fallbackColor,
 }: {
   gradeViz?: GradeVizData | null;
-  fallbackColor: string;
 }) {
   if (!gradeViz || gradeViz.total <= 0) {
     return (
       <div
-        className="fc-uoplan-grade-bottom fc-uoplan-grade-bottom--solid"
-        style={{ backgroundColor: fallbackColor }}
+        className="fc-uoplan-grade-bottom fc-uoplan-grade-bottom--no-grade-data"
         aria-hidden
       />
     );
