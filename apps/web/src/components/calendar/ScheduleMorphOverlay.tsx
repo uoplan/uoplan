@@ -1,95 +1,49 @@
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useLayoutEffect } from "react";
 import { createPortal } from "react-dom";
-import { motion } from "framer-motion";
-import { hexToRgb } from "schedule";
-import type { Phantom } from "../../hooks/useCalendarMorph";
-import { PHANTOM_MS, HALF_PHANTOM_MS } from "../../hooks/useCalendarMorph";
-import { tr } from "../../i18n";
+import type { GradeVizData } from "schedule";
+import { hexToRgb, ratingToColor } from "schedule";
+import type { Phantom, PhantomText } from "../../hooks/useCalendarMorph";
+import { HALF_PHANTOM_MS, PHANTOM_MS } from "../../hooks/useCalendarMorph";
+import { GradeDistributionBottomBar } from "./GradeDistributionViz";
+import { CalendarEventFace, type CalendarEventFaceProps } from "./CalendarEventFace";
 
-const HALF_S = HALF_PHANTOM_MS / 1000;
-const FULL_S = PHANTOM_MS / 1000;
-const EASING = [0.4, 0, 0.2, 1] as const;
+const MORPH_EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
 
-function rectToStyle(rect: DOMRect) {
+function phantomTextToFaceProps(t: PhantomText): CalendarEventFaceProps {
+  const hasNumericRating =
+    t.hasProfessorRating && t.ratingValue != null && t.ratingValue > 0;
+  const ratingTier = t.ratingTier || ratingToColor(t.ratingValue ?? null);
   return {
-    top: rect.top,
-    left: rect.left,
-    width: rect.width,
-    height: rect.height,
+    courseCode: t.courseCode,
+    courseTitle: t.courseTitle,
+    componentSectionDisplay: t.section,
+    timeRange: t.time.trim() ? t.time : null,
+    professor: t.professor,
+    virtual: t.virtual,
+    layout: {
+      showSection: !!t.section.trim(),
+      showTime: !!t.time.trim(),
+      showProfessor: !!t.professor.trim(),
+    },
+    ratingTier,
+    hasProfessorRating: t.hasProfessorRating,
+    hasNumericRating,
+    professorRatingValue: t.ratingValue,
+    legacyId: t.legacyId ?? null,
+    professorRatingDetails: undefined,
+    interaction: "static",
   };
 }
 
-function TextContent({
-  heading,
-  section,
-  virtual,
-  time,
-  professor,
-  ratingColor,
-}: {
-  heading: string;
-  section: string;
-  virtual: boolean;
-  time: string;
-  professor: string;
-  ratingColor: string;
-}) {
-  if (!heading) return null;
-  return (
-    <div className="fc-uoplan-event-body">
-      <span className="fc-uoplan-event-code">{heading}</span>
-      {section && (
-        <div className="fc-uoplan-event-type-row">
-          <span className="fc-uoplan-event-type">{section}</span>
-          {virtual && (
-            <span className="fc-uoplan-event-virtual">
-              {tr("calendar.event.virtual")}
-            </span>
-          )}
-        </div>
-      )}
-      {time && <span className="fc-uoplan-event-time">{time}</span>}
-      {professor && (
-        <span
-          className="fc-uoplan-event-professor"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            flexWrap: "nowrap",
-            minWidth: 0,
-            maxWidth: "100%",
-          }}
-        >
-          <span
-            className="fc-uoplan-event-professor-name"
-            style={{
-              minWidth: 0,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {professor}
-          </span>
-          {ratingColor && (
-            <span
-              aria-hidden
-              style={{
-                width: 10,
-                height: 10,
-                borderRadius: 0,
-                backgroundColor: ratingColor,
-                border: "1px solid rgba(0,0,0,0.45)",
-                boxShadow: "0 0 0 1px rgba(255,255,255,0.08) inset",
-                flexShrink: 0,
-              }}
-            />
-          )}
-        </span>
-      )}
-    </div>
-  );
+function pickGradeViz(phantom: Phantom): GradeVizData | null {
+  if (phantom.kind === "flip") {
+    const next = phantom.toText.gradeViz;
+    if (next && next.total > 0) return next;
+    const prev = phantom.fromText.gradeViz;
+    return prev && prev.total > 0 ? prev : null;
+  }
+  const g = phantom.fromText.gradeViz;
+  return g && g.total > 0 ? g : null;
 }
 
 function PhantomBlock({
@@ -99,6 +53,7 @@ function PhantomBlock({
   phantom: Phantom;
   onComplete: () => void;
 }) {
+  const shellRef = useRef<HTMLDivElement>(null);
   const { colorHex, kind, fromRect } = phantom;
   const { r, g, b } = hexToRgb(colorHex);
   const bg = `rgba(${r}, ${g}, ${b}, 0.38)`;
@@ -106,104 +61,114 @@ function PhantomBlock({
   const isFlip = kind === "flip";
   const fromText = phantom.fromText;
   const toText = isFlip ? phantom.toText : fromText;
+  /** Start at the old rect so we can animate geometry without transform scale (which blows up type). */
+  const geoRect = fromRect;
+  const gradeViz = pickGradeViz(phantom);
 
-  // Flip phantoms fire `onComplete` via a timer rather than onAnimationComplete:
-  // parked phantoms (fromRect === toRect) would otherwise complete instantly.
-  useEffect(() => {
-    if (!isFlip) return;
-    const t = window.setTimeout(onComplete, HALF_PHANTOM_MS);
-    return () => window.clearTimeout(t);
-  }, [isFlip, onComplete]);
+  useLayoutEffect(() => {
+    const el = shellRef.current;
+    if (!el) return;
 
-  const blockStyle = {
-    position: "fixed" as const,
-    pointerEvents: "none" as const,
-    borderLeft: `4px solid ${colorHex}`,
-    backgroundColor: bg,
-    zIndex: 9999,
-    overflow: "hidden",
-    display: "flex" as const,
-    flexDirection: "column" as const,
-    alignItems: "flex-start" as const,
-    padding: "8px 8px",
-    fontSize: "11px",
-    boxSizing: "border-box" as const,
-  };
+    let finished = false;
+    const safeComplete = () => {
+      if (finished) return;
+      finished = true;
+      onComplete();
+    };
 
-  if (isFlip) {
-    /**
-     * Flip phantom:
-     *   - Slides old→new position over HALF_S while old text fades out and new
-     *     text fades in, so text is fully changed by arrival.
-     *   - onComplete is fired via a timer rather than onAnimationComplete because
-     *     parked phantoms (fromRect === toRect) trigger onAnimationComplete instantly,
-     *     which would drain the counter before real phantoms mount. The timer is
-     *     cancelled on unmount, so only real phantoms (which live for HALF_S) fire it.
-     */
-    return (
-      <motion.div
-        initial={rectToStyle(fromRect)}
-        animate={rectToStyle(phantom.toRect)}
-        transition={{ duration: HALF_S, ease: EASING }}
-        style={blockStyle}
-      >
-        {/* Old text fades out during the slide */}
-        <motion.div
-          style={{ position: "absolute", top: "8px", left: "8px", right: "8px", bottom: "8px", display: "flex", flexDirection: "column" }}
-          animate={{ opacity: 0 }}
-          transition={{ duration: HALF_S, ease: "easeIn" }}
-        >
-          <TextContent
-            heading={fromText.heading}
-            section={fromText.section}
-            virtual={fromText.virtual}
-            time={fromText.time}
-            professor={fromText.professor}
-            ratingColor={fromText.ratingColor}
-          />
-        </motion.div>
+    el.style.setProperty("--uoplan-morph-half-ms", `${HALF_PHANTOM_MS}ms`);
+    el.style.setProperty("--uoplan-morph-full-ms", `${PHANTOM_MS}ms`);
 
-        {/* New text fades in during the slide */}
-        <motion.div
-          style={{ position: "absolute", top: "8px", left: "8px", right: "8px", bottom: "8px", display: "flex", flexDirection: "column" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: HALF_S, ease: "easeIn" }}
-        >
-          <TextContent
-            heading={toText.heading}
-            section={toText.section}
-            virtual={toText.virtual}
-            time={toText.time}
-            professor={toText.professor}
-            ratingColor={toText.ratingColor}
-          />
-        </motion.div>
-      </motion.div>
-    );
-  }
+    if (phantom.kind !== "flip") {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          el.classList.add("fc-uoplan-morph-phantom--animating-fade");
+        });
+      });
+      const onEnd = (e: TransitionEvent) => {
+        if (e.target === el && e.propertyName === "opacity") {
+          el.removeEventListener("transitionend", onEnd);
+          safeComplete();
+        }
+      };
+      el.addEventListener("transitionend", onEnd);
+      const t = window.setTimeout(() => safeComplete(), PHANTOM_MS + 80);
+      return () => {
+        el.removeEventListener("transitionend", onEnd);
+        window.clearTimeout(t);
+      };
+    }
 
-  /**
-   * FadeOut phantom:
-   *   - Stays in place, fades opacity 1 → 0 over the full duration.
-   */
+    const to = phantom.toRect;
+    const from = fromRect;
+    const needsGeo =
+      Math.abs(to.top - from.top) > 0.5 ||
+      Math.abs(to.left - from.left) > 0.5 ||
+      Math.abs(to.width - from.width) > 0.5 ||
+      Math.abs(to.height - from.height) > 0.5;
+
+    const dur = `${HALF_PHANTOM_MS}ms`;
+    const geom = `top ${dur} ${MORPH_EASE}, left ${dur} ${MORPH_EASE}, width ${dur} ${MORPH_EASE}, height ${dur} ${MORPH_EASE}`;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        el.classList.add("fc-uoplan-morph-phantom--animating-layers");
+        if (needsGeo) {
+          el.style.transition = geom;
+          el.style.top = `${to.top}px`;
+          el.style.left = `${to.left}px`;
+          el.style.width = `${to.width}px`;
+          el.style.height = `${to.height}px`;
+        }
+      });
+    });
+
+    const t = window.setTimeout(() => safeComplete(), HALF_PHANTOM_MS + 80);
+    return () => {
+      window.clearTimeout(t);
+      el.style.transition = "";
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- one run per phantom.layoutId; rects are fixed for that id
+  }, [phantom.layoutId, onComplete]);
+
   return (
-    <motion.div
-      initial={{ ...rectToStyle(fromRect), opacity: 1 }}
-      animate={{ ...rectToStyle(fromRect), opacity: 0 }}
-      transition={{ duration: FULL_S, ease: EASING }}
-      onAnimationComplete={onComplete}
-      style={blockStyle}
+    <div
+      ref={shellRef}
+      className={`fc-uoplan-event fc-uoplan-morph-phantom${isFlip ? "" : " fc-uoplan-morph-phantom--fade-out"}`}
+      style={{
+        position: "fixed",
+        pointerEvents: "none",
+        top: geoRect.top,
+        left: geoRect.left,
+        width: geoRect.width,
+        height: geoRect.height,
+        minHeight: 0,
+        borderLeft: `4px solid ${colorHex}`,
+        backgroundColor: bg,
+        overflow: "hidden",
+        boxSizing: "border-box",
+      }}
     >
-      <TextContent
-        heading={fromText.heading}
-        section={fromText.section}
-        virtual={fromText.virtual}
-        time={fromText.time}
-        professor={fromText.professor}
-        ratingColor={fromText.ratingColor}
-      />
-    </motion.div>
+      <div className="fc-uoplan-morph-phantom-surface">
+        {isFlip ? (
+          <>
+            <div className="fc-uoplan-morph-phantom-layer fc-uoplan-morph-phantom-layer--out">
+              <CalendarEventFace {...phantomTextToFaceProps(fromText)} />
+            </div>
+            <div className="fc-uoplan-morph-phantom-layer fc-uoplan-morph-phantom-layer--in">
+              <CalendarEventFace {...phantomTextToFaceProps(toText)} />
+            </div>
+          </>
+        ) : (
+          <div className="fc-uoplan-morph-phantom-layer">
+            <CalendarEventFace {...phantomTextToFaceProps(fromText)} />
+          </div>
+        )}
+      </div>
+      <div className="fc-uoplan-grade-bottom-hitbox">
+        <GradeDistributionBottomBar gradeViz={gradeViz} fallbackColor={colorHex} />
+      </div>
+    </div>
   );
 }
 

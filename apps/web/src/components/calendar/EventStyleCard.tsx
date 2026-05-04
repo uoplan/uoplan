@@ -1,22 +1,15 @@
-import type { MouseEvent } from "react";
-import { Box, Tooltip } from "@mantine/core";
-import type { DataCache } from "schedule";
-import type { CourseEnrollment } from "schedule";
-import type { ComponentSection } from "schedule";
-import {
-  getRatingsForInstructors,
-  getRatingDetailsForInstructors,
-  type ProfessorRatingsMap,
-} from "schedule";
+import type { ComponentSection, CourseEnrollment, DataCache } from "schedule";
 import {
   COURSE_COLORS,
   COURSE_COLOR_HEX,
+  getRatingDetailsForInstructors,
+  getRatingsForInstructors,
   hexToRgb,
-  ratingToColor,
+  type ProfessorRatingsMap,
   ratingColorToCssVar,
+  ratingToColor,
 } from "schedule";
-import { ProfessorRatingTooltipLabel } from "./ProfessorRatingTooltipLabel";
-import { tr } from "../../i18n";
+import { CalendarEventFace } from "./CalendarEventFace";
 import { componentKindOnly, formatTimeRange } from "./calendarEventDisplayUtils";
 
 interface EventStyleCardProps {
@@ -91,54 +84,6 @@ export function EventStyleCard({
   const ratingTier = ratingToColor(ratingValue ?? null);
   const markerColor = ratingColorToCssVar(ratingTier);
 
-  const virtualTail = virtual ? (
-    <div className="fc-uoplan-event-row-tail">
-      <span className="fc-uoplan-event-virtual">{tr("calendar.event.virtual")}</span>
-    </div>
-  ) : null;
-
-  const professorRowInner = (
-    <div className="fc-uoplan-event-professor-row">
-      <span className="fc-uoplan-event-professor-name" title={professor}>
-        {professor}
-      </span>
-      {hasNumericRating ? (
-        <>
-          <span className="fc-uoplan-event-meta-sep" aria-hidden>
-            ·
-          </span>
-          <Box
-            component={legacyId ? "a" : "span"}
-            href={legacyId ? `https://www.ratemyprofessors.com/professor/${legacyId}` : undefined}
-            target={legacyId ? "_blank" : undefined}
-            rel={legacyId ? "noopener noreferrer" : undefined}
-            onClick={(e: MouseEvent) => e.stopPropagation()}
-            className={`fc-uoplan-rating-inline fc-uoplan-rating-inline--${ratingTier}`}
-          >
-            {ratingValue.toFixed(1)}
-          </Box>
-        </>
-      ) : null}
-    </div>
-  );
-
-  const professorBlock =
-    professor.trim() !== "" ? (
-      hasProfessorRating ? (
-        <Tooltip
-          label={<ProfessorRatingTooltipLabel details={ratingDetails} />}
-          withArrow
-          position="top"
-          withinPortal
-          color="dark"
-        >
-          {professorRowInner}
-        </Tooltip>
-      ) : (
-        professorRowInner
-      )
-    ) : null;
-
   return (
     <div
       className="fc-uoplan-event fc-uoplan-event--swap-card"
@@ -149,43 +94,26 @@ export function EventStyleCard({
         backgroundColor: `rgba(${r}, ${g}, ${b}, 0.38)`,
       }}
     >
-      <div className="fc-uoplan-event-inner">
-        <div className="fc-uoplan-event-body">
-          <div
-            className="fc-uoplan-event-heading"
-            title={courseTitle ? `${enrollment.courseCode} ${courseTitle}` : enrollment.courseCode}
-          >
-            <span className="fc-uoplan-event-heading-inline">
-              <span className="fc-uoplan-event-code-part">{enrollment.courseCode}</span>
-              {courseTitle ? <span className="fc-uoplan-event-title-part">{courseTitle}</span> : null}
-            </span>
-          </div>
-
-          <div className="fc-uoplan-event-top-meta">
-            {timeRange ? (
-              <div className="fc-uoplan-event-type-time-row">
-                <div className="fc-uoplan-event-type-time-wrap">
-                  <span className="fc-uoplan-event-type">{componentKindOnly(componentSectionFull)}</span>
-                  <span className="fc-uoplan-event-meta-sep" aria-hidden>
-                    ·
-                  </span>
-                  <span className="fc-uoplan-event-time">{timeRange}</span>
-                </div>
-                {virtualTail}
-              </div>
-            ) : (
-              <div className="fc-uoplan-event-type-row">
-                <span className="fc-uoplan-event-type">{componentKindOnly(componentSectionFull)}</span>
-                {virtualTail}
-              </div>
-            )}
-          </div>
-
-          {professorBlock ? (
-            <div className="fc-uoplan-event-professor-bottom">{professorBlock}</div>
-          ) : null}
-        </div>
-      </div>
+      <CalendarEventFace
+        courseCode={enrollment.courseCode}
+        courseTitle={courseTitle}
+        componentSectionDisplay={componentKindOnly(componentSectionFull)}
+        timeRange={timeRange}
+        professor={professor}
+        virtual={!!virtual}
+        layout={{
+          showSection: true,
+          showTime: !!timeRange,
+          showProfessor: true,
+        }}
+        ratingTier={ratingTier}
+        hasProfessorRating={hasProfessorRating}
+        hasNumericRating={hasNumericRating}
+        professorRatingValue={ratingValue}
+        legacyId={legacyId ?? null}
+        professorRatingDetails={ratingDetails}
+        interaction="interactive"
+      />
     </div>
   );
 }

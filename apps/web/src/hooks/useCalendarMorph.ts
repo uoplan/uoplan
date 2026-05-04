@@ -1,24 +1,34 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import type { GradeVizData } from "schedule";
 
 interface CapturedEvent {
   courseCode: string;
+  courseTitle: string;
   colorHex: string;
   rect: DOMRect;
-  heading: string;
   section: string;
   virtual: boolean;
   time: string;
   professor: string;
-  ratingColor: string;
+  ratingTier: string;
+  ratingValue: number | null;
+  legacyId?: number;
+  hasProfessorRating: boolean;
+  gradeViz: GradeVizData | null;
 }
 
-interface PhantomText {
-  heading: string;
+export interface PhantomText {
+  courseCode: string;
+  courseTitle: string;
   section: string;
   virtual: boolean;
   time: string;
   professor: string;
-  ratingColor: string;
+  ratingTier: string;
+  ratingValue: number | null;
+  legacyId?: number;
+  hasProfessorRating: boolean;
+  gradeViz: GradeVizData | null;
 }
 
 interface PhantomBase {
@@ -46,13 +56,28 @@ export type Phantom = FlipPhantom | FadeOutPhantom;
 
 function toPhantomText(event: CapturedEvent): PhantomText {
   return {
-    heading: event.heading,
+    courseCode: event.courseCode,
+    courseTitle: event.courseTitle,
     section: event.section,
     virtual: event.virtual,
     time: event.time,
     professor: event.professor,
-    ratingColor: event.ratingColor,
+    ratingTier: event.ratingTier,
+    ratingValue: event.ratingValue,
+    legacyId: event.legacyId,
+    hasProfessorRating: event.hasProfessorRating,
+    gradeViz: event.gradeViz,
   };
+}
+
+function parseGradeVizDataset(raw: string | undefined): GradeVizData | null {
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(decodeURIComponent(raw)) as GradeVizData;
+    return parsed && typeof parsed.total === "number" && parsed.total > 0 ? parsed : null;
+  } catch {
+    return null;
+  }
 }
 
 type Phase =
@@ -82,30 +107,44 @@ function captureEventPositions(container: HTMLElement | null): CapturedEvent[] {
     const colorHex = el.dataset.colorHex ?? "";
     const rect = el.getBoundingClientRect();
     if (rect.width > 0 && rect.height > 0) {
-      const heading =
-        el.querySelector(".fc-uoplan-event-heading")?.textContent?.trim() ??
-        el.querySelector(".fc-uoplan-event-code")?.textContent ??
+      const courseTitle =
+        el.dataset.courseTitle?.trim() ??
+        el.querySelector(".fc-uoplan-event-title-part")?.textContent?.trim() ??
         "";
-      const section =
-        el.querySelector(".fc-uoplan-event-type")?.textContent ?? "";
+      const section = el.querySelector(".fc-uoplan-event-type")?.textContent ?? "";
       const time =
         el.dataset.eventTime ??
-        el.querySelector(".fc-uoplan-event-time")?.textContent ??
+        el.querySelector(".fc-uoplan-event-time")?.textContent?.trim() ??
         "";
       const professor =
         el.querySelector(".fc-uoplan-event-professor-name")?.textContent?.trim() ?? "";
-      const ratingColor = el.dataset.ratingColor ?? "";
+      const ratingTier = el.dataset.ratingTier?.trim() ?? "";
+      const rv = el.dataset.professorRatingValue;
+      const ratingValue =
+        rv !== undefined && rv !== "" && Number.isFinite(Number(rv)) ? Number(rv) : null;
+      const legacyRaw = el.dataset.rmpLegacyId;
+      const legacyId =
+        legacyRaw !== undefined && legacyRaw !== "" && Number.isFinite(Number(legacyRaw))
+          ? Number(legacyRaw)
+          : undefined;
+      const hasProfessorRating =
+        ratingTier !== "" || (ratingValue != null && ratingValue > 0);
       const virtual = el.dataset.virtual === "true";
+      const gradeViz = parseGradeVizDataset(el.dataset.gradeViz);
       captures.push({
         courseCode,
+        courseTitle,
         colorHex,
         rect,
-        heading,
         section,
         virtual,
         time,
         professor,
-        ratingColor,
+        ratingTier,
+        ratingValue,
+        legacyId,
+        hasProfessorRating,
+        gradeViz,
       });
     }
   }
