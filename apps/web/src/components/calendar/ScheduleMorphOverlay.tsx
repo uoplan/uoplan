@@ -166,7 +166,7 @@ function PhantomBlock({
         )}
       </div>
       <div className="fc-uoplan-grade-bottom-hitbox">
-        <GradeDistributionBottomBar gradeViz={gradeViz} fallbackColor={colorHex} />
+        <GradeDistributionBottomBar gradeViz={gradeViz} />
       </div>
     </div>
   );
