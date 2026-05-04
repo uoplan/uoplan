@@ -16877,7 +16877,7 @@
       "code": "AUD 5527",
       "title": "Principes d’entrée en pratique I",
       "credits": 1,
-      "description": "Initiation aux aspects théoriques et pratiques en préparation pour le Stage I.",
+      "description": "Initiation aux aspects théoriques et pratiques en préparation pour le Stage I et l’Expérience interprofessionnelle I.",
       "component": "Cours magistralPréalables : AUD 5519, AUD 5613. Le cours AUD 5579 est concomitant à AUD 5527. Noté S (satisfaisant) ou NS (non satisfaisant).",
       "prereqText": "AUD 5519, AUD 5613",
       "prerequisites": {
@@ -16956,7 +16956,7 @@
       "title": "Bruit et audiologie",
       "credits": 2,
       "description": "Effets psychologiques et physiologiques du bruit, inventaire des réglementations, normes et solutions aux problèmes de bruit. L'audiologiste en tant que consultant pour les problématiques de bruit dans différents milieux de vie et de travail.",
-      "component": "Cours magistralPréalables : AUD 5521, AUD 5522, AUD 5723. Le cours AUD 5552 est concomitant à AUD 5550.",
+      "component": "Cours magistralPréalables : AUD 5521, AUD 5522, AUD 5723.",
       "prereqText": "AUD 5521, AUD 5522, AUD 5723",
       "prerequisites": {
         "type": "and_group",
@@ -16981,14 +16981,14 @@
       "code": "AUD 5551",
       "title": "Psychoacoustique",
       "credits": 2,
-      "description": "Physiologie du système auditif périphérique et central endommagé. Phénomènes acoustiques et psychoacoustiques de l'audition normale et endommagée. Méthodes psychophysiques, seuils, effet de masque, sonie, sensibilité différentielle, tonie, phénomènes binauraux et perception de la parole.",
+      "description": "Physiologie du système auditif périphérique endommagé. Phénomènes acoustiques et psychoacoustiques de l'audition normale et endommagée. Méthodes psychophysiques, seuils, effet de masque, sonie, sensibilité différentielle, tonie, phénomènes binauraux et perception de la parole.",
       "component": "Cours magistralLe cours AUD 5511 est concomitant au cours AUD 5551. En cas d’échec au cours AUD 5511, l’étudiante ou l’étudiant sera retiré du cours AUD 5551."
     },
     {
       "code": "AUD 5552",
       "title": "Pharmacologie et ototoxicité",
       "credits": 2,
-      "description": "Effets des solvants organiques et des agents de pharmacologiques sur le système auditif et les approches de surveillance de l'ototoxicité.",
+      "description": "Effets des solvants organiques et des agents pharmacologiques sur le système auditif et les approches de surveillance de l'ototoxicité.",
       "component": "Cours magistralPréalable : AUD 5723. Le cours AUD 5550 est concomitant à AUD 5552.",
       "prereqText": "AUD 5723",
       "prerequisites": {
@@ -17023,8 +17023,8 @@
       "code": "AUD 5613",
       "title": "Évaluation audiologique I",
       "credits": 4,
-      "description": "Planifier et réaliser les étapes inhérentes au processus d'évaluation permettant d'identifier et de comprendre un problème du système auditif périphérique (oreille externe, moyenne et interne) et de mesurer les progrès effectués à la suite d’une intervention le cas échéant.",
-      "component": "Laboratoire, Cours magistralLe cours AUD 5551 est concomitant à AUD 5613. En cas d’échec au cours AUD 5511, l’étudiante ou l’étudiant sera retiré du cours AUD 5613."
+      "description": "Planifier et réaliser les étapes inhérentes au processus d'évaluation permettant d'identifier et de comprendre un problème du système auditif périphérique (oreille externe, moyenne et interne), ainsi que de mesurer les progrès effectués à la suite d’une intervention le cas échéant.",
+      "component": "Laboratoire, Cours magistralLes cours AUD 5511 et AUD 5551 sont concomitants à AUD 5613. En cas d’échec au cours AUD 5511, l’étudiante ou l’étudiant sera retiré du cours AUD 5613."
     },
     {
       "code": "AUD 5620",
@@ -17059,7 +17059,7 @@
       "code": "AUD 5641",
       "title": "Évaluations électrophysiologiques",
       "credits": 4,
-      "description": "Fondements, importance et utilisation clinique des potentiels évoqués du tronc cérébral et des émissions oto-acoustiques pour l'évaluation audiologique. Introduction aux potentiels évoqués de latence courte, moyenne, longue et des réponses corticales.",
+      "description": "Fondements, importance et utilisation clinique des potentiels évoqués du tronc cérébral et des émissions oto-acoustiques pour l'évaluation audiologique. Introduction aux potentiels évoqués de latence courte, moyenne et longue.",
       "component": "Laboratoire, Cours magistralPréalables : AUD 5522, AUD 5723.",
       "prereqText": "AUD 5522, AUD 5723",
       "prerequisites": {
@@ -17088,7 +17088,7 @@
       "code": "AUD 5722",
       "title": "Aides auditives I",
       "credits": 3,
-      "description": "Dimensions acoustiques et électroacoustiques des systèmes d'amplification et des technologies pour personnes expérimentant des difficultés auditives.",
+      "description": "Dimensions acoustiques et électroacoustiques des systèmes d'amplification et des technologies pour les personnes expérimentant des difficultés auditives.",
       "component": "Cours magistralPréalables : AUD 5511, AUD 5521, AUD 5551, AUD 5613, REA 5703. Les cours AUD 5529 et AUD 5723 sont concomitants à AUD 5722.",
       "prereqText": "AUD 5511, AUD 5521, AUD 5551, AUD 5613, REA 5703",
       "prerequisites": {
@@ -17123,21 +17123,12 @@
       "title": "Évaluation audiologique II",
       "credits": 3,
       "description": "Principes avancés d'évaluation comportementale du système auditif.",
-      "component": "Cours magistralPréalables : AUD 5551, AUD 5613. Le cours AUD 5522 est concomitant à AUD 5723.",
-      "prereqText": "AUD 5551, AUD 5613",
+      "component": "Cours magistralPréalable : AUD 5613.",
+      "prereqText": "AUD 5613",
       "prerequisites": {
-        "type": "and_group",
-        "text": "AUD 5551, AUD 5613",
-        "children": [
-          {
-            "type": "course",
-            "code": "AUD 5551"
-          },
-          {
-            "type": "course",
-            "code": "AUD 5613"
-          }
-        ]
+        "type": "course",
+        "code": "AUD 5613",
+        "text": "AUD 5613"
       }
     },
     {
@@ -17215,11 +17206,11 @@
       "title": "Stage II",
       "credits": 2,
       "description": "Approfondissement des connaissances et des compétences cliniques, ainsi que celles associées aux différents rôles professionnels en audiologie. Stage d’une durée de 25 jours.",
-      "component": "StagePréalables : AUD 5529, 42 crédits de cours en audiologie (AUD) ou réadaptation (REA). Le cours AUD 6527 est concomitant à AUD 6529. Noté S (satisfaisant) ou NS (non satisfaisant).",
-      "prereqText": "AUD 5529, 42 crédits de cours en audiologie (AUD) ou réadaptation (REA)",
+      "component": "StagePréalables : AUD 5529, 45.5 crédits de cours en audiologie (AUD) ou réadaptation (REA). Le cours AUD 6527 est concomitant à AUD 6529. Noté S (satisfaisant) ou NS (non satisfaisant).",
+      "prereqText": "AUD 5529, 45.5 crédits de cours en audiologie (AUD) ou réadaptation (REA)",
       "prerequisites": {
         "type": "and_group",
-        "text": "AUD 5529, 42 crédits de cours en audiologie (AUD) ou réadaptation (REA)",
+        "text": "AUD 5529, 45.5 crédits de cours en audiologie (AUD) ou réadaptation (REA)",
         "children": [
           {
             "type": "course",
@@ -17228,8 +17219,8 @@
           },
           {
             "type": "non_course",
-            "text": "42 crédits de cours en audiologie (AUD) ou réadaptation (REA)",
-            "credits": 42,
+            "text": "45.5 crédits de cours en audiologie (AUD) ou réadaptation (REA)",
+            "credits": 45.5,
             "disciplines": [
               "AUD",
               "REA"
@@ -17256,16 +17247,16 @@
       "title": "Stage III",
       "credits": 3,
       "description": "Approfondissement des connaissances et des compétences cliniques, ainsi que celles associées aux différents rôles professionnels en audiologie. Stage d'une durée de 30 jours.",
-      "component": "StagePréalables : AUD 6529 et 54 crédits de cours en audiologie (AUD) ou réadaptation (REA). Le cours AUD 6537 est concomitant AUD 6539. Noté S (satisfaisant) ou NS (non satisfaisant).",
-      "prereqText": "AUD 6529 et 54 crédits de cours en audiologie (AUD) ou réadaptation (REA)",
+      "component": "StagePréalables : AUD 6529 et 59.25 crédits de cours en audiologie (AUD) ou réadaptation (REA). Le cours AUD 6537 est concomitant AUD 6539. Noté S (satisfaisant) ou NS (non satisfaisant).",
+      "prereqText": "AUD 6529 et 59.25 crédits de cours en audiologie (AUD) ou réadaptation (REA)",
       "prerequisites": {
         "type": "or_group",
-        "text": "AUD 6529 et 54 crédits de cours en audiologie (AUD) ou réadaptation (REA)",
+        "text": "AUD 6529 et 59.25 crédits de cours en audiologie (AUD) ou réadaptation (REA)",
         "children": [
           {
             "type": "course",
             "code": "AUD 6529",
-            "text": "AUD 6529 et 54 crédits de cours en audiologie (AUD)"
+            "text": "AUD 6529 et 59.25 crédits de cours en audiologie (AUD)"
           },
           {
             "type": "non_course",
@@ -17282,12 +17273,29 @@
       "title": "Gérontoaudiologie",
       "credits": 2,
       "description": "Effets du vieillissement sur le système auditif et les approches de réadaptation.",
-      "component": "Cours magistralPréalable : AUD 5723. Le cours AUD 6642 est concomitant à AUD 6543.",
-      "prereqText": "AUD 5723",
+      "component": "Cours magistralPréalables : AUD 5723, AUD 6524, AUD 6545, AUD 6642.",
+      "prereqText": "AUD 5723, AUD 6524, AUD 6545, AUD 6642",
       "prerequisites": {
-        "type": "course",
-        "code": "AUD 5723",
-        "text": "AUD 5723"
+        "type": "and_group",
+        "text": "AUD 5723, AUD 6524, AUD 6545, AUD 6642",
+        "children": [
+          {
+            "type": "course",
+            "code": "AUD 5723"
+          },
+          {
+            "type": "course",
+            "code": "AUD 6524"
+          },
+          {
+            "type": "course",
+            "code": "AUD 6545"
+          },
+          {
+            "type": "course",
+            "code": "AUD 6642"
+          }
+        ]
       }
     },
     {
@@ -17321,25 +17329,12 @@
       "title": "Traitement auditif",
       "credits": 2,
       "description": "Méthodes de dépistage et d'évaluation des habiletés de traitement auditif, et les approches de réadaptation qui s'appliquent.",
-      "component": "Cours magistralPréalables : AUD 5641, AUD 6524, AUD 6615. Les cours AUD 6561 est concomitant à AUD 6545.",
-      "prereqText": "AUD 5641, AUD 6524, AUD 6615",
+      "component": "Cours magistralPréalable : AUD 5641. Les cours AUD 6615 est concomitant à AUD 6545.",
+      "prereqText": "AUD 5641",
       "prerequisites": {
-        "type": "and_group",
-        "text": "AUD 5641, AUD 6524, AUD 6615",
-        "children": [
-          {
-            "type": "course",
-            "code": "AUD 5641"
-          },
-          {
-            "type": "course",
-            "code": "AUD 6524"
-          },
-          {
-            "type": "course",
-            "code": "AUD 6615"
-          }
-        ]
+        "type": "course",
+        "code": "AUD 5641",
+        "text": "AUD 5641"
       }
     },
     {
@@ -17359,16 +17354,20 @@
       "code": "AUD 6561",
       "title": "Audiologie en milieu scolaire",
       "credits": 2,
-      "description": "Méthodes de dépistage auditif, d’évaluation des besoins et d'intervention audiologiques en milieu scolaire. Vérification des moyens en place pour pallier les difficultés d'écoute suivant une approche centrée sur la personne et axée sur la collaboration interdisciplinaire.",
-      "component": "Cours magistralPréalables : AUD 6524, AUD 6615. Le cours AUD 6725 est concomitant à AUD 6561.",
-      "prereqText": "AUD 6524, AUD 6615",
+      "description": "Méthodes de dépistage auditif, d’évaluation des besoins et d'intervention audiologiques en milieu scolaire. Vérification des moyens en place pour pallier les difficultés d'écoute suivant une approche centrée sur la personne et axée sur la collaboration interprofessionnelle.",
+      "component": "Cours magistralPréalables : AUD 6524, AUD 6545, AUD 6615. Le cours AUD 6725 est concomitant à AUD 6561.",
+      "prereqText": "AUD 6524, AUD 6545, AUD 6615",
       "prerequisites": {
         "type": "and_group",
-        "text": "AUD 6524, AUD 6615",
+        "text": "AUD 6524, AUD 6545, AUD 6615",
         "children": [
           {
             "type": "course",
             "code": "AUD 6524"
+          },
+          {
+            "type": "course",
+            "code": "AUD 6545"
           },
           {
             "type": "course",
@@ -17425,7 +17424,7 @@
       "code": "AUD 6642",
       "title": "Aides auditives II",
       "credits": 4,
-      "description": "Évaluation de la candidature pour l'amplification et les technologies associées. Sélection, ajustement, vérification et validation des appareils auditifs auprès des populations pédiatriques et adultes.",
+      "description": "Évaluation de la candidature pour l'amplification et les technologies associées. Sélection, ajustement, vérification et validation des appareils auditifs auprès des populations adultes.",
       "component": "Laboratoire, Cours magistralPréalables : AUD 5722, AUD 5723.",
       "prereqText": "AUD 5722, AUD 5723",
       "prerequisites": {
@@ -17448,16 +17447,16 @@
       "title": "Stage IV",
       "credits": 5,
       "description": "Consolidation des connaissances et des compétences cliniques menant à l’autonomie professionnelle. Stage d'une durée de 50 jours.",
-      "component": "StagePréalables : AUD 6539 et 67 crédits de cours en audiologie (AUD) ou en réadaptation (REA). Le cours AUD 6547 est concomitant à AUD 6649. Noté S (satisfaisant) ou NS (non satisfaisant).",
-      "prereqText": "AUD 6539 et 67 crédits de cours en audiologie (AUD) ou en réadaptation (REA)",
+      "component": "StagePréalables : AUD 6539 et 68 crédits de cours en audiologie (AUD) ou en réadaptation (REA). Le cours AUD 6547 est concomitant à AUD 6649. Noté S (satisfaisant) ou NS (non satisfaisant).",
+      "prereqText": "AUD 6539 et 68 crédits de cours en audiologie (AUD) ou en réadaptation (REA)",
       "prerequisites": {
         "type": "or_group",
-        "text": "AUD 6539 et 67 crédits de cours en audiologie (AUD) ou en réadaptation (REA)",
+        "text": "AUD 6539 et 68 crédits de cours en audiologie (AUD) ou en réadaptation (REA)",
         "children": [
           {
             "type": "course",
             "code": "AUD 6539",
-            "text": "AUD 6539 et 67 crédits de cours en audiologie (AUD)"
+            "text": "AUD 6539 et 68 crédits de cours en audiologie (AUD)"
           },
           {
             "type": "non_course",
@@ -17474,7 +17473,26 @@
       "title": "Pédoaudiologie II",
       "credits": 3,
       "description": "Concepts et modèles théoriques de la réadaptation audiologique chez l'enfant. Conséquences et impacts des problèmes auditifs sur le développement de l'enfant.",
-      "component": "Cours magistral"
+      "component": "Cours magistralPréalables : AUD 6524, AUD 6615, AUD 6642.",
+      "prereqText": "AUD 6524, AUD 6615, AUD 6642",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "AUD 6524, AUD 6615, AUD 6642",
+        "children": [
+          {
+            "type": "course",
+            "code": "AUD 6524"
+          },
+          {
+            "type": "course",
+            "code": "AUD 6615"
+          },
+          {
+            "type": "course",
+            "code": "AUD 6642"
+          }
+        ]
+      }
     },
     {
       "code": "BCH 2333",
@@ -41095,6 +41113,361 @@
       "component": "Recherche / Research"
     },
     {
+      "code": "CTM 7101",
+      "title": "MSc Seminar",
+      "credits": 3,
+      "description": "Compulsory for all students enrolled in the master program. Presentation of two seminars or one seminar and one poster required during the year as well as regular attendance at the CTM seminar series.",
+      "component": "Seminar"
+    },
+    {
+      "code": "CTM 71011",
+      "title": "MSc Seminar (Part 1 of 2)",
+      "credits": 0,
+      "description": "Compulsory for all students enrolled in the master program. Presentation of two seminars or one seminar and one poster required during the year as well as regular attendance at the CTM seminar series. (Part 1 of 2)",
+      "component": "Seminar"
+    },
+    {
+      "code": "CTM 71012",
+      "title": "MSc Seminar (Part 2 of 2)",
+      "credits": 3,
+      "description": "Compulsory for all students enrolled in the master program. Presentation of two seminars or one seminar and one poster required during the year as well as regular attendance at the CTM seminar series. (Part 2 of 2)",
+      "component": "SeminarPrerequisite: CTM 71011.",
+      "prereqText": "CTM 71011",
+      "prerequisites": {
+        "type": "course",
+        "code": "CTM 71011",
+        "text": "CTM 71011"
+      }
+    },
+    {
+      "code": "CTM 7102",
+      "title": "MSc with Research Project Entrustable Professional Activities",
+      "credits": 0,
+      "description": "",
+      "component": "Research"
+    },
+    {
+      "code": "CTM 7103",
+      "title": "Research Project",
+      "credits": 6,
+      "description": "Obligatoire pour tous les étudiants inscrits au programme de maitrise basé sur le projet de recherche. Les candidats au MSc s'engageront dans un projet de recherche en laboratoire de 8 mois guidé par un membre du corps professoral, englobant le développement de questions de recherche, la conception expérimentale, l’acquisition des données et la rédaction scientifique. Ce projet expérientiel favorise le développement des compétences essentielles, aboutissant à un rapport de projet sous la forme d'un court article de journal/ Compulsory for all students enrolled in the research project based master program. MSc candidates will engage in an 8-month laboratory research project guided by faculty member, encompassing research question development, experimental design, data handling, and science writing. This experiential project fosters core skill development, culminating in a project report in the format of a short journal article.",
+      "component": "Research"
+    },
+    {
+      "code": "CTM 7104",
+      "title": "MSc Thesis Entrustable Professional Activities",
+      "credits": 0,
+      "description": "",
+      "component": "Research"
+    },
+    {
+      "code": "CTM 7105",
+      "title": "Stage / Internship",
+      "credits": 6,
+      "description": "Expérience pratique et exécution d'un projet ayant trait au sciences cliniques et médecine translationnelle, sous la supervision d'un membre du corps professoral. Noté S (satisfaisant) ou NS (non satisfaisant) à partir d'un rapport de stage écrit et des résultats du stage. / Practical experience and completion of a project related to clinical science and translational medicine, under the supervision of a faculty member. Graded S (Satisfactory) / NS (Not satisfactory) based on a written report on the project, and on performance during the internship.",
+      "component": "Praticum"
+    },
+    {
+      "code": "CTM 7501",
+      "title": "MSc Séminaire",
+      "credits": 3,
+      "description": "Obligatoire pour tous les étudiants inscrits au programme de maîtrise. Présentation de deux séminaires ou un séminaire et un poster requis au cours de l'année, ainsi qu'une participation régulière à la série de séminaires MCT.",
+      "component": "Séminaire"
+    },
+    {
+      "code": "CTM 8101",
+      "title": "Research Methods and Experimental Design",
+      "credits": 3,
+      "description": "Introduction to fundamentals of CTM, basic biostatistics, and experimental design in clinical and translational research.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8102",
+      "title": "PhD Seminar",
+      "credits": 3,
+      "description": "Compulsory for all students enrolled in the doctorate program. Presentation of two seminars or one seminar and one poster required during the year as well as regular attendance at the CTM seminar series.",
+      "component": "Seminar"
+    },
+    {
+      "code": "CTM 81021",
+      "title": "PhD Seminar (Part 1 of 2)",
+      "credits": 0,
+      "description": "Compulsory for all students enrolled in the doctorate program. Presentation of two seminars or one seminar and one poster required during the year as well as regular attendance at the CTM seminar series. (Part 1 of 2)",
+      "component": "Seminar"
+    },
+    {
+      "code": "CTM 81022",
+      "title": "PhD Seminar (Part 2 of 2)",
+      "credits": 3,
+      "description": "Compulsory for all students enrolled in the doctorate program. Presentation of two seminars or one seminar and one poster required during the year as well as regular attendance at the CTM seminar series. (Part 2 of 2)",
+      "component": "SeminarPrerequisite: CTM 81021.",
+      "prereqText": "CTM 81021",
+      "prerequisites": {
+        "type": "course",
+        "code": "CTM 81021",
+        "text": "CTM 81021"
+      }
+    },
+    {
+      "code": "CTM 8103",
+      "title": "Comprehensive Examination (PhD)",
+      "credits": 0,
+      "description": "",
+      "component": "Research"
+    },
+    {
+      "code": "CTM 8104",
+      "title": "PhD Entrustable Professional Activities",
+      "credits": 0,
+      "description": "",
+      "component": "Research"
+    },
+    {
+      "code": "CTM 8105",
+      "title": "Advanced Focused Topics in Basic and Clinical Cardiovascular Medicine",
+      "credits": 3,
+      "description": "Advanced exposure to focused topics in Cardiovascular Medicine on either electrophysiology, coronary artery disease, heart function, myocardial disorders, or valvular disorders.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8106",
+      "title": "Advanced Topics in Cardiovascular Medicine",
+      "credits": 3,
+      "description": "Advanced mechanisms in Cardiovascular Medicine and survey of cardiac electrophysiology, cardiac pathology, coronary artery disease, heart function, myocardial disorders, and valvular disorders.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8107",
+      "title": "Introduction to Radiation Sciences",
+      "credits": 3,
+      "description": "Introduction of classical radiobiology concepts and their clinical applications through relevant calculations and hands-on experience with state-of-the-art equipment and simulation tools.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8108",
+      "title": "Introduction to Medical Imaging Physics",
+      "credits": 3,
+      "description": "Introduction of the principles and clinical applications of various medical imaging modalities, the physics of image formation, equipment, safety, image reconstruction, through hands-on experience with state-of-the-art imaging equipment.",
+      "component": "Lecture, Seminar"
+    },
+    {
+      "code": "CTM 8109",
+      "title": "Introduction to AI & Machine Learning in medical imaging",
+      "credits": 3,
+      "description": "Introduction to AI in medical imaging, focusing on quantitative feature extraction, machine learning, and deep learning. Emphasis on experimental design and rigorous analysis of results.",
+      "component": "Lecture, Seminar"
+    },
+    {
+      "code": "CTM 8110",
+      "title": "Advanced Topics in Magnetic Resonance Imaging and Spectroscopy",
+      "credits": 3,
+      "description": "Advanced study of Magnetic Resonance Imaging and Spectroscopy with a focus on relaxation theory, k-space, pulse sequence design, sequence optimization, image reconstruction, MR spectroscopy, diffusion imaging, perfusion imaging, quantitative susceptibility MR, accelerated imaging, high-field, and hybrid PET-MR.",
+      "component": "Lecture, Seminar"
+    },
+    {
+      "code": "CTM 8111",
+      "title": "Special Topics in Image Processing",
+      "credits": 3,
+      "description": "Introduction to current applications of processing utilities and scientific computing tools. Study of image processing in medical imaging, covering file-format conversion, registration, error correction, data fitting, and tissue segmentation.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8112",
+      "title": "Special Topics in Radiation Oncology",
+      "credits": 3,
+      "description": "Study of radiation oncology physics with a focus on clinical applications and advanced technologies for graduate students.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8113",
+      "title": "Special Topics in Cardiac Computed Tomography and Magnetic Resonance Imaging",
+      "credits": 3,
+      "description": "Study of recent advances in imaging, including cardiac imaging in CT and MRI. Examine the basics of MR and CT physics, CT and MR instrumentation, calcium scoring, non-invasive coronary angiography, cardiac anatomy, function, viability and perfusion imaging, and valvular abnormalities.",
+      "component": "Lecture, Seminar"
+    },
+    {
+      "code": "CTM 8114",
+      "title": "Special Topics in Cardiac Nuclear Imaging",
+      "credits": 3,
+      "description": "Study of advances in cardiac nuclear imaging and the technologies, techniques and clinical indicators in cardiac nuclear imaging including basics of radiation physics, SPECT and PET.",
+      "component": "Lecture, Seminar"
+    },
+    {
+      "code": "CTM 8115",
+      "title": "Quality Improvement (QI) Methods",
+      "credits": 3,
+      "description": "Introduction to the TOH Innovation Framework for healthcare improvement and innovation, including case examples of QI tools such as problem analysis, root cause analysis, process monitoring, PDSAs, and methods for sustaining and evaluating an improvement initiative.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8116",
+      "title": "Patient Safety",
+      "credits": 3,
+      "description": "Introduction to quality and safety legislation, patient safety methods, Just Culture, safety measurement systems, safety interventions, and human factors.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8117",
+      "title": "Variation and Statistical Process Control",
+      "credits": 3,
+      "description": "Introduction to variation theory and process assessment methods, with a focus on run charts and control charts and their relevance to quality outcomes.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8118",
+      "title": "Advanced topics in microbiome and drug development",
+      "credits": 3,
+      "description": "Advanced study of recent developments in human microbiome impacts on health and disease, and the development of therapeutics targeting the gut microbiome, and the development of microbiome based assays.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8119",
+      "title": "Advanced topics in Targeted Pharmacotherapy in Oncology",
+      "credits": 3,
+      "description": "Introduction to the drug development process in oncology covering the discovery, preclinical and clinical phases, clinical trial conduct, approved anti-cancer drugs including chemotherapy, targeted therapies, and immunotherapies. The course also includes biomarker usage in patient selection for treatment and new therapeutic strategies.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8120",
+      "title": "Advanced topics monoclonal Antibodies in Therapy",
+      "credits": 3,
+      "description": "Advanced study of the history, current state, and future of mAb therapy including the hybridoma method, antibody engineering, the translation of mAbs to the clinic, as well as study of mAbs as direct drugs or delivery agents for cytotoxic small molecules.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8121",
+      "title": "Advanced topics Antibody-drug conjugates",
+      "credits": 3,
+      "description": "Advanced study of the history, present status, and future of antibody-drug conjugates (ADCs), providing students with an understanding of their construction and technical challenges. Examination of preclinical and clinical trial design and methodology, as well as regulatory and economic aspects of ADC therapy.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8122",
+      "title": "Advanced topics in The Cell Nucleus in Pharmaceutics",
+      "credits": 3,
+      "description": "Advanced study of the structure and function of the cell nucleus and its relevance to pharmaceutics, including nuclear transport as a pharmacological target and current/future perspectives for pharmacological targeting of the nucleus.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8123",
+      "title": "Advanced topics in the Treatments of skeletal muscle diseases",
+      "credits": 3,
+      "description": "Advanced study of diseases affecting the musculoskeletal system and current therapies, including non-surgical management therapies including emerging drugs and nutritional strategies, for treating myopathies.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8124",
+      "title": "Advanced topics in Integrative Nutrition",
+      "credits": 3,
+      "description": "Advanced study of recent advances in selected areas of nutritional compounds and their roles in the pathogenicity and treatments these diseases.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8125",
+      "title": "Special topics in pharmacology",
+      "credits": 3,
+      "description": "Advanced study of the recent advances in selected areas of pharmacology.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8126",
+      "title": "Special topics in drug development",
+      "credits": 3,
+      "description": "Advanced study of the recent advances in selected areas of drug development.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8127",
+      "title": "Special topics in human microbiome",
+      "credits": 3,
+      "description": "Advanced study of the recent advances in selected areas of human microbiome.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8128",
+      "title": "Special Topics in Neuroimaging",
+      "credits": 3,
+      "description": "Introduction to the scientific and technical foundations of neuroimaging and a focus on data acquisition, research study design, and analysis methods for various neuroimaging modalities.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8129",
+      "title": "Advanced Topics in Psychiatry",
+      "credits": 3,
+      "description": "Advanced study of recent progress in psychiatry and clinical neuroscience, examination of psychosocial, biological, developmental, experiential, and environmental factors impact behavior, symptoms, and treatment.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8130",
+      "title": "Special Topics in Interdisciplinary Social Studies in Medicine",
+      "credits": 3,
+      "description": "Advanced study of interdisciplinary social research while embedded in clinical settings.",
+      "component": "Seminar"
+    },
+    {
+      "code": "CTM 8131",
+      "title": "Advanced topics in the Treatments of degenerative Musculo-skeletal diseases",
+      "credits": 3,
+      "description": "Advanced study of diseases affecting the musculoskeletal system focusing on degenerative conditions of osteo-articular joints and tendons discussing surgical management ie. Osteotomties, cartilage grafts and joint replacements.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 81311",
+      "title": "Advanced topics in the Treatments of degenerative Musculo-skeletal diseases (Part 1 of 2)",
+      "credits": 0,
+      "description": "Advanced study of diseases affecting the musculoskeletal system focusing on degenerative conditions of osteo-articular joints and tendons discussing surgical management ie. Osteotomties, cartilage grafts and joint replacements. (Part 1 of 2)",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 81312",
+      "title": "Advanced topics in the Treatments of degenerative Musculo-skeletal diseases (Part 2 of 2)",
+      "credits": 3,
+      "description": "Advanced study of diseases affecting the musculoskeletal system focusing on degenerative conditions of osteo-articular joints and tendons discussing surgical management ie. Osteotomties, cartilage grafts and joint replacements. (Part 2 of 2)",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8132",
+      "title": "Advanced topics in Joint Biomechanics and Biomaterials",
+      "credits": 3,
+      "description": "Advanced study of the principles of joint mechanics essential for normal joint function as well as factors leading to joint malfunction/pain and properties of biomaterials.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8133",
+      "title": "Advanced topics in infections affecting the MSK system",
+      "credits": 3,
+      "description": "Advanced study of infections post-surgical interventions after trauma or joint replacement surgery focusing on the patho-mechanisms as well as antibiotic and surgical treatments.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8134",
+      "title": "Directed studies in clinical and translational medicine",
+      "credits": 3,
+      "description": "Individual course aimed at deepening the student’s knowledge in a specific area of clinical and translational medicine.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8135",
+      "title": "Special Topics in Cardiac Magnetic Resonance Imaging",
+      "credits": 3,
+      "description": "Study of recent advances in cardiac imaging in MRI. Examine the basics of MR physics, MR instrumentation, non-invasive coronary angiography, cardiac anatomy, function, myocardial characterization, viability and perfusion imaging, valvular abnormalities, and tissue characterization. Course Component: Lecture, Seminar Pre-requisite(s): By permission of the course coordinator.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 8501",
+      "title": "Études dirigées en médicine clinique et translationnelle",
+      "credits": 3,
+      "description": "Cours individuel ayant pour objectif d’approfondir les connaissances de l’étudiant dans un domaine particulier de la médicine clinique et translationnelle.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "CTM 8502",
+      "title": "PhD Séminaire",
+      "credits": 3,
+      "description": "Obligatoire pour tous les étudiants inscrits au programme de doctorat. Présentation de deux séminaires ou un séminaire et un poster requis au cours de l'année, ainsi qu'une participation régulière à la série de séminaires MCT.",
+      "component": "Séminaire"
+    },
+    {
       "code": "CTS 6101",
       "title": "Lectures: Lung and Esophageal Surgery",
       "credits": 1,
@@ -48241,6 +48614,90 @@
       "credits": 0,
       "description": "",
       "component": "Recherche / Research"
+    },
+    {
+      "code": "DTO 5100",
+      "title": "Foundations and Applications of Machine Learning",
+      "credits": 3,
+      "description": "The capabilities and limitations of machine learning; problem formulation; supervised and unsupervised learning techniques; deploying, monitoring, and evaluating machine learning models; storytelling and assessing the results of learning; current advances in application areas such as business, law, arts, social sciences and education.",
+      "component": "LectureThe courses CSI 5155, ELG 5255, IAI 5100, IAI 5101, MIA 5100, DTO 5100 cannot be combined for units."
+    },
+    {
+      "code": "DTO 5101",
+      "title": "Foundations of Machine Learning for Scientists and Engineers",
+      "credits": 3,
+      "description": "The capabilities and limitations of machine learning; problem formulation and requirement engineering; supervised and unsupervised learning techniques; designing, deploying, monitoring and evaluating machine learning models; assessing the results of learning; current advances in application areas such as engineering, science and health.",
+      "component": "LectureCourses CSI 5155, ELG 5255, IAI 5101, IAI 5100, MIA 5100, DTO 5101 cannot be combined for units."
+    },
+    {
+      "code": "DTO 5120",
+      "title": "Essential Concepts in Data Science",
+      "credits": 3,
+      "description": "An introduction to the foundations of data science using a case study approach; overview of the data science process: types of tasks and models, data manipulation, exploratory data analysis, data summarization and data visualization; predictive modeling, descriptive modeling; reporting and deployment.",
+      "component": "LectureCourses CSI 4142, DTI 5125, DTI 5126, MAT 4373, DTO 5120 cannot be combined for units."
+    },
+    {
+      "code": "DTO 5140",
+      "title": "Engineering Design",
+      "credits": 3,
+      "description": "Open ended, hands-on engineering design course that provides students with fundamentals and advanced concepts of the engineering design process from client empathy to prototyping and testing. Students work directly with clients to solve a real societal need. There is a strong component of teamwork and lifelong learning.",
+      "component": "Lecture"
+    },
+    {
+      "code": "DTO 5150",
+      "title": "Topics in Digital Transformation and Innovation",
+      "credits": 3,
+      "description": "Recent and advanced topics in the field of Digital Transformation and Innovation and its related areas. Topics vary from year to year.",
+      "component": "Lecture"
+    },
+    {
+      "code": "DTO 5310",
+      "title": "Ethics for Design, AI and Robotics",
+      "credits": 3,
+      "description": "Artificial Intelligence technologies are becoming ever more present in applications like: automated vehicles and mobility-as-a-service (e.g. driving and system-level control algorithms); business intelligence (e.g. predictive resource allocation); consumer electronics (e.g. social robots and smart speakers); healthcare (e.g. image classification in medical imaging); the justice system (e.g. recidivism prediction and sentencing); and weapons systems (e.g. targeting and kill decision-making). Many of these applications are raising significant ethical concerns. A range of topics in applied technology ethics are examined through the lens of contemporary philosophy and applied ethics texts and popular media articles. Practical frameworks, methodologies and tools for anticipating, and addressing, ethical issues are introduced through hands-on, group-based design thinking workshops and projects.",
+      "component": "LectureThe courses DTO 5310, DTI 5310, CSI 5195 cannot be combined for units"
+    },
+    {
+      "code": "DTO 5389",
+      "title": "Digital Transformation Technologies",
+      "credits": 3,
+      "description": "Introduction to business models and technologies. Search engines. Cryptography. Web services and agents. Secure electronic transactions. Value added e-commerce technologies. Advanced research questions.",
+      "component": "LectureCourses DTO 5389, DTI 5389 cannot be combined for units."
+    },
+    {
+      "code": "DTO 6106",
+      "title": "User Research and User Experience Principles and Practice",
+      "credits": 3,
+      "description": "User experience (UX) facets including functionality, usability, and desirability; Human-computer interaction (HCI) theories; UX frameworks and patterns for interaction/information/visual design; UX management, design methods, and tools; UX evaluation and usability engineering; Understanding of users’ behaviours, needs, motivations, and challenges in user experience (UX); User research methods including interviews, surveys, focus groups, contextual inquiries; Principles and guidelines for generative & evaluative research; Methods in qualitative and quantitative user research; Tools and techniques for in-person and remote research; Heuristic evaluations and usability testing.",
+      "component": "LectureCourses DTO 6106, DTI 6102, DTI 6103 cannot be combined for units."
+    },
+    {
+      "code": "DTO 6107",
+      "title": "Interaction Design and Design Thinking",
+      "credits": 3,
+      "description": "Principles of interaction design (IxD); Usability heuristics for user interface (UI) design; IxD tools and techniques including sketching, wireframing, and prototyping; UI design patterns for navigation, landing pages, search, and e-commerce; IxD best practices for mobile application design. Design thinking as a collaborative creative process for problem-solving and designing human-centered solutions. Design thinking for driving business innovation, new product development, and customer experience. Best practices for design inspiration, ideation and implementation; essential design research skills for empathy, listening, collaboration, observation, critical analysis, and experimentation. Design Thinking tools and techniques including visualization, mapping, storytelling, rapid prototyping, and testing.",
+      "component": "LectureCourses DTO 6107, DTI 6104, DTI 6105 cannot be combined for units."
+    },
+    {
+      "code": "DTO 6160",
+      "title": "Innovation Management",
+      "credits": 3,
+      "description": "Examination of the context in which firms and other organizations operate and of the nature and evolution of industries. Survey of research on the nature and evolution of national and regional systems of innovation, and on politically and geographically defined systems that influence the competitiveness of firms and the prosperity of citizens.",
+      "component": "LectureCourses DTO 6160, MGT 6160 cannot be combined for units."
+    },
+    {
+      "code": "DTO 6231",
+      "title": "Process Modelling, Mining, and Automation",
+      "credits": 3,
+      "description": "Business Process Management (BPM) languages and technologies. Modelling and analysis of processes. Algorithms, log pre-processing, and tools for Process Mining. Process discovery, conformance, and improvement. Performance and predictive process analytics. Robotic Process Automation (RPA). Process automation tools, challenges, and opportunities. Examples from diverse application domains will be studied.",
+      "component": "Lecture"
+    },
+    {
+      "code": "DTO 7103",
+      "title": "Visual Literacy and User Experience Design Principles",
+      "credits": 3,
+      "description": "Fundamentals of visual, interaction and motion design theories and principles as they relate to User Experience Design (UXD). A series of hands-on workshops and assignments focus on building visual literacy through guided observations, visual design critiques, and visual redesigns of existing screen-based digital products (i.e. website, interactive kiosk interface, mobile app etc.). Students will complete a design project. Students will conduct research and scholarship in visual literacy, and UXD and justify their design decisions in writing.",
+      "component": "LectureCourses DTO 7103, DTI 7103 cannot be combined for units."
     },
     {
       "code": "DVM 1100",
@@ -75218,7 +75675,7 @@
       "title": "Global Climate Change",
       "credits": 3,
       "description": "The global climate system and climate variability. Climate system history and dynamics. Global warming impacts. Instrumental and proxy data analysis. Also offered as ENV 4129.",
-      "component": "Laboratory, SeminarPrerequisite: GEG 2304. Course with laboratory or field work.",
+      "component": "Seminar, LaboratoryPrerequisite: GEG 2304. Course with laboratory or field work.",
       "prereqText": "GEG 2304",
       "prerequisites": {
         "type": "course",
@@ -104918,17 +105375,38 @@
       "component": "LectureMHA 5140 and MHA 5141 cannot be combined for credit with MBA 5340 or with MBA 5140 and MBA 5141."
     },
     {
-      "code": "MHA 5300",
-      "title": "Fundamentals of Data Analytics: Making Data Useful for Health Care Managers",
+      "code": "MHA 5150",
+      "title": "Managing Finance in Health Systems",
       "credits": 3,
-      "description": "Analysis and data modelling skills, develop the ability to interpret large amounts of data and draw sound implications for the health care problem at hand, and to exhibit the usefulness of data analytics in health care problem solving and decision-making.",
-      "component": "LectureMBA 5300 and MHA 5300 cannot be combined for credit."
+      "description": "Financial planning and interpretation of financial statements and metrics, managing budgets and understanding funding models in health systems.",
+      "component": "Lecture"
+    },
+    {
+      "code": "MHA 5158",
+      "title": "Digital Health Innovation & Transformation",
+      "credits": 3,
+      "description": "Principles of health informatics, EHR, telehealth, mobile health, artificial intelligence, innovation processes, planning and implementing technological solutions.",
+      "component": "Lecture"
+    },
+    {
+      "code": "MHA 5300",
+      "title": "Data-Driven Decision-Making in Health Systems",
+      "credits": 3,
+      "description": "Critical thinking, evidence-based decision-making, data analysis, statistical reasoning and inference, and ethical use of data.",
+      "component": "Lecture"
     },
     {
       "code": "MHA 5330",
-      "title": "Human Resource Management in Health Care",
+      "title": "People management in Health Systems",
       "credits": 3,
-      "description": "Focus on the major issues unique to effective health human resources management. Measuring needs and planning for the current and future supply of human resources. Recruitment, retention and development strategies to meet changing workforce conditions. Understanding the unique regulatory environments where professions are regulated by provincial laws and professional colleges. Labor relation issues and approaches in unionized environment. Funding, team work and inter-professional practice, scope of practice issues and organizational design. Interactions of organizational and professional accreditation mechanisms (such as professional colleges and associations, and accreditation bodies).",
+      "description": "Working with partnerered health providers, develop strategic workforce plans, HHR optimization and analytics, inclusive recruitment and retention, as well as talent development.",
+      "component": "Lecture"
+    },
+    {
+      "code": "MHA 5345",
+      "title": "Health Leadership and Change Management",
+      "credits": 3,
+      "description": "The course will be guided by the CCHL’s LEAD Framework to help students translate leadership, governance, and accountability principles into practice when working with hybrid teams, dyads, remote employees, and across organizational boundaries.",
       "component": "Lecture"
     },
     {
@@ -104940,9 +105418,9 @@
     },
     {
       "code": "MHA 6203",
-      "title": "Program Evaluation for Health Care Managers",
+      "title": "Program Evaluation",
       "credits": 1.5,
-      "description": "Provides students with an overview of planning, designing and conducting applied program evaluations, which are applicable in health care organizations and community settings. Topics include: types of evaluations; formulation of evaluation questions; evaluation designs, methodologies, and tools; evaluation results to different stakeholders, and critical appraisal of evaluation research and reports.",
+      "description": "Types of program evaluation, evaluation design, reporting of results to different stakeholders, critical appraisal of evaluation research and reports.",
       "component": "Lecture"
     },
     {
@@ -104967,9 +105445,9 @@
     },
     {
       "code": "MHA 6260",
-      "title": "Project Planning and Management",
-      "credits": 1.5,
-      "description": "Introduction to program planning and management of health management projects. Program planning and management methods including management of a project throughout its life cycle (identification, design, planning, realization and close-out).",
+      "title": "Managing Projects in Complex Health Systems",
+      "credits": 3,
+      "description": "Project scope definition, resource planning, risk management, and change management frameworks.",
       "component": "LectureMHA 6260 cannot be combined for credit with ADM 6260."
     },
     {
@@ -104987,9 +105465,9 @@
     },
     {
       "code": "MHA 6301",
-      "title": "Epidemiology and Population Health",
-      "credits": 3,
-      "description": "Understanding of the principles of epidemiology and research designs in the health related fields, and the ability to critically evaluate clinical, epidemiological, and health care management evidence in support of decision-making. Topics include: determining research designs most appropriate to specific research conditions; overview of epidemiologic approaches; important measures; issues related to validity, confounding effect, selection bias, misclassification bias, and effect modification; and general concepts related to population health.",
+      "title": "Epidemiology & Population Health",
+      "credits": 1.5,
+      "description": "Population health data, evaluating interventions, distribution and determinants of health-related events, such as disease outbreaks and Health inequities.",
       "component": "LecturePrerequisite: MBA 5300 or MHA 5300",
       "prereqText": "MBA 5300 or MHA 5300",
       "prerequisites": {
@@ -105011,37 +105489,37 @@
     },
     {
       "code": "MHA 6312",
-      "title": "Strategy, Governance, and Ethical Management in Health",
+      "title": "Strategy, Governance, and Ethics",
       "credits": 3,
-      "description": "Key concepts and theories on each of strategy, governance, and ethical management. Interdependencies among strategy, governance, and ethical management and how these topics span beyond organizational boundaries to a system level.",
+      "description": "Strategic thinking, board governance, stakeholder management, ethical decision-making and risk management.",
       "component": "Lecture"
     },
     {
       "code": "MHA 6315",
-      "title": "Quality and Performance Management in Health Care",
+      "title": "Quality and Performance Management",
       "credits": 3,
-      "description": "Overview of approaches and tools used for managing, evaluating, and promoting quality in health care. Emphasizes the importance of context and stakeholder engagement in quality improvement and performance management initiatives. Topics include: important key theories and concepts related to quality; patient safety measures and practices; performance management; evidence-based management; and quality improvement strategies.",
+      "description": "Principles of quality and safety, continuous improvement models, performance indicators, evaluation of quality of care and benchmarking.",
       "component": "Lecture"
     },
     {
       "code": "MHA 6351",
       "title": "Health Economics",
       "credits": 3,
-      "description": "An economists’ perspective illuminating the systems behavior of Health-Care. Such insights inform strategies for managing/improving Health-care. The survey course introduces key concepts from economics (e.g., micro-economics, trade-offs, opportunity costs, efficiency, equity) that are pivotal to this illumination. The unique attributes of health-care (e.g., uncertainty of demand and information asymmetry) and the incentives (some perverse) that ensue are discussed. Indices of population health impact and their links to health economic valuation are covered, including cost-effectiveness and benefit-cost analysis.",
+      "description": "Demand and supply of health care, economic evaluation, funding models, economics of population health and interpreting policy trade-offs.",
       "component": "Lecture"
     },
     {
       "code": "MHA 6360",
-      "title": "Health Care in Canada in a Comparative Context",
+      "title": "Comparative Health Policy and Systems",
       "credits": 3,
-      "description": "Overview of the Canadian health care system including its history and evolution with an emphasis on the relationship between federal government and the provincial/territorial systems. Current forces (e.g. societal, political, economic) that influence health care policy. Canadian system compared to international health care systems.",
+      "description": "Structure, governance and performance of the Canadian health care system in comparision with systems in other countries. History of health care in medicare, funding mechanisms, delivery models and global comparisons.",
       "component": "Lecture"
     },
     {
       "code": "MHA 6361",
-      "title": "Organizational Behavior and Change in Health Care",
+      "title": "Organizational Behaviour in Health Systems",
       "credits": 3,
-      "description": "Overview of organizational behavior and change in the health care context. Motivation, stress and stress management, group dynamics, power and negotiation. Leadership of change and different types of change that can be pursued in various contexts are considered.",
+      "description": "Leadership theories, emotional intelligence, diversity and inclusion, motivation, group dynamics, stress management, power, negotiation, and conflict resolution.",
       "component": "Lecture"
     },
     {
@@ -105053,16 +105531,23 @@
     },
     {
       "code": "MHA 6380",
-      "title": "Quantitative Methods and Their Applications to Health Care Decision Making",
+      "title": "Analytics for Health Systems",
       "credits": 3,
-      "description": "Provide health care decision makers with an overview of several useful quantitative methods that can provide insight and support for complex decisions. Mathematical model formulation, linear programming and optimization, queuing theory and simulation modeling. Mathematical tools available to help optimally utilize the resources.",
+      "description": "Machine learning, optimization, queuing theory and simulations. Transforming data into actionable insights.",
       "component": "Lecture"
     },
     {
       "code": "MHA 6990",
-      "title": "Residency and / or Field Project",
+      "title": "Residency and Field Project",
       "credits": 6,
-      "description": "Capstone course where students apply what they have learned in the classroom to a health care management project.",
+      "description": "In this four-month in-person residency, students gain executive-level experience in a health organization and complete a mandatory Field Project addressing a relevant health system issue under faculty and field supervision.",
+      "component": "Recherche / Research"
+    },
+    {
+      "code": "MHA 6996",
+      "title": "Health Consulting Project",
+      "credits": 3,
+      "description": "Final consulting project where students apply what they have learned in the classroom to a health system management project.",
       "component": "Recherche / Research"
     },
     {
@@ -107013,11 +107498,11 @@
       "title": "Ensemble chorale / Choral Ensemble",
       "credits": 3,
       "description": "Participation durant une année universitaire à l'ensemble chorale. / Participation throughout the academic year in the choral ensemble.",
-      "component": "Groupe de discussion / Discussion Group, Laboratoire / LaboratoryPréalable : Audition. Destiné aux étudiants et aux étudiantes en chant, guitare, harpe, percussion, piano, vents et cuivres. / Prerequisite: Audition. Intended for voice, guitar, harp, percussion, piano, winds, and brass students.",
-      "prereqText": "Audition",
+      "component": "Groupe de discussion / Discussion Group, Laboratoire / LaboratoryPréalable : Destiné aux étudiants et aux étudiantes en chant, guitare, harpe, percussion, piano, vents et cuivres. / Prerequisite: Intended for voice, guitar, harp, percussion, piano, winds, and brass students.",
+      "prereqText": "Destiné aux étudiants et aux étudiantes en chant, guitare, harpe, percussion, piano, vents et cuivres",
       "prerequisites": {
         "type": "non_course",
-        "text": "Audition"
+        "text": "Destiné aux étudiants et aux étudiantes en chant, guitare, harpe, percussion, piano, vents et cuivres"
       }
     },
     {
@@ -107025,11 +107510,11 @@
       "title": "Ensemble chorale (Partie 1 de 2) / Choral Ensemble (Part 1 of 2)",
       "credits": 0,
       "description": "Participation durant une année universitaire à l'ensemble chorale. (Partie 1 de 2) / Participation throughout the academic year in the choral ensemble. (Part 1 of 2)",
-      "component": "Groupe de discussion / Discussion Group, Laboratoire / LaboratoryPréalable : Audition. Destiné aux étudiants et aux étudiantes en chant, guitare, harpe, percussion, piano, vents et cuivres. / Prerequisite: Audition. Intended for voice, guitar, harp, percussion, piano, winds, and brass students.",
-      "prereqText": "Audition",
+      "component": "Groupe de discussion / Discussion Group, Laboratoire / LaboratoryPréalable : Destiné aux étudiants et aux étudiantes en chant, guitare, harpe, percussion, piano, vents et cuivres. / Prerequisite: Intended for voice, guitar, harp, percussion, piano, winds, and brass students.",
+      "prereqText": "Destiné aux étudiants et aux étudiantes en chant, guitare, harpe, percussion, piano, vents et cuivres",
       "prerequisites": {
         "type": "non_course",
-        "text": "Audition"
+        "text": "Destiné aux étudiants et aux étudiantes en chant, guitare, harpe, percussion, piano, vents et cuivres"
       }
     },
     {
@@ -107037,7 +107522,7 @@
       "title": "Ensemble chorale (Partie 2 de 2) / Choral Ensemble (Part 2 of 2)",
       "credits": 3,
       "description": "Participation durant une année universitaire à l'ensemble chorale. (Partie 2 de 2) / Participation throughout the academic year in the choral ensemble. (Part 2 of 2)",
-      "component": "Groupe de discussion / Discussion Group, Laboratoire / LaboratoryPréalable : MUS 39041 / Prerequisite: MUS 39041",
+      "component": "Groupe de discussion / Discussion Group, Laboratoire / LaboratoryPréalable : MUS 39041 / Prerequisite: MUS 39041.",
       "prereqText": "MUS 39041",
       "prerequisites": {
         "type": "course",
@@ -123244,7 +123729,7 @@
       "title": "Logic II",
       "credits": 3,
       "description": "Topics may include: metatheory of classical logic, extensions and alternatives to classical first-order logic; philosophical logic; modal/intensional logic.",
-      "component": "Lecture, Discussion GroupPrerequisite: PHI 2170. This course has variable topics and may be taken several times if the themes are different.",
+      "component": "Discussion Group, LecturePrerequisite: PHI 2170. This course has variable topics and may be taken several times if the themes are different.",
       "prereqText": "PHI 2170",
       "prerequisites": {
         "type": "course",
