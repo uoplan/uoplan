@@ -27,6 +27,42 @@ export function GradeDistributionCompactChip({
   );
 }
 
+/** Full-width horizontal strip at the bottom of a calendar event (constant column width). */
+export function GradeDistributionBottomBar({
+  gradeViz,
+  fallbackColor,
+}: {
+  gradeViz?: GradeVizData | null;
+  fallbackColor: string;
+}) {
+  if (!gradeViz || gradeViz.total <= 0) {
+    return (
+      <div
+        className="fc-uoplan-grade-bottom fc-uoplan-grade-bottom--solid"
+        style={{ backgroundColor: fallbackColor }}
+        aria-hidden
+      />
+    );
+  }
+
+  return (
+    <div className="fc-uoplan-grade-bottom fc-uoplan-grade-bottom--dist" aria-hidden>
+      {gradeViz.buckets.map((bucket) => {
+        if (bucket.count <= 0) return null;
+        return (
+          <span
+            key={bucket.id}
+            style={{
+              width: `${(bucket.count / gradeViz.total) * 100}%`,
+              backgroundColor: bucket.color,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 export function GradeDistributionExpanded({
   gradeViz,
 }: {

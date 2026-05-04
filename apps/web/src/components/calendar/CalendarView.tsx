@@ -89,11 +89,10 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(
             ext={ext}
             cache={cache}
             colorMap={colorMap}
-            isCompactLayout={isCompactCalendar}
           />
         );
       },
-      [cache, colorMap, isCompactCalendar]
+      [cache, colorMap]
     );
 
     const handleEventClick = (info: { event: { extendedProps: unknown } }) => {
