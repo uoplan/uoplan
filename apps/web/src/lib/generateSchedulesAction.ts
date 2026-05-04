@@ -55,8 +55,12 @@ const UNKNOWN_COURSE_LEVEL = 999_000;
 
 /** Pivot GPA (~B-): higher → boost weight when "prefer easier" is on. */
 const EASIER_GPA_PIVOT = 2.7;
-/** Base for exponential boost: weight multiplier = BASE^(gpa - pivot). */
-const EASIER_GPA_BASE = 3.0;
+/**
+ * Base for exponential boost: multiplier = BASE^(gpa - pivot).
+ * Must be high enough to compete with {@link LEVEL_WEIGHT_BASE} tier penalties,
+ * otherwise low-level hard courses still win over higher-level easy electives.
+ */
+const EASIER_GPA_BASE = 5.25;
 
 /** Each level tier is this many times less likely than the one below it. */
 const LEVEL_WEIGHT_BASE = 2;
