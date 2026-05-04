@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.0-beta.6](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.5...uoplan-monorepo-v1.0.0-beta.6) (2026-05-04)
+
+
+### Features
+
+* add course selection lock in swap modal ([ef66f28](https://github.com/uoplan/uoplan/commit/ef66f281f927630f00f99517b05aac1cce9e5c5b))
+* improve design of calendar events ([0d18f46](https://github.com/uoplan/uoplan/commit/0d18f46c8e16ea05d26fc7e7b52613cb8a43a5b3))
+* improve layout of calendar events on mobile ([268ba18](https://github.com/uoplan/uoplan/commit/268ba18e58abb0310e4f8fa2ab48455d0a7428f4))
+
+
+### Bug Fixes
+
+* **ci:** use correct import path for dataPaths ([fa8a2b6](https://github.com/uoplan/uoplan/commit/fa8a2b69c43de838e5cc3bfffd06d501fe680b41))
+* **scraper:** enrich schedules with grades on daily scrape ([422b3bc](https://github.com/uoplan/uoplan/commit/422b3bcca2f3417fe70fd4a6a975d7016d83db01))
+
 ## [1.0.0-beta.5](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.4...uoplan-monorepo-v1.0.0-beta.5) (2026-05-01)
 
 
