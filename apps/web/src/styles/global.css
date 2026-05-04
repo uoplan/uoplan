@@ -141,6 +141,65 @@ a {
   opacity: 0 !important;
 }
 
+/* Schedule morph overlay — layout shell only; typography matches .fc-uoplan-event* (same classes on node) */
+.fc-uoplan-morph-phantom {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 0;
+}
+
+.fc-uoplan-morph-phantom-surface {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.fc-uoplan-morph-phantom-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.fc-uoplan-morph-phantom-layer .fc-uoplan-event-inner {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.fc-uoplan-morph-phantom-layer--out {
+  z-index: 1;
+  opacity: 1;
+  transition: opacity var(--uoplan-morph-half-ms, 175ms) ease-in;
+}
+
+.fc-uoplan-morph-phantom-layer--in {
+  z-index: 2;
+  opacity: 0;
+  transition: opacity var(--uoplan-morph-half-ms, 175ms) ease-in;
+}
+
+.fc-uoplan-morph-phantom--animating-layers .fc-uoplan-morph-phantom-layer--out {
+  opacity: 0;
+}
+
+.fc-uoplan-morph-phantom--animating-layers .fc-uoplan-morph-phantom-layer--in {
+  opacity: 1;
+}
+
+.fc-uoplan-morph-phantom--fade-out {
+  opacity: 1;
+  transition: opacity var(--uoplan-morph-full-ms, 350ms) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fc-uoplan-morph-phantom--fade-out.fc-uoplan-morph-phantom--animating-fade {
+  opacity: 0;
+}
+
 .fc-uoplan-event {
   display: flex;
   flex-direction: column;
@@ -153,6 +212,15 @@ a {
   min-height: 100%;
   box-sizing: border-box;
   overflow: hidden;
+}
+
+/* Phantoms are position:fixed with an explicit pixel height — do not inherit min-height:100%
+   (that resolves against the viewport and forces full-screen-tall “events”).
+   z-index below CalendarPage mobile shell (bottom nav 198, drawer backdrop 199, drawer 200). */
+.fc-uoplan-event.fc-uoplan-morph-phantom {
+  min-height: 0;
+  max-height: none;
+  z-index: 100;
 }
 
 /* Swap modal / static preview: same look as calendar cells without filling parent height. */
@@ -263,14 +331,6 @@ a {
   font-size: 9px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.52);
-}
-
-.fc-uoplan-event--tight .fc-uoplan-event-code-part {
-  font-size: 10px;
-}
-
-.fc-uoplan-event--tight .fc-uoplan-event-title-part {
-  font-size: 8px;
 }
 
 .fc-uoplan-event-top-meta {
