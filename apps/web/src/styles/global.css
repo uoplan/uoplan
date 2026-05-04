@@ -144,15 +144,76 @@ a {
 .fc-uoplan-event {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: flex-start;
-  padding: 8px 8px;
+  padding: 0;
   font-size: 11px;
   border-radius: 0;
   height: 100%;
   min-height: 100%;
   box-sizing: border-box;
   overflow: hidden;
+}
+
+/* Swap modal / static preview: same look as calendar cells without filling parent height. */
+.fc-uoplan-event--swap-card {
+  height: auto;
+  min-height: 0;
+}
+
+.fc-uoplan-event--swap-card .fc-uoplan-event-inner {
+  flex: 0 0 auto;
+}
+
+.fc-uoplan-event--swap-card .fc-uoplan-event-body {
+  flex: 0 0 auto;
+  min-height: 0;
+}
+
+.fc-uoplan-event--swap-card .fc-uoplan-event-professor-bottom {
+  margin-top: 0;
+}
+
+.fc-uoplan-event-row-tail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.fc-uoplan-grade-bottom {
+  flex-shrink: 0;
+  width: 100%;
+  height: 4px;
+  box-sizing: border-box;
+}
+
+.fc-uoplan-grade-bottom--dist {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.fc-uoplan-grade-bottom--dist > span {
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.fc-uoplan-grade-bottom-hitbox {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.fc-uoplan-event-inner {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
 .fc-uoplan-event-body {
@@ -164,6 +225,147 @@ a {
   flex: 1;
   min-height: 0;
   width: 100%;
+}
+
+.fc-uoplan-event-heading {
+  flex: 0 0 auto;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.fc-uoplan-event-heading-inline {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 1.2;
+}
+
+.fc-uoplan-event-code-part {
+  flex-shrink: 0;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.fc-uoplan-event-title-part {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 9px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.fc-uoplan-event--tight .fc-uoplan-event-code-part {
+  font-size: 10px;
+}
+
+.fc-uoplan-event--tight .fc-uoplan-event-title-part {
+  font-size: 8px;
+}
+
+.fc-uoplan-event-top-meta {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  width: 100%;
+}
+
+.fc-uoplan-event-top-meta .fc-uoplan-event-type {
+  color: #fff;
+  font-weight: 600;
+}
+
+.fc-uoplan-event-professor-bottom {
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  min-width: 0;
+  width: 100%;
+  margin-top: auto;
+}
+
+.fc-uoplan-event-professor-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+}
+
+.fc-uoplan-event-professor-row .fc-uoplan-event-professor-name {
+  /* Grow only when needed for ellipsis; do not stretch so · and RMP stay beside the name */
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.25;
+}
+
+.fc-uoplan-event-professor-row .fc-uoplan-event-meta-sep {
+  flex-shrink: 0;
+}
+
+.fc-uoplan-rating-inline {
+  --rmp-accent: var(--mantine-color-gray-5);
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 1px 6px;
+  border-radius: 0;
+  font-size: 9px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--rmp-accent) 55%, rgba(255, 255, 255, 0.22));
+  background: color-mix(in srgb, var(--rmp-accent) 22%, rgba(0, 0, 0, 0.35));
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+}
+
+.fc-uoplan-rating-inline--red {
+  --rmp-accent: var(--mantine-color-red-5);
+}
+
+.fc-uoplan-rating-inline--orange {
+  --rmp-accent: var(--mantine-color-orange-5);
+}
+
+.fc-uoplan-rating-inline--yellow {
+  --rmp-accent: var(--mantine-color-yellow-5);
+}
+
+.fc-uoplan-rating-inline--green {
+  --rmp-accent: var(--mantine-color-green-5);
+}
+
+.fc-uoplan-rating-inline--gray {
+  --rmp-accent: var(--mantine-color-gray-5);
+}
+
+a.fc-uoplan-rating-inline:hover {
+  filter: brightness(1.08);
+  text-decoration: none;
 }
 
 .fc-uoplan-event-code {
@@ -186,6 +388,43 @@ a {
   gap: 6px;
   width: 100%;
   min-width: 0;
+}
+
+.fc-uoplan-event-type-time-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.fc-uoplan-event-type-time-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.fc-uoplan-event-type-time-wrap .fc-uoplan-event-type {
+  flex: 0 0 auto;
+}
+
+.fc-uoplan-event-type-time-wrap .fc-uoplan-event-time {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.fc-uoplan-event-meta-sep {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.35);
+  line-height: 1.2;
+  user-select: none;
 }
 
 .fc-uoplan-event-type {
@@ -224,6 +463,11 @@ a {
   justify-content: space-between;
   gap: 8px;
   width: 100%;
+  min-width: 0;
+}
+
+.fc-uoplan-event-time-row .fc-uoplan-event-time {
+  flex: 1 1 auto;
   min-width: 0;
 }
 
@@ -287,7 +531,25 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
-  margin-top: auto;
+}
+
+.fc-uoplan-event-professor-compact {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.fc-uoplan-event-professor-compact .fc-uoplan-event-professor-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.2;
 }
 
 .uoplan-grade-chip {

@@ -83,7 +83,9 @@ function captureEventPositions(container: HTMLElement | null): CapturedEvent[] {
     const rect = el.getBoundingClientRect();
     if (rect.width > 0 && rect.height > 0) {
       const heading =
-        el.querySelector(".fc-uoplan-event-code")?.textContent ?? "";
+        el.querySelector(".fc-uoplan-event-heading")?.textContent?.trim() ??
+        el.querySelector(".fc-uoplan-event-code")?.textContent ??
+        "";
       const section =
         el.querySelector(".fc-uoplan-event-type")?.textContent ?? "";
       const time =
@@ -91,8 +93,7 @@ function captureEventPositions(container: HTMLElement | null): CapturedEvent[] {
         el.querySelector(".fc-uoplan-event-time")?.textContent ??
         "";
       const professor =
-        el.querySelector(".fc-uoplan-event-professor-name")?.textContent?.trim() ??
-        "";
+        el.querySelector(".fc-uoplan-event-professor-name")?.textContent?.trim() ?? "";
       const ratingColor = el.dataset.ratingColor ?? "";
       const virtual = el.dataset.virtual === "true";
       captures.push({
