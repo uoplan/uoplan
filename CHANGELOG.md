@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.0-beta.7](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.6...uoplan-monorepo-v1.0.0-beta.7) (2026-05-15)
+
+
+### Features
+
+* add support for french immersion streams ([332bc45](https://github.com/uoplan/uoplan/commit/332bc45927baa48cf3af47bb29294bfececc2719))
+* make easy course generation option more aggressive ([1e4562a](https://github.com/uoplan/uoplan/commit/1e4562aa73b8dc839003728d52c5cccadf51849c))
+
+
+### Bug Fixes
+
+* **calendar:** use a gray bar when the grade distribution is unknown ([4ca3427](https://github.com/uoplan/uoplan/commit/4ca34273e74226bf4764e3dd81fc6f4b55ae6429))
+* **calendar:** use better styling for event animations ([6f44a8f](https://github.com/uoplan/uoplan/commit/6f44a8fd2c088d92263dc6b033c2f6e7e0a1aceb))
+
 ## [1.0.0-beta.6](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.5...uoplan-monorepo-v1.0.0-beta.6) (2026-05-04)
 
 
