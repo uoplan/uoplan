@@ -693,6 +693,9 @@ msgstr "Change this requirement set - go back to pick a different option. Curren
 msgid "optionsDrilldown.changeRequirementSet"
 msgstr "Change this requirement set"
 
+msgid "optionsDrilldown.optionTitle"
+msgstr "Option {number}"
+
 msgid "optionsStep.none"
 msgstr "No options to configure for this program. Click Next to continue."
 

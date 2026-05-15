@@ -124,7 +124,7 @@ export function OptionsDrilldown({
               {tr("optionsDrilldown.selectOneError", )}
             </Text>
           )}
-          <Stack gap="xs">
+          <Stack gap="sm">
             {options.map((opt, idx) => {
               const childKey = getStableNodeKey(
                 opt,
@@ -148,6 +148,7 @@ export function OptionsDrilldown({
                     activeBranch={childActiveBranch}
                     depth={depth + 1}
                     optionsStepHideCardTitle
+                    optionsStepOptionOrdinal={idx + 1}
                   />
                 </Box>
               );
