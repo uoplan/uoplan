@@ -704,3 +704,57 @@ a.fc-uoplan-rating-inline:hover {
     align-items: stretch;
   }
 }
+
+/* Changelog modal (build-time markdown → HTML) */
+.changelog-html {
+  color: #adb5bd;
+  font-size: var(--mantine-font-size-sm);
+  line-height: 1.55;
+  text-align: left;
+}
+
+.changelog-html h2 {
+  margin: 1.35rem 0 0.65rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid #2c2e33;
+  color: #f8f9fa;
+  font-size: var(--mantine-font-size-md);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.changelog-html h2:first-child {
+  margin-top: 0;
+}
+
+.changelog-html h3 {
+  margin: 1rem 0 0.4rem;
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #868e96;
+}
+
+.changelog-html ul {
+  margin: 0.35rem 0 0.75rem;
+  padding-left: 1.15rem;
+}
+
+.changelog-html li {
+  margin: 0.25rem 0;
+}
+
+.changelog-html a {
+  color: #a5b4fc;
+  text-decoration: none;
+}
+
+.changelog-html a:hover {
+  text-decoration: underline;
+}
+
+.changelog-html strong {
+  color: #dee2e6;
+  font-weight: 600;
+}

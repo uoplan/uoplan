@@ -48,6 +48,12 @@ msgstr "Suivant"
 msgid "app.footer.gradeDataAttribution"
 msgstr "Les données de notes ont été obtenues dans le cadre d'une demande d'accès à l'information en vertu de la Loi sur l'accès à l'information et la protection de la vie privée de l'Ontario."
 
+msgid "app.footer.changelog"
+msgstr "journal des modifications"
+
+msgid "app.changelog.title"
+msgstr "Journal des modifications"
+
 msgid "app.reset.action"
 msgstr "Réinitialiser"
 
