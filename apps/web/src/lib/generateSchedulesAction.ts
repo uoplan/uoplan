@@ -6,6 +6,10 @@ import {
   generateSchedulesWithPinned,
   getValidSectionCombos,
   courseGpa,
+  analyzeFrenchImmersionProgress,
+  frenchImmersionHeuristicPickWeight,
+  programTitleIndicatesNursing,
+  type FrenchImmersionProgressOptions,
   type GeneratedSchedule,
   type GenerationConstraints,
   type RequirementWithStatus,
@@ -64,6 +68,7 @@ const EASIER_GPA_BASE = 5.25;
 
 /** Each level tier is this many times less likely than the one below it. */
 const LEVEL_WEIGHT_BASE = 2;
+
 /** Penalty multiplier for courses with non-course prerequisites (e.g. "permission of instructor"). */
 const NON_COURSE_PREREQ_PENALTY = 0.3;
 /** Floor weight for courses whose level can't be parsed. */
@@ -81,30 +86,65 @@ function candidateWeight(level: number, hasNonCoursePrereq: boolean): number {
   return w;
 }
 
-function reorderOptionalPoolByEasiness(
+function reorderOptionalPoolForGeneration(
   codes: string[],
   cache: DataCache,
-  preferEasier: boolean,
   rng: () => number,
+  options: {
+    preferEasier: boolean;
+    frenchImmersionStream: boolean;
+    immersionOpts?: FrenchImmersionProgressOptions;
+    immersionProgressBaseCodes: readonly string[];
+  },
 ): void {
-  if (!preferEasier || codes.length <= 1) {
+  const {
+    preferEasier,
+    frenchImmersionStream,
+    immersionOpts,
+    immersionProgressBaseCodes,
+  } = options;
+
+  if (codes.length <= 1) {
+    return;
+  }
+
+  if (!preferEasier && !frenchImmersionStream) {
     shuffleInPlace(codes, rng);
     return;
   }
-  const memo = new Map<string, number>();
+
+  const easierMemo = new Map<string, number>();
   function easierWeight(code: string): number {
-    let w = memo.get(code);
+    if (!preferEasier) return 1;
+    let w = easierMemo.get(code);
     if (w !== undefined) return w;
     const sched = cache.getSchedule(code);
     const gpa = sched ? courseGpa(sched) : null;
     w = gpa == null ? 1 : Math.pow(EASIER_GPA_BASE, gpa - EASIER_GPA_PIVOT);
-    memo.set(code, w);
+    easierMemo.set(code, w);
     return w;
   }
+
+  /** One analyze on the starting set; avoids O(n²) full marginal scans on large basic pools. */
+  const progSnapshot =
+    frenchImmersionStream && immersionOpts != null
+      ? analyzeFrenchImmersionProgress(
+          [...new Set(immersionProgressBaseCodes.map((c) => normalizeCourseCode(c)))],
+          cache,
+          immersionOpts,
+        )
+      : null;
+
   const remaining = [...codes];
   codes.length = 0;
   while (remaining.length > 0) {
-    const weights = remaining.map(easierWeight);
+    const weights = remaining.map((code) => {
+      let w = easierWeight(code);
+      if (progSnapshot) {
+        w *= frenchImmersionHeuristicPickWeight(progSnapshot, code, cache);
+      }
+      return w;
+    });
     const picked = weightedRandomPick(remaining, weights, rng);
     codes.push(picked);
     const idx = remaining.indexOf(picked);
@@ -306,6 +346,8 @@ export async function generateSchedulesAction(
     generationLimitFirstYearCredits,
     generationCompressedSchedule,
     generationPreferEasier,
+    program,
+    frenchImmersionStream,
   } = state;
 
   if (!cache) {
@@ -393,6 +435,11 @@ export async function generateSchedulesAction(
 
   // Use currentSeed directly for deterministic generation
   const rng = createSeededRng(effectiveSeed >>> 0);
+
+  const immersionProgressOpts: FrenchImmersionProgressOptions | undefined =
+    frenchImmersionStream
+      ? { isNursingProgram: programTitleIndicatesNursing(program?.title) }
+      : undefined;
 
   const completedFirstYearCredits = completedCourses.reduce((sum, code) => {
     const m = code.match(/\d{4}/);
@@ -819,6 +866,13 @@ export async function generateSchedulesAction(
     }
 
     const easierMemo = new Map<string, number>();
+    function immersionCodesWithChosen(chosen: Set<string>): string[] {
+      const s = new Set(completedCourses.map((c) => normalizeCourseCode(c)));
+      for (const c of chosen) {
+        s.add(normalizeCourseCode(c));
+      }
+      return [...s];
+    }
     function easierMultiplierForCourse(code: string): number {
       if (!generationPreferEasier) return 1;
       let m = easierMemo.get(code);
@@ -931,6 +985,15 @@ export async function generateSchedulesAction(
       };
 
       while (totalRemaining() > 0) {
+        const immersionProgForPick =
+          frenchImmersionStream && immersionProgressOpts != null
+            ? analyzeFrenchImmersionProgress(
+                immersionCodesWithChosen(chosenCodes),
+                cacheVal,
+                immersionProgressOpts,
+              )
+            : null;
+
         const cands: WeightedCand[] = [];
 
         for (const pool of pools) {
@@ -1014,12 +1077,21 @@ export async function generateSchedulesAction(
               cacheVal.getCourse(code)?.prerequisites,
             );
             const bucketSize = levelCounts.get(level) ?? 1;
+            let immersionW = 1;
+            if (immersionProgForPick != null) {
+              immersionW = frenchImmersionHeuristicPickWeight(
+                immersionProgForPick,
+                code,
+                cacheVal,
+              );
+            }
             cands.push({
               pool,
               code,
               weight:
                 (candidateWeight(level, hasNonCoursePrereq) / bucketSize) *
-                easierMultiplierForCourse(code),
+                easierMultiplierForCourse(code) *
+                immersionW,
             });
           }
         }
@@ -1079,7 +1151,9 @@ export async function generateSchedulesAction(
       if (foundSchedule) break;
 
       for (const list of candidatesByRequirement.values()) {
-        shuffleInPlace(list, rng);
+        if (!frenchImmersionStream) {
+          shuffleInPlace(list, rng);
+        }
       }
 
       const allocationPool =
@@ -1129,7 +1203,12 @@ export async function generateSchedulesAction(
       }
 
       lastFilteredPool = optionalPool;
-      shuffleInPlace(lastFilteredPool, rng);
+      reorderOptionalPoolForGeneration(lastFilteredPool, cacheVal, rng, {
+        preferEasier: false,
+        frenchImmersionStream,
+        immersionOpts: immersionProgressOpts,
+        immersionProgressBaseCodes: [...completedCourses, ...pinned],
+      });
 
       const attemptCache = cacheWithPerCourseVirtualFilter(
         cacheVal,
@@ -1292,6 +1371,8 @@ async function handleBasicGeneration(
     generationPreferEasier,
     completedCourses,
     studentPrograms,
+    program,
+    frenchImmersionStream,
   } = state;
 
   if (!cache) {
@@ -1355,7 +1436,17 @@ async function handleBasicGeneration(
     optionalPool.push(code);
   }
 
-  reorderOptionalPoolByEasiness(optionalPool, effectiveCache, generationPreferEasier, rng);
+  const immersionOptsBasic: FrenchImmersionProgressOptions | undefined =
+    frenchImmersionStream
+      ? { isNursingProgram: programTitleIndicatesNursing(program?.title) }
+      : undefined;
+
+  reorderOptionalPoolForGeneration(optionalPool, effectiveCache, rng, {
+    preferEasier: generationPreferEasier,
+    frenchImmersionStream,
+    immersionOpts: immersionOptsBasic,
+    immersionProgressBaseCodes: [...completedCourses, ...pinned],
+  });
 
   const batch = generateSchedulesWithPinned(
     pinned,

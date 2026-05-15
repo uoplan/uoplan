@@ -29,6 +29,8 @@ import {
 
 import { AdvancedCourseFiltersCard } from "./CourseFiltersCard";
 import { CompletedRequirementsAccordion } from "./CompletedRequirementsAccordion";
+import { FrenchImmersionRequirementsReadout } from "./FrenchImmersionRequirementsReadout";
+import { useAppStore } from "../../store/appStore";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -81,6 +83,9 @@ export function ConstrainStep({
 }: ConstrainStepProps) {
   const [collapsedUnavailableOpen, setCollapsedUnavailableOpen] =
     useState(false);
+
+  const frenchImmersionStream = useAppStore((s) => s.frenchImmersionStream);
+  const unassignedCount = useAppStore((s) => s.unassignedCompletedCourses.length);
 
   const completedSet = useMemo(
     () => new Set(completedCourses),
@@ -209,6 +214,9 @@ export function ConstrainStep({
 
   return (
     <Stack gap="lg" data-tour="constrain-schedule">
+      {frenchImmersionStream && unassignedCount === 0 ? (
+        <FrenchImmersionRequirementsReadout />
+      ) : null}
       <AdvancedCourseFiltersCard
         levelBuckets={levelBuckets}
         languageBuckets={languageBuckets}

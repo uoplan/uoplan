@@ -80,6 +80,7 @@ export const useAppStore = create<AppStore>()((...a) => {
     generationPreferEasier: false,
     activeStep: 0,
     showCalendar: false,
+    frenchImmersionStream: false,
 
     // Global action: touches many states
     resetToDefault: () => {
@@ -137,6 +138,8 @@ export const useAppStore = create<AppStore>()((...a) => {
         includeClosedComponents: false,
         virtualSectionsOnly: false,
         activeStep: 0,
+        showCalendar: false,
+        frenchImmersionStream: false,
       });
       if (typeof window !== "undefined") {
         localStorage.removeItem(LOCAL_STORAGE_KEY);

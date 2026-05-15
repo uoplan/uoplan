@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from 'react';
-import { Select, MultiSelect, Stack, Text, Button, Alert, Loader, Badge } from '@mantine/core';
+import { Select, MultiSelect, Stack, Text, Button, Alert, Loader, Badge, Switch } from '@mantine/core';
 import { tr } from "../../i18n";
 import type { Program } from 'schedule';
 import { useAppStore } from '../../store/appStore';
@@ -10,6 +10,7 @@ import {
   isOptCourse,
 } from 'schedule';
 import { normalizeCourseCode } from 'schedule';
+import { FrenchImmersionProgramOverview } from '../shared/FrenchImmersionProgramOverview';
 
 interface ProgramStepProps {
   programs: Program[];
@@ -45,6 +46,8 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
   const minorProgram = useAppStore((s) => s.minorProgram);
   const setMinorProgram = useAppStore((s) => s.setMinorProgram);
   const setFirstYear = useAppStore((s) => s.setFirstYear);
+  const setFrenchImmersionStream = useAppStore((s) => s.setFrenchImmersionStream);
+  const frenchImmersionStream = useAppStore((s) => s.frenchImmersionStream);
   const [transcriptLoading, setTranscriptLoading] = useState(false);
   const [transcriptError, setTranscriptError] = useState<string | null>(null);
   const [transcriptFeedback, setTranscriptFeedback] = useState<{
@@ -127,7 +130,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
     setTranscriptLoading(true);
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const { courses: parsedCourses, fullText, startingYear } = await parseTranscriptPdf(arrayBuffer);
+      const { courses: parsedCourses, fullText, startingYear, frenchImmersionStreamHint } = await parseTranscriptPdf(arrayBuffer);
       const inCatalogue: string[] = [];
       const skippedCodes: string[] = [];
       for (const code of parsedCourses) {
@@ -139,6 +142,10 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
       }
       const merged = [...new Set([...completedCourses, ...inCatalogue])];
       setCompletedCourses(merged);
+
+      if (frenchImmersionStreamHint) {
+        setFrenchImmersionStream(true);
+      }
 
       // Set year first; setFirstYear awaits the catalogue fetch and then calls setProgram(null),
       // so we must await it before matching the program against the updated programme list.
@@ -245,6 +252,19 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
           searchable
           size="md"
         />
+      )}
+      {value && (
+        <>
+          <Switch
+            label={tr("frenchImmersion.toggle.label")}
+            description={tr("frenchImmersion.toggle.description")}
+            checked={frenchImmersionStream}
+            onChange={(e) => setFrenchImmersionStream(e.currentTarget.checked)}
+            size="md"
+            radius={0}
+          />
+          {frenchImmersionStream ? <FrenchImmersionProgramOverview /> : null}
+        </>
       )}
       <Alert color="blue" variant="light" radius={0}>
         <Text size="sm">

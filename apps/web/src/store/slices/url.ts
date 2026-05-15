@@ -60,6 +60,7 @@ function buildEncodeInput(s: AppStore): EncodeInput {
     generationPreferEasier: s.generationPreferEasier,
     activeStep: s.activeStep,
     showCalendar: s.showCalendar,
+    frenchImmersionStream: s.frenchImmersionStream,
   };
 }
 
@@ -198,6 +199,8 @@ export const createUrlSlice: StateCreator<
       generationCompressedSchedule: decoded.generationCompressedSchedule,
       generationPreferEasier: decoded.generationPreferEasier,
       activeStep: decoded.activeStep ?? 0,
+      showCalendar: decoded.showCalendar ?? false,
+      frenchImmersionStream: decoded.frenchImmersionStream ?? false,
       generationError: null,
       constrainedPerRequirement,
       ...(decoded.selectedTermId != null ? { selectedTermId: decoded.selectedTermId } : {}),

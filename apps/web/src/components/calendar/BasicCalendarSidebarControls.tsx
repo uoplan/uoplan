@@ -1,9 +1,10 @@
 import { useMemo, useRef, useState } from "react";
-import { Button, MultiSelect, NumberInput, Stack, Box, Text, Loader, Alert, type OptionsFilter } from "@mantine/core";
+import { Button, MultiSelect, NumberInput, Stack, Box, Text, Loader, Alert, Switch, type OptionsFilter } from "@mantine/core";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { createCourseOptions, renderCourseOption } from "../shared/CourseSelect";
 import { BasicCourseFiltersCard } from "../requirements/CourseFiltersCard";
+import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../i18n";
 import { parseTranscriptPdf, isOptCourse, normalizeCourseCode } from "schedule";
 
@@ -18,9 +19,10 @@ export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNav
     electiveLevelBuckets,
     includeClosedComponents,
     virtualSectionsOnly,
-    completedCourses,
-    indices,
-  } = useAppStore(
+      completedCourses,
+      indices,
+      frenchImmersionStream,
+    } = useAppStore(
     useShallow((s) => ({
       cache: s.cache,
       basicPinnedCourses: s.basicPinnedCourses,
@@ -33,8 +35,11 @@ export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNav
       virtualSectionsOnly: s.virtualSectionsOnly,
       completedCourses: s.completedCourses,
       indices: s.indices,
+      frenchImmersionStream: s.frenchImmersionStream,
     }))
   );
+
+  const setFrenchImmersionStream = useAppStore((s) => s.setFrenchImmersionStream);
 
   const setBasicPinnedCourses = useAppStore((s) => s.setBasicPinnedCourses);
   const setBasicElectivesCount = useAppStore((s) => s.setBasicElectivesCount);
@@ -62,7 +67,7 @@ export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNav
 
     try {
       const buffer = await file.arrayBuffer();
-      const { courses: parsedCourses } = await parseTranscriptPdf(buffer);
+      const { courses: parsedCourses, frenchImmersionStreamHint } = await parseTranscriptPdf(buffer);
       const inCatalogue: string[] = [];
       const indexedCodes = indices ? new Set(indices.courses.map(normalizeCourseCode)) : new Set<string>();
       for (const code of parsedCourses) {
@@ -71,6 +76,11 @@ export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNav
         }
       }
       const merged = [...new Set([...completedCourses, ...inCatalogue])];
+
+      if (frenchImmersionStreamHint) {
+        setFrenchImmersionStream(true);
+        markBasicSettingsChanged();
+      }
 
       if (merged.length > completedCourses.length) {
         setCompletedCourses(merged);
@@ -170,6 +180,20 @@ export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNav
           max={8}
           radius={0}
         />
+
+        <Switch
+          label={tr("frenchImmersion.toggle.label")}
+          description={tr("frenchImmersion.toggle.description")}
+          checked={frenchImmersionStream}
+          onChange={(e) => {
+            setFrenchImmersionStream(e.currentTarget.checked);
+            markBasicSettingsChanged();
+          }}
+          radius={0}
+          styles={{ description: { color: "#ADB5BD" } }}
+        />
+
+        {frenchImmersionStream ? <FrenchImmersionProgramOverview variant="compact" /> : null}
 
         <BasicCourseFiltersCard
           levelBuckets={levelBuckets}

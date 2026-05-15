@@ -89,6 +89,7 @@ export interface AppState {
   generationPreferEasier: boolean;
   activeStep: number;
   showCalendar: boolean;
+  frenchImmersionStream: boolean;
 }
 
 export interface AppActions {
@@ -151,6 +152,7 @@ export interface AppActions {
   setGenerationLimitFirstYearCredits: (v: boolean) => void;
   setGenerationCompressedSchedule: (v: boolean) => void;
   setGenerationPreferEasier: (v: boolean) => void;
+  setFrenchImmersionStream: (enabled: boolean) => void;
   resetToDefault: () => void;
 }
 

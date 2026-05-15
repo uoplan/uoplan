@@ -318,6 +318,126 @@ msgstr "Téléverser un relevé PDF"
 msgid "programStep.transcript.uploadFailed"
 msgstr "Téléversement échoué"
 
+msgid "frenchImmersion.toggle.label"
+msgstr "Volet d’immersion française"
+
+msgid "frenchImmersion.toggle.description"
+msgstr "Suivez la progression vers la mention « immersion française » et gardez les cours en français dans les filtres de langue."
+
+msgid "frenchImmersion.progress.disclaimer"
+msgstr "Totaux indicatifs d’après les cours complétés et l’horaire actuel. Ce n’est pas une vérification officielle."
+
+msgid "frenchImmersion.progress.cardTitle"
+msgstr "Progression — immersion française"
+
+msgid "frenchImmersion.progress.sectionVolume"
+msgstr "Volume pour la mention"
+
+msgid "frenchImmersion.progress.sectionLevels"
+msgstr "Exigences de niveau (hors FLS)"
+
+msgid "frenchImmersion.progress.sectionAccompanying"
+msgstr "Plafonds FLS d’accompagnement"
+
+msgid "frenchImmersion.progress.sectionCountedCodes"
+msgstr "Cours comptés pour le volume"
+
+msgid "frenchImmersion.progress.sectionExcluded"
+msgstr "Non comptés (plafond)"
+
+msgid "frenchImmersion.progress.excludedCompanionsHint"
+msgstr "Ces crédits FLS d’accompagnement dépassent le maximum admissible pour la mention."
+
+msgid "frenchImmersion.progress.metricCourses"
+msgstr "Cours admissibles"
+
+msgid "frenchImmersion.progress.metricUnits"
+msgstr "Unités admissibles"
+
+msgid "frenchImmersion.progress.metricLevel1000"
+msgstr "Cours de niveau 1000 (min. 2)"
+
+msgid "frenchImmersion.progress.metricLevel1000Units"
+msgstr "Unités de niveau 1000 (min. 6)"
+
+msgid "frenchImmersion.progress.metricLevel3000"
+msgstr "Cours de niveau 3000 ou 4000 (min. 2)"
+
+msgid "frenchImmersion.progress.metricLevel3000Units"
+msgstr "Unités de niveau 3000 ou 4000 (min. 6)"
+
+msgid "frenchImmersion.progress.metricCompanionTotal"
+msgstr "Cours FLS d’accompagnement (max. 4)"
+
+msgid "frenchImmersion.progress.metricCompanion2581"
+msgstr "FLS 2581 (max. 2)"
+
+msgid "frenchImmersion.progress.valueCrU"
+msgstr "{c} cr · {u} u"
+
+msgid "frenchImmersion.progress.officialLink"
+msgstr "Exigences officielles du diplôme (uOttawa)"
+
+msgid "frenchImmersion.fls3500.title"
+msgstr "Test de certification de langue seconde (FLS 3500)"
+
+msgid "frenchImmersion.fls3500.body"
+msgstr "Vous devez réussir le test de certification FLS 3500 avant d’obtenir le diplôme avec la mention immersion française."
+
+msgid "frenchImmersion.progress.nursing"
+msgstr "Programme en sciences infirmières : 12 cours en français (36 unités) au lieu de 14 (42)."
+
+msgid "frenchImmersion.overview.title"
+msgstr "Mention immersion française"
+
+msgid "frenchImmersion.overview.volumeHeading"
+msgstr "Progression vers le volume"
+
+msgid "frenchImmersion.overview.volumeCounts"
+msgstr "{courses}/{reqC} cours · {units}/{reqU} unités"
+
+msgid "frenchImmersion.overview.volumeAria"
+msgstr "Progression vers l’exigence de volume pour la mention immersion française"
+
+msgid "frenchImmersion.overview.checkVolume"
+msgstr "Nombre minimal de cours et d’unités en français pour la mention (selon le critère le plus exigeant)."
+
+msgid "frenchImmersion.overview.check1000"
+msgstr "Au moins deux cours de niveau 1000 en français hors FLS (6 unités minimum)."
+
+msgid "frenchImmersion.overview.check3000"
+msgstr "Au moins deux cours de niveau 3000 ou 4000 en français hors FLS (6 unités minimum)."
+
+msgid "frenchImmersion.overview.checkCompanion"
+msgstr "FLS d’accompagnement dans les plafonds (max. 4 cours / 12 unités ; max. 2 × FLS 2581)."
+
+msgid "frenchImmersion.overview.compactLine"
+msgstr "Immersion : {courses}/{reqC} cours · {units}/{reqU} unités"
+
+msgid "frenchImmersion.readout.title"
+msgstr "Mention immersion française"
+
+msgid "frenchImmersion.readout.intro"
+msgstr "Comment vos cours complétés et l’horaire actuel se répartissent selon les règles de la mention (indicatif)."
+
+msgid "frenchImmersion.readout.pendingAssign"
+msgstr "Attribuez les cours complétés ci-dessous ; les totaux se mettent à jour au fur et à mesure."
+
+msgid "frenchImmersion.readout.cat1000"
+msgstr "Niveau 1000 (hors FLS, FR) :"
+
+msgid "frenchImmersion.readout.cat3000"
+msgstr "Niveau 3000 ou 4000 (hors FLS, FR) :"
+
+msgid "frenchImmersion.readout.catCompanion"
+msgstr "FLS d’accompagnement :"
+
+msgid "frenchImmersion.readout.catOther"
+msgstr "Autres cours en français comptés :"
+
+msgid "frenchImmersion.readout.excludedLabel"
+msgstr "Exclus par les plafonds d’accompagnement :"
+
 msgid "scheduleCount.compressed.description"
 msgstr "Au plus une pause par jour, jusqu'à 90 minutes."
 
