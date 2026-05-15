@@ -81,12 +81,18 @@ export function getNodeDisplayTitle(node: RequirementWithStatus): string {
   return fallback;
 }
 
-function optionsStepOptionCardAriaLabel(node: RequirementWithStatus): string {
-  return (
+function optionsStepOptionCardAriaLabel(
+  node: RequirementWithStatus,
+  optionOrdinal?: number,
+): string {
+  const detail =
     getOptionSecondarySummaryLine(node) ??
     getNodeDisplayTitle(node) ??
-    "Select this requirement option"
-  );
+    "Select this requirement option";
+  if (optionOrdinal != null) {
+    return `${tr("optionsDrilldown.optionTitle", { number: optionOrdinal })}. ${detail}`;
+  }
+  return detail;
 }
 
 interface RequirementNodeProps {
@@ -127,6 +133,8 @@ interface RequirementNodeProps {
    * option cards; body (nested groups, summaries) stays visible.
    */
   optionsStepHideCardTitle?: boolean;
+  /** Options step: 1-based index label ("Option 1") on this selectable card only. */
+  optionsStepOptionOrdinal?: number;
 }
 
 type RadioConfig = NonNullable<RequirementNodeProps["radio"]>;
@@ -137,6 +145,7 @@ type SelectableOptionPaperProps = Omit<PaperProps, "children"> & {
   radio: OptionCardRadioConfig;
   node: RequirementWithStatus;
   optionsStepHideCardTitle: boolean;
+  optionsStepOptionOrdinal?: number;
   children: ReactNode;
 };
 
@@ -145,6 +154,7 @@ function SelectableOptionPaper({
   radio,
   node,
   optionsStepHideCardTitle,
+  optionsStepOptionOrdinal,
   style,
   children,
   ...paperProps
@@ -152,9 +162,11 @@ function SelectableOptionPaper({
   const [hover, setHover] = useState(false);
   const flatStyle = (style ?? {}) as CSSProperties;
   const { backgroundColor: bgFromStyle, ...restFlat } = flatStyle;
+  const fallbackIdle = optionsStepHideCardTitle
+    ? "var(--mantine-color-dark-7)"
+    : "var(--mantine-color-dark-6)";
   const idleBg =
-    (typeof bgFromStyle === "string" && bgFromStyle) ||
-    "var(--mantine-color-dark-6)";
+    (typeof bgFromStyle === "string" && bgFromStyle) || fallbackIdle;
   const visualBg = radio.checked
     ? OPTION_CARD_BG_SELECTED
     : hover && !radio.disabled
@@ -171,7 +183,7 @@ function SelectableOptionPaper({
       aria-disabled={radio.disabled}
       aria-label={
         optionsStepHideCardTitle
-          ? optionsStepOptionCardAriaLabel(node)
+          ? optionsStepOptionCardAriaLabel(node, optionsStepOptionOrdinal)
           : undefined
       }
       tabIndex={radio.disabled ? -1 : 0}
@@ -206,6 +218,13 @@ function SelectableOptionPaper({
           : undefined,
       }}
     >
+      {optionsStepHideCardTitle && optionsStepOptionOrdinal != null ? (
+        <Text fw={500} size="sm" lh={1.25} c="gray.0" mb="xs" style={{ minWidth: 0 }}>
+          {tr("optionsDrilldown.optionTitle", {
+            number: optionsStepOptionOrdinal,
+          })}
+        </Text>
+      ) : null}
       {children}
     </Paper>
   );
@@ -233,6 +252,7 @@ export const RequirementNode = memo(function RequirementNode({
   completedOnly = false,
   hideSelection = false,
   optionsStepHideCardTitle = false,
+  optionsStepOptionOrdinal,
 }: RequirementNodeProps) {
   // If a parent (like an option) is responsible for selection UX, don't remove it,
   // but we still want to reduce *nested* single-child wrappers inside it.
@@ -646,6 +666,7 @@ export const RequirementNode = memo(function RequirementNode({
           radio={radio}
           node={node}
           optionsStepHideCardTitle={optionsStepHideCardTitle}
+          optionsStepOptionOrdinal={optionsStepOptionOrdinal}
           p="sm"
           mt="xs"
           data-missing-selection={showError ? "true" : undefined}
@@ -821,6 +842,7 @@ export const RequirementNode = memo(function RequirementNode({
           radio={radio}
           node={node}
           optionsStepHideCardTitle={optionsStepHideCardTitle}
+          optionsStepOptionOrdinal={optionsStepOptionOrdinal}
           p="sm"
           mt="xs"
           data-missing-selection={showError ? "true" : undefined}
@@ -945,6 +967,7 @@ export const RequirementNode = memo(function RequirementNode({
           radio={radio}
           node={node}
           optionsStepHideCardTitle={optionsStepHideCardTitle}
+          optionsStepOptionOrdinal={optionsStepOptionOrdinal}
           p="sm"
           mt="xs"
           style={{
@@ -1139,9 +1162,12 @@ export const RequirementNode = memo(function RequirementNode({
       );
     })();
 
+  const expandedSelectionBg = optionsStepHideCardTitle
+    ? "var(--mantine-color-dark-7)"
+    : "var(--mantine-color-dark-6)";
   const defaultPaperBg = hasOptions
     ? hideSelection || opened
-      ? "var(--mantine-color-dark-6)"
+      ? expandedSelectionBg
       : "var(--mantine-color-dark-8)"
     : "var(--mantine-color-dark-7)";
 
@@ -1151,6 +1177,7 @@ export const RequirementNode = memo(function RequirementNode({
         radio={radio}
         node={node}
         optionsStepHideCardTitle={optionsStepHideCardTitle}
+        optionsStepOptionOrdinal={optionsStepOptionOrdinal}
         p="sm"
         mt="xs"
         style={{
@@ -1234,6 +1261,8 @@ export const RequirementNode = memo(function RequirementNode({
 }, function areEqual(prevProps, nextProps) {
   if (prevProps.activeBranch !== nextProps.activeBranch) return false;
   if (prevProps.depth !== nextProps.depth) return false;
+  if (prevProps.optionsStepOptionOrdinal !== nextProps.optionsStepOptionOrdinal)
+    return false;
   if (prevProps.radio !== nextProps.radio) return false;
   if (prevProps.includeClosedComponents !== nextProps.includeClosedComponents) return false;
   if (prevProps.virtualSectionsOnly !== nextProps.virtualSectionsOnly) return false;

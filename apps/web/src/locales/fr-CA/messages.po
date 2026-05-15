@@ -693,6 +693,9 @@ msgstr "Modifier cet ensemble d'exigences - revenez en arrière pour choisir une
 msgid "optionsDrilldown.changeRequirementSet"
 msgstr "Modifier cet ensemble d'exigences"
 
+msgid "optionsDrilldown.optionTitle"
+msgstr "Option {number}"
+
 msgid "optionsStep.none"
 msgstr "Aucune option à configurer pour ce programme. Cliquez sur Suivant pour continuer."
 
