@@ -14,6 +14,7 @@ The current academic year is detected dynamically via `getCurrentAcademicYear()`
 **Archive URLs** follow the pattern `https://catalogue.uottawa.ca/archive/{year}-{year+1}/en/...`. The current year uses the root `https://catalogue.uottawa.ca/en/...`. The HTML structure is identical across years.
 
 **App store (`src/store/appStore.ts`)** on startup:
+
 1. Fetches `catalogue.json` to get `availableYears`
 2. Fetches `catalogue.{latestYear}.json` as the main catalogue (used for course lookups and schedule generation)
 3. Stores `availableYears` in state
@@ -30,9 +31,9 @@ When the user selects their first year via `setFirstYear(year)`, the store fetch
 
 ### Configuration
 
-| Constant | File | Purpose |
-|----------|------|---------|
-| `OLDEST_YEAR` | `scripts/scraper.ts` | Earliest year to scrape |
+| Constant                   | File                 | Purpose                                        |
+| -------------------------- | -------------------- | ---------------------------------------------- |
+| `OLDEST_YEAR`              | `scripts/scraper.ts` | Earliest year to scrape                        |
 | `getCurrentAcademicYear()` | `scripts/scraper.ts` | Detects current academic year from system date |
 
 ### Dependencies

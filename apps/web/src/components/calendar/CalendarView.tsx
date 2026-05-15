@@ -1,20 +1,20 @@
-import { useMemo, useCallback, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
-import { Box, Text, Modal } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
-import FullCalendar from '@fullcalendar/react';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import { startOfWeek } from 'date-fns';
-import type { DataCache } from 'schedule';
-import type { GeneratedSchedule } from 'schedule';
-import type { ProfessorRatingsMap } from 'schedule';
-import { CalendarEventContent } from './CalendarEventContent';
-import { SwapModalContent } from './SwapModalContent';
-import { useCalendarEvents, type CalendarEvent } from '../../hooks/useCalendarEvents';
-import { useSwapModal } from '../../hooks/useSwapModal';
-import { useCalendarMorph } from '../../hooks/useCalendarMorph';
-import { ScheduleMorphOverlay } from './ScheduleMorphOverlay';
-import { tr } from '../../i18n';
+import { useMemo, useCallback, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import { Box, Text, Modal } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
+import FullCalendar from "@fullcalendar/react";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import { startOfWeek } from "date-fns";
+import type { DataCache } from "schedule";
+import type { GeneratedSchedule } from "schedule";
+import type { ProfessorRatingsMap } from "schedule";
+import { CalendarEventContent } from "./CalendarEventContent";
+import { SwapModalContent } from "./SwapModalContent";
+import { useCalendarEvents, type CalendarEvent } from "../../hooks/useCalendarEvents";
+import { useSwapModal } from "../../hooks/useSwapModal";
+import { useCalendarMorph } from "../../hooks/useCalendarMorph";
+import { ScheduleMorphOverlay } from "./ScheduleMorphOverlay";
+import { tr } from "../../i18n";
 
 const EMPTY_COLOR_MAP: Record<string, number> = {};
 
@@ -37,162 +37,148 @@ interface CalendarViewProps {
   colorMap?: Record<string, number>;
 }
 
-export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(
-  function CalendarView({
-    schedule,
-    cache,
-    professorRatings,
-    getSwapCandidates,
-    onSwap,
-    colorMap = EMPTY_COLOR_MAP,
-  }, ref) {
-    /** Match narrow split layouts (calendar + sidebar); ~xl breakpoint, closest standard to ~1140px. */
-    const isCompactCalendar = useMediaQuery('(max-width: 1200px)');
-    const prefersReduced = useMediaQuery('(prefers-reduced-motion: reduce)') ?? false;
+export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(function CalendarView(
+  { schedule, cache, professorRatings, getSwapCandidates, onSwap, colorMap = EMPTY_COLOR_MAP },
+  ref,
+) {
+  /** Match narrow split layouts (calendar + sidebar); ~xl breakpoint, closest standard to ~1140px. */
+  const isCompactCalendar = useMediaQuery("(max-width: 1200px)");
+  const prefersReduced = useMediaQuery("(prefers-reduced-motion: reduce)") ?? false;
 
-    const containerRef = useRef<HTMLDivElement>(null);
-    const morph = useCalendarMorph(containerRef, prefersReduced);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const morph = useCalendarMorph(containerRef, prefersReduced);
 
-    useImperativeHandle(ref, () => ({
+  useImperativeHandle(
+    ref,
+    () => ({
       captureAndPark: morph.captureAndPark,
-    }), [morph.captureAndPark]);
+    }),
+    [morph.captureAndPark],
+  );
 
-    // When the schedule prop changes, complete the morph transition.
-    useEffect(() => {
-      return morph.onScheduleChanged();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [schedule]);
+  // When the schedule prop changes, complete the morph transition.
+  useEffect(() => {
+    return morph.onScheduleChanged();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schedule]);
 
-    const swap = useSwapModal(getSwapCandidates, cache);
+  const swap = useSwapModal(getSwapCandidates, cache);
 
-    const referenceWeekStart = useMemo(
-      () => startOfWeek(new Date(), { weekStartsOn: 0 }),
-      []
-    );
+  const referenceWeekStart = useMemo(() => startOfWeek(new Date(), { weekStartsOn: 0 }), []);
 
-    const events = useCalendarEvents(schedule, professorRatings, referenceWeekStart);
+  const events = useCalendarEvents(schedule, professorRatings, referenceWeekStart);
 
-    const hasWeekendCourses = useMemo(() => {
-      return events.some(e => {
-        const day = e.start.getDay();
-        return day === 0 || day === 6;
+  const hasWeekendCourses = useMemo(() => {
+    return events.some((e) => {
+      const day = e.start.getDay();
+      return day === 0 || day === 6;
+    });
+  }, [events]);
+
+  const showWeekends = !isCompactCalendar || hasWeekendCourses;
+
+  const eventContent = useCallback(
+    (arg: { event: { extendedProps: unknown } }) => {
+      const ext = arg.event.extendedProps as CalendarEvent;
+      return <CalendarEventContent ext={ext} cache={cache} colorMap={colorMap} />;
+    },
+    [cache, colorMap],
+  );
+
+  const handleEventClick = (info: { event: { extendedProps: unknown } }) => {
+    const ext = info.event.extendedProps as CalendarEvent;
+    if (ext.enrollmentIndex != null) {
+      swap.openModal(ext.enrollmentIndex, ext.courseCode, {
+        virtual: ext.virtual,
+        componentSection: ext.componentSection,
+        gradeViz: ext.gradeViz,
       });
-    }, [events]);
-
-    const showWeekends = !isCompactCalendar || hasWeekendCourses;
-
-    const eventContent = useCallback(
-      (arg: { event: { extendedProps: unknown } }) => {
-        const ext = arg.event.extendedProps as CalendarEvent;
-        return (
-          <CalendarEventContent
-            ext={ext}
-            cache={cache}
-            colorMap={colorMap}
-          />
-        );
-      },
-      [cache, colorMap]
-    );
-
-    const handleEventClick = (info: { event: { extendedProps: unknown } }) => {
-      const ext = info.event.extendedProps as CalendarEvent;
-      if (ext.enrollmentIndex != null) {
-        swap.openModal(ext.enrollmentIndex, ext.courseCode, {
-          virtual: ext.virtual,
-          componentSection: ext.componentSection,
-          gradeViz: ext.gradeViz,
-        });
-      }
-    };
-
-    if (!schedule) {
-      return (
-        <Box
-          style={{
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#868E96',
-          }}
-        >
-          <Text size="lg">{tr('calendarPage.noSchedule')}</Text>
-        </Box>
-      );
     }
+  };
 
+  if (!schedule) {
     return (
       <Box
         style={{
           flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: 0,
-          overflow: 'hidden',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "#868E96",
         }}
       >
-        <Box
-          ref={containerRef}
-          className={morph.isHidingEvents ? 'fc-uoplan-morphing' : undefined}
-          style={{ flex: 1, minHeight: 0 }}
-        >
-          <FullCalendar
-            plugins={[timeGridPlugin, interactionPlugin]}
-            initialView="timeGridWeek"
-            headerToolbar={false}
-            allDaySlot={false}
-            slotDuration="00:30:00"
-            slotMinTime="08:00:00"
-            slotMaxTime="23:00:00"
-            firstDay={0}
-            weekends={showWeekends}
-            height="100%"
-            events={events}
-            eventContent={eventContent}
-            eventClick={handleEventClick}
-            slotLabelFormat={{
-              hour: 'numeric',
-              minute: '2-digit',
-              omitZeroMinute: false,
-              hour12: false,
-            }}
-            dayHeaderFormat={{ weekday: 'short' }}
-            nowIndicator={false}
-            navLinks={false}
-            expandRows={true}
-          />
-        </Box>
-
-        <ScheduleMorphOverlay
-          phantoms={morph.phantoms}
-          onComplete={morph.onAnimationComplete}
-        />
-
-        <Modal
-          opened={swap.isOpen}
-          onClose={swap.closeModal}
-          title={swap.result?.requirementTitle}
-          size="lg"
-          centered
-        >
-          {swap.modalState && (
-            <SwapModalContent
-              schedule={schedule}
-              modalState={swap.modalState}
-              result={swap.result}
-              loading={swap.loading}
-              candidateOptions={swap.candidateOptions}
-              query={swap.query}
-              setQuery={swap.setQuery}
-              closeModal={swap.closeModal}
-              cache={cache}
-              professorRatings={professorRatings}
-              onSwap={onSwap}
-            />
-          )}
-        </Modal>
+        <Text size="lg">{tr("calendarPage.noSchedule")}</Text>
       </Box>
     );
   }
-);
+
+  return (
+    <Box
+      style={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        minHeight: 0,
+        overflow: "hidden",
+      }}
+    >
+      <Box
+        ref={containerRef}
+        className={morph.isHidingEvents ? "fc-uoplan-morphing" : undefined}
+        style={{ flex: 1, minHeight: 0 }}
+      >
+        <FullCalendar
+          plugins={[timeGridPlugin, interactionPlugin]}
+          initialView="timeGridWeek"
+          headerToolbar={false}
+          allDaySlot={false}
+          slotDuration="00:30:00"
+          slotMinTime="08:00:00"
+          slotMaxTime="23:00:00"
+          firstDay={0}
+          weekends={showWeekends}
+          height="100%"
+          events={events}
+          eventContent={eventContent}
+          eventClick={handleEventClick}
+          slotLabelFormat={{
+            hour: "numeric",
+            minute: "2-digit",
+            omitZeroMinute: false,
+            hour12: false,
+          }}
+          dayHeaderFormat={{ weekday: "short" }}
+          nowIndicator={false}
+          navLinks={false}
+          expandRows={true}
+        />
+      </Box>
+
+      <ScheduleMorphOverlay phantoms={morph.phantoms} onComplete={morph.onAnimationComplete} />
+
+      <Modal
+        opened={swap.isOpen}
+        onClose={swap.closeModal}
+        title={swap.result?.requirementTitle}
+        size="lg"
+        centered
+      >
+        {swap.modalState && (
+          <SwapModalContent
+            schedule={schedule}
+            modalState={swap.modalState}
+            result={swap.result}
+            loading={swap.loading}
+            candidateOptions={swap.candidateOptions}
+            query={swap.query}
+            setQuery={swap.setQuery}
+            closeModal={swap.closeModal}
+            cache={cache}
+            professorRatings={professorRatings}
+            onSwap={onSwap}
+          />
+        )}
+      </Modal>
+    </Box>
+  );
+});

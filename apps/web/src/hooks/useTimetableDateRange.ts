@@ -30,12 +30,5 @@ export function useTimetableDateRangeFromSchedule(
     // Only auto-fill when the user hasn't provided values yet.
     if (!timetableStartDate && minStart) setTimetableStartDate(minStart);
     if (!timetableEndDate && maxEnd) setTimetableEndDate(maxEnd);
-  }, [
-    schedule,
-    timetableStartDate,
-    timetableEndDate,
-    setTimetableStartDate,
-    setTimetableEndDate,
-  ]);
+  }, [schedule, timetableStartDate, timetableEndDate, setTimetableStartDate, setTimetableEndDate]);
 }
-

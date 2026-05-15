@@ -1,14 +1,14 @@
-import type { ProgramRequirement } from '../dataTypes';
-import { getCourseCredits, normalizeCourseCode } from '../utils/courseUtils';
-import type { RequirementContext } from './context';
-import type { ProcessOptions, ProcessResult, RequirementWithStatus } from './types';
-import { resolveDisciplineElective, resolveElectiveCandidates } from './utils';
+import type { ProgramRequirement } from "../dataTypes";
+import { getCourseCredits, normalizeCourseCode } from "../utils/courseUtils";
+import type { RequirementContext } from "./context";
+import type { ProcessOptions, ProcessResult, RequirementWithStatus } from "./types";
+import { resolveDisciplineElective, resolveElectiveCandidates } from "./utils";
 
 export function processRequirement(
   ctx: RequirementContext,
   req: ProgramRequirement,
   path: string,
-  opts: ProcessOptions = {}
+  opts: ProcessOptions = {},
 ): { result: ProcessResult; node: RequirementWithStatus } {
   const dryRun = opts.dryRun ?? false;
   const forceRequirementId = opts.forceRequirementId ?? false;
@@ -16,15 +16,15 @@ export function processRequirement(
   const requirementId = forceRequirementId || !dryRun ? reqId : undefined;
 
   switch (req.type) {
-    case 'section': {
+    case "section": {
       return {
         result: { satisfied: true, creditsUsed: 0, coursesUsed: [] },
         node: { ...ctx.toStatusBase(req), complete: true, satisfiedBy: [], options: [] },
       };
     }
 
-    case 'course':
-    case 'or_course': {
+    case "course":
+    case "or_course": {
       const code = req.code ? normalizeCourseCode(req.code) : null;
       if (!code) {
         return {
@@ -74,7 +74,7 @@ export function processRequirement(
       };
     }
 
-    case 'and': {
+    case "and": {
       if (!req.options?.length) {
         return {
           result: { satisfied: true, creditsUsed: 0, coursesUsed: [] },
@@ -86,7 +86,10 @@ export function processRequirement(
       let allSatisfied = true;
       const childNodes: RequirementWithStatus[] = [];
       for (let i = 0; i < req.options.length; i++) {
-        const { result: r, node } = processRequirement(ctx, req.options[i], `${path}-${i}`, { ...opts, forceRequirementId: true });
+        const { result: r, node } = processRequirement(ctx, req.options[i], `${path}-${i}`, {
+          ...opts,
+          forceRequirementId: true,
+        });
         totalCredits += r.creditsUsed;
         allCoursesUsed.push(...r.coursesUsed);
         if (!r.satisfied) allSatisfied = false;
@@ -107,7 +110,7 @@ export function processRequirement(
       };
     }
 
-    case 'or_group': {
+    case "or_group": {
       if (!req.options?.length) {
         return {
           result: { satisfied: true, creditsUsed: 0, coursesUsed: [] },
@@ -127,11 +130,15 @@ export function processRequirement(
           forceRequirementId: true,
         });
         orChildNodes.push(node);
-        if (opt.type === 'course' && opt.code) {
+        if (opt.type === "course" && opt.code) {
           allCandidates.push(ctx.cache.getCourse(opt.code)?.code ?? opt.code);
-        } else if (opt.type === 'discipline_elective' && opt.disciplineLevels?.length) {
+        } else if (opt.type === "discipline_elective" && opt.disciplineLevels?.length) {
           allCandidates.push(
-            ...resolveDisciplineElective(ctx.cache, opt.disciplineLevels[0].discipline, opt.disciplineLevels[0].levels)
+            ...resolveDisciplineElective(
+              ctx.cache,
+              opt.disciplineLevels[0].discipline,
+              opt.disciplineLevels[0].levels,
+            ),
           );
         }
       }
@@ -140,7 +147,7 @@ export function processRequirement(
         if (!dryRun && selectedIdx === undefined) {
           ctx.remaining.push({
             requirementId: reqId,
-            type: 'or_group',
+            type: "or_group",
             title: req.title,
             candidateCourses: [...new Set(allCandidates)],
             creditsNeeded: req.credits,
@@ -172,17 +179,22 @@ export function processRequirement(
       };
     }
 
-    case 'group': {
+    case "group": {
       const creditsNeeded = req.credits ?? 0;
       const options = req.options ?? [];
       const courseCodes = options.flatMap((o) =>
-        o.type === 'course' && o.code ? [ctx.cache.getCourse(o.code)?.code ?? o.code] : []
+        o.type === "course" && o.code ? [ctx.cache.getCourse(o.code)?.code ?? o.code] : [],
       );
       const electiveOptions = options.filter(
-        (o) => o.type === 'discipline_elective' || o.type === 'elective' || o.type === 'faculty_elective' || o.type === 'free_elective' || o.type === 'non_discipline_elective'
+        (o) =>
+          o.type === "discipline_elective" ||
+          o.type === "elective" ||
+          o.type === "faculty_elective" ||
+          o.type === "free_elective" ||
+          o.type === "non_discipline_elective",
       );
       const electiveCandidates = electiveOptions.flatMap((o) =>
-        resolveElectiveCandidates(ctx.cache, o, creditsNeeded)
+        resolveElectiveCandidates(ctx.cache, o, creditsNeeded),
       );
       const allCandidates = [...new Set([...courseCodes, ...electiveCandidates])];
 
@@ -192,7 +204,7 @@ export function processRequirement(
       if (!dryRun && requirementId) {
         ctx.remaining.push({
           requirementId,
-          type: 'group',
+          type: "group",
           title: req.title,
           candidateCourses: allCandidates,
           creditsNeeded: remainingCredits,
@@ -200,7 +212,10 @@ export function processRequirement(
           satisfiedBy: coursesUsed,
         });
       }
-      const childNodes = req.options?.map((o, i) => processRequirement(ctx, o, `${path}-${i}`, { dryRun: true }).node) ?? [];
+      const childNodes =
+        req.options?.map(
+          (o, i) => processRequirement(ctx, o, `${path}-${i}`, { dryRun: true }).node,
+        ) ?? [];
       return {
         result: { satisfied: false, creditsUsed: 0, coursesUsed },
         node: {
@@ -216,14 +231,15 @@ export function processRequirement(
       };
     }
 
-    case 'options_group': {
+    case "options_group": {
       if (!req.options?.length) {
         return {
           result: { satisfied: true, creditsUsed: 0, coursesUsed: [] },
           node: { ...ctx.toStatusBase(req), complete: true, satisfiedBy: [], options: [] },
         };
       }
-      const selectedIdx = requirementId != null ? ctx.selectedOptionsPerRequirement[requirementId] : undefined;
+      const selectedIdx =
+        requirementId != null ? ctx.selectedOptionsPerRequirement[requirementId] : undefined;
 
       const optNodes: RequirementWithStatus[] = [];
       for (let i = 0; i < req.options.length; i++) {
@@ -247,13 +263,17 @@ export function processRequirement(
       };
     }
 
-    case 'pick': {
+    case "pick": {
       const creditsNeeded = req.credits ?? 3;
       const options = req.options ?? [];
       const allCandidates = options.flatMap((o) => {
-        if (o.type === 'course' && o.code) return [ctx.cache.getCourse(o.code)?.code ?? o.code];
-        if (o.type === 'discipline_elective' && o.disciplineLevels?.length) {
-          return resolveDisciplineElective(ctx.cache, o.disciplineLevels[0].discipline, o.disciplineLevels[0].levels);
+        if (o.type === "course" && o.code) return [ctx.cache.getCourse(o.code)?.code ?? o.code];
+        if (o.type === "discipline_elective" && o.disciplineLevels?.length) {
+          return resolveDisciplineElective(
+            ctx.cache,
+            o.disciplineLevels[0].discipline,
+            o.disciplineLevels[0].levels,
+          );
         }
         return [];
       });
@@ -265,14 +285,16 @@ export function processRequirement(
       if (!dryRun && requirementId) {
         ctx.remaining.push({
           requirementId,
-          type: 'pick',
+          type: "pick",
           title: req.title,
           candidateCourses: unique,
           creditsNeeded: remaining,
           satisfiedBy: coursesUsed,
         });
       }
-      const childNodes = options.map((o, i) => processRequirement(ctx, o, `${path}-${i}`, { dryRun: true }).node);
+      const childNodes = options.map(
+        (o, i) => processRequirement(ctx, o, `${path}-${i}`, { dryRun: true }).node,
+      );
       return {
         result: { satisfied: false, creditsUsed: 0, coursesUsed },
         node: {
@@ -287,11 +309,11 @@ export function processRequirement(
       };
     }
 
-    case 'elective':
-    case 'discipline_elective':
-    case 'faculty_elective':
-    case 'free_elective':
-    case 'non_discipline_elective': {
+    case "elective":
+    case "discipline_elective":
+    case "faculty_elective":
+    case "free_elective":
+    case "non_discipline_elective": {
       const creditsNeeded = req.credits ?? 3;
       const candidates = resolveElectiveCandidates(ctx.cache, req, creditsNeeded);
 

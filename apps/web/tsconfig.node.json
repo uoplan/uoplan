@@ -9,7 +9,5 @@
     "skipLibCheck": true,
     "target": "ES2022"
   },
-  "include": [
-    "../../eslint.config.ts",
-  ]
+  "include": ["../../eslint.config.ts"]
 }

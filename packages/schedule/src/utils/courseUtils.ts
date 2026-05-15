@@ -1,4 +1,4 @@
-import type { Course } from '../dataTypes'
+import type { Course } from "../dataTypes";
 import type { DataCache } from "../dataCache";
 
 /**
@@ -19,7 +19,7 @@ export function normalizeCourseCode(code: string): string {
 export function isHonoursProject(code: string, cache: DataCache | null): boolean {
   if (!cache) return false;
   const course = cache.getCourse(code);
-  return course?.code.endsWith('900') ?? false;
+  return course?.code.endsWith("900") ?? false;
 }
 
 /**
@@ -86,7 +86,7 @@ export function isOptCourse(code: string): boolean {
 
 /**
  * Check if a course is a non-degree mandatory course (e.g., ethics).
- * These courses are required for all uOttawa students but don't count 
+ * These courses are required for all uOttawa students but don't count
  * towards degree requirements and are not in the catalogue.
  * Currently includes:
  * - ITD 1100: Ethics in Engineering
@@ -94,7 +94,7 @@ export function isOptCourse(code: string): boolean {
  */
 export function isNonDegreeCourse(code: string): boolean {
   const normalized = normalizeCourseCode(code);
-  return normalized === 'ITD 1100' || normalized === 'ITD 1500';
+  return normalized === "ITD 1100" || normalized === "ITD 1500";
 }
 
 /**
@@ -104,7 +104,7 @@ export function isNonDegreeCourse(code: string): boolean {
 export function formatCourseWithTitle(
   code: string,
   cache: DataCache | null,
-  separator: string = " - "
+  separator: string = " - ",
 ): string {
   const course = cache?.getCourse(code);
   const title = course?.title?.trim();

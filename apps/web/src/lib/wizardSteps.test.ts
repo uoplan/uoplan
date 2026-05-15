@@ -124,10 +124,20 @@ describe("skipped optional steps", () => {
   });
 
   it("skippedWizardStepIsPassed when furthest reaches the next step", () => {
-    expect(skippedWizardStepIsPassed(WizardStep.Options, WizardStep.Assign, true, false)).toBe(false);
-    expect(skippedWizardStepIsPassed(WizardStep.Options, WizardStep.Generate, true, false)).toBe(false);
-    expect(skippedWizardStepIsPassed(WizardStep.Options, WizardStep.Generate, false, false)).toBe(true);
-    expect(skippedWizardStepIsPassed(WizardStep.Assign, WizardStep.Assign, false, false)).toBe(false);
-    expect(skippedWizardStepIsPassed(WizardStep.Assign, WizardStep.Generate, false, false)).toBe(true);
+    expect(skippedWizardStepIsPassed(WizardStep.Options, WizardStep.Assign, true, false)).toBe(
+      false,
+    );
+    expect(skippedWizardStepIsPassed(WizardStep.Options, WizardStep.Generate, true, false)).toBe(
+      false,
+    );
+    expect(skippedWizardStepIsPassed(WizardStep.Options, WizardStep.Generate, false, false)).toBe(
+      true,
+    );
+    expect(skippedWizardStepIsPassed(WizardStep.Assign, WizardStep.Assign, false, false)).toBe(
+      false,
+    );
+    expect(skippedWizardStepIsPassed(WizardStep.Assign, WizardStep.Generate, false, false)).toBe(
+      true,
+    );
   });
 });

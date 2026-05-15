@@ -1,23 +1,23 @@
-import fs from 'fs/promises';
-import path from 'path';
-import * as cheerio from 'cheerio';
-import pLimit from 'p-limit';
-import { type Got, got } from 'got';
-import { CookieJar } from 'tough-cookie';
-import { SCRAPER_DATA_DIR } from './dataPaths.ts';
+import fs from "fs/promises";
+import path from "path";
+import * as cheerio from "cheerio";
+import pLimit from "p-limit";
+import { type Got, got } from "got";
+import { CookieJar } from "tough-cookie";
+import { SCRAPER_DATA_DIR } from "./dataPaths.ts";
 import {
   buildGradeLookups,
   enrichSchedulesPayload,
   formatGradeEnrichmentLine,
   type GradeLookups,
-} from './enrichSchedulesWithGrades.ts';
+} from "./enrichSchedulesWithGrades.ts";
 
 const BASE_URL =
-  'https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL';
-const HTML_CACHE_DIR = '.cache/course-search-html';
+  "https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL";
+const HTML_CACHE_DIR = ".cache/course-search-html";
 const MAX_CONCURRENCY = 20;
-const USE_CACHE_ONLY = process.argv.includes('use-cache');
-const WRITE_CACHE = process.argv.includes('write-cache');
+const USE_CACHE_ONLY = process.argv.includes("use-cache");
+const WRITE_CACHE = process.argv.includes("write-cache");
 
 function getErrorMessage(err: unknown): string {
   return err instanceof Error ? err.message : String(err);
@@ -35,7 +35,7 @@ interface ParsedCourseCode {
   code: string;
 }
 
-type DayOfWeek = 'Mo' | 'Tu' | 'We' | 'Th' | 'Fr' | 'Sa' | 'Su';
+type DayOfWeek = "Mo" | "Tu" | "We" | "Th" | "Fr" | "Sa" | "Su";
 
 interface MeetingTime {
   day: DayOfWeek;
@@ -76,20 +76,20 @@ interface ClientInfo {
 }
 
 const DAY_MAP: Record<string, DayOfWeek> = {
-  Mo: 'Mo',
-  Mon: 'Mo',
-  Tu: 'Tu',
-  Tue: 'Tu',
-  We: 'We',
-  Wed: 'We',
-  Th: 'Th',
-  Thu: 'Th',
-  Fr: 'Fr',
-  Fri: 'Fr',
-  Sa: 'Sa',
-  Sat: 'Sa',
-  Su: 'Su',
-  Sun: 'Su',
+  Mo: "Mo",
+  Mon: "Mo",
+  Tu: "Tu",
+  Tue: "Tu",
+  We: "We",
+  Wed: "We",
+  Th: "Th",
+  Thu: "Th",
+  Fr: "Fr",
+  Fri: "Fr",
+  Sa: "Sa",
+  Sat: "Sa",
+  Su: "Su",
+  Sun: "Su",
 };
 
 function parseTimeToMinutes(time: string): number | null {
@@ -107,7 +107,10 @@ function parseMeetingDates(text: string): MeetingDateRange | null {
   // Store as local ET dates (no offset) so consumers can combine with times using the ET timezone.
   const startDate = m[1];
   const endDate = m[2];
-  if (Number.isNaN(Date.parse(`${startDate}T00:00:00Z`)) || Number.isNaN(Date.parse(`${endDate}T00:00:00Z`))) {
+  if (
+    Number.isNaN(Date.parse(`${startDate}T00:00:00Z`)) ||
+    Number.isNaN(Date.parse(`${endDate}T00:00:00Z`))
+  ) {
     return null;
   }
   return [startDate, endDate];
@@ -142,14 +145,14 @@ function getCatalogueYearForTerm(termName: string): number {
   const m = termName.match(/(\d{4})/);
   if (!m) throw new Error(`Cannot extract year from term name: ${termName}`);
   const year = parseInt(m[1], 10);
-  return termName.toLowerCase().includes('fall') ? year : year - 1;
+  return termName.toLowerCase().includes("fall") ? year : year - 1;
 }
 
 async function loadCatalogue(year: number): Promise<ParsedCourseCode[]> {
-  const raw = await fs.readFile(path.join(SCRAPER_DATA_DIR, `catalogue.${year}.json`), 'utf-8');
+  const raw = await fs.readFile(path.join(SCRAPER_DATA_DIR, `catalogue.${year}.json`), "utf-8");
   const data = JSON.parse(raw) as { courses?: CatalogueCourse[] };
   if (!Array.isArray(data.courses)) {
-    throw new Error('catalogue.json does not contain a courses array');
+    throw new Error("catalogue.json does not contain a courses array");
   }
 
   //const mat1300 = data.courses.find(c => c.code === 'MAT 1300');
@@ -161,7 +164,7 @@ async function loadCatalogue(year: number): Promise<ParsedCourseCode[]> {
 
   const unique = new Map<string, ParsedCourseCode>();
   for (const course of data.courses) {
-    if (!course || typeof course.code !== 'string') continue;
+    if (!course || typeof course.code !== "string") continue;
     const parsed = parseCourseCode(course.code);
     if (!parsed) continue;
     const key = parsed.code;
@@ -182,25 +185,23 @@ async function createClient(): Promise<ClientInfo> {
   });
 
   // Initial GET to establish session and retrieve ICSID (with a few retries for transient pages)
-  let lastHtml = '';
+  let lastHtml = "";
   for (let attempt = 1; attempt <= 10; attempt++) {
-     
     const res = await client.get(BASE_URL);
     const html = res.body;
     lastHtml = html;
     const $ = cheerio.load(html);
-    const icsid = $('#ICSID').attr('value');
+    const icsid = $("#ICSID").attr("value");
     if (icsid) {
-      const icStateNum = ($('#ICStateNum').attr('value')) || '1';
-      const dataLang = ($('#\\#ICDataLang').val() as string | undefined) || 'ENG';
+      const icStateNum = $("#ICStateNum").attr("value") || "1";
+      const dataLang = ($("#\\#ICDataLang").val() as string | undefined) || "ENG";
       return { client, icsid, dataLang, icStateNum };
     }
   }
 
-  const preview = lastHtml.slice(0, 400).replace(/\s+/g, ' ');
+  const preview = lastHtml.slice(0, 400).replace(/\s+/g, " ");
   throw new Error(`Failed to find ICSID on initial class search page; first 400 chars: ${preview}`);
 }
-
 
 function buildSearchBody(args: {
   icsid: string;
@@ -216,83 +217,83 @@ function buildSearchBody(args: {
   const params = new URLSearchParams();
 
   // Core PeopleSoft navigation / panel fields (non-AJAX, full page response)
-  params.set('ICType', 'Panel');
-  params.set('ICElementNum', '0');
-  params.set('ICStateNum', icStateNum);
-  params.set('ICAction', 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH');
-  params.set('ICModelCancel', '0');
-  params.set('ICXPos', '0');
-  params.set('ICYPos', '0');
-  params.set('ResponsetoDiffFrame', '-1');
-  params.set('TargetFrameName', 'None');
-  params.set('FacetPath', 'None');
-  params.set('PrmtTbl', '');
-  params.set('PrmtTbl_fn', '');
-  params.set('PrmtTbl_fv', '');
-  params.set('TA_SkipFldNms', '');
-  params.set('ICFocus', '');
-  params.set('ICSaveWarningFilter', '0');
-  params.set('ICChanged', '-1');
-  params.set('ICSkipPending', '0');
-  params.set('ICAutoSave', '0');
-  params.set('ICResubmit', '0');
-  params.set('ICSID', icsid);
-  params.set('ICActionPrompt', 'false');
-  params.set('ICTypeAheadID', '');
-  params.set('ICBcDomData', '');
-  params.set('ICPanelName', '');
-  params.set('ICFind', '');
-  params.set('ICAddCount', '');
-  params.set('ICAppClsData', '');
+  params.set("ICType", "Panel");
+  params.set("ICElementNum", "0");
+  params.set("ICStateNum", icStateNum);
+  params.set("ICAction", "CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH");
+  params.set("ICModelCancel", "0");
+  params.set("ICXPos", "0");
+  params.set("ICYPos", "0");
+  params.set("ResponsetoDiffFrame", "-1");
+  params.set("TargetFrameName", "None");
+  params.set("FacetPath", "None");
+  params.set("PrmtTbl", "");
+  params.set("PrmtTbl_fn", "");
+  params.set("PrmtTbl_fv", "");
+  params.set("TA_SkipFldNms", "");
+  params.set("ICFocus", "");
+  params.set("ICSaveWarningFilter", "0");
+  params.set("ICChanged", "-1");
+  params.set("ICSkipPending", "0");
+  params.set("ICAutoSave", "0");
+  params.set("ICResubmit", "0");
+  params.set("ICSID", icsid);
+  params.set("ICActionPrompt", "false");
+  params.set("ICTypeAheadID", "");
+  params.set("ICBcDomData", "");
+  params.set("ICPanelName", "");
+  params.set("ICFind", "");
+  params.set("ICAddCount", "");
+  params.set("ICAppClsData", "");
 
   // Language / term
-  params.set('#ICDataLang', dataLang || 'ENG');
+  params.set("#ICDataLang", dataLang || "ENG");
   if (termId) {
-    params.set('CLASS_SRCH_WRK2_STRM$35$', termId);
+    params.set("CLASS_SRCH_WRK2_STRM$35$", termId);
   }
 
   // Course criteria
-  params.set('SSR_CLSRCH_WRK_SUBJECT$0', subject);
-  params.set('SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$0', 'E'); // course number "exact match"
-  params.set('SSR_CLSRCH_WRK_CATALOG_NBR$0', catalogNbr);
+  params.set("SSR_CLSRCH_WRK_SUBJECT$0", subject);
+  params.set("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$0", "E"); // course number "exact match"
+  params.set("SSR_CLSRCH_WRK_CATALOG_NBR$0", catalogNbr);
 
   // Keep other fields in a neutral state to mimic the real form as closely as possible.
-  params.set('SSR_CLSRCH_WRK_ACAD_CAREER$0', '');
+  params.set("SSR_CLSRCH_WRK_ACAD_CAREER$0", "");
   // Open only flag unchecked (send both variants as "N"/empty)
-  params.set('SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$0', 'N');
-  params.set('SSR_CLSRCH_WRK_SSR_OPEN_ONLY$0', 'N');
-  params.set('UO_PUB_SRCH_WRK_ACAD_GROUP$0', '');
-  params.set('SSR_CLSRCH_WRK_DESCR$0', '');
-  params.set('UO_PUB_SRCH_WRK_UO_LNG_FR$chk$0', 'N');
-  params.set('UO_PUB_SRCH_WRK_UO_LNG_EN$chk$0', 'N');
-  params.set('UO_PUB_SRCH_WRK_UO_LNG_OT$chk$0', 'N');
-  params.set('UO_PUB_SRCH_WRK_UO_LNG_BI$chk$0', 'N');
-  params.set('UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_01$chk$0', 'N');
-  params.set('UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_02$chk$0', 'N');
-  params.set('UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_03$chk$0', 'N');
-  params.set('UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_04$chk$0', 'N');
-  params.set('UO_PUB_SRCH_WRK_GRADUATED_TBL_CD$chk$0', 'N');
-  params.set('SSR_CLSRCH_WRK_SSR_START_TIME_OPR$0', 'GE');
-  params.set('SSR_CLSRCH_WRK_MEETING_TIME_START$0', '');
-  params.set('SSR_CLSRCH_WRK_SSR_END_TIME_OPR$0', 'LE');
-  params.set('SSR_CLSRCH_WRK_MEETING_TIME_END$0', '');
-  params.set('SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$0', 'I');
-  params.set('SSR_CLSRCH_WRK_MON$chk$0', '');
-  params.set('SSR_CLSRCH_WRK_TUES$chk$0', '');
-  params.set('SSR_CLSRCH_WRK_WED$chk$0', '');
-  params.set('SSR_CLSRCH_WRK_THURS$chk$0', '');
-  params.set('SSR_CLSRCH_WRK_FRI$chk$0', '');
-  params.set('SSR_CLSRCH_WRK_SAT$chk$0', '');
-  params.set('SSR_CLSRCH_WRK_SUN$chk$0', '');
-  params.set('SSR_CLSRCH_WRK_SSR_EXACT_MATCH2$0', 'B');
-  params.set('SSR_CLSRCH_WRK_LAST_NAME$0', '');
-  params.set('SSR_CLSRCH_WRK_SSR_COMPONENT$0', '');
-  params.set('SSR_CLSRCH_WRK_SESSION_CODE$0', '');
-  params.set('SSR_CLSRCH_WRK_INSTRUCTION_MODE$0', '');
-  params.set('SSR_CLSRCH_WRK_LOCATION$0', virtual ? 'ZZVIRTL' : '');
-  params.set('UO_PUB_SRCH_WRK_UO_ONLINE_COURSES$chk$0', 'N');
-  params.set('UO_PUB_SRCH_WRK_UO_AUDITOR_PERMITD$chk$0', 'N');
-  params.set('UO_PUB_SRCH_WRK_UO_UOTTA_CARLETON$chk$0', 'N');
+  params.set("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$0", "N");
+  params.set("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$0", "N");
+  params.set("UO_PUB_SRCH_WRK_ACAD_GROUP$0", "");
+  params.set("SSR_CLSRCH_WRK_DESCR$0", "");
+  params.set("UO_PUB_SRCH_WRK_UO_LNG_FR$chk$0", "N");
+  params.set("UO_PUB_SRCH_WRK_UO_LNG_EN$chk$0", "N");
+  params.set("UO_PUB_SRCH_WRK_UO_LNG_OT$chk$0", "N");
+  params.set("UO_PUB_SRCH_WRK_UO_LNG_BI$chk$0", "N");
+  params.set("UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_01$chk$0", "N");
+  params.set("UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_02$chk$0", "N");
+  params.set("UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_03$chk$0", "N");
+  params.set("UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_04$chk$0", "N");
+  params.set("UO_PUB_SRCH_WRK_GRADUATED_TBL_CD$chk$0", "N");
+  params.set("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$0", "GE");
+  params.set("SSR_CLSRCH_WRK_MEETING_TIME_START$0", "");
+  params.set("SSR_CLSRCH_WRK_SSR_END_TIME_OPR$0", "LE");
+  params.set("SSR_CLSRCH_WRK_MEETING_TIME_END$0", "");
+  params.set("SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$0", "I");
+  params.set("SSR_CLSRCH_WRK_MON$chk$0", "");
+  params.set("SSR_CLSRCH_WRK_TUES$chk$0", "");
+  params.set("SSR_CLSRCH_WRK_WED$chk$0", "");
+  params.set("SSR_CLSRCH_WRK_THURS$chk$0", "");
+  params.set("SSR_CLSRCH_WRK_FRI$chk$0", "");
+  params.set("SSR_CLSRCH_WRK_SAT$chk$0", "");
+  params.set("SSR_CLSRCH_WRK_SUN$chk$0", "");
+  params.set("SSR_CLSRCH_WRK_SSR_EXACT_MATCH2$0", "B");
+  params.set("SSR_CLSRCH_WRK_LAST_NAME$0", "");
+  params.set("SSR_CLSRCH_WRK_SSR_COMPONENT$0", "");
+  params.set("SSR_CLSRCH_WRK_SESSION_CODE$0", "");
+  params.set("SSR_CLSRCH_WRK_INSTRUCTION_MODE$0", "");
+  params.set("SSR_CLSRCH_WRK_LOCATION$0", virtual ? "ZZVIRTL" : "");
+  params.set("UO_PUB_SRCH_WRK_UO_ONLINE_COURSES$chk$0", "N");
+  params.set("UO_PUB_SRCH_WRK_UO_AUDITOR_PERMITD$chk$0", "N");
+  params.set("UO_PUB_SRCH_WRK_UO_UOTTA_CARLETON$chk$0", "N");
 
   return params.toString();
 }
@@ -305,7 +306,7 @@ function parseScheduleHtml(
   const $ = cheerio.load(html);
 
   const headerAnchor = $('a[id^="SSR_CLSRSLT_WRK_GROUPBOX2$"]').first();
-  const anchorTitle = headerAnchor.attr('title') ?? '';
+  const anchorTitle = headerAnchor.attr("title") ?? "";
   let title: string | null = null;
   const titleMatch = anchorTitle.match(/\s-\s(.+)$/);
   if (titleMatch) {
@@ -319,41 +320,65 @@ function parseScheduleHtml(
     rows.each((__, row) => {
       const $row = $(row);
       const sectionSpan = $row.find('span[id^="MTG_CLASSNAME$"]').first();
-      const sectionHtml = sectionSpan.html() || '';
+      const sectionHtml = sectionSpan.html() || "";
       const sectionLines = sectionHtml
         .split(/<br\s*\/?>/i)
-        .map(line => line.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim())
+        .map((line) =>
+          line
+            .replace(/<[^>]*>/g, "")
+            .replace(/\s+/g, " ")
+            .trim(),
+        )
         .filter(Boolean);
-      const rawSection = sectionLines.join(' ');
+      const rawSection = sectionLines.join(" ");
 
       const daysSpan = $row.find('span#MTG_DAYTIME\\$0, span[id^="MTG_DAYTIME$"]').first();
-      const daysHtml = daysSpan.html() || '';
+      const daysHtml = daysSpan.html() || "";
       const dayLines = daysHtml
         .split(/<br\s*\/?>/i)
-        .map(line => line.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim())
+        .map((line) =>
+          line
+            .replace(/<[^>]*>/g, "")
+            .replace(/\s+/g, " ")
+            .trim(),
+        )
         .filter(Boolean);
 
       const instrSpan = $row.find('span#MTG_INSTR\\$0, span[id^="MTG_INSTR$"]').first();
-      const instrHtml = instrSpan.html() || '';
+      const instrHtml = instrSpan.html() || "";
       const instructorParts = instrHtml
         .split(/<br\s*\/?>/i)
-        .map(line => line.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim())
+        .map((line) =>
+          line
+            .replace(/<[^>]*>/g, "")
+            .replace(/\s+/g, " ")
+            .trim(),
+        )
         .filter(Boolean);
 
       const datesSpan = $row.find('span#MTG_TOPIC\\$0, span[id^="MTG_TOPIC$"]').first();
-      const datesHtml = datesSpan.html() || '';
+      const datesHtml = datesSpan.html() || "";
       const dateLines = datesHtml
         .split(/<br\s*\/?>/i)
-        .map(line => line.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim())
+        .map((line) =>
+          line
+            .replace(/<[^>]*>/g, "")
+            .replace(/\s+/g, " ")
+            .trim(),
+        )
         .filter(Boolean);
-      const datesText = dateLines[0] || '';
+      const datesText = dateLines[0] || "";
 
       const statusAlt =
-        $row
-          .find('div[id^="win0divDERIVED_CLSRCH_SSR_STATUS_LONG$"] img')
-          .attr('alt') || null;
+        $row.find('div[id^="win0divDERIVED_CLSRCH_SSR_STATUS_LONG$"] img').attr("alt") || null;
 
-      if (!rawSection && dayLines.length === 0 && instructorParts.length === 0 && !datesText && !statusAlt) {
+      if (
+        !rawSection &&
+        dayLines.length === 0 &&
+        instructorParts.length === 0 &&
+        !datesText &&
+        !statusAlt
+      ) {
         return;
       }
 
@@ -373,9 +398,9 @@ function parseScheduleHtml(
 
       const meetingDates = datesText ? parseMeetingDates(datesText) : null;
 
-      const compKey = component || 'UNKNOWN';
+      const compKey = component || "UNKNOWN";
       const section: ComponentSection = {
-        section: rawSection || sectionLines[0] || '',
+        section: rawSection || sectionLines[0] || "",
         sectionCode,
         component,
         session,
@@ -390,10 +415,7 @@ function parseScheduleHtml(
     });
   });
 
-  const totalSections = Object.values(components).reduce(
-    (sum, arr) => sum + arr.length,
-    0,
-  );
+  const totalSections = Object.values(components).reduce((sum, arr) => sum + arr.length, 0);
   if (totalSections === 0) {
     return null;
   }
@@ -403,7 +425,7 @@ function parseScheduleHtml(
     catalogNumber: catalogNbr,
     courseCode: `${subject} ${catalogNbr}`,
     title,
-    timeZone: 'America/Toronto',
+    timeZone: "America/Toronto",
     components,
   };
 
@@ -415,13 +437,10 @@ function timeKey(t: MeetingTime): string {
 }
 
 function sectionKey(componentKey: string, section: ComponentSection): string {
-  return `${componentKey}|${section.sectionCode ?? ''}|${section.section}`;
+  return `${componentKey}|${section.sectionCode ?? ""}|${section.section}`;
 }
 
-function mergeVirtualIntoBase(
-  base: CourseSchedule,
-  virtualOnly: CourseSchedule,
-): CourseSchedule {
+function mergeVirtualIntoBase(base: CourseSchedule, virtualOnly: CourseSchedule): CourseSchedule {
   // base is treated as "non-virtual"; this function flips the relevant meeting-times to virtual.
   for (const [compKey, vSections] of Object.entries(virtualOnly.components)) {
     if (!base.components[compKey]) base.components[compKey] = [];
@@ -467,23 +486,23 @@ async function fetchScheduleForCourseWithVirtual(
   virtual: boolean,
 ): Promise<CourseSchedule | null> {
   const { client, dataLang } = clientInfo;
-  const safeSubject = course.subject.replace(/[^A-Za-z0-9]+/g, '_');
-  const safeCatalog = course.catalogNbr.replace(/[^A-Za-z0-9]+/g, '_');
-  const cacheFilename = `${safeSubject}-${safeCatalog}-${termId}-${virtual ? 'virtual' : 'nonvirtual'}.html`;
+  const safeSubject = course.subject.replace(/[^A-Za-z0-9]+/g, "_");
+  const safeCatalog = course.catalogNbr.replace(/[^A-Za-z0-9]+/g, "_");
+  const cacheFilename = `${safeSubject}-${safeCatalog}-${termId}-${virtual ? "virtual" : "nonvirtual"}.html`;
   const cachePath = path.join(HTML_CACHE_DIR, cacheFilename);
 
   if (USE_CACHE_ONLY) {
     try {
-      const cachedHtml = await fs.readFile(cachePath, 'utf-8');
+      const cachedHtml = await fs.readFile(cachePath, "utf-8");
 
       // Mirror the "no results" detection we do for live responses.
       const bannerText = cheerio
-        .load(cachedHtml)('span.PSERRORTEXT, div.PSERRORTEXT, span.SSSMSGALERTTEXT')
+        .load(cachedHtml)("span.PSERRORTEXT, div.PSERRORTEXT, span.SSSMSGALERTTEXT")
         .text()
-        .replace(/\s+/g, ' ')
+        .replace(/\s+/g, " ")
         .trim()
         .toLowerCase();
-      if (bannerText.includes('no classes') || bannerText.includes('no results')) {
+      if (bannerText.includes("no classes") || bannerText.includes("no results")) {
         return null;
       }
 
@@ -509,9 +528,9 @@ async function fetchScheduleForCourseWithVirtual(
     const initRes = await client.get(BASE_URL);
     try {
       const $init = cheerio.load(initRes.body);
-      const pageIcsid = $init('#ICSID').attr('value');
+      const pageIcsid = $init("#ICSID").attr("value");
       if (pageIcsid) clientInfo.icsid = pageIcsid;
-      const pageState = $init('#ICStateNum').attr('value');
+      const pageState = $init("#ICStateNum").attr("value");
       if (pageState) clientInfo.icStateNum = pageState;
     } catch {
       // Ignore and fall back to previously known state.
@@ -529,7 +548,7 @@ async function fetchScheduleForCourseWithVirtual(
 
     const res = await client.post(BASE_URL, {
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        "Content-Type": "application/x-www-form-urlencoded",
       },
       body,
     });
@@ -537,11 +556,11 @@ async function fetchScheduleForCourseWithVirtual(
     // Update session state (ICSID / ICStateNum) from the response for subsequent requests.
     try {
       const $ = cheerio.load(res.body);
-      const newIcsid = $('#ICSID').attr('value');
+      const newIcsid = $("#ICSID").attr("value");
       if (newIcsid) {
         clientInfo.icsid = newIcsid;
       }
-      const newStateNum = $('#ICStateNum').attr('value');
+      const newStateNum = $("#ICStateNum").attr("value");
       if (newStateNum) {
         clientInfo.icStateNum = newStateNum;
       }
@@ -552,7 +571,7 @@ async function fetchScheduleForCourseWithVirtual(
     // Persist raw HTML per-course for debugging / verification.
     try {
       await fs.mkdir(HTML_CACHE_DIR, { recursive: true });
-      if (WRITE_CACHE) await fs.writeFile(cachePath, res.body, 'utf-8');
+      if (WRITE_CACHE) await fs.writeFile(cachePath, res.body, "utf-8");
     } catch (err: unknown) {
       console.error(
         `Warning: failed to write HTML cache for ${course.subject} ${course.catalogNbr}:`,
@@ -563,10 +582,9 @@ async function fetchScheduleForCourseWithVirtual(
     // Detect login / redirect pages (not real search or results pages).
     const lowerHtml = res.body.toLowerCase();
     const looksLikeLogin =
-      lowerHtml.includes('sign in to peoplesoft') ||
-      lowerHtml.includes('you must have cookies enabled') ||
-      (/<meta[^>]+http-equiv=['"]refresh['"]/i.test(res.body) &&
-        res.body.includes('CAMPUS_URL='));
+      lowerHtml.includes("sign in to peoplesoft") ||
+      lowerHtml.includes("you must have cookies enabled") ||
+      (/<meta[^>]+http-equiv=['"]refresh['"]/i.test(res.body) && res.body.includes("CAMPUS_URL="));
     if (looksLikeLogin) {
       console.error(
         `Received login/redirect page instead of search results for ${course.subject} ${course.catalogNbr}. ` +
@@ -576,7 +594,7 @@ async function fetchScheduleForCourseWithVirtual(
         // Replace this session with a fresh one (new cookie jar + fresh GET).
         const newSession = await createClient();
         Object.assign(clientInfo, newSession);
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
         continue;
       }
       // On the final attempt, give up on this course but let the overall run continue.
@@ -585,12 +603,12 @@ async function fetchScheduleForCourseWithVirtual(
 
     // Check for explicit "no results" banner; if present, do not retry.
     const bannerText = cheerio
-      .load(res.body)('span.PSERRORTEXT, div.PSERRORTEXT, span.SSSMSGALERTTEXT')
+      .load(res.body)("span.PSERRORTEXT, div.PSERRORTEXT, span.SSSMSGALERTTEXT")
       .text()
-      .replace(/\s+/g, ' ')
+      .replace(/\s+/g, " ")
       .trim()
       .toLowerCase();
-    if (bannerText.includes('no classes') || bannerText.includes('no results')) {
+    if (bannerText.includes("no classes") || bannerText.includes("no results")) {
       return null;
     }
 
@@ -602,7 +620,7 @@ async function fetchScheduleForCourseWithVirtual(
     if (schedule) return schedule;
 
     if (attempt < 10) {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
   }
 
@@ -630,9 +648,9 @@ async function fetchScheduleForCourse(
 }
 
 async function tryLoadGradeLookups(): Promise<GradeLookups | null> {
-  const gradesPath = path.join(SCRAPER_DATA_DIR, 'grades.json');
+  const gradesPath = path.join(SCRAPER_DATA_DIR, "grades.json");
   try {
-    const raw = await fs.readFile(gradesPath, 'utf-8');
+    const raw = await fs.readFile(gradesPath, "utf-8");
     return buildGradeLookups(JSON.parse(raw) as unknown);
   } catch (err: unknown) {
     console.warn(
@@ -647,7 +665,7 @@ async function main(): Promise<void> {
   const onlyCatalog = process.env.ONLY_CATALOG;
   const onlyTermId = process.env.ONLY_TERM_ID;
 
-  const termsRaw = await fs.readFile(path.join(SCRAPER_DATA_DIR, 'terms.json'), 'utf-8');
+  const termsRaw = await fs.readFile(path.join(SCRAPER_DATA_DIR, "terms.json"), "utf-8");
   let terms: Term[] = (JSON.parse(termsRaw) as { terms: Term[] }).terms;
 
   if (onlyTermId) {
@@ -657,7 +675,7 @@ async function main(): Promise<void> {
     }
   }
 
-  console.log('Initializing PeopleSoft session...');
+  console.log("Initializing PeopleSoft session...");
   const clientCount = USE_CACHE_ONLY ? 1 : MAX_CONCURRENCY;
   const clientInfos: ClientInfo[] = await Promise.all(
     Array.from({ length: clientCount }, createClient),
@@ -675,7 +693,7 @@ async function main(): Promise<void> {
 
     const courses =
       onlySubject || onlyCatalog
-        ? allCourses.filter(c => {
+        ? allCourses.filter((c) => {
             if (onlySubject && c.subject !== onlySubject) return false;
             if (onlyCatalog && c.catalogNbr !== onlyCatalog) return false;
             return true;
@@ -709,9 +727,7 @@ async function main(): Promise<void> {
         } finally {
           processed += 1;
           if (processed % 50 === 0 || processed === courses.length) {
-            console.log(
-              `[${term.termId}] Processed ${processed}/${courses.length} courses...`,
-            );
+            console.log(`[${term.termId}] Processed ${processed}/${courses.length} courses...`);
           }
         }
       }),
@@ -735,16 +751,15 @@ async function main(): Promise<void> {
     }
 
     const outPath = path.join(SCRAPER_DATA_DIR, `schedules.${term.termId}.json`);
-    await fs.writeFile(outPath, JSON.stringify(output, null, 2), 'utf-8');
+    await fs.writeFile(outPath, JSON.stringify(output, null, 2), "utf-8");
     console.log(
       `Done. Saved schedules for ${results.length} courses (out of ${courses.length}) to ${path.basename(outPath)}`,
     );
   }
 }
 
-main().catch(err => {
-  console.error('Schedule scrape failed.');
+main().catch((err) => {
+  console.error("Schedule scrape failed.");
   console.error(err);
   process.exit(1);
 });
-

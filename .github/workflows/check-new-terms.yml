@@ -2,7 +2,7 @@ name: Check for new terms and notify
 
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: "0 * * * *"
   workflow_dispatch:
 
 concurrency:
@@ -151,7 +151,6 @@ jobs:
 
             sleep 30
           done
-
 
   notify:
     needs: check

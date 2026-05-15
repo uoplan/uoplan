@@ -7,10 +7,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const dataDir = resolve(__dirname, "../../scrapers/data");
 
 // Load real data
-const { terms }    = JSON.parse(readFileSync(join(dataDir, "terms.json"), "utf8"));
+const { terms } = JSON.parse(readFileSync(join(dataDir, "terms.json"), "utf8"));
 const { courses, programs } = JSON.parse(readFileSync(join(dataDir, "indices.json"), "utf8"));
 const { professors } = JSON.parse(readFileSync(join(dataDir, "ratemyprofessors.json"), "utf8"));
-
 
 const W = 1200;
 const H = 630;
@@ -18,9 +17,9 @@ const canvas = createCanvas(W, H);
 const ctx = canvas.getContext("2d");
 
 // Theme
-const BG     = "#141414";
-const DARK2  = "#1E1E1E";
-const CREAM  = "#F5F2EC";
+const BG = "#141414";
+const DARK2 = "#1E1E1E";
+const CREAM = "#F5F2EC";
 const CREAM2 = "#B8B2A6";
 const PURPLE = "#BE4BDB";
 const PURPLE_BORDER = "#6B2080";
@@ -33,11 +32,31 @@ ctx.fillRect(0, 0, W, H);
 
 // Course code watermark — right half, staggered rows
 const SAMPLE_CODES = [
-  "CSI 2110", "MAT 1320", "PHY 1121", "ENG 1100", "ECO 1102",
-  "CSI 3530", "ITI 1120", "MAT 2122", "CHM 1311", "BIO 1130",
-  "GEG 2320", "PHI 1101", "PSY 1101", "SOC 1101", "HIS 2129",
-  "CSI 4180", "MAT 3121", "PHY 2323", "ENG 2100", "ECO 2143",
-  "CSI 3540", "ITI 1121", "MAT 2362", "CHM 1321", "BIO 2133",
+  "CSI 2110",
+  "MAT 1320",
+  "PHY 1121",
+  "ENG 1100",
+  "ECO 1102",
+  "CSI 3530",
+  "ITI 1120",
+  "MAT 2122",
+  "CHM 1311",
+  "BIO 1130",
+  "GEG 2320",
+  "PHI 1101",
+  "PSY 1101",
+  "SOC 1101",
+  "HIS 2129",
+  "CSI 4180",
+  "MAT 3121",
+  "PHY 2323",
+  "ENG 2100",
+  "ECO 2143",
+  "CSI 3540",
+  "ITI 1121",
+  "MAT 2362",
+  "CHM 1321",
+  "BIO 2133",
 ];
 ctx.font = "300 13px monospace";
 ctx.fillStyle = "#FFFFFF";
@@ -159,4 +178,6 @@ ctx.fillText("Free. No account needed.", PAD + urlW + 26, FOOTER_Y);
 
 const out = join(__dirname, "../public/og-image.png");
 writeFileSync(out, canvas.toBuffer("image/png"));
-console.log(`OG image written to ${out} — ${terms.map(t => t.name).join(", ")} · ${courses.length} courses · ${programs.length} programs · ${professors.length} professors`);
+console.log(
+  `OG image written to ${out} — ${terms.map((t) => t.name).join(", ")} · ${courses.length} courses · ${programs.length} programs · ${professors.length} professors`,
+);

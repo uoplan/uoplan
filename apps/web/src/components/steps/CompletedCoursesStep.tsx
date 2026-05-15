@@ -1,9 +1,9 @@
-import { Alert, MultiSelect, Text, Stack } from '@mantine/core';
-import type { ComboboxItem } from '@mantine/core';
-import { createCourseOptions, renderCourseOption } from '../shared/CourseSelect';
-import type { DataCache } from 'schedule';
-import type { RemainingRequirement } from 'schedule';
-import { tr } from '../../i18n';
+import { Alert, MultiSelect, Text, Stack } from "@mantine/core";
+import type { ComboboxItem } from "@mantine/core";
+import { createCourseOptions, renderCourseOption } from "../shared/CourseSelect";
+import type { DataCache } from "schedule";
+import type { RemainingRequirement } from "schedule";
+import { tr } from "../../i18n";
 
 interface CompletedCoursesStepProps {
   cache: DataCache | null;
@@ -20,9 +20,7 @@ export function CompletedCoursesStep({
   onChange,
   hasProgram,
 }: CompletedCoursesStepProps) {
-  const allCandidates = [
-    ...new Set(remainingRequirements.flatMap((r) => r.candidateCourses)),
-  ];
+  const allCandidates = [...new Set(remainingRequirements.flatMap((r) => r.candidateCourses))];
   const completedSet = new Set(completedCourses);
   const availableCandidates = allCandidates.filter((c) => !completedSet.has(c));
   const options = createCourseOptions(availableCandidates, cache);
@@ -30,9 +28,7 @@ export function CompletedCoursesStep({
   if (!hasProgram) {
     return (
       <Alert color="blue" variant="light" radius={0}>
-        <Text size="sm">
-          {tr("completedCourses.selectProgramFirst")}
-        </Text>
+        <Text size="sm">{tr("completedCourses.selectProgramFirst")}</Text>
       </Alert>
     );
   }
@@ -41,8 +37,8 @@ export function CompletedCoursesStep({
     <Stack gap="md">
       <MultiSelect
         data-tour="completed-courses"
-        label={tr("completedCourses.label", )}
-        placeholder={tr("completedCourses.placeholder", )}
+        label={tr("completedCourses.label")}
+        placeholder={tr("completedCourses.placeholder")}
         data={options}
         value={completedCourses}
         onChange={onChange}
@@ -53,13 +49,11 @@ export function CompletedCoursesStep({
           const q = search.toLowerCase().trim();
           if (!q) return options;
           return (options as ComboboxItem[]).filter(
-            (o) =>
-              o.value.toLowerCase().includes(q) ||
-              o.label.toLowerCase().includes(q)
+            (o) => o.value.toLowerCase().includes(q) || o.label.toLowerCase().includes(q),
           );
         }}
         nothingFoundMessage={tr("completedCourses.notFound")}
-        description={tr("completedCourses.description", )}
+        description={tr("completedCourses.description")}
       />
     </Stack>
   );

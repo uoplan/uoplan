@@ -1,5 +1,16 @@
 import { useMemo, useRef, useState } from "react";
-import { Button, MultiSelect, NumberInput, Stack, Box, Text, Loader, Alert, Switch, type OptionsFilter } from "@mantine/core";
+import {
+  Button,
+  MultiSelect,
+  NumberInput,
+  Stack,
+  Box,
+  Text,
+  Loader,
+  Alert,
+  Switch,
+  type OptionsFilter,
+} from "@mantine/core";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { createCourseOptions, renderCourseOption } from "../shared/CourseSelect";
@@ -8,7 +19,11 @@ import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgram
 import { tr } from "../../i18n";
 import { parseTranscriptPdf, isOptCourse, normalizeCourseCode } from "schedule";
 
-export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNavigate?: () => void }) {
+export function BasicCalendarSidebarControls({
+  onBeforeNavigate,
+}: {
+  onBeforeNavigate?: () => void;
+}) {
   const {
     cache,
     basicPinnedCourses,
@@ -19,10 +34,10 @@ export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNav
     electiveLevelBuckets,
     includeClosedComponents,
     virtualSectionsOnly,
-      completedCourses,
-      indices,
-      frenchImmersionStream,
-    } = useAppStore(
+    completedCourses,
+    indices,
+    frenchImmersionStream,
+  } = useAppStore(
     useShallow((s) => ({
       cache: s.cache,
       basicPinnedCourses: s.basicPinnedCourses,
@@ -36,7 +51,7 @@ export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNav
       completedCourses: s.completedCourses,
       indices: s.indices,
       frenchImmersionStream: s.frenchImmersionStream,
-    }))
+    })),
   );
 
   const setFrenchImmersionStream = useAppStore((s) => s.setFrenchImmersionStream);
@@ -67,11 +82,18 @@ export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNav
 
     try {
       const buffer = await file.arrayBuffer();
-      const { courses: parsedCourses, frenchImmersionStreamHint } = await parseTranscriptPdf(buffer);
+      const { courses: parsedCourses, frenchImmersionStreamHint } =
+        await parseTranscriptPdf(buffer);
       const inCatalogue: string[] = [];
-      const indexedCodes = indices ? new Set(indices.courses.map(normalizeCourseCode)) : new Set<string>();
+      const indexedCodes = indices
+        ? new Set(indices.courses.map(normalizeCourseCode))
+        : new Set<string>();
       for (const code of parsedCourses) {
-        if (isOptCourse(normalizeCourseCode(code)) || cache!.getCourse(code) || indexedCodes.has(normalizeCourseCode(code))) {
+        if (
+          isOptCourse(normalizeCourseCode(code)) ||
+          cache!.getCourse(code) ||
+          indexedCodes.has(normalizeCourseCode(code))
+        ) {
           inCatalogue.push(code);
         }
       }
@@ -116,13 +138,16 @@ export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNav
   const requiredCourseOptions = useMemo(() => {
     if (!cache) return [];
     const seen = new Set<string>();
-    return cache.getAllSchedules().flatMap((sched) => {
-      const course = cache.getCourse(sched.courseCode);
-      if (!course) return [];
-      if (seen.has(course.code)) return [];
-      seen.add(course.code);
-      return [{ value: course.code, label: `${course.code} - ${course.title}` }];
-    }).sort((a, b) => a.label.localeCompare(b.label));
+    return cache
+      .getAllSchedules()
+      .flatMap((sched) => {
+        const course = cache.getCourse(sched.courseCode);
+        if (!course) return [];
+        if (seen.has(course.code)) return [];
+        seen.add(course.code);
+        return [{ value: course.code, label: `${course.code} - ${course.title}` }];
+      })
+      .sort((a, b) => a.label.localeCompare(b.label));
   }, [cache]);
 
   const requiredCoursesFilter: OptionsFilter = ({ options, search }) => {
@@ -130,7 +155,9 @@ export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNav
     return (options as { label: string; value: string }[]).filter((option) => {
       if (!option.label) return false;
       const words = option.label.toLowerCase().trim().split(" ");
-      return splittedSearch.every((searchWord) => words.some((word: string) => word.includes(searchWord)));
+      return splittedSearch.every((searchWord) =>
+        words.some((word: string) => word.includes(searchWord)),
+      );
     });
   };
 
@@ -145,7 +172,9 @@ export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNav
     return (options as { label: string; value: string }[]).filter((option) => {
       if (!option.label) return false;
       const words = option.label.toLowerCase().trim().split(" ");
-      return splittedSearch.every((searchWord) => words.some((word: string) => word.includes(searchWord)));
+      return splittedSearch.every((searchWord) =>
+        words.some((word: string) => word.includes(searchWord)),
+      );
     });
   };
 
@@ -240,7 +269,10 @@ export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNav
             color="violet"
             size="sm"
             radius={0}
-            onClick={() => { onBeforeNavigate?.(); goToPreviousSeed(); }}
+            onClick={() => {
+              onBeforeNavigate?.();
+              goToPreviousSeed();
+            }}
           >
             {tr("calendarPage.previous")}
           </Button>
@@ -249,7 +281,10 @@ export function BasicCalendarSidebarControls({ onBeforeNavigate }: { onBeforeNav
             color="violet"
             size="sm"
             radius={0}
-            onClick={() => { onBeforeNavigate?.(); goToNextSeed(); }}
+            onClick={() => {
+              onBeforeNavigate?.();
+              goToNextSeed();
+            }}
           >
             {tr("calendarPage.next")}
           </Button>

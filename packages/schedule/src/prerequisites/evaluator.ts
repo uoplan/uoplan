@@ -1,7 +1,7 @@
-import type { CoursePrereqNode } from '../dataTypes';
-import type { DataCache } from '../dataCache';
-import { normalizeCourseCode } from '../utils/courseUtils';
-import type { PrereqContext } from './types';
+import type { CoursePrereqNode } from "../dataTypes";
+import type { DataCache } from "../dataCache";
+import { normalizeCourseCode } from "../utils/courseUtils";
+import type { PrereqContext } from "./types";
 
 export function meetsCoursePrereq(node: CoursePrereqNode, ctx: PrereqContext): boolean {
   if (node.programs && node.programs.length > 0) {
@@ -10,13 +10,13 @@ export function meetsCoursePrereq(node: CoursePrereqNode, ctx: PrereqContext): b
   }
 
   switch (node.type) {
-    case 'course':
+    case "course":
       return evaluateCourseRequirement(node, ctx);
-    case 'and_group':
+    case "and_group":
       return (node.children ?? []).every((child) => meetsCoursePrereq(child, ctx));
-    case 'or_group':
+    case "or_group":
       return (node.children ?? []).some((child) => meetsCoursePrereq(child, ctx));
-    case 'non_course':
+    case "non_course":
       return evaluateNonCourseRequirement(node, ctx);
     default:
       return true;
@@ -104,18 +104,14 @@ function creditsMatchingNonCourse(node: CoursePrereqNode, ctx: PrereqContext): n
  */
 export function prerequisitesContainNonCourse(node: CoursePrereqNode | undefined): boolean {
   if (!node) return false;
-  if (node.type === 'non_course') return true;
+  if (node.type === "non_course") return true;
   for (const child of node.children ?? []) {
     if (prerequisitesContainNonCourse(child)) return true;
   }
   return false;
 }
 
-export function canTakeCourse(
-  courseCode: string,
-  cache: DataCache,
-  ctx: PrereqContext,
-): boolean {
+export function canTakeCourse(courseCode: string, cache: DataCache, ctx: PrereqContext): boolean {
   const course = cache.getCourse(courseCode);
   if (!course) return false;
   const prereq = course.prerequisites;

@@ -20,12 +20,10 @@ export function ProfessorRatingTooltipLabel({
       </Text>
       {details.map((d) => (
         <Text key={d.name} size="xs">
-          {d.name} ·{" "}
-          {d.numRatings > 0 ? `${d.rating.toFixed(1).replace(/\.0$/, "")}/5` : "N/A"}
+          {d.name} · {d.numRatings > 0 ? `${d.rating.toFixed(1).replace(/\.0$/, "")}/5` : "N/A"}
           {d.numRatings > 0 ? ` (${d.numRatings} ratings)` : ""}
         </Text>
       ))}
     </Stack>
   );
 }
-

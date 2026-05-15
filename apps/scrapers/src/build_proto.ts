@@ -19,44 +19,71 @@ function dateStringToYyyymmdd(value: string): number {
 
 function dayToProto(day: string): number {
   switch (day) {
-    case "Mo": return DataProto.DayOfWeek.DAY_OF_WEEK_MO;
-    case "Tu": return DataProto.DayOfWeek.DAY_OF_WEEK_TU;
-    case "We": return DataProto.DayOfWeek.DAY_OF_WEEK_WE;
-    case "Th": return DataProto.DayOfWeek.DAY_OF_WEEK_TH;
-    case "Fr": return DataProto.DayOfWeek.DAY_OF_WEEK_FR;
-    case "Sa": return DataProto.DayOfWeek.DAY_OF_WEEK_SA;
-    case "Su": return DataProto.DayOfWeek.DAY_OF_WEEK_SU;
-    default: return DataProto.DayOfWeek.DAY_OF_WEEK_UNSPECIFIED;
+    case "Mo":
+      return DataProto.DayOfWeek.DAY_OF_WEEK_MO;
+    case "Tu":
+      return DataProto.DayOfWeek.DAY_OF_WEEK_TU;
+    case "We":
+      return DataProto.DayOfWeek.DAY_OF_WEEK_WE;
+    case "Th":
+      return DataProto.DayOfWeek.DAY_OF_WEEK_TH;
+    case "Fr":
+      return DataProto.DayOfWeek.DAY_OF_WEEK_FR;
+    case "Sa":
+      return DataProto.DayOfWeek.DAY_OF_WEEK_SA;
+    case "Su":
+      return DataProto.DayOfWeek.DAY_OF_WEEK_SU;
+    default:
+      return DataProto.DayOfWeek.DAY_OF_WEEK_UNSPECIFIED;
   }
 }
 
 function prereqTypeToProto(type: string): number {
   switch (type) {
-    case "course": return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_COURSE;
-    case "or_group": return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_OR_GROUP;
-    case "and_group": return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_AND_GROUP;
-    case "non_course": return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_NON_COURSE;
-    default: return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_UNSPECIFIED;
+    case "course":
+      return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_COURSE;
+    case "or_group":
+      return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_OR_GROUP;
+    case "and_group":
+      return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_AND_GROUP;
+    case "non_course":
+      return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_NON_COURSE;
+    default:
+      return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_UNSPECIFIED;
   }
 }
 
 function requirementTypeToProto(type: string): number {
   const t = DataProto.RequirementType;
   switch (type) {
-    case "course": return t.REQUIREMENT_TYPE_COURSE;
-    case "elective": return t.REQUIREMENT_TYPE_ELECTIVE;
-    case "group": return t.REQUIREMENT_TYPE_GROUP;
-    case "pick": return t.REQUIREMENT_TYPE_PICK;
-    case "options_group": return t.REQUIREMENT_TYPE_OPTIONS_GROUP;
-    case "discipline_elective": return t.REQUIREMENT_TYPE_DISCIPLINE_ELECTIVE;
-    case "free_elective": return t.REQUIREMENT_TYPE_FREE_ELECTIVE;
-    case "non_discipline_elective": return t.REQUIREMENT_TYPE_NON_DISCIPLINE_ELECTIVE;
-    case "faculty_elective": return t.REQUIREMENT_TYPE_FACULTY_ELECTIVE;
-    case "section": return t.REQUIREMENT_TYPE_SECTION;
-    case "and": return t.REQUIREMENT_TYPE_AND;
-    case "or_group": return t.REQUIREMENT_TYPE_OR_GROUP;
-    case "or_course": return t.REQUIREMENT_TYPE_OR_COURSE;
-    default: return t.REQUIREMENT_TYPE_UNSPECIFIED;
+    case "course":
+      return t.REQUIREMENT_TYPE_COURSE;
+    case "elective":
+      return t.REQUIREMENT_TYPE_ELECTIVE;
+    case "group":
+      return t.REQUIREMENT_TYPE_GROUP;
+    case "pick":
+      return t.REQUIREMENT_TYPE_PICK;
+    case "options_group":
+      return t.REQUIREMENT_TYPE_OPTIONS_GROUP;
+    case "discipline_elective":
+      return t.REQUIREMENT_TYPE_DISCIPLINE_ELECTIVE;
+    case "free_elective":
+      return t.REQUIREMENT_TYPE_FREE_ELECTIVE;
+    case "non_discipline_elective":
+      return t.REQUIREMENT_TYPE_NON_DISCIPLINE_ELECTIVE;
+    case "faculty_elective":
+      return t.REQUIREMENT_TYPE_FACULTY_ELECTIVE;
+    case "section":
+      return t.REQUIREMENT_TYPE_SECTION;
+    case "and":
+      return t.REQUIREMENT_TYPE_AND;
+    case "or_group":
+      return t.REQUIREMENT_TYPE_OR_GROUP;
+    case "or_course":
+      return t.REQUIREMENT_TYPE_OR_COURSE;
+    default:
+      return t.REQUIREMENT_TYPE_UNSPECIFIED;
   }
 }
 
@@ -67,7 +94,9 @@ function sectionStatusToProto(status: unknown): number {
 }
 
 function normalizeCode(value: unknown): string {
-  return String(value ?? "").trim().replace(/\s+/g, " ");
+  return String(value ?? "")
+    .trim()
+    .replace(/\s+/g, " ");
 }
 
 function mapPrereq(node: any): any {
@@ -129,7 +158,9 @@ function mapCatalogue(input: any): any {
       title: course.title,
       credits: course.credits,
       component: course.component,
-      aliases: (course.aliases ?? []).map((alias: unknown) => ({ index: addCode(String(alias ?? "")) })),
+      aliases: (course.aliases ?? []).map((alias: unknown) => ({
+        index: addCode(String(alias ?? "")),
+      })),
       hasPrereqText: Boolean(course.prereqText),
       prerequisites: course.prerequisites ? mapPrereq(course.prerequisites) : undefined,
     })),
@@ -179,12 +210,13 @@ function mapSchedules(input: any): any {
                 virtual: Boolean(time.virtual),
               })),
               instructors: section.instructors ?? [],
-              meetingDates: Array.isArray(section.meetingDates) && section.meetingDates.length >= 2
-                ? {
-                    startYyyymmdd: dateStringToYyyymmdd(String(section.meetingDates[0] ?? "")),
-                    endYyyymmdd: dateStringToYyyymmdd(String(section.meetingDates[1] ?? "")),
-                  }
-                : undefined,
+              meetingDates:
+                Array.isArray(section.meetingDates) && section.meetingDates.length >= 2
+                  ? {
+                      startYyyymmdd: dateStringToYyyymmdd(String(section.meetingDates[0] ?? "")),
+                      endYyyymmdd: dateStringToYyyymmdd(String(section.meetingDates[1] ?? "")),
+                    }
+                  : undefined,
               status: sectionStatusToProto(section.status),
               distribution: section.distribution
                 ? {
@@ -240,7 +272,9 @@ async function main(): Promise<void> {
   const yearCatalogues = entries.filter(isCatalogueYearJson).sort();
   const scheduleFiles = entries.filter(isScheduleJson).sort();
 
-  const manifest = await readJson<{ years: number[] }>(path.join(SCRAPER_DATA_DIR, "catalogue.json"));
+  const manifest = await readJson<{ years: number[] }>(
+    path.join(SCRAPER_DATA_DIR, "catalogue.json"),
+  );
   await writePb(
     path.join(WEB_PUBLIC_DATA_DIR, "catalogue.pb"),
     DataProto.CatalogueManifest.encode({ years: manifest.years ?? [] }).finish(),
@@ -259,13 +293,20 @@ async function main(): Promise<void> {
     }).finish(),
   );
 
-  const indices = await readJson<{ courses: string[]; programs: string[] }>(path.join(SCRAPER_DATA_DIR, "indices.json"));
+  const indices = await readJson<{ courses: string[]; programs: string[] }>(
+    path.join(SCRAPER_DATA_DIR, "indices.json"),
+  );
   await writePb(
     path.join(WEB_PUBLIC_DATA_DIR, "indices.pb"),
-    DataProto.Indices.encode({ courses: indices.courses ?? [], programs: indices.programs ?? [] }).finish(),
+    DataProto.Indices.encode({
+      courses: indices.courses ?? [],
+      programs: indices.programs ?? [],
+    }).finish(),
   );
 
-  const rmp = await readJson<{ resultCount: number; professors: any[] }>(path.join(SCRAPER_DATA_DIR, "ratemyprofessors.json"));
+  const rmp = await readJson<{ resultCount: number; professors: any[] }>(
+    path.join(SCRAPER_DATA_DIR, "ratemyprofessors.json"),
+  );
   await writePb(
     path.join(WEB_PUBLIC_DATA_DIR, "ratemyprofessors.pb"),
     DataProto.RateMyProfessorsData.encode({
@@ -284,20 +325,14 @@ async function main(): Promise<void> {
     const fullPath = path.join(SCRAPER_DATA_DIR, fileName);
     const data = await readJson<JsonObject>(fullPath);
     const encoded = DataProto.Catalogue.encode(mapCatalogue(data)).finish();
-    await writePb(
-      path.join(WEB_PUBLIC_DATA_DIR, fileName.replace(/\.json$/, ".pb")),
-      encoded,
-    );
+    await writePb(path.join(WEB_PUBLIC_DATA_DIR, fileName.replace(/\.json$/, ".pb")), encoded);
   }
 
   for (const fileName of scheduleFiles) {
     const fullPath = path.join(SCRAPER_DATA_DIR, fileName);
     const data = await readJson<JsonObject>(fullPath);
     const encoded = DataProto.SchedulesData.encode(mapSchedules(data)).finish();
-    await writePb(
-      path.join(WEB_PUBLIC_DATA_DIR, fileName.replace(/\.json$/, ".pb")),
-      encoded,
-    );
+    await writePb(path.join(WEB_PUBLIC_DATA_DIR, fileName.replace(/\.json$/, ".pb")), encoded);
   }
 
   console.log(

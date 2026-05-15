@@ -196,9 +196,7 @@ function parseStartingYear(fullText: string): number | null {
  * Uses first-two-columns table extraction when positions are available,
  * otherwise falls back to regex on full text.
  */
-export async function parseTranscriptPdf(
-  arrayBuffer: ArrayBuffer,
-): Promise<TranscriptParseResult> {
+export async function parseTranscriptPdf(arrayBuffer: ArrayBuffer): Promise<TranscriptParseResult> {
   await ensureWorker();
   const pdfjsLib = await import("pdfjs-dist");
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
@@ -260,8 +258,8 @@ export async function parseTranscriptPdf(
 
   const fullText = textParts.join("\n");
   // Filter out non-degree courses (ITD ethics courses don't count toward degree requirements)
-  const filteredCourses = [...allCodes].filter(code => !isNonDegreeCourse(code));
-  
+  const filteredCourses = [...allCodes].filter((code) => !isNonDegreeCourse(code));
+
   return {
     courses: filteredCourses,
     fullText,
@@ -274,19 +272,13 @@ export async function parseTranscriptPdf(
 function levenshtein(a: string, b: string): number {
   const m = a.length;
   const n = b.length;
-  const d = Array.from({ length: m + 1 }, (): number[] =>
-    Array<number>(n + 1).fill(0),
-  );
+  const d = Array.from({ length: m + 1 }, (): number[] => Array<number>(n + 1).fill(0));
   for (let i = 0; i <= m; i++) d[i][0] = i;
   for (let j = 0; j <= n; j++) d[0][j] = j;
   for (let j = 1; j <= n; j++) {
     for (let i = 1; i <= m; i++) {
       const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-      d[i][j] = Math.min(
-        d[i - 1][j] + 1,
-        d[i][j - 1] + 1,
-        d[i - 1][j - 1] + cost,
-      );
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
     }
   }
   return d[m][n];
@@ -301,8 +293,7 @@ function normalizedSimilarity(a: string, b: string): number {
 }
 
 /** Semester header pattern: e.g. "2022 Fall Term", "2024 Winter Term", "2024 Spring/Summer Term" */
-const SEMESTER_HEADER =
-  /\b\d{4}\s+(?:Fall|Winter|Spring|Summer)(?:\s*\/\s*Summer)?\s*Term\b/im;
+const SEMESTER_HEADER = /\b\d{4}\s+(?:Fall|Winter|Spring|Summer)(?:\s*\/\s*Summer)?\s*Term\b/im;
 
 /**
  * Return the last semester segment of the transcript (from the last semester header to end).
@@ -324,7 +315,10 @@ function getLastSemesterSegment(transcriptText: string): string {
  * Example: "... 2026 Winter Term Honours Bachelor of Science in Computer Science  Course Description ..."
  * -> "Honours Bachelor of Science in Computer Science"
  */
-function extractProgramBetweenTermAndCourse(text: string): { main: string | null; minor: string | null } {
+function extractProgramBetweenTermAndCourse(text: string): {
+  main: string | null;
+  minor: string | null;
+} {
   const normalized = text.replace(/\s+/g, " ").trim();
   const match = normalized.match(/Term\s+(.+?)\s+(Course|Transfer)\b/i);
   if (!match) return { main: null, minor: null };
@@ -409,8 +403,9 @@ export function findBestMatchingProgram<T extends { title: string }>(
   let bestMinor: T | null = null;
 
   // 1) Try strict extraction between "Term" and "Course" in the last semester segment.
-  const { main: mainFragment, minor: minorFragment } = extractProgramBetweenTermAndCourse(searchText);
-  
+  const { main: mainFragment, minor: minorFragment } =
+    extractProgramBetweenTermAndCourse(searchText);
+
   if (mainFragment) {
     const fragLower = mainFragment.toLowerCase().replace(/\s+/g, " ").trim();
     let bestFragmentScore = 0;
@@ -494,7 +489,7 @@ export function findBestMatchingProgram<T extends { title: string }>(
         bestProgram = program;
       }
     }
-    
+
     if (bestScore < 0.5) {
       bestProgram = null;
     }

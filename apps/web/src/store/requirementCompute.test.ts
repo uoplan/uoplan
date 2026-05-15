@@ -6,10 +6,7 @@ import { recomputeStateForProgram } from "./requirementCompute";
 
 const emptySchedules: SchedulesData = { termId: "2261", schedules: [] };
 
-function mkCourse(
-  code: string,
-  overrides?: Partial<{ credits: number; component: string }>,
-) {
+function mkCourse(code: string, overrides?: Partial<{ credits: number; component: string }>) {
   return {
     code,
     title: code,
@@ -21,11 +18,7 @@ function mkCourse(
 
 /** Honours CS–style overlap: narrow CSI 4000 bucket vs broader pick (CSI/SEG 3000–4000). */
 const overlappingElectivesCatalogue: Catalogue = {
-  courses: [
-    mkCourse("CSI 3120"),
-    mkCourse("CSI 4120"),
-    mkCourse("SEG 3100"),
-  ],
+  courses: [mkCourse("CSI 3120"), mkCourse("CSI 4120"), mkCourse("SEG 3100")],
   programs: [],
 };
 
@@ -138,20 +131,13 @@ describe("recomputeStateForProgram completed-course auto-assignment", () => {
     const narrow = state.selectedPerRequirement["req-0"] ?? [];
     const pick = state.selectedPerRequirement["req-1"] ?? [];
 
-    expect(narrow.map((c) => c.replace(/\s+/g, " ").trim())).toContain(
-      "CSI 4120",
-    );
-    expect(pick.map((c) => c.replace(/\s+/g, " ").trim())).toContain(
-      "CSI 3120",
-    );
+    expect(narrow.map((c) => c.replace(/\s+/g, " ").trim())).toContain("CSI 4120");
+    expect(pick.map((c) => c.replace(/\s+/g, " ").trim())).toContain("CSI 3120");
   });
 
   it("assigns SEG 3000 to a narrow elective inside a selected options_group branch, not only a top-level free elective", () => {
     const catalogue: Catalogue = {
-      courses: [
-        mkCourse("SEG 3100"),
-        mkCourse("ENG 1100"),
-      ],
+      courses: [mkCourse("SEG 3100"), mkCourse("ENG 1100")],
       programs: [],
     };
     const cache = buildDataCache(catalogue, emptySchedules);
@@ -246,9 +232,7 @@ describe("recomputeStateForProgram completed-course auto-assignment", () => {
             },
             {
               type: "and",
-              options: [
-                { type: "course", code: "ENG 1100", credits: 3 },
-              ],
+              options: [{ type: "course", code: "ENG 1100", credits: 3 }],
             },
           ],
         },

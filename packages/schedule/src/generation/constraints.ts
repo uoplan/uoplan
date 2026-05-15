@@ -1,14 +1,8 @@
-import type { DayOfWeek } from '../dataTypes';
-import type { CourseEnrollment, GenerationConstraints, TimeSlot } from './types';
+import type { DayOfWeek } from "../dataTypes";
+import type { CourseEnrollment, GenerationConstraints, TimeSlot } from "./types";
 
 /** Default when the UI clears “days allowed” (empty array): same as initial app state (weekdays). */
-const DEFAULT_ALLOWED_DAYS: DayOfWeek[] = [
-  "Mo",
-  "Tu",
-  "We",
-  "Th",
-  "Fr",
-];
+const DEFAULT_ALLOWED_DAYS: DayOfWeek[] = ["Mo", "Tu", "We", "Th", "Fr"];
 
 export function effectiveAllowedDays(c: GenerationConstraints): DayOfWeek[] {
   return c.allowedDays.length > 0 ? c.allowedDays : DEFAULT_ALLOWED_DAYS;

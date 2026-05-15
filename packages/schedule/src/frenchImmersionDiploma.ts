@@ -1,6 +1,11 @@
 import type { DataCache } from "./dataCache";
 import { getCourseLanguageBucket } from "./courseFilters";
-import { getCourseCredits, getCourseLevel, normalizeCourseCode, parseCourseCode } from "./utils/courseUtils";
+import {
+  getCourseCredits,
+  getCourseLevel,
+  normalizeCourseCode,
+  parseCourseCode,
+} from "./utils/courseUtils";
 
 /** Second Language Certification — excluded from course/unit tallies; tracked separately in UI. */
 export const FLS_IMMERSION_CERT_CODE = "FLS 3500";
@@ -20,8 +25,18 @@ export interface FrenchImmersionProgress {
   countedTowardVolumeCodes: string[];
   countedCourses: number;
   countedUnits: number;
-  level1000NonFls: { courses: number; units: number; requiredCourses: number; requiredUnits: number };
-  level3000Or4000NonFls: { courses: number; units: number; requiredCourses: number; requiredUnits: number };
+  level1000NonFls: {
+    courses: number;
+    units: number;
+    requiredCourses: number;
+    requiredUnits: number;
+  };
+  level3000Or4000NonFls: {
+    courses: number;
+    units: number;
+    requiredCourses: number;
+    requiredUnits: number;
+  };
   accompanyingFls: {
     countedCourses: number;
     countedUnits: number;
@@ -169,7 +184,8 @@ export function analyzeFrenchImmersionProgress(
 
   const counted2581Courses = companionCounted.filter((c) => isFls2581Companion(c)).length;
 
-  const volumeMet = countedTowardVolumeCodes.length >= requiredCourses && countedUnits >= requiredUnits;
+  const volumeMet =
+    countedTowardVolumeCodes.length >= requiredCourses && countedUnits >= requiredUnits;
   const min1000NonFlsMet = level1000.length >= 2 && u1000 >= 6;
   const min3000Or4000NonFlsMet = level3000Or4000.length >= 2 && u3000 >= 6;
   const allAccompanyingFlsCountTowardVolume = excludedCompanionCodes.length === 0;

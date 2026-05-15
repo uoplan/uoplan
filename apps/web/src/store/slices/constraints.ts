@@ -14,12 +14,7 @@ interface ConstraintsSlice {
   setGenerationPreferEasier: AppStore["setGenerationPreferEasier"];
 }
 
-export const createConstraintsSlice: StateCreator<
-  AppStore,
-  [],
-  [],
-  ConstraintsSlice
-> = (set) => ({
+export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsSlice> = (set) => ({
   setIncludeClosedComponents: (value) => {
     clearEnrollmentsCache();
     set({ includeClosedComponents: value });
@@ -30,24 +25,20 @@ export const createConstraintsSlice: StateCreator<
     set({ virtualSectionsOnly: value });
   },
 
-  setGenerationMinStartMinutes: (minutes) =>
-    set({ generationMinStartMinutes: minutes }),
-    
-  setGenerationMaxEndMinutes: (minutes) =>
-    set({ generationMaxEndMinutes: minutes }),
-    
+  setGenerationMinStartMinutes: (minutes) => set({ generationMinStartMinutes: minutes }),
+
+  setGenerationMaxEndMinutes: (minutes) => set({ generationMaxEndMinutes: minutes }),
+
   setGenerationAllowedDays: (days) => set({ generationAllowedDays: days }),
-  
+
   setGenerationMinProfessorRating: (rating) =>
     set({
       generationMinProfessorRating: rating == null ? null : Number(rating),
     }),
-    
-  setGenerationLimitFirstYearCredits: (v) =>
-    set({ generationLimitFirstYearCredits: v }),
-    
-  setGenerationCompressedSchedule: (v) =>
-    set({ generationCompressedSchedule: v }),
+
+  setGenerationLimitFirstYearCredits: (v) => set({ generationLimitFirstYearCredits: v }),
+
+  setGenerationCompressedSchedule: (v) => set({ generationCompressedSchedule: v }),
 
   setGenerationPreferEasier: (v) => set({ generationPreferEasier: v }),
 });

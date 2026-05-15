@@ -26,7 +26,13 @@ export interface CalendarEvent {
   virtual: boolean;
   professor: string;
   professorRatingValue?: number | null;
-  professorRatingDetails?: Array<{ id?: string; legacyId?: number; name: string; rating: number; numRatings: number }>;
+  professorRatingDetails?: Array<{
+    id?: string;
+    legacyId?: number;
+    name: string;
+    rating: number;
+    numRatings: number;
+  }>;
   gradeViz?: GradeVizData | null;
 }
 
@@ -40,7 +46,7 @@ export interface CalendarEvent {
 export function useCalendarEvents(
   schedule: GeneratedSchedule | null,
   professorRatings: ProfessorRatingsMap | null,
-  referenceWeekStart: Date
+  referenceWeekStart: Date,
 ): CalendarEvent[] {
   return useMemo<CalendarEvent[]>(() => {
     if (!schedule) return [];
@@ -64,22 +70,15 @@ export function useCalendarEvents(
       for (const [comp, { section }] of Object.entries(enrollment.sectionCombo)) {
         const sectionCode = section.sectionCode ?? section.section ?? "";
         const componentSection = `${comp} - ${sectionCode}`;
-        const professor =
-          [...new Set(section.instructors ?? [])].filter(Boolean).join(", ") ||
-          "—";
-        const ratings = getRatingsForInstructors(
-          section.instructors ?? [],
-          professorRatings
-        );
+        const professor = [...new Set(section.instructors ?? [])].filter(Boolean).join(", ") || "—";
+        const ratings = getRatingsForInstructors(section.instructors ?? [], professorRatings);
         const professorRatingValue =
           ratings.length > 0
-            ? Math.round(
-                (ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10
-              ) / 10
+            ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10
             : null;
         const professorRatingDetails = getRatingDetailsForInstructors(
           section.instructors ?? [],
-          professorRatings
+          professorRatings,
         );
 
         for (const t of section.times) {

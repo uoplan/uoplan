@@ -21,9 +21,7 @@ export function getMergedCatalogue(
   if (!yearCatalogueCourses) return catalogue;
 
   const completedSet = new Set(completedCourses.map(normalizeCourseCode));
-  const yearMap = new Map(
-    yearCatalogueCourses.map((c) => [normalizeCourseCode(c.code), c]),
-  );
+  const yearMap = new Map(yearCatalogueCourses.map((c) => [normalizeCourseCode(c.code), c]));
 
   const merged = new Map<string, Course>();
   for (const course of yearCatalogueCourses) {

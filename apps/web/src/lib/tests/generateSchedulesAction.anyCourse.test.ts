@@ -11,8 +11,7 @@ describe("expandConstrainedPerRequirement with group tokens", () => {
       "req-2": ["group:MAT"],
     };
 
-    const { individualSelections, groupTokenSelections } =
-      expandConstrainedPerRequirement(raw);
+    const { individualSelections, groupTokenSelections } = expandConstrainedPerRequirement(raw);
 
     expect(individualSelections).toEqual({
       "req-1": ["CSI 2101"],
@@ -29,8 +28,7 @@ describe("expandConstrainedPerRequirement with group tokens", () => {
       "req-1": ["group:CSI", "group:CSI", "CSI 2101"],
     };
 
-    const { individualSelections, groupTokenSelections } =
-      expandConstrainedPerRequirement(raw);
+    const { individualSelections, groupTokenSelections } = expandConstrainedPerRequirement(raw);
 
     expect(individualSelections).toEqual({
       "req-1": ["CSI 2101"],

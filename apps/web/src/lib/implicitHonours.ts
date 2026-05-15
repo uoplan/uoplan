@@ -64,12 +64,7 @@ export function collectImplicitHonoursForSchedule(
         code,
         explicitExemptNormalized,
       );
-      return !!getEffectiveSchedule(
-        cache,
-        code,
-        includeClosedComponents,
-        virtualOnly,
-      );
+      return !!getEffectiveSchedule(cache, code, includeClosedComponents, virtualOnly);
     });
 
     if (nonHonoursWithSchedule.length > 0) continue;

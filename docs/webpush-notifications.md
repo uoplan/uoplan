@@ -52,29 +52,29 @@ No Worker requests happen on page load — state is read entirely from `localSto
 
 ### Cloudflare Worker secrets (set via `wrangler secret put`)
 
-| Secret | Description |
-|--------|-------------|
-| `VAPID_PRIVATE_KEY` | VAPID private key (base64url); generated with `npx web-push generate-vapid-keys` |
-| `NOTIFY_SECRET` | Shared bearer token for the `/send` endpoint; must match `NOTIFY_SECRET` in GitHub Actions |
+| Secret              | Description                                                                                |
+| ------------------- | ------------------------------------------------------------------------------------------ |
+| `VAPID_PRIVATE_KEY` | VAPID private key (base64url); generated with `npx web-push generate-vapid-keys`           |
+| `NOTIFY_SECRET`     | Shared bearer token for the `/send` endpoint; must match `NOTIFY_SECRET` in GitHub Actions |
 
 ### Cloudflare Worker vars (in `wrangler.json`)
 
-| Var | Description |
-|-----|-------------|
+| Var                | Description                                  |
+| ------------------ | -------------------------------------------- |
 | `VAPID_PUBLIC_KEY` | VAPID public key (base64url); safe to expose |
-| `VAPID_SUBJECT` | `mailto:` contact address for VAPID |
+| `VAPID_SUBJECT`    | `mailto:` contact address for VAPID          |
 
 ### Vite env vars
 
-| Var | Where | Description |
-|-----|-------|-------------|
-| `VITE_VAPID_PUBLIC_KEY` | Cloudflare Pages env / `.env.local` | VAPID public key; used by the subscribe flow |
-| `VITE_NOTIFICATIONS_URL` | `.env.local` only | Override Worker URL for local dev (default: `https://notifications.uoplan.party`) |
+| Var                      | Where                               | Description                                                                       |
+| ------------------------ | ----------------------------------- | --------------------------------------------------------------------------------- |
+| `VITE_VAPID_PUBLIC_KEY`  | Cloudflare Pages env / `.env.local` | VAPID public key; used by the subscribe flow                                      |
+| `VITE_NOTIFICATIONS_URL` | `.env.local` only                   | Override Worker URL for local dev (default: `https://notifications.uoplan.party`) |
 
 ### GitHub Actions secrets
 
-| Secret | Description |
-|--------|-------------|
+| Secret          | Description                                    |
+| --------------- | ---------------------------------------------- |
 | `NOTIFY_SECRET` | Must match the Worker's `NOTIFY_SECRET` secret |
 
 ---
@@ -93,6 +93,7 @@ No Worker requests happen on page load — state is read entirely from `localSto
 10. Add custom domain `notifications.uoplan.party` in Cloudflare → Workers & Pages → `uoplan-notifications` → Settings → Triggers → Custom Domains
 
 For local dev, create `apps/web/.env.local`:
+
 ```
 VITE_VAPID_PUBLIC_KEY=<your_public_key>
 VITE_NOTIFICATIONS_URL=http://localhost:8787

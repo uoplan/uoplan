@@ -81,19 +81,14 @@ export function pruneOptionSelectionsForClear(
  */
 export function nodeHasOptionGroups(node: RequirementWithStatus): boolean {
   if (node.complete) return false;
-  if (
-    (node.type === "or_group" || node.type === "options_group") &&
-    node.requirementId != null
-  ) {
+  if ((node.type === "or_group" || node.type === "options_group") && node.requirementId != null) {
     return true;
   }
   return node.options?.some(nodeHasOptionGroups) ?? false;
 }
 
 /** One-line hint under an option in the Options step (credits, pool size, nested groups). */
-export function getOptionSecondarySummaryLine(
-  opt: RequirementWithStatus,
-): string | null {
+export function getOptionSecondarySummaryLine(opt: RequirementWithStatus): string | null {
   const parts: string[] = [];
   const credits = opt.creditsNeeded ?? 0;
   if (credits > 0) {
@@ -120,14 +115,12 @@ export function hasMissingOptionSelections(
 ): boolean {
   for (const node of nodes) {
     if (node.complete) continue;
-    const isOptionType =
-      node.type === "or_group" || node.type === "options_group";
+    const isOptionType = node.type === "or_group" || node.type === "options_group";
     if (isOptionType && node.requirementId != null) {
       const idx = selectedOptions[node.requirementId];
       if (idx == null) return true;
       const child = node.options?.[idx];
-      if (child && hasMissingOptionSelections([child], selectedOptions))
-        return true;
+      if (child && hasMissingOptionSelections([child], selectedOptions)) return true;
     } else if (node.options?.length) {
       if (hasMissingOptionSelections(node.options, selectedOptions)) return true;
     }
@@ -156,11 +149,7 @@ function selectedBranchIndexForOptionGroup(
  * after an option branch is chosen.
  */
 function canHoistStructuralWrapper(node: RequirementWithStatus): boolean {
-  if (
-    node.type !== "and" &&
-    node.type !== "pick" &&
-    node.type !== "group"
-  ) {
+  if (node.type !== "and" && node.type !== "pick" && node.type !== "group") {
     return false;
   }
   if (node.requirementId != null) return false;
@@ -193,8 +182,7 @@ function mapOptionSelectionList(
 ): RequirementWithStatus[] {
   const out: RequirementWithStatus[] = [];
   for (const node of nodes) {
-    const isOptionType =
-      node.type === "or_group" || node.type === "options_group";
+    const isOptionType = node.type === "or_group" || node.type === "options_group";
 
     if (isOptionType && node.requirementId != null) {
       const idx = selectedBranchIndexForOptionGroup(node, selectedOptions);
@@ -250,9 +238,7 @@ export function collectRequirementIdsWithCandidateCourse(
     for (const node of nodes) {
       if (
         node.requirementId &&
-        node.candidateCourses?.some(
-          (c) => normalizeCourseCode(c) === courseNorm,
-        )
+        node.candidateCourses?.some((c) => normalizeCourseCode(c) === courseNorm)
       ) {
         ids.push(node.requirementId);
       }
@@ -279,12 +265,9 @@ export function adjustNodeForAssignments(
   selectedPerRequirement: Record<string, string[]>,
   cache: DataCache | null,
 ): RequirementWithStatus {
-  const assigned = node.requirementId
-    ? (selectedPerRequirement[node.requirementId] ?? [])
-    : [];
+  const assigned = node.requirementId ? (selectedPerRequirement[node.requirementId] ?? []) : [];
   const assignedCredits = assigned.reduce(
-    (sum, code) =>
-      sum + (cache?.getCourse(normalizeCourseCode(code))?.credits ?? 3),
+    (sum, code) => sum + (cache?.getCourse(normalizeCourseCode(code))?.credits ?? 3),
     0,
   );
   const origCredits = node.creditsNeeded ?? 0;
@@ -294,9 +277,7 @@ export function adjustNodeForAssignments(
   }
 
   const newCredits =
-    origCredits > 0 && assignedCredits > 0
-      ? origCredits - assignedCredits
-      : origCredits;
+    origCredits > 0 && assignedCredits > 0 ? origCredits - assignedCredits : origCredits;
 
   const adjustedOptions = node.options?.map((child) =>
     adjustNodeForAssignments(child, selectedPerRequirement, cache),
@@ -304,9 +285,7 @@ export function adjustNodeForAssignments(
 
   const isOrLike = node.type === "or_group" || node.type === "options_group";
   const anyChildComplete =
-    isOrLike &&
-    adjustedOptions != null &&
-    adjustedOptions.some((c) => c.complete);
+    isOrLike && adjustedOptions != null && adjustedOptions.some((c) => c.complete);
   const allChildrenComplete =
     !isOrLike &&
     adjustedOptions != null &&
@@ -341,10 +320,7 @@ export function countSatisfiedTopLevelRoots(
   return n;
 }
 
-function isCourseExplicitlyMentioned(
-  node: RequirementWithStatus,
-  code: string,
-): boolean {
+function isCourseExplicitlyMentioned(node: RequirementWithStatus, code: string): boolean {
   if (node.type === "course" || node.type === "or_course") {
     return !!node.candidateCourses?.includes(code);
   }
@@ -386,15 +362,11 @@ export function getConstrainMultiSelectOptions(
   selectedPerRequirement: Record<string, string[]>,
   ctx: ConstrainMultiSelectContext,
 ): { selectedForDisplay: string[]; options: ConstrainMultiSelectOption[] } {
-  const selected = node.requirementId
-    ? (selectedPerRequirement[node.requirementId] ?? [])
-    : [];
+  const selected = node.requirementId ? (selectedPerRequirement[node.requirementId] ?? []) : [];
 
   const explicitExemptNormalized = new Set<string>(
     [
-      ...(node.requirementId
-        ? ctx.constrainedPerRequirement?.[node.requirementId] ?? []
-        : []),
+      ...(node.requirementId ? (ctx.constrainedPerRequirement?.[node.requirementId] ?? []) : []),
       ...selected,
     ]
       .filter((c) => !isGroupToken(c))
@@ -402,8 +374,7 @@ export function getConstrainMultiSelectOptions(
   );
 
   const isElectiveType = isElectiveRequirementType(node.type);
-  const isElectiveWithExclusions =
-    isElectiveType && (node.excluded_disciplines?.length ?? 0) > 0;
+  const isElectiveWithExclusions = isElectiveType && (node.excluded_disciplines?.length ?? 0) > 0;
 
   const isCompletedCourse = (code: string): boolean => {
     const norm = normalizeCourseCode(code);
@@ -416,8 +387,7 @@ export function getConstrainMultiSelectOptions(
       ?.filter((c) => ctx.prereqEligible.has(c))
       .filter((c) => {
         const isCompleted =
-          isCompletedCourse(c) ||
-          ctx.unassignedCompletedSetNormalized.has(normalizeCourseCode(c));
+          isCompletedCourse(c) || ctx.unassignedCompletedSetNormalized.has(normalizeCourseCode(c));
         if (ctx.completedOnly) return isCompleted;
         if (isCompleted) return false;
         if (
@@ -517,8 +487,7 @@ export function getConstrainMultiSelectOptions(
   const courseOptions = availableSorted.map((code) => {
     const norm = normalizeCourseCode(code);
     const usedElsewhere =
-      ctx.allAssignedCoursesNormalized.has(norm) &&
-      !selectedForDisplay.includes(code);
+      ctx.allAssignedCoursesNormalized.has(norm) && !selectedForDisplay.includes(code);
     const coveredByGroup = selectedGroupPrefixes.has(subjectPrefix(code));
     const title = ctx.cache?.getCourse(norm)?.title;
     const label = title ? `${code} – ${title}` : code;
@@ -563,18 +532,13 @@ function subtreeHasOnlyEmptyConstrainDropdowns(
   if (node.complete) return true;
   if (node.type === "section") return true;
 
-  const isOptionType =
-    node.type === "or_group" || node.type === "options_group";
+  const isOptionType = node.type === "or_group" || node.type === "options_group";
   if (isOptionType && node.requirementId != null) {
     const idx = node.satisfiedOptionIndex;
     const nOpts = node.options?.length ?? 0;
     if (idx == null || nOpts === 0 || idx < 0 || idx >= nOpts) return false;
     const child = node.options![idx];
-    return subtreeHasOnlyEmptyConstrainDropdowns(
-      child,
-      constrainedPerRequirement,
-      ctx,
-    );
+    return subtreeHasOnlyEmptyConstrainDropdowns(child, constrainedPerRequirement, ctx);
   }
 
   if (node.options?.length) {
@@ -585,24 +549,13 @@ function subtreeHasOnlyEmptyConstrainDropdowns(
       (isOptionType && node.requirementId == null);
     if (structural) {
       const childrenAllEmpty = node.options.every((child) =>
-        subtreeHasOnlyEmptyConstrainDropdowns(
-          child,
-          constrainedPerRequirement,
-          ctx,
-        ),
+        subtreeHasOnlyEmptyConstrainDropdowns(child, constrainedPerRequirement, ctx),
       );
       if (!childrenAllEmpty) return false;
       // pick/group: hide the whole block only when every child is empty **and**
       // any parent-card MultiSelect (requirementId on this node) is empty too.
-      if (
-        (node.type === "pick" || node.type === "group") &&
-        node.requirementId != null
-      ) {
-        const { options } = getConstrainMultiSelectOptions(
-          node,
-          constrainedPerRequirement,
-          ctx,
-        );
+      if ((node.type === "pick" || node.type === "group") && node.requirementId != null) {
+        const { options } = getConstrainMultiSelectOptions(node, constrainedPerRequirement, ctx);
         return options.length === 0;
       }
       return true;
@@ -610,11 +563,7 @@ function subtreeHasOnlyEmptyConstrainDropdowns(
   }
 
   if (node.requirementId != null) {
-    const { options } = getConstrainMultiSelectOptions(
-      node,
-      constrainedPerRequirement,
-      ctx,
-    );
+    const { options } = getConstrainMultiSelectOptions(node, constrainedPerRequirement, ctx);
     return options.length === 0;
   }
 
@@ -639,13 +588,7 @@ export function partitionIncompleteConstrainRoots(
   for (let i = 0; i < incompleteRoots.length; i++) {
     const root = incompleteRoots[i];
     const entry: PartitionedConstrainRoot = { node: root, rootIndex: i };
-    if (
-      subtreeHasOnlyEmptyConstrainDropdowns(
-        root,
-        constrainedPerRequirement,
-        ctx,
-      )
-    ) {
+    if (subtreeHasOnlyEmptyConstrainDropdowns(root, constrainedPerRequirement, ctx)) {
       collapsed.push(entry);
     } else {
       primary.push(entry);

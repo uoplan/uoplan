@@ -5,9 +5,7 @@ import type { GradeVizData } from "schedule";
 /**
  * Type for the swap candidates getter function.
  */
-export type SwapCandidatesGetter = (
-  enrollmentIndex: number
-) => {
+export type SwapCandidatesGetter = (enrollmentIndex: number) => {
   candidates: string[];
   poolCourses: string[];
   requirementTitle?: string;
@@ -55,14 +53,11 @@ const EMPTY_SWAP_RESULT: SwapResult = {
 
 /**
  * Hook for managing swap modal state and loading candidates.
- * 
+ *
  * @param getSwapCandidates - Function to fetch swap candidates
  * @param cache - Data cache for looking up course info
  */
-export function useSwapModal(
-  getSwapCandidates: SwapCandidatesGetter,
-  cache: DataCache | null
-) {
+export function useSwapModal(getSwapCandidates: SwapCandidatesGetter, cache: DataCache | null) {
   const [swapModal, setSwapModal] = useState<SwapModalState | null>(null);
   const [swapResult, setSwapResult] = useState<SwapResult>(EMPTY_SWAP_RESULT);
   const [loading, setLoading] = useState(false);
@@ -97,19 +92,17 @@ export function useSwapModal(
       };
     });
 
-    const rejected = (swapResult.rejectedWithConflict ?? []).map(
-      ({ code, conflictsWith }) => {
-        const course = cache?.getCourse(code);
-        const title = (course?.title ?? "").trim();
-        const label = title ? `${code} — ${title}` : code;
-        return {
-          value: `__rejected:${code}`,
-          label,
-          disabled: true as const,
-          conflictsWith,
-        };
-      }
-    );
+    const rejected = (swapResult.rejectedWithConflict ?? []).map(({ code, conflictsWith }) => {
+      const course = cache?.getCourse(code);
+      const title = (course?.title ?? "").trim();
+      const label = title ? `${code} — ${title}` : code;
+      return {
+        value: `__rejected:${code}`,
+        label,
+        disabled: true as const,
+        conflictsWith,
+      };
+    });
 
     return [...valid, ...rejected];
   }, [cache, swapResult.candidates, swapResult.rejectedWithConflict]);

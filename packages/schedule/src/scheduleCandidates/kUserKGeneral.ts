@@ -26,8 +26,5 @@ export function shouldPinAllExplicit(
   explicitUnionSize: number,
   effectiveTargetNonHonours: number,
 ): boolean {
-  return (
-    explicitUnionSize > 0 &&
-    explicitUnionSize < effectiveTargetNonHonours
-  );
+  return explicitUnionSize > 0 && explicitUnionSize < effectiveTargetNonHonours;
 }

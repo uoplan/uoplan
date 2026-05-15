@@ -97,12 +97,8 @@ function reorderOptionalPoolForGeneration(
     immersionProgressBaseCodes: readonly string[];
   },
 ): void {
-  const {
-    preferEasier,
-    frenchImmersionStream,
-    immersionOpts,
-    immersionProgressBaseCodes,
-  } = options;
+  const { preferEasier, frenchImmersionStream, immersionOpts, immersionProgressBaseCodes } =
+    options;
 
   if (codes.length <= 1) {
     return;
@@ -191,11 +187,7 @@ function collectRequirementsFromSelectedBranches(
       }
       if (node.options?.length) {
         result.push(
-          ...collectRequirementsFromSelectedBranches(
-            node.options,
-            selectedOptions,
-            existingIds,
-          ),
+          ...collectRequirementsFromSelectedBranches(node.options, selectedOptions, existingIds),
         );
       }
     }
@@ -224,9 +216,7 @@ function buildTimetableFailureDiagnostics(
   });
   const details: GenerationErrorDetails = {
     emptyPools: poolDiagnostics?.emptyPools ?? [],
-    totalAvailable:
-      poolDiagnostics?.totalAvailable ??
-      pinned.length + filteredOptionalPool.length,
+    totalAvailable: poolDiagnostics?.totalAvailable ?? pinned.length + filteredOptionalPool.length,
     totalNeeded: poolDiagnostics?.totalNeeded ?? coursesThisSemester,
     timetableFailure,
   };
@@ -359,9 +349,7 @@ export async function generateSchedulesAction(
   const effectiveSeed = currentSeed || firstSeed;
 
   const existingReqIds = new Set(
-    remainingRequirements
-      .map((r) => r.requirementId)
-      .filter((id): id is string => id != null),
+    remainingRequirements.map((r) => r.requirementId).filter((id): id is string => id != null),
   );
   const branchRequirements = collectRequirementsFromSelectedBranches(
     requirementTreeWithStatus,
@@ -376,10 +364,8 @@ export async function generateSchedulesAction(
       candidatesByReqId.set(req.requirementId, req.candidateCourses);
     }
   }
-  const {
-    individualSelections: constrainedPerRequirement,
-    groupTokenSelections,
-  } = expandConstrainedPerRequirement(rawConstrainedPerRequirement);
+  const { individualSelections: constrainedPerRequirement, groupTokenSelections } =
+    expandConstrainedPerRequirement(rawConstrainedPerRequirement);
 
   const explicitExemptNormalized = new Set<string>();
   for (const codes of Object.values(constrainedPerRequirement)) {
@@ -402,20 +388,14 @@ export async function generateSchedulesAction(
     if (req.requirementId) requirementTypeById.set(req.requirementId, req.type);
   }
 
-  const effectiveCache = cacheWithClosedFilter(
-    cacheVal,
-    includeClosedComponents,
-    false,
-  );
+  const effectiveCache = cacheWithClosedFilter(cacheVal, includeClosedComponents, false);
 
   const unassigned = [...new Set(unassignedCompletedCourses)].sort();
   if (unassigned.length > 0) {
     const previewLimit = 12;
     const preview = unassigned.slice(0, previewLimit);
     const suffix =
-      unassigned.length > previewLimit
-        ? ` (+${unassigned.length - previewLimit} more)`
-        : "";
+      unassigned.length > previewLimit ? ` (+${unassigned.length - previewLimit} more)` : "";
     return {
       currentSchedule: null,
       swapPool: [],
@@ -436,10 +416,9 @@ export async function generateSchedulesAction(
   // Use currentSeed directly for deterministic generation
   const rng = createSeededRng(effectiveSeed >>> 0);
 
-  const immersionProgressOpts: FrenchImmersionProgressOptions | undefined =
-    frenchImmersionStream
-      ? { isNursingProgram: programTitleIndicatesNursing(program?.title) }
-      : undefined;
+  const immersionProgressOpts: FrenchImmersionProgressOptions | undefined = frenchImmersionStream
+    ? { isNursingProgram: programTitleIndicatesNursing(program?.title) }
+    : undefined;
 
   const completedFirstYearCredits = completedCourses.reduce((sum, code) => {
     const m = code.match(/\d{4}/);
@@ -513,12 +492,7 @@ export async function generateSchedulesAction(
   for (const code of uniqueConstrained) {
     if (isHonoursProject(code, cacheVal)) continue;
     if (
-      !getEffectiveSchedule(
-        cacheVal,
-        code,
-        includeClosedComponents,
-        false,
-      ) ||
+      !getEffectiveSchedule(cacheVal, code, includeClosedComponents, false) ||
       completedSet.has(normalizeCourseCode(code)) ||
       !prereqEligibleSet.has(code)
     ) {
@@ -595,9 +569,7 @@ export async function generateSchedulesAction(
       if (node.options && node.options.length > 0) {
         const currentReqId = node.requirementId;
         const currentSelectedIndex =
-          currentReqId != null
-            ? selectedOptionsPerRequirement[currentReqId]
-            : undefined;
+          currentReqId != null ? selectedOptionsPerRequirement[currentReqId] : undefined;
         for (let childIdx = 0; childIdx < node.options.length; childIdx++) {
           walkNodes(
             [node.options[childIdx]],
@@ -630,9 +602,7 @@ export async function generateSchedulesAction(
     languageBuckets,
   };
 
-  const nonHonoursPinnedCount = pinned.filter(
-    (c) => !isHonoursProject(c, cacheVal),
-  ).length;
+  const nonHonoursPinnedCount = pinned.filter((c) => !isHonoursProject(c, cacheVal)).length;
   const remainingNeeded = Math.max(0, effectiveTarget - nonHonoursPinnedCount);
   let filteredOptionalPool: string[] = [];
   let finalPoolMap: Record<string, string> = {};
@@ -650,12 +620,7 @@ export async function generateSchedulesAction(
       code,
       explicitExemptNormalized,
     );
-    const sched = getEffectiveSchedule(
-      cacheVal,
-      code,
-      includeClosedComponents,
-      virtualOnly,
-    );
+    const sched = getEffectiveSchedule(cacheVal, code, includeClosedComponents, virtualOnly);
     if (
       !sched ||
       pinned.includes(code) ||
@@ -678,10 +643,8 @@ export async function generateSchedulesAction(
 
     let pools: RequirementPool[] = allPools
       .map((pool) => {
-        const constrainedForPool =
-          constrainedPerRequirement[pool.requirementId] ?? [];
-        const selectedForPool =
-          selectedPerRequirement[pool.requirementId] ?? [];
+        const constrainedForPool = constrainedPerRequirement[pool.requirementId] ?? [];
+        const selectedForPool = selectedPerRequirement[pool.requirementId] ?? [];
         let pinnedCredits = 0;
         for (const code of pinned) {
           const primaryReqId = requirementIdForPinnedCourse(code);
@@ -691,10 +654,7 @@ export async function generateSchedulesAction(
             pinnedCredits += course?.credits ?? 3;
             continue;
           }
-          if (
-            !pool.candidateCourses.includes(code) &&
-            !constrainedForPool.includes(code)
-          ) {
+          if (!pool.candidateCourses.includes(code) && !constrainedForPool.includes(code)) {
             continue;
           }
           const course = cacheVal.getCourse(code);
@@ -766,10 +726,7 @@ export async function generateSchedulesAction(
         if (isElectiveType && !isWithinElectiveLevelCap(code)) {
           continue;
         }
-        if (
-          electiveLevelBuckets.length > 0 &&
-          isBroadElectivePoolType(pool.type)
-        ) {
+        if (electiveLevelBuckets.length > 0 && isBroadElectivePoolType(pool.type)) {
           const match = code.match(/\d{4}/);
           if (match) {
             const num = Number.parseInt(match[0], 10);
@@ -795,17 +752,9 @@ export async function generateSchedulesAction(
     );
     pools = pools.filter((p) => candidatesByRequirement.has(p.requirementId));
 
-    const coursesPerPool = computeCoursesPerPool(
-      pools,
-      remainingNeeded,
-      cacheVal,
-    );
+    const coursesPerPool = computeCoursesPerPool(pools, remainingNeeded, cacheVal);
     const poolCaps = buildPoolCaps(pools);
-    const redistributionAlts = enumerateSingleRedistributions(
-      coursesPerPool,
-      pools,
-      poolCaps,
-    );
+    const redistributionAlts = enumerateSingleRedistributions(coursesPerPool, pools, poolCaps);
 
     const highLevelPoolIds = new Set<string>();
     for (const pool of pools) {
@@ -817,8 +766,7 @@ export async function generateSchedulesAction(
     }
     const highLevelRedistAlts = redistributionAlts.filter((alt) =>
       [...alt.entries()].some(
-        ([id, count]) =>
-          highLevelPoolIds.has(id) && count < (coursesPerPool.get(id) ?? 0),
+        ([id, count]) => highLevelPoolIds.has(id) && count < (coursesPerPool.get(id) ?? 0),
       ),
     );
 
@@ -884,9 +832,7 @@ export async function generateSchedulesAction(
       return m;
     }
 
-    function runPoolPickPass(
-      perPoolNeed: Map<string, number>,
-    ): PoolPickPassResult {
+    function runPoolPickPass(perPoolNeed: Map<string, number>): PoolPickPassResult {
       const chosenCodes = new Set<string>(pinned);
       const chosenFromPool: Record<string, string> = {};
       for (const code of pinned) {
@@ -915,21 +861,16 @@ export async function generateSchedulesAction(
         if (cur > 0) agg.set(pfx, cur - 1);
       }
 
-      const totalRemaining = (): number =>
-        [...remaining.values()].reduce((a, b) => a + b, 0);
+      const totalRemaining = (): number => [...remaining.values()].reduce((a, b) => a + b, 0);
 
       for (const pool of pools) {
         const r = remaining.get(pool.requirementId) ?? 0;
         if (r <= 0) continue;
 
-        const constrainedForPool =
-          constrainedPerRequirement[pool.requirementId] ?? [];
-        const S = constrainedForPool.filter((code) =>
-          isEligibleCandidate(code, pool.type),
-        );
+        const constrainedForPool = constrainedPerRequirement[pool.requirementId] ?? [];
+        const S = constrainedForPool.filter((code) => isEligibleCandidate(code, pool.type));
         const sSet = new Set(S);
-        const candidates =
-          candidatesByRequirement.get(pool.requirementId) ?? [];
+        const candidates = candidatesByRequirement.get(pool.requirementId) ?? [];
         const G = candidates.filter((code) => !sSet.has(code));
 
         const SAvail = S.filter((code) => !chosenCodes.has(code));
@@ -957,9 +898,7 @@ export async function generateSchedulesAction(
           if (forcedInPool > r) {
             return poolPickFailure(pool, r, SAvail.length, GAvail.length);
           }
-          const orderedPrefixes = [...pend.entries()].sort(([a], [b]) =>
-            a.localeCompare(b),
-          );
+          const orderedPrefixes = [...pend.entries()].sort(([a], [b]) => a.localeCompare(b));
           for (const [pfx, rem] of orderedPrefixes) {
             if (rem <= 0) continue;
             if (!pool.candidateCourses.some((c) => subjectPrefix(c) === pfx)) {
@@ -1000,14 +939,10 @@ export async function generateSchedulesAction(
           const r = remaining.get(pool.requirementId) ?? 0;
           if (r <= 0) continue;
 
-          const constrainedForPool =
-            constrainedPerRequirement[pool.requirementId] ?? [];
-          const S = constrainedForPool.filter((code) =>
-            isEligibleCandidate(code, pool.type),
-          );
+          const constrainedForPool = constrainedPerRequirement[pool.requirementId] ?? [];
+          const S = constrainedForPool.filter((code) => isEligibleCandidate(code, pool.type));
           const sSet = new Set(S);
-          const candidates =
-            candidatesByRequirement.get(pool.requirementId) ?? [];
+          const candidates = candidatesByRequirement.get(pool.requirementId) ?? [];
           const G = candidates.filter((code) => !sSet.has(code));
 
           const SAvail = S.filter((code) => !chosenCodes.has(code));
@@ -1079,11 +1014,7 @@ export async function generateSchedulesAction(
             const bucketSize = levelCounts.get(level) ?? 1;
             let immersionW = 1;
             if (immersionProgForPick != null) {
-              immersionW = frenchImmersionHeuristicPickWeight(
-                immersionProgForPick,
-                code,
-                cacheVal,
-              );
+              immersionW = frenchImmersionHeuristicPickWeight(immersionProgForPick, code, cacheVal);
             }
             cands.push({
               pool,
@@ -1123,14 +1054,10 @@ export async function generateSchedulesAction(
         for (const pool of pools) {
           const r = remaining.get(pool.requirementId) ?? 0;
           if (r <= 0) continue;
-          const constrainedForPool =
-            constrainedPerRequirement[pool.requirementId] ?? [];
-          const S = constrainedForPool.filter((code) =>
-            isEligibleCandidate(code, pool.type),
-          );
+          const constrainedForPool = constrainedPerRequirement[pool.requirementId] ?? [];
+          const S = constrainedForPool.filter((code) => isEligibleCandidate(code, pool.type));
           const sSet = new Set(S);
-          const candidates =
-            candidatesByRequirement.get(pool.requirementId) ?? [];
+          const candidates = candidatesByRequirement.get(pool.requirementId) ?? [];
           const G = candidates.filter((code) => !sSet.has(code));
           const SAvail = S.filter((code) => !chosenCodes.has(code));
           let GAvail = G.filter((code) => !chosenCodes.has(code));
@@ -1160,8 +1087,7 @@ export async function generateSchedulesAction(
         highLevelRedistAlts.length > 0
           ? [coursesPerPool, ...highLevelRedistAlts]
           : [coursesPerPool];
-      const firstAlloc =
-        allocationPool[Math.floor(rng() * allocationPool.length)];
+      const firstAlloc = allocationPool[Math.floor(rng() * allocationPool.length)];
 
       let pickPass: PoolPickPassResult = runPoolPickPass(firstAlloc);
 
@@ -1190,9 +1116,7 @@ export async function generateSchedulesAction(
         chosenCodes.add(code);
       }
 
-      const optionalPool = Array.from(chosenCodes).filter(
-        (code) => !pinned.includes(code),
-      );
+      const optionalPool = Array.from(chosenCodes).filter((code) => !pinned.includes(code));
 
       const slotsFromOptional = coursesThisSemester - pinned.length;
       if (optionalPool.length < slotsFromOptional) {
@@ -1214,8 +1138,7 @@ export async function generateSchedulesAction(
         cacheVal,
         includeClosedComponents,
         (code) => {
-          const reqId =
-            chosenFromPool[code] ?? requirementIdForPinnedCourse(code);
+          const reqId = chosenFromPool[code] ?? requirementIdForPinnedCourse(code);
           const reqType = reqId ? requirementTypeById.get(reqId) : undefined;
           return virtualScheduleFilterApplies(
             virtualSectionsOnly,
@@ -1226,23 +1149,24 @@ export async function generateSchedulesAction(
         },
       );
 
-      const batch = pinned.length === 0
-        ? generateSchedulesWithPinned(
-            lastFilteredPool,
-            [],
-            coursesThisSemester,
-            attemptCache,
-            constraints,
-            1
-          )
-        : generateSchedulesWithPinned(
-            pinned,
-            lastFilteredPool,
-            coursesThisSemester,
-            attemptCache,
-            constraints,
-            1
-          );
+      const batch =
+        pinned.length === 0
+          ? generateSchedulesWithPinned(
+              lastFilteredPool,
+              [],
+              coursesThisSemester,
+              attemptCache,
+              constraints,
+              1,
+            )
+          : generateSchedulesWithPinned(
+              pinned,
+              lastFilteredPool,
+              coursesThisSemester,
+              attemptCache,
+              constraints,
+              1,
+            );
 
       if (batch.length > 0) {
         const fingerprint = batch[0].enrollments
@@ -1272,16 +1196,17 @@ export async function generateSchedulesAction(
 
   if (remainingNeeded <= 0) {
     filteredOptionalPool = [];
-    const batch = pinned.length === 0
-      ? generateSchedulesWithPinned([], [], coursesThisSemester, effectiveCache, constraints, 1)
-      : generateSchedulesWithPinned(
-          pinned,
-          [],
-          coursesThisSemester,
-          effectiveCache,
-          constraints,
-          1
-        );
+    const batch =
+      pinned.length === 0
+        ? generateSchedulesWithPinned([], [], coursesThisSemester, effectiveCache, constraints, 1)
+        : generateSchedulesWithPinned(
+            pinned,
+            [],
+            coursesThisSemester,
+            effectiveCache,
+            constraints,
+            1,
+          );
     if (batch.length > 0) {
       finalPoolMap = {};
       foundSchedule = batch[0];
@@ -1310,20 +1235,16 @@ export async function generateSchedulesAction(
       pinned,
       filteredOptionalPool,
       coursesThisSemester,
-      cacheWithPerCourseVirtualFilter(
-        cacheVal,
-        includeClosedComponents,
-        (code) => {
-          const reqId = finalPoolMap[code] ?? requirementIdForPinnedCourse(code);
-          const reqType = reqId ? requirementTypeById.get(reqId) : undefined;
-          return virtualScheduleFilterApplies(
-            virtualSectionsOnly,
-            reqType,
-            code,
-            explicitExemptNormalized,
-          );
-        },
-      ),
+      cacheWithPerCourseVirtualFilter(cacheVal, includeClosedComponents, (code) => {
+        const reqId = finalPoolMap[code] ?? requirementIdForPinnedCourse(code);
+        const reqType = reqId ? requirementTypeById.get(reqId) : undefined;
+        return virtualScheduleFilterApplies(
+          virtualSectionsOnly,
+          reqType,
+          code,
+          explicitExemptNormalized,
+        );
+      }),
       constraints,
     );
     const swapPool = [...new Set([...pinned, ...filteredOptionalPool])];
@@ -1348,9 +1269,7 @@ export async function generateSchedulesAction(
   };
 }
 
-async function handleBasicGeneration(
-  state: AppState,
-): Promise<GenerateSchedulesResult | null> {
+async function handleBasicGeneration(state: AppState): Promise<GenerateSchedulesResult | null> {
   const {
     cache,
     basicPinnedCourses,
@@ -1436,10 +1355,9 @@ async function handleBasicGeneration(
     optionalPool.push(code);
   }
 
-  const immersionOptsBasic: FrenchImmersionProgressOptions | undefined =
-    frenchImmersionStream
-      ? { isNursingProgram: programTitleIndicatesNursing(program?.title) }
-      : undefined;
+  const immersionOptsBasic: FrenchImmersionProgressOptions | undefined = frenchImmersionStream
+    ? { isNursingProgram: programTitleIndicatesNursing(program?.title) }
+    : undefined;
 
   reorderOptionalPoolForGeneration(optionalPool, effectiveCache, rng, {
     preferEasier: generationPreferEasier,

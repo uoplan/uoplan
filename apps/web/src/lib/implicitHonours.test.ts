@@ -24,15 +24,11 @@ function makeCache(schedules: Record<string, CourseSchedule | undefined>): DataC
     getSchedule: (code: string) => schedules[normalizeCourseCode(code)],
     getCoursesByDiscipline: () => [],
     getAllCourses: () => [...courseByNorm.values()],
-    getAllSchedules: () =>
-      Object.values(schedules).filter((s): s is CourseSchedule => s != null),
+    getAllSchedules: () => Object.values(schedules).filter((s): s is CourseSchedule => s != null),
   };
 }
 
-function req(
-  id: string,
-  candidates: string[],
-): RemainingRequirement {
+function req(id: string, candidates: string[]): RemainingRequirement {
   return {
     requirementId: id,
     type: "course",

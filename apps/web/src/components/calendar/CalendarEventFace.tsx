@@ -150,7 +150,9 @@ export function CalendarEventFace({
           ) : null}
         </div>
 
-        {professorBlock ? <div className="fc-uoplan-event-professor-bottom">{professorBlock}</div> : null}
+        {professorBlock ? (
+          <div className="fc-uoplan-event-professor-bottom">{professorBlock}</div>
+        ) : null}
       </div>
     </div>
   );

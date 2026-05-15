@@ -34,11 +34,7 @@ const TYPE_PRIORITY: Record<string, number> = {
 };
 
 /** Branch / explicit-choice requirements: candidates are blocked from auto-assignment elsewhere. */
-const NEVER_AUTO_ASSIGN_TYPES = new Set([
-  "or_group",
-  "or_course",
-  "options_group",
-]);
+const NEVER_AUTO_ASSIGN_TYPES = new Set(["or_group", "or_course", "options_group"]);
 
 export interface AutoAssignReqMeta {
   reqId: string;
@@ -60,10 +56,7 @@ export function compareReqPreference(a: AutoAssignReqMeta, b: AutoAssignReqMeta)
   return a.reqId.localeCompare(b.reqId);
 }
 
-function sumCreditsForCodes(
-  cache: DataCache,
-  codes: string[],
-): number {
+function sumCreditsForCodes(cache: DataCache, codes: string[]): number {
   let s = 0;
   for (const code of codes) {
     s += getCourseCredits(normalizeCourseCode(code), cache);
@@ -91,9 +84,7 @@ export function getAutoSelectedSingleEligibleCompleted(
     const tier = TYPE_PRIORITY[req.type];
     if (tier === undefined || !req.candidateCourses?.length) continue;
 
-    const candidatesNorm = new Set(
-      req.candidateCourses.map((c) => normalizeCourseCode(c)),
-    );
+    const candidatesNorm = new Set(req.candidateCourses.map((c) => normalizeCourseCode(c)));
     const creditsNeeded = req.creditsNeeded ?? 3;
     metas.push({
       reqId: req.requirementId,
@@ -133,10 +124,7 @@ export function getAutoSelectedSingleEligibleCompleted(
     const candidates = eligibleMetasForCourse(norm);
 
     for (const m of candidates) {
-      const existingForReq = [
-        ...(alreadySelected[m.reqId] ?? []),
-        ...(out[m.reqId] ?? []),
-      ];
+      const existingForReq = [...(alreadySelected[m.reqId] ?? []), ...(out[m.reqId] ?? [])];
       if (existingForReq.includes(courseCode)) {
         break;
       }

@@ -1,11 +1,11 @@
-import * as cheerio from 'cheerio';
-import { z } from 'zod';
-import pLimit from 'p-limit';
-import fs from 'fs/promises';
-import path from 'path';
-import { SCRAPER_DATA_DIR } from './dataPaths.ts';
+import * as cheerio from "cheerio";
+import { z } from "zod";
+import pLimit from "p-limit";
+import fs from "fs/promises";
+import path from "path";
+import { SCRAPER_DATA_DIR } from "./dataPaths.ts";
 
-const ROOT_URL = 'https://catalogue.uottawa.ca';
+const ROOT_URL = "https://catalogue.uottawa.ca";
 const OLDEST_YEAR = 2017;
 
 function getErrorMessage(err: unknown): string {
@@ -25,7 +25,7 @@ function buildBaseUrl(year: number, currentYear: number): string {
 
 /** Returns the path-only prefix for the given baseUrl (e.g. "/archive/2021-2022" or ""). */
 function hrefPrefix(baseUrl: string): string {
-  return baseUrl.replace(ROOT_URL, '');
+  return baseUrl.replace(ROOT_URL, "");
 }
 
 // Detect if text is just a grade indicator like (M), (B+), (B+ or higher), (A-)
@@ -37,7 +37,11 @@ function isGradeIndicator(text: string): boolean {
   const singleLetterPattern = /^\([A-Z]\)$/;
   // Pattern 3: two-letter standing codes like (HP), (HS), etc.
   const twoLetterPattern = /^\([A-Z]{2}\)$/;
-  return gradePattern.test(trimmed) || singleLetterPattern.test(trimmed) || twoLetterPattern.test(trimmed);
+  return (
+    gradePattern.test(trimmed) ||
+    singleLetterPattern.test(trimmed) ||
+    twoLetterPattern.test(trimmed)
+  );
 }
 
 type CoursePrereqDisciplineLevel = {
@@ -46,7 +50,7 @@ type CoursePrereqDisciplineLevel = {
 };
 
 type CoursePrereqNode = {
-  type: 'course' | 'or_group' | 'and_group' | 'non_course';
+  type: "course" | "or_group" | "and_group" | "non_course";
   code?: string;
   text?: string;
   credits?: number;
@@ -59,7 +63,7 @@ type CoursePrereqNode = {
 
 const CoursePrereqNodeSchema: z.ZodType<CoursePrereqNode> = z.lazy(() =>
   z.object({
-    type: z.enum(['course', 'or_group', 'and_group', 'non_course']),
+    type: z.enum(["course", "or_group", "and_group", "non_course"]),
     code: z.string().optional(),
     text: z.string().optional(),
     credits: z.number().optional(),
@@ -92,19 +96,19 @@ export type Course = z.infer<typeof CourseSchema>;
 export type CoursePrereqNodeType = CoursePrereqNode;
 
 const RequirementTypeSchema = z.enum([
-  'course',
-  'elective',
-  'group',
-  'pick',
-  'options_group',
-  'discipline_elective',
-  'free_elective',
-  'non_discipline_elective',
-  'faculty_elective',
-  'section',
-  'and',
-  'or_group',
-  'or_course',
+  "course",
+  "elective",
+  "group",
+  "pick",
+  "options_group",
+  "discipline_elective",
+  "free_elective",
+  "non_discipline_elective",
+  "faculty_elective",
+  "section",
+  "and",
+  "or_group",
+  "or_course",
 ]);
 
 const DisciplineLevelSchema = z.object({
@@ -129,16 +133,17 @@ type ProgramRequirementType = z.infer<typeof ProgramRequirementBaseSchema> & {
   options?: ProgramRequirementType[];
 };
 
-const ProgramRequirementSchema: z.ZodType<ProgramRequirementType> = ProgramRequirementBaseSchema.extend({
-  options: z.lazy(() => z.array(ProgramRequirementSchema)).optional(),
-});
+const ProgramRequirementSchema: z.ZodType<ProgramRequirementType> =
+  ProgramRequirementBaseSchema.extend({
+    options: z.lazy(() => z.array(ProgramRequirementSchema)).optional(),
+  });
 export type ProgramRequirement = ProgramRequirementType;
 
 /**
  * "at the 3000 or 4000 level" / "niveau 3000 ou 4000" must not split on the inner `or`/`ou`.
  */
 function normalizeLevelOrDisjunction(text: string): string {
-  return text.replace(/\b(\d{4})\s+(or|ou)\s+(\d{4})\b/gi, '$1/$3');
+  return text.replace(/\b(\d{4})\s+(or|ou)\s+(\d{4})\b/gi, "$1/$3");
 }
 
 /**
@@ -147,25 +152,25 @@ function normalizeLevelOrDisjunction(text: string): string {
  */
 function normalizeDisciplineOrInCredits(text: string): string {
   return text
-    .replace(/\bin\s+([A-Z]{3,4})\s+or\s+([A-Z]{3,4})\b/gi, 'in ($1) or ($2)')
-    .replace(/\bdans\s+([A-Z]{3,4})\s+ou\s+([A-Z]{3,4})\b/gi, 'dans ($1) ou ($2)');
+    .replace(/\bin\s+([A-Z]{3,4})\s+or\s+([A-Z]{3,4})\b/gi, "in ($1) or ($2)")
+    .replace(/\bdans\s+([A-Z]{3,4})\s+ou\s+([A-Z]{3,4})\b/gi, "dans ($1) ou ($2)");
 }
 
 // Common abbreviations that shouldn't trigger splits
-const ABBREVIATIONS = new Set(['b.com', 'm.com', 'b.a', 'm.a', 'm.sc', 'ph.d', 'b.mus', 'b.eng']);
+const ABBREVIATIONS = new Set(["b.com", "m.com", "b.a", "m.a", "m.sc", "ph.d", "b.mus", "b.eng"]);
 
 function shouldSplitPrereqAndAt(left: string, right: string): boolean {
   const leftTrim = left.trim().toLowerCase();
   const rightTrim = right.trim().toLowerCase();
-  
+
   // Check if left ends with an abbreviation like B.Com
   const leftEnd = leftTrim.slice(-6).toLowerCase();
   for (const abbrev of ABBREVIATIONS) {
     if (leftEnd.includes(abbrev)) return false;
   }
-  
-  if (leftTrim.endsWith(')')) return true;
-  
+
+  if (leftTrim.endsWith(")")) return true;
+
   // Only split on digit if it looks like a credit count (1-3 digits, not 4-digit level/course code)
   const creditMatch = rightTrim.match(/^(\d+)\s/);
   if (creditMatch) {
@@ -174,7 +179,7 @@ function shouldSplitPrereqAndAt(left: string, right: string): boolean {
     if (num.length === 4) return false;
     return true;
   }
-  
+
   return false;
 }
 
@@ -219,13 +224,13 @@ function extractCourseCodes(text: string): string[] {
   const codes: string[] = [];
   let m: RegExpExecArray | null;
   while ((m = re.exec(text)) !== null) {
-    codes.push(`${m[1]} ${m[2]}`.replace(/\s+/, ' '));
+    codes.push(`${m[1]} ${m[2]}`.replace(/\s+/, " "));
   }
   return Array.from(new Set(codes));
 }
 
 function normalizeCodeKey(s: string): string {
-  return s.replace(/\s+/g, ' ').trim().toUpperCase();
+  return s.replace(/\s+/g, " ").trim().toUpperCase();
 }
 
 /**
@@ -233,7 +238,7 @@ function normalizeCodeKey(s: string): string {
  * Scans component and description; does not add standalone catalogue rows.
  */
 function extractPreviouslyAliases(combined: string, ownCode: string): string[] {
-  const normalized = combined.replace(/\s+/g, ' ').trim();
+  const normalized = combined.replace(/\s+/g, " ").trim();
   if (!normalized) return [];
   const ownKey = normalizeCodeKey(ownCode);
   const re = /\b(?:Previously|Antérieurement)\s*:?\s*/gi;
@@ -248,11 +253,14 @@ function extractPreviouslyAliases(combined: string, ownCode: string): string[] {
     if (boundaryWithSentence) {
       segment = boundaryWithSentence[1];
     } else {
-      const dotIdx = rest.indexOf('.');
+      const dotIdx = rest.indexOf(".");
       segment = dotIdx === -1 ? rest : rest.slice(0, dotIdx);
     }
-    let segmentTrim = segment.replace(/^\(\s*/, '').replace(/\s*\)\s*$/, '').trim();
-    segmentTrim = segmentTrim.replace(/\.\s*$/, '').trim();
+    let segmentTrim = segment
+      .replace(/^\(\s*/, "")
+      .replace(/\s*\)\s*$/, "")
+      .trim();
+    segmentTrim = segmentTrim.replace(/\.\s*$/, "").trim();
     for (const c of extractCourseCodes(segmentTrim)) {
       if (normalizeCodeKey(c) !== ownKey) codes.add(c);
     }
@@ -261,7 +269,7 @@ function extractPreviouslyAliases(combined: string, ownCode: string): string[] {
 }
 
 export function extractPrereqSentence(raw: string): string | undefined {
-  const normalized = raw.replace(/\s+/g, ' ').trim();
+  const normalized = raw.replace(/\s+/g, " ").trim();
   if (!normalized) return undefined;
 
   // Check if text has bilingual format (contains both French and English labels)
@@ -280,13 +288,17 @@ export function extractPrereqSentence(raw: string): string | undefined {
 
       if (englishPos < frenchPos) {
         // English comes first - extract until "/ Préalable" or end
-        const textMatch = normalized.match(/Prerequisite(s)?\s*[:：]\s*(.*?)(?:\s*\/\s*Préalable|$)/i);
+        const textMatch = normalized.match(
+          /Prerequisite(s)?\s*[:：]\s*(.*?)(?:\s*\/\s*Préalable|$)/i,
+        );
         if (textMatch && textMatch[2]) {
           return extractFirstSentence(textMatch[2].trim());
         }
       } else {
         // French comes first - extract until "/ Prerequisite" or end
-        const textMatch = normalized.match(/Préalable(s)?\s*[:：]\s*(.*?)(?:\s*\/\s*Prerequisite|$)/i);
+        const textMatch = normalized.match(
+          /Préalable(s)?\s*[:：]\s*(.*?)(?:\s*\/\s*Prerequisite|$)/i,
+        );
         if (textMatch && textMatch[2]) {
           return extractFirstSentence(textMatch[2].trim());
         }
@@ -297,7 +309,10 @@ export function extractPrereqSentence(raw: string): string | undefined {
   const labelRegex = /(Prerequisite|Prerequisites|Prerequiste|Préalable|Préalables)\s*[:：]\s*/i;
   if (!labelRegex.test(normalized)) return undefined;
 
-  const afterLabel = normalized.replace(/^(.*?)(Prerequisite|Prerequisites|Prerequiste|Préalable|Préalables)\s*[:：]\s*/i, '');
+  const afterLabel = normalized.replace(
+    /^(.*?)(Prerequisite|Prerequisites|Prerequiste|Préalable|Préalables)\s*[:：]\s*/i,
+    "",
+  );
   const trimmed = afterLabel.trim();
   if (!trimmed) return undefined;
 
@@ -306,11 +321,11 @@ export function extractPrereqSentence(raw: string): string | undefined {
   // Also single letters in parentheses like (B) or (B.A.)
   let sentenceEnd = -1;
   for (let i = 0; i < trimmed.length; i++) {
-    if (trimmed[i] === '.') {
+    if (trimmed[i] === ".") {
       // Check if this looks like an abbreviation
       const before = trimmed.slice(Math.max(0, i - 10), i);
       const after = trimmed.slice(i + 1, Math.min(trimmed.length, i + 20));
-      
+
       // Check for common abbreviations (single letter + period + optional more letters)
       if (/\b[A-Z]$/.test(before) || /\b[A-Z]\.$/.test(before)) {
         // Could be B., M., etc. - look ahead to see if it's followed by Com, A, Sc, etc.
@@ -319,10 +334,10 @@ export function extractPrereqSentence(raw: string): string | undefined {
           continue;
         }
       }
-      
+
       // Check if period is inside parentheses - likely abbreviation
-      const parenBefore = trimmed.slice(0, i).lastIndexOf('(');
-      const parenAfter = trimmed.indexOf(')', i);
+      const parenBefore = trimmed.slice(0, i).lastIndexOf("(");
+      const parenAfter = trimmed.indexOf(")", i);
       if (parenBefore !== -1 && parenAfter !== -1 && parenAfter > i) {
         // Period is inside parentheses - likely abbreviation context
         const parenContent = trimmed.slice(parenBefore, parenAfter + 1);
@@ -330,18 +345,22 @@ export function extractPrereqSentence(raw: string): string | undefined {
           continue;
         }
       }
-      
+
       // This looks like a sentence-ending period
       // Either followed by space+letter, or end of string
       // Also stop at periods before bilingual separator like " / Prerequisites:"
       const afterPeriod = trimmed.slice(i, i + 20);
-      if (i === trimmed.length - 1 || /\s+[A-Z]/.test(trimmed.slice(i, i + 3)) || /\s*\/\s*(Prerequisite|Préalables)/i.test(afterPeriod)) {
+      if (
+        i === trimmed.length - 1 ||
+        /\s+[A-Z]/.test(trimmed.slice(i, i + 3)) ||
+        /\s*\/\s*(Prerequisite|Préalables)/i.test(afterPeriod)
+      ) {
         sentenceEnd = i;
         break;
       }
     }
   }
-  
+
   const sentence = (sentenceEnd === -1 ? trimmed : trimmed.slice(0, sentenceEnd)).trim();
   return sentence || undefined;
 }
@@ -353,7 +372,7 @@ function extractFirstSentence(text: string): string | undefined {
 
   // Find first sentence-ending period (simplified logic)
   for (let i = 0; i < trimmed.length; i++) {
-    if (trimmed[i] === '.') {
+    if (trimmed[i] === ".") {
       // Check if this is part of an abbreviation or decimal
       const before = trimmed.slice(Math.max(0, i - 2), i);
       const after = trimmed.slice(i + 1, Math.min(trimmed.length, i + 3));
@@ -371,7 +390,7 @@ function extractFirstSentence(text: string): string | undefined {
   }
 
   // Strip trailing period if present
-  return trimmed.replace(/\.$/, '').trim();
+  return trimmed.replace(/\.$/, "").trim();
 }
 
 function parseCreditRequirement(text: string): number | undefined {
@@ -384,19 +403,19 @@ function parseCreditRequirement(text: string): number | undefined {
 
 function splitTopLevel(text: string, separators: RegExp): string[] {
   const parts: string[] = [];
-  let current = '';
+  let current = "";
   let depth = 0;
   for (let i = 0; i < text.length; i++) {
     const ch = text[i];
-    if (ch === '(') depth++;
-    if (ch === ')') depth = Math.max(0, depth - 1);
+    if (ch === "(") depth++;
+    if (ch === ")") depth = Math.max(0, depth - 1);
 
     if (depth === 0) {
       const rest = text.slice(i);
       const m = rest.match(separators);
       if (m && m.index === 0) {
         if (current.trim()) parts.push(current.trim());
-        current = '';
+        current = "";
         i += m[0].length - 1;
         continue;
       }
@@ -410,14 +429,14 @@ function splitTopLevel(text: string, separators: RegExp): string[] {
 
 /** Remove one outer `(...)` layer when the whole string is a single balanced group. */
 function stripOuterParensOnce(inner: string): string | undefined {
-  if (!inner.startsWith('(') || !inner.endsWith(')')) return undefined;
+  if (!inner.startsWith("(") || !inner.endsWith(")")) return undefined;
   let depth2 = 0;
   let wrapsAll = true;
   for (let i = 0; i < inner.length; i++) {
     const ch = inner[i];
-    if (ch === '(') {
+    if (ch === "(") {
       depth2++;
-    } else if (ch === ')') {
+    } else if (ch === ")") {
       depth2--;
       if (depth2 === 0 && i < inner.length - 1) {
         wrapsAll = false;
@@ -452,7 +471,7 @@ function tryMergeSharedCreditDisciplineOr(
   if (allDisciplines.length === 0) return undefined;
   const levels = extractLevelsFromPrerequisiteText(fullText);
   const base: CoursePrereqNode = {
-    type: 'non_course',
+    type: "non_course",
     credits: c0,
     disciplines: allDisciplines,
     text: fullText,
@@ -467,7 +486,7 @@ function tryMergeSharedCreditDisciplineOr(
 }
 
 function enrichNonCourseWithLevels(node: CoursePrereqNode, sourceText: string): CoursePrereqNode {
-  if (node.type !== 'non_course') return node;
+  if (node.type !== "non_course") return node;
   if (node.credits == null && !node.disciplines?.length) return node;
   const levels = extractLevelsFromPrerequisiteText(sourceText);
   if (!levels?.length) return node;
@@ -482,9 +501,9 @@ function enrichNonCourseWithLevels(node: CoursePrereqNode, sourceText: string): 
 }
 
 function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
-  let inner = clause.replace(/\s+/g, ' ').trim();
+  let inner = clause.replace(/\s+/g, " ").trim();
   if (!inner) return undefined;
-  
+
   // Skip standalone grade indicators like (M), (B+), (A-)
   if (isGradeIndicator(inner)) return undefined;
 
@@ -496,10 +515,10 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
   let start = -1;
   for (let i = 0; i < inner.length; i++) {
     const ch = inner[i];
-    if (ch === '(') {
+    if (ch === "(") {
       if (depth === 0) start = i;
       depth++;
-    } else if (ch === ')' && depth > 0) {
+    } else if (ch === ")" && depth > 0) {
       depth--;
       if (depth === 0 && start !== -1) {
         groupContents.push(inner.slice(start + 1, i).trim());
@@ -510,14 +529,14 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
   }
 
   if (groupContents.length > 1) {
-    let outside = '';
+    let outside = "";
     let lastIndex = 0;
     for (const range of groupRanges) {
       outside += inner.slice(lastIndex, range.start);
       lastIndex = range.end + 1;
     }
     outside += inner.slice(lastIndex);
-    if (outside.replace(/[,\s]+/g, '') === '') {
+    if (outside.replace(/[,\s]+/g, "") === "") {
       const children: CoursePrereqNode[] = [];
       for (const g of groupContents) {
         const node = parsePrereqClause(g);
@@ -526,7 +545,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
       if (children.length === 0) return undefined;
       if (children.length === 1) return children[0];
       return {
-        type: 'and_group',
+        type: "and_group",
         text: inner,
         children,
       };
@@ -536,7 +555,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
   // Handle clauses like "ECO 1502, ECO 1504, (ADM 1740 ou ADM 2740)"
   // by treating comma-separated top-level segments as an implicit AND.
   // Also handles "CHM 3120, CHM 4120, CHM 4125, equivalent. or A basic knowledge..."
-  if (inner.includes(',') && (inner.includes('(') || /,\s*equivalent\.?\s+or\s+/i.test(inner))) {
+  if (inner.includes(",") && (inner.includes("(") || /,\s*equivalent\.?\s+or\s+/i.test(inner))) {
     const commaParts = splitTopLevel(inner, /,/);
     if (commaParts.length > 1) {
       const children: CoursePrereqNode[] = [];
@@ -549,7 +568,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
       if (children.length === 0) return undefined;
       if (children.length === 1) return children[0];
       return {
-        type: 'and_group',
+        type: "and_group",
         text: inner,
         children,
       };
@@ -578,7 +597,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
       if (children.length === 0) return undefined;
       if (children.length === 1) return children[0];
       return {
-        type: 'and_group',
+        type: "and_group",
         text: inner,
         children,
       };
@@ -588,7 +607,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
   // Strip redundant outer parentheses (e.g. `((MAT 2371, STA 2100) or STA 2391)` → inner OR at depth 0).
   while (true) {
     const peeled = stripOuterParensOnce(inner);
-    if (peeled === undefined || peeled === '') break;
+    if (peeled === undefined || peeled === "") break;
     inner = peeled;
   }
   if (!inner) return undefined;
@@ -612,7 +631,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
 
     const conditionalNode: CoursePrereqNode = { ...conditionalBase, programs };
     return {
-      type: 'or_group',
+      type: "or_group",
       text: inner,
       children: [conditionalNode, fallbackNode],
     };
@@ -629,7 +648,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
 
     const children: CoursePrereqNode[] = [];
     for (const part of orParts) {
-      const partTrim = part.trim().replace(/^[,]+/, '').trim();
+      const partTrim = part.trim().replace(/^[,]+/, "").trim();
       if (!partTrim) continue;
       const codes = extractCourseCodes(partTrim);
       const credits = parseCreditRequirement(partTrim);
@@ -638,7 +657,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
         children.push(
           enrichNonCourseWithLevels(
             {
-              type: 'non_course',
+              type: "non_course",
               text: partTrim,
               credits,
               disciplines: disciplines.length ? disciplines : undefined,
@@ -648,19 +667,19 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
         );
       } else if (codes.length === 1) {
         children.push({
-          type: 'course',
+          type: "course",
           code: codes[0],
           text: partTrim,
         });
       } else {
-        const childNodes: CoursePrereqNode[] = codes.map(code => ({ type: 'course', code }));
+        const childNodes: CoursePrereqNode[] = codes.map((code) => ({ type: "course", code }));
         if (credits !== undefined) {
           childNodes.push(
-            enrichNonCourseWithLevels({ type: 'non_course', text: partTrim, credits }, partTrim),
+            enrichNonCourseWithLevels({ type: "non_course", text: partTrim, credits }, partTrim),
           );
         }
         children.push({
-          type: 'and_group',
+          type: "and_group",
           text: partTrim,
           children: childNodes,
         });
@@ -669,7 +688,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
     if (children.length === 0) return undefined;
     if (children.length === 1) return children[0];
     return {
-      type: 'or_group',
+      type: "or_group",
       text: innerForOr,
       children,
     };
@@ -681,7 +700,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
   if (codes.length === 0) {
     return enrichNonCourseWithLevels(
       {
-        type: 'non_course',
+        type: "non_course",
         text: inner,
         credits,
         disciplines: disciplines.length ? disciplines : undefined,
@@ -691,26 +710,26 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
   }
   if (codes.length === 1 && credits === undefined) {
     return {
-      type: 'course',
+      type: "course",
       code: codes[0],
       text: inner,
     };
   }
 
-  const children: CoursePrereqNode[] = codes.map(code => ({ type: 'course', code }));
+  const children: CoursePrereqNode[] = codes.map((code) => ({ type: "course", code }));
   if (credits !== undefined) {
-    children.push(enrichNonCourseWithLevels({ type: 'non_course', text: inner, credits }, inner));
+    children.push(enrichNonCourseWithLevels({ type: "non_course", text: inner, credits }, inner));
   }
   if (children.length === 1) return children[0];
   return {
-    type: 'and_group',
+    type: "and_group",
     text: inner,
     children,
   };
 }
 
 export function parseCoursePrerequisites(text: string): CoursePrereqNode | undefined {
-  const body = text.replace(/\s+/g, ' ').trim();
+  const body = text.replace(/\s+/g, " ").trim();
   if (!body) return undefined;
 
   // Split on semicolons or periods, but not:
@@ -733,66 +752,71 @@ export function parseCoursePrerequisites(text: string): CoursePrereqNode | undef
   if (clauseNodes.length === 1) return clauseNodes[0];
 
   return {
-    type: 'and_group',
+    type: "and_group",
     children: clauseNodes,
   };
 }
 
 function parseElectiveRequirement(text: string, credits?: number): ProgramRequirement {
-  const trimmed = text.replace(/^\s*(and|or)\s+/i, '').trim();
+  const trimmed = text.replace(/^\s*(and|or)\s+/i, "").trim();
 
   const effectiveCredits = credits ?? parseCreditRequirement(trimmed);
 
   if (/free elective/i.test(trimmed)) {
-    return { type: 'free_elective', title: trimmed, credits: effectiveCredits };
+    return { type: "free_elective", title: trimmed, credits: effectiveCredits };
   }
 
-  const orParts = trimmed.split(/;\s*or\s+/i).map(s => s.trim()).filter(Boolean);
+  const orParts = trimmed
+    .split(/;\s*or\s+/i)
+    .map((s) => s.trim())
+    .filter(Boolean);
   if (orParts.length > 1) {
-    const allSubsequentLackCredits = orParts.slice(1).every(p => parseCreditRequirement(p) == null);
+    const allSubsequentLackCredits = orParts
+      .slice(1)
+      .every((p) => parseCreditRequirement(p) == null);
 
     if (allSubsequentLackCredits) {
       // Subsequent parts have no credit spec of their own — they share the same credit pool.
       // Collect all disciplines/courses from every part into a single pick.
       const allOptions: ProgramRequirement[] = [];
       for (const part of orParts) {
-        const p = part.replace(/^\s*(and|or)\s+/i, '').trim();
+        const p = part.replace(/^\s*(and|or)\s+/i, "").trim();
         const partDisciplines = extractDisciplines(p);
         const partLevels = parseLevelsFromClause(p);
         const partCourses = extractCourseCodes(p);
         for (const d of partDisciplines) {
           allOptions.push({
-            type: 'discipline_elective',
-            title: `Any ${d}${partLevels ? ` at ${partLevels.join(' or ')} level` : ''}`,
+            type: "discipline_elective",
+            title: `Any ${d}${partLevels ? ` at ${partLevels.join(" or ")} level` : ""}`,
             disciplineLevels: [{ discipline: d, levels: partLevels }],
           });
         }
         for (const c of partCourses) {
-          allOptions.push({ type: 'course', code: c });
+          allOptions.push({ type: "course", code: c });
         }
       }
       if (allOptions.length === 1) {
         return { ...allOptions[0], credits: effectiveCredits, title: trimmed };
       }
       if (allOptions.length > 1) {
-        return { type: 'pick', title: trimmed, credits: effectiveCredits, options: allOptions };
+        return { type: "pick", title: trimmed, credits: effectiveCredits, options: allOptions };
       }
       // Fall through to or_group if no disciplines/courses found in any part
     }
 
     return {
-      type: 'or_group',
-      title: 'or',
-      options: orParts.map(p => parseElectiveRequirement(p, credits)),
+      type: "or_group",
+      title: "or",
+      options: orParts.map((p) => parseElectiveRequirement(p, credits)),
     };
   }
 
   if (/non[- ]/i.test(trimmed)) {
     const exclusions: string[] = [];
-    if (/computing|computer/i.test(trimmed)) exclusions.push('CEG', 'CSI', 'SEG', 'ELG');
-    if (/mathematic/i.test(trimmed)) exclusions.push('MAT');
+    if (/computing|computer/i.test(trimmed)) exclusions.push("CEG", "CSI", "SEG", "ELG");
+    if (/mathematic/i.test(trimmed)) exclusions.push("MAT");
     return {
-      type: 'non_discipline_elective',
+      type: "non_discipline_elective",
       title: trimmed,
       credits: effectiveCredits,
       excluded_disciplines: exclusions.length > 0 ? exclusions : undefined,
@@ -800,10 +824,15 @@ function parseElectiveRequirement(text: string, credits?: number): ProgramRequir
   }
 
   if (/Faculty of/i.test(trimmed)) {
-    return { type: 'faculty_elective', title: trimmed, credits: effectiveCredits };
+    return { type: "faculty_elective", title: trimmed, credits: effectiveCredits };
   }
   if (/in science/i.test(trimmed)) {
-    return { type: 'faculty_elective', title: trimmed, credits: effectiveCredits, faculty: 'Science' };
+    return {
+      type: "faculty_elective",
+      title: trimmed,
+      credits: effectiveCredits,
+      faculty: "Science",
+    };
   }
 
   const disciplines = extractDisciplines(trimmed);
@@ -815,14 +844,14 @@ function parseElectiveRequirement(text: string, credits?: number): ProgramRequir
 
     for (const d of disciplines) {
       options.push({
-        type: 'discipline_elective',
-        title: `Any ${d}${levels ? ` at ${levels.join(' or ')} level` : ''}`,
+        type: "discipline_elective",
+        title: `Any ${d}${levels ? ` at ${levels.join(" or ")} level` : ""}`,
         disciplineLevels: [{ discipline: d, levels }],
       });
     }
 
     for (const c of explicitCourses) {
-      options.push({ type: 'course', code: c });
+      options.push({ type: "course", code: c });
     }
 
     if (options.length === 1) {
@@ -830,14 +859,14 @@ function parseElectiveRequirement(text: string, credits?: number): ProgramRequir
     }
 
     return {
-      type: 'pick',
+      type: "pick",
       title: trimmed,
       credits: effectiveCredits,
       options,
     };
   }
 
-  return { type: 'elective', title: trimmed, credits: effectiveCredits };
+  return { type: "elective", title: trimmed, credits: effectiveCredits };
 }
 
 const ProgramSchema = z.object({
@@ -850,8 +879,8 @@ export type Program = z.infer<typeof ProgramSchema>;
 
 function urlToSlug(url: string): string {
   return url
-    .replace(/^https?:\/\/catalogue\.uottawa\.ca(?:\/archive\/\d{4}-\d{4})?\/en\//, '')
-    .replace(/\/$/, '');
+    .replace(/^https?:\/\/catalogue\.uottawa\.ca(?:\/archive\/\d{4}-\d{4})?\/en\//, "")
+    .replace(/\/$/, "");
 }
 
 const CatalogueSchema = z.object({
@@ -863,23 +892,23 @@ export type Catalogue = z.infer<typeof CatalogueSchema>;
 class NotFoundError extends Error {
   constructor(url: string) {
     super(`Not found (404): ${url}`);
-    this.name = 'NotFoundError';
+    this.name = "NotFoundError";
   }
 }
 
-const USE_CACHE_ONLY = process.argv.includes('use-cache');
-const WRITE_CACHE = process.argv.includes('write-cache');
+const USE_CACHE_ONLY = process.argv.includes("use-cache");
+const WRITE_CACHE = process.argv.includes("write-cache");
 
 async function fetchHtml(url: string, retries = 3): Promise<string> {
-  const cacheDir = '.cache/catalogue';
+  const cacheDir = ".cache/catalogue";
   await fs.mkdir(cacheDir, { recursive: true });
 
-  const filename = encodeURIComponent(url.replace(/^https?:\/\//, '')) + '.html';
+  const filename = encodeURIComponent(url.replace(/^https?:\/\//, "")) + ".html";
   const filePath = path.join(cacheDir, filename);
 
   if (USE_CACHE_ONLY) {
     try {
-      const cached = await fs.readFile(filePath, 'utf-8');
+      const cached = await fs.readFile(filePath, "utf-8");
       return cached;
     } catch {
       // not cached
@@ -893,13 +922,14 @@ async function fetchHtml(url: string, retries = 3): Promise<string> {
       if (res.status === 404) throw new NotFoundError(url);
       if (!res.ok) throw new Error(`Status ${res.status}`);
       const text = await res.text();
-      if (WRITE_CACHE) await fs.writeFile(filePath, text, 'utf-8');
+      if (WRITE_CACHE) await fs.writeFile(filePath, text, "utf-8");
       return text;
     } catch (err: unknown) {
       // Don't retry 404s
       if (err instanceof NotFoundError) throw err;
-      if (i === retries - 1) throw new Error(`Failed to fetch ${url}: ${getErrorMessage(err)}`, { cause: err });
-      await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+      if (i === retries - 1)
+        throw new Error(`Failed to fetch ${url}: ${getErrorMessage(err)}`, { cause: err });
+      await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
     }
   }
   throw new Error(`Failed to fetch ${url}`);
@@ -911,8 +941,8 @@ async function scrapeDisciplineLinks(baseUrl: string): Promise<string[]> {
   const prefix = hrefPrefix(baseUrl);
   const pattern = new RegExp(`^${prefix}/en/courses/[a-z]{3,4}/$`);
   const links: string[] = [];
-  $('a').each((_, el) => {
-    const href = $(el).attr('href');
+  $("a").each((_, el) => {
+    const href = $(el).attr("href");
     if (href && pattern.test(href)) {
       if (!links.includes(href)) links.push(href);
     }
@@ -925,9 +955,12 @@ async function scrapeProgramLinks(baseUrl: string): Promise<string[]> {
   const $ = cheerio.load(html);
   const prefix = hrefPrefix(baseUrl);
   const links: string[] = [];
-  $('a').each((_, el) => {
-    const href = $(el).attr('href');
-    if (href && (href.startsWith(`${prefix}/en/undergrad/`) || href.startsWith(`${prefix}/en/grad/`))) {
+  $("a").each((_, el) => {
+    const href = $(el).attr("href");
+    if (
+      href &&
+      (href.startsWith(`${prefix}/en/undergrad/`) || href.startsWith(`${prefix}/en/grad/`))
+    ) {
       if (!links.includes(href)) links.push(href);
     }
   });
@@ -939,12 +972,12 @@ async function scrapeCourses(url: string): Promise<Course[]> {
   const $ = cheerio.load(html);
   const courses: Course[] = [];
 
-  $('.courseblock').each((_, el) => {
-    const titleBlock = $(el).find('.courseblocktitle').text().replace(/\s+/g, ' ').trim();
-    const descBlock = $(el).find('.courseblockdesc').text().replace(/\s+/g, ' ').trim();
-    const extraBlock = $(el).find('.courseblockextra').text().replace(/\s+/g, ' ').trim();
+  $(".courseblock").each((_, el) => {
+    const titleBlock = $(el).find(".courseblocktitle").text().replace(/\s+/g, " ").trim();
+    const descBlock = $(el).find(".courseblockdesc").text().replace(/\s+/g, " ").trim();
+    const extraBlock = $(el).find(".courseblockextra").text().replace(/\s+/g, " ").trim();
 
-    const prereqHighlight = $(el).find('.courseblockextra.highlight').first();
+    const prereqHighlight = $(el).find(".courseblockextra.highlight").first();
     let prereqText: string | undefined;
     let prerequisites: CoursePrereqNode | undefined;
     if (prereqHighlight.length > 0) {
@@ -961,7 +994,7 @@ async function scrapeCourses(url: string): Promise<Course[]> {
       throw new Error(`Failed to parse course title block: "${titleBlock}" at ${url}`);
     }
 
-    const code = match[1].replace(/\s+/, ' ');
+    const code = match[1].replace(/\s+/, " ");
     let title = match[2];
     let credits = 0;
 
@@ -977,19 +1010,21 @@ async function scrapeCourses(url: string): Promise<Course[]> {
     const componentMatch = extraBlock.match(/(?:Course Component|Volet)\s*:\s*(.*)/i);
     const component = componentMatch ? componentMatch[1] : undefined;
 
-    const aliasSource = [component, descBlock].filter(Boolean).join(' ');
+    const aliasSource = [component, descBlock].filter(Boolean).join(" ");
     const aliases = extractPreviouslyAliases(aliasSource, code);
 
-    courses.push(CourseSchema.parse({
-      code,
-      title,
-      credits,
-      description: descBlock,
-      component,
-      ...(aliases.length > 0 ? { aliases } : {}),
-      prereqText,
-      prerequisites,
-    }));
+    courses.push(
+      CourseSchema.parse({
+        code,
+        title,
+        credits,
+        description: descBlock,
+        component,
+        ...(aliases.length > 0 ? { aliases } : {}),
+        prereqText,
+        prerequisites,
+      }),
+    );
   });
 
   return courses;
@@ -1004,60 +1039,65 @@ function parseUnits(text: string): number | undefined {
 async function scrapeProgram(url: string): Promise<Program> {
   const html = await fetchHtml(url);
   const $ = cheerio.load(html);
-  const title = $('#page-title-area>h1, h1.page-title').first().text().replace(/\s+/g, ' ').trim();
+  const title = $("#page-title-area>h1, h1.page-title").first().text().replace(/\s+/g, " ").trim();
 
   const requirements: ProgramRequirement[] = [];
   let currentGroup: ProgramRequirement | null = null;
 
-  $('table.sc_courselist tr').each((_, el) => {
-    const rowClass = $(el).attr('class') || '';
-    if (rowClass.includes('listsum')) return;
+  $("table.sc_courselist tr").each((_, el) => {
+    const rowClass = $(el).attr("class") || "";
+    if (rowClass.includes("listsum")) return;
 
-    const isIndented = $(el).find('div[style*="margin-left"]').length > 0 ||
-      $(el).find('.blockind').length > 0 ||
-      $(el).find('.commentindent').length > 0;
+    const isIndented =
+      $(el).find('div[style*="margin-left"]').length > 0 ||
+      $(el).find(".blockind").length > 0 ||
+      $(el).find(".commentindent").length > 0;
 
-    const isHeaderRow = $(el).find('th').length > 0;
-    const isSectionHeader = $(el).find('.areaheader').length > 0;
+    const isHeaderRow = $(el).find("th").length > 0;
+    const isSectionHeader = $(el).find(".areaheader").length > 0;
 
     if (isHeaderRow) {
       if (isSectionHeader) {
         currentGroup = null;
-        requirements.push(ProgramRequirementSchema.parse({
-          type: 'section',
-          title: $(el).text().replace(/\s+/g, ' ').trim(),
-          indented: isIndented || undefined,
-        }));
+        requirements.push(
+          ProgramRequirementSchema.parse({
+            type: "section",
+            title: $(el).text().replace(/\s+/g, " ").trim(),
+            indented: isIndented || undefined,
+          }),
+        );
       }
       return;
     }
 
     if (isSectionHeader) {
       currentGroup = null;
-      requirements.push(ProgramRequirementSchema.parse({
-        type: 'section',
-        title: $(el).text().replace(/\s+/g, ' ').trim(),
-        indented: isIndented || undefined,
-      }));
+      requirements.push(
+        ProgramRequirementSchema.parse({
+          type: "section",
+          title: $(el).text().replace(/\s+/g, " ").trim(),
+          indented: isIndented || undefined,
+        }),
+      );
       return;
     }
 
-    let code = $(el).find('td.codecol').text().replace(/\s+/g, ' ').trim();
-    const rowTitle = $(el).find('td.titlecol').text().replace(/\s+/g, ' ').trim();
-    const hours = $(el).find('td.hourscol').text().replace(/\s+/g, ' ').trim();
+    let code = $(el).find("td.codecol").text().replace(/\s+/g, " ").trim();
+    const rowTitle = $(el).find("td.titlecol").text().replace(/\s+/g, " ").trim();
+    const hours = $(el).find("td.hourscol").text().replace(/\s+/g, " ").trim();
     const credits = hours ? parseUnits(hours) : undefined;
 
     let isOr = false;
-    if ($(el).find('.orclass').length > 0) isOr = true;
-    if (code.startsWith('or ')) {
+    if ($(el).find(".orclass").length > 0) isOr = true;
+    if (code.startsWith("or ")) {
       isOr = true;
       code = code.substring(3).trim();
     }
 
-    const isComment = $(el).find('.courselistcomment').length > 0;
+    const isComment = $(el).find(".courselistcomment").length > 0;
 
     if (isComment) {
-      const commentText = $(el).find('.courselistcomment').text().replace(/\s+/g, ' ').trim();
+      const commentText = $(el).find(".courselistcomment").text().replace(/\s+/g, " ").trim();
       const parsedNode = parseElectiveRequirement(commentText, credits);
       const parsedWithIndent: ProgramRequirement = {
         ...parsedNode,
@@ -1067,9 +1107,9 @@ async function scrapeProgram(url: string): Promise<Program> {
       if (isIndented && currentGroup && currentGroup.options) {
         currentGroup.options.push(parsedWithIndent);
       } else {
-        if (commentText.endsWith(':') || commentText.toLowerCase().includes('from:')) {
+        if (commentText.endsWith(":") || commentText.toLowerCase().includes("from:")) {
           currentGroup = {
-            type: 'group',
+            type: "group",
             title: commentText,
             credits,
             options: [],
@@ -1086,7 +1126,7 @@ async function scrapeProgram(url: string): Promise<Program> {
 
     if (code) {
       const courseReq: ProgramRequirement = {
-        type: isOr ? 'or_course' : 'course',
+        type: isOr ? "or_course" : "course",
         code,
         title: rowTitle || undefined,
         credits,
@@ -1123,10 +1163,10 @@ async function scrapeProgram(url: string): Promise<Program> {
 }
 
 function processRequirements(reqs: ProgramRequirement[]): ProgramRequirement[] {
-  const cleaned = reqs.map(r => {
+  const cleaned = reqs.map((r) => {
     const newR: ProgramRequirement = { ...r };
-    if (newR.type === 'group' && (!newR.options || newR.options.length === 0)) {
-      newR.type = 'elective';
+    if (newR.type === "group" && (!newR.options || newR.options.length === 0)) {
+      newR.type = "elective";
       delete newR.options;
     }
     if (newR.options && newR.options.length === 0) {
@@ -1145,9 +1185,13 @@ function processRequirements(reqs: ProgramRequirement[]): ProgramRequirement[] {
   for (let i = 0; i < cleaned.length; i++) {
     const r = cleaned[i];
 
-    if ((r.type === 'elective' || r.type === 'group' || r.type === 'section') && r.title && r.title.toLowerCase().includes('option from the following')) {
+    if (
+      (r.type === "elective" || r.type === "group" || r.type === "section") &&
+      r.title &&
+      r.title.toLowerCase().includes("option from the following")
+    ) {
       currentOptionsGroup = {
-        type: 'options_group',
+        type: "options_group",
         title: r.title,
         credits: r.credits,
         options: [],
@@ -1156,11 +1200,11 @@ function processRequirements(reqs: ProgramRequirement[]): ProgramRequirement[] {
       continue;
     }
 
-    if (r.type === 'section' && r.title && r.title.toLowerCase().startsWith('option ')) {
+    if (r.type === "section" && r.title && r.title.toLowerCase().startsWith("option ")) {
       if (!currentOptionsGroup) {
         currentOptionsGroup = {
-          type: 'options_group',
-          title: 'Options',
+          type: "options_group",
+          title: "Options",
           options: [],
         };
         foldedOptions.push(currentOptionsGroup);
@@ -1168,7 +1212,7 @@ function processRequirements(reqs: ProgramRequirement[]): ProgramRequirement[] {
 
       currentOptionList = [];
       currentOptionsGroup.options!.push({
-        type: 'and',
+        type: "and",
         title: r.title,
         options: currentOptionList,
       });
@@ -1176,7 +1220,7 @@ function processRequirements(reqs: ProgramRequirement[]): ProgramRequirement[] {
     }
 
     if (currentOptionList) {
-      if (r.type === 'section') {
+      if (r.type === "section") {
         // A new section always terminates the current options group.
         currentOptionsGroup = null;
         currentOptionList = null;
@@ -1202,19 +1246,19 @@ function processRequirements(reqs: ProgramRequirement[]): ProgramRequirement[] {
   for (let i = 0; i < foldedOptions.length; i++) {
     const r = foldedOptions[i];
 
-    if (r.type === 'section') {
-      if (r.title && r.title.toLowerCase() === 'or') {
+    if (r.type === "section") {
+      if (r.title && r.title.toLowerCase() === "or") {
         const last = foldedSections.pop();
         const orGroup: ProgramRequirement = {
-          type: 'or_group',
+          type: "or_group",
           options: last ? [last] : [],
         };
         foldedSections.push(orGroup);
-        currentSection = { type: 'and', title: 'Alternative', options: [] };
+        currentSection = { type: "and", title: "Alternative", options: [] };
         orGroup.options!.push(currentSection);
       } else {
         currentSection = {
-          type: 'and',
+          type: "and",
           title: r.title,
           options: [],
         };
@@ -1232,7 +1276,9 @@ function processRequirements(reqs: ProgramRequirement[]): ProgramRequirement[] {
   return foldedSections;
 }
 
-async function scrapeYearCatalogue(baseUrl: string): Promise<{ catalogue: Catalogue; missingUrls: string[] }> {
+async function scrapeYearCatalogue(
+  baseUrl: string,
+): Promise<{ catalogue: Catalogue; missingUrls: string[] }> {
   const disciplineLinks = await scrapeDisciplineLinks(baseUrl);
   const programLinks = await scrapeProgramLinks(baseUrl);
 
@@ -1240,39 +1286,43 @@ async function scrapeYearCatalogue(baseUrl: string): Promise<{ catalogue: Catalo
   const missingUrls: string[] = [];
 
   const allCourses: Course[] = [];
-  const coursePromises = disciplineLinks.map(link => limit(async () => {
-    // hrefs are root-relative paths, so always use ROOT_URL as the domain
-    const url = `${ROOT_URL}${link}`;
-    try {
-      const courses = await scrapeCourses(url);
-      allCourses.push(...courses);
-    } catch (e: unknown) {
-      if (e instanceof NotFoundError) {
-        console.warn(`Skipping missing course page: ${url}`);
-        missingUrls.push(url);
-      } else {
-        console.error(`Error scraping courses at ${url}: ${getErrorMessage(e)}`);
-        throw e;
+  const coursePromises = disciplineLinks.map((link) =>
+    limit(async () => {
+      // hrefs are root-relative paths, so always use ROOT_URL as the domain
+      const url = `${ROOT_URL}${link}`;
+      try {
+        const courses = await scrapeCourses(url);
+        allCourses.push(...courses);
+      } catch (e: unknown) {
+        if (e instanceof NotFoundError) {
+          console.warn(`Skipping missing course page: ${url}`);
+          missingUrls.push(url);
+        } else {
+          console.error(`Error scraping courses at ${url}: ${getErrorMessage(e)}`);
+          throw e;
+        }
       }
-    }
-  }));
+    }),
+  );
 
   const allPrograms: Program[] = [];
-  const programPromises = programLinks.map(link => limit(async () => {
-    const url = `${ROOT_URL}${link}`;
-    try {
-      const prog = await scrapeProgram(url);
-      allPrograms.push(prog);
-    } catch (e: unknown) {
-      if (e instanceof NotFoundError) {
-        console.warn(`Skipping missing program: ${url}`);
-        missingUrls.push(url);
-      } else {
-        console.error(`Error scraping program at ${url}: ${getErrorMessage(e)}`);
-        throw e;
+  const programPromises = programLinks.map((link) =>
+    limit(async () => {
+      const url = `${ROOT_URL}${link}`;
+      try {
+        const prog = await scrapeProgram(url);
+        allPrograms.push(prog);
+      } catch (e: unknown) {
+        if (e instanceof NotFoundError) {
+          console.warn(`Skipping missing program: ${url}`);
+          missingUrls.push(url);
+        } else {
+          console.error(`Error scraping program at ${url}: ${getErrorMessage(e)}`);
+          throw e;
+        }
       }
-    }
-  }));
+    }),
+  );
 
   await Promise.all([...coursePromises, ...programPromises]);
 
@@ -1281,7 +1331,7 @@ async function scrapeYearCatalogue(baseUrl: string): Promise<{ catalogue: Catalo
 
   const catalogue = CatalogueSchema.parse({
     courses: allCourses,
-    programs: allPrograms.map(p => ({
+    programs: allPrograms.map((p) => ({
       ...p,
       requirements: processRequirements(p.requirements),
     })),
@@ -1290,7 +1340,12 @@ async function scrapeYearCatalogue(baseUrl: string): Promise<{ catalogue: Catalo
   return { catalogue, missingUrls };
 }
 
-async function scrapeYear(year: number, dataDir: string, force: boolean, currentYear: number): Promise<string[]> {
+async function scrapeYear(
+  year: number,
+  dataDir: string,
+  force: boolean,
+  currentYear: number,
+): Promise<string[]> {
   const outPath = path.join(dataDir, `catalogue.${year}.json`);
 
   if (!force) {
@@ -1308,10 +1363,10 @@ async function scrapeYear(year: number, dataDir: string, force: boolean, current
 
   const { catalogue, missingUrls } = await scrapeYearCatalogue(baseUrl);
 
-  await fs.writeFile(outPath, JSON.stringify(catalogue, null, 2), 'utf-8');
+  await fs.writeFile(outPath, JSON.stringify(catalogue, null, 2), "utf-8");
   console.log(
     `Saved catalogue.${year}.json (${catalogue.courses.length} courses, ${catalogue.programs.length} programs)` +
-    (missingUrls.length ? ` — ${missingUrls.length} missing (404)` : '')
+      (missingUrls.length ? ` — ${missingUrls.length} missing (404)` : ""),
   );
 
   return missingUrls;
@@ -1319,11 +1374,11 @@ async function scrapeYear(year: number, dataDir: string, force: boolean, current
 
 function parseIndicesStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
-  return value.filter((x): x is string => typeof x === 'string');
+  return value.filter((x): x is string => typeof x === "string");
 }
 
 function parseMissingByYear(value: unknown): Record<string, string[]> {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
   const out: Record<string, string[]> = {};
   for (const [year, urls] of Object.entries(value)) {
     out[year] = parseIndicesStringArray(urls);
@@ -1334,13 +1389,13 @@ function parseMissingByYear(value: unknown): Record<string, string[]> {
 const CATALOGUE_JSON_RE = /^catalogue\.(\d{4})\.json$/;
 
 async function generateIndices(dataDir: string): Promise<void> {
-  const indicesPath = path.join(dataDir, 'indices.json');
+  const indicesPath = path.join(dataDir, "indices.json");
   let existingCourses: string[] = [];
   let existingPrograms: string[] = [];
   try {
-    const rawExisting = await fs.readFile(indicesPath, 'utf-8');
+    const rawExisting = await fs.readFile(indicesPath, "utf-8");
     const parsed: unknown = JSON.parse(rawExisting);
-    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
       const o = parsed as Record<string, unknown>;
       existingCourses = parseIndicesStringArray(o.courses);
       existingPrograms = parseIndicesStringArray(o.programs);
@@ -1351,7 +1406,7 @@ async function generateIndices(dataDir: string): Promise<void> {
 
   const dirEntries = await fs.readdir(dataDir);
   const catalogueYears = dirEntries
-    .map(name => {
+    .map((name) => {
       const m = CATALOGUE_JSON_RE.exec(name);
       return m ? Number(m[1]) : null;
     })
@@ -1364,7 +1419,7 @@ async function generateIndices(dataDir: string): Promise<void> {
   const programsOut = [...existingPrograms];
 
   for (const y of catalogueYears) {
-    const raw = await fs.readFile(path.join(dataDir, `catalogue.${y}.json`), 'utf-8');
+    const raw = await fs.readFile(path.join(dataDir, `catalogue.${y}.json`), "utf-8");
     const catalogue = CatalogueSchema.parse(JSON.parse(raw) as unknown);
     for (const c of catalogue.courses) {
       const code = c.code;
@@ -1387,7 +1442,7 @@ async function generateIndices(dataDir: string): Promise<void> {
   await fs.writeFile(
     indicesPath,
     JSON.stringify({ courses: coursesOut, programs: programsOut }, null, 2),
-    'utf-8',
+    "utf-8",
   );
   console.log(
     `\nWrote indices.json (${coursesOut.length} courses, ${programsOut.length} programs; +${newCourses} courses, +${newPrograms} programs appended from ${catalogueYears.length} catalogue file(s))`,
@@ -1396,7 +1451,7 @@ async function generateIndices(dataDir: string): Promise<void> {
 
 async function getAcademicYearFromTerms(dataDir: string): Promise<number> {
   try {
-    const raw = await fs.readFile(path.join(dataDir, 'terms.json'), 'utf-8');
+    const raw = await fs.readFile(path.join(dataDir, "terms.json"), "utf-8");
     const data = JSON.parse(raw) as { terms?: { termId: string; name: string }[] };
     if (!Array.isArray(data.terms) || data.terms.length === 0) return getCurrentAcademicYear();
     let best = 0;
@@ -1404,7 +1459,7 @@ async function getAcademicYearFromTerms(dataDir: string): Promise<number> {
       const m = term.name.match(/(\d{4})/);
       if (!m) continue;
       const year = parseInt(m[1], 10);
-      const acYear = term.name.toLowerCase().includes('fall') ? year : year - 1;
+      const acYear = term.name.toLowerCase().includes("fall") ? year : year - 1;
       if (acYear > best) best = acYear;
     }
     return best > 0 ? best : getCurrentAcademicYear();
@@ -1419,10 +1474,10 @@ async function main() {
   await fs.mkdir(dataDir, { recursive: true });
 
   // Load existing missing-URLs log so we can merge into it
-  const missingPath = path.join(dataDir, 'catalogue.missing.json');
+  const missingPath = path.join(dataDir, "catalogue.missing.json");
   let missingByYear: Record<string, string[]> = {};
   try {
-    const raw = await fs.readFile(missingPath, 'utf-8');
+    const raw = await fs.readFile(missingPath, "utf-8");
     missingByYear = parseMissingByYear(JSON.parse(raw) as unknown);
   } catch {
     // No existing file — start fresh
@@ -1443,19 +1498,21 @@ async function main() {
   }
 
   // Write the missing-URLs log
-  await fs.writeFile(missingPath, JSON.stringify(missingByYear, null, 2), 'utf-8');
+  await fs.writeFile(missingPath, JSON.stringify(missingByYear, null, 2), "utf-8");
   const totalMissing = Object.values(missingByYear).reduce((n, urls) => n + urls.length, 0);
   if (totalMissing > 0) {
-    console.log(`\nWrote catalogue.missing.json (${totalMissing} missing URLs across ${Object.keys(missingByYear).length} year(s))`);
+    console.log(
+      `\nWrote catalogue.missing.json (${totalMissing} missing URLs across ${Object.keys(missingByYear).length} year(s))`,
+    );
   }
 
   // Write the manifest
   const years: number[] = [];
   for (let y = currentYear; y >= OLDEST_YEAR; y--) years.push(y);
   await fs.writeFile(
-    path.join(dataDir, 'catalogue.json'),
+    path.join(dataDir, "catalogue.json"),
     JSON.stringify({ years }, null, 2),
-    'utf-8',
+    "utf-8",
   );
   console.log(`\nWrote catalogue.json manifest: years ${currentYear}–${OLDEST_YEAR}`);
 
@@ -1463,8 +1520,8 @@ async function main() {
 }
 
 if (process.argv[1] && import.meta.url === `file://${process.argv[1]}`) {
-  main().catch(e => {
-    console.error('\nScrape failed!');
+  main().catch((e) => {
+    console.error("\nScrape failed!");
     console.error(e);
     process.exit(1);
   });

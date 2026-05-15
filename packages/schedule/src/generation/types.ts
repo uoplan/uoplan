@@ -1,5 +1,5 @@
-import type { ComponentSection, DayOfWeek } from '../dataTypes';
-import type { ProfessorRatingsMap } from '../professorRatings';
+import type { ComponentSection, DayOfWeek } from "../dataTypes";
+import type { ProfessorRatingsMap } from "../professorRatings";
 
 export interface TimeSlot {
   day: DayOfWeek;

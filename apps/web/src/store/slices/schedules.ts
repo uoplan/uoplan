@@ -45,20 +45,13 @@ interface SchedulesSlice {
   lockCourseForAllSchedulesFromSwap: AppStore["lockCourseForAllSchedulesFromSwap"];
 }
 
-export const createSchedulesSlice: StateCreator<
-  AppStore,
-  [],
-  [],
-  SchedulesSlice
-> = (set, get) => ({
+export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice> = (set, get) => ({
   generateSchedules: async () => {
     const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
     const state = get();
     // Ensure currentSeed is initialized on first generation
     const isFirstGen = state.currentSeed === 0;
-    const effectiveState = isFirstGen
-      ? { ...state, currentSeed: state.firstSeed }
-      : state;
+    const effectiveState = isFirstGen ? { ...state, currentSeed: state.firstSeed } : state;
     const result = await generateSchedulesAction(effectiveState);
     if (result) {
       // On first generation, also set currentSeed to firstSeed in the store
@@ -70,9 +63,7 @@ export const createSchedulesSlice: StateCreator<
     const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
     const state = get();
     const isFirstGen = state.currentSeed === 0;
-    const effectiveState = isFirstGen
-      ? { ...state, currentSeed: state.firstSeed }
-      : state;
+    const effectiveState = isFirstGen ? { ...state, currentSeed: state.firstSeed } : state;
     const result = await generateSchedulesAction(effectiveState);
     if (result) {
       set(isFirstGen ? { ...result, currentSeed: state.firstSeed } : result);
@@ -81,9 +72,7 @@ export const createSchedulesSlice: StateCreator<
 
   clearSchedule: () =>
     set((state) => {
-      const alreadyCleared =
-        state.currentSchedule === null &&
-        state.generationError === null;
+      const alreadyCleared = state.currentSchedule === null && state.generationError === null;
       if (alreadyCleared) return state;
       return {
         currentSchedule: null,
@@ -126,7 +115,11 @@ export const createSchedulesSlice: StateCreator<
     const newFirstSeed = generateRandomSeed();
     set({ firstSeed: newFirstSeed, currentSeed: newFirstSeed, currentSwaps: [] });
     const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
-    const result = await generateSchedulesAction({ ...get(), firstSeed: newFirstSeed, currentSeed: newFirstSeed });
+    const result = await generateSchedulesAction({
+      ...get(),
+      firstSeed: newFirstSeed,
+      currentSeed: newFirstSeed,
+    });
     if (result) {
       set(result);
     }
@@ -176,9 +169,7 @@ export const createSchedulesSlice: StateCreator<
     } else {
       const oldCode = oldEnrollment.courseCode;
       const reqId = currentPoolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
-      const reqType = remainingRequirements.find(
-        (r) => r.requirementId === reqId,
-      )?.type;
+      const reqType = remainingRequirements.find((r) => r.requirementId === reqId)?.type;
       virtualOnlyForNewCourse = virtualScheduleFilterApplies(
         virtualSectionsOnly,
         reqType,
@@ -207,15 +198,11 @@ export const createSchedulesSlice: StateCreator<
       const allCodes = schedule.enrollments.map((e) => e.courseCode);
       allCodes[enrollmentIndex] = newCourseCode;
 
-      const pinnedNormalized = new Set(
-        basicPinnedCourses.map(normalizeCourseCode),
-      );
+      const pinnedNormalized = new Set(basicPinnedCourses.map(normalizeCourseCode));
       const effectiveCache = cacheWithPerCourseVirtualFilter(
         cache,
         includeClosedComponents,
-        (code) =>
-          virtualSectionsOnly &&
-          !pinnedNormalized.has(normalizeCourseCode(code)),
+        (code) => virtualSectionsOnly && !pinnedNormalized.has(normalizeCourseCode(code)),
       );
 
       const batch = generateSchedulesWithPinned(
@@ -230,17 +217,15 @@ export const createSchedulesSlice: StateCreator<
       if (validSchedules.length > 0) {
         const oldColorIdx = currentColorMap[oldEnrollment.courseCode];
         const { [oldEnrollment.courseCode]: _, ...mapWithoutOld } = currentColorMap;
-        const nextColorMap = oldColorIdx !== undefined
-          ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
-          : mapWithoutOld;
+        const nextColorMap =
+          oldColorIdx !== undefined
+            ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
+            : mapWithoutOld;
 
         set({
           currentSchedule: validSchedules[0],
           currentColorMap: nextColorMap,
-          currentSwaps: [
-            ...get().currentSwaps,
-            { enrollmentIndex, courseCode: newCourseCode },
-          ],
+          currentSwaps: [...get().currentSwaps, { enrollmentIndex, courseCode: newCourseCode }],
         });
       }
       return;
@@ -257,24 +242,21 @@ export const createSchedulesSlice: StateCreator<
         newEnrollments[enrollmentIndex] = candidate;
         const oldCode = oldEnrollment.courseCode;
         const poolId = currentPoolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
-        const nextPoolMap = poolId != null
-          ? { ...currentPoolMap, [newCourseCode]: poolId }
-          : currentPoolMap;
+        const nextPoolMap =
+          poolId != null ? { ...currentPoolMap, [newCourseCode]: poolId } : currentPoolMap;
 
         const oldColorIdx = currentColorMap[oldCode];
         const { [oldCode]: _, ...mapWithoutOld } = currentColorMap;
-        const nextColorMap = oldColorIdx !== undefined
-          ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
-          : mapWithoutOld;
+        const nextColorMap =
+          oldColorIdx !== undefined
+            ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
+            : mapWithoutOld;
 
         set({
           currentSchedule: { enrollments: newEnrollments },
           currentPoolMap: nextPoolMap,
           currentColorMap: nextColorMap,
-          currentSwaps: [
-            ...get().currentSwaps,
-            { enrollmentIndex, courseCode: newCourseCode },
-          ],
+          currentSwaps: [...get().currentSwaps, { enrollmentIndex, courseCode: newCourseCode }],
         });
         return;
       }
@@ -383,7 +365,12 @@ export const createSchedulesSlice: StateCreator<
         optionalPool.push(code);
       }
 
-      return { candidates: optionalPool, poolCourses: optionalPool, requirementTitle: "Elective", rejectedWithConflict: [] };
+      return {
+        candidates: optionalPool,
+        poolCourses: optionalPool,
+        requirementTitle: "Elective",
+        rejectedWithConflict: [],
+      };
     }
 
     const poolId = currentPoolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
@@ -402,9 +389,7 @@ export const createSchedulesSlice: StateCreator<
       const oldCodeNorm = normalizeCourseCode(oldCode);
       for (const req of remainingRequirements) {
         if (!req.candidateCourses?.length) continue;
-        const hasOld = req.candidateCourses.some(
-          (c) => normalizeCourseCode(c) === oldCodeNorm,
-        );
+        const hasOld = req.candidateCourses.some((c) => normalizeCourseCode(c) === oldCodeNorm);
         if (hasOld) {
           for (const c of req.candidateCourses) candidateSet.add(c);
         }
@@ -425,9 +410,7 @@ export const createSchedulesSlice: StateCreator<
     const others = schedule.enrollments.filter(
       (e, i) => i !== enrollmentIndex && e.courseCode !== oldCode,
     );
-    const alreadyInSchedule = new Set(
-      schedule.enrollments.map((e) => e.courseCode),
-    );
+    const alreadyInSchedule = new Set(schedule.enrollments.map((e) => e.courseCode));
 
     const prereqEligibleSet = new Set(prereqEligibleCourses);
     const swapConstraints: GenerationConstraints = {
@@ -448,20 +431,13 @@ export const createSchedulesSlice: StateCreator<
       const cacheKey = `${code}:${includeClosedComponents}:${virtualOnly}`;
       const cached = validEnrollmentsByCourseCode.get(cacheKey);
       if (cached) return cached;
-      const sched = getEffectiveSchedule(
-        cache!,
-        code,
-        includeClosedComponents,
-        virtualOnly,
-      );
+      const sched = getEffectiveSchedule(cache!, code, includeClosedComponents, virtualOnly);
       if (!sched) {
         validEnrollmentsByCourseCode.set(cacheKey, []);
         return [];
       }
       const combos = getValidSectionCombos(sched, swapConstraints);
-      const enrollments = combos.map((combo) =>
-        getEnrollmentsForCourse(sched, combo),
-      );
+      const enrollments = combos.map((combo) => getEnrollmentsForCourse(sched, combo));
       validEnrollmentsByCourseCode.set(cacheKey, enrollments);
       return enrollments;
     }
@@ -556,22 +532,14 @@ export const createSchedulesSlice: StateCreator<
       requirementTreeWithStatus,
       selectedOptionsPerRequirement,
     );
-    let requirementIds = collectRequirementIdsWithCandidateCourse(
-      flattened,
-      norm,
-    );
+    let requirementIds = collectRequirementIdsWithCandidateCourse(flattened, norm);
 
     if (requirementIds.length === 0) {
-      let poolId =
-        currentPoolMap[code] ?? chosenCourseToRequirementId[code] ?? undefined;
+      let poolId = currentPoolMap[code] ?? chosenCourseToRequirementId[code] ?? undefined;
       if (!poolId) {
         for (const req of remainingRequirements) {
           if (!req.requirementId || !req.candidateCourses?.length) continue;
-          if (
-            req.candidateCourses.some(
-              (c) => normalizeCourseCode(c) === norm,
-            )
-          ) {
+          if (req.candidateCourses.some((c) => normalizeCourseCode(c) === norm)) {
             poolId = req.requirementId;
             break;
           }

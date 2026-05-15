@@ -2,12 +2,7 @@ import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
 import { recomputeStateForProgram, getDisciplineCodesForProgram } from "../requirementCompute";
 import type { CourseLanguageBucket } from "schedule";
-import {
-  buildDataCache,
-  normalizeCourseCode,
-  withExtraCourses,
-  isOptCourse,
-} from "schedule";
+import { buildDataCache, normalizeCourseCode, withExtraCourses, isOptCourse } from "schedule";
 import { getMergedCatalogue } from "./catalogueUtils";
 import { pruneOptionSelectionsForClear } from "../../components/requirements/requirementUtils";
 import {
@@ -15,7 +10,6 @@ import {
   DEFAULT_BASIC_LANGUAGE_BUCKETS,
   DEFAULT_BASIC_LEVEL_BUCKETS,
 } from "../../lib/electiveEligibility";
-
 
 interface SelectionSlice {
   setWizardMode: AppStore["setWizardMode"];
@@ -39,12 +33,7 @@ interface SelectionSlice {
   setFrenchImmersionStream: AppStore["setFrenchImmersionStream"];
 }
 
-export const createSelectionSlice: StateCreator<
-  AppStore,
-  [],
-  [],
-  SelectionSlice
-> = (set, get) => ({
+export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice> = (set, get) => ({
   setWizardMode: (mode) => {
     if (mode !== "basic") {
       set({ wizardMode: mode });
@@ -121,13 +110,8 @@ export const createSelectionSlice: StateCreator<
       constrainedPerRequirement: {},
       requirementSlotsUserTouched: {},
     });
-    const {
-      cache,
-      completedCourses,
-      levelBuckets,
-      languageBuckets,
-      includeClosedComponents,
-    } = get();
+    const { cache, completedCourses, levelBuckets, languageBuckets, includeClosedComponents } =
+      get();
     const state = recomputeStateForProgram(
       program,
       null, // minor is null
@@ -207,11 +191,7 @@ export const createSelectionSlice: StateCreator<
 
   setCompletedCourses: (courses) => {
     set({ completedCourses: courses });
-    const {
-      catalogue,
-      yearCatalogueCourses,
-      schedulesData,
-    } = get();
+    const { catalogue, yearCatalogueCourses, schedulesData } = get();
     if (yearCatalogueCourses && catalogue && schedulesData) {
       const effectiveCatalogue = getMergedCatalogue(catalogue, yearCatalogueCourses, courses);
       if (effectiveCatalogue) {
@@ -235,9 +215,13 @@ export const createSelectionSlice: StateCreator<
     // Inject fake course entries for OPT transfer credit codes so they flow through
     // the standard catalogue-based logic (prerequisite checks, elective candidates, etc.)
     const optCodes = courses.map(normalizeCourseCode).filter(isOptCourse);
-    const cache = cacheAfterRebuild && optCodes.length > 0
-      ? withExtraCourses(cacheAfterRebuild, optCodes.map((code) => ({ code, title: code, credits: 3, description: '' })))
-      : cacheAfterRebuild;
+    const cache =
+      cacheAfterRebuild && optCodes.length > 0
+        ? withExtraCourses(
+            cacheAfterRebuild,
+            optCodes.map((code) => ({ code, title: code, credits: 3, description: "" })),
+          )
+        : cacheAfterRebuild;
     if (cache !== cacheAfterRebuild) set({ cache });
 
     const state = recomputeStateForProgram(

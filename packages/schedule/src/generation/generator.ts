@@ -1,21 +1,21 @@
-import type { DataCache } from '../dataCache';
-import { isHonoursProject } from '../utils/courseUtils';
-import { satisfiesCompressedConstraint } from './constraints';
-import { enrollmentsOverlap } from './overlaps';
-import { canonicalCourseCode, enrollmentForPicker, getValidSectionCombos } from './sectionCombos';
+import type { DataCache } from "../dataCache";
+import { isHonoursProject } from "../utils/courseUtils";
+import { satisfiesCompressedConstraint } from "./constraints";
+import { enrollmentsOverlap } from "./overlaps";
+import { canonicalCourseCode, enrollmentForPicker, getValidSectionCombos } from "./sectionCombos";
 import type {
   CourseEnrollment,
   GeneratedSchedule,
   GenerationConstraints,
   PrecomputedCombo,
-} from './types';
+} from "./types";
 
 export function generateSchedules(
   courseCodes: string[],
   targetCount: number,
   cache: DataCache,
   constraints?: GenerationConstraints,
-  limit: number = 150
+  limit: number = 150,
 ): GeneratedSchedule[] {
   const schedules: GeneratedSchedule[] = [];
   const coursesWithCombos: { code: string; combos: PrecomputedCombo[] }[] = [];
@@ -37,7 +37,7 @@ export function generateSchedules(
         code: schedule.courseCode,
         combos: combos.map((combo) => ({
           combo,
-          enrollment: enrollmentForPicker(schedule.courseCode, combo, cache)
+          enrollment: enrollmentForPicker(schedule.courseCode, combo, cache),
         })),
       });
     }
@@ -64,7 +64,7 @@ export function generateSchedules(
     courseIdx: number,
     selected: { code: string; combo: PrecomputedCombo }[],
     selectedCount: number,
-    currentFyCredits: number
+    currentFyCredits: number,
   ): boolean {
     if (selectedCount === targetCount) {
       const enrollments: CourseEnrollment[] = selected.map(({ combo }) => combo.enrollment);
@@ -85,7 +85,7 @@ export function generateSchedules(
     if (constraints?.maxFirstYearCredits != null) {
       const nonFyRemaining = nonFyRemainingAtIdx[courseIdx];
       const minFyCoursesForced = Math.max(0, remainingToPick - nonFyRemaining);
-      if (currentFyCredits + (minFyCoursesForced * 3) > constraints.maxFirstYearCredits) {
+      if (currentFyCredits + minFyCoursesForced * 3 > constraints.maxFirstYearCredits) {
         return false;
       }
     }
@@ -105,11 +105,14 @@ export function generateSchedules(
 
     for (const precomputed of combos) {
       const candidate = precomputed.enrollment;
-      const conflicts = selected.some(({ combo: co }) => enrollmentsOverlap(co.enrollment, candidate));
+      const conflicts = selected.some(({ combo: co }) =>
+        enrollmentsOverlap(co.enrollment, candidate),
+      );
       if (conflicts) continue;
 
       selected.push({ code, combo: precomputed });
-      if (solve(courseIdx + 1, selected, selectedCount + 1, currentFyCredits + courseFyCredits)) return true;
+      if (solve(courseIdx + 1, selected, selectedCount + 1, currentFyCredits + courseFyCredits))
+        return true;
       selected.pop();
     }
 
@@ -129,7 +132,7 @@ export function generateSchedulesWithPinned(
   targetCount: number,
   cache: DataCache,
   constraints?: GenerationConstraints,
-  limit: number = 150
+  limit: number = 150,
 ): GeneratedSchedule[] {
   if (pinnedCourseCodes.length > targetCount) {
     return [];
@@ -151,10 +154,10 @@ export function generateSchedulesWithPinned(
     if (combos.length === 0) return [];
     pinned.push({
       code: schedule.courseCode,
-      combos: combos.map(combo => ({
+      combos: combos.map((combo) => ({
         combo,
-        enrollment: enrollmentForPicker(schedule.courseCode, combo, cache)
-      }))
+        enrollment: enrollmentForPicker(schedule.courseCode, combo, cache),
+      })),
     });
   }
 
@@ -175,10 +178,10 @@ export function generateSchedulesWithPinned(
     if (combos.length > 0) {
       optional.push({
         code: schedule.courseCode,
-        combos: combos.map(combo => ({
+        combos: combos.map((combo) => ({
           combo,
-          enrollment: enrollmentForPicker(schedule.courseCode, combo, cache)
-        }))
+          enrollment: enrollmentForPicker(schedule.courseCode, combo, cache),
+        })),
       });
     }
   }
@@ -192,7 +195,7 @@ export function generateSchedulesWithPinned(
     optionalItems: { code: string; combos: PrecomputedCombo[] }[],
     chosenPinned: { code: string; combo: PrecomputedCombo }[],
     startIdx: number,
-    initialFyCredits: number
+    initialFyCredits: number,
   ): void {
     const remainingSlots = targetCount - chosenPinned.length;
     if (remainingSlots <= 0) {
@@ -219,7 +222,7 @@ export function generateSchedulesWithPinned(
       idx: number,
       selected: { code: string; combo: PrecomputedCombo }[],
       selectedCount: number,
-      currentFyCredits: number
+      currentFyCredits: number,
     ): boolean {
       if (selectedCount === remainingSlots) {
         const all = [...chosenPinned, ...selected];
@@ -239,7 +242,7 @@ export function generateSchedulesWithPinned(
       if (constraints?.maxFirstYearCredits != null) {
         const nonFyRemaining = nonFyRemainingAtIdx[idx];
         const minFyCoursesForced = Math.max(0, remainingToPick - nonFyRemaining);
-        if (currentFyCredits + (minFyCoursesForced * 3) > constraints.maxFirstYearCredits) {
+        if (currentFyCredits + minFyCoursesForced * 3 > constraints.maxFirstYearCredits) {
           return false;
         }
       }
@@ -259,14 +262,19 @@ export function generateSchedulesWithPinned(
 
       for (const precomputed of combos) {
         const candidate = precomputed.enrollment;
-        const conflictsPinned = chosenPinned.some(({ combo: co }) => enrollmentsOverlap(co.enrollment, candidate));
+        const conflictsPinned = chosenPinned.some(({ combo: co }) =>
+          enrollmentsOverlap(co.enrollment, candidate),
+        );
         if (conflictsPinned) continue;
 
-        const conflictsOpt = selected.some(({ combo: co }) => enrollmentsOverlap(co.enrollment, candidate));
+        const conflictsOpt = selected.some(({ combo: co }) =>
+          enrollmentsOverlap(co.enrollment, candidate),
+        );
         if (conflictsOpt) continue;
 
         selected.push({ code, combo: precomputed });
-        if (dfsOptional(idx + 1, selected, selectedCount + 1, currentFyCredits + courseFyCredits)) return true;
+        if (dfsOptional(idx + 1, selected, selectedCount + 1, currentFyCredits + courseFyCredits))
+          return true;
         selected.pop();
       }
 
@@ -281,13 +289,13 @@ export function generateSchedulesWithPinned(
     items: { code: string; combos: PrecomputedCombo[] }[],
     selected: { code: string; combo: PrecomputedCombo }[],
     idx: number,
-    currentFyCredits: number
+    currentFyCredits: number,
   ): boolean {
     if (idx === items.length) {
       findOptionalForPinned(optional, selected, 0, currentFyCredits);
       return schedules.length >= limit;
     }
-    
+
     const { code, combos } = items[idx];
     let courseFyCredits = 0;
     if (constraints?.maxFirstYearCredits != null) {
@@ -302,7 +310,9 @@ export function generateSchedulesWithPinned(
 
     for (const precomputed of combos) {
       const candidate = precomputed.enrollment;
-      const conflicts = selected.some(({ combo: co }) => enrollmentsOverlap(co.enrollment, candidate));
+      const conflicts = selected.some(({ combo: co }) =>
+        enrollmentsOverlap(co.enrollment, candidate),
+      );
       if (conflicts) continue;
 
       selected.push({ code, combo: precomputed });

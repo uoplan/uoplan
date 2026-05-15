@@ -40,71 +40,40 @@ export function SwapModalContent({
   onSwap: (enrollmentIndex: number, newCourseCode: string) => void;
 }) {
   const enrollment = schedule?.enrollments[modalState.enrollmentIndex];
-  const lockCourseForAllSchedulesFromSwap = useAppStore(
-    (s) => s.lockCourseForAllSchedulesFromSwap,
-  );
+  const lockCourseForAllSchedulesFromSwap = useAppStore((s) => s.lockCourseForAllSchedulesFromSwap);
   const wizardMode = useAppStore((s) => s.wizardMode);
   const basicPinnedCourses = useAppStore((s) => s.basicPinnedCourses);
   const constrainedPerRequirement = useAppStore((s) => s.constrainedPerRequirement);
   const currentPoolMap = useAppStore((s) => s.currentPoolMap);
-  const chosenCourseToRequirementId = useAppStore(
-    (s) => s.chosenCourseToRequirementId,
-  );
+  const chosenCourseToRequirementId = useAppStore((s) => s.chosenCourseToRequirementId);
   const remainingRequirements = useAppStore((s) => s.remainingRequirements);
-  const requirementTreeWithStatus = useAppStore(
-    (s) => s.requirementTreeWithStatus,
-  );
-  const selectedOptionsPerRequirement = useAppStore(
-    (s) => s.selectedOptionsPerRequirement,
-  );
+  const requirementTreeWithStatus = useAppStore((s) => s.requirementTreeWithStatus);
+  const selectedOptionsPerRequirement = useAppStore((s) => s.selectedOptionsPerRequirement);
 
   const courseCode = modalState.courseCode;
   const courseNorm = normalizeCourseCode(courseCode);
 
   const poolId = useMemo(() => {
-    const id =
-      currentPoolMap[courseCode] ??
-      chosenCourseToRequirementId[courseCode] ??
-      undefined;
+    const id = currentPoolMap[courseCode] ?? chosenCourseToRequirementId[courseCode] ?? undefined;
     if (id) return id;
     for (const req of remainingRequirements) {
       if (!req.requirementId || !req.candidateCourses?.length) continue;
-      if (
-        req.candidateCourses.some(
-          (c) => normalizeCourseCode(c) === courseNorm,
-        )
-      ) {
+      if (req.candidateCourses.some((c) => normalizeCourseCode(c) === courseNorm)) {
         return req.requirementId;
       }
     }
     return undefined;
-  }, [
-    chosenCourseToRequirementId,
-    courseCode,
-    courseNorm,
-    currentPoolMap,
-    remainingRequirements,
-  ]);
+  }, [chosenCourseToRequirementId, courseCode, courseNorm, currentPoolMap, remainingRequirements]);
 
   const treeRequirementIdsForCourse = useMemo(() => {
     if (wizardMode !== "advanced") return [];
-    const flat = applyOptionSelections(
-      requirementTreeWithStatus,
-      selectedOptionsPerRequirement,
-    );
+    const flat = applyOptionSelections(requirementTreeWithStatus, selectedOptionsPerRequirement);
     return collectRequirementIdsWithCandidateCourse(flat, courseNorm);
-  }, [
-    courseNorm,
-    requirementTreeWithStatus,
-    selectedOptionsPerRequirement,
-    wizardMode,
-  ]);
+  }, [courseNorm, requirementTreeWithStatus, selectedOptionsPerRequirement, wizardMode]);
 
   const alreadyLocked = useMemo(() => {
     if (wizardMode === "basic") {
-      return basicPinnedCourses.some(
-        (c) => normalizeCourseCode(c) === courseNorm,
-      );
+      return basicPinnedCourses.some((c) => normalizeCourseCode(c) === courseNorm);
     }
     if (wizardMode === "advanced") {
       for (const codes of Object.values(constrainedPerRequirement)) {
@@ -114,12 +83,7 @@ export function SwapModalContent({
       }
     }
     return false;
-  }, [
-    basicPinnedCourses,
-    constrainedPerRequirement,
-    courseNorm,
-    wizardMode,
-  ]);
+  }, [basicPinnedCourses, constrainedPerRequirement, courseNorm, wizardMode]);
 
   const lockUnavailable =
     wizardMode === "advanced" &&
@@ -127,8 +91,7 @@ export function SwapModalContent({
     treeRequirementIdsForCourse.length === 0 &&
     !poolId;
 
-  const lockDisabled =
-    wizardMode == null || alreadyLocked || lockUnavailable;
+  const lockDisabled = wizardMode == null || alreadyLocked || lockUnavailable;
 
   const lockTooltip = lockUnavailable
     ? tr("calendar.swap.lockNoPool")
@@ -173,12 +136,7 @@ export function SwapModalContent({
           <Text size="xs" c="dimmed" tt="uppercase" fw={600}>
             Current course
           </Text>
-          <Tooltip
-            label={lockTooltip}
-            position="left"
-            withArrow
-            color="dark"
-          >
+          <Tooltip label={lockTooltip} position="left" withArrow color="dark">
             <Box component="span" style={{ display: "inline-flex" }}>
               <ActionIcon
                 variant="subtle"
@@ -241,4 +199,3 @@ export function SwapModalContent({
     </Stack>
   );
 }
-

@@ -1,4 +1,4 @@
-import type { CourseEnrollment, TimeSlot } from './types';
+import type { CourseEnrollment, TimeSlot } from "./types";
 
 export function timesOverlap(a: TimeSlot, b: TimeSlot): boolean {
   if (a.day !== b.day) return false;
@@ -16,7 +16,7 @@ export function enrollmentsOverlap(a: CourseEnrollment, b: CourseEnrollment): bo
 
 export function getFirstOverlapWith(
   enrollment: CourseEnrollment,
-  existingEnrollments: CourseEnrollment[]
+  existingEnrollments: CourseEnrollment[],
 ): CourseEnrollment | null {
   for (const existing of existingEnrollments) {
     if (enrollmentsOverlap(enrollment, existing)) {

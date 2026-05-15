@@ -27,9 +27,7 @@ describe("groupTokenPrefix", () => {
     expect(groupTokenPrefix("group:MAT")).toBe("MAT");
   });
   it("strips instance suffix used for unique MultiSelect values", () => {
-    expect(groupTokenPrefix("group:CSI~550e8400-e29b-41d4-a716-446655440000")).toBe(
-      "CSI",
-    );
+    expect(groupTokenPrefix("group:CSI~550e8400-e29b-41d4-a716-446655440000")).toBe("CSI");
   });
   it("uppercases subject", () => {
     expect(groupTokenPrefix("group:adm~x")).toBe("ADM");

@@ -1,11 +1,15 @@
-import type { Catalogue, Course, Program, SchedulesData } from 'schedule'
-import type { RemainingRequirement, RequirementWithStatus, CompletedRequirementItem } from "schedule";
+import type { Catalogue, Course, Program, SchedulesData } from "schedule";
+import type {
+  RemainingRequirement,
+  RequirementWithStatus,
+  CompletedRequirementItem,
+} from "schedule";
 import type { GeneratedSchedule } from "schedule";
-import type { DayOfWeek } from 'schedule'
+import type { DayOfWeek } from "schedule";
 import type { DataCache } from "schedule";
 import type { CourseLanguageBucket, CourseLevelBucket } from "schedule";
-import type { Indices } from 'schedule'
-import type { Term } from 'schedule'
+import type { Indices } from "schedule";
+import type { Term } from "schedule";
 import type { ProfessorRatingsMap } from "schedule";
 import type { DecodedState } from "schedule";
 import type { TimetableFailureDiagnostics } from "schedule";
@@ -98,7 +102,7 @@ export interface AppActions {
   setBasicElectivesCount: (count: number) => void;
   setBasicExcludedCategories: (categories: string[]) => void;
   generateBasicSchedules: () => Promise<void>;
-  
+
   loadData: () => Promise<void>;
   setSelectedTermId: (termId: string) => Promise<void>;
   setFirstYear: (year: number | null) => Promise<void>;
@@ -113,10 +117,7 @@ export interface AppActions {
   removeCompletedCourse: (code: string) => void;
   setSelectedForRequirement: (requirementId: string, courses: string[]) => void;
   setConstrainedForRequirement: (requirementId: string, courses: string[]) => void;
-  setSelectedOptionForRequirement: (
-    requirementId: string,
-    optionIndex: number,
-  ) => void;
+  setSelectedOptionForRequirement: (requirementId: string, optionIndex: number) => void;
   clearSelectedOptionForRequirement: (requirementId: string) => void;
   setCoursesThisSemester: (n: number) => void;
   setGenerationMinStartMinutes: (minutes: number) => void;
@@ -131,14 +132,9 @@ export interface AppActions {
   goToPreviousSeed: () => Promise<void>;
   goToNextSeed: () => Promise<void>;
   randomizeSeed: () => Promise<void>;
-  swapCourseInSchedule: (
-    enrollmentIndex: number,
-    newCourseCode: string,
-  ) => Promise<void>;
+  swapCourseInSchedule: (enrollmentIndex: number, newCourseCode: string) => Promise<void>;
   undoLastSwap: () => void;
-  getSwapCandidates: (
-    enrollmentIndex: number,
-  ) => {
+  getSwapCandidates: (enrollmentIndex: number) => {
     candidates: string[];
     poolCourses: string[];
     requirementTitle?: string;

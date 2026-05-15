@@ -10,4 +10,4 @@ AI was used to create this project.
 
 ### Grade data
 
-Historical grade data in this repository (for example `apps/scrapers/data/grades.json` and data derived from it) was obtained through an access to information request under Ontario's *Freedom of Information and Protection of Privacy Act*.
+Historical grade data in this repository (for example `apps/scrapers/data/grades.json` and data derived from it) was obtained through an access to information request under Ontario's _Freedom of Information and Protection of Privacy Act_.

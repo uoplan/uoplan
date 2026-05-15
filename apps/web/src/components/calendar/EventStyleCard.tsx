@@ -75,8 +75,7 @@ export function EventStyleCard({
 
   const legacyId = ratingDetails.find((d) => d.legacyId)?.legacyId;
   const hasProfessorRating = ratingDetails.length > 0;
-  const hasNumericRating =
-    hasProfessorRating && ratingValue != null && ratingValue > 0;
+  const hasNumericRating = hasProfessorRating && ratingValue != null && ratingValue > 0;
 
   const colorName = COURSE_COLORS[enrollmentIndex % COURSE_COLORS.length];
   const hex = COURSE_COLOR_HEX[colorName];

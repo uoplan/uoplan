@@ -9,8 +9,11 @@ import {
   createSchedulesSlice,
   createSelectionSlice,
 } from "./slices/index";
-import { DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS, DEFAULT_BASIC_LANGUAGE_BUCKETS, DEFAULT_BASIC_LEVEL_BUCKETS } from "../lib/electiveEligibility";
-
+import {
+  DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS,
+  DEFAULT_BASIC_LANGUAGE_BUCKETS,
+  DEFAULT_BASIC_LEVEL_BUCKETS,
+} from "../lib/electiveEligibility";
 
 export const useAppStore = create<AppStore>()((...a) => {
   const [set, get] = a;
@@ -84,15 +87,7 @@ export const useAppStore = create<AppStore>()((...a) => {
 
     // Global action: touches many states
     resetToDefault: () => {
-      const {
-        catalogue,
-        indices,
-        schedulesData,
-        cache,
-        loading,
-        error,
-        availableYears,
-      } = get();
+      const { catalogue, indices, schedulesData, cache, loading, error, availableYears } = get();
       set({
         catalogue,
         indices,

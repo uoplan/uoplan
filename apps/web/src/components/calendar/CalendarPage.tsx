@@ -1,14 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  Alert,
-  Box,
-  Button,
-  Group,
-  Stack,
-  Text,
-  Title,
-  Tooltip,
-} from "@mantine/core";
+import { Alert, Box, Button, Group, Stack, Text, Title, Tooltip } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import {
   IconArrowBackUp,
@@ -104,17 +95,12 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
     setTimetableEndDate,
   );
 
-  const eventCount = currentSchedule?.enrollments.reduce(
-    (sum, e) => sum + e.times.length,
-    0,
-  ) ?? 0;
+  const eventCount = currentSchedule?.enrollments.reduce((sum, e) => sum + e.times.length, 0) ?? 0;
 
   const startOk =
-    Boolean(timetableStartDate) &&
-    !Number.isNaN(Date.parse(`${timetableStartDate}T00:00:00Z`));
+    Boolean(timetableStartDate) && !Number.isNaN(Date.parse(`${timetableStartDate}T00:00:00Z`));
   const endOk =
-    Boolean(timetableEndDate) &&
-    !Number.isNaN(Date.parse(`${timetableEndDate}T00:00:00Z`));
+    Boolean(timetableEndDate) && !Number.isNaN(Date.parse(`${timetableEndDate}T00:00:00Z`));
   const dateRangeOk = startOk && endOk && timetableStartDate <= timetableEndDate;
 
   const genErrDetails = generationError?.details ?? null;
@@ -235,7 +221,9 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
         {isBasic ? (
           <>
             <BasicCalendarHeaderActions onBack={onBack} />
-            <BasicCalendarSidebarControls onBeforeNavigate={() => morphRef.current?.captureAndPark()} />
+            <BasicCalendarSidebarControls
+              onBeforeNavigate={() => morphRef.current?.captureAndPark()}
+            />
           </>
         ) : (
           <>
@@ -259,7 +247,13 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
             <Group gap="xs">
               <LanguageSwitcher />
               {indices && (
-                <Tooltip label="Copied to clipboard!" opened={shareCopied} position="bottom" withArrow color="dark">
+                <Tooltip
+                  label="Copied to clipboard!"
+                  opened={shareCopied}
+                  position="bottom"
+                  withArrow
+                  color="dark"
+                >
                   <Button
                     variant="filled"
                     color="dark"
@@ -364,13 +358,7 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
         </Button>
 
         {!isBasic && (
-          <Button
-            variant="light"
-            color="gray"
-            size="sm"
-            radius={0}
-            onClick={() => randomizeSeed()}
-          >
+          <Button variant="light" color="gray" size="sm" radius={0} onClick={() => randomizeSeed()}>
             {tr("calendarPage.randomize")}
           </Button>
         )}
@@ -394,13 +382,10 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
 
         <Stack gap={0}>
           <Text size="xs" c="dimmed">
-            {tr(
-              "calendarPage.showingBlocks",
-              {
-                count: eventCount,
-                suffix: eventCount === 1 ? "" : "s",
-              },
-            )}
+            {tr("calendarPage.showingBlocks", {
+              count: eventCount,
+              suffix: eventCount === 1 ? "" : "s",
+            })}
           </Text>
         </Stack>
 

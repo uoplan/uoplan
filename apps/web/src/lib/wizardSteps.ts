@@ -23,22 +23,20 @@ export const ALL_WIZARD_STEP_INDICES = [
 ] as const;
 
 /** Interactive steps only (omits Options / Assign when N/A). */
-export function buildVisibleStepIndices(
-  needsOptions: boolean,
-  needsAssign: boolean,
-): number[] {
-  const out: number[] = [WizardStep.Term, WizardStep.Mode, WizardStep.Program, WizardStep.Completed];
+export function buildVisibleStepIndices(needsOptions: boolean, needsAssign: boolean): number[] {
+  const out: number[] = [
+    WizardStep.Term,
+    WizardStep.Mode,
+    WizardStep.Program,
+    WizardStep.Completed,
+  ];
   if (needsOptions) out.push(WizardStep.Options);
   if (needsAssign) out.push(WizardStep.Assign);
   out.push(WizardStep.Generate);
   return out;
 }
 
-export function getNextStep(
-  current: number,
-  needsOptions: boolean,
-  needsAssign: boolean,
-): number {
+export function getNextStep(current: number, needsOptions: boolean, needsAssign: boolean): number {
   const visible = buildVisibleStepIndices(needsOptions, needsAssign);
   const i = visible.indexOf(current);
   if (i !== -1) return visible[Math.min(i + 1, visible.length - 1)];
@@ -46,11 +44,7 @@ export function getNextStep(
   return next ?? current;
 }
 
-export function getPrevStep(
-  current: number,
-  needsOptions: boolean,
-  needsAssign: boolean,
-): number {
+export function getPrevStep(current: number, needsOptions: boolean, needsAssign: boolean): number {
   const visible = buildVisibleStepIndices(needsOptions, needsAssign);
   const i = visible.indexOf(current);
   if (i !== -1) return visible[Math.max(i - 1, 0)];

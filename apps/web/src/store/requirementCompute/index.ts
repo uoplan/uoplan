@@ -1,13 +1,12 @@
 import { computeRequirementsState } from "schedule";
 import { normalizeCourseCode, type DataCache } from "schedule";
 import { buildPrereqContext, canTakeCourse } from "schedule";
-import {
-  courseMatchesFilters,
-  type CourseLanguageBucket,
-  type CourseLevelBucket,
-} from "schedule";
+import { courseMatchesFilters, type CourseLanguageBucket, type CourseLevelBucket } from "schedule";
 import type { Program } from "schedule";
-import { getAutoSelectedForRequirements, getAutoSelectedSingleEligibleCompleted } from "./autoAssign";
+import {
+  getAutoSelectedForRequirements,
+  getAutoSelectedSingleEligibleCompleted,
+} from "./autoAssign";
 import { mergeProgramWithMinor } from "./minorMerge";
 import type { RecomputedState } from "./types";
 import { collectAssignedFromExactRequirements } from "./utils";
@@ -71,11 +70,7 @@ export function recomputeStateForProgram(
     }
   }
 
-  const autoSelected = getAutoSelectedForRequirements(
-    remaining,
-    userLockedSelections,
-    cache,
-  );
+  const autoSelected = getAutoSelectedForRequirements(remaining, userLockedSelections, cache);
 
   // Unassigned completed = completed minus exact-match minus courses locked to user-touched slots.
   const assignedFromExact = collectAssignedFromExactRequirements(tree);
@@ -86,41 +81,28 @@ export function recomputeStateForProgram(
       assignedFromSelected.add(normalizeCourseCode(code));
     }
   }
-  const completedNormalized = new Set(
-    completedCourses.map(c => cache.resolveToCanonical(c)),
-  );
+  const completedNormalized = new Set(completedCourses.map((c) => cache.resolveToCanonical(c)));
   const isWorkTerm = (normCode: string): boolean => {
     const course = cache.getCourse(normCode);
     const component = course?.component?.trim().toLowerCase() ?? "";
     return component.startsWith("stage / work term");
   };
   const unassignedCompleted = [...completedNormalized].filter(
-    (norm) =>
-      !assignedFromExact.has(norm) &&
-      !assignedFromSelected.has(norm) &&
-      !isWorkTerm(norm),
+    (norm) => !assignedFromExact.has(norm) && !assignedFromSelected.has(norm) && !isWorkTerm(norm),
   );
 
   // For group-style requirements, augment candidate list with unassigned completed (eligible) first.
   const augmentedRemaining = remaining.map((req) => {
     if (
       !req.candidateCourses?.length ||
-      !GROUP_STYLE_TYPES.includes(
-        req.type as (typeof GROUP_STYLE_TYPES)[number],
-      )
+      !GROUP_STYLE_TYPES.includes(req.type as (typeof GROUP_STYLE_TYPES)[number])
     ) {
       return req;
     }
     const eligibleSet = new Set(req.candidateCourses.map(normalizeCourseCode));
-    const unassignedEligible = unassignedCompleted.filter((norm) =>
-      eligibleSet.has(norm),
-    );
-    const displayCodes = unassignedEligible.map(
-      (norm) => cache.getCourse(norm)?.code ?? norm,
-    );
-    const candidateCourses = [
-      ...new Set([...displayCodes, ...req.candidateCourses]),
-    ];
+    const unassignedEligible = unassignedCompleted.filter((norm) => eligibleSet.has(norm));
+    const displayCodes = unassignedEligible.map((norm) => cache.getCourse(norm)?.code ?? norm);
+    const candidateCourses = [...new Set([...displayCodes, ...req.candidateCourses])];
     return { ...req, candidateCourses };
   });
 
@@ -171,9 +153,7 @@ export function recomputeStateForProgram(
   const finalUnassignedCompletedCourses = [...completedNormalized]
     .filter(
       (norm) =>
-        !assignedFromExact.has(norm) &&
-        !finalAssignedFromSelected.has(norm) &&
-        !isWorkTerm(norm),
+        !assignedFromExact.has(norm) && !finalAssignedFromSelected.has(norm) && !isWorkTerm(norm),
     )
     .map((norm) => cache.getCourse(norm)?.code ?? norm);
 

@@ -28,9 +28,7 @@ export function OptionsStep({
   if (relevantNodes.length === 0) {
     return (
       <Alert color="blue" variant="light" radius={0} data-tour="options">
-        <Text size="sm">
-          {tr("optionsStep.none", )}
-        </Text>
+        <Text size="sm">{tr("optionsStep.none")}</Text>
       </Alert>
     );
   }
@@ -38,29 +36,27 @@ export function OptionsStep({
   return (
     <Stack gap="md" data-tour="options">
       <Alert color="blue" variant="light" radius={0}>
-        <Text size="sm">
-          {tr("optionsStep.note", )}
-        </Text>
+        <Text size="sm">{tr("optionsStep.note")}</Text>
       </Alert>
 
       <Stack gap="md">
-          {relevantNodes.map((node, idx) => {
-            const nodeKey = getStableNodeKey(node, `options:${idx}`);
-            return (
-              <OptionsDrilldown
-                key={nodeKey}
-                nodeKeyPrefix={nodeKey}
-                node={node}
-                completedCourses={completedCoursesSet}
-                selectedOptionsPerRequirement={selectedOptionsPerRequirement}
-                onSelectOption={onSelectOption}
-                onClearOption={onClearOption}
-                activeBranch={true}
-                depth={0}
-              />
-            );
-          })}
-        </Stack>
+        {relevantNodes.map((node, idx) => {
+          const nodeKey = getStableNodeKey(node, `options:${idx}`);
+          return (
+            <OptionsDrilldown
+              key={nodeKey}
+              nodeKeyPrefix={nodeKey}
+              node={node}
+              completedCourses={completedCoursesSet}
+              selectedOptionsPerRequirement={selectedOptionsPerRequirement}
+              onSelectOption={onSelectOption}
+              onClearOption={onClearOption}
+              activeBranch={true}
+              depth={0}
+            />
+          );
+        })}
+      </Stack>
     </Stack>
   );
 }

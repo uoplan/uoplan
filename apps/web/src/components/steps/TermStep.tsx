@@ -1,7 +1,7 @@
-import { Alert, Select, Stack, Text } from '@mantine/core';
-import type { Term } from 'schedule';
-import { tr } from '../../i18n';
-import { NotificationToggle } from './NotificationToggle';
+import { Alert, Select, Stack, Text } from "@mantine/core";
+import type { Term } from "schedule";
+import { tr } from "../../i18n";
+import { NotificationToggle } from "./NotificationToggle";
 
 interface TermStepProps {
   terms: Term[];
@@ -27,12 +27,9 @@ export function TermStep({ terms, value, onChange }: TermStepProps) {
         size="md"
       />
       <Alert color="blue" variant="light" radius={0}>
-        <Text size="sm">
-          {tr("termStep.note", )}
-        </Text>
+        <Text size="sm">{tr("termStep.note")}</Text>
       </Alert>
       <NotificationToggle />
     </Stack>
   );
 }
-

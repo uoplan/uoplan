@@ -26,11 +26,11 @@ Three moving parts:
 
 ### Endpoints
 
-| Method | Path | Auth | Purpose |
-|--------|------|------|---------|
-| POST | `/subscribe` | none | Store a Web Push subscription |
-| POST | `/unsubscribe` | none | Delete a subscription |
-| POST | `/send` | Bearer token | Send notification to all subscribers |
+| Method | Path           | Auth         | Purpose                              |
+| ------ | -------------- | ------------ | ------------------------------------ |
+| POST   | `/subscribe`   | none         | Store a Web Push subscription        |
+| POST   | `/unsubscribe` | none         | Delete a subscription                |
+| POST   | `/send`        | Bearer token | Send notification to all subscribers |
 
 **`POST /subscribe`**  
 Body: standard `PushSubscription` JSON (`{ endpoint, keys: { p256dh, auth } }`)  
@@ -59,10 +59,12 @@ Web Push requires VAPID (Voluntary Application Server Identification). The worke
 Library: `web-push` or `@block65/webcrypto-web-push` (Workers-compatible — verify during implementation).
 
 **Worker secrets (set via `wrangler secret put`):**
+
 - `VAPID_PRIVATE_KEY` — base64url-encoded private key
 - `NOTIFY_SECRET` — shared secret for `/send` endpoint
 
 **Worker vars (in `wrangler.json`):**
+
 - `VAPID_PUBLIC_KEY` — base64url-encoded public key (safe to expose)
 - `VAPID_SUBJECT` — `mailto:<email>`
 
@@ -85,50 +87,53 @@ Library: `web-push` or `@block65/webcrypto-web-push` (Workers-compatible — ver
 
 Key: `uoplan-notifications`  
 Shape:
+
 ```ts
 type NotificationState =
-  | { status: 'disabled' }
-  | { status: 'subscribed'; subscription: SerializedPushSubscription }
-  | { status: 'denied' }
+  | { status: "disabled" }
+  | { status: "subscribed"; subscription: SerializedPushSubscription }
+  | { status: "denied" };
 ```
 
 **No requests to the Worker on page load.** State is read entirely from `localStorage`.
 
 ### Toggle behaviour
 
-| Current state | User clicks "Enable" | User clicks "Disable" |
-|---------------|---------------------|----------------------|
-| `disabled` | Request permission → subscribe → POST `/subscribe` → save to localStorage | — |
-| `subscribed` | — | `subscription.unsubscribe()` → POST `/unsubscribe` → clear localStorage |
-| `denied` | Toggle shown as disabled, tooltip: "Notifications blocked in browser settings" | — |
+| Current state | User clicks "Enable"                                                           | User clicks "Disable"                                                   |
+| ------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| `disabled`    | Request permission → subscribe → POST `/subscribe` → save to localStorage      | —                                                                       |
+| `subscribed`  | —                                                                              | `subscription.unsubscribe()` → POST `/unsubscribe` → clear localStorage |
+| `denied`      | Toggle shown as disabled, tooltip: "Notifications blocked in browser settings" | —                                                                       |
 
 If browser doesn't support `PushManager`, the toggle is hidden entirely.
 
 ### Service Worker (`public/sw.js`)
 
 Minimal — only handles `push` events:
+
 ```js
-self.addEventListener('push', event => {
+self.addEventListener("push", (event) => {
   const { title, body, url } = event.data.json();
   event.waitUntil(
     self.registration.showNotification(title, {
       body,
-      icon: '/icon.png',
+      icon: "/icon.png",
       data: { url },
-    })
+    }),
   );
 });
 
-self.addEventListener('notificationclick', event => {
+self.addEventListener("notificationclick", (event) => {
   event.notification.close();
   event.waitUntil(clients.openWindow(event.notification.data.url));
 });
 ```
 
 Registration (in `main.tsx` or similar):
+
 ```ts
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js');
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js");
 }
 ```
 
@@ -145,18 +150,23 @@ Exposed via Vite env var `VITE_VAPID_PUBLIC_KEY` (set in Cloudflare Pages env or
 Fetches the uOttawa public class search page and parses the term `<select>` dropdown. Compares the found term IDs against `apps/web/public/data/terms.json`.
 
 **Output:** JSON array of new term objects to stdout, e.g.:
+
 ```json
-[{"termId":"2269","name":"2026 Fall Term"}]
+[{ "termId": "2269", "name": "2026 Fall Term" }]
 ```
+
 Empty array `[]` if no new terms.
 
 The script exits 0 regardless (new terms or not) — the GH Action checks whether the output array is empty.
 
 Add to `apps/scrapers/package.json` scripts:
+
 ```json
 "check:terms": "tsx src/check_terms.ts"
 ```
+
 And root `package.json`:
+
 ```json
 "check:terms": "pnpm --filter scrapers run check:terms"
 ```
@@ -166,6 +176,7 @@ And root `package.json`:
 **Schedule:** `0 */4 * * *` (every 4 hours) + `workflow_dispatch`
 
 **Steps:**
+
 1. Checkout repo
 2. Setup pnpm + Node 24 + install deps
 3. Run `pnpm check:terms`, capture stdout as `NEW_TERMS`
@@ -177,6 +188,7 @@ And root `package.json`:
 9. For each new term in `NEW_TERMS`, call `POST https://notifications.uoplan.party/send` with `Authorization: Bearer $NOTIFY_SECRET` (one HTTP call per new term; typically only one term drops at a time)
 
 **Notification content** (per new term):
+
 ```json
 {
   "title": "uoplan — New Term Available",
@@ -186,6 +198,7 @@ And root `package.json`:
 ```
 
 **Secrets required in GitHub:**
+
 - `NOTIFY_SECRET` — must match the Worker's `NOTIFY_SECRET` secret
 
 ---

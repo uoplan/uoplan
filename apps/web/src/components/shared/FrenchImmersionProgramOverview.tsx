@@ -16,7 +16,15 @@ const DIPLOMA_REQUIREMENTS_URL =
 
 export type FrenchImmersionProgramOverviewVariant = "default" | "calendarSidebar" | "compact";
 
-function CheckLine({ done, children, dark }: { done: boolean; children: ReactNode; dark: boolean }) {
+function CheckLine({
+  done,
+  children,
+  dark,
+}: {
+  done: boolean;
+  children: ReactNode;
+  dark: boolean;
+}) {
   const markColor = done ? (dark ? "teal.4" : "teal.7") : dark ? "gray.5" : "dimmed";
   return (
     <Group gap={8} align="flex-start" wrap="nowrap">
@@ -34,7 +42,11 @@ function CheckLine({ done, children, dark }: { done: boolean; children: ReactNod
       >
         {done ? "✓" : "○"}
       </Text>
-      <Text size="xs" c={dark ? "gray.3" : undefined} style={{ flex: 1, minWidth: 0, lineHeight: 1.4 }}>
+      <Text
+        size="xs"
+        c={dark ? "gray.3" : undefined}
+        style={{ flex: 1, minWidth: 0, lineHeight: 1.4 }}
+      >
         {children}
       </Text>
     </Group>
@@ -49,16 +61,15 @@ export function FrenchImmersionProgramOverview({
   const dark = variant === "calendarSidebar";
   const compact = variant === "compact";
 
-  const { frenchImmersionStream, completedCourses, currentSchedule, cache, program } =
-    useAppStore(
-      useShallow((s) => ({
-        frenchImmersionStream: s.frenchImmersionStream,
-        completedCourses: s.completedCourses,
-        currentSchedule: s.currentSchedule,
-        cache: s.cache,
-        program: s.program,
-      })),
-    );
+  const { frenchImmersionStream, completedCourses, currentSchedule, cache, program } = useAppStore(
+    useShallow((s) => ({
+      frenchImmersionStream: s.frenchImmersionStream,
+      completedCourses: s.completedCourses,
+      currentSchedule: s.currentSchedule,
+      cache: s.cache,
+      program: s.program,
+    })),
+  );
 
   const progress = useMemo(() => {
     const scheduleCodes = currentSchedule?.enrollments.map((e) => e.courseCode) ?? [];
@@ -171,12 +182,23 @@ export function FrenchImmersionProgramOverview({
           </CheckLine>
         </Stack>
 
-        <Anchor href={DIPLOMA_REQUIREMENTS_URL} target="_blank" rel="noreferrer" size="xs" c={dark ? "violet.3" : undefined}>
+        <Anchor
+          href={DIPLOMA_REQUIREMENTS_URL}
+          target="_blank"
+          rel="noreferrer"
+          size="xs"
+          c={dark ? "violet.3" : undefined}
+        >
           {tr("frenchImmersion.progress.officialLink")}
         </Anchor>
 
         {showFls3500Reminder && (
-          <Alert color="yellow" variant="light" radius={0} title={tr("frenchImmersion.fls3500.title")}>
+          <Alert
+            color="yellow"
+            variant="light"
+            radius={0}
+            title={tr("frenchImmersion.fls3500.title")}
+          >
             <Text size="sm">{tr("frenchImmersion.fls3500.body")}</Text>
           </Alert>
         )}

@@ -1,4 +1,4 @@
-import { sendPushNotification } from './webpush.js';
+import { sendPushNotification } from "./webpush.js";
 
 export interface Env {
   WEBPUSH_SUBSCRIPTIONS: KVNamespace;
@@ -9,38 +9,38 @@ export interface Env {
   TURNSTILE_SECRET_KEY: string;
 }
 
-const ALLOWED_ORIGINS = ['https://uoplan.party', 'http://localhost:5173'];
+const ALLOWED_ORIGINS = ["https://uoplan.party", "http://localhost:5173"];
 
 function corsHeaders(req: Request): Record<string, string> {
-  const origin = req.headers.get('Origin') ?? '';
+  const origin = req.headers.get("Origin") ?? "";
   const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
-    'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
   };
 }
 
 function json(req: Request, status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json', ...corsHeaders(req) },
+    headers: { "Content-Type": "application/json", ...corsHeaders(req) },
   });
 }
 
 async function endpointKey(endpoint: string): Promise<string> {
   const data = new TextEncoder().encode(endpoint);
-  const hash = await crypto.subtle.digest('SHA-256', data);
+  const hash = await crypto.subtle.digest("SHA-256", data);
   const hex = Array.from(new Uint8Array(hash))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
   return `sub:${hex}`;
 }
 
 async function verifyTurnstile(token: string, secret: string, ip: string): Promise<boolean> {
-  const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: `secret=${encodeURIComponent(secret)}&response=${encodeURIComponent(token)}&remoteip=${encodeURIComponent(ip)}`,
   });
   const data = await res.json<{ success: boolean }>();
@@ -51,16 +51,16 @@ async function handleSubscribe(req: Request, env: Env): Promise<Response> {
   const sub = await req.json<{
     endpoint?: string;
     keys?: { p256dh?: string; auth?: string };
-    'cf-turnstile-response'?: string;
+    "cf-turnstile-response"?: string;
   }>();
   if (!sub?.endpoint || !sub?.keys?.p256dh || !sub?.keys?.auth) {
-    return json(req, 400, { error: 'Invalid subscription' });
+    return json(req, 400, { error: "Invalid subscription" });
   }
-  const token = sub['cf-turnstile-response'];
-  if (!token) return json(req, 400, { error: 'Missing Turnstile token' });
-  const ip = req.headers.get('CF-Connecting-IP') ?? '';
+  const token = sub["cf-turnstile-response"];
+  if (!token) return json(req, 400, { error: "Missing Turnstile token" });
+  const ip = req.headers.get("CF-Connecting-IP") ?? "";
   if (!(await verifyTurnstile(token, env.TURNSTILE_SECRET_KEY, ip))) {
-    return json(req, 403, { error: 'Turnstile verification failed' });
+    return json(req, 403, { error: "Turnstile verification failed" });
   }
   const key = await endpointKey(sub.endpoint);
   const { endpoint, keys } = sub;
@@ -69,15 +69,15 @@ async function handleSubscribe(req: Request, env: Env): Promise<Response> {
 }
 
 async function handleUnsubscribe(req: Request, env: Env): Promise<Response> {
-  const body = await req.json<{ endpoint?: string; 'cf-turnstile-response'?: string }>();
+  const body = await req.json<{ endpoint?: string; "cf-turnstile-response"?: string }>();
   if (!body?.endpoint) {
-    return json(req, 400, { error: 'Missing endpoint' });
+    return json(req, 400, { error: "Missing endpoint" });
   }
-  const token = body['cf-turnstile-response'];
-  if (!token) return json(req, 400, { error: 'Missing Turnstile token' });
-  const ip = req.headers.get('CF-Connecting-IP') ?? '';
+  const token = body["cf-turnstile-response"];
+  if (!token) return json(req, 400, { error: "Missing Turnstile token" });
+  const ip = req.headers.get("CF-Connecting-IP") ?? "";
   if (!(await verifyTurnstile(token, env.TURNSTILE_SECRET_KEY, ip))) {
-    return json(req, 403, { error: 'Turnstile verification failed' });
+    return json(req, 403, { error: "Turnstile verification failed" });
   }
   const key = await endpointKey(body.endpoint);
   await env.WEBPUSH_SUBSCRIPTIONS.delete(key);
@@ -85,16 +85,16 @@ async function handleUnsubscribe(req: Request, env: Env): Promise<Response> {
 }
 
 async function handleSend(req: Request, env: Env): Promise<Response> {
-  if (req.headers.get('Authorization') !== `Bearer ${env.NOTIFY_SECRET}`) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+  if (req.headers.get("Authorization") !== `Bearer ${env.NOTIFY_SECRET}`) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   }
 
   const payload = await req.json<{ title?: string; body?: string; url?: string }>();
   if (!payload?.title || !payload?.body || !payload?.url) {
-    return json(req, 400, { error: 'Missing required fields: title, body, url' });
+    return json(req, 400, { error: "Missing required fields: title, body, url" });
   }
 
   const { title, body, url } = payload;
@@ -106,7 +106,7 @@ async function handleSend(req: Request, env: Env): Promise<Response> {
   let listComplete = false;
 
   while (!listComplete) {
-    const list = await env.WEBPUSH_SUBSCRIPTIONS.list({ prefix: 'sub:', cursor });
+    const list = await env.WEBPUSH_SUBSCRIPTIONS.list({ prefix: "sub:", cursor });
     cursor = (list as { cursor?: string }).cursor ?? undefined;
     listComplete = list.list_complete;
 
@@ -131,7 +131,7 @@ async function handleSend(req: Request, env: Env): Promise<Response> {
             cleaned++;
           } else {
             failed++;
-            console.error('Failed to send notification (status=%s):', status ?? 'unknown', err);
+            console.error("Failed to send notification (status=%s):", status ?? "unknown", err);
           }
         }
       }),
@@ -140,7 +140,7 @@ async function handleSend(req: Request, env: Env): Promise<Response> {
 
   return new Response(JSON.stringify({ sent, failed, cleaned }), {
     status: 200,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { "Content-Type": "application/json" },
   });
 }
 
@@ -148,16 +148,16 @@ export default {
   async fetch(req: Request, env: Env): Promise<Response> {
     const { pathname } = new URL(req.url);
 
-    if (req.method === 'OPTIONS') {
+    if (req.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders(req) });
     }
 
-    if (req.method === 'POST') {
-      if (pathname === '/subscribe') return handleSubscribe(req, env);
-      if (pathname === '/unsubscribe') return handleUnsubscribe(req, env);
-      if (pathname === '/send') return handleSend(req, env);
+    if (req.method === "POST") {
+      if (pathname === "/subscribe") return handleSubscribe(req, env);
+      if (pathname === "/unsubscribe") return handleUnsubscribe(req, env);
+      if (pathname === "/send") return handleSend(req, env);
     }
 
-    return new Response('Not Found', { status: 404 });
+    return new Response("Not Found", { status: 404 });
   },
 };

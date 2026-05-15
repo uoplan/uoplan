@@ -11,7 +11,7 @@ export const baseConfig = defineConfig([
       "**/.turbo/**",
       "**/coverage/**",
       "**/*.config.ts",
-      '**/*.mjs',
+      "**/*.mjs",
       "apps/web/public/data/**",
       "**/public/**",
       "apps/notifications/**",
@@ -26,7 +26,7 @@ export const baseConfig = defineConfig([
     },
     languageOptions: {
       parserOptions: {
-        projectService: true
+        projectService: true,
       },
     },
     rules: {
@@ -34,21 +34,21 @@ export const baseConfig = defineConfig([
       "@typescript-eslint/no-misused-promises": [
         "error",
         {
-          "checksVoidReturn": {
-            "attributes": false
-          }
-        }
+          checksVoidReturn: {
+            attributes: false,
+          },
+        },
       ],
       "@typescript-eslint/no-unused-vars": "off",
       "unused-imports/no-unused-imports": "error",
       "unused-imports/no-unused-vars": [
         "warn",
         {
-          "vars": "all",
-          "varsIgnorePattern": "^_",
-          "args": "after-used",
-          "argsIgnorePattern": "^_",
-        }
+          vars: "all",
+          varsIgnorePattern: "^_",
+          args: "after-used",
+          argsIgnorePattern: "^_",
+        },
       ],
     },
   },

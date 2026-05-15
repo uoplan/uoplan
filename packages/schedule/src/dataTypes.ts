@@ -121,44 +121,48 @@ function toProtoDistribution(distribution: GradeDistribution | undefined) {
   };
 }
 
-function fromProtoDistribution(distribution: {
-  aPlus: number;
-  a: number;
-  aMinus: number;
-  bPlus: number;
-  b: number;
-  cPlus: number;
-  c: number;
-  dPlus: number;
-  d: number;
-  e: number;
-  f: number;
-  ein: number;
-  ns: number;
-  nc: number;
-  abs: number;
-  p: number;
-  s: number;
-} | undefined): GradeDistribution | undefined {
+function fromProtoDistribution(
+  distribution:
+    | {
+        aPlus: number;
+        a: number;
+        aMinus: number;
+        bPlus: number;
+        b: number;
+        cPlus: number;
+        c: number;
+        dPlus: number;
+        d: number;
+        e: number;
+        f: number;
+        ein: number;
+        ns: number;
+        nc: number;
+        abs: number;
+        p: number;
+        s: number;
+      }
+    | undefined,
+): GradeDistribution | undefined {
   if (!distribution) return undefined;
   const out: GradeDistribution = {
     "A+": Number(distribution.aPlus),
-    "A": Number(distribution.a),
+    A: Number(distribution.a),
     "A-": Number(distribution.aMinus),
     "B+": Number(distribution.bPlus),
-    "B": Number(distribution.b),
+    B: Number(distribution.b),
     "C+": Number(distribution.cPlus),
-    "C": Number(distribution.c),
+    C: Number(distribution.c),
     "D+": Number(distribution.dPlus),
-    "D": Number(distribution.d),
-    "E": Number(distribution.e),
-    "F": Number(distribution.f),
-    "EIN": Number(distribution.ein),
-    "NS": Number(distribution.ns),
-    "NC": Number(distribution.nc),
-    "ABS": Number(distribution.abs),
-    "P": Number(distribution.p),
-    "S": Number(distribution.s),
+    D: Number(distribution.d),
+    E: Number(distribution.e),
+    F: Number(distribution.f),
+    EIN: Number(distribution.ein),
+    NS: Number(distribution.ns),
+    NC: Number(distribution.nc),
+    ABS: Number(distribution.abs),
+    P: Number(distribution.p),
+    S: Number(distribution.s),
   };
   if (Object.values(out).every((v) => v === 0)) return undefined;
   return out;
@@ -417,7 +421,10 @@ function parseCourseCodeParts(courseCode: string): { subject: string; catalogNum
   return { subject, catalogNumber };
 }
 
-function createCourseCodeTable(courses: Course[]): { table: string[]; indexByCode: Map<string, number> } {
+function createCourseCodeTable(courses: Course[]): {
+  table: string[];
+  indexByCode: Map<string, number>;
+} {
   const table: string[] = [];
   const indexByCode = new Map<string, number>();
   const add = (code: string) => {
@@ -434,7 +441,10 @@ function createCourseCodeTable(courses: Course[]): { table: string[]; indexByCod
   return { table, indexByCode };
 }
 
-function courseIndexFromCode(indexByCode: Map<string, number>, code: string): ProtoCourseIndex | undefined {
+function courseIndexFromCode(
+  indexByCode: Map<string, number>,
+  code: string,
+): ProtoCourseIndex | undefined {
   const idx = indexByCode.get(code.trim());
   return idx === undefined ? undefined : { index: idx };
 }
@@ -516,46 +526,58 @@ export function toProtoCatalogue(input: Catalogue): ProtoCatalogue {
   const { table, indexByCode } = createCourseCodeTable(input.courses);
   return {
     courseCodes: table,
-    courses: input.courses.map((course): ProtoCourse => ({
-      code: courseIndexFromCode(indexByCode, course.code),
-      title: course.title,
-      credits: course.credits,
-      component: course.component,
-      aliases: (course.aliases ?? [])
-        .map((alias) => courseIndexFromCode(indexByCode, alias))
-        .filter((v): v is ProtoCourseIndex => v !== undefined),
-      hasPrereqText: Boolean(course.prereqText),
-      prerequisites: course.prerequisites ? toProtoPrereq(course.prerequisites) : undefined,
-    })),
-    programs: input.programs.map((program): ProtoProgram => ({
-      title: program.title,
-      programKey: programKeyFromProgram(program),
-      requirements: program.requirements.map(toProtoProgramRequirement),
-    })),
+    courses: input.courses.map(
+      (course): ProtoCourse => ({
+        code: courseIndexFromCode(indexByCode, course.code),
+        title: course.title,
+        credits: course.credits,
+        component: course.component,
+        aliases: (course.aliases ?? [])
+          .map((alias) => courseIndexFromCode(indexByCode, alias))
+          .filter((v): v is ProtoCourseIndex => v !== undefined),
+        hasPrereqText: Boolean(course.prereqText),
+        prerequisites: course.prerequisites ? toProtoPrereq(course.prerequisites) : undefined,
+      }),
+    ),
+    programs: input.programs.map(
+      (program): ProtoProgram => ({
+        title: program.title,
+        programKey: programKeyFromProgram(program),
+        requirements: program.requirements.map(toProtoProgramRequirement),
+      }),
+    ),
   };
 }
 
 export function fromProtoCatalogue(input: ProtoCatalogue): Catalogue {
   const courseCodeTable = input.courseCodes;
   return {
-    courses: input.courses.map((course): Course => ({
-      code: codeFromCourseIndex(courseCodeTable, course.code),
-      title: course.title,
-      credits: Number(course.credits),
-      description: "",
-      ...(course.component ? { component: course.component } : {}),
-      ...(course.aliases.length > 0
-        ? { aliases: course.aliases.map((alias) => codeFromCourseIndex(courseCodeTable, alias)).filter(Boolean) }
-        : {}),
-      ...(course.hasPrereqText ? { prereqText: "0" } : {}),
-      ...(course.prerequisites ? { prerequisites: fromProtoPrereq(course.prerequisites) } : {}),
-    })),
-    programs: input.programs.map((program): Program => ({
-      title: program.title,
-      url: programUrlFromKey(program.programKey),
-      slug: program.programKey,
-      requirements: program.requirements.map(fromProtoProgramRequirement),
-    })),
+    courses: input.courses.map(
+      (course): Course => ({
+        code: codeFromCourseIndex(courseCodeTable, course.code),
+        title: course.title,
+        credits: Number(course.credits),
+        description: "",
+        ...(course.component ? { component: course.component } : {}),
+        ...(course.aliases.length > 0
+          ? {
+              aliases: course.aliases
+                .map((alias) => codeFromCourseIndex(courseCodeTable, alias))
+                .filter(Boolean),
+            }
+          : {}),
+        ...(course.hasPrereqText ? { prereqText: "0" } : {}),
+        ...(course.prerequisites ? { prerequisites: fromProtoPrereq(course.prerequisites) } : {}),
+      }),
+    ),
+    programs: input.programs.map(
+      (program): Program => ({
+        title: program.title,
+        url: programUrlFromKey(program.programKey),
+        slug: program.programKey,
+        requirements: program.requirements.map(fromProtoProgramRequirement),
+      }),
+    ),
   };
 }
 
@@ -576,39 +598,43 @@ export function toProtoSchedulesData(input: SchedulesData): ProtoSchedulesData {
     courseCodes,
     totalCourses: input.totalCourses,
     totalWithSchedules: input.totalWithSchedules,
-    schedules: input.schedules.map((schedule): ProtoCourseSchedule => ({
-      course: addCode(schedule.courseCode),
-      title: schedule.title ?? undefined,
-      timeZone: schedule.timeZone,
-      components: Object.fromEntries(
-        Object.entries(schedule.components).map(([component, sections]) => [
-          component,
-          {
-            items: sections.map((section) => ({
-              section: section.section,
-              sectionCode: section.sectionCode ?? undefined,
-              component: section.component ?? undefined,
-              session: section.session ?? undefined,
-              times: section.times.map((time) => ({
-                day: codeDayToProto(time.day),
-                startMinutes: time.startMinutes,
-                endMinutes: time.endMinutes,
-                virtual: time.virtual,
+    schedules: input.schedules.map(
+      (schedule): ProtoCourseSchedule => ({
+        course: addCode(schedule.courseCode),
+        title: schedule.title ?? undefined,
+        timeZone: schedule.timeZone,
+        components: Object.fromEntries(
+          Object.entries(schedule.components).map(([component, sections]) => [
+            component,
+            {
+              items: sections.map((section) => ({
+                section: section.section,
+                sectionCode: section.sectionCode ?? undefined,
+                component: section.component ?? undefined,
+                session: section.session ?? undefined,
+                times: section.times.map((time) => ({
+                  day: codeDayToProto(time.day),
+                  startMinutes: time.startMinutes,
+                  endMinutes: time.endMinutes,
+                  virtual: time.virtual,
+                })),
+                instructors: section.instructors,
+                meetingDates: section.meetingDates
+                  ? {
+                      startYyyymmdd: dateStringToYyyymmdd(section.meetingDates[0] ?? ""),
+                      endYyyymmdd: dateStringToYyyymmdd(section.meetingDates[1] ?? ""),
+                    }
+                  : undefined,
+                status: statusToProto(section.status),
+                distribution: section.distribution
+                  ? toProtoDistribution(section.distribution)
+                  : undefined,
               })),
-              instructors: section.instructors,
-              meetingDates: section.meetingDates
-                ? {
-                    startYyyymmdd: dateStringToYyyymmdd(section.meetingDates[0] ?? ""),
-                    endYyyymmdd: dateStringToYyyymmdd(section.meetingDates[1] ?? ""),
-                  }
-                : undefined,
-              status: statusToProto(section.status),
-              distribution: section.distribution ? toProtoDistribution(section.distribution) : undefined,
-            })),
-          },
-        ]),
-      ),
-    })),
+            },
+          ]),
+        ),
+      }),
+    ),
   };
 }
 
@@ -620,41 +646,49 @@ export function fromProtoSchedulesData(input: ProtoSchedulesData): SchedulesData
     ...(input.totalWithSchedules !== undefined
       ? { totalWithSchedules: Number(input.totalWithSchedules) }
       : {}),
-    schedules: input.schedules.map((schedule): CourseSchedule => ({
-      subject: parseCourseCodeParts(codeFromCourseIndex(courseCodeTable, schedule.course)).subject,
-      catalogNumber: parseCourseCodeParts(codeFromCourseIndex(courseCodeTable, schedule.course)).catalogNumber,
-      courseCode: codeFromCourseIndex(courseCodeTable, schedule.course),
-      title: schedule.title ?? null,
-      timeZone: schedule.timeZone,
-      components: Object.fromEntries(
-        Object.entries(schedule.components).map(([component, list]) => [
-          component,
-          list.items.map((section): ComponentSection => ({
-            section: section.section,
-            sectionCode: section.sectionCode ?? null,
-            component: section.component ?? null,
-            session: section.session ?? null,
-            times: section.times.map((time): MeetingTime => ({
-              day: protoDayToCode(time.day),
-              startMinutes: Number(time.startMinutes),
-              endMinutes: Number(time.endMinutes),
-              virtual: time.virtual,
-            })),
-            instructors: section.instructors,
-            meetingDates: section.meetingDates
-              ? [
-                  yyyymmddToDateString(Number(section.meetingDates.startYyyymmdd)),
-                  yyyymmddToDateString(Number(section.meetingDates.endYyyymmdd)),
-                ]
-              : null,
-            status: statusFromProto(section.status),
-            ...(fromProtoDistribution(section.distribution)
-              ? { distribution: fromProtoDistribution(section.distribution) }
-              : {}),
-          })),
-        ]),
-      ),
-    })),
+    schedules: input.schedules.map(
+      (schedule): CourseSchedule => ({
+        subject: parseCourseCodeParts(codeFromCourseIndex(courseCodeTable, schedule.course))
+          .subject,
+        catalogNumber: parseCourseCodeParts(codeFromCourseIndex(courseCodeTable, schedule.course))
+          .catalogNumber,
+        courseCode: codeFromCourseIndex(courseCodeTable, schedule.course),
+        title: schedule.title ?? null,
+        timeZone: schedule.timeZone,
+        components: Object.fromEntries(
+          Object.entries(schedule.components).map(([component, list]) => [
+            component,
+            list.items.map(
+              (section): ComponentSection => ({
+                section: section.section,
+                sectionCode: section.sectionCode ?? null,
+                component: section.component ?? null,
+                session: section.session ?? null,
+                times: section.times.map(
+                  (time): MeetingTime => ({
+                    day: protoDayToCode(time.day),
+                    startMinutes: Number(time.startMinutes),
+                    endMinutes: Number(time.endMinutes),
+                    virtual: time.virtual,
+                  }),
+                ),
+                instructors: section.instructors,
+                meetingDates: section.meetingDates
+                  ? [
+                      yyyymmddToDateString(Number(section.meetingDates.startYyyymmdd)),
+                      yyyymmddToDateString(Number(section.meetingDates.endYyyymmdd)),
+                    ]
+                  : null,
+                status: statusFromProto(section.status),
+                ...(fromProtoDistribution(section.distribution)
+                  ? { distribution: fromProtoDistribution(section.distribution) }
+                  : {}),
+              }),
+            ),
+          ]),
+        ),
+      }),
+    ),
   };
 }
 
@@ -668,10 +702,12 @@ export function fromProtoIndices(input: ProtoIndices): Indices {
 
 export function toProtoTermsData(input: TermsData): ProtoTermsData {
   return {
-    terms: input.terms.map((term): ProtoTerm => ({
-      termId: parseTermIdToNumber(term.termId),
-      name: term.name,
-    })),
+    terms: input.terms.map(
+      (term): ProtoTerm => ({
+        termId: parseTermIdToNumber(term.termId),
+        name: term.name,
+      }),
+    ),
   };
 }
 
@@ -689,7 +725,9 @@ export function fromProtoCatalogueManifest(input: ProtoCatalogueManifest): Catal
   return { years: input.years.map((year) => Number(year)) };
 }
 
-export function toProtoRateMyProfessorsData(input: RateMyProfessorsData): ProtoRateMyProfessorsData {
+export function toProtoRateMyProfessorsData(
+  input: RateMyProfessorsData,
+): ProtoRateMyProfessorsData {
   return {
     resultCount: input.resultCount,
     professors: input.professors.map((professor) => ({
@@ -702,7 +740,9 @@ export function toProtoRateMyProfessorsData(input: RateMyProfessorsData): ProtoR
   };
 }
 
-export function fromProtoRateMyProfessorsData(input: ProtoRateMyProfessorsData): RateMyProfessorsData {
+export function fromProtoRateMyProfessorsData(
+  input: ProtoRateMyProfessorsData,
+): RateMyProfessorsData {
   return {
     resultCount: Number(input.resultCount),
     professors: input.professors.map((professor) => ({

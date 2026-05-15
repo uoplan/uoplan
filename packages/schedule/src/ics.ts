@@ -1,11 +1,11 @@
-import type { DataCache } from './dataCache';
-import type { GeneratedSchedule } from './generation';
-import type { DayOfWeek } from './dataTypes';
+import type { DataCache } from "./dataCache";
+import type { GeneratedSchedule } from "./generation";
+import type { DayOfWeek } from "./dataTypes";
 
-const DEFAULT_TZID = 'America/Toronto';
+const DEFAULT_TZID = "America/Toronto";
 
 function pad2(n: number): string {
-  return String(n).padStart(2, '0');
+  return String(n).padStart(2, "0");
 }
 
 function parseIsoDate(date: string): { y: number; m: number; d: number } | null {
@@ -33,19 +33,19 @@ function addUtcDays(base: Date, days: number): Date {
 function dayToIsoIndex(day: DayOfWeek): number {
   // Monday=1 .. Sunday=7
   switch (day) {
-    case 'Mo':
+    case "Mo":
       return 1;
-    case 'Tu':
+    case "Tu":
       return 2;
-    case 'We':
+    case "We":
       return 3;
-    case 'Th':
+    case "Th":
       return 4;
-    case 'Fr':
+    case "Fr":
       return 5;
-    case 'Sa':
+    case "Sa":
       return 6;
-    case 'Su':
+    case "Su":
       return 7;
   }
 }
@@ -68,10 +68,10 @@ function formatLocalDateTimeForIcs(dateUtcMidnight: Date, minutes: number): stri
 
 function escapeIcsText(value: string): string {
   return value
-    .replace(/\\/g, '\\\\')
-    .replace(/\r\n|\n|\r/g, '\\n')
-    .replace(/,/g, '\\,')
-    .replace(/;/g, '\\;');
+    .replace(/\\/g, "\\\\")
+    .replace(/\r\n|\n|\r/g, "\\n")
+    .replace(/,/g, "\\,")
+    .replace(/;/g, "\\;");
 }
 
 function foldIcsLine(line: string): string[] {
@@ -93,20 +93,20 @@ function lines(...raw: string[]): string {
   for (const l of raw) {
     for (const folded of foldIcsLine(l)) out.push(folded);
   }
-  return out.join('\r\n') + '\r\n';
+  return out.join("\r\n") + "\r\n";
 }
 
 function uniqNonEmpty(parts: Array<string | null | undefined>): string[] {
   const set = new Set<string>();
   for (const p of parts) {
-    const t = (p ?? '').trim();
+    const t = (p ?? "").trim();
     if (t) set.add(t);
   }
   return [...set];
 }
 
 function pickLocation(sectionText: string): string | null {
-  const raw = (sectionText ?? '').trim();
+  const raw = (sectionText ?? "").trim();
   if (!raw) return null;
 
   // Best-effort: look for common "BLDG 1234" or "BLDG-1234" patterns.
@@ -115,7 +115,7 @@ function pickLocation(sectionText: string): string | null {
   if (!m) return null;
   const building = m[1];
   const room = m[2];
-  const banned = new Set(['LEC', 'LAB', 'REC', 'TUT', 'SEM', 'DGD', 'PRA', 'CLI']);
+  const banned = new Set(["LEC", "LAB", "REC", "TUT", "SEM", "DGD", "PRA", "CLI"]);
   if (banned.has(building)) return null;
   return `${building} ${room}`;
 }
@@ -123,7 +123,7 @@ function pickLocation(sectionText: string): string | null {
 function dtstampUtc(): string {
   const d = new Date();
   return `${d.getUTCFullYear()}${pad2(d.getUTCMonth() + 1)}${pad2(d.getUTCDate())}T${pad2(
-    d.getUTCHours()
+    d.getUTCHours(),
   )}${pad2(d.getUTCMinutes())}${pad2(d.getUTCSeconds())}Z`;
 }
 
@@ -137,31 +137,31 @@ export function buildScheduleIcs(args: {
   const start = utcDateFromIso(startDate);
   const end = utcDateFromIso(endDate);
   if (!start || !end) {
-    throw new Error('Invalid date range for iCalendar export');
+    throw new Error("Invalid date range for iCalendar export");
   }
 
   const dtstamp = dtstampUtc();
 
-  let out = '';
-  out += lines('BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//uoplan//EN', 'CALSCALE:GREGORIAN');
+  let out = "";
+  out += lines("BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//uoplan//EN", "CALSCALE:GREGORIAN");
 
   for (const enrollment of schedule.enrollments) {
     const courseCode = enrollment.courseCode;
     const courseTitle =
       cache?.getCourse(courseCode)?.title?.trim() ||
       cache?.getSchedule(courseCode)?.title?.trim() ||
-      '';
+      "";
 
     const courseTzid = cache?.getSchedule(courseCode)?.timeZone || DEFAULT_TZID;
 
     for (const [component, { section }] of Object.entries(enrollment.sectionCombo)) {
       const instructors = uniqNonEmpty(section.instructors ?? []);
-      const professor = instructors.length ? instructors.join(', ') : '—';
-      const sectionCode = (section.sectionCode ?? section.section ?? '').trim();
+      const professor = instructors.length ? instructors.join(", ") : "—";
+      const sectionCode = (section.sectionCode ?? section.section ?? "").trim();
       const sectionLabel = sectionCode ? `${component} - ${sectionCode}` : component;
 
       const location = pickLocation(section.section);
-      const summary = `${courseCode}${location ? ` — ${location}` : ''}`;
+      const summary = `${courseCode}${location ? ` — ${location}` : ""}`;
       const descriptionLines = [
         courseTitle ? `Course: ${courseTitle}` : null,
         professor ? `Prof: ${professor}` : null,
@@ -183,29 +183,29 @@ export function buildScheduleIcs(args: {
         const uid = `${courseCode}-${component}-${t.day}-${t.startMinutes}-${t.endMinutes}@uoplan`;
 
         out += lines(
-          'BEGIN:VEVENT',
+          "BEGIN:VEVENT",
           `UID:${escapeIcsText(uid)}`,
           `DTSTAMP:${dtstamp}`,
           `DTSTART;TZID=${escapeIcsText(courseTzid)}:${dtStart}`,
           `DTEND;TZID=${escapeIcsText(courseTzid)}:${dtEnd}`,
           `RRULE:FREQ=WEEKLY;UNTIL=${untilUtc}`,
           `SUMMARY:${escapeIcsText(summary)}`,
-          `DESCRIPTION:${escapeIcsText(descriptionLines.join('\n'))}`,
+          `DESCRIPTION:${escapeIcsText(descriptionLines.join("\n"))}`,
           ...(location ? [`LOCATION:${escapeIcsText(location)}`] : []),
-          'END:VEVENT'
+          "END:VEVENT",
         );
       }
     }
   }
 
-  out += lines('END:VCALENDAR');
+  out += lines("END:VCALENDAR");
   return out;
 }
 
 export function downloadTextFile(filename: string, contents: string, mimeType: string): void {
   const blob = new Blob([contents], { type: mimeType });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.href = url;
   a.download = filename;
   document.body.appendChild(a);
@@ -213,4 +213,3 @@ export function downloadTextFile(filename: string, contents: string, mimeType: s
   a.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 0);
 }
-

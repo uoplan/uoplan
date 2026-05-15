@@ -10,9 +10,7 @@ export type RequirementPool = {
   minCourses: number;
 };
 
-export function buildRequirementPools(
-  remaining: RemainingRequirement[],
-): RequirementPool[] {
+export function buildRequirementPools(remaining: RemainingRequirement[]): RequirementPool[] {
   const pools: RequirementPool[] = [];
 
   for (const req of remaining) {
@@ -51,10 +49,7 @@ const DEFAULT_CREDITS_PER_COURSE = 3;
  * across future terms by the planner, not stacked into one schedule.
  */
 export function poolCourseCap(pool: RequirementPool): number {
-  const raw = Math.max(
-    pool.minCourses,
-    Math.ceil(pool.creditsNeeded / DEFAULT_CREDITS_PER_COURSE),
-  );
+  const raw = Math.max(pool.minCourses, Math.ceil(pool.creditsNeeded / DEFAULT_CREDITS_PER_COURSE));
   if (pool.type === "discipline_elective") {
     return Math.min(raw, 1);
   }
@@ -119,10 +114,7 @@ export function isBroadElectivePoolType(type: string): boolean {
   );
 }
 
-function sumCapForPools(
-  poolSubset: RequirementPool[],
-  cap: Map<string, number>,
-): number {
+function sumCapForPools(poolSubset: RequirementPool[], cap: Map<string, number>): number {
   let s = 0;
   for (const p of poolSubset) {
     s += cap.get(p.requirementId) ?? 0;
@@ -241,11 +233,7 @@ export function shuffleInPlace<T>(arr: T[], rng: () => number): void {
  * Pick one item from `items` using weighted probabilities.
  * Deterministic given the seeded `rng`.
  */
-export function weightedRandomPick<T>(
-  items: T[],
-  weights: number[],
-  rng: () => number,
-): T {
+export function weightedRandomPick<T>(items: T[], weights: number[], rng: () => number): T {
   const total = weights.reduce((a, b) => a + b, 0);
   let r = rng() * total;
   for (let i = 0; i < items.length; i++) {

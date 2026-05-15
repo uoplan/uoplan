@@ -127,8 +127,7 @@ function captureEventPositions(container: HTMLElement | null): CapturedEvent[] {
         legacyRaw !== undefined && legacyRaw !== "" && Number.isFinite(Number(legacyRaw))
           ? Number(legacyRaw)
           : undefined;
-      const hasProfessorRating =
-        ratingTier !== "" || (ratingValue != null && ratingValue > 0);
+      const hasProfessorRating = ratingTier !== "" || (ratingValue != null && ratingValue > 0);
       const virtual = el.dataset.virtual === "true";
       const gradeViz = parseGradeVizDataset(el.dataset.gradeViz);
       captures.push({
@@ -165,10 +164,7 @@ function buildParkedPhantoms(oldEvents: CapturedEvent[]): Phantom[] {
   }));
 }
 
-function buildPhantoms(
-  oldEvents: CapturedEvent[],
-  newEvents: CapturedEvent[],
-): Phantom[] {
+function buildPhantoms(oldEvents: CapturedEvent[], newEvents: CapturedEvent[]): Phantom[] {
   const phantoms: Phantom[] = [];
   const matchedOld = new Set<number>();
   const matchedNew = new Set<number>();
@@ -199,10 +195,8 @@ function buildPhantoms(
   }
 
   // Secondary: match remaining by colorHex
-  const remaining = <T extends { colorHex: string; i: number }>(
-    list: T[],
-    matched: Set<number>,
-  ) => list.filter((c) => !matched.has(c.i));
+  const remaining = <T extends { colorHex: string; i: number }>(list: T[], matched: Set<number>) =>
+    list.filter((c) => !matched.has(c.i));
 
   const remOld = remaining(
     oldEvents.map((c, i) => ({ ...c, i })),

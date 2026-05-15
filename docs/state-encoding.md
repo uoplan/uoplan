@@ -10,25 +10,25 @@ LocalStorage (`uoplan-state`) stores the same base64 blob so the previous sessio
 
 ### Binary format (VERSION 5)
 
-| Field | Type | Notes |
-|-------|------|-------|
-| version | U8 | Must equal 5 |
-| termId length | U8 | 0 = absent |
-| termId | ASCII bytes | e.g. `"202509"` |
-| firstYear | U16 | 0 = null/current |
-| programIndex | U16 | Index into `indices.json` programs; `0xFFFF` = no program |
-| completedCount | U16 | |
-| completedCourses | U16 × count | Index into `indices.json` courses |
-| levelBuckets | U8 count + U8 × count | 0=undergrad, 1=grad |
-| languageBuckets | U8 count + U8 × count | 0=en, 1=fr, 2=other |
-| electiveLevelBuckets | U8 count + U16 × count | e.g. 1000, 2000 |
-| coursesThisSemester | U8 | |
-| selectedScheduleIndex | U16 | |
-| generationSeed | U32 | |
-| includeClosedComponents | U8 | 0 or 1 |
-| optionSelections | U16 count + (U16 reqIndex, U16 optionIndex) × count | |
-| courseSelections | U16 count + (U16 reqIndex, U16 selCount, U16 × selCount) × count | |
-| studentPrograms | U8 count + (U8 len, ASCII bytes) × count | Discipline codes |
+| Field                   | Type                                                             | Notes                                                     |
+| ----------------------- | ---------------------------------------------------------------- | --------------------------------------------------------- |
+| version                 | U8                                                               | Must equal 5                                              |
+| termId length           | U8                                                               | 0 = absent                                                |
+| termId                  | ASCII bytes                                                      | e.g. `"202509"`                                           |
+| firstYear               | U16                                                              | 0 = null/current                                          |
+| programIndex            | U16                                                              | Index into `indices.json` programs; `0xFFFF` = no program |
+| completedCount          | U16                                                              |                                                           |
+| completedCourses        | U16 × count                                                      | Index into `indices.json` courses                         |
+| levelBuckets            | U8 count + U8 × count                                            | 0=undergrad, 1=grad                                       |
+| languageBuckets         | U8 count + U8 × count                                            | 0=en, 1=fr, 2=other                                       |
+| electiveLevelBuckets    | U8 count + U16 × count                                           | e.g. 1000, 2000                                           |
+| coursesThisSemester     | U8                                                               |                                                           |
+| selectedScheduleIndex   | U16                                                              |                                                           |
+| generationSeed          | U32                                                              |                                                           |
+| includeClosedComponents | U8                                                               | 0 or 1                                                    |
+| optionSelections        | U16 count + (U16 reqIndex, U16 optionIndex) × count              |                                                           |
+| courseSelections        | U16 count + (U16 reqIndex, U16 selCount, U16 × selCount) × count |                                                           |
+| studentPrograms         | U8 count + (U8 len, ASCII bytes) × count                         | Discipline codes                                          |
 
 All multi-byte integers are **little-endian**.
 

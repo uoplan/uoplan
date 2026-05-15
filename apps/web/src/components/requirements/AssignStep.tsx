@@ -9,10 +9,7 @@ import type {
 } from "schedule";
 import { useAppStore } from "../../store/appStore";
 import { RequirementNode, getStableNodeKey } from "./RequirementNode";
-import {
-  applyOptionSelections,
-  countSatisfiedTopLevelRoots,
-} from "./requirementUtils";
+import { applyOptionSelections, countSatisfiedTopLevelRoots } from "./requirementUtils";
 import { CompletedRequirementsAccordion } from "./CompletedRequirementsAccordion";
 import { FrenchImmersionRequirementsReadout } from "./FrenchImmersionRequirementsReadout";
 
@@ -68,10 +65,7 @@ export function AssignStep({
     const set = new Set<string>();
     const walk = (nodes: RequirementWithStatus[]) => {
       for (const node of nodes) {
-        if (
-          (node.type === "course" || node.type === "or_course") &&
-          node.satisfiedBy?.length
-        ) {
+        if ((node.type === "course" || node.type === "or_course") && node.satisfiedBy?.length) {
           for (const code of node.satisfiedBy) set.add(normalizeCourseCode(code));
         }
         if (node.options?.length) walk(node.options);
@@ -85,29 +79,19 @@ export function AssignStep({
   }, [flattenedTree, selectedPerRequirement]);
 
   const hasTree = flattenedTree.length > 0;
-  const incompleteNodes = flattenedTree.filter(
-    (node) => !node.complete,
-  );
+  const incompleteNodes = flattenedTree.filter((node) => !node.complete);
   const hasRemaining = incompleteNodes.length > 0;
   const satisfiedTopLevelCount = useMemo(
-    () =>
-      countSatisfiedTopLevelRoots(
-        requirementTreeWithStatus,
-        selectedPerRequirement,
-        cache,
-      ),
+    () => countSatisfiedTopLevelRoots(requirementTreeWithStatus, selectedPerRequirement, cache),
     [requirementTreeWithStatus, selectedPerRequirement, cache],
   );
   const topLevelRequirementCount = requirementTreeWithStatus.length;
-  const hasCompleted =
-    satisfiedTopLevelCount > 0 || completedRequirementsList.length > 0;
+  const hasCompleted = satisfiedTopLevelCount > 0 || completedRequirementsList.length > 0;
 
   if (!hasTree) {
     return (
       <Alert color="blue" variant="light" radius={0}>
-        <Text size="sm">
-          Select a program and complete the previous steps to see requirements.
-        </Text>
+        <Text size="sm">Select a program and complete the previous steps to see requirements.</Text>
       </Alert>
     );
   }
@@ -129,67 +113,69 @@ export function AssignStep({
         >
           <Text size="sm">
             You have {unassignedDisplay.length} completed course
-            {unassignedDisplay.length === 1 ? "" : "s"} not assigned to any
-            requirement: {unassignedDisplay.join(", ")}.
+            {unassignedDisplay.length === 1 ? "" : "s"} not assigned to any requirement:{" "}
+            {unassignedDisplay.join(", ")}.
           </Text>
           <Text size="sm" mt={6}>
             Assign each completed course to the requirement it satisfies.
           </Text>
         </Alert>
       ) : (
-        <Alert color="green" variant="light" radius={0} title="All courses assigned" aria-live="polite">
+        <Alert
+          color="green"
+          variant="light"
+          radius={0}
+          title="All courses assigned"
+          aria-live="polite"
+        >
           <Text size="sm">
-            All completed courses are assigned to requirements. Click Next to
-            continue.
+            All completed courses are assigned to requirements. Click Next to continue.
           </Text>
         </Alert>
       )}
 
       <Alert color="blue" variant="light" radius={0}>
         <Text size="sm">
-          For each requirement below, assign the completed courses that satisfy
-          it. Only your completed courses are shown in the dropdowns.
+          For each requirement below, assign the completed courses that satisfy it. Only your
+          completed courses are shown in the dropdowns.
         </Text>
       </Alert>
 
       <Stack gap="md">
-          {hasRemaining ? (
-            incompleteNodes.map((node, idx) => {
-              const nodeKey = getStableNodeKey(node, `root:${idx}`);
-              return (
-                <RequirementNode
-                  key={nodeKey}
-                  node={node}
-                  cache={cache}
-                  completedCourses={completedSet}
-                  selectedPerRequirement={selectedPerRequirement}
-                  constrainedPerRequirement={constrainedPerRequirement}
-                  onSelect={onSelect}
-                  activeBranch
-                  prereqEligible={prereqEligible}
-                  levelBuckets={["undergrad", "grad"]}
-                  languageBuckets={["en", "fr", "other"]}
-                  electiveLevelBuckets={[]}
-                  unassignedCompletedSet={unassignedCompletedSet}
-                  unassignedCompletedSetNormalized={
-                    unassignedCompletedSetNormalized
-                  }
-                  allAssignedCoursesNormalized={allAssignedCoursesNormalized}
-                  includeClosedComponents={includeClosedComponents}
-                  virtualSectionsOnly={virtualSectionsOnly}
-                  completedOnly
-                />
-              );
-            })
-          ) : (
-            <Alert color="blue" variant="light" radius={0}>
-              <Text size="sm">
-                All requirements are currently satisfied by your completed
-                courses.
-              </Text>
-            </Alert>
-          )}
-        </Stack>
+        {hasRemaining ? (
+          incompleteNodes.map((node, idx) => {
+            const nodeKey = getStableNodeKey(node, `root:${idx}`);
+            return (
+              <RequirementNode
+                key={nodeKey}
+                node={node}
+                cache={cache}
+                completedCourses={completedSet}
+                selectedPerRequirement={selectedPerRequirement}
+                constrainedPerRequirement={constrainedPerRequirement}
+                onSelect={onSelect}
+                activeBranch
+                prereqEligible={prereqEligible}
+                levelBuckets={["undergrad", "grad"]}
+                languageBuckets={["en", "fr", "other"]}
+                electiveLevelBuckets={[]}
+                unassignedCompletedSet={unassignedCompletedSet}
+                unassignedCompletedSetNormalized={unassignedCompletedSetNormalized}
+                allAssignedCoursesNormalized={allAssignedCoursesNormalized}
+                includeClosedComponents={includeClosedComponents}
+                virtualSectionsOnly={virtualSectionsOnly}
+                completedOnly
+              />
+            );
+          })
+        ) : (
+          <Alert color="blue" variant="light" radius={0}>
+            <Text size="sm">
+              All requirements are currently satisfied by your completed courses.
+            </Text>
+          </Alert>
+        )}
+      </Stack>
 
       {hasCompleted && (
         <CompletedRequirementsAccordion

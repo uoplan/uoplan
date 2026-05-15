@@ -19,7 +19,7 @@ export function createSeededRng(seed: number): () => number {
 }
 
 export function generateRandomSeed(): number {
-  if (typeof crypto !== 'undefined' && 'getRandomValues' in crypto) {
+  if (typeof crypto !== "undefined" && "getRandomValues" in crypto) {
     const buf = new Uint32Array(1);
     crypto.getRandomValues(buf);
     return buf[0] >>> 0;
@@ -27,4 +27,3 @@ export function generateRandomSeed(): number {
   // Fallback for older/non-browser contexts.
   return toUint32(Date.now() ^ Math.floor(Math.random() * 0xffffffff));
 }
-

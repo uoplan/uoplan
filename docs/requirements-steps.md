@@ -10,10 +10,10 @@ Two wizard steps handle requirements in uoplan — **Assign** (step 4) and **Con
 
 ## State
 
-| Field | Slice | Purpose |
-|-------|-------|---------|
-| `selectedPerRequirement` | `selection.ts` | Completed course assignments. Consumed by `requirementCompute.ts` to determine which requirements are satisfied. |
-| `constrainedPerRequirement` | `selection.ts` | User course constraints for schedule generation. Consumed by `generateSchedulesAction.ts`. |
+| Field                       | Slice          | Purpose                                                                                                          |
+| --------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `selectedPerRequirement`    | `selection.ts` | Completed course assignments. Consumed by `requirementCompute.ts` to determine which requirements are satisfied. |
+| `constrainedPerRequirement` | `selection.ts` | User course constraints for schedule generation. Consumed by `generateSchedulesAction.ts`.                       |
 
 Both are reset to `{}` when `setProgram` is called.
 
@@ -49,7 +49,8 @@ The key loop:
 for (const [reqId, constrainedCodes] of Object.entries(constrainedPerRequirement)) {
   const req = remainingRequirements.find((r) => r.requirementId === reqId);
   const coursesNeeded = Math.ceil((req?.creditsNeeded ?? 3) / 3);
-  const constrainedSchedulable = constrainedCodes.filter(/* schedulable + not completed + prereq eligible */);
+  const constrainedSchedulable =
+    constrainedCodes.filter(/* schedulable + not completed + prereq eligible */);
 
   if (constrainedSchedulable.length > 0 && constrainedSchedulable.length <= coursesNeeded) {
     // Pin all provided courses
