@@ -23,6 +23,19 @@ const isStageWorkTermCourse = isWorkTermCourse;
  * copy each course's `aliases` from the latest rows when defined so the data cache
  * and prerequisite alias map match current "Previously …" renumbering.
  */
+/**
+ * When merging catalogues for a student's first year of study, prerequisite fields
+ * always come from the year row. Strips latest prereqs when the year row has none.
+ */
+export function applyYearPrerequisites(latest: Course, year: Course): Course {
+  const { prerequisites: _p, prereqText: _t, ...rest } = latest;
+  return {
+    ...rest,
+    ...(year.prerequisites !== undefined ? { prerequisites: year.prerequisites } : {}),
+    ...(year.prereqText !== undefined ? { prereqText: year.prereqText } : {}),
+  };
+}
+
 export function applyLatestAliasesToMergedCourses(
   latestCourses: readonly Course[],
   mergedCourses: Course[],
