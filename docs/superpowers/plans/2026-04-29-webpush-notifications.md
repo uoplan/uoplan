@@ -12,20 +12,20 @@
 
 ## File Map
 
-| Action | Path | Responsibility |
-|--------|------|---------------|
-| Create | `apps/notifications/package.json` | Worker package config + scripts |
-| Create | `apps/notifications/wrangler.json` | Worker bindings, KV, routes, vars |
-| Create | `apps/notifications/tsconfig.json` | TS config for Workers runtime |
-| Create | `apps/notifications/src/index.ts` | Worker fetch handler: subscribe / unsubscribe / send |
-| Create | `apps/web/public/sw.js` | Service worker: handles `push` event, shows notification |
-| Modify | `apps/web/src/main.tsx` | Register service worker on startup |
-| Create | `apps/web/src/components/steps/NotificationToggle.tsx` | Bell toggle: localStorage state, subscribe/unsubscribe logic |
-| Modify | `apps/web/src/components/steps/TermStep.tsx` | Add `<NotificationToggle />` at bottom |
-| Create | `apps/scrapers/src/check_terms.ts` | Fetch uOttawa search page, compare to terms.json, print new terms JSON |
-| Modify | `apps/scrapers/package.json` | Add `check:terms` script |
-| Modify | `package.json` (root) | Add `check:terms` root script |
-| Create | `.github/workflows/check-new-terms.yml` | 4-hour schedule: detect new terms → trigger scrape → wait for CF Pages → notify |
+| Action | Path                                                   | Responsibility                                                                  |
+| ------ | ------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| Create | `apps/notifications/package.json`                      | Worker package config + scripts                                                 |
+| Create | `apps/notifications/wrangler.json`                     | Worker bindings, KV, routes, vars                                               |
+| Create | `apps/notifications/tsconfig.json`                     | TS config for Workers runtime                                                   |
+| Create | `apps/notifications/src/index.ts`                      | Worker fetch handler: subscribe / unsubscribe / send                            |
+| Create | `apps/web/public/sw.js`                                | Service worker: handles `push` event, shows notification                        |
+| Modify | `apps/web/src/main.tsx`                                | Register service worker on startup                                              |
+| Create | `apps/web/src/components/steps/NotificationToggle.tsx` | Bell toggle: localStorage state, subscribe/unsubscribe logic                    |
+| Modify | `apps/web/src/components/steps/TermStep.tsx`           | Add `<NotificationToggle />` at bottom                                          |
+| Create | `apps/scrapers/src/check_terms.ts`                     | Fetch uOttawa search page, compare to terms.json, print new terms JSON          |
+| Modify | `apps/scrapers/package.json`                           | Add `check:terms` script                                                        |
+| Modify | `package.json` (root)                                  | Add `check:terms` root script                                                   |
+| Create | `.github/workflows/check-new-terms.yml`                | 4-hour schedule: detect new terms → trigger scrape → wait for CF Pages → notify |
 
 ---
 
@@ -60,6 +60,7 @@ Copy the `id` from the output (looks like `"id": "abc123..."`).
 - [ ] **Step 4: Update `wrangler.json` with real values**
 
 After Task 2 creates the file, replace:
+
 - `REPLACE_WITH_KV_NAMESPACE_ID` → the id from Step 3
 - `REPLACE_AFTER_GENERATE` → the Public Key from Step 2
 
@@ -78,14 +79,17 @@ Save the `NOTIFY_SECRET` value — you need it in Step 6.
 - [ ] **Step 6: Add secrets to GitHub Actions**
 
 In GitHub → Repository → Settings → Secrets → Actions, add:
+
 - `NOTIFY_SECRET` → same value used in Step 5
 
 - [ ] **Step 7: Add Vite env var to Cloudflare Pages**
 
 In Cloudflare Dashboard → Pages project → Settings → Environment variables:
+
 - `VITE_VAPID_PUBLIC_KEY` → the Public Key from Step 2
 
 For local dev, create `apps/web/.env.local`:
+
 ```
 VITE_VAPID_PUBLIC_KEY=<your_public_key>
 VITE_NOTIFICATIONS_URL=http://localhost:8787
@@ -96,6 +100,7 @@ VITE_NOTIFICATIONS_URL=http://localhost:8787
 ## Task 2: Cloudflare Worker Project Scaffold
 
 **Files:**
+
 - Create: `apps/notifications/package.json`
 - Create: `apps/notifications/wrangler.json`
 - Create: `apps/notifications/tsconfig.json`
@@ -195,12 +200,13 @@ git commit -m "feat(notifications): scaffold Cloudflare Worker project"
 All three endpoints in a single fetch handler.
 
 **Files:**
+
 - Create: `apps/notifications/src/index.ts`
 
 - [ ] **Step 1: Write `apps/notifications/src/index.ts`**
 
 ```ts
-import webpush from 'web-push';
+import webpush from "web-push";
 
 export interface Env {
   WEBPUSH_SUBSCRIPTIONS: KVNamespace;
@@ -210,38 +216,38 @@ export interface Env {
   NOTIFY_SECRET: string;
 }
 
-const ALLOWED_ORIGINS = ['https://uoplan.party', 'http://localhost:5173'];
+const ALLOWED_ORIGINS = ["https://uoplan.party", "http://localhost:5173"];
 
 function corsHeaders(req: Request): Record<string, string> {
-  const origin = req.headers.get('Origin') ?? '';
+  const origin = req.headers.get("Origin") ?? "";
   const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
-    'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
   };
 }
 
 function json(req: Request, status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json', ...corsHeaders(req) },
+    headers: { "Content-Type": "application/json", ...corsHeaders(req) },
   });
 }
 
 async function endpointKey(endpoint: string): Promise<string> {
   const data = new TextEncoder().encode(endpoint);
-  const hash = await crypto.subtle.digest('SHA-256', data);
+  const hash = await crypto.subtle.digest("SHA-256", data);
   const hex = Array.from(new Uint8Array(hash))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
   return `sub:${hex}`;
 }
 
 async function handleSubscribe(req: Request, env: Env): Promise<Response> {
   const sub = await req.json<{ endpoint?: string; keys?: { p256dh?: string; auth?: string } }>();
   if (!sub?.endpoint || !sub?.keys?.p256dh || !sub?.keys?.auth) {
-    return json(req, 400, { error: 'Invalid subscription' });
+    return json(req, 400, { error: "Invalid subscription" });
   }
   const key = await endpointKey(sub.endpoint);
   await env.WEBPUSH_SUBSCRIPTIONS.put(key, JSON.stringify(sub));
@@ -251,7 +257,7 @@ async function handleSubscribe(req: Request, env: Env): Promise<Response> {
 async function handleUnsubscribe(req: Request, env: Env): Promise<Response> {
   const body = await req.json<{ endpoint?: string }>();
   if (!body?.endpoint) {
-    return json(req, 400, { error: 'Missing endpoint' });
+    return json(req, 400, { error: "Missing endpoint" });
   }
   const key = await endpointKey(body.endpoint);
   await env.WEBPUSH_SUBSCRIPTIONS.delete(key);
@@ -259,10 +265,10 @@ async function handleUnsubscribe(req: Request, env: Env): Promise<Response> {
 }
 
 async function handleSend(req: Request, env: Env): Promise<Response> {
-  if (req.headers.get('Authorization') !== `Bearer ${env.NOTIFY_SECRET}`) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+  if (req.headers.get("Authorization") !== `Bearer ${env.NOTIFY_SECRET}`) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   }
 
@@ -277,7 +283,7 @@ async function handleSend(req: Request, env: Env): Promise<Response> {
   let listComplete = false;
 
   while (!listComplete) {
-    const list = await env.WEBPUSH_SUBSCRIPTIONS.list({ prefix: 'sub:', cursor });
+    const list = await env.WEBPUSH_SUBSCRIPTIONS.list({ prefix: "sub:", cursor });
     cursor = list.cursor ?? undefined;
     listComplete = list.list_complete;
 
@@ -304,7 +310,7 @@ async function handleSend(req: Request, env: Env): Promise<Response> {
 
   return new Response(JSON.stringify({ sent, failed, cleaned }), {
     status: 200,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { "Content-Type": "application/json" },
   });
 }
 
@@ -312,17 +318,17 @@ export default {
   async fetch(req: Request, env: Env): Promise<Response> {
     const { pathname } = new URL(req.url);
 
-    if (req.method === 'OPTIONS') {
+    if (req.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders(req) });
     }
 
-    if (req.method === 'POST') {
-      if (pathname === '/subscribe') return handleSubscribe(req, env);
-      if (pathname === '/unsubscribe') return handleUnsubscribe(req, env);
-      if (pathname === '/send') return handleSend(req, env);
+    if (req.method === "POST") {
+      if (pathname === "/subscribe") return handleSubscribe(req, env);
+      if (pathname === "/unsubscribe") return handleUnsubscribe(req, env);
+      if (pathname === "/send") return handleSend(req, env);
     }
 
-    return new Response('Not Found', { status: 404 });
+    return new Response("Not Found", { status: 404 });
   },
 };
 ```
@@ -390,24 +396,25 @@ git commit -m "feat(notifications): add subscribe/unsubscribe/send Worker endpoi
 ## Task 4: Service Worker + Registration
 
 **Files:**
+
 - Create: `apps/web/public/sw.js`
 - Modify: `apps/web/src/main.tsx`
 
 - [ ] **Step 1: Create `apps/web/public/sw.js`**
 
 ```js
-self.addEventListener('push', (event) => {
+self.addEventListener("push", (event) => {
   const { title, body, url } = event.data.json();
   event.waitUntil(
     self.registration.showNotification(title, {
       body,
-      icon: '/favicon.svg',
+      icon: "/favicon.svg",
       data: { url },
-    })
+    }),
   );
 });
 
-self.addEventListener('notificationclick', (event) => {
+self.addEventListener("notificationclick", (event) => {
   event.notification.close();
   event.waitUntil(clients.openWindow(event.notification.data.url));
 });
@@ -466,37 +473,40 @@ git commit -m "feat(web): register service worker for push notifications"
 ## Task 5: NotificationToggle Component + TermStep Integration
 
 **Files:**
+
 - Create: `apps/web/src/components/steps/NotificationToggle.tsx`
 - Modify: `apps/web/src/components/steps/TermStep.tsx`
 
 - [ ] **Step 1: Create `apps/web/src/components/steps/NotificationToggle.tsx`**
 
 ```tsx
-import { useState } from 'react';
-import { Group, Switch, Text, Tooltip } from '@mantine/core';
-import { IconBell, IconBellOff } from '@tabler/icons-react';
+import { useState } from "react";
+import { Group, Switch, Text, Tooltip } from "@mantine/core";
+import { IconBell, IconBellOff } from "@tabler/icons-react";
 
-const WORKER_URL = (import.meta.env.VITE_NOTIFICATIONS_URL as string | undefined) ?? 'https://notifications.uoplan.party';
-const VAPID_PUBLIC_KEY = (import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined) ?? '';
-const LS_KEY = 'uoplan-notifications';
+const WORKER_URL =
+  (import.meta.env.VITE_NOTIFICATIONS_URL as string | undefined) ??
+  "https://notifications.uoplan.party";
+const VAPID_PUBLIC_KEY = (import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined) ?? "";
+const LS_KEY = "uoplan-notifications";
 
 type NotifState =
-  | { status: 'disabled' }
-  | { status: 'subscribed'; subscription: PushSubscriptionJSON }
-  | { status: 'denied' };
+  | { status: "disabled" }
+  | { status: "subscribed"; subscription: PushSubscriptionJSON }
+  | { status: "denied" };
 
 function loadState(): NotifState {
   try {
     const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return { status: 'disabled' };
+    if (!raw) return { status: "disabled" };
     return JSON.parse(raw) as NotifState;
   } catch {
-    return { status: 'disabled' };
+    return { status: "disabled" };
   }
 }
 
 function saveState(state: NotifState): void {
-  if (state.status === 'disabled') {
+  if (state.status === "disabled") {
     localStorage.removeItem(LS_KEY);
   } else {
     localStorage.setItem(LS_KEY, JSON.stringify(state));
@@ -504,8 +514,8 @@ function saveState(state: NotifState): void {
 }
 
 function urlBase64ToUint8Array(base64: string): Uint8Array {
-  const padding = '='.repeat((4 - (base64.length % 4)) % 4);
-  const b64 = (base64 + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const padding = "=".repeat((4 - (base64.length % 4)) % 4);
+  const b64 = (base64 + padding).replace(/-/g, "+").replace(/_/g, "/");
   const raw = atob(b64);
   return Uint8Array.from([...raw].map((c) => c.charCodeAt(0)));
 }
@@ -514,17 +524,17 @@ export function NotificationToggle() {
   const [state, setState] = useState<NotifState>(loadState);
   const [loading, setLoading] = useState(false);
 
-  if (!('PushManager' in window)) return null;
+  if (!("PushManager" in window)) return null;
 
-  const isSubscribed = state.status === 'subscribed';
-  const isDenied = state.status === 'denied';
+  const isSubscribed = state.status === "subscribed";
+  const isDenied = state.status === "denied";
 
   async function handleEnable() {
     setLoading(true);
     try {
       const permission = await Notification.requestPermission();
-      if (permission !== 'granted') {
-        const next: NotifState = { status: 'denied' };
+      if (permission !== "granted") {
+        const next: NotifState = { status: "denied" };
         saveState(next);
         setState(next);
         return;
@@ -537,23 +547,23 @@ export function NotificationToggle() {
       });
 
       await fetch(`${WORKER_URL}/subscribe`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(sub.toJSON()),
       });
 
-      const next: NotifState = { status: 'subscribed', subscription: sub.toJSON() };
+      const next: NotifState = { status: "subscribed", subscription: sub.toJSON() };
       saveState(next);
       setState(next);
     } catch (err) {
-      console.error('Failed to subscribe to push notifications:', err);
+      console.error("Failed to subscribe to push notifications:", err);
     } finally {
       setLoading(false);
     }
   }
 
   async function handleDisable() {
-    if (state.status !== 'subscribed') return;
+    if (state.status !== "subscribed") return;
     setLoading(true);
     try {
       const reg = await navigator.serviceWorker.ready;
@@ -561,15 +571,15 @@ export function NotificationToggle() {
       await sub?.unsubscribe();
 
       await fetch(`${WORKER_URL}/unsubscribe`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ endpoint: state.subscription.endpoint }),
       });
 
-      saveState({ status: 'disabled' });
-      setState({ status: 'disabled' });
+      saveState({ status: "disabled" });
+      setState({ status: "disabled" });
     } catch (err) {
-      console.error('Failed to unsubscribe from push notifications:', err);
+      console.error("Failed to unsubscribe from push notifications:", err);
     } finally {
       setLoading(false);
     }
@@ -585,11 +595,7 @@ export function NotificationToggle() {
           Notify me when new terms are added
         </Text>
       </Group>
-      <Tooltip
-        label="Notifications blocked in browser settings"
-        disabled={!isDenied}
-        withArrow
-      >
+      <Tooltip label="Notifications blocked in browser settings" disabled={!isDenied} withArrow>
         <span>
           <Switch
             checked={isSubscribed}
@@ -611,10 +617,10 @@ export function NotificationToggle() {
 Add the import and `<NotificationToggle />` at the bottom of the `Stack`:
 
 ```tsx
-import { Alert, Select, Stack, Text } from '@mantine/core';
-import type { Term } from 'schemas';
-import { tr } from '../../i18n';
-import { NotificationToggle } from './NotificationToggle';
+import { Alert, Select, Stack, Text } from "@mantine/core";
+import type { Term } from "schemas";
+import { tr } from "../../i18n";
+import { NotificationToggle } from "./NotificationToggle";
 
 interface TermStepProps {
   terms: Term[];
@@ -628,8 +634,8 @@ export function TermStep({ terms, value, onChange }: TermStepProps) {
   return (
     <Stack gap="md" data-tour="term-select">
       <Select
-        label={tr('termStep.label')}
-        placeholder={tr('termStep.placeholder')}
+        label={tr("termStep.label")}
+        placeholder={tr("termStep.placeholder")}
         data={data}
         value={value}
         onChange={(v) => {
@@ -640,7 +646,7 @@ export function TermStep({ terms, value, onChange }: TermStepProps) {
         size="md"
       />
       <Alert color="blue" variant="light" radius={0}>
-        <Text size="sm">{tr('termStep.note')}</Text>
+        <Text size="sm">{tr("termStep.note")}</Text>
       </Alert>
       <NotificationToggle />
     </Stack>
@@ -670,6 +676,7 @@ Click the toggle. Confirm the browser permission dialog appears. If you grant it
 
 In DevTools → Application → Local Storage → `http://localhost:5173`:
 Confirm key `uoplan-notifications` has value like:
+
 ```json
 {"status":"subscribed","subscription":{"endpoint":"https://...","keys":{...}}}
 ```
@@ -688,6 +695,7 @@ git commit -m "feat(web): add notification toggle to term selection step"
 ## Task 6: Terms Check Scraper
 
 **Files:**
+
 - Create: `apps/scrapers/src/check_terms.ts`
 - Modify: `apps/scrapers/package.json`
 - Modify: `package.json` (root)
@@ -697,16 +705,16 @@ git commit -m "feat(web): add notification toggle to term selection step"
 Create `apps/scrapers/src/check_terms.test.ts`:
 
 ```ts
-import { describe, it, expect } from 'vitest';
-import * as cheerio from 'cheerio';
+import { describe, it, expect } from "vitest";
+import * as cheerio from "cheerio";
 
 function parseTermDropdown(html: string): Array<{ termId: string; name: string }> {
   const $ = cheerio.load(html);
-  const select = $('#CLASS_SRCH_WRK2_STRM\\$35\\$');
+  const select = $("#CLASS_SRCH_WRK2_STRM\\$35\\$");
   const terms: Array<{ termId: string; name: string }> = [];
-  select.find('option').each((_, opt) => {
-    const termId = ($(opt).attr('value') ?? '').trim();
-    const name = $(opt).text().replace(/\s+/g, ' ').trim();
+  select.find("option").each((_, opt) => {
+    const termId = ($(opt).attr("value") ?? "").trim();
+    const name = $(opt).text().replace(/\s+/g, " ").trim();
     if (termId && name) terms.push({ termId, name });
   });
   const seen = new Set<string>();
@@ -717,8 +725,8 @@ function parseTermDropdown(html: string): Array<{ termId: string; name: string }
   });
 }
 
-describe('parseTermDropdown', () => {
-  it('extracts term IDs and names from a select element', () => {
+describe("parseTermDropdown", () => {
+  it("extracts term IDs and names from a select element", () => {
     const html = `
       <select id="CLASS_SRCH_WRK2_STRM$35$">
         <option value="">Select a term</option>
@@ -727,22 +735,22 @@ describe('parseTermDropdown', () => {
       </select>
     `;
     expect(parseTermDropdown(html)).toEqual([
-      { termId: '2261', name: '2026 Winter Term' },
-      { termId: '2265', name: '2026 Spring/Summer Term' },
+      { termId: "2261", name: "2026 Winter Term" },
+      { termId: "2265", name: "2026 Spring/Summer Term" },
     ]);
   });
 
-  it('skips blank option values', () => {
+  it("skips blank option values", () => {
     const html = `
       <select id="CLASS_SRCH_WRK2_STRM$35$">
         <option value=""> </option>
         <option value="2261">2026 Winter Term</option>
       </select>
     `;
-    expect(parseTermDropdown(html)).toEqual([{ termId: '2261', name: '2026 Winter Term' }]);
+    expect(parseTermDropdown(html)).toEqual([{ termId: "2261", name: "2026 Winter Term" }]);
   });
 
-  it('deduplicates by termId', () => {
+  it("deduplicates by termId", () => {
     const html = `
       <select id="CLASS_SRCH_WRK2_STRM$35$">
         <option value="2261">2026 Winter Term</option>
@@ -752,8 +760,8 @@ describe('parseTermDropdown', () => {
     expect(parseTermDropdown(html)).toHaveLength(1);
   });
 
-  it('returns empty array when select element is missing', () => {
-    expect(parseTermDropdown('<html></html>')).toEqual([]);
+  it("returns empty array when select element is missing", () => {
+    expect(parseTermDropdown("<html></html>")).toEqual([]);
   });
 });
 ```
@@ -771,26 +779,26 @@ Expected: FAIL — `parseTermDropdown` is not defined yet.
 Export `parseTermDropdown` so the test can import it, then run the main check:
 
 ```ts
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import * as cheerio from 'cheerio';
-import { got } from 'got';
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+import * as cheerio from "cheerio";
+import { got } from "got";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const TERMS_JSON = path.join(__dirname, '../../web/public/data/terms.json');
+const TERMS_JSON = path.join(__dirname, "../../web/public/data/terms.json");
 const SEARCH_URL =
-  'https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL';
+  "https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL";
 
 type Term = { termId: string; name: string };
 
 export function parseTermDropdown(html: string): Term[] {
   const $ = cheerio.load(html);
-  const select = $('#CLASS_SRCH_WRK2_STRM\\$35\\$');
+  const select = $("#CLASS_SRCH_WRK2_STRM\\$35\\$");
   const terms: Term[] = [];
-  select.find('option').each((_, opt) => {
-    const termId = ($(opt).attr('value') ?? '').trim();
-    const name = $(opt).text().replace(/\s+/g, ' ').trim();
+  select.find("option").each((_, opt) => {
+    const termId = ($(opt).attr("value") ?? "").trim();
+    const name = $(opt).text().replace(/\s+/g, " ").trim();
     if (termId && name) terms.push({ termId, name });
   });
   const seen = new Set<string>();
@@ -806,11 +814,11 @@ async function main() {
   const currentTerms = parseTermDropdown(res.body);
 
   if (currentTerms.length === 0) {
-    const preview = res.body.slice(0, 400).replace(/\s+/g, ' ');
+    const preview = res.body.slice(0, 400).replace(/\s+/g, " ");
     throw new Error(`Term dropdown not found in response. First 400 chars: ${preview}`);
   }
 
-  const raw = await fs.readFile(TERMS_JSON, 'utf8');
+  const raw = await fs.readFile(TERMS_JSON, "utf8");
   const { terms: knownTerms } = JSON.parse(raw) as { terms: Term[] };
   const knownIds = new Set(knownTerms.map((t) => t.termId));
 
@@ -829,8 +837,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 Replace the inline `parseTermDropdown` definition in `check_terms.test.ts` with an import:
 
 ```ts
-import { describe, it, expect } from 'vitest';
-import { parseTermDropdown } from './check_terms.ts';
+import { describe, it, expect } from "vitest";
+import { parseTermDropdown } from "./check_terms.ts";
 
 // ... rest of tests unchanged
 ```
@@ -846,6 +854,7 @@ Expected: all 4 tests PASS.
 - [ ] **Step 6: Add `check:terms` script to `apps/scrapers/package.json`**
 
 In the `scripts` object, add:
+
 ```json
 "check:terms": "node src/check_terms.ts"
 ```
@@ -853,6 +862,7 @@ In the `scripts` object, add:
 - [ ] **Step 7: Add `check:terms` script to root `package.json`**
 
 In the root `scripts` object, add:
+
 ```json
 "check:terms": "pnpm --filter scrapers check:terms"
 ```
@@ -877,6 +887,7 @@ git commit -m "feat(scrapers): add check:terms script and unit tests"
 ## Task 7: GitHub Action — check-new-terms.yml
 
 **Files:**
+
 - Create: `.github/workflows/check-new-terms.yml`
 
 - [ ] **Step 1: Create `.github/workflows/check-new-terms.yml`**
@@ -886,7 +897,7 @@ name: Check for new terms and notify
 
 on:
   schedule:
-    - cron: '0 */4 * * *'
+    - cron: "0 */4 * * *"
   workflow_dispatch:
 
 permissions:

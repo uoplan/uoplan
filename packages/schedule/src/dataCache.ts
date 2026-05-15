@@ -1,9 +1,9 @@
-import type { Course, Catalogue } from './dataTypes';
-import type { CourseSchedule, SchedulesData } from './dataTypes';
-import { normalizeCourseCode, isWorkTermCourse } from './utils/courseUtils';
+import type { Course, Catalogue } from "./dataTypes";
+import type { CourseSchedule, SchedulesData } from "./dataTypes";
+import { normalizeCourseCode, isWorkTermCourse } from "./utils/courseUtils";
 
 // Re-export for backwards compatibility
-export { normalizeCourseCode } from './utils/courseUtils';
+export { normalizeCourseCode } from "./utils/courseUtils";
 
 export interface DataCache {
   getCourse(code: string): Course | undefined;
@@ -27,9 +27,7 @@ export function applyLatestAliasesToMergedCourses(
   latestCourses: readonly Course[],
   mergedCourses: Course[],
 ): Course[] {
-  const latestByCode = new Map(
-    latestCourses.map((c) => [normalizeCourseCode(c.code), c]),
-  );
+  const latestByCode = new Map(latestCourses.map((c) => [normalizeCourseCode(c.code), c]));
   return mergedCourses.map((course) => {
     const latest = latestByCode.get(normalizeCourseCode(course.code));
     if (!latest || latest.aliases === undefined) return course;
@@ -66,7 +64,7 @@ export function withExtraCourses(base: DataCache, courses: Course[]): DataCache 
   for (const course of courses) {
     const key = normalizeCourseCode(course.code);
     extra.set(key, course);
-    const discipline = course.code.split(/\s+/)[0]?.toUpperCase() ?? '';
+    const discipline = course.code.split(/\s+/)[0]?.toUpperCase() ?? "";
     if (discipline) {
       const list = byDiscipline.get(discipline) ?? [];
       list.push(course);
@@ -116,7 +114,7 @@ export function buildDataCache(catalogue: Catalogue, schedulesData: SchedulesDat
 
     eligibleCourses.push(course);
 
-    const subject = course.code.split(/\s+/)[0]?.toUpperCase() ?? '';
+    const subject = course.code.split(/\s+/)[0]?.toUpperCase() ?? "";
     if (subject) {
       const list = disciplineMap.get(subject) ?? [];
       list.push(course);

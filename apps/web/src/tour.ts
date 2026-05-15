@@ -1,17 +1,17 @@
-import { driver } from 'driver.js';
-import type { DriveStep } from 'driver.js';
-import 'driver.js/dist/driver.css';
-import './styles/driver-dark.css';
+import { driver } from "driver.js";
+import type { DriveStep } from "driver.js";
+import "driver.js/dist/driver.css";
+import "./styles/driver-dark.css";
 import {
   formatTourDescriptionHtml,
   getShareStepContent,
   getWizardStepContent,
   WIZARD_TOUR_SELECTOR,
-} from './lib/wizardStepContent';
-import { WizardStep } from './lib/wizardSteps';
-import { tr } from './i18n';
+} from "./lib/wizardStepContent";
+import { WizardStep } from "./lib/wizardSteps";
+import { tr } from "./i18n";
 
-localStorage.removeItem('uoplan-tour-done');
+localStorage.removeItem("uoplan-tour-done");
 
 function querySelectorOrBody(selector: string): Element {
   return document.querySelector(selector) ?? document.body;
@@ -47,27 +47,23 @@ export function runTour(
     const content = wizardStepContent[wizardIdx as WizardStep];
     if (!selector || !content) continue;
 
-    descriptionHtmlList.push(
-      formatTourDescriptionHtml(content.purpose, content.whatToDo),
-    );
+    descriptionHtmlList.push(formatTourDescriptionHtml(content.purpose, content.whatToDo));
     steps.push({
       element: () => querySelectorOrBody(selector),
       popover: {
         title: content.title,
-        description: ' ',
+        description: " ",
       },
     });
   }
 
   const share = getShareStepContent();
-  descriptionHtmlList.push(
-    formatTourDescriptionHtml(share.purpose, share.whatToDo),
-  );
+  descriptionHtmlList.push(formatTourDescriptionHtml(share.purpose, share.whatToDo));
   steps.push({
     element: () => querySelectorOrBody('[data-tour="share"]'),
     popover: {
       title: share.title,
-      description: ' ',
+      description: " ",
     },
   });
 
@@ -84,7 +80,7 @@ export function runTour(
     nextBtnText: tr("tour.next"),
     prevBtnText: tr("tour.back"),
     doneBtnText: tr("tour.done"),
-    overlayColor: '#141517',
+    overlayColor: "#141517",
     overlayOpacity: 0.85,
     steps,
     onPopoverRender: (popover, { state }) => {

@@ -1,18 +1,16 @@
-import type { CourseSchedule, ComponentSection } from './dataTypes';
-import type { DataCache } from './dataCache';
+import type { CourseSchedule, ComponentSection } from "./dataTypes";
+import type { DataCache } from "./dataCache";
 
 /**
  * Returns a new schedule with sections where status === "Closed" removed from each component.
  * If any component ends up with no sections, returns undefined (course is incomplete).
  */
 export function filterScheduleExcludingClosed(
-  schedule: CourseSchedule
+  schedule: CourseSchedule,
 ): CourseSchedule | undefined {
   const filtered: Record<string, ComponentSection[]> = {};
   for (const [key, sections] of Object.entries(schedule.components)) {
-    const kept = (sections ?? []).filter(
-      (s) => (s.status ?? '').trim() !== 'Closed'
-    );
+    const kept = (sections ?? []).filter((s) => (s.status ?? "").trim() !== "Closed");
     if (kept.length === 0) return undefined;
     filtered[key] = kept;
   }
@@ -26,9 +24,7 @@ export function filterScheduleExcludingClosed(
  * Keeps only meeting times with virtual: true per section; drops sections with no times left.
  * If any component ends up with no sections, returns undefined.
  */
-export function filterScheduleVirtualOnly(
-  schedule: CourseSchedule
-): CourseSchedule | undefined {
+export function filterScheduleVirtualOnly(schedule: CourseSchedule): CourseSchedule | undefined {
   const filtered: Record<string, ComponentSection[]> = {};
   for (const [key, sections] of Object.entries(schedule.components)) {
     const kept: ComponentSection[] = [];
@@ -48,7 +44,7 @@ export function filterScheduleVirtualOnly(
 
 function applyScheduleFilters(
   schedule: CourseSchedule,
-  opts: { includeClosed: boolean; virtualOnly: boolean }
+  opts: { includeClosed: boolean; virtualOnly: boolean },
 ): CourseSchedule | undefined {
   let s: CourseSchedule | undefined = schedule;
   if (!opts.includeClosed) {
@@ -70,7 +66,7 @@ export function getEffectiveSchedule(
   cache: DataCache,
   code: string,
   includeClosed: boolean,
-  virtualOnly: boolean = false
+  virtualOnly: boolean = false,
 ): CourseSchedule | undefined {
   const s = cache.getSchedule(code);
   if (!s) return undefined;
@@ -85,14 +81,13 @@ export function getEffectiveSchedule(
 export function cacheWithClosedFilter(
   cache: DataCache,
   includeClosed: boolean,
-  virtualOnly: boolean = false
+  virtualOnly: boolean = false,
 ): DataCache {
   if (includeClosed && !virtualOnly) return cache;
   return {
     getCourse: (code) => cache.getCourse(code),
     resolveToCanonical: (code) => cache.resolveToCanonical(code),
-    getSchedule: (code) =>
-      getEffectiveSchedule(cache, code, includeClosed, virtualOnly),
+    getSchedule: (code) => getEffectiveSchedule(cache, code, includeClosed, virtualOnly),
     getCoursesByDiscipline: (d) => cache.getCoursesByDiscipline(d),
     getAllCourses: () => cache.getAllCourses(),
     getAllSchedules: () => cache.getAllSchedules(),

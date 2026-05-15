@@ -4,6 +4,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import { baseConfig } from "../../eslint.config.ts";
 
 export default defineConfig([
+  { ignores: ["src/locales/**/messages.js"] },
   ...baseConfig,
   reactHooks.configs.flat.recommended,
   pluginLingui.configs["flat/recommended"],

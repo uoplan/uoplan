@@ -1,12 +1,12 @@
-import type { DataCache } from './dataCache';
-import type { GenerationConstraints } from './generation';
-import { getValidSectionCombos } from './generation';
-import { isHonoursProject, normalizeCourseCode } from './utils/courseUtils';
+import type { DataCache } from "./dataCache";
+import type { GenerationConstraints } from "./generation";
+import { getValidSectionCombos } from "./generation";
+import { isHonoursProject, normalizeCourseCode } from "./utils/courseUtils";
 
 export type TimetableFailureKind =
-  | 'no_section_combos'
-  | 'too_few_courses_with_combos'
-  | 'no_conflict_free_assignment';
+  | "no_section_combos"
+  | "too_few_courses_with_combos"
+  | "no_conflict_free_assignment";
 
 export interface ActiveConstraintsSummary {
   compressedSchedule: boolean;
@@ -74,28 +74,28 @@ function buildSuggestions(
 ): string[] {
   const suggestions: string[] = [];
 
-  if (kind === 'no_section_combos' || kind === 'too_few_courses_with_combos') {
-    suggestions.push('Relax time window, professor rating, or allowed days.');
+  if (kind === "no_section_combos" || kind === "too_few_courses_with_combos") {
+    suggestions.push("Relax time window, professor rating, or allowed days.");
     if (coursesWithNoCombo.length > 0) {
-      suggestions.push('No timetable posted yet? Try a different course or check back later.');
+      suggestions.push("No timetable posted yet? Try a different course or check back later.");
     }
   }
 
-  if (kind === 'no_conflict_free_assignment') {
+  if (kind === "no_conflict_free_assignment") {
     if (summary.compressedSchedule) {
-      suggestions.push('Turn off Compressed schedule.');
+      suggestions.push("Turn off Compressed schedule.");
     }
     if (summary.minProfessorRating) {
-      suggestions.push('Clear minimum professor rating.');
+      suggestions.push("Clear minimum professor rating.");
     }
     if (summary.allowedDaysCustom) {
-      suggestions.push('Allow more weekdays.');
+      suggestions.push("Allow more weekdays.");
     }
     if (summary.maxFirstYearCredits) {
-      suggestions.push('Relax 1000-level credit cap if possible.');
+      suggestions.push("Relax 1000-level credit cap if possible.");
     }
     if (suggestions.length < MAX_SUGGESTIONS) {
-      suggestions.push('Widen class hours or change Constrain / Assign picks.');
+      suggestions.push("Widen class hours or change Constrain / Assign picks.");
     }
   }
 
@@ -104,8 +104,8 @@ function buildSuggestions(
 
 function formatCourseListForLead(codes: string[]): string {
   const max = 4;
-  if (codes.length <= max) return codes.join(', ');
-  return `${codes.slice(0, max).join(', ')} +${codes.length - max} more`;
+  if (codes.length <= max) return codes.join(", ");
+  return `${codes.slice(0, max).join(", ")} +${codes.length - max} more`;
 }
 
 function buildLeadMessage(
@@ -114,15 +114,15 @@ function buildLeadMessage(
   targetCount: number,
   coursesWithNoCombo: string[],
 ): string {
-  if (kind === 'no_section_combos') {
+  if (kind === "no_section_combos") {
     return coursesWithNoCombo.length > 0
       ? `No sections match your filters: ${formatCourseListForLead(coursesWithNoCombo)}.`
-      : 'No sections match your current filters.';
+      : "No sections match your current filters.";
   }
-  if (kind === 'too_few_courses_with_combos') {
+  if (kind === "too_few_courses_with_combos") {
     return `Only ${eligibleCourseCount}/${targetCount} courses have valid sections.`;
   }
-  return 'No clash-free timetable with your current settings.';
+  return "No clash-free timetable with your current settings.";
 }
 
 export interface DiagnoseTimetableFailureInput {
@@ -173,12 +173,17 @@ export function diagnoseTimetableFailure(
 
     let kind: TimetableFailureKind;
     if (eligibleCourseCount < targetCount) {
-      kind = eligibleCourseCount === 0 ? 'no_section_combos' : 'too_few_courses_with_combos';
+      kind = eligibleCourseCount === 0 ? "no_section_combos" : "too_few_courses_with_combos";
     } else {
-      kind = 'no_conflict_free_assignment';
+      kind = "no_conflict_free_assignment";
     }
 
-    const leadMessage = buildLeadMessage(kind, eligibleCourseCount, targetCount, coursesWithNoCombo);
+    const leadMessage = buildLeadMessage(
+      kind,
+      eligibleCourseCount,
+      targetCount,
+      coursesWithNoCombo,
+    );
     return {
       kind,
       coursesWithNoCombo: [...new Set(coursesWithNoCombo)],
@@ -201,7 +206,7 @@ export function diagnoseTimetableFailure(
   }
 
   if (coursesWithNoCombo.length > 0) {
-    const kind: TimetableFailureKind = 'no_section_combos';
+    const kind: TimetableFailureKind = "no_section_combos";
     const eligibleCourseCount = 0;
     return {
       kind,
@@ -239,9 +244,9 @@ export function diagnoseTimetableFailure(
 
   let kind: TimetableFailureKind;
   if (remainingSlots > 0 && optionalEligibleCount < remainingSlots) {
-    kind = optionalEligibleCount === 0 ? 'no_section_combos' : 'too_few_courses_with_combos';
+    kind = optionalEligibleCount === 0 ? "no_section_combos" : "too_few_courses_with_combos";
   } else {
-    kind = 'no_conflict_free_assignment';
+    kind = "no_conflict_free_assignment";
   }
 
   const eligibleCourseCount = pinnedCourseCodes.length + optionalEligibleCount;

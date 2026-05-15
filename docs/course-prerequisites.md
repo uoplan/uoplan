@@ -17,11 +17,11 @@ These are added on top of the existing `Course` fields:
 
 ```ts
 type Course = {
-  code: string;            // e.g. "ADM 2702"
+  code: string; // e.g. "ADM 2702"
   title: string;
-  credits: number;         // course credit value (e.g. 3)
+  credits: number; // course credit value (e.g. 3)
   description: string;
-  component?: string;      // e.g. "Lecture", "Discussion Group, Lecture"
+  component?: string; // e.g. "Lecture", "Discussion Group, Lecture"
 
   // NEW:
   prereqText?: string;
@@ -47,10 +47,10 @@ Prerequisites are represented as a small AST that can encode basic AND/OR logic,
 
 ```ts
 type CoursePrereqNode = {
-  type: 'course' | 'or_group' | 'and_group' | 'non_course';
-  code?: string;          // for type === 'course'
-  text?: string;          // human-readable clause text
-  credits?: number;       // numeric credit requirement (if any)
+  type: "course" | "or_group" | "and_group" | "non_course";
+  code?: string; // for type === 'course'
+  text?: string; // human-readable clause text
+  credits?: number; // numeric credit requirement (if any)
   disciplines?: string[]; // discipline codes like ['ANT'] for scoped credit requirements
   children?: CoursePrereqNode[]; // for group nodes
 };
@@ -64,7 +64,7 @@ type CoursePrereqNode = {
 
 - **`type: 'and_group'`**
   - Represents a logical AND across `children`.
-  - Semantics: *all* children must be satisfied.
+  - Semantics: _all_ children must be satisfied.
   - Used for:
     - Combining multiple independent prerequisites in a single sentence:
       - `"ECO 1502, ECO 1504, (ADM 1740 ou ADM 2740)"`  
@@ -81,7 +81,7 @@ type CoursePrereqNode = {
 
 - **`type: 'or_group'`**
   - Represents a logical OR across `children`.
-  - Semantics: *at least one* child must be satisfied.
+  - Semantics: _at least one_ child must be satisfied.
   - Examples:
     - `"ADM 1705 ou MAT 1702"`  
       ⇒ `or_group` of `course("ADM 1705")` and `course("MAT 1702")`.
@@ -138,7 +138,7 @@ The parser takes `prereqText` and produces a `CoursePrereqNode` tree. The key be
     - `"ECO 1502"`
     - `"ECO 1504"`
     - `"(ADM 1740 ou ADM 2740)"`
-    and each is parsed recursively, then wrapped in an `and_group`.
+      and each is parsed recursively, then wrapped in an `and_group`.
 
 - **OR detection**
   - Inside a clause (or inside each parenthesized group), the parser looks for `or`/`ou` at top level (again with parentheses-aware splitting).
@@ -173,17 +173,17 @@ function meetsCoursePrereq(
   disciplineCredits: Record<string, number>,
 ): boolean {
   switch (node.type) {
-    case 'course':
-      return taken.some(c => c.code === node.code);
-    case 'and_group':
-      return (node.children ?? []).every(child =>
+    case "course":
+      return taken.some((c) => c.code === node.code);
+    case "and_group":
+      return (node.children ?? []).every((child) =>
         meetsCoursePrereq(child, taken, totalCredits, disciplineCredits),
       );
-    case 'or_group':
-      return (node.children ?? []).some(child =>
+    case "or_group":
+      return (node.children ?? []).some((child) =>
         meetsCoursePrereq(child, taken, totalCredits, disciplineCredits),
       );
-    case 'non_course':
+    case "non_course":
       return evaluateNonCourseRequirement(node, totalCredits, disciplineCredits);
   }
 }
@@ -348,6 +348,7 @@ Any `CoursePrereqNode` can carry an optional `programs?: string[]` field. When p
 **Semantics:** if `programs` is set and the student's program is not in the list, the node evaluates to `false` — as if the prerequisite was not met. This is checked before the node's type-based logic runs.
 
 This is used to represent prerequisites of the form:
+
 > "X or Y for students enrolled in P1 or P2 programs or Z for all other students"
 
 which maps to an `or_group` whose first child has `programs` set:
@@ -373,4 +374,3 @@ which maps to an `or_group` whose first child has `programs` set:
 - All other students (or students with no program set) fall through to the second `or_group` child and need ITI 1120.
 
 **`PrereqContext.studentPrograms`:** The evaluation context now includes `studentPrograms: string[]`. Populate this by extracting `(XXX)` codes from the student's selected program title (e.g. `"Honours BSc in Computer Science (CSI)"` → `["CSI"]`). The field defaults to `[]` if no program is selected, causing all program-filtered nodes to evaluate to `false` and the OR to fall through to the unfiltered alternatives.
-

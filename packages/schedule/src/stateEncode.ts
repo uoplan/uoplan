@@ -1,17 +1,16 @@
-import type { Program, DayOfWeek as SchemaDayOfWeek } from './dataTypes';
-import type { CourseLevelBucket, CourseLanguageBucket } from './courseFilters';
-import type { RemainingRequirement, RequirementWithStatus } from './requirements';
-import type { Indices } from './dataTypes';
-import { isOptCourse, getCourseLevel } from './utils/courseUtils';
-import { isGroupToken, groupTokenPrefix } from './utils/groupToken';
-import type {
-  DayOfWeek as ProtoDayOfWeek} from './proto/state';
+import type { Program, DayOfWeek as SchemaDayOfWeek } from "./dataTypes";
+import type { CourseLevelBucket, CourseLanguageBucket } from "./courseFilters";
+import type { RemainingRequirement, RequirementWithStatus } from "./requirements";
+import type { Indices } from "./dataTypes";
+import { isOptCourse, getCourseLevel } from "./utils/courseUtils";
+import { isGroupToken, groupTokenPrefix } from "./utils/groupToken";
+import type { DayOfWeek as ProtoDayOfWeek } from "./proto/state";
 import {
   ShareableState,
   WizardMode,
   CourseLevelBucket as ProtoLevel,
-  CourseLanguageBucket as ProtoLang
-} from './proto/state';
+  CourseLanguageBucket as ProtoLang,
+} from "./proto/state";
 
 export function requirementIdsFromTree(nodes: RequirementWithStatus[]): string[] {
   const out: string[] = [];
@@ -27,17 +26,17 @@ export function requirementIdsFromTree(nodes: RequirementWithStatus[]): string[]
 
 export function urlToSlug(url: string): string {
   return url
-    .replace(/^https?:\/\/catalogue\.uottawa\.ca(?:\/archive\/\d{4}-\d{4})?\/en\//, '')
-    .replace(/\/$/, '');
+    .replace(/^https?:\/\/catalogue\.uottawa\.ca(?:\/archive\/\d{4}-\d{4})?\/en\//, "")
+    .replace(/\/$/, "");
 }
 
-export const STATE_MAGIC = 0x554F504C; // "UOPL" in ASCII hex
+export const STATE_MAGIC = 0x554f504c; // "UOPL" in ASCII hex
 
 function programSlug(p: Program): string {
   return (p as Program & { slug?: string }).slug ?? urlToSlug(p.url);
 }
 
-const OPT_SENTINEL_BASE = 0xFFFFFFF0; // Safely inside uint32 space
+const OPT_SENTINEL_BASE = 0xfffffff0; // Safely inside uint32 space
 
 export interface EncodeInput {
   wizardMode: "basic" | "advanced" | null;
@@ -125,48 +124,46 @@ export interface CatalogueLike {
 
 // Helpers for mappings
 function levelToProto(b: CourseLevelBucket): ProtoLevel {
-  return b === 'undergrad' ? ProtoLevel.COURSE_LEVEL_UNDERGRAD : ProtoLevel.COURSE_LEVEL_GRAD;
+  return b === "undergrad" ? ProtoLevel.COURSE_LEVEL_UNDERGRAD : ProtoLevel.COURSE_LEVEL_GRAD;
 }
 
 function protoToLevel(b: ProtoLevel): CourseLevelBucket {
-  return b === ProtoLevel.COURSE_LEVEL_UNDERGRAD ? 'undergrad' : 'grad';
+  return b === ProtoLevel.COURSE_LEVEL_UNDERGRAD ? "undergrad" : "grad";
 }
 
 function langToProto(b: CourseLanguageBucket): ProtoLang {
-  if (b === 'en') return ProtoLang.COURSE_LANGUAGE_EN;
-  if (b === 'fr') return ProtoLang.COURSE_LANGUAGE_FR;
+  if (b === "en") return ProtoLang.COURSE_LANGUAGE_EN;
+  if (b === "fr") return ProtoLang.COURSE_LANGUAGE_FR;
   return ProtoLang.COURSE_LANGUAGE_OTHER;
 }
 
 function protoToLang(b: ProtoLang): CourseLanguageBucket {
-  if (b === ProtoLang.COURSE_LANGUAGE_EN) return 'en';
-  if (b === ProtoLang.COURSE_LANGUAGE_FR) return 'fr';
-  return 'other';
+  if (b === ProtoLang.COURSE_LANGUAGE_EN) return "en";
+  if (b === ProtoLang.COURSE_LANGUAGE_FR) return "fr";
+  return "other";
 }
 
 function dayToProto(d: SchemaDayOfWeek): ProtoDayOfWeek {
-  const days: SchemaDayOfWeek[] = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+  const days: SchemaDayOfWeek[] = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
   return days.indexOf(d) as ProtoDayOfWeek;
 }
 
 function protoToDay(p: ProtoDayOfWeek): SchemaDayOfWeek {
-  const days: SchemaDayOfWeek[] = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
-  return days[p as number] ?? 'Mo';
+  const days: SchemaDayOfWeek[] = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+  return days[p as number] ?? "Mo";
 }
 
 export function encodeState(
   input: EncodeInput,
   _catalogue: CatalogueLike,
-  indices: Indices
+  indices: Indices,
 ): Uint8Array | null {
-  const programIndex = input.program != null
-    ? indices.programs.indexOf(programSlug(input.program))
-    : -1;
+  const programIndex =
+    input.program != null ? indices.programs.indexOf(programSlug(input.program)) : -1;
   if (input.program != null && programIndex < 0) return null;
 
-  const minorProgramIndex = input.minorProgram != null
-    ? indices.programs.indexOf(programSlug(input.minorProgram))
-    : -1;
+  const minorProgramIndex =
+    input.minorProgram != null ? indices.programs.indexOf(programSlug(input.minorProgram)) : -1;
   if (input.minorProgram != null && minorProgramIndex < 0) return null;
 
   const courseCodeToIndex = new Map<string, number>();
@@ -191,10 +188,15 @@ export function encodeState(
 
   // Assemble State
   const state: ShareableState = {
-    wizardMode: input.wizardMode === "basic" ? WizardMode.WIZARD_MODE_BASIC 
-      : input.wizardMode === "advanced" ? WizardMode.WIZARD_MODE_ADVANCED 
-      : WizardMode.WIZARD_MODE_UNSPECIFIED,
-    basicPinnedCourses: input.basicPinnedCourses.map(encodeCourseCode).filter((i): i is number => i !== undefined),
+    wizardMode:
+      input.wizardMode === "basic"
+        ? WizardMode.WIZARD_MODE_BASIC
+        : input.wizardMode === "advanced"
+          ? WizardMode.WIZARD_MODE_ADVANCED
+          : WizardMode.WIZARD_MODE_UNSPECIFIED,
+    basicPinnedCourses: input.basicPinnedCourses
+      .map(encodeCourseCode)
+      .filter((i): i is number => i !== undefined),
     basicElectivesCount: input.basicElectivesCount,
     basicExcludedCategories: input.basicExcludedCategories,
 
@@ -204,15 +206,17 @@ export function encodeState(
     minorProgramIndex: minorProgramIndex !== -1 ? minorProgramIndex : undefined,
     studentPrograms: input.studentPrograms,
 
-    completedCourses: input.completedCourses.map(encodeCourseCode).filter((i): i is number => i !== undefined),
+    completedCourses: input.completedCourses
+      .map(encodeCourseCode)
+      .filter((i): i is number => i !== undefined),
     levelBuckets: input.levelBuckets.map(levelToProto),
     languageBuckets: input.languageBuckets.map(langToProto),
     electiveLevelBuckets: input.electiveLevelBuckets,
-    
+
     coursesThisSemester: input.coursesThisSemester,
     firstSeed: input.firstSeed,
     currentSeed: input.currentSeed,
-    swaps: input.swaps.map(s => ({
+    swaps: input.swaps.map((s) => ({
       enrollmentIndex: s.enrollmentIndex,
       courseCodeIndex: courseCodeToIndex.get(s.courseCode) ?? 0,
     })),
@@ -229,9 +233,10 @@ export function encodeState(
     generationMinStartMinutes: input.generationMinStartMinutes,
     generationMaxEndMinutes: input.generationMaxEndMinutes,
     generationAllowedDays: input.generationAllowedDays.map(dayToProto),
-    generationMinProfessorRating: input.generationMinProfessorRating !== null 
-      ? Math.round(input.generationMinProfessorRating * 10) 
-      : undefined,
+    generationMinProfessorRating:
+      input.generationMinProfessorRating !== null
+        ? Math.round(input.generationMinProfessorRating * 10)
+        : undefined,
     generationLimitFirstYearCredits: input.generationLimitFirstYearCredits,
     generationCompressedSchedule: input.generationCompressedSchedule,
     generationPreferEasier: input.generationPreferEasier,
@@ -270,7 +275,9 @@ export function encodeState(
         }
       }
       if (realCodes.length) {
-        const courseIndices = realCodes.map(encodeCourseCode).filter((i): i is number => i !== undefined);
+        const courseIndices = realCodes
+          .map(encodeCourseCode)
+          .filter((i): i is number => i !== undefined);
         if (courseIndices.length) state.constrainedSelections.push({ reqIndex, courseIndices });
       }
       if (groupPrefixes.length) {
@@ -294,14 +301,14 @@ export function encodeState(
 export type DecodeError = { error: string };
 
 export function peekTermAndYear(
-  bytes: Uint8Array
+  bytes: Uint8Array,
 ): { termId: string | null; firstYear: number | null } | null {
   try {
     const state = ShareableState.decode(bytes);
     if (state.magic !== STATE_MAGIC) return null;
-    return { 
-      termId: state.selectedTermId ?? null, 
-      firstYear: state.firstYear ?? null 
+    return {
+      termId: state.selectedTermId ?? null,
+      firstYear: state.firstYear ?? null,
     };
   } catch {
     return null;
@@ -311,34 +318,39 @@ export function peekTermAndYear(
 export function decodeState(
   buffer: Uint8Array,
   catalogue: CatalogueLike,
-  indices: Indices
+  indices: Indices,
 ): DecodedState | DecodeError {
   let state: ShareableState;
   try {
     state = ShareableState.decode(buffer);
   } catch {
-    return { error: 'Invalid state encoding' };
+    return { error: "Invalid state encoding" };
   }
 
   if (state.magic !== STATE_MAGIC) {
-    return { error: 'Incompatible or corrupted state data' };
+    return { error: "Incompatible or corrupted state data" };
   }
 
   let program: Program | null = null;
   if (state.programIndex !== undefined && state.programIndex < indices.programs.length) {
     const slug = indices.programs[state.programIndex];
     program = catalogue.programs.find((p) => programSlug(p) === slug) ?? null;
-    if (program === null) return { error: 'Program from shared state is no longer in the catalogue' };
+    if (program === null)
+      return { error: "Program from shared state is no longer in the catalogue" };
   }
 
   let minorProgram: Program | null = null;
   if (state.minorProgramIndex !== undefined && state.minorProgramIndex < indices.programs.length) {
     const slug = indices.programs[state.minorProgramIndex];
     minorProgram = catalogue.programs.find((p) => programSlug(p) === slug) ?? null;
-    if (minorProgram === null) return { error: 'Minor program from shared state is no longer in the catalogue' };
+    if (minorProgram === null)
+      return { error: "Minor program from shared state is no longer in the catalogue" };
   }
 
-  const decodeCourseIndices = (indicesList: number[], optCounters?: Map<number, number>): string[] => {
+  const decodeCourseIndices = (
+    indicesList: number[],
+    optCounters?: Map<number, number>,
+  ): string[] => {
     const codes: string[] = [];
     for (const idx of indicesList) {
       if (idx >= OPT_SENTINEL_BASE) {
@@ -360,33 +372,43 @@ export function decodeState(
   };
 
   const completedOptCounters = new Map<number, number>();
-  const completedCourseCodes = decodeCourseIndices(state.completedCourses, completedOptCounters).filter(c => c && (isOptCourse(c) || catalogue.courses.some(catC => catC.code === c)));
+  const completedCourseCodes = decodeCourseIndices(
+    state.completedCourses,
+    completedOptCounters,
+  ).filter((c) => c && (isOptCourse(c) || catalogue.courses.some((catC) => catC.code === c)));
 
   const courseSelectionsOptCounters = new Map<number, number>();
-  const courseSelections = state.courseSelections.map(sel => ({
+  const courseSelections = state.courseSelections.map((sel) => ({
     reqIndex: sel.reqIndex,
-    courseCodes: decodeCourseIndices(sel.courseIndices, courseSelectionsOptCounters).filter(c => c && (isOptCourse(c) || catalogue.courses.some(catC => catC.code === c))),
+    courseCodes: decodeCourseIndices(sel.courseIndices, courseSelectionsOptCounters).filter(
+      (c) => c && (isOptCourse(c) || catalogue.courses.some((catC) => catC.code === c)),
+    ),
   }));
 
   const constrainedOptCounters = new Map<number, number>();
-  const constrainedSelections = state.constrainedSelections.map(sel => ({
+  const constrainedSelections = state.constrainedSelections.map((sel) => ({
     reqIndex: sel.reqIndex,
-    courseCodes: decodeCourseIndices(sel.courseIndices, constrainedOptCounters).filter(c => c && (isOptCourse(c) || catalogue.courses.some(catC => catC.code === c))),
+    courseCodes: decodeCourseIndices(sel.courseIndices, constrainedOptCounters).filter(
+      (c) => c && (isOptCourse(c) || catalogue.courses.some((catC) => catC.code === c)),
+    ),
   }));
 
-  const constrainedGroupSelections = state.constrainedGroupSelections.map(sel => ({
+  const constrainedGroupSelections = state.constrainedGroupSelections.map((sel) => ({
     reqIndex: sel.reqIndex,
     groupPrefixes: sel.groupPrefixes,
   }));
 
   const basicPinnedCourses = state.basicPinnedCourses
-    .map(idx => idx < indices.courses.length ? indices.courses[idx] : null)
+    .map((idx) => (idx < indices.courses.length ? indices.courses[idx] : null))
     .filter((c): c is string => c !== null);
 
   return {
-    wizardMode: state.wizardMode === WizardMode.WIZARD_MODE_BASIC ? "basic"
-      : state.wizardMode === WizardMode.WIZARD_MODE_ADVANCED ? "advanced"
-      : null,
+    wizardMode:
+      state.wizardMode === WizardMode.WIZARD_MODE_BASIC
+        ? "basic"
+        : state.wizardMode === WizardMode.WIZARD_MODE_ADVANCED
+          ? "advanced"
+          : null,
     basicPinnedCourses,
     basicElectivesCount: state.basicElectivesCount,
     basicExcludedCategories: state.basicExcludedCategories,
@@ -399,32 +421,36 @@ export function decodeState(
     levelBuckets: state.levelBuckets.map(protoToLevel),
     languageBuckets: state.languageBuckets.map(protoToLang),
     electiveLevelBuckets: state.electiveLevelBuckets,
-    
+
     coursesThisSemester: state.coursesThisSemester,
     firstSeed: state.firstSeed,
     currentSeed: state.currentSeed,
-    swaps: state.swaps.map(s => ({
+    swaps: state.swaps.map((s) => ({
       enrollmentIndex: s.enrollmentIndex,
-      courseCode: indices.courses[s.courseCodeIndex] ?? '',
+      courseCode: indices.courses[s.courseCodeIndex] ?? "",
     })),
-    
-    optionSelections: state.optionSelections.map(o => ({ reqIndex: o.reqIndex, optionIndex: o.optionIndex })),
+
+    optionSelections: state.optionSelections.map((o) => ({
+      reqIndex: o.reqIndex,
+      optionIndex: o.optionIndex,
+    })),
     courseSelections,
     constrainedSelections,
     constrainedGroupSelections,
-    
+
     includeClosedComponents: state.includeClosedComponents,
     virtualSectionsOnly: state.virtualSectionsOnly,
     studentPrograms: state.studentPrograms,
-    
+
     touchedReqIndices: state.touchedReqIndices,
-    
+
     generationMinStartMinutes: state.generationMinStartMinutes,
     generationMaxEndMinutes: state.generationMaxEndMinutes,
     generationAllowedDays: state.generationAllowedDays.map(protoToDay),
-    generationMinProfessorRating: state.generationMinProfessorRating !== undefined 
-      ? state.generationMinProfessorRating / 10 
-      : null,
+    generationMinProfessorRating:
+      state.generationMinProfessorRating !== undefined
+        ? state.generationMinProfessorRating / 10
+        : null,
     generationLimitFirstYearCredits: state.generationLimitFirstYearCredits,
     generationCompressedSchedule: state.generationCompressedSchedule,
     generationPreferEasier: state.generationPreferEasier,
@@ -435,7 +461,7 @@ export function decodeState(
 }
 
 function bytesToBase64(bytes: Uint8Array): string {
-  let binary = '';
+  let binary = "";
   for (let i = 0; i < bytes.length; i++) {
     binary += String.fromCharCode(bytes[i]);
   }
@@ -457,17 +483,17 @@ function base64ToBytes(base64: string): Uint8Array | null {
 
 export function stateToShareUrl(
   encoded: Uint8Array,
-  baseUrl: string = typeof window !== 'undefined'
+  baseUrl: string = typeof window !== "undefined"
     ? `${window.location.origin}${window.location.pathname}`
-    : ''
+    : "",
 ): string {
-  const q = baseUrl.includes('?') ? '&' : '?';
+  const q = baseUrl.includes("?") ? "&" : "?";
   return `${baseUrl}${q}s=${encodeURIComponent(bytesToBase64(encoded))}`;
 }
 
 export function parseStateFromUrl(search: string): Uint8Array | null {
   const params = new URLSearchParams(search);
-  const s = params.get('s');
+  const s = params.get("s");
   if (!s) return null;
   try {
     return base64ToBytes(decodeURIComponent(s));
@@ -479,7 +505,7 @@ export function parseStateFromUrl(search: string): Uint8Array | null {
 export function encodeStateToBase64(
   input: EncodeInput,
   catalogue: CatalogueLike,
-  indices: Indices
+  indices: Indices,
 ): string | null {
   const bytes = encodeState(input, catalogue, indices);
   if (!bytes) return null;
@@ -489,15 +515,15 @@ export function encodeStateToBase64(
 export function decodeStateFromBase64(
   base64: string,
   catalogue: CatalogueLike,
-  indices: Indices
+  indices: Indices,
 ): DecodedState | DecodeError {
   const bytes = base64ToBytes(base64);
-  if (!bytes) return { error: 'Invalid state encoding' };
+  if (!bytes) return { error: "Invalid state encoding" };
   return decodeState(bytes, catalogue, indices);
 }
 
 export function peekTermAndYearFromBase64(
-  base64: string
+  base64: string,
 ): { termId: string | null; firstYear: number | null } | null {
   const bytes = base64ToBytes(base64);
   if (!bytes) return null;

@@ -1,7 +1,13 @@
 import { useMemo } from "react";
 import { Tooltip } from "@mantine/core";
 import type { DataCache, GradeVizData } from "schedule";
-import { COURSE_COLORS, COURSE_COLOR_HEX, hexToRgb, ratingColorToCssVar, ratingToColor } from "schedule";
+import {
+  COURSE_COLORS,
+  COURSE_COLOR_HEX,
+  hexToRgb,
+  ratingColorToCssVar,
+  ratingToColor,
+} from "schedule";
 import type { CalendarEvent } from "../../hooks/useCalendarEvents";
 import { tr } from "../../i18n";
 import { GradeDistributionBottomBar } from "./GradeDistributionViz";
@@ -52,7 +58,9 @@ export function CalendarEventContent({
     [ext.professorRatingValue],
   );
   const markerColor = useMemo(() => ratingColorToCssVar(ratingTier), [ratingTier]);
-  const hasProfessorRating = !!(ext.professorRatingDetails && ext.professorRatingDetails.length > 0);
+  const hasProfessorRating = !!(
+    ext.professorRatingDetails && ext.professorRatingDetails.length > 0
+  );
   const hasNumericRating =
     hasProfessorRating &&
     ext.professorRatingValue != null &&
@@ -71,12 +79,12 @@ export function CalendarEventContent({
   }, [ext.gradeViz]);
 
   const gradeTooltip =
-    ext.gradeViz && ext.gradeViz.total > 0 ? (
-      tr("calendar.grade.compactTooltip", {
-        passing: Math.round(ext.gradeViz.passingPercent),
-        aPlus: aPlusPercent,
-      })
-    ) : null;
+    ext.gradeViz && ext.gradeViz.total > 0
+      ? tr("calendar.grade.compactTooltip", {
+          passing: Math.round(ext.gradeViz.passingPercent),
+          aPlus: aPlusPercent,
+        })
+      : null;
 
   const gradeBottom = <GradeDistributionBottomBar gradeViz={ext.gradeViz} />;
 

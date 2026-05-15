@@ -1,4 +1,4 @@
-@import '@mantine/core/styles.css';
+@import "@mantine/core/styles.css";
 
 /* Reserve space for the vertical scrollbar so layout width stays stable when
    overflow appears/disappears (avoids horizontal shift). */
@@ -22,7 +22,7 @@ body {
 
 ::selection {
   background-color: rgba(134, 46, 156, 0.2);
-  color: #F5F2EC;
+  color: #f5f2ec;
 }
 
 * {
@@ -36,12 +36,14 @@ a {
 
 /* Stamp hover effect for interactive cards */
 .stamp-hover {
-  transition: transform 80ms ease, box-shadow 80ms ease;
+  transition:
+    transform 80ms ease,
+    box-shadow 80ms ease;
 }
 
 .stamp-hover:hover {
   transform: rotate(-1deg) scale(1.02);
-  box-shadow: 3px 3px 0px #1A1A1A;
+  box-shadow: 3px 3px 0px #1a1a1a;
 }
 
 .stamp-hover:active {
@@ -54,7 +56,7 @@ a {
   background-color: #111113;
   color: var(--mantine-color-gray-3);
   font-family: inherit;
-  --fc-border-color: #2C2E33;
+  --fc-border-color: #2c2e33;
   --fc-page-bg-color: #111113;
   --fc-neutral-bg-color: #111113;
   --fc-list-event-hover-bg-color: #25262b;
@@ -73,7 +75,7 @@ a {
 .fc .fc-timegrid-axis,
 .fc td,
 .fc th {
-  border-color: #2C2E33 !important;
+  border-color: #2c2e33 !important;
 }
 
 .fc .fc-scrollgrid {
@@ -88,7 +90,7 @@ a {
 
 .fc .fc-col-header-cell {
   background-color: #111113;
-  color: #ADB5BD;
+  color: #adb5bd;
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
@@ -96,7 +98,7 @@ a {
 
 .fc .fc-timegrid-slot-label-cushion {
   font-size: 11px;
-  color: #868E96;
+  color: #868e96;
   padding-right: 4px;
 }
 
@@ -702,4 +704,3 @@ a.fc-uoplan-rating-inline:hover {
     align-items: stretch;
   }
 }
-

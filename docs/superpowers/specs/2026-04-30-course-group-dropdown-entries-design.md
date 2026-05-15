@@ -17,9 +17,9 @@ Real course codes always contain a space (`"CSI 2101"`), so the formats are unam
 A shared utility at `packages/schedule/src/utils/groupToken.ts` exposes:
 
 ```ts
-export function isGroupToken(s: string): boolean
-export function groupTokenPrefix(s: string): string   // "group:CSI" → "CSI"
-export function makeGroupToken(prefix: string): string // "CSI" → "group:CSI"
+export function isGroupToken(s: string): boolean;
+export function groupTokenPrefix(s: string): string; // "group:CSI" → "CSI"
+export function makeGroupToken(prefix: string): string; // "CSI" → "group:CSI"
 ```
 
 All consumers import from here — no magic strings scattered across files.
@@ -45,12 +45,15 @@ Inside `getConstrainMultiSelectOptions`, after the filtered course list is compu
 Three targeted changes:
 
 ### `renderOption`
+
 Detect `isGroupToken(option.value)` and render a group-styled row (e.g. italic label, a small "group" icon or badge) instead of the standard "CODE – TITLE" course format.
 
 ### `filter`
+
 The existing filter checks `value.includes(q) || label.includes(q)`. Group entries already match because their label contains the prefix. The only addition: **sort group matches before individual course matches** when both share the same prefix. Concretely, if the search term matches a group entry's prefix, that group entry should float to the top of the result list.
 
 ### `onChange`
+
 No special handling required — Mantine returns the full `string[]` of selected values, which will naturally include group tokens when selected.
 
 ---
@@ -62,11 +65,12 @@ At the very start of `generateSchedulesAction`, before any code touches `constra
 ```ts
 function expandConstrainedPerRequirement(
   constrainedPerRequirement: Record<string, string[]>,
-  poolsByCandidates: Map<string, string[]>,  // requirementId → candidateCourses
-): Record<string, string[]>
+  poolsByCandidates: Map<string, string[]>, // requirementId → candidateCourses
+): Record<string, string[]>;
 ```
 
 For each requirement's code list:
+
 - Leave real course codes as-is.
 - Replace each `"group:PREFIX"` with all courses from that requirement's `candidateCourses` whose subject prefix equals `PREFIX`.
 - **Deduplicate** the final list (handles the case where the user selected "Any CSI course" + "CSI 2101" explicitly).
@@ -107,6 +111,7 @@ cd packages/schedule && pnpm generate:proto
 ### Encode path (`stateEncode.ts`)
 
 When serializing `constrainedPerRequirement`, split each requirement's codes into two buckets:
+
 - **Real course codes** → existing `constrainedSelections` (encoded as course indices, unchanged).
 - **Group tokens** → new `constrainedGroupSelections` (encoded as `{ reqIndex, groupPrefixes: ["CSI", "CEG"] }` using `groupTokenPrefix`).
 
@@ -119,10 +124,7 @@ for (const { reqIndex, groupPrefixes } of decoded.constrainedGroupSelections) {
   const reqId = reqIndexToId.get(reqIndex);
   if (reqId == null) continue;
   const tokens = groupPrefixes.map(makeGroupToken);
-  constrainedPerRequirement[reqId] = [
-    ...(constrainedPerRequirement[reqId] ?? []),
-    ...tokens,
-  ];
+  constrainedPerRequirement[reqId] = [...(constrainedPerRequirement[reqId] ?? []), ...tokens];
 }
 ```
 
@@ -135,12 +137,14 @@ Group chips are fully preserved through URL round-trips.
 Add one new key to both `.po` files:
 
 **`apps/web/src/locales/en/messages.po`**
+
 ```
 msgid "requirementNode.anyCourseGroup"
 msgstr "Any {prefix} course"
 ```
 
 **`apps/web/src/locales/fr-CA/messages.po`**
+
 ```
 msgid "requirementNode.anyCourseGroup"
 msgstr "Tout cours {prefix}"
@@ -152,18 +156,18 @@ Used as: `tr("requirementNode.anyCourseGroup", { prefix: "CSI" })` → `"Any CSI
 
 ## Files to Change
 
-| File | Change |
-|------|--------|
-| `packages/schedule/src/utils/groupToken.ts` | **New** — `isGroupToken`, `groupTokenPrefix`, `makeGroupToken` |
-| `apps/web/src/components/requirements/requirementUtils.ts` | Add group option generation in `getConstrainMultiSelectOptions` |
-| `apps/web/src/components/requirements/RequirementNode.tsx` | Update `renderOption` and `filter` for group entries |
-| `apps/web/src/lib/generateSchedulesAction.ts` | Expand group tokens before processing `constrainedPerRequirement` |
-| `packages/schedule/proto/state.proto` | Add `RequirementGroupSelection` message + `constrained_group_selections` field 34 |
-| `packages/schedule/src/proto/state.ts` | Regenerated via `pnpm generate:proto` after proto change |
-| `packages/schedule/src/stateEncode.ts` | Split group tokens into `constrainedGroupSelections` on encode |
-| `apps/web/src/store/slices/url.ts` | Merge group tokens back from `constrainedGroupSelections` on decode |
-| `apps/web/src/locales/en/messages.po` | Add `requirementNode.anyCourseGroup` |
-| `apps/web/src/locales/fr-CA/messages.po` | Add `requirementNode.anyCourseGroup` |
+| File                                                       | Change                                                                            |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `packages/schedule/src/utils/groupToken.ts`                | **New** — `isGroupToken`, `groupTokenPrefix`, `makeGroupToken`                    |
+| `apps/web/src/components/requirements/requirementUtils.ts` | Add group option generation in `getConstrainMultiSelectOptions`                   |
+| `apps/web/src/components/requirements/RequirementNode.tsx` | Update `renderOption` and `filter` for group entries                              |
+| `apps/web/src/lib/generateSchedulesAction.ts`              | Expand group tokens before processing `constrainedPerRequirement`                 |
+| `packages/schedule/proto/state.proto`                      | Add `RequirementGroupSelection` message + `constrained_group_selections` field 34 |
+| `packages/schedule/src/proto/state.ts`                     | Regenerated via `pnpm generate:proto` after proto change                          |
+| `packages/schedule/src/stateEncode.ts`                     | Split group tokens into `constrainedGroupSelections` on encode                    |
+| `apps/web/src/store/slices/url.ts`                         | Merge group tokens back from `constrainedGroupSelections` on decode               |
+| `apps/web/src/locales/en/messages.po`                      | Add `requirementNode.anyCourseGroup`                                              |
+| `apps/web/src/locales/fr-CA/messages.po`                   | Add `requirementNode.anyCourseGroup`                                              |
 
 ---
 

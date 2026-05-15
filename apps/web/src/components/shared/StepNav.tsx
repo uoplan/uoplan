@@ -1,10 +1,7 @@
 import { Box, Group, Stack, Text } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 import { tr } from "../../i18n";
-import {
-  isWizardStepSkipped,
-  skippedWizardStepIsPassed,
-} from "../../lib/wizardSteps";
+import { isWizardStepSkipped, skippedWizardStepIsPassed } from "../../lib/wizardSteps";
 
 export const STEPS = [
   {
@@ -17,29 +14,23 @@ export const STEPS = [
   },
   {
     label: () => tr("stepNav.step.program.label"),
-    description: () =>
-      tr("stepNav.step.program.description"),
+    description: () => tr("stepNav.step.program.description"),
   },
   {
-    label: () =>
-      tr("stepNav.step.completed.label"),
-    description: () =>
-      tr("stepNav.step.completed.description"),
+    label: () => tr("stepNav.step.completed.label"),
+    description: () => tr("stepNav.step.completed.description"),
   },
   {
     label: () => tr("stepNav.step.path.label"),
-    description: () =>
-      tr("stepNav.step.path.description"),
+    description: () => tr("stepNav.step.path.description"),
   },
   {
     label: () => tr("stepNav.step.requirements.label"),
-    description: () =>
-      tr("stepNav.step.requirements.description"),
+    description: () => tr("stepNav.step.requirements.description"),
   },
   {
     label: () => tr("stepNav.step.generate.label"),
-    description: () =>
-      tr("stepNav.step.generate.description"),
+    description: () => tr("stepNav.step.generate.description"),
   },
 ] as const;
 
@@ -84,11 +75,7 @@ function StepItem({
   isMobile: boolean;
 }) {
   const isActive = actualIdx === active;
-  const isSkipped = isWizardStepSkipped(
-    actualIdx,
-    needsOptionsStep,
-    needsAssignStep,
-  );
+  const isSkipped = isWizardStepSkipped(actualIdx, needsOptionsStep, needsAssignStep);
   const skippedPassed = skippedWizardStepIsPassed(
     actualIdx,
     furthestActualStep,
@@ -97,10 +84,7 @@ function StepItem({
   );
   const isComplete = !isSkipped && displayIdx < furthestDisplayIndex;
   /** Completed rows, plus the next row after them (same as pressing Next from the last completed). Skipped rows are never clickable. */
-  const isClickable =
-    !isSkipped &&
-    !isActive &&
-    displayIdx <= furthestDisplayIndex;
+  const isClickable = !isSkipped && !isActive && displayIdx <= furthestDisplayIndex;
 
   const borderColor = skippedPassed
     ? "#6C757D"
@@ -109,11 +93,7 @@ function StepItem({
       : isActive
         ? "#B197FC"
         : "#2C2E33";
-  const backgroundColor = skippedPassed
-    ? "#343A40"
-    : isComplete
-      ? "#2F9E44"
-      : "#141517";
+  const backgroundColor = skippedPassed ? "#343A40" : isComplete ? "#2F9E44" : "#141517";
 
   const labelColor = isActive
     ? "#F8F9FA"
@@ -178,12 +158,7 @@ function StepItem({
         )}
       </Box>
       {!isMobile && (
-        <Group
-          gap={6}
-          wrap="nowrap"
-          align="center"
-          style={{ paddingTop: 1 }}
-        >
+        <Group gap={6} wrap="nowrap" align="center" style={{ paddingTop: 1 }}>
           <Text
             size="xs"
             fw={isActive ? 600 : 400}
@@ -230,21 +205,21 @@ export function StepNav({
               }}
             />
           )}
-            <Group
-              component="ul"
-              role="list"
-              gap="md"
-              wrap="nowrap"
-              style={{
-                justifyContent: "space-between",
-                width: "100%",
-                position: "relative",
-                zIndex: 1,
-                padding: 0,
-                margin: 0,
-                listStyle: "none",
-              }}
-            >
+          <Group
+            component="ul"
+            role="list"
+            gap="md"
+            wrap="nowrap"
+            style={{
+              justifyContent: "space-between",
+              width: "100%",
+              position: "relative",
+              zIndex: 1,
+              padding: 0,
+              margin: 0,
+              listStyle: "none",
+            }}
+          >
             {visibleStepIndices.map((actualIdx, displayIdx) => (
               <StepItem
                 key={actualIdx}
@@ -263,20 +238,12 @@ export function StepNav({
             ))}
           </Group>
         </Box>
-        <Text
-          size="xs"
-          fw={500}
-          mt={8}
-          style={{ textAlign: "center", color: "#F8F9FA" }}
-        >
-          {tr(
-            "stepNav.mobileProgress",
-            {
-              current: activeDisplayIdx + 1,
-              total: visibleCount,
-              label: STEPS[active].label(),
-            },
-          )}
+        <Text size="xs" fw={500} mt={8} style={{ textAlign: "center", color: "#F8F9FA" }}>
+          {tr("stepNav.mobileProgress", {
+            current: activeDisplayIdx + 1,
+            total: visibleCount,
+            label: STEPS[active].label(),
+          })}
         </Text>
       </Box>
     );
@@ -310,10 +277,10 @@ export function StepNav({
             }}
           />
         )}
-        <Stack 
-          component="ul" 
+        <Stack
+          component="ul"
           role="list"
-          gap={0} 
+          gap={0}
           style={{ padding: 0, margin: 0, listStyle: "none" }}
         >
           {visibleStepIndices.map((actualIdx, displayIdx) => (

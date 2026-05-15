@@ -1,18 +1,29 @@
-export type ProfessorRatingsEntry = { id?: string; legacyId?: number; rating: number; numRatings: number };
+export type ProfessorRatingsEntry = {
+  id?: string;
+  legacyId?: number;
+  rating: number;
+  numRatings: number;
+};
 export type ProfessorRatingsMap = Record<string, ProfessorRatingsEntry>;
 
 export function normalizeProfessorName(name: string): string {
-  return (name ?? '').trim().replace(/\s+/g, ' ');
+  return (name ?? "").trim().replace(/\s+/g, " ");
 }
 
 export function buildProfessorRatingsMap(input: {
-  professors: Array<{ id?: string; legacyId?: number; name: string; rating: number | null; numRatings?: number }>;
+  professors: Array<{
+    id?: string;
+    legacyId?: number;
+    name: string;
+    rating: number | null;
+    numRatings?: number;
+  }>;
 }): ProfessorRatingsMap {
   const map: ProfessorRatingsMap = {};
   for (const p of input.professors ?? []) {
     const key = normalizeProfessorName(p.name);
     if (!key) continue;
-    const rating = typeof p.rating === 'number' ? p.rating : Number(p.rating);
+    const rating = typeof p.rating === "number" ? p.rating : Number(p.rating);
     if (!Number.isFinite(rating)) continue;
     map[key] = { id: p.id, legacyId: p.legacyId, rating, numRatings: p.numRatings ?? 0 };
   }
@@ -21,7 +32,7 @@ export function buildProfessorRatingsMap(input: {
 
 export function getRatingsForInstructors(
   instructors: string[] | null | undefined,
-  map: ProfessorRatingsMap | null | undefined
+  map: ProfessorRatingsMap | null | undefined,
 ): number[] {
   if (!map || !instructors?.length) return [];
   const out: number[] = [];
@@ -38,10 +49,16 @@ export function getRatingsForInstructors(
 
 export function getRatingDetailsForInstructors(
   instructors: string[] | null | undefined,
-  map: ProfessorRatingsMap | null | undefined
+  map: ProfessorRatingsMap | null | undefined,
 ): Array<{ id?: string; legacyId?: number; name: string; rating: number; numRatings: number }> {
   if (!map || !instructors?.length) return [];
-  const out: Array<{ id?: string; legacyId?: number; name: string; rating: number; numRatings: number }> = [];
+  const out: Array<{
+    id?: string;
+    legacyId?: number;
+    name: string;
+    rating: number;
+    numRatings: number;
+  }> = [];
   const seen = new Set<string>();
   for (const raw of instructors) {
     const key = normalizeProfessorName(raw);
@@ -49,7 +66,13 @@ export function getRatingDetailsForInstructors(
     seen.add(key);
     const entry = map[key];
     if (entry && Number.isFinite(entry.rating)) {
-      out.push({ id: entry.id, legacyId: entry.legacyId, name: raw.trim(), rating: entry.rating, numRatings: entry.numRatings });
+      out.push({
+        id: entry.id,
+        legacyId: entry.legacyId,
+        name: raw.trim(),
+        rating: entry.rating,
+        numRatings: entry.numRatings,
+      });
     }
   }
   return out;

@@ -14,15 +14,17 @@ import {
   type Program,
   type SchedulesData,
 } from "schedule";
-import {
-  buildDataCache,
-  normalizeCourseCode,
-  withExtraCourses,
-  isOptCourse,
-} from "schedule";
+import { buildDataCache, normalizeCourseCode, withExtraCourses, isOptCourse } from "schedule";
 import { getMergedCatalogue } from "./catalogueUtils";
 import { buildProfessorRatingsMap } from "schedule";
-import { parseStateFromUrl, peekTermAndYear, peekTermAndYearFromBase64, decodeState, decodeStateFromBase64, urlToSlug } from "schedule";
+import {
+  parseStateFromUrl,
+  peekTermAndYear,
+  peekTermAndYearFromBase64,
+  decodeState,
+  decodeStateFromBase64,
+  urlToSlug,
+} from "schedule";
 import { recomputeStateForProgram } from "../requirementCompute";
 import { LOCAL_STORAGE_KEY } from "../constants";
 
@@ -35,9 +37,11 @@ function buildCacheWithOpt(
   const base = buildDataCache(catalogue, schedulesData);
   const optCodes = completedCourses.map(normalizeCourseCode).filter(isOptCourse);
   if (optCodes.length === 0) return base;
-  return withExtraCourses(base, optCodes.map((code): Course => ({ code, title: code, credits: 3, description: '' })));
+  return withExtraCourses(
+    base,
+    optCodes.map((code): Course => ({ code, title: code, credits: 3, description: "" })),
+  );
 }
-
 
 async function fetchProtoBytes(path: string): Promise<Uint8Array> {
   const res = await fetch(path);
@@ -51,12 +55,7 @@ interface DataSlice {
   setFirstYear: AppStore["setFirstYear"];
 }
 
-export const createDataSlice: StateCreator<
-  AppStore,
-  [],
-  [],
-  DataSlice
-> = (set, get) => ({
+export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, get) => ({
   setSelectedTermId: async (termId: string) => {
     set({ loading: true, error: null });
     try {
@@ -64,9 +63,19 @@ export const createDataSlice: StateCreator<
       if (!catalogue) throw new Error("Catalogue not loaded");
 
       const schedulesBytes = await fetchProtoBytes(`/data/schedules.${termId}.pb`);
-      const parsedSchedules = fromProtoSchedulesData(DataProto.SchedulesData.decode(schedulesBytes));
-      const effectiveCatalogue = getMergedCatalogue(catalogue, yearCatalogueCourses, completedCourses);
-      const cache = buildCacheWithOpt(effectiveCatalogue ?? catalogue, parsedSchedules, completedCourses);
+      const parsedSchedules = fromProtoSchedulesData(
+        DataProto.SchedulesData.decode(schedulesBytes),
+      );
+      const effectiveCatalogue = getMergedCatalogue(
+        catalogue,
+        yearCatalogueCourses,
+        completedCourses,
+      );
+      const cache = buildCacheWithOpt(
+        effectiveCatalogue ?? catalogue,
+        parsedSchedules,
+        completedCourses,
+      );
 
       const s = get();
       const full = recomputeStateForProgram(
@@ -94,7 +103,6 @@ export const createDataSlice: StateCreator<
         loading: false,
         error: null,
       });
-
     } catch (err) {
       set({
         loading: false,
@@ -108,7 +116,11 @@ export const createDataSlice: StateCreator<
     set({ firstYear: year, yearCatalogueLoading: true });
     try {
       if (year === null) {
-        set({ yearCataloguePrograms: null, yearCatalogueCourses: null, yearCatalogueLoading: false });
+        set({
+          yearCataloguePrograms: null,
+          yearCatalogueCourses: null,
+          yearCatalogueLoading: false,
+        });
         const { schedulesData, completedCourses: cc } = get();
         if (catalogue && schedulesData) {
           const cache = buildCacheWithOpt(catalogue, schedulesData, cc);
@@ -117,7 +129,11 @@ export const createDataSlice: StateCreator<
       } else {
         const bytes = await fetchProtoBytes(`/data/catalogue.${year}.pb`);
         const parsed = fromProtoCatalogue(DataProto.Catalogue.decode(bytes));
-        set({ yearCataloguePrograms: parsed.programs, yearCatalogueCourses: parsed.courses, yearCatalogueLoading: false });
+        set({
+          yearCataloguePrograms: parsed.programs,
+          yearCatalogueCourses: parsed.courses,
+          yearCatalogueLoading: false,
+        });
         const { schedulesData, completedCourses } = get();
         const effectiveCatalogue = getMergedCatalogue(catalogue, parsed.courses, completedCourses);
         if (effectiveCatalogue && schedulesData) {
@@ -141,8 +157,7 @@ export const createDataSlice: StateCreator<
         fetch("/data/indices.pb").catch(() => null),
         fetch("/data/ratemyprofessors.pb").catch(() => null),
       ]);
-      if (!manifestRes.ok || !termsRes.ok)
-        throw new Error("Failed to load data");
+      if (!manifestRes.ok || !termsRes.ok) throw new Error("Failed to load data");
 
       const manifestBytes = new Uint8Array(await manifestRes.arrayBuffer());
       const availableYears = fromProtoCatalogueManifest(
@@ -187,13 +202,19 @@ export const createDataSlice: StateCreator<
         const urlBytes = parseStateFromUrl(window.location.search);
         if (urlBytes && urlBytes.length > 0) {
           const peeked = peekTermAndYear(urlBytes);
-          if (peeked) { peekedTermId = peeked.termId; peekedFirstYear = peeked.firstYear; }
+          if (peeked) {
+            peekedTermId = peeked.termId;
+            peekedFirstYear = peeked.firstYear;
+          }
         } else {
           try {
             const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
             if (stored) {
               const peeked = peekTermAndYearFromBase64(stored);
-              if (peeked) { peekedTermId = peeked.termId; peekedFirstYear = peeked.firstYear; }
+              if (peeked) {
+                peekedTermId = peeked.termId;
+                peekedFirstYear = peeked.firstYear;
+              }
             }
           } catch {
             // ignore
@@ -222,7 +243,9 @@ export const createDataSlice: StateCreator<
       }
 
       const schedulesBytes = await fetchProtoBytes(`/data/schedules.${initialTermId}.pb`);
-      const parsedSchedules = fromProtoSchedulesData(DataProto.SchedulesData.decode(schedulesBytes));
+      const parsedSchedules = fromProtoSchedulesData(
+        DataProto.SchedulesData.decode(schedulesBytes),
+      );
       const effectiveCatalogue = getMergedCatalogue(parsedCatalogue, yearCatalogueCourses, []);
       const cache = buildDataCache(effectiveCatalogue ?? parsedCatalogue, parsedSchedules);
 
@@ -255,18 +278,18 @@ export const createDataSlice: StateCreator<
             u.searchParams.delete("t");
             u.searchParams.delete("f");
             const step = decoded.activeStep ?? 0;
-            const navState = { step, furthestStep: step, showCalendar: decoded.showCalendar ?? false };
+            const navState = {
+              step,
+              furthestStep: step,
+              showCalendar: decoded.showCalendar ?? false,
+            };
             window.history.replaceState(navState, "", u.toString());
             window.dispatchEvent(new PopStateEvent("popstate", { state: navState }));
           }
         } else {
           const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
           if (stored) {
-            const decoded = decodeStateFromBase64(
-              stored,
-              parsedCatalogue,
-              indices,
-            );
+            const decoded = decodeStateFromBase64(stored, parsedCatalogue, indices);
             if (!("error" in decoded)) {
               get().loadEncodedState(decoded);
               const step = decoded.activeStep ?? 0;

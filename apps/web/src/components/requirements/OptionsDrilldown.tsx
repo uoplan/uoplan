@@ -1,10 +1,7 @@
 import { Box, Group, Paper, Stack, Text, UnstyledButton } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
 import type { RequirementWithStatus } from "schedule";
-import {
-  getOptionSecondarySummaryLine,
-  simplifySingleChildChain,
-} from "./requirementUtils";
+import { getOptionSecondarySummaryLine, simplifySingleChildChain } from "./requirementUtils";
 import {
   RequirementNode,
   getNodeDisplayTitle,
@@ -33,7 +30,7 @@ function orGroupLabel(node: RequirementWithStatus): string {
   const rawTitle = (node.title ?? "").trim();
   const useGeneric = rawTitle === "" || rawTitle.toLowerCase() === "or";
   return useGeneric
-    ? tr("optionsDrilldown.orGroupLabel.default", )
+    ? tr("optionsDrilldown.orGroupLabel.default")
     : rawTitle || node.code || tr("optionsDrilldown.chooseOne");
 }
 
@@ -49,8 +46,7 @@ export function OptionsDrilldown({
 }: OptionsDrilldownProps) {
   const { node } = simplifySingleChildChain(rawNode);
 
-  const indent =
-    depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX;
+  const indent = depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX;
 
   const requirementNodeShared = {
     cache: null,
@@ -90,16 +86,10 @@ export function OptionsDrilldown({
     const reqId = node.requirementId!;
     const options = node.options!;
     const selectedIdx = selectedOptionsPerRequirement[reqId];
-    const selOk =
-      selectedIdx != null &&
-      selectedIdx >= 0 &&
-      selectedIdx < options.length;
+    const selOk = selectedIdx != null && selectedIdx >= 0 && selectedIdx < options.length;
     const selectedChild = selOk ? options[selectedIdx] : null;
 
-    const showError =
-      activeBranch &&
-      selectedIdx == null &&
-      !node.complete;
+    const showError = activeBranch && selectedIdx == null && !node.complete;
 
     if (!selOk) {
       return (
@@ -121,19 +111,15 @@ export function OptionsDrilldown({
           )}
           {showError && (
             <Text size="xs" c="red" mb="xs">
-              {tr("optionsDrilldown.selectOneError", )}
+              {tr("optionsDrilldown.selectOneError")}
             </Text>
           )}
           <Stack gap="sm">
             {options.map((opt, idx) => {
-              const childKey = getStableNodeKey(
-                opt,
-                `${nodeKeyPrefix}:pick:${idx}`,
-              );
+              const childKey = getStableNodeKey(opt, `${nodeKeyPrefix}:pick:${idx}`);
               const isSelected = selectedIdx === idx;
               const childActiveBranch =
-                activeBranch &&
-                (selectedIdx == null || selectedIdx === idx);
+                activeBranch && (selectedIdx == null || selectedIdx === idx);
               return (
                 <Box key={childKey}>
                   <RequirementNode
@@ -159,20 +145,14 @@ export function OptionsDrilldown({
     }
 
     const chosenHint =
-      getOptionSecondarySummaryLine(selectedChild!) ??
-      tr("optionsDrilldown.selectedBranch");
+      getOptionSecondarySummaryLine(selectedChild!) ?? tr("optionsDrilldown.selectedBranch");
     const backDescription =
       getOptionSecondarySummaryLine(selectedChild!) ?? getNodeDisplayTitle(selectedChild!);
-    const backAriaLabel = tr("optionsDrilldown.changeRequirementSetAria", { path: backDescription },
-    );
+    const backAriaLabel = tr("optionsDrilldown.changeRequirementSetAria", {
+      path: backDescription,
+    });
     return (
-      <Paper
-        withBorder
-        radius={0}
-        mt={depth > 0 ? "xs" : 0}
-        p={0}
-        style={{ overflow: "hidden" }}
-      >
+      <Paper withBorder radius={0} mt={depth > 0 ? "xs" : 0} p={0} style={{ overflow: "hidden" }}>
         <UnstyledButton
           type="button"
           onClick={() => onClearOption(reqId)}
@@ -190,12 +170,10 @@ export function OptionsDrilldown({
             transition: "background-color 120ms ease",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor =
-              "var(--mantine-color-dark-5)";
+            e.currentTarget.style.backgroundColor = "var(--mantine-color-dark-5)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor =
-              "var(--mantine-color-dark-6)";
+            e.currentTarget.style.backgroundColor = "var(--mantine-color-dark-6)";
           }}
         >
           <Group gap="sm" wrap="nowrap" align="flex-start">
@@ -210,7 +188,7 @@ export function OptionsDrilldown({
             />
             <Stack gap={4} style={{ minWidth: 0, flex: 1 }}>
               <Text size="xs" c="dimmed" fw={600} tt="uppercase" lh={1.2}>
-                {tr("optionsDrilldown.changeRequirementSet", )}
+                {tr("optionsDrilldown.changeRequirementSet")}
               </Text>
               <Text size="sm" lh={1.35} style={{ minWidth: 0 }}>
                 {chosenHint}
@@ -226,10 +204,7 @@ export function OptionsDrilldown({
           }}
         >
           <OptionsDrilldown
-            nodeKeyPrefix={getStableNodeKey(
-              selectedChild!,
-              `${nodeKeyPrefix}:in:${selectedIdx}`,
-            )}
+            nodeKeyPrefix={getStableNodeKey(selectedChild!, `${nodeKeyPrefix}:in:${selectedIdx}`)}
             node={selectedChild!}
             completedCourses={completedCourses}
             selectedOptionsPerRequirement={selectedOptionsPerRequirement}
@@ -247,10 +222,7 @@ export function OptionsDrilldown({
     return (
       <Stack gap="lg">
         {node.options.map((child, idx) => {
-          const childPrefix = getStableNodeKey(
-            child,
-            `${nodeKeyPrefix}:and:${idx}`,
-          );
+          const childPrefix = getStableNodeKey(child, `${nodeKeyPrefix}:and:${idx}`);
           return (
             <OptionsDrilldown
               key={childPrefix}

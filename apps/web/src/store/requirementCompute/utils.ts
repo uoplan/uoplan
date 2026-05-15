@@ -2,16 +2,11 @@ import { normalizeCourseCode, type DataCache, getCourseCredits } from "schedule"
 import type { RequirementWithStatus } from "schedule";
 import type { Program, ProgramRequirement } from "schedule";
 
-export function collectAssignedFromExactRequirements(
-  tree: RequirementWithStatus[],
-): Set<string> {
+export function collectAssignedFromExactRequirements(tree: RequirementWithStatus[]): Set<string> {
   const assigned = new Set<string>();
   function walk(nodes: RequirementWithStatus[]) {
     for (const node of nodes) {
-      if (
-        (node.type === "course" || node.type === "or_course") &&
-        node.satisfiedBy?.length
-      ) {
+      if ((node.type === "course" || node.type === "or_course") && node.satisfiedBy?.length) {
         for (const code of node.satisfiedBy) {
           assigned.add(normalizeCourseCode(code));
         }
@@ -23,10 +18,7 @@ export function collectAssignedFromExactRequirements(
   return assigned;
 }
 
-export function sumCreditsForCodes(
-  cache: DataCache,
-  codes: string[],
-): number {
+export function sumCreditsForCodes(cache: DataCache, codes: string[]): number {
   let s = 0;
   for (const code of codes) {
     s += getCourseCredits(normalizeCourseCode(code), cache);
@@ -42,9 +34,7 @@ export function isStrictSubset<T>(a: Set<T>, b: Set<T>): boolean {
   return true;
 }
 
-export function getDisciplineCodesForProgram(
-  program: Program | null,
-): string[] {
+export function getDisciplineCodesForProgram(program: Program | null): string[] {
   const s = new Set<string>();
   if (!program) return [];
 

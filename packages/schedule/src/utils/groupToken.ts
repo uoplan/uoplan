@@ -43,8 +43,7 @@ export function makeGroupToken(prefix: string): string {
  */
 export function makeGroupTokenInstance(prefix: string): string {
   const id =
-    typeof globalThis.crypto !== "undefined" &&
-    typeof globalThis.crypto.randomUUID === "function"
+    typeof globalThis.crypto !== "undefined" && typeof globalThis.crypto.randomUUID === "function"
       ? globalThis.crypto.randomUUID()
       : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
   return `${makeGroupToken(prefix)}~${id}`;

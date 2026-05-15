@@ -21,9 +21,7 @@ beforeAll(() => {
 function emptyScheduleCache(): DataCache {
   return {
     getCourse: (code) =>
-      ({ code, title: "Test", credits: 3 }) as NonNullable<
-        ReturnType<DataCache["getCourse"]>
-      >,
+      ({ code, title: "Test", credits: 3 }) as NonNullable<ReturnType<DataCache["getCourse"]>>,
     resolveToCanonical: (code) => code,
     getSchedule: () => undefined,
     getCoursesByDiscipline: () => [],
@@ -59,12 +57,9 @@ describe("collectRequirementIdsWithCandidateCourse", () => {
         candidateCourses: ["CSI 2132", "MAT 1341"],
       },
     ];
-    expect(
-      collectRequirementIdsWithCandidateCourse(
-        tree,
-        normalizeCourseCode("csi2132"),
-      ),
-    ).toEqual(["req-elective"]);
+    expect(collectRequirementIdsWithCandidateCourse(tree, normalizeCourseCode("csi2132"))).toEqual([
+      "req-elective",
+    ]);
   });
 
   it("walks nested options and dedupes ids", () => {
@@ -98,10 +93,7 @@ describe("collectRequirementIdsWithCandidateCourse", () => {
       },
     ];
     expect(
-      collectRequirementIdsWithCandidateCourse(
-        tree,
-        normalizeCourseCode("SEG 3100"),
-      ).sort(),
+      collectRequirementIdsWithCandidateCourse(tree, normalizeCourseCode("SEG 3100")).sort(),
     ).toEqual(["req-a", "req-b"].sort());
   });
 });
@@ -123,10 +115,7 @@ describe("pruneOptionSelectionsForClear", () => {
 
   it("does not strip req-10 when clearing req-1", () => {
     expect(
-      pruneOptionSelectionsForClear(
-        { "req-1": 0, "req-10": 1, "req-1-0": 0 },
-        "req-1",
-      ),
+      pruneOptionSelectionsForClear({ "req-1": 0, "req-10": 1, "req-1-0": 0 }, "req-1"),
     ).toEqual({ "req-10": 1 });
   });
 });
@@ -281,11 +270,7 @@ describe("applyOptionSelections", () => {
     expect(out).toHaveLength(1);
     expect(out[0].type).toBe("and");
     expect(out[0].options ?? []).toHaveLength(3);
-    expect(out[0].options!.map((x) => x.requirementId)).toEqual([
-      "free",
-      "req-a",
-      "req-b",
-    ]);
+    expect(out[0].options!.map((x) => x.requirementId)).toEqual(["free", "req-a", "req-b"]);
   });
 });
 
@@ -307,9 +292,7 @@ describe("getConstrainMultiSelectOptions", () => {
   it("excludes 5000+ courses from elective dropdown options", () => {
     const cacheWithSchedules: DataCache = {
       getCourse: (code) =>
-        ({ code, title: "Test", credits: 3 }) as NonNullable<
-          ReturnType<DataCache["getCourse"]>
-        >,
+        ({ code, title: "Test", credits: 3 }) as NonNullable<ReturnType<DataCache["getCourse"]>>,
       resolveToCanonical: (code) => code,
       getSchedule: (code) =>
         ({
@@ -353,9 +336,7 @@ describe("getConstrainMultiSelectOptions", () => {
             sectionCode: "A00",
             component: "LEC",
             session: null,
-            times: [
-              { day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false },
-            ],
+            times: [{ day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false }],
             instructors: [],
             meetingDates: null,
             status: "Open",
@@ -366,9 +347,7 @@ describe("getConstrainMultiSelectOptions", () => {
 
     const cacheWithNonVirtual: DataCache = {
       getCourse: (code) =>
-        ({ code, title: "Test", credits: 3 }) as NonNullable<
-          ReturnType<DataCache["getCourse"]>
-        >,
+        ({ code, title: "Test", credits: 3 }) as NonNullable<ReturnType<DataCache["getCourse"]>>,
       resolveToCanonical: (code) => code,
       getSchedule: (code) => (code === "SEG 3100" ? schedNonVirtualOnly : undefined),
       getCoursesByDiscipline: () => [],
@@ -404,11 +383,7 @@ describe("getConstrainMultiSelectOptions", () => {
       ...withoutExemptionCtx,
       constrainedPerRequirement: { "req-1": ["SEG 3100"] },
     };
-    const { options: optionsWith } = getConstrainMultiSelectOptions(
-      node,
-      {},
-      withExemptionCtx,
-    );
+    const { options: optionsWith } = getConstrainMultiSelectOptions(node, {}, withExemptionCtx);
     expect(optionsWith.map((o) => o.value)).toEqual(["SEG 3100"]);
   });
 
@@ -426,9 +401,7 @@ describe("getConstrainMultiSelectOptions", () => {
             sectionCode: "A00",
             component: "LEC",
             session: null,
-            times: [
-              { day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false },
-            ],
+            times: [{ day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false }],
             instructors: [],
             meetingDates: null,
             status: "Open",
@@ -439,9 +412,7 @@ describe("getConstrainMultiSelectOptions", () => {
 
     const cacheWithNonVirtual: DataCache = {
       getCourse: (code) =>
-        ({ code, title: "Test", credits: 3 }) as NonNullable<
-          ReturnType<DataCache["getCourse"]>
-        >,
+        ({ code, title: "Test", credits: 3 }) as NonNullable<ReturnType<DataCache["getCourse"]>>,
       resolveToCanonical: (code) => code,
       getSchedule: (code) => (code === "SEG 3100" ? schedNonVirtualOnly : undefined),
       getCoursesByDiscipline: () => [],
@@ -532,11 +503,7 @@ describe("partitionIncompleteConstrainRoots", () => {
         ],
       },
     ];
-    const { primary, collapsed } = partitionIncompleteConstrainRoots(
-      tree,
-      {},
-      defaultConstrainCtx,
-    );
+    const { primary, collapsed } = partitionIncompleteConstrainRoots(tree, {}, defaultConstrainCtx);
     expect(primary).toHaveLength(1);
     expect(collapsed).toHaveLength(0);
   });
@@ -574,11 +541,7 @@ describe("partitionIncompleteConstrainRoots", () => {
       ...defaultConstrainCtx,
       prereqEligible: new Set(["SEG 3100", "SEG 3101"]),
     };
-    const { primary, collapsed } = partitionIncompleteConstrainRoots(
-      tree,
-      {},
-      ctx,
-    );
+    const { primary, collapsed } = partitionIncompleteConstrainRoots(tree, {}, ctx);
     expect(primary).toHaveLength(0);
     expect(collapsed).toHaveLength(1);
     expect(collapsed[0].rootIndex).toBe(0);
@@ -615,11 +578,7 @@ describe("partitionIncompleteConstrainRoots", () => {
       ...defaultConstrainCtx,
       prereqEligible: new Set<string>(),
     };
-    const { primary, collapsed } = partitionIncompleteConstrainRoots(
-      tree,
-      {},
-      ctx,
-    );
+    const { primary, collapsed } = partitionIncompleteConstrainRoots(tree, {}, ctx);
     expect(primary).toHaveLength(0);
     expect(collapsed).toHaveLength(1);
   });
@@ -648,11 +607,7 @@ describe("partitionIncompleteConstrainRoots", () => {
       ...defaultConstrainCtx,
       prereqEligible: new Set<string>(),
     };
-    const { primary, collapsed } = partitionIncompleteConstrainRoots(
-      tree,
-      {},
-      ctx,
-    );
+    const { primary, collapsed } = partitionIncompleteConstrainRoots(tree, {}, ctx);
     expect(primary).toHaveLength(0);
     expect(collapsed).toHaveLength(1);
   });
@@ -698,16 +653,12 @@ describe("countSatisfiedTopLevelRoots", () => {
         options: [],
       },
     ];
-    expect(
-      countSatisfiedTopLevelRoots(roots, { "req-1": ["SEG 3100"] }, null),
-    ).toBe(1);
+    expect(countSatisfiedTopLevelRoots(roots, { "req-1": ["SEG 3100"] }, null)).toBe(1);
   });
 });
 
 describe("getConstrainMultiSelectOptions — group entries", () => {
-  function makeNode(
-    candidateCourses: string[],
-  ): RequirementWithStatus {
+  function makeNode(candidateCourses: string[]): RequirementWithStatus {
     return {
       requirementId: "req-1",
       type: "course",
@@ -722,9 +673,7 @@ describe("getConstrainMultiSelectOptions — group entries", () => {
   const ctx = {
     ...defaultConstrainCtx,
     cache: null, // null skips the schedule-availability filter, letting courses reach `filtered`
-    prereqEligible: new Set([
-      "CSI 2101", "CSI 2520", "CEG 2136", "CEG 3185", "MAT 1320",
-    ]),
+    prereqEligible: new Set(["CSI 2101", "CSI 2520", "CEG 2136", "CEG 3185", "MAT 1320"]),
   };
 
   it("adds group options before individual courses when prefix has 2+ courses", () => {
@@ -742,20 +691,13 @@ describe("getConstrainMultiSelectOptions — group entries", () => {
     const node = makeNode(["CSI 2101", "CSI 2520", "MAT 1320"]);
     const { options } = getConstrainMultiSelectOptions(node, {}, ctx);
     const firstNonGroup = options.findIndex((o) => !isGroupToken(o.value));
-    const lastGroup = options.reduce(
-      (acc, o, i) => (isGroupToken(o.value) ? i : acc),
-      -1,
-    );
+    const lastGroup = options.reduce((acc, o, i) => (isGroupToken(o.value) ? i : acc), -1);
     expect(lastGroup).toBeLessThan(firstNonGroup);
   });
 
   it("disables individual courses whose prefix is covered by a selected group token", () => {
     const node = makeNode(["CSI 2101", "CSI 2520", "CEG 2136"]);
-    const { options } = getConstrainMultiSelectOptions(
-      node,
-      { "req-1": ["group:CSI"] },
-      ctx,
-    );
+    const { options } = getConstrainMultiSelectOptions(node, { "req-1": ["group:CSI"] }, ctx);
     const csi2101 = options.find((o) => o.value === "CSI 2101");
     const ceg2136 = options.find((o) => o.value === "CEG 2136");
     expect(csi2101?.disabled).toBe(true);

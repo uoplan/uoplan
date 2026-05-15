@@ -128,9 +128,7 @@ describe("enumerateSingleRedistributions", () => {
       ["a", 1],
       ["b", 1],
     ]);
-    expect(enumerateSingleRedistributions(coursesPerPool, pools, cap)).toEqual(
-      [],
-    );
+    expect(enumerateSingleRedistributions(coursesPerPool, pools, cap)).toEqual([]);
   });
 
   it("dedupes identical redistribution maps", () => {

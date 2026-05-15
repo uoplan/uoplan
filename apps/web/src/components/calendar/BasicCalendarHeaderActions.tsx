@@ -20,7 +20,13 @@ export function BasicCalendarHeaderActions({ onBack }: { onBack: () => void }) {
       <Group gap="xs" wrap="wrap">
         <LanguageSwitcher />
         {indices && (
-          <Tooltip label="Copied to clipboard!" opened={shareCopied} position="bottom" withArrow color="dark">
+          <Tooltip
+            label="Copied to clipboard!"
+            opened={shareCopied}
+            position="bottom"
+            withArrow
+            color="dark"
+          >
             <Button
               variant="filled"
               color="dark"

@@ -10,8 +10,7 @@ import { CalendarEventFace, type CalendarEventFaceProps } from "./CalendarEventF
 const MORPH_EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
 
 function phantomTextToFaceProps(t: PhantomText): CalendarEventFaceProps {
-  const hasNumericRating =
-    t.hasProfessorRating && t.ratingValue != null && t.ratingValue > 0;
+  const hasNumericRating = t.hasProfessorRating && t.ratingValue != null && t.ratingValue > 0;
   const ratingTier = t.ratingTier || ratingToColor(t.ratingValue ?? null);
   return {
     courseCode: t.courseCode,
@@ -46,13 +45,7 @@ function pickGradeViz(phantom: Phantom): GradeVizData | null {
   return g && g.total > 0 ? g : null;
 }
 
-function PhantomBlock({
-  phantom,
-  onComplete,
-}: {
-  phantom: Phantom;
-  onComplete: () => void;
-}) {
+function PhantomBlock({ phantom, onComplete }: { phantom: Phantom; onComplete: () => void }) {
   const shellRef = useRef<HTMLDivElement>(null);
   const { colorHex, kind, fromRect } = phantom;
   const { r, g, b } = hexToRgb(colorHex);
@@ -177,10 +170,7 @@ interface ScheduleMorphOverlayProps {
   onComplete: () => void;
 }
 
-export function ScheduleMorphOverlay({
-  phantoms,
-  onComplete,
-}: ScheduleMorphOverlayProps) {
+export function ScheduleMorphOverlay({ phantoms, onComplete }: ScheduleMorphOverlayProps) {
   const remainingRef = useRef(0);
 
   const handleOne = useCallback(() => {

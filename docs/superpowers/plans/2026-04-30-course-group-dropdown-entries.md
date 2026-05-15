@@ -13,6 +13,7 @@
 ### Task 1: `groupToken.ts` utility
 
 **Files:**
+
 - Create: `packages/schedule/src/utils/groupToken.ts`
 - Create: `packages/schedule/src/tests/groupToken.test.ts`
 - Modify: `packages/schedule/src/index.ts`
@@ -22,12 +23,7 @@
 ```ts
 // packages/schedule/src/tests/groupToken.test.ts
 import { describe, it, expect } from "vitest";
-import {
-  isGroupToken,
-  groupTokenPrefix,
-  makeGroupToken,
-  subjectPrefix,
-} from "../utils/groupToken";
+import { isGroupToken, groupTokenPrefix, makeGroupToken, subjectPrefix } from "../utils/groupToken";
 
 describe("isGroupToken", () => {
   it("returns true for group tokens", () => {
@@ -105,7 +101,7 @@ export function makeGroupToken(prefix: string): string {
 In `packages/schedule/src/index.ts`, add at the end:
 
 ```ts
-export * from './utils/groupToken';
+export * from "./utils/groupToken";
 ```
 
 - [ ] **Step 5: Run tests — confirm they pass**
@@ -128,6 +124,7 @@ git commit -m "feat: add groupToken utility for course-prefix group selections"
 ### Task 2: Translations
 
 **Files:**
+
 - Modify: `apps/web/src/locales/en/messages.po`
 - Modify: `apps/web/src/locales/fr-CA/messages.po`
 
@@ -163,6 +160,7 @@ git commit -m "feat: add translation key for course group dropdown entry"
 ### Task 3: Group options in `requirementUtils.ts`
 
 **Files:**
+
 - Modify: `apps/web/src/components/requirements/requirementUtils.ts`
 - Modify: `apps/web/src/components/requirements/requirementUtils.test.ts`
 
@@ -174,9 +172,7 @@ In `apps/web/src/components/requirements/requirementUtils.test.ts`, add a new de
 import { isGroupToken } from "schedule";
 
 describe("getConstrainMultiSelectOptions — group entries", () => {
-  function makeNode(
-    candidateCourses: string[],
-  ): RequirementWithStatus {
+  function makeNode(candidateCourses: string[]): RequirementWithStatus {
     return {
       requirementId: "req-1",
       type: "course",
@@ -190,9 +186,7 @@ describe("getConstrainMultiSelectOptions — group entries", () => {
 
   const ctx = {
     ...defaultConstrainCtx,
-    prereqEligible: new Set([
-      "CSI 2101", "CSI 2520", "CEG 2136", "CEG 3185", "MAT 1320",
-    ]),
+    prereqEligible: new Set(["CSI 2101", "CSI 2520", "CEG 2136", "CEG 3185", "MAT 1320"]),
   };
 
   it("adds group options before individual courses when prefix has 2+ courses", () => {
@@ -210,20 +204,13 @@ describe("getConstrainMultiSelectOptions — group entries", () => {
     const node = makeNode(["CSI 2101", "CSI 2520", "MAT 1320"]);
     const { options } = getConstrainMultiSelectOptions(node, {}, ctx);
     const firstNonGroup = options.findIndex((o) => !isGroupToken(o.value));
-    const lastGroup = options.reduce(
-      (acc, o, i) => (isGroupToken(o.value) ? i : acc),
-      -1,
-    );
+    const lastGroup = options.reduce((acc, o, i) => (isGroupToken(o.value) ? i : acc), -1);
     expect(lastGroup).toBeLessThan(firstNonGroup);
   });
 
   it("disables individual courses whose prefix is covered by a selected group token", () => {
     const node = makeNode(["CSI 2101", "CSI 2520", "CEG 2136"]);
-    const { options } = getConstrainMultiSelectOptions(
-      node,
-      { "req-1": ["group:CSI"] },
-      ctx,
-    );
+    const { options } = getConstrainMultiSelectOptions(node, { "req-1": ["group:CSI"] }, ctx);
     const csi2101 = options.find((o) => o.value === "CSI 2101");
     const ceg2136 = options.find((o) => o.value === "CEG 2136");
     expect(csi2101?.disabled).toBe(true);
@@ -281,61 +268,58 @@ import { tr } from "../../i18n";
 Replace the `options` computation at the end of `getConstrainMultiSelectOptions` (the block starting with `const options = availableSorted.map(...)` through `return { selectedForDisplay, options }`) with:
 
 ```ts
-  // Prefixes covered by currently-selected group tokens
-  const selectedGroupPrefixes = new Set<string>(
-    selected.filter(isGroupToken).map(groupTokenPrefix),
-  );
+// Prefixes covered by currently-selected group tokens
+const selectedGroupPrefixes = new Set<string>(selected.filter(isGroupToken).map(groupTokenPrefix));
 
-  // Count courses per prefix among available (real codes only)
-  const prefixCounts = new Map<string, number>();
-  for (const code of available) {
-    const pfx = subjectPrefix(code);
-    prefixCounts.set(pfx, (prefixCounts.get(pfx) ?? 0) + 1);
-  }
+// Count courses per prefix among available (real codes only)
+const prefixCounts = new Map<string, number>();
+for (const code of available) {
+  const pfx = subjectPrefix(code);
+  prefixCounts.set(pfx, (prefixCounts.get(pfx) ?? 0) + 1);
+}
 
-  // Group options for prefixes with ≥ 2 courses, sorted alphabetically
-  const groupOptions: ConstrainMultiSelectOption[] = [...prefixCounts.entries()]
-    .filter(([, count]) => count >= 2)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([pfx]) => ({
-      value: makeGroupToken(pfx),
-      label: tr("requirementNode.anyCourseGroup", { prefix: pfx }),
-      disabled: false,
-    }));
+// Group options for prefixes with ≥ 2 courses, sorted alphabetically
+const groupOptions: ConstrainMultiSelectOption[] = [...prefixCounts.entries()]
+  .filter(([, count]) => count >= 2)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([pfx]) => ({
+    value: makeGroupToken(pfx),
+    label: tr("requirementNode.anyCourseGroup", { prefix: pfx }),
+    disabled: false,
+  }));
 
-  // Individual course options — disable if prefix covered by a selected group
-  const courseOptions = availableSorted.map((code) => {
-    const norm = normalizeCourseCode(code);
-    const usedElsewhere =
-      ctx.allAssignedCoursesNormalized.has(norm) &&
-      !selectedForDisplay.includes(code);
-    const coveredByGroup = selectedGroupPrefixes.has(subjectPrefix(code));
-    return { value: code, label: code, disabled: usedElsewhere || coveredByGroup };
-  });
+// Individual course options — disable if prefix covered by a selected group
+const courseOptions = availableSorted.map((code) => {
+  const norm = normalizeCourseCode(code);
+  const usedElsewhere =
+    ctx.allAssignedCoursesNormalized.has(norm) && !selectedForDisplay.includes(code);
+  const coveredByGroup = selectedGroupPrefixes.has(subjectPrefix(code));
+  return { value: code, label: code, disabled: usedElsewhere || coveredByGroup };
+});
 
-  const options = [...groupOptions, ...courseOptions];
+const options = [...groupOptions, ...courseOptions];
 
-  return { selectedForDisplay, options };
+return { selectedForDisplay, options };
 ```
 
 Also update the `available` building loop (the two `for` loops that populate `available`) to skip group tokens in `selectedForDisplay`:
 
 ```ts
-  const normalizedSeen = new Set<string>();
-  const available: string[] = [];
-  for (const c of selectedForDisplay) {
-    if (isGroupToken(c)) continue;
-    const norm = normalizeCourseCode(c);
-    if (normalizedSeen.has(norm)) continue;
-    normalizedSeen.add(norm);
-    available.push(ctx.cache?.getCourse(norm)?.code ?? c);
-  }
-  for (const c of filtered) {
-    const norm = normalizeCourseCode(c);
-    if (normalizedSeen.has(norm)) continue;
-    normalizedSeen.add(norm);
-    available.push(ctx.cache?.getCourse(norm)?.code ?? c);
-  }
+const normalizedSeen = new Set<string>();
+const available: string[] = [];
+for (const c of selectedForDisplay) {
+  if (isGroupToken(c)) continue;
+  const norm = normalizeCourseCode(c);
+  if (normalizedSeen.has(norm)) continue;
+  normalizedSeen.add(norm);
+  available.push(ctx.cache?.getCourse(norm)?.code ?? c);
+}
+for (const c of filtered) {
+  const norm = normalizeCourseCode(c);
+  if (normalizedSeen.has(norm)) continue;
+  normalizedSeen.add(norm);
+  available.push(ctx.cache?.getCourse(norm)?.code ?? c);
+}
 ```
 
 - [ ] **Step 5: Run tests — confirm they pass**
@@ -358,6 +342,7 @@ git commit -m "feat: inject course group options into constrain MultiSelect"
 ### Task 4: Group entry rendering in `RequirementNode.tsx`
 
 **Files:**
+
 - Modify: `apps/web/src/components/requirements/RequirementNode.tsx`
 
 - [ ] **Step 1: Add import for `isGroupToken`**
@@ -431,6 +416,7 @@ git commit -m "feat: render and sort course group entries in constrain MultiSele
 ### Task 5: Proto schema update + regenerate
 
 **Files:**
+
 - Modify: `packages/schedule/proto/state.proto`
 - Regenerate: `packages/schedule/src/proto/state.ts` (via `pnpm generate:proto`)
 
@@ -495,6 +481,7 @@ git commit -m "feat: add RequirementGroupSelection proto message for group token
 ### Task 6: `stateEncode.ts` — encode and decode group tokens
 
 **Files:**
+
 - Modify: `packages/schedule/src/stateEncode.ts`
 - Modify: `packages/schedule/src/tests/stateEncode.test.ts`
 
@@ -589,7 +576,7 @@ constrainedGroupSelections: Array<{ reqIndex: number; groupPrefixes: string[] }>
 Add `isGroupToken` and `groupTokenPrefix` to the imports at the top of `stateEncode.ts`:
 
 ```ts
-import { isGroupToken, groupTokenPrefix } from './utils/groupToken';
+import { isGroupToken, groupTokenPrefix } from "./utils/groupToken";
 ```
 
 - [ ] **Step 5: Update `encodeState` — split group tokens from course codes**
@@ -603,23 +590,23 @@ constrainedGroupSelections: [],
 Then replace the existing `constrainedPerRequirement` loop (lines 251–257):
 
 ```ts
-  for (const [reqId, codes] of Object.entries(input.constrainedPerRequirement)) {
-    const reqIndex = reqIdToIndex.get(reqId);
-    if (reqIndex === undefined) continue;
+for (const [reqId, codes] of Object.entries(input.constrainedPerRequirement)) {
+  const reqIndex = reqIdToIndex.get(reqId);
+  if (reqIndex === undefined) continue;
 
-    const realCodes = codes.filter((c) => !isGroupToken(c));
-    const groupPrefixes = codes.filter(isGroupToken).map(groupTokenPrefix);
+  const realCodes = codes.filter((c) => !isGroupToken(c));
+  const groupPrefixes = codes.filter(isGroupToken).map(groupTokenPrefix);
 
-    if (realCodes.length) {
-      const courseIndices = realCodes
-        .map(encodeCourseCode)
-        .filter((i): i is number => i !== undefined);
-      if (courseIndices.length) state.constrainedSelections.push({ reqIndex, courseIndices });
-    }
-    if (groupPrefixes.length) {
-      state.constrainedGroupSelections.push({ reqIndex, groupPrefixes });
-    }
+  if (realCodes.length) {
+    const courseIndices = realCodes
+      .map(encodeCourseCode)
+      .filter((i): i is number => i !== undefined);
+    if (courseIndices.length) state.constrainedSelections.push({ reqIndex, courseIndices });
   }
+  if (groupPrefixes.length) {
+    state.constrainedGroupSelections.push({ reqIndex, groupPrefixes });
+  }
+}
 ```
 
 - [ ] **Step 6: Update `decodeState` — return group selections**
@@ -627,10 +614,10 @@ Then replace the existing `constrainedPerRequirement` loop (lines 251–257):
 In `decodeState`, after the `constrainedSelections` computation (around line 352), add:
 
 ```ts
-  const constrainedGroupSelections = state.constrainedGroupSelections.map((sel) => ({
-    reqIndex: sel.reqIndex,
-    groupPrefixes: sel.groupPrefixes,
-  }));
+const constrainedGroupSelections = state.constrainedGroupSelections.map((sel) => ({
+  reqIndex: sel.reqIndex,
+  groupPrefixes: sel.groupPrefixes,
+}));
 ```
 
 Then add `constrainedGroupSelections` to the returned object (after `constrainedSelections`):
@@ -660,6 +647,7 @@ git commit -m "feat: encode/decode group tokens in stateEncode for URL persisten
 ### Task 7: `url.ts` — restore group tokens on decode
 
 **Files:**
+
 - Modify: `apps/web/src/store/slices/url.ts`
 
 - [ ] **Step 1: Add import for `makeGroupToken`**
@@ -686,15 +674,12 @@ import {
 In `loadEncodedState` (around line 131–138), after the existing `constrainedPerRequirement` loop that reads `decoded.constrainedSelections`, add:
 
 ```ts
-    for (const { reqIndex, groupPrefixes } of decoded.constrainedGroupSelections) {
-      const reqId = reqIndexToId.get(reqIndex);
-      if (reqId == null) continue;
-      const tokens = groupPrefixes.map(makeGroupToken);
-      constrainedPerRequirement[reqId] = [
-        ...(constrainedPerRequirement[reqId] ?? []),
-        ...tokens,
-      ];
-    }
+for (const { reqIndex, groupPrefixes } of decoded.constrainedGroupSelections) {
+  const reqId = reqIndexToId.get(reqIndex);
+  if (reqId == null) continue;
+  const tokens = groupPrefixes.map(makeGroupToken);
+  constrainedPerRequirement[reqId] = [...(constrainedPerRequirement[reqId] ?? []), ...tokens];
+}
 ```
 
 - [ ] **Step 3: Verify the app builds**
@@ -717,6 +702,7 @@ git commit -m "feat: restore group tokens from URL state on decode"
 ### Task 8: Expand group tokens in `generateSchedulesAction.ts`
 
 **Files:**
+
 - Modify: `apps/web/src/lib/generateSchedulesAction.ts`
 
 - [ ] **Step 1: Add imports**
@@ -766,30 +752,30 @@ function expandConstrainedPerRequirement(
 In the destructuring at line 174, rename `constrainedPerRequirement` to `rawConstrainedPerRequirement`:
 
 ```ts
-  const {
-    cache,
-    remainingRequirements,
-    requirementTreeWithStatus,
-    selectedPerRequirement,
-    selectedOptionsPerRequirement,
-    constrainedPerRequirement: rawConstrainedPerRequirement,
-    // ... rest unchanged
-  } = state;
+const {
+  cache,
+  remainingRequirements,
+  requirementTreeWithStatus,
+  selectedPerRequirement,
+  selectedOptionsPerRequirement,
+  constrainedPerRequirement: rawConstrainedPerRequirement,
+  // ... rest unchanged
+} = state;
 ```
 
 Then, immediately after the `effectiveRemainingRequirements` line (line 219), add:
 
 ```ts
-  const candidatesByReqId = new Map<string, string[]>();
-  for (const req of effectiveRemainingRequirements) {
-    if (req.requirementId && req.candidateCourses) {
-      candidatesByReqId.set(req.requirementId, req.candidateCourses);
-    }
+const candidatesByReqId = new Map<string, string[]>();
+for (const req of effectiveRemainingRequirements) {
+  if (req.requirementId && req.candidateCourses) {
+    candidatesByReqId.set(req.requirementId, req.candidateCourses);
   }
-  const constrainedPerRequirement = expandConstrainedPerRequirement(
-    rawConstrainedPerRequirement,
-    candidatesByReqId,
-  );
+}
+const constrainedPerRequirement = expandConstrainedPerRequirement(
+  rawConstrainedPerRequirement,
+  candidatesByReqId,
+);
 ```
 
 All subsequent references to `constrainedPerRequirement` in the function body are now the expanded version — no further changes needed.

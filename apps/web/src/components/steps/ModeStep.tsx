@@ -1,14 +1,5 @@
 import { useState } from "react";
-import {
-  Stack,
-  Group,
-  Paper,
-  Text,
-  Radio,
-  Box,
-  VisuallyHidden,
-  Badge,
-} from "@mantine/core";
+import { Stack, Group, Paper, Text, Radio, Box, VisuallyHidden, Badge } from "@mantine/core";
 import { tr } from "../../i18n";
 
 interface ModeStepProps {
@@ -35,9 +26,7 @@ export function ModeStep({ value, onChange }: ModeStepProps) {
         : isHovered
           ? "var(--mantine-color-dark-7)"
           : "transparent",
-      boxShadow: isHovered && !isSelected
-        ? "0 0 0 1px var(--mantine-color-dark-3)"
-        : undefined,
+      boxShadow: isHovered && !isSelected ? "0 0 0 1px var(--mantine-color-dark-3)" : undefined,
       transition: "border-color 0.2s, background-color 0.2s, box-shadow 0.2s",
     } as const;
   };
@@ -70,11 +59,7 @@ export function ModeStep({ value, onChange }: ModeStepProps) {
           >
             <Group wrap="nowrap" align="flex-start">
               <VisuallyHidden>
-                <Radio
-                  value="basic"
-                  mt={2}
-                  aria-label={tr("modeStep.basic.aria")}
-                />
+                <Radio value="basic" mt={2} aria-label={tr("modeStep.basic.aria")} />
               </VisuallyHidden>
               <Box>
                 <Group gap="xs" align="center">
@@ -112,11 +97,7 @@ export function ModeStep({ value, onChange }: ModeStepProps) {
           >
             <Group wrap="nowrap" align="flex-start">
               <VisuallyHidden>
-                <Radio
-                  value="advanced"
-                  mt={2}
-                  aria-label={tr("modeStep.advanced.aria")}
-                />
+                <Radio value="advanced" mt={2} aria-label={tr("modeStep.advanced.aria")} />
               </VisuallyHidden>
               <Box>
                 <Group gap="xs" align="center">

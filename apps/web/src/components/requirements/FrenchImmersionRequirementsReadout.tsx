@@ -131,7 +131,8 @@ export function FrenchImmersionRequirementsReadout() {
             <Text span fw={600}>
               {tr("frenchImmersion.readout.excludedLabel")}
             </Text>{" "}
-            {formatCodeList(excludedUnique)}. {tr("frenchImmersion.progress.excludedCompanionsHint")}
+            {formatCodeList(excludedUnique)}.{" "}
+            {tr("frenchImmersion.progress.excludedCompanionsHint")}
           </Text>
         )}
 
@@ -140,7 +141,12 @@ export function FrenchImmersionRequirementsReadout() {
         </Anchor>
 
         {showFls3500Reminder && (
-          <Alert color="yellow" variant="light" radius={0} title={tr("frenchImmersion.fls3500.title")}>
+          <Alert
+            color="yellow"
+            variant="light"
+            radius={0}
+            title={tr("frenchImmersion.fls3500.title")}
+          >
             <Text size="sm">{tr("frenchImmersion.fls3500.body")}</Text>
           </Alert>
         )}

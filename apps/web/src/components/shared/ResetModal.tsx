@@ -1,4 +1,4 @@
-import { Button, Group, Modal, Stack, Text } from '@mantine/core';
+import { Button, Group, Modal, Stack, Text } from "@mantine/core";
 
 interface ResetModalProps {
   opened: boolean;

@@ -22,8 +22,8 @@ interface UrlSlice {
 }
 
 function buildEncodeInput(s: AppStore): EncodeInput {
-  const completedCourses = s.completedCourses.map(code =>
-    s.cache ? s.cache.resolveToCanonical(code) : code
+  const completedCourses = s.completedCourses.map((code) =>
+    s.cache ? s.cache.resolveToCanonical(code) : code,
   );
   return {
     selectedTermId: s.selectedTermId,
@@ -64,12 +64,7 @@ function buildEncodeInput(s: AppStore): EncodeInput {
   };
 }
 
-export const createUrlSlice: StateCreator<
-  AppStore,
-  [],
-  [],
-  UrlSlice
-> = (set, get) => ({
+export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, get) => ({
   loadEncodedState: (decoded) => {
     const { catalogue, indices, cache: baseCache, yearCataloguePrograms } = get();
     if (!catalogue || !baseCache || !indices) return;
@@ -90,9 +85,13 @@ export const createUrlSlice: StateCreator<
 
     // Augment cache with fake entries for any OPT transfer credit codes
     const optCodes = decoded.completedCourseCodes.map(normalizeCourseCode).filter(isOptCourse);
-    const cache = optCodes.length > 0
-      ? withExtraCourses(baseCache, optCodes.map((code): Course => ({ code, title: code, credits: 3, description: '' })))
-      : baseCache;
+    const cache =
+      optCodes.length > 0
+        ? withExtraCourses(
+            baseCache,
+            optCodes.map((code): Course => ({ code, title: code, credits: 3, description: "" })),
+          )
+        : baseCache;
 
     const studentPrograms = decoded.studentPrograms;
     const firstPass = recomputeStateForProgram(
@@ -118,9 +117,7 @@ export const createUrlSlice: StateCreator<
       if (reqId != null) selectedOptionsPerRequirement[reqId] = optionIndex;
     }
 
-    const inCatalogue = new Set(
-      catalogue.courses.map((c) => c.code),
-    );
+    const inCatalogue = new Set(catalogue.courses.map((c) => c.code));
     const selectedPerRequirement: Record<string, string[]> = {};
     for (const { reqIndex, courseCodes } of decoded.courseSelections) {
       const reqId = reqIndexToId.get(reqIndex);
@@ -145,10 +142,7 @@ export const createUrlSlice: StateCreator<
       const reqId = reqIndexToId.get(reqIndex);
       if (reqId == null) continue;
       const tokens = groupPrefixes.map((prefix) => makeGroupTokenInstance(prefix));
-      constrainedPerRequirement[reqId] = [
-        ...(constrainedPerRequirement[reqId] ?? []),
-        ...tokens,
-      ];
+      constrainedPerRequirement[reqId] = [...(constrainedPerRequirement[reqId] ?? []), ...tokens];
     }
 
     const requirementSlotsUserTouched: Record<string, true> = Object.fromEntries(

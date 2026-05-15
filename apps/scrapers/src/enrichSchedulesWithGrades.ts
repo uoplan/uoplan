@@ -42,17 +42,17 @@ export interface SectionGradeFields {
 
 function normalizeNameForMatch(value: string): string {
   return String(value)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .trim()
     .toLowerCase()
-    .replace(/\s+/g, ' ');
+    .replace(/\s+/g, " ");
 }
 
 function sumDistributions(dists: Array<GradeDistribution | null | undefined>): GradeDistribution {
   const out: GradeDistribution = {};
   for (const d of dists) {
-    if (!d || typeof d !== 'object') continue;
+    if (!d || typeof d !== "object") continue;
     for (const [k, v] of Object.entries(d)) {
       const n = Number(v);
       if (!Number.isFinite(n)) continue;
@@ -63,7 +63,7 @@ function sumDistributions(dists: Array<GradeDistribution | null | undefined>): G
 }
 
 function hasGradeData(dist: GradeDistribution | null | undefined): boolean {
-  if (!dist || typeof dist !== 'object') return false;
+  if (!dist || typeof dist !== "object") return false;
   for (const v of Object.values(dist)) {
     if (Number(v) > 0) return true;
   }
@@ -74,17 +74,17 @@ function distributionForSection(
   instructors: string[] | undefined,
   profMap: Map<string, GradeDistribution> | undefined,
   courseAggregate: GradeDistribution | undefined,
-): { distribution?: GradeDistribution; kind: 'matched' | 'fallback' | 'none' } {
+): { distribution?: GradeDistribution; kind: "matched" | "fallback" | "none" } {
   const matchedParts: GradeDistribution[] = [];
   const seen = new Set<string>();
 
   if (Array.isArray(instructors)) {
     for (const raw of instructors) {
-      if (typeof raw !== 'string') continue;
+      if (typeof raw !== "string") continue;
       const trimmed = raw.trim();
       if (!trimmed) continue;
       const norm = normalizeNameForMatch(trimmed);
-      if (!norm || norm === 'staff') continue;
+      if (!norm || norm === "staff") continue;
       if (seen.has(norm)) continue;
       seen.add(norm);
 
@@ -98,15 +98,15 @@ function distributionForSection(
   if (matchedParts.length > 0) {
     const merged = sumDistributions(matchedParts);
     if (hasGradeData(merged)) {
-      return { distribution: merged, kind: 'matched' };
+      return { distribution: merged, kind: "matched" };
     }
   }
 
   if (courseAggregate && hasGradeData(courseAggregate)) {
-    return { distribution: courseAggregate, kind: 'fallback' };
+    return { distribution: courseAggregate, kind: "fallback" };
   }
 
-  return { kind: 'none' };
+  return { kind: "none" };
 }
 
 export function buildGradeLookups(gradesRaw: unknown): GradeLookups {
@@ -114,14 +114,14 @@ export function buildGradeLookups(gradesRaw: unknown): GradeLookups {
   const aggregateByCourse = new Map<string, GradeDistribution>();
 
   if (!Array.isArray(gradesRaw)) {
-    throw new Error('grades.json: expected top-level array');
+    throw new Error("grades.json: expected top-level array");
   }
 
   for (const row of gradesRaw) {
-    if (!row || typeof row !== 'object') continue;
+    if (!row || typeof row !== "object") continue;
     const r = row as { code?: unknown; professors?: unknown };
     const code = r.code;
-    if (typeof code !== 'string' || !code.trim()) continue;
+    if (typeof code !== "string" || !code.trim()) continue;
     const professors = Array.isArray(r.professors) ? r.professors : [];
 
     let profMap = byCourse.get(code);
@@ -132,12 +132,12 @@ export function buildGradeLookups(gradesRaw: unknown): GradeLookups {
 
     const allDists: GradeDistribution[] = [];
     for (const p of professors) {
-      if (!p || typeof p !== 'object') continue;
+      if (!p || typeof p !== "object") continue;
       const prof = p as { name?: unknown; distribution?: unknown };
       const name = prof.name;
-      if (typeof name !== 'string' || !name.trim()) continue;
+      if (typeof name !== "string" || !name.trim()) continue;
       const dist = prof.distribution;
-      if (!dist || typeof dist !== 'object') continue;
+      if (!dist || typeof dist !== "object") continue;
 
       const key = normalizeNameForMatch(name);
       if (!key) continue;
@@ -166,20 +166,20 @@ export function enrichSchedulesPayload(
   if (!Array.isArray(schedules)) return data;
 
   for (const course of schedules) {
-    if (!course || typeof course !== 'object') continue;
+    if (!course || typeof course !== "object") continue;
     const courseCode = course.courseCode;
-    if (typeof courseCode !== 'string') continue;
+    if (typeof courseCode !== "string") continue;
 
     const profMap = lookups.byCourse.get(courseCode);
     const aggregate = lookups.aggregateByCourse.get(courseCode);
 
     const components = course.components;
-    if (!components || typeof components !== 'object') continue;
+    if (!components || typeof components !== "object") continue;
 
     for (const sections of Object.values(components)) {
       if (!Array.isArray(sections)) continue;
       for (const section of sections) {
-        if (!section || typeof section !== 'object') continue;
+        if (!section || typeof section !== "object") continue;
         stats.sectionsTotal += 1;
 
         const prev = section.distribution;
@@ -191,9 +191,9 @@ export function enrichSchedulesPayload(
           aggregate,
         );
 
-        if (distribution && kind !== 'none') {
+        if (distribution && kind !== "none") {
           section.distribution = distribution;
-          if (kind === 'matched') stats.matched += 1;
+          if (kind === "matched") stats.matched += 1;
           else stats.fallback += 1;
         } else {
           stats.none += 1;
@@ -209,12 +209,12 @@ export function enrichSchedulesPayload(
 }
 
 export function pct(n: number, d: number): string {
-  return d === 0 ? '0.0' : ((100 * n) / d).toFixed(1);
+  return d === 0 ? "0.0" : ((100 * n) / d).toFixed(1);
 }
 
 export function formatGradeEnrichmentLine(
   label: string,
-  stats: Pick<GradeEnrichmentStats, 'sectionsTotal' | 'matched' | 'fallback' | 'none'>,
+  stats: Pick<GradeEnrichmentStats, "sectionsTotal" | "matched" | "fallback" | "none">,
 ): string {
   const { sectionsTotal: s, matched, fallback, none } = stats;
   return (

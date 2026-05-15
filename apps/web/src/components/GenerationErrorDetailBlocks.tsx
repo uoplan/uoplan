@@ -35,10 +35,10 @@ export function GenerationErrorDetailBlocks({
   const tf = errorDetails.timetableFailure;
 
   const genericPools = errorDetails.emptyPools.filter(
-    (p) => p.label === "course" || p.label === "or_course"
+    (p) => p.label === "course" || p.label === "or_course",
   );
   const otherPools = errorDetails.emptyPools.filter(
-    (p) => p.label !== "course" && p.label !== "or_course"
+    (p) => p.label !== "course" && p.label !== "or_course",
   );
 
   const formattedEmptyPools: React.ReactNode[] = [];
@@ -54,9 +54,7 @@ export function GenerationErrorDetailBlocks({
     }
     const candidates = Array.from(combinedCandidates).sort();
     if (candidates.length > 0) {
-      formattedEmptyPools.push(
-        <List.Item key="generic">{formatCourseList(candidates)}</List.Item>
-      );
+      formattedEmptyPools.push(<List.Item key="generic">{formatCourseList(candidates)}</List.Item>);
     } else {
       formattedEmptyPools.push(<List.Item key="generic">Requirement</List.Item>);
     }
@@ -67,23 +65,21 @@ export function GenerationErrorDetailBlocks({
     if (p.candidateCourses && p.candidateCourses.length > 0) {
       text += ` ${formatCourseList(p.candidateCourses)}`;
     }
-    formattedEmptyPools.push(
-      <List.Item key={p.requirementId ?? p.label}>{text}</List.Item>
-    );
+    formattedEmptyPools.push(<List.Item key={p.requirementId ?? p.label}>{text}</List.Item>);
   }
 
   return (
     <Stack gap="sm" pt="xs">
       {errorDetails.totalAvailable < errorDetails.totalNeeded && (
         <Text size="xs" c="dimmed">
-          Only {errorDetails.totalAvailable} of {errorDetails.totalNeeded} course
-          slots can be filled with your current filters.
+          Only {errorDetails.totalAvailable} of {errorDetails.totalNeeded} course slots can be
+          filled with your current filters.
         </Text>
       )}
       {errorDetails.emptyPools.length > 0 && summarizeEmptyPools && (
         <Text size="xs" c="dimmed">
-          {errorDetails.emptyPools.length} other requirements have no eligible
-          courses (often future-term sections not posted yet).
+          {errorDetails.emptyPools.length} other requirements have no eligible courses (often
+          future-term sections not posted yet).
         </Text>
       )}
       {errorDetails.emptyPools.length > 0 && !summarizeEmptyPools && (

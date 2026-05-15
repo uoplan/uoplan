@@ -41,7 +41,23 @@ describe("countsTowardFrenchImmersionBeforeCompanionCaps", () => {
 
 describe("analyzeFrenchImmersionProgress", () => {
   it("never counts FLS 3500 toward volume", () => {
-    const codes = ["FLS 3500", "MAT 1520", "MAT 1521", "MAT 1522", "MAT 1523", "MAT 1524", "MAT 1525", "MAT 1526", "MAT 1527", "MAT 1528", "MAT 1529", "MAT 1530", "MAT 1531", "MAT 1532", "MAT 1533"];
+    const codes = [
+      "FLS 3500",
+      "MAT 1520",
+      "MAT 1521",
+      "MAT 1522",
+      "MAT 1523",
+      "MAT 1524",
+      "MAT 1525",
+      "MAT 1526",
+      "MAT 1527",
+      "MAT 1528",
+      "MAT 1529",
+      "MAT 1530",
+      "MAT 1531",
+      "MAT 1532",
+      "MAT 1533",
+    ];
     const p = analyzeFrenchImmersionProgress(codes, null);
     expect(p.countedTowardVolumeCodes).not.toContain(FLS_IMMERSION_CERT_CODE);
   });

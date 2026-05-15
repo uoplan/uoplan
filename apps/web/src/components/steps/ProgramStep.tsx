@@ -1,16 +1,22 @@
-import { useState, useRef, useMemo } from 'react';
-import { Select, MultiSelect, Stack, Text, Button, Alert, Loader, Badge, Switch } from '@mantine/core';
-import { tr } from "../../i18n";
-import type { Program } from 'schedule';
-import { useAppStore } from '../../store/appStore';
-import { useShallow } from 'zustand/react/shallow';
+import { useState, useRef, useMemo } from "react";
 import {
-  parseTranscriptPdf,
-  findBestMatchingProgram,
-  isOptCourse,
-} from 'schedule';
-import { normalizeCourseCode } from 'schedule';
-import { FrenchImmersionProgramOverview } from '../shared/FrenchImmersionProgramOverview';
+  Select,
+  MultiSelect,
+  Stack,
+  Text,
+  Button,
+  Alert,
+  Loader,
+  Badge,
+  Switch,
+} from "@mantine/core";
+import { tr } from "../../i18n";
+import type { Program } from "schedule";
+import { useAppStore } from "../../store/appStore";
+import { useShallow } from "zustand/react/shallow";
+import { parseTranscriptPdf, findBestMatchingProgram, isOptCourse } from "schedule";
+import { normalizeCourseCode } from "schedule";
+import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
 
 interface ProgramStepProps {
   programs: Program[];
@@ -58,48 +64,49 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
   } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const yearSelectData = useMemo(() =>
-    availableYears.map(y => ({ value: String(y), label: `${y}–${y + 1}` })),
+  const yearSelectData = useMemo(
+    () => availableYears.map((y) => ({ value: String(y), label: `${y}–${y + 1}` })),
     [availableYears],
   );
 
-  const { uniquePrograms, minors, valueToIndex, data, minorData, minorValueToIndex } = useMemo(() => {
-    const seen = new Set<string>();
-    const uniquePrograms: Program[] = [];
-    const minors: Program[] = [];
-    
-    for (const p of (yearCataloguePrograms ?? [])) {
-      if (seen.has(p.url)) continue;
-      seen.add(p.url);
-      uniquePrograms.push(p);
-      
-      const t = p.title.toLowerCase();
-      if (t.includes('minor in') || t.includes('advanced minor')) {
-        minors.push(p);
+  const { uniquePrograms, minors, valueToIndex, data, minorData, minorValueToIndex } =
+    useMemo(() => {
+      const seen = new Set<string>();
+      const uniquePrograms: Program[] = [];
+      const minors: Program[] = [];
+
+      for (const p of yearCataloguePrograms ?? []) {
+        if (seen.has(p.url)) continue;
+        seen.add(p.url);
+        uniquePrograms.push(p);
+
+        const t = p.title.toLowerCase();
+        if (t.includes("minor in") || t.includes("advanced minor")) {
+          minors.push(p);
+        }
       }
-    }
-    const valueToIndex = new Map<string, number>();
-    uniquePrograms.forEach((p, i) => valueToIndex.set(p.url, i));
-    
-    const minorValueToIndex = new Map<string, number>();
-    minors.forEach((p, i) => minorValueToIndex.set(p.url, i));
+      const valueToIndex = new Map<string, number>();
+      uniquePrograms.forEach((p, i) => valueToIndex.set(p.url, i));
 
-    const titleCount = new Map<string, number>();
-    const data = uniquePrograms.map((p, i) => {
-      const key = `program-${i}`;
-      const count = (titleCount.get(p.title) ?? 0) + 1;
-      titleCount.set(p.title, count);
-      const label = count > 1 ? `${p.title} (${count})` : p.title;
-      return { value: key, label };
-    });
-    
-    const minorData = minors.map((p, i) => {
-      const key = `minor-${i}`;
-      return { value: key, label: p.title };
-    });
+      const minorValueToIndex = new Map<string, number>();
+      minors.forEach((p, i) => minorValueToIndex.set(p.url, i));
 
-    return { uniquePrograms, minors, valueToIndex, data, minorData, minorValueToIndex };
-  }, [yearCataloguePrograms]);
+      const titleCount = new Map<string, number>();
+      const data = uniquePrograms.map((p, i) => {
+        const key = `program-${i}`;
+        const count = (titleCount.get(p.title) ?? 0) + 1;
+        titleCount.set(p.title, count);
+        const label = count > 1 ? `${p.title} (${count})` : p.title;
+        return { value: key, label };
+      });
+
+      const minorData = minors.map((p, i) => {
+        const key = `minor-${i}`;
+        return { value: key, label: p.title };
+      });
+
+      return { uniquePrograms, minors, valueToIndex, data, minorData, minorValueToIndex };
+    }, [yearCataloguePrograms]);
 
   const indexedCodes = useMemo(() => {
     if (!indices) return null;
@@ -116,10 +123,11 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
     return [...disciplines].sort();
   }, [cache]);
 
-  const selectedIndex = value !== null ? valueToIndex.get(value) ?? null : null;
+  const selectedIndex = value !== null ? (valueToIndex.get(value) ?? null) : null;
   const selectValue = selectedIndex !== null ? `program-${selectedIndex}` : null;
-  
-  const minorSelectedIndex = minorProgram !== null ? minorValueToIndex.get(minorProgram.url) ?? null : null;
+
+  const minorSelectedIndex =
+    minorProgram !== null ? (minorValueToIndex.get(minorProgram.url) ?? null) : null;
   const minorSelectValue = minorSelectedIndex !== null ? `minor-${minorSelectedIndex}` : null;
 
   const handleTranscriptFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,11 +138,20 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
     setTranscriptLoading(true);
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const { courses: parsedCourses, fullText, startingYear, frenchImmersionStreamHint } = await parseTranscriptPdf(arrayBuffer);
+      const {
+        courses: parsedCourses,
+        fullText,
+        startingYear,
+        frenchImmersionStreamHint,
+      } = await parseTranscriptPdf(arrayBuffer);
       const inCatalogue: string[] = [];
       const skippedCodes: string[] = [];
       for (const code of parsedCourses) {
-        if (isOptCourse(normalizeCourseCode(code)) || cache.getCourse(code) || indexedCodes?.has(normalizeCourseCode(code))) {
+        if (
+          isOptCourse(normalizeCourseCode(code)) ||
+          cache.getCourse(code) ||
+          indexedCodes?.has(normalizeCourseCode(code))
+        ) {
           inCatalogue.push(code);
         } else {
           skippedCodes.push(code);
@@ -155,14 +172,18 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
         const freshPrograms = useAppStore.getState().yearCataloguePrograms;
         if (freshPrograms) {
           const seen = new Set<string>();
-          programListToMatch = freshPrograms.filter(p => {
+          programListToMatch = freshPrograms.filter((p) => {
             if (seen.has(p.url)) return false;
             seen.add(p.url);
             return true;
           });
         }
       }
-      const { program: programMatched, minor: minorMatched } = findBestMatchingProgram(fullText, programListToMatch, minors);
+      const { program: programMatched, minor: minorMatched } = findBestMatchingProgram(
+        fullText,
+        programListToMatch,
+        minors,
+      );
       if (programMatched) {
         onChange(programMatched);
       }
@@ -178,13 +199,11 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
     } catch (err) {
       console.error(err);
       setTranscriptError(
-        err instanceof Error
-          ? err.message
-          : tr("programStep.transcript.parseFailed")
+        err instanceof Error ? err.message : tr("programStep.transcript.parseFailed"),
       );
     } finally {
       setTranscriptLoading(false);
-      e.target.value = '';
+      e.target.value = "";
     }
   };
 
@@ -212,7 +231,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
             onChange(null);
             return;
           }
-          const i = parseInt(v.replace(/^program-/, ''), 10);
+          const i = parseInt(v.replace(/^program-/, ""), 10);
           const selected = uniquePrograms[i] ?? null;
           onChange(selected);
         }}
@@ -232,7 +251,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
               setMinorProgram(null);
               return;
             }
-            const i = parseInt(v.replace(/^minor-/, ''), 10);
+            const i = parseInt(v.replace(/^minor-/, ""), 10);
             const selected = minors[i] ?? null;
             setMinorProgram(selected);
           }}
@@ -268,8 +287,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
       )}
       <Alert color="blue" variant="light" radius={0}>
         <Text size="sm">
-          <strong>{tr("programStep.optional")}</strong>{" "}
-          {tr("programStep.transcript.description")}
+          <strong>{tr("programStep.optional")}</strong> {tr("programStep.transcript.description")}
         </Text>
       </Alert>
       <input
@@ -278,7 +296,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
         accept=".pdf"
         onChange={handleTranscriptFile}
         disabled={transcriptLoading}
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
         aria-label={tr("programStep.transcript.uploadAria")}
       />
       <Button
@@ -289,7 +307,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
         onClick={() => fileInputRef.current?.click()}
         disabled={transcriptLoading}
         leftSection={transcriptLoading ? <Loader size="sm" /> : undefined}
-        style={{ border: '2px solid black' }}
+        style={{ border: "2px solid black" }}
       >
         {transcriptLoading
           ? tr("programStep.transcript.parsing")
@@ -308,36 +326,29 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
         {tr("programStep.transcript.request")}
       </Button>
       {transcriptError && (
-        <Alert
-          color="red"
-          variant="light"
-          title={tr("programStep.transcript.uploadFailed")}
-        >
+        <Alert color="red" variant="light" title={tr("programStep.transcript.uploadFailed")}>
           {transcriptError}
         </Alert>
       )}
       {transcriptFeedback && !transcriptError && (
         <Stack gap="xs">
           <Alert color="green" variant="light">
-            {tr(
-              "programStep.transcript.added",
-              {
-                count: transcriptFeedback.added,
-                suffix: transcriptFeedback.added !== 1 ? "s" : "",
-              },
-            )}
+            {tr("programStep.transcript.added", {
+              count: transcriptFeedback.added,
+              suffix: transcriptFeedback.added !== 1 ? "s" : "",
+            })}
             {transcriptFeedback.programMatched && (
-              <div style={{ marginTop: '8px' }}>
+              <div style={{ marginTop: "8px" }}>
                 <Text component="div" size="sm">
                   {tr("programStep.transcript.programDetected")}{" "}
-                  <Badge color="green" variant="light" style={{ textTransform: 'none' }}>
+                  <Badge color="green" variant="light" style={{ textTransform: "none" }}>
                     {transcriptFeedback.programMatched.title}
                   </Badge>
                   {transcriptFeedback.minorMatched && (
                     <>
                       {" "}
                       {tr("programStep.transcript.withMinor")}{" "}
-                      <Badge color="green" variant="light" style={{ textTransform: 'none' }}>
+                      <Badge color="green" variant="light" style={{ textTransform: "none" }}>
                         {transcriptFeedback.minorMatched.title}
                       </Badge>
                     </>
@@ -354,21 +365,20 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
             >
               <Stack gap="xs">
                 <Text size="sm">
-                  {tr(
-                    "programStep.transcript.codesNotFound",
-                    {
-                      count: transcriptFeedback.skippedCodes.length,
-                      suffix: transcriptFeedback.skippedCodes.length !== 1 ? "s" : "",
-                      codes: transcriptFeedback.skippedCodes.sort().join(", "),
-                    },
-                  )}
+                  {tr("programStep.transcript.codesNotFound", {
+                    count: transcriptFeedback.skippedCodes.length,
+                    suffix: transcriptFeedback.skippedCodes.length !== 1 ? "s" : "",
+                    codes: transcriptFeedback.skippedCodes.sort().join(", "),
+                  })}
                 </Text>
                 <Button
                   size="xs"
                   variant="light"
                   color="yellow"
                   onClick={() => {
-                    const merged = [...new Set([...completedCourses, ...transcriptFeedback.skippedCodes])];
+                    const merged = [
+                      ...new Set([...completedCourses, ...transcriptFeedback.skippedCodes]),
+                    ];
                     setCompletedCourses(merged);
                     setTranscriptFeedback({ ...transcriptFeedback, skippedCodes: [] });
                   }}

@@ -2,11 +2,7 @@ import { Stack, Text, Tooltip } from "@mantine/core";
 import type { GradeVizData } from "schedule";
 import { tr } from "../../i18n";
 
-export function GradeDistributionCompactChip({
-  gradeViz,
-}: {
-  gradeViz?: GradeVizData | null;
-}) {
+export function GradeDistributionCompactChip({ gradeViz }: { gradeViz?: GradeVizData | null }) {
   if (!gradeViz || gradeViz.total <= 0) return null;
 
   return (
@@ -28,17 +24,10 @@ export function GradeDistributionCompactChip({
 }
 
 /** Full-width horizontal strip at the bottom of a calendar event (constant column width). */
-export function GradeDistributionBottomBar({
-  gradeViz,
-}: {
-  gradeViz?: GradeVizData | null;
-}) {
+export function GradeDistributionBottomBar({ gradeViz }: { gradeViz?: GradeVizData | null }) {
   if (!gradeViz || gradeViz.total <= 0) {
     return (
-      <div
-        className="fc-uoplan-grade-bottom fc-uoplan-grade-bottom--no-grade-data"
-        aria-hidden
-      />
+      <div className="fc-uoplan-grade-bottom fc-uoplan-grade-bottom--no-grade-data" aria-hidden />
     );
   }
 
@@ -60,11 +49,7 @@ export function GradeDistributionBottomBar({
   );
 }
 
-export function GradeDistributionExpanded({
-  gradeViz,
-}: {
-  gradeViz?: GradeVizData | null;
-}) {
+export function GradeDistributionExpanded({ gradeViz }: { gradeViz?: GradeVizData | null }) {
   if (!gradeViz || gradeViz.total <= 0) return null;
 
   const sCount = gradeViz.histogram.find((entry) => entry.grade === "S")?.count ?? 0;
@@ -108,11 +93,15 @@ export function GradeDistributionExpanded({
                       className="uoplan-grade-histogram-bar"
                       style={{
                         height: `${Math.max(4, (entry.count / maxHistogramCount) * 88)}px`,
-                        backgroundColor:
-                          entry.count > 0 ? entry.color : "rgba(255,255,255,0.16)",
+                        backgroundColor: entry.count > 0 ? entry.color : "rgba(255,255,255,0.16)",
                       }}
                     />
-                    <Text size="10px" c="gray.5" ta="center" className="uoplan-grade-histogram-label">
+                    <Text
+                      size="10px"
+                      c="gray.5"
+                      ta="center"
+                      className="uoplan-grade-histogram-label"
+                    >
                       {entry.grade}
                     </Text>
                   </div>

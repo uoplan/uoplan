@@ -42,11 +42,7 @@ function readStoredLocale(): string | null {
 function readNavigatorLocales(): string[] {
   if (typeof window === "undefined") return [];
 
-  const detected = detect(
-    fromStorage(LOCALE_STORAGE_KEY),
-    fromNavigator(),
-    () => DEFAULT_LOCALE,
-  );
+  const detected = detect(fromStorage(LOCALE_STORAGE_KEY), fromNavigator(), () => DEFAULT_LOCALE);
 
   const browserLocales = window.navigator.languages?.length
     ? window.navigator.languages
@@ -87,10 +83,7 @@ export async function initializeI18n() {
   await dynamicActivate(locale);
 }
 
-export function tr(
-  id: string,
-  values?: Record<string, unknown>,
-): string {
+export function tr(id: string, values?: Record<string, unknown>): string {
   return i18n._({
     id,
     values,

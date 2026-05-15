@@ -22,10 +22,10 @@ How uoplan builds conflict-free timetables from program requirements and user ch
 
 ### References
 
-| Piece | Location |
-|-------|----------|
-| Pool building + allocation | `apps/web/src/store/scheduleHelpers.ts` |
-| Honours inference | `apps/web/src/lib/implicitHonours.ts` |
-| Full generation flow | `apps/web/src/lib/generateSchedulesAction.ts` |
-| Timetable backtracking | `packages/schedule/src/scheduleGenerator.ts` |
+| Piece                          | Location                                                                            |
+| ------------------------------ | ----------------------------------------------------------------------------------- |
+| Pool building + allocation     | `apps/web/src/store/scheduleHelpers.ts`                                             |
+| Honours inference              | `apps/web/src/lib/implicitHonours.ts`                                               |
+| Full generation flow           | `apps/web/src/lib/generateSchedulesAction.ts`                                       |
+| Timetable backtracking         | `packages/schedule/src/scheduleGenerator.ts`                                        |
 | Explicit vs general pool split | `packages/schedule/src/scheduleCandidates/explicitPoolPicks.ts`, `kUserKGeneral.ts` |

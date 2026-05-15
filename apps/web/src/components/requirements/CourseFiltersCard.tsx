@@ -56,9 +56,7 @@ export function BasicCourseFiltersCard({
   collapsible = false,
   defaultCollapsed = true,
 }: BasicCourseFiltersCardProps) {
-  const [filtersOpen, { toggle: toggleFilters }] = useDisclosure(
-    !defaultCollapsed,
-  );
+  const [filtersOpen, { toggle: toggleFilters }] = useDisclosure(!defaultCollapsed);
 
   const electiveLevelOptions = showGraduateElectiveLevels
     ? [
@@ -114,10 +112,7 @@ export function BasicCourseFiltersCard({
           value={levelBuckets}
           onChange={(vals) =>
             onChangeLevelBuckets(
-              vals.filter(
-                (v): v is "undergrad" | "grad" =>
-                  v === "undergrad" || v === "grad",
-              ),
+              vals.filter((v): v is "undergrad" | "grad" => v === "undergrad" || v === "grad"),
             )
           }
           clearable={false}
@@ -134,8 +129,7 @@ export function BasicCourseFiltersCard({
           onChange={(vals) =>
             onChangeLanguageBuckets(
               vals.filter(
-                (v): v is "en" | "fr" | "other" =>
-                  v === "en" || v === "fr" || v === "other",
+                (v): v is "en" | "fr" | "other" => v === "en" || v === "fr" || v === "other",
               ),
             )
           }
@@ -148,9 +142,7 @@ export function BasicCourseFiltersCard({
           value={electiveLevelBuckets.map((v) => String(v))}
           onChange={(vals) =>
             onChangeElectiveLevelBuckets(
-              vals
-                .map((v) => parseInt(v, 10))
-                .filter((n) => allowedElectiveLevels.has(n)),
+              vals.map((v) => parseInt(v, 10)).filter((n) => allowedElectiveLevels.has(n)),
             )
           }
           clearable={false}
@@ -159,16 +151,12 @@ export function BasicCourseFiltersCard({
         <Switch
           label={tr("constrainStep.includeClosedSections")}
           checked={includeClosedComponents}
-          onChange={(e) =>
-            onIncludeClosedComponentsChange(e.currentTarget.checked)
-          }
+          onChange={(e) => onIncludeClosedComponentsChange(e.currentTarget.checked)}
         />
         <Switch
           label={tr("constrainStep.virtualSectionsOnly")}
           checked={virtualSectionsOnly}
-          onChange={(e) =>
-            onVirtualSectionsOnlyChange(e.currentTarget.checked)
-          }
+          onChange={(e) => onVirtualSectionsOnlyChange(e.currentTarget.checked)}
         />
       </Group>
     </Stack>
@@ -206,9 +194,7 @@ export function BasicCourseFiltersCard({
           </UnstyledButton>
         ) : (
           <Group justify="space-between" align="center">
-            <Stack gap={4}>
-              {headerContent}
-            </Stack>
+            <Stack gap={4}>{headerContent}</Stack>
           </Group>
         )}
         <Collapse in={collapsible ? filtersOpen : true}>{filterBody}</Collapse>
@@ -277,10 +263,7 @@ export function AdvancedCourseFiltersCard({
               value={levelBuckets}
               onChange={(vals) =>
                 onChangeLevelBuckets(
-                  vals.filter(
-                    (v): v is "undergrad" | "grad" =>
-                      v === "undergrad" || v === "grad",
-                  ),
+                  vals.filter((v): v is "undergrad" | "grad" => v === "undergrad" || v === "grad"),
                 )
               }
               clearable={false}
@@ -297,8 +280,7 @@ export function AdvancedCourseFiltersCard({
               onChange={(vals) =>
                 onChangeLanguageBuckets(
                   vals.filter(
-                    (v): v is "en" | "fr" | "other" =>
-                      v === "en" || v === "fr" || v === "other",
+                    (v): v is "en" | "fr" | "other" => v === "en" || v === "fr" || v === "other",
                   ),
                 )
               }
@@ -308,9 +290,7 @@ export function AdvancedCourseFiltersCard({
             <Switch
               label={tr("constrainStep.includeClosedSections")}
               checked={includeClosedComponents}
-              onChange={(e) =>
-                onIncludeClosedComponentsChange(e.currentTarget.checked)
-              }
+              onChange={(e) => onIncludeClosedComponentsChange(e.currentTarget.checked)}
             />
           </Group>
         </Box>
@@ -336,9 +316,7 @@ export function AdvancedCourseFiltersCard({
               value={electiveLevelBuckets.map((v) => String(v))}
               onChange={(vals) =>
                 onChangeElectiveLevelBuckets(
-                  vals
-                    .map((v) => parseInt(v, 10))
-                    .filter((n) => allowedElectiveLevels.has(n)),
+                  vals.map((v) => parseInt(v, 10)).filter((n) => allowedElectiveLevels.has(n)),
                 )
               }
               clearable={false}
@@ -347,9 +325,7 @@ export function AdvancedCourseFiltersCard({
             <Switch
               label={tr("constrainStep.virtualSectionsOnly")}
               checked={virtualSectionsOnly}
-              onChange={(e) =>
-                onVirtualSectionsOnlyChange(e.currentTarget.checked)
-              }
+              onChange={(e) => onVirtualSectionsOnlyChange(e.currentTarget.checked)}
             />
           </Group>
         </Box>

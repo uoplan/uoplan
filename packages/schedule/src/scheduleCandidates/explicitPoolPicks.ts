@@ -24,14 +24,8 @@ export function mergeGlobalExplicitRule(
   effectiveTargetNonHonours: number,
 ): GlobalExplicitRule {
   return {
-    pinAllExplicit: shouldPinAllExplicit(
-      explicitUnionSize,
-      effectiveTargetNonHonours,
-    ),
-    explicitOnly: shouldUseExplicitOnlyPool(
-      explicitUnionSize,
-      effectiveTargetNonHonours,
-    ),
+    pinAllExplicit: shouldPinAllExplicit(explicitUnionSize, effectiveTargetNonHonours),
+    explicitOnly: shouldUseExplicitOnlyPool(explicitUnionSize, effectiveTargetNonHonours),
   };
 }
 
@@ -51,10 +45,7 @@ export function pickFromUserAndGeneralPools(input: {
   sAvailOrdered: string[];
   gAvailOrdered: string[];
 }): PickFromPoolsResult {
-  const { kUser, kGeneral } = splitRequiredAndGeneral(
-    input.need,
-    input.sAvailOrdered.length,
-  );
+  const { kUser, kGeneral } = splitRequiredAndGeneral(input.need, input.sAvailOrdered.length);
   const userPicks = input.sAvailOrdered.slice(0, kUser);
   const generalPicks = input.gAvailOrdered.slice(0, kGeneral);
   const ok = generalPicks.length === kGeneral;

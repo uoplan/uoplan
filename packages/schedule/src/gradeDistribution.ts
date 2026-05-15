@@ -1,30 +1,30 @@
-import type { CourseSchedule } from './dataTypes';
+import type { CourseSchedule } from "./dataTypes";
 
 /** Ottawa-style letter grades → 4.3-scale points for GPA-style summaries. */
 export const GRADE_POINTS: Record<string, number> = {
-  'A+': 4.3,
+  "A+": 4.3,
   A: 4.0,
-  'A-': 3.7,
-  'B+': 3.3,
+  "A-": 3.7,
+  "B+": 3.3,
   B: 3.0,
-  'B-': 2.7,
-  'C+': 2.3,
+  "B-": 2.7,
+  "C+": 2.3,
   C: 2.0,
-  'D+': 1.3,
+  "D+": 1.3,
   D: 1.0,
   E: 0.5,
   F: 0,
 };
 
-const SKIP_GRADES = new Set(['P', 'S', 'NS', 'NC', 'ABS', 'EIN']);
+const SKIP_GRADES = new Set(["P", "S", "NS", "NC", "ABS", "EIN"]);
 
 export const GRADE_VIZ_COLORS = {
-  red: '#A32D2D',
-  amber: '#BA7517',
-  yellow: '#d4b800',
-  blue: '#3266ad',
-  teal: '#5a9e7a',
-  green: '#1D9E75',
+  red: "#A32D2D",
+  amber: "#BA7517",
+  yellow: "#d4b800",
+  blue: "#3266ad",
+  teal: "#5a9e7a",
+  green: "#1D9E75",
 } as const;
 
 export type GradeVizBucketId = keyof typeof GRADE_VIZ_COLORS;
@@ -44,12 +44,12 @@ export interface GradeVizData {
 }
 
 const GRADE_BUCKET_DEFS: Array<{ id: GradeVizBucketId; label: string; grades: string[] }> = [
-  { id: 'red', label: 'Failing', grades: ['F', 'E', 'ABS', 'EIN', 'NS'] },
-  { id: 'amber', label: 'Low pass', grades: ['D', 'D+'] },
-  { id: 'yellow', label: 'Mid pass', grades: ['C', 'C+'] },
-  { id: 'blue', label: 'Good', grades: ['B', 'B+', 'S'] },
-  { id: 'teal', label: 'Near excellent', grades: ['A-'] },
-  { id: 'green', label: 'Excellent', grades: ['A', 'A+', 'P'] },
+  { id: "red", label: "Failing", grades: ["F", "E", "ABS", "EIN", "NS"] },
+  { id: "amber", label: "Low pass", grades: ["D", "D+"] },
+  { id: "yellow", label: "Mid pass", grades: ["C", "C+"] },
+  { id: "blue", label: "Good", grades: ["B", "B+", "S"] },
+  { id: "teal", label: "Near excellent", grades: ["A-"] },
+  { id: "green", label: "Excellent", grades: ["A", "A+", "P"] },
 ];
 
 const GRADE_TO_BUCKET = new Map<string, GradeVizBucketId>(
@@ -57,20 +57,20 @@ const GRADE_TO_BUCKET = new Map<string, GradeVizBucketId>(
 );
 
 const HISTOGRAM_GRADE_ORDER = [
-  'NS',
-  'EIN',
-  'ABS',
-  'F',
-  'E',
-  'D',
-  'D+',
-  'C',
-  'C+',
-  'B',
-  'B+',
-  'A-',
-  'A',
-  'A+',
+  "NS",
+  "EIN",
+  "ABS",
+  "F",
+  "E",
+  "D",
+  "D+",
+  "C",
+  "C+",
+  "B",
+  "B+",
+  "A-",
+  "A",
+  "A+",
 ] as const;
 
 /**
@@ -78,7 +78,7 @@ const HISTOGRAM_GRADE_ORDER = [
  * Returns null if there is no countable mass.
  */
 export function distributionGpa(dist: Record<string, number> | null | undefined): number | null {
-  if (!dist || typeof dist !== 'object') return null;
+  if (!dist || typeof dist !== "object") return null;
   let weighted = 0;
   let mass = 0;
   for (const [letter, count] of Object.entries(dist)) {
@@ -101,7 +101,7 @@ export function aggregateCourseDistribution(schedule: CourseSchedule): Record<st
     if (!Array.isArray(sections)) continue;
     for (const sec of sections) {
       const d = sec?.distribution;
-      if (d && typeof d === 'object') parts.push(d);
+      if (d && typeof d === "object") parts.push(d);
     }
   }
   const out: Record<string, number> = {};
@@ -126,7 +126,7 @@ export function courseGpa(schedule: CourseSchedule): number | null {
 export function normalizeGradeVizDistribution(
   distribution: Record<string, number> | null | undefined,
 ): GradeVizData | null {
-  if (!distribution || typeof distribution !== 'object') return null;
+  if (!distribution || typeof distribution !== "object") return null;
 
   const countsByGrade = new Map<string, number>();
   for (const [gradeRaw, valueRaw] of Object.entries(distribution)) {
@@ -150,11 +150,11 @@ export function normalizeGradeVizDistribution(
     };
   });
 
-  const failingCount = buckets.find((bucket) => bucket.id === 'red')?.count ?? 0;
+  const failingCount = buckets.find((bucket) => bucket.id === "red")?.count ?? 0;
   const passingPercent = ((total - failingCount) / total) * 100;
 
-  const histogram: GradeVizData['histogram'] = HISTOGRAM_GRADE_ORDER.map((grade) => {
-    const bucketId = GRADE_TO_BUCKET.get(grade) ?? 'red';
+  const histogram: GradeVizData["histogram"] = HISTOGRAM_GRADE_ORDER.map((grade) => {
+    const bucketId = GRADE_TO_BUCKET.get(grade) ?? "red";
     return {
       grade,
       count: countsByGrade.get(grade) ?? 0,

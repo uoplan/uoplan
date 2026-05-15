@@ -1,11 +1,11 @@
-export type CourseLanguageBucket = 'en' | 'fr' | 'other';
+export type CourseLanguageBucket = "en" | "fr" | "other";
 
 export interface CourseFilters {
   levels: CourseLevelBucket[];
   languageBuckets: CourseLanguageBucket[];
 }
 
-export type CourseLevelBucket = 'undergrad' | 'grad';
+export type CourseLevelBucket = "undergrad" | "grad";
 
 function extractNumericPart(code: string): string | null {
   const match = code.match(/(\d{4,5})/);
@@ -25,7 +25,7 @@ export function getCourseLevelBucket(code: string): CourseLevelBucket | null {
   if (!numeric) return null;
   const level = Number(numeric);
   if (Number.isNaN(level)) return null;
-  return level >= 5000 ? 'grad' : 'undergrad';
+  return level >= 5000 ? "grad" : "undergrad";
 }
 
 export function getCourseLanguageBucket(code: string): CourseLanguageBucket | null {
@@ -33,9 +33,9 @@ export function getCourseLanguageBucket(code: string): CourseLanguageBucket | nu
   if (!numeric) return null;
   const secondDigit = Number(numeric[1]);
   if (Number.isNaN(secondDigit)) return null;
-  if (secondDigit >= 1 && secondDigit <= 4) return 'en';
-  if (secondDigit >= 5 && secondDigit <= 8) return 'fr';
-  return 'other';
+  if (secondDigit >= 1 && secondDigit <= 4) return "en";
+  if (secondDigit >= 5 && secondDigit <= 8) return "fr";
+  return "other";
 }
 
 export function courseMatchesFilters(code: string, filters: CourseFilters): boolean {
@@ -51,4 +51,3 @@ export function courseMatchesFilters(code: string, filters: CourseFilters): bool
 
   return true;
 }
-

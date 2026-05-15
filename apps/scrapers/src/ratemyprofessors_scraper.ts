@@ -1,9 +1,9 @@
-import fs from 'fs/promises';
-import path from 'path';
-import got from 'got';
-import { SCRAPER_DATA_DIR } from './dataPaths.ts';
+import fs from "fs/promises";
+import path from "path";
+import got from "got";
+import { SCRAPER_DATA_DIR } from "./dataPaths.ts";
 
-const GRAPHQL_URL = 'https://www.ratemyprofessors.com/graphql';
+const GRAPHQL_URL = "https://www.ratemyprofessors.com/graphql";
 const PAGE_SIZE = 1000;
 
 const TEACHER_SEARCH_QUERY = `query TeacherSearchPaginationQuery(
@@ -87,7 +87,7 @@ async function fetchTeachersPage(
     count: PAGE_SIZE,
     cursor,
     query: {
-      text: '',
+      text: "",
       ...(schoolId ? { schoolID: schoolId } : {}),
       fallback: true,
     },
@@ -96,14 +96,13 @@ async function fetchTeachersPage(
   const res = await got.post(GRAPHQL_URL, {
     json: {
       query: TEACHER_SEARCH_QUERY,
-      operationName: 'TeacherSearchPaginationQuery',
+      operationName: "TeacherSearchPaginationQuery",
       variables,
     },
-    responseType: 'json',
+    responseType: "json",
     headers: {
-      'Content-Type': 'application/json',
-      'User-Agent':
-        'Mozilla/5.0 (compatible; uoplan-scraper/1.0)',
+      "Content-Type": "application/json",
+      "User-Agent": "Mozilla/5.0 (compatible; uoplan-scraper/1.0)",
     },
   });
 
@@ -112,13 +111,13 @@ async function fetchTeachersPage(
 
 async function main(): Promise<void> {
   // Optional: scrape a specific school (e.g. University of Ottawa). Omit to try global search.
-  const schoolId = process.env.RMP_SCHOOL_ID || 'U2Nob29sLTE0NTI=';
+  const schoolId = process.env.RMP_SCHOOL_ID || "U2Nob29sLTE0NTI=";
 
   const allTeachers: FormattedTeacherNode[] = [];
   let cursor: string | null = null;
   let page = 0;
 
-  console.log('Fetching professors from RateMyProfessors (GraphQL)...');
+  console.log("Fetching professors from RateMyProfessors (GraphQL)...");
 
   while (true) {
     page += 1;
@@ -130,13 +129,13 @@ async function main(): Promise<void> {
 
     const teachers = data.data?.search?.teachers;
     if (!teachers) {
-      throw new Error('Unexpected response: no data.search.teachers');
+      throw new Error("Unexpected response: no data.search.teachers");
     }
 
     const nodes = teachers.edges.map((e) => ({
       id: e.node.id,
       legacyId: e.node.legacyId,
-      name: `${e.node.firstName} ${e.node.lastName}`.trim().replace(/\s+/g, ' '),
+      name: `${e.node.firstName} ${e.node.lastName}`.trim().replace(/\s+/g, " "),
       rating: e.node.avgRating,
       numRatings: e.node.numRatings,
     }));
@@ -152,7 +151,7 @@ async function main(): Promise<void> {
     }
     cursor = pageInfo.endCursor ?? null;
     if (!cursor) {
-      console.warn('hasNextPage was true but endCursor missing; stopping.');
+      console.warn("hasNextPage was true but endCursor missing; stopping.");
       break;
     }
 
@@ -162,7 +161,7 @@ async function main(): Promise<void> {
 
   const outDir = SCRAPER_DATA_DIR;
   await fs.mkdir(outDir, { recursive: true });
-  const outPath = path.join(outDir, 'ratemyprofessors.json');
+  const outPath = path.join(outDir, "ratemyprofessors.json");
 
   allTeachers.sort((a, b) => a.name.localeCompare(b.name) || a.legacyId - b.legacyId);
 
@@ -171,11 +170,11 @@ async function main(): Promise<void> {
     professors: allTeachers,
   };
 
-  await fs.writeFile(outPath, JSON.stringify(output, null, 2), 'utf-8');
+  await fs.writeFile(outPath, JSON.stringify(output, null, 2), "utf-8");
   console.log(`Saved ${allTeachers.length} professors to ${outPath}`);
 }
 
 main().catch((err) => {
-  console.error('RateMyProfessors scrape failed:', err);
+  console.error("RateMyProfessors scrape failed:", err);
   process.exit(1);
 });

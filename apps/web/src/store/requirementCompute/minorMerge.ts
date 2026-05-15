@@ -27,9 +27,9 @@ export function mergeProgramWithMinor(
   const subtractFromOptions = (options: ProgramRequirement[]) => {
     for (let i = options.length - 1; i >= 0 && remainingToSubtract > 0; i--) {
       const opt = options[i];
-      
+
       if (opt.options) {
-         subtractFromOptions(opt.options);
+        subtractFromOptions(opt.options);
       }
 
       if (

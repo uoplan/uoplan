@@ -1,10 +1,10 @@
-import type { ComponentSection, CourseSchedule } from '../dataTypes';
-import type { DataCache } from '../dataCache';
-import { isSectionAllowedByMinRating } from '../professorRatings';
-import { isHonoursProject, normalizeCourseCode } from '../utils/courseUtils';
-import { timeSlotSatisfiesConstraints } from './constraints';
-import { timesOverlap } from './overlaps';
-import type { CourseEnrollment, GenerationConstraints, SectionCombo, TimeSlot } from './types';
+import type { ComponentSection, CourseSchedule } from "../dataTypes";
+import type { DataCache } from "../dataCache";
+import { isSectionAllowedByMinRating } from "../professorRatings";
+import { isHonoursProject, normalizeCourseCode } from "../utils/courseUtils";
+import { timeSlotSatisfiesConstraints } from "./constraints";
+import { timesOverlap } from "./overlaps";
+import type { CourseEnrollment, GenerationConstraints, SectionCombo, TimeSlot } from "./types";
 
 export function collectTimes(sections: ComponentSection[]): TimeSlot[] {
   const times: TimeSlot[] = [];
@@ -37,15 +37,12 @@ export function cartesianProduct<T>(arrays: T[][]): T[][] {
 
 /** True if the section has at least one real time slot (used to skip TST/other components with empty times). */
 export function sectionHasTimes(section: ComponentSection): boolean {
-  return (
-    Array.isArray(section.times) &&
-    section.times.some((t) => t.startMinutes < t.endMinutes)
-  );
+  return Array.isArray(section.times) && section.times.some((t) => t.startMinutes < t.endMinutes);
 }
 
 export function getValidSectionCombos(
   schedule: CourseSchedule,
-  constraints?: GenerationConstraints
+  constraints?: GenerationConstraints,
 ): SectionCombo[] {
   const componentKeys = Object.keys(schedule.components).sort();
   const sectionArrays = componentKeys.map((key) => {
@@ -53,24 +50,28 @@ export function getValidSectionCombos(
     return sections.filter((section) => {
       if (!sectionHasTimes(section)) return false;
       if (!constraints) return true;
-      if (!isSectionAllowedByMinRating({
-        instructors: section.instructors,
-        minRating: constraints.minProfessorRating,
-        professorRatings: constraints.professorRatings,
-      })) {
+      if (
+        !isSectionAllowedByMinRating({
+          instructors: section.instructors,
+          minRating: constraints.minProfessorRating,
+          professorRatings: constraints.professorRatings,
+        })
+      ) {
         return false;
       }
-      
-      const times = section.times.filter(t => t.startMinutes < t.endMinutes).map(t => ({
-        day: t.day,
-        startMinutes: t.startMinutes,
-        endMinutes: t.endMinutes,
-      }));
-      
+
+      const times = section.times
+        .filter((t) => t.startMinutes < t.endMinutes)
+        .map((t) => ({
+          day: t.day,
+          startMinutes: t.startMinutes,
+          endMinutes: t.endMinutes,
+        }));
+
       if (!times.every((t) => timeSlotSatisfiesConstraints(t, constraints))) {
         return false;
       }
-      
+
       return true;
     });
   });
@@ -109,7 +110,7 @@ export function getValidSectionCombos(
 
 export function getEnrollmentsForCourse(
   schedule: CourseSchedule,
-  sectionCombo: SectionCombo
+  sectionCombo: SectionCombo,
 ): CourseEnrollment {
   const sections = Object.values(sectionCombo).map((x) => x.section);
   const times = collectTimes(sections);

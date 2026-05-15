@@ -1,13 +1,5 @@
 import { useState, useMemo, type MouseEvent } from "react";
-import {
-  Stack,
-  Text,
-  Badge,
-  Group,
-  Collapse,
-  Alert,
-  Paper,
-} from "@mantine/core";
+import { Stack, Text, Badge, Group, Collapse, Alert, Paper } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import type { DataCache } from "schedule";
 import type {
@@ -15,11 +7,7 @@ import type {
   RequirementWithStatus,
   CompletedRequirementItem,
 } from "schedule";
-import {
-  RequirementNode,
-  getStableNodeKey,
-  getNodeDisplayTitle,
-} from "./RequirementNode";
+import { RequirementNode, getStableNodeKey, getNodeDisplayTitle } from "./RequirementNode";
 import {
   applyOptionSelections,
   adjustNodeForAssignments,
@@ -81,20 +69,13 @@ export function ConstrainStep({
   virtualSectionsOnly,
   onVirtualSectionsOnlyChange,
 }: ConstrainStepProps) {
-  const [collapsedUnavailableOpen, setCollapsedUnavailableOpen] =
-    useState(false);
+  const [collapsedUnavailableOpen, setCollapsedUnavailableOpen] = useState(false);
 
   const frenchImmersionStream = useAppStore((s) => s.frenchImmersionStream);
   const unassignedCount = useAppStore((s) => s.unassignedCompletedCourses.length);
 
-  const completedSet = useMemo(
-    () => new Set(completedCourses),
-    [completedCourses],
-  );
-  const prereqEligible = useMemo(
-    () => new Set(prereqEligibleCourses),
-    [prereqEligibleCourses],
-  );
+  const completedSet = useMemo(() => new Set(completedCourses), [completedCourses]);
+  const prereqEligible = useMemo(() => new Set(prereqEligibleCourses), [prereqEligibleCourses]);
 
   // Flatten option selections so or_group/options_group parents are replaced
   // by their selected child branch (chosen in the Options step).
@@ -106,9 +87,7 @@ export function ConstrainStep({
   // Adjust tree to reflect manual assignments from the Assign step.
   const adjustedTree = useMemo(
     () =>
-      flattenedTree.map((node) =>
-        adjustNodeForAssignments(node, selectedPerRequirement, cache),
-      ),
+      flattenedTree.map((node) => adjustNodeForAssignments(node, selectedPerRequirement, cache)),
     [flattenedTree, selectedPerRequirement, cache],
   );
 
@@ -143,16 +122,8 @@ export function ConstrainStep({
 
   const { primary: primaryRoots, collapsed: collapsedRoots } = useMemo(
     () =>
-        partitionIncompleteConstrainRoots(
-        incompleteNodes,
-        constrainedPerRequirement,
-        constrainCtx,
-      ),
-    [
-      incompleteNodes,
-      constrainedPerRequirement,
-      constrainCtx,
-    ],
+      partitionIncompleteConstrainRoots(incompleteNodes, constrainedPerRequirement, constrainCtx),
+    [incompleteNodes, constrainedPerRequirement, constrainCtx],
   );
 
   // Top-level tree nodes that were originally incomplete but became complete via adjustment.
@@ -165,9 +136,7 @@ export function ConstrainStep({
     );
     return adjustedTree.filter(
       (node) =>
-        node.complete &&
-        node.requirementId != null &&
-        !originalCompleteIds.has(node.requirementId),
+        node.complete && node.requirementId != null && !originalCompleteIds.has(node.requirementId),
     );
   }, [adjustedTree, flattenedTree]);
 
@@ -175,8 +144,7 @@ export function ConstrainStep({
     () =>
       newlyCompleteNodes.map((node) => ({
         title: getNodeDisplayTitle(node),
-        satisfiedBy:
-          node.satisfiedBy ?? selectedPerRequirement[node.requirementId!] ?? [],
+        satisfiedBy: node.satisfiedBy ?? selectedPerRequirement[node.requirementId!] ?? [],
       })),
     [newlyCompleteNodes, selectedPerRequirement],
   );
@@ -187,27 +155,15 @@ export function ConstrainStep({
   const hasCompleted = allCompletedItems.length > 0;
 
   const satisfiedTopLevelCount = useMemo(
-    () =>
-      countSatisfiedTopLevelRoots(
-        requirementTreeWithStatus,
-        selectedPerRequirement,
-        cache,
-      ),
+    () => countSatisfiedTopLevelRoots(requirementTreeWithStatus, selectedPerRequirement, cache),
     [requirementTreeWithStatus, selectedPerRequirement, cache],
   );
   const topLevelRequirementCount = requirementTreeWithStatus.length;
 
   if (!hasTree) {
     return (
-      <Alert
-        color="blue"
-        variant="light"
-        radius={0}
-        data-tour="constrain-schedule"
-      >
-        <Text size="sm">
-          Select a program and complete the previous steps to see requirements.
-        </Text>
+      <Alert color="blue" variant="light" radius={0} data-tour="constrain-schedule">
+        <Text size="sm">Select a program and complete the previous steps to see requirements.</Text>
       </Alert>
     );
   }
@@ -236,10 +192,10 @@ export function ConstrainStep({
             {primaryRoots.length === 0 && collapsedRoots.length > 0 && (
               <Alert color="gray" variant="light" radius={0}>
                 <Text size="sm">
-                  The remaining requirements have no courses in the picker
-                  (e.g. missing prerequisites or nothing offered this term). Expand{" "}
-                  <strong>No eligible courses</strong> below to review them,
-                  or adjust course filters above.
+                  The remaining requirements have no courses in the picker (e.g. missing
+                  prerequisites or nothing offered this term). Expand{" "}
+                  <strong>No eligible courses</strong> below to review them, or adjust course
+                  filters above.
                 </Text>
               </Alert>
             )}
@@ -292,9 +248,7 @@ export function ConstrainStep({
                     <IconChevronDown
                       size={14}
                       style={{
-                        transform: collapsedUnavailableOpen
-                          ? "rotate(0deg)"
-                          : "rotate(-90deg)",
+                        transform: collapsedUnavailableOpen ? "rotate(0deg)" : "rotate(-90deg)",
                         transition: "transform 150ms ease",
                       }}
                     />
@@ -309,10 +263,7 @@ export function ConstrainStep({
                 <Collapse in={collapsedUnavailableOpen}>
                   <Stack gap="md" mt="sm">
                     {collapsedRoots.map(({ node, rootIndex }) => {
-                      const nodeKey = getStableNodeKey(
-                        node,
-                        `root:${rootIndex}`,
-                      );
+                      const nodeKey = getStableNodeKey(node, `root:${rootIndex}`);
                       return (
                         <RequirementNode
                           key={nodeKey}
@@ -343,8 +294,8 @@ export function ConstrainStep({
         ) : (
           <Alert color="blue" variant="light" radius={0}>
             <Text size="sm">
-              All requirements are currently satisfied by your completed
-              courses. Nothing to constrain.
+              All requirements are currently satisfied by your completed courses. Nothing to
+              constrain.
             </Text>
           </Alert>
         )}

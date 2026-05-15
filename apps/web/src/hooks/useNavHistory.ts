@@ -28,8 +28,7 @@ function getInitialNavState(): NavHistoryState {
  * it doesn't pollute the history stack.
  */
 export function useNavHistory() {
-  const [state, setStateInternal] =
-    useState<NavHistoryState>(getInitialNavState);
+  const [state, setStateInternal] = useState<NavHistoryState>(getInitialNavState);
 
   useEffect(() => {
     useAppStore.setState({ activeStep: state.step });
@@ -73,24 +72,18 @@ export function useNavHistory() {
    * Navigate to a specific wizard step. Always hides the calendar.
    * Accepts either a step index or an updater function (same API as useState).
    */
-  const setActive = useCallback(
-    (stepOrUpdater: number | ((prev: number) => number)) => {
-      setStateInternal((prev) => {
-        const step =
-          typeof stepOrUpdater === "function"
-            ? stepOrUpdater(prev.step)
-            : stepOrUpdater;
-        const newState: NavHistoryState = {
-          step,
-          showCalendar: false,
-          furthestStep: Math.max(prev.furthestStep, step) as WizardStep,
-        };
-        window.history.pushState(newState, "");
-        return newState;
-      });
-    },
-    [],
-  );
+  const setActive = useCallback((stepOrUpdater: number | ((prev: number) => number)) => {
+    setStateInternal((prev) => {
+      const step = typeof stepOrUpdater === "function" ? stepOrUpdater(prev.step) : stepOrUpdater;
+      const newState: NavHistoryState = {
+        step,
+        showCalendar: false,
+        furthestStep: Math.max(prev.furthestStep, step) as WizardStep,
+      };
+      window.history.pushState(newState, "");
+      return newState;
+    });
+  }, []);
 
   /**
    * Show or hide the calendar view. The current step index is preserved so
