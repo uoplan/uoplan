@@ -341,6 +341,14 @@ These patterns should be enough for another agent to wire the prerequisites into
 
 ---
 
+### Multi-year catalogue merge
+
+When the user selects a first year of study, `getMergedCatalogue` (`apps/web/src/store/slices/catalogueUtils.ts`) combines the latest catalogue with that year's snapshot before building `DataCache`. **Prerequisite fields always come from the start-year row** for courses that exist in both catalogues; if the year row has no `prerequisites` or `prereqText`, those fields are omitted on the merged course even when the latest row has them. Completed courses that exist in the year catalogue keep the full year row (credits and metadata). See `docs/multi-year-catalogue.md` for the full merge table.
+
+Runtime checks (`canTakeCourse`, schedule pools) read `course.prerequisites` from this merged cache only.
+
+---
+
 ### Program-filtered nodes (`programs` field)
 
 Any `CoursePrereqNode` can carry an optional `programs?: string[]` field. When present, the node only applies if the student is enrolled in one of the listed program codes.

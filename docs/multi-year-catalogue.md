@@ -19,7 +19,18 @@ The current academic year is detected dynamically via `getCurrentAcademicYear()`
 2. Fetches `catalogue.{latestYear}.json` as the main catalogue (used for course lookups and schedule generation)
 3. Stores `availableYears` in state
 
-When the user selects their first year via `setFirstYear(year)`, the store fetches `catalogue.{year}.json` and stores its `programs` as `yearCataloguePrograms`. The program selection is cleared since requirements differ between years.
+When the user selects their first year via `setFirstYear(year)`, the store fetches `catalogue.{year}.pb` and stores its `programs` as `yearCataloguePrograms` and courses as `yearCatalogueCourses`. The program selection is cleared since requirements differ between years.
+
+**Catalogue merge (`apps/web/src/store/slices/catalogueUtils.ts`)** builds an effective course list for schedule generation and prerequisite checks:
+
+| Situation | Course metadata | Prerequisites |
+| --------- | --------------- | ------------- |
+| In both year + latest, not completed | Latest (title, credits, description) | Start-year; if year has none, latest prereqs are **stripped** |
+| In both, completed | Full start-year row | Start-year |
+| Latest only (new course) | Latest | Latest |
+| Year only (legacy/dropped) | Year | Year |
+
+Latest aliases are still applied after merge so renumbered courses resolve correctly. See `applyYearPrerequisites` in `packages/schedule/src/dataCache.ts`.
 
 **`ProgramStep` (`src/components/ProgramStep.tsx`)** shows a "First year of study" select built from `availableYears`. The program dropdown uses `yearCataloguePrograms ?? programmes` (falls back to current year if no year selected).
 
