@@ -1,6 +1,7 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
 import { recomputeStateForProgram, getDisciplineCodesForProgram } from "../requirementCompute";
+import type { CourseLanguageBucket } from "schedule";
 import {
   buildDataCache,
   normalizeCourseCode,
@@ -35,6 +36,7 @@ interface SelectionSlice {
   setLevelBuckets: AppStore["setLevelBuckets"];
   setLanguageBuckets: AppStore["setLanguageBuckets"];
   setElectiveLevelBuckets: AppStore["setElectiveLevelBuckets"];
+  setFrenchImmersionStream: AppStore["setFrenchImmersionStream"];
 }
 
 export const createSelectionSlice: StateCreator<
@@ -43,12 +45,47 @@ export const createSelectionSlice: StateCreator<
   [],
   SelectionSlice
 > = (set, get) => ({
-  setWizardMode: (mode) =>
-    set((state) => {
-      if (mode !== "basic") {
-        return { wizardMode: mode };
+  setWizardMode: (mode) => {
+    if (mode !== "basic") {
+      set({ wizardMode: mode });
+      // Basic mode skips requirement recompute when toggling immersion; refresh here
+      // so advanced steps see correct filteredPrereqEligibleCourses with current language buckets.
+      if (mode === "advanced") {
+        const {
+          program,
+          minorProgram,
+          cache,
+          completedCourses,
+          selectedPerRequirement,
+          selectedOptionsPerRequirement,
+          levelBuckets,
+          languageBuckets,
+          includeClosedComponents,
+          studentPrograms,
+          requirementSlotsUserTouched,
+        } = get();
+        if (program && cache) {
+          set(
+            recomputeStateForProgram(
+              program,
+              minorProgram,
+              completedCourses,
+              cache,
+              selectedPerRequirement,
+              selectedOptionsPerRequirement,
+              levelBuckets,
+              languageBuckets,
+              includeClosedComponents,
+              studentPrograms,
+              requirementSlotsUserTouched,
+            ),
+          );
+        }
       }
+      return;
+    }
 
+    set((state) => {
       const hasUntouchedDefaults =
         state.levelBuckets.length === 1 &&
         state.levelBuckets[0] === "undergrad" &&
@@ -69,7 +106,8 @@ export const createSelectionSlice: StateCreator<
         languageBuckets: [...DEFAULT_BASIC_LANGUAGE_BUCKETS],
         electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
       };
-    }),
+    });
+  },
   setBasicPinnedCourses: (courses) => set({ basicPinnedCourses: courses }),
   setBasicElectivesCount: (count) => set({ basicElectivesCount: count }),
   setBasicExcludedCategories: (categories) => set({ basicExcludedCategories: categories }),
@@ -325,6 +363,52 @@ export const createSelectionSlice: StateCreator<
 
   setElectiveLevelBuckets: (buckets) => {
     set({ electiveLevelBuckets: buckets });
+  },
+
+  setFrenchImmersionStream: (enabled) => {
+    if (!enabled) {
+      set({ frenchImmersionStream: false });
+      return;
+    }
+    const {
+      wizardMode,
+      program,
+      minorProgram,
+      cache,
+      completedCourses,
+      selectedPerRequirement,
+      selectedOptionsPerRequirement,
+      levelBuckets,
+      languageBuckets,
+      includeClosedComponents,
+      studentPrograms,
+      requirementSlotsUserTouched,
+    } = get();
+    const nextLang: CourseLanguageBucket[] = languageBuckets.includes("fr")
+      ? languageBuckets
+      : [...languageBuckets, "fr"];
+
+    // Basic mode does not use requirement-tree / filtered-prereq state on the calendar;
+    // skipping the full recompute avoids scanning the entire catalogue on toggle (UI freeze).
+    if (wizardMode === "basic") {
+      set({ frenchImmersionStream: true, languageBuckets: nextLang });
+      return;
+    }
+
+    const state = recomputeStateForProgram(
+      program,
+      minorProgram,
+      completedCourses,
+      cache,
+      selectedPerRequirement,
+      selectedOptionsPerRequirement,
+      levelBuckets,
+      nextLang,
+      includeClosedComponents,
+      studentPrograms,
+      requirementSlotsUserTouched,
+    );
+    set({ ...state, frenchImmersionStream: true, languageBuckets: nextLang });
   },
 
   setSelectedOptionForRequirement: (requirementId, optionIndex) => {

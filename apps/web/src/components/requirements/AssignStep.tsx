@@ -7,12 +7,14 @@ import type {
   RequirementWithStatus,
   CompletedRequirementItem,
 } from "schedule";
+import { useAppStore } from "../../store/appStore";
 import { RequirementNode, getStableNodeKey } from "./RequirementNode";
 import {
   applyOptionSelections,
   countSatisfiedTopLevelRoots,
 } from "./requirementUtils";
 import { CompletedRequirementsAccordion } from "./CompletedRequirementsAccordion";
+import { FrenchImmersionRequirementsReadout } from "./FrenchImmersionRequirementsReadout";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -49,6 +51,7 @@ export function AssignStep({
   includeClosedComponents = true,
   virtualSectionsOnly = false,
 }: AssignStepProps) {
+  const frenchImmersionStream = useAppStore((s) => s.frenchImmersionStream);
   const completedSet = new Set(completedCourses);
   const prereqEligible = new Set(prereqEligibleCourses);
   const unassignedCompletedSet = new Set(unassignedCompletedCourses);
@@ -115,6 +118,7 @@ export function AssignStep({
 
   return (
     <Stack gap="lg" data-tour="assign-requirements">
+      {frenchImmersionStream ? <FrenchImmersionRequirementsReadout /> : null}
       {unassignedDisplay.length > 0 ? (
         <Alert
           color="yellow"

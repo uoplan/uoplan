@@ -76,6 +76,7 @@ export interface EncodeInput {
   generationPreferEasier: boolean;
   activeStep: number;
   showCalendar: boolean;
+  frenchImmersionStream: boolean;
 }
 
 export interface DecodedState {
@@ -114,6 +115,7 @@ export interface DecodedState {
   generationPreferEasier: boolean;
   activeStep: number;
   showCalendar: boolean;
+  frenchImmersionStream: boolean;
 }
 
 export interface CatalogueLike {
@@ -233,6 +235,7 @@ export function encodeState(
     generationLimitFirstYearCredits: input.generationLimitFirstYearCredits,
     generationCompressedSchedule: input.generationCompressedSchedule,
     generationPreferEasier: input.generationPreferEasier,
+    frenchImmersionStream: input.frenchImmersionStream,
     magic: STATE_MAGIC,
     activeStep: input.activeStep,
     showCalendar: input.showCalendar,
@@ -427,6 +430,7 @@ export function decodeState(
     generationPreferEasier: state.generationPreferEasier,
     activeStep: state.activeStep ?? 0,
     showCalendar: state.showCalendar ?? false,
+    frenchImmersionStream: state.frenchImmersionStream ?? false,
   };
 }
 

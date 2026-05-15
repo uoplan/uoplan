@@ -82,6 +82,7 @@ function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
     generationPreferEasier: false,
     activeStep: 0,
     showCalendar: false,
+    frenchImmersionStream: false,
     ...overrides,
   };
 }
@@ -137,6 +138,7 @@ describe('encodeState / decodeState roundtrip', () => {
     expect(decoded.virtualSectionsOnly).toBe(false);
     expect(decoded.studentPrograms).toEqual(['CSI', 'MAT']);
     expect(decoded.generationPreferEasier).toBe(false);
+    expect(decoded.frenchImmersionStream).toBe(false);
   });
 
   it('round-trips generationPreferEasier', () => {
@@ -146,6 +148,15 @@ describe('encodeState / decodeState roundtrip', () => {
     expect('error' in decoded).toBe(false);
     if ('error' in decoded) return;
     expect(decoded.generationPreferEasier).toBe(true);
+  });
+
+  it('round-trips frenchImmersionStream', () => {
+    const input = makeInput({ frenchImmersionStream: true });
+    const bytes = encodeState(input, catalogue, indices)!;
+    const decoded = decodeState(bytes, catalogue, indices);
+    expect('error' in decoded).toBe(false);
+    if ('error' in decoded) return;
+    expect(decoded.frenchImmersionStream).toBe(true);
   });
 
   it('round-trips firstYear', () => {

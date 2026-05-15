@@ -16,6 +16,7 @@ export * from './utils/uiUtils';
 export * from './utils/groupToken';
 export * from './ics';
 export * from './transcriptParser';
+export * from './frenchImmersionDiploma';
 export * from './stateEncode';
 export * from './prerequisites';
 export * from './requirements';

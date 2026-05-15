@@ -32,7 +32,6 @@ import { LanguageSwitcher } from "../shared/LanguageSwitcher";
 import { CALENDAR_SIDEBAR_WIDTH_PX } from "./calendarLayout";
 import { BasicCalendarSidebarControls } from "./BasicCalendarSidebarControls";
 import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
-
 interface CalendarPageProps {
   onBack: () => void;
 }
