@@ -14,6 +14,7 @@ import {
   Text,
   Title,
   Tooltip,
+  UnstyledButton,
 } from "@mantine/core";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMediaQuery } from "@mantine/hooks";
@@ -28,6 +29,7 @@ import { runTour } from "./tour";
 import { useAppStore } from "./store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { STEPS, StepNav } from "./components/shared/StepNav";
+import { ChangelogModal } from "./components/shared/ChangelogModal";
 import { ResetModal } from "./components/shared/ResetModal";
 import { CalendarPage } from "./components/calendar/CalendarPage";
 import { TermStep } from "./components/steps/TermStep";
@@ -177,6 +179,7 @@ function App() {
   const [generating, setGenerating] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [helpModalOpen, setHelpModalOpen] = useState(false);
+  const [changelogModalOpen, setChangelogModalOpen] = useState(false);
   const [constrainOpen, setConstrainOpen] = useState(false);
   const wizardStepContent = getWizardStepContent();
 
@@ -501,6 +504,11 @@ function App() {
                 </Box>
               </Stack>
             </Modal>
+
+            <ChangelogModal
+              opened={changelogModalOpen}
+              onClose={() => setChangelogModalOpen(false)}
+            />
 
             <Box component="header">
               <Title
@@ -915,7 +923,7 @@ function App() {
                   {/* Footer */}
                   <Box component="footer" style={{ marginTop: 16, textAlign: "center" }}>
                     <Stack gap={6} align="center">
-                      <Text size="xs" c="dimmed">
+                      <Box fz="xs" c="dimmed" style={{ lineHeight: 1.45 }}>
                         {typeof __BRANCH_NAME__ !== "undefined" && __BRANCH_NAME__
                           ? `${__BRANCH_NAME__} `
                           : ""}
@@ -931,11 +939,30 @@ function App() {
                         >
                           github.com/uoplan/uoplan
                         </Text>
+                        {" • "}
+                        <UnstyledButton
+                          type="button"
+                          onClick={() => setChangelogModalOpen(true)}
+                          fz="xs"
+                          c="dimmed"
+                          p={0}
+                          h="auto"
+                          lh={1.45}
+                          display="inline"
+                          style={{ verticalAlign: "baseline", textDecoration: "none" }}
+                          styles={{
+                            root: {
+                              "&:hover": { textDecoration: "underline" },
+                            },
+                          }}
+                        >
+                          {tr("app.footer.changelog")}
+                        </UnstyledButton>
                         {" • send feedback to "}
                         <Text component="a" href="mailto:admin@uoplan.party" span c="dimmed">
                           admin@uoplan.party
                         </Text>
-                      </Text>
+                      </Box>
                       <Text size="xs" c="dimmed" maw={560} style={{ lineHeight: 1.45 }}>
                         {tr("app.footer.gradeDataAttribution")}
                       </Text>
