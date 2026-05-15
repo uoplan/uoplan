@@ -45,6 +45,9 @@ msgstr "Back"
 msgid "app.nav.next"
 msgstr "Next"
 
+msgid "app.footer.gradeDataAttribution"
+msgstr "Grade data was obtained through an access to information request under Ontario's Freedom of Information and Protection of Privacy Act."
+
 msgid "app.reset.action"
 msgstr "Reset"
 

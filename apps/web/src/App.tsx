@@ -928,32 +928,37 @@ function App() {
 
           {/* Footer */}
           <Box component="footer" style={{ marginTop: 16, textAlign: "center" }}>
-            <Text size="xs" c="dimmed">
-              {typeof __BRANCH_NAME__ !== "undefined" && __BRANCH_NAME__
-                ? `${__BRANCH_NAME__} `
-                : ""}
-              {typeof __COMMIT_HASH__ !== "undefined" ? __COMMIT_HASH__ : "dev"}
-              {" • "}
-              <Text
-                component="a"
-                href="https://github.com/uoplan/uoplan"
-                target="_blank"
-                rel="noopener noreferrer"
-                span
-                c="dimmed"
-              >
-                github.com/uoplan/uoplan
+            <Stack gap={6} align="center">
+              <Text size="xs" c="dimmed">
+                {typeof __BRANCH_NAME__ !== "undefined" && __BRANCH_NAME__
+                  ? `${__BRANCH_NAME__} `
+                  : ""}
+                {typeof __COMMIT_HASH__ !== "undefined" ? __COMMIT_HASH__ : "dev"}
+                {" • "}
+                <Text
+                  component="a"
+                  href="https://github.com/uoplan/uoplan"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  span
+                  c="dimmed"
+                >
+                  github.com/uoplan/uoplan
+                </Text>
+                {" • send feedback to "}
+                <Text
+                  component="a"
+                  href="mailto:admin@uoplan.party"
+                  span
+                  c="dimmed"
+                >
+                  admin@uoplan.party
+                </Text>
               </Text>
-              {" • send feedback to "}
-              <Text
-                component="a"
-                href="mailto:admin@uoplan.party"
-                span
-                c="dimmed"
-              >
-                admin@uoplan.party
+              <Text size="xs" c="dimmed" maw={560} style={{ lineHeight: 1.45 }}>
+                {tr("app.footer.gradeDataAttribution")}
               </Text>
-            </Text>
+            </Stack>
           </Box>
         </Box>
 
