@@ -225,6 +225,9 @@ msgstr "Tour"
 msgid "basicCalendar.changeMode"
 msgstr "Change Mode"
 
+msgid "basicCalendar.clear"
+msgstr "Clear options"
+
 msgid "basicCalendar.completed.notFound"
 msgstr "No courses found"
 

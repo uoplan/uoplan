@@ -225,6 +225,9 @@ msgstr "Visite"
 msgid "basicCalendar.changeMode"
 msgstr "Changer de mode"
 
+msgid "basicCalendar.clear"
+msgstr "Effacer les options"
+
 msgid "basicCalendar.completed.notFound"
 msgstr "Aucun cours trouvé"
 

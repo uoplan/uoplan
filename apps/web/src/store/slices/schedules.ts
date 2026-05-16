@@ -15,6 +15,9 @@ import { normalizeCourseCode } from "schedule";
 import { courseMatchesFilters } from "schedule";
 import { isHonoursProject, canTakeCourse, buildPrereqContext } from "schedule";
 import {
+  DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS,
+  DEFAULT_BASIC_LANGUAGE_BUCKETS,
+  DEFAULT_BASIC_LEVEL_BUCKETS,
   isElectiveRequirementType,
   isWithinElectiveLevelCap,
   isWithinElectiveLevelBuckets,
@@ -47,6 +50,7 @@ interface SchedulesSlice {
   generateSchedules: AppStore["generateSchedules"];
   generateBasicSchedules: AppStore["generateBasicSchedules"];
   clearSchedule: AppStore["clearSchedule"];
+  resetBasicCalendarSettings: AppStore["resetBasicCalendarSettings"];
   markBasicSettingsChanged: AppStore["markBasicSettingsChanged"];
   goToPreviousSeed: AppStore["goToPreviousSeed"];
   goToNextSeed: AppStore["goToNextSeed"];
@@ -97,6 +101,29 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         currentSwaps: [],
         generationError: null,
       };
+    }),
+
+  resetBasicCalendarSettings: () =>
+    set({
+      basicPinnedCourses: [],
+      basicElectivesCount: 0,
+      basicExcludedCategories: [],
+      completedCourses: [],
+      frenchImmersionStream: false,
+      levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
+      languageBuckets: [...DEFAULT_BASIC_LANGUAGE_BUCKETS],
+      electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
+      includeClosedComponents: false,
+      virtualSectionsOnly: false,
+      currentSchedule: null,
+      currentPoolMap: {},
+      currentColorMap: {},
+      currentSwaps: [],
+      swapPool: [],
+      chosenCourseToRequirementId: {},
+      generationError: null,
+      firstSeed: generateRandomSeed(),
+      currentSeed: 0,
     }),
 
   markBasicSettingsChanged: () =>

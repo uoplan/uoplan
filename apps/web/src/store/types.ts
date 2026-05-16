@@ -130,6 +130,7 @@ export interface AppActions {
   setVirtualSectionsOnly: (value: boolean) => void;
   generateSchedules: () => Promise<void>;
   clearSchedule: () => void;
+  resetBasicCalendarSettings: () => void;
   markBasicSettingsChanged: () => void;
   goToPreviousSeed: () => Promise<void>;
   goToNextSeed: () => Promise<void>;
