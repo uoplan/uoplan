@@ -66,6 +66,7 @@ export function BasicCalendarSidebarControls({
   const currentSeed = useAppStore((s) => s.currentSeed);
   const canGoPrevious = currentSeed > firstSeed && currentSeed > 0;
   const markBasicSettingsChanged = useAppStore((s) => s.markBasicSettingsChanged);
+  const resetBasicCalendarSettings = useAppStore((s) => s.resetBasicCalendarSettings);
   const setLevelBuckets = useAppStore((s) => s.setLevelBuckets);
   const setLanguageBuckets = useAppStore((s) => s.setLanguageBuckets);
   const setElectiveLevelBuckets = useAppStore((s) => s.setElectiveLevelBuckets);
@@ -182,9 +183,26 @@ export function BasicCalendarSidebarControls({
     });
   };
 
+  const handleClearOptions = () => {
+    resetBasicCalendarSettings();
+    setTranscriptError(null);
+    onBeforeNavigate?.();
+  };
+
   return (
     <>
       <Stack gap="md">
+        <Button
+          variant="light"
+          color="gray"
+          size="sm"
+          radius={0}
+          fullWidth
+          onClick={handleClearOptions}
+        >
+          {tr("basicCalendar.clear")}
+        </Button>
+
         <MultiSelect
           label={tr("basicCalendar.required.label")}
           placeholder={tr("basicCalendar.required.placeholder")}
@@ -213,20 +231,6 @@ export function BasicCalendarSidebarControls({
           max={8}
           radius={0}
         />
-
-        <Switch
-          label={tr("frenchImmersion.toggle.label")}
-          description={tr("frenchImmersion.toggle.description")}
-          checked={frenchImmersionStream}
-          onChange={(e) => {
-            setFrenchImmersionStream(e.currentTarget.checked);
-            markBasicSettingsChanged();
-          }}
-          radius={0}
-          styles={{ description: { color: "#ADB5BD" } }}
-        />
-
-        {frenchImmersionStream ? <FrenchImmersionProgramOverview variant="compact" /> : null}
 
         <BasicCourseFiltersCard
           levelBuckets={levelBuckets}
@@ -265,6 +269,20 @@ export function BasicCalendarSidebarControls({
             markBasicSettingsChanged();
           }}
         />
+
+        <Switch
+          label={tr("frenchImmersion.toggle.label")}
+          description={tr("frenchImmersion.toggle.description")}
+          checked={frenchImmersionStream}
+          onChange={(e) => {
+            setFrenchImmersionStream(e.currentTarget.checked);
+            markBasicSettingsChanged();
+          }}
+          radius={0}
+          styles={{ description: { color: "#ADB5BD" } }}
+        />
+
+        {frenchImmersionStream ? <FrenchImmersionProgramOverview variant="compact" /> : null}
 
         {/* Seed Navigation for Basic Mode */}
         <Button.Group>
