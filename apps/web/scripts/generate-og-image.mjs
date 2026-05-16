@@ -12,7 +12,7 @@ const { courses, programs } = JSON.parse(readFileSync(join(dataDir, "indices.jso
 const { professors } = JSON.parse(readFileSync(join(dataDir, "ratemyprofessors.json"), "utf8"));
 
 const W = 1200;
-const H = 630;
+const H = Math.round(630 * 0.7); // 441 — shorter OG card
 const canvas = createCanvas(W, H);
 const ctx = canvas.getContext("2d");
 
@@ -89,17 +89,17 @@ ctx.fillStyle = PURPLE_BORDER;
 ctx.fillRect(0, 0, 5, H);
 
 // ── Logo ─────────────────────────────────────────────────────────────────────
-const PAD = 72;
-const LOGO_Y = 200;
+const PAD = 56;
+const LOGO_Y = 128;
 
-ctx.font = "bold 104px Georgia";
+ctx.font = "bold 88px Georgia";
 ctx.fillStyle = CREAM;
 ctx.fillText("uoPlan", PAD, LOGO_Y);
 
 // ── Term badges (one per term) ────────────────────────────────────────────────
-ctx.font = "500 12px monospace";
-const BADGE_Y = LOGO_Y + 22;
-const BADGE_H = 24;
+ctx.font = "500 11px monospace";
+const BADGE_Y = LOGO_Y + 18;
+const BADGE_H = 22;
 let badgeX = PAD;
 for (const term of terms) {
   const label = term.name;
@@ -107,12 +107,12 @@ for (const term of terms) {
   ctx.fillStyle = PURPLE_DIM;
   ctx.fillRect(badgeX, BADGE_Y, badgeW, BADGE_H);
   ctx.fillStyle = PURPLE_TEXT;
-  ctx.fillText(label, badgeX + 10, BADGE_Y + 16);
+  ctx.fillText(label, badgeX + 10, BADGE_Y + 15);
   badgeX += badgeW + 8;
 }
 
 // ── Divider ───────────────────────────────────────────────────────────────────
-const DIV_Y = LOGO_Y + 66;
+const DIV_Y = LOGO_Y + 52;
 ctx.strokeStyle = "#3D3832";
 ctx.lineWidth = 1;
 ctx.beginPath();
@@ -121,9 +121,9 @@ ctx.lineTo(W * 0.58, DIV_Y);
 ctx.stroke();
 
 // ── Tagline ───────────────────────────────────────────────────────────────────
-ctx.font = "400 22px monospace";
+ctx.font = "400 18px monospace";
 ctx.fillStyle = CREAM2;
-ctx.fillText("uOttawa course planner & schedule generator", PAD, DIV_Y + 36);
+ctx.fillText("uOttawa course planner & schedule generator", PAD, DIV_Y + 28);
 
 // ── Stats row ─────────────────────────────────────────────────────────────────
 const stats = [
@@ -132,20 +132,20 @@ const stats = [
   { value: professors.length.toLocaleString(), label: "professors" },
 ];
 
-const STAT_Y = DIV_Y + 90;
+const STAT_Y = DIV_Y + 76;
 let statX = PAD;
-const statGap = 24;
+const statGap = 20;
 
-ctx.font = "bold 38px monospace";
+ctx.font = "bold 32px monospace";
 for (const { value, label } of stats) {
   const numW = ctx.measureText(value).width;
   ctx.fillStyle = CREAM;
   ctx.fillText(value, statX, STAT_Y);
 
-  ctx.font = "300 14px monospace";
+  ctx.font = "300 12px monospace";
   ctx.fillStyle = CREAM2;
-  ctx.fillText(label, statX, STAT_Y + 22);
-  ctx.font = "bold 38px monospace";
+  ctx.fillText(label, statX, STAT_Y + 18);
+  ctx.font = "bold 32px monospace";
 
   statX += numW + statGap + ctx.measureText(label).width * 0.5 + 40;
 }
@@ -160,9 +160,9 @@ for (let i = 0; i < stats.length - 1; i++) {
 }
 
 // ── Bottom row ────────────────────────────────────────────────────────────────
-const FOOTER_Y = H - 52;
+const FOOTER_Y = H - 40;
 
-ctx.font = "500 15px monospace";
+ctx.font = "500 14px monospace";
 ctx.fillStyle = PURPLE;
 ctx.fillText("uoplan.party", PAD, FOOTER_Y);
 
@@ -172,7 +172,7 @@ ctx.beginPath();
 ctx.arc(PAD + urlW + 14, FOOTER_Y - 5, 3, 0, Math.PI * 2);
 ctx.fill();
 
-ctx.font = "300 15px monospace";
+ctx.font = "300 14px monospace";
 ctx.fillStyle = CREAM2;
 ctx.fillText("Free. No account needed.", PAD + urlW + 26, FOOTER_Y);
 
