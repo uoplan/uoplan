@@ -90,6 +90,27 @@ msgstr "Aucun cours en commun avec d'autres professeurs dans ces données."
 msgid "graph.loadErrorTitle"
 msgstr "Impossible de charger le graphe"
 
+msgid "graph.connectedProfessors"
+msgstr "Professeurs connectés"
+
+msgid "graph.sortByStrength"
+msgstr "Force"
+
+msgid "graph.sortByName"
+msgstr "Nom"
+
+msgid "graph.sharedCourses"
+msgstr "{weight, plural, one {# offre commune} other {# offres communes}}"
+
+msgid "graph.noGradeData"
+msgstr "Aucune distribution de notes dans cet ensemble de données."
+
+msgid "graph.close"
+msgstr "Fermer"
+
+msgid "graph.nodeDetails"
+msgstr "Détails du professeur"
+
 msgid "explore.title"
 msgstr "Explorer les cours"
 

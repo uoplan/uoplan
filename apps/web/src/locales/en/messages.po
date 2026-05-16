@@ -90,6 +90,27 @@ msgstr "No shared courses with other professors in this dataset."
 msgid "graph.loadErrorTitle"
 msgstr "Could not load graph"
 
+msgid "graph.connectedProfessors"
+msgstr "Connected professors"
+
+msgid "graph.sortByStrength"
+msgstr "Strength"
+
+msgid "graph.sortByName"
+msgstr "Name"
+
+msgid "graph.sharedCourses"
+msgstr "{weight, plural, one {# shared offering} other {# shared offerings}}"
+
+msgid "graph.noGradeData"
+msgstr "No grade distribution in this dataset."
+
+msgid "graph.close"
+msgstr "Close"
+
+msgid "graph.nodeDetails"
+msgstr "Professor details"
+
 msgid "explore.title"
 msgstr "Explore courses"
 
