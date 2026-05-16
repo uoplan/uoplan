@@ -17,7 +17,7 @@ import { placeIsolatedNodes } from "../../lib/graph/placeIsolatedNodes";
 
 const NODE_DIM = "rgba(61, 66, 72, 0.42)";
 const NODE_ACTIVE = "#ffffff";
-const EDGE_FOCUS = "rgba(151, 117, 250, 0.35)";
+const EDGE_FOCUS = "rgba(36, 39, 44, 0.14)";
 
 export type ProfessorGraphPhase = "layout" | "ready";
 

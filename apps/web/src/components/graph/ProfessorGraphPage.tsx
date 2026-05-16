@@ -11,28 +11,59 @@ import {
   TextInput,
   UnstyledButton,
 } from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
+import { useDebouncedValue, useMediaQuery } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
 import { IconSearch } from "@tabler/icons-react";
-import { useCallback, useMemo, useRef, useState, useTransition } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { buildProfessorCoTeachingGraph, type ProfessorGraphNode } from "schedule";
 import { tr } from "../../i18n";
+import type { ExploreOfferingFlat } from "../../lib/explore/gradesSearch";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
+import {
+  buildOfferingsByProfessorId,
+  getGraphNeighbors,
+  type NeighborSortMode,
+} from "../../lib/graph/professorGraphDetails";
+import {
+  parseProfessorSearchParam,
+  professorToSearchParam,
+} from "../../lib/graph/graphSearchParams";
 import {
   buildProfessorSearchEntries,
   searchProfessors,
   type ProfessorSearchEntry,
 } from "../../lib/graph/professorGraphSearch";
+import { useAppStore } from "../../store/appStore";
+import { ProfessorGraphDesktopPanel } from "./ProfessorGraphDesktopPanel";
+import { ProfessorGraphMobileDrawer } from "./ProfessorGraphMobileDrawer";
 import { ProfessorGraphView, type ProfessorGraphPhase } from "./ProfessorGraphView";
 
 type BuildPhase = "loading" | "ready" | "error";
 
-export function ProfessorGraphPage() {
+export type ProfessorGraphNavigate = (opts: {
+  search: { prof: string | undefined };
+  replace?: boolean;
+}) => void | Promise<void>;
+
+export function ProfessorGraphPage({
+  urlProfParam,
+  navigateGraph,
+}: {
+  urlProfParam?: string;
+  navigateGraph: ProfessorGraphNavigate;
+}) {
   useLingui();
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const professorRatings = useAppStore((s) => s.professorRatings);
 
   const { loading, data: grades, error } = useCourseGradesPb();
   const graphData = useMemo(
     () => (grades ? buildProfessorCoTeachingGraph(grades) : null),
+    [grades],
+  );
+  const offeringsByProfessorId = useMemo(
+    () => (grades ? buildOfferingsByProfessorId(grades) : new Map<string, ExploreOfferingFlat[]>()),
     [grades],
   );
   const buildPhase: BuildPhase = loading
@@ -43,9 +74,8 @@ export function ProfessorGraphPage() {
         ? "ready"
         : "loading";
   const [layoutPhase, setLayoutPhase] = useState<ProfessorGraphPhase>("layout");
-  const [focusNodeId, setFocusNodeId] = useState<string | null>(null);
   const [previewNodeId, setPreviewNodeId] = useState<string | null>(null);
-  const [selectedNode, setSelectedNode] = useState<ProfessorGraphNode | null>(null);
+  const [neighborSort, setNeighborSort] = useState<NeighborSortMode>("strength");
   const [search, setSearch] = useState("");
   const [debouncedSearch] = useDebouncedValue(search, 150);
   const [, startSearchTransition] = useTransition();
@@ -66,6 +96,31 @@ export function ProfessorGraphPage() {
     [searchEntries, debouncedSearch],
   );
 
+  const urlNodeId = useMemo(
+    () =>
+      graphData && buildPhase === "ready"
+        ? parseProfessorSearchParam(urlProfParam, nodesById)
+        : null,
+    [urlProfParam, nodesById, graphData, buildPhase],
+  );
+
+  const selectedNode = useMemo(() => {
+    if (!urlNodeId) return null;
+    return nodesById.get(urlNodeId) ?? null;
+  }, [urlNodeId, nodesById]);
+
+  const focusNodeId = selectedNode?.id ?? previewNodeId;
+
+  const selectedOfferings = useMemo(() => {
+    if (!selectedNode) return [];
+    return offeringsByProfessorId.get(selectedNode.id) ?? [];
+  }, [selectedNode, offeringsByProfessorId]);
+
+  const selectedNeighbors = useMemo(() => {
+    if (!graphData || !selectedNode) return [];
+    return getGraphNeighbors(graphData, selectedNode.id, nodesById);
+  }, [graphData, selectedNode, nodesById]);
+
   const setPreviewThrottled = useCallback((nodeId: string | null) => {
     if (previewRafRef.current != null) cancelAnimationFrame(previewRafRef.current);
     previewRafRef.current = requestAnimationFrame(() => {
@@ -74,21 +129,31 @@ export function ProfessorGraphPage() {
     });
   }, []);
 
-  const onNodeSelect = useCallback((node: ProfessorGraphNode | null) => {
-    setPreviewNodeId(null);
-    setSelectedNode(node);
-    setFocusNodeId(node?.id ?? null);
-  }, []);
+  const onNodeSelect = useCallback(
+    (node: ProfessorGraphNode | null) => {
+      setPreviewNodeId(null);
+      void navigateGraph({
+        search: { prof: node ? professorToSearchParam(node) : undefined },
+        replace: true,
+      });
+    },
+    [navigateGraph],
+  );
 
   const onPickProfessor = useCallback(
     (entry: ProfessorSearchEntry) => {
       setSearch(entry.displayName);
-      setPreviewNodeId(null);
-      setFocusNodeId(entry.id);
-      setSelectedNode(nodesById.get(entry.id) ?? null);
+      onNodeSelect(nodesById.get(entry.id) ?? null);
     },
-    [nodesById],
+    [nodesById, onNodeSelect],
   );
+
+  useEffect(() => {
+    if (!graphData || buildPhase !== "ready") return;
+    if (!urlProfParam) return;
+    if (urlNodeId) return;
+    void navigateGraph({ search: { prof: undefined }, replace: true });
+  }, [urlProfParam, urlNodeId, graphData, buildPhase, navigateGraph]);
 
   const showOverlay = buildPhase !== "ready" || layoutPhase === "layout";
   const overlayMessage =
@@ -209,53 +274,32 @@ export function ProfessorGraphPage() {
         </Group>
       </Box>
 
-      {selectedNode && (
-        <Paper
-          shadow="md"
-          p="md"
-          style={{
-            position: "absolute",
-            left: 16,
-            bottom: 16,
-            zIndex: 20,
-            maxWidth: 320,
-            backgroundColor: "rgba(26, 27, 30, 0.94)",
-            border: "1px solid rgba(134, 142, 150, 0.25)",
-            pointerEvents: "auto",
-          }}
-        >
-          <Stack gap={4}>
-            <Text fw={600} c="#F8F9FA" size="sm">
-              {selectedNode.displayName}
-            </Text>
-            <Text size="xs" c="dimmed">
-              {tr("graph.connections", { count: selectedNode.degree })}
-            </Text>
-            {selectedNode.degree === 0 && (
-              <Text size="xs" c="dimmed">
-                {tr("graph.noConnections")}
-              </Text>
-            )}
-            {selectedNode.subjects.length > 0 && (
-              <Text size="xs" c="dimmed" lineClamp={2}>
-                {selectedNode.subjects.join(", ")}
-              </Text>
-            )}
-            {selectedNode.legacyId != null && (
-              <Link
-                to="/explore/professor/$legacyId"
-                params={{ legacyId: String(selectedNode.legacyId) }}
-                style={{
-                  fontSize: "var(--mantine-font-size-xs)",
-                  color: "var(--mantine-color-violet-4)",
-                  textDecoration: "none",
-                }}
-              >
-                {tr("explore.profileLink")}
-              </Link>
-            )}
-          </Stack>
-        </Paper>
+      {isMobile ? (
+        <ProfessorGraphMobileDrawer
+          node={selectedNode}
+          offerings={selectedOfferings}
+          neighbors={selectedNeighbors}
+          neighborSort={neighborSort}
+          onNeighborSortChange={setNeighborSort}
+          offeringsByProfessorId={offeringsByProfessorId}
+          professorRatings={professorRatings}
+          onSelectNode={onNodeSelect}
+          onClose={() => onNodeSelect(null)}
+        />
+      ) : (
+        selectedNode && (
+          <ProfessorGraphDesktopPanel
+            node={selectedNode}
+            offerings={selectedOfferings}
+            neighbors={selectedNeighbors}
+            neighborSort={neighborSort}
+            onNeighborSortChange={setNeighborSort}
+            offeringsByProfessorId={offeringsByProfessorId}
+            professorRatings={professorRatings}
+            onSelectNode={onNodeSelect}
+            onClose={() => onNodeSelect(null)}
+          />
+        )
       )}
 
       {graphData && buildPhase === "ready" && (

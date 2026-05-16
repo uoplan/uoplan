@@ -51,25 +51,33 @@ export function GradeDistributionPassingSummary({
 export function GradeDistributionHistogram({
   gradeViz,
   variant = "default",
+  hideLabels = false,
 }: {
   gradeViz: GradeVizData;
   variant?: GradeHistogramVariant;
+  /** Omit grade letters under bars (for very narrow inline histograms). */
+  hideLabels?: boolean;
 }) {
   const dims = HIST_DIMS[variant];
   const { sCount, nsCount, snsTotal, histogramEntries, maxHistogramCount } =
     buildHistogramModel(gradeViz);
 
-  const histClass =
-    variant === "compact"
-      ? "uoplan-grade-histogram uoplan-grade-histogram--compact"
-      : "uoplan-grade-histogram";
+  const histClass = [
+    "uoplan-grade-histogram",
+    variant === "compact" ? "uoplan-grade-histogram--compact" : "",
+    hideLabels ? "uoplan-grade-histogram--no-labels" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const minHeight = hideLabels ? dims.maxBarPx + dims.padTopPx + 4 : dims.minWrapHeight;
 
   return (
     <div
       className={histClass}
       style={{
         paddingTop: dims.padTopPx,
-        minHeight: dims.minWrapHeight,
+        minHeight,
       }}
       aria-hidden
     >
@@ -96,14 +104,16 @@ export function GradeDistributionHistogram({
                   backgroundColor: entry.count > 0 ? entry.color : "rgba(255,255,255,0.16)",
                 }}
               />
-              <Text
-                style={{ fontSize: dims.labelFontPx }}
-                c="gray.5"
-                ta="center"
-                className="uoplan-grade-histogram-label"
-              >
-                {entry.grade}
-              </Text>
+              {!hideLabels ? (
+                <Text
+                  style={{ fontSize: dims.labelFontPx }}
+                  c="gray.5"
+                  ta="center"
+                  className="uoplan-grade-histogram-label"
+                >
+                  {entry.grade}
+                </Text>
+              ) : null}
             </div>
           </Tooltip>
         );
@@ -150,14 +160,16 @@ export function GradeDistributionHistogram({
               />
             )}
           </div>
-          <Text
-            style={{ fontSize: dims.labelFontPx }}
-            c="gray.5"
-            ta="center"
-            className="uoplan-grade-histogram-label"
-          >
-            {tr("calendar.grade.snsLabel")}
-          </Text>
+          {!hideLabels ? (
+            <Text
+              style={{ fontSize: dims.labelFontPx }}
+              c="gray.5"
+              ta="center"
+              className="uoplan-grade-histogram-label"
+            >
+              {tr("calendar.grade.snsLabel")}
+            </Text>
+          ) : null}
         </div>
       </Tooltip>
     </div>
