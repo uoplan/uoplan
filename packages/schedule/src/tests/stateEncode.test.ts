@@ -102,7 +102,7 @@ describe("urlToSlug", () => {
   });
 
   it("handles http scheme", () => {
-    expect(urlToSlug("http://catalogue.uottawa.ca/en/grad/msc-cs/")).toBe("grad/msc-cs");
+    expect(urlToSlug("http://catalogue.uottawa.ca/en/graduate/msc-cs/")).toBe("graduate/msc-cs");
   });
 });
 
