@@ -45,11 +45,23 @@ msgstr "Back"
 msgid "app.nav.next"
 msgstr "Next"
 
-msgid "app.footer.gradeDataAttribution"
-msgstr "Grade data was obtained through an access to information request under Ontario's Freedom of Information and Protection of Privacy Act."
+msgid "app.footer.gradeDataAttribution.before"
+msgstr "Grade data was obtained through an access to information request under Ontario's "
+
+msgid "app.footer.gradeDataAttribution.actLink"
+msgstr "Freedom of Information and Protection of Privacy Act"
+
+msgid "app.footer.gradeDataAttribution.after"
+msgstr "."
 
 msgid "app.footer.changelog"
 msgstr "changelog"
+
+msgid "app.footer.feedbackPrompt"
+msgstr "send feedback to"
+
+msgid "app.footer.buildBranchFallback"
+msgstr "local"
 
 msgid "app.changelog.title"
 msgstr "Changelog"
