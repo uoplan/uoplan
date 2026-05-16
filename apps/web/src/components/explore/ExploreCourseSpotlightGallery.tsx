@@ -151,8 +151,8 @@ export function ExploreCourseSpotlightGallery({
       component="section"
       aria-label={tr("explore.spotlight.gallery")}
       className={styles.gallery}
-      pt={32}
-      pb={8}
+      pt={12}
+      pb={4}
       style={{
         width: "100vw",
         maxWidth: "100vw",

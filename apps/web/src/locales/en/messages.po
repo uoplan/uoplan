@@ -115,10 +115,10 @@ msgid "explore.title"
 msgstr "Explore courses"
 
 msgid "explore.subtitle"
-msgstr "Look up grade distributions by course code or title."
+msgstr "Look up grade distributions by course, title, or professor name."
 
 msgid "explore.searchPlaceholder"
-msgstr "Search by course code or title…"
+msgstr "Search courses or professors…"
 
 msgid "explore.loadingGrades"
 msgstr "Loading grade history…"
@@ -130,7 +130,16 @@ msgid "explore.searchUpdating"
 msgstr "Updating results…"
 
 msgid "explore.noResults"
-msgstr "No matching courses."
+msgstr "No matching professors or courses."
+
+msgid "explore.resultsProfessors"
+msgstr "Professors"
+
+msgid "explore.resultsCourses"
+msgstr "Courses"
+
+msgid "explore.professorCourseCount"
+msgstr "{count, plural, one {# course} other {# courses}}"
 
 msgid "explore.section"
 msgstr "Section {section}"

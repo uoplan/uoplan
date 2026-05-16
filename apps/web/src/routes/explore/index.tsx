@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useShallow } from "zustand/react/shallow";
-import { ExploreSearchPage } from "../../components/explore/ExploreSearchPage";
+import {
+  ExploreSearchPage,
+  type ExploreSearchNavigate,
+} from "../../components/explore/ExploreSearchPage";
 import { useAppStore } from "../../store/appStore";
 
 export const Route = createFileRoute("/explore/")({
@@ -23,7 +26,7 @@ function ExploreRoute() {
       catalogue={catalogue}
       terms={terms ?? []}
       professorRatings={professorRatings}
-      navigateExplore={navigate}
+      navigateExplore={navigate as ExploreSearchNavigate}
     />
   );
 }

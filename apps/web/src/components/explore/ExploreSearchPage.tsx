@@ -4,17 +4,15 @@ import {
   Box,
   Group,
   Loader,
-  Paper,
   Stack,
   Text,
   TextInput,
   Title,
-  UnstyledButton,
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Catalogue, ProfessorRatingsMap, Term } from "schedule";
 import { normalizeCourseCode } from "schedule";
 import { tr } from "../../i18n";
@@ -30,13 +28,16 @@ import {
 import {
   buildCourseSearchEntries,
   buildExploreOfferings,
+  buildExploreProfessorSearchEntries,
   createExploreCourseFuse,
   groupOfferingsByProfessor,
-  searchExploreCourses,
+  searchExplore,
   type ExploreCourseSearchEntry,
+  type ExploreProfessorSearchEntry,
   type ProfessorOfferingGroup,
 } from "../../lib/explore/gradesSearch";
 import { ExploreCourseSpotlightGallery } from "./ExploreCourseSpotlightGallery";
+import { buildExploreSearchFlatItems, ExploreSearchResults } from "./ExploreSearchResults";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
@@ -46,13 +47,21 @@ import {
 import { Link } from "@tanstack/react-router";
 
 export type ExploreSearchNavigate = (opts: {
-  to: "/explore/" | "/explore/course/$course";
-  params?: { course: string };
+  to: "/explore/" | "/explore/course/$course" | "/explore/professor/$legacyId";
+  params?: { course: string } | { legacyId: string };
   replace?: boolean;
 }) => void | Promise<void>;
 
 /** Chevron sits slightly inset from the viewport edge (further right than text padding). */
 const EXPLORE_CHEVRON_RIGHT = "max(12px, calc((100vw - min(100vw, 1200px)) / 2 + 12px))";
+
+const EXPLORE_SEARCH_DEBOUNCE_MS = 100;
+
+/** Viewport band for landing (main vertical padding ≈ 72px). */
+const EXPLORE_LANDING_VIEWPORT = "calc(100vh - 72px)";
+
+/** Keeps title + search in the upper area; spotlight fills the rest of the viewport. */
+const EXPLORE_LANDING_HERO_PAD_TOP = "clamp(40px, 13vh, 128px)";
 
 function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
   const m = new Map<string, string>();
@@ -116,16 +125,17 @@ export function ExploreSearchPage({
   useLingui();
   const { loading, data: grades, error } = useCourseGradesPb();
   const [draftQuery, setDraftQuery] = useState("");
-  const [debouncedDraft] = useDebouncedValue(draftQuery, 220);
+  const [debouncedDraft] = useDebouncedValue(draftQuery, EXPLORE_SEARCH_DEBOUNCE_MS);
+  const draftTrimmed = draftQuery.trim();
   const debouncedTrimmed = debouncedDraft.trim();
-  const fuseQuery = useDeferredValue(debouncedTrimmed);
-  const [highlightIndex, setHighlightIndex] = useState(0);
-  const [highlightFuseQuery, setHighlightFuseQuery] = useState(fuseQuery);
+  const searchQuery = debouncedTrimmed;
+  const [highlightFlatIndex, setHighlightFlatIndex] = useState(0);
+  const [highlightSearchQuery, setHighlightSearchQuery] = useState(searchQuery);
   const [urlNormForDraft, setUrlNormForDraft] = useState<string | null | undefined>(undefined);
 
   const [pendingEnterPickFirst, setPendingEnterPickFirst] = useState(false);
   const [skipClearDraftOnUrlClear, setSkipClearDraftOnUrlClear] = useState(false);
-  const [prevDropdownStale, setPrevDropdownStale] = useState(false);
+  const [prevResultsStale, setPrevResultsStale] = useState(false);
   const [spotlightVariants] = useState(() => pickSpotlightVariants(3));
 
   const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
@@ -139,6 +149,11 @@ export function ExploreSearchPage({
   const courseEntries = useMemo(
     () => buildCourseSearchEntries(offerings, titleByCode),
     [offerings, titleByCode],
+  );
+
+  const professorEntries = useMemo(
+    () => buildExploreProfessorSearchEntries(offerings),
+    [offerings],
   );
 
   const spotlightRows = useMemo(() => {
@@ -159,10 +174,26 @@ export function ExploreSearchPage({
     return createExploreCourseFuse(courseEntries);
   }, [courseEntries]);
 
-  const suggestions = useMemo(() => {
-    if (!courseFuse || courseEntries.length === 0 || fuseQuery.length === 0) return [];
-    return searchExploreCourses(courseFuse, courseEntries, fuseQuery);
-  }, [fuseQuery, courseFuse, courseEntries]);
+  const searchResults = useMemo(() => {
+    if (searchQuery.length === 0) {
+      return { professors: [], courses: [], professorsFirst: true };
+    }
+    return searchExplore(searchQuery, {
+      courseFuse,
+      courseEntries,
+      professorEntries,
+    });
+  }, [searchQuery, courseFuse, courseEntries, professorEntries]);
+
+  const flatItems = useMemo(
+    () =>
+      buildExploreSearchFlatItems(
+        searchResults.professors,
+        searchResults.courses,
+        searchResults.professorsFirst,
+      ),
+    [searchResults],
+  );
 
   const urlNorm = useMemo(() => parseCoursePathParam(urlCourseParam), [urlCourseParam]);
 
@@ -173,11 +204,10 @@ export function ExploreSearchPage({
 
   const committedNorm = selectedCourseMeta?.normCode ?? null;
 
-  const dropdownStale =
-    committedNorm === null && debouncedTrimmed.length > 0 && fuseQuery !== debouncedTrimmed;
+  const resultsStale =
+    committedNorm === null && draftTrimmed.length > 0 && draftTrimmed !== debouncedTrimmed;
 
-  const showInlineSuggestions =
-    committedNorm === null && debouncedTrimmed.length > 0 && !loading && !error;
+  const showSearchResults = committedNorm === null && draftTrimmed.length > 0 && !loading && !error;
 
   const commitCourse = useCallback(
     (c: ExploreCourseSearchEntry) => {
@@ -191,9 +221,22 @@ export function ExploreSearchPage({
     [navigateExplore],
   );
 
-  if (fuseQuery !== highlightFuseQuery) {
-    setHighlightFuseQuery(fuseQuery);
-    setHighlightIndex(0);
+  const commitProfessor = useCallback(
+    (p: ExploreProfessorSearchEntry) => {
+      if (p.legacyId == null) return;
+      setPendingEnterPickFirst(false);
+      void navigateExplore({
+        to: "/explore/professor/$legacyId",
+        params: { legacyId: String(p.legacyId) },
+        replace: true,
+      });
+    },
+    [navigateExplore],
+  );
+
+  if (searchQuery !== highlightSearchQuery) {
+    setHighlightSearchQuery(searchQuery);
+    setHighlightFlatIndex(0);
   }
 
   if (urlNorm !== urlNormForDraft) {
@@ -204,13 +247,41 @@ export function ExploreSearchPage({
     setSkipClearDraftOnUrlClear(false);
   }
 
-  const staleBecameFresh = prevDropdownStale && !dropdownStale;
-  if (dropdownStale !== prevDropdownStale) {
-    setPrevDropdownStale(dropdownStale);
+  const clampedHighlight =
+    flatItems.length === 0 ? -1 : Math.min(Math.max(highlightFlatIndex, 0), flatItems.length - 1);
+
+  const pickSelectableItem = useCallback(
+    (startIndex: number) => {
+      if (flatItems.length === 0) return;
+      const start = Math.min(Math.max(startIndex, 0), flatItems.length - 1);
+      for (let offset = 0; offset < flatItems.length; offset += 1) {
+        const item = flatItems[(start + offset) % flatItems.length];
+        if (item.kind === "course") {
+          commitCourse(item.entry);
+          return;
+        }
+        if (item.kind === "professor" && item.entry.legacyId != null) {
+          commitProfessor(item.entry);
+          return;
+        }
+      }
+    },
+    [flatItems, commitProfessor, commitCourse],
+  );
+
+  const pickHighlighted = useCallback(() => {
+    if (clampedHighlight < 0) return;
+    pickSelectableItem(clampedHighlight);
+  }, [clampedHighlight, pickSelectableItem]);
+
+  const staleBecameFresh = prevResultsStale && !resultsStale;
+  if (resultsStale !== prevResultsStale) {
+    setPrevResultsStale(resultsStale);
   }
+
   if (pendingEnterPickFirst && staleBecameFresh) {
-    if (suggestions.length > 0) {
-      queueMicrotask(() => commitCourse(suggestions[0]));
+    if (flatItems.length > 0) {
+      queueMicrotask(() => pickSelectableItem(highlightFlatIndex));
     } else if (debouncedTrimmed.length > 0) {
       setPendingEnterPickFirst(false);
     }
@@ -234,12 +305,11 @@ export function ExploreSearchPage({
   );
 
   const landingBrowse = committedNorm === null;
+  const showSpotlight =
+    landingBrowse && draftTrimmed.length === 0 && !loading && !error && spotlightRows.length > 0;
 
   const inputValue =
     selectedCourseMeta != null ? formatCommittedCourseLabel(selectedCourseMeta) : draftQuery;
-
-  const clampedHighlight =
-    suggestions.length === 0 ? -1 : Math.min(Math.max(highlightIndex, 0), suggestions.length - 1);
 
   return (
     <Box
@@ -263,7 +333,8 @@ export function ExploreSearchPage({
             ? {
                 display: "flex",
                 flexDirection: "column",
-                minHeight: "calc(100vh - 72px)",
+                height: showSearchResults ? undefined : EXPLORE_LANDING_VIEWPORT,
+                minHeight: showSearchResults ? EXPLORE_LANDING_VIEWPORT : undefined,
               }
             : undefined
         }
@@ -272,13 +343,11 @@ export function ExploreSearchPage({
           style={{
             position: "relative",
             overflow: "visible",
+            flexShrink: 0,
             ...(landingBrowse
               ? {
-                  flex: "1 1 auto",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  paddingBottom: 16,
+                  paddingTop: EXPLORE_LANDING_HERO_PAD_TOP,
+                  paddingBottom: 12,
                 }
               : { paddingBottom: 8 }),
           }}
@@ -302,14 +371,7 @@ export function ExploreSearchPage({
             </Text>
 
             <Box w="100%" maw={584} mx="auto">
-              <motion.div
-                animate={dropdownStale ? { opacity: [1, 0.88, 1] } : { opacity: 1 }}
-                transition={{
-                  duration: dropdownStale ? 1.15 : 0.2,
-                  repeat: dropdownStale ? Infinity : 0,
-                  ease: "easeInOut",
-                }}
-              >
+              <motion.div animate={{ opacity: 1 }} transition={{ duration: 0.15 }}>
                 <TextInput
                   placeholder={tr("explore.searchPlaceholder")}
                   value={inputValue}
@@ -330,21 +392,20 @@ export function ExploreSearchPage({
                   w="100%"
                   autoComplete="off"
                   aria-label={tr("explore.searchPlaceholder")}
-                  aria-expanded={showInlineSuggestions}
-                  aria-controls={showInlineSuggestions ? "explore-course-suggestions" : undefined}
+                  aria-controls={showSearchResults ? "explore-search-results" : undefined}
                   onKeyDown={(e) => {
                     if (e.nativeEvent.code !== "Enter" && e.nativeEvent.code !== "NumpadEnter") {
                       if (e.key === "ArrowDown") {
-                        if (!showInlineSuggestions || suggestions.length === 0) return;
+                        if (!showSearchResults || flatItems.length === 0) return;
                         e.preventDefault();
-                        setHighlightIndex((i) =>
-                          Math.min(suggestions.length - 1, Math.max(0, i) + 1),
+                        setHighlightFlatIndex((i) =>
+                          Math.min(flatItems.length - 1, Math.max(0, i) + 1),
                         );
                       }
                       if (e.key === "ArrowUp") {
-                        if (!showInlineSuggestions || suggestions.length === 0) return;
+                        if (!showSearchResults || flatItems.length === 0) return;
                         e.preventDefault();
-                        setHighlightIndex((i) => Math.max(0, i - 1));
+                        setHighlightFlatIndex((i) => Math.max(0, i - 1));
                       }
                       return;
                     }
@@ -352,22 +413,20 @@ export function ExploreSearchPage({
                     if (committedNorm !== null) return;
                     if (debouncedTrimmed.length === 0) return;
 
-                    if (dropdownStale) {
+                    if (resultsStale) {
                       e.preventDefault();
                       setPendingEnterPickFirst(true);
                       return;
                     }
 
-                    if (suggestions.length === 0) {
+                    if (flatItems.length === 0) {
                       e.preventDefault();
                       setPendingEnterPickFirst(false);
                       return;
                     }
 
                     e.preventDefault();
-                    const pick =
-                      clampedHighlight >= 0 ? suggestions[clampedHighlight] : suggestions[0];
-                    if (pick) commitCourse(pick);
+                    pickHighlighted();
                   }}
                   styles={{
                     root: { width: "100%" },
@@ -382,95 +441,59 @@ export function ExploreSearchPage({
                   }}
                 />
               </motion.div>
-
-              <AnimatePresence initial={false}>
-                {showInlineSuggestions ? (
-                  <motion.div
-                    key="explore-suggestions"
-                    id="explore-course-suggestions"
-                    role="listbox"
-                    aria-label={tr("explore.searchPlaceholder")}
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                    style={{ marginTop: 10 }}
-                  >
-                    <Paper
-                      radius="md"
-                      p={0}
-                      style={{
-                        overflow: "hidden",
-                        border: "1px solid #2c2e33",
-                        backgroundColor: "#1a1b1e",
-                      }}
-                    >
-                      {dropdownStale ? (
-                        <Group justify="center" gap="xs" py="lg">
-                          <Loader size="sm" color="gray" />
-                          <motion.div
-                            animate={{ opacity: [0.55, 1, 0.55] }}
-                            transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
-                          >
-                            <Text size="sm" c="dimmed">
-                              {tr("explore.searchUpdating")}
-                            </Text>
-                          </motion.div>
-                        </Group>
-                      ) : suggestions.length === 0 ? (
-                        <Text size="sm" c="dimmed" ta="center" py="lg" px="md">
-                          {tr("explore.noResults")}
-                        </Text>
-                      ) : (
-                        suggestions.map((c, idx) => {
-                          const title = c.courseTitle.trim();
-                          const active = idx === clampedHighlight;
-                          return (
-                            <UnstyledButton
-                              key={c.normCode}
-                              role="option"
-                              aria-selected={active}
-                              w="100%"
-                              onMouseDown={(ev) => ev.preventDefault()}
-                              onMouseEnter={() => setHighlightIndex(idx)}
-                              onClick={() => commitCourse(c)}
-                              styles={{
-                                root: {
-                                  display: "block",
-                                  width: "100%",
-                                  padding: "12px 16px",
-                                  textAlign: "left",
-                                  borderBottom: "1px solid #25262b",
-                                  backgroundColor: active ? "rgba(134, 46, 156, 0.14)" : undefined,
-                                  transition: "background-color 80ms ease",
-                                },
-                              }}
-                            >
-                              <Text size="sm" lh={1.45} style={{ wordBreak: "break-word" }}>
-                                <Text component="span" fw={600} c="#F8F9FA">
-                                  {c.courseCode}
-                                </Text>
-                                {title.length > 0 ? (
-                                  <Text component="span" fw={400} c="dimmed">
-                                    {" "}
-                                    • {title}
-                                  </Text>
-                                ) : null}
-                              </Text>
-                            </UnstyledButton>
-                          );
-                        })
-                      )}
-                    </Paper>
-                  </motion.div>
-                ) : null}
-              </AnimatePresence>
             </Box>
           </Stack>
         </Box>
 
-        {landingBrowse && !loading && !error && spotlightRows.length > 0 ? (
-          <ExploreCourseSpotlightGallery rows={spotlightRows} onSelectCourse={commitCourse} />
+        {landingBrowse ? (
+          <Box
+            style={{
+              flex: showSearchResults ? "0 0 auto" : "1 1 auto",
+              minHeight: 0,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: showSpotlight ? "flex-end" : "flex-start",
+            }}
+          >
+            <AnimatePresence mode="popLayout" initial={false}>
+              {showSearchResults ? (
+                <motion.div
+                  key="explore-search-results"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ width: "100%", maxWidth: 720, marginInline: "auto" }}
+                >
+                  <ExploreSearchResults
+                    professors={searchResults.professors}
+                    courses={searchResults.courses}
+                    professorsFirst={searchResults.professorsFirst}
+                    loadingStale={resultsStale}
+                    professorRatings={professorRatings}
+                    highlightFlatIndex={highlightFlatIndex}
+                    onHighlightFlatIndex={setHighlightFlatIndex}
+                    onSelectProfessor={commitProfessor}
+                    onSelectCourse={commitCourse}
+                  />
+                </motion.div>
+              ) : showSpotlight ? (
+                <motion.div
+                  key="explore-spotlight"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.22, ease: "easeOut" }}
+                  style={{ width: "100%", flexShrink: 0 }}
+                >
+                  <ExploreCourseSpotlightGallery
+                    rows={spotlightRows}
+                    onSelectCourse={commitCourse}
+                  />
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+          </Box>
         ) : null}
 
         {loading ? (
