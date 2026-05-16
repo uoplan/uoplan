@@ -5,9 +5,21 @@ import type { AppStore } from "../store/types";
 import { navigateToCalendar, navigateToWizardStep } from "./appNavigation";
 
 /**
- * After {@link AppStore.loadEncodedState}, sync the visible URL with legacy navigation fields.
+ * After {@link AppStore.loadEncodedState}, optionally sync the URL with **legacy** navigation
+ * fields from the protobuf (`activeStep`, `showCalendar`).
+ *
+ * Current encodings always store `activeStep: 0` and `showCalendar: false` (navigation lives in
+ * the pathname only). If we navigated on every hydrate, we would `replace` away the real URL
+ * (e.g. `/step/generate`) and send users to `/step/term` after every refresh — so we no-op when
+ * those fields carry no information.
  */
 export function applyHydrationNavigation(decoded: DecodedState, getState: () => AppStore): void {
+  const hasStoredNavigationHint = (decoded.activeStep ?? 0) !== 0 || decoded.showCalendar === true;
+
+  if (!hasStoredNavigationHint) {
+    return;
+  }
+
   const state = getState();
   const needsOptionsStep = state.requirementTreeWithStatus.some(nodeHasOptionGroups);
   const needsAssignStep = state.unassignedCompletedCourses.length > 0;

@@ -1,14 +1,17 @@
 import { describe, expect, it } from "vitest";
 import {
   buildVisibleStepIndices,
+  canAdvanceWizardStep,
   firstInteractiveStepAfter,
   furthestReachedDisplayIndex,
   getNextStep,
   getPrevStep,
   isWizardStepSkipped,
+  maxReachableWizardStep,
   normalizeActiveStep,
   skippedWizardStepIsPassed,
   WizardStep,
+  type WizardProceedContext,
 } from "./wizardSteps";
 
 describe("buildVisibleStepIndices", () => {
@@ -139,5 +142,76 @@ describe("skipped optional steps", () => {
     expect(skippedWizardStepIsPassed(WizardStep.Assign, WizardStep.Generate, false, false)).toBe(
       true,
     );
+  });
+});
+
+function baseProceedCtx(over: Partial<WizardProceedContext> = {}): WizardProceedContext {
+  return {
+    hasTerms: true,
+    selectedTermId: "t1",
+    cacheLoaded: true,
+    wizardMode: "advanced",
+    firstYear: 2024,
+    hasProgram: true,
+    missingOptions: false,
+    needsOptionsStep: false,
+    unassignedCount: 0,
+    ...over,
+  };
+}
+
+describe("maxReachableWizardStep", () => {
+  it("stays on term when term incomplete", () => {
+    expect(maxReachableWizardStep(false, false, baseProceedCtx({ hasTerms: false }))).toBe(
+      WizardStep.Term,
+    );
+  });
+
+  it("stops at mode when planner mode unset", () => {
+    expect(maxReachableWizardStep(false, false, baseProceedCtx({ wizardMode: null }))).toBe(
+      WizardStep.Mode,
+    );
+  });
+
+  it("stops at program when programme missing", () => {
+    expect(maxReachableWizardStep(false, false, baseProceedCtx({ hasProgram: false }))).toBe(
+      WizardStep.Program,
+    );
+  });
+
+  it("reaches generate on shortest advanced path", () => {
+    expect(maxReachableWizardStep(false, false, baseProceedCtx())).toBe(WizardStep.Generate);
+  });
+
+  it("stops at options when selections missing", () => {
+    expect(
+      maxReachableWizardStep(
+        true,
+        false,
+        baseProceedCtx({ needsOptionsStep: true, missingOptions: true }),
+      ),
+    ).toBe(WizardStep.Options);
+  });
+
+  it("stops at assign when unassigned courses", () => {
+    expect(maxReachableWizardStep(false, true, baseProceedCtx({ unassignedCount: 2 }))).toBe(
+      WizardStep.Assign,
+    );
+  });
+});
+
+describe("canAdvanceWizardStep", () => {
+  const shortPath = buildVisibleStepIndices(false, false);
+
+  it("is false on generate", () => {
+    expect(canAdvanceWizardStep(WizardStep.Generate, shortPath, WizardStep.Generate)).toBe(false);
+  });
+
+  it("is false when current step is max reachable", () => {
+    expect(canAdvanceWizardStep(WizardStep.Mode, shortPath, WizardStep.Mode)).toBe(false);
+  });
+
+  it("is true when max reachable is ahead on the path", () => {
+    expect(canAdvanceWizardStep(WizardStep.Mode, shortPath, WizardStep.Program)).toBe(true);
   });
 });

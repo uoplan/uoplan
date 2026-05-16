@@ -25,9 +25,11 @@ import { hasMissingOptionSelections, nodeHasOptionGroups } from "../requirements
 import {
   ALL_WIZARD_STEP_INDICES,
   buildVisibleStepIndices,
+  canAdvanceWizardStep,
   furthestReachedDisplayIndex,
   getNextStep,
   getPrevStep,
+  maxReachableWizardStep,
   normalizeActiveStep,
   WizardStep,
 } from "../../lib/wizardSteps";
@@ -124,6 +126,36 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
 
   const needsAssignStep = unassignedCompletedCourses.length > 0;
 
+  const proceedCtx = useMemo(
+    () => ({
+      hasTerms,
+      selectedTermId,
+      cacheLoaded: Boolean(cache),
+      wizardMode,
+      firstYear,
+      hasProgram: program !== null,
+      missingOptions,
+      needsOptionsStep,
+      unassignedCount: unassignedCompletedCourses.length,
+    }),
+    [
+      hasTerms,
+      selectedTermId,
+      cache,
+      wizardMode,
+      firstYear,
+      program,
+      missingOptions,
+      needsOptionsStep,
+      unassignedCompletedCourses.length,
+    ],
+  );
+
+  const maxReachable = useMemo(
+    () => maxReachableWizardStep(needsOptionsStep, needsAssignStep, proceedCtx),
+    [needsOptionsStep, needsAssignStep, proceedCtx],
+  );
+
   const navVisibleStepIndices = useMemo(
     () => buildVisibleStepIndices(needsOptionsStep, needsAssignStep),
     [needsOptionsStep, needsAssignStep],
@@ -165,6 +197,17 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
     }
   }, [wizardMode, effectiveActive, needsOptionsStep, missingOptions]);
 
+  useEffect(() => {
+    if (wizardMode === "basic") return;
+    const visible = navVisibleStepIndices;
+    const maxIdx = visible.indexOf(maxReachable);
+    const activeIdx = visible.indexOf(effectiveActive);
+    if (maxIdx === -1 || activeIdx === -1) return;
+    if (activeIdx > maxIdx) {
+      navigateToWizardStep(maxReachable, { replace: true });
+    }
+  }, [wizardMode, effectiveActive, maxReachable, navVisibleStepIndices]);
+
   const setActive = useCallback(
     (stepOrUpdater: number | ((prev: number) => number)) => {
       const step =
@@ -174,15 +217,10 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
     [effectiveActive],
   );
 
-  const canProceedFromStep = (() => {
-    if (effectiveActive === WizardStep.Term)
-      return hasTerms && Boolean(selectedTermId) && Boolean(cache);
-    if (effectiveActive === WizardStep.Mode) return Boolean(wizardMode);
-    if (effectiveActive === WizardStep.Program) return firstYear !== null && program !== null;
-    if (effectiveActive === WizardStep.Options) return !missingOptions;
-    if (effectiveActive === WizardStep.Assign) return unassignedCompletedCourses.length === 0;
-    return true;
-  })();
+  const canProceedFromStep = useMemo(
+    () => canAdvanceWizardStep(effectiveActive, navVisibleStepIndices, maxReachable),
+    [effectiveActive, navVisibleStepIndices, maxReachable],
+  );
 
   const [nextUnlockCue, setNextUnlockCue] = useState(false);
   const prevStepProgressRef = useRef<{
@@ -207,7 +245,7 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
       };
       return;
     }
-    if (!was.canProceed && canProceedFromStep && effectiveActive !== WizardStep.Generate) {
+    if (!was.canProceed && canProceedFromStep) {
       unlockCueTimer = window.setTimeout(() => setNextUnlockCue(true), 0);
     }
     prevStepProgressRef.current = {
@@ -513,7 +551,7 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
                         color={nextUnlockCue ? "violet" : "constructBlack"}
                         radius={0}
                         onClick={handleWizardNext}
-                        disabled={effectiveActive === WizardStep.Generate || !canProceedFromStep}
+                        disabled={!canProceedFromStep}
                       >
                         {tr("app.nav.next")}
                       </Button>
