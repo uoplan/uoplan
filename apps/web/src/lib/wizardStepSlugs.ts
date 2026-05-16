@@ -16,7 +16,9 @@ export function wizardStepToSlug(step: WizardStep): WizardStepSlug {
   return WIZARD_STEP_SLUGS[step];
 }
 
-export function slugToWizardStep(slug: string): WizardStep | null {
-  const idx = WIZARD_STEP_SLUGS.indexOf(slug as WizardStepSlug);
-  return idx >= 0 ? (idx as WizardStep) : null;
+/** Typed href for TanStack Router `navigate({ to })` / `<Link to>`. */
+export type WizardStepHref = `/step/${WizardStepSlug}`;
+
+export function wizardStepToHref(step: WizardStep): WizardStepHref {
+  return `/step/${wizardStepToSlug(step)}`;
 }
