@@ -2,7 +2,8 @@ import { createRootRoute, HeadContent, Link, Outlet } from "@tanstack/react-rout
 import { buildRootHead } from "../lib/seo";
 import { useEffect, type ReactNode } from "react";
 import { useLingui } from "@lingui/react";
-import { Alert, Box, Loader, Paper, Stack, Text } from "@mantine/core";
+import { Alert, Box, Paper, Text } from "@mantine/core";
+import { AppDataLoader } from "../components/shared/AppDataLoader";
 import { usePersistState } from "../hooks/usePersistState";
 import { useAppStore } from "../store/appStore";
 import { useShallow } from "zustand/react/shallow";
@@ -54,34 +55,17 @@ function RootLayout() {
 
   usePersistState(!!indices);
 
-  const { loading, error } = useAppStore(
+  const { loading, loadProgress, error } = useAppStore(
     useShallow((s) => ({
       loading: s.loading,
+      loadProgress: s.loadProgress,
       error: s.error,
     })),
   );
 
   let content: ReactNode;
   if (loading) {
-    content = (
-      <Box
-        component="main"
-        style={{
-          minHeight: "100vh",
-          padding: "60px 24px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Stack align="center" justify="center" gap="md">
-          <Loader size="lg" color="constructBlack" />
-          <Text size="sm" c="dimmed">
-            {tr("app.loadingData")}
-          </Text>
-        </Stack>
-      </Box>
-    );
+    content = <AppDataLoader progress={loadProgress} />;
   } else if (error) {
     content = (
       <Box

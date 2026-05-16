@@ -6,6 +6,7 @@ import {
   DataProto,
   fromProtoCatalogue,
   fromProtoCatalogueManifest,
+  fromProtoCourseGradesData,
   fromProtoIndices,
   fromProtoRateMyProfessorsData,
   fromProtoSchedulesData,
@@ -151,15 +152,24 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
   },
 
   loadData: async () => {
-    set({ loading: true, error: null });
+    const LOAD_STEPS = 5;
+    let loadStep = 0;
+    const bumpLoadProgress = () => {
+      loadStep += 1;
+      set({ loadProgress: Math.round((loadStep / LOAD_STEPS) * 100) });
+    };
+
+    set({ loading: true, error: null, loadProgress: 0 });
     try {
-      const [manifestRes, termsRes, indicesRes, rmpRes] = await Promise.all([
+      const [manifestRes, termsRes, indicesRes, rmpRes, gradesRes] = await Promise.all([
         fetch("/data/catalogue.pb"),
         fetch("/data/terms.pb"),
         fetch("/data/indices.pb").catch(() => null),
         fetch("/data/ratemyprofessors.pb").catch(() => null),
+        fetch("/data/grades.pb").catch(() => null),
       ]);
       if (!manifestRes.ok || !termsRes.ok) throw new Error("Failed to load data");
+      bumpLoadProgress();
 
       const manifestBytes = new Uint8Array(await manifestRes.arrayBuffer());
       const availableYears = fromProtoCatalogueManifest(
@@ -169,6 +179,7 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
       if (!latestYear) throw new Error("Catalogue manifest has no years");
 
       const catalogueBytes = await fetchProtoBytes(`/data/catalogue.${latestYear}.pb`);
+      bumpLoadProgress();
       const termsBytes = new Uint8Array(await termsRes.arrayBuffer());
 
       const parsedCatalogue = fromProtoCatalogue(DataProto.Catalogue.decode(catalogueBytes));
@@ -186,6 +197,20 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
           professorRatings = null;
         }
       }
+
+      let courseGrades = null;
+      let courseGradesError: string | null = null;
+      if (gradesRes?.ok) {
+        try {
+          const gradesBytes = new Uint8Array(await gradesRes.arrayBuffer());
+          courseGrades = fromProtoCourseGradesData(DataProto.GradesData.decode(gradesBytes));
+        } catch (err) {
+          courseGradesError = err instanceof Error ? err.message : "Failed to parse grade history";
+        }
+      } else {
+        courseGradesError = gradesRes ? `HTTP ${gradesRes.status}` : "Failed to load grade history";
+      }
+      bumpLoadProgress();
 
       let indices: Indices | null = null;
       if (indicesRes?.ok) {
@@ -231,6 +256,7 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
         null;
       if (!initialTermId) throw new Error("No terms available");
       const initialFirstYear = peekedFirstYear;
+      bumpLoadProgress();
 
       let yearCataloguePrograms: Program[] | null = null;
       let yearCatalogueCourses: Course[] | null = null;
@@ -255,11 +281,14 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
       const effectiveCatalogue = getMergedCatalogue(parsedCatalogue, yearCatalogueCourses, []);
       const cache = buildDataCache(effectiveCatalogue ?? parsedCatalogue, parsedSchedules);
 
+      bumpLoadProgress();
       set({
         catalogue: parsedCatalogue,
         indices,
         schedulesData: parsedSchedules,
         cache,
+        courseGrades,
+        courseGradesError,
         professorRatings,
         terms: parsedTerms.terms,
         selectedTermId: initialTermId,
@@ -268,6 +297,7 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
         yearCatalogueCourses,
         availableYears,
         loading: false,
+        loadProgress: 100,
         error: null,
       });
 
@@ -303,6 +333,7 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
     } catch (err) {
       set({
         loading: false,
+        loadProgress: 0,
         error: err instanceof Error ? err.message : "Failed to load data",
       });
     }

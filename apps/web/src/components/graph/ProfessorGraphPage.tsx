@@ -57,7 +57,7 @@ export function ProfessorGraphPage({
   const isMobile = useMediaQuery("(max-width: 768px)");
   const professorRatings = useAppStore((s) => s.professorRatings);
 
-  const { loading, data: grades, error } = useCourseGradesPb();
+  const { data: grades, error } = useCourseGradesPb();
   const graphData = useMemo(
     () => (grades ? buildProfessorCoTeachingGraph(grades) : null),
     [grades],
@@ -66,13 +66,7 @@ export function ProfessorGraphPage({
     () => (grades ? buildOfferingsByProfessorId(grades) : new Map<string, ExploreOfferingFlat[]>()),
     [grades],
   );
-  const buildPhase: BuildPhase = loading
-    ? "loading"
-    : error
-      ? "error"
-      : graphData
-        ? "ready"
-        : "loading";
+  const buildPhase: BuildPhase = error ? "error" : graphData ? "ready" : "loading";
   const [layoutPhase, setLayoutPhase] = useState<ProfessorGraphPhase>("layout");
   const [previewNodeId, setPreviewNodeId] = useState<string | null>(null);
   const [neighborSort, setNeighborSort] = useState<NeighborSortMode>("strength");
@@ -154,9 +148,8 @@ export function ProfessorGraphPage({
     void navigateGraph({ search: { prof: undefined }, replace: true });
   }, [urlProfParam, urlNodeId, graphData, buildPhase, navigateGraph]);
 
-  const showOverlay = buildPhase !== "ready" || layoutPhase === "layout";
-  const overlayMessage =
-    buildPhase === "loading" ? tr("graph.loadingGrades") : tr("graph.layouting");
+  const showOverlay = layoutPhase === "layout";
+  const overlayMessage = tr("graph.layouting");
 
   return (
     <Box

@@ -1,14 +1,4 @@
-import {
-  Accordion,
-  Anchor,
-  Box,
-  Group,
-  Loader,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
+import { Accordion, Anchor, Box, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -494,12 +484,7 @@ export function ExploreSearchPage({
           </Box>
         ) : null}
 
-        {loading ? (
-          <Group justify="center" py="xl">
-            <Loader color="gray" />
-            <Text c="dimmed">{tr("explore.loadingGrades")}</Text>
-          </Group>
-        ) : error ? (
+        {error ? (
           <Text c="red" ta="center" size="sm" mt="xl">
             {tr("explore.loadError", { message: error })}
           </Text>

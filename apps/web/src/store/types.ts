@@ -1,4 +1,4 @@
-import type { Catalogue, Course, Program, SchedulesData } from "schedule";
+import type { Catalogue, Course, CourseGradesData, Program, SchedulesData } from "schedule";
 import type {
   RemainingRequirement,
   RequirementWithStatus,
@@ -36,7 +36,11 @@ export interface AppState {
   indices: Indices | null;
   schedulesData: SchedulesData | null;
   cache: DataCache | null;
+  courseGrades: CourseGradesData | null;
+  courseGradesError: string | null;
   loading: boolean;
+  /** 0–100 while {@link loading} is true. */
+  loadProgress: number;
   error: string | null;
 
   terms: Term[] | null;
