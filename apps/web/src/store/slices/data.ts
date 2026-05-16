@@ -24,6 +24,7 @@ import {
   decodeState,
   decodeStateFromBase64,
   urlToSlug,
+  defaultUpcomingTermId,
 } from "schedule";
 import { recomputeStateForProgram } from "../requirementCompute";
 import { LOCAL_STORAGE_KEY } from "../constants";
@@ -223,7 +224,11 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
         }
       }
 
-      const initialTermId = peekedTermId ?? parsedTerms.terms[0]?.termId ?? null;
+      const initialTermId =
+        peekedTermId ??
+        defaultUpcomingTermId(parsedTerms.terms) ??
+        parsedTerms.terms[0]?.termId ??
+        null;
       if (!initialTermId) throw new Error("No terms available");
       const initialFirstYear = peekedFirstYear;
 
