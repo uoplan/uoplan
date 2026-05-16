@@ -12,6 +12,8 @@ import type {
   CoursePrereqNode as ProtoCoursePrereqNode,
   CourseSchedule as ProtoCourseSchedule,
   DisciplineLevel as ProtoDisciplineLevel,
+  GradeProfessorOffering as ProtoGradeProfessorOffering,
+  GradesData as ProtoGradesData,
   Indices as ProtoIndices,
   Program as ProtoProgram,
   ProgramRequirement as ProtoProgramRequirement,
@@ -121,7 +123,7 @@ function toProtoDistribution(distribution: GradeDistribution | undefined) {
   };
 }
 
-function fromProtoDistribution(
+export function fromProtoDistribution(
   distribution:
     | {
         aPlus: number;
@@ -752,5 +754,51 @@ export function fromProtoRateMyProfessorsData(
       rating: professor.rating ?? null,
       ...(professor.numRatings !== undefined ? { numRatings: Number(professor.numRatings) } : {}),
     })),
+  };
+}
+
+export type CourseGradesProfessor = {
+  name: string;
+  legacyId?: number;
+  termId: number;
+  distribution: GradeDistribution;
+  section?: string;
+};
+
+export type CourseGradesEntry = {
+  code: string;
+  professors: CourseGradesProfessor[];
+};
+
+export type CourseGradesData = {
+  courses: CourseGradesEntry[];
+};
+
+export function fromProtoCourseGradesData(input: ProtoGradesData): CourseGradesData {
+  const courses: CourseGradesEntry[] = [];
+  for (const c of input.courses ?? []) {
+    const professors: CourseGradesProfessor[] = [];
+    for (const p of c.professors ?? []) {
+      const row = fromProtoGradeProfessorOfferingRow(p);
+      if (row) professors.push(row);
+    }
+    if (professors.length > 0) {
+      courses.push({ code: c.code, professors });
+    }
+  }
+  return { courses };
+}
+
+function fromProtoGradeProfessorOfferingRow(
+  p: ProtoGradeProfessorOffering,
+): CourseGradesProfessor | null {
+  const distribution = fromProtoDistribution(p.distribution);
+  if (!distribution) return null;
+  return {
+    name: p.name,
+    ...(p.legacyId !== undefined ? { legacyId: Number(p.legacyId) } : {}),
+    termId: Number(p.termId),
+    distribution,
+    ...(p.section ? { section: p.section } : {}),
   };
 }

@@ -13,7 +13,8 @@ export interface GradeEnrichmentStats {
 }
 
 export interface GradeLookups {
-  byCourse: Map<string, Map<string, GradeDistribution>>;
+  /** courseCode → termId → normalized instructor name → merged distributions for that term */
+  byCourseTermName: Map<string, Map<number, Map<string, GradeDistribution>>>;
   aggregateByCourse: Map<string, GradeDistribution>;
 }
 
@@ -70,6 +71,20 @@ function hasGradeData(dist: GradeDistribution | null | undefined): boolean {
   return false;
 }
 
+function parseSchedulesTermId(data: { termId?: string | number }): number {
+  const parsed = Number.parseInt(String(data.termId ?? ""), 10);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function parseGradeRowTermId(raw: unknown): number {
+  if (typeof raw === "number" && Number.isFinite(raw)) return raw;
+  if (typeof raw === "string") {
+    const parsed = Number.parseInt(raw, 10);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+  return 0;
+}
+
 function distributionForSection(
   instructors: string[] | undefined,
   profMap: Map<string, GradeDistribution> | undefined,
@@ -110,7 +125,7 @@ function distributionForSection(
 }
 
 export function buildGradeLookups(gradesRaw: unknown): GradeLookups {
-  const byCourse = new Map<string, Map<string, GradeDistribution>>();
+  const byCourseTermName = new Map<string, Map<number, Map<string, GradeDistribution>>>();
   const aggregateByCourse = new Map<string, GradeDistribution>();
 
   if (!Array.isArray(gradesRaw)) {
@@ -124,23 +139,32 @@ export function buildGradeLookups(gradesRaw: unknown): GradeLookups {
     if (typeof code !== "string" || !code.trim()) continue;
     const professors = Array.isArray(r.professors) ? r.professors : [];
 
-    let profMap = byCourse.get(code);
-    if (!profMap) {
-      profMap = new Map();
-      byCourse.set(code, profMap);
-    }
-
     const allDists: GradeDistribution[] = [];
+
     for (const p of professors) {
       if (!p || typeof p !== "object") continue;
-      const prof = p as { name?: unknown; distribution?: unknown };
+      const prof = p as { name?: unknown; distribution?: unknown; termId?: unknown };
       const name = prof.name;
       if (typeof name !== "string" || !name.trim()) continue;
       const dist = prof.distribution;
       if (!dist || typeof dist !== "object") continue;
 
+      const termId = parseGradeRowTermId(prof.termId);
+      if (termId === 0) continue;
+
       const key = normalizeNameForMatch(name);
       if (!key) continue;
+
+      let termMap = byCourseTermName.get(code);
+      if (!termMap) {
+        termMap = new Map();
+        byCourseTermName.set(code, termMap);
+      }
+      let profMap = termMap.get(termId);
+      if (!profMap) {
+        profMap = new Map();
+        termMap.set(termId, profMap);
+      }
 
       const existing = profMap.get(key);
       if (existing) {
@@ -154,23 +178,26 @@ export function buildGradeLookups(gradesRaw: unknown): GradeLookups {
     aggregateByCourse.set(code, sumDistributions(allDists));
   }
 
-  return { byCourse, aggregateByCourse };
+  return { byCourseTermName, aggregateByCourse };
 }
 
 export function enrichSchedulesPayload(
-  data: { schedules?: ScheduleCourseRow[] },
+  data: SchedulesFilePayload,
   lookups: GradeLookups,
   stats: GradeEnrichmentStats,
-): { schedules?: ScheduleCourseRow[] } {
+): SchedulesFilePayload {
   const schedules = data.schedules;
   if (!Array.isArray(schedules)) return data;
+
+  const scheduleTermId = parseSchedulesTermId(data);
 
   for (const course of schedules) {
     if (!course || typeof course !== "object") continue;
     const courseCode = course.courseCode;
     if (typeof courseCode !== "string") continue;
 
-    const profMap = lookups.byCourse.get(courseCode);
+    const termMap = lookups.byCourseTermName.get(courseCode);
+    const profMap = scheduleTermId !== 0 ? termMap?.get(scheduleTermId) : undefined;
     const aggregate = lookups.aggregateByCourse.get(courseCode);
 
     const components = course.components;

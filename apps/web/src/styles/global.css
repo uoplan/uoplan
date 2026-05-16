@@ -632,6 +632,12 @@ a.fc-uoplan-rating-inline:hover {
   height: 100%;
 }
 
+.uoplan-grade-chip--preview {
+  width: min(100%, 260px);
+  height: 12px;
+  border-radius: 999px;
+}
+
 .uoplan-grade-expanded-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -660,6 +666,14 @@ a.fc-uoplan-rating-inline:hover {
   min-height: 94px;
   padding-top: 20px;
   width: 100%;
+}
+
+.uoplan-grade-histogram--compact {
+  gap: 1px;
+}
+
+.uoplan-grade-histogram--compact .uoplan-grade-histogram-item {
+  gap: 2px;
 }
 
 .uoplan-grade-histogram-item {

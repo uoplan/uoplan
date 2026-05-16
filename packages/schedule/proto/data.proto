@@ -197,3 +197,20 @@ message SchedulesData {
   optional uint32 total_with_schedules = 4;
   repeated CourseSchedule schedules = 5;
 }
+
+message GradesData {
+  repeated CourseGradeEntry courses = 1;
+}
+
+message CourseGradeEntry {
+  string code = 1;
+  repeated GradeProfessorOffering professors = 2;
+}
+
+message GradeProfessorOffering {
+  string name = 1;
+  optional uint32 legacy_id = 2;
+  uint32 term_id = 3;
+  GradeDistribution distribution = 4;
+  optional string section = 5;
+}

@@ -57,6 +57,57 @@ msgstr "."
 msgid "app.footer.changelog"
 msgstr "changelog"
 
+msgid "app.footer.explore"
+msgstr "explore"
+
+msgid "explore.title"
+msgstr "Explore courses"
+
+msgid "explore.subtitle"
+msgstr "Look up grade distributions by course code or title."
+
+msgid "explore.searchPlaceholder"
+msgstr "Search by course code or title…"
+
+msgid "explore.loadingGrades"
+msgstr "Loading grade history…"
+
+msgid "explore.loadError"
+msgstr "Could not load grades: {message}"
+
+msgid "explore.searchUpdating"
+msgstr "Updating results…"
+
+msgid "explore.noResults"
+msgstr "No matching courses."
+
+msgid "explore.section"
+msgstr "Section {section}"
+
+msgid "explore.courseNoProfessors"
+msgstr "No grade data found for this course."
+
+msgid "explore.sectionNoGrades"
+msgstr "No grade breakdown for this section."
+
+msgid "explore.distributionHeading"
+msgstr "Grade distribution"
+
+msgid "explore.profileLink"
+msgstr "Profile"
+
+msgid "explore.backToSearch"
+msgstr "← Back to explore"
+
+msgid "explore.professorFallback"
+msgstr "Professor"
+
+msgid "explore.professorNoCourses"
+msgstr "No grade history found for this instructor."
+
+msgid "explore.invalidProfessor"
+msgstr "Invalid professor link."
+
 msgid "app.footer.feedbackPrompt"
 msgstr "send feedback to"
 

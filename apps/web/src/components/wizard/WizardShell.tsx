@@ -624,6 +624,30 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
                 </Text>
                 <Text
                   component={Link}
+                  to="/explore"
+                  size="sm"
+                  c="dimmed"
+                  lh={1.45}
+                  style={{
+                    textDecoration: "none",
+                    cursor: "pointer",
+                  }}
+                  styles={{
+                    root: {
+                      "&:hover": {
+                        color: "var(--mantine-color-gray-4)",
+                        textDecoration: "underline",
+                      },
+                    },
+                  }}
+                >
+                  {tr("app.footer.explore")}
+                </Text>
+                <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
+                  ·
+                </Text>
+                <Text
+                  component={Link}
                   to="/changelog"
                   size="sm"
                   c="dimmed"

@@ -57,6 +57,57 @@ msgstr " de l'Ontario."
 msgid "app.footer.changelog"
 msgstr "journal des modifications"
 
+msgid "app.footer.explore"
+msgstr "explorer"
+
+msgid "explore.title"
+msgstr "Explorer les cours"
+
+msgid "explore.subtitle"
+msgstr "Consultez les répartitions de notes par code ou titre de cours."
+
+msgid "explore.searchPlaceholder"
+msgstr "Rechercher par code ou titre de cours…"
+
+msgid "explore.loadingGrades"
+msgstr "Chargement des notes historiques…"
+
+msgid "explore.loadError"
+msgstr "Impossible de charger les notes : {message}"
+
+msgid "explore.searchUpdating"
+msgstr "Mise à jour des résultats…"
+
+msgid "explore.noResults"
+msgstr "Aucun cours correspondant."
+
+msgid "explore.section"
+msgstr "Section {section}"
+
+msgid "explore.courseNoProfessors"
+msgstr "Aucune donnée de notes pour ce cours."
+
+msgid "explore.sectionNoGrades"
+msgstr "Pas de répartition des notes pour cette section."
+
+msgid "explore.distributionHeading"
+msgstr "Répartition des notes"
+
+msgid "explore.profileLink"
+msgstr "Profil"
+
+msgid "explore.backToSearch"
+msgstr "← Retour à l’exploration"
+
+msgid "explore.professorFallback"
+msgstr "Professeur"
+
+msgid "explore.professorNoCourses"
+msgstr "Aucune donnée de notes pour ce professeur."
+
+msgid "explore.invalidProfessor"
+msgstr "Lien professeur invalide."
+
 msgid "app.footer.feedbackPrompt"
 msgstr "écrivez-nous à"
 
