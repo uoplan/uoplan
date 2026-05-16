@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.0-beta.10](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.9...uoplan-monorepo-v1.0.0-beta.10) (2026-05-16)
+
+
+### Features
+
+* add animation for changelog page ([c57ce33](https://github.com/uoplan/uoplan/commit/c57ce339e3bf55a88428654b2c447fe9267f895c))
+* keep term list in sync with live public class search ([0c617a8](https://github.com/uoplan/uoplan/commit/0c617a899727050249a18df9c95b7c2827d2e6fd))
+
+
+### Bug Fixes
+
+* do not replace history for navigation ([8bb1acb](https://github.com/uoplan/uoplan/commit/8bb1acb08f87f5831aa14928c0eaee32414236b7))
+
 ## [1.0.0-beta.9](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.8...uoplan-monorepo-v1.0.0-beta.9) (2026-05-16)
 
 ### Features
