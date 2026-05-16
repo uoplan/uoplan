@@ -390,6 +390,15 @@ msgstr "Ajoute ce cours aux sélections utilisées pour générer les horaires."
 msgid "calendar.swap.alreadyLocked"
 msgstr "Déjà ajouté"
 
+msgid "calendar.swap.alreadyAssigned"
+msgstr "Déjà assigné à une exigence dans l'assistant"
+
+msgid "calendar.swap.unlockAria"
+msgstr "Retirer le cours des sélections pour la génération d'horaires"
+
+msgid "calendar.swap.unlockTooltip"
+msgstr "Retire ce cours des sélections utilisées pour générer les horaires."
+
 msgid "calendar.swap.lockNoPool"
 msgstr "Impossible de rattacher ce cours à un sélecteur d'exigence."
 

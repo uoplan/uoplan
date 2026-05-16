@@ -6,8 +6,8 @@ import type { DataCache, GeneratedSchedule, ProfessorRatingsMap } from "schedule
 import type { SwapCandidateOption, SwapModalState, SwapResult } from "../../hooks/useSwapModal";
 import { tr } from "../../i18n";
 import {
-  applyOptionSelections,
-  collectRequirementIdsWithCandidateCourse,
+  isCourseInPerRequirementMaps,
+  resolveRequirementIdsForScheduleCourse,
 } from "../requirements/requirementUtils";
 import { useAppStore } from "../../store/appStore";
 import { EventStyleCard } from "./EventStyleCard";
@@ -41,9 +41,13 @@ export function SwapModalContent({
 }) {
   const enrollment = schedule?.enrollments[modalState.enrollmentIndex];
   const lockCourseForAllSchedulesFromSwap = useAppStore((s) => s.lockCourseForAllSchedulesFromSwap);
+  const unlockCourseForAllSchedulesFromSwap = useAppStore(
+    (s) => s.unlockCourseForAllSchedulesFromSwap,
+  );
   const wizardMode = useAppStore((s) => s.wizardMode);
   const basicPinnedCourses = useAppStore((s) => s.basicPinnedCourses);
   const constrainedPerRequirement = useAppStore((s) => s.constrainedPerRequirement);
+  const selectedPerRequirement = useAppStore((s) => s.selectedPerRequirement);
   const currentPoolMap = useAppStore((s) => s.currentPoolMap);
   const chosenCourseToRequirementId = useAppStore((s) => s.chosenCourseToRequirementId);
   const remainingRequirements = useAppStore((s) => s.remainingRequirements);
@@ -53,54 +57,74 @@ export function SwapModalContent({
   const courseCode = modalState.courseCode;
   const courseNorm = normalizeCourseCode(courseCode);
 
-  const poolId = useMemo(() => {
-    const id = currentPoolMap[courseCode] ?? chosenCourseToRequirementId[courseCode] ?? undefined;
-    if (id) return id;
-    for (const req of remainingRequirements) {
-      if (!req.requirementId || !req.candidateCourses?.length) continue;
-      if (req.candidateCourses.some((c) => normalizeCourseCode(c) === courseNorm)) {
-        return req.requirementId;
-      }
-    }
-    return undefined;
-  }, [chosenCourseToRequirementId, courseCode, courseNorm, currentPoolMap, remainingRequirements]);
-
   const treeRequirementIdsForCourse = useMemo(() => {
     if (wizardMode !== "advanced") return [];
-    const flat = applyOptionSelections(requirementTreeWithStatus, selectedOptionsPerRequirement);
-    return collectRequirementIdsWithCandidateCourse(flat, courseNorm);
-  }, [courseNorm, requirementTreeWithStatus, selectedOptionsPerRequirement, wizardMode]);
+    return resolveRequirementIdsForScheduleCourse({
+      courseCode,
+      courseNorm,
+      requirementTreeWithStatus,
+      selectedOptionsPerRequirement,
+      currentPoolMap,
+      chosenCourseToRequirementId,
+      remainingRequirements,
+    });
+  }, [
+    chosenCourseToRequirementId,
+    courseCode,
+    courseNorm,
+    currentPoolMap,
+    remainingRequirements,
+    requirementTreeWithStatus,
+    selectedOptionsPerRequirement,
+    wizardMode,
+  ]);
 
-  const alreadyLocked = useMemo(() => {
+  const isGenerationPinned = useMemo(() => {
     if (wizardMode === "basic") {
       return basicPinnedCourses.some((c) => normalizeCourseCode(c) === courseNorm);
     }
     if (wizardMode === "advanced") {
-      for (const codes of Object.values(constrainedPerRequirement)) {
-        if (codes.some((c) => normalizeCourseCode(c) === courseNorm)) {
-          return true;
-        }
-      }
+      return isCourseInPerRequirementMaps(courseNorm, constrainedPerRequirement);
     }
     return false;
   }, [basicPinnedCourses, constrainedPerRequirement, courseNorm, wizardMode]);
 
+  const isInAssignSelections = useMemo(() => {
+    if (wizardMode !== "advanced") return false;
+    return isCourseInPerRequirementMaps(courseNorm, selectedPerRequirement);
+  }, [courseNorm, selectedPerRequirement, wizardMode]);
+
+  const showLockedIcon = isGenerationPinned || isInAssignSelections;
+
   const lockUnavailable =
     wizardMode === "advanced" &&
-    !alreadyLocked &&
-    treeRequirementIdsForCourse.length === 0 &&
-    !poolId;
+    !isGenerationPinned &&
+    !isInAssignSelections &&
+    treeRequirementIdsForCourse.length === 0;
 
-  const lockDisabled = wizardMode == null || alreadyLocked || lockUnavailable;
+  const canLock =
+    wizardMode != null && !isGenerationPinned && !isInAssignSelections && !lockUnavailable;
+  const canUnlock = isGenerationPinned;
+
+  const lockControlDisabled = !canLock && !canUnlock;
 
   const lockTooltip = lockUnavailable
     ? tr("calendar.swap.lockNoPool")
-    : alreadyLocked
-      ? tr("calendar.swap.alreadyLocked")
-      : tr("calendar.swap.lockTooltip");
+    : canUnlock
+      ? tr("calendar.swap.unlockTooltip")
+      : isInAssignSelections
+        ? tr("calendar.swap.alreadyAssigned")
+        : tr("calendar.swap.lockTooltip");
 
-  const handleLock = () => {
-    if (lockDisabled) return;
+  const lockAria = canUnlock ? tr("calendar.swap.unlockAria") : tr("calendar.swap.lockAria");
+
+  const handleLockToggle = () => {
+    if (canUnlock) {
+      unlockCourseForAllSchedulesFromSwap(modalState.enrollmentIndex);
+      closeModal();
+      return;
+    }
+    if (!canLock) return;
     lockCourseForAllSchedulesFromSwap(modalState.enrollmentIndex);
     closeModal();
   };
@@ -140,14 +164,14 @@ export function SwapModalContent({
             <Box component="span" style={{ display: "inline-flex" }}>
               <ActionIcon
                 variant="subtle"
-                color={alreadyLocked ? "yellow" : "gray"}
+                color={showLockedIcon ? "yellow" : "gray"}
                 size="lg"
                 radius="md"
-                disabled={lockDisabled}
-                aria-label={tr("calendar.swap.lockAria")}
-                onClick={handleLock}
+                disabled={lockControlDisabled}
+                aria-label={lockAria}
+                onClick={handleLockToggle}
               >
-                {alreadyLocked ? (
+                {showLockedIcon ? (
                   <IconLockFilled size={20} stroke={1.5} />
                 ) : (
                   <IconLock size={20} stroke={1.5} />

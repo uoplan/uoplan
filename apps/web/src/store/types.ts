@@ -145,6 +145,8 @@ export interface AppActions {
   };
   /** Pin the course like "Pick specific courses" for its pool (no immediate regeneration). */
   lockCourseForAllSchedulesFromSwap: (enrollmentIndex: number) => void;
+  /** Remove calendar pin from basic required courses / constrain selections (no immediate regeneration). */
+  unlockCourseForAllSchedulesFromSwap: (enrollmentIndex: number) => void;
   setLevelBuckets: (buckets: CourseLevelBucket[]) => void;
   setLanguageBuckets: (buckets: CourseLanguageBucket[]) => void;
   setElectiveLevelBuckets: (buckets: number[]) => void;

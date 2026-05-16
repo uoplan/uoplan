@@ -5,12 +5,15 @@ import { isGroupToken, normalizeCourseCode } from "schedule";
 import { i18n } from "../../i18n";
 import {
   applyOptionSelections,
+  appendCourseDedupedByNorm,
   collectRequirementIdsWithCandidateCourse,
   countSatisfiedTopLevelRoots,
   getConstrainMultiSelectOptions,
   getOptionSecondarySummaryLine,
+  isCourseInPerRequirementMaps,
   partitionIncompleteConstrainRoots,
   pruneOptionSelectionsForClear,
+  resolveRequirementIdsForScheduleCourse,
 } from "./requirementUtils";
 
 beforeAll(() => {
@@ -43,6 +46,75 @@ const defaultConstrainCtx = {
   virtualSectionsOnly: false,
   completedOnly: false,
 };
+
+describe("resolveRequirementIdsForScheduleCourse", () => {
+  it("returns tree requirement ids when the course is a candidate", () => {
+    const tree: RequirementWithStatus[] = [
+      {
+        type: "elective",
+        title: "Elective",
+        complete: false,
+        satisfiedBy: [],
+        creditsNeeded: 6,
+        requirementId: "req-elective",
+        candidateCourses: ["CSI 2132", "MAT 1341"],
+      },
+    ];
+    expect(
+      resolveRequirementIdsForScheduleCourse({
+        courseCode: "CSI 2132",
+        courseNorm: normalizeCourseCode("CSI 2132"),
+        requirementTreeWithStatus: tree,
+        selectedOptionsPerRequirement: {},
+        currentPoolMap: {},
+        chosenCourseToRequirementId: {},
+        remainingRequirements: [],
+      }),
+    ).toEqual(["req-elective"]);
+  });
+
+  it("falls back to pool map when tree has no match", () => {
+    expect(
+      resolveRequirementIdsForScheduleCourse({
+        courseCode: "SEG 3100",
+        courseNorm: normalizeCourseCode("SEG 3100"),
+        requirementTreeWithStatus: [],
+        selectedOptionsPerRequirement: {},
+        currentPoolMap: { "SEG 3100": "req-pool" },
+        chosenCourseToRequirementId: {},
+        remainingRequirements: [],
+      }),
+    ).toEqual(["req-pool"]);
+  });
+});
+
+describe("isCourseInPerRequirementMaps", () => {
+  it("matches normalized course codes across maps", () => {
+    expect(
+      isCourseInPerRequirementMaps(normalizeCourseCode("csi2132"), {
+        "req-1": ["CSI 2132"],
+      }),
+    ).toBe(true);
+    expect(
+      isCourseInPerRequirementMaps(normalizeCourseCode("csi2132"), { "req-1": ["MAT 1341"] }),
+    ).toBe(false);
+  });
+});
+
+describe("appendCourseDedupedByNorm", () => {
+  it("does not append when normalized code already exists", () => {
+    const prev = ["CSI2132"];
+    expect(appendCourseDedupedByNorm(prev, "CSI 2132", normalizeCourseCode("CSI 2132"))).toEqual(
+      prev,
+    );
+  });
+
+  it("appends canonical when not present", () => {
+    expect(appendCourseDedupedByNorm([], "CSI 2132", normalizeCourseCode("CSI 2132"))).toEqual([
+      "CSI 2132",
+    ]);
+  });
+});
 
 describe("collectRequirementIdsWithCandidateCourse", () => {
   it("returns requirement ids for nodes whose candidate list includes the course", () => {

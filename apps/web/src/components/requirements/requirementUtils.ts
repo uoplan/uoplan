@@ -1,4 +1,4 @@
-import type { DataCache, RequirementWithStatus } from "schedule";
+import type { DataCache, RemainingRequirement, RequirementWithStatus } from "schedule";
 import {
   normalizeCourseCode,
   courseMatchesFilters,
@@ -250,6 +250,79 @@ export function collectRequirementIdsWithCandidateCourse(
 
   walk(flattenedRoots);
   return [...new Set(ids)];
+}
+
+export interface ResolveRequirementIdsForScheduleCourseParams {
+  courseCode: string;
+  courseNorm: string;
+  requirementTreeWithStatus: RequirementWithStatus[];
+  selectedOptionsPerRequirement: Record<string, number>;
+  currentPoolMap: Record<string, string>;
+  chosenCourseToRequirementId: Record<string, string>;
+  remainingRequirements: RemainingRequirement[];
+}
+
+/**
+ * Requirement IDs to pin from the calendar swap modal (tree match, then pool fallback).
+ */
+export function resolveRequirementIdsForScheduleCourse(
+  params: ResolveRequirementIdsForScheduleCourseParams,
+): string[] {
+  const {
+    courseCode,
+    courseNorm,
+    requirementTreeWithStatus,
+    selectedOptionsPerRequirement,
+    currentPoolMap,
+    chosenCourseToRequirementId,
+    remainingRequirements,
+  } = params;
+
+  const flattened = applyOptionSelections(requirementTreeWithStatus, selectedOptionsPerRequirement);
+  let requirementIds = collectRequirementIdsWithCandidateCourse(flattened, courseNorm);
+
+  if (requirementIds.length === 0) {
+    let poolId = currentPoolMap[courseCode] ?? chosenCourseToRequirementId[courseCode] ?? undefined;
+    if (!poolId) {
+      for (const req of remainingRequirements) {
+        if (!req.requirementId || !req.candidateCourses?.length) continue;
+        if (req.candidateCourses.some((c) => normalizeCourseCode(c) === courseNorm)) {
+          poolId = req.requirementId;
+          break;
+        }
+      }
+    }
+    if (poolId) requirementIds = [poolId];
+  }
+
+  return requirementIds;
+}
+
+/** True if normalized code appears in any of the per-requirement course lists. */
+export function isCourseInPerRequirementMaps(
+  courseNorm: string,
+  ...maps: Record<string, string[]>[]
+): boolean {
+  for (const map of maps) {
+    for (const codes of Object.values(map)) {
+      if (codes.some((c) => normalizeCourseCode(c) === courseNorm)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+/** Append canonical code without duplicate normalized entries. */
+export function appendCourseDedupedByNorm(
+  prev: string[],
+  canonical: string,
+  courseNorm: string,
+): string[] {
+  if (prev.some((c) => normalizeCourseCode(c) === courseNorm)) {
+    return prev;
+  }
+  return [...prev, canonical];
 }
 
 /**
