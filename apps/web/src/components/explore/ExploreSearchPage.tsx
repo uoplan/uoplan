@@ -215,7 +215,6 @@ export function ExploreSearchPage({
       void navigateExplore({
         to: "/explore/course/$course",
         params: { course: courseNormToPathParam(c.normCode) },
-        replace: true,
       });
     },
     [navigateExplore],
@@ -228,7 +227,6 @@ export function ExploreSearchPage({
       void navigateExplore({
         to: "/explore/professor/$legacyId",
         params: { legacyId: String(p.legacyId) },
-        replace: true,
       });
     },
     [navigateExplore],
