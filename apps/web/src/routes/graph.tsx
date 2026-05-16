@@ -3,8 +3,10 @@ import {
   ProfessorGraphPage,
   type ProfessorGraphNavigate,
 } from "../components/graph/ProfessorGraphPage";
+import { buildPageHead } from "../lib/seo";
 
 export const Route = createFileRoute("/graph")({
+  head: () => buildPageHead("graph"),
   validateSearch: (search: Record<string, unknown>) => ({
     prof:
       typeof search.prof === "string" && search.prof.trim().length > 0

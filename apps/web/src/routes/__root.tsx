@@ -1,5 +1,6 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createRootRoute, HeadContent, Link, Outlet } from "@tanstack/react-router";
+import { buildRootHead } from "../lib/seo";
+import { useEffect, type ReactNode } from "react";
 import { useLingui } from "@lingui/react";
 import { Alert, Box, Loader, Paper, Stack, Text } from "@mantine/core";
 import { useAppStore } from "../store/appStore";
@@ -7,6 +8,7 @@ import { useShallow } from "zustand/react/shallow";
 import { tr } from "../i18n";
 
 export const Route = createRootRoute({
+  head: () => buildRootHead(),
   component: RootLayout,
   notFoundComponent: NotFound,
 });
@@ -54,8 +56,9 @@ function RootLayout() {
     })),
   );
 
+  let content: ReactNode;
   if (loading) {
-    return (
+    content = (
       <Box
         component="main"
         style={{
@@ -74,10 +77,8 @@ function RootLayout() {
         </Stack>
       </Box>
     );
-  }
-
-  if (error) {
-    return (
+  } else if (error) {
+    content = (
       <Box
         component="main"
         style={{
@@ -104,7 +105,14 @@ function RootLayout() {
         </Paper>
       </Box>
     );
+  } else {
+    content = <Outlet />;
   }
 
-  return <Outlet />;
+  return (
+    <>
+      <HeadContent />
+      {content}
+    </>
+  );
 }

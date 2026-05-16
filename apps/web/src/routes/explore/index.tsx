@@ -5,8 +5,10 @@ import {
   type ExploreSearchNavigate,
 } from "../../components/explore/ExploreSearchPage";
 import { useAppStore } from "../../store/appStore";
+import { buildPageHead } from "../../lib/seo";
 
 export const Route = createFileRoute("/explore/")({
+  head: () => buildPageHead("explore"),
   component: ExploreRoute,
 });
 
