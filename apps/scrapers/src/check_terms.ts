@@ -10,7 +10,23 @@ const TERMS_JSON = path.join(SCRAPER_DATA_DIR, "terms.json");
 const SEARCH_URL =
   "https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL";
 
-type Term = { termId: string; name: string };
+export type Term = { termId: string; name: string };
+
+export function sortTerms(terms: Term[]): Term[] {
+  return [...terms].sort((a, b) => a.termId.localeCompare(b.termId));
+}
+
+export function findNewTerms(known: Term[], current: Term[]): Term[] {
+  const knownIds = new Set(known.map((t) => t.termId));
+  return current.filter((t) => !knownIds.has(t.termId));
+}
+
+export function termsListsEqual(a: Term[], b: Term[]): boolean {
+  const sortedA = sortTerms(a);
+  const sortedB = sortTerms(b);
+  if (sortedA.length !== sortedB.length) return false;
+  return sortedA.every((t, i) => t.termId === sortedB[i].termId && t.name === sortedB[i].name);
+}
 
 export function parseTermDropdown(html: string): Term[] {
   const $ = cheerio.load(html);
@@ -54,12 +70,11 @@ async function main() {
 
   const raw = await fs.readFile(TERMS_JSON, "utf8");
   const { terms: knownTerms } = JSON.parse(raw) as { terms: Term[] };
-  const knownIds = new Set(knownTerms.map((t) => t.termId));
 
-  const newTerms = currentTerms.filter((t) => !knownIds.has(t.termId));
+  const newTerms = findNewTerms(knownTerms, currentTerms);
+  const sorted = sortTerms(currentTerms);
 
-  if (newTerms.length > 0) {
-    const sorted = [...currentTerms].sort((a, b) => a.termId.localeCompare(b.termId));
+  if (!termsListsEqual(knownTerms, sorted)) {
     await fs.writeFile(TERMS_JSON, JSON.stringify({ terms: sorted }, null, 2) + "\n", "utf-8");
   }
 

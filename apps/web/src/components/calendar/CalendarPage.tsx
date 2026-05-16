@@ -20,6 +20,7 @@ import { useShareUrl } from "../../hooks/useShareUrl";
 import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateRange";
 import { tr } from "../../i18n";
 import { LanguageSwitcher } from "../shared/LanguageSwitcher";
+import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
 import { CALENDAR_SIDEBAR_WIDTH_PX } from "./calendarLayout";
 import { BasicCalendarSidebarControls } from "./BasicCalendarSidebarControls";
 import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
@@ -47,6 +48,8 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
     currentSeed,
     wizardMode,
     scheduleGenerating,
+    basicPinnedCourses,
+    basicElectivesCount,
   } = useAppStore(
     useShallow((s) => ({
       currentSchedule: s.currentSchedule,
@@ -60,6 +63,8 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
       currentSeed: s.currentSeed,
       wizardMode: s.wizardMode,
       scheduleGenerating: s.scheduleGenerating,
+      basicPinnedCourses: s.basicPinnedCourses,
+      basicElectivesCount: s.basicElectivesCount,
     })),
   );
 
@@ -76,6 +81,8 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
   const isBasic = wizardMode === "basic";
   const hasSchedule = currentSchedule !== null;
   const canGoPrevious = currentSeed > firstSeed && currentSeed > 0;
+  const canUseSeedNavigation =
+    !isBasic || canGenerateBasicSchedule(basicPinnedCourses.length, basicElectivesCount);
 
   const morphRef = useRef<CalendarViewHandle>(null);
 
@@ -111,13 +118,13 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
     genErrDetails.totalAvailable < genErrDetails.totalNeeded;
 
   const handlePrevious = async () => {
-    if (scheduleGenerating) return;
+    if (scheduleGenerating || !canUseSeedNavigation) return;
     morphRef.current?.captureAndPark();
     await goToPreviousSeed();
   };
 
   const handleNext = async () => {
-    if (scheduleGenerating) return;
+    if (scheduleGenerating || !canUseSeedNavigation) return;
     morphRef.current?.captureAndPark();
     await goToNextSeed();
   };
@@ -302,7 +309,7 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
                   size="sm"
                   radius={0}
                   leftSection={<IconChevronLeft size={14} />}
-                  disabled={!canGoPrevious || scheduleGenerating}
+                  disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
                   loading={scheduleGenerating}
                   onClick={handlePrevious}
                 >
@@ -314,7 +321,7 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
                   size="sm"
                   radius={0}
                   rightSection={<IconChevronRight size={14} />}
-                  disabled={scheduleGenerating}
+                  disabled={scheduleGenerating || !canUseSeedNavigation}
                   loading={scheduleGenerating}
                   onClick={handleNext}
                 >
@@ -469,7 +476,7 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
             radius={0}
             style={{ flex: 1, border: "none", height: 56 }}
             leftSection={<IconChevronLeft size={22} />}
-            disabled={!canGoPrevious || scheduleGenerating}
+            disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
             loading={scheduleGenerating}
             onClick={handlePrevious}
           >
@@ -482,7 +489,7 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
             radius={0}
             style={{ flex: 1, border: "none", height: 56 }}
             leftSection={<IconChevronRight size={22} />}
-            disabled={scheduleGenerating}
+            disabled={scheduleGenerating || !canUseSeedNavigation}
             loading={scheduleGenerating}
             onClick={handleNext}
           >

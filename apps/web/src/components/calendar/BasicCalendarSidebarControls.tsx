@@ -18,7 +18,10 @@ import { BasicCourseFiltersCard } from "../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../i18n";
 import { parseTranscriptPdf, isOptCourse, normalizeCourseCode } from "schedule";
-import { basicElectivesAfterPinnedDelta } from "../../lib/basicCalendarPins";
+import {
+  basicElectivesAfterPinnedDelta,
+  canGenerateBasicSchedule,
+} from "../../lib/basicCalendarPins";
 
 export function BasicCalendarSidebarControls({
   onBeforeNavigate,
@@ -66,6 +69,7 @@ export function BasicCalendarSidebarControls({
   const firstSeed = useAppStore((s) => s.firstSeed);
   const currentSeed = useAppStore((s) => s.currentSeed);
   const canGoPrevious = currentSeed > firstSeed && currentSeed > 0;
+  const canNavigateSeeds = canGenerateBasicSchedule(basicPinnedCourses.length, basicElectivesCount);
   const markBasicSettingsChanged = useAppStore((s) => s.markBasicSettingsChanged);
   const resetBasicCalendarSettings = useAppStore((s) => s.resetBasicCalendarSettings);
   const setLevelBuckets = useAppStore((s) => s.setLevelBuckets);
@@ -298,10 +302,10 @@ export function BasicCalendarSidebarControls({
             color="violet"
             size="sm"
             radius={0}
-            disabled={!canGoPrevious || scheduleGenerating}
+            disabled={!canGoPrevious || scheduleGenerating || !canNavigateSeeds}
             loading={scheduleGenerating}
             onClick={() => {
-              if (scheduleGenerating) return;
+              if (scheduleGenerating || !canNavigateSeeds) return;
               onBeforeNavigate?.();
               void goToPreviousSeed();
             }}
@@ -313,10 +317,10 @@ export function BasicCalendarSidebarControls({
             color="violet"
             size="sm"
             radius={0}
-            disabled={scheduleGenerating}
+            disabled={scheduleGenerating || !canNavigateSeeds}
             loading={scheduleGenerating}
             onClick={() => {
-              if (scheduleGenerating) return;
+              if (scheduleGenerating || !canNavigateSeeds) return;
               onBeforeNavigate?.();
               void goToNextSeed();
             }}
