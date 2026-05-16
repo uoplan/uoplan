@@ -15,6 +15,7 @@ import {
 import { recomputeStateForProgram } from "../requirementCompute";
 import type { Course } from "schedule";
 import { wizardModeForEncoding } from "../../lib/calendarRoute";
+import { inferLowestVisitedSeedFromPersisted } from "../../lib/seedNavigation";
 
 interface UrlSlice {
   loadEncodedState: AppStore["loadEncodedState"];
@@ -181,6 +182,10 @@ export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, ge
       coursesThisSemester: decoded.coursesThisSemester,
       firstSeed: decoded.firstSeed >>> 0,
       currentSeed: decoded.currentSeed >>> 0,
+      lowestVisitedSeed: inferLowestVisitedSeedFromPersisted(
+        decoded.firstSeed >>> 0,
+        decoded.currentSeed >>> 0,
+      ),
       currentSwaps: decoded.swaps,
       includeClosedComponents: decoded.includeClosedComponents ?? false,
       virtualSectionsOnly: decoded.virtualSectionsOnly ?? false,

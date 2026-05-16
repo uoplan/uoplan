@@ -3,6 +3,7 @@ import { buildRootHead } from "../lib/seo";
 import { useEffect, type ReactNode } from "react";
 import { useLingui } from "@lingui/react";
 import { Alert, Box, Loader, Paper, Stack, Text } from "@mantine/core";
+import { usePersistState } from "../hooks/usePersistState";
 import { useAppStore } from "../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { tr } from "../i18n";
@@ -45,9 +46,13 @@ function NotFound() {
 
 function RootLayout() {
   const loadData = useAppStore((s) => s.loadData);
+  const indices = useAppStore((s) => s.indices);
+
   useEffect(() => {
     void loadData();
   }, [loadData]);
+
+  usePersistState(!!indices);
 
   const { loading, error } = useAppStore(
     useShallow((s) => ({

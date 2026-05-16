@@ -22,6 +22,7 @@ import {
   basicElectivesAfterPinnedDelta,
   canGenerateBasicSchedule,
 } from "../../lib/basicCalendarPins";
+import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 
 export function BasicCalendarSidebarControls({
   onBeforeNavigate,
@@ -66,9 +67,9 @@ export function BasicCalendarSidebarControls({
   const goToPreviousSeed = useAppStore((s) => s.goToPreviousSeed);
   const goToNextSeed = useAppStore((s) => s.goToNextSeed);
   const scheduleGenerating = useAppStore((s) => s.scheduleGenerating);
-  const firstSeed = useAppStore((s) => s.firstSeed);
   const currentSeed = useAppStore((s) => s.currentSeed);
-  const canGoPrevious = currentSeed > firstSeed && currentSeed > 0;
+  const lowestVisitedSeed = useAppStore((s) => s.lowestVisitedSeed);
+  const canGoPrevious = canGoToPreviousSeed(currentSeed, lowestVisitedSeed);
   const canNavigateSeeds = canGenerateBasicSchedule(basicPinnedCourses.length, basicElectivesCount);
   const markBasicSettingsChanged = useAppStore((s) => s.markBasicSettingsChanged);
   const resetBasicCalendarSettings = useAppStore((s) => s.resetBasicCalendarSettings);

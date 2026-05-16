@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { CalendarPage } from "../../components/calendar/CalendarPage";
 import { navigateToWizardStep } from "../../lib/appNavigation";
 import { WizardStep } from "../../lib/wizardSteps";
+import { useRepairSeedOnCalendarMount } from "../../hooks/useRepairSeedOnCalendarMount";
 import { useAppStore } from "../../store/appStore";
 
 export const Route = createFileRoute("/calendar/advanced")({
@@ -11,6 +12,8 @@ export const Route = createFileRoute("/calendar/advanced")({
 });
 
 function AdvancedCalendarRoute() {
+  useRepairSeedOnCalendarMount();
+
   const generateSchedules = useAppStore((s) => s.generateSchedules);
   const indices = useAppStore((s) => s.indices);
   const currentSchedule = useAppStore((s) => s.currentSchedule);
