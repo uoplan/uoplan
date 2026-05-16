@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { CalendarPage } from "../../components/calendar/CalendarPage";
-import { useRepairSeedOnCalendarMount } from "../../hooks/useRepairSeedOnCalendarMount";
-import { navigateToWizardStep } from "../../lib/appNavigation";
-import { WizardStep } from "../../lib/wizardSteps";
+import { CalendarPage } from "../../../components/calendar/CalendarPage";
+import { useRepairSeedOnCalendarMount } from "../../../hooks/useRepairSeedOnCalendarMount";
+import { navigateToWizardStep } from "../../../lib/appNavigation";
+import { WizardStep } from "../../../lib/wizardSteps";
 
-export const Route = createFileRoute("/calendar/basic")({
+export const Route = createFileRoute("/schedule/calendar/basic")({
   component: BasicCalendarRoute,
 });
 

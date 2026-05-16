@@ -44,7 +44,14 @@ function canonicalPairKey(a: string, b: string): string {
  * Edge exists when two professors appear under the same course code; weight sums
  * min(offeringCountA, offeringCountB) per shared course.
  */
-export function buildProfessorCoTeachingGraph(grades: CourseGradesData): ProfessorCoTeachingGraph {
+const GRAPH_BUILD_PROGRESS_EVERY = 48;
+
+export function buildProfessorCoTeachingGraph(
+  grades: CourseGradesData,
+  onProgress?: (ratio: number) => void,
+): ProfessorCoTeachingGraph {
+  const courses = grades.courses;
+  const courseCount = courses.length;
   const nodeMeta = new Map<
     string,
     {
@@ -55,7 +62,8 @@ export function buildProfessorCoTeachingGraph(grades: CourseGradesData): Profess
   >();
   const edgeWeights = new Map<string, number>();
 
-  for (const course of grades.courses) {
+  for (let courseIndex = 0; courseIndex < courseCount; courseIndex++) {
+    const course = courses[courseIndex];
     const counts = new Map<string, number>();
 
     for (const p of course.professors) {
@@ -83,7 +91,16 @@ export function buildProfessorCoTeachingGraph(grades: CourseGradesData): Profess
         edgeWeights.set(pairKey, (edgeWeights.get(pairKey) ?? 0) + contribution);
       }
     }
+
+    if (
+      onProgress &&
+      (courseIndex % GRAPH_BUILD_PROGRESS_EVERY === 0 || courseIndex === courseCount - 1)
+    ) {
+      onProgress((courseIndex + 1) / courseCount);
+    }
   }
+
+  onProgress?.(1);
 
   const degree = new Map<string, number>();
   const edges: ProfessorGraphEdge[] = [];

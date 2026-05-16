@@ -9,6 +9,21 @@ msgstr ""
 msgid "app.beta"
 msgstr "Beta"
 
+msgid "app.experimental"
+msgstr "Experimental"
+
+msgid "landing.schedule.title"
+msgstr "Schedule generator"
+
+msgid "landing.schedule.description"
+msgstr "Plan your degree and generate conflict-free timetables."
+
+msgid "landing.explore.description"
+msgstr "Search courses and professors with grade distributions."
+
+msgid "landing.graph.description"
+msgstr "See how professors connect through shared courses."
+
 msgid "app.constraints.description"
 msgstr "Pin courses to specific requirements - the generator uses your picks first, filling any remaining slots from other eligible courses."
 
@@ -1010,6 +1025,15 @@ msgstr "No schedule generated yet."
 
 msgid "calendarPage.generate"
 msgstr "Generate"
+
+msgid "seo.home.title"
+msgstr "uoplan | uOttawa Course Planner"
+
+msgid "seo.home.description"
+msgstr "Free tools for University of Ottawa students: plan your degree, explore course grades, and browse the professor co-teaching network."
+
+msgid "seo.home.keywords"
+msgstr "uottawa course planner, uottawa schedule planner, uottawa course grades, university of ottawa"
 
 msgid "seo.schedule.title"
 msgstr "uoplan | uOttawa Course Planner & Schedule Generator"

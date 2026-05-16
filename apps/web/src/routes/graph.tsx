@@ -3,6 +3,8 @@ import {
   ProfessorGraphPage,
   type ProfessorGraphNavigate,
 } from "../components/graph/ProfessorGraphPage";
+import { AppDataRouteGate } from "../components/shared/AppDataRouteGate";
+import { RouteEnterTransition } from "../components/shared/RouteEnterTransition";
 import { buildPageHead } from "../lib/seo";
 
 export const Route = createFileRoute("/graph")({
@@ -23,5 +25,11 @@ function GraphRoute() {
   const navigateGraph: ProfessorGraphNavigate = (opts) =>
     navigate({ search: opts.search, replace: opts.replace });
 
-  return <ProfessorGraphPage urlProfParam={prof} navigateGraph={navigateGraph} />;
+  return (
+    <AppDataRouteGate>
+      <RouteEnterTransition>
+        <ProfessorGraphPage urlProfParam={prof} navigateGraph={navigateGraph} />
+      </RouteEnterTransition>
+    </AppDataRouteGate>
+  );
 }

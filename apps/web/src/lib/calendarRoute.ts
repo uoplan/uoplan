@@ -1,8 +1,8 @@
 export type CalendarVariant = "basic" | "advanced";
 
 export function getCalendarVariantFromPath(pathname: string): CalendarVariant | null {
-  if (pathname.includes("/calendar/basic")) return "basic";
-  if (pathname.includes("/calendar/advanced")) return "advanced";
+  if (pathname.includes("/schedule/calendar/basic")) return "basic";
+  if (pathname.includes("/schedule/calendar/advanced")) return "advanced";
   return null;
 }
 

@@ -4,12 +4,14 @@ import type {
   ProfessorCoTeachingGraph,
   ProfessorGraphNode,
 } from "schedule";
-import { normalizeGradeVizDistribution, professorGraphId } from "schedule";
 import {
-  buildExploreOfferings,
-  mergeGradeDistributionCounts,
-  type ExploreOfferingFlat,
-} from "../explore/gradesSearch";
+  normalizeCourseCode,
+  normalizeGradeVizDistribution,
+  normalizeProfessorName,
+  professorGraphId,
+} from "schedule";
+import { mergeGradeDistributionCounts, type ExploreOfferingFlat } from "../explore/gradesSearch";
+import { formatUottawaTermIdLabel } from "../explore/uottawaTermId";
 
 export type NeighborSortMode = "strength" | "name";
 
@@ -18,22 +20,86 @@ export type GraphNeighbor = {
   weight: number;
 };
 
+const OFFERINGS_BUILD_PROGRESS_EVERY = 64;
+
+function offeringRowId(parts: {
+  courseCode: string;
+  legacyId?: number;
+  name: string;
+  termId: number;
+  section?: string;
+}): string {
+  return [
+    parts.courseCode,
+    parts.legacyId ?? "",
+    normalizeProfessorName(parts.name).toLowerCase(),
+    String(parts.termId),
+    parts.section ?? "",
+  ].join("|");
+}
+
 export function buildOfferingsByProfessorId(
   grades: CourseGradesData,
+  onProgress?: (ratio: number) => void,
 ): Map<string, ExploreOfferingFlat[]> {
-  const offerings = buildExploreOfferings(grades, new Map(), new Map());
   const byId = new Map<string, ExploreOfferingFlat[]>();
+  const courses = grades.courses;
+  const courseCount = courses.length;
 
-  for (const o of offerings) {
-    const id = professorGraphId(o.legacyId, o.professorName);
-    const list = byId.get(id);
-    if (list) {
-      list.push(o);
-    } else {
-      byId.set(id, [o]);
+  for (let courseIndex = 0; courseIndex < courseCount; courseIndex++) {
+    const c = courses[courseIndex];
+    const norm = normalizeCourseCode(c.code);
+
+    for (const p of c.professors) {
+      const termLabel = formatUottawaTermIdLabel(p.termId);
+      const fuseText = [
+        c.code,
+        norm,
+        p.name,
+        p.legacyId != null ? String(p.legacyId) : "",
+        termLabel,
+        p.section ?? "",
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      const offering: ExploreOfferingFlat = {
+        id: offeringRowId({
+          courseCode: c.code,
+          legacyId: p.legacyId,
+          name: p.name,
+          termId: p.termId,
+          section: p.section,
+        }),
+        courseCode: c.code,
+        courseTitle: "",
+        professorName: p.name,
+        legacyId: p.legacyId,
+        termId: p.termId,
+        termLabel,
+        section: p.section,
+        fuseText,
+        distribution: p.distribution,
+      };
+
+      const id = professorGraphId(p.legacyId, p.name);
+      const list = byId.get(id);
+      if (list) {
+        list.push(offering);
+      } else {
+        byId.set(id, [offering]);
+      }
+    }
+
+    if (
+      onProgress &&
+      (courseIndex % OFFERINGS_BUILD_PROGRESS_EVERY === 0 || courseIndex === courseCount - 1)
+    ) {
+      onProgress((courseIndex + 1) / courseCount);
     }
   }
 
+  onProgress?.(1);
   return byId;
 }
 

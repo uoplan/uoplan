@@ -147,7 +147,11 @@ if (!fs.existsSync(templatePath)) {
 
 const template = fs.readFileSync(templatePath, "utf8");
 
-writePrerenderedPage(template, "schedule", path.join(distDir, "index.html"));
+writePrerenderedPage(template, "home", path.join(distDir, "index.html"));
 writePrerenderedPage(template, "explore", path.join(distDir, "explore", "index.html"));
 writePrerenderedPage(template, "graph", path.join(distDir, "graph", "index.html"));
-writePrerenderedPage(template, "schedule", path.join(distDir, "step", "term", "index.html"));
+writePrerenderedPage(
+  template,
+  "schedule",
+  path.join(distDir, "schedule", "step", "term", "index.html"),
+);

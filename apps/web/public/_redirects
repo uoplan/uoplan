@@ -1,5 +1,9 @@
 /explore    /explore/index.html   200
 /explore/   /explore/index.html   200
 /graph      /graph/index.html     200
-/step/term  /step/term/index.html 200
+/step/*     /schedule/step/:splat 301
+/calendar/* /schedule/calendar/:splat 301
+/schedule           /schedule/index.html           200
+/schedule/            /schedule/index.html           200
+/schedule/step/term   /schedule/step/term/index.html 200
 /*          /index.html           200

@@ -1,12 +1,10 @@
 import { createRootRoute, HeadContent, Link, Outlet } from "@tanstack/react-router";
 import { buildRootHead } from "../lib/seo";
-import { useEffect, type ReactNode } from "react";
+import { useEffect } from "react";
 import { useLingui } from "@lingui/react";
-import { Alert, Box, Paper, Text } from "@mantine/core";
-import { AppDataLoader } from "../components/shared/AppDataLoader";
+import { Box, Text } from "@mantine/core";
 import { usePersistState } from "../hooks/usePersistState";
 import { useAppStore } from "../store/appStore";
-import { useShallow } from "zustand/react/shallow";
 import { tr } from "../i18n";
 
 export const Route = createRootRoute({
@@ -38,7 +36,7 @@ function NotFound() {
       <Text c="dimmed" size="sm" ta="center">
         This page does not exist.
       </Text>
-      <Link to="/step/term" style={{ color: "var(--mantine-color-violet-4)" }}>
+      <Link to="/" style={{ color: "var(--mantine-color-violet-4)" }}>
         {tr("app.nav.back")} — uoplan
       </Link>
     </Box>
@@ -55,53 +53,10 @@ function RootLayout() {
 
   usePersistState(!!indices);
 
-  const { loading, loadProgress, error } = useAppStore(
-    useShallow((s) => ({
-      loading: s.loading,
-      loadProgress: s.loadProgress,
-      error: s.error,
-    })),
-  );
-
-  let content: ReactNode;
-  if (loading) {
-    content = <AppDataLoader progress={loadProgress} />;
-  } else if (error) {
-    content = (
-      <Box
-        component="main"
-        style={{
-          minHeight: "100vh",
-          padding: "60px 24px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Paper
-          withBorder
-          style={{
-            border: "2px solid #2C2E33",
-            padding: 32,
-            maxWidth: 480,
-            width: "100%",
-            backgroundColor: "#1E1E20",
-          }}
-        >
-          <Alert color="red" title={tr("app.errorTitle")}>
-            {error}
-          </Alert>
-        </Paper>
-      </Box>
-    );
-  } else {
-    content = <Outlet />;
-  }
-
   return (
     <>
       <HeadContent />
-      {content}
+      <Outlet />
     </>
   );
 }
