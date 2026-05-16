@@ -52,11 +52,14 @@ export function GradeDistributionHistogram({
   gradeViz,
   variant = "default",
   hideLabels = false,
+  showStudentCount = false,
 }: {
   gradeViz: GradeVizData;
   variant?: GradeHistogramVariant;
   /** Omit grade letters under bars (for very narrow inline histograms). */
   hideLabels?: boolean;
+  /** Top-left student total (compact explore histograms). */
+  showStudentCount?: boolean;
 }) {
   const dims = HIST_DIMS[variant];
   const { sCount, nsCount, snsTotal, histogramEntries, maxHistogramCount } =
@@ -66,11 +69,13 @@ export function GradeDistributionHistogram({
     "uoplan-grade-histogram",
     variant === "compact" ? "uoplan-grade-histogram--compact" : "",
     hideLabels ? "uoplan-grade-histogram--no-labels" : "",
+    showStudentCount && variant === "compact" ? "uoplan-grade-histogram--with-count" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
   const minHeight = hideLabels ? dims.maxBarPx + dims.padTopPx + 4 : dims.minWrapHeight;
+  const studentCountOverlay = showStudentCount && variant === "compact" && gradeViz.total > 0;
 
   return (
     <div
@@ -81,6 +86,11 @@ export function GradeDistributionHistogram({
       }}
       aria-hidden
     >
+      {studentCountOverlay ? (
+        <Text size="xs" c="dimmed" className="uoplan-grade-histogram-student-count">
+          {tr("explore.histogramStudents", { count: gradeViz.total })}
+        </Text>
+      ) : null}
       {histogramEntries.map((entry) => {
         const percent = (entry.count / gradeViz.total) * 100;
         return (
