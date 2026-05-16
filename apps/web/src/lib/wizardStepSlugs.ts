@@ -17,8 +17,8 @@ export function wizardStepToSlug(step: WizardStep): WizardStepSlug {
 }
 
 /** Typed href for TanStack Router `navigate({ to })` / `<Link to>`. */
-export type WizardStepHref = `/step/${WizardStepSlug}`;
+export type WizardStepHref = `/schedule/step/${WizardStepSlug}`;
 
 export function wizardStepToHref(step: WizardStep): WizardStepHref {
-  return `/step/${wizardStepToSlug(step)}`;
+  return `/schedule/step/${wizardStepToSlug(step)}`;
 }

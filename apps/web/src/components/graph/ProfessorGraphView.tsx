@@ -1,6 +1,5 @@
 import { memo, useCallback, useEffect, useRef } from "react";
 import type Graph from "graphology";
-import forceAtlas2 from "graphology-layout-forceatlas2";
 import Sigma from "sigma";
 import type { ProfessorCoTeachingGraph, ProfessorGraphNode } from "schedule";
 import {
@@ -14,6 +13,7 @@ import {
 import { drawProfessorNodeHover } from "../../lib/graph/drawProfessorNodeHover";
 import { animateCameraToHighlightedNodes } from "../../lib/graph/fitViewportToNodes";
 import { placeIsolatedNodes } from "../../lib/graph/placeIsolatedNodes";
+import { runForceAtlas2Chunked } from "../../lib/graph/runForceAtlas2Chunked";
 
 const NODE_DIM = "rgba(61, 66, 72, 0.42)";
 const NODE_ACTIVE = "#ffffff";
@@ -26,6 +26,7 @@ export type ProfessorGraphViewProps = {
   focusNodeId: string | null;
   previewNodeId?: string | null;
   onPhaseChange?: (phase: ProfessorGraphPhase) => void;
+  onLayoutProgress?: (percent: number) => void;
   onNodeSelect?: (node: ProfessorGraphNode | null) => void;
 };
 
@@ -46,6 +47,7 @@ function ProfessorGraphViewInner({
   focusNodeId,
   previewNodeId = null,
   onPhaseChange,
+  onLayoutProgress,
   onNodeSelect,
 }: ProfessorGraphViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -57,9 +59,11 @@ function ProfessorGraphViewInner({
   const hoveredNodeRef = useRef<string | null>(null);
   const onNodeSelectRef = useRef(onNodeSelect);
   const onPhaseChangeRef = useRef(onPhaseChange);
+  const onLayoutProgressRef = useRef(onLayoutProgress);
 
   onNodeSelectRef.current = onNodeSelect;
   onPhaseChangeRef.current = onPhaseChange;
+  onLayoutProgressRef.current = onLayoutProgress;
 
   const nodeReducer = useCallback((node: string, attrs: ProfessorNodeAttributes) => {
     let next = attrs;
@@ -129,83 +133,92 @@ function ProfessorGraphViewInner({
 
     let cancelled = false;
     onPhaseChangeRef.current?.("layout");
+    onLayoutProgressRef.current?.(0);
 
     const { graph, nodesById } = buildSigmaGraph(data);
     graphRef.current = graph;
     nodesByIdRef.current = nodesById;
 
-    const settings = forceAtlas2.inferSettings(graph);
-    forceAtlas2.assign(graph, { iterations: 120, settings });
-    ensureFinitePositions(graph);
-    placeIsolatedNodes(graph, data.nodes);
-    ensureFinitePositions(graph);
+    void (async () => {
+      await runForceAtlas2Chunked(graph, {
+        onProgress: (ratio) => {
+          if (!cancelled) onLayoutProgressRef.current?.(Math.round(ratio * 100));
+        },
+        isCancelled: () => cancelled,
+      });
 
-    if (cancelled) return;
+      if (cancelled) return;
 
-    const sigma = new Sigma(graph, container, {
-      renderLabels: false,
-      labelSize: 12,
-      labelFont: "system-ui, -apple-system, sans-serif",
-      labelColor: { color: "#F8F9FA" },
-      defaultDrawNodeHover: drawProfessorNodeHover as never,
-      defaultNodeColor: "#868e96",
-      defaultEdgeColor: GRAPH_EDGE_COLOR,
-      minEdgeThickness: 0.3,
-      antiAliasingFeather: 0.5,
-      hideEdgesOnMove: false,
-      zIndex: true,
-      nodeReducer,
-      edgeReducer,
-      minCameraRatio: 0.02,
-      maxCameraRatio: 4,
-    });
-    sigmaRef.current = sigma;
-    onPhaseChangeRef.current?.("ready");
+      ensureFinitePositions(graph);
+      placeIsolatedNodes(graph, data.nodes);
+      ensureFinitePositions(graph);
 
-    const onEnterNode = ({ node }: { node: string }) => {
-      hoveredNodeRef.current = node;
-      sigma.refresh();
-    };
-    const onLeaveNode = () => {
-      hoveredNodeRef.current = null;
-      sigma.refresh();
-    };
+      if (cancelled) return;
 
-    const onClickNode = ({ node }: { node: string }) => {
-      onNodeSelectRef.current?.(nodesById.get(node) ?? null);
-    };
-    sigma.on("enterNode", onEnterNode);
-    sigma.on("leaveNode", onLeaveNode);
-    sigma.on("clickNode", onClickNode);
+      const sigma = new Sigma(graph, container, {
+        renderLabels: false,
+        labelSize: 12,
+        labelFont: "system-ui, -apple-system, sans-serif",
+        labelColor: { color: "#F8F9FA" },
+        defaultDrawNodeHover: drawProfessorNodeHover as never,
+        defaultNodeColor: "#868e96",
+        defaultEdgeColor: GRAPH_EDGE_COLOR,
+        minEdgeThickness: 0.3,
+        antiAliasingFeather: 0.5,
+        hideEdgesOnMove: false,
+        zIndex: true,
+        nodeReducer,
+        edgeReducer,
+        minCameraRatio: 0.02,
+        maxCameraRatio: 4,
+      });
+      sigmaRef.current = sigma;
+      onLayoutProgressRef.current?.(100);
+      onPhaseChangeRef.current?.("ready");
 
-    const onClickStage = () => {
-      onNodeSelectRef.current?.(null);
-    };
-    sigma.on("clickStage", onClickStage);
-
-    const initialHighlight = previewNodeId ?? focusNodeId;
-    if (initialHighlight && graph.hasNode(initialHighlight)) {
-      const onAfterRender = () => {
-        sigma.off("afterRender", onAfterRender);
-        focusRef.current = initialHighlight;
-        const neighbors = getNeighborIds(graph, initialHighlight);
-        neighborsRef.current = neighbors;
+      const onEnterNode = ({ node }: { node: string }) => {
+        hoveredNodeRef.current = node;
         sigma.refresh();
-        if (!previewNodeId && focusNodeId) {
-          animateCameraToHighlightedNodes(sigma as never, initialHighlight, neighbors);
-        }
       };
-      sigma.on("afterRender", onAfterRender);
-    }
+      const onLeaveNode = () => {
+        hoveredNodeRef.current = null;
+        sigma.refresh();
+      };
+      const onClickNode = ({ node }: { node: string }) => {
+        onNodeSelectRef.current?.(nodesById.get(node) ?? null);
+      };
+      sigma.on("enterNode", onEnterNode);
+      sigma.on("leaveNode", onLeaveNode);
+      sigma.on("clickNode", onClickNode);
+
+      const onClickStage = () => {
+        onNodeSelectRef.current?.(null);
+      };
+      sigma.on("clickStage", onClickStage);
+
+      const initialHighlight = previewNodeId ?? focusNodeId;
+      if (initialHighlight && graph.hasNode(initialHighlight)) {
+        const onAfterRender = () => {
+          sigma.off("afterRender", onAfterRender);
+          focusRef.current = initialHighlight;
+          const neighbors = getNeighborIds(graph, initialHighlight);
+          neighborsRef.current = neighbors;
+          sigma.refresh();
+          if (!previewNodeId && focusNodeId) {
+            animateCameraToHighlightedNodes(sigma as never, initialHighlight, neighbors);
+          }
+        };
+        sigma.on("afterRender", onAfterRender);
+      }
+    })();
 
     return () => {
       cancelled = true;
-      sigma.off("enterNode", onEnterNode);
-      sigma.off("leaveNode", onLeaveNode);
-      sigma.off("clickNode", onClickNode);
-      sigma.off("clickStage", onClickStage);
-      sigma.kill();
-      sigmaRef.current = null;
+      const sigma = sigmaRef.current;
+      if (sigma) {
+        sigma.kill();
+        sigmaRef.current = null;
+      }
       graphRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only rebuild layout when data changes

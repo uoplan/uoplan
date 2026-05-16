@@ -10,7 +10,7 @@ import { navigateToCalendar, navigateToWizardStep } from "./appNavigation";
  *
  * Current encodings always store `activeStep: 0` and `showCalendar: false` (navigation lives in
  * the pathname only). If we navigated on every hydrate, we would `replace` away the real URL
- * (e.g. `/step/generate`) and send users to `/step/term` after every refresh — so we no-op when
+ * (e.g. `/schedule/step/generate`) and send users to `/schedule/step/term` after every refresh — so we no-op when
  * those fields carry no information.
  */
 export function applyHydrationNavigation(decoded: DecodedState, getState: () => AppStore): void {

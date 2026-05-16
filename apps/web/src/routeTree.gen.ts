@@ -11,17 +11,20 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as GraphRouteImport } from './routes/graph'
 import { Route as ChangelogRouteImport } from './routes/changelog'
+import { Route as ScheduleRouteRouteImport } from './routes/schedule/route'
+import { Route as ExploreRouteRouteImport } from './routes/explore/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ScheduleIndexRouteImport } from './routes/schedule/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
-import { Route as StepTermRouteImport } from './routes/step/term'
-import { Route as StepProgramRouteImport } from './routes/step/program'
-import { Route as StepOptionsRouteImport } from './routes/step/options'
-import { Route as StepModeRouteImport } from './routes/step/mode'
-import { Route as StepGenerateRouteImport } from './routes/step/generate'
-import { Route as StepCompletedRouteImport } from './routes/step/completed'
-import { Route as StepAssignRouteImport } from './routes/step/assign'
-import { Route as CalendarBasicRouteImport } from './routes/calendar/basic'
-import { Route as CalendarAdvancedRouteImport } from './routes/calendar/advanced'
+import { Route as ScheduleStepTermRouteImport } from './routes/schedule/step/term'
+import { Route as ScheduleStepProgramRouteImport } from './routes/schedule/step/program'
+import { Route as ScheduleStepOptionsRouteImport } from './routes/schedule/step/options'
+import { Route as ScheduleStepModeRouteImport } from './routes/schedule/step/mode'
+import { Route as ScheduleStepGenerateRouteImport } from './routes/schedule/step/generate'
+import { Route as ScheduleStepCompletedRouteImport } from './routes/schedule/step/completed'
+import { Route as ScheduleStepAssignRouteImport } from './routes/schedule/step/assign'
+import { Route as ScheduleCalendarBasicRouteImport } from './routes/schedule/calendar/basic'
+import { Route as ScheduleCalendarAdvancedRouteImport } from './routes/schedule/calendar/advanced'
 import { Route as ExploreProfessorLegacyIdRouteImport } from './routes/explore/professor/$legacyId'
 import { Route as ExploreCourseCourseRouteImport } from './routes/explore/course/$course'
 
@@ -35,195 +38,215 @@ const ChangelogRoute = ChangelogRouteImport.update({
   path: '/changelog',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ScheduleRouteRoute = ScheduleRouteRouteImport.update({
+  id: '/schedule',
+  path: '/schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploreRouteRoute = ExploreRouteRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ExploreIndexRoute = ExploreIndexRouteImport.update({
-  id: '/explore/',
-  path: '/explore/',
-  getParentRoute: () => rootRouteImport,
+const ScheduleIndexRoute = ScheduleIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ScheduleRouteRoute,
 } as any)
-const StepTermRoute = StepTermRouteImport.update({
+const ExploreIndexRoute = ExploreIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ExploreRouteRoute,
+} as any)
+const ScheduleStepTermRoute = ScheduleStepTermRouteImport.update({
   id: '/step/term',
   path: '/step/term',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ScheduleRouteRoute,
 } as any)
-const StepProgramRoute = StepProgramRouteImport.update({
+const ScheduleStepProgramRoute = ScheduleStepProgramRouteImport.update({
   id: '/step/program',
   path: '/step/program',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ScheduleRouteRoute,
 } as any)
-const StepOptionsRoute = StepOptionsRouteImport.update({
+const ScheduleStepOptionsRoute = ScheduleStepOptionsRouteImport.update({
   id: '/step/options',
   path: '/step/options',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ScheduleRouteRoute,
 } as any)
-const StepModeRoute = StepModeRouteImport.update({
+const ScheduleStepModeRoute = ScheduleStepModeRouteImport.update({
   id: '/step/mode',
   path: '/step/mode',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ScheduleRouteRoute,
 } as any)
-const StepGenerateRoute = StepGenerateRouteImport.update({
+const ScheduleStepGenerateRoute = ScheduleStepGenerateRouteImport.update({
   id: '/step/generate',
   path: '/step/generate',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ScheduleRouteRoute,
 } as any)
-const StepCompletedRoute = StepCompletedRouteImport.update({
+const ScheduleStepCompletedRoute = ScheduleStepCompletedRouteImport.update({
   id: '/step/completed',
   path: '/step/completed',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ScheduleRouteRoute,
 } as any)
-const StepAssignRoute = StepAssignRouteImport.update({
+const ScheduleStepAssignRoute = ScheduleStepAssignRouteImport.update({
   id: '/step/assign',
   path: '/step/assign',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ScheduleRouteRoute,
 } as any)
-const CalendarBasicRoute = CalendarBasicRouteImport.update({
+const ScheduleCalendarBasicRoute = ScheduleCalendarBasicRouteImport.update({
   id: '/calendar/basic',
   path: '/calendar/basic',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ScheduleRouteRoute,
 } as any)
-const CalendarAdvancedRoute = CalendarAdvancedRouteImport.update({
-  id: '/calendar/advanced',
-  path: '/calendar/advanced',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const ScheduleCalendarAdvancedRoute =
+  ScheduleCalendarAdvancedRouteImport.update({
+    id: '/calendar/advanced',
+    path: '/calendar/advanced',
+    getParentRoute: () => ScheduleRouteRoute,
+  } as any)
 const ExploreProfessorLegacyIdRoute =
   ExploreProfessorLegacyIdRouteImport.update({
-    id: '/explore/professor/$legacyId',
-    path: '/explore/professor/$legacyId',
-    getParentRoute: () => rootRouteImport,
+    id: '/professor/$legacyId',
+    path: '/professor/$legacyId',
+    getParentRoute: () => ExploreRouteRoute,
   } as any)
 const ExploreCourseCourseRoute = ExploreCourseCourseRouteImport.update({
-  id: '/explore/course/$course',
-  path: '/explore/course/$course',
-  getParentRoute: () => rootRouteImport,
+  id: '/course/$course',
+  path: '/course/$course',
+  getParentRoute: () => ExploreRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/explore': typeof ExploreRouteRouteWithChildren
+  '/schedule': typeof ScheduleRouteRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/graph': typeof GraphRoute
-  '/calendar/advanced': typeof CalendarAdvancedRoute
-  '/calendar/basic': typeof CalendarBasicRoute
-  '/step/assign': typeof StepAssignRoute
-  '/step/completed': typeof StepCompletedRoute
-  '/step/generate': typeof StepGenerateRoute
-  '/step/mode': typeof StepModeRoute
-  '/step/options': typeof StepOptionsRoute
-  '/step/program': typeof StepProgramRoute
-  '/step/term': typeof StepTermRoute
   '/explore/': typeof ExploreIndexRoute
+  '/schedule/': typeof ScheduleIndexRoute
   '/explore/course/$course': typeof ExploreCourseCourseRoute
   '/explore/professor/$legacyId': typeof ExploreProfessorLegacyIdRoute
+  '/schedule/calendar/advanced': typeof ScheduleCalendarAdvancedRoute
+  '/schedule/calendar/basic': typeof ScheduleCalendarBasicRoute
+  '/schedule/step/assign': typeof ScheduleStepAssignRoute
+  '/schedule/step/completed': typeof ScheduleStepCompletedRoute
+  '/schedule/step/generate': typeof ScheduleStepGenerateRoute
+  '/schedule/step/mode': typeof ScheduleStepModeRoute
+  '/schedule/step/options': typeof ScheduleStepOptionsRoute
+  '/schedule/step/program': typeof ScheduleStepProgramRoute
+  '/schedule/step/term': typeof ScheduleStepTermRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
   '/graph': typeof GraphRoute
-  '/calendar/advanced': typeof CalendarAdvancedRoute
-  '/calendar/basic': typeof CalendarBasicRoute
-  '/step/assign': typeof StepAssignRoute
-  '/step/completed': typeof StepCompletedRoute
-  '/step/generate': typeof StepGenerateRoute
-  '/step/mode': typeof StepModeRoute
-  '/step/options': typeof StepOptionsRoute
-  '/step/program': typeof StepProgramRoute
-  '/step/term': typeof StepTermRoute
   '/explore': typeof ExploreIndexRoute
+  '/schedule': typeof ScheduleIndexRoute
   '/explore/course/$course': typeof ExploreCourseCourseRoute
   '/explore/professor/$legacyId': typeof ExploreProfessorLegacyIdRoute
+  '/schedule/calendar/advanced': typeof ScheduleCalendarAdvancedRoute
+  '/schedule/calendar/basic': typeof ScheduleCalendarBasicRoute
+  '/schedule/step/assign': typeof ScheduleStepAssignRoute
+  '/schedule/step/completed': typeof ScheduleStepCompletedRoute
+  '/schedule/step/generate': typeof ScheduleStepGenerateRoute
+  '/schedule/step/mode': typeof ScheduleStepModeRoute
+  '/schedule/step/options': typeof ScheduleStepOptionsRoute
+  '/schedule/step/program': typeof ScheduleStepProgramRoute
+  '/schedule/step/term': typeof ScheduleStepTermRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/explore': typeof ExploreRouteRouteWithChildren
+  '/schedule': typeof ScheduleRouteRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/graph': typeof GraphRoute
-  '/calendar/advanced': typeof CalendarAdvancedRoute
-  '/calendar/basic': typeof CalendarBasicRoute
-  '/step/assign': typeof StepAssignRoute
-  '/step/completed': typeof StepCompletedRoute
-  '/step/generate': typeof StepGenerateRoute
-  '/step/mode': typeof StepModeRoute
-  '/step/options': typeof StepOptionsRoute
-  '/step/program': typeof StepProgramRoute
-  '/step/term': typeof StepTermRoute
   '/explore/': typeof ExploreIndexRoute
+  '/schedule/': typeof ScheduleIndexRoute
   '/explore/course/$course': typeof ExploreCourseCourseRoute
   '/explore/professor/$legacyId': typeof ExploreProfessorLegacyIdRoute
+  '/schedule/calendar/advanced': typeof ScheduleCalendarAdvancedRoute
+  '/schedule/calendar/basic': typeof ScheduleCalendarBasicRoute
+  '/schedule/step/assign': typeof ScheduleStepAssignRoute
+  '/schedule/step/completed': typeof ScheduleStepCompletedRoute
+  '/schedule/step/generate': typeof ScheduleStepGenerateRoute
+  '/schedule/step/mode': typeof ScheduleStepModeRoute
+  '/schedule/step/options': typeof ScheduleStepOptionsRoute
+  '/schedule/step/program': typeof ScheduleStepProgramRoute
+  '/schedule/step/term': typeof ScheduleStepTermRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/explore'
+    | '/schedule'
     | '/changelog'
     | '/graph'
-    | '/calendar/advanced'
-    | '/calendar/basic'
-    | '/step/assign'
-    | '/step/completed'
-    | '/step/generate'
-    | '/step/mode'
-    | '/step/options'
-    | '/step/program'
-    | '/step/term'
     | '/explore/'
+    | '/schedule/'
     | '/explore/course/$course'
     | '/explore/professor/$legacyId'
+    | '/schedule/calendar/advanced'
+    | '/schedule/calendar/basic'
+    | '/schedule/step/assign'
+    | '/schedule/step/completed'
+    | '/schedule/step/generate'
+    | '/schedule/step/mode'
+    | '/schedule/step/options'
+    | '/schedule/step/program'
+    | '/schedule/step/term'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/changelog'
     | '/graph'
-    | '/calendar/advanced'
-    | '/calendar/basic'
-    | '/step/assign'
-    | '/step/completed'
-    | '/step/generate'
-    | '/step/mode'
-    | '/step/options'
-    | '/step/program'
-    | '/step/term'
     | '/explore'
+    | '/schedule'
     | '/explore/course/$course'
     | '/explore/professor/$legacyId'
+    | '/schedule/calendar/advanced'
+    | '/schedule/calendar/basic'
+    | '/schedule/step/assign'
+    | '/schedule/step/completed'
+    | '/schedule/step/generate'
+    | '/schedule/step/mode'
+    | '/schedule/step/options'
+    | '/schedule/step/program'
+    | '/schedule/step/term'
   id:
     | '__root__'
     | '/'
+    | '/explore'
+    | '/schedule'
     | '/changelog'
     | '/graph'
-    | '/calendar/advanced'
-    | '/calendar/basic'
-    | '/step/assign'
-    | '/step/completed'
-    | '/step/generate'
-    | '/step/mode'
-    | '/step/options'
-    | '/step/program'
-    | '/step/term'
     | '/explore/'
+    | '/schedule/'
     | '/explore/course/$course'
     | '/explore/professor/$legacyId'
+    | '/schedule/calendar/advanced'
+    | '/schedule/calendar/basic'
+    | '/schedule/step/assign'
+    | '/schedule/step/completed'
+    | '/schedule/step/generate'
+    | '/schedule/step/mode'
+    | '/schedule/step/options'
+    | '/schedule/step/program'
+    | '/schedule/step/term'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ExploreRouteRoute: typeof ExploreRouteRouteWithChildren
+  ScheduleRouteRoute: typeof ScheduleRouteRouteWithChildren
   ChangelogRoute: typeof ChangelogRoute
   GraphRoute: typeof GraphRoute
-  CalendarAdvancedRoute: typeof CalendarAdvancedRoute
-  CalendarBasicRoute: typeof CalendarBasicRoute
-  StepAssignRoute: typeof StepAssignRoute
-  StepCompletedRoute: typeof StepCompletedRoute
-  StepGenerateRoute: typeof StepGenerateRoute
-  StepModeRoute: typeof StepModeRoute
-  StepOptionsRoute: typeof StepOptionsRoute
-  StepProgramRoute: typeof StepProgramRoute
-  StepTermRoute: typeof StepTermRoute
-  ExploreIndexRoute: typeof ExploreIndexRoute
-  ExploreCourseCourseRoute: typeof ExploreCourseCourseRoute
-  ExploreProfessorLegacyIdRoute: typeof ExploreProfessorLegacyIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -242,6 +265,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChangelogRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/schedule': {
+      id: '/schedule'
+      path: '/schedule'
+      fullPath: '/schedule'
+      preLoaderRoute: typeof ScheduleRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -249,109 +286,152 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/schedule/': {
+      id: '/schedule/'
+      path: '/'
+      fullPath: '/schedule/'
+      preLoaderRoute: typeof ScheduleIndexRouteImport
+      parentRoute: typeof ScheduleRouteRoute
+    }
     '/explore/': {
       id: '/explore/'
-      path: '/explore'
+      path: '/'
       fullPath: '/explore/'
       preLoaderRoute: typeof ExploreIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ExploreRouteRoute
     }
-    '/step/term': {
-      id: '/step/term'
+    '/schedule/step/term': {
+      id: '/schedule/step/term'
       path: '/step/term'
-      fullPath: '/step/term'
-      preLoaderRoute: typeof StepTermRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/schedule/step/term'
+      preLoaderRoute: typeof ScheduleStepTermRouteImport
+      parentRoute: typeof ScheduleRouteRoute
     }
-    '/step/program': {
-      id: '/step/program'
+    '/schedule/step/program': {
+      id: '/schedule/step/program'
       path: '/step/program'
-      fullPath: '/step/program'
-      preLoaderRoute: typeof StepProgramRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/schedule/step/program'
+      preLoaderRoute: typeof ScheduleStepProgramRouteImport
+      parentRoute: typeof ScheduleRouteRoute
     }
-    '/step/options': {
-      id: '/step/options'
+    '/schedule/step/options': {
+      id: '/schedule/step/options'
       path: '/step/options'
-      fullPath: '/step/options'
-      preLoaderRoute: typeof StepOptionsRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/schedule/step/options'
+      preLoaderRoute: typeof ScheduleStepOptionsRouteImport
+      parentRoute: typeof ScheduleRouteRoute
     }
-    '/step/mode': {
-      id: '/step/mode'
+    '/schedule/step/mode': {
+      id: '/schedule/step/mode'
       path: '/step/mode'
-      fullPath: '/step/mode'
-      preLoaderRoute: typeof StepModeRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/schedule/step/mode'
+      preLoaderRoute: typeof ScheduleStepModeRouteImport
+      parentRoute: typeof ScheduleRouteRoute
     }
-    '/step/generate': {
-      id: '/step/generate'
+    '/schedule/step/generate': {
+      id: '/schedule/step/generate'
       path: '/step/generate'
-      fullPath: '/step/generate'
-      preLoaderRoute: typeof StepGenerateRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/schedule/step/generate'
+      preLoaderRoute: typeof ScheduleStepGenerateRouteImport
+      parentRoute: typeof ScheduleRouteRoute
     }
-    '/step/completed': {
-      id: '/step/completed'
+    '/schedule/step/completed': {
+      id: '/schedule/step/completed'
       path: '/step/completed'
-      fullPath: '/step/completed'
-      preLoaderRoute: typeof StepCompletedRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/schedule/step/completed'
+      preLoaderRoute: typeof ScheduleStepCompletedRouteImport
+      parentRoute: typeof ScheduleRouteRoute
     }
-    '/step/assign': {
-      id: '/step/assign'
+    '/schedule/step/assign': {
+      id: '/schedule/step/assign'
       path: '/step/assign'
-      fullPath: '/step/assign'
-      preLoaderRoute: typeof StepAssignRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/schedule/step/assign'
+      preLoaderRoute: typeof ScheduleStepAssignRouteImport
+      parentRoute: typeof ScheduleRouteRoute
     }
-    '/calendar/basic': {
-      id: '/calendar/basic'
+    '/schedule/calendar/basic': {
+      id: '/schedule/calendar/basic'
       path: '/calendar/basic'
-      fullPath: '/calendar/basic'
-      preLoaderRoute: typeof CalendarBasicRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/schedule/calendar/basic'
+      preLoaderRoute: typeof ScheduleCalendarBasicRouteImport
+      parentRoute: typeof ScheduleRouteRoute
     }
-    '/calendar/advanced': {
-      id: '/calendar/advanced'
+    '/schedule/calendar/advanced': {
+      id: '/schedule/calendar/advanced'
       path: '/calendar/advanced'
-      fullPath: '/calendar/advanced'
-      preLoaderRoute: typeof CalendarAdvancedRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/schedule/calendar/advanced'
+      preLoaderRoute: typeof ScheduleCalendarAdvancedRouteImport
+      parentRoute: typeof ScheduleRouteRoute
     }
     '/explore/professor/$legacyId': {
       id: '/explore/professor/$legacyId'
-      path: '/explore/professor/$legacyId'
+      path: '/professor/$legacyId'
       fullPath: '/explore/professor/$legacyId'
       preLoaderRoute: typeof ExploreProfessorLegacyIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ExploreRouteRoute
     }
     '/explore/course/$course': {
       id: '/explore/course/$course'
-      path: '/explore/course/$course'
+      path: '/course/$course'
       fullPath: '/explore/course/$course'
       preLoaderRoute: typeof ExploreCourseCourseRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ExploreRouteRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  ChangelogRoute: ChangelogRoute,
-  GraphRoute: GraphRoute,
-  CalendarAdvancedRoute: CalendarAdvancedRoute,
-  CalendarBasicRoute: CalendarBasicRoute,
-  StepAssignRoute: StepAssignRoute,
-  StepCompletedRoute: StepCompletedRoute,
-  StepGenerateRoute: StepGenerateRoute,
-  StepModeRoute: StepModeRoute,
-  StepOptionsRoute: StepOptionsRoute,
-  StepProgramRoute: StepProgramRoute,
-  StepTermRoute: StepTermRoute,
+interface ExploreRouteRouteChildren {
+  ExploreIndexRoute: typeof ExploreIndexRoute
+  ExploreCourseCourseRoute: typeof ExploreCourseCourseRoute
+  ExploreProfessorLegacyIdRoute: typeof ExploreProfessorLegacyIdRoute
+}
+
+const ExploreRouteRouteChildren: ExploreRouteRouteChildren = {
   ExploreIndexRoute: ExploreIndexRoute,
   ExploreCourseCourseRoute: ExploreCourseCourseRoute,
   ExploreProfessorLegacyIdRoute: ExploreProfessorLegacyIdRoute,
+}
+
+const ExploreRouteRouteWithChildren = ExploreRouteRoute._addFileChildren(
+  ExploreRouteRouteChildren,
+)
+
+interface ScheduleRouteRouteChildren {
+  ScheduleIndexRoute: typeof ScheduleIndexRoute
+  ScheduleCalendarAdvancedRoute: typeof ScheduleCalendarAdvancedRoute
+  ScheduleCalendarBasicRoute: typeof ScheduleCalendarBasicRoute
+  ScheduleStepAssignRoute: typeof ScheduleStepAssignRoute
+  ScheduleStepCompletedRoute: typeof ScheduleStepCompletedRoute
+  ScheduleStepGenerateRoute: typeof ScheduleStepGenerateRoute
+  ScheduleStepModeRoute: typeof ScheduleStepModeRoute
+  ScheduleStepOptionsRoute: typeof ScheduleStepOptionsRoute
+  ScheduleStepProgramRoute: typeof ScheduleStepProgramRoute
+  ScheduleStepTermRoute: typeof ScheduleStepTermRoute
+}
+
+const ScheduleRouteRouteChildren: ScheduleRouteRouteChildren = {
+  ScheduleIndexRoute: ScheduleIndexRoute,
+  ScheduleCalendarAdvancedRoute: ScheduleCalendarAdvancedRoute,
+  ScheduleCalendarBasicRoute: ScheduleCalendarBasicRoute,
+  ScheduleStepAssignRoute: ScheduleStepAssignRoute,
+  ScheduleStepCompletedRoute: ScheduleStepCompletedRoute,
+  ScheduleStepGenerateRoute: ScheduleStepGenerateRoute,
+  ScheduleStepModeRoute: ScheduleStepModeRoute,
+  ScheduleStepOptionsRoute: ScheduleStepOptionsRoute,
+  ScheduleStepProgramRoute: ScheduleStepProgramRoute,
+  ScheduleStepTermRoute: ScheduleStepTermRoute,
+}
+
+const ScheduleRouteRouteWithChildren = ScheduleRouteRoute._addFileChildren(
+  ScheduleRouteRouteChildren,
+)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  ExploreRouteRoute: ExploreRouteRouteWithChildren,
+  ScheduleRouteRoute: ScheduleRouteRouteWithChildren,
+  ChangelogRoute: ChangelogRoute,
+  GraphRoute: GraphRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

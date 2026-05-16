@@ -1,18 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { useLingui } from "@lingui/react";
-import {
-  Anchor,
-  Badge,
-  Box,
-  Button,
-  Group,
-  Modal,
-  Stack,
-  Text,
-  Title,
-  Tooltip,
-} from "@mantine/core";
+import { Anchor, Box, Button, Group, Modal, Stack, Text, Title, Tooltip } from "@mantine/core";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconCompass, IconHelp, IconRefresh, IconShare } from "@tabler/icons-react";
@@ -367,10 +356,7 @@ export function WizardShell({
               gap: 4,
             }}
           >
-            uoplan.party
-            <Badge color="blue" variant="light" size="sm">
-              {tr("app.beta")}
-            </Badge>
+            {tr("landing.schedule.title")}
           </Title>
         </Box>
 

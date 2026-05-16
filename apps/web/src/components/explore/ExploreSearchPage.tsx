@@ -342,7 +342,7 @@ export function ExploreSearchPage({
         >
           <Anchor
             component={Link}
-            to="/step/term"
+            to="/"
             c="violet.4"
             size="sm"
             style={{ position: "absolute", top: 0, right: 0, zIndex: 1 }}

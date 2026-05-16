@@ -9,6 +9,21 @@ msgstr ""
 msgid "app.beta"
 msgstr "Beta"
 
+msgid "app.experimental"
+msgstr "Expérimental"
+
+msgid "landing.schedule.title"
+msgstr "Générateur d'horaires"
+
+msgid "landing.schedule.description"
+msgstr "Planifiez votre parcours et générez des horaires sans conflit."
+
+msgid "landing.explore.description"
+msgstr "Recherchez des cours et des professeurs avec les distributions de notes."
+
+msgid "landing.graph.description"
+msgstr "Découvrez comment les professeurs sont liés par des cours communs."
+
 msgid "app.constraints.description"
 msgstr "Épinglez des cours à des exigences précises - le générateur utilise d'abord vos choix, puis complète les placés restantes avec d'autres cours admissibles."
 
@@ -991,6 +1006,15 @@ msgstr "Plus d'horaires"
 
 msgid "basicCalendar.noMoreSchedules"
 msgstr "Plus d'horaires"
+
+msgid "seo.home.title"
+msgstr "uoplan | Planificateur de cours uOttawa"
+
+msgid "seo.home.description"
+msgstr "Outils gratuits pour les étudiant·e·s de l'Université d'Ottawa : planifiez votre parcours, explorez les notes de cours et parcourez le réseau de co-enseignement des professeurs."
+
+msgid "seo.home.keywords"
+msgstr "planificateur de cours uottawa, horaire uottawa, notes de cours uottawa, université d'ottawa"
 
 msgid "seo.schedule.title"
 msgstr "uoplan | Planificateur de cours et générateur d'horaires uOttawa"

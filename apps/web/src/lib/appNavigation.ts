@@ -18,7 +18,7 @@ export function navigateToCalendar(
   const router = getRouterInstance();
   if (!router) return;
   void router.navigate({
-    to: variant === "basic" ? "/calendar/basic" : "/calendar/advanced",
+    to: variant === "basic" ? "/schedule/calendar/basic" : "/schedule/calendar/advanced",
     replace: options?.replace ?? false,
   });
 }

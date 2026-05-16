@@ -1,6 +1,15 @@
 {
-  "schedule": {
+  "home": {
     "canonicalPath": "/",
+    "title": "uoplan | uOttawa Course Planner",
+    "description": "Free tools for University of Ottawa students: plan your degree, explore course grades, and browse the professor co-teaching network.",
+    "keywords": "uottawa course planner, uottawa schedule planner, uottawa course grades, university of ottawa",
+    "structuredName": "uoplan home",
+    "noscriptTitle": "uoplan — uOttawa Course Planner",
+    "noscriptBody": "Plan your uOttawa degree, explore course grades, and browse professor connections."
+  },
+  "schedule": {
+    "canonicalPath": "/schedule/step/term",
     "title": "uoplan | uOttawa Course Planner & Schedule Generator",
     "description": "Free course planner and timetable generator for University of Ottawa (uOttawa) students. Map your degree, check prerequisites, and generate conflict-free timetables in seconds.",
     "keywords": "uottawa course planner, uottawa schedule planner, uschedule, uottawa timetable, uottawa degree planner, university of ottawa schedule generator",

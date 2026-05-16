@@ -4,8 +4,8 @@ import {
   Box,
   Button,
   Group,
-  Loader,
   Paper,
+  Progress,
   Stack,
   Text,
   TextInput,
@@ -15,15 +15,11 @@ import { useDebouncedValue, useMediaQuery } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
 import { IconSearch } from "@tabler/icons-react";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
-import { buildProfessorCoTeachingGraph, type ProfessorGraphNode } from "schedule";
+import type { ProfessorGraphNode } from "schedule";
 import { tr } from "../../i18n";
-import type { ExploreOfferingFlat } from "../../lib/explore/gradesSearch";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
-import {
-  buildOfferingsByProfessorId,
-  getGraphNeighbors,
-  type NeighborSortMode,
-} from "../../lib/graph/professorGraphDetails";
+import { useProfessorGraphBuild } from "../../hooks/useProfessorGraphBuild";
+import { getGraphNeighbors, type NeighborSortMode } from "../../lib/graph/professorGraphDetails";
 import {
   parseProfessorSearchParam,
   professorToSearchParam,
@@ -57,17 +53,21 @@ export function ProfessorGraphPage({
   const isMobile = useMediaQuery("(max-width: 768px)");
   const professorRatings = useAppStore((s) => s.professorRatings);
 
-  const { data: grades, error } = useCourseGradesPb();
-  const graphData = useMemo(
-    () => (grades ? buildProfessorCoTeachingGraph(grades) : null),
-    [grades],
-  );
-  const offeringsByProfessorId = useMemo(
-    () => (grades ? buildOfferingsByProfessorId(grades) : new Map<string, ExploreOfferingFlat[]>()),
-    [grades],
-  );
-  const buildPhase: BuildPhase = error ? "error" : graphData ? "ready" : "loading";
+  const { data: grades, error: gradesLoadError } = useCourseGradesPb();
+  const { graphData, offeringsByProfessorId, buildProgress, buildError, isBuilding } =
+    useProfessorGraphBuild(grades);
+  const buildPhase: BuildPhase =
+    gradesLoadError || buildError ? "error" : graphData ? "ready" : "loading";
+  const loadError = gradesLoadError ?? buildError;
   const [layoutPhase, setLayoutPhase] = useState<ProfessorGraphPhase>("layout");
+  const [layoutProgress, setLayoutProgress] = useState(0);
+  const [prevGraphData, setPrevGraphData] = useState(graphData);
+
+  if (prevGraphData !== graphData && graphData) {
+    setPrevGraphData(graphData);
+    setLayoutPhase("layout");
+    setLayoutProgress(0);
+  }
   const [previewNodeId, setPreviewNodeId] = useState<string | null>(null);
   const [neighborSort, setNeighborSort] = useState<NeighborSortMode>("strength");
   const [search, setSearch] = useState("");
@@ -148,8 +148,18 @@ export function ProfessorGraphPage({
     void navigateGraph({ search: { prof: undefined }, replace: true });
   }, [urlProfParam, urlNodeId, graphData, buildPhase, navigateGraph]);
 
-  const showOverlay = layoutPhase === "layout";
-  const overlayMessage = tr("graph.layouting");
+  const showDataLoadingOverlay = buildPhase === "loading" && !gradesLoadError;
+  const showLayoutOverlay = buildPhase === "ready" && layoutPhase === "layout";
+  const showOverlay = showDataLoadingOverlay || showLayoutOverlay;
+  const overlayMessage = showDataLoadingOverlay
+    ? isBuilding
+      ? tr("graph.building")
+      : tr("graph.loadingGrades")
+    : tr("graph.layouting");
+  const overlayProgress = Math.min(
+    100,
+    Math.max(0, showDataLoadingOverlay ? buildProgress : layoutProgress),
+  );
 
   return (
     <Box
@@ -176,7 +186,7 @@ export function ProfessorGraphPage({
         <Group align="flex-start" justify="space-between" wrap="nowrap" gap="md">
           <Stack gap="xs" style={{ pointerEvents: "auto", maxWidth: 360, width: "100%" }}>
             <Group gap="xs" wrap="nowrap">
-              <Link to="/step/term" style={{ textDecoration: "none" }}>
+              <Link to="/" style={{ textDecoration: "none" }}>
                 <Button variant="subtle" color="gray" size="xs">
                   {tr("app.nav.back")}
                 </Button>
@@ -300,11 +310,12 @@ export function ProfessorGraphPage({
           focusNodeId={focusNodeId}
           previewNodeId={previewNodeId}
           onPhaseChange={setLayoutPhase}
+          onLayoutProgress={setLayoutProgress}
           onNodeSelect={onNodeSelect}
         />
       )}
 
-      {buildPhase === "error" && (
+      {buildPhase === "error" && loadError && (
         <Box
           style={{
             position: "absolute",
@@ -316,12 +327,12 @@ export function ProfessorGraphPage({
           }}
         >
           <Alert color="red" title={tr("graph.loadErrorTitle")}>
-            {error}
+            {loadError}
           </Alert>
         </Box>
       )}
 
-      {showOverlay && buildPhase !== "error" && (
+      {showOverlay && (
         <Box
           style={{
             position: "absolute",
@@ -334,12 +345,27 @@ export function ProfessorGraphPage({
             zIndex: 15,
             backgroundColor: "rgba(20, 21, 23, 0.72)",
             pointerEvents: "none",
+            padding: 24,
           }}
         >
-          <Loader color="violet" size="md" />
-          <Text c="dimmed" size="sm">
-            {overlayMessage}
-          </Text>
+          <Stack gap="xs" align="center" w="100%" maw={320}>
+            <Text c="dimmed" size="sm" ta="center">
+              {overlayMessage}
+            </Text>
+            <Progress
+              value={overlayProgress}
+              size="sm"
+              radius={0}
+              color="violet"
+              w="100%"
+              transitionDuration={0}
+              aria-label={overlayMessage}
+              styles={{ root: { backgroundColor: "#2C2E33" } }}
+            />
+            <Text size="xs" c="dimmed" ff="monospace">
+              {overlayProgress}%
+            </Text>
+          </Stack>
         </Box>
       )}
     </Box>

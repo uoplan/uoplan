@@ -1,0 +1,165 @@
+import { Link } from "@tanstack/react-router";
+import { useLingui } from "@lingui/react";
+import { Badge, Box, Paper, SimpleGrid, Stack, Text, Title } from "@mantine/core";
+import { IconAffiliate, IconCalendar, IconCompass } from "@tabler/icons-react";
+import { motion } from "framer-motion";
+import type { ReactNode } from "react";
+import { tr } from "../../i18n";
+
+type LandingTileProps = {
+  to: string;
+  title: string;
+  description: string;
+  badgeLabel?: string;
+  badgeColor?: "blue" | "orange";
+  icon: ReactNode;
+  ariaLabel: string;
+};
+
+function LandingTile({
+  to,
+  title,
+  description,
+  badgeLabel,
+  badgeColor = "blue",
+  icon,
+  ariaLabel,
+}: LandingTileProps) {
+  return (
+    <Link
+      to={to}
+      aria-label={ariaLabel}
+      style={{
+        display: "block",
+        height: "100%",
+        textDecoration: "none",
+      }}
+    >
+      <Paper
+        withBorder
+        radius={0}
+        className="stamp-hover"
+        style={{
+          position: "relative",
+          height: "100%",
+          overflow: "hidden",
+          backgroundColor: "#1E1E20",
+          border: "2px solid #2C2E33",
+          padding: "var(--mantine-spacing-lg)",
+          paddingBottom: badgeLabel
+            ? "calc(var(--mantine-spacing-lg) + 28px)"
+            : "var(--mantine-spacing-lg)",
+        }}
+      >
+        <Stack gap="md" align="center" ta="center">
+          <Box c="violet.4" style={{ lineHeight: 0 }}>
+            {icon}
+          </Box>
+          <Text fw={600} size="md" c="#F8F9FA">
+            {title}
+          </Text>
+          <Text size="sm" c="dimmed" lh={1.5}>
+            {description}
+          </Text>
+        </Stack>
+        {badgeLabel ? (
+          <Badge
+            color={badgeColor}
+            variant="light"
+            size="sm"
+            style={{
+              position: "absolute",
+              bottom: 12,
+              left: "50%",
+              transform: "translateX(-50%)",
+              fontSize: 10,
+              fontWeight: 600,
+              letterSpacing: "0.06em",
+              background:
+                badgeColor === "blue" ? "rgba(51, 154, 240, 0.12)" : "rgba(255, 146, 43, 0.12)",
+              color: badgeColor === "blue" ? "#74C0FC" : "#FFA94D",
+              border: "none",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {badgeLabel}
+          </Badge>
+        ) : null}
+      </Paper>
+    </Link>
+  );
+}
+
+export function LandingPage() {
+  useLingui();
+
+  const betaLabel = tr("app.beta");
+  const experimentalLabel = tr("app.experimental");
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.3 }}
+      style={{ width: "100%", minHeight: "100vh" }}
+    >
+      <Box
+        component="main"
+        style={{
+          minHeight: "100vh",
+          padding: 24,
+          backgroundColor: "#141517",
+          boxSizing: "border-box",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Stack gap="xl" align="center" w="100%" maw={960} pb={16}>
+          <Title
+            order={1}
+            style={{
+              fontFamily: '"DM Serif Display", serif',
+              color: "#F8F9FA",
+              fontWeight: 400,
+              fontSize: "clamp(1.75rem, 5vw, 2.25rem)",
+            }}
+          >
+            uoplan.party
+          </Title>
+
+          <SimpleGrid cols={{ base: 1, md: 3 }} spacing="lg" w="100%">
+            <LandingTile
+              to="/schedule"
+              title={tr("landing.schedule.title")}
+              description={tr("landing.schedule.description")}
+              badgeLabel={betaLabel}
+              badgeColor="blue"
+              icon={<IconCalendar size={32} stroke={1.5} />}
+              ariaLabel={`${tr("landing.schedule.title")}, ${betaLabel}`}
+            />
+            <LandingTile
+              to="/explore"
+              title={tr("explore.title")}
+              description={tr("landing.explore.description")}
+              badgeLabel={betaLabel}
+              badgeColor="blue"
+              icon={<IconCompass size={32} stroke={1.5} />}
+              ariaLabel={`${tr("explore.title")}, ${betaLabel}`}
+            />
+            <LandingTile
+              to="/graph"
+              title={tr("graph.title")}
+              description={tr("landing.graph.description")}
+              badgeLabel={experimentalLabel}
+              badgeColor="orange"
+              icon={<IconAffiliate size={32} stroke={1.5} />}
+              ariaLabel={`${tr("graph.title")}, ${experimentalLabel}`}
+            />
+          </SimpleGrid>
+        </Stack>
+      </Box>
+    </motion.div>
+  );
+}
