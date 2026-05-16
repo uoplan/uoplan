@@ -1,0 +1,29 @@
+{
+  "schedule": {
+    "canonicalPath": "/",
+    "title": "uoplan | uOttawa Course Planner & Schedule Generator",
+    "description": "Free course planner and timetable generator for University of Ottawa (uOttawa) students. Map your degree, check prerequisites, and generate conflict-free timetables in seconds.",
+    "keywords": "uottawa course planner, uottawa schedule planner, uschedule, uottawa timetable, uottawa degree planner, university of ottawa schedule generator",
+    "structuredName": "Schedule generator",
+    "noscriptTitle": "uoplan — uOttawa Course Planner & Schedule Generator",
+    "noscriptBody": "Free course planner and timetable generator for University of Ottawa students. Build conflict-free schedules, check prerequisites, and plan your degree."
+  },
+  "explore": {
+    "canonicalPath": "/explore/",
+    "title": "Explore uOttawa Courses & Grades | uoplan",
+    "description": "Search University of Ottawa courses and professors. View historical grade distributions, compare sections, and find the easiest or hardest offerings.",
+    "keywords": "uottawa course grades, uottawa grade distribution, uottawa professor ratings, university of ottawa course search",
+    "structuredName": "Explore courses",
+    "noscriptTitle": "Explore uOttawa Courses & Grades | uoplan",
+    "noscriptBody": "Search uOttawa courses and professors with historical grade distributions from public records."
+  },
+  "graph": {
+    "canonicalPath": "/graph",
+    "title": "Professor Co-Teaching Network | uoplan",
+    "description": "Explore how uOttawa professors connect through shared courses. Interactive network graph of co-teaching patterns and course overlap.",
+    "keywords": "uottawa professors, uottawa co-teaching, university of ottawa faculty network, uottawa course overlap",
+    "structuredName": "Professor network",
+    "noscriptTitle": "Professor Co-Teaching Network | uoplan",
+    "noscriptBody": "Interactive graph of uOttawa professor connections through shared course offerings."
+  }
+}

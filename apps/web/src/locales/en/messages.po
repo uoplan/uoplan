@@ -1005,3 +1005,30 @@ msgstr "No schedule generated yet."
 msgid "calendarPage.generate"
 msgstr "Generate"
 
+msgid "seo.schedule.title"
+msgstr "uoplan | uOttawa Course Planner & Schedule Generator"
+
+msgid "seo.schedule.description"
+msgstr "Free course planner and timetable generator for University of Ottawa (uOttawa) students. Map your degree, check prerequisites, and generate conflict-free timetables in seconds."
+
+msgid "seo.schedule.keywords"
+msgstr "uottawa course planner, uottawa schedule planner, uschedule, uottawa timetable, uottawa degree planner, university of ottawa schedule generator"
+
+msgid "seo.explore.title"
+msgstr "Explore uOttawa Courses & Grades | uoplan"
+
+msgid "seo.explore.description"
+msgstr "Search University of Ottawa courses and professors. View historical grade distributions, compare sections, and find the easiest or hardest offerings."
+
+msgid "seo.explore.keywords"
+msgstr "uottawa course grades, uottawa grade distribution, uottawa professor ratings, university of ottawa course search"
+
+msgid "seo.graph.title"
+msgstr "Professor Co-Teaching Network | uoplan"
+
+msgid "seo.graph.description"
+msgstr "Explore how uOttawa professors connect through shared courses. Interactive network graph of co-teaching patterns and course overlap."
+
+msgid "seo.graph.keywords"
+msgstr "uottawa professors, uottawa co-teaching, university of ottawa faculty network, uottawa course overlap"
+

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-og-image.mjs && vite build",
+    "build": "node scripts/generate-og-image.mjs && vite build && node scripts/prerender-seo-html.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json",
     "preview": "vite preview",
     "lint": "eslint .",

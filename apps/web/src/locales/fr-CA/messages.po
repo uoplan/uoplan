@@ -980,3 +980,30 @@ msgstr "Plus d'horaires"
 msgid "basicCalendar.noMoreSchedules"
 msgstr "Plus d'horaires"
 
+msgid "seo.schedule.title"
+msgstr "uoplan | Planificateur de cours et générateur d'horaires uOttawa"
+
+msgid "seo.schedule.description"
+msgstr "Planificateur de cours et générateur d'horaires gratuit pour les étudiant·e·s de l'Université d'Ottawa. Planifiez votre programme, vérifiez les prérequis et générez des horaires sans conflit en quelques secondes."
+
+msgid "seo.schedule.keywords"
+msgstr "planificateur de cours uottawa, horaire uottawa, emploi du temps uottawa, planificateur de diplôme uottawa"
+
+msgid "seo.explore.title"
+msgstr "Explorer les cours et notes uOttawa | uoplan"
+
+msgid "seo.explore.description"
+msgstr "Recherchez des cours et des professeur·e·s de l'Université d'Ottawa. Consultez les distributions de notes historiques et comparez les sections."
+
+msgid "seo.explore.keywords"
+msgstr "notes de cours uottawa, distribution des notes uottawa, professeurs uottawa"
+
+msgid "seo.graph.title"
+msgstr "Réseau de co-enseignement des professeur·e·s | uoplan"
+
+msgid "seo.graph.description"
+msgstr "Explorez comment les professeur·e·s de l'uOttawa sont relié·e·s par des cours communs. Graphe interactif des co-enseignements et des chevauchements de cours."
+
+msgid "seo.graph.keywords"
+msgstr "professeurs uottawa, co-enseignement uottawa, réseau de faculté uottawa"
+

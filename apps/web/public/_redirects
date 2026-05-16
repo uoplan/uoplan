@@ -1,1 +1,5 @@
-/* /index.html 200
+/explore    /explore/index.html   200
+/explore/   /explore/index.html   200
+/graph      /graph/index.html     200
+/step/term  /step/term/index.html 200
+/*          /index.html           200
