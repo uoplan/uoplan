@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLingui } from "@lingui/react";
 import {
   Alert,
+  Anchor,
   Badge,
   Box,
   Button,
@@ -59,6 +60,8 @@ import { useShareUrl } from "./hooks/useShareUrl";
 import { getWizardStepContent } from "./lib/wizardStepContent";
 import { LanguageSwitcher } from "./components/shared/LanguageSwitcher";
 import { dynamicActivate, tr, type AppLocale } from "./i18n";
+
+const ONTARIO_FIPPA_ACT_URL = "https://www.ontario.ca/laws/statute/90f31";
 
 function App() {
   // Subscribe App to locale changes so all text helpers re-render.
@@ -434,12 +437,18 @@ function App() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
-          style={{ width: "100%", minHeight: "100vh" }}
+          style={{
+            width: "100%",
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column",
+          }}
         >
           <Box
             style={{
               minHeight: "100vh",
-              padding: isMobile ? "20px 12px 48px" : "28px 20px 48px",
+              padding: isMobile ? "20px 12px 0" : "28px 20px 0",
+              paddingBottom: isMobile ? 12 : 16,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -919,61 +928,186 @@ function App() {
                       </Group>
                     </Box>
                   </Box>
-
-                  {/* Footer */}
-                  <Box component="footer" style={{ marginTop: 16, textAlign: "center" }}>
-                    <Stack gap={6} align="center">
-                      <Box fz="xs" c="dimmed" style={{ lineHeight: 1.45 }}>
-                        {typeof __BRANCH_NAME__ !== "undefined" && __BRANCH_NAME__
-                          ? `${__BRANCH_NAME__} `
-                          : ""}
-                        {typeof __COMMIT_HASH__ !== "undefined" ? __COMMIT_HASH__ : "dev"}
-                        {" • "}
-                        <Text
-                          component="a"
-                          href="https://github.com/uoplan/uoplan"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          span
-                          c="dimmed"
-                        >
-                          github.com/uoplan/uoplan
-                        </Text>
-                        {" • "}
-                        <UnstyledButton
-                          type="button"
-                          onClick={() => setChangelogModalOpen(true)}
-                          fz="xs"
-                          c="dimmed"
-                          p={0}
-                          h="auto"
-                          lh={1.45}
-                          display="inline"
-                          style={{ verticalAlign: "baseline", textDecoration: "none" }}
-                          styles={{
-                            root: {
-                              "&:hover": { textDecoration: "underline" },
-                            },
-                          }}
-                        >
-                          {tr("app.footer.changelog")}
-                        </UnstyledButton>
-                        {" • send feedback to "}
-                        <Text component="a" href="mailto:admin@uoplan.party" span c="dimmed">
-                          admin@uoplan.party
-                        </Text>
-                      </Box>
-                      <Text size="xs" c="dimmed" maw={560} style={{ lineHeight: 1.45 }}>
-                        {tr("app.footer.gradeDataAttribution")}
-                      </Text>
-                    </Stack>
-                  </Box>
                 </Box>
 
                 {/* Right gutter (desktop only) */}
                 {!isMobile && <Box />}
               </Box>
             </motion.div>
+
+            <Box
+              component="footer"
+              mt={isMobile ? 20 : 28}
+              pt={isMobile ? 14 : 18}
+              pb="max(14px, env(safe-area-inset-bottom))"
+              style={{
+                alignSelf: "stretch",
+                marginLeft: isMobile ? -12 : -20,
+                marginRight: isMobile ? -12 : -20,
+                borderTop: "1px solid #2C2E33",
+              }}
+            >
+              <Box
+                style={{
+                  maxWidth: 1200,
+                  margin: "0 auto",
+                  paddingLeft: isMobile ? 12 : 20,
+                  paddingRight: isMobile ? 12 : 20,
+                  ...(isMobile
+                    ? {}
+                    : {
+                        display: "grid",
+                        gridTemplateColumns: "minmax(0, 260px) minmax(0, 1fr) minmax(0, 260px)",
+                      }),
+                }}
+              >
+                {!isMobile ? <Box /> : null}
+
+                <Stack gap="lg">
+                  <Group
+                    gap={12}
+                    wrap="wrap"
+                    justify={isMobile ? "center" : "flex-start"}
+                    align="baseline"
+                  >
+                    <Anchor
+                      href="https://github.com/uoplan/uoplan"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      size="sm"
+                      c="dimmed"
+                      underline="never"
+                      lh={1.45}
+                      styles={{
+                        root: {
+                          "&:hover": {
+                            color: "var(--mantine-color-gray-4)",
+                            textDecoration: "underline",
+                          },
+                        },
+                      }}
+                    >
+                      github
+                    </Anchor>
+                    <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
+                      ·
+                    </Text>
+                    <UnstyledButton
+                      type="button"
+                      onClick={() => setChangelogModalOpen(true)}
+                      fz="sm"
+                      c="dimmed"
+                      p={0}
+                      h="auto"
+                      lh={1.45}
+                      display="inline"
+                      style={{ textDecoration: "none", verticalAlign: "baseline" }}
+                      styles={{
+                        root: {
+                          "&:hover": {
+                            color: "var(--mantine-color-gray-4)",
+                            textDecoration: "underline",
+                          },
+                        },
+                      }}
+                    >
+                      {tr("app.footer.changelog")}
+                    </UnstyledButton>
+                    <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
+                      ·
+                    </Text>
+                    <Text
+                      span
+                      size="xs"
+                      c="dimmed"
+                      ff="monospace"
+                      lh={1.45}
+                      style={{ opacity: 0.85 }}
+                    >
+                      {(typeof __BRANCH_NAME__ !== "undefined" && __BRANCH_NAME__
+                        ? __BRANCH_NAME__
+                        : tr("app.footer.buildBranchFallback")
+                      ).toLowerCase()}
+                      {" · "}
+                      {(typeof __COMMIT_HASH__ !== "undefined"
+                        ? __COMMIT_HASH__
+                        : "dev"
+                      ).toLowerCase()}
+                    </Text>
+                    <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
+                      ·
+                    </Text>
+                    <Text span size="sm" c="dimmed" lh={1.45}>
+                      {tr("app.footer.feedbackPrompt")}{" "}
+                      <Anchor
+                        href="mailto:admin@uoplan.party"
+                        size="sm"
+                        c="dimmed"
+                        underline="hover"
+                      >
+                        admin@uoplan.party
+                      </Anchor>
+                    </Text>
+                  </Group>
+
+                  <Box
+                    role="note"
+                    style={{
+                      ...(isMobile
+                        ? {
+                            maxWidth: 440,
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                          }
+                        : {
+                            borderLeft: "2px solid rgba(124, 58, 237, 0.38)",
+                            paddingLeft: 14,
+                          }),
+                      paddingTop: 2,
+                    }}
+                  >
+                    <Text
+                      size="sm"
+                      lh={1.65}
+                      ta={isMobile ? "center" : "left"}
+                      style={{
+                        fontStyle: "italic",
+                        letterSpacing: "0.01em",
+                        color: "#868E96",
+                      }}
+                    >
+                      {tr("app.footer.gradeDataAttribution.before")}
+                      <Anchor
+                        href={ONTARIO_FIPPA_ACT_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        display="inline"
+                        fz="sm"
+                        lh={1.65}
+                        underline="hover"
+                        style={{
+                          fontStyle: "italic",
+                          letterSpacing: "0.01em",
+                          color: "#868E96",
+                        }}
+                        styles={{
+                          root: {
+                            "&:hover": {
+                              color: "var(--mantine-color-gray-4)",
+                            },
+                          },
+                        }}
+                      >
+                        {tr("app.footer.gradeDataAttribution.actLink")}
+                      </Anchor>
+                      {tr("app.footer.gradeDataAttribution.after")}
+                    </Text>
+                  </Box>
+                </Stack>
+
+                {!isMobile ? <Box /> : null}
+              </Box>
+            </Box>
           </Box>
         </motion.div>
       )}

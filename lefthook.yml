@@ -2,7 +2,7 @@ pre-commit:
   commands:
     oxfmt:
       glob: "**/*.{cjs,cts,html,js,json,jsx,md,mjs,mts,ts,tsx,yml,yaml}"
-      run: pnpm exec oxfmt --no-error-on-unmatched-pattern {staged_files}
+      run: pnpm exec oxfmt --no-error-on-unmatched-pattern --check {staged_files}
     eslint:
       glob: "**/*.{js,jsx,ts,tsx,mjs,cjs}"
       run: pnpm exec eslint --cache --max-warnings=0 --no-warn-ignored {staged_files}

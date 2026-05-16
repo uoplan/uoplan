@@ -45,11 +45,23 @@ msgstr "Retour"
 msgid "app.nav.next"
 msgstr "Suivant"
 
-msgid "app.footer.gradeDataAttribution"
-msgstr "Les données de notes ont été obtenues dans le cadre d'une demande d'accès à l'information en vertu de la Loi sur l'accès à l'information et la protection de la vie privée de l'Ontario."
+msgid "app.footer.gradeDataAttribution.before"
+msgstr "Les données de notes ont été obtenues dans le cadre d'une demande d'accès à l'information en vertu de la "
+
+msgid "app.footer.gradeDataAttribution.actLink"
+msgstr "Loi sur l'accès à l'information et la protection de la vie privée"
+
+msgid "app.footer.gradeDataAttribution.after"
+msgstr " de l'Ontario."
 
 msgid "app.footer.changelog"
 msgstr "journal des modifications"
+
+msgid "app.footer.feedbackPrompt"
+msgstr "écrivez-nous à"
+
+msgid "app.footer.buildBranchFallback"
+msgstr "local"
 
 msgid "app.changelog.title"
 msgstr "Journal des modifications"
