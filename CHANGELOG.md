@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.0.0-beta.8](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.7...uoplan-monorepo-v1.0.0-beta.8) (2026-05-16)
+
+
+### Features
+
+* add changelog to website ([eb0f14b](https://github.com/uoplan/uoplan/commit/eb0f14b9db447257f66b7f17fd8786e918285b0d))
+* add experimental graph visualization ([7b45708](https://github.com/uoplan/uoplan/commit/7b457087b9a3cf9b2d8220787519ab119ab913ea))
+* add explore page ([df342c1](https://github.com/uoplan/uoplan/commit/df342c1137f9fd8cb1b91aaa622019a090a232d4))
+* add graduate programs ([b9edc0f](https://github.com/uoplan/uoplan/commit/b9edc0f055c54ed4e56f53c858f6a961e0b58709))
+* add oxfmt for formatting ([bb5457b](https://github.com/uoplan/uoplan/commit/bb5457b284335347b4617107e98be151fa49317c))
+* add router to keep pages separate ([9d2ca45](https://github.com/uoplan/uoplan/commit/9d2ca459d3cbc34a595f0a2990977e7071729db1))
+* improve footer ([3001138](https://github.com/uoplan/uoplan/commit/30011388ee9e25d5e8141b8c38f5c51c36c6167a))
+* improve graph on mobile and desktop ([178527b](https://github.com/uoplan/uoplan/commit/178527b1c7a901d681157cece96be95edc7a0227))
+* improve layout of explore page ([874aad4](https://github.com/uoplan/uoplan/commit/874aad457e6ab0f44bbf3988a4ae73148a03c633))
+* improve layout of sidebar on graph page ([e656018](https://github.com/uoplan/uoplan/commit/e65601895397b64c1924727d4a15ac92f2fa088e))
+* make option selection more intuitive ([09481d3](https://github.com/uoplan/uoplan/commit/09481d38d2eed6ff4b346026189dd865fdae9117))
+* use the next upcoming term as the default ([f552f5a](https://github.com/uoplan/uoplan/commit/f552f5ac5facb170cfe590306fbb00a0a6c8f9c7))
+
+
+### Bug Fixes
+
+* do not redirect to /step/term unconditionally ([8d1742d](https://github.com/uoplan/uoplan/commit/8d1742d428c6571aa45e1d92797251ef8c44eadb))
+* prefer start year for course information ([2bc9c56](https://github.com/uoplan/uoplan/commit/2bc9c56e4f27d2ca641e097e724b45f763939930))
+
 ## [1.0.0-beta.7](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.6...uoplan-monorepo-v1.0.0-beta.7) (2026-05-15)
 
 ### Features
