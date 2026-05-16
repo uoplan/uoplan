@@ -669,7 +669,7 @@ a.fc-uoplan-rating-inline:hover {
 }
 
 .uoplan-grade-histogram--compact {
-  gap: 1px;
+  gap: 2px;
 }
 
 .uoplan-grade-histogram-student-count {

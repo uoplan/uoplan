@@ -23,7 +23,7 @@ export const EXPLORE_CHEVRON_GUTTER_PX = 40;
 export const EXPLORE_ACCORDION_PAD_RIGHT = `calc(${EXPLORE_ACCORDION_PAD_INLINE} + ${EXPLORE_CHEVRON_GUTTER_PX}px)`;
 
 /** Compact explore histogram width (accordion + professor rows). */
-export const EXPLORE_HISTOGRAM_WIDTH_PX = 240;
+export const EXPLORE_HISTOGRAM_WIDTH_PX = 288;
 
 export const exploreHistogramBoxStyle: CSSProperties = {
   flex: "0 0 auto",
