@@ -316,7 +316,7 @@ msgid "calendar.grade.passingAndAPlus"
 msgstr "{passing}% passing · {aPlus}% A+"
 
 msgid "calendar.grade.snsLabel"
-msgstr "S / NS"
+msgstr "S/NS"
 
 msgid "calendar.swap.lockAria"
 msgstr "Add course to schedule-generation selections"

@@ -391,7 +391,7 @@ msgid "calendar.grade.passingAndAPlus"
 msgstr "{passing} % de reussite · {aPlus} % A+"
 
 msgid "calendar.grade.snsLabel"
-msgstr "S / NS"
+msgstr "S/NS"
 
 msgid "calendar.swap.lockAria"
 msgstr "Ajouter le cours aux sélections pour la génération d'horaires"
