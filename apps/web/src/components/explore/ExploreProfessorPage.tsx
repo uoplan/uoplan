@@ -92,23 +92,17 @@ export function ExploreProfessorPage({
       }}
     >
       <Stack gap={0}>
-        <Group
-          justify="space-between"
-          wrap="nowrap"
+        <Box
           style={{
             paddingLeft: EXPLORE_ACCORDION_PAD_INLINE,
             paddingRight: EXPLORE_ACCORDION_PAD_RIGHT,
+            paddingTop: 24,
           }}
         >
           <Anchor component={Link} to="/explore" size="sm" c="violet.4">
             {tr("explore.backToSearch")}
           </Anchor>
-          {rmpHref ? (
-            <Anchor href={rmpHref} target="_blank" rel="noopener noreferrer" size="sm" c="dimmed">
-              RateMyProfessors
-            </Anchor>
-          ) : null}
-        </Group>
+        </Box>
 
         <Box
           style={{
@@ -121,7 +115,22 @@ export function ExploreProfessorPage({
           <Title order={2} c="#F8F9FA" fw={600}>
             {displayName}
           </Title>
-          {ratingLine}
+          {(ratingLine || rmpHref) && (
+            <Group gap={6} align="center" mt={8} wrap="wrap">
+              {ratingLine}
+              {rmpHref ? (
+                <Anchor
+                  href={rmpHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="sm"
+                  c="dimmed"
+                >
+                  RateMyProfessors
+                </Anchor>
+              ) : null}
+            </Group>
+          )}
         </Box>
 
         {loading ? (

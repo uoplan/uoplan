@@ -31,6 +31,18 @@ export function clearEnrollmentsCache() {
   validEnrollmentsByCourseCode.clear();
 }
 
+async function withScheduleGenerating(
+  set: Parameters<StateCreator<AppStore, [], [], SchedulesSlice>>[0],
+  run: () => Promise<void>,
+) {
+  set({ scheduleGenerating: true });
+  try {
+    await run();
+  } finally {
+    set({ scheduleGenerating: false });
+  }
+}
+
 interface SchedulesSlice {
   generateSchedules: AppStore["generateSchedules"];
   generateBasicSchedules: AppStore["generateBasicSchedules"];
@@ -47,27 +59,31 @@ interface SchedulesSlice {
 
 export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice> = (set, get) => ({
   generateSchedules: async () => {
-    const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
-    const state = get();
-    // Ensure currentSeed is initialized on first generation
-    const isFirstGen = state.currentSeed === 0;
-    const effectiveState = isFirstGen ? { ...state, currentSeed: state.firstSeed } : state;
-    const result = await generateSchedulesAction(effectiveState);
-    if (result) {
-      // On first generation, also set currentSeed to firstSeed in the store
-      set(isFirstGen ? { ...result, currentSeed: state.firstSeed } : result);
-    }
+    await withScheduleGenerating(set, async () => {
+      const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
+      const state = get();
+      // Ensure currentSeed is initialized on first generation
+      const isFirstGen = state.currentSeed === 0;
+      const effectiveState = isFirstGen ? { ...state, currentSeed: state.firstSeed } : state;
+      const result = await generateSchedulesAction(effectiveState);
+      if (result) {
+        // On first generation, also set currentSeed to firstSeed in the store
+        set(isFirstGen ? { ...result, currentSeed: state.firstSeed } : result);
+      }
+    });
   },
 
   generateBasicSchedules: async () => {
-    const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
-    const state = get();
-    const isFirstGen = state.currentSeed === 0;
-    const effectiveState = isFirstGen ? { ...state, currentSeed: state.firstSeed } : state;
-    const result = await generateSchedulesAction(effectiveState);
-    if (result) {
-      set(isFirstGen ? { ...result, currentSeed: state.firstSeed } : result);
-    }
+    await withScheduleGenerating(set, async () => {
+      const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
+      const state = get();
+      const isFirstGen = state.currentSeed === 0;
+      const effectiveState = isFirstGen ? { ...state, currentSeed: state.firstSeed } : state;
+      const result = await generateSchedulesAction(effectiveState);
+      if (result) {
+        set(isFirstGen ? { ...result, currentSeed: state.firstSeed } : result);
+      }
+    });
   },
 
   clearSchedule: () =>
@@ -90,39 +106,47 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
 
   goToPreviousSeed: async () => {
     const state = get();
-    if (state.currentSeed <= state.firstSeed) return;
-    const newSeed = state.currentSeed - 1;
-    set({ currentSeed: newSeed, currentSwaps: [] });
-    const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
-    const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
-    if (result) {
-      set(result);
-    }
+    if (state.scheduleGenerating || state.currentSeed <= state.firstSeed) return;
+    await withScheduleGenerating(set, async () => {
+      const newSeed = state.currentSeed - 1;
+      set({ currentSeed: newSeed, currentSwaps: [] });
+      const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
+      const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
+      if (result) {
+        set(result);
+      }
+    });
   },
 
   goToNextSeed: async () => {
     const state = get();
-    const newSeed = state.currentSeed + 1;
-    set({ currentSeed: newSeed, currentSwaps: [] });
-    const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
-    const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
-    if (result) {
-      set(result);
-    }
+    if (state.scheduleGenerating) return;
+    await withScheduleGenerating(set, async () => {
+      const newSeed = state.currentSeed + 1;
+      set({ currentSeed: newSeed, currentSwaps: [] });
+      const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
+      const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
+      if (result) {
+        set(result);
+      }
+    });
   },
 
   randomizeSeed: async () => {
-    const newFirstSeed = generateRandomSeed();
-    set({ firstSeed: newFirstSeed, currentSeed: newFirstSeed, currentSwaps: [] });
-    const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
-    const result = await generateSchedulesAction({
-      ...get(),
-      firstSeed: newFirstSeed,
-      currentSeed: newFirstSeed,
+    if (get().scheduleGenerating) return;
+    await withScheduleGenerating(set, async () => {
+      const newFirstSeed = generateRandomSeed();
+      set({ firstSeed: newFirstSeed, currentSeed: newFirstSeed, currentSwaps: [] });
+      const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
+      const result = await generateSchedulesAction({
+        ...get(),
+        firstSeed: newFirstSeed,
+        currentSeed: newFirstSeed,
+      });
+      if (result) {
+        set(result);
+      }
     });
-    if (result) {
-      set(result);
-    }
   },
 
   swapCourseInSchedule: async (enrollmentIndex, newCourseCode) => {

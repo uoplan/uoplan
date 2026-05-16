@@ -46,6 +46,7 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
     firstSeed,
     currentSeed,
     wizardMode,
+    scheduleGenerating,
   } = useAppStore(
     useShallow((s) => ({
       currentSchedule: s.currentSchedule,
@@ -58,6 +59,7 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
       firstSeed: s.firstSeed,
       currentSeed: s.currentSeed,
       wizardMode: s.wizardMode,
+      scheduleGenerating: s.scheduleGenerating,
     })),
   );
 
@@ -79,7 +81,6 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
-  const [navigating, setNavigating] = useState(false);
   const [timetableStartDate, setTimetableStartDate] = useState("");
   const [timetableEndDate, setTimetableEndDate] = useState("");
 
@@ -110,17 +111,15 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
     genErrDetails.totalAvailable < genErrDetails.totalNeeded;
 
   const handlePrevious = async () => {
+    if (scheduleGenerating) return;
     morphRef.current?.captureAndPark();
-    setNavigating(true);
     await goToPreviousSeed();
-    setNavigating(false);
   };
 
   const handleNext = async () => {
+    if (scheduleGenerating) return;
     morphRef.current?.captureAndPark();
-    setNavigating(true);
     await goToNextSeed();
-    setNavigating(false);
   };
 
   const handleDownloadIcs = () => {
@@ -303,8 +302,8 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
                   size="sm"
                   radius={0}
                   leftSection={<IconChevronLeft size={14} />}
-                  disabled={!canGoPrevious || navigating}
-                  loading={navigating}
+                  disabled={!canGoPrevious || scheduleGenerating}
+                  loading={scheduleGenerating}
                   onClick={handlePrevious}
                 >
                   {tr("calendarPage.previous")}
@@ -315,7 +314,8 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
                   size="sm"
                   radius={0}
                   rightSection={<IconChevronRight size={14} />}
-                  loading={navigating}
+                  disabled={scheduleGenerating}
+                  loading={scheduleGenerating}
                   onClick={handleNext}
                 >
                   {tr("calendarPage.next")}
@@ -327,12 +327,9 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
                 color="violet"
                 size="sm"
                 radius={0}
-                loading={navigating}
-                onClick={async () => {
-                  setNavigating(true);
-                  await generateSchedules();
-                  setNavigating(false);
-                }}
+                disabled={scheduleGenerating}
+                loading={scheduleGenerating}
+                onClick={() => void generateSchedules()}
               >
                 {tr("calendarPage.generate")}
               </Button>
@@ -358,7 +355,15 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
         </Button>
 
         {!isBasic && (
-          <Button variant="light" color="gray" size="sm" radius={0} onClick={() => randomizeSeed()}>
+          <Button
+            variant="light"
+            color="gray"
+            size="sm"
+            radius={0}
+            disabled={scheduleGenerating}
+            loading={scheduleGenerating}
+            onClick={() => void randomizeSeed()}
+          >
             {tr("calendarPage.randomize")}
           </Button>
         )}
@@ -464,7 +469,8 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
             radius={0}
             style={{ flex: 1, border: "none", height: 56 }}
             leftSection={<IconChevronLeft size={22} />}
-            disabled={!canGoPrevious}
+            disabled={!canGoPrevious || scheduleGenerating}
+            loading={scheduleGenerating}
             onClick={handlePrevious}
           >
             {tr("calendarPage.mobile.previous")}
@@ -476,6 +482,8 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
             radius={0}
             style={{ flex: 1, border: "none", height: 56 }}
             leftSection={<IconChevronRight size={22} />}
+            disabled={scheduleGenerating}
+            loading={scheduleGenerating}
             onClick={handleNext}
           >
             {tr("calendarPage.mobile.next")}
