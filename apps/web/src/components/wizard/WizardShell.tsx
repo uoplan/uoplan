@@ -34,6 +34,7 @@ import {
   WizardStep,
 } from "../../lib/wizardSteps";
 import { navigateToCalendar, navigateToWizardStep } from "../../lib/appNavigation";
+import { applyBasicDefaultsIfUntouched, enterAdvancedWizardFlow } from "../../lib/plannerModeFlow";
 import { usePersistState } from "../../hooks/usePersistState";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { getWizardStepContent } from "../../lib/wizardStepContent";
@@ -45,9 +46,15 @@ const ONTARIO_FIPPA_ACT_URL = "https://www.ontario.ca/laws/statute/90f31";
 export type WizardShellProps = {
   activeStep: WizardStep;
   children: ReactNode;
+  /** Selected planner mode on the mode step; Next stays disabled until set. */
+  modeSelection?: "basic" | "advanced" | null;
 };
 
-export function WizardShell({ activeStep: active, children }: WizardShellProps) {
+export function WizardShell({
+  activeStep: active,
+  children,
+  modeSelection = null,
+}: WizardShellProps) {
   useLingui();
 
   const {
@@ -55,7 +62,6 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
     cache,
     terms,
     selectedTermId,
-    wizardMode,
     firstYear,
     program,
     requirementTreeWithStatus,
@@ -68,7 +74,6 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
       cache: s.cache,
       terms: s.terms,
       selectedTermId: s.selectedTermId,
-      wizardMode: s.wizardMode,
       firstYear: s.firstYear,
       program: s.program,
       requirementTreeWithStatus: s.requirementTreeWithStatus,
@@ -131,7 +136,6 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
       hasTerms,
       selectedTermId,
       cacheLoaded: Boolean(cache),
-      wizardMode,
       firstYear,
       hasProgram: program !== null,
       missingOptions,
@@ -142,7 +146,6 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
       hasTerms,
       selectedTermId,
       cache,
-      wizardMode,
       firstYear,
       program,
       missingOptions,
@@ -175,30 +178,18 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
   );
 
   useEffect(() => {
-    if (wizardMode === "basic" && effectiveActive > WizardStep.Mode) {
-      navigateToCalendar("basic", { replace: true });
-    }
-  }, [wizardMode, effectiveActive]);
-
-  useEffect(() => {
     if (effectiveActive !== active) {
       navigateToWizardStep(effectiveActive, { replace: true });
     }
   }, [active, effectiveActive]);
 
   useEffect(() => {
-    if (
-      wizardMode !== "basic" &&
-      effectiveActive > WizardStep.Options &&
-      needsOptionsStep &&
-      missingOptions
-    ) {
+    if (effectiveActive > WizardStep.Options && needsOptionsStep && missingOptions) {
       navigateToWizardStep(WizardStep.Options);
     }
-  }, [wizardMode, effectiveActive, needsOptionsStep, missingOptions]);
+  }, [effectiveActive, needsOptionsStep, missingOptions]);
 
   useEffect(() => {
-    if (wizardMode === "basic") return;
     const visible = navVisibleStepIndices;
     const maxIdx = visible.indexOf(maxReachable);
     const activeIdx = visible.indexOf(effectiveActive);
@@ -206,7 +197,7 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
     if (activeIdx > maxIdx) {
       navigateToWizardStep(maxReachable, { replace: true });
     }
-  }, [wizardMode, effectiveActive, maxReachable, navVisibleStepIndices]);
+  }, [effectiveActive, maxReachable, navVisibleStepIndices]);
 
   const setActive = useCallback(
     (stepOrUpdater: number | ((prev: number) => number)) => {
@@ -217,10 +208,13 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
     [effectiveActive],
   );
 
-  const canProceedFromStep = useMemo(
-    () => canAdvanceWizardStep(effectiveActive, navVisibleStepIndices, maxReachable),
-    [effectiveActive, navVisibleStepIndices, maxReachable],
-  );
+  const canProceedFromStep = useMemo(() => {
+    const base = canAdvanceWizardStep(effectiveActive, navVisibleStepIndices, maxReachable);
+    if (effectiveActive === WizardStep.Mode) {
+      return base && modeSelection != null;
+    }
+    return base;
+  }, [effectiveActive, navVisibleStepIndices, maxReachable, modeSelection]);
 
   const [nextUnlockCue, setNextUnlockCue] = useState(false);
   const prevStepProgressRef = useRef<{
@@ -265,8 +259,15 @@ export function WizardShell({ activeStep: active, children }: WizardShellProps) 
   }, [nextUnlockCue, prefersReducedMotion]);
 
   const handleWizardNext = () => {
-    if (wizardMode === "basic" && effectiveActive === WizardStep.Mode) {
-      navigateToCalendar("basic");
+    if (effectiveActive === WizardStep.Mode) {
+      if (!modeSelection) return;
+      if (modeSelection === "basic") {
+        applyBasicDefaultsIfUntouched(useAppStore.setState, useAppStore.getState);
+        navigateToCalendar("basic");
+      } else {
+        enterAdvancedWizardFlow(useAppStore.setState, useAppStore.getState);
+        navigateToWizardStep(WizardStep.Program);
+      }
       return;
     }
     const rawNext = getNextStep(effectiveActive, needsOptionsStep, needsAssignStep);

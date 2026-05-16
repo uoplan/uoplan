@@ -28,6 +28,7 @@ import {
   appendCourseDedupedByNorm,
   resolveRequirementIdsForScheduleCourse,
 } from "../../components/requirements/requirementUtils";
+import { isAdvancedPlannerActive, isBasicPlannerActive } from "../../lib/calendarRoute";
 
 const validEnrollmentsByCourseCode = new Map<string, CourseEnrollment[]>();
 
@@ -180,7 +181,6 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
 
   swapCourseInSchedule: async (enrollmentIndex, newCourseCode) => {
     const {
-      wizardMode,
       basicPinnedCourses,
       currentSchedule,
       cache,
@@ -217,7 +217,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     }
 
     let virtualOnlyForNewCourse: boolean;
-    if (wizardMode === "basic") {
+    if (isBasicPlannerActive()) {
       virtualOnlyForNewCourse = virtualSectionsOnly;
     } else {
       const oldCode = oldEnrollment.courseCode;
@@ -247,7 +247,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       professorRatings: professorRatings ?? undefined,
     };
 
-    if (wizardMode === "basic") {
+    if (isBasicPlannerActive()) {
       const allCodes = schedule.enrollments.map((e) => e.courseCode);
       allCodes[enrollmentIndex] = newCourseCode;
 
@@ -327,7 +327,6 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
 
   getSwapCandidates: (enrollmentIndex) => {
     const {
-      wizardMode,
       basicPinnedCourses,
       basicExcludedCategories,
       studentPrograms,
@@ -364,7 +363,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
 
     const oldCode = enrollment.courseCode;
 
-    if (wizardMode === "basic") {
+    if (isBasicPlannerActive()) {
       if (basicPinnedCourses.includes(oldCode)) {
         return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
       }
@@ -554,7 +553,6 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
 
   lockCourseForAllSchedulesFromSwap: (enrollmentIndex) => {
     const {
-      wizardMode,
       currentSchedule,
       cache,
       basicPinnedCourses,
@@ -572,7 +570,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     const norm = normalizeCourseCode(code);
     const canonical = cache?.getCourse(norm)?.code ?? code;
 
-    if (wizardMode === "basic") {
+    if (isBasicPlannerActive()) {
       if (basicPinnedCourses.some((c) => normalizeCourseCode(c) === norm)) {
         return;
       }
@@ -584,7 +582,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       return;
     }
 
-    if (wizardMode !== "advanced") return;
+    if (!isAdvancedPlannerActive()) return;
 
     const requirementIds = resolveRequirementIdsForScheduleCourse({
       courseCode: code,
@@ -620,19 +618,14 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
   },
 
   unlockCourseForAllSchedulesFromSwap: (enrollmentIndex) => {
-    const {
-      wizardMode,
-      currentSchedule,
-      basicPinnedCourses,
-      basicElectivesCount,
-      constrainedPerRequirement,
-    } = get();
+    const { currentSchedule, basicPinnedCourses, basicElectivesCount, constrainedPerRequirement } =
+      get();
     if (!currentSchedule) return;
     const enrollment = currentSchedule.enrollments[enrollmentIndex];
     if (!enrollment) return;
     const norm = normalizeCourseCode(enrollment.courseCode);
 
-    if (wizardMode === "basic") {
+    if (isBasicPlannerActive()) {
       const next = basicPinnedCourses.filter((c) => normalizeCourseCode(c) !== norm);
       if (next.length === basicPinnedCourses.length) return;
       set({
@@ -646,7 +639,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       return;
     }
 
-    if (wizardMode !== "advanced") return;
+    if (!isAdvancedPlannerActive()) return;
 
     const next: Record<string, string[]> = {};
     let changed = false;

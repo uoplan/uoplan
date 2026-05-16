@@ -150,7 +150,6 @@ function baseProceedCtx(over: Partial<WizardProceedContext> = {}): WizardProceed
     hasTerms: true,
     selectedTermId: "t1",
     cacheLoaded: true,
-    wizardMode: "advanced",
     firstYear: 2024,
     hasProgram: true,
     missingOptions: false,
@@ -167,10 +166,18 @@ describe("maxReachableWizardStep", () => {
     );
   });
 
-  it("stops at mode when planner mode unset", () => {
-    expect(maxReachableWizardStep(false, false, baseProceedCtx({ wizardMode: null }))).toBe(
-      WizardStep.Mode,
-    );
+  it("allows proceeding past mode when term is complete", () => {
+    expect(maxReachableWizardStep(false, false, baseProceedCtx())).toBe(WizardStep.Generate);
+  });
+
+  it("stops at mode when term incomplete", () => {
+    expect(
+      maxReachableWizardStep(
+        false,
+        false,
+        baseProceedCtx({ hasTerms: false, selectedTermId: null, cacheLoaded: false }),
+      ),
+    ).toBe(WizardStep.Term);
   });
 
   it("stops at program when programme missing", () => {

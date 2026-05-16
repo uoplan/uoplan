@@ -1,4 +1,5 @@
 import type { AppState } from "../store/types";
+import { isBasicPlannerActive } from "./calendarRoute";
 import type { GenerationErrorDetails, GenerationErrorState } from "../store/types";
 import type { DataCache } from "schedule";
 import { createSeededRng } from "schedule";
@@ -306,7 +307,7 @@ function clonePendingGroupPickCounts(
 export async function generateSchedulesAction(
   state: AppState,
 ): Promise<GenerateSchedulesResult | null> {
-  if (state.wizardMode === "basic") {
+  if (isBasicPlannerActive()) {
     return await handleBasicGeneration(state);
   }
 

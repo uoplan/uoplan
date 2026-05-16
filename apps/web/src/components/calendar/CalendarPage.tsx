@@ -26,10 +26,16 @@ import { BasicCalendarSidebarControls } from "./BasicCalendarSidebarControls";
 import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
 import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
 interface CalendarPageProps {
+  variant: "basic" | "advanced";
   onBack: () => void;
 }
 
-export function CalendarPage({ onBack }: CalendarPageProps) {
+function isMobileViewport(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(max-width: 768px)").matches;
+}
+
+export function CalendarPage({ variant, onBack }: CalendarPageProps) {
   useEffect(() => {
     document.documentElement.classList.add("calendar-no-scrollbar-gutter");
     return () => {
@@ -47,7 +53,6 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
     currentColorMap,
     firstSeed,
     currentSeed,
-    wizardMode,
     scheduleGenerating,
     basicPinnedCourses,
     basicElectivesCount,
@@ -62,7 +67,6 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
       currentColorMap: s.currentColorMap,
       firstSeed: s.firstSeed,
       currentSeed: s.currentSeed,
-      wizardMode: s.wizardMode,
       scheduleGenerating: s.scheduleGenerating,
       basicPinnedCourses: s.basicPinnedCourses,
       basicElectivesCount: s.basicElectivesCount,
@@ -79,7 +83,7 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
   const swapCourseInSchedule = useAppStore((s) => s.swapCourseInSchedule);
   const resetToDefault = useAppStore((s) => s.resetToDefault);
 
-  const isBasic = wizardMode === "basic";
+  const isBasic = variant === "basic";
   const hasSchedule = currentSchedule !== null;
   const canGoPrevious = currentSeed > firstSeed && currentSeed > 0;
   const canUseSeedNavigation =
@@ -87,14 +91,14 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
 
   const morphRef = useRef<CalendarViewHandle>(null);
 
-  const [controlsOpen, setControlsOpen] = useState(false);
+  const [controlsOpen, setControlsOpen] = useState(isMobileViewport);
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [timetableStartDate, setTimetableStartDate] = useState("");
   const [timetableEndDate, setTimetableEndDate] = useState("");
 
   const { shareCopied, handleCopyShare } = useShareUrl(getShareUrl);
 
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });
 
   useTimetableDateRangeFromSchedule(
     currentSchedule,

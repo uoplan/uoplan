@@ -1,4 +1,4 @@
-import { Drawer, ScrollArea } from "@mantine/core";
+import { Drawer } from "@mantine/core";
 import type { ReactNode } from "react";
 
 const SURFACE_STYLE = {
@@ -30,9 +30,16 @@ export function CalendarMobileDrawer({
       title={title}
       overlayProps={{ backgroundOpacity: 0.5 }}
       styles={{
-        content: { ...SURFACE_STYLE, maxHeight: "85vh" },
+        content: {
+          ...SURFACE_STYLE,
+          maxHeight: "85vh",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        },
         header: {
           ...SURFACE_STYLE,
+          flexShrink: 0,
           borderBottom: "1px solid rgba(134, 142, 150, 0.2)",
         },
         title: {
@@ -41,13 +48,19 @@ export function CalendarMobileDrawer({
           fontWeight: 400,
         },
         close: { color: "#868e96" },
-        body: { paddingTop: 8 },
+        body: {
+          flex: 1,
+          minHeight: 0,
+          overflowY: "auto",
+          overflowX: "hidden",
+          overscrollBehavior: "contain",
+          paddingTop: 8,
+          paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))",
+        },
       }}
       aria-label={ariaLabel}
     >
-      <ScrollArea.Autosize mah="calc(85vh - 60px)" type="auto" offsetScrollbars>
-        {children}
-      </ScrollArea.Autosize>
+      {children}
     </Drawer>
   );
 }
