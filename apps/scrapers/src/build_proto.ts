@@ -172,6 +172,52 @@ function mapCatalogue(input: any): any {
   };
 }
 
+function mapLetterGradeDistributionToProto(dist: unknown): {
+  aPlus: number;
+  a: number;
+  aMinus: number;
+  bPlus: number;
+  b: number;
+  cPlus: number;
+  c: number;
+  dPlus: number;
+  d: number;
+  e: number;
+  f: number;
+  ein: number;
+  ns: number;
+  nc: number;
+  abs: number;
+  p: number;
+  s: number;
+} {
+  const d = dist && typeof dist === "object" ? (dist as Record<string, unknown>) : {};
+  const n = (k: string): number => {
+    const v = d[k];
+    const num = Number(v);
+    return Number.isFinite(num) ? num : 0;
+  };
+  return {
+    aPlus: n("A+"),
+    a: n("A"),
+    aMinus: n("A-"),
+    bPlus: n("B+"),
+    b: n("B"),
+    cPlus: n("C+"),
+    c: n("C"),
+    dPlus: n("D+"),
+    d: n("D"),
+    e: n("E"),
+    f: n("F"),
+    ein: n("EIN"),
+    ns: n("NS"),
+    nc: n("NC"),
+    abs: n("ABS"),
+    p: n("P"),
+    s: n("S"),
+  };
+}
+
 function mapSchedules(input: any): any {
   const courseCodes: string[] = [];
   const indexByCode = new Map<string, number>();
@@ -219,31 +265,60 @@ function mapSchedules(input: any): any {
                   : undefined,
               status: sectionStatusToProto(section.status),
               distribution: section.distribution
-                ? {
-                    aPlus: section.distribution["A+"] ?? 0,
-                    a: section.distribution["A"] ?? 0,
-                    aMinus: section.distribution["A-"] ?? 0,
-                    bPlus: section.distribution["B+"] ?? 0,
-                    b: section.distribution["B"] ?? 0,
-                    cPlus: section.distribution["C+"] ?? 0,
-                    c: section.distribution["C"] ?? 0,
-                    dPlus: section.distribution["D+"] ?? 0,
-                    d: section.distribution["D"] ?? 0,
-                    e: section.distribution["E"] ?? 0,
-                    f: section.distribution["F"] ?? 0,
-                    ein: section.distribution["EIN"] ?? 0,
-                    ns: section.distribution["NS"] ?? 0,
-                    nc: section.distribution["NC"] ?? 0,
-                    abs: section.distribution["ABS"] ?? 0,
-                    p: section.distribution["P"] ?? 0,
-                    s: section.distribution["S"] ?? 0,
-                  }
+                ? mapLetterGradeDistributionToProto(section.distribution)
                 : undefined,
             })),
           },
         ]),
       ),
     })),
+  };
+}
+
+function mapGradesJson(rows: unknown[]) {
+  if (!Array.isArray(rows)) {
+    throw new Error("grades.json: expected top-level array");
+  }
+  return {
+    courses: rows
+      .map((row: unknown) => {
+        const r = row as { code?: unknown; professors?: unknown };
+        const profs = Array.isArray(r.professors) ? r.professors : [];
+        return {
+          code: normalizeCode(r.code),
+          professors: profs
+            .map((p: unknown) => {
+              const x = p as {
+                name?: unknown;
+                legacyId?: unknown;
+                termId?: unknown;
+                distribution?: unknown;
+                section?: unknown;
+              };
+              const termParsed = Number.parseInt(String(x.termId ?? ""), 10);
+              const termId = Number.isFinite(termParsed) ? termParsed : 0;
+              const sec =
+                typeof x.section === "string" && x.section.trim() ? x.section.trim() : undefined;
+              const legacyRaw = x.legacyId;
+              let legacyId: number | undefined;
+              if (typeof legacyRaw === "number" && Number.isFinite(legacyRaw)) {
+                legacyId = legacyRaw;
+              } else if (typeof legacyRaw === "string" && legacyRaw.trim()) {
+                const parsed = Number.parseInt(legacyRaw, 10);
+                legacyId = Number.isFinite(parsed) ? parsed : undefined;
+              }
+              return {
+                name: String(x.name ?? ""),
+                ...(legacyId !== undefined ? { legacyId } : {}),
+                termId,
+                distribution: mapLetterGradeDistributionToProto(x.distribution),
+                section: sec,
+              };
+            })
+            .filter((p) => p.termId !== 0 && String(p.name).trim().length > 0),
+        };
+      })
+      .filter((c) => c.professors.length > 0),
   };
 }
 
@@ -335,8 +410,14 @@ async function main(): Promise<void> {
     await writePb(path.join(WEB_PUBLIC_DATA_DIR, fileName.replace(/\.json$/, ".pb")), encoded);
   }
 
+  const gradesJson = await readJson<unknown[]>(path.join(SCRAPER_DATA_DIR, "grades.json"));
+  await writePb(
+    path.join(WEB_PUBLIC_DATA_DIR, "grades.pb"),
+    DataProto.GradesData.encode(mapGradesJson(gradesJson)).finish(),
+  );
+
   console.log(
-    `Generated protobuf data: ${yearCatalogues.length} catalogue files and ${scheduleFiles.length} schedule files`,
+    `Generated protobuf data: ${yearCatalogues.length} catalogue files, ${scheduleFiles.length} schedule files, grades.pb`,
   );
 }
 
