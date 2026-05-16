@@ -53,7 +53,10 @@ export type ExploreSearchNavigate = (opts: {
 }) => void | Promise<void>;
 
 /** Chevron sits slightly inset from the viewport edge (further right than text padding). */
-const EXPLORE_CHEVRON_RIGHT = "max(12px, calc((100vw - min(100vw, 1200px)) / 2 + 12px))";
+const EXPLORE_CHEVRON_RIGHT = {
+  base: `calc(12px)`,
+  xs: "max(12px, calc((100vw - min(100vw, 1200px)) / 2 + 12px))",
+};
 
 const EXPLORE_SEARCH_DEBOUNCE_MS = 100;
 
@@ -322,7 +325,7 @@ export function ExploreSearchPage({
       }}
     >
       <Box
-        px={24}
+        px={{ base: 16, xs: 24 }}
         maw={1200}
         mx="auto"
         w="100%"
@@ -384,7 +387,7 @@ export function ExploreSearchPage({
                       });
                     }
                   }}
-                  size="xl"
+                  size="lg"
                   radius={9999}
                   disabled={loading || !!error}
                   w="100%"
@@ -431,10 +434,14 @@ export function ExploreSearchPage({
                     input: {
                       backgroundColor: "#1a1b1e",
                       borderColor: "#3f424a",
-                      minHeight: 52,
-                      paddingInline: 22,
+                      minHeight: 48,
+                      paddingInline: 18,
                       fontSize: "var(--mantine-font-size-md)",
                       boxShadow: "0 1px 6px rgba(0, 0, 0, 0.22)",
+                      "@media (min-width: 540px)": {
+                        minHeight: 52,
+                        paddingInline: 22,
+                      },
                     },
                   }}
                 />
@@ -556,10 +563,14 @@ export function ExploreSearchPage({
                         position: "relative",
                         paddingTop: "var(--mantine-spacing-lg)",
                         paddingBottom: "var(--mantine-spacing-lg)",
-                        paddingLeft: EXPLORE_ACCORDION_PAD_INLINE,
-                        paddingRight: EXPLORE_ACCORDION_PAD_RIGHT,
+                        paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
+                        paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
                         borderRadius: 0,
                         backgroundColor: "#18191c",
+                        "@media (max-width: 540px)": {
+                          paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
+                          paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.base,
+                        },
                         "&:hover": {
                           backgroundColor: "rgba(255,255,255,0.04)",
                         },
@@ -580,11 +591,14 @@ export function ExploreSearchPage({
                         position: "absolute",
                         top: 0,
                         bottom: 0,
-                        right: EXPLORE_CHEVRON_RIGHT,
+                        right: EXPLORE_CHEVRON_RIGHT.xs,
                         display: "flex",
                         alignItems: "center",
                         marginLeft: 0,
                         color: "var(--mantine-color-gray-5)",
+                        "@media (max-width: 540px)": {
+                          right: EXPLORE_CHEVRON_RIGHT.base,
+                        },
                       },
                     }}
                   >
