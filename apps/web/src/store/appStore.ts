@@ -31,7 +31,10 @@ export const useAppStore = create<AppStore>()((...a) => {
     indices: null,
     schedulesData: null,
     cache: null,
+    courseGrades: null,
+    courseGradesError: null,
     loading: false,
+    loadProgress: 0,
     error: null,
     terms: null,
     selectedTermId: null,
@@ -97,13 +100,27 @@ export const useAppStore = create<AppStore>()((...a) => {
 
     // Global action: touches many states
     resetToDefault: () => {
-      const { catalogue, indices, schedulesData, cache, loading, error, availableYears } = get();
+      const {
+        catalogue,
+        indices,
+        schedulesData,
+        cache,
+        courseGrades,
+        courseGradesError,
+        loading,
+        loadProgress,
+        error,
+        availableYears,
+      } = get();
       set({
         catalogue,
         indices,
         schedulesData,
         cache,
+        courseGrades,
+        courseGradesError,
         loading,
+        loadProgress,
         error,
         availableYears,
         firstYear: null,

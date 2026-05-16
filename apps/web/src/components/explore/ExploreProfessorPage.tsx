@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Anchor, Box, Group, Loader, Stack, Text, Title } from "@mantine/core";
+import { Anchor, Box, Group, Stack, Text, Title } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { useMemo } from "react";
 import type { Catalogue, ProfessorRatingsMap, Term } from "schedule";
@@ -43,7 +43,7 @@ export function ExploreProfessorPage({
   professorRatings: ProfessorRatingsMap | null;
 }) {
   useLingui();
-  const { loading, data: grades, error } = useCourseGradesPb();
+  const { data: grades, error } = useCourseGradesPb();
 
   const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
   const termNameById = useMemo(() => buildTermNameById(terms), [terms]);
@@ -133,12 +133,7 @@ export function ExploreProfessorPage({
           )}
         </Box>
 
-        {loading ? (
-          <Group justify="center" py="xl" px={24}>
-            <Loader color="gray" />
-            <Text c="dimmed">{tr("explore.loadingGrades")}</Text>
-          </Group>
-        ) : error ? (
+        {error ? (
           <Text c="red" px={24}>
             {tr("explore.loadError", { message: error })}
           </Text>
