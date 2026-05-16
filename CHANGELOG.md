@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0-beta.9](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.8...uoplan-monorepo-v1.0.0-beta.9) (2026-05-16)
+
+
+### Features
+
+* add some quality of life improvements ([836121d](https://github.com/uoplan/uoplan/commit/836121df94f6452b23171ee1d3a9422c5813b1a6))
+* allow unlocking locked courses in schedule generation ([d643359](https://github.com/uoplan/uoplan/commit/d643359c93649ba4f99e5936427217f100a96c85))
+* improve search results ux for explore page ([f383c48](https://github.com/uoplan/uoplan/commit/f383c4806f5851b145b506981441003781545d9c))
+* improve ux of basic calendar page ([63f4a60](https://github.com/uoplan/uoplan/commit/63f4a6043e92ab6c5cf96cfeb9a731728dec15d5))
+* **lefthook:** add typecheck to pre-commit ([bc82153](https://github.com/uoplan/uoplan/commit/bc8215340cfc1273ccb6036fb5ef5d275cdccb1b))
+
 ## [1.0.0-beta.8](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.7...uoplan-monorepo-v1.0.0-beta.8) (2026-05-16)
 
 
