@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.0-beta.11](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.10...uoplan-monorepo-v1.0.0-beta.11) (2026-05-16)
+
+
+### Features
+
+* use bottom drawer for mobile calendar page ([41fc055](https://github.com/uoplan/uoplan/commit/41fc05528fded7e11bbda17d6e1611d924cbe3d5))
+
+
+### Bug Fixes
+
+* use correct seed for calendar for buttons ([1055d32](https://github.com/uoplan/uoplan/commit/1055d32c87cf60b8635dcfc6b158ad7c509dd554))
+* use router for mode selection ([462746d](https://github.com/uoplan/uoplan/commit/462746dd2e0af427bd8cd27def1376b6de4afeee))
+
 ## [1.0.0-beta.10](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.9...uoplan-monorepo-v1.0.0-beta.10) (2026-05-16)
 
 
