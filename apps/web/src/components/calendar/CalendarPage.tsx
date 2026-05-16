@@ -3,12 +3,12 @@ import { Alert, Box, Button, Group, Stack, Text, Title, Tooltip } from "@mantine
 import { useMediaQuery } from "@mantine/hooks";
 import {
   IconArrowBackUp,
+  IconArrowLeft,
   IconChevronLeft,
   IconChevronRight,
-  IconMenu2,
   IconRefresh,
+  IconSettings,
   IconShare,
-  IconX,
 } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
@@ -24,6 +24,7 @@ import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
 import { CALENDAR_SIDEBAR_WIDTH_PX } from "./calendarLayout";
 import { BasicCalendarSidebarControls } from "./BasicCalendarSidebarControls";
 import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
+import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
 interface CalendarPageProps {
   onBack: () => void;
 }
@@ -86,7 +87,7 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
 
   const morphRef = useRef<CalendarViewHandle>(null);
 
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [controlsOpen, setControlsOpen] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [timetableStartDate, setTimetableStartDate] = useState("");
   const [timetableEndDate, setTimetableEndDate] = useState("");
@@ -141,6 +142,220 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
     downloadTextFile(filename, ics, "text/calendar;charset=utf-8");
   };
 
+  const calendarTitle = tr(isBasic ? "basicCalendar.title" : "calendarPage.title");
+  const calendarSubtitle = tr(isBasic ? "basicCalendar.subtitle" : "calendarPage.subtitle");
+
+  const sidebarControls = (
+    <>
+      <Title
+        order={1}
+        style={{
+          fontFamily: '"DM Serif Display", serif',
+          color: "#F8F9FA",
+          marginBottom: 0,
+          ...(isMobile ? { display: "none" } : {}),
+        }}
+      >
+        {calendarTitle}
+      </Title>
+      <Text size="sm" style={{ color: "#ADB5BD", marginTop: isMobile ? 0 : -8 }}>
+        {calendarSubtitle}
+      </Text>
+
+      {isBasic ? (
+        <>
+          <BasicCalendarHeaderActions onBack={onBack} />
+          <BasicCalendarSidebarControls
+            onBeforeNavigate={() => morphRef.current?.captureAndPark()}
+          />
+        </>
+      ) : (
+        <>
+          {currentSwaps.length > 0 && (
+            <Button
+              variant="light"
+              color="gray"
+              size="sm"
+              radius={0}
+              leftSection={<IconArrowBackUp size={14} />}
+              onClick={() => undoLastSwap()}
+            >
+              {currentSwaps.length === 1
+                ? tr("calendarPage.undoSwap")
+                : tr("calendarPage.undoSwapCount", {
+                    count: currentSwaps.length,
+                  })}
+            </Button>
+          )}
+
+          <Group gap="xs">
+            <LanguageSwitcher />
+            {indices && (
+              <Tooltip
+                label="Copied to clipboard!"
+                opened={shareCopied}
+                position="bottom"
+                withArrow
+                color="dark"
+              >
+                <Button
+                  variant="filled"
+                  color="dark"
+                  size="sm"
+                  radius={0}
+                  leftSection={<IconShare size={14} />}
+                  onClick={handleCopyShare}
+                  style={{ backgroundColor: "#141517" }}
+                >
+                  {tr("calendarPage.share")}
+                </Button>
+              </Tooltip>
+            )}
+            <Button
+              variant="filled"
+              color="dark"
+              size="sm"
+              radius={0}
+              leftSection={<IconRefresh size={14} />}
+              onClick={() => setResetModalOpen(true)}
+              style={{ backgroundColor: "#141517" }}
+            >
+              {tr("calendarPage.reset")}
+            </Button>
+          </Group>
+
+          <ResetModal
+            opened={resetModalOpen}
+            onClose={() => setResetModalOpen(false)}
+            onConfirm={() => {
+              resetToDefault();
+              setResetModalOpen(false);
+              onBack();
+            }}
+          />
+        </>
+      )}
+
+      {!isBasic && (
+        <>
+          {hasSchedule ? (
+            <Group gap="xs">
+              <Button
+                variant="light"
+                color="violet"
+                size="sm"
+                radius={0}
+                leftSection={<IconChevronLeft size={14} />}
+                disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
+                loading={scheduleGenerating}
+                onClick={handlePrevious}
+              >
+                {tr("calendarPage.previous")}
+              </Button>
+              <Button
+                variant="filled"
+                color="violet"
+                size="sm"
+                radius={0}
+                rightSection={<IconChevronRight size={14} />}
+                disabled={scheduleGenerating || !canUseSeedNavigation}
+                loading={scheduleGenerating}
+                onClick={handleNext}
+              >
+                {tr("calendarPage.next")}
+              </Button>
+            </Group>
+          ) : (
+            <Button
+              variant="filled"
+              color="violet"
+              size="sm"
+              radius={0}
+              disabled={scheduleGenerating}
+              loading={scheduleGenerating}
+              onClick={() => void generateSchedules()}
+            >
+              {tr("calendarPage.generate")}
+            </Button>
+          )}
+
+          {hasSchedule && (
+            <Text size="sm" c="dimmed">
+              {tr("calendarPage.seedLabel", { seed: currentSeed })}
+            </Text>
+          )}
+        </>
+      )}
+
+      <Button
+        size="sm"
+        color="violet"
+        variant="filled"
+        radius={0}
+        disabled={!dateRangeOk || !currentSchedule}
+        onClick={handleDownloadIcs}
+      >
+        {tr("calendarPage.downloadIcs")}
+      </Button>
+
+      {!isBasic && (
+        <Button
+          variant="light"
+          color="gray"
+          size="sm"
+          radius={0}
+          disabled={scheduleGenerating}
+          loading={scheduleGenerating}
+          onClick={() => void randomizeSeed()}
+        >
+          {tr("calendarPage.randomize")}
+        </Button>
+      )}
+
+      {generationError && (
+        <Alert
+          color="red"
+          variant="light"
+          radius={0}
+          py="xs"
+          title={generationError.message}
+          styles={{ title: { whiteSpace: "normal", lineHeight: 1.3 } }}
+          style={{ flexShrink: 0 }}
+        >
+          <GenerationErrorDetailBlocks
+            errorDetails={genErrDetails}
+            summarizeEmptyPools={!!summarizeEmptyPoolsInGenError}
+          />
+        </Alert>
+      )}
+
+      <Stack gap={0}>
+        <Text size="xs" c="dimmed">
+          {tr("calendarPage.showingBlocks", {
+            count: eventCount,
+            suffix: eventCount === 1 ? "" : "s",
+          })}
+        </Text>
+      </Stack>
+
+      {!isMobile && (
+        <>
+          <Box style={{ flex: 1, minHeight: 24 }} />
+          <Button
+            variant="filled"
+            color="dark"
+            size="sm"
+            radius={0}
+            onClick={onBack}
+            style={{ backgroundColor: "#141517", alignSelf: "stretch" }}
+          >
+            {tr("calendarPage.backToSetup")}
+          </Button>
+        </>
+      )}
+    </>
+  );
+
   return (
     <Box
       component="main"
@@ -153,267 +368,37 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
         overflow: "hidden",
       }}
     >
-      {/* Mobile sidebar backdrop */}
-      {isMobile && sidebarOpen && (
+      {!isMobile && (
         <Box
-          aria-hidden
+          component="aside"
+          aria-label="Calendar Controls"
           style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            zIndex: 199,
+            width: CALENDAR_SIDEBAR_WIDTH_PX,
+            height: "100%",
+            flexShrink: 0,
+            padding: "24px 20px",
+            borderRight: "2px solid #2C2E33",
+            backgroundColor: "#1E1E20",
+            display: "flex",
+            flexDirection: "column",
+            gap: 24,
+            overflowY: "auto",
           }}
-          onClick={() => setSidebarOpen(false)}
-        />
+        >
+          {sidebarControls}
+        </Box>
       )}
 
-      {/* Sidebar */}
-      <Box
-        component="aside"
-        aria-label="Calendar Controls"
-        style={{
-          width: CALENDAR_SIDEBAR_WIDTH_PX,
-          height: "100%",
-          flexShrink: 0,
-          padding: "24px 20px",
-          borderRight: "2px solid #2C2E33",
-          backgroundColor: "#1E1E20",
-          display: "flex",
-          flexDirection: "column",
-          gap: 24,
-          overflowY: "auto",
-          ...(isMobile
-            ? {
-                position: "fixed",
-                top: 0,
-                left: 0,
-                height: "100vh",
-                zIndex: 200,
-                transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
-                transition: "transform 0.2s ease",
-                boxShadow: sidebarOpen ? "4px 0 24px rgba(0,0,0,0.3)" : "none",
-              }
-            : {}),
-        }}
-      >
-        {isMobile && (
-          <Button
-            variant="subtle"
-            color="gray"
-            size="sm"
-            radius={0}
-            leftSection={<IconX size={18} />}
-            onClick={() => setSidebarOpen(false)}
-            style={{ border: "none", alignSelf: "flex-start", marginBottom: 8 }}
-          >
-            {tr("calendarPage.mobile.close")}
-          </Button>
-        )}
-
-        <Title
-          order={1}
-          style={{
-            fontFamily: '"DM Serif Display", serif',
-            color: "#F8F9FA",
-            marginBottom: 0,
-          }}
+      {isMobile && (
+        <CalendarMobileDrawer
+          opened={controlsOpen}
+          onClose={() => setControlsOpen(false)}
+          title={calendarTitle}
+          ariaLabel={tr("calendarPage.mobile.controlsAria")}
         >
-          {tr(isBasic ? "basicCalendar.title" : "calendarPage.title")}
-        </Title>
-        <Text size="sm" style={{ color: "#ADB5BD", marginTop: -8 }}>
-          {tr(isBasic ? "basicCalendar.subtitle" : "calendarPage.subtitle")}
-        </Text>
-
-        {isBasic ? (
-          <>
-            <BasicCalendarHeaderActions onBack={onBack} />
-            <BasicCalendarSidebarControls
-              onBeforeNavigate={() => morphRef.current?.captureAndPark()}
-            />
-          </>
-        ) : (
-          <>
-            {currentSwaps.length > 0 && (
-              <Button
-                variant="light"
-                color="gray"
-                size="sm"
-                radius={0}
-                leftSection={<IconArrowBackUp size={14} />}
-                onClick={() => undoLastSwap()}
-              >
-                {currentSwaps.length === 1
-                  ? tr("calendarPage.undoSwap")
-                  : tr("calendarPage.undoSwapCount", {
-                      count: currentSwaps.length,
-                    })}
-              </Button>
-            )}
-
-            <Group gap="xs">
-              <LanguageSwitcher />
-              {indices && (
-                <Tooltip
-                  label="Copied to clipboard!"
-                  opened={shareCopied}
-                  position="bottom"
-                  withArrow
-                  color="dark"
-                >
-                  <Button
-                    variant="filled"
-                    color="dark"
-                    size="sm"
-                    radius={0}
-                    leftSection={<IconShare size={14} />}
-                    onClick={handleCopyShare}
-                    style={{ backgroundColor: "#141517" }}
-                  >
-                    {tr("calendarPage.share")}
-                  </Button>
-                </Tooltip>
-              )}
-              <Button
-                variant="filled"
-                color="dark"
-                size="sm"
-                radius={0}
-                leftSection={<IconRefresh size={14} />}
-                onClick={() => setResetModalOpen(true)}
-                style={{ backgroundColor: "#141517" }}
-              >
-                {tr("calendarPage.reset")}
-              </Button>
-            </Group>
-
-            <ResetModal
-              opened={resetModalOpen}
-              onClose={() => setResetModalOpen(false)}
-              onConfirm={() => {
-                resetToDefault();
-                setResetModalOpen(false);
-                onBack();
-              }}
-            />
-          </>
-        )}
-
-        {/* Seed Navigation - only show in advanced mode (basic has its own in sidebar) */}
-        {!isBasic && (
-          <>
-            {hasSchedule ? (
-              <Group gap="xs">
-                <Button
-                  variant="light"
-                  color="violet"
-                  size="sm"
-                  radius={0}
-                  leftSection={<IconChevronLeft size={14} />}
-                  disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
-                  loading={scheduleGenerating}
-                  onClick={handlePrevious}
-                >
-                  {tr("calendarPage.previous")}
-                </Button>
-                <Button
-                  variant="filled"
-                  color="violet"
-                  size="sm"
-                  radius={0}
-                  rightSection={<IconChevronRight size={14} />}
-                  disabled={scheduleGenerating || !canUseSeedNavigation}
-                  loading={scheduleGenerating}
-                  onClick={handleNext}
-                >
-                  {tr("calendarPage.next")}
-                </Button>
-              </Group>
-            ) : (
-              <Button
-                variant="filled"
-                color="violet"
-                size="sm"
-                radius={0}
-                disabled={scheduleGenerating}
-                loading={scheduleGenerating}
-                onClick={() => void generateSchedules()}
-              >
-                {tr("calendarPage.generate")}
-              </Button>
-            )}
-
-            {hasSchedule && (
-              <Text size="sm" c="dimmed">
-                {tr("calendarPage.seedLabel", { seed: currentSeed })}
-              </Text>
-            )}
-          </>
-        )}
-
-        <Button
-          size="sm"
-          color="violet"
-          variant="filled"
-          radius={0}
-          disabled={!dateRangeOk || !currentSchedule}
-          onClick={handleDownloadIcs}
-        >
-          {tr("calendarPage.downloadIcs")}
-        </Button>
-
-        {!isBasic && (
-          <Button
-            variant="light"
-            color="gray"
-            size="sm"
-            radius={0}
-            disabled={scheduleGenerating}
-            loading={scheduleGenerating}
-            onClick={() => void randomizeSeed()}
-          >
-            {tr("calendarPage.randomize")}
-          </Button>
-        )}
-
-        {generationError && (
-          <Alert
-            color="red"
-            variant="light"
-            radius={0}
-            py="xs"
-            title={generationError.message}
-            styles={{ title: { whiteSpace: "normal", lineHeight: 1.3 } }}
-            style={{ flexShrink: 0 }}
-          >
-            <GenerationErrorDetailBlocks
-              errorDetails={genErrDetails}
-              summarizeEmptyPools={!!summarizeEmptyPoolsInGenError}
-            />
-          </Alert>
-        )}
-
-        <Stack gap={0}>
-          <Text size="xs" c="dimmed">
-            {tr("calendarPage.showingBlocks", {
-              count: eventCount,
-              suffix: eventCount === 1 ? "" : "s",
-            })}
-          </Text>
-        </Stack>
-
-        <Box style={{ flex: 1, minHeight: 24 }} />
-
-        <Button
-          variant="filled"
-          color="dark"
-          size="sm"
-          radius={0}
-          onClick={onBack}
-          style={{ backgroundColor: "#141517", alignSelf: "stretch" }}
-        >
-          {tr("calendarPage.backToSetup")}
-        </Button>
-      </Box>
+          <Stack gap={24}>{sidebarControls}</Stack>
+        </CalendarMobileDrawer>
+      )}
 
       {/* Calendar area */}
       <Box
@@ -463,37 +448,48 @@ export function CalendarPage({ onBack }: CalendarPageProps) {
             color="gray"
             size="md"
             radius={0}
+            aria-label={tr("calendarPage.mobile.back")}
             style={{ flex: 1, border: "none", height: 56 }}
-            leftSection={<IconMenu2 size={22} />}
-            onClick={() => setSidebarOpen(true)}
+            onClick={onBack}
           >
-            {tr("calendarPage.mobile.menu")}
+            <IconArrowLeft size={22} stroke={1.75} />
           </Button>
           <Button
             variant="subtle"
             color="gray"
             size="md"
             radius={0}
+            aria-label={tr("calendarPage.mobile.menu")}
             style={{ flex: 1, border: "none", height: 56 }}
-            leftSection={<IconChevronLeft size={22} />}
+            onClick={() => setControlsOpen(true)}
+          >
+            <IconSettings size={22} stroke={1.75} />
+          </Button>
+          <Button
+            variant="subtle"
+            color="gray"
+            size="md"
+            radius={0}
+            aria-label={tr("calendarPage.mobile.previous")}
+            style={{ flex: 1, border: "none", height: 56 }}
             disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
             loading={scheduleGenerating}
             onClick={handlePrevious}
           >
-            {tr("calendarPage.mobile.previous")}
+            <IconChevronLeft size={22} stroke={1.75} />
           </Button>
           <Button
             variant="subtle"
             color="gray"
             size="md"
             radius={0}
+            aria-label={tr("calendarPage.mobile.next")}
             style={{ flex: 1, border: "none", height: 56 }}
-            leftSection={<IconChevronRight size={22} />}
             disabled={scheduleGenerating || !canUseSeedNavigation}
             loading={scheduleGenerating}
             onClick={handleNext}
           >
-            {tr("calendarPage.mobile.next")}
+            <IconChevronRight size={22} stroke={1.75} />
           </Button>
         </Box>
       )}

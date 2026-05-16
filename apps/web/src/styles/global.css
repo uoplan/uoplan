@@ -218,7 +218,7 @@ a {
 
 /* Phantoms are position:fixed with an explicit pixel height — do not inherit min-height:100%
    (that resolves against the viewport and forces full-screen-tall “events”).
-   z-index below CalendarPage mobile shell (bottom nav 198, drawer backdrop 199, drawer 200). */
+   z-index below CalendarPage mobile shell (bottom nav 198; Mantine bottom drawer above). */
 .fc-uoplan-event.fc-uoplan-morph-phantom {
   min-height: 0;
   max-height: none;

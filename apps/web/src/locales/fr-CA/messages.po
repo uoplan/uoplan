@@ -303,8 +303,20 @@ msgstr "{count} tôtal - cliquez sur un bloc pour échanger"
 msgid "calendarPage.mobile.close"
 msgstr "Fermer"
 
+msgid "calendarPage.mobile.back"
+msgstr "Retour"
+
+msgid "calendarPage.mobile.controlsAria"
+msgstr "Options de l'horaire"
+
 msgid "calendarPage.mobile.menu"
-msgstr "Menu"
+msgstr "Options"
+
+msgid "calendarPage.mobile.previous"
+msgstr "Préc."
+
+msgid "calendarPage.mobile.next"
+msgstr "Suiv."
 
 msgid "calendarPage.mobile.tryAnother"
 msgstr "Essayer un autre"

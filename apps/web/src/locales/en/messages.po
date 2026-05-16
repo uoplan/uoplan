@@ -351,8 +351,14 @@ msgstr "{count} total - click a block to swap"
 msgid "calendarPage.mobile.close"
 msgstr "Close"
 
+msgid "calendarPage.mobile.back"
+msgstr "Back"
+
+msgid "calendarPage.mobile.controlsAria"
+msgstr "Calendar options"
+
 msgid "calendarPage.mobile.menu"
-msgstr "Menu"
+msgstr "Options"
 
 msgid "calendarPage.mobile.tryAnother"
 msgstr "Try another"
