@@ -1,5 +1,5 @@
 import { useMemo, useCallback, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import { Box, Text, Modal } from "@mantine/core";
+import { Box, Modal } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -14,8 +14,6 @@ import { useCalendarEvents, type CalendarEvent } from "../../hooks/useCalendarEv
 import { useSwapModal } from "../../hooks/useSwapModal";
 import { useCalendarMorph } from "../../hooks/useCalendarMorph";
 import { ScheduleMorphOverlay } from "./ScheduleMorphOverlay";
-import { tr } from "../../i18n";
-
 const EMPTY_COLOR_MAP: Record<string, number> = {};
 
 export interface CalendarViewHandle {
@@ -95,22 +93,6 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(fu
       });
     }
   };
-
-  if (!schedule) {
-    return (
-      <Box
-        style={{
-          flex: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "#868E96",
-        }}
-      >
-        <Text size="lg">{tr("calendarPage.noSchedule")}</Text>
-      </Box>
-    );
-  }
 
   return (
     <Box

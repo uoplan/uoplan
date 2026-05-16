@@ -1,5 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { basicElectivesAfterPinnedDelta } from "./basicCalendarPins";
+import { basicElectivesAfterPinnedDelta, canGenerateBasicSchedule } from "./basicCalendarPins";
+
+describe("canGenerateBasicSchedule", () => {
+  it("is false when there are no required courses and electives are 0", () => {
+    expect(canGenerateBasicSchedule(0, 0)).toBe(false);
+  });
+
+  it("is true when there is at least one required course or elective slot", () => {
+    expect(canGenerateBasicSchedule(1, 0)).toBe(true);
+    expect(canGenerateBasicSchedule(0, 1)).toBe(true);
+  });
+});
 
 describe("basicElectivesAfterPinnedDelta", () => {
   it("decrements electives when a required course is pinned", () => {

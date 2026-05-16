@@ -55,6 +55,10 @@ jobs:
           TERMS_CONTENT: ${{ inputs.terms }}
         run: echo "$TERMS_CONTENT" > apps/scrapers/data/terms.json
 
+      - name: Sync terms from uOttawa class search
+        if: inputs.terms == ''
+        run: pnpm check:terms
+
       - name: Run catalogue scraper
         run: pnpm run scrape:catalogue
 
