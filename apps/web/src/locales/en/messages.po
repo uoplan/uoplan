@@ -159,6 +159,39 @@ msgstr "No grade history found for this instructor."
 msgid "explore.invalidProfessor"
 msgstr "Invalid professor link."
 
+msgid "explore.histogramStudents"
+msgstr "{count, plural, one {# student} other {# students}}"
+
+msgid "explore.spotlight.gallery"
+msgstr "Course highlights"
+
+msgid "explore.spotlight.hardest"
+msgstr "Hardest courses"
+
+msgid "explore.spotlight.easiest"
+msgstr "Easiest courses"
+
+msgid "explore.spotlight.mostGraded"
+msgstr "Most graded courses"
+
+msgid "explore.spotlight.highestFailRate"
+msgstr "Highest fail rate"
+
+msgid "explore.spotlight.mostProfessors"
+msgstr "Most instructors"
+
+msgid "explore.spotlight.avgGpa"
+msgstr "{gpa} avg"
+
+msgid "explore.spotlight.gradeCount"
+msgstr "{count} grades"
+
+msgid "explore.spotlight.failRate"
+msgstr "{pct}% fail"
+
+msgid "explore.spotlight.professorCount"
+msgstr "{count} profs"
+
 msgid "app.footer.feedbackPrompt"
 msgstr "send feedback to"
 

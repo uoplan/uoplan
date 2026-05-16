@@ -159,6 +159,39 @@ msgstr "Aucune donnée de notes pour ce professeur."
 msgid "explore.invalidProfessor"
 msgstr "Lien professeur invalide."
 
+msgid "explore.histogramStudents"
+msgstr "{count, plural, one {# étudiant} other {# étudiants}}"
+
+msgid "explore.spotlight.gallery"
+msgstr "Cours en vedette"
+
+msgid "explore.spotlight.hardest"
+msgstr "Cours les plus difficiles"
+
+msgid "explore.spotlight.easiest"
+msgstr "Cours les plus faciles"
+
+msgid "explore.spotlight.mostGraded"
+msgstr "Cours les plus notés"
+
+msgid "explore.spotlight.highestFailRate"
+msgstr "Taux d'échec le plus élevé"
+
+msgid "explore.spotlight.mostProfessors"
+msgstr "Plus d'instructeurs"
+
+msgid "explore.spotlight.avgGpa"
+msgstr "{gpa} moy."
+
+msgid "explore.spotlight.gradeCount"
+msgstr "{count} notes"
+
+msgid "explore.spotlight.failRate"
+msgstr "{pct} % d'échecs"
+
+msgid "explore.spotlight.professorCount"
+msgstr "{count} profs"
+
 msgid "app.footer.feedbackPrompt"
 msgstr "écrivez-nous à"
 

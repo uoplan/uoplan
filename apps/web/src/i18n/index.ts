@@ -90,4 +90,10 @@ export function tr(id: string, values?: Record<string, unknown>): string {
   });
 }
 
+/** Locale-aware number formatting (e.g. `12,000` en · `12 000` fr-CA). */
+export function formatLocaleNumber(value: number, options?: Intl.NumberFormatOptions): string {
+  const locale = i18n.locale && i18n.locale.length > 0 ? i18n.locale : DEFAULT_LOCALE;
+  return new Intl.NumberFormat(locale, options).format(value);
+}
+
 export { i18n };

@@ -1,12 +1,12 @@
 import { normalizeCourseCode } from "schedule";
 
-/** Compact course code for URL query (e.g. `CSI 2110` → `CSI2110`). */
-export function courseNormToSearchParam(norm: string): string {
-  return norm.replace(/\s+/g, "").toUpperCase();
+/** Compact lowercase course code for URL path (e.g. `CSI 2110` → `csi2110`). */
+export function courseNormToPathParam(norm: string): string {
+  return norm.replace(/\s+/g, "").toLowerCase();
 }
 
-/** Parse `course` search param back to normalized catalogue-style code, or null if invalid. */
-export function parseCourseSearchParam(raw: string | undefined): string | null {
+/** Parse course path param back to normalized catalogue-style code, or null if invalid. */
+export function parseCoursePathParam(raw: string | undefined): string | null {
   if (!raw?.trim()) return null;
   const compact = raw.trim().toUpperCase().replace(/\s+/g, "");
   const m = compact.match(/^([A-Z]{3,4})(\d{4}[A-Z]?)$/i);

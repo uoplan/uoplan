@@ -672,6 +672,20 @@ a.fc-uoplan-rating-inline:hover {
   gap: 1px;
 }
 
+.uoplan-grade-histogram--with-count {
+  position: relative;
+}
+
+.uoplan-grade-histogram-student-count {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
 .uoplan-grade-histogram--compact .uoplan-grade-histogram-item {
   gap: 2px;
 }

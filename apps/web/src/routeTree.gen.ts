@@ -23,6 +23,7 @@ import { Route as StepAssignRouteImport } from './routes/step/assign'
 import { Route as CalendarBasicRouteImport } from './routes/calendar/basic'
 import { Route as CalendarAdvancedRouteImport } from './routes/calendar/advanced'
 import { Route as ExploreProfessorLegacyIdRouteImport } from './routes/explore/professor/$legacyId'
+import { Route as ExploreCourseCourseRouteImport } from './routes/explore/course/$course'
 
 const GraphRoute = GraphRouteImport.update({
   id: '/graph',
@@ -95,6 +96,11 @@ const ExploreProfessorLegacyIdRoute =
     path: '/explore/professor/$legacyId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ExploreCourseCourseRoute = ExploreCourseCourseRouteImport.update({
+  id: '/explore/course/$course',
+  path: '/explore/course/$course',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/step/program': typeof StepProgramRoute
   '/step/term': typeof StepTermRoute
   '/explore/': typeof ExploreIndexRoute
+  '/explore/course/$course': typeof ExploreCourseCourseRoute
   '/explore/professor/$legacyId': typeof ExploreProfessorLegacyIdRoute
 }
 export interface FileRoutesByTo {
@@ -126,6 +133,7 @@ export interface FileRoutesByTo {
   '/step/program': typeof StepProgramRoute
   '/step/term': typeof StepTermRoute
   '/explore': typeof ExploreIndexRoute
+  '/explore/course/$course': typeof ExploreCourseCourseRoute
   '/explore/professor/$legacyId': typeof ExploreProfessorLegacyIdRoute
 }
 export interface FileRoutesById {
@@ -143,6 +151,7 @@ export interface FileRoutesById {
   '/step/program': typeof StepProgramRoute
   '/step/term': typeof StepTermRoute
   '/explore/': typeof ExploreIndexRoute
+  '/explore/course/$course': typeof ExploreCourseCourseRoute
   '/explore/professor/$legacyId': typeof ExploreProfessorLegacyIdRoute
 }
 export interface FileRouteTypes {
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/step/program'
     | '/step/term'
     | '/explore/'
+    | '/explore/course/$course'
     | '/explore/professor/$legacyId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/step/program'
     | '/step/term'
     | '/explore'
+    | '/explore/course/$course'
     | '/explore/professor/$legacyId'
   id:
     | '__root__'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/step/program'
     | '/step/term'
     | '/explore/'
+    | '/explore/course/$course'
     | '/explore/professor/$legacyId'
   fileRoutesById: FileRoutesById
 }
@@ -210,6 +222,7 @@ export interface RootRouteChildren {
   StepProgramRoute: typeof StepProgramRoute
   StepTermRoute: typeof StepTermRoute
   ExploreIndexRoute: typeof ExploreIndexRoute
+  ExploreCourseCourseRoute: typeof ExploreCourseCourseRoute
   ExploreProfessorLegacyIdRoute: typeof ExploreProfessorLegacyIdRoute
 }
 
@@ -313,6 +326,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExploreProfessorLegacyIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/explore/course/$course': {
+      id: '/explore/course/$course'
+      path: '/explore/course/$course'
+      fullPath: '/explore/course/$course'
+      preLoaderRoute: typeof ExploreCourseCourseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -330,6 +350,7 @@ const rootRouteChildren: RootRouteChildren = {
   StepProgramRoute: StepProgramRoute,
   StepTermRoute: StepTermRoute,
   ExploreIndexRoute: ExploreIndexRoute,
+  ExploreCourseCourseRoute: ExploreCourseCourseRoute,
   ExploreProfessorLegacyIdRoute: ExploreProfessorLegacyIdRoute,
 }
 export const routeTree = rootRouteImport
