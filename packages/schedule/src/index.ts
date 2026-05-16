@@ -18,6 +18,7 @@ export * from "./ics";
 export * from "./transcriptParser";
 export * from "./frenchImmersionDiploma";
 export * from "./stateEncode";
+export * from "./termDefaults";
 export * from "./prerequisites";
 export * from "./requirements";
 export * as DataProto from "./proto/data";
