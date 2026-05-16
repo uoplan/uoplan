@@ -134,7 +134,6 @@ export function ProfessorGraphPage({
       setPreviewNodeId(null);
       void navigateGraph({
         search: { prof: node ? professorToSearchParam(node) : undefined },
-        replace: true,
       });
     },
     [navigateGraph],
