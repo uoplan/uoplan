@@ -11,7 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as StepStepSlugRouteImport } from './routes/step/$stepSlug'
+import { Route as StepTermRouteImport } from './routes/step/term'
+import { Route as StepProgramRouteImport } from './routes/step/program'
+import { Route as StepOptionsRouteImport } from './routes/step/options'
+import { Route as StepModeRouteImport } from './routes/step/mode'
+import { Route as StepGenerateRouteImport } from './routes/step/generate'
+import { Route as StepCompletedRouteImport } from './routes/step/completed'
+import { Route as StepAssignRouteImport } from './routes/step/assign'
 import { Route as CalendarBasicRouteImport } from './routes/calendar/basic'
 import { Route as CalendarAdvancedRouteImport } from './routes/calendar/advanced'
 
@@ -25,9 +31,39 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StepStepSlugRoute = StepStepSlugRouteImport.update({
-  id: '/step/$stepSlug',
-  path: '/step/$stepSlug',
+const StepTermRoute = StepTermRouteImport.update({
+  id: '/step/term',
+  path: '/step/term',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StepProgramRoute = StepProgramRouteImport.update({
+  id: '/step/program',
+  path: '/step/program',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StepOptionsRoute = StepOptionsRouteImport.update({
+  id: '/step/options',
+  path: '/step/options',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StepModeRoute = StepModeRouteImport.update({
+  id: '/step/mode',
+  path: '/step/mode',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StepGenerateRoute = StepGenerateRouteImport.update({
+  id: '/step/generate',
+  path: '/step/generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StepCompletedRoute = StepCompletedRouteImport.update({
+  id: '/step/completed',
+  path: '/step/completed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StepAssignRoute = StepAssignRouteImport.update({
+  id: '/step/assign',
+  path: '/step/assign',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CalendarBasicRoute = CalendarBasicRouteImport.update({
@@ -46,14 +82,26 @@ export interface FileRoutesByFullPath {
   '/changelog': typeof ChangelogRoute
   '/calendar/advanced': typeof CalendarAdvancedRoute
   '/calendar/basic': typeof CalendarBasicRoute
-  '/step/$stepSlug': typeof StepStepSlugRoute
+  '/step/assign': typeof StepAssignRoute
+  '/step/completed': typeof StepCompletedRoute
+  '/step/generate': typeof StepGenerateRoute
+  '/step/mode': typeof StepModeRoute
+  '/step/options': typeof StepOptionsRoute
+  '/step/program': typeof StepProgramRoute
+  '/step/term': typeof StepTermRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
   '/calendar/advanced': typeof CalendarAdvancedRoute
   '/calendar/basic': typeof CalendarBasicRoute
-  '/step/$stepSlug': typeof StepStepSlugRoute
+  '/step/assign': typeof StepAssignRoute
+  '/step/completed': typeof StepCompletedRoute
+  '/step/generate': typeof StepGenerateRoute
+  '/step/mode': typeof StepModeRoute
+  '/step/options': typeof StepOptionsRoute
+  '/step/program': typeof StepProgramRoute
+  '/step/term': typeof StepTermRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,7 +109,13 @@ export interface FileRoutesById {
   '/changelog': typeof ChangelogRoute
   '/calendar/advanced': typeof CalendarAdvancedRoute
   '/calendar/basic': typeof CalendarBasicRoute
-  '/step/$stepSlug': typeof StepStepSlugRoute
+  '/step/assign': typeof StepAssignRoute
+  '/step/completed': typeof StepCompletedRoute
+  '/step/generate': typeof StepGenerateRoute
+  '/step/mode': typeof StepModeRoute
+  '/step/options': typeof StepOptionsRoute
+  '/step/program': typeof StepProgramRoute
+  '/step/term': typeof StepTermRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -70,21 +124,39 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/calendar/advanced'
     | '/calendar/basic'
-    | '/step/$stepSlug'
+    | '/step/assign'
+    | '/step/completed'
+    | '/step/generate'
+    | '/step/mode'
+    | '/step/options'
+    | '/step/program'
+    | '/step/term'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/changelog'
     | '/calendar/advanced'
     | '/calendar/basic'
-    | '/step/$stepSlug'
+    | '/step/assign'
+    | '/step/completed'
+    | '/step/generate'
+    | '/step/mode'
+    | '/step/options'
+    | '/step/program'
+    | '/step/term'
   id:
     | '__root__'
     | '/'
     | '/changelog'
     | '/calendar/advanced'
     | '/calendar/basic'
-    | '/step/$stepSlug'
+    | '/step/assign'
+    | '/step/completed'
+    | '/step/generate'
+    | '/step/mode'
+    | '/step/options'
+    | '/step/program'
+    | '/step/term'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -92,7 +164,13 @@ export interface RootRouteChildren {
   ChangelogRoute: typeof ChangelogRoute
   CalendarAdvancedRoute: typeof CalendarAdvancedRoute
   CalendarBasicRoute: typeof CalendarBasicRoute
-  StepStepSlugRoute: typeof StepStepSlugRoute
+  StepAssignRoute: typeof StepAssignRoute
+  StepCompletedRoute: typeof StepCompletedRoute
+  StepGenerateRoute: typeof StepGenerateRoute
+  StepModeRoute: typeof StepModeRoute
+  StepOptionsRoute: typeof StepOptionsRoute
+  StepProgramRoute: typeof StepProgramRoute
+  StepTermRoute: typeof StepTermRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -111,11 +189,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/step/$stepSlug': {
-      id: '/step/$stepSlug'
-      path: '/step/$stepSlug'
-      fullPath: '/step/$stepSlug'
-      preLoaderRoute: typeof StepStepSlugRouteImport
+    '/step/term': {
+      id: '/step/term'
+      path: '/step/term'
+      fullPath: '/step/term'
+      preLoaderRoute: typeof StepTermRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/step/program': {
+      id: '/step/program'
+      path: '/step/program'
+      fullPath: '/step/program'
+      preLoaderRoute: typeof StepProgramRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/step/options': {
+      id: '/step/options'
+      path: '/step/options'
+      fullPath: '/step/options'
+      preLoaderRoute: typeof StepOptionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/step/mode': {
+      id: '/step/mode'
+      path: '/step/mode'
+      fullPath: '/step/mode'
+      preLoaderRoute: typeof StepModeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/step/generate': {
+      id: '/step/generate'
+      path: '/step/generate'
+      fullPath: '/step/generate'
+      preLoaderRoute: typeof StepGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/step/completed': {
+      id: '/step/completed'
+      path: '/step/completed'
+      fullPath: '/step/completed'
+      preLoaderRoute: typeof StepCompletedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/step/assign': {
+      id: '/step/assign'
+      path: '/step/assign'
+      fullPath: '/step/assign'
+      preLoaderRoute: typeof StepAssignRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calendar/basic': {
@@ -140,7 +260,13 @@ const rootRouteChildren: RootRouteChildren = {
   ChangelogRoute: ChangelogRoute,
   CalendarAdvancedRoute: CalendarAdvancedRoute,
   CalendarBasicRoute: CalendarBasicRoute,
-  StepStepSlugRoute: StepStepSlugRoute,
+  StepAssignRoute: StepAssignRoute,
+  StepCompletedRoute: StepCompletedRoute,
+  StepGenerateRoute: StepGenerateRoute,
+  StepModeRoute: StepModeRoute,
+  StepOptionsRoute: StepOptionsRoute,
+  StepProgramRoute: StepProgramRoute,
+  StepTermRoute: StepTermRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,16 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { useLingui } from "@lingui/react";
 import {
-  Alert,
   Anchor,
   Badge,
   Box,
   Button,
-  Collapse,
   Group,
   Modal,
-  Paper,
   Stack,
   Text,
   Title,
@@ -18,25 +15,12 @@ import {
 } from "@mantine/core";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMediaQuery } from "@mantine/hooks";
-import {
-  IconChevronDown,
-  IconCompass,
-  IconHelp,
-  IconRefresh,
-  IconShare,
-} from "@tabler/icons-react";
+import { IconCompass, IconHelp, IconRefresh, IconShare } from "@tabler/icons-react";
 import { runTour } from "../../tour";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { STEPS, StepNav } from "../shared/StepNav";
 import { ResetModal } from "../shared/ResetModal";
-import { TermStep } from "../steps/TermStep";
-import { ModeStep } from "../steps/ModeStep";
-import { ProgramStep } from "../steps/ProgramStep";
-import { CompletedCoursesStep } from "../steps/CompletedCoursesStep";
-import { AssignStep } from "../requirements/AssignStep";
-import { ConstrainStep } from "../requirements/ConstrainStep";
-import { OptionsStep } from "../requirements/OptionsStep";
 import { hasMissingOptionSelections, nodeHasOptionGroups } from "../requirements/requirementUtils";
 import {
   ALL_WIZARD_STEP_INDICES,
@@ -47,9 +31,7 @@ import {
   normalizeActiveStep,
   WizardStep,
 } from "../../lib/wizardSteps";
-import { slugToWizardStep } from "../../lib/wizardStepSlugs";
 import { navigateToCalendar, navigateToWizardStep } from "../../lib/appNavigation";
-import { ScheduleCountStep } from "../steps/ScheduleCountStep";
 import { usePersistState } from "../../hooks/usePersistState";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { getWizardStepContent } from "../../lib/wizardStepContent";
@@ -58,17 +40,15 @@ import { dynamicActivate, tr, type AppLocale } from "../../i18n";
 
 const ONTARIO_FIPPA_ACT_URL = "https://www.ontario.ca/laws/statute/90f31";
 
-export type WizardPageProps = {
-  stepSlug: string;
+export type WizardShellProps = {
+  activeStep: WizardStep;
+  children: ReactNode;
 };
 
-export function WizardPage({ stepSlug }: WizardPageProps) {
+export function WizardShell({ activeStep: active, children }: WizardShellProps) {
   useLingui();
 
-  const active = slugToWizardStep(stepSlug)!;
-
   const {
-    catalogue,
     indices,
     cache,
     terms,
@@ -76,33 +56,12 @@ export function WizardPage({ stepSlug }: WizardPageProps) {
     wizardMode,
     firstYear,
     program,
-    completedCourses,
-    remainingRequirements,
     requirementTreeWithStatus,
-    completedRequirementsList,
     unassignedCompletedCourses,
-    selectedPerRequirement,
-    constrainedPerRequirement,
     selectedOptionsPerRequirement,
-    coursesThisSemester,
-    generationMinStartMinutes,
-    generationMaxEndMinutes,
-    generationAllowedDays,
-    generationMinProfessorRating,
-    generationError,
-    filteredPrereqEligibleCourses,
-    levelBuckets,
-    languageBuckets,
-    electiveLevelBuckets,
-    includeClosedComponents,
-    virtualSectionsOnly,
-    generationLimitFirstYearCredits,
-    generationCompressedSchedule,
-    generationPreferEasier,
     wizardFurthestStep,
   } = useAppStore(
     useShallow((s) => ({
-      catalogue: s.catalogue,
       indices: s.indices,
       cache: s.cache,
       terms: s.terms,
@@ -110,65 +69,19 @@ export function WizardPage({ stepSlug }: WizardPageProps) {
       wizardMode: s.wizardMode,
       firstYear: s.firstYear,
       program: s.program,
-      completedCourses: s.completedCourses,
-      remainingRequirements: s.remainingRequirements,
       requirementTreeWithStatus: s.requirementTreeWithStatus,
-      completedRequirementsList: s.completedRequirementsList,
       unassignedCompletedCourses: s.unassignedCompletedCourses,
-      selectedPerRequirement: s.selectedPerRequirement,
-      constrainedPerRequirement: s.constrainedPerRequirement,
       selectedOptionsPerRequirement: s.selectedOptionsPerRequirement,
-      coursesThisSemester: s.coursesThisSemester,
-      generationMinStartMinutes: s.generationMinStartMinutes,
-      generationMaxEndMinutes: s.generationMaxEndMinutes,
-      generationAllowedDays: s.generationAllowedDays,
-      generationMinProfessorRating: s.generationMinProfessorRating,
-      generationError: s.generationError,
-      filteredPrereqEligibleCourses: s.filteredPrereqEligibleCourses,
-      levelBuckets: s.levelBuckets,
-      languageBuckets: s.languageBuckets,
-      electiveLevelBuckets: s.electiveLevelBuckets,
-      includeClosedComponents: s.includeClosedComponents,
-      virtualSectionsOnly: s.virtualSectionsOnly,
-      generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
-      generationCompressedSchedule: s.generationCompressedSchedule,
-      generationPreferEasier: s.generationPreferEasier,
       wizardFurthestStep: s.wizardFurthestStep,
     })),
   );
 
   const getShareUrl = useAppStore((s) => s.getShareUrl);
-  const setWizardMode = useAppStore((s) => s.setWizardMode);
-  const setProgram = useAppStore((s) => s.setProgram);
-  const setSelectedTermId = useAppStore((s) => s.setSelectedTermId);
-  const setCompletedCourses = useAppStore((s) => s.setCompletedCourses);
-  const setSelectedForRequirement = useAppStore((s) => s.setSelectedForRequirement);
-  const setConstrainedForRequirement = useAppStore((s) => s.setConstrainedForRequirement);
-  const setCoursesThisSemester = useAppStore((s) => s.setCoursesThisSemester);
-  const setSelectedOptionForRequirement = useAppStore((s) => s.setSelectedOptionForRequirement);
-  const clearSelectedOptionForRequirement = useAppStore((s) => s.clearSelectedOptionForRequirement);
-  const generateSchedules = useAppStore((s) => s.generateSchedules);
-  const setGenerationMinProfessorRating = useAppStore((s) => s.setGenerationMinProfessorRating);
-  const setGenerationMinStartMinutes = useAppStore((s) => s.setGenerationMinStartMinutes);
-  const setGenerationMaxEndMinutes = useAppStore((s) => s.setGenerationMaxEndMinutes);
-  const setGenerationAllowedDays = useAppStore((s) => s.setGenerationAllowedDays);
-  const setLevelBuckets = useAppStore((s) => s.setLevelBuckets);
-  const setLanguageBuckets = useAppStore((s) => s.setLanguageBuckets);
-  const setElectiveLevelBuckets = useAppStore((s) => s.setElectiveLevelBuckets);
-  const setIncludeClosedComponents = useAppStore((s) => s.setIncludeClosedComponents);
-  const setVirtualSectionsOnly = useAppStore((s) => s.setVirtualSectionsOnly);
-  const setGenerationLimitFirstYearCredits = useAppStore(
-    (s) => s.setGenerationLimitFirstYearCredits,
-  );
-  const setGenerationCompressedSchedule = useAppStore((s) => s.setGenerationCompressedSchedule);
-  const setGenerationPreferEasier = useAppStore((s) => s.setGenerationPreferEasier);
   const resetToDefault = useAppStore((s) => s.resetToDefault);
   const touchWizardFurthestStep = useAppStore((s) => s.touchWizardFurthestStep);
 
-  const [generating, setGenerating] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [helpModalOpen, setHelpModalOpen] = useState(false);
-  const [constrainOpen, setConstrainOpen] = useState(false);
   const wizardStepContent = getWizardStepContent();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -197,7 +110,6 @@ export function WizardPage({ stepSlug }: WizardPageProps) {
     touchWizardFurthestStep(active);
   }, [active, touchWizardFurthestStep]);
 
-  const programs = catalogue?.programs ?? [];
   const hasTerms = (terms?.length ?? 0) > 0;
 
   const missingOptions = useMemo(
@@ -314,21 +226,6 @@ export function WizardPage({ stepSlug }: WizardPageProps) {
     return () => window.clearTimeout(t);
   }, [nextUnlockCue, prefersReducedMotion]);
 
-  const handleGenerate = () => {
-    setGenerating(true);
-    void (async () => {
-      try {
-        await generateSchedules();
-        const { currentSchedule, generationError } = useAppStore.getState();
-        if (currentSchedule !== null && generationError === null) {
-          navigateToCalendar("advanced");
-        }
-      } finally {
-        setGenerating(false);
-      }
-    })();
-  };
-
   const handleWizardNext = () => {
     if (wizardMode === "basic" && effectiveActive === WizardStep.Mode) {
       navigateToCalendar("basic");
@@ -343,23 +240,6 @@ export function WizardPage({ stepSlug }: WizardPageProps) {
     navigateToWizardStep(WizardStep.Term, { replace: true });
     setResetModalOpen(false);
   };
-
-  const uniqueSelected = new Set(Object.values(selectedPerRequirement).flat()).size;
-
-  const completedFirstYearCredits = completedCourses.reduce((sum, code) => {
-    const m = code.match(/\d{4}/);
-    if (!m || Number(m[0]) >= 2000) return sum;
-    return sum + (cache?.getCourse(code)?.credits ?? 3);
-  }, 0);
-  const selectedFirstYearCredits = [...new Set(Object.values(selectedPerRequirement).flat())]
-    .filter((code) => !completedCourses.includes(code))
-    .reduce((sum, code) => {
-      const m = code.match(/\d{4}/);
-      if (!m || Number(m[0]) >= 2000) return sum;
-      return sum + (cache?.getCourse(code)?.credits ?? 3);
-    }, 0);
-  const totalFirstYearCredits = completedFirstYearCredits + selectedFirstYearCredits;
-  const warnFirstYearLimit = totalFirstYearCredits > 48;
 
   return (
     <motion.div
@@ -586,197 +466,7 @@ export function WizardPage({ stepSlug }: WizardPageProps) {
                       </Group>
                     </Group>
 
-                    {effectiveActive === WizardStep.Term && terms && (
-                      <Stack gap="md">
-                        <TermStep
-                          terms={terms}
-                          value={selectedTermId}
-                          onChange={(termId) => {
-                            void setSelectedTermId(termId);
-                          }}
-                        />
-                      </Stack>
-                    )}
-                    {effectiveActive === WizardStep.Mode && (
-                      <Stack gap="md">
-                        <ModeStep
-                          value={wizardMode}
-                          onChange={(mode) => {
-                            setWizardMode(mode);
-                          }}
-                        />
-                      </Stack>
-                    )}
-                    {effectiveActive === WizardStep.Program && (
-                      <Stack gap="md">
-                        <ProgramStep
-                          programs={programs}
-                          value={program?.url ?? null}
-                          onChange={setProgram}
-                        />
-                      </Stack>
-                    )}
-                    {effectiveActive === WizardStep.Completed && (
-                      <Stack gap="md">
-                        <CompletedCoursesStep
-                          cache={cache}
-                          remainingRequirements={remainingRequirements}
-                          completedCourses={completedCourses}
-                          onChange={setCompletedCourses}
-                          hasProgram={!!program}
-                        />
-                      </Stack>
-                    )}
-                    {effectiveActive === WizardStep.Options && (
-                      <Stack gap="md">
-                        <OptionsStep
-                          requirementTreeWithStatus={requirementTreeWithStatus}
-                          completedCourses={completedCourses}
-                          selectedOptionsPerRequirement={selectedOptionsPerRequirement}
-                          onSelectOption={setSelectedOptionForRequirement}
-                          onClearOption={clearSelectedOptionForRequirement}
-                        />
-                      </Stack>
-                    )}
-                    {effectiveActive === WizardStep.Assign && (
-                      <Stack gap="md">
-                        <AssignStep
-                          cache={cache}
-                          remainingRequirements={remainingRequirements}
-                          requirementTreeWithStatus={requirementTreeWithStatus}
-                          completedRequirementsList={completedRequirementsList}
-                          completedCourses={completedCourses}
-                          unassignedCompletedCourses={unassignedCompletedCourses}
-                          constrainedPerRequirement={constrainedPerRequirement}
-                          selectedPerRequirement={selectedPerRequirement}
-                          onSelect={setSelectedForRequirement}
-                          selectedOptionsPerRequirement={selectedOptionsPerRequirement}
-                          prereqEligibleCourses={filteredPrereqEligibleCourses}
-                          includeClosedComponents={includeClosedComponents}
-                          virtualSectionsOnly={virtualSectionsOnly}
-                        />
-                      </Stack>
-                    )}
-                    {effectiveActive === WizardStep.Generate && (
-                      <Stack gap="md">
-                        <ScheduleCountStep
-                          coursesThisSemester={coursesThisSemester}
-                          onCoursesChange={setCoursesThisSemester}
-                          selectedCount={uniqueSelected}
-                          minStartMinutes={generationMinStartMinutes}
-                          onMinStartMinutesChange={setGenerationMinStartMinutes}
-                          maxEndMinutes={generationMaxEndMinutes}
-                          onMaxEndMinutesChange={setGenerationMaxEndMinutes}
-                          allowedDays={generationAllowedDays}
-                          onAllowedDaysChange={setGenerationAllowedDays}
-                          minProfessorRating={generationMinProfessorRating}
-                          onMinProfessorRatingChange={setGenerationMinProfessorRating}
-                          totalFirstYearCredits={totalFirstYearCredits}
-                          warnFirstYearLimit={warnFirstYearLimit}
-                          limitFirstYearCredits={generationLimitFirstYearCredits}
-                          onLimitFirstYearCreditsChange={setGenerationLimitFirstYearCredits}
-                          compressedSchedule={generationCompressedSchedule}
-                          onCompressedScheduleChange={setGenerationCompressedSchedule}
-                          preferEasierCourses={generationPreferEasier}
-                          onPreferEasierCoursesChange={setGenerationPreferEasier}
-                          onGenerate={handleGenerate}
-                          generating={generating}
-                          error={generationError?.message ?? null}
-                          errorDetails={generationError?.details ?? null}
-                          disableGenerate={unassignedCompletedCourses.length > 0}
-                          disableGenerateReason={tr("app.generate.disableReason", {
-                            count: unassignedCompletedCourses.length,
-                            suffix: unassignedCompletedCourses.length === 1 ? "" : "s",
-                          })}
-                          beforeGenerate={
-                            <Paper
-                              withBorder
-                              radius={0}
-                              style={{
-                                backgroundColor: constrainOpen
-                                  ? "var(--mantine-color-dark-6)"
-                                  : "var(--mantine-color-dark-8)",
-                              }}
-                            >
-                              <Group
-                                justify="space-between"
-                                align="center"
-                                p="sm"
-                                mb="xs"
-                                style={{ cursor: "pointer" }}
-                                onClick={() => setConstrainOpen((o) => !o)}
-                                aria-expanded={constrainOpen}
-                                aria-controls="constraints-collapse"
-                                role="button"
-                                tabIndex={0}
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter" || e.key === " ") {
-                                    e.preventDefault();
-                                    setConstrainOpen((o) => !o);
-                                  }
-                                }}
-                              >
-                                <Group gap="xs" align="center">
-                                  <IconChevronDown
-                                    size={14}
-                                    aria-hidden="true"
-                                    style={{
-                                      flexShrink: 0,
-                                      transform: constrainOpen ? "rotate(0deg)" : "rotate(-90deg)",
-                                      transition: "transform 150ms ease",
-                                    }}
-                                  />
-                                  <Text fw={600} size="sm">
-                                    {tr("app.constraints.heading")}
-                                  </Text>
-                                </Group>
-                                <Badge size="sm" variant="light" color="violet">
-                                  {tr("app.constraints.optional")}
-                                </Badge>
-                              </Group>
-                              <Collapse id="constraints-collapse" in={!constrainOpen}>
-                                <Alert
-                                  color="blue"
-                                  variant="light"
-                                  radius={0}
-                                  mx="sm"
-                                  mb="sm"
-                                  style={{ border: "none" }}
-                                >
-                                  <Text size="sm">{tr("app.constraints.description")}</Text>
-                                </Alert>
-                              </Collapse>
-                              <Collapse id="constraints-collapse-open" in={constrainOpen}>
-                                <Box p="sm" pt={0}>
-                                  <ConstrainStep
-                                    cache={cache}
-                                    remainingRequirements={remainingRequirements}
-                                    requirementTreeWithStatus={requirementTreeWithStatus}
-                                    completedRequirementsList={completedRequirementsList}
-                                    completedCourses={completedCourses}
-                                    selectedPerRequirement={selectedPerRequirement}
-                                    constrainedPerRequirement={constrainedPerRequirement}
-                                    onConstrain={setConstrainedForRequirement}
-                                    selectedOptionsPerRequirement={selectedOptionsPerRequirement}
-                                    prereqEligibleCourses={filteredPrereqEligibleCourses}
-                                    levelBuckets={levelBuckets}
-                                    languageBuckets={languageBuckets}
-                                    onChangeLevelBuckets={setLevelBuckets}
-                                    onChangeLanguageBuckets={setLanguageBuckets}
-                                    electiveLevelBuckets={electiveLevelBuckets}
-                                    onChangeElectiveLevelBuckets={setElectiveLevelBuckets}
-                                    includeClosedComponents={includeClosedComponents}
-                                    onIncludeClosedComponentsChange={setIncludeClosedComponents}
-                                    virtualSectionsOnly={virtualSectionsOnly}
-                                    onVirtualSectionsOnlyChange={setVirtualSectionsOnly}
-                                  />
-                                </Box>
-                              </Collapse>
-                            </Paper>
-                          }
-                        />
-                      </Stack>
-                    )}
+                    {children}
                   </motion.section>
                 </AnimatePresence>
 

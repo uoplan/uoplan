@@ -34,11 +34,7 @@ function NotFound() {
       <Text c="dimmed" size="sm" ta="center">
         This page does not exist.
       </Text>
-      <Link
-        to="/step/$stepSlug"
-        params={{ stepSlug: "term" }}
-        style={{ color: "var(--mantine-color-violet-4)" }}
-      >
+      <Link to="/step/term" style={{ color: "var(--mantine-color-violet-4)" }}>
         {tr("app.nav.back")} — uoplan
       </Link>
     </Box>

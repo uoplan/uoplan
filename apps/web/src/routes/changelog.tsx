@@ -22,11 +22,7 @@ function ChangelogRoute() {
       }}
     >
       <Stack gap="md" maw={900} mx="auto">
-        <Link
-          to="/step/$stepSlug"
-          params={{ stepSlug: "term" }}
-          style={{ alignSelf: "flex-start" }}
-        >
+        <Link to="/step/term" style={{ alignSelf: "flex-start" }}>
           <Button variant="subtle" color="gray" size="sm">
             {tr("app.nav.back")}
           </Button>
