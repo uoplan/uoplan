@@ -115,10 +115,10 @@ msgid "explore.title"
 msgstr "Explorer les cours"
 
 msgid "explore.subtitle"
-msgstr "Consultez les répartitions de notes par code ou titre de cours."
+msgstr "Consultez les répartitions de notes par cours, titre ou nom de professeur."
 
 msgid "explore.searchPlaceholder"
-msgstr "Rechercher par code ou titre de cours…"
+msgstr "Rechercher des cours ou des professeurs…"
 
 msgid "explore.loadingGrades"
 msgstr "Chargement des notes historiques…"
@@ -130,7 +130,16 @@ msgid "explore.searchUpdating"
 msgstr "Mise à jour des résultats…"
 
 msgid "explore.noResults"
-msgstr "Aucun cours correspondant."
+msgstr "Aucun professeur ou cours correspondant."
+
+msgid "explore.resultsProfessors"
+msgstr "Professeurs"
+
+msgid "explore.resultsCourses"
+msgstr "Cours"
+
+msgid "explore.professorCourseCount"
+msgstr "{count, plural, one {# cours} other {# cours}}"
 
 msgid "explore.section"
 msgstr "Section {section}"

@@ -2,6 +2,7 @@ import Fuse from "fuse.js";
 import type { IFuseOptions } from "fuse.js";
 import type { CourseGradesData } from "schedule";
 import { normalizeCourseCode, normalizeProfessorName } from "schedule";
+import { searchProfessorsScored, type ProfessorSearchEntry } from "../graph/professorGraphSearch";
 import { formatUottawaTermIdLabel } from "./uottawaTermId";
 
 /** Max section rows returned when searching all offerings (legacy / tests). */
@@ -9,6 +10,15 @@ export const EXPLORE_MAX_RESULTS = 120;
 
 /** Max distinct courses returned from course-only explore search. */
 export const EXPLORE_MAX_COURSE_RESULTS = 24;
+
+/** Max professors returned from explore search (aligned with graph search). */
+export const EXPLORE_MAX_PROFESSOR_RESULTS = 24;
+
+/**
+ * Maps professor substring rank (0–2) to a scale comparable to Fuse scores (lower = better).
+ * rank 0 ≈ 0, rank 1 ≈ 0.14, rank 2 ≈ 0.28 vs typical course scores 0–0.34.
+ */
+export const EXPLORE_SECTION_RANK_SCALE = 0.14;
 
 /** Cap substring pre-filter pool size before running Fuse on that subset. */
 const SUBSTRING_POOL_MAX = 5000;
@@ -22,6 +32,21 @@ export type ExploreCourseSearchEntry = {
   courseCode: string;
   courseTitle: string;
   fuseText: string;
+};
+
+/** One row per distinct professor — search index for explore. */
+export type ExploreProfessorSearchEntry = {
+  groupId: string;
+  legacyId?: number;
+  displayName: string;
+  searchText: string;
+  uniqueCourseCount: number;
+};
+
+export type ExploreSearchResult = {
+  professors: ExploreProfessorSearchEntry[];
+  courses: ExploreCourseSearchEntry[];
+  professorsFirst: boolean;
 };
 
 export type ExploreOfferingFlat = {
@@ -143,6 +168,30 @@ export function createExploreCourseFuse(entries: ExploreCourseSearchEntry[]) {
   return new Fuse(entries, EXPLORE_COURSE_FUSE_OPTIONS);
 }
 
+export function buildExploreProfessorSearchEntries(
+  offerings: ExploreOfferingFlat[],
+): ExploreProfessorSearchEntry[] {
+  return groupOfferingsByProfessor(offerings).map((g) => ({
+    groupId: g.groupId,
+    legacyId: g.legacyId,
+    displayName: g.displayName,
+    searchText: [g.displayName, g.legacyId != null ? String(g.legacyId) : ""]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase(),
+    uniqueCourseCount: new Set(g.offerings.map((o) => normalizeCourseCode(o.courseCode))).size,
+  }));
+}
+
+function exploreProfessorToGraphEntry(e: ExploreProfessorSearchEntry): ProfessorSearchEntry {
+  return {
+    id: e.groupId,
+    displayName: e.displayName,
+    legacyId: e.legacyId,
+    searchText: e.searchText,
+  };
+}
+
 /** Sum grade bucket counts (same keys as proto distributions). */
 export function mergeGradeDistributionCounts(
   dists: ReadonlyArray<Record<string, number>>,
@@ -195,21 +244,91 @@ function narrowCoursesBySubstring(
   return pool;
 }
 
+export type ExploreCourseSearchScored = {
+  items: ExploreCourseSearchEntry[];
+  topScore: number | null;
+};
+
+export function searchExploreCoursesScored(
+  fuse: Fuse<ExploreCourseSearchEntry>,
+  entries: ExploreCourseSearchEntry[],
+  rawQuery: string,
+): ExploreCourseSearchScored {
+  const q = rawQuery.trim().toLowerCase();
+  if (!fuse || q.length === 0) return { items: [], topScore: null };
+
+  const pool = narrowCoursesBySubstring(entries, q);
+  const engine = pool.length > 0 ? new Fuse(pool, EXPLORE_COURSE_FUSE_OPTIONS) : fuse;
+
+  const results = engine.search(q).slice(0, EXPLORE_MAX_COURSE_RESULTS);
+  return {
+    items: results.map((r) => r.item),
+    topScore: results[0]?.score ?? null,
+  };
+}
+
 export function searchExploreCourses(
   fuse: Fuse<ExploreCourseSearchEntry>,
   entries: ExploreCourseSearchEntry[],
   rawQuery: string,
 ): ExploreCourseSearchEntry[] {
-  const q = rawQuery.trim().toLowerCase();
-  if (!fuse || q.length === 0) return [];
+  return searchExploreCoursesScored(fuse, entries, rawQuery).items;
+}
 
-  const pool = narrowCoursesBySubstring(entries, q);
-  const engine = pool.length > 0 ? new Fuse(pool, EXPLORE_COURSE_FUSE_OPTIONS) : fuse;
+export function searchExploreProfessors(
+  entries: ExploreProfessorSearchEntry[],
+  rawQuery: string,
+): ExploreProfessorSearchEntry[] {
+  return searchExploreProfessorsScored(entries, rawQuery).items;
+}
 
-  return engine
-    .search(q)
-    .slice(0, EXPLORE_MAX_COURSE_RESULTS)
-    .map((r) => r.item);
+export function searchExploreProfessorsScored(
+  entries: ExploreProfessorSearchEntry[],
+  rawQuery: string,
+): { items: ExploreProfessorSearchEntry[]; topRank: number | null } {
+  const graphEntries = entries.map(exploreProfessorToGraphEntry);
+  const byGroupId = new Map(entries.map((e) => [e.groupId, e]));
+  const { items, topRank } = searchProfessorsScored(graphEntries, rawQuery);
+  return {
+    items: items
+      .map((p) => byGroupId.get(p.id))
+      .filter((e): e is ExploreProfessorSearchEntry => e != null),
+    topRank,
+  };
+}
+
+/** Compare best professor rank vs best course Fuse score; lower metric wins. */
+export function exploreProfessorsSectionFirst(
+  profTopRank: number | null,
+  courseTopScore: number | null,
+): boolean {
+  return (
+    profTopRank != null &&
+    (courseTopScore == null || profTopRank * EXPLORE_SECTION_RANK_SCALE < courseTopScore)
+  );
+}
+
+export function searchExplore(
+  rawQuery: string,
+  opts: {
+    courseFuse: Fuse<ExploreCourseSearchEntry> | null;
+    courseEntries: ExploreCourseSearchEntry[];
+    professorEntries: ExploreProfessorSearchEntry[];
+  },
+): ExploreSearchResult {
+  const courseScored =
+    opts.courseFuse && opts.courseEntries.length > 0
+      ? searchExploreCoursesScored(opts.courseFuse, opts.courseEntries, rawQuery)
+      : { items: [] as ExploreCourseSearchEntry[], topScore: null as number | null };
+  const { items: courses, topScore: courseTopScore } = courseScored;
+  const { items: professors, topRank: profTopRank } = searchExploreProfessorsScored(
+    opts.professorEntries,
+    rawQuery,
+  );
+
+  const professorsFirst = exploreProfessorsSectionFirst(profTopRank, courseTopScore);
+
+  return { professors, courses, professorsFirst };
 }
 
 export function searchExploreOfferings(

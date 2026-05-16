@@ -25,7 +25,10 @@ export function buildProfessorSearchEntries(nodes: ProfessorGraphNode[]): Profes
   }));
 }
 
-function rankMatch(entry: ProfessorSearchEntry, q: string): number | null {
+export function rankProfessorSearchMatch(
+  entry: Pick<ProfessorSearchEntry, "displayName" | "searchText">,
+  q: string,
+): number | null {
   if (!entry.searchText.includes(q)) return null;
   const name = entry.displayName.toLowerCase();
   if (name.startsWith(q)) return 0;
@@ -33,20 +36,25 @@ function rankMatch(entry: ProfessorSearchEntry, q: string): number | null {
   return 2;
 }
 
+export type ProfessorSearchScored = {
+  items: ProfessorSearchEntry[];
+  topRank: number | null;
+};
+
 /**
  * Substring search on name / legacy id only (no Fuse) — fast enough for ~5k professors.
  */
-export function searchProfessors(
+export function searchProfessorsScored(
   entries: ProfessorSearchEntry[],
   rawQuery: string,
-): ProfessorSearchEntry[] {
+): ProfessorSearchScored {
   const q = rawQuery.trim().toLowerCase();
-  if (!q) return [];
+  if (!q) return { items: [], topRank: null };
 
   const scored: { entry: ProfessorSearchEntry; rank: number }[] = [];
 
   for (const entry of entries) {
-    const rank = rankMatch(entry, q);
+    const rank = rankProfessorSearchMatch(entry, q);
     if (rank == null) continue;
     scored.push({ entry, rank });
     if (scored.length >= MATCH_COLLECT_CAP) break;
@@ -57,5 +65,16 @@ export function searchProfessors(
     return a.entry.displayName.localeCompare(b.entry.displayName, "en");
   });
 
-  return scored.slice(0, PROFESSOR_GRAPH_SEARCH_MAX).map((s) => s.entry);
+  const slice = scored.slice(0, PROFESSOR_GRAPH_SEARCH_MAX);
+  return {
+    items: slice.map((s) => s.entry),
+    topRank: slice[0]?.rank ?? null,
+  };
+}
+
+export function searchProfessors(
+  entries: ProfessorSearchEntry[],
+  rawQuery: string,
+): ProfessorSearchEntry[] {
+  return searchProfessorsScored(entries, rawQuery).items;
 }
