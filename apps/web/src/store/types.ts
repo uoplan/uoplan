@@ -91,8 +91,8 @@ export interface AppState {
   generationCompressedSchedule: boolean;
   /** Bias pool picks toward courses with higher historical grade averages. */
   generationPreferEasier: boolean;
-  activeStep: number;
-  showCalendar: boolean;
+  /** Highest wizard step index reached this session (sidebar progress). */
+  wizardFurthestStep: number;
   frenchImmersionStream: boolean;
 }
 
@@ -150,6 +150,8 @@ export interface AppActions {
   setGenerationPreferEasier: (v: boolean) => void;
   setFrenchImmersionStream: (enabled: boolean) => void;
   resetToDefault: () => void;
+  touchWizardFurthestStep: (step: number) => void;
+  resetWizardFurthestStep: () => void;
 }
 
 export type AppStore = AppState & AppActions;

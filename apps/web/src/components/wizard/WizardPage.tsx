@@ -1,0 +1,1001 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { useLingui } from "@lingui/react";
+import {
+  Alert,
+  Anchor,
+  Badge,
+  Box,
+  Button,
+  Collapse,
+  Group,
+  Modal,
+  Paper,
+  Stack,
+  Text,
+  Title,
+  Tooltip,
+} from "@mantine/core";
+import { AnimatePresence, motion } from "framer-motion";
+import { useMediaQuery } from "@mantine/hooks";
+import {
+  IconChevronDown,
+  IconCompass,
+  IconHelp,
+  IconRefresh,
+  IconShare,
+} from "@tabler/icons-react";
+import { runTour } from "../../tour";
+import { useAppStore } from "../../store/appStore";
+import { useShallow } from "zustand/react/shallow";
+import { STEPS, StepNav } from "../shared/StepNav";
+import { ResetModal } from "../shared/ResetModal";
+import { TermStep } from "../steps/TermStep";
+import { ModeStep } from "../steps/ModeStep";
+import { ProgramStep } from "../steps/ProgramStep";
+import { CompletedCoursesStep } from "../steps/CompletedCoursesStep";
+import { AssignStep } from "../requirements/AssignStep";
+import { ConstrainStep } from "../requirements/ConstrainStep";
+import { OptionsStep } from "../requirements/OptionsStep";
+import { hasMissingOptionSelections, nodeHasOptionGroups } from "../requirements/requirementUtils";
+import {
+  ALL_WIZARD_STEP_INDICES,
+  buildVisibleStepIndices,
+  furthestReachedDisplayIndex,
+  getNextStep,
+  getPrevStep,
+  normalizeActiveStep,
+  WizardStep,
+} from "../../lib/wizardSteps";
+import { slugToWizardStep } from "../../lib/wizardStepSlugs";
+import { navigateToCalendar, navigateToWizardStep } from "../../lib/appNavigation";
+import { ScheduleCountStep } from "../steps/ScheduleCountStep";
+import { usePersistState } from "../../hooks/usePersistState";
+import { useShareUrl } from "../../hooks/useShareUrl";
+import { getWizardStepContent } from "../../lib/wizardStepContent";
+import { LanguageSwitcher } from "../shared/LanguageSwitcher";
+import { dynamicActivate, tr, type AppLocale } from "../../i18n";
+
+const ONTARIO_FIPPA_ACT_URL = "https://www.ontario.ca/laws/statute/90f31";
+
+export type WizardPageProps = {
+  stepSlug: string;
+};
+
+export function WizardPage({ stepSlug }: WizardPageProps) {
+  useLingui();
+
+  const active = slugToWizardStep(stepSlug)!;
+
+  const {
+    catalogue,
+    indices,
+    cache,
+    terms,
+    selectedTermId,
+    wizardMode,
+    firstYear,
+    program,
+    completedCourses,
+    remainingRequirements,
+    requirementTreeWithStatus,
+    completedRequirementsList,
+    unassignedCompletedCourses,
+    selectedPerRequirement,
+    constrainedPerRequirement,
+    selectedOptionsPerRequirement,
+    coursesThisSemester,
+    generationMinStartMinutes,
+    generationMaxEndMinutes,
+    generationAllowedDays,
+    generationMinProfessorRating,
+    generationError,
+    filteredPrereqEligibleCourses,
+    levelBuckets,
+    languageBuckets,
+    electiveLevelBuckets,
+    includeClosedComponents,
+    virtualSectionsOnly,
+    generationLimitFirstYearCredits,
+    generationCompressedSchedule,
+    generationPreferEasier,
+    wizardFurthestStep,
+  } = useAppStore(
+    useShallow((s) => ({
+      catalogue: s.catalogue,
+      indices: s.indices,
+      cache: s.cache,
+      terms: s.terms,
+      selectedTermId: s.selectedTermId,
+      wizardMode: s.wizardMode,
+      firstYear: s.firstYear,
+      program: s.program,
+      completedCourses: s.completedCourses,
+      remainingRequirements: s.remainingRequirements,
+      requirementTreeWithStatus: s.requirementTreeWithStatus,
+      completedRequirementsList: s.completedRequirementsList,
+      unassignedCompletedCourses: s.unassignedCompletedCourses,
+      selectedPerRequirement: s.selectedPerRequirement,
+      constrainedPerRequirement: s.constrainedPerRequirement,
+      selectedOptionsPerRequirement: s.selectedOptionsPerRequirement,
+      coursesThisSemester: s.coursesThisSemester,
+      generationMinStartMinutes: s.generationMinStartMinutes,
+      generationMaxEndMinutes: s.generationMaxEndMinutes,
+      generationAllowedDays: s.generationAllowedDays,
+      generationMinProfessorRating: s.generationMinProfessorRating,
+      generationError: s.generationError,
+      filteredPrereqEligibleCourses: s.filteredPrereqEligibleCourses,
+      levelBuckets: s.levelBuckets,
+      languageBuckets: s.languageBuckets,
+      electiveLevelBuckets: s.electiveLevelBuckets,
+      includeClosedComponents: s.includeClosedComponents,
+      virtualSectionsOnly: s.virtualSectionsOnly,
+      generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
+      generationCompressedSchedule: s.generationCompressedSchedule,
+      generationPreferEasier: s.generationPreferEasier,
+      wizardFurthestStep: s.wizardFurthestStep,
+    })),
+  );
+
+  const getShareUrl = useAppStore((s) => s.getShareUrl);
+  const setWizardMode = useAppStore((s) => s.setWizardMode);
+  const setProgram = useAppStore((s) => s.setProgram);
+  const setSelectedTermId = useAppStore((s) => s.setSelectedTermId);
+  const setCompletedCourses = useAppStore((s) => s.setCompletedCourses);
+  const setSelectedForRequirement = useAppStore((s) => s.setSelectedForRequirement);
+  const setConstrainedForRequirement = useAppStore((s) => s.setConstrainedForRequirement);
+  const setCoursesThisSemester = useAppStore((s) => s.setCoursesThisSemester);
+  const setSelectedOptionForRequirement = useAppStore((s) => s.setSelectedOptionForRequirement);
+  const clearSelectedOptionForRequirement = useAppStore((s) => s.clearSelectedOptionForRequirement);
+  const generateSchedules = useAppStore((s) => s.generateSchedules);
+  const setGenerationMinProfessorRating = useAppStore((s) => s.setGenerationMinProfessorRating);
+  const setGenerationMinStartMinutes = useAppStore((s) => s.setGenerationMinStartMinutes);
+  const setGenerationMaxEndMinutes = useAppStore((s) => s.setGenerationMaxEndMinutes);
+  const setGenerationAllowedDays = useAppStore((s) => s.setGenerationAllowedDays);
+  const setLevelBuckets = useAppStore((s) => s.setLevelBuckets);
+  const setLanguageBuckets = useAppStore((s) => s.setLanguageBuckets);
+  const setElectiveLevelBuckets = useAppStore((s) => s.setElectiveLevelBuckets);
+  const setIncludeClosedComponents = useAppStore((s) => s.setIncludeClosedComponents);
+  const setVirtualSectionsOnly = useAppStore((s) => s.setVirtualSectionsOnly);
+  const setGenerationLimitFirstYearCredits = useAppStore(
+    (s) => s.setGenerationLimitFirstYearCredits,
+  );
+  const setGenerationCompressedSchedule = useAppStore((s) => s.setGenerationCompressedSchedule);
+  const setGenerationPreferEasier = useAppStore((s) => s.setGenerationPreferEasier);
+  const resetToDefault = useAppStore((s) => s.resetToDefault);
+  const touchWizardFurthestStep = useAppStore((s) => s.touchWizardFurthestStep);
+
+  const [generating, setGenerating] = useState(false);
+  const [resetModalOpen, setResetModalOpen] = useState(false);
+  const [helpModalOpen, setHelpModalOpen] = useState(false);
+  const [constrainOpen, setConstrainOpen] = useState(false);
+  const wizardStepContent = getWizardStepContent();
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+
+  const [isLangTransitioning, setIsLangTransitioning] = useState(false);
+  const handleLangSwitch = useCallback(
+    async (locale: AppLocale) => {
+      if (prefersReducedMotion) {
+        await dynamicActivate(locale);
+        return;
+      }
+      setIsLangTransitioning(true);
+      await new Promise((r) => setTimeout(r, 130));
+      await dynamicActivate(locale);
+      setIsLangTransitioning(false);
+    },
+    [prefersReducedMotion],
+  );
+
+  const { shareCopied, handleCopyShare } = useShareUrl(getShareUrl);
+
+  usePersistState(!!indices);
+
+  useEffect(() => {
+    touchWizardFurthestStep(active);
+  }, [active, touchWizardFurthestStep]);
+
+  const programs = catalogue?.programs ?? [];
+  const hasTerms = (terms?.length ?? 0) > 0;
+
+  const missingOptions = useMemo(
+    () => hasMissingOptionSelections(requirementTreeWithStatus, selectedOptionsPerRequirement),
+    [requirementTreeWithStatus, selectedOptionsPerRequirement],
+  );
+
+  const needsOptionsStep = useMemo(
+    () => requirementTreeWithStatus.some(nodeHasOptionGroups),
+    [requirementTreeWithStatus],
+  );
+
+  const needsAssignStep = unassignedCompletedCourses.length > 0;
+
+  const navVisibleStepIndices = useMemo(
+    () => buildVisibleStepIndices(needsOptionsStep, needsAssignStep),
+    [needsOptionsStep, needsAssignStep],
+  );
+
+  const effectiveActive = useMemo(
+    () => normalizeActiveStep(active, needsOptionsStep, needsAssignStep),
+    [active, needsOptionsStep, needsAssignStep],
+  );
+
+  const stepDisplayIndex = Math.max(0, navVisibleStepIndices.indexOf(effectiveActive));
+  const visibleStepCount = navVisibleStepIndices.length;
+
+  const sidebarFurthestDisplayIndex = useMemo(
+    () => furthestReachedDisplayIndex(ALL_WIZARD_STEP_INDICES, wizardFurthestStep),
+    [wizardFurthestStep],
+  );
+
+  useEffect(() => {
+    if (wizardMode === "basic" && effectiveActive > WizardStep.Mode) {
+      navigateToCalendar("basic", { replace: true });
+    }
+  }, [wizardMode, effectiveActive]);
+
+  useEffect(() => {
+    if (effectiveActive !== active) {
+      navigateToWizardStep(effectiveActive, { replace: true });
+    }
+  }, [active, effectiveActive]);
+
+  useEffect(() => {
+    if (
+      wizardMode !== "basic" &&
+      effectiveActive > WizardStep.Options &&
+      needsOptionsStep &&
+      missingOptions
+    ) {
+      navigateToWizardStep(WizardStep.Options);
+    }
+  }, [wizardMode, effectiveActive, needsOptionsStep, missingOptions]);
+
+  const setActive = useCallback(
+    (stepOrUpdater: number | ((prev: number) => number)) => {
+      const step =
+        typeof stepOrUpdater === "function" ? stepOrUpdater(effectiveActive) : stepOrUpdater;
+      navigateToWizardStep(step as WizardStep);
+    },
+    [effectiveActive],
+  );
+
+  const canProceedFromStep = (() => {
+    if (effectiveActive === WizardStep.Term)
+      return hasTerms && Boolean(selectedTermId) && Boolean(cache);
+    if (effectiveActive === WizardStep.Mode) return Boolean(wizardMode);
+    if (effectiveActive === WizardStep.Program) return firstYear !== null && program !== null;
+    if (effectiveActive === WizardStep.Options) return !missingOptions;
+    if (effectiveActive === WizardStep.Assign) return unassignedCompletedCourses.length === 0;
+    return true;
+  })();
+
+  const [nextUnlockCue, setNextUnlockCue] = useState(false);
+  const prevStepProgressRef = useRef<{
+    step: WizardStep;
+    canProceed: boolean;
+  } | null>(null);
+
+  useEffect(() => {
+    let unlockCueTimer: number | null = null;
+    if (prevStepProgressRef.current === null) {
+      prevStepProgressRef.current = {
+        step: effectiveActive,
+        canProceed: canProceedFromStep,
+      };
+      return;
+    }
+    const was = prevStepProgressRef.current;
+    if (was.step !== effectiveActive) {
+      prevStepProgressRef.current = {
+        step: effectiveActive,
+        canProceed: canProceedFromStep,
+      };
+      return;
+    }
+    if (!was.canProceed && canProceedFromStep && effectiveActive !== WizardStep.Generate) {
+      unlockCueTimer = window.setTimeout(() => setNextUnlockCue(true), 0);
+    }
+    prevStepProgressRef.current = {
+      step: effectiveActive,
+      canProceed: canProceedFromStep,
+    };
+    return () => {
+      if (unlockCueTimer !== null) window.clearTimeout(unlockCueTimer);
+    };
+  }, [effectiveActive, canProceedFromStep]);
+
+  useEffect(() => {
+    if (!nextUnlockCue) return;
+    const ms = prefersReducedMotion ? 700 : 650;
+    const t = window.setTimeout(() => setNextUnlockCue(false), ms);
+    return () => window.clearTimeout(t);
+  }, [nextUnlockCue, prefersReducedMotion]);
+
+  const handleGenerate = () => {
+    setGenerating(true);
+    void (async () => {
+      try {
+        await generateSchedules();
+        const { currentSchedule, generationError } = useAppStore.getState();
+        if (currentSchedule !== null && generationError === null) {
+          navigateToCalendar("advanced");
+        }
+      } finally {
+        setGenerating(false);
+      }
+    })();
+  };
+
+  const handleWizardNext = () => {
+    if (wizardMode === "basic" && effectiveActive === WizardStep.Mode) {
+      navigateToCalendar("basic");
+      return;
+    }
+    const rawNext = getNextStep(effectiveActive, needsOptionsStep, needsAssignStep);
+    navigateToWizardStep(rawNext);
+  };
+
+  const handleResetConfirm = () => {
+    resetToDefault();
+    navigateToWizardStep(WizardStep.Term, { replace: true });
+    setResetModalOpen(false);
+  };
+
+  const uniqueSelected = new Set(Object.values(selectedPerRequirement).flat()).size;
+
+  const completedFirstYearCredits = completedCourses.reduce((sum, code) => {
+    const m = code.match(/\d{4}/);
+    if (!m || Number(m[0]) >= 2000) return sum;
+    return sum + (cache?.getCourse(code)?.credits ?? 3);
+  }, 0);
+  const selectedFirstYearCredits = [...new Set(Object.values(selectedPerRequirement).flat())]
+    .filter((code) => !completedCourses.includes(code))
+    .reduce((sum, code) => {
+      const m = code.match(/\d{4}/);
+      if (!m || Number(m[0]) >= 2000) return sum;
+      return sum + (cache?.getCourse(code)?.credits ?? 3);
+    }, 0);
+  const totalFirstYearCredits = completedFirstYearCredits + selectedFirstYearCredits;
+  const warnFirstYearLimit = totalFirstYearCredits > 48;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.3 }}
+      style={{
+        width: "100%",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <Box
+        style={{
+          minHeight: "100vh",
+          padding: isMobile ? "20px 12px 0" : "28px 20px 0",
+          paddingBottom: isMobile ? 12 : 16,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 24,
+          width: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <ResetModal
+          opened={resetModalOpen}
+          onClose={() => setResetModalOpen(false)}
+          onConfirm={handleResetConfirm}
+        />
+
+        <Modal
+          opened={helpModalOpen}
+          onClose={() => setHelpModalOpen(false)}
+          title={wizardStepContent[effectiveActive]?.title ?? tr("app.helpFallback")}
+          centered
+          radius={0}
+          styles={{
+            header: {
+              backgroundColor: "#1E1E20",
+              borderBottom: "1px solid #2C2E33",
+            },
+            body: { backgroundColor: "#1E1E20" },
+            title: { color: "#F8F9FA", fontWeight: 600 },
+          }}
+        >
+          <Stack gap="md">
+            <Box>
+              <Text
+                size="xs"
+                fw={600}
+                tt="uppercase"
+                style={{ letterSpacing: "0.08em", color: "#868E96" }}
+                mb={6}
+              >
+                {tr("app.help.whatFor")}
+              </Text>
+              <Text size="sm" style={{ color: "#ADB5BD", lineHeight: 1.5 }}>
+                {wizardStepContent[effectiveActive]?.purpose}
+              </Text>
+            </Box>
+            <Box>
+              <Text
+                size="xs"
+                fw={600}
+                tt="uppercase"
+                style={{ letterSpacing: "0.08em", color: "#868E96" }}
+                mb={6}
+              >
+                {tr("app.help.whatToDo")}
+              </Text>
+              <Text size="sm" style={{ color: "#ADB5BD", lineHeight: 1.5 }}>
+                {wizardStepContent[effectiveActive]?.whatToDo}
+              </Text>
+            </Box>
+          </Stack>
+        </Modal>
+
+        <Box component="header">
+          <Title
+            order={1}
+            style={{
+              fontFamily: '"DM Serif Display", serif',
+              color: "#F8F9FA",
+              display: "flex",
+              alignItems: "baseline",
+              gap: 4,
+            }}
+          >
+            uoplan.party
+            <Badge color="blue" variant="light" size="sm">
+              {tr("app.beta")}
+            </Badge>
+          </Title>
+        </Box>
+
+        <motion.div
+          animate={{ opacity: isLangTransitioning ? 0 : 1, y: isLangTransitioning ? 4 : 0 }}
+          transition={{ duration: isLangTransitioning ? 0.13 : 0.2, ease: "easeInOut" }}
+          style={{ width: "100%" }}
+        >
+          <Box
+            style={{
+              width: "100%",
+              maxWidth: 1200,
+              margin: "0 auto",
+              display: isMobile ? "flex" : "grid",
+              flexDirection: isMobile ? "column" : undefined,
+              gridTemplateColumns: isMobile
+                ? undefined
+                : "minmax(0, 260px) minmax(0, 1fr) minmax(0, 260px)",
+              justifyContent: "center",
+              gap: isMobile ? 20 : 0,
+            }}
+          >
+            <Box
+              component="nav"
+              aria-label="Wizard Steps"
+              style={{
+                display: "flex",
+                justifyContent: isMobile ? "flex-start" : "flex-end",
+                paddingRight: isMobile ? 0 : 28,
+                paddingTop: 4,
+              }}
+            >
+              <StepNav
+                visibleStepIndices={ALL_WIZARD_STEP_INDICES}
+                active={effectiveActive}
+                furthestDisplayIndex={sidebarFurthestDisplayIndex}
+                furthestActualStep={wizardFurthestStep}
+                needsOptionsStep={needsOptionsStep}
+                needsAssignStep={needsAssignStep}
+                onStepClick={setActive}
+                isMobile={isMobile ?? false}
+              />
+            </Box>
+
+            <Box component="main" style={{ minWidth: 0 }}>
+              <Box
+                style={{
+                  backgroundColor: "#1E1E20",
+                  ...(isMobile
+                    ? { border: "none", padding: 12 }
+                    : { border: "2px solid #2C2E33", padding: 24 }),
+                }}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.section
+                    key={effectiveActive}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}
+                    aria-labelledby="step-heading"
+                  >
+                    <Group justify="space-between" mb={8}>
+                      <Text
+                        id="step-heading"
+                        size="xs"
+                        fw={500}
+                        style={{
+                          textTransform: "uppercase",
+                          letterSpacing: "0.08em",
+                          color: "#A6A7AB",
+                        }}
+                      >
+                        {tr("app.stepHeader", {
+                          current: stepDisplayIndex + 1,
+                          total: visibleStepCount,
+                          description: STEPS[effectiveActive].description().toUpperCase(),
+                        }).toUpperCase()}
+                      </Text>
+                      <Group gap="xs">
+                        <LanguageSwitcher onSwitch={handleLangSwitch} />
+                        {indices && (
+                          <Tooltip
+                            label="Copied to clipboard!"
+                            opened={shareCopied}
+                            position="bottom"
+                            withArrow
+                            color="dark"
+                          >
+                            <Button
+                              data-tour="share"
+                              variant="subtle"
+                              color="gray"
+                              size="xs"
+                              leftSection={<IconShare size={14} />}
+                              onClick={handleCopyShare}
+                            >
+                              {tr("app.share.action")}
+                            </Button>
+                          </Tooltip>
+                        )}
+                        <Button
+                          variant="subtle"
+                          color="gray"
+                          size="xs"
+                          leftSection={<IconHelp size={14} />}
+                          onClick={() => setHelpModalOpen(true)}
+                        >
+                          {tr("app.help.action")}
+                        </Button>
+                        <Button
+                          variant="subtle"
+                          color="gray"
+                          size="xs"
+                          leftSection={<IconCompass size={14} />}
+                          onClick={() => runTour(navVisibleStepIndices)}
+                        >
+                          {tr("app.tour.action")}
+                        </Button>
+                        <Button
+                          variant="subtle"
+                          color="gray"
+                          size="xs"
+                          leftSection={<IconRefresh size={14} />}
+                          onClick={() => setResetModalOpen(true)}
+                        >
+                          {tr("app.reset.action")}
+                        </Button>
+                      </Group>
+                    </Group>
+
+                    {effectiveActive === WizardStep.Term && terms && (
+                      <Stack gap="md">
+                        <TermStep
+                          terms={terms}
+                          value={selectedTermId}
+                          onChange={(termId) => {
+                            void setSelectedTermId(termId);
+                          }}
+                        />
+                      </Stack>
+                    )}
+                    {effectiveActive === WizardStep.Mode && (
+                      <Stack gap="md">
+                        <ModeStep
+                          value={wizardMode}
+                          onChange={(mode) => {
+                            setWizardMode(mode);
+                          }}
+                        />
+                      </Stack>
+                    )}
+                    {effectiveActive === WizardStep.Program && (
+                      <Stack gap="md">
+                        <ProgramStep
+                          programs={programs}
+                          value={program?.url ?? null}
+                          onChange={setProgram}
+                        />
+                      </Stack>
+                    )}
+                    {effectiveActive === WizardStep.Completed && (
+                      <Stack gap="md">
+                        <CompletedCoursesStep
+                          cache={cache}
+                          remainingRequirements={remainingRequirements}
+                          completedCourses={completedCourses}
+                          onChange={setCompletedCourses}
+                          hasProgram={!!program}
+                        />
+                      </Stack>
+                    )}
+                    {effectiveActive === WizardStep.Options && (
+                      <Stack gap="md">
+                        <OptionsStep
+                          requirementTreeWithStatus={requirementTreeWithStatus}
+                          completedCourses={completedCourses}
+                          selectedOptionsPerRequirement={selectedOptionsPerRequirement}
+                          onSelectOption={setSelectedOptionForRequirement}
+                          onClearOption={clearSelectedOptionForRequirement}
+                        />
+                      </Stack>
+                    )}
+                    {effectiveActive === WizardStep.Assign && (
+                      <Stack gap="md">
+                        <AssignStep
+                          cache={cache}
+                          remainingRequirements={remainingRequirements}
+                          requirementTreeWithStatus={requirementTreeWithStatus}
+                          completedRequirementsList={completedRequirementsList}
+                          completedCourses={completedCourses}
+                          unassignedCompletedCourses={unassignedCompletedCourses}
+                          constrainedPerRequirement={constrainedPerRequirement}
+                          selectedPerRequirement={selectedPerRequirement}
+                          onSelect={setSelectedForRequirement}
+                          selectedOptionsPerRequirement={selectedOptionsPerRequirement}
+                          prereqEligibleCourses={filteredPrereqEligibleCourses}
+                          includeClosedComponents={includeClosedComponents}
+                          virtualSectionsOnly={virtualSectionsOnly}
+                        />
+                      </Stack>
+                    )}
+                    {effectiveActive === WizardStep.Generate && (
+                      <Stack gap="md">
+                        <ScheduleCountStep
+                          coursesThisSemester={coursesThisSemester}
+                          onCoursesChange={setCoursesThisSemester}
+                          selectedCount={uniqueSelected}
+                          minStartMinutes={generationMinStartMinutes}
+                          onMinStartMinutesChange={setGenerationMinStartMinutes}
+                          maxEndMinutes={generationMaxEndMinutes}
+                          onMaxEndMinutesChange={setGenerationMaxEndMinutes}
+                          allowedDays={generationAllowedDays}
+                          onAllowedDaysChange={setGenerationAllowedDays}
+                          minProfessorRating={generationMinProfessorRating}
+                          onMinProfessorRatingChange={setGenerationMinProfessorRating}
+                          totalFirstYearCredits={totalFirstYearCredits}
+                          warnFirstYearLimit={warnFirstYearLimit}
+                          limitFirstYearCredits={generationLimitFirstYearCredits}
+                          onLimitFirstYearCreditsChange={setGenerationLimitFirstYearCredits}
+                          compressedSchedule={generationCompressedSchedule}
+                          onCompressedScheduleChange={setGenerationCompressedSchedule}
+                          preferEasierCourses={generationPreferEasier}
+                          onPreferEasierCoursesChange={setGenerationPreferEasier}
+                          onGenerate={handleGenerate}
+                          generating={generating}
+                          error={generationError?.message ?? null}
+                          errorDetails={generationError?.details ?? null}
+                          disableGenerate={unassignedCompletedCourses.length > 0}
+                          disableGenerateReason={tr("app.generate.disableReason", {
+                            count: unassignedCompletedCourses.length,
+                            suffix: unassignedCompletedCourses.length === 1 ? "" : "s",
+                          })}
+                          beforeGenerate={
+                            <Paper
+                              withBorder
+                              radius={0}
+                              style={{
+                                backgroundColor: constrainOpen
+                                  ? "var(--mantine-color-dark-6)"
+                                  : "var(--mantine-color-dark-8)",
+                              }}
+                            >
+                              <Group
+                                justify="space-between"
+                                align="center"
+                                p="sm"
+                                mb="xs"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => setConstrainOpen((o) => !o)}
+                                aria-expanded={constrainOpen}
+                                aria-controls="constraints-collapse"
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter" || e.key === " ") {
+                                    e.preventDefault();
+                                    setConstrainOpen((o) => !o);
+                                  }
+                                }}
+                              >
+                                <Group gap="xs" align="center">
+                                  <IconChevronDown
+                                    size={14}
+                                    aria-hidden="true"
+                                    style={{
+                                      flexShrink: 0,
+                                      transform: constrainOpen ? "rotate(0deg)" : "rotate(-90deg)",
+                                      transition: "transform 150ms ease",
+                                    }}
+                                  />
+                                  <Text fw={600} size="sm">
+                                    {tr("app.constraints.heading")}
+                                  </Text>
+                                </Group>
+                                <Badge size="sm" variant="light" color="violet">
+                                  {tr("app.constraints.optional")}
+                                </Badge>
+                              </Group>
+                              <Collapse id="constraints-collapse" in={!constrainOpen}>
+                                <Alert
+                                  color="blue"
+                                  variant="light"
+                                  radius={0}
+                                  mx="sm"
+                                  mb="sm"
+                                  style={{ border: "none" }}
+                                >
+                                  <Text size="sm">{tr("app.constraints.description")}</Text>
+                                </Alert>
+                              </Collapse>
+                              <Collapse id="constraints-collapse-open" in={constrainOpen}>
+                                <Box p="sm" pt={0}>
+                                  <ConstrainStep
+                                    cache={cache}
+                                    remainingRequirements={remainingRequirements}
+                                    requirementTreeWithStatus={requirementTreeWithStatus}
+                                    completedRequirementsList={completedRequirementsList}
+                                    completedCourses={completedCourses}
+                                    selectedPerRequirement={selectedPerRequirement}
+                                    constrainedPerRequirement={constrainedPerRequirement}
+                                    onConstrain={setConstrainedForRequirement}
+                                    selectedOptionsPerRequirement={selectedOptionsPerRequirement}
+                                    prereqEligibleCourses={filteredPrereqEligibleCourses}
+                                    levelBuckets={levelBuckets}
+                                    languageBuckets={languageBuckets}
+                                    onChangeLevelBuckets={setLevelBuckets}
+                                    onChangeLanguageBuckets={setLanguageBuckets}
+                                    electiveLevelBuckets={electiveLevelBuckets}
+                                    onChangeElectiveLevelBuckets={setElectiveLevelBuckets}
+                                    includeClosedComponents={includeClosedComponents}
+                                    onIncludeClosedComponentsChange={setIncludeClosedComponents}
+                                    virtualSectionsOnly={virtualSectionsOnly}
+                                    onVirtualSectionsOnlyChange={setVirtualSectionsOnly}
+                                  />
+                                </Box>
+                              </Collapse>
+                            </Paper>
+                          }
+                        />
+                      </Stack>
+                    )}
+                  </motion.section>
+                </AnimatePresence>
+
+                <Box
+                  style={{
+                    position: "sticky",
+                    bottom: 0,
+                    zIndex: 10,
+                    marginTop: 24,
+                    marginLeft: isMobile ? -12 : -24,
+                    marginRight: isMobile ? -12 : -24,
+                    paddingInline: isMobile ? 12 : 24,
+                    paddingTop: 16,
+                    paddingBottom: "max(12px, env(safe-area-inset-bottom))",
+                    backgroundColor: "#1E1E20",
+                    borderTop: "1px solid #2C2E33",
+                  }}
+                >
+                  <Group justify="space-between">
+                    <Button
+                      variant="subtle"
+                      color="gray"
+                      radius={0}
+                      onClick={() =>
+                        navigateToWizardStep(
+                          getPrevStep(effectiveActive, needsOptionsStep, needsAssignStep),
+                        )
+                      }
+                      disabled={effectiveActive === WizardStep.Term}
+                      style={{ border: "none" }}
+                    >
+                      {tr("app.nav.back")}
+                    </Button>
+                    <motion.div
+                      style={{ display: "inline-block" }}
+                      animate={
+                        nextUnlockCue && !prefersReducedMotion
+                          ? { x: [0, -6, 6, -5, 5, -3, 3, 0] }
+                          : { x: 0 }
+                      }
+                      transition={{ duration: 0.45, ease: "easeInOut" }}
+                    >
+                      <Button
+                        color={nextUnlockCue ? "violet" : "constructBlack"}
+                        radius={0}
+                        onClick={handleWizardNext}
+                        disabled={effectiveActive === WizardStep.Generate || !canProceedFromStep}
+                      >
+                        {tr("app.nav.next")}
+                      </Button>
+                    </motion.div>
+                  </Group>
+                </Box>
+              </Box>
+            </Box>
+
+            {!isMobile && <Box />}
+          </Box>
+        </motion.div>
+
+        <Box
+          component="footer"
+          mt={isMobile ? 20 : 28}
+          pt={isMobile ? 14 : 18}
+          pb="max(14px, env(safe-area-inset-bottom))"
+          style={{
+            alignSelf: "stretch",
+            marginLeft: isMobile ? -12 : -20,
+            marginRight: isMobile ? -12 : -20,
+            borderTop: "1px solid #2C2E33",
+          }}
+        >
+          <Box
+            style={{
+              maxWidth: 1200,
+              margin: "0 auto",
+              paddingLeft: isMobile ? 12 : 20,
+              paddingRight: isMobile ? 12 : 20,
+              ...(isMobile
+                ? {}
+                : {
+                    display: "grid",
+                    gridTemplateColumns: "minmax(0, 260px) minmax(0, 1fr) minmax(0, 260px)",
+                  }),
+            }}
+          >
+            {!isMobile ? <Box /> : null}
+
+            <Stack gap="lg">
+              <Group
+                gap={12}
+                wrap="wrap"
+                justify={isMobile ? "center" : "flex-start"}
+                align="baseline"
+              >
+                <Anchor
+                  href="https://github.com/uoplan/uoplan"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="sm"
+                  c="dimmed"
+                  underline="never"
+                  lh={1.45}
+                  styles={{
+                    root: {
+                      "&:hover": {
+                        color: "var(--mantine-color-gray-4)",
+                        textDecoration: "underline",
+                      },
+                    },
+                  }}
+                >
+                  github
+                </Anchor>
+                <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
+                  ·
+                </Text>
+                <Text
+                  component={Link}
+                  to="/changelog"
+                  size="sm"
+                  c="dimmed"
+                  lh={1.45}
+                  style={{
+                    textDecoration: "none",
+                    cursor: "pointer",
+                  }}
+                  styles={{
+                    root: {
+                      "&:hover": {
+                        color: "var(--mantine-color-gray-4)",
+                        textDecoration: "underline",
+                      },
+                    },
+                  }}
+                >
+                  {tr("app.footer.changelog")}
+                </Text>
+                <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
+                  ·
+                </Text>
+                <Text span size="xs" c="dimmed" ff="monospace" lh={1.45} style={{ opacity: 0.85 }}>
+                  {(typeof __BRANCH_NAME__ !== "undefined" && __BRANCH_NAME__
+                    ? __BRANCH_NAME__
+                    : tr("app.footer.buildBranchFallback")
+                  ).toLowerCase()}
+                  {" · "}
+                  {(typeof __COMMIT_HASH__ !== "undefined" ? __COMMIT_HASH__ : "dev").toLowerCase()}
+                </Text>
+                <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
+                  ·
+                </Text>
+                <Text span size="sm" c="dimmed" lh={1.45}>
+                  {tr("app.footer.feedbackPrompt")}{" "}
+                  <Anchor href="mailto:admin@uoplan.party" size="sm" c="dimmed" underline="hover">
+                    admin@uoplan.party
+                  </Anchor>
+                </Text>
+              </Group>
+
+              <Box
+                role="note"
+                style={{
+                  ...(isMobile
+                    ? {
+                        maxWidth: 440,
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                      }
+                    : {
+                        borderLeft: "2px solid rgba(124, 58, 237, 0.38)",
+                        paddingLeft: 14,
+                      }),
+                  paddingTop: 2,
+                }}
+              >
+                <Text
+                  size="sm"
+                  lh={1.65}
+                  ta={isMobile ? "center" : "left"}
+                  style={{
+                    fontStyle: "italic",
+                    letterSpacing: "0.01em",
+                    color: "#868E96",
+                  }}
+                >
+                  {tr("app.footer.gradeDataAttribution.before")}
+                  <Anchor
+                    href={ONTARIO_FIPPA_ACT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    display="inline"
+                    fz="sm"
+                    lh={1.65}
+                    underline="hover"
+                    style={{
+                      fontStyle: "italic",
+                      letterSpacing: "0.01em",
+                      color: "#868E96",
+                    }}
+                    styles={{
+                      root: {
+                        "&:hover": {
+                          color: "var(--mantine-color-gray-4)",
+                        },
+                      },
+                    }}
+                  >
+                    {tr("app.footer.gradeDataAttribution.actLink")}
+                  </Anchor>
+                  {tr("app.footer.gradeDataAttribution.after")}
+                </Text>
+              </Box>
+            </Stack>
+
+            {!isMobile ? <Box /> : null}
+          </Box>
+        </Box>
+      </Box>
+    </motion.div>
+  );
+}
