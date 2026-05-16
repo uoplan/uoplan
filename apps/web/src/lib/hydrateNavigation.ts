@@ -32,12 +32,11 @@ export function applyHydrationNavigation(decoded: DecodedState, getState: () => 
   state.touchWizardFurthestStep(normalized);
 
   if (decoded.showCalendar) {
-    const wm = state.wizardMode ?? decoded.wizardMode;
-    navigateToCalendar(wm === "basic" ? "basic" : "advanced", { replace: true });
+    navigateToCalendar(decoded.wizardMode === "basic" ? "basic" : "advanced", { replace: true });
     return;
   }
 
-  if (state.wizardMode === "basic" && normalized > WizardStep.Mode) {
+  if (decoded.wizardMode === "basic" && normalized > WizardStep.Mode) {
     navigateToCalendar("basic", { replace: true });
     return;
   }

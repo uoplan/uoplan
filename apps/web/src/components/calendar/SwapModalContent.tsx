@@ -10,6 +10,11 @@ import {
   resolveRequirementIdsForScheduleCourse,
 } from "../requirements/requirementUtils";
 import { useAppStore } from "../../store/appStore";
+import {
+  isAdvancedPlannerActive,
+  isBasicPlannerActive,
+  isPlannerVariantActive,
+} from "../../lib/calendarRoute";
 import { EventStyleCard } from "./EventStyleCard";
 import { GradeDistributionExpanded } from "./GradeDistributionViz";
 import { SwapCourseDropdown } from "./SwapCourseDropdown";
@@ -44,7 +49,6 @@ export function SwapModalContent({
   const unlockCourseForAllSchedulesFromSwap = useAppStore(
     (s) => s.unlockCourseForAllSchedulesFromSwap,
   );
-  const wizardMode = useAppStore((s) => s.wizardMode);
   const basicPinnedCourses = useAppStore((s) => s.basicPinnedCourses);
   const constrainedPerRequirement = useAppStore((s) => s.constrainedPerRequirement);
   const selectedPerRequirement = useAppStore((s) => s.selectedPerRequirement);
@@ -54,11 +58,14 @@ export function SwapModalContent({
   const requirementTreeWithStatus = useAppStore((s) => s.requirementTreeWithStatus);
   const selectedOptionsPerRequirement = useAppStore((s) => s.selectedOptionsPerRequirement);
 
+  const isBasic = isBasicPlannerActive();
+  const isAdvanced = isAdvancedPlannerActive();
+
   const courseCode = modalState.courseCode;
   const courseNorm = normalizeCourseCode(courseCode);
 
   const treeRequirementIdsForCourse = useMemo(() => {
-    if (wizardMode !== "advanced") return [];
+    if (!isAdvanced) return [];
     return resolveRequirementIdsForScheduleCourse({
       courseCode,
       courseNorm,
@@ -73,37 +80,37 @@ export function SwapModalContent({
     courseCode,
     courseNorm,
     currentPoolMap,
+    isAdvanced,
     remainingRequirements,
     requirementTreeWithStatus,
     selectedOptionsPerRequirement,
-    wizardMode,
   ]);
 
   const isGenerationPinned = useMemo(() => {
-    if (wizardMode === "basic") {
+    if (isBasic) {
       return basicPinnedCourses.some((c) => normalizeCourseCode(c) === courseNorm);
     }
-    if (wizardMode === "advanced") {
+    if (isAdvanced) {
       return isCourseInPerRequirementMaps(courseNorm, constrainedPerRequirement);
     }
     return false;
-  }, [basicPinnedCourses, constrainedPerRequirement, courseNorm, wizardMode]);
+  }, [basicPinnedCourses, constrainedPerRequirement, courseNorm, isAdvanced, isBasic]);
 
   const isInAssignSelections = useMemo(() => {
-    if (wizardMode !== "advanced") return false;
+    if (!isAdvanced) return false;
     return isCourseInPerRequirementMaps(courseNorm, selectedPerRequirement);
-  }, [courseNorm, selectedPerRequirement, wizardMode]);
+  }, [courseNorm, isAdvanced, selectedPerRequirement]);
 
   const showLockedIcon = isGenerationPinned || isInAssignSelections;
 
   const lockUnavailable =
-    wizardMode === "advanced" &&
+    isAdvanced &&
     !isGenerationPinned &&
     !isInAssignSelections &&
     treeRequirementIdsForCourse.length === 0;
 
   const canLock =
-    wizardMode != null && !isGenerationPinned && !isInAssignSelections && !lockUnavailable;
+    isPlannerVariantActive() && !isGenerationPinned && !isInAssignSelections && !lockUnavailable;
   const canUnlock = isGenerationPinned;
 
   const lockControlDisabled = !canLock && !canUnlock;

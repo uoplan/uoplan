@@ -1,22 +1,16 @@
+import { useState } from "react";
 import { Stack } from "@mantine/core";
-import { useAppStore } from "../../../store/appStore";
 import { ModeStep } from "../../steps/ModeStep";
 import { WizardStep } from "../../../lib/wizardSteps";
 import { WizardShell } from "../WizardShell";
 
 export function WizardModePage() {
-  const wizardMode = useAppStore((s) => s.wizardMode);
-  const setWizardMode = useAppStore((s) => s.setWizardMode);
+  const [selectedMode, setSelectedMode] = useState<"basic" | "advanced" | null>(null);
 
   return (
-    <WizardShell activeStep={WizardStep.Mode}>
+    <WizardShell activeStep={WizardStep.Mode} modeSelection={selectedMode}>
       <Stack gap="md">
-        <ModeStep
-          value={wizardMode}
-          onChange={(mode) => {
-            setWizardMode(mode);
-          }}
-        />
+        <ModeStep value={selectedMode} onChange={setSelectedMode} />
       </Stack>
     </WizardShell>
   );

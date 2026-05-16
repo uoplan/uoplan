@@ -28,7 +28,6 @@ export type GenerationErrorState = {
 };
 
 export interface AppState {
-  wizardMode: "basic" | "advanced" | null;
   basicPinnedCourses: string[];
   basicElectivesCount: number;
   basicExcludedCategories: string[];
@@ -99,7 +98,6 @@ export interface AppState {
 }
 
 export interface AppActions {
-  setWizardMode: (mode: "basic" | "advanced" | null) => void;
   setBasicPinnedCourses: (courses: string[]) => void;
   setBasicElectivesCount: (count: number) => void;
   setBasicExcludedCategories: (categories: string[]) => void;

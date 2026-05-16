@@ -33,7 +33,7 @@ function AdvancedCalendarRoute() {
       transition={{ duration: 0.3 }}
       style={{ width: "100%", minHeight: "100vh" }}
     >
-      <CalendarPage onBack={() => navigateToWizardStep(WizardStep.Generate)} />
+      <CalendarPage variant="advanced" onBack={() => navigateToWizardStep(WizardStep.Generate)} />
     </motion.div>
   );
 }

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { buildDataCache, normalizeCourseCode } from "schedule";
 import type {
   Catalogue,
@@ -7,6 +7,19 @@ import type {
   RequirementWithStatus,
 } from "schedule";
 import { useAppStore } from "../appStore";
+
+let mockCalendarVariant: "basic" | "advanced" | null = null;
+
+vi.mock("../../lib/calendarRoute", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../lib/calendarRoute")>();
+  return {
+    ...actual,
+    getActiveCalendarVariant: () => mockCalendarVariant,
+    isBasicPlannerActive: () => mockCalendarVariant === "basic",
+    isAdvancedPlannerActive: () => mockCalendarVariant === "advanced",
+    isPlannerVariantActive: () => mockCalendarVariant != null,
+  };
+});
 
 const testCatalogue: Catalogue = {
   courses: [
@@ -68,9 +81,9 @@ const electiveTree: RequirementWithStatus[] = [
 
 describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwap", () => {
   beforeEach(() => {
+    mockCalendarVariant = null;
     useAppStore.setState({
       ...useAppStore.getState(),
-      wizardMode: null,
       basicPinnedCourses: [],
       constrainedPerRequirement: {},
       selectedPerRequirement: {},
@@ -80,8 +93,8 @@ describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwa
   });
 
   it("pins and unpins a course in basic mode", () => {
+    mockCalendarVariant = "basic";
     useAppStore.setState({
-      wizardMode: "basic",
       basicElectivesCount: 3,
       currentSchedule: makeSchedule("CSI 2132"),
     });
@@ -100,8 +113,8 @@ describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwa
   });
 
   it("pins and unpins across constrained requirements in advanced mode", () => {
+    mockCalendarVariant = "advanced";
     useAppStore.setState({
-      wizardMode: "advanced",
       currentSchedule: makeSchedule("CSI 2132"),
       requirementTreeWithStatus: electiveTree,
       remainingRequirements: [makeRemainingReq("req-elective", ["CSI 2132", "MAT 1341"])],
@@ -118,8 +131,8 @@ describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwa
   });
 
   it("does not duplicate when already in constrainedPerRequirement", () => {
+    mockCalendarVariant = "advanced";
     useAppStore.setState({
-      wizardMode: "advanced",
       currentSchedule: makeSchedule("CSI 2132"),
       requirementTreeWithStatus: electiveTree,
       remainingRequirements: [makeRemainingReq("req-elective", ["CSI 2132", "MAT 1341"])],
@@ -133,8 +146,8 @@ describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwa
   });
 
   it("does not add to constrain when already in selectedPerRequirement for that requirement", () => {
+    mockCalendarVariant = "advanced";
     useAppStore.setState({
-      wizardMode: "advanced",
       currentSchedule: makeSchedule("CSI 2132"),
       requirementTreeWithStatus: electiveTree,
       remainingRequirements: [makeRemainingReq("req-elective", ["CSI 2132", "MAT 1341"])],
@@ -146,8 +159,8 @@ describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwa
   });
 
   it("does not append a second alias for the same normalized course", () => {
+    mockCalendarVariant = "advanced";
     useAppStore.setState({
-      wizardMode: "advanced",
       currentSchedule: makeSchedule("CSI2132"),
       requirementTreeWithStatus: electiveTree,
       remainingRequirements: [makeRemainingReq("req-elective", ["CSI 2132", "MAT 1341"])],

@@ -17,7 +17,7 @@ function BasicCalendarRoute() {
       transition={{ duration: 0.3 }}
       style={{ width: "100%", minHeight: "100vh" }}
     >
-      <CalendarPage onBack={() => navigateToWizardStep(WizardStep.Mode)} />
+      <CalendarPage variant="basic" onBack={() => navigateToWizardStep(WizardStep.Mode)} />
     </motion.div>
   );
 }

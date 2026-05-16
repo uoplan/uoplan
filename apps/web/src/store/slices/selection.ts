@@ -5,14 +5,9 @@ import type { CourseLanguageBucket } from "schedule";
 import { buildDataCache, normalizeCourseCode, withExtraCourses, isOptCourse } from "schedule";
 import { getMergedCatalogue } from "./catalogueUtils";
 import { pruneOptionSelectionsForClear } from "../../components/requirements/requirementUtils";
-import {
-  DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS,
-  DEFAULT_BASIC_LANGUAGE_BUCKETS,
-  DEFAULT_BASIC_LEVEL_BUCKETS,
-} from "../../lib/electiveEligibility";
+import { isBasicPlannerActive } from "../../lib/calendarRoute";
 
 interface SelectionSlice {
-  setWizardMode: AppStore["setWizardMode"];
   setBasicPinnedCourses: AppStore["setBasicPinnedCourses"];
   setBasicElectivesCount: AppStore["setBasicElectivesCount"];
   setBasicExcludedCategories: AppStore["setBasicExcludedCategories"];
@@ -34,69 +29,6 @@ interface SelectionSlice {
 }
 
 export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice> = (set, get) => ({
-  setWizardMode: (mode) => {
-    if (mode !== "basic") {
-      set({ wizardMode: mode });
-      // Basic mode skips requirement recompute when toggling immersion; refresh here
-      // so advanced steps see correct filteredPrereqEligibleCourses with current language buckets.
-      if (mode === "advanced") {
-        const {
-          program,
-          minorProgram,
-          cache,
-          completedCourses,
-          selectedPerRequirement,
-          selectedOptionsPerRequirement,
-          levelBuckets,
-          languageBuckets,
-          includeClosedComponents,
-          studentPrograms,
-          requirementSlotsUserTouched,
-        } = get();
-        if (program && cache) {
-          set(
-            recomputeStateForProgram(
-              program,
-              minorProgram,
-              completedCourses,
-              cache,
-              selectedPerRequirement,
-              selectedOptionsPerRequirement,
-              levelBuckets,
-              languageBuckets,
-              includeClosedComponents,
-              studentPrograms,
-              requirementSlotsUserTouched,
-            ),
-          );
-        }
-      }
-      return;
-    }
-
-    set((state) => {
-      const hasUntouchedDefaults =
-        state.levelBuckets.length === 1 &&
-        state.levelBuckets[0] === "undergrad" &&
-        state.languageBuckets.length === 2 &&
-        state.languageBuckets.includes("en") &&
-        state.languageBuckets.includes("other") &&
-        state.electiveLevelBuckets.length === 2 &&
-        state.electiveLevelBuckets.includes(1000) &&
-        state.electiveLevelBuckets.includes(2000);
-
-      if (!hasUntouchedDefaults) {
-        return { wizardMode: mode };
-      }
-
-      return {
-        wizardMode: mode,
-        levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
-        languageBuckets: [...DEFAULT_BASIC_LANGUAGE_BUCKETS],
-        electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
-      };
-    });
-  },
   setBasicPinnedCourses: (courses) => set({ basicPinnedCourses: courses }),
   setBasicElectivesCount: (count) => set({ basicElectivesCount: count }),
   setBasicExcludedCategories: (categories) => set({ basicExcludedCategories: categories }),
@@ -355,7 +287,6 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       return;
     }
     const {
-      wizardMode,
       program,
       minorProgram,
       cache,
@@ -374,7 +305,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
 
     // Basic mode does not use requirement-tree / filtered-prereq state on the calendar;
     // skipping the full recompute avoids scanning the entire catalogue on toggle (UI freeze).
-    if (wizardMode === "basic") {
+    if (isBasicPlannerActive()) {
       set({ frenchImmersionStream: true, languageBuckets: nextLang });
       return;
     }

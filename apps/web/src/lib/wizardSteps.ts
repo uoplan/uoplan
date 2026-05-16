@@ -57,7 +57,6 @@ export type WizardProceedContext = {
   hasTerms: boolean;
   selectedTermId: string | null;
   cacheLoaded: boolean;
-  wizardMode: "basic" | "advanced" | null;
   firstYear: number | null;
   hasProgram: boolean;
   missingOptions: boolean;
@@ -70,7 +69,7 @@ export function canProceedFromWizardStep(step: WizardStep, ctx: WizardProceedCon
     case WizardStep.Term:
       return ctx.hasTerms && Boolean(ctx.selectedTermId) && ctx.cacheLoaded;
     case WizardStep.Mode:
-      return Boolean(ctx.wizardMode);
+      return ctx.hasTerms && Boolean(ctx.selectedTermId) && ctx.cacheLoaded;
     case WizardStep.Program:
       return ctx.firstYear !== null && ctx.hasProgram;
     case WizardStep.Completed:

@@ -14,6 +14,7 @@ import {
 } from "schedule";
 import { recomputeStateForProgram } from "../requirementCompute";
 import type { Course } from "schedule";
+import { wizardModeForEncoding } from "../../lib/calendarRoute";
 
 interface UrlSlice {
   loadEncodedState: AppStore["loadEncodedState"];
@@ -46,7 +47,9 @@ function buildEncodeInput(s: AppStore): EncodeInput {
     includeClosedComponents: s.includeClosedComponents,
     virtualSectionsOnly: s.virtualSectionsOnly,
     studentPrograms: s.studentPrograms,
-    wizardMode: s.wizardMode,
+    wizardMode: wizardModeForEncoding(
+      typeof window !== "undefined" ? window.location.pathname : "",
+    ),
     basicPinnedCourses: s.basicPinnedCourses,
     basicElectivesCount: s.basicElectivesCount,
     basicExcludedCategories: s.basicExcludedCategories,
@@ -181,7 +184,6 @@ export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, ge
       currentSwaps: decoded.swaps,
       includeClosedComponents: decoded.includeClosedComponents ?? false,
       virtualSectionsOnly: decoded.virtualSectionsOnly ?? false,
-      wizardMode: decoded.wizardMode,
       basicPinnedCourses: decoded.basicPinnedCourses,
       basicElectivesCount: decoded.basicElectivesCount,
       basicExcludedCategories: decoded.basicExcludedCategories,
