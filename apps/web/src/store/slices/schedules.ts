@@ -14,6 +14,7 @@ import {
 import { normalizeCourseCode } from "schedule";
 import { courseMatchesFilters } from "schedule";
 import { isHonoursProject, canTakeCourse, buildPrereqContext } from "schedule";
+import { basicElectivesAfterPinnedDelta } from "../../lib/basicCalendarPins";
 import {
   DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS,
   DEFAULT_BASIC_LANGUAGE_BUCKETS,
@@ -24,8 +25,8 @@ import {
   virtualScheduleFilterApplies,
 } from "../../lib/electiveEligibility";
 import {
-  applyOptionSelections,
-  collectRequirementIdsWithCandidateCourse,
+  appendCourseDedupedByNorm,
+  resolveRequirementIdsForScheduleCourse,
 } from "../../components/requirements/requirementUtils";
 
 const validEnrollmentsByCourseCode = new Map<string, CourseEnrollment[]>();
@@ -59,6 +60,7 @@ interface SchedulesSlice {
   undoLastSwap: AppStore["undoLastSwap"];
   getSwapCandidates: AppStore["getSwapCandidates"];
   lockCourseForAllSchedulesFromSwap: AppStore["lockCourseForAllSchedulesFromSwap"];
+  unlockCourseForAllSchedulesFromSwap: AppStore["unlockCourseForAllSchedulesFromSwap"];
 }
 
 export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice> = (set, get) => ({
@@ -556,6 +558,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       currentSchedule,
       cache,
       basicPinnedCourses,
+      basicElectivesCount,
       currentPoolMap,
       chosenCourseToRequirementId,
       remainingRequirements,
@@ -573,31 +576,25 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       if (basicPinnedCourses.some((c) => normalizeCourseCode(c) === norm)) {
         return;
       }
-      get().setBasicPinnedCourses([...basicPinnedCourses, canonical]);
+      set({
+        basicPinnedCourses: [...basicPinnedCourses, canonical],
+        basicElectivesCount: basicElectivesAfterPinnedDelta(basicElectivesCount, 1),
+        generationError: null,
+      });
       return;
     }
 
     if (wizardMode !== "advanced") return;
 
-    const flattened = applyOptionSelections(
+    const requirementIds = resolveRequirementIdsForScheduleCourse({
+      courseCode: code,
+      courseNorm: norm,
       requirementTreeWithStatus,
       selectedOptionsPerRequirement,
-    );
-    let requirementIds = collectRequirementIdsWithCandidateCourse(flattened, norm);
-
-    if (requirementIds.length === 0) {
-      let poolId = currentPoolMap[code] ?? chosenCourseToRequirementId[code] ?? undefined;
-      if (!poolId) {
-        for (const req of remainingRequirements) {
-          if (!req.requirementId || !req.candidateCourses?.length) continue;
-          if (req.candidateCourses.some((c) => normalizeCourseCode(c) === norm)) {
-            poolId = req.requirementId;
-            break;
-          }
-        }
-      }
-      if (poolId) requirementIds = [poolId];
-    }
+      currentPoolMap,
+      chosenCourseToRequirementId,
+      remainingRequirements,
+    });
 
     if (requirementIds.length === 0) return;
 
@@ -605,12 +602,60 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       let next = { ...s.constrainedPerRequirement };
       let changed = false;
       for (const rid of requirementIds) {
-        const prev = next[rid] ?? [];
-        if (prev.some((c) => normalizeCourseCode(c) === norm)) continue;
-        next = { ...next, [rid]: [...prev, canonical] };
+        const constrained = next[rid] ?? [];
+        const assigned = s.selectedPerRequirement[rid] ?? [];
+        if (
+          constrained.some((c) => normalizeCourseCode(c) === norm) ||
+          assigned.some((c) => normalizeCourseCode(c) === norm)
+        ) {
+          continue;
+        }
+        const merged = appendCourseDedupedByNorm(constrained, canonical, norm);
+        if (merged === constrained) continue;
+        next = { ...next, [rid]: merged };
         changed = true;
       }
       return changed ? { constrainedPerRequirement: next } : {};
     });
+  },
+
+  unlockCourseForAllSchedulesFromSwap: (enrollmentIndex) => {
+    const {
+      wizardMode,
+      currentSchedule,
+      basicPinnedCourses,
+      basicElectivesCount,
+      constrainedPerRequirement,
+    } = get();
+    if (!currentSchedule) return;
+    const enrollment = currentSchedule.enrollments[enrollmentIndex];
+    if (!enrollment) return;
+    const norm = normalizeCourseCode(enrollment.courseCode);
+
+    if (wizardMode === "basic") {
+      const next = basicPinnedCourses.filter((c) => normalizeCourseCode(c) !== norm);
+      if (next.length === basicPinnedCourses.length) return;
+      set({
+        basicPinnedCourses: next,
+        basicElectivesCount: basicElectivesAfterPinnedDelta(
+          basicElectivesCount,
+          next.length - basicPinnedCourses.length,
+        ),
+        generationError: null,
+      });
+      return;
+    }
+
+    if (wizardMode !== "advanced") return;
+
+    const next: Record<string, string[]> = {};
+    let changed = false;
+    for (const [rid, codes] of Object.entries(constrainedPerRequirement)) {
+      const filtered = codes.filter((c) => normalizeCourseCode(c) !== norm);
+      if (filtered.length !== codes.length) changed = true;
+      if (filtered.length > 0) next[rid] = filtered;
+    }
+    if (!changed) return;
+    set({ constrainedPerRequirement: next });
   },
 });

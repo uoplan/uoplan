@@ -327,6 +327,15 @@ msgstr "Adds this course to the selections used when schedules are generated."
 msgid "calendar.swap.alreadyLocked"
 msgstr "Already added"
 
+msgid "calendar.swap.alreadyAssigned"
+msgstr "Already assigned to a requirement in the wizard"
+
+msgid "calendar.swap.unlockAria"
+msgstr "Remove course from schedule-generation selections"
+
+msgid "calendar.swap.unlockTooltip"
+msgstr "Removes this course from the selections used when schedules are generated."
+
 msgid "calendar.swap.lockNoPool"
 msgstr "Can't attach this course to a requirement picker."
 
