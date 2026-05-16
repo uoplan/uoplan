@@ -23,12 +23,12 @@ When the user selects their first year via `setFirstYear(year)`, the store fetch
 
 **Catalogue merge (`apps/web/src/store/slices/catalogueUtils.ts`)** builds an effective course list for schedule generation and prerequisite checks:
 
-| Situation | Course metadata | Prerequisites |
-| --------- | --------------- | ------------- |
+| Situation                            | Course metadata                      | Prerequisites                                                 |
+| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------- |
 | In both year + latest, not completed | Latest (title, credits, description) | Start-year; if year has none, latest prereqs are **stripped** |
-| In both, completed | Full start-year row | Start-year |
-| Latest only (new course) | Latest | Latest |
-| Year only (legacy/dropped) | Year | Year |
+| In both, completed                   | Full start-year row                  | Start-year                                                    |
+| Latest only (new course)             | Latest                               | Latest                                                        |
+| Year only (legacy/dropped)           | Year                                 | Year                                                          |
 
 Latest aliases are still applied after merge so renumbered courses resolve correctly. See `applyYearPrerequisites` in `packages/schedule/src/dataCache.ts`.
 

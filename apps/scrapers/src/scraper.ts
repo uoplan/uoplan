@@ -18,9 +18,14 @@ function getCurrentAcademicYear(): number {
   return now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1;
 }
 
-function buildBaseUrl(year: number, currentYear: number): string {
-  if (year === currentYear) return ROOT_URL;
+/** Live catalogue site for the ongoing academic year; archives for past years only. */
+function buildBaseUrl(year: number): string {
+  if (year === getCurrentAcademicYear()) return ROOT_URL;
   return `${ROOT_URL}/archive/${year}-${year + 1}`;
+}
+
+function isArchiveBaseUrl(baseUrl: string): boolean {
+  return baseUrl.includes("/archive/");
 }
 
 /** Returns the path-only prefix for the given baseUrl (e.g. "/archive/2021-2022" or ""). */
@@ -959,7 +964,7 @@ async function scrapeProgramLinks(baseUrl: string): Promise<string[]> {
     const href = $(el).attr("href");
     if (
       href &&
-      (href.startsWith(`${prefix}/en/undergrad/`) || href.startsWith(`${prefix}/en/grad/`))
+      (href.startsWith(`${prefix}/en/undergrad/`) || href.startsWith(`${prefix}/en/graduate/`))
     ) {
       if (!links.includes(href)) links.push(href);
     }
@@ -1278,9 +1283,20 @@ function processRequirements(reqs: ProgramRequirement[]): ProgramRequirement[] {
 
 async function scrapeYearCatalogue(
   baseUrl: string,
-): Promise<{ catalogue: Catalogue; missingUrls: string[] }> {
-  const disciplineLinks = await scrapeDisciplineLinks(baseUrl);
-  const programLinks = await scrapeProgramLinks(baseUrl);
+): Promise<{ catalogue: Catalogue; missingUrls: string[] } | null> {
+  let disciplineLinks: string[];
+  let programLinks: string[];
+  try {
+    disciplineLinks = await scrapeDisciplineLinks(baseUrl);
+    programLinks = await scrapeProgramLinks(baseUrl);
+  } catch (e: unknown) {
+    // Entire archive year may not be published yet (404 root / courses / programs).
+    if (e instanceof NotFoundError && isArchiveBaseUrl(baseUrl)) {
+      console.warn(`Skipping unavailable archive (${e.message})`);
+      return null;
+    }
+    throw e;
+  }
 
   const limit = pLimit(10);
   const missingUrls: string[] = [];
@@ -1340,12 +1356,7 @@ async function scrapeYearCatalogue(
   return { catalogue, missingUrls };
 }
 
-async function scrapeYear(
-  year: number,
-  dataDir: string,
-  force: boolean,
-  currentYear: number,
-): Promise<string[]> {
+async function scrapeYear(year: number, dataDir: string, force: boolean): Promise<string[]> {
   const outPath = path.join(dataDir, `catalogue.${year}.json`);
 
   if (!force) {
@@ -1358,10 +1369,15 @@ async function scrapeYear(
     }
   }
 
-  const baseUrl = buildBaseUrl(year, currentYear);
+  const baseUrl = buildBaseUrl(year);
   console.log(`\nScraping ${year}-${year + 1} from ${baseUrl}...`);
 
-  const { catalogue, missingUrls } = await scrapeYearCatalogue(baseUrl);
+  const result = await scrapeYearCatalogue(baseUrl);
+  if (result === null) {
+    console.warn(`Skipping catalogue.${year}.json — archive unavailable at ${baseUrl}`);
+    return [];
+  }
+  const { catalogue, missingUrls } = result;
 
   await fs.writeFile(outPath, JSON.stringify(catalogue, null, 2), "utf-8");
   console.log(
@@ -1449,28 +1465,9 @@ async function generateIndices(dataDir: string): Promise<void> {
   );
 }
 
-async function getAcademicYearFromTerms(dataDir: string): Promise<number> {
-  try {
-    const raw = await fs.readFile(path.join(dataDir, "terms.json"), "utf-8");
-    const data = JSON.parse(raw) as { terms?: { termId: string; name: string }[] };
-    if (!Array.isArray(data.terms) || data.terms.length === 0) return getCurrentAcademicYear();
-    let best = 0;
-    for (const term of data.terms) {
-      const m = term.name.match(/(\d{4})/);
-      if (!m) continue;
-      const year = parseInt(m[1], 10);
-      const acYear = term.name.toLowerCase().includes("fall") ? year : year - 1;
-      if (acYear > best) best = acYear;
-    }
-    return best > 0 ? best : getCurrentAcademicYear();
-  } catch {
-    return getCurrentAcademicYear();
-  }
-}
-
 async function main() {
   const dataDir = SCRAPER_DATA_DIR;
-  const currentYear = await getAcademicYearFromTerms(dataDir);
+  const currentYear = getCurrentAcademicYear();
   await fs.mkdir(dataDir, { recursive: true });
 
   // Load existing missing-URLs log so we can merge into it
@@ -1485,12 +1482,12 @@ async function main() {
 
   // Scrape archive years (skip if already present)
   for (let year = OLDEST_YEAR; year < currentYear; year++) {
-    const missing = await scrapeYear(year, dataDir, false, currentYear);
+    const missing = await scrapeYear(year, dataDir, false);
     if (missing.length) missingByYear[String(year)] = missing.sort();
   }
 
-  // Always re-scrape the current year
-  const currentMissing = await scrapeYear(currentYear, dataDir, true, currentYear);
+  // Always re-scrape the current calendar academic year from the live site
+  const currentMissing = await scrapeYear(currentYear, dataDir, true);
   if (currentMissing.length) {
     missingByYear[String(currentYear)] = currentMissing.sort();
   } else {
