@@ -68,6 +68,8 @@ export interface AppState {
   languageBuckets: CourseLanguageBucket[];
   electiveLevelBuckets: number[];
   currentSchedule: GeneratedSchedule | null;
+  /** True while generateSchedules / seed navigation is in flight. */
+  scheduleGenerating: boolean;
   swapPool: string[];
   chosenCourseToRequirementId: Record<string, string>;
   currentPoolMap: Record<string, string>;

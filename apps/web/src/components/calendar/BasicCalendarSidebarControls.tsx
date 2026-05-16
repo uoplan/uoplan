@@ -61,6 +61,10 @@ export function BasicCalendarSidebarControls({
   const setBasicExcludedCategories = useAppStore((s) => s.setBasicExcludedCategories);
   const goToPreviousSeed = useAppStore((s) => s.goToPreviousSeed);
   const goToNextSeed = useAppStore((s) => s.goToNextSeed);
+  const scheduleGenerating = useAppStore((s) => s.scheduleGenerating);
+  const firstSeed = useAppStore((s) => s.firstSeed);
+  const currentSeed = useAppStore((s) => s.currentSeed);
+  const canGoPrevious = currentSeed > firstSeed && currentSeed > 0;
   const markBasicSettingsChanged = useAppStore((s) => s.markBasicSettingsChanged);
   const setLevelBuckets = useAppStore((s) => s.setLevelBuckets);
   const setLanguageBuckets = useAppStore((s) => s.setLanguageBuckets);
@@ -269,9 +273,12 @@ export function BasicCalendarSidebarControls({
             color="violet"
             size="sm"
             radius={0}
+            disabled={!canGoPrevious || scheduleGenerating}
+            loading={scheduleGenerating}
             onClick={() => {
+              if (scheduleGenerating) return;
               onBeforeNavigate?.();
-              goToPreviousSeed();
+              void goToPreviousSeed();
             }}
           >
             {tr("calendarPage.previous")}
@@ -281,9 +288,12 @@ export function BasicCalendarSidebarControls({
             color="violet"
             size="sm"
             radius={0}
+            disabled={scheduleGenerating}
+            loading={scheduleGenerating}
             onClick={() => {
+              if (scheduleGenerating) return;
               onBeforeNavigate?.();
-              goToNextSeed();
+              void goToNextSeed();
             }}
           >
             {tr("calendarPage.next")}
