@@ -1,10 +1,19 @@
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { lingui } from "@lingui/vite-plugin";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import { changelogHtmlPlugin } from "./vite/changelog-html-plugin";
 
 export default defineConfig({
-  plugins: [changelogHtmlPlugin(), react(), lingui()],
+  plugins: [
+    changelogHtmlPlugin(),
+    tanstackRouter({
+      target: "react",
+      autoCodeSplitting: true,
+    }),
+    react(),
+    lingui(),
+  ],
   define: {
     __COMMIT_HASH__: JSON.stringify((process.env.CF_PAGES_COMMIT_SHA || "dev").slice(0, 7)),
     __BRANCH_NAME__: JSON.stringify(process.env.CF_PAGES_BRANCH || ""),

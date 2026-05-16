@@ -81,9 +81,18 @@ export const useAppStore = create<AppStore>()((...a) => {
     generationLimitFirstYearCredits: true,
     generationCompressedSchedule: false,
     generationPreferEasier: false,
-    activeStep: 0,
-    showCalendar: false,
+    wizardFurthestStep: 0,
     frenchImmersionStream: false,
+
+    touchWizardFurthestStep: (step) => {
+      set((s) => ({
+        wizardFurthestStep: Math.max(s.wizardFurthestStep, step),
+      }));
+    },
+
+    resetWizardFurthestStep: () => {
+      set({ wizardFurthestStep: 0 });
+    },
 
     // Global action: touches many states
     resetToDefault: () => {
@@ -132,8 +141,7 @@ export const useAppStore = create<AppStore>()((...a) => {
         currentSeed: 0,
         includeClosedComponents: false,
         virtualSectionsOnly: false,
-        activeStep: 0,
-        showCalendar: false,
+        wizardFurthestStep: 0,
         frenchImmersionStream: false,
       });
       if (typeof window !== "undefined") {

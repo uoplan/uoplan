@@ -58,8 +58,8 @@ function buildEncodeInput(s: AppStore): EncodeInput {
     generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
     generationCompressedSchedule: s.generationCompressedSchedule,
     generationPreferEasier: s.generationPreferEasier,
-    activeStep: s.activeStep,
-    showCalendar: s.showCalendar,
+    activeStep: 0,
+    showCalendar: false,
     frenchImmersionStream: s.frenchImmersionStream,
   };
 }
@@ -192,8 +192,6 @@ export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, ge
       generationLimitFirstYearCredits: decoded.generationLimitFirstYearCredits,
       generationCompressedSchedule: decoded.generationCompressedSchedule,
       generationPreferEasier: decoded.generationPreferEasier,
-      activeStep: decoded.activeStep ?? 0,
-      showCalendar: decoded.showCalendar ?? false,
       frenchImmersionStream: decoded.frenchImmersionStream ?? false,
       generationError: null,
       constrainedPerRequirement,

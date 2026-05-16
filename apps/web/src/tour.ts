@@ -9,6 +9,7 @@ import {
   WIZARD_TOUR_SELECTOR,
 } from "./lib/wizardStepContent";
 import { WizardStep } from "./lib/wizardSteps";
+import { navigateToWizardStep } from "./lib/appNavigation";
 import { tr } from "./i18n";
 
 localStorage.removeItem("uoplan-tour-done");
@@ -34,10 +35,7 @@ function getActiveIndex(state: unknown): number {
  * highlighted element is visible. Pass the same visible indices as the sidebar
  * ({@link buildVisibleStepIndices}).
  */
-export function runTour(
-  setWizardStep: (index: number) => void,
-  visibleStepIndices: readonly number[],
-): void {
+export function runTour(visibleStepIndices: readonly number[]): void {
   const wizardStepContent = getWizardStepContent();
   const descriptionHtmlList: string[] = [];
   const steps: DriveStep[] = [];
@@ -71,7 +69,7 @@ export function runTour(
 
   const firstWizard = visibleStepIndices[0];
   if (firstWizard !== undefined) {
-    setWizardStep(firstWizard);
+    navigateToWizardStep(firstWizard as WizardStep);
   }
 
   const driverObj = driver({
@@ -101,7 +99,7 @@ export function runTour(
         nextTourIndex < visibleStepIndices.length
           ? visibleStepIndices[nextTourIndex]
           : WizardStep.Generate;
-      setWizardStep(targetWizard);
+      navigateToWizardStep(targetWizard as WizardStep);
       setTimeout(() => {
         d.moveNext();
         d.refresh();
@@ -115,7 +113,7 @@ export function runTour(
         prevTourIndex < visibleStepIndices.length
           ? visibleStepIndices[prevTourIndex]
           : WizardStep.Generate;
-      setWizardStep(targetWizard);
+      navigateToWizardStep(targetWizard as WizardStep);
       setTimeout(() => {
         d.movePrevious();
         d.refresh();

@@ -27,6 +27,7 @@ import {
 } from "schedule";
 import { recomputeStateForProgram } from "../requirementCompute";
 import { LOCAL_STORAGE_KEY } from "../constants";
+import { applyHydrationNavigation } from "../../lib/hydrateNavigation";
 
 /** Build a DataCache and inject fake entries for any OPT transfer credit codes in completedCourses. */
 function buildCacheWithOpt(
@@ -277,14 +278,8 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
             u.searchParams.delete("s");
             u.searchParams.delete("t");
             u.searchParams.delete("f");
-            const step = decoded.activeStep ?? 0;
-            const navState = {
-              step,
-              furthestStep: step,
-              showCalendar: decoded.showCalendar ?? false,
-            };
-            window.history.replaceState(navState, "", u.toString());
-            window.dispatchEvent(new PopStateEvent("popstate", { state: navState }));
+            window.history.replaceState({}, "", u.toString());
+            applyHydrationNavigation(decoded, get);
           }
         } else {
           const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -292,10 +287,8 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
             const decoded = decodeStateFromBase64(stored, parsedCatalogue, indices);
             if (!("error" in decoded)) {
               get().loadEncodedState(decoded);
-              const step = decoded.activeStep ?? 0;
-              const navState = { step, furthestStep: step, showCalendar: false };
-              window.history.replaceState(navState, "");
-              window.dispatchEvent(new PopStateEvent("popstate", { state: navState }));
+              window.history.replaceState({}, "");
+              applyHydrationNavigation(decoded, get);
             } else {
               get().resetToDefault();
             }
