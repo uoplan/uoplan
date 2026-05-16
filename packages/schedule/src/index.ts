@@ -7,6 +7,8 @@ export type { GlobalExplicitRule } from "./scheduleCandidates/types";
 export * from "./scheduleFilters";
 export * from "./courseFilters";
 export * from "./professorRatings";
+export * from "./professorCoTeachingGraph";
+export * from "./professorDisciplineColors";
 export * from "./gradeDistribution";
 export * from "./seededRandom";
 export * from "./dataCache";
