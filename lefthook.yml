@@ -6,3 +6,5 @@ pre-commit:
     eslint:
       glob: "**/*.{js,jsx,ts,tsx,mjs,cjs}"
       run: pnpm exec eslint --cache --max-warnings=0 --no-warn-ignored {staged_files}
+    typecheck:
+      run: pnpm typecheck
