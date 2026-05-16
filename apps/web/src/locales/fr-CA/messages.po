@@ -60,6 +60,36 @@ msgstr "journal des modifications"
 msgid "app.footer.explore"
 msgstr "explorer"
 
+msgid "app.footer.graph"
+msgstr "graphe"
+
+msgid "graph.title"
+msgstr "Réseau de professeurs"
+
+msgid "graph.searchPlaceholder"
+msgstr "Rechercher un professeur…"
+
+msgid "graph.loadingGrades"
+msgstr "Chargement de l'historique des notes…"
+
+msgid "graph.building"
+msgstr "Construction du graphe de co-enseignement…"
+
+msgid "graph.layouting"
+msgstr "Disposition du graphe…"
+
+msgid "graph.noResults"
+msgstr "Aucun professeur correspondant."
+
+msgid "graph.connections"
+msgstr "{count, plural, one {# connexion} other {# connexions}}"
+
+msgid "graph.noConnections"
+msgstr "Aucun cours en commun avec d'autres professeurs dans ces données."
+
+msgid "graph.loadErrorTitle"
+msgstr "Impossible de charger le graphe"
+
 msgid "explore.title"
 msgstr "Explorer les cours"
 

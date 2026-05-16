@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as GraphRouteImport } from './routes/graph'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
@@ -23,6 +24,11 @@ import { Route as CalendarBasicRouteImport } from './routes/calendar/basic'
 import { Route as CalendarAdvancedRouteImport } from './routes/calendar/advanced'
 import { Route as ExploreProfessorLegacyIdRouteImport } from './routes/explore/professor/$legacyId'
 
+const GraphRoute = GraphRouteImport.update({
+  id: '/graph',
+  path: '/graph',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChangelogRoute = ChangelogRouteImport.update({
   id: '/changelog',
   path: '/changelog',
@@ -93,6 +99,7 @@ const ExploreProfessorLegacyIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
+  '/graph': typeof GraphRoute
   '/calendar/advanced': typeof CalendarAdvancedRoute
   '/calendar/basic': typeof CalendarBasicRoute
   '/step/assign': typeof StepAssignRoute
@@ -108,6 +115,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
+  '/graph': typeof GraphRoute
   '/calendar/advanced': typeof CalendarAdvancedRoute
   '/calendar/basic': typeof CalendarBasicRoute
   '/step/assign': typeof StepAssignRoute
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
+  '/graph': typeof GraphRoute
   '/calendar/advanced': typeof CalendarAdvancedRoute
   '/calendar/basic': typeof CalendarBasicRoute
   '/step/assign': typeof StepAssignRoute
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/changelog'
+    | '/graph'
     | '/calendar/advanced'
     | '/calendar/basic'
     | '/step/assign'
@@ -156,6 +166,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/changelog'
+    | '/graph'
     | '/calendar/advanced'
     | '/calendar/basic'
     | '/step/assign'
@@ -171,6 +182,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/changelog'
+    | '/graph'
     | '/calendar/advanced'
     | '/calendar/basic'
     | '/step/assign'
@@ -187,6 +199,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChangelogRoute: typeof ChangelogRoute
+  GraphRoute: typeof GraphRoute
   CalendarAdvancedRoute: typeof CalendarAdvancedRoute
   CalendarBasicRoute: typeof CalendarBasicRoute
   StepAssignRoute: typeof StepAssignRoute
@@ -202,6 +215,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/graph': {
+      id: '/graph'
+      path: '/graph'
+      fullPath: '/graph'
+      preLoaderRoute: typeof GraphRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/changelog': {
       id: '/changelog'
       path: '/changelog'
@@ -299,6 +319,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChangelogRoute: ChangelogRoute,
+  GraphRoute: GraphRoute,
   CalendarAdvancedRoute: CalendarAdvancedRoute,
   CalendarBasicRoute: CalendarBasicRoute,
   StepAssignRoute: StepAssignRoute,

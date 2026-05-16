@@ -60,6 +60,36 @@ msgstr "changelog"
 msgid "app.footer.explore"
 msgstr "explore"
 
+msgid "app.footer.graph"
+msgstr "graph"
+
+msgid "graph.title"
+msgstr "Professor network"
+
+msgid "graph.searchPlaceholder"
+msgstr "Search professors…"
+
+msgid "graph.loadingGrades"
+msgstr "Loading grade history…"
+
+msgid "graph.building"
+msgstr "Building co-teaching graph…"
+
+msgid "graph.layouting"
+msgstr "Laying out graph…"
+
+msgid "graph.noResults"
+msgstr "No matching professors."
+
+msgid "graph.connections"
+msgstr "{count, plural, one {# connection} other {# connections}}"
+
+msgid "graph.noConnections"
+msgstr "No shared courses with other professors in this dataset."
+
+msgid "graph.loadErrorTitle"
+msgstr "Could not load graph"
+
 msgid "explore.title"
 msgstr "Explore courses"
 

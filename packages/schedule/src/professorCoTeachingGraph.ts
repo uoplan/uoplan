@@ -1,0 +1,115 @@
+import type { CourseGradesData } from "./dataTypes";
+import { normalizeProfessorName } from "./professorRatings";
+import { parseCourseCode } from "./utils/courseUtils";
+
+export type ProfessorGraphNode = {
+  id: string;
+  displayName: string;
+  legacyId?: number;
+  degree: number;
+  /** Subject prefixes with section-offering counts (one per professor row in grades data). */
+  disciplineWeights: Record<string, number>;
+  subjects: string[];
+};
+
+export type ProfessorGraphEdge = {
+  source: string;
+  target: string;
+  weight: number;
+};
+
+export type ProfessorCoTeachingGraph = {
+  nodes: ProfessorGraphNode[];
+  edges: ProfessorGraphEdge[];
+};
+
+export function professorGraphId(legacyId?: number, name?: string): string {
+  if (legacyId != null) return `id:${legacyId}`;
+  return `name:${normalizeProfessorName(name ?? "").toLowerCase()}`;
+}
+
+function subjectFromCourseCode(code: string): string {
+  const parsed = parseCourseCode(code);
+  if (parsed) return parsed.discipline;
+  const [subject = ""] = code.trim().replace(/\s+/g, " ").split(" ");
+  return subject.toUpperCase();
+}
+
+function canonicalPairKey(a: string, b: string): string {
+  return a < b ? `${a}|${b}` : `${b}|${a}`;
+}
+
+/**
+ * Build professor co-teaching graph from historical grade offerings.
+ * Edge exists when two professors appear under the same course code; weight sums
+ * min(offeringCountA, offeringCountB) per shared course.
+ */
+export function buildProfessorCoTeachingGraph(grades: CourseGradesData): ProfessorCoTeachingGraph {
+  const nodeMeta = new Map<
+    string,
+    {
+      displayName: string;
+      legacyId?: number;
+      disciplineWeights: Map<string, number>;
+    }
+  >();
+  const edgeWeights = new Map<string, number>();
+
+  for (const course of grades.courses) {
+    const counts = new Map<string, number>();
+
+    for (const p of course.professors) {
+      const id = professorGraphId(p.legacyId, p.name);
+      counts.set(id, (counts.get(id) ?? 0) + 1);
+
+      let meta = nodeMeta.get(id);
+      if (!meta) {
+        meta = { displayName: p.name, legacyId: p.legacyId, disciplineWeights: new Map() };
+        nodeMeta.set(id, meta);
+      }
+      const subject = subjectFromCourseCode(course.code);
+      if (subject) {
+        meta.disciplineWeights.set(subject, (meta.disciplineWeights.get(subject) ?? 0) + 1);
+      }
+    }
+
+    const ids = [...counts.keys()];
+    for (let i = 0; i < ids.length; i++) {
+      for (let j = i + 1; j < ids.length; j++) {
+        const a = ids[i];
+        const b = ids[j];
+        const pairKey = canonicalPairKey(a, b);
+        const contribution = Math.min(counts.get(a)!, counts.get(b)!);
+        edgeWeights.set(pairKey, (edgeWeights.get(pairKey) ?? 0) + contribution);
+      }
+    }
+  }
+
+  const degree = new Map<string, number>();
+  const edges: ProfessorGraphEdge[] = [];
+
+  for (const [pairKey, weight] of edgeWeights) {
+    const sep = pairKey.indexOf("|");
+    const source = pairKey.slice(0, sep);
+    const target = pairKey.slice(sep + 1);
+    edges.push({ source, target, weight });
+    degree.set(source, (degree.get(source) ?? 0) + 1);
+    degree.set(target, (degree.get(target) ?? 0) + 1);
+  }
+
+  const nodes: ProfessorGraphNode[] = [...nodeMeta.entries()].map(([id, meta]) => {
+    const disciplineWeights = Object.fromEntries(meta.disciplineWeights);
+    return {
+      id,
+      displayName: meta.displayName,
+      legacyId: meta.legacyId,
+      degree: degree.get(id) ?? 0,
+      disciplineWeights,
+      subjects: Object.keys(disciplineWeights).sort((a, b) => a.localeCompare(b, "en")),
+    };
+  });
+
+  nodes.sort((a, b) => a.displayName.localeCompare(b.displayName, "en"));
+
+  return { nodes, edges };
+}
