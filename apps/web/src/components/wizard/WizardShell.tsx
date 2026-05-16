@@ -35,7 +35,6 @@ import {
 } from "../../lib/wizardSteps";
 import { navigateToCalendar, navigateToWizardStep } from "../../lib/appNavigation";
 import { applyBasicDefaultsIfUntouched, enterAdvancedWizardFlow } from "../../lib/plannerModeFlow";
-import { usePersistState } from "../../hooks/usePersistState";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { getWizardStepContent } from "../../lib/wizardStepContent";
 import { LanguageSwitcher } from "../shared/LanguageSwitcher";
@@ -110,8 +109,6 @@ export function WizardShell({
   );
 
   const { shareCopied, handleCopyShare } = useShareUrl(getShareUrl);
-
-  usePersistState(!!indices);
 
   useEffect(() => {
     touchWizardFurthestStep(active);

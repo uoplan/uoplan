@@ -71,6 +71,7 @@ export const useAppStore = create<AppStore>()((...a) => {
     currentSwaps: [],
     firstSeed: generateRandomSeed(),
     currentSeed: 0, // Will be set to firstSeed when first generated
+    lowestVisitedSeed: null,
     generationMinStartMinutes: 8 * 60 + 30, // 8:30
     generationMaxEndMinutes: 22 * 60, // 22:00
     generationAllowedDays: ["Mo", "Tu", "We", "Th", "Fr"],
@@ -139,6 +140,7 @@ export const useAppStore = create<AppStore>()((...a) => {
         currentSwaps: [],
         firstSeed: generateRandomSeed(),
         currentSeed: 0,
+        lowestVisitedSeed: null,
         includeClosedComponents: false,
         virtualSectionsOnly: false,
         wizardFurthestStep: 0,

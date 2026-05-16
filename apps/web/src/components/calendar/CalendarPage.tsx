@@ -21,6 +21,7 @@ import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateR
 import { tr } from "../../i18n";
 import { LanguageSwitcher } from "../shared/LanguageSwitcher";
 import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
+import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 import { CALENDAR_SIDEBAR_WIDTH_PX } from "./calendarLayout";
 import { BasicCalendarSidebarControls } from "./BasicCalendarSidebarControls";
 import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
@@ -51,8 +52,8 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
     cache,
     professorRatings,
     currentColorMap,
-    firstSeed,
     currentSeed,
+    lowestVisitedSeed,
     scheduleGenerating,
     basicPinnedCourses,
     basicElectivesCount,
@@ -65,8 +66,8 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
       cache: s.cache,
       professorRatings: s.professorRatings,
       currentColorMap: s.currentColorMap,
-      firstSeed: s.firstSeed,
       currentSeed: s.currentSeed,
+      lowestVisitedSeed: s.lowestVisitedSeed,
       scheduleGenerating: s.scheduleGenerating,
       basicPinnedCourses: s.basicPinnedCourses,
       basicElectivesCount: s.basicElectivesCount,
@@ -85,7 +86,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
 
   const isBasic = variant === "basic";
   const hasSchedule = currentSchedule !== null;
-  const canGoPrevious = currentSeed > firstSeed && currentSeed > 0;
+  const canGoPrevious = canGoToPreviousSeed(currentSeed, lowestVisitedSeed);
   const canUseSeedNavigation =
     !isBasic || canGenerateBasicSchedule(basicPinnedCourses.length, basicElectivesCount);
 

@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
+import { flushPersistedAppState } from "../lib/persistAppState";
 import { useAppStore } from "../store/appStore";
 import type { AppStore } from "../store/types";
 
-const STORAGE_KEY = "uoplan-state";
 const DEBOUNCE_MS = 400;
 
 function hasPersistedStateChange(next: AppStore, prev: AppStore): boolean {
@@ -47,8 +47,7 @@ export function usePersistState(enabled: boolean): void {
     if (!enabled) return;
 
     const flush = () => {
-      const base64 = getEncodedStateBase64();
-      if (base64) localStorage.setItem(STORAGE_KEY, base64);
+      flushPersistedAppState();
     };
 
     const schedule = (state: AppStore, prevState: AppStore) => {

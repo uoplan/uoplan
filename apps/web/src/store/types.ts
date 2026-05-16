@@ -80,6 +80,8 @@ export interface AppState {
   currentSwaps: Array<{ enrollmentIndex: number; courseCode: string }>;
   firstSeed: number;
   currentSeed: number;
+  /** Earliest seed the user has generated at this session; drives Previous availability. */
+  lowestVisitedSeed: number | null;
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
   generationAllowedDays: DayOfWeek[];

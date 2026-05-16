@@ -29,6 +29,27 @@ import {
   resolveRequirementIdsForScheduleCourse,
 } from "../../components/requirements/requirementUtils";
 import { isAdvancedPlannerActive, isBasicPlannerActive } from "../../lib/calendarRoute";
+import { flushPersistedAppState } from "../../lib/persistAppState";
+import { nextSeed, noteLowestVisitedSeed, repairSeedPosition } from "../../lib/seedNavigation";
+
+type ScheduleGenerationResult = {
+  currentSchedule: AppStore["currentSchedule"];
+  swapPool: string[];
+  chosenCourseToRequirementId: Record<string, string>;
+  currentPoolMap: Record<string, string>;
+  currentColorMap: Record<string, number>;
+  generationError: AppStore["generationError"];
+};
+
+function applyScheduleGenerationResult(
+  set: Parameters<StateCreator<AppStore, [], [], SchedulesSlice>>[0],
+  get: Parameters<StateCreator<AppStore, [], [], SchedulesSlice>>[1],
+  result: ScheduleGenerationResult,
+  seed: number,
+) {
+  const lowestVisitedSeed = noteLowestVisitedSeed(get().lowestVisitedSeed, seed);
+  set({ ...result, currentSeed: seed, lowestVisitedSeed });
+}
 
 const validEnrollmentsByCourseCode = new Map<string, CourseEnrollment[]>();
 
@@ -45,6 +66,7 @@ async function withScheduleGenerating(
     await run();
   } finally {
     set({ scheduleGenerating: false });
+    flushPersistedAppState();
   }
 }
 
@@ -69,13 +91,19 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     await withScheduleGenerating(set, async () => {
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const state = get();
-      // Ensure currentSeed is initialized on first generation
-      const isFirstGen = state.currentSeed === 0;
-      const effectiveState = isFirstGen ? { ...state, currentSeed: state.firstSeed } : state;
+      const repairedSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
+      const isFirstGen = repairedSeed === 0;
+      const effectiveState = isFirstGen
+        ? { ...state, currentSeed: state.firstSeed }
+        : { ...state, currentSeed: repairedSeed };
       const result = await generateSchedulesAction(effectiveState);
       if (result) {
-        // On first generation, also set currentSeed to firstSeed in the store
-        set(isFirstGen ? { ...result, currentSeed: state.firstSeed } : result);
+        applyScheduleGenerationResult(
+          set,
+          get,
+          result,
+          isFirstGen ? state.firstSeed : repairedSeed,
+        );
       }
     });
   },
@@ -84,11 +112,19 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     await withScheduleGenerating(set, async () => {
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const state = get();
-      const isFirstGen = state.currentSeed === 0;
-      const effectiveState = isFirstGen ? { ...state, currentSeed: state.firstSeed } : state;
+      const repairedSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
+      const isFirstGen = repairedSeed === 0;
+      const effectiveState = isFirstGen
+        ? { ...state, currentSeed: state.firstSeed }
+        : { ...state, currentSeed: repairedSeed };
       const result = await generateSchedulesAction(effectiveState);
       if (result) {
-        set(isFirstGen ? { ...result, currentSeed: state.firstSeed } : result);
+        applyScheduleGenerationResult(
+          set,
+          get,
+          result,
+          isFirstGen ? state.firstSeed : repairedSeed,
+        );
       }
     });
   },
@@ -127,6 +163,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       generationError: null,
       firstSeed: generateRandomSeed(),
       currentSeed: 0,
+      lowestVisitedSeed: null,
     }),
 
   markBasicSettingsChanged: () =>
@@ -136,14 +173,15 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
 
   goToPreviousSeed: async () => {
     const state = get();
-    if (state.scheduleGenerating || state.currentSeed <= state.firstSeed) return;
+    const floor = state.lowestVisitedSeed ?? state.firstSeed;
+    if (state.scheduleGenerating || state.currentSeed <= floor) return;
     await withScheduleGenerating(set, async () => {
       const newSeed = state.currentSeed - 1;
       set({ currentSeed: newSeed, currentSwaps: [] });
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
       if (result) {
-        set(result);
+        set({ ...result, currentSeed: newSeed });
       }
     });
   },
@@ -152,12 +190,13 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     const state = get();
     if (state.scheduleGenerating) return;
     await withScheduleGenerating(set, async () => {
-      const newSeed = state.currentSeed + 1;
+      const baseSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
+      const newSeed = nextSeed(state.firstSeed, baseSeed);
       set({ currentSeed: newSeed, currentSwaps: [] });
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
       if (result) {
-        set(result);
+        applyScheduleGenerationResult(set, get, result, newSeed);
       }
     });
   },
@@ -166,7 +205,12 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     if (get().scheduleGenerating) return;
     await withScheduleGenerating(set, async () => {
       const newFirstSeed = generateRandomSeed();
-      set({ firstSeed: newFirstSeed, currentSeed: newFirstSeed, currentSwaps: [] });
+      set({
+        firstSeed: newFirstSeed,
+        currentSeed: newFirstSeed,
+        lowestVisitedSeed: newFirstSeed,
+        currentSwaps: [],
+      });
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const result = await generateSchedulesAction({
         ...get(),
@@ -174,7 +218,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         currentSeed: newFirstSeed,
       });
       if (result) {
-        set(result);
+        applyScheduleGenerationResult(set, get, result, newFirstSeed);
       }
     });
   },
