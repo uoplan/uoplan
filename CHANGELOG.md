@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.0-beta.12](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.11...uoplan-monorepo-v1.0.0-beta.12) (2026-05-17)
+
+
+### Features
+
+* add footer to all pages ([d924ec5](https://github.com/uoplan/uoplan/commit/d924ec56e6e343c3953f53c3bad343a2b926e4f8))
+* add landing page ([b37de6a](https://github.com/uoplan/uoplan/commit/b37de6a267f6d55ca7eab995a177468e9a81472d))
+* enhance mobile design for explore components ([#26](https://github.com/uoplan/uoplan/issues/26)) ([bd8576e](https://github.com/uoplan/uoplan/commit/bd8576e31c46dd0d64f23e9d736e8d7a1ed6f6fb))
+* use better loading bar ([5068a7b](https://github.com/uoplan/uoplan/commit/5068a7ba54af8fe609db5747a4553663d00804ed))
+
+
+### Bug Fixes
+
+* use better spacing for grade histogram ([33daeb7](https://github.com/uoplan/uoplan/commit/33daeb77ba724f61b4add08c17cf671183fff871))
+
 ## [1.0.0-beta.11](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.10...uoplan-monorepo-v1.0.0-beta.11) (2026-05-16)
 
 
