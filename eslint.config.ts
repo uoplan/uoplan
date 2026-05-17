@@ -15,6 +15,7 @@ export const baseConfig = defineConfig([
       "apps/web/public/data/**",
       "**/public/**",
       "apps/notifications/**",
+      "worker-configuration.d.ts",
     ],
   },
   js.configs.recommended,

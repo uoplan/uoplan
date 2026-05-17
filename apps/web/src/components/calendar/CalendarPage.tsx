@@ -30,11 +30,6 @@ interface CalendarPageProps {
   onBack: () => void;
 }
 
-function isMobileViewport(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia("(max-width: 768px)").matches;
-}
-
 export function CalendarPage({ variant, onBack }: CalendarPageProps) {
   useEffect(() => {
     document.documentElement.classList.add("calendar-no-scrollbar-gutter");
@@ -91,7 +86,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
 
   const morphRef = useRef<CalendarViewHandle>(null);
 
-  const [controlsOpen, setControlsOpen] = useState(isMobileViewport);
+  const [controlsOpen, setControlsOpen] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [timetableStartDate, setTimetableStartDate] = useState("");
   const [timetableEndDate, setTimetableEndDate] = useState("");
