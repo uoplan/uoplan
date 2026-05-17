@@ -1,21 +1,27 @@
 import { Link } from "@tanstack/react-router";
-import { Anchor, Box, Group, Stack, Text, Title } from "@mantine/core";
+import { Accordion, Anchor, Box, Group, Stack, Text, Title } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { useMemo } from "react";
 import type { Catalogue, ProfessorRatingsMap, Term } from "schedule";
 import { normalizeCourseCode, normalizeProfessorName } from "schedule";
 import { tr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
-import { buildExploreOfferings } from "../../lib/explore/gradesSearch";
+import { buildExploreOfferings, groupOfferingsByCourse } from "../../lib/explore/gradesSearch";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
-  ExploreProfessorOfferingRows,
+  ExploreCourseItem,
 } from "./ExploreProfessorGradesLayout";
 
 /** Mobile breakpoint for responsive padding (in px). */
 const MOBILE_BREAKPOINT_PX = 540;
 const mobileMediaQuery = `@media (max-width: ${MOBILE_BREAKPOINT_PX}px)`;
+
+/** Chevron sits slightly inset from the viewport edge. */
+const EXPLORE_CHEVRON_RIGHT = {
+  base: "12px",
+  xs: "max(12px, calc((100vw - min(100vw, 1200px)) / 2 + 12px))",
+};
 
 function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
   const m = new Map<string, string>();
@@ -55,15 +61,10 @@ export function ExploreProfessorPage({
   const offerings = useMemo(() => {
     if (!grades) return [];
     const all = buildExploreOfferings(grades, titleByCode, termNameById);
-    return all
-      .filter((o) => o.legacyId === legacyId)
-      .sort((a, b) => {
-        const c = a.courseCode.localeCompare(b.courseCode, "en");
-        if (c !== 0) return c;
-        if (b.termId !== a.termId) return b.termId - a.termId;
-        return String(a.section ?? "").localeCompare(String(b.section ?? ""), "en");
-      });
+    return all.filter((o) => o.legacyId === legacyId);
   }, [grades, titleByCode, termNameById, legacyId]);
+
+  const courseGroups = useMemo(() => groupOfferingsByCourse(offerings), [offerings]);
 
   const displayName = offerings[0]?.professorName ?? tr("explore.professorFallback");
 
@@ -151,7 +152,7 @@ export function ExploreProfessorPage({
           <Text c="red" px={24}>
             {tr("explore.loadError", { message: error })}
           </Text>
-        ) : offerings.length === 0 ? (
+        ) : courseGroups.length === 0 ? (
           <Text
             c="dimmed"
             style={{
@@ -173,7 +174,70 @@ export function ExploreProfessorPage({
               marginInline: "calc(50% - 50vw)",
             }}
           >
-            <ExploreProfessorOfferingRows offerings={offerings} showCourseCode />
+            <Accordion
+              multiple
+              radius={0}
+              chevronPosition="right"
+              variant="default"
+              styles={{
+                root: {
+                  backgroundColor: "#141517",
+                  borderTop: "1px solid #2c2e33",
+                },
+                item: {
+                  borderBottom: "1px solid #2c2e33",
+                  backgroundColor: "#18191c",
+                  "&:last-of-type": {
+                    borderBottom: "none",
+                  },
+                },
+                control: {
+                  position: "relative",
+                  paddingTop: "var(--mantine-spacing-lg)",
+                  paddingBottom: "var(--mantine-spacing-lg)",
+                  paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
+                  paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
+                  borderRadius: 0,
+                  backgroundColor: "#18191c",
+                  "@media (max-width: 540px)": {
+                    paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
+                    paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.base,
+                  },
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.04)",
+                  },
+                },
+                label: {
+                  flex: 1,
+                  minWidth: 0,
+                  paddingRight: 0,
+                },
+                panel: {
+                  padding: 0,
+                  backgroundColor: "#141517",
+                },
+                content: {
+                  padding: 0,
+                },
+                chevron: {
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  right: EXPLORE_CHEVRON_RIGHT.xs,
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: 0,
+                  color: "var(--mantine-color-gray-5)",
+                  "@media (max-width: 540px)": {
+                    right: EXPLORE_CHEVRON_RIGHT.base,
+                  },
+                },
+              }}
+            >
+              {courseGroups.map((g) => (
+                <ExploreCourseItem key={g.groupId} group={g} />
+              ))}
+            </Accordion>
           </Box>
         )}
       </Stack>

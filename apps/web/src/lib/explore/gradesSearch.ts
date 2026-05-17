@@ -398,3 +398,59 @@ export function groupOfferingsByProfessor(items: ExploreOfferingFlat[]): Profess
   groups.sort((a, b) => a.displayName.localeCompare(b.displayName, "en"));
   return groups;
 }
+
+export type CourseOfferingGroup = {
+  groupId: string;
+  courseCode: string;
+  courseTitles: string[];
+  offerings: ExploreOfferingFlat[];
+};
+
+export function groupOfferingsByCourse(items: ExploreOfferingFlat[]): CourseOfferingGroup[] {
+  const byGroup = new Map<string, ExploreOfferingFlat[]>();
+  const titles = new Map<string, Set<string>>();
+
+  for (const o of items) {
+    const normCode = normalizeCourseCode(o.courseCode);
+
+    // Add to group
+    let list = byGroup.get(normCode);
+    if (!list) {
+      list = [];
+      byGroup.set(normCode, list);
+    }
+    list.push(o);
+
+    // Track unique titles
+    let titleSet = titles.get(normCode);
+    if (!titleSet) {
+      titleSet = new Set();
+      titles.set(normCode, titleSet);
+    }
+    if (o.courseTitle.trim()) {
+      titleSet.add(o.courseTitle.trim());
+    }
+  }
+
+  const groups: CourseOfferingGroup[] = [];
+  for (const [normCode, offerings] of byGroup) {
+    // Sort offerings: most recent term first, then by section
+    offerings.sort((a, b) => {
+      if (b.termId !== a.termId) return b.termId - a.termId;
+      return String(a.section ?? "").localeCompare(String(b.section ?? ""), "en");
+    });
+
+    const courseTitles = Array.from(titles.get(normCode) ?? []);
+
+    groups.push({
+      groupId: normCode,
+      courseCode: offerings[0].courseCode,
+      courseTitles,
+      offerings,
+    });
+  }
+
+  // Sort groups alphabetically by course code
+  groups.sort((a, b) => a.courseCode.localeCompare(b.courseCode, "en"));
+  return groups;
+}

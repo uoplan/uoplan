@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Box, Group, Paper, Stack, Text } from "@mantine/core";
+import { Accordion, Box, Group, Paper, Stack, Text } from "@mantine/core";
 import { useMemo } from "react";
 import type { ProfessorRatingsMap } from "schedule";
 import { normalizeProfessorName, normalizeGradeVizDistribution } from "schedule";
@@ -10,6 +10,7 @@ import {
 import { tr } from "../../i18n";
 import {
   mergeGradeDistributionCounts,
+  type CourseOfferingGroup,
   type ExploreOfferingFlat,
   type ProfessorOfferingGroup,
 } from "../../lib/explore/gradesSearch";
@@ -129,6 +130,106 @@ export function ExploreProfessorSummaryBar({
         </Box>
       ) : null}
     </Box>
+  );
+}
+
+export type ExploreCourseSummaryBarProps = {
+  group: CourseOfferingGroup;
+};
+
+/** Extract a short label from term label (e.g., "Fall Term 2024" → "Fall 2024") */
+function shortTermLabel(termLabel: string): string {
+  // Remove " Term" from labels like "Fall Term 2024"
+  return termLabel.replace(" Term", "");
+}
+
+export function ExploreCourseSummaryBar({ group }: ExploreCourseSummaryBarProps) {
+  const combinedViz = useMemo(
+    () =>
+      normalizeGradeVizDistribution(
+        mergeGradeDistributionCounts(group.offerings.map((o) => o.distribution)),
+      ),
+    [group.offerings],
+  );
+
+  // Calculate metadata - offerings are already sorted by termId descending
+  const totalSections = group.offerings.length;
+  const newestTermLabel = group.offerings[0]?.termLabel;
+  const oldestTermLabel = group.offerings[group.offerings.length - 1]?.termLabel;
+
+  // Format metadata text: "X sections from Fall 2020 to Winter 2025"
+  let metadata: string;
+  if (totalSections === 1 || newestTermLabel === oldestTermLabel) {
+    metadata = `${totalSections} section${totalSections !== 1 ? "s" : ""} in ${shortTermLabel(newestTermLabel ?? "")}`;
+  } else {
+    metadata = `${totalSections} section${totalSections !== 1 ? "s" : ""} from ${shortTermLabel(oldestTermLabel ?? "")} to ${shortTermLabel(newestTermLabel ?? "")}`;
+  }
+
+  return (
+    <Box
+      w="100%"
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: "var(--mantine-spacing-md)",
+        [mobileMediaQuery]: {
+          flexDirection: "column",
+          alignItems: "stretch",
+        },
+      }}
+    >
+      <Stack gap={4} style={{ minWidth: 0, flex: "1 1 auto" }}>
+        <Text fw={600} c="gray.1" lineClamp={1}>
+          {group.courseCode}
+        </Text>
+        {group.courseTitles.length > 0 && (
+          <Text size="xs" c="dimmed" lineClamp={2}>
+            {group.courseTitles.join(" · ")}
+          </Text>
+        )}
+        {combinedViz ? <GradeDistributionPassingSummary gradeViz={combinedViz} compact /> : null}
+        <Text size="xs" c="dimmed" style={{ whiteSpace: "nowrap" }}>
+          {metadata}
+        </Text>
+      </Stack>
+      {combinedViz ? (
+        <Box
+          style={{
+            flex: "0 0 auto",
+            width: EXPLORE_HISTOGRAM_WIDTH_PX,
+            maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
+            marginLeft: "auto",
+            [mobileMediaQuery]: {
+              width: "100%",
+              maxWidth: "100%",
+              marginLeft: 0,
+            },
+          }}
+        >
+          <GradeDistributionHistogram gradeViz={combinedViz} variant="compact" showStudentCount />
+        </Box>
+      ) : null}
+    </Box>
+  );
+}
+
+export type ExploreCourseItemProps = {
+  group: CourseOfferingGroup;
+};
+
+export function ExploreCourseItem({ group }: ExploreCourseItemProps) {
+  return (
+    <Accordion.Item value={group.groupId}>
+      <Accordion.Control>
+        <ExploreCourseSummaryBar group={group} />
+      </Accordion.Control>
+      <Accordion.Panel>
+        <ExploreProfessorOfferingRows offerings={group.offerings} showCourseCode={false} />
+      </Accordion.Panel>
+    </Accordion.Item>
   );
 }
 
