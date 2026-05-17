@@ -26,6 +26,11 @@
       "custom_domain": true
     },
     {
+      "pattern": "staging.uoplan.party",
+      "zone_name": "uoplan.party",
+      "custom_domain": true
+    },
+    {
       "pattern": "notifications.uoplan.party",
       "zone_name": "uoplan.party",
       "custom_domain": true
