@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.0-beta.14](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.13...uoplan-monorepo-v1.0.0-beta.14) (2026-05-17)
+
+
+### Bug Fixes
+
+* **ci:** use new api url for sending notifications ([9bf2fb4](https://github.com/uoplan/uoplan/commit/9bf2fb4b0514ceeb5a8eb3b5815e7e81cc0e2783))
+* generate wrangler types before typecheck ([6f70cd6](https://github.com/uoplan/uoplan/commit/6f70cd6c8037385e712ce25d0e775eaf7d78fbe7))
+* use correct env var ([1e9f890](https://github.com/uoplan/uoplan/commit/1e9f890693338ee7dddabf3c3acab316f817ac36))
+
 ## [1.0.0-beta.13](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.12...uoplan-monorepo-v1.0.0-beta.13) (2026-05-17)
 
 
