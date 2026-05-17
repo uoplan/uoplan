@@ -8,6 +8,10 @@ import {
   type ExploreProfessorSearchEntry,
 } from "../lib/explore/gradesSearch";
 import { buildExploreSearchFlatItems } from "../components/explore/ExploreSearchResults";
+import {
+  useExploreHistory,
+  type ExploreHistoryEntry,
+} from "../components/explore/ExploreHistoryContext";
 
 export type ExploreSearchNavigate = (opts: {
   to: "/explore/" | "/explore/course/$course" | "/explore/professor/$legacyId";
@@ -21,10 +25,12 @@ export function useExploreSearch({
   courseEntries,
   professorEntries,
   navigateExplore,
+  currentEntry,
 }: {
   courseEntries: ExploreCourseSearchEntry[];
   professorEntries: ExploreProfessorSearchEntry[];
   navigateExplore: ExploreSearchNavigate;
+  currentEntry?: ExploreHistoryEntry;
 }) {
   const [draftQuery, setDraftQuery] = useState("");
   const [debouncedDraft] = useDebouncedValue(draftQuery, DEBOUNCE_MS);
@@ -68,22 +74,26 @@ export function useExploreSearch({
   const staleBecameFresh = prevResultsStale && !resultsStale;
   if (resultsStale !== prevResultsStale) setPrevResultsStale(resultsStale);
 
+  const { push } = useExploreHistory();
+
   const commitCourse = useCallback(
     (c: ExploreCourseSearchEntry) => {
       setPendingEnterPickFirst(false);
       setDraftQuery("");
+      if (currentEntry) push(currentEntry);
       void navigateExplore({
         to: "/explore/course/$course",
         params: { course: courseNormToPathParam(c.normCode) },
       });
     },
-    [navigateExplore],
+    [navigateExplore, currentEntry, push],
   );
 
   const commitProfessor = useCallback(
     (p: ExploreProfessorSearchEntry) => {
       setPendingEnterPickFirst(false);
       setDraftQuery("");
+      if (currentEntry) push(currentEntry);
       void navigateExplore({
         to: "/explore/professor/$legacyId",
         params: {
@@ -91,7 +101,7 @@ export function useExploreSearch({
         },
       });
     },
-    [navigateExplore],
+    [navigateExplore, currentEntry, push],
   );
 
   const clampedHighlight =

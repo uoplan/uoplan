@@ -20,6 +20,11 @@ import {
 } from "./ExploreProfessorGradesLayout";
 import { ExploreSearchResults } from "./ExploreSearchResults";
 import { useExploreSearch, type ExploreSearchNavigate } from "../../hooks/useExploreSearch";
+import {
+  useExploreHistory,
+  ExploreBackButton,
+  type ExploreHistoryEntry,
+} from "./ExploreHistoryContext";
 
 /** Mobile breakpoint for responsive padding (in px). */
 const MOBILE_BREAKPOINT_PX = 540;
@@ -71,6 +76,9 @@ export function ExploreProfessorPage({
   const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
   const termNameById = useMemo(() => buildTermNameById(terms), [terms]);
 
+  const { stack, pop } = useExploreHistory();
+  const backEntry = stack[stack.length - 1];
+
   const allOfferings = useMemo(() => {
     if (!grades) return [];
     return buildExploreOfferings(grades, titleByCode, termNameById);
@@ -94,6 +102,19 @@ export function ExploreProfessorPage({
     [allOfferings],
   );
 
+  const displayName =
+    professorOfferings[0]?.professorName ?? professorNameProp ?? tr("explore.professorFallback");
+
+  const profRouteParam = legacyId != null ? String(legacyId) : encodeURIComponent(displayName);
+  const currentEntry = useMemo<ExploreHistoryEntry>(
+    () => ({
+      to: "/explore/professor/$legacyId",
+      params: { legacyId: profRouteParam },
+      label: displayName,
+    }),
+    [profRouteParam, displayName],
+  );
+
   const {
     draftQuery,
     setDraftQuery,
@@ -105,14 +126,12 @@ export function ExploreProfessorPage({
     resultsStale,
     handleKeyDown,
     showSearchResults: searchActive,
-  } = useExploreSearch({ courseEntries, professorEntries, navigateExplore });
+  } = useExploreSearch({ courseEntries, professorEntries, navigateExplore, currentEntry });
 
   const courseGroups = useMemo(
     () => groupOfferingsByCourse(professorOfferings),
     [professorOfferings],
   );
-
-  const displayName = professorOfferings[0]?.professorName ?? tr("explore.professorFallback");
 
   const ratingLine = useMemo(() => {
     if (!professorRatings) return null;
@@ -147,19 +166,28 @@ export function ExploreProfessorPage({
       <Stack gap={0}>
         {/* Compact search header */}
         <Box px={{ base: 16, xs: 24 }} maw={1200} mx="auto" w="100%" style={{ paddingBottom: 12 }}>
-          <Box style={{ position: "relative", paddingTop: 0 }}>
-            <Anchor
-              component={Link}
-              to="/"
-              c="violet.4"
-              size="sm"
-              style={{ position: "absolute", top: 0, right: 0, zIndex: 1 }}
-            >
-              {tr("app.nav.back")}
-            </Anchor>
+          <Box style={{ paddingTop: 0 }}>
             <Stack gap="xs" align="center" ta="center">
+              {backEntry && (
+                <ExploreBackButton
+                  entry={backEntry}
+                  onBack={() => {
+                    pop();
+                    void navigateExplore({ to: backEntry.to, params: backEntry.params });
+                  }}
+                />
+              )}
               <Title order={3} c="#F8F9FA" fw={600} fz={{ base: "h4", sm: "h3" }}>
-                {tr("explore.title")}
+                <Anchor
+                  component={Link}
+                  to="/explore"
+                  c="inherit"
+                  underline="hover"
+                  fz="inherit"
+                  fw="inherit"
+                >
+                  {tr("explore.title")}
+                </Anchor>
               </Title>
               <Box w="100%" maw={584} mx="auto">
                 <TextInput
@@ -356,7 +384,7 @@ export function ExploreProfessorPage({
                       }}
                     >
                       {courseGroups.map((g) => (
-                        <ExploreCourseItem key={g.groupId} group={g} />
+                        <ExploreCourseItem key={g.groupId} group={g} currentEntry={currentEntry} />
                       ))}
                     </Accordion>
                   </Box>

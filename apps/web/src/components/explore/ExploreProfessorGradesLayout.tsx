@@ -9,6 +9,7 @@ import {
 } from "../calendar/GradeDistributionViz";
 import { tr } from "../../i18n";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
+import { useExploreHistory, type ExploreHistoryEntry } from "./ExploreHistoryContext";
 import {
   mergeGradeDistributionCounts,
   type CourseOfferingGroup,
@@ -61,13 +62,16 @@ export type ExploreProfessorSummaryBarProps = {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
   stopPropagation?: boolean;
+  currentEntry?: ExploreHistoryEntry;
 };
 
 export function ExploreProfessorSummaryBar({
   group,
   professorRatings,
   stopPropagation = false,
+  currentEntry,
 }: ExploreProfessorSummaryBarProps) {
+  const { push } = useExploreHistory();
   const combinedViz = useMemo(
     () =>
       normalizeGradeVizDistribution(
@@ -141,7 +145,10 @@ export function ExploreProfessorSummaryBar({
                 ? String(group.legacyId)
                 : encodeURIComponent(group.displayName),
           }}
-          onClick={stopPropagation ? (e) => e.stopPropagation() : undefined}
+          onClick={(e) => {
+            if (stopPropagation) e.stopPropagation();
+            if (currentEntry) push(currentEntry);
+          }}
           className="explore-name-link"
           style={{
             fontWeight: 600,
@@ -182,9 +189,11 @@ export function ExploreProfessorSummaryBar({
 
 export type ExploreCourseSummaryBarProps = {
   group: CourseOfferingGroup;
+  currentEntry?: ExploreHistoryEntry;
 };
 
-export function ExploreCourseSummaryBar({ group }: ExploreCourseSummaryBarProps) {
+export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSummaryBarProps) {
+  const { push } = useExploreHistory();
   const combinedViz = useMemo(
     () =>
       normalizeGradeVizDistribution(
@@ -226,7 +235,10 @@ export function ExploreCourseSummaryBar({ group }: ExploreCourseSummaryBarProps)
         <Link
           to="/explore/course/$course"
           params={{ course: courseNormToPathParam(group.groupId) }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (currentEntry) push(currentEntry);
+          }}
           className="explore-name-link"
           style={{
             fontWeight: 600,
@@ -270,13 +282,14 @@ export function ExploreCourseSummaryBar({ group }: ExploreCourseSummaryBarProps)
 
 export type ExploreCourseItemProps = {
   group: CourseOfferingGroup;
+  currentEntry?: ExploreHistoryEntry;
 };
 
-export function ExploreCourseItem({ group }: ExploreCourseItemProps) {
+export function ExploreCourseItem({ group, currentEntry }: ExploreCourseItemProps) {
   return (
     <Accordion.Item value={group.groupId}>
       <Accordion.Control>
-        <ExploreCourseSummaryBar group={group} />
+        <ExploreCourseSummaryBar group={group} currentEntry={currentEntry} />
       </Accordion.Control>
       <Accordion.Panel>
         <ExploreProfessorOfferingRows offerings={group.offerings} showCourseCode={false} />

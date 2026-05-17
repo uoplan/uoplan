@@ -57,6 +57,12 @@ msgstr "Loading course data..."
 msgid "app.nav.back"
 msgstr "Back"
 
+msgid "app.nav.backHome"
+msgstr "Home"
+
+msgid "app.nav.backToCourse"
+msgstr "Back to {course}"
+
 msgid "app.nav.next"
 msgstr "Next"
 
