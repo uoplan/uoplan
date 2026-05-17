@@ -3,8 +3,7 @@ import { useLingui } from "@lingui/react";
 import { Box, Button, Group, Modal, Stack, Text, Title, Tooltip } from "@mantine/core";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconCompass, IconHelp, IconRefresh, IconShare } from "@tabler/icons-react";
-import { runTour } from "../../tour";
+import { IconHelp, IconRefresh, IconShare } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { STEPS, StepNav } from "../shared/StepNav";
@@ -442,15 +441,6 @@ export function WizardShell({
                           onClick={() => setHelpModalOpen(true)}
                         >
                           {tr("app.help.action")}
-                        </Button>
-                        <Button
-                          variant="subtle"
-                          color="gray"
-                          size="xs"
-                          leftSection={<IconCompass size={14} />}
-                          onClick={() => runTour(navVisibleStepIndices)}
-                        >
-                          {tr("app.tour.action")}
                         </Button>
                         <Button
                           variant="subtle"
