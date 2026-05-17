@@ -8,6 +8,7 @@ import {
   GradeDistributionPassingSummary,
 } from "../calendar/GradeDistributionViz";
 import { tr } from "../../i18n";
+import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import {
   mergeGradeDistributionCounts,
   type CourseOfferingGroup,
@@ -53,15 +54,13 @@ function professorRatingLine(displayName: string, professorRatings: ProfessorRat
 export type ExploreProfessorSummaryBarProps = {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
-  showProfileLink?: boolean;
-  profileLinkStopPropagation?: boolean;
+  stopPropagation?: boolean;
 };
 
 export function ExploreProfessorSummaryBar({
   group,
   professorRatings,
-  showProfileLink = true,
-  profileLinkStopPropagation = false,
+  stopPropagation = false,
 }: ExploreProfessorSummaryBarProps) {
   const combinedViz = useMemo(
     () =>
@@ -90,26 +89,25 @@ export function ExploreProfessorSummaryBar({
       }}
     >
       <Stack gap={4} style={{ minWidth: 0, flex: "1 1 auto" }}>
-        <Group gap="xs" align="center" wrap="wrap">
-          <Text fw={600} c="gray.1" lineClamp={2}>
-            {group.displayName}
-          </Text>
-          {showProfileLink && group.legacyId != null ? (
-            <Link
-              to="/explore/professor/$legacyId"
-              params={{ legacyId: String(group.legacyId) }}
-              onClick={profileLinkStopPropagation ? (e) => e.stopPropagation() : undefined}
-              style={{
-                fontSize: "var(--mantine-font-size-xs)",
-                color: "var(--mantine-color-violet-4)",
-                textDecoration: "none",
-                flexShrink: 0,
-              }}
-            >
-              {tr("explore.profileLink")}
-            </Link>
-          ) : null}
-        </Group>
+        <Link
+          to="/explore/professor/$legacyId"
+          params={{
+            legacyId:
+              group.legacyId != null
+                ? String(group.legacyId)
+                : encodeURIComponent(group.displayName),
+          }}
+          onClick={stopPropagation ? (e) => e.stopPropagation() : undefined}
+          className="explore-name-link"
+          style={{
+            fontWeight: 600,
+            color: "var(--mantine-color-gray-1)",
+            display: "inline",
+            alignSelf: "flex-start",
+          }}
+        >
+          {group.displayName}
+        </Link>
         {ratingLine}
       </Stack>
       {combinedViz ? (
@@ -182,9 +180,20 @@ export function ExploreCourseSummaryBar({ group }: ExploreCourseSummaryBarProps)
       }}
     >
       <Stack gap={4} style={{ minWidth: 0, flex: "1 1 auto" }}>
-        <Text fw={600} c="gray.1" lineClamp={1}>
+        <Link
+          to="/explore/course/$course"
+          params={{ course: courseNormToPathParam(group.groupId) }}
+          onClick={(e) => e.stopPropagation()}
+          className="explore-name-link"
+          style={{
+            fontWeight: 600,
+            color: "var(--mantine-color-gray-1)",
+            display: "inline",
+            alignSelf: "flex-start",
+          }}
+        >
           {group.courseCode}
-        </Text>
+        </Link>
         {group.courseTitles.length > 0 && (
           <Text size="xs" c="dimmed" lineClamp={2}>
             {group.courseTitles.join(" · ")}

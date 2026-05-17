@@ -34,6 +34,15 @@ a {
   text-decoration: none;
 }
 
+/* Explore page: clickable name links (professor name, course code) */
+.explore-name-link {
+  text-decoration: none;
+}
+
+.explore-name-link:hover {
+  text-decoration: underline;
+}
+
 /* Stamp hover effect for interactive cards */
 .stamp-hover {
   transition:

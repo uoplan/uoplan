@@ -92,7 +92,7 @@ function ExploreCourseProfessorItem({
         <ExploreProfessorSummaryBar
           group={group}
           professorRatings={professorRatings}
-          profileLinkStopPropagation
+          stopPropagation
         />
       </Accordion.Control>
       <Accordion.Panel>
@@ -129,6 +129,7 @@ export function ExploreSearchPage({
   const [pendingEnterPickFirst, setPendingEnterPickFirst] = useState(false);
   const [skipClearDraftOnUrlClear, setSkipClearDraftOnUrlClear] = useState(false);
   const [prevResultsStale, setPrevResultsStale] = useState(false);
+  const [isReSearching, setIsReSearching] = useState(false);
   const [spotlightVariants] = useState(() => pickSpotlightVariants(3));
 
   const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
@@ -200,11 +201,13 @@ export function ExploreSearchPage({
   const resultsStale =
     committedNorm === null && draftTrimmed.length > 0 && draftTrimmed !== debouncedTrimmed;
 
-  const showSearchResults = committedNorm === null && draftTrimmed.length > 0 && !loading && !error;
+  const showSearchResults =
+    committedNorm === null && (draftTrimmed.length > 0 || isReSearching) && !loading && !error;
 
   const commitCourse = useCallback(
     (c: ExploreCourseSearchEntry) => {
       setPendingEnterPickFirst(false);
+      setIsReSearching(false);
       void navigateExplore({
         to: "/explore/course/$course",
         params: { course: courseNormToPathParam(c.normCode) },
@@ -215,11 +218,13 @@ export function ExploreSearchPage({
 
   const commitProfessor = useCallback(
     (p: ExploreProfessorSearchEntry) => {
-      if (p.legacyId == null) return;
       setPendingEnterPickFirst(false);
+      setIsReSearching(false);
       void navigateExplore({
         to: "/explore/professor/$legacyId",
-        params: { legacyId: String(p.legacyId) },
+        params: {
+          legacyId: p.legacyId != null ? String(p.legacyId) : encodeURIComponent(p.displayName),
+        },
       });
     },
     [navigateExplore],
@@ -234,6 +239,7 @@ export function ExploreSearchPage({
     setUrlNormForDraft(urlNorm);
     if (urlNorm == null && !skipClearDraftOnUrlClear) {
       setDraftQuery("");
+      setIsReSearching(false);
     }
     setSkipClearDraftOnUrlClear(false);
   }
@@ -251,7 +257,7 @@ export function ExploreSearchPage({
           commitCourse(item.entry);
           return;
         }
-        if (item.kind === "professor" && item.entry.legacyId != null) {
+        if (item.kind === "professor") {
           commitProfessor(item.entry);
           return;
         }
@@ -371,6 +377,7 @@ export function ExploreSearchPage({
                     setDraftQuery(v);
                     if (urlNorm != null) {
                       setSkipClearDraftOnUrlClear(true);
+                      setIsReSearching(true);
                       void navigateExplore({
                         to: "/explore/",
                         replace: true,

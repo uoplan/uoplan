@@ -43,11 +43,14 @@ function buildTermNameById(terms: Term[]): Map<number, string> {
 
 export function ExploreProfessorPage({
   legacyId,
+  professorName: professorNameProp,
   catalogue,
   terms,
   professorRatings,
-}: {
-  legacyId: number;
+}: (
+  | { legacyId: number; professorName?: undefined }
+  | { professorName: string; legacyId?: undefined }
+) & {
   catalogue: Catalogue | null;
   terms: Term[];
   professorRatings: ProfessorRatingsMap | null;
@@ -61,8 +64,12 @@ export function ExploreProfessorPage({
   const offerings = useMemo(() => {
     if (!grades) return [];
     const all = buildExploreOfferings(grades, titleByCode, termNameById);
-    return all.filter((o) => o.legacyId === legacyId);
-  }, [grades, titleByCode, termNameById, legacyId]);
+    if (legacyId != null) {
+      return all.filter((o) => o.legacyId === legacyId);
+    }
+    const nameLower = professorNameProp?.toLowerCase() ?? "";
+    return all.filter((o) => o.professorName.toLowerCase() === nameLower);
+  }, [grades, titleByCode, termNameById, legacyId, professorNameProp]);
 
   const courseGroups = useMemo(() => groupOfferingsByCourse(offerings), [offerings]);
 
@@ -80,7 +87,7 @@ export function ExploreProfessorPage({
   }, [professorRatings, displayName]);
 
   const rmpHref =
-    Number.isFinite(legacyId) && legacyId > 0
+    legacyId != null && Number.isFinite(legacyId) && legacyId > 0
       ? `https://www.ratemyprofessors.com/professor/${legacyId}`
       : null;
 

@@ -12,6 +12,7 @@ export const Route = createFileRoute("/explore/professor/$legacyId")({
 function ExploreProfessorRoute() {
   const { legacyId } = Route.useParams();
   const parsed = Number.parseInt(legacyId, 10);
+  const isNumeric = Number.isFinite(parsed) && parsed > 0;
 
   const { catalogue, terms, professorRatings } = useAppStore(
     useShallow((s) => ({
@@ -21,7 +22,19 @@ function ExploreProfessorRoute() {
     })),
   );
 
-  if (!Number.isFinite(parsed) || parsed <= 0) {
+  if (isNumeric) {
+    return (
+      <ExploreProfessorPage
+        legacyId={parsed}
+        catalogue={catalogue}
+        terms={terms ?? []}
+        professorRatings={professorRatings}
+      />
+    );
+  }
+
+  const professorName = decodeURIComponent(legacyId);
+  if (!professorName) {
     return (
       <Box p={24} style={{ backgroundColor: "#141517", minHeight: "100vh" }}>
         <Text c="dimmed">{tr("explore.invalidProfessor")}</Text>
@@ -31,7 +44,7 @@ function ExploreProfessorRoute() {
 
   return (
     <ExploreProfessorPage
-      legacyId={parsed}
+      professorName={professorName}
       catalogue={catalogue}
       terms={terms ?? []}
       professorRatings={professorRatings}
