@@ -18,10 +18,7 @@ import { BasicCourseFiltersCard } from "../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../i18n";
 import { parseTranscriptPdf, isOptCourse, normalizeCourseCode } from "schedule";
-import {
-  basicElectivesAfterPinnedDelta,
-  canGenerateBasicSchedule,
-} from "../../lib/basicCalendarPins";
+import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
 import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 
 export function BasicCalendarSidebarControls({
@@ -216,12 +213,6 @@ export function BasicCalendarSidebarControls({
           data={requiredCourseOptions}
           value={basicPinnedCourses}
           onChange={(v) => {
-            const pinnedDelta = v.length - basicPinnedCourses.length;
-            if (pinnedDelta !== 0) {
-              setBasicElectivesCount(
-                basicElectivesAfterPinnedDelta(basicElectivesCount, pinnedDelta),
-              );
-            }
             setBasicPinnedCourses(v);
             markBasicSettingsChanged();
           }}
