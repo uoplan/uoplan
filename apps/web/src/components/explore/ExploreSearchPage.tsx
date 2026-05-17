@@ -313,12 +313,19 @@ export function ExploreSearchPage({
             </Stack>
           ) : (
             <Stack gap="xs" align="center" ta="center">
-              {backEntry && (
+              {backEntry ? (
                 <ExploreBackButton
                   entry={backEntry}
                   onBack={() => {
                     pop();
                     void navigateExplore({ to: backEntry.to, params: backEntry.params });
+                  }}
+                />
+              ) : (
+                <ExploreBackButton
+                  entry={{ to: "/explore/", label: tr("explore.title") }}
+                  onBack={() => {
+                    void navigateExplore({ to: "/explore/" });
                   }}
                 />
               )}

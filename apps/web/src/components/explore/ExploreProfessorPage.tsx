@@ -168,12 +168,19 @@ export function ExploreProfessorPage({
         <Box px={{ base: 16, xs: 24 }} maw={1200} mx="auto" w="100%" style={{ paddingBottom: 12 }}>
           <Box style={{ paddingTop: 0 }}>
             <Stack gap="xs" align="center" ta="center">
-              {backEntry && (
+              {backEntry ? (
                 <ExploreBackButton
                   entry={backEntry}
                   onBack={() => {
                     pop();
                     void navigateExplore({ to: backEntry.to, params: backEntry.params });
+                  }}
+                />
+              ) : (
+                <ExploreBackButton
+                  entry={{ to: "/explore/", label: tr("explore.title") }}
+                  onBack={() => {
+                    void navigateExplore({ to: "/explore/" });
                   }}
                 />
               )}

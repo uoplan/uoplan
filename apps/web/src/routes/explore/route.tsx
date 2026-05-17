@@ -1,6 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { AppDataRouteGate } from "../../components/shared/AppDataRouteGate";
-import { RouteEnterTransition } from "../../components/shared/RouteEnterTransition";
 import { ExploreHistoryProvider } from "../../components/explore/ExploreHistoryContext";
 
 export const Route = createFileRoute("/explore")({
@@ -10,11 +9,9 @@ export const Route = createFileRoute("/explore")({
 function ExploreLayoutRoute() {
   return (
     <AppDataRouteGate>
-      <RouteEnterTransition>
-        <ExploreHistoryProvider>
-          <Outlet />
-        </ExploreHistoryProvider>
-      </RouteEnterTransition>
+      <ExploreHistoryProvider>
+        <Outlet />
+      </ExploreHistoryProvider>
     </AppDataRouteGate>
   );
 }
