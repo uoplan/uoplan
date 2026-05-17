@@ -7,7 +7,7 @@
     "build": "pnpm generate && pnpm --filter scrapers build:proto && pnpm --filter web build",
     "deploy": "pnpm build && wrangler deploy",
     "generate": "pnpm -r generate",
-    "typecheck": "pnpm -r typecheck",
+    "typecheck": "pnpm wrangler types && pnpm -r typecheck",
     "lint": "pnpm -r lint",
     "lint:fix": "pnpm -r lint:fix",
     "format": "oxfmt",
