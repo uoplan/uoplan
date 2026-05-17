@@ -1,5 +1,5 @@
 {
-  "name": "uoplan",
+  "name": "uoplan-notifications",
   "main": "apps/notifications/src/index.ts",
   "compatibility_date": "2025-04-29",
   "compatibility_flags": ["nodejs_compat"],
