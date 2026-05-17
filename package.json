@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "pnpm generate && pnpm --filter scrapers build:proto && pnpm --filter web dev",
     "build": "pnpm generate && pnpm --filter scrapers build:proto && pnpm --filter web build",
-    "deploy": "pnpm build && wrangler deploy",
+    "deploy": "wrangler deploy",
     "generate": "pnpm -r generate",
     "typecheck": "pnpm wrangler types && pnpm -r typecheck",
     "lint": "pnpm -r lint",
