@@ -66,10 +66,9 @@ No Worker requests happen on page load — state is read entirely from `localSto
 
 ### Vite env vars
 
-| Var                      | Where                               | Description                                                                       |
-| ------------------------ | ----------------------------------- | --------------------------------------------------------------------------------- |
-| `VITE_VAPID_PUBLIC_KEY`  | Cloudflare Pages env / `.env.local` | VAPID public key; used by the subscribe flow                                      |
-| `VITE_NOTIFICATIONS_URL` | `.env.local` only                   | Override Worker URL for local dev (default: `https://notifications.uoplan.party`) |
+| Var                     | Where                               | Description                                  |
+| ----------------------- | ----------------------------------- | -------------------------------------------- |
+| `VITE_VAPID_PUBLIC_KEY` | Cloudflare Pages env / `.env.local` | VAPID public key; used by the subscribe flow |
 
 ### GitHub Actions secrets
 
@@ -96,7 +95,6 @@ For local dev, create `apps/web/.env.local`:
 
 ```
 VITE_VAPID_PUBLIC_KEY=<your_public_key>
-VITE_NOTIFICATIONS_URL=http://localhost:8787
 ```
 
 ---

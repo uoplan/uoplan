@@ -154,9 +154,9 @@ export default {
     }
 
     if (req.method === "POST") {
-      if (pathname === "/subscribe") return handleSubscribe(req, env);
-      if (pathname === "/unsubscribe") return handleUnsubscribe(req, env);
-      if (pathname === "/send") return handleSend(req, env);
+      if (pathname === "/api/subscribe") return handleSubscribe(req, env);
+      if (pathname === "/api/unsubscribe") return handleUnsubscribe(req, env);
+      if (pathname === "/api/send") return handleSend(req, env);
     }
 
     return env.ASSETS.fetch(req);
