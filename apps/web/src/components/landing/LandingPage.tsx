@@ -1,10 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { useLingui } from "@lingui/react";
 import { Badge, Box, Paper, SimpleGrid, Stack, Text, Title } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { IconAffiliate, IconCalendar, IconCompass } from "@tabler/icons-react";
 import { motion } from "framer-motion";
-import type { ReactNode } from "react";
-import { tr } from "../../i18n";
+import { useCallback, useState, type ReactNode } from "react";
+import { dynamicActivate, tr, type AppLocale } from "../../i18n";
+import { LanguageSwitcher } from "../shared/LanguageSwitcher";
 
 type LandingTileProps = {
   to: string;
@@ -93,20 +95,38 @@ function LandingTile({
 export function LandingPage() {
   useLingui();
 
+  const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const [isLangTransitioning, setIsLangTransitioning] = useState(false);
+
+  const handleLangSwitch = useCallback(
+    async (locale: AppLocale) => {
+      if (prefersReducedMotion) {
+        await dynamicActivate(locale);
+        return;
+      }
+      setIsLangTransitioning(true);
+      await new Promise((r) => setTimeout(r, 130));
+      await dynamicActivate(locale);
+      setIsLangTransitioning(false);
+    },
+    [prefersReducedMotion],
+  );
+
   const betaLabel = tr("app.beta");
   const experimentalLabel = tr("app.experimental");
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={{ opacity: isLangTransitioning ? 0 : 1, y: isLangTransitioning ? 0 : 0 }}
       exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: isLangTransitioning ? 0.13 : 0.3, ease: "easeInOut" }}
       style={{ width: "100%", minHeight: "100vh" }}
     >
       <Box
         component="main"
         style={{
+          position: "relative",
           minHeight: "100vh",
           padding: 24,
           backgroundColor: "#141517",
@@ -116,6 +136,16 @@ export function LandingPage() {
           justifyContent: "center",
         }}
       >
+        <Box
+          style={{
+            position: "absolute",
+            top: 16,
+            right: 16,
+          }}
+        >
+          <LanguageSwitcher onSwitch={handleLangSwitch} />
+        </Box>
+
         <Stack gap="xl" align="center" w="100%" maw={960} pb={16}>
           <Title
             order={1}
