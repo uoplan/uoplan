@@ -117,10 +117,8 @@ export function LandingPage() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: isLangTransitioning ? 0 : 1, y: isLangTransitioning ? 0 : 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: isLangTransitioning ? 0.13 : 0.3, ease: "easeInOut" }}
+      animate={{ opacity: isLangTransitioning ? 0 : 1 }}
+      transition={{ duration: 0.13 }}
       style={{ width: "100%", minHeight: "100vh" }}
     >
       <Box
