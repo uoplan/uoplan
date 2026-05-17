@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useLingui } from "@lingui/react";
-import { Box, Button, ScrollArea, Stack, Title } from "@mantine/core";
+import { Box, Stack, Title } from "@mantine/core";
 import { motion } from "framer-motion";
 import changelogHtml from "virtual:changelog-html";
 import { tr } from "../i18n";
@@ -30,17 +30,10 @@ function ChangelogRoute() {
         }}
       >
         <Stack gap="md" maw={900} mx="auto">
-          <Link to="/" style={{ alignSelf: "flex-start" }}>
-            <Button variant="subtle" color="gray" size="sm">
-              {tr("app.nav.back")}
-            </Button>
-          </Link>
           <Title order={2} c="#F8F9FA" fw={600}>
             {tr("app.changelog.title")}
           </Title>
-          <ScrollArea.Autosize mah="calc(100vh - 140px)" type="auto" offsetScrollbars>
-            <Box className="changelog-html" dangerouslySetInnerHTML={{ __html: changelogHtml }} />
-          </ScrollArea.Autosize>
+          <Box className="changelog-html" dangerouslySetInnerHTML={{ __html: changelogHtml }} />
         </Stack>
       </Box>
     </motion.div>

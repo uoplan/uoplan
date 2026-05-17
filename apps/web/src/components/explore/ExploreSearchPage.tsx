@@ -1,4 +1,4 @@
-import { Accordion, Anchor, Box, Stack, Text, TextInput, Title } from "@mantine/core";
+import { Accordion, Box, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
@@ -29,7 +29,6 @@ import {
   ExploreProfessorOfferingRows,
   ExploreProfessorSummaryBar,
 } from "./ExploreProfessorGradesLayout";
-import { Link } from "@tanstack/react-router";
 import { useExploreSearch, type ExploreSearchNavigate } from "../../hooks/useExploreSearch";
 
 export type { ExploreSearchNavigate };
@@ -269,16 +268,6 @@ export function ExploreSearchPage({
               : { paddingTop: 0, paddingBottom: 12 }),
           }}
         >
-          <Anchor
-            component={Link}
-            to="/"
-            c="violet.4"
-            size="sm"
-            style={{ position: "absolute", top: 0, right: 0, zIndex: 1 }}
-          >
-            {tr("app.nav.back")}
-          </Anchor>
-
           {landingBrowse ? (
             <Stack gap="md" align="center" ta="center">
               <Title order={2} c="#F8F9FA" fw={600} fz={{ base: "h3", sm: "h2" }}>
