@@ -16,7 +16,7 @@
     }
   ],
   "vars": {
-    "VITE_VAPID_PUBLIC_KEY": "BOh-leSM9bDtztY_UjyEzzu0-ycPoYFMqHscB6iANmA-XX2rJcaJ-E-Az11LegK8tTkdfANYFRXh_ewEpS88H9c",
+    "VAPID_PUBLIC_KEY": "BOh-leSM9bDtztY_UjyEzzu0-ycPoYFMqHscB6iANmA-XX2rJcaJ-E-Az11LegK8tTkdfANYFRXh_ewEpS88H9c",
     "VAPID_SUBJECT": "mailto:admin@uoplan.party"
   },
   "routes": [
