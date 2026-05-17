@@ -4,7 +4,6 @@ import { IconRefresh, IconShare } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { tr } from "../../i18n";
-import { LanguageSwitcher } from "../shared/LanguageSwitcher";
 import { ResetModal } from "../shared/ResetModal";
 
 export function BasicCalendarHeaderActions({ onBack }: { onBack: () => void }) {
@@ -18,7 +17,6 @@ export function BasicCalendarHeaderActions({ onBack }: { onBack: () => void }) {
   return (
     <>
       <Group gap="xs" wrap="wrap">
-        <LanguageSwitcher />
         {indices && (
           <Tooltip
             label="Copied to clipboard!"
