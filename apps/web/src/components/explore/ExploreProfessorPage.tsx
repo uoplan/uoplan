@@ -13,6 +13,10 @@ import {
   ExploreProfessorOfferingRows,
 } from "./ExploreProfessorGradesLayout";
 
+/** Mobile breakpoint for responsive padding (in px). */
+const MOBILE_BREAKPOINT_PX = 540;
+const mobileMediaQuery = `@media (max-width: ${MOBILE_BREAKPOINT_PX}px)`;
+
 function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
   const m = new Map<string, string>();
   if (!catalogue) return m;
@@ -94,9 +98,13 @@ export function ExploreProfessorPage({
       <Stack gap={0}>
         <Box
           style={{
-            paddingLeft: EXPLORE_ACCORDION_PAD_INLINE,
-            paddingRight: EXPLORE_ACCORDION_PAD_RIGHT,
+            paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
+            paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
             paddingTop: 24,
+            [mobileMediaQuery]: {
+              paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
+              paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.base,
+            },
           }}
         >
           <Anchor component={Link} to="/explore" size="sm" c="violet.4">
@@ -106,13 +114,19 @@ export function ExploreProfessorPage({
 
         <Box
           style={{
-            paddingLeft: EXPLORE_ACCORDION_PAD_INLINE,
-            paddingRight: EXPLORE_ACCORDION_PAD_RIGHT,
-            paddingTop: 40,
-            paddingBottom: 40,
+            paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
+            paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
+            paddingTop: 32,
+            paddingBottom: 32,
+            [mobileMediaQuery]: {
+              paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
+              paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.base,
+              paddingTop: 24,
+              paddingBottom: 24,
+            },
           }}
         >
-          <Title order={2} c="#F8F9FA" fw={600}>
+          <Title order={2} c="#F8F9FA" fw={600} fz={{ base: "h3", sm: "h2" }}>
             {displayName}
           </Title>
           {(ratingLine || rmpHref) && (
@@ -141,8 +155,12 @@ export function ExploreProfessorPage({
           <Text
             c="dimmed"
             style={{
-              paddingLeft: EXPLORE_ACCORDION_PAD_INLINE,
-              paddingRight: EXPLORE_ACCORDION_PAD_RIGHT,
+              paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
+              paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
+              [mobileMediaQuery]: {
+                paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
+                paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.base,
+              },
             }}
           >
             {tr("explore.professorNoCourses")}

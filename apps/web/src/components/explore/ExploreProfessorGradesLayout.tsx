@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Box, Group, Paper, Stack, Text } from "@mantine/core";
-import { useMemo, type CSSProperties } from "react";
+import { useMemo } from "react";
 import type { ProfessorRatingsMap } from "schedule";
 import { normalizeProfessorName, normalizeGradeVizDistribution } from "schedule";
 import {
@@ -14,23 +14,29 @@ import {
   type ProfessorOfferingGroup,
 } from "../../lib/explore/gradesSearch";
 
-export const EXPLORE_ACCORDION_PAD_INLINE =
-  "max(24px, calc((100vw - min(100vw, 1200px)) / 2 + 24px))";
+/** Mobile breakpoint for stacking histogram below text (in px). */
+const MOBILE_BREAKPOINT_PX = 540;
+
+/** Padding inline for accordion - responsive: smaller on mobile. */
+export const EXPLORE_ACCORDION_PAD_INLINE = {
+  base: "16px",
+  xs: "max(24px, calc((100vw - min(100vw, 1200px)) / 2 + 24px))",
+};
 
 /** Space reserved beside content so accordion chevron does not shift histogram alignment. */
 export const EXPLORE_CHEVRON_GUTTER_PX = 40;
 
-export const EXPLORE_ACCORDION_PAD_RIGHT = `calc(${EXPLORE_ACCORDION_PAD_INLINE} + ${EXPLORE_CHEVRON_GUTTER_PX}px)`;
+/** Padding right for accordion - responsive with chevron gutter. */
+export const EXPLORE_ACCORDION_PAD_RIGHT = {
+  base: `calc(16px + ${EXPLORE_CHEVRON_GUTTER_PX}px)`,
+  xs: `calc(max(24px, calc((100vw - min(100vw, 1200px)) / 2 + 24px)) + ${EXPLORE_CHEVRON_GUTTER_PX}px)`,
+};
 
 /** Compact explore histogram width (accordion + professor rows). */
 export const EXPLORE_HISTOGRAM_WIDTH_PX = 288;
 
-export const exploreHistogramBoxStyle: CSSProperties = {
-  flex: "0 0 auto",
-  width: EXPLORE_HISTOGRAM_WIDTH_PX,
-  maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
-  marginLeft: "auto",
-};
+/** CSS media query for mobile stacking. */
+const mobileMediaQuery = `@media (max-width: ${MOBILE_BREAKPOINT_PX}px)`;
 
 function professorRatingLine(displayName: string, professorRatings: ProfessorRatingsMap | null) {
   if (!professorRatings) return null;
@@ -67,7 +73,21 @@ export function ExploreProfessorSummaryBar({
   const ratingLine = professorRatingLine(group.displayName, professorRatings);
 
   return (
-    <Group justify="space-between" align="center" gap="md" wrap="nowrap" w="100%">
+    <Box
+      w="100%"
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: "var(--mantine-spacing-md)",
+        [mobileMediaQuery]: {
+          flexDirection: "column",
+          alignItems: "stretch",
+        },
+      }}
+    >
       <Stack gap={4} style={{ minWidth: 0, flex: "1 1 auto" }}>
         <Group gap="xs" align="center" wrap="wrap">
           <Text fw={600} c="gray.1" lineClamp={2}>
@@ -92,11 +112,23 @@ export function ExploreProfessorSummaryBar({
         {ratingLine}
       </Stack>
       {combinedViz ? (
-        <Box style={exploreHistogramBoxStyle}>
+        <Box
+          style={{
+            flex: "0 0 auto",
+            width: EXPLORE_HISTOGRAM_WIDTH_PX,
+            maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
+            marginLeft: "auto",
+            [mobileMediaQuery]: {
+              width: "100%",
+              maxWidth: "100%",
+              marginLeft: 0,
+            },
+          }}
+        >
           <GradeDistributionHistogram gradeViz={combinedViz} variant="compact" showStudentCount />
         </Box>
       ) : null}
-    </Group>
+    </Box>
   );
 }
 
@@ -126,11 +158,28 @@ export function ExploreProfessorOfferingRows({
               borderRight: "none",
               paddingTop: "var(--mantine-spacing-lg)",
               paddingBottom: "var(--mantine-spacing-lg)",
-              paddingLeft: EXPLORE_ACCORDION_PAD_INLINE,
-              paddingRight: EXPLORE_ACCORDION_PAD_RIGHT,
+              paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
+              paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
+              [mobileMediaQuery]: {
+                paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
+                paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.base,
+              },
             }}
           >
-            <Group justify="space-between" align="center" wrap="nowrap" gap="md">
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "var(--mantine-spacing-md)",
+                [mobileMediaQuery]: {
+                  flexDirection: "column",
+                  alignItems: "stretch",
+                },
+              }}
+            >
               <Stack gap={6} style={{ minWidth: 0, flex: "1 1 auto" }}>
                 {showCourseCode ? (
                   <Stack gap={2}>
@@ -163,7 +212,19 @@ export function ExploreProfessorOfferingRows({
                 )}
               </Stack>
               {sectionViz ? (
-                <Box style={exploreHistogramBoxStyle}>
+                <Box
+                  style={{
+                    flex: "0 0 auto",
+                    width: EXPLORE_HISTOGRAM_WIDTH_PX,
+                    maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
+                    marginLeft: "auto",
+                    [mobileMediaQuery]: {
+                      width: "100%",
+                      maxWidth: "100%",
+                      marginLeft: 0,
+                    },
+                  }}
+                >
                   <GradeDistributionHistogram
                     gradeViz={sectionViz}
                     variant="compact"
@@ -171,7 +232,7 @@ export function ExploreProfessorOfferingRows({
                   />
                 </Box>
               ) : null}
-            </Group>
+            </Box>
           </Paper>
         );
       })}
