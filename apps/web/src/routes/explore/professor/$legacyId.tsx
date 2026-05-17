@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Box, Text } from "@mantine/core";
 import { useShallow } from "zustand/react/shallow";
 import { ExploreProfessorPage } from "../../../components/explore/ExploreProfessorPage";
+import { type ExploreSearchNavigate } from "../../../hooks/useExploreSearch";
 import { tr } from "../../../i18n";
 import { useAppStore } from "../../../store/appStore";
 
@@ -22,6 +23,8 @@ function ExploreProfessorRoute() {
     })),
   );
 
+  const navigate = Route.useNavigate();
+
   if (isNumeric) {
     return (
       <ExploreProfessorPage
@@ -29,6 +32,7 @@ function ExploreProfessorRoute() {
         catalogue={catalogue}
         terms={terms ?? []}
         professorRatings={professorRatings}
+        navigateExplore={navigate as ExploreSearchNavigate}
       />
     );
   }
@@ -48,6 +52,7 @@ function ExploreProfessorRoute() {
       catalogue={catalogue}
       terms={terms ?? []}
       professorRatings={professorRatings}
+      navigateExplore={navigate as ExploreSearchNavigate}
     />
   );
 }
