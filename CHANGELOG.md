@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0-beta.13](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.12...uoplan-monorepo-v1.0.0-beta.13) (2026-05-17)
+
+
+### Features
+
+* add date range for profs in course explorer ([#29](https://github.com/uoplan/uoplan/issues/29)) ([ee635b6](https://github.com/uoplan/uoplan/commit/ee635b67cc25df96037dde1401e446caa8e30189))
+* group courses in professor page ([#28](https://github.com/uoplan/uoplan/issues/28)) ([d10de6b](https://github.com/uoplan/uoplan/commit/d10de6b0c62c2874f5c712bc9b52428619c1b7c7))
+* improve search bar on explore page ([a9bfd49](https://github.com/uoplan/uoplan/commit/a9bfd49264a70f967ad9e5416031770c4bfbe071))
+* make all prof and course codes clickable in explore page ([79ff963](https://github.com/uoplan/uoplan/commit/79ff96312d64f28ec9d03152d31ab54e1e1a5567))
+* show neighbours on mobile drawer for graph ([4621107](https://github.com/uoplan/uoplan/commit/46211078eaf89ed4dcf19095923c31f649af8da9))
+
 ## [1.0.0-beta.12](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.11...uoplan-monorepo-v1.0.0-beta.12) (2026-05-17)
 
 
