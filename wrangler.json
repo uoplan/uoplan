@@ -1,8 +1,14 @@
 {
-  "name": "uoplan-notifications",
-  "main": "src/index.ts",
+  "name": "uoplan",
+  "main": "apps/notifications/src/index.ts",
   "compatibility_date": "2025-04-29",
   "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "apps/web/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/subscribe", "/unsubscribe", "/send"]
+  },
   "kv_namespaces": [
     {
       "binding": "WEBPUSH_SUBSCRIPTIONS",
@@ -15,8 +21,9 @@
   },
   "routes": [
     {
-      "pattern": "notifications.uoplan.party/*",
-      "zone_name": "uoplan.party"
+      "pattern": "uoplan.party",
+      "zone_name": "uoplan.party",
+      "custom_domain": true
     },
     {
       "pattern": "notifications.uoplan.party",
