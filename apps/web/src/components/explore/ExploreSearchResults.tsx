@@ -55,7 +55,7 @@ function ExploreProfessorResultRow({
   onHighlight: () => void;
   onSelect: () => void;
 }) {
-  const navigable = entry.legacyId != null;
+  const navigable = true;
   const ratingLine = professorRatingLine(entry.displayName, professorRatings);
 
   return (
