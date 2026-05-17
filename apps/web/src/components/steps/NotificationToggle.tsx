@@ -3,9 +3,6 @@ import { Alert, Box, Group, Loader, Switch, Text } from "@mantine/core";
 import { IconAlertTriangle, IconBell, IconBellOff } from "@tabler/icons-react";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 
-const WORKER_URL =
-  (import.meta.env.VITE_NOTIFICATIONS_URL as string | undefined) ??
-  "https://notifications.uoplan.party";
 const VAPID_PUBLIC_KEY = (import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined) ?? "";
 const TURNSTILE_SITE_KEY =
   (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) ?? "0x4AAAAAADGEYLH_6_yl1r5j";
@@ -108,7 +105,7 @@ export function NotificationToggle() {
       const token = await getTurnstileToken();
       turnstileRef.current?.reset();
 
-      await fetch(`${WORKER_URL}/subscribe`, {
+      await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...sub.toJSON(), "cf-turnstile-response": token }),
@@ -135,7 +132,7 @@ export function NotificationToggle() {
       const sub = await reg.pushManager.getSubscription();
       await sub?.unsubscribe();
 
-      await fetch(`${WORKER_URL}/unsubscribe`, {
+      await fetch("/api/unsubscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -484,9 +484,6 @@ import { useState } from "react";
 import { Group, Switch, Text, Tooltip } from "@mantine/core";
 import { IconBell, IconBellOff } from "@tabler/icons-react";
 
-const WORKER_URL =
-  (import.meta.env.VITE_NOTIFICATIONS_URL as string | undefined) ??
-  "https://notifications.uoplan.party";
 const VAPID_PUBLIC_KEY = (import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined) ?? "";
 const LS_KEY = "uoplan-notifications";
 
