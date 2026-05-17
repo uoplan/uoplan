@@ -14,19 +14,6 @@ await initializeI18n();
 const router = createRouter({ routeTree });
 setRouterInstance(router);
 
-// Patch history to trigger view transitions immediately on navigation —
-// before TanStack Router's async pipeline — so the screenshot is captured
-// at the moment the user acts, not 1s later after loaders resolve.
-if (typeof document !== "undefined" && "startViewTransition" in document) {
-  const hist = router.history;
-  const origPush = hist.push.bind(hist);
-  const origReplace = hist.replace.bind(hist);
-  const svt = (fn: () => void) =>
-    (document as Document & { startViewTransition(cb: () => void): void }).startViewTransition(fn);
-  hist.push = (to, state) => svt(() => origPush(to, state));
-  hist.replace = (to, state) => svt(() => origReplace(to, state));
-}
-
 declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;

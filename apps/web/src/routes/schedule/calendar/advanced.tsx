@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import { CalendarPage } from "../../../components/calendar/CalendarPage";
 import { navigateToWizardStep } from "../../../lib/appNavigation";
 import { WizardStep } from "../../../lib/wizardSteps";
@@ -29,14 +28,6 @@ function AdvancedCalendarRoute() {
   }, [indices, currentSchedule, firstSeed, generateSchedules]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.3 }}
-      style={{ width: "100%", minHeight: "100vh" }}
-    >
-      <CalendarPage variant="advanced" onBack={() => navigateToWizardStep(WizardStep.Generate)} />
-    </motion.div>
+    <CalendarPage variant="advanced" onBack={() => navigateToWizardStep(WizardStep.Generate)} />
   );
 }

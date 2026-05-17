@@ -1,8 +1,16 @@
-import { createRootRoute, HeadContent, Link, Outlet } from "@tanstack/react-router";
+import {
+  createRootRoute,
+  HeadContent,
+  Link,
+  Outlet,
+  useLocation,
+  useRouterState,
+} from "@tanstack/react-router";
 import { buildRootHead } from "../lib/seo";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLingui } from "@lingui/react";
 import { Box, Text } from "@mantine/core";
+import { motion, useAnimation } from "framer-motion";
 import { usePersistState } from "../hooks/usePersistState";
 import { useAppStore } from "../store/appStore";
 import { tr } from "../i18n";
@@ -47,12 +55,32 @@ function NotFound() {
 function RootLayout() {
   const loadData = useAppStore((s) => s.loadData);
   const indices = useAppStore((s) => s.indices);
+  const { pathname } = useLocation();
+  const routerStatus = useRouterState({ select: (s) => s.status });
+  const controls = useAnimation();
+  const pendingAnimation = useRef(false);
 
   useEffect(() => {
     void loadData();
   }, [loadData]);
 
   usePersistState(!!indices);
+
+  useEffect(() => {
+    pendingAnimation.current = true;
+    controls.set({ opacity: 0, y: 18 });
+  }, [pathname, controls]);
+
+  useEffect(() => {
+    if (routerStatus === "idle" && pendingAnimation.current) {
+      pendingAnimation.current = false;
+      void controls.start({
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+      });
+    }
+  }, [routerStatus, controls]);
 
   return (
     <Box
@@ -65,7 +93,9 @@ function RootLayout() {
     >
       <HeadContent />
       <Box style={{ flex: 1 }}>
-        <Outlet />
+        <motion.div animate={controls}>
+          <Outlet />
+        </motion.div>
       </Box>
       <AppFooter />
     </Box>
