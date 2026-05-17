@@ -127,7 +127,7 @@ msgid "graph.nodeDetails"
 msgstr "Détails du professeur"
 
 msgid "explore.title"
-msgstr "Explorer les cours"
+msgstr "Explorateur de cours"
 
 msgid "explore.subtitle"
 msgstr "Consultez les répartitions de notes par cours, titre ou nom de professeur."
