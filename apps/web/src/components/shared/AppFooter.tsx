@@ -1,0 +1,167 @@
+import { useLingui } from "@lingui/react";
+import { Anchor, Box, Group, Stack, Text } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
+import { Link } from "@tanstack/react-router";
+import { tr } from "../../i18n";
+
+const ONTARIO_FIPPA_ACT_URL = "https://www.ontario.ca/laws/statute/90f31";
+
+export function AppFooter() {
+  useLingui();
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  return (
+    <Box
+      component="footer"
+      mt={isMobile ? 20 : 28}
+      pt={isMobile ? 14 : 18}
+      pb="max(14px, env(safe-area-inset-bottom))"
+      style={{
+        alignSelf: "stretch",
+        borderTop: "1px solid #2C2E33",
+      }}
+    >
+      <Box
+        style={{
+          maxWidth: 1200,
+          margin: "0 auto",
+          paddingLeft: isMobile ? 12 : 20,
+          paddingRight: isMobile ? 12 : 20,
+          ...(isMobile
+            ? {}
+            : {
+                display: "grid",
+                gridTemplateColumns: "minmax(0, 260px) minmax(0, 1fr) minmax(0, 260px)",
+              }),
+        }}
+      >
+        {!isMobile ? <Box /> : null}
+
+        <Stack gap="lg">
+          <Group gap={12} wrap="wrap" justify={isMobile ? "center" : "flex-start"} align="baseline">
+            <Anchor
+              href="https://github.com/uoplan/uoplan"
+              target="_blank"
+              rel="noopener noreferrer"
+              size="sm"
+              c="dimmed"
+              underline="never"
+              lh={1.45}
+              styles={{
+                root: {
+                  "&:hover": {
+                    color: "var(--mantine-color-gray-4)",
+                    textDecoration: "underline",
+                  },
+                },
+              }}
+            >
+              github
+            </Anchor>
+            <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
+              ·
+            </Text>
+            <Text
+              component={Link}
+              to="/changelog"
+              size="sm"
+              c="dimmed"
+              lh={1.45}
+              style={{
+                textDecoration: "none",
+                cursor: "pointer",
+              }}
+              styles={{
+                root: {
+                  "&:hover": {
+                    color: "var(--mantine-color-gray-4)",
+                    textDecoration: "underline",
+                  },
+                },
+              }}
+            >
+              {tr("app.footer.changelog")}
+            </Text>
+            <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
+              ·
+            </Text>
+            <Text span size="xs" c="dimmed" ff="monospace" lh={1.45} style={{ opacity: 0.85 }}>
+              {(typeof __BRANCH_NAME__ !== "undefined" && __BRANCH_NAME__
+                ? __BRANCH_NAME__
+                : tr("app.footer.buildBranchFallback")
+              ).toLowerCase()}
+              {" · "}
+              {(typeof __COMMIT_HASH__ !== "undefined" ? __COMMIT_HASH__ : "dev").toLowerCase()}
+            </Text>
+            <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
+              ·
+            </Text>
+            <Text span size="sm" c="dimmed" lh={1.45}>
+              {tr("app.footer.feedbackPrompt")}{" "}
+              <Anchor href="mailto:admin@uoplan.party" size="sm" c="dimmed" underline="hover">
+                admin@uoplan.party
+              </Anchor>
+            </Text>
+          </Group>
+
+          <Box
+            role="note"
+            style={{
+              ...(isMobile
+                ? {
+                    maxWidth: 440,
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }
+                : {
+                    borderLeft: "2px solid rgba(124, 58, 237, 0.38)",
+                    paddingLeft: 14,
+                  }),
+              paddingTop: 2,
+            }}
+          >
+            <Text
+              size="sm"
+              lh={1.65}
+              ta={isMobile ? "center" : "left"}
+              style={{
+                fontStyle: "italic",
+                letterSpacing: "0.01em",
+                color: "#868E96",
+              }}
+            >
+              {tr("app.footer.gradeDataAttribution.before")}
+              <Anchor
+                href={ONTARIO_FIPPA_ACT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                display="inline"
+                fz="sm"
+                lh={1.65}
+                underline="hover"
+                style={{
+                  fontStyle: "italic",
+                  letterSpacing: "0.01em",
+                  color: "#868E96",
+                }}
+                styles={{
+                  root: {
+                    "&:hover": {
+                      color: "var(--mantine-color-gray-4)",
+                    },
+                  },
+                }}
+              >
+                {tr("app.footer.gradeDataAttribution.actLink")}
+              </Anchor>
+              {tr("app.footer.gradeDataAttribution.after")}
+            </Text>
+          </Box>
+        </Stack>
+
+        {!isMobile ? <Box /> : null}
+      </Box>
+    </Box>
+  );
+}
