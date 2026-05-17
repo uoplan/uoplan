@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useLingui } from "@lingui/react";
 import { Box, Button, Group, Modal, Stack, Text, Title, Tooltip } from "@mantine/core";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconHelp, IconRefresh, IconShare } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
@@ -247,11 +247,7 @@ export function WizardShell({
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.3 }}
+    <div
       style={{
         width: "100%",
         minHeight: "100vh",
@@ -386,77 +382,68 @@ export function WizardShell({
                     : { border: "2px solid #2C2E33", padding: 24 }),
                 }}
               >
-                <AnimatePresence mode="wait">
-                  <motion.section
-                    key={effectiveActive}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.2 }}
-                    aria-labelledby="step-heading"
-                  >
-                    <Group justify="space-between" mb={8}>
-                      <Text
-                        id="step-heading"
-                        size="xs"
-                        fw={500}
-                        style={{
-                          textTransform: "uppercase",
-                          letterSpacing: "0.08em",
-                          color: "#A6A7AB",
-                        }}
-                      >
-                        {tr("app.stepHeader", {
-                          current: stepDisplayIndex + 1,
-                          total: visibleStepCount,
-                          description: STEPS[effectiveActive].description().toUpperCase(),
-                        }).toUpperCase()}
-                      </Text>
-                      <Group gap="xs">
-                        {indices && (
-                          <Tooltip
-                            label="Copied to clipboard!"
-                            opened={shareCopied}
-                            position="bottom"
-                            withArrow
-                            color="dark"
+                <section aria-labelledby="step-heading">
+                  <Group justify="space-between" mb={8}>
+                    <Text
+                      id="step-heading"
+                      size="xs"
+                      fw={500}
+                      style={{
+                        textTransform: "uppercase",
+                        letterSpacing: "0.08em",
+                        color: "#A6A7AB",
+                      }}
+                    >
+                      {tr("app.stepHeader", {
+                        current: stepDisplayIndex + 1,
+                        total: visibleStepCount,
+                        description: STEPS[effectiveActive].description().toUpperCase(),
+                      }).toUpperCase()}
+                    </Text>
+                    <Group gap="xs">
+                      {indices && (
+                        <Tooltip
+                          label="Copied to clipboard!"
+                          opened={shareCopied}
+                          position="bottom"
+                          withArrow
+                          color="dark"
+                        >
+                          <Button
+                            data-tour="share"
+                            variant="subtle"
+                            color="gray"
+                            size="xs"
+                            leftSection={<IconShare size={14} />}
+                            onClick={handleCopyShare}
                           >
-                            <Button
-                              data-tour="share"
-                              variant="subtle"
-                              color="gray"
-                              size="xs"
-                              leftSection={<IconShare size={14} />}
-                              onClick={handleCopyShare}
-                            >
-                              {tr("app.share.action")}
-                            </Button>
-                          </Tooltip>
-                        )}
-                        <Button
-                          variant="subtle"
-                          color="gray"
-                          size="xs"
-                          leftSection={<IconHelp size={14} />}
-                          onClick={() => setHelpModalOpen(true)}
-                        >
-                          {tr("app.help.action")}
-                        </Button>
-                        <Button
-                          variant="subtle"
-                          color="gray"
-                          size="xs"
-                          leftSection={<IconRefresh size={14} />}
-                          onClick={() => setResetModalOpen(true)}
-                        >
-                          {tr("app.reset.action")}
-                        </Button>
-                      </Group>
+                            {tr("app.share.action")}
+                          </Button>
+                        </Tooltip>
+                      )}
+                      <Button
+                        variant="subtle"
+                        color="gray"
+                        size="xs"
+                        leftSection={<IconHelp size={14} />}
+                        onClick={() => setHelpModalOpen(true)}
+                      >
+                        {tr("app.help.action")}
+                      </Button>
+                      <Button
+                        variant="subtle"
+                        color="gray"
+                        size="xs"
+                        leftSection={<IconRefresh size={14} />}
+                        onClick={() => setResetModalOpen(true)}
+                      >
+                        {tr("app.reset.action")}
+                      </Button>
                     </Group>
+                  </Group>
 
-                    {children}
-                  </motion.section>
-                </AnimatePresence>
+                  {children}
+                </section>
 
                 <Box
                   style={{
@@ -515,6 +502,6 @@ export function WizardShell({
           </Box>
         </Box>
       </Box>
-    </motion.div>
+    </div>
   );
 }

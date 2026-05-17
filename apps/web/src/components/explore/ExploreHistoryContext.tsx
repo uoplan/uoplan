@@ -13,12 +13,14 @@ type ExploreHistoryContextValue = {
   push: (entry: ExploreHistoryEntry) => void;
   /** Remove the top entry. Read stack[stack.length - 1] before calling. */
   pop: () => void;
+  clear: () => void;
 };
 
 const ExploreHistoryContext = createContext<ExploreHistoryContextValue>({
   stack: [],
   push: () => {},
   pop: () => {},
+  clear: () => {},
 });
 
 export function ExploreHistoryProvider({ children }: { children: ReactNode }) {
@@ -32,8 +34,12 @@ export function ExploreHistoryProvider({ children }: { children: ReactNode }) {
     setStack((prev) => prev.slice(0, -1));
   }, []);
 
+  const clear = useCallback(() => {
+    setStack([]);
+  }, []);
+
   return (
-    <ExploreHistoryContext.Provider value={{ stack, push, pop }}>
+    <ExploreHistoryContext.Provider value={{ stack, push, pop, clear }}>
       {children}
     </ExploreHistoryContext.Provider>
   );

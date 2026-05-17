@@ -1,5 +1,39 @@
 @import "@mantine/core/styles.css";
 
+@keyframes page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+::view-transition-old(root) {
+  animation-name: page-fade-out;
+  animation-duration: 150ms;
+  animation-timing-function: ease-in;
+  animation-fill-mode: both;
+}
+
+::view-transition-new(root) {
+  animation-name: page-slide-in;
+  animation-duration: 320ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
 /* Reserve space for the vertical scrollbar so layout width stays stable when
    overflow appears/disappears (avoids horizontal shift). */
 html {
