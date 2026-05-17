@@ -63,7 +63,7 @@ export function ProfessorGraphMobileDrawer({
             offeringsByProfessorId={offeringsByProfessorId}
             professorRatings={professorRatings}
             onSelectNode={onSelectNode}
-            showNeighbors={false}
+            showNeighbors
           />
         </ScrollArea.Autosize>
       ) : null}
