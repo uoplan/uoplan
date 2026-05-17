@@ -10,3 +10,5 @@ dist
 *.tsbuildinfo
 .env*
 playground
+worker-configuration.d.ts
+.wrangler

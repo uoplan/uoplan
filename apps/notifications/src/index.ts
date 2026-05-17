@@ -1,6 +1,7 @@
 import { sendPushNotification } from "./webpush.js";
 
 export interface Env {
+  ASSETS: Fetcher;
   WEBPUSH_SUBSCRIPTIONS: KVNamespace;
   VAPID_PUBLIC_KEY: string;
   VAPID_PRIVATE_KEY: string;
@@ -158,6 +159,6 @@ export default {
       if (pathname === "/send") return handleSend(req, env);
     }
 
-    return new Response("Not Found", { status: 404 });
+    return env.ASSETS.fetch(req);
   },
 };
