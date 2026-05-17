@@ -6,6 +6,7 @@ import { Box, Text } from "@mantine/core";
 import { usePersistState } from "../hooks/usePersistState";
 import { useAppStore } from "../store/appStore";
 import { tr } from "../i18n";
+import { AppFooter } from "../components/shared/AppFooter";
 
 export const Route = createRootRoute({
   head: () => buildRootHead(),
@@ -54,9 +55,19 @@ function RootLayout() {
   usePersistState(!!indices);
 
   return (
-    <>
+    <Box
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#141517",
+      }}
+    >
       <HeadContent />
-      <Outlet />
-    </>
+      <Box style={{ flex: 1 }}>
+        <Outlet />
+      </Box>
+      <AppFooter />
+    </Box>
   );
 }
