@@ -147,9 +147,22 @@ a {
   height: 100%;
 }
 
-/* Hide real events while phantom overlay controls the visual during morphing */
+/* During pre-animating: hide events instantly at their start-of-entrance position */
 .fc-uoplan-morphing .fc-event {
   opacity: 0 !important;
+  transform: translateY(-8px);
+}
+
+/* Outgoing: phantoms fade out and drift down */
+@keyframes uoplan-phantom-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
 /* Schedule morph overlay — layout shell only; typography matches .fc-uoplan-event* (same classes on node) */
@@ -158,57 +171,30 @@ a {
   flex-direction: column;
   align-items: stretch;
   border-radius: 0;
+  animation: uoplan-phantom-out 160ms ease-in both;
 }
 
-.fc-uoplan-morph-phantom-surface {
-  position: relative;
-  flex: 1 1 auto;
-  min-height: 0;
-  width: 100%;
-  min-width: 0;
+/* Incoming: new events fade in from slightly above */
+@keyframes uoplan-event-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.fc-uoplan-morph-phantom-layer {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-sizing: border-box;
+.fc-uoplan-entering .fc-event {
+  animation: uoplan-event-in 160ms ease-out both;
 }
 
-.fc-uoplan-morph-phantom-layer .fc-uoplan-event-inner {
-  flex: 1 1 auto;
-  min-height: 0;
-}
-
-.fc-uoplan-morph-phantom-layer--out {
-  z-index: 1;
-  opacity: 1;
-  transition: opacity var(--uoplan-morph-half-ms, 175ms) ease-in;
-}
-
-.fc-uoplan-morph-phantom-layer--in {
-  z-index: 2;
-  opacity: 0;
-  transition: opacity var(--uoplan-morph-half-ms, 175ms) ease-in;
-}
-
-.fc-uoplan-morph-phantom--animating-layers .fc-uoplan-morph-phantom-layer--out {
-  opacity: 0;
-}
-
-.fc-uoplan-morph-phantom--animating-layers .fc-uoplan-morph-phantom-layer--in {
-  opacity: 1;
-}
-
-.fc-uoplan-morph-phantom--fade-out {
-  opacity: 1;
-  transition: opacity var(--uoplan-morph-full-ms, 350ms) cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.fc-uoplan-morph-phantom--fade-out.fc-uoplan-morph-phantom--animating-fade {
-  opacity: 0;
+@media (prefers-reduced-motion: reduce) {
+  .fc-uoplan-morph-phantom,
+  .fc-uoplan-entering .fc-event {
+    animation: none;
+  }
 }
 
 .fc-uoplan-event {
