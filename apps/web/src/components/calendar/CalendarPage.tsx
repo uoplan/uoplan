@@ -19,7 +19,6 @@ import { buildScheduleIcs, downloadTextFile } from "schedule";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateRange";
 import { tr } from "../../i18n";
-import { LanguageSwitcher } from "../shared/LanguageSwitcher";
 import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
 import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 import { CALENDAR_SIDEBAR_WIDTH_PX } from "./calendarLayout";
@@ -194,7 +193,6 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
           )}
 
           <Group gap="xs">
-            <LanguageSwitcher />
             {indices && (
               <Tooltip
                 label="Copied to clipboard!"

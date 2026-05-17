@@ -25,8 +25,7 @@ import { navigateToCalendar, navigateToWizardStep } from "../../lib/appNavigatio
 import { applyBasicDefaultsIfUntouched, enterAdvancedWizardFlow } from "../../lib/plannerModeFlow";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { getWizardStepContent } from "../../lib/wizardStepContent";
-import { LanguageSwitcher } from "../shared/LanguageSwitcher";
-import { dynamicActivate, tr, type AppLocale } from "../../i18n";
+import { tr } from "../../i18n";
 
 export type WizardShellProps = {
   activeStep: WizardStep;
@@ -78,21 +77,6 @@ export function WizardShell({
 
   const isMobile = useMediaQuery("(max-width: 768px)");
   const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
-
-  const [isLangTransitioning, setIsLangTransitioning] = useState(false);
-  const handleLangSwitch = useCallback(
-    async (locale: AppLocale) => {
-      if (prefersReducedMotion) {
-        await dynamicActivate(locale);
-        return;
-      }
-      setIsLangTransitioning(true);
-      await new Promise((r) => setTimeout(r, 130));
-      await dynamicActivate(locale);
-      setIsLangTransitioning(false);
-    },
-    [prefersReducedMotion],
-  );
 
   const { shareCopied, handleCopyShare } = useShareUrl(getShareUrl);
 
@@ -357,11 +341,7 @@ export function WizardShell({
           </Title>
         </Box>
 
-        <motion.div
-          animate={{ opacity: isLangTransitioning ? 0 : 1, y: isLangTransitioning ? 4 : 0 }}
-          transition={{ duration: isLangTransitioning ? 0.13 : 0.2, ease: "easeInOut" }}
-          style={{ width: "100%" }}
-        >
+        <Box style={{ width: "100%" }}>
           <Box
             style={{
               width: "100%",
@@ -434,7 +414,6 @@ export function WizardShell({
                         }).toUpperCase()}
                       </Text>
                       <Group gap="xs">
-                        <LanguageSwitcher onSwitch={handleLangSwitch} />
                         {indices && (
                           <Tooltip
                             label="Copied to clipboard!"
@@ -544,7 +523,7 @@ export function WizardShell({
 
             {!isMobile && <Box />}
           </Box>
-        </motion.div>
+        </Box>
       </Box>
     </motion.div>
   );
