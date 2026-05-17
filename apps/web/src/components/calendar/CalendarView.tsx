@@ -106,7 +106,13 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(fu
     >
       <Box
         ref={containerRef}
-        className={morph.isHidingEvents ? "fc-uoplan-morphing" : undefined}
+        className={
+          morph.isHidingEvents
+            ? "fc-uoplan-morphing"
+            : morph.isEntering
+              ? "fc-uoplan-entering"
+              : undefined
+        }
         style={{ flex: 1, minHeight: 0 }}
       >
         <FullCalendar
@@ -136,7 +142,7 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(fu
         />
       </Box>
 
-      <ScheduleMorphOverlay phantoms={morph.phantoms} onComplete={morph.onAnimationComplete} />
+      <ScheduleMorphOverlay phantoms={morph.phantoms} />
 
       <Modal
         opened={swap.isOpen}
