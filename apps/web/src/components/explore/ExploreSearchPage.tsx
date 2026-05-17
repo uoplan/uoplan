@@ -1,4 +1,5 @@
-import { Accordion, Box, Stack, Text, TextInput, Title } from "@mantine/core";
+import { Link } from "@tanstack/react-router";
+import { Accordion, Anchor, Box, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
@@ -30,6 +31,11 @@ import {
   ExploreProfessorSummaryBar,
 } from "./ExploreProfessorGradesLayout";
 import { useExploreSearch, type ExploreSearchNavigate } from "../../hooks/useExploreSearch";
+import {
+  useExploreHistory,
+  ExploreBackButton,
+  type ExploreHistoryEntry,
+} from "./ExploreHistoryContext";
 
 export type { ExploreSearchNavigate };
 
@@ -66,9 +72,11 @@ function buildTermNameById(terms: Term[]): Map<number, string> {
 function ExploreCourseProfessorItem({
   group,
   professorRatings,
+  currentEntry,
 }: {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
+  currentEntry?: ExploreHistoryEntry;
 }) {
   return (
     <Accordion.Item value={group.groupId}>
@@ -77,6 +85,7 @@ function ExploreCourseProfessorItem({
           group={group}
           professorRatings={professorRatings}
           stopPropagation
+          currentEntry={currentEntry}
         />
       </Accordion.Control>
       <Accordion.Panel>
@@ -166,6 +175,20 @@ export function ExploreSearchPage({
     [offerings],
   );
 
+  const { stack, pop } = useExploreHistory();
+  const backEntry = stack[stack.length - 1];
+
+  const urlNormEarly = useMemo(() => parseCoursePathParam(urlCourseParam), [urlCourseParam]);
+  const currentEntry = useMemo<ExploreHistoryEntry | undefined>(() => {
+    if (!urlCourseParam) return { to: "/explore/", label: "Explore" };
+    if (!urlNormEarly) return undefined;
+    return {
+      to: "/explore/course/$course",
+      params: { course: urlCourseParam },
+      label: urlNormEarly,
+    };
+  }, [urlCourseParam, urlNormEarly]);
+
   const {
     draftQuery,
     setDraftQuery,
@@ -177,7 +200,7 @@ export function ExploreSearchPage({
     resultsStale,
     handleKeyDown,
     showSearchResults: searchActive,
-  } = useExploreSearch({ courseEntries, professorEntries, navigateExplore });
+  } = useExploreSearch({ courseEntries, professorEntries, navigateExplore, currentEntry });
 
   const spotlightRows = useMemo(() => {
     if (offerings.length === 0) return [];
@@ -290,8 +313,26 @@ export function ExploreSearchPage({
             </Stack>
           ) : (
             <Stack gap="xs" align="center" ta="center">
+              {backEntry && (
+                <ExploreBackButton
+                  entry={backEntry}
+                  onBack={() => {
+                    pop();
+                    void navigateExplore({ to: backEntry.to, params: backEntry.params });
+                  }}
+                />
+              )}
               <Title order={3} c="#F8F9FA" fw={600} fz={{ base: "h4", sm: "h3" }}>
-                {tr("explore.title")}
+                <Anchor
+                  component={Link}
+                  to="/explore"
+                  c="inherit"
+                  underline="hover"
+                  fz="inherit"
+                  fw="inherit"
+                >
+                  {tr("explore.title")}
+                </Anchor>
               </Title>
               <Box w="100%" maw={584} mx="auto">
                 <ExploreSearchInput
@@ -491,6 +532,7 @@ export function ExploreSearchPage({
                           key={g.groupId}
                           group={g}
                           professorRatings={professorRatings}
+                          currentEntry={currentEntry}
                         />
                       ))}
                     </Accordion>
