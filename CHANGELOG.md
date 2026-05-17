@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.0-beta.14](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.13...uoplan-monorepo-v1.0.0-beta.14) (2026-05-17)
+
+
+### Features
+
+* use a cleaner animation for schedule generation ([81cbb40](https://github.com/uoplan/uoplan/commit/81cbb40101062d89d665147257712506d70d9a51))
+
+
+### Bug Fixes
+
+* **ci:** use correct path for notifications ([2e2a6b7](https://github.com/uoplan/uoplan/commit/2e2a6b71159ade24c51a788e64e1085efebb8637))
+* **ci:** use new api url for sending notifications ([9bf2fb4](https://github.com/uoplan/uoplan/commit/9bf2fb4b0514ceeb5a8eb3b5815e7e81cc0e2783))
+* generate wrangler types before typecheck ([6f70cd6](https://github.com/uoplan/uoplan/commit/6f70cd6c8037385e712ce25d0e775eaf7d78fbe7))
+* use correct env var ([1e9f890](https://github.com/uoplan/uoplan/commit/1e9f890693338ee7dddabf3c3acab316f817ac36))
+* use correct vapid env name ([c546bc6](https://github.com/uoplan/uoplan/commit/c546bc6b66ca607e62c9baa138ccf644072ca41a))
+
 ## [1.0.0-beta.13](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.12...uoplan-monorepo-v1.0.0-beta.13) (2026-05-17)
 
 
