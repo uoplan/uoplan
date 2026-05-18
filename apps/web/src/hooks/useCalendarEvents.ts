@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { GeneratedSchedule } from "schedule";
+import type { GeneratedSchedule, DayOfWeekCode } from "schedule";
 import type { ProfessorRatingsMap } from "schedule";
 import {
   getRatingsForInstructors,
@@ -7,22 +7,15 @@ import {
   normalizeGradeVizDistribution,
   type GradeVizData,
 } from "schedule";
-import { addDays, minutesToDate, DAY_OFFSETS } from "schedule";
 
-/**
- * A calendar event representing a single time slot for a course section.
- */
 export interface CalendarEvent {
   id: string;
-  title: string;
-  start: Date;
-  end: Date;
   courseCode: string;
   enrollmentIndex: number;
+  day: DayOfWeekCode;
   startMinutes: number;
   endMinutes: number;
   componentSection: string;
-  /** True when this specific meeting time is virtual (online). */
   virtual: boolean;
   professor: string;
   professorRatingValue?: number | null;
@@ -36,17 +29,9 @@ export interface CalendarEvent {
   gradeViz?: GradeVizData | null;
 }
 
-/**
- * Hook to transform a schedule into FullCalendar-compatible events.
- *
- * @param schedule - The generated schedule to transform
- * @param professorRatings - Optional professor ratings map for display
- * @returns Array of calendar events positioned on a reference week
- */
 export function useCalendarEvents(
   schedule: GeneratedSchedule | null,
   professorRatings: ProfessorRatingsMap | null,
-  referenceWeekStart: Date,
 ): CalendarEvent[] {
   return useMemo<CalendarEvent[]>(() => {
     if (!schedule) return [];
@@ -83,20 +68,12 @@ export function useCalendarEvents(
 
         for (const t of section.times) {
           if (t.startMinutes >= t.endMinutes) continue;
-          const offset = DAY_OFFSETS[t.day] ?? null;
-          if (offset == null) continue;
-
-          const dayDate = addDays(referenceWeekStart, offset);
-          const start = minutesToDate(dayDate, t.startMinutes);
-          const end = minutesToDate(dayDate, t.endMinutes);
 
           out.push({
             id: `${enrollment.courseCode}-${comp}-${timeIdx}`,
-            title: enrollment.courseCode,
-            start,
-            end,
             courseCode: enrollment.courseCode,
             enrollmentIndex: enrollIdx,
+            day: t.day,
             startMinutes: t.startMinutes,
             endMinutes: t.endMinutes,
             componentSection,
@@ -111,5 +88,5 @@ export function useCalendarEvents(
       }
       return out;
     });
-  }, [schedule, professorRatings, referenceWeekStart]);
+  }, [schedule, professorRatings]);
 }
