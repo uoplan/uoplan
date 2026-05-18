@@ -1,0 +1,148 @@
+.uoplan-cal-root {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  overflow: hidden;
+  background-color: #111113;
+  color: var(--mantine-color-gray-3);
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+/* Time axis */
+.uoplan-cal-time-axis {
+  flex-shrink: 0;
+  width: 44px;
+  overflow: hidden;
+  position: relative;
+}
+
+.uoplan-cal-time-axis-inner {
+  position: relative;
+  height: calc(100% - 28px); /* subtract header height */
+  margin-top: 28px;
+}
+
+.uoplan-cal-time-label {
+  position: absolute;
+  right: 4px;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: #868e96;
+  white-space: nowrap;
+  line-height: 1;
+  user-select: none;
+}
+
+/* Columns area */
+.uoplan-cal-columns {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  min-width: 0;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Full-height horizontal hour lines, rendered behind columns */
+.uoplan-cal-hour-lines {
+  position: absolute;
+  inset: 28px 0 0 0; /* top = header height */
+  pointer-events: none;
+  z-index: 0;
+}
+
+.uoplan-cal-hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #2c2e33;
+  transform: translateY(-0.5px);
+}
+
+.uoplan-cal-half-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: rgba(44, 46, 51, 0.45);
+  transform: translateY(-0.5px);
+}
+
+/* Individual day column */
+.uoplan-cal-column {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #2c2e33;
+  position: relative;
+  z-index: 1;
+}
+
+.uoplan-cal-column:first-child {
+  border-left: none;
+}
+
+.uoplan-cal-col-header {
+  flex-shrink: 0;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #adb5bd;
+  background-color: #111113;
+  border-bottom: 1px solid #2c2e33;
+  user-select: none;
+}
+
+.uoplan-cal-col-body {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Animation phases */
+@keyframes uoplan-cal-exit-down {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes uoplan-cal-enter-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-phase="exiting"] .uoplan-cal-event {
+  animation: uoplan-cal-exit-down 100ms ease-in forwards;
+  pointer-events: none;
+}
+
+[data-phase="entering"] .uoplan-cal-event {
+  animation: uoplan-cal-enter-up 100ms ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-phase="exiting"] .uoplan-cal-event,
+  [data-phase="entering"] .uoplan-cal-event {
+    animation: none;
+  }
+}

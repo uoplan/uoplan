@@ -1,19 +1,16 @@
-import { useMemo, useCallback, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import { useMemo, useCallback, forwardRef, useImperativeHandle } from "react";
 import { Box, Modal } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import FullCalendar from "@fullcalendar/react";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import { startOfWeek } from "date-fns";
 import type { DataCache } from "schedule";
 import type { GeneratedSchedule } from "schedule";
 import type { ProfessorRatingsMap } from "schedule";
-import { CalendarEventContent } from "./CalendarEventContent";
 import { SwapModalContent } from "./SwapModalContent";
-import { useCalendarEvents, type CalendarEvent } from "../../hooks/useCalendarEvents";
+import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useSwapModal } from "../../hooks/useSwapModal";
-import { useCalendarMorph } from "../../hooks/useCalendarMorph";
-import { ScheduleMorphOverlay } from "./ScheduleMorphOverlay";
+import { useScheduleTransition } from "../../hooks/useScheduleTransition";
+import { WeekCalendar } from "./WeekCalendar";
+import type { CalendarEvent } from "../../hooks/useCalendarEvents";
+
 const EMPTY_COLOR_MAP: Record<string, number> = {};
 
 export interface CalendarViewHandle {
@@ -31,7 +28,6 @@ interface CalendarViewProps {
     rejectedWithConflict: Array<{ code: string; conflictsWith: string }>;
   };
   onSwap: (enrollmentIndex: number, newCourseCode: string) => void;
-  /** courseCode → colorIndex map for stable colouring. */
   colorMap?: Record<string, number>;
 }
 
@@ -39,60 +35,37 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(fu
   { schedule, cache, professorRatings, getSwapCandidates, onSwap, colorMap = EMPTY_COLOR_MAP },
   ref,
 ) {
-  /** Match narrow split layouts (calendar + sidebar); ~xl breakpoint, closest standard to ~1140px. */
   const isCompactCalendar = useMediaQuery("(max-width: 1200px)");
   const prefersReduced = useMediaQuery("(prefers-reduced-motion: reduce)") ?? false;
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const morph = useCalendarMorph(containerRef, prefersReduced);
-
-  useImperativeHandle(
-    ref,
-    () => ({
-      captureAndPark: morph.captureAndPark,
-    }),
-    [morph.captureAndPark],
+  const { displayedSchedule, animationPhase, captureAndPark } = useScheduleTransition(
+    schedule,
+    prefersReduced,
   );
 
-  // When the schedule prop changes, complete the morph transition.
-  useEffect(() => {
-    return morph.onScheduleChanged();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schedule]);
+  useImperativeHandle(ref, () => ({ captureAndPark }), [captureAndPark]);
 
   const swap = useSwapModal(getSwapCandidates, cache);
 
-  const referenceWeekStart = useMemo(() => startOfWeek(new Date(), { weekStartsOn: 0 }), []);
+  const events = useCalendarEvents(displayedSchedule, professorRatings);
 
-  const events = useCalendarEvents(schedule, professorRatings, referenceWeekStart);
-
-  const hasWeekendCourses = useMemo(() => {
-    return events.some((e) => {
-      const day = e.start.getDay();
-      return day === 0 || day === 6;
-    });
-  }, [events]);
+  const hasWeekendCourses = useMemo(
+    () => events.some((e) => e.day === "Sa" || e.day === "Su"),
+    [events],
+  );
 
   const showWeekends = !isCompactCalendar || hasWeekendCourses;
 
-  const eventContent = useCallback(
-    (arg: { event: { extendedProps: unknown } }) => {
-      const ext = arg.event.extendedProps as CalendarEvent;
-      return <CalendarEventContent ext={ext} cache={cache} colorMap={colorMap} />;
-    },
-    [cache, colorMap],
-  );
-
-  const handleEventClick = (info: { event: { extendedProps: unknown } }) => {
-    const ext = info.event.extendedProps as CalendarEvent;
-    if (ext.enrollmentIndex != null) {
-      swap.openModal(ext.enrollmentIndex, ext.courseCode, {
-        virtual: ext.virtual,
-        componentSection: ext.componentSection,
-        gradeViz: ext.gradeViz,
+  const handleEventClick = useCallback(
+    (event: CalendarEvent) => {
+      swap.openModal(event.enrollmentIndex, event.courseCode, {
+        virtual: event.virtual,
+        componentSection: event.componentSection,
+        gradeViz: event.gradeViz,
       });
-    }
-  };
+    },
+    [swap],
+  );
 
   return (
     <Box
@@ -104,45 +77,16 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(fu
         overflow: "hidden",
       }}
     >
-      <Box
-        ref={containerRef}
-        className={
-          morph.isHidingEvents
-            ? "fc-uoplan-morphing"
-            : morph.isEntering
-              ? "fc-uoplan-entering"
-              : undefined
-        }
-        style={{ flex: 1, minHeight: 0 }}
-      >
-        <FullCalendar
-          plugins={[timeGridPlugin, interactionPlugin]}
-          initialView="timeGridWeek"
-          headerToolbar={false}
-          allDaySlot={false}
-          slotDuration="00:30:00"
-          slotMinTime="08:00:00"
-          slotMaxTime="23:00:00"
-          firstDay={0}
-          weekends={showWeekends}
-          height="100%"
+      <Box style={{ flex: 1, minHeight: 0 }}>
+        <WeekCalendar
           events={events}
-          eventContent={eventContent}
-          eventClick={handleEventClick}
-          slotLabelFormat={{
-            hour: "numeric",
-            minute: "2-digit",
-            omitZeroMinute: false,
-            hour12: false,
-          }}
-          dayHeaderFormat={{ weekday: "short" }}
-          nowIndicator={false}
-          navLinks={false}
-          expandRows={true}
+          cache={cache}
+          colorMap={colorMap}
+          onEventClick={handleEventClick}
+          showWeekends={showWeekends ?? false}
+          animationPhase={animationPhase}
         />
       </Box>
-
-      <ScheduleMorphOverlay phantoms={morph.phantoms} />
 
       <Modal
         opened={swap.isOpen}

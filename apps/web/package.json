@@ -16,10 +16,6 @@
     "i18n:compile": "lingui compile"
   },
   "dependencies": {
-    "@fullcalendar/core": "^6.1.20",
-    "@fullcalendar/interaction": "^6.1.20",
-    "@fullcalendar/react": "^6.1.20",
-    "@fullcalendar/timegrid": "^6.1.20",
     "@lingui/core": "^5.9.3",
     "@lingui/detect-locale": "^5.9.3",
     "@lingui/react": "^5.9.3",

@@ -10,8 +10,6 @@ html.calendar-no-scrollbar-gutter {
   scrollbar-gutter: auto;
 }
 
-/* FullCalendar v6 injects its own CSS; we only override below for dark theme */
-
 body {
   background-color: #141517;
   margin: 0;
@@ -60,143 +58,6 @@ a {
   box-shadow: none;
 }
 
-/* FullCalendar dark theme – borders and grid use dark gray to avoid light-mode remnants */
-.fc {
-  background-color: #111113;
-  color: var(--mantine-color-gray-3);
-  font-family: inherit;
-  --fc-border-color: #2c2e33;
-  --fc-page-bg-color: #111113;
-  --fc-neutral-bg-color: #111113;
-  --fc-list-event-hover-bg-color: #25262b;
-  --fc-today-bg-color: #111113;
-}
-
-.fc .fc-scrollgrid,
-.fc .fc-scrollgrid-section,
-.fc .fc-scrollgrid-sync-table,
-.fc .fc-scrollgrid-sync-inner,
-.fc .fc-daygrid-day,
-.fc .fc-timegrid-slot,
-.fc .fc-timegrid-slot-label,
-.fc .fc-timegrid-slot-lane,
-.fc .fc-col-header-cell,
-.fc .fc-timegrid-axis,
-.fc td,
-.fc th {
-  border-color: #2c2e33 !important;
-}
-
-.fc .fc-scrollgrid {
-  border-width: 0;
-}
-
-/* Avoid double-thick right edge where inner grid meets outer frame border. */
-.fc .fc-scrollgrid td:last-child,
-.fc .fc-scrollgrid th:last-child {
-  border-right-width: 0 !important;
-}
-
-.fc .fc-col-header-cell {
-  background-color: #111113;
-  color: #adb5bd;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.fc .fc-timegrid-slot-label-cushion {
-  font-size: 11px;
-  color: #868e96;
-  padding-right: 4px;
-}
-
-.fc .fc-timegrid-slot-label {
-  width: 40px;
-}
-
-.fc .fc-timegrid-slot-lane {
-  background-color: #111113;
-}
-
-.fc .fc-timegrid-slot-lane.fc-timegrid-slot-lane-now,
-.fc .fc-day-today {
-  background-color: #111113;
-}
-
-.fc .fc-timegrid-axis {
-  background-color: #111113;
-}
-
-.fc .fc-scrollgrid-liquid {
-  border-radius: 0;
-  overflow: hidden;
-}
-
-.fc .fc-event,
-.fc .fc-event .fc-event-main,
-.fc .fc-timegrid-event {
-  border: none;
-  outline: none;
-  box-shadow: none;
-  background: transparent !important;
-  height: 100%;
-}
-
-.fc .fc-event-main-frame {
-  height: 100%;
-}
-
-/* During pre-animating: hide events instantly at their start-of-entrance position */
-.fc-uoplan-morphing .fc-event {
-  opacity: 0 !important;
-  transform: translateY(-8px);
-}
-
-/* Outgoing: phantoms fade out and drift down */
-@keyframes uoplan-phantom-out {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-}
-
-/* Schedule morph overlay — layout shell only; typography matches .fc-uoplan-event* (same classes on node) */
-.fc-uoplan-morph-phantom {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  border-radius: 0;
-  animation: uoplan-phantom-out 160ms ease-in both;
-}
-
-/* Incoming: new events fade in from slightly above */
-@keyframes uoplan-event-in {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fc-uoplan-entering .fc-event {
-  animation: uoplan-event-in 160ms ease-out both;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fc-uoplan-morph-phantom,
-  .fc-uoplan-entering .fc-event {
-    animation: none;
-  }
-}
-
 .fc-uoplan-event {
   display: flex;
   flex-direction: column;
@@ -209,15 +70,6 @@ a {
   min-height: 100%;
   box-sizing: border-box;
   overflow: hidden;
-}
-
-/* Phantoms are position:fixed with an explicit pixel height — do not inherit min-height:100%
-   (that resolves against the viewport and forces full-screen-tall “events”).
-   z-index below CalendarPage mobile shell (bottom nav 198; Mantine bottom drawer above). */
-.fc-uoplan-event.fc-uoplan-morph-phantom {
-  min-height: 0;
-  max-height: none;
-  z-index: 100;
 }
 
 /* Swap modal / static preview: same look as calendar cells without filling parent height. */
