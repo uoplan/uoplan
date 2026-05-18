@@ -52,9 +52,14 @@ export function EventStyleCard({
   const componentSectionFull = picked
     ? `${picked[0]} - ${picked[1].section.sectionCode ?? picked[1].section.section ?? ""}`
     : "—";
-  const professor = picked
-    ? [...new Set(picked[1].section.instructors ?? [])].filter(Boolean).join(", ") || "—"
-    : "—";
+  const pickedInstructors = picked
+    ? [
+        ...new Set(
+          picked[1].section.times.map((t) => t.instructor).filter((i): i is string => i !== null),
+        ),
+      ]
+    : [];
+  const professor = pickedInstructors.filter(Boolean).join(", ") || "—";
 
   const firstTime = picked?.[1].section.times?.[0];
   const timeRange =
@@ -62,16 +67,12 @@ export function EventStyleCard({
       ? formatTimeRange(firstTime.startMinutes, firstTime.endMinutes)
       : null;
 
-  const ratings = picked
-    ? getRatingsForInstructors(picked[1].section.instructors ?? [], professorRatings)
-    : [];
+  const ratings = getRatingsForInstructors(pickedInstructors, professorRatings);
   const ratingValue =
     ratings.length > 0
       ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10
       : null;
-  const ratingDetails = picked
-    ? getRatingDetailsForInstructors(picked[1].section.instructors ?? [], professorRatings)
-    : [];
+  const ratingDetails = getRatingDetailsForInstructors(pickedInstructors, professorRatings);
 
   const legacyId = ratingDetails.find((d) => d.legacyId)?.legacyId;
   const hasProfessorRating = ratingDetails.length > 0;

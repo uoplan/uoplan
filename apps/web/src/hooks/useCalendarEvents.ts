@@ -55,14 +55,17 @@ export function useCalendarEvents(
       for (const [comp, { section }] of Object.entries(enrollment.sectionCombo)) {
         const sectionCode = section.sectionCode ?? section.section ?? "";
         const componentSection = `${comp} - ${sectionCode}`;
-        const professor = [...new Set(section.instructors ?? [])].filter(Boolean).join(", ") || "—";
-        const ratings = getRatingsForInstructors(section.instructors ?? [], professorRatings);
+        const sectionInstructors = [
+          ...new Set(section.times.map((t) => t.instructor).filter((i): i is string => i !== null)),
+        ];
+        const professor = sectionInstructors.filter(Boolean).join(", ") || "—";
+        const ratings = getRatingsForInstructors(sectionInstructors, professorRatings);
         const professorRatingValue =
           ratings.length > 0
             ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10
             : null;
         const professorRatingDetails = getRatingDetailsForInstructors(
-          section.instructors ?? [],
+          sectionInstructors,
           professorRatings,
         );
 

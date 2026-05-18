@@ -29,8 +29,6 @@ describe("scheduleGenerator benchmarks", () => {
             times: [
               { day: "Mo", startMinutes: 600 + i * 10, endMinutes: 650 + i * 10, virtual: false },
             ],
-            instructors: [],
-            meetingDates: [],
           },
         ],
       },
@@ -78,8 +76,6 @@ describe("scheduleGenerator benchmarks", () => {
             component: "LEC",
             session: "Regular",
             times: [{ day: "Mo", startMinutes: 600, endMinutes: 700, virtual: false }],
-            instructors: [],
-            meetingDates: [],
           },
         ],
       },

@@ -96,6 +96,8 @@ export type MeetingTime = {
   startMinutes: number;
   endMinutes: number;
   virtual: boolean;
+  instructor?: string | null;
+  meetingDates?: [string, string] | null;
 };
 
 export type GradeDistribution = Record<string, number>;
@@ -176,8 +178,6 @@ export type ComponentSection = {
   component: string | null;
   session: string | null;
   times: MeetingTime[];
-  instructors: string[];
-  meetingDates: string[] | null;
   status: string | null;
   distribution?: GradeDistribution;
 };
@@ -619,14 +619,14 @@ export function toProtoSchedulesData(input: SchedulesData): ProtoSchedulesData {
                   startMinutes: time.startMinutes,
                   endMinutes: time.endMinutes,
                   virtual: time.virtual,
+                  instructor: time.instructor ?? undefined,
+                  meetingDates: time.meetingDates
+                    ? {
+                        startYyyymmdd: dateStringToYyyymmdd(time.meetingDates[0] ?? ""),
+                        endYyyymmdd: dateStringToYyyymmdd(time.meetingDates[1] ?? ""),
+                      }
+                    : undefined,
                 })),
-                instructors: section.instructors,
-                meetingDates: section.meetingDates
-                  ? {
-                      startYyyymmdd: dateStringToYyyymmdd(section.meetingDates[0] ?? ""),
-                      endYyyymmdd: dateStringToYyyymmdd(section.meetingDates[1] ?? ""),
-                    }
-                  : undefined,
                 status: statusToProto(section.status),
                 distribution: section.distribution
                   ? toProtoDistribution(section.distribution)
@@ -672,15 +672,15 @@ export function fromProtoSchedulesData(input: ProtoSchedulesData): SchedulesData
                     startMinutes: Number(time.startMinutes),
                     endMinutes: Number(time.endMinutes),
                     virtual: time.virtual,
+                    instructor: time.instructor ?? null,
+                    meetingDates: time.meetingDates
+                      ? [
+                          yyyymmddToDateString(Number(time.meetingDates.startYyyymmdd)),
+                          yyyymmddToDateString(Number(time.meetingDates.endYyyymmdd)),
+                        ]
+                      : null,
                   }),
                 ),
-                instructors: section.instructors,
-                meetingDates: section.meetingDates
-                  ? [
-                      yyyymmddToDateString(Number(section.meetingDates.startYyyymmdd)),
-                      yyyymmddToDateString(Number(section.meetingDates.endYyyymmdd)),
-                    ]
-                  : null,
                 status: statusFromProto(section.status),
                 ...(fromProtoDistribution(section.distribution)
                   ? { distribution: fromProtoDistribution(section.distribution) }

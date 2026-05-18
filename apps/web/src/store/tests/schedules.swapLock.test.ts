@@ -44,8 +44,6 @@ function makeSchedule(courseCode: string): GeneratedSchedule {
               component: "LEC",
               session: null,
               times: [],
-              instructors: [],
-              meetingDates: null,
               status: null,
             },
           },

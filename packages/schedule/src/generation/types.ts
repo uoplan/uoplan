@@ -5,6 +5,7 @@ export interface TimeSlot {
   day: DayOfWeek;
   startMinutes: number;
   endMinutes: number;
+  meetingDates?: [string, string] | null;
 }
 
 export interface CourseEnrollment {

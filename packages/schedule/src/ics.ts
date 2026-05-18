@@ -155,7 +155,9 @@ export function buildScheduleIcs(args: {
     const courseTzid = cache?.getSchedule(courseCode)?.timeZone || DEFAULT_TZID;
 
     for (const [component, { section }] of Object.entries(enrollment.sectionCombo)) {
-      const instructors = uniqNonEmpty(section.instructors ?? []);
+      const instructors = uniqNonEmpty(
+        section.times.map((t) => t.instructor).filter((i): i is string => i !== null),
+      );
       const professor = instructors.length ? instructors.join(", ") : "—";
       const sectionCode = (section.sectionCode ?? section.section ?? "").trim();
       const sectionLabel = sectionCode ? `${component} - ${sectionCode}` : component;

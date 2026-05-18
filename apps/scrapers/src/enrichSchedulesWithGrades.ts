@@ -37,7 +37,7 @@ export type ScheduleCourseRow = {
 
 /** Section fields read/written by enrichment (matches protobuf map keys in build_proto). */
 export interface SectionGradeFields {
-  instructors?: string[];
+  times?: Array<{ instructor?: string | null }>;
   distribution?: GradeDistribution;
 }
 
@@ -212,8 +212,11 @@ export function enrichSchedulesPayload(
         const prev = section.distribution;
         delete section.distribution;
 
+        const sectionInstructors = (section.times ?? [])
+          .map((t) => t.instructor)
+          .filter((i): i is string => typeof i === "string" && i.length > 0);
         const { distribution, kind } = distributionForSection(
-          section.instructors,
+          sectionInstructors,
           profMap,
           aggregate,
         );

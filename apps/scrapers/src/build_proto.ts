@@ -254,15 +254,15 @@ function mapSchedules(input: any): any {
                 startMinutes: time.startMinutes,
                 endMinutes: time.endMinutes,
                 virtual: Boolean(time.virtual),
+                instructor: time.instructor ?? undefined,
+                meetingDates:
+                  Array.isArray(time.meetingDates) && time.meetingDates.length >= 2
+                    ? {
+                        startYyyymmdd: dateStringToYyyymmdd(String(time.meetingDates[0] ?? "")),
+                        endYyyymmdd: dateStringToYyyymmdd(String(time.meetingDates[1] ?? "")),
+                      }
+                    : undefined,
               })),
-              instructors: section.instructors ?? [],
-              meetingDates:
-                Array.isArray(section.meetingDates) && section.meetingDates.length >= 2
-                  ? {
-                      startYyyymmdd: dateStringToYyyymmdd(String(section.meetingDates[0] ?? "")),
-                      endYyyymmdd: dateStringToYyyymmdd(String(section.meetingDates[1] ?? "")),
-                    }
-                  : undefined,
               status: sectionStatusToProto(section.status),
               distribution: section.distribution
                 ? mapLetterGradeDistributionToProto(section.distribution)

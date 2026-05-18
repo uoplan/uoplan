@@ -21,6 +21,49 @@ describe("overlaps", () => {
     expect(timesOverlap(a, b)).toBe(false);
   });
 
+  it("timesOverlap treats same-time slots with non-overlapping date ranges as non-conflicting", () => {
+    const a: TimeSlot = {
+      day: "Mo",
+      startMinutes: 600,
+      endMinutes: 700,
+      meetingDates: ["2027-01-13", "2027-02-24"],
+    };
+    const b: TimeSlot = {
+      day: "Mo",
+      startMinutes: 600,
+      endMinutes: 700,
+      meetingDates: ["2027-03-10", "2027-04-14"],
+    };
+    expect(timesOverlap(a, b)).toBe(false);
+  });
+
+  it("timesOverlap treats same-time slots with overlapping date ranges as conflicting", () => {
+    const a: TimeSlot = {
+      day: "Mo",
+      startMinutes: 600,
+      endMinutes: 700,
+      meetingDates: ["2027-01-13", "2027-03-01"],
+    };
+    const b: TimeSlot = {
+      day: "Mo",
+      startMinutes: 600,
+      endMinutes: 700,
+      meetingDates: ["2027-02-15", "2027-04-14"],
+    };
+    expect(timesOverlap(a, b)).toBe(true);
+  });
+
+  it("timesOverlap assumes conflict when either slot has no meeting dates", () => {
+    const a: TimeSlot = { day: "Mo", startMinutes: 600, endMinutes: 700 };
+    const b: TimeSlot = {
+      day: "Mo",
+      startMinutes: 600,
+      endMinutes: 700,
+      meetingDates: ["2027-01-13", "2027-04-14"],
+    };
+    expect(timesOverlap(a, b)).toBe(true);
+  });
+
   it("enrollmentsOverlap checks all time slots in enrollments", () => {
     const e1: CourseEnrollment = {
       courseCode: "AAA 1000",

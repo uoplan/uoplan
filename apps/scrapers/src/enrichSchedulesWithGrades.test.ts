@@ -86,7 +86,7 @@ describe("enrichSchedulesPayload", () => {
         {
           courseCode: "CSI 2110",
           components: {
-            LEC: [{ instructors: ["Grace Hopper"] }],
+            LEC: [{ times: [{ instructor: "Grace Hopper" }] }],
           },
         },
       ],
