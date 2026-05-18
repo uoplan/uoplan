@@ -15,7 +15,7 @@ import {
 const BASE_URL =
   "https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL";
 const HTML_CACHE_DIR = ".cache/course-search-html";
-const MAX_CONCURRENCY = 20;
+const MAX_CONCURRENCY = 50;
 const USE_CACHE_ONLY = process.argv.includes("use-cache");
 const WRITE_CACHE = process.argv.includes("write-cache");
 
@@ -42,6 +42,8 @@ interface MeetingTime {
   startMinutes: number;
   endMinutes: number;
   virtual: boolean;
+  instructor: string | null;
+  meetingDates: MeetingDateRange | null;
 }
 
 type MeetingDateRange = [string, string];
@@ -52,8 +54,6 @@ interface ComponentSection {
   component: string | null;
   session: string | null;
   times: MeetingTime[];
-  instructors: string[];
-  meetingDates: MeetingDateRange | null;
   status: string | null;
   /** Filled by grade enrichment from `grades.json` when present. */
   distribution?: Record<string, number>;
@@ -367,8 +367,6 @@ function parseScheduleHtml(
             .trim(),
         )
         .filter(Boolean);
-      const datesText = dateLines[0] || "";
-
       const statusAlt =
         $row.find('div[id^="win0divDERIVED_CLSRCH_SSR_STATUS_LONG$"] img').attr("alt") || null;
 
@@ -376,7 +374,7 @@ function parseScheduleHtml(
         !rawSection &&
         dayLines.length === 0 &&
         instructorParts.length === 0 &&
-        !datesText &&
+        dateLines.length === 0 &&
         !statusAlt
       ) {
         return;
@@ -385,7 +383,8 @@ function parseScheduleHtml(
       const { sectionCode, component, session } = parseSectionHeader(sectionLines[0] || rawSection);
 
       const times: MeetingTime[] = [];
-      for (const line of dayLines) {
+      for (let i = 0; i < dayLines.length; i++) {
+        const line = dayLines[i];
         const m = line.match(/^([A-Za-z]{2,3})\s+(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})$/);
         if (!m) continue;
         const dayKey = DAY_MAP[m[1]];
@@ -393,10 +392,15 @@ function parseScheduleHtml(
         const start = parseTimeToMinutes(m[2]);
         const end = parseTimeToMinutes(m[3]);
         if (start == null || end == null) continue;
-        times.push({ day: dayKey, startMinutes: start, endMinutes: end, virtual });
+        times.push({
+          day: dayKey,
+          startMinutes: start,
+          endMinutes: end,
+          virtual,
+          instructor: instructorParts[i] ?? null,
+          meetingDates: dateLines[i] ? parseMeetingDates(dateLines[i]) : null,
+        });
       }
-
-      const meetingDates = datesText ? parseMeetingDates(datesText) : null;
 
       const compKey = component || "UNKNOWN";
       const section: ComponentSection = {
@@ -405,8 +409,6 @@ function parseScheduleHtml(
         component,
         session,
         times,
-        instructors: instructorParts,
-        meetingDates,
         status: statusAlt,
       };
 

@@ -16,14 +16,14 @@ export function useTimetableDateRangeFromSchedule(
 
     for (const enrollment of schedule.enrollments) {
       for (const { section } of Object.values(enrollment.sectionCombo)) {
-        const md = section.meetingDates;
-        if (!md || md.length < 2) continue;
-
-        const start = md[0];
-        const end = md[1];
-
-        if (start && (!minStart || start < minStart)) minStart = start;
-        if (end && (!maxEnd || end > maxEnd)) maxEnd = end;
+        for (const t of section.times) {
+          const md = t.meetingDates;
+          if (!md || md.length < 2) continue;
+          const start = md[0];
+          const end = md[1];
+          if (start && (!minStart || start < minStart)) minStart = start;
+          if (end && (!maxEnd || end > maxEnd)) maxEnd = end;
+        }
       }
     }
 

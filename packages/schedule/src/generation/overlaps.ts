@@ -2,7 +2,11 @@ import type { CourseEnrollment, TimeSlot } from "./types";
 
 export function timesOverlap(a: TimeSlot, b: TimeSlot): boolean {
   if (a.day !== b.day) return false;
-  return a.startMinutes < b.endMinutes && b.startMinutes < a.endMinutes;
+  if (!(a.startMinutes < b.endMinutes && b.startMinutes < a.endMinutes)) return false;
+  if (a.meetingDates && b.meetingDates) {
+    return a.meetingDates[0] <= b.meetingDates[1] && b.meetingDates[0] <= a.meetingDates[1];
+  }
+  return true;
 }
 
 export function enrollmentsOverlap(a: CourseEnrollment, b: CourseEnrollment): boolean {

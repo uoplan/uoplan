@@ -1356,13 +1356,20 @@ async function scrapeYearCatalogue(
   return { catalogue, missingUrls };
 }
 
-async function scrapeYear(year: number, dataDir: string, force: boolean): Promise<string[]> {
-  const outPath = path.join(dataDir, `catalogue.${year}.json`);
+/** Returns the missing URLs scraped, or null if the archive year returned 404. */
+async function scrapeYear(
+  year: number,
+  dataDir: string,
+  force: boolean,
+  outYear?: number,
+): Promise<string[] | null> {
+  const effectiveOutYear = outYear ?? year;
+  const outPath = path.join(dataDir, `catalogue.${effectiveOutYear}.json`);
 
   if (!force) {
     try {
       await fs.access(outPath);
-      console.log(`Skipping catalogue.${year}.json (already exists)`);
+      console.log(`Skipping catalogue.${effectiveOutYear}.json (already exists)`);
       return [];
     } catch {
       // file doesn't exist, proceed with scraping
@@ -1374,14 +1381,14 @@ async function scrapeYear(year: number, dataDir: string, force: boolean): Promis
 
   const result = await scrapeYearCatalogue(baseUrl);
   if (result === null) {
-    console.warn(`Skipping catalogue.${year}.json — archive unavailable at ${baseUrl}`);
-    return [];
+    console.warn(`Archive unavailable at ${baseUrl}`);
+    return null;
   }
   const { catalogue, missingUrls } = result;
 
   await fs.writeFile(outPath, JSON.stringify(catalogue, null, 2), "utf-8");
   console.log(
-    `Saved catalogue.${year}.json (${catalogue.courses.length} courses, ${catalogue.programs.length} programs)` +
+    `Saved catalogue.${effectiveOutYear}.json (${catalogue.courses.length} courses, ${catalogue.programs.length} programs)` +
       (missingUrls.length ? ` — ${missingUrls.length} missing (404)` : ""),
   );
 
@@ -1467,7 +1474,8 @@ async function generateIndices(dataDir: string): Promise<void> {
 
 async function main() {
   const dataDir = SCRAPER_DATA_DIR;
-  const currentYear = getCurrentAcademicYear();
+  const academicYear = getCurrentAcademicYear();
+  const calendarYear = new Date().getFullYear();
   await fs.mkdir(dataDir, { recursive: true });
 
   // Load existing missing-URLs log so we can merge into it
@@ -1480,18 +1488,39 @@ async function main() {
     // No existing file — start fresh
   }
 
-  // Scrape archive years (skip if already present)
-  for (let year = OLDEST_YEAR; year < currentYear; year++) {
+  // Probe archive years from OLDEST_YEAR upward, stopping at the first 404
+  for (let year = OLDEST_YEAR; year < academicYear; year++) {
     const missing = await scrapeYear(year, dataDir, false);
+    if (missing === null) {
+      console.warn(`Stopping archive scrape at ${year} (404)`);
+      break;
+    }
     if (missing.length) missingByYear[String(year)] = missing.sort();
   }
 
-  // Always re-scrape the current calendar academic year from the live site
-  const currentMissing = await scrapeYear(currentYear, dataDir, true);
-  if (currentMissing.length) {
-    missingByYear[String(currentYear)] = currentMissing.sort();
+  // Always re-scrape the live (non-archived) site for the current academic year.
+  // Write it under the academic year filename (e.g. catalogue.2025.json).
+  const liveMissing = await scrapeYear(academicYear, dataDir, true);
+  if (liveMissing !== null && liveMissing.length) {
+    missingByYear[String(academicYear)] = liveMissing.sort();
   } else {
-    delete missingByYear[String(currentYear)];
+    delete missingByYear[String(academicYear)];
+  }
+
+  // Ensure the current calendar year always has a file.
+  // Before September: academicYear = calendarYear - 1, so we copy the live data forward.
+  // From September on: academicYear === calendarYear, nothing extra needed.
+  if (calendarYear !== academicYear) {
+    const srcPath = path.join(dataDir, `catalogue.${academicYear}.json`);
+    const dstPath = path.join(dataDir, `catalogue.${calendarYear}.json`);
+    await fs.copyFile(srcPath, dstPath);
+    console.log(`\nCopied catalogue.${academicYear}.json → catalogue.${calendarYear}.json`);
+    // Mirror missing URLs to the calendar year key as well
+    if (missingByYear[String(academicYear)]?.length) {
+      missingByYear[String(calendarYear)] = missingByYear[String(academicYear)];
+    } else {
+      delete missingByYear[String(calendarYear)];
+    }
   }
 
   // Write the missing-URLs log
@@ -1503,15 +1532,22 @@ async function main() {
     );
   }
 
-  // Write the manifest
-  const years: number[] = [];
-  for (let y = currentYear; y >= OLDEST_YEAR; y--) years.push(y);
+  // Build the manifest from files actually present in the data dir
+  const dirEntries = await fs.readdir(dataDir);
+  const years = dirEntries
+    .map((name) => {
+      const m = CATALOGUE_JSON_RE.exec(name);
+      return m ? Number(m[1]) : null;
+    })
+    .filter((y): y is number => y !== null)
+    .sort((a, b) => b - a);
+
   await fs.writeFile(
     path.join(dataDir, "catalogue.json"),
     JSON.stringify({ years }, null, 2),
     "utf-8",
   );
-  console.log(`\nWrote catalogue.json manifest: years ${currentYear}–${OLDEST_YEAR}`);
+  console.log(`\nWrote catalogue.json manifest: years ${years[0]}–${years[years.length - 1]}`);
 
   await generateIndices(dataDir);
 }

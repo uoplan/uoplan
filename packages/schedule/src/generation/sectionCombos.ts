@@ -15,6 +15,7 @@ export function collectTimes(sections: ComponentSection[]): TimeSlot[] {
           day: t.day,
           startMinutes: t.startMinutes,
           endMinutes: t.endMinutes,
+          meetingDates: t.meetingDates ?? null,
         });
       }
     }
@@ -52,7 +53,9 @@ export function getValidSectionCombos(
       if (!constraints) return true;
       if (
         !isSectionAllowedByMinRating({
-          instructors: section.instructors,
+          instructors: section.times
+            .map((t) => t.instructor)
+            .filter((i): i is string => i !== null),
           minRating: constraints.minProfessorRating,
           professorRatings: constraints.professorRatings,
         })
@@ -66,6 +69,7 @@ export function getValidSectionCombos(
           day: t.day,
           startMinutes: t.startMinutes,
           endMinutes: t.endMinutes,
+          meetingDates: t.meetingDates ?? null,
         }));
 
       if (!times.every((t) => timeSlotSatisfiesConstraints(t, constraints))) {

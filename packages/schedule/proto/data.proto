@@ -134,6 +134,8 @@ message MeetingTime {
   uint32 start_minutes = 2;
   uint32 end_minutes = 3;
   bool virtual = 4;
+  optional string instructor = 5;
+  optional MeetingDateRange meeting_dates = 6;
 }
 
 message MeetingDateRange {
@@ -173,8 +175,7 @@ message ComponentSection {
   optional string component = 3;
   optional string session = 4;
   repeated MeetingTime times = 5;
-  repeated string instructors = 6;
-  optional MeetingDateRange meeting_dates = 7;
+  // fields 6 and 7 reserved (instructors/meeting_dates moved into MeetingTime)
   SectionStatus status = 8;
   optional GradeDistribution distribution = 9;
 }

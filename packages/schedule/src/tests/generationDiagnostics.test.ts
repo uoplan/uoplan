@@ -29,8 +29,6 @@ function makeSchedule(
             endMinutes: t.end,
             virtual: false,
           })),
-          instructors: [],
-          meetingDates: null,
           status: null,
         },
       ],

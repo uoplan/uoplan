@@ -14,8 +14,6 @@ const minimalSection = (distribution: Record<string, number>): ComponentSection 
   component: "LEC",
   session: null,
   times: [{ day: "Mo", startMinutes: 600, endMinutes: 660, virtual: false }],
-  instructors: [],
-  meetingDates: null,
   status: null,
   distribution,
 });
