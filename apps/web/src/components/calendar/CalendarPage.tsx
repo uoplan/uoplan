@@ -238,32 +238,37 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
       {!isBasic && (
         <>
           {hasSchedule ? (
-            <Group gap="xs">
-              <Button
-                variant="light"
-                color="violet"
-                size="sm"
-                radius={0}
-                leftSection={<IconChevronLeft size={14} />}
-                disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
-                loading={scheduleGenerating}
-                onClick={handlePrevious}
-              >
-                {tr("calendarPage.previous")}
-              </Button>
-              <Button
-                variant="filled"
-                color="violet"
-                size="sm"
-                radius={0}
-                rightSection={<IconChevronRight size={14} />}
-                disabled={scheduleGenerating || !canUseSeedNavigation}
-                loading={scheduleGenerating}
-                onClick={handleNext}
-              >
-                {tr("calendarPage.next")}
-              </Button>
-            </Group>
+            <Stack gap={6}>
+              <Text size="xs" c="dimmed">
+                {tr("calendarPage.scheduleNav.label")}
+              </Text>
+              <Group gap="xs">
+                <Button
+                  variant="light"
+                  color="violet"
+                  size="sm"
+                  radius={0}
+                  leftSection={<IconChevronLeft size={14} />}
+                  disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
+                  loading={scheduleGenerating}
+                  onClick={handlePrevious}
+                >
+                  {tr("calendarPage.previous")}
+                </Button>
+                <Button
+                  variant="filled"
+                  color="violet"
+                  size="sm"
+                  radius={0}
+                  rightSection={<IconChevronRight size={14} />}
+                  disabled={scheduleGenerating || !canUseSeedNavigation}
+                  loading={scheduleGenerating}
+                  onClick={handleNext}
+                >
+                  {tr("calendarPage.next")}
+                </Button>
+              </Group>
+            </Stack>
           ) : (
             <Button
               variant="filled"
@@ -474,6 +479,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
             disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
             loading={scheduleGenerating}
             onClick={handlePrevious}
+            title="Previous schedule"
           >
             <IconChevronLeft size={22} stroke={1.75} />
           </Button>
@@ -487,6 +493,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
             disabled={scheduleGenerating || !canUseSeedNavigation}
             loading={scheduleGenerating}
             onClick={handleNext}
+            title="Next schedule"
           >
             <IconChevronRight size={22} stroke={1.75} />
           </Button>

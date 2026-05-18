@@ -27,6 +27,7 @@ export interface CalendarEvent {
     numRatings: number;
   }>;
   gradeViz?: GradeVizData | null;
+  meetingDates?: [string, string] | null;
 }
 
 export function useCalendarEvents(
@@ -85,6 +86,7 @@ export function useCalendarEvents(
             professorRatingValue,
             professorRatingDetails,
             gradeViz,
+            meetingDates: t.meetingDates ?? null,
           });
           timeIdx += 1;
         }
