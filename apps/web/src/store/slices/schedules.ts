@@ -102,6 +102,7 @@ interface SchedulesSlice {
 
 export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice> = (set, get) => ({
   generateSchedules: async () => {
+    if (get().scheduleGenerating) return;
     await withScheduleGenerating(set, async () => {
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const state = get();
@@ -123,6 +124,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
   },
 
   generateBasicSchedules: async () => {
+    if (get().scheduleGenerating) return;
     await withScheduleGenerating(set, async () => {
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const state = get();
