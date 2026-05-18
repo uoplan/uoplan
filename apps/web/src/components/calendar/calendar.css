@@ -1,0 +1,445 @@
+/* Calendar event card styles */
+
+.cal-event {
+  container-type: size;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 0;
+  font-size: 11px;
+  border-radius: 0;
+  height: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Swap modal / static preview: same look as calendar cells without filling parent height.
+   container-type must be reset — size containment collapses auto-height elements to 0. */
+.cal-event--swap-card {
+  container-type: normal;
+  height: auto;
+  min-height: 0;
+}
+
+.cal-event--swap-card .cal-event-inner {
+  flex: 0 0 auto;
+}
+
+.cal-event--swap-card .cal-event-body {
+  flex: 0 0 auto;
+  min-height: 0;
+}
+
+.cal-event--swap-card .cal-event-prof-bottom {
+  margin-top: 0;
+}
+
+.cal-event-row-tail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.cal-event-inner {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.cal-event-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.cal-event-heading {
+  flex: 0 0 auto;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.cal-event-heading-inline {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 1.2;
+}
+
+.cal-event-code {
+  flex-shrink: 0;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.cal-event-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 9px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.cal-event-meta {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  width: 100%;
+}
+
+.cal-event-meta .cal-event-type {
+  color: #fff;
+  font-weight: 600;
+}
+
+.cal-event-prof-bottom {
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  min-width: 0;
+  width: 100%;
+  margin-top: auto;
+}
+
+.cal-event-prof-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+}
+
+.cal-event-prof-row .cal-event-prof-name {
+  /* Grow only when needed for ellipsis; do not stretch so · and RMP stay beside the name */
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.25;
+}
+
+.cal-event-prof-row .cal-event-sep {
+  flex-shrink: 0;
+}
+
+.cal-rating {
+  --rmp-accent: var(--mantine-color-gray-5);
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 1px 6px;
+  border-radius: 0;
+  font-size: 9px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--rmp-accent) 55%, rgba(255, 255, 255, 0.22));
+  background: color-mix(in srgb, var(--rmp-accent) 22%, rgba(0, 0, 0, 0.35));
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+}
+
+.cal-rating--red {
+  --rmp-accent: var(--mantine-color-red-5);
+}
+.cal-rating--orange {
+  --rmp-accent: var(--mantine-color-orange-5);
+}
+.cal-rating--yellow {
+  --rmp-accent: var(--mantine-color-yellow-5);
+}
+.cal-rating--green {
+  --rmp-accent: var(--mantine-color-green-5);
+}
+.cal-rating--gray {
+  --rmp-accent: var(--mantine-color-gray-5);
+}
+
+a.cal-rating:hover {
+  filter: brightness(1.08);
+  text-decoration: none;
+}
+
+.cal-event-code-block {
+  display: block;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.cal-event-type-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.cal-event-type-row .cal-event-type {
+  flex: 0 0 auto;
+}
+
+.cal-event-type-time-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.cal-event-type-time-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.cal-event-type-time-wrap .cal-event-type {
+  flex: 0 0 auto;
+}
+
+.cal-event-type-time-wrap .cal-event-time {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cal-event-sep {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.35);
+  line-height: 1.2;
+  user-select: none;
+}
+
+.cal-event-type {
+  flex: 1;
+  min-width: 0;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.cal-event-virtual {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.cal-event-time {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.cal-event-time-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.cal-event-time-row .cal-event-time {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cal-event-grade-wrap {
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.cal-event-time-row--stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.cal-event-grade-wrap--stacked {
+  width: 100%;
+}
+
+.cal-event-grade-wrap--stacked .cal-grade-chip {
+  width: 100%;
+  max-width: 100%;
+}
+
+.cal-event-compact-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.cal-event-compact-row .cal-event-grade-wrap--stacked {
+  flex: 1;
+  min-width: 0;
+}
+
+.cal-event-rating-dot-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.cal-event-rating-dot {
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+}
+
+.cal-event-prof {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.cal-event-prof-compact {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.cal-event-prof-compact .cal-event-prof-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.2;
+}
+
+/* Height-adaptive container queries */
+
+@container (max-height: 80px) {
+  .cal-event-prof-bottom {
+    display: none;
+  }
+}
+
+@container (max-height: 52px) {
+  .cal-event-title {
+    display: none;
+  }
+  .cal-event-time {
+    display: none;
+  }
+  .cal-event-type-time-wrap .cal-event-sep {
+    display: none;
+  }
+  .cal-event-prof-bottom {
+    display: none;
+  }
+  .cal-event-inner {
+    padding: 3px 5px;
+  }
+}
+
+/* Mobile adjustments */
+
+@media (max-width: 768px) {
+  .cal-event-prof-bottom {
+    display: none;
+  }
+  .cal-event-title {
+    display: none;
+  }
+  .cal-event-code {
+    font-size: 10px;
+  }
+  .cal-event-inner {
+    padding: 5px 6px;
+  }
+
+  /* Swap card always shows full detail regardless of screen size */
+  .cal-event--swap-card .cal-event-prof-bottom {
+    display: block;
+  }
+  .cal-event--swap-card .cal-event-title {
+    display: inline;
+  }
+  .cal-event--swap-card .cal-event-code {
+    font-size: 11px;
+  }
+  .cal-event--swap-card .cal-event-inner {
+    padding: 8px;
+  }
+}

@@ -27,7 +27,7 @@ export type CalendarEventFaceProps = {
   professor: string;
   virtual: boolean;
   layout: CalendarEventFaceLayout;
-  /** Mantine rating tier key for `fc-uoplan-rating-inline--*`. */
+  /** Mantine rating tier key for `cal-rating--*`. */
   ratingTier: string;
   hasProfessorRating: boolean;
   hasNumericRating: boolean;
@@ -55,15 +55,15 @@ export function CalendarEventFace({
   interaction,
 }: CalendarEventFaceProps) {
   const virtualTail = virtual ? (
-    <div className="fc-uoplan-event-row-tail">
-      <span className="fc-uoplan-event-virtual">{tr("calendar.event.virtual")}</span>
+    <div className="cal-event-row-tail">
+      <span className="cal-event-virtual">{tr("calendar.event.virtual")}</span>
     </div>
   ) : null;
 
   const ratingEl =
     hasNumericRating && professorRatingValue != null ? (
       <>
-        <span className="fc-uoplan-event-meta-sep" aria-hidden>
+        <span className="cal-event-sep" aria-hidden>
           ·
         </span>
         <Box
@@ -76,7 +76,7 @@ export function CalendarEventFace({
           target={interaction === "interactive" && legacyId ? "_blank" : undefined}
           rel={interaction === "interactive" && legacyId ? "noopener noreferrer" : undefined}
           onClick={(e: MouseEvent) => e.stopPropagation()}
-          className={`fc-uoplan-rating-inline fc-uoplan-rating-inline--${ratingTier}`}
+          className={`cal-rating cal-rating--${ratingTier}`}
         >
           {professorRatingValue.toFixed(1)}
         </Box>
@@ -84,8 +84,8 @@ export function CalendarEventFace({
     ) : null;
 
   const professorRowInner = (
-    <div className="fc-uoplan-event-professor-row">
-      <span className="fc-uoplan-event-professor-name" title={professor}>
+    <div className="cal-event-prof-row">
+      <span className="cal-event-prof-name" title={professor}>
         {professor}
       </span>
       {ratingEl}
@@ -113,46 +113,44 @@ export function CalendarEventFace({
     ) : null;
 
   return (
-    <div className="fc-uoplan-event-inner">
-      <div className="fc-uoplan-event-body">
+    <div className="cal-event-inner">
+      <div className="cal-event-body">
         <div
-          className="fc-uoplan-event-heading"
+          className="cal-event-heading"
           title={courseTitle ? `${courseCode} ${courseTitle}` : courseCode}
         >
-          <span className="fc-uoplan-event-heading-inline">
-            <span className="fc-uoplan-event-code-part">{courseCode}</span>
-            {courseTitle ? <span className="fc-uoplan-event-title-part">{courseTitle}</span> : null}
+          <span className="cal-event-heading-inline">
+            <span className="cal-event-code">{courseCode}</span>
+            {courseTitle ? <span className="cal-event-title">{courseTitle}</span> : null}
           </span>
         </div>
 
-        <div className="fc-uoplan-event-top-meta">
+        <div className="cal-event-meta">
           {layout.showSection && layout.showTime && timeRange ? (
-            <div className="fc-uoplan-event-type-time-row">
-              <div className="fc-uoplan-event-type-time-wrap">
-                <span className="fc-uoplan-event-type">{componentSectionDisplay}</span>
-                <span className="fc-uoplan-event-meta-sep" aria-hidden>
+            <div className="cal-event-type-time-row">
+              <div className="cal-event-type-time-wrap">
+                <span className="cal-event-type">{componentSectionDisplay}</span>
+                <span className="cal-event-sep" aria-hidden>
                   ·
                 </span>
-                <span className="fc-uoplan-event-time">{timeRange}</span>
+                <span className="cal-event-time">{timeRange}</span>
               </div>
               {virtualTail}
             </div>
           ) : layout.showSection ? (
-            <div className="fc-uoplan-event-type-row">
-              <span className="fc-uoplan-event-type">{componentSectionDisplay}</span>
+            <div className="cal-event-type-row">
+              <span className="cal-event-type">{componentSectionDisplay}</span>
               {virtualTail}
             </div>
           ) : layout.showTime && timeRange ? (
-            <div className="fc-uoplan-event-time-row">
-              <span className="fc-uoplan-event-time">{timeRange}</span>
+            <div className="cal-event-time-row">
+              <span className="cal-event-time">{timeRange}</span>
               {virtualTail}
             </div>
           ) : null}
         </div>
 
-        {professorBlock ? (
-          <div className="fc-uoplan-event-professor-bottom">{professorBlock}</div>
-        ) : null}
+        {professorBlock ? <div className="cal-event-prof-bottom">{professorBlock}</div> : null}
       </div>
     </div>
   );

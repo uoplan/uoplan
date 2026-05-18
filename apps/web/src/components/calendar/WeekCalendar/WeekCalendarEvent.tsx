@@ -91,7 +91,7 @@ export function WeekCalendarEvent({
 
   return (
     <div
-      className="uoplan-cal-event fc-uoplan-event"
+      className="cal-event cal-event"
       style={{
         position: "absolute",
         top: `${top}%`,
@@ -126,10 +126,10 @@ export function WeekCalendarEvent({
       />
       {gradeTooltip ? (
         <Tooltip label={gradeTooltip} withArrow position="top" withinPortal color="dark">
-          <div className="fc-uoplan-grade-bottom-hitbox">{gradeBottom}</div>
+          <div className="cal-grade-bar-hitbox">{gradeBottom}</div>
         </Tooltip>
       ) : (
-        <div className="fc-uoplan-grade-bottom-hitbox">{gradeBottom}</div>
+        <div className="cal-grade-bar-hitbox">{gradeBottom}</div>
       )}
     </div>
   );

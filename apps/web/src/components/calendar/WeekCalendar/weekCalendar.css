@@ -1,4 +1,4 @@
-.uoplan-cal-root {
+.cal-root {
   display: flex;
   flex-direction: row;
   height: 100%;
@@ -10,20 +10,20 @@
 }
 
 /* Time axis */
-.uoplan-cal-time-axis {
+.cal-time-axis {
   flex-shrink: 0;
   width: 44px;
   overflow: hidden;
   position: relative;
 }
 
-.uoplan-cal-time-axis-inner {
+.cal-time-axis-inner {
   position: relative;
   height: calc(100% - 28px); /* subtract header height */
   margin-top: 28px;
 }
 
-.uoplan-cal-time-label {
+.cal-time-label {
   position: absolute;
   right: 4px;
   transform: translateY(-50%);
@@ -35,7 +35,7 @@
 }
 
 /* Columns area */
-.uoplan-cal-columns {
+.cal-columns {
   flex: 1;
   display: flex;
   flex-direction: row;
@@ -46,14 +46,14 @@
 }
 
 /* Full-height horizontal hour lines, rendered behind columns */
-.uoplan-cal-hour-lines {
+.cal-hour-lines {
   position: absolute;
   inset: 28px 0 0 0; /* top = header height */
   pointer-events: none;
   z-index: 0;
 }
 
-.uoplan-cal-hour-line {
+.cal-hour-line {
   position: absolute;
   left: 0;
   right: 0;
@@ -62,7 +62,7 @@
   transform: translateY(-0.5px);
 }
 
-.uoplan-cal-half-line {
+.cal-half-line {
   position: absolute;
   left: 0;
   right: 0;
@@ -72,7 +72,7 @@
 }
 
 /* Individual day column */
-.uoplan-cal-column {
+.cal-column {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -82,11 +82,11 @@
   z-index: 1;
 }
 
-.uoplan-cal-column:first-child {
+.cal-column:first-child {
   border-left: none;
 }
 
-.uoplan-cal-col-header {
+.cal-col-header {
   flex-shrink: 0;
   height: 28px;
   display: flex;
@@ -101,7 +101,7 @@
   user-select: none;
 }
 
-.uoplan-cal-col-body {
+.cal-col-body {
   flex: 1;
   position: relative;
   overflow: hidden;
@@ -109,7 +109,7 @@
 }
 
 /* Animation phases */
-@keyframes uoplan-cal-exit-down {
+@keyframes cal-exit-down {
   from {
     opacity: 1;
     transform: translateY(0);
@@ -120,7 +120,7 @@
   }
 }
 
-@keyframes uoplan-cal-enter-up {
+@keyframes cal-enter-up {
   from {
     opacity: 0;
     transform: translateY(6px);
@@ -131,18 +131,18 @@
   }
 }
 
-[data-phase="exiting"] .uoplan-cal-event {
-  animation: uoplan-cal-exit-down 100ms ease-in forwards;
+[data-phase="exiting"] .cal-event {
+  animation: cal-exit-down 100ms ease-in forwards;
   pointer-events: none;
 }
 
-[data-phase="entering"] .uoplan-cal-event {
-  animation: uoplan-cal-enter-up 100ms ease-out forwards;
+[data-phase="entering"] .cal-event {
+  animation: cal-enter-up 100ms ease-out forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-phase="exiting"] .uoplan-cal-event,
-  [data-phase="entering"] .uoplan-cal-event {
+  [data-phase="exiting"] .cal-event,
+  [data-phase="entering"] .cal-event {
     animation: none;
   }
 }

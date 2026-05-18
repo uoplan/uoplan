@@ -1,3 +1,4 @@
+import "./calendar.css";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Box, Button, Group, Stack, Text, Title, Tooltip } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";

@@ -85,7 +85,7 @@ export function EventStyleCard({
 
   return (
     <div
-      className="fc-uoplan-event fc-uoplan-event--swap-card"
+      className="cal-event cal-event--swap-card"
       data-color-hex={hex}
       data-rating-color={hasProfessorRating ? markerColor : ""}
       style={{
