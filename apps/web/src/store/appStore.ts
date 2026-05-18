@@ -88,6 +88,7 @@ export const useAppStore = create<AppStore>()((...a) => {
     wizardFurthestStep: 0,
     frenchImmersionStream: false,
     calendarWeekIndex: null,
+    scheduleNoVariety: false,
 
     setCalendarWeekIndex: (index) => set({ calendarWeekIndex: index }),
 
