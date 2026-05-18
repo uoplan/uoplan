@@ -52,6 +52,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
     scheduleGenerating,
     basicPinnedCourses,
     basicElectivesCount,
+    scheduleNoVariety,
   } = useAppStore(
     useShallow((s) => ({
       currentSchedule: s.currentSchedule,
@@ -66,6 +67,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
       scheduleGenerating: s.scheduleGenerating,
       basicPinnedCourses: s.basicPinnedCourses,
       basicElectivesCount: s.basicElectivesCount,
+      scheduleNoVariety: s.scheduleNoVariety,
     })),
   );
 
@@ -330,6 +332,12 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
             errorDetails={genErrDetails}
             summarizeEmptyPools={!!summarizeEmptyPoolsInGenError}
           />
+        </Alert>
+      )}
+
+      {scheduleNoVariety && !generationError && (
+        <Alert color="yellow" variant="light" radius={0} py="xs" style={{ flexShrink: 0 }}>
+          {tr(isBasic ? "basicCalendar.noMoreSchedules" : "calendarPage.noMoreSchedules")}
         </Alert>
       )}
 

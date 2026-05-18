@@ -31,6 +31,14 @@ import {
 import { isAdvancedPlannerActive, isBasicPlannerActive } from "../../lib/calendarRoute";
 import { flushPersistedAppState } from "../../lib/persistAppState";
 import { nextSeed, noteLowestVisitedSeed, repairSeedPosition } from "../../lib/seedNavigation";
+import type { GeneratedSchedule } from "schedule";
+
+function scheduleFingerprint(schedule: GeneratedSchedule): string {
+  return schedule.enrollments
+    .map((e) => e.courseCode)
+    .sort()
+    .join(",");
+}
 
 type ScheduleGenerationResult = {
   currentSchedule: AppStore["currentSchedule"];
@@ -48,7 +56,13 @@ function applyScheduleGenerationResult(
   seed: number,
 ) {
   const lowestVisitedSeed = noteLowestVisitedSeed(get().lowestVisitedSeed, seed);
-  set({ ...result, currentSeed: seed, lowestVisitedSeed, calendarWeekIndex: null });
+  set({
+    ...result,
+    currentSeed: seed,
+    lowestVisitedSeed,
+    calendarWeekIndex: null,
+    scheduleNoVariety: false,
+  });
 }
 
 const validEnrollmentsByCourseCode = new Map<string, CourseEnrollment[]>();
@@ -164,24 +178,33 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       firstSeed: generateRandomSeed(),
       currentSeed: 0,
       lowestVisitedSeed: null,
+      scheduleNoVariety: false,
     }),
 
   markBasicSettingsChanged: () =>
     set({
       generationError: null,
+      scheduleNoVariety: false,
     }),
 
   goToPreviousSeed: async () => {
     const state = get();
     const floor = state.lowestVisitedSeed ?? state.firstSeed;
     if (state.scheduleGenerating || state.currentSeed <= floor) return;
+    const prevFingerprint = state.currentSchedule
+      ? scheduleFingerprint(state.currentSchedule)
+      : null;
     await withScheduleGenerating(set, async () => {
       const newSeed = state.currentSeed - 1;
       set({ currentSeed: newSeed, currentSwaps: [] });
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
       if (result) {
-        set({ ...result, currentSeed: newSeed });
+        const noVariety =
+          prevFingerprint !== null &&
+          result.currentSchedule !== null &&
+          scheduleFingerprint(result.currentSchedule) === prevFingerprint;
+        set({ ...result, currentSeed: newSeed, scheduleNoVariety: noVariety });
       }
     });
   },
@@ -189,6 +212,9 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
   goToNextSeed: async () => {
     const state = get();
     if (state.scheduleGenerating) return;
+    const prevFingerprint = state.currentSchedule
+      ? scheduleFingerprint(state.currentSchedule)
+      : null;
     await withScheduleGenerating(set, async () => {
       const baseSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
       const newSeed = nextSeed(state.firstSeed, baseSeed);
@@ -197,12 +223,22 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
       if (result) {
         applyScheduleGenerationResult(set, get, result, newSeed);
+        if (
+          prevFingerprint !== null &&
+          result.currentSchedule !== null &&
+          scheduleFingerprint(result.currentSchedule) === prevFingerprint
+        ) {
+          set({ scheduleNoVariety: true });
+        }
       }
     });
   },
 
   randomizeSeed: async () => {
     if (get().scheduleGenerating) return;
+    const prevFingerprint = get().currentSchedule
+      ? scheduleFingerprint(get().currentSchedule!)
+      : null;
     await withScheduleGenerating(set, async () => {
       const newFirstSeed = generateRandomSeed();
       set({
@@ -219,6 +255,13 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       });
       if (result) {
         applyScheduleGenerationResult(set, get, result, newFirstSeed);
+        if (
+          prevFingerprint !== null &&
+          result.currentSchedule !== null &&
+          scheduleFingerprint(result.currentSchedule) === prevFingerprint
+        ) {
+          set({ scheduleNoVariety: true });
+        }
       }
     });
   },

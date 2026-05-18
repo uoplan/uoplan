@@ -103,6 +103,8 @@ export interface AppState {
   frenchImmersionStream: boolean;
   /** The week group index the user last navigated to in the calendar, for URL sharing. */
   calendarWeekIndex: number | null;
+  /** True when the last seed navigation returned the same course set as the current schedule. */
+  scheduleNoVariety: boolean;
 }
 
 export interface AppActions {
