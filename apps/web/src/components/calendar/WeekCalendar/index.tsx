@@ -46,12 +46,12 @@ export function WeekCalendar({
   }, [events, dayCodes]);
 
   return (
-    <div className="uoplan-cal-root" data-phase={animationPhase}>
+    <div className="cal-root" data-phase={animationPhase}>
       {/* Time axis */}
-      <div className="uoplan-cal-time-axis">
-        <div className="uoplan-cal-time-axis-inner">
+      <div className="cal-time-axis">
+        <div className="cal-time-axis-inner">
           {HOUR_LABELS.map(({ label, percent }) => (
-            <div key={label} className="uoplan-cal-time-label" style={{ top: `${percent}%` }}>
+            <div key={label} className="cal-time-label" style={{ top: `${percent}%` }}>
               {label}
             </div>
           ))}
@@ -59,11 +59,11 @@ export function WeekCalendar({
       </div>
 
       {/* Day columns */}
-      <div className="uoplan-cal-columns">
+      <div className="cal-columns">
         {/* Hour lines (behind all columns) */}
-        <div className="uoplan-cal-hour-lines" aria-hidden>
+        <div className="cal-hour-lines" aria-hidden>
           {HOUR_LABELS.map(({ label, percent }) => (
-            <div key={label} className="uoplan-cal-hour-line" style={{ top: `${percent}%` }} />
+            <div key={label} className="cal-hour-line" style={{ top: `${percent}%` }} />
           ))}
         </div>
 
@@ -71,14 +71,14 @@ export function WeekCalendar({
           const dayEvents = eventsByDay.get(day) ?? [];
           const laid = assignLanes(dayEvents);
           return (
-            <div key={day} className="uoplan-cal-column">
-              <div className="uoplan-cal-col-header">{DAY_LABELS[day]}</div>
-              <div className="uoplan-cal-col-body">
+            <div key={day} className="cal-column">
+              <div className="cal-col-header">{DAY_LABELS[day]}</div>
+              <div className="cal-col-body">
                 {/* Half-hour dividers */}
                 {HALF_HOUR_PERCENTS.map((percent) => (
                   <div
                     key={percent}
-                    className="uoplan-cal-half-line"
+                    className="cal-half-line"
                     style={{ top: `${percent}%` }}
                     aria-hidden
                   />

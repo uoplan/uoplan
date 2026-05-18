@@ -1,3 +1,4 @@
+import "./gradeDistribution.css";
 import { Stack, Text, Tooltip } from "@mantine/core";
 import type { GradeVizData } from "schedule";
 import { tr } from "../../i18n";
@@ -36,7 +37,7 @@ export function GradeDistributionPassingSummary({
       size={compact ? "xs" : "sm"}
       fw={compact ? 500 : 700}
       c={compact ? "dimmed" : "gray.2"}
-      className={overlay ? "uoplan-grade-passing-overlay" : undefined}
+      className={overlay ? "cal-grade-passing-overlay" : undefined}
       lh={1.35}
     >
       {tr("calendar.grade.passingAndAPlus", {
@@ -66,9 +67,9 @@ export function GradeDistributionHistogram({
     buildHistogramModel(gradeViz);
 
   const histClass = [
-    "uoplan-grade-histogram",
-    variant === "compact" ? "uoplan-grade-histogram--compact" : "",
-    hideLabels ? "uoplan-grade-histogram--no-labels" : "",
+    "cal-grade-histogram",
+    variant === "compact" ? "cal-grade-histogram--compact" : "",
+    hideLabels ? "cal-grade-histogram--no-labels" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -100,9 +101,9 @@ export function GradeDistributionHistogram({
             withinPortal
             color="dark"
           >
-            <div className="uoplan-grade-histogram-item">
+            <div className="cal-grade-histogram-item">
               <div
-                className="uoplan-grade-histogram-bar"
+                className="cal-grade-histogram-bar"
                 style={{
                   height: `${Math.max(4, (entry.count / maxHistogramCount) * dims.maxBarPx)}px`,
                   backgroundColor: entry.count > 0 ? entry.color : "rgba(255,255,255,0.16)",
@@ -113,7 +114,7 @@ export function GradeDistributionHistogram({
                   style={{ fontSize: dims.labelFontPx }}
                   c="gray.5"
                   ta="center"
-                  className="uoplan-grade-histogram-label"
+                  className="cal-grade-histogram-label"
                 >
                   {entry.grade}
                 </Text>
@@ -129,9 +130,9 @@ export function GradeDistributionHistogram({
         withinPortal
         color="dark"
       >
-        <div className="uoplan-grade-histogram-item uoplan-grade-histogram-item-sns">
+        <div className="cal-grade-histogram-item cal-grade-histogram-item--sns">
           <div
-            className="uoplan-grade-histogram-bar uoplan-grade-histogram-bar-sns"
+            className="cal-grade-histogram-bar cal-grade-histogram-bar--sns"
             style={{
               height: `${dims.snsPx}px`,
             }}
@@ -169,7 +170,7 @@ export function GradeDistributionHistogram({
               style={{ fontSize: dims.labelFontPx }}
               c="gray.5"
               ta="center"
-              className="uoplan-grade-histogram-label"
+              className="cal-grade-histogram-label"
             >
               {tr("calendar.grade.snsLabel")}
             </Text>
@@ -183,7 +184,7 @@ export function GradeDistributionHistogram({
 
   return (
     <Stack gap={4} w="100%">
-      <Text size="xs" c="dimmed" className="uoplan-grade-histogram-student-count">
+      <Text size="xs" c="dimmed" className="cal-grade-histogram-count">
         {tr("explore.histogramStudents", { count: gradeViz.total })}
       </Text>
       {histogram}
@@ -200,8 +201,7 @@ export function GradeDistributionCompactChip({
 }) {
   if (!gradeViz || gradeViz.total <= 0) return null;
 
-  const cls =
-    variant === "preview" ? "uoplan-grade-chip uoplan-grade-chip--preview" : "uoplan-grade-chip";
+  const cls = variant === "preview" ? "cal-grade-chip cal-grade-chip--preview" : "cal-grade-chip";
 
   return (
     <div className={cls} aria-hidden>
@@ -224,13 +224,11 @@ export function GradeDistributionCompactChip({
 /** Full-width horizontal strip at the bottom of a calendar event (constant column width). */
 export function GradeDistributionBottomBar({ gradeViz }: { gradeViz?: GradeVizData | null }) {
   if (!gradeViz || gradeViz.total <= 0) {
-    return (
-      <div className="fc-uoplan-grade-bottom fc-uoplan-grade-bottom--no-grade-data" aria-hidden />
-    );
+    return <div className="cal-grade-bar cal-grade-bar--empty" aria-hidden />;
   }
 
   return (
-    <div className="fc-uoplan-grade-bottom fc-uoplan-grade-bottom--dist" aria-hidden>
+    <div className="cal-grade-bar cal-grade-bar--dist" aria-hidden>
       {gradeViz.buckets.map((bucket) => {
         if (bucket.count <= 0) return null;
         return (
@@ -252,8 +250,8 @@ export function GradeDistributionExpanded({ gradeViz }: { gradeViz?: GradeVizDat
 
   return (
     <Stack gap={8}>
-      <div className="uoplan-grade-expanded-layout">
-        <div className="uoplan-grade-histogram-wrap">
+      <div className="cal-grade-expanded">
+        <div className="cal-grade-histogram-wrap">
           <GradeDistributionPassingSummary gradeViz={gradeViz} overlay />
           <GradeDistributionHistogram gradeViz={gradeViz} variant="default" />
         </div>
