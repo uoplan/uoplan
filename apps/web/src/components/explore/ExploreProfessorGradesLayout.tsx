@@ -160,6 +160,7 @@ export function ExploreProfessorSummaryBar({
           {group.displayName}
         </Link>
         {ratingLine}
+        {combinedViz ? <GradeDistributionPassingSummary gradeViz={combinedViz} compact /> : null}
         {metadata ? (
           <Text size="xs" c="dimmed">
             {metadata}
