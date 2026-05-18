@@ -148,7 +148,12 @@ export function useScheduleWeeks(
     [schedule],
   );
 
-  const [weekIndex, setWeekIndex] = useState(0);
+  const [weekIndex, setWeekIndex] = useState(() => {
+    if (initialWeekIndex != null && initialWeekIndex >= 0 && initialWeekIndex < weekGroups.length) {
+      return initialWeekIndex;
+    }
+    return busiestIndex;
+  });
   const [lastSchedule, setLastSchedule] = useState(schedule);
 
   if (schedule !== lastSchedule) {
