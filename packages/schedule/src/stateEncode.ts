@@ -76,6 +76,7 @@ export interface EncodeInput {
   activeStep: number;
   showCalendar: boolean;
   frenchImmersionStream: boolean;
+  calendarWeekIndex?: number | null;
 }
 
 export interface DecodedState {
@@ -115,6 +116,7 @@ export interface DecodedState {
   activeStep: number;
   showCalendar: boolean;
   frenchImmersionStream: boolean;
+  calendarWeekIndex: number | null;
 }
 
 export interface CatalogueLike {
@@ -244,6 +246,7 @@ export function encodeState(
     magic: STATE_MAGIC,
     activeStep: input.activeStep,
     showCalendar: input.showCalendar,
+    calendarWeekIndex: input.calendarWeekIndex != null ? input.calendarWeekIndex : undefined,
   };
 
   // Requirements
@@ -457,6 +460,7 @@ export function decodeState(
     activeStep: state.activeStep ?? 0,
     showCalendar: state.showCalendar ?? false,
     frenchImmersionStream: state.frenchImmersionStream ?? false,
+    calendarWeekIndex: state.calendarWeekIndex ?? null,
   };
 }
 

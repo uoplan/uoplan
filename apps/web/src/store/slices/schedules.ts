@@ -48,7 +48,7 @@ function applyScheduleGenerationResult(
   seed: number,
 ) {
   const lowestVisitedSeed = noteLowestVisitedSeed(get().lowestVisitedSeed, seed);
-  set({ ...result, currentSeed: seed, lowestVisitedSeed });
+  set({ ...result, currentSeed: seed, lowestVisitedSeed, calendarWeekIndex: null });
 }
 
 const validEnrollmentsByCourseCode = new Map<string, CourseEnrollment[]>();

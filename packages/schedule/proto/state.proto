@@ -93,4 +93,5 @@ message ShareableState {
   repeated RequirementGroupSelection constrained_group_selections = 34;
   bool generation_prefer_easier = 35;
   bool french_immersion_stream = 36;
+  optional uint32 calendar_week_index = 37;
 }
