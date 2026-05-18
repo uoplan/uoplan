@@ -252,7 +252,7 @@ export function collectRequirementIdsWithCandidateCourse(
   return [...new Set(ids)];
 }
 
-export interface ResolveRequirementIdsForScheduleCourseParams {
+interface ResolveRequirementIdsForScheduleCourseParams {
   courseCode: string;
   courseNorm: string;
   requirementTreeWithStatus: RequirementWithStatus[];

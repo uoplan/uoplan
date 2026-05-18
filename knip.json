@@ -1,9 +1,28 @@
 {
-  "$schema": "https://unpkg.com/knip@3/schema.json",
+  "$schema": "https://unpkg.com/knip@6/schema.json",
   "workspaces": {
     "apps/web": {
       "vite": false,
-      "entry": ["src/main.tsx"]
+      "entry": ["src/main.tsx", "scripts/**/*.mjs"],
+      "ignore": ["public/**", "vite.config.ts", "lingui.config.ts", "vite/**"],
+      "ignoreDependencies": [
+        "@lingui/format-po",
+        "@lingui/vite-plugin",
+        "@tanstack/router-plugin",
+        "@types/markdown-it",
+        "@vitejs/plugin-react",
+        "markdown-it"
+      ]
+    },
+    "apps/notifications": {
+      "ignoreDependencies": ["@marsidev/react-turnstile", "wrangler"]
+    },
+    "apps/scrapers": {
+      "entry": ["src/**/*.ts"]
+    },
+    "packages/schedule": {
+      "entry": ["src/**/*.ts"],
+      "ignoreDependencies": ["ts-proto"]
     }
   }
 }

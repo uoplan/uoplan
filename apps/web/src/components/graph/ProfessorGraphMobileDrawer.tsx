@@ -10,7 +10,7 @@ const SURFACE_STYLE = {
   borderTop: "1px solid rgba(134, 142, 150, 0.25)",
 };
 
-export type ProfessorGraphMobileDrawerProps = {
+type ProfessorGraphMobileDrawerProps = {
   node: ProfessorGraphNode | null;
   offerings: ExploreOfferingFlat[];
   neighbors: GraphNeighbor[];

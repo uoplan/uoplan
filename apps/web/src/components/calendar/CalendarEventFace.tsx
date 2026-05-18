@@ -3,14 +3,14 @@ import { Box, Tooltip } from "@mantine/core";
 import { ProfessorRatingTooltipLabel } from "./ProfessorRatingTooltipLabel";
 import { tr } from "../../i18n";
 
-export type CalendarEventFaceLayout = {
+type CalendarEventFaceLayout = {
   showSection: boolean;
   showTime: boolean;
   showProfessor: boolean;
 };
 
 /** Professor rating row detail (matches calendar event / swap modal). */
-export type CalendarEventFaceRatingDetail = {
+type CalendarEventFaceRatingDetail = {
   id?: string;
   legacyId?: number;
   name: string;
@@ -18,7 +18,7 @@ export type CalendarEventFaceRatingDetail = {
   numRatings: number;
 };
 
-export type CalendarEventFaceProps = {
+type CalendarEventFaceProps = {
   courseCode: string;
   courseTitle: string;
   /** Shown in the type row; already shortened if desired (e.g. `componentKindOnly`). */

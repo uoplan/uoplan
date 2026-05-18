@@ -6,7 +6,7 @@ const SURFACE_STYLE = {
   borderTop: "2px solid #2C2E33",
 };
 
-export type CalendarMobileDrawerProps = {
+type CalendarMobileDrawerProps = {
   opened: boolean;
   onClose: () => void;
   title: string;

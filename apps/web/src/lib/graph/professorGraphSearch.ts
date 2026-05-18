@@ -8,7 +8,7 @@ export type ProfessorSearchEntry = {
   searchText: string;
 };
 
-export const PROFESSOR_GRAPH_SEARCH_MAX = 24;
+const PROFESSOR_GRAPH_SEARCH_MAX = 24;
 
 /** Stop scanning after this many matches (e.g. single-letter queries). */
 const MATCH_COLLECT_CAP = 256;
@@ -25,7 +25,7 @@ export function buildProfessorSearchEntries(nodes: ProfessorGraphNode[]): Profes
   }));
 }
 
-export function rankProfessorSearchMatch(
+function rankProfessorSearchMatch(
   entry: Pick<ProfessorSearchEntry, "displayName" | "searchText">,
   q: string,
 ): number | null {
@@ -36,7 +36,7 @@ export function rankProfessorSearchMatch(
   return 2;
 }
 
-export type ProfessorSearchScored = {
+type ProfessorSearchScored = {
   items: ProfessorSearchEntry[];
   topRank: number | null;
 };

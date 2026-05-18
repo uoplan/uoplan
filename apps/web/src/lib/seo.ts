@@ -1,11 +1,11 @@
 import seoPages from "./seo-pages.json";
 import { tr } from "../i18n";
 
-export const SITE_ORIGIN = "https://uoplan.party";
-export const SITE_NAME = "uoplan";
-export const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
+const SITE_ORIGIN = "https://uoplan.party";
+const SITE_NAME = "uoplan";
+const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 
-export type SeoPageId = keyof typeof seoPages;
+type SeoPageId = keyof typeof seoPages;
 
 function pageUrl(canonicalPath: string): string {
   return canonicalPath === "/" ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${canonicalPath}`;
@@ -17,7 +17,7 @@ function localized(pageId: SeoPageId, field: "title" | "description" | "keywords
   return translated !== `seo.${pageId}.${field}` ? translated : fallback;
 }
 
-export function buildWebsiteJsonLd(): Record<string, unknown> {
+function buildWebsiteJsonLd(): Record<string, unknown> {
   const hasPart = (Object.keys(seoPages) as SeoPageId[]).map((id) => {
     const page = seoPages[id];
     return {
@@ -38,7 +38,7 @@ export function buildWebsiteJsonLd(): Record<string, unknown> {
   };
 }
 
-export function buildWebApplicationJsonLd(): Record<string, unknown> {
+function buildWebApplicationJsonLd(): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "WebApplication",
@@ -91,9 +91,4 @@ export function buildPageHead(pageId: SeoPageId) {
     ],
     links: [{ rel: "canonical", href: canonical }],
   };
-}
-
-/** Static page config for build-time HTML prerender (English). */
-export function getSeoPagesForPrerender(): typeof seoPages {
-  return seoPages;
 }

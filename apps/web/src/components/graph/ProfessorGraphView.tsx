@@ -21,7 +21,7 @@ const EDGE_FOCUS = "rgba(36, 39, 44, 0.14)";
 
 export type ProfessorGraphPhase = "layout" | "ready";
 
-export type ProfessorGraphViewProps = {
+type ProfessorGraphViewProps = {
   data: ProfessorCoTeachingGraph;
   focusNodeId: string | null;
   previewNodeId?: string | null;

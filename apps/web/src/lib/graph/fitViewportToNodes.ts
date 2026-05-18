@@ -6,7 +6,7 @@ import { getCorrectionRatio } from "sigma/utils";
 type SigmaInstance = Sigma<Record<string, unknown>, Record<string, unknown>>;
 
 /** Max zoom-in when framing a selection (lower ratio = closer). */
-export const FOCUS_MAX_ZOOM_RATIO = 0.16;
+const FOCUS_MAX_ZOOM_RATIO = 0.16;
 
 type FitOptions = {
   /** Extra margin around the cluster (0.15 ≈ 15% per side). */
@@ -17,7 +17,7 @@ type FitOptions = {
  * Camera state that frames the given nodes with padding, adapted from @sigma/utils.
  * Call after sigma.refresh() so node display positions are current.
  */
-export function getCameraStateToFitViewportToNodes(
+function getCameraStateToFitViewportToNodes(
   sigma: SigmaInstance,
   nodes: string[],
   options: FitOptions = {},

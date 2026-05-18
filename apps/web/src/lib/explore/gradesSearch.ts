@@ -6,19 +6,16 @@ import { searchProfessorsScored, type ProfessorSearchEntry } from "../graph/prof
 import { formatUottawaTermIdLabel } from "./uottawaTermId";
 
 /** Max section rows returned when searching all offerings (legacy / tests). */
-export const EXPLORE_MAX_RESULTS = 120;
+const EXPLORE_MAX_RESULTS = 120;
 
 /** Max distinct courses returned from course-only explore search. */
-export const EXPLORE_MAX_COURSE_RESULTS = 24;
-
-/** Max professors returned from explore search (aligned with graph search). */
-export const EXPLORE_MAX_PROFESSOR_RESULTS = 24;
+const EXPLORE_MAX_COURSE_RESULTS = 24;
 
 /**
  * Maps professor substring rank (0–2) to a scale comparable to Fuse scores (lower = better).
  * rank 0 ≈ 0, rank 1 ≈ 0.14, rank 2 ≈ 0.28 vs typical course scores 0–0.34.
  */
-export const EXPLORE_SECTION_RANK_SCALE = 0.14;
+const EXPLORE_SECTION_RANK_SCALE = 0.14;
 
 /** Cap substring pre-filter pool size before running Fuse on that subset. */
 const SUBSTRING_POOL_MAX = 5000;
@@ -43,7 +40,7 @@ export type ExploreProfessorSearchEntry = {
   uniqueCourseCount: number;
 };
 
-export type ExploreSearchResult = {
+type ExploreSearchResult = {
   professors: ExploreProfessorSearchEntry[];
   courses: ExploreCourseSearchEntry[];
   professorsFirst: boolean;
@@ -62,7 +59,7 @@ export type ExploreOfferingFlat = {
   distribution: Record<string, number>;
 };
 
-export const EXPLORE_FUSE_OPTIONS: IFuseOptions<ExploreOfferingFlat> = {
+const EXPLORE_FUSE_OPTIONS: IFuseOptions<ExploreOfferingFlat> = {
   keys: ["fuseText"],
   threshold: 0.34,
   ignoreLocation: true,
@@ -70,7 +67,7 @@ export const EXPLORE_FUSE_OPTIONS: IFuseOptions<ExploreOfferingFlat> = {
   distance: 48,
 };
 
-export const EXPLORE_COURSE_FUSE_OPTIONS: IFuseOptions<ExploreCourseSearchEntry> = {
+const EXPLORE_COURSE_FUSE_OPTIONS: IFuseOptions<ExploreCourseSearchEntry> = {
   keys: ["fuseText"],
   threshold: 0.32,
   ignoreLocation: true,
@@ -244,12 +241,12 @@ function narrowCoursesBySubstring(
   return pool;
 }
 
-export type ExploreCourseSearchScored = {
+type ExploreCourseSearchScored = {
   items: ExploreCourseSearchEntry[];
   topScore: number | null;
 };
 
-export function searchExploreCoursesScored(
+function searchExploreCoursesScored(
   fuse: Fuse<ExploreCourseSearchEntry>,
   entries: ExploreCourseSearchEntry[],
   rawQuery: string,
@@ -282,7 +279,7 @@ export function searchExploreProfessors(
   return searchExploreProfessorsScored(entries, rawQuery).items;
 }
 
-export function searchExploreProfessorsScored(
+function searchExploreProfessorsScored(
   entries: ExploreProfessorSearchEntry[],
   rawQuery: string,
 ): { items: ExploreProfessorSearchEntry[]; topRank: number | null } {

@@ -39,21 +39,3 @@ export function buildColorMap(
 
   return map;
 }
-
-/**
- * Build color maps for an array of schedules, chaining each map from the
- * previous one.  Pass `baseMap` when appending to an existing list.
- */
-export function buildColorMaps(
-  schedules: GeneratedSchedule[],
-  baseMap: Record<string, number> = {},
-): Record<string, number>[] {
-  const maps: Record<string, number>[] = [];
-  let prev = baseMap;
-  for (const schedule of schedules) {
-    const m = buildColorMap(schedule, prev);
-    maps.push(m);
-    prev = m;
-  }
-  return maps;
-}

@@ -64,7 +64,7 @@ export type WizardProceedContext = {
   unassignedCount: number;
 };
 
-export function canProceedFromWizardStep(step: WizardStep, ctx: WizardProceedContext): boolean {
+function canProceedFromWizardStep(step: WizardStep, ctx: WizardProceedContext): boolean {
   switch (step) {
     case WizardStep.Term:
       return ctx.hasTerms && Boolean(ctx.selectedTermId) && ctx.cacheLoaded;

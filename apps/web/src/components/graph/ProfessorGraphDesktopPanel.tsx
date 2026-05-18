@@ -6,7 +6,7 @@ import type { ExploreOfferingFlat } from "../../lib/explore/gradesSearch";
 import type { GraphNeighbor, NeighborSortMode } from "../../lib/graph/professorGraphDetails";
 import { ProfessorGraphNodeDetails } from "./ProfessorGraphNodeDetails";
 
-export type ProfessorGraphDesktopPanelProps = {
+type ProfessorGraphDesktopPanelProps = {
   node: ProfessorGraphNode;
   offerings: ExploreOfferingFlat[];
   neighbors: GraphNeighbor[];

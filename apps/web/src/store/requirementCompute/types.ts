@@ -14,10 +14,3 @@ export interface RecomputedState {
   filteredPrereqEligibleCourses: string[];
   unassignedCompletedCourses: string[];
 }
-
-export interface ReqAutoMeta {
-  id: string;
-  type: string;
-  creditsNeeded: number;
-  candidates: Set<string>;
-}

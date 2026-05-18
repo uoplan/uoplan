@@ -27,7 +27,7 @@ export const EXPLORE_ACCORDION_PAD_INLINE = {
 };
 
 /** Space reserved beside content so accordion chevron does not shift histogram alignment. */
-export const EXPLORE_CHEVRON_GUTTER_PX = 40;
+const EXPLORE_CHEVRON_GUTTER_PX = 40;
 
 /** Padding right for accordion - responsive with chevron gutter. */
 export const EXPLORE_ACCORDION_PAD_RIGHT = {
@@ -36,7 +36,7 @@ export const EXPLORE_ACCORDION_PAD_RIGHT = {
 };
 
 /** Compact explore histogram width (accordion + professor rows). */
-export const EXPLORE_HISTOGRAM_WIDTH_PX = 288;
+const EXPLORE_HISTOGRAM_WIDTH_PX = 288;
 
 /** CSS media query for mobile stacking. */
 const mobileMediaQuery = `@media (max-width: ${MOBILE_BREAKPOINT_PX}px)`;
@@ -58,7 +58,7 @@ function shortTermLabel(termLabel: string): string {
   return termLabel.replace(" Term", "");
 }
 
-export type ExploreProfessorSummaryBarProps = {
+type ExploreProfessorSummaryBarProps = {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
   stopPropagation?: boolean;
@@ -187,12 +187,12 @@ export function ExploreProfessorSummaryBar({
   );
 }
 
-export type ExploreCourseSummaryBarProps = {
+type ExploreCourseSummaryBarProps = {
   group: CourseOfferingGroup;
   currentEntry?: ExploreHistoryEntry;
 };
 
-export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSummaryBarProps) {
+function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSummaryBarProps) {
   const { push } = useExploreHistory();
   const combinedViz = useMemo(
     () =>
@@ -280,7 +280,7 @@ export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSu
   );
 }
 
-export type ExploreCourseItemProps = {
+type ExploreCourseItemProps = {
   group: CourseOfferingGroup;
   currentEntry?: ExploreHistoryEntry;
 };
@@ -298,7 +298,7 @@ export function ExploreCourseItem({ group, currentEntry }: ExploreCourseItemProp
   );
 }
 
-export type ExploreProfessorOfferingRowsProps = {
+type ExploreProfessorOfferingRowsProps = {
   offerings: ExploreOfferingFlat[];
   showCourseCode?: boolean;
 };

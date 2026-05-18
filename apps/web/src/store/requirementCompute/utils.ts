@@ -1,4 +1,4 @@
-import { normalizeCourseCode, type DataCache, getCourseCredits } from "schedule";
+import { normalizeCourseCode } from "schedule";
 import type { RequirementWithStatus } from "schedule";
 import type { Program, ProgramRequirement } from "schedule";
 
@@ -16,14 +16,6 @@ export function collectAssignedFromExactRequirements(tree: RequirementWithStatus
   }
   walk(tree);
   return assigned;
-}
-
-export function sumCreditsForCodes(cache: DataCache, codes: string[]): number {
-  let s = 0;
-  for (const code of codes) {
-    s += getCourseCredits(normalizeCourseCode(code), cache);
-  }
-  return s;
 }
 
 export function isStrictSubset<T>(a: Set<T>, b: Set<T>): boolean {

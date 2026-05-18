@@ -1,6 +1,6 @@
 import type { ProgramRequirement } from "../dataTypes";
 import type { DataCache } from "../dataCache";
-export function extractCourseCodes(req: ProgramRequirement): string[] {
+function extractCourseCodes(req: ProgramRequirement): string[] {
   const codes: string[] = [];
   if (req.code) codes.push(req.code);
   if (req.options) {
@@ -11,14 +11,11 @@ export function extractCourseCodes(req: ProgramRequirement): string[] {
   return codes;
 }
 
-export function getDiscipline(code: string): string {
+function getDiscipline(code: string): string {
   return code.split(/\s+/)[0]?.toUpperCase() ?? "";
 }
 
-export function applyExcludedDisciplines(
-  codes: string[],
-  excluded: string[] | undefined,
-): string[] {
+function applyExcludedDisciplines(codes: string[], excluded: string[] | undefined): string[] {
   if (!excluded?.length) return codes;
   const excludedSet = new Set(excluded.map((d) => d.toUpperCase()));
   return codes.filter((code) => !excludedSet.has(getDiscipline(code)));
