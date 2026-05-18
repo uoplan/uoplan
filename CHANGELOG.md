@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.0.0-beta.15](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.14...uoplan-monorepo-v1.0.0-beta.15) (2026-05-18)
+
+
+### Features
+
+* improve calendar layout on mobile ([33c92d6](https://github.com/uoplan/uoplan/commit/33c92d6647359b27d0eb3bf79bc1e6376dc2cdaf))
+* improve language switcher ux ([543ea30](https://github.com/uoplan/uoplan/commit/543ea308638172100f94bbdc2706342d43e36723))
+* improve page animation ([2ace662](https://github.com/uoplan/uoplan/commit/2ace66280c6cc1cc787a990d108352494b219f59))
+* improve ux of explore page back button ([7cbb238](https://github.com/uoplan/uoplan/commit/7cbb2380291dd11b91b3f47be13a240ddd13e450))
+* move language switcher to full site ([5577a4c](https://github.com/uoplan/uoplan/commit/5577a4c8400e393bbad4b81d1540f19e3d2fdc07))
+* remove tour button ([5a9f56c](https://github.com/uoplan/uoplan/commit/5a9f56c3fe9c47dde0132440c5ae17acaf04f678))
+* show all different weeks in a generated schedule ([ede08d0](https://github.com/uoplan/uoplan/commit/ede08d0669a711b161fabb343d285b7eac533e48))
+* show the busiest week for the schedule by default ([ecb268c](https://github.com/uoplan/uoplan/commit/ecb268c5d308d1513a7f07efe14613e05a9ec669))
+* use consistent page animation ([2617f98](https://github.com/uoplan/uoplan/commit/2617f98ef707f1758bfd98871bfd46a4b325efda))
+* use custom calendar implementation to replace fullcalendar ([898af81](https://github.com/uoplan/uoplan/commit/898af81fa691126eaf782891d2997ea623833937))
+
+
+### Bug Fixes
+
+* do not decrement electives when adding required course on basic calendar ([a1f87f4](https://github.com/uoplan/uoplan/commit/a1f87f449feda91f4b1e918e46c83b0d00bd71f4))
+* jump to generated schedule when shared ([2c1316b](https://github.com/uoplan/uoplan/commit/2c1316b810b1789ffbcc6e438d7568322d6eaf91))
+* separate date ranges and profs per time slot in courses ([8a4fb4a](https://github.com/uoplan/uoplan/commit/8a4fb4ab60f362015d2912f0b717ee8a8c60937e))
+
 ## [1.0.0-beta.14](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.13...uoplan-monorepo-v1.0.0-beta.14) (2026-05-17)
 
 
