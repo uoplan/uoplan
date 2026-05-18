@@ -46,14 +46,24 @@ export function slotActiveInWeek(
   return occurrenceDate >= meetingDates[0] && occurrenceDate <= meetingDates[1];
 }
 
-function computeWeekGroups(schedule: GeneratedSchedule): WeekGroup[] {
+interface WeekData {
+  monday: string;
+  fingerprint: string;
+  slotCount: number;
+  totalMinutes: number;
+}
+
+function computeWeekGroups(schedule: GeneratedSchedule): {
+  groups: WeekGroup[];
+  busiestIndex: number;
+} {
   const datedTimes = schedule.enrollments.flatMap((e) =>
     Object.values(e.sectionCombo).flatMap(({ section }) =>
       section.times.filter((t) => t.meetingDates),
     ),
   );
 
-  if (datedTimes.length === 0) return [];
+  if (datedTimes.length === 0) return { groups: [], busiestIndex: 0 };
 
   const minDate = datedTimes.reduce(
     (min, t) => (t.meetingDates![0] < min ? t.meetingDates![0] : min),
@@ -67,7 +77,7 @@ function computeWeekGroups(schedule: GeneratedSchedule): WeekGroup[] {
   const firstMonday = getMondayOf(minDate);
   const lastMonday = getMondayOf(maxDate);
 
-  const weekData: Array<{ monday: string; fingerprint: string }> = [];
+  const weekData: WeekData[] = [];
   let monday = firstMonday;
   while (monday <= lastMonday) {
     const activeTimes = datedTimes.filter((t) => slotActiveInWeek(t.day, t.meetingDates!, monday));
@@ -81,41 +91,74 @@ function computeWeekGroups(schedule: GeneratedSchedule): WeekGroup[] {
         )
         .sort()
         .join(",");
-      weekData.push({ monday, fingerprint });
+      const totalMinutes = activeTimes.reduce((sum, t) => sum + (t.endMinutes - t.startMinutes), 0);
+      weekData.push({ monday, fingerprint, slotCount: activeTimes.length, totalMinutes });
     }
 
     monday = addDays(monday, 7);
   }
 
   const groups: WeekGroup[] = [];
+  // Track the max business per group (by slot count, then total minutes as tiebreak)
+  const groupBusyness: Array<{ slotCount: number; totalMinutes: number }> = [];
+
   let i = 0;
   while (i < weekData.length) {
     const fp = weekData[i].fingerprint;
     let j = i + 1;
+    // All weeks in this group share the same fingerprint, so same slot count/minutes
     while (j < weekData.length && weekData[j].fingerprint === fp) j++;
     groups.push({
       startDate: weekData[i].monday,
       endDate: addDays(weekData[j - 1].monday, 6),
     });
+    groupBusyness.push({
+      slotCount: weekData[i].slotCount,
+      totalMinutes: weekData[i].totalMinutes,
+    });
     i = j;
   }
 
-  return groups;
+  // Find the busiest group: most slots, then most minutes, then earliest (index 0 wins ties)
+  let busiestIndex = 0;
+  for (let g = 1; g < groupBusyness.length; g++) {
+    const best = groupBusyness[busiestIndex];
+    const curr = groupBusyness[g];
+    if (
+      curr.slotCount > best.slotCount ||
+      (curr.slotCount === best.slotCount && curr.totalMinutes > best.totalMinutes)
+    ) {
+      busiestIndex = g;
+    }
+  }
+
+  return { groups, busiestIndex };
 }
 
-export function useScheduleWeeks(schedule: GeneratedSchedule | null): {
+export function useScheduleWeeks(
+  schedule: GeneratedSchedule | null,
+  initialWeekIndex?: number | null,
+): {
   weekGroups: WeekGroup[];
   weekIndex: number;
   setWeekIndex: (index: number) => void;
 } {
-  const weekGroups = useMemo(() => (schedule ? computeWeekGroups(schedule) : []), [schedule]);
+  const { groups: weekGroups, busiestIndex } = useMemo(
+    () => (schedule ? computeWeekGroups(schedule) : { groups: [], busiestIndex: 0 }),
+    [schedule],
+  );
 
   const [weekIndex, setWeekIndex] = useState(0);
   const [lastSchedule, setLastSchedule] = useState(schedule);
 
   if (schedule !== lastSchedule) {
     setLastSchedule(schedule);
-    setWeekIndex(0);
+    // Use the provided initial index if valid, otherwise default to the busiest week
+    const target =
+      initialWeekIndex != null && initialWeekIndex >= 0 && initialWeekIndex < weekGroups.length
+        ? initialWeekIndex
+        : busiestIndex;
+    setWeekIndex(target);
   }
 
   return { weekGroups, weekIndex, setWeekIndex };

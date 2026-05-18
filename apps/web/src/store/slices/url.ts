@@ -65,6 +65,7 @@ function buildEncodeInput(s: AppStore): EncodeInput {
     activeStep: 0,
     showCalendar: false,
     frenchImmersionStream: s.frenchImmersionStream,
+    calendarWeekIndex: s.calendarWeekIndex,
   };
 }
 
@@ -200,6 +201,7 @@ export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, ge
       generationCompressedSchedule: decoded.generationCompressedSchedule,
       generationPreferEasier: decoded.generationPreferEasier,
       frenchImmersionStream: decoded.frenchImmersionStream ?? false,
+      calendarWeekIndex: decoded.calendarWeekIndex ?? null,
       generationError: null,
       constrainedPerRequirement,
       ...(decoded.selectedTermId != null ? { selectedTermId: decoded.selectedTermId } : {}),

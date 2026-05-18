@@ -101,6 +101,8 @@ export interface AppState {
   /** Highest wizard step index reached this session (sidebar progress). */
   wizardFurthestStep: number;
   frenchImmersionStream: boolean;
+  /** The week group index the user last navigated to in the calendar, for URL sharing. */
+  calendarWeekIndex: number | null;
 }
 
 export interface AppActions {
@@ -158,6 +160,7 @@ export interface AppActions {
   setGenerationCompressedSchedule: (v: boolean) => void;
   setGenerationPreferEasier: (v: boolean) => void;
   setFrenchImmersionStream: (enabled: boolean) => void;
+  setCalendarWeekIndex: (index: number | null) => void;
   resetToDefault: () => void;
   touchWizardFurthestStep: (step: number) => void;
   resetWizardFurthestStep: () => void;

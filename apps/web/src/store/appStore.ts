@@ -87,6 +87,9 @@ export const useAppStore = create<AppStore>()((...a) => {
     generationPreferEasier: false,
     wizardFurthestStep: 0,
     frenchImmersionStream: false,
+    calendarWeekIndex: null,
+
+    setCalendarWeekIndex: (index) => set({ calendarWeekIndex: index }),
 
     touchWizardFurthestStep: (step) => {
       set((s) => ({
@@ -162,6 +165,7 @@ export const useAppStore = create<AppStore>()((...a) => {
         virtualSectionsOnly: false,
         wizardFurthestStep: 0,
         frenchImmersionStream: false,
+        calendarWeekIndex: null,
       });
       if (typeof window !== "undefined") {
         localStorage.removeItem(LOCAL_STORAGE_KEY);

@@ -1,4 +1,4 @@
-import { useMemo, useCallback, forwardRef, useImperativeHandle } from "react";
+import { useMemo, useCallback, forwardRef, useImperativeHandle, useEffect } from "react";
 import { ActionIcon, Box, Group, Modal, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
@@ -11,6 +11,7 @@ import { useSwapModal } from "../../hooks/useSwapModal";
 import { useScheduleTransition } from "../../hooks/useScheduleTransition";
 import { useScheduleWeeks, slotActiveInWeek } from "../../hooks/useScheduleWeeks";
 import { WeekCalendar } from "./WeekCalendar";
+import { useAppStore } from "../../store/appStore";
 import type { CalendarEvent } from "../../hooks/useCalendarEvents";
 import type { WeekGroup } from "../../hooks/useScheduleWeeks";
 
@@ -67,8 +68,15 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(fu
 
   const swap = useSwapModal(getSwapCandidates, cache);
 
+  const calendarWeekIndex = useAppStore((s) => s.calendarWeekIndex);
+  const setCalendarWeekIndex = useAppStore((s) => s.setCalendarWeekIndex);
+
   const allEvents = useCalendarEvents(displayedSchedule, professorRatings);
-  const { weekGroups, weekIndex, setWeekIndex } = useScheduleWeeks(schedule);
+  const { weekGroups, weekIndex, setWeekIndex } = useScheduleWeeks(schedule, calendarWeekIndex);
+
+  useEffect(() => {
+    setCalendarWeekIndex(weekIndex);
+  }, [weekIndex, setCalendarWeekIndex]);
 
   const currentGroup: WeekGroup | null = weekGroups[weekIndex] ?? null;
 
