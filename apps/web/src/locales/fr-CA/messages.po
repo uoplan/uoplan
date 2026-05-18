@@ -387,6 +387,9 @@ msgstr "Annuler l'echange"
 msgid "calendarPage.undoSwapCount"
 msgstr "Annuler l'echange ({count})"
 
+msgid "calendarPage.scheduleNav.label"
+msgstr "Parcourir les horaires"
+
 msgid "calendarView.empty"
 msgstr "Aucun horaire n'à encore ete généré. Completez les étapes ci-dessus et cliquez sur Générer."
 
