@@ -1,16 +1,12 @@
-export type CalendarVariant = "basic" | "advanced";
+type CalendarVariant = "basic" | "advanced";
 
-export function getCalendarVariantFromPath(pathname: string): CalendarVariant | null {
+function getCalendarVariantFromPath(pathname: string): CalendarVariant | null {
   if (pathname.includes("/schedule/calendar/basic")) return "basic";
   if (pathname.includes("/schedule/calendar/advanced")) return "advanced";
   return null;
 }
 
-export function isBasicCalendarPath(pathname: string): boolean {
-  return getCalendarVariantFromPath(pathname) === "basic";
-}
-
-export function getActiveCalendarVariant(): CalendarVariant | null {
+function getActiveCalendarVariant(): CalendarVariant | null {
   if (typeof window === "undefined") return null;
   return getCalendarVariantFromPath(window.location.pathname);
 }

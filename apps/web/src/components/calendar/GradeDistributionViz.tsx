@@ -8,7 +8,7 @@ const HIST_DIMS = {
   compact: { maxBarPx: 40, snsPx: 40, padTopPx: 4, minWrapHeight: 52, labelFontPx: 9 },
 } as const;
 
-export type GradeHistogramVariant = keyof typeof HIST_DIMS;
+type GradeHistogramVariant = keyof typeof HIST_DIMS;
 
 function buildHistogramModel(gradeViz: GradeVizData) {
   const sCount = gradeViz.histogram.find((entry) => entry.grade === "S")?.count ?? 0;
@@ -189,35 +189,6 @@ export function GradeDistributionHistogram({
       </Text>
       {histogram}
     </Stack>
-  );
-}
-
-export function GradeDistributionCompactChip({
-  gradeViz,
-  variant = "default",
-}: {
-  gradeViz?: GradeVizData | null;
-  variant?: "default" | "preview";
-}) {
-  if (!gradeViz || gradeViz.total <= 0) return null;
-
-  const cls = variant === "preview" ? "cal-grade-chip cal-grade-chip--preview" : "cal-grade-chip";
-
-  return (
-    <div className={cls} aria-hidden>
-      {gradeViz.buckets.map((bucket) => {
-        if (bucket.count <= 0) return null;
-        return (
-          <span
-            key={bucket.id}
-            style={{
-              width: `${(bucket.count / gradeViz.total) * 100}%`,
-              backgroundColor: bucket.color,
-            }}
-          />
-        );
-      })}
-    </div>
   );
 }
 

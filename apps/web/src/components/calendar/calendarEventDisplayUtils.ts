@@ -1,5 +1,5 @@
 /** Matches `useCalendarEvents` (`${comp} - ${sectionCode}`). */
-export const COMPONENT_SECTION_SEP = " - ";
+const COMPONENT_SECTION_SEP = " - ";
 
 export function componentKindOnly(componentSection: string): string {
   const i = componentSection.indexOf(COMPONENT_SECTION_SEP);

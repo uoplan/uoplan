@@ -14,7 +14,7 @@ import { tr } from "../../i18n";
 const DIPLOMA_REQUIREMENTS_URL =
   "https://www.uottawa.ca/study/immersion/french/about/diploma-requirements";
 
-export type FrenchImmersionProgramOverviewVariant = "default" | "calendarSidebar" | "compact";
+type FrenchImmersionProgramOverviewVariant = "default" | "calendarSidebar" | "compact";
 
 function CheckLine({
   done,

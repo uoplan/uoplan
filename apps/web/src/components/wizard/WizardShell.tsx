@@ -26,7 +26,7 @@ import { useShareUrl } from "../../hooks/useShareUrl";
 import { getWizardStepContent } from "../../lib/wizardStepContent";
 import { tr } from "../../i18n";
 
-export type WizardShellProps = {
+type WizardShellProps = {
   activeStep: WizardStep;
   children: ReactNode;
   /** Selected planner mode on the mode step; Next stays disabled until set. */

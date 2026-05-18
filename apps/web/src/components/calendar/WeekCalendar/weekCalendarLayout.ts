@@ -1,9 +1,9 @@
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
 import type { DayOfWeekCode } from "schedule";
 
-export const CAL_START_MINUTES = 480; // 08:00
-export const CAL_END_MINUTES = 1380; // 23:00
-export const CAL_SPAN_MINUTES = CAL_END_MINUTES - CAL_START_MINUTES;
+const CAL_START_MINUTES = 480; // 08:00
+const CAL_END_MINUTES = 1380; // 23:00
+const CAL_SPAN_MINUTES = CAL_END_MINUTES - CAL_START_MINUTES;
 
 export function minutesToPercent(minutes: number): number {
   return ((minutes - CAL_START_MINUTES) / CAL_SPAN_MINUTES) * 100;
@@ -23,7 +23,7 @@ export const DAY_LABELS: Record<DayOfWeekCode, string> = {
   Su: "Sun",
 };
 
-export interface LayoutEvent {
+interface LayoutEvent {
   event: CalendarEvent;
   laneIndex: number;
   laneCount: number;

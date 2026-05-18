@@ -9,7 +9,7 @@ import type {
 import type { ExploreCourseSearchEntry } from "../../lib/explore/gradesSearch";
 import styles from "./ExploreCourseSpotlightGallery.module.css";
 
-export type SpotlightGalleryRow = {
+type SpotlightGalleryRow = {
   variant: CourseSpotlightVariant;
   courses: RankedSpotlightCourse[];
   durationSec: number;

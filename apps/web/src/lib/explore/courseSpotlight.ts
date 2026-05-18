@@ -14,7 +14,7 @@ const FAIL_GRADES = new Set(["F", "E", "ABS"]);
 export const SPOTLIGHT_MIN_GRADED_COUNT = 40;
 
 /** Max courses returned per spotlight variant. */
-export const SPOTLIGHT_TOP_N = 16;
+const SPOTLIGHT_TOP_N = 16;
 
 /** Hide the gallery when fewer than this many courses qualify. */
 export const SPOTLIGHT_MIN_GALLERY_ITEMS = 6;
@@ -29,7 +29,7 @@ export const SPOTLIGHT_VARIANTS = [
 
 export type CourseSpotlightVariant = (typeof SPOTLIGHT_VARIANTS)[number];
 
-export type CourseSpotlightRecord = {
+type CourseSpotlightRecord = {
   entry: ExploreCourseSearchEntry;
   gpa: number;
   gradedCount: number;
@@ -86,7 +86,7 @@ export function gradedHeadcount(dist: Record<string, number>): number {
 }
 
 /** F + E + ABS counts for fail-rate spotlight. */
-export function failHeadcount(dist: Record<string, number>): number {
+function failHeadcount(dist: Record<string, number>): number {
   let fail = 0;
   for (const [letter, count] of Object.entries(dist)) {
     if (!FAIL_GRADES.has(letter)) continue;

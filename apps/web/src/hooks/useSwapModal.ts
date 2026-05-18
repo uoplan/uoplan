@@ -5,7 +5,7 @@ import type { GradeVizData } from "schedule";
 /**
  * Type for the swap candidates getter function.
  */
-export type SwapCandidatesGetter = (enrollmentIndex: number) => {
+type SwapCandidatesGetter = (enrollmentIndex: number) => {
   candidates: string[];
   poolCourses: string[];
   requirementTitle?: string;

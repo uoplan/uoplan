@@ -1,5 +1,5 @@
 /** Narrow router surface used outside React tree (hydration from Zustand, tour). */
-export type NavigateRouter = {
+type NavigateRouter = {
   navigate: (opts: {
     to: string;
     params?: Record<string, string>;

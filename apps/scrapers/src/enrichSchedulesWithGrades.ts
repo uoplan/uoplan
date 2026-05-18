@@ -235,7 +235,7 @@ export function enrichSchedulesPayload(
   return data;
 }
 
-export function pct(n: number, d: number): string {
+function pct(n: number, d: number): string {
   return d === 0 ? "0.0" : ((100 * n) / d).toFixed(1);
 }
 

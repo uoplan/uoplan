@@ -186,7 +186,7 @@ function NeighborRow({
   );
 }
 
-export type ProfessorGraphNodeDetailsProps = {
+type ProfessorGraphNodeDetailsProps = {
   node: ProfessorGraphNode;
   offerings: ExploreOfferingFlat[];
   neighbors: GraphNeighbor[];

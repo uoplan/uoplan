@@ -1,4 +1,4 @@
-export const BASIC_ELECTIVES_COUNT_MAX = 8;
+const BASIC_ELECTIVES_COUNT_MAX = 8;
 
 /** Basic mode needs at least one required course or elective slot before seed navigation / generation. */
 export function canGenerateBasicSchedule(
