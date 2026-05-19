@@ -792,6 +792,7 @@ export function fromProtoDisciplinesData(input: ProtoDisciplinesData): Disciplin
       const result: Discipline = {
         code: discipline.code,
         name: discipline.name,
+        ...(discipline.nameFr ? { nameFr: discipline.nameFr } : {}),
       };
       return result;
     }),
