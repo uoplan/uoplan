@@ -15,6 +15,7 @@ import { useAppStore } from "../../store/appStore";
 import type { CalendarEvent } from "../../hooks/useCalendarEvents";
 import type { WeekGroup } from "../../hooks/useScheduleWeeks";
 import { formatWeekCount } from "../../lib/formatWeekCount";
+import { tr } from "../../i18n";
 
 const EMPTY_COLOR_MAP: Record<string, number> = {};
 
@@ -171,7 +172,7 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(fu
             </ActionIcon>
             <Text size="xs" c="dimmed" style={{ textAlign: "center", flex: 1 }}>
               {weekGroups.length > 1
-                ? `Week ${weekIndex + 1} of ${weekGroups.length} · ${formatWeekCount(weekGroups[weekIndex])}`
+                ? `${tr("calendarPage.weekOf", { current: weekIndex + 1, total: weekGroups.length })} · ${formatWeekCount(weekGroups[weekIndex])}`
                 : formatWeekCount(weekGroups[0])}
             </Text>
             <ActionIcon
