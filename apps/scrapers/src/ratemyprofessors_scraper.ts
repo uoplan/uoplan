@@ -159,19 +159,44 @@ async function main(): Promise<void> {
     await new Promise((r) => setTimeout(r, 300));
   }
 
+  // Deduplicate by normalized name: weighted-average rating, summed numRatings, first entry wins
+  const normalized = new Map<string, FormattedTeacherNode>();
+  for (const prof of allTeachers) {
+    const key = prof.name.toLowerCase().replace(/\s+/g, " ").trim();
+    const existing = normalized.get(key);
+    if (!existing) {
+      normalized.set(key, { ...prof });
+    } else {
+      const totalRatings = existing.numRatings + prof.numRatings;
+      if (totalRatings > 0 && existing.rating !== null && prof.rating !== null) {
+        existing.rating =
+          (existing.rating * existing.numRatings + prof.rating * prof.numRatings) / totalRatings;
+      } else if (prof.rating !== null && existing.rating === null) {
+        existing.rating = prof.rating;
+      }
+      existing.numRatings = totalRatings;
+    }
+  }
+
+  const dedupedTeachers = Array.from(normalized.values());
+  const duplicatesRemoved = allTeachers.length - dedupedTeachers.length;
+  if (duplicatesRemoved > 0) {
+    console.log(`Deduplicated ${duplicatesRemoved} duplicate professor entries.`);
+  }
+
   const outDir = SCRAPER_DATA_DIR;
   await fs.mkdir(outDir, { recursive: true });
   const outPath = path.join(outDir, "ratemyprofessors.json");
 
-  allTeachers.sort((a, b) => a.name.localeCompare(b.name) || a.legacyId - b.legacyId);
+  dedupedTeachers.sort((a, b) => a.name.localeCompare(b.name) || a.legacyId - b.legacyId);
 
   const output = {
-    resultCount: allTeachers.length,
-    professors: allTeachers,
+    resultCount: dedupedTeachers.length,
+    professors: dedupedTeachers,
   };
 
   await fs.writeFile(outPath, JSON.stringify(output, null, 2), "utf-8");
-  console.log(`Saved ${allTeachers.length} professors to ${outPath}`);
+  console.log(`Saved ${dedupedTeachers.length} professors to ${outPath}`);
 }
 
 main().catch((err) => {

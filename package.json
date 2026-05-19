@@ -6,7 +6,7 @@
     "dev": "pnpm generate && pnpm --filter scrapers build:proto && pnpm --filter web dev",
     "build": "pnpm generate && pnpm --filter scrapers build:proto && pnpm --filter web build",
     "deploy": "wrangler deploy",
-    "generate": "pnpm -r generate",
+    "generate": "pnpm -r generate && pnpm build:data-proto",
     "typecheck": "pnpm wrangler types && pnpm -r typecheck",
     "lint": "pnpm -r lint",
     "lint:fix": "pnpm -r lint:fix",
