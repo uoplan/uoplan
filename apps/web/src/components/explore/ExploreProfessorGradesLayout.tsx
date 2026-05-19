@@ -194,7 +194,7 @@ type ExploreCourseSummaryBarProps = {
   currentEntry?: ExploreHistoryEntry;
 };
 
-function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSummaryBarProps) {
+export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSummaryBarProps) {
   const { push } = useExploreHistory();
   const combinedViz = useMemo(
     () =>

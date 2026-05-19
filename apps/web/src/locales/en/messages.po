@@ -159,6 +159,15 @@ msgstr "Professors"
 msgid "explore.resultsCourses"
 msgstr "Courses"
 
+msgid "explore.resultsDisciplines"
+msgstr "Disciplines"
+
+msgid "explore.disciplineCourseCount"
+msgstr "{count, plural, one {# course} other {# courses}}"
+
+msgid "explore.disciplineNoData"
+msgstr "No courses found for this discipline."
+
 msgid "explore.professorCourseCount"
 msgstr "{count, plural, one {# course} other {# courses}}"
 
@@ -1109,4 +1118,3 @@ msgstr "No rating"
 
 msgid "search.noGradeData"
 msgstr "No grade data"
-

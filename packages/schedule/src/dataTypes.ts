@@ -236,6 +236,7 @@ export type RateMyProfessorsData = {
 export type Discipline = {
   code: string;
   name: string;
+  nameFr?: string;
 };
 
 export type DisciplinesData = {
@@ -428,7 +429,10 @@ function yyyymmddToDateString(value: number): string {
   return `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`;
 }
 
-function parseCourseCodeParts(courseCode: string): { subject: string; catalogNumber: string } {
+function parseCourseCodeParts(courseCode: string): {
+  subject: string;
+  catalogNumber: string;
+} {
   const normalized = courseCode.trim().replace(/\s+/g, " ");
   const [subject = "", catalogNumber = ""] = normalized.split(" ");
   return { subject, catalogNumber };
@@ -694,7 +698,9 @@ export function fromProtoSchedulesData(input: ProtoSchedulesData): SchedulesData
                 ),
                 status: statusFromProto(section.status),
                 ...(fromProtoDistribution(section.distribution)
-                  ? { distribution: fromProtoDistribution(section.distribution) }
+                  ? {
+                      distribution: fromProtoDistribution(section.distribution),
+                    }
                   : {}),
               }),
             ),
@@ -774,6 +780,7 @@ export function toProtoDisciplinesData(input: DisciplinesData): ProtoDisciplines
       (discipline): ProtoDiscipline => ({
         code: discipline.code,
         name: discipline.name,
+        nameFr: discipline.nameFr ?? "",
       }),
     ),
   };
@@ -781,12 +788,13 @@ export function toProtoDisciplinesData(input: DisciplinesData): ProtoDisciplines
 
 export function fromProtoDisciplinesData(input: ProtoDisciplinesData): DisciplinesData {
   return {
-    disciplines: input.disciplines.map(
-      (discipline): Discipline => ({
+    disciplines: input.disciplines.map((discipline): Discipline => {
+      const result: Discipline = {
         code: discipline.code,
         name: discipline.name,
-      }),
-    ),
+      };
+      return result;
+    }),
   };
 }
 

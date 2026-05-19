@@ -276,7 +276,7 @@ function mapSchedules(input: any): any {
 }
 
 function mapDisciplinesJson(input: unknown): {
-  disciplines: Array<{ code: string; name: string }>;
+  disciplines: Array<{ code: string; name: string; nameFr: string }>;
 } {
   const obj = input && typeof input === "object" ? (input as Record<string, unknown>) : {};
   const rows = Array.isArray(obj.disciplines) ? obj.disciplines : [];
@@ -287,10 +287,11 @@ function mapDisciplinesJson(input: unknown): {
         const r = row && typeof row === "object" ? (row as Record<string, unknown>) : {};
         const code = normalizeCode(r.code);
         const name = String(r.name ?? "").trim();
+        const nameFr = typeof r.nameFr === "string" ? r.nameFr.trim() : "";
         if (!code || !name) return null;
-        return { code, name };
+        return { code, name, nameFr };
       })
-      .filter((row): row is { code: string; name: string } => row != null),
+      .filter((row): row is { code: string; name: string; nameFr: string } => row != null),
   };
 }
 
@@ -372,12 +373,14 @@ async function main(): Promise<void> {
   );
   await writePb(
     path.join(WEB_PUBLIC_DATA_DIR, "catalogue.pb"),
-    DataProto.CatalogueManifest.encode({ years: manifest.years ?? [] }).finish(),
+    DataProto.CatalogueManifest.encode({
+      years: manifest.years ?? [],
+    }).finish(),
   );
 
-  const terms = await readJson<{ terms: Array<{ termId: string; name: string }> }>(
-    path.join(SCRAPER_DATA_DIR, "terms.json"),
-  );
+  const terms = await readJson<{
+    terms: Array<{ termId: string; name: string }>;
+  }>(path.join(SCRAPER_DATA_DIR, "terms.json"));
   await writePb(
     path.join(WEB_PUBLIC_DATA_DIR, "terms.pb"),
     DataProto.TermsData.encode({
