@@ -4,6 +4,7 @@ import {
   Link,
   Outlet,
   useLocation,
+  useRouter,
   useRouterState,
 } from "@tanstack/react-router";
 import { buildRootHead } from "../lib/seo";
@@ -57,8 +58,16 @@ function RootLayout() {
   const indices = useAppStore((s) => s.indices);
   const { pathname } = useLocation();
   const routerStatus = useRouterState({ select: (s) => s.status });
+  const router = useRouter();
   const controls = useAnimation();
   const pendingAnimation = useRef(false);
+  const lastNavAction = useRef<string>("PUSH");
+
+  useEffect(() => {
+    return router.history.subscribe(({ action }) => {
+      lastNavAction.current = action.type;
+    });
+  }, [router.history]);
 
   useEffect(() => {
     void loadData();
@@ -67,6 +76,12 @@ function RootLayout() {
   usePersistState(!!indices);
 
   useEffect(() => {
+    const action = lastNavAction.current;
+    if (action === "BACK" || action === "FORWARD" || action === "GO") {
+      controls.set({ opacity: 1, y: 0 });
+      pendingAnimation.current = false;
+      return;
+    }
     pendingAnimation.current = true;
     controls.set({ opacity: 0, y: 18 });
   }, [pathname, controls]);
