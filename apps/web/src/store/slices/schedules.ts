@@ -98,6 +98,8 @@ interface SchedulesSlice {
   getSwapCandidates: AppStore["getSwapCandidates"];
   lockCourseForAllSchedulesFromSwap: AppStore["lockCourseForAllSchedulesFromSwap"];
   unlockCourseForAllSchedulesFromSwap: AppStore["unlockCourseForAllSchedulesFromSwap"];
+  blacklistCourseFromSwap: AppStore["blacklistCourseFromSwap"];
+  unblacklistCourseFromSwap: AppStore["unblacklistCourseFromSwap"];
 }
 
 export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice> = (set, get) => ({
@@ -739,5 +741,38 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     }
     if (!changed) return;
     set({ constrainedPerRequirement: next });
+  },
+
+  blacklistCourseFromSwap: (enrollmentIndex) => {
+    const { currentSchedule, cache, blacklistedCourses } = get();
+    if (!currentSchedule) return;
+    const enrollment = currentSchedule.enrollments[enrollmentIndex];
+    if (!enrollment) return;
+    const code = enrollment.courseCode;
+    const norm = normalizeCourseCode(code);
+    if (blacklistedCourses.some((c) => normalizeCourseCode(c) === norm)) return;
+    const canonical = cache?.getCourse(norm)?.code ?? code;
+    set({
+      blacklistedCourses: [...blacklistedCourses, canonical],
+      firstSeed: generateRandomSeed(),
+      currentSeed: 0,
+      lowestVisitedSeed: null,
+    });
+  },
+
+  unblacklistCourseFromSwap: (enrollmentIndex) => {
+    const { currentSchedule, blacklistedCourses } = get();
+    if (!currentSchedule) return;
+    const enrollment = currentSchedule.enrollments[enrollmentIndex];
+    if (!enrollment) return;
+    const norm = normalizeCourseCode(enrollment.courseCode);
+    const next = blacklistedCourses.filter((c) => normalizeCourseCode(c) !== norm);
+    if (next.length === blacklistedCourses.length) return;
+    set({
+      blacklistedCourses: next,
+      firstSeed: generateRandomSeed(),
+      currentSeed: 0,
+      lowestVisitedSeed: null,
+    });
   },
 });

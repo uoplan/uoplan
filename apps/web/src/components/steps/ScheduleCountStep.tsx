@@ -51,6 +51,9 @@ interface ScheduleCountStepProps {
   onCompressedScheduleChange: (v: boolean) => void;
   preferEasierCourses: boolean;
   onPreferEasierCoursesChange: (v: boolean) => void;
+  blacklistedCourses: string[];
+  allPoolCourses: { value: string; label: string }[];
+  onBlacklistedCoursesChange: (courses: string[]) => void;
   onGenerate: () => void;
   generating?: boolean;
   error?: string | null;
@@ -80,6 +83,9 @@ export function ScheduleCountStep({
   onCompressedScheduleChange,
   preferEasierCourses,
   onPreferEasierCoursesChange,
+  blacklistedCourses,
+  allPoolCourses,
+  onBlacklistedCoursesChange,
   onGenerate,
   generating = false,
   error,
@@ -180,6 +186,18 @@ export function ScheduleCountStep({
         checked={preferEasierCourses}
         onChange={(e) => onPreferEasierCoursesChange(e.currentTarget.checked)}
       />
+      {allPoolCourses.length > 0 && (
+        <MultiSelect
+          label={tr("scheduleCount.blacklist.label")}
+          description={tr("scheduleCount.blacklist.description")}
+          placeholder={tr("scheduleCount.blacklist.placeholder")}
+          data={allPoolCourses}
+          value={blacklistedCourses}
+          onChange={onBlacklistedCoursesChange}
+          searchable
+          clearable
+        />
+      )}
       {error && (
         <Alert color="red" variant="light" radius={0} title={error}>
           <GenerationErrorDetailBlocks

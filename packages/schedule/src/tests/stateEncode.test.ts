@@ -76,6 +76,7 @@ function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
     activeStep: 0,
     showCalendar: false,
     frenchImmersionStream: false,
+    blacklistedCourses: [],
     ...overrides,
   };
 }

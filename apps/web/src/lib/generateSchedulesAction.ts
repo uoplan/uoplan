@@ -442,6 +442,7 @@ export async function generateSchedulesAction(
 
   const completedSet = new Set(completedCourses.map(normalizeCourseCode));
   const prereqEligibleSet = new Set(prereqEligibleCourses);
+  const blacklistedSet = new Set((state.blacklistedCourses ?? []).map(normalizeCourseCode));
 
   const allConstrained = Object.values(constrainedPerRequirement).flat();
   const uniqueConstrained = [...new Set(allConstrained)];
@@ -636,6 +637,7 @@ export async function generateSchedulesAction(
       return false;
     }
     if (getValidSectionCombos(sched, constraints).length === 0) return false;
+    if (blacklistedSet.has(normalizeCourseCode(code))) return false;
     return true;
   }
 
@@ -1293,7 +1295,9 @@ async function handleBasicGeneration(state: AppState): Promise<GenerateSchedules
     studentPrograms,
     program,
     frenchImmersionStream,
+    blacklistedCourses: basicBlacklistedCourses,
   } = state;
+  const basicBlacklistedSet = new Set((basicBlacklistedCourses ?? []).map(normalizeCourseCode));
 
   if (!cache) {
     return null;
@@ -1347,6 +1351,7 @@ async function handleBasicGeneration(state: AppState): Promise<GenerateSchedules
     }
 
     if (pinned.includes(code)) continue;
+    if (basicBlacklistedSet.has(normalizeCourseCode(code))) continue;
 
     const sched = effectiveCache.getSchedule(code);
     if (!sched) continue;

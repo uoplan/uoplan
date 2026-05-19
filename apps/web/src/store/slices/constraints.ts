@@ -1,5 +1,6 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
+import { generateRandomSeed } from "schedule";
 import { clearEnrollmentsCache } from "./schedules";
 
 interface ConstraintsSlice {
@@ -12,6 +13,7 @@ interface ConstraintsSlice {
   setGenerationLimitFirstYearCredits: AppStore["setGenerationLimitFirstYearCredits"];
   setGenerationCompressedSchedule: AppStore["setGenerationCompressedSchedule"];
   setGenerationPreferEasier: AppStore["setGenerationPreferEasier"];
+  setBlacklistedCourses: AppStore["setBlacklistedCourses"];
 }
 
 export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsSlice> = (set) => ({
@@ -41,4 +43,12 @@ export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsS
   setGenerationCompressedSchedule: (v) => set({ generationCompressedSchedule: v }),
 
   setGenerationPreferEasier: (v) => set({ generationPreferEasier: v }),
+
+  setBlacklistedCourses: (courses) =>
+    set({
+      blacklistedCourses: courses,
+      firstSeed: generateRandomSeed(),
+      currentSeed: 0,
+      lowestVisitedSeed: null,
+    }),
 });

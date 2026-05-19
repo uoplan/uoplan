@@ -444,6 +444,18 @@ msgstr "Retire ce cours des sélections utilisées pour générer les horaires."
 msgid "calendar.swap.lockNoPool"
 msgstr "Impossible de rattacher ce cours à un sélecteur d'exigence."
 
+msgid "calendar.swap.blacklistAria"
+msgstr "Exclure le cours de la génération d'horaires"
+
+msgid "calendar.swap.blacklistTooltip"
+msgstr "Empêche ce cours d'apparaître dans tout horaire généré."
+
+msgid "calendar.swap.unblacklistAria"
+msgstr "Retirer le cours de la liste d'exclusion"
+
+msgid "calendar.swap.unblacklistTooltip"
+msgstr "Retire ce cours de la liste d'exclusion afin qu'il puisse apparaître dans les horaires générés."
+
 msgid "languageSwitcher.ariaLabel"
 msgstr "Choisir la langue de l'application"
 
@@ -668,6 +680,15 @@ msgstr "Lors de la génération, les cours avec des moyennes historiques plus é
 
 msgid "scheduleCount.preferEasier.label"
 msgstr "Préférer les cours plus faciles (répartition des notes passées)"
+
+msgid "scheduleCount.blacklist.label"
+msgstr "Cours exclus"
+
+msgid "scheduleCount.blacklist.description"
+msgstr "Les cours sélectionnés ici n'apparaîtront jamais dans les horaires générés."
+
+msgid "scheduleCount.blacklist.placeholder"
+msgstr "Ajouter un cours à exclure…"
 
 msgid "scheduleCount.courses.label"
 msgstr "Combien de cours voulez-vous cette session?"

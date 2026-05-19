@@ -77,6 +77,7 @@ export interface EncodeInput {
   showCalendar: boolean;
   frenchImmersionStream: boolean;
   calendarWeekIndex?: number | null;
+  blacklistedCourses: string[];
 }
 
 export interface DecodedState {
@@ -117,6 +118,7 @@ export interface DecodedState {
   showCalendar: boolean;
   frenchImmersionStream: boolean;
   calendarWeekIndex: number | null;
+  blacklistedCourses: string[];
 }
 
 export interface CatalogueLike {
@@ -176,6 +178,9 @@ export function encodeState(
     if (!isOptCourse(code) && !courseCodeToIndex.has(code)) return null;
   }
   for (const code of input.basicPinnedCourses) {
+    if (!courseCodeToIndex.has(code)) return null;
+  }
+  for (const code of input.blacklistedCourses) {
     if (!courseCodeToIndex.has(code)) return null;
   }
 
@@ -247,6 +252,9 @@ export function encodeState(
     activeStep: input.activeStep,
     showCalendar: input.showCalendar,
     calendarWeekIndex: input.calendarWeekIndex != null ? input.calendarWeekIndex : undefined,
+    blacklistedCourses: input.blacklistedCourses
+      .map(encodeCourseCode)
+      .filter((i): i is number => i !== undefined),
   };
 
   // Requirements
@@ -405,6 +413,10 @@ export function decodeState(
     .map((idx) => (idx < indices.courses.length ? indices.courses[idx] : null))
     .filter((c): c is string => c !== null);
 
+  const blacklistedCourses = state.blacklistedCourses
+    .map((idx) => (idx < indices.courses.length ? indices.courses[idx] : null))
+    .filter((c): c is string => c !== null);
+
   return {
     wizardMode:
       state.wizardMode === WizardMode.WIZARD_MODE_BASIC
@@ -461,6 +473,7 @@ export function decodeState(
     showCalendar: state.showCalendar ?? false,
     frenchImmersionStream: state.frenchImmersionStream ?? false,
     calendarWeekIndex: state.calendarWeekIndex ?? null,
+    blacklistedCourses,
   };
 }
 

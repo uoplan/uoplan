@@ -89,6 +89,7 @@ export const useAppStore = create<AppStore>()((...a) => {
     frenchImmersionStream: false,
     calendarWeekIndex: null,
     scheduleNoVariety: false,
+    blacklistedCourses: [],
 
     setCalendarWeekIndex: (index) => set({ calendarWeekIndex: index }),
 
@@ -167,6 +168,7 @@ export const useAppStore = create<AppStore>()((...a) => {
         wizardFurthestStep: 0,
         frenchImmersionStream: false,
         calendarWeekIndex: null,
+        blacklistedCourses: [],
       });
       if (typeof window !== "undefined") {
         localStorage.removeItem(LOCAL_STORAGE_KEY);

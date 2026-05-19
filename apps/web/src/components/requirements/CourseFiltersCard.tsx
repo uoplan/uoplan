@@ -36,6 +36,7 @@ interface BaseCourseFiltersProps {
 
 interface BasicCourseFiltersCardProps extends BaseCourseFiltersProps {
   excludeElectiveSubjects?: ExcludeElectiveSubjectsProps;
+  excludeCourses?: ExcludeElectiveSubjectsProps;
   collapsible?: boolean;
   defaultCollapsed?: boolean;
 }
@@ -53,6 +54,7 @@ export function BasicCourseFiltersCard({
   onIncludeClosedComponentsChange,
   onVirtualSectionsOnlyChange,
   excludeElectiveSubjects,
+  excludeCourses,
   collapsible = false,
   defaultCollapsed = true,
 }: BasicCourseFiltersCardProps) {
@@ -99,6 +101,19 @@ export function BasicCourseFiltersCard({
           data={excludeElectiveSubjects.data}
           value={excludeElectiveSubjects.value}
           onChange={excludeElectiveSubjects.onChange}
+          radius={0}
+        />
+      )}
+      {excludeCourses && (
+        <MultiSelect
+          label={tr("scheduleCount.blacklist.label")}
+          description={tr("scheduleCount.blacklist.description")}
+          placeholder={tr("scheduleCount.blacklist.placeholder")}
+          searchable
+          clearable
+          data={excludeCourses.data}
+          value={excludeCourses.value}
+          onChange={excludeCourses.onChange}
           radius={0}
         />
       )}
