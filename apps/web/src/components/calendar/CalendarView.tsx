@@ -17,21 +17,31 @@ import type { WeekGroup } from "../../hooks/useScheduleWeeks";
 
 const EMPTY_COLOR_MAP: Record<string, number> = {};
 
-function formatWeekRange(group: WeekGroup): string {
-  const fmt = new Intl.DateTimeFormat(undefined, {
+function formatWeekCount(group: WeekGroup): string {
+  const start = new Date(`${group.startDate}T00:00:00Z`);
+  const end = new Date(`${group.endDate}T00:00:00Z`);
+  const weeks = Math.round((end.getTime() - start.getTime()) / (7 * 24 * 60 * 60 * 1000)) + 1;
+  return weeks === 1 ? "1 week" : `${weeks} weeks`;
+}
+
+function formatScheduleRange(start: string, end: string): string {
+  const s = new Date(`${start}T00:00:00Z`);
+  const e = new Date(`${end}T00:00:00Z`);
+  const startYear = s.getUTCFullYear();
+  const endYear = e.getUTCFullYear();
+  const fmtNoYear = new Intl.DateTimeFormat(undefined, {
     month: "short",
     day: "numeric",
     timeZone: "UTC",
   });
-  // Display Monday of first week → Friday of last week (matching the Mon–Fri grid)
-  const start = new Date(`${group.startDate}T00:00:00Z`);
-  const endFriday = new Date(`${group.endDate}T00:00:00Z`);
-  endFriday.setUTCDate(endFriday.getUTCDate() - 2); // Sunday → Friday
-  if (endFriday < start) {
-    // Edge case: single-day range
-    return fmt.format(start);
-  }
-  return `${fmt.format(start)} – ${fmt.format(endFriday)}`;
+  const fmtWithYear = new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+  const startStr = startYear === endYear ? fmtNoYear.format(s) : fmtWithYear.format(s);
+  return `${startStr} – ${fmtWithYear.format(e)}`;
 }
 
 export interface CalendarViewHandle {
@@ -73,6 +83,22 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(fu
 
   const allEvents = useCalendarEvents(displayedSchedule, professorRatings);
   const { weekGroups, weekIndex, setWeekIndex } = useScheduleWeeks(schedule, calendarWeekIndex);
+
+  const scheduleDateRange = useMemo(() => {
+    if (!schedule) return null;
+    let min: string | null = null;
+    let max: string | null = null;
+    for (const enrollment of schedule.enrollments) {
+      for (const { section } of Object.values(enrollment.sectionCombo)) {
+        for (const t of section.times) {
+          if (!t.meetingDates) continue;
+          if (!min || t.meetingDates[0] < min) min = t.meetingDates[0];
+          if (!max || t.meetingDates[1] > max) max = t.meetingDates[1];
+        }
+      }
+    }
+    return min && max ? { start: min, end: max } : null;
+  }, [schedule]);
 
   useEffect(() => {
     setCalendarWeekIndex(weekIndex);
@@ -119,43 +145,53 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(fu
       }}
     >
       {weekGroups.length > 0 && (
-        <Group
-          justify="space-between"
-          align="center"
-          gap={8}
+        <Box
           style={{
             flexShrink: 0,
-            padding: "6px 12px",
             borderBottom: "1px solid #2C2E33",
             backgroundColor: "#1A1A1C",
           }}
         >
-          <ActionIcon
-            variant="subtle"
-            color="gray"
-            size="sm"
-            aria-label="Previous week"
-            disabled={weekIndex === 0}
-            onClick={() => setWeekIndex(weekIndex - 1)}
-          >
-            <IconChevronLeft size={14} />
-          </ActionIcon>
-          <Text size="xs" c="dimmed" style={{ textAlign: "center", flex: 1 }}>
-            {weekGroups.length > 1
-              ? `Week ${weekIndex + 1} of ${weekGroups.length} · ${formatWeekRange(weekGroups[weekIndex])}`
-              : formatWeekRange(weekGroups[0])}
-          </Text>
-          <ActionIcon
-            variant="subtle"
-            color="gray"
-            size="sm"
-            aria-label="Next week"
-            disabled={weekIndex === weekGroups.length - 1}
-            onClick={() => setWeekIndex(weekIndex + 1)}
-          >
-            <IconChevronRight size={14} />
-          </ActionIcon>
-        </Group>
+          {scheduleDateRange && (
+            <Text
+              size="xs"
+              c="dimmed"
+              style={{
+                textAlign: "center",
+                padding: "4px 12px 0",
+              }}
+            >
+              {formatScheduleRange(scheduleDateRange.start, scheduleDateRange.end)}
+            </Text>
+          )}
+          <Group justify="space-between" align="center" gap={8} style={{ padding: "4px 12px 6px" }}>
+            <ActionIcon
+              variant="subtle"
+              color="gray"
+              size="sm"
+              aria-label="Previous week"
+              disabled={weekIndex === 0}
+              onClick={() => setWeekIndex(weekIndex - 1)}
+            >
+              <IconChevronLeft size={14} />
+            </ActionIcon>
+            <Text size="xs" c="dimmed" style={{ textAlign: "center", flex: 1 }}>
+              {weekGroups.length > 1
+                ? `Week ${weekIndex + 1} of ${weekGroups.length} · ${formatWeekCount(weekGroups[weekIndex])}`
+                : formatWeekCount(weekGroups[0])}
+            </Text>
+            <ActionIcon
+              variant="subtle"
+              color="gray"
+              size="sm"
+              aria-label="Next week"
+              disabled={weekIndex === weekGroups.length - 1}
+              onClick={() => setWeekIndex(weekIndex + 1)}
+            >
+              <IconChevronRight size={14} />
+            </ActionIcon>
+          </Group>
+        </Box>
       )}
       <Box style={{ flex: 1, minHeight: 0 }}>
         <WeekCalendar
