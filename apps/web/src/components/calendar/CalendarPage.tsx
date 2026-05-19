@@ -15,7 +15,6 @@ import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { CalendarView, type CalendarViewHandle } from "./CalendarView";
 import { ResetModal } from "../shared/ResetModal";
-import { GenerationErrorDetailBlocks } from "../GenerationErrorDetailBlocks";
 import { buildScheduleIcs, downloadTextFile } from "schedule";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateRange";
@@ -26,6 +25,7 @@ import { CALENDAR_SIDEBAR_WIDTH_PX } from "./calendarLayout";
 import { BasicCalendarSidebarControls } from "./BasicCalendarSidebarControls";
 import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
 import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
+import { GenerationErrorModal } from "./GenerationErrorModal";
 interface CalendarPageProps {
   variant: "basic" | "advanced";
   onBack: () => void;
@@ -71,6 +71,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
     })),
   );
 
+  const clearGenerationError = () => useAppStore.setState({ generationError: null });
   const undoLastSwap = useAppStore((s) => s.undoLastSwap);
   const getShareUrl = useAppStore((s) => s.getShareUrl);
   const goToPreviousSeed = useAppStore((s) => s.goToPreviousSeed);
@@ -113,12 +114,6 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
   const endOk =
     Boolean(timetableEndDate) && !Number.isNaN(Date.parse(`${timetableEndDate}T00:00:00Z`));
   const dateRangeOk = startOk && endOk && timetableStartDate <= timetableEndDate;
-
-  const genErrDetails = generationError?.details ?? null;
-  const summarizeEmptyPoolsInGenError =
-    genErrDetails &&
-    genErrDetails.emptyPools.length > 4 &&
-    genErrDetails.totalAvailable < genErrDetails.totalNeeded;
 
   const handlePrevious = async () => {
     if (scheduleGenerating || !canUseSeedNavigation) return;
@@ -318,23 +313,6 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
         </Button>
       )}
 
-      {generationError && (
-        <Alert
-          color="red"
-          variant="light"
-          radius={0}
-          py="xs"
-          title={generationError.message}
-          styles={{ title: { whiteSpace: "normal", lineHeight: 1.3 } }}
-          style={{ flexShrink: 0 }}
-        >
-          <GenerationErrorDetailBlocks
-            errorDetails={genErrDetails}
-            summarizeEmptyPools={!!summarizeEmptyPoolsInGenError}
-          />
-        </Alert>
-      )}
-
       {scheduleNoVariety && !generationError && (
         <Alert color="yellow" variant="light" radius={0} py="xs" style={{ flexShrink: 0 }}>
           {tr(isBasic ? "basicCalendar.noMoreSchedules" : "calendarPage.noMoreSchedules")}
@@ -369,144 +347,147 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
   );
 
   return (
-    <Box
-      component="main"
-      style={{
-        width: "100%",
-        height: "100vh",
-        display: "flex",
-        flexDirection: "row",
-        boxSizing: "border-box",
-        overflow: "hidden",
-      }}
-    >
-      {!isMobile && (
-        <Box
-          component="aside"
-          aria-label="Calendar Controls"
-          style={{
-            width: CALENDAR_SIDEBAR_WIDTH_PX,
-            height: "100%",
-            flexShrink: 0,
-            padding: "24px 20px",
-            borderRight: "2px solid #2C2E33",
-            backgroundColor: "#1E1E20",
-            display: "flex",
-            flexDirection: "column",
-            gap: 24,
-            overflowY: "auto",
-          }}
-        >
-          {sidebarControls}
-        </Box>
-      )}
-
-      {isMobile && (
-        <CalendarMobileDrawer
-          opened={controlsOpen}
-          onClose={() => setControlsOpen(false)}
-          title={calendarTitle}
-          ariaLabel={tr("calendarPage.mobile.controlsAria")}
-        >
-          <Stack gap={24}>{sidebarControls}</Stack>
-        </CalendarMobileDrawer>
-      )}
-
-      {/* Calendar area */}
+    <>
+      <GenerationErrorModal error={generationError} onClose={clearGenerationError} />
       <Box
-        component="section"
-        aria-label="Timetable"
+        component="main"
         style={{
-          flex: 1,
-          minWidth: 0,
-          minHeight: 0,
-          display: "flex",
-          flexDirection: "column",
-          padding: 0,
-          paddingBottom: isMobile ? 72 : 0,
           width: "100%",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "row",
+          boxSizing: "border-box",
+          overflow: "hidden",
         }}
       >
-        <CalendarView
-          ref={morphRef}
-          schedule={currentSchedule}
-          cache={cache}
-          professorRatings={professorRatings}
-          getSwapCandidates={getSwapCandidates}
-          onSwap={swapCourseInSchedule}
-          colorMap={currentColorMap}
-        />
-      </Box>
+        {!isMobile && (
+          <Box
+            component="aside"
+            aria-label="Calendar Controls"
+            style={{
+              width: CALENDAR_SIDEBAR_WIDTH_PX,
+              height: "100%",
+              flexShrink: 0,
+              padding: "24px 20px",
+              borderRight: "2px solid #2C2E33",
+              backgroundColor: "#1E1E20",
+              display: "flex",
+              flexDirection: "column",
+              gap: 24,
+              overflowY: "auto",
+            }}
+          >
+            {sidebarControls}
+          </Box>
+        )}
 
-      {/* Mobile bottom nav */}
-      {isMobile && (
+        {isMobile && (
+          <CalendarMobileDrawer
+            opened={controlsOpen}
+            onClose={() => setControlsOpen(false)}
+            title={calendarTitle}
+            ariaLabel={tr("calendarPage.mobile.controlsAria")}
+          >
+            <Stack gap={24}>{sidebarControls}</Stack>
+          </CalendarMobileDrawer>
+        )}
+
+        {/* Calendar area */}
         <Box
-          component="nav"
+          component="section"
+          aria-label="Timetable"
           style={{
-            position: "fixed",
-            bottom: 0,
-            left: 0,
-            right: 0,
+            flex: 1,
+            minWidth: 0,
+            minHeight: 0,
             display: "flex",
-            gap: 0,
-            backgroundColor: "#1E1E20",
-            borderTop: "2px solid #2C2E33",
-            paddingBottom: "env(safe-area-inset-bottom, 0)",
-            zIndex: 198,
+            flexDirection: "column",
+            padding: 0,
+            paddingBottom: isMobile ? 72 : 0,
+            width: "100%",
           }}
         >
-          <Button
-            variant="subtle"
-            color="gray"
-            size="md"
-            radius={0}
-            aria-label={tr("calendarPage.mobile.back")}
-            style={{ flex: 1, border: "none", height: 56 }}
-            onClick={onBack}
-          >
-            <IconArrowLeft size={22} stroke={1.75} />
-          </Button>
-          <Button
-            variant="subtle"
-            color="gray"
-            size="md"
-            radius={0}
-            aria-label={tr("calendarPage.mobile.menu")}
-            style={{ flex: 1, border: "none", height: 56 }}
-            onClick={() => setControlsOpen(true)}
-          >
-            <IconSettings size={22} stroke={1.75} />
-          </Button>
-          <Button
-            variant="subtle"
-            color="gray"
-            size="md"
-            radius={0}
-            aria-label={tr("calendarPage.mobile.previous")}
-            style={{ flex: 1, border: "none", height: 56 }}
-            disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
-            loading={scheduleGenerating}
-            onClick={handlePrevious}
-            title="Previous schedule"
-          >
-            <IconChevronLeft size={22} stroke={1.75} />
-          </Button>
-          <Button
-            variant="subtle"
-            color="gray"
-            size="md"
-            radius={0}
-            aria-label={tr("calendarPage.mobile.next")}
-            style={{ flex: 1, border: "none", height: 56 }}
-            disabled={scheduleGenerating || !canUseSeedNavigation}
-            loading={scheduleGenerating}
-            onClick={handleNext}
-            title="Next schedule"
-          >
-            <IconChevronRight size={22} stroke={1.75} />
-          </Button>
+          <CalendarView
+            ref={morphRef}
+            schedule={currentSchedule}
+            cache={cache}
+            professorRatings={professorRatings}
+            getSwapCandidates={getSwapCandidates}
+            onSwap={swapCourseInSchedule}
+            colorMap={currentColorMap}
+          />
         </Box>
-      )}
-    </Box>
+
+        {/* Mobile bottom nav */}
+        {isMobile && (
+          <Box
+            component="nav"
+            style={{
+              position: "fixed",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              display: "flex",
+              gap: 0,
+              backgroundColor: "#1E1E20",
+              borderTop: "2px solid #2C2E33",
+              paddingBottom: "env(safe-area-inset-bottom, 0)",
+              zIndex: 198,
+            }}
+          >
+            <Button
+              variant="subtle"
+              color="gray"
+              size="md"
+              radius={0}
+              aria-label={tr("calendarPage.mobile.back")}
+              style={{ flex: 1, border: "none", height: 56 }}
+              onClick={onBack}
+            >
+              <IconArrowLeft size={22} stroke={1.75} />
+            </Button>
+            <Button
+              variant="subtle"
+              color="gray"
+              size="md"
+              radius={0}
+              aria-label={tr("calendarPage.mobile.menu")}
+              style={{ flex: 1, border: "none", height: 56 }}
+              onClick={() => setControlsOpen(true)}
+            >
+              <IconSettings size={22} stroke={1.75} />
+            </Button>
+            <Button
+              variant="subtle"
+              color="gray"
+              size="md"
+              radius={0}
+              aria-label={tr("calendarPage.mobile.previous")}
+              style={{ flex: 1, border: "none", height: 56 }}
+              disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
+              loading={scheduleGenerating}
+              onClick={handlePrevious}
+              title="Previous schedule"
+            >
+              <IconChevronLeft size={22} stroke={1.75} />
+            </Button>
+            <Button
+              variant="subtle"
+              color="gray"
+              size="md"
+              radius={0}
+              aria-label={tr("calendarPage.mobile.next")}
+              style={{ flex: 1, border: "none", height: 56 }}
+              disabled={scheduleGenerating || !canUseSeedNavigation}
+              loading={scheduleGenerating}
+              onClick={handleNext}
+              title="Next schedule"
+            >
+              <IconChevronRight size={22} stroke={1.75} />
+            </Button>
+          </Box>
+        )}
+      </Box>
+    </>
   );
 }
