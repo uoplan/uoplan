@@ -58,6 +58,8 @@ export function BasicCalendarSidebarControls({
 
   const setFrenchImmersionStream = useAppStore((s) => s.setFrenchImmersionStream);
 
+  const blacklistedCourses = useAppStore((s) => s.blacklistedCourses);
+  const setBlacklistedCourses = useAppStore((s) => s.setBlacklistedCourses);
   const setBasicPinnedCourses = useAppStore((s) => s.setBasicPinnedCourses);
   const setBasicElectivesCount = useAppStore((s) => s.setBasicElectivesCount);
   const setBasicExcludedCategories = useAppStore((s) => s.setBasicExcludedCategories);
@@ -248,6 +250,14 @@ export function BasicCalendarSidebarControls({
             value: basicExcludedCategories,
             onChange: (v) => {
               setBasicExcludedCategories(v);
+              markBasicSettingsChanged();
+            },
+          }}
+          excludeCourses={{
+            data: requiredCourseOptions,
+            value: blacklistedCourses,
+            onChange: (v) => {
+              setBlacklistedCourses(v);
               markBasicSettingsChanged();
             },
           }}

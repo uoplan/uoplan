@@ -360,6 +360,18 @@ msgstr "Removes this course from the selections used when schedules are generate
 msgid "calendar.swap.lockNoPool"
 msgstr "Can't attach this course to a requirement picker."
 
+msgid "calendar.swap.blacklistAria"
+msgstr "Exclude course from schedule generation"
+
+msgid "calendar.swap.blacklistTooltip"
+msgstr "Prevents this course from appearing in any generated schedule."
+
+msgid "calendar.swap.unblacklistAria"
+msgstr "Remove course from exclusion list"
+
+msgid "calendar.swap.unblacklistTooltip"
+msgstr "Removes this course from the exclusion list so it can appear in generated schedules."
+
 msgid "calendarPage.downloadIcs"
 msgstr "Download ICS"
 
@@ -659,6 +671,15 @@ msgstr "When generating, courses with higher historical grade averages are more 
 
 msgid "scheduleCount.preferEasier.label"
 msgstr "Prefer easier courses (past grade distributions)"
+
+msgid "scheduleCount.blacklist.label"
+msgstr "Excluded courses"
+
+msgid "scheduleCount.blacklist.description"
+msgstr "Courses selected here will never appear in generated schedules."
+
+msgid "scheduleCount.blacklist.placeholder"
+msgstr "Add a course to exclude…"
 
 msgid "scheduleCount.courses.label"
 msgstr "How many courses do you want this semester?"

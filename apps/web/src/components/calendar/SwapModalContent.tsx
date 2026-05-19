@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { ActionIcon, Box, Group, Stack, Text, Tooltip } from "@mantine/core";
-import { IconLock, IconLockFilled } from "@tabler/icons-react";
+import { IconLock, IconLockFilled, IconBan } from "@tabler/icons-react";
 import { normalizeCourseCode } from "schedule";
 import type { DataCache, GeneratedSchedule, ProfessorRatingsMap } from "schedule";
 import type { SwapCandidateOption, SwapModalState, SwapResult } from "../../hooks/useSwapModal";
@@ -49,6 +49,9 @@ export function SwapModalContent({
   const unlockCourseForAllSchedulesFromSwap = useAppStore(
     (s) => s.unlockCourseForAllSchedulesFromSwap,
   );
+  const blacklistCourseFromSwap = useAppStore((s) => s.blacklistCourseFromSwap);
+  const unblacklistCourseFromSwap = useAppStore((s) => s.unblacklistCourseFromSwap);
+  const blacklistedCourses = useAppStore((s) => s.blacklistedCourses);
   const basicPinnedCourses = useAppStore((s) => s.basicPinnedCourses);
   const constrainedPerRequirement = useAppStore((s) => s.constrainedPerRequirement);
   const selectedPerRequirement = useAppStore((s) => s.selectedPerRequirement);
@@ -109,11 +112,47 @@ export function SwapModalContent({
     !isInAssignSelections &&
     treeRequirementIdsForCourse.length === 0;
 
+  const isBlacklisted = useMemo(
+    () => blacklistedCourses.some((c) => normalizeCourseCode(c) === courseNorm),
+    [blacklistedCourses, courseNorm],
+  );
+
   const canLock =
-    isPlannerVariantActive() && !isGenerationPinned && !isInAssignSelections && !lockUnavailable;
+    isPlannerVariantActive() &&
+    !isGenerationPinned &&
+    !isInAssignSelections &&
+    !lockUnavailable &&
+    !isBlacklisted;
   const canUnlock = isGenerationPinned;
 
   const lockControlDisabled = !canLock && !canUnlock;
+
+  const canBlacklist =
+    isPlannerVariantActive() && !isGenerationPinned && !isInAssignSelections && !isBlacklisted;
+  const canUnblacklist = isBlacklisted;
+  const blacklistControlDisabled = !canBlacklist && !canUnblacklist;
+
+  const blacklistTooltip =
+    isGenerationPinned || isInAssignSelections
+      ? tr("calendar.swap.alreadyLocked")
+      : canUnblacklist
+        ? tr("calendar.swap.unblacklistTooltip")
+        : tr("calendar.swap.blacklistTooltip");
+
+  const blacklistAria = canUnblacklist
+    ? tr("calendar.swap.unblacklistAria")
+    : tr("calendar.swap.blacklistAria");
+
+  const handleBlacklistToggle = () => {
+    if (canUnblacklist) {
+      unblacklistCourseFromSwap(modalState.enrollmentIndex);
+      closeModal();
+      return;
+    }
+    if (!canBlacklist) return;
+    blacklistCourseFromSwap(modalState.enrollmentIndex);
+    closeModal();
+  };
 
   const lockTooltip = lockUnavailable
     ? tr("calendar.swap.lockNoPool")
@@ -167,25 +206,42 @@ export function SwapModalContent({
           <Text size="xs" c="dimmed" tt="uppercase" fw={600}>
             Current course
           </Text>
-          <Tooltip label={lockTooltip} position="left" withArrow color="dark">
-            <Box component="span" style={{ display: "inline-flex" }}>
-              <ActionIcon
-                variant="subtle"
-                color={showLockedIcon ? "yellow" : "gray"}
-                size="lg"
-                radius="md"
-                disabled={lockControlDisabled}
-                aria-label={lockAria}
-                onClick={handleLockToggle}
-              >
-                {showLockedIcon ? (
-                  <IconLockFilled size={20} stroke={1.5} />
-                ) : (
-                  <IconLock size={20} stroke={1.5} />
-                )}
-              </ActionIcon>
-            </Box>
-          </Tooltip>
+          <Group gap={4} wrap="nowrap">
+            <Tooltip label={blacklistTooltip} position="left" withArrow color="dark">
+              <Box component="span" style={{ display: "inline-flex" }}>
+                <ActionIcon
+                  variant="subtle"
+                  color={isBlacklisted ? "red" : "gray"}
+                  size="lg"
+                  radius="md"
+                  disabled={blacklistControlDisabled}
+                  aria-label={blacklistAria}
+                  onClick={handleBlacklistToggle}
+                >
+                  <IconBan size={20} stroke={1.5} />
+                </ActionIcon>
+              </Box>
+            </Tooltip>
+            <Tooltip label={lockTooltip} position="left" withArrow color="dark">
+              <Box component="span" style={{ display: "inline-flex" }}>
+                <ActionIcon
+                  variant="subtle"
+                  color={showLockedIcon ? "yellow" : "gray"}
+                  size="lg"
+                  radius="md"
+                  disabled={lockControlDisabled}
+                  aria-label={lockAria}
+                  onClick={handleLockToggle}
+                >
+                  {showLockedIcon ? (
+                    <IconLockFilled size={20} stroke={1.5} />
+                  ) : (
+                    <IconLock size={20} stroke={1.5} />
+                  )}
+                </ActionIcon>
+              </Box>
+            </Tooltip>
+          </Group>
         </Group>
         {enrollment ? (
           <EventStyleCard

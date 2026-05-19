@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Alert, Badge, Box, Collapse, Group, Paper, Stack, Text } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import { useAppStore } from "../../../store/appStore";
@@ -41,6 +41,7 @@ function WizardGenerateStepBody() {
   const generationLimitFirstYearCredits = useAppStore((s) => s.generationLimitFirstYearCredits);
   const generationCompressedSchedule = useAppStore((s) => s.generationCompressedSchedule);
   const generationPreferEasier = useAppStore((s) => s.generationPreferEasier);
+  const blacklistedCourses = useAppStore((s) => s.blacklistedCourses);
   const unassignedCompletedCourses = useAppStore((s) => s.unassignedCompletedCourses);
 
   const setCoursesThisSemester = useAppStore((s) => s.setCoursesThisSemester);
@@ -59,7 +60,16 @@ function WizardGenerateStepBody() {
   );
   const setGenerationCompressedSchedule = useAppStore((s) => s.setGenerationCompressedSchedule);
   const setGenerationPreferEasier = useAppStore((s) => s.setGenerationPreferEasier);
+  const setBlacklistedCourses = useAppStore((s) => s.setBlacklistedCourses);
   const setConstrainedForRequirement = useAppStore((s) => s.setConstrainedForRequirement);
+
+  const allPoolCourses = useMemo(() => {
+    const codes = new Set(remainingRequirements.flatMap((r) => r.candidateCourses));
+    return [...codes]
+      .filter((c) => !completedCourses.includes(c))
+      .map((c) => ({ value: c, label: c }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [remainingRequirements, completedCourses]);
 
   const [generating, setGenerating] = useState(false);
   const [constrainOpen, setConstrainOpen] = useState(false);
@@ -118,6 +128,9 @@ function WizardGenerateStepBody() {
         onCompressedScheduleChange={setGenerationCompressedSchedule}
         preferEasierCourses={generationPreferEasier}
         onPreferEasierCoursesChange={setGenerationPreferEasier}
+        blacklistedCourses={blacklistedCourses}
+        allPoolCourses={allPoolCourses}
+        onBlacklistedCoursesChange={setBlacklistedCourses}
         onGenerate={handleGenerate}
         generating={generating}
         error={generationError?.message ?? null}

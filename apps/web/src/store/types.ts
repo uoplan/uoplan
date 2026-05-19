@@ -105,6 +105,8 @@ export interface AppState {
   calendarWeekIndex: number | null;
   /** True when the last seed navigation returned the same course set as the current schedule. */
   scheduleNoVariety: boolean;
+  /** Courses that must never appear in any generated schedule. */
+  blacklistedCourses: string[];
 }
 
 export interface AppActions {
@@ -162,6 +164,9 @@ export interface AppActions {
   setGenerationCompressedSchedule: (v: boolean) => void;
   setGenerationPreferEasier: (v: boolean) => void;
   setFrenchImmersionStream: (enabled: boolean) => void;
+  setBlacklistedCourses: (courses: string[]) => void;
+  blacklistCourseFromSwap: (enrollmentIndex: number) => void;
+  unblacklistCourseFromSwap: (enrollmentIndex: number) => void;
   setCalendarWeekIndex: (index: number | null) => void;
   resetToDefault: () => void;
   touchWizardFurthestStep: (step: number) => void;
