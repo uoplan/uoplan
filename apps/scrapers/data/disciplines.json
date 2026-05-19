@@ -1,526 +1,659 @@
 {
-  "source": "https://catalogue.uottawa.ca/en/courses/",
+  "sources": [
+    "https://catalogue.uottawa.ca/en/courses/",
+    "https://catalogue.uottawa.ca/fr/cours/"
+  ],
   "count": 174,
   "disciplines": [
     {
       "code": "ACP",
-      "name": "Arts Co-op"
+      "name": "Arts Co-op",
+      "nameFr": "Arts Coop"
     },
     {
       "code": "ADM",
-      "name": "Administration"
+      "name": "Administration",
+      "nameFr": "Administration"
     },
     {
       "code": "AFR",
-      "name": "African Studies"
+      "name": "African Studies",
+      "nameFr": "Études africaines"
     },
     {
       "code": "AHL",
-      "name": "Interdisciplinary Study in Arts"
+      "name": "Interdisciplinary Study in Arts",
+      "nameFr": "Études interdisciplinaires en arts"
     },
     {
       "code": "ALG",
-      "name": "German Language and Culture"
+      "name": "German Language and Culture",
+      "nameFr": "Langue et culture allemandes"
     },
     {
       "code": "AMM",
-      "name": "Advanced Materials and Manufacturing"
+      "name": "Advanced Materials and Manufacturing",
+      "nameFr": "Matériaux avancés et fabrication"
     },
     {
       "code": "AMT",
-      "name": "Arts, Music, Theatre"
+      "name": "Arts, Music, Theatre",
+      "nameFr": "Arts, musique, théâtre"
     },
     {
       "code": "ANA",
-      "name": "Anatomy and Neurobiology"
+      "name": "Anatomy and Neurobiology",
+      "nameFr": "Anatomie et neurobiologie"
     },
     {
       "code": "ANE",
-      "name": "Anesthesiology"
+      "name": "Anesthesiology",
+      "nameFr": "Anesthésiologie"
     },
     {
       "code": "ANP",
-      "name": "Anatomy and Physiology"
+      "name": "Anatomy and Physiology",
+      "nameFr": "Anatomie et physiologie"
     },
     {
       "code": "ANT",
-      "name": "Anthropology"
+      "name": "Anthropology",
+      "nameFr": "Anthropologie"
     },
     {
       "code": "APA",
-      "name": "Human Kinetics"
+      "name": "Human Kinetics",
+      "nameFr": "Sciences de l'activité physique"
     },
     {
       "code": "API",
-      "name": "Public and International Affairs"
+      "name": "Public and International Affairs",
+      "nameFr": "Affaires publiques et internationales"
     },
     {
       "code": "ARB",
-      "name": "Arabic Language and Culture"
+      "name": "Arabic Language and Culture",
+      "nameFr": "Langue et culture arabes"
     },
     {
       "code": "ART",
-      "name": "Visual Arts"
+      "name": "Visual Arts",
+      "nameFr": "Arts visuels"
     },
     {
       "code": "ASE",
-      "name": "Anatomical Sciences Education"
+      "name": "Anatomical Sciences Education",
+      "nameFr": "Enseignement des sciences anatomiques"
     },
     {
       "code": "ASI",
-      "name": "Asian Studies"
+      "name": "Asian Studies",
+      "nameFr": "Études asiatiques"
     },
     {
       "code": "AUD",
-      "name": "Audiology"
+      "name": "Audiology",
+      "nameFr": "Audiologie"
     },
     {
       "code": "BCH",
-      "name": "Biochemistry"
+      "name": "Biochemistry",
+      "nameFr": "Biochimie"
     },
     {
       "code": "BIL",
-      "name": "Bilingualism Studies"
+      "name": "Bilingualism Studies",
+      "nameFr": "Études du bilinguisme"
     },
     {
       "code": "BIM",
-      "name": "Biomedical Science"
+      "name": "Biomedical Science",
+      "nameFr": "Sciences biomédicales"
     },
     {
       "code": "BIO",
-      "name": "Biology"
+      "name": "Biology",
+      "nameFr": "Biologie"
     },
     {
       "code": "BMG",
-      "name": "Biomedical Engineering"
+      "name": "Biomedical Engineering",
+      "nameFr": "Génie biomédical"
     },
     {
       "code": "BML",
-      "name": "Biomolecular Sciences"
+      "name": "Biomolecular Sciences",
+      "nameFr": "Sciences biomoléculaires"
     },
     {
       "code": "BNF",
-      "name": "Bioinformatics"
+      "name": "Bioinformatics",
+      "nameFr": "Bioinformatique"
     },
     {
       "code": "BPS",
-      "name": "Biopharmaceutical Science"
+      "name": "Biopharmaceutical Science",
+      "nameFr": "Sciences biopharmaceutiques"
     },
     {
       "code": "CDN",
-      "name": "Canadian Studies"
+      "name": "Canadian Studies",
+      "nameFr": "Études canadiennes"
     },
     {
       "code": "CEG",
-      "name": "Computer Engineering"
+      "name": "Computer Engineering",
+      "nameFr": "Génie informatique"
     },
     {
       "code": "CGI",
-      "name": "Engineering Co-op"
+      "name": "Engineering Co-op",
+      "nameFr": "Génie Coop"
     },
     {
       "code": "CHG",
-      "name": "Chemical Engineering"
+      "name": "Chemical Engineering",
+      "nameFr": "Génie chimique"
     },
     {
       "code": "CHM",
-      "name": "Chemistry"
+      "name": "Chemistry",
+      "nameFr": "Chimie"
     },
     {
       "code": "CHN",
-      "name": "Chinese"
+      "name": "Chinese",
+      "nameFr": "Chinois"
     },
     {
       "code": "CIN",
-      "name": "Film Studies"
+      "name": "Film Studies",
+      "nameFr": "Études cinématographiques"
     },
     {
       "code": "CLA",
-      "name": "Classical Studies"
+      "name": "Classical Studies",
+      "nameFr": "Études anciennes"
     },
     {
       "code": "CLI",
-      "name": "Clinical Rotation"
+      "name": "Clinical Rotation",
+      "nameFr": "Stage clinique"
     },
     {
       "code": "CLT",
-      "name": "Celtic Studies"
+      "name": "Celtic Studies",
+      "nameFr": "Études celtiques"
     },
     {
       "code": "CML",
-      "name": "Common Law"
+      "name": "Common Law",
+      "nameFr": "Common Law"
     },
     {
       "code": "CMM",
-      "name": "Cellular and Molecular Medicine"
+      "name": "Cellular and Molecular Medicine",
+      "nameFr": "Médecine cellulaire et moléculaire"
     },
     {
       "code": "CMN",
-      "name": "Communication"
+      "name": "Communication",
+      "nameFr": "Communication"
     },
     {
       "code": "CPL",
-      "name": "Complex Project Leadership"
+      "name": "Complex Project Leadership",
+      "nameFr": "Leadership de projets complexes"
     },
     {
       "code": "CPT",
-      "name": "Accounting"
+      "name": "Accounting",
+      "nameFr": "Comptabilité"
     },
     {
       "code": "CRM",
-      "name": "Criminology"
+      "name": "Criminology",
+      "nameFr": "Criminologie"
     },
     {
       "code": "CSI",
-      "name": "Computer Science"
+      "name": "Computer Science",
+      "nameFr": "Informatique"
     },
     {
       "code": "CTM",
-      "name": "Clinical Science and Translational Medicine"
+      "name": "Clinical Science and Translational Medicine",
+      "nameFr": "Sciences cliniques et médecine translationnelle"
     },
     {
       "code": "CTS",
-      "name": "Cardio-Respiratory Systems"
+      "name": "Cardio-Respiratory Systems",
+      "nameFr": "Systèmes cardio-respiratoires"
     },
     {
       "code": "CVG",
-      "name": "Civil Engineering"
+      "name": "Civil Engineering",
+      "nameFr": "Génie civil"
     },
     {
       "code": "DCC",
-      "name": "Law (Certificate)"
+      "name": "Law (Certificate)",
+      "nameFr": "Droit (Certificat)"
     },
     {
       "code": "DCL",
-      "name": "Law"
+      "name": "Law",
+      "nameFr": "Droit"
     },
     {
       "code": "DCN",
-      "name": "Digital Cultures"
+      "name": "Digital Cultures",
+      "nameFr": "Cultures numériques"
     },
     {
       "code": "DLS",
-      "name": "Second-Language Teaching"
+      "name": "Second-Language Teaching",
+      "nameFr": "Enseignement des langues secondes"
     },
     {
       "code": "DRC",
-      "name": "Civil Law"
+      "name": "Civil Law",
+      "nameFr": "Droit civil"
     },
     {
       "code": "DTI",
-      "name": "Digital Transformation and Innovation"
+      "name": "Digital Transformation and Innovation",
+      "nameFr": "Innovation et transformation numérique"
     },
     {
       "code": "DTO",
-      "name": "Digital Transformation and Innovation - online"
+      "name": "Digital Transformation and Innovation - online",
+      "nameFr": "Innovation et transformation numérique - en ligne"
     },
     {
       "code": "DVM",
-      "name": "International Development and Globalization"
+      "name": "International Development and Globalization",
+      "nameFr": "Développement international et mondialisation"
     },
     {
       "code": "EAS",
-      "name": "Indigenous Studies"
+      "name": "Indigenous Studies",
+      "nameFr": "Études autochtones"
     },
     {
       "code": "ECH",
-      "name": "Conflict Studies and Human Rights"
+      "name": "Conflict Studies and Human Rights",
+      "nameFr": "Études de conflits et droits humains"
     },
     {
       "code": "ECO",
-      "name": "Economics"
+      "name": "Economics",
+      "nameFr": "Science économique"
     },
     {
       "code": "EDU",
-      "name": "Education"
+      "name": "Education",
+      "nameFr": "Éducation"
     },
     {
       "code": "EED",
-      "name": "Entrepreneurial Engineering Design"
+      "name": "Entrepreneurial Engineering Design",
+      "nameFr": "Conception en ingénierie entrepreneuriale"
     },
     {
       "code": "EFR",
-      "name": "Francophone Studies"
+      "name": "Francophone Studies",
+      "nameFr": "Études des francophonies"
     },
     {
       "code": "ELA",
-      "name": "Latin American Studies"
+      "name": "Latin American Studies",
+      "nameFr": "Études latino-américaines"
     },
     {
       "code": "ELE",
-      "name": "Elective Courses in Medicine"
+      "name": "Elective Courses in Medicine",
+      "nameFr": "Cours optionnels en médecine"
     },
     {
       "code": "ELG",
-      "name": "Electrical Engineering"
+      "name": "Electrical Engineering",
+      "nameFr": "Génie électrique"
     },
     {
       "code": "EMP",
-      "name": "Engineering Management"
+      "name": "Engineering Management",
+      "nameFr": "Gestion en ingénierie"
     },
     {
       "code": "ENG",
-      "name": "English"
+      "name": "English",
+      "nameFr": "English"
     },
     {
       "code": "ENV",
-      "name": "Environmental Studies"
+      "name": "Environmental Studies",
+      "nameFr": "Études de l'environnement"
     },
     {
       "code": "EPI",
-      "name": "Epidemiology and Applied Health Research"
+      "name": "Epidemiology and Applied Health Research",
+      "nameFr": "Épidémiologie et recherche appliquée en santé"
     },
     {
       "code": "ERG",
-      "name": "Occupational Therapy"
+      "name": "Occupational Therapy",
+      "nameFr": "Ergothérapie"
     },
     {
       "code": "ESL",
-      "name": "English as a Second Language"
+      "name": "English as a Second Language",
+      "nameFr": "Anglais langue seconde"
     },
     {
       "code": "ESP",
-      "name": "Spanish"
+      "name": "Spanish",
+      "nameFr": "Espagnol"
     },
     {
       "code": "EVD",
-      "name": "Environmental Sustainability"
+      "name": "Environmental Sustainability",
+      "nameFr": "Durabilité de l'environnement"
     },
     {
       "code": "EVG",
-      "name": "Environmental Engineering"
+      "name": "Environmental Engineering",
+      "nameFr": "Génie de l'environnement"
     },
     {
       "code": "EVS",
-      "name": "Environmental Science"
+      "name": "Environmental Science",
+      "nameFr": "Sciences environnementales"
     },
     {
       "code": "FAM",
-      "name": "Family Medicine"
+      "name": "Family Medicine",
+      "nameFr": "Médecine familiale"
     },
     {
       "code": "FEM",
-      "name": "Feminist and Gender Studies"
+      "name": "Feminist and Gender Studies",
+      "nameFr": "Études féministes et de genre"
     },
     {
       "code": "FLS",
-      "name": "French as a Second Language"
+      "name": "French as a Second Language",
+      "nameFr": "Français langue seconde"
     },
     {
       "code": "FRA",
-      "name": "Lettres françaises"
+      "name": "Lettres françaises",
+      "nameFr": "Lettres françaises"
     },
     {
       "code": "FRE",
-      "name": "French Studies"
+      "name": "French Studies",
+      "nameFr": "French Studies"
     },
     {
       "code": "FSS",
-      "name": "Social Sciences"
+      "name": "Social Sciences",
+      "nameFr": "Sciences sociales"
     },
     {
       "code": "GAE",
-      "name": "Gastroenteritis"
+      "name": "Gastroenteritis",
+      "nameFr": "Gastroentérite"
     },
     {
       "code": "GEG",
-      "name": "Geography"
+      "name": "Geography",
+      "nameFr": "Géographie"
     },
     {
       "code": "GEO",
-      "name": "Geology"
+      "name": "Geology",
+      "nameFr": "Géologie"
     },
     {
       "code": "GNG",
-      "name": "General Engineering"
+      "name": "General Engineering",
+      "nameFr": "Génie général"
     },
     {
       "code": "GRT",
-      "name": "Gerontology"
+      "name": "Gerontology",
+      "nameFr": "Gérontologie"
     },
     {
       "code": "GSU",
-      "name": "General Surgery"
+      "name": "General Surgery",
+      "nameFr": "Chirurgie générale"
     },
     {
       "code": "HAH",
-      "name": "Health Administration"
+      "name": "Health Administration",
+      "nameFr": "Gestion des services de santé"
     },
     {
       "code": "HIS",
-      "name": "History"
+      "name": "History",
+      "nameFr": "Histoire"
     },
     {
       "code": "HMG",
-      "name": "Human and Molecular Genetics"
+      "name": "Human and Molecular Genetics",
+      "nameFr": "Génétique humaine et moléculaire"
     },
     {
       "code": "HSS",
-      "name": "Health Sciences"
+      "name": "Health Sciences",
+      "nameFr": "Sciences de la santé"
     },
     {
       "code": "IAI",
-      "name": "Interdisciplinary Artificial Intelligence"
+      "name": "Interdisciplinary Artificial Intelligence",
+      "nameFr": "Intelligence artificielle interdisciplinaire"
     },
     {
       "code": "ILA",
-      "name": "Indigenous Languages"
+      "name": "Indigenous Languages",
+      "nameFr": "Langues autochtones"
     },
     {
       "code": "IMM",
-      "name": "Immunology"
+      "name": "Immunology",
+      "nameFr": "Immunologie"
     },
     {
       "code": "INR",
-      "name": "Medical Intern or Resident"
+      "name": "Medical Intern or Resident",
+      "nameFr": "Interne ou résident en médecine"
     },
     {
       "code": "ISI",
-      "name": "Information Studies"
+      "name": "Information Studies",
+      "nameFr": "Sciences de l'information"
     },
     {
       "code": "ISP",
-      "name": "Science, Society and Policy"
+      "name": "Science, Society and Policy",
+      "nameFr": "Science, société et politique publique"
     },
     {
       "code": "ITA",
-      "name": "Italian Language and Culture"
+      "name": "Italian Language and Culture",
+      "nameFr": "Langue et culture italiennes"
     },
     {
       "code": "ITI",
-      "name": "Information Technology"
+      "name": "Information Technology",
+      "nameFr": "Technologie de l'information"
     },
     {
       "code": "JCS",
-      "name": "Vered Jewish Canadian Studies"
+      "name": "Vered Jewish Canadian Studies",
+      "nameFr": "Études canadiennes juives Vered"
     },
     {
       "code": "JOU",
-      "name": "Journalism"
+      "name": "Journalism",
+      "nameFr": "Journalisme"
     },
     {
       "code": "JPN",
-      "name": "Japanese"
+      "name": "Japanese",
+      "nameFr": "Japonais"
     },
     {
       "code": "LCL",
-      "name": "Classics"
+      "name": "Classics",
+      "nameFr": "Lettres classiques"
     },
     {
       "code": "LCM",
-      "name": "World Literatures and Cultures"
+      "name": "World Literatures and Cultures",
+      "nameFr": "Littératures et cultures du monde"
     },
     {
       "code": "LIN",
-      "name": "Linguistics"
+      "name": "Linguistics",
+      "nameFr": "Linguistique"
     },
     {
       "code": "LLM",
-      "name": "Modern Languages"
+      "name": "Modern Languages",
+      "nameFr": "Langues modernes"
     },
     {
       "code": "LSR",
-      "name": "Leisure Studies"
+      "name": "Leisure Studies",
+      "nameFr": "Sciences du loisir"
     },
     {
       "code": "MAT",
-      "name": "Mathematics"
+      "name": "Mathematics",
+      "nameFr": "Mathématiques"
     },
     {
       "code": "MBA",
-      "name": "MBA Program"
+      "name": "MBA Program",
+      "nameFr": "Administration"
     },
     {
       "code": "MCG",
-      "name": "Mechanical Engineering"
+      "name": "Mechanical Engineering",
+      "nameFr": "Génie mécanique"
     },
     {
       "code": "MDV",
-      "name": "Medieval Studies"
+      "name": "Medieval Studies",
+      "nameFr": "Études médiévales"
     },
     {
       "code": "MED",
-      "name": "Medicine"
+      "name": "Medicine",
+      "nameFr": "Médecine"
     },
     {
       "code": "MEM",
-      "name": "Engineering Management - online"
+      "name": "Engineering Management - online",
+      "nameFr": "Gestion ingénierie - en ligne"
     },
     {
       "code": "MGT",
-      "name": "Management"
+      "name": "Management",
+      "nameFr": "Gestion"
     },
     {
       "code": "MHA",
-      "name": "Health Administration"
+      "name": "Health Administration",
+      "nameFr": "Gestion des services de santé"
     },
     {
       "code": "MHS",
-      "name": "Health Systems"
+      "name": "Health Systems",
+      "nameFr": "Systèmes de santé"
     },
     {
       "code": "MIA",
-      "name": "Interdisciplinary Artificial Intelligence - online"
+      "name": "Interdisciplinary Artificial Intelligence - online",
+      "nameFr": "Intelligence artificielle interdisciplinaire - en ligne"
     },
     {
       "code": "MIC",
-      "name": "Microbiology and Immunology"
+      "name": "Microbiology and Immunology",
+      "nameFr": "Microbiologie et immunologie"
     },
     {
       "code": "MRP",
-      "name": "Major Research Paper"
+      "name": "Major Research Paper",
+      "nameFr": "Mémoire"
     },
     {
       "code": "MUS",
-      "name": "Music"
+      "name": "Music",
+      "nameFr": "Musique"
     },
     {
       "code": "NAP",
-      "name": "Neurology"
+      "name": "Neurology",
+      "nameFr": "Neurologie"
     },
     {
       "code": "NOT",
-      "name": "Notary Law"
+      "name": "Notary Law",
+      "nameFr": "Droit notarial"
     },
     {
       "code": "NSC",
-      "name": "Neuroscience"
+      "name": "Neuroscience",
+      "nameFr": "Neuroscience"
     },
     {
       "code": "NSG",
-      "name": "Nursing"
+      "name": "Nursing",
+      "nameFr": "Sciences infirmières"
     },
     {
       "code": "NUT",
-      "name": "Food and Nutrition"
+      "name": "Food and Nutrition",
+      "nameFr": "Nutrition et aliments"
     },
     {
       "code": "OBG",
-      "name": "Obstetrics and Gynecology"
+      "name": "Obstetrics and Gynecology",
+      "nameFr": "Obstétrique et gynécologie"
     },
     {
       "code": "OMT",
-      "name": "Ophthalmic Medical Technology"
+      "name": "Ophthalmic Medical Technology",
+      "nameFr": "Technologie médicale de l'ophtalmologie"
     },
     {
       "code": "OPH",
-      "name": "Ophthalmology"
+      "name": "Ophthalmology",
+      "nameFr": "Ophtalmologie"
     },
     {
       "code": "ORA",
-      "name": "Speech-Language Pathology"
+      "name": "Speech-Language Pathology",
+      "nameFr": "Orthophonie"
     },
     {
       "code": "ORT",
-      "name": "Orthopaedic Pathology"
+      "name": "Orthopaedic Pathology",
+      "nameFr": "Pathologie orthopédique"
     },
     {
       "code": "PAE",
-      "name": "Pediatrics"
+      "name": "Pediatrics",
+      "nameFr": "Pédiatrie"
     },
     {
       "code": "PAP",
-      "name": "Public Administration"
+      "name": "Public Administration",
+      "nameFr": "Administration publique"
     },
     {
       "code": "PBH",
@@ -528,11 +661,13 @@
     },
     {
       "code": "PCS",
-      "name": "Medicine"
+      "name": "Medicine",
+      "nameFr": "Médecine"
     },
     {
       "code": "PCT",
-      "name": "Psychiatry"
+      "name": "Psychiatry",
+      "nameFr": "Psychiatrie"
     },
     {
       "code": "PDF",
@@ -540,163 +675,203 @@
     },
     {
       "code": "PED",
-      "name": "Education"
+      "name": "Education",
+      "nameFr": "Éducation"
     },
     {
       "code": "PHA",
-      "name": "Pharmacology"
+      "name": "Pharmacology",
+      "nameFr": "Pharmacologie"
     },
     {
       "code": "PHI",
-      "name": "Philosophy"
+      "name": "Philosophy",
+      "nameFr": "Philosophie"
     },
     {
       "code": "PHR",
-      "name": "Population Health Risk Assessment and Management"
+      "name": "Population Health Risk Assessment and Management",
+      "nameFr": "Évaluation et gestion du risque santé des populations"
     },
     {
       "code": "PHS",
-      "name": "Physiology"
+      "name": "Physiology",
+      "nameFr": "Physiologie"
     },
     {
       "code": "PHT",
-      "name": "Physiotherapy"
+      "name": "Physiotherapy",
+      "nameFr": "Physiothérapie"
     },
     {
       "code": "PHY",
-      "name": "Physics"
+      "name": "Physics",
+      "nameFr": "Physique"
     },
     {
       "code": "PIP",
-      "name": "Pre-internship Program"
+      "name": "Pre-internship Program",
+      "nameFr": "Programme pré-internat"
     },
     {
       "code": "PLN",
-      "name": "Polish"
+      "name": "Polish",
+      "nameFr": "Polonais"
     },
     {
       "code": "PME",
-      "name": "Pathology and Experimental Medicine"
+      "name": "Pathology and Experimental Medicine",
+      "nameFr": "Pathologie et médecine expérimentale"
     },
     {
       "code": "POL",
-      "name": "Political Science"
+      "name": "Political Science",
+      "nameFr": "Science politique"
     },
     {
       "code": "POP",
-      "name": "Population Health"
+      "name": "Population Health",
+      "nameFr": "Santé des populations"
     },
     {
       "code": "POR",
-      "name": "Portuguese"
+      "name": "Portuguese",
+      "nameFr": "Portugais"
     },
     {
       "code": "PSY",
-      "name": "Psychology"
+      "name": "Psychology",
+      "nameFr": "Psychologie"
     },
     {
       "code": "RAD",
-      "name": "Radiology"
+      "name": "Radiology",
+      "nameFr": "Radiologie"
     },
     {
       "code": "RCH",
-      "name": "Research Internship"
+      "name": "Research Internship",
+      "nameFr": "Stage de recherche"
     },
     {
       "code": "REA",
-      "name": "Rehabilitation Sciences"
+      "name": "Rehabilitation Sciences",
+      "nameFr": "Sciences de la réadaptation"
     },
     {
       "code": "RUS",
-      "name": "Russian Language and Culture"
+      "name": "Russian Language and Culture",
+      "nameFr": "Langue et culture russes"
     },
     {
       "code": "SAI",
-      "name": "Interprofessional Health Care Practice"
+      "name": "Interprofessional Health Care Practice",
+      "nameFr": "Pratique interprofessionnelle en soins de santé"
     },
     {
       "code": "SCI",
-      "name": "Science (General)"
+      "name": "Science (General)",
+      "nameFr": "Sciences (Général)"
     },
     {
       "code": "SCS",
-      "name": "Social Sciences"
+      "name": "Social Sciences",
+      "nameFr": "Sciences sociales"
     },
     {
       "code": "SDS",
-      "name": "Data Science"
+      "name": "Data Science",
+      "nameFr": "Science des données"
     },
     {
       "code": "SEC",
-      "name": "Cybersecurity"
+      "name": "Cybersecurity",
+      "nameFr": "Cybersécurité"
     },
     {
       "code": "SED",
-      "name": "Engineering Design and Teaching Innovation"
+      "name": "Engineering Design and Teaching Innovation",
+      "nameFr": "Conception et innovation pédagogique en génie"
     },
     {
       "code": "SEG",
-      "name": "Software Engineering"
+      "name": "Software Engineering",
+      "nameFr": "Génie logiciel"
     },
     {
       "code": "SOC",
-      "name": "Sociology"
+      "name": "Sociology",
+      "nameFr": "Sociologie"
     },
     {
       "code": "SRS",
-      "name": "Religious Studies"
+      "name": "Religious Studies",
+      "nameFr": "Sciences des religions"
     },
     {
       "code": "SSP",
-      "name": "Health Sciences"
+      "name": "Health Sciences",
+      "nameFr": "Sciences de la santé"
     },
     {
       "code": "SSS",
-      "name": "Social Sciences of Health"
+      "name": "Social Sciences of Health",
+      "nameFr": "Sciences sociales de la santé"
     },
     {
       "code": "STA",
-      "name": "Statistics"
+      "name": "Statistics",
+      "nameFr": "Statistiques"
     },
     {
       "code": "SYS",
-      "name": "Systems Science"
+      "name": "Systems Science",
+      "nameFr": "Science des systèmes"
     },
     {
       "code": "THD",
-      "name": "Doctoral Thesis"
+      "name": "Doctoral Thesis",
+      "nameFr": "Thèse de doctorat"
     },
     {
       "code": "THE",
-      "name": "Theatre"
+      "name": "Theatre",
+      "nameFr": "Théâtre"
     },
     {
       "code": "THM",
-      "name": "Master's Thesis"
+      "name": "Master's Thesis",
+      "nameFr": "Thèse de maîtrise"
     },
     {
       "code": "TMM",
-      "name": "Translational and Molecular Medicine"
+      "name": "Translational and Molecular Medicine",
+      "nameFr": "Médecine moléculaire et translationnelle"
     },
     {
       "code": "TOX",
-      "name": "Chemical and Environmental Toxicology"
+      "name": "Chemical and Environmental Toxicology",
+      "nameFr": "Toxicologie chimique et environnementale"
     },
     {
       "code": "TRA",
-      "name": "Translation"
+      "name": "Translation",
+      "nameFr": "Traduction"
     },
     {
       "code": "TSO",
-      "name": "Social Work"
+      "name": "Social Work",
+      "nameFr": "Travail social"
     },
     {
       "code": "URO",
-      "name": "Urology"
+      "name": "Urology",
+      "nameFr": "Urologie"
     },
     {
       "code": "YDD",
-      "name": "Yiddish"
+      "name": "Yiddish",
+      "nameFr": "Yiddish"
     }
   ]
 }
