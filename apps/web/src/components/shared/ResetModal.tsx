@@ -24,7 +24,6 @@ export function ResetModal({ opened, onClose, onConfirm }: ResetModalProps) {
         },
         body: {
           padding: MODAL_PAD,
-          paddingTop: 0,
         },
       }}
     >
