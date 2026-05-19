@@ -1,0 +1,702 @@
+{
+  "source": "https://catalogue.uottawa.ca/en/courses/",
+  "count": 174,
+  "disciplines": [
+    {
+      "code": "ACP",
+      "name": "Arts Co-op"
+    },
+    {
+      "code": "ADM",
+      "name": "Administration"
+    },
+    {
+      "code": "AFR",
+      "name": "African Studies"
+    },
+    {
+      "code": "AHL",
+      "name": "Interdisciplinary Study in Arts"
+    },
+    {
+      "code": "ALG",
+      "name": "German Language and Culture"
+    },
+    {
+      "code": "AMM",
+      "name": "Advanced Materials and Manufacturing"
+    },
+    {
+      "code": "AMT",
+      "name": "Arts, Music, Theatre"
+    },
+    {
+      "code": "ANA",
+      "name": "Anatomy and Neurobiology"
+    },
+    {
+      "code": "ANE",
+      "name": "Anesthesiology"
+    },
+    {
+      "code": "ANP",
+      "name": "Anatomy and Physiology"
+    },
+    {
+      "code": "ANT",
+      "name": "Anthropology"
+    },
+    {
+      "code": "APA",
+      "name": "Human Kinetics"
+    },
+    {
+      "code": "API",
+      "name": "Public and International Affairs"
+    },
+    {
+      "code": "ARB",
+      "name": "Arabic Language and Culture"
+    },
+    {
+      "code": "ART",
+      "name": "Visual Arts"
+    },
+    {
+      "code": "ASE",
+      "name": "Anatomical Sciences Education"
+    },
+    {
+      "code": "ASI",
+      "name": "Asian Studies"
+    },
+    {
+      "code": "AUD",
+      "name": "Audiology"
+    },
+    {
+      "code": "BCH",
+      "name": "Biochemistry"
+    },
+    {
+      "code": "BIL",
+      "name": "Bilingualism Studies"
+    },
+    {
+      "code": "BIM",
+      "name": "Biomedical Science"
+    },
+    {
+      "code": "BIO",
+      "name": "Biology"
+    },
+    {
+      "code": "BMG",
+      "name": "Biomedical Engineering"
+    },
+    {
+      "code": "BML",
+      "name": "Biomolecular Sciences"
+    },
+    {
+      "code": "BNF",
+      "name": "Bioinformatics"
+    },
+    {
+      "code": "BPS",
+      "name": "Biopharmaceutical Science"
+    },
+    {
+      "code": "CDN",
+      "name": "Canadian Studies"
+    },
+    {
+      "code": "CEG",
+      "name": "Computer Engineering"
+    },
+    {
+      "code": "CGI",
+      "name": "Engineering Co-op"
+    },
+    {
+      "code": "CHG",
+      "name": "Chemical Engineering"
+    },
+    {
+      "code": "CHM",
+      "name": "Chemistry"
+    },
+    {
+      "code": "CHN",
+      "name": "Chinese"
+    },
+    {
+      "code": "CIN",
+      "name": "Film Studies"
+    },
+    {
+      "code": "CLA",
+      "name": "Classical Studies"
+    },
+    {
+      "code": "CLI",
+      "name": "Clinical Rotation"
+    },
+    {
+      "code": "CLT",
+      "name": "Celtic Studies"
+    },
+    {
+      "code": "CML",
+      "name": "Common Law"
+    },
+    {
+      "code": "CMM",
+      "name": "Cellular and Molecular Medicine"
+    },
+    {
+      "code": "CMN",
+      "name": "Communication"
+    },
+    {
+      "code": "CPL",
+      "name": "Complex Project Leadership"
+    },
+    {
+      "code": "CPT",
+      "name": "Accounting"
+    },
+    {
+      "code": "CRM",
+      "name": "Criminology"
+    },
+    {
+      "code": "CSI",
+      "name": "Computer Science"
+    },
+    {
+      "code": "CTM",
+      "name": "Clinical Science and Translational Medicine"
+    },
+    {
+      "code": "CTS",
+      "name": "Cardio-Respiratory Systems"
+    },
+    {
+      "code": "CVG",
+      "name": "Civil Engineering"
+    },
+    {
+      "code": "DCC",
+      "name": "Law (Certificate)"
+    },
+    {
+      "code": "DCL",
+      "name": "Law"
+    },
+    {
+      "code": "DCN",
+      "name": "Digital Cultures"
+    },
+    {
+      "code": "DLS",
+      "name": "Second-Language Teaching"
+    },
+    {
+      "code": "DRC",
+      "name": "Civil Law"
+    },
+    {
+      "code": "DTI",
+      "name": "Digital Transformation and Innovation"
+    },
+    {
+      "code": "DTO",
+      "name": "Digital Transformation and Innovation - online"
+    },
+    {
+      "code": "DVM",
+      "name": "International Development and Globalization"
+    },
+    {
+      "code": "EAS",
+      "name": "Indigenous Studies"
+    },
+    {
+      "code": "ECH",
+      "name": "Conflict Studies and Human Rights"
+    },
+    {
+      "code": "ECO",
+      "name": "Economics"
+    },
+    {
+      "code": "EDU",
+      "name": "Education"
+    },
+    {
+      "code": "EED",
+      "name": "Entrepreneurial Engineering Design"
+    },
+    {
+      "code": "EFR",
+      "name": "Francophone Studies"
+    },
+    {
+      "code": "ELA",
+      "name": "Latin American Studies"
+    },
+    {
+      "code": "ELE",
+      "name": "Elective Courses in Medicine"
+    },
+    {
+      "code": "ELG",
+      "name": "Electrical Engineering"
+    },
+    {
+      "code": "EMP",
+      "name": "Engineering Management"
+    },
+    {
+      "code": "ENG",
+      "name": "English"
+    },
+    {
+      "code": "ENV",
+      "name": "Environmental Studies"
+    },
+    {
+      "code": "EPI",
+      "name": "Epidemiology and Applied Health Research"
+    },
+    {
+      "code": "ERG",
+      "name": "Occupational Therapy"
+    },
+    {
+      "code": "ESL",
+      "name": "English as a Second Language"
+    },
+    {
+      "code": "ESP",
+      "name": "Spanish"
+    },
+    {
+      "code": "EVD",
+      "name": "Environmental Sustainability"
+    },
+    {
+      "code": "EVG",
+      "name": "Environmental Engineering"
+    },
+    {
+      "code": "EVS",
+      "name": "Environmental Science"
+    },
+    {
+      "code": "FAM",
+      "name": "Family Medicine"
+    },
+    {
+      "code": "FEM",
+      "name": "Feminist and Gender Studies"
+    },
+    {
+      "code": "FLS",
+      "name": "French as a Second Language"
+    },
+    {
+      "code": "FRA",
+      "name": "Lettres françaises"
+    },
+    {
+      "code": "FRE",
+      "name": "French Studies"
+    },
+    {
+      "code": "FSS",
+      "name": "Social Sciences"
+    },
+    {
+      "code": "GAE",
+      "name": "Gastroenteritis"
+    },
+    {
+      "code": "GEG",
+      "name": "Geography"
+    },
+    {
+      "code": "GEO",
+      "name": "Geology"
+    },
+    {
+      "code": "GNG",
+      "name": "General Engineering"
+    },
+    {
+      "code": "GRT",
+      "name": "Gerontology"
+    },
+    {
+      "code": "GSU",
+      "name": "General Surgery"
+    },
+    {
+      "code": "HAH",
+      "name": "Health Administration"
+    },
+    {
+      "code": "HIS",
+      "name": "History"
+    },
+    {
+      "code": "HMG",
+      "name": "Human and Molecular Genetics"
+    },
+    {
+      "code": "HSS",
+      "name": "Health Sciences"
+    },
+    {
+      "code": "IAI",
+      "name": "Interdisciplinary Artificial Intelligence"
+    },
+    {
+      "code": "ILA",
+      "name": "Indigenous Languages"
+    },
+    {
+      "code": "IMM",
+      "name": "Immunology"
+    },
+    {
+      "code": "INR",
+      "name": "Medical Intern or Resident"
+    },
+    {
+      "code": "ISI",
+      "name": "Information Studies"
+    },
+    {
+      "code": "ISP",
+      "name": "Science, Society and Policy"
+    },
+    {
+      "code": "ITA",
+      "name": "Italian Language and Culture"
+    },
+    {
+      "code": "ITI",
+      "name": "Information Technology"
+    },
+    {
+      "code": "JCS",
+      "name": "Vered Jewish Canadian Studies"
+    },
+    {
+      "code": "JOU",
+      "name": "Journalism"
+    },
+    {
+      "code": "JPN",
+      "name": "Japanese"
+    },
+    {
+      "code": "LCL",
+      "name": "Classics"
+    },
+    {
+      "code": "LCM",
+      "name": "World Literatures and Cultures"
+    },
+    {
+      "code": "LIN",
+      "name": "Linguistics"
+    },
+    {
+      "code": "LLM",
+      "name": "Modern Languages"
+    },
+    {
+      "code": "LSR",
+      "name": "Leisure Studies"
+    },
+    {
+      "code": "MAT",
+      "name": "Mathematics"
+    },
+    {
+      "code": "MBA",
+      "name": "MBA Program"
+    },
+    {
+      "code": "MCG",
+      "name": "Mechanical Engineering"
+    },
+    {
+      "code": "MDV",
+      "name": "Medieval Studies"
+    },
+    {
+      "code": "MED",
+      "name": "Medicine"
+    },
+    {
+      "code": "MEM",
+      "name": "Engineering Management - online"
+    },
+    {
+      "code": "MGT",
+      "name": "Management"
+    },
+    {
+      "code": "MHA",
+      "name": "Health Administration"
+    },
+    {
+      "code": "MHS",
+      "name": "Health Systems"
+    },
+    {
+      "code": "MIA",
+      "name": "Interdisciplinary Artificial Intelligence - online"
+    },
+    {
+      "code": "MIC",
+      "name": "Microbiology and Immunology"
+    },
+    {
+      "code": "MRP",
+      "name": "Major Research Paper"
+    },
+    {
+      "code": "MUS",
+      "name": "Music"
+    },
+    {
+      "code": "NAP",
+      "name": "Neurology"
+    },
+    {
+      "code": "NOT",
+      "name": "Notary Law"
+    },
+    {
+      "code": "NSC",
+      "name": "Neuroscience"
+    },
+    {
+      "code": "NSG",
+      "name": "Nursing"
+    },
+    {
+      "code": "NUT",
+      "name": "Food and Nutrition"
+    },
+    {
+      "code": "OBG",
+      "name": "Obstetrics and Gynecology"
+    },
+    {
+      "code": "OMT",
+      "name": "Ophthalmic Medical Technology"
+    },
+    {
+      "code": "OPH",
+      "name": "Ophthalmology"
+    },
+    {
+      "code": "ORA",
+      "name": "Speech-Language Pathology"
+    },
+    {
+      "code": "ORT",
+      "name": "Orthopaedic Pathology"
+    },
+    {
+      "code": "PAE",
+      "name": "Pediatrics"
+    },
+    {
+      "code": "PAP",
+      "name": "Public Administration"
+    },
+    {
+      "code": "PBH",
+      "name": "Public Health"
+    },
+    {
+      "code": "PCS",
+      "name": "Medicine"
+    },
+    {
+      "code": "PCT",
+      "name": "Psychiatry"
+    },
+    {
+      "code": "PDF",
+      "name": "Download Page"
+    },
+    {
+      "code": "PED",
+      "name": "Education"
+    },
+    {
+      "code": "PHA",
+      "name": "Pharmacology"
+    },
+    {
+      "code": "PHI",
+      "name": "Philosophy"
+    },
+    {
+      "code": "PHR",
+      "name": "Population Health Risk Assessment and Management"
+    },
+    {
+      "code": "PHS",
+      "name": "Physiology"
+    },
+    {
+      "code": "PHT",
+      "name": "Physiotherapy"
+    },
+    {
+      "code": "PHY",
+      "name": "Physics"
+    },
+    {
+      "code": "PIP",
+      "name": "Pre-internship Program"
+    },
+    {
+      "code": "PLN",
+      "name": "Polish"
+    },
+    {
+      "code": "PME",
+      "name": "Pathology and Experimental Medicine"
+    },
+    {
+      "code": "POL",
+      "name": "Political Science"
+    },
+    {
+      "code": "POP",
+      "name": "Population Health"
+    },
+    {
+      "code": "POR",
+      "name": "Portuguese"
+    },
+    {
+      "code": "PSY",
+      "name": "Psychology"
+    },
+    {
+      "code": "RAD",
+      "name": "Radiology"
+    },
+    {
+      "code": "RCH",
+      "name": "Research Internship"
+    },
+    {
+      "code": "REA",
+      "name": "Rehabilitation Sciences"
+    },
+    {
+      "code": "RUS",
+      "name": "Russian Language and Culture"
+    },
+    {
+      "code": "SAI",
+      "name": "Interprofessional Health Care Practice"
+    },
+    {
+      "code": "SCI",
+      "name": "Science (General)"
+    },
+    {
+      "code": "SCS",
+      "name": "Social Sciences"
+    },
+    {
+      "code": "SDS",
+      "name": "Data Science"
+    },
+    {
+      "code": "SEC",
+      "name": "Cybersecurity"
+    },
+    {
+      "code": "SED",
+      "name": "Engineering Design and Teaching Innovation"
+    },
+    {
+      "code": "SEG",
+      "name": "Software Engineering"
+    },
+    {
+      "code": "SOC",
+      "name": "Sociology"
+    },
+    {
+      "code": "SRS",
+      "name": "Religious Studies"
+    },
+    {
+      "code": "SSP",
+      "name": "Health Sciences"
+    },
+    {
+      "code": "SSS",
+      "name": "Social Sciences of Health"
+    },
+    {
+      "code": "STA",
+      "name": "Statistics"
+    },
+    {
+      "code": "SYS",
+      "name": "Systems Science"
+    },
+    {
+      "code": "THD",
+      "name": "Doctoral Thesis"
+    },
+    {
+      "code": "THE",
+      "name": "Theatre"
+    },
+    {
+      "code": "THM",
+      "name": "Master's Thesis"
+    },
+    {
+      "code": "TMM",
+      "name": "Translational and Molecular Medicine"
+    },
+    {
+      "code": "TOX",
+      "name": "Chemical and Environmental Toxicology"
+    },
+    {
+      "code": "TRA",
+      "name": "Translation"
+    },
+    {
+      "code": "TSO",
+      "name": "Social Work"
+    },
+    {
+      "code": "URO",
+      "name": "Urology"
+    },
+    {
+      "code": "YDD",
+      "name": "Yiddish"
+    }
+  ]
+}
