@@ -1,5 +1,5 @@
 {
-  "resultCount": 4673,
+  "resultCount": 4564,
   "professors": [
     {
       "id": "VGVhY2hlci04Nzk2OTM=",
@@ -51,18 +51,11 @@
       "numRatings": 9
     },
     {
-      "id": "VGVhY2hlci0xNzE0Njk1",
-      "legacyId": 1714695,
-      "name": "Aaron Kaiserman",
-      "rating": 4.3,
-      "numRatings": 13
-    },
-    {
       "id": "VGVhY2hlci0xNzE0Njk3",
       "legacyId": 1714697,
       "name": "Aaron Kaiserman",
-      "rating": 4.1,
-      "numRatings": 62
+      "rating": 4.134666666666666,
+      "numRatings": 75
     },
     {
       "id": "VGVhY2hlci0xOTY2OTY3",
@@ -646,13 +639,6 @@
       "numRatings": 0
     },
     {
-      "id": "VGVhY2hlci0zMTU0ODM2",
-      "legacyId": 3154836,
-      "name": "Ahmed Omara",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0yOTc4NzMy",
       "legacyId": 2978732,
       "name": "Ahmet Aktas",
@@ -993,7 +979,7 @@
       "legacyId": 2161805,
       "name": "Aleksandra Nastic",
       "rating": 4.7,
-      "numRatings": 37
+      "numRatings": 38
     },
     {
       "id": "VGVhY2hlci0yNTE0MjIw",
@@ -1129,25 +1115,11 @@
       "numRatings": 8
     },
     {
-      "id": "VGVhY2hlci0yMzM2NDc4",
-      "legacyId": 2336478,
-      "name": "Alex Payette",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0zMTI3ODM4",
       "legacyId": 3127838,
       "name": "Alexa Hilmarsson",
       "rating": 3.1,
       "numRatings": 12
-    },
-    {
-      "id": "VGVhY2hlci0zMTM2MzIy",
-      "legacyId": 3136322,
-      "name": "Alexa Hilmarsson",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci04Mjc1MzY=",
@@ -1363,15 +1335,8 @@
       "id": "VGVhY2hlci0yNTY0NTA4",
       "legacyId": 2564508,
       "name": "Alhassan Ohiomah",
-      "rating": 3.6,
-      "numRatings": 72
-    },
-    {
-      "id": "VGVhY2hlci0yNzI5MTI4",
-      "legacyId": 2729128,
-      "name": "Alhassan Ohiomah",
-      "rating": 4.5,
-      "numRatings": 4
+      "rating": 3.6473684210526316,
+      "numRatings": 76
     },
     {
       "id": "VGVhY2hlci0xNTUwMDE1",
@@ -1430,18 +1395,11 @@
       "numRatings": 3
     },
     {
-      "id": "VGVhY2hlci0yODA0MTE5",
-      "legacyId": 2804119,
-      "name": "Ali Mahdi",
-      "rating": 3,
-      "numRatings": 2
-    },
-    {
       "id": "VGVhY2hlci0yODQzMzQ0",
       "legacyId": 2843344,
       "name": "Ali Mahdi",
-      "rating": 4.6,
-      "numRatings": 9
+      "rating": 4.309090909090909,
+      "numRatings": 11
     },
     {
       "id": "VGVhY2hlci0yMTY2Njgy",
@@ -1609,14 +1567,7 @@
       "legacyId": 2869186,
       "name": "Allison Clouthier",
       "rating": 5,
-      "numRatings": 7
-    },
-    {
-      "id": "VGVhY2hlci0yODczOTE4",
-      "legacyId": 2873918,
-      "name": "Allison Clouthier",
-      "rating": 5,
-      "numRatings": 1
+      "numRatings": 8
     },
     {
       "id": "VGVhY2hlci0yMDg5ODg1",
@@ -1848,13 +1799,6 @@
       "name": "Amir Khataie",
       "rating": 2.5,
       "numRatings": 27
-    },
-    {
-      "id": "VGVhY2hlci0yNjU5OTc1",
-      "legacyId": 2659975,
-      "name": "Amir Khataie",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0yNTQ1MDQ3",
@@ -2739,13 +2683,6 @@
       "numRatings": 0
     },
     {
-      "id": "VGVhY2hlci0zMDczNzk0",
-      "legacyId": 3073794,
-      "name": "Anne-Marie Parent",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0yNjY2MTE4",
       "legacyId": 2666118,
       "name": "Anne-Sophie Ruest-Paquette",
@@ -3257,13 +3194,6 @@
       "numRatings": 25
     },
     {
-      "id": "VGVhY2hlci0yNzE0MTUy",
-      "legacyId": 2714152,
-      "name": "Athmane Chelbi",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0zODQ5MzU=",
       "legacyId": 384935,
       "name": "Atina Cote",
@@ -3416,13 +3346,6 @@
       "name": "Bahaeddine Tilouche",
       "rating": 4.2,
       "numRatings": 5
-    },
-    {
-      "id": "VGVhY2hlci0yODY5NjYy",
-      "legacyId": 2869662,
-      "name": "Bahaeddine Tilouche",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0zMDcyNzYx",
@@ -3733,13 +3656,6 @@
       "numRatings": 6
     },
     {
-      "id": "VGVhY2hlci0yOTA1OTMy",
-      "legacyId": 2905932,
-      "name": "Bénédicte Santoire",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0xOTczMjYx",
       "legacyId": 1973261,
       "name": "Benjamin Barber",
@@ -3757,15 +3673,8 @@
       "id": "VGVhY2hlci0yOTk2Mjk4",
       "legacyId": 2996298,
       "name": "Benjamin Noé",
-      "rating": 4.8,
-      "numRatings": 6
-    },
-    {
-      "id": "VGVhY2hlci0zMDAzNjY0",
-      "legacyId": 3003664,
-      "name": "Benjamin Noé",
-      "rating": 5,
-      "numRatings": 2
+      "rating": 4.85,
+      "numRatings": 8
     },
     {
       "id": "VGVhY2hlci0yMzgzNjA3",
@@ -4321,13 +4230,6 @@
       "numRatings": 9
     },
     {
-      "id": "VGVhY2hlci0zMDg3NDk1",
-      "legacyId": 3087495,
-      "name": "britton williams",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0zMDg3NTAx",
       "legacyId": 3087501,
       "name": "britton williams",
@@ -4382,13 +4284,6 @@
       "name": "Brunella Masciantonio",
       "rating": 2.7,
       "numRatings": 31
-    },
-    {
-      "id": "VGVhY2hlci0zMDY0NjAz",
-      "legacyId": 3064603,
-      "name": "Brunella Masciantonio",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0zMDkyNTUz",
@@ -4615,18 +4510,11 @@
       "numRatings": 11
     },
     {
-      "id": "VGVhY2hlci0xOTU3NDky",
-      "legacyId": 1957492,
-      "name": "Carmen Constantinescu",
-      "rating": 2.7,
-      "numRatings": 15
-    },
-    {
       "id": "VGVhY2hlci0yNjE5OTM2",
       "legacyId": 2619936,
       "name": "Carmen Constantinescu",
-      "rating": 2,
-      "numRatings": 10
+      "rating": 2.42,
+      "numRatings": 25
     },
     {
       "id": "VGVhY2hlci0yNzQyNDI4",
@@ -4807,15 +4695,8 @@
       "id": "VGVhY2hlci01NDI1MjM=",
       "legacyId": 542523,
       "name": "Catalin Rada",
-      "rating": 3.5,
-      "numRatings": 185
-    },
-    {
-      "id": "VGVhY2hlci0yMTg3MzYw",
-      "legacyId": 2187360,
-      "name": "Catalin Rada",
-      "rating": 3,
-      "numRatings": 7
+      "rating": 3.4817708333333335,
+      "numRatings": 192
     },
     {
       "id": "VGVhY2hlci0yNTE1MTIx",
@@ -4912,15 +4793,8 @@
       "id": "VGVhY2hlci0yNjE5MDMz",
       "legacyId": 2619033,
       "name": "Catherine Levasseur",
-      "rating": 4.2,
-      "numRatings": 6
-    },
-    {
-      "id": "VGVhY2hlci0yNjM0MDg4",
-      "legacyId": 2634088,
-      "name": "Catherine Levasseur",
-      "rating": 4.7,
-      "numRatings": 3
+      "rating": 4.366666666666667,
+      "numRatings": 9
     },
     {
       "id": "VGVhY2hlci0yNTYxMzYy",
@@ -5182,13 +5056,6 @@
       "numRatings": 2
     },
     {
-      "id": "VGVhY2hlci0yODEzMTkx",
-      "legacyId": 2813191,
-      "name": "Chantal Rodier",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0yMTAxNjU1",
       "legacyId": 2101655,
       "name": "Chantale Payette",
@@ -5348,13 +5215,6 @@
       "name": "Chen Guo",
       "rating": 3,
       "numRatings": 32
-    },
-    {
-      "id": "VGVhY2hlci0xOTMwNjM2",
-      "legacyId": 1930636,
-      "name": "Chen Guo",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0yOTMwODg5",
@@ -6141,18 +6001,11 @@
       "numRatings": 3
     },
     {
-      "id": "VGVhY2hlci0yOTg1MjM3",
-      "legacyId": 2985237,
-      "name": "Claudia Gagnon",
-      "rating": 1.7,
-      "numRatings": 10
-    },
-    {
       "id": "VGVhY2hlci0yOTkzMzA0",
       "legacyId": 2993304,
       "name": "Claudia Gagnon",
-      "rating": 1,
-      "numRatings": 1
+      "rating": 1.6363636363636365,
+      "numRatings": 11
     },
     {
       "id": "VGVhY2hlci0yNDU0NjM2",
@@ -6333,15 +6186,8 @@
       "id": "VGVhY2hlci0xNjg1OTIy",
       "legacyId": 1685922,
       "name": "Corrie Scott",
-      "rating": 2.4,
-      "numRatings": 89
-    },
-    {
-      "id": "VGVhY2hlci0yNTgwNDc3",
-      "legacyId": 2580477,
-      "name": "Corrie Scott",
-      "rating": 2.3,
-      "numRatings": 3
+      "rating": 2.3967391304347827,
+      "numRatings": 92
     },
     {
       "id": "VGVhY2hlci0xOTUwNjUw",
@@ -6375,15 +6221,8 @@
       "id": "VGVhY2hlci0xODg3OTM1",
       "legacyId": 1887935,
       "name": "Costanza Musu",
-      "rating": 3.3,
-      "numRatings": 14
-    },
-    {
-      "id": "VGVhY2hlci0yMjI0NDky",
-      "legacyId": 2224492,
-      "name": "Costanza Musu",
-      "rating": 3,
-      "numRatings": 3
+      "rating": 3.2470588235294113,
+      "numRatings": 17
     },
     {
       "id": "VGVhY2hlci0yNjk4MDYw",
@@ -6617,13 +6456,6 @@
       "numRatings": 44
     },
     {
-      "id": "VGVhY2hlci0zMDI4NTUw",
-      "legacyId": 3028550,
-      "name": "Dana Hyde",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0yNDk5NTU5",
       "legacyId": 2499559,
       "name": "Danial Khorasanian",
@@ -6831,14 +6663,7 @@
       "legacyId": 2873394,
       "name": "Daniel Quintal-Curcic",
       "rating": 5,
-      "numRatings": 4
-    },
-    {
-      "id": "VGVhY2hlci0yODc2Mzg1",
-      "legacyId": 2876385,
-      "name": "Daniel Quintal-Curcic",
-      "rating": 5,
-      "numRatings": 1
+      "numRatings": 5
     },
     {
       "id": "VGVhY2hlci0yMDYwMDgw",
@@ -7005,15 +6830,8 @@
       "id": "VGVhY2hlci00NTgwNzM=",
       "legacyId": 458073,
       "name": "Darrin Richeson",
-      "rating": 3.6,
+      "rating": 3.6000000000000005,
       "numRatings": 193
-    },
-    {
-      "id": "VGVhY2hlci0zMDIwMzM0",
-      "legacyId": 3020334,
-      "name": "Darrin Richeson",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0yODQ5Njky",
@@ -7061,22 +6879,8 @@
       "id": "VGVhY2hlci0xOTY0MTYz",
       "legacyId": 1964163,
       "name": "David Brown",
-      "rating": 3.5,
-      "numRatings": 33
-    },
-    {
-      "id": "VGVhY2hlci0yMTUyODcx",
-      "legacyId": 2152871,
-      "name": "David Brown",
-      "rating": 3,
-      "numRatings": 1
-    },
-    {
-      "id": "VGVhY2hlci0yNTAxMDc5",
-      "legacyId": 2501079,
-      "name": "David Brown",
-      "rating": 0,
-      "numRatings": 0
+      "rating": 3.485294117647059,
+      "numRatings": 34
     },
     {
       "id": "VGVhY2hlci0zMTYwMzEy",
@@ -7145,15 +6949,8 @@
       "id": "VGVhY2hlci01ODM3OA==",
       "legacyId": 58378,
       "name": "David Currie",
-      "rating": 2.5,
-      "numRatings": 17
-    },
-    {
-      "id": "VGVhY2hlci0xNjE5OTE=",
-      "legacyId": 161991,
-      "name": "David Currie",
-      "rating": 4,
-      "numRatings": 22
+      "rating": 3.3461538461538463,
+      "numRatings": 39
     },
     {
       "id": "VGVhY2hlci0zMTM1OTI=",
@@ -7534,18 +7331,11 @@
       "numRatings": 4
     },
     {
-      "id": "VGVhY2hlci0xODAyNDM=",
-      "legacyId": 180243,
-      "name": "David Wright",
-      "rating": 4.6,
-      "numRatings": 148
-    },
-    {
       "id": "VGVhY2hlci0yMjI2NTk3",
       "legacyId": 2226597,
       "name": "David Wright",
-      "rating": 3.7,
-      "numRatings": 9
+      "rating": 4.5484076433121015,
+      "numRatings": 157
     },
     {
       "id": "VGVhY2hlci0yMzMyNTA4",
@@ -7660,18 +7450,11 @@
       "numRatings": 4
     },
     {
-      "id": "VGVhY2hlci0yNDA4NjQ3",
-      "legacyId": 2408647,
-      "name": "Delphine Nakache",
-      "rating": 4.3,
-      "numRatings": 3
-    },
-    {
       "id": "VGVhY2hlci0yNjA1Njk0",
       "legacyId": 2605694,
       "name": "Delphine Nakache",
-      "rating": 4.2,
-      "numRatings": 5
+      "rating": 4.2375,
+      "numRatings": 8
     },
     {
       "id": "VGVhY2hlci0xMjk2MjYz",
@@ -8167,15 +7950,8 @@
       "id": "VGVhY2hlci0xNTQyNg==",
       "legacyId": 15426,
       "name": "Dominique Masson",
-      "rating": 3.8,
-      "numRatings": 47
-    },
-    {
-      "id": "VGVhY2hlci0yMjE2MzE1",
-      "legacyId": 2216315,
-      "name": "Dominique Masson",
-      "rating": 3,
-      "numRatings": 2
+      "rating": 3.76734693877551,
+      "numRatings": 49
     },
     {
       "id": "VGVhY2hlci0xNDg0NzUy",
@@ -8738,13 +8514,6 @@
       "numRatings": 124
     },
     {
-      "id": "VGVhY2hlci0yMzgxNTc2",
-      "legacyId": 2381576,
-      "name": "Elizabeth Maltais",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0xODk3MTEy",
       "legacyId": 1897112,
       "name": "Elizabeth Marshman",
@@ -8855,13 +8624,6 @@
       "name": "Elliott Faller",
       "rating": 4.4,
       "numRatings": 15
-    },
-    {
-      "id": "VGVhY2hlci0yODY0ODA0",
-      "legacyId": 2864804,
-      "name": "Elliott Faller",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0yNjY2NjY4",
@@ -9228,18 +8990,11 @@
       "numRatings": 7
     },
     {
-      "id": "VGVhY2hlci0yMjM0MTA5",
-      "legacyId": 2234109,
-      "name": "Érik Harvey-Girard",
-      "rating": 3.3,
-      "numRatings": 6
-    },
-    {
       "id": "VGVhY2hlci0yMjY1NDU5",
       "legacyId": 2265459,
       "name": "Érik Harvey-Girard",
-      "rating": 4,
-      "numRatings": 1
+      "rating": 3.3999999999999995,
+      "numRatings": 7
     },
     {
       "id": "VGVhY2hlci0yNzgwNzgy",
@@ -9259,15 +9014,8 @@
       "id": "VGVhY2hlci0xNTYxMDAy",
       "legacyId": 1561002,
       "name": "Erin Cressman",
-      "rating": 2.9,
-      "numRatings": 20
-    },
-    {
-      "id": "VGVhY2hlci0xOTk0OTEy",
-      "legacyId": 1994912,
-      "name": "Erin Cressman",
-      "rating": 4.5,
-      "numRatings": 1
+      "rating": 2.9761904761904763,
+      "numRatings": 21
     },
     {
       "id": "VGVhY2hlci0xNTU5NDIy",
@@ -9795,13 +9543,6 @@
       "numRatings": 3
     },
     {
-      "id": "VGVhY2hlci0zMTEwNzU3",
-      "legacyId": 3110757,
-      "name": "Florina Gaborean",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci01MTI2Mjg=",
       "legacyId": 512628,
       "name": "Fodil Adjaoud",
@@ -10327,13 +10068,6 @@
       "numRatings": 19
     },
     {
-      "id": "VGVhY2hlci0xOTM1OTkz",
-      "legacyId": 1935993,
-      "name": "Frédérique Tesson",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0xNzA1OTc5",
       "legacyId": 1705979,
       "name": "Frederique Wion",
@@ -10507,13 +10241,6 @@
       "name": "Gary Evans",
       "rating": 4.6,
       "numRatings": 47
-    },
-    {
-      "id": "VGVhY2hlci0yMTUyMzcz",
-      "legacyId": 2152373,
-      "name": "Gary Evans",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0yNzQ5MTM0",
@@ -10817,13 +10544,6 @@
       "numRatings": 16
     },
     {
-      "id": "VGVhY2hlci0zMDgyNDY4",
-      "legacyId": 3082468,
-      "name": "Geranda Notten",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci01NjUxOTY=",
       "legacyId": 565196,
       "name": "Gerard Brathwaite-Sturgeon",
@@ -10948,13 +10668,6 @@
       "name": "Gilbert Arbez",
       "rating": 3.1,
       "numRatings": 79
-    },
-    {
-      "id": "VGVhY2hlci0yNDc5Njkx",
-      "legacyId": 2479691,
-      "name": "Gilbert Arbez",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0yOTkwMjI2",
@@ -11366,15 +11079,8 @@
       "id": "VGVhY2hlci0xODQyNzU=",
       "legacyId": 184275,
       "name": "Guy Drouin",
-      "rating": 2.3,
-      "numRatings": 70
-    },
-    {
-      "id": "VGVhY2hlci0yMzIxMzk2",
-      "legacyId": 2321396,
-      "name": "Guy Drouin",
-      "rating": 1,
-      "numRatings": 1
+      "rating": 2.2816901408450705,
+      "numRatings": 71
     },
     {
       "id": "VGVhY2hlci0yMjE1NDg1",
@@ -11461,32 +11167,11 @@
       "numRatings": 131
     },
     {
-      "id": "VGVhY2hlci0zMTIwMDAx",
-      "legacyId": 3120001,
-      "name": "Haifa Ben Naji",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
-      "id": "VGVhY2hlci0zMTIwMjMw",
-      "legacyId": 3120230,
-      "name": "Haifa Ben Naji",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0zMTIwMjY4",
       "legacyId": 3120268,
       "name": "Haifa Ben Naji",
       "rating": 1.2,
       "numRatings": 32
-    },
-    {
-      "id": "VGVhY2hlci0zMTE5OTAx",
-      "legacyId": 3119901,
-      "name": "Haifa Naji",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0zMTIwMjY3",
@@ -11590,15 +11275,8 @@
       "id": "VGVhY2hlci0yNzczNDA3",
       "legacyId": 2773407,
       "name": "Handy Leroy",
-      "rating": 1.8,
-      "numRatings": 10
-    },
-    {
-      "id": "VGVhY2hlci0yODk0MTY0",
-      "legacyId": 2894164,
-      "name": "Handy Leroy",
-      "rating": 1.3,
-      "numRatings": 4
+      "rating": 1.657142857142857,
+      "numRatings": 14
     },
     {
       "id": "VGVhY2hlci0yNjgwNjM4",
@@ -11860,18 +11538,11 @@
       "numRatings": 0
     },
     {
-      "id": "VGVhY2hlci0yOTkyNTkx",
-      "legacyId": 2992591,
-      "name": "Helen Abbot",
-      "rating": 2.9,
-      "numRatings": 35
-    },
-    {
       "id": "VGVhY2hlci0zMTI5NTI5",
       "legacyId": 3129529,
       "name": "Helen Abbot",
-      "rating": 3,
-      "numRatings": 9
+      "rating": 2.9204545454545454,
+      "numRatings": 44
     },
     {
       "id": "VGVhY2hlci0xMzc0OTUz",
@@ -12847,18 +12518,11 @@
       "numRatings": 2
     },
     {
-      "id": "VGVhY2hlci0yNDE5OTAz",
-      "legacyId": 2419903,
-      "name": "Jada Watson",
-      "rating": 5,
-      "numRatings": 1
-    },
-    {
       "id": "VGVhY2hlci0yNDIwMzYz",
       "legacyId": 2420363,
       "name": "Jada Watson",
-      "rating": 4.8,
-      "numRatings": 4
+      "rating": 4.84,
+      "numRatings": 5
     },
     {
       "id": "VGVhY2hlci0yNzQyNTAw",
@@ -13977,15 +13641,8 @@
       "id": "VGVhY2hlci0xNTkyOTE5",
       "legacyId": 1592919,
       "name": "Jennifer Barrigar",
-      "rating": 2.4,
-      "numRatings": 17
-    },
-    {
-      "id": "VGVhY2hlci0xNzIxMzgx",
-      "legacyId": 1721381,
-      "name": "Jennifer Barrigar",
-      "rating": 2,
-      "numRatings": 2
+      "rating": 2.357894736842105,
+      "numRatings": 19
     },
     {
       "id": "VGVhY2hlci0xNTYyMTEw",
@@ -14133,13 +13790,6 @@
       "name": "Jennifer Smith",
       "rating": 4,
       "numRatings": 2
-    },
-    {
-      "id": "VGVhY2hlci0yMzQwNzEx",
-      "legacyId": 2340711,
-      "name": "Jennifer Smith",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0zMDY0MzMx",
@@ -14488,15 +14138,8 @@
       "id": "VGVhY2hlci0yMTA2OTQ0",
       "legacyId": 2106944,
       "name": "Jing Li",
-      "rating": 2.8,
-      "numRatings": 9
-    },
-    {
-      "id": "VGVhY2hlci0xMzg5NDQ0",
-      "legacyId": 1389444,
-      "name": "Jing LI",
-      "rating": 3,
-      "numRatings": 12
+      "rating": 2.9142857142857146,
+      "numRatings": 21
     },
     {
       "id": "VGVhY2hlci0xNjczMzE1",
@@ -14595,13 +14238,6 @@
       "name": "Jocelyn Kane",
       "rating": 3.8,
       "numRatings": 10
-    },
-    {
-      "id": "VGVhY2hlci0yOTg1NzE1",
-      "legacyId": 2985715,
-      "name": "Jocelyn Kane",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0xMDI4MjU3",
@@ -15454,15 +15090,8 @@
       "id": "VGVhY2hlci0xMDQ0NDcy",
       "legacyId": 1044472,
       "name": "Joseph Roman",
-      "rating": 1.9,
+      "rating": 1.8999999999999997,
       "numRatings": 323
-    },
-    {
-      "id": "VGVhY2hlci0yNjcxNDE1",
-      "legacyId": 2671415,
-      "name": "Joseph Roman",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0xNjE2MjM3",
@@ -15472,18 +15101,11 @@
       "numRatings": 3
     },
     {
-      "id": "VGVhY2hlci0xNzkwODc5",
-      "legacyId": 1790879,
-      "name": "Joseph Saint-Juste",
-      "rating": 1.9,
-      "numRatings": 8
-    },
-    {
       "id": "VGVhY2hlci0yMTIxNzk3",
       "legacyId": 2121797,
       "name": "Joseph Saint-Juste",
-      "rating": 3.5,
-      "numRatings": 6
+      "rating": 2.585714285714286,
+      "numRatings": 14
     },
     {
       "id": "VGVhY2hlci0xNjI3MDAz",
@@ -15533,13 +15155,6 @@
       "name": "Joshua Zaato",
       "rating": 2.4,
       "numRatings": 35
-    },
-    {
-      "id": "VGVhY2hlci0yMzg1ODQ3",
-      "legacyId": 2385847,
-      "name": "Joshua Zaato",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0yMzg4NDA1",
@@ -15703,13 +15318,6 @@
       "numRatings": 25
     },
     {
-      "id": "VGVhY2hlci0yODc2ODA3",
-      "legacyId": 2876807,
-      "name": "Julian Caza",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0yMDY2Nzg3",
       "legacyId": 2066787,
       "name": "Julian Chan",
@@ -15722,13 +15330,6 @@
       "name": "Julian Gwyn",
       "rating": 1,
       "numRatings": 1
-    },
-    {
-      "id": "VGVhY2hlci0zMDU0OTQ5",
-      "legacyId": 3054949,
-      "name": "julian starr",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0xMDM2OTk1",
@@ -15878,18 +15479,11 @@
       "numRatings": 5
     },
     {
-      "id": "VGVhY2hlci0yODk0MDY3",
-      "legacyId": 2894067,
-      "name": "Julien Leclair-Dionne",
-      "rating": 4,
-      "numRatings": 1
-    },
-    {
       "id": "VGVhY2hlci0yOTA1OTE0",
       "legacyId": 2905914,
       "name": "Julien Leclair-Dionne",
-      "rating": 4.8,
-      "numRatings": 71
+      "rating": 4.788888888888889,
+      "numRatings": 72
     },
     {
       "id": "VGVhY2hlci0yNTYzMTE3",
@@ -16014,13 +15608,6 @@
       "id": "VGVhY2hlci0yOTk0OTQw",
       "legacyId": 2994940,
       "name": "Justine Monette-Tremblay",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
-      "id": "VGVhY2hlci0yMTcxOTUz",
-      "legacyId": 2171953,
-      "name": "Justine Perron",
       "rating": 0,
       "numRatings": 0
     },
@@ -16291,25 +15878,11 @@
       "numRatings": 16
     },
     {
-      "id": "VGVhY2hlci04OTExMzA=",
-      "legacyId": 891130,
-      "name": "Kate Fletcher",
-      "rating": 3.6,
-      "numRatings": 120
-    },
-    {
-      "id": "VGVhY2hlci0yMDAwMTEy",
-      "legacyId": 2000112,
-      "name": "Kate Fletcher",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0yMjkyNzcw",
       "legacyId": 2292770,
       "name": "Kate Fletcher",
-      "rating": 2.9,
-      "numRatings": 61
+      "rating": 3.3640883977900553,
+      "numRatings": 181
     },
     {
       "id": "VGVhY2hlci0xNDgzNzY5",
@@ -17306,13 +16879,6 @@
       "numRatings": 23
     },
     {
-      "id": "VGVhY2hlci0yNzExNjkz",
-      "legacyId": 2711693,
-      "name": "Laetitia Lebihan",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0yOTMyMDY2",
       "legacyId": 2932066,
       "name": "Laith Gharaibeh",
@@ -17367,13 +16933,6 @@
       "name": "Lauchlan Munro",
       "rating": 3.2,
       "numRatings": 18
-    },
-    {
-      "id": "VGVhY2hlci0yODE4NTA2",
-      "legacyId": 2818506,
-      "name": "Lauchlan Munro",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0xNjE3MzEz",
@@ -17645,15 +17204,8 @@
       "id": "VGVhY2hlci00MDczNA==",
       "legacyId": 40734,
       "name": "Lawrence Harris",
-      "rating": 2.5,
-      "numRatings": 165
-    },
-    {
-      "id": "VGVhY2hlci0yNDEwNzAy",
-      "legacyId": 2410702,
-      "name": "Lawrence Harris",
-      "rating": 3,
-      "numRatings": 1
+      "rating": 2.503012048192771,
+      "numRatings": 166
     },
     {
       "id": "VGVhY2hlci0xNTMzNjM0",
@@ -18020,18 +17572,11 @@
       "numRatings": 0
     },
     {
-      "id": "VGVhY2hlci0xNTU0OA==",
-      "legacyId": 15548,
-      "name": "Line Beauchesne",
-      "rating": 3.8,
-      "numRatings": 78
-    },
-    {
       "id": "VGVhY2hlci0xOTI1MjEz",
       "legacyId": 1925213,
       "name": "Line Beauchesne",
-      "rating": 2.8,
-      "numRatings": 26
+      "rating": 3.55,
+      "numRatings": 104
     },
     {
       "id": "VGVhY2hlci02NTMyNjQ=",
@@ -18293,13 +17838,6 @@
       "numRatings": 0
     },
     {
-      "id": "VGVhY2hlci0yOTE2NTg0",
-      "legacyId": 2916584,
-      "name": "Louis Pasteur",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0xNzQ4MDA4",
       "legacyId": 1748008,
       "name": "Louis Poirier",
@@ -18382,13 +17920,6 @@
       "name": "Louise Fines",
       "rating": 2.2,
       "numRatings": 15
-    },
-    {
-      "id": "VGVhY2hlci0yOTAwNzY5",
-      "legacyId": 2900769,
-      "name": "Louise Fines",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0xNTU5NzE4",
@@ -18531,13 +18062,6 @@
       "numRatings": 4
     },
     {
-      "id": "VGVhY2hlci0yMDczNDA3",
-      "legacyId": 2073407,
-      "name": "Lucas Jurkovic",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0yNjYxNzI0",
       "legacyId": 2661724,
       "name": "Lucas Michaud",
@@ -18632,15 +18156,8 @@
       "id": "VGVhY2hlci0xMzQzNjg4",
       "legacyId": 1343688,
       "name": "Luis Abanto",
-      "rating": 4,
-      "numRatings": 47
-    },
-    {
-      "id": "VGVhY2hlci0yNjI1NTEx",
-      "legacyId": 2625511,
-      "name": "Luis Abanto",
-      "rating": 3,
-      "numRatings": 1
+      "rating": 3.9791666666666665,
+      "numRatings": 48
     },
     {
       "id": "VGVhY2hlci05ODgyMTY=",
@@ -18702,15 +18219,8 @@
       "id": "VGVhY2hlci0yNzYzMjg4",
       "legacyId": 2763288,
       "name": "Luke Russell",
-      "rating": 4.9,
-      "numRatings": 12
-    },
-    {
-      "id": "VGVhY2hlci0yODc5OTQ4",
-      "legacyId": 2879948,
-      "name": "Luke Russell",
-      "rating": 4.5,
-      "numRatings": 6
+      "rating": 4.7666666666666675,
+      "numRatings": 18
     },
     {
       "id": "VGVhY2hlci0xODY5NTAy",
@@ -18849,15 +18359,8 @@
       "id": "VGVhY2hlci0xNjc0NDAy",
       "legacyId": 1674402,
       "name": "Magda Donia",
-      "rating": 2.5,
-      "numRatings": 54
-    },
-    {
-      "id": "VGVhY2hlci0yNzA0NDcy",
-      "legacyId": 2704472,
-      "name": "Magda Donia",
-      "rating": 5,
-      "numRatings": 1
+      "rating": 2.5454545454545454,
+      "numRatings": 55
     },
     {
       "id": "VGVhY2hlci0yODcyMzI3",
@@ -18891,15 +18394,8 @@
       "id": "VGVhY2hlci0yODc0OTg4",
       "legacyId": 2874988,
       "name": "Maha Tazi",
-      "rating": 1.1,
-      "numRatings": 13
-    },
-    {
-      "id": "VGVhY2hlci0yODc1ODc0",
-      "legacyId": 2875874,
-      "name": "Maha Tazi",
-      "rating": 1,
-      "numRatings": 1
+      "rating": 1.092857142857143,
+      "numRatings": 14
     },
     {
       "id": "VGVhY2hlci0xNzUxNjQx",
@@ -19035,13 +18531,6 @@
       "numRatings": 8
     },
     {
-      "id": "VGVhY2hlci0yODMxMTA3",
-      "legacyId": 2831107,
-      "name": "Majd Karam",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0yNTA3OTYx",
       "legacyId": 2507961,
       "name": "Majed Jarrar",
@@ -19112,18 +18601,11 @@
       "numRatings": 11
     },
     {
-      "id": "VGVhY2hlci0yNzI5MTI2",
-      "legacyId": 2729126,
-      "name": "Manoj Bayan",
-      "rating": 2.4,
-      "numRatings": 49
-    },
-    {
       "id": "VGVhY2hlci0yOTMyODgy",
       "legacyId": 2932882,
       "name": "Manoj Bayan",
-      "rating": 2.3,
-      "numRatings": 3
+      "rating": 2.394230769230769,
+      "numRatings": 52
     },
     {
       "id": "VGVhY2hlci0xNDczOQ==",
@@ -19595,18 +19077,11 @@
       "numRatings": 0
     },
     {
-      "id": "VGVhY2hlci0yODAyMTA0",
-      "legacyId": 2802104,
-      "name": "Marie Oelgemoeller",
-      "rating": 5,
-      "numRatings": 1
-    },
-    {
       "id": "VGVhY2hlci0zMDAzNDY1",
       "legacyId": 3003465,
       "name": "Marie Oelgemoeller",
       "rating": 5,
-      "numRatings": 1
+      "numRatings": 2
     },
     {
       "id": "VGVhY2hlci0xNTQ3MA==",
@@ -19973,18 +19448,11 @@
       "numRatings": 5
     },
     {
-      "id": "VGVhY2hlci0yODU3MDYw",
-      "legacyId": 2857060,
-      "name": "Marina Gomá",
-      "rating": 4.5,
-      "numRatings": 4
-    },
-    {
       "id": "VGVhY2hlci0yODcxNDYy",
       "legacyId": 2871462,
       "name": "Marina Gomá",
-      "rating": 4,
-      "numRatings": 2
+      "rating": 4.333333333333333,
+      "numRatings": 6
     },
     {
       "id": "VGVhY2hlci0xNDY3NzY2",
@@ -20071,13 +19539,6 @@
       "numRatings": 0
     },
     {
-      "id": "VGVhY2hlci0yNjg2MjUw",
-      "legacyId": 2686250,
-      "name": "Marjene Gana",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci05MzcyNDA=",
       "legacyId": 937240,
       "name": "Marjolaine Hébert",
@@ -20123,15 +19584,8 @@
       "id": "VGVhY2hlci0xNTIzNzIx",
       "legacyId": 1523721,
       "name": "Mark Dallas",
-      "rating": 2.5,
-      "numRatings": 34
-    },
-    {
-      "id": "VGVhY2hlci0xOTY0MDAy",
-      "legacyId": 1964002,
-      "name": "Mark Dallas",
-      "rating": 2.8,
-      "numRatings": 10
+      "rating": 2.5681818181818183,
+      "numRatings": 44
     },
     {
       "id": "VGVhY2hlci0yMDIyOTU2",
@@ -20162,18 +19616,11 @@
       "numRatings": 15
     },
     {
-      "id": "VGVhY2hlci0yNzY1NjE4",
-      "legacyId": 2765618,
-      "name": "Mark Horsman",
-      "rating": 4.5,
-      "numRatings": 2
-    },
-    {
       "id": "VGVhY2hlci0yODkwMzQx",
       "legacyId": 2890341,
       "name": "Mark Horsman",
-      "rating": 5,
-      "numRatings": 1
+      "rating": 4.666666666666667,
+      "numRatings": 3
     },
     {
       "id": "VGVhY2hlci01NzU4NDI=",
@@ -20393,18 +19840,11 @@
       "numRatings": 23
     },
     {
-      "id": "VGVhY2hlci0xNzUxODg4",
-      "legacyId": 1751888,
-      "name": "Martin Noel",
-      "rating": 2.8,
-      "numRatings": 8
-    },
-    {
       "id": "VGVhY2hlci0yMDg5MTk2",
       "legacyId": 2089196,
       "name": "Martin Noel",
-      "rating": 4.5,
-      "numRatings": 42
+      "rating": 4.228,
+      "numRatings": 50
     },
     {
       "id": "VGVhY2hlci05NDgyNjY=",
@@ -20575,18 +20015,11 @@
       "numRatings": 18
     },
     {
-      "id": "VGVhY2hlci0yODQ5NjEz",
-      "legacyId": 2849613,
-      "name": "Maryam Onifade",
-      "rating": 3.7,
-      "numRatings": 3
-    },
-    {
       "id": "VGVhY2hlci0yODczMTAz",
       "legacyId": 2873103,
       "name": "Maryam Onifade",
-      "rating": 2,
-      "numRatings": 4
+      "rating": 2.7285714285714286,
+      "numRatings": 7
     },
     {
       "id": "VGVhY2hlci0yMDc3OTE2",
@@ -20986,13 +20419,6 @@
       "name": "Maxime Prevost",
       "rating": 4.3,
       "numRatings": 32
-    },
-    {
-      "id": "VGVhY2hlci0yNzI0NTU4",
-      "legacyId": 2724558,
-      "name": "Maxime Prevost",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0yODk3MzA0",
@@ -21712,15 +21138,8 @@
       "id": "VGVhY2hlci01MTQ5ODU=",
       "legacyId": 514985,
       "name": "Michel Fournier",
-      "rating": 4.3,
-      "numRatings": 18
-    },
-    {
-      "id": "VGVhY2hlci0xOTU2MTYx",
-      "legacyId": 1956161,
-      "name": "Michel Fournier",
-      "rating": 3.8,
-      "numRatings": 7
+      "rating": 4.159999999999999,
+      "numRatings": 25
     },
     {
       "id": "VGVhY2hlci0yMzM2MjY0",
@@ -21770,13 +21189,6 @@
       "name": "Michel Labrosse",
       "rating": 3.5,
       "numRatings": 12
-    },
-    {
-      "id": "VGVhY2hlci0yNzIxMzEx",
-      "legacyId": 2721311,
-      "name": "Michel Labrosse",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci03NDk4Nzg=",
@@ -22027,13 +21439,6 @@
       "id": "VGVhY2hlci0zMDgwMDM1",
       "legacyId": 3080035,
       "name": "Mikaila ortynsky",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
-      "id": "VGVhY2hlci0zMDgwMDM3",
-      "legacyId": 3080037,
-      "name": "Mikaila Ortynsky",
       "rating": 0,
       "numRatings": 0
     },
@@ -22342,15 +21747,8 @@
       "id": "VGVhY2hlci0yMjc5NzAx",
       "legacyId": 2279701,
       "name": "Mohamed Ahmed",
-      "rating": 3,
-      "numRatings": 37
-    },
-    {
-      "id": "VGVhY2hlci0yMzQ5Nzkz",
-      "legacyId": 2349793,
-      "name": "Mohamed Ahmed",
-      "rating": 2.1,
-      "numRatings": 21
+      "rating": 2.674137931034483,
+      "numRatings": 58
     },
     {
       "id": "VGVhY2hlci0yOTI5Nzk3",
@@ -22384,22 +21782,8 @@
       "id": "VGVhY2hlci0xOTM5NTk0",
       "legacyId": 1939594,
       "name": "Mohamed Ibrahim",
-      "rating": 1.5,
-      "numRatings": 46
-    },
-    {
-      "id": "VGVhY2hlci0yNzU5ODg3",
-      "legacyId": 2759887,
-      "name": "Mohamed Ibrahim",
-      "rating": 2,
-      "numRatings": 6
-    },
-    {
-      "id": "VGVhY2hlci0zMTAyODc1",
-      "legacyId": 3102875,
-      "name": "Mohamed Ibrahim",
-      "rating": 0,
-      "numRatings": 0
+      "rating": 1.5576923076923077,
+      "numRatings": 52
     },
     {
       "id": "VGVhY2hlci0yNTI1MTQ3",
@@ -22512,13 +21896,6 @@
       "name": "Mohammad Rafiee",
       "rating": 2.8,
       "numRatings": 5
-    },
-    {
-      "id": "VGVhY2hlci0yODc3MTMw",
-      "legacyId": 2877130,
-      "name": "Mohammad Rahman",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0yOTUxMzg3",
@@ -22888,15 +22265,8 @@
       "id": "VGVhY2hlci0yNzU3NTA5",
       "legacyId": 2757509,
       "name": "Murray Kronick",
-      "rating": 3.4,
+      "rating": 3.3999999999999995,
       "numRatings": 13
-    },
-    {
-      "id": "VGVhY2hlci0yOTE2MDAx",
-      "legacyId": 2916001,
-      "name": "Murray Kronick",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0xNzUyNDkw",
@@ -22972,15 +22342,8 @@
       "id": "VGVhY2hlci0xODQ5NjA1",
       "legacyId": 1849605,
       "name": "Mythili Rajiva",
-      "rating": 4.3,
-      "numRatings": 55
-    },
-    {
-      "id": "VGVhY2hlci0yMDk4MzM1",
-      "legacyId": 2098335,
-      "name": "Mythili Rajiva",
-      "rating": 4.5,
-      "numRatings": 10
+      "rating": 4.3307692307692305,
+      "numRatings": 65
     },
     {
       "id": "VGVhY2hlci0yMzQwMTU0",
@@ -23135,13 +22498,6 @@
       "name": "Najwa Haddad",
       "rating": 4.8,
       "numRatings": 678
-    },
-    {
-      "id": "VGVhY2hlci0yODA3ODAz",
-      "legacyId": 2807803,
-      "name": "Najwa Haddad",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0xMDE5MDY5",
@@ -24064,15 +23420,8 @@
       "id": "VGVhY2hlci0xMzMzNjUy",
       "legacyId": 1333652,
       "name": "Nuah Makungu Masudi",
-      "rating": 1.8,
-      "numRatings": 28
-    },
-    {
-      "id": "VGVhY2hlci0yMjA2NjY0",
-      "legacyId": 2206664,
-      "name": "Nuah Makungu Masudi",
-      "rating": 2.5,
-      "numRatings": 2
+      "rating": 1.8466666666666667,
+      "numRatings": 30
     },
     {
       "id": "VGVhY2hlci0xOTgzMjA2",
@@ -24092,15 +23441,8 @@
       "id": "VGVhY2hlci0xMzA5NjA=",
       "legacyId": 130960,
       "name": "Odette Laneuville",
-      "rating": 3.3,
+      "rating": 3.2999999999999994,
       "numRatings": 48
-    },
-    {
-      "id": "VGVhY2hlci0yNzAyODg2",
-      "legacyId": 2702886,
-      "name": "Odette Laneuville",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0yMzA1MjA4",
@@ -24677,13 +24019,6 @@
       "numRatings": 28
     },
     {
-      "id": "VGVhY2hlci0yNjk1MTI1",
-      "legacyId": 2695125,
-      "name": "Patricia Kmiec",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0xNjcyNzQ0",
       "legacyId": 1672744,
       "name": "Patricia Life",
@@ -25013,13 +24348,6 @@
       "numRatings": 44
     },
     {
-      "id": "VGVhY2hlci0yNDAzNDk2",
-      "legacyId": 2403496,
-      "name": "Paul Haslam",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci00ODg0NDA=",
       "legacyId": 488440,
       "name": "Paul Heintzman",
@@ -25034,18 +24362,11 @@
       "numRatings": 70
     },
     {
-      "id": "VGVhY2hlci0yNDY4Ng==",
-      "legacyId": 24686,
-      "name": "Paul Mayer",
-      "rating": 4.6,
-      "numRatings": 86
-    },
-    {
       "id": "VGVhY2hlci0yNzEzMTA4",
       "legacyId": 2713108,
       "name": "Paul Mayer",
-      "rating": 4.7,
-      "numRatings": 27
+      "rating": 4.623893805309734,
+      "numRatings": 113
     },
     {
       "id": "VGVhY2hlci0yMDgyMzY4",
@@ -25506,15 +24827,8 @@
       "id": "VGVhY2hlci0yOTQ5MTYz",
       "legacyId": 2949163,
       "name": "Philippe Comtois",
-      "rating": 2.6,
-      "numRatings": 9
-    },
-    {
-      "id": "VGVhY2hlci0yOTgxMDQ3",
-      "legacyId": 2981047,
-      "name": "Philippe Comtois",
-      "rating": 4.8,
-      "numRatings": 5
+      "rating": 3.385714285714286,
+      "numRatings": 14
     },
     {
       "id": "VGVhY2hlci0yMTAyNDM2",
@@ -25872,13 +25186,6 @@
       "name": "Pouya Safi",
       "rating": 4.1,
       "numRatings": 49
-    },
-    {
-      "id": "VGVhY2hlci0yOTM3MjIx",
-      "legacyId": 2937221,
-      "name": "Pouya Safi",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0xNjQ0NDQy",
@@ -26889,18 +26196,11 @@
       "numRatings": 8
     },
     {
-      "id": "VGVhY2hlci00NzQyNw==",
-      "legacyId": 47427,
-      "name": "Richard Sokoloski",
-      "rating": 3.8,
-      "numRatings": 37
-    },
-    {
       "id": "VGVhY2hlci0yNjQ4OTEy",
       "legacyId": 2648912,
       "name": "Richard Sokoloski",
-      "rating": 2.1,
-      "numRatings": 28
+      "rating": 3.0676923076923077,
+      "numRatings": 65
     },
     {
       "id": "VGVhY2hlci0zMDk4ODM=",
@@ -27083,13 +26383,6 @@
       "name": "Robert Bruff",
       "rating": 2.3,
       "numRatings": 23
-    },
-    {
-      "id": "VGVhY2hlci0xOTgyMDAx",
-      "legacyId": 1982001,
-      "name": "Robert Buranello",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0xOTgzMTU1",
@@ -28019,15 +27312,8 @@
       "id": "VGVhY2hlci0xMjkxMA==",
       "legacyId": 12910,
       "name": "Sam Alvaro",
-      "rating": 2.9,
-      "numRatings": 378
-    },
-    {
-      "id": "VGVhY2hlci0yNzE4MzAw",
-      "legacyId": 2718300,
-      "name": "Sam Alvaro",
-      "rating": 1.6,
-      "numRatings": 19
+      "rating": 2.837783375314862,
+      "numRatings": 397
     },
     {
       "id": "VGVhY2hlci0yOTY5MDUw",
@@ -28807,18 +28093,11 @@
       "numRatings": 26
     },
     {
-      "id": "VGVhY2hlci0yNzkzMjgw",
-      "legacyId": 2793280,
-      "name": "Shahin Basiratzadeh",
-      "rating": 5,
-      "numRatings": 1
-    },
-    {
       "id": "VGVhY2hlci0yOTM3MDgx",
       "legacyId": 2937081,
       "name": "Shahin Basiratzadeh",
-      "rating": 4,
-      "numRatings": 2
+      "rating": 4.333333333333333,
+      "numRatings": 3
     },
     {
       "id": "VGVhY2hlci0yNjc1ODc0",
@@ -29062,15 +28341,8 @@
       "id": "VGVhY2hlci01NTQwNjg=",
       "legacyId": 554068,
       "name": "Shervin Shirmohammadi",
-      "rating": 4,
-      "numRatings": 34
-    },
-    {
-      "id": "VGVhY2hlci0yNTAxOTAw",
-      "legacyId": 2501900,
-      "name": "Shervin Shirmohammadi",
-      "rating": 1,
-      "numRatings": 1
+      "rating": 3.914285714285714,
+      "numRatings": 35
     },
     {
       "id": "VGVhY2hlci0zMDY2ODQ1",
@@ -31257,13 +30529,6 @@
       "numRatings": 146
     },
     {
-      "id": "VGVhY2hlci0yOTY5ODA3",
-      "legacyId": 2969807,
-      "name": "Vajmeh Tabibi",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci0yOTUzMzU0",
       "legacyId": 2953354,
       "name": "Valérie Aubut",
@@ -31789,18 +31054,11 @@
       "numRatings": 102
     },
     {
-      "id": "VGVhY2hlci0yNzkxMDAy",
-      "legacyId": 2791002,
-      "name": "Wail Mardini",
-      "rating": 4,
-      "numRatings": 4
-    },
-    {
       "id": "VGVhY2hlci0yOTEwNzYy",
       "legacyId": 2910762,
       "name": "Wail Mardini",
-      "rating": 2.5,
-      "numRatings": 2
+      "rating": 3.5,
+      "numRatings": 6
     },
     {
       "id": "VGVhY2hlci03OTA1ODk=",
@@ -31808,13 +31066,6 @@
       "name": "Walid Ben Amar",
       "rating": 4.3,
       "numRatings": 20
-    },
-    {
-      "id": "VGVhY2hlci0xOTM0MDkw",
-      "legacyId": 1934090,
-      "name": "Walid Ben Amar",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0yODMyOTk1",
@@ -32009,15 +31260,8 @@
       "id": "VGVhY2hlci0zOTUyNw==",
       "legacyId": 39527,
       "name": "William Ogilvie",
-      "rating": 4.4,
-      "numRatings": 361
-    },
-    {
-      "id": "VGVhY2hlci0yNzEyNjQx",
-      "legacyId": 2712641,
-      "name": "William Ogilvie",
-      "rating": 4.8,
-      "numRatings": 4
+      "rating": 4.404383561643836,
+      "numRatings": 365
     },
     {
       "id": "VGVhY2hlci0xMjM5MzY0",
@@ -32641,13 +31885,6 @@
       "name": "Zhor Sebbani",
       "rating": 2.1,
       "numRatings": 43
-    },
-    {
-      "id": "VGVhY2hlci0zMDgyOTI2",
-      "legacyId": 3082926,
-      "name": "Zi Zhang",
-      "rating": 0,
-      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0zMDg5Mzk0",
