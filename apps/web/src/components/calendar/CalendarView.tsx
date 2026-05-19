@@ -14,15 +14,9 @@ import { WeekCalendar } from "./WeekCalendar";
 import { useAppStore } from "../../store/appStore";
 import type { CalendarEvent } from "../../hooks/useCalendarEvents";
 import type { WeekGroup } from "../../hooks/useScheduleWeeks";
+import { formatWeekCount } from "../../lib/formatWeekCount";
 
 const EMPTY_COLOR_MAP: Record<string, number> = {};
-
-function formatWeekCount(group: WeekGroup): string {
-  const start = new Date(`${group.startDate}T00:00:00Z`);
-  const end = new Date(`${group.endDate}T00:00:00Z`);
-  const weeks = Math.round((end.getTime() - start.getTime()) / (7 * 24 * 60 * 60 * 1000)) + 1;
-  return weeks === 1 ? "1 week" : `${weeks} weeks`;
-}
 
 function formatScheduleRange(start: string, end: string): string {
   const s = new Date(`${start}T00:00:00Z`);
