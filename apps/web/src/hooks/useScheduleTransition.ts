@@ -3,17 +3,20 @@ import type { GeneratedSchedule } from "schedule";
 
 type Phase = "idle" | "exiting" | "entering";
 
-const TRANSITION_MS = 100;
+const EXIT_MS = 180;
+const ENTER_MS = 220;
 
 /**
- * Manages schedule switch animations.
+ * Drives the schedule fade-out / fade-in animation.
  *
- * Returns a `displayedSchedule` that lags behind the real schedule: it only
- * swaps to the new value AFTER the exit animation finishes, so the exit plays
- * on old events and the enter plays on new ones.
+ * When `schedule` changes the hook starts an exit animation, swaps
+ * `displayedSchedule` to the new value once the exit finishes, then plays
+ * an enter animation.
  *
- * Call captureAndPark() before changing the schedule prop, then update the
- * schedule prop. The hook drives the rest.
+ * If another schedule arrives mid-animation:
+ *  - during exit  → restart the exit timer (latest schedule shown at the end)
+ *  - during enter → show the new schedule immediately and restart the enter
+ *
  */
 export function useScheduleTransition(
   schedule: GeneratedSchedule | null,
@@ -21,20 +24,20 @@ export function useScheduleTransition(
 ): {
   displayedSchedule: GeneratedSchedule | null;
   animationPhase: Phase;
-  captureAndPark: () => void;
 } {
-  const [phase, setPhase] = useState<Phase>("idle");
   const [displayedSchedule, setDisplayedSchedule] = useState(schedule);
+  const [phase, setPhase] = useState<Phase>("idle");
 
   const phaseRef = useRef<Phase>("idle");
-  const pendingScheduleRef = useRef(schedule);
   const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const enterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const setPhaseSync = useCallback((p: Phase) => {
-    phaseRef.current = p;
-    setPhase(p);
-  }, []);
+  // Always holds the latest schedule so timers pick it up even if they
+  // were set before this render.
+  const latestScheduleRef = useRef(schedule);
+  useEffect(() => {
+    latestScheduleRef.current = schedule;
+  }, [schedule]);
 
   const clearTimers = useCallback(() => {
     if (exitTimerRef.current != null) {
@@ -47,45 +50,46 @@ export function useScheduleTransition(
     }
   }, []);
 
-  const captureAndPark = useCallback(() => {
-    if (prefersReduced || phaseRef.current !== "idle") return;
-    setPhaseSync("exiting");
-  }, [prefersReduced, setPhaseSync]);
-
-  // Track the latest incoming schedule so the exit timer can pick it up.
   useEffect(() => {
-    pendingScheduleRef.current = schedule;
-  }, [schedule]);
+    if (prefersReduced) {
+      clearTimers();
+      return;
+    }
 
-  useEffect(() => {
-    if (phaseRef.current !== "exiting") return;
-
-    clearTimers();
-
-    exitTimerRef.current = setTimeout(() => {
-      exitTimerRef.current = null;
-      setDisplayedSchedule(pendingScheduleRef.current);
-      setPhaseSync("entering");
-
+    const startEnter = () => {
+      phaseRef.current = "entering";
+      setPhase("entering");
       enterTimerRef.current = setTimeout(() => {
         enterTimerRef.current = null;
-        setPhaseSync("idle");
-      }, TRANSITION_MS + 50);
-    }, TRANSITION_MS);
+        phaseRef.current = "idle";
+        setPhase("idle");
+      }, ENTER_MS);
+    };
+
+    const startExit = () => {
+      phaseRef.current = "exiting";
+      setPhase("exiting");
+      exitTimerRef.current = setTimeout(() => {
+        exitTimerRef.current = null;
+        setDisplayedSchedule(latestScheduleRef.current);
+        startEnter();
+      }, EXIT_MS);
+    };
+
+    // Clear any in-flight timers and (re)start the full exit → swap → enter
+    // sequence. Handles idle, exiting (debounce rapid navigation), and
+    // entering (interrupt the fade-in with a fresh transition).
+    clearTimers();
+    startExit();
 
     return clearTimers;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schedule]);
+  }, [schedule, prefersReduced, clearTimers]);
 
-  // If no animation is running, keep displayedSchedule in sync immediately.
-  useEffect(() => {
-    if (phaseRef.current === "idle") {
-      setDisplayedSchedule(schedule);
-    }
-  }, [schedule]);
+  useEffect(() => () => clearTimers(), [clearTimers]);
 
-  // Cleanup on unmount.
-  useEffect(() => clearTimers, [clearTimers]);
-
-  return { displayedSchedule, animationPhase: phase, captureAndPark };
+  // When reduced motion is preferred, skip the animation entirely.
+  return {
+    displayedSchedule: prefersReduced ? schedule : displayedSchedule,
+    animationPhase: prefersReduced ? "idle" : phase,
+  };
 }

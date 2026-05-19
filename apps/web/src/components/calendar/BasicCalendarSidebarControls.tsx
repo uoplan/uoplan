@@ -22,11 +22,9 @@ import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
 import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 
 export function BasicCalendarSidebarControls({
-  onBeforeNavigate,
   onDownloadIcs,
   downloadDisabled,
 }: {
-  onBeforeNavigate?: () => void;
   onDownloadIcs?: () => void;
   downloadDisabled?: boolean;
 }) {
@@ -195,7 +193,6 @@ export function BasicCalendarSidebarControls({
   const handleClearOptions = () => {
     resetBasicCalendarSettings();
     setTranscriptError(null);
-    onBeforeNavigate?.();
   };
 
   return (
@@ -312,7 +309,6 @@ export function BasicCalendarSidebarControls({
             loading={scheduleGenerating}
             onClick={() => {
               if (scheduleGenerating || !canNavigateSeeds) return;
-              onBeforeNavigate?.();
               void goToPreviousSeed();
             }}
           >
@@ -327,7 +323,6 @@ export function BasicCalendarSidebarControls({
             loading={scheduleGenerating}
             onClick={() => {
               if (scheduleGenerating || !canNavigateSeeds) return;
-              onBeforeNavigate?.();
               void goToNextSeed();
             }}
           >
