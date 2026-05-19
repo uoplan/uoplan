@@ -7,10 +7,12 @@ import {
   fromProtoCatalogue,
   fromProtoCatalogueManifest,
   fromProtoCourseGradesData,
+  fromProtoDisciplinesData,
   fromProtoIndices,
   fromProtoRateMyProfessorsData,
   fromProtoSchedulesData,
   fromProtoTermsData,
+  type Discipline,
   type Indices,
   type Program,
   type SchedulesData,
@@ -152,7 +154,7 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
   },
 
   loadData: async () => {
-    const LOAD_STEPS = 5;
+    const LOAD_STEPS = 6;
     let loadStep = 0;
     const bumpLoadProgress = () => {
       loadStep += 1;
@@ -161,13 +163,15 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
 
     set({ loading: true, error: null, loadProgress: 0 });
     try {
-      const [manifestRes, termsRes, indicesRes, rmpRes, gradesRes] = await Promise.all([
-        fetch("/data/catalogue.pb"),
-        fetch("/data/terms.pb"),
-        fetch("/data/indices.pb").catch(() => null),
-        fetch("/data/ratemyprofessors.pb").catch(() => null),
-        fetch("/data/grades.pb").catch(() => null),
-      ]);
+      const [manifestRes, termsRes, indicesRes, rmpRes, gradesRes, disciplinesRes] =
+        await Promise.all([
+          fetch("/data/catalogue.pb"),
+          fetch("/data/terms.pb"),
+          fetch("/data/indices.pb").catch(() => null),
+          fetch("/data/ratemyprofessors.pb").catch(() => null),
+          fetch("/data/grades.pb").catch(() => null),
+          fetch("/data/disciplines.pb").catch(() => null),
+        ]);
       if (!manifestRes.ok || !termsRes.ok) throw new Error("Failed to load data");
       bumpLoadProgress();
 
@@ -209,6 +213,19 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
         }
       } else {
         courseGradesError = gradesRes ? `HTTP ${gradesRes.status}` : "Failed to load grade history";
+      }
+      bumpLoadProgress();
+
+      let disciplines: Discipline[] | null = null;
+      if (disciplinesRes?.ok) {
+        try {
+          const disciplinesBytes = new Uint8Array(await disciplinesRes.arrayBuffer());
+          disciplines = fromProtoDisciplinesData(
+            DataProto.DisciplinesData.decode(disciplinesBytes),
+          ).disciplines;
+        } catch {
+          disciplines = null;
+        }
       }
       bumpLoadProgress();
 
@@ -289,6 +306,7 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
         cache,
         courseGrades,
         courseGradesError,
+        disciplines,
         professorRatings,
         terms: parsedTerms.terms,
         selectedTermId: initialTermId,

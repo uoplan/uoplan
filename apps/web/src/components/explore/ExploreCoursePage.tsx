@@ -1,24 +1,30 @@
-import { Accordion, Anchor, Box, Group, Stack, Text, Title } from "@mantine/core";
+import { Accordion, Box, Stack, Text, Title } from "@mantine/core";
 import { useLingui } from "@lingui/react";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import type { Catalogue, ProfessorRatingsMap, Term } from "schedule";
-import { normalizeCourseCode, normalizeProfessorName } from "schedule";
+import { normalizeCourseCode } from "schedule";
 import { tr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
-import { buildExploreOfferings, groupOfferingsByCourse } from "../../lib/explore/gradesSearch";
+import {
+  buildCourseSearchEntries,
+  buildExploreOfferings,
+  type ProfessorOfferingGroup,
+  groupOfferingsByProfessor,
+} from "../../lib/explore/gradesSearch";
+import { parseCoursePathParam } from "../../lib/explore/courseSearchParams";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
-  ExploreCourseItem,
+  ExploreProfessorOfferingRows,
+  ExploreProfessorSummaryBar,
 } from "./ExploreProfessorGradesLayout";
 
 const EXPLORE_CHEVRON_RIGHT = {
-  base: "12px",
+  base: `calc(12px)`,
   xs: "max(12px, calc((100vw - min(100vw, 1200px)) / 2 + 12px))",
 };
-
-const mobileMediaQuery = "@media (max-width: 540px)";
 
 function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
   const m = new Map<string, string>();
@@ -36,54 +42,81 @@ function buildTermNameById(terms: Term[]): Map<number, string> {
   return m;
 }
 
-export function ExploreProfessorPage({
-  legacyId,
-  professorName: professorNameProp,
+function CourseProfessorItem({
+  group,
+  professorRatings,
+}: {
+  group: ProfessorOfferingGroup;
+  professorRatings: ProfessorRatingsMap | null;
+}) {
+  return (
+    <Accordion.Item value={group.groupId}>
+      <Accordion.Control>
+        <ExploreProfessorSummaryBar
+          group={group}
+          professorRatings={professorRatings}
+          stopPropagation
+        />
+      </Accordion.Control>
+      <Accordion.Panel>
+        <ExploreProfessorOfferingRows offerings={group.offerings} />
+      </Accordion.Panel>
+    </Accordion.Item>
+  );
+}
+
+export function ExploreCoursePage({
+  urlCourseParam,
   catalogue,
   terms,
   professorRatings,
-}: (
-  | { legacyId: number; professorName?: undefined }
-  | { professorName: string; legacyId?: undefined }
-) & {
+}: {
+  urlCourseParam: string;
   catalogue: Catalogue | null;
   terms: Term[];
   professorRatings: ProfessorRatingsMap | null;
 }) {
   useLingui();
-  const { data: grades, error } = useCourseGradesPb();
+  const { loading, data: grades, error } = useCourseGradesPb();
+  const navigate = useNavigate();
 
   const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
   const termNameById = useMemo(() => buildTermNameById(terms), [terms]);
 
-  const allOfferings = useMemo(() => {
+  const offerings = useMemo(() => {
     if (!grades) return [];
     return buildExploreOfferings(grades, titleByCode, termNameById);
   }, [grades, titleByCode, termNameById]);
 
-  const professorOfferings = useMemo(() => {
-    if (legacyId != null) return allOfferings.filter((o) => o.legacyId === legacyId);
-    const nameLower = professorNameProp?.toLowerCase() ?? "";
-    return allOfferings.filter((o) => o.professorName.toLowerCase() === nameLower);
-  }, [allOfferings, legacyId, professorNameProp]);
-
-  const displayName =
-    professorOfferings[0]?.professorName ?? professorNameProp ?? tr("explore.professorFallback");
-
-  const courseGroups = useMemo(
-    () => groupOfferingsByCourse(professorOfferings),
-    [professorOfferings],
+  const courseEntries = useMemo(
+    () => buildCourseSearchEntries(offerings, titleByCode),
+    [offerings, titleByCode],
   );
 
-  const rmpEntry = professorRatings ? professorRatings[normalizeProfessorName(displayName)] : null;
-  const hasRating = rmpEntry != null && Number.isFinite(rmpEntry.rating);
+  const urlNorm = useMemo(() => parseCoursePathParam(urlCourseParam), [urlCourseParam]);
 
-  const rmpHref =
-    legacyId != null && Number.isFinite(legacyId) && legacyId > 0
-      ? `https://www.ratemyprofessors.com/professor/${legacyId}`
-      : null;
+  // Redirect to /explore if course not found once data loads
+  useEffect(() => {
+    if (loading || courseEntries.length === 0) return;
+    if (urlNorm == null) return;
+    if (courseEntries.some((e) => e.normCode === urlNorm)) return;
+    void navigate({ to: "/explore", search: { q: undefined }, replace: true });
+  }, [loading, courseEntries, urlNorm, navigate]);
 
-  const profRouteParam = legacyId != null ? String(legacyId) : encodeURIComponent(displayName);
+  const selectedCourseMeta = useMemo(() => {
+    if (loading || urlNorm == null) return null;
+    return courseEntries.find((e) => e.normCode === urlNorm) ?? null;
+  }, [loading, urlNorm, courseEntries]);
+
+  const courseOfferings = useMemo(() => {
+    if (urlNorm === null) return [];
+    return offerings.filter((o) => normalizeCourseCode(o.courseCode) === urlNorm);
+  }, [offerings, urlNorm]);
+
+  const professorGroups = useMemo(
+    () => groupOfferingsByProfessor(courseOfferings),
+    [courseOfferings],
+  );
 
   return (
     <motion.div
@@ -92,38 +125,25 @@ export function ExploreProfessorPage({
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
     >
       <Stack gap={0}>
-        <Box
-          pt={4}
-          pb={32}
-          style={{
-            paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
-            paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
-          }}
-        >
-          <Title order={2} c="#F8F9FA" fw={600} fz={{ base: "h3", sm: "h2" }}>
-            {displayName}
-          </Title>
-          {(hasRating || rmpHref) && (
-            <Group gap={6} align="center" mt={8} wrap="wrap">
-              {hasRating ? (
-                <Text size="sm" c="dimmed">
-                  {rmpEntry?.rating.toFixed(1)} · {rmpEntry?.numRatings} ratings
-                </Text>
-              ) : null}
-              {rmpHref ? (
-                <Anchor
-                  href={rmpHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  size="sm"
-                  c="dimmed"
-                >
-                  RateMyProfessors
-                </Anchor>
-              ) : null}
-            </Group>
-          )}
-        </Box>
+        {selectedCourseMeta ? (
+          <Box
+            pt={4}
+            pb={32}
+            style={{
+              paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
+              paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
+            }}
+          >
+            <Title order={2} c="#F8F9FA" fw={600} fz={{ base: "h3", sm: "h2" }}>
+              {selectedCourseMeta.courseCode}
+            </Title>
+            {selectedCourseMeta.courseTitle ? (
+              <Text size="sm" c="dimmed" lh={1.5} mt={8}>
+                {selectedCourseMeta.courseTitle}
+              </Text>
+            ) : null}
+          </Box>
+        ) : null}
 
         {error ? (
           <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs }}>
@@ -131,17 +151,10 @@ export function ExploreProfessorPage({
               {tr("explore.loadError", { message: error })}
             </Text>
           </Box>
-        ) : courseGroups.length === 0 ? (
-          <Box
-            style={{
-              paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
-              [mobileMediaQuery]: {
-                paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
-              },
-            }}
-          >
+        ) : professorGroups.length === 0 ? (
+          <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs }}>
             <Text c="dimmed" size="sm">
-              {tr("explore.professorNoCourses")}
+              {loading ? null : tr("explore.courseNoProfessors")}
             </Text>
           </Box>
         ) : (
@@ -199,15 +212,11 @@ export function ExploreProfessorPage({
                 },
               }}
             >
-              {courseGroups.map((g) => (
-                <ExploreCourseItem
+              {professorGroups.map((g) => (
+                <CourseProfessorItem
                   key={g.groupId}
                   group={g}
-                  currentEntry={{
-                    to: "/explore/professor/$legacyId",
-                    params: { legacyId: profRouteParam },
-                    label: displayName,
-                  }}
+                  professorRatings={professorRatings}
                 />
               ))}
             </Accordion>

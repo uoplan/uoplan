@@ -1,7 +1,11 @@
 import Fuse from "fuse.js";
 import type { IFuseOptions } from "fuse.js";
-import type { CourseGradesData } from "schedule";
-import { normalizeCourseCode, normalizeProfessorName } from "schedule";
+import type { CourseGradesData, GradeVizData } from "schedule";
+import {
+  normalizeCourseCode,
+  normalizeProfessorName,
+  normalizeGradeVizDistribution,
+} from "schedule";
 import { searchProfessorsScored, type ProfessorSearchEntry } from "../graph/professorGraphSearch";
 import { formatUottawaTermIdLabel } from "./uottawaTermId";
 
@@ -29,6 +33,7 @@ export type ExploreCourseSearchEntry = {
   courseCode: string;
   courseTitle: string;
   fuseText: string;
+  gradeViz: GradeVizData | null;
 };
 
 /** One row per distinct professor — search index for explore. */
@@ -38,6 +43,7 @@ export type ExploreProfessorSearchEntry = {
   displayName: string;
   searchText: string;
   uniqueCourseCount: number;
+  gradeViz: GradeVizData | null;
 };
 
 type ExploreSearchResult = {
@@ -145,20 +151,26 @@ export function buildCourseSearchEntries(
   offerings: ExploreOfferingFlat[],
   titleByCode?: Map<string, string> | null,
 ): ExploreCourseSearchEntry[] {
-  const byNorm = new Map<string, ExploreCourseSearchEntry>();
+  type Acc = { courseCode: string; courseTitle: string; dists: Record<string, number>[] };
+  const byNorm = new Map<string, Acc>();
   for (const o of offerings) {
     const norm = normalizeCourseCode(o.courseCode);
-    if (byNorm.has(norm)) continue;
-    const catalogueTitle = titleByCode?.get(norm)?.trim() ?? "";
-    const title = catalogueTitle || o.courseTitle.trim();
-    byNorm.set(norm, {
-      normCode: norm,
-      courseCode: o.courseCode,
-      courseTitle: title,
-      fuseText: [o.courseCode, norm, title].filter(Boolean).join(" ").toLowerCase(),
-    });
+    const existing = byNorm.get(norm);
+    if (existing) {
+      existing.dists.push(o.distribution);
+    } else {
+      const catalogueTitle = titleByCode?.get(norm)?.trim() ?? "";
+      const title = catalogueTitle || o.courseTitle.trim();
+      byNorm.set(norm, { courseCode: o.courseCode, courseTitle: title, dists: [o.distribution] });
+    }
   }
-  return [...byNorm.values()];
+  return [...byNorm.entries()].map(([norm, { courseCode, courseTitle, dists }]) => ({
+    normCode: norm,
+    courseCode,
+    courseTitle,
+    fuseText: [courseCode, norm, courseTitle].filter(Boolean).join(" ").toLowerCase(),
+    gradeViz: normalizeGradeVizDistribution(mergeGradeDistributionCounts(dists)),
+  }));
 }
 
 export function createExploreCourseFuse(entries: ExploreCourseSearchEntry[]) {
@@ -177,6 +189,9 @@ export function buildExploreProfessorSearchEntries(
       .join(" ")
       .toLowerCase(),
     uniqueCourseCount: new Set(g.offerings.map((o) => normalizeCourseCode(o.courseCode))).size,
+    gradeViz: normalizeGradeVizDistribution(
+      mergeGradeDistributionCounts(g.offerings.map((o) => o.distribution)),
+    ),
   }));
 }
 

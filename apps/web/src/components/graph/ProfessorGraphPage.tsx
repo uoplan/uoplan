@@ -249,6 +249,7 @@ export function ProfessorGraphPage({
                           <Link
                             to="/explore/professor/$legacyId"
                             params={{ legacyId: String(entry.legacyId) }}
+                            search={{ q: undefined }}
                             onClick={(e) => e.stopPropagation()}
                             style={{
                               fontSize: "var(--mantine-font-size-xs)",

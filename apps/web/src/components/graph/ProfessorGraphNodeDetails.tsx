@@ -52,6 +52,7 @@ function ProfessorProfileLink({
     <Link
       to="/explore/professor/$legacyId"
       params={{ legacyId: String(legacyId) }}
+      search={{ q: undefined }}
       onClick={onClick}
       style={PROFILE_LINK_STYLE}
     >

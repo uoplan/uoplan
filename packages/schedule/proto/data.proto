@@ -37,6 +37,15 @@ message Professor {
   optional uint32 num_ratings = 5;
 }
 
+message Discipline {
+  string code = 1;
+  string name = 2;
+}
+
+message DisciplinesData {
+  repeated Discipline disciplines = 1;
+}
+
 message Catalogue {
   repeated string course_codes = 1;
   repeated Course courses = 2;

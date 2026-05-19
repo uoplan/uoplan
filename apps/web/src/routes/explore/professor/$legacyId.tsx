@@ -1,12 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Box, Text } from "@mantine/core";
 import { useShallow } from "zustand/react/shallow";
+import { ExploreLayout } from "../../../components/explore/ExploreLayout";
 import { ExploreProfessorPage } from "../../../components/explore/ExploreProfessorPage";
-import { type ExploreSearchNavigate } from "../../../hooks/useExploreSearch";
 import { tr } from "../../../i18n";
 import { useAppStore } from "../../../store/appStore";
 
 export const Route = createFileRoute("/explore/professor/$legacyId")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    q: typeof search.q === "string" && search.q.length > 0 ? search.q : undefined,
+  }),
   component: ExploreProfessorRoute,
 });
 
@@ -23,17 +26,32 @@ function ExploreProfessorRoute() {
     })),
   );
 
+  const { q } = Route.useSearch();
   const navigate = Route.useNavigate();
+
+  const layoutProps = {
+    showBackButton: true as const,
+    catalogue,
+    terms: terms ?? [],
+    professorRatings,
+    initialQuery: q ?? "",
+    onQueryChange: (v: string) =>
+      void navigate({
+        search: { q: v.length > 0 ? v : undefined },
+        replace: true,
+      }),
+  };
 
   if (isNumeric) {
     return (
-      <ExploreProfessorPage
-        legacyId={parsed}
-        catalogue={catalogue}
-        terms={terms ?? []}
-        professorRatings={professorRatings}
-        navigateExplore={navigate as ExploreSearchNavigate}
-      />
+      <ExploreLayout {...layoutProps}>
+        <ExploreProfessorPage
+          legacyId={parsed}
+          catalogue={catalogue}
+          terms={terms ?? []}
+          professorRatings={professorRatings}
+        />
+      </ExploreLayout>
     );
   }
 
@@ -47,12 +65,13 @@ function ExploreProfessorRoute() {
   }
 
   return (
-    <ExploreProfessorPage
-      professorName={professorName}
-      catalogue={catalogue}
-      terms={terms ?? []}
-      professorRatings={professorRatings}
-      navigateExplore={navigate as ExploreSearchNavigate}
-    />
+    <ExploreLayout {...layoutProps}>
+      <ExploreProfessorPage
+        professorName={professorName}
+        catalogue={catalogue}
+        terms={terms ?? []}
+        professorRatings={professorRatings}
+      />
+    </ExploreLayout>
   );
 }

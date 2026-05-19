@@ -11,6 +11,7 @@ import type { CourseLanguageBucket, CourseLevelBucket } from "schedule";
 import type { Indices } from "schedule";
 import type { Term } from "schedule";
 import type { ProfessorRatingsMap } from "schedule";
+import type { Discipline } from "schedule";
 import type { DecodedState } from "schedule";
 import type { TimetableFailureDiagnostics } from "schedule";
 
@@ -38,6 +39,7 @@ export interface AppState {
   cache: DataCache | null;
   courseGrades: CourseGradesData | null;
   courseGradesError: string | null;
+  disciplines: Discipline[] | null;
   loading: boolean;
   /** 0–100 while {@link loading} is true. */
   loadProgress: number;
