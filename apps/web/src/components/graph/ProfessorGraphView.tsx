@@ -14,6 +14,7 @@ import { drawProfessorNodeHover } from "../../lib/graph/drawProfessorNodeHover";
 import { animateCameraToHighlightedNodes } from "../../lib/graph/fitViewportToNodes";
 import { placeIsolatedNodes } from "../../lib/graph/placeIsolatedNodes";
 import { runForceAtlas2Chunked } from "../../lib/graph/runForceAtlas2Chunked";
+import { buildGraphContainerStyle } from "../../lib/graph/graphContainerStyle";
 
 const NODE_DIM = "rgba(61, 66, 72, 0.42)";
 const NODE_ACTIVE = "#ffffff";
@@ -224,18 +225,7 @@ function ProfessorGraphViewInner({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only rebuild layout when data changes
   }, [data, edgeReducer, nodeReducer]);
 
-  return (
-    <div
-      ref={containerRef}
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        background: "#141517",
-      }}
-    />
-  );
+  return <div ref={containerRef} style={buildGraphContainerStyle()} />;
 }
 
 export const ProfessorGraphView = memo(ProfessorGraphViewInner);
