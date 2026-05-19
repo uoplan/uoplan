@@ -134,55 +134,78 @@ export function CalendarView({
         overflow: "hidden",
       }}
     >
-      {weekGroups.length > 0 && (
-        <Box
-          style={{
-            flexShrink: 0,
-            borderBottom: "1px solid #2C2E33",
-            backgroundColor: "#1A1A1C",
-          }}
-        >
-          {scheduleDateRange && (
-            <Text
-              size="xs"
-              c="dimmed"
-              style={{
-                textAlign: "center",
-                padding: "4px 12px 0",
-              }}
+      <Box
+        style={{
+          flexShrink: 0,
+          borderBottom: "1px solid #2C2E33",
+          backgroundColor: "#1A1A1C",
+        }}
+      >
+        {weekGroups.length > 0 && (
+          <>
+            {scheduleDateRange && (
+              <Text
+                size="xs"
+                c="dimmed"
+                style={{
+                  textAlign: "center",
+                  padding: "4px 12px 0",
+                }}
+              >
+                {formatScheduleRange(scheduleDateRange.start, scheduleDateRange.end)}
+              </Text>
+            )}
+            <Group
+              justify="space-between"
+              align="center"
+              gap={8}
+              style={{ padding: "4px 12px 6px" }}
             >
-              {formatScheduleRange(scheduleDateRange.start, scheduleDateRange.end)}
-            </Text>
-          )}
-          <Group justify="space-between" align="center" gap={8} style={{ padding: "4px 12px 6px" }}>
-            <ActionIcon
-              variant="subtle"
-              color="gray"
-              size="sm"
-              aria-label="Previous week"
-              disabled={weekIndex === 0}
-              onClick={() => setWeekIndex(weekIndex - 1)}
-            >
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                size="sm"
+                aria-label="Previous week"
+                disabled={weekIndex === 0}
+                onClick={() => setWeekIndex(weekIndex - 1)}
+              >
+                <IconChevronLeft size={14} />
+              </ActionIcon>
+              <Text size="xs" c="dimmed" style={{ textAlign: "center", flex: 1 }}>
+                {weekGroups.length > 1
+                  ? `${tr("calendarPage.weekOf", { current: weekIndex + 1, total: weekGroups.length })} · ${formatWeekCount(weekGroups[weekIndex])}`
+                  : formatWeekCount(weekGroups[0])}
+              </Text>
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                size="sm"
+                aria-label="Next week"
+                disabled={weekIndex === weekGroups.length - 1}
+                onClick={() => setWeekIndex(weekIndex + 1)}
+              >
+                <IconChevronRight size={14} />
+              </ActionIcon>
+            </Group>
+          </>
+        )}
+        {weekGroups.length === 0 && (
+          <Group
+            justify="space-between"
+            align="center"
+            gap={8}
+            style={{ padding: "4px 12px 6px", visibility: "hidden" }}
+          >
+            <ActionIcon variant="subtle" color="gray" size="sm">
               <IconChevronLeft size={14} />
             </ActionIcon>
-            <Text size="xs" c="dimmed" style={{ textAlign: "center", flex: 1 }}>
-              {weekGroups.length > 1
-                ? `${tr("calendarPage.weekOf", { current: weekIndex + 1, total: weekGroups.length })} · ${formatWeekCount(weekGroups[weekIndex])}`
-                : formatWeekCount(weekGroups[0])}
-            </Text>
-            <ActionIcon
-              variant="subtle"
-              color="gray"
-              size="sm"
-              aria-label="Next week"
-              disabled={weekIndex === weekGroups.length - 1}
-              onClick={() => setWeekIndex(weekIndex + 1)}
-            >
+            <Text size="xs">&nbsp;</Text>
+            <ActionIcon variant="subtle" color="gray" size="sm">
               <IconChevronRight size={14} />
             </ActionIcon>
           </Group>
-        </Box>
-      )}
+        )}
+      </Box>
       <Box style={{ flex: 1, minHeight: 0 }}>
         <WeekCalendar
           events={events}
