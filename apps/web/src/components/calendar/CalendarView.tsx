@@ -1,4 +1,4 @@
-import { useMemo, useCallback, forwardRef, useImperativeHandle, useEffect } from "react";
+import { useMemo, useCallback, useEffect } from "react";
 import { ActionIcon, Box, Group, Modal, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
@@ -39,10 +39,6 @@ function formatScheduleRange(start: string, end: string): string {
   return `${startStr} – ${fmtWithYear.format(e)}`;
 }
 
-export interface CalendarViewHandle {
-  captureAndPark: () => void;
-}
-
 interface CalendarViewProps {
   schedule: GeneratedSchedule | null;
   cache: DataCache | null;
@@ -57,19 +53,18 @@ interface CalendarViewProps {
   colorMap?: Record<string, number>;
 }
 
-export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(function CalendarView(
-  { schedule, cache, professorRatings, getSwapCandidates, onSwap, colorMap = EMPTY_COLOR_MAP },
-  ref,
-) {
+export function CalendarView({
+  schedule,
+  cache,
+  professorRatings,
+  getSwapCandidates,
+  onSwap,
+  colorMap = EMPTY_COLOR_MAP,
+}: CalendarViewProps) {
   const isCompactCalendar = useMediaQuery("(max-width: 1200px)");
   const prefersReduced = useMediaQuery("(prefers-reduced-motion: reduce)") ?? false;
 
-  const { displayedSchedule, animationPhase, captureAndPark } = useScheduleTransition(
-    schedule,
-    prefersReduced,
-  );
-
-  useImperativeHandle(ref, () => ({ captureAndPark }), [captureAndPark]);
+  const { displayedSchedule, animationPhase } = useScheduleTransition(schedule, prefersReduced);
 
   const swap = useSwapModal(getSwapCandidates, cache);
 
@@ -224,4 +219,4 @@ export const CalendarView = forwardRef<CalendarViewHandle, CalendarViewProps>(fu
       </Modal>
     </Box>
   );
-});
+}

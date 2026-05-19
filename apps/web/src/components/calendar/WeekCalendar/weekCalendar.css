@@ -132,12 +132,12 @@
 }
 
 [data-phase="exiting"] .cal-event {
-  animation: cal-exit-down 100ms ease-in forwards;
+  animation: cal-exit-down 180ms ease-in forwards;
   pointer-events: none;
 }
 
 [data-phase="entering"] .cal-event {
-  animation: cal-enter-up 100ms ease-out forwards;
+  animation: cal-enter-up 220ms ease-out forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {

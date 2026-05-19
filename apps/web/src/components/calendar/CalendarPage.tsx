@@ -1,5 +1,5 @@
 import "./calendar.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Box, Button, Group, Stack, Text, Title, Tooltip } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import {
@@ -13,7 +13,7 @@ import {
 } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
-import { CalendarView, type CalendarViewHandle } from "./CalendarView";
+import { CalendarView } from "./CalendarView";
 import { ResetModal } from "../shared/ResetModal";
 import { buildScheduleIcs, downloadTextFile } from "schedule";
 import { useShareUrl } from "../../hooks/useShareUrl";
@@ -88,8 +88,6 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
   const canUseSeedNavigation =
     !isBasic || canGenerateBasicSchedule(basicPinnedCourses.length, basicElectivesCount);
 
-  const morphRef = useRef<CalendarViewHandle>(null);
-
   const [controlsOpen, setControlsOpen] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [timetableStartDate, setTimetableStartDate] = useState("");
@@ -117,13 +115,11 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
 
   const handlePrevious = async () => {
     if (scheduleGenerating || !canUseSeedNavigation) return;
-    morphRef.current?.captureAndPark();
     await goToPreviousSeed();
   };
 
   const handleNext = async () => {
     if (scheduleGenerating || !canUseSeedNavigation) return;
-    morphRef.current?.captureAndPark();
     await goToNextSeed();
   };
 
@@ -163,7 +159,6 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
         <>
           <BasicCalendarHeaderActions onBack={onBack} />
           <BasicCalendarSidebarControls
-            onBeforeNavigate={() => morphRef.current?.captureAndPark()}
             onDownloadIcs={handleDownloadIcs}
             downloadDisabled={!dateRangeOk || !currentSchedule}
           />
@@ -412,7 +407,6 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
           }}
         >
           <CalendarView
-            ref={morphRef}
             schedule={currentSchedule}
             cache={cache}
             professorRatings={professorRatings}
