@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.0.0-beta.16](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.15...uoplan-monorepo-v1.0.0-beta.16) (2026-05-19)
+
+
+### Features
+
+* add aggregated A+ and pass percentage to profs in explore ([a476db7](https://github.com/uoplan/uoplan/commit/a476db73e83ac0874a17dffac35e6d4f5ac365a5))
+* add aggregated A+ and pass percentage to profs in explore ([9abd355](https://github.com/uoplan/uoplan/commit/9abd355b2195ec274b6c3de570e28d1e133bbe0f))
+* add better search results for explore ([a8157fc](https://github.com/uoplan/uoplan/commit/a8157fcb6d0e2f3b38028423439576f1378261de))
+* add course blacklist generation option ([e8fcce2](https://github.com/uoplan/uoplan/commit/e8fcce2539ba7dfac10af9b5cf2cd1605aca893a))
+* add discipline to the search results for explore ([21a0889](https://github.com/uoplan/uoplan/commit/21a0889aea8f3300a0371201728faaaccb6e411c))
+* add ics download button on basic calendar ([5973747](https://github.com/uoplan/uoplan/commit/59737477af0c4b3f046457050a2726bfd543b347))
+* add warning when out of schedules ([d4cdec3](https://github.com/uoplan/uoplan/commit/d4cdec3dc0f1b6ba5f13885b910df0a5ef452547))
+* disable back animation on mobile ([ece7922](https://github.com/uoplan/uoplan/commit/ece79226fccb8c747422ca078ebe1c779798e2a2))
+* reduce cls by reserving space for calendar header ([f6fbb21](https://github.com/uoplan/uoplan/commit/f6fbb21a95c467847d163906fa1df6a96a886fc3))
+* show start and end dates for whole schedule, and week count ([94785d3](https://github.com/uoplan/uoplan/commit/94785d3e04964ef1f9ab9005721f926df1e6bedf))
+* use better wording for week header ([282e939](https://github.com/uoplan/uoplan/commit/282e9396bc81150ce091fe076f7a9fe3f2cb0544))
+* use error modal instead of sidebar error card ([96761fb](https://github.com/uoplan/uoplan/commit/96761fb0fd7d1274a89fbb6a8afe103763476e55))
+
+
+### Bug Fixes
+
+* add top padding to reset modal ([d73744c](https://github.com/uoplan/uoplan/commit/d73744c38a536b227560b394bd3b8cd4cb3022f3))
+* deduplicate prof names ([884e246](https://github.com/uoplan/uoplan/commit/884e24641b4fb4d4c3cfe03b122ceb98e9568791))
+* disable zooming on mobile ([443c307](https://github.com/uoplan/uoplan/commit/443c3076fd4f77c3dc65687a3366b7a69cb2f012))
+* fix bug where generating too quickly causes schedule to get stuck ([b8ace86](https://github.com/uoplan/uoplan/commit/b8ace8623c5df8e26e761c4e91778f6f2828343a))
+* jump to busiest week on first generation ([ea51d2e](https://github.com/uoplan/uoplan/commit/ea51d2ec3b95200b414c9f8236eb77c7ec9fe7b6))
+* simplify amimation to avoid race condition ([541bbfa](https://github.com/uoplan/uoplan/commit/541bbfa649b95b1799279b9517807bc4e0f16235))
+* translate disciplines into french ([918787c](https://github.com/uoplan/uoplan/commit/918787c6c8366838c45190b4295c4fd8e994bc11))
+* use correct count for schedule week ([b220b16](https://github.com/uoplan/uoplan/commit/b220b1678f30b864edf361561da37ca88e9e9ffc))
+
 ## [1.0.0-beta.15](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.14...uoplan-monorepo-v1.0.0-beta.15) (2026-05-18)
 
 
