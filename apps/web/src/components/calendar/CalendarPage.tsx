@@ -164,6 +164,8 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
           <BasicCalendarHeaderActions onBack={onBack} />
           <BasicCalendarSidebarControls
             onBeforeNavigate={() => morphRef.current?.captureAndPark()}
+            onDownloadIcs={handleDownloadIcs}
+            downloadDisabled={!dateRangeOk || !currentSchedule}
           />
         </>
       ) : (
@@ -288,16 +290,18 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
         </>
       )}
 
-      <Button
-        size="sm"
-        color="violet"
-        variant="filled"
-        radius={0}
-        disabled={!dateRangeOk || !currentSchedule}
-        onClick={handleDownloadIcs}
-      >
-        {tr("calendarPage.downloadIcs")}
-      </Button>
+      {!isBasic && (
+        <Button
+          size="sm"
+          color="violet"
+          variant="filled"
+          radius={0}
+          disabled={!dateRangeOk || !currentSchedule}
+          onClick={handleDownloadIcs}
+        >
+          {tr("calendarPage.downloadIcs")}
+        </Button>
+      )}
 
       {!isBasic && (
         <Button

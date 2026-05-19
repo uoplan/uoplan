@@ -23,8 +23,12 @@ import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 
 export function BasicCalendarSidebarControls({
   onBeforeNavigate,
+  onDownloadIcs,
+  downloadDisabled,
 }: {
   onBeforeNavigate?: () => void;
+  onDownloadIcs?: () => void;
+  downloadDisabled?: boolean;
 }) {
   const {
     cache,
@@ -330,6 +334,19 @@ export function BasicCalendarSidebarControls({
             {tr("calendarPage.next")}
           </Button>
         </Button.Group>
+
+        {onDownloadIcs && (
+          <Button
+            size="sm"
+            color="violet"
+            variant="filled"
+            radius={0}
+            disabled={downloadDisabled}
+            onClick={onDownloadIcs}
+          >
+            {tr("calendarPage.downloadIcs")}
+          </Button>
+        )}
       </Stack>
 
       <Box style={{ borderTop: "1px solid #2C2E33", paddingTop: 16, marginTop: 8 }}>
