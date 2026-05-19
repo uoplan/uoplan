@@ -26,6 +26,7 @@ import { Route as ScheduleStepAssignRouteImport } from './routes/schedule/step/a
 import { Route as ScheduleCalendarBasicRouteImport } from './routes/schedule/calendar/basic'
 import { Route as ScheduleCalendarAdvancedRouteImport } from './routes/schedule/calendar/advanced'
 import { Route as ExploreProfessorLegacyIdRouteImport } from './routes/explore/professor/$legacyId'
+import { Route as ExploreDisciplineDisciplineRouteImport } from './routes/explore/discipline/$discipline'
 import { Route as ExploreCourseCourseRouteImport } from './routes/explore/course/$course'
 
 const GraphRoute = GraphRouteImport.update({
@@ -115,6 +116,12 @@ const ExploreProfessorLegacyIdRoute =
     path: '/professor/$legacyId',
     getParentRoute: () => ExploreRouteRoute,
   } as any)
+const ExploreDisciplineDisciplineRoute =
+  ExploreDisciplineDisciplineRouteImport.update({
+    id: '/discipline/$discipline',
+    path: '/discipline/$discipline',
+    getParentRoute: () => ExploreRouteRoute,
+  } as any)
 const ExploreCourseCourseRoute = ExploreCourseCourseRouteImport.update({
   id: '/course/$course',
   path: '/course/$course',
@@ -130,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/explore/': typeof ExploreIndexRoute
   '/schedule/': typeof ScheduleIndexRoute
   '/explore/course/$course': typeof ExploreCourseCourseRoute
+  '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
   '/explore/professor/$legacyId': typeof ExploreProfessorLegacyIdRoute
   '/schedule/calendar/advanced': typeof ScheduleCalendarAdvancedRoute
   '/schedule/calendar/basic': typeof ScheduleCalendarBasicRoute
@@ -148,6 +156,7 @@ export interface FileRoutesByTo {
   '/explore': typeof ExploreIndexRoute
   '/schedule': typeof ScheduleIndexRoute
   '/explore/course/$course': typeof ExploreCourseCourseRoute
+  '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
   '/explore/professor/$legacyId': typeof ExploreProfessorLegacyIdRoute
   '/schedule/calendar/advanced': typeof ScheduleCalendarAdvancedRoute
   '/schedule/calendar/basic': typeof ScheduleCalendarBasicRoute
@@ -169,6 +178,7 @@ export interface FileRoutesById {
   '/explore/': typeof ExploreIndexRoute
   '/schedule/': typeof ScheduleIndexRoute
   '/explore/course/$course': typeof ExploreCourseCourseRoute
+  '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
   '/explore/professor/$legacyId': typeof ExploreProfessorLegacyIdRoute
   '/schedule/calendar/advanced': typeof ScheduleCalendarAdvancedRoute
   '/schedule/calendar/basic': typeof ScheduleCalendarBasicRoute
@@ -191,6 +201,7 @@ export interface FileRouteTypes {
     | '/explore/'
     | '/schedule/'
     | '/explore/course/$course'
+    | '/explore/discipline/$discipline'
     | '/explore/professor/$legacyId'
     | '/schedule/calendar/advanced'
     | '/schedule/calendar/basic'
@@ -209,6 +220,7 @@ export interface FileRouteTypes {
     | '/explore'
     | '/schedule'
     | '/explore/course/$course'
+    | '/explore/discipline/$discipline'
     | '/explore/professor/$legacyId'
     | '/schedule/calendar/advanced'
     | '/schedule/calendar/basic'
@@ -229,6 +241,7 @@ export interface FileRouteTypes {
     | '/explore/'
     | '/schedule/'
     | '/explore/course/$course'
+    | '/explore/discipline/$discipline'
     | '/explore/professor/$legacyId'
     | '/schedule/calendar/advanced'
     | '/schedule/calendar/basic'
@@ -370,6 +383,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExploreProfessorLegacyIdRouteImport
       parentRoute: typeof ExploreRouteRoute
     }
+    '/explore/discipline/$discipline': {
+      id: '/explore/discipline/$discipline'
+      path: '/discipline/$discipline'
+      fullPath: '/explore/discipline/$discipline'
+      preLoaderRoute: typeof ExploreDisciplineDisciplineRouteImport
+      parentRoute: typeof ExploreRouteRoute
+    }
     '/explore/course/$course': {
       id: '/explore/course/$course'
       path: '/course/$course'
@@ -383,12 +403,14 @@ declare module '@tanstack/react-router' {
 interface ExploreRouteRouteChildren {
   ExploreIndexRoute: typeof ExploreIndexRoute
   ExploreCourseCourseRoute: typeof ExploreCourseCourseRoute
+  ExploreDisciplineDisciplineRoute: typeof ExploreDisciplineDisciplineRoute
   ExploreProfessorLegacyIdRoute: typeof ExploreProfessorLegacyIdRoute
 }
 
 const ExploreRouteRouteChildren: ExploreRouteRouteChildren = {
   ExploreIndexRoute: ExploreIndexRoute,
   ExploreCourseCourseRoute: ExploreCourseCourseRoute,
+  ExploreDisciplineDisciplineRoute: ExploreDisciplineDisciplineRoute,
   ExploreProfessorLegacyIdRoute: ExploreProfessorLegacyIdRoute,
 }
 

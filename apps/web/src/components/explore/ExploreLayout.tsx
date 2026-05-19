@@ -15,9 +15,12 @@ import {
   createExploreCourseFuse,
   searchExplore,
 } from "../../lib/explore/gradesSearch";
+import { useAppStore } from "../../store/appStore";
+import { useShallow } from "zustand/react/shallow";
 import { ExploreBackButton } from "./ExploreHistoryContext";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "./ExploreProfessorGradesLayout";
 import { SearchResultCourseCard } from "./SearchResultCourseCard";
+import { SearchResultDisciplineCard } from "./SearchResultDisciplineCard";
 import { SearchResultProfessorCard } from "./SearchResultProfessorCard";
 
 function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
@@ -114,6 +117,18 @@ function SearchCardSection({
   );
 }
 
+const DISCIPLINE_MAX_RESULTS = 8;
+
+function buildDisciplineCourseCount(catalogue: Catalogue | null): Map<string, number> {
+  const m = new Map<string, number>();
+  if (!catalogue) return m;
+  for (const c of catalogue.courses) {
+    const disc = c.code.split(/\s+/)[0]?.toUpperCase();
+    if (disc) m.set(disc, (m.get(disc) ?? 0) + 1);
+  }
+  return m;
+}
+
 export function ExploreLayout({
   showBackButton = false,
   catalogue,
@@ -134,6 +149,7 @@ export function ExploreLayout({
   useLingui();
   const { loading, data: grades } = useCourseGradesPb();
   const navigate = useNavigate();
+  const disciplines = useAppStore(useShallow((s) => s.disciplines));
 
   const [query, setQueryState] = useState(initialQuery);
   const [debouncedQuery] = useDebouncedValue(query, 120);
@@ -170,9 +186,26 @@ export function ExploreLayout({
     return searchExplore(q, { courseFuse, courseEntries, professorEntries });
   }, [debouncedQuery, courseFuse, courseEntries, professorEntries]);
 
+  const disciplineCourseCount = useMemo(() => buildDisciplineCourseCount(catalogue), [catalogue]);
+
+  const disciplineResults = useMemo(() => {
+    const q = debouncedQuery.trim().toLowerCase();
+    if (!q || !disciplines) return [];
+    return disciplines
+      .filter(
+        (d) =>
+          d.code.toLowerCase().includes(q) ||
+          d.name.toLowerCase().includes(q) ||
+          (d.nameFr?.toLowerCase().includes(q) ?? false),
+      )
+      .slice(0, DISCIPLINE_MAX_RESULTS);
+  }, [debouncedQuery, disciplines]);
+
   const showResults = query.trim().length > 0;
   const hasResults =
-    (searchResults?.courses.length ?? 0) > 0 || (searchResults?.professors.length ?? 0) > 0;
+    (searchResults?.courses.length ?? 0) > 0 ||
+    (searchResults?.professors.length ?? 0) > 0 ||
+    disciplineResults.length > 0;
 
   const coursesSection =
     searchResults && searchResults.courses.length > 0 ? (
@@ -187,6 +220,27 @@ export function ExploreLayout({
             style={{ flexShrink: 0 }}
           >
             <SearchResultCourseCard entry={entry} />
+          </motion.div>
+        ))}
+      </SearchCardSection>
+    ) : null;
+
+  const disciplinesSection =
+    disciplineResults.length > 0 ? (
+      <SearchCardSection label={tr("explore.resultsDisciplines")} delay={0.04}>
+        {disciplineResults.map((d) => (
+          <motion.div
+            key={d.code}
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.94 }}
+            transition={{ duration: 0.14, ease: "easeOut" }}
+            style={{ flexShrink: 0 }}
+          >
+            <SearchResultDisciplineCard
+              discipline={d}
+              courseCount={disciplineCourseCount.get(d.code) ?? 0}
+            />
           </motion.div>
         ))}
       </SearchCardSection>
@@ -211,8 +265,8 @@ export function ExploreLayout({
     ) : null;
 
   const orderedSections = searchResults?.professorsFirst
-    ? [professorsSection, coursesSection]
-    : [coursesSection, professorsSection];
+    ? [professorsSection, coursesSection, disciplinesSection]
+    : [coursesSection, disciplinesSection, professorsSection];
 
   return (
     <Box
