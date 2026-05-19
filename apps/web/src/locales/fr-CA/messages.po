@@ -381,6 +381,12 @@ msgstr "Passez en revue vos horaires générés. Cliquez sur un bloc pour échan
 msgid "calendarPage.title"
 msgstr "Votre horaire hebdomadaire"
 
+msgid "calendarPage.weekCount"
+msgstr "{weeks, plural, one {1 semaine} other {se répète pendant # semaines}}"
+
+msgid "calendarPage.weekOf"
+msgstr "Horaire semaine {current}/{total}"
+
 msgid "calendarPage.undoSwap"
 msgstr "Annuler l'echange"
 

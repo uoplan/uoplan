@@ -423,6 +423,12 @@ msgstr "Review your generated schedules. Click a block to swap courses."
 msgid "calendarPage.title"
 msgstr "Your weekly timetable"
 
+msgid "calendarPage.weekCount"
+msgstr "{weeks, plural, one {1 week} other {repeats for # weeks}}"
+
+msgid "calendarPage.weekOf"
+msgstr "Week schedule {current}/{total}"
+
 msgid "calendarPage.undoSwap"
 msgstr "Undo swap"
 

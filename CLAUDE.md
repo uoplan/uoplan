@@ -51,3 +51,13 @@ Orchestration lives in **`apps/web/src/lib/generateSchedulesAction.ts`**. The pu
 ### URL sharing
 
 `apps/web/src/store/slices/url.ts` (and related) encodes state for shareable URLs.
+
+### Internationalisation (i18n)
+
+All user-visible text in `apps/web` must be translated into both **English** and **French (Canadian)**. The app uses [Lingui](https://lingui.dev/) with ICU message format.
+
+- Translation catalogs: `apps/web/src/locales/en/messages.po` and `apps/web/src/locales/fr-CA/messages.po`
+- Translation helper: `tr(id, values?)` from `apps/web/src/i18n` — usable anywhere (components, utility functions, etc.)
+- Plural forms use ICU syntax: `{count, plural, one {# item} other {# items}}`
+- Components that call `tr()` must call `useLingui()` to re-render on locale change
+- When adding any new string, add the `msgid`/`msgstr` entry to **both** PO files in the same PR
