@@ -1098,3 +1098,15 @@ msgstr "Explore how uOttawa professors connect through shared courses. Interacti
 msgid "seo.graph.keywords"
 msgstr "uottawa professors, uottawa co-teaching, university of ottawa faculty network, uottawa course overlap"
 
+msgid "search.noResults"
+msgstr "No results for \"{q}\""
+
+msgid "search.passingPercent"
+msgstr "{percent}% passing"
+
+msgid "search.noRating"
+msgstr "No rating"
+
+msgid "search.noGradeData"
+msgstr "No grade data"
+

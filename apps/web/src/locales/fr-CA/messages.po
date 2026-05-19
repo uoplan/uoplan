@@ -1079,3 +1079,15 @@ msgstr "Explorez comment les professeur·e·s de l'uOttawa sont relié·e·s par
 msgid "seo.graph.keywords"
 msgstr "professeurs uottawa, co-enseignement uottawa, réseau de faculté uottawa"
 
+msgid "search.noResults"
+msgstr "Aucun résultat pour « {q} »"
+
+msgid "search.passingPercent"
+msgstr "{percent} % de réussite"
+
+msgid "search.noRating"
+msgstr "Pas de note"
+
+msgid "search.noGradeData"
+msgstr "Pas de données"
+

@@ -145,6 +145,7 @@ export function ExploreProfessorSummaryBar({
                 ? String(group.legacyId)
                 : encodeURIComponent(group.displayName),
           }}
+          search={{ q: undefined }}
           onClick={(e) => {
             if (stopPropagation) e.stopPropagation();
             if (currentEntry) push(currentEntry);
@@ -236,6 +237,7 @@ function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSummaryBa
         <Link
           to="/explore/course/$course"
           params={{ course: courseNormToPathParam(group.groupId) }}
+          search={{ q: undefined }}
           onClick={(e) => {
             e.stopPropagation();
             if (currentEntry) push(currentEntry);

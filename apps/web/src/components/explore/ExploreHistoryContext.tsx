@@ -3,7 +3,7 @@ import { Group, Text, UnstyledButton } from "@mantine/core";
 import { IconChevronLeft } from "@tabler/icons-react";
 
 export type ExploreHistoryEntry = {
-  to: "/explore/" | "/explore/course/$course" | "/explore/professor/$legacyId";
+  to: "/explore" | "/explore/course/$course" | "/explore/professor/$legacyId";
   params?: { course: string } | { legacyId: string };
   label: string;
 };

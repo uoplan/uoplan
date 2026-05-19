@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useShallow } from "zustand/react/shallow";
-import {
-  ExploreSearchPage,
-  type ExploreSearchNavigate,
-} from "../../../components/explore/ExploreSearchPage";
+import { ExploreLayout } from "../../../components/explore/ExploreLayout";
+import { ExploreCoursePage } from "../../../components/explore/ExploreCoursePage";
 import { useAppStore } from "../../../store/appStore";
 
 export const Route = createFileRoute("/explore/course/$course")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    q: typeof search.q === "string" && search.q.length > 0 ? search.q : undefined,
+  }),
   component: ExploreCourseRoute,
 });
 
@@ -19,16 +20,30 @@ function ExploreCourseRoute() {
     })),
   );
 
-  const navigate = Route.useNavigate();
   const { course } = Route.useParams();
+  const { q } = Route.useSearch();
+  const navigate = Route.useNavigate();
 
   return (
-    <ExploreSearchPage
+    <ExploreLayout
+      showBackButton
       catalogue={catalogue}
       terms={terms ?? []}
       professorRatings={professorRatings}
-      navigateExplore={navigate as ExploreSearchNavigate}
-      urlCourseParam={course}
-    />
+      initialQuery={q ?? ""}
+      onQueryChange={(v) =>
+        void navigate({
+          search: { q: v.length > 0 ? v : undefined },
+          replace: true,
+        })
+      }
+    >
+      <ExploreCoursePage
+        urlCourseParam={course}
+        catalogue={catalogue}
+        terms={terms ?? []}
+        professorRatings={professorRatings}
+      />
+    </ExploreLayout>
   );
 }

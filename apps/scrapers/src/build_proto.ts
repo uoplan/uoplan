@@ -275,10 +275,30 @@ function mapSchedules(input: any): any {
   };
 }
 
+function mapDisciplinesJson(input: unknown): {
+  disciplines: Array<{ code: string; name: string }>;
+} {
+  const obj = input && typeof input === "object" ? (input as Record<string, unknown>) : {};
+  const rows = Array.isArray(obj.disciplines) ? obj.disciplines : [];
+
+  return {
+    disciplines: rows
+      .map((row) => {
+        const r = row && typeof row === "object" ? (row as Record<string, unknown>) : {};
+        const code = normalizeCode(r.code);
+        const name = String(r.name ?? "").trim();
+        if (!code || !name) return null;
+        return { code, name };
+      })
+      .filter((row): row is { code: string; name: string } => row != null),
+  };
+}
+
 function mapGradesJson(rows: unknown[]) {
   if (!Array.isArray(rows)) {
     throw new Error("grades.json: expected top-level array");
   }
+
   return {
     courses: rows
       .map((row: unknown) => {
@@ -396,6 +416,12 @@ async function main(): Promise<void> {
     }).finish(),
   );
 
+  const disciplinesJson = await readJson<unknown>(path.join(SCRAPER_DATA_DIR, "disciplines.json"));
+  await writePb(
+    path.join(WEB_PUBLIC_DATA_DIR, "disciplines.pb"),
+    DataProto.DisciplinesData.encode(mapDisciplinesJson(disciplinesJson)).finish(),
+  );
+
   for (const fileName of yearCatalogues) {
     const fullPath = path.join(SCRAPER_DATA_DIR, fileName);
     const data = await readJson<JsonObject>(fullPath);
@@ -417,7 +443,7 @@ async function main(): Promise<void> {
   );
 
   console.log(
-    `Generated protobuf data: ${yearCatalogues.length} catalogue files, ${scheduleFiles.length} schedule files, grades.pb`,
+    `Generated protobuf data: ${yearCatalogues.length} catalogue files, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb`,
   );
 }
 

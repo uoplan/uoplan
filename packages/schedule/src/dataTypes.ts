@@ -11,7 +11,9 @@ import type {
   CourseIndex as ProtoCourseIndex,
   CoursePrereqNode as ProtoCoursePrereqNode,
   CourseSchedule as ProtoCourseSchedule,
+  Discipline as ProtoDiscipline,
   DisciplineLevel as ProtoDisciplineLevel,
+  DisciplinesData as ProtoDisciplinesData,
   GradeProfessorOffering as ProtoGradeProfessorOffering,
   GradesData as ProtoGradesData,
   Indices as ProtoIndices,
@@ -229,6 +231,15 @@ export type Professor = {
 export type RateMyProfessorsData = {
   resultCount: number;
   professors: Professor[];
+};
+
+export type Discipline = {
+  code: string;
+  name: string;
+};
+
+export type DisciplinesData = {
+  disciplines: Discipline[];
 };
 
 function reqTypeFromProto(value: RequirementType): ProgramRequirement["type"] {
@@ -754,6 +765,28 @@ export function fromProtoRateMyProfessorsData(
       rating: professor.rating ?? null,
       ...(professor.numRatings !== undefined ? { numRatings: Number(professor.numRatings) } : {}),
     })),
+  };
+}
+
+export function toProtoDisciplinesData(input: DisciplinesData): ProtoDisciplinesData {
+  return {
+    disciplines: input.disciplines.map(
+      (discipline): ProtoDiscipline => ({
+        code: discipline.code,
+        name: discipline.name,
+      }),
+    ),
+  };
+}
+
+export function fromProtoDisciplinesData(input: ProtoDisciplinesData): DisciplinesData {
+  return {
+    disciplines: input.disciplines.map(
+      (discipline): Discipline => ({
+        code: discipline.code,
+        name: discipline.name,
+      }),
+    ),
   };
 }
 
