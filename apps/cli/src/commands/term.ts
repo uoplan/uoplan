@@ -2,7 +2,7 @@ import { Command } from "commander";
 import chalk from "chalk";
 import ora from "ora";
 import * as clack from "@clack/prompts";
-import { getSession } from "../auth/keychain.ts";
+import { getSession, setTerm } from "../auth/keychain.ts";
 import { buildClient, AuthExpiredError } from "../api/client.ts";
 import { listTerms, selectTerm } from "../api/terms.ts";
 
@@ -55,7 +55,8 @@ async function runInteractive(): Promise<void> {
 
   try {
     const { client } = await buildClient(session);
-    await selectTerm(client, selected as number);
+    const strm = await selectTerm(client, selected as number);
+    setTerm(strm, selected as number);
     spinner2.succeed(`Term set to ${chalk.bold(terms[selected as number].name)}.`);
   } catch (err) {
     spinner2.fail();

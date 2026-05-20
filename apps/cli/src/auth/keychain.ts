@@ -16,6 +16,9 @@ export interface SessionCookie {
 export interface StoredSession {
   cookies: SessionCookie[];
   savedAt: number;
+  strm?: string;
+  termIndex?: number;
+  cartUrl?: string;
 }
 
 export function getSession(): StoredSession | null {
@@ -43,6 +46,12 @@ export function setSession(session: StoredSession): void {
   execSync(`security add-generic-password -a ${ACCOUNT} -s ${SERVICE} -w '${json}'`, {
     stdio: "ignore",
   });
+}
+
+export function setTerm(strm: string, termIndex: number, cartUrl?: string): void {
+  const session = getSession();
+  if (!session) return;
+  setSession({ ...session, strm, termIndex, ...(cartUrl ? { cartUrl } : {}) });
 }
 
 export function deleteSession(): void {
