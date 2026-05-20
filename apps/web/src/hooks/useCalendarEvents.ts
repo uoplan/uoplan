@@ -1,12 +1,12 @@
 import { useMemo } from "react";
-import type { GeneratedSchedule, DayOfWeekCode } from "schedule";
-import type { ProfessorRatingsMap } from "schedule";
+import type { GeneratedSchedule, DayOfWeekCode } from "@uoplan/schedule";
+import type { ProfessorRatingsMap } from "@uoplan/schedule";
 import {
   getRatingsForInstructors,
   getRatingDetailsForInstructors,
   normalizeGradeVizDistribution,
   type GradeVizData,
-} from "schedule";
+} from "@uoplan/schedule";
 
 export interface CalendarEvent {
   id: string;

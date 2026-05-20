@@ -1,12 +1,12 @@
 import { useState, useMemo, type MouseEvent } from "react";
 import { Stack, Text, Badge, Group, Collapse, Alert, Paper } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
-import type { DataCache } from "schedule";
+import type { DataCache } from "@uoplan/schedule";
 import type {
   RemainingRequirement,
   RequirementWithStatus,
   CompletedRequirementItem,
-} from "schedule";
+} from "@uoplan/schedule";
 import { RequirementNode, getStableNodeKey, getNodeDisplayTitle } from "./RequirementNode";
 import {
   applyOptionSelections,

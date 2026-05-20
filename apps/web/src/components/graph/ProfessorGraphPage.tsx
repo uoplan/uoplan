@@ -15,7 +15,7 @@ import { useDebouncedValue, useMediaQuery } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
 import { IconSearch } from "@tabler/icons-react";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
-import type { ProfessorGraphNode } from "schedule";
+import type { ProfessorGraphNode } from "@uoplan/schedule";
 import { tr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useProfessorGraphBuild } from "../../hooks/useProfessorGraphBuild";

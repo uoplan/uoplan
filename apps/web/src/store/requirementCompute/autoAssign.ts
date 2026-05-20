@@ -1,5 +1,5 @@
-import type { RemainingRequirement } from "schedule";
-import { normalizeCourseCode, type DataCache, getCourseCredits } from "schedule";
+import type { RemainingRequirement } from "@uoplan/schedule";
+import { normalizeCourseCode, type DataCache, getCourseCredits } from "@uoplan/schedule";
 import { isStrictSubset } from "./utils";
 
 export function getAutoSelectedForRequirements(

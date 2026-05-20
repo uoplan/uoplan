@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { ActionIcon, Box, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { IconLock, IconLockFilled, IconBan } from "@tabler/icons-react";
-import { normalizeCourseCode } from "schedule";
-import type { DataCache, GeneratedSchedule, ProfessorRatingsMap } from "schedule";
+import { normalizeCourseCode } from "@uoplan/schedule";
+import type { DataCache, GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/schedule";
 import type { SwapCandidateOption, SwapModalState, SwapResult } from "../../hooks/useSwapModal";
 import { tr } from "../../i18n";
 import {

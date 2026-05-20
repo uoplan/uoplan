@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { generateRandomSeed } from "schedule";
+import { generateRandomSeed } from "@uoplan/schedule";
 import type { AppStore } from "./types";
 import { LOCAL_STORAGE_KEY } from "./constants";
 import {

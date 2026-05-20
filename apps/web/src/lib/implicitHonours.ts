@@ -1,6 +1,6 @@
-import type { DataCache } from "schedule";
-import type { RemainingRequirement } from "schedule";
-import { getEffectiveSchedule, isHonoursProject, normalizeCourseCode } from "schedule";
+import type { DataCache } from "@uoplan/schedule";
+import type { RemainingRequirement } from "@uoplan/schedule";
+import { getEffectiveSchedule, isHonoursProject, normalizeCourseCode } from "@uoplan/schedule";
 import { virtualScheduleFilterApplies } from "./electiveEligibility";
 
 type ImplicitHonoursPick = { code: string; requirementId: string };

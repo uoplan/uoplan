@@ -1,4 +1,4 @@
-import type { DataCache, RemainingRequirement, RequirementWithStatus } from "schedule";
+import type { DataCache, RemainingRequirement, RequirementWithStatus } from "@uoplan/schedule";
 import {
   normalizeCourseCode,
   courseMatchesFilters,
@@ -8,7 +8,7 @@ import {
   groupTokenPrefix,
   makeGroupToken,
   subjectPrefix,
-} from "schedule";
+} from "@uoplan/schedule";
 import {
   isElectiveRequirementType,
   isWithinElectiveLevelCap,

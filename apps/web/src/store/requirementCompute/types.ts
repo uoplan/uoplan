@@ -2,7 +2,7 @@ import type {
   RemainingRequirement,
   RequirementWithStatus,
   CompletedRequirementItem,
-} from "schedule";
+} from "@uoplan/schedule";
 
 export interface RecomputedState {
   remainingRequirements: RemainingRequirement[];

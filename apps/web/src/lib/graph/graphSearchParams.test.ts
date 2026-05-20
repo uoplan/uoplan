@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ProfessorGraphNode } from "schedule";
+import type { ProfessorGraphNode } from "@uoplan/schedule";
 import { parseProfessorSearchParam, professorToSearchParam } from "./graphSearchParams";
 
 function node(

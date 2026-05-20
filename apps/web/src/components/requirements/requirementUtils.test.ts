@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import type { DataCache } from "schedule";
-import type { RequirementWithStatus } from "schedule";
-import { isGroupToken, normalizeCourseCode } from "schedule";
+import type { DataCache } from "@uoplan/schedule";
+import type { RequirementWithStatus } from "@uoplan/schedule";
+import { isGroupToken, normalizeCourseCode } from "@uoplan/schedule";
 import { i18n } from "../../i18n";
 import {
   applyOptionSelections,

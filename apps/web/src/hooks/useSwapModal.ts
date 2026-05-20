@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import type { DataCache } from "schedule";
-import type { GradeVizData } from "schedule";
+import type { DataCache } from "@uoplan/schedule";
+import type { GradeVizData } from "@uoplan/schedule";
 
 /**
  * Type for the swap candidates getter function.

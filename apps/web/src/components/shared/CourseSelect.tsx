@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { DataCache } from "schedule";
+import type { DataCache } from "@uoplan/schedule";
 
 /** Options use label = code so selected pills show only the code; use renderOption in MultiSelect to show "code – title" in the dropdown. */
 export function createCourseOptions(

@@ -1,12 +1,12 @@
 import Fuse from "fuse.js";
 import type { IFuseOptions } from "fuse.js";
-import type { CourseGradesData, GradeVizData, ProfessorRatingsMap } from "schedule";
+import type { CourseGradesData, GradeVizData, ProfessorRatingsMap } from "@uoplan/schedule";
 import {
   normalizeCourseCode,
   normalizeProfessorName,
   normalizeGradeVizDistribution,
   getCourseLanguageBucket,
-} from "schedule";
+} from "@uoplan/schedule";
 import { searchProfessorsScored, type ProfessorSearchEntry } from "../graph/professorGraphSearch";
 import { formatUottawaTermIdLabel } from "./uottawaTermId";
 import { getCourseLevel, type ExploreFilterLevel } from "./exploreFilters";

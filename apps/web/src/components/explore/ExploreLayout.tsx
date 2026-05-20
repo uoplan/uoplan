@@ -4,8 +4,8 @@ import { useDebouncedValue } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState, type ReactNode } from "react";
-import type { Catalogue, ProfessorRatingsMap, Term } from "schedule";
-import { normalizeCourseCode } from "schedule";
+import type { Catalogue, ProfessorRatingsMap, Term } from "@uoplan/schedule";
+import { normalizeCourseCode } from "@uoplan/schedule";
 import { tr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import {

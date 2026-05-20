@@ -1,8 +1,8 @@
 import { Alert, MultiSelect, Text, Stack } from "@mantine/core";
 import type { ComboboxItem } from "@mantine/core";
 import { createCourseOptions, renderCourseOption } from "../shared/CourseSelect";
-import type { DataCache } from "schedule";
-import type { RemainingRequirement } from "schedule";
+import type { DataCache } from "@uoplan/schedule";
+import type { RemainingRequirement } from "@uoplan/schedule";
 import { tr } from "../../i18n";
 
 interface CompletedCoursesStepProps {

@@ -3,8 +3,8 @@ import {
   applyYearPrerequisites,
   normalizeCourseCode,
   removeMergedCoursesSupersededByAliases,
-} from "schedule";
-import type { Catalogue, Course } from "schedule";
+} from "@uoplan/schedule";
+import type { Catalogue, Course } from "@uoplan/schedule";
 
 /**
  * Merges the latest catalogue with the start-year catalogue when the user selects

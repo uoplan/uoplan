@@ -3,7 +3,7 @@ import {
   blendProfessorDisciplineColor,
   type ProfessorCoTeachingGraph,
   type ProfessorGraphNode,
-} from "schedule";
+} from "@uoplan/schedule";
 
 export type ProfessorNodeAttributes = {
   label: string | null;

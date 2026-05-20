@@ -1,19 +1,19 @@
-import type { Catalogue, Course, CourseGradesData, Program, SchedulesData } from "schedule";
+import type { Catalogue, Course, CourseGradesData, Program, SchedulesData } from "@uoplan/schedule";
 import type {
   RemainingRequirement,
   RequirementWithStatus,
   CompletedRequirementItem,
-} from "schedule";
-import type { GeneratedSchedule } from "schedule";
-import type { DayOfWeek } from "schedule";
-import type { DataCache } from "schedule";
-import type { CourseLanguageBucket, CourseLevelBucket } from "schedule";
-import type { Indices } from "schedule";
-import type { Term } from "schedule";
-import type { ProfessorRatingsMap } from "schedule";
-import type { Discipline } from "schedule";
-import type { DecodedState } from "schedule";
-import type { TimetableFailureDiagnostics } from "schedule";
+} from "@uoplan/schedule";
+import type { GeneratedSchedule } from "@uoplan/schedule";
+import type { DayOfWeek } from "@uoplan/schedule";
+import type { DataCache } from "@uoplan/schedule";
+import type { CourseLanguageBucket, CourseLevelBucket } from "@uoplan/schedule";
+import type { Indices } from "@uoplan/schedule";
+import type { Term } from "@uoplan/schedule";
+import type { ProfessorRatingsMap } from "@uoplan/schedule";
+import type { Discipline } from "@uoplan/schedule";
+import type { DecodedState } from "@uoplan/schedule";
+import type { TimetableFailureDiagnostics } from "@uoplan/schedule";
 
 export interface GenerationErrorDetails {
   emptyPools: Array<{ label: string; requirementId?: string; candidateCourses?: string[] }>;

@@ -11,15 +11,15 @@ import { Stack, MultiSelect, Text, Paper, Badge, Group, Box, Collapse, Radio } f
 import type { PaperProps } from "@mantine/core";
 import { IconCheck, IconChevronDown, IconX, IconChartCohort } from "@tabler/icons-react";
 import type { ComboboxItem } from "@mantine/core";
-import type { DataCache } from "schedule";
+import type { DataCache } from "@uoplan/schedule";
 import {
   normalizeCourseCode,
   isGroupToken,
   groupTokenPrefix,
   canonicalGroupToken,
   makeGroupTokenInstance,
-} from "schedule";
-import type { RequirementWithStatus } from "schedule";
+} from "@uoplan/schedule";
+import type { RequirementWithStatus } from "@uoplan/schedule";
 import {
   getConstrainMultiSelectOptions,
   getOptionSecondarySummaryLine,

@@ -11,9 +11,9 @@ import {
   isOptCourse,
   normalizeCourseCode,
   makeGroupTokenInstance,
-} from "schedule";
+} from "@uoplan/schedule";
 import { recomputeStateForProgram } from "../requirementCompute";
-import type { Course } from "schedule";
+import type { Course } from "@uoplan/schedule";
 import { wizardModeForEncoding } from "../../lib/calendarRoute";
 import { inferLowestVisitedSeedFromPersisted } from "../../lib/seedNavigation";
 

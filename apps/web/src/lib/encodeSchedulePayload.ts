@@ -1,5 +1,5 @@
-import { SchedulePayload } from "schedule/src/proto/cli";
-import type { GeneratedSchedule } from "schedule/src/generation/types";
+import { SchedulePayload } from "@uoplan/schedule/src/proto/cli";
+import type { GeneratedSchedule } from "@uoplan/schedule/src/generation/types";
 
 export function encodeSchedulePayload(schedule: GeneratedSchedule, termId: string): string {
   const payload: SchedulePayload = {

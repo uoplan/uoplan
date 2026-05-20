@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { Course, CourseSchedule } from "schedule";
-import type { DataCache } from "schedule";
-import type { RemainingRequirement } from "schedule";
-import { normalizeCourseCode } from "schedule";
+import type { Course, CourseSchedule } from "@uoplan/schedule";
+import type { DataCache } from "@uoplan/schedule";
+import type { RemainingRequirement } from "@uoplan/schedule";
+import { normalizeCourseCode } from "@uoplan/schedule";
 import { collectImplicitHonoursForSchedule } from "./implicitHonours";
 
 function makeCache(schedules: Record<string, CourseSchedule | undefined>): DataCache {

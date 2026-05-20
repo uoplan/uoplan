@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { buildProfessorCoTeachingGraph, professorGraphId, type CourseGradesData } from "schedule";
+import {
+  buildProfessorCoTeachingGraph,
+  professorGraphId,
+  type CourseGradesData,
+} from "@uoplan/schedule";
 import {
   buildOfferingsByProfessorId,
   getAggregateGradeViz,

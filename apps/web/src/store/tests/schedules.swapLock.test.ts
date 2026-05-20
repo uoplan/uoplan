@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { buildDataCache, normalizeCourseCode } from "schedule";
+import { buildDataCache, normalizeCourseCode } from "@uoplan/schedule";
 import type {
   Catalogue,
   GeneratedSchedule,
   RemainingRequirement,
   RequirementWithStatus,
-} from "schedule";
+} from "@uoplan/schedule";
 import { useAppStore } from "../appStore";
 
 let mockCalendarVariant: "basic" | "advanced" | null = null;

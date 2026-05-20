@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Stack, Text } from "@mantine/core";
 import { useLingui } from "@lingui/react";
-import type { Discipline } from "schedule";
+import type { Discipline } from "@uoplan/schedule";
 import { tr } from "../../i18n";
 
 type Props = {

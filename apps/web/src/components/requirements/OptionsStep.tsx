@@ -1,5 +1,5 @@
 import { Alert, Stack, Text } from "@mantine/core";
-import type { RequirementWithStatus } from "schedule";
+import type { RequirementWithStatus } from "@uoplan/schedule";
 import { getStableNodeKey } from "./RequirementNode";
 import { OptionsDrilldown } from "./OptionsDrilldown";
 import { nodeHasOptionGroups } from "./requirementUtils";

@@ -1,6 +1,6 @@
-import { normalizeCourseCode } from "schedule";
-import type { RequirementWithStatus } from "schedule";
-import type { Program, ProgramRequirement } from "schedule";
+import { normalizeCourseCode } from "@uoplan/schedule";
+import type { RequirementWithStatus } from "@uoplan/schedule";
+import type { Program, ProgramRequirement } from "@uoplan/schedule";
 
 export function collectAssignedFromExactRequirements(tree: RequirementWithStatus[]): Set<string> {
   const assigned = new Set<string>();

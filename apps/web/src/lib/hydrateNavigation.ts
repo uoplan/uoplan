@@ -1,4 +1,4 @@
-import type { DecodedState } from "schedule";
+import type { DecodedState } from "@uoplan/schedule";
 import { nodeHasOptionGroups } from "../components/requirements/requirementUtils";
 import { normalizeActiveStep, WizardStep } from "./wizardSteps";
 import type { AppStore } from "../store/types";

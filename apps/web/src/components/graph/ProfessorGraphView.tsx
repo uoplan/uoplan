@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useRef } from "react";
 import type Graph from "graphology";
 import Sigma from "sigma";
-import type { ProfessorCoTeachingGraph, ProfessorGraphNode } from "schedule";
+import type { ProfessorCoTeachingGraph, ProfessorGraphNode } from "@uoplan/schedule";
 import {
   buildSigmaGraph,
   getNeighborIds,

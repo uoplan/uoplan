@@ -1,5 +1,5 @@
 import type Graph from "graphology";
-import type { ProfessorGraphNode } from "schedule";
+import type { ProfessorGraphNode } from "@uoplan/schedule";
 
 function hashId(id: string): number {
   let h = 2166136261;

@@ -3,13 +3,13 @@ import type {
   GradeVizData,
   ProfessorCoTeachingGraph,
   ProfessorGraphNode,
-} from "schedule";
+} from "@uoplan/schedule";
 import {
   normalizeCourseCode,
   normalizeGradeVizDistribution,
   normalizeProfessorName,
   professorGraphId,
-} from "schedule";
+} from "@uoplan/schedule";
 import { mergeGradeDistributionCounts, type ExploreOfferingFlat } from "../explore/gradesSearch";
 import { formatUottawaTermIdLabel } from "../explore/uottawaTermId";
 
