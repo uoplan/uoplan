@@ -1186,10 +1186,19 @@ msgid "enrolCli.modal.title"
 msgstr "Enrol via CLI"
 
 msgid "enrolCli.modal.description"
-msgstr "Run this command in your terminal to automatically enrol in this schedule using the uoplan CLI."
+msgstr "Paste this command in your terminal to enrol in this schedule."
 
 msgid "enrolCli.modal.copy"
 msgstr "Copy"
 
 msgid "enrolCli.modal.copied"
 msgstr "Copied!"
+
+msgid "enrolCli.modal.mobileUnavailable"
+msgstr "The uoplan CLI is not available on mobile. Open this page on a desktop to use it."
+
+msgid "enrolCli.modal.stepInstall"
+msgstr "1. Install uoplan"
+
+msgid "enrolCli.modal.stepRun"
+msgstr "2. Enrol"
