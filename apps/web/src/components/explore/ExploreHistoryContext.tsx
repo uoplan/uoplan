@@ -5,6 +5,7 @@ import { IconChevronLeft } from "@tabler/icons-react";
 export type ExploreHistoryEntry = {
   to: "/explore" | "/explore/course/$course" | "/explore/professor/$legacyId";
   params?: { course: string } | { legacyId: string };
+  search?: { q?: string };
   label: string;
 };
 

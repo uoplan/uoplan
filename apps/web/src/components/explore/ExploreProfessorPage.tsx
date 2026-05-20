@@ -1,4 +1,4 @@
-import { Accordion, Anchor, Box, Group, Stack, Text, Title } from "@mantine/core";
+import { Accordion, Box, Group, Stack, Text, Title } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
@@ -12,6 +12,7 @@ import {
   EXPLORE_ACCORDION_PAD_RIGHT,
   ExploreCourseItem,
 } from "./ExploreProfessorGradesLayout";
+import { RateMyProfessorLink } from "./RateMyProfessorLink";
 
 const EXPLORE_CHEVRON_RIGHT = {
   base: "12px",
@@ -78,11 +79,6 @@ export function ExploreProfessorPage({
   const rmpEntry = professorRatings ? professorRatings[normalizeProfessorName(displayName)] : null;
   const hasRating = rmpEntry != null && Number.isFinite(rmpEntry.rating);
 
-  const rmpHref =
-    legacyId != null && Number.isFinite(legacyId) && legacyId > 0
-      ? `https://www.ratemyprofessors.com/professor/${legacyId}`
-      : null;
-
   const profRouteParam = legacyId != null ? String(legacyId) : encodeURIComponent(displayName);
 
   return (
@@ -103,23 +99,15 @@ export function ExploreProfessorPage({
           <Title order={2} c="#F8F9FA" fw={600} fz={{ base: "h3", sm: "h2" }}>
             {displayName}
           </Title>
-          {(hasRating || rmpHref) && (
+          {(hasRating || (legacyId != null && Number.isFinite(legacyId) && legacyId > 0)) && (
             <Group gap={6} align="center" mt={8} wrap="wrap">
               {hasRating ? (
                 <Text size="sm" c="dimmed">
                   {rmpEntry?.rating.toFixed(1)} · {rmpEntry?.numRatings} ratings
                 </Text>
               ) : null}
-              {rmpHref ? (
-                <Anchor
-                  href={rmpHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  size="sm"
-                  c="dimmed"
-                >
-                  RateMyProfessors
-                </Anchor>
+              {legacyId != null && Number.isFinite(legacyId) && legacyId > 0 ? (
+                <RateMyProfessorLink legacyId={legacyId} />
               ) : null}
             </Group>
           )}

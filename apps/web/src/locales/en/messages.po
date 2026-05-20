@@ -187,7 +187,7 @@ msgid "explore.profileLink"
 msgstr "Profile"
 
 msgid "explore.backToSearch"
-msgstr "← Back to explore"
+msgstr "Search results for \"{q}\""
 
 msgid "explore.professorFallback"
 msgstr "Professor"

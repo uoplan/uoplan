@@ -24,7 +24,7 @@ import {
 } from "../../lib/explore/exploreFilters";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
-import { ExploreBackButton } from "./ExploreHistoryContext";
+import { ExploreBackButton, useExploreHistory } from "./ExploreHistoryContext";
 import { ExploreFilterBar } from "./ExploreFilterBar";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "./ExploreProfessorGradesLayout";
 import { SearchResultCourseCard } from "./SearchResultCourseCard";
@@ -157,6 +157,7 @@ export function ExploreLayout({
   useLingui();
   const { loading, data: grades } = useCourseGradesPb();
   const navigate = useNavigate();
+  const { stack, pop } = useExploreHistory();
   const disciplines = useAppStore(useShallow((s) => s.disciplines));
 
   const [query, setQueryState] = useState(initialQuery);
@@ -256,7 +257,7 @@ export function ExploreLayout({
             transition={{ duration: 0.14, ease: "easeOut" }}
             style={{ flexShrink: 0 }}
           >
-            <SearchResultCourseCard entry={entry} />
+            <SearchResultCourseCard entry={entry} query={debouncedQuery} />
           </motion.div>
         ))}
       </SearchCardSection>
@@ -295,7 +296,11 @@ export function ExploreLayout({
             transition={{ duration: 0.14, ease: "easeOut" }}
             style={{ flexShrink: 0 }}
           >
-            <SearchResultProfessorCard entry={entry} professorRatings={professorRatings} />
+            <SearchResultProfessorCard
+              entry={entry}
+              professorRatings={professorRatings}
+              query={debouncedQuery}
+            />
           </motion.div>
         ))}
       </SearchCardSection>
@@ -329,10 +334,25 @@ export function ExploreLayout({
       >
         {showBackButton ? (
           <Box mb={8}>
-            <ExploreBackButton
-              entry={{ to: "/explore", label: tr("explore.title") }}
-              onBack={() => void navigate({ to: "/explore", search: { q: undefined } })}
-            />
+            {stack.length > 0 ? (
+              <ExploreBackButton
+                entry={stack[stack.length - 1]}
+                onBack={() => {
+                  const entry = stack[stack.length - 1];
+                  pop();
+                  void navigate({
+                    to: entry.to,
+                    params: entry.params as Record<string, string>,
+                    search: { q: entry.search?.q },
+                  });
+                }}
+              />
+            ) : (
+              <ExploreBackButton
+                entry={{ to: "/explore", label: tr("explore.title") }}
+                onBack={() => void navigate({ to: "/explore", search: { q: undefined } })}
+              />
+            )}
           </Box>
         ) : null}
         <Stack gap="md" maw={520}>
