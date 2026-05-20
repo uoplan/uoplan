@@ -1,5 +1,46 @@
 # Changelog
 
+## [1.0.0-beta.17](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.16...uoplan-monorepo-v1.0.0-beta.17) (2026-05-20)
+
+
+### Features
+
+* add filters to explore page ([96e0c6c](https://github.com/uoplan/uoplan/commit/96e0c6c5e95c96e859f5f56f29fe4037aa71331e))
+* add uoplan cli base ([7d16520](https://github.com/uoplan/uoplan/commit/7d165209cb8a3dd1e97eac9d7bf0219af13f33d6))
+* add uoplan run command ([a921b4a](https://github.com/uoplan/uoplan/commit/a921b4aca2f64999c385afcf795bd70b46f4080d))
+* allow dragging bottom drawer on mobile ([ba1b731](https://github.com/uoplan/uoplan/commit/ba1b7313f6043e84dab53a9b1617b801003f274d))
+* clean up sidebar for calendars ([04acba7](https://github.com/uoplan/uoplan/commit/04acba7d77d84885ac35a8d92b3deabceb748d7c))
+* **cli-rs:** rust rewrite with cross-platform release pipeline ([f4eb932](https://github.com/uoplan/uoplan/commit/f4eb93242ca4c67f73a233a63306dac3bab12f43))
+* **cli:** add course enrolment and deletion with cart ([b1766ee](https://github.com/uoplan/uoplan/commit/b1766eebc8cdce94007ddfb95ad6e07e37206d08))
+* **cli:** add course search and cart addition flow ([2ff49c5](https://github.com/uoplan/uoplan/commit/2ff49c5bd67dbbf00246889df4e954657bb6939a))
+* **cli:** add firefox support ([0fd3b63](https://github.com/uoplan/uoplan/commit/0fd3b6372c45fde872d280b2a61c74c894484a85))
+* **cli:** add publish script ([b7fea4e](https://github.com/uoplan/uoplan/commit/b7fea4e38ba6997344c8f9badbfc57ef83d38c7d))
+* **cli:** add run subcommand ([37e9c0e](https://github.com/uoplan/uoplan/commit/37e9c0e093923df4a18280ade6c52fe27f745811))
+* **cli:** add term selector ([7c0c830](https://github.com/uoplan/uoplan/commit/7c0c830ec598210156882bd6dcf5222efe0cea82))
+* **cli:** add timing to cli run subcommand ([11b9806](https://github.com/uoplan/uoplan/commit/11b980668a747b071f4d467f770cb77c2e8694c6))
+* **cli:** add update cache and version check logic ([484e0ed](https://github.com/uoplan/uoplan/commit/484e0ed9b124eb8035781f1a6c9faefaf5ac5be0))
+* **cli:** add update subcommand ([7a31b85](https://github.com/uoplan/uoplan/commit/7a31b85e02870a882de1a7163fbaaa2d599e4e05))
+* **cli:** make the cli crossplatform ([18f45f1](https://github.com/uoplan/uoplan/commit/18f45f13959b368d6ff3b6e53782805218f6e2c3))
+* **cli:** make the cli log in experience better ([5330638](https://github.com/uoplan/uoplan/commit/533063892923575a523a2729379cb470a8941a4f))
+* **cli:** match ux of rust port to original typescript ([56c6c70](https://github.com/uoplan/uoplan/commit/56c6c70cbb6b481d9914f84114bbb3bee769e4f2))
+* **cli:** persist term selection across logins ([f2d5a56](https://github.com/uoplan/uoplan/commit/f2d5a56601a579ad2cb7a00e976dd31925d71cde))
+* **cli:** replace typescript cli with rust implementation ([2dd2195](https://github.com/uoplan/uoplan/commit/2dd2195860b57280424fe4bcd18ba42d3d8dabcb))
+* **cli:** wire passive update check and update subcommand ([03c1b5a](https://github.com/uoplan/uoplan/commit/03c1b5af454ead681912f68e0650cf587e13a270))
+* **explore:** simplify explore page ([d7d889c](https://github.com/uoplan/uoplan/commit/d7d889c2b5842312f475d5da0fa5c1e7cbb416a9))
+* improve explore page display ([61ea370](https://github.com/uoplan/uoplan/commit/61ea370f1e88ab9e8da9a98b54b3c1da9ebd7d58))
+* improve layout of calendar sidebars ([59e3806](https://github.com/uoplan/uoplan/commit/59e38061f6829b883e51f8d4f0f29bd24ea7f2d4))
+* migrate to oxlint ([e802106](https://github.com/uoplan/uoplan/commit/e802106d3e064cbe684e49aeeb3869b15bf6b0d2))
+* **web:** update enrol via cli modal with platform-aware install step ([b084d78](https://github.com/uoplan/uoplan/commit/b084d782a626ec79500acbf0458e9e734b0abbd0))
+
+
+### Bug Fixes
+
+* **ci:** add bootstrap-sha for release-please ([dd41612](https://github.com/uoplan/uoplan/commit/dd4161265a114f212b1a0c29285972ab309abee2))
+* **ci:** add bootstrap-sha for release-please uoplan ([4614375](https://github.com/uoplan/uoplan/commit/4614375ccfc745661603b6a3e2e9e7d3fab6bc0f))
+* **cli:** parse icsid properly ([e48186f](https://github.com/uoplan/uoplan/commit/e48186f82e39b8bfb68e52f8b032084c0c3e3406))
+* **cli:** pass session properly ([85b3dd4](https://github.com/uoplan/uoplan/commit/85b3dd4a59717887334c43a661a9099a5ca5cc00))
+* **cli:** properly reuse term selection ([ae1392a](https://github.com/uoplan/uoplan/commit/ae1392aedbf2718266b5cbbebd4c8eef63968ac2))
+
 ## [1.0.0-beta.16](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.15...uoplan-monorepo-v1.0.0-beta.16) (2026-05-19)
 
 
