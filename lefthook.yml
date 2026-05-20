@@ -7,4 +7,8 @@ pre-commit:
       glob: "**/*.{js,jsx,ts,tsx,mjs,cjs}"
       run: pnpm exec oxlint {staged_files}
     typecheck:
+      glob: "**/*.{ts,tsx,mts,cts}"
       run: pnpm typecheck
+    cargo-check:
+      glob: "apps/cli/**"
+      run: cargo check --manifest-path apps/cli/Cargo.toml
