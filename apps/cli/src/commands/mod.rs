@@ -5,3 +5,4 @@ pub mod logout;
 pub mod run;
 pub mod search;
 pub mod term;
+pub mod update;
