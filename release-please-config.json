@@ -5,6 +5,11 @@
       "prerelease": true,
       "prerelease-type": "beta",
       "versioning": "prerelease"
+    },
+    "apps/cli": {
+      "release-type": "rust",
+      "tag-name": "cli/v${version}",
+      "package-name": "uoplan"
     }
   },
   "pull-request-title-pattern": "chore${scope}: release${component} ${version} [skip ci]"
