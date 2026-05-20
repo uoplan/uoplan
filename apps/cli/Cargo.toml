@@ -38,6 +38,7 @@ thiserror = "2"
 futures = "0.3"
 url = "2"
 cliclack = "0.5"
+uv-keyring = "0.0.40"
 
 [build-dependencies]
 prost-build = "0.14"

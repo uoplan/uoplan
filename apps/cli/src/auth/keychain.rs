@@ -1,6 +1,6 @@
 use anyhow::{anyhow, Result};
 use serde::{Deserialize, Serialize};
-use std::process::{Command, Stdio};
+use uv_keyring::Entry;
 
 const SERVICE: &str = "uoplan";
 const ACCOUNT: &str = "session";
@@ -30,65 +30,24 @@ pub struct StoredSession {
     pub cart_url: Option<String>,
 }
 
-pub fn get_session() -> Option<StoredSession> {
-    let output = Command::new("security")
-        .args([
-            "find-generic-password",
-            "-a",
-            ACCOUNT,
-            "-s",
-            SERVICE,
-            "-w",
-        ])
-        .stdout(Stdio::piped())
-        .stderr(Stdio::null())
-        .stdin(Stdio::null())
-        .output()
-        .ok()?;
-    if !output.status.success() {
-        return None;
-    }
-    let raw = String::from_utf8(output.stdout).ok()?;
-    let raw = raw.trim();
-    serde_json::from_str(raw).ok()
+pub async fn get_session() -> Option<StoredSession> {
+    let entry = Entry::new(SERVICE, ACCOUNT).ok()?;
+    let raw = entry.get_password().await.ok()?;
+    serde_json::from_str(&raw).ok()
 }
 
-pub fn set_session(session: &StoredSession) -> Result<()> {
+pub async fn set_session(session: &StoredSession) -> Result<()> {
     let json = serde_json::to_string(session)?;
-    // delete existing (ignore error)
-    let _ = Command::new("security")
-        .args([
-            "delete-generic-password",
-            "-a",
-            ACCOUNT,
-            "-s",
-            SERVICE,
-        ])
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
-        .status();
-
-    let status = Command::new("security")
-        .args([
-            "add-generic-password",
-            "-a",
-            ACCOUNT,
-            "-s",
-            SERVICE,
-            "-w",
-            &json,
-        ])
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
-        .status()?;
-    if !status.success() {
-        return Err(anyhow!("Failed to store session in keychain"));
-    }
-    Ok(())
+    let entry =
+        Entry::new(SERVICE, ACCOUNT).map_err(|e| anyhow!("Failed to access keychain: {e}"))?;
+    entry
+        .set_password(&json)
+        .await
+        .map_err(|e| anyhow!("Failed to store session in keychain: {e}"))
 }
 
-pub fn set_term(strm: &str, term_index: i64, cart_url: Option<&str>) -> Result<()> {
-    let Some(mut s) = get_session() else {
+pub async fn set_term(strm: &str, term_index: i64, cart_url: Option<&str>) -> Result<()> {
+    let Some(mut s) = get_session().await else {
         return Ok(());
     };
     s.strm = Some(strm.to_string());
@@ -96,19 +55,11 @@ pub fn set_term(strm: &str, term_index: i64, cart_url: Option<&str>) -> Result<(
     if let Some(c) = cart_url {
         s.cart_url = Some(c.to_string());
     }
-    set_session(&s)
+    set_session(&s).await
 }
 
-pub fn delete_session() {
-    let _ = Command::new("security")
-        .args([
-            "delete-generic-password",
-            "-a",
-            ACCOUNT,
-            "-s",
-            SERVICE,
-        ])
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
-        .status();
+pub async fn delete_session() {
+    if let Ok(entry) = Entry::new(SERVICE, ACCOUNT) {
+        let _ = entry.delete_credential().await;
+    }
 }

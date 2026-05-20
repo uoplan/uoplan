@@ -7,7 +7,7 @@ use crate::auth::{get_session, set_term};
 use crate::error::NoCookiesError;
 
 async fn fetch_terms() -> Result<(PeopleSoftClient, Vec<crate::api::peoplesoft::Term>)> {
-    let session = get_session().ok_or_else(|| anyhow!(NoCookiesError))?;
+    let session = get_session().await.ok_or_else(|| anyhow!(NoCookiesError))?;
     let client = PeopleSoftClient::new(session)?;
     let sp = spinner();
     sp.start("Fetching available terms…");
@@ -41,7 +41,7 @@ pub async fn interactive() -> Result<()> {
     sp.start("Selecting term…");
     let strm = select_term(&client, idx).await?;
     sp.stop("Term selected");
-    set_term(&strm, idx, None)?;
+    set_term(&strm, idx, None).await?;
     outro(&format!("Selected {}", chosen.name))?;
     Ok(())
 }

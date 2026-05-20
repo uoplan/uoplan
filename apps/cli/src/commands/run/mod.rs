@@ -16,7 +16,7 @@ pub async fn run(payload: &str) -> Result<()> {
     intro("uoplan run")?;
     let decoded = cart::decode_payload(payload)?;
 
-    let session = get_session().ok_or_else(|| anyhow!(NoCookiesError))?;
+    let session = get_session().await.ok_or_else(|| anyhow!(NoCookiesError))?;
     if session.strm.is_none() {
         return Err(anyhow!(NoTermSelectedError));
     }
