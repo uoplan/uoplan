@@ -1,12 +1,12 @@
 use anyhow::Result;
 use chrono::{DateTime, Datelike, NaiveDate, NaiveDateTime, NaiveTime, TimeZone, Utc};
 use chrono_tz::America::Toronto;
-use inquire::{MultiSelect, Select, Text};
+use cliclack::{input, multiselect, outro_cancel, select};
 use regex::Regex;
 
 use crate::proto::CourseSelection;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum EnrolMode {
     Cart,
     Now,
@@ -19,63 +19,74 @@ pub fn prompt_course_selection(
     if courses.is_empty() {
         return Ok(Some(Vec::new()));
     }
-    let labels: Vec<String> = courses
-        .iter()
-        .map(|c| {
-            let secs: Vec<String> = c
-                .sections
-                .iter()
-                .map(|s| format!("{} {}", s.component, s.section))
-                .collect();
-            format!("{} — {}", c.course_code, secs.join(", "))
-        })
-        .collect();
-    let res = MultiSelect::new("Select courses to enrol", labels.clone())
-        .with_all_selected_by_default()
-        .prompt();
-    let selected = match res {
+
+    let mut prompt = multiselect("Select courses to enrol");
+    for (i, c) in courses.iter().enumerate() {
+        let secs: Vec<String> = c
+            .sections
+            .iter()
+            .map(|s| format!("{} {}", s.component, s.section))
+            .collect();
+        let hint = secs.join(", ");
+        prompt = prompt.item(i, &c.course_code, hint);
+    }
+    let all_indices: Vec<usize> = (0..courses.len()).collect();
+    let selected_indices: Vec<usize> = match prompt.initial_values(all_indices).interact() {
         Ok(v) => v,
-        Err(_) => return Ok(None),
+        Err(_) => {
+            outro_cancel("Cancelled.")?;
+            return Ok(None);
+        }
     };
-    let chosen: Vec<CourseSelection> = selected
-        .iter()
-        .filter_map(|s| labels.iter().position(|l| l == s).map(|i| courses[i].clone()))
-        .collect();
-    Ok(Some(chosen))
+
+    Ok(Some(
+        selected_indices
+            .into_iter()
+            .map(|i| courses[i].clone())
+            .collect(),
+    ))
 }
 
 pub fn prompt_enrol_mode() -> Result<Option<EnrolMode>> {
-    let res = Select::new(
-        "How would you like to enrol?",
-        vec!["Add to cart only", "Enrol now", "Snipe (enrol at time)"],
-    )
-    .prompt();
-    let choice = match res {
+    let mode = match select("How would you like to enrol?")
+        .item(EnrolMode::Cart, "Add to cart only", "")
+        .item(EnrolMode::Now, "Enrol now", "")
+        .item(
+            EnrolMode::Snipe,
+            "Snipe (enrol at time)",
+            "Schedule enrolment for exact open time",
+        )
+        .interact()
+    {
         Ok(v) => v,
-        Err(_) => return Ok(None),
+        Err(_) => {
+            outro_cancel("Cancelled.")?;
+            return Ok(None);
+        }
     };
-    Ok(Some(match choice {
-        "Add to cart only" => EnrolMode::Cart,
-        "Enrol now" => EnrolMode::Now,
-        _ => EnrolMode::Snipe,
-    }))
+    Ok(Some(mode))
 }
 
 pub fn prompt_snipe_time() -> Result<Option<DateTime<Utc>>> {
     let default_year = chrono::Utc::now().with_timezone(&Toronto).year();
     loop {
-        let res = Text::new("Enter snipe time (Toronto local):").prompt();
-        let input = match res {
-            Ok(v) => v,
-            Err(_) => return Ok(None),
-        };
-        match parse_toronto_time(&input, default_year) {
+        let raw: String =
+            match input("Enter snipe time (Toronto local, e.g. 2026-05-26 10:00):").interact() {
+                Ok(v) => v,
+                Err(_) => {
+                    outro_cancel("Cancelled.")?;
+                    return Ok(None);
+                }
+            };
+        match parse_toronto_time(&raw, default_year) {
             Some(dt) => {
-                println!("Sniping at: {}", format_toronto_time(&dt));
+                cliclack::log::info(&format!("Sniping at: {}", format_toronto_time(&dt)))?;
                 return Ok(Some(dt));
             }
             None => {
-                println!("Could not parse time. Try formats like '2026-05-26 10:00', '26/5 10am', 'may 26 10:00'.");
+                cliclack::log::warning(
+                    "Could not parse time. Try: '2026-05-26 10:00', '26/5 10am', 'may 26 10:00'",
+                )?;
             }
         }
     }
@@ -87,7 +98,6 @@ pub fn format_toronto_time(dt: &DateTime<Utc>) -> String {
 }
 
 pub fn parse_toronto_time(input: &str, default_year: i32) -> Option<DateTime<Utc>> {
-    // strip weekday prefix
     let weekday_re = Regex::new(
         r"(?i)^(mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday)[,\s]+",
     )
@@ -95,7 +105,6 @@ pub fn parse_toronto_time(input: &str, default_year: i32) -> Option<DateTime<Utc
     let cleaned = weekday_re.replace(input.trim(), "").to_string();
     let cleaned = cleaned.trim();
 
-    // Try ISO: 2026-05-26[T ]HH:MM[:SS]
     let iso_re =
         Regex::new(r"^(\d{4})-(\d{1,2})-(\d{1,2})[T\s]+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*([ap]m)?")
             .unwrap();
@@ -113,7 +122,6 @@ pub fn parse_toronto_time(input: &str, default_year: i32) -> Option<DateTime<Utc
         return to_utc(y, mo, d, h, mi, s);
     }
 
-    // Slash date: D/M[/YYYY] HH:MM[am/pm]
     let slash_re = Regex::new(
         r"^(\d{1,2})/(\d{1,2})(?:/(\d{2,4}))?\s+(\d{1,2})(?::(\d{2}))?\s*([ap]m)?",
     )
@@ -135,7 +143,6 @@ pub fn parse_toronto_time(input: &str, default_year: i32) -> Option<DateTime<Utc
         return to_utc(y, mo, d, h, mi, 0);
     }
 
-    // Named month: "may 26[ 2026] HH:MM[am/pm]"
     let named_re = Regex::new(
         r"(?i)^(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\s+(\d{1,2})(?:[,\s]+(\d{2,4}))?\s+(\d{1,2})(?::(\d{2}))?\s*([ap]m)?",
     )

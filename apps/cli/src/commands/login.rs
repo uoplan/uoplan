@@ -1,9 +1,11 @@
 use anyhow::Result;
+use cliclack::{intro, outro};
 
 use crate::auth::browser::launch_browser_auth;
 use crate::auth::{get_session, set_session};
 
 pub async fn run() -> Result<()> {
+    intro("uoplan login")?;
     let new_session = launch_browser_auth().await?;
     let merged = if let Some(existing) = get_session() {
         crate::auth::StoredSession {
@@ -17,6 +19,6 @@ pub async fn run() -> Result<()> {
         new_session
     };
     set_session(&merged)?;
-    println!("Logged in successfully.");
+    outro("Logged in successfully.")?;
     Ok(())
 }

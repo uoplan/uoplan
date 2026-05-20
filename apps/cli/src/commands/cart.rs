@@ -1,8 +1,5 @@
 use anyhow::{anyhow, Result};
-use indicatif::{ProgressBar, ProgressStyle};
-use inquire::{MultiSelect, Select};
-use owo_colors::OwoColorize;
-use std::time::Duration;
+use cliclack::{intro, multiselect, outro, outro_cancel, select, spinner};
 
 use crate::api::cart::{add_to_cart, list_cart, CartItem};
 use crate::api::endpoints;
@@ -10,18 +7,6 @@ use crate::api::enrollment::{submit_cart_action, ACTION_DELETE, ACTION_ENROL};
 use crate::api::PeopleSoftClient;
 use crate::auth::get_session;
 use crate::error::NoCookiesError;
-
-fn make_spinner(msg: &str) -> ProgressBar {
-    let pb = ProgressBar::new_spinner();
-    pb.set_style(
-        ProgressStyle::with_template("{spinner:.cyan} {msg}")
-            .unwrap()
-            .tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ "),
-    );
-    pb.set_message(msg.to_string());
-    pb.enable_steady_tick(Duration::from_millis(80));
-    pb
-}
 
 fn cart_url_from_session() -> Result<(PeopleSoftClient, String)> {
     let session = get_session().ok_or_else(|| anyhow!(NoCookiesError))?;
@@ -33,101 +18,129 @@ fn cart_url_from_session() -> Result<(PeopleSoftClient, String)> {
     Ok((client, cart_url))
 }
 
-fn label_for(item: &CartItem) -> String {
+fn item_label(item: &CartItem) -> String {
     format!(
-        "{} {} (#{}) {} — {}",
-        item.course_code,
-        item.section,
-        item.class_number,
-        item.units,
-        item.instructors.join(", ")
+        "{} {} (#{}) {}",
+        item.course_code, item.section, item.class_number, item.units
     )
 }
 
+fn item_hint(item: &CartItem) -> String {
+    item.instructors.join(", ")
+}
+
 pub async fn interactive() -> Result<()> {
+    intro("uoplan cart")?;
     let (client, cart_url) = cart_url_from_session()?;
     loop {
-        let pb = make_spinner("Loading cart…");
+        let sp = spinner();
+        sp.start("Loading cart…");
         let items = list_cart(&client, &cart_url).await?;
-        pb.finish_and_clear();
+        sp.stop("Cart loaded");
 
         if items.is_empty() {
-            println!("Your cart is empty.");
+            outro("Your cart is empty.")?;
             return Ok(());
         }
 
-        let labels: Vec<String> = items.iter().map(label_for).collect();
-        let selected = MultiSelect::new("Select courses", labels.clone()).prompt()?;
-        if selected.is_empty() {
-            return Ok(());
+        let mut prompt = multiselect("Select courses");
+        for item in &items {
+            prompt = prompt.item(item.bufnum, item_label(item), item_hint(item));
         }
+        let selected_bufnums: Vec<i64> = match prompt.required(true).interact() {
+            Ok(v) => v,
+            Err(_) => {
+                outro_cancel("Cancelled.")?;
+                return Ok(());
+            }
+        };
 
-        let action = Select::new("Action", vec!["Enrol", "Delete", "Cancel"]).prompt()?;
-        if action == "Cancel" {
-            return Ok(());
-        }
-
-        let bufnums: Vec<i64> = selected
-            .iter()
-            .filter_map(|s| labels.iter().position(|l| l == s).map(|i| items[i].bufnum))
-            .collect();
+        let action = match select("What would you like to do?")
+            .item("enrol", "Enrol", "")
+            .item("delete", "Delete from cart", "")
+            .interact()
+        {
+            Ok(v) => v,
+            Err(_) => {
+                outro_cancel("Cancelled.")?;
+                return Ok(());
+            }
+        };
 
         let action_code = match action {
-            "Enrol" => ACTION_ENROL,
-            "Delete" => ACTION_DELETE,
+            "enrol" => ACTION_ENROL,
+            "delete" => ACTION_DELETE,
             _ => continue,
         };
 
-        let pb = make_spinner("Submitting…");
-        let result = submit_cart_action(&client, &cart_url, &bufnums, action_code).await?;
-        pb.finish_and_clear();
+        let sp = spinner();
+        sp.start(if action == "delete" {
+            "Deleting…"
+        } else {
+            "Submitting enrolment…"
+        });
+        let result =
+            submit_cart_action(&client, &cart_url, &selected_bufnums, action_code).await?;
+        sp.stop("Done");
 
         if result.errors.is_empty() {
-            println!("{} {}", "✓".green(), "Success".bold());
+            cliclack::log::success("Success")?;
         } else {
             for e in &result.errors {
-                println!("{} {}", "✗".red(), e);
+                cliclack::log::error(e)?;
             }
         }
     }
 }
 
 pub async fn add(class_number: &str) -> Result<()> {
+    intro("uoplan cart add")?;
     let (client, cart_url) = cart_url_from_session()?;
-    let pb = make_spinner(&format!("Adding class {} to cart…", class_number));
+    let sp = spinner();
+    sp.start(&format!("Adding class {} to cart…", class_number));
     add_to_cart(&client, &cart_url, class_number).await?;
-    pb.finish_and_clear();
-    println!("{} Added.", "✓".green());
+    sp.stop("Added");
+    outro("Class added to cart.")?;
     Ok(())
 }
 
 pub async fn enrol() -> Result<()> {
+    intro("uoplan enrol")?;
     let (client, cart_url) = cart_url_from_session()?;
-    let pb = make_spinner("Loading cart…");
+    let sp = spinner();
+    sp.start("Loading cart…");
     let items = list_cart(&client, &cart_url).await?;
-    pb.finish_and_clear();
+    sp.stop("Cart loaded");
+
     if items.is_empty() {
-        println!("Your cart is empty.");
+        outro("Your cart is empty.")?;
         return Ok(());
     }
-    let labels: Vec<String> = items.iter().map(label_for).collect();
-    let selected = MultiSelect::new("Select courses to enrol", labels.clone()).prompt()?;
-    if selected.is_empty() {
-        return Ok(());
+
+    let mut prompt = multiselect("Select courses to enrol");
+    for item in &items {
+        prompt = prompt.item(item.bufnum, item_label(item), item_hint(item));
     }
-    let bufnums: Vec<i64> = selected
-        .iter()
-        .filter_map(|s| labels.iter().position(|l| l == s).map(|i| items[i].bufnum))
-        .collect();
-    let pb = make_spinner("Enrolling…");
-    let result = submit_cart_action(&client, &cart_url, &bufnums, ACTION_ENROL).await?;
-    pb.finish_and_clear();
+    let selected_bufnums: Vec<i64> = match prompt.required(true).interact() {
+        Ok(v) => v,
+        Err(_) => {
+            outro_cancel("Cancelled.")?;
+            return Ok(());
+        }
+    };
+
+    let sp = spinner();
+    sp.start("Enrolling…");
+    let result = submit_cart_action(&client, &cart_url, &selected_bufnums, ACTION_ENROL).await?;
+    sp.stop("Done");
+
     if result.errors.is_empty() {
-        println!("{} {}", "✓".green(), "Success".bold());
+        outro("Enrolled successfully.")?;
     } else {
         for e in &result.errors {
-            println!("{} {}", "✗".red(), e);
+            cliclack::log::error(e)?;
         }
+        outro_cancel("Enrolment completed with errors.")?;
     }
     Ok(())
 }

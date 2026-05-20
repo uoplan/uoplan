@@ -3,9 +3,7 @@ pub mod interactive;
 pub mod sniper;
 
 use anyhow::{anyhow, Result};
-use indicatif::{ProgressBar, ProgressStyle};
-use owo_colors::OwoColorize;
-use std::time::Duration;
+use cliclack::{intro, log, outro, outro_cancel, spinner};
 
 use crate::api::cart::list_cart;
 use crate::api::endpoints;
@@ -14,19 +12,8 @@ use crate::api::PeopleSoftClient;
 use crate::auth::get_session;
 use crate::error::{NoCookiesError, NoTermSelectedError};
 
-fn make_spinner(msg: &str) -> ProgressBar {
-    let pb = ProgressBar::new_spinner();
-    pb.set_style(
-        ProgressStyle::with_template("{spinner:.cyan} {msg}")
-            .unwrap()
-            .tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ "),
-    );
-    pb.set_message(msg.to_string());
-    pb.enable_steady_tick(Duration::from_millis(80));
-    pb
-}
-
 pub async fn run(payload: &str) -> Result<()> {
+    intro("uoplan run")?;
     let decoded = cart::decode_payload(payload)?;
 
     let session = get_session().ok_or_else(|| anyhow!(NoCookiesError))?;
@@ -51,31 +38,35 @@ pub async fn run(payload: &str) -> Result<()> {
 
     match mode {
         interactive::EnrolMode::Cart => {
-            println!("{} Courses added to cart.", "✓".green());
+            outro("Courses added to cart.")?;
         }
         interactive::EnrolMode::Now => {
-            let pb = make_spinner("Loading cart…");
+            let sp = spinner();
+            sp.start("Loading cart…");
             let items = list_cart(&client, &cart_url).await?;
-            pb.finish_and_clear();
+            sp.stop("Cart loaded");
             let bufnums: Vec<i64> = items.iter().map(|i| i.bufnum).collect();
-            let pb = make_spinner("Enrolling…");
+            let sp = spinner();
+            sp.start("Enrolling…");
             let result = submit_cart_action(&client, &cart_url, &bufnums, ACTION_ENROL).await?;
-            pb.finish_and_clear();
+            sp.stop("Done");
             if result.errors.is_empty() {
-                println!("{} {}", "✓".green(), "Enrolled".bold());
+                outro("Enrolled successfully.")?;
             } else {
                 for e in &result.errors {
-                    println!("{} {}", "✗".red(), e);
+                    log::error(e)?;
                 }
+                outro_cancel("Enrolment completed with errors.")?;
             }
         }
         interactive::EnrolMode::Snipe => {
             let Some(target) = interactive::prompt_snipe_time()? else {
                 return Ok(());
             };
-            let pb = make_spinner("Loading cart…");
+            let sp = spinner();
+            sp.start("Loading cart…");
             let items = list_cart(&client, &cart_url).await?;
-            pb.finish_and_clear();
+            sp.stop("Cart loaded");
             let bufnums: Vec<i64> = items.iter().map(|i| i.bufnum).collect();
             let result = sniper::snipe(
                 &client,
@@ -88,11 +79,12 @@ pub async fn run(payload: &str) -> Result<()> {
             )
             .await?;
             if result.success {
-                println!("{} {}", "✓".green(), "Sniped successfully!".bold());
+                outro("Sniped successfully!")?;
             } else {
                 for e in &result.errors {
-                    println!("{} {}", "✗".red(), e);
+                    log::error(e)?;
                 }
+                outro_cancel("Snipe failed.")?;
             }
         }
     }
