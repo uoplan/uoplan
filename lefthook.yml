@@ -3,8 +3,8 @@ pre-commit:
     oxfmt:
       glob: "**/*.{cjs,cts,html,js,json,jsx,md,mjs,mts,ts,tsx,yml,yaml}"
       run: pnpm exec oxfmt --no-error-on-unmatched-pattern --check {staged_files}
-    eslint:
+    oxlint:
       glob: "**/*.{js,jsx,ts,tsx,mjs,cjs}"
-      run: pnpm exec eslint --cache --max-warnings=0 --no-warn-ignored {staged_files}
+      run: pnpm exec oxlint {staged_files}
     typecheck:
       run: pnpm typecheck

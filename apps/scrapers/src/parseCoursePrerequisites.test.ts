@@ -61,7 +61,7 @@ describe("parseCoursePrerequisites", () => {
     const tree = parseCoursePrerequisites("MAT 1341 and MAT 1342");
     expect(tree?.type).toBe("and_group");
     const codes = (tree?.children ?? []).map((c) => c.code).filter(Boolean);
-    expect(codes.sort()).toEqual(["MAT 1341", "MAT 1342"]);
+    expect(codes.sort((a, b) => a!.localeCompare(b!))).toEqual(["MAT 1341", "MAT 1342"]);
   });
 });
 
