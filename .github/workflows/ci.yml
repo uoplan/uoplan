@@ -4,11 +4,15 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "apps/cli/**"
   pull_request:
     types:
       - opened
       - reopened
       - synchronize
+    paths-ignore:
+      - "apps/cli/**"
 
 permissions:
   contents: read

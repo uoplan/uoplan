@@ -3,7 +3,9 @@ name: CLI Release
 on:
   push:
     tags:
-      - "cli-rs/v*"
+      - "cli/v*"
+    paths:
+      - "apps/cli/**"
 
 permissions:
   contents: write
@@ -47,19 +49,19 @@ jobs:
 
       - name: Build (native)
         if: ${{ !matrix.cross }}
-        working-directory: apps/cli-rs
+        working-directory: apps/cli
         run: cargo build --release --target ${{ matrix.target }}
 
       - name: Build (cross)
         if: matrix.cross
-        working-directory: apps/cli-rs
+        working-directory: apps/cli
         run: cross build --release --target ${{ matrix.target }}
 
       - name: Package (Unix)
         if: matrix.archive == 'tar.gz'
         shell: bash
         run: |
-          BINARY="apps/cli-rs/target/${{ matrix.target }}/release/uoplan"
+          BINARY="apps/cli/target/${{ matrix.target }}/release/uoplan"
           ARCHIVE="uoplan-${{ matrix.target }}.tar.gz"
           tar -czf "$ARCHIVE" -C "$(dirname $BINARY)" "$(basename $BINARY)"
           echo "ASSET=$ARCHIVE" >> $GITHUB_ENV
@@ -68,7 +70,7 @@ jobs:
         if: matrix.archive == 'zip'
         shell: pwsh
         run: |
-          $binary = "apps\cli-rs\target\${{ matrix.target }}\release\uoplan.exe"
+          $binary = "apps\cli\target\${{ matrix.target }}\release\uoplan.exe"
           $archive = "uoplan-${{ matrix.target }}.zip"
           Compress-Archive -Path $binary -DestinationPath $archive
           echo "ASSET=$archive" | Out-File -FilePath $env:GITHUB_ENV -Append
@@ -90,7 +92,7 @@ jobs:
           merge-multiple: true
 
       - name: Extract version from tag
-        run: echo "VERSION=${GITHUB_REF_NAME#cli-rs/}" >> $GITHUB_ENV
+        run: echo "VERSION=${GITHUB_REF_NAME#cli/}" >> $GITHUB_ENV
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
