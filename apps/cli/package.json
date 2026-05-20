@@ -1,10 +1,17 @@
 {
   "name": "@uoplan/cli",
   "version": "0.1.0",
-  "private": true,
+  "bin": {
+    "uoplan": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "scripts": {
     "dev": "node --experimental-transform-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/index.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "publish:npm": "pnpm build && npm publish --access public",
     "typecheck": "tsgo --noEmit -p tsconfig.json"
   },
   "dependencies": {
