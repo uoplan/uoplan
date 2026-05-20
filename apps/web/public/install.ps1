@@ -33,12 +33,12 @@ function Resolve-InstallDir {
 function Get-LatestVersion {
     $url = "https://api.github.com/repos/$Repo/releases"
     $releases = Invoke-RestMethod -Uri $url -Headers @{ "User-Agent" = "uoplan-installer" }
-    $tag = $releases | Where-Object { $_.tag_name -like "cli-rs/v*" } | Select-Object -First 1 -ExpandProperty tag_name
+    $tag = $releases | Where-Object { $_.tag_name -like "cli/v*" } | Select-Object -First 1 -ExpandProperty tag_name
     if (-not $tag) {
         Write-Error "Could not determine latest release version."
         exit 1
     }
-    return $tag -replace "^cli-rs/", ""
+    return $tag -replace "^cli/", ""
 }
 
 # ── PATH helper ──────────────────────────────────────────────────────────────
@@ -69,7 +69,7 @@ Write-Host "  Install: $Dir"
 Write-Host ""
 
 $Archive    = "uoplan-${Target}.zip"
-$TagEncoded = "cli-rs%2F${Version}"
+$TagEncoded = "cli%2F${Version}"
 $Url        = "https://github.com/$Repo/releases/download/$TagEncoded/$Archive"
 
 $TmpDir = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
