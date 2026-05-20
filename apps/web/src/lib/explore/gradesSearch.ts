@@ -1,13 +1,15 @@
 import Fuse from "fuse.js";
 import type { IFuseOptions } from "fuse.js";
-import type { CourseGradesData, GradeVizData } from "schedule";
+import type { CourseGradesData, GradeVizData, ProfessorRatingsMap } from "schedule";
 import {
   normalizeCourseCode,
   normalizeProfessorName,
   normalizeGradeVizDistribution,
+  getCourseLanguageBucket,
 } from "schedule";
 import { searchProfessorsScored, type ProfessorSearchEntry } from "../graph/professorGraphSearch";
 import { formatUottawaTermIdLabel } from "./uottawaTermId";
+import { getCourseLevel, type ExploreFilterLevel } from "./exploreFilters";
 
 /** Max section rows returned when searching all offerings (legacy / tests). */
 const EXPLORE_MAX_RESULTS = 120;
@@ -34,6 +36,9 @@ export type ExploreCourseSearchEntry = {
   courseTitle: string;
   fuseText: string;
   gradeViz: GradeVizData | null;
+  level: ExploreFilterLevel | null;
+  language: "en" | "fr" | null;
+  maxProfessorRating: number | null;
 };
 
 /** One row per distinct professor — search index for explore. */
@@ -44,6 +49,7 @@ export type ExploreProfessorSearchEntry = {
   searchText: string;
   uniqueCourseCount: number;
   gradeViz: GradeVizData | null;
+  maxRating: number | null;
 };
 
 type ExploreSearchResult = {
@@ -150,27 +156,56 @@ export function createExploreFuse(offerings: ExploreOfferingFlat[]) {
 export function buildCourseSearchEntries(
   offerings: ExploreOfferingFlat[],
   titleByCode?: Map<string, string> | null,
+  professorRatings?: ProfessorRatingsMap | null,
 ): ExploreCourseSearchEntry[] {
-  type Acc = { courseCode: string; courseTitle: string; dists: Record<string, number>[] };
+  type Acc = {
+    courseCode: string;
+    courseTitle: string;
+    dists: Record<string, number>[];
+    professorNames: string[];
+  };
   const byNorm = new Map<string, Acc>();
   for (const o of offerings) {
     const norm = normalizeCourseCode(o.courseCode);
     const existing = byNorm.get(norm);
     if (existing) {
       existing.dists.push(o.distribution);
+      existing.professorNames.push(o.professorName);
     } else {
       const catalogueTitle = titleByCode?.get(norm)?.trim() ?? "";
       const title = catalogueTitle || o.courseTitle.trim();
-      byNorm.set(norm, { courseCode: o.courseCode, courseTitle: title, dists: [o.distribution] });
+      byNorm.set(norm, {
+        courseCode: o.courseCode,
+        courseTitle: title,
+        dists: [o.distribution],
+        professorNames: [o.professorName],
+      });
     }
   }
-  return [...byNorm.entries()].map(([norm, { courseCode, courseTitle, dists }]) => ({
-    normCode: norm,
-    courseCode,
-    courseTitle,
-    fuseText: [courseCode, norm, courseTitle].filter(Boolean).join(" ").toLowerCase(),
-    gradeViz: normalizeGradeVizDistribution(mergeGradeDistributionCounts(dists)),
-  }));
+  return [...byNorm.entries()].map(([norm, { courseCode, courseTitle, dists, professorNames }]) => {
+    let maxProfessorRating: number | null = null;
+    if (professorRatings) {
+      for (const name of professorNames) {
+        const entry = professorRatings[normalizeProfessorName(name)];
+        if (entry && Number.isFinite(entry.rating)) {
+          if (maxProfessorRating === null || entry.rating > maxProfessorRating) {
+            maxProfessorRating = entry.rating;
+          }
+        }
+      }
+    }
+    const langBucket = getCourseLanguageBucket(courseCode);
+    return {
+      normCode: norm,
+      courseCode,
+      courseTitle,
+      fuseText: [courseCode, norm, courseTitle].filter(Boolean).join(" ").toLowerCase(),
+      gradeViz: normalizeGradeVizDistribution(mergeGradeDistributionCounts(dists)),
+      level: getCourseLevel(courseCode),
+      language: langBucket === "en" || langBucket === "fr" ? langBucket : null,
+      maxProfessorRating,
+    };
+  });
 }
 
 export function createExploreCourseFuse(entries: ExploreCourseSearchEntry[]) {
@@ -179,20 +214,26 @@ export function createExploreCourseFuse(entries: ExploreCourseSearchEntry[]) {
 
 export function buildExploreProfessorSearchEntries(
   offerings: ExploreOfferingFlat[],
+  professorRatings?: ProfessorRatingsMap | null,
 ): ExploreProfessorSearchEntry[] {
-  return groupOfferingsByProfessor(offerings).map((g) => ({
-    groupId: g.groupId,
-    legacyId: g.legacyId,
-    displayName: g.displayName,
-    searchText: [g.displayName, g.legacyId != null ? String(g.legacyId) : ""]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase(),
-    uniqueCourseCount: new Set(g.offerings.map((o) => normalizeCourseCode(o.courseCode))).size,
-    gradeViz: normalizeGradeVizDistribution(
-      mergeGradeDistributionCounts(g.offerings.map((o) => o.distribution)),
-    ),
-  }));
+  return groupOfferingsByProfessor(offerings).map((g) => {
+    const rmpEntry = professorRatings?.[normalizeProfessorName(g.displayName)];
+    const maxRating = rmpEntry && Number.isFinite(rmpEntry.rating) ? rmpEntry.rating : null;
+    return {
+      groupId: g.groupId,
+      legacyId: g.legacyId,
+      displayName: g.displayName,
+      searchText: [g.displayName, g.legacyId != null ? String(g.legacyId) : ""]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase(),
+      uniqueCourseCount: new Set(g.offerings.map((o) => normalizeCourseCode(o.courseCode))).size,
+      gradeViz: normalizeGradeVizDistribution(
+        mergeGradeDistributionCounts(g.offerings.map((o) => o.distribution)),
+      ),
+      maxRating,
+    };
+  });
 }
 
 function exploreProfessorToGraphEntry(e: ExploreProfessorSearchEntry): ProfessorSearchEntry {
