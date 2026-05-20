@@ -47,7 +47,7 @@ export const checkoutCommand = new Command("checkout")
     } catch (err) {
       spinner.fail();
       if (err instanceof AuthExpiredError) {
-        console.error(chalk.red((err as Error).message));
+        console.error(chalk.red(err.message));
         process.exit(1);
       }
       throw err;
