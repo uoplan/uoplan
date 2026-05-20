@@ -8,8 +8,8 @@
     "deploy": "wrangler deploy",
     "generate": "pnpm -r generate && pnpm build:data-proto",
     "typecheck": "pnpm wrangler types && pnpm -r typecheck",
-    "lint": "pnpm -r lint",
-    "lint:fix": "pnpm -r lint:fix",
+    "lint": "oxlint apps/web/src apps/scrapers/src packages/schedule/src",
+    "lint:fix": "oxlint --fix apps/web/src apps/scrapers/src packages/schedule/src",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "test": "pnpm run -r test",
@@ -28,15 +28,13 @@
     "check:terms": "pnpm --filter scrapers check:terms"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "eslint": "^10.1.0",
-    "eslint-plugin-unused-imports": "^4.4.1",
     "jiti": "^2.6.1",
     "knip": "^6.1.0",
     "lefthook": "^2.1.4",
     "oxfmt": "^0.48.0",
+    "oxlint": "^1.64.0",
+    "oxlint-tsgolint": "^0.22.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.57.2",
     "wrangler": "^4.84.1"
   },
   "packageManager": "pnpm@10.27.0"
