@@ -99,6 +99,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
   const getSwapCandidates = useAppStore((s) => s.getSwapCandidates);
   const swapCourseInSchedule = useAppStore((s) => s.swapCourseInSchedule);
   const resetToDefault = useAppStore((s) => s.resetToDefault);
+  const resetBasicCalendarSettings = useAppStore((s) => s.resetBasicCalendarSettings);
 
   const isBasic = variant === "basic";
   const hasSchedule = currentSchedule !== null;
@@ -109,6 +110,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
   const [controlsOpen, setControlsOpen] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [enrolCliOpen, setEnrolCliOpen] = useState(false);
+  const [transcriptError, setTranscriptError] = useState<string | null>(null);
 
   const cliCommand =
     currentSchedule && selectedTermId
@@ -145,6 +147,11 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
   const handleNext = async () => {
     if (scheduleGenerating || !canUseSeedNavigation) return;
     await goToNextSeed();
+  };
+
+  const handleClearOptions = () => {
+    resetBasicCalendarSettings();
+    setTranscriptError(null);
   };
 
   const handleDownloadIcs = () => {
@@ -185,10 +192,41 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
             onBack={onBack}
             cliCommand={cliCommand}
             onEnrolCli={() => setEnrolCliOpen(true)}
-          />
-          <BasicCalendarSidebarControls
+            onClearOptions={handleClearOptions}
             onDownloadIcs={handleDownloadIcs}
             downloadDisabled={!dateRangeOk || !currentSchedule}
+          />
+          {!isMobile && (
+            <Button.Group>
+              <Button
+                variant="light"
+                color="violet"
+                size="sm"
+                radius={0}
+                leftSection={<IconChevronLeft size={14} />}
+                disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
+                loading={scheduleGenerating}
+                onClick={handlePrevious}
+              >
+                {tr("calendarPage.previous")}
+              </Button>
+              <Button
+                variant="filled"
+                color="violet"
+                size="sm"
+                radius={0}
+                rightSection={<IconChevronRight size={14} />}
+                disabled={scheduleGenerating || !canUseSeedNavigation}
+                loading={scheduleGenerating}
+                onClick={handleNext}
+              >
+                {tr("calendarPage.next")}
+              </Button>
+            </Button.Group>
+          )}
+          <BasicCalendarSidebarControls
+            transcriptError={transcriptError}
+            setTranscriptError={setTranscriptError}
           />
         </>
       ) : (
@@ -267,10 +305,8 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
             </Button>
           </Group>
 
-          <Divider color="#2C2E33" />
-
-          {/* Schedule navigation */}
-          {hasSchedule ? (
+          {/* Prev/Next - desktop only */}
+          {!isMobile && hasSchedule && (
             <Stack gap={6}>
               <Button.Group>
                 <Button
@@ -302,7 +338,11 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
                 {tr("calendarPage.seedLabel", { seed: currentSeed })}
               </Text>
             </Stack>
-          ) : (
+          )}
+
+          <Divider color="#2C2E33" />
+
+          {!hasSchedule && (
             <Button
               variant="filled"
               color="violet"

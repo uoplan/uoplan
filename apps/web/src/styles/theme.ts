@@ -139,6 +139,9 @@ export const theme = createTheme({
         header: {
           borderBottom: "2px solid #1A1A1A",
         },
+        body: {
+          paddingTop: rem(16),
+        },
       }),
     },
     Badge: {

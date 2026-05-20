@@ -18,15 +18,13 @@ import { BasicCourseFiltersCard } from "../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../i18n";
 import { parseTranscriptPdf, isOptCourse, normalizeCourseCode } from "@uoplan/schedule";
-import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
-import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 
 export function BasicCalendarSidebarControls({
-  onDownloadIcs,
-  downloadDisabled,
+  transcriptError,
+  setTranscriptError,
 }: {
-  onDownloadIcs?: () => void;
-  downloadDisabled?: boolean;
+  transcriptError: string | null;
+  setTranscriptError: (err: string | null) => void;
 }) {
   const {
     cache,
@@ -65,15 +63,7 @@ export function BasicCalendarSidebarControls({
   const setBasicPinnedCourses = useAppStore((s) => s.setBasicPinnedCourses);
   const setBasicElectivesCount = useAppStore((s) => s.setBasicElectivesCount);
   const setBasicExcludedCategories = useAppStore((s) => s.setBasicExcludedCategories);
-  const goToPreviousSeed = useAppStore((s) => s.goToPreviousSeed);
-  const goToNextSeed = useAppStore((s) => s.goToNextSeed);
-  const scheduleGenerating = useAppStore((s) => s.scheduleGenerating);
-  const currentSeed = useAppStore((s) => s.currentSeed);
-  const lowestVisitedSeed = useAppStore((s) => s.lowestVisitedSeed);
-  const canGoPrevious = canGoToPreviousSeed(currentSeed, lowestVisitedSeed);
-  const canNavigateSeeds = canGenerateBasicSchedule(basicPinnedCourses.length, basicElectivesCount);
   const markBasicSettingsChanged = useAppStore((s) => s.markBasicSettingsChanged);
-  const resetBasicCalendarSettings = useAppStore((s) => s.resetBasicCalendarSettings);
   const setLevelBuckets = useAppStore((s) => s.setLevelBuckets);
   const setLanguageBuckets = useAppStore((s) => s.setLanguageBuckets);
   const setElectiveLevelBuckets = useAppStore((s) => s.setElectiveLevelBuckets);
@@ -82,7 +72,6 @@ export function BasicCalendarSidebarControls({
   const setCompletedCourses = useAppStore((s) => s.setCompletedCourses);
 
   const [transcriptLoading, setTranscriptLoading] = useState(false);
-  const [transcriptError, setTranscriptError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleTranscriptFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -190,25 +179,9 @@ export function BasicCalendarSidebarControls({
     });
   };
 
-  const handleClearOptions = () => {
-    resetBasicCalendarSettings();
-    setTranscriptError(null);
-  };
-
   return (
     <>
       <Stack gap="md">
-        <Button
-          variant="light"
-          color="gray"
-          size="sm"
-          radius={0}
-          fullWidth
-          onClick={handleClearOptions}
-        >
-          {tr("basicCalendar.clear")}
-        </Button>
-
         <MultiSelect
           label={tr("basicCalendar.required.label")}
           placeholder={tr("basicCalendar.required.placeholder")}
@@ -297,51 +270,6 @@ export function BasicCalendarSidebarControls({
         />
 
         {frenchImmersionStream ? <FrenchImmersionProgramOverview variant="compact" /> : null}
-
-        {/* Seed Navigation for Basic Mode */}
-        <Button.Group>
-          <Button
-            variant="light"
-            color="violet"
-            size="sm"
-            radius={0}
-            disabled={!canGoPrevious || scheduleGenerating || !canNavigateSeeds}
-            loading={scheduleGenerating}
-            onClick={() => {
-              if (scheduleGenerating || !canNavigateSeeds) return;
-              void goToPreviousSeed();
-            }}
-          >
-            {tr("calendarPage.previous")}
-          </Button>
-          <Button
-            variant="filled"
-            color="violet"
-            size="sm"
-            radius={0}
-            disabled={scheduleGenerating || !canNavigateSeeds}
-            loading={scheduleGenerating}
-            onClick={() => {
-              if (scheduleGenerating || !canNavigateSeeds) return;
-              void goToNextSeed();
-            }}
-          >
-            {tr("calendarPage.next")}
-          </Button>
-        </Button.Group>
-
-        {onDownloadIcs && (
-          <Button
-            size="sm"
-            color="violet"
-            variant="filled"
-            radius={0}
-            disabled={downloadDisabled}
-            onClick={onDownloadIcs}
-          >
-            {tr("calendarPage.downloadIcs")}
-          </Button>
-        )}
       </Stack>
 
       <Box style={{ borderTop: "1px solid #2C2E33", paddingTop: 16, marginTop: 8 }}>
