@@ -28,6 +28,7 @@
     "check:terms": "pnpm --filter scrapers check:terms"
   },
   "devDependencies": {
+    "@typescript/native-preview": "7.0.0-dev.20260512.1",
     "jiti": "^2.6.1",
     "knip": "^6.1.0",
     "lefthook": "^2.1.4",

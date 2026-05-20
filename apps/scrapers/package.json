@@ -13,7 +13,7 @@
     "scrape:ratemyprofessors": "node src/ratemyprofessors_scraper.ts",
     "build:proto": "node --experimental-transform-types --experimental-specifier-resolution=node src/build_proto.ts",
     "check:terms": "node src/check_terms.ts",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsgo --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "cheerio": "^1.2.0",
