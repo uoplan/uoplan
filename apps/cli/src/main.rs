@@ -2,6 +2,7 @@ mod api;
 mod auth;
 mod commands;
 mod error;
+mod update;
 
 pub mod proto {
     include!(concat!(env!("OUT_DIR"), "/cli.rs"));
