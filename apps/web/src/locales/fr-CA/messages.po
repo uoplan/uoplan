@@ -1167,10 +1167,19 @@ msgid "enrolCli.modal.title"
 msgstr "Inscrire via CLI"
 
 msgid "enrolCli.modal.description"
-msgstr "Exécutez cette commande dans votre terminal pour vous inscrire automatiquement à cet horaire avec le CLI uoplan."
+msgstr "Collez cette commande dans votre terminal pour vous inscrire à cet horaire."
 
 msgid "enrolCli.modal.copy"
 msgstr "Copier"
 
 msgid "enrolCli.modal.copied"
 msgstr "Copié !"
+
+msgid "enrolCli.modal.mobileUnavailable"
+msgstr "Le CLI uoplan n'est pas disponible sur mobile. Ouvrez cette page sur un ordinateur pour l'utiliser."
+
+msgid "enrolCli.modal.stepInstall"
+msgstr "1. Installer uoplan"
+
+msgid "enrolCli.modal.stepRun"
+msgstr "2. S'inscrire"

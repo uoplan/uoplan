@@ -112,7 +112,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
 
   const cliCommand =
     currentSchedule && selectedTermId
-      ? `npx @uoplan/cli run ${encodeSchedulePayload(currentSchedule, selectedTermId)}`
+      ? `uoplan run ${encodeSchedulePayload(currentSchedule, selectedTermId)}`
       : null;
   const [timetableStartDate, setTimetableStartDate] = useState("");
   const [timetableEndDate, setTimetableEndDate] = useState("");
