@@ -1,6 +1,6 @@
 use anyhow::Result;
 use chrono::Utc;
-use indicatif::{ProgressBar, ProgressStyle};
+use cliclack::{progress_bar, spinner};
 use std::time::Duration;
 
 use crate::api::enrollment::{submit_cart_action, ACTION_ENROL};
@@ -21,41 +21,42 @@ pub async fn snipe(
     timeout_after_ms: i64,
 ) -> Result<SnipeResult> {
     let now = Utc::now().timestamp_millis();
-    let pb = ProgressBar::new_spinner();
-    pb.set_style(
-        ProgressStyle::with_template("{spinner:.cyan} {msg}")
-            .unwrap()
-            .tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ "),
-    );
-    pb.enable_steady_tick(Duration::from_millis(100));
-
     let wait_until = target_ms - lead_ms;
+
     if wait_until > now {
-        let dur = (wait_until - now) as u64;
-        pb.set_message(format!("Waiting {} ms until snipe window…", dur));
-        tokio::time::sleep(Duration::from_millis(dur)).await;
+        let total_ms = (wait_until - now) as u64;
+        let pb = progress_bar(total_ms).with_download_template();
+        pb.start("Waiting for snipe window…");
+        let tick = 250u64;
+        let mut elapsed = 0u64;
+        while elapsed < total_ms {
+            tokio::time::sleep(Duration::from_millis(tick)).await;
+            elapsed += tick;
+            pb.set_position(elapsed.min(total_ms));
+        }
+        pb.stop("Snipe window open");
     }
 
+    let sp = spinner();
+    sp.start("Firing enrol…");
     let deadline = target_ms + timeout_after_ms;
     let mut last_errors: Vec<String> = Vec::new();
     loop {
-        pb.set_message("Firing enrol…");
         let result = submit_cart_action(client, cart_url, bufnums, ACTION_ENROL).await?;
         if result.errors.is_empty() {
-            pb.finish_and_clear();
+            sp.stop("Enrolled!");
             return Ok(SnipeResult {
                 success: true,
                 errors: Vec::new(),
             });
         }
         last_errors = result.errors;
-        let now = Utc::now().timestamp_millis();
-        if now >= deadline {
+        if Utc::now().timestamp_millis() >= deadline {
             break;
         }
         tokio::time::sleep(Duration::from_millis(retry_interval_ms)).await;
     }
-    pb.finish_and_clear();
+    sp.cancel("Snipe window closed");
     Ok(SnipeResult {
         success: false,
         errors: last_errors,

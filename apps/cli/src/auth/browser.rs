@@ -28,7 +28,26 @@ pub async fn launch_browser_auth() -> Result<StoredSession> {
         .user_data_dir("/tmp/uoplan-session")
         .arg("--no-first-run")
         .arg("--no-default-browser-check")
+        .arg("--disable-sync")
+        .arg("--disable-background-networking")
+        .arg("--disable-background-timer-throttling")
+        .arg("--disable-backgrounding-occluded-windows")
+        .arg("--disable-breakpad")
+        .arg("--disable-client-side-phishing-detection")
+        .arg("--disable-component-extensions-with-background-pages")
+        .arg("--disable-default-apps")
+        .arg("--disable-dev-shm-usage")
+        .arg("--disable-hang-monitor")
+        .arg("--disable-ipc-flooding-protection")
+        .arg("--disable-prompt-on-repost")
+        .arg("--disable-renderer-backgrounding")
+        .arg("--metrics-recording-only")
+        .arg("--password-store=basic")
+        .arg("--use-mock-keychain")
+        .viewport(None)
         .launch_timeout(Duration::from_secs(30))
+        .disable_default_args()
+        .with_head()
         .build()
         .map_err(|e| anyhow!("Failed to build browser config: {e}"))?;
 
@@ -41,8 +60,15 @@ pub async fn launch_browser_auth() -> Result<StoredSession> {
         }
     });
 
-    let page = browser.new_page(PEOPLESOFT_URL).await?;
-    println!("Chrome opened. Log in with your uOttawa account.");
+    let page = loop {
+        let pages = browser.pages().await?;
+        if let Some(p) = pages.into_iter().next() {
+            p.goto(PEOPLESOFT_URL).await?;
+            break p;
+        }
+        tokio::time::sleep(Duration::from_millis(100)).await;
+    };
+    cliclack::log::info("Chrome opened — log in with your uOttawa account.")?;
 
     let result = tokio::time::timeout(Duration::from_secs(300), async {
         loop {
