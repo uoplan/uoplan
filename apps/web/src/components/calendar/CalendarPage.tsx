@@ -1,15 +1,29 @@
 import "./calendar.css";
 import { useEffect, useState } from "react";
-import { Alert, Box, Button, Group, Stack, Text, Title, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Alert,
+  Box,
+  Button,
+  Divider,
+  Group,
+  Stack,
+  Text,
+  Title,
+  Tooltip,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import {
   IconArrowBackUp,
   IconArrowLeft,
+  IconArrowsShuffle,
+  IconCalendarDown,
   IconChevronLeft,
   IconChevronRight,
   IconRefresh,
   IconSettings,
   IconShare,
+  IconTerminal,
 } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
@@ -26,6 +40,8 @@ import { BasicCalendarSidebarControls } from "./BasicCalendarSidebarControls";
 import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
 import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
 import { GenerationErrorModal } from "./GenerationErrorModal";
+import { EnrolCliModal } from "./EnrolCliModal";
+import { encodeSchedulePayload } from "../../lib/encodeSchedulePayload";
 interface CalendarPageProps {
   variant: "basic" | "advanced";
   onBack: () => void;
@@ -53,6 +69,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
     basicPinnedCourses,
     basicElectivesCount,
     scheduleNoVariety,
+    selectedTermId,
   } = useAppStore(
     useShallow((s) => ({
       currentSchedule: s.currentSchedule,
@@ -68,6 +85,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
       basicPinnedCourses: s.basicPinnedCourses,
       basicElectivesCount: s.basicElectivesCount,
       scheduleNoVariety: s.scheduleNoVariety,
+      selectedTermId: s.selectedTermId,
     })),
   );
 
@@ -90,6 +108,12 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
 
   const [controlsOpen, setControlsOpen] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
+  const [enrolCliOpen, setEnrolCliOpen] = useState(false);
+
+  const cliCommand =
+    currentSchedule && selectedTermId
+      ? `npx @uoplan/cli run ${encodeSchedulePayload(currentSchedule, selectedTermId)}`
+      : null;
   const [timetableStartDate, setTimetableStartDate] = useState("");
   const [timetableEndDate, setTimetableEndDate] = useState("");
 
@@ -157,65 +181,158 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
 
       {isBasic ? (
         <>
-          <BasicCalendarHeaderActions onBack={onBack} />
+          <BasicCalendarHeaderActions
+            onBack={onBack}
+            cliCommand={cliCommand}
+            onEnrolCli={() => setEnrolCliOpen(true)}
+          />
           <BasicCalendarSidebarControls
             onDownloadIcs={handleDownloadIcs}
             downloadDisabled={!dateRangeOk || !currentSchedule}
           />
         </>
       ) : (
-        <>
-          {currentSwaps.length > 0 && (
+        <Stack gap="md">
+          {/* Utility toolbar: download, share, randomize, reset */}
+          <Group gap={4}>
+            <Tooltip label={tr("calendarPage.downloadIcs")} withArrow position="right" color="dark">
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                size="md"
+                radius={0}
+                disabled={!dateRangeOk || !currentSchedule}
+                onClick={handleDownloadIcs}
+                aria-label={tr("calendarPage.downloadIcs")}
+              >
+                <IconCalendarDown size={16} />
+              </ActionIcon>
+            </Tooltip>
+            {indices && (
+              <Tooltip
+                label={shareCopied ? tr("app.share.copied") : tr("calendarPage.share")}
+                withArrow
+                position="right"
+                color="dark"
+                opened={shareCopied || undefined}
+              >
+                <ActionIcon
+                  variant="subtle"
+                  color={shareCopied ? "teal" : "gray"}
+                  size="md"
+                  radius={0}
+                  onClick={handleCopyShare}
+                  aria-label={tr("calendarPage.share")}
+                >
+                  <IconShare size={16} />
+                </ActionIcon>
+              </Tooltip>
+            )}
+            <Tooltip label={tr("calendarPage.randomize")} withArrow position="right" color="dark">
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                size="md"
+                radius={0}
+                disabled={scheduleGenerating || !canUseSeedNavigation}
+                onClick={() => void randomizeSeed()}
+                aria-label={tr("calendarPage.randomize")}
+              >
+                <IconArrowsShuffle size={16} />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label={tr("calendarPage.reset")} withArrow position="right" color="dark">
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                size="md"
+                radius={0}
+                onClick={() => setResetModalOpen(true)}
+                aria-label={tr("calendarPage.reset")}
+              >
+                <IconRefresh size={16} />
+              </ActionIcon>
+            </Tooltip>
             <Button
               variant="light"
-              color="gray"
+              color="green"
+              size="xs"
+              radius={0}
+              leftSection={<IconTerminal size={12} />}
+              disabled={!cliCommand}
+              onClick={() => setEnrolCliOpen(true)}
+              style={{ marginLeft: "auto" }}
+            >
+              {tr("enrolCli.button")}
+            </Button>
+          </Group>
+
+          <Divider color="#2C2E33" />
+
+          {/* Schedule navigation */}
+          {hasSchedule ? (
+            <Stack gap={6}>
+              <Button.Group>
+                <Button
+                  variant="default"
+                  size="sm"
+                  radius={0}
+                  style={{ flex: 1 }}
+                  leftSection={<IconChevronLeft size={14} />}
+                  disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
+                  loading={scheduleGenerating}
+                  onClick={handlePrevious}
+                >
+                  {tr("calendarPage.previous")}
+                </Button>
+                <Button
+                  variant="default"
+                  size="sm"
+                  radius={0}
+                  style={{ flex: 1 }}
+                  rightSection={<IconChevronRight size={14} />}
+                  disabled={scheduleGenerating || !canUseSeedNavigation}
+                  loading={scheduleGenerating}
+                  onClick={handleNext}
+                >
+                  {tr("calendarPage.next")}
+                </Button>
+              </Button.Group>
+              <Text size="xs" c="dimmed">
+                {tr("calendarPage.seedLabel", { seed: currentSeed })}
+              </Text>
+            </Stack>
+          ) : (
+            <Button
+              variant="filled"
+              color="violet"
               size="sm"
               radius={0}
-              leftSection={<IconArrowBackUp size={14} />}
-              onClick={() => undoLastSwap()}
+              fullWidth
+              disabled={scheduleGenerating}
+              loading={scheduleGenerating}
+              onClick={() => void generateSchedules()}
             >
-              {currentSwaps.length === 1
-                ? tr("calendarPage.undoSwap")
-                : tr("calendarPage.undoSwapCount", {
-                    count: currentSwaps.length,
-                  })}
+              {tr("calendarPage.generate")}
             </Button>
           )}
 
-          <Group gap="xs">
-            {indices && (
-              <Tooltip
-                label="Copied to clipboard!"
-                opened={shareCopied}
-                position="bottom"
-                withArrow
-                color="dark"
-              >
-                <Button
-                  variant="filled"
-                  color="dark"
-                  size="sm"
-                  radius={0}
-                  leftSection={<IconShare size={14} />}
-                  onClick={handleCopyShare}
-                  style={{ backgroundColor: "#141517" }}
-                >
-                  {tr("calendarPage.share")}
-                </Button>
-              </Tooltip>
-            )}
+          {/* Undo swap */}
+          {currentSwaps.length > 0 && (
             <Button
-              variant="filled"
-              color="dark"
-              size="sm"
+              variant="subtle"
+              color="gray"
+              size="xs"
               radius={0}
-              leftSection={<IconRefresh size={14} />}
-              onClick={() => setResetModalOpen(true)}
-              style={{ backgroundColor: "#141517" }}
+              leftSection={<IconArrowBackUp size={12} />}
+              onClick={() => undoLastSwap()}
+              style={{ alignSelf: "flex-start", paddingInline: 6 }}
             >
-              {tr("calendarPage.reset")}
+              {currentSwaps.length === 1
+                ? tr("calendarPage.undoSwap")
+                : tr("calendarPage.undoSwapCount", { count: currentSwaps.length })}
             </Button>
-          </Group>
+          )}
 
           <ResetModal
             opened={resetModalOpen}
@@ -226,91 +343,14 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
               onBack();
             }}
           />
-        </>
+        </Stack>
       )}
 
-      {!isBasic && (
-        <>
-          {hasSchedule ? (
-            <Stack gap={6}>
-              <Text size="xs" c="dimmed">
-                {tr("calendarPage.scheduleNav.label")}
-              </Text>
-              <Group gap="xs">
-                <Button
-                  variant="light"
-                  color="violet"
-                  size="sm"
-                  radius={0}
-                  leftSection={<IconChevronLeft size={14} />}
-                  disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
-                  loading={scheduleGenerating}
-                  onClick={handlePrevious}
-                >
-                  {tr("calendarPage.previous")}
-                </Button>
-                <Button
-                  variant="filled"
-                  color="violet"
-                  size="sm"
-                  radius={0}
-                  rightSection={<IconChevronRight size={14} />}
-                  disabled={scheduleGenerating || !canUseSeedNavigation}
-                  loading={scheduleGenerating}
-                  onClick={handleNext}
-                >
-                  {tr("calendarPage.next")}
-                </Button>
-              </Group>
-            </Stack>
-          ) : (
-            <Button
-              variant="filled"
-              color="violet"
-              size="sm"
-              radius={0}
-              disabled={scheduleGenerating}
-              loading={scheduleGenerating}
-              onClick={() => void generateSchedules()}
-            >
-              {tr("calendarPage.generate")}
-            </Button>
-          )}
-
-          {hasSchedule && (
-            <Text size="sm" c="dimmed">
-              {tr("calendarPage.seedLabel", { seed: currentSeed })}
-            </Text>
-          )}
-        </>
-      )}
-
-      {!isBasic && (
-        <Button
-          size="sm"
-          color="violet"
-          variant="filled"
-          radius={0}
-          disabled={!dateRangeOk || !currentSchedule}
-          onClick={handleDownloadIcs}
-        >
-          {tr("calendarPage.downloadIcs")}
-        </Button>
-      )}
-
-      {!isBasic && (
-        <Button
-          variant="light"
-          color="gray"
-          size="sm"
-          radius={0}
-          disabled={scheduleGenerating}
-          loading={scheduleGenerating}
-          onClick={() => void randomizeSeed()}
-        >
-          {tr("calendarPage.randomize")}
-        </Button>
-      )}
+      <EnrolCliModal
+        opened={enrolCliOpen}
+        onClose={() => setEnrolCliOpen(false)}
+        command={cliCommand ?? ""}
+      />
 
       {scheduleNoVariety && !generationError && (
         <Alert color="yellow" variant="light" radius={0} py="xs" style={{ flexShrink: 0 }}>

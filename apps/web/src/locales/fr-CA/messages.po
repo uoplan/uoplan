@@ -1159,3 +1159,18 @@ msgstr "Aucun cours ne correspond à ces filtres."
 
 msgid "explore.filter.clearFilters"
 msgstr "Effacer les filtres"
+
+msgid "enrolCli.button"
+msgstr "Inscrire via CLI"
+
+msgid "enrolCli.modal.title"
+msgstr "Inscrire via CLI"
+
+msgid "enrolCli.modal.description"
+msgstr "Exécutez cette commande dans votre terminal pour vous inscrire automatiquement à cet horaire avec le CLI uoplan."
+
+msgid "enrolCli.modal.copy"
+msgstr "Copier"
+
+msgid "enrolCli.modal.copied"
+msgstr "Copié !"

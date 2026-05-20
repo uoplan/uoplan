@@ -1,12 +1,22 @@
 import { useState } from "react";
-import { Button, Group, Tooltip } from "@mantine/core";
-import { IconRefresh, IconShare } from "@tabler/icons-react";
+import { ActionIcon, Button, Group, Tooltip } from "@mantine/core";
+import { IconRefresh, IconShare, IconTerminal } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { tr } from "../../i18n";
 import { ResetModal } from "../shared/ResetModal";
 
-export function BasicCalendarHeaderActions({ onBack }: { onBack: () => void }) {
+interface BasicCalendarHeaderActionsProps {
+  onBack: () => void;
+  cliCommand?: string | null;
+  onEnrolCli?: () => void;
+}
+
+export function BasicCalendarHeaderActions({
+  onBack,
+  cliCommand,
+  onEnrolCli,
+}: BasicCalendarHeaderActionsProps) {
   const indices = useAppStore((s) => s.indices);
   const getShareUrl = useAppStore((s) => s.getShareUrl);
   const resetToDefault = useAppStore((s) => s.resetToDefault);
@@ -16,39 +26,53 @@ export function BasicCalendarHeaderActions({ onBack }: { onBack: () => void }) {
 
   return (
     <>
-      <Group gap="xs" wrap="wrap">
+      <Group gap={4} wrap="nowrap">
         {indices && (
           <Tooltip
-            label="Copied to clipboard!"
-            opened={shareCopied}
-            position="bottom"
+            label={shareCopied ? tr("app.share.copied") : tr("calendarPage.share")}
+            opened={shareCopied || undefined}
+            position="right"
             withArrow
             color="dark"
           >
-            <Button
-              variant="filled"
-              color="dark"
-              size="sm"
+            <ActionIcon
+              variant="subtle"
+              color={shareCopied ? "teal" : "gray"}
+              size="md"
               radius={0}
-              leftSection={<IconShare size={14} />}
               onClick={handleCopyShare}
-              style={{ backgroundColor: "#141517" }}
+              aria-label={tr("calendarPage.share")}
             >
-              {tr("calendarPage.share")}
-            </Button>
+              <IconShare size={16} />
+            </ActionIcon>
           </Tooltip>
         )}
-        <Button
-          variant="filled"
-          color="dark"
-          size="sm"
-          radius={0}
-          leftSection={<IconRefresh size={14} />}
-          onClick={() => setResetModalOpen(true)}
-          style={{ backgroundColor: "#141517" }}
-        >
-          {tr("calendarPage.reset")}
-        </Button>
+        <Tooltip label={tr("calendarPage.reset")} position="right" withArrow color="dark">
+          <ActionIcon
+            variant="subtle"
+            color="gray"
+            size="md"
+            radius={0}
+            onClick={() => setResetModalOpen(true)}
+            aria-label={tr("calendarPage.reset")}
+          >
+            <IconRefresh size={16} />
+          </ActionIcon>
+        </Tooltip>
+        {onEnrolCli && (
+          <Button
+            variant="light"
+            color="green"
+            size="xs"
+            radius={0}
+            leftSection={<IconTerminal size={12} />}
+            disabled={!cliCommand}
+            onClick={onEnrolCli}
+            style={{ marginLeft: 4 }}
+          >
+            {tr("enrolCli.button")}
+          </Button>
+        )}
       </Group>
 
       <ResetModal
