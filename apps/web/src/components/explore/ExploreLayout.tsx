@@ -15,9 +15,17 @@ import {
   createExploreCourseFuse,
   searchExplore,
 } from "../../lib/explore/gradesSearch";
+import {
+  EMPTY_FILTERS,
+  filterCourseEntries,
+  filterProfessorEntries,
+  hasActiveFilters,
+  type ExploreFilterState,
+} from "../../lib/explore/exploreFilters";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { ExploreBackButton } from "./ExploreHistoryContext";
+import { ExploreFilterBar } from "./ExploreFilterBar";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "./ExploreProfessorGradesLayout";
 import { SearchResultCourseCard } from "./SearchResultCourseCard";
 import { SearchResultDisciplineCard } from "./SearchResultDisciplineCard";
@@ -153,10 +161,15 @@ export function ExploreLayout({
 
   const [query, setQueryState] = useState(initialQuery);
   const [debouncedQuery] = useDebouncedValue(query, 120);
+  const [filters, setFilters] = useState<ExploreFilterState>(EMPTY_FILTERS);
 
   const handleQueryChange = (v: string) => {
     setQueryState(v);
     onQueryChange?.(v);
+  };
+
+  const handleFilterChange = (next: Partial<ExploreFilterState>) => {
+    setFilters((prev) => ({ ...prev, ...next }));
   };
 
   const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
@@ -168,23 +181,44 @@ export function ExploreLayout({
   }, [grades, titleByCode, termNameById]);
 
   const courseEntries = useMemo(
-    () => buildCourseSearchEntries(offerings, titleByCode),
-    [offerings, titleByCode],
+    () => buildCourseSearchEntries(offerings, titleByCode, professorRatings),
+    [offerings, titleByCode, professorRatings],
   );
   const professorEntries = useMemo(
-    () => buildExploreProfessorSearchEntries(offerings),
-    [offerings],
+    () => buildExploreProfessorSearchEntries(offerings, professorRatings),
+    [offerings, professorRatings],
   );
   const courseFuse = useMemo(
     () => (courseEntries.length === 0 ? null : createExploreCourseFuse(courseEntries)),
     [courseEntries],
   );
 
-  const searchResults = useMemo(() => {
+  const activeFilters = hasActiveFilters(filters);
+
+  const rawSearchResults = useMemo(() => {
     const q = debouncedQuery.trim();
     if (!q || !courseFuse) return null;
     return searchExplore(q, { courseFuse, courseEntries, professorEntries });
   }, [debouncedQuery, courseFuse, courseEntries, professorEntries]);
+
+  const searchResults = useMemo(() => {
+    if (!rawSearchResults) return null;
+    if (!activeFilters) return rawSearchResults;
+    return {
+      ...rawSearchResults,
+      courses: filterCourseEntries(rawSearchResults.courses, filters),
+      professors: filterProfessorEntries(rawSearchResults.professors, filters),
+    };
+  }, [rawSearchResults, activeFilters, filters]);
+
+  const filterOnlyCourses = useMemo(() => {
+    const q = debouncedQuery.trim();
+    if (q || !activeFilters) return null;
+    return filterCourseEntries(courseEntries, filters)
+      .slice()
+      .sort((a, b) => a.courseCode.localeCompare(b.courseCode, "en"))
+      .slice(0, 24);
+  }, [debouncedQuery, activeFilters, courseEntries, filters]);
 
   const disciplineCourseCount = useMemo(() => buildDisciplineCourseCount(catalogue), [catalogue]);
 
@@ -201,16 +235,19 @@ export function ExploreLayout({
       .slice(0, DISCIPLINE_MAX_RESULTS);
   }, [debouncedQuery, disciplines]);
 
-  const showResults = query.trim().length > 0;
+  const showResults = debouncedQuery.trim().length > 0 || activeFilters;
   const hasResults =
     (searchResults?.courses.length ?? 0) > 0 ||
+    (filterOnlyCourses?.length ?? 0) > 0 ||
     (searchResults?.professors.length ?? 0) > 0 ||
     disciplineResults.length > 0;
 
+  const displayedCourses = filterOnlyCourses ?? searchResults?.courses ?? [];
+
   const coursesSection =
-    searchResults && searchResults.courses.length > 0 ? (
+    displayedCourses.length > 0 ? (
       <SearchCardSection label={tr("explore.resultsCourses")} delay={0}>
-        {searchResults.courses.map((entry) => (
+        {displayedCourses.map((entry) => (
           <motion.div
             key={entry.normCode}
             initial={{ opacity: 0, scale: 0.94 }}
@@ -321,6 +358,7 @@ export function ExploreLayout({
             )}
           </Title>
           <ExploreSearchInput value={query} onChange={handleQueryChange} disabled={loading} />
+          <ExploreFilterBar filters={filters} onChange={handleFilterChange} />
         </Stack>
       </Box>
 
@@ -348,10 +386,30 @@ export function ExploreLayout({
                   {orderedSections}
                 </Stack>
               ) : (
-                <Box px={{ base: 16, xs: 24 }} mt={8}>
+                <Box
+                  style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs, paddingRight: 24 }}
+                  mt={8}
+                >
                   <Text size="sm" c="dimmed">
-                    {tr("search.noResults", { q: query.trim() })}
+                    {activeFilters && !debouncedQuery.trim()
+                      ? tr("explore.filter.noResults")
+                      : tr("search.noResults", { q: query.trim() })}
                   </Text>
+                  {activeFilters && (
+                    <Text
+                      size="sm"
+                      c="violet.4"
+                      mt={4}
+                      style={{
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                        textUnderlineOffset: 2,
+                      }}
+                      onClick={() => setFilters(EMPTY_FILTERS)}
+                    >
+                      {tr("explore.filter.clearFilters")}
+                    </Text>
+                  )}
                 </Box>
               )}
             </motion.div>

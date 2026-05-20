@@ -1099,3 +1099,63 @@ msgstr "Pas de note"
 
 msgid "search.noGradeData"
 msgstr "Pas de données"
+
+msgid "explore.filter.level"
+msgstr "Niveau"
+
+msgid "explore.filter.language"
+msgstr "Langue"
+
+msgid "explore.filter.difficulty"
+msgstr "Difficulté"
+
+msgid "explore.filter.rating"
+msgstr "Évaluation"
+
+msgid "explore.filter.clearAll"
+msgstr "Tout effacer"
+
+msgid "explore.filter.level.1000"
+msgstr "1re année"
+
+msgid "explore.filter.level.2000"
+msgstr "2e année"
+
+msgid "explore.filter.level.3000"
+msgstr "3e année"
+
+msgid "explore.filter.level.4000"
+msgstr "4e année"
+
+msgid "explore.filter.level.5000"
+msgstr "Cycles supérieurs"
+
+msgid "explore.filter.language.en"
+msgstr "Anglais"
+
+msgid "explore.filter.language.fr"
+msgstr "Français"
+
+msgid "explore.filter.difficulty.easy"
+msgstr "Facile"
+
+msgid "explore.filter.difficulty.moderate"
+msgstr "Modéré"
+
+msgid "explore.filter.difficulty.tough"
+msgstr "Difficile"
+
+msgid "explore.filter.rating.good"
+msgstr "Bien (3,0+)"
+
+msgid "explore.filter.rating.great"
+msgstr "Très bien (3,5+)"
+
+msgid "explore.filter.rating.excellent"
+msgstr "Excellent (4,0+)"
+
+msgid "explore.filter.noResults"
+msgstr "Aucun cours ne correspond à ces filtres."
+
+msgid "explore.filter.clearFilters"
+msgstr "Effacer les filtres"

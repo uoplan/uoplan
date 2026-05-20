@@ -1118,3 +1118,63 @@ msgstr "No rating"
 
 msgid "search.noGradeData"
 msgstr "No grade data"
+
+msgid "explore.filter.level"
+msgstr "Level"
+
+msgid "explore.filter.language"
+msgstr "Language"
+
+msgid "explore.filter.difficulty"
+msgstr "Difficulty"
+
+msgid "explore.filter.rating"
+msgstr "Rating"
+
+msgid "explore.filter.clearAll"
+msgstr "Clear all"
+
+msgid "explore.filter.level.1000"
+msgstr "1st Year"
+
+msgid "explore.filter.level.2000"
+msgstr "2nd Year"
+
+msgid "explore.filter.level.3000"
+msgstr "3rd Year"
+
+msgid "explore.filter.level.4000"
+msgstr "4th Year"
+
+msgid "explore.filter.level.5000"
+msgstr "Graduate"
+
+msgid "explore.filter.language.en"
+msgstr "English"
+
+msgid "explore.filter.language.fr"
+msgstr "French"
+
+msgid "explore.filter.difficulty.easy"
+msgstr "Easy"
+
+msgid "explore.filter.difficulty.moderate"
+msgstr "Moderate"
+
+msgid "explore.filter.difficulty.tough"
+msgstr "Tough"
+
+msgid "explore.filter.rating.good"
+msgstr "Good (3.0+)"
+
+msgid "explore.filter.rating.great"
+msgstr "Great (3.5+)"
+
+msgid "explore.filter.rating.excellent"
+msgstr "Excellent (4.0+)"
+
+msgid "explore.filter.noResults"
+msgstr "No courses match these filters."
+
+msgid "explore.filter.clearFilters"
+msgstr "Clear filters"
