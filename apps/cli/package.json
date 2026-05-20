@@ -12,7 +12,8 @@
     "dev": "node --experimental-transform-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/index.ts",
     "build": "tsc -p tsconfig.build.json",
     "publish:npm": "pnpm build && pnpm publish --access public --no-git-checks",
-    "typecheck": "tsgo --noEmit -p tsconfig.json"
+    "typecheck": "tsgo --noEmit -p tsconfig.json",
+    "test": "vitest run"
   },
   "dependencies": {
     "@clack/prompts": "^0.9.1",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@types/chrome-remote-interface": "^0.31",
-    "@types/node": "^25.5.0"
+    "@types/node": "^25.5.0",
+    "vitest": "^4.1.1"
   }
 }
