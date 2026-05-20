@@ -6,6 +6,7 @@ import { normalizeProfessorName } from "@uoplan/schedule";
 import { tr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import type { ExploreProfessorSearchEntry } from "../../lib/explore/gradesSearch";
+import { useExploreHistory } from "./ExploreHistoryContext";
 
 const LETTER_GRADES = new Set(["F", "E", "D", "D+", "C", "C+", "B", "B+", "A-", "A", "A+"]);
 
@@ -28,11 +29,14 @@ function professorLegacyParam(entry: ExploreProfessorSearchEntry): string {
 export function SearchResultProfessorCard({
   entry,
   professorRatings,
+  query,
 }: {
   entry: ExploreProfessorSearchEntry;
   professorRatings: ProfessorRatingsMap | null;
+  query?: string;
 }) {
   useLingui();
+  const { push } = useExploreHistory();
   const { gradeViz } = entry;
   const grade = gradeViz ? mostCommonGrade(gradeViz) : null;
   const passing = gradeViz ? Math.round(gradeViz.passingPercent) : null;
@@ -42,11 +46,20 @@ export function SearchResultProfessorCard({
     : null;
   const hasRating = rmpEntry != null && Number.isFinite(rmpEntry.rating);
 
+  const q = query?.trim() ?? "";
+
   return (
     <Link
       to="/explore/professor/$legacyId"
       params={{ legacyId: professorLegacyParam(entry) }}
       search={{ q: undefined }}
+      onClick={() => {
+        push({
+          to: "/explore",
+          search: q ? { q } : { q: undefined },
+          label: q ? tr("explore.backToSearch", { q }) : tr("explore.title"),
+        });
+      }}
       style={{
         width: 190,
         minWidth: 190,

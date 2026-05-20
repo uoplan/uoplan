@@ -6,6 +6,7 @@ import { tr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import type { ExploreCourseSearchEntry } from "../../lib/explore/gradesSearch";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
+import { useExploreHistory } from "./ExploreHistoryContext";
 
 const LETTER_GRADES = new Set(["F", "E", "D", "D+", "C", "C+", "B", "B+", "A-", "A", "A+"]);
 
@@ -20,17 +21,33 @@ function mostCommonGrade(gradeViz: GradeVizData): string | null {
   );
 }
 
-export function SearchResultCourseCard({ entry }: { entry: ExploreCourseSearchEntry }) {
+export function SearchResultCourseCard({
+  entry,
+  query,
+}: {
+  entry: ExploreCourseSearchEntry;
+  query?: string;
+}) {
   useLingui();
+  const { push } = useExploreHistory();
   const { gradeViz } = entry;
   const grade = gradeViz ? mostCommonGrade(gradeViz) : null;
   const passing = gradeViz ? Math.round(gradeViz.passingPercent) : null;
+
+  const q = query?.trim() ?? "";
 
   return (
     <Link
       to="/explore/course/$course"
       params={{ course: courseNormToPathParam(entry.normCode) }}
       search={{ q: undefined }}
+      onClick={() => {
+        push({
+          to: "/explore",
+          search: q ? { q } : { q: undefined },
+          label: q ? tr("explore.backToSearch", { q }) : tr("explore.title"),
+        });
+      }}
       style={{
         width: 190,
         minWidth: 190,

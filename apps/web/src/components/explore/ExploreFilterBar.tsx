@@ -114,6 +114,7 @@ export function ExploreFilterBar({
 
   const pillBarRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const pillRefs = useRef<Map<FilterKey, HTMLButtonElement | null>>(new Map());
 
   // Close when clicking anywhere outside the pill bar or dropdown
   useEffect(() => {
@@ -159,6 +160,9 @@ export function ExploreFilterBar({
             return (
               <FilterPill
                 key={key}
+                ref={(el) => {
+                  pillRefs.current.set(key, el);
+                }}
                 label={pillLabel(key, filters)}
                 active={active}
                 activeBg={bg}
@@ -189,7 +193,7 @@ export function ExploreFilterBar({
       {openedPopover && !isMobile && (
         <FilterDropdown
           filterKey={openedPopover}
-          pillBarRef={pillBarRef}
+          pillRef={{ current: pillRefs.current.get(openedPopover) ?? null }}
           dropdownRef={dropdownRef}
           filters={filters}
           onChange={handleChange}
@@ -209,13 +213,13 @@ export function ExploreFilterBar({
 
 function FilterDropdown({
   filterKey,
-  pillBarRef,
+  pillRef,
   dropdownRef,
   filters,
   onChange,
 }: {
   filterKey: FilterKey;
-  pillBarRef: React.RefObject<HTMLDivElement | null>;
+  pillRef: React.RefObject<HTMLButtonElement | null>;
   dropdownRef: React.RefObject<HTMLDivElement | null>;
   filters: ExploreFilterState;
   onChange: (next: Partial<ExploreFilterState>) => void;
@@ -223,11 +227,11 @@ function FilterDropdown({
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
 
   useEffect(() => {
-    const el = pillBarRef.current;
+    const el = pillRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
     setPos({ top: rect.bottom + 6, left: rect.left });
-  }, [filterKey, pillBarRef]);
+  }, [filterKey, pillRef]);
 
   if (!pos) return null;
 
