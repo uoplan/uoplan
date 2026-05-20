@@ -39,12 +39,14 @@ export function parseCourseCode(raw: string): { subject: string; catalogNbr: str
 }
 
 // PeopleSoft AJAX responses are XML wrappers. Extract ICStateNum and ICSID from them.
+// ICStateNum lives in inline JS; ICSID lives in the embedded HTML — use cheerio to
+// handle any attribute order rather than relying on a fragile regex.
 function extractAjaxState(xml: string): PageState {
   const stateNumMatch = xml.match(/ICStateNum\.value=(\d+)/);
-  const icsidMatch = xml.match(/name=['"]ICSID['"][^>]+value=['"]([^'"]+)['"]/);
+  const $ = load(extractPageHtml(xml));
   return {
     icStateNum: stateNumMatch?.[1] ?? "1",
-    icsid: icsidMatch?.[1] ?? "",
+    icsid: $("#ICSID").attr("value") ?? "",
   };
 }
 

@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process";
 import { createServer } from "node:http";
-import { existsSync } from "node:fs";
+import { existsSync, rmSync } from "node:fs";
 import CDP from "chrome-remote-interface";
 import type { StoredSession } from "./keychain.ts";
 
@@ -35,6 +35,11 @@ export async function launchBrowserAuth(): Promise<StoredSession> {
     );
   }
 
+  // Wipe the profile on every login so Chrome never reuses a stale cached session.
+  // Without this, Chrome opens the portal page from cache, loadEventFired fires
+  // immediately with a matching URL, and expired cookies get captured as "fresh".
+  rmSync("/tmp/uoplan-session", { recursive: true, force: true });
+
   const cdpPort = await findFreePort();
 
   const chrome = spawn(
@@ -43,7 +48,6 @@ export async function launchBrowserAuth(): Promise<StoredSession> {
       `--remote-debugging-port=${cdpPort}`,
       "--no-first-run",
       "--no-default-browser-check",
-      // Separate profile so the session doesn't bleed into the user's main Chrome.
       "--user-data-dir=/tmp/uoplan-session",
       PEOPLESOFT_URL,
     ],

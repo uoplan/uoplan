@@ -3,7 +3,7 @@ import { multiselect, select, isCancel, cancel, outro } from "@clack/prompts";
 import chalk from "chalk";
 import ora from "ora";
 import { getSession } from "../auth/keychain.ts";
-import { buildClient, AuthExpiredError, NoTermSelectedError } from "../api/client.ts";
+import { buildClient, AuthExpiredError, NoTermSelectedError, unwrapError } from "../api/client.ts";
 import { ENDPOINTS } from "../api/endpoints.ts";
 import { listCart, parseCart } from "../api/cart.ts";
 import type { CartItem } from "../api/cart.ts";
@@ -28,6 +28,15 @@ function buildOptions(items: CartItem[]) {
     label: item.courseCode,
     hint: item.instructors.join(", ") || undefined,
   }));
+}
+
+function handleAuthError(err: unknown): never {
+  const e = unwrapError(err);
+  if (e instanceof AuthExpiredError || e instanceof NoTermSelectedError) {
+    console.error(chalk.red((e as Error).message));
+    process.exit(1);
+  }
+  throw err;
 }
 
 async function runLoop(
@@ -82,11 +91,7 @@ async function runLoop(
     await runLoop(client, cartUrl, remaining);
   } catch (err) {
     spinner.fail();
-    if (err instanceof AuthExpiredError) {
-      console.error(chalk.red((err as Error).message));
-      process.exit(1);
-    }
-    throw err;
+    handleAuthError(err);
   }
 }
 
@@ -102,11 +107,7 @@ export async function runCartInteractive(): Promise<void> {
     await runLoop(client, cartUrl, items);
   } catch (err) {
     spinner.fail();
-    if (err instanceof AuthExpiredError || err instanceof NoTermSelectedError) {
-      console.error(chalk.red((err as Error).message));
-      process.exit(1);
-    }
-    throw err;
+    handleAuthError(err);
   }
 }
 
@@ -152,11 +153,7 @@ export async function runEnrolInteractive(): Promise<void> {
     }
   } catch (err) {
     spinner.fail();
-    if (err instanceof AuthExpiredError || err instanceof NoTermSelectedError) {
-      console.error(chalk.red((err as Error).message));
-      process.exit(1);
-    }
-    throw err;
+    handleAuthError(err);
   }
 }
 
@@ -178,11 +175,7 @@ export const cartCommand = new Command("cart")
           spinner.succeed(`Class ${classNumber} added to cart.`);
         } catch (err) {
           spinner.fail();
-          if (err instanceof AuthExpiredError || err instanceof NoTermSelectedError) {
-            console.error(chalk.red((err as Error).message));
-            process.exit(1);
-          }
-          throw err;
+          handleAuthError(err);
         }
       }),
   );
