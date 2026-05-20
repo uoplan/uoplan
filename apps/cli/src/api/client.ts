@@ -2,8 +2,6 @@ import { got } from "got";
 import { CookieJar, Cookie } from "tough-cookie";
 import type { StoredSession } from "../auth/keychain.ts";
 
-export const BASE_URL = "https://www.uocampus.uottawa.ca/psp/csprpr9www/EMPLOYEE/SA/c/";
-
 export class AuthExpiredError extends Error {
   constructor() {
     super("Session expired. Run `uoplan login` to authenticate.");
@@ -29,7 +27,7 @@ export async function buildClient(session: StoredSession) {
 
   const client = got.extend({
     cookieJar: jar,
-    followRedirects: true,
+    followRedirect: true,
     hooks: {
       afterResponse: [
         (response) => {

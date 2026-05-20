@@ -1,10 +1,7 @@
 import { load } from "cheerio";
 import type { PeopleSoftClient } from "./client.ts";
-import { BASE_URL } from "./client.ts";
+import { ENDPOINTS } from "./endpoints.ts";
 import { extractPageState, buildFormBody } from "./peoplesoft.ts";
-
-const ENROLL_LIST_URL = `${BASE_URL}SA_LEARNER_SERVICES.SSR_SSENRL_LIST.GBL`;
-const ENROLL_CART_URL = `${BASE_URL}SA_LEARNER_SERVICES.SSR_SSENRL_CART.GBL`;
 
 export interface CartItem {
   courseCode: string;
@@ -15,7 +12,7 @@ export interface CartItem {
 }
 
 export async function listCart(client: PeopleSoftClient): Promise<CartItem[]> {
-  const res = await client.get(ENROLL_LIST_URL);
+  const res = await client.get(ENDPOINTS.enrollList);
   const $ = load(res.body as string);
   const items: CartItem[] = [];
 
@@ -38,11 +35,11 @@ export async function listCart(client: PeopleSoftClient): Promise<CartItem[]> {
 }
 
 export async function addToCart(client: PeopleSoftClient, classNumber: string): Promise<void> {
-  const initRes = await client.get(ENROLL_CART_URL);
+  const initRes = await client.get(ENDPOINTS.enrollCart);
   const state = extractPageState(initRes.body as string);
 
   // ICAction and field names TBD — update after inspecting the live cart form.
-  await client.post(ENROLL_CART_URL, {
+  await client.post(ENDPOINTS.enrollCart, {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: buildFormBody("DERIVED_REGFRM1_SSR_PB_ADDTOLIST", state, {
       DERIVED_REGFRM1_CLASS_NBR: classNumber,

@@ -25,7 +25,8 @@
     "enrich:schedules": "pnpm --filter scrapers enrich:schedules",
     "scrape:ratemyprofessors": "pnpm --filter scrapers scrape:ratemyprofessors",
     "build:data-proto": "pnpm --filter scrapers build:proto",
-    "check:terms": "pnpm --filter scrapers check:terms"
+    "check:terms": "pnpm --filter scrapers check:terms",
+    "cli": "pnpm --silent --filter @uoplan/cli dev --"
   },
   "devDependencies": {
     "@typescript/native-preview": "7.0.0-dev.20260512.1",
