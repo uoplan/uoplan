@@ -49,6 +49,8 @@ enum Cmd {
     Run {
         payload: String,
     },
+    /// Check for and install the latest version
+    Update,
 }
 
 #[derive(Subcommand)]
@@ -76,7 +78,14 @@ async fn main() {
 
 async fn run() -> Result<()> {
     let cli = Cli::parse();
-    match cli.command {
+
+    let update_handle = if !matches!(cli.command, Cmd::Update) {
+        Some(tokio::spawn(update::check_for_update()))
+    } else {
+        None
+    };
+
+    let result = match cli.command {
         Cmd::Login => commands::login::run().await,
         Cmd::Logout => commands::logout::run().await,
         Cmd::Term { sub } => match sub {
@@ -92,5 +101,16 @@ async fn run() -> Result<()> {
         Cmd::Enrol => commands::cart::enrol().await,
         Cmd::Fetch { url } => commands::fetch::run(&url).await,
         Cmd::Run { payload } => commands::run::run(&payload).await,
+        Cmd::Update => commands::update::run().await,
+    };
+
+    if let Some(handle) = update_handle {
+        if let Ok(Some(version)) = handle.await {
+            eprintln!(
+                "\n  a new version is available: v{version} — run 'uoplan update' to install it"
+            );
+        }
     }
+
+    result
 }
