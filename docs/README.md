@@ -12,4 +12,5 @@
 | [webpush-notifications.md](./webpush-notifications.md)                                                                         | Web Push notification system — Worker, frontend toggle, and term-detection GitHub Action     |
 | [explore-search.md](./explore-search.md)                                                                                       | Explore search — `/search/` page, card components, and grade data aggregation                |
 | [cli.md](./cli.md)                                                                                                             | `@uoplan/cli` — command-line course cart and enrollment tool                                 |
+| [enrol-cli-modal.md](./enrol-cli-modal.md)                                                                                     | "Enrol via CLI" button and modal — encodes schedule as base64url protobuf for the CLI        |
 | [superpowers/specs/2026-04-29-webpush-notifications-design.md](./superpowers/specs/2026-04-29-webpush-notifications-design.md) | WebPush notification system — Cloudflare Worker, frontend toggle (Step 1), and GitHub Action |
