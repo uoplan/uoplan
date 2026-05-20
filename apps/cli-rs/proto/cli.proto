@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package cli;
+
+// A specific component+section selection for a course (e.g. LEC A00, LAB L01).
+message SectionSelection {
+  string component = 1;
+  string section = 2;
+}
+
+// A course and the sections the user has selected across its components.
+message CourseSelection {
+  string course_code = 1;
+  repeated SectionSelection sections = 2;
+}
+
+// The payload embedded in a `uoplan run` string.
+// Encoded as protobuf, optionally gzip-compressed, then base64url-encoded.
+message SchedulePayload {
+  uint32 term_id = 1;
+  repeated CourseSelection courses = 2;
+}

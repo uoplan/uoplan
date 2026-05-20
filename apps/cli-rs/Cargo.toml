@@ -1,0 +1,34 @@
+[package]
+name = "uoplan"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "uoplan"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", default-features = false, features = ["cookies", "gzip", "rustls-tls", "json"] }
+scraper = "0.27"
+inquire = "0.7"
+indicatif = "0.17"
+owo-colors = "4"
+chromiumoxide = { version = "0.9", default-features = false, features = ["bytes"] }
+prost = "0.14"
+base64 = "0.22"
+flate2 = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = "0.4"
+chrono-tz = "0.10"
+regex = "1"
+anyhow = "1"
+thiserror = "2"
+futures = "0.3"
+url = "2"
+
+[build-dependencies]
+prost-build = "0.14"
+protox = "0.9"

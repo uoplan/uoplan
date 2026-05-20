@@ -1,0 +1,94 @@
+use anyhow::{anyhow, Result};
+use chromiumoxide::{Browser, BrowserConfig};
+use futures::StreamExt;
+use std::path::Path;
+use std::time::Duration;
+
+use super::keychain::{SessionCookie, StoredSession};
+
+const PEOPLESOFT_URL: &str = "https://www.uocampus.uottawa.ca/psp/csprpr9www/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSR_SSENRL_LIST.GBL?languageCd=ENG";
+
+const CHROME_PATHS: &[&str] = &[
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary",
+    "/Applications/Chromium.app/Contents/MacOS/Chromium",
+];
+
+pub async fn launch_browser_auth() -> Result<StoredSession> {
+    let chrome_path = CHROME_PATHS
+        .iter()
+        .find(|p| Path::new(p).exists())
+        .ok_or_else(|| anyhow!("Google Chrome not found."))?;
+
+    // wipe old profile
+    let _ = std::fs::remove_dir_all("/tmp/uoplan-session");
+
+    let config = BrowserConfig::builder()
+        .chrome_executable(*chrome_path)
+        .user_data_dir("/tmp/uoplan-session")
+        .arg("--no-first-run")
+        .arg("--no-default-browser-check")
+        .launch_timeout(Duration::from_secs(30))
+        .build()
+        .map_err(|e| anyhow!("Failed to build browser config: {e}"))?;
+
+    let (mut browser, mut handler) = Browser::launch(config).await?;
+    let handler_task = tokio::spawn(async move {
+        loop {
+            if handler.next().await.is_none() {
+                break;
+            }
+        }
+    });
+
+    let page = browser.new_page(PEOPLESOFT_URL).await?;
+    println!("Chrome opened. Log in with your uOttawa account.");
+
+    let result = tokio::time::timeout(Duration::from_secs(300), async {
+        loop {
+            tokio::time::sleep(Duration::from_millis(500)).await;
+            if let Ok(Some(url)) = page.url().await {
+                if url.starts_with("https://www.uocampus.uottawa.ca/psp/")
+                    && !url.contains("login.microsoftonline.com")
+                {
+                    break;
+                }
+            }
+        }
+        Ok::<(), anyhow::Error>(())
+    })
+    .await;
+
+    if result.is_err() {
+        let _ = browser.close().await;
+        handler_task.abort();
+        return Err(anyhow!("Login timed out after 5 minutes."));
+    }
+
+    let cookies = page.get_cookies().await?;
+    let session_cookies: Vec<SessionCookie> = cookies
+        .into_iter()
+        .map(|c| SessionCookie {
+            name: c.name,
+            value: c.value,
+            domain: c.domain,
+            path: c.path,
+            expires: c.expires,
+            http_only: c.http_only,
+            secure: c.secure,
+        })
+        .collect();
+
+    let _ = browser.close().await;
+    handler_task.abort();
+
+    let saved_at = chrono::Utc::now().timestamp_millis();
+
+    Ok(StoredSession {
+        cookies: session_cookies,
+        saved_at,
+        strm: None,
+        term_index: None,
+        cart_url: None,
+    })
+}
