@@ -8,7 +8,10 @@ export function encodeSchedulePayload(schedule: GeneratedSchedule, termId: strin
       courseCode: e.courseCode,
       sections: Object.entries(e.sectionCombo).map(([component, { section }]) => ({
         component,
-        section: section.section,
+        section:
+          section.sectionCode ??
+          (section.section.match(/^([A-Za-z0-9]+)-/) ?? [])[1] ??
+          section.section,
       })),
     })),
   };

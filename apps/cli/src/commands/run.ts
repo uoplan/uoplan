@@ -123,10 +123,9 @@ async function runPayload(raw: string): Promise<void> {
     const classMap = parseAllClassNumbers(xml);
 
     // Find the primary (LEC or whichever is in the enabled search results) section.
-    // The payload may list sections in any order; we identify the primary as the one
-    // that appears as a selectable row in the search results.
+    // section field format is "A00-LEC FullSess." so match sectionCode-COMPONENT prefix.
     const primarySelection = course.sections.find((s) =>
-      results.some((r) => r.section.includes(`${s.component} ${s.section}`)),
+      results.some((r) => r.section.startsWith(`${s.section}-${s.component}`)),
     );
 
     if (!primarySelection) {
@@ -140,11 +139,12 @@ async function runPayload(raw: string): Promise<void> {
           `  Payload sections: ${course.sections.map((s) => `${s.component} ${s.section}`).join(", ")}`,
         ),
       );
+      console.log(chalk.dim(`  Available: ${results.map((r) => r.section).join(", ")}`));
       continue;
     }
 
     const primaryRow = results.find((r) =>
-      r.section.includes(`${primarySelection.component} ${primarySelection.section}`),
+      r.section.startsWith(`${primarySelection.section}-${primarySelection.component}`),
     )!;
 
     const selectSpinner = ora(
@@ -157,7 +157,6 @@ async function runPayload(raw: string): Promise<void> {
       selectSpinner.fail();
       handleAuthError(err);
     }
-
     // Walk companion pages (LAB, TUT, etc.).
     // The companion page shows class numbers but not component labels, so we use
     // classMap (built from the search results) to identify which option to pick.
@@ -171,14 +170,21 @@ async function runPayload(raw: string): Promise<void> {
 
       if (page.options.length > 0) {
         // Match companion options against the desired sections from the payload.
+        // Primary: use classMap (built from search results) for component+section matching.
+        // Fallback: match section code directly from the companion option's text.
         const match = page.options.find((o) => {
           const classNbr = o.section.split(" ")[0];
           const info = classMap.get(classNbr);
-          return (
-            info &&
-            companionSections.some(
+          if (info) {
+            return companionSections.some(
               (s) => s.component === info.component && s.section === info.section,
-            )
+            );
+          }
+          // The companion page doesn't label sections by component — match by section code.
+          // o.section is "classNbr sectionText" where sectionText may be "A02" or "A02-LAB FullSess."
+          const sectionText = o.section.split(" ").slice(1).join(" ");
+          return companionSections.some(
+            (s) => sectionText === s.section || sectionText.startsWith(`${s.section}-`),
           );
         });
 

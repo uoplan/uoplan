@@ -46,7 +46,7 @@ export function parseCourseCode(raw: string): {
 // PeopleSoft serialises in the *outer* XML stream — between the <GENSCRIPT> CDATA and
 // the <FIELD id='win0divPAGECONTAINER'> CDATA — so it is NOT inside the page-HTML
 // blob and must be found by searching the full response string.
-function extractAjaxState(xml: string): PageState {
+export function extractAjaxState(xml: string): PageState {
   const stateNumMatch = xml.match(/ICStateNum\.value=(\d+)/);
   // Primary: name attr before value (the order PeopleSoft currently uses).
   // Fallback: value before name, in case attribute order ever varies.
@@ -277,7 +277,7 @@ export async function selectSection(
 ): Promise<string> {
   const state = extractAjaxState(xml);
 
-  const result = (
+  let result = (
     await client.post(cartUrl, {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: buildAjaxBody(`SSR_PB_SELECT$${rowIndex}`, state, {
@@ -288,6 +288,13 @@ export async function selectSection(
   ).body as string;
 
   await debugDump("3-select", result);
+
+  // Partial-update responses (e.g. search-results highlight) don't carry ICSID.
+  // Inject the inherited ICSID so downstream callers (confirmEnrollment, etc.) can use it.
+  if (state.icsid && !extractAjaxState(result).icsid) {
+    result += `\n<input name='ICSID' id='ICSID' value='${state.icsid}' />`;
+  }
+
   return result;
 }
 
@@ -301,16 +308,21 @@ export async function submitCompanionSelection(
 ): Promise<string> {
   const state = extractAjaxState(xml);
 
-  const result = (
+  let result = (
     await client.post(cartUrl, {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: buildAjaxBody("DERIVED_CLS_DTL_NEXT_PB", state, {
-        [`SSR_CLS_TBL_R1$sels$0$$${companionIndex}`]: String(companionIndex),
+        [`SSR_CLS_TBL_R1$sels$${companionIndex}$$0`]: String(companionIndex),
       }),
     })
   ).body as string;
 
   await debugDump(`4-companion-${pageNum}`, result);
+
+  if (state.icsid && !extractAjaxState(result).icsid) {
+    result += `\n<input name='ICSID' id='ICSID' value='${state.icsid}' />`;
+  }
+
   return result;
 }
 
@@ -385,7 +397,10 @@ export function parseAllClassNumbers(
   const $ = load(html);
   const map = new Map<string, { component: string; section: string }>();
 
-  $("[id^='MTG_CLASS_NBR$']").each((_i, el) => {
+  // Use `a` to avoid non-anchor elements (e.g. enrolled-course spans) that share the prefix
+  // but have no corresponding MTG_CLASSNAME cell. Both PSHYPERLINK (selectable LEC rows) and
+  // PSHYPERLINKDISABLED (LAB/TUT rows) are anchor elements.
+  $("a[id^='MTG_CLASS_NBR$']").each((_i, el) => {
     const id = $(el).attr("id") ?? "";
     const rowMatch = id.match(/MTG_CLASS_NBR\$(\d+)$/);
     if (!rowMatch) return;
@@ -393,10 +408,10 @@ export function parseAllClassNumbers(
 
     const classNbr = $(el).text().trim();
     const sectionText = $(`#MTG_CLASSNAME\\$${rowIndex}`).text().replace(/\s+/g, " ").trim();
-    // sectionText looks like "CSI 3156 - LEC A00" or "CSI 3156 - LAB L01"
-    const compMatch = sectionText.match(/- ([A-Z]+) ([A-Z0-9]+)$/);
+    // sectionText looks like "A00-LEC FullSess." — sectionCode-COMPONENT session
+    const compMatch = sectionText.match(/^([A-Za-z0-9]+)-([A-Z]+)/);
     if (!classNbr || !compMatch) return;
-    map.set(classNbr, { component: compMatch[1], section: compMatch[2] });
+    map.set(classNbr, { component: compMatch[2], section: compMatch[1] });
   });
 
   return map;
