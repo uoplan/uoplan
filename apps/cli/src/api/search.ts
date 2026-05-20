@@ -367,3 +367,37 @@ export function parseConfirmMessages(xml: string): ConfirmMessages {
 export function parseConfirmErrors(xml: string): string[] {
   return parseConfirmMessages(xml).errors;
 }
+
+/**
+ * Parse all class number entries from a search results page — both selectable
+ * (PSHYPERLINK) and non-selectable (PSHYPERLINKDISABLED) — and return a map
+ * from class number → { component, section }.
+ *
+ * The first search-results table shows full section names like "CSI 3156 - LAB L01"
+ * even for companion sections that can't be directly clicked. The companion pages
+ * that follow a LEC selection omit the component label, so this map is needed to
+ * match companion options back to the desired payload sections.
+ */
+export function parseAllClassNumbers(
+  xml: string,
+): Map<string, { component: string; section: string }> {
+  const html = extractPageHtml(xml);
+  const $ = load(html);
+  const map = new Map<string, { component: string; section: string }>();
+
+  $("[id^='MTG_CLASS_NBR$']").each((_i, el) => {
+    const id = $(el).attr("id") ?? "";
+    const rowMatch = id.match(/MTG_CLASS_NBR\$(\d+)$/);
+    if (!rowMatch) return;
+    const rowIndex = parseInt(rowMatch[1], 10);
+
+    const classNbr = $(el).text().trim();
+    const sectionText = $(`#MTG_CLASSNAME\\$${rowIndex}`).text().replace(/\s+/g, " ").trim();
+    // sectionText looks like "CSI 3156 - LEC A00" or "CSI 3156 - LAB L01"
+    const compMatch = sectionText.match(/- ([A-Z]+) ([A-Z0-9]+)$/);
+    if (!classNbr || !compMatch) return;
+    map.set(classNbr, { component: compMatch[1], section: compMatch[2] });
+  });
+
+  return map;
+}
