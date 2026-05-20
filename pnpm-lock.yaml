@@ -56,6 +56,9 @@ importers:
       ora:
         specifier: ^8
         version: 8.2.0
+      schedule:
+        specifier: workspace:*
+        version: link:../../packages/schedule
       tough-cookie:
         specifier: ^6
         version: 6.0.1
