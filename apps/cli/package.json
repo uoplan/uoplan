@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --experimental-transform-types src/index.ts",
+    "dev": "node --experimental-transform-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/index.ts",
     "typecheck": "tsgo --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@clack/prompts": "^0.9.1",
     "chalk": "^5",
     "cheerio": "^1",
     "chrome-remote-interface": "^0.33",
