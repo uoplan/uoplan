@@ -10,7 +10,8 @@
     "apps/cli": {
       "release-type": "rust",
       "tag-name": "cli/v${version}",
-      "package-name": "uoplan"
+      "package-name": "uoplan",
+      "bootstrap-sha": "b084d782a626ec79500acbf0458e9e734b0abbd0"
     }
   },
   "pull-request-title-pattern": "chore${scope}: release${component} ${version} [skip ci]"
