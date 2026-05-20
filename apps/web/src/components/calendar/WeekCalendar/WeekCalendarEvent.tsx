@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 import { Tooltip } from "@mantine/core";
-import type { DataCache } from "schedule";
+import type { DataCache } from "@uoplan/schedule";
 import {
   COURSE_COLORS,
   COURSE_COLOR_HEX,
   hexToRgb,
   ratingColorToCssVar,
   ratingToColor,
-} from "schedule";
+} from "@uoplan/schedule";
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
 import { tr } from "../../../i18n";
 import { GradeDistributionBottomBar } from "../GradeDistributionViz";

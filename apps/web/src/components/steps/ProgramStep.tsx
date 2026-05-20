@@ -11,11 +11,11 @@ import {
   Switch,
 } from "@mantine/core";
 import { tr } from "../../i18n";
-import type { Program } from "schedule";
+import type { Program } from "@uoplan/schedule";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
-import { parseTranscriptPdf, findBestMatchingProgram, isOptCourse } from "schedule";
-import { normalizeCourseCode } from "schedule";
+import { parseTranscriptPdf, findBestMatchingProgram, isOptCourse } from "@uoplan/schedule";
+import { normalizeCourseCode } from "@uoplan/schedule";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
 
 interface ProgramStepProps {

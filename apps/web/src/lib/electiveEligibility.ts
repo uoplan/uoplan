@@ -1,4 +1,4 @@
-import { getCourseLevel, normalizeCourseCode } from "schedule";
+import { getCourseLevel, normalizeCourseCode } from "@uoplan/schedule";
 import { isBroadElectivePoolType } from "../store/scheduleHelpers";
 
 const MAX_ELECTIVE_LEVEL = 4000;

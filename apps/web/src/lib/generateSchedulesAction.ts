@@ -1,8 +1,8 @@
 import type { AppState } from "../store/types";
 import { isBasicPlannerActive } from "./calendarRoute";
 import type { GenerationErrorDetails, GenerationErrorState } from "../store/types";
-import type { DataCache } from "schedule";
-import { createSeededRng } from "schedule";
+import type { DataCache } from "@uoplan/schedule";
+import { createSeededRng } from "@uoplan/schedule";
 import {
   generateSchedulesWithPinned,
   getValidSectionCombos,
@@ -19,15 +19,15 @@ import {
   groupTokenPrefix,
   canonicalGroupToken,
   subjectPrefix,
-} from "schedule";
+} from "@uoplan/schedule";
 import {
   cacheWithClosedFilter,
   cacheWithPerCourseVirtualFilter,
   getCourseLevel,
   getEffectiveSchedule,
-} from "schedule";
-import { courseMatchesFilters } from "schedule";
-import { normalizeCourseCode } from "schedule";
+} from "@uoplan/schedule";
+import { courseMatchesFilters } from "@uoplan/schedule";
+import { normalizeCourseCode } from "@uoplan/schedule";
 import {
   buildPoolCaps,
   buildRequirementPools,
@@ -45,9 +45,9 @@ import {
   splitRequiredAndGeneral,
   canTakeCourse,
   buildPrereqContext,
-} from "schedule";
+} from "@uoplan/schedule";
 import { collectImplicitHonoursForSchedule } from "./implicitHonours";
-import { diagnoseTimetableFailure, type TimetableFailureDiagnostics } from "schedule";
+import { diagnoseTimetableFailure, type TimetableFailureDiagnostics } from "@uoplan/schedule";
 import { buildColorMap } from "./colorMap";
 import {
   isElectiveRequirementType,

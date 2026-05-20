@@ -1,5 +1,5 @@
-import type { RemainingRequirement } from "schedule";
-import type { DataCache } from "schedule";
+import type { RemainingRequirement } from "@uoplan/schedule";
+import type { DataCache } from "@uoplan/schedule";
 
 export type RequirementPool = {
   requirementId: string;

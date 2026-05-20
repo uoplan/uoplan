@@ -1,5 +1,5 @@
 import { Drawer, ScrollArea } from "@mantine/core";
-import type { ProfessorGraphNode, ProfessorRatingsMap } from "schedule";
+import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/schedule";
 import { tr } from "../../i18n";
 import type { ExploreOfferingFlat } from "../../lib/explore/gradesSearch";
 import type { GraphNeighbor, NeighborSortMode } from "../../lib/graph/professorGraphDetails";

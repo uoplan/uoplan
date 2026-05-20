@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 import { Stack, Text, Alert } from "@mantine/core";
-import type { DataCache } from "schedule";
-import { normalizeCourseCode } from "schedule";
+import type { DataCache } from "@uoplan/schedule";
+import { normalizeCourseCode } from "@uoplan/schedule";
 import type {
   RemainingRequirement,
   RequirementWithStatus,
   CompletedRequirementItem,
-} from "schedule";
+} from "@uoplan/schedule";
 import { useAppStore } from "../../store/appStore";
 import { RequirementNode, getStableNodeKey } from "./RequirementNode";
 import { applyOptionSelections, countSatisfiedTopLevelRoots } from "./requirementUtils";

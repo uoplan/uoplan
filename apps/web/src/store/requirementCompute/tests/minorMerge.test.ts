@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
-import type { Program, ProgramRequirement } from "schedule";
-import type { DataCache } from "schedule";
+import type { Program, ProgramRequirement } from "@uoplan/schedule";
+import type { DataCache } from "@uoplan/schedule";
 import { mergeProgramWithMinor } from "../minorMerge";
 
 // Mock schedule's computeRequirementsState so we don't have to build a complex cache
-vi.mock("schedule", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("schedule")>();
+vi.mock("@uoplan/schedule", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@uoplan/schedule")>();
   return {
     ...actual,
     computeRequirementsState: (program: Program) => {

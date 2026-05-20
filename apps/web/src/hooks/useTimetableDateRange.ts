@@ -1,5 +1,5 @@
 import { useEffect, type Dispatch, type SetStateAction } from "react";
-import type { GeneratedSchedule } from "schedule";
+import type { GeneratedSchedule } from "@uoplan/schedule";
 
 export function useTimetableDateRangeFromSchedule(
   schedule: GeneratedSchedule | null,

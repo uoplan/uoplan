@@ -1,4 +1,4 @@
-import { distributionGpa, GRADE_POINTS, normalizeCourseCode } from "schedule";
+import { distributionGpa, GRADE_POINTS, normalizeCourseCode } from "@uoplan/schedule";
 import {
   buildCourseSearchEntries,
   groupOfferingsByProfessor,

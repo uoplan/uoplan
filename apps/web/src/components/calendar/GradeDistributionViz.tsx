@@ -1,6 +1,6 @@
 import "./gradeDistribution.css";
 import { Stack, Text, Tooltip } from "@mantine/core";
-import type { GradeVizData } from "schedule";
+import type { GradeVizData } from "@uoplan/schedule";
 import { tr } from "../../i18n";
 
 const HIST_DIMS = {

@@ -29,7 +29,7 @@ import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { CalendarView } from "./CalendarView";
 import { ResetModal } from "../shared/ResetModal";
-import { buildScheduleIcs, downloadTextFile } from "schedule";
+import { buildScheduleIcs, downloadTextFile } from "@uoplan/schedule";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateRange";
 import { tr } from "../../i18n";

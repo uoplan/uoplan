@@ -1,4 +1,4 @@
-import type { ProfessorGraphNode } from "schedule";
+import type { ProfessorGraphNode } from "@uoplan/schedule";
 
 /** Compact professor id for graph URL (`?prof=`). Uses RMP legacy id when available. */
 export function professorToSearchParam(node: ProfessorGraphNode): string {

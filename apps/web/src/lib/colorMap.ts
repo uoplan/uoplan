@@ -1,4 +1,4 @@
-import type { GeneratedSchedule } from "schedule";
+import type { GeneratedSchedule } from "@uoplan/schedule";
 
 /**
  * Build a courseCode → colorIndex (0–7) map for a schedule.

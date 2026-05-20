@@ -41,6 +41,9 @@ importers:
       '@clack/prompts':
         specifier: ^0.9.1
         version: 0.9.1
+      '@uoplan/schedule':
+        specifier: workspace:*
+        version: link:../../packages/schedule
       chalk:
         specifier: ^5
         version: 5.6.2
@@ -59,9 +62,6 @@ importers:
       ora:
         specifier: ^8
         version: 8.2.0
-      schedule:
-        specifier: workspace:*
-        version: link:../../packages/schedule
       tough-cookie:
         specifier: ^6
         version: 6.0.1
@@ -142,6 +142,9 @@ importers:
       '@tanstack/react-router':
         specifier: ^1.169.2
         version: 1.169.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@uoplan/schedule':
+        specifier: workspace:^
+        version: link:../../packages/schedule
       framer-motion:
         specifier: ^12.36.0
         version: 12.38.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -160,9 +163,6 @@ importers:
       react-dom:
         specifier: ^19.2.4
         version: 19.2.4(react@19.2.4)
-      schedule:
-        specifier: workspace:^
-        version: link:../../packages/schedule
       sigma:
         specifier: ^3.0.3
         version: 3.0.3(graphology-types@0.24.8)

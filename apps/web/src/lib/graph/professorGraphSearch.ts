@@ -1,4 +1,4 @@
-import type { ProfessorGraphNode } from "schedule";
+import type { ProfessorGraphNode } from "@uoplan/schedule";
 
 export type ProfessorSearchEntry = {
   id: string;

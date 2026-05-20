@@ -3,8 +3,8 @@ import { useLingui } from "@lingui/react";
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import type { Catalogue, ProfessorRatingsMap, Term } from "schedule";
-import { normalizeCourseCode } from "schedule";
+import type { Catalogue, ProfessorRatingsMap, Term } from "@uoplan/schedule";
+import { normalizeCourseCode } from "@uoplan/schedule";
 import { tr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import {

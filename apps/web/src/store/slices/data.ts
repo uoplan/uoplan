@@ -16,10 +16,15 @@ import {
   type Indices,
   type Program,
   type SchedulesData,
-} from "schedule";
-import { buildDataCache, normalizeCourseCode, withExtraCourses, isOptCourse } from "schedule";
+} from "@uoplan/schedule";
+import {
+  buildDataCache,
+  normalizeCourseCode,
+  withExtraCourses,
+  isOptCourse,
+} from "@uoplan/schedule";
 import { getMergedCatalogue } from "./catalogueUtils";
-import { buildProfessorRatingsMap } from "schedule";
+import { buildProfessorRatingsMap } from "@uoplan/schedule";
 import {
   parseStateFromUrl,
   peekTermAndYear,
@@ -28,7 +33,7 @@ import {
   decodeStateFromBase64,
   urlToSlug,
   defaultUpcomingTermId,
-} from "schedule";
+} from "@uoplan/schedule";
 import { recomputeStateForProgram } from "../requirementCompute";
 import { LOCAL_STORAGE_KEY } from "../constants";
 import { applyHydrationNavigation } from "../../lib/hydrateNavigation";

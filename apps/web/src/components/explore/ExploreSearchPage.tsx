@@ -1,8 +1,8 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useLingui } from "@lingui/react";
 import { useMemo, useState } from "react";
-import type { Catalogue, Term } from "schedule";
-import { normalizeCourseCode } from "schedule";
+import type { Catalogue, Term } from "@uoplan/schedule";
+import { normalizeCourseCode } from "@uoplan/schedule";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import {
   buildCourseSpotlightIndex,

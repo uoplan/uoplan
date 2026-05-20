@@ -1,6 +1,6 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
-import { generateRandomSeed } from "schedule";
+import { generateRandomSeed } from "@uoplan/schedule";
 import { clearEnrollmentsCache } from "./schedules";
 
 interface ConstraintsSlice {

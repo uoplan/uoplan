@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { DataCache, DayOfWeekCode } from "schedule";
+import type { DataCache, DayOfWeekCode } from "@uoplan/schedule";
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
 import {
   WEEKDAY_CODES,

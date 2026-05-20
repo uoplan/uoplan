@@ -1,6 +1,6 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
-import { getEffectiveSchedule, generateRandomSeed } from "schedule";
+import { getEffectiveSchedule, generateRandomSeed } from "@uoplan/schedule";
 import {
   getValidSectionCombos,
   getEnrollmentsForCourse,
@@ -10,10 +10,10 @@ import {
   cacheWithPerCourseVirtualFilter,
   type CourseEnrollment,
   type GenerationConstraints,
-} from "schedule";
-import { normalizeCourseCode } from "schedule";
-import { courseMatchesFilters } from "schedule";
-import { isHonoursProject, canTakeCourse, buildPrereqContext } from "schedule";
+} from "@uoplan/schedule";
+import { normalizeCourseCode } from "@uoplan/schedule";
+import { courseMatchesFilters } from "@uoplan/schedule";
+import { isHonoursProject, canTakeCourse, buildPrereqContext } from "@uoplan/schedule";
 import { basicElectivesAfterPinnedDelta } from "../../lib/basicCalendarPins";
 import {
   DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS,
@@ -31,7 +31,7 @@ import {
 import { isAdvancedPlannerActive, isBasicPlannerActive } from "../../lib/calendarRoute";
 import { flushPersistedAppState } from "../../lib/persistAppState";
 import { nextSeed, noteLowestVisitedSeed, repairSeedPosition } from "../../lib/seedNavigation";
-import type { GeneratedSchedule } from "schedule";
+import type { GeneratedSchedule } from "@uoplan/schedule";
 
 function scheduleFingerprint(schedule: GeneratedSchedule): string {
   return schedule.enrollments

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import type { GeneratedSchedule } from "schedule";
+import type { GeneratedSchedule } from "@uoplan/schedule";
 
 type Phase = "idle" | "exiting" | "entering";
 

@@ -17,7 +17,7 @@ import { createCourseOptions, renderCourseOption } from "../shared/CourseSelect"
 import { BasicCourseFiltersCard } from "../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../i18n";
-import { parseTranscriptPdf, isOptCourse, normalizeCourseCode } from "schedule";
+import { parseTranscriptPdf, isOptCourse, normalizeCourseCode } from "@uoplan/schedule";
 import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
 import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 

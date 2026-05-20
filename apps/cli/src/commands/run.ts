@@ -2,7 +2,7 @@ import { gunzipSync } from "node:zlib";
 import { Command } from "commander";
 import chalk from "chalk";
 import ora from "ora";
-import { SchedulePayload } from "schedule/src/proto/cli.ts";
+import { SchedulePayload } from "@uoplan/schedule/src/proto/cli";
 import { getSession } from "../auth/keychain.ts";
 import {
   buildClient,

@@ -10,7 +10,7 @@ import {
   Select,
   Checkbox,
 } from "@mantine/core";
-import type { DayOfWeek } from "schedule";
+import type { DayOfWeek } from "@uoplan/schedule";
 import type { GenerationErrorDetails } from "../../store/types";
 import { GenerationErrorDetailBlocks } from "../GenerationErrorDetailBlocks";
 import { tr } from "../../i18n";

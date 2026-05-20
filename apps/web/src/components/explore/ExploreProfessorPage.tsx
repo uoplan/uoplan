@@ -2,8 +2,8 @@ import { Accordion, Anchor, Box, Group, Stack, Text, Title } from "@mantine/core
 import { useLingui } from "@lingui/react";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import type { Catalogue, ProfessorRatingsMap, Term } from "schedule";
-import { normalizeCourseCode, normalizeProfessorName } from "schedule";
+import type { Catalogue, ProfessorRatingsMap, Term } from "@uoplan/schedule";
+import { normalizeCourseCode, normalizeProfessorName } from "@uoplan/schedule";
 import { tr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { buildExploreOfferings, groupOfferingsByCourse } from "../../lib/explore/gradesSearch";

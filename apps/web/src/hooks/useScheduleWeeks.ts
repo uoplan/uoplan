@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import type { GeneratedSchedule } from "schedule";
+import type { GeneratedSchedule } from "@uoplan/schedule";
 
 export interface WeekGroup {
   startDate: string; // ISO date string — Monday of first week in group

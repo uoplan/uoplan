@@ -1,8 +1,13 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
 import { recomputeStateForProgram, getDisciplineCodesForProgram } from "../requirementCompute";
-import type { CourseLanguageBucket } from "schedule";
-import { buildDataCache, normalizeCourseCode, withExtraCourses, isOptCourse } from "schedule";
+import type { CourseLanguageBucket } from "@uoplan/schedule";
+import {
+  buildDataCache,
+  normalizeCourseCode,
+  withExtraCourses,
+  isOptCourse,
+} from "@uoplan/schedule";
 import { getMergedCatalogue } from "./catalogueUtils";
 import { pruneOptionSelectionsForClear } from "../../components/requirements/requirementUtils";
 import { isBasicPlannerActive } from "../../lib/calendarRoute";

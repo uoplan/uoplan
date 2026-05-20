@@ -8,7 +8,7 @@ import { fetchCommand } from "./commands/fetch.ts";
 import { termCommand } from "./commands/term.ts";
 import { searchCommand } from "./commands/search.ts";
 
-const program = new Command("uoplan").version("0.1.0").description("uOttawa course planner CLI");
+const program = new Command("uoplan").version("0.1.1").description("uOttawa course planner CLI");
 
 program.addCommand(loginCommand);
 program.addCommand(logoutCommand);

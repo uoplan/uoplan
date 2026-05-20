@@ -1,5 +1,5 @@
-import { computeRequirementsState, type DataCache } from "schedule";
-import type { Program, ProgramRequirement } from "schedule";
+import { computeRequirementsState, type DataCache } from "@uoplan/schedule";
+import type { Program, ProgramRequirement } from "@uoplan/schedule";
 
 export function mergeProgramWithMinor(
   mainProgram: Program,

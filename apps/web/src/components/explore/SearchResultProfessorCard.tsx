@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Box, Stack, Text } from "@mantine/core";
 import { useLingui } from "@lingui/react";
-import type { GradeVizData, ProfessorRatingsMap } from "schedule";
-import { normalizeProfessorName } from "schedule";
+import type { GradeVizData, ProfessorRatingsMap } from "@uoplan/schedule";
+import { normalizeProfessorName } from "@uoplan/schedule";
 import { tr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import type { ExploreProfessorSearchEntry } from "../../lib/explore/gradesSearch";

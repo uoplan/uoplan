@@ -8,7 +8,7 @@ import {
   groupCountedFrenchImmersionCodesByCategory,
   normalizeCourseCode,
   programTitleIndicatesNursing,
-} from "schedule";
+} from "@uoplan/schedule";
 import { useAppStore } from "../../store/appStore";
 import { tr } from "../../i18n";
 

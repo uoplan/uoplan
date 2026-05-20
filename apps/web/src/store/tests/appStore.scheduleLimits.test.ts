@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { buildDataCache } from "schedule";
-import type { Catalogue, Program } from "schedule";
-import type { SchedulesData } from "schedule";
-import { computeRequirementsState } from "schedule";
+import { buildDataCache } from "@uoplan/schedule";
+import type { Catalogue, Program } from "@uoplan/schedule";
+import type { SchedulesData } from "@uoplan/schedule";
+import { computeRequirementsState } from "@uoplan/schedule";
 import { useAppStore } from "../appStore";
 
 const testCatalogue: Catalogue = {
