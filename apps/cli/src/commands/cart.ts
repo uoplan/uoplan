@@ -1,10 +1,13 @@
 import { Command } from "commander";
+import { multiselect, select, isCancel, cancel, outro } from "@clack/prompts";
 import chalk from "chalk";
 import ora from "ora";
 import { getSession } from "../auth/keychain.ts";
 import { buildClient, AuthExpiredError, NoTermSelectedError } from "../api/client.ts";
 import { ENDPOINTS } from "../api/endpoints.ts";
-import { listCart, addToCart } from "../api/cart.ts";
+import { listCart, parseCart } from "../api/cart.ts";
+import type { CartItem } from "../api/cart.ts";
+import { submitCartAction, CART_ACTIONS } from "../api/enrollment.ts";
 
 function requireSession() {
   const session = getSession();
@@ -19,7 +22,95 @@ function requireSession() {
   return session as typeof session & { strm: string };
 }
 
-async function runList(): Promise<void> {
+function buildOptions(items: CartItem[]) {
+  return items.map((item) => ({
+    value: item.bufnum,
+    label: item.courseCode,
+    hint: item.instructors.join(", ") || undefined,
+  }));
+}
+
+async function runLoop(
+  client: Awaited<ReturnType<typeof buildClient>>["client"],
+  cartUrl: string,
+  items: CartItem[],
+): Promise<void> {
+  if (items.length === 0) {
+    outro("Cart is empty.");
+    return;
+  }
+
+  const selected = await multiselect({
+    message: "Select courses",
+    options: buildOptions(items),
+    required: true,
+  });
+
+  if (isCancel(selected)) {
+    cancel("Cancelled.");
+    return;
+  }
+
+  const action = await select({
+    message: "What would you like to do?",
+    options: [
+      { value: "enrol", label: "Enrol" },
+      { value: "delete", label: "Delete from cart" },
+    ],
+  });
+
+  if (isCancel(action)) {
+    cancel("Cancelled.");
+    return;
+  }
+
+  const isDelete = action === "delete";
+  const spinner = ora(isDelete ? "Deleting from cart" : "Submitting enrolment").start();
+
+  try {
+    const { html, errors } = await submitCartAction(
+      client,
+      cartUrl,
+      selected as number[],
+      isDelete ? CART_ACTIONS.delete : CART_ACTIONS.enrol,
+    );
+    spinner.stop();
+
+    for (const err of errors) console.log(`${chalk.red("error:")} ${err}`);
+
+    const remaining = parseCart(html);
+    await runLoop(client, cartUrl, remaining);
+  } catch (err) {
+    spinner.fail();
+    if (err instanceof AuthExpiredError) {
+      console.error(chalk.red((err as Error).message));
+      process.exit(1);
+    }
+    throw err;
+  }
+}
+
+export async function runCartInteractive(): Promise<void> {
+  const session = requireSession();
+  const spinner = ora("Fetching cart").start();
+
+  try {
+    const { client } = await buildClient(session);
+    const cartUrl = session.cartUrl ?? ENDPOINTS.enrollCart;
+    const items = await listCart(client, cartUrl);
+    spinner.stop();
+    await runLoop(client, cartUrl, items);
+  } catch (err) {
+    spinner.fail();
+    if (err instanceof AuthExpiredError || err instanceof NoTermSelectedError) {
+      console.error(chalk.red((err as Error).message));
+      process.exit(1);
+    }
+    throw err;
+  }
+}
+
+export async function runEnrolInteractive(): Promise<void> {
   const session = requireSession();
   const spinner = ora("Fetching cart").start();
 
@@ -34,32 +125,35 @@ async function runList(): Promise<void> {
       return;
     }
 
-    const header = [
-      chalk.bold("Section".padEnd(14)),
-      chalk.bold("#".padEnd(6)),
-      chalk.bold("Schedule".padEnd(36)),
-      chalk.bold("Instructor".padEnd(16)),
-      chalk.bold("Units"),
-    ].join("  ");
+    const selected = await multiselect({
+      message: "Select courses to enrol in",
+      options: buildOptions(items),
+      required: true,
+    });
 
-    console.log(header);
-    console.log("─".repeat(80));
+    if (isCancel(selected)) {
+      cancel("Cancelled.");
+      return;
+    }
 
-    for (const item of items) {
-      console.log(
-        [
-          item.section.padEnd(14),
-          item.classNumber.padEnd(6),
-          item.schedule.slice(0, 36).padEnd(36),
-          item.instructor.slice(0, 16).padEnd(16),
-          item.units,
-        ].join("  "),
-      );
+    const spinner2 = ora("Submitting enrolment").start();
+    const { errors } = await submitCartAction(
+      client,
+      cartUrl,
+      selected as number[],
+      CART_ACTIONS.enrol,
+    );
+    spinner2.stop();
+
+    if (errors.length > 0) {
+      for (const err of errors) console.log(`${chalk.red("error:")} ${err}`);
+    } else {
+      console.log(chalk.green("Done. Check uoCampus to confirm enrolment."));
     }
   } catch (err) {
     spinner.fail();
     if (err instanceof AuthExpiredError || err instanceof NoTermSelectedError) {
-      console.error(chalk.red(err.message));
+      console.error(chalk.red((err as Error).message));
       process.exit(1);
     }
     throw err;
@@ -68,8 +162,7 @@ async function runList(): Promise<void> {
 
 export const cartCommand = new Command("cart")
   .description("Manage your course shopping cart")
-  .action(runList)
-  .addCommand(new Command("list").description("List courses in your shopping cart").action(runList))
+  .action(runCartInteractive)
   .addCommand(
     new Command("add")
       .description("Add a course to your cart by class number")
@@ -80,12 +173,13 @@ export const cartCommand = new Command("cart")
         try {
           const { client } = await buildClient(session);
           const cartUrl = session.cartUrl ?? ENDPOINTS.enrollCart;
+          const { addToCart } = await import("../api/cart.ts");
           await addToCart(client, cartUrl, classNumber);
           spinner.succeed(`Class ${classNumber} added to cart.`);
         } catch (err) {
           spinner.fail();
           if (err instanceof AuthExpiredError || err instanceof NoTermSelectedError) {
-            console.error(chalk.red(err.message));
+            console.error(chalk.red((err as Error).message));
             process.exit(1);
           }
           throw err;
