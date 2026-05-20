@@ -15,10 +15,10 @@ $BinaryName = "uoplan.exe"
 
 # ── Platform detection ───────────────────────────────────────────────────────
 function Get-Target {
-    $arch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture
+    $arch = $env:PROCESSOR_ARCHITECTURE
     switch ($arch) {
-        "X64"   { return "x86_64-pc-windows-msvc" }
-        "Arm64" { Write-Error "ARM64 Windows is not yet supported."; exit 1 }
+        "AMD64" { return "x86_64-pc-windows-msvc" }
+        "ARM64" { Write-Error "ARM64 Windows is not yet supported."; exit 1 }
         default { Write-Error "Unsupported architecture: $arch"; exit 1 }
     }
 }

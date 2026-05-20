@@ -1,105 +1,83 @@
 use anyhow::{anyhow, Result};
-use chromiumoxide::{Browser, BrowserConfig};
-use futures::StreamExt;
 use std::time::Duration;
+use thirtyfour::{
+    common::capabilities::firefox::FirefoxPreferences, prelude::*,
+};
 
 use super::keychain::{SessionCookie, StoredSession};
 
 const PEOPLESOFT_URL: &str = "https://www.uocampus.uottawa.ca/psp/csprpr9www/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSR_SSENRL_LIST.GBL?languageCd=ENG";
 
 pub async fn launch_browser_auth() -> Result<StoredSession> {
-    let session_dir = std::env::temp_dir().join("uoplan-session");
-    let _ = std::fs::remove_dir_all(&session_dir);
-
-    let config = BrowserConfig::builder()
-        .user_data_dir(&session_dir)
-        .arg("--no-first-run")
-        .arg("--no-default-browser-check")
-        .arg("--disable-sync")
-        .arg("--disable-background-networking")
-        .arg("--disable-background-timer-throttling")
-        .arg("--disable-backgrounding-occluded-windows")
-        .arg("--disable-breakpad")
-        .arg("--disable-client-side-phishing-detection")
-        .arg("--disable-component-extensions-with-background-pages")
-        .arg("--disable-default-apps")
-        .arg("--disable-dev-shm-usage")
-        .arg("--disable-hang-monitor")
-        .arg("--disable-ipc-flooding-protection")
-        .arg("--disable-prompt-on-repost")
-        .arg("--disable-renderer-backgrounding")
-        .arg("--metrics-recording-only")
-        .arg("--password-store=basic")
-        .arg("--use-mock-keychain")
-        .viewport(None)
-        .launch_timeout(Duration::from_secs(30))
-        .disable_default_args()
-        .with_head()
-        .build()
-        .map_err(|e| anyhow!("Failed to build browser config: {e}. Make sure Chrome, Chromium, or Edge is installed."))?;
-
-    let (mut browser, mut handler) = Browser::launch(config).await?;
-    let handler_task = tokio::spawn(async move {
-        loop {
-            if handler.next().await.is_none() {
-                break;
-            }
-        }
-    });
-
-    let page = loop {
-        let pages = browser.pages().await?;
-        if let Some(p) = pages.into_iter().next() {
-            p.goto(PEOPLESOFT_URL).await?;
-            break p;
-        }
-        tokio::time::sleep(Duration::from_millis(100)).await;
+    let driver = match try_chrome().await {
+        Ok(d) => d,
+        Err(_) => try_firefox().await.map_err(|_| {
+            anyhow!("No supported browser found. Install Chrome, Edge, or Firefox.")
+        })?,
     };
-    cliclack::log::info("Chrome opened — log in with your uOttawa account.")?;
+
+    run_auth_flow(driver).await
+}
+
+async fn try_chrome() -> WebDriverResult<WebDriver> {
+    let mut caps = DesiredCapabilities::chrome();
+    caps.add_exclude_switch("enable-automation")?;
+    caps.add_experimental_option("useAutomationExtension", false)?;
+    caps.add_arg("--disable-blink-features=AutomationControlled")?;
+    WebDriver::managed(caps).await
+}
+
+async fn try_firefox() -> WebDriverResult<WebDriver> {
+    let mut caps = DesiredCapabilities::firefox();
+    let mut prefs = FirefoxPreferences::new();
+    prefs.set("dom.webdriver.enabled", false)?;
+    caps.set_preferences(prefs)?;
+    WebDriver::managed(caps).await
+}
+
+async fn run_auth_flow(driver: WebDriver) -> Result<StoredSession> {
+    driver.goto(PEOPLESOFT_URL).await?;
+    cliclack::log::info("Browser opened — log in with your uOttawa account.")?;
 
     let result = tokio::time::timeout(Duration::from_secs(300), async {
         loop {
             tokio::time::sleep(Duration::from_millis(500)).await;
-            if let Ok(Some(url)) = page.url().await {
-                if url.starts_with("https://www.uocampus.uottawa.ca/psp/")
-                    && !url.contains("login.microsoftonline.com")
+            if let Ok(url) = driver.current_url().await {
+                let s = url.as_str();
+                if s.starts_with("https://www.uocampus.uottawa.ca/psp/")
+                    && !s.contains("login.microsoftonline.com")
                 {
                     break;
                 }
             }
         }
-        Ok::<(), anyhow::Error>(())
     })
     .await;
 
     if result.is_err() {
-        let _ = browser.close().await;
-        handler_task.abort();
+        let _ = driver.quit().await;
         return Err(anyhow!("Login timed out after 5 minutes."));
     }
 
-    let cookies = page.get_cookies().await?;
-    let session_cookies: Vec<SessionCookie> = cookies
+    let cookies = driver.get_all_cookies().await?;
+    let _ = driver.quit().await;
+
+    let session_cookies = cookies
         .into_iter()
         .map(|c| SessionCookie {
-            name: c.name,
-            value: c.value,
-            domain: c.domain,
-            path: c.path,
-            expires: c.expires,
-            http_only: c.http_only,
-            secure: c.secure,
+            name: c.name.clone(),
+            value: c.value.clone(),
+            domain: c.domain.clone().unwrap_or_default(),
+            path: c.path.clone().unwrap_or_default(),
+            expires: c.expiry.map(|e| e as f64).unwrap_or(-1.0),
+            http_only: false,
+            secure: c.secure.unwrap_or(false),
         })
         .collect();
 
-    let _ = browser.close().await;
-    handler_task.abort();
-
-    let saved_at = chrono::Utc::now().timestamp_millis();
-
     Ok(StoredSession {
         cookies: session_cookies,
-        saved_at,
+        saved_at: chrono::Utc::now().timestamp_millis(),
         strm: None,
         term_index: None,
         cart_url: None,
