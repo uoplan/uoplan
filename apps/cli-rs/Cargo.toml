@@ -2,6 +2,13 @@
 name = "uoplan"
 version = "0.1.0"
 edition = "2021"
+description = "Course planner CLI for University of Ottawa students — search, enrol, and snipe course registrations via PeopleSoft"
+license = "MIT"
+repository = "https://github.com/uoplan/uoplan"
+homepage = "https://uoplan.ca"
+keywords = ["uottawa", "course", "enrollment", "cli"]
+categories = ["command-line-utilities"]
+readme = "README.md"
 
 [[bin]]
 name = "uoplan"
