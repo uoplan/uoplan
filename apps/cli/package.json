@@ -1,0 +1,24 @@
+{
+  "name": "@uoplan/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --experimental-transform-types src/index.ts",
+    "typecheck": "tsgo --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "chalk": "^5",
+    "cheerio": "^1",
+    "chrome-remote-interface": "^0.33",
+    "commander": "^12",
+    "got": "^14",
+    "ora": "^8",
+    "tough-cookie": "^6",
+    "zod": "^4"
+  },
+  "devDependencies": {
+    "@types/chrome-remote-interface": "^0.31",
+    "@types/node": "^25.5.0"
+  }
+}
