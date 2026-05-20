@@ -22,8 +22,8 @@ interface EnrolCliModalProps {
 function getInstallCommand(): string | null {
   const ua = navigator.userAgent;
   if (/Android|iPhone|iPad|iPod/i.test(ua)) return null;
-  if (/Win/i.test(ua)) return "irm https://uoplan.ca/install.ps1 | iex";
-  return "curl -fsSL https://uoplan.ca/install.sh | sh";
+  if (/Win/i.test(ua)) return "irm https://uoplan.party/install.ps1 | iex";
+  return "curl -fsSL https://uoplan.party/install.sh | sh";
 }
 
 function CopyRow({ value }: { value: string }) {

@@ -1,7 +1,7 @@
 #!/bin/sh
 # uoplan CLI installer
-# Usage: curl -fsSL https://uoplan.ca/install.sh | sh
-# Or to install to a custom directory: curl -fsSL https://uoplan.ca/install.sh | sh -s -- --install-dir /usr/local/bin
+# Usage: curl -fsSL https://uoplan.party/install.sh | sh
+# Or to install to a custom directory: curl -fsSL https://uoplan.party/install.sh | sh -s -- --install-dir /usr/local/bin
 
 set -eu
 

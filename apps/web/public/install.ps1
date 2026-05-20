@@ -1,7 +1,7 @@
 # uoplan CLI installer for Windows
-# Usage: irm https://uoplan.ca/install.ps1 | iex
+# Usage: irm https://uoplan.party/install.ps1 | iex
 # Or to install to a custom directory:
-#   $env:UOPLAN_INSTALL_DIR = "C:\Tools"; irm https://uoplan.ca/install.ps1 | iex
+#   $env:UOPLAN_INSTALL_DIR = "C:\Tools"; irm https://uoplan.party/install.ps1 | iex
 
 param(
     [string]$InstallDir = $env:UOPLAN_INSTALL_DIR
