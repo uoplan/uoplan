@@ -121,12 +121,24 @@ pub fn parse_search_results(xml: &str) -> Vec<SearchResult> {
         let section = doc
             .select(&sec_sel)
             .next()
-            .map(|e| e.text().collect::<String>().trim().to_string())
+            .map(|e| {
+                e.text()
+                    .collect::<String>()
+                    .split_whitespace()
+                    .collect::<Vec<_>>()
+                    .join(" ")
+            })
             .unwrap_or_default();
         let days = doc
             .select(&day_sel)
             .next()
-            .map(|e| e.text().collect::<String>().trim().to_string())
+            .map(|e| {
+                e.text()
+                    .collect::<String>()
+                    .split_whitespace()
+                    .collect::<Vec<_>>()
+                    .join(" ")
+            })
             .unwrap_or_default();
         let room_text = doc
             .select(&room_sel)

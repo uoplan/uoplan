@@ -19,10 +19,7 @@ fn cart_url_from_session() -> Result<(PeopleSoftClient, String)> {
 }
 
 fn item_label(item: &CartItem) -> String {
-    format!(
-        "{} {} (#{}) {}",
-        item.course_code, item.section, item.class_number, item.units
-    )
+    item.course_code.clone()
 }
 
 fn item_hint(item: &CartItem) -> String {
