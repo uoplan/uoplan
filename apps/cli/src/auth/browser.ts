@@ -54,13 +54,21 @@ export async function launchBrowserAuth(): Promise<StoredSession> {
     throw new Error(`Failed to launch Chrome: ${err.message}`);
   });
 
-  // Give Chrome a moment to start the debugging server.
-  await new Promise((resolve) => setTimeout(resolve, 1500));
-
   let client: CDP.Client | undefined;
 
   try {
-    client = await CDP({ port: cdpPort });
+    // Retry connecting to Chrome's debugging server until it's ready.
+    const deadline = Date.now() + 10_000;
+    while (true) {
+      try {
+        client = await CDP({ port: cdpPort });
+        break;
+      } catch {
+        if (Date.now() >= deadline)
+          throw new Error("Chrome did not start its debugging server in time.");
+        await new Promise((resolve) => setTimeout(resolve, 250));
+      }
+    }
 
     const { Network, Page } = client;
     await Network.enable();
