@@ -3,7 +3,13 @@ import { select, isCancel, cancel } from "@clack/prompts";
 import chalk from "chalk";
 import ora from "ora";
 import { getSession } from "../auth/keychain.ts";
-import { buildClient, AuthExpiredError, NoTermSelectedError } from "../api/client.ts";
+import {
+  buildClient,
+  AuthExpiredError,
+  NoTermSelectedError,
+  NoCookiesError,
+  unwrapError,
+} from "../api/client.ts";
 import { ENDPOINTS } from "../api/endpoints.ts";
 import {
   parseCourseCode,
@@ -28,6 +34,19 @@ function formatCompanion(o: CompanionOption): string {
   return parts.join(" — ");
 }
 
+function handleAuthError(err: unknown): never {
+  const e = unwrapError(err);
+  if (
+    e instanceof AuthExpiredError ||
+    e instanceof NoTermSelectedError ||
+    e instanceof NoCookiesError
+  ) {
+    console.error(chalk.red((e as Error).message));
+    process.exit(1);
+  }
+  throw err;
+}
+
 async function runSearch(course: string): Promise<void> {
   const session = getSession();
   if (!session) {
@@ -48,11 +67,7 @@ async function runSearch(course: string): Promise<void> {
     ({ client } = await buildClient(session));
   } catch (err) {
     spinner.fail();
-    if (err instanceof AuthExpiredError || err instanceof NoTermSelectedError) {
-      console.error(chalk.red((err as Error).message));
-      process.exit(1);
-    }
-    throw err;
+    handleAuthError(err);
   }
 
   let xml: string;
@@ -62,11 +77,7 @@ async function runSearch(course: string): Promise<void> {
     spinner.stop();
   } catch (err) {
     spinner.fail();
-    if (err instanceof AuthExpiredError || err instanceof NoTermSelectedError) {
-      console.error(chalk.red((err as Error).message));
-      process.exit(1);
-    }
-    throw err;
+    handleAuthError(err);
   }
 
   if (results.length === 0) {

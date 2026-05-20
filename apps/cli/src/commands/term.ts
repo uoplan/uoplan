@@ -3,7 +3,7 @@ import chalk from "chalk";
 import ora from "ora";
 import * as clack from "@clack/prompts";
 import { getSession, setTerm } from "../auth/keychain.ts";
-import { buildClient, AuthExpiredError } from "../api/client.ts";
+import { buildClient, AuthExpiredError, unwrapError } from "../api/client.ts";
 import { listTerms, selectTerm } from "../api/terms.ts";
 
 function requireSession() {
@@ -26,8 +26,9 @@ async function runInteractive(): Promise<void> {
     spinner.stop();
   } catch (err) {
     spinner.fail();
-    if (err instanceof AuthExpiredError) {
-      console.error(chalk.red(err.message));
+    const e = unwrapError(err);
+    if (e instanceof AuthExpiredError) {
+      console.error(chalk.red(e.message));
       process.exit(1);
     }
     throw err;
@@ -60,8 +61,9 @@ async function runInteractive(): Promise<void> {
     spinner2.succeed(`Term set to ${chalk.bold(terms[selected as number].name)}.`);
   } catch (err) {
     spinner2.fail();
-    if (err instanceof AuthExpiredError) {
-      console.error(chalk.red(err.message));
+    const e = unwrapError(err);
+    if (e instanceof AuthExpiredError) {
+      console.error(chalk.red(e.message));
       process.exit(1);
     }
     throw err;

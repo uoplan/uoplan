@@ -19,11 +19,25 @@ export class AuthExpiredError extends Error {
   }
 }
 
+export class NoCookiesError extends Error {
+  constructor() {
+    super("No session cookies found for uocampus.uottawa.ca. Run `uoplan login` to authenticate.");
+    this.name = "NoCookiesError";
+  }
+}
+
 export class NoTermSelectedError extends Error {
   constructor() {
     super("No term selected. Run `uoplan term` to select one.");
     this.name = "NoTermSelectedError";
   }
+}
+
+// got wraps errors thrown from hooks in a RequestError with the original as .cause.
+// This unwraps one level so instanceof checks work correctly.
+export function unwrapError(err: unknown): unknown {
+  if (err instanceof Error && err.cause instanceof Error) return err.cause;
+  return err;
 }
 
 export async function buildClient(session: StoredSession) {
@@ -40,6 +54,11 @@ export async function buildClient(session: StoredSession) {
       secure: c.secure,
     });
     await jar.setCookie(cookie, `https://${cookie.domain}/`);
+  }
+
+  const loadedCookies = await jar.getCookies("https://www.uocampus.uottawa.ca/");
+  if (loadedCookies.length === 0) {
+    throw new NoCookiesError();
   }
 
   // Raw client: auth detection only. Used internally to avoid handler recursion.
