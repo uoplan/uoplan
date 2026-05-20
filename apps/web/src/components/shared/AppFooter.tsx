@@ -19,7 +19,6 @@ export function AppFooter() {
       pb="max(14px, env(safe-area-inset-bottom))"
       style={{
         alignSelf: "stretch",
-        borderTop: "1px solid #2C2E33",
       }}
     >
       <Box

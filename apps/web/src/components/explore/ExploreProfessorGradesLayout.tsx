@@ -52,12 +52,6 @@ function professorRatingLine(displayName: string, professorRatings: ProfessorRat
   );
 }
 
-/** Extract a short label from term label (e.g., "Fall Term 2024" → "Fall 2024") */
-function shortTermLabel(termLabel: string): string {
-  // Remove " Term" from labels like "Fall Term 2024"
-  return termLabel.replace(" Term", "");
-}
-
 type ExploreProfessorSummaryBarProps = {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
@@ -81,44 +75,6 @@ export function ExploreProfessorSummaryBar({
   );
 
   const ratingLine = professorRatingLine(group.displayName, professorRatings);
-
-  // Calculate date range metadata
-  const { totalSections, newestTermLabel, oldestTermLabel } = useMemo(() => {
-    if (group.offerings.length === 0) {
-      return { totalSections: 0, newestTermLabel: "", oldestTermLabel: "" };
-    }
-    // Find min/max termId to get date range
-    let minTermId = group.offerings[0].termId;
-    let maxTermId = group.offerings[0].termId;
-    let minLabel = group.offerings[0].termLabel;
-    let maxLabel = group.offerings[0].termLabel;
-
-    for (const o of group.offerings) {
-      if (o.termId < minTermId) {
-        minTermId = o.termId;
-        minLabel = o.termLabel;
-      }
-      if (o.termId > maxTermId) {
-        maxTermId = o.termId;
-        maxLabel = o.termLabel;
-      }
-    }
-    return {
-      totalSections: group.offerings.length,
-      newestTermLabel: maxLabel,
-      oldestTermLabel: minLabel,
-    };
-  }, [group.offerings]);
-
-  // Format metadata text: "X sections from Fall 2020 to Winter 2025"
-  let metadata: string;
-  if (totalSections === 0) {
-    metadata = "";
-  } else if (totalSections === 1 || newestTermLabel === oldestTermLabel) {
-    metadata = `${totalSections} section${totalSections !== 1 ? "s" : ""} in ${shortTermLabel(newestTermLabel)}`;
-  } else {
-    metadata = `${totalSections} section${totalSections !== 1 ? "s" : ""} from ${shortTermLabel(oldestTermLabel)} to ${shortTermLabel(newestTermLabel)}`;
-  }
 
   return (
     <Box
@@ -162,11 +118,6 @@ export function ExploreProfessorSummaryBar({
         </Link>
         {ratingLine}
         {combinedViz ? <GradeDistributionPassingSummary gradeViz={combinedViz} compact /> : null}
-        {metadata ? (
-          <Text size="xs" c="dimmed">
-            {metadata}
-          </Text>
-        ) : null}
       </Stack>
       {combinedViz ? (
         <Box
@@ -203,19 +154,6 @@ export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSu
       ),
     [group.offerings],
   );
-
-  // Calculate metadata - offerings are already sorted by termId descending
-  const totalSections = group.offerings.length;
-  const newestTermLabel = group.offerings[0]?.termLabel;
-  const oldestTermLabel = group.offerings[group.offerings.length - 1]?.termLabel;
-
-  // Format metadata text: "X sections from Fall 2020 to Winter 2025"
-  let metadata: string;
-  if (totalSections === 1 || newestTermLabel === oldestTermLabel) {
-    metadata = `${totalSections} section${totalSections !== 1 ? "s" : ""} in ${shortTermLabel(newestTermLabel ?? "")}`;
-  } else {
-    metadata = `${totalSections} section${totalSections !== 1 ? "s" : ""} from ${shortTermLabel(oldestTermLabel ?? "")} to ${shortTermLabel(newestTermLabel ?? "")}`;
-  }
 
   return (
     <Box
@@ -258,9 +196,6 @@ export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSu
           </Text>
         )}
         {combinedViz ? <GradeDistributionPassingSummary gradeViz={combinedViz} compact /> : null}
-        <Text size="xs" c="dimmed" style={{ whiteSpace: "nowrap" }}>
-          {metadata}
-        </Text>
       </Stack>
       {combinedViz ? (
         <Box
