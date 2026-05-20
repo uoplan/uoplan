@@ -1,31 +1,18 @@
 use anyhow::{anyhow, Result};
 use chromiumoxide::{Browser, BrowserConfig};
 use futures::StreamExt;
-use std::path::Path;
 use std::time::Duration;
 
 use super::keychain::{SessionCookie, StoredSession};
 
 const PEOPLESOFT_URL: &str = "https://www.uocampus.uottawa.ca/psp/csprpr9www/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSR_SSENRL_LIST.GBL?languageCd=ENG";
 
-const CHROME_PATHS: &[&str] = &[
-    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary",
-    "/Applications/Chromium.app/Contents/MacOS/Chromium",
-];
-
 pub async fn launch_browser_auth() -> Result<StoredSession> {
-    let chrome_path = CHROME_PATHS
-        .iter()
-        .find(|p| Path::new(p).exists())
-        .ok_or_else(|| anyhow!("Google Chrome not found."))?;
-
-    // wipe old profile
-    let _ = std::fs::remove_dir_all("/tmp/uoplan-session");
+    let session_dir = std::env::temp_dir().join("uoplan-session");
+    let _ = std::fs::remove_dir_all(&session_dir);
 
     let config = BrowserConfig::builder()
-        .chrome_executable(*chrome_path)
-        .user_data_dir("/tmp/uoplan-session")
+        .user_data_dir(&session_dir)
         .arg("--no-first-run")
         .arg("--no-default-browser-check")
         .arg("--disable-sync")
@@ -49,7 +36,7 @@ pub async fn launch_browser_auth() -> Result<StoredSession> {
         .disable_default_args()
         .with_head()
         .build()
-        .map_err(|e| anyhow!("Failed to build browser config: {e}"))?;
+        .map_err(|e| anyhow!("Failed to build browser config: {e}. Make sure Chrome, Chromium, or Edge is installed."))?;
 
     let (mut browser, mut handler) = Browser::launch(config).await?;
     let handler_task = tokio::spawn(async move {

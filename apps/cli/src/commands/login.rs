@@ -7,7 +7,7 @@ use crate::auth::{get_session, set_session};
 pub async fn run() -> Result<()> {
     intro("uoplan login")?;
     let new_session = launch_browser_auth().await?;
-    let merged = if let Some(existing) = get_session() {
+    let merged = if let Some(existing) = get_session().await {
         crate::auth::StoredSession {
             cookies: new_session.cookies,
             saved_at: new_session.saved_at,
@@ -18,7 +18,7 @@ pub async fn run() -> Result<()> {
     } else {
         new_session
     };
-    set_session(&merged)?;
+    set_session(&merged).await?;
     outro("Logged in successfully.")?;
     Ok(())
 }

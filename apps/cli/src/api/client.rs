@@ -152,7 +152,7 @@ impl PeopleSoftClient {
             if let Some(strm) = parse_strm_from_html(&select_resp_body)
                 .or_else(|| parse_strm_from_html(&select_resp_url))
             {
-                let _ = set_term(&strm, term_index, None);
+                let _ = set_term(&strm, term_index, None).await;
                 let mut sess = self.inner.session.lock().await;
                 sess.strm = Some(strm);
             }

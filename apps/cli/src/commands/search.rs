@@ -25,7 +25,7 @@ fn strip_session(section: &str) -> &str {
 
 pub async fn run(course_code: &str) -> Result<()> {
     intro("uoplan search")?;
-    let session = get_session().ok_or_else(|| anyhow!(NoCookiesError))?;
+    let session = get_session().await.ok_or_else(|| anyhow!(NoCookiesError))?;
     if session.strm.is_none() {
         return Err(anyhow!(NoTermSelectedError));
     }

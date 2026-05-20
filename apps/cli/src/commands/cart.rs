@@ -8,8 +8,8 @@ use crate::api::PeopleSoftClient;
 use crate::auth::get_session;
 use crate::error::NoCookiesError;
 
-fn cart_url_from_session() -> Result<(PeopleSoftClient, String)> {
-    let session = get_session().ok_or_else(|| anyhow!(NoCookiesError))?;
+async fn cart_url_from_session() -> Result<(PeopleSoftClient, String)> {
+    let session = get_session().await.ok_or_else(|| anyhow!(NoCookiesError))?;
     let cart_url = session
         .cart_url
         .clone()
@@ -28,7 +28,7 @@ fn item_hint(item: &CartItem) -> String {
 
 pub async fn interactive() -> Result<()> {
     intro("uoplan cart")?;
-    let (client, cart_url) = cart_url_from_session()?;
+    let (client, cart_url) = cart_url_from_session().await?;
     loop {
         let sp = spinner();
         sp.start("Loading cart…");
@@ -92,7 +92,7 @@ pub async fn interactive() -> Result<()> {
 
 pub async fn add(class_number: &str) -> Result<()> {
     intro("uoplan cart add")?;
-    let (client, cart_url) = cart_url_from_session()?;
+    let (client, cart_url) = cart_url_from_session().await?;
     let sp = spinner();
     sp.start(&format!("Adding class {} to cart…", class_number));
     add_to_cart(&client, &cart_url, class_number).await?;
@@ -103,7 +103,7 @@ pub async fn add(class_number: &str) -> Result<()> {
 
 pub async fn enrol() -> Result<()> {
     intro("uoplan enrol")?;
-    let (client, cart_url) = cart_url_from_session()?;
+    let (client, cart_url) = cart_url_from_session().await?;
     let sp = spinner();
     sp.start("Loading cart…");
     let items = list_cart(&client, &cart_url).await?;
