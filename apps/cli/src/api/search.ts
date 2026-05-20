@@ -31,7 +31,10 @@ export interface CompanionOption {
   status: string;
 }
 
-export function parseCourseCode(raw: string): { subject: string; catalogNbr: string } {
+export function parseCourseCode(raw: string): {
+  subject: string;
+  catalogNbr: string;
+} {
   const normalized = raw.toUpperCase().replace(/\s+/g, "");
   const match = normalized.match(/^([A-Z]{2,4})(\d{3,4})$/);
   if (!match) throw new Error(`Invalid course code: ${raw}. Expected format like CSI2101.`);
@@ -39,14 +42,20 @@ export function parseCourseCode(raw: string): { subject: string; catalogNbr: str
 }
 
 // PeopleSoft AJAX responses are XML wrappers. Extract ICStateNum and ICSID from them.
-// ICStateNum lives in inline JS; ICSID lives in the embedded HTML — use cheerio to
-// handle any attribute order rather than relying on a fragile regex.
+// ICStateNum lives in inline JS (ICStateNum.value=N). ICSID is a hidden <input> that
+// PeopleSoft serialises in the *outer* XML stream — between the <GENSCRIPT> CDATA and
+// the <FIELD id='win0divPAGECONTAINER'> CDATA — so it is NOT inside the page-HTML
+// blob and must be found by searching the full response string.
 function extractAjaxState(xml: string): PageState {
   const stateNumMatch = xml.match(/ICStateNum\.value=(\d+)/);
-  const $ = load(extractPageHtml(xml));
+  // Primary: name attr before value (the order PeopleSoft currently uses).
+  // Fallback: value before name, in case attribute order ever varies.
+  const icsidMatch =
+    xml.match(/name=['"]ICSID['"][^>]*value=['"]([^'"]+)['"]/) ??
+    xml.match(/value=['"]([^'"]+)['"][^>]*name=['"]ICSID['"]/);
   return {
     icStateNum: stateNumMatch?.[1] ?? "1",
-    icsid: $("#ICSID").attr("value") ?? "",
+    icsid: icsidMatch?.[1] ?? "",
   };
 }
 
@@ -85,7 +94,15 @@ export function parseSearchResults(xml: string): SearchResult[] {
     const statusDiv = $(`#win0divDERIVED_CLSRCH_SSR_STATUS_LONG\\$${rowIndex}`);
     const status = statusDiv.find("img").attr("alt") ?? statusDiv.text().trim();
 
-    results.push({ rowIndex, classNbr, section, days, room, instructor, status });
+    results.push({
+      rowIndex,
+      classNbr,
+      section,
+      days,
+      room,
+      instructor,
+      status,
+    });
   });
 
   return results;
