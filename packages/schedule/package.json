@@ -7,7 +7,7 @@
   "scripts": {
     "generate:proto": "protoc --ts_proto_out=./src/proto --proto_path=./proto ./proto/state.proto ./proto/data.proto --ts_proto_opt=esModuleInterop=true,forceLong=long,useOptionals=messages,outputJsonMethods=false,outputPartialMethods=false",
     "generate": "pnpm generate:proto",
-    "typecheck": "tsc -b tsconfig.json",
+    "typecheck": "tsgo -b tsconfig.json",
     "test": "vitest run",
     "bench": "vitest bench"
   },
