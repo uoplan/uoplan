@@ -112,7 +112,7 @@ function RootLayout() {
           <Outlet />
         </motion.div>
       </Box>
-      <AppFooter />
+      {!pathname.startsWith("/schedule/calendar") && <AppFooter />}
     </Box>
   );
 }
