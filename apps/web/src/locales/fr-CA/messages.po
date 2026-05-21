@@ -1240,3 +1240,39 @@ msgstr "1. Installer uoplan"
 
 msgid "enrolCli.modal.stepRun"
 msgstr "2. S'inscrire"
+
+msgid "uenrollImport.button"
+msgstr "Importer depuis uEnroll"
+
+msgid "uenrollImport.modal.title"
+msgstr "Importer depuis uEnroll"
+
+msgid "uenrollImport.modal.inputLabel"
+msgstr "URL uEnroll"
+
+msgid "uenrollImport.modal.inputPlaceholder"
+msgstr "Collez votre URL uEnroll ou le paramètre data"
+
+msgid "uenrollImport.modal.confirm"
+msgstr "Importer l'horaire"
+
+msgid "uenrollImport.modal.recognized"
+msgstr "Cours reconnus"
+
+msgid "uenrollImport.modal.warnings"
+msgstr "Certains cours n'ont pas été trouvés"
+
+msgid "uenrollImport.modal.invalid"
+msgstr "URL uEnroll invalide"
+
+msgid "uenrollImport.modal.invalidDescription"
+msgstr "Cela ne ressemble pas à une URL uEnroll ou à un paramètre data valide."
+
+msgid "uenrollImport.modal.termSwitch"
+msgstr "La session sera changée à {term} lors de l'importation."
+
+msgid "uenrollImport.modal.noCoursesTitle"
+msgstr "Aucun cours trouvé"
+
+msgid "uenrollImport.modal.noCoursesDescription"
+msgstr "Aucun de ces cours n'existe dans les données de la session actuelle. Essayez de changer de session d'abord."

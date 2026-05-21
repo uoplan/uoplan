@@ -170,6 +170,7 @@ export interface AppActions {
   blacklistCourseFromSwap: (enrollmentIndex: number) => void;
   unblacklistCourseFromSwap: (enrollmentIndex: number) => void;
   setCalendarWeekIndex: (index: number | null) => void;
+  importSchedule: (schedule: GeneratedSchedule) => void;
   resetToDefault: () => void;
   touchWizardFurthestStep: (step: number) => void;
   resetWizardFurthestStep: () => void;

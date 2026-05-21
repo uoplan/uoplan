@@ -100,6 +100,7 @@ interface SchedulesSlice {
   unlockCourseForAllSchedulesFromSwap: AppStore["unlockCourseForAllSchedulesFromSwap"];
   blacklistCourseFromSwap: AppStore["blacklistCourseFromSwap"];
   unblacklistCourseFromSwap: AppStore["unblacklistCourseFromSwap"];
+  importSchedule: AppStore["importSchedule"];
 }
 
 export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice> = (set, get) => ({
@@ -774,5 +775,19 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       currentSeed: 0,
       lowestVisitedSeed: null,
     });
+  },
+
+  importSchedule: (schedule) => {
+    const colorMap: Record<string, number> = {};
+    schedule.enrollments.forEach((e, i) => {
+      colorMap[e.courseCode] = i % 8;
+    });
+    set({
+      currentSchedule: schedule,
+      currentSwaps: [],
+      currentColorMap: colorMap,
+      generationError: null,
+    });
+    flushPersistedAppState();
   },
 });

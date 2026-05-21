@@ -19,6 +19,7 @@ import {
   IconCalendarDown,
   IconChevronLeft,
   IconChevronRight,
+  IconFileImport,
   IconRefresh,
   IconSettings,
   IconShare,
@@ -39,6 +40,7 @@ import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
 import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
 import { GenerationErrorModal } from "./GenerationErrorModal";
 import { EnrolCliModal } from "./EnrolCliModal";
+import { UEnrollImportModal } from "./UEnrollImportModal";
 import { AdvancedGenerationOptions } from "./AdvancedGenerationOptions";
 import { BasicGenerationOptions } from "./BasicGenerationOptions";
 import { encodeSchedulePayload } from "../../lib/encodeSchedulePayload";
@@ -130,6 +132,7 @@ export function CalendarPage() {
   const [controlsOpen, setControlsOpen] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [enrolCliOpen, setEnrolCliOpen] = useState(false);
+  const [uenrollImportOpen, setUenrollImportOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(CALENDAR_SIDEBAR_WIDTH_PX);
   const isResizing = useRef(false);
   const resizeStartX = useRef(0);
@@ -326,6 +329,18 @@ export function CalendarPage() {
                 <IconRefresh size={16} />
               </ActionIcon>
             </Tooltip>
+            <Tooltip label={tr("uenrollImport.button")} withArrow position="right" color="dark">
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                size="md"
+                radius={0}
+                onClick={() => setUenrollImportOpen(true)}
+                aria-label={tr("uenrollImport.button")}
+              >
+                <IconFileImport size={16} />
+              </ActionIcon>
+            </Tooltip>
             <Button
               variant="light"
               color="green"
@@ -415,6 +430,7 @@ export function CalendarPage() {
         onClose={() => setEnrolCliOpen(false)}
         command={cliCommand ?? ""}
       />
+      <UEnrollImportModal opened={uenrollImportOpen} onClose={() => setUenrollImportOpen(false)} />
 
       {scheduleNoVariety && !generationError && (
         <Alert color="yellow" variant="light" radius={0} py="xs" style={{ flexShrink: 0 }}>
