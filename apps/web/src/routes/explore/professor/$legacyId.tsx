@@ -5,11 +5,13 @@ import { ExploreLayout } from "../../../components/explore/ExploreLayout";
 import { ExploreProfessorPage } from "../../../components/explore/ExploreProfessorPage";
 import { tr } from "../../../i18n";
 import { useAppStore } from "../../../store/appStore";
+import {
+  validateExploreSearch,
+  type ExploreSearchParams,
+} from "../../../lib/explore/exploreFilters";
 
 export const Route = createFileRoute("/explore/professor/$legacyId")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    q: typeof search.q === "string" && search.q.length > 0 ? search.q : undefined,
-  }),
+  validateSearch: validateExploreSearch,
   component: ExploreProfessorRoute,
 });
 
@@ -26,7 +28,7 @@ function ExploreProfessorRoute() {
     })),
   );
 
-  const { q } = Route.useSearch();
+  const search = Route.useSearch();
   const navigate = Route.useNavigate();
 
   const layoutProps = {
@@ -34,10 +36,10 @@ function ExploreProfessorRoute() {
     catalogue,
     terms: terms ?? [],
     professorRatings,
-    initialQuery: q ?? "",
-    onQueryChange: (v: string) =>
+    searchParams: search,
+    onQueryChange: (_: string, nextSearch: ExploreSearchParams) =>
       void navigate({
-        search: { q: v.length > 0 ? v : undefined },
+        search: nextSearch,
         replace: true,
       }),
   };

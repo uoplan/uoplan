@@ -1,13 +1,15 @@
-import { Box, Checkbox, Radio, Stack } from "@mantine/core";
+import { Box, Checkbox, Group, Radio, SegmentedControl, Stack, Text } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { tr } from "../../i18n";
 import type {
   ExploreFilterDifficulty,
   ExploreFilterLevel,
   ExploreFilterState,
+  ExploreSortDir,
+  ExploreSortKey,
 } from "../../lib/explore/exploreFilters";
 
-type FilterKey = "level" | "language" | "difficulty" | "rating";
+type FilterKey = "level" | "language" | "difficulty" | "rating" | "sort";
 
 const LEVELS: { value: ExploreFilterLevel; labelKey: string }[] = [
   { value: 1000, labelKey: "explore.filter.level.1000" },
@@ -34,6 +36,20 @@ const RATINGS: { value: number; labelKey: string }[] = [
   { value: 4.0, labelKey: "explore.filter.rating.excellent" },
 ];
 
+const SORT_OPTIONS: { value: ExploreSortKey; labelKey: string }[] = [
+  { value: "relevance", labelKey: "explore.sort.relevance" },
+  { value: "avgGrade", labelKey: "explore.sort.avgGrade" },
+  { value: "courseCode", labelKey: "explore.sort.courseCode" },
+  { value: "profRating", labelKey: "explore.sort.profRating" },
+];
+
+const SORT_DEFAULT_DIR: Record<ExploreSortKey, ExploreSortDir> = {
+  relevance: "desc",
+  avgGrade: "desc",
+  courseCode: "asc",
+  profRating: "desc",
+};
+
 const checkboxStyles = {
   label: { color: "#c1c2c5", fontSize: "var(--mantine-font-size-sm)", cursor: "pointer" },
   input: { cursor: "pointer", backgroundColor: "#25262b", borderColor: "#4a4d57" },
@@ -42,6 +58,11 @@ const checkboxStyles = {
 const radioStyles = {
   label: { color: "#c1c2c5", fontSize: "var(--mantine-font-size-sm)", cursor: "pointer" },
   radio: { cursor: "pointer", backgroundColor: "#25262b", borderColor: "#4a4d57" },
+};
+
+const segmentedStyles = {
+  root: { backgroundColor: "#25262b" },
+  label: { color: "#ced4da", fontSize: "var(--mantine-font-size-xs)" },
 };
 
 export function ExploreFilterPopoverContent({
@@ -143,6 +164,45 @@ export function ExploreFilterPopoverContent({
     );
   }
 
+  if (filterKey === "sort") {
+    const showDirection = filters.sortKey !== "relevance";
+    return (
+      <Stack gap={12}>
+        <Radio.Group
+          value={filters.sortKey}
+          onChange={(value) => {
+            const key = value as ExploreSortKey;
+            onChange({ sortKey: key, sortDir: SORT_DEFAULT_DIR[key] });
+          }}
+        >
+          <Stack gap={8}>
+            {SORT_OPTIONS.map(({ value, labelKey }) => (
+              <Radio key={value} value={value} label={tr(labelKey)} styles={radioStyles} />
+            ))}
+          </Stack>
+        </Radio.Group>
+        <Stack gap={6}>
+          <Group justify="space-between" align="center">
+            <Text size="xs" c="dimmed">
+              {tr("explore.sort.direction")}
+            </Text>
+          </Group>
+          <SegmentedControl
+            size="xs"
+            value={filters.sortDir}
+            onChange={(value) => onChange({ sortDir: value as ExploreSortDir })}
+            data={[
+              { label: tr("explore.sort.ascending"), value: "asc" },
+              { label: tr("explore.sort.descending"), value: "desc" },
+            ]}
+            disabled={!showDirection}
+            styles={segmentedStyles}
+          />
+        </Stack>
+      </Stack>
+    );
+  }
+
   return <Box />;
 }
 
@@ -156,5 +216,7 @@ export function filterSectionLabel(key: FilterKey): string {
       return tr("explore.filter.difficulty");
     case "rating":
       return tr("explore.filter.rating");
+    case "sort":
+      return tr("explore.sort.label");
   }
 }

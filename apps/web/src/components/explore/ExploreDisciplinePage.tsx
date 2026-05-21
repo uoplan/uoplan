@@ -13,6 +13,7 @@ import {
   type CourseOfferingGroup,
 } from "../../lib/explore/gradesSearch";
 import { tr } from "../../i18n";
+import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
@@ -136,7 +137,7 @@ export function ExploreDisciplinePage({
     if (discipline === null) {
       void navigate({
         to: "/explore",
-        search: { q: undefined },
+        search: EMPTY_EXPLORE_SEARCH,
         replace: true,
       });
     }

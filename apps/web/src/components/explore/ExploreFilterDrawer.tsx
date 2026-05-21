@@ -6,7 +6,7 @@ import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { ExploreFilterPopoverContent, filterSectionLabel } from "./ExploreFilterPopoverContent";
 
-const FILTER_KEYS = ["level", "language", "difficulty", "rating"] as const;
+const FILTER_KEYS = ["level", "language", "difficulty", "rating", "sort"] as const;
 type FilterKey = (typeof FILTER_KEYS)[number];
 
 export function ExploreFilterDrawer({

@@ -4,11 +4,10 @@ import { ExploreLayout } from "../../components/explore/ExploreLayout";
 import { ExploreSearchPage } from "../../components/explore/ExploreSearchPage";
 import { useAppStore } from "../../store/appStore";
 import { buildPageHead } from "../../lib/seo";
+import { validateExploreSearch } from "../../lib/explore/exploreFilters";
 
 export const Route = createFileRoute("/explore/")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    q: typeof search.q === "string" && search.q.length > 0 ? search.q : undefined,
-  }),
+  validateSearch: validateExploreSearch,
   head: () => buildPageHead("explore"),
   component: ExploreRoute,
 });
@@ -23,22 +22,22 @@ function ExploreRoute() {
   );
 
   const navigate = Route.useNavigate();
-  const { q } = Route.useSearch();
+  const search = Route.useSearch();
 
   return (
     <ExploreLayout
       catalogue={catalogue}
       terms={terms ?? []}
       professorRatings={professorRatings}
-      initialQuery={q ?? ""}
-      onQueryChange={(v) =>
+      searchParams={search}
+      onQueryChange={(_, nextSearch) =>
         void navigate({
-          search: { q: v.length > 0 ? v : undefined },
+          search: nextSearch,
           replace: true,
         })
       }
     >
-      <ExploreSearchPage catalogue={catalogue} terms={terms ?? []} />
+      <ExploreSearchPage catalogue={catalogue} terms={terms ?? []} searchParams={search} />
     </ExploreLayout>
   );
 }

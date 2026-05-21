@@ -1,11 +1,12 @@
 import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
 import { Group, Text, UnstyledButton } from "@mantine/core";
 import { IconChevronLeft } from "@tabler/icons-react";
+import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 
 export type ExploreHistoryEntry = {
   to: "/explore" | "/explore/course/$course" | "/explore/professor/$legacyId";
   params?: { course: string } | { legacyId: string };
-  search?: { q?: string };
+  search?: ExploreSearchParams;
   label: string;
 };
 

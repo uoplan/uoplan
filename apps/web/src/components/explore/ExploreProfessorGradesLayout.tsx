@@ -16,6 +16,7 @@ import {
   type ExploreOfferingFlat,
   type ProfessorOfferingGroup,
 } from "../../lib/explore/gradesSearch";
+import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 
 /** Mobile breakpoint for stacking histogram below text (in px). */
 const MOBILE_BREAKPOINT_PX = 540;
@@ -101,7 +102,7 @@ export function ExploreProfessorSummaryBar({
                 ? String(group.legacyId)
                 : encodeURIComponent(group.displayName),
           }}
-          search={{ q: undefined }}
+          search={EMPTY_EXPLORE_SEARCH}
           onClick={(e) => {
             if (stopPropagation) e.stopPropagation();
             if (currentEntry) push(currentEntry);
@@ -175,7 +176,7 @@ export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSu
         <Link
           to="/explore/course/$course"
           params={{ course: courseNormToPathParam(group.groupId) }}
-          search={{ q: undefined }}
+          search={EMPTY_EXPLORE_SEARCH}
           onClick={(e) => {
             e.stopPropagation();
             if (currentEntry) push(currentEntry);

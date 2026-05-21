@@ -1,13 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { Badge, Box, Group, SegmentedControl, Stack, Text, UnstyledButton } from "@mantine/core";
-import { useMemo, type CSSProperties, type MouseEvent } from "react";
+import { useMemo, type CSSProperties } from "react";
 import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/schedule";
 import { colorForDiscipline, normalizeProfessorName } from "@uoplan/schedule";
+import { tr } from "../../i18n";
+import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
   GradeDistributionHistogram,
   GradeDistributionPassingSummary,
 } from "../calendar/GradeDistributionViz";
-import { tr } from "../../i18n";
 import {
   getAggregateGradeViz,
   sortGraphNeighbors,
@@ -46,13 +47,13 @@ function ProfessorProfileLink({
   onClick,
 }: {
   legacyId: number;
-  onClick?: (e: MouseEvent) => void;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 }) {
   return (
     <Link
       to="/explore/professor/$legacyId"
       params={{ legacyId: String(legacyId) }}
-      search={{ q: undefined }}
+      search={EMPTY_EXPLORE_SEARCH}
       onClick={onClick}
       style={PROFILE_LINK_STYLE}
     >

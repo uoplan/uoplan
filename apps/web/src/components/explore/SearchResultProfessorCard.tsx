@@ -6,6 +6,7 @@ import { normalizeProfessorName } from "@uoplan/schedule";
 import { tr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import type { ExploreProfessorSearchEntry } from "../../lib/explore/gradesSearch";
+import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { useExploreHistory } from "./ExploreHistoryContext";
 
 const LETTER_GRADES = new Set(["F", "E", "D", "D+", "C", "C+", "B", "B+", "A-", "A", "A+"]);
@@ -30,10 +31,12 @@ export function SearchResultProfessorCard({
   entry,
   professorRatings,
   query,
+  searchParams,
 }: {
   entry: ExploreProfessorSearchEntry;
   professorRatings: ProfessorRatingsMap | null;
   query?: string;
+  searchParams: ExploreSearchParams;
 }) {
   useLingui();
   const { push } = useExploreHistory();
@@ -52,11 +55,11 @@ export function SearchResultProfessorCard({
     <Link
       to="/explore/professor/$legacyId"
       params={{ legacyId: professorLegacyParam(entry) }}
-      search={{ q: undefined }}
+      search={searchParams}
       onClick={() => {
         push({
           to: "/explore",
-          search: q ? { q } : { q: undefined },
+          search: searchParams,
           label: q ? tr("explore.backToSearch", { q }) : tr("explore.title"),
         });
       }}
