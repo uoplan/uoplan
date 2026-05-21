@@ -1259,3 +1259,39 @@ msgstr "1. Install uoplan"
 
 msgid "enrolCli.modal.stepRun"
 msgstr "2. Enrol"
+
+msgid "uenrollImport.button"
+msgstr "Import from uEnroll"
+
+msgid "uenrollImport.modal.title"
+msgstr "Import from uEnroll"
+
+msgid "uenrollImport.modal.inputLabel"
+msgstr "uEnroll URL"
+
+msgid "uenrollImport.modal.inputPlaceholder"
+msgstr "Paste your uEnroll URL or data parameter"
+
+msgid "uenrollImport.modal.confirm"
+msgstr "Import schedule"
+
+msgid "uenrollImport.modal.recognized"
+msgstr "Recognized courses"
+
+msgid "uenrollImport.modal.warnings"
+msgstr "Some courses could not be found"
+
+msgid "uenrollImport.modal.invalid"
+msgstr "Invalid uEnroll URL"
+
+msgid "uenrollImport.modal.invalidDescription"
+msgstr "This doesn't look like a valid uEnroll URL or data parameter."
+
+msgid "uenrollImport.modal.termSwitch"
+msgstr "Term will be switched to {term} when you import."
+
+msgid "uenrollImport.modal.noCoursesTitle"
+msgstr "No courses found"
+
+msgid "uenrollImport.modal.noCoursesDescription"
+msgstr "None of these courses exist in the current term's data. Try switching terms first."

@@ -3,6 +3,7 @@ import { ActionIcon, Button, Group, Tooltip } from "@mantine/core";
 import {
   IconCalendarDown,
   IconEraser,
+  IconFileImport,
   IconRefresh,
   IconShare,
   IconTerminal,
@@ -11,6 +12,7 @@ import { useAppStore } from "../../store/appStore";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { tr } from "../../i18n";
 import { ResetModal } from "../shared/ResetModal";
+import { UEnrollImportModal } from "./UEnrollImportModal";
 import { navigateToWizardStep } from "../../lib/appNavigation";
 import { WizardStep } from "../../lib/wizardSteps";
 
@@ -34,6 +36,7 @@ export function BasicCalendarHeaderActions({
   const resetToDefault = useAppStore((s) => s.resetToDefault);
 
   const [resetModalOpen, setResetModalOpen] = useState(false);
+  const [uenrollImportOpen, setUenrollImportOpen] = useState(false);
   const { shareCopied, handleCopyShare } = useShareUrl(getShareUrl);
 
   return (
@@ -96,6 +99,18 @@ export function BasicCalendarHeaderActions({
             <IconEraser size={16} />
           </ActionIcon>
         </Tooltip>
+        <Tooltip label={tr("uenrollImport.button")} position="right" withArrow color="dark">
+          <ActionIcon
+            variant="subtle"
+            color="gray"
+            size="md"
+            radius={0}
+            onClick={() => setUenrollImportOpen(true)}
+            aria-label={tr("uenrollImport.button")}
+          >
+            <IconFileImport size={16} />
+          </ActionIcon>
+        </Tooltip>
         {onEnrolCli && (
           <Button
             variant="light"
@@ -121,6 +136,7 @@ export function BasicCalendarHeaderActions({
           navigateToWizardStep(WizardStep.Term);
         }}
       />
+      <UEnrollImportModal opened={uenrollImportOpen} onClose={() => setUenrollImportOpen(false)} />
     </>
   );
 }
