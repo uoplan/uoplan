@@ -12,7 +12,7 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { useMediaQuery } from "@mantine/hooks";
 import {
   IconArrowBackUp,
   IconArrowsShuffle,
@@ -39,8 +39,8 @@ import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
 import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
 import { GenerationErrorModal } from "./GenerationErrorModal";
 import { EnrolCliModal } from "./EnrolCliModal";
-import { GenerationOptionsModal } from "./GenerationOptionsModal";
-import { BasicGenerationOptionsModal } from "./BasicGenerationOptionsModal";
+import { AdvancedGenerationOptions } from "./AdvancedGenerationOptions";
+import { BasicGenerationOptions } from "./BasicGenerationOptions";
 import { encodeSchedulePayload } from "../../lib/encodeSchedulePayload";
 import { setCalendarMode } from "../../lib/calendarRoute";
 import { navigateToWizardStep } from "../../lib/appNavigation";
@@ -134,102 +134,6 @@ export function CalendarPage() {
   const isResizing = useRef(false);
   const resizeStartX = useRef(0);
   const resizeStartWidth = useRef(0);
-
-  // Generation options modal for the full-wizard (hasProgram) path
-  const generateSchedules = useAppStore((s) => s.generateSchedules);
-  const [genOptionsOpened, { open: openGenOptions, close: closeGenOptions }] = useDisclosure(false);
-  const hasAutoOpenedGenOptions = useRef(false);
-  const genSettingsSnapshotRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    if (hasProgram && !hasAutoOpenedGenOptions.current) {
-      hasAutoOpenedGenOptions.current = true;
-      genSettingsSnapshotRef.current = getGenSettingsSnapshot();
-      openGenOptions();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasProgram, openGenOptions]);
-
-  // Generation options modal for the basic (no program) path
-  const [basicGenOptionsOpened, { open: openBasicGenOptions, close: closeBasicGenOptions }] =
-    useDisclosure(false);
-  const hasAutoOpenedBasicGenOptions = useRef(false);
-  const basicSettingsSnapshotRef = useRef<string | null>(null);
-
-  const getBasicSettingsSnapshot = () => {
-    const s = useAppStore.getState();
-    return JSON.stringify({
-      basicPinnedCourses: s.basicPinnedCourses,
-      basicElectivesCount: s.basicElectivesCount,
-      basicExcludedCategories: s.basicExcludedCategories,
-      completedCourses: s.completedCourses,
-      frenchImmersionStream: s.frenchImmersionStream,
-      levelBuckets: s.levelBuckets,
-      languageBuckets: s.languageBuckets,
-      electiveLevelBuckets: s.electiveLevelBuckets,
-      includeClosedComponents: s.includeClosedComponents,
-      virtualSectionsOnly: s.virtualSectionsOnly,
-      blacklistedCourses: s.blacklistedCourses,
-    });
-  };
-
-  useEffect(() => {
-    if (!hasProgram && !hasAutoOpenedBasicGenOptions.current) {
-      hasAutoOpenedBasicGenOptions.current = true;
-      basicSettingsSnapshotRef.current = getBasicSettingsSnapshot();
-      openBasicGenOptions();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasProgram, openBasicGenOptions]);
-
-  const handleOpenBasicGenOptions = () => {
-    basicSettingsSnapshotRef.current = getBasicSettingsSnapshot();
-    openBasicGenOptions();
-  };
-
-  const handleCloseBasicGenOptions = () => {
-    closeBasicGenOptions();
-    const noSchedule = useAppStore.getState().currentSchedule === null;
-    const settingsChanged = basicSettingsSnapshotRef.current !== getBasicSettingsSnapshot();
-    if (noSchedule || settingsChanged) {
-      void generateSchedules();
-    }
-  };
-
-  const getGenSettingsSnapshot = () => {
-    const s = useAppStore.getState();
-    return JSON.stringify({
-      coursesThisSemester: s.coursesThisSemester,
-      generationMinStartMinutes: s.generationMinStartMinutes,
-      generationMaxEndMinutes: s.generationMaxEndMinutes,
-      generationAllowedDays: s.generationAllowedDays,
-      generationMinProfessorRating: s.generationMinProfessorRating,
-      generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
-      generationCompressedSchedule: s.generationCompressedSchedule,
-      generationPreferEasier: s.generationPreferEasier,
-      blacklistedCourses: s.blacklistedCourses,
-      constrainedPerRequirement: s.constrainedPerRequirement,
-      levelBuckets: s.levelBuckets,
-      languageBuckets: s.languageBuckets,
-      electiveLevelBuckets: s.electiveLevelBuckets,
-      includeClosedComponents: s.includeClosedComponents,
-      virtualSectionsOnly: s.virtualSectionsOnly,
-    });
-  };
-
-  const handleOpenGenOptions = () => {
-    genSettingsSnapshotRef.current = getGenSettingsSnapshot();
-    openGenOptions();
-  };
-
-  const handleCloseGenOptions = () => {
-    closeGenOptions();
-    const noSchedule = useAppStore.getState().currentSchedule === null;
-    const settingsChanged = genSettingsSnapshotRef.current !== getGenSettingsSnapshot();
-    if (noSchedule || settingsChanged) {
-      void generateSchedules();
-    }
-  };
 
   const cliCommand =
     currentSchedule && selectedTermId
@@ -330,17 +234,6 @@ export function CalendarPage() {
             onDownloadIcs={handleDownloadIcs}
             downloadDisabled={!dateRangeOk || !currentSchedule}
           />
-          <Button
-            variant="light"
-            color="violet"
-            size="sm"
-            radius={0}
-            fullWidth
-            leftSection={<IconSettings size={14} />}
-            onClick={handleOpenBasicGenOptions}
-          >
-            {tr("app.generationOptions.title")}
-          </Button>
           {!isMobile && (
             <Button.Group>
               <Button
@@ -369,10 +262,11 @@ export function CalendarPage() {
               </Button>
             </Button.Group>
           )}
+          <BasicGenerationOptions />
         </>
       ) : (
         <Stack gap="md">
-          {/* Utility toolbar: download, share, randomize, reset, generation options */}
+          {/* Utility toolbar: download, share, randomize, reset */}
           <Group gap={4}>
             <Tooltip label={tr("calendarPage.downloadIcs")} withArrow position="right" color="dark">
               <ActionIcon
@@ -446,18 +340,6 @@ export function CalendarPage() {
             </Button>
           </Group>
 
-          <Button
-            variant="light"
-            color="violet"
-            size="sm"
-            radius={0}
-            fullWidth
-            leftSection={<IconSettings size={14} />}
-            onClick={handleOpenGenOptions}
-          >
-            {tr("app.generationOptions.title")}
-          </Button>
-
           {/* Prev/Next - desktop only */}
           {!isMobile && hasSchedule && (
             <Stack gap={6}>
@@ -492,6 +374,10 @@ export function CalendarPage() {
               </Text>
             </Stack>
           )}
+
+          <Divider color="#2C2E33" />
+
+          <AdvancedGenerationOptions />
 
           <Divider color="#2C2E33" />
 
@@ -550,17 +436,6 @@ export function CalendarPage() {
   return (
     <>
       <GenerationErrorModal error={generationError} onClose={clearGenerationError} />
-      <GenerationOptionsModal
-        opened={genOptionsOpened}
-        onClose={handleCloseGenOptions}
-        onAfterGenerate={() => {
-          genSettingsSnapshotRef.current = getGenSettingsSnapshot();
-        }}
-      />
-      <BasicGenerationOptionsModal
-        opened={basicGenOptionsOpened}
-        onClose={handleCloseBasicGenOptions}
-      />
       <Box
         component="main"
         style={{

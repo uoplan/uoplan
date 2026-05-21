@@ -61,6 +61,8 @@ interface ScheduleCountStepProps {
   disableGenerate?: boolean;
   disableGenerateReason?: string;
   beforeGenerate?: React.ReactNode;
+  /** Hides the generate button (e.g., when used inline in sidebar). */
+  hideGenerateButton?: boolean;
 }
 
 export function ScheduleCountStep({
@@ -93,6 +95,7 @@ export function ScheduleCountStep({
   disableGenerate = false,
   disableGenerateReason,
   beforeGenerate,
+  hideGenerateButton = false,
 }: ScheduleCountStepProps) {
   const needMore = selectedCount < coursesThisSemester;
   const summarizeEmptyPools =
@@ -217,18 +220,20 @@ export function ScheduleCountStep({
         </Alert>
       )}
       {beforeGenerate}
-      <Button
-        size="sm"
-        color="violet"
-        variant="filled"
-        onClick={onGenerate}
-        loading={generating}
-        disabled={disableGenerate || generating}
-        radius={0}
-        style={{ border: "2px solid black" }}
-      >
-        {tr("scheduleCount.generate")}
-      </Button>
+      {!hideGenerateButton && (
+        <Button
+          size="sm"
+          color="violet"
+          variant="filled"
+          onClick={onGenerate}
+          loading={generating}
+          disabled={disableGenerate || generating}
+          radius={0}
+          style={{ border: "2px solid black" }}
+        >
+          {tr("scheduleCount.generate")}
+        </Button>
+      )}
     </Stack>
   );
 }
