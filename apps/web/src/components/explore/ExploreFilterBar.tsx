@@ -1,7 +1,8 @@
 import { Box, Group, UnstyledButton } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
-import { IconChevronDown } from "@tabler/icons-react";
+import { IconArrowsSort } from "@tabler/icons-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { tr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
@@ -13,10 +14,6 @@ const FILTER_KEYS = ["level", "language", "difficulty", "rating", "sort"] as con
 type FilterKey = (typeof FILTER_KEYS)[number];
 export const FILTER_PILL_RADIUS = 0;
 export const FILTER_POPOVER_RADIUS = 0;
-
-export function pillHasChevron(key: FilterKey): boolean {
-  return key === "sort";
-}
 
 const RATING_KEY: Record<number, string> = { 3: "good", 3.5: "great", 4: "excellent" };
 
@@ -82,11 +79,11 @@ type FilterPillProps = {
   activeBg: string;
   activeBorder: string;
   onClick: () => void;
-  showChevron?: boolean;
+  icon?: React.ReactNode;
 };
 
 const FilterPill = forwardRef<HTMLButtonElement, FilterPillProps>(
-  ({ label, active, activeBg, activeBorder, onClick, showChevron = false }, ref) => (
+  ({ label, active, activeBg, activeBorder, onClick, icon }, ref) => (
     <UnstyledButton
       ref={ref}
       onClick={onClick}
@@ -108,7 +105,7 @@ const FilterPill = forwardRef<HTMLButtonElement, FilterPillProps>(
       }}
     >
       {label}
-      {showChevron ? <IconChevronDown size={12} stroke={1.6} /> : null}
+      {icon}
     </UnstyledButton>
   ),
 );
@@ -127,6 +124,7 @@ export function ExploreFilterBar({
   });
 
   const [openedPopover, setOpenedPopover] = useState<FilterKey | null>(null);
+  const [popoverPos, setPopoverPos] = useState<{ top: number; left: number } | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerSection, setDrawerSection] = useState<FilterKey>("level");
 
@@ -141,6 +139,7 @@ export function ExploreFilterBar({
       if (pillBarRef.current?.contains(target)) return;
       if (dropdownRef.current?.contains(target)) return;
       setOpenedPopover(null);
+      setPopoverPos(null);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
@@ -152,7 +151,17 @@ export function ExploreFilterBar({
       setDrawerOpen(true);
       return;
     }
-    setOpenedPopover((prev) => (prev === key ? null : key));
+    if (openedPopover === key) {
+      setOpenedPopover(null);
+      setPopoverPos(null);
+    } else {
+      setOpenedPopover(key);
+      const el = pillRefs.current.get(key);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        setPopoverPos({ top: rect.bottom + 6, left: rect.left });
+      }
+    }
   };
 
   const handleChange = (next: Partial<ExploreFilterState>) => {
@@ -186,7 +195,7 @@ export function ExploreFilterBar({
                 active={active}
                 activeBg={bg}
                 activeBorder={border}
-                showChevron={pillHasChevron(key)}
+                icon={key === "sort" ? <IconArrowsSort size={13} stroke={1.6} /> : undefined}
                 onClick={() => handlePillClick(key)}
               />
             );
@@ -210,15 +219,18 @@ export function ExploreFilterBar({
         </Group>
       </Box>
 
-      {openedPopover && !isMobile && (
-        <FilterDropdown
-          filterKey={openedPopover}
-          pillRef={{ current: pillRefs.current.get(openedPopover) ?? null }}
-          dropdownRef={dropdownRef}
-          filters={filters}
-          onChange={handleChange}
-        />
-      )}
+      <AnimatePresence>
+        {openedPopover && !isMobile && popoverPos && (
+          <FilterDropdown
+            key={openedPopover}
+            filterKey={openedPopover}
+            pos={popoverPos}
+            dropdownRef={dropdownRef}
+            filters={filters}
+            onChange={handleChange}
+          />
+        )}
+      </AnimatePresence>
 
       <ExploreFilterDrawer
         opened={drawerOpen}
@@ -231,33 +243,29 @@ export function ExploreFilterBar({
   );
 }
 
+const POPOVER_EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
+
 function FilterDropdown({
   filterKey,
-  pillRef,
+  pos,
   dropdownRef,
   filters,
   onChange,
 }: {
   filterKey: FilterKey;
-  pillRef: React.RefObject<HTMLButtonElement | null>;
+  pos: { top: number; left: number };
   dropdownRef: React.RefObject<HTMLDivElement | null>;
   filters: ExploreFilterState;
   onChange: (next: Partial<ExploreFilterState>) => void;
 }) {
-  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
-
-  useEffect(() => {
-    const el = pillRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    setPos({ top: rect.bottom + 6, left: rect.left });
-  }, [filterKey, pillRef]);
-
-  if (!pos) return null;
-
   return (
-    <div
+    <motion.div
       ref={dropdownRef}
+      key={filterKey}
+      initial={{ opacity: 0, y: -4, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -4, scale: 0.97 }}
+      transition={{ duration: 0.15, ease: POPOVER_EASE }}
       style={{
         position: "fixed",
         top: pos.top,
@@ -269,9 +277,10 @@ function FilterDropdown({
         padding: "12px 14px",
         minWidth: 180,
         boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
+        transformOrigin: "top left",
       }}
     >
       <ExploreFilterPopoverContent filterKey={filterKey} filters={filters} onChange={onChange} />
-    </div>
+    </motion.div>
   );
 }
