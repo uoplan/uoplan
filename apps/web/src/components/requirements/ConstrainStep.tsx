@@ -260,7 +260,7 @@ export function ConstrainStep({
                     {collapsedUnavailableOpen ? "Hide" : "Show"}
                   </Badge>
                 </Group>
-                <Collapse in={collapsedUnavailableOpen}>
+                <Collapse expanded={collapsedUnavailableOpen}>
                   <Stack gap="md" mt="sm">
                     {collapsedRoots.map(({ node, rootIndex }) => {
                       const nodeKey = getStableNodeKey(node, `root:${rootIndex}`);

@@ -537,7 +537,7 @@ export const RequirementNode = memo(
               Satisfied by: {node.satisfiedBy.join(", ")}
             </Text>
           )}
-          <Collapse in={collapseIn}>
+          <Collapse expanded={collapseIn}>
             <Stack gap="xs">
               {node.options!.map((opt, idx) => {
                 const isSatisfiedOption = node.satisfiedOptionIndex === idx && opt.complete;
@@ -704,7 +704,7 @@ export const RequirementNode = memo(
               Satisfied by option: {node.satisfiedBy.join(", ")}
             </Text>
           )}
-          <Collapse in={collapseIn}>
+          <Collapse expanded={collapseIn}>
             <Stack gap="xs">
               {node.options!.map((opt, idx) => {
                 const childActiveBranch =
@@ -836,7 +836,7 @@ export const RequirementNode = memo(
 
     if (isAnd && hasOptions) {
       const andCollapse = (
-        <Collapse in={collapseIn}>
+        <Collapse expanded={collapseIn}>
           <Stack gap="xs">
             {node.options!.map((child, idx) => {
               const childKey = getStableNodeKey(
@@ -969,7 +969,7 @@ export const RequirementNode = memo(
 
     const leafPickCollapse =
       hasOptions && (node.type === "pick" || node.type === "group") ? (
-        <Collapse in={collapseIn}>
+        <Collapse expanded={collapseIn}>
           <Stack gap="xs" pl="xs">
             {node.options!.map((child, idx) => {
               const childKey = getStableNodeKey(

@@ -53,7 +53,7 @@ export function CompletedRequirementsAccordion({
           {completedOpen ? "Hide details" : "Show details"}
         </Badge>
       </Group>
-      <Collapse in={completedOpen}>
+      <Collapse expanded={completedOpen}>
         <Stack gap={0} mt="sm">
           {completedItems.map((item, idx) => (
             <Box

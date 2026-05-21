@@ -212,7 +212,7 @@ export function BasicCourseFiltersCard({
             <Stack gap={4}>{headerContent}</Stack>
           </Group>
         )}
-        <Collapse in={collapsible ? filtersOpen : true}>{filterBody}</Collapse>
+        <Collapse expanded={collapsible ? filtersOpen : true}>{filterBody}</Collapse>
       </Stack>
     </Paper>
   );

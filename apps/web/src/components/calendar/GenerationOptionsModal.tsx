@@ -214,7 +214,7 @@ function GenerationOptionsBody({
                 {tr("app.constraints.optional")}
               </Badge>
             </Group>
-            <Collapse id="constraints-collapse" in={!constrainOpen}>
+            <Collapse id="constraints-collapse" expanded={!constrainOpen}>
               <Alert
                 color="blue"
                 variant="light"
@@ -226,7 +226,7 @@ function GenerationOptionsBody({
                 <Text size="sm">{tr("app.constraints.description")}</Text>
               </Alert>
             </Collapse>
-            <Collapse id="constraints-collapse-open" in={constrainOpen}>
+            <Collapse id="constraints-collapse-open" expanded={constrainOpen}>
               <Box p="sm" pt={0}>
                 <ConstrainStep
                   cache={cache}
