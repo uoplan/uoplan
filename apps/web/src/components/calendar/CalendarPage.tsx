@@ -12,10 +12,9 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import {
   IconArrowBackUp,
-  IconArrowLeft,
   IconArrowsShuffle,
   IconCalendarDown,
   IconChevronLeft,
@@ -41,13 +40,13 @@ import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
 import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
 import { GenerationErrorModal } from "./GenerationErrorModal";
 import { EnrolCliModal } from "./EnrolCliModal";
+import { GenerationOptionsModal } from "./GenerationOptionsModal";
 import { encodeSchedulePayload } from "../../lib/encodeSchedulePayload";
-interface CalendarPageProps {
-  variant: "basic" | "advanced";
-  onBack: () => void;
-}
+import { setCalendarMode } from "../../lib/calendarRoute";
+import { navigateToWizardStep } from "../../lib/appNavigation";
+import { WizardStep } from "../../lib/wizardSteps";
 
-export function CalendarPage({ variant, onBack }: CalendarPageProps) {
+export function CalendarPage() {
   useEffect(() => {
     document.documentElement.classList.add("calendar-no-scrollbar-gutter");
     return () => {
@@ -70,6 +69,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
     basicElectivesCount,
     scheduleNoVariety,
     selectedTermId,
+    program,
   } = useAppStore(
     useShallow((s) => ({
       currentSchedule: s.currentSchedule,
@@ -86,8 +86,17 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
       basicElectivesCount: s.basicElectivesCount,
       scheduleNoVariety: s.scheduleNoVariety,
       selectedTermId: s.selectedTermId,
+      program: s.program,
     })),
   );
+
+  const hasProgram = program !== null;
+
+  // Sync module-level calendar mode so generation logic knows which path is active
+  useEffect(() => {
+    setCalendarMode(hasProgram ? "advanced" : "basic");
+    return () => setCalendarMode(null);
+  }, [hasProgram]);
 
   const clearGenerationError = () => useAppStore.setState({ generationError: null });
   const undoLastSwap = useAppStore((s) => s.undoLastSwap);
@@ -95,17 +104,15 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
   const goToPreviousSeed = useAppStore((s) => s.goToPreviousSeed);
   const goToNextSeed = useAppStore((s) => s.goToNextSeed);
   const randomizeSeed = useAppStore((s) => s.randomizeSeed);
-  const generateSchedules = useAppStore((s) => s.generateSchedules);
   const getSwapCandidates = useAppStore((s) => s.getSwapCandidates);
   const swapCourseInSchedule = useAppStore((s) => s.swapCourseInSchedule);
   const resetToDefault = useAppStore((s) => s.resetToDefault);
   const resetBasicCalendarSettings = useAppStore((s) => s.resetBasicCalendarSettings);
 
-  const isBasic = variant === "basic";
   const hasSchedule = currentSchedule !== null;
   const canGoPrevious = canGoToPreviousSeed(currentSeed, lowestVisitedSeed);
   const canUseSeedNavigation =
-    !isBasic || canGenerateBasicSchedule(basicPinnedCourses.length, basicElectivesCount);
+    hasProgram || canGenerateBasicSchedule(basicPinnedCourses.length, basicElectivesCount);
 
   const [controlsOpen, setControlsOpen] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
@@ -115,6 +122,56 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
   const isResizing = useRef(false);
   const resizeStartX = useRef(0);
   const resizeStartWidth = useRef(0);
+
+  // Generation options modal for the full-wizard (hasProgram) path
+  const generateSchedules = useAppStore((s) => s.generateSchedules);
+  const [genOptionsOpened, { open: openGenOptions, close: closeGenOptions }] = useDisclosure(false);
+  const hasAutoOpenedGenOptions = useRef(false);
+  const genSettingsSnapshotRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (hasProgram && !hasAutoOpenedGenOptions.current) {
+      hasAutoOpenedGenOptions.current = true;
+      genSettingsSnapshotRef.current = getGenSettingsSnapshot();
+      openGenOptions();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasProgram, openGenOptions]);
+
+  const getGenSettingsSnapshot = () => {
+    const s = useAppStore.getState();
+    return JSON.stringify({
+      coursesThisSemester: s.coursesThisSemester,
+      generationMinStartMinutes: s.generationMinStartMinutes,
+      generationMaxEndMinutes: s.generationMaxEndMinutes,
+      generationAllowedDays: s.generationAllowedDays,
+      generationMinProfessorRating: s.generationMinProfessorRating,
+      generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
+      generationCompressedSchedule: s.generationCompressedSchedule,
+      generationPreferEasier: s.generationPreferEasier,
+      blacklistedCourses: s.blacklistedCourses,
+      constrainedPerRequirement: s.constrainedPerRequirement,
+      levelBuckets: s.levelBuckets,
+      languageBuckets: s.languageBuckets,
+      electiveLevelBuckets: s.electiveLevelBuckets,
+      includeClosedComponents: s.includeClosedComponents,
+      virtualSectionsOnly: s.virtualSectionsOnly,
+    });
+  };
+
+  const handleOpenGenOptions = () => {
+    genSettingsSnapshotRef.current = getGenSettingsSnapshot();
+    openGenOptions();
+  };
+
+  const handleCloseGenOptions = () => {
+    closeGenOptions();
+    const noSchedule = useAppStore.getState().currentSchedule === null;
+    const settingsChanged = genSettingsSnapshotRef.current !== getGenSettingsSnapshot();
+    if (noSchedule || settingsChanged) {
+      void generateSchedules();
+    }
+  };
 
   const cliCommand =
     currentSchedule && selectedTermId
@@ -187,8 +244,8 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
     isResizing.current = false;
   }
 
-  const calendarTitle = tr(isBasic ? "basicCalendar.title" : "calendarPage.title");
-  const calendarSubtitle = tr(isBasic ? "basicCalendar.subtitle" : "calendarPage.subtitle");
+  const calendarTitle = tr(hasProgram ? "calendarPage.title" : "basicCalendar.title");
+  const calendarSubtitle = tr(hasProgram ? "calendarPage.subtitle" : "basicCalendar.subtitle");
 
   const sidebarControls = (
     <>
@@ -207,10 +264,9 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
         {calendarSubtitle}
       </Text>
 
-      {isBasic ? (
+      {!hasProgram ? (
         <>
           <BasicCalendarHeaderActions
-            onBack={onBack}
             cliCommand={cliCommand}
             onEnrolCli={() => setEnrolCliOpen(true)}
             onClearOptions={handleClearOptions}
@@ -252,7 +308,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
         </>
       ) : (
         <Stack gap="md">
-          {/* Utility toolbar: download, share, randomize, reset */}
+          {/* Utility toolbar: download, share, randomize, reset, generation options */}
           <Group gap={4}>
             <Tooltip label={tr("calendarPage.downloadIcs")} withArrow position="right" color="dark">
               <ActionIcon
@@ -326,6 +382,18 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
             </Button>
           </Group>
 
+          <Button
+            variant="light"
+            color="violet"
+            size="sm"
+            radius={0}
+            fullWidth
+            leftSection={<IconSettings size={14} />}
+            onClick={handleOpenGenOptions}
+          >
+            {tr("app.generationOptions.title")}
+          </Button>
+
           {/* Prev/Next - desktop only */}
           {!isMobile && hasSchedule && (
             <Stack gap={6}>
@@ -363,21 +431,6 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
 
           <Divider color="#2C2E33" />
 
-          {!hasSchedule && (
-            <Button
-              variant="filled"
-              color="violet"
-              size="sm"
-              radius={0}
-              fullWidth
-              disabled={scheduleGenerating}
-              loading={scheduleGenerating}
-              onClick={() => void generateSchedules()}
-            >
-              {tr("calendarPage.generate")}
-            </Button>
-          )}
-
           {/* Undo swap */}
           {currentSwaps.length > 0 && (
             <Button
@@ -401,7 +454,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
             onConfirm={() => {
               resetToDefault();
               setResetModalOpen(false);
-              onBack();
+              navigateToWizardStep(WizardStep.Term);
             }}
           />
         </Stack>
@@ -415,7 +468,7 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
 
       {scheduleNoVariety && !generationError && (
         <Alert color="yellow" variant="light" radius={0} py="xs" style={{ flexShrink: 0 }}>
-          {tr(isBasic ? "basicCalendar.noMoreSchedules" : "calendarPage.noMoreSchedules")}
+          {tr(hasProgram ? "calendarPage.noMoreSchedules" : "basicCalendar.noMoreSchedules")}
         </Alert>
       )}
 
@@ -427,28 +480,19 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
           })}
         </Text>
       </Stack>
-
-      {!isMobile && (
-        <>
-          <Box style={{ flex: 1, minHeight: 24 }} />
-          <Button
-            variant="filled"
-            color="dark"
-            size="sm"
-            radius={0}
-            onClick={onBack}
-            style={{ backgroundColor: "#141517", alignSelf: "stretch" }}
-          >
-            {tr("calendarPage.backToSetup")}
-          </Button>
-        </>
-      )}
     </>
   );
 
   return (
     <>
       <GenerationErrorModal error={generationError} onClose={clearGenerationError} />
+      <GenerationOptionsModal
+        opened={genOptionsOpened}
+        onClose={handleCloseGenOptions}
+        onAfterGenerate={() => {
+          genSettingsSnapshotRef.current = getGenSettingsSnapshot();
+        }}
+      />
       <Box
         component="main"
         style={{
@@ -556,17 +600,6 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
               zIndex: 198,
             }}
           >
-            <Button
-              variant="subtle"
-              color="gray"
-              size="md"
-              radius={0}
-              aria-label={tr("calendarPage.mobile.back")}
-              style={{ flex: 1, border: "none", height: 56 }}
-              onClick={onBack}
-            >
-              <IconArrowLeft size={22} stroke={1.75} />
-            </Button>
             <Button
               variant="subtle"
               color="gray"

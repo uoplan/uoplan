@@ -1,23 +1,50 @@
 import { useState, useMemo } from "react";
-import { Alert, Badge, Box, Collapse, Group, Paper, Stack, Text } from "@mantine/core";
+import { Alert, Badge, Box, Collapse, Group, Modal, Paper, Stack, Text } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
-import { useAppStore } from "../../../store/appStore";
-import { ConstrainStep } from "../../requirements/ConstrainStep";
-import { ScheduleCountStep } from "../../steps/ScheduleCountStep";
-import { WizardStep } from "../../../lib/wizardSteps";
-import { navigateToCalendar } from "../../../lib/appNavigation";
-import { WizardShell } from "../WizardShell";
-import { tr } from "../../../i18n";
+import { useAppStore } from "../../store/appStore";
+import { ConstrainStep } from "../requirements/ConstrainStep";
+import { ScheduleCountStep } from "../steps/ScheduleCountStep";
+import { tr } from "../../i18n";
 
-export function WizardGeneratePage() {
+interface GenerationOptionsModalProps {
+  opened: boolean;
+  onClose: () => void;
+  /** Called after a successful explicit generate, so the parent can refresh its change snapshot. */
+  onAfterGenerate?: () => void;
+}
+
+export function GenerationOptionsModal({
+  opened,
+  onClose,
+  onAfterGenerate,
+}: GenerationOptionsModalProps) {
   return (
-    <WizardShell activeStep={WizardStep.Generate}>
-      <WizardGenerateStepBody />
-    </WizardShell>
+    <Modal
+      opened={opened}
+      onClose={onClose}
+      title={tr("app.generationOptions.title")}
+      size="lg"
+      radius={0}
+      styles={{
+        header: { backgroundColor: "#1E1E20", borderBottom: "1px solid #2C2E33" },
+        body: { backgroundColor: "#1E1E20", padding: 0 },
+        title: { color: "#F8F9FA", fontWeight: 600 },
+      }}
+    >
+      <Box p="md">
+        <GenerationOptionsBody onClose={onClose} onAfterGenerate={onAfterGenerate} />
+      </Box>
+    </Modal>
   );
 }
 
-function WizardGenerateStepBody() {
+function GenerationOptionsBody({
+  onClose,
+  onAfterGenerate,
+}: {
+  onClose: () => void;
+  onAfterGenerate?: () => void;
+}) {
   const cache = useAppStore((s) => s.cache);
   const remainingRequirements = useAppStore((s) => s.remainingRequirements);
   const requirementTreeWithStatus = useAppStore((s) => s.requirementTreeWithStatus);
@@ -81,7 +108,8 @@ function WizardGenerateStepBody() {
         await generateSchedules();
         const { currentSchedule, generationError: genErr } = useAppStore.getState();
         if (currentSchedule !== null && genErr === null) {
-          navigateToCalendar("advanced");
+          onAfterGenerate?.();
+          onClose();
         }
       } finally {
         setGenerating(false);

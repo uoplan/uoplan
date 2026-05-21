@@ -1,29 +1,25 @@
 type CalendarVariant = "basic" | "advanced";
 
-function getCalendarVariantFromPath(pathname: string): CalendarVariant | null {
-  if (pathname.includes("/schedule/calendar/basic")) return "basic";
-  if (pathname.includes("/schedule/calendar/advanced")) return "advanced";
-  return null;
+let _mode: CalendarVariant | null = null;
+
+/** Called by CalendarPage on mount/unmount to set the active generation mode. */
+export function setCalendarMode(mode: CalendarVariant | null): void {
+  _mode = mode;
 }
 
-function getActiveCalendarVariant(): CalendarVariant | null {
-  if (typeof window === "undefined") return null;
-  return getCalendarVariantFromPath(window.location.pathname);
-}
-
-/** Mode stored in share protobuf when encoding from the current page URL. */
-export function wizardModeForEncoding(pathname: string): "basic" | "advanced" | null {
-  return getCalendarVariantFromPath(pathname);
+/** Mode stored in share protobuf when encoding from the current calendar state. */
+export function wizardModeForEncoding(_pathname: string): CalendarVariant | null {
+  return _mode;
 }
 
 export function isBasicPlannerActive(): boolean {
-  return getActiveCalendarVariant() === "basic";
+  return _mode === "basic";
 }
 
 export function isAdvancedPlannerActive(): boolean {
-  return getActiveCalendarVariant() === "advanced";
+  return _mode === "advanced";
 }
 
 export function isPlannerVariantActive(): boolean {
-  return getActiveCalendarVariant() != null;
+  return _mode !== null;
 }

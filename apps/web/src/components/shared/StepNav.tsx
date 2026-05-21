@@ -9,10 +9,6 @@ export const STEPS = [
     description: () => tr("stepNav.step.term.description"),
   },
   {
-    label: () => tr("stepNav.step.mode.label"),
-    description: () => tr("stepNav.step.mode.description"),
-  },
-  {
     label: () => tr("stepNav.step.program.label"),
     description: () => tr("stepNav.step.program.description"),
   },
@@ -27,10 +23,6 @@ export const STEPS = [
   {
     label: () => tr("stepNav.step.requirements.label"),
     description: () => tr("stepNav.step.requirements.description"),
-  },
-  {
-    label: () => tr("stepNav.step.generate.label"),
-    description: () => tr("stepNav.step.generate.description"),
   },
 ] as const;
 
