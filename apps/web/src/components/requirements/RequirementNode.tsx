@@ -529,12 +529,14 @@ export const RequirementNode = memo(
           )}
           {showError && (
             <Text size="xs" c="red" mt={4}>
-              Select exactly one option in this group.
+              {tr("optionsDrilldown.selectOneError")}
             </Text>
           )}
           {node.complete && node.satisfiedOptionIndex != null && (
             <Text size="xs" c="dimmed" mb="xs">
-              Satisfied by: {node.satisfiedBy.join(", ")}
+              {tr("requirementNode.satisfiedBy", {
+                courses: node.satisfiedBy.join(", "),
+              })}
             </Text>
           )}
           <Collapse expanded={collapseIn}>
@@ -585,7 +587,9 @@ export const RequirementNode = memo(
                     {isSatisfiedOption && opt.satisfiedBy.length > 0 && (
                       <Box pl="sm" mt={4}>
                         <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-                          Satisfied by: {opt.satisfiedBy.join(", ")}
+                          {tr("requirementNode.satisfiedBy", {
+                            courses: opt.satisfiedBy.join(", "),
+                          })}
                         </Badge>
                       </Box>
                     )}
@@ -696,12 +700,14 @@ export const RequirementNode = memo(
           )}
           {showError && (
             <Text size="xs" c="red" mt={4}>
-              Select exactly one option in this group.
+              {tr("optionsDrilldown.selectOneError")}
             </Text>
           )}
           {node.complete && node.satisfiedOptionIndex != null && (
             <Text size="xs" c="dimmed" mb="xs">
-              Satisfied by option: {node.satisfiedBy.join(", ")}
+              {tr("requirementNode.satisfiedBy", {
+                courses: node.satisfiedBy.join(", "),
+              })}
             </Text>
           )}
           <Collapse expanded={collapseIn}>
