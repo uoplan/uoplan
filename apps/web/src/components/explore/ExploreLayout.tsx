@@ -56,10 +56,12 @@ function buildTermNameById(terms: Term[]): Map<number, string> {
 function ExploreSearchInput({
   value,
   onChange,
+  onFocus,
   disabled,
 }: {
   value: string;
   onChange: (v: string) => void;
+  onFocus?: () => void;
   disabled: boolean;
 }) {
   return (
@@ -67,6 +69,7 @@ function ExploreSearchInput({
       placeholder={tr("explore.searchPlaceholder")}
       value={value}
       onChange={(e) => onChange(e.currentTarget.value)}
+      onFocus={onFocus}
       size="lg"
       radius={9999}
       disabled={disabled}
@@ -173,6 +176,7 @@ export function ExploreLayout({
   const [query, setQueryState] = useState(searchParams.q ?? "");
   const [debouncedQuery] = useDebouncedValue(query, 120);
   const [filters, setFilters] = useState<ExploreFilterState>(parsedFilters);
+  const [searchEngaged, setSearchEngaged] = useState(!showBackButton);
 
   useEffect(() => {
     setQueryState(searchParams.q ?? "");
@@ -207,6 +211,7 @@ export function ExploreLayout({
 
   const handleQueryChange = (v: string) => {
     setQueryState(v);
+    setSearchEngaged(true);
     const nextSearch = buildSearchParams(filters, v);
     if (onQueryChange) {
       onQueryChange(v, nextSearch);
@@ -216,6 +221,7 @@ export function ExploreLayout({
   };
 
   const handleFilterChange = (next: Partial<ExploreFilterState>) => {
+    setSearchEngaged(true);
     setFilters((prev) => {
       const updated = { ...prev, ...next };
       updateSearchParams(updated, query);
@@ -301,7 +307,7 @@ export function ExploreLayout({
       .slice(0, DISCIPLINE_MAX_RESULTS);
   }, [debouncedQuery, disciplines]);
 
-  const showResults = debouncedQuery.trim().length > 0 || activeFilters;
+  const showResults = searchEngaged && (debouncedQuery.trim().length > 0 || activeFilters);
   const hasResults =
     (searchResults?.courses.length ?? 0) > 0 ||
     (filterOnlyCourses?.length ?? 0) > 0 ||
@@ -450,7 +456,12 @@ export function ExploreLayout({
               tr("explore.title")
             )}
           </Title>
-          <ExploreSearchInput value={query} onChange={handleQueryChange} disabled={loading} />
+          <ExploreSearchInput
+            value={query}
+            onChange={handleQueryChange}
+            onFocus={() => setSearchEngaged(true)}
+            disabled={loading}
+          />
         </Stack>
         <Box mt="md">
           <ExploreFilterBar filters={filters} onChange={handleFilterChange} />
