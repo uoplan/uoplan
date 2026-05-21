@@ -35,12 +35,12 @@ import { tr } from "../../i18n";
 import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
 import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 import { CALENDAR_SIDEBAR_WIDTH_PX } from "./calendarLayout";
-import { BasicCalendarSidebarControls } from "./BasicCalendarSidebarControls";
 import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
 import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
 import { GenerationErrorModal } from "./GenerationErrorModal";
 import { EnrolCliModal } from "./EnrolCliModal";
 import { GenerationOptionsModal } from "./GenerationOptionsModal";
+import { BasicGenerationOptionsModal } from "./BasicGenerationOptionsModal";
 import { encodeSchedulePayload } from "../../lib/encodeSchedulePayload";
 import { setCalendarMode } from "../../lib/calendarRoute";
 import { navigateToWizardStep } from "../../lib/appNavigation";
@@ -130,7 +130,6 @@ export function CalendarPage() {
   const [controlsOpen, setControlsOpen] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [enrolCliOpen, setEnrolCliOpen] = useState(false);
-  const [transcriptError, setTranscriptError] = useState<string | null>(null);
   const [sidebarWidth, setSidebarWidth] = useState(CALENDAR_SIDEBAR_WIDTH_PX);
   const isResizing = useRef(false);
   const resizeStartX = useRef(0);
@@ -150,6 +149,52 @@ export function CalendarPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasProgram, openGenOptions]);
+
+  // Generation options modal for the basic (no program) path
+  const [basicGenOptionsOpened, { open: openBasicGenOptions, close: closeBasicGenOptions }] =
+    useDisclosure(false);
+  const hasAutoOpenedBasicGenOptions = useRef(false);
+  const basicSettingsSnapshotRef = useRef<string | null>(null);
+
+  const getBasicSettingsSnapshot = () => {
+    const s = useAppStore.getState();
+    return JSON.stringify({
+      basicPinnedCourses: s.basicPinnedCourses,
+      basicElectivesCount: s.basicElectivesCount,
+      basicExcludedCategories: s.basicExcludedCategories,
+      completedCourses: s.completedCourses,
+      frenchImmersionStream: s.frenchImmersionStream,
+      levelBuckets: s.levelBuckets,
+      languageBuckets: s.languageBuckets,
+      electiveLevelBuckets: s.electiveLevelBuckets,
+      includeClosedComponents: s.includeClosedComponents,
+      virtualSectionsOnly: s.virtualSectionsOnly,
+      blacklistedCourses: s.blacklistedCourses,
+    });
+  };
+
+  useEffect(() => {
+    if (!hasProgram && !hasAutoOpenedBasicGenOptions.current) {
+      hasAutoOpenedBasicGenOptions.current = true;
+      basicSettingsSnapshotRef.current = getBasicSettingsSnapshot();
+      openBasicGenOptions();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasProgram, openBasicGenOptions]);
+
+  const handleOpenBasicGenOptions = () => {
+    basicSettingsSnapshotRef.current = getBasicSettingsSnapshot();
+    openBasicGenOptions();
+  };
+
+  const handleCloseBasicGenOptions = () => {
+    closeBasicGenOptions();
+    const noSchedule = useAppStore.getState().currentSchedule === null;
+    const settingsChanged = basicSettingsSnapshotRef.current !== getBasicSettingsSnapshot();
+    if (noSchedule || settingsChanged) {
+      void generateSchedules();
+    }
+  };
 
   const getGenSettingsSnapshot = () => {
     const s = useAppStore.getState();
@@ -225,7 +270,6 @@ export function CalendarPage() {
 
   const handleClearOptions = () => {
     resetBasicCalendarSettings();
-    setTranscriptError(null);
   };
 
   const handleDownloadIcs = () => {
@@ -257,7 +301,7 @@ export function CalendarPage() {
     isResizing.current = false;
   }
 
-  const calendarTitle = tr(hasProgram ? "calendarPage.title" : "basicCalendar.title");
+  const calendarTitle = tr("calendarPage.title");
   const calendarSubtitle = tr(hasProgram ? "calendarPage.subtitle" : "basicCalendar.subtitle");
 
   const sidebarControls = (
@@ -286,6 +330,17 @@ export function CalendarPage() {
             onDownloadIcs={handleDownloadIcs}
             downloadDisabled={!dateRangeOk || !currentSchedule}
           />
+          <Button
+            variant="light"
+            color="violet"
+            size="sm"
+            radius={0}
+            fullWidth
+            leftSection={<IconSettings size={14} />}
+            onClick={handleOpenBasicGenOptions}
+          >
+            {tr("app.generationOptions.title")}
+          </Button>
           {!isMobile && (
             <Button.Group>
               <Button
@@ -314,10 +369,6 @@ export function CalendarPage() {
               </Button>
             </Button.Group>
           )}
-          <BasicCalendarSidebarControls
-            transcriptError={transcriptError}
-            setTranscriptError={setTranscriptError}
-          />
         </>
       ) : (
         <Stack gap="md">
@@ -505,6 +556,10 @@ export function CalendarPage() {
         onAfterGenerate={() => {
           genSettingsSnapshotRef.current = getGenSettingsSnapshot();
         }}
+      />
+      <BasicGenerationOptionsModal
+        opened={basicGenOptionsOpened}
+        onClose={handleCloseBasicGenOptions}
       />
       <Box
         component="main"

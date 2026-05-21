@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import {
   Button,
   MultiSelect,
@@ -6,26 +6,20 @@ import {
   Stack,
   Box,
   Text,
-  Loader,
-  Alert,
   Switch,
   type OptionsFilter,
 } from "@mantine/core";
+import { IconFileUpload } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { createCourseOptions, renderCourseOption } from "../shared/CourseSelect";
 import { BasicCourseFiltersCard } from "../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../i18n";
-import { parseTranscriptPdf, isOptCourse, normalizeCourseCode } from "@uoplan/schedule";
+import { navigateToWizardStep } from "../../lib/appNavigation";
+import { WizardStep } from "../../lib/wizardSteps";
 
-export function BasicCalendarSidebarControls({
-  transcriptError,
-  setTranscriptError,
-}: {
-  transcriptError: string | null;
-  setTranscriptError: (err: string | null) => void;
-}) {
+export function BasicCalendarSidebarControls() {
   const {
     cache,
     basicPinnedCourses,
@@ -37,7 +31,6 @@ export function BasicCalendarSidebarControls({
     includeClosedComponents,
     virtualSectionsOnly,
     completedCourses,
-    indices,
     frenchImmersionStream,
   } = useAppStore(
     useShallow((s) => ({
@@ -51,7 +44,6 @@ export function BasicCalendarSidebarControls({
       includeClosedComponents: s.includeClosedComponents,
       virtualSectionsOnly: s.virtualSectionsOnly,
       completedCourses: s.completedCourses,
-      indices: s.indices,
       frenchImmersionStream: s.frenchImmersionStream,
     })),
   );
@@ -70,57 +62,6 @@ export function BasicCalendarSidebarControls({
   const setIncludeClosedComponents = useAppStore((s) => s.setIncludeClosedComponents);
   const setVirtualSectionsOnly = useAppStore((s) => s.setVirtualSectionsOnly);
   const setCompletedCourses = useAppStore((s) => s.setCompletedCourses);
-
-  const [transcriptLoading, setTranscriptLoading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleTranscriptFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setTranscriptLoading(true);
-    setTranscriptError(null);
-
-    try {
-      const buffer = await file.arrayBuffer();
-      const { courses: parsedCourses, frenchImmersionStreamHint } =
-        await parseTranscriptPdf(buffer);
-      const inCatalogue: string[] = [];
-      const indexedCodes = indices
-        ? new Set(indices.courses.map(normalizeCourseCode))
-        : new Set<string>();
-      for (const code of parsedCourses) {
-        if (
-          isOptCourse(normalizeCourseCode(code)) ||
-          cache!.getCourse(code) ||
-          indexedCodes.has(normalizeCourseCode(code))
-        ) {
-          inCatalogue.push(code);
-        }
-      }
-      const merged = [...new Set([...completedCourses, ...inCatalogue])];
-
-      if (frenchImmersionStreamHint) {
-        setFrenchImmersionStream(true);
-        markBasicSettingsChanged();
-      }
-
-      if (merged.length > completedCourses.length) {
-        setCompletedCourses(merged);
-        markBasicSettingsChanged();
-      } else {
-        setTranscriptError(tr("basicCalendar.transcript.error.noneAdded"));
-      }
-    } catch (err) {
-      console.error(err);
-      setTranscriptError(tr("basicCalendar.transcript.error.parseFailed"));
-    } finally {
-      setTranscriptLoading(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }
-  };
 
   const allCategories = useMemo(() => {
     if (!cache) return [] as string[];
@@ -296,35 +237,17 @@ export function BasicCalendarSidebarControls({
             radius={0}
           />
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".pdf"
-            onChange={(e) => {
-              void handleTranscriptFile(e);
-            }}
-            disabled={transcriptLoading}
-            style={{ display: "none" }}
-          />
           <Button
             size="sm"
             color="gray"
             variant="light"
             radius={0}
-            onClick={() => fileInputRef.current?.click()}
-            disabled={transcriptLoading}
-            leftSection={transcriptLoading ? <Loader size="xs" /> : undefined}
+            leftSection={<IconFileUpload size={14} />}
             fullWidth
+            onClick={() => navigateToWizardStep(WizardStep.Program)}
           >
-            {transcriptLoading
-              ? tr("basicCalendar.transcript.parsing")
-              : tr("basicCalendar.transcript.upload")}
+            {tr("basicCalendar.transcript.upload")}
           </Button>
-          {transcriptError && (
-            <Alert color="red" variant="light" py="xs">
-              <Text size="xs">{transcriptError}</Text>
-            </Alert>
-          )}
         </Stack>
       </Box>
     </>
