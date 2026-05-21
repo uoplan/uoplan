@@ -244,7 +244,7 @@ export function ExploreLayout({
     [courseEntries],
   );
 
-  const activeFilters = hasActiveFilters(filters);
+  const activeFilters = hasActiveFilters(filters) || filters.sortKey !== "relevance";
 
   const rawSearchResults = useMemo(() => {
     const q = debouncedQuery.trim();
@@ -451,8 +451,10 @@ export function ExploreLayout({
             )}
           </Title>
           <ExploreSearchInput value={query} onChange={handleQueryChange} disabled={loading} />
-          <ExploreFilterBar filters={filters} onChange={handleFilterChange} />
         </Stack>
+        <Box mt="md">
+          <ExploreFilterBar filters={filters} onChange={handleFilterChange} />
+        </Box>
       </Box>
 
       {/* Content area */}
