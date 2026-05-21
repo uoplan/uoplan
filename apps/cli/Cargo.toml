@@ -1,6 +1,6 @@
 [package]
 name = "uoplan"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 description = "Course planner CLI for University of Ottawa students — search, enrol, and snipe course registrations via PeopleSoft"
 license = "MIT"
