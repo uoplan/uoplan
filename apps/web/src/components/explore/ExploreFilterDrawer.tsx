@@ -5,7 +5,6 @@ import { tr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { ExploreFilterPopoverContent, filterSectionLabel } from "./ExploreFilterPopoverContent";
-import { useDragToDismiss } from "../../hooks/useDragToDismiss";
 
 const FILTER_KEYS = ["level", "language", "difficulty", "rating"] as const;
 type FilterKey = (typeof FILTER_KEYS)[number];
@@ -26,7 +25,6 @@ export function ExploreFilterDrawer({
   useLingui();
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { dragOffset, dragging, handlers } = useDragToDismiss({ opened, onClose, scrollRef });
 
   return (
     <Drawer.Root opened={opened} onClose={onClose} position="bottom" size="auto" radius="md">
@@ -38,14 +36,10 @@ export function ExploreFilterDrawer({
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
-          transform: `translateY(${dragOffset}px)`,
-          transition: dragging ? "none" : "transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)",
+          transition: "transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)",
         }}
       >
-        <div
-          {...handlers}
-          style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}
-        >
+        <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
           <div
             style={{
               width: 36,
