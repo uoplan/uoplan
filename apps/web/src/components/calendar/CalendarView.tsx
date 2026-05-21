@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useEffect } from "react";
+import { useMemo, useCallback } from "react";
 import { ActionIcon, Box, Group, Modal, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
@@ -8,10 +8,10 @@ import type { ProfessorRatingsMap } from "@uoplan/schedule";
 import { SwapModalContent } from "./SwapModalContent";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useSwapModal } from "../../hooks/useSwapModal";
-import { useScheduleTransition } from "../../hooks/useScheduleTransition";
-import { useScheduleWeeks, slotActiveInWeek } from "../../hooks/useScheduleWeeks";
+import { useScheduleTransition, useWeekIndexTransition } from "../../hooks/useScheduleTransition";
+import { slotActiveInWeek } from "../../hooks/useScheduleWeeks";
 import { WeekCalendar } from "./WeekCalendar";
-import { useAppStore } from "../../store/appStore";
+import { WeekPreviewPanel } from "./WeekPreviewPanel";
 import type { CalendarEvent } from "../../hooks/useCalendarEvents";
 import type { WeekGroup } from "../../hooks/useScheduleWeeks";
 import { formatWeekCount } from "../../lib/formatWeekCount";
@@ -51,6 +51,9 @@ interface CalendarViewProps {
   };
   onSwap: (enrollmentIndex: number, newCourseCode: string) => void;
   colorMap?: Record<string, number>;
+  weekGroups: WeekGroup[];
+  weekIndex: number;
+  setWeekIndex: (index: number) => void;
 }
 
 export function CalendarView({
@@ -60,19 +63,29 @@ export function CalendarView({
   getSwapCandidates,
   onSwap,
   colorMap = EMPTY_COLOR_MAP,
+  weekGroups,
+  weekIndex,
+  setWeekIndex,
 }: CalendarViewProps) {
   const isCompactCalendar = useMediaQuery("(max-width: 1200px)");
+  const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });
   const prefersReduced = useMediaQuery("(prefers-reduced-motion: reduce)") ?? false;
 
-  const { displayedSchedule, animationPhase } = useScheduleTransition(schedule, prefersReduced);
+  const { displayedSchedule, animationPhase: schedulePhase } = useScheduleTransition(
+    schedule,
+    prefersReduced,
+  );
+  const { displayedWeekIndex, animationPhase: weekPhase } = useWeekIndexTransition(
+    weekIndex,
+    prefersReduced,
+  );
+
+  // Schedule animation takes priority; week animation fires only when schedule is idle.
+  const animationPhase = schedulePhase !== "idle" ? schedulePhase : weekPhase;
 
   const swap = useSwapModal(getSwapCandidates, cache);
 
-  const calendarWeekIndex = useAppStore((s) => s.calendarWeekIndex);
-  const setCalendarWeekIndex = useAppStore((s) => s.setCalendarWeekIndex);
-
   const allEvents = useCalendarEvents(displayedSchedule, professorRatings);
-  const { weekGroups, weekIndex, setWeekIndex } = useScheduleWeeks(schedule, calendarWeekIndex);
 
   const scheduleDateRange = useMemo(() => {
     if (!schedule) return null;
@@ -90,11 +103,7 @@ export function CalendarView({
     return min && max ? { start: min, end: max } : null;
   }, [schedule]);
 
-  useEffect(() => {
-    setCalendarWeekIndex(weekIndex);
-  }, [weekIndex, setCalendarWeekIndex]);
-
-  const currentGroup: WeekGroup | null = weekGroups[weekIndex] ?? null;
+  const currentGroup: WeekGroup | null = weekGroups[displayedWeekIndex] ?? null;
 
   const events = useMemo(() => {
     if (!currentGroup) return allEvents;
@@ -190,31 +199,47 @@ export function CalendarView({
           </>
         )}
         {weekGroups.length === 0 && (
-          <Group
-            justify="space-between"
-            align="center"
-            gap={8}
-            style={{ padding: "4px 12px 6px", visibility: "hidden" }}
-          >
-            <ActionIcon variant="subtle" color="gray" size="sm">
-              <IconChevronLeft size={14} />
-            </ActionIcon>
-            <Text size="xs">&nbsp;</Text>
-            <ActionIcon variant="subtle" color="gray" size="sm">
-              <IconChevronRight size={14} />
-            </ActionIcon>
-          </Group>
+          <div style={{ visibility: "hidden" }}>
+            <Text size="xs" style={{ padding: "4px 12px 0" }}>
+              &nbsp;
+            </Text>
+            <Group
+              justify="space-between"
+              align="center"
+              gap={8}
+              style={{ padding: "4px 12px 6px" }}
+            >
+              <ActionIcon variant="subtle" color="gray" size="sm">
+                <IconChevronLeft size={14} />
+              </ActionIcon>
+              <Text size="xs">&nbsp;</Text>
+              <ActionIcon variant="subtle" color="gray" size="sm">
+                <IconChevronRight size={14} />
+              </ActionIcon>
+            </Group>
+          </div>
         )}
       </Box>
-      <Box style={{ flex: 1, minHeight: 0 }}>
-        <WeekCalendar
-          events={events}
-          cache={cache}
-          colorMap={colorMap}
-          onEventClick={handleEventClick}
-          showWeekends={showWeekends ?? false}
-          animationPhase={animationPhase}
-        />
+      <Box style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "row" }}>
+        {!isMobile && (
+          <WeekPreviewPanel
+            schedule={schedule}
+            weekGroups={weekGroups}
+            weekIndex={weekIndex}
+            setWeekIndex={setWeekIndex}
+            colorMap={colorMap}
+          />
+        )}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <WeekCalendar
+            events={events}
+            cache={cache}
+            colorMap={colorMap}
+            onEventClick={handleEventClick}
+            showWeekends={showWeekends ?? false}
+            animationPhase={animationPhase}
+          />
+        </div>
       </Box>
 
       <Modal
