@@ -5,7 +5,6 @@ import { tr } from "../../i18n";
 import type { ExploreOfferingFlat } from "../../lib/explore/gradesSearch";
 import type { GraphNeighbor, NeighborSortMode } from "../../lib/graph/professorGraphDetails";
 import { ProfessorGraphNodeDetails } from "./ProfessorGraphNodeDetails";
-import { useDragToDismiss } from "../../hooks/useDragToDismiss";
 
 const SURFACE_STYLE = {
   backgroundColor: "rgba(26, 27, 30, 0.98)",
@@ -37,7 +36,6 @@ export function ProfessorGraphMobileDrawer({
 }: ProfessorGraphMobileDrawerProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const opened = node != null;
-  const { dragOffset, dragging, handlers } = useDragToDismiss({ opened, onClose, scrollRef });
 
   return (
     <Drawer.Root opened={opened} onClose={onClose} position="bottom" size="auto">
@@ -50,14 +48,10 @@ export function ProfessorGraphMobileDrawer({
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
-          transform: `translateY(${dragOffset}px)`,
-          transition: dragging ? "none" : "transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)",
+          transition: "transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)",
         }}
       >
-        <div
-          {...handlers}
-          style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}
-        >
+        <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
           <div
             style={{
               width: 36,
