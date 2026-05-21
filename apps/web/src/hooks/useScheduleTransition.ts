@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { GeneratedSchedule } from "@uoplan/schedule";
 
-export type Phase = "idle" | "exiting" | "entering";
+type Phase = "idle" | "exiting" | "entering";
 
 const EXIT_MS = 180;
 const ENTER_MS = 220;

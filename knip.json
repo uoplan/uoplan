@@ -1,5 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignore": ["apps/cli/target/**"],
   "workspaces": {
     "apps/web": {
       "vite": false,
@@ -23,6 +24,7 @@
     "packages/schedule": {
       "entry": ["src/**/*.ts"],
       "ignoreDependencies": ["ts-proto"]
-    }
+    },
+    "apps/cli": {}
   }
 }
