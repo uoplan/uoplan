@@ -3,11 +3,10 @@ import { useShallow } from "zustand/react/shallow";
 import { ExploreLayout } from "../../../components/explore/ExploreLayout";
 import { ExploreCoursePage } from "../../../components/explore/ExploreCoursePage";
 import { useAppStore } from "../../../store/appStore";
+import { validateExploreSearch } from "../../../lib/explore/exploreFilters";
 
 export const Route = createFileRoute("/explore/course/$course")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    q: typeof search.q === "string" && search.q.length > 0 ? search.q : undefined,
-  }),
+  validateSearch: validateExploreSearch,
   component: ExploreCourseRoute,
 });
 
@@ -21,7 +20,7 @@ function ExploreCourseRoute() {
   );
 
   const { course } = Route.useParams();
-  const { q } = Route.useSearch();
+  const search = Route.useSearch();
   const navigate = Route.useNavigate();
 
   return (
@@ -30,10 +29,10 @@ function ExploreCourseRoute() {
       catalogue={catalogue}
       terms={terms ?? []}
       professorRatings={professorRatings}
-      initialQuery={q ?? ""}
-      onQueryChange={(v) =>
+      searchParams={search}
+      onQueryChange={(_, nextSearch) =>
         void navigate({
-          search: { q: v.length > 0 ? v : undefined },
+          search: nextSearch,
           replace: true,
         })
       }

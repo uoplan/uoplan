@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
   Alert,
   Box,
@@ -249,7 +250,7 @@ export function ProfessorGraphPage({
                           <Link
                             to="/explore/professor/$legacyId"
                             params={{ legacyId: String(entry.legacyId) }}
-                            search={{ q: undefined }}
+                            search={EMPTY_EXPLORE_SEARCH}
                             onClick={(e) => e.stopPropagation()}
                             style={{
                               fontSize: "var(--mantine-font-size-xs)",

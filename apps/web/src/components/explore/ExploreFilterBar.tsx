@@ -1,6 +1,7 @@
 import { Box, Group, UnstyledButton } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
+import { IconChevronDown } from "@tabler/icons-react";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { tr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
@@ -8,8 +9,14 @@ import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { ExploreFilterPopoverContent } from "./ExploreFilterPopoverContent";
 import { ExploreFilterDrawer } from "./ExploreFilterDrawer";
 
-const FILTER_KEYS = ["level", "language", "difficulty", "rating"] as const;
+const FILTER_KEYS = ["level", "language", "difficulty", "rating", "sort"] as const;
 type FilterKey = (typeof FILTER_KEYS)[number];
+export const FILTER_PILL_RADIUS = 0;
+export const FILTER_POPOVER_RADIUS = 0;
+
+export function pillHasChevron(key: FilterKey): boolean {
+  return key === "sort";
+}
 
 const RATING_KEY: Record<number, string> = { 3: "good", 3.5: "great", 4: "excellent" };
 
@@ -34,6 +41,13 @@ function pillLabel(key: FilterKey, filters: ExploreFilterState): string {
     const rk = RATING_KEY[filters.minRating];
     return rk ? tr(`explore.filter.rating.${rk}`) : tr("explore.filter.rating");
   }
+  if (key === "sort") {
+    const label = tr(`explore.sort.${filters.sortKey}`);
+    if (filters.sortKey === "relevance") return label;
+    const dirLabel =
+      filters.sortDir === "asc" ? tr("explore.sort.ascending") : tr("explore.sort.descending");
+    return `${label} · ${dirLabel}`;
+  }
   return "";
 }
 
@@ -42,6 +56,7 @@ function pillIsActive(key: FilterKey, filters: ExploreFilterState): boolean {
   if (key === "language") return filters.languages.length > 0;
   if (key === "difficulty") return filters.difficulty !== null;
   if (key === "rating") return filters.minRating !== null;
+  if (key === "sort") return filters.sortKey !== "relevance";
   return false;
 }
 
@@ -67,19 +82,21 @@ type FilterPillProps = {
   activeBg: string;
   activeBorder: string;
   onClick: () => void;
+  showChevron?: boolean;
 };
 
 const FilterPill = forwardRef<HTMLButtonElement, FilterPillProps>(
-  ({ label, active, activeBg, activeBorder, onClick }, ref) => (
+  ({ label, active, activeBg, activeBorder, onClick, showChevron = false }, ref) => (
     <UnstyledButton
       ref={ref}
       onClick={onClick}
       style={{
         display: "inline-flex",
         alignItems: "center",
+        gap: 6,
         paddingInline: 10,
         paddingBlock: 4,
-        borderRadius: 9999,
+        borderRadius: FILTER_PILL_RADIUS,
         fontSize: "var(--mantine-font-size-xs)",
         fontWeight: active ? 600 : 400,
         color: active ? "#e9ecef" : "#868e96",
@@ -91,6 +108,7 @@ const FilterPill = forwardRef<HTMLButtonElement, FilterPillProps>(
       }}
     >
       {label}
+      {showChevron ? <IconChevronDown size={12} stroke={1.6} /> : null}
     </UnstyledButton>
   ),
 );
@@ -145,7 +163,8 @@ export function ExploreFilterBar({
     filters.levels.length > 0 ||
     filters.languages.length > 0 ||
     filters.difficulty !== null ||
-    filters.minRating !== null;
+    filters.minRating !== null ||
+    filters.sortKey !== "relevance";
 
   return (
     <>
@@ -167,6 +186,7 @@ export function ExploreFilterBar({
                 active={active}
                 activeBg={bg}
                 activeBorder={border}
+                showChevron={pillHasChevron(key)}
                 onClick={() => handlePillClick(key)}
               />
             );
@@ -245,7 +265,7 @@ function FilterDropdown({
         zIndex: 300,
         backgroundColor: "#1a1b1e",
         border: "1px solid #3f424a",
-        borderRadius: 10,
+        borderRadius: FILTER_POPOVER_RADIUS,
         padding: "12px 14px",
         minWidth: 180,
         boxShadow: "0 4px 16px rgba(0,0,0,0.4)",

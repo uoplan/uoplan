@@ -16,6 +16,7 @@ import {
   type ExploreCourseSearchEntry,
 } from "../../lib/explore/gradesSearch";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
+import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { ExploreCourseSpotlightGallery } from "./ExploreCourseSpotlightGallery";
 
 function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
@@ -37,9 +38,11 @@ function buildTermNameById(terms: Term[]): Map<number, string> {
 export function ExploreSearchPage({
   catalogue,
   terms,
+  searchParams,
 }: {
   catalogue: Catalogue | null;
   terms: Term[];
+  searchParams: ExploreSearchParams;
 }) {
   useLingui();
   const { loading, data: grades } = useCourseGradesPb();
@@ -71,7 +74,7 @@ export function ExploreSearchPage({
     void navigate({
       to: "/explore/course/$course",
       params: { course: courseNormToPathParam(entry.normCode) },
-      search: { q: undefined },
+      search: searchParams,
     });
   };
 

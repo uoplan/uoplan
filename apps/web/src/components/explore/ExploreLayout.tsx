@@ -3,7 +3,7 @@ import { Anchor, Box, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Catalogue, ProfessorRatingsMap, Term } from "@uoplan/schedule";
 import { normalizeCourseCode } from "@uoplan/schedule";
 import { tr } from "../../i18n";
@@ -17,9 +17,15 @@ import {
 } from "../../lib/explore/gradesSearch";
 import {
   EMPTY_FILTERS,
+  compareCourseEntries,
+  compareProfessorEntries,
   filterCourseEntries,
   filterProfessorEntries,
   hasActiveFilters,
+  parseExploreFiltersSearch,
+  serializeExploreFiltersSearch,
+  EMPTY_EXPLORE_SEARCH,
+  type ExploreSearchParams,
   type ExploreFilterState,
 } from "../../lib/explore/exploreFilters";
 import { useAppStore } from "../../store/appStore";
@@ -142,7 +148,7 @@ export function ExploreLayout({
   catalogue,
   terms,
   professorRatings,
-  initialQuery = "",
+  searchParams,
   onQueryChange,
   children,
 }: {
@@ -150,8 +156,8 @@ export function ExploreLayout({
   catalogue: Catalogue | null;
   terms: Term[];
   professorRatings: ProfessorRatingsMap | null;
-  initialQuery?: string;
-  onQueryChange?: (v: string) => void;
+  searchParams: ExploreSearchParams;
+  onQueryChange?: (v: string, nextSearch: ExploreSearchParams) => void;
   children: ReactNode;
 }) {
   useLingui();
@@ -160,17 +166,61 @@ export function ExploreLayout({
   const { stack, pop } = useExploreHistory();
   const disciplines = useAppStore(useShallow((s) => s.disciplines));
 
-  const [query, setQueryState] = useState(initialQuery);
+  const parsedFilters = useMemo(
+    () => parseExploreFiltersSearch(searchParams ?? {}),
+    [searchParams],
+  );
+  const [query, setQueryState] = useState(searchParams.q ?? "");
   const [debouncedQuery] = useDebouncedValue(query, 120);
-  const [filters, setFilters] = useState<ExploreFilterState>(EMPTY_FILTERS);
+  const [filters, setFilters] = useState<ExploreFilterState>(parsedFilters);
+
+  useEffect(() => {
+    setQueryState(searchParams.q ?? "");
+  }, [searchParams.q]);
+
+  useEffect(() => {
+    setFilters(parsedFilters);
+  }, [parsedFilters]);
+
+  const buildSearchParams = (
+    nextFilters: ExploreFilterState,
+    nextQuery: string,
+  ): ExploreSearchParams => {
+    const params = serializeExploreFiltersSearch(nextFilters);
+    const trimmed = nextQuery.trim();
+    return {
+      q: trimmed.length > 0 ? trimmed : undefined,
+      levels: params.levels ?? undefined,
+      langs: params.langs ?? undefined,
+      difficulty: params.difficulty ?? undefined,
+      minRating: params.minRating ?? undefined,
+      sort: params.sort ?? undefined,
+      dir: params.dir ?? undefined,
+    };
+  };
+
+  const updateSearchParams = (nextFilters: ExploreFilterState, nextQuery: string) => {
+    const nextSearch = buildSearchParams(nextFilters, nextQuery);
+    void navigate({ search: nextSearch as any, replace: true });
+    return nextSearch;
+  };
 
   const handleQueryChange = (v: string) => {
     setQueryState(v);
-    onQueryChange?.(v);
+    const nextSearch = buildSearchParams(filters, v);
+    if (onQueryChange) {
+      onQueryChange(v, nextSearch);
+      return;
+    }
+    void navigate({ search: nextSearch as any, replace: true });
   };
 
   const handleFilterChange = (next: Partial<ExploreFilterState>) => {
-    setFilters((prev) => ({ ...prev, ...next }));
+    setFilters((prev) => {
+      const updated = { ...prev, ...next };
+      updateSearchParams(updated, query);
+      return updated;
+    });
   };
 
   const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
@@ -205,19 +255,34 @@ export function ExploreLayout({
   const searchResults = useMemo(() => {
     if (!rawSearchResults) return null;
     if (!activeFilters) return rawSearchResults;
+    const filteredCourses = filterCourseEntries(rawSearchResults.courses, filters);
+    const filteredProfessors = filterProfessorEntries(rawSearchResults.professors, filters);
+    const shouldSortCourses = filters.sortKey === "avgGrade" || filters.sortKey === "courseCode";
+    const shouldSortProfessors = filters.sortKey === "profRating";
     return {
       ...rawSearchResults,
-      courses: filterCourseEntries(rawSearchResults.courses, filters),
-      professors: filterProfessorEntries(rawSearchResults.professors, filters),
+      courses: shouldSortCourses
+        ? filteredCourses
+            .slice()
+            .sort((a, b) => compareCourseEntries(a, b, filters.sortKey, filters.sortDir))
+        : filteredCourses,
+      professors: shouldSortProfessors
+        ? filteredProfessors
+            .slice()
+            .sort((a, b) => compareProfessorEntries(a, b, filters.sortKey, filters.sortDir))
+        : filteredProfessors,
     };
   }, [rawSearchResults, activeFilters, filters]);
 
   const filterOnlyCourses = useMemo(() => {
     const q = debouncedQuery.trim();
     if (q || !activeFilters) return null;
-    return filterCourseEntries(courseEntries, filters)
+    const filtered = filterCourseEntries(courseEntries, filters);
+    if (filters.sortKey === "relevance") return filtered.slice(0, 24);
+    if (filters.sortKey === "profRating") return filtered.slice(0, 24);
+    return filtered
       .slice()
-      .sort((a, b) => a.courseCode.localeCompare(b.courseCode, "en"))
+      .sort((a, b) => compareCourseEntries(a, b, filters.sortKey, filters.sortDir))
       .slice(0, 24);
   }, [debouncedQuery, activeFilters, courseEntries, filters]);
 
@@ -245,6 +310,8 @@ export function ExploreLayout({
 
   const displayedCourses = filterOnlyCourses ?? searchResults?.courses ?? [];
 
+  const currentSearchParams = useMemo(() => buildSearchParams(filters, query), [filters, query]);
+
   const coursesSection =
     displayedCourses.length > 0 ? (
       <SearchCardSection label={tr("explore.resultsCourses")} delay={0}>
@@ -257,7 +324,11 @@ export function ExploreLayout({
             transition={{ duration: 0.14, ease: "easeOut" }}
             style={{ flexShrink: 0 }}
           >
-            <SearchResultCourseCard entry={entry} query={debouncedQuery} />
+            <SearchResultCourseCard
+              entry={entry}
+              query={debouncedQuery}
+              searchParams={currentSearchParams}
+            />
           </motion.div>
         ))}
       </SearchCardSection>
@@ -278,6 +349,7 @@ export function ExploreLayout({
             <SearchResultDisciplineCard
               discipline={d}
               courseCount={disciplineCourseCount.get(d.code) ?? 0}
+              searchParams={currentSearchParams}
             />
           </motion.div>
         ))}
@@ -300,6 +372,7 @@ export function ExploreLayout({
               entry={entry}
               professorRatings={professorRatings}
               query={debouncedQuery}
+              searchParams={currentSearchParams}
             />
           </motion.div>
         ))}
@@ -343,14 +416,14 @@ export function ExploreLayout({
                   void navigate({
                     to: entry.to,
                     params: entry.params as Record<string, string>,
-                    search: { q: entry.search?.q },
+                    search: entry.search ?? EMPTY_EXPLORE_SEARCH,
                   });
                 }}
               />
             ) : (
               <ExploreBackButton
                 entry={{ to: "/explore", label: tr("explore.title") }}
-                onBack={() => void navigate({ to: "/explore", search: { q: undefined } })}
+                onBack={() => void navigate({ to: "/explore", search: currentSearchParams })}
               />
             )}
           </Box>
@@ -425,7 +498,7 @@ export function ExploreLayout({
                         textDecoration: "underline",
                         textUnderlineOffset: 2,
                       }}
-                      onClick={() => setFilters(EMPTY_FILTERS)}
+                      onClick={() => handleFilterChange(EMPTY_FILTERS)}
                     >
                       {tr("explore.filter.clearFilters")}
                     </Text>

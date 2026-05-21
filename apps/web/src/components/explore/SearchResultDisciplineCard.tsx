@@ -3,13 +3,15 @@ import { Stack, Text } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import type { Discipline } from "@uoplan/schedule";
 import { tr } from "../../i18n";
+import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 
 type Props = {
   discipline: Discipline;
   courseCount: number;
+  searchParams: ExploreSearchParams;
 };
 
-export function SearchResultDisciplineCard({ discipline, courseCount }: Props) {
+export function SearchResultDisciplineCard({ discipline, courseCount, searchParams }: Props) {
   const { i18n } = useLingui();
   const isFr = i18n.locale.startsWith("fr");
   const displayName = isFr ? (discipline.nameFr ?? discipline.name) : discipline.name;
@@ -18,6 +20,7 @@ export function SearchResultDisciplineCard({ discipline, courseCount }: Props) {
     <Link
       to="/explore/discipline/$discipline"
       params={{ discipline: discipline.code.toLowerCase() }}
+      search={searchParams}
       style={{
         width: 190,
         minWidth: 190,

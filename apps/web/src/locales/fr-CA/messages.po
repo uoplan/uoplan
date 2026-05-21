@@ -1148,6 +1148,30 @@ msgstr "Évaluation"
 msgid "explore.filter.clearAll"
 msgstr "Tout effacer"
 
+msgid "explore.sort.label"
+msgstr "Trier"
+
+msgid "explore.sort.relevance"
+msgstr "Pertinence"
+
+msgid "explore.sort.avgGrade"
+msgstr "Note moyenne"
+
+msgid "explore.sort.courseCode"
+msgstr "Code du cours"
+
+msgid "explore.sort.profRating"
+msgstr "Note du professeur"
+
+msgid "explore.sort.direction"
+msgstr "Direction"
+
+msgid "explore.sort.ascending"
+msgstr "Croissant"
+
+msgid "explore.sort.descending"
+msgstr "Décroissant"
+
 msgid "explore.filter.level.1000"
 msgstr "1re année"
 

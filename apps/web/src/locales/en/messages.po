@@ -1167,6 +1167,30 @@ msgstr "Rating"
 msgid "explore.filter.clearAll"
 msgstr "Clear all"
 
+msgid "explore.sort.label"
+msgstr "Sort"
+
+msgid "explore.sort.relevance"
+msgstr "Relevance"
+
+msgid "explore.sort.avgGrade"
+msgstr "Average grade"
+
+msgid "explore.sort.courseCode"
+msgstr "Course code"
+
+msgid "explore.sort.profRating"
+msgstr "Professor rating"
+
+msgid "explore.sort.direction"
+msgstr "Direction"
+
+msgid "explore.sort.ascending"
+msgstr "Ascending"
+
+msgid "explore.sort.descending"
+msgstr "Descending"
+
 msgid "explore.filter.level.1000"
 msgstr "1st Year"
 

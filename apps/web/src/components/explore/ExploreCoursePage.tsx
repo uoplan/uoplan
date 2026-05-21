@@ -13,6 +13,7 @@ import {
   type ProfessorOfferingGroup,
   groupOfferingsByProfessor,
 } from "../../lib/explore/gradesSearch";
+import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { parseCoursePathParam } from "../../lib/explore/courseSearchParams";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
@@ -100,7 +101,7 @@ export function ExploreCoursePage({
     if (loading || courseEntries.length === 0) return;
     if (urlNorm == null) return;
     if (courseEntries.some((e) => e.normCode === urlNorm)) return;
-    void navigate({ to: "/explore", search: { q: undefined }, replace: true });
+    void navigate({ to: "/explore", search: EMPTY_EXPLORE_SEARCH, replace: true });
   }, [loading, courseEntries, urlNorm, navigate]);
 
   const selectedCourseMeta = useMemo(() => {
