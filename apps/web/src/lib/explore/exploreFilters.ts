@@ -34,7 +34,7 @@ export function getCourseLevel(code: string): ExploreFilterLevel | null {
   return null;
 }
 
-export function getDifficultyBucket(passingPercent: number): ExploreFilterDifficulty {
+function getDifficultyBucket(passingPercent: number): ExploreFilterDifficulty {
   if (passingPercent > 0.75) return "easy";
   if (passingPercent >= 0.5) return "moderate";
   return "tough";

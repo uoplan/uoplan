@@ -47,7 +47,7 @@ function buildTermNameById(terms: Term[]): Map<number, string> {
   return m;
 }
 
-export function ExploreSearchInput({
+function ExploreSearchInput({
   value,
   onChange,
   disabled,
