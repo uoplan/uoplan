@@ -1,5 +1,5 @@
 import "./calendar.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ActionIcon,
   Alert,
@@ -111,6 +111,10 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [enrolCliOpen, setEnrolCliOpen] = useState(false);
   const [transcriptError, setTranscriptError] = useState<string | null>(null);
+  const [sidebarWidth, setSidebarWidth] = useState(CALENDAR_SIDEBAR_WIDTH_PX);
+  const isResizing = useRef(false);
+  const resizeStartX = useRef(0);
+  const resizeStartWidth = useRef(0);
 
   const cliCommand =
     currentSchedule && selectedTermId
@@ -165,6 +169,23 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
     const filename = `uoplan-schedule-${currentSeed}-${timetableStartDate}-to-${timetableEndDate}.ics`;
     downloadTextFile(filename, ics, "text/calendar;charset=utf-8");
   };
+
+  function handleResizePointerDown(e: React.PointerEvent) {
+    isResizing.current = true;
+    resizeStartX.current = e.clientX;
+    resizeStartWidth.current = sidebarWidth;
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  }
+
+  function handleResizePointerMove(e: React.PointerEvent) {
+    if (!isResizing.current) return;
+    const delta = e.clientX - resizeStartX.current;
+    setSidebarWidth(Math.min(600, Math.max(220, resizeStartWidth.current + delta)));
+  }
+
+  function handleResizePointerUp() {
+    isResizing.current = false;
+  }
 
   const calendarTitle = tr(isBasic ? "basicCalendar.title" : "calendarPage.title");
   const calendarSubtitle = tr(isBasic ? "basicCalendar.subtitle" : "calendarPage.subtitle");
@@ -440,24 +461,46 @@ export function CalendarPage({ variant, onBack }: CalendarPageProps) {
         }}
       >
         {!isMobile && (
-          <Box
-            component="aside"
-            aria-label="Calendar Controls"
-            style={{
-              width: CALENDAR_SIDEBAR_WIDTH_PX,
-              height: "100%",
-              flexShrink: 0,
-              padding: "24px 20px",
-              borderRight: "2px solid #2C2E33",
-              backgroundColor: "#1E1E20",
-              display: "flex",
-              flexDirection: "column",
-              gap: 24,
-              overflowY: "auto",
-            }}
-          >
-            {sidebarControls}
-          </Box>
+          <>
+            <Box
+              component="aside"
+              aria-label="Calendar Controls"
+              style={{
+                width: sidebarWidth,
+                height: "100%",
+                flexShrink: 0,
+                padding: "24px 20px",
+                backgroundColor: "#1E1E20",
+                display: "flex",
+                flexDirection: "column",
+                gap: 24,
+                overflowY: "auto",
+              }}
+            >
+              {sidebarControls}
+            </Box>
+            <div
+              role="separator"
+              aria-label="Resize sidebar"
+              onPointerDown={handleResizePointerDown}
+              onPointerMove={handleResizePointerMove}
+              onPointerUp={handleResizePointerUp}
+              style={{
+                width: 6,
+                flexShrink: 0,
+                cursor: "col-resize",
+                backgroundColor: "#2C2E33",
+                transition: "background-color 0.15s",
+                zIndex: 1,
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLDivElement).style.backgroundColor = "#4a4d55";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLDivElement).style.backgroundColor = "#2C2E33";
+              }}
+            />
+          </>
         )}
 
         {isMobile && (
