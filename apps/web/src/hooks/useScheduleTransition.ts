@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { GeneratedSchedule } from "@uoplan/schedule";
 
-type Phase = "idle" | "exiting" | "entering";
+export type Phase = "idle" | "exiting" | "entering";
 
 const EXIT_MS = 180;
 const ENTER_MS = 220;
@@ -90,6 +90,77 @@ export function useScheduleTransition(
   // When reduced motion is preferred, skip the animation entirely.
   return {
     displayedSchedule: prefersReduced ? schedule : displayedSchedule,
+    animationPhase: prefersReduced ? "idle" : phase,
+  };
+}
+
+/**
+ * Same exit → swap → enter pattern as useScheduleTransition, but for
+ * a numeric week index. When weekIndex changes the hook plays the exit
+ * animation, updates displayedWeekIndex, then plays the enter animation.
+ */
+export function useWeekIndexTransition(
+  weekIndex: number,
+  prefersReduced: boolean,
+): { displayedWeekIndex: number; animationPhase: Phase } {
+  const [displayedWeekIndex, setDisplayedWeekIndex] = useState(weekIndex);
+  const [phase, setPhase] = useState<Phase>("idle");
+
+  const phaseRef = useRef<Phase>("idle");
+  const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const enterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const latestRef = useRef(weekIndex);
+  useEffect(() => {
+    latestRef.current = weekIndex;
+  }, [weekIndex]);
+
+  const clearTimers = useCallback(() => {
+    if (exitTimerRef.current != null) {
+      clearTimeout(exitTimerRef.current);
+      exitTimerRef.current = null;
+    }
+    if (enterTimerRef.current != null) {
+      clearTimeout(enterTimerRef.current);
+      enterTimerRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (prefersReduced) {
+      clearTimers();
+      return;
+    }
+
+    const startEnter = () => {
+      phaseRef.current = "entering";
+      setPhase("entering");
+      enterTimerRef.current = setTimeout(() => {
+        enterTimerRef.current = null;
+        phaseRef.current = "idle";
+        setPhase("idle");
+      }, ENTER_MS);
+    };
+
+    const startExit = () => {
+      phaseRef.current = "exiting";
+      setPhase("exiting");
+      exitTimerRef.current = setTimeout(() => {
+        exitTimerRef.current = null;
+        setDisplayedWeekIndex(latestRef.current);
+        startEnter();
+      }, EXIT_MS);
+    };
+
+    clearTimers();
+    startExit();
+    return clearTimers;
+  }, [weekIndex, prefersReduced, clearTimers]);
+
+  useEffect(() => () => clearTimers(), [clearTimers]);
+
+  return {
+    displayedWeekIndex: prefersReduced ? weekIndex : displayedWeekIndex,
     animationPhase: prefersReduced ? "idle" : phase,
   };
 }

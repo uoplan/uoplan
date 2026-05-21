@@ -45,6 +45,7 @@ import { encodeSchedulePayload } from "../../lib/encodeSchedulePayload";
 import { setCalendarMode } from "../../lib/calendarRoute";
 import { navigateToWizardStep } from "../../lib/appNavigation";
 import { WizardStep } from "../../lib/wizardSteps";
+import { useScheduleWeeks } from "../../hooks/useScheduleWeeks";
 
 export function CalendarPage() {
   useEffect(() => {
@@ -97,6 +98,18 @@ export function CalendarPage() {
     setCalendarMode(hasProgram ? "advanced" : "basic");
     return () => setCalendarMode(null);
   }, [hasProgram]);
+
+  const calendarWeekIndex = useAppStore((s) => s.calendarWeekIndex);
+  const setCalendarWeekIndex = useAppStore((s) => s.setCalendarWeekIndex);
+
+  const { weekGroups, weekIndex, setWeekIndex } = useScheduleWeeks(
+    currentSchedule,
+    calendarWeekIndex,
+  );
+
+  useEffect(() => {
+    setCalendarWeekIndex(weekIndex);
+  }, [weekIndex, setCalendarWeekIndex]);
 
   const clearGenerationError = () => useAppStore.setState({ generationError: null });
   const undoLastSwap = useAppStore((s) => s.undoLastSwap);
@@ -580,6 +593,9 @@ export function CalendarPage() {
             getSwapCandidates={getSwapCandidates}
             onSwap={swapCourseInSchedule}
             colorMap={currentColorMap}
+            weekGroups={weekGroups}
+            weekIndex={weekIndex}
+            setWeekIndex={setWeekIndex}
           />
         </Box>
 
