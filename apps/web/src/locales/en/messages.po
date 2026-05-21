@@ -448,7 +448,7 @@ msgid "calendarPage.subtitle"
 msgstr "Review your generated schedules. Click a block to swap courses."
 
 msgid "calendarPage.title"
-msgstr "Your weekly timetable"
+msgstr "Timetable"
 
 msgid "calendarPage.weekCount"
 msgstr "{weeks, plural, one {1 week} other {repeats for # weeks}}"

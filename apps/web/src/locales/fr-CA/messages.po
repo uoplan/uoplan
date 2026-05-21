@@ -394,7 +394,7 @@ msgid "calendarPage.subtitle"
 msgstr "Passez en revue vos horaires générés. Cliquez sur un bloc pour échanger des cours."
 
 msgid "calendarPage.title"
-msgstr "Votre horaire hebdomadaire"
+msgstr "Horaire"
 
 msgid "calendarPage.weekCount"
 msgstr "{weeks, plural, one {1 semaine} other {se répète pendant # semaines}}"
