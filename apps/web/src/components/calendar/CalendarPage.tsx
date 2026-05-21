@@ -440,9 +440,9 @@ export function CalendarPage() {
         component="main"
         style={{
           width: "100%",
-          height: "100vh",
+          height: "100dvh",
           display: "flex",
-          flexDirection: "row",
+          flexDirection: isMobile ? "column" : "row",
           boxSizing: "border-box",
           overflow: "hidden",
         }}
@@ -512,7 +512,6 @@ export function CalendarPage() {
             display: "flex",
             flexDirection: "column",
             padding: 0,
-            paddingBottom: isMobile ? 72 : 0,
             width: "100%",
           }}
         >
@@ -534,16 +533,12 @@ export function CalendarPage() {
           <Box
             component="nav"
             style={{
-              position: "fixed",
-              bottom: 0,
-              left: 0,
-              right: 0,
+              flexShrink: 0,
               display: "flex",
               gap: 0,
               backgroundColor: "#1E1E20",
               borderTop: "2px solid #2C2E33",
               paddingBottom: "env(safe-area-inset-bottom, 0)",
-              zIndex: 198,
             }}
           >
             <Button

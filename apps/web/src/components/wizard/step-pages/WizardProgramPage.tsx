@@ -25,16 +25,10 @@ export function WizardProgramPage() {
   return (
     <WizardShell activeStep={WizardStep.Program}>
       <Stack gap="md">
-        <ProgramStep programs={programs} value={program?.url ?? null} onChange={setProgram} />
-        <Button
-          variant="subtle"
-          color="gray"
-          size="sm"
-          radius={0}
-          onClick={() => setSkipModalOpen(true)}
-        >
+        <Button variant="default" size="sm" radius={0} onClick={() => setSkipModalOpen(true)}>
           {tr("programStep.skip.button")}
         </Button>
+        <ProgramStep programs={programs} value={program?.url ?? null} onChange={setProgram} />
       </Stack>
 
       <Modal
@@ -62,16 +56,16 @@ export function WizardProgramPage() {
             {tr("programStep.skip.basicModeNote")}
           </Text>
           <Stack gap="xs">
+            <Button variant="filled" color="gray" radius={0} onClick={handleSkipConfirm}>
+              {tr("programStep.skip.confirm")}
+            </Button>
             <Button
-              variant="filled"
-              color="violet"
+              variant="subtle"
+              color="gray"
               radius={0}
               onClick={() => setSkipModalOpen(false)}
             >
               {tr("programStep.skip.cancel")}
-            </Button>
-            <Button variant="subtle" color="gray" radius={0} onClick={handleSkipConfirm}>
-              {tr("programStep.skip.confirm")}
             </Button>
           </Stack>
         </Stack>
