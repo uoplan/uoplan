@@ -4,35 +4,25 @@
  */
 export enum WizardStep {
   Term = 0,
-  Mode = 1,
-  Program = 2,
-  Completed = 3,
-  Options = 4,
-  Assign = 5,
-  Generate = 6,
+  Program = 1,
+  Completed = 2,
+  Options = 3,
+  Assign = 4,
 }
 
 export const ALL_WIZARD_STEP_INDICES = [
   WizardStep.Term,
-  WizardStep.Mode,
   WizardStep.Program,
   WizardStep.Completed,
   WizardStep.Options,
   WizardStep.Assign,
-  WizardStep.Generate,
 ] as const;
 
 /** Interactive steps only (omits Options / Assign when N/A). */
 export function buildVisibleStepIndices(needsOptions: boolean, needsAssign: boolean): number[] {
-  const out: number[] = [
-    WizardStep.Term,
-    WizardStep.Mode,
-    WizardStep.Program,
-    WizardStep.Completed,
-  ];
+  const out: number[] = [WizardStep.Term, WizardStep.Program, WizardStep.Completed];
   if (needsOptions) out.push(WizardStep.Options);
   if (needsAssign) out.push(WizardStep.Assign);
-  out.push(WizardStep.Generate);
   return out;
 }
 
@@ -64,11 +54,9 @@ export type WizardProceedContext = {
   unassignedCount: number;
 };
 
-function canProceedFromWizardStep(step: WizardStep, ctx: WizardProceedContext): boolean {
+export function canProceedFromWizardStep(step: WizardStep, ctx: WizardProceedContext): boolean {
   switch (step) {
     case WizardStep.Term:
-      return ctx.hasTerms && Boolean(ctx.selectedTermId) && ctx.cacheLoaded;
-    case WizardStep.Mode:
       return ctx.hasTerms && Boolean(ctx.selectedTermId) && ctx.cacheLoaded;
     case WizardStep.Program:
       return ctx.firstYear !== null && ctx.hasProgram;
@@ -78,8 +66,6 @@ function canProceedFromWizardStep(step: WizardStep, ctx: WizardProceedContext): 
       return ctx.needsOptionsStep ? !ctx.missingOptions : true;
     case WizardStep.Assign:
       return ctx.unassignedCount === 0;
-    case WizardStep.Generate:
-      return true;
     default:
       return true;
   }
@@ -108,13 +94,12 @@ export function maxReachableWizardStep(
   return max;
 }
 
-/** Whether Next should be enabled: current step is strictly before {@link maxReachableWizardStep} on the visible path. */
+/** Whether Next should be enabled for non-terminal wizard steps. */
 export function canAdvanceWizardStep(
   effectiveActive: WizardStep,
   visible: readonly number[],
   maxReachable: WizardStep,
 ): boolean {
-  if (effectiveActive === WizardStep.Generate) return false;
   const activeNavIdx = visible.indexOf(effectiveActive);
   const maxNavIdx = visible.indexOf(maxReachable);
   if (activeNavIdx === -1 || maxNavIdx === -1) return false;

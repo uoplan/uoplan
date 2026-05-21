@@ -1,6 +1,6 @@
 import type { DecodedState } from "@uoplan/schedule";
 import { nodeHasOptionGroups } from "../components/requirements/requirementUtils";
-import { normalizeActiveStep, WizardStep } from "./wizardSteps";
+import { normalizeActiveStep } from "./wizardSteps";
 import type { AppStore } from "../store/types";
 import { navigateToCalendar, navigateToWizardStep } from "./appNavigation";
 
@@ -10,7 +10,7 @@ import { navigateToCalendar, navigateToWizardStep } from "./appNavigation";
  *
  * Current encodings always store `activeStep: 0` and `showCalendar: false` (navigation lives in
  * the pathname only). If we navigated on every hydrate, we would `replace` away the real URL
- * (e.g. `/schedule/step/generate`) and send users to `/schedule/step/term` after every refresh — so we no-op when
+ * (e.g. `/schedule/step/program`) and send users to `/schedule/step/term` after every refresh — so we no-op when
  * those fields carry no information.
  */
 export function applyHydrationNavigation(decoded: DecodedState, getState: () => AppStore): void {
@@ -32,12 +32,7 @@ export function applyHydrationNavigation(decoded: DecodedState, getState: () => 
   state.touchWizardFurthestStep(normalized);
 
   if (decoded.showCalendar) {
-    navigateToCalendar(decoded.wizardMode === "basic" ? "basic" : "advanced", { replace: true });
-    return;
-  }
-
-  if (decoded.wizardMode === "basic" && normalized > WizardStep.Mode) {
-    navigateToCalendar("basic", { replace: true });
+    navigateToCalendar({ replace: true });
     return;
   }
 

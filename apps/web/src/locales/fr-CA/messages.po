@@ -66,6 +66,12 @@ msgstr "Retour à {course}"
 msgid "app.nav.next"
 msgstr "Suivant"
 
+msgid "app.wizard.continueToCalendar"
+msgstr "Continuer vers le calendrier"
+
+msgid "app.generationOptions.title"
+msgstr "Options de génération"
+
 msgid "app.footer.gradeDataAttribution.before"
 msgstr "Les données de notes ont été obtenues dans le cadre d'une demande d'accès à l'information en vertu de la "
 
@@ -557,6 +563,33 @@ msgstr "Téléverser un relevé PDF"
 
 msgid "programStep.transcript.uploadFailed"
 msgstr "Téléversement échoué"
+
+msgid "programStep.skip.button"
+msgstr "Passer la configuration"
+
+msgid "programStep.skip.title"
+msgstr "Passer la configuration?"
+
+msgid "programStep.skip.body"
+msgstr "Sans compléter la configuration, vous manquerez:"
+
+msgid "programStep.skip.missing.requirements"
+msgstr "Le suivi des exigences selon votre programme"
+
+msgid "programStep.skip.missing.completedCourses"
+msgstr "La détection automatique de vos cours complétés"
+
+msgid "programStep.skip.missing.programMatching"
+msgstr "Des recommandations d'options personnalisées"
+
+msgid "programStep.skip.basicModeNote"
+msgstr "Vous pouvez tout de même construire un horaire en sélectionnant des cours obligatoires et un nombre de cours optionnels."
+
+msgid "programStep.skip.confirm"
+msgstr "Passer quand même"
+
+msgid "programStep.skip.cancel"
+msgstr "Continuer la configuration"
 
 msgid "frenchImmersion.toggle.label"
 msgstr "Volet d’immersion française"

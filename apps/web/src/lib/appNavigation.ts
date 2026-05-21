@@ -11,14 +11,11 @@ export function navigateToWizardStep(step: WizardStep, options?: { replace?: boo
   });
 }
 
-export function navigateToCalendar(
-  variant: "basic" | "advanced",
-  options?: { replace?: boolean },
-): void {
+export function navigateToCalendar(options?: { replace?: boolean }): void {
   const router = getRouterInstance();
   if (!router) return;
   void router.navigate({
-    to: variant === "basic" ? "/schedule/calendar/basic" : "/schedule/calendar/advanced",
+    to: "/schedule/calendar",
     replace: options?.replace ?? false,
   });
 }

@@ -1,14 +1,6 @@
 import type { WizardStep } from "./wizardSteps";
 
-const WIZARD_STEP_SLUGS = [
-  "term",
-  "mode",
-  "program",
-  "completed",
-  "options",
-  "assign",
-  "generate",
-] as const;
+const WIZARD_STEP_SLUGS = ["term", "program", "completed", "options", "assign"] as const;
 
 type WizardStepSlug = (typeof WIZARD_STEP_SLUGS)[number];
 

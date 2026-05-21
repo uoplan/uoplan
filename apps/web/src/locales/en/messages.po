@@ -66,6 +66,12 @@ msgstr "Back to {course}"
 msgid "app.nav.next"
 msgstr "Next"
 
+msgid "app.wizard.continueToCalendar"
+msgstr "Continue to Calendar"
+
+msgid "app.generationOptions.title"
+msgstr "Generation Options"
+
 msgid "app.footer.gradeDataAttribution.before"
 msgstr "Grade data was obtained through an access to information request under Ontario's "
 
@@ -548,6 +554,33 @@ msgstr "Upload transcript PDF"
 
 msgid "programStep.transcript.uploadFailed"
 msgstr "Upload failed"
+
+msgid "programStep.skip.button"
+msgstr "Skip setup"
+
+msgid "programStep.skip.title"
+msgstr "Skip setup?"
+
+msgid "programStep.skip.body"
+msgstr "Without completing setup, you'll be missing out on:"
+
+msgid "programStep.skip.missing.requirements"
+msgstr "Requirement tracking based on your program"
+
+msgid "programStep.skip.missing.completedCourses"
+msgstr "Automatic detection of your completed courses"
+
+msgid "programStep.skip.missing.programMatching"
+msgstr "Personalized elective recommendations"
+
+msgid "programStep.skip.basicModeNote"
+msgstr "You can still build a schedule by selecting required courses and a number of electives."
+
+msgid "programStep.skip.confirm"
+msgstr "Skip Anyway"
+
+msgid "programStep.skip.cancel"
+msgstr "Continue Setup"
 
 msgid "frenchImmersion.toggle.label"
 msgstr "French immersion stream"

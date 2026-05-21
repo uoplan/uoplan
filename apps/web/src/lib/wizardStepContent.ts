@@ -20,11 +20,6 @@ export function getWizardStepContent(): Record<WizardStep, WizardContentStep> {
       purpose: tr("wizardContent.term.purpose"),
       whatToDo: tr("wizardContent.term.whatToDo"),
     },
-    [WizardStep.Mode]: {
-      title: tr("wizardContent.mode.title"),
-      purpose: tr("wizardContent.mode.purpose"),
-      whatToDo: tr("wizardContent.mode.whatToDo"),
-    },
     [WizardStep.Program]: {
       title: tr("wizardContent.program.title"),
       purpose: tr("wizardContent.program.purpose"),
@@ -44,11 +39,6 @@ export function getWizardStepContent(): Record<WizardStep, WizardContentStep> {
       title: tr("wizardContent.assign.title"),
       purpose: tr("wizardContent.assign.purpose"),
       whatToDo: tr("wizardContent.assign.whatToDo"),
-    },
-    [WizardStep.Generate]: {
-      title: tr("wizardContent.generate.title"),
-      purpose: tr("wizardContent.generate.purpose"),
-      whatToDo: tr("wizardContent.generate.whatToDo"),
     },
   };
 }

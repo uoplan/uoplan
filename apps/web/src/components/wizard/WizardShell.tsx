@@ -13,6 +13,7 @@ import {
   ALL_WIZARD_STEP_INDICES,
   buildVisibleStepIndices,
   canAdvanceWizardStep,
+  canProceedFromWizardStep,
   furthestReachedDisplayIndex,
   getNextStep,
   getPrevStep,
@@ -21,7 +22,6 @@ import {
   WizardStep,
 } from "../../lib/wizardSteps";
 import { navigateToCalendar, navigateToWizardStep } from "../../lib/appNavigation";
-import { applyBasicDefaultsIfUntouched, enterAdvancedWizardFlow } from "../../lib/plannerModeFlow";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { getWizardStepContent } from "../../lib/wizardStepContent";
 import { tr } from "../../i18n";
@@ -29,15 +29,9 @@ import { tr } from "../../i18n";
 type WizardShellProps = {
   activeStep: WizardStep;
   children: ReactNode;
-  /** Selected planner mode on the mode step; Next stays disabled until set. */
-  modeSelection?: "basic" | "advanced" | null;
 };
 
-export function WizardShell({
-  activeStep: active,
-  children,
-  modeSelection = null,
-}: WizardShellProps) {
+export function WizardShell({ activeStep: active, children }: WizardShellProps) {
   useLingui();
 
   const {
@@ -174,13 +168,14 @@ export function WizardShell({
     [effectiveActive],
   );
 
+  const isOnLastStep = effectiveActive === navVisibleStepIndices.at(-1);
+
   const canProceedFromStep = useMemo(() => {
-    const base = canAdvanceWizardStep(effectiveActive, navVisibleStepIndices, maxReachable);
-    if (effectiveActive === WizardStep.Mode) {
-      return base && modeSelection != null;
+    if (isOnLastStep) {
+      return canProceedFromWizardStep(effectiveActive, proceedCtx);
     }
-    return base;
-  }, [effectiveActive, navVisibleStepIndices, maxReachable, modeSelection]);
+    return canAdvanceWizardStep(effectiveActive, navVisibleStepIndices, maxReachable);
+  }, [isOnLastStep, effectiveActive, proceedCtx, navVisibleStepIndices, maxReachable]);
 
   const [nextUnlockCue, setNextUnlockCue] = useState(false);
   const prevStepProgressRef = useRef<{
@@ -225,15 +220,8 @@ export function WizardShell({
   }, [nextUnlockCue, prefersReducedMotion]);
 
   const handleWizardNext = () => {
-    if (effectiveActive === WizardStep.Mode) {
-      if (!modeSelection) return;
-      if (modeSelection === "basic") {
-        applyBasicDefaultsIfUntouched(useAppStore.setState, useAppStore.getState);
-        navigateToCalendar("basic");
-      } else {
-        enterAdvancedWizardFlow(useAppStore.setState, useAppStore.getState);
-        navigateToWizardStep(WizardStep.Program);
-      }
+    if (isOnLastStep) {
+      navigateToCalendar();
       return;
     }
     const rawNext = getNextStep(effectiveActive, needsOptionsStep, needsAssignStep);
@@ -490,7 +478,7 @@ export function WizardShell({
                         onClick={handleWizardNext}
                         disabled={!canProceedFromStep}
                       >
-                        {tr("app.nav.next")}
+                        {isOnLastStep ? tr("app.wizard.continueToCalendar") : tr("app.nav.next")}
                       </Button>
                     </motion.div>
                   </Group>

@@ -11,9 +11,10 @@ import { useAppStore } from "../../store/appStore";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { tr } from "../../i18n";
 import { ResetModal } from "../shared/ResetModal";
+import { navigateToWizardStep } from "../../lib/appNavigation";
+import { WizardStep } from "../../lib/wizardSteps";
 
 interface BasicCalendarHeaderActionsProps {
-  onBack: () => void;
   cliCommand?: string | null;
   onEnrolCli?: () => void;
   onClearOptions: () => void;
@@ -22,7 +23,6 @@ interface BasicCalendarHeaderActionsProps {
 }
 
 export function BasicCalendarHeaderActions({
-  onBack,
   cliCommand,
   onEnrolCli,
   onClearOptions,
@@ -118,7 +118,7 @@ export function BasicCalendarHeaderActions({
         onConfirm={() => {
           resetToDefault();
           setResetModalOpen(false);
-          onBack();
+          navigateToWizardStep(WizardStep.Term);
         }}
       />
     </>
