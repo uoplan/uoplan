@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.0.0-beta.18](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.17...uoplan-monorepo-v1.0.0-beta.18) (2026-05-21)
+
+
+### Features
+
+* add animation to explore pills ([838d09a](https://github.com/uoplan/uoplan/commit/838d09ad9837c82cb89ca4497eab4afbd4392d57))
+* add nice week preview to calendar ([b9ae67a](https://github.com/uoplan/uoplan/commit/b9ae67ad747ce400f685ab69751d3ab81c0c9644))
+* clean up the sidebar ([8224bbc](https://github.com/uoplan/uoplan/commit/8224bbc9187eb07a3726b950ef840daf14338c22))
+* improve explore page persistence ([a85d497](https://github.com/uoplan/uoplan/commit/a85d497273d54b66b24a3419969bb766497ce9c2))
+* make the mobile bottom drawer draggable ([d91acc1](https://github.com/uoplan/uoplan/commit/d91acc1fba95eeb27d86548d742e0d91c7dd7150))
+* remove footer from calendar page ([7f7ffaf](https://github.com/uoplan/uoplan/commit/7f7ffafea2274ce5e3cece2fc11573e71f495582))
+* simplify scheduler flow ([f11fa81](https://github.com/uoplan/uoplan/commit/f11fa8122d2356260bce4b559e3b5fabcd1ba7fc))
+
+
+### Bug Fixes
+
+* disable dragging drawers on mobile ([04f6f66](https://github.com/uoplan/uoplan/commit/04f6f6665e33afa6719762cfc9f2d16f37aaad16))
+* **release-please:** move pr title rename to workflow ([c077664](https://github.com/uoplan/uoplan/commit/c077664dc4a511eec1cc07d7f0fe1c8aa4ff78e0))
+
 ## [1.0.0-beta.17](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.16...uoplan-monorepo-v1.0.0-beta.17) (2026-05-20)
 
 
