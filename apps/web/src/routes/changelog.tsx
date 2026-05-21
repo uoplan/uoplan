@@ -3,8 +3,10 @@ import { useLingui } from "@lingui/react";
 import { Box, Stack, Title } from "@mantine/core";
 import changelogHtml from "virtual:changelog-html";
 import { tr } from "../i18n";
+import { buildTabTitle } from "../lib/seo";
 
 export const Route = createFileRoute("/changelog")({
+  head: () => buildTabTitle("Changelog"),
   component: ChangelogRoute,
 });
 

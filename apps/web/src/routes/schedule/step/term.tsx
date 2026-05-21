@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { WizardTermPage } from "../../../components/wizard/step-pages/WizardTermPage";
-import { buildPageHead } from "../../../lib/seo";
+import { buildTabTitle } from "../../../lib/seo";
 
 export const Route = createFileRoute("/schedule/step/term")({
-  head: () => buildPageHead("schedule"),
+  head: () => buildTabTitle("Select term"),
   component: WizardTermPage,
 });

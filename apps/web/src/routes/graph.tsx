@@ -1,13 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 import {
   ProfessorGraphPage,
   type ProfessorGraphNavigate,
 } from "../components/graph/ProfessorGraphPage";
 import { AppDataRouteGate } from "../components/shared/AppDataRouteGate";
-import { buildPageHead } from "../lib/seo";
+import { buildTabTitle } from "../lib/seo";
 
 export const Route = createFileRoute("/graph")({
-  head: () => buildPageHead("graph"),
+  head: () => buildTabTitle("Prof network"),
   validateSearch: (search: Record<string, unknown>) => ({
     prof:
       typeof search.prof === "string" && search.prof.trim().length > 0
@@ -20,6 +21,10 @@ export const Route = createFileRoute("/graph")({
 function GraphRoute() {
   const navigate = Route.useNavigate();
   const { prof } = Route.useSearch();
+
+  useEffect(() => {
+    document.title = prof ?? "Prof network";
+  }, [prof]);
 
   const navigateGraph: ProfessorGraphNavigate = (opts) =>
     navigate({ search: opts.search, replace: opts.replace });
