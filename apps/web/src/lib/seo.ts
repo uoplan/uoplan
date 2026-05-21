@@ -72,23 +72,28 @@ export function buildRootHead() {
 export function buildPageHead(pageId: SeoPageId) {
   const page = seoPages[pageId];
   const canonical = pageUrl(page.canonicalPath);
-  const title = localized(pageId, "title");
+  const tabTitle = page.tabTitle;
+  const ogTitle = localized(pageId, "title");
   const description = localized(pageId, "description");
   const keywords = localized(pageId, "keywords");
 
   return {
     meta: [
-      { title },
+      { title: tabTitle },
       { name: "description", content: description },
       { name: "keywords", content: keywords },
       { property: "og:type", content: "website" },
       { property: "og:url", content: canonical },
-      { property: "og:title", content: title },
+      { property: "og:title", content: ogTitle },
       { property: "og:description", content: description },
       { property: "twitter:url", content: canonical },
-      { property: "twitter:title", content: title },
+      { property: "twitter:title", content: ogTitle },
       { property: "twitter:description", content: description },
     ],
     links: [{ rel: "canonical", href: canonical }],
   };
+}
+
+export function buildTabTitle(title: string) {
+  return { meta: [{ title }] };
 }

@@ -7,6 +7,7 @@ import { validateExploreSearch } from "../../../lib/explore/exploreFilters";
 
 export const Route = createFileRoute("/explore/course/$course")({
   validateSearch: validateExploreSearch,
+  head: ({ params }) => ({ meta: [{ title: params.course.toUpperCase() }] }),
   component: ExploreCourseRoute,
 });
 

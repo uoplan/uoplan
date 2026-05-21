@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Box, Text } from "@mantine/core";
 import { useShallow } from "zustand/react/shallow";
 import { ExploreLayout } from "../../../components/explore/ExploreLayout";
@@ -12,6 +13,12 @@ import {
 
 export const Route = createFileRoute("/explore/professor/$legacyId")({
   validateSearch: validateExploreSearch,
+  head: ({ params }) => {
+    const id = Number.parseInt(params.legacyId, 10);
+    const isNumeric = Number.isFinite(id) && id > 0;
+    const title = isNumeric ? "Professor" : decodeURIComponent(params.legacyId);
+    return { meta: [{ title }] };
+  },
   component: ExploreProfessorRoute,
 });
 
@@ -19,6 +26,20 @@ function ExploreProfessorRoute() {
   const { legacyId } = Route.useParams();
   const parsed = Number.parseInt(legacyId, 10);
   const isNumeric = Number.isFinite(parsed) && parsed > 0;
+
+  const courseGrades = useAppStore((s) => s.courseGrades);
+
+  useEffect(() => {
+    if (!isNumeric || !courseGrades) return;
+    for (const course of courseGrades.courses) {
+      for (const prof of course.professors) {
+        if (prof.legacyId === parsed) {
+          document.title = prof.name;
+          return;
+        }
+      }
+    }
+  }, [isNumeric, parsed, courseGrades]);
 
   const { catalogue, terms, professorRatings } = useAppStore(
     useShallow((s) => ({
