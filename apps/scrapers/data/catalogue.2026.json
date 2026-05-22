@@ -274584,9 +274584,18 @@
               ]
             },
             {
-              "type": "elective",
-              "title": "12 optional course units in Political Science ( POL) at the 3000 or 4000 level from the list of c ourses offered by one of the foreign universities a pproved by the School of Political Studies",
-              "credits": 12
+              "type": "discipline_elective",
+              "title": "12 optional course units in Political Science (POL) at the 3000 or 4000 level from the list of courses offered by one of the foreign universities a pproved by the School of Political Studies",
+              "credits": 12,
+              "disciplineLevels": [
+                {
+                  "discipline": "POL",
+                  "levels": [
+                    3000,
+                    4000
+                  ]
+                }
+              ]
             },
             {
               "type": "elective",
@@ -274744,7 +274753,7 @@
             },
             {
               "type": "elective",
-              "title": "3 optional course units in modern languages f rom the list of courses offered by one of the f oreign universities approved by the School of Political Studies",
+              "title": "3 optional course units in modern languages from the list of courses offered by one of the foreign universities approved by the School of Political Studies",
               "credits": 3
             }
           ]
