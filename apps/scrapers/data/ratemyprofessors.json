@@ -1,5 +1,5 @@
 {
-  "resultCount": 4564,
+  "resultCount": 4565,
   "professors": [
     {
       "id": "VGVhY2hlci04Nzk2OTM=",
@@ -1111,8 +1111,8 @@
       "id": "VGVhY2hlci0xOTg4MzA4",
       "legacyId": 1988308,
       "name": "Alex Payette",
-      "rating": 3,
-      "numRatings": 8
+      "rating": 3.2,
+      "numRatings": 9
     },
     {
       "id": "VGVhY2hlci0zMTI3ODM4",
@@ -9526,7 +9526,7 @@
       "legacyId": 2336704,
       "name": "Firouz Fallahi",
       "rating": 4.6,
-      "numRatings": 15
+      "numRatings": 16
     },
     {
       "id": "VGVhY2hlci05Mjc1MzM=",
@@ -24570,6 +24570,13 @@
       "name": "Penelope Simons",
       "rating": 2.8,
       "numRatings": 11
+    },
+    {
+      "id": "VGVhY2hlci0zODAxNTQ1",
+      "legacyId": 3801545,
+      "name": "Peng Tang",
+      "rating": 0,
+      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci01MDE0NTQ=",
