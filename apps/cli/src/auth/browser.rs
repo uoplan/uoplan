@@ -39,7 +39,7 @@ async fn run_auth_flow(driver: WebDriver) -> Result<StoredSession> {
     driver.goto(PEOPLESOFT_URL).await?;
     cliclack::log::info("Browser opened — log in with your uOttawa account.")?;
 
-    let result = tokio::time::timeout(Duration::from_secs(300), async {
+    let result = tokio::time::timeout(Duration::from_mins(5), async {
         loop {
             tokio::time::sleep(Duration::from_millis(500)).await;
             if let Ok(url) = driver.current_url().await {
