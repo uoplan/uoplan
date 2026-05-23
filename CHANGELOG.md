@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.0-beta.20](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.19...uoplan-monorepo-v1.0.0-beta.20) (2026-05-23)
+
+
+### Features
+
+* add current schedules to the explore page ([3770511](https://github.com/uoplan/uoplan/commit/3770511e40f48c8969f40b765e1ac19b82afb36b))
+
+
+### Bug Fixes
+
+* **cli:** resolve various bugs with term persistence ([5280022](https://github.com/uoplan/uoplan/commit/5280022a5d4aeb0276b614574f775a628be17bb7))
+
 ## [1.0.0-beta.19](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.18...uoplan-monorepo-v1.0.0-beta.19) (2026-05-23)
 
 
