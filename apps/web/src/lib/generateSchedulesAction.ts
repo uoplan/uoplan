@@ -58,6 +58,81 @@ import {
 
 const UNKNOWN_COURSE_LEVEL = 999_000;
 
+const DEFAULT_MIN_START_MINUTES = 8 * 60 + 30;
+const DEFAULT_MAX_END_MINUTES = 22 * 60;
+const DEFAULT_ALLOWED_DAYS = ["Mo", "Tu", "We", "Th", "Fr"];
+const DEFAULT_LANGUAGE_BUCKETS = ["en", "other"];
+
+const DAY_NAMES: Record<string, string> = {
+  Mo: "Mon",
+  Tu: "Tue",
+  We: "Wed",
+  Th: "Thu",
+  Fr: "Fri",
+  Sa: "Sat",
+  Su: "Sun",
+};
+
+function buildActiveFilterHints(opts: {
+  generationMinStartMinutes: number;
+  generationMaxEndMinutes: number;
+  generationAllowedDays: string[];
+  generationMinProfessorRating: number | null | undefined;
+  virtualSectionsOnly: boolean;
+  includeClosedComponents: boolean;
+  languageBuckets: string[];
+}): string[] {
+  const hints: string[] = [];
+  const {
+    generationMinStartMinutes,
+    generationMaxEndMinutes,
+    generationAllowedDays,
+    generationMinProfessorRating,
+    virtualSectionsOnly,
+    includeClosedComponents,
+    languageBuckets,
+  } = opts;
+
+  if (generationMinStartMinutes > DEFAULT_MIN_START_MINUTES) {
+    const h = Math.floor(generationMinStartMinutes / 60);
+    const m = generationMinStartMinutes % 60;
+    hints.push(`Start time restricted to after ${h}:${m.toString().padStart(2, "0")}`);
+  }
+
+  if (generationMaxEndMinutes < DEFAULT_MAX_END_MINUTES) {
+    const h = Math.floor(generationMaxEndMinutes / 60);
+    const m = generationMaxEndMinutes % 60;
+    hints.push(`End time restricted to before ${h}:${m.toString().padStart(2, "0")}`);
+  }
+
+  const missingDays = DEFAULT_ALLOWED_DAYS.filter((d) => !generationAllowedDays.includes(d));
+  if (missingDays.length > 0) {
+    hints.push(`Days excluded: ${missingDays.map((d) => DAY_NAMES[d] ?? d).join(", ")}`);
+  }
+
+  if (generationMinProfessorRating != null) {
+    hints.push(`Professor rating ≥ ${generationMinProfessorRating}`);
+  }
+
+  if (virtualSectionsOnly) {
+    hints.push("Virtual sections only");
+  }
+
+  if (!includeClosedComponents) {
+    hints.push('Closed sections excluded — try enabling "Include closed sections"');
+  }
+
+  const isSameAsDefaultLang =
+    languageBuckets.length === DEFAULT_LANGUAGE_BUCKETS.length &&
+    DEFAULT_LANGUAGE_BUCKETS.every((b) => languageBuckets.includes(b));
+  if (!isSameAsDefaultLang) {
+    const langNames: Record<string, string> = { en: "English", fr: "French", other: "Other" };
+    hints.push(`Language filter: ${languageBuckets.map((b) => langNames[b] ?? b).join(", ")} only`);
+  }
+
+  return hints;
+}
+
 /** Pivot GPA (~B-): higher → boost weight when "prefer easier" is on. */
 const EASIER_GPA_PIVOT = 2.7;
 /**
@@ -201,6 +276,7 @@ function buildTimetableFailureDiagnostics(
     emptyPools: Array<{ label: string; requirementId?: string; candidateCourses?: string[] }>;
     totalAvailable: number;
     totalNeeded: number;
+    activeFilterHints?: string[];
   } | null,
   pinned: string[],
   filteredOptionalPool: string[],
@@ -220,6 +296,7 @@ function buildTimetableFailureDiagnostics(
     totalAvailable: poolDiagnostics?.totalAvailable ?? pinned.length + filteredOptionalPool.length,
     totalNeeded: poolDiagnostics?.totalNeeded ?? coursesThisSemester,
     timetableFailure,
+    activeFilterHints: poolDiagnostics?.activeFilterHints,
   };
   return { details, timetableFailure };
 }
@@ -613,6 +690,7 @@ export async function generateSchedulesAction(
     emptyPools: Array<{ label: string; requirementId?: string; candidateCourses?: string[] }>;
     totalAvailable: number;
     totalNeeded: number;
+    activeFilterHints?: string[];
   } | null = null;
 
   function isEligibleCandidate(code: string, poolType?: string): boolean {
@@ -1194,6 +1272,15 @@ export async function generateSchedulesAction(
       emptyPools,
       totalAvailable: pinned.length + filteredOptionalPool.length,
       totalNeeded: coursesThisSemester,
+      activeFilterHints: buildActiveFilterHints({
+        generationMinStartMinutes,
+        generationMaxEndMinutes,
+        generationAllowedDays,
+        generationMinProfessorRating,
+        virtualSectionsOnly,
+        includeClosedComponents,
+        languageBuckets,
+      }),
     };
   }
 
