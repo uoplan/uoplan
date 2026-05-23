@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/uoplan/uoplan/compare/uoplan-v0.4.0...uoplan-v0.4.1) (2026-05-23)
+
+
+### Bug Fixes
+
+* **cli:** resolve various bugs with term persistence ([5280022](https://github.com/uoplan/uoplan/commit/5280022a5d4aeb0276b614574f775a628be17bb7))
+
 ## [0.4.0](https://github.com/uoplan/uoplan/compare/uoplan-v0.3.0...uoplan-v0.4.0) (2026-05-23)
 
 
