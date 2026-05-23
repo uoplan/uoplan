@@ -47,7 +47,7 @@ impl PeopleSoftClient {
         let jar = Arc::new(Jar::default());
         for c in &session.cookies {
             let domain = c.domain.trim_start_matches('.');
-            let cookie_url = Url::parse(&format!("https://{}/", domain))?;
+            let cookie_url = Url::parse(&format!("https://{domain}/"))?;
             let cookie_str = format!(
                 "{}={}; Domain={}; Path={}{}{}",
                 c.name,
@@ -122,7 +122,6 @@ impl PeopleSoftClient {
             return Err(anyhow!(AuthExpiredError));
         }
         if is_term_selection_page(&body) {
-            // Need term_index from session.
             let term_index = {
                 let sess = self.inner.session.lock().await;
                 sess.term_index
@@ -130,7 +129,6 @@ impl PeopleSoftClient {
             let Some(term_index) = term_index else {
                 return Err(anyhow!(crate::error::NoTermSelectedError));
             };
-            // Re-select term: GET term list, POST select
             let term_list_url = endpoints::term_list();
             let list_resp = self.inner.client.get(&term_list_url).send().await?;
             let list_body = list_resp.text().await?;
@@ -157,7 +155,6 @@ impl PeopleSoftClient {
                 sess.strm = Some(strm);
             }
 
-            // Replay original request
             if let Some(url) = retry_get {
                 let resp = self.inner.client.get(url).send().await?;
                 return Ok(resp.text().await?);
@@ -178,13 +175,5 @@ impl PeopleSoftClient {
             }
         }
         Ok(body)
-    }
-
-    pub async fn session_strm(&self) -> Option<String> {
-        self.inner.session.lock().await.strm.clone()
-    }
-
-    pub async fn session_cart_url(&self) -> Option<String> {
-        self.inner.session.lock().await.cart_url.clone()
     }
 }

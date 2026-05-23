@@ -69,7 +69,8 @@ async fn run_auth_flow(driver: WebDriver) -> Result<StoredSession> {
             value: c.value.clone(),
             domain: c.domain.clone().unwrap_or_default(),
             path: c.path.clone().unwrap_or_default(),
-            expires: c.expiry.map(|e| e as f64).unwrap_or(-1.0),
+            #[allow(clippy::cast_precision_loss)]
+            expires: c.expiry.map_or(-1.0, |e| e as f64),
             http_only: false,
             secure: c.secure.unwrap_or(false),
         })

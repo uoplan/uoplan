@@ -12,8 +12,8 @@ use crate::api::PeopleSoftClient;
 use crate::auth::get_session;
 use crate::error::{NoCookiesError, NoTermSelectedError};
 
-/// Strip trailing PeopleSoft session indicator from a section string.
-/// e.g. "A00-LEC FullSess." → "A00-LEC", "B00-TUT 2ndHalf." → "B00-TUT"
+/// Strip trailing `PeopleSoft` session indicator from a section string.
+/// e.g. `"A00-LEC FullSess."` → `"A00-LEC"`, `"B00-TUT 2ndHalf."` → `"B00-TUT"`.
 fn strip_session(section: &str) -> &str {
     let re = Regex::new(r"\s+\S+\.\s*$").unwrap();
     if let Some(m) = re.find(section) {
@@ -23,6 +23,7 @@ fn strip_session(section: &str) -> &str {
     }
 }
 
+#[allow(clippy::too_many_lines)]
 pub async fn run(course_code: &str) -> Result<()> {
     intro("uoplan search")?;
     let session = get_session().await.ok_or_else(|| anyhow!(NoCookiesError))?;
@@ -37,7 +38,7 @@ pub async fn run(course_code: &str) -> Result<()> {
     let parsed = parse_course_code(course_code)?;
 
     let sp = spinner();
-    sp.start(&format!(
+    sp.start(format!(
         "Searching for {} {}…",
         parsed.subject, parsed.catalog_nbr
     ));
@@ -50,7 +51,7 @@ pub async fn run(course_code: &str) -> Result<()> {
         return Ok(());
     }
 
-    let mut prompt = select(&format!(
+    let mut prompt = select(format!(
         "Select a section for {} {}",
         parsed.subject, parsed.catalog_nbr
     ));
@@ -68,12 +69,9 @@ pub async fn run(course_code: &str) -> Result<()> {
             .join(" · ");
         prompt = prompt.item(r.row_index, label, hint);
     }
-    let row_index = match prompt.interact() {
-        Ok(v) => v,
-        Err(_) => {
-            outro_cancel("Cancelled.")?;
-            return Ok(());
-        }
+    let Ok(row_index) = prompt.interact() else {
+        outro_cancel("Cancelled.")?;
+        return Ok(());
     };
 
     let sp = spinner();
@@ -90,7 +88,7 @@ pub async fn run(course_code: &str) -> Result<()> {
             page.options[0].index
         } else {
             let prompt_text = if page.label.is_empty() {
-                "Select accompanying section".to_string()
+                "Select accompanying section".to_owned()
             } else {
                 page.label.clone()
             };
@@ -108,12 +106,11 @@ pub async fn run(course_code: &str) -> Result<()> {
                     .join(" · ");
                 companion = companion.item(o.index, label, hint);
             }
-            match companion.interact() {
-                Ok(v) => v,
-                Err(_) => {
-                    outro_cancel("Cancelled.")?;
-                    return Ok(());
-                }
+            if let Ok(v) = companion.interact() {
+                v
+            } else {
+                outro_cancel("Cancelled.")?;
+                return Ok(());
             }
         };
 
@@ -131,13 +128,13 @@ pub async fn run(course_code: &str) -> Result<()> {
 
     if errors.is_empty() {
         let fallback = format!("{} {} added to cart.", parsed.subject, parsed.catalog_nbr);
-        let msg = notices.first().map(|s| s.as_str()).unwrap_or(&fallback);
+        let msg = notices.first().map_or(fallback.as_str(), String::as_str);
         sp.stop(msg);
         outro("")?;
     } else {
         sp.cancel("Failed");
         for e in &errors {
-            log::error(&format!("error: {e}"))?;
+            log::error(format!("error: {e}"))?;
         }
         outro_cancel("Completed with errors.")?;
     }
