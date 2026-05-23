@@ -13,6 +13,7 @@ pub async fn run() -> Result<()> {
             saved_at: new_session.saved_at,
             strm: existing.strm,
             term_index: existing.term_index,
+            term_name: existing.term_name,
             cart_url: existing.cart_url,
         }
     } else {

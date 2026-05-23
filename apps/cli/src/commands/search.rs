@@ -30,6 +30,9 @@ pub async fn run(course_code: &str) -> Result<()> {
     if session.strm.is_none() {
         return Err(anyhow!(NoTermSelectedError));
     }
+
+    cliclack::log::info(format!("Term: {}", session.term_label()))?;
+
     let cart_url = session
         .cart_url
         .clone()

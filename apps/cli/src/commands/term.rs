@@ -38,7 +38,7 @@ pub async fn interactive() -> Result<()> {
     sp.start("Selecting term…");
     let strm = select_term(&client, idx).await?;
     sp.clear();
-    set_term(&strm, idx, None).await?;
+    set_term(&strm, idx, Some(&chosen.name), None).await?;
     outro(format!("Selected {}", chosen.name))?;
     Ok(())
 }

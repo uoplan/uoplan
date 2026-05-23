@@ -8,14 +8,15 @@ use crate::api::PeopleSoftClient;
 use crate::auth::get_session;
 use crate::error::NoCookiesError;
 
-async fn cart_url_from_session() -> Result<(PeopleSoftClient, String)> {
+async fn cart_url_from_session() -> Result<(PeopleSoftClient, String, String)> {
     let session = get_session().await.ok_or_else(|| anyhow!(NoCookiesError))?;
+    let label = session.term_label();
     let cart_url = session
         .cart_url
         .clone()
         .unwrap_or_else(endpoints::enroll_cart);
     let client = PeopleSoftClient::new(session)?;
-    Ok((client, cart_url))
+    Ok((client, cart_url, label))
 }
 
 fn item_label(item: &CartItem) -> String {
@@ -28,7 +29,8 @@ fn item_hint(item: &CartItem) -> String {
 
 pub async fn interactive() -> Result<()> {
     intro("uoplan cart")?;
-    let (client, cart_url) = cart_url_from_session().await?;
+    let (client, cart_url, label) = cart_url_from_session().await?;
+    cliclack::log::info(format!("Term: {label}"))?;
     loop {
         let sp = spinner();
         sp.start("Loading cart…");
@@ -88,7 +90,8 @@ pub async fn interactive() -> Result<()> {
 
 pub async fn add(class_number: &str) -> Result<()> {
     intro("uoplan cart add")?;
-    let (client, cart_url) = cart_url_from_session().await?;
+    let (client, cart_url, label) = cart_url_from_session().await?;
+    cliclack::log::info(format!("Term: {label}"))?;
     let sp = spinner();
     sp.start(format!("Adding class {class_number} to cart…"));
     add_to_cart(&client, &cart_url, class_number).await?;
@@ -99,7 +102,8 @@ pub async fn add(class_number: &str) -> Result<()> {
 
 pub async fn enrol() -> Result<()> {
     intro("uoplan enrol")?;
-    let (client, cart_url) = cart_url_from_session().await?;
+    let (client, cart_url, label) = cart_url_from_session().await?;
+    cliclack::log::info(format!("Term: {label}"))?;
     let sp = spinner();
     sp.start("Loading cart…");
     let items = list_cart(&client, &cart_url).await?;
