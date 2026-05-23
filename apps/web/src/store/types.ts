@@ -20,6 +20,8 @@ export interface GenerationErrorDetails {
   totalAvailable: number;
   totalNeeded: number;
   timetableFailure?: TimetableFailureDiagnostics;
+  /** Human-readable descriptions of non-default filters that may be restricting results. */
+  activeFilterHints?: string[];
 }
 
 /** Primary message plus optional structured context for the expandable Details panel. */

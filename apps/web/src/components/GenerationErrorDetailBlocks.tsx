@@ -34,64 +34,87 @@ export function GenerationErrorDetailBlocks({
 
   const tf = errorDetails.timetableFailure;
 
-  const genericPools = errorDetails.emptyPools.filter(
-    (p) => p.label === "course" || p.label === "or_course",
-  );
-  const otherPools = errorDetails.emptyPools.filter(
-    (p) => p.label !== "course" && p.label !== "or_course",
-  );
-
-  const formattedEmptyPools: React.ReactNode[] = [];
-
-  if (genericPools.length > 0) {
-    const combinedCandidates = new Set<string>();
-    for (const p of genericPools) {
-      if (p.candidateCourses) {
-        for (const c of p.candidateCourses) {
-          combinedCandidates.add(c);
-        }
-      }
-    }
-    const candidates = Array.from(combinedCandidates).sort();
-    if (candidates.length > 0) {
-      formattedEmptyPools.push(<List.Item key="generic">{formatCourseList(candidates)}</List.Item>);
-    } else {
-      formattedEmptyPools.push(<List.Item key="generic">Requirement</List.Item>);
-    }
-  }
-
-  for (const p of otherPools) {
-    let text = p.label;
-    if (p.candidateCourses && p.candidateCourses.length > 0) {
-      text += ` ${formatCourseList(p.candidateCourses)}`;
-    }
-    formattedEmptyPools.push(<List.Item key={p.requirementId ?? p.label}>{text}</List.Item>);
-  }
-
   return (
     <Stack gap="sm" pt="xs">
       {errorDetails.totalAvailable < errorDetails.totalNeeded && (
         <Text size="xs" c="dimmed">
           Only {errorDetails.totalAvailable} of {errorDetails.totalNeeded} course slots can be
-          filled with your current filters.
+          filled with your current filters
+          {errorDetails.emptyPools.length > 0 && !summarizeEmptyPools && (
+            <>
+              {" — "}
+              {errorDetails.emptyPools.length === 1 ? (
+                <Text size="xs" fw={500} span>
+                  {errorDetails.emptyPools[0].label}
+                </Text>
+              ) : (
+                errorDetails.emptyPools.map((p, i) => (
+                  <Text key={p.requirementId ?? p.label} size="xs" fw={500} span>
+                    {i > 0 && (i === errorDetails.emptyPools.length - 1 ? " and " : ", ")}
+                    {p.label}
+                  </Text>
+                ))
+              )}{" "}
+              {errorDetails.emptyPools.length === 1 ? "has" : "have"} no eligible courses
+            </>
+          )}
+          .
         </Text>
       )}
+
       {errorDetails.emptyPools.length > 0 && summarizeEmptyPools && (
         <Text size="xs" c="dimmed">
           {errorDetails.emptyPools.length} other requirements have no eligible courses (often
           future-term sections not posted yet).
         </Text>
       )}
+
       {errorDetails.emptyPools.length > 0 && !summarizeEmptyPools && (
         <>
           <Text size="xs" fw={600}>
-            No eligible courses this term
+            Requirements with no eligible courses
           </Text>
           <List size="xs" spacing={4} withPadding>
-            {formattedEmptyPools}
+            {errorDetails.emptyPools.map((p) => {
+              const candidates = p.candidateCourses ?? [];
+              return (
+                <List.Item key={p.requirementId ?? p.label}>
+                  <Text size="xs" fw={500} span>
+                    {p.label}
+                  </Text>
+                  {candidates.length > 0 ? (
+                    <Text size="xs" c="dimmed" span>
+                      {" "}
+                      — {formatCourseList(candidates)}{" "}
+                      {candidates.length === 1 ? "qualifies" : "qualify"} but{" "}
+                      {candidates.length === 1 ? "is" : "are"} blocked by current filters
+                    </Text>
+                  ) : (
+                    <Text size="xs" c="dimmed" span>
+                      {" "}
+                      — no sections offered this term
+                    </Text>
+                  )}
+                </List.Item>
+              );
+            })}
           </List>
         </>
       )}
+
+      {errorDetails.activeFilterHints && errorDetails.activeFilterHints.length > 0 && (
+        <>
+          <Text size="xs" fw={600}>
+            Active filters limiting results
+          </Text>
+          <List size="xs" spacing={4} withPadding>
+            {errorDetails.activeFilterHints.map((hint, i) => (
+              <List.Item key={i}>{hint}</List.Item>
+            ))}
+          </List>
+        </>
+      )}
+
       {tf && tf.coursesWithNoCombo.length > 0 && (
         <>
           <Text size="xs" fw={600}>
