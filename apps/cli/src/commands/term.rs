@@ -12,7 +12,7 @@ async fn fetch_terms() -> Result<(PeopleSoftClient, Vec<crate::api::peoplesoft::
     let sp = spinner();
     sp.start("Fetching available terms…");
     let terms = list_terms(&client).await?;
-    sp.stop("Terms loaded");
+    sp.clear();
     Ok((client, terms))
 }
 
@@ -37,7 +37,7 @@ pub async fn interactive() -> Result<()> {
     let sp = spinner();
     sp.start("Selecting term…");
     let strm = select_term(&client, idx).await?;
-    sp.stop("Term selected");
+    sp.clear();
     set_term(&strm, idx, None).await?;
     outro(format!("Selected {}", chosen.name))?;
     Ok(())

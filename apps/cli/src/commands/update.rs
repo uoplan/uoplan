@@ -10,7 +10,7 @@ pub async fn run() -> Result<()> {
     sp.start("Checking for updates...");
 
     let Some(version) = check_for_update().await else {
-        sp.stop("Already up to date.");
+        sp.clear();
         outro("No update available.")?;
         return Ok(());
     };
@@ -22,7 +22,7 @@ pub async fn run() -> Result<()> {
 
     do_update(&version).await?;
 
-    sp.stop("Done.");
+    sp.clear();
     outro(format!("Updated to v{version}."))?;
     Ok(())
 }
