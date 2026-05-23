@@ -20,6 +20,9 @@ pub async fn run(payload: &str) -> Result<()> {
     if session.strm.is_none() {
         return Err(anyhow!(NoTermSelectedError));
     }
+
+    log::info(format!("Term: {}", session.term_label()))?;
+
     let cart_url = session
         .cart_url
         .clone()

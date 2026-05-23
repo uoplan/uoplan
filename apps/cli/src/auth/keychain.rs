@@ -27,7 +27,23 @@ pub struct StoredSession {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub term_index: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub term_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     pub cart_url: Option<String>,
+}
+
+impl StoredSession {
+    pub fn term_label(&self) -> String {
+        self.term_name
+            .as_deref()
+            .map(|n| {
+                self.strm
+                    .as_deref()
+                    .map_or_else(|| n.to_owned(), |s| format!("{n} (STRM {s})"))
+            })
+            .or_else(|| self.strm.as_deref().map(|s| format!("STRM {s}")))
+            .unwrap_or_else(|| "unknown".to_owned())
+    }
 }
 
 pub async fn get_session() -> Option<StoredSession> {
@@ -46,15 +62,23 @@ pub async fn set_session(session: &StoredSession) -> Result<()> {
         .map_err(|e| anyhow!("Failed to store session in keychain: {e}"))
 }
 
-pub async fn set_term(strm: &str, term_index: i64, cart_url: Option<&str>) -> Result<()> {
+pub async fn set_term(
+    strm: &str,
+    term_index: i64,
+    term_name: Option<&str>,
+    cart_url: Option<&str>,
+) -> Result<()> {
     let Some(mut s) = get_session().await else {
         return Ok(());
     };
     s.strm = Some(strm.to_string());
     s.term_index = Some(term_index);
-    if let Some(c) = cart_url {
-        s.cart_url = Some(c.to_string());
+    if let Some(n) = term_name {
+        s.term_name = Some(n.to_string());
     }
+    // Clear stale cart_url whenever the term changes so the next request
+    // picks up a fresh one rather than one belonging to the previous term.
+    s.cart_url = cart_url.map(str::to_string);
     set_session(&s).await
 }
 

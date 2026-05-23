@@ -9,7 +9,6 @@ use url::Url;
 use crate::auth::{set_term, StoredSession};
 use crate::error::AuthExpiredError;
 
-use super::endpoints;
 use super::peoplesoft::{
     build_term_select_body, extract_page_state, is_term_selection_page, parse_strm_from_html,
 };
@@ -129,15 +128,21 @@ impl PeopleSoftClient {
             let Some(term_index) = term_index else {
                 return Err(anyhow!(crate::error::NoTermSelectedError));
             };
-            let term_list_url = endpoints::term_list();
-            let list_resp = self.inner.client.get(&term_list_url).send().await?;
-            let list_body = list_resp.text().await?;
-            let state = extract_page_state(&list_body);
+
+            // The term-selection widget can appear either on the dedicated term-list
+            // page OR embedded inside another page (e.g. the enrollment cart). In
+            // both cases we use the page state from the body we already have and POST
+            // the selection back to the same URL, avoiding a round-trip to a
+            // different page whose state won't apply to the current context.
+            let state = extract_page_state(&body);
+            let submit_url = retry_get
+                .or(retry_post.as_ref().map(|(u, _)| *u))
+                .unwrap_or(final_url);
             let select_body = build_term_select_body(&state, term_index);
             let select_resp = self
                 .inner
                 .client
-                .post(&term_list_url)
+                .post(submit_url)
                 .header(
                     header::CONTENT_TYPE,
                     "application/x-www-form-urlencoded; charset=UTF-8",
@@ -150,9 +155,21 @@ impl PeopleSoftClient {
             if let Some(strm) = parse_strm_from_html(&select_resp_body)
                 .or_else(|| parse_strm_from_html(&select_resp_url))
             {
-                let _ = set_term(&strm, term_index, None).await;
+                // Derive a psc cart URL with the full key set from the redirect URL so
+                // future requests don't hit the term-selection page again.
+                let saved_cart_url = select_resp_url.replace("/psp/", "/psc/");
+                let _ = set_term(&strm, term_index, None, Some(&saved_cart_url)).await;
                 let mut sess = self.inner.session.lock().await;
                 sess.strm = Some(strm);
+                sess.cart_url = Some(saved_cart_url);
+            }
+
+            // If the selection response is already the page we wanted (no term
+            // selector visible), return it directly — doing a fresh GET would just
+            // land on the term-selection page again because the server only holds
+            // the chosen term within this page-state flow.
+            if !is_term_selection_page(&select_resp_body) {
+                return Ok(select_resp_body);
             }
 
             if let Some(url) = retry_get {

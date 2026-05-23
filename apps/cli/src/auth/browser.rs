@@ -81,6 +81,7 @@ async fn run_auth_flow(driver: WebDriver) -> Result<StoredSession> {
         saved_at: chrono::Utc::now().timestamp_millis(),
         strm: None,
         term_index: None,
+        term_name: None,
         cart_url: None,
     })
 }
