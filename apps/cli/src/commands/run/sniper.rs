@@ -26,7 +26,8 @@ pub async fn snipe(
     if wait_until > now {
         #[allow(clippy::cast_sign_loss)]
         let total_ms = (wait_until - now) as u64;
-        let pb = progress_bar(total_ms).with_download_template();
+        let pb = progress_bar(total_ms)
+            .with_template("{msg} [{bar:30.magenta}] {eta}");
         pb.start("Waiting for snipe window…");
         let tick = 250u64;
         let mut elapsed = 0u64;
@@ -44,7 +45,7 @@ pub async fn snipe(
     let last_errors = loop {
         let result = submit_cart_action(client, cart_url, bufnums, ACTION_ENROL).await?;
         if result.errors.is_empty() {
-            sp.stop("Enrolled!");
+            sp.clear();
             return Ok(SnipeResult {
                 success: true,
                 errors: Vec::new(),

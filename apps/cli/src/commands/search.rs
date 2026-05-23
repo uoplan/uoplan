@@ -4,7 +4,7 @@ use regex::Regex;
 
 use crate::api::endpoints;
 use crate::api::search::{
-    confirm_enrollment, is_companion_page, is_waitlist_page, parse_companion_page,
+    confirm_enrollment, is_companion_page, is_waitlist_page, parse_companion_tables,
     parse_confirm_messages, parse_course_code, search_courses, select_section,
     submit_companion_selection,
 };
@@ -79,46 +79,49 @@ pub async fn run(course_code: &str) -> Result<()> {
     let mut xml = select_section(&client, &cart_url, &xml, row_index).await?;
     sp.clear();
 
-    let mut page_num: i64 = 0;
     while is_companion_page(&xml) && !is_waitlist_page(&xml) {
-        let page = parse_companion_page(&xml);
-        let chosen_idx = if page.options.is_empty() {
-            0
-        } else if page.options.len() == 1 {
-            page.options[0].index
-        } else {
-            let prompt_text = if page.label.is_empty() {
-                "Select accompanying section".to_owned()
+        let tables = parse_companion_tables(&xml);
+        let mut selections: Vec<(u32, i64)> = Vec::new();
+
+        for table in &tables {
+            let chosen_idx = if table.options.is_empty() {
+                0
+            } else if table.options.len() == 1 {
+                table.options[0].index
             } else {
-                page.label.clone()
+                let prompt_text = if table.label.is_empty() {
+                    "Select accompanying section".to_owned()
+                } else {
+                    table.label.clone()
+                };
+                let mut companion = select(&prompt_text);
+                for o in &table.options {
+                    let label = [o.section.as_str(), o.schedule.as_str(), o.room.as_str()]
+                        .into_iter()
+                        .filter(|s: &&str| !s.is_empty())
+                        .collect::<Vec<_>>()
+                        .join(" — ");
+                    let hint = [o.instructor.as_str(), o.status.as_str()]
+                        .into_iter()
+                        .filter(|s: &&str| !s.is_empty())
+                        .collect::<Vec<_>>()
+                        .join(" · ");
+                    companion = companion.item(o.index, label, hint);
+                }
+                if let Ok(v) = companion.interact() {
+                    v
+                } else {
+                    outro_cancel("Cancelled.")?;
+                    return Ok(());
+                }
             };
-            let mut companion = select(&prompt_text);
-            for o in &page.options {
-                let label = [o.section.as_str(), o.schedule.as_str(), o.room.as_str()]
-                    .into_iter()
-                    .filter(|s| !s.is_empty())
-                    .collect::<Vec<_>>()
-                    .join(" — ");
-                let hint = [o.instructor.as_str(), o.status.as_str()]
-                    .into_iter()
-                    .filter(|s| !s.is_empty())
-                    .collect::<Vec<_>>()
-                    .join(" · ");
-                companion = companion.item(o.index, label, hint);
-            }
-            if let Ok(v) = companion.interact() {
-                v
-            } else {
-                outro_cancel("Cancelled.")?;
-                return Ok(());
-            }
-        };
+            selections.push((table.table_num, chosen_idx));
+        }
 
         let sp = spinner();
-        sp.start("Confirming selection");
-        xml = submit_companion_selection(&client, &cart_url, &xml, chosen_idx, page_num).await?;
+        sp.start("Confirming selection…");
+        xml = submit_companion_selection(&client, &cart_url, &xml, &selections).await?;
         sp.clear();
-        page_num += 1;
     }
 
     let sp = spinner();

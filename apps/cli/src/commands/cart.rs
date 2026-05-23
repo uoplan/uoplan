@@ -33,7 +33,7 @@ pub async fn interactive() -> Result<()> {
         let sp = spinner();
         sp.start("Loading cart…");
         let items = list_cart(&client, &cart_url).await?;
-        sp.stop("Cart loaded");
+        sp.clear();
 
         if items.is_empty() {
             outro("Your cart is empty.")?;
@@ -74,7 +74,7 @@ pub async fn interactive() -> Result<()> {
         });
         let result =
             submit_cart_action(&client, &cart_url, &selected_bufnums, action_code).await?;
-        sp.stop("Done");
+        sp.clear();
 
         if result.errors.is_empty() {
             cliclack::log::success("Success")?;
@@ -92,7 +92,7 @@ pub async fn add(class_number: &str) -> Result<()> {
     let sp = spinner();
     sp.start(format!("Adding class {class_number} to cart…"));
     add_to_cart(&client, &cart_url, class_number).await?;
-    sp.stop("Added");
+    sp.clear();
     outro("Class added to cart.")?;
     Ok(())
 }

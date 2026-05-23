@@ -5,9 +5,13 @@ use flate2::read::GzDecoder;
 use prost::Message;
 use std::io::Read;
 
+const BOLD: &str = "\x1b[1m";
+const GRAY: &str = "\x1b[2m";
+const RESET: &str = "\x1b[0m";
+
 use crate::api::search::{
     confirm_enrollment, is_companion_page, is_waitlist_page, parse_all_class_numbers,
-    parse_companion_page, parse_confirm_messages, parse_course_code, search_courses,
+    parse_companion_tables, parse_confirm_messages, parse_course_code, search_courses,
     select_section, submit_companion_selection,
 };
 use crate::api::PeopleSoftClient;
@@ -57,7 +61,7 @@ pub async fn add_courses_to_cart(
         ));
         let (results, xml) =
             search_courses(client, cart_url, &parsed.subject, &parsed.catalog_nbr).await?;
-        sp.stop("Search complete");
+        sp.clear();
 
         let class_map = parse_all_class_numbers(&xml);
 
@@ -86,50 +90,57 @@ pub async fn add_courses_to_cart(
         let sp = spinner();
         sp.start("Selecting section…");
         let mut xml = select_section(client, cart_url, &xml, row_index).await?;
-        sp.stop("Section selected");
+        sp.clear();
 
-        let mut page_num: i64 = 0;
         while is_companion_page(&xml) && !is_waitlist_page(&xml) {
-            let page = parse_companion_page(&xml);
-            let mut chosen_idx: Option<i64> = None;
-            'companion: for sel in &course.sections {
-                for opt in &page.options {
-                    if opt
-                        .section
-                        .to_uppercase()
-                        .contains(&sel.section.to_uppercase())
-                        && opt
-                            .section
-                            .to_uppercase()
-                            .contains(&sel.component.to_uppercase())
-                    {
-                        chosen_idx = Some(opt.index);
-                        break 'companion;
-                    }
-                }
-            }
-            let pick = chosen_idx
-                .or_else(|| page.options.first().map(|o| o.index))
-                .unwrap_or(0);
+            let tables = parse_companion_tables(&xml);
+            let selections: Vec<(u32, i64)> = tables
+                .iter()
+                .map(|table| {
+                    let pick = table
+                        .options
+                        .iter()
+                        .find(|opt| {
+                            course.sections.iter().any(|sel| {
+                                opt.section
+                                    .to_uppercase()
+                                    .contains(&sel.section.to_uppercase())
+                            })
+                        })
+                        .or_else(|| table.options.first())
+                        .map_or(0, |o| o.index);
+                    (table.table_num, pick)
+                })
+                .collect();
 
             let sp = spinner();
-            sp.start("Submitting companion selection…");
-            xml = submit_companion_selection(client, cart_url, &xml, pick, page_num).await?;
-            sp.stop("Done");
-            page_num += 1;
+            sp.start("Selecting companion sections…");
+            xml = submit_companion_selection(client, cart_url, &xml, &selections).await?;
+            sp.clear();
         }
 
         let sp = spinner();
         sp.start("Confirming…");
         let final_xml = confirm_enrollment(client, cart_url, &xml).await?;
-        sp.stop("Done");
+        sp.clear();
+
+        let mut sections_text = String::new();
+        for sel in &course.sections {
+            use std::fmt::Write as _;
+            let _ = write!(sections_text, "\n{GRAY}• {} {}{RESET}", sel.component, sel.section);
+        }
 
         let (errors, notices) = parse_confirm_messages(&final_xml);
-        for n in &notices {
-            log::success(format!("{} — {n}", course.course_code))?;
-        }
-        for e in &errors {
-            log::error(format!("{} — {e}", course.course_code))?;
+        if errors.is_empty() {
+            log::success(format!("{BOLD}{} ✓{RESET}{sections_text}", course.course_code))?;
+            for n in &notices {
+                log::info(format!("{GRAY}{n}{RESET}"))?;
+            }
+        } else {
+            log::info(format!("{BOLD}{}{RESET}{sections_text}", course.course_code))?;
+            for e in &errors {
+                log::error(e.clone())?;
+            }
         }
     }
     Ok(())

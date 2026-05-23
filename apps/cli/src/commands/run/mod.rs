@@ -44,12 +44,12 @@ pub async fn run(payload: &str) -> Result<()> {
             let sp = spinner();
             sp.start("Loading cart…");
             let items = list_cart(&client, &cart_url).await?;
-            sp.stop("Cart loaded");
+            sp.clear();
             let bufnums: Vec<i64> = items.iter().map(|i| i.bufnum).collect();
             let sp = spinner();
             sp.start("Enrolling…");
             let result = submit_cart_action(&client, &cart_url, &bufnums, ACTION_ENROL).await?;
-            sp.stop("Done");
+            sp.clear();
             if result.errors.is_empty() {
                 outro("Enrolled successfully.")?;
             } else {
@@ -66,7 +66,7 @@ pub async fn run(payload: &str) -> Result<()> {
             let sp = spinner();
             sp.start("Loading cart…");
             let items = list_cart(&client, &cart_url).await?;
-            sp.stop("Cart loaded");
+            sp.clear();
             let bufnums: Vec<i64> = items.iter().map(|i| i.bufnum).collect();
             let result = sniper::snipe(
                 &client,

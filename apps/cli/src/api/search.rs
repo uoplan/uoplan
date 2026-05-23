@@ -27,7 +27,8 @@ pub struct CompanionOption {
 }
 
 #[derive(Debug, Clone)]
-pub struct CompanionPage {
+pub struct CompanionTable {
+    pub table_num: u32,
     pub label: String,
     pub options: Vec<CompanionOption>,
 }
@@ -172,56 +173,76 @@ pub fn is_waitlist_page(xml: &str) -> bool {
     xml.contains("DERIVED_CLS_DTL_WAIT_LIST_OKAY")
 }
 
-pub fn parse_companion_page(xml: &str) -> CompanionPage {
+pub fn parse_companion_tables(xml: &str) -> Vec<CompanionTable> {
     let html = extract_page_html(xml);
     let doc = Html::parse_document(&html);
-    let label_sel = Selector::parse(r"[id^='win0divSSR_CLS_TBL_R1GP']").unwrap();
-    let label = doc
-        .select(&label_sel)
-        .next()
-        .map_or_else(|| "Select accompanying section".to_owned(), |e| e.text().collect::<String>().trim().to_owned());
 
-    let row_sel = Selector::parse(r"tr[id^='trSSR_CLS_TBL_R1']").unwrap();
-    let mut options = Vec::new();
-    for row in doc.select(&row_sel) {
-        let Some(bufnum_str) = row.value().attr("bufnum") else {
-            continue;
-        };
-        let Ok(index) = bufnum_str.parse::<i64>() else {
-            continue;
-        };
-        let cell_sel = Selector::parse("td").unwrap();
-        let cells: Vec<_> = row.select(&cell_sel).collect();
-        if cells.len() < 7 {
-            continue;
+    let re = Regex::new(r"SSR_CLS_TBL_R(\d+)\$scroll").unwrap();
+    let mut table_nums: Vec<u32> = re
+        .captures_iter(xml)
+        .filter_map(|c| c.get(1)?.as_str().parse().ok())
+        .collect::<std::collections::HashSet<_>>()
+        .into_iter()
+        .collect();
+    table_nums.sort_unstable();
+
+    let mut tables = Vec::new();
+    for n in table_nums {
+        let label_sel =
+            Selector::parse(&format!("[id='win0divSSR_CLS_TBL_R{n}GP$0']")).unwrap();
+        let label = doc
+            .select(&label_sel)
+            .next()
+            .map_or_else(String::new, |e| e.text().collect::<String>().trim().to_owned());
+
+        let row_sel =
+            Selector::parse(&format!("tr[id^='trSSR_CLS_TBL_R{n}$']")).unwrap();
+        let mut options = Vec::new();
+        for row in doc.select(&row_sel) {
+            let Some(bufnum_str) = row.value().attr("bufnum") else {
+                continue;
+            };
+            let Ok(index) = bufnum_str.parse::<i64>() else {
+                continue;
+            };
+            let cell_sel = Selector::parse("td").unwrap();
+            let cells: Vec<_> = row.select(&cell_sel).collect();
+            if cells.len() < 7 {
+                continue;
+            }
+            let txt = |i: usize| {
+                cells
+                    .get(i)
+                    .map(|c| c.text().collect::<String>().trim().to_owned())
+                    .unwrap_or_default()
+            };
+            let section = txt(2);
+            let schedule = txt(3);
+            let room = txt(4);
+            let instructor = txt(5);
+            let img_sel = Selector::parse("img").unwrap();
+            let status = cells
+                .get(6)
+                .and_then(|c| c.select(&img_sel).next())
+                .and_then(|e| e.value().attr("alt"))
+                .unwrap_or("")
+                .to_owned();
+            options.push(CompanionOption {
+                index,
+                section,
+                schedule,
+                room,
+                instructor,
+                status,
+            });
         }
-        let txt = |i: usize| {
-            cells
-                .get(i)
-                .map(|c| c.text().collect::<String>().trim().to_owned())
-                .unwrap_or_default()
-        };
-        let section = txt(2);
-        let schedule = txt(3);
-        let room = txt(4);
-        let instructor = txt(5);
-        let img_sel = Selector::parse("img").unwrap();
-        let status = cells
-            .get(6)
-            .and_then(|c| c.select(&img_sel).next())
-            .and_then(|e| e.value().attr("alt"))
-            .unwrap_or("")
-            .to_owned();
-        options.push(CompanionOption {
-            index,
-            section,
-            schedule,
-            room,
-            instructor,
-            status,
+        tables.push(CompanionTable {
+            table_num: n,
+            label,
+            options,
         });
     }
-    CompanionPage { label, options }
+    tables
 }
 
 pub fn parse_waitlist_id(xml: &str) -> Option<String> {
@@ -421,13 +442,13 @@ pub async fn submit_companion_selection(
     client: &PeopleSoftClient,
     cart_url: &str,
     xml: &str,
-    companion_index: i64,
-    page_num: i64,
+    selections: &[(u32, i64)],
 ) -> Result<String> {
     let state = extract_ajax_state(xml);
     let mut params = ajax_base(&state, "DERIVED_CLS_DTL_NEXT_PB");
-    let key = format!("SSR_CLS_TBL_R1$sels${page_num}$$0");
-    params.push((key, companion_index.to_string()));
+    for (table_num, value) in selections {
+        params.push((format!("SSR_CLS_TBL_R{table_num}$sels$0$$0"), value.to_string()));
+    }
     ajax_finish(&mut params);
     let mut result = client.post(cart_url, pairs_to_form(&params)).await?;
     if extract_ajax_state(&result).icsid.is_empty() && !state.icsid.is_empty() {
