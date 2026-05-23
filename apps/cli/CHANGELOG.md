@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/uoplan/uoplan/compare/uoplan-v0.3.0...uoplan-v0.4.0) (2026-05-23)
+
+
+### Features
+
+* **cli:** improve ux experience for cli ([8f92429](https://github.com/uoplan/uoplan/commit/8f9242910924a8acb52dbc89c38a7c998426bc93))
+
 ## [0.3.0](https://github.com/uoplan/uoplan/compare/uoplan-v0.2.0...uoplan-v0.3.0) (2026-05-21)
 
 

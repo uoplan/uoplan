@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.0-beta.19](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.18...uoplan-monorepo-v1.0.0-beta.19) (2026-05-23)
+
+
+### Features
+
+* add uenroll import ([e86ac1c](https://github.com/uoplan/uoplan/commit/e86ac1c7f38b26ea9ed0bb4edaa2bd13434e7ca0))
+* **cli:** improve ux experience for cli ([8f92429](https://github.com/uoplan/uoplan/commit/8f9242910924a8acb52dbc89c38a7c998426bc93))
+* improve document titles ([69bb675](https://github.com/uoplan/uoplan/commit/69bb675e6ad71b3cecc9fe66ea2c5b9d2364f810))
+* improve mobile ux ([13c3cb5](https://github.com/uoplan/uoplan/commit/13c3cb5494c2845a08ce3f56055ca1ef73b97b5f))
+* move modal into calendar sidebar ([7e1addb](https://github.com/uoplan/uoplan/commit/7e1addb8b322d88bf76668965e788054586d5ddb))
+
+
+### Bug Fixes
+
+* allow sorting without filtering on explore, allow pill content to overflow ([0a3a7a0](https://github.com/uoplan/uoplan/commit/0a3a7a06374c63f9f6558428f9b8873704c9be05))
+* show page instead of search results until user interacts with it ([e1ca1a6](https://github.com/uoplan/uoplan/commit/e1ca1a61016692254e80224b663005aa5402b781))
+
 ## [1.0.0-beta.18](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.17...uoplan-monorepo-v1.0.0-beta.18) (2026-05-21)
 
 
