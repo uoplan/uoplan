@@ -41,8 +41,6 @@ function ExploreDisciplineRoute() {
       <ExploreDisciplinePage
         disciplineCode={discipline}
         disciplines={disciplines}
-        catalogue={catalogue}
-        terms={terms ?? []}
         professorRatings={professorRatings}
       />
     </ExploreLayout>

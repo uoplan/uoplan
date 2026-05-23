@@ -1,9 +1,8 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useLingui } from "@lingui/react";
 import { useMemo, useState } from "react";
-import type { Catalogue, Term } from "@uoplan/schedule";
+import type { Catalogue } from "@uoplan/schedule";
 import { normalizeCourseCode } from "@uoplan/schedule";
-import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import {
   buildCourseSpotlightIndex,
   pickSpotlightVariants,
@@ -11,13 +10,11 @@ import {
   SPOTLIGHT_MIN_GALLERY_ITEMS,
   SPOTLIGHT_ROW_DURATIONS_SEC,
 } from "../../lib/explore/courseSpotlight";
-import {
-  buildExploreOfferings,
-  type ExploreCourseSearchEntry,
-} from "../../lib/explore/gradesSearch";
+import { type ExploreCourseSearchEntry } from "../../lib/explore/gradesSearch";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { ExploreCourseSpotlightGallery } from "./ExploreCourseSpotlightGallery";
+import { useExploreOfferings } from "./ExploreOfferingsContext";
 
 function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
   const m = new Map<string, string>();
@@ -26,36 +23,19 @@ function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
   return m;
 }
 
-function buildTermNameById(terms: Term[]): Map<number, string> {
-  const m = new Map<number, string>();
-  for (const t of terms) {
-    const id = Number.parseInt(t.termId, 10);
-    if (Number.isFinite(id)) m.set(id, t.name);
-  }
-  return m;
-}
-
 export function ExploreSearchPage({
   catalogue,
-  terms,
   searchParams,
 }: {
   catalogue: Catalogue | null;
-  terms: Term[];
   searchParams: ExploreSearchParams;
 }) {
   useLingui();
-  const { loading, data: grades } = useCourseGradesPb();
+  const { loading, offerings } = useExploreOfferings();
   const navigate = useNavigate();
   const [spotlightVariants] = useState(() => pickSpotlightVariants(3));
 
   const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
-  const termNameById = useMemo(() => buildTermNameById(terms), [terms]);
-
-  const offerings = useMemo(() => {
-    if (!grades) return [];
-    return buildExploreOfferings(grades, titleByCode, termNameById);
-  }, [grades, titleByCode, termNameById]);
 
   const spotlightRows = useMemo(() => {
     if (offerings.length === 0) return [];

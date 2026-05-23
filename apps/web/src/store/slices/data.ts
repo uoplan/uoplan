@@ -24,6 +24,7 @@ import {
   isOptCourse,
 } from "@uoplan/schedule";
 import { getMergedCatalogue } from "./catalogueUtils";
+import { fetchProtoBytes } from "../../lib/protoFetch";
 import { buildProfessorRatingsMap } from "@uoplan/schedule";
 import {
   parseStateFromUrl,
@@ -51,12 +52,6 @@ function buildCacheWithOpt(
     base,
     optCodes.map((code): Course => ({ code, title: code, credits: 3, description: "" })),
   );
-}
-
-async function fetchProtoBytes(path: string): Promise<Uint8Array> {
-  const res = await fetch(path);
-  if (!res.ok) throw new Error(`Failed to load ${path}`);
-  return new Uint8Array(await res.arrayBuffer());
 }
 
 interface DataSlice {
@@ -284,13 +279,10 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
       let yearCatalogueCourses: Course[] | null = null;
       if (initialFirstYear !== null) {
         try {
-          const yearRes = await fetch(`/data/catalogue.${initialFirstYear}.pb`);
-          if (yearRes.ok) {
-            const yearBytes = new Uint8Array(await yearRes.arrayBuffer());
-            const parsedYear = fromProtoCatalogue(DataProto.Catalogue.decode(yearBytes));
-            yearCataloguePrograms = parsedYear.programs;
-            yearCatalogueCourses = parsedYear.courses;
-          }
+          const yearBytes = await fetchProtoBytes(`/data/catalogue.${initialFirstYear}.pb`);
+          const parsedYear = fromProtoCatalogue(DataProto.Catalogue.decode(yearBytes));
+          yearCataloguePrograms = parsedYear.programs;
+          yearCatalogueCourses = parsedYear.courses;
         } catch {
           // ignore
         }

@@ -37,7 +37,7 @@ function ExploreRoute() {
         })
       }
     >
-      <ExploreSearchPage catalogue={catalogue} terms={terms ?? []} searchParams={search} />
+      <ExploreSearchPage catalogue={catalogue} searchParams={search} />
     </ExploreLayout>
   );
 }

@@ -6,15 +6,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Catalogue, ProfessorRatingsMap, Term } from "@uoplan/schedule";
 import { normalizeCourseCode } from "@uoplan/schedule";
+
 import { tr } from "../../i18n";
-import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import {
   buildCourseSearchEntries,
-  buildExploreOfferings,
   buildExploreProfessorSearchEntries,
   createExploreCourseFuse,
   searchExplore,
 } from "../../lib/explore/gradesSearch";
+import { ExploreOfferingsProvider, useExploreOfferings } from "./ExploreOfferingsContext";
 import {
   EMPTY_FILTERS,
   compareCourseEntries,
@@ -41,15 +41,6 @@ function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
   const m = new Map<string, string>();
   if (!catalogue) return m;
   for (const c of catalogue.courses) m.set(normalizeCourseCode(c.code), c.title);
-  return m;
-}
-
-function buildTermNameById(terms: Term[]): Map<number, string> {
-  const m = new Map<number, string>();
-  for (const t of terms) {
-    const id = Number.parseInt(t.termId, 10);
-    if (Number.isFinite(id)) m.set(id, t.name);
-  }
   return m;
 }
 
@@ -146,15 +137,7 @@ function buildDisciplineCourseCount(catalogue: Catalogue | null): Map<string, nu
   return m;
 }
 
-export function ExploreLayout({
-  showBackButton = false,
-  catalogue,
-  terms,
-  professorRatings,
-  searchParams,
-  onQueryChange,
-  children,
-}: {
+type ExploreLayoutProps = {
   showBackButton?: boolean;
   catalogue: Catalogue | null;
   terms: Term[];
@@ -162,9 +145,26 @@ export function ExploreLayout({
   searchParams: ExploreSearchParams;
   onQueryChange?: (v: string, nextSearch: ExploreSearchParams) => void;
   children: ReactNode;
-}) {
+};
+
+export function ExploreLayout(props: ExploreLayoutProps) {
+  return (
+    <ExploreOfferingsProvider catalogue={props.catalogue} terms={props.terms}>
+      <ExploreLayoutInner {...props} />
+    </ExploreOfferingsProvider>
+  );
+}
+
+function ExploreLayoutInner({
+  showBackButton = false,
+  catalogue,
+  professorRatings,
+  searchParams,
+  onQueryChange,
+  children,
+}: ExploreLayoutProps) {
   useLingui();
-  const { loading, data: grades } = useCourseGradesPb();
+  const { loading, offerings } = useExploreOfferings();
   const navigate = useNavigate();
   const { stack, pop } = useExploreHistory();
   const disciplines = useAppStore(useShallow((s) => s.disciplines));
@@ -230,12 +230,6 @@ export function ExploreLayout({
   };
 
   const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
-  const termNameById = useMemo(() => buildTermNameById(terms), [terms]);
-
-  const offerings = useMemo(() => {
-    if (!grades) return [];
-    return buildExploreOfferings(grades, titleByCode, termNameById);
-  }, [grades, titleByCode, termNameById]);
 
   const courseEntries = useMemo(
     () => buildCourseSearchEntries(offerings, titleByCode, professorRatings),

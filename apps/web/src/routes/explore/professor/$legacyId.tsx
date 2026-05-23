@@ -68,12 +68,7 @@ function ExploreProfessorRoute() {
   if (isNumeric) {
     return (
       <ExploreLayout {...layoutProps}>
-        <ExploreProfessorPage
-          legacyId={parsed}
-          catalogue={catalogue}
-          terms={terms ?? []}
-          professorRatings={professorRatings}
-        />
+        <ExploreProfessorPage legacyId={parsed} professorRatings={professorRatings} />
       </ExploreLayout>
     );
   }
@@ -89,12 +84,7 @@ function ExploreProfessorRoute() {
 
   return (
     <ExploreLayout {...layoutProps}>
-      <ExploreProfessorPage
-        professorName={professorName}
-        catalogue={catalogue}
-        terms={terms ?? []}
-        professorRatings={professorRatings}
-      />
+      <ExploreProfessorPage professorName={professorName} professorRatings={professorRatings} />
     </ExploreLayout>
   );
 }

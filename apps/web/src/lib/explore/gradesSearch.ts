@@ -1,6 +1,11 @@
 import Fuse from "fuse.js";
 import type { IFuseOptions } from "fuse.js";
-import type { CourseGradesData, GradeVizData, ProfessorRatingsMap } from "@uoplan/schedule";
+import type {
+  CourseGradesData,
+  GradeVizData,
+  ProfessorRatingsMap,
+  SchedulesData,
+} from "@uoplan/schedule";
 import {
   normalizeCourseCode,
   normalizeProfessorName,
@@ -458,6 +463,104 @@ export type CourseOfferingGroup = {
   courseTitles: string[];
   offerings: ExploreOfferingFlat[];
 };
+
+function scheduleOfferingId(courseCode: string, name: string, termId: number, section: string) {
+  return [courseCode, "", normalizeProfessorName(name).toLowerCase(), String(termId), section].join(
+    "|",
+  );
+}
+
+function scheduleOfferingDedupKey(
+  courseCode: string,
+  name: string,
+  termId: number,
+  section: string,
+) {
+  return [
+    normalizeCourseCode(courseCode),
+    normalizeProfessorName(name).toLowerCase(),
+    String(termId),
+    section,
+  ].join("|");
+}
+
+export function buildScheduleOfferings(
+  allSchedules: SchedulesData[],
+  termNameById: Map<number, string>,
+  titleByCode: Map<string, string>,
+): ExploreOfferingFlat[] {
+  const seen = new Set<string>();
+  const out: ExploreOfferingFlat[] = [];
+
+  for (const schedData of allSchedules) {
+    const termId = Number.parseInt(schedData.termId, 10);
+    if (!Number.isFinite(termId)) continue;
+    const termLabel = termNameById.get(termId) ?? formatUottawaTermIdLabel(termId);
+
+    for (const sched of schedData.schedules) {
+      const norm = normalizeCourseCode(sched.courseCode);
+      const title = titleByCode.get(norm) ?? sched.title ?? "";
+
+      for (const sections of Object.values(sched.components)) {
+        for (const section of sections) {
+          const instructors = new Set<string>();
+          for (const t of section.times) {
+            if (t.instructor) instructors.add(t.instructor);
+          }
+
+          for (const instructor of instructors) {
+            const key = scheduleOfferingDedupKey(
+              sched.courseCode,
+              instructor,
+              termId,
+              section.section,
+            );
+            if (seen.has(key)) continue;
+            seen.add(key);
+
+            const fuseText = [sched.courseCode, norm, title, instructor, termLabel, section.section]
+              .filter(Boolean)
+              .join(" ")
+              .toLowerCase();
+
+            out.push({
+              id: scheduleOfferingId(sched.courseCode, instructor, termId, section.section),
+              courseCode: sched.courseCode,
+              courseTitle: title,
+              professorName: instructor,
+              termId,
+              termLabel,
+              section: section.section,
+              fuseText,
+              distribution: {},
+            });
+          }
+        }
+      }
+    }
+  }
+
+  return out;
+}
+
+export function mergeOfferingsWithSchedule(
+  gradeOfferings: ExploreOfferingFlat[],
+  scheduleOfferings: ExploreOfferingFlat[],
+): ExploreOfferingFlat[] {
+  const gradeKeys = new Set<string>();
+  for (const o of gradeOfferings) {
+    gradeKeys.add(
+      scheduleOfferingDedupKey(o.courseCode, o.professorName, o.termId, o.section ?? ""),
+    );
+  }
+  const newEntries = scheduleOfferings.filter(
+    (o) =>
+      !gradeKeys.has(
+        scheduleOfferingDedupKey(o.courseCode, o.professorName, o.termId, o.section ?? ""),
+      ),
+  );
+  return [...gradeOfferings, ...newEntries];
+}
 
 export function groupOfferingsByCourse(items: ExploreOfferingFlat[]): CourseOfferingGroup[] {
   const byGroup = new Map<string, ExploreOfferingFlat[]>();
