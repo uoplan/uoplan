@@ -2,11 +2,11 @@ import { Accordion, Box, Group, Stack, Text, Title } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import type { Catalogue, ProfessorRatingsMap, Term } from "@uoplan/schedule";
-import { normalizeCourseCode, normalizeProfessorName } from "@uoplan/schedule";
+import type { ProfessorRatingsMap } from "@uoplan/schedule";
+import { normalizeProfessorName } from "@uoplan/schedule";
 import { tr } from "../../i18n";
-import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
-import { buildExploreOfferings, groupOfferingsByCourse } from "../../lib/explore/gradesSearch";
+import { groupOfferingsByCourse } from "../../lib/explore/gradesSearch";
+import { useExploreOfferings } from "./ExploreOfferingsContext";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
@@ -21,46 +21,18 @@ const EXPLORE_CHEVRON_RIGHT = {
 
 const mobileMediaQuery = "@media (max-width: 540px)";
 
-function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
-  const m = new Map<string, string>();
-  if (!catalogue) return m;
-  for (const c of catalogue.courses) m.set(normalizeCourseCode(c.code), c.title);
-  return m;
-}
-
-function buildTermNameById(terms: Term[]): Map<number, string> {
-  const m = new Map<number, string>();
-  for (const t of terms) {
-    const id = Number.parseInt(t.termId, 10);
-    if (Number.isFinite(id)) m.set(id, t.name);
-  }
-  return m;
-}
-
 export function ExploreProfessorPage({
   legacyId,
   professorName: professorNameProp,
-  catalogue,
-  terms,
   professorRatings,
 }: (
   | { legacyId: number; professorName?: undefined }
   | { professorName: string; legacyId?: undefined }
 ) & {
-  catalogue: Catalogue | null;
-  terms: Term[];
   professorRatings: ProfessorRatingsMap | null;
 }) {
   useLingui();
-  const { data: grades, error } = useCourseGradesPb();
-
-  const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
-  const termNameById = useMemo(() => buildTermNameById(terms), [terms]);
-
-  const allOfferings = useMemo(() => {
-    if (!grades) return [];
-    return buildExploreOfferings(grades, titleByCode, termNameById);
-  }, [grades, titleByCode, termNameById]);
+  const { offerings: allOfferings } = useExploreOfferings();
 
   const professorOfferings = useMemo(() => {
     if (legacyId != null) return allOfferings.filter((o) => o.legacyId === legacyId);
@@ -113,13 +85,7 @@ export function ExploreProfessorPage({
           )}
         </Box>
 
-        {error ? (
-          <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs }}>
-            <Text c="red" size="sm">
-              {tr("explore.loadError", { message: error })}
-            </Text>
-          </Box>
-        ) : courseGroups.length === 0 ? (
+        {courseGroups.length === 0 ? (
           <Box
             style={{
               paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,

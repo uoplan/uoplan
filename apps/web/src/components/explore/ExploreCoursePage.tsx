@@ -3,16 +3,15 @@ import { useLingui } from "@lingui/react";
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import type { Catalogue, ProfessorRatingsMap, Term } from "@uoplan/schedule";
+import type { Catalogue, ProfessorRatingsMap } from "@uoplan/schedule";
 import { normalizeCourseCode } from "@uoplan/schedule";
 import { tr } from "../../i18n";
-import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import {
   buildCourseSearchEntries,
-  buildExploreOfferings,
   type ProfessorOfferingGroup,
   groupOfferingsByProfessor,
 } from "../../lib/explore/gradesSearch";
+import { useExploreOfferings } from "./ExploreOfferingsContext";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { parseCoursePathParam } from "../../lib/explore/courseSearchParams";
 import {
@@ -31,15 +30,6 @@ function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
   const m = new Map<string, string>();
   if (!catalogue) return m;
   for (const c of catalogue.courses) m.set(normalizeCourseCode(c.code), c.title);
-  return m;
-}
-
-function buildTermNameById(terms: Term[]): Map<number, string> {
-  const m = new Map<number, string>();
-  for (const t of terms) {
-    const id = Number.parseInt(t.termId, 10);
-    if (Number.isFinite(id)) m.set(id, t.name);
-  }
   return m;
 }
 
@@ -69,25 +59,17 @@ function CourseProfessorItem({
 export function ExploreCoursePage({
   urlCourseParam,
   catalogue,
-  terms,
   professorRatings,
 }: {
   urlCourseParam: string;
   catalogue: Catalogue | null;
-  terms: Term[];
   professorRatings: ProfessorRatingsMap | null;
 }) {
   useLingui();
-  const { loading, data: grades, error } = useCourseGradesPb();
+  const { loading, offerings } = useExploreOfferings();
   const navigate = useNavigate();
 
   const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
-  const termNameById = useMemo(() => buildTermNameById(terms), [terms]);
-
-  const offerings = useMemo(() => {
-    if (!grades) return [];
-    return buildExploreOfferings(grades, titleByCode, termNameById);
-  }, [grades, titleByCode, termNameById]);
 
   const courseEntries = useMemo(
     () => buildCourseSearchEntries(offerings, titleByCode),
@@ -146,13 +128,7 @@ export function ExploreCoursePage({
           </Box>
         ) : null}
 
-        {error ? (
-          <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs }}>
-            <Text c="red" size="sm">
-              {tr("explore.loadError", { message: error })}
-            </Text>
-          </Box>
-        ) : professorGroups.length === 0 ? (
+        {professorGroups.length === 0 ? (
           <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs }}>
             <Text c="dimmed" size="sm">
               {loading ? null : tr("explore.courseNoProfessors")}

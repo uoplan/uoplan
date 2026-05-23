@@ -41,7 +41,6 @@ function ExploreCourseRoute() {
       <ExploreCoursePage
         urlCourseParam={course}
         catalogue={catalogue}
-        terms={terms ?? []}
         professorRatings={professorRatings}
       />
     </ExploreLayout>

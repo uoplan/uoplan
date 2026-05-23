@@ -3,15 +3,13 @@ import { useLingui } from "@lingui/react";
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import type { Catalogue, Discipline, ProfessorRatingsMap, Term } from "@uoplan/schedule";
-import { normalizeCourseCode } from "@uoplan/schedule";
-import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
+import type { Discipline, ProfessorRatingsMap } from "@uoplan/schedule";
 import {
-  buildExploreOfferings,
   groupOfferingsByCourse,
   groupOfferingsByProfessor,
   type CourseOfferingGroup,
 } from "../../lib/explore/gradesSearch";
+import { useExploreOfferings } from "./ExploreOfferingsContext";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
@@ -27,22 +25,6 @@ const EXPLORE_CHEVRON_RIGHT = {
 };
 
 const mobileMediaQuery = "@media (max-width: 540px)";
-
-function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
-  const m = new Map<string, string>();
-  if (!catalogue) return m;
-  for (const c of catalogue.courses) m.set(normalizeCourseCode(c.code), c.title);
-  return m;
-}
-
-function buildTermNameById(terms: Term[]): Map<number, string> {
-  const m = new Map<number, string>();
-  for (const t of terms) {
-    const id = Number.parseInt(t.termId, 10);
-    if (Number.isFinite(id)) m.set(id, t.name);
-  }
-  return m;
-}
 
 function DisciplineProfessorRows({
   group,
@@ -110,18 +92,14 @@ function DisciplineCourseItem({
 export function ExploreDisciplinePage({
   disciplineCode,
   disciplines,
-  catalogue,
-  terms,
   professorRatings,
 }: {
   disciplineCode: string;
   disciplines: Discipline[] | null;
-  catalogue: Catalogue | null;
-  terms: Term[];
   professorRatings: ProfessorRatingsMap | null;
 }) {
   const { i18n } = useLingui();
-  const { loading, data: grades, error } = useCourseGradesPb();
+  const { loading, offerings } = useExploreOfferings();
   const navigate = useNavigate();
 
   const normalizedCode = disciplineCode.toUpperCase();
@@ -152,14 +130,6 @@ export function ExploreDisciplinePage({
 
   // Prefer the canonical code from the data (already uppercased), fall back to the URL param
   const titleCode = discipline?.code ?? normalizedCode;
-
-  const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
-  const termNameById = useMemo(() => buildTermNameById(terms), [terms]);
-
-  const offerings = useMemo(() => {
-    if (!grades) return [];
-    return buildExploreOfferings(grades, titleByCode, termNameById);
-  }, [grades, titleByCode, termNameById]);
 
   const disciplineOfferings = useMemo(
     () => offerings.filter((o) => o.courseCode.split(/\s+/)[0]?.toUpperCase() === normalizedCode),
@@ -198,13 +168,7 @@ export function ExploreDisciplinePage({
           </Box>
         ) : null}
 
-        {error ? (
-          <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs }}>
-            <Text c="red" size="sm">
-              {tr("explore.loadError", { message: error })}
-            </Text>
-          </Box>
-        ) : courseGroups.length === 0 ? (
+        {courseGroups.length === 0 ? (
           <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs }}>
             <Text c="dimmed" size="sm">
               {loading ? null : tr("explore.disciplineNoData")}
