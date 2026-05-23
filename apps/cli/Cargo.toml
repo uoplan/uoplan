@@ -51,3 +51,6 @@ dirs = "5"
 [build-dependencies]
 prost-build = "0.14"
 protox = "0.9"
+
+[lints.clippy]
+pedantic = "warn"

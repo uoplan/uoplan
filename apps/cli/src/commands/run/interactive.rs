@@ -31,12 +31,12 @@ pub fn prompt_course_selection(
         prompt = prompt.item(i, &c.course_code, hint);
     }
     let all_indices: Vec<usize> = (0..courses.len()).collect();
-    let selected_indices: Vec<usize> = match prompt.initial_values(all_indices).interact() {
-        Ok(v) => v,
-        Err(_) => {
-            outro_cancel("Cancelled.")?;
-            return Ok(None);
-        }
+    let selected_indices: Vec<usize> = if let Ok(v) = prompt.initial_values(all_indices).interact()
+    {
+        v
+    } else {
+        outro_cancel("Cancelled.")?;
+        return Ok(None);
     };
 
     Ok(Some(
@@ -48,7 +48,7 @@ pub fn prompt_course_selection(
 }
 
 pub fn prompt_enrol_mode() -> Result<Option<EnrolMode>> {
-    let mode = match select("How would you like to enrol?")
+    let Ok(mode) = select("How would you like to enrol?")
         .item(EnrolMode::Cart, "Add to cart only", "")
         .item(EnrolMode::Now, "Enrol now", "")
         .item(
@@ -57,12 +57,9 @@ pub fn prompt_enrol_mode() -> Result<Option<EnrolMode>> {
             "Schedule enrolment for exact open time",
         )
         .interact()
-    {
-        Ok(v) => v,
-        Err(_) => {
-            outro_cancel("Cancelled.")?;
-            return Ok(None);
-        }
+    else {
+        outro_cancel("Cancelled.")?;
+        return Ok(None);
     };
     Ok(Some(mode))
 }
@@ -71,16 +68,17 @@ pub fn prompt_snipe_time() -> Result<Option<DateTime<Utc>>> {
     let default_year = chrono::Utc::now().with_timezone(&Toronto).year();
     loop {
         let raw: String =
-            match input("Enter snipe time (Toronto local, e.g. 2026-05-26 10:00):").interact() {
-                Ok(v) => v,
-                Err(_) => {
-                    outro_cancel("Cancelled.")?;
-                    return Ok(None);
-                }
+            if let Ok(v) = input("Enter snipe time (Toronto local, e.g. 2026-05-26 10:00):")
+                .interact()
+            {
+                v
+            } else {
+                outro_cancel("Cancelled.")?;
+                return Ok(None);
             };
         match parse_toronto_time(&raw, default_year) {
             Some(dt) => {
-                cliclack::log::info(&format!("Sniping at: {}", format_toronto_time(&dt)))?;
+                cliclack::log::info(format!("Sniping at: {}", format_toronto_time(&dt)))?;
                 return Ok(Some(dt));
             }
             None => {
@@ -114,10 +112,7 @@ pub fn parse_toronto_time(input: &str, default_year: i32) -> Option<DateTime<Utc
         let d: u32 = c.get(3).unwrap().as_str().parse().ok()?;
         let h: u32 = c.get(4).unwrap().as_str().parse().ok()?;
         let mi: u32 = c.get(5).unwrap().as_str().parse().ok()?;
-        let s: u32 = c
-            .get(6)
-            .and_then(|m| m.as_str().parse().ok())
-            .unwrap_or(0);
+        let s: u32 = c.get(6).and_then(|m| m.as_str().parse().ok()).unwrap_or(0);
         let h = apply_ampm(h, c.get(7).map(|m| m.as_str()));
         return to_utc(y, mo, d, h, mi, s);
     }
@@ -132,13 +127,9 @@ pub fn parse_toronto_time(input: &str, default_year: i32) -> Option<DateTime<Utc
         let y: i32 = c
             .get(3)
             .and_then(|m| m.as_str().parse().ok())
-            .map(|y: i32| if y < 100 { 2000 + y } else { y })
-            .unwrap_or(default_year);
+            .map_or(default_year, |y: i32| if y < 100 { 2000 + y } else { y });
         let h: u32 = c.get(4).unwrap().as_str().parse().ok()?;
-        let mi: u32 = c
-            .get(5)
-            .and_then(|m| m.as_str().parse().ok())
-            .unwrap_or(0);
+        let mi: u32 = c.get(5).and_then(|m| m.as_str().parse().ok()).unwrap_or(0);
         let h = apply_ampm(h, c.get(6).map(|m| m.as_str()));
         return to_utc(y, mo, d, h, mi, 0);
     }
@@ -153,13 +144,9 @@ pub fn parse_toronto_time(input: &str, default_year: i32) -> Option<DateTime<Utc
         let y: i32 = c
             .get(3)
             .and_then(|m| m.as_str().parse().ok())
-            .map(|y: i32| if y < 100 { 2000 + y } else { y })
-            .unwrap_or(default_year);
+            .map_or(default_year, |y: i32| if y < 100 { 2000 + y } else { y });
         let h: u32 = c.get(4).unwrap().as_str().parse().ok()?;
-        let mi: u32 = c
-            .get(5)
-            .and_then(|m| m.as_str().parse().ok())
-            .unwrap_or(0);
+        let mi: u32 = c.get(5).and_then(|m| m.as_str().parse().ok()).unwrap_or(0);
         let h = apply_ampm(h, c.get(6).map(|m| m.as_str()));
         return to_utc(y, mo, d, h, mi, 0);
     }
@@ -168,20 +155,12 @@ pub fn parse_toronto_time(input: &str, default_year: i32) -> Option<DateTime<Utc
 }
 
 fn apply_ampm(h: u32, ampm: Option<&str>) -> u32 {
-    match ampm.map(|s| s.to_lowercase()) {
-        Some(s) if s == "pm" => {
-            if h == 12 {
-                12
-            } else {
-                h + 12
-            }
+    match ampm {
+        Some(s) if s.eq_ignore_ascii_case("pm") => {
+            if h == 12 { 12 } else { h + 12 }
         }
-        Some(s) if s == "am" => {
-            if h == 12 {
-                0
-            } else {
-                h
-            }
+        Some(s) if s.eq_ignore_ascii_case("am") => {
+            if h == 12 { 0 } else { h }
         }
         _ => h,
     }

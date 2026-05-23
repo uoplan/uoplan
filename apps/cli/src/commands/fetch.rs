@@ -8,6 +8,6 @@ pub async fn run(url: &str) -> Result<()> {
     let session = get_session().await.ok_or_else(|| anyhow!(NoCookiesError))?;
     let client = PeopleSoftClient::new(session)?;
     let body = client.get(url).await?;
-    println!("{}", body);
+    println!("{body}");
     Ok(())
 }

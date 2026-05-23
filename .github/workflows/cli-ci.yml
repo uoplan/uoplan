@@ -1,0 +1,37 @@
+name: CLI CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/cli/**"
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - "apps/cli/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cli-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - name: Run Clippy
+        working-directory: apps/cli
+        run: cargo clippy -- -D warnings

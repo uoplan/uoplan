@@ -28,12 +28,9 @@ pub async fn interactive() -> Result<()> {
     for t in &terms {
         prompt = prompt.item(t.index, &t.name, &t.career);
     }
-    let idx = match prompt.interact() {
-        Ok(v) => v,
-        Err(_) => {
-            outro_cancel("Cancelled.")?;
-            return Ok(());
-        }
+    let Ok(idx) = prompt.interact() else {
+        outro_cancel("Cancelled.")?;
+        return Ok(());
     };
 
     let chosen = terms.iter().find(|t| t.index == idx).unwrap();
@@ -42,7 +39,7 @@ pub async fn interactive() -> Result<()> {
     let strm = select_term(&client, idx).await?;
     sp.stop("Term selected");
     set_term(&strm, idx, None).await?;
-    outro(&format!("Selected {}", chosen.name))?;
+    outro(format!("Selected {}", chosen.name))?;
     Ok(())
 }
 
@@ -53,7 +50,7 @@ pub async fn list() -> Result<()> {
         return Ok(());
     }
     for t in &terms {
-        log::info(&format!("{} — {}", t.name, t.career))?;
+        log::info(format!("{} — {}", t.name, t.career))?;
     }
     Ok(())
 }

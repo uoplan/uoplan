@@ -71,7 +71,7 @@ enum CartCmd {
 #[tokio::main]
 async fn main() {
     if let Err(e) = run().await {
-        let _ = cliclack::outro_cancel(&format!("{e}"));
+        let _ = cliclack::outro_cancel(format!("{e}"));
         std::process::exit(1);
     }
 }
@@ -79,10 +79,10 @@ async fn main() {
 async fn run() -> Result<()> {
     let cli = Cli::parse();
 
-    let update_handle = if !matches!(cli.command, Cmd::Update) {
-        Some(tokio::spawn(update::check_for_update()))
-    } else {
+    let update_handle = if matches!(cli.command, Cmd::Update) {
         None
+    } else {
+        Some(tokio::spawn(update::check_for_update()))
     };
 
     let result = match cli.command {

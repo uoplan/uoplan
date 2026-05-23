@@ -44,24 +44,20 @@ pub async fn interactive() -> Result<()> {
         for item in &items {
             prompt = prompt.item(item.bufnum, item_label(item), item_hint(item));
         }
-        let selected_bufnums: Vec<i64> = match prompt.required(true).interact() {
-            Ok(v) => v,
-            Err(_) => {
-                outro_cancel("Cancelled.")?;
-                return Ok(());
-            }
+        let selected_bufnums: Vec<i64> = if let Ok(v) = prompt.required(true).interact() {
+            v
+        } else {
+            outro_cancel("Cancelled.")?;
+            return Ok(());
         };
 
-        let action = match select("What would you like to do?")
+        let Ok(action) = select("What would you like to do?")
             .item("enrol", "Enrol", "")
             .item("delete", "Delete from cart", "")
             .interact()
-        {
-            Ok(v) => v,
-            Err(_) => {
-                outro_cancel("Cancelled.")?;
-                return Ok(());
-            }
+        else {
+            outro_cancel("Cancelled.")?;
+            return Ok(());
         };
 
         let action_code = match action {
@@ -94,7 +90,7 @@ pub async fn add(class_number: &str) -> Result<()> {
     intro("uoplan cart add")?;
     let (client, cart_url) = cart_url_from_session().await?;
     let sp = spinner();
-    sp.start(&format!("Adding class {} to cart…", class_number));
+    sp.start(format!("Adding class {class_number} to cart…"));
     add_to_cart(&client, &cart_url, class_number).await?;
     sp.stop("Added");
     outro("Class added to cart.")?;
@@ -118,12 +114,11 @@ pub async fn enrol() -> Result<()> {
     for item in &items {
         prompt = prompt.item(item.bufnum, item_label(item), item_hint(item));
     }
-    let selected_bufnums: Vec<i64> = match prompt.required(true).interact() {
-        Ok(v) => v,
-        Err(_) => {
-            outro_cancel("Cancelled.")?;
-            return Ok(());
-        }
+    let selected_bufnums: Vec<i64> = if let Ok(v) = prompt.required(true).interact() {
+        v
+    } else {
+        outro_cancel("Cancelled.")?;
+        return Ok(());
     };
 
     let sp = spinner();

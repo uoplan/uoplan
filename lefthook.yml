@@ -9,6 +9,6 @@ pre-commit:
     typecheck:
       glob: "**/*.{ts,tsx,mts,cts}"
       run: pnpm typecheck
-    cargo-check:
+    cargo-clippy:
       glob: "apps/cli/**"
-      run: cargo check --manifest-path apps/cli/Cargo.toml
+      run: cargo clippy --manifest-path apps/cli/Cargo.toml -- -D warnings

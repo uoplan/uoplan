@@ -6,7 +6,6 @@ pub struct Term {
     pub index: i64,
     pub name: String,
     pub career: String,
-    pub institution: String,
 }
 
 #[derive(Debug, Clone)]
@@ -24,13 +23,13 @@ pub fn extract_page_state(html: &str) -> PageState {
         .next()
         .and_then(|el| el.value().attr("value"))
         .unwrap_or("")
-        .to_string();
+        .to_owned();
     let ic_state_num = doc
         .select(&icstate_sel)
         .next()
         .and_then(|el| el.value().attr("value"))
         .unwrap_or("")
-        .to_string();
+        .to_owned();
     PageState {
         icsid,
         ic_state_num,
@@ -88,22 +87,6 @@ pub fn build_form_body(action: &str, state: &PageState, extra: &[(&str, &str)]) 
     encode_form(&params)
 }
 
-pub fn build_ajax_body(action: &str, state: &PageState, extra: &[(&str, &str)]) -> String {
-    let mut params = base_pairs(state, action);
-    // Override ICAJAX
-    if let Some(idx) = params.iter().position(|(k, _)| *k == "ICAJAX") {
-        params[idx] = ("ICAJAX", "1");
-    }
-    // Append AJAX extras
-    params.push(("#ICDataLang", "ENG"));
-    params.push(("DERIVED_SSTSNAV_SSTS_MAIN_GOTO$27$", ""));
-    for (k, v) in extra {
-        params.push((*k, *v));
-    }
-    params.push(("DERIVED_SSTSNAV_SSTS_MAIN_GOTO$7$", ""));
-    encode_form(&params)
-}
-
 pub fn build_term_select_body(state: &PageState, term_index: i64) -> String {
     let idx = term_index.to_string();
     let extra = vec![
@@ -122,42 +105,31 @@ pub fn is_term_selection_page(body: &str) -> bool {
 
 pub fn parse_terms_from_html(html: &str) -> Vec<Term> {
     let doc = Html::parse_document(html);
-    let row_sel = Selector::parse(r#"tr[id^='trSSR_DUMMY_RECV1$0_row']"#).unwrap();
+    let row_sel = Selector::parse(r"tr[id^='trSSR_DUMMY_RECV1$0_row']").unwrap();
     let mut out = Vec::new();
     for row in doc.select(&row_sel) {
-        let bufnum_str = match row.value().attr("bufnum") {
-            Some(v) => v,
-            None => continue,
+        let Some(bufnum_str) = row.value().attr("bufnum") else {
+            continue;
         };
-        let bufnum: i64 = match bufnum_str.parse() {
-            Ok(n) => n,
-            Err(_) => continue,
+        let Ok(bufnum) = bufnum_str.parse::<i64>() else {
+            continue;
         };
-        let term_sel =
-            Selector::parse(&format!("[id='TERM_CAR${}']", bufnum)).unwrap();
-        let career_sel = Selector::parse(&format!("[id='CAREER${}']", bufnum)).unwrap();
-        let inst_sel =
-            Selector::parse(&format!("[id='INSTITUTION${}']", bufnum)).unwrap();
+        let term_sel = Selector::parse(&format!("[id='TERM_CAR${bufnum}']")).unwrap();
+        let career_sel = Selector::parse(&format!("[id='CAREER${bufnum}']")).unwrap();
         let name = row
             .select(&term_sel)
             .next()
-            .map(|e| e.text().collect::<String>().trim().to_string())
+            .map(|e| e.text().collect::<String>().trim().to_owned())
             .unwrap_or_default();
         let career = row
             .select(&career_sel)
             .next()
-            .map(|e| e.text().collect::<String>().trim().to_string())
-            .unwrap_or_default();
-        let institution = row
-            .select(&inst_sel)
-            .next()
-            .map(|e| e.text().collect::<String>().trim().to_string())
+            .map(|e| e.text().collect::<String>().trim().to_owned())
             .unwrap_or_default();
         out.push(Term {
             index: bufnum,
             name,
             career,
-            institution,
         });
     }
     out
@@ -167,5 +139,5 @@ pub fn parse_strm_from_html(html: &str) -> Option<String> {
     let re = Regex::new(r"[?&]STRM=(\d{4})").unwrap();
     re.captures(html)
         .and_then(|c| c.get(1))
-        .map(|m| m.as_str().to_string())
+        .map(|m| m.as_str().to_owned())
 }

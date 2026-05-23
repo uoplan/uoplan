@@ -24,6 +24,7 @@ pub async fn snipe(
     let wait_until = target_ms - lead_ms;
 
     if wait_until > now {
+        #[allow(clippy::cast_sign_loss)]
         let total_ms = (wait_until - now) as u64;
         let pb = progress_bar(total_ms).with_download_template();
         pb.start("Waiting for snipe window…");
@@ -40,8 +41,7 @@ pub async fn snipe(
     let sp = spinner();
     sp.start("Firing enrol…");
     let deadline = target_ms + timeout_after_ms;
-    let mut last_errors: Vec<String> = Vec::new();
-    loop {
+    let last_errors = loop {
         let result = submit_cart_action(client, cart_url, bufnums, ACTION_ENROL).await?;
         if result.errors.is_empty() {
             sp.stop("Enrolled!");
@@ -50,12 +50,11 @@ pub async fn snipe(
                 errors: Vec::new(),
             });
         }
-        last_errors = result.errors;
         if Utc::now().timestamp_millis() >= deadline {
-            break;
+            break result.errors;
         }
         tokio::time::sleep(Duration::from_millis(retry_interval_ms)).await;
-    }
+    };
     sp.cancel("Snipe window closed");
     Ok(SnipeResult {
         success: false,

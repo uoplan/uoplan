@@ -45,13 +45,13 @@ pub async fn add_courses_to_cart(
         let parsed = match parse_course_code(&course.course_code) {
             Ok(p) => p,
             Err(e) => {
-                log::error(&format!("{}: {}", course.course_code, e))?;
+                log::error(format!("{}: {e}", course.course_code))?;
                 continue;
             }
         };
 
         let sp = spinner();
-        sp.start(&format!(
+        sp.start(format!(
             "Searching {} {}…",
             parsed.subject, parsed.catalog_nbr
         ));
@@ -62,31 +62,25 @@ pub async fn add_courses_to_cart(
         let class_map = parse_all_class_numbers(&xml);
 
         let mut primary_row_index: Option<i64> = None;
-        for sel in &course.sections {
+        'outer: for sel in &course.sections {
             for r in &results {
                 if let Some(mapping) = class_map.get(&r.class_nbr) {
                     if mapping.component.eq_ignore_ascii_case(&sel.component)
                         && mapping.section.eq_ignore_ascii_case(&sel.section)
                     {
                         primary_row_index = Some(r.row_index);
-                        break;
+                        break 'outer;
                     }
                 }
             }
-            if primary_row_index.is_some() {
-                break;
-            }
         }
 
-        let row_index = match primary_row_index {
-            Some(i) => i,
-            None => {
-                log::error(&format!(
-                    "No matching primary section for {}",
-                    course.course_code
-                ))?;
-                continue;
-            }
+        let Some(row_index) = primary_row_index else {
+            log::error(format!(
+                "No matching primary section for {}",
+                course.course_code
+            ))?;
+            continue;
         };
 
         let sp = spinner();
@@ -98,7 +92,7 @@ pub async fn add_courses_to_cart(
         while is_companion_page(&xml) && !is_waitlist_page(&xml) {
             let page = parse_companion_page(&xml);
             let mut chosen_idx: Option<i64> = None;
-            for sel in &course.sections {
+            'companion: for sel in &course.sections {
                 for opt in &page.options {
                     if opt
                         .section
@@ -110,11 +104,8 @@ pub async fn add_courses_to_cart(
                             .contains(&sel.component.to_uppercase())
                     {
                         chosen_idx = Some(opt.index);
-                        break;
+                        break 'companion;
                     }
-                }
-                if chosen_idx.is_some() {
-                    break;
                 }
             }
             let pick = chosen_idx
@@ -135,10 +126,10 @@ pub async fn add_courses_to_cart(
 
         let (errors, notices) = parse_confirm_messages(&final_xml);
         for n in &notices {
-            log::success(&format!("{} — {}", course.course_code, n))?;
+            log::success(format!("{} — {n}", course.course_code))?;
         }
         for e in &errors {
-            log::error(&format!("{} — {}", course.course_code, e))?;
+            log::error(format!("{} — {e}", course.course_code))?;
         }
     }
     Ok(())
