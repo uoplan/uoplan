@@ -1,17 +1,30 @@
-# @uoplan/cli
+# uoplan CLI
 
-Command-line tool for University of Ottawa students to manage course enrollment directly from the terminal.
+Command-line tool for University of Ottawa students to search courses and enrol directly from the terminal.
+
+## Installation
+
+**macOS / Linux**
+
+```bash
+curl -fsSL https://uoplan.party/install.sh | sh
+```
+
+**Windows**
+
+```powershell
+irm https://uoplan.party/install.ps1 | iex
+```
+
+Or install via Cargo:
+
+```bash
+cargo install uoplan
+```
 
 ## Usage
 
-```bash
-npx @uoplan/cli <command> [options]
 ```
-
-Or install globally:
-
-```bash
-npm install -g @uoplan/cli
 uoplan <command> [options]
 ```
 
@@ -19,13 +32,13 @@ uoplan <command> [options]
 
 ### `login`
 
-Authenticate with your uOttawa Microsoft account via Chrome.
+Authenticate with your uOttawa Microsoft account via a browser.
 
 ```bash
 uoplan login
 ```
 
-Opens a Chrome browser window and captures your session cookies for subsequent commands.
+Opens a Chrome (or Firefox) window via the WebDriver remote debugging protocol, completes the Microsoft OAuth flow, and saves the resulting session cookies to your system keychain.
 
 ### `logout`
 
@@ -45,9 +58,11 @@ uoplan term ls       # List available terms
 uoplan term list     # Same as above
 ```
 
+The selected term is persisted across sessions.
+
 ### `search <course>`
 
-Search for a course and add it to your cart.
+Search for a course and add sections to your cart interactively.
 
 ```bash
 uoplan search CSI2101
@@ -55,15 +70,17 @@ uoplan search CSI2101
 
 ### `cart`
 
-Manage your course shopping cart.
+Manage your enrollment cart.
 
 ```bash
-uoplan cart add <classNumber>   # Add a course by PeopleSoft class number (e.g. 1234)
+uoplan cart                        # View and manage cart interactively
+uoplan cart add <classNumber>      # Add a section by PeopleSoft class number
+uoplan cart enrol                  # Enrol in all selected sections
 ```
 
 ### `enrol`
 
-Interactively select and enrol in courses from your cart.
+Enrol in all sections currently selected in your cart.
 
 ```bash
 uoplan enrol
@@ -85,14 +102,18 @@ Fetch a URL using your stored session cookies and print the response body. Usefu
 uoplan fetch https://uozone2.uottawa.ca/...
 ```
 
-## How it works
+### `update`
 
-`login` launches Chrome via the remote debugging protocol, completes the Microsoft OAuth flow, and saves the resulting session cookies to your system keychain. All subsequent commands attach those cookies to requests against the uOttawa PeopleSoft API.
-
-## Publishing
+Check for and install the latest version.
 
 ```bash
-pnpm --filter @uoplan/cli publish:npm
+uoplan update
 ```
 
-Builds the TypeScript source to `dist/` and publishes the package to npm under the `@uoplan` org with public access.
+The CLI also passively checks for updates in the background on every run and prints a notice if a newer version is available.
+
+## How it works
+
+`login` drives Chrome or Firefox via the WebDriver remote debugging protocol, completes the Microsoft OAuth flow, and persists the resulting session cookies in your OS keychain. Subsequent commands attach those cookies to requests against the uOttawa PeopleSoft API.
+
+`run` decodes a compressed protobuf payload (produced by the web app's URL sharing feature), resolves each course section, and enrols in them sequentially.
