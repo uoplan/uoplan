@@ -1,6 +1,6 @@
 import type { CoursePrereqNode } from "../dataTypes";
 import type { DataCache } from "../dataCache";
-import { normalizeCourseCode } from "../utils/courseUtils";
+import { normalizeCourseCode, getLanguageVariant } from "../utils/courseUtils";
 import type { PrereqContext } from "./types";
 
 export function meetsCoursePrereq(node: CoursePrereqNode, ctx: PrereqContext): boolean {
@@ -26,7 +26,8 @@ export function meetsCoursePrereq(node: CoursePrereqNode, ctx: PrereqContext): b
 function evaluateCourseRequirement(node: CoursePrereqNode, ctx: PrereqContext): boolean {
   if (!node.code) return true;
   const target = normalizeCourseCode(node.code);
-  return ctx.taken.some((c) => c.code === target);
+  const variant = getLanguageVariant(target);
+  return ctx.taken.some((c) => c.code === target || (variant !== null && c.code === variant));
 }
 
 function evaluateNonCourseRequirement(node: CoursePrereqNode, ctx: PrereqContext): boolean {
