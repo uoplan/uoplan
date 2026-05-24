@@ -1,5 +1,6 @@
 import type { Program, ProgramRequirement } from "../dataTypes";
 import type { DataCache } from "../dataCache";
+import { getLanguageVariant } from "../utils/courseUtils";
 import type { RemainingRequirement, RequirementWithStatus } from "./types";
 
 export class RequirementContext {
@@ -26,6 +27,16 @@ export class RequirementContext {
         if (!dryRun) this.pool.delete(canonical);
         const displayCode = this.cache.getCourse(canonical)?.code ?? canonical;
         return { displayCode, norm: canonical };
+      }
+      // Also accept the language variant (English ↔ French equivalence)
+      const variant = getLanguageVariant(canonical);
+      if (variant) {
+        const variantCanonical = this.cache.resolveToCanonical(variant);
+        if (this.pool.has(variantCanonical)) {
+          if (!dryRun) this.pool.delete(variantCanonical);
+          const displayCode = this.cache.getCourse(variantCanonical)?.code ?? variantCanonical;
+          return { displayCode, norm: variantCanonical };
+        }
       }
     }
     return null;

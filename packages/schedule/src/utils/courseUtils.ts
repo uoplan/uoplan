@@ -76,6 +76,29 @@ export function getCourseLevel(code: string): number | null {
 }
 
 /**
+ * Return the language variant of a course code, or null if none exists.
+ * English courses (hundreds digit 1–4) map to French (+ 400) and vice versa.
+ * Bilingual/other courses (hundreds digit 0 or 9) have no variant.
+ *
+ * e.g. "CRM 1301" → "CRM 1701", "CRM 1701" → "CRM 1301", "ESP 1991" → null
+ */
+export function getLanguageVariant(normalizedCode: string): string | null {
+  const parsed = parseCourseCode(normalizedCode);
+  if (!parsed) return null;
+
+  const numMatch = parsed.number.match(/^(\d{4})([A-Z]?)$/);
+  if (!numMatch) return null;
+
+  const n = parseInt(numMatch[1], 10);
+  const suffix = numMatch[2];
+  const hundreds = Math.floor(n / 100) % 10;
+
+  if (hundreds >= 1 && hundreds <= 4) return `${parsed.discipline} ${n + 400}${suffix}`;
+  if (hundreds >= 5 && hundreds <= 8) return `${parsed.discipline} ${n - 400}${suffix}`;
+  return null;
+}
+
+/**
  * Check if a course code is an OPT transfer credit placeholder.
  * These are generated during transcript parsing for "OPT 1XXX" / "OPT 2XXX" etc.
  * e.g., "OPT 1000", "OPT 2001"
