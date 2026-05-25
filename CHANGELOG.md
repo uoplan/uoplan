@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.0.0-beta.21](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.20...uoplan-monorepo-v1.0.0-beta.21) (2026-05-25)
+
+
+### Features
+
+* add tooltip to see full requirement text ([148378c](https://github.com/uoplan/uoplan/commit/148378c473b644a4f785cff9a311731b0bd2207c))
+* compress state ([258f18a](https://github.com/uoplan/uoplan/commit/258f18abcf5e82b9cbfa1d2ad4b7fabcff0fce78))
+* improve theming ([2525b82](https://github.com/uoplan/uoplan/commit/2525b82e5ebd0282ffe5a67aad943536eb8046d9))
+* make encode state smaller ([c08f2ec](https://github.com/uoplan/uoplan/commit/c08f2ec2542d79694456ea0e2f3ffa3d9128a0c8))
+* **schedule:** allow french and english to satisfy pre-reqs interchangably ([692fed0](https://github.com/uoplan/uoplan/commit/692fed062b473a61397b2175154f4e1c43606425))
+
+
+### Bug Fixes
+
+* center copy button on cli modal ([095fa7c](https://github.com/uoplan/uoplan/commit/095fa7c9818a04d7517e5cc82c703111c55acbfc))
+* resolve failing test ([135b4ff](https://github.com/uoplan/uoplan/commit/135b4ff13cae68f40eee8eeb06c39bad70da7209))
+* **scheduler:** raise limits for some course generation ([88a0015](https://github.com/uoplan/uoplan/commit/88a001576a6c49adde749ff2338c0cc76f15ca23))
+
 ## [1.0.0-beta.20](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.19...uoplan-monorepo-v1.0.0-beta.20) (2026-05-23)
 
 
