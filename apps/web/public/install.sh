@@ -70,9 +70,9 @@ fetch_latest_version() {
   local version
 
   if command -v curl > /dev/null 2>&1; then
-    version=$(curl -fsSL "$url" | grep '"tag_name"' | grep '"cli/' | head -1 | sed 's/.*"cli\/\(v[^"]*\)".*/\1/')
+    version=$(curl -fsSL "$url" | grep '"tag_name"' | grep '"uoplan-v' | head -1 | sed 's/.*"uoplan-\(v[^"]*\)".*/\1/')
   elif command -v wget > /dev/null 2>&1; then
-    version=$(wget -qO- "$url" | grep '"tag_name"' | grep '"cli/' | head -1 | sed 's/.*"cli\/\(v[^"]*\)".*/\1/')
+    version=$(wget -qO- "$url" | grep '"tag_name"' | grep '"uoplan-v' | head -1 | sed 's/.*"uoplan-\(v[^"]*\)".*/\1/')
   else
     echo "error: curl or wget is required" >&2
     exit 1
@@ -144,7 +144,7 @@ main() {
   printf "  Install: %s\n\n" "$INSTALL_DIR"
 
   ARCHIVE="uoplan-${TARGET}.tar.gz"
-  URL="https://github.com/${REPO}/releases/download/cli%2F${VERSION}/${ARCHIVE}"
+  URL="https://github.com/${REPO}/releases/download/uoplan-${VERSION}/${ARCHIVE}"
 
   TMPDIR=$(mktemp -d)
   trap 'rm -rf "$TMPDIR"' EXIT
