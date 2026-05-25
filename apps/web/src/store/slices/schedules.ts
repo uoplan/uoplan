@@ -443,6 +443,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       filteredPrereqEligibleCourses,
       constrainedPerRequirement,
       selectedPerRequirement,
+      generationLimitFirstYearCredits,
     } = get();
     if (!cache || !currentSchedule) {
       return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
@@ -557,6 +558,26 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     );
     const alreadyInSchedule = new Set(schedule.enrollments.map((e) => e.courseCode));
 
+    const isFirstYear = (code: string) => {
+      const m = code.match(/\d{4}/);
+      return m ? Number(m[0]) < 2000 : false;
+    };
+    const completedFirstYearCredits = generationLimitFirstYearCredits
+      ? completedCourses.reduce((sum, code) => {
+          if (!isFirstYear(code)) return sum;
+          return sum + (cache.getCourse(code)?.credits ?? 3);
+        }, 0)
+      : 0;
+    const othersFirstYearCredits = generationLimitFirstYearCredits
+      ? others.reduce((sum, e) => {
+          if (!isFirstYear(e.courseCode)) return sum;
+          return sum + (cache.getCourse(e.courseCode)?.credits ?? 3);
+        }, 0)
+      : 0;
+    const remainingFirstYearBudget = generationLimitFirstYearCredits
+      ? 48 - completedFirstYearCredits - othersFirstYearCredits
+      : Infinity;
+
     const prereqEligibleSet = new Set(prereqEligibleCourses);
     const swapConstraints: GenerationConstraints = {
       minStartMinutes: generationMinStartMinutes,
@@ -598,6 +619,8 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       if (alreadyInSchedule.has(code)) continue;
       if (isHonoursProject(code, cache)) continue;
       if (!courseMatchesFilters(code, filters)) continue;
+      if (isFirstYear(code) && (cache.getCourse(code)?.credits ?? 3) > remainingFirstYearBudget)
+        continue;
 
       const isElectiveType = isElectiveRequirementType(poolRequirementType);
       const isGenericElective =

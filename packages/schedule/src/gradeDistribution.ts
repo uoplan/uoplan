@@ -121,6 +121,31 @@ export function courseGpa(schedule: CourseSchedule): number | null {
 }
 
 /**
+ * Fraction of graded students who received A+, as a percentage 0–100.
+ * Returns null if there is no countable mass.
+ */
+export function aPlusPercent(dist: Record<string, number> | null | undefined): number | null {
+  if (!dist || typeof dist !== "object") return null;
+  const aPlus = Number(dist["A+"] ?? 0);
+  let total = 0;
+  for (const [letter, count] of Object.entries(dist)) {
+    if (SKIP_GRADES.has(letter)) continue;
+    const pts = GRADE_POINTS[letter];
+    if (pts === undefined) continue;
+    const n = Number(count);
+    if (!Number.isFinite(n) || n <= 0) continue;
+    total += n;
+  }
+  if (total <= 0) return null;
+  return (aPlus / total) * 100;
+}
+
+/** Course-level A+ percentage from aggregated section distributions. */
+export function courseAPlusPercent(schedule: CourseSchedule): number | null {
+  return aPlusPercent(aggregateCourseDistribution(schedule));
+}
+
+/**
  * Normalizes mixed letter/pass-fail distributions into ordered visualization buckets.
  */
 export function normalizeGradeVizDistribution(

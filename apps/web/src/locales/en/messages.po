@@ -709,10 +709,10 @@ msgid "scheduleCount.compressed.label"
 msgstr "Compressed schedule"
 
 msgid "scheduleCount.preferEasier.description"
-msgstr "When generating, courses with higher historical grade averages are more likely to be picked from each requirement pool."
+msgstr "When generating, courses with a higher historical A+ rate are more likely to be picked from each requirement pool."
 
 msgid "scheduleCount.preferEasier.label"
-msgstr "Prefer easier courses (past grade distributions)"
+msgstr "Prefer easier courses (past A+ rates)"
 
 msgid "scheduleCount.blacklist.label"
 msgstr "Excluded courses"

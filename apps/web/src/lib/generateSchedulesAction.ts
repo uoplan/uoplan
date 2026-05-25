@@ -6,7 +6,7 @@ import { createSeededRng } from "@uoplan/schedule";
 import {
   generateSchedulesWithPinned,
   getValidSectionCombos,
-  courseGpa,
+  courseAPlusPercent,
   analyzeFrenchImmersionProgress,
   frenchImmersionHeuristicPickWeight,
   programTitleIndicatesNursing,
@@ -133,14 +133,15 @@ function buildActiveFilterHints(opts: {
   return hints;
 }
 
-/** Pivot GPA (~B-): higher → boost weight when "prefer easier" is on. */
-const EASIER_GPA_PIVOT = 2.7;
+/** Pivot A+ rate (≈ median): higher → boost weight when "prefer easier" is on. */
+const EASIER_APLUS_PIVOT = 20;
 /**
- * Base for exponential boost: multiplier = BASE^(gpa - pivot).
+ * Base and scale for exponential boost: multiplier = BASE^((aPlus% - pivot) / SCALE).
  * Must be high enough to compete with {@link LEVEL_WEIGHT_BASE} tier penalties,
  * otherwise low-level hard courses still win over higher-level easy electives.
  */
-const EASIER_GPA_BASE = 5.25;
+const EASIER_APLUS_BASE = 5.25;
+const EASIER_APLUS_SCALE = 10;
 
 /** Each level tier is this many times less likely than the one below it. */
 const LEVEL_WEIGHT_BASE = 2;
@@ -191,8 +192,11 @@ function reorderOptionalPoolForGeneration(
     let w = easierMemo.get(code);
     if (w !== undefined) return w;
     const sched = cache.getSchedule(code);
-    const gpa = sched ? courseGpa(sched) : null;
-    w = gpa == null ? 1 : Math.pow(EASIER_GPA_BASE, gpa - EASIER_GPA_PIVOT);
+    const aPlus = sched ? courseAPlusPercent(sched) : null;
+    w =
+      aPlus == null
+        ? 1
+        : Math.pow(EASIER_APLUS_BASE, (aPlus - EASIER_APLUS_PIVOT) / EASIER_APLUS_SCALE);
     easierMemo.set(code, w);
     return w;
   }
@@ -907,8 +911,11 @@ export async function generateSchedulesAction(
       let m = easierMemo.get(code);
       if (m !== undefined) return m;
       const sched = cacheVal.getSchedule(code);
-      const gpa = sched ? courseGpa(sched) : null;
-      m = gpa == null ? 1 : Math.pow(EASIER_GPA_BASE, gpa - EASIER_GPA_PIVOT);
+      const aPlus = sched ? courseAPlusPercent(sched) : null;
+      m =
+        aPlus == null
+          ? 1
+          : Math.pow(EASIER_APLUS_BASE, (aPlus - EASIER_APLUS_PIVOT) / EASIER_APLUS_SCALE);
       easierMemo.set(code, m);
       return m;
     }

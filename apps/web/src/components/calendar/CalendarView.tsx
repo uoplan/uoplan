@@ -1,11 +1,12 @@
 import { useMemo, useCallback } from "react";
-import { ActionIcon, Box, Group, Modal, Text } from "@mantine/core";
+import { ActionIcon, Box, Group, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { AnimatePresence, motion } from "framer-motion";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import type { DataCache } from "@uoplan/schedule";
 import type { GeneratedSchedule } from "@uoplan/schedule";
 import type { ProfessorRatingsMap } from "@uoplan/schedule";
-import { SwapModalContent } from "./SwapModalContent";
+import { SwapPanel } from "./SwapPanel";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useSwapModal } from "../../hooks/useSwapModal";
 import { useScheduleTransition, useWeekIndexTransition } from "../../hooks/useScheduleTransition";
@@ -83,7 +84,7 @@ export function CalendarView({
   // Schedule animation takes priority; week animation fires only when schedule is idle.
   const animationPhase = schedulePhase !== "idle" ? schedulePhase : weekPhase;
 
-  const swap = useSwapModal(getSwapCandidates, cache);
+  const swap = useSwapModal(getSwapCandidates, cache, professorRatings);
 
   const allEvents = useCalendarEvents(displayedSchedule, professorRatings);
 
@@ -143,128 +144,151 @@ export function CalendarView({
         overflow: "hidden",
       }}
     >
+      {!swap.isOpen && (
+        <Box
+          style={{
+            flexShrink: 0,
+            borderBottom: "1px solid #2C2E33",
+            backgroundColor: "#1A1A1C",
+          }}
+        >
+          {weekGroups.length > 0 && (
+            <>
+              {scheduleDateRange && (
+                <Text
+                  size="xs"
+                  c="dimmed"
+                  style={{
+                    textAlign: "center",
+                    padding: "4px 12px 0",
+                  }}
+                >
+                  {formatScheduleRange(scheduleDateRange.start, scheduleDateRange.end)}
+                </Text>
+              )}
+              <Group
+                justify="space-between"
+                align="center"
+                gap={8}
+                style={{ padding: "4px 12px 6px" }}
+              >
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  size="sm"
+                  aria-label="Previous week"
+                  disabled={weekIndex === 0}
+                  onClick={() => setWeekIndex(weekIndex - 1)}
+                >
+                  <IconChevronLeft size={14} />
+                </ActionIcon>
+                <Text size="xs" c="dimmed" style={{ textAlign: "center", flex: 1 }}>
+                  {weekGroups.length > 1
+                    ? `${tr("calendarPage.weekOf", { current: weekIndex + 1, total: weekGroups.length })} · ${formatWeekCount(weekGroups[weekIndex])}`
+                    : formatWeekCount(weekGroups[0])}
+                </Text>
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  size="sm"
+                  aria-label="Next week"
+                  disabled={weekIndex === weekGroups.length - 1}
+                  onClick={() => setWeekIndex(weekIndex + 1)}
+                >
+                  <IconChevronRight size={14} />
+                </ActionIcon>
+              </Group>
+            </>
+          )}
+          {weekGroups.length === 0 && (
+            <div style={{ visibility: "hidden" }}>
+              <Text size="xs" style={{ padding: "4px 12px 0" }}>
+                &nbsp;
+              </Text>
+              <Group
+                justify="space-between"
+                align="center"
+                gap={8}
+                style={{ padding: "4px 12px 6px" }}
+              >
+                <ActionIcon variant="subtle" color="gray" size="sm">
+                  <IconChevronLeft size={14} />
+                </ActionIcon>
+                <Text size="xs">&nbsp;</Text>
+                <ActionIcon variant="subtle" color="gray" size="sm">
+                  <IconChevronRight size={14} />
+                </ActionIcon>
+              </Group>
+            </div>
+          )}
+        </Box>
+      )}
       <Box
         style={{
-          flexShrink: 0,
-          borderBottom: "1px solid #2C2E33",
-          backgroundColor: "#1A1A1C",
+          flex: 1,
+          minHeight: 0,
+          display: "flex",
+          flexDirection: "row",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        {weekGroups.length > 0 && (
-          <>
-            {scheduleDateRange && (
-              <Text
-                size="xs"
-                c="dimmed"
-                style={{
-                  textAlign: "center",
-                  padding: "4px 12px 0",
-                }}
-              >
-                {formatScheduleRange(scheduleDateRange.start, scheduleDateRange.end)}
-              </Text>
-            )}
-            <Group
-              justify="space-between"
-              align="center"
-              gap={8}
-              style={{ padding: "4px 12px 6px" }}
+        <AnimatePresence mode="wait" initial={false}>
+          {swap.isOpen && swap.modalState ? (
+            <motion.div
+              key="swap"
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 24 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              style={{ display: "flex", flex: 1, minWidth: 0, minHeight: 0 }}
             >
-              <ActionIcon
-                variant="subtle"
-                color="gray"
-                size="sm"
-                aria-label="Previous week"
-                disabled={weekIndex === 0}
-                onClick={() => setWeekIndex(weekIndex - 1)}
-              >
-                <IconChevronLeft size={14} />
-              </ActionIcon>
-              <Text size="xs" c="dimmed" style={{ textAlign: "center", flex: 1 }}>
-                {weekGroups.length > 1
-                  ? `${tr("calendarPage.weekOf", { current: weekIndex + 1, total: weekGroups.length })} · ${formatWeekCount(weekGroups[weekIndex])}`
-                  : formatWeekCount(weekGroups[0])}
-              </Text>
-              <ActionIcon
-                variant="subtle"
-                color="gray"
-                size="sm"
-                aria-label="Next week"
-                disabled={weekIndex === weekGroups.length - 1}
-                onClick={() => setWeekIndex(weekIndex + 1)}
-              >
-                <IconChevronRight size={14} />
-              </ActionIcon>
-            </Group>
-          </>
-        )}
-        {weekGroups.length === 0 && (
-          <div style={{ visibility: "hidden" }}>
-            <Text size="xs" style={{ padding: "4px 12px 0" }}>
-              &nbsp;
-            </Text>
-            <Group
-              justify="space-between"
-              align="center"
-              gap={8}
-              style={{ padding: "4px 12px 6px" }}
+              <SwapPanel
+                schedule={schedule}
+                modalState={swap.modalState}
+                result={swap.result}
+                loading={swap.loading}
+                candidateOptions={swap.candidateOptions}
+                query={swap.query}
+                setQuery={swap.setQuery}
+                closeModal={swap.closeModal}
+                cache={cache}
+                professorRatings={professorRatings}
+                onSwap={onSwap}
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="calendar"
+              initial={{ opacity: 0, x: -24 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -24 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              style={{ display: "flex", flex: 1, minWidth: 0, minHeight: 0 }}
             >
-              <ActionIcon variant="subtle" color="gray" size="sm">
-                <IconChevronLeft size={14} />
-              </ActionIcon>
-              <Text size="xs">&nbsp;</Text>
-              <ActionIcon variant="subtle" color="gray" size="sm">
-                <IconChevronRight size={14} />
-              </ActionIcon>
-            </Group>
-          </div>
-        )}
+              {!isMobile && (
+                <WeekPreviewPanel
+                  schedule={schedule}
+                  weekGroups={weekGroups}
+                  weekIndex={weekIndex}
+                  setWeekIndex={setWeekIndex}
+                  colorMap={colorMap}
+                />
+              )}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <WeekCalendar
+                  events={events}
+                  cache={cache}
+                  colorMap={colorMap}
+                  onEventClick={handleEventClick}
+                  showWeekends={showWeekends ?? false}
+                  animationPhase={animationPhase}
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </Box>
-      <Box style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "row" }}>
-        {!isMobile && (
-          <WeekPreviewPanel
-            schedule={schedule}
-            weekGroups={weekGroups}
-            weekIndex={weekIndex}
-            setWeekIndex={setWeekIndex}
-            colorMap={colorMap}
-          />
-        )}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <WeekCalendar
-            events={events}
-            cache={cache}
-            colorMap={colorMap}
-            onEventClick={handleEventClick}
-            showWeekends={showWeekends ?? false}
-            animationPhase={animationPhase}
-          />
-        </div>
-      </Box>
-
-      <Modal
-        opened={swap.isOpen}
-        onClose={swap.closeModal}
-        title={swap.result?.requirementTitle}
-        size="lg"
-        centered
-      >
-        {swap.modalState && (
-          <SwapModalContent
-            schedule={schedule}
-            modalState={swap.modalState}
-            result={swap.result}
-            loading={swap.loading}
-            candidateOptions={swap.candidateOptions}
-            query={swap.query}
-            setQuery={swap.setQuery}
-            closeModal={swap.closeModal}
-            cache={cache}
-            professorRatings={professorRatings}
-            onSwap={onSwap}
-          />
-        )}
-      </Modal>
     </Box>
   );
 }
