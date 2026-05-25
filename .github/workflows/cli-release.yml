@@ -4,6 +4,16 @@ on:
   push:
     tags:
       - "uoplan-v*"
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to release (e.g. uoplan-v0.4.2)"
+        required: true
 
 permissions:
   contents: write
@@ -35,6 +45,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -90,13 +102,16 @@ jobs:
           merge-multiple: true
 
       - name: Extract version from tag
-        run: echo "VERSION=${GITHUB_REF_NAME#uoplan-}" >> $GITHUB_ENV
+        run: |
+          TAG="${{ inputs.tag || github.ref_name }}"
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "VERSION=${TAG#uoplan-}" >> $GITHUB_ENV
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           name: uoplan CLI ${{ env.VERSION }}
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ env.TAG }}
           files: artifacts/*
           generate_release_notes: true
           draft: false

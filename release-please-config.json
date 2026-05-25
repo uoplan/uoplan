@@ -9,7 +9,7 @@
     },
     "apps/cli": {
       "release-type": "rust",
-      "tag-name": "cli/v${version}"
+      "tag-name": "uoplan-v${version}"
     }
   }
 }

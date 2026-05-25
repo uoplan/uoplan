@@ -11,7 +11,20 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    outputs:
+      cli_release_created: ${{ steps.release.outputs['apps/cli--release_created'] }}
+      cli_tag_name: ${{ steps.release.outputs['apps/cli--tag_name'] }}
     steps:
       - uses: googleapis/release-please-action@v4
+        id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+
+  cli-release:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.cli_release_created == 'true' }}
+    uses: ./.github/workflows/cli-release.yml
+    with:
+      tag: ${{ needs.release-please.outputs.cli_tag_name }}
+    permissions:
+      contents: write
