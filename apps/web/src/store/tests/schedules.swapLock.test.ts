@@ -156,6 +156,47 @@ describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwa
     expect(useAppStore.getState().constrainedPerRequirement).toEqual({});
   });
 
+  it("locks to the most restrictive requirement when multiple requirements match", () => {
+    mockCalendarVariant = "advanced";
+    const specificTree: RequirementWithStatus[] = [
+      {
+        type: "course",
+        title: "Specific Course",
+        complete: false,
+        satisfiedBy: [],
+        creditsNeeded: 3,
+        requirementId: "req-specific",
+        candidateCourses: ["CSI 2132"],
+      },
+      {
+        type: "free_elective",
+        title: "Free Elective",
+        complete: false,
+        satisfiedBy: [],
+        creditsNeeded: 9,
+        requirementId: "req-free",
+        candidateCourses: ["CSI 2132", "MAT 1341", "PHI 1101"],
+      },
+    ];
+    useAppStore.setState({
+      currentSchedule: makeSchedule("CSI 2132"),
+      requirementTreeWithStatus: specificTree,
+      remainingRequirements: [
+        { ...makeRemainingReq("req-specific", ["CSI 2132"]), type: "course", creditsNeeded: 3 },
+        {
+          ...makeRemainingReq("req-free", ["CSI 2132", "MAT 1341", "PHI 1101"]),
+          type: "free_elective",
+          creditsNeeded: 9,
+        },
+      ],
+    });
+
+    useAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
+    const state = useAppStore.getState().constrainedPerRequirement;
+    expect(state["req-specific"]).toEqual(["CSI 2132"]);
+    expect(state["req-free"]).toBeUndefined();
+  });
+
   it("does not append a second alias for the same normalized course", () => {
     mockCalendarVariant = "advanced";
     useAppStore.setState({
