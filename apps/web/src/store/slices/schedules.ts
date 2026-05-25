@@ -201,7 +201,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       : null;
     await withScheduleGenerating(set, async () => {
       const newSeed = state.currentSeed - 1;
-      set({ currentSeed: newSeed, currentSwaps: [] });
+      set({ currentSeed: newSeed, currentSwaps: [], calendarWeekIndex: null });
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
       if (result) {
@@ -223,7 +223,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     await withScheduleGenerating(set, async () => {
       const baseSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
       const newSeed = nextSeed(state.firstSeed, baseSeed);
-      set({ currentSeed: newSeed, currentSwaps: [] });
+      set({ currentSeed: newSeed, currentSwaps: [], calendarWeekIndex: null });
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
       if (result) {
