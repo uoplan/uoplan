@@ -1,5 +1,6 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
+import type { RequirementWithStatus } from "@uoplan/schedule";
 import { getEffectiveSchedule, generateRandomSeed } from "@uoplan/schedule";
 import {
   getValidSectionCombos,
@@ -27,6 +28,8 @@ import {
 import {
   appendCourseDedupedByNorm,
   resolveRequirementIdsForScheduleCourse,
+  applyOptionSelections,
+  collectRequirementIdsWithCandidateCourse,
 } from "../../components/requirements/requirementUtils";
 import { compareReqPreference, type AutoAssignReqMeta } from "../requirementCompute/autoAssign";
 import { isAdvancedPlannerActive, isBasicPlannerActive } from "../../lib/calendarRoute";
@@ -444,6 +447,8 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       constrainedPerRequirement,
       selectedPerRequirement,
       generationLimitFirstYearCredits,
+      requirementTreeWithStatus,
+      selectedOptionsPerRequirement,
     } = get();
     if (!cache || !currentSchedule) {
       return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
@@ -523,21 +528,61 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     const candidateSet = new Set<string>();
     let poolRequirementType: string | undefined;
     let requirementTitle: string | undefined;
+
+    function findReqNodeById(
+      nodes: RequirementWithStatus[],
+      id: string,
+    ): RequirementWithStatus | null {
+      for (const node of nodes) {
+        if (node.requirementId === id) return node;
+        if (node.options?.length) {
+          const found = findReqNodeById(node.options, id);
+          if (found) return found;
+        }
+      }
+      return null;
+    }
+
     if (poolId) {
+      // Check remaining requirements first; if already satisfied (complete), fall back to the full tree
       const req = remainingRequirements.find((r) => r.requirementId === poolId);
       if (req?.candidateCourses?.length) {
         poolRequirementType = req.type;
         requirementTitle = req.title;
         for (const c of req.candidateCourses) candidateSet.add(c);
+      } else {
+        const node = findReqNodeById(requirementTreeWithStatus, poolId);
+        if (node?.candidateCourses?.length) {
+          poolRequirementType = node.type;
+          requirementTitle = node.title;
+          for (const c of node.candidateCourses) candidateSet.add(c);
+        }
       }
     }
     if (candidateSet.size === 0) {
       const oldCodeNorm = normalizeCourseCode(oldCode);
+      // Search remaining requirements
       for (const req of remainingRequirements) {
         if (!req.candidateCourses?.length) continue;
         const hasOld = req.candidateCourses.some((c) => normalizeCourseCode(c) === oldCodeNorm);
         if (hasOld) {
           for (const c of req.candidateCourses) candidateSet.add(c);
+        }
+      }
+      // Also search the full tree (includes completed requirements)
+      if (candidateSet.size === 0) {
+        const flattened = applyOptionSelections(
+          requirementTreeWithStatus,
+          selectedOptionsPerRequirement,
+        );
+        const reqIds = collectRequirementIdsWithCandidateCourse(flattened, oldCodeNorm);
+        for (const reqId of reqIds) {
+          const node = findReqNodeById(flattened, reqId);
+          if (node?.candidateCourses?.length) {
+            if (!poolRequirementType) poolRequirementType = node.type;
+            if (!requirementTitle) requirementTitle = node.title;
+            for (const c of node.candidateCourses) candidateSet.add(c);
+          }
         }
       }
     }
