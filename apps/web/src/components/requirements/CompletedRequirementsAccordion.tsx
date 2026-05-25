@@ -1,5 +1,5 @@
 import { useState, type MouseEvent } from "react";
-import { Paper, Group, Text, Badge, Collapse, Stack, Box } from "@mantine/core";
+import { Paper, Group, Text, Badge, Collapse, Stack, Box, Tooltip } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import type { CompletedRequirementItem } from "@uoplan/schedule";
 
@@ -59,9 +59,18 @@ export function CompletedRequirementsAccordion({
               }}
             >
               <Group justify="space-between" wrap="nowrap" align="center">
-                <Text size="sm" lineClamp={2} style={{ flex: 1 }}>
-                  {item.title}
-                </Text>
+                <Tooltip
+                  label={item.title}
+                  multiline
+                  maw={320}
+                  withArrow
+                  color="dark"
+                  disabled={!item.title}
+                >
+                  <Text size="sm" lineClamp={2} style={{ flex: 1 }}>
+                    {item.title}
+                  </Text>
+                </Tooltip>
                 <Group gap="xs" wrap="nowrap" align="center">
                   <Text size="xs" c="dimmed">
                     {item.satisfiedBy.sort().join(", ")}
