@@ -37,6 +37,136 @@ import { flushPersistedAppState } from "../../lib/persistAppState";
 import { nextSeed, noteLowestVisitedSeed, repairSeedPosition } from "../../lib/seedNavigation";
 import type { GeneratedSchedule } from "@uoplan/schedule";
 
+function tryApplyOneSwap(
+  schedule: GeneratedSchedule,
+  enrollmentIndex: number,
+  newCourseCode: string,
+  poolMap: Record<string, string>,
+  colorMap: Record<string, number>,
+  chosenCourseToRequirementId: Record<string, string>,
+  state: AppStore,
+): {
+  schedule: GeneratedSchedule;
+  poolMap: Record<string, string>;
+  colorMap: Record<string, number>;
+} | null {
+  const {
+    cache,
+    generationMinStartMinutes,
+    generationMaxEndMinutes,
+    generationAllowedDays,
+    generationMinProfessorRating,
+    professorRatings,
+    includeClosedComponents,
+    virtualSectionsOnly,
+    remainingRequirements,
+    constrainedPerRequirement,
+    selectedPerRequirement,
+  } = state;
+
+  if (!cache) return null;
+
+  const oldEnrollment = schedule.enrollments[enrollmentIndex];
+  if (!oldEnrollment) return null;
+
+  const oldCode = oldEnrollment.courseCode;
+
+  const constraints: GenerationConstraints = {
+    minStartMinutes: generationMinStartMinutes,
+    maxEndMinutes: generationMaxEndMinutes,
+    allowedDays: generationAllowedDays,
+    minProfessorRating: generationMinProfessorRating ?? undefined,
+    professorRatings: professorRatings ?? undefined,
+  };
+
+  const explicitExemptNormalized = new Set<string>();
+  for (const codes of Object.values(constrainedPerRequirement)) {
+    for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
+  }
+  for (const codes of Object.values(selectedPerRequirement)) {
+    for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
+  }
+
+  const reqId = poolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
+  const reqType = remainingRequirements.find((r) => r.requirementId === reqId)?.type;
+  const virtualOnly = isBasicPlannerActive()
+    ? virtualSectionsOnly
+    : virtualScheduleFilterApplies(
+        virtualSectionsOnly,
+        reqType,
+        newCourseCode,
+        explicitExemptNormalized,
+      );
+
+  const newScheduleData = getEffectiveSchedule(
+    cache,
+    newCourseCode,
+    includeClosedComponents,
+    virtualOnly,
+  );
+  if (!newScheduleData) return null;
+
+  const combos = getValidSectionCombos(newScheduleData, constraints);
+  const others = schedule.enrollments.filter((_, i) => i !== enrollmentIndex);
+
+  for (const combo of combos) {
+    const candidate = getEnrollmentsForCourse(newScheduleData, combo);
+    if (!others.some((e) => enrollmentsOverlap(e, candidate))) {
+      const newEnrollments = [...schedule.enrollments];
+      newEnrollments[enrollmentIndex] = candidate;
+
+      const poolId = poolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
+      const nextPoolMap = poolId != null ? { ...poolMap, [newCourseCode]: poolId } : poolMap;
+
+      const oldColorIdx = colorMap[oldCode];
+      const { [oldCode]: _, ...mapWithoutOld } = colorMap;
+      const nextColorMap =
+        oldColorIdx !== undefined
+          ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
+          : mapWithoutOld;
+
+      return {
+        schedule: { enrollments: newEnrollments },
+        poolMap: nextPoolMap,
+        colorMap: nextColorMap,
+      };
+    }
+  }
+
+  return null;
+}
+
+function applySwapsToResult(
+  result: ScheduleGenerationResult,
+  swaps: Array<{ enrollmentIndex: number; courseCode: string }>,
+  state: AppStore,
+): ScheduleGenerationResult {
+  if (swaps.length === 0 || !result.currentSchedule) return result;
+
+  let currentSchedule = result.currentSchedule;
+  let currentPoolMap = result.currentPoolMap;
+  let currentColorMap = result.currentColorMap;
+
+  for (const swap of swaps) {
+    const applied = tryApplyOneSwap(
+      currentSchedule,
+      swap.enrollmentIndex,
+      swap.courseCode,
+      currentPoolMap,
+      currentColorMap,
+      result.chosenCourseToRequirementId,
+      state,
+    );
+    if (applied) {
+      currentSchedule = applied.schedule;
+      currentPoolMap = applied.poolMap;
+      currentColorMap = applied.colorMap;
+    }
+  }
+
+  return { ...result, currentSchedule, currentPoolMap, currentColorMap };
+}
+
 function scheduleFingerprint(schedule: GeneratedSchedule): string {
   return schedule.enrollments
     .map((e) => e.courseCode)
@@ -113,6 +243,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     await withScheduleGenerating(set, async () => {
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const state = get();
+      const swapsToApply = state.currentSwaps;
       const repairedSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
       const isFirstGen = repairedSeed === 0;
       const effectiveState = isFirstGen
@@ -120,10 +251,11 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         : { ...state, currentSeed: repairedSeed };
       const result = await generateSchedulesAction(effectiveState);
       if (result) {
+        const resultWithSwaps = applySwapsToResult(result, swapsToApply, get());
         applyScheduleGenerationResult(
           set,
           get,
-          result,
+          resultWithSwaps,
           isFirstGen ? state.firstSeed : repairedSeed,
         );
       }
@@ -135,6 +267,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     await withScheduleGenerating(set, async () => {
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const state = get();
+      const swapsToApply = state.currentSwaps;
       const repairedSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
       const isFirstGen = repairedSeed === 0;
       const effectiveState = isFirstGen
@@ -142,10 +275,11 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         : { ...state, currentSeed: repairedSeed };
       const result = await generateSchedulesAction(effectiveState);
       if (result) {
+        const resultWithSwaps = applySwapsToResult(result, swapsToApply, get());
         applyScheduleGenerationResult(
           set,
           get,
-          result,
+          resultWithSwaps,
           isFirstGen ? state.firstSeed : repairedSeed,
         );
       }
@@ -161,6 +295,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         currentPoolMap: {},
         currentColorMap: {},
         currentSwaps: [],
+        swapsPerSeed: {},
         generationError: null,
       };
     }),
@@ -181,6 +316,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       currentPoolMap: {},
       currentColorMap: {},
       currentSwaps: [],
+      swapsPerSeed: {},
       swapPool: [],
       chosenCourseToRequirementId: {},
       generationError: null,
@@ -205,15 +341,26 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       : null;
     await withScheduleGenerating(set, async () => {
       const newSeed = state.currentSeed - 1;
-      set({ currentSeed: newSeed, currentSwaps: [], calendarWeekIndex: null });
+      const updatedSwapsPerSeed = {
+        ...state.swapsPerSeed,
+        [state.currentSeed]: state.currentSwaps,
+      };
+      const newSwaps = updatedSwapsPerSeed[newSeed] ?? [];
+      set({
+        currentSeed: newSeed,
+        currentSwaps: newSwaps,
+        swapsPerSeed: updatedSwapsPerSeed,
+        calendarWeekIndex: null,
+      });
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
       if (result) {
+        const resultWithSwaps = applySwapsToResult(result, newSwaps, get());
         const noVariety =
           prevFingerprint !== null &&
-          result.currentSchedule !== null &&
-          scheduleFingerprint(result.currentSchedule) === prevFingerprint;
-        set({ ...result, currentSeed: newSeed, scheduleNoVariety: noVariety });
+          resultWithSwaps.currentSchedule !== null &&
+          scheduleFingerprint(resultWithSwaps.currentSchedule) === prevFingerprint;
+        set({ ...resultWithSwaps, currentSeed: newSeed, scheduleNoVariety: noVariety });
       }
     });
   },
@@ -227,15 +374,26 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     await withScheduleGenerating(set, async () => {
       const baseSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
       const newSeed = nextSeed(state.firstSeed, baseSeed);
-      set({ currentSeed: newSeed, currentSwaps: [], calendarWeekIndex: null });
+      const updatedSwapsPerSeed = {
+        ...state.swapsPerSeed,
+        [state.currentSeed]: state.currentSwaps,
+      };
+      const newSwaps = updatedSwapsPerSeed[newSeed] ?? [];
+      set({
+        currentSeed: newSeed,
+        currentSwaps: newSwaps,
+        swapsPerSeed: updatedSwapsPerSeed,
+        calendarWeekIndex: null,
+      });
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
       if (result) {
-        applyScheduleGenerationResult(set, get, result, newSeed);
+        const resultWithSwaps = applySwapsToResult(result, newSwaps, get());
+        applyScheduleGenerationResult(set, get, resultWithSwaps, newSeed);
         if (
           prevFingerprint !== null &&
-          result.currentSchedule !== null &&
-          scheduleFingerprint(result.currentSchedule) === prevFingerprint
+          resultWithSwaps.currentSchedule !== null &&
+          scheduleFingerprint(resultWithSwaps.currentSchedule) === prevFingerprint
         ) {
           set({ scheduleNoVariety: true });
         }
@@ -255,6 +413,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         currentSeed: newFirstSeed,
         lowestVisitedSeed: newFirstSeed,
         currentSwaps: [],
+        swapsPerSeed: {},
       });
       const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const result = await generateSchedulesAction({
@@ -371,10 +530,15 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
             ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
             : mapWithoutOld;
 
+        const newCurrentSwaps = [
+          ...get().currentSwaps,
+          { enrollmentIndex, courseCode: newCourseCode },
+        ];
         set({
           currentSchedule: validSchedules[0],
           currentColorMap: nextColorMap,
-          currentSwaps: [...get().currentSwaps, { enrollmentIndex, courseCode: newCourseCode }],
+          currentSwaps: newCurrentSwaps,
+          swapsPerSeed: { ...get().swapsPerSeed, [get().currentSeed]: newCurrentSwaps },
         });
       }
       return;
@@ -401,11 +565,16 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
             ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
             : mapWithoutOld;
 
+        const newCurrentSwaps = [
+          ...get().currentSwaps,
+          { enrollmentIndex, courseCode: newCourseCode },
+        ];
         set({
           currentSchedule: { enrollments: newEnrollments },
           currentPoolMap: nextPoolMap,
           currentColorMap: nextColorMap,
-          currentSwaps: [...get().currentSwaps, { enrollmentIndex, courseCode: newCourseCode }],
+          currentSwaps: newCurrentSwaps,
+          swapsPerSeed: { ...get().swapsPerSeed, [get().currentSeed]: newCurrentSwaps },
         });
         return;
       }
@@ -413,11 +582,13 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
   },
 
   undoLastSwap: () => {
-    const { currentSwaps } = get();
+    const { currentSwaps, currentSeed, swapsPerSeed } = get();
     if (currentSwaps.length === 0) return;
-    // Remove the last swap and regenerate with original seed to get base schedule
-    set({ currentSwaps: currentSwaps.slice(0, -1) });
-    // Regenerate to get clean schedule, then re-apply remaining swaps
+    const newSwaps = currentSwaps.slice(0, -1);
+    set({
+      currentSwaps: newSwaps,
+      swapsPerSeed: { ...swapsPerSeed, [currentSeed]: newSwaps },
+    });
     void get().generateSchedules();
   },
 
@@ -872,6 +1043,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     set({
       currentSchedule: schedule,
       currentSwaps: [],
+      swapsPerSeed: {},
       currentColorMap: colorMap,
       generationError: null,
     });

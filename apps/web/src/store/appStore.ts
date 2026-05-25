@@ -73,6 +73,7 @@ export const useAppStore = create<AppStore>()((...a) => {
     generationError: null,
     unassignedCompletedCourses: [],
     currentSwaps: [],
+    swapsPerSeed: {},
     firstSeed: generateRandomSeed(),
     currentSeed: 0, // Will be set to firstSeed when first generated
     lowestVisitedSeed: null,

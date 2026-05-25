@@ -86,6 +86,8 @@ export interface AppState {
   unassignedCompletedCourses: string[];
   /** Swaps applied to current schedule, indexed by enrollment position. */
   currentSwaps: Array<{ enrollmentIndex: number; courseCode: string }>;
+  /** Per-seed swap history; preserved when navigating prev/next, cleared on randomize. */
+  swapsPerSeed: Record<number, Array<{ enrollmentIndex: number; courseCode: string }>>;
   firstSeed: number;
   currentSeed: number;
   /** Earliest seed the user has generated at this session; drives Previous availability. */
