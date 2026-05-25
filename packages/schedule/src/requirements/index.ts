@@ -35,21 +35,20 @@ export function runRequirementPass(
 
 export function collectCompletedRequirements(
   tree: RequirementWithStatus[],
-  parentComplete = false,
 ): CompletedRequirementItem[] {
   const out: CompletedRequirementItem[] = [];
   for (const node of tree) {
     const title = node.title ?? node.code ?? `${node.type} requirement`;
     if (node.complete) {
-      if (!parentComplete && node.satisfiedBy.length > 0) {
+      if (node.satisfiedBy.length > 0) {
         out.push({ title, satisfiedBy: node.satisfiedBy });
       }
       if (node.options?.length) {
-        out.push(...collectCompletedRequirements(node.options, true));
+        out.push(...collectCompletedRequirements(node.options));
       }
     } else {
       if (node.options?.length) {
-        out.push(...collectCompletedRequirements(node.options, false));
+        out.push(...collectCompletedRequirements(node.options));
       }
     }
   }

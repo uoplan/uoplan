@@ -7,7 +7,18 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from "react";
-import { Stack, MultiSelect, Text, Paper, Badge, Group, Box, Collapse, Radio } from "@mantine/core";
+import {
+  Stack,
+  MultiSelect,
+  Text,
+  Paper,
+  Badge,
+  Group,
+  Box,
+  Collapse,
+  Radio,
+  Tooltip,
+} from "@mantine/core";
 import type { PaperProps } from "@mantine/core";
 import { IconCheck, IconChevronDown, IconX, IconChartCohort } from "@tabler/icons-react";
 import type { ComboboxItem } from "@mantine/core";
@@ -491,9 +502,11 @@ export const RequirementNode = memo(
           }}
         >
           <Group gap="xs" wrap="nowrap" align="center">
-            <Text size="sm" c="dimmed" lineClamp={1} style={TITLE_FLEX}>
-              {title}
-            </Text>
+            <Tooltip label={title} multiline maw={320} withArrow color="dark" disabled={!title}>
+              <Text size="sm" c="dimmed" lineClamp={1} style={TITLE_FLEX}>
+                {title}
+              </Text>
+            </Tooltip>
             <Text size="xs" c="dimmed" style={{ minWidth: 0 }}>
               {satisfiedByDisplayUnique.sort().join(", ")}
             </Text>
@@ -1027,9 +1040,11 @@ export const RequirementNode = memo(
       ) : null;
 
     const leafPrimaryText = !optionsStepHideCardTitle ? (
-      <Text fw={500} size="sm" lh={1.3} lineClamp={2} style={{ minWidth: 0, flex: 1 }}>
-        {label}
-      </Text>
+      <Tooltip label={label} multiline maw={320} withArrow color="dark" disabled={!label}>
+        <Text fw={500} size="sm" lh={1.3} lineClamp={2} style={{ minWidth: 0, flex: 1 }}>
+          {label}
+        </Text>
+      </Tooltip>
     ) : (
       (() => {
         const line = getOptionSecondarySummaryLine(node);
@@ -1136,9 +1151,11 @@ export const RequirementNode = memo(
                   }}
                 />
               )}
-              <Text fw={500} size="sm" lh={1.3} lineClamp={2} style={{ minWidth: 0 }}>
-                {label}
-              </Text>
+              <Tooltip label={label} multiline maw={320} withArrow color="dark" disabled={!label}>
+                <Text fw={500} size="sm" lh={1.3} lineClamp={2} style={{ minWidth: 0 }}>
+                  {label}
+                </Text>
+              </Tooltip>
             </Group>
             {leafBadgeRow}
           </Group>
