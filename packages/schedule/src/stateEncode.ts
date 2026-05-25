@@ -1,3 +1,4 @@
+import { deflateSync, inflateSync } from "fflate";
 import type { Program, DayOfWeek as SchemaDayOfWeek } from "./dataTypes";
 import type { CourseLevelBucket, CourseLanguageBucket } from "./courseFilters";
 import type { RemainingRequirement, RequirementWithStatus } from "./requirements";
@@ -478,9 +479,10 @@ export function decodeState(
 }
 
 function bytesToBase64(bytes: Uint8Array): string {
+  const compressed = deflateSync(bytes, { level: 6 });
   let binary = "";
-  for (let i = 0; i < bytes.length; i++) {
-    binary += String.fromCharCode(bytes[i]);
+  for (let i = 0; i < compressed.length; i++) {
+    binary += String.fromCharCode(compressed[i]);
   }
   return btoa(binary);
 }
@@ -492,7 +494,11 @@ function base64ToBytes(base64: string): Uint8Array | null {
     for (let i = 0; i < binary.length; i++) {
       bytes[i] = binary.charCodeAt(i);
     }
-    return bytes;
+    try {
+      return inflateSync(bytes);
+    } catch {
+      return bytes;
+    }
   } catch {
     return null;
   }
