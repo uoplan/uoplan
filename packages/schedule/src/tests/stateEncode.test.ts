@@ -37,6 +37,7 @@ const catalogue: CatalogueLike = {
 const indices: Indices = {
   courses: ["CSI 2110", "MAT 1320", "PHY 1122"],
   programs: ["undergrad/bsc-computer-science", "undergrad/ba-english"],
+  disciplines: ["CSI", "MAT", "PHY", "CEG"],
 };
 
 function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {

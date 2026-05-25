@@ -31,7 +31,7 @@ describe("flushPersistedAppState", () => {
       firstSeed: 42,
       currentSeed: 43,
       catalogue: { courses: [], programs: [] },
-      indices: { courses: [], programs: [] },
+      indices: { courses: [], programs: [], disciplines: [] },
     });
 
     flushPersistedAppState();

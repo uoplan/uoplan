@@ -391,7 +391,7 @@ async function main(): Promise<void> {
     }).finish(),
   );
 
-  const indices = await readJson<{ courses: string[]; programs: string[] }>(
+  const indices = await readJson<{ courses: string[]; programs: string[]; disciplines?: string[] }>(
     path.join(SCRAPER_DATA_DIR, "indices.json"),
   );
   await writePb(
@@ -399,6 +399,7 @@ async function main(): Promise<void> {
     DataProto.Indices.encode({
       courses: indices.courses ?? [],
       programs: indices.programs ?? [],
+      disciplines: indices.disciplines ?? [],
     }).finish(),
   );
 

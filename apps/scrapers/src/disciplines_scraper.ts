@@ -74,9 +74,9 @@ async function main(): Promise<void> {
     throw new Error("No disciplines were parsed from the uOttawa courses page");
   }
 
-  const outPath = path.join(SCRAPER_DATA_DIR, "disciplines.json");
+  const disciplinesPath = path.join(SCRAPER_DATA_DIR, "disciplines.json");
   await fs.writeFile(
-    outPath,
+    disciplinesPath,
     JSON.stringify(
       {
         sources: [DISCIPLINES_URL_EN, DISCIPLINES_URL_FR],
@@ -88,7 +88,32 @@ async function main(): Promise<void> {
     ),
     "utf8",
   );
-  console.log(`Wrote ${disciplines.length} disciplines to ${outPath}`);
+  console.log(`Wrote ${disciplines.length} disciplines to ${disciplinesPath}`);
+
+  const indicesPath = path.join(SCRAPER_DATA_DIR, "indices.json");
+  let indices: Record<string, unknown> = {};
+  try {
+    indices = JSON.parse(await fs.readFile(indicesPath, "utf-8")) as Record<string, unknown>;
+  } catch {
+    // Missing or unreadable — will be created on next catalogue scrape
+  }
+  const existingCodes: string[] = Array.isArray(indices.disciplines)
+    ? (indices.disciplines as string[])
+    : [];
+  const seen = new Set(existingCodes);
+  const appended: string[] = [];
+  for (const d of disciplines) {
+    if (!seen.has(d.code)) {
+      seen.add(d.code);
+      existingCodes.push(d.code);
+      appended.push(d.code);
+    }
+  }
+  indices.disciplines = existingCodes;
+  await fs.writeFile(indicesPath, JSON.stringify(indices, null, 2), "utf-8");
+  console.log(
+    `Updated indices.json with ${existingCodes.length} discipline codes (+${appended.length} new)`,
+  );
 }
 
 main().catch((err) => {
