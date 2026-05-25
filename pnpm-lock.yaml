@@ -33,18 +33,6 @@ importers:
         specifier: ^4.84.1
         version: 4.84.1
 
-  apps/notifications:
-    devDependencies:
-      '@marsidev/react-turnstile':
-        specifier: ^1.5.0
-        version: 1.5.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      typescript:
-        specifier: ^5.8.3
-        version: 5.9.3
-      wrangler:
-        specifier: ^4.12.0
-        version: 4.84.1
-
   apps/scrapers:
     dependencies:
       cheerio:
@@ -166,6 +154,22 @@ importers:
       vitest:
         specifier: ^4.1.0
         version: 4.1.1(@types/node@25.5.0)(jsdom@28.1.0)(vite@8.0.2(@types/node@25.5.0)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.8.3))
+
+  apps/worker:
+    dependencies:
+      hono:
+        specifier: ^4.7.11
+        version: 4.12.19
+    devDependencies:
+      '@marsidev/react-turnstile':
+        specifier: ^1.5.0
+        version: 1.5.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.3
+      wrangler:
+        specifier: ^4.12.0
+        version: 4.84.1
 
   packages/schedule:
     dependencies:
@@ -2491,6 +2495,10 @@ packages:
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
+
+  hono@4.12.19:
+    resolution: {integrity: sha512-xa3eYXYXx68XTT4hZ7dRzsXBhaq85ToSrlUJNoR0gwz/1Ap/CNwX47wfvV7pc/xWhjKVVkLT7zBJy8chhNguqQ==}
+    engines: {node: '>=16.9.0'}
 
   html-encoding-sniffer@6.0.0:
     resolution: {integrity: sha512-CV9TW3Y3f8/wT0BRFc1/KAVQ3TUHiXmaAb6VW9vtiMFf7SLoMd1PdAc4W3KFOFETBJUb90KatHqlsZMWV+R9Gg==}
@@ -5409,6 +5417,8 @@ snapshots:
       graphology-types: 0.24.8
 
   has-flag@4.0.0: {}
+
+  hono@4.12.19: {}
 
   html-encoding-sniffer@6.0.0:
     dependencies:

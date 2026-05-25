@@ -1,6 +1,6 @@
 {
   "name": "uoplan",
-  "main": "apps/notifications/src/index.ts",
+  "main": "apps/worker/src/index.ts",
   "compatibility_date": "2025-04-29",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
