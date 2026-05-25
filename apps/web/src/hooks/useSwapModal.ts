@@ -1,6 +1,12 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import type { DataCache } from "@uoplan/schedule";
-import type { GradeVizData } from "@uoplan/schedule";
+import type { DataCache, ProfessorRatingsMap, GradeVizData } from "@uoplan/schedule";
+import {
+  courseAPlusPercent,
+  getRatingsForInstructors,
+  normalizeCourseCode,
+  aggregateCourseDistribution,
+  normalizeGradeVizDistribution,
+} from "@uoplan/schedule";
 
 /**
  * Type for the swap candidates getter function.
@@ -43,6 +49,10 @@ export interface SwapCandidateOption {
   label: string;
   disabled: boolean;
   conflictsWith?: string;
+  title: string | null;
+  aPlusPercent: number | null;
+  avgRating: number | null;
+  gradeViz: GradeVizData | null;
 }
 
 const EMPTY_SWAP_RESULT: SwapResult = {
@@ -57,7 +67,11 @@ const EMPTY_SWAP_RESULT: SwapResult = {
  * @param getSwapCandidates - Function to fetch swap candidates
  * @param cache - Data cache for looking up course info
  */
-export function useSwapModal(getSwapCandidates: SwapCandidatesGetter, cache: DataCache | null) {
+export function useSwapModal(
+  getSwapCandidates: SwapCandidatesGetter,
+  cache: DataCache | null,
+  professorRatings: ProfessorRatingsMap | null,
+) {
   const [swapModal, setSwapModal] = useState<SwapModalState | null>(null);
   const [swapResult, setSwapResult] = useState<SwapResult>(EMPTY_SWAP_RESULT);
   const [loading, setLoading] = useState(false);
@@ -82,30 +96,51 @@ export function useSwapModal(getSwapCandidates: SwapCandidatesGetter, cache: Dat
 
   // Build dropdown options from candidates
   const candidateOptions = useMemo<SwapCandidateOption[]>(() => {
-    const valid = swapResult.candidates.map((code) => {
-      const course = cache?.getCourse(code);
-      const title = (course?.title ?? "").trim();
-      return {
-        value: code,
-        label: title ? `${code} — ${title}` : code,
-        disabled: false as const,
-      };
-    });
-
-    const rejected = (swapResult.rejectedWithConflict ?? []).map(({ code, conflictsWith }) => {
-      const course = cache?.getCourse(code);
-      const title = (course?.title ?? "").trim();
+    function buildOption(
+      code: string,
+    ): Omit<SwapCandidateOption, "value" | "disabled" | "conflictsWith"> {
+      const norm = normalizeCourseCode(code);
+      const course = cache?.getCourse(norm);
+      const title = (course?.title ?? "").trim() || null;
+      const sched = cache?.getSchedule(norm);
+      const aPlus = sched ? courseAPlusPercent(sched) : null;
+      const gradeViz = sched
+        ? normalizeGradeVizDistribution(aggregateCourseDistribution(sched))
+        : null;
+      const instructors = sched
+        ? [
+            ...new Set(
+              Object.values(sched.components ?? {})
+                .flat()
+                .flatMap((sec) => sec.times.map((t) => t.instructor))
+                .filter((i): i is string => typeof i === "string"),
+            ),
+          ]
+        : [];
+      const ratings = getRatingsForInstructors(instructors, professorRatings);
+      const avgRating =
+        ratings.length > 0
+          ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10
+          : null;
       const label = title ? `${code} — ${title}` : code;
-      return {
-        value: `__rejected:${code}`,
-        label,
-        disabled: true as const,
-        conflictsWith,
-      };
-    });
+      return { label, title, aPlusPercent: aPlus, avgRating, gradeViz };
+    }
+
+    const valid = swapResult.candidates.map((code) => ({
+      value: code,
+      disabled: false as const,
+      ...buildOption(code),
+    }));
+
+    const rejected = (swapResult.rejectedWithConflict ?? []).map(({ code, conflictsWith }) => ({
+      value: `__rejected:${code}`,
+      disabled: true as const,
+      conflictsWith,
+      ...buildOption(code),
+    }));
 
     return [...valid, ...rejected];
-  }, [cache, swapResult.candidates, swapResult.rejectedWithConflict]);
+  }, [cache, professorRatings, swapResult.candidates, swapResult.rejectedWithConflict]);
 
   const openModal = useCallback(
     (
