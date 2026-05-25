@@ -3,9 +3,7 @@ name: CLI Release
 on:
   push:
     tags:
-      - "cli/v*"
-    paths:
-      - "apps/cli/**"
+      - "uoplan-v*"
 
 permissions:
   contents: write
@@ -92,7 +90,7 @@ jobs:
           merge-multiple: true
 
       - name: Extract version from tag
-        run: echo "VERSION=${GITHUB_REF_NAME#cli/}" >> $GITHUB_ENV
+        run: echo "VERSION=${GITHUB_REF_NAME#uoplan-}" >> $GITHUB_ENV
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
