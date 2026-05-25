@@ -189,6 +189,7 @@ export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, ge
         decoded.currentSeed >>> 0,
       ),
       currentSwaps: decoded.swaps,
+      swapsPerSeed: {},
       includeClosedComponents: decoded.includeClosedComponents ?? false,
       virtualSectionsOnly: decoded.virtualSectionsOnly ?? false,
       basicPinnedCourses: decoded.basicPinnedCourses,
