@@ -28,6 +28,7 @@ import {
   appendCourseDedupedByNorm,
   resolveRequirementIdsForScheduleCourse,
 } from "../../components/requirements/requirementUtils";
+import { compareReqPreference, type AutoAssignReqMeta } from "../requirementCompute/autoAssign";
 import { isAdvancedPlannerActive, isBasicPlannerActive } from "../../lib/calendarRoute";
 import { flushPersistedAppState } from "../../lib/persistAppState";
 import { nextSeed, noteLowestVisitedSeed, repairSeedPosition } from "../../lib/seedNavigation";
@@ -688,24 +689,42 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
 
     if (requirementIds.length === 0) return;
 
+    const reqMap = new Map(remainingRequirements.map((r) => [r.requirementId, r]));
+
+    let targetId: string;
+    if (requirementIds.length === 1) {
+      targetId = requirementIds[0];
+    } else {
+      const metas = requirementIds.flatMap((id) => {
+        const req = reqMap.get(id);
+        if (!req) return [];
+        return [
+          {
+            reqId: id,
+            type: req.type,
+            candidatesNorm: new Set(req.candidateCourses.map(normalizeCourseCode)),
+            creditsNeeded: req.creditsNeeded ?? 0,
+          } satisfies AutoAssignReqMeta,
+        ];
+      });
+      metas.sort(compareReqPreference);
+      targetId = metas[0]?.reqId ?? requirementIds[0];
+    }
+
     set((s) => {
-      let next = { ...s.constrainedPerRequirement };
-      let changed = false;
-      for (const rid of requirementIds) {
-        const constrained = next[rid] ?? [];
-        const assigned = s.selectedPerRequirement[rid] ?? [];
-        if (
-          constrained.some((c) => normalizeCourseCode(c) === norm) ||
-          assigned.some((c) => normalizeCourseCode(c) === norm)
-        ) {
-          continue;
-        }
-        const merged = appendCourseDedupedByNorm(constrained, canonical, norm);
-        if (merged === constrained) continue;
-        next = { ...next, [rid]: merged };
-        changed = true;
+      const constrained = s.constrainedPerRequirement[targetId] ?? [];
+      const assigned = s.selectedPerRequirement[targetId] ?? [];
+      if (
+        constrained.some((c) => normalizeCourseCode(c) === norm) ||
+        assigned.some((c) => normalizeCourseCode(c) === norm)
+      ) {
+        return {};
       }
-      return changed ? { constrainedPerRequirement: next } : {};
+      const merged = appendCourseDedupedByNorm(constrained, canonical, norm);
+      if (merged === constrained) return {};
+      return {
+        constrainedPerRequirement: { ...s.constrainedPerRequirement, [targetId]: merged },
+      };
     });
   },
 
