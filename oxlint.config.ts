@@ -1,16 +1,17 @@
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "react"],
-  "categories": {
-    "correctness": "error"
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  plugins: ["typescript", "react"],
+  categories: {
+    correctness: "error",
   },
-  "options": {
-    "typeAware": true
+  options: {
+    typeAware: true,
   },
-  "env": {
-    "builtin": true
+  env: {
+    builtin: true,
   },
-  "ignorePatterns": [
+  ignorePatterns: [
     "**/node_modules/**",
     "**/dist/**",
     "**/.turbo/**",
@@ -20,33 +21,33 @@
     "apps/web/public/data/**",
     "**/public/**",
     "apps/notifications/**",
-    "worker-configuration.d.ts"
+    "worker-configuration.d.ts",
   ],
-  "rules": {
+  rules: {
     "no-unused-vars": "off",
     "typescript/no-unused-vars": [
       "warn",
       {
-        "vars": "all",
-        "varsIgnorePattern": "^_",
-        "args": "after-used",
-        "argsIgnorePattern": "^_"
-      }
+        vars: "all",
+        varsIgnorePattern: "^_",
+        args: "after-used",
+        argsIgnorePattern: "^_",
+      },
     ],
     "typescript/consistent-type-imports": "error",
     "typescript/no-misused-promises": [
       "error",
       {
-        "checksVoidReturn": {
-          "attributes": false
-        }
-      }
-    ]
+        checksVoidReturn: {
+          attributes: false,
+        },
+      },
+    ],
   },
-  "overrides": [
+  overrides: [
     {
-      "files": ["apps/web/src/**/*.{ts,tsx}"],
-      "rules": {
+      files: ["apps/web/src/**/*.{ts,tsx}"],
+      rules: {
         "react/rules-of-hooks": "error",
         "react/exhaustive-deps": "warn",
         "typescript/no-floating-promises": "off",
@@ -54,29 +55,29 @@
         "typescript/no-misused-promises": [
           "error",
           {
-            "checksVoidReturn": {
-              "attributes": false,
-              "arguments": false
-            }
-          }
-        ]
-      }
+            checksVoidReturn: {
+              attributes: false,
+              arguments: false,
+            },
+          },
+        ],
+      },
     },
     {
-      "files": [
+      files: [
         "**/*.test.{ts,tsx}",
         "**/*.spec.{ts,tsx}",
         "**/tests/**/*.{ts,tsx}",
-        "**/__tests__/**/*.{ts,tsx}"
+        "**/__tests__/**/*.{ts,tsx}",
       ],
-      "rules": {
+      rules: {
         "typescript/no-unsafe-assignment": "off",
         "typescript/no-unsafe-call": "off",
         "typescript/no-unsafe-member-access": "off",
         "typescript/no-unsafe-argument": "off",
         "typescript/no-unsafe-return": "off",
-        "typescript/consistent-type-imports": "off"
-      }
-    }
-  ]
-}
+        "typescript/consistent-type-imports": "off",
+      },
+    },
+  ],
+});
