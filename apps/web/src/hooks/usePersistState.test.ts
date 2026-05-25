@@ -7,8 +7,8 @@ describe("hasPersistedStateChange", () => {
     const prev = useAppStore.getState();
     const next = {
       ...prev,
-      generatedSchedules: [{ enrollments: [] }],
-      basicElectivesCount: prev.basicElectivesCount + 1,
+      scheduleGenerating: true,
+      currentColorMap: { CSI3105: 2 },
     };
 
     expect(hasPersistedStateChange(next, prev)).toBe(false);
