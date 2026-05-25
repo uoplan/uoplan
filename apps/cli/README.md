@@ -1,4 +1,4 @@
-# uoplan CLI
+# uoplan
 
 Command-line tool for University of Ottawa students to search courses and enrol directly from the terminal.
 
