@@ -220,7 +220,8 @@ export function computeCoursesPerPool(
   // Phase 3: if structured pool caps prevented filling all slots (e.g. discipline_elective
   // capped at 1 per term but remainingCourseSlots > sumCap), absorb overflow into broad
   // elective pools — they have large candidate sets and can take extra slots.
-  if (placed < remainingCourseSlots && broadPools.length > 0) {
+  // Only runs when structured pools exist; if all pools are broad, their caps are the hard limit.
+  if (placed < remainingCourseSlots && broadPools.length > 0 && structuredPools.length > 0) {
     const overflowCap = new Map(cap);
     for (const p of broadPools) {
       overflowCap.set(p.requirementId, remainingCourseSlots);
