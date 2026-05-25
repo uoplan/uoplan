@@ -9,7 +9,7 @@ import type {
 } from "@uoplan/schedule";
 import { useAppStore } from "../../store/appStore";
 import { RequirementNode, getStableNodeKey } from "./RequirementNode";
-import { applyOptionSelections, countSatisfiedTopLevelRoots } from "./requirementUtils";
+import { applyOptionSelections } from "./requirementUtils";
 import { CompletedRequirementsAccordion } from "./CompletedRequirementsAccordion";
 import { FrenchImmersionRequirementsReadout } from "./FrenchImmersionRequirementsReadout";
 
@@ -81,12 +81,7 @@ export function AssignStep({
   const hasTree = flattenedTree.length > 0;
   const incompleteNodes = flattenedTree.filter((node) => !node.complete);
   const hasRemaining = incompleteNodes.length > 0;
-  const satisfiedTopLevelCount = useMemo(
-    () => countSatisfiedTopLevelRoots(requirementTreeWithStatus, selectedPerRequirement, cache),
-    [requirementTreeWithStatus, selectedPerRequirement, cache],
-  );
-  const topLevelRequirementCount = requirementTreeWithStatus.length;
-  const hasCompleted = satisfiedTopLevelCount > 0 || completedRequirementsList.length > 0;
+  const hasCompleted = completedRequirementsList.length > 0;
 
   if (!hasTree) {
     return (
@@ -178,11 +173,7 @@ export function AssignStep({
       </Stack>
 
       {hasCompleted && (
-        <CompletedRequirementsAccordion
-          completedItems={completedRequirementsList}
-          satisfiedCount={satisfiedTopLevelCount}
-          totalCount={topLevelRequirementCount}
-        />
+        <CompletedRequirementsAccordion completedItems={completedRequirementsList} />
       )}
     </Stack>
   );

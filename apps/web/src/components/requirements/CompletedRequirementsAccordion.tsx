@@ -5,14 +5,10 @@ import type { CompletedRequirementItem } from "@uoplan/schedule";
 
 interface CompletedRequirementsAccordionProps {
   completedItems: CompletedRequirementItem[];
-  satisfiedCount: number;
-  totalCount: number;
 }
 
 export function CompletedRequirementsAccordion({
   completedItems,
-  satisfiedCount,
-  totalCount,
 }: CompletedRequirementsAccordionProps) {
   const [completedOpen, setCompletedOpen] = useState(false);
 
@@ -36,22 +32,17 @@ export function CompletedRequirementsAccordion({
         setCompletedOpen((o) => !o);
       }}
     >
-      <Group justify="space-between" align="center" mb={completedOpen ? "sm" : 0}>
-        <Group gap="xs" align="center">
-          <IconChevronDown
-            size={14}
-            style={{
-              transform: completedOpen ? "rotate(0deg)" : "rotate(-90deg)",
-              transition: "transform 150ms ease",
-            }}
-          />
-          <Text fw={600} size="sm">
-            {satisfiedCount}/{totalCount || "—"} completed requirements
-          </Text>
-        </Group>
-        <Badge size="sm" variant="light" color="green">
-          {completedOpen ? "Hide details" : "Show details"}
-        </Badge>
+      <Group align="center" gap="xs" mb={completedOpen ? "sm" : 0}>
+        <IconChevronDown
+          size={14}
+          style={{
+            transform: completedOpen ? "rotate(0deg)" : "rotate(-90deg)",
+            transition: "transform 150ms ease",
+          }}
+        />
+        <Text fw={600} size="sm">
+          {completedItems.length} completed requirement{completedItems.length !== 1 ? "s" : ""}
+        </Text>
       </Group>
       <Collapse expanded={completedOpen}>
         <Stack gap={0} mt="sm">
@@ -75,7 +66,7 @@ export function CompletedRequirementsAccordion({
                   <Text size="xs" c="dimmed">
                     {item.satisfiedBy.sort().join(", ")}
                   </Text>
-                  <Badge color="green" variant="light" size="sm">
+                  <Badge size="sm" variant="light" color="constructGreen">
                     Complete
                   </Badge>
                 </Group>

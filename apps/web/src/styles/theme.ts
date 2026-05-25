@@ -39,6 +39,19 @@ const constructRed: MantineColorsTuple = [
   "#962020",
 ];
 
+const constructGreen: MantineColorsTuple = [
+  "#F0FDF4",
+  "#DCFCE7",
+  "#BBF7D0",
+  "#86EFAC",
+  "#4ADE80",
+  "#22C55E",
+  "#16A34A",
+  "#15803D",
+  "#166534",
+  "#14532D",
+];
+
 export const theme = createTheme({
   defaultRadius: 0,
   primaryColor: "constructBlack",
@@ -46,6 +59,7 @@ export const theme = createTheme({
     accentPurple,
     constructBlack,
     constructRed,
+    constructGreen,
   },
   fontFamily: '"DM Mono", monospace',
   headings: {
