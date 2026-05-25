@@ -11,7 +11,6 @@ import { RequirementNode, getStableNodeKey, getNodeDisplayTitle } from "./Requir
 import {
   applyOptionSelections,
   adjustNodeForAssignments,
-  countSatisfiedTopLevelRoots,
   partitionIncompleteConstrainRoots,
 } from "./requirementUtils";
 
@@ -154,12 +153,6 @@ export function ConstrainStep({
   const hasRemaining = incompleteNodes.length > 0;
   const hasCompleted = allCompletedItems.length > 0;
 
-  const satisfiedTopLevelCount = useMemo(
-    () => countSatisfiedTopLevelRoots(requirementTreeWithStatus, selectedPerRequirement, cache),
-    [requirementTreeWithStatus, selectedPerRequirement, cache],
-  );
-  const topLevelRequirementCount = requirementTreeWithStatus.length;
-
   if (!hasTree) {
     return (
       <Alert color="blue" variant="light" radius={0} data-tour="constrain-schedule">
@@ -301,13 +294,7 @@ export function ConstrainStep({
         )}
       </Stack>
 
-      {hasCompleted && (
-        <CompletedRequirementsAccordion
-          completedItems={allCompletedItems}
-          satisfiedCount={satisfiedTopLevelCount}
-          totalCount={topLevelRequirementCount}
-        />
-      )}
+      {hasCompleted && <CompletedRequirementsAccordion completedItems={allCompletedItems} />}
     </Stack>
   );
 }
