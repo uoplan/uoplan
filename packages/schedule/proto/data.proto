@@ -13,6 +13,7 @@ message CourseIndex {
 message Indices {
   repeated string courses = 1;
   repeated string programs = 2;
+  repeated string disciplines = 3;
 }
 
 message TermsData {

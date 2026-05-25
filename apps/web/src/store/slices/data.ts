@@ -237,6 +237,7 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
         indices = {
           courses: parsedCatalogue.courses.map((c) => c.code),
           programs: parsedCatalogue.programs.map((p) => urlToSlug(p.url)),
+          disciplines: [],
         };
       }
 

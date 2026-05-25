@@ -204,6 +204,7 @@ export type SchedulesData = {
 export type Indices = {
   courses: string[];
   programs: string[];
+  disciplines: string[];
 };
 
 export type Term = {
@@ -712,11 +713,11 @@ export function fromProtoSchedulesData(input: ProtoSchedulesData): SchedulesData
 }
 
 export function toProtoIndices(input: Indices): ProtoIndices {
-  return { courses: input.courses, programs: input.programs };
+  return { courses: input.courses, programs: input.programs, disciplines: input.disciplines };
 }
 
 export function fromProtoIndices(input: ProtoIndices): Indices {
-  return { courses: input.courses, programs: input.programs };
+  return { courses: input.courses, programs: input.programs, disciplines: input.disciplines };
 }
 
 export function toProtoTermsData(input: TermsData): ProtoTermsData {

@@ -39,6 +39,30 @@ function programSlug(p: Program): string {
 
 const OPT_SENTINEL_BASE = 0xfffffff0; // Safely inside uint32 space
 
+// Packing two course indices into one uint32 (used for completedCourses).
+// Real indices top out at ~13197 (0x338D), so the 0xFFF_ range is free.
+const PACK_EMPTY = 0xffff; // padding slot when count is odd
+const OPT_16_BASE = 0xfff0; // OPT level/1000 stored as OPT_16_BASE + (level/1000)
+
+function packCoursePairs(vals: number[]): number[] {
+  const out: number[] = [];
+  for (let i = 0; i < vals.length; i += 2) {
+    const hi = vals[i];
+    const lo = i + 1 < vals.length ? vals[i + 1] : PACK_EMPTY;
+    out.push((hi & 0xffff) * 0x10000 + (lo & 0xffff));
+  }
+  return out;
+}
+
+function unpackCoursePairs(packed: number[]): number[] {
+  const out: number[] = [];
+  for (const p of packed) {
+    out.push((p >>> 16) & 0xffff);
+    out.push(p & 0xffff);
+  }
+  return out;
+}
+
 export interface EncodeInput {
   wizardMode: "basic" | "advanced" | null;
   basicPinnedCourses: string[];
@@ -174,6 +198,12 @@ export function encodeState(
   const courseCodeToIndex = new Map<string, number>();
   indices.courses.forEach((code, i) => courseCodeToIndex.set(code, i));
 
+  const disciplineToIndex = new Map<string, number>();
+  indices.disciplines.forEach((code, i) => disciplineToIndex.set(code, i));
+
+  const encodeDiscipline = (code: string): number | undefined =>
+    disciplineToIndex.get(code.toUpperCase());
+
   // Validate courses
   for (const code of input.completedCourses) {
     if (!isOptCourse(code) && !courseCodeToIndex.has(code)) return null;
@@ -187,6 +217,11 @@ export function encodeState(
 
   const encodeCourseCode = (c: string): number | undefined => {
     if (isOptCourse(c)) return OPT_SENTINEL_BASE + Math.floor((getCourseLevel(c) ?? 1000) / 1000);
+    return courseCodeToIndex.get(c);
+  };
+
+  const encodeCourseCode16 = (c: string): number | undefined => {
+    if (isOptCourse(c)) return OPT_16_BASE + Math.floor((getCourseLevel(c) ?? 1000) / 1000);
     return courseCodeToIndex.get(c);
   };
 
@@ -206,17 +241,21 @@ export function encodeState(
       .map(encodeCourseCode)
       .filter((i): i is number => i !== undefined),
     basicElectivesCount: input.basicElectivesCount,
-    basicExcludedCategories: input.basicExcludedCategories,
+    basicExcludedCategoryIndices: input.basicExcludedCategories
+      .map(encodeDiscipline)
+      .filter((i): i is number => i !== undefined),
 
-    selectedTermId: input.selectedTermId ?? undefined,
+    selectedTermId: input.selectedTermId != null ? parseInt(input.selectedTermId, 10) : undefined,
     firstYear: input.firstYear ?? undefined,
     programIndex: programIndex !== -1 ? programIndex : undefined,
     minorProgramIndex: minorProgramIndex !== -1 ? minorProgramIndex : undefined,
-    studentPrograms: input.studentPrograms,
-
-    completedCourses: input.completedCourses
-      .map(encodeCourseCode)
+    studentProgramIndices: input.studentPrograms
+      .map(encodeDiscipline)
       .filter((i): i is number => i !== undefined),
+
+    completedCourses: packCoursePairs(
+      input.completedCourses.map(encodeCourseCode16).filter((i): i is number => i !== undefined),
+    ),
     levelBuckets: input.levelBuckets.map(levelToProto),
     languageBuckets: input.languageBuckets.map(langToProto),
     electiveLevelBuckets: input.electiveLevelBuckets,
@@ -293,7 +332,11 @@ export function encodeState(
         if (courseIndices.length) state.constrainedSelections.push({ reqIndex, courseIndices });
       }
       if (groupPrefixes.length) {
-        state.constrainedGroupSelections.push({ reqIndex, groupPrefixes });
+        const groupPrefixIndices = groupPrefixes
+          .map(encodeDiscipline)
+          .filter((i): i is number => i !== undefined);
+        if (groupPrefixIndices.length)
+          state.constrainedGroupSelections.push({ reqIndex, groupPrefixIndices });
       }
     }
   }
@@ -319,7 +362,7 @@ export function peekTermAndYear(
     const state = ShareableState.decode(bytes);
     if (state.magic !== STATE_MAGIC) return null;
     return {
-      termId: state.selectedTermId ?? null,
+      termId: state.selectedTermId != null ? String(state.selectedTermId) : null,
       firstYear: state.firstYear ?? null,
     };
   } catch {
@@ -384,10 +427,21 @@ export function decodeState(
   };
 
   const completedOptCounters = new Map<number, number>();
-  const completedCourseCodes = decodeCourseIndices(
-    state.completedCourses,
-    completedOptCounters,
-  ).filter((c) => c && (isOptCourse(c) || catalogue.courses.some((catC) => catC.code === c)));
+  const completedCourseCodes = unpackCoursePairs(state.completedCourses)
+    .filter((v) => v !== PACK_EMPTY)
+    .map((v) => {
+      if (v >= OPT_16_BASE) {
+        const level = (v - OPT_16_BASE) * 1000;
+        const count = completedOptCounters.get(level) ?? 0;
+        completedOptCounters.set(level, count + 1);
+        return `OPT ${level + count}`;
+      }
+      return v < indices.courses.length ? indices.courses[v] : null;
+    })
+    .filter(
+      (c): c is string =>
+        c !== null && (isOptCourse(c) || catalogue.courses.some((catC) => catC.code === c)),
+    );
 
   const courseSelectionsOptCounters = new Map<number, number>();
   const courseSelections = state.courseSelections.map((sel) => ({
@@ -407,7 +461,9 @@ export function decodeState(
 
   const constrainedGroupSelections = state.constrainedGroupSelections.map((sel) => ({
     reqIndex: sel.reqIndex,
-    groupPrefixes: sel.groupPrefixes,
+    groupPrefixes: sel.groupPrefixIndices
+      .map((i) => (i < indices.disciplines.length ? indices.disciplines[i] : null))
+      .filter((c): c is string => c !== null),
   }));
 
   const basicPinnedCourses = state.basicPinnedCourses
@@ -427,9 +483,11 @@ export function decodeState(
           : null,
     basicPinnedCourses,
     basicElectivesCount: state.basicElectivesCount,
-    basicExcludedCategories: state.basicExcludedCategories,
+    basicExcludedCategories: state.basicExcludedCategoryIndices
+      .map((i) => (i < indices.disciplines.length ? indices.disciplines[i] : null))
+      .filter((c): c is string => c !== null),
 
-    selectedTermId: state.selectedTermId ?? null,
+    selectedTermId: state.selectedTermId != null ? String(state.selectedTermId) : null,
     firstYear: state.firstYear ?? null,
     program,
     minorProgram,
@@ -456,7 +514,9 @@ export function decodeState(
 
     includeClosedComponents: state.includeClosedComponents,
     virtualSectionsOnly: state.virtualSectionsOnly,
-    studentPrograms: state.studentPrograms,
+    studentPrograms: state.studentProgramIndices
+      .map((i) => (i < indices.disciplines.length ? indices.disciplines[i] : null))
+      .filter((c): c is string => c !== null),
 
     touchedReqIndices: state.touchedReqIndices,
 
@@ -494,11 +554,7 @@ function base64ToBytes(base64: string): Uint8Array | null {
     for (let i = 0; i < binary.length; i++) {
       bytes[i] = binary.charCodeAt(i);
     }
-    try {
-      return inflateSync(bytes);
-    } catch {
-      return bytes;
-    }
+    return inflateSync(bytes);
   } catch {
     return null;
   }
