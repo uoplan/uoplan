@@ -29,7 +29,7 @@ function getInstallCommand(): string | null {
 function CopyRow({ value }: { value: string }) {
   useLingui();
   return (
-    <Group gap="xs" wrap="nowrap" align="flex-start">
+    <Group gap="xs" wrap="nowrap" align="center">
       <Code block style={{ flex: 1, wordBreak: "break-all" }}>
         {value}
       </Code>
