@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.0.0-beta.22](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.21...uoplan-monorepo-v1.0.0-beta.22) (2026-05-25)
+
+
+### Features
+
+* improve course swap page ([8e75091](https://github.com/uoplan/uoplan/commit/8e75091737c2f293a6a602b699ab2c5ea419687d))
+* show save indicator on calendar page ([1e129dc](https://github.com/uoplan/uoplan/commit/1e129dcf2e61eb1f699d4f46c24f538544dcd2e2))
+
+
+### Bug Fixes
+
+* apply locked course to most specific available requirement ([e003968](https://github.com/uoplan/uoplan/commit/e0039684ec0cc5e5a7e0421f176690be46a0c9a9))
+* **ci:** explicitly publish release as non-draft ([f9e6530](https://github.com/uoplan/uoplan/commit/f9e65307a4768a2c6b9101c1e1d014514212c6dd))
+* **ci:** use correct cli tag ([74ad265](https://github.com/uoplan/uoplan/commit/74ad26535468b00568de7af18fd74fa4ddc3eb7b))
+* **cli:** update readme ([469e3c4](https://github.com/uoplan/uoplan/commit/469e3c411b71c775f4c211a00f3b3977302ab160))
+* persist course swaps ([10e22bb](https://github.com/uoplan/uoplan/commit/10e22bbd1d54acaa099095440153c9276e72cd4d))
+* resolve various bugs on mobile ([d946fab](https://github.com/uoplan/uoplan/commit/d946fab0935f35fddd8679c357a5991fac7c21f9))
+* stuff ([30455e6](https://github.com/uoplan/uoplan/commit/30455e6e67933f1ef22ca3e15d5434d4bedea851))
+* use correct tag for cli release ([cbe7bed](https://github.com/uoplan/uoplan/commit/cbe7bed5e576b0b7790abe97f42056085c002738))
+
 ## [1.0.0-beta.21](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.20...uoplan-monorepo-v1.0.0-beta.21) (2026-05-25)
 
 

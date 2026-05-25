@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2](https://github.com/uoplan/uoplan/compare/uoplan-v0.4.1...uoplan-v0.4.2) (2026-05-25)
+
+
+### Bug Fixes
+
+* **cli:** update readme ([469e3c4](https://github.com/uoplan/uoplan/commit/469e3c411b71c775f4c211a00f3b3977302ab160))
+
 ## [0.4.1](https://github.com/uoplan/uoplan/compare/uoplan-v0.4.0...uoplan-v0.4.1) (2026-05-23)
 
 
