@@ -1276,3 +1276,27 @@ msgstr "Aucun cours trouvé"
 
 msgid "uenrollImport.modal.noCoursesDescription"
 msgstr "Aucun de ces cours n'existe dans les données de la session actuelle. Essayez de changer de session d'abord."
+
+msgid "saveStatus.unsaved"
+msgstr "Modifications non enregistrées — cliquer pour enregistrer"
+
+msgid "saveStatus.unsavedSince"
+msgstr "Modifications non enregistrées (dernier enregistrement {time}) — cliquer pour enregistrer"
+
+msgid "saveStatus.saveNow"
+msgstr "Enregistrer maintenant"
+
+msgid "saveStatus.saved"
+msgstr "Enregistré"
+
+msgid "saveStatus.savedAt"
+msgstr "Enregistré {time}"
+
+msgid "saveStatus.justNow"
+msgstr "à l'instant"
+
+msgid "saveStatus.savedMinuteAgo"
+msgstr "il y a 1 minute"
+
+msgid "saveStatus.savedMinutesAgo"
+msgstr "il y a {n} minutes"
