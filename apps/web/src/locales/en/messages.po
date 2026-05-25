@@ -1295,3 +1295,27 @@ msgstr "No courses found"
 
 msgid "uenrollImport.modal.noCoursesDescription"
 msgstr "None of these courses exist in the current term's data. Try switching terms first."
+
+msgid "saveStatus.unsaved"
+msgstr "Unsaved changes — click to save"
+
+msgid "saveStatus.unsavedSince"
+msgstr "Unsaved changes (last saved {time}) — click to save"
+
+msgid "saveStatus.saveNow"
+msgstr "Save now"
+
+msgid "saveStatus.saved"
+msgstr "Saved"
+
+msgid "saveStatus.savedAt"
+msgstr "Saved {time}"
+
+msgid "saveStatus.justNow"
+msgstr "just now"
+
+msgid "saveStatus.savedMinuteAgo"
+msgstr "1 minute ago"
+
+msgid "saveStatus.savedMinutesAgo"
+msgstr "{n} minutes ago"

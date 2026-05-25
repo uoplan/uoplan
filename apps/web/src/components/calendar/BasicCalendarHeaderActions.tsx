@@ -12,6 +12,7 @@ import { useAppStore } from "../../store/appStore";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { tr } from "../../i18n";
 import { ResetModal } from "../shared/ResetModal";
+import { SaveStatusIndicator } from "./SaveStatusIndicator";
 import { UEnrollImportModal } from "./UEnrollImportModal";
 import { navigateToWizardStep } from "../../lib/appNavigation";
 import { WizardStep } from "../../lib/wizardSteps";
@@ -55,6 +56,7 @@ export function BasicCalendarHeaderActions({
             <IconCalendarDown size={16} />
           </ActionIcon>
         </Tooltip>
+        <SaveStatusIndicator />
         {indices && (
           <Tooltip
             label={shareCopied ? tr("app.share.copied") : tr("calendarPage.share")}

@@ -111,6 +111,10 @@ export interface AppState {
   scheduleNoVariety: boolean;
   /** Courses that must never appear in any generated schedule. */
   blacklistedCourses: string[];
+  /** Timestamp (Date.now()) of the last successful localStorage flush. Null before first save. */
+  lastSavedAt: number | null;
+  /** True when tracked state has changed since the last localStorage flush. */
+  hasPendingSave: boolean;
 }
 
 export interface AppActions {

@@ -28,7 +28,20 @@ function hasPersistedStateChange(next: AppStore, prev: AppStore): boolean {
     next.includeClosedComponents !== prev.includeClosedComponents ||
     next.virtualSectionsOnly !== prev.virtualSectionsOnly ||
     next.studentPrograms !== prev.studentPrograms ||
-    next.frenchImmersionStream !== prev.frenchImmersionStream
+    next.frenchImmersionStream !== prev.frenchImmersionStream ||
+    next.basicPinnedCourses !== prev.basicPinnedCourses ||
+    next.basicElectivesCount !== prev.basicElectivesCount ||
+    next.basicExcludedCategories !== prev.basicExcludedCategories ||
+    next.generationMinStartMinutes !== prev.generationMinStartMinutes ||
+    next.generationMaxEndMinutes !== prev.generationMaxEndMinutes ||
+    next.generationAllowedDays !== prev.generationAllowedDays ||
+    next.generationMinProfessorRating !== prev.generationMinProfessorRating ||
+    next.generationLimitFirstYearCredits !== prev.generationLimitFirstYearCredits ||
+    next.generationCompressedSchedule !== prev.generationCompressedSchedule ||
+    next.generationPreferEasier !== prev.generationPreferEasier ||
+    next.blacklistedCourses !== prev.blacklistedCourses ||
+    next.requirementSlotsUserTouched !== prev.requirementSlotsUserTouched ||
+    next.calendarWeekIndex !== prev.calendarWeekIndex
   );
 }
 
@@ -52,6 +65,7 @@ export function usePersistState(enabled: boolean): void {
 
     const schedule = (state: AppStore, prevState: AppStore) => {
       if (!hasPersistedStateChange(state, prevState)) return;
+      useAppStore.setState({ hasPendingSave: true });
       if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(flush, DEBOUNCE_MS);
     };

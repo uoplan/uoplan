@@ -43,6 +43,7 @@ import { EnrolCliModal } from "./EnrolCliModal";
 import { UEnrollImportModal } from "./UEnrollImportModal";
 import { AdvancedGenerationOptions } from "./AdvancedGenerationOptions";
 import { BasicGenerationOptions } from "./BasicGenerationOptions";
+import { SaveStatusIndicator } from "./SaveStatusIndicator";
 import { encodeSchedulePayload } from "../../lib/encodeSchedulePayload";
 import { setCalendarMode } from "../../lib/calendarRoute";
 import { navigateToWizardStep } from "../../lib/appNavigation";
@@ -284,6 +285,7 @@ export function CalendarPage() {
                 <IconCalendarDown size={16} />
               </ActionIcon>
             </Tooltip>
+            <SaveStatusIndicator />
             {indices && (
               <Tooltip
                 label={shareCopied ? tr("app.share.copied") : tr("calendarPage.share")}

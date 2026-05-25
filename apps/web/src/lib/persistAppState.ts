@@ -7,5 +7,6 @@ export function flushPersistedAppState(): void {
   const base64 = useAppStore.getState().getEncodedStateBase64();
   if (base64) {
     localStorage.setItem(LOCAL_STORAGE_KEY, base64);
+    useAppStore.setState({ hasPendingSave: false, lastSavedAt: Date.now() });
   }
 }
