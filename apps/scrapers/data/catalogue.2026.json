@@ -22608,7 +22608,7 @@
       "title": "Architecture d'ordinateurs II",
       "credits": 3,
       "description": "Microprocesseurs et leur architecture générale. Architectures CISC et RISC. Micro-contrôleurs. Systèmes inclus. Conception des ordinateurs à base de microprocesseurs. Introduction à la co-conception logiciel- matériel.",
-      "component": "Tutoriel, Laboratoire, Cours magistralPréalable : CEG 2536.",
+      "component": "Laboratoire, Cours magistral, TutorielPréalable : CEG 2536.",
       "prereqText": "CEG 2536",
       "prerequisites": {
         "type": "course",
@@ -23083,7 +23083,7 @@
       "title": "Réseaux optiques",
       "credits": 3,
       "description": "Introduction aux réseaux optiques. Composants et systèmes pour commutation optique. Multiplexage en longueur d'onde. Réseaux WDM. Réseaux optiques en anneaux vs réseaux maillés optiques. Architecture de contrôle pour réseaux optiques. Algorithmes de routage et d'allocation de longueur d'onde. Mécanismes de protection et de restauration pour réseaux optiques. Études de cas en réseaux optiques.",
-      "component": "Cours magistral, Groupe de discussion, LaboratoirePréalable : CEG 3585.",
+      "component": "Groupe de discussion, Laboratoire, Cours magistralPréalable : CEG 3585.",
       "prereqText": "CEG 3585",
       "prerequisites": {
         "type": "course",
@@ -25797,7 +25797,7 @@
       "title": "Applications of Spectroscopy in Chemistry",
       "credits": 3,
       "description": "Introduction to infrared, visible and ultraviolet spectroscopy, multinuclear magnetic resonance (with emphasis on 1H and 13C), Fourier-transform. NMR, mass spectrometry.",
-      "component": "Lecture, Discussion GroupPrerequisite: CHM 2120.",
+      "component": "Discussion Group, LecturePrerequisite: CHM 2120.",
       "prereqText": "CHM 2120",
       "prerequisites": {
         "type": "course",
@@ -41426,9 +41426,16 @@
       "component": "Lecture"
     },
     {
-      "code": "CTM 8132",
+      "code": "CTM 81321",
       "title": "Advanced topics in Joint Biomechanics and Biomaterials",
-      "credits": 3,
+      "credits": 0,
+      "description": "Advanced study of the principles of joint mechanics essential for normal joint function as well as factors leading to joint malfunction/pain and properties of biomaterials.",
+      "component": "Lecture"
+    },
+    {
+      "code": "CTM 81322",
+      "title": "Advanced topics in Joint Biomechanics and Biomaterials (Part 2)",
+      "credits": 6,
       "description": "Advanced study of the principles of joint mechanics essential for normal joint function as well as factors leading to joint malfunction/pain and properties of biomaterials.",
       "component": "Lecture"
     },
@@ -41612,7 +41619,7 @@
       "title": "Measurements I",
       "credits": 4,
       "description": "Principles and analysis of civil engineering measurements. Probability and normal distribution; systematic and random errors; probabilistic principles of errors; statistical treatment of experimental data. Basic theory of mechanical and electrical strain measurement systems. Measurements in water resources and geotechnical engineering.",
-      "component": "Research, Discussion Group, Laboratory, Lecture, Seminar, Work Term, Theory and Laboratory, TutorialPrerequisites: MAT 1320, MAT 1322, MAT 1341.",
+      "component": "Discussion Group, Laboratory, Lecture, Research, Seminar, Work Term, Theory and Laboratory, TutorialPrerequisites: MAT 1320, MAT 1322, MAT 1341.",
       "prereqText": "MAT 1320, MAT 1322, MAT 1341",
       "prerequisites": {
         "type": "and_group",
@@ -74462,78 +74469,6 @@
       }
     },
     {
-      "code": "FSS 3310",
-      "title": "In-depth Experiential Learning Stream Self-directed Course I",
-      "credits": 1,
-      "description": "Completion, individually or in small groups, of a supervised self-directed experiential activity that is guided by the principles of experiential learning. Students will reflect on the transferable competencies, in particular the uOCompetencies, acquired during the experiential activity while making connections to their academic studies.",
-      "component": "SeminarPrerequisites: FSS 1300 and 6 IELS university course units.",
-      "prereqText": "FSS 1300 and 6 IELS university course units",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "FSS 1300 and 6 IELS university course units",
-        "children": [
-          {
-            "type": "course",
-            "code": "FSS 1300",
-            "text": "FSS 1300"
-          },
-          {
-            "type": "non_course",
-            "text": "6 IELS university course units",
-            "credits": 6
-          }
-        ]
-      }
-    },
-    {
-      "code": "FSS 3320",
-      "title": "In-depth Experiential Learning Stream Self-directed Course II",
-      "credits": 1.5,
-      "description": "Completion, individually or in small groups, of a supervised self-directed experiential activity that is guided by the principles of experiential learning. Students will reflect on the transferable competencies, in particular the uOCompetencies, acquired during the experiential activity while making connections to their academic studies.",
-      "component": "SeminarPrerequisites: FSS 1300 and 6 IELS university course units.",
-      "prereqText": "FSS 1300 and 6 IELS university course units",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "FSS 1300 and 6 IELS university course units",
-        "children": [
-          {
-            "type": "course",
-            "code": "FSS 1300",
-            "text": "FSS 1300"
-          },
-          {
-            "type": "non_course",
-            "text": "6 IELS university course units",
-            "credits": 6
-          }
-        ]
-      }
-    },
-    {
-      "code": "FSS 3330",
-      "title": "In-depth Experiential Learning Stream Self-directed Course III",
-      "credits": 3,
-      "description": "Completion, individually or in small groups, of a supervised self-directed experiential activity that is guided by the principles of experiential learning. Students will reflect on the transferable competencies, in particular the uOCompetencies, acquired during the experiential activity while making connections to their academic studies.",
-      "component": "SeminarPrerequisites: FSS 1300 and 6 IELS university course units.",
-      "prereqText": "FSS 1300 and 6 IELS university course units",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "FSS 1300 and 6 IELS university course units",
-        "children": [
-          {
-            "type": "course",
-            "code": "FSS 1300",
-            "text": "FSS 1300"
-          },
-          {
-            "type": "non_course",
-            "text": "6 IELS university course units",
-            "credits": 6
-          }
-        ]
-      }
-    },
-    {
       "code": "FSS 3500",
       "title": "Thèmes choisis II",
       "credits": 3,
@@ -74630,75 +74565,6 @@
       }
     },
     {
-      "code": "FSS 3710",
-      "title": "Cours autodirigé du Régime d’apprentissage expérientiel approfondi I",
-      "credits": 1,
-      "description": "Réalisation, individuellement ou en petit groupe, d’une activité expérientielle autodirigée supervisée et encadrée par les principes de l’apprentissage expérientiel. Les étudiantes et étudiants seront amenés à réfléchir sur les compétences transversales, notamment les uOCompétences, acquises durant l’activité expérientielle tout en tissant des liens avec les apprentissages académiques de leur parcours.",
-      "component": "SéminairePréalables : FSS 1700 et 6 crédits de cours universitaires RAEA.",
-      "prereqText": "FSS 1700 et 6 crédits de cours universitaires RAEA",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "FSS 1700 et 6 crédits de cours universitaires RAEA",
-        "children": [
-          {
-            "type": "course",
-            "code": "FSS 1700"
-          },
-          {
-            "type": "non_course",
-            "text": "FSS 1700 et 6 crédits de cours universitaires RAEA",
-            "credits": 6
-          }
-        ]
-      }
-    },
-    {
-      "code": "FSS 3720",
-      "title": "Cours autodirigé du Régime d’apprentissage expérientiel approfondi II",
-      "credits": 1.5,
-      "description": "Réalisation, individuellement ou en petit groupe, d’une activité expérientielle autodirigée supervisée et encadrée par les principes de l’apprentissage expérientiel. Les étudiantes et étudiants seront amenés à réfléchir sur les compétences transversales, notamment les uOCompétences, acquises durant l’activité expérientielle tout en tissant des liens avec les apprentissages académiques de leur parcours.",
-      "component": "SéminairePréalables : FSS 1700 et 6 crédits de cours universitaires RAEA.",
-      "prereqText": "FSS 1700 et 6 crédits de cours universitaires RAEA",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "FSS 1700 et 6 crédits de cours universitaires RAEA",
-        "children": [
-          {
-            "type": "course",
-            "code": "FSS 1700"
-          },
-          {
-            "type": "non_course",
-            "text": "FSS 1700 et 6 crédits de cours universitaires RAEA",
-            "credits": 6
-          }
-        ]
-      }
-    },
-    {
-      "code": "FSS 3730",
-      "title": "Cours autodirigé du Régime d’apprentissage expérientiel approfondi III",
-      "credits": 3,
-      "description": "Réalisation, individuellement ou en petit groupe, d’une activité expérientielle autodirigée supervisée et encadrée par les principes de l’apprentissage expérientiel. Les étudiantes et étudiants seront amenés à réfléchir sur les compétences transversales, notamment les uOCompétences, acquises durant l’activité expérientielle tout en tissant des liens avec les apprentissages académiques de leur parcours.",
-      "component": "SéminairePréalables : FSS 1700 et 6 crédits de cours universitaires RAEA.",
-      "prereqText": "FSS 1700 et 6 crédits de cours universitaires RAEA",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "FSS 1700 et 6 crédits de cours universitaires RAEA",
-        "children": [
-          {
-            "type": "course",
-            "code": "FSS 1700"
-          },
-          {
-            "type": "non_course",
-            "text": "FSS 1700 et 6 crédits de cours universitaires RAEA",
-            "credits": 6
-          }
-        ]
-      }
-    },
-    {
       "code": "FSS 3901",
       "title": "Stage coop / Co-op Work Term",
       "credits": 3,
@@ -74724,6 +74590,20 @@
         "text": "54 crédits de cours universitaires et ayant une MPC de 6,0",
         "credits": 54
       }
+    },
+    {
+      "code": "FSS 3920",
+      "title": "Cours autodirigé d’apprentissage expérientiel I / Experiential Learning Self-directed Course I",
+      "credits": 1.5,
+      "description": "Réalisation, individuellement ou en petit groupe, d’une activité expérientielle autodirigée supervisée et encadrée par les principes de l’apprentissage expérientiel. Les étudiantes et étudiants seront amenés à réfléchir sur les compétences transversales, notamment les uOCompétences, acquises durant l’activité expérientielle tout en tissant des liens avec les apprentissages académiques de leur parcours. / Completion, individually or in small groups, of a supervised self-directed experiential activity that is guided by the principles of experiential learning. Students will reflect on the transferable competencies, in particular the uOCompetencies, acquired during the experiential activity while making connections to their academic studies.",
+      "component": "Séminaire / Seminar"
+    },
+    {
+      "code": "FSS 3930",
+      "title": "Cours autodirigé d’apprentissage expérientiel II / Experiential Learning Self-directed Course II",
+      "credits": 3,
+      "description": "Réalisation, individuellement ou en petit groupe, d’une activité expérientielle autodirigée supervisée et encadrée par les principes de l’apprentissage expérientiel. Les étudiantes et étudiants seront amenés à réfléchir sur les compétences transversales, notamment les uOCompétences, acquises durant l’activité expérientielle tout en tissant des liens avec les apprentissages académiques de leur parcours. / Completion, individually or in small groups, of a supervised self-directed experiential activity that is guided by the principles of experiential learning. Students will reflect on the transferable competencies, in particular the uOCompetencies, acquired during the experiential activity while making connections to their academic studies.",
+      "component": "Séminaire / Seminar"
     },
     {
       "code": "FSS 4010",
@@ -74752,22 +74632,6 @@
         "type": "non_course",
         "text": "54 university course units",
         "credits": 54
-      }
-    },
-    {
-      "code": "FSS 4150",
-      "title": "Directed Research in Social Sciences",
-      "credits": 3,
-      "description": "Completion, individually or in a small group, of a research project under the supervision of a professor. This course allows for the application of already acquired abilities and the acquisition of new knowledge related to carrying out research. Course may be repeated if theme is different.",
-      "component": "LecturePrerequisite: 81 university course units. Registration is limited and must be approved by the Faculty. Previously SCS 4150.",
-      "aliases": [
-        "SCS 4150"
-      ],
-      "prereqText": "81 university course units",
-      "prerequisites": {
-        "type": "non_course",
-        "text": "81 university course units",
-        "credits": 81
       }
     },
     {
@@ -74826,22 +74690,6 @@
       }
     },
     {
-      "code": "FSS 4550",
-      "title": "Recherche dirigée en sciences sociales",
-      "credits": 3,
-      "description": "Réalisation, individuellement ou en petit groupe, d'une recherche sous la supervision d'un professeur. Ce cours permet l'application d'habiletés déjà acquises et l'acquisition de nouvelles connaissances liées à l'exécution d'une recherche. Le cours peut être répété si le thème est différent.",
-      "component": "Cours magistralPréalable: 81 crédits de cours universitaires. L'inscription est limitée et exige l'approbation de la Faculté. Antérieurement SCS 4550.",
-      "aliases": [
-        "SCS 4550"
-      ],
-      "prereqText": "81 crédits de cours universitaires",
-      "prerequisites": {
-        "type": "non_course",
-        "text": "81 crédits de cours universitaires",
-        "credits": 81
-      }
-    },
-    {
       "code": "FSS 4610",
       "title": "Thèmes choisis : Recherche terrain à l'international en sciences sociales II",
       "credits": 6,
@@ -74896,6 +74744,34 @@
       "credits": 3,
       "description": "Stage coop / Co-op Work Term",
       "component": "Stage / Work Term"
+    },
+    {
+      "code": "FSS 4950",
+      "title": "Recherche dirigée en sciences sociales / Directed Research in Social Sciences",
+      "credits": 3,
+      "description": "Réalisation, individuellement ou en petit groupe, d'une recherche sous la supervision d'un professeur. Ce cours permet l'application d'habiletés déjà acquises et l'acquisition de nouvelles connaissances liées à l'exécution d'une recherche. Le cours peut être répété si le thème est différent. / Completion, individually or in a small group, of a research project under the supervision of a professor. This course allows for the application of already acquired abilities and the acquisition of new knowledge related to carrying out research. Course may be repeated if theme is different.",
+      "component": "Recherche / Research"
+    },
+    {
+      "code": "FSS 4951",
+      "title": "Recherche dirigée en sciences sociales / Directed Research in Social Sciences",
+      "credits": 6,
+      "description": "Réalisation, individuellement ou en petit groupe, d'une recherche sous la supervision d'un professeur. Ce cours permet l'application d'habiletés déjà acquises et l'acquisition de nouvelles connaissances liées à l'exécution d'une recherche. Le cours peut être répété si le thème est différent. / Completion, individually or in a small group, of a research project under the supervision of a professor. This course allows for the application of already acquired abilities and the acquisition of new knowledge related to carrying out research. Course may be repeated if theme is different.",
+      "component": "Recherche / Research"
+    },
+    {
+      "code": "FSS 49511",
+      "title": "Recherche dirigée en sciences sociales (Partie 1 de 2) / Directed Research in Social Sciences (Part 1 of 2)",
+      "credits": 0,
+      "description": "Réalisation, individuellement ou en petit groupe, d'une recherche sous la supervision d'un professeur. Ce cours permet l'application d'habiletés déjà acquises et l'acquisition de nouvelles connaissances liées à l'exécution d'une recherche. Le cours peut être répété si le thème est différent. (Partie 1 de 2) / Completion, individually or in a small group, of a research project under the supervision of a professor. This course allows for the application of already acquired abilities and the acquisition of new knowledge related to carrying out research. Course may be repeated if theme is different. (Part 1 of 2)",
+      "component": "Recherche / Research"
+    },
+    {
+      "code": "FSS 49512",
+      "title": "Recherche dirigée en sciences sociales (Partie 2 de 2) / Directed Research in Social Sciences (Part 2 of 2)",
+      "credits": 6,
+      "description": "Réalisation, individuellement ou en petit groupe, d'une recherche sous la supervision d'un professeur. Ce cours permet l'application d'habiletés déjà acquises et l'acquisition de nouvelles connaissances liées à l'exécution d'une recherche. Le cours peut être répété si le thème est différent. (Partie 2 de 2) / Completion, individually or in a small group, of a research project under the supervision of a professor. This course allows for the application of already acquired abilities and the acquisition of new knowledge related to carrying out research. Course may be repeated if theme is different. (Part 2 of 2)",
+      "component": "Recherche / Research"
     },
     {
       "code": "FSS 5151",
@@ -75675,7 +75551,7 @@
       "title": "Global Climate Change",
       "credits": 3,
       "description": "The global climate system and climate variability. Climate system history and dynamics. Global warming impacts. Instrumental and proxy data analysis. Also offered as ENV 4129.",
-      "component": "Seminar, LaboratoryPrerequisite: GEG 2304. Course with laboratory or field work.",
+      "component": "Laboratory, SeminarPrerequisite: GEG 2304. Course with laboratory or field work.",
       "prereqText": "GEG 2304",
       "prerequisites": {
         "type": "course",
@@ -102736,7 +102612,7 @@
       "title": "Mechatronics",
       "credits": 3,
       "description": "Models for passive and active components for electro-mechanical systems. Network representation of signals and energy transmission and conversion. Selection of sensors and actuators for the control of mechanical systems. Modelling and simulation for the design of mixed dynamic systems. Courses MCG 5184, MCG 4136 cannot be combined for units. This course is equivalent to MAAJ 5804 at Carleton University.",
-      "component": "Tutorial, Lecture"
+      "component": "Lecture, Tutorial"
     },
     {
       "code": "MCG 5185",
@@ -110415,6 +110291,20 @@
       "component": "Lecture"
     },
     {
+      "code": "NSC 83241",
+      "title": "Seminar for MSc Students (Part 1 of 2)",
+      "credits": 0,
+      "description": "All graduate students enrolled in the MSc program or who have been admitted to a PhD program without an MSc must participate in these seminars for one year. Two seminars must be presented by each student during the year. (Part 1 of 2)",
+      "component": "Seminar"
+    },
+    {
+      "code": "NSC 83242",
+      "title": "Seminar for MSc Students (Part 2 of 2)",
+      "credits": 3,
+      "description": "All graduate students enrolled in the MSc program or who have been admitted to a PhD program without an MSc must participate in these seminars for one year. Two seminars must be presented by each student during the year. (Part 2 of 2)",
+      "component": "Seminar"
+    },
+    {
       "code": "NSC 8324S",
       "title": "Seminar for MSc Students",
       "credits": 3,
@@ -111287,7 +111177,7 @@
       "title": "Practicum: Family-Centered Care of Children with Acute and Chronic Illness",
       "credits": 3,
       "description": "Family-centered care of children experiencing acute and chronic illness. Practice in health care and simulation settings.",
-      "component": "Laboratory, Work TermPrerequisite: NSG 2313. NSG 3107 is corequisite to NSG 3307.",
+      "component": "Work Term, LaboratoryPrerequisite: NSG 2313. NSG 3107 is corequisite to NSG 3307.",
       "prereqText": "NSG 2313",
       "prerequisites": {
         "type": "course",
@@ -150556,7 +150446,7 @@
       "title": "Introduction à la pratique théâtrale : Les métiers des coulisses",
       "credits": 3,
       "description": "Introduction à la théorie, à la terminologie et à la pratique théâtrale avec un accent particulier sur la technique et la production de l'événement théâtral.",
-      "component": "Cours magistral, Laboratoire"
+      "component": "Laboratoire, Cours magistral"
     },
     {
       "code": "THE 1502",
@@ -274485,8 +274375,7 @@
           "options": [
             {
               "type": "course",
-              "code": "FSS 3330",
-              "credits": 3
+              "code": "FSS 3330"
             },
             {
               "type": "course",
@@ -293742,8 +293631,7 @@
             },
             {
               "type": "course",
-              "code": "FSS 4150",
-              "credits": 3
+              "code": "FSS 4150"
             },
             {
               "type": "course",
@@ -307035,8 +306923,7 @@
             },
             {
               "type": "course",
-              "code": "FSS 4150",
-              "credits": 3
+              "code": "FSS 4150"
             },
             {
               "type": "course",

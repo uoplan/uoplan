@@ -13196,7 +13196,17 @@
     "MHA 5150",
     "MHA 5158",
     "MHA 5345",
-    "MHA 6996"
+    "MHA 6996",
+    "CTM 81321",
+    "CTM 81322",
+    "FSS 3920",
+    "FSS 3930",
+    "FSS 4950",
+    "FSS 4951",
+    "FSS 49511",
+    "FSS 49512",
+    "NSC 83241",
+    "NSC 83242"
   ],
   "programs": [
     "undergrad/ba-specialise-bidisciplinaire-communication-lettres-francaises",
