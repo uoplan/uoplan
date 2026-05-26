@@ -52,10 +52,13 @@ function fallbackSvg(): string {
 </svg>`;
 }
 
-async function svgToPng(svg: string): Promise<Uint8Array> {
+async function svgToPng(svg: string, fontBuffers?: Uint8Array[]): Promise<Uint8Array> {
   await ensureWasm();
   const resvg = new Resvg(svg, {
-    font: { loadSystemFonts: false },
+    font: {
+      loadSystemFonts: false,
+      ...(fontBuffers?.length ? { fontBuffers } : {}),
+    },
     fitTo: { mode: "original" },
   });
   const rendered = resvg.render();
@@ -90,7 +93,12 @@ export async function handleOgImage(
 
 async function generatePng(stateBase64url: string, env: Env, origin: string): Promise<Uint8Array> {
   const base64 = base64urlToBase64(stateBase64url);
-  const fallback = () => svgToPng(fallbackSvg());
+  const [fontRegular, fontBold] = await Promise.all([
+    fetchBytes(env, origin, "/fonts/dm-mono-regular.ttf"),
+    fetchBytes(env, origin, "/fonts/dm-mono-bold.ttf"),
+  ]);
+  const fonts = [fontRegular, fontBold].filter(Boolean) as Uint8Array[];
+  const fallback = () => svgToPng(fallbackSvg(), fonts);
 
   try {
     const peek = peekTermAndYearFromBase64(base64);
@@ -157,7 +165,7 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
     const colorMap = buildColorMap(schedule, {});
     const svg = renderCalendarToSvg(events, colorMap);
 
-    return svgToPng(svg);
+    return svgToPng(svg, fonts);
   } catch (err) {
     console.error("[og-image] unexpected error:", err);
     return fallback();

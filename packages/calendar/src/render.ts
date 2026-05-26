@@ -15,6 +15,7 @@ const PAD_TOP = 6;
 const PAD_BOTTOM = 6;
 
 const FONT = "DM Mono,monospace";
+const FONT_MEDIUM = "DM Mono Medium,monospace";
 
 interface RenderOptions {
   width?: number;
@@ -63,11 +64,6 @@ export function renderCalendarToSvg(
   parts.push(
     `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`,
   );
-
-  parts.push(`<defs><style>
-@font-face{font-family:'DM Mono';font-weight:400;src:url('https://uoplan.party/fonts/dm-mono-regular.ttf') format('truetype')}
-@font-face{font-family:'DM Mono';font-weight:500;src:url('https://uoplan.party/fonts/dm-mono-bold.ttf') format('truetype')}
-</style></defs>`);
 
   // Background
   parts.push(`<rect width="${W}" height="${H}" fill="${BG}"/>`);
@@ -145,9 +141,8 @@ export function renderCalendarToSvg(
       const codeSize = 16;
       const codeY = y + PAD_TOP + codeSize;
       if (codeY <= textAreaBottom && eventH >= codeSize + PAD_TOP + 4) {
-        console.log("codeY", codeY, "textAreaBottom", textAreaBottom, "eventH", eventH);
         parts.push(
-          `<text x="${textX}" y="${codeY}" font-family="asd" font-size="${codeSize}" font-weight="700" fill="${TEXT_WHITE}">${e(event.courseCode)}</text>`,
+          `<text x="${textX}" y="${codeY}" font-family="${FONT_MEDIUM}" font-size="${codeSize}" fill="${TEXT_WHITE}">${e(event.courseCode)}</text>`,
         );
       }
 
@@ -158,7 +153,7 @@ export function renderCalendarToSvg(
       const timeRange = formatTimeRange(event.startMinutes, event.endMinutes);
       if (metaY <= textAreaBottom && eventH >= codeSize + metaSize + PAD_TOP + 10) {
         parts.push(
-          `<text x="${textX}" y="${metaY}" font-family="${FONT}" font-size="${metaSize}" font-weight="500" fill="${TEXT_WHITE}">${e(comp)}</text>`,
+          `<text x="${textX}" y="${metaY}" font-family="${FONT_MEDIUM}" font-size="${metaSize}" fill="${TEXT_WHITE}">${e(comp)}</text>`,
         );
         const compApproxW = comp.length * metaSize * 0.58;
         const sepX = textX + compApproxW + 4;
@@ -176,7 +171,7 @@ export function renderCalendarToSvg(
       const profY = textAreaBottom - 2;
       if (profName && profY >= metaY + profSize + 8) {
         parts.push(
-          `<text x="${textX}" y="${profY}" font-family="${FONT}" font-size="${profSize}" font-weight="500" fill="${TEXT_PROF}">${e(profName)}</text>`,
+          `<text x="${textX}" y="${profY}" font-family="${FONT_MEDIUM}" font-size="${profSize}" fill="${TEXT_PROF}">${e(profName)}</text>`,
         );
       }
     }
