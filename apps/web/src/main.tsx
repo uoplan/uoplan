@@ -6,6 +6,10 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { setRouterInstance } from "./routerRef";
 import { theme } from "./styles/theme";
+import "@fontsource/dm-mono/300.css";
+import "@fontsource/dm-mono/400.css";
+import "@fontsource/dm-mono/500.css";
+import "@fontsource/dm-serif-display/400.css";
 import "./styles/global.css";
 import { i18n, initializeI18n } from "./i18n";
 

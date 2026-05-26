@@ -90,34 +90,45 @@ export async function handleOgImage(
 
 async function generatePng(stateBase64url: string, env: Env, origin: string): Promise<Uint8Array> {
   const base64 = base64urlToBase64(stateBase64url);
+  const fallback = () => svgToPng(fallbackSvg());
 
   try {
     const peek = peekTermAndYearFromBase64(base64);
-    if (!peek) return svgToPng(fallbackSvg());
+    if (!peek) {
+      return fallback();
+    }
 
     const [manifestBytes, indicesBytes] = await Promise.all([
       fetchBytes(env, origin, "/data/catalogue.pb"),
       fetchBytes(env, origin, "/data/indices.pb"),
     ]);
 
-    if (!manifestBytes || !indicesBytes) return svgToPng(fallbackSvg());
+    if (!manifestBytes || !indicesBytes) {
+      return fallback();
+    }
 
     const manifest = fromProtoCatalogueManifest(DataProto.CatalogueManifest.decode(manifestBytes));
     const yearForCatalogue = peek.firstYear
       ? (manifest.years.find((y) => y >= peek.firstYear!) ?? manifest.years[0])
       : manifest.years[0];
 
-    if (!yearForCatalogue) return svgToPng(fallbackSvg());
+    if (!yearForCatalogue) {
+      return fallback();
+    }
 
     const termId = peek.termId;
-    if (!termId) return svgToPng(fallbackSvg());
+    if (!termId) {
+      return fallback();
+    }
 
     const [catalogueBytes, schedulesBytes] = await Promise.all([
       fetchBytes(env, origin, `/data/catalogue.${yearForCatalogue}.pb`),
       fetchBytes(env, origin, `/data/schedules.${termId}.pb`),
     ]);
 
-    if (!catalogueBytes || !schedulesBytes) return svgToPng(fallbackSvg());
+    if (!catalogueBytes || !schedulesBytes) {
+      return fallback();
+    }
 
     const catalogue = fromProtoCatalogue(DataProto.Catalogue.decode(catalogueBytes));
     const schedulesData = fromProtoSchedulesData(DataProto.SchedulesData.decode(schedulesBytes));
@@ -126,7 +137,9 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
     const cache = buildDataCache(catalogue, schedulesData);
 
     const decoded = decodeStateFromBase64(base64, catalogue, indices);
-    if ("error" in decoded) return svgToPng(fallbackSvg());
+    if ("error" in decoded) {
+      return fallback();
+    }
 
     const constraints = {
       minStartMinutes: decoded.generationMinStartMinutes,
@@ -136,14 +149,17 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
     };
 
     const schedule = reconstructScheduleForPreview(decoded, cache, constraints);
-    if (!schedule || schedule.enrollments.length === 0) return svgToPng(fallbackSvg());
+    if (!schedule || schedule.enrollments.length === 0) {
+      return fallback();
+    }
 
     const events = scheduleToEvents(schedule, null);
     const colorMap = buildColorMap(schedule, {});
     const svg = renderCalendarToSvg(events, colorMap);
 
     return svgToPng(svg);
-  } catch {
-    return svgToPng(fallbackSvg());
+  } catch (err) {
+    console.error("[og-image] unexpected error:", err);
+    return fallback();
   }
 }

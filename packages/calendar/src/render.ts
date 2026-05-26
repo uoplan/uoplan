@@ -1,20 +1,20 @@
 import { getCourseColorHex, hexToRgb } from "@uoplan/schedule";
 import type { CalendarEvent } from "./types";
-import {
-  assignLanes,
-  CAL_START_MINUTES,
-  CAL_END_MINUTES,
-  WEEKDAY_CODES,
-  DAY_LABELS,
-} from "./layout";
+import { assignLanes, CAL_START_MINUTES, CAL_END_MINUTES, WEEKDAY_CODES } from "./layout";
 
 const BG = "#111113";
 const GRID_LINE = "#2c2e33";
-const TEXT_PRIMARY = "#ffffff";
-const TEXT_MUTED = "#909296";
-const TIME_AXIS_W = 52;
-const HEADER_H = 36;
-const HOUR_LABEL_INTERVAL = 60; // every hour
+const GRID_HALF = "rgba(44,46,51,0.45)";
+const TEXT_WHITE = "#ffffff";
+const TEXT_TIME = "rgba(255,255,255,0.85)";
+const TEXT_PROF = "rgba(255,255,255,0.78)";
+const LEFT_BORDER_W = 6;
+const GRADE_BAR_H = 6;
+const PAD_LEFT = 7;
+const PAD_TOP = 6;
+const PAD_BOTTOM = 6;
+
+const FONT = "DM Mono,monospace";
 
 interface RenderOptions {
   width?: number;
@@ -29,6 +29,17 @@ function e(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
+function componentKindOnly(componentSection: string): string {
+  const i = componentSection.indexOf(" - ");
+  return (i >= 0 ? componentSection.slice(0, i) : componentSection).trim();
+}
+
+function formatTimeRange(startMinutes: number, endMinutes: number): string {
+  const fmt = (m: number) =>
+    `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+  return `${fmt(startMinutes)}–${fmt(endMinutes)}`;
+}
+
 export function renderCalendarToSvg(
   events: CalendarEvent[],
   colorMap: Record<string, number>,
@@ -40,14 +51,11 @@ export function renderCalendarToSvg(
   const activeDays = WEEKDAY_CODES.filter((d) => events.some((ev) => ev.day === d));
   const days = activeDays.length > 0 ? activeDays : WEEKDAY_CODES;
 
-  const gridW = W - TIME_AXIS_W;
-  const gridH = H - HEADER_H;
-  const colW = gridW / days.length;
-
+  const colW = W / days.length;
   const spanMinutes = CAL_END_MINUTES - CAL_START_MINUTES;
 
   function minutesToY(m: number): number {
-    return HEADER_H + ((m - CAL_START_MINUTES) / spanMinutes) * gridH;
+    return ((m - CAL_START_MINUTES) / spanMinutes) * H;
   }
 
   const parts: string[] = [];
@@ -56,43 +64,31 @@ export function renderCalendarToSvg(
     `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`,
   );
 
+  parts.push(`<defs><style>
+@font-face{font-family:'DM Mono';font-weight:400;src:url('https://uoplan.party/fonts/dm-mono-regular.ttf') format('truetype')}
+@font-face{font-family:'DM Mono';font-weight:500;src:url('https://uoplan.party/fonts/dm-mono-bold.ttf') format('truetype')}
+</style></defs>`);
+
   // Background
   parts.push(`<rect width="${W}" height="${H}" fill="${BG}"/>`);
 
-  // Header background
-  parts.push(`<rect width="${W}" height="${HEADER_H}" fill="${GRID_LINE}"/>`);
-
-  // Day column headers
-  for (let i = 0; i < days.length; i++) {
-    const cx = TIME_AXIS_W + i * colW + colW / 2;
-    parts.push(
-      `<text x="${cx}" y="${HEADER_H / 2 + 5}" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="${TEXT_PRIMARY}">${e(DAY_LABELS[days[i]])}</text>`,
-    );
-  }
-
-  // Vertical separators between days
-  for (let i = 1; i < days.length; i++) {
-    const x = TIME_AXIS_W + i * colW;
-    parts.push(
-      `<line x1="${x}" y1="${HEADER_H}" x2="${x}" y2="${H}" stroke="${GRID_LINE}" stroke-width="1"/>`,
-    );
-  }
-
-  // Hour grid lines and time labels
+  // Hour and half-hour grid lines
   let t = CAL_START_MINUTES;
   while (t <= CAL_END_MINUTES) {
     const y = minutesToY(t);
-    const h = Math.floor(t / 60);
-    const label = `${String(h).padStart(2, "0")}:00`;
+    const isHour = t % 60 === 0;
     parts.push(
-      `<line x1="${TIME_AXIS_W}" y1="${y}" x2="${W}" y2="${y}" stroke="${GRID_LINE}" stroke-width="1"/>`,
+      `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="${isHour ? GRID_LINE : GRID_HALF}" stroke-width="1"/>`,
     );
-    if (t < CAL_END_MINUTES) {
-      parts.push(
-        `<text x="${TIME_AXIS_W - 6}" y="${y + 4}" text-anchor="end" font-family="system-ui,sans-serif" font-size="10" fill="${TEXT_MUTED}">${e(label)}</text>`,
-      );
-    }
-    t += HOUR_LABEL_INTERVAL;
+    t += 30;
+  }
+
+  // Vertical column separators
+  for (let i = 1; i < days.length; i++) {
+    const x = i * colW;
+    parts.push(
+      `<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="${GRID_LINE}" stroke-width="1"/>`,
+    );
   }
 
   // Events
@@ -106,40 +102,85 @@ export function renderCalendarToSvg(
       const hex = getCourseColorHex(colorIdx);
       const { r, g, b } = hexToRgb(hex);
 
-      const x = TIME_AXIS_W + dayIdx * colW + (laneIndex / laneCount) * colW + 2;
-      const laneW = colW / laneCount - 4;
-      const y = minutesToY(event.startMinutes) + 1;
-      const eventH = minutesToY(event.endMinutes) - y - 1;
+      const laneW = colW / laneCount;
+      const x = dayIdx * colW + laneIndex * laneW;
+      const y = minutesToY(event.startMinutes);
+      const eventH = minutesToY(event.endMinutes) - y;
 
       if (eventH < 4) continue;
 
-      // Event block
+      // Background fill
       parts.push(
-        `<rect x="${x}" y="${y}" width="${laneW}" height="${eventH}" rx="4" fill="rgba(${r},${g},${b},0.55)" stroke="${hex}" stroke-width="1.5"/>`,
+        `<rect x="${x}" y="${y}" width="${laneW}" height="${eventH}" fill="rgba(${r},${g},${b},0.38)"/>`,
       );
 
-      // Course code label
-      const fontSize = Math.min(13, Math.max(9, eventH / 3.5));
-      if (eventH >= 16) {
-        const labelY = y + Math.min(16, eventH / 2 + 6);
+      // Left accent border
+      parts.push(
+        `<rect x="${x}" y="${y}" width="${LEFT_BORDER_W}" height="${eventH}" fill="${hex}"/>`,
+      );
+
+      // Grade strip — starts after the left border, sits flush at the bottom
+      const gradeViz = event.gradeViz;
+      const hasGrade = gradeViz && gradeViz.total > 0 && eventH >= GRADE_BAR_H + 8;
+      if (hasGrade) {
+        const stripY = y + eventH - GRADE_BAR_H;
+        const stripX = x + LEFT_BORDER_W;
+        const stripW = laneW - LEFT_BORDER_W;
+        let bucketX = stripX;
+        for (const bucket of gradeViz.buckets) {
+          if (bucket.count <= 0) continue;
+          const bucketW = (bucket.count / gradeViz.total) * stripW;
+          parts.push(
+            `<rect x="${bucketX}" y="${stripY}" width="${bucketW}" height="${GRADE_BAR_H}" fill="${e(bucket.color)}"/>`,
+          );
+          bucketX += bucketW;
+        }
+      }
+
+      // Text layout
+      const textX = x + LEFT_BORDER_W + PAD_LEFT;
+      const textAreaBottom = y + eventH - (hasGrade ? GRADE_BAR_H : 0) - PAD_BOTTOM;
+
+      // Course code — top
+      const codeSize = 16;
+      const codeY = y + PAD_TOP + codeSize;
+      if (codeY <= textAreaBottom && eventH >= codeSize + PAD_TOP + 4) {
+        console.log("codeY", codeY, "textAreaBottom", textAreaBottom, "eventH", eventH);
         parts.push(
-          `<text x="${x + laneW / 2}" y="${labelY}" text-anchor="middle" font-family="system-ui,sans-serif" font-size="${fontSize}" font-weight="700" fill="${TEXT_PRIMARY}">${e(event.courseCode)}</text>`,
+          `<text x="${textX}" y="${codeY}" font-family="asd" font-size="${codeSize}" font-weight="700" fill="${TEXT_WHITE}">${e(event.courseCode)}</text>`,
         );
       }
 
-      // Section label (if enough space)
-      if (eventH >= 34) {
+      // Component + time — second line
+      const metaSize = 13;
+      const metaY = codeY + metaSize + 4;
+      const comp = componentKindOnly(event.componentSection);
+      const timeRange = formatTimeRange(event.startMinutes, event.endMinutes);
+      if (metaY <= textAreaBottom && eventH >= codeSize + metaSize + PAD_TOP + 10) {
         parts.push(
-          `<text x="${x + laneW / 2}" y="${y + Math.min(28, eventH - 6)}" text-anchor="middle" font-family="system-ui,sans-serif" font-size="${Math.max(8, fontSize - 2)}" fill="rgba(255,255,255,0.75)">${e(event.componentSection)}</text>`,
+          `<text x="${textX}" y="${metaY}" font-family="${FONT}" font-size="${metaSize}" font-weight="500" fill="${TEXT_WHITE}">${e(comp)}</text>`,
+        );
+        const compApproxW = comp.length * metaSize * 0.58;
+        const sepX = textX + compApproxW + 4;
+        parts.push(
+          `<text x="${sepX}" y="${metaY}" font-family="${FONT}" font-size="${metaSize}" fill="rgba(255,255,255,0.35)">·</text>`,
+        );
+        parts.push(
+          `<text x="${sepX + 11}" y="${metaY}" font-family="${FONT}" font-size="${metaSize}" fill="${TEXT_TIME}">${e(timeRange)}</text>`,
+        );
+      }
+
+      // Professor — pinned to bottom of text area, only if there's enough room
+      const profName = event.professor && event.professor !== "—" ? event.professor : null;
+      const profSize = 12;
+      const profY = textAreaBottom - 2;
+      if (profName && profY >= metaY + profSize + 8) {
+        parts.push(
+          `<text x="${textX}" y="${profY}" font-family="${FONT}" font-size="${profSize}" font-weight="500" fill="${TEXT_PROF}">${e(profName)}</text>`,
         );
       }
     }
   }
-
-  // Time axis separator
-  parts.push(
-    `<line x1="${TIME_AXIS_W}" y1="${HEADER_H}" x2="${TIME_AXIS_W}" y2="${H}" stroke="${GRID_LINE}" stroke-width="1"/>`,
-  );
 
   parts.push(`</svg>`);
 

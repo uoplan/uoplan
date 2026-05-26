@@ -22,7 +22,7 @@ When a user clicks **Share**, `getShareUrl()` in `apps/web/src/store/slices/url.
 - `og:image` → `https://uoplan.party/api/og-image/:state`
 - `og:image:width` / `og:image:height` (1200×630)
 - `twitter:card summary_large_image`
-- A `<script>` that immediately redirects to `/?s=<state>` (the state is converted back from base64url to standard base64 for the `?s=` query parameter used by the app)
+- A `<script>` that immediately redirects to `/schedule/calendar/?s=<state>` (the state is converted back from base64url to standard base64 for the `?s=` query parameter used by the app)
 
 When a social bot (Discord, iMessage, etc.) scrapes the page it sees the OG tags; regular browsers are instantly redirected to the app.
 
