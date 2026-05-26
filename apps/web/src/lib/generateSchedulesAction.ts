@@ -23,7 +23,6 @@ import {
 import {
   cacheWithClosedFilter,
   cacheWithPerCourseVirtualFilter,
-  getCourseLevel,
   getEffectiveSchedule,
 } from "@uoplan/schedule";
 import { courseMatchesFilters } from "@uoplan/schedule";
@@ -34,8 +33,14 @@ import {
   computeCoursesPerPool,
   enumerateSingleRedistributions,
   isBroadElectivePoolType,
+  isElectiveRequirementType,
+  isWithinElectiveLevelCap,
+  isWithinElectiveLevelBuckets,
+  virtualScheduleFilterApplies,
   shuffleInPlace,
   weightedRandomPick,
+  courseLevelSortKey as levelSortKey,
+  candidatePoolWeight as candidateWeight,
   type RequirementPool,
 } from "../store/scheduleHelpers";
 import {
@@ -49,14 +54,6 @@ import {
 import { collectImplicitHonoursForSchedule } from "./implicitHonours";
 import { diagnoseTimetableFailure, type TimetableFailureDiagnostics } from "@uoplan/schedule";
 import { buildColorMap } from "./colorMap";
-import {
-  isElectiveRequirementType,
-  isWithinElectiveLevelCap,
-  virtualScheduleFilterApplies,
-  isWithinElectiveLevelBuckets,
-} from "./electiveEligibility";
-
-const UNKNOWN_COURSE_LEVEL = 999_000;
 
 const DEFAULT_MIN_START_MINUTES = 8 * 60 + 30;
 const DEFAULT_MAX_END_MINUTES = 22 * 60;
@@ -137,31 +134,10 @@ function buildActiveFilterHints(opts: {
 const EASIER_APLUS_PIVOT = 20;
 /**
  * Base and scale for exponential boost: multiplier = BASE^((aPlus% - pivot) / SCALE).
- * Must be high enough to compete with {@link LEVEL_WEIGHT_BASE} tier penalties,
- * otherwise low-level hard courses still win over higher-level easy electives.
+ * Must be high enough to compete with LEVEL_WEIGHT_BASE tier penalties.
  */
 const EASIER_APLUS_BASE = 5.25;
 const EASIER_APLUS_SCALE = 10;
-
-/** Each level tier is this many times less likely than the one below it. */
-const LEVEL_WEIGHT_BASE = 2;
-
-/** Penalty multiplier for courses with non-course prerequisites (e.g. "permission of instructor"). */
-const NON_COURSE_PREREQ_PENALTY = 0.3;
-/** Floor weight for courses whose level can't be parsed. */
-const UNKNOWN_LEVEL_FLOOR = 0.01;
-
-function levelSortKey(code: string): number {
-  return getCourseLevel(code) ?? UNKNOWN_COURSE_LEVEL;
-}
-
-function candidateWeight(level: number, hasNonCoursePrereq: boolean): number {
-  if (level >= UNKNOWN_COURSE_LEVEL) return UNKNOWN_LEVEL_FLOOR;
-  const tier = Math.max(1, Math.floor(level / 1000));
-  let w = 1 / Math.pow(LEVEL_WEIGHT_BASE, tier - 1);
-  if (hasNonCoursePrereq) w *= NON_COURSE_PREREQ_PENALTY;
-  return w;
-}
 
 function reorderOptionalPoolForGeneration(
   codes: string[],

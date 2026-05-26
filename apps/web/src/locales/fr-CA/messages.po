@@ -1300,3 +1300,15 @@ msgstr "il y a 1 minute"
 
 msgid "saveStatus.savedMinutesAgo"
 msgstr "il y a {n} minutes"
+
+msgid "sharedSchedule.title"
+msgstr "Horaire partagé"
+
+msgid "sharedSchedule.body"
+msgstr "Quelqu'un a partagé un horaire avec vous. Voulez-vous le charger? Cela remplacera votre planificateur actuel."
+
+msgid "sharedSchedule.keepMine"
+msgstr "Garder le mien"
+
+msgid "sharedSchedule.load"
+msgstr "Charger l'horaire partagé"

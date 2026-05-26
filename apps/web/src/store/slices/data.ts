@@ -38,6 +38,8 @@ import {
 import { recomputeStateForProgram } from "../requirementCompute";
 import { LOCAL_STORAGE_KEY } from "../constants";
 import { applyHydrationNavigation } from "../../lib/hydrateNavigation";
+import { setCalendarMode } from "../../lib/calendarRoute";
+import { navigateToCalendar } from "../../lib/appNavigation";
 
 /** Build a DataCache and inject fake entries for any OPT transfer credit codes in completedCourses. */
 function buildCacheWithOpt(
@@ -58,6 +60,8 @@ interface DataSlice {
   loadData: AppStore["loadData"];
   setSelectedTermId: AppStore["setSelectedTermId"];
   setFirstYear: AppStore["setFirstYear"];
+  acceptSharedState: AppStore["acceptSharedState"];
+  dismissSharedState: AppStore["dismissSharedState"];
 }
 
 export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, get) => ({
@@ -321,16 +325,29 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
         const urlBytes = parseStateFromUrl(window.location.search);
         if (urlBytes && urlBytes.length > 0) {
           const decoded = decodeState(urlBytes, parsedCatalogue, indices);
+          // Always strip the ?s= param so a refresh doesn't re-trigger this
+          const u = new URL(window.location.href);
+          u.searchParams.delete("s");
+          u.searchParams.delete("t");
+          u.searchParams.delete("f");
+          window.history.replaceState({}, "", u.toString());
+
           if ("error" in decoded) {
             set({ error: decoded.error });
           } else {
-            get().loadEncodedState(decoded);
-            const u = new URL(window.location.href);
-            u.searchParams.delete("s");
-            u.searchParams.delete("t");
-            u.searchParams.delete("f");
-            window.history.replaceState({}, "", u.toString());
-            applyHydrationNavigation(decoded, get);
+            const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (stored) {
+              // User has existing state — ask before replacing it
+              const existing = decodeStateFromBase64(stored, parsedCatalogue, indices);
+              if (!("error" in existing)) {
+                get().loadEncodedState(existing);
+                applyHydrationNavigation(existing, get);
+              }
+              set({ pendingSharedState: decoded });
+            } else {
+              get().loadEncodedState(decoded);
+              applyHydrationNavigation(decoded, get);
+            }
           }
         } else {
           const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -353,5 +370,20 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
         error: err instanceof Error ? err.message : "Failed to load data",
       });
     }
+  },
+
+  acceptSharedState: () => {
+    const pending = get().pendingSharedState;
+    if (!pending) return;
+    set({ pendingSharedState: null });
+    get().loadEncodedState(pending);
+    navigateToCalendar({ replace: false });
+    const isBasic = pending.wizardMode === "basic";
+    setCalendarMode(isBasic ? "basic" : "advanced");
+    void (isBasic ? get().generateBasicSchedules() : get().generateSchedules());
+  },
+
+  dismissSharedState: () => {
+    set({ pendingSharedState: null });
   },
 });

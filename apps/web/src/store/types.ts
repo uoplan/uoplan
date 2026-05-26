@@ -31,6 +31,7 @@ export type GenerationErrorState = {
 };
 
 export interface AppState {
+  pendingSharedState: DecodedState | null;
   basicPinnedCourses: string[];
   basicElectivesCount: number;
   basicExcludedCategories: string[];
@@ -129,6 +130,8 @@ export interface AppActions {
   setSelectedTermId: (termId: string) => Promise<void>;
   setFirstYear: (year: number | null) => Promise<void>;
   loadEncodedState: (decoded: DecodedState) => void;
+  acceptSharedState: () => void;
+  dismissSharedState: () => void;
   getShareUrl: () => string | null;
   getEncodedStateBase64: () => string | null;
   setProgram: (program: Program | null) => void;

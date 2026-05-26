@@ -94,6 +94,7 @@ export const useAppStore = create<AppStore>()((...a) => {
     blacklistedCourses: [],
     lastSavedAt: null,
     hasPendingSave: false,
+    pendingSharedState: null,
 
     setCalendarWeekIndex: (index) => set({ calendarWeekIndex: index }),
 

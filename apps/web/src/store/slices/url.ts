@@ -222,12 +222,6 @@ export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, ge
     const s = get();
     if (!s.catalogue || !s.indices) return null;
     const input = buildEncodeInput(s);
-    // Include every course in the current schedule in basicPinnedCourses so the OG image
-    // endpoint can reconstruct the exact schedule without needing requirement tree logic.
-    if (s.currentSchedule) {
-      const scheduleCodes = s.currentSchedule.enrollments.map((e) => e.courseCode);
-      input.basicPinnedCourses = [...new Set([...input.basicPinnedCourses, ...scheduleCodes])];
-    }
     const base64 = encodeStateToBase64(input, s.catalogue, s.indices);
     if (!base64) return null;
     const base64url = base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
