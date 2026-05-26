@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "og-image": "node scripts/og-image-runner.mjs"
   },
   "dependencies": {
     "@resvg/resvg-wasm": "^2.6.2",

@@ -36,7 +36,7 @@ async function verifyTurnstile(token: string, secret: string, ip: string): Promi
 function buildShareHtml(stateBase64url: string): string {
   const base64 = stateBase64url.replace(/-/g, "+").replace(/_/g, "/");
   const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-  const appUrl = `/?s=${encodeURIComponent(padded)}`;
+  const appUrl = `/schedule/calendar/?s=${encodeURIComponent(padded)}`;
   const ogImage = `https://uoplan.party/api/og-image/${stateBase64url}`;
   const ogUrl = `https://uoplan.party/api/share/${stateBase64url}`;
 

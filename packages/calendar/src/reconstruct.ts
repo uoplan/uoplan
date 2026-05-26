@@ -58,14 +58,20 @@ export function reconstructScheduleForPreview(
   const rng = createSeededRng(seed >>> 0);
 
   const courseCodes = [
-    ...decoded.courseSelections.flatMap((s) => s.courseCodes),
     ...decoded.basicPinnedCourses,
+    ...decoded.courseSelections.flatMap((s) => s.courseCodes),
+    ...decoded.constrainedSelections.flatMap((s) => s.courseCodes),
   ];
 
   const deduplicated = [...new Set(courseCodes)];
-  const targetCount = decoded.coursesThisSemester || deduplicated.length;
+  const targetCount = Math.min(
+    decoded.coursesThisSemester || deduplicated.length,
+    deduplicated.length,
+  );
 
   shuffleInPlace(deduplicated, rng);
+
+  if (targetCount === 0 || deduplicated.length === 0) return null;
 
   const schedules = generateSchedules(deduplicated, targetCount, cache, constraints, 1);
   if (schedules.length === 0) return null;
