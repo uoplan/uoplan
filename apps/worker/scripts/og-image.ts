@@ -148,8 +148,7 @@ async function run() {
   const resvg = new Resvg(svg, {
     font: {
       fontBuffers: [new Uint8Array(fontRegular), new Uint8Array(fontBold)],
-      defaultFontFamily: "DM Mono",
-      monospaceFamily: "DM Mono",
+      loadSystemFonts: false,
     },
     fitTo: { mode: "original" },
   });
