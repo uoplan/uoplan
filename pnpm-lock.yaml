@@ -87,6 +87,9 @@ importers:
       '@tanstack/react-router':
         specifier: ^1.169.2
         version: 1.169.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@uoplan/calendar':
+        specifier: workspace:^
+        version: link:../../packages/calendar
       '@uoplan/schedule':
         specifier: workspace:^
         version: link:../../packages/schedule
@@ -157,6 +160,15 @@ importers:
 
   apps/worker:
     dependencies:
+      '@resvg/resvg-wasm':
+        specifier: ^2.6.2
+        version: 2.6.2
+      '@uoplan/calendar':
+        specifier: workspace:*
+        version: link:../../packages/calendar
+      '@uoplan/schedule':
+        specifier: workspace:*
+        version: link:../../packages/schedule
       hono:
         specifier: ^4.7.11
         version: 4.12.19
@@ -170,6 +182,12 @@ importers:
       wrangler:
         specifier: ^4.12.0
         version: 4.84.1
+
+  packages/calendar:
+    dependencies:
+      '@uoplan/schedule':
+        specifier: workspace:*
+        version: link:../schedule
 
   packages/schedule:
     dependencies:
@@ -1742,6 +1760,10 @@ packages:
 
   '@poppinss/exception@1.2.3':
     resolution: {integrity: sha512-dCED+QRChTVatE9ibtoaxc+WkdzOSjYTKi/+uacHWIsfodVfpsueo3+DKpgU5Px8qXjgmXkSvhXvSCz3fnP9lw==}
+
+  '@resvg/resvg-wasm@2.6.2':
+    resolution: {integrity: sha512-FqALmHI8D4o6lk/LRWDnhw95z5eO+eAa6ORjVg09YRR7BkcM6oPHU9uyC0gtQG5vpFLvgpeU4+zEAz2H8APHNw==}
+    engines: {node: '>= 10'}
 
   '@rolldown/binding-android-arm64@1.0.0-rc.11':
     resolution: {integrity: sha512-SJ+/g+xNnOh6NqYxD0V3uVN4W3VfnrGsC9/hoglicgTNfABFG9JjISvkkU0dNY84MNHLWyOgxP9v9Y9pX4S7+A==}
@@ -4669,6 +4691,8 @@ snapshots:
       supports-color: 10.2.2
 
   '@poppinss/exception@1.2.3': {}
+
+  '@resvg/resvg-wasm@2.6.2': {}
 
   '@rolldown/binding-android-arm64@1.0.0-rc.11':
     optional: true

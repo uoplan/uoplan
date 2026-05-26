@@ -1,9 +1,7 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
 import {
-  encodeState,
   encodeStateToBase64,
-  stateToShareUrl,
   urlToSlug,
   type EncodeInput,
   requirementIdsFromTree,
@@ -223,8 +221,9 @@ export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, ge
   getShareUrl: () => {
     const s = get();
     if (!s.catalogue || !s.indices) return null;
-    const bytes = encodeState(buildEncodeInput(s), s.catalogue, s.indices);
-    if (!bytes) return null;
-    return stateToShareUrl(bytes);
+    const base64 = encodeStateToBase64(buildEncodeInput(s), s.catalogue, s.indices);
+    if (!base64) return null;
+    const base64url = base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+    return `${window.location.origin}/api/share/${base64url}`;
   },
 });

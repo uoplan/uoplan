@@ -15,4 +15,5 @@
 | [enrol-cli-modal.md](./enrol-cli-modal.md)                                                                                     | "Enrol via CLI" button and modal — encodes schedule as base64url protobuf for the CLI              |
 | [uenroll-import.md](./uenroll-import.md)                                                                                       | Import from uEnroll — parses uenroll.ca schedule URLs and loads them into the calendar             |
 | [week-preview-panel.md](./week-preview-panel.md)                                                                               | Visual week-group navigation panel — mini calendar cards for schedules with multiple week patterns |
+| [share-og-image.md](./share-og-image.md)                                                                                       | Share URL & OG image — `/api/share/:state` HTML redirect and `/api/og-image/:state` PNG preview    |
 | [superpowers/specs/2026-04-29-webpush-notifications-design.md](./superpowers/specs/2026-04-29-webpush-notifications-design.md) | WebPush notification system — Cloudflare Worker, frontend toggle (Step 1), and GitHub Action       |

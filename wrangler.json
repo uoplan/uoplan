@@ -7,7 +7,13 @@
     "directory": "apps/web/dist",
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
-    "run_worker_first": ["/api/subscribe", "/api/unsubscribe", "/api/send"]
+    "run_worker_first": [
+      "/api/subscribe",
+      "/api/unsubscribe",
+      "/api/send",
+      "/api/share/*",
+      "/api/og-image/*"
+    ]
   },
   "kv_namespaces": [
     {
