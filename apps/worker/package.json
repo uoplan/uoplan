@@ -7,6 +7,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@resvg/resvg-wasm": "^2.6.2",
+    "@uoplan/calendar": "workspace:*",
+    "@uoplan/schedule": "workspace:*",
     "hono": "^4.7.11"
   },
   "devDependencies": {
