@@ -549,7 +549,14 @@ function bytesToBase64(bytes: Uint8Array): string {
 
 function base64ToBytes(base64: string): Uint8Array | null {
   try {
-    const binary = atob(base64);
+    // Normalize to standard base64: URLSearchParams.get() converts "+" to spaces,
+    // and callers may pass base64url (which uses "-" and "_" instead of "+" and "/").
+    const normalized = base64.replace(/ /g, "+").replace(/-/g, "+").replace(/_/g, "/");
+    const padded =
+      normalized.length % 4 === 0
+        ? normalized
+        : normalized + "=".repeat(4 - (normalized.length % 4));
+    const binary = atob(padded);
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i++) {
       bytes[i] = binary.charCodeAt(i);
@@ -571,14 +578,12 @@ export function stateToShareUrl(
 }
 
 export function parseStateFromUrl(search: string): Uint8Array | null {
+  // Use URLSearchParams for robust parsing; note it decodes "+" as a space (x-www-form-urlencoded),
+  // which base64ToBytes normalizes back to "+".
   const params = new URLSearchParams(search);
   const s = params.get("s");
   if (!s) return null;
-  try {
-    return base64ToBytes(decodeURIComponent(s));
-  } catch {
-    return null;
-  }
+  return base64ToBytes(s);
 }
 
 export function encodeStateToBase64(

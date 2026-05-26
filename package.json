@@ -15,7 +15,7 @@
     "test": "pnpm run -r test",
     "bench": "pnpm --filter schedule bench",
     "test:watch": "pnpm --filter web test:watch",
-    "og-image": "pnpm --filter worker og-image --",
+    "og-image": "pnpm --filter worker og-image",
     "prepare": "lefthook install",
     "hooks:install": "lefthook install",
     "hooks:run": "lefthook run pre-commit",

@@ -1319,3 +1319,15 @@ msgstr "1 minute ago"
 
 msgid "saveStatus.savedMinutesAgo"
 msgstr "{n} minutes ago"
+
+msgid "sharedSchedule.title"
+msgstr "Shared schedule"
+
+msgid "sharedSchedule.body"
+msgstr "Someone shared a schedule with you. Would you like to load it? This will replace your current planner state."
+
+msgid "sharedSchedule.keepMine"
+msgstr "Keep mine"
+
+msgid "sharedSchedule.load"
+msgstr "Load shared schedule"

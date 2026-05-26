@@ -16,6 +16,7 @@ import { usePersistState } from "../hooks/usePersistState";
 import { useAppStore } from "../store/appStore";
 import { tr } from "../i18n";
 import { AppFooter } from "../components/shared/AppFooter";
+import { SharedScheduleModal } from "../components/shared/SharedScheduleModal";
 
 export const Route = createRootRoute({
   head: () => buildRootHead(),
@@ -107,6 +108,7 @@ function RootLayout() {
       }}
     >
       <HeadContent />
+      <SharedScheduleModal />
       <Box style={{ flex: 1 }}>
         <motion.div animate={controls}>
           <Outlet />

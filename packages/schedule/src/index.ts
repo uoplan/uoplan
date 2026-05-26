@@ -24,3 +24,4 @@ export * from "./termDefaults";
 export * from "./prerequisites";
 export * from "./requirements";
 export * as DataProto from "./proto/data";
+export * from "./poolHelpers";
