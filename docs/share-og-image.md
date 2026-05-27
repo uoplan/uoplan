@@ -34,7 +34,7 @@ Implemented in `apps/worker/src/ogImage.ts`:
 2. **Peek** — `peekTermAndYearFromBase64()` reads `termId` and `firstYear` without fully decoding
 3. **Fetch data assets** from `env.ASSETS` (catalogue manifest → catalogue year → schedules for term → indices)
 4. **Decode state** — `decodeStateFromBase64()` returns `DecodedState` with all selections and swaps
-5. **Reconstruct schedule** — `reconstructScheduleForPreview()` from `@uoplan/calendar` runs a seed-shuffled `generateSchedules()` and then applies the swaps from the state (best-effort approximation)
+5. **Reconstruct schedule** — `reconstructScheduleForPreview()` from `@uoplan/calendar` calls `generateScheduleFromDecodedState()`, which uses the **exact same algorithm** as the web app's `generateSchedulesAction` (shared via `packages/calendar/src/generateSchedule.ts`). This guarantees the OG image shows the same courses the user sees in their browser.
 6. **Render** — `scheduleToEvents()`, `buildColorMap()`, then `renderCalendarToSvg()` produce an SVG; `@resvg/resvg-wasm` converts SVG → PNG
 7. **Cache** — the PNG response is stored in the Workers Cache with `max-age=86400`
 

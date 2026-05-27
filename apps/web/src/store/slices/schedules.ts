@@ -372,28 +372,40 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       ? scheduleFingerprint(state.currentSchedule)
       : null;
     await withScheduleGenerating(set, async () => {
+      const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const baseSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
-      const newSeed = nextSeed(state.firstSeed, baseSeed);
       const updatedSwapsPerSeed = {
         ...state.swapsPerSeed,
         [state.currentSeed]: state.currentSwaps,
       };
-      const newSwaps = updatedSwapsPerSeed[newSeed] ?? [];
-      set({
-        currentSeed: newSeed,
-        currentSwaps: newSwaps,
-        swapsPerSeed: updatedSwapsPerSeed,
-        calendarWeekIndex: null,
-      });
-      const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
-      const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
-      if (result) {
-        const resultWithSwaps = applySwapsToResult(result, newSwaps, get());
-        applyScheduleGenerationResult(set, get, resultWithSwaps, newSeed);
+
+      let trySeed = nextSeed(state.firstSeed, baseSeed);
+      let finalResult: ScheduleGenerationResult | null = null;
+
+      for (let i = 0; i < 30; i++) {
+        const swapsForSeed = updatedSwapsPerSeed[trySeed] ?? [];
+        const result = await generateSchedulesAction({ ...state, currentSeed: trySeed });
+        if (!result) break;
+        const withSwaps = applySwapsToResult(result, swapsForSeed, get());
+        finalResult = withSwaps;
+        if (
+          prevFingerprint === null ||
+          withSwaps.currentSchedule === null ||
+          scheduleFingerprint(withSwaps.currentSchedule) !== prevFingerprint
+        ) {
+          break;
+        }
+        trySeed = nextSeed(state.firstSeed, trySeed);
+      }
+
+      if (finalResult) {
+        const newSwaps = updatedSwapsPerSeed[trySeed] ?? [];
+        set({ currentSwaps: newSwaps, swapsPerSeed: updatedSwapsPerSeed, calendarWeekIndex: null });
+        applyScheduleGenerationResult(set, get, finalResult, trySeed);
         if (
           prevFingerprint !== null &&
-          resultWithSwaps.currentSchedule !== null &&
-          scheduleFingerprint(resultWithSwaps.currentSchedule) === prevFingerprint
+          finalResult.currentSchedule !== null &&
+          scheduleFingerprint(finalResult.currentSchedule) === prevFingerprint
         ) {
           set({ scheduleNoVariety: true });
         }

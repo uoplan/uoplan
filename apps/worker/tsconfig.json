@@ -8,7 +8,8 @@
     "skipLibCheck": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noEmit": true
+    "noEmit": true,
+    "types": ["node"]
   },
-  "include": ["src", "../../worker-configuration.d.ts"]
+  "include": ["src", "scripts", "../../worker-configuration.d.ts"]
 }

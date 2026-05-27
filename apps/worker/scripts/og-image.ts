@@ -19,6 +19,7 @@ import {
   fromProtoCatalogueManifest,
   fromProtoIndices,
   fromProtoSchedulesData,
+  getMergedCatalogue,
   peekTermAndYearFromBase64,
 } from "@uoplan/schedule";
 import {
@@ -77,9 +78,13 @@ async function run() {
 
   const base64 = base64urlToBase64(stateBase64url);
 
+  console.log("[og-image] base64url length:", stateBase64url.length);
+  console.log("[og-image] base64 (first 80):", base64.slice(0, 80));
+
   const peek = peekTermAndYearFromBase64(base64);
+  console.log("[og-image] peek:", peek);
   if (!peek) {
-    console.warn("Could not peek term/year from state — using fallback");
+    console.warn("[og-image] Could not peek term/year from state — using fallback");
     svg = fallbackSvg();
   } else {
     const manifestBytes = readData("catalogue.pb");
@@ -91,9 +96,18 @@ async function run() {
     }
 
     const manifest = fromProtoCatalogueManifest(DataProto.CatalogueManifest.decode(manifestBytes));
+    console.log("[og-image] manifest years:", manifest.years);
     const yearForCatalogue = peek.firstYear
-      ? (manifest.years.find((y) => y >= peek.firstYear!) ?? manifest.years[0])
+      ? (manifest.years.find((y) => y <= peek.firstYear!) ??
+        manifest.years[manifest.years.length - 1])
       : manifest.years[0];
+
+    console.log(
+      "[og-image] peek.firstYear:",
+      peek.firstYear,
+      "→ yearForCatalogue:",
+      yearForCatalogue,
+    );
 
     if (!yearForCatalogue) {
       console.error("No matching catalogue year for firstYear:", peek.firstYear);
@@ -101,24 +115,46 @@ async function run() {
     }
 
     const termId = peek.termId;
+    console.log("[og-image] termId:", termId);
     if (!termId) {
       console.error("No termId in state");
       process.exit(1);
     }
 
-    const catalogueBytes = readData(`catalogue.${yearForCatalogue}.pb`);
+    const latestYear = manifest.years[0]!;
+    const latestCatalogueBytes = readData(`catalogue.${latestYear}.pb`);
+    const yearCatalogueBytes =
+      yearForCatalogue !== latestYear ? readData(`catalogue.${yearForCatalogue}.pb`) : null;
     const schedulesBytes = readData(`schedules.${termId}.pb`);
 
-    if (!catalogueBytes || !schedulesBytes) {
-      console.error(
-        `Missing catalogue.${yearForCatalogue}.pb or schedules.${termId}.pb in ${DATA_DIR}`,
-      );
+    if (!latestCatalogueBytes || !schedulesBytes) {
+      console.error(`Missing catalogue.${latestYear}.pb or schedules.${termId}.pb in ${DATA_DIR}`);
       process.exit(1);
     }
 
-    const catalogue = fromProtoCatalogue(DataProto.Catalogue.decode(catalogueBytes));
-    const schedulesData = fromProtoSchedulesData(DataProto.SchedulesData.decode(schedulesBytes));
+    const latestCatalogue = fromProtoCatalogue(DataProto.Catalogue.decode(latestCatalogueBytes));
+    const yearCatalogueObj = yearCatalogueBytes
+      ? fromProtoCatalogue(DataProto.Catalogue.decode(yearCatalogueBytes))
+      : null;
     const indices = fromProtoIndices(DataProto.Indices.decode(indicesBytes));
+
+    // Decode first with empty completedCourses to get the actual completed courses,
+    // then re-merge with them (mirrors the web app's two-step load).
+    const catalogueForDecode = getMergedCatalogue(
+      latestCatalogue,
+      yearCatalogueObj?.courses ?? null,
+      [],
+    );
+    const decodedForCompleted = decodeStateFromBase64(base64, catalogueForDecode, indices);
+    const completedCourses =
+      "error" in decodedForCompleted ? [] : decodedForCompleted.completedCourseCodes;
+    const catalogue = getMergedCatalogue(
+      latestCatalogue,
+      yearCatalogueObj?.courses ?? null,
+      completedCourses,
+    );
+
+    const schedulesData = fromProtoSchedulesData(DataProto.SchedulesData.decode(schedulesBytes));
     const cache = buildDataCache(catalogue, schedulesData);
 
     const decoded = decodeStateFromBase64(base64, catalogue, indices);
@@ -136,11 +172,11 @@ async function run() {
 
     const schedule = reconstructScheduleForPreview(decoded, cache, constraints);
     if (!schedule || schedule.enrollments.length === 0) {
-      console.warn("No schedule reconstructed — using fallback");
+      console.warn("[og-image] No schedule reconstructed — using fallback");
       svg = fallbackSvg();
     } else {
       const events = scheduleToEvents(schedule, null);
-      const colorMap = buildColorMap(schedule, {});
+      const colorMap = buildColorMap(schedule);
       svg = renderCalendarToSvg(events, colorMap);
     }
   }

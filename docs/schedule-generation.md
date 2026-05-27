@@ -8,7 +8,7 @@ How uoplan builds conflict-free timetables from program requirements and user ch
 
 2. **Requirements** — `computeRequirementsState` / `recomputeStateForProgram` produce `remainingRequirements`, `requirementTreeWithStatus`, and `selectedPerRequirement`. Assign-step auto-select skips honours when it is the only “schedulable” option; **`apps/web/src/lib/implicitHonours.ts`** infers that honours thesis for generation when no non-honours course has timetable data and the user has not cleared or replaced that slot.
 
-3. **Orchestration** — **`apps/web/src/lib/generateSchedulesAction.ts`** (invoked from `createSchedulesSlice` → `generateSchedules`):
+3. **Orchestration** — **`packages/calendar/src/generateSchedule.ts`** is the canonical shared implementation (used by both the web app and the OG image worker). The web app calls it via **`apps/web/src/lib/generateSchedulesAction.ts`**, which adds error reporting and AppState adaptation. The OG image worker calls it via **`packages/calendar/src/scheduleFromState.ts`**, which adapts a `DecodedState` to the same inputs.
    - Pins honours (Constrain, Assign, or implicit) and optional explicit union from Constrain (`mergeGlobalExplicitRule`, `pickFromUserAndGeneralPools` from `packages/schedule`).
    - Builds **`RequirementPool`s** via `buildRequirementPools` and allocates counts with **`computeCoursesPerPool`** (`apps/web/src/store/scheduleHelpers.ts`), adjusting credits for pinned courses **once per requirement** (`requirementIdForPinnedCourse`).
    - Samples candidates per pool using **weighted random selection** — lower-level courses (1000) are preferred over higher-level ones (2000, 3000, …) via an inverse-exponential weight (`1 / 2^(tier-1)`). User-constrained courses are always picked first for their pool. Courses with non-course prerequisites receive a penalty. The `weightedRandomPick` utility in `scheduleHelpers.ts` drives this selection using the seeded RNG.
@@ -28,10 +28,12 @@ The overlap check (`packages/schedule/src/generation/overlaps.ts` → `timesOver
 
 ### References
 
-| Piece                          | Location                                                                            |
-| ------------------------------ | ----------------------------------------------------------------------------------- |
-| Pool building + allocation     | `apps/web/src/store/scheduleHelpers.ts`                                             |
-| Honours inference              | `apps/web/src/lib/implicitHonours.ts`                                               |
-| Full generation flow           | `apps/web/src/lib/generateSchedulesAction.ts`                                       |
-| Timetable backtracking         | `packages/schedule/src/scheduleGenerator.ts`                                        |
-| Explicit vs general pool split | `packages/schedule/src/scheduleCandidates/explicitPoolPicks.ts`, `kUserKGeneral.ts` |
+| Piece                           | Location                                                                            |
+| ------------------------------- | ----------------------------------------------------------------------------------- |
+| Pool building + allocation      | `apps/web/src/store/scheduleHelpers.ts` (re-exports from `@uoplan/schedule`)        |
+| Honours inference               | `packages/calendar/src/implicitHonours.ts`                                          |
+| **Shared generation core**      | **`packages/calendar/src/generateSchedule.ts`** — used by both web app and OG image |
+| Web app adapter (AppState)      | `apps/web/src/lib/generateSchedulesAction.ts`                                       |
+| OG image adapter (DecodedState) | `packages/calendar/src/scheduleFromState.ts`                                        |
+| Timetable backtracking          | `packages/schedule/src/scheduleGenerator.ts`                                        |
+| Explicit vs general pool split  | `packages/schedule/src/scheduleCandidates/explicitPoolPicks.ts`, `kUserKGeneral.ts` |
