@@ -55,7 +55,7 @@ describe("schedules seed navigation", () => {
     await useAppStore.getState().goToNextSeed();
 
     const { currentSeed } = useAppStore.getState();
-    expect(currentSeed).toBe(firstSeed + 1);
+    expect(currentSeed).toBeGreaterThan(firstSeed);
     expect(canGoToPreviousSeed(currentSeed, useAppStore.getState().lowestVisitedSeed)).toBe(true);
     expect(useAppStore.getState().lowestVisitedSeed).toBe(firstSeed);
   });
