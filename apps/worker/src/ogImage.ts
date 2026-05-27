@@ -7,6 +7,7 @@ import {
   fromProtoCatalogueManifest,
   fromProtoIndices,
   fromProtoSchedulesData,
+  getMergedCatalogue,
   peekTermAndYearFromBase64,
 } from "@uoplan/schedule";
 import {
@@ -117,7 +118,8 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
 
     const manifest = fromProtoCatalogueManifest(DataProto.CatalogueManifest.decode(manifestBytes));
     const yearForCatalogue = peek.firstYear
-      ? (manifest.years.find((y) => y >= peek.firstYear!) ?? manifest.years[0])
+      ? (manifest.years.find((y) => y <= peek.firstYear!) ??
+        manifest.years[manifest.years.length - 1])
       : manifest.years[0];
 
     if (!yearForCatalogue) {
@@ -129,19 +131,40 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
       return fallback();
     }
 
-    const [catalogueBytes, schedulesBytes] = await Promise.all([
-      fetchBytes(env, origin, `/data/catalogue.${yearForCatalogue}.pb`),
+    const latestYear = manifest.years[0]!;
+    const [latestCatalogueBytes, yearCatalogueBytes, schedulesBytes] = await Promise.all([
+      fetchBytes(env, origin, `/data/catalogue.${latestYear}.pb`),
+      yearForCatalogue !== latestYear
+        ? fetchBytes(env, origin, `/data/catalogue.${yearForCatalogue}.pb`)
+        : Promise.resolve(null),
       fetchBytes(env, origin, `/data/schedules.${termId}.pb`),
     ]);
 
-    if (!catalogueBytes || !schedulesBytes) {
+    if (!latestCatalogueBytes || !schedulesBytes) {
       return fallback();
     }
 
-    const catalogue = fromProtoCatalogue(DataProto.Catalogue.decode(catalogueBytes));
-    const schedulesData = fromProtoSchedulesData(DataProto.SchedulesData.decode(schedulesBytes));
+    const latestCatalogue = fromProtoCatalogue(DataProto.Catalogue.decode(latestCatalogueBytes));
+    const yearCatalogueObj = yearCatalogueBytes
+      ? fromProtoCatalogue(DataProto.Catalogue.decode(yearCatalogueBytes))
+      : null;
     const indices = fromProtoIndices(DataProto.Indices.decode(indicesBytes));
 
+    const catalogueForDecode = getMergedCatalogue(
+      latestCatalogue,
+      yearCatalogueObj?.courses ?? null,
+      [],
+    );
+    const decodedForCompleted = decodeStateFromBase64(base64, catalogueForDecode, indices);
+    const completedCourses =
+      "error" in decodedForCompleted ? [] : decodedForCompleted.completedCourseCodes;
+    const catalogue = getMergedCatalogue(
+      latestCatalogue,
+      yearCatalogueObj?.courses ?? null,
+      completedCourses,
+    );
+
+    const schedulesData = fromProtoSchedulesData(DataProto.SchedulesData.decode(schedulesBytes));
     const cache = buildDataCache(catalogue, schedulesData);
 
     const decoded = decodeStateFromBase64(base64, catalogue, indices);
@@ -162,7 +185,7 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
     }
 
     const events = scheduleToEvents(schedule, null);
-    const colorMap = buildColorMap(schedule, {});
+    const colorMap = buildColorMap(schedule);
     const svg = renderCalendarToSvg(events, colorMap);
 
     return svgToPng(svg, fonts);

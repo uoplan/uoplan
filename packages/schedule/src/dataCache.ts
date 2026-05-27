@@ -67,6 +67,49 @@ export function removeMergedCoursesSupersededByAliases(
 }
 
 /**
+ * Merges the latest catalogue with the start-year catalogue.
+ * Latest provides programs, new courses, and metadata; year-specific
+ * prerequisites override for every overlapping code. Completed courses that
+ * exist in the year catalogue keep the full year row (credits/level).
+ * Alias→canonical mapping is applied and superseded alias rows are removed.
+ */
+export function getMergedCatalogue(
+  latest: Catalogue,
+  yearCourses: Course[] | null,
+  completedCourses: string[],
+): Catalogue {
+  if (!yearCourses) return latest;
+
+  const completedSet = new Set(completedCourses.map(normalizeCourseCode));
+  const yearMap = new Map(yearCourses.map((c) => [normalizeCourseCode(c.code), c]));
+  const latestMap = new Map(latest.courses.map((c) => [normalizeCourseCode(c.code), c]));
+
+  const merged = new Map<string, Course>();
+
+  for (const course of latest.courses) {
+    const key = normalizeCourseCode(course.code);
+    const yearCourse = yearMap.get(key);
+    if (!yearCourse) {
+      merged.set(key, course);
+    } else if (completedSet.has(key)) {
+      merged.set(key, yearCourse);
+    } else {
+      merged.set(key, applyYearPrerequisites(course, yearCourse));
+    }
+  }
+
+  for (const course of yearCourses) {
+    const key = normalizeCourseCode(course.code);
+    if (!latestMap.has(key)) merged.set(key, course);
+  }
+
+  const mergedList = Array.from(merged.values());
+  const withAliases = applyLatestAliasesToMergedCourses(latest.courses, mergedList);
+  const courses = removeMergedCoursesSupersededByAliases(latest.courses, withAliases);
+  return { ...latest, courses };
+}
+
+/**
  * Wrap an existing DataCache with additional courses (e.g. OPT transfer credit stubs).
  * Extra courses are included in getCourse, getCoursesByDiscipline, and getAllCourses.
  */
