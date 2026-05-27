@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.0.0-beta.23](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.22...uoplan-monorepo-v1.0.0-beta.23) (2026-05-27)
+
+
+### Features
+
+* add dynamic og-image for schedule preview ([45bda15](https://github.com/uoplan/uoplan/commit/45bda15517f83874c3d06a5cdd688c3df837773c))
+* improve og-image generation ([a74f771](https://github.com/uoplan/uoplan/commit/a74f771e71021947f0b0e0bc0c899a82bdf75fd5))
+* move worker to use hono ([fde2b6d](https://github.com/uoplan/uoplan/commit/fde2b6d61125c4dfab0f662f8701943d20945c60))
+* sync og-image with real calendar, improve calendar generation randomization" ([093d836](https://github.com/uoplan/uoplan/commit/093d83652c18a5770410b1f5157ed760b746a7cb))
+
+
+### Bug Fixes
+
+* **ci:** trigger CLI release from release-please via workflow_call ([5c85262](https://github.com/uoplan/uoplan/commit/5c85262ea476b23e473b318f573c147d3392df0a))
+* loosen test to allow skipping schedules ([16e930e](https://github.com/uoplan/uoplan/commit/16e930eb8e7b8ce97953fc7925634b08a04a462c))
+* **og-image:** use proper bold font ([b31c7d9](https://github.com/uoplan/uoplan/commit/b31c7d9a216a9dc066d54e290e11d6063f17548b))
+* stable schedule sharing ([7d78c58](https://github.com/uoplan/uoplan/commit/7d78c58c129ef387b9e4f868f50d4fafd282b35d))
+
 ## [1.0.0-beta.22](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.21...uoplan-monorepo-v1.0.0-beta.22) (2026-05-25)
 
 
