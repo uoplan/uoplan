@@ -121,8 +121,19 @@
                 "day": "We",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
-                "virtual": true,
+                "virtual": false,
                 "instructor": "Chris Liboiron",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": true,
+                "instructor": "Bruce Millar",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-07-24"
@@ -162,7 +173,7 @@
                 "day": "Mo",
                 "startMinutes": 1050,
                 "endMinutes": 1130,
-                "virtual": true,
+                "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-05-04",
@@ -3686,6 +3697,97 @@
     },
     {
       "subject": "ADM",
+      "catalogNumber": "3340",
+      "courseCode": "ADM 3340",
+      "title": "Business Analytics for Decision Making",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "X00-LEC Session A",
+            "sectionCode": "X00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Nima Afsharhajari",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 35,
+              "A": 23,
+              "A-": 71,
+              "B+": 64,
+              "B": 113,
+              "C+": 101,
+              "C": 143,
+              "D+": 95,
+              "D": 110,
+              "E": 86,
+              "F": 37,
+              "EIN": 35,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ],
+        "DGD": [
+          {
+            "section": "X01-DGD Session A",
+            "sectionCode": "X01",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 960,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 35,
+              "A": 23,
+              "A-": 71,
+              "B+": 64,
+              "B": 113,
+              "C+": 101,
+              "C": 143,
+              "D+": 95,
+              "D": 110,
+              "E": 86,
+              "F": 37,
+              "EIN": 35,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ADM",
       "catalogNumber": "3346",
       "courseCode": "ADM 3346",
       "title": "Cost Accounting",
@@ -3937,56 +4039,6 @@
               "NS": 0,
               "NC": 0,
               "ABS": 6,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "ADM",
-      "catalogNumber": "3352",
-      "courseCode": "ADM 3352",
-      "title": "Human Resource Management",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "Y00-LEC Session A",
-            "sectionCode": "Y00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": false,
-                "instructor": "Manal Abou-Chakra",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 131,
-              "A": 294,
-              "A-": 318,
-              "B+": 211,
-              "B": 143,
-              "C+": 60,
-              "C": 40,
-              "D+": 7,
-              "D": 4,
-              "E": 1,
-              "F": 3,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
               "P": 0,
               "S": 0
             }
@@ -4984,6 +5036,17 @@
                 "endMinutes": 1040,
                 "virtual": false,
                 "instructor": "Jacline Anne All Nyman",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": true,
+                "instructor": "Nadir A Djerboua",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-07-24"
@@ -7186,7 +7249,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 80,
               "A": 101,
@@ -7534,117 +7597,6 @@
               }
             ],
             "status": "Closed"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "API",
-      "catalogNumber": "6763",
-      "courseCode": "API 6763",
-      "title": "Special Topics in International Affairs",
-      "timeZone": "America/Toronto",
-      "components": {
-        "SEM": [
-          {
-            "section": "A00-SEM Session B",
-            "sectionCode": "A00",
-            "component": "SEM",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": false,
-                "instructor": "Costanza Musu",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-06-12"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": false,
-                "instructor": "Costanza Musu",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-06-12"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 0,
-              "A": 4,
-              "A-": 5,
-              "B+": 10,
-              "B": 1,
-              "C+": 1,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          },
-          {
-            "section": "C00-SEM Session C",
-            "sectionCode": "C00",
-            "component": "SEM",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Cesar Jaramillo",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Cesar Jaramillo",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 0,
-              "A": 4,
-              "A-": 5,
-              "B+": 10,
-              "B": 1,
-              "C+": 1,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
           }
         ]
       }
@@ -8468,6 +8420,25 @@
               "P": 0,
               "S": 0
             }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "BCH",
+      "catalogNumber": "4900",
+      "courseCode": "BCH 4900",
+      "title": "Thesis Proposal",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "A00-REC Term",
+            "sectionCode": "A00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open"
           }
         ]
       }
@@ -13787,7 +13758,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 540,
               "A": 842,
@@ -14133,6 +14104,44 @@
     },
     {
       "subject": "CRM",
+      "catalogNumber": "3334",
+      "courseCode": "CRM 3334",
+      "title": "Introduction à la criminologie",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Session B",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 72,
+              "A": 69,
+              "A-": 125,
+              "B+": 116,
+              "B": 127,
+              "C+": 96,
+              "C": 87,
+              "D+": 58,
+              "D": 63,
+              "E": 22,
+              "F": 24,
+              "EIN": 16,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CRM",
       "catalogNumber": "3710",
       "courseCode": "CRM 3710",
       "title": "Criminalité des corporations",
@@ -14169,6 +14178,67 @@
               }
             ],
             "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CRM",
+      "catalogNumber": "4315",
+      "courseCode": "CRM 4315",
+      "title": "Victimology",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Session C",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 540,
+                "endMinutes": 720,
+                "virtual": true,
+                "instructor": "Michel Doiron",
+                "meetingDates": [
+                  "2026-06-22",
+                  "2026-07-31"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 540,
+                "endMinutes": 720,
+                "virtual": true,
+                "instructor": "Michel Doiron",
+                "meetingDates": [
+                  "2026-06-22",
+                  "2026-07-31"
+                ]
+              }
+            ],
+            "status": "Closed",
+            "distribution": {
+              "A+": 4,
+              "A": 9,
+              "A-": 12,
+              "B+": 2,
+              "B": 0,
+              "C+": 0,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
           }
         ]
       }
@@ -16708,25 +16778,6 @@
               "P": 0,
               "S": 0
             }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "CVG",
-      "catalogNumber": "7185",
-      "courseCode": "CVG 7185",
-      "title": "Civil Engineering Report",
-      "timeZone": "America/Toronto",
-      "components": {
-        "REC": [
-          {
-            "section": "S00-REC Term",
-            "sectionCode": "S00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open"
           }
         ]
       }
@@ -32378,35 +32429,6 @@
               "S": 7
             }
           }
-        ],
-        "REC": [
-          {
-            "section": "X00-REC Term",
-            "sectionCode": "X00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 149,
-              "A": 140,
-              "A-": 172,
-              "B+": 166,
-              "B": 137,
-              "C+": 137,
-              "C": 97,
-              "D+": 73,
-              "D": 58,
-              "E": 38,
-              "F": 12,
-              "EIN": 11,
-              "NS": 1,
-              "NC": 0,
-              "ABS": 1,
-              "P": 0,
-              "S": 7
-            }
-          }
         ]
       }
     },
@@ -35734,6 +35756,48 @@
               "P": 0,
               "S": 0
             }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "MAT",
+      "catalogNumber": "1795",
+      "courseCode": "MAT 1795",
+      "title": "Le loisir dans la société canadienne",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "X00-LEC Session B",
+            "sectionCode": "X00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": true,
+                "instructor": "Frédérique Bourdua",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-06-12"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": true,
+                "instructor": "Aida Stratas",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-06-12"
+                ]
+              }
+            ],
+            "status": "Open"
           }
         ]
       }
@@ -40417,37 +40481,6 @@
     },
     {
       "subject": "MGT",
-      "catalogNumber": "6590",
-      "courseCode": "MGT 6590",
-      "title": "Principles of Accounting and Finance for Engineers",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "Z00-LEC Session A",
-            "sectionCode": "Z00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
-                "instructor": "Joseph Audi",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "MGT",
       "catalogNumber": "6990",
       "courseCode": "MGT 6990",
       "title": "Praticum Research",
@@ -42649,48 +42682,6 @@
             "component": "REC",
             "session": null,
             "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "OPH",
-      "catalogNumber": "6202",
-      "courseCode": "OPH 6202",
-      "title": "Troubles de la déglutition et alimentation",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC Term",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": true,
-                "instructor": "Geneviève Ouellet Therrien",
-                "meetingDates": [
-                  "2026-06-02",
-                  "2026-07-09"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": true,
-                "instructor": "Geneviève Ouellet Therrien",
-                "meetingDates": [
-                  "2026-06-02",
-                  "2026-07-09"
-                ]
-              }
-            ],
             "status": "Open"
           }
         ]
@@ -49424,7 +49415,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 173,
               "A": 116,
@@ -49485,7 +49476,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 26,
               "A": 48,
@@ -49645,7 +49636,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 18,
               "A": 19,
@@ -49889,7 +49880,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 36,
               "A": 102,
@@ -49944,67 +49935,6 @@
               "NS": 0,
               "NC": 0,
               "ABS": 2,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "POL",
-      "catalogNumber": "4190",
-      "courseCode": "POL 4190",
-      "title": "Genre et politique",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC Session B",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": false,
-                "instructor": "Pascasie Minani",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-06-12"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": false,
-                "instructor": "Pascasie Minani",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-06-12"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 20,
-              "A": 16,
-              "A-": 15,
-              "B+": 7,
-              "B": 4,
-              "C+": 3,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
               "P": 0,
               "S": 0
             }
@@ -51212,6 +51142,98 @@
     },
     {
       "subject": "PSY",
+      "catalogNumber": "3126",
+      "courseCode": "PSY 3126",
+      "title": "Directed Studies in Population Health",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "A00-REC Term",
+            "sectionCode": "A00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 143,
+              "A": 113,
+              "A-": 91,
+              "B+": 94,
+              "B": 82,
+              "C+": 41,
+              "C": 39,
+              "D+": 16,
+              "D": 9,
+              "E": 12,
+              "F": 2,
+              "EIN": 2,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 1,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "B00-REC Term",
+            "sectionCode": "B00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 143,
+              "A": 113,
+              "A-": 91,
+              "B+": 94,
+              "B": 82,
+              "C+": 41,
+              "C": 39,
+              "D+": 16,
+              "D": 9,
+              "E": 12,
+              "F": 2,
+              "EIN": 2,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 1,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "C00-REC Term",
+            "sectionCode": "C00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 143,
+              "A": 113,
+              "A-": 91,
+              "B+": 94,
+              "B": 82,
+              "C+": 41,
+              "C": 39,
+              "D+": 16,
+              "D": 9,
+              "E": 12,
+              "F": 2,
+              "EIN": 2,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 1,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PSY",
       "catalogNumber": "3171",
       "courseCode": "PSY 3171",
       "title": "Psychopathology",
@@ -51316,6 +51338,67 @@
               "ABS": 0,
               "P": 0,
               "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PSY",
+      "catalogNumber": "3509",
+      "courseCode": "PSY 3509",
+      "title": "Introduction à la psychologie : fondements",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Session B",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Nathalie Le Marec",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-06-12"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Nathalie Le Marec",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-06-12"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 79,
+              "A": 89,
+              "A-": 86,
+              "B+": 85,
+              "B": 68,
+              "C+": 70,
+              "C": 59,
+              "D+": 30,
+              "D": 21,
+              "E": 5,
+              "F": 8,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 1,
+              "P": 0,
+              "S": 2
             }
           }
         ]
@@ -53909,44 +53992,6 @@
               "E": 0,
               "F": 2,
               "EIN": 6,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 2,
-              "P": 0,
-              "S": 1
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "SOC",
-      "catalogNumber": "2716",
-      "courseCode": "SOC 2716",
-      "title": "Work Term IV",
-      "timeZone": "America/Toronto",
-      "components": {
-        "STG": [
-          {
-            "section": "S00-STG Term",
-            "sectionCode": "S00",
-            "component": "STG",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 17,
-              "A": 17,
-              "A-": 31,
-              "B+": 19,
-              "B": 21,
-              "C+": 9,
-              "C": 9,
-              "D+": 4,
-              "D": 2,
-              "E": 0,
-              "F": 0,
-              "EIN": 3,
               "NS": 0,
               "NC": 0,
               "ABS": 2,
