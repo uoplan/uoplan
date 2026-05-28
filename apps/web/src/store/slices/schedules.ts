@@ -340,27 +340,48 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       ? scheduleFingerprint(state.currentSchedule)
       : null;
     await withScheduleGenerating(set, async () => {
-      const newSeed = state.currentSeed - 1;
       const updatedSwapsPerSeed = {
         ...state.swapsPerSeed,
         [state.currentSeed]: state.currentSwaps,
       };
-      const newSwaps = updatedSwapsPerSeed[newSeed] ?? [];
-      set({
-        currentSeed: newSeed,
-        currentSwaps: newSwaps,
-        swapsPerSeed: updatedSwapsPerSeed,
-        calendarWeekIndex: null,
-      });
       const mode: GenerateSchedulesMode = isBasicPlannerActive() ? "basic" : "advanced";
-      const result = await runScheduleGeneration({ ...get(), currentSeed: newSeed }, mode);
-      if (result) {
-        const resultWithSwaps = applySwapsToResult(result, newSwaps, get());
+
+      let trySeed = state.currentSeed - 1;
+      let finalResult: ScheduleGenerationResult | null = null;
+      let finalSeed = trySeed;
+
+      for (let i = 0; i < 30; i++) {
+        const swapsForSeed = updatedSwapsPerSeed[trySeed] ?? [];
+        const result = await runScheduleGeneration({ ...state, currentSeed: trySeed }, mode);
+        if (!result) break;
+        const withSwaps = applySwapsToResult(result, swapsForSeed, get());
+        finalResult = withSwaps;
+        finalSeed = trySeed;
+        if (
+          prevFingerprint === null ||
+          withSwaps.currentSchedule === null ||
+          scheduleFingerprint(withSwaps.currentSchedule) !== prevFingerprint
+        ) {
+          break;
+        }
+        if (trySeed <= floor) break;
+        trySeed -= 1;
+      }
+
+      if (finalResult) {
+        const newSwaps = updatedSwapsPerSeed[finalSeed] ?? [];
         const noVariety =
           prevFingerprint !== null &&
-          resultWithSwaps.currentSchedule !== null &&
-          scheduleFingerprint(resultWithSwaps.currentSchedule) === prevFingerprint;
-        set({ ...resultWithSwaps, currentSeed: newSeed, scheduleNoVariety: noVariety });
+          finalResult.currentSchedule !== null &&
+          scheduleFingerprint(finalResult.currentSchedule) === prevFingerprint;
+        set({
+          ...finalResult,
+          currentSeed: finalSeed,
+          currentSwaps: newSwaps,
+          swapsPerSeed: updatedSwapsPerSeed,
+          calendarWeekIndex: null,
+          scheduleNoVariety: noVariety,
+        });
       }
     });
   },
