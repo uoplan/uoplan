@@ -7,5 +7,6 @@
     "jsx": "react-jsx"
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "exclude": ["src/workers/sw.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.sw.json" }]
 }
