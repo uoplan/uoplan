@@ -127,7 +127,6 @@ export function CalendarPage() {
   const resetToDefault = useAppStore((s) => s.resetToDefault);
   const resetBasicCalendarSettings = useAppStore((s) => s.resetBasicCalendarSettings);
 
-  const hasSchedule = currentSchedule !== null;
   const canGoPrevious = canGoToPreviousSeed(currentSeed, lowestVisitedSeed);
   const canUseSeedNavigation =
     hasProgram || canGenerateBasicSchedule(basicPinnedCourses.length, basicElectivesCount);
@@ -378,7 +377,7 @@ export function CalendarPage() {
           </Group>
 
           {/* Prev/Next - desktop only */}
-          {!isMobile && hasSchedule && (
+          {!isMobile && (
             <Stack gap={6}>
               <Button.Group>
                 <Button
