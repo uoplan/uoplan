@@ -1,7 +1,6 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
 import {
-  type Catalogue,
   type Course,
   DataProto,
   fromProtoCatalogue,
@@ -15,16 +14,11 @@ import {
   type Discipline,
   type Indices,
   type Program,
-  type SchedulesData,
 } from "@uoplan/schedule";
-import {
-  buildDataCache,
-  normalizeCourseCode,
-  withExtraCourses,
-  isOptCourse,
-} from "@uoplan/schedule";
+import { buildDataCache } from "@uoplan/schedule";
 import { getMergedCatalogue } from "./catalogueUtils";
 import { fetchProtoBytes } from "../../lib/protoFetch";
+import { buildCacheWithOpt } from "../../lib/dataCacheLoader";
 import { buildProfessorRatingsMap } from "@uoplan/schedule";
 import {
   parseStateFromUrl,
@@ -40,21 +34,6 @@ import { LOCAL_STORAGE_KEY } from "../constants";
 import { applyHydrationNavigation } from "../../lib/hydrateNavigation";
 import { setCalendarMode } from "../../lib/calendarRoute";
 import { navigateToCalendar } from "../../lib/appNavigation";
-
-/** Build a DataCache and inject fake entries for any OPT transfer credit codes in completedCourses. */
-function buildCacheWithOpt(
-  catalogue: Catalogue,
-  schedulesData: SchedulesData,
-  completedCourses: string[],
-) {
-  const base = buildDataCache(catalogue, schedulesData);
-  const optCodes = completedCourses.map(normalizeCourseCode).filter(isOptCourse);
-  if (optCodes.length === 0) return base;
-  return withExtraCourses(
-    base,
-    optCodes.map((code): Course => ({ code, title: code, credits: 3, description: "" })),
-  );
-}
 
 interface DataSlice {
   loadData: AppStore["loadData"];
@@ -320,6 +299,13 @@ export const createDataSlice: StateCreator<AppStore, [], [], DataSlice> = (set, 
         loadProgress: 100,
         error: null,
       });
+
+      // Fire-and-forget: pre-warm the schedule worker so first generation is hot.
+      if (typeof window !== "undefined") {
+        void import("../../workers/scheduleWorkerClient").then(({ prewarmScheduleWorker }) =>
+          prewarmScheduleWorker(get()),
+        );
+      }
 
       if (indices && typeof window !== "undefined") {
         const urlBytes = parseStateFromUrl(window.location.search);

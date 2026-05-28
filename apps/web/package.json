@@ -26,6 +26,7 @@
     "@tanstack/react-router": "^1.169.2",
     "@uoplan/calendar": "workspace:^",
     "@uoplan/schedule": "workspace:^",
+    "comlink": "^4.4.2",
     "framer-motion": "^12.36.0",
     "fuse.js": "^7.3.0",
     "graphology": "^0.26.0",
