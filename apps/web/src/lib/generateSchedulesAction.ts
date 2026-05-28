@@ -1,7 +1,7 @@
 import type { AppState } from "../store/types";
-import { isBasicPlannerActive } from "./calendarRoute";
 import type { GenerationErrorDetails, GenerationErrorState } from "../store/types";
 import {
+  type DataCache,
   type GeneratedSchedule,
   type GenerationConstraints,
   type RequirementWithStatus,
@@ -24,6 +24,92 @@ export {
   buildPendingGroupPickCounts,
   reorderOptionalPoolForGeneration,
 } from "@uoplan/calendar";
+
+export type GenerateSchedulesMode = "basic" | "advanced";
+
+/**
+ * Subset of {@link AppState} fields the generator reads. Pick<> keeps this in
+ * lock-step with AppState so adding a new field to the action automatically
+ * propagates a compile error here.
+ */
+export type GenerateSchedulesInput = Pick<
+  AppState,
+  | "basicPinnedCourses"
+  | "basicElectivesCount"
+  | "basicExcludedCategories"
+  | "completedCourses"
+  | "studentPrograms"
+  | "program"
+  | "remainingRequirements"
+  | "requirementTreeWithStatus"
+  | "selectedPerRequirement"
+  | "selectedOptionsPerRequirement"
+  | "constrainedPerRequirement"
+  | "coursesThisSemester"
+  | "prereqEligibleCourses"
+  | "unassignedCompletedCourses"
+  | "levelBuckets"
+  | "languageBuckets"
+  | "electiveLevelBuckets"
+  | "generationMinStartMinutes"
+  | "generationMaxEndMinutes"
+  | "generationAllowedDays"
+  | "generationMinProfessorRating"
+  | "professorRatings"
+  | "currentSeed"
+  | "firstSeed"
+  | "includeClosedComponents"
+  | "virtualSectionsOnly"
+  | "generationLimitFirstYearCredits"
+  | "generationCompressedSchedule"
+  | "generationPreferEasier"
+  | "frenchImmersionStream"
+  | "blacklistedCourses"
+> & {
+  /** Set explicitly by callers instead of read from module-global state. */
+  mode: GenerateSchedulesMode;
+};
+
+/** Extract the worker-safe input from an AppState snapshot. */
+export function pickGenerateSchedulesInput(
+  state: AppState,
+  mode: GenerateSchedulesMode,
+): GenerateSchedulesInput {
+  return {
+    mode,
+    basicPinnedCourses: state.basicPinnedCourses,
+    basicElectivesCount: state.basicElectivesCount,
+    basicExcludedCategories: state.basicExcludedCategories,
+    completedCourses: state.completedCourses,
+    studentPrograms: state.studentPrograms,
+    program: state.program,
+    remainingRequirements: state.remainingRequirements,
+    requirementTreeWithStatus: state.requirementTreeWithStatus,
+    selectedPerRequirement: state.selectedPerRequirement,
+    selectedOptionsPerRequirement: state.selectedOptionsPerRequirement,
+    constrainedPerRequirement: state.constrainedPerRequirement,
+    coursesThisSemester: state.coursesThisSemester,
+    prereqEligibleCourses: state.prereqEligibleCourses,
+    unassignedCompletedCourses: state.unassignedCompletedCourses,
+    levelBuckets: state.levelBuckets,
+    languageBuckets: state.languageBuckets,
+    electiveLevelBuckets: state.electiveLevelBuckets,
+    generationMinStartMinutes: state.generationMinStartMinutes,
+    generationMaxEndMinutes: state.generationMaxEndMinutes,
+    generationAllowedDays: state.generationAllowedDays,
+    generationMinProfessorRating: state.generationMinProfessorRating,
+    professorRatings: state.professorRatings,
+    currentSeed: state.currentSeed,
+    firstSeed: state.firstSeed,
+    includeClosedComponents: state.includeClosedComponents,
+    virtualSectionsOnly: state.virtualSectionsOnly,
+    generationLimitFirstYearCredits: state.generationLimitFirstYearCredits,
+    generationCompressedSchedule: state.generationCompressedSchedule,
+    generationPreferEasier: state.generationPreferEasier,
+    frenchImmersionStream: state.frenchImmersionStream,
+    blacklistedCourses: state.blacklistedCourses,
+  };
+}
 
 const DEFAULT_MIN_START_MINUTES = 8 * 60 + 30;
 const DEFAULT_MAX_END_MINUTES = 22 * 60;
@@ -142,15 +228,17 @@ interface GenerateSchedulesResult {
   generationError: GenerationErrorState | null;
 }
 
+export type { GenerateSchedulesResult };
+
 export async function generateSchedulesAction(
-  state: AppState,
+  input: GenerateSchedulesInput,
+  cache: DataCache,
 ): Promise<GenerateSchedulesResult | null> {
-  if (isBasicPlannerActive()) {
-    return await handleBasicGeneration(state);
+  if (input.mode === "basic") {
+    return await handleBasicGeneration(input, cache);
   }
 
   const {
-    cache,
     remainingRequirements,
     requirementTreeWithStatus,
     selectedPerRequirement,
@@ -177,9 +265,7 @@ export async function generateSchedulesAction(
     generationPreferEasier,
     program,
     frenchImmersionStream,
-  } = state;
-
-  if (!cache) return null;
+  } = input;
 
   const unassigned = [...new Set(unassignedCompletedCourses)].sort();
   if (unassigned.length > 0) {
@@ -297,7 +383,7 @@ export async function generateSchedulesAction(
     generationPreferEasier,
     frenchImmersionStream,
     programTitle: program?.title,
-    blacklistedCourses: state.blacklistedCourses ?? [],
+    blacklistedCourses: input.blacklistedCourses ?? [],
     currentSeed,
     firstSeed,
   });
@@ -366,9 +452,11 @@ export async function generateSchedulesAction(
   };
 }
 
-async function handleBasicGeneration(state: AppState): Promise<GenerateSchedulesResult | null> {
+async function handleBasicGeneration(
+  input: GenerateSchedulesInput,
+  cache: DataCache,
+): Promise<GenerateSchedulesResult | null> {
   const {
-    cache,
     basicPinnedCourses,
     basicElectivesCount,
     basicExcludedCategories,
@@ -390,9 +478,7 @@ async function handleBasicGeneration(state: AppState): Promise<GenerateSchedules
     program,
     frenchImmersionStream,
     blacklistedCourses: basicBlacklistedCourses,
-  } = state;
-
-  if (!cache) return null;
+  } = input;
 
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,

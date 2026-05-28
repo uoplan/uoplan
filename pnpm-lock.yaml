@@ -108,6 +108,9 @@ importers:
       '@uoplan/schedule':
         specifier: workspace:^
         version: link:../../packages/schedule
+      comlink:
+        specifier: ^4.4.2
+        version: 4.4.2
       framer-motion:
         specifier: ^12.36.0
         version: 12.38.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -2425,6 +2428,9 @@ packages:
   colors@1.0.3:
     resolution: {integrity: sha512-pFGrxThWcWQ2MsAz6RtgeWe4NK2kUE1WfsrvvlctdII745EW9I0yflqhe7++M5LEc7bV2c/9/5zc8sFcpL0Drw==}
     engines: {node: '>=0.1.90'}
+
+  comlink@4.4.2:
+    resolution: {integrity: sha512-OxGdvBmJuNKSCMO4NTl1L47VRp6xn2wG4F/2hYzB6tiCb709otOxtEYCSvK80PtjODfXXZu8ds+Nw5kVCjqd2g==}
 
   commander@10.0.1:
     resolution: {integrity: sha512-y4Mg2tXshplEbSGzx7amzPwKKOCGuoSRP/CjEdwwk0FOGlUbq6lKuoyDZTNZkmxHdJtp54hdfY/JUrdL7Xfdug==}
@@ -5411,6 +5417,8 @@ snapshots:
   color-name@1.1.4: {}
 
   colors@1.0.3: {}
+
+  comlink@4.4.2: {}
 
   commander@10.0.1: {}
 

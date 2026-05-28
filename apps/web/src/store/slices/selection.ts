@@ -2,13 +2,8 @@ import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
 import { recomputeStateForProgram, getDisciplineCodesForProgram } from "../requirementCompute";
 import type { CourseLanguageBucket } from "@uoplan/schedule";
-import {
-  buildDataCache,
-  normalizeCourseCode,
-  withExtraCourses,
-  isOptCourse,
-} from "@uoplan/schedule";
 import { getMergedCatalogue } from "./catalogueUtils";
+import { buildCacheWithOpt } from "../../lib/dataCacheLoader";
 import { pruneOptionSelectionsForClear } from "../../components/requirements/requirementUtils";
 import { isBasicPlannerActive } from "../../lib/calendarRoute";
 
@@ -132,14 +127,19 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
     if (yearCatalogueCourses && catalogue && schedulesData) {
       const effectiveCatalogue = getMergedCatalogue(catalogue, yearCatalogueCourses, courses);
       if (effectiveCatalogue) {
-        const newCache = buildDataCache(effectiveCatalogue, schedulesData);
+        const newCache = buildCacheWithOpt(effectiveCatalogue, schedulesData, courses);
         set({ cache: newCache });
       }
+    } else if (catalogue && schedulesData) {
+      // No year catalogue: rebuild from the latest catalogue so OPT entries stay
+      // in sync with the current completed-course list.
+      const newCache = buildCacheWithOpt(catalogue, schedulesData, courses);
+      set({ cache: newCache });
     }
     const {
       program,
       minorProgram,
-      cache: cacheAfterRebuild,
+      cache,
       selectedPerRequirement,
       selectedOptionsPerRequirement,
       levelBuckets,
@@ -148,18 +148,6 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       studentPrograms,
       requirementSlotsUserTouched,
     } = get();
-
-    // Inject fake course entries for OPT transfer credit codes so they flow through
-    // the standard catalogue-based logic (prerequisite checks, elective candidates, etc.)
-    const optCodes = courses.map(normalizeCourseCode).filter(isOptCourse);
-    const cache =
-      cacheAfterRebuild && optCodes.length > 0
-        ? withExtraCourses(
-            cacheAfterRebuild,
-            optCodes.map((code) => ({ code, title: code, credits: 3, description: "" })),
-          )
-        : cacheAfterRebuild;
-    if (cache !== cacheAfterRebuild) set({ cache });
 
     const state = recomputeStateForProgram(
       program,

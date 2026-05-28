@@ -35,6 +35,8 @@ import { compareReqPreference, type AutoAssignReqMeta } from "../requirementComp
 import { isAdvancedPlannerActive, isBasicPlannerActive } from "../../lib/calendarRoute";
 import { flushPersistedAppState } from "../../lib/persistAppState";
 import { nextSeed, noteLowestVisitedSeed, repairSeedPosition } from "../../lib/seedNavigation";
+import { runScheduleGeneration } from "../../workers/scheduleWorkerClient";
+import type { GenerateSchedulesMode } from "../../lib/generateSchedulesAction";
 import type { GeneratedSchedule } from "@uoplan/schedule";
 
 function tryApplyOneSwap(
@@ -241,7 +243,6 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
   generateSchedules: async () => {
     if (get().scheduleGenerating) return;
     await withScheduleGenerating(set, async () => {
-      const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const state = get();
       const swapsToApply = state.currentSwaps;
       const repairedSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
@@ -249,7 +250,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       const effectiveState = isFirstGen
         ? { ...state, currentSeed: state.firstSeed }
         : { ...state, currentSeed: repairedSeed };
-      const result = await generateSchedulesAction(effectiveState);
+      const result = await runScheduleGeneration(effectiveState, "advanced");
       if (result) {
         const resultWithSwaps = applySwapsToResult(result, swapsToApply, get());
         applyScheduleGenerationResult(
@@ -265,7 +266,6 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
   generateBasicSchedules: async () => {
     if (get().scheduleGenerating) return;
     await withScheduleGenerating(set, async () => {
-      const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const state = get();
       const swapsToApply = state.currentSwaps;
       const repairedSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
@@ -273,7 +273,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       const effectiveState = isFirstGen
         ? { ...state, currentSeed: state.firstSeed }
         : { ...state, currentSeed: repairedSeed };
-      const result = await generateSchedulesAction(effectiveState);
+      const result = await runScheduleGeneration(effectiveState, "basic");
       if (result) {
         const resultWithSwaps = applySwapsToResult(result, swapsToApply, get());
         applyScheduleGenerationResult(
@@ -352,8 +352,8 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         swapsPerSeed: updatedSwapsPerSeed,
         calendarWeekIndex: null,
       });
-      const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
-      const result = await generateSchedulesAction({ ...get(), currentSeed: newSeed });
+      const mode: GenerateSchedulesMode = isBasicPlannerActive() ? "basic" : "advanced";
+      const result = await runScheduleGeneration({ ...get(), currentSeed: newSeed }, mode);
       if (result) {
         const resultWithSwaps = applySwapsToResult(result, newSwaps, get());
         const noVariety =
@@ -372,19 +372,19 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       ? scheduleFingerprint(state.currentSchedule)
       : null;
     await withScheduleGenerating(set, async () => {
-      const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
       const baseSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
       const updatedSwapsPerSeed = {
         ...state.swapsPerSeed,
         [state.currentSeed]: state.currentSwaps,
       };
+      const mode: GenerateSchedulesMode = isBasicPlannerActive() ? "basic" : "advanced";
 
       let trySeed = nextSeed(state.firstSeed, baseSeed);
       let finalResult: ScheduleGenerationResult | null = null;
 
       for (let i = 0; i < 30; i++) {
         const swapsForSeed = updatedSwapsPerSeed[trySeed] ?? [];
-        const result = await generateSchedulesAction({ ...state, currentSeed: trySeed });
+        const result = await runScheduleGeneration({ ...state, currentSeed: trySeed }, mode);
         if (!result) break;
         const withSwaps = applySwapsToResult(result, swapsForSeed, get());
         finalResult = withSwaps;
@@ -427,12 +427,11 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         currentSwaps: [],
         swapsPerSeed: {},
       });
-      const { generateSchedulesAction } = await import("../../lib/generateSchedulesAction");
-      const result = await generateSchedulesAction({
-        ...get(),
-        firstSeed: newFirstSeed,
-        currentSeed: newFirstSeed,
-      });
+      const mode: GenerateSchedulesMode = isBasicPlannerActive() ? "basic" : "advanced";
+      const result = await runScheduleGeneration(
+        { ...get(), firstSeed: newFirstSeed, currentSeed: newFirstSeed },
+        mode,
+      );
       if (result) {
         applyScheduleGenerationResult(set, get, result, newFirstSeed);
         if (

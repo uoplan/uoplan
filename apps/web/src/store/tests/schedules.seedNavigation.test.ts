@@ -4,8 +4,11 @@ import { useAppStore } from "../appStore";
 
 const generateSchedulesActionMock = vi.fn();
 
-vi.mock("../../lib/generateSchedulesAction", () => ({
-  generateSchedulesAction: (...args: unknown[]) => generateSchedulesActionMock(...args),
+vi.mock("../../workers/scheduleWorkerClient", () => ({
+  runScheduleGeneration: (...args: unknown[]) => generateSchedulesActionMock(...args),
+  prewarmScheduleWorker: vi.fn().mockResolvedValue(undefined),
+  dataKeyFromState: () => null,
+  inputFromState: (s: unknown) => s,
 }));
 
 const mockResult = {
@@ -47,6 +50,7 @@ describe("schedules seed navigation", () => {
     expect(useAppStore.getState().lowestVisitedSeed).toBe(firstSeed);
     expect(generateSchedulesActionMock).toHaveBeenCalledWith(
       expect.objectContaining({ currentSeed: firstSeed }),
+      expect.any(String),
     );
   });
 
@@ -67,6 +71,7 @@ describe("schedules seed navigation", () => {
     expect(useAppStore.getState().currentSeed).toBe(firstSeed);
     expect(generateSchedulesActionMock).toHaveBeenCalledWith(
       expect.objectContaining({ currentSeed: firstSeed }),
+      expect.any(String),
     );
   });
 
@@ -84,6 +89,7 @@ describe("schedules seed navigation", () => {
     expect(useAppStore.getState().lowestVisitedSeed).toBe(firstSeed);
     expect(generateSchedulesActionMock).toHaveBeenCalledWith(
       expect.objectContaining({ currentSeed: firstSeed }),
+      expect.any(String),
     );
   });
 
@@ -94,6 +100,7 @@ describe("schedules seed navigation", () => {
     expect(useAppStore.getState().currentSeed).toBe(firstSeed);
     expect(generateSchedulesActionMock).toHaveBeenCalledWith(
       expect.objectContaining({ currentSeed: firstSeed }),
+      expect.any(String),
     );
   });
 });
