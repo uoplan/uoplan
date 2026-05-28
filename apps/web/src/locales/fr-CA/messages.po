@@ -39,18 +39,6 @@ msgstr "Erreur"
 msgid "app.generate.disableReason"
 msgstr "Vous devez encore assigner {count} cours terminé{suffix} dans Exigences avant de pouvoir générer des horaires."
 
-msgid "app.help.action"
-msgstr "Aide"
-
-msgid "app.help.whatFor"
-msgstr "À quoi sert cette étape"
-
-msgid "app.help.whatToDo"
-msgstr "Ce que vous devez faire"
-
-msgid "app.helpFallback"
-msgstr "Aide"
-
 msgid "app.loadingData"
 msgstr "Chargement des données de cours..."
 
@@ -564,32 +552,11 @@ msgstr "Téléverser un relevé PDF"
 msgid "programStep.transcript.uploadFailed"
 msgstr "Téléversement échoué"
 
-msgid "programStep.skip.button"
-msgstr "Passer la configuration"
-
-msgid "programStep.skip.title"
-msgstr "Passer la configuration?"
-
 msgid "programStep.skip.body"
 msgstr "Sans compléter la configuration, vous manquerez:"
 
-msgid "programStep.skip.missing.requirements"
-msgstr "Le suivi des exigences selon votre programme"
-
-msgid "programStep.skip.missing.completedCourses"
-msgstr "La détection automatique de vos cours complétés"
-
-msgid "programStep.skip.missing.programMatching"
-msgstr "Des recommandations d'options personnalisées"
-
 msgid "programStep.skip.basicModeNote"
 msgstr "Vous pouvez tout de même construire un horaire en sélectionnant des cours obligatoires et un nombre de cours optionnels."
-
-msgid "programStep.skip.confirm"
-msgstr "Passer quand même"
-
-msgid "programStep.skip.cancel"
-msgstr "Continuer la configuration"
 
 msgid "frenchImmersion.toggle.label"
 msgstr "Volet d’immersion française"
@@ -765,6 +732,145 @@ msgstr "Jours de la semaine permis"
 msgid "scheduleCount.days.placeholder"
 msgstr "Sélectionner les jours"
 
+
+msgid "schedule.dashboard.assign.attention"
+msgstr "{count, plural, one {# cours terminé doit être assigné} other {# cours terminés doivent être assignés}}"
+
+msgid "schedule.dashboard.assign.label"
+msgstr "Remplir les exigences"
+
+msgid "schedule.dashboard.assign.ready"
+msgstr "Tous les cours terminés sont placés"
+
+msgid "schedule.dashboard.completed.label"
+msgstr "Cours terminés"
+
+msgid "schedule.dashboard.completed.summary"
+msgstr "{count, plural, one {# cours terminé sélectionné} other {# cours terminés sélectionnés}}"
+
+msgid "schedule.dashboard.gate.program"
+msgstr "Choisis d’abord un programme"
+
+msgid "schedule.dashboard.gate.term"
+msgstr "Choisis d’abord un trimestre"
+
+msgid "schedule.dashboard.generate"
+msgstr "Générer"
+
+msgid "schedule.dashboard.options.attention"
+msgstr "Certains choix de programme doivent encore être sélectionnés"
+
+msgid "schedule.dashboard.options.label"
+msgstr "Options du programme"
+
+msgid "schedule.dashboard.options.ready"
+msgstr "Tous les choix de programme sont résolus"
+
+msgid "schedule.dashboard.program.empty"
+msgstr "Aucun programme sélectionné"
+
+msgid "schedule.dashboard.program.label"
+msgstr "Programme"
+
+msgid "schedule.dashboard.ready"
+msgstr "Prêt à générer"
+
+msgid "schedule.dashboard.readyCount"
+msgstr "{ready} de {total} entrées prêtes"
+
+msgid "schedule.dashboard.term.empty"
+msgstr "Choisir un trimestre"
+
+msgid "schedule.dashboard.term.label"
+msgstr "Trimestre"
+
+msgid "schedule.dashboard.title"
+msgstr "Construis ton horaire"
+
+msgid "schedule.editor.assign.subtitle"
+msgstr "Place les cours terminés sous les exigences qu’ils satisfont."
+
+msgid "schedule.editor.assign.title"
+msgstr "Remplir les exigences"
+
+msgid "schedule.editor.back"
+msgstr "Retour à la configuration"
+
+msgid "schedule.editor.completed.subtitle"
+msgstr "Ajoute les cours déjà terminés afin que les exigences et les préalables restent exacts."
+
+msgid "schedule.editor.completed.title"
+msgstr "Ajouter les cours terminés"
+
+msgid "schedule.editor.done"
+msgstr "Terminé"
+
+msgid "schedule.editor.continue"
+msgstr "Continuer"
+
+msgid "schedule.editor.options.subtitle"
+msgstr "Résous les branches du programme avant de générer un horaire avancé."
+
+msgid "schedule.editor.options.title"
+msgstr "Choisir les options du programme"
+
+msgid "schedule.editor.program.subtitle"
+msgstr "Sélectionne ton année de catalogue, ton programme et l’importation facultative du relevé."
+
+msgid "schedule.editor.program.title"
+msgstr "Sélectionner le programme"
+
+msgid "schedule.editor.term.subtitle"
+msgstr "Choisis le trimestre à utiliser pour les cours offerts et la génération de l’horaire."
+
+msgid "schedule.editor.term.title"
+msgstr "Choisir le trimestre"
+
+msgid "schedule.generate.confirm.assign.consequence"
+msgstr "Les cours terminés non assignés pourraient ne pas compter pour la bonne exigence."
+
+msgid "schedule.generate.confirm.assign.description"
+msgstr "{count, plural, one {# cours terminé n’est pas assigné.} other {# cours terminés ne sont pas assignés.}}"
+
+msgid "schedule.generate.confirm.assign.label"
+msgstr "Cours terminés non assignés"
+
+msgid "schedule.generate.confirm.body"
+msgstr "Certains détails de configuration sont incomplets. Tu peux continuer, mais l’horaire généré pourrait utiliser un mode plus simple ou manquer de contexte."
+
+msgid "schedule.generate.confirm.cancel"
+msgstr "Annuler"
+
+msgid "schedule.generate.confirm.consequence"
+msgstr "Tu peux revenir à la configuration en tout temps pour compléter les détails manquants."
+
+msgid "schedule.generate.confirm.generateAnyway"
+msgstr "Générer quand même"
+
+msgid "schedule.generate.confirm.options.consequence"
+msgstr "Le générateur pourrait ignorer les branches non résolues ou produire des exigences moins exactes."
+
+msgid "schedule.generate.confirm.options.description"
+msgstr "Un ou plusieurs groupes d’options du programme doivent encore être sélectionnés."
+
+msgid "schedule.generate.confirm.options.label"
+msgstr "Options de programme non résolues"
+
+msgid "schedule.generate.confirm.program.label"
+msgstr "Aucun programme sélectionné"
+
+msgid "schedule.generate.confirm.term.consequence"
+msgstr "La génération pourrait échouer sans trimestre."
+
+msgid "schedule.generate.confirm.term.description"
+msgstr "Aucun trimestre d’horaire n’est sélectionné."
+
+msgid "schedule.generate.confirm.term.label"
+msgstr "Aucun trimestre sélectionné"
+
+msgid "schedule.generate.confirm.title"
+msgstr "Générer avec une configuration incomplète?"
+
 msgid "scheduleCount.firstYear.limitDescription"
 msgstr "Vous avez actuellement {credits} credit{suffix} de cours de niveau 1000 (terminés + sélectionnés). La limite du premier cycle est de 48."
 
@@ -855,84 +961,6 @@ msgstr "Suivant"
 msgid "tour.progress"
 msgstr "{{current}} sur {{total}}"
 
-msgid "wizardContent.assign.purpose"
-msgstr "Chaque cours complété doit être placé sous une exigence qu'il satisfait. Les cours non assignés bloquent la génération d'horaires tant qu'ils ne sont pas placés."
-
-msgid "wizardContent.assign.title"
-msgstr "Remplir les exigences"
-
-msgid "wizardContent.assign.whatToDo"
-msgstr "Assignez chaque cours complété au nœud d'exigence qu'il remplit. Continuez jusqu'à ce que le planificateur indique que tous les cours sont assignés."
-
-msgid "wizardContent.completed.purpose"
-msgstr "Le planificateur soustrait ce que vous avez déjà fait de vos exigences et utilise cette liste lors de l'assignation des cours aux emplacements d'exigences."
-
-msgid "wizardContent.completed.title"
-msgstr "Ajouter les cours complétés"
-
-msgid "wizardContent.completed.whatToDo"
-msgstr "Ajoutez tous les cours que vous avez terminés ou que vous suivez actuellement en utilisant les codes de cours. Vous pouvez ajuster cette liste après un téléversement de relevé depuis l'étape Programme."
-
-msgid "wizardContent.generate.purpose"
-msgstr "Le solveur construit des horaires sans conflit à partir de vos sélections selon vos préférences de charge, d'heures et de jours."
-
-msgid "wizardContent.generate.title"
-msgstr "Générer des horaires"
-
-msgid "wizardContent.generate.whatToDo"
-msgstr "Définissez le nombre de cours pour cette session, l'heure de début la plus tôt et de fin la plus tard, les jours permis et une note minimale de professeur optionnelle. Ajustez le plafond de crédits de première année ou l'horaire compact si affiché, puis cliquez sur Générer des horaires."
-
-msgid "wizardContent.mode.purpose"
-msgstr "UOPlan prend en charge deux modes. Le mode de base permet de choisir rapidement des cours obligatoires et des cours au choix sans planification complète du programme. Le mode avancé construit la structure complète de votre diplôme."
-
-msgid "wizardContent.mode.title"
-msgstr "Choisir le mode"
-
-msgid "wizardContent.mode.whatToDo"
-msgstr "Choisissez le mode de base pour une planification rapide, ou le mode avancé pour une planification complète du diplôme."
-
-msgid "wizardContent.options.purpose"
-msgstr "Certains programmes incluent des branches, des concentrations ou des groupes d'options. Cette étape enregistre le parcours que vous suivez pour utiliser la bonne sous-arborescence d'exigences."
-
-msgid "wizardContent.options.title"
-msgstr "Choisir le parcours"
-
-msgid "wizardContent.options.whatToDo"
-msgstr "Parcourez chaque choix dans l'ordre. Sélectionnez une option lorsque requis; utilisez le bouton retour dans un détail si vous devez changer de branche."
-
-msgid "wizardContent.program.purpose"
-msgstr "Votre programme et votre année de début déterminent quelles exigences de diplôme s'appliquent. Les listes de disciplines aident à évaluer les préalables propres au programme."
-
-msgid "wizardContent.program.title"
-msgstr "Sélectionner le programme"
-
-msgid "wizardContent.program.whatToDo"
-msgstr "Définissez votre année de début, puis recherchez et sélectionnez votre programme. Vous pouvez aussi téléverser un relevé non officiel en PDF pour détecter automatiquement l'année, le programme et les cours complétés - le traitement reste entièrement sur votre appareil."
-
-msgid "wizardContent.share.purpose"
-msgstr "Un lien partageable encode votre session, votre programme, vos cours complétés et vos sélections du planificateur afin que vous puissiez revenir plus tard ou envoyer votre plan à quelqu'un d'autre."
-
-msgid "wizardContent.share.title"
-msgstr "Partager"
-
-msgid "wizardContent.share.whatToDo"
-msgstr "Cliquez sur Partager dans l'en-tête pour copier l'URL dans votre presse-papiers. Après avoir généré des horaires, vous pouvez aussi partager depuis la vue calendrier."
-
-msgid "wizardContent.term.purpose"
-msgstr "Les données d'horaire et les sections offertes sont liées à une session académique précise. Choisir la bonne session garantit que le planificateur utilise des cours réellement offerts quand vous voulez étudier."
-
-msgid "wizardContent.term.title"
-msgstr "Choisir la session"
-
-msgid "wizardContent.term.whatToDo"
-msgstr "Sélectionnez la session que vous planifiez dans la liste. Une session doit être sélectionnée avant de pouvoir générer des horaires."
-
-msgid "wizardContent.tour.whatFor"
-msgstr "À quoi sert cette étape"
-
-msgid "wizardContent.tour.whatToDo"
-msgstr "Ce que vous devez faire"
-
 msgid "completedCourses.selectProgramFirst"
 msgstr "Sélectionnez d'abord un programme à l'étape 1."
 
@@ -976,7 +1004,7 @@ msgid "optionsDrilldown.optionTitle"
 msgstr "Option {number}"
 
 msgid "optionsStep.none"
-msgstr "Aucune option à configurer pour ce programme. Cliquez sur Suivant pour continuer."
+msgstr "Aucune option à configurer pour ce programme."
 
 msgid "optionsStep.note"
 msgstr "Parcourez chaque choix ci-dessous. Touchez une option pour continuer; utilisez la flèche retour pour changer de parcours et choisir une autre branche."

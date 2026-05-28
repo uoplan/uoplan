@@ -1,10 +1,12 @@
 import { Stack } from "@mantine/core";
-import { useAppStore } from "../../../store/appStore";
-import { AssignStep } from "../../requirements/AssignStep";
-import { WizardStep } from "../../../lib/wizardSteps";
-import { WizardShell } from "../WizardShell";
+import { useLingui } from "@lingui/react";
+import { useAppStore } from "../../store/appStore";
+import { tr } from "../../i18n";
+import { AssignStep } from "../requirements/AssignStep";
+import { ScheduleEditorShell } from "./ScheduleEditorShell";
 
-export function WizardAssignPage() {
+export function AssignEditorPage() {
+  useLingui();
   const cache = useAppStore((s) => s.cache);
   const remainingRequirements = useAppStore((s) => s.remainingRequirements);
   const requirementTreeWithStatus = useAppStore((s) => s.requirementTreeWithStatus);
@@ -20,7 +22,11 @@ export function WizardAssignPage() {
   const setSelectedForRequirement = useAppStore((s) => s.setSelectedForRequirement);
 
   return (
-    <WizardShell activeStep={WizardStep.Assign}>
+    <ScheduleEditorShell
+      step="assign"
+      title={tr("schedule.editor.assign.title")}
+      subtitle={tr("schedule.editor.assign.subtitle")}
+    >
       <Stack gap="md">
         <AssignStep
           cache={cache}
@@ -38,6 +44,6 @@ export function WizardAssignPage() {
           virtualSectionsOnly={virtualSectionsOnly}
         />
       </Stack>
-    </WizardShell>
+    </ScheduleEditorShell>
   );
 }

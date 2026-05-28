@@ -1,6 +1,5 @@
 import type { DecodedState } from "@uoplan/schedule";
-import { nodeHasOptionGroups } from "../components/requirements/requirementUtils";
-import { normalizeActiveStep } from "./wizardSteps";
+import { WizardStep } from "./wizardSteps";
 import type { AppStore } from "../store/types";
 import { navigateToCalendar, navigateToWizardStep } from "./appNavigation";
 
@@ -10,31 +9,25 @@ import { navigateToCalendar, navigateToWizardStep } from "./appNavigation";
  *
  * Current encodings always store `activeStep: 0` and `showCalendar: false` (navigation lives in
  * the pathname only). If we navigated on every hydrate, we would `replace` away the real URL
- * (e.g. `/schedule/step/program`) and send users to `/schedule/step/term` after every refresh — so we no-op when
+ * (e.g. `/schedule/program`) and send users to `/schedule/term` after every refresh — so we no-op when
  * those fields carry no information.
  */
-export function applyHydrationNavigation(decoded: DecodedState, getState: () => AppStore): void {
+export function applyHydrationNavigation(decoded: DecodedState, _getState: () => AppStore): void {
   const hasStoredNavigationHint = (decoded.activeStep ?? 0) !== 0 || decoded.showCalendar === true;
 
   if (!hasStoredNavigationHint) {
     return;
   }
 
-  const state = getState();
-  const needsOptionsStep = state.requirementTreeWithStatus.some(nodeHasOptionGroups);
-  const needsAssignStep = state.unassignedCompletedCourses.length > 0;
-  const normalized = normalizeActiveStep(
-    decoded.activeStep ?? 0,
-    needsOptionsStep,
-    needsAssignStep,
-  );
-
-  state.touchWizardFurthestStep(normalized);
+  const activeStep = Math.min(
+    WizardStep.Assign,
+    Math.max(WizardStep.Term, decoded.activeStep ?? WizardStep.Term),
+  ) as WizardStep;
 
   if (decoded.showCalendar) {
     navigateToCalendar({ replace: true });
     return;
   }
 
-  navigateToWizardStep(normalized, { replace: true });
+  navigateToWizardStep(activeStep, { replace: true });
 }

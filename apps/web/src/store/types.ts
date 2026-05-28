@@ -105,8 +105,6 @@ export interface AppState {
   generationCompressedSchedule: boolean;
   /** Bias pool picks toward courses with higher historical grade averages. */
   generationPreferEasier: boolean;
-  /** Highest wizard step index reached this session (sidebar progress). */
-  wizardFurthestStep: number;
   frenchImmersionStream: boolean;
   /** The week group index the user last navigated to in the calendar, for URL sharing. */
   calendarWeekIndex: number | null;
@@ -183,8 +181,6 @@ export interface AppActions {
   setCalendarWeekIndex: (index: number | null) => void;
   importSchedule: (schedule: GeneratedSchedule) => void;
   resetToDefault: () => void;
-  touchWizardFurthestStep: (step: number) => void;
-  resetWizardFurthestStep: () => void;
 }
 
 export type AppStore = AppState & AppActions;

@@ -87,7 +87,6 @@ export const useAppStore = create<AppStore>()((...a) => {
     generationLimitFirstYearCredits: true,
     generationCompressedSchedule: false,
     generationPreferEasier: false,
-    wizardFurthestStep: 0,
     frenchImmersionStream: false,
     calendarWeekIndex: null,
     scheduleNoVariety: false,
@@ -97,16 +96,6 @@ export const useAppStore = create<AppStore>()((...a) => {
     pendingSharedState: null,
 
     setCalendarWeekIndex: (index) => set({ calendarWeekIndex: index }),
-
-    touchWizardFurthestStep: (step) => {
-      set((s) => ({
-        wizardFurthestStep: Math.max(s.wizardFurthestStep, step),
-      }));
-    },
-
-    resetWizardFurthestStep: () => {
-      set({ wizardFurthestStep: 0 });
-    },
 
     // Global action: touches many states
     resetToDefault: () => {
@@ -172,7 +161,6 @@ export const useAppStore = create<AppStore>()((...a) => {
         lowestVisitedSeed: null,
         includeClosedComponents: false,
         virtualSectionsOnly: false,
-        wizardFurthestStep: 0,
         frenchImmersionStream: false,
         calendarWeekIndex: null,
         blacklistedCourses: [],

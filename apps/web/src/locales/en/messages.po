@@ -39,18 +39,6 @@ msgstr "Error"
 msgid "app.generate.disableReason"
 msgstr "You still need to assign {count} completed course{suffix} in Requirements before you can generate schedules."
 
-msgid "app.help.action"
-msgstr "Help"
-
-msgid "app.help.whatFor"
-msgstr "What this step is for"
-
-msgid "app.help.whatToDo"
-msgstr "What you should do"
-
-msgid "app.helpFallback"
-msgstr "Help"
-
 msgid "app.loadingData"
 msgstr "Loading course data..."
 
@@ -555,32 +543,11 @@ msgstr "Upload transcript PDF"
 msgid "programStep.transcript.uploadFailed"
 msgstr "Upload failed"
 
-msgid "programStep.skip.button"
-msgstr "Skip setup"
-
-msgid "programStep.skip.title"
-msgstr "Skip setup?"
-
 msgid "programStep.skip.body"
 msgstr "Without completing setup, you'll be missing out on:"
 
-msgid "programStep.skip.missing.requirements"
-msgstr "Requirement tracking based on your program"
-
-msgid "programStep.skip.missing.completedCourses"
-msgstr "Automatic detection of your completed courses"
-
-msgid "programStep.skip.missing.programMatching"
-msgstr "Personalized elective recommendations"
-
 msgid "programStep.skip.basicModeNote"
 msgstr "You can still build a schedule by selecting required courses and a number of electives."
-
-msgid "programStep.skip.confirm"
-msgstr "Skip Anyway"
-
-msgid "programStep.skip.cancel"
-msgstr "Continue Setup"
 
 msgid "frenchImmersion.toggle.label"
 msgstr "French immersion stream"
@@ -756,6 +723,145 @@ msgstr "Days of the week allowed"
 msgid "scheduleCount.days.placeholder"
 msgstr "Select days"
 
+
+msgid "schedule.dashboard.assign.attention"
+msgstr "{count, plural, one {# completed course needs assignment} other {# completed courses need assignment}}"
+
+msgid "schedule.dashboard.assign.label"
+msgstr "Fill requirements"
+
+msgid "schedule.dashboard.assign.ready"
+msgstr "All completed courses placed"
+
+msgid "schedule.dashboard.completed.label"
+msgstr "Completed courses"
+
+msgid "schedule.dashboard.completed.summary"
+msgstr "{count, plural, one {# completed course selected} other {# completed courses selected}}"
+
+msgid "schedule.dashboard.gate.program"
+msgstr "Pick a program first"
+
+msgid "schedule.dashboard.gate.term"
+msgstr "Pick a term first"
+
+msgid "schedule.dashboard.generate"
+msgstr "Generate"
+
+msgid "schedule.dashboard.options.attention"
+msgstr "Some program choices still need a selection"
+
+msgid "schedule.dashboard.options.label"
+msgstr "Program options"
+
+msgid "schedule.dashboard.options.ready"
+msgstr "All program choices are resolved"
+
+msgid "schedule.dashboard.program.empty"
+msgstr "Program not selected"
+
+msgid "schedule.dashboard.program.label"
+msgstr "Program"
+
+msgid "schedule.dashboard.ready"
+msgstr "Ready to generate"
+
+msgid "schedule.dashboard.readyCount"
+msgstr "{ready} of {total} inputs ready"
+
+msgid "schedule.dashboard.term.empty"
+msgstr "Choose a term"
+
+msgid "schedule.dashboard.term.label"
+msgstr "Term"
+
+msgid "schedule.dashboard.title"
+msgstr "Build your schedule"
+
+msgid "schedule.editor.assign.subtitle"
+msgstr "Place completed courses under the requirements they satisfy."
+
+msgid "schedule.editor.assign.title"
+msgstr "Fill requirements"
+
+msgid "schedule.editor.back"
+msgstr "Back to setup"
+
+msgid "schedule.editor.completed.subtitle"
+msgstr "Add courses you have already completed so requirements and prerequisites stay accurate."
+
+msgid "schedule.editor.completed.title"
+msgstr "Add completed courses"
+
+msgid "schedule.editor.done"
+msgstr "Done"
+
+msgid "schedule.editor.continue"
+msgstr "Continue"
+
+msgid "schedule.editor.options.subtitle"
+msgstr "Resolve any program branches before generating an advanced schedule."
+
+msgid "schedule.editor.options.title"
+msgstr "Choose program options"
+
+msgid "schedule.editor.program.subtitle"
+msgstr "Select your catalogue year, program, and optional transcript import."
+
+msgid "schedule.editor.program.title"
+msgstr "Select program"
+
+msgid "schedule.editor.term.subtitle"
+msgstr "Choose the term to use for course offerings and timetable generation."
+
+msgid "schedule.editor.term.title"
+msgstr "Choose term"
+
+msgid "schedule.generate.confirm.assign.consequence"
+msgstr "Unassigned completed courses may not count toward the right requirement."
+
+msgid "schedule.generate.confirm.assign.description"
+msgstr "{count, plural, one {# completed course is unassigned.} other {# completed courses are unassigned.}}"
+
+msgid "schedule.generate.confirm.assign.label"
+msgstr "Unassigned completed courses"
+
+msgid "schedule.generate.confirm.body"
+msgstr "Some setup details are incomplete. You can continue, but the generated schedule may use a simpler mode or miss context."
+
+msgid "schedule.generate.confirm.cancel"
+msgstr "Cancel"
+
+msgid "schedule.generate.confirm.consequence"
+msgstr "You can return to setup at any time to fill in the missing details."
+
+msgid "schedule.generate.confirm.generateAnyway"
+msgstr "Generate anyway"
+
+msgid "schedule.generate.confirm.options.consequence"
+msgstr "The generator may ignore unresolved branches or produce less accurate requirements."
+
+msgid "schedule.generate.confirm.options.description"
+msgstr "One or more program option groups still need a selection."
+
+msgid "schedule.generate.confirm.options.label"
+msgstr "Unresolved program options"
+
+msgid "schedule.generate.confirm.program.label"
+msgstr "No program selected"
+
+msgid "schedule.generate.confirm.term.consequence"
+msgstr "Generation may fail without a term."
+
+msgid "schedule.generate.confirm.term.description"
+msgstr "No schedule term is selected."
+
+msgid "schedule.generate.confirm.term.label"
+msgstr "No term selected"
+
+msgid "schedule.generate.confirm.title"
+msgstr "Generate with missing setup?"
+
 msgid "scheduleCount.firstYear.limitDescription"
 msgstr "You currently have {credits} credit{suffix} of 1000-level courses (completed + selected). The undergraduate limit is 48."
 
@@ -846,84 +952,6 @@ msgstr "Next"
 msgid "tour.progress"
 msgstr "{{current}} of {{total}}"
 
-msgid "wizardContent.assign.purpose"
-msgstr "Each completed course must sit under a requirement it satisfies. Unassigned courses block schedule generation until they are placed."
-
-msgid "wizardContent.assign.title"
-msgstr "Fill requirements"
-
-msgid "wizardContent.assign.whatToDo"
-msgstr "Assign every completed course to the requirement node it fulfills. Continue until the planner reports that all courses are assigned."
-
-msgid "wizardContent.completed.purpose"
-msgstr "The planner subtracts what you have already done from your requirements and uses this list when assigning courses to requirement slots."
-
-msgid "wizardContent.completed.title"
-msgstr "Add completed courses"
-
-msgid "wizardContent.completed.whatToDo"
-msgstr "Add every course you have completed or are currently taking, using course codes. You can refine this list after a transcript upload from the Program step."
-
-msgid "wizardContent.generate.purpose"
-msgstr "The solver builds conflict-free timetables from your selections using your preferences for load, times, and days."
-
-msgid "wizardContent.generate.title"
-msgstr "Generate schedules"
-
-msgid "wizardContent.generate.whatToDo"
-msgstr "Set how many courses you want this term, earliest start and latest end times, allowed days, and optional minimum professor rating. Adjust first-year credit cap or compressed schedule if shown, then click Generate Schedules."
-
-msgid "wizardContent.mode.purpose"
-msgstr "UOPlan supports two modes. Basic mode lets you quickly select required courses and electives without full program planning. Advanced mode builds your entire degree structure."
-
-msgid "wizardContent.mode.title"
-msgstr "Choose mode"
-
-msgid "wizardContent.mode.whatToDo"
-msgstr "Select either Basic mode for quick scheduling, or Advanced mode for comprehensive degree planning."
-
-msgid "wizardContent.options.purpose"
-msgstr "Some programs include branches, majors, or option groups. This step records which path you are following so the correct requirement subtree is used."
-
-msgid "wizardContent.options.title"
-msgstr "Choose path"
-
-msgid "wizardContent.options.whatToDo"
-msgstr "Work through each choice in order. Pick one option where required; use the back control inside a drilldown if you need to change a branch."
-
-msgid "wizardContent.program.purpose"
-msgstr "Your program and starting year determine which degree requirements apply. Discipline lists help evaluate program-specific prerequisites."
-
-msgid "wizardContent.program.title"
-msgstr "Select program"
-
-msgid "wizardContent.program.whatToDo"
-msgstr "Set your first year of study, then search and select your program. Optionally upload an unofficial transcript PDF to auto-detect year, program, and completed courses - processing stays entirely on your device."
-
-msgid "wizardContent.share.purpose"
-msgstr "A shareable link encodes your term, program, completed courses, and planner selections so you can revisit or send your plan to someone else."
-
-msgid "wizardContent.share.title"
-msgstr "Share"
-
-msgid "wizardContent.share.whatToDo"
-msgstr "Click Share in the header to copy the URL to your clipboard. After you generate timetables, you can also share from the calendar view."
-
-msgid "wizardContent.term.purpose"
-msgstr "Schedule data and section offerings are tied to a specific academic term. Choosing the right term ensures the planner uses courses that are actually offered when you plan to study."
-
-msgid "wizardContent.term.title"
-msgstr "Choose term"
-
-msgid "wizardContent.term.whatToDo"
-msgstr "Select the term you are planning for from the list. You must have a term selected before you can generate schedules."
-
-msgid "wizardContent.tour.whatFor"
-msgstr "What this step is for"
-
-msgid "wizardContent.tour.whatToDo"
-msgstr "What you should do"
-
 msgid "completedCourses.selectProgramFirst"
 msgstr "Select a program in Step 1 first."
 
@@ -967,7 +995,7 @@ msgid "optionsDrilldown.optionTitle"
 msgstr "Option {number}"
 
 msgid "optionsStep.none"
-msgstr "No options to configure for this program. Click Next to continue."
+msgstr "No options to configure for this program."
 
 msgid "optionsStep.note"
 msgstr "Step through each choice below. Tap an option to continue; use the back arrow to change a path and pick a different branch."

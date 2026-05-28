@@ -123,9 +123,7 @@ export function AssignStep({
           title="All courses assigned"
           aria-live="polite"
         >
-          <Text size="sm">
-            All completed courses are assigned to requirements. Click Next to continue.
-          </Text>
+          <Text size="sm">All completed courses are assigned to requirements.</Text>
         </Alert>
       )}
 

@@ -1,8 +1,10 @@
 import "./calendar.css";
+import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import {
   ActionIcon,
   Alert,
+  Anchor,
   Box,
   Button,
   Divider,
@@ -214,6 +216,22 @@ export function CalendarPage() {
 
   const sidebarControls = (
     <>
+      <Anchor
+        component={Link}
+        to="/schedule"
+        c="#A6A7AB"
+        underline="hover"
+        fz="sm"
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 4,
+          alignSelf: "flex-start",
+        }}
+      >
+        <IconChevronLeft size={14} />
+        {tr("schedule.editor.back")}
+      </Anchor>
       <Title
         order={1}
         style={{
@@ -343,18 +361,20 @@ export function CalendarPage() {
                 <IconFileImport size={16} />
               </ActionIcon>
             </Tooltip>
-            <Button
-              variant="light"
-              color="green"
-              size="xs"
-              radius={0}
-              leftSection={<IconTerminal size={12} />}
-              disabled={!cliCommand}
-              onClick={() => setEnrolCliOpen(true)}
-              style={{ marginLeft: "auto" }}
-            >
-              {tr("enrolCli.button")}
-            </Button>
+            <Tooltip label={tr("enrolCli.button")} withArrow position="right" color="dark">
+              <ActionIcon
+                variant="subtle"
+                color="green"
+                size="md"
+                radius={0}
+                disabled={!cliCommand}
+                onClick={() => setEnrolCliOpen(true)}
+                aria-label={tr("enrolCli.button")}
+                style={{ marginLeft: "auto" }}
+              >
+                <IconTerminal size={16} />
+              </ActionIcon>
+            </Tooltip>
           </Group>
 
           {/* Prev/Next - desktop only */}

@@ -3,6 +3,7 @@
 /graph      /graph/index.html     200
 /step/*     /schedule/step/:splat 301
 /calendar/* /schedule/calendar/:splat 301
-/schedule           /schedule/index.html           200
-/schedule/            /schedule/index.html           200
-/schedule/step/term   /schedule/step/term/index.html 200
+/schedule             /schedule/index.html 200
+/schedule/            /schedule/index.html 200
+/schedule/step/*      /schedule/index.html 200
+/schedule/*           /schedule/index.html 200

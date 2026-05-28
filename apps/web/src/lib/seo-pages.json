@@ -10,7 +10,7 @@
     "noscriptBody": "Plan your uOttawa degree, explore course grades, and browse professor connections."
   },
   "schedule": {
-    "canonicalPath": "/schedule/step/term",
+    "canonicalPath": "/schedule/",
     "tabTitle": "Schedule planner",
     "title": "uoplan | uOttawa Course Planner & Schedule Generator",
     "description": "Free course planner and timetable generator for University of Ottawa (uOttawa) students. Map your degree, check prerequisites, and generate conflict-free timetables in seconds.",
