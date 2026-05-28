@@ -5,5 +5,4 @@
 /calendar/* /schedule/calendar/:splat 301
 /schedule             /schedule/index.html 200
 /schedule/            /schedule/index.html 200
-/schedule/step/*      /schedule/index.html 200
-/schedule/*           /schedule/index.html 200
+/schedule/*           /schedule/ 200
