@@ -12,6 +12,7 @@ import "@fontsource/dm-mono/500.css";
 import "@fontsource/dm-serif-display/400.css";
 import "./styles/global.css";
 import { i18n, initializeI18n } from "./i18n";
+import { registerServiceWorker } from "./workers/serviceWorkerClient";
 
 await initializeI18n();
 
@@ -24,9 +25,7 @@ declare module "@tanstack/react-router" {
   }
 }
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js").catch(console.error);
-}
+registerServiceWorker();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
