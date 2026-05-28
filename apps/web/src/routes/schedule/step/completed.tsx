@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { WizardCompletedPage } from "../../../components/wizard/step-pages/WizardCompletedPage";
-import { buildTabTitle } from "../../../lib/seo";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/schedule/step/completed")({
-  head: () => buildTabTitle("Review"),
-  component: WizardCompletedPage,
+  beforeLoad: ({ search }) => {
+    // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router redirect pattern
+    throw redirect({ to: "/schedule/completed", search });
+  },
 });

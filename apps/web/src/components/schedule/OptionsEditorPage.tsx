@@ -1,10 +1,12 @@
 import { Stack } from "@mantine/core";
-import { useAppStore } from "../../../store/appStore";
-import { OptionsStep } from "../../requirements/OptionsStep";
-import { WizardStep } from "../../../lib/wizardSteps";
-import { WizardShell } from "../WizardShell";
+import { useLingui } from "@lingui/react";
+import { useAppStore } from "../../store/appStore";
+import { tr } from "../../i18n";
+import { OptionsStep } from "../requirements/OptionsStep";
+import { ScheduleEditorShell } from "./ScheduleEditorShell";
 
-export function WizardOptionsPage() {
+export function OptionsEditorPage() {
+  useLingui();
   const requirementTreeWithStatus = useAppStore((s) => s.requirementTreeWithStatus);
   const completedCourses = useAppStore((s) => s.completedCourses);
   const selectedOptionsPerRequirement = useAppStore((s) => s.selectedOptionsPerRequirement);
@@ -12,7 +14,11 @@ export function WizardOptionsPage() {
   const clearSelectedOptionForRequirement = useAppStore((s) => s.clearSelectedOptionForRequirement);
 
   return (
-    <WizardShell activeStep={WizardStep.Options}>
+    <ScheduleEditorShell
+      step="options"
+      title={tr("schedule.editor.options.title")}
+      subtitle={tr("schedule.editor.options.subtitle")}
+    >
       <Stack gap="md">
         <OptionsStep
           requirementTreeWithStatus={requirementTreeWithStatus}
@@ -22,6 +28,6 @@ export function WizardOptionsPage() {
           onClearOption={clearSelectedOptionForRequirement}
         />
       </Stack>
-    </WizardShell>
+    </ScheduleEditorShell>
   );
 }

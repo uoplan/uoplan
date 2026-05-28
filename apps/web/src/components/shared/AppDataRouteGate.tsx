@@ -9,15 +9,16 @@ import { AppDataLoader } from "./AppDataLoader";
 export function AppDataRouteGate({ children }: { children: ReactNode }) {
   useLingui();
 
-  const { loading, loadProgress, error } = useAppStore(
+  const { loading, loadProgress, error, hasBooted } = useAppStore(
     useShallow((s) => ({
       loading: s.loading,
       loadProgress: s.loadProgress,
       error: s.error,
+      hasBooted: Boolean(s.cache),
     })),
   );
 
-  if (loading) {
+  if (loading && !hasBooted) {
     return <AppDataLoader progress={loadProgress} />;
   }
 

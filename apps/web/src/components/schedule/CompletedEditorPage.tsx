@@ -1,10 +1,12 @@
 import { Stack } from "@mantine/core";
-import { useAppStore } from "../../../store/appStore";
-import { CompletedCoursesStep } from "../../steps/CompletedCoursesStep";
-import { WizardStep } from "../../../lib/wizardSteps";
-import { WizardShell } from "../WizardShell";
+import { useLingui } from "@lingui/react";
+import { useAppStore } from "../../store/appStore";
+import { tr } from "../../i18n";
+import { CompletedCoursesStep } from "../steps/CompletedCoursesStep";
+import { ScheduleEditorShell } from "./ScheduleEditorShell";
 
-export function WizardCompletedPage() {
+export function CompletedEditorPage() {
+  useLingui();
   const cache = useAppStore((s) => s.cache);
   const remainingRequirements = useAppStore((s) => s.remainingRequirements);
   const completedCourses = useAppStore((s) => s.completedCourses);
@@ -12,7 +14,11 @@ export function WizardCompletedPage() {
   const setCompletedCourses = useAppStore((s) => s.setCompletedCourses);
 
   return (
-    <WizardShell activeStep={WizardStep.Completed}>
+    <ScheduleEditorShell
+      step="completed"
+      title={tr("schedule.editor.completed.title")}
+      subtitle={tr("schedule.editor.completed.subtitle")}
+    >
       <Stack gap="md">
         <CompletedCoursesStep
           cache={cache}
@@ -22,6 +28,6 @@ export function WizardCompletedPage() {
           hasProgram={!!program}
         />
       </Stack>
-    </WizardShell>
+    </ScheduleEditorShell>
   );
 }

@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { WizardOptionsPage } from "../../../components/wizard/step-pages/WizardOptionsPage";
-import { buildTabTitle } from "../../../lib/seo";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/schedule/step/options")({
-  head: () => buildTabTitle("Preferences"),
-  component: WizardOptionsPage,
+  beforeLoad: ({ search }) => {
+    // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router redirect pattern
+    throw redirect({ to: "/schedule/options", search });
+  },
 });

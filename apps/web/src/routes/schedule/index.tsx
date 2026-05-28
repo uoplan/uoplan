@@ -1,12 +1,8 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { ScheduleDashboardPage } from "../../components/schedule/ScheduleDashboardPage";
 import { buildPageHead } from "../../lib/seo";
 
 export const Route = createFileRoute("/schedule/")({
   head: () => buildPageHead("schedule"),
-  beforeLoad: () => {
-    // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router redirect pattern
-    throw redirect({
-      to: "/schedule/step/term",
-    });
-  },
+  component: ScheduleDashboardPage,
 });

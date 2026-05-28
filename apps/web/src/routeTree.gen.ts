@@ -16,6 +16,10 @@ import { Route as ExploreRouteRouteImport } from './routes/explore/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ScheduleIndexRouteImport } from './routes/schedule/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
+import { Route as ScheduleRequirementsRouteImport } from './routes/schedule/requirements'
+import { Route as ScheduleProgramRouteImport } from './routes/schedule/program'
+import { Route as ScheduleOptionsRouteImport } from './routes/schedule/options'
+import { Route as ScheduleCompletedRouteImport } from './routes/schedule/completed'
 import { Route as ScheduleCalendarIndexRouteImport } from './routes/schedule/calendar/index'
 import { Route as ScheduleStepTermRouteImport } from './routes/schedule/step/term'
 import { Route as ScheduleStepProgramRouteImport } from './routes/schedule/step/program'
@@ -60,6 +64,26 @@ const ExploreIndexRoute = ExploreIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ExploreRouteRoute,
+} as any)
+const ScheduleRequirementsRoute = ScheduleRequirementsRouteImport.update({
+  id: '/requirements',
+  path: '/requirements',
+  getParentRoute: () => ScheduleRouteRoute,
+} as any)
+const ScheduleProgramRoute = ScheduleProgramRouteImport.update({
+  id: '/program',
+  path: '/program',
+  getParentRoute: () => ScheduleRouteRoute,
+} as any)
+const ScheduleOptionsRoute = ScheduleOptionsRouteImport.update({
+  id: '/options',
+  path: '/options',
+  getParentRoute: () => ScheduleRouteRoute,
+} as any)
+const ScheduleCompletedRoute = ScheduleCompletedRouteImport.update({
+  id: '/completed',
+  path: '/completed',
+  getParentRoute: () => ScheduleRouteRoute,
 } as any)
 const ScheduleCalendarIndexRoute = ScheduleCalendarIndexRouteImport.update({
   id: '/calendar/',
@@ -115,6 +139,10 @@ export interface FileRoutesByFullPath {
   '/schedule': typeof ScheduleRouteRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/graph': typeof GraphRoute
+  '/schedule/completed': typeof ScheduleCompletedRoute
+  '/schedule/options': typeof ScheduleOptionsRoute
+  '/schedule/program': typeof ScheduleProgramRoute
+  '/schedule/requirements': typeof ScheduleRequirementsRoute
   '/explore/': typeof ExploreIndexRoute
   '/schedule/': typeof ScheduleIndexRoute
   '/explore/course/$course': typeof ExploreCourseCourseRoute
@@ -131,6 +159,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
   '/graph': typeof GraphRoute
+  '/schedule/completed': typeof ScheduleCompletedRoute
+  '/schedule/options': typeof ScheduleOptionsRoute
+  '/schedule/program': typeof ScheduleProgramRoute
+  '/schedule/requirements': typeof ScheduleRequirementsRoute
   '/explore': typeof ExploreIndexRoute
   '/schedule': typeof ScheduleIndexRoute
   '/explore/course/$course': typeof ExploreCourseCourseRoute
@@ -150,6 +182,10 @@ export interface FileRoutesById {
   '/schedule': typeof ScheduleRouteRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/graph': typeof GraphRoute
+  '/schedule/completed': typeof ScheduleCompletedRoute
+  '/schedule/options': typeof ScheduleOptionsRoute
+  '/schedule/program': typeof ScheduleProgramRoute
+  '/schedule/requirements': typeof ScheduleRequirementsRoute
   '/explore/': typeof ExploreIndexRoute
   '/schedule/': typeof ScheduleIndexRoute
   '/explore/course/$course': typeof ExploreCourseCourseRoute
@@ -170,6 +206,10 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/changelog'
     | '/graph'
+    | '/schedule/completed'
+    | '/schedule/options'
+    | '/schedule/program'
+    | '/schedule/requirements'
     | '/explore/'
     | '/schedule/'
     | '/explore/course/$course'
@@ -186,6 +226,10 @@ export interface FileRouteTypes {
     | '/'
     | '/changelog'
     | '/graph'
+    | '/schedule/completed'
+    | '/schedule/options'
+    | '/schedule/program'
+    | '/schedule/requirements'
     | '/explore'
     | '/schedule'
     | '/explore/course/$course'
@@ -204,6 +248,10 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/changelog'
     | '/graph'
+    | '/schedule/completed'
+    | '/schedule/options'
+    | '/schedule/program'
+    | '/schedule/requirements'
     | '/explore/'
     | '/schedule/'
     | '/explore/course/$course'
@@ -275,6 +323,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/explore/'
       preLoaderRoute: typeof ExploreIndexRouteImport
       parentRoute: typeof ExploreRouteRoute
+    }
+    '/schedule/requirements': {
+      id: '/schedule/requirements'
+      path: '/requirements'
+      fullPath: '/schedule/requirements'
+      preLoaderRoute: typeof ScheduleRequirementsRouteImport
+      parentRoute: typeof ScheduleRouteRoute
+    }
+    '/schedule/program': {
+      id: '/schedule/program'
+      path: '/program'
+      fullPath: '/schedule/program'
+      preLoaderRoute: typeof ScheduleProgramRouteImport
+      parentRoute: typeof ScheduleRouteRoute
+    }
+    '/schedule/options': {
+      id: '/schedule/options'
+      path: '/options'
+      fullPath: '/schedule/options'
+      preLoaderRoute: typeof ScheduleOptionsRouteImport
+      parentRoute: typeof ScheduleRouteRoute
+    }
+    '/schedule/completed': {
+      id: '/schedule/completed'
+      path: '/completed'
+      fullPath: '/schedule/completed'
+      preLoaderRoute: typeof ScheduleCompletedRouteImport
+      parentRoute: typeof ScheduleRouteRoute
     }
     '/schedule/calendar/': {
       id: '/schedule/calendar/'
@@ -361,6 +437,10 @@ const ExploreRouteRouteWithChildren = ExploreRouteRoute._addFileChildren(
 )
 
 interface ScheduleRouteRouteChildren {
+  ScheduleCompletedRoute: typeof ScheduleCompletedRoute
+  ScheduleOptionsRoute: typeof ScheduleOptionsRoute
+  ScheduleProgramRoute: typeof ScheduleProgramRoute
+  ScheduleRequirementsRoute: typeof ScheduleRequirementsRoute
   ScheduleIndexRoute: typeof ScheduleIndexRoute
   ScheduleStepAssignRoute: typeof ScheduleStepAssignRoute
   ScheduleStepCompletedRoute: typeof ScheduleStepCompletedRoute
@@ -371,6 +451,10 @@ interface ScheduleRouteRouteChildren {
 }
 
 const ScheduleRouteRouteChildren: ScheduleRouteRouteChildren = {
+  ScheduleCompletedRoute: ScheduleCompletedRoute,
+  ScheduleOptionsRoute: ScheduleOptionsRoute,
+  ScheduleProgramRoute: ScheduleProgramRoute,
+  ScheduleRequirementsRoute: ScheduleRequirementsRoute,
   ScheduleIndexRoute: ScheduleIndexRoute,
   ScheduleStepAssignRoute: ScheduleStepAssignRoute,
   ScheduleStepCompletedRoute: ScheduleStepCompletedRoute,
