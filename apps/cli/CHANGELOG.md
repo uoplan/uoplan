@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/uoplan/uoplan/compare/uoplan-v0.4.2...uoplan-v1.0.0) (2026-05-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* **web:** split code into modules, add browser tests, rework proto
+
+### Code Refactoring
+
+* **web:** split code into modules, add browser tests, rework proto ([1efa04c](https://github.com/uoplan/uoplan/commit/1efa04ce67d515f59081e6e67e4fcc4872987a26))
+
 ## [0.4.2](https://github.com/uoplan/uoplan/compare/uoplan-v0.4.1...uoplan-v0.4.2) (2026-05-25)
 
 

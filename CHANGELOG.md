@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.0.0-beta.24](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.23...uoplan-monorepo-v1.0.0-beta.24) (2026-05-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* **web:** split code into modules, add browser tests, rework proto
+
+### Features
+
+* add consistent back button ([904772d](https://github.com/uoplan/uoplan/commit/904772dd1685062c58f3d7f8080c0b6faae484c4))
+* add light theme ([abbacc1](https://github.com/uoplan/uoplan/commit/abbacc1e8a0c15e921fd046f5428a358500c2afb))
+* add oxlint plugin for missing translations ([b7b59df](https://github.com/uoplan/uoplan/commit/b7b59df9b7c13acc5bab0ff2dd532ce741451ea6))
+* add seed skipping when using previous button ([9860315](https://github.com/uoplan/uoplan/commit/9860315691a47908885518815aa9c7ef7f373fb4))
+* add types to service worker ([484efd2](https://github.com/uoplan/uoplan/commit/484efd2eca320ecdf95c8bb9900edd35cd83e1f9))
+* clean up multiselect labels ([f94e33b](https://github.com/uoplan/uoplan/commit/f94e33bf1e6085b6461eab65d4cae40f96af147f))
+* improve design for schedule ([7960e3e](https://github.com/uoplan/uoplan/commit/7960e3e914164597fb40ee28056c9d83fc14c9d7))
+* improve document title on graph page ([08dbc15](https://github.com/uoplan/uoplan/commit/08dbc151277659016d48be595c2630b521a3388c))
+* move all schedule steps into one page ([163bf0c](https://github.com/uoplan/uoplan/commit/163bf0cffee7939cc1b3d6bc3e6cf0fc8dada30a))
+* move generation to worker ([ae79d22](https://github.com/uoplan/uoplan/commit/ae79d2252561a9c1dedca343bf72718e9d3150c6))
+
+
+### Bug Fixes
+
+* **ci:** make src/generated before running protoc ([6aa7f37](https://github.com/uoplan/uoplan/commit/6aa7f3713d5f7ac45237defa680d95d098b50220))
+* course explorer lag, redirect loop ([99b27d4](https://github.com/uoplan/uoplan/commit/99b27d43f572f928853662f44233aaffc69d63c4))
+* do not hide buttons when generation fails ([8d71454](https://github.com/uoplan/uoplan/commit/8d7145451f7ddd37322ca8645e7b04b953a21dad))
+
+
+### Code Refactoring
+
+* **web:** split code into modules, add browser tests, rework proto ([1efa04c](https://github.com/uoplan/uoplan/commit/1efa04ce67d515f59081e6e67e4fcc4872987a26))
+
 ## [1.0.0-beta.23](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.22...uoplan-monorepo-v1.0.0-beta.23) (2026-05-27)
 
 
