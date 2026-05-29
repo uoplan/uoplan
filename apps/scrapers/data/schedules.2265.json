@@ -1,7 +1,7 @@
 {
   "termId": "2265",
   "totalCourses": 11145,
-  "totalWithSchedules": 883,
+  "totalWithSchedules": 884,
   "schedules": [
     {
       "subject": "ADM",
@@ -121,19 +121,8 @@
                 "day": "We",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
-                "virtual": false,
-                "instructor": "Chris Liboiron",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Bruce Millar",
+                "instructor": "Chris Liboiron",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-07-24"
@@ -173,7 +162,7 @@
                 "day": "Mo",
                 "startMinutes": 1050,
                 "endMinutes": 1130,
-                "virtual": false,
+                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-05-04",
@@ -3697,97 +3686,6 @@
     },
     {
       "subject": "ADM",
-      "catalogNumber": "3340",
-      "courseCode": "ADM 3340",
-      "title": "Business Analytics for Decision Making",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "X00-LEC Session A",
-            "sectionCode": "X00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Nima Afsharhajari",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 35,
-              "A": 23,
-              "A-": 71,
-              "B+": 64,
-              "B": 113,
-              "C+": 101,
-              "C": 143,
-              "D+": 95,
-              "D": 110,
-              "E": 86,
-              "F": 37,
-              "EIN": 35,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ],
-        "DGD": [
-          {
-            "section": "X01-DGD Session A",
-            "sectionCode": "X01",
-            "component": "DGD",
-            "session": null,
-            "times": [
-              {
-                "day": "We",
-                "startMinutes": 960,
-                "endMinutes": 1040,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 35,
-              "A": 23,
-              "A-": 71,
-              "B+": 64,
-              "B": 113,
-              "C+": 101,
-              "C": 143,
-              "D+": 95,
-              "D": 110,
-              "E": 86,
-              "F": 37,
-              "EIN": 35,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "ADM",
       "catalogNumber": "3346",
       "courseCode": "ADM 3346",
       "title": "Cost Accounting",
@@ -4170,6 +4068,37 @@
     },
     {
       "subject": "ADM",
+      "catalogNumber": "3395",
+      "courseCode": "ADM 3395",
+      "title": "Gestion des ressources humaines",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "X00-LEC Session A",
+            "sectionCode": "X00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": true,
+                "instructor": "Jean Francois Aubert",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ADM",
       "catalogNumber": "3701",
       "courseCode": "ADM 3701",
       "title": "Gestion des opérations",
@@ -4327,8 +4256,19 @@
                 "day": "We",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
-                "virtual": true,
+                "virtual": false,
                 "instructor": "Nadir A Djerboua",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": true,
+                "instructor": "Jacline Anne All Nyman",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-07-24"
@@ -5040,17 +4980,6 @@
                   "2026-05-04",
                   "2026-07-24"
                 ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
-                "instructor": "Nadir A Djerboua",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
               }
             ],
             "status": "Open",
@@ -5523,6 +5452,48 @@
             "component": "SEM",
             "session": null,
             "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ALG",
+      "catalogNumber": "3921",
+      "courseCode": "ALG 3921",
+      "title": "Introduction to Interdisciplinary Study in the Arts",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Session A",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 1050,
+                "endMinutes": 1130,
+                "virtual": true,
+                "instructor": "Marina Zilbergerts",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 1050,
+                "endMinutes": 1130,
+                "virtual": true,
+                "instructor": "Marina Zilbergerts",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              }
+            ],
             "status": "Open"
           }
         ]
@@ -7249,7 +7220,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 80,
               "A": 101,
@@ -8420,25 +8391,6 @@
               "P": 0,
               "S": 0
             }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "BCH",
-      "catalogNumber": "4900",
-      "courseCode": "BCH 4900",
-      "title": "Thesis Proposal",
-      "timeZone": "America/Toronto",
-      "components": {
-        "REC": [
-          {
-            "section": "A00-REC Term",
-            "sectionCode": "A00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open"
           }
         ]
       }
@@ -11549,7 +11501,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Darrin Richeson",
+                "instructor": "Chad Normandin",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-11"
@@ -14104,44 +14056,6 @@
     },
     {
       "subject": "CRM",
-      "catalogNumber": "3334",
-      "courseCode": "CRM 3334",
-      "title": "Introduction à la criminologie",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC Session B",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 72,
-              "A": 69,
-              "A-": 125,
-              "B+": 116,
-              "B": 127,
-              "C+": 96,
-              "C": 87,
-              "D+": 58,
-              "D": 63,
-              "E": 22,
-              "F": 24,
-              "EIN": 16,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "CRM",
       "catalogNumber": "3710",
       "courseCode": "CRM 3710",
       "title": "Criminalité des corporations",
@@ -14178,67 +14092,6 @@
               }
             ],
             "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "CRM",
-      "catalogNumber": "4315",
-      "courseCode": "CRM 4315",
-      "title": "Victimology",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC Session C",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "We",
-                "startMinutes": 540,
-                "endMinutes": 720,
-                "virtual": true,
-                "instructor": "Michel Doiron",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 540,
-                "endMinutes": 720,
-                "virtual": true,
-                "instructor": "Michel Doiron",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              }
-            ],
-            "status": "Closed",
-            "distribution": {
-              "A+": 4,
-              "A": 9,
-              "A-": 12,
-              "B+": 2,
-              "B": 0,
-              "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
           }
         ]
       }
@@ -17538,6 +17391,86 @@
       }
     },
     {
+      "subject": "DCN",
+      "catalogNumber": "3312",
+      "courseCode": "DCN 3312",
+      "title": "Thèmes choisis en droit (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "A00-SEM Session C",
+            "sectionCode": "A00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 960,
+                "endMinutes": 1130,
+                "virtual": false,
+                "instructor": "André Bélanger",
+                "meetingDates": [
+                  "2026-06-22",
+                  "2026-07-31"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 960,
+                "endMinutes": 1130,
+                "virtual": false,
+                "instructor": "André Bélanger",
+                "meetingDates": [
+                  "2026-06-22",
+                  "2026-07-31"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DLS",
+      "catalogNumber": "4500",
+      "courseCode": "DLS 4500",
+      "title": "Comprehensive Exam",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "A00-REC Term",
+            "sectionCode": "A00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 24,
+              "A": 14,
+              "A-": 8,
+              "B+": 4,
+              "B": 2,
+              "C+": 4,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
       "subject": "DRC",
       "catalogNumber": "4513",
       "courseCode": "DRC 4513",
@@ -18860,6 +18793,48 @@
             "component": "STG",
             "session": null,
             "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DRC",
+      "catalogNumber": "4830",
+      "courseCode": "DRC 4830",
+      "title": "Droit de la communication dans le cyber espace (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "AA00-LEC Session B",
+            "sectionCode": "AA00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Karen Eltis",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-06-12"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Karen Eltis",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-06-12"
+                ]
+              }
+            ],
             "status": "Open"
           }
         ]
@@ -21744,7 +21719,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 523,
               "A": 772,
@@ -32548,7 +32523,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 494,
               "A": 268,
@@ -32732,6 +32707,48 @@
               "P": 0,
               "S": 0
             }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "HSS",
+      "catalogNumber": "5903",
+      "courseCode": "HSS 5903",
+      "title": "Pathophysiology of Health Problems",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "X00-LEC Session C",
+            "sectionCode": "X00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true,
+                "instructor": "Andrew Darnel",
+                "meetingDates": [
+                  "2026-06-22",
+                  "2026-07-31"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true,
+                "instructor": "Andrew Darnel",
+                "meetingDates": [
+                  "2026-06-22",
+                  "2026-07-31"
+                ]
+              }
+            ],
+            "status": "Closed"
           }
         ]
       }
@@ -33418,7 +33435,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 149,
               "A": 248,
@@ -35756,48 +35773,6 @@
               "P": 0,
               "S": 0
             }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "MAT",
-      "catalogNumber": "1795",
-      "courseCode": "MAT 1795",
-      "title": "Le loisir dans la société canadienne",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "X00-LEC Session B",
-            "sectionCode": "X00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": true,
-                "instructor": "Frédérique Bourdua",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-06-12"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": true,
-                "instructor": "Aida Stratas",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-06-12"
-                ]
-              }
-            ],
-            "status": "Open"
           }
         ]
       }
@@ -41407,6 +41382,57 @@
               "P": 0,
               "S": 0
             }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "MUS",
+      "catalogNumber": "29431",
+      "courseCode": "MUS 29431",
+      "title": "Essential Concepts in Data Science",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "Z00-LEC Session A",
+            "sectionCode": "Z00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": true,
+                "instructor": "Mohammad Alnabhan",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "ZZ00-LEC Session A",
+            "sectionCode": "ZZ00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": true,
+                "instructor": "Olubisi Atinuke Runsewe",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              }
+            ],
+            "status": "Open"
           }
         ]
       }
@@ -49476,7 +49502,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 26,
               "A": 48,
@@ -51142,98 +51168,6 @@
     },
     {
       "subject": "PSY",
-      "catalogNumber": "3126",
-      "courseCode": "PSY 3126",
-      "title": "Directed Studies in Population Health",
-      "timeZone": "America/Toronto",
-      "components": {
-        "REC": [
-          {
-            "section": "A00-REC Term",
-            "sectionCode": "A00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 143,
-              "A": 113,
-              "A-": 91,
-              "B+": 94,
-              "B": 82,
-              "C+": 41,
-              "C": 39,
-              "D+": 16,
-              "D": 9,
-              "E": 12,
-              "F": 2,
-              "EIN": 2,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 1,
-              "P": 0,
-              "S": 0
-            }
-          },
-          {
-            "section": "B00-REC Term",
-            "sectionCode": "B00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 143,
-              "A": 113,
-              "A-": 91,
-              "B+": 94,
-              "B": 82,
-              "C+": 41,
-              "C": 39,
-              "D+": 16,
-              "D": 9,
-              "E": 12,
-              "F": 2,
-              "EIN": 2,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 1,
-              "P": 0,
-              "S": 0
-            }
-          },
-          {
-            "section": "C00-REC Term",
-            "sectionCode": "C00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 143,
-              "A": 113,
-              "A-": 91,
-              "B+": 94,
-              "B": 82,
-              "C+": 41,
-              "C": 39,
-              "D+": 16,
-              "D": 9,
-              "E": 12,
-              "F": 2,
-              "EIN": 2,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 1,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "PSY",
       "catalogNumber": "3171",
       "courseCode": "PSY 3171",
       "title": "Psychopathology",
@@ -51338,67 +51272,6 @@
               "ABS": 0,
               "P": 0,
               "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "PSY",
-      "catalogNumber": "3509",
-      "courseCode": "PSY 3509",
-      "title": "Introduction à la psychologie : fondements",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC Session B",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 780,
-                "endMinutes": 950,
-                "virtual": false,
-                "instructor": "Nathalie Le Marec",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-06-12"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 780,
-                "endMinutes": 950,
-                "virtual": false,
-                "instructor": "Nathalie Le Marec",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-06-12"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 79,
-              "A": 89,
-              "A-": 86,
-              "B+": 85,
-              "B": 68,
-              "C+": 70,
-              "C": 59,
-              "D+": 30,
-              "D": 21,
-              "E": 5,
-              "F": 8,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 1,
-              "P": 0,
-              "S": 2
             }
           }
         ]
@@ -55434,6 +55307,48 @@
               "P": 0,
               "S": 6
             }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "TRA",
+      "catalogNumber": "6524",
+      "courseCode": "TRA 6524",
+      "title": "Health and Social Inequality",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Session B",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Noelle Buzohera",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-06-12"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Noelle Buzohera",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-06-12"
+                ]
+              }
+            ],
+            "status": "Open"
           }
         ]
       }

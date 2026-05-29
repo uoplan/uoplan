@@ -1,7 +1,7 @@
 {
   "termId": "2271",
   "totalCourses": 11145,
-  "totalWithSchedules": 3130,
+  "totalWithSchedules": 3153,
   "schedules": [
     {
       "subject": "ADM",
@@ -9758,56 +9758,6 @@
               "P": 0,
               "S": 0
             }
-          },
-          {
-            "section": "P00-LEC FullSess.",
-            "sectionCode": "P00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "We",
-                "startMinutes": 600,
-                "endMinutes": 680,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 510,
-                "endMinutes": 590,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 109,
-              "A": 91,
-              "A-": 124,
-              "B+": 119,
-              "B": 136,
-              "C+": 96,
-              "C": 109,
-              "D+": 84,
-              "D": 100,
-              "E": 54,
-              "F": 64,
-              "EIN": 19,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
           }
         ],
         "DGD": [
@@ -9822,45 +9772,6 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 109,
-              "A": 91,
-              "A-": 124,
-              "B+": 119,
-              "B": 136,
-              "C+": 96,
-              "C": 109,
-              "D+": 84,
-              "D": 100,
-              "E": 54,
-              "F": 64,
-              "EIN": 19,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          },
-          {
-            "section": "P01-DGD FullSess.",
-            "sectionCode": "P01",
-            "component": "DGD",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 960,
-                "endMinutes": 1040,
-                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
@@ -11177,7 +11088,7 @@
       "subject": "ADM",
       "catalogNumber": "3723",
       "courseCode": "ADM 3723",
-      "title": "Business and Society",
+      "title": "Occupational Health and Safety",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -11188,10 +11099,10 @@
             "session": null,
             "times": [
               {
-                "day": "Tu",
+                "day": "We",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
-                "virtual": false,
+                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
@@ -11780,6 +11691,28 @@
             "component": "SEM",
             "session": null,
             "times": [],
+            "status": "Open"
+          }
+        ],
+        "LEC": [
+          {
+            "section": "M00-LEC FullSess.",
+            "sectionCode": "M00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": true,
+                "instructor": "Wadid Lamine",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
             "status": "Open"
           }
         ]
@@ -14649,6 +14582,25 @@
             "section": "M00-REC FullSess.",
             "sectionCode": "M00",
             "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ADM",
+      "catalogNumber": "5102",
+      "courseCode": "ADM 5102",
+      "title": "Special Topics - Interdisciplinary study in the Arts",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "B00-LEC FullSess.",
+            "sectionCode": "B00",
+            "component": "LEC",
             "session": null,
             "times": [],
             "status": "Open"
@@ -27790,6 +27742,47 @@
                 "startMinutes": 510,
                 "endMinutes": 740,
                 "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 48,
+              "A": 71,
+              "A-": 114,
+              "B+": 67,
+              "B": 24,
+              "C+": 12,
+              "C": 3,
+              "D+": 0,
+              "D": 1,
+              "E": 0,
+              "F": 4,
+              "EIN": 4,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 3,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ],
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
@@ -43480,6 +43473,48 @@
             ],
             "status": "Open"
           }
+        ],
+        "LAB": [
+          {
+            "section": "B00-LAB FullSess.",
+            "sectionCode": "B00",
+            "component": "LAB",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 690,
+                "endMinutes": 1040,
+                "virtual": true,
+                "instructor": "François Magnan",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "C00-LAB FullSess.",
+            "sectionCode": "C00",
+            "component": "LAB",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 690,
+                "endMinutes": 1040,
+                "virtual": true,
+                "instructor": "François Magnan",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
         ]
       }
     },
@@ -44412,67 +44447,6 @@
               }
             ],
             "status": "Closed"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "CDN",
-      "catalogNumber": "4101",
-      "courseCode": "CDN 4101",
-      "title": "Drugs 101",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 690,
-                "endMinutes": 770,
-                "virtual": true,
-                "instructor": "Didier Alexandre Bilodeau",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 780,
-                "endMinutes": 860,
-                "virtual": true,
-                "instructor": "Didier Alexandre Bilodeau",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 0,
-              "A": 3,
-              "A-": 3,
-              "B+": 1,
-              "B": 1,
-              "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
           }
         ]
       }
@@ -55250,7 +55224,7 @@
                 "startMinutes": 540,
                 "endMinutes": 650,
                 "virtual": false,
-                "instructor": "Marina Pavlovic",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -55335,9 +55309,9 @@
             "session": null,
             "times": [
               {
-                "day": "Tu",
-                "startMinutes": 900,
-                "endMinutes": 1010,
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 620,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -55413,9 +55387,9 @@
             "session": null,
             "times": [
               {
-                "day": "Fr",
-                "startMinutes": 510,
-                "endMinutes": 620,
+                "day": "Tu",
+                "startMinutes": 900,
+                "endMinutes": 1010,
                 "virtual": false,
                 "instructor": "Robin Whitehead",
                 "meetingDates": [
@@ -58770,7 +58744,7 @@
                 "startMinutes": 570,
                 "endMinutes": 650,
                 "virtual": false,
-                "instructor": "Lydia Dobson",
+                "instructor": "Alexandria Bonney",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -59645,7 +59619,7 @@
                 "startMinutes": 1200,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jolene Hansell",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -59656,7 +59630,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1250,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Aaron King",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -59875,7 +59849,7 @@
                 "startMinutes": 540,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Richard Paul Casanova",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -60917,6 +60891,28 @@
             "component": "TUT",
             "session": null,
             "times": [],
+            "status": "Open"
+          }
+        ],
+        "LEC": [
+          {
+            "section": "M00-LEC Session H",
+            "sectionCode": "M00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 1020,
+                "endMinutes": 1250,
+                "virtual": true,
+                "instructor": "Randy Slepchik",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-04-14"
+                ]
+              }
+            ],
             "status": "Open"
           }
         ]
@@ -62016,7 +62012,7 @@
       "subject": "CML",
       "catalogNumber": "3213",
       "courseCode": "CML 3213",
-      "title": "Statutory Interpretation",
+      "title": "Statutory Interpretation (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -62375,7 +62371,7 @@
       "subject": "CML",
       "catalogNumber": "3253",
       "courseCode": "CML 3253",
-      "title": "Competition Law",
+      "title": "Competition Law (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -63573,7 +63569,7 @@
       "subject": "CML",
       "catalogNumber": "3371",
       "courseCode": "CML 3371",
-      "title": "Intellectual Property Law",
+      "title": "Intellectual Property Law (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -63649,7 +63645,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1250,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Andrew Astritis",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -63660,7 +63656,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1250,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Andrew Astritis",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -64315,7 +64311,7 @@
       "subject": "CML",
       "catalogNumber": "3395",
       "courseCode": "CML 3395",
-      "title": "Regulation of Internet Communication",
+      "title": "Regulation of Internet Communication (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "SEM": [
@@ -64882,7 +64878,7 @@
                 "startMinutes": 570,
                 "endMinutes": 680,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Charles Robert Daoust",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -64893,7 +64889,7 @@
                 "startMinutes": 570,
                 "endMinutes": 680,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Charles Robert Daoust",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -64928,7 +64924,7 @@
       "subject": "CML",
       "catalogNumber": "3569",
       "courseCode": "CML 3569",
-      "title": "Arbitrage international",
+      "title": "Arbitrage international (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -65380,7 +65376,7 @@
       "subject": "CML",
       "catalogNumber": "3740",
       "courseCode": "CML 3740",
-      "title": "Le droit du sport",
+      "title": "Le droit du sport (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -65672,7 +65668,7 @@
       "subject": "CML",
       "catalogNumber": "3795",
       "courseCode": "CML 3795",
-      "title": "Droit et informatique",
+      "title": "Droit et informatique (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -66986,56 +66982,6 @@
                 "meetingDates": [
                   "2027-01-05",
                   "2027-01-22"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 24,
-              "A": 69,
-              "A-": 208,
-              "B+": 246,
-              "B": 190,
-              "C+": 28,
-              "C": 14,
-              "D+": 4,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 2,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 35
-            }
-          },
-          {
-            "section": "M00-SEM Session H",
-            "sectionCode": "M00",
-            "component": "SEM",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 1020,
-                "endMinutes": 1130,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-02-01",
-                  "2027-04-14"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 1080,
-                "endMinutes": 1190,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-02-01",
-                  "2027-04-14"
                 ]
               }
             ],
@@ -68907,7 +68853,7 @@
       "subject": "CML",
       "catalogNumber": "4526",
       "courseCode": "CML 4526",
-      "title": "Droit maritime",
+      "title": "Droit maritime (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "SEM": [
@@ -68956,6 +68902,67 @@
               "EIN": 0,
               "NS": 0,
               "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CML",
+      "catalogNumber": "4747",
+      "courseCode": "CML 4747",
+      "title": "Globalization and Communication",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 1050,
+                "endMinutes": 1130,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 1050,
+                "endMinutes": 1130,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 8,
+              "A-": 7,
+              "B+": 9,
+              "B": 13,
+              "C+": 4,
+              "C": 5,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 1,
               "ABS": 0,
               "P": 0,
               "S": 0
@@ -70015,7 +70022,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Thomas Hervé Mboa Nkoudou",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -70026,7 +70033,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Thomas Hervé Mboa Nkoudou",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -71921,6 +71928,56 @@
               "E": 0,
               "F": 0,
               "EIN": 2,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CMN",
+      "catalogNumber": "3158",
+      "courseCode": "CMN 3158",
+      "title": "Théories de la communication et de la santé",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "A00-SEM FullSess.",
+            "sectionCode": "A00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 37,
+              "A": 27,
+              "A-": 16,
+              "B+": 4,
+              "B": 1,
+              "C+": 0,
+              "C": 0,
+              "D+": 0,
+              "D": 1,
+              "E": 1,
+              "F": 0,
+              "EIN": 0,
               "NS": 0,
               "NC": 0,
               "ABS": 0,
@@ -75516,67 +75573,6 @@
       }
     },
     {
-      "subject": "CPL",
-      "catalogNumber": "5340",
-      "courseCode": "CPL 5340",
-      "title": "Police and Social Control",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "B00-LEC FullSess.",
-            "sectionCode": "B00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 950,
-                "virtual": true,
-                "instructor": "Michael Kempa",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 960,
-                "endMinutes": 1040,
-                "virtual": true,
-                "instructor": "Michael Kempa",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 0,
-              "A": 22,
-              "A-": 12,
-              "B+": 0,
-              "B": 0,
-              "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
       "subject": "CRM",
       "catalogNumber": "1300",
       "courseCode": "CRM 1300",
@@ -78028,6 +78024,45 @@
                 "endMinutes": 680,
                 "virtual": false,
                 "instructor": "Paul Sylvestre",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 112,
+              "A": 110,
+              "A-": 171,
+              "B+": 180,
+              "B": 155,
+              "C+": 76,
+              "C": 51,
+              "D+": 28,
+              "D": 12,
+              "E": 1,
+              "F": 4,
+              "EIN": 9,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 2,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "B00-LEC FullSess.",
+            "sectionCode": "B00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true,
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -86083,6 +86118,90 @@
     },
     {
       "subject": "CTM",
+      "catalogNumber": "8122",
+      "courseCode": "CTM 8122",
+      "title": "Reinforced Concrete Design I",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 780,
+                "endMinutes": 860,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 690,
+                "endMinutes": 770,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ],
+        "LAB": [
+          {
+            "section": "A01-LAB FullSess.",
+            "sectionCode": "A01",
+            "component": "LAB",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 480,
+                "endMinutes": 590,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "A02-LAB FullSess.",
+            "sectionCode": "A02",
+            "component": "LAB",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 480,
+                "endMinutes": 590,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CTM",
       "catalogNumber": "8123",
       "courseCode": "CTM 8123",
       "title": "Advanced topics in the Treatments of skeletal muscle diseases (+2 combined)",
@@ -86093,6 +86212,25 @@
             "section": "A00-LEC FullSess.",
             "sectionCode": "A00",
             "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CTM",
+      "catalogNumber": "8126",
+      "courseCode": "CTM 8126",
+      "title": "Intensive Graduate Projects in Computer Science",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "W00-REC FullSess.",
+            "sectionCode": "W00",
+            "component": "REC",
             "session": null,
             "times": [],
             "status": "Open"
@@ -88805,17 +88943,6 @@
                   "2027-01-11",
                   "2027-04-14"
                 ]
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": true,
-                "instructor": "Ghasan Doudak",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
               }
             ],
             "status": "Open"
@@ -90720,37 +90847,6 @@
     },
     {
       "subject": "CVG",
-      "catalogNumber": "7126",
-      "courseCode": "CVG 7126",
-      "title": "Leadership et gestion de conflit en milieu autochtone",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "We",
-                "startMinutes": 1080,
-                "endMinutes": 1250,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "CVG",
       "catalogNumber": "7128",
       "courseCode": "CVG 7128",
       "title": "Prestressed Concrete",
@@ -91665,6 +91761,68 @@
     },
     {
       "subject": "DCC",
+      "catalogNumber": "4116",
+      "courseCode": "DCC 4116",
+      "title": "Law and Social Justice",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "AA00-LEC FullSess.",
+            "sectionCode": "AA00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DCC",
+      "catalogNumber": "4122",
+      "courseCode": "DCC 4122",
+      "title": "Protection des droits et libertés",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "AA00-LEC FullSess.",
+            "sectionCode": "AA00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DCC",
       "catalogNumber": "4508",
       "courseCode": "DCC 4508",
       "title": "Droit de la consommation",
@@ -91717,10 +91875,49 @@
       "subject": "DCC",
       "catalogNumber": "4519",
       "courseCode": "DCC 4519",
-      "title": "Thèmes choisis en droit",
+      "title": "Public International Law",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
+          {
+            "section": "AA00-LEC FullSess.",
+            "sectionCode": "AA00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 13,
+              "A": 7,
+              "A-": 12,
+              "B+": 1,
+              "B": 5,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 1,
+              "E": 0,
+              "F": 0,
+              "EIN": 2,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
           {
             "section": "BB00-LEC FullSess.",
             "sectionCode": "BB00",
@@ -94010,7 +94207,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1250,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Andrew Astritis",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -94021,7 +94218,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1250,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Andrew Astritis",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -94234,12 +94431,260 @@
     },
     {
       "subject": "DCL",
+      "catalogNumber": "6728",
+      "courseCode": "DCL 6728",
+      "title": "Droit international privé (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "B00-LEC FullSess.",
+            "sectionCode": "B00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DCL",
+      "catalogNumber": "6731",
+      "courseCode": "DCL 6731",
+      "title": "Problèmes choisis de droit international I (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Céline Lévesque",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DCL",
       "catalogNumber": "6739",
       "courseCode": "DCL 6739",
       "title": "Thèmes choisis en droit (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "SEM": [
+          {
+            "section": "V00-SEM Session F",
+            "sectionCode": "V00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Alexander Gay",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Alexander Gay",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Alexander Gay",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Alexander Gay",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Alexander Gay",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 2,
+              "A-": 2,
+              "B+": 2,
+              "B": 4,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "W00-SEM Session F",
+            "sectionCode": "W00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Benoît Girardin",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Benoît Girardin",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Benoît Girardin",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Benoît Girardin",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Benoît Girardin",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 2,
+              "A-": 2,
+              "B+": 2,
+              "B": 4,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
           {
             "section": "A00-SEM FullSess.",
             "sectionCode": "A00",
@@ -94278,6 +94723,522 @@
               "P": 0,
               "S": 0
             }
+          },
+          {
+            "section": "D00-SEM FullSess.",
+            "sectionCode": "D00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Patrick Dumberry",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 2,
+              "A-": 2,
+              "B+": 2,
+              "B": 4,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "N00-SEM FullSess.",
+            "sectionCode": "N00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Louis-Charles Sirois",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 2,
+              "A-": 2,
+              "B+": 2,
+              "B": 4,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "O00-SEM FullSess.",
+            "sectionCode": "O00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Lynda Hubert Ta",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 2,
+              "A-": 2,
+              "B+": 2,
+              "B": 4,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "P00-SEM FullSess.",
+            "sectionCode": "P00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 2,
+              "A-": 2,
+              "B+": 2,
+              "B": 4,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "Q00-SEM FullSess.",
+            "sectionCode": "Q00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 1080,
+                "endMinutes": 1250,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 2,
+              "A-": 2,
+              "B+": 2,
+              "B": 4,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "R00-SEM FullSess.",
+            "sectionCode": "R00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 870,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Emmanuelle Bernheim",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 690,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Emmanuelle Bernheim",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 2,
+              "A-": 2,
+              "B+": 2,
+              "B": 4,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "S00-SEM FullSess.",
+            "sectionCode": "S00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 2,
+              "A-": 2,
+              "B+": 2,
+              "B": 4,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "T00-SEM FullSess.",
+            "sectionCode": "T00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 2,
+              "A-": 2,
+              "B+": 2,
+              "B": 4,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "Y00-SEM FullSess.",
+            "sectionCode": "Y00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 960,
+                "endMinutes": 1130,
+                "virtual": false,
+                "instructor": "Pascale Cornut St-Pierre",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 2,
+              "A-": 2,
+              "B+": 2,
+              "B": 4,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "U00-SEM Session H",
+            "sectionCode": "U00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 780,
+                "endMinutes": 890,
+                "virtual": false,
+                "instructor": "Maria Katsivela",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 900,
+                "endMinutes": 1010,
+                "virtual": false,
+                "instructor": "Maria Katsivela",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 2,
+              "A-": 2,
+              "B+": 2,
+              "B": 4,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DCL",
+      "catalogNumber": "6939",
+      "courseCode": "DCL 6939",
+      "title": "Special Topic in Law (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Session H",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 900,
+                "endMinutes": 1010,
+                "virtual": false,
+                "instructor": "Nathalie Chalifour",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Nathalie Chalifour",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DCL",
+      "catalogNumber": "7302",
+      "courseCode": "DCL 7302",
+      "title": "Regulation of Internet Communications (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "A00-SEM Session H",
+            "sectionCode": "A00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 900,
+                "endMinutes": 1010,
+                "virtual": false,
+                "instructor": "Marcelo Thompson Mello Guimaraes",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 900,
+                "endMinutes": 1010,
+                "virtual": false,
+                "instructor": "Marcelo Thompson Mello Guimaraes",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
           }
         ]
       }
@@ -94464,6 +95425,151 @@
     },
     {
       "subject": "DCL",
+      "catalogNumber": "7311",
+      "courseCode": "DCL 7311",
+      "title": "Studies in Intellectual and Industrial Property (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "B00-LEC Session H",
+            "sectionCode": "B00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 1020,
+                "endMinutes": 1130,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 1200,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DCL",
+      "catalogNumber": "7312",
+      "courseCode": "DCL 7312",
+      "title": "Competition Law (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Session H",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 1020,
+                "endMinutes": 1130,
+                "virtual": false,
+                "instructor": "John Tyhurst",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 1020,
+                "endMinutes": 1130,
+                "virtual": false,
+                "instructor": "John Tyhurst",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DCL",
+      "catalogNumber": "7313",
+      "courseCode": "DCL 7313",
+      "title": "Statutory Interpretation (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "B00-LEC Session H",
+            "sectionCode": "B00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 1140,
+                "endMinutes": 1250,
+                "virtual": false,
+                "instructor": "John Keyes",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 1140,
+                "endMinutes": 1250,
+                "virtual": false,
+                "instructor": "John Keyes",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 0,
+              "A": 1,
+              "A-": 2,
+              "B+": 1,
+              "B": 5,
+              "C+": 3,
+              "C": 0,
+              "D+": 0,
+              "D": 1,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 1,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DCL",
       "catalogNumber": "7500",
       "courseCode": "DCL 7500",
       "title": "Techno-Théorie : Théorie du droit à l'ère de l'information (+1 combined)",
@@ -94485,6 +95591,81 @@
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DCL",
+      "catalogNumber": "7712",
+      "courseCode": "DCL 7712",
+      "title": "Problèmes choisis de droit et technologie (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Session F",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Florian Martin-Bariteau",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Florian Martin-Bariteau",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Florian Martin-Bariteau",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Florian Martin-Bariteau",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Florian Martin-Bariteau",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
                 ]
               }
             ],
@@ -96824,7 +98005,7 @@
       "subject": "DRC",
       "catalogNumber": "3501",
       "courseCode": "DRC 3501",
-      "title": "Droit international privé (+1 combined)",
+      "title": "Droit international privé (+2 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -97034,7 +98215,7 @@
       "subject": "DRC",
       "catalogNumber": "4540",
       "courseCode": "DRC 4540",
-      "title": "Règlement des différends internationaux",
+      "title": "Règlement des différends internationaux (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -97084,7 +98265,7 @@
       "subject": "DRC",
       "catalogNumber": "4544",
       "courseCode": "DRC 4544",
-      "title": "Naissance, transformation et fin des États",
+      "title": "Naissance, transformation et fin des États (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -97523,7 +98704,7 @@
       "subject": "DRC",
       "catalogNumber": "4591",
       "courseCode": "DRC 4591",
-      "title": "Droit de la faillite et de l'insolvabilité",
+      "title": "Droit de la faillite et de l'insolvabilité (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -97573,7 +98754,7 @@
       "subject": "DRC",
       "catalogNumber": "4593",
       "courseCode": "DRC 4593",
-      "title": "Droit de l’entreprise III : Droit financier",
+      "title": "Droit de l’entreprise III : Droit financier (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -97623,7 +98804,7 @@
       "subject": "DRC",
       "catalogNumber": "4597",
       "courseCode": "DRC 4597",
-      "title": "Responsabilité sociale des entreprises et durabilité",
+      "title": "Responsabilité sociale des entreprises et durabilité (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -97773,7 +98954,7 @@
       "subject": "DRC",
       "catalogNumber": "4731",
       "courseCode": "DRC 4731",
-      "title": "Thèmes choisis en droit",
+      "title": "Thèmes choisis en droit (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -97974,7 +99155,7 @@
       "subject": "DRC",
       "catalogNumber": "4737",
       "courseCode": "DRC 4737",
-      "title": "Théories raciales et droit",
+      "title": "Théories raciales et droit (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -98174,7 +99355,7 @@
       "subject": "DRC",
       "catalogNumber": "4751",
       "courseCode": "DRC 4751",
-      "title": "Droit psychiatrique",
+      "title": "Droit psychiatrique (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -98366,7 +99547,7 @@
       "subject": "DRC",
       "catalogNumber": "4766",
       "courseCode": "DRC 4766",
-      "title": "Médiation, conciliation et arbitrage",
+      "title": "Médiation, conciliation et arbitrage (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -98554,7 +99735,7 @@
       "subject": "DRC",
       "catalogNumber": "4776",
       "courseCode": "DRC 4776",
-      "title": "Droit avancé des infractions criminelles et pénales",
+      "title": "Droit avancé des infractions criminelles et pénales (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -98654,7 +99835,7 @@
       "subject": "DRC",
       "catalogNumber": "4789",
       "courseCode": "DRC 4789",
-      "title": "Droit international privé bijuridique",
+      "title": "Droit international privé bijuridique (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -98902,7 +100083,7 @@
       "subject": "DRC",
       "catalogNumber": "4796",
       "courseCode": "DRC 4796",
-      "title": "Droit international privé (+1 combined)",
+      "title": "Droit international privé (+2 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -99985,6 +101166,56 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 5,
+              "A": 16,
+              "A-": 19,
+              "B+": 25,
+              "B": 14,
+              "C+": 7,
+              "C": 2,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 7,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 3,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "B00-LEC FullSess.",
+            "sectionCode": "B00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 780,
+                "endMinutes": 860,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 690,
+                "endMinutes": 770,
+                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
@@ -106730,6 +107961,37 @@
     },
     {
       "subject": "ECO",
+      "catalogNumber": "6573",
+      "courseCode": "ECO 6573",
+      "title": "Équité, diversité et inclusion en éducation",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ECO",
       "catalogNumber": "6574",
       "courseCode": "ECO 6574",
       "title": "Économie de la santé",
@@ -108659,6 +109921,56 @@
               "B": 2,
               "C+": 0,
               "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "EDU",
+      "catalogNumber": "5381",
+      "courseCode": "EDU 5381",
+      "title": "Problématiques actuelles en enseignement et apprentissage des mathématiques",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "DS00-LEC FullSess.",
+            "sectionCode": "DS00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": true,
+                "instructor": "Carolina Ruminot",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 28,
+              "A": 45,
+              "A-": 11,
+              "B+": 3,
+              "B": 1,
+              "C+": 0,
+              "C": 1,
               "D+": 0,
               "D": 0,
               "E": 0,
@@ -112798,9 +114110,9 @@
             "session": null,
             "times": [
               {
-                "day": "We",
-                "startMinutes": 600,
-                "endMinutes": 650,
+                "day": "Th",
+                "startMinutes": 870,
+                "endMinutes": 920,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -113949,16 +115261,121 @@
       "subject": "ELG",
       "catalogNumber": "3537",
       "courseCode": "ELG 3537",
-      "title": "Entrepreneurial Engineering Design Project II",
+      "title": "Notions fondamentales des dispositifs à semi-conducteurs",
       "timeZone": "America/Toronto",
       "components": {
-        "REC": [
+        "LEC": [
           {
-            "section": "W00-REC FullSess.",
-            "sectionCode": "W00",
-            "component": "REC",
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
             "session": null,
-            "times": [],
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Pierre Berini",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 590,
+                "virtual": false,
+                "instructor": "Pierre Berini",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 30,
+              "A": 16,
+              "A-": 19,
+              "B+": 13,
+              "B": 14,
+              "C+": 13,
+              "C": 7,
+              "D+": 3,
+              "D": 2,
+              "E": 5,
+              "F": 1,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ],
+        "LAB": [
+          {
+            "section": "A01-LAB FullSess.",
+            "sectionCode": "A01",
+            "component": "LAB",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Pierre Berini",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 30,
+              "A": 16,
+              "A-": 19,
+              "B+": 13,
+              "B": 14,
+              "C+": 13,
+              "C": 7,
+              "D+": 3,
+              "D": 2,
+              "E": 5,
+              "F": 1,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ],
+        "TUT": [
+          {
+            "section": "A02-TUT FullSess.",
+            "sectionCode": "A02",
+            "component": "TUT",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Pierre Berini",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
             "status": "Open",
             "distribution": {
               "A+": 30,
@@ -116053,6 +117470,44 @@
             "session": null,
             "times": [],
             "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ELG",
+      "catalogNumber": "5128",
+      "courseCode": "ELG 5128",
+      "title": "Methodologies for Discrete-Event Modeling and Simulation",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "I00-LEC FullSess.",
+            "sectionCode": "I00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 9,
+              "A": 12,
+              "A-": 15,
+              "B+": 10,
+              "B": 0,
+              "C+": 0,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 1,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 1,
+              "P": 0,
+              "S": 0
+            }
           }
         ]
       }
@@ -120355,9 +121810,87 @@
             "session": null,
             "times": [
               {
-                "day": "Fr",
-                "startMinutes": 780,
-                "endMinutes": 860,
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 770,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 276,
+              "A": 722,
+              "A-": 1096,
+              "B+": 978,
+              "B": 711,
+              "C+": 371,
+              "C": 212,
+              "D+": 91,
+              "D": 75,
+              "E": 34,
+              "F": 43,
+              "EIN": 49,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 26,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "J00-LEC FullSess.",
+            "sectionCode": "J00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 870,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 276,
+              "A": 722,
+              "A-": 1096,
+              "B+": 978,
+              "B": 711,
+              "C+": 371,
+              "C": 212,
+              "D+": 91,
+              "D": 75,
+              "E": 34,
+              "F": 43,
+              "EIN": 49,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 26,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "K00-LEC FullSess.",
+            "sectionCode": "K00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 870,
+                "endMinutes": 950,
                 "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -120513,9 +122046,9 @@
             "session": null,
             "times": [
               {
-                "day": "Tu",
-                "startMinutes": 690,
-                "endMinutes": 770,
+                "day": "Fr",
+                "startMinutes": 780,
+                "endMinutes": 860,
                 "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -120552,9 +122085,9 @@
             "session": null,
             "times": [
               {
-                "day": "Tu",
-                "startMinutes": 690,
-                "endMinutes": 770,
+                "day": "Fr",
+                "startMinutes": 780,
+                "endMinutes": 860,
                 "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -120591,9 +122124,243 @@
             "session": null,
             "times": [
               {
-                "day": "Tu",
-                "startMinutes": 690,
-                "endMinutes": 770,
+                "day": "Fr",
+                "startMinutes": 780,
+                "endMinutes": 860,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 276,
+              "A": 722,
+              "A-": 1096,
+              "B+": 978,
+              "B": 711,
+              "C+": 371,
+              "C": 212,
+              "D+": 91,
+              "D": 75,
+              "E": 34,
+              "F": 43,
+              "EIN": 49,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 26,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "J01-DGD FullSess.",
+            "sectionCode": "J01",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 960,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 276,
+              "A": 722,
+              "A-": 1096,
+              "B+": 978,
+              "B": 711,
+              "C+": 371,
+              "C": 212,
+              "D+": 91,
+              "D": 75,
+              "E": 34,
+              "F": 43,
+              "EIN": 49,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 26,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "J02-DGD FullSess.",
+            "sectionCode": "J02",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 960,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 276,
+              "A": 722,
+              "A-": 1096,
+              "B+": 978,
+              "B": 711,
+              "C+": 371,
+              "C": 212,
+              "D+": 91,
+              "D": 75,
+              "E": 34,
+              "F": 43,
+              "EIN": 49,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 26,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "J03-DGD FullSess.",
+            "sectionCode": "J03",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 960,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 276,
+              "A": 722,
+              "A-": 1096,
+              "B+": 978,
+              "B": 711,
+              "C+": 371,
+              "C": 212,
+              "D+": 91,
+              "D": 75,
+              "E": 34,
+              "F": 43,
+              "EIN": 49,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 26,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "K01-DGD FullSess.",
+            "sectionCode": "K01",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 960,
+                "endMinutes": 1040,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 276,
+              "A": 722,
+              "A-": 1096,
+              "B+": 978,
+              "B": 711,
+              "C+": 371,
+              "C": 212,
+              "D+": 91,
+              "D": 75,
+              "E": 34,
+              "F": 43,
+              "EIN": 49,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 26,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "K02-DGD FullSess.",
+            "sectionCode": "K02",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 960,
+                "endMinutes": 1040,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 276,
+              "A": 722,
+              "A-": 1096,
+              "B+": 978,
+              "B": 711,
+              "C+": 371,
+              "C": 212,
+              "D+": 91,
+              "D": 75,
+              "E": 34,
+              "F": 43,
+              "EIN": 49,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 26,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "K03-DGD FullSess.",
+            "sectionCode": "K03",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 960,
+                "endMinutes": 1040,
                 "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -120936,6 +122703,44 @@
               }
             ],
             "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ENG",
+      "catalogNumber": "2120",
+      "courseCode": "ENG 2120",
+      "title": "Ph.D. Comprehensive Examination",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "W00-REC FullSess.",
+            "sectionCode": "W00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 31,
+              "A-": 51,
+              "B+": 66,
+              "B": 37,
+              "C+": 39,
+              "C": 21,
+              "D+": 16,
+              "D": 17,
+              "E": 9,
+              "F": 7,
+              "EIN": 18,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 2,
+              "P": 0,
+              "S": 0
+            }
           }
         ]
       }
@@ -124089,7 +125894,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Renate Margarete Sander-Regier",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -124198,6 +126003,44 @@
               "C": 2,
               "D+": 0,
               "D": 1,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "EPI",
+      "catalogNumber": "5126",
+      "courseCode": "EPI 5126",
+      "title": "Second Language Requirement",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "C00-REC FullSess.",
+            "sectionCode": "C00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 4,
+              "A": 4,
+              "A-": 4,
+              "B+": 0,
+              "B": 0,
+              "C+": 0,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
               "E": 0,
               "F": 0,
               "EIN": 0,
@@ -127422,6 +129265,25 @@
                 ]
               }
             ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ESP",
+      "catalogNumber": "4919",
+      "courseCode": "ESP 4919",
+      "title": "Comprehensive Examination",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "C00-REC FullSess.",
+            "sectionCode": "C00",
+            "component": "REC",
+            "session": null,
+            "times": [],
             "status": "Open"
           }
         ]
@@ -136232,35 +138094,6 @@
               "S": 0
             }
           }
-        ],
-        "REC": [
-          {
-            "section": "C00-REC FullSess.",
-            "sectionCode": "C00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 20,
-              "A": 19,
-              "A-": 24,
-              "B+": 9,
-              "B": 11,
-              "C+": 5,
-              "C": 3,
-              "D+": 2,
-              "D": 0,
-              "E": 1,
-              "F": 0,
-              "EIN": 3,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
         ]
       }
     },
@@ -139460,7 +141293,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 62,
               "A": 126,
@@ -145749,6 +147582,44 @@
     },
     {
       "subject": "HSS",
+      "catalogNumber": "2781",
+      "courseCode": "HSS 2781",
+      "title": "Research Project",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "M00-REC FullSess.",
+            "sectionCode": "M00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 149,
+              "A": 140,
+              "A-": 172,
+              "B+": 166,
+              "B": 137,
+              "C+": 137,
+              "C": 97,
+              "D+": 73,
+              "D": 58,
+              "E": 38,
+              "F": 12,
+              "EIN": 11,
+              "NS": 1,
+              "NC": 0,
+              "ABS": 1,
+              "P": 0,
+              "S": 7
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "HSS",
       "catalogNumber": "2782",
       "courseCode": "HSS 2782",
       "title": "Analyse quantitative des données en sciences de la santé: variables catégorielles",
@@ -149270,6 +151141,28 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 1050,
+                "endMinutes": 1130,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 1050,
+                "endMinutes": 1130,
+                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
@@ -155087,6 +156980,33 @@
               "P": 0,
               "S": 0
             }
+          },
+          {
+            "section": "B00-LEC FullSess.",
+            "sectionCode": "B00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 8,
+              "A": 3,
+              "A-": 5,
+              "B+": 7,
+              "B": 1,
+              "C+": 5,
+              "C": 3,
+              "D+": 2,
+              "D": 0,
+              "E": 1,
+              "F": 0,
+              "EIN": 2,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
           }
         ]
       }
@@ -156253,6 +158173,136 @@
                 "endMinutes": 1040,
                 "virtual": false,
                 "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 47,
+              "A": 77,
+              "A-": 91,
+              "B+": 41,
+              "B": 25,
+              "C+": 10,
+              "C": 7,
+              "D+": 3,
+              "D": 2,
+              "E": 2,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 1,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": true,
+                "instructor": "Michael Newman",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 590,
+                "virtual": true,
+                "instructor": "Michael Newman",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 47,
+              "A": 77,
+              "A-": 91,
+              "B+": 41,
+              "B": 25,
+              "C+": 10,
+              "C": 7,
+              "D+": 3,
+              "D": 2,
+              "E": 2,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 1,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ],
+        "DGD": [
+          {
+            "section": "A01-DGD FullSess.",
+            "sectionCode": "A01",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 1140,
+                "endMinutes": 1220,
+                "virtual": true,
+                "instructor": "Michael Newman",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 47,
+              "A": 77,
+              "A-": 91,
+              "B+": 41,
+              "B": 25,
+              "C+": 10,
+              "C": 7,
+              "D+": 3,
+              "D": 2,
+              "E": 2,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 1,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "A02-DGD FullSess.",
+            "sectionCode": "A02",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 1140,
+                "endMinutes": 1220,
+                "virtual": true,
+                "instructor": "Michael Newman",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -165451,6 +167501,28 @@
                   "2027-01-11",
                   "2027-04-14"
                 ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 690,
+                "endMinutes": 770,
+                "virtual": true,
+                "instructor": "Maia Fraser",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 780,
+                "endMinutes": 860,
+                "virtual": true,
+                "instructor": "Maia Fraser",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
               }
             ],
             "status": "Open",
@@ -165813,28 +167885,6 @@
                 "endMinutes": 950,
                 "virtual": false,
                 "instructor": "Simon Henry",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 780,
-                "endMinutes": 860,
-                "virtual": true,
-                "instructor": "Arthur Mehta",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 770,
-                "virtual": true,
-                "instructor": "Arthur Mehta",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -166715,6 +168765,100 @@
               "P": 0,
               "S": 0
             }
+          },
+          {
+            "section": "B00-LEC Term",
+            "sectionCode": "B00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Sa",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-09",
+                  "2027-01-09"
+                ]
+              },
+              {
+                "day": "Su",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-10",
+                  "2027-01-10"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-23",
+                  "2027-01-23"
+                ]
+              },
+              {
+                "day": "Su",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-24",
+                  "2027-01-24"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-06",
+                  "2027-02-06"
+                ]
+              },
+              {
+                "day": "Su",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-07",
+                  "2027-02-07"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 17,
+              "A": 9,
+              "A-": 8,
+              "B+": 11,
+              "B": 8,
+              "C+": 2,
+              "C": 0,
+              "D+": 1,
+              "D": 0,
+              "E": 1,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
           }
         ]
       }
@@ -166943,6 +169087,92 @@
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "MAT",
+      "catalogNumber": "5713",
+      "courseCode": "MAT 5713",
+      "title": "Management Accounting",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "BH00-LEC Term",
+            "sectionCode": "BH00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Sa",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-09",
+                  "2027-01-09"
+                ]
+              },
+              {
+                "day": "Su",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-10",
+                  "2027-01-10"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-23",
+                  "2027-01-23"
+                ]
+              },
+              {
+                "day": "Su",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-24",
+                  "2027-01-24"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-06",
+                  "2027-02-06"
+                ]
+              },
+              {
+                "day": "Su",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-07",
+                  "2027-02-07"
                 ]
               }
             ],
@@ -176739,6 +178969,37 @@
     },
     {
       "subject": "MGT",
+      "catalogNumber": "6131",
+      "courseCode": "MGT 6131",
+      "title": "Professional Skills (Part 2 of 2)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "B00-SEM FullSess.",
+            "sectionCode": "B00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 720,
+                "endMinutes": 800,
+                "virtual": false,
+                "instructor": "Elizabeth Potter",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "MGT",
       "catalogNumber": "6160",
       "courseCode": "MGT 6160",
       "title": "Systems of Innovation",
@@ -177053,6 +179314,81 @@
                 "meetingDates": [
                   "2027-04-05",
                   "2027-04-12"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "BH00-LEC Term",
+            "sectionCode": "BH00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Sa",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-27",
+                  "2027-02-27"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-27",
+                  "2027-02-27"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-13",
+                  "2027-03-13"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-13",
+                  "2027-03-13"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-04-03",
+                  "2027-04-03"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-04-03",
+                  "2027-04-03"
                 ]
               }
             ],
@@ -179684,37 +182020,6 @@
               "P": 0,
               "S": 0
             }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "MUS",
-      "catalogNumber": "1901",
-      "courseCode": "MUS 1901",
-      "title": "Foundations and Applications of Machine Learning",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "B00-LEC FullSess.",
-            "sectionCode": "B00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Th",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open"
           }
         ]
       }
@@ -184903,7 +187208,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "ME00-LAB FullSess.",
@@ -187911,6 +190216,56 @@
     },
     {
       "subject": "NSG",
+      "catalogNumber": "4430",
+      "courseCode": "NSG 4430",
+      "title": "Formation avancée en évaluation de la santé et diagnostic II",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "NP00-LEC FullSess.",
+            "sectionCode": "NP00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 0,
+              "A": 0,
+              "A-": 0,
+              "B+": 0,
+              "B": 0,
+              "C+": 0,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 31,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 4450
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "NSG",
       "catalogNumber": "4501",
       "courseCode": "NSG 4501",
       "title": "Histoire des soins infirmiers canadiens - 1850 à 1975",
@@ -190582,6 +192937,56 @@
     },
     {
       "subject": "NUT",
+      "catalogNumber": "2611",
+      "courseCode": "NUT 2611",
+      "title": "Séminaire doctoral (Partie 2 de 2)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "HC00-SEM FullSess.",
+            "sectionCode": "HC00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "NUT",
+      "catalogNumber": "26113",
+      "courseCode": "NUT 26113",
+      "title": "Thesis Proposal",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "HC00-REC FullSess.",
+            "sectionCode": "HC00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "NUT",
       "catalogNumber": "2701",
       "courseCode": "NUT 2701",
       "title": "Nutrition à travers le cycle de la vie",
@@ -192730,7 +195135,7 @@
       "components": {
         "TLB": [
           {
-            "section": "A00-TLB Term",
+            "section": "A00-TLB Multi-Term",
             "sectionCode": "A00",
             "component": "TLB",
             "session": null,
@@ -192749,7 +195154,7 @@
       "components": {
         "LEC": [
           {
-            "section": "A00-LEC Term",
+            "section": "A00-LEC Multi-Term",
             "sectionCode": "A00",
             "component": "LEC",
             "session": null,
@@ -192768,7 +195173,7 @@
       "components": {
         "TLB": [
           {
-            "section": "A00-TLB Term",
+            "section": "A00-TLB Multi-Term",
             "sectionCode": "A00",
             "component": "TLB",
             "session": null,
@@ -192787,7 +195192,7 @@
       "components": {
         "LEC": [
           {
-            "section": "A00-LEC Term",
+            "section": "A00-LEC Multi-Term",
             "sectionCode": "A00",
             "component": "LEC",
             "session": null,
@@ -192806,7 +195211,7 @@
       "components": {
         "PRA": [
           {
-            "section": "A00-PRA Term",
+            "section": "A00-PRA Multi-Term",
             "sectionCode": "A00",
             "component": "PRA",
             "session": null,
@@ -192825,7 +195230,7 @@
       "components": {
         "REC": [
           {
-            "section": "A00-REC Term",
+            "section": "A00-REC Multi-Term",
             "sectionCode": "A00",
             "component": "REC",
             "session": null,
@@ -192844,7 +195249,7 @@
       "components": {
         "TLB": [
           {
-            "section": "A00-TLB Term",
+            "section": "A00-TLB Multi-Term",
             "sectionCode": "A00",
             "component": "TLB",
             "session": null,
@@ -192863,7 +195268,7 @@
       "components": {
         "TLB": [
           {
-            "section": "A00-TLB Term",
+            "section": "A00-TLB Multi-Term",
             "sectionCode": "A00",
             "component": "TLB",
             "session": null,
@@ -192882,7 +195287,7 @@
       "components": {
         "TLB": [
           {
-            "section": "A00-TLB Term",
+            "section": "A00-TLB Multi-Term",
             "sectionCode": "A00",
             "component": "TLB",
             "session": null,
@@ -192901,7 +195306,7 @@
       "components": {
         "PRA": [
           {
-            "section": "A00-PRA Term",
+            "section": "A00-PRA Multi-Term",
             "sectionCode": "A00",
             "component": "PRA",
             "session": null,
@@ -192920,7 +195325,7 @@
       "components": {
         "PRA": [
           {
-            "section": "A00-PRA Term",
+            "section": "A00-PRA Multi-Term",
             "sectionCode": "A00",
             "component": "PRA",
             "session": null,
@@ -203676,60 +206081,10 @@
       "subject": "PED",
       "catalogNumber": "4551",
       "courseCode": "PED 4551",
-      "title": "Didactique du français au cycle moyen",
+      "title": "Intégration des apprentissages et développement professionnel au secondaire I (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
-          {
-            "section": "OV10-LEC Term",
-            "sectionCode": "OV10",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false,
-                "instructor": "Lucie Jane Bartosova",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-02-26"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false,
-                "instructor": "Lucie Jane Bartosova",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-02-26"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 61,
-              "A": 139,
-              "A-": 61,
-              "B+": 28,
-              "B": 13,
-              "C+": 4,
-              "C": 3,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 2,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          },
           {
             "section": "D100-LEC Term",
             "sectionCode": "D100",
@@ -218026,7 +220381,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 138,
               "A": 75,
@@ -219725,7 +222080,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 88,
               "A": 56,
@@ -221049,33 +223404,6 @@
                 ]
               }
             ],
-            "status": "Open",
-            "distribution": {
-              "A+": 19,
-              "A": 7,
-              "A-": 9,
-              "B+": 5,
-              "B": 8,
-              "C+": 6,
-              "C": 6,
-              "D+": 5,
-              "D": 6,
-              "E": 1,
-              "F": 4,
-              "EIN": 4,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          },
-          {
-            "section": "I00-LEC FullSess.",
-            "sectionCode": "I00",
-            "component": "LEC",
-            "session": null,
-            "times": [],
             "status": "Open",
             "distribution": {
               "A+": 19,
@@ -225105,6 +227433,17 @@
                   "2027-01-11",
                   "2027-04-14"
                 ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
               }
             ],
             "status": "Open",
@@ -225649,56 +227988,6 @@
               "E": 2,
               "F": 4,
               "EIN": 4,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "POL",
-      "catalogNumber": "4535",
-      "courseCode": "POL 4535",
-      "title": "Organisations internationales et gouvernance mondiale",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
-                "instructor": "Falk Litane Petegou",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 19,
-              "A": 29,
-              "A-": 14,
-              "B+": 2,
-              "B": 3,
-              "C+": 4,
-              "C": 2,
-              "D+": 1,
-              "D": 1,
-              "E": 0,
-              "F": 2,
-              "EIN": 3,
               "NS": 0,
               "NC": 0,
               "ABS": 0,
@@ -239077,7 +241366,7 @@
                 "day": "Mo",
                 "startMinutes": 690,
                 "endMinutes": 770,
-                "virtual": false,
+                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
@@ -239088,7 +241377,7 @@
                 "day": "Th",
                 "startMinutes": 780,
                 "endMinutes": 860,
-                "virtual": false,
+                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
@@ -239189,45 +241478,6 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 1550,
-              "A": 1427,
-              "A-": 1459,
-              "B+": 1251,
-              "B": 1097,
-              "C+": 874,
-              "C": 642,
-              "D+": 331,
-              "D": 271,
-              "E": 103,
-              "F": 37,
-              "EIN": 310,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 95,
-              "P": 0,
-              "S": 0
-            }
-          },
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
@@ -241471,58 +243721,6 @@
                 "endMinutes": 870,
                 "virtual": false,
                 "instructor": "Phyllis Rippey",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 17,
-              "A": 13,
-              "A-": 6,
-              "B+": 2,
-              "B": 1,
-              "C+": 2,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 2,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ],
-        "LEC": [
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 1050,
-                "endMinutes": 1130,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 1050,
-                "endMinutes": 1130,
-                "virtual": true,
-                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -247962,7 +250160,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Joerg Esleben",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -250734,6 +252932,67 @@
               "NS": 0,
               "NC": 0,
               "ABS": 6,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "TRA",
+      "catalogNumber": "4534",
+      "courseCode": "TRA 4534",
+      "title": "Introduction to Translation",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "B00-LEC FullSess.",
+            "sectionCode": "B00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 690,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 780,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 18,
+              "A": 19,
+              "A-": 15,
+              "B+": 13,
+              "B": 6,
+              "C+": 0,
+              "C": 1,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 1,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
               "P": 0,
               "S": 0
             }
