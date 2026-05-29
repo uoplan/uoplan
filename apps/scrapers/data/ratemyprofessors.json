@@ -1,5 +1,5 @@
 {
-  "resultCount": 4565,
+  "resultCount": 4566,
   "professors": [
     {
       "id": "VGVhY2hlci04Nzk2OTM=",
@@ -7307,7 +7307,7 @@
       "legacyId": 300337,
       "name": "David Taylor",
       "rating": 2.2,
-      "numRatings": 88
+      "numRatings": 89
     },
     {
       "id": "VGVhY2hlci0xMjI0Mzc2",
@@ -11538,8 +11538,8 @@
       "numRatings": 0
     },
     {
-      "id": "VGVhY2hlci0yOTkyNTkx",
-      "legacyId": 2992591,
+      "id": "VGVhY2hlci0zMTI5NTI5",
+      "legacyId": 3129529,
       "name": "Helen Abbot",
       "rating": 2.9204545454545454,
       "numRatings": 44
@@ -17673,6 +17673,13 @@
       "id": "VGVhY2hlci0xOTM5NjQz",
       "legacyId": 1939643,
       "name": "Liz Bel",
+      "rating": 0,
+      "numRatings": 0
+    },
+    {
+      "id": "VGVhY2hlci00Mjc5Njk1",
+      "legacyId": 4279695,
+      "name": "Lizhi Luo",
       "rating": 0,
       "numRatings": 0
     },
