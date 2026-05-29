@@ -25,7 +25,7 @@ function SwapCard({
       style={{
         cursor: rejected ? "default" : "pointer",
         opacity: rejected ? 0.55 : 1,
-        backgroundColor: hovered && !rejected ? "var(--mantine-color-dark-6)" : "transparent",
+        backgroundColor: hovered && !rejected ? "var(--app-surface)" : "transparent",
         transition: "background-color 80ms ease",
       }}
     >
@@ -239,7 +239,7 @@ function SortedFilteredList({
   ));
 
   if (inline) {
-    return <Box style={{ border: "1px solid var(--mantine-color-dark-4)" }}>{cards}</Box>;
+    return <Box style={{ border: "1px solid var(--app-border)" }}>{cards}</Box>;
   }
 
   return (
@@ -247,7 +247,7 @@ function SortedFilteredList({
       style={{
         maxHeight: 320,
         overflowY: "auto",
-        border: "1px solid var(--mantine-color-dark-4)",
+        border: "1px solid var(--app-border)",
       }}
     >
       {cards}

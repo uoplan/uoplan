@@ -1,4 +1,5 @@
 @import "@mantine/core/styles.css";
+@import "./tokens.css";
 
 /* Reserve space for the vertical scrollbar so layout width stays stable when
    overflow appears/disappears (avoids horizontal shift). */
@@ -11,7 +12,7 @@ html.calendar-no-scrollbar-gutter {
 }
 
 body {
-  background-color: #141517;
+  background-color: var(--app-bg);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
@@ -19,8 +20,8 @@ body {
 }
 
 ::selection {
-  background-color: rgba(134, 46, 156, 0.2);
-  color: #f5f2ec;
+  background-color: var(--app-selection-bg);
+  color: var(--app-text);
 }
 
 * {
@@ -50,7 +51,7 @@ a {
 
 .stamp-hover:hover {
   transform: rotate(-1deg) scale(1.02);
-  box-shadow: 3px 3px 0px #1a1a1a;
+  box-shadow: 3px 3px 0px var(--app-stamp-shadow);
 }
 
 .stamp-hover:active {
@@ -60,7 +61,7 @@ a {
 
 /* Changelog modal (build-time markdown → HTML) */
 .changelog-html {
-  color: #adb5bd;
+  color: var(--app-text-muted);
   font-size: var(--mantine-font-size-sm);
   line-height: 1.55;
   text-align: left;
@@ -69,8 +70,8 @@ a {
 .changelog-html h2 {
   margin: 1.35rem 0 0.65rem;
   padding-bottom: 0.35rem;
-  border-bottom: 1px solid #2c2e33;
-  color: #f8f9fa;
+  border-bottom: 1px solid var(--app-border);
+  color: var(--app-text);
   font-size: var(--mantine-font-size-md);
   font-weight: 600;
   line-height: 1.35;
@@ -86,7 +87,7 @@ a {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #868e96;
+  color: var(--app-text-dim);
 }
 
 .changelog-html ul {
@@ -99,7 +100,7 @@ a {
 }
 
 .changelog-html a {
-  color: #a5b4fc;
+  color: var(--app-accent);
   text-decoration: none;
 }
 
@@ -108,6 +109,6 @@ a {
 }
 
 .changelog-html strong {
-  color: #dee2e6;
+  color: var(--app-text);
   font-weight: 600;
 }

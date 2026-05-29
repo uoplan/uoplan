@@ -148,8 +148,8 @@ export function CalendarView({
         <Box
           style={{
             flexShrink: 0,
-            borderBottom: "1px solid #2C2E33",
-            backgroundColor: "#1A1A1C",
+            borderBottom: "1px solid var(--app-border)",
+            backgroundColor: "var(--app-surface)",
           }}
         >
           {weekGroups.length > 0 && (

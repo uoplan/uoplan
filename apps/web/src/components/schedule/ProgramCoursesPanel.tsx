@@ -24,12 +24,12 @@ export function ProgramCoursesPanel() {
 
       {hasProgram ? (
         <>
-          <Divider color="#2C2E33" />
+          <Divider color="var(--app-border)" />
           <Stack gap={4}>
-            <Text size="sm" fw={600} c="#F8F9FA">
+            <Text size="sm" fw={600} c="var(--app-text)">
               {tr("schedule.programCourses.completedHeading")}
             </Text>
-            <Text size="xs" c="#ADB5BD" lh={1.5}>
+            <Text size="xs" c="var(--app-text-muted)" lh={1.5}>
               {tr("schedule.programCourses.completedHint")}
             </Text>
           </Stack>

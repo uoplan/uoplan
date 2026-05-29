@@ -207,17 +207,17 @@ export function BasicCalendarSidebarControls() {
             markBasicSettingsChanged();
           }}
           radius={0}
-          styles={{ description: { color: "#ADB5BD" } }}
+          styles={{ description: { color: "var(--app-text-muted)" } }}
         />
 
         {frenchImmersionStream ? <FrenchImmersionProgramOverview variant="compact" /> : null}
       </Stack>
 
-      <Box style={{ borderTop: "1px solid #2C2E33", paddingTop: 16, marginTop: 8 }}>
-        <Text size="sm" fw={600} mb={8} style={{ color: "#F8F9FA" }}>
+      <Box style={{ borderTop: "1px solid var(--app-border)", paddingTop: 16, marginTop: 8 }}>
+        <Text size="sm" fw={600} mb={8} style={{ color: "var(--app-text)" }}>
           {tr("basicCalendar.prereq.heading")}
         </Text>
-        <Text size="xs" style={{ color: "#ADB5BD", marginBottom: 12 }}>
+        <Text size="xs" style={{ color: "var(--app-text-muted)", marginBottom: 12 }}>
           {tr("basicCalendar.prereq.description")}
         </Text>
         <Stack gap="sm">

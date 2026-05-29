@@ -130,7 +130,7 @@ export function ExploreCoursePage({
               paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
             }}
           >
-            <Title order={2} c="#F8F9FA" fw={600} fz={{ base: "h3", sm: "h2" }}>
+            <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
               {selectedCourseMeta.courseCode}
             </Title>
             {selectedCourseMeta.courseTitle ? (
@@ -162,12 +162,12 @@ export function ExploreCoursePage({
               variant="default"
               styles={{
                 root: {
-                  backgroundColor: "#141517",
-                  borderTop: "1px solid #2c2e33",
+                  backgroundColor: "var(--app-bg)",
+                  borderTop: "1px solid var(--app-border)",
                 },
                 item: {
-                  borderBottom: "1px solid #2c2e33",
-                  backgroundColor: "#18191c",
+                  borderBottom: "1px solid var(--app-border)",
+                  backgroundColor: "var(--app-surface-sunken)",
                   "&:last-of-type": { borderBottom: "none" },
                 },
                 control: {
@@ -177,15 +177,15 @@ export function ExploreCoursePage({
                   paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
                   paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
                   borderRadius: 0,
-                  backgroundColor: "#18191c",
+                  backgroundColor: "var(--app-surface-sunken)",
                   "@media (max-width: 540px)": {
                     paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
                     paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.base,
                   },
-                  "&:hover": { backgroundColor: "rgba(255,255,255,0.04)" },
+                  "&:hover": { backgroundColor: "var(--app-translucent)" },
                 },
                 label: { flex: 1, minWidth: 0, paddingRight: 0 },
-                panel: { padding: 0, backgroundColor: "#141517" },
+                panel: { padding: 0, backgroundColor: "var(--app-bg)" },
                 content: { padding: 0 },
                 chevron: {
                   position: "absolute",
@@ -195,7 +195,7 @@ export function ExploreCoursePage({
                   display: "flex",
                   alignItems: "center",
                   marginLeft: 0,
-                  color: "var(--mantine-color-gray-5)",
+                  color: "var(--app-text-muted)",
                   "@media (max-width: 540px)": {
                     right: EXPLORE_CHEVRON_RIGHT.base,
                   },

@@ -13,6 +13,12 @@
   min-height: 100%;
   box-sizing: border-box;
   overflow: hidden;
+  border-left: 4px solid var(--event-color, var(--app-border-strong));
+  background-color: color-mix(
+    in srgb,
+    var(--event-color, var(--app-surface)) var(--event-fill),
+    var(--event-mix-base)
+  );
 }
 
 /* Swap modal / static preview: same look as calendar cells without filling parent height.
@@ -89,7 +95,7 @@
 .cal-event-code {
   flex-shrink: 0;
   font-weight: 700;
-  color: #fff;
+  color: var(--app-on-event);
   line-height: 1.2;
   font-size: 11px;
   white-space: nowrap;
@@ -103,7 +109,7 @@
   white-space: nowrap;
   font-size: 9px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.52);
+  color: color-mix(in srgb, var(--app-on-event) 62%, transparent);
 }
 
 .cal-event-meta {
@@ -116,7 +122,7 @@
 }
 
 .cal-event-meta .cal-event-type {
-  color: #fff;
+  color: var(--app-on-event);
   font-weight: 600;
 }
 
@@ -147,7 +153,7 @@
   white-space: nowrap;
   font-size: 10px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.78);
+  color: color-mix(in srgb, var(--app-on-event) 80%, transparent);
   line-height: 1.25;
 }
 
@@ -200,7 +206,7 @@ a.cal-rating:hover {
 .cal-event-code-block {
   display: block;
   font-weight: 600;
-  color: #fff;
+  color: var(--app-on-event);
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -255,7 +261,7 @@ a.cal-rating:hover {
   flex-shrink: 0;
   font-size: 10px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.35);
+  color: color-mix(in srgb, var(--app-on-event) 45%, transparent);
   line-height: 1.2;
   user-select: none;
 }
@@ -264,7 +270,7 @@ a.cal-rating:hover {
   flex: 1;
   min-width: 0;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.9);
+  color: color-mix(in srgb, var(--app-on-event) 90%, transparent);
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -274,7 +280,7 @@ a.cal-rating:hover {
 
 .cal-event-virtual {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.9);
+  color: color-mix(in srgb, var(--app-on-event) 90%, transparent);
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -284,7 +290,7 @@ a.cal-rating:hover {
 
 .cal-event-time {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.85);
+  color: color-mix(in srgb, var(--app-on-event) 85%, transparent);
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -360,7 +366,7 @@ a.cal-rating:hover {
 
 .cal-event-prof {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.75);
+  color: color-mix(in srgb, var(--app-on-event) 78%, transparent);
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -383,7 +389,7 @@ a.cal-rating:hover {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.75);
+  color: color-mix(in srgb, var(--app-on-event) 78%, transparent);
   line-height: 1.2;
 }
 

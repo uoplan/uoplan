@@ -34,7 +34,7 @@
   overflow: hidden;
   display: flex;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--app-translucent-strong);
 }
 
 .cal-grade-chip > span {

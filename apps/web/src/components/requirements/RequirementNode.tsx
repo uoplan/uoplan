@@ -44,10 +44,10 @@ export const REQUIREMENT_BASE_PADDING_PX = 10;
 const TITLE_FLEX = { flex: 1, minWidth: 0 } as const;
 const BADGE_NO_SHRINK = { flexShrink: 0 } as const;
 
-const OPTION_CARD_BORDER_UNSELECTED = "var(--mantine-color-dark-4)";
+const OPTION_CARD_BORDER_UNSELECTED = "var(--app-border)";
 const OPTION_CARD_BORDER_SELECTED = "var(--mantine-color-violet-6)";
 const OPTION_CARD_BG_SELECTED = "var(--mantine-color-violet-light)";
-const OPTION_CARD_HOVER_BG = "var(--mantine-color-dark-5)";
+const OPTION_CARD_HOVER_BG = "var(--app-surface-hover)";
 
 export function getStableNodeKey(node: RequirementWithStatus, fallback: string): string {
   if (node.requirementId) return `req:${node.requirementId}`;
@@ -152,9 +152,7 @@ function SelectableOptionPaper({
   const [hover, setHover] = useState(false);
   const flatStyle = (style ?? {}) as CSSProperties;
   const { backgroundColor: bgFromStyle, ...restFlat } = flatStyle;
-  const fallbackIdle = optionsStepHideCardTitle
-    ? "var(--mantine-color-dark-7)"
-    : "var(--mantine-color-dark-6)";
+  const fallbackIdle = optionsStepHideCardTitle ? "var(--app-bg)" : "var(--app-surface)";
   const idleBg = (typeof bgFromStyle === "string" && bgFromStyle) || fallbackIdle;
   const visualBg = radio.checked
     ? OPTION_CARD_BG_SELECTED
@@ -202,7 +200,7 @@ function SelectableOptionPaper({
         transition: "background-color 120ms ease, border-color 120ms ease",
         boxShadow:
           hover && !radio.disabled && !radio.checked
-            ? "0 0 0 1px var(--mantine-color-dark-3)"
+            ? "0 0 0 1px var(--app-border-strong)"
             : undefined,
       }}
     >
@@ -498,11 +496,11 @@ export const RequirementNode = memo(
           mt="xs"
           style={{
             paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
-            backgroundColor: "var(--mantine-color-dark-7)",
+            backgroundColor: "var(--app-bg)",
           }}
         >
           <Group gap="xs" wrap="nowrap" align="center">
-            <Tooltip label={title} multiline maw={320} withArrow color="dark" disabled={!title}>
+            <Tooltip label={title} multiline maw={320} withArrow disabled={!title}>
               <Text size="sm" c="dimmed" lineClamp={1} style={TITLE_FLEX}>
                 {title}
               </Text>
@@ -643,9 +641,7 @@ export const RequirementNode = memo(
           style={{
             paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
             backgroundColor:
-              hideSelection || opened
-                ? "var(--mantine-color-dark-6)"
-                : "var(--mantine-color-dark-8)",
+              hideSelection || opened ? "var(--app-surface)" : "var(--app-surface-sunken)",
           }}
         >
           <Group
@@ -804,9 +800,7 @@ export const RequirementNode = memo(
           style={{
             paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
             backgroundColor:
-              hideSelection || opened
-                ? "var(--mantine-color-dark-6)"
-                : "var(--mantine-color-dark-8)",
+              hideSelection || opened ? "var(--app-surface)" : "var(--app-surface-sunken)",
           }}
         >
           <Group
@@ -930,9 +924,7 @@ export const RequirementNode = memo(
           style={{
             paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
             backgroundColor:
-              hideSelection || opened
-                ? "var(--mantine-color-dark-6)"
-                : "var(--mantine-color-dark-8)",
+              hideSelection || opened ? "var(--app-surface)" : "var(--app-surface-sunken)",
           }}
         >
           {title && (
@@ -1040,7 +1032,7 @@ export const RequirementNode = memo(
       ) : null;
 
     const leafPrimaryText = !optionsStepHideCardTitle ? (
-      <Tooltip label={label} multiline maw={320} withArrow color="dark" disabled={!label}>
+      <Tooltip label={label} multiline maw={320} withArrow disabled={!label}>
         <Text fw={500} size="sm" lh={1.3} lineClamp={2} style={{ minWidth: 0, flex: 1 }}>
           {label}
         </Text>
@@ -1070,14 +1062,12 @@ export const RequirementNode = memo(
       })()
     );
 
-    const expandedSelectionBg = optionsStepHideCardTitle
-      ? "var(--mantine-color-dark-7)"
-      : "var(--mantine-color-dark-6)";
+    const expandedSelectionBg = optionsStepHideCardTitle ? "var(--app-bg)" : "var(--app-surface)";
     const defaultPaperBg = hasOptions
       ? hideSelection || opened
         ? expandedSelectionBg
-        : "var(--mantine-color-dark-8)"
-      : "var(--mantine-color-dark-7)";
+        : "var(--app-surface-sunken)"
+      : "var(--app-bg)";
 
     if (radio && hideSelection) {
       return (
@@ -1151,7 +1141,7 @@ export const RequirementNode = memo(
                   }}
                 />
               )}
-              <Tooltip label={label} multiline maw={320} withArrow color="dark" disabled={!label}>
+              <Tooltip label={label} multiline maw={320} withArrow disabled={!label}>
                 <Text fw={500} size="sm" lh={1.3} lineClamp={2} style={{ minWidth: 0 }}>
                   {label}
                 </Text>

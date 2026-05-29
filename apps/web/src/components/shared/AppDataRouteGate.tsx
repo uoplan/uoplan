@@ -37,11 +37,11 @@ export function AppDataRouteGate({ children }: { children: ReactNode }) {
         <Paper
           withBorder
           style={{
-            border: "2px solid #2C2E33",
+            border: "2px solid var(--app-border)",
             padding: 32,
             maxWidth: 480,
             width: "100%",
-            backgroundColor: "#1E1E20",
+            backgroundColor: "var(--app-surface)",
           }}
         >
           <Alert color="red" title={tr("app.errorTitle")}>

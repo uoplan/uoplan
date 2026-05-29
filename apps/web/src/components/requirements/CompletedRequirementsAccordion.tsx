@@ -22,9 +22,7 @@ export function CompletedRequirementsAccordion({
       withBorder
       radius={0}
       style={{
-        backgroundColor: completedOpen
-          ? "var(--mantine-color-dark-6)"
-          : "var(--mantine-color-dark-8)",
+        backgroundColor: completedOpen ? "var(--app-surface)" : "var(--app-surface-sunken)",
         cursor: "pointer",
       }}
       onClick={(e: MouseEvent) => {
@@ -52,21 +50,13 @@ export function CompletedRequirementsAccordion({
               px="sm"
               py={6}
               style={{
-                backgroundColor:
-                  idx % 2 === 0 ? "var(--mantine-color-dark-6)" : "var(--mantine-color-dark-7)",
-                borderTop: idx === 0 ? "1px solid var(--mantine-color-dark-4)" : "none",
-                borderBottom: "1px solid var(--mantine-color-dark-4)",
+                backgroundColor: idx % 2 === 0 ? "var(--app-surface)" : "var(--app-bg)",
+                borderTop: idx === 0 ? "1px solid var(--app-border)" : "none",
+                borderBottom: "1px solid var(--app-border)",
               }}
             >
               <Group justify="space-between" wrap="nowrap" align="center">
-                <Tooltip
-                  label={item.title}
-                  multiline
-                  maw={320}
-                  withArrow
-                  color="dark"
-                  disabled={!item.title}
-                >
+                <Tooltip label={item.title} multiline maw={320} withArrow disabled={!item.title}>
                   <Text size="sm" lineClamp={2} style={{ flex: 1 }}>
                     {item.title}
                   </Text>

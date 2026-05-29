@@ -58,8 +58,8 @@ export function SearchResultCourseCard({
         display: "flex",
         flexDirection: "column",
         minHeight: 155,
-        backgroundColor: "#18191c",
-        border: "1px solid #2c2e33",
+        backgroundColor: "var(--app-surface-sunken)",
+        border: "1px solid var(--app-border)",
         borderRadius: 0,
         overflow: "hidden",
         textDecoration: "none",
@@ -68,7 +68,7 @@ export function SearchResultCourseCard({
       }}
     >
       <Stack gap={5} p={12} style={{ flex: 1 }}>
-        <Text size="sm" fw={700} c="#F8F9FA" lh={1.3}>
+        <Text size="sm" fw={700} c="var(--app-text)" lh={1.3}>
           {entry.courseCode}
         </Text>
         {entry.courseTitle ? (
@@ -88,10 +88,10 @@ export function SearchResultCourseCard({
         ) : null}
         <Box style={{ flex: 1 }} />
         {gradeViz ? (
-          <Text size="xs" c="gray.4" lh={1.3}>
+          <Text size="xs" c="var(--app-text-muted)" lh={1.3}>
             {grade ? (
               <>
-                <Text component="span" fw={600} c="#F8F9FA">
+                <Text component="span" fw={600} c="var(--app-text)">
                   {grade}
                 </Text>{" "}
                 ·{" "}

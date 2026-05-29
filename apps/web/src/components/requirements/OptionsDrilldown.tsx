@@ -104,7 +104,7 @@ export function OptionsDrilldown({
           data-missing-selection={showError ? "true" : undefined}
           style={{
             paddingLeft: indent,
-            backgroundColor: "var(--mantine-color-dark-6)",
+            backgroundColor: "var(--app-surface)",
           }}
         >
           {node.type === "or_group" && (
@@ -166,17 +166,17 @@ export function OptionsDrilldown({
             padding: "var(--mantine-spacing-sm)",
             paddingLeft: indent,
             border: "none",
-            borderBottom: "1px solid var(--mantine-color-dark-4)",
-            backgroundColor: "var(--mantine-color-dark-6)",
+            borderBottom: "1px solid var(--app-border)",
+            backgroundColor: "var(--app-surface)",
             cursor: "pointer",
             textAlign: "left",
             transition: "background-color 120ms ease",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "var(--mantine-color-dark-5)";
+            e.currentTarget.style.backgroundColor = "var(--app-surface-hover)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "var(--mantine-color-dark-6)";
+            e.currentTarget.style.backgroundColor = "var(--app-surface)";
           }}
         >
           <Group gap="sm" wrap="nowrap" align="flex-start">
@@ -203,7 +203,7 @@ export function OptionsDrilldown({
           p="sm"
           style={{
             paddingLeft: indent,
-            backgroundColor: "var(--mantine-color-dark-7)",
+            backgroundColor: "var(--app-bg)",
           }}
         >
           <OptionsDrilldown

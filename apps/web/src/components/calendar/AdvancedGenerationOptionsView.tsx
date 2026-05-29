@@ -34,9 +34,7 @@ export function AdvancedGenerationOptionsView({
             radius={0}
             data-testid="constraints-panel"
             style={{
-              backgroundColor: constrainOpen
-                ? "var(--mantine-color-dark-6)"
-                : "var(--mantine-color-dark-8)",
+              backgroundColor: constrainOpen ? "var(--app-surface)" : "var(--app-surface-sunken)",
             }}
           >
             <Group

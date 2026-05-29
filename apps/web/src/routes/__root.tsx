@@ -38,7 +38,7 @@ function NotFound() {
         alignItems: "center",
         justifyContent: "center",
         gap: 16,
-        backgroundColor: "#141517",
+        backgroundColor: "var(--app-bg)",
       }}
     >
       <Text c="dimmed" size="lg" fw={600}>
@@ -104,7 +104,7 @@ function RootLayout() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#141517",
+        backgroundColor: "var(--app-bg)",
       }}
     >
       <HeadContent />

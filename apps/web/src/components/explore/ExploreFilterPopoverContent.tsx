@@ -51,18 +51,34 @@ const SORT_DEFAULT_DIR: Record<ExploreSortKey, ExploreSortDir> = {
 };
 
 const checkboxStyles = {
-  label: { color: "#c1c2c5", fontSize: "var(--mantine-font-size-sm)", cursor: "pointer" },
-  input: { cursor: "pointer", backgroundColor: "#25262b", borderColor: "#4a4d57" },
+  label: {
+    color: "var(--app-text-muted)",
+    fontSize: "var(--mantine-font-size-sm)",
+    cursor: "pointer",
+  },
+  input: {
+    cursor: "pointer",
+    backgroundColor: "var(--app-surface-overlay)",
+    borderColor: "var(--app-border-strong)",
+  },
 };
 
 const radioStyles = {
-  label: { color: "#c1c2c5", fontSize: "var(--mantine-font-size-sm)", cursor: "pointer" },
-  radio: { cursor: "pointer", backgroundColor: "#25262b", borderColor: "#4a4d57" },
+  label: {
+    color: "var(--app-text-muted)",
+    fontSize: "var(--mantine-font-size-sm)",
+    cursor: "pointer",
+  },
+  radio: {
+    cursor: "pointer",
+    backgroundColor: "var(--app-surface-overlay)",
+    borderColor: "var(--app-border-strong)",
+  },
 };
 
 const segmentedStyles = {
-  root: { backgroundColor: "#25262b" },
-  label: { color: "#ced4da", fontSize: "var(--mantine-font-size-xs)" },
+  root: { backgroundColor: "var(--app-surface-overlay)" },
+  label: { color: "var(--app-text-muted)", fontSize: "var(--mantine-font-size-xs)" },
 };
 
 export function ExploreFilterPopoverContent({

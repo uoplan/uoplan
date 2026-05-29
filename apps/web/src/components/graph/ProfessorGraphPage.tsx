@@ -14,7 +14,7 @@ import {
 } from "@mantine/core";
 import { useDebouncedValue, useMediaQuery } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
-import { IconSearch } from "@tabler/icons-react";
+import { IconSearch, IconExternalLink } from "@tabler/icons-react";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import type { ProfessorGraphNode } from "@uoplan/core";
 import { tr } from "../../i18n";
@@ -170,7 +170,7 @@ export function ProfessorGraphPage({
         width: "100vw",
         height: "100vh",
         overflow: "hidden",
-        backgroundColor: "#141517",
+        backgroundColor: "var(--app-bg)",
       }}
     >
       <Box
@@ -207,8 +207,8 @@ export function ProfessorGraphPage({
               leftSection={<IconSearch size={16} stroke={1.6} />}
               styles={{
                 input: {
-                  backgroundColor: "rgba(20, 21, 23, 0.92)",
-                  borderColor: "rgba(134, 142, 150, 0.35)",
+                  backgroundColor: "var(--app-surface-sunken)",
+                  borderColor: "var(--app-border-strong)",
                 },
               }}
               disabled={!graphData}
@@ -220,8 +220,8 @@ export function ProfessorGraphPage({
                 p={4}
                 onMouseLeave={() => setPreviewThrottled(null)}
                 style={{
-                  backgroundColor: "rgba(26, 27, 30, 0.96)",
-                  border: "1px solid rgba(134, 142, 150, 0.25)",
+                  backgroundColor: "color-mix(in srgb, var(--app-surface) 96%, transparent)",
+                  border: "1px solid var(--app-border)",
                   maxHeight: 280,
                   overflowY: "auto",
                 }}
@@ -239,11 +239,11 @@ export function ProfessorGraphPage({
                         display: "block",
                         width: "100%",
                         backgroundColor:
-                          previewNodeId === entry.id ? "rgba(151, 117, 250, 0.12)" : undefined,
+                          previewNodeId === entry.id ? "var(--app-surface-hover)" : undefined,
                       }}
                     >
                       <Group justify="space-between" wrap="nowrap" gap="xs">
-                        <Text size="sm" c="#F8F9FA" lineClamp={1}>
+                        <Text size="sm" c="var(--app-text)" lineClamp={1}>
                           {entry.displayName}
                         </Text>
                         {entry.legacyId != null && (
@@ -252,14 +252,19 @@ export function ProfessorGraphPage({
                             params={{ legacyId: String(entry.legacyId) }}
                             search={EMPTY_EXPLORE_SEARCH}
                             onClick={(e) => e.stopPropagation()}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={tr("explore.profileLink")}
+                            title={tr("explore.profileLink")}
                             style={{
-                              fontSize: "var(--mantine-font-size-xs)",
-                              color: "var(--mantine-color-violet-4)",
+                              color: "var(--app-text)",
                               textDecoration: "none",
                               flexShrink: 0,
+                              display: "inline-flex",
+                              alignItems: "center",
                             }}
                           >
-                            {tr("explore.profileLink")}
+                            <IconExternalLink size={15} stroke={1.8} />
                           </Link>
                         )}
                       </Group>
@@ -345,7 +350,7 @@ export function ProfessorGraphPage({
             justifyContent: "center",
             gap: 12,
             zIndex: 15,
-            backgroundColor: "rgba(20, 21, 23, 0.72)",
+            backgroundColor: "color-mix(in srgb, var(--app-bg) 72%, transparent)",
             pointerEvents: "none",
             padding: 24,
           }}
@@ -362,7 +367,7 @@ export function ProfessorGraphPage({
               w="100%"
               transitionDuration={0}
               aria-label={overlayMessage}
-              styles={{ root: { backgroundColor: "#2C2E33" } }}
+              styles={{ root: { backgroundColor: "var(--app-border)" } }}
             />
             <Text size="xs" c="dimmed" ff="monospace">
               {overlayProgress}%

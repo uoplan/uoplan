@@ -223,8 +223,8 @@ export function ConstrainStep({
                 radius={0}
                 style={{
                   backgroundColor: collapsedUnavailableOpen
-                    ? "var(--mantine-color-dark-6)"
-                    : "var(--mantine-color-dark-8)",
+                    ? "var(--app-surface)"
+                    : "var(--app-surface-sunken)",
                   cursor: "pointer",
                 }}
                 onClick={(e: MouseEvent) => {

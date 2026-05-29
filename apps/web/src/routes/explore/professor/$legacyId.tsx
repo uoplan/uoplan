@@ -44,7 +44,7 @@ function ExploreProfessorRoute() {
   const professorName = decodeURIComponent(legacyId);
   if (!professorName) {
     return (
-      <Box p={24} style={{ backgroundColor: "#141517", minHeight: "100vh" }}>
+      <Box p={24} style={{ backgroundColor: "var(--app-bg)", minHeight: "100vh" }}>
         <Text c="dimmed">{tr("explore.invalidProfessor")}</Text>
       </Box>
     );

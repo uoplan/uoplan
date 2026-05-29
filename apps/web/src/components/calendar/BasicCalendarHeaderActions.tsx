@@ -43,7 +43,7 @@ export function BasicCalendarHeaderActions({
   return (
     <>
       <Group gap={4} wrap="nowrap">
-        <Tooltip label={tr("calendarPage.downloadIcs")} position="right" withArrow color="dark">
+        <Tooltip label={tr("calendarPage.downloadIcs")} position="right" withArrow>
           <ActionIcon
             variant="subtle"
             color="gray"
@@ -63,7 +63,6 @@ export function BasicCalendarHeaderActions({
             opened={shareCopied || undefined}
             position="right"
             withArrow
-            color="dark"
           >
             <ActionIcon
               variant="subtle"
@@ -77,7 +76,7 @@ export function BasicCalendarHeaderActions({
             </ActionIcon>
           </Tooltip>
         )}
-        <Tooltip label={tr("calendarPage.reset")} position="right" withArrow color="dark">
+        <Tooltip label={tr("calendarPage.reset")} position="right" withArrow>
           <ActionIcon
             variant="subtle"
             color="gray"
@@ -89,7 +88,7 @@ export function BasicCalendarHeaderActions({
             <IconRefresh size={16} />
           </ActionIcon>
         </Tooltip>
-        <Tooltip label={tr("basicCalendar.clear")} position="right" withArrow color="dark">
+        <Tooltip label={tr("basicCalendar.clear")} position="right" withArrow>
           <ActionIcon
             variant="subtle"
             color="gray"
@@ -101,7 +100,7 @@ export function BasicCalendarHeaderActions({
             <IconEraser size={16} />
           </ActionIcon>
         </Tooltip>
-        <Tooltip label={tr("uenrollImport.button")} position="right" withArrow color="dark">
+        <Tooltip label={tr("uenrollImport.button")} position="right" withArrow>
           <ActionIcon
             variant="subtle"
             color="gray"

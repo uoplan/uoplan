@@ -99,14 +99,13 @@ export function GradeDistributionHistogram({
             withArrow
             position="top"
             withinPortal
-            color="dark"
           >
             <div className="cal-grade-histogram-item">
               <div
                 className="cal-grade-histogram-bar"
                 style={{
                   height: `${Math.max(4, (entry.count / maxHistogramCount) * dims.maxBarPx)}px`,
-                  backgroundColor: entry.count > 0 ? entry.color : "rgba(255,255,255,0.16)",
+                  backgroundColor: entry.count > 0 ? entry.color : "var(--app-translucent-strong)",
                 }}
               />
               {!hideLabels ? (
@@ -128,7 +127,6 @@ export function GradeDistributionHistogram({
         withArrow
         position="top"
         withinPortal
-        color="dark"
       >
         <div className="cal-grade-histogram-item cal-grade-histogram-item--sns">
           <div
@@ -160,7 +158,7 @@ export function GradeDistributionHistogram({
               <span
                 style={{
                   height: "100%",
-                  backgroundColor: "rgba(255,255,255,0.18)",
+                  backgroundColor: "var(--app-translucent-strong)",
                 }}
               />
             )}

@@ -29,18 +29,22 @@ export function TermPicker({ terms, value, onChange }: TermPickerProps) {
               width: "100%",
               padding: "14px var(--mantine-spacing-lg)",
               backgroundColor: selected ? "rgba(81, 207, 102, 0.06)" : "transparent",
-              borderBottom: isLast ? "none" : "1px solid #2C2E33",
+              borderBottom: isLast ? "none" : "1px solid var(--app-border)",
               transition: "background-color 140ms ease",
               cursor: "pointer",
             }}
             onMouseEnter={(e) => {
-              if (!selected) e.currentTarget.style.backgroundColor = "#1C1D20";
+              if (!selected) e.currentTarget.style.backgroundColor = "var(--app-surface-hover)";
             }}
             onMouseLeave={(e) => {
               if (!selected) e.currentTarget.style.backgroundColor = "transparent";
             }}
           >
-            <Text size="sm" c={selected ? "#F8F9FA" : "#CED4DA"} fw={selected ? 600 : 500}>
+            <Text
+              size="sm"
+              c={selected ? "var(--app-text)" : "var(--app-text-muted)"}
+              fw={selected ? 600 : 500}
+            >
               {term.name}
             </Text>
             {selected ? (

@@ -31,7 +31,7 @@ export function ExploreFilterDrawer({
       <Drawer.Overlay backgroundOpacity={0.5} />
       <Drawer.Content
         style={{
-          backgroundColor: "#1a1b1e",
+          backgroundColor: "var(--app-surface)",
           maxHeight: "85dvh",
           display: "flex",
           flexDirection: "column",
@@ -45,18 +45,24 @@ export function ExploreFilterDrawer({
               width: 36,
               height: 4,
               borderRadius: 2,
-              background: "#555",
+              background: "var(--app-border-strong)",
               margin: "10px auto 0",
               flexShrink: 0,
             }}
           />
-          <Drawer.Header style={{ backgroundColor: "#1a1b1e", paddingBottom: 0, flexShrink: 0 }}>
+          <Drawer.Header
+            style={{ backgroundColor: "var(--app-surface)", paddingBottom: 0, flexShrink: 0 }}
+          >
             <Drawer.Title
-              style={{ color: "#F8F9FA", fontWeight: 600, fontSize: "var(--mantine-font-size-md)" }}
+              style={{
+                color: "var(--app-text)",
+                fontWeight: 600,
+                fontSize: "var(--mantine-font-size-md)",
+              }}
             >
               {tr("explore.filter.clearAll")}
             </Drawer.Title>
-            <Drawer.CloseButton style={{ color: "#c1c2c5" }} />
+            <Drawer.CloseButton style={{ color: "var(--app-text-muted)" }} />
           </Drawer.Header>
           <Drawer.Body style={{ flex: 1, minHeight: 0, padding: 0 }}>
             <div
@@ -73,7 +79,7 @@ export function ExploreFilterDrawer({
                     onClick={() => onChange(EMPTY_FILTERS)}
                     style={{
                       fontSize: "var(--mantine-font-size-xs)",
-                      color: "#868e96",
+                      color: "var(--app-text-dim)",
                       textDecoration: "underline",
                       textUnderlineOffset: 2,
                     }}
@@ -84,7 +90,7 @@ export function ExploreFilterDrawer({
 
                 {FILTER_KEYS.map((key, i) => (
                   <Box key={key} id={`drawer-section-${key}`}>
-                    {i > 0 && <Divider color="#2c2e33" my={16} />}
+                    {i > 0 && <Divider color="var(--app-border)" my={16} />}
                     <Box px={16}>
                       <Text
                         size="xs"

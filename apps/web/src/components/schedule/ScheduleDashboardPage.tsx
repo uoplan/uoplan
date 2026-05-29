@@ -122,7 +122,7 @@ export function ScheduleDashboardPage() {
       component="main"
       style={{
         minHeight: "100vh",
-        backgroundColor: "#141517",
+        backgroundColor: "var(--app-bg)",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
@@ -140,7 +140,7 @@ export function ScheduleDashboardPage() {
         <Stack gap="xs" maw={760} mx="auto" w="100%">
           <Title
             order={1}
-            c="#F8F9FA"
+            c="var(--app-text)"
             fw={500}
             fz={{ base: "h2", sm: 44 }}
             lh={1.05}
@@ -148,7 +148,7 @@ export function ScheduleDashboardPage() {
           >
             {tr("schedule.dashboard.title")}
           </Title>
-          <Text size="sm" c="#ADB5BD">
+          <Text size="sm" c="var(--app-text-muted)">
             {readiness}
           </Text>
         </Stack>
@@ -166,8 +166,8 @@ export function ScheduleDashboardPage() {
           <Box
             p="md"
             style={{
-              backgroundColor: "#1A1B1E",
-              border: "1px solid #2C2E33",
+              backgroundColor: "var(--app-surface)",
+              border: "1px solid var(--app-border)",
             }}
           >
             <NotificationToggle />

@@ -50,6 +50,6 @@ export function drawProfessorNodeHover(
   context.fill();
   context.stroke();
 
-  context.fillStyle = "#F8F9FA";
+  context.fillStyle = "var(--app-text)";
   context.fillText(data.label, x + padX, y + padY + size * 0.8);
 }

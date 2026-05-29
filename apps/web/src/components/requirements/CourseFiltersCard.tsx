@@ -310,7 +310,7 @@ export function AdvancedCourseFiltersCard({
           </Group>
         </Box>
 
-        <Divider color="var(--mantine-color-dark-4)" />
+        <Divider color="var(--app-border)" />
 
         {/* Section 2: Elective filters */}
         <Box>
