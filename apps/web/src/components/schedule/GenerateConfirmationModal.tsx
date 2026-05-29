@@ -3,7 +3,7 @@ import { useLingui } from "@lingui/react";
 import type { GenerateBlocker } from "../../lib/scheduleDashboard";
 import { tr } from "../../i18n";
 
-export type GenerateConfirmationModalProps = {
+type GenerateConfirmationModalProps = {
   opened: boolean;
   blockers: GenerateBlocker[];
   onCancel: () => void;

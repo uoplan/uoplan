@@ -4,18 +4,17 @@
   "workspaces": {
     "apps/web": {
       "vite": false,
-      "entry": ["src/main.tsx", "scripts/**/*.mjs"],
-      "ignore": ["public/**", "vite.config.ts", "lingui.config.ts", "vite/**"],
-      "ignoreDependencies": [
-        "@lingui/format-po",
-        "@lingui/vite-plugin",
-        "@tanstack/router-plugin",
-        "@types/markdown-it",
-        "@vitejs/plugin-react",
-        "markdown-it"
+      "entry": [
+        "src/main.tsx",
+        "src/workers/sw.ts",
+        "scripts/**/*.mjs",
+        "vite.config.ts",
+        "lingui.config.ts",
+        "vite/**"
       ]
     },
     "apps/worker": {
+      "entry": ["scripts/og-image.ts"],
       "ignoreDependencies": ["@marsidev/react-turnstile", "wrangler"]
     },
     "apps/scrapers": {

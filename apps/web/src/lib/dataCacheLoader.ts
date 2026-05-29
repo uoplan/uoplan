@@ -159,12 +159,3 @@ export async function loadEffectiveCacheFromAssets(dataKey: CacheDataKey): Promi
   }
   return cache;
 }
-
-/** Test-only: clear in-memory memoization. */
-export function __resetDataCacheLoaderForTests(): void {
-  latestCataloguePromise.clear();
-  yearCataloguePromise.clear();
-  schedulesPromise.clear();
-  manifestYearsPromise = null;
-  cacheMemo.clear();
-}

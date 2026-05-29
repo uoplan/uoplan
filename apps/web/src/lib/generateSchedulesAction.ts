@@ -19,11 +19,7 @@ import {
 import { buildColorMap } from "./colorMap";
 
 // Re-export helpers used by tests and other modules
-export {
-  expandConstrainedPerRequirement,
-  buildPendingGroupPickCounts,
-  reorderOptionalPoolForGeneration,
-} from "@uoplan/calendar";
+export { expandConstrainedPerRequirement, buildPendingGroupPickCounts } from "@uoplan/calendar";
 
 export type GenerateSchedulesMode = "basic" | "advanced";
 
