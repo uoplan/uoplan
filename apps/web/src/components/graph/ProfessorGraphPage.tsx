@@ -3,7 +3,6 @@ import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
   Alert,
   Box,
-  Button,
   Group,
   Paper,
   Progress,
@@ -34,6 +33,7 @@ import { useAppStore } from "../../store/appStore";
 import { ProfessorGraphDesktopPanel } from "./ProfessorGraphDesktopPanel";
 import { ProfessorGraphMobileDrawer } from "./ProfessorGraphMobileDrawer";
 import { ProfessorGraphView, type ProfessorGraphPhase } from "./ProfessorGraphView";
+import { BackButton } from "../shared/BackButton";
 
 type BuildPhase = "loading" | "ready" | "error";
 
@@ -187,11 +187,7 @@ export function ProfessorGraphPage({
         <Group align="flex-start" justify="space-between" wrap="nowrap" gap="md">
           <Stack gap="xs" style={{ pointerEvents: "auto", maxWidth: 360, width: "100%" }}>
             <Group gap="xs" wrap="nowrap">
-              <Link to="/" style={{ textDecoration: "none" }}>
-                <Button variant="subtle" color="gray" size="xs">
-                  {tr("app.nav.back")}
-                </Button>
-              </Link>
+              <BackButton fallbackTo="/" fallbackLabel={tr("app.nav.backHome")} />
               <Text size="sm" c="dimmed" fw={600}>
                 {tr("graph.title")}
               </Text>

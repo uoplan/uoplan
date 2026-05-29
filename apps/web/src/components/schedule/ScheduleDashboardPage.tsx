@@ -22,6 +22,7 @@ import { ProgramCoursesPanel } from "./ProgramCoursesPanel";
 import { OptionsPanel } from "./OptionsPanel";
 import { AssignPanel } from "./AssignPanel";
 import { NotificationToggle } from "../steps/NotificationToggle";
+import { BackButton } from "../shared/BackButton";
 
 export function ScheduleDashboardPage() {
   useLingui();
@@ -87,7 +88,12 @@ export function ScheduleDashboardPage() {
     void storeApi
       .getState()
       .generateSchedules()
-      .then(() => navigate({ to: "/schedule/calendar" }));
+      .then(() =>
+        navigate({
+          to: "/schedule/calendar",
+          state: { back: { to: "/schedule", label: tr("landing.schedule.title") } } as never,
+        }),
+      );
   };
 
   const contentForStep = (id: ScheduleStepId) => {
@@ -138,6 +144,7 @@ export function ScheduleDashboardPage() {
         }}
       >
         <Stack gap="xs" maw={760} mx="auto" w="100%">
+          <BackButton fallbackTo="/" fallbackLabel={tr("app.nav.backHome")} />
           <Title
             order={1}
             c="var(--app-text)"

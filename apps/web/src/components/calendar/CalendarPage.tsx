@@ -1,10 +1,8 @@
 import "./calendar.css";
-import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import {
   ActionIcon,
   Alert,
-  Anchor,
   Box,
   Button,
   Divider,
@@ -31,6 +29,7 @@ import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { CalendarView } from "./CalendarView";
 import { ResetModal } from "../shared/ResetModal";
+import { BackButton } from "../shared/BackButton";
 import { buildScheduleIcs } from "@uoplan/core";
 import { downloadTextFile } from "../../lib/downloadFile";
 import { useShareUrl } from "../../hooks/useShareUrl";
@@ -217,22 +216,7 @@ export function CalendarPage() {
 
   const sidebarControls = (
     <>
-      <Anchor
-        component={Link}
-        to="/schedule"
-        c="var(--app-text-dim)"
-        underline="hover"
-        fz="sm"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 4,
-          alignSelf: "flex-start",
-        }}
-      >
-        <IconChevronLeft size={14} />
-        {tr("schedule.editor.back")}
-      </Anchor>
+      <BackButton fallbackTo="/schedule" fallbackLabel={tr("landing.schedule.title")} />
       <Title
         order={1}
         style={{

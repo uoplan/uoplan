@@ -7,7 +7,6 @@ import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import type { ExploreCourseSearchEntry } from "../../lib/explore/gradesSearch";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
-import { useExploreHistory } from "./ExploreHistoryContext";
 
 const LETTER_GRADES = new Set(["F", "E", "D", "D+", "C", "C+", "B", "B+", "A-", "A", "A+"]);
 
@@ -32,7 +31,6 @@ export function SearchResultCourseCard({
   searchParams: ExploreSearchParams;
 }) {
   useLingui();
-  const { push } = useExploreHistory();
   const { gradeViz } = entry;
   const grade = gradeViz ? mostCommonGrade(gradeViz) : null;
   const passing = gradeViz ? Math.round(gradeViz.passingPercent) : null;
@@ -44,13 +42,15 @@ export function SearchResultCourseCard({
       to="/explore/course/$course"
       params={{ course: courseNormToPathParam(entry.normCode) }}
       search={searchParams}
-      onClick={() => {
-        push({
-          to: "/explore",
-          search: searchParams,
-          label: q ? tr("explore.backToSearch", { q }) : tr("explore.title"),
-        });
-      }}
+      state={
+        {
+          back: {
+            to: "/explore",
+            search: searchParams,
+            label: q ? tr("explore.backToSearch", { q }) : tr("explore.title"),
+          },
+        } as never
+      }
       style={{
         width: 190,
         minWidth: 190,

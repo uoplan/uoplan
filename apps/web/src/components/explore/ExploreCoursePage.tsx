@@ -12,7 +12,7 @@ import {
   groupOfferingsByProfessor,
 } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
-import type { ExploreHistoryEntry } from "./ExploreHistoryContext";
+import type { BackState } from "../../lib/navigation/backState";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { parseCoursePathParam } from "../../lib/explore/courseSearchParams";
 import {
@@ -41,7 +41,7 @@ function CourseProfessorItem({
 }: {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
-  currentEntry?: ExploreHistoryEntry;
+  currentEntry?: BackState;
 }) {
   return (
     <Accordion.Item value={group.groupId}>
@@ -105,7 +105,7 @@ export function ExploreCoursePage({
     [courseOfferings],
   );
 
-  const courseEntry = useMemo<ExploreHistoryEntry | undefined>(() => {
+  const courseEntry = useMemo<BackState | undefined>(() => {
     if (!selectedCourseMeta) return undefined;
     return {
       to: "/explore/course/$course",

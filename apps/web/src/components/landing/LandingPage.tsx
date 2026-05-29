@@ -31,6 +31,7 @@ function LandingTile({
   return (
     <Link
       to={to}
+      state={{ back: { to: "/", label: tr("app.nav.backHome") } } as never}
       aria-label={ariaLabel}
       style={{
         display: "block",

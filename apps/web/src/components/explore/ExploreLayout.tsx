@@ -24,13 +24,12 @@ import {
   hasActiveFilters,
   parseExploreFiltersSearch,
   serializeExploreFiltersSearch,
-  EMPTY_EXPLORE_SEARCH,
   type ExploreSearchParams,
   type ExploreFilterState,
 } from "../../lib/explore/exploreFilters";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
-import { ExploreBackButton, useExploreHistory } from "./ExploreHistoryContext";
+import { BackButton } from "../shared/BackButton";
 import { ExploreFilterBar } from "./ExploreFilterBar";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "./ExploreProfessorGradesLayout";
 import { SearchResultCourseCard } from "./SearchResultCourseCard";
@@ -147,7 +146,6 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
   useLingui();
   const { loading, offerings } = useExploreOfferings();
   const navigate = useNavigate();
-  const { stack, pop } = useExploreHistory();
   const { catalogue, professorRatings, disciplines } = useAppStore(
     useShallow((s) => ({
       catalogue: s.catalogue,
@@ -402,29 +400,12 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
           paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
         }}
       >
-        {showBackButton ? (
-          <Box mb={8}>
-            {stack.length > 0 ? (
-              <ExploreBackButton
-                entry={stack[stack.length - 1]}
-                onBack={() => {
-                  const entry = stack[stack.length - 1];
-                  pop();
-                  void navigate({
-                    to: entry.to,
-                    params: entry.params as Record<string, string>,
-                    search: entry.search ?? EMPTY_EXPLORE_SEARCH,
-                  });
-                }}
-              />
-            ) : (
-              <ExploreBackButton
-                entry={{ to: "/explore", label: tr("explore.title") }}
-                onBack={() => void navigate({ to: "/explore", search: currentSearchParams })}
-              />
-            )}
-          </Box>
-        ) : null}
+        <Box mb={8}>
+          <BackButton
+            fallbackTo={onIndex ? "/" : "/explore"}
+            fallbackLabel={onIndex ? tr("app.nav.backHome") : tr("explore.title")}
+          />
+        </Box>
         <Stack gap="md" maw={520}>
           <Title
             order={showBackButton ? 3 : 2}

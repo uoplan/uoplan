@@ -10,7 +10,7 @@ import {
   type CourseOfferingGroup,
 } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
-import type { ExploreHistoryEntry } from "./ExploreHistoryContext";
+import type { BackState } from "../../lib/navigation/backState";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
@@ -34,7 +34,7 @@ function DisciplineProfessorRows({
 }: {
   group: CourseOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
-  currentEntry?: ExploreHistoryEntry;
+  currentEntry?: BackState;
 }) {
   const professorGroups = useMemo(
     () => groupOfferingsByProfessor(group.offerings),
@@ -84,7 +84,7 @@ function DisciplineCourseItem({
 }: {
   group: CourseOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
-  currentEntry?: ExploreHistoryEntry;
+  currentEntry?: BackState;
 }) {
   return (
     <Accordion.Item value={group.groupId}>
@@ -154,7 +154,7 @@ export function ExploreDisciplinePage({
     [disciplineOfferings],
   );
 
-  const disciplineEntry = useMemo<ExploreHistoryEntry>(
+  const disciplineEntry = useMemo<BackState>(
     () => ({
       to: "/explore/discipline/$discipline",
       params: { discipline: disciplineCode },

@@ -9,7 +9,7 @@ import {
 } from "../calendar/GradeDistributionViz";
 import { tr } from "../../i18n";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
-import { useExploreHistory, type ExploreHistoryEntry } from "./ExploreHistoryContext";
+import type { BackState } from "../../lib/navigation/backState";
 import {
   mergeGradeDistributionCounts,
   type CourseOfferingGroup,
@@ -57,7 +57,7 @@ type ExploreProfessorSummaryBarProps = {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
   stopPropagation?: boolean;
-  currentEntry?: ExploreHistoryEntry;
+  currentEntry?: BackState;
 };
 
 export function ExploreProfessorSummaryBar({
@@ -66,7 +66,6 @@ export function ExploreProfessorSummaryBar({
   stopPropagation = false,
   currentEntry,
 }: ExploreProfessorSummaryBarProps) {
-  const { push } = useExploreHistory();
   const combinedViz = useMemo(
     () =>
       normalizeGradeVizDistribution(
@@ -103,9 +102,9 @@ export function ExploreProfessorSummaryBar({
                 : encodeURIComponent(group.displayName),
           }}
           search={EMPTY_EXPLORE_SEARCH}
+          state={currentEntry ? ({ back: currentEntry } as never) : undefined}
           onClick={(e) => {
             if (stopPropagation) e.stopPropagation();
-            if (currentEntry) push(currentEntry);
           }}
           className="explore-name-link"
           style={{
@@ -143,11 +142,10 @@ export function ExploreProfessorSummaryBar({
 
 type ExploreCourseSummaryBarProps = {
   group: CourseOfferingGroup;
-  currentEntry?: ExploreHistoryEntry;
+  currentEntry?: BackState;
 };
 
 export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSummaryBarProps) {
-  const { push } = useExploreHistory();
   const combinedViz = useMemo(
     () =>
       normalizeGradeVizDistribution(
@@ -177,9 +175,9 @@ export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSu
           to="/explore/course/$course"
           params={{ course: courseNormToPathParam(group.groupId) }}
           search={EMPTY_EXPLORE_SEARCH}
+          state={currentEntry ? ({ back: currentEntry } as never) : undefined}
           onClick={(e) => {
             e.stopPropagation();
-            if (currentEntry) push(currentEntry);
           }}
           className="explore-name-link"
           style={{
@@ -221,7 +219,7 @@ export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSu
 
 type ExploreCourseItemProps = {
   group: CourseOfferingGroup;
-  currentEntry?: ExploreHistoryEntry;
+  currentEntry?: BackState;
 };
 
 export function ExploreCourseItem({ group, currentEntry }: ExploreCourseItemProps) {
