@@ -19,12 +19,12 @@ function ChangelogRoute() {
       style={{
         minHeight: "100vh",
         padding: 24,
-        backgroundColor: "#141517",
+        backgroundColor: "var(--app-bg)",
         boxSizing: "border-box",
       }}
     >
       <Stack gap="md" maw={900} mx="auto">
-        <Title order={2} c="#F8F9FA" fw={600}>
+        <Title order={2} c="var(--app-text)" fw={600}>
           {tr("app.changelog.title")}
         </Title>
         <Box className="changelog-html" dangerouslySetInnerHTML={{ __html: changelogHtml }} />

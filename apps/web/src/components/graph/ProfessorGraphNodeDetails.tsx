@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Badge, Box, Group, SegmentedControl, Stack, Text, UnstyledButton } from "@mantine/core";
+import { IconExternalLink } from "@tabler/icons-react";
 import { useMemo, type CSSProperties } from "react";
 import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/core";
 import { colorForDiscipline, normalizeProfessorName } from "@uoplan/core";
@@ -19,10 +20,11 @@ import type { ExploreOfferingFlat } from "../../lib/explore/gradesSearch";
 
 const HISTOGRAM_ROW_WIDTH_PX = 88;
 const PROFILE_LINK_STYLE: CSSProperties = {
-  fontSize: "var(--mantine-font-size-xs)",
-  color: "var(--mantine-color-violet-4)",
+  color: "var(--app-text)",
   textDecoration: "none",
   flexShrink: 0,
+  display: "inline-flex",
+  alignItems: "center",
 };
 
 function hexToRgba(hex: string, alpha: number): string {
@@ -55,9 +57,13 @@ function ProfessorProfileLink({
       params={{ legacyId: String(legacyId) }}
       search={EMPTY_EXPLORE_SEARCH}
       onClick={onClick}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={tr("explore.profileLink")}
+      title={tr("explore.profileLink")}
       style={PROFILE_LINK_STYLE}
     >
-      {tr("explore.profileLink")}
+      <IconExternalLink size={15} stroke={1.8} />
     </Link>
   );
 }
@@ -164,7 +170,7 @@ function NeighborRow({
       <Group justify="space-between" align="center" wrap="nowrap" gap="sm" w="100%">
         <Stack gap={4} style={{ minWidth: 0, flex: "1 1 auto" }}>
           <Group gap="xs" align="center" wrap="nowrap">
-            <Text size="sm" fw={600} c="#F8F9FA" lineClamp={1}>
+            <Text size="sm" fw={600} c="var(--app-text)" lineClamp={1}>
               {neighbor.node.displayName}
             </Text>
             {neighbor.node.legacyId != null ? (
@@ -220,7 +226,7 @@ export function ProfessorGraphNodeDetails({
     <Stack gap="md">
       <Stack gap={4}>
         <Group gap="xs" align="center" wrap="nowrap">
-          <Text fw={600} c="#F8F9FA" size="lg" lineClamp={3} style={{ minWidth: 0 }}>
+          <Text fw={600} c="var(--app-text)" size="lg" lineClamp={3} style={{ minWidth: 0 }}>
             {node.displayName}
           </Text>
           {node.legacyId != null ? <ProfessorProfileLink legacyId={node.legacyId} /> : null}
@@ -255,7 +261,7 @@ export function ProfessorGraphNodeDetails({
               ]}
               styles={{
                 root: { backgroundColor: "rgba(20, 21, 23, 0.8)" },
-                label: { color: "#ced4da", fontSize: 11 },
+                label: { color: "var(--app-text-muted)", fontSize: 11 },
               }}
             />
           </Group>

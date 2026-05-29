@@ -19,6 +19,26 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   </head>
   <body style="margin: 0; min-height: 100vh">
+    <script>
+      // Apply the saved theme before first paint to avoid a flash of the wrong
+      // colours. Mirrors the resolution logic in src/theme/themes.ts.
+      (function () {
+        try {
+          var sel = localStorage.getItem("uoplan.theme") || "system";
+          var base, id;
+          if (sel === "dark" || sel === "light") {
+            base = sel;
+            id = sel;
+          } else {
+            base = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            id = base;
+          }
+          var el = document.documentElement;
+          el.setAttribute("data-app-theme", id);
+          el.setAttribute("data-mantine-color-scheme", base);
+        } catch (e) {}
+      })();
+    </script>
     <noscript>
       <h1>uoplan — uOttawa Course Planner &amp; Schedule Generator</h1>
       <p>

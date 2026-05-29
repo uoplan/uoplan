@@ -220,7 +220,7 @@ export function CalendarPage() {
       <Anchor
         component={Link}
         to="/schedule"
-        c="#A6A7AB"
+        c="var(--app-text-dim)"
         underline="hover"
         fz="sm"
         style={{
@@ -237,14 +237,14 @@ export function CalendarPage() {
         order={1}
         style={{
           fontFamily: '"DM Serif Display", serif',
-          color: "#F8F9FA",
+          color: "var(--app-text)",
           marginBottom: 0,
           ...(isMobile ? { display: "none" } : {}),
         }}
       >
         {calendarTitle}
       </Title>
-      <Text size="sm" style={{ color: "#ADB5BD", marginTop: isMobile ? 0 : -8 }}>
+      <Text size="sm" style={{ color: "var(--app-text-muted)", marginTop: isMobile ? 0 : -8 }}>
         {calendarSubtitle}
       </Text>
 
@@ -291,7 +291,7 @@ export function CalendarPage() {
         <Stack gap="md">
           {/* Utility toolbar: download, share, randomize, reset */}
           <Group gap={4}>
-            <Tooltip label={tr("calendarPage.downloadIcs")} withArrow position="right" color="dark">
+            <Tooltip label={tr("calendarPage.downloadIcs")} withArrow position="right">
               <ActionIcon
                 variant="subtle"
                 color="gray"
@@ -310,7 +310,6 @@ export function CalendarPage() {
                 label={shareCopied ? tr("app.share.copied") : tr("calendarPage.share")}
                 withArrow
                 position="right"
-                color="dark"
                 opened={shareCopied || undefined}
               >
                 <ActionIcon
@@ -325,7 +324,7 @@ export function CalendarPage() {
                 </ActionIcon>
               </Tooltip>
             )}
-            <Tooltip label={tr("calendarPage.randomize")} withArrow position="right" color="dark">
+            <Tooltip label={tr("calendarPage.randomize")} withArrow position="right">
               <ActionIcon
                 variant="subtle"
                 color="gray"
@@ -338,7 +337,7 @@ export function CalendarPage() {
                 <IconArrowsShuffle size={16} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip label={tr("calendarPage.reset")} withArrow position="right" color="dark">
+            <Tooltip label={tr("calendarPage.reset")} withArrow position="right">
               <ActionIcon
                 variant="subtle"
                 color="gray"
@@ -350,7 +349,7 @@ export function CalendarPage() {
                 <IconRefresh size={16} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip label={tr("uenrollImport.button")} withArrow position="right" color="dark">
+            <Tooltip label={tr("uenrollImport.button")} withArrow position="right">
               <ActionIcon
                 variant="subtle"
                 color="gray"
@@ -362,7 +361,7 @@ export function CalendarPage() {
                 <IconFileImport size={16} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip label={tr("enrolCli.button")} withArrow position="right" color="dark">
+            <Tooltip label={tr("enrolCli.button")} withArrow position="right">
               <ActionIcon
                 variant="subtle"
                 color="green"
@@ -407,17 +406,14 @@ export function CalendarPage() {
                   {tr("calendarPage.next")}
                 </Button>
               </Button.Group>
-              <Text size="xs" c="dimmed">
-                {tr("calendarPage.seedLabel", { seed: currentSeed })}
-              </Text>
             </Stack>
           )}
 
-          <Divider color="#2C2E33" />
+          <Divider color="var(--app-border)" />
 
           <AdvancedGenerationOptions />
 
-          <Divider color="#2C2E33" />
+          <Divider color="var(--app-border)" />
 
           {/* Undo swap */}
           {currentSwaps.length > 0 && (
@@ -497,7 +493,7 @@ export function CalendarPage() {
                 height: "100%",
                 flexShrink: 0,
                 padding: "24px 20px",
-                backgroundColor: "#1E1E20",
+                backgroundColor: "var(--app-surface)",
                 display: "flex",
                 flexDirection: "column",
                 gap: 24,
@@ -516,15 +512,16 @@ export function CalendarPage() {
                 width: 6,
                 flexShrink: 0,
                 cursor: "col-resize",
-                backgroundColor: "#2C2E33",
+                backgroundColor: "var(--app-border)",
                 transition: "background-color 0.15s",
                 zIndex: 1,
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLDivElement).style.backgroundColor = "#4a4d55";
+                (e.currentTarget as HTMLDivElement).style.backgroundColor =
+                  "var(--app-border-strong)";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLDivElement).style.backgroundColor = "#2C2E33";
+                (e.currentTarget as HTMLDivElement).style.backgroundColor = "var(--app-border)";
               }}
             />
           </>
@@ -576,8 +573,8 @@ export function CalendarPage() {
               flexShrink: 0,
               display: "flex",
               gap: 0,
-              backgroundColor: "#1E1E20",
-              borderTop: "2px solid #2C2E33",
+              backgroundColor: "var(--app-surface)",
+              borderTop: "2px solid var(--app-border)",
               paddingBottom: "env(safe-area-inset-bottom, 0)",
             }}
           >

@@ -127,7 +127,7 @@ export function AppFooter() {
               style={{
                 fontStyle: "italic",
                 letterSpacing: "0.01em",
-                color: "#868E96",
+                color: "var(--app-text-dim)",
               }}
             >
               {tr("app.footer.gradeDataAttribution.before")}
@@ -142,7 +142,7 @@ export function AppFooter() {
                 style={{
                   fontStyle: "italic",
                   letterSpacing: "0.01em",
-                  color: "#868E96",
+                  color: "var(--app-text-dim)",
                 }}
                 styles={{
                   root: {

@@ -171,15 +171,15 @@ export function SwapPanel({
         flexDirection: "column",
         minHeight: 0,
         overflow: "hidden",
-        backgroundColor: "#1A1A1C",
+        backgroundColor: "var(--app-bg)",
       }}
     >
       {/* Sticky header */}
       <Box
         style={{
           flexShrink: 0,
-          borderBottom: "1px solid #2C2E33",
-          backgroundColor: "#1A1A1C",
+          borderBottom: "1px solid var(--app-border)",
+          backgroundColor: "var(--app-surface)",
           padding: "8px 12px",
         }}
       >
@@ -212,7 +212,7 @@ export function SwapPanel({
             </div>
           </Group>
           <Group gap={4} wrap="nowrap" style={{ flexShrink: 0 }}>
-            <Tooltip label={blacklistTooltip} position="left" withArrow color="dark">
+            <Tooltip label={blacklistTooltip} position="left" withArrow>
               <Box component="span" style={{ display: "inline-flex" }}>
                 <MantineActionIcon
                   variant="subtle"
@@ -230,7 +230,7 @@ export function SwapPanel({
                 </MantineActionIcon>
               </Box>
             </Tooltip>
-            <Tooltip label={lockTooltip} position="left" withArrow color="dark">
+            <Tooltip label={lockTooltip} position="left" withArrow>
               <Box component="span" style={{ display: "inline-flex" }}>
                 <MantineActionIcon
                   variant="subtle"
@@ -259,7 +259,7 @@ export function SwapPanel({
         <Stack gap={0}>
           {/* Current course card */}
           {enrollment && (
-            <Box p="sm" style={{ borderBottom: "1px solid #2C2E33" }}>
+            <Box p="sm" style={{ borderBottom: "1px solid var(--app-border)" }}>
               <EventStyleCard
                 enrollment={enrollment}
                 enrollmentIndex={modalState.enrollmentIndex}
@@ -273,7 +273,7 @@ export function SwapPanel({
 
           {/* Grade distribution */}
           {modalState.gradeViz && (
-            <Box px="sm" pt="sm" style={{ borderBottom: "1px solid #2C2E33" }}>
+            <Box px="sm" pt="sm" style={{ borderBottom: "1px solid var(--app-border)" }}>
               <Text size="xs" c="dimmed" tt="uppercase" fw={600} mb={6}>
                 {tr("calendar.grade.distribution")}
               </Text>

@@ -70,7 +70,7 @@ function pillColors(key: FilterKey, filters: ExploreFilterState): { bg: string; 
     return { bg: "rgba(212,184,0,0.12)", border: "rgba(212,184,0,0.5)" };
   }
   // Level and Language: neutral white tint
-  return { bg: "rgba(255,255,255,0.07)", border: "rgba(255,255,255,0.22)" };
+  return { bg: "var(--app-translucent)", border: "var(--app-translucent-strong)" };
 }
 
 type FilterPillProps = {
@@ -96,9 +96,9 @@ const FilterPill = forwardRef<HTMLButtonElement, FilterPillProps>(
         borderRadius: FILTER_PILL_RADIUS,
         fontSize: "var(--mantine-font-size-xs)",
         fontWeight: active ? 600 : 400,
-        color: active ? "#e9ecef" : "#868e96",
-        backgroundColor: active ? activeBg : "#1a1b1e",
-        border: `1px solid ${active ? activeBorder : "#3f424a"}`,
+        color: active ? "var(--app-text)" : "var(--app-text-dim)",
+        backgroundColor: active ? activeBg : "var(--app-surface)",
+        border: `1px solid ${active ? activeBorder : "var(--app-border-strong)"}`,
         transition: "border-color 120ms, background-color 120ms, color 120ms",
         whiteSpace: "nowrap",
         userSelect: "none",
@@ -206,7 +206,7 @@ export function ExploreFilterBar({
               onClick={() => onChange(EMPTY_FILTERS)}
               style={{
                 fontSize: "var(--mantine-font-size-xs)",
-                color: "#868e96",
+                color: "var(--app-text-dim)",
                 paddingInline: 4,
                 whiteSpace: "nowrap",
                 textDecoration: "underline",
@@ -271,8 +271,8 @@ function FilterDropdown({
         top: pos.top,
         left: pos.left,
         zIndex: 300,
-        backgroundColor: "#1a1b1e",
-        border: "1px solid #3f424a",
+        backgroundColor: "var(--app-surface)",
+        border: "1px solid var(--app-border-strong)",
         borderRadius: FILTER_POPOVER_RADIUS,
         padding: "12px 14px",
         minWidth: 180,

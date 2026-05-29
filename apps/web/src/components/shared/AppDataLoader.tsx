@@ -29,7 +29,7 @@ export function AppDataLoader({ progress }: { progress: number }) {
           w="100%"
           aria-label={tr("app.loadingData")}
           styles={{
-            root: { backgroundColor: "#2C2E33" },
+            root: { backgroundColor: "var(--app-border)" },
           }}
         />
         <Text size="xs" c="dimmed" ff="monospace">

@@ -41,8 +41,8 @@ export function ProfessorGraphDesktopPanel({
         height: "100%",
         zIndex: 20,
         pointerEvents: "auto",
-        backgroundColor: "rgba(26, 27, 30, 0.96)",
-        borderLeft: "1px solid rgba(134, 142, 150, 0.25)",
+        backgroundColor: "color-mix(in srgb, var(--app-surface) 96%, transparent)",
+        borderLeft: "1px solid var(--app-border)",
         display: "flex",
         flexDirection: "column",
       }}

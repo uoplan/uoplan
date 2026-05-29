@@ -1,0 +1,91 @@
+/*
+ * Semantic theme tokens — the single source of truth for every app colour.
+ *
+ * Each theme is one [data-app-theme="<id>"] block. To add a theme, add a block
+ * here and register it in `themes.ts`. Components reference these via
+ * `var(--app-*)`; never hardcode hex values.
+ *
+ * The :root block mirrors the default (dark) theme so variables always resolve
+ * even before the data-app-theme attribute is applied (first paint / tests).
+ */
+
+:root,
+[data-app-theme="dark"] {
+  /* Surfaces */
+  --app-bg: #1a1b22;
+  --app-surface: #232530;
+  --app-surface-sunken: #16171d;
+  --app-surface-overlay: #2b2d39;
+  --app-surface-hover: #32343f;
+
+  /* Borders & brutalist identity */
+  --app-border: #34374a;
+  --app-border-strong: #4a4d63;
+  --app-ink: #0e0f14;
+  --app-stamp-shadow: rgba(0, 0, 0, 0.55);
+
+  /* Text */
+  --app-text: #eceef5;
+  --app-text-muted: #aeb2c2;
+  --app-text-dim: #7c8099;
+  --app-text-inverse: #1a1b22;
+
+  /* Accent (pastel lavender) */
+  --app-accent: #c99df0;
+  --app-accent-soft: #3a2f4d;
+  --app-on-accent: #1a1b22;
+  --app-focus-ring: #c99df0;
+
+  /* Misc chrome */
+  --app-selection-bg: rgba(201, 157, 240, 0.28);
+  --app-overlay-scrim: rgba(10, 11, 15, 0.6);
+  --app-translucent: rgba(255, 255, 255, 0.06);
+  --app-translucent-strong: rgba(255, 255, 255, 0.1);
+
+  /* Calendar event cards: the card background is the course colour mixed with
+     --event-mix-base by --event-fill; --app-on-event is the text colour that
+     sits on that background. On dark themes the mix base is dark so the card is
+     a dark tint and the text stays light. */
+  --app-on-event: #f3f1ee;
+  --event-fill: 38%;
+  --event-mix-base: var(--app-bg);
+}
+
+[data-app-theme="light"] {
+  /* Surfaces (warm pastel parchment, not pure white) */
+  --app-bg: #f7f5f2;
+  --app-surface: #fffdfa;
+  --app-surface-sunken: #efece6;
+  --app-surface-overlay: #ffffff;
+  --app-surface-hover: #f0eee8;
+
+  /* Borders & brutalist identity. Ink is softened on light so the 2px borders
+     on inputs/buttons/cards read as a firm warm graphite rather than harsh
+     near-black on the pale parchment surfaces. */
+  --app-border: #ddd8cf;
+  --app-border-strong: #c4bfb4;
+  --app-ink: #6f675b;
+  --app-stamp-shadow: rgba(60, 54, 44, 0.22);
+
+  /* Text */
+  --app-text: #2a2826;
+  --app-text-muted: #5e5a52;
+  --app-text-dim: #8a857b;
+  --app-text-inverse: #fffdfa;
+
+  /* Accent (pastel purple, darker tier for contrast on light) */
+  --app-accent: #9c6fd6;
+  --app-accent-soft: #efe5fa;
+  --app-on-accent: #ffffff;
+  --app-focus-ring: #9c6fd6;
+
+  /* Misc chrome */
+  --app-selection-bg: rgba(156, 111, 214, 0.24);
+  --app-overlay-scrim: rgba(42, 38, 32, 0.4);
+  --app-translucent: rgba(0, 0, 0, 0.05);
+  --app-translucent-strong: rgba(0, 0, 0, 0.08);
+
+  --app-on-event: #2a2722;
+  --event-fill: 60%;
+  --event-mix-base: #ffffff;
+}

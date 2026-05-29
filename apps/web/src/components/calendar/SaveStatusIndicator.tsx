@@ -33,7 +33,7 @@ export function SaveStatusIndicator() {
       : tr("saveStatus.unsaved");
 
     return (
-      <Tooltip label={tooltip} withArrow position="right" color="dark">
+      <Tooltip label={tooltip} withArrow position="right">
         <ActionIcon
           variant="subtle"
           color="orange"
@@ -55,7 +55,6 @@ export function SaveStatusIndicator() {
       label={tr("saveStatus.savedAt", { time: formatRelativeTime(lastSavedAt) })}
       withArrow
       position="right"
-      color="dark"
     >
       <ActionIcon
         variant="subtle"

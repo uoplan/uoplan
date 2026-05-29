@@ -70,8 +70,8 @@ function ExploreSearchInput({
       styles={{
         root: { width: "100%" },
         input: {
-          backgroundColor: "#1a1b1e",
-          borderColor: "#3f424a",
+          backgroundColor: "var(--app-surface)",
+          borderColor: "var(--app-border-strong)",
           minHeight: 48,
           paddingInline: 18,
           fontSize: "var(--mantine-font-size-md)",
@@ -111,7 +111,7 @@ function SearchCardSection({
             overflowY: "visible",
             paddingBottom: 10,
             scrollbarWidth: "thin",
-            scrollbarColor: "#3f424a transparent",
+            scrollbarColor: "var(--app-border-strong) transparent",
           }}
         >
           <Box style={{ display: "flex", gap: 10, width: "max-content" }}>
@@ -385,7 +385,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       component="main"
       style={{
         minHeight: "100vh",
-        backgroundColor: "#141517",
+        backgroundColor: "var(--app-bg)",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
@@ -428,7 +428,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
         <Stack gap="md" maw={520}>
           <Title
             order={showBackButton ? 3 : 2}
-            c="#F8F9FA"
+            c="var(--app-text)"
             fw={600}
             fz={showBackButton ? { base: "h4", sm: "h3" } : { base: "h3", sm: "h2" }}
           >
@@ -495,7 +495,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
                   {activeFilters && (
                     <Text
                       size="sm"
-                      c="violet.4"
+                      c="var(--app-accent)"
                       mt={4}
                       style={{
                         cursor: "pointer",

@@ -90,7 +90,7 @@ export function FrenchImmersionProgramOverview({
     return (
       <Stack gap={6} mt={4}>
         <Group justify="space-between" gap="xs" wrap="nowrap" align="center">
-          <Text size="xs" style={{ color: "#CED4DA" }} lineClamp={2}>
+          <Text size="xs" style={{ color: "var(--app-text-muted)" }} lineClamp={2}>
             {tr("frenchImmersion.overview.compactLine", {
               courses: progress.countedCourses,
               reqC: progress.requiredCourses,
@@ -98,7 +98,7 @@ export function FrenchImmersionProgramOverview({
               reqU: progress.requiredUnits,
             })}
           </Text>
-          <Text size="xs" ff="monospace" style={{ color: "#ADB5BD", flexShrink: 0 }}>
+          <Text size="xs" ff="monospace" style={{ color: "var(--app-text-muted)", flexShrink: 0 }}>
             {overallPct}%
           </Text>
         </Group>
@@ -121,7 +121,7 @@ export function FrenchImmersionProgramOverview({
       styles={{
         root: dark
           ? {
-              backgroundColor: "#1A1B1E",
+              backgroundColor: "var(--app-surface)",
               border: "none",
             }
           : {

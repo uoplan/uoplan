@@ -110,7 +110,7 @@ export function ExploreProfessorSummaryBar({
           className="explore-name-link"
           style={{
             fontWeight: 600,
-            color: "var(--mantine-color-gray-1)",
+            color: "var(--app-text)",
             display: "inline",
             alignSelf: "flex-start",
           }}
@@ -184,7 +184,7 @@ export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSu
           className="explore-name-link"
           style={{
             fontWeight: 600,
-            color: "var(--mantine-color-gray-1)",
+            color: "var(--app-text)",
             display: "inline",
             alignSelf: "flex-start",
           }}
@@ -256,8 +256,8 @@ export function ExploreProfessorOfferingRows({
             key={o.id}
             radius={0}
             style={{
-              backgroundColor: "#141517",
-              borderBottom: isLast ? undefined : "1px solid #2c2e33",
+              backgroundColor: "var(--app-bg)",
+              borderBottom: isLast ? undefined : "1px solid var(--app-border)",
               borderTop: "none",
               borderLeft: "none",
               borderRight: "none",
@@ -288,7 +288,7 @@ export function ExploreProfessorOfferingRows({
               <Stack gap={6} style={{ minWidth: 0, flex: "1 1 auto" }}>
                 {showCourseCode ? (
                   <Stack gap={2}>
-                    <Text size="sm" fw={600} c="gray.2">
+                    <Text size="sm" fw={600} c="var(--app-text)">
                       {o.courseCode}
                     </Text>
                     {o.courseTitle ? (
@@ -299,7 +299,7 @@ export function ExploreProfessorOfferingRows({
                   </Stack>
                 ) : null}
                 <Group gap="xs" wrap="wrap" align="baseline">
-                  <Text size="sm" fw={600} c="gray.2">
+                  <Text size="sm" fw={600} c="var(--app-text)">
                     {o.termLabel}
                   </Text>
                   {o.section ? (

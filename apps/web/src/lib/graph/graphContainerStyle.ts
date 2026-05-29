@@ -6,7 +6,7 @@ export function buildGraphContainerStyle(): CSSProperties {
     inset: 0,
     width: "100%",
     height: "100%",
-    background: "#141517",
+    background: "var(--app-bg)",
     touchAction: "none",
   };
 }

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Tooltip } from "@mantine/core";
 import type { DataCache } from "@uoplan/core";
-import { COURSE_COLORS, COURSE_COLOR_HEX, hexToRgb, ratingToColor } from "@uoplan/core";
+import { COURSE_COLORS, COURSE_COLOR_HEX, ratingToColor } from "@uoplan/core";
 import { ratingColorToCssVar } from "../../../lib/ratingColor";
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
 import { tr } from "../../../i18n";
@@ -37,7 +37,6 @@ export function WeekCalendarEvent({
   const colorIdx = colorMap[event.courseCode] ?? event.enrollmentIndex;
   const colorName = COURSE_COLORS[colorIdx % COURSE_COLORS.length];
   const hex = COURSE_COLOR_HEX[colorName];
-  const { r, g, b } = useMemo(() => hexToRgb(hex), [hex]);
 
   const legacyId = useMemo(
     () => event.professorRatingDetails?.find((d) => d.legacyId)?.legacyId,
@@ -95,10 +94,9 @@ export function WeekCalendarEvent({
         left: `calc(${leftPct}% + ${laneIndex > 0 ? LANE_GAP_PX : 0}px)`,
         width: `calc(${widthPct}% - ${laneIndex > 0 ? LANE_GAP_PX : 0}px - ${laneIndex < laneCount - 1 ? LANE_GAP_PX : 0}px)`,
         cursor: "pointer",
-        borderLeft: `4px solid ${hex}`,
-        backgroundColor: `rgba(${r}, ${g}, ${b}, 0.38)`,
         boxSizing: "border-box",
         overflow: "hidden",
+        ["--event-color" as string]: hex,
       }}
       data-color={markerColor}
       onClick={() => onClick(event)}
@@ -120,7 +118,7 @@ export function WeekCalendarEvent({
         interaction="interactive"
       />
       {gradeTooltip ? (
-        <Tooltip label={gradeTooltip} withArrow position="top" withinPortal color="dark">
+        <Tooltip label={gradeTooltip} withArrow position="top" withinPortal>
           <div className="cal-grade-bar-hitbox">{gradeBottom}</div>
         </Tooltip>
       ) : (

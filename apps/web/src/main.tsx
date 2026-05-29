@@ -1,11 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { MantineProvider } from "@mantine/core";
 import { I18nProvider } from "@lingui/react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { setRouterInstance } from "./routerRef";
-import { theme } from "./styles/theme";
+import { AppThemeProvider } from "./theme/AppThemeProvider";
 import "@fontsource/dm-mono/300.css";
 import "@fontsource/dm-mono/400.css";
 import "@fontsource/dm-mono/500.css";
@@ -32,11 +31,11 @@ registerServiceWorker();
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <I18nProvider i18n={i18n}>
-      <MantineProvider theme={theme} defaultColorScheme="dark">
+      <AppThemeProvider>
         <AppStoreProvider store={defaultAppStore}>
           <RouterProvider router={router} />
         </AppStoreProvider>
-      </MantineProvider>
+      </AppThemeProvider>
     </I18nProvider>
   </React.StrictMode>,
 );

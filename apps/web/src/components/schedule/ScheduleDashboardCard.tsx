@@ -75,7 +75,7 @@ function StatusIcon({
       <Box
         aria-hidden="true"
         style={{
-          color: "#A6A7AB",
+          color: "var(--app-text-dim)",
           display: "flex",
           alignItems: "center",
           flexShrink: 0,
@@ -118,21 +118,21 @@ export function ScheduleDashboardCard({
   return (
     <Box
       style={{
-        backgroundColor: "#1A1B1E",
-        border: "1px solid #2C2E33",
+        backgroundColor: "var(--app-surface)",
+        border: "1px solid var(--app-border)",
         borderLeft: `2px solid ${accent}`,
         opacity: locked ? 0.58 : 1,
         transition: "border-color 180ms ease, background-color 180ms ease",
       }}
       onMouseEnter={(e) => {
         if (!isExpandable) return;
-        e.currentTarget.style.backgroundColor = "#1F2024";
-        e.currentTarget.style.borderColor = "#3F424A";
+        e.currentTarget.style.backgroundColor = "var(--app-surface-hover)";
+        e.currentTarget.style.borderColor = "var(--app-border-strong)";
       }}
       onMouseLeave={(e) => {
         if (!isExpandable) return;
-        e.currentTarget.style.backgroundColor = "#1A1B1E";
-        e.currentTarget.style.borderColor = "#2C2E33";
+        e.currentTarget.style.backgroundColor = "var(--app-surface)";
+        e.currentTarget.style.borderColor = "var(--app-border)";
       }}
     >
       <Box
@@ -146,14 +146,20 @@ export function ScheduleDashboardCard({
       >
         <Group justify="space-between" align="center" gap="md" wrap="nowrap">
           <Stack gap={6} style={{ textAlign: "left" }}>
-            <Text size="xs" fw={700} tt="uppercase" c="#A6A7AB" style={{ letterSpacing: "0.08em" }}>
+            <Text
+              size="xs"
+              fw={700}
+              tt="uppercase"
+              c="var(--app-text-dim)"
+              style={{ letterSpacing: "0.08em" }}
+            >
               {label}
             </Text>
-            <Text size="md" c="#F8F9FA" fw={600} lh={1.25}>
+            <Text size="md" c="var(--app-text)" fw={600} lh={1.25}>
               {summary}
             </Text>
             {gateMessage ? (
-              <Text size="sm" c="#ADB5BD">
+              <Text size="sm" c="var(--app-text-muted)">
                 {gateMessage}
               </Text>
             ) : null}
@@ -172,7 +178,7 @@ export function ScheduleDashboardCard({
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             style={{ overflow: "hidden" }}
           >
-            <Box style={{ borderTop: "1px solid #2C2E33" }}>{expandableContent}</Box>
+            <Box style={{ borderTop: "1px solid var(--app-border)" }}>{expandableContent}</Box>
           </motion.div>
         ) : null}
       </AnimatePresence>

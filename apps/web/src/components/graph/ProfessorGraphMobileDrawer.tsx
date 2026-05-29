@@ -7,8 +7,8 @@ import type { GraphNeighbor, NeighborSortMode } from "../../lib/graph/professorG
 import { ProfessorGraphNodeDetails } from "./ProfessorGraphNodeDetails";
 
 const SURFACE_STYLE = {
-  backgroundColor: "rgba(26, 27, 30, 0.98)",
-  borderTop: "1px solid rgba(134, 142, 150, 0.25)",
+  backgroundColor: "var(--app-surface)",
+  borderTop: "1px solid var(--app-border)",
 };
 
 type ProfessorGraphMobileDrawerProps = {
@@ -57,7 +57,7 @@ export function ProfessorGraphMobileDrawer({
               width: 36,
               height: 4,
               borderRadius: 2,
-              background: "#555",
+              background: "var(--app-border-strong)",
               margin: "10px auto 0",
               flexShrink: 0,
             }}
@@ -65,14 +65,14 @@ export function ProfessorGraphMobileDrawer({
           <Drawer.Header
             style={{
               ...SURFACE_STYLE,
-              borderBottom: "1px solid rgba(134, 142, 150, 0.2)",
+              borderBottom: "1px solid var(--app-border)",
               flexShrink: 0,
             }}
           >
-            <Drawer.Title style={{ color: "#F8F9FA", fontWeight: 600 }}>
+            <Drawer.Title style={{ color: "var(--app-text)", fontWeight: 600 }}>
               {node?.displayName}
             </Drawer.Title>
-            <Drawer.CloseButton style={{ color: "#868e96" }} />
+            <Drawer.CloseButton style={{ color: "var(--app-text-dim)" }} />
           </Drawer.Header>
           <Drawer.Body style={{ flex: 1, minHeight: 0, padding: 0 }}>
             {node ? (

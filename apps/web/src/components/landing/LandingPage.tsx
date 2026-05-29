@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { useCallback, useState, type ReactNode } from "react";
 import { dynamicActivate, tr, type AppLocale } from "../../i18n";
 import { LanguageSwitcher } from "../shared/LanguageSwitcher";
+import { ThemeSwitcher } from "../shared/ThemeSwitcher";
 
 type LandingTileProps = {
   to: string;
@@ -45,8 +46,8 @@ function LandingTile({
           position: "relative",
           height: "100%",
           overflow: "hidden",
-          backgroundColor: "#1E1E20",
-          border: "2px solid #2C2E33",
+          backgroundColor: "var(--app-surface)",
+          border: "2px solid var(--app-border)",
           padding: "var(--mantine-spacing-lg)",
           paddingBottom: badgeLabel
             ? "calc(var(--mantine-spacing-lg) + 28px)"
@@ -57,7 +58,7 @@ function LandingTile({
           <Box c="violet.4" style={{ lineHeight: 0 }}>
             {icon}
           </Box>
-          <Text fw={600} size="md" c="#F8F9FA">
+          <Text fw={600} size="md" c="var(--app-text)">
             {title}
           </Text>
           <Text size="sm" c="dimmed" lh={1.5}>
@@ -127,7 +128,7 @@ export function LandingPage() {
           position: "relative",
           minHeight: "100vh",
           padding: 24,
-          backgroundColor: "#141517",
+          backgroundColor: "var(--app-bg)",
           boxSizing: "border-box",
           display: "flex",
           alignItems: "center",
@@ -139,8 +140,11 @@ export function LandingPage() {
             position: "absolute",
             top: 16,
             right: 16,
+            display: "flex",
+            gap: 8,
           }}
         >
+          <ThemeSwitcher />
           <LanguageSwitcher onSwitch={handleLangSwitch} />
         </Box>
 
@@ -149,7 +153,7 @@ export function LandingPage() {
             order={1}
             style={{
               fontFamily: '"DM Serif Display", serif',
-              color: "#F8F9FA",
+              color: "var(--app-text)",
               fontWeight: 400,
               fontSize: "clamp(1.75rem, 5vw, 2.25rem)",
             }}

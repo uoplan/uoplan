@@ -4,7 +4,6 @@ import {
   COURSE_COLOR_HEX,
   getRatingDetailsForInstructors,
   getRatingsForInstructors,
-  hexToRgb,
   type ProfessorRatingsMap,
   ratingToColor,
 } from "@uoplan/core";
@@ -80,7 +79,6 @@ export function EventStyleCard({
 
   const colorName = COURSE_COLORS[enrollmentIndex % COURSE_COLORS.length];
   const hex = COURSE_COLOR_HEX[colorName];
-  const { r, g, b } = hexToRgb(hex);
   const ratingTier = ratingToColor(ratingValue ?? null);
   const markerColor = ratingColorToCssVar(ratingTier);
 
@@ -90,8 +88,7 @@ export function EventStyleCard({
       data-color-hex={hex}
       data-rating-color={hasProfessorRating ? markerColor : ""}
       style={{
-        borderLeft: `4px solid ${hex}`,
-        backgroundColor: `rgba(${r}, ${g}, ${b}, 0.38)`,
+        ["--event-color" as string]: hex,
       }}
     >
       <CalendarEventFace

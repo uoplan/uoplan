@@ -17,8 +17,8 @@ type SpotlightGalleryRow = {
 };
 
 const PAGE_BG = "transparent";
-const CARD_BORDER = "rgba(255, 255, 255, 0.03)";
-const CARD_BORDER_HOVER = "rgba(255, 255, 255, 0.07)";
+const CARD_BORDER = "var(--app-translucent)";
+const CARD_BORDER_HOVER = "var(--app-translucent-strong)";
 
 function formatSpotlightStat(stat: CourseSpotlightStat): string {
   switch (stat.kind) {
@@ -77,17 +77,17 @@ function SpotlightCard({
         }}
       >
         <Stack gap={4}>
-          <Text size="xs" fw={500} c="gray.5" lineClamp={1}>
+          <Text size="xs" fw={500} c="var(--app-text-muted)" lineClamp={1}>
             {course.entry.courseCode}
           </Text>
           {title.length > 0 ? (
-            <Text fz={10} c="gray.6" lineClamp={2} lh={1.3} mih={22}>
+            <Text fz={10} c="var(--app-text-dim)" lineClamp={2} lh={1.3} mih={22}>
               {title}
             </Text>
           ) : (
             <Box mih={22} />
           )}
-          <Text size="xs" c="gray.6" lh={1.2}>
+          <Text size="xs" c="var(--app-text-dim)" lh={1.2}>
             {statLabel}
           </Text>
         </Stack>

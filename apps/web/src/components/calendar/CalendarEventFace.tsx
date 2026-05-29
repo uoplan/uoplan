@@ -103,7 +103,6 @@ export function CalendarEventFace({
           withArrow
           position="top"
           withinPortal
-          color="dark"
         >
           {professorRowInner}
         </Tooltip>

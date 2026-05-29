@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
 const SURFACE_STYLE = {
-  backgroundColor: "rgba(30, 30, 32, 0.98)",
-  borderTop: "2px solid #2C2E33",
+  backgroundColor: "var(--app-surface)",
+  borderTop: "2px solid var(--app-border)",
 };
 
 const DISMISS_DISTANCE = 80;
@@ -99,7 +99,7 @@ export function CalendarMobileDrawer({
               width: 36,
               height: 4,
               borderRadius: 2,
-              background: "#555",
+              background: "var(--app-border-strong)",
               margin: "10px auto 0",
               flexShrink: 0,
             }}
@@ -113,14 +113,14 @@ export function CalendarMobileDrawer({
           >
             <Drawer.Title
               style={{
-                color: "#F8F9FA",
+                color: "var(--app-text)",
                 fontFamily: '"DM Serif Display", serif',
                 fontWeight: 400,
               }}
             >
               {title}
             </Drawer.Title>
-            <Drawer.CloseButton style={{ color: "#868e96" }} />
+            <Drawer.CloseButton style={{ color: "var(--app-text-dim)" }} />
           </Drawer.Header>
           <Drawer.Body
             style={{

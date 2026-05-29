@@ -1,11 +1,10 @@
 import type { ReactNode } from "react";
-import { MantineProvider } from "@mantine/core";
 import { I18nProvider } from "@lingui/react";
 import { MotionConfig } from "framer-motion";
 import { render } from "vitest-browser-react";
 
 import { i18n } from "../i18n";
-import { theme } from "../styles/theme";
+import { AppThemeProvider } from "../theme/AppThemeProvider";
 import { AppStoreProvider } from "../store/AppStoreProvider";
 import { type AppStoreApi, createAppStore } from "../store/appStore";
 import type { AppServices } from "../store/services";
@@ -32,11 +31,11 @@ interface TestProviderOptions {
 function AppTestProviders({ children, store }: { children: ReactNode; store: AppStoreApi }) {
   return (
     <I18nProvider i18n={i18n}>
-      <MantineProvider theme={theme} defaultColorScheme="dark">
+      <AppThemeProvider initialSelection="dark">
         <AppStoreProvider store={store}>
           <MotionConfig reducedMotion="always">{children}</MotionConfig>
         </AppStoreProvider>
-      </MantineProvider>
+      </AppThemeProvider>
     </I18nProvider>
   );
 }

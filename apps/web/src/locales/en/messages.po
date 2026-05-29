@@ -1332,3 +1332,15 @@ msgstr "Keep mine"
 
 msgid "sharedSchedule.load"
 msgstr "Load shared schedule"
+
+msgid "theme.system"
+msgstr "System"
+
+msgid "theme.light"
+msgstr "Light"
+
+msgid "theme.dark"
+msgstr "Dark"
+
+msgid "themeSwitcher.ariaLabel"
+msgstr "Select theme"

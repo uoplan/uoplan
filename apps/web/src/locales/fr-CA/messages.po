@@ -1313,3 +1313,15 @@ msgstr "Garder le mien"
 
 msgid "sharedSchedule.load"
 msgstr "Charger l'horaire partagé"
+
+msgid "theme.system"
+msgstr "Système"
+
+msgid "theme.light"
+msgstr "Clair"
+
+msgid "theme.dark"
+msgstr "Sombre"
+
+msgid "themeSwitcher.ariaLabel"
+msgstr "Choisir le thème"
