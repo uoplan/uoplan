@@ -23,7 +23,7 @@ function wizardStepToScheduleStep(step: WizardStep): ScheduleStepId | undefined 
   }
 }
 
-export type WizardStepNavigation = {
+type WizardStepNavigation = {
   to: "/schedule";
   search: { step?: ScheduleStepId };
 };

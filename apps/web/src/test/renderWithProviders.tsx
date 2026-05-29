@@ -11,7 +11,7 @@ import { type AppStoreApi, createAppStore } from "../store/appStore";
 import type { AppServices } from "../store/services";
 import type { AppStore } from "../store/types";
 
-export interface TestProviderOptions {
+interface TestProviderOptions {
   /** A fresh store to back the tree. Defaults to a new isolated `createAppStore()`. */
   store?: AppStoreApi;
   /** Services injected when constructing a default store (e.g. a fake navigation). */
@@ -29,7 +29,7 @@ export interface TestProviderOptions {
  * isolated. Deliberately omits the TanStack Router and the data-loading root layout;
  * routing is injected per-test via the navigation service where needed.
  */
-export function AppTestProviders({ children, store }: { children: ReactNode; store: AppStoreApi }) {
+function AppTestProviders({ children, store }: { children: ReactNode; store: AppStoreApi }) {
   return (
     <I18nProvider i18n={i18n}>
       <MantineProvider theme={theme} defaultColorScheme="dark">

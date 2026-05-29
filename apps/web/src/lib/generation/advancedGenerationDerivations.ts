@@ -5,7 +5,7 @@ export interface CourseCreditsLookup {
   getCourse(code: string): { credits?: number } | undefined;
 }
 
-export interface PoolCourseOption {
+interface PoolCourseOption {
   value: string;
   label: string;
 }
@@ -47,7 +47,7 @@ function firstYearCreditsForCode(code: string, cache: CourseCreditsLookup | null
   return cache?.getCourse(code)?.credits ?? DEFAULT_CREDITS;
 }
 
-export interface FirstYearCreditSummary {
+interface FirstYearCreditSummary {
   total: number;
   warn: boolean;
 }

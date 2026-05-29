@@ -7,11 +7,13 @@
       "entry": [
         "src/main.tsx",
         "src/workers/sw.ts",
+        "src/test/browserSetup.ts",
         "scripts/**/*.mjs",
         "vite.config.ts",
         "lingui.config.ts",
         "vite/**"
-      ]
+      ],
+      "ignoreDependencies": ["@vitest/browser"]
     },
     "apps/worker": {
       "entry": ["scripts/og-image.ts"],
@@ -21,8 +23,10 @@
       "entry": ["src/**/*.ts"]
     },
     "packages/core": {
-      "entry": ["src/**/*.ts"],
-      "ignoreDependencies": ["ts-proto"]
+      "entry": ["src/**/*.ts"]
+    },
+    "packages/proto": {
+      "ignoreDependencies": ["@bufbuild/protobuf", "ts-proto"]
     },
     "apps/cli": {}
   }
