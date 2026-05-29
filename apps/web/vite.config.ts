@@ -33,8 +33,9 @@ export default defineConfig({
     }),
   ],
   define: {
-    __COMMIT_HASH__: JSON.stringify((process.env.CF_PAGES_COMMIT_SHA || "dev").slice(0, 7)),
-    __BRANCH_NAME__: JSON.stringify(process.env.CF_PAGES_BRANCH || ""),
+    // Cloudflare Workers Builds exposes WORKERS_CI_* at build time.
+    __COMMIT_HASH__: JSON.stringify((process.env.WORKERS_CI_COMMIT_SHA || "dev").slice(0, 7)),
+    __BRANCH_NAME__: JSON.stringify(process.env.WORKERS_CI_BRANCH || ""),
   },
   // Keep a single React instance across pre-bundled deps so zustand's `useStore`
   // (and any other hook-calling dep) shares the renderer's dispatcher in Browser Mode.
