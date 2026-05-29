@@ -453,6 +453,15 @@ msgstr "Undo swap ({count})"
 msgid "languageSwitcher.ariaLabel"
 msgstr "Select application language"
 
+msgid "settings.ariaLabel"
+msgstr "Settings"
+
+msgid "language.en"
+msgstr "English"
+
+msgid "language.frCA"
+msgstr "French"
+
 msgid "modeStep.advanced.aria"
 msgstr "Advanced mode"
 
