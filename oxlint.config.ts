@@ -2,6 +2,7 @@ import { defineConfig } from "oxlint";
 
 export default defineConfig({
   plugins: ["typescript", "react"],
+  jsPlugins: ["./scripts/i18n/oxlint-plugin.mjs"],
   categories: {
     correctness: "error",
   },
@@ -50,6 +51,7 @@ export default defineConfig({
       rules: {
         "react/rules-of-hooks": "error",
         "react/exhaustive-deps": "warn",
+        "i18n-tr/tr-key-exists": "error",
         "typescript/no-floating-promises": "off",
         "typescript/require-await": "off",
         "typescript/no-misused-promises": [

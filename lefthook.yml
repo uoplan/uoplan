@@ -9,6 +9,9 @@ pre-commit:
     typecheck:
       glob: "**/*.{ts,tsx,mts,cts}"
       run: pnpm typecheck
+    check-i18n:
+      glob: "{**/locales/**/*.po,apps/web/src/**/*.{ts,tsx}}"
+      run: pnpm check:i18n
     cargo-clippy:
       glob: "apps/cli/**"
       run: cargo clippy --manifest-path apps/cli/Cargo.toml -- -D warnings

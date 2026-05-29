@@ -1325,3 +1325,24 @@ msgstr "Sombre"
 
 msgid "themeSwitcher.ariaLabel"
 msgstr "Choisir le thème"
+
+msgid "schedule.editor.back"
+msgstr "Retour au planificateur"
+
+msgid "calendarPage.generate"
+msgstr "Générer"
+
+msgid "calendarPage.previous"
+msgstr "Précédent"
+
+msgid "calendarPage.next"
+msgstr "Suivant"
+
+msgid "calendarPage.randomize"
+msgstr "Aléatoire"
+
+msgid "calendarPage.seedLabel"
+msgstr "Valeur de départ : {seed}"
+
+msgid "calendarPage.noSchedule"
+msgstr "Aucun horaire généré pour l'instant."
