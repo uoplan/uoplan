@@ -748,6 +748,18 @@ msgstr "Cours terminés"
 msgid "schedule.dashboard.completed.summary"
 msgstr "{count, plural, one {# cours terminé sélectionné} other {# cours terminés sélectionnés}}"
 
+msgid "schedule.dashboard.program.courseCount"
+msgstr "{count, plural, one {# cours} other {# cours}}"
+
+msgid "schedule.dashboard.term.loading"
+msgstr "Chargement des trimestres…"
+
+msgid "schedule.programCourses.completedHeading"
+msgstr "Cours terminés"
+
+msgid "schedule.programCourses.completedHint"
+msgstr "Ajoute les cours déjà terminés afin que les exigences et les préalables restent exacts. L’importation d’un relevé les remplit automatiquement."
+
 msgid "schedule.dashboard.gate.program"
 msgstr "Choisis d’abord un programme"
 
@@ -770,7 +782,7 @@ msgid "schedule.dashboard.program.empty"
 msgstr "Aucun programme sélectionné"
 
 msgid "schedule.dashboard.program.label"
-msgstr "Programme"
+msgstr "Programme et cours"
 
 msgid "schedule.dashboard.ready"
 msgstr "Prêt à générer"
@@ -786,45 +798,6 @@ msgstr "Trimestre"
 
 msgid "schedule.dashboard.title"
 msgstr "Construis ton horaire"
-
-msgid "schedule.editor.assign.subtitle"
-msgstr "Place les cours terminés sous les exigences qu’ils satisfont."
-
-msgid "schedule.editor.assign.title"
-msgstr "Remplir les exigences"
-
-msgid "schedule.editor.back"
-msgstr "Retour à la configuration"
-
-msgid "schedule.editor.completed.subtitle"
-msgstr "Ajoute les cours déjà terminés afin que les exigences et les préalables restent exacts."
-
-msgid "schedule.editor.completed.title"
-msgstr "Ajouter les cours terminés"
-
-msgid "schedule.editor.done"
-msgstr "Terminé"
-
-msgid "schedule.editor.continue"
-msgstr "Continuer"
-
-msgid "schedule.editor.options.subtitle"
-msgstr "Résous les branches du programme avant de générer un horaire avancé."
-
-msgid "schedule.editor.options.title"
-msgstr "Choisir les options du programme"
-
-msgid "schedule.editor.program.subtitle"
-msgstr "Sélectionne ton année de catalogue, ton programme et l’importation facultative du relevé."
-
-msgid "schedule.editor.program.title"
-msgstr "Sélectionner le programme"
-
-msgid "schedule.editor.term.subtitle"
-msgstr "Choisis le trimestre à utiliser pour les cours offerts et la génération de l’horaire."
-
-msgid "schedule.editor.term.title"
-msgstr "Choisir le trimestre"
 
 msgid "schedule.generate.confirm.assign.consequence"
 msgstr "Les cours terminés non assignés pourraient ne pas compter pour la bonne exigence."

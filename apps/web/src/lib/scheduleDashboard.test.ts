@@ -3,6 +3,7 @@ import type { RequirementWithStatus } from "@uoplan/core";
 import {
   getGenerateBlockers,
   getScheduleDashboardCards,
+  resolveInitialOpenStep,
   type ScheduleDashboardInput,
 } from "./scheduleDashboard";
 import { dynamicActivate } from "../i18n";
@@ -44,15 +45,29 @@ describe("getScheduleDashboardCards", () => {
   it("always shows assign and marks the shortest complete setup ready", () => {
     const cards = getScheduleDashboardCards(baseState());
 
-    expect(cards.map((card) => [card.id, card.status, card.to, card.gateMessage])).toEqual([
-      ["term", "ready", "/schedule", undefined],
-      ["program", "ready", "/schedule/program", undefined],
-      ["completed", "ready", "/schedule/completed", undefined],
-      ["assign", "ready", "/schedule/requirements", undefined],
+    expect(cards.map((card) => [card.id, card.status, card.gateMessage])).toEqual([
+      ["term", "ready", undefined],
+      ["program", "ready", undefined],
+      ["assign", "ready", undefined],
     ]);
   });
 
-  it("soft-gates dependent cards to the prerequisite route", () => {
+  it("summarises the merged program & courses card with completed count", () => {
+    const cards = getScheduleDashboardCards(
+      baseState({ completedCourses: ["CSI 1100", "MAT 1320"] }),
+    );
+
+    const program = cards.find((card) => card.id === "program");
+    expect(program?.label).toBe("Program & courses");
+    expect(program?.summary).toBe("Honours Computer Science · 2 courses");
+  });
+
+  it("falls back to the program title when no completed courses are selected", () => {
+    const program = getScheduleDashboardCards(baseState()).find((card) => card.id === "program");
+    expect(program?.summary).toBe("Honours Computer Science");
+  });
+
+  it("soft-gates dependent cards to the prerequisite step", () => {
     const cards = getScheduleDashboardCards(
       baseState({ selectedTermId: null, firstYear: null, program: null }),
     );
@@ -61,12 +76,10 @@ describe("getScheduleDashboardCards", () => {
     expect(cards.find((card) => card.id === "program")).toMatchObject({
       status: "empty",
       gateMessage: "Pick a term first",
-      gateTarget: "/schedule",
     });
-    expect(cards.find((card) => card.id === "completed")).toMatchObject({
+    expect(cards.find((card) => card.id === "assign")).toMatchObject({
       status: "empty",
       gateMessage: "Pick a program first",
-      gateTarget: "/schedule/program",
     });
   });
 
@@ -78,15 +91,38 @@ describe("getScheduleDashboardCards", () => {
       }),
     );
 
-    expect(cards.map((card) => card.id)).toEqual([
-      "term",
-      "program",
-      "completed",
-      "options",
-      "assign",
-    ]);
+    expect(cards.map((card) => card.id)).toEqual(["term", "program", "options", "assign"]);
     expect(cards.find((card) => card.id === "options")?.status).toBe("attention");
     expect(cards.find((card) => card.id === "assign")?.status).toBe("attention");
+  });
+});
+
+describe("resolveInitialOpenStep", () => {
+  it("opens the first non-gated step needing attention", () => {
+    const cards = getScheduleDashboardCards(baseState({ firstYear: null, program: null }));
+    // term ready, program needs attention → program opens.
+    expect(resolveInitialOpenStep(cards, undefined)).toBe("program");
+  });
+
+  it("opens the term step when the term is not ready", () => {
+    const cards = getScheduleDashboardCards(baseState({ selectedTermId: null }));
+    expect(resolveInitialOpenStep(cards, undefined)).toBe("term");
+  });
+
+  it("opens nothing when every step is ready", () => {
+    const cards = getScheduleDashboardCards(baseState());
+    expect(resolveInitialOpenStep(cards, undefined)).toBeNull();
+  });
+
+  it("prefers an explicit ?step deep link over the attention heuristic", () => {
+    const cards = getScheduleDashboardCards(baseState());
+    expect(resolveInitialOpenStep(cards, "program")).toBe("program");
+  });
+
+  it("ignores a ?step that does not match any rendered card", () => {
+    const cards = getScheduleDashboardCards(baseState());
+    // options card is absent when no option groups exist → fall back to null.
+    expect(resolveInitialOpenStep(cards, "options")).toBeNull();
   });
 });
 

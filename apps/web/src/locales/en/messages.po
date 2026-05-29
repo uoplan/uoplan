@@ -739,6 +739,18 @@ msgstr "Completed courses"
 msgid "schedule.dashboard.completed.summary"
 msgstr "{count, plural, one {# completed course selected} other {# completed courses selected}}"
 
+msgid "schedule.dashboard.program.courseCount"
+msgstr "{count, plural, one {# course} other {# courses}}"
+
+msgid "schedule.dashboard.term.loading"
+msgstr "Loading terms…"
+
+msgid "schedule.programCourses.completedHeading"
+msgstr "Completed courses"
+
+msgid "schedule.programCourses.completedHint"
+msgstr "Add courses you have already completed so requirements and prerequisites stay accurate. A transcript import fills these in automatically."
+
 msgid "schedule.dashboard.gate.program"
 msgstr "Pick a program first"
 
@@ -761,7 +773,7 @@ msgid "schedule.dashboard.program.empty"
 msgstr "Program not selected"
 
 msgid "schedule.dashboard.program.label"
-msgstr "Program"
+msgstr "Program & courses"
 
 msgid "schedule.dashboard.ready"
 msgstr "Ready to generate"
@@ -777,45 +789,6 @@ msgstr "Term"
 
 msgid "schedule.dashboard.title"
 msgstr "Build your schedule"
-
-msgid "schedule.editor.assign.subtitle"
-msgstr "Place completed courses under the requirements they satisfy."
-
-msgid "schedule.editor.assign.title"
-msgstr "Fill requirements"
-
-msgid "schedule.editor.back"
-msgstr "Back to setup"
-
-msgid "schedule.editor.completed.subtitle"
-msgstr "Add courses you have already completed so requirements and prerequisites stay accurate."
-
-msgid "schedule.editor.completed.title"
-msgstr "Add completed courses"
-
-msgid "schedule.editor.done"
-msgstr "Done"
-
-msgid "schedule.editor.continue"
-msgstr "Continue"
-
-msgid "schedule.editor.options.subtitle"
-msgstr "Resolve any program branches before generating an advanced schedule."
-
-msgid "schedule.editor.options.title"
-msgstr "Choose program options"
-
-msgid "schedule.editor.program.subtitle"
-msgstr "Select your catalogue year, program, and optional transcript import."
-
-msgid "schedule.editor.program.title"
-msgstr "Select program"
-
-msgid "schedule.editor.term.subtitle"
-msgstr "Choose the term to use for course offerings and timetable generation."
-
-msgid "schedule.editor.term.title"
-msgstr "Choose term"
 
 msgid "schedule.generate.confirm.assign.consequence"
 msgstr "Unassigned completed courses may not count toward the right requirement."

@@ -5,11 +5,13 @@ import {
   Stack,
   Text,
   Button,
+  Group,
   Alert,
   Loader,
   Badge,
   Switch,
 } from "@mantine/core";
+import { IconFileUpload, IconExternalLink } from "@tabler/icons-react";
 import { tr } from "../../i18n";
 import type { Program } from "@uoplan/core";
 import { useAppStore, useAppStoreApi } from "../../store/appStore";
@@ -287,11 +289,6 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
           {frenchImmersionStream ? <FrenchImmersionProgramOverview /> : null}
         </>
       )}
-      <Alert color="blue" variant="light" radius={0}>
-        <Text size="sm">
-          <strong>{tr("programStep.optional")}</strong> {tr("programStep.transcript.description")}
-        </Text>
-      </Alert>
       <input
         ref={fileInputRef}
         type="file"
@@ -301,32 +298,36 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
         style={{ display: "none" }}
         aria-label={tr("programStep.transcript.uploadAria")}
       />
-      <Button
-        size="sm"
-        color="violet"
-        variant="filled"
-        radius={0}
-        onClick={() => fileInputRef.current?.click()}
-        disabled={transcriptLoading}
-        leftSection={transcriptLoading ? <Loader size="sm" /> : undefined}
-        style={{ border: "2px solid black" }}
-      >
-        {transcriptLoading
-          ? tr("programStep.transcript.parsing")
-          : tr("programStep.transcript.choose")}
-      </Button>
-      <Button
-        component="a"
-        href="https://www.uocampus.uottawa.ca/psp/csprpr9www/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSS_TSRQST_UNOFF.GBL?languageCd=ENG"
-        target="_blank"
-        rel="noreferrer"
-        size="sm"
-        color="violet"
-        variant="light"
-        radius={0}
-      >
-        {tr("programStep.transcript.request")}
-      </Button>
+      <Group gap="sm" wrap="wrap">
+        <Button
+          size="sm"
+          variant="light"
+          color="gray"
+          radius={0}
+          onClick={() => fileInputRef.current?.click()}
+          disabled={transcriptLoading}
+          leftSection={
+            transcriptLoading ? <Loader size="xs" /> : <IconFileUpload size={15} stroke={1.8} />
+          }
+        >
+          {transcriptLoading
+            ? tr("programStep.transcript.parsing")
+            : tr("programStep.transcript.choose")}
+        </Button>
+        <Button
+          component="a"
+          href="https://www.uocampus.uottawa.ca/psp/csprpr9www/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSS_TSRQST_UNOFF.GBL?languageCd=ENG"
+          target="_blank"
+          rel="noreferrer"
+          size="sm"
+          variant="subtle"
+          color="gray"
+          radius={0}
+          rightSection={<IconExternalLink size={14} stroke={1.8} />}
+        >
+          {tr("programStep.transcript.request")}
+        </Button>
+      </Group>
       {transcriptError && (
         <Alert color="red" variant="light" title={tr("programStep.transcript.uploadFailed")}>
           {transcriptError}
