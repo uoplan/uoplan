@@ -1,8 +1,9 @@
 import { useLingui } from "@lingui/react";
 import { Anchor, Box, Group, Stack, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { tr } from "../../i18n";
+import { labelForPath } from "../../lib/navigation/backState";
 
 const ONTARIO_FIPPA_ACT_URL = "https://www.ontario.ca/laws/statute/90f31";
 
@@ -10,6 +11,7 @@ export function AppFooter() {
   useLingui();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const pathname = useLocation({ select: (s) => s.pathname });
 
   return (
     <Box
@@ -64,6 +66,7 @@ export function AppFooter() {
             <Text
               component={Link}
               to="/changelog"
+              state={{ back: { to: pathname, label: labelForPath(pathname) } } as never}
               size="sm"
               c="dimmed"
               lh={1.45}

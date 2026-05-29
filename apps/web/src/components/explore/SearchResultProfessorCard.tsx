@@ -7,7 +7,6 @@ import { tr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import type { ExploreProfessorSearchEntry } from "../../lib/explore/gradesSearch";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
-import { useExploreHistory } from "./ExploreHistoryContext";
 
 const LETTER_GRADES = new Set(["F", "E", "D", "D+", "C", "C+", "B", "B+", "A-", "A", "A+"]);
 
@@ -39,7 +38,6 @@ export function SearchResultProfessorCard({
   searchParams: ExploreSearchParams;
 }) {
   useLingui();
-  const { push } = useExploreHistory();
   const { gradeViz } = entry;
   const grade = gradeViz ? mostCommonGrade(gradeViz) : null;
   const passing = gradeViz ? Math.round(gradeViz.passingPercent) : null;
@@ -56,13 +54,15 @@ export function SearchResultProfessorCard({
       to="/explore/professor/$legacyId"
       params={{ legacyId: professorLegacyParam(entry) }}
       search={searchParams}
-      onClick={() => {
-        push({
-          to: "/explore",
-          search: searchParams,
-          label: q ? tr("explore.backToSearch", { q }) : tr("explore.title"),
-        });
-      }}
+      state={
+        {
+          back: {
+            to: "/explore",
+            search: searchParams,
+            label: q ? tr("explore.backToSearch", { q }) : tr("explore.title"),
+          },
+        } as never
+      }
       style={{
         width: 190,
         minWidth: 190,

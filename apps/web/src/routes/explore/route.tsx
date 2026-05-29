@@ -1,7 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useShallow } from "zustand/react/shallow";
 import { AppDataRouteGate } from "../../components/shared/AppDataRouteGate";
-import { ExploreHistoryProvider } from "../../components/explore/ExploreHistoryContext";
 import { ExploreLayout } from "../../components/explore/ExploreLayout";
 import { ExploreOfferingsProvider } from "../../components/explore/ExploreOfferingsContext";
 import { useAppStore } from "../../store/appStore";
@@ -20,11 +19,9 @@ function ExploreLayoutRoute() {
   return (
     <AppDataRouteGate>
       <ExploreOfferingsProvider catalogue={catalogue} terms={terms ?? []}>
-        <ExploreHistoryProvider>
-          <ExploreLayout>
-            <Outlet />
-          </ExploreLayout>
-        </ExploreHistoryProvider>
+        <ExploreLayout>
+          <Outlet />
+        </ExploreLayout>
       </ExploreOfferingsProvider>
     </AppDataRouteGate>
   );
