@@ -6,14 +6,6 @@ export enum WizardStep {
   Assign = 4,
 }
 
-export const ALL_WIZARD_STEP_INDICES = [
-  WizardStep.Term,
-  WizardStep.Program,
-  WizardStep.Completed,
-  WizardStep.Options,
-  WizardStep.Assign,
-] as const;
-
 export type WizardProceedContext = {
   hasTerms: boolean;
   selectedTermId: string | null;

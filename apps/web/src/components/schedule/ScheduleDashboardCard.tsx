@@ -12,7 +12,7 @@ const STATUS_ACCENT: Record<ScheduleDashboardCardStatus, string> = {
   empty: "#5C5F66",
 };
 
-export type ScheduleDashboardCardProps = {
+type ScheduleDashboardCardProps = {
   label: string;
   status: ScheduleDashboardCardStatus;
   summary: string | ReactNode;

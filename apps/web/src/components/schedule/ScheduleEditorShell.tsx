@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../explore/ExploreProfessorGradesLayout";
 import { tr } from "../../i18n";
 
-export type ScheduleEditorStep = "program" | "completed" | "options" | "assign";
+type ScheduleEditorStep = "program" | "completed" | "options" | "assign";
 
 const STEP_ORDER: readonly ScheduleEditorStep[] = ["program", "completed", "options", "assign"];
 
@@ -20,7 +20,7 @@ function nextHrefFor(step: ScheduleEditorStep): EditorHref {
   return next === "assign" ? "/schedule/requirements" : `/schedule/${next}`;
 }
 
-export type ScheduleEditorShellProps = {
+type ScheduleEditorShellProps = {
   step: ScheduleEditorStep;
   title: string;
   subtitle: string;

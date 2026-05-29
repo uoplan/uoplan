@@ -2,21 +2,12 @@
 // Re-exported here for backward compatibility with existing imports.
 export {
   type RequirementPool,
-  buildRequirementPools,
   computeCoursesPerPool,
   buildPoolCaps,
   poolCourseCap,
   isBroadElectivePoolType,
-  isElectiveRequirementType,
-  isWithinElectiveLevelCap,
-  isWithinElectiveLevelBuckets,
-  virtualScheduleFilterApplies,
   enumerateSingleRedistributions,
-  shuffleInPlace,
   weightedRandomPick,
-  courseLevelSortKey,
-  candidatePoolWeight,
-  LEVEL_WEIGHT_BASE,
 } from "@uoplan/schedule";
 
 // reorderGeneralPoolForDisciplineDiversity is used only by the web app.

@@ -6,7 +6,7 @@ import {
 import { tr } from "../i18n";
 
 export type ScheduleDashboardCardStatus = "ready" | "attention" | "empty";
-export type ScheduleDashboardCardId = "term" | "program" | "completed" | "options" | "assign";
+type ScheduleDashboardCardId = "term" | "program" | "completed" | "options" | "assign";
 export type ScheduleEditorHref =
   | "/schedule"
   | "/schedule/program"
@@ -26,7 +26,7 @@ export type ScheduleDashboardInput = {
   unassignedCompletedCourses: string[];
 };
 
-export type ScheduleDashboardCardState = {
+type ScheduleDashboardCardState = {
   id: ScheduleDashboardCardId;
   label: string;
   status: ScheduleDashboardCardStatus;
