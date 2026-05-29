@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
 import {
   ProfessorGraphPage,
   type ProfessorGraphNavigate,
@@ -21,10 +20,6 @@ export const Route = createFileRoute("/graph")({
 function GraphRoute() {
   const navigate = Route.useNavigate();
   const { prof } = Route.useSearch();
-
-  useEffect(() => {
-    document.title = prof ?? "Prof network";
-  }, [prof]);
 
   const navigateGraph: ProfessorGraphNavigate = (opts) =>
     navigate({ search: opts.search, replace: opts.replace });
