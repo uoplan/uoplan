@@ -509,7 +509,7 @@ describe("getConstrainMultiSelectOptions", () => {
     expect(options.map((o) => o.value)).toEqual(["SEG 3100"]);
   });
 
-  it("uses combined code and title as option label when cache has a title", () => {
+  it("uses the bare code as option label (title is shown only in the dropdown render)", () => {
     const businessTitle = "Introduction to Business";
     const cacheWithSchedules: DataCache = {
       getCourse: () =>
@@ -545,7 +545,7 @@ describe("getConstrainMultiSelectOptions", () => {
     const { options } = getConstrainMultiSelectOptions(node, {}, ctx);
     const adm = options.find((o) => o.value === "ADM 1101");
     expect(adm?.value).toBe("ADM 1101");
-    expect(adm?.label).toBe(`ADM 1101 – ${businessTitle}`);
+    expect(adm?.label).toBe("ADM 1101");
   });
 });
 

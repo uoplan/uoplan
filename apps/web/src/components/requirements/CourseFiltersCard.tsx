@@ -10,6 +10,7 @@ import {
   Box,
   Divider,
 } from "@mantine/core";
+import type { MultiSelectProps } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconChevronDown } from "@tabler/icons-react";
 import { tr } from "../../i18n";
@@ -18,6 +19,11 @@ interface ExcludeElectiveSubjectsProps {
   data: { value: string; label: string }[];
   value: string[];
   onChange: (value: string[]) => void;
+}
+
+interface ExcludeCoursesProps extends ExcludeElectiveSubjectsProps {
+  renderOption?: MultiSelectProps["renderOption"];
+  filter?: MultiSelectProps["filter"];
 }
 
 interface BaseCourseFiltersProps {
@@ -36,7 +42,7 @@ interface BaseCourseFiltersProps {
 
 interface BasicCourseFiltersCardProps extends BaseCourseFiltersProps {
   excludeElectiveSubjects?: ExcludeElectiveSubjectsProps;
-  excludeCourses?: ExcludeElectiveSubjectsProps;
+  excludeCourses?: ExcludeCoursesProps;
   collapsible?: boolean;
   defaultCollapsed?: boolean;
 }
@@ -114,6 +120,8 @@ export function BasicCourseFiltersCard({
           data={excludeCourses.data}
           value={excludeCourses.value}
           onChange={excludeCourses.onChange}
+          renderOption={excludeCourses.renderOption}
+          filter={excludeCourses.filter}
           radius={0}
         />
       )}
