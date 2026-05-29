@@ -8,8 +8,8 @@ import type { NavigationService } from "../store/services";
  *
  * Current encodings always store `activeStep: 0` and `showCalendar: false` (navigation lives in
  * the pathname only). If we navigated on every hydrate, we would `replace` away the real URL
- * (e.g. `/schedule/program`) and send users to `/schedule/term` after every refresh — so we no-op when
- * those fields carry no information.
+ * (e.g. `/schedule?step=program`) and send users to the dashboard top after every refresh — so we
+ * no-op when those fields carry no information.
  */
 export function applyHydrationNavigation(
   decoded: DecodedState,

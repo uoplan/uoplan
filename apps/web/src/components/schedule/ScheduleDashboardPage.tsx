@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Box, Button, Group, Stack, Text, Title } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { motion } from "framer-motion";
@@ -9,17 +9,28 @@ import { EXPLORE_ACCORDION_PAD_INLINE } from "../explore/ExploreProfessorGradesL
 import { ResetModal } from "../shared/ResetModal";
 import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { tr } from "../../i18n";
-import { getGenerateBlockers, getScheduleDashboardCards } from "../../lib/scheduleDashboard";
+import {
+  getGenerateBlockers,
+  getScheduleDashboardCards,
+  resolveInitialOpenStep,
+  type ScheduleStepId,
+} from "../../lib/scheduleDashboard";
 import { ScheduleDashboardCard } from "./ScheduleDashboardCard";
 import { GenerateConfirmationModal } from "./GenerateConfirmationModal";
 import { TermPicker } from "./TermPicker";
+import { ProgramCoursesPanel } from "./ProgramCoursesPanel";
+import { OptionsPanel } from "./OptionsPanel";
+import { AssignPanel } from "./AssignPanel";
 import { NotificationToggle } from "../steps/NotificationToggle";
 
 export function ScheduleDashboardPage() {
   useLingui();
   const navigate = useNavigate();
+  const search = useSearch({ from: "/schedule/" });
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [openStep, setOpenStep] = useState<ScheduleStepId | null>(() => search.step ?? null);
+  const didInit = useRef(false);
 
   const dashboardState = useAppStore(
     useShallow((s) => ({
@@ -47,12 +58,63 @@ export function ScheduleDashboardPage() {
       ? tr("schedule.dashboard.ready")
       : tr("schedule.dashboard.readyCount", { ready: readyCount, total: cards.length });
 
+  // Auto-open the first step that needs attention — only once on mount, so that
+  // selecting a term/program doesn't yank the open section away from the user.
+  // An explicit ?step deep link always takes precedence.
+  useEffect(() => {
+    if (didInit.current) return;
+    didInit.current = true;
+    setOpenStep((current) => current ?? resolveInitialOpenStep(cards, search.step));
+  }, [cards, search.step]);
+
+  // Respond to external ?step changes (e.g. the calendar "upload transcript" button).
+  useEffect(() => {
+    if (search.step) setOpenStep(search.step);
+  }, [search.step]);
+
+  const toggleStep = (id: ScheduleStepId) => {
+    const next = openStep === id ? null : id;
+    setOpenStep(next);
+    void navigate({
+      to: "/schedule",
+      search: { step: next ?? undefined },
+      replace: true,
+    });
+  };
+
   const generateAndNavigate = () => {
     setConfirmOpen(false);
     void storeApi
       .getState()
       .generateSchedules()
       .then(() => navigate({ to: "/schedule/calendar" }));
+  };
+
+  const contentForStep = (id: ScheduleStepId) => {
+    switch (id) {
+      case "term":
+        return dashboardState.terms ? (
+          <TermPicker
+            terms={dashboardState.terms}
+            value={dashboardState.selectedTermId}
+            onChange={(termId) => {
+              void setSelectedTermId(termId);
+            }}
+          />
+        ) : (
+          <Text size="sm" c="dimmed" p="lg">
+            {tr("schedule.dashboard.term.loading")}
+          </Text>
+        );
+      case "program":
+        return <ProgramCoursesPanel />;
+      case "options":
+        return <OptionsPanel />;
+      case "assign":
+        return <AssignPanel />;
+      default:
+        return undefined;
+    }
   };
 
   return (
@@ -111,34 +173,24 @@ export function ScheduleDashboardPage() {
             <NotificationToggle />
           </Box>
 
-          {cards.map((card, index) => {
-            const expandableContent =
-              card.id === "term" ? (
-                dashboardState.terms ? (
-                  <TermPicker
-                    terms={dashboardState.terms}
-                    value={dashboardState.selectedTermId}
-                    onChange={(termId) => {
-                      void setSelectedTermId(termId);
-                    }}
-                  />
-                ) : (
-                  <Text size="sm" c="dimmed">
-                    Loading terms…
-                  </Text>
-                )
-              ) : undefined;
-            return (
-              <motion.div
-                key={card.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1], delay: index * 0.035 }}
-              >
-                <ScheduleDashboardCard {...card} expandableContent={expandableContent} />
-              </motion.div>
-            );
-          })}
+          {cards.map((card, index) => (
+            <motion.div
+              key={card.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1], delay: index * 0.035 }}
+            >
+              <ScheduleDashboardCard
+                label={card.label}
+                status={card.status}
+                summary={card.summary}
+                gateMessage={card.gateMessage}
+                open={openStep === card.id}
+                onToggle={() => toggleStep(card.id)}
+                expandableContent={contentForStep(card.id)}
+              />
+            </motion.div>
+          ))}
 
           <Group justify="space-between" mt="lg" gap="sm">
             <Button

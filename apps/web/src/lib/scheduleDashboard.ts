@@ -3,13 +3,13 @@ import { hasMissingOptionSelections, nodeHasOptionGroups } from "./requirements/
 import { tr } from "../i18n";
 
 export type ScheduleDashboardCardStatus = "ready" | "attention" | "empty";
-type ScheduleDashboardCardId = "term" | "program" | "completed" | "options" | "assign";
-export type ScheduleEditorHref =
-  | "/schedule"
-  | "/schedule/program"
-  | "/schedule/completed"
-  | "/schedule/options"
-  | "/schedule/requirements";
+export type ScheduleStepId = "term" | "program" | "options" | "assign";
+
+const SCHEDULE_STEP_IDS: readonly ScheduleStepId[] = ["term", "program", "options", "assign"];
+
+export function isScheduleStepId(value: unknown): value is ScheduleStepId {
+  return typeof value === "string" && (SCHEDULE_STEP_IDS as readonly string[]).includes(value);
+}
 
 export type ScheduleDashboardInput = {
   terms: Pick<Term, "termId" | "name">[] | null;
@@ -24,13 +24,11 @@ export type ScheduleDashboardInput = {
 };
 
 type ScheduleDashboardCardState = {
-  id: ScheduleDashboardCardId;
+  id: ScheduleStepId;
   label: string;
   status: ScheduleDashboardCardStatus;
   summary: string;
-  to: ScheduleEditorHref;
   gateMessage?: string;
-  gateTarget?: ScheduleEditorHref;
 };
 
 export type GenerateBlockerId = "term" | "program" | "options" | "assign";
@@ -65,22 +63,27 @@ function selectedTermName(state: ScheduleDashboardInput): string | null {
   return selected?.name ?? null;
 }
 
-function gateToTerm(card: Omit<ScheduleDashboardCardState, "gateMessage" | "gateTarget">) {
+function gateToTerm(card: Omit<ScheduleDashboardCardState, "gateMessage">) {
   return {
     ...card,
     status: "empty" as const,
     gateMessage: tr("schedule.dashboard.gate.term"),
-    gateTarget: "/schedule" as const,
   };
 }
 
-function gateToProgram(card: Omit<ScheduleDashboardCardState, "gateMessage" | "gateTarget">) {
+function gateToProgram(card: Omit<ScheduleDashboardCardState, "gateMessage">) {
   return {
     ...card,
     status: "empty" as const,
     gateMessage: tr("schedule.dashboard.gate.program"),
-    gateTarget: "/schedule/program" as const,
   };
+}
+
+function programSummary(state: ScheduleDashboardInput): string {
+  if (!state.program) return tr("schedule.dashboard.program.empty");
+  const count = state.completedCourses.length;
+  if (count === 0) return state.program.title;
+  return `${state.program.title} · ${tr("schedule.dashboard.program.courseCount", { count })}`;
 }
 
 export function getScheduleDashboardCards(
@@ -97,29 +100,18 @@ export function getScheduleDashboardCards(
     label: tr("schedule.dashboard.term.label"),
     status: termReady ? "ready" : "attention",
     summary: selectedTermName(state) ?? tr("schedule.dashboard.term.empty"),
-    to: "/schedule",
   };
 
   const programBase: ScheduleDashboardCardState = {
     id: "program",
     label: tr("schedule.dashboard.program.label"),
     status: programReady ? "ready" : "attention",
-    summary: state.program?.title ?? tr("schedule.dashboard.program.empty"),
-    to: "/schedule/program",
-  };
-
-  const completedBase: ScheduleDashboardCardState = {
-    id: "completed",
-    label: tr("schedule.dashboard.completed.label"),
-    status: programReady ? "ready" : "empty",
-    summary: tr("schedule.dashboard.completed.summary", { count: state.completedCourses.length }),
-    to: "/schedule/completed",
+    summary: programSummary(state),
   };
 
   const cards: ScheduleDashboardCardState[] = [
     termCard,
     termReady ? programBase : gateToTerm(programBase),
-    programReady ? completedBase : gateToProgram(completedBase),
   ];
 
   if (optionsNeeded) {
@@ -130,7 +122,6 @@ export function getScheduleDashboardCards(
       summary: optionsMissing
         ? tr("schedule.dashboard.options.attention")
         : tr("schedule.dashboard.options.ready"),
-      to: "/schedule/options",
     };
     cards.push(programReady ? optionsBase : gateToProgram(optionsBase));
   }
@@ -143,11 +134,26 @@ export function getScheduleDashboardCards(
       unassignedCount > 0
         ? tr("schedule.dashboard.assign.attention", { count: unassignedCount })
         : tr("schedule.dashboard.assign.ready"),
-    to: "/schedule/requirements",
   };
   cards.push(programReady ? assignBase : gateToProgram(assignBase));
 
   return cards;
+}
+
+/**
+ * Decide which accordion section should be open initially. An explicit
+ * `requestedStep` (from a `?step=` deep link) always wins; otherwise open the
+ * first non-gated step that still needs attention, or nothing when all ready.
+ */
+export function resolveInitialOpenStep(
+  cards: Pick<ScheduleDashboardCardState, "id" | "status" | "gateMessage">[],
+  requestedStep: ScheduleStepId | undefined,
+): ScheduleStepId | null {
+  if (requestedStep && cards.some((card) => card.id === requestedStep)) {
+    return requestedStep;
+  }
+  const firstAttention = cards.find((card) => !card.gateMessage && card.status !== "ready");
+  return firstAttention?.id ?? null;
 }
 
 export function getGenerateBlockers(state: ScheduleDashboardInput): GenerateBlocker[] {

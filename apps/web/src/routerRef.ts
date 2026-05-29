@@ -3,6 +3,7 @@ type NavigateRouter = {
   navigate: (opts: {
     to: string;
     params?: Record<string, string>;
+    search?: Record<string, unknown>;
     replace?: boolean;
   }) => Promise<void> | void;
 };

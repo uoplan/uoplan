@@ -1,17 +1,33 @@
 import { WizardStep } from "./wizardSteps";
+import type { ScheduleStepId } from "./scheduleDashboard";
 
-const WIZARD_STEP_SLUGS = ["term", "program", "completed", "options", "requirements"] as const;
-
-type WizardStepSlug = (typeof WIZARD_STEP_SLUGS)[number];
-
-function wizardStepToSlug(step: WizardStep): WizardStepSlug {
-  return WIZARD_STEP_SLUGS[step];
+/**
+ * Map a {@link WizardStep} to the dashboard accordion section it should open.
+ * The standalone wizard sub-pages were removed in favour of inline collapsible
+ * sections on `/schedule`, so navigation now targets `/schedule?step=<id>`.
+ * "Completed courses" was merged into the Program & courses section.
+ */
+function wizardStepToScheduleStep(step: WizardStep): ScheduleStepId | undefined {
+  switch (step) {
+    case WizardStep.Term:
+      return undefined;
+    case WizardStep.Program:
+    case WizardStep.Completed:
+      return "program";
+    case WizardStep.Options:
+      return "options";
+    case WizardStep.Assign:
+      return "assign";
+    default:
+      return undefined;
+  }
 }
 
-/** Typed href for TanStack Router `navigate({ to })` / `<Link to>`. */
-type WizardStepHref = `/schedule/${WizardStepSlug}` | "/schedule";
+export type WizardStepNavigation = {
+  to: "/schedule";
+  search: { step?: ScheduleStepId };
+};
 
-export function wizardStepToHref(step: WizardStep): WizardStepHref {
-  if (step === WizardStep.Term) return "/schedule";
-  return `/schedule/${wizardStepToSlug(step)}`;
+export function wizardStepToNavigation(step: WizardStep): WizardStepNavigation {
+  return { to: "/schedule", search: { step: wizardStepToScheduleStep(step) } };
 }

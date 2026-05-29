@@ -1,10 +1,9 @@
-import { useNavigate } from "@tanstack/react-router";
 import { Box, Group, Stack, Text } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { IconAlertCircle, IconCheck, IconChevronDown } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState, type ReactNode } from "react";
-import type { ScheduleDashboardCardStatus, ScheduleEditorHref } from "../../lib/scheduleDashboard";
+import { type ReactNode } from "react";
+import type { ScheduleDashboardCardStatus } from "../../lib/scheduleDashboard";
 
 const STATUS_ACCENT: Record<ScheduleDashboardCardStatus, string> = {
   ready: "#51cf66",
@@ -16,25 +15,63 @@ type ScheduleDashboardCardProps = {
   label: string;
   status: ScheduleDashboardCardStatus;
   summary: string | ReactNode;
-  to: ScheduleEditorHref;
+  open: boolean;
+  onToggle: () => void;
   gateMessage?: string;
-  gateTarget?: ScheduleEditorHref;
   expandableContent?: ReactNode;
 };
 
 function StatusIcon({
   status,
   locked,
-  isExpandable,
   isOpen,
 }: {
   status: ScheduleDashboardCardStatus;
   locked: boolean;
-  isExpandable: boolean;
   isOpen: boolean;
 }) {
-  if (isExpandable) {
+  if (locked) {
     return (
+      <Box
+        aria-hidden="true"
+        style={{ color: STATUS_ACCENT.empty, display: "flex", alignItems: "center", flexShrink: 0 }}
+      >
+        <IconAlertCircle size={20} stroke={2} />
+      </Box>
+    );
+  }
+  return (
+    <Group gap={10} wrap="nowrap" align="center">
+      {status === "ready" ? (
+        <Box
+          aria-hidden="true"
+          style={{
+            width: 22,
+            height: 22,
+            borderRadius: 999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: STATUS_ACCENT.ready,
+            backgroundColor: `${STATUS_ACCENT.ready}22`,
+            flexShrink: 0,
+          }}
+        >
+          <IconCheck size={14} stroke={2.6} />
+        </Box>
+      ) : status === "attention" ? (
+        <Box
+          aria-hidden="true"
+          style={{
+            color: STATUS_ACCENT.attention,
+            display: "flex",
+            alignItems: "center",
+            flexShrink: 0,
+          }}
+        >
+          <IconAlertCircle size={20} stroke={2} />
+        </Box>
+      ) : null}
       <Box
         aria-hidden="true"
         style={{
@@ -48,82 +85,33 @@ function StatusIcon({
       >
         <IconChevronDown size={18} stroke={2} />
       </Box>
-    );
-  }
-  if (locked) return null;
-  if (status === "ready") {
-    return (
-      <Box
-        aria-hidden="true"
-        style={{
-          width: 22,
-          height: 22,
-          borderRadius: 999,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: STATUS_ACCENT.ready,
-          backgroundColor: `${STATUS_ACCENT.ready}22`,
-          flexShrink: 0,
-        }}
-      >
-        <IconCheck size={14} stroke={2.6} />
-      </Box>
-    );
-  }
-  if (status === "attention") {
-    return (
-      <Box
-        aria-hidden="true"
-        style={{
-          color: STATUS_ACCENT.attention,
-          display: "flex",
-          alignItems: "center",
-          flexShrink: 0,
-        }}
-      >
-        <IconAlertCircle size={20} stroke={2} />
-      </Box>
-    );
-  }
-  return null;
+    </Group>
+  );
 }
 
 export function ScheduleDashboardCard({
   label,
   status,
   summary,
-  to,
+  open,
+  onToggle,
   gateMessage,
-  gateTarget,
   expandableContent,
 }: ScheduleDashboardCardProps) {
   useLingui();
-  const navigate = useNavigate();
   const locked = Boolean(gateMessage);
   const accent = locked ? STATUS_ACCENT.empty : STATUS_ACCENT[status];
   const isExpandable = Boolean(expandableContent) && !locked;
-  const [open, setOpen] = useState(false);
-  const href = locked ? (gateTarget ?? to) : to;
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (isExpandable) {
-      setOpen((v) => !v);
-      return;
-    }
-    // Navigate on plain card click (not via <Link> so the entire card is hittable)
-    event.preventDefault();
-    void navigate({ to: href });
+  const handleClick = () => {
+    if (isExpandable) onToggle();
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!isExpandable) return;
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      if (isExpandable) {
-        setOpen((v) => !v);
-      } else {
-        void navigate({ to: href });
-      }
+      onToggle();
     }
   };
 
@@ -137,22 +125,24 @@ export function ScheduleDashboardCard({
         transition: "border-color 180ms ease, background-color 180ms ease",
       }}
       onMouseEnter={(e) => {
+        if (!isExpandable) return;
         e.currentTarget.style.backgroundColor = "#1F2024";
         e.currentTarget.style.borderColor = "#3F424A";
       }}
       onMouseLeave={(e) => {
+        if (!isExpandable) return;
         e.currentTarget.style.backgroundColor = "#1A1B1E";
         e.currentTarget.style.borderColor = "#2C2E33";
       }}
     >
       <Box
-        role="button"
-        tabIndex={0}
+        role={isExpandable ? "button" : undefined}
+        tabIndex={isExpandable ? 0 : undefined}
         aria-expanded={isExpandable ? open : undefined}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         p="lg"
-        style={{ cursor: "pointer", outline: "none" }}
+        style={{ cursor: isExpandable ? "pointer" : "default", outline: "none" }}
       >
         <Group justify="space-between" align="center" gap="md" wrap="nowrap">
           <Stack gap={6} style={{ textAlign: "left" }}>
@@ -168,7 +158,7 @@ export function ScheduleDashboardCard({
               </Text>
             ) : null}
           </Stack>
-          <StatusIcon status={status} locked={locked} isExpandable={isExpandable} isOpen={open} />
+          <StatusIcon status={status} locked={locked} isOpen={open} />
         </Group>
       </Box>
 

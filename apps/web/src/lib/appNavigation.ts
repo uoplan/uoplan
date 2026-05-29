@@ -1,12 +1,14 @@
 import type { WizardStep } from "./wizardSteps";
-import { wizardStepToHref } from "./wizardStepSlugs";
+import { wizardStepToNavigation } from "./wizardStepSlugs";
 import { getRouterInstance } from "../routerRef";
 
 export function navigateToWizardStep(step: WizardStep, options?: { replace?: boolean }): void {
   const router = getRouterInstance();
   if (!router) return;
+  const { to, search } = wizardStepToNavigation(step);
   void router.navigate({
-    to: wizardStepToHref(step),
+    to,
+    search,
     replace: options?.replace ?? false,
   });
 }
