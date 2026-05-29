@@ -1,15 +1,15 @@
 import { useMemo } from "react";
 import { Stack, Text, Alert } from "@mantine/core";
-import type { DataCache } from "@uoplan/schedule";
-import { normalizeCourseCode } from "@uoplan/schedule";
+import type { DataCache } from "@uoplan/core";
+import { normalizeCourseCode } from "@uoplan/core";
 import type {
   RemainingRequirement,
   RequirementWithStatus,
   CompletedRequirementItem,
-} from "@uoplan/schedule";
+} from "@uoplan/core";
 import { useAppStore } from "../../store/appStore";
 import { RequirementNode, getStableNodeKey } from "./RequirementNode";
-import { applyOptionSelections } from "./requirementUtils";
+import { applyOptionSelections } from "../../lib/requirements/requirementUtils";
 import { CompletedRequirementsAccordion } from "./CompletedRequirementsAccordion";
 import { FrenchImmersionRequirementsReadout } from "./FrenchImmersionRequirementsReadout";
 

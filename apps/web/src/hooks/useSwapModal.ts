@@ -1,12 +1,12 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import type { DataCache, ProfessorRatingsMap, GradeVizData } from "@uoplan/schedule";
+import type { DataCache, ProfessorRatingsMap, GradeVizData } from "@uoplan/core";
 import {
   courseAPlusPercent,
   getRatingsForInstructors,
   normalizeCourseCode,
   aggregateCourseDistribution,
   normalizeGradeVizDistribution,
-} from "@uoplan/schedule";
+} from "@uoplan/core";
 
 /**
  * Type for the swap candidates getter function.

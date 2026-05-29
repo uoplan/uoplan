@@ -13,6 +13,8 @@ import "@fontsource/dm-serif-display/400.css";
 import "./styles/global.css";
 import { i18n, initializeI18n } from "./i18n";
 import { registerServiceWorker } from "./workers/serviceWorkerClient";
+import { AppStoreProvider } from "./store/AppStoreProvider";
+import { defaultAppStore } from "./store/appStore";
 
 await initializeI18n();
 
@@ -31,7 +33,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <I18nProvider i18n={i18n}>
       <MantineProvider theme={theme} defaultColorScheme="dark">
-        <RouterProvider router={router} />
+        <AppStoreProvider store={defaultAppStore}>
+          <RouterProvider router={router} />
+        </AppStoreProvider>
       </MantineProvider>
     </I18nProvider>
   </React.StrictMode>,

@@ -1,1 +1,1 @@
-export { collectImplicitHonoursForSchedule } from "@uoplan/calendar";
+export { collectImplicitHonoursForSchedule } from "@uoplan/core";

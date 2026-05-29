@@ -1,7 +1,10 @@
 import { Box, Group, Paper, Stack, Text, UnstyledButton } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
-import type { RequirementWithStatus } from "@uoplan/schedule";
-import { getOptionSecondarySummaryLine, simplifySingleChildChain } from "./requirementUtils";
+import type { RequirementWithStatus } from "@uoplan/core";
+import {
+  getOptionSecondarySummaryLine,
+  simplifySingleChildChain,
+} from "../../lib/requirements/requirementUtils";
 import {
   RequirementNode,
   getNodeDisplayTitle,

@@ -1,7 +1,7 @@
 import { useState, type MouseEvent } from "react";
 import { Paper, Group, Text, Badge, Collapse, Stack, Box, Tooltip } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
-import type { CompletedRequirementItem } from "@uoplan/schedule";
+import type { CompletedRequirementItem } from "@uoplan/core";
 
 interface CompletedRequirementsAccordionProps {
   completedItems: CompletedRequirementItem[];

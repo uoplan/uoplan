@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { canGoToPreviousSeed } from "../../lib/seedNavigation";
-import { useAppStore } from "../appStore";
+import { defaultAppStore } from "../appStore";
 
 const generateSchedulesActionMock = vi.fn();
 
@@ -26,8 +26,8 @@ describe("schedules seed navigation", () => {
   beforeEach(() => {
     generateSchedulesActionMock.mockReset();
     generateSchedulesActionMock.mockResolvedValue(mockResult);
-    useAppStore.setState({
-      ...useAppStore.getState(),
+    defaultAppStore.setState({
+      ...defaultAppStore.getState(),
       firstSeed,
       currentSeed: 0,
       lowestVisitedSeed: null,
@@ -38,16 +38,16 @@ describe("schedules seed navigation", () => {
   });
 
   it("goToNextSeed from 0 uses firstSeed", async () => {
-    await useAppStore.getState().goToNextSeed();
+    await defaultAppStore.getState().goToNextSeed();
 
-    expect(useAppStore.getState().currentSeed).toBe(firstSeed);
+    expect(defaultAppStore.getState().currentSeed).toBe(firstSeed);
     expect(
       canGoToPreviousSeed(
-        useAppStore.getState().currentSeed,
-        useAppStore.getState().lowestVisitedSeed,
+        defaultAppStore.getState().currentSeed,
+        defaultAppStore.getState().lowestVisitedSeed,
       ),
     ).toBe(false);
-    expect(useAppStore.getState().lowestVisitedSeed).toBe(firstSeed);
+    expect(defaultAppStore.getState().lowestVisitedSeed).toBe(firstSeed);
     expect(generateSchedulesActionMock).toHaveBeenCalledWith(
       expect.objectContaining({ currentSeed: firstSeed }),
       expect.any(String),
@@ -55,20 +55,22 @@ describe("schedules seed navigation", () => {
   });
 
   it("second goToNextSeed enables previous navigation", async () => {
-    await useAppStore.getState().goToNextSeed();
-    await useAppStore.getState().goToNextSeed();
+    await defaultAppStore.getState().goToNextSeed();
+    await defaultAppStore.getState().goToNextSeed();
 
-    const { currentSeed } = useAppStore.getState();
+    const { currentSeed } = defaultAppStore.getState();
     expect(currentSeed).toBeGreaterThan(firstSeed);
-    expect(canGoToPreviousSeed(currentSeed, useAppStore.getState().lowestVisitedSeed)).toBe(true);
-    expect(useAppStore.getState().lowestVisitedSeed).toBe(firstSeed);
+    expect(canGoToPreviousSeed(currentSeed, defaultAppStore.getState().lowestVisitedSeed)).toBe(
+      true,
+    );
+    expect(defaultAppStore.getState().lowestVisitedSeed).toBe(firstSeed);
   });
 
   it("goToPreviousSeed decrements from firstSeed + 1", async () => {
-    useAppStore.setState({ currentSeed: firstSeed + 1 });
-    await useAppStore.getState().goToPreviousSeed();
+    defaultAppStore.setState({ currentSeed: firstSeed + 1 });
+    await defaultAppStore.getState().goToPreviousSeed();
 
-    expect(useAppStore.getState().currentSeed).toBe(firstSeed);
+    expect(defaultAppStore.getState().currentSeed).toBe(firstSeed);
     expect(generateSchedulesActionMock).toHaveBeenCalledWith(
       expect.objectContaining({ currentSeed: firstSeed }),
       expect.any(String),
@@ -76,17 +78,17 @@ describe("schedules seed navigation", () => {
   });
 
   it("goToNextSeed from corrupt seed lands on firstSeed (not firstSeed+1)", async () => {
-    useAppStore.setState({ currentSeed: 3 });
-    await useAppStore.getState().goToNextSeed();
+    defaultAppStore.setState({ currentSeed: 3 });
+    await defaultAppStore.getState().goToNextSeed();
 
-    expect(useAppStore.getState().currentSeed).toBe(firstSeed);
+    expect(defaultAppStore.getState().currentSeed).toBe(firstSeed);
     expect(
       canGoToPreviousSeed(
-        useAppStore.getState().currentSeed,
-        useAppStore.getState().lowestVisitedSeed,
+        defaultAppStore.getState().currentSeed,
+        defaultAppStore.getState().lowestVisitedSeed,
       ),
     ).toBe(false);
-    expect(useAppStore.getState().lowestVisitedSeed).toBe(firstSeed);
+    expect(defaultAppStore.getState().lowestVisitedSeed).toBe(firstSeed);
     expect(generateSchedulesActionMock).toHaveBeenCalledWith(
       expect.objectContaining({ currentSeed: firstSeed }),
       expect.any(String),
@@ -94,10 +96,10 @@ describe("schedules seed navigation", () => {
   });
 
   it("generateSchedules repairs corrupt seed before generating", async () => {
-    useAppStore.setState({ currentSeed: 3 });
-    await useAppStore.getState().generateSchedules();
+    defaultAppStore.setState({ currentSeed: 3 });
+    await defaultAppStore.getState().generateSchedules();
 
-    expect(useAppStore.getState().currentSeed).toBe(firstSeed);
+    expect(defaultAppStore.getState().currentSeed).toBe(firstSeed);
     expect(generateSchedulesActionMock).toHaveBeenCalledWith(
       expect.objectContaining({ currentSeed: firstSeed }),
       expect.any(String),

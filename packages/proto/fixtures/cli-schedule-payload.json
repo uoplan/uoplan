@@ -1,0 +1,20 @@
+{
+  "description": "Cross-language wire contract for cli.proto SchedulePayload. base64Std is the standard-base64 encoding of the protobuf bytes for `payload`. The TS test (packages/schedule) asserts encode(payload) === base64Std and decode round-trips; the Rust test (apps/cli) asserts it decodes the same bytes to the same fields. Both must stay in sync because they share this single fixture.",
+  "base64Std": "CMkREiEKB0NTSTIxMTASCgoDTEVDEgNBMDASCgoDTEFCEgNMMDESFQoHTUFUMTMyMBIKCgNMRUMSA0IwMA==",
+  "payload": {
+    "termId": 2249,
+    "courses": [
+      {
+        "courseCode": "CSI2110",
+        "sections": [
+          { "component": "LEC", "section": "A00" },
+          { "component": "LAB", "section": "L01" }
+        ]
+      },
+      {
+        "courseCode": "MAT1320",
+        "sections": [{ "component": "LEC", "section": "B00" }]
+      }
+    ]
+  }
+}

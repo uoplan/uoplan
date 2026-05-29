@@ -3,7 +3,7 @@ import {
   buildProfessorCoTeachingGraph,
   professorGraphId,
   type CourseGradesData,
-} from "@uoplan/schedule";
+} from "@uoplan/core";
 import {
   buildOfferingsByProfessorId,
   getAggregateGradeViz,

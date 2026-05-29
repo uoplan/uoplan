@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Alert, Button, List, Modal, Stack, Text, TextInput } from "@mantine/core";
 import { IconAlertCircle, IconCircleCheck, IconInfoCircle } from "@tabler/icons-react";
 import { useLingui } from "@lingui/react";
-import { useAppStore } from "../../store/appStore";
+import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import {
   parseUEnrollUrl,
@@ -34,6 +34,7 @@ export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps)
       importSchedule: s.importSchedule,
     })),
   );
+  const storeApi = useAppStoreApi();
 
   const [input, setInput] = useState("");
   const [parseState, setParseState] = useState<ParseState>({ status: "idle" });
@@ -63,7 +64,7 @@ export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps)
 
       if (parsed.termId && parsed.termId !== selectedTermId) {
         await setSelectedTermId(parsed.termId);
-        activeCache = useAppStore.getState().cache;
+        activeCache = storeApi.getState().cache;
       }
 
       if (!activeCache) return;

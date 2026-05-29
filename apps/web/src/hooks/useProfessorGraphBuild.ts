@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import type { CourseGradesData, ProfessorCoTeachingGraph } from "@uoplan/schedule";
-import { buildProfessorCoTeachingGraph } from "@uoplan/schedule";
+import type { CourseGradesData, ProfessorCoTeachingGraph } from "@uoplan/core";
+import { buildProfessorCoTeachingGraph } from "@uoplan/core";
 import type { ExploreOfferingFlat } from "../lib/explore/gradesSearch";
 import { buildOfferingsByProfessorId } from "../lib/graph/professorGraphDetails";
 import type {

@@ -1,21 +1,23 @@
 import { initWasm, Resvg } from "@resvg/resvg-wasm";
 import {
-  DataProto,
   buildDataCache,
   decodeStateFromBase64,
-  fromProtoCatalogue,
-  fromProtoCatalogueManifest,
-  fromProtoIndices,
-  fromProtoSchedulesData,
+  enrichSchedulesDataWithGrades,
+  getGradeLookups,
   getMergedCatalogue,
   peekTermAndYearFromBase64,
-} from "@uoplan/schedule";
-import {
-  buildColorMap,
   reconstructScheduleForPreview,
-  renderCalendarToSvg,
-  scheduleToEvents,
-} from "@uoplan/calendar";
+} from "@uoplan/core";
+import {
+  loadCatalogue,
+  loadCatalogueManifest,
+  loadGrades,
+  loadIndices,
+  loadSchedules,
+  optional,
+} from "@uoplan/data";
+import { createAssetsTransport } from "@uoplan/data/worker";
+import { buildColorMap, renderCalendarToSvg, scheduleToEvents } from "@uoplan/calendar";
 import type { Env } from "./index.js";
 
 // @ts-ignore - wrangler handles .wasm imports as WebAssembly.Module
@@ -33,16 +35,6 @@ function base64urlToBase64(s: string): string {
   const padded = s.replace(/-/g, "+").replace(/_/g, "/");
   const pad = (4 - (padded.length % 4)) % 4;
   return padded + "=".repeat(pad);
-}
-
-async function fetchBytes(env: Env, origin: string, path: string): Promise<Uint8Array | null> {
-  try {
-    const res = await env.ASSETS.fetch(new Request(`${origin}${path}`));
-    if (!res.ok) return null;
-    return new Uint8Array(await res.arrayBuffer());
-  } catch {
-    return null;
-  }
 }
 
 function fallbackSvg(): string {
@@ -94,9 +86,10 @@ export async function handleOgImage(
 
 async function generatePng(stateBase64url: string, env: Env, origin: string): Promise<Uint8Array> {
   const base64 = base64urlToBase64(stateBase64url);
+  const transport = createAssetsTransport(env.ASSETS, origin);
   const [fontRegular, fontBold] = await Promise.all([
-    fetchBytes(env, origin, "/fonts/dm-mono-regular.ttf"),
-    fetchBytes(env, origin, "/fonts/dm-mono-bold.ttf"),
+    optional(transport, "/fonts/dm-mono-regular.ttf"),
+    optional(transport, "/fonts/dm-mono-bold.ttf"),
   ]);
   const fonts = [fontRegular, fontBold].filter(Boolean) as Uint8Array[];
   const fallback = () => svgToPng(fallbackSvg(), fonts);
@@ -106,49 +99,38 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
     if (!peek) {
       return fallback();
     }
-
-    const [manifestBytes, indicesBytes] = await Promise.all([
-      fetchBytes(env, origin, "/data/catalogue.pb"),
-      fetchBytes(env, origin, "/data/indices.pb"),
-    ]);
-
-    if (!manifestBytes || !indicesBytes) {
-      return fallback();
-    }
-
-    const manifest = fromProtoCatalogueManifest(DataProto.CatalogueManifest.decode(manifestBytes));
-    const yearForCatalogue = peek.firstYear
-      ? (manifest.years.find((y) => y <= peek.firstYear!) ??
-        manifest.years[manifest.years.length - 1])
-      : manifest.years[0];
-
-    if (!yearForCatalogue) {
-      return fallback();
-    }
-
     const termId = peek.termId;
     if (!termId) {
       return fallback();
     }
 
-    const latestYear = manifest.years[0]!;
-    const [latestCatalogueBytes, yearCatalogueBytes, schedulesBytes] = await Promise.all([
-      fetchBytes(env, origin, `/data/catalogue.${latestYear}.pb`),
-      yearForCatalogue !== latestYear
-        ? fetchBytes(env, origin, `/data/catalogue.${yearForCatalogue}.pb`)
-        : Promise.resolve(null),
-      fetchBytes(env, origin, `/data/schedules.${termId}.pb`),
-    ]);
-
-    if (!latestCatalogueBytes || !schedulesBytes) {
+    const manifest = await loadCatalogueManifest(transport);
+    const yearForCatalogue = peek.firstYear
+      ? (manifest.years.find((y) => y <= peek.firstYear!) ??
+        manifest.years[manifest.years.length - 1])
+      : manifest.years[0];
+    const latestYear = manifest.years[0];
+    if (!yearForCatalogue || latestYear === undefined) {
       return fallback();
     }
 
-    const latestCatalogue = fromProtoCatalogue(DataProto.Catalogue.decode(latestCatalogueBytes));
-    const yearCatalogueObj = yearCatalogueBytes
-      ? fromProtoCatalogue(DataProto.Catalogue.decode(yearCatalogueBytes))
-      : null;
-    const indices = fromProtoIndices(DataProto.Indices.decode(indicesBytes));
+    const [latestCatalogue, yearCatalogueObj, rawSchedules, indices, grades] = await Promise.all([
+      loadCatalogue(transport, latestYear),
+      yearForCatalogue !== latestYear
+        ? loadCatalogue(transport, yearForCatalogue)
+        : Promise.resolve(null),
+      loadSchedules(transport, termId),
+      loadIndices(transport),
+      loadGrades(transport).catch(() => null),
+    ]);
+
+    // Grade distributions are no longer embedded in schedules.NNNN.pb, so
+    // reconstruct them from grades.pb. This keeps both the "prefer easier"
+    // difficulty index used by reconstruction AND the grade bars rendered on
+    // the OG image correct. Grades are optional: a failure degrades gracefully.
+    const schedulesData = grades
+      ? enrichSchedulesDataWithGrades(rawSchedules, getGradeLookups(grades), Number(termId))
+      : rawSchedules;
 
     const catalogueForDecode = getMergedCatalogue(
       latestCatalogue,
@@ -164,7 +146,6 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
       completedCourses,
     );
 
-    const schedulesData = fromProtoSchedulesData(DataProto.SchedulesData.decode(schedulesBytes));
     const cache = buildDataCache(catalogue, schedulesData);
 
     const decoded = decodeStateFromBase64(base64, catalogue, indices);

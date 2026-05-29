@@ -2,7 +2,7 @@ import {
   buildProfessorCoTeachingGraph,
   type CourseGradesData,
   type ProfessorCoTeachingGraph,
-} from "@uoplan/schedule";
+} from "@uoplan/core";
 import { buildOfferingsByProfessorId } from "../lib/graph/professorGraphDetails";
 import type { ExploreOfferingFlat } from "../lib/explore/gradesSearch";
 

@@ -1,7 +1,6 @@
-import type { DecodedState } from "@uoplan/schedule";
+import type { DecodedState } from "@uoplan/core";
 import { WizardStep } from "./wizardSteps";
-import type { AppStore } from "../store/types";
-import { navigateToCalendar, navigateToWizardStep } from "./appNavigation";
+import type { NavigationService } from "../store/services";
 
 /**
  * After {@link AppStore.loadEncodedState}, optionally sync the URL with **legacy** navigation
@@ -12,7 +11,10 @@ import { navigateToCalendar, navigateToWizardStep } from "./appNavigation";
  * (e.g. `/schedule/program`) and send users to `/schedule/term` after every refresh — so we no-op when
  * those fields carry no information.
  */
-export function applyHydrationNavigation(decoded: DecodedState, _getState: () => AppStore): void {
+export function applyHydrationNavigation(
+  decoded: DecodedState,
+  navigation: NavigationService,
+): void {
   const hasStoredNavigationHint = (decoded.activeStep ?? 0) !== 0 || decoded.showCalendar === true;
 
   if (!hasStoredNavigationHint) {
@@ -25,9 +27,9 @@ export function applyHydrationNavigation(decoded: DecodedState, _getState: () =>
   ) as WizardStep;
 
   if (decoded.showCalendar) {
-    navigateToCalendar({ replace: true });
+    navigation.toCalendar({ replace: true });
     return;
   }
 
-  navigateToWizardStep(activeStep, { replace: true });
+  navigation.toWizardStep(activeStep, { replace: true });
 }

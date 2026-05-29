@@ -9,7 +9,7 @@ import {
   type RequirementPool,
 } from "./scheduleHelpers";
 
-const cache = {} as import("@uoplan/schedule").DataCache;
+const cache = {} as import("@uoplan/core").DataCache;
 
 function pool(
   id: string,

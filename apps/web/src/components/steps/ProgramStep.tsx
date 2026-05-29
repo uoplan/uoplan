@@ -11,11 +11,12 @@ import {
   Switch,
 } from "@mantine/core";
 import { tr } from "../../i18n";
-import type { Program } from "@uoplan/schedule";
-import { useAppStore } from "../../store/appStore";
+import type { Program } from "@uoplan/core";
+import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
-import { parseTranscriptPdf, findBestMatchingProgram, isOptCourse } from "@uoplan/schedule";
-import { normalizeCourseCode } from "@uoplan/schedule";
+import { parseTranscriptPdf, findBestMatchingProgram } from "@uoplan/transcript";
+import { isOptCourse } from "@uoplan/core";
+import { normalizeCourseCode } from "@uoplan/core";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
 
 interface ProgramStepProps {
@@ -54,6 +55,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
   const setFirstYear = useAppStore((s) => s.setFirstYear);
   const setFrenchImmersionStream = useAppStore((s) => s.setFrenchImmersionStream);
   const frenchImmersionStream = useAppStore((s) => s.frenchImmersionStream);
+  const storeApi = useAppStoreApi();
   const [transcriptLoading, setTranscriptLoading] = useState(false);
   const [transcriptError, setTranscriptError] = useState<string | null>(null);
   const [transcriptFeedback, setTranscriptFeedback] = useState<{
@@ -169,7 +171,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
       let programListToMatch = uniquePrograms;
       if (startingYear !== null && firstYear === null) {
         await setFirstYear(startingYear);
-        const freshPrograms = useAppStore.getState().yearCataloguePrograms;
+        const freshPrograms = storeApi.getState().yearCataloguePrograms;
         if (freshPrograms) {
           const seen = new Set<string>();
           programListToMatch = freshPrograms.filter((p) => {

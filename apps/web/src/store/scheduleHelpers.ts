@@ -1,4 +1,4 @@
-// Pool helpers have been moved to @uoplan/schedule.
+// Pool helpers have been moved to @uoplan/core.
 // Re-exported here for backward compatibility with existing imports.
 export {
   type RequirementPool,
@@ -8,7 +8,7 @@ export {
   isBroadElectivePoolType,
   enumerateSingleRedistributions,
   weightedRandomPick,
-} from "@uoplan/schedule";
+} from "@uoplan/core";
 
 // reorderGeneralPoolForDisciplineDiversity is used only by the web app.
 function disciplinePrefixFromCourseCode(code: string): string {

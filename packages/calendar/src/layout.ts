@@ -1,5 +1,5 @@
 import type { CalendarEvent } from "./types";
-import type { DayOfWeekCode } from "@uoplan/schedule";
+import type { DayOfWeekCode } from "@uoplan/core";
 
 export const CAL_START_MINUTES = 480; // 08:00
 export const CAL_END_MINUTES = 1380; // 23:00

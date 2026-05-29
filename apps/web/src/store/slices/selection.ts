@@ -1,11 +1,10 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
 import { recomputeStateForProgram, getDisciplineCodesForProgram } from "../requirementCompute";
-import type { CourseLanguageBucket } from "@uoplan/schedule";
+import type { CourseLanguageBucket } from "@uoplan/core";
 import { getMergedCatalogue } from "./catalogueUtils";
 import { buildCacheWithOpt } from "../../lib/dataCacheLoader";
-import { pruneOptionSelectionsForClear } from "../../components/requirements/requirementUtils";
-import { isBasicPlannerActive } from "../../lib/calendarRoute";
+import { pruneOptionSelectionsForClear } from "../../lib/requirements/requirementUtils";
 
 interface SelectionSlice {
   setBasicPinnedCourses: AppStore["setBasicPinnedCourses"];
@@ -298,7 +297,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
 
     // Basic mode does not use requirement-tree / filtered-prereq state on the calendar;
     // skipping the full recompute avoids scanning the entire catalogue on toggle (UI freeze).
-    if (isBasicPlannerActive()) {
+    if (get().calendarMode === "basic") {
       set({ frenchImmersionStream: true, languageBuckets: nextLang });
       return;
     }

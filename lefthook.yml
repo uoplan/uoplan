@@ -5,7 +5,7 @@ pre-commit:
       run: pnpm exec oxfmt --no-error-on-unmatched-pattern --check {staged_files}
     oxlint:
       glob: "**/*.{js,jsx,ts,tsx,mjs,cjs}"
-      run: pnpm exec oxlint {staged_files}
+      run: pnpm exec oxlint --no-error-on-unmatched-pattern {staged_files}
     typecheck:
       glob: "**/*.{ts,tsx,mts,cts}"
       run: pnpm typecheck

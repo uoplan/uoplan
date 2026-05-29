@@ -1,19 +1,19 @@
-import type { Catalogue, Course, CourseGradesData, Program, SchedulesData } from "@uoplan/schedule";
+import type { Catalogue, Course, CourseGradesData, Program, SchedulesData } from "@uoplan/core";
 import type {
   RemainingRequirement,
   RequirementWithStatus,
   CompletedRequirementItem,
-} from "@uoplan/schedule";
-import type { GeneratedSchedule } from "@uoplan/schedule";
-import type { DayOfWeek } from "@uoplan/schedule";
-import type { DataCache } from "@uoplan/schedule";
-import type { CourseLanguageBucket, CourseLevelBucket } from "@uoplan/schedule";
-import type { Indices } from "@uoplan/schedule";
-import type { Term } from "@uoplan/schedule";
-import type { ProfessorRatingsMap } from "@uoplan/schedule";
-import type { Discipline } from "@uoplan/schedule";
-import type { DecodedState } from "@uoplan/schedule";
-import type { TimetableFailureDiagnostics } from "@uoplan/schedule";
+} from "@uoplan/core";
+import type { GeneratedSchedule } from "@uoplan/core";
+import type { DayOfWeek } from "@uoplan/core";
+import type { DataCache } from "@uoplan/core";
+import type { CourseLanguageBucket, CourseLevelBucket } from "@uoplan/core";
+import type { Indices } from "@uoplan/core";
+import type { Term } from "@uoplan/core";
+import type { ProfessorRatingsMap } from "@uoplan/core";
+import type { Discipline } from "@uoplan/core";
+import type { DecodedState } from "@uoplan/core";
+import type { TimetableFailureDiagnostics } from "@uoplan/core";
 
 export interface GenerationErrorDetails {
   emptyPools: Array<{ label: string; requirementId?: string; candidateCourses?: string[] }>;
@@ -29,6 +29,9 @@ export type GenerationErrorState = {
   message: string;
   details: GenerationErrorDetails | null;
 };
+
+/** Which planner variant is active on the calendar route. */
+export type CalendarVariant = "basic" | "advanced";
 
 export interface AppState {
   pendingSharedState: DecodedState | null;
@@ -108,6 +111,11 @@ export interface AppState {
   frenchImmersionStream: boolean;
   /** The week group index the user last navigated to in the calendar, for URL sharing. */
   calendarWeekIndex: number | null;
+  /**
+   * Which planner variant is currently active on the calendar route, or null when
+   * the calendar is not mounted. Drives generation-mode branching and share encoding.
+   */
+  calendarMode: CalendarVariant | null;
   /** True when the last seed navigation returned the same course set as the current schedule. */
   scheduleNoVariety: boolean;
   /** Courses that must never appear in any generated schedule. */
@@ -179,6 +187,8 @@ export interface AppActions {
   blacklistCourseFromSwap: (enrollmentIndex: number) => void;
   unblacklistCourseFromSwap: (enrollmentIndex: number) => void;
   setCalendarWeekIndex: (index: number | null) => void;
+  setCalendarMode: (mode: CalendarVariant | null) => void;
+  clearEnrollmentsCache: () => void;
   importSchedule: (schedule: GeneratedSchedule) => void;
   resetToDefault: () => void;
 }

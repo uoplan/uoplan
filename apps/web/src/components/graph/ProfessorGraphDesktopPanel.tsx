@@ -1,6 +1,6 @@
 import { ActionIcon, Box, ScrollArea, Stack } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
-import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/schedule";
+import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/core";
 import { tr } from "../../i18n";
 import type { ExploreOfferingFlat } from "../../lib/explore/gradesSearch";
 import type { GraphNeighbor, NeighborSortMode } from "../../lib/graph/professorGraphDetails";

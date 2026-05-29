@@ -7,7 +7,7 @@ import { IconRefresh } from "@tabler/icons-react";
 import { useShallow } from "zustand/react/shallow";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../explore/ExploreProfessorGradesLayout";
 import { ResetModal } from "../shared/ResetModal";
-import { useAppStore } from "../../store/appStore";
+import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { tr } from "../../i18n";
 import { getGenerateBlockers, getScheduleDashboardCards } from "../../lib/scheduleDashboard";
 import { ScheduleDashboardCard } from "./ScheduleDashboardCard";
@@ -37,6 +37,7 @@ export function ScheduleDashboardPage() {
   const resetToDefault = useAppStore((s) => s.resetToDefault);
   const scheduleGenerating = useAppStore((s) => s.scheduleGenerating);
   const setSelectedTermId = useAppStore((s) => s.setSelectedTermId);
+  const storeApi = useAppStoreApi();
 
   const cards = useMemo(() => getScheduleDashboardCards(dashboardState), [dashboardState]);
   const blockers = useMemo(() => getGenerateBlockers(dashboardState), [dashboardState]);
@@ -48,7 +49,7 @@ export function ScheduleDashboardPage() {
 
   const generateAndNavigate = () => {
     setConfirmOpen(false);
-    void useAppStore
+    void storeApi
       .getState()
       .generateSchedules()
       .then(() => navigate({ to: "/schedule/calendar" }));

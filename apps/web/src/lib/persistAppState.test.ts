@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { LOCAL_STORAGE_KEY } from "../store/constants";
-import { useAppStore } from "../store/appStore";
+import { defaultAppStore } from "../store/appStore";
 import { flushPersistedAppState } from "./persistAppState";
 
 describe("flushPersistedAppState", () => {
@@ -26,8 +26,8 @@ describe("flushPersistedAppState", () => {
   });
 
   it("writes encoded state to localStorage when catalogue and indices exist", () => {
-    useAppStore.setState({
-      ...useAppStore.getState(),
+    defaultAppStore.setState({
+      ...defaultAppStore.getState(),
       firstSeed: 42,
       currentSeed: 43,
       catalogue: { courses: [], programs: [] },
@@ -39,8 +39,8 @@ describe("flushPersistedAppState", () => {
   });
 
   it("no-ops when encoding is not available", () => {
-    useAppStore.setState({
-      ...useAppStore.getState(),
+    defaultAppStore.setState({
+      ...defaultAppStore.getState(),
       catalogue: null,
       indices: null,
     });

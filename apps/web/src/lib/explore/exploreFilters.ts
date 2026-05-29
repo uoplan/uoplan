@@ -1,4 +1,4 @@
-import { distributionGpa } from "@uoplan/schedule";
+import { distributionGpa } from "@uoplan/core";
 import type { ExploreCourseSearchEntry, ExploreProfessorSearchEntry } from "./gradesSearch";
 
 export type ExploreFilterLevel = 1000 | 2000 | 3000 | 4000 | 5000;

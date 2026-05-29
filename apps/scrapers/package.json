@@ -16,6 +16,7 @@
     "typecheck": "tsgo --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@uoplan/proto": "workspace:*",
     "cheerio": "^1.2.0",
     "got": "^14.6.6",
     "jsdom": "^28.1.0",

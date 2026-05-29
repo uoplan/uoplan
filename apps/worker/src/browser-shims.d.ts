@@ -1,4 +1,4 @@
-// Minimal ambient declarations for browser globals used by @uoplan/schedule.
+// Minimal ambient declarations for browser globals used by @uoplan/core.
 // Workers have neither window nor document at runtime; we type them as `any`
 // so that conditional guards and property access in the library source compile.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,12 +45,6 @@ interface CryptoKey {
 
 interface JsonWebKey {
   [key: string]: unknown;
-}
-
-// Vite ?url import — not used at runtime in the worker but needed for types.
-declare module "pdfjs-dist/build/pdf.worker.mjs?url" {
-  const src: string;
-  export default src;
 }
 
 type BufferSource = ArrayBuffer | ArrayBufferView;

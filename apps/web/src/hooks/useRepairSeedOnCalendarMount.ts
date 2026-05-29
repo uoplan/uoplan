@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 import { flushPersistedAppState } from "../lib/persistAppState";
 import { repairSeedPosition } from "../lib/seedNavigation";
-import { useAppStore } from "../store/appStore";
+import { useAppStoreApi } from "../store/appStore";
 
 /** Repair corrupt currentSeed (< firstSeed) when entering a calendar route. */
 export function useRepairSeedOnCalendarMount(): void {
+  const storeApi = useAppStoreApi();
   useEffect(() => {
-    const { firstSeed, currentSeed } = useAppStore.getState();
+    const { firstSeed, currentSeed } = storeApi.getState();
     const repaired = repairSeedPosition(firstSeed, currentSeed);
     if (repaired !== currentSeed) {
-      useAppStore.setState({ currentSeed: repaired });
+      storeApi.setState({ currentSeed: repaired });
       flushPersistedAppState();
     }
-  }, []);
+  }, [storeApi]);
 }

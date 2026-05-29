@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import type { Catalogue, Course, CoursePrereqNode } from "@uoplan/schedule";
+import type { Catalogue, Course, CoursePrereqNode } from "@uoplan/core";
 import { getMergedCatalogue } from "./catalogueUtils";
 
 const yearPrereq: CoursePrereqNode = { type: "course", code: "CSI 2110" };

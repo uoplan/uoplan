@@ -1,5 +1,5 @@
-import type { DataCache, GeneratedSchedule, SectionCombo } from "@uoplan/schedule";
-import { normalizeCourseCode, getEnrollmentsForCourse } from "@uoplan/schedule";
+import type { DataCache, GeneratedSchedule, SectionCombo } from "@uoplan/core";
+import { normalizeCourseCode, getEnrollmentsForCourse } from "@uoplan/core";
 
 export type ParsedUEnrollData = {
   termId: string | null;

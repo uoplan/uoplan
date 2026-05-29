@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Stack, Text } from "@mantine/core";
 import { useLingui } from "@lingui/react";
-import type { Discipline } from "@uoplan/schedule";
+import type { Discipline } from "@uoplan/core";
 import { tr } from "../../i18n";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 

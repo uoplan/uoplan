@@ -1,4 +1,4 @@
-import type { GeneratedSchedule } from "@uoplan/schedule";
+import type { GeneratedSchedule } from "@uoplan/core";
 
 export function buildColorMap(schedule: GeneratedSchedule): Record<string, number> {
   const codes = [...new Set(schedule.enrollments.map((e) => e.courseCode))].sort();

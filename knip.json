@@ -20,7 +20,7 @@
     "apps/scrapers": {
       "entry": ["src/**/*.ts"]
     },
-    "packages/schedule": {
+    "packages/core": {
       "entry": ["src/**/*.ts"],
       "ignoreDependencies": ["ts-proto"]
     },

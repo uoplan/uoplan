@@ -1,4 +1,4 @@
-import { getCourseColorHex, hexToRgb } from "@uoplan/schedule";
+import { getCourseColorHex, hexToRgb } from "@uoplan/core";
 import type { CalendarEvent } from "./types";
 import { assignLanes, CAL_START_MINUTES, CAL_END_MINUTES, WEEKDAY_CODES } from "./layout";
 

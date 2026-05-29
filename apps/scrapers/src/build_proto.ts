@@ -1,7 +1,7 @@
 /* eslint-disable */
 import fs from "node:fs/promises";
 import path from "node:path";
-import * as DataProto from "../../../packages/schedule/src/proto/data.ts";
+import * as DataProto from "@uoplan/proto/data";
 import { SCRAPER_DATA_DIR, WEB_PUBLIC_DATA_DIR } from "./dataPaths.ts";
 
 type JsonObject = Record<string, unknown>;
@@ -264,9 +264,6 @@ function mapSchedules(input: any): any {
                     : undefined,
               })),
               status: sectionStatusToProto(section.status),
-              distribution: section.distribution
-                ? mapLetterGradeDistributionToProto(section.distribution)
-                : undefined,
             })),
           },
         ]),

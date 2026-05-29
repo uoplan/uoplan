@@ -10,16 +10,15 @@ import {
   normalizeCourseCode,
   diagnoseTimetableFailure,
   type TimetableFailureDiagnostics,
-} from "@uoplan/schedule";
-import {
   generateBasicSchedule,
   generateAdvancedSchedule,
+  buildCourseDifficultyIndexFromCache,
   type PoolDiagnostics,
-} from "@uoplan/calendar";
+} from "@uoplan/core";
 import { buildColorMap } from "./colorMap";
 
 // Re-export helpers used by tests and other modules
-export { expandConstrainedPerRequirement, buildPendingGroupPickCounts } from "@uoplan/calendar";
+export { expandConstrainedPerRequirement, buildPendingGroupPickCounts } from "@uoplan/core";
 
 export type GenerateSchedulesMode = "basic" | "advanced";
 
@@ -377,6 +376,7 @@ export async function generateSchedulesAction(
     includeClosedComponents,
     virtualSectionsOnly,
     generationPreferEasier,
+    courseDifficultyIndex: buildCourseDifficultyIndexFromCache(cache),
     frenchImmersionStream,
     programTitle: program?.title,
     blacklistedCourses: input.blacklistedCourses ?? [],
@@ -498,6 +498,7 @@ async function handleBasicGeneration(
     includeClosedComponents,
     virtualSectionsOnly,
     generationPreferEasier,
+    courseDifficultyIndex: buildCourseDifficultyIndexFromCache(cache),
     frenchImmersionStream,
     programTitle: program?.title,
     blacklistedCourses: basicBlacklistedCourses ?? [],
