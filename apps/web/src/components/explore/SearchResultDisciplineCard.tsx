@@ -4,23 +4,39 @@ import { useLingui } from "@lingui/react";
 import type { Discipline } from "@uoplan/core";
 import { tr } from "../../i18n";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
+import { useExploreHistory } from "./ExploreHistoryContext";
 
 type Props = {
   discipline: Discipline;
   courseCount: number;
+  query?: string;
   searchParams: ExploreSearchParams;
 };
 
-export function SearchResultDisciplineCard({ discipline, courseCount, searchParams }: Props) {
+export function SearchResultDisciplineCard({
+  discipline,
+  courseCount,
+  query,
+  searchParams,
+}: Props) {
   const { i18n } = useLingui();
+  const { push } = useExploreHistory();
   const isFr = i18n.locale.startsWith("fr");
   const displayName = isFr ? (discipline.nameFr ?? discipline.name) : discipline.name;
+  const q = query?.trim() ?? "";
 
   return (
     <Link
       to="/explore/discipline/$discipline"
       params={{ discipline: discipline.code.toLowerCase() }}
       search={searchParams}
+      onClick={() => {
+        push({
+          to: "/explore",
+          search: searchParams,
+          label: q ? tr("explore.backToSearch", { q }) : tr("explore.title"),
+        });
+      }}
       style={{
         width: 190,
         minWidth: 190,

@@ -10,6 +10,7 @@ import {
   type CourseOfferingGroup,
 } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
+import type { ExploreHistoryEntry } from "./ExploreHistoryContext";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
@@ -29,9 +30,11 @@ const mobileMediaQuery = "@media (max-width: 540px)";
 function DisciplineProfessorRows({
   group,
   professorRatings,
+  currentEntry,
 }: {
   group: CourseOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
+  currentEntry?: ExploreHistoryEntry;
 }) {
   const professorGroups = useMemo(
     () => groupOfferingsByProfessor(group.offerings),
@@ -62,7 +65,11 @@ function DisciplineProfessorRows({
               },
             }}
           >
-            <ExploreProfessorSummaryBar group={pg} professorRatings={professorRatings} />
+            <ExploreProfessorSummaryBar
+              group={pg}
+              professorRatings={professorRatings}
+              currentEntry={currentEntry}
+            />
           </Paper>
         );
       })}
@@ -73,17 +80,23 @@ function DisciplineProfessorRows({
 function DisciplineCourseItem({
   group,
   professorRatings,
+  currentEntry,
 }: {
   group: CourseOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
+  currentEntry?: ExploreHistoryEntry;
 }) {
   return (
     <Accordion.Item value={group.groupId}>
       <Accordion.Control>
-        <ExploreCourseSummaryBar group={group} />
+        <ExploreCourseSummaryBar group={group} currentEntry={currentEntry} />
       </Accordion.Control>
       <Accordion.Panel>
-        <DisciplineProfessorRows group={group} professorRatings={professorRatings} />
+        <DisciplineProfessorRows
+          group={group}
+          professorRatings={professorRatings}
+          currentEntry={currentEntry}
+        />
       </Accordion.Panel>
     </Accordion.Item>
   );
@@ -139,6 +152,15 @@ export function ExploreDisciplinePage({
   const courseGroups = useMemo(
     () => groupOfferingsByCourse(disciplineOfferings),
     [disciplineOfferings],
+  );
+
+  const disciplineEntry = useMemo<ExploreHistoryEntry>(
+    () => ({
+      to: "/explore/discipline/$discipline",
+      params: { discipline: disciplineCode },
+      label: titleCode,
+    }),
+    [disciplineCode, titleCode],
   );
 
   return (
@@ -234,6 +256,7 @@ export function ExploreDisciplinePage({
                   key={g.groupId}
                   group={g}
                   professorRatings={professorRatings}
+                  currentEntry={disciplineEntry}
                 />
               ))}
             </Accordion>

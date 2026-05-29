@@ -12,6 +12,7 @@ import {
   groupOfferingsByProfessor,
 } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
+import type { ExploreHistoryEntry } from "./ExploreHistoryContext";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { parseCoursePathParam } from "../../lib/explore/courseSearchParams";
 import {
@@ -36,9 +37,11 @@ function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
 function CourseProfessorItem({
   group,
   professorRatings,
+  currentEntry,
 }: {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
+  currentEntry?: ExploreHistoryEntry;
 }) {
   return (
     <Accordion.Item value={group.groupId}>
@@ -47,6 +50,7 @@ function CourseProfessorItem({
           group={group}
           professorRatings={professorRatings}
           stopPropagation
+          currentEntry={currentEntry}
         />
       </Accordion.Control>
       <Accordion.Panel>
@@ -100,6 +104,15 @@ export function ExploreCoursePage({
     () => groupOfferingsByProfessor(courseOfferings),
     [courseOfferings],
   );
+
+  const courseEntry = useMemo<ExploreHistoryEntry | undefined>(() => {
+    if (!selectedCourseMeta) return undefined;
+    return {
+      to: "/explore/course/$course",
+      params: { course: urlCourseParam },
+      label: selectedCourseMeta.courseCode,
+    };
+  }, [selectedCourseMeta, urlCourseParam]);
 
   return (
     <motion.div
@@ -194,6 +207,7 @@ export function ExploreCoursePage({
                   key={g.groupId}
                   group={g}
                   professorRatings={professorRatings}
+                  currentEntry={courseEntry}
                 />
               ))}
             </Accordion>

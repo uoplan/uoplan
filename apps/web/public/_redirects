@@ -1,8 +1,12 @@
-/explore    /explore/index.html   200
-/explore/   /explore/index.html   200
-/graph      /graph/index.html     200
-/step/*     /schedule/step/:splat 301
-/calendar/* /schedule/calendar/:splat 301
-/schedule             /schedule/index.html 200
-/schedule/            /schedule/index.html 200
-/schedule/*           /schedule/ 200
+# Legacy URL migrations to canonical /schedule paths.
+/step/*     /schedule/step/:splat      301
+/calendar/* /schedule/calendar/:splat  301
+
+# Everything else is handled by Workers Assets:
+#   - prerendered section pages (/, /explore, /graph, /schedule) are served from
+#     their <section>/index.html via html_handling, and
+#   - deep dynamic routes fall back to the SPA via
+#     `assets.not_found_handling = "single-page-application"` in wrangler.json.
+# Do NOT add `/<section> -> /<section>/index.html 200` rewrites here: Workers
+# Assets canonicalises `/<section>/index.html` back to `/<section>`, which
+# re-enters the rewrite and causes an infinite redirect loop.
