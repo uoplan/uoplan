@@ -6,8 +6,7 @@ import { IconAffiliate, IconCalendar, IconCompass } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { useCallback, useState, type ReactNode } from "react";
 import { dynamicActivate, tr, type AppLocale } from "../../i18n";
-import { LanguageSwitcher } from "../shared/LanguageSwitcher";
-import { ThemeSwitcher } from "../shared/ThemeSwitcher";
+import { ChromeControls } from "../shared/ChromeControls";
 
 type LandingTileProps = {
   to: string;
@@ -132,24 +131,29 @@ export function LandingPage() {
           backgroundColor: "var(--app-bg)",
           boxSizing: "border-box",
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
         }}
       >
         <Box
           style={{
-            position: "absolute",
-            top: 16,
-            right: 16,
             display: "flex",
+            justifyContent: "flex-end",
             gap: 8,
+            width: "100%",
           }}
         >
-          <ThemeSwitcher />
-          <LanguageSwitcher onSwitch={handleLangSwitch} />
+          <ChromeControls onLangSwitch={handleLangSwitch} />
         </Box>
 
-        <Stack gap="xl" align="center" w="100%" maw={960} pb={16}>
+        <Stack
+          gap="xl"
+          align="center"
+          w="100%"
+          maw={960}
+          pb={16}
+          style={{ flex: 1, justifyContent: "center" }}
+        >
           <Title
             order={1}
             style={{

@@ -462,6 +462,15 @@ msgstr "Retire ce cours de la liste d'exclusion afin qu'il puisse apparaître da
 msgid "languageSwitcher.ariaLabel"
 msgstr "Choisir la langue de l'application"
 
+msgid "settings.ariaLabel"
+msgstr "Paramètres"
+
+msgid "language.en"
+msgstr "Anglais"
+
+msgid "language.frCA"
+msgstr "Français"
+
 msgid "modeStep.advanced.aria"
 msgstr "Mode avancé"
 
