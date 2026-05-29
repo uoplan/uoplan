@@ -16,8 +16,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@uoplan/core": "workspace:*",
-    "@uoplan/proto": "workspace:*"
+    "@uoplan/core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",

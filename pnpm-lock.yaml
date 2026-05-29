@@ -239,9 +239,6 @@ importers:
 
   packages/core:
     dependencies:
-      '@bufbuild/protobuf':
-        specifier: ^2.11.0
-        version: 2.11.0
       '@uoplan/proto':
         specifier: workspace:*
         version: link:../proto
@@ -261,9 +258,6 @@ importers:
       '@uoplan/core':
         specifier: workspace:*
         version: link:../core
-      '@uoplan/proto':
-        specifier: workspace:*
-        version: link:../proto
     devDependencies:
       '@types/node':
         specifier: ^25.5.0

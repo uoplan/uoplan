@@ -27,7 +27,6 @@
     "bench": "vitest bench"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^2.11.0",
     "@uoplan/proto": "workspace:*",
     "fflate": "^0.8.3"
   },
