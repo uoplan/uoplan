@@ -11,6 +11,7 @@
     "lint": "oxlint apps/web/src apps/scrapers/src packages/core/src",
     "lint:fix": "oxlint --fix apps/web/src apps/scrapers/src packages/core/src",
     "check:arch": "node scripts/check-architecture.mjs",
+    "check:i18n": "node scripts/check-i18n.mjs",
     "sync:proto-cli": "cp packages/proto/proto/cli.proto apps/cli/proto/cli.proto",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
@@ -39,6 +40,7 @@
     "oxfmt": "^0.48.0",
     "oxlint": "^1.64.0",
     "oxlint-tsgolint": "^0.22.1",
+    "pofile": "^1.1.4",
     "typescript": "^5.9.3",
     "wrangler": "^4.84.1"
   },

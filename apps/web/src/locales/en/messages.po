@@ -1344,3 +1344,6 @@ msgstr "Dark"
 
 msgid "themeSwitcher.ariaLabel"
 msgstr "Select theme"
+
+msgid "schedule.editor.back"
+msgstr "Back to planner"
