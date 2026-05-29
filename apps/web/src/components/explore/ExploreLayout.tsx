@@ -1,10 +1,10 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState, useSearch } from "@tanstack/react-router";
 import { Anchor, Box, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import type { Catalogue, ProfessorRatingsMap, Term } from "@uoplan/core";
+import type { Catalogue } from "@uoplan/core";
 import { normalizeCourseCode } from "@uoplan/core";
 
 import { tr } from "../../i18n";
@@ -14,7 +14,7 @@ import {
   createExploreCourseFuse,
   searchExplore,
 } from "../../lib/explore/gradesSearch";
-import { ExploreOfferingsProvider, useExploreOfferings } from "./ExploreOfferingsContext";
+import { useExploreOfferings } from "./ExploreOfferingsContext";
 import {
   EMPTY_FILTERS,
   compareCourseEntries,
@@ -138,36 +138,31 @@ function buildDisciplineCourseCount(catalogue: Catalogue | null): Map<string, nu
 }
 
 type ExploreLayoutProps = {
-  showBackButton?: boolean;
-  catalogue: Catalogue | null;
-  terms: Term[];
-  professorRatings: ProfessorRatingsMap | null;
-  searchParams: ExploreSearchParams;
-  onQueryChange?: (v: string, nextSearch: ExploreSearchParams) => void;
   children: ReactNode;
 };
 
-export function ExploreLayout(props: ExploreLayoutProps) {
-  return (
-    <ExploreOfferingsProvider catalogue={props.catalogue} terms={props.terms}>
-      <ExploreLayoutInner {...props} />
-    </ExploreOfferingsProvider>
-  );
-}
+const EXPLORE_INDEX_ROUTE_ID = "/explore/";
 
-function ExploreLayoutInner({
-  showBackButton = false,
-  catalogue,
-  professorRatings,
-  searchParams,
-  onQueryChange,
-  children,
-}: ExploreLayoutProps) {
+export function ExploreLayout({ children }: ExploreLayoutProps) {
   useLingui();
   const { loading, offerings } = useExploreOfferings();
   const navigate = useNavigate();
   const { stack, pop } = useExploreHistory();
-  const disciplines = useAppStore(useShallow((s) => s.disciplines));
+  const { catalogue, professorRatings, disciplines } = useAppStore(
+    useShallow((s) => ({
+      catalogue: s.catalogue,
+      professorRatings: s.professorRatings,
+      disciplines: s.disciplines,
+    })),
+  );
+
+  const searchParams = useSearch({ from: "/explore" });
+
+  const leafRouteId = useRouterState({
+    select: (s) => s.matches[s.matches.length - 1]?.routeId as string | undefined,
+  });
+  const onIndex = leafRouteId === EXPLORE_INDEX_ROUTE_ID;
+  const showBackButton = !onIndex;
 
   const parsedFilters = useMemo(
     () => parseExploreFiltersSearch(searchParams ?? {}),
@@ -176,7 +171,7 @@ function ExploreLayoutInner({
   const [query, setQueryState] = useState(searchParams.q ?? "");
   const [debouncedQuery] = useDebouncedValue(query, 120);
   const [filters, setFilters] = useState<ExploreFilterState>(parsedFilters);
-  const [searchEngaged, setSearchEngaged] = useState(!showBackButton);
+  const [searchEngaged, setSearchEngaged] = useState(onIndex);
 
   useEffect(() => {
     setQueryState(searchParams.q ?? "");
@@ -203,28 +198,28 @@ function ExploreLayoutInner({
     };
   };
 
-  const updateSearchParams = (nextFilters: ExploreFilterState, nextQuery: string) => {
-    const nextSearch = buildSearchParams(nextFilters, nextQuery);
-    void navigate({ search: nextSearch as any, replace: true });
-    return nextSearch;
-  };
-
+  // Search/filter edits always land on the index route's results view. When
+  // already on the index we replace history so keystrokes don't pile up; from a
+  // detail page we push so the in-app/browser back returns to the detail page.
   const handleQueryChange = (v: string) => {
     setQueryState(v);
     setSearchEngaged(true);
-    const nextSearch = buildSearchParams(filters, v);
-    if (onQueryChange) {
-      onQueryChange(v, nextSearch);
-      return;
-    }
-    void navigate({ search: nextSearch as any, replace: true });
+    void navigate({
+      to: "/explore",
+      search: buildSearchParams(filters, v) as any,
+      replace: onIndex,
+    });
   };
 
   const handleFilterChange = (next: Partial<ExploreFilterState>) => {
     setSearchEngaged(true);
     setFilters((prev) => {
       const updated = { ...prev, ...next };
-      updateSearchParams(updated, query);
+      void navigate({
+        to: "/explore",
+        search: buildSearchParams(updated, query) as any,
+        replace: onIndex,
+      });
       return updated;
     });
   };
@@ -302,6 +297,7 @@ function ExploreLayoutInner({
   }, [debouncedQuery, disciplines]);
 
   const showResults = searchEngaged && (debouncedQuery.trim().length > 0 || activeFilters);
+  const renderResults = onIndex && showResults;
   const hasResults =
     (searchResults?.courses.length ?? 0) > 0 ||
     (filterOnlyCourses?.length ?? 0) > 0 ||
@@ -349,6 +345,7 @@ function ExploreLayoutInner({
             <SearchResultDisciplineCard
               discipline={d}
               courseCount={disciplineCourseCount.get(d.code) ?? 0}
+              query={debouncedQuery}
               searchParams={currentSearchParams}
             />
           </motion.div>
@@ -468,11 +465,11 @@ function ExploreLayoutInner({
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          paddingBottom: showResults ? 48 : 0,
+          paddingBottom: renderResults ? 48 : 0,
         }}
       >
         <AnimatePresence mode="wait" initial={false}>
-          {showResults ? (
+          {renderResults ? (
             <motion.div
               key="search-results"
               initial={{ y: 14 }}

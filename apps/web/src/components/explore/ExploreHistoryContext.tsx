@@ -4,8 +4,12 @@ import { IconChevronLeft } from "@tabler/icons-react";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 
 export type ExploreHistoryEntry = {
-  to: "/explore" | "/explore/course/$course" | "/explore/professor/$legacyId";
-  params?: { course: string } | { legacyId: string };
+  to:
+    | "/explore"
+    | "/explore/course/$course"
+    | "/explore/professor/$legacyId"
+    | "/explore/discipline/$discipline";
+  params?: { course: string } | { legacyId: string } | { discipline: string };
   search?: ExploreSearchParams;
   label: string;
 };

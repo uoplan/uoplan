@@ -2,17 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Box, Text } from "@mantine/core";
 import { useShallow } from "zustand/react/shallow";
-import { ExploreLayout } from "../../../components/explore/ExploreLayout";
 import { ExploreProfessorPage } from "../../../components/explore/ExploreProfessorPage";
 import { tr } from "../../../i18n";
 import { useAppStore } from "../../../store/appStore";
-import {
-  validateExploreSearch,
-  type ExploreSearchParams,
-} from "../../../lib/explore/exploreFilters";
 
 export const Route = createFileRoute("/explore/professor/$legacyId")({
-  validateSearch: validateExploreSearch,
   head: ({ params }) => {
     const id = Number.parseInt(params.legacyId, 10);
     const isNumeric = Number.isFinite(id) && id > 0;
@@ -41,36 +35,10 @@ function ExploreProfessorRoute() {
     }
   }, [isNumeric, parsed, courseGrades]);
 
-  const { catalogue, terms, professorRatings } = useAppStore(
-    useShallow((s) => ({
-      catalogue: s.catalogue,
-      terms: s.terms,
-      professorRatings: s.professorRatings,
-    })),
-  );
-
-  const search = Route.useSearch();
-  const navigate = Route.useNavigate();
-
-  const layoutProps = {
-    showBackButton: true as const,
-    catalogue,
-    terms: terms ?? [],
-    professorRatings,
-    searchParams: search,
-    onQueryChange: (_: string, nextSearch: ExploreSearchParams) =>
-      void navigate({
-        search: nextSearch,
-        replace: true,
-      }),
-  };
+  const professorRatings = useAppStore(useShallow((s) => s.professorRatings));
 
   if (isNumeric) {
-    return (
-      <ExploreLayout {...layoutProps}>
-        <ExploreProfessorPage legacyId={parsed} professorRatings={professorRatings} />
-      </ExploreLayout>
-    );
+    return <ExploreProfessorPage legacyId={parsed} professorRatings={professorRatings} />;
   }
 
   const professorName = decodeURIComponent(legacyId);
@@ -82,9 +50,5 @@ function ExploreProfessorRoute() {
     );
   }
 
-  return (
-    <ExploreLayout {...layoutProps}>
-      <ExploreProfessorPage professorName={professorName} professorRatings={professorRatings} />
-    </ExploreLayout>
-  );
+  return <ExploreProfessorPage professorName={professorName} professorRatings={professorRatings} />;
 }
