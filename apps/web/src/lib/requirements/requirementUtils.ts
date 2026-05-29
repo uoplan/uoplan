@@ -556,15 +556,15 @@ export function getConstrainMultiSelectOptions(
       disabled: false,
     }));
 
-  // Individual course options — disable if prefix covered by a selected group
+  // Individual course options — disable if prefix covered by a selected group.
+  // Label is the bare code so selected pills show only the code; the dropdown adds
+  // the title via the MultiSelect's renderOption.
   const courseOptions = availableSorted.map((code) => {
     const norm = normalizeCourseCode(code);
     const usedElsewhere =
       ctx.allAssignedCoursesNormalized.has(norm) && !selectedForDisplay.includes(code);
     const coveredByGroup = selectedGroupPrefixes.has(subjectPrefix(code));
-    const title = ctx.cache?.getCourse(norm)?.title;
-    const label = title ? `${code} – ${title}` : code;
-    return { value: code, label, disabled: usedElsewhere || coveredByGroup };
+    return { value: code, label: code, disabled: usedElsewhere || coveredByGroup };
   });
 
   let options = [...groupOptions, ...courseOptions];

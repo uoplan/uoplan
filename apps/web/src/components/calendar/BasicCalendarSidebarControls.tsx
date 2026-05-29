@@ -12,7 +12,11 @@ import {
 import { IconFileUpload } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
-import { createCourseOptions, renderCourseOption } from "../shared/CourseSelect";
+import {
+  createCourseOptions,
+  renderCourseOption,
+  createCourseOptionsFilter,
+} from "../shared/CourseSelect";
 import { BasicCourseFiltersCard } from "../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../i18n";
@@ -87,38 +91,21 @@ export function BasicCalendarSidebarControls() {
         if (!course) return [];
         if (seen.has(course.code)) return [];
         seen.add(course.code);
-        return [{ value: course.code, label: `${course.code} - ${course.title}` }];
+        return [{ value: course.code, label: course.code }];
       })
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [cache]);
 
-  const requiredCoursesFilter: OptionsFilter = ({ options, search }) => {
-    const splittedSearch = search.toLowerCase().trim().split(" ");
-    return (options as { label: string; value: string }[]).filter((option) => {
-      if (!option.label) return false;
-      const words = option.label.toLowerCase().trim().split(" ");
-      return splittedSearch.every((searchWord) =>
-        words.some((word: string) => word.includes(searchWord)),
-      );
-    });
-  };
+  const courseOptionsFilter = useMemo<OptionsFilter>(
+    () => createCourseOptionsFilter(cache),
+    [cache],
+  );
 
   const completedCourseOptions = useMemo(() => {
     if (!cache) return [];
     const unique = [...new Set(cache.getAllCourses().map((c) => c.code))];
     return createCourseOptions(unique, cache);
   }, [cache]);
-
-  const completedCoursesFilter: OptionsFilter = ({ options, search }) => {
-    const splittedSearch = search.toLowerCase().trim().split(" ");
-    return (options as { label: string; value: string }[]).filter((option) => {
-      if (!option.label) return false;
-      const words = option.label.toLowerCase().trim().split(" ");
-      return splittedSearch.every((searchWord) =>
-        words.some((word: string) => word.includes(searchWord)),
-      );
-    });
-  };
 
   return (
     <>
@@ -133,7 +120,8 @@ export function BasicCalendarSidebarControls() {
             setBasicPinnedCourses(v);
             markBasicSettingsChanged();
           }}
-          filter={requiredCoursesFilter}
+          renderOption={renderCourseOption(cache)}
+          filter={courseOptionsFilter}
           radius={0}
         />
 
@@ -175,6 +163,8 @@ export function BasicCalendarSidebarControls() {
               setBlacklistedCourses(v);
               markBasicSettingsChanged();
             },
+            renderOption: renderCourseOption(cache),
+            filter: courseOptionsFilter,
           }}
           onChangeLevelBuckets={(buckets) => {
             setLevelBuckets(buckets);
@@ -232,7 +222,7 @@ export function BasicCalendarSidebarControls() {
             searchable
             clearable
             renderOption={renderCourseOption(cache)}
-            filter={completedCoursesFilter}
+            filter={courseOptionsFilter}
             nothingFoundMessage={tr("basicCalendar.completed.notFound")}
             radius={0}
           />

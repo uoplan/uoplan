@@ -434,7 +434,8 @@ export const RequirementNode = memo(
                 </Group>
               );
             }
-            const label = option.label;
+            const course = cache?.getCourse(normalizeCourseCode(option.value));
+            const label = course?.title ? `${option.value} – ${course.title}` : option.label;
             const isSelected = selectedForDisplay.includes(option.value);
             const isCompleted = unassignedCompletedSetNormalized.has(
               normalizeCourseCode(option.value),
@@ -477,9 +478,16 @@ export const RequirementNode = memo(
           filter={({ options: opts, search }) => {
             const q = search.toLowerCase().trim();
             if (!q) return opts;
-            return (opts as ComboboxItem[]).filter(
-              (o) => o.value.toLowerCase().includes(q) || o.label.toLowerCase().includes(q),
-            );
+            return (opts as ComboboxItem[]).filter((o) => {
+              const title = isGroupToken(o.value)
+                ? ""
+                : (cache?.getCourse(normalizeCourseCode(o.value))?.title ?? "");
+              return (
+                o.value.toLowerCase().includes(q) ||
+                o.label.toLowerCase().includes(q) ||
+                title.toLowerCase().includes(q)
+              );
+            });
           }}
           nothingFoundMessage={tr("requirementNode.noCoursesFound")}
         />
