@@ -25,7 +25,7 @@
     "types": "./dist/index.d.ts"
   },
   "scripts": {
-    "generate:proto": "protoc --ts_proto_out=./src/generated --proto_path=./proto ./proto/state.proto ./proto/data.proto ./proto/cli.proto --ts_proto_opt=esModuleInterop=true,forceLong=long,useOptionals=messages,outputJsonMethods=false,outputPartialMethods=false",
+    "generate:proto": "mkdir -p ./src/generated && protoc --ts_proto_out=./src/generated --proto_path=./proto ./proto/state.proto ./proto/data.proto ./proto/cli.proto --ts_proto_opt=esModuleInterop=true,forceLong=long,useOptionals=messages,outputJsonMethods=false,outputPartialMethods=false",
     "generate": "pnpm generate:proto",
     "build": "tsc -p tsconfig.json",
     "publish:npm": "pnpm build && pnpm publish --access public --no-git-checks",
