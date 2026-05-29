@@ -1,28 +1,10 @@
 import type { Settings } from "sigma/settings";
 
-function roundRect(
-  context: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  r: number,
-) {
-  const radius = Math.min(r, w / 2, h / 2);
-  context.beginPath();
-  context.moveTo(x + radius, y);
-  context.lineTo(x + w - radius, y);
-  context.quadraticCurveTo(x + w, y, x + w, y + radius);
-  context.lineTo(x + w, y + h - radius);
-  context.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
-  context.lineTo(x + radius, y + h);
-  context.quadraticCurveTo(x, y + h, x, y + h - radius);
-  context.lineTo(x, y + radius);
-  context.quadraticCurveTo(x, y, x + radius, y);
-  context.closePath();
+function themeColor(token: string): string {
+  return getComputedStyle(document.documentElement).getPropertyValue(token).trim();
 }
 
-/** Dark tooltip for hovered professor nodes (replaces Sigma's white hover pill). */
+/** Theme-aware tooltip for hovered professor nodes (replaces Sigma's white hover pill). */
 export function drawProfessorNodeHover(
   context: CanvasRenderingContext2D,
   data: { label?: string | null; x: number; y: number; size: number },
@@ -43,13 +25,14 @@ export function drawProfessorNodeHover(
   const x = data.x - boxW / 2;
   const y = data.y - data.size - boxH - 8;
 
-  context.fillStyle = "rgba(26, 27, 30, 0.96)";
-  context.strokeStyle = "rgba(134, 142, 150, 0.35)";
+  context.fillStyle = themeColor("--app-surface-overlay");
+  context.strokeStyle = themeColor("--app-border");
   context.lineWidth = 1;
-  roundRect(context, x, y, boxW, boxH, 6);
+  context.beginPath();
+  context.rect(x, y, boxW, boxH);
   context.fill();
   context.stroke();
 
-  context.fillStyle = "var(--app-text)";
+  context.fillStyle = themeColor("--app-text");
   context.fillText(data.label, x + padX, y + padY + size * 0.8);
 }

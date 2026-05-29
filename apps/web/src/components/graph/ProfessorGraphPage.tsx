@@ -106,6 +106,13 @@ export function ProfessorGraphPage({
 
   const focusNodeId = selectedNode?.id ?? previewNodeId;
 
+  useEffect(() => {
+    document.title = selectedNode ? `${selectedNode.displayName} — Prof network` : "Prof network";
+    return () => {
+      document.title = "Prof network";
+    };
+  }, [selectedNode]);
+
   const selectedOfferings = useMemo(() => {
     if (!selectedNode) return [];
     return offeringsByProfessorId.get(selectedNode.id) ?? [];
