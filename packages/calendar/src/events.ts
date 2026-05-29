@@ -1,9 +1,9 @@
-import type { GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/schedule";
+import type { GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/core";
 import {
   getRatingsForInstructors,
   getRatingDetailsForInstructors,
   normalizeGradeVizDistribution,
-} from "@uoplan/schedule";
+} from "@uoplan/core";
 import type { CalendarEvent } from "./types";
 
 export function scheduleToEvents(

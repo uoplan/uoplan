@@ -1,8 +1,8 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useLingui } from "@lingui/react";
 import { useMemo, useState } from "react";
-import type { Catalogue } from "@uoplan/schedule";
-import { normalizeCourseCode } from "@uoplan/schedule";
+import type { Catalogue } from "@uoplan/core";
+import { normalizeCourseCode } from "@uoplan/core";
 import {
   buildCourseSpotlightIndex,
   pickSpotlightVariants,

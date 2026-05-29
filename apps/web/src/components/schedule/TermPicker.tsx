@@ -1,6 +1,6 @@
 import { Box, Stack, Text, UnstyledButton } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
-import type { Term } from "@uoplan/schedule";
+import type { Term } from "@uoplan/core";
 
 interface TermPickerProps {
   terms: Term[];

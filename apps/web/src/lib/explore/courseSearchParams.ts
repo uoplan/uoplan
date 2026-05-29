@@ -1,4 +1,4 @@
-import { normalizeCourseCode } from "@uoplan/schedule";
+import { normalizeCourseCode } from "@uoplan/core";
 
 /** Compact lowercase course code for URL path (e.g. `CSI 2110` → `csi2110`). */
 export function courseNormToPathParam(norm: string): string {

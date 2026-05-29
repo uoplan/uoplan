@@ -1,10 +1,12 @@
-import { useMemo, useState } from "react";
-import { Alert, Badge, Box, Collapse, Group, Paper, Stack, Text } from "@mantine/core";
-import { IconChevronDown } from "@tabler/icons-react";
+import { useMemo } from "react";
 import { useAppStore } from "../../store/appStore";
-import { ConstrainStep } from "../requirements/ConstrainStep";
-import { ScheduleCountStep } from "../steps/ScheduleCountStep";
 import { tr } from "../../i18n";
+import {
+  buildPoolCourseOptions,
+  computeFirstYearCredits,
+  countUniqueSelected,
+} from "../../lib/generation/advancedGenerationDerivations";
+import { AdvancedGenerationOptionsView } from "./AdvancedGenerationOptionsView";
 
 export function AdvancedGenerationOptions() {
   const cache = useAppStore((s) => s.cache);
@@ -51,155 +53,75 @@ export function AdvancedGenerationOptions() {
   const setBlacklistedCourses = useAppStore((s) => s.setBlacklistedCourses);
   const setConstrainedForRequirement = useAppStore((s) => s.setConstrainedForRequirement);
 
-  const allPoolCourses = useMemo(() => {
-    const codes = new Set(remainingRequirements.flatMap((r) => r.candidateCourses));
-    return [...codes]
-      .filter((c) => !completedCourses.includes(c))
-      .map((c) => ({ value: c, label: c }))
-      .sort((a, b) => a.label.localeCompare(b.label));
-  }, [remainingRequirements, completedCourses]);
+  const allPoolCourses = useMemo(
+    () => buildPoolCourseOptions(remainingRequirements, completedCourses),
+    [remainingRequirements, completedCourses],
+  );
 
-  const [constrainOpen, setConstrainOpen] = useState(false);
-
-  const uniqueSelected = new Set(Object.values(selectedPerRequirement).flat()).size;
-
-  const completedFirstYearCredits = completedCourses.reduce((sum, code) => {
-    const m = code.match(/\d{4}/);
-    if (!m || Number(m[0]) >= 2000) return sum;
-    return sum + (cache?.getCourse(code)?.credits ?? 3);
-  }, 0);
-  const selectedFirstYearCredits = [...new Set(Object.values(selectedPerRequirement).flat())]
-    .filter((code) => !completedCourses.includes(code))
-    .reduce((sum, code) => {
-      const m = code.match(/\d{4}/);
-      if (!m || Number(m[0]) >= 2000) return sum;
-      return sum + (cache?.getCourse(code)?.credits ?? 3);
-    }, 0);
-  const totalFirstYearCredits = completedFirstYearCredits + selectedFirstYearCredits;
-  const warnFirstYearLimit = totalFirstYearCredits > 48;
+  const uniqueSelected = countUniqueSelected(selectedPerRequirement);
+  const { total: totalFirstYearCredits, warn: warnFirstYearLimit } = computeFirstYearCredits(
+    cache,
+    completedCourses,
+    selectedPerRequirement,
+  );
 
   return (
-    <Stack gap="md">
-      <ScheduleCountStep
-        coursesThisSemester={coursesThisSemester}
-        onCoursesChange={setCoursesThisSemester}
-        selectedCount={uniqueSelected}
-        minStartMinutes={generationMinStartMinutes}
-        onMinStartMinutesChange={setGenerationMinStartMinutes}
-        maxEndMinutes={generationMaxEndMinutes}
-        onMaxEndMinutesChange={setGenerationMaxEndMinutes}
-        allowedDays={generationAllowedDays}
-        onAllowedDaysChange={setGenerationAllowedDays}
-        minProfessorRating={generationMinProfessorRating}
-        onMinProfessorRatingChange={setGenerationMinProfessorRating}
-        totalFirstYearCredits={totalFirstYearCredits}
-        warnFirstYearLimit={warnFirstYearLimit}
-        limitFirstYearCredits={generationLimitFirstYearCredits}
-        onLimitFirstYearCreditsChange={setGenerationLimitFirstYearCredits}
-        compressedSchedule={generationCompressedSchedule}
-        onCompressedScheduleChange={setGenerationCompressedSchedule}
-        preferEasierCourses={generationPreferEasier}
-        onPreferEasierCoursesChange={setGenerationPreferEasier}
-        blacklistedCourses={blacklistedCourses}
-        allPoolCourses={allPoolCourses}
-        onBlacklistedCoursesChange={setBlacklistedCourses}
-        onGenerate={() => {}}
-        generating={false}
-        error={generationError?.message ?? null}
-        errorDetails={generationError?.details ?? null}
-        disableGenerate={unassignedCompletedCourses.length > 0}
-        disableGenerateReason={tr("app.generate.disableReason", {
+    <AdvancedGenerationOptionsView
+      scheduleCount={{
+        coursesThisSemester,
+        onCoursesChange: setCoursesThisSemester,
+        selectedCount: uniqueSelected,
+        minStartMinutes: generationMinStartMinutes,
+        onMinStartMinutesChange: setGenerationMinStartMinutes,
+        maxEndMinutes: generationMaxEndMinutes,
+        onMaxEndMinutesChange: setGenerationMaxEndMinutes,
+        allowedDays: generationAllowedDays,
+        onAllowedDaysChange: setGenerationAllowedDays,
+        minProfessorRating: generationMinProfessorRating,
+        onMinProfessorRatingChange: setGenerationMinProfessorRating,
+        totalFirstYearCredits,
+        warnFirstYearLimit,
+        limitFirstYearCredits: generationLimitFirstYearCredits,
+        onLimitFirstYearCreditsChange: setGenerationLimitFirstYearCredits,
+        compressedSchedule: generationCompressedSchedule,
+        onCompressedScheduleChange: setGenerationCompressedSchedule,
+        preferEasierCourses: generationPreferEasier,
+        onPreferEasierCoursesChange: setGenerationPreferEasier,
+        blacklistedCourses,
+        allPoolCourses,
+        onBlacklistedCoursesChange: setBlacklistedCourses,
+        onGenerate: () => {},
+        generating: false,
+        error: generationError?.message ?? null,
+        errorDetails: generationError?.details ?? null,
+        disableGenerate: unassignedCompletedCourses.length > 0,
+        disableGenerateReason: tr("app.generate.disableReason", {
           count: unassignedCompletedCourses.length,
           suffix: unassignedCompletedCourses.length === 1 ? "" : "s",
-        })}
-        hideGenerateButton
-        beforeGenerate={
-          <Paper
-            withBorder
-            radius={0}
-            style={{
-              backgroundColor: constrainOpen
-                ? "var(--mantine-color-dark-6)"
-                : "var(--mantine-color-dark-8)",
-            }}
-          >
-            <Group
-              justify="space-between"
-              align="center"
-              p="sm"
-              mb="xs"
-              style={{ cursor: "pointer" }}
-              onClick={() => setConstrainOpen((o) => !o)}
-              aria-expanded={constrainOpen}
-              aria-controls="constraints-collapse"
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setConstrainOpen((o) => !o);
-                }
-              }}
-            >
-              <Group gap="xs" align="center">
-                <IconChevronDown
-                  size={14}
-                  aria-hidden="true"
-                  style={{
-                    flexShrink: 0,
-                    transform: constrainOpen ? "rotate(0deg)" : "rotate(-90deg)",
-                    transition: "transform 150ms ease",
-                  }}
-                />
-                <Text fw={600} size="sm">
-                  {tr("app.constraints.heading")}
-                </Text>
-              </Group>
-              <Badge size="sm" variant="light" color="violet">
-                {tr("app.constraints.optional")}
-              </Badge>
-            </Group>
-            <Collapse id="constraints-collapse" expanded={!constrainOpen}>
-              <Alert
-                color="blue"
-                variant="light"
-                radius={0}
-                mx="sm"
-                mb="sm"
-                style={{ border: "none" }}
-              >
-                <Text size="sm">{tr("app.constraints.description")}</Text>
-              </Alert>
-            </Collapse>
-            <Collapse id="constraints-collapse-open" expanded={constrainOpen}>
-              <Box p="sm" pt={0}>
-                <ConstrainStep
-                  cache={cache}
-                  remainingRequirements={remainingRequirements}
-                  requirementTreeWithStatus={requirementTreeWithStatus}
-                  completedRequirementsList={completedRequirementsList}
-                  completedCourses={completedCourses}
-                  selectedPerRequirement={selectedPerRequirement}
-                  constrainedPerRequirement={constrainedPerRequirement}
-                  onConstrain={setConstrainedForRequirement}
-                  selectedOptionsPerRequirement={selectedOptionsPerRequirement}
-                  prereqEligibleCourses={filteredPrereqEligibleCourses}
-                  levelBuckets={levelBuckets}
-                  languageBuckets={languageBuckets}
-                  onChangeLevelBuckets={setLevelBuckets}
-                  onChangeLanguageBuckets={setLanguageBuckets}
-                  electiveLevelBuckets={electiveLevelBuckets}
-                  onChangeElectiveLevelBuckets={setElectiveLevelBuckets}
-                  includeClosedComponents={includeClosedComponents}
-                  onIncludeClosedComponentsChange={setIncludeClosedComponents}
-                  virtualSectionsOnly={virtualSectionsOnly}
-                  onVirtualSectionsOnlyChange={setVirtualSectionsOnly}
-                />
-              </Box>
-            </Collapse>
-          </Paper>
-        }
-      />
-    </Stack>
+        }),
+      }}
+      constrain={{
+        cache,
+        remainingRequirements,
+        requirementTreeWithStatus,
+        completedRequirementsList,
+        completedCourses,
+        selectedPerRequirement,
+        constrainedPerRequirement,
+        onConstrain: setConstrainedForRequirement,
+        selectedOptionsPerRequirement,
+        prereqEligibleCourses: filteredPrereqEligibleCourses,
+        levelBuckets,
+        languageBuckets,
+        onChangeLevelBuckets: setLevelBuckets,
+        onChangeLanguageBuckets: setLanguageBuckets,
+        electiveLevelBuckets,
+        onChangeElectiveLevelBuckets: setElectiveLevelBuckets,
+        includeClosedComponents,
+        onIncludeClosedComponentsChange: setIncludeClosedComponents,
+        virtualSectionsOnly,
+        onVirtualSectionsOnlyChange: setVirtualSectionsOnly,
+      }}
+    />
   );
 }

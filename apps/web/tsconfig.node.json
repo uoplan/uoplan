@@ -9,5 +9,11 @@
     "skipLibCheck": true,
     "target": "ES2022"
   },
-  "include": ["vite/**/*.ts", "vite.config.ts", "../../eslint.config.ts"]
+  "include": [
+    "vite/**/*.ts",
+    "vite.config.ts",
+    "playwright.config.ts",
+    "e2e/**/*.ts",
+    "../../eslint.config.ts"
+  ]
 }

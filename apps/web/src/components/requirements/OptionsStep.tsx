@@ -1,8 +1,8 @@
 import { Alert, Stack, Text } from "@mantine/core";
-import type { RequirementWithStatus } from "@uoplan/schedule";
+import type { RequirementWithStatus } from "@uoplan/core";
 import { getStableNodeKey } from "./RequirementNode";
 import { OptionsDrilldown } from "./OptionsDrilldown";
-import { nodeHasOptionGroups } from "./requirementUtils";
+import { nodeHasOptionGroups } from "../../lib/requirements/requirementUtils";
 import { tr } from "../../i18n";
 
 interface OptionsStepProps {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { GradeVizData } from "@uoplan/schedule";
+import type { GradeVizData } from "@uoplan/core";
 import type { ExploreCourseSearchEntry, ExploreProfessorSearchEntry } from "./gradesSearch";
 import {
   EMPTY_FILTERS,

@@ -1,4 +1,4 @@
-import type { DayOfWeek as DayOfWeekCode, GradeVizData } from "@uoplan/schedule";
+import type { DayOfWeek as DayOfWeekCode, GradeVizData } from "@uoplan/core";
 
 export type { DayOfWeekCode };
 

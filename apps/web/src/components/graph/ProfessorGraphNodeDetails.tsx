@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Badge, Box, Group, SegmentedControl, Stack, Text, UnstyledButton } from "@mantine/core";
 import { useMemo, type CSSProperties } from "react";
-import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/schedule";
-import { colorForDiscipline, normalizeProfessorName } from "@uoplan/schedule";
+import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/core";
+import { colorForDiscipline, normalizeProfessorName } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {

@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import type { RequirementWithStatus } from "@uoplan/schedule";
+import type { RequirementWithStatus } from "@uoplan/core";
 import {
   getGenerateBlockers,
   getScheduleDashboardCards,

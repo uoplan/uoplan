@@ -1,6 +1,6 @@
 import { ActionIcon, Box, Group, Stack, Text } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
-import type { DataCache, GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/schedule";
+import type { DataCache, GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/core";
 import type { SwapCandidateOption, SwapModalState, SwapResult } from "../../hooks/useSwapModal";
 import { EventStyleCard } from "./EventStyleCard";
 import { GradeDistributionExpanded } from "./GradeDistributionViz";
@@ -8,16 +8,11 @@ import { SwapCourseDropdown } from "./SwapCourseDropdown";
 import {
   isCourseInPerRequirementMaps,
   resolveRequirementIdsForScheduleCourse,
-} from "../requirements/requirementUtils";
+} from "../../lib/requirements/requirementUtils";
 import { useAppStore } from "../../store/appStore";
-import {
-  isAdvancedPlannerActive,
-  isBasicPlannerActive,
-  isPlannerVariantActive,
-} from "../../lib/calendarRoute";
 import { ActionIcon as MantineActionIcon, Tooltip } from "@mantine/core";
 import { IconBan, IconLock, IconLockFilled } from "@tabler/icons-react";
-import { normalizeCourseCode } from "@uoplan/schedule";
+import { normalizeCourseCode } from "@uoplan/core";
 import { useMemo } from "react";
 import { tr } from "../../i18n";
 
@@ -63,9 +58,10 @@ export function SwapPanel({
   const remainingRequirements = useAppStore((s) => s.remainingRequirements);
   const requirementTreeWithStatus = useAppStore((s) => s.requirementTreeWithStatus);
   const selectedOptionsPerRequirement = useAppStore((s) => s.selectedOptionsPerRequirement);
+  const calendarMode = useAppStore((s) => s.calendarMode);
 
-  const isBasic = isBasicPlannerActive();
-  const isAdvanced = isAdvancedPlannerActive();
+  const isBasic = calendarMode === "basic";
+  const isAdvanced = calendarMode === "advanced";
 
   const courseCode = modalState.courseCode;
   const courseNorm = normalizeCourseCode(courseCode);
@@ -117,7 +113,7 @@ export function SwapPanel({
   );
 
   const canLock =
-    isPlannerVariantActive() &&
+    calendarMode !== null &&
     !isGenerationPinned &&
     !isInAssignSelections &&
     !lockUnavailable &&
@@ -126,7 +122,7 @@ export function SwapPanel({
   const lockControlDisabled = !canLock && !canUnlock;
 
   const canBlacklist =
-    isPlannerVariantActive() && !isGenerationPinned && !isInAssignSelections && !isBlacklisted;
+    calendarMode !== null && !isGenerationPinned && !isInAssignSelections && !isBlacklisted;
   const canUnblacklist = isBlacklisted;
   const blacklistControlDisabled = !canBlacklist && !canUnblacklist;
 

@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Box, Stack, Text } from "@mantine/core";
 import { useLingui } from "@lingui/react";
-import type { GradeVizData } from "@uoplan/schedule";
+import type { GradeVizData } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import type { ExploreCourseSearchEntry } from "../../lib/explore/gradesSearch";

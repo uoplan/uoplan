@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { flushPersistedAppState } from "../lib/persistAppState";
-import { useAppStore } from "../store/appStore";
+import { useAppStore, useAppStoreApi } from "../store/appStore";
 import type { AppStore } from "../store/types";
 
 const DEBOUNCE_MS = 400;
@@ -54,6 +54,7 @@ export { hasPersistedStateChange };
  */
 export function usePersistState(enabled: boolean): void {
   const getEncodedStateBase64 = useAppStore((s) => s.getEncodedStateBase64);
+  const storeApi = useAppStoreApi();
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -65,16 +66,16 @@ export function usePersistState(enabled: boolean): void {
 
     const schedule = (state: AppStore, prevState: AppStore) => {
       if (!hasPersistedStateChange(state, prevState)) return;
-      useAppStore.setState({ hasPendingSave: true });
+      storeApi.setState({ hasPendingSave: true });
       if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(flush, DEBOUNCE_MS);
     };
 
-    const unsub = useAppStore.subscribe(schedule);
+    const unsub = storeApi.subscribe(schedule);
 
     return () => {
       unsub();
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [enabled, getEncodedStateBase64]);
+  }, [enabled, getEncodedStateBase64, storeApi]);
 }

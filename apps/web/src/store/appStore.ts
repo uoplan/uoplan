@@ -1,5 +1,7 @@
-import { create } from "zustand";
-import { generateRandomSeed } from "@uoplan/schedule";
+import { createStore, type StoreApi } from "zustand/vanilla";
+import { useStore } from "zustand";
+import { createContext, useContext } from "react";
+import { generateRandomSeed } from "@uoplan/core";
 import type { AppStore } from "./types";
 import { LOCAL_STORAGE_KEY } from "./constants";
 import {
@@ -9,165 +11,203 @@ import {
   createSchedulesSlice,
   createSelectionSlice,
 } from "./slices/index";
+import { type AppServices, createDefaultAppServices } from "./services";
 import {
   DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS,
   DEFAULT_BASIC_LANGUAGE_BUCKETS,
   DEFAULT_BASIC_LEVEL_BUCKETS,
 } from "../lib/electiveEligibility";
 
-export const useAppStore = create<AppStore>()((...a) => {
-  const [set, get] = a;
+export type AppStoreApi = StoreApi<AppStore>;
 
-  return {
-    // Merge slices
-    ...createDataSlice(...a),
-    ...createUrlSlice(...a),
-    ...createSelectionSlice(...a),
-    ...createConstraintsSlice(...a),
-    ...createSchedulesSlice(...a),
+/**
+ * Build an isolated app store. Services (navigation, …) are injected so tests and the OG
+ * worker can supply fakes; production uses {@link createDefaultAppServices}.
+ */
+export function createAppStore(services: AppServices = createDefaultAppServices()): AppStoreApi {
+  return createStore<AppStore>()((...a) => {
+    const [set, get] = a;
 
-    // Initial State values that are cross-slice or global defaults
-    catalogue: null,
-    indices: null,
-    schedulesData: null,
-    cache: null,
-    courseGrades: null,
-    courseGradesError: null,
-    disciplines: null,
-    loading: false,
-    loadProgress: 0,
-    error: null,
-    terms: null,
-    selectedTermId: null,
-    availableYears: [],
-    firstYear: null,
-    yearCataloguePrograms: null,
-    yearCatalogueCourses: null,
-    yearCatalogueLoading: false,
-    program: null,
-    minorProgram: null,
-    basicPinnedCourses: [],
-    basicElectivesCount: 0,
-    basicExcludedCategories: [],
-    studentPrograms: [],
-    completedCourses: [],
-    remainingRequirements: [],
-    requirementTreeWithStatus: [],
-    completedRequirementsList: [],
-    selectedPerRequirement: {},
-    requirementSlotsUserTouched: {},
-    selectedOptionsPerRequirement: {},
-    constrainedPerRequirement: {},
-    coursesThisSemester: 5,
-    prereqEligibleCourses: [],
-    filteredPrereqEligibleCourses: [],
-    levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
-    languageBuckets: [...DEFAULT_BASIC_LANGUAGE_BUCKETS],
-    electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
-    currentSchedule: null,
-    scheduleGenerating: false,
-    swapPool: [],
-    chosenCourseToRequirementId: {},
-    currentPoolMap: {},
-    currentColorMap: {},
-    generationError: null,
-    unassignedCompletedCourses: [],
-    currentSwaps: [],
-    swapsPerSeed: {},
-    firstSeed: generateRandomSeed(),
-    currentSeed: 0, // Will be set to firstSeed when first generated
-    lowestVisitedSeed: null,
-    generationMinStartMinutes: 8 * 60 + 30, // 8:30
-    generationMaxEndMinutes: 22 * 60, // 22:00
-    generationAllowedDays: ["Mo", "Tu", "We", "Th", "Fr"],
-    includeClosedComponents: false,
-    virtualSectionsOnly: false,
-    generationMinProfessorRating: null,
-    professorRatings: null,
-    generationLimitFirstYearCredits: true,
-    generationCompressedSchedule: false,
-    generationPreferEasier: false,
-    frenchImmersionStream: false,
-    calendarWeekIndex: null,
-    scheduleNoVariety: false,
-    blacklistedCourses: [],
-    lastSavedAt: null,
-    hasPendingSave: false,
-    pendingSharedState: null,
+    return {
+      // Merge slices
+      ...createDataSlice(services)(...a),
+      ...createUrlSlice(...a),
+      ...createSelectionSlice(...a),
+      ...createConstraintsSlice(...a),
+      ...createSchedulesSlice(...a),
 
-    setCalendarWeekIndex: (index) => set({ calendarWeekIndex: index }),
+      // Initial State values that are cross-slice or global defaults
+      catalogue: null,
+      indices: null,
+      schedulesData: null,
+      cache: null,
+      courseGrades: null,
+      courseGradesError: null,
+      disciplines: null,
+      loading: false,
+      loadProgress: 0,
+      error: null,
+      terms: null,
+      selectedTermId: null,
+      availableYears: [],
+      firstYear: null,
+      yearCataloguePrograms: null,
+      yearCatalogueCourses: null,
+      yearCatalogueLoading: false,
+      program: null,
+      minorProgram: null,
+      basicPinnedCourses: [],
+      basicElectivesCount: 0,
+      basicExcludedCategories: [],
+      studentPrograms: [],
+      completedCourses: [],
+      remainingRequirements: [],
+      requirementTreeWithStatus: [],
+      completedRequirementsList: [],
+      selectedPerRequirement: {},
+      requirementSlotsUserTouched: {},
+      selectedOptionsPerRequirement: {},
+      constrainedPerRequirement: {},
+      coursesThisSemester: 5,
+      prereqEligibleCourses: [],
+      filteredPrereqEligibleCourses: [],
+      levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
+      languageBuckets: [...DEFAULT_BASIC_LANGUAGE_BUCKETS],
+      electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
+      currentSchedule: null,
+      scheduleGenerating: false,
+      swapPool: [],
+      chosenCourseToRequirementId: {},
+      currentPoolMap: {},
+      currentColorMap: {},
+      generationError: null,
+      unassignedCompletedCourses: [],
+      currentSwaps: [],
+      swapsPerSeed: {},
+      firstSeed: generateRandomSeed(),
+      currentSeed: 0, // Will be set to firstSeed when first generated
+      lowestVisitedSeed: null,
+      generationMinStartMinutes: 8 * 60 + 30, // 8:30
+      generationMaxEndMinutes: 22 * 60, // 22:00
+      generationAllowedDays: ["Mo", "Tu", "We", "Th", "Fr"],
+      includeClosedComponents: false,
+      virtualSectionsOnly: false,
+      generationMinProfessorRating: null,
+      professorRatings: null,
+      generationLimitFirstYearCredits: true,
+      generationCompressedSchedule: false,
+      generationPreferEasier: false,
+      frenchImmersionStream: false,
+      calendarWeekIndex: null,
+      calendarMode: null,
+      scheduleNoVariety: false,
+      blacklistedCourses: [],
+      lastSavedAt: null,
+      hasPendingSave: false,
+      pendingSharedState: null,
 
-    // Global action: touches many states
-    resetToDefault: () => {
-      const {
-        catalogue,
-        indices,
-        schedulesData,
-        cache,
-        courseGrades,
-        courseGradesError,
-        disciplines,
-        loading,
-        loadProgress,
-        error,
-        availableYears,
-      } = get();
-      set({
-        catalogue,
-        indices,
-        schedulesData,
-        cache,
-        courseGrades,
-        courseGradesError,
-        disciplines,
-        loading,
-        loadProgress,
-        error,
-        availableYears,
-        firstYear: null,
-        basicPinnedCourses: [],
-        basicElectivesCount: 0,
-        basicExcludedCategories: [],
-        yearCataloguePrograms: null,
-        yearCatalogueCourses: null,
-        yearCatalogueLoading: false,
-        program: null,
-        minorProgram: null,
-        completedCourses: [],
-        remainingRequirements: [],
-        requirementTreeWithStatus: [],
-        completedRequirementsList: [],
-        selectedPerRequirement: {},
-        requirementSlotsUserTouched: {},
-        selectedOptionsPerRequirement: {},
-        constrainedPerRequirement: {},
-        coursesThisSemester: 5,
-        prereqEligibleCourses: [],
-        filteredPrereqEligibleCourses: [],
-        levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
-        languageBuckets: [...DEFAULT_BASIC_LANGUAGE_BUCKETS],
-        electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
-        currentSchedule: null,
-        scheduleGenerating: false,
-        swapPool: [],
-        chosenCourseToRequirementId: {},
-        currentPoolMap: {},
-        currentColorMap: {},
-        generationError: null,
-        unassignedCompletedCourses: [],
-        currentSwaps: [],
-        firstSeed: generateRandomSeed(),
-        currentSeed: 0,
-        lowestVisitedSeed: null,
-        includeClosedComponents: false,
-        virtualSectionsOnly: false,
-        frenchImmersionStream: false,
-        calendarWeekIndex: null,
-        blacklistedCourses: [],
-      });
-      if (typeof window !== "undefined") {
-        localStorage.removeItem(LOCAL_STORAGE_KEY);
-      }
-    },
-  };
-});
+      setCalendarWeekIndex: (index) => set({ calendarWeekIndex: index }),
+      setCalendarMode: (mode) => set({ calendarMode: mode }),
+
+      // Global action: touches many states
+      resetToDefault: () => {
+        const {
+          catalogue,
+          indices,
+          schedulesData,
+          cache,
+          courseGrades,
+          courseGradesError,
+          disciplines,
+          loading,
+          loadProgress,
+          error,
+          availableYears,
+        } = get();
+        set({
+          catalogue,
+          indices,
+          schedulesData,
+          cache,
+          courseGrades,
+          courseGradesError,
+          disciplines,
+          loading,
+          loadProgress,
+          error,
+          availableYears,
+          firstYear: null,
+          basicPinnedCourses: [],
+          basicElectivesCount: 0,
+          basicExcludedCategories: [],
+          yearCataloguePrograms: null,
+          yearCatalogueCourses: null,
+          yearCatalogueLoading: false,
+          program: null,
+          minorProgram: null,
+          completedCourses: [],
+          remainingRequirements: [],
+          requirementTreeWithStatus: [],
+          completedRequirementsList: [],
+          selectedPerRequirement: {},
+          requirementSlotsUserTouched: {},
+          selectedOptionsPerRequirement: {},
+          constrainedPerRequirement: {},
+          coursesThisSemester: 5,
+          prereqEligibleCourses: [],
+          filteredPrereqEligibleCourses: [],
+          levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
+          languageBuckets: [...DEFAULT_BASIC_LANGUAGE_BUCKETS],
+          electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
+          currentSchedule: null,
+          scheduleGenerating: false,
+          swapPool: [],
+          chosenCourseToRequirementId: {},
+          currentPoolMap: {},
+          currentColorMap: {},
+          generationError: null,
+          unassignedCompletedCourses: [],
+          currentSwaps: [],
+          firstSeed: generateRandomSeed(),
+          currentSeed: 0,
+          lowestVisitedSeed: null,
+          includeClosedComponents: false,
+          virtualSectionsOnly: false,
+          frenchImmersionStream: false,
+          calendarWeekIndex: null,
+          blacklistedCourses: [],
+        });
+        if (typeof window !== "undefined") {
+          localStorage.removeItem(LOCAL_STORAGE_KEY);
+        }
+      },
+    };
+  });
+}
+
+/** Default singleton store used by the running app and by non-React/imperative callers. */
+export const defaultAppStore = createAppStore();
+
+/**
+ * Context holding the active store instance. Provided by {@link AppStoreProvider}; there is no
+ * silent singleton fallback so a missing provider fails loudly (keeps tests truly isolated).
+ */
+export const AppStoreContext = createContext<AppStoreApi | null>(null);
+
+/** Subscribe to the active store with a selector. Requires an {@link AppStoreProvider} ancestor. */
+export function useAppStore<T>(selector: (state: AppStore) => T): T {
+  const store = useContext(AppStoreContext);
+  if (!store) {
+    throw new Error("useAppStore must be used within <AppStoreProvider>");
+  }
+  return useStore(store, selector);
+}
+
+/** Access the active store instance for imperative reads/writes inside React. */
+export function useAppStoreApi(): AppStoreApi {
+  const store = useContext(AppStoreContext);
+  if (!store) {
+    throw new Error("useAppStoreApi must be used within <AppStoreProvider>");
+  }
+  return store;
+}

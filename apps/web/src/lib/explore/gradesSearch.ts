@@ -5,13 +5,13 @@ import type {
   GradeVizData,
   ProfessorRatingsMap,
   SchedulesData,
-} from "@uoplan/schedule";
+} from "@uoplan/core";
 import {
   normalizeCourseCode,
   normalizeProfessorName,
   normalizeGradeVizDistribution,
   getCourseLanguageBucket,
-} from "@uoplan/schedule";
+} from "@uoplan/core";
 import { searchProfessorsScored, type ProfessorSearchEntry } from "../graph/professorGraphSearch";
 import { formatUottawaTermIdLabel } from "./uottawaTermId";
 import { getCourseLevel, type ExploreFilterLevel } from "./exploreFilters";

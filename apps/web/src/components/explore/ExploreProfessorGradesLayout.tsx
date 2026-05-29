@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Accordion, Box, Group, Paper, Stack, Text } from "@mantine/core";
 import { useMemo } from "react";
-import type { ProfessorRatingsMap } from "@uoplan/schedule";
-import { normalizeProfessorName, normalizeGradeVizDistribution } from "@uoplan/schedule";
+import type { ProfessorRatingsMap } from "@uoplan/core";
+import { normalizeProfessorName, normalizeGradeVizDistribution } from "@uoplan/core";
 import {
   GradeDistributionHistogram,
   GradeDistributionPassingSummary,

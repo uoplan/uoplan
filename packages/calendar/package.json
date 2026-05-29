@@ -9,6 +9,6 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@uoplan/schedule": "workspace:*"
+    "@uoplan/core": "workspace:*"
   }
 }

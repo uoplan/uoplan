@@ -27,11 +27,12 @@ import {
   IconShare,
   IconTerminal,
 } from "@tabler/icons-react";
-import { useAppStore } from "../../store/appStore";
+import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { CalendarView } from "./CalendarView";
 import { ResetModal } from "../shared/ResetModal";
-import { buildScheduleIcs, downloadTextFile } from "@uoplan/schedule";
+import { buildScheduleIcs } from "@uoplan/core";
+import { downloadTextFile } from "../../lib/downloadFile";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateRange";
 import { tr } from "../../i18n";
@@ -47,7 +48,6 @@ import { AdvancedGenerationOptions } from "./AdvancedGenerationOptions";
 import { BasicGenerationOptions } from "./BasicGenerationOptions";
 import { SaveStatusIndicator } from "./SaveStatusIndicator";
 import { encodeSchedulePayload } from "../../lib/encodeSchedulePayload";
-import { setCalendarMode } from "../../lib/calendarRoute";
 import { navigateToWizardStep } from "../../lib/appNavigation";
 import { WizardStep } from "../../lib/wizardSteps";
 import { useScheduleWeeks } from "../../hooks/useScheduleWeeks";
@@ -98,11 +98,12 @@ export function CalendarPage() {
 
   const hasProgram = program !== null;
 
-  // Sync module-level calendar mode so generation logic knows which path is active
+  const setCalendarMode = useAppStore((s) => s.setCalendarMode);
+  // Sync the active calendar mode so generation logic knows which path is active.
   useEffect(() => {
     setCalendarMode(hasProgram ? "advanced" : "basic");
     return () => setCalendarMode(null);
-  }, [hasProgram]);
+  }, [hasProgram, setCalendarMode]);
 
   const calendarWeekIndex = useAppStore((s) => s.calendarWeekIndex);
   const setCalendarWeekIndex = useAppStore((s) => s.setCalendarWeekIndex);
@@ -116,7 +117,8 @@ export function CalendarPage() {
     setCalendarWeekIndex(weekIndex);
   }, [weekIndex, setCalendarWeekIndex]);
 
-  const clearGenerationError = () => useAppStore.setState({ generationError: null });
+  const storeApi = useAppStoreApi();
+  const clearGenerationError = () => storeApi.setState({ generationError: null });
   const undoLastSwap = useAppStore((s) => s.undoLastSwap);
   const getShareUrl = useAppStore((s) => s.getShareUrl);
   const goToPreviousSeed = useAppStore((s) => s.goToPreviousSeed);
@@ -475,6 +477,7 @@ export function CalendarPage() {
       <GenerationErrorModal error={generationError} onClose={clearGenerationError} />
       <Box
         component="main"
+        data-testid="calendar-page"
         style={{
           width: "100%",
           height: "100dvh",

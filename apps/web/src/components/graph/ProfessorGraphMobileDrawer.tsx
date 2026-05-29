@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Drawer, ScrollArea } from "@mantine/core";
-import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/schedule";
+import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/core";
 import { tr } from "../../i18n";
 import type { ExploreOfferingFlat } from "../../lib/explore/gradesSearch";
 import type { GraphNeighbor, NeighborSortMode } from "../../lib/graph/professorGraphDetails";

@@ -3,7 +3,7 @@ import { useLingui } from "@lingui/react";
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import type { Discipline, ProfessorRatingsMap } from "@uoplan/schedule";
+import type { Discipline, ProfessorRatingsMap } from "@uoplan/core";
 import {
   groupOfferingsByCourse,
   groupOfferingsByProfessor,

@@ -9,10 +9,9 @@ import {
   isOptCourse,
   normalizeCourseCode,
   makeGroupTokenInstance,
-} from "@uoplan/schedule";
+} from "@uoplan/core";
 import { recomputeStateForProgram } from "../requirementCompute";
-import type { Course } from "@uoplan/schedule";
-import { wizardModeForEncoding } from "../../lib/calendarRoute";
+import type { Course } from "@uoplan/core";
 import { inferLowestVisitedSeedFromPersisted } from "../../lib/seedNavigation";
 
 interface UrlSlice {
@@ -46,9 +45,7 @@ function buildEncodeInput(s: AppStore): EncodeInput {
     includeClosedComponents: s.includeClosedComponents,
     virtualSectionsOnly: s.virtualSectionsOnly,
     studentPrograms: s.studentPrograms,
-    wizardMode: wizardModeForEncoding(
-      typeof window !== "undefined" ? window.location.pathname : "",
-    ),
+    wizardMode: s.calendarMode,
     basicPinnedCourses: s.basicPinnedCourses,
     basicElectivesCount: s.basicElectivesCount,
     basicExcludedCategories: s.basicExcludedCategories,

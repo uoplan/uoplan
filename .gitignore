@@ -12,3 +12,7 @@ dist
 playground
 worker-configuration.d.ts
 .wrangler
+playwright-report
+test-results
+.vitest-attachments
+__screenshots__

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { DataCache, RemainingRequirement } from "@uoplan/schedule";
+import type { DataCache, RemainingRequirement } from "@uoplan/core";
 import {
   getAutoSelectedForRequirements,
   compareReqPreference,

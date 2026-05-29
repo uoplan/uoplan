@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { useAppStore } from "../store/appStore";
+import { defaultAppStore } from "../store/appStore";
 import { hasPersistedStateChange } from "./usePersistState";
 
 describe("hasPersistedStateChange", () => {
   it("ignores schedule display-only updates", () => {
-    const prev = useAppStore.getState();
+    const prev = defaultAppStore.getState();
     const next = {
       ...prev,
       scheduleGenerating: true,
@@ -15,7 +15,7 @@ describe("hasPersistedStateChange", () => {
   });
 
   it("detects updates that are encoded into persisted state", () => {
-    const prev = useAppStore.getState();
+    const prev = defaultAppStore.getState();
     const next = {
       ...prev,
       completedCourses: [...prev.completedCourses, "CSI 3105"],

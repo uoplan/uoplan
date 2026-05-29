@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import type { Catalogue, Program } from "@uoplan/schedule";
-import type { SchedulesData } from "@uoplan/schedule";
-import { buildDataCache } from "@uoplan/schedule";
+import type { Catalogue, Program } from "@uoplan/core";
+import type { SchedulesData } from "@uoplan/core";
+import { buildDataCache } from "@uoplan/core";
 import { recomputeStateForProgram } from "./requirementCompute";
 
 const emptySchedules: SchedulesData = { termId: "2261", schedules: [] };

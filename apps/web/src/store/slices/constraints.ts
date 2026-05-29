@@ -1,7 +1,6 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
-import { generateRandomSeed } from "@uoplan/schedule";
-import { clearEnrollmentsCache } from "./schedules";
+import { generateRandomSeed } from "@uoplan/core";
 
 interface ConstraintsSlice {
   setGenerationMinStartMinutes: AppStore["setGenerationMinStartMinutes"];
@@ -16,14 +15,17 @@ interface ConstraintsSlice {
   setBlacklistedCourses: AppStore["setBlacklistedCourses"];
 }
 
-export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsSlice> = (set) => ({
+export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsSlice> = (
+  set,
+  get,
+) => ({
   setIncludeClosedComponents: (value) => {
-    clearEnrollmentsCache();
+    get().clearEnrollmentsCache();
     set({ includeClosedComponents: value });
   },
 
   setVirtualSectionsOnly: (value) => {
-    clearEnrollmentsCache();
+    get().clearEnrollmentsCache();
     set({ virtualSectionsOnly: value });
   },
 

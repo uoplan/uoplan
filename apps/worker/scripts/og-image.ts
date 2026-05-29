@@ -21,13 +21,9 @@ import {
   fromProtoSchedulesData,
   getMergedCatalogue,
   peekTermAndYearFromBase64,
-} from "@uoplan/schedule";
-import {
-  buildColorMap,
   reconstructScheduleForPreview,
-  renderCalendarToSvg,
-  scheduleToEvents,
-} from "@uoplan/calendar";
+} from "@uoplan/core";
+import { buildColorMap, renderCalendarToSvg, scheduleToEvents } from "@uoplan/calendar";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // WORKER_ROOT is injected by esbuild at build time (see og-image-runner.mjs)

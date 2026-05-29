@@ -145,3 +145,39 @@ pub async fn add_courses_to_cart(
     }
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::decode_payload;
+
+    // Shared cross-language wire contract for cli.proto's SchedulePayload.
+    // The TS encoder (packages/schedule/src/tests/cliPayloadContract.test.ts)
+    // pins the same fixture; both sides must agree on the bytes.
+    const FIXTURE: &str =
+        include_str!("../../../../../packages/proto/fixtures/cli-schedule-payload.json");
+
+    #[test]
+    fn decodes_shared_fixture_payload() {
+        let fixture: serde_json::Value = serde_json::from_str(FIXTURE).unwrap();
+        let base64_std = fixture["base64Std"].as_str().unwrap();
+
+        let payload = decode_payload(base64_std).expect("fixture payload should decode");
+
+        assert_eq!(payload.term_id, 2249);
+        assert_eq!(payload.courses.len(), 2);
+
+        let csi = &payload.courses[0];
+        assert_eq!(csi.course_code, "CSI2110");
+        assert_eq!(csi.sections.len(), 2);
+        assert_eq!(csi.sections[0].component, "LEC");
+        assert_eq!(csi.sections[0].section, "A00");
+        assert_eq!(csi.sections[1].component, "LAB");
+        assert_eq!(csi.sections[1].section, "L01");
+
+        let mat = &payload.courses[1];
+        assert_eq!(mat.course_code, "MAT1320");
+        assert_eq!(mat.sections.len(), 1);
+        assert_eq!(mat.sections[0].component, "LEC");
+        assert_eq!(mat.sections[0].section, "B00");
+    }
+}

@@ -22,20 +22,20 @@ import {
 import type { PaperProps } from "@mantine/core";
 import { IconCheck, IconChevronDown, IconX, IconChartCohort } from "@tabler/icons-react";
 import type { ComboboxItem } from "@mantine/core";
-import type { DataCache } from "@uoplan/schedule";
+import type { DataCache } from "@uoplan/core";
 import {
   normalizeCourseCode,
   isGroupToken,
   groupTokenPrefix,
   canonicalGroupToken,
   makeGroupTokenInstance,
-} from "@uoplan/schedule";
-import type { RequirementWithStatus } from "@uoplan/schedule";
+} from "@uoplan/core";
+import type { RequirementWithStatus } from "@uoplan/core";
 import {
   getConstrainMultiSelectOptions,
   getOptionSecondarySummaryLine,
   simplifySingleChildChain,
-} from "./requirementUtils";
+} from "../../lib/requirements/requirementUtils";
 import { tr } from "../../i18n";
 
 export const REQUIREMENT_INDENT_PX = 12;

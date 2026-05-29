@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildProfessorSearchEntries, searchProfessors } from "./professorGraphSearch";
-import type { ProfessorGraphNode } from "@uoplan/schedule";
+import type { ProfessorGraphNode } from "@uoplan/core";
 
 function node(
   partial: Partial<ProfessorGraphNode> & Pick<ProfessorGraphNode, "id" | "displayName">,

@@ -1,18 +1,18 @@
 import { useState, useMemo, type MouseEvent } from "react";
 import { Stack, Text, Badge, Group, Collapse, Alert, Paper } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
-import type { DataCache } from "@uoplan/schedule";
+import type { DataCache } from "@uoplan/core";
 import type {
   RemainingRequirement,
   RequirementWithStatus,
   CompletedRequirementItem,
-} from "@uoplan/schedule";
+} from "@uoplan/core";
 import { RequirementNode, getStableNodeKey, getNodeDisplayTitle } from "./RequirementNode";
 import {
   applyOptionSelections,
   adjustNodeForAssignments,
   partitionIncompleteConstrainRoots,
-} from "./requirementUtils";
+} from "../../lib/requirements/requirementUtils";
 
 import { AdvancedCourseFiltersCard } from "./CourseFiltersCard";
 import { CompletedRequirementsAccordion } from "./CompletedRequirementsAccordion";
@@ -21,7 +21,7 @@ import { useAppStore } from "../../store/appStore";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-interface ConstrainStepProps {
+export interface ConstrainStepProps {
   cache: DataCache | null;
   remainingRequirements: RemainingRequirement[];
   requirementTreeWithStatus: RequirementWithStatus[];

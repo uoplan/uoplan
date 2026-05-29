@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo, type ReactNode } from "react";
-import type { Catalogue, Term } from "@uoplan/schedule";
-import { normalizeCourseCode } from "@uoplan/schedule";
+import type { Catalogue, Term } from "@uoplan/core";
+import { normalizeCourseCode } from "@uoplan/core";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useAllSchedulesData } from "../../hooks/useAllSchedulesData";
 import {

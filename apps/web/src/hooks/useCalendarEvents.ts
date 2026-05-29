@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/schedule";
+import type { GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/core";
 import { scheduleToEvents } from "@uoplan/calendar";
 
 export type { CalendarEvent } from "@uoplan/calendar";

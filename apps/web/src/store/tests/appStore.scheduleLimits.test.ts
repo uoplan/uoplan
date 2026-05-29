@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { buildDataCache } from "@uoplan/schedule";
-import type { Catalogue, Program } from "@uoplan/schedule";
-import type { SchedulesData } from "@uoplan/schedule";
-import { computeRequirementsState } from "@uoplan/schedule";
-import { useAppStore } from "../appStore";
+import { buildDataCache } from "@uoplan/core";
+import type { Catalogue, Program } from "@uoplan/core";
+import type { SchedulesData } from "@uoplan/core";
+import { computeRequirementsState } from "@uoplan/core";
+import { defaultAppStore } from "../appStore";
 
 const testCatalogue: Catalogue = {
   courses: [
@@ -115,7 +115,7 @@ describe("schedule generation respects per-category limits", () => {
     );
 
     // Initialize store with our synthetic data and requirements state.
-    const store = useAppStore;
+    const store = defaultAppStore;
 
     store.setState({
       ...store.getState(),
@@ -189,7 +189,7 @@ describe("schedule generation respects per-category limits", () => {
     const completedCourses: string[] = [];
     const { remaining } = computeRequirementsState(programWithMoreCsi, completedCourses, cache);
 
-    const store = useAppStore;
+    const store = defaultAppStore;
 
     store.setState({
       ...store.getState(),
@@ -238,7 +238,7 @@ describe("schedule generation respects per-category limits", () => {
     );
     const csiReqId = remaining[0]?.requirementId ?? "req-0";
 
-    const store = useAppStore;
+    const store = defaultAppStore;
 
     // Pin CSI 4101 via constrainedPerRequirement to simulate the user explicitly
     // choosing it. The generator should treat it as pinned and only pull one
@@ -323,7 +323,7 @@ describe("schedule generation respects per-category limits", () => {
     const cache = buildDataCache(gradOnlyCatalogue, gradOnlySchedules);
     const completedCourses: string[] = [];
     const { remaining } = computeRequirementsState(freeElectiveOnly, completedCourses, cache);
-    const store = useAppStore;
+    const store = defaultAppStore;
     store.setState({
       ...store.getState(),
       catalogue: { courses: gradOnlyCatalogue.courses, programs: [freeElectiveOnly] },
@@ -432,7 +432,7 @@ describe("schedule generation respects per-category limits", () => {
     expect(disciplineReq?.candidateCourses?.includes("ENG 1100")).toBe(true);
     expect(courseReq?.candidateCourses).toContain("CSI 4101");
 
-    const store = useAppStore;
+    const store = defaultAppStore;
     store.setState({
       ...store.getState(),
       catalogue: {

@@ -1,25 +1,12 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { buildDataCache, normalizeCourseCode } from "@uoplan/schedule";
+import { describe, it, expect, beforeEach } from "vitest";
+import { buildDataCache, normalizeCourseCode } from "@uoplan/core";
 import type {
   Catalogue,
   GeneratedSchedule,
   RemainingRequirement,
   RequirementWithStatus,
-} from "@uoplan/schedule";
-import { useAppStore } from "../appStore";
-
-let mockCalendarVariant: "basic" | "advanced" | null = null;
-
-vi.mock("../../lib/calendarRoute", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("../../lib/calendarRoute")>();
-  return {
-    ...actual,
-    getActiveCalendarVariant: () => mockCalendarVariant,
-    isBasicPlannerActive: () => mockCalendarVariant === "basic",
-    isAdvancedPlannerActive: () => mockCalendarVariant === "advanced",
-    isPlannerVariantActive: () => mockCalendarVariant != null,
-  };
-});
+} from "@uoplan/core";
+import { defaultAppStore } from "../appStore";
 
 const testCatalogue: Catalogue = {
   courses: [
@@ -79,9 +66,9 @@ const electiveTree: RequirementWithStatus[] = [
 
 describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwap", () => {
   beforeEach(() => {
-    mockCalendarVariant = null;
-    useAppStore.setState({
-      ...useAppStore.getState(),
+    defaultAppStore.setState({ calendarMode: null });
+    defaultAppStore.setState({
+      ...defaultAppStore.getState(),
       basicPinnedCourses: [],
       constrainedPerRequirement: {},
       selectedPerRequirement: {},
@@ -91,73 +78,73 @@ describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwa
   });
 
   it("pins and unpins a course in basic mode", () => {
-    mockCalendarVariant = "basic";
-    useAppStore.setState({
+    defaultAppStore.setState({ calendarMode: "basic" });
+    defaultAppStore.setState({
       basicElectivesCount: 3,
       currentSchedule: makeSchedule("CSI 2132"),
     });
 
-    useAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
-    expect(useAppStore.getState().basicPinnedCourses).toEqual(["CSI 2132"]);
-    expect(useAppStore.getState().basicElectivesCount).toBe(2);
+    defaultAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
+    expect(defaultAppStore.getState().basicPinnedCourses).toEqual(["CSI 2132"]);
+    expect(defaultAppStore.getState().basicElectivesCount).toBe(2);
 
-    useAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
-    expect(useAppStore.getState().basicPinnedCourses).toEqual(["CSI 2132"]);
-    expect(useAppStore.getState().basicElectivesCount).toBe(2);
+    defaultAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
+    expect(defaultAppStore.getState().basicPinnedCourses).toEqual(["CSI 2132"]);
+    expect(defaultAppStore.getState().basicElectivesCount).toBe(2);
 
-    useAppStore.getState().unlockCourseForAllSchedulesFromSwap(0);
-    expect(useAppStore.getState().basicPinnedCourses).toEqual([]);
-    expect(useAppStore.getState().basicElectivesCount).toBe(3);
+    defaultAppStore.getState().unlockCourseForAllSchedulesFromSwap(0);
+    expect(defaultAppStore.getState().basicPinnedCourses).toEqual([]);
+    expect(defaultAppStore.getState().basicElectivesCount).toBe(3);
   });
 
   it("pins and unpins across constrained requirements in advanced mode", () => {
-    mockCalendarVariant = "advanced";
-    useAppStore.setState({
+    defaultAppStore.setState({ calendarMode: "advanced" });
+    defaultAppStore.setState({
       currentSchedule: makeSchedule("CSI 2132"),
       requirementTreeWithStatus: electiveTree,
       remainingRequirements: [makeRemainingReq("req-elective", ["CSI 2132", "MAT 1341"])],
       currentPoolMap: { "CSI 2132": "req-elective" },
     });
 
-    useAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
-    expect(useAppStore.getState().constrainedPerRequirement).toEqual({
+    defaultAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
+    expect(defaultAppStore.getState().constrainedPerRequirement).toEqual({
       "req-elective": ["CSI 2132"],
     });
 
-    useAppStore.getState().unlockCourseForAllSchedulesFromSwap(0);
-    expect(useAppStore.getState().constrainedPerRequirement).toEqual({});
+    defaultAppStore.getState().unlockCourseForAllSchedulesFromSwap(0);
+    expect(defaultAppStore.getState().constrainedPerRequirement).toEqual({});
   });
 
   it("does not duplicate when already in constrainedPerRequirement", () => {
-    mockCalendarVariant = "advanced";
-    useAppStore.setState({
+    defaultAppStore.setState({ calendarMode: "advanced" });
+    defaultAppStore.setState({
       currentSchedule: makeSchedule("CSI 2132"),
       requirementTreeWithStatus: electiveTree,
       remainingRequirements: [makeRemainingReq("req-elective", ["CSI 2132", "MAT 1341"])],
       constrainedPerRequirement: { "req-elective": ["CSI 2132"] },
     });
 
-    useAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
-    expect(useAppStore.getState().constrainedPerRequirement).toEqual({
+    defaultAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
+    expect(defaultAppStore.getState().constrainedPerRequirement).toEqual({
       "req-elective": ["CSI 2132"],
     });
   });
 
   it("does not add to constrain when already in selectedPerRequirement for that requirement", () => {
-    mockCalendarVariant = "advanced";
-    useAppStore.setState({
+    defaultAppStore.setState({ calendarMode: "advanced" });
+    defaultAppStore.setState({
       currentSchedule: makeSchedule("CSI 2132"),
       requirementTreeWithStatus: electiveTree,
       remainingRequirements: [makeRemainingReq("req-elective", ["CSI 2132", "MAT 1341"])],
       selectedPerRequirement: { "req-elective": ["CSI 2132"] },
     });
 
-    useAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
-    expect(useAppStore.getState().constrainedPerRequirement).toEqual({});
+    defaultAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
+    expect(defaultAppStore.getState().constrainedPerRequirement).toEqual({});
   });
 
   it("locks to the most restrictive requirement when multiple requirements match", () => {
-    mockCalendarVariant = "advanced";
+    defaultAppStore.setState({ calendarMode: "advanced" });
     const specificTree: RequirementWithStatus[] = [
       {
         type: "course",
@@ -178,7 +165,7 @@ describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwa
         candidateCourses: ["CSI 2132", "MAT 1341", "PHI 1101"],
       },
     ];
-    useAppStore.setState({
+    defaultAppStore.setState({
       currentSchedule: makeSchedule("CSI 2132"),
       requirementTreeWithStatus: specificTree,
       remainingRequirements: [
@@ -191,15 +178,15 @@ describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwa
       ],
     });
 
-    useAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
-    const state = useAppStore.getState().constrainedPerRequirement;
+    defaultAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
+    const state = defaultAppStore.getState().constrainedPerRequirement;
     expect(state["req-specific"]).toEqual(["CSI 2132"]);
     expect(state["req-free"]).toBeUndefined();
   });
 
   it("does not append a second alias for the same normalized course", () => {
-    mockCalendarVariant = "advanced";
-    useAppStore.setState({
+    defaultAppStore.setState({ calendarMode: "advanced" });
+    defaultAppStore.setState({
       currentSchedule: makeSchedule("CSI2132"),
       requirementTreeWithStatus: electiveTree,
       remainingRequirements: [makeRemainingReq("req-elective", ["CSI 2132", "MAT 1341"])],
@@ -207,8 +194,8 @@ describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwa
       currentPoolMap: { CSI2132: "req-elective" },
     });
 
-    useAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
-    const codes = useAppStore.getState().constrainedPerRequirement["req-elective"] ?? [];
+    defaultAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
+    const codes = defaultAppStore.getState().constrainedPerRequirement["req-elective"] ?? [];
     expect(codes).toHaveLength(1);
     expect(normalizeCourseCode(codes[0])).toBe(normalizeCourseCode("CSI 2132"));
   });

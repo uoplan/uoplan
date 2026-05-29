@@ -1,12 +1,12 @@
-import { computeRequirementsState } from "@uoplan/schedule";
-import { normalizeCourseCode, type DataCache } from "@uoplan/schedule";
-import { buildPrereqContext, canTakeCourse } from "@uoplan/schedule";
+import { computeRequirementsState } from "@uoplan/core";
+import { normalizeCourseCode, type DataCache } from "@uoplan/core";
+import { buildPrereqContext, canTakeCourse } from "@uoplan/core";
 import {
   courseMatchesFilters,
   type CourseLanguageBucket,
   type CourseLevelBucket,
-} from "@uoplan/schedule";
-import type { Program } from "@uoplan/schedule";
+} from "@uoplan/core";
+import type { Program } from "@uoplan/core";
 import {
   getAutoSelectedForRequirements,
   getAutoSelectedSingleEligibleCompleted,

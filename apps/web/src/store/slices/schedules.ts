@@ -1,7 +1,7 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
-import type { RequirementWithStatus } from "@uoplan/schedule";
-import { getEffectiveSchedule, generateRandomSeed } from "@uoplan/schedule";
+import type { RequirementWithStatus } from "@uoplan/core";
+import { getEffectiveSchedule, generateRandomSeed } from "@uoplan/core";
 import {
   getValidSectionCombos,
   getEnrollmentsForCourse,
@@ -11,10 +11,10 @@ import {
   cacheWithPerCourseVirtualFilter,
   type CourseEnrollment,
   type GenerationConstraints,
-} from "@uoplan/schedule";
-import { normalizeCourseCode } from "@uoplan/schedule";
-import { courseMatchesFilters } from "@uoplan/schedule";
-import { isHonoursProject, canTakeCourse, buildPrereqContext } from "@uoplan/schedule";
+} from "@uoplan/core";
+import { normalizeCourseCode } from "@uoplan/core";
+import { courseMatchesFilters } from "@uoplan/core";
+import { isHonoursProject, canTakeCourse, buildPrereqContext } from "@uoplan/core";
 import { basicElectivesAfterPinnedDelta } from "../../lib/basicCalendarPins";
 import {
   DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS,
@@ -30,14 +30,13 @@ import {
   resolveRequirementIdsForScheduleCourse,
   applyOptionSelections,
   collectRequirementIdsWithCandidateCourse,
-} from "../../components/requirements/requirementUtils";
+} from "../../lib/requirements/requirementUtils";
 import { compareReqPreference, type AutoAssignReqMeta } from "../requirementCompute/autoAssign";
-import { isAdvancedPlannerActive, isBasicPlannerActive } from "../../lib/calendarRoute";
 import { flushPersistedAppState } from "../../lib/persistAppState";
 import { nextSeed, noteLowestVisitedSeed, repairSeedPosition } from "../../lib/seedNavigation";
 import { runScheduleGeneration } from "../../workers/scheduleWorkerClient";
 import type { GenerateSchedulesMode } from "../../lib/generateSchedulesAction";
-import type { GeneratedSchedule } from "@uoplan/schedule";
+import type { GeneratedSchedule } from "@uoplan/core";
 
 function tryApplyOneSwap(
   schedule: GeneratedSchedule,
@@ -91,14 +90,15 @@ function tryApplyOneSwap(
 
   const reqId = poolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
   const reqType = remainingRequirements.find((r) => r.requirementId === reqId)?.type;
-  const virtualOnly = isBasicPlannerActive()
-    ? virtualSectionsOnly
-    : virtualScheduleFilterApplies(
-        virtualSectionsOnly,
-        reqType,
-        newCourseCode,
-        explicitExemptNormalized,
-      );
+  const virtualOnly =
+    state.calendarMode === "basic"
+      ? virtualSectionsOnly
+      : virtualScheduleFilterApplies(
+          virtualSectionsOnly,
+          reqType,
+          newCourseCode,
+          explicitExemptNormalized,
+        );
 
   const newScheduleData = getEffectiveSchedule(
     cache,
@@ -201,12 +201,6 @@ function applyScheduleGenerationResult(
   });
 }
 
-const validEnrollmentsByCourseCode = new Map<string, CourseEnrollment[]>();
-
-export function clearEnrollmentsCache() {
-  validEnrollmentsByCourseCode.clear();
-}
-
 async function withScheduleGenerating(
   set: Parameters<StateCreator<AppStore, [], [], SchedulesSlice>>[0],
   run: () => Promise<void>,
@@ -237,848 +231,864 @@ interface SchedulesSlice {
   blacklistCourseFromSwap: AppStore["blacklistCourseFromSwap"];
   unblacklistCourseFromSwap: AppStore["unblacklistCourseFromSwap"];
   importSchedule: AppStore["importSchedule"];
+  clearEnrollmentsCache: AppStore["clearEnrollmentsCache"];
 }
 
-export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice> = (set, get) => ({
-  generateSchedules: async () => {
-    if (get().scheduleGenerating) return;
-    await withScheduleGenerating(set, async () => {
-      const state = get();
-      const swapsToApply = state.currentSwaps;
-      const repairedSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
-      const isFirstGen = repairedSeed === 0;
-      const effectiveState = isFirstGen
-        ? { ...state, currentSeed: state.firstSeed }
-        : { ...state, currentSeed: repairedSeed };
-      const result = await runScheduleGeneration(effectiveState, "advanced");
-      if (result) {
-        const resultWithSwaps = applySwapsToResult(result, swapsToApply, get());
-        applyScheduleGenerationResult(
-          set,
-          get,
-          resultWithSwaps,
-          isFirstGen ? state.firstSeed : repairedSeed,
-        );
-      }
-    });
-  },
+export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice> = (set, get) => {
+  // Per-store memo of valid section enrollments, invalidated via clearEnrollmentsCache.
+  const validEnrollmentsByCourseCode = new Map<string, CourseEnrollment[]>();
 
-  generateBasicSchedules: async () => {
-    if (get().scheduleGenerating) return;
-    await withScheduleGenerating(set, async () => {
-      const state = get();
-      const swapsToApply = state.currentSwaps;
-      const repairedSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
-      const isFirstGen = repairedSeed === 0;
-      const effectiveState = isFirstGen
-        ? { ...state, currentSeed: state.firstSeed }
-        : { ...state, currentSeed: repairedSeed };
-      const result = await runScheduleGeneration(effectiveState, "basic");
-      if (result) {
-        const resultWithSwaps = applySwapsToResult(result, swapsToApply, get());
-        applyScheduleGenerationResult(
-          set,
-          get,
-          resultWithSwaps,
-          isFirstGen ? state.firstSeed : repairedSeed,
-        );
-      }
-    });
-  },
+  return {
+    clearEnrollmentsCache: () => validEnrollmentsByCourseCode.clear(),
 
-  clearSchedule: () =>
-    set((state) => {
-      const alreadyCleared = state.currentSchedule === null && state.generationError === null;
-      if (alreadyCleared) return state;
-      return {
+    generateSchedules: async () => {
+      if (get().scheduleGenerating) return;
+      await withScheduleGenerating(set, async () => {
+        const state = get();
+        const swapsToApply = state.currentSwaps;
+        const repairedSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
+        const isFirstGen = repairedSeed === 0;
+        const effectiveState = isFirstGen
+          ? { ...state, currentSeed: state.firstSeed }
+          : { ...state, currentSeed: repairedSeed };
+        const result = await runScheduleGeneration(effectiveState, "advanced");
+        if (result) {
+          const resultWithSwaps = applySwapsToResult(result, swapsToApply, get());
+          applyScheduleGenerationResult(
+            set,
+            get,
+            resultWithSwaps,
+            isFirstGen ? state.firstSeed : repairedSeed,
+          );
+        }
+      });
+    },
+
+    generateBasicSchedules: async () => {
+      if (get().scheduleGenerating) return;
+      await withScheduleGenerating(set, async () => {
+        const state = get();
+        const swapsToApply = state.currentSwaps;
+        const repairedSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
+        const isFirstGen = repairedSeed === 0;
+        const effectiveState = isFirstGen
+          ? { ...state, currentSeed: state.firstSeed }
+          : { ...state, currentSeed: repairedSeed };
+        const result = await runScheduleGeneration(effectiveState, "basic");
+        if (result) {
+          const resultWithSwaps = applySwapsToResult(result, swapsToApply, get());
+          applyScheduleGenerationResult(
+            set,
+            get,
+            resultWithSwaps,
+            isFirstGen ? state.firstSeed : repairedSeed,
+          );
+        }
+      });
+    },
+
+    clearSchedule: () =>
+      set((state) => {
+        const alreadyCleared = state.currentSchedule === null && state.generationError === null;
+        if (alreadyCleared) return state;
+        return {
+          currentSchedule: null,
+          currentPoolMap: {},
+          currentColorMap: {},
+          currentSwaps: [],
+          swapsPerSeed: {},
+          generationError: null,
+        };
+      }),
+
+    resetBasicCalendarSettings: () =>
+      set({
+        basicPinnedCourses: [],
+        basicElectivesCount: 0,
+        basicExcludedCategories: [],
+        completedCourses: [],
+        frenchImmersionStream: false,
+        levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
+        languageBuckets: [...DEFAULT_BASIC_LANGUAGE_BUCKETS],
+        electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
+        includeClosedComponents: false,
+        virtualSectionsOnly: false,
         currentSchedule: null,
         currentPoolMap: {},
         currentColorMap: {},
         currentSwaps: [],
         swapsPerSeed: {},
+        swapPool: [],
+        chosenCourseToRequirementId: {},
         generationError: null,
-      };
-    }),
+        firstSeed: generateRandomSeed(),
+        currentSeed: 0,
+        lowestVisitedSeed: null,
+        scheduleNoVariety: false,
+      }),
 
-  resetBasicCalendarSettings: () =>
-    set({
-      basicPinnedCourses: [],
-      basicElectivesCount: 0,
-      basicExcludedCategories: [],
-      completedCourses: [],
-      frenchImmersionStream: false,
-      levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
-      languageBuckets: [...DEFAULT_BASIC_LANGUAGE_BUCKETS],
-      electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
-      includeClosedComponents: false,
-      virtualSectionsOnly: false,
-      currentSchedule: null,
-      currentPoolMap: {},
-      currentColorMap: {},
-      currentSwaps: [],
-      swapsPerSeed: {},
-      swapPool: [],
-      chosenCourseToRequirementId: {},
-      generationError: null,
-      firstSeed: generateRandomSeed(),
-      currentSeed: 0,
-      lowestVisitedSeed: null,
-      scheduleNoVariety: false,
-    }),
-
-  markBasicSettingsChanged: () =>
-    set({
-      generationError: null,
-      scheduleNoVariety: false,
-    }),
-
-  goToPreviousSeed: async () => {
-    const state = get();
-    const floor = state.lowestVisitedSeed ?? state.firstSeed;
-    if (state.scheduleGenerating || state.currentSeed <= floor) return;
-    const prevFingerprint = state.currentSchedule
-      ? scheduleFingerprint(state.currentSchedule)
-      : null;
-    await withScheduleGenerating(set, async () => {
-      const updatedSwapsPerSeed = {
-        ...state.swapsPerSeed,
-        [state.currentSeed]: state.currentSwaps,
-      };
-      const mode: GenerateSchedulesMode = isBasicPlannerActive() ? "basic" : "advanced";
-
-      let trySeed = state.currentSeed - 1;
-      let finalResult: ScheduleGenerationResult | null = null;
-      let finalSeed = trySeed;
-
-      for (let i = 0; i < 30; i++) {
-        const swapsForSeed = updatedSwapsPerSeed[trySeed] ?? [];
-        const result = await runScheduleGeneration({ ...state, currentSeed: trySeed }, mode);
-        if (!result) break;
-        const withSwaps = applySwapsToResult(result, swapsForSeed, get());
-        finalResult = withSwaps;
-        finalSeed = trySeed;
-        if (
-          prevFingerprint === null ||
-          withSwaps.currentSchedule === null ||
-          scheduleFingerprint(withSwaps.currentSchedule) !== prevFingerprint
-        ) {
-          break;
-        }
-        if (trySeed <= floor) break;
-        trySeed -= 1;
-      }
-
-      if (finalResult) {
-        const newSwaps = updatedSwapsPerSeed[finalSeed] ?? [];
-        const noVariety =
-          prevFingerprint !== null &&
-          finalResult.currentSchedule !== null &&
-          scheduleFingerprint(finalResult.currentSchedule) === prevFingerprint;
-        set({
-          ...finalResult,
-          currentSeed: finalSeed,
-          currentSwaps: newSwaps,
-          swapsPerSeed: updatedSwapsPerSeed,
-          calendarWeekIndex: null,
-          scheduleNoVariety: noVariety,
-        });
-      }
-    });
-  },
-
-  goToNextSeed: async () => {
-    const state = get();
-    if (state.scheduleGenerating) return;
-    const prevFingerprint = state.currentSchedule
-      ? scheduleFingerprint(state.currentSchedule)
-      : null;
-    await withScheduleGenerating(set, async () => {
-      const baseSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
-      const updatedSwapsPerSeed = {
-        ...state.swapsPerSeed,
-        [state.currentSeed]: state.currentSwaps,
-      };
-      const mode: GenerateSchedulesMode = isBasicPlannerActive() ? "basic" : "advanced";
-
-      let trySeed = nextSeed(state.firstSeed, baseSeed);
-      let finalResult: ScheduleGenerationResult | null = null;
-
-      for (let i = 0; i < 30; i++) {
-        const swapsForSeed = updatedSwapsPerSeed[trySeed] ?? [];
-        const result = await runScheduleGeneration({ ...state, currentSeed: trySeed }, mode);
-        if (!result) break;
-        const withSwaps = applySwapsToResult(result, swapsForSeed, get());
-        finalResult = withSwaps;
-        if (
-          prevFingerprint === null ||
-          withSwaps.currentSchedule === null ||
-          scheduleFingerprint(withSwaps.currentSchedule) !== prevFingerprint
-        ) {
-          break;
-        }
-        trySeed = nextSeed(state.firstSeed, trySeed);
-      }
-
-      if (finalResult) {
-        const newSwaps = updatedSwapsPerSeed[trySeed] ?? [];
-        set({ currentSwaps: newSwaps, swapsPerSeed: updatedSwapsPerSeed, calendarWeekIndex: null });
-        applyScheduleGenerationResult(set, get, finalResult, trySeed);
-        if (
-          prevFingerprint !== null &&
-          finalResult.currentSchedule !== null &&
-          scheduleFingerprint(finalResult.currentSchedule) === prevFingerprint
-        ) {
-          set({ scheduleNoVariety: true });
-        }
-      }
-    });
-  },
-
-  randomizeSeed: async () => {
-    if (get().scheduleGenerating) return;
-    const prevFingerprint = get().currentSchedule
-      ? scheduleFingerprint(get().currentSchedule!)
-      : null;
-    await withScheduleGenerating(set, async () => {
-      const newFirstSeed = generateRandomSeed();
+    markBasicSettingsChanged: () =>
       set({
-        firstSeed: newFirstSeed,
-        currentSeed: newFirstSeed,
-        lowestVisitedSeed: newFirstSeed,
-        currentSwaps: [],
-        swapsPerSeed: {},
+        generationError: null,
+        scheduleNoVariety: false,
+      }),
+
+    goToPreviousSeed: async () => {
+      const state = get();
+      const floor = state.lowestVisitedSeed ?? state.firstSeed;
+      if (state.scheduleGenerating || state.currentSeed <= floor) return;
+      const prevFingerprint = state.currentSchedule
+        ? scheduleFingerprint(state.currentSchedule)
+        : null;
+      await withScheduleGenerating(set, async () => {
+        const updatedSwapsPerSeed = {
+          ...state.swapsPerSeed,
+          [state.currentSeed]: state.currentSwaps,
+        };
+        const mode: GenerateSchedulesMode = get().calendarMode === "basic" ? "basic" : "advanced";
+
+        let trySeed = state.currentSeed - 1;
+        let finalResult: ScheduleGenerationResult | null = null;
+        let finalSeed = trySeed;
+
+        for (let i = 0; i < 30; i++) {
+          const swapsForSeed = updatedSwapsPerSeed[trySeed] ?? [];
+          const result = await runScheduleGeneration({ ...state, currentSeed: trySeed }, mode);
+          if (!result) break;
+          const withSwaps = applySwapsToResult(result, swapsForSeed, get());
+          finalResult = withSwaps;
+          finalSeed = trySeed;
+          if (
+            prevFingerprint === null ||
+            withSwaps.currentSchedule === null ||
+            scheduleFingerprint(withSwaps.currentSchedule) !== prevFingerprint
+          ) {
+            break;
+          }
+          if (trySeed <= floor) break;
+          trySeed -= 1;
+        }
+
+        if (finalResult) {
+          const newSwaps = updatedSwapsPerSeed[finalSeed] ?? [];
+          const noVariety =
+            prevFingerprint !== null &&
+            finalResult.currentSchedule !== null &&
+            scheduleFingerprint(finalResult.currentSchedule) === prevFingerprint;
+          set({
+            ...finalResult,
+            currentSeed: finalSeed,
+            currentSwaps: newSwaps,
+            swapsPerSeed: updatedSwapsPerSeed,
+            calendarWeekIndex: null,
+            scheduleNoVariety: noVariety,
+          });
+        }
       });
-      const mode: GenerateSchedulesMode = isBasicPlannerActive() ? "basic" : "advanced";
-      const result = await runScheduleGeneration(
-        { ...get(), firstSeed: newFirstSeed, currentSeed: newFirstSeed },
-        mode,
-      );
-      if (result) {
-        applyScheduleGenerationResult(set, get, result, newFirstSeed);
-        if (
-          prevFingerprint !== null &&
-          result.currentSchedule !== null &&
-          scheduleFingerprint(result.currentSchedule) === prevFingerprint
-        ) {
-          set({ scheduleNoVariety: true });
+    },
+
+    goToNextSeed: async () => {
+      const state = get();
+      if (state.scheduleGenerating) return;
+      const prevFingerprint = state.currentSchedule
+        ? scheduleFingerprint(state.currentSchedule)
+        : null;
+      await withScheduleGenerating(set, async () => {
+        const baseSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
+        const updatedSwapsPerSeed = {
+          ...state.swapsPerSeed,
+          [state.currentSeed]: state.currentSwaps,
+        };
+        const mode: GenerateSchedulesMode = get().calendarMode === "basic" ? "basic" : "advanced";
+
+        let trySeed = nextSeed(state.firstSeed, baseSeed);
+        let finalResult: ScheduleGenerationResult | null = null;
+
+        for (let i = 0; i < 30; i++) {
+          const swapsForSeed = updatedSwapsPerSeed[trySeed] ?? [];
+          const result = await runScheduleGeneration({ ...state, currentSeed: trySeed }, mode);
+          if (!result) break;
+          const withSwaps = applySwapsToResult(result, swapsForSeed, get());
+          finalResult = withSwaps;
+          if (
+            prevFingerprint === null ||
+            withSwaps.currentSchedule === null ||
+            scheduleFingerprint(withSwaps.currentSchedule) !== prevFingerprint
+          ) {
+            break;
+          }
+          trySeed = nextSeed(state.firstSeed, trySeed);
+        }
+
+        if (finalResult) {
+          const newSwaps = updatedSwapsPerSeed[trySeed] ?? [];
+          set({
+            currentSwaps: newSwaps,
+            swapsPerSeed: updatedSwapsPerSeed,
+            calendarWeekIndex: null,
+          });
+          applyScheduleGenerationResult(set, get, finalResult, trySeed);
+          if (
+            prevFingerprint !== null &&
+            finalResult.currentSchedule !== null &&
+            scheduleFingerprint(finalResult.currentSchedule) === prevFingerprint
+          ) {
+            set({ scheduleNoVariety: true });
+          }
+        }
+      });
+    },
+
+    randomizeSeed: async () => {
+      if (get().scheduleGenerating) return;
+      const prevFingerprint = get().currentSchedule
+        ? scheduleFingerprint(get().currentSchedule!)
+        : null;
+      await withScheduleGenerating(set, async () => {
+        const newFirstSeed = generateRandomSeed();
+        set({
+          firstSeed: newFirstSeed,
+          currentSeed: newFirstSeed,
+          lowestVisitedSeed: newFirstSeed,
+          currentSwaps: [],
+          swapsPerSeed: {},
+        });
+        const mode: GenerateSchedulesMode = get().calendarMode === "basic" ? "basic" : "advanced";
+        const result = await runScheduleGeneration(
+          { ...get(), firstSeed: newFirstSeed, currentSeed: newFirstSeed },
+          mode,
+        );
+        if (result) {
+          applyScheduleGenerationResult(set, get, result, newFirstSeed);
+          if (
+            prevFingerprint !== null &&
+            result.currentSchedule !== null &&
+            scheduleFingerprint(result.currentSchedule) === prevFingerprint
+          ) {
+            set({ scheduleNoVariety: true });
+          }
+        }
+      });
+    },
+
+    swapCourseInSchedule: async (enrollmentIndex, newCourseCode) => {
+      const {
+        basicPinnedCourses,
+        currentSchedule,
+        cache,
+        chosenCourseToRequirementId,
+        currentPoolMap,
+        currentColorMap,
+        generationMinStartMinutes,
+        generationMaxEndMinutes,
+        generationAllowedDays,
+        generationMinProfessorRating,
+        professorRatings,
+        includeClosedComponents,
+        virtualSectionsOnly,
+        remainingRequirements,
+        constrainedPerRequirement,
+        selectedPerRequirement,
+      } = get();
+      if (!cache || !currentSchedule) return;
+
+      const schedule = currentSchedule;
+      const oldEnrollment = schedule.enrollments[enrollmentIndex];
+      if (!oldEnrollment) return;
+
+      const explicitExemptNormalized = new Set<string>();
+      for (const codes of Object.values(constrainedPerRequirement)) {
+        for (const code of codes) {
+          explicitExemptNormalized.add(normalizeCourseCode(code));
         }
       }
-    });
-  },
-
-  swapCourseInSchedule: async (enrollmentIndex, newCourseCode) => {
-    const {
-      basicPinnedCourses,
-      currentSchedule,
-      cache,
-      chosenCourseToRequirementId,
-      currentPoolMap,
-      currentColorMap,
-      generationMinStartMinutes,
-      generationMaxEndMinutes,
-      generationAllowedDays,
-      generationMinProfessorRating,
-      professorRatings,
-      includeClosedComponents,
-      virtualSectionsOnly,
-      remainingRequirements,
-      constrainedPerRequirement,
-      selectedPerRequirement,
-    } = get();
-    if (!cache || !currentSchedule) return;
-
-    const schedule = currentSchedule;
-    const oldEnrollment = schedule.enrollments[enrollmentIndex];
-    if (!oldEnrollment) return;
-
-    const explicitExemptNormalized = new Set<string>();
-    for (const codes of Object.values(constrainedPerRequirement)) {
-      for (const code of codes) {
-        explicitExemptNormalized.add(normalizeCourseCode(code));
+      for (const codes of Object.values(selectedPerRequirement)) {
+        for (const code of codes) {
+          explicitExemptNormalized.add(normalizeCourseCode(code));
+        }
       }
-    }
-    for (const codes of Object.values(selectedPerRequirement)) {
-      for (const code of codes) {
-        explicitExemptNormalized.add(normalizeCourseCode(code));
-      }
-    }
 
-    let virtualOnlyForNewCourse: boolean;
-    if (isBasicPlannerActive()) {
-      virtualOnlyForNewCourse = virtualSectionsOnly;
-    } else {
-      const oldCode = oldEnrollment.courseCode;
-      const reqId = currentPoolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
-      const reqType = remainingRequirements.find((r) => r.requirementId === reqId)?.type;
-      virtualOnlyForNewCourse = virtualScheduleFilterApplies(
-        virtualSectionsOnly,
-        reqType,
-        newCourseCode,
-        explicitExemptNormalized,
-      );
-    }
-
-    const newSchedule = getEffectiveSchedule(
-      cache,
-      newCourseCode,
-      includeClosedComponents,
-      virtualOnlyForNewCourse,
-    );
-    if (!newSchedule) return;
-
-    const constraints: GenerationConstraints = {
-      minStartMinutes: generationMinStartMinutes,
-      maxEndMinutes: generationMaxEndMinutes,
-      allowedDays: generationAllowedDays,
-      minProfessorRating: generationMinProfessorRating ?? undefined,
-      professorRatings: professorRatings ?? undefined,
-    };
-
-    if (isBasicPlannerActive()) {
-      const allCodes = schedule.enrollments.map((e) => e.courseCode);
-      allCodes[enrollmentIndex] = newCourseCode;
-
-      const pinnedNormalized = new Set(basicPinnedCourses.map(normalizeCourseCode));
-      const effectiveCache = cacheWithPerCourseVirtualFilter(
-        cache,
-        includeClosedComponents,
-        (code) => virtualSectionsOnly && !pinnedNormalized.has(normalizeCourseCode(code)),
-      );
-
-      const batch = generateSchedulesWithPinned(
-        allCodes,
-        [],
-        allCodes.length,
-        effectiveCache,
-        constraints,
-      );
-
-      const validSchedules = batch.filter((s) => s.enrollments.length >= allCodes.length);
-      if (validSchedules.length > 0) {
-        const oldColorIdx = currentColorMap[oldEnrollment.courseCode];
-        const { [oldEnrollment.courseCode]: _, ...mapWithoutOld } = currentColorMap;
-        const nextColorMap =
-          oldColorIdx !== undefined
-            ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
-            : mapWithoutOld;
-
-        const newCurrentSwaps = [
-          ...get().currentSwaps,
-          { enrollmentIndex, courseCode: newCourseCode },
-        ];
-        set({
-          currentSchedule: validSchedules[0],
-          currentColorMap: nextColorMap,
-          currentSwaps: newCurrentSwaps,
-          swapsPerSeed: { ...get().swapsPerSeed, [get().currentSeed]: newCurrentSwaps },
-        });
-      }
-      return;
-    }
-
-    const combos = getValidSectionCombos(newSchedule, constraints);
-    const others = schedule.enrollments.filter((_, i) => i !== enrollmentIndex);
-
-    for (const combo of combos) {
-      const candidate = getEnrollmentsForCourse(newSchedule, combo);
-      const conflicts = others.some((e) => enrollmentsOverlap(e, candidate));
-      if (!conflicts) {
-        const newEnrollments = [...schedule.enrollments];
-        newEnrollments[enrollmentIndex] = candidate;
+      let virtualOnlyForNewCourse: boolean;
+      if (get().calendarMode === "basic") {
+        virtualOnlyForNewCourse = virtualSectionsOnly;
+      } else {
         const oldCode = oldEnrollment.courseCode;
-        const poolId = currentPoolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
-        const nextPoolMap =
-          poolId != null ? { ...currentPoolMap, [newCourseCode]: poolId } : currentPoolMap;
+        const reqId = currentPoolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
+        const reqType = remainingRequirements.find((r) => r.requirementId === reqId)?.type;
+        virtualOnlyForNewCourse = virtualScheduleFilterApplies(
+          virtualSectionsOnly,
+          reqType,
+          newCourseCode,
+          explicitExemptNormalized,
+        );
+      }
 
-        const oldColorIdx = currentColorMap[oldCode];
-        const { [oldCode]: _, ...mapWithoutOld } = currentColorMap;
-        const nextColorMap =
-          oldColorIdx !== undefined
-            ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
-            : mapWithoutOld;
+      const newSchedule = getEffectiveSchedule(
+        cache,
+        newCourseCode,
+        includeClosedComponents,
+        virtualOnlyForNewCourse,
+      );
+      if (!newSchedule) return;
 
-        const newCurrentSwaps = [
-          ...get().currentSwaps,
-          { enrollmentIndex, courseCode: newCourseCode },
-        ];
-        set({
-          currentSchedule: { enrollments: newEnrollments },
-          currentPoolMap: nextPoolMap,
-          currentColorMap: nextColorMap,
-          currentSwaps: newCurrentSwaps,
-          swapsPerSeed: { ...get().swapsPerSeed, [get().currentSeed]: newCurrentSwaps },
-        });
+      const constraints: GenerationConstraints = {
+        minStartMinutes: generationMinStartMinutes,
+        maxEndMinutes: generationMaxEndMinutes,
+        allowedDays: generationAllowedDays,
+        minProfessorRating: generationMinProfessorRating ?? undefined,
+        professorRatings: professorRatings ?? undefined,
+      };
+
+      if (get().calendarMode === "basic") {
+        const allCodes = schedule.enrollments.map((e) => e.courseCode);
+        allCodes[enrollmentIndex] = newCourseCode;
+
+        const pinnedNormalized = new Set(basicPinnedCourses.map(normalizeCourseCode));
+        const effectiveCache = cacheWithPerCourseVirtualFilter(
+          cache,
+          includeClosedComponents,
+          (code) => virtualSectionsOnly && !pinnedNormalized.has(normalizeCourseCode(code)),
+        );
+
+        const batch = generateSchedulesWithPinned(
+          allCodes,
+          [],
+          allCodes.length,
+          effectiveCache,
+          constraints,
+        );
+
+        const validSchedules = batch.filter((s) => s.enrollments.length >= allCodes.length);
+        if (validSchedules.length > 0) {
+          const oldColorIdx = currentColorMap[oldEnrollment.courseCode];
+          const { [oldEnrollment.courseCode]: _, ...mapWithoutOld } = currentColorMap;
+          const nextColorMap =
+            oldColorIdx !== undefined
+              ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
+              : mapWithoutOld;
+
+          const newCurrentSwaps = [
+            ...get().currentSwaps,
+            { enrollmentIndex, courseCode: newCourseCode },
+          ];
+          set({
+            currentSchedule: validSchedules[0],
+            currentColorMap: nextColorMap,
+            currentSwaps: newCurrentSwaps,
+            swapsPerSeed: { ...get().swapsPerSeed, [get().currentSeed]: newCurrentSwaps },
+          });
+        }
         return;
       }
-    }
-  },
 
-  undoLastSwap: () => {
-    const { currentSwaps, currentSeed, swapsPerSeed } = get();
-    if (currentSwaps.length === 0) return;
-    const newSwaps = currentSwaps.slice(0, -1);
-    set({
-      currentSwaps: newSwaps,
-      swapsPerSeed: { ...swapsPerSeed, [currentSeed]: newSwaps },
-    });
-    void get().generateSchedules();
-  },
+      const combos = getValidSectionCombos(newSchedule, constraints);
+      const others = schedule.enrollments.filter((_, i) => i !== enrollmentIndex);
 
-  getSwapCandidates: (enrollmentIndex) => {
-    const {
-      basicPinnedCourses,
-      basicExcludedCategories,
-      studentPrograms,
-      cache,
-      currentSchedule,
-      remainingRequirements,
-      chosenCourseToRequirementId,
-      currentPoolMap,
-      completedCourses,
-      prereqEligibleCourses,
-      levelBuckets,
-      languageBuckets,
-      electiveLevelBuckets,
-      generationMinStartMinutes,
-      generationMaxEndMinutes,
-      generationAllowedDays,
-      generationMinProfessorRating,
-      professorRatings,
-      includeClosedComponents,
-      virtualSectionsOnly,
-      filteredPrereqEligibleCourses,
-      constrainedPerRequirement,
-      selectedPerRequirement,
-      generationLimitFirstYearCredits,
-      requirementTreeWithStatus,
-      selectedOptionsPerRequirement,
-    } = get();
-    if (!cache || !currentSchedule) {
-      return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
-    }
+      for (const combo of combos) {
+        const candidate = getEnrollmentsForCourse(newSchedule, combo);
+        const conflicts = others.some((e) => enrollmentsOverlap(e, candidate));
+        if (!conflicts) {
+          const newEnrollments = [...schedule.enrollments];
+          newEnrollments[enrollmentIndex] = candidate;
+          const oldCode = oldEnrollment.courseCode;
+          const poolId = currentPoolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
+          const nextPoolMap =
+            poolId != null ? { ...currentPoolMap, [newCourseCode]: poolId } : currentPoolMap;
 
-    const schedule = currentSchedule;
-    const enrollment = schedule.enrollments[enrollmentIndex];
-    if (!enrollment) {
-      return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
-    }
+          const oldColorIdx = currentColorMap[oldCode];
+          const { [oldCode]: _, ...mapWithoutOld } = currentColorMap;
+          const nextColorMap =
+            oldColorIdx !== undefined
+              ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
+              : mapWithoutOld;
 
-    const oldCode = enrollment.courseCode;
+          const newCurrentSwaps = [
+            ...get().currentSwaps,
+            { enrollmentIndex, courseCode: newCourseCode },
+          ];
+          set({
+            currentSchedule: { enrollments: newEnrollments },
+            currentPoolMap: nextPoolMap,
+            currentColorMap: nextColorMap,
+            currentSwaps: newCurrentSwaps,
+            swapsPerSeed: { ...get().swapsPerSeed, [get().currentSeed]: newCurrentSwaps },
+          });
+          return;
+        }
+      }
+    },
 
-    if (isBasicPlannerActive()) {
-      if (basicPinnedCourses.includes(oldCode)) {
+    undoLastSwap: () => {
+      const { currentSwaps, currentSeed, swapsPerSeed } = get();
+      if (currentSwaps.length === 0) return;
+      const newSwaps = currentSwaps.slice(0, -1);
+      set({
+        currentSwaps: newSwaps,
+        swapsPerSeed: { ...swapsPerSeed, [currentSeed]: newSwaps },
+      });
+      void get().generateSchedules();
+    },
+
+    getSwapCandidates: (enrollmentIndex) => {
+      const {
+        basicPinnedCourses,
+        basicExcludedCategories,
+        studentPrograms,
+        cache,
+        currentSchedule,
+        remainingRequirements,
+        chosenCourseToRequirementId,
+        currentPoolMap,
+        completedCourses,
+        prereqEligibleCourses,
+        levelBuckets,
+        languageBuckets,
+        electiveLevelBuckets,
+        generationMinStartMinutes,
+        generationMaxEndMinutes,
+        generationAllowedDays,
+        generationMinProfessorRating,
+        professorRatings,
+        includeClosedComponents,
+        virtualSectionsOnly,
+        filteredPrereqEligibleCourses,
+        constrainedPerRequirement,
+        selectedPerRequirement,
+        generationLimitFirstYearCredits,
+        requirementTreeWithStatus,
+        selectedOptionsPerRequirement,
+      } = get();
+      if (!cache || !currentSchedule) {
         return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
       }
 
-      const optionalPool: string[] = [];
-      const excludedPrefixes = basicExcludedCategories.map((c) => c.toLowerCase());
-      const prereqCtx = buildPrereqContext(completedCourses, cache, studentPrograms);
-      const basicFilters = { levels: levelBuckets, languageBuckets };
+      const schedule = currentSchedule;
+      const enrollment = schedule.enrollments[enrollmentIndex];
+      if (!enrollment) {
+        return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
+      }
 
-      for (const course of cache.getAllCourses()) {
-        const code = course.code;
-        if (code === oldCode) continue;
-        if (!courseMatchesFilters(code, basicFilters)) continue;
-        if (!isWithinElectiveLevelBuckets(code, electiveLevelBuckets)) continue;
+      const oldCode = enrollment.courseCode;
 
-        const prefixMatch = code.match(/^([A-Z]{3,4})/i);
-        const prefix = prefixMatch ? prefixMatch[1].toLowerCase() : "";
-        if (excludedPrefixes.includes(prefix)) continue;
+      if (get().calendarMode === "basic") {
+        if (basicPinnedCourses.includes(oldCode)) {
+          return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
+        }
 
-        if (completedCourses.length > 0) {
-          if (course.prerequisites) {
-            if (!canTakeCourse(code, cache, prereqCtx)) continue;
-          } else if (course.prereqText) {
-            continue;
+        const optionalPool: string[] = [];
+        const excludedPrefixes = basicExcludedCategories.map((c) => c.toLowerCase());
+        const prereqCtx = buildPrereqContext(completedCourses, cache, studentPrograms);
+        const basicFilters = { levels: levelBuckets, languageBuckets };
+
+        for (const course of cache.getAllCourses()) {
+          const code = course.code;
+          if (code === oldCode) continue;
+          if (!courseMatchesFilters(code, basicFilters)) continue;
+          if (!isWithinElectiveLevelBuckets(code, electiveLevelBuckets)) continue;
+
+          const prefixMatch = code.match(/^([A-Z]{3,4})/i);
+          const prefix = prefixMatch ? prefixMatch[1].toLowerCase() : "";
+          if (excludedPrefixes.includes(prefix)) continue;
+
+          if (completedCourses.length > 0) {
+            if (course.prerequisites) {
+              if (!canTakeCourse(code, cache, prereqCtx)) continue;
+            } else if (course.prereqText) {
+              continue;
+            }
+          } else {
+            if (course.prerequisites || course.prereqText) continue;
           }
-        } else {
-          if (course.prerequisites || course.prereqText) continue;
+
+          if (basicPinnedCourses.includes(code)) continue;
+          const alreadyInSchedule = schedule.enrollments.some((e) => e.courseCode === code);
+          if (alreadyInSchedule) continue;
+
+          const sched = getEffectiveSchedule(
+            cache,
+            code,
+            includeClosedComponents,
+            virtualSectionsOnly,
+          );
+          if (!sched) continue;
+
+          const swapConstraints: GenerationConstraints = {
+            minStartMinutes: generationMinStartMinutes,
+            maxEndMinutes: generationMaxEndMinutes,
+            allowedDays: generationAllowedDays,
+            minProfessorRating: generationMinProfessorRating ?? undefined,
+            professorRatings: professorRatings ?? undefined,
+          };
+          if (getValidSectionCombos(sched, swapConstraints).length === 0) continue;
+
+          optionalPool.push(code);
         }
 
-        if (basicPinnedCourses.includes(code)) continue;
-        const alreadyInSchedule = schedule.enrollments.some((e) => e.courseCode === code);
-        if (alreadyInSchedule) continue;
-
-        const sched = getEffectiveSchedule(
-          cache,
-          code,
-          includeClosedComponents,
-          virtualSectionsOnly,
-        );
-        if (!sched) continue;
-
-        const swapConstraints: GenerationConstraints = {
-          minStartMinutes: generationMinStartMinutes,
-          maxEndMinutes: generationMaxEndMinutes,
-          allowedDays: generationAllowedDays,
-          minProfessorRating: generationMinProfessorRating ?? undefined,
-          professorRatings: professorRatings ?? undefined,
+        return {
+          candidates: optionalPool,
+          poolCourses: optionalPool,
+          requirementTitle: "Elective",
+          rejectedWithConflict: [],
         };
-        if (getValidSectionCombos(sched, swapConstraints).length === 0) continue;
-
-        optionalPool.push(code);
       }
 
-      return {
-        candidates: optionalPool,
-        poolCourses: optionalPool,
-        requirementTitle: "Elective",
-        rejectedWithConflict: [],
-      };
-    }
+      const poolId = currentPoolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
+      const candidateSet = new Set<string>();
+      let poolRequirementType: string | undefined;
+      let requirementTitle: string | undefined;
 
-    const poolId = currentPoolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
-    const candidateSet = new Set<string>();
-    let poolRequirementType: string | undefined;
-    let requirementTitle: string | undefined;
-
-    function findReqNodeById(
-      nodes: RequirementWithStatus[],
-      id: string,
-    ): RequirementWithStatus | null {
-      for (const node of nodes) {
-        if (node.requirementId === id) return node;
-        if (node.options?.length) {
-          const found = findReqNodeById(node.options, id);
-          if (found) return found;
+      function findReqNodeById(
+        nodes: RequirementWithStatus[],
+        id: string,
+      ): RequirementWithStatus | null {
+        for (const node of nodes) {
+          if (node.requirementId === id) return node;
+          if (node.options?.length) {
+            const found = findReqNodeById(node.options, id);
+            if (found) return found;
+          }
         }
+        return null;
       }
-      return null;
-    }
 
-    if (poolId) {
-      // Check remaining requirements first; if already satisfied (complete), fall back to the full tree
-      const req = remainingRequirements.find((r) => r.requirementId === poolId);
-      if (req?.candidateCourses?.length) {
-        poolRequirementType = req.type;
-        requirementTitle = req.title;
-        for (const c of req.candidateCourses) candidateSet.add(c);
-      } else {
-        const node = findReqNodeById(requirementTreeWithStatus, poolId);
-        if (node?.candidateCourses?.length) {
-          poolRequirementType = node.type;
-          requirementTitle = node.title;
-          for (const c of node.candidateCourses) candidateSet.add(c);
-        }
-      }
-    }
-    if (candidateSet.size === 0) {
-      const oldCodeNorm = normalizeCourseCode(oldCode);
-      // Search remaining requirements
-      for (const req of remainingRequirements) {
-        if (!req.candidateCourses?.length) continue;
-        const hasOld = req.candidateCourses.some((c) => normalizeCourseCode(c) === oldCodeNorm);
-        if (hasOld) {
+      if (poolId) {
+        // Check remaining requirements first; if already satisfied (complete), fall back to the full tree
+        const req = remainingRequirements.find((r) => r.requirementId === poolId);
+        if (req?.candidateCourses?.length) {
+          poolRequirementType = req.type;
+          requirementTitle = req.title;
           for (const c of req.candidateCourses) candidateSet.add(c);
-        }
-      }
-      // Also search the full tree (includes completed requirements)
-      if (candidateSet.size === 0) {
-        const flattened = applyOptionSelections(
-          requirementTreeWithStatus,
-          selectedOptionsPerRequirement,
-        );
-        const reqIds = collectRequirementIdsWithCandidateCourse(flattened, oldCodeNorm);
-        for (const reqId of reqIds) {
-          const node = findReqNodeById(flattened, reqId);
+        } else {
+          const node = findReqNodeById(requirementTreeWithStatus, poolId);
           if (node?.candidateCourses?.length) {
-            if (!poolRequirementType) poolRequirementType = node.type;
-            if (!requirementTitle) requirementTitle = node.title;
+            poolRequirementType = node.type;
+            requirementTitle = node.title;
             for (const c of node.candidateCourses) candidateSet.add(c);
           }
         }
       }
-    }
-    if (candidateSet.size === 0) {
-      for (const c of filteredPrereqEligibleCourses) candidateSet.add(c);
-    }
-
-    const explicitExemptNormalized = new Set<string>();
-    for (const codes of Object.values(constrainedPerRequirement)) {
-      for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
-    }
-    for (const codes of Object.values(selectedPerRequirement)) {
-      for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
-    }
-
-    const others = schedule.enrollments.filter(
-      (e, i) => i !== enrollmentIndex && e.courseCode !== oldCode,
-    );
-    const alreadyInSchedule = new Set(schedule.enrollments.map((e) => e.courseCode));
-
-    const isFirstYear = (code: string) => {
-      const m = code.match(/\d{4}/);
-      return m ? Number(m[0]) < 2000 : false;
-    };
-    const completedFirstYearCredits = generationLimitFirstYearCredits
-      ? completedCourses.reduce((sum, code) => {
-          if (!isFirstYear(code)) return sum;
-          return sum + (cache.getCourse(code)?.credits ?? 3);
-        }, 0)
-      : 0;
-    const othersFirstYearCredits = generationLimitFirstYearCredits
-      ? others.reduce((sum, e) => {
-          if (!isFirstYear(e.courseCode)) return sum;
-          return sum + (cache.getCourse(e.courseCode)?.credits ?? 3);
-        }, 0)
-      : 0;
-    const remainingFirstYearBudget = generationLimitFirstYearCredits
-      ? 48 - completedFirstYearCredits - othersFirstYearCredits
-      : Infinity;
-
-    const prereqEligibleSet = new Set(prereqEligibleCourses);
-    const swapConstraints: GenerationConstraints = {
-      minStartMinutes: generationMinStartMinutes,
-      maxEndMinutes: generationMaxEndMinutes,
-      allowedDays: generationAllowedDays,
-      minProfessorRating: generationMinProfessorRating ?? undefined,
-      professorRatings: professorRatings ?? undefined,
-    };
-
-    function getValidEnrollmentsFor(code: string): CourseEnrollment[] {
-      const virtualOnly = virtualScheduleFilterApplies(
-        virtualSectionsOnly,
-        poolRequirementType,
-        code,
-        explicitExemptNormalized,
-      );
-      const cacheKey = `${code}:${includeClosedComponents}:${virtualOnly}`;
-      const cached = validEnrollmentsByCourseCode.get(cacheKey);
-      if (cached) return cached;
-      const sched = getEffectiveSchedule(cache!, code, includeClosedComponents, virtualOnly);
-      if (!sched) {
-        validEnrollmentsByCourseCode.set(cacheKey, []);
-        return [];
-      }
-      const combos = getValidSectionCombos(sched, swapConstraints);
-      const enrollments = combos.map((combo) => getEnrollmentsForCourse(sched, combo));
-      validEnrollmentsByCourseCode.set(cacheKey, enrollments);
-      return enrollments;
-    }
-
-    const filters = { levels: levelBuckets, languageBuckets };
-
-    const candidates: string[] = [];
-    const rejectedWithConflict: Array<{ code: string; conflictsWith: string }> = [];
-    for (const code of candidateSet) {
-      if (!prereqEligibleSet.has(code)) continue;
-      if (code === oldCode) continue;
-      if (completedCourses.includes(code)) continue;
-      if (alreadyInSchedule.has(code)) continue;
-      if (isHonoursProject(code, cache)) continue;
-      if (!courseMatchesFilters(code, filters)) continue;
-      if (isFirstYear(code) && (cache.getCourse(code)?.credits ?? 3) > remainingFirstYearBudget)
-        continue;
-
-      const isElectiveType = isElectiveRequirementType(poolRequirementType);
-      const isGenericElective =
-        poolRequirementType === "free_elective" ||
-        poolRequirementType === "non_discipline_elective" ||
-        poolRequirementType === "faculty_elective" ||
-        poolRequirementType === "elective";
-      if (isElectiveType && !isWithinElectiveLevelCap(code)) continue;
-      if (isGenericElective && electiveLevelBuckets.length > 0) {
-        const match = code.match(/\d{4}/);
-        if (match) {
-          const num = parseInt(match[0], 10);
-          if (!Number.isNaN(num)) {
-            const bucket = Math.floor(num / 1000) * 1000;
-            if (!electiveLevelBuckets.includes(bucket)) {
-              continue;
+      if (candidateSet.size === 0) {
+        const oldCodeNorm = normalizeCourseCode(oldCode);
+        // Search remaining requirements
+        for (const req of remainingRequirements) {
+          if (!req.candidateCourses?.length) continue;
+          const hasOld = req.candidateCourses.some((c) => normalizeCourseCode(c) === oldCodeNorm);
+          if (hasOld) {
+            for (const c of req.candidateCourses) candidateSet.add(c);
+          }
+        }
+        // Also search the full tree (includes completed requirements)
+        if (candidateSet.size === 0) {
+          const flattened = applyOptionSelections(
+            requirementTreeWithStatus,
+            selectedOptionsPerRequirement,
+          );
+          const reqIds = collectRequirementIdsWithCandidateCourse(flattened, oldCodeNorm);
+          for (const reqId of reqIds) {
+            const node = findReqNodeById(flattened, reqId);
+            if (node?.candidateCourses?.length) {
+              if (!poolRequirementType) poolRequirementType = node.type;
+              if (!requirementTitle) requirementTitle = node.title;
+              for (const c of node.candidateCourses) candidateSet.add(c);
             }
           }
         }
       }
-      const possibleEnrollments = getValidEnrollmentsFor(code);
-      if (possibleEnrollments.length === 0) continue;
+      if (candidateSet.size === 0) {
+        for (const c of filteredPrereqEligibleCourses) candidateSet.add(c);
+      }
 
-      let added = false;
-      for (const candidate of possibleEnrollments) {
-        const conflicts = others.some((e) => enrollmentsOverlap(e, candidate));
-        if (!conflicts) {
-          candidates.push(code);
-          added = true;
-          break;
+      const explicitExemptNormalized = new Set<string>();
+      for (const codes of Object.values(constrainedPerRequirement)) {
+        for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
+      }
+      for (const codes of Object.values(selectedPerRequirement)) {
+        for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
+      }
+
+      const others = schedule.enrollments.filter(
+        (e, i) => i !== enrollmentIndex && e.courseCode !== oldCode,
+      );
+      const alreadyInSchedule = new Set(schedule.enrollments.map((e) => e.courseCode));
+
+      const isFirstYear = (code: string) => {
+        const m = code.match(/\d{4}/);
+        return m ? Number(m[0]) < 2000 : false;
+      };
+      const completedFirstYearCredits = generationLimitFirstYearCredits
+        ? completedCourses.reduce((sum, code) => {
+            if (!isFirstYear(code)) return sum;
+            return sum + (cache.getCourse(code)?.credits ?? 3);
+          }, 0)
+        : 0;
+      const othersFirstYearCredits = generationLimitFirstYearCredits
+        ? others.reduce((sum, e) => {
+            if (!isFirstYear(e.courseCode)) return sum;
+            return sum + (cache.getCourse(e.courseCode)?.credits ?? 3);
+          }, 0)
+        : 0;
+      const remainingFirstYearBudget = generationLimitFirstYearCredits
+        ? 48 - completedFirstYearCredits - othersFirstYearCredits
+        : Infinity;
+
+      const prereqEligibleSet = new Set(prereqEligibleCourses);
+      const swapConstraints: GenerationConstraints = {
+        minStartMinutes: generationMinStartMinutes,
+        maxEndMinutes: generationMaxEndMinutes,
+        allowedDays: generationAllowedDays,
+        minProfessorRating: generationMinProfessorRating ?? undefined,
+        professorRatings: professorRatings ?? undefined,
+      };
+
+      function getValidEnrollmentsFor(code: string): CourseEnrollment[] {
+        const virtualOnly = virtualScheduleFilterApplies(
+          virtualSectionsOnly,
+          poolRequirementType,
+          code,
+          explicitExemptNormalized,
+        );
+        const cacheKey = `${code}:${includeClosedComponents}:${virtualOnly}`;
+        const cached = validEnrollmentsByCourseCode.get(cacheKey);
+        if (cached) return cached;
+        const sched = getEffectiveSchedule(cache!, code, includeClosedComponents, virtualOnly);
+        if (!sched) {
+          validEnrollmentsByCourseCode.set(cacheKey, []);
+          return [];
+        }
+        const combos = getValidSectionCombos(sched, swapConstraints);
+        const enrollments = combos.map((combo) => getEnrollmentsForCourse(sched, combo));
+        validEnrollmentsByCourseCode.set(cacheKey, enrollments);
+        return enrollments;
+      }
+
+      const filters = { levels: levelBuckets, languageBuckets };
+
+      const candidates: string[] = [];
+      const rejectedWithConflict: Array<{ code: string; conflictsWith: string }> = [];
+      for (const code of candidateSet) {
+        if (!prereqEligibleSet.has(code)) continue;
+        if (code === oldCode) continue;
+        if (completedCourses.includes(code)) continue;
+        if (alreadyInSchedule.has(code)) continue;
+        if (isHonoursProject(code, cache)) continue;
+        if (!courseMatchesFilters(code, filters)) continue;
+        if (isFirstYear(code) && (cache.getCourse(code)?.credits ?? 3) > remainingFirstYearBudget)
+          continue;
+
+        const isElectiveType = isElectiveRequirementType(poolRequirementType);
+        const isGenericElective =
+          poolRequirementType === "free_elective" ||
+          poolRequirementType === "non_discipline_elective" ||
+          poolRequirementType === "faculty_elective" ||
+          poolRequirementType === "elective";
+        if (isElectiveType && !isWithinElectiveLevelCap(code)) continue;
+        if (isGenericElective && electiveLevelBuckets.length > 0) {
+          const match = code.match(/\d{4}/);
+          if (match) {
+            const num = parseInt(match[0], 10);
+            if (!Number.isNaN(num)) {
+              const bucket = Math.floor(num / 1000) * 1000;
+              if (!electiveLevelBuckets.includes(bucket)) {
+                continue;
+              }
+            }
+          }
+        }
+        const possibleEnrollments = getValidEnrollmentsFor(code);
+        if (possibleEnrollments.length === 0) continue;
+
+        let added = false;
+        for (const candidate of possibleEnrollments) {
+          const conflicts = others.some((e) => enrollmentsOverlap(e, candidate));
+          if (!conflicts) {
+            candidates.push(code);
+            added = true;
+            break;
+          }
+        }
+        if (!added && others.length > 0 && possibleEnrollments.length > 0) {
+          const conflict = getFirstOverlapWith(possibleEnrollments[0], others);
+          if (conflict) {
+            rejectedWithConflict.push({
+              code,
+              conflictsWith: conflict.courseCode,
+            });
+          }
         }
       }
-      if (!added && others.length > 0 && possibleEnrollments.length > 0) {
-        const conflict = getFirstOverlapWith(possibleEnrollments[0], others);
-        if (conflict) {
-          rejectedWithConflict.push({
-            code,
-            conflictsWith: conflict.courseCode,
-          });
+      const poolCourses = [...candidateSet];
+      return { candidates, poolCourses, requirementTitle, rejectedWithConflict };
+    },
+
+    lockCourseForAllSchedulesFromSwap: (enrollmentIndex) => {
+      const {
+        currentSchedule,
+        cache,
+        basicPinnedCourses,
+        basicElectivesCount,
+        currentPoolMap,
+        chosenCourseToRequirementId,
+        remainingRequirements,
+        requirementTreeWithStatus,
+        selectedOptionsPerRequirement,
+      } = get();
+      if (!currentSchedule) return;
+      const enrollment = currentSchedule.enrollments[enrollmentIndex];
+      if (!enrollment) return;
+      const code = enrollment.courseCode;
+      const norm = normalizeCourseCode(code);
+      const canonical = cache?.getCourse(norm)?.code ?? code;
+
+      if (get().calendarMode === "basic") {
+        if (basicPinnedCourses.some((c) => normalizeCourseCode(c) === norm)) {
+          return;
         }
-      }
-    }
-    const poolCourses = [...candidateSet];
-    return { candidates, poolCourses, requirementTitle, rejectedWithConflict };
-  },
-
-  lockCourseForAllSchedulesFromSwap: (enrollmentIndex) => {
-    const {
-      currentSchedule,
-      cache,
-      basicPinnedCourses,
-      basicElectivesCount,
-      currentPoolMap,
-      chosenCourseToRequirementId,
-      remainingRequirements,
-      requirementTreeWithStatus,
-      selectedOptionsPerRequirement,
-    } = get();
-    if (!currentSchedule) return;
-    const enrollment = currentSchedule.enrollments[enrollmentIndex];
-    if (!enrollment) return;
-    const code = enrollment.courseCode;
-    const norm = normalizeCourseCode(code);
-    const canonical = cache?.getCourse(norm)?.code ?? code;
-
-    if (isBasicPlannerActive()) {
-      if (basicPinnedCourses.some((c) => normalizeCourseCode(c) === norm)) {
+        set({
+          basicPinnedCourses: [...basicPinnedCourses, canonical],
+          basicElectivesCount: basicElectivesAfterPinnedDelta(basicElectivesCount, 1),
+          generationError: null,
+        });
         return;
       }
-      set({
-        basicPinnedCourses: [...basicPinnedCourses, canonical],
-        basicElectivesCount: basicElectivesAfterPinnedDelta(basicElectivesCount, 1),
-        generationError: null,
+
+      if (get().calendarMode !== "advanced") return;
+
+      const requirementIds = resolveRequirementIdsForScheduleCourse({
+        courseCode: code,
+        courseNorm: norm,
+        requirementTreeWithStatus,
+        selectedOptionsPerRequirement,
+        currentPoolMap,
+        chosenCourseToRequirementId,
+        remainingRequirements,
       });
-      return;
-    }
 
-    if (!isAdvancedPlannerActive()) return;
+      if (requirementIds.length === 0) return;
 
-    const requirementIds = resolveRequirementIdsForScheduleCourse({
-      courseCode: code,
-      courseNorm: norm,
-      requirementTreeWithStatus,
-      selectedOptionsPerRequirement,
-      currentPoolMap,
-      chosenCourseToRequirementId,
-      remainingRequirements,
-    });
+      const reqMap = new Map(remainingRequirements.map((r) => [r.requirementId, r]));
 
-    if (requirementIds.length === 0) return;
-
-    const reqMap = new Map(remainingRequirements.map((r) => [r.requirementId, r]));
-
-    let targetId: string;
-    if (requirementIds.length === 1) {
-      targetId = requirementIds[0];
-    } else {
-      const metas = requirementIds.flatMap((id) => {
-        const req = reqMap.get(id);
-        if (!req) return [];
-        return [
-          {
-            reqId: id,
-            type: req.type,
-            candidatesNorm: new Set(req.candidateCourses.map(normalizeCourseCode)),
-            creditsNeeded: req.creditsNeeded ?? 0,
-          } satisfies AutoAssignReqMeta,
-        ];
-      });
-      metas.sort(compareReqPreference);
-      targetId = metas[0]?.reqId ?? requirementIds[0];
-    }
-
-    set((s) => {
-      const constrained = s.constrainedPerRequirement[targetId] ?? [];
-      const assigned = s.selectedPerRequirement[targetId] ?? [];
-      if (
-        constrained.some((c) => normalizeCourseCode(c) === norm) ||
-        assigned.some((c) => normalizeCourseCode(c) === norm)
-      ) {
-        return {};
+      let targetId: string;
+      if (requirementIds.length === 1) {
+        targetId = requirementIds[0];
+      } else {
+        const metas = requirementIds.flatMap((id) => {
+          const req = reqMap.get(id);
+          if (!req) return [];
+          return [
+            {
+              reqId: id,
+              type: req.type,
+              candidatesNorm: new Set(req.candidateCourses.map(normalizeCourseCode)),
+              creditsNeeded: req.creditsNeeded ?? 0,
+            } satisfies AutoAssignReqMeta,
+          ];
+        });
+        metas.sort(compareReqPreference);
+        targetId = metas[0]?.reqId ?? requirementIds[0];
       }
-      const merged = appendCourseDedupedByNorm(constrained, canonical, norm);
-      if (merged === constrained) return {};
-      return {
-        constrainedPerRequirement: { ...s.constrainedPerRequirement, [targetId]: merged },
-      };
-    });
-  },
 
-  unlockCourseForAllSchedulesFromSwap: (enrollmentIndex) => {
-    const { currentSchedule, basicPinnedCourses, basicElectivesCount, constrainedPerRequirement } =
-      get();
-    if (!currentSchedule) return;
-    const enrollment = currentSchedule.enrollments[enrollmentIndex];
-    if (!enrollment) return;
-    const norm = normalizeCourseCode(enrollment.courseCode);
+      set((s) => {
+        const constrained = s.constrainedPerRequirement[targetId] ?? [];
+        const assigned = s.selectedPerRequirement[targetId] ?? [];
+        if (
+          constrained.some((c) => normalizeCourseCode(c) === norm) ||
+          assigned.some((c) => normalizeCourseCode(c) === norm)
+        ) {
+          return {};
+        }
+        const merged = appendCourseDedupedByNorm(constrained, canonical, norm);
+        if (merged === constrained) return {};
+        return {
+          constrainedPerRequirement: { ...s.constrainedPerRequirement, [targetId]: merged },
+        };
+      });
+    },
 
-    if (isBasicPlannerActive()) {
-      const next = basicPinnedCourses.filter((c) => normalizeCourseCode(c) !== norm);
-      if (next.length === basicPinnedCourses.length) return;
+    unlockCourseForAllSchedulesFromSwap: (enrollmentIndex) => {
+      const {
+        currentSchedule,
+        basicPinnedCourses,
+        basicElectivesCount,
+        constrainedPerRequirement,
+      } = get();
+      if (!currentSchedule) return;
+      const enrollment = currentSchedule.enrollments[enrollmentIndex];
+      if (!enrollment) return;
+      const norm = normalizeCourseCode(enrollment.courseCode);
+
+      if (get().calendarMode === "basic") {
+        const next = basicPinnedCourses.filter((c) => normalizeCourseCode(c) !== norm);
+        if (next.length === basicPinnedCourses.length) return;
+        set({
+          basicPinnedCourses: next,
+          basicElectivesCount: basicElectivesAfterPinnedDelta(
+            basicElectivesCount,
+            next.length - basicPinnedCourses.length,
+          ),
+          generationError: null,
+        });
+        return;
+      }
+
+      if (get().calendarMode !== "advanced") return;
+
+      const next: Record<string, string[]> = {};
+      let changed = false;
+      for (const [rid, codes] of Object.entries(constrainedPerRequirement)) {
+        const filtered = codes.filter((c) => normalizeCourseCode(c) !== norm);
+        if (filtered.length !== codes.length) changed = true;
+        if (filtered.length > 0) next[rid] = filtered;
+      }
+      if (!changed) return;
+      set({ constrainedPerRequirement: next });
+    },
+
+    blacklistCourseFromSwap: (enrollmentIndex) => {
+      const { currentSchedule, cache, blacklistedCourses } = get();
+      if (!currentSchedule) return;
+      const enrollment = currentSchedule.enrollments[enrollmentIndex];
+      if (!enrollment) return;
+      const code = enrollment.courseCode;
+      const norm = normalizeCourseCode(code);
+      if (blacklistedCourses.some((c) => normalizeCourseCode(c) === norm)) return;
+      const canonical = cache?.getCourse(norm)?.code ?? code;
       set({
-        basicPinnedCourses: next,
-        basicElectivesCount: basicElectivesAfterPinnedDelta(
-          basicElectivesCount,
-          next.length - basicPinnedCourses.length,
-        ),
+        blacklistedCourses: [...blacklistedCourses, canonical],
+        firstSeed: generateRandomSeed(),
+        currentSeed: 0,
+        lowestVisitedSeed: null,
+      });
+    },
+
+    unblacklistCourseFromSwap: (enrollmentIndex) => {
+      const { currentSchedule, blacklistedCourses } = get();
+      if (!currentSchedule) return;
+      const enrollment = currentSchedule.enrollments[enrollmentIndex];
+      if (!enrollment) return;
+      const norm = normalizeCourseCode(enrollment.courseCode);
+      const next = blacklistedCourses.filter((c) => normalizeCourseCode(c) !== norm);
+      if (next.length === blacklistedCourses.length) return;
+      set({
+        blacklistedCourses: next,
+        firstSeed: generateRandomSeed(),
+        currentSeed: 0,
+        lowestVisitedSeed: null,
+      });
+    },
+
+    importSchedule: (schedule) => {
+      const colorMap: Record<string, number> = {};
+      schedule.enrollments.forEach((e, i) => {
+        colorMap[e.courseCode] = i % 8;
+      });
+      set({
+        currentSchedule: schedule,
+        currentSwaps: [],
+        swapsPerSeed: {},
+        currentColorMap: colorMap,
         generationError: null,
       });
-      return;
-    }
-
-    if (!isAdvancedPlannerActive()) return;
-
-    const next: Record<string, string[]> = {};
-    let changed = false;
-    for (const [rid, codes] of Object.entries(constrainedPerRequirement)) {
-      const filtered = codes.filter((c) => normalizeCourseCode(c) !== norm);
-      if (filtered.length !== codes.length) changed = true;
-      if (filtered.length > 0) next[rid] = filtered;
-    }
-    if (!changed) return;
-    set({ constrainedPerRequirement: next });
-  },
-
-  blacklistCourseFromSwap: (enrollmentIndex) => {
-    const { currentSchedule, cache, blacklistedCourses } = get();
-    if (!currentSchedule) return;
-    const enrollment = currentSchedule.enrollments[enrollmentIndex];
-    if (!enrollment) return;
-    const code = enrollment.courseCode;
-    const norm = normalizeCourseCode(code);
-    if (blacklistedCourses.some((c) => normalizeCourseCode(c) === norm)) return;
-    const canonical = cache?.getCourse(norm)?.code ?? code;
-    set({
-      blacklistedCourses: [...blacklistedCourses, canonical],
-      firstSeed: generateRandomSeed(),
-      currentSeed: 0,
-      lowestVisitedSeed: null,
-    });
-  },
-
-  unblacklistCourseFromSwap: (enrollmentIndex) => {
-    const { currentSchedule, blacklistedCourses } = get();
-    if (!currentSchedule) return;
-    const enrollment = currentSchedule.enrollments[enrollmentIndex];
-    if (!enrollment) return;
-    const norm = normalizeCourseCode(enrollment.courseCode);
-    const next = blacklistedCourses.filter((c) => normalizeCourseCode(c) !== norm);
-    if (next.length === blacklistedCourses.length) return;
-    set({
-      blacklistedCourses: next,
-      firstSeed: generateRandomSeed(),
-      currentSeed: 0,
-      lowestVisitedSeed: null,
-    });
-  },
-
-  importSchedule: (schedule) => {
-    const colorMap: Record<string, number> = {};
-    schedule.enrollments.forEach((e, i) => {
-      colorMap[e.courseCode] = i % 8;
-    });
-    set({
-      currentSchedule: schedule,
-      currentSwaps: [],
-      swapsPerSeed: {},
-      currentColorMap: colorMap,
-      generationError: null,
-    });
-    flushPersistedAppState();
-  },
-});
+      flushPersistedAppState();
+    },
+  };
+};

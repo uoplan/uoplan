@@ -27,6 +27,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Verify cli.proto matches the canonical @uoplan/proto schema
+        run: diff -u packages/proto/proto/cli.proto apps/cli/proto/cli.proto
+
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -35,3 +38,7 @@ jobs:
       - name: Run Clippy
         working-directory: apps/cli
         run: cargo clippy -- -D warnings
+
+      - name: Run tests
+        working-directory: apps/cli
+        run: cargo test

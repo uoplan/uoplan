@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { SCRAPER_DATA_DIR } from "./dataPaths.ts";
-import type { SchedulesData } from "../../../packages/schedule/src/dataTypes.ts";
+import type { SchedulesData } from "../../../packages/core/src/dataTypes.ts";
 
 const DAY_INDEX: Record<string, number> = {
   Mo: 0,

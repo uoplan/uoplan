@@ -10,7 +10,7 @@ import {
   Select,
   Checkbox,
 } from "@mantine/core";
-import type { DayOfWeek } from "@uoplan/schedule";
+import type { DayOfWeek } from "@uoplan/core";
 import type { GenerationErrorDetails } from "../../store/types";
 import { GenerationErrorDetailBlocks } from "../GenerationErrorDetailBlocks";
 import { tr } from "../../i18n";
@@ -29,7 +29,7 @@ function timeStringToMinutes(value: string): number {
   return Math.max(0, Math.min(24 * 60 - 1, h * 60 + m));
 }
 
-interface ScheduleCountStepProps {
+export interface ScheduleCountStepProps {
   coursesThisSemester: number;
   onCoursesChange: (n: number) => void;
   selectedCount: number;

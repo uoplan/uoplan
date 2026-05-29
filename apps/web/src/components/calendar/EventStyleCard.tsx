@@ -1,4 +1,4 @@
-import type { ComponentSection, CourseEnrollment, DataCache } from "@uoplan/schedule";
+import type { ComponentSection, CourseEnrollment, DataCache } from "@uoplan/core";
 import {
   COURSE_COLORS,
   COURSE_COLOR_HEX,
@@ -6,9 +6,9 @@ import {
   getRatingsForInstructors,
   hexToRgb,
   type ProfessorRatingsMap,
-  ratingColorToCssVar,
   ratingToColor,
-} from "@uoplan/schedule";
+} from "@uoplan/core";
+import { ratingColorToCssVar } from "../../lib/ratingColor";
 import { CalendarEventFace } from "./CalendarEventFace";
 import { componentKindOnly, formatTimeRange } from "./calendarEventDisplayUtils";
 

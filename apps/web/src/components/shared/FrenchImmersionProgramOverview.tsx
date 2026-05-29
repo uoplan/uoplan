@@ -7,7 +7,7 @@ import {
   frenchImmersionOverallVolumePercent,
   normalizeCourseCode,
   programTitleIndicatesNursing,
-} from "@uoplan/schedule";
+} from "@uoplan/core";
 import { useAppStore } from "../../store/appStore";
 import { tr } from "../../i18n";
 

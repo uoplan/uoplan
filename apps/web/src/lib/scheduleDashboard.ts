@@ -1,8 +1,5 @@
-import type { Program, RequirementWithStatus, Term } from "@uoplan/schedule";
-import {
-  hasMissingOptionSelections,
-  nodeHasOptionGroups,
-} from "../components/requirements/requirementUtils";
+import type { Program, RequirementWithStatus, Term } from "@uoplan/core";
+import { hasMissingOptionSelections, nodeHasOptionGroups } from "./requirements/requirementUtils";
 import { tr } from "../i18n";
 
 export type ScheduleDashboardCardStatus = "ready" | "attention" | "empty";

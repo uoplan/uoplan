@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { DataProto, fromProtoSchedulesData, type SchedulesData } from "@uoplan/schedule";
+import { DataProto, fromProtoSchedulesData, type SchedulesData } from "@uoplan/core";
 import { useAppStore } from "../store/appStore";
 import { fetchProtoBytes } from "../lib/protoFetch";
 
