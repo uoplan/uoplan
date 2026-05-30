@@ -23,7 +23,7 @@ import {
   peekTermAndYearFromBase64,
   reconstructScheduleForPreview,
 } from "@uoplan/core";
-import { buildColorMap, renderCalendarToSvg, scheduleToEvents } from "@uoplan/calendar";
+import { renderCalendarToSvg, scheduleToEvents } from "@uoplan/calendar";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // WORKER_ROOT is injected by esbuild at build time (see og-image-runner.mjs)
@@ -166,14 +166,13 @@ async function run() {
       compressedSchedule: decoded.generationCompressedSchedule,
     };
 
-    const schedule = reconstructScheduleForPreview(decoded, cache, constraints);
-    if (!schedule || schedule.enrollments.length === 0) {
+    const reconstructed = reconstructScheduleForPreview(decoded, cache, constraints);
+    if (!reconstructed || reconstructed.schedule.enrollments.length === 0) {
       console.warn("[og-image] No schedule reconstructed — using fallback");
       svg = fallbackSvg();
     } else {
-      const events = scheduleToEvents(schedule, null);
-      const colorMap = buildColorMap(schedule);
-      svg = renderCalendarToSvg(events, colorMap);
+      const events = scheduleToEvents(reconstructed.schedule, null);
+      svg = renderCalendarToSvg(events, reconstructed.colorMap);
     }
   }
 

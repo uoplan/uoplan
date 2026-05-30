@@ -35,7 +35,7 @@ Implemented in `apps/worker/src/ogImage.ts`:
 3. **Fetch data assets** from `env.ASSETS` (catalogue manifest → catalogue year → schedules for term → indices)
 4. **Decode state** — `decodeStateFromBase64()` returns `DecodedState` with all selections and swaps
 5. **Reconstruct schedule** — `reconstructScheduleForPreview()` from `@uoplan/calendar` calls `generateScheduleFromDecodedState()`, which uses the **exact same algorithm** as the web app's `generateSchedulesAction` (shared via `packages/calendar/src/generateSchedule.ts`). This guarantees the OG image shows the same courses the user sees in their browser.
-6. **Render** — `scheduleToEvents()`, `buildColorMap()`, then `renderCalendarToSvg()` produce an SVG; `@resvg/resvg-wasm` converts SVG → PNG
+6. **Render** — `reconstructScheduleForPreview()` returns `{ schedule, colorMap }`; the `colorMap` already has swap colour-inheritance applied so colours match the live calendar. `scheduleToEvents()` then `renderCalendarToSvg()` produce an SVG; `@resvg/resvg-wasm` converts SVG → PNG
 7. **Cache** — the PNG response is stored in the Workers Cache with `max-age=86400`
 
 If any step fails (invalid state, missing data, generation produces no schedule) a fallback PNG with the uoplan wordmark is returned.
