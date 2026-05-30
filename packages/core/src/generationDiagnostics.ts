@@ -17,6 +17,41 @@ export interface ActiveConstraintsSummary {
   maxFirstYearCredits: boolean;
 }
 
+/**
+ * Machine-readable suggestion identifiers. The locale-agnostic core never emits
+ * UI prose; the web layer maps each code to a translated string (see
+ * `apps/web/src/lib/generationDiagnosticsText.ts`).
+ */
+export type SuggestionCode =
+  | "relax-filters"
+  | "try-different-course"
+  | "turn-off-compressed"
+  | "clear-min-rating"
+  | "allow-more-weekdays"
+  | "widen-hours-days"
+  | "relax-fy-cap"
+  | "un-blacklist"
+  | "widen-or-change-picks"
+  | "combined-blockers-intro"
+  | "structural-conflict";
+
+export type LeadCode =
+  | "no-sections-named"
+  | "no-sections"
+  | "too-few-courses"
+  | "no-clash-free"
+  | "structural-conflict";
+
+/** Structured description of the primary alert line, rendered by the web layer. */
+export interface LeadDescriptor {
+  code: LeadCode;
+  /** Display course codes (already canonical) for `no-sections-named`. */
+  courses?: string[];
+  /** For `too-few-courses`. */
+  eligible?: number;
+  target?: number;
+}
+
 export interface TimetableFailureDiagnostics {
   kind: TimetableFailureKind;
   /** Courses with no schedule row or zero valid section combinations under constraints. */
@@ -24,10 +59,11 @@ export interface TimetableFailureDiagnostics {
   comboCountByCourse: Record<string, number>;
   eligibleCourseCount: number;
   targetCount: number;
-  suggestions: string[];
+  /** Machine-readable suggestion codes (web maps to translated strings). */
+  suggestions: SuggestionCode[];
   activeConstraintsSummary: ActiveConstraintsSummary;
-  /** One short sentence for a primary alert line. */
-  leadMessage: string;
+  /** Structured primary alert line (web maps to a translated sentence). */
+  lead: LeadDescriptor;
   /**
    * For the "no_conflict_free_assignment" case, the result of bounded
    * relaxation: which specific constraint(s), if removed, would actually
@@ -72,38 +108,35 @@ function buildActiveConstraintsSummary(
   };
 }
 
-const RELAX_SUGGESTION_BY_ID: Record<string, string> = {
-  "compressed-schedule": "Turn off Compressed schedule.",
-  "min-professor-rating": "Clear minimum professor rating.",
-  "time-window": "Widen class hours or allow more weekdays.",
-  "max-first-year-credits": "Relax the 1000-level credit cap if possible.",
-  blacklist: "Un-blacklist a course you removed earlier.",
+const RELAX_SUGGESTION_BY_ID: Record<string, SuggestionCode> = {
+  "compressed-schedule": "turn-off-compressed",
+  "min-professor-rating": "clear-min-rating",
+  "time-window": "widen-hours-days",
+  "max-first-year-credits": "relax-fy-cap",
+  blacklist: "un-blacklist",
 };
 
 /**
- * Turns a bounded-relaxation outcome into precise, *verified* suggestions: only
- * the constraints proven to unblock a timetable are listed, in place of the
+ * Turns a bounded-relaxation outcome into precise, *verified* suggestion codes:
+ * only the constraints proven to unblock a timetable are listed, in place of the
  * legacy "list every active constraint" guesswork.
  */
-function suggestionsFromRelaxation(outcome: RelaxationOutcome): string[] | null {
+function suggestionsFromRelaxation(outcome: RelaxationOutcome): SuggestionCode[] | null {
   if (outcome.kind === "single_blockers") {
     const tips = outcome.blockers
       .map((b) => RELAX_SUGGESTION_BY_ID[b.id])
-      .filter((s): s is string => s != null);
+      .filter((s): s is SuggestionCode => s != null);
     return tips.length > 0 ? tips : null;
   }
   if (outcome.kind === "combined_blockers") {
     const tips = outcome.relaxable
       .map((b) => RELAX_SUGGESTION_BY_ID[b.id])
-      .filter((s): s is string => s != null);
+      .filter((s): s is SuggestionCode => s != null);
     if (tips.length === 0) return null;
-    return ["No single filter is the culprit — relaxing several together helps:", ...tips];
+    return ["combined-blockers-intro", ...tips];
   }
   if (outcome.kind === "structural_conflict") {
-    return [
-      "These courses can't all fit in one timetable, even with filters off. " +
-        "Try different Constrain / Assign picks or fewer courses.",
-    ];
+    return ["structural-conflict"];
   }
   return null;
 }
@@ -114,58 +147,52 @@ function buildSuggestions(
   kind: TimetableFailureKind,
   summary: ActiveConstraintsSummary,
   coursesWithNoCombo: string[],
-): string[] {
-  const suggestions: string[] = [];
+): SuggestionCode[] {
+  const suggestions: SuggestionCode[] = [];
 
   if (kind === "no_section_combos" || kind === "too_few_courses_with_combos") {
-    suggestions.push("Relax time window, professor rating, or allowed days.");
+    suggestions.push("relax-filters");
     if (coursesWithNoCombo.length > 0) {
-      suggestions.push("No timetable posted yet? Try a different course or check back later.");
+      suggestions.push("try-different-course");
     }
   }
 
   if (kind === "no_conflict_free_assignment") {
     if (summary.compressedSchedule) {
-      suggestions.push("Turn off Compressed schedule.");
+      suggestions.push("turn-off-compressed");
     }
     if (summary.minProfessorRating) {
-      suggestions.push("Clear minimum professor rating.");
+      suggestions.push("clear-min-rating");
     }
     if (summary.allowedDaysCustom) {
-      suggestions.push("Allow more weekdays.");
+      suggestions.push("allow-more-weekdays");
     }
     if (summary.maxFirstYearCredits) {
-      suggestions.push("Relax 1000-level credit cap if possible.");
+      suggestions.push("relax-fy-cap");
     }
     if (suggestions.length < MAX_SUGGESTIONS) {
-      suggestions.push("Widen class hours or change Constrain / Assign picks.");
+      suggestions.push("widen-or-change-picks");
     }
   }
 
   return suggestions.slice(0, MAX_SUGGESTIONS);
 }
 
-function formatCourseListForLead(codes: string[]): string {
-  const max = 4;
-  if (codes.length <= max) return codes.join(", ");
-  return `${codes.slice(0, max).join(", ")} +${codes.length - max} more`;
-}
-
-function buildLeadMessage(
+function buildLeadDescriptor(
   kind: TimetableFailureKind,
   eligibleCourseCount: number,
   targetCount: number,
   coursesWithNoCombo: string[],
-): string {
+): LeadDescriptor {
   if (kind === "no_section_combos") {
     return coursesWithNoCombo.length > 0
-      ? `No sections match your filters: ${formatCourseListForLead(coursesWithNoCombo)}.`
-      : "No sections match your current filters.";
+      ? { code: "no-sections-named", courses: [...new Set(coursesWithNoCombo)] }
+      : { code: "no-sections" };
   }
   if (kind === "too_few_courses_with_combos") {
-    return `Only ${eligibleCourseCount}/${targetCount} courses have valid sections.`;
+    return { code: "too-few-courses", eligible: eligibleCourseCount, target: targetCount };
   }
-  return "No clash-free timetable with your current settings.";
+  return { code: "no-clash-free" };
 }
 
 export interface DiagnoseTimetableFailureInput {
@@ -207,15 +234,13 @@ export function diagnoseTimetableFailure(
   }
 
   const tailored = suggestionsFromRelaxation(relaxation);
-  const leadMessage =
-    relaxation.kind === "structural_conflict"
-      ? "These courses can't be scheduled together, even with all filters off."
-      : base.leadMessage;
+  const lead: LeadDescriptor =
+    relaxation.kind === "structural_conflict" ? { code: "structural-conflict" } : base.lead;
 
   return {
     ...base,
     relaxation,
-    leadMessage,
+    lead,
     suggestions: (tailored ?? base.suggestions).slice(0, MAX_SUGGESTIONS),
   };
 }
@@ -261,12 +286,7 @@ function diagnoseTimetableFailureBase(
       kind = "no_conflict_free_assignment";
     }
 
-    const leadMessage = buildLeadMessage(
-      kind,
-      eligibleCourseCount,
-      targetCount,
-      coursesWithNoCombo,
-    );
+    const lead = buildLeadDescriptor(kind, eligibleCourseCount, targetCount, coursesWithNoCombo);
     return {
       kind,
       coursesWithNoCombo: [...new Set(coursesWithNoCombo)],
@@ -275,7 +295,7 @@ function diagnoseTimetableFailureBase(
       targetCount,
       suggestions: buildSuggestions(kind, summary, coursesWithNoCombo),
       activeConstraintsSummary: summary,
-      leadMessage,
+      lead,
     };
   }
 
@@ -299,7 +319,7 @@ function diagnoseTimetableFailureBase(
       targetCount,
       suggestions: buildSuggestions(kind, summary, coursesWithNoCombo),
       activeConstraintsSummary: summary,
-      leadMessage: buildLeadMessage(kind, eligibleCourseCount, targetCount, coursesWithNoCombo),
+      lead: buildLeadDescriptor(kind, eligibleCourseCount, targetCount, coursesWithNoCombo),
     };
   }
 
@@ -333,7 +353,7 @@ function diagnoseTimetableFailureBase(
   }
 
   const eligibleCourseCount = pinnedCourseCodes.length + optionalEligibleCount;
-  const leadMessage = buildLeadMessage(kind, eligibleCourseCount, targetCount, coursesWithNoCombo);
+  const lead = buildLeadDescriptor(kind, eligibleCourseCount, targetCount, coursesWithNoCombo);
 
   return {
     kind,
@@ -343,6 +363,6 @@ function diagnoseTimetableFailureBase(
     targetCount,
     suggestions: buildSuggestions(kind, summary, coursesWithNoCombo),
     activeConstraintsSummary: summary,
-    leadMessage,
+    lead,
   };
 }

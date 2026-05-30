@@ -1355,3 +1355,162 @@ msgstr "Valeur de départ : {seed}"
 
 msgid "calendarPage.noSchedule"
 msgstr "Aucun horaire généré pour l'instant."
+
+msgid "gen.modal.title"
+msgstr "Erreur de génération"
+
+msgid "gen.lead.coursesMore"
+msgstr "{shown} +{count} de plus"
+
+msgid "gen.lead.noSectionsNamed"
+msgstr "Aucune section ne correspond à vos filtres : {courses}."
+
+msgid "gen.lead.noSections"
+msgstr "Aucune section ne correspond à vos filtres actuels."
+
+msgid "gen.lead.tooFew"
+msgstr "Seulement {eligible}/{target} cours ont des sections valides."
+
+msgid "gen.lead.structural"
+msgstr "Ces cours ne peuvent pas être placés ensemble, même sans aucun filtre."
+
+msgid "gen.lead.noClashFree"
+msgstr "Aucun horaire sans conflit avec vos paramètres actuels."
+
+msgid "gen.suggest.relaxFilters"
+msgstr "Assouplissez la plage horaire, la note du professeur ou les jours permis."
+
+msgid "gen.suggest.tryDifferentCourse"
+msgstr "Horaire pas encore publié ? Essayez un autre cours ou revenez plus tard."
+
+msgid "gen.suggest.turnOffCompressed"
+msgstr "Désactivez l'horaire compact."
+
+msgid "gen.suggest.clearMinRating"
+msgstr "Retirez la note minimale du professeur."
+
+msgid "gen.suggest.allowMoreWeekdays"
+msgstr "Permettez plus de jours de semaine."
+
+msgid "gen.suggest.widenHoursDays"
+msgstr "Élargissez les heures de cours ou permettez plus de jours."
+
+msgid "gen.suggest.relaxFyCap"
+msgstr "Assouplissez le plafond de crédits de niveau 1000 si possible."
+
+msgid "gen.suggest.unBlacklist"
+msgstr "Réautorisez un cours que vous aviez retiré."
+
+msgid "gen.suggest.widenOrChangePicks"
+msgstr "Élargissez les heures de cours ou modifiez vos choix Contraindre / Assigner."
+
+msgid "gen.suggest.combinedBlockersIntro"
+msgstr "Aucun filtre unique n'est en cause — en assouplir plusieurs ensemble aide :"
+
+msgid "gen.suggest.structural"
+msgstr "Ces cours ne peuvent pas tous tenir dans un seul horaire, même sans filtres. Essayez d'autres choix Contraindre / Assigner ou moins de cours."
+
+msgid "gen.error.notEnoughCourses"
+msgstr "Pas assez de cours correspondent à vos filtres."
+
+msgid "gen.error.unassignedCompleted"
+msgstr "Vous avez {count, plural, one {# cours complété} other {# cours complétés}} non assigné(s) à une exigence : {courses}. Vous devez {count, plural, one {l'assigner} other {les assigner}} à des exigences, ou les déplacer vers la section Exclus."
+
+msgid "gen.error.coursesMore"
+msgstr " (+{count} de plus)"
+
+msgid "gen.error.completeAssign"
+msgstr "Complétez les exigences Assigner avant de générer des horaires."
+
+msgid "gen.hint.startAfter"
+msgstr "Début limité à après {time}"
+
+msgid "gen.hint.endBefore"
+msgstr "Fin limitée à avant {time}"
+
+msgid "gen.hint.daysExcluded"
+msgstr "Jours exclus : {days}"
+
+msgid "gen.hint.profRating"
+msgstr "Note du professeur ≥ {rating}"
+
+msgid "gen.hint.virtualOnly"
+msgstr "Sections virtuelles seulement"
+
+msgid "gen.hint.closedExcluded"
+msgstr "Sections fermées exclues — essayez d'activer « Inclure les sections fermées »"
+
+msgid "gen.hint.languageFilter"
+msgstr "Filtre de langue : {langs} seulement"
+
+msgid "gen.lang.english"
+msgstr "Anglais"
+
+msgid "gen.lang.french"
+msgstr "Français"
+
+msgid "gen.lang.other"
+msgstr "Autre"
+
+msgid "gen.list.two"
+msgstr "{a} ou {b}"
+
+msgid "gen.list.overflow"
+msgstr "{head}, ou {count} de plus"
+
+msgid "gen.list.many"
+msgstr "{rest}, ou {last}"
+
+msgid "gen.slots.summary"
+msgstr "Seulement {available} des {needed} places de cours peuvent être remplies avec vos filtres actuels"
+
+msgid "gen.join.and"
+msgstr " et "
+
+msgid "gen.join.comma"
+msgstr ", "
+
+msgid "gen.pools.haveNoCourses"
+msgstr "{count, plural, one {n'a aucun cours admissible} other {n'ont aucun cours admissible}}"
+
+msgid "gen.pools.otherSummary"
+msgstr "{count} autres exigences n'ont aucun cours admissible (souvent des sections de trimestres à venir pas encore publiées)."
+
+msgid "gen.pools.heading"
+msgstr "Exigences sans cours admissibles"
+
+msgid "gen.pools.blockedByFilters"
+msgstr "{count, plural, one {— {courses} est admissible mais bloqué par les filtres actuels} other {— {courses} sont admissibles mais bloqués par les filtres actuels}}"
+
+msgid "gen.pools.noSectionsThisTerm"
+msgstr "— aucune section offerte ce trimestre"
+
+msgid "gen.hints.heading"
+msgstr "Filtres actifs limitant les résultats"
+
+msgid "gen.noSections.heading"
+msgstr "Aucune section correspondante (filtres / horaire)"
+
+msgid "gen.quickFixes.heading"
+msgstr "Solutions rapides"
+
+msgid "gen.day.mon"
+msgstr "lun"
+
+msgid "gen.day.tue"
+msgstr "mar"
+
+msgid "gen.day.wed"
+msgstr "mer"
+
+msgid "gen.day.thu"
+msgstr "jeu"
+
+msgid "gen.day.fri"
+msgstr "ven"
+
+msgid "gen.day.sat"
+msgstr "sam"
+
+msgid "gen.day.sun"
+msgstr "dim"

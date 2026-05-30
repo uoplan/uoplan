@@ -718,6 +718,7 @@ export function generateAdvancedSchedule(params: AdvancedScheduleParams): Advanc
           }
         }
         if (isHonoursProject(code, cache)) continue;
+        if (blacklistedSet.has(normalizeCourseCode(code))) continue;
         if (getValidSectionCombos(sched, constraints).length === 0) continue;
         candidates.push(code);
       }

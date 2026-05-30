@@ -128,7 +128,7 @@ describe("generateAdvancedSchedule golden behaviour", () => {
     expect(summaries).toMatchSnapshot();
   });
 
-  it("excludes blacklisted courses from the constrained set (documents general-pool leak)", () => {
+  it("excludes blacklisted courses from the general pool", () => {
     const summaries = runSeeds(() => {
       const cache = buildFixtureCache();
       const params = baseAdvancedParams(cache);
@@ -147,11 +147,13 @@ describe("generateAdvancedSchedule golden behaviour", () => {
       return params;
     });
 
-    // CHARACTERIZATION OF A KNOWN BUG: the advanced pipeline applies the
-    // blacklist only to constrained (S) picks, not to the general (G) pool, so
-    // a blacklisted course can still be scheduled. The `engine` rewrite
-    // MUST fix this (blacklist is a uniform course-scope constraint); when it
-    // does, update this snapshot to assert exclusion instead.
+    // The blacklist is a uniform course-scope exclusion: a blacklisted course
+    // must never appear in a generated course set, whether picked from the
+    // constrained (S) set or the general (G) pool.
+    for (const summary of summaries) {
+      expect(summary.courseSet).not.toContain("MAT 1320");
+      expect(summary.optionalPool).not.toContain("MAT 1320");
+    }
     expect(summaries).toMatchSnapshot();
   });
 

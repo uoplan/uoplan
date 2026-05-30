@@ -1356,3 +1356,162 @@ msgstr "Select theme"
 
 msgid "schedule.editor.back"
 msgstr "Back to planner"
+
+msgid "gen.modal.title"
+msgstr "Generation error"
+
+msgid "gen.lead.coursesMore"
+msgstr "{shown} +{count} more"
+
+msgid "gen.lead.noSectionsNamed"
+msgstr "No sections match your filters: {courses}."
+
+msgid "gen.lead.noSections"
+msgstr "No sections match your current filters."
+
+msgid "gen.lead.tooFew"
+msgstr "Only {eligible}/{target} courses have valid sections."
+
+msgid "gen.lead.structural"
+msgstr "These courses can't be scheduled together, even with all filters off."
+
+msgid "gen.lead.noClashFree"
+msgstr "No clash-free timetable with your current settings."
+
+msgid "gen.suggest.relaxFilters"
+msgstr "Relax time window, professor rating, or allowed days."
+
+msgid "gen.suggest.tryDifferentCourse"
+msgstr "No timetable posted yet? Try a different course or check back later."
+
+msgid "gen.suggest.turnOffCompressed"
+msgstr "Turn off Compressed schedule."
+
+msgid "gen.suggest.clearMinRating"
+msgstr "Clear minimum professor rating."
+
+msgid "gen.suggest.allowMoreWeekdays"
+msgstr "Allow more weekdays."
+
+msgid "gen.suggest.widenHoursDays"
+msgstr "Widen class hours or allow more weekdays."
+
+msgid "gen.suggest.relaxFyCap"
+msgstr "Relax 1000-level credit cap if possible."
+
+msgid "gen.suggest.unBlacklist"
+msgstr "Un-blacklist a course you removed earlier."
+
+msgid "gen.suggest.widenOrChangePicks"
+msgstr "Widen class hours or change Constrain / Assign picks."
+
+msgid "gen.suggest.combinedBlockersIntro"
+msgstr "No single filter is the culprit — relaxing several together helps:"
+
+msgid "gen.suggest.structural"
+msgstr "These courses can't all fit in one timetable, even with filters off. Try different Constrain / Assign picks or fewer courses."
+
+msgid "gen.error.notEnoughCourses"
+msgstr "Not enough courses match your filters."
+
+msgid "gen.error.unassignedCompleted"
+msgstr "You have {count, plural, one {# completed course} other {# completed courses}} not assigned to a requirement: {courses}. You must assign {count, plural, one {it} other {them}} to requirements, or move them to the Excluded section."
+
+msgid "gen.error.coursesMore"
+msgstr " (+{count} more)"
+
+msgid "gen.error.completeAssign"
+msgstr "Complete Assign requirements before generating schedules."
+
+msgid "gen.hint.startAfter"
+msgstr "Start time restricted to after {time}"
+
+msgid "gen.hint.endBefore"
+msgstr "End time restricted to before {time}"
+
+msgid "gen.hint.daysExcluded"
+msgstr "Days excluded: {days}"
+
+msgid "gen.hint.profRating"
+msgstr "Professor rating ≥ {rating}"
+
+msgid "gen.hint.virtualOnly"
+msgstr "Virtual sections only"
+
+msgid "gen.hint.closedExcluded"
+msgstr "Closed sections excluded — try enabling \"Include closed sections\""
+
+msgid "gen.hint.languageFilter"
+msgstr "Language filter: {langs} only"
+
+msgid "gen.lang.english"
+msgstr "English"
+
+msgid "gen.lang.french"
+msgstr "French"
+
+msgid "gen.lang.other"
+msgstr "Other"
+
+msgid "gen.list.two"
+msgstr "{a} or {b}"
+
+msgid "gen.list.overflow"
+msgstr "{head}, or {count} more"
+
+msgid "gen.list.many"
+msgstr "{rest}, or {last}"
+
+msgid "gen.slots.summary"
+msgstr "Only {available} of {needed} course slots can be filled with your current filters"
+
+msgid "gen.join.and"
+msgstr " and "
+
+msgid "gen.join.comma"
+msgstr ", "
+
+msgid "gen.pools.haveNoCourses"
+msgstr "{count, plural, one {has no eligible courses} other {have no eligible courses}}"
+
+msgid "gen.pools.otherSummary"
+msgstr "{count} other requirements have no eligible courses (often future-term sections not posted yet)."
+
+msgid "gen.pools.heading"
+msgstr "Requirements with no eligible courses"
+
+msgid "gen.pools.blockedByFilters"
+msgstr "{count, plural, one {— {courses} qualifies but is blocked by current filters} other {— {courses} qualify but are blocked by current filters}}"
+
+msgid "gen.pools.noSectionsThisTerm"
+msgstr "— no sections offered this term"
+
+msgid "gen.hints.heading"
+msgstr "Active filters limiting results"
+
+msgid "gen.noSections.heading"
+msgstr "No matching sections (filters / timetable)"
+
+msgid "gen.quickFixes.heading"
+msgstr "Quick fixes"
+
+msgid "gen.day.mon"
+msgstr "Mon"
+
+msgid "gen.day.tue"
+msgstr "Tue"
+
+msgid "gen.day.wed"
+msgstr "Wed"
+
+msgid "gen.day.thu"
+msgstr "Thu"
+
+msgid "gen.day.fri"
+msgstr "Fri"
+
+msgid "gen.day.sat"
+msgstr "Sat"
+
+msgid "gen.day.sun"
+msgstr "Sun"

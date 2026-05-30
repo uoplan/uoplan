@@ -1,5 +1,10 @@
 import type { AppState } from "../store/types";
-import type { GenerationErrorDetails, GenerationErrorState } from "../store/types";
+import type {
+  FilterHintDescriptor,
+  GenerationErrorDetails,
+  GenerationErrorState,
+  GenerationMessageDescriptor,
+} from "../store/types";
 import {
   type DataCache,
   type GeneratedSchedule,
@@ -111,16 +116,6 @@ const DEFAULT_MAX_END_MINUTES = 22 * 60;
 const DEFAULT_ALLOWED_DAYS = ["Mo", "Tu", "We", "Th", "Fr"];
 const DEFAULT_LANGUAGE_BUCKETS = ["en", "other"];
 
-const DAY_NAMES: Record<string, string> = {
-  Mo: "Mon",
-  Tu: "Tue",
-  We: "Wed",
-  Th: "Thu",
-  Fr: "Fri",
-  Sa: "Sat",
-  Su: "Sun",
-};
-
 function buildActiveFilterHints(opts: {
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
@@ -129,8 +124,8 @@ function buildActiveFilterHints(opts: {
   virtualSectionsOnly: boolean;
   includeClosedComponents: boolean;
   languageBuckets: string[];
-}): string[] {
-  const hints: string[] = [];
+}): FilterHintDescriptor[] {
+  const hints: FilterHintDescriptor[] = [];
   const {
     generationMinStartMinutes,
     generationMaxEndMinutes,
@@ -144,38 +139,37 @@ function buildActiveFilterHints(opts: {
   if (generationMinStartMinutes > DEFAULT_MIN_START_MINUTES) {
     const h = Math.floor(generationMinStartMinutes / 60);
     const m = generationMinStartMinutes % 60;
-    hints.push(`Start time restricted to after ${h}:${m.toString().padStart(2, "0")}`);
+    hints.push({ code: "start-after", time: `${h}:${m.toString().padStart(2, "0")}` });
   }
 
   if (generationMaxEndMinutes < DEFAULT_MAX_END_MINUTES) {
     const h = Math.floor(generationMaxEndMinutes / 60);
     const m = generationMaxEndMinutes % 60;
-    hints.push(`End time restricted to before ${h}:${m.toString().padStart(2, "0")}`);
+    hints.push({ code: "end-before", time: `${h}:${m.toString().padStart(2, "0")}` });
   }
 
   const missingDays = DEFAULT_ALLOWED_DAYS.filter((d) => !generationAllowedDays.includes(d));
   if (missingDays.length > 0) {
-    hints.push(`Days excluded: ${missingDays.map((d) => DAY_NAMES[d] ?? d).join(", ")}`);
+    hints.push({ code: "days-excluded", days: missingDays });
   }
 
   if (generationMinProfessorRating != null) {
-    hints.push(`Professor rating ≥ ${generationMinProfessorRating}`);
+    hints.push({ code: "prof-rating", rating: generationMinProfessorRating });
   }
 
   if (virtualSectionsOnly) {
-    hints.push("Virtual sections only");
+    hints.push({ code: "virtual-only" });
   }
 
   if (!includeClosedComponents) {
-    hints.push('Closed sections excluded — try enabling "Include closed sections"');
+    hints.push({ code: "closed-excluded" });
   }
 
   const isSameAsDefaultLang =
     languageBuckets.length === DEFAULT_LANGUAGE_BUCKETS.length &&
     DEFAULT_LANGUAGE_BUCKETS.every((b) => languageBuckets.includes(b));
   if (!isSameAsDefaultLang) {
-    const langNames: Record<string, string> = { en: "English", fr: "French", other: "Other" };
-    hints.push(`Language filter: ${languageBuckets.map((b) => langNames[b] ?? b).join(", ")} only`);
+    hints.push({ code: "language-filter", langs: languageBuckets });
   }
 
   return hints;
@@ -188,7 +182,7 @@ function buildTimetableFailureDiagnostics(
   coursesThisSemester: number,
   cache: ReturnType<typeof cacheWithClosedFilter>,
   constraints: GenerationConstraints,
-  activeFilterHints?: string[],
+  activeFilterHints?: FilterHintDescriptor[],
 ): { details: GenerationErrorDetails; timetableFailure: TimetableFailureDiagnostics } {
   const timetableFailure = diagnoseTimetableFailure({
     pinnedCourseCodes: pinned,
@@ -208,7 +202,7 @@ function buildTimetableFailureDiagnostics(
 }
 
 function generationErrorState(
-  message: string,
+  message: GenerationMessageDescriptor,
   details: GenerationErrorDetails | null = null,
 ): GenerationErrorState {
   return { message, details };
@@ -266,22 +260,19 @@ export async function generateSchedulesAction(
   if (unassigned.length > 0) {
     const previewLimit = 12;
     const preview = unassigned.slice(0, previewLimit);
-    const suffix =
-      unassigned.length > previewLimit ? ` (+${unassigned.length - previewLimit} more)` : "";
+    const overflow = unassigned.length > previewLimit ? unassigned.length - previewLimit : 0;
     return {
       currentSchedule: null,
       swapPool: [],
       chosenCourseToRequirementId: {},
       currentPoolMap: {},
       currentColorMap: {},
-      generationError: generationErrorState(
-        `You have ${unassigned.length} completed course${
-          unassigned.length === 1 ? "" : "s"
-        } not assigned to a requirement: ${preview.join(", ")}${suffix}. ` +
-          `You must assign ${
-            unassigned.length === 1 ? "it" : "them"
-          } to requirements, or move them to the Excluded section.`,
-      ),
+      generationError: generationErrorState({
+        kind: "unassigned-completed",
+        count: unassigned.length,
+        preview,
+        overflow,
+      }),
     };
   }
 
@@ -334,9 +325,7 @@ export async function generateSchedulesAction(
       chosenCourseToRequirementId: {},
       currentPoolMap: {},
       currentColorMap: {},
-      generationError: generationErrorState(
-        "Complete Assign requirements before generating schedules.",
-      ),
+      generationError: generationErrorState({ kind: "complete-assign" }),
     };
   }
 
@@ -405,13 +394,16 @@ export async function generateSchedulesAction(
       chosenCourseToRequirementId: {},
       currentPoolMap: {},
       currentColorMap: {},
-      generationError: generationErrorState("Not enough courses match your filters.", {
-        emptyPools: poolDiagnostics?.emptyPools ?? [],
-        totalAvailable: poolDiagnostics?.totalAvailable ?? swapPool.length,
-        totalNeeded: poolDiagnostics?.totalNeeded ?? coursesThisSemester,
-        timetableFailure: null as unknown as TimetableFailureDiagnostics,
-        activeFilterHints: filterHints,
-      }),
+      generationError: generationErrorState(
+        { kind: "not-enough-courses" },
+        {
+          emptyPools: poolDiagnostics?.emptyPools ?? [],
+          totalAvailable: poolDiagnostics?.totalAvailable ?? swapPool.length,
+          totalNeeded: poolDiagnostics?.totalNeeded ?? coursesThisSemester,
+          timetableFailure: null as unknown as TimetableFailureDiagnostics,
+          activeFilterHints: filterHints,
+        },
+      ),
     };
   }
 
@@ -433,7 +425,7 @@ export async function generateSchedulesAction(
       chosenCourseToRequirementId: {},
       currentPoolMap: {},
       currentColorMap: {},
-      generationError: generationErrorState(timetableFailure.leadMessage, details),
+      generationError: generationErrorState({ kind: "lead", lead: timetableFailure.lead }, details),
     };
   }
 
@@ -530,7 +522,7 @@ async function handleBasicGeneration(
       currentPoolMap: {},
       currentColorMap: {},
       generationError: {
-        message: timetableFailure.leadMessage,
+        message: { kind: "lead", lead: timetableFailure.lead },
         details: {
           emptyPools: [],
           totalAvailable: basicPinnedCourses.length + optionalPool.length,
