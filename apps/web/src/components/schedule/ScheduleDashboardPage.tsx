@@ -3,7 +3,7 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Box, Button, Group, Stack, Text, Title } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { motion } from "framer-motion";
-import { IconRefresh } from "@tabler/icons-react";
+import { IconRefresh, IconSparkles } from "@tabler/icons-react";
 import { useShallow } from "zustand/react/shallow";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../explore/ExploreProfessorGradesLayout";
 import { ResetModal } from "../shared/ResetModal";
@@ -23,6 +23,7 @@ import { OptionsPanel } from "./OptionsPanel";
 import { AssignPanel } from "./AssignPanel";
 import { NotificationToggle } from "../steps/NotificationToggle";
 import { BackButton } from "../shared/BackButton";
+import "./scheduleDashboard.css";
 
 export function ScheduleDashboardPage() {
   useLingui();
@@ -201,18 +202,30 @@ export function ScheduleDashboardPage() {
 
           <Group justify="space-between" mt="lg" gap="sm">
             <Button
-              variant="subtle"
-              color="gray"
+              variant="default"
               radius={0}
               leftSection={<IconRefresh size={16} />}
               onClick={() => setResetModalOpen(true)}
+              styles={{
+                root: { color: "var(--app-text-muted)" },
+              }}
             >
               {tr("app.reset.action")}
             </Button>
             <Button
-              color="constructBlack"
               radius={0}
               loading={scheduleGenerating}
+              className={
+                blockers.length === 0 && !scheduleGenerating ? "generate-cta--ready" : undefined
+              }
+              leftSection={<IconSparkles size={16} />}
+              styles={{
+                root: {
+                  backgroundColor: "var(--app-accent)",
+                  color: "var(--app-on-accent)",
+                  paddingInline: "1.5rem",
+                },
+              }}
               onClick={() => {
                 if (blockers.length > 0) {
                   setConfirmOpen(true);
