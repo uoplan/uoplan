@@ -17,7 +17,7 @@ import {
   optional,
 } from "@uoplan/data";
 import { createAssetsTransport } from "@uoplan/data/worker";
-import { buildColorMap, renderCalendarToSvg, scheduleToEvents } from "@uoplan/calendar";
+import { renderCalendarToSvg, scheduleToEvents } from "@uoplan/calendar";
 import type { Env } from "./index.js";
 
 // @ts-ignore - wrangler handles .wasm imports as WebAssembly.Module
@@ -160,14 +160,13 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
       compressedSchedule: decoded.generationCompressedSchedule,
     };
 
-    const schedule = reconstructScheduleForPreview(decoded, cache, constraints);
-    if (!schedule || schedule.enrollments.length === 0) {
+    const reconstructed = reconstructScheduleForPreview(decoded, cache, constraints);
+    if (!reconstructed || reconstructed.schedule.enrollments.length === 0) {
       return fallback();
     }
 
-    const events = scheduleToEvents(schedule, null);
-    const colorMap = buildColorMap(schedule);
-    const svg = renderCalendarToSvg(events, colorMap);
+    const events = scheduleToEvents(reconstructed.schedule, null);
+    const svg = renderCalendarToSvg(events, reconstructed.colorMap);
 
     return svgToPng(svg, fonts);
   } catch (err) {

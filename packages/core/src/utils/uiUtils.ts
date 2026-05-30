@@ -2,6 +2,8 @@
  * UI utilities for colors, display formatting, and visual helpers.
  */
 
+import type { GeneratedSchedule } from "../generation/types";
+
 /**
  * Color palette for course calendar events.
  */
@@ -59,6 +61,41 @@ export function getCourseColor(index: number): CourseColor {
 export function getCourseColorHex(index: number): string {
   const color = getCourseColor(index);
   return COURSE_COLOR_HEX[color];
+}
+
+/**
+ * Build the canonical course → colour-index map for a schedule.
+ *
+ * Course codes are de-duplicated, sorted alphabetically, and assigned colour
+ * indices by position (`i % COURSE_COLORS.length`). This is the single source of
+ * truth shared by the web calendar and the OG-image preview, so colours stay
+ * consistent between them. Swap colour-inheritance is layered on top of this base
+ * map by the caller (see scheduleFromState reconstruction and the web store).
+ */
+export function buildColorMap(schedule: GeneratedSchedule): Record<string, number> {
+  const codes = [...new Set(schedule.enrollments.map((e) => e.courseCode))].sort();
+  const map: Record<string, number> = {};
+  codes.forEach((code, i) => {
+    map[code] = i % COURSE_COLORS.length;
+  });
+  return map;
+}
+
+/**
+ * Transfer a course's colour index to its swapped-in replacement, mirroring the
+ * web store's `tryApplyOneSwap`: the new course code inherits the old course's
+ * colour index and the old code is dropped. If the old code had no colour, the
+ * new code simply gains none. Keeps OG-image preview colours consistent with the
+ * live calendar across swaps.
+ */
+export function transferSwapColor(
+  colorMap: Record<string, number>,
+  oldCode: string,
+  newCode: string,
+): Record<string, number> {
+  const oldColorIdx = colorMap[oldCode];
+  const { [oldCode]: _removed, ...rest } = colorMap;
+  return oldColorIdx !== undefined ? { ...rest, [newCode]: oldColorIdx } : rest;
 }
 
 /**

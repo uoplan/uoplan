@@ -9,8 +9,15 @@ import {
   getEnrollmentsForCourse,
   enrollmentsOverlap,
   buildCourseDifficultyIndexFromCache,
+  buildColorMap,
+  transferSwapColor,
 } from "./index";
 import { generateBasicSchedule, generateAdvancedSchedule } from "./generateSchedule";
+
+export interface ReconstructedPreview {
+  schedule: GeneratedSchedule;
+  colorMap: Record<string, number>;
+}
 
 function applyOneSwap(
   schedule: GeneratedSchedule,
@@ -36,14 +43,25 @@ function applyOneSwap(
   return null;
 }
 
+/**
+ * Replays the decoded swaps over the base schedule, carrying a colour map so the
+ * OG-image preview matches the web calendar. Mirrors the web store's
+ * `tryApplyOneSwap`: each successful swap transfers the old course's colour index
+ * to the swapped-in course code. Failed swaps leave both schedule and colours
+ * unchanged.
+ */
 function applySwaps(
   schedule: GeneratedSchedule | null,
   decoded: DecodedState,
   cache: DataCache,
   constraints: GenerationConstraints,
-): GeneratedSchedule | null {
+): ReconstructedPreview | null {
   if (!schedule) return null;
+  let colorMap = buildColorMap(schedule);
   for (const swap of decoded.swaps) {
+    const oldEnrollment = schedule.enrollments[swap.enrollmentIndex];
+    if (!oldEnrollment) continue;
+    const oldCode = oldEnrollment.courseCode;
     const result = applyOneSwap(
       schedule,
       swap.enrollmentIndex,
@@ -51,9 +69,11 @@ function applySwaps(
       cache,
       constraints,
     );
-    if (result) schedule = result;
+    if (!result) continue;
+    schedule = result;
+    colorMap = transferSwapColor(colorMap, oldCode, swap.courseCode);
   }
-  return schedule;
+  return { schedule, colorMap };
 }
 
 /**
@@ -64,7 +84,7 @@ export function generateScheduleFromDecodedState(
   decoded: DecodedState,
   cache: DataCache,
   constraints: GenerationConstraints,
-): GeneratedSchedule | null {
+): ReconstructedPreview | null {
   const courseDifficultyIndex = buildCourseDifficultyIndexFromCache(cache);
   if (decoded.wizardMode === "basic") {
     const result = generateBasicSchedule({

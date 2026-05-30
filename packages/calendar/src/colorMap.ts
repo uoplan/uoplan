@@ -1,10 +1,3 @@
-import type { GeneratedSchedule } from "@uoplan/core";
-
-export function buildColorMap(schedule: GeneratedSchedule): Record<string, number> {
-  const codes = [...new Set(schedule.enrollments.map((e) => e.courseCode))].sort();
-  const map: Record<string, number> = {};
-  codes.forEach((code, i) => {
-    map[code] = i % 15;
-  });
-  return map;
-}
+// Re-exported from @uoplan/core so the web calendar and the OG-image preview share
+// a single source of truth for the base colour assignment.
+export { buildColorMap } from "@uoplan/core";
