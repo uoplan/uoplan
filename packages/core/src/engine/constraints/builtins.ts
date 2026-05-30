@@ -10,7 +10,6 @@ import { satisfiesCompressedConstraint } from "../../generation/constraints";
 import { timeSlotSatisfiesConstraints } from "../../generation/constraints";
 import { isSectionAllowedByMinRating } from "../../professorRatings";
 import { normalizeCourseCode } from "../../utils/courseUtils";
-import { getEnrollmentsForCourse } from "../../generation/sectionCombos";
 import type { Constraint } from "./types";
 
 /** No two enrollments may have overlapping meeting times. Incremental. */
@@ -147,9 +146,3 @@ export function buildHardConstraintPipeline(
     blacklistConstraint(blacklistedCourses),
   ];
 }
-
-/**
- * Helper to build a {@link CourseEnrollment} for overlap checks from a schedule
- * and a chosen section combo, re-exported for the timetable enumerator.
- */
-export { getEnrollmentsForCourse };

@@ -18,7 +18,7 @@ import type { ConstraintPipeline } from "../constraints/pipeline";
 import { buildTimetableCourse, type TimetableCourse } from "./lazyCombos";
 import { arrangementFingerprint } from "./enumerator";
 
-export interface SubsetEnumerationInput {
+interface SubsetEnumerationInput {
   readonly pinned: readonly string[];
   readonly optional: readonly string[];
   readonly targetCount: number;

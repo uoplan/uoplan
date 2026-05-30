@@ -41,7 +41,7 @@ export type RelaxationOutcome =
    */
   | { kind: "structural_conflict" };
 
-export interface RelaxationInput {
+interface RelaxationInput {
   readonly pinned: readonly string[];
   readonly optional: readonly string[];
   readonly targetCount: number;

@@ -25,7 +25,7 @@ export interface AppTheme {
  * Theme registry — the single list of selectable themes. Add an entry here
  * (and a matching block in tokens.css) to introduce a new theme.
  */
-export const THEMES: Record<ThemeId, AppTheme> = {
+const THEMES: Record<ThemeId, AppTheme> = {
   dark: { id: "dark", labelId: "theme.dark", base: "dark" },
   light: { id: "light", labelId: "theme.light", base: "light" },
 };
@@ -36,13 +36,13 @@ export const THEME_LIST: AppTheme[] = Object.values(THEMES);
  * Which theme each system colour-scheme preference resolves to when the user
  * selection is "system".
  */
-export const SYSTEM_THEME_MAP: Record<ColorSchemeBase, ThemeId> = {
+const SYSTEM_THEME_MAP: Record<ColorSchemeBase, ThemeId> = {
   dark: "dark",
   light: "light",
 };
 
 /** The default theme id when system preference can't be determined. */
-export const DEFAULT_THEME_ID: ThemeId = "dark";
+const DEFAULT_THEME_ID: ThemeId = "dark";
 
 /** A user selection: either an explicit theme id or "follow system". */
 export type ThemeSelection = "system" | ThemeId;
@@ -50,7 +50,7 @@ export type ThemeSelection = "system" | ThemeId;
 export const THEME_STORAGE_KEY = "uoplan.theme";
 
 /** Narrow an arbitrary string to a registered {@link ThemeId}. */
-export function isThemeId(value: string): value is ThemeId {
+function isThemeId(value: string): value is ThemeId {
   return Object.prototype.hasOwnProperty.call(THEMES, value);
 }
 

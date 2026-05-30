@@ -20,11 +20,10 @@
       "ignoreDependencies": ["@marsidev/react-turnstile", "wrangler"]
     },
     "apps/scrapers": {
-      "entry": ["src/**/*.ts"]
+      "entry": ["src/verifyCatalogue.ts", "src/validate_schedule_dates.ts"],
+      "project": ["src/**/*.ts"]
     },
-    "packages/core": {
-      "entry": ["src/**/*.ts"]
-    },
+    "packages/core": {},
     "packages/proto": {
       "ignoreDependencies": ["@bufbuild/protobuf", "ts-proto"]
     },
