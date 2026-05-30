@@ -23,6 +23,7 @@
     "@lingui/react": "^5.9.3",
     "@mantine/core": "^9.2.0",
     "@mantine/hooks": "^9.2.0",
+    "@mantine/nprogress": "^9.2.1",
     "@marsidev/react-turnstile": "^1.5.0",
     "@tabler/icons-react": "^3.40.0",
     "@tanstack/react-router": "^1.169.2",
