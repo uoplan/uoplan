@@ -7,8 +7,9 @@ import {
   getEnrollmentsForCourse,
   enrollmentsOverlap,
   getFirstOverlapWith,
-  generateSchedulesWithPinned,
+  timetableFixedCourseSet,
   cacheWithPerCourseVirtualFilter,
+  arrangementFingerprint,
   type CourseEnrollment,
   type GenerationConstraints,
 } from "@uoplan/core";
@@ -169,11 +170,14 @@ function applySwapsToResult(
   return { ...result, currentSchedule, currentPoolMap, currentColorMap };
 }
 
+/**
+ * Identifies a timetable by its full course + section/time arrangement, not just
+ * its course set. The generator now produces genuinely different section/time
+ * arrangements for the same courses (the randomness fix), so deduping by course
+ * code alone would collapse that variety and falsely report "no more schedules".
+ */
 function scheduleFingerprint(schedule: GeneratedSchedule): string {
-  return schedule.enrollments
-    .map((e) => e.courseCode)
-    .sort()
-    .join(",");
+  return arrangementFingerprint(schedule);
 }
 
 type ScheduleGenerationResult = {
@@ -550,15 +554,11 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
           (code) => virtualSectionsOnly && !pinnedNormalized.has(normalizeCourseCode(code)),
         );
 
-        const batch = generateSchedulesWithPinned(
-          allCodes,
-          [],
-          allCodes.length,
-          effectiveCache,
-          constraints,
-        );
+        const newSched = timetableFixedCourseSet(allCodes, effectiveCache, constraints, {
+          seed: get().currentSeed,
+        });
 
-        const validSchedules = batch.filter((s) => s.enrollments.length >= allCodes.length);
+        const validSchedules = newSched ? [newSched] : [];
         if (validSchedules.length > 0) {
           const oldColorIdx = currentColorMap[oldEnrollment.courseCode];
           const { [oldEnrollment.courseCode]: _, ...mapWithoutOld } = currentColorMap;

@@ -16,7 +16,6 @@ import type {
   CourseDifficultyIndex,
 } from "./index";
 import {
-  generateSchedulesWithPinned,
   getValidSectionCombos,
   analyzeFrenchImmersionProgress,
   frenchImmersionHeuristicPickWeight,
@@ -51,6 +50,11 @@ import {
   isHonoursProject,
 } from "./index";
 import { collectImplicitHonoursForSchedule } from "./implicitHonours";
+import {
+  buildTimetablePipeline,
+  firstSeededArrangement,
+  firstSeededSubsetArrangement,
+} from "./engine/integration";
 
 const EASIER_APLUS_PIVOT = 20;
 const EASIER_APLUS_BASE = 5.25;
@@ -362,17 +366,19 @@ export function generateBasicSchedule(params: BasicScheduleParams): BasicSchedul
     courseDifficultyIndex,
   });
 
-  const batch = generateSchedulesWithPinned(
+  const timetablePipeline = buildTimetablePipeline(constraints);
+  const arrangementRng = createSeededRng((scrambleSeed(effectiveSeed) ^ 0x9e3779b9) >>> 0);
+  const schedule = firstSeededSubsetArrangement(
     pinned,
     optionalPool,
     targetCount,
     effectiveCache,
-    constraints,
-    1,
+    timetablePipeline,
+    arrangementRng,
   );
 
   return {
-    schedule: batch.length > 0 ? batch[0] : null,
+    schedule,
     optionalPool,
   };
 }
@@ -449,6 +455,11 @@ export function generateAdvancedSchedule(params: AdvancedScheduleParams): Advanc
 
   const effectiveSeed = currentSeed || firstSeed;
   const rng = createSeededRng(scrambleSeed(effectiveSeed) >>> 0);
+  // Independent RNG for section/time arrangement so it never perturbs the
+  // course-*selection* RNG sequence (keeps selection deterministic per seed),
+  // while still varying the arrangement the new timetable enumerator returns.
+  const arrangementRng = createSeededRng((scrambleSeed(effectiveSeed) ^ 0x9e3779b9) >>> 0);
+  const timetablePipeline = buildTimetablePipeline(constraints);
 
   const immersionProgressOpts: FrenchImmersionProgressOptions | undefined = frenchImmersionStream
     ? { isNursingProgram: programTitleIndicatesNursing(programTitle) }
@@ -1019,33 +1030,25 @@ export function generateAdvancedSchedule(params: AdvancedScheduleParams): Advanc
         },
       );
 
-      const batch =
-        pinned.length === 0
-          ? generateSchedulesWithPinned(
-              lastFilteredPool,
-              [],
-              coursesThisSemester,
-              attemptCache,
-              constraints,
-              1,
-            )
-          : generateSchedulesWithPinned(
-              pinned,
-              lastFilteredPool,
-              coursesThisSemester,
-              attemptCache,
-              constraints,
-              1,
-            );
+      // The selector guarantees |pinned ∪ optionalPool| == coursesThisSemester,
+      // so the course set is fixed: the new enumerator arranges its sections in
+      // a seeded order and returns the first conflict-free arrangement (the old
+      // solver always returned the first cartesian arrangement — bug #1).
+      const arranged = firstSeededArrangement(
+        [...pinned, ...lastFilteredPool],
+        attemptCache,
+        timetablePipeline,
+        arrangementRng,
+      );
 
-      if (batch.length > 0) {
-        const fingerprint = batch[0].enrollments
+      if (arranged) {
+        const fingerprint = arranged.enrollments
           .map((e) => e.courseCode)
           .sort()
           .join(",");
         if (!seenCourseSets.has(fingerprint)) {
           seenCourseSets.add(fingerprint);
-          foundSchedule = batch[0];
+          foundSchedule = arranged;
         }
       }
     }
@@ -1065,18 +1068,19 @@ export function generateAdvancedSchedule(params: AdvancedScheduleParams): Advanc
 
   if (remainingNeeded <= 0) {
     filteredOptionalPool = [];
-    const batch =
-      pinned.length === 0
-        ? generateSchedulesWithPinned([], [], coursesThisSemester, effectiveCache, constraints, 1)
-        : generateSchedulesWithPinned(
-            pinned,
-            [],
-            coursesThisSemester,
-            effectiveCache,
-            constraints,
-            1,
-          );
-    if (batch.length > 0) foundSchedule = batch[0];
+    // remainingNeeded <= 0 means pinned already fills (or over-fills) every slot.
+    // The legacy solver returned [] when pinned.length > coursesThisSemester, so a
+    // schedule is only produced when the pinned set exactly matches the target — in
+    // which case it is a fixed course set the enumerator arranges directly.
+    if (pinned.length <= coursesThisSemester) {
+      const arranged = firstSeededArrangement(
+        pinned,
+        effectiveCache,
+        timetablePipeline,
+        arrangementRng,
+      );
+      if (arranged) foundSchedule = arranged;
+    }
   }
 
   return { schedule: foundSchedule, filteredOptionalPool, pinned, poolDiagnostics };

@@ -106,3 +106,65 @@ describe("schedules seed navigation", () => {
     );
   });
 });
+
+/** Build a one-course schedule whose timetable fingerprint depends on `section`. */
+function scheduleWithSection(section: string) {
+  return {
+    enrollments: [
+      {
+        courseCode: "AAA 1000",
+        sectionCombo: { LEC: { section: { section } } },
+        times: [{ day: "Mo", startMinutes: 540, endMinutes: 600 }],
+      },
+    ],
+  };
+}
+
+describe("schedules navigation variety detection (full timetable fingerprint)", () => {
+  const firstSeed = 1_000_000_000;
+
+  beforeEach(() => {
+    generateSchedulesActionMock.mockReset();
+    defaultAppStore.setState({
+      ...defaultAppStore.getState(),
+      firstSeed,
+      currentSeed: firstSeed,
+      lowestVisitedSeed: firstSeed,
+      currentSchedule: scheduleWithSection("A") as never,
+      scheduleGenerating: false,
+      scheduleNoVariety: false,
+      currentSwaps: [],
+      swapsPerSeed: {},
+      calendarMode: "advanced",
+    });
+  });
+
+  it("accepts a same-course-set schedule with different section/times as real variety", async () => {
+    // Same course "AAA 1000" but a different section than the current schedule:
+    // a course-code-only fingerprint would wrongly call this "no variety".
+    generateSchedulesActionMock.mockResolvedValue({
+      ...mockResult,
+      currentSchedule: scheduleWithSection("B"),
+    });
+
+    await defaultAppStore.getState().goToNextSeed();
+
+    expect(defaultAppStore.getState().scheduleNoVariety).toBe(false);
+    expect(generateSchedulesActionMock).toHaveBeenCalledTimes(1);
+    expect(
+      defaultAppStore.getState().currentSchedule?.enrollments[0].sectionCombo.LEC.section.section,
+    ).toBe("B");
+  });
+
+  it("still reports no variety when every candidate is the identical timetable", async () => {
+    generateSchedulesActionMock.mockResolvedValue({
+      ...mockResult,
+      currentSchedule: scheduleWithSection("A"),
+    });
+
+    await defaultAppStore.getState().goToNextSeed();
+
+    expect(defaultAppStore.getState().scheduleNoVariety).toBe(true);
+    expect(generateSchedulesActionMock).toHaveBeenCalledTimes(30);
+  });
+});

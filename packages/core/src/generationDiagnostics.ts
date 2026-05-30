@@ -2,6 +2,7 @@ import type { DataCache } from "./dataCache";
 import type { GenerationConstraints } from "./generation";
 import { getValidSectionCombos } from "./generation";
 import { isHonoursProject, normalizeCourseCode } from "./utils/courseUtils";
+import { diagnoseByRelaxation, type RelaxationOutcome } from "./engine/diagnostics/relaxation";
 
 export type TimetableFailureKind =
   | "no_section_combos"
@@ -27,6 +28,12 @@ export interface TimetableFailureDiagnostics {
   activeConstraintsSummary: ActiveConstraintsSummary;
   /** One short sentence for a primary alert line. */
   leadMessage: string;
+  /**
+   * For the "no_conflict_free_assignment" case, the result of bounded
+   * relaxation: which specific constraint(s), if removed, would actually
+   * unblock a timetable. Absent when not applicable or not computed.
+   */
+  relaxation?: RelaxationOutcome;
 }
 
 function canonicalDisplayCode(code: string, cache: DataCache): string {
@@ -63,6 +70,42 @@ function buildActiveConstraintsSummary(
     allowedDaysCustom: constraints.allowedDays.length > 0,
     maxFirstYearCredits: constraints.maxFirstYearCredits != null,
   };
+}
+
+const RELAX_SUGGESTION_BY_ID: Record<string, string> = {
+  "compressed-schedule": "Turn off Compressed schedule.",
+  "min-professor-rating": "Clear minimum professor rating.",
+  "time-window": "Widen class hours or allow more weekdays.",
+  "max-first-year-credits": "Relax the 1000-level credit cap if possible.",
+  blacklist: "Un-blacklist a course you removed earlier.",
+};
+
+/**
+ * Turns a bounded-relaxation outcome into precise, *verified* suggestions: only
+ * the constraints proven to unblock a timetable are listed, in place of the
+ * legacy "list every active constraint" guesswork.
+ */
+function suggestionsFromRelaxation(outcome: RelaxationOutcome): string[] | null {
+  if (outcome.kind === "single_blockers") {
+    const tips = outcome.blockers
+      .map((b) => RELAX_SUGGESTION_BY_ID[b.id])
+      .filter((s): s is string => s != null);
+    return tips.length > 0 ? tips : null;
+  }
+  if (outcome.kind === "combined_blockers") {
+    const tips = outcome.relaxable
+      .map((b) => RELAX_SUGGESTION_BY_ID[b.id])
+      .filter((s): s is string => s != null);
+    if (tips.length === 0) return null;
+    return ["No single filter is the culprit — relaxing several together helps:", ...tips];
+  }
+  if (outcome.kind === "structural_conflict") {
+    return [
+      "These courses can't all fit in one timetable, even with filters off. " +
+        "Try different Constrain / Assign picks or fewer courses.",
+    ];
+  }
+  return null;
 }
 
 const MAX_SUGGESTIONS = 4;
@@ -135,9 +178,49 @@ export interface DiagnoseTimetableFailureInput {
 
 /**
  * Explains why schedule generation may have returned no results, using the same
- * eligibility rules as {@link generateSchedules} / {@link generateSchedulesWithPinned}.
+ * eligibility rules as the generation entry points (`generateBasicSchedule` /
+ * `generateAdvancedSchedule`).
+ *
+ * For the "no clash-free timetable" case it additionally runs bounded relaxation
+ * (removing one constraint at a time) to pinpoint the actual blocking
+ * constraint(s) and produce verified, specific suggestions.
  */
 export function diagnoseTimetableFailure(
+  input: DiagnoseTimetableFailureInput,
+): TimetableFailureDiagnostics {
+  const base = diagnoseTimetableFailureBase(input);
+  if (base.kind !== "no_conflict_free_assignment" || !input.constraints) {
+    return base;
+  }
+
+  const relaxation = diagnoseByRelaxation({
+    pinned: input.pinnedCourseCodes,
+    optional: input.optionalCourseCodes,
+    targetCount: input.targetCount,
+    cache: input.cache,
+    constraints: input.constraints,
+  });
+
+  if (relaxation.kind === "schedulable") {
+    // Relaxation found a timetable the legacy pass missed; keep generic output.
+    return { ...base, relaxation };
+  }
+
+  const tailored = suggestionsFromRelaxation(relaxation);
+  const leadMessage =
+    relaxation.kind === "structural_conflict"
+      ? "These courses can't be scheduled together, even with all filters off."
+      : base.leadMessage;
+
+  return {
+    ...base,
+    relaxation,
+    leadMessage,
+    suggestions: (tailored ?? base.suggestions).slice(0, MAX_SUGGESTIONS),
+  };
+}
+
+function diagnoseTimetableFailureBase(
   input: DiagnoseTimetableFailureInput,
 ): TimetableFailureDiagnostics {
   const { pinnedCourseCodes, optionalCourseCodes, targetCount, cache, constraints } = input;

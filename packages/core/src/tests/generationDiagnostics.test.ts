@@ -106,7 +106,9 @@ describe("diagnoseTimetableFailure", () => {
     expect(d.coursesWithNoCombo).toContain("B 2000");
   });
 
-  it("includes compressed schedule in suggestions when no_conflict_free_assignment", () => {
+  it("does NOT blame Compressed when the courses themselves overlap (structural)", () => {
+    // A and B overlap on Monday, so no filter change can help — turning off
+    // Compressed would be misleading. Relaxation must report this honestly.
     const schedulesData: SchedulesData = {
       termId: "2261",
       schedules: [
@@ -127,8 +129,35 @@ describe("diagnoseTimetableFailure", () => {
         compressedSchedule: true,
       },
     });
-    expect(d.kind).toBe("no_conflict_free_assignment");
-    expect(d.activeConstraintsSummary.compressedSchedule).toBe(true);
+    expect(d.relaxation?.kind).toBe("structural_conflict");
+    expect(d.suggestions.some((s) => s.includes("Compressed"))).toBe(false);
+    expect(d.suggestions.some((s) => s.includes("can't all fit"))).toBe(true);
+  });
+
+  it("blames Compressed only when removing it actually unblocks a timetable", () => {
+    // A (08:00-09:30) and B (13:20-14:50) on Monday are conflict-free but leave a
+    // long mid-day gap, so Compressed rejects them; removing it lets them fit.
+    const schedulesData: SchedulesData = {
+      termId: "2261",
+      schedules: [
+        makeSchedule("A 1000", [{ day: "Mo", start: 480, end: 570 }]),
+        makeSchedule("B 2000", [{ day: "Mo", start: 800, end: 890 }]),
+      ],
+    };
+    const cache = buildDataCache(emptyCatalogue, schedulesData);
+    const d = diagnoseTimetableFailure({
+      pinnedCourseCodes: [],
+      optionalCourseCodes: ["A 1000", "B 2000"],
+      targetCount: 2,
+      cache,
+      constraints: {
+        minStartMinutes: 8 * 60,
+        maxEndMinutes: 22 * 60,
+        allowedDays: [],
+        compressedSchedule: true,
+      },
+    });
+    expect(d.relaxation?.kind).toBe("single_blockers");
     expect(d.suggestions.some((s) => s.includes("Compressed"))).toBe(true);
   });
 });
