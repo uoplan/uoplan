@@ -5,14 +5,12 @@ import { useLingui } from "@lingui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Catalogue } from "@uoplan/core";
-import { normalizeCourseCode } from "@uoplan/core";
 
 import { tr } from "../../i18n";
 import {
-  buildCourseSearchEntries,
-  buildExploreProfessorSearchEntries,
-  createExploreCourseFuse,
   searchExplore,
+  type ExploreCourseSearchEntry,
+  type ExploreProfessorSearchEntry,
 } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
 import {
@@ -36,12 +34,8 @@ import { SearchResultCourseCard } from "./SearchResultCourseCard";
 import { SearchResultDisciplineCard } from "./SearchResultDisciplineCard";
 import { SearchResultProfessorCard } from "./SearchResultProfessorCard";
 
-function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
-  const m = new Map<string, string>();
-  if (!catalogue) return m;
-  for (const c of catalogue.courses) m.set(normalizeCourseCode(c.code), c.title);
-  return m;
-}
+const EMPTY_COURSE_ENTRIES: ExploreCourseSearchEntry[] = [];
+const EMPTY_PROFESSOR_ENTRIES: ExploreProfessorSearchEntry[] = [];
 
 function ExploreSearchInput({
   value,
@@ -144,7 +138,7 @@ const EXPLORE_INDEX_ROUTE_ID = "/explore/";
 
 export function ExploreLayout({ children }: ExploreLayoutProps) {
   useLingui();
-  const { loading, offerings } = useExploreOfferings();
+  const { loading, getCourseEntries, getProfessorEntries, getCourseFuse } = useExploreOfferings();
   const navigate = useNavigate();
   const { catalogue, professorRatings, disciplines } = useAppStore(
     useShallow((s) => ({
@@ -222,22 +216,25 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     });
   };
 
-  const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
-
-  const courseEntries = useMemo(
-    () => buildCourseSearchEntries(offerings, titleByCode, professorRatings),
-    [offerings, titleByCode, professorRatings],
-  );
-  const professorEntries = useMemo(
-    () => buildExploreProfessorSearchEntries(offerings, professorRatings),
-    [offerings, professorRatings],
-  );
-  const courseFuse = useMemo(
-    () => (courseEntries.length === 0 ? null : createExploreCourseFuse(courseEntries)),
-    [courseEntries],
-  );
-
   const activeFilters = hasActiveFilters(filters) || filters.sortKey !== "relevance";
+
+  // The corpus-wide search indices are only needed once the user engages search
+  // (a query or any active filter). Latch the moment they're first needed and keep
+  // it true so clearing the query doesn't discard/rebuild the cached indices.
+  const needsSearchIndex = debouncedQuery.trim().length > 0 || activeFilters;
+  const [indexNeeded, setIndexNeeded] = useState(
+    () =>
+      (searchParams.q?.trim().length ?? 0) > 0 ||
+      hasActiveFilters(parsedFilters) ||
+      parsedFilters.sortKey !== "relevance",
+  );
+  useEffect(() => {
+    if (needsSearchIndex) setIndexNeeded(true);
+  }, [needsSearchIndex]);
+
+  const courseEntries = indexNeeded ? getCourseEntries() : EMPTY_COURSE_ENTRIES;
+  const professorEntries = indexNeeded ? getProfessorEntries() : EMPTY_PROFESSOR_ENTRIES;
+  const courseFuse = indexNeeded ? getCourseFuse() : null;
 
   const rawSearchResults = useMemo(() => {
     const q = debouncedQuery.trim();
