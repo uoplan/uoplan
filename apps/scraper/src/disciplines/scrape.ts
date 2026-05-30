@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import got from "got";
 import * as cheerio from "cheerio";
-import { SCRAPER_DATA_DIR } from "./dataPaths.ts";
+import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
 
 const DISCIPLINES_URL_EN = "https://catalogue.uottawa.ca/en/courses/";
 const DISCIPLINES_URL_FR = "https://catalogue.uottawa.ca/fr/cours/";
@@ -68,7 +68,7 @@ async function scrapeDisciplines(): Promise<DisciplineRow[]> {
   return rows.sort((a, b) => a.code.localeCompare(b.code, "en"));
 }
 
-async function main(): Promise<void> {
+export async function main(): Promise<void> {
   const disciplines = await scrapeDisciplines();
   if (disciplines.length === 0) {
     throw new Error("No disciplines were parsed from the uOttawa courses page");
@@ -115,9 +115,3 @@ async function main(): Promise<void> {
     `Updated indices.json with ${existingCodes.length} discipline codes (+${appended.length} new)`,
   );
 }
-
-main().catch((err) => {
-  console.error("Failed to scrape disciplines");
-  console.error(err);
-  process.exit(1);
-});

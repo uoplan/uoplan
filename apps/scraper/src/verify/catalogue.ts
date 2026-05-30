@@ -1,5 +1,7 @@
 import * as fs from "fs/promises";
 import * as path from "path";
+import { WEB_PUBLIC_DATA_DIR } from "../shared/paths.ts";
+import { extractCourseCodes } from "../shared/text.ts";
 
 interface CoursePrereqNode {
   type: "course" | "or_group" | "and_group" | "non_course";
@@ -19,17 +21,6 @@ interface Course {
 
 interface Catalogue {
   courses: Course[];
-}
-
-// Extract all course codes from a prerequisite text
-function extractCourseCodesFromText(text: string): string[] {
-  const re = /\b([A-Z]{3,4})\s*(\d{4,5}[A-Z]?)\b/g;
-  const codes: string[] = [];
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(text)) !== null) {
-    codes.push(`${m[1]} ${m[2]}`.replace(/\s+/, " ").trim());
-  }
-  return Array.from(new Set(codes));
 }
 
 // Extract all course codes from the AST
@@ -126,7 +117,7 @@ function verifyCourse(course: Course): string[] {
     return issues;
   }
 
-  const textCodes = extractCourseCodesFromText(course.prereqText);
+  const textCodes = extractCourseCodes(course.prereqText);
   const astCodes = extractCourseCodesFromAst(course.prerequisites);
 
   // Check for missing codes
@@ -159,8 +150,8 @@ async function loadCatalogue(filePath: string): Promise<Catalogue> {
   return JSON.parse(content) as Catalogue;
 }
 
-async function main() {
-  const dataDir = path.join(process.cwd(), "apps/web/public/data");
+export async function main() {
+  const dataDir = WEB_PUBLIC_DATA_DIR;
 
   // Find all catalogue files
   const files = await fs.readdir(dataDir);
@@ -254,5 +245,3 @@ async function main() {
     }
   }
 }
-
-main().catch(console.error);

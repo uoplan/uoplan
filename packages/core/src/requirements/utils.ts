@@ -21,6 +21,13 @@ function applyExcludedDisciplines(codes: string[], excluded: string[] | undefine
   return codes.filter((code) => !excludedSet.has(getDiscipline(code)));
 }
 
+function matchesLevels(code: string, levels: number[]): boolean {
+  const match = code.match(/\d{4,5}/);
+  if (!match) return false;
+  const num = parseInt(match[0].replace(/\D/g, "").slice(0, 4), 10);
+  return levels.some((l) => num >= l && num < l + 1000);
+}
+
 export function resolveDisciplineElective(
   cache: DataCache,
   discipline: string,
@@ -30,14 +37,7 @@ export function resolveDisciplineElective(
   if (!levels || levels.length === 0) {
     return courses.map((c) => c.code);
   }
-  return courses
-    .filter((c) => {
-      const match = c.code.match(/\d{4,5}/);
-      if (!match) return false;
-      const num = parseInt(match[0].replace(/\D/g, "").slice(0, 4), 10);
-      return levels.some((l) => num >= l && num < l + 1000);
-    })
-    .map((c) => c.code);
+  return courses.filter((c) => matchesLevels(c.code, levels)).map((c) => c.code);
 }
 
 export function resolveElectiveCandidates(
@@ -62,7 +62,10 @@ export function resolveElectiveCandidates(
       if (explicit.length > 0) return applyExcludedDisciplines(explicit, req.excluded_disciplines);
       const creditsNeeded = credits ?? req.credits ?? 3;
       const allCourses = cache.getAllCourses();
-      const candidates = allCourses.filter((c) => c.credits <= creditsNeeded).map((c) => c.code);
+      let candidates = allCourses.filter((c) => c.credits <= creditsNeeded).map((c) => c.code);
+      if (req.levels && req.levels.length > 0) {
+        candidates = candidates.filter((code) => matchesLevels(code, req.levels!));
+      }
       return applyExcludedDisciplines(candidates, req.excluded_disciplines);
     }
     default:

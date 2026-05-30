@@ -31,7 +31,7 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  * Allowed dependency direction. Each workspace package maps to the set of
  * other workspace packages it is permitted to depend on. A package may depend
  * on anything in its list; depending on anything else (or forming a cycle)
- * fails the check. App packages (web/worker/scrapers) are leaves: nothing may
+ * fails the check. App packages (web/worker/scraper) are leaves: nothing may
  * depend on them.
  *
  * @type {Record<string, string[]>}
@@ -44,7 +44,7 @@ const LAYERS = {
   "@uoplan/transcript": ["@uoplan/proto", "@uoplan/core"],
   web: ["@uoplan/proto", "@uoplan/core", "@uoplan/data", "@uoplan/calendar", "@uoplan/transcript"],
   worker: ["@uoplan/proto", "@uoplan/core", "@uoplan/data", "@uoplan/calendar"],
-  scrapers: ["@uoplan/proto"],
+  scraper: ["@uoplan/proto"],
 };
 
 const WORKSPACE_GLOBS = ["apps", "packages"];

@@ -19,7 +19,7 @@ Always use `pnpm`, never `npm`.
 
 **uoplan** is a course planner for University of Ottawa students: a React SPA with a wizard (term → program → completed courses → requirements → schedule preferences) and a calendar of generated timetables.
 
-**Monorepo**: `apps/web` (Vite + React), `packages/core` (shared scheduling + requirements logic + protobuf schemas/types), `apps/scrapers`.
+**Monorepo**: `apps/web` (Vite + React), `packages/core` (shared scheduling + requirements logic + protobuf schemas/types), `apps/scraper`.
 
 ### Tech Stack
 
@@ -28,8 +28,8 @@ React 19 + TypeScript, Zustand, Mantine, FullCalendar, Vite + Vitest, Zod, Frame
 ### Data Flow
 
 ```
-Source JSON (`apps/scrapers/data`)
-  → protobuf build step (`apps/scrapers/src/build_proto.ts`)
+Source JSON (`apps/scraper/data`)
+  → protobuf build step (`apps/scraper/src/build_proto.ts`)
   → runtime `.pb` assets (`apps/web/public/data`)
   → protobuf decode + DataCache (packages/core)
   → Zustand (apps/web/src/store/)
@@ -41,7 +41,7 @@ Source JSON (`apps/scrapers/data`)
 - **`apps/web/src/store/`** — Zustand slices (`appStore.ts` composes them), `requirementCompute.ts`, `scheduleHelpers.ts` (requirement pools + `computeCoursesPerPool`).
 - **`apps/web/src/lib/`** — `generateSchedulesAction.ts` (schedule generation orchestration), `implicitHonours.ts`, URL state encoding, etc.
 - **`packages/core/`** — `generation/` (shared timetabling primitives: `sectionCombos.ts`, `overlaps.ts`, constraint filters), `engine/` (modular generation engine: composable constraint pipe, lazy seeded timetable + subset enumerators, relaxation diagnostics), `requirements/`, `scheduleCandidates/` (`kUserKGeneral`, `explicitPoolPicks`), filters, prerequisites. Schedule generation entry points are `generateSchedule.ts` (`generateBasicSchedule`, `generateAdvancedSchedule`).
-- **`apps/scrapers/data/`** — Source JSON datasets committed for diffability.
+- **`apps/scraper/data/`** — Source JSON datasets committed for diffability.
 - **`apps/web/public/data/`** — Runtime protobuf (`.pb`) assets served to the client.
 
 ### Schedule generation

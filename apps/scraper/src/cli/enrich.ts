@@ -1,28 +1,28 @@
 /**
- * Re-enrich apps/scrapers/data/schedules.*.json with grade distributions from grades.json.
+ * Re-enrich apps/scraper/data/schedules.*.json with grade distributions from grades.json.
  * Use when grades.json changes without re-running the schedule scraper.
  *
  * Usage:
- *   pnpm --filter scrapers enrich:schedules
- *   pnpm --filter scrapers enrich:schedules -- --dry-run
+ *   pnpm --filter scraper enrich:schedules
+ *   pnpm --filter scraper enrich:schedules -- --dry-run
  */
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { SCRAPER_DATA_DIR } from "./dataPaths.ts";
+import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
 import {
   buildGradeLookups,
   enrichSchedulesPayload,
   formatGradeEnrichmentLine,
   type GradeEnrichmentStats,
   type SchedulesFilePayload,
-} from "./enrichSchedulesWithGrades.ts";
+} from "../schedules/enrich.ts";
 
 function parseArgs(argv: string[]): { dryRun: boolean } {
   return { dryRun: argv.includes("--dry-run") };
 }
 
-async function main(): Promise<void> {
+export async function main(): Promise<void> {
   const { dryRun } = parseArgs(process.argv);
 
   const gradesPath = path.join(SCRAPER_DATA_DIR, "grades.json");
@@ -77,8 +77,3 @@ async function main(): Promise<void> {
     console.log("Dry run: no files written.");
   }
 }
-
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});

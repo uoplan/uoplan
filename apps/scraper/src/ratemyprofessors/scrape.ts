@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import got from "got";
-import { SCRAPER_DATA_DIR } from "./dataPaths.ts";
+import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
 
 const GRAPHQL_URL = "https://www.ratemyprofessors.com/graphql";
 const PAGE_SIZE = 1000;
@@ -109,7 +109,7 @@ async function fetchTeachersPage(
   return res.body as TeacherSearchResponse;
 }
 
-async function main(): Promise<void> {
+export async function main(): Promise<void> {
   // Optional: scrape a specific school (e.g. University of Ottawa). Omit to try global search.
   const schoolId = process.env.RMP_SCHOOL_ID || "U2Nob29sLTE0NTI=";
 
@@ -198,8 +198,3 @@ async function main(): Promise<void> {
   await fs.writeFile(outPath, JSON.stringify(output, null, 2), "utf-8");
   console.log(`Saved ${dedupedTeachers.length} professors to ${outPath}`);
 }
-
-main().catch((err) => {
-  console.error("RateMyProfessors scrape failed:", err);
-  process.exit(1);
-});

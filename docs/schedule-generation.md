@@ -18,7 +18,7 @@ How uoplan builds conflict-free timetables from program requirements and user ch
 
 ### Per-slot instructor and meeting dates
 
-Each `MeetingTime` (in `ComponentSection.times`) now carries its own `instructor: string | null` and `meetingDates: [string, string] | null` rather than storing a shared array on the section. The three columns in the PeopleSoft HTML table (Days & Times, Instructor, Meeting Dates) are zipped by line index in the scraper (`apps/scrapers/src/schedule_scraper.ts`).
+Each `MeetingTime` (in `ComponentSection.times`) now carries its own `instructor: string | null` and `meetingDates: [string, string] | null` rather than storing a shared array on the section. The three columns in the PeopleSoft HTML table (Days & Times, Instructor, Meeting Dates) are zipped by line index in the scraper (`apps/scraper/src/schedule_scraper.ts`).
 
 The overlap check (`packages/schedule/src/generation/overlaps.ts` → `timesOverlap`) additionally verifies that the meeting date ranges intersect when both slots carry dates — slots in the same time-of-week but in different date ranges (e.g. a first-half-semester course and a second-half-semester course) are not considered conflicts.
 

@@ -1,14 +1,12 @@
 import fs from "fs/promises";
 import * as cheerio from "cheerio";
-import { got } from "got";
-import { CookieJar } from "tough-cookie";
 import path from "path";
 import { fileURLToPath } from "url";
-import { SCRAPER_DATA_DIR } from "./dataPaths.ts";
+import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import { bootstrapPeopleSoft, PEOPLESOFT_CLASS_SEARCH_URL } from "../shared/peoplesoft.ts";
 
 const TERMS_JSON = path.join(SCRAPER_DATA_DIR, "terms.json");
-const SEARCH_URL =
-  "https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL";
+const SEARCH_URL = PEOPLESOFT_CLASS_SEARCH_URL;
 
 export type Term = { termId: string; name: string };
 
@@ -46,26 +44,18 @@ export function parseTermDropdown(html: string): Term[] {
 }
 
 async function fetchTerms(): Promise<Term[]> {
-  const jar = new CookieJar();
-  const client = got.extend({
-    cookieJar: jar,
-    followRedirect: true,
-    https: { rejectUnauthorized: true },
-  });
-
-  let lastHtml = "";
-  for (let attempt = 1; attempt <= 10; attempt++) {
-    const res = await client.get(SEARCH_URL);
-    lastHtml = res.body;
-    const terms = parseTermDropdown(lastHtml);
-    if (terms.length > 0) return terms;
-  }
-
-  const preview = lastHtml.slice(0, 400).replace(/\s+/g, " ");
-  throw new Error(`Term dropdown not found after 10 attempts. First 400 chars: ${preview}`);
+  const { value } = await bootstrapPeopleSoft(
+    SEARCH_URL,
+    (html) => {
+      const terms = parseTermDropdown(html);
+      return terms.length > 0 ? terms : null;
+    },
+    (preview) =>
+      new Error(`Term dropdown not found after 10 attempts. First 400 chars: ${preview}`),
+  );
+  return value;
 }
-
-async function main() {
+export async function main() {
   const currentTerms = await fetchTerms();
 
   const raw = await fs.readFile(TERMS_JSON, "utf8");

@@ -2,26 +2,22 @@ import fs from "fs/promises";
 import path from "path";
 import * as cheerio from "cheerio";
 import pLimit from "p-limit";
-import { type Got, got } from "got";
-import { CookieJar } from "tough-cookie";
-import { SCRAPER_DATA_DIR } from "./dataPaths.ts";
+import type { Got } from "got";
+import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import { getErrorMessage } from "../shared/errors.ts";
+import { bootstrapPeopleSoft, PEOPLESOFT_CLASS_SEARCH_URL } from "../shared/peoplesoft.ts";
 import {
   buildGradeLookups,
   enrichSchedulesPayload,
   formatGradeEnrichmentLine,
   type GradeLookups,
-} from "./enrichSchedulesWithGrades.ts";
+} from "./enrich.ts";
 
-const BASE_URL =
-  "https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL";
+const BASE_URL = PEOPLESOFT_CLASS_SEARCH_URL;
 const HTML_CACHE_DIR = ".cache/course-search-html";
 const MAX_CONCURRENCY = 50;
 const USE_CACHE_ONLY = process.argv.includes("use-cache");
 const WRITE_CACHE = process.argv.includes("write-cache");
-
-function getErrorMessage(err: unknown): string {
-  return err instanceof Error ? err.message : String(err);
-}
 
 type Term = { termId: string; name: string };
 
@@ -177,32 +173,21 @@ async function loadCatalogue(year: number): Promise<ParsedCourseCode[]> {
 }
 
 async function createClient(): Promise<ClientInfo> {
-  const jar = new CookieJar();
-  const client: Got = got.extend({
-    cookieJar: jar,
-    followRedirect: true,
-    https: { rejectUnauthorized: true },
-  });
-
-  // Initial GET to establish session and retrieve ICSID (with a few retries for transient pages)
-  let lastHtml = "";
-  for (let attempt = 1; attempt <= 10; attempt++) {
-    const res = await client.get(BASE_URL);
-    const html = res.body;
-    lastHtml = html;
-    const $ = cheerio.load(html);
-    const icsid = $("#ICSID").attr("value");
-    if (icsid) {
+  const { value } = await bootstrapPeopleSoft(
+    BASE_URL,
+    (html, client) => {
+      const $ = cheerio.load(html);
+      const icsid = $("#ICSID").attr("value");
+      if (!icsid) return null;
       const icStateNum = $("#ICStateNum").attr("value") || "1";
       const dataLang = ($("#\\#ICDataLang").val() as string | undefined) || "ENG";
       return { client, icsid, dataLang, icStateNum };
-    }
-  }
-
-  const preview = lastHtml.slice(0, 400).replace(/\s+/g, " ");
-  throw new Error(`Failed to find ICSID on initial class search page; first 400 chars: ${preview}`);
+    },
+    (preview) =>
+      new Error(`Failed to find ICSID on initial class search page; first 400 chars: ${preview}`),
+  );
+  return value;
 }
-
 function buildSearchBody(args: {
   icsid: string;
   dataLang: string;
@@ -662,7 +647,7 @@ async function tryLoadGradeLookups(): Promise<GradeLookups | null> {
   }
 }
 
-async function main(): Promise<void> {
+export async function main(): Promise<void> {
   const onlySubject = process.env.ONLY_SUBJECT;
   const onlyCatalog = process.env.ONLY_CATALOG;
   const onlyTermId = process.env.ONLY_TERM_ID;
@@ -759,9 +744,3 @@ async function main(): Promise<void> {
     );
   }
 }
-
-main().catch((err) => {
-  console.error("Schedule scrape failed.");
-  console.error(err);
-  process.exit(1);
-});

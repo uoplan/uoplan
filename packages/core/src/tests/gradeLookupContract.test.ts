@@ -20,7 +20,7 @@ import { buildGradeLookups, lookupSectionDistribution } from "../gradeLookup";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dataDir = join(here, "..", "..", "..", "..", "apps", "web", "public", "data");
-const sourceDir = join(here, "..", "..", "..", "..", "apps", "scrapers", "data");
+const sourceDir = join(here, "..", "..", "..", "..", "apps", "scraper", "data");
 
 interface SourceSection {
   times?: Array<{ instructor?: string | null }>;

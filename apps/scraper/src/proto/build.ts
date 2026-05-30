@@ -2,7 +2,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import * as DataProto from "@uoplan/proto/data";
-import { SCRAPER_DATA_DIR, WEB_PUBLIC_DATA_DIR } from "./dataPaths.ts";
+import { SCRAPER_DATA_DIR, WEB_PUBLIC_DATA_DIR } from "../shared/paths.ts";
+import { readJson } from "../shared/json.ts";
 
 type JsonObject = Record<string, unknown>;
 
@@ -99,6 +100,34 @@ function normalizeCode(value: unknown): string {
     .replace(/\s+/g, " ");
 }
 
+function prereqKindToProto(kind: unknown): number | undefined {
+  const k = DataProto.CoursePrereqKind;
+  switch (kind) {
+    case "permission":
+      return k.COURSE_PREREQ_KIND_PERMISSION;
+    case "audition":
+      return k.COURSE_PREREQ_KIND_AUDITION;
+    case "language":
+      return k.COURSE_PREREQ_KIND_LANGUAGE;
+    case "equivalent":
+      return k.COURSE_PREREQ_KIND_EQUIVALENT;
+    case "highschool":
+      return k.COURSE_PREREQ_KIND_HIGHSCHOOL;
+    case "standing":
+      return k.COURSE_PREREQ_KIND_STANDING;
+    case "topic":
+      return k.COURSE_PREREQ_KIND_TOPIC;
+    case "coursework":
+      return k.COURSE_PREREQ_KIND_COURSEWORK;
+    case "knowledge":
+      return k.COURSE_PREREQ_KIND_KNOWLEDGE;
+    case "recommended":
+      return k.COURSE_PREREQ_KIND_RECOMMENDED;
+    default:
+      return undefined;
+  }
+}
+
 function mapPrereq(node: any): any {
   return {
     type: prereqTypeToProto(String(node.type ?? "")),
@@ -113,6 +142,7 @@ function mapPrereq(node: any): any {
     })),
     programs: node.programs ?? [],
     children: (node.children ?? []).map(mapPrereq),
+    kind: prereqKindToProto(node.kind),
   };
 }
 
@@ -129,6 +159,7 @@ function mapRequirement(req: any): any {
     excludedDisciplines: req.excluded_disciplines ?? [],
     faculty: req.faculty,
     indented: req.indented,
+    levels: req.levels ?? [],
     options: (req.options ?? []).map(mapRequirement),
   };
 }
@@ -340,11 +371,6 @@ function mapGradesJson(rows: unknown[]) {
   };
 }
 
-async function readJson<T>(filePath: string): Promise<T> {
-  const raw = await fs.readFile(filePath, "utf8");
-  return JSON.parse(raw) as T;
-}
-
 async function writePb(filePath: string, bytes: Uint8Array): Promise<void> {
   await fs.mkdir(path.dirname(filePath), { recursive: true });
   await fs.writeFile(filePath, bytes);
@@ -358,7 +384,7 @@ function isScheduleJson(name: string): boolean {
   return /^schedules\.\d+\.json$/.test(name);
 }
 
-async function main(): Promise<void> {
+export async function main(): Promise<void> {
   await fs.mkdir(WEB_PUBLIC_DATA_DIR, { recursive: true });
 
   const entries = await fs.readdir(SCRAPER_DATA_DIR);

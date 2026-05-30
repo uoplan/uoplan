@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { findNewTerms, parseTermDropdown, sortTerms, termsListsEqual } from "./check_terms.ts";
+import { findNewTerms, parseTermDropdown, sortTerms, termsListsEqual } from "./terms/check.ts";
 
 describe("parseTermDropdown", () => {
   it("extracts term IDs and names from a select element", () => {

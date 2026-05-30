@@ -3,7 +3,7 @@ import {
   buildGradeLookups,
   enrichSchedulesPayload,
   type SchedulesFilePayload,
-} from "./enrichSchedulesWithGrades.ts";
+} from "./schedules/enrich.ts";
 
 describe("buildGradeLookups", () => {
   it("keys distributions by course term and instructor name", () => {
