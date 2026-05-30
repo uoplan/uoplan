@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ActionIcon, Button, Group, Tooltip } from "@mantine/core";
+import { ActionIcon, Group, Tooltip } from "@mantine/core";
 import {
   IconCalendarDown,
   IconEraser,
@@ -113,18 +113,20 @@ export function BasicCalendarHeaderActions({
           </ActionIcon>
         </Tooltip>
         {onEnrolCli && (
-          <Button
-            variant="light"
-            color="green"
-            size="xs"
-            radius={0}
-            leftSection={<IconTerminal size={12} />}
-            disabled={!cliCommand}
-            onClick={onEnrolCli}
-            style={{ marginLeft: 4 }}
-          >
-            {tr("enrolCli.button")}
-          </Button>
+          <Tooltip label={tr("enrolCli.button")} position="right" withArrow>
+            <ActionIcon
+              variant="subtle"
+              color="green"
+              size="md"
+              radius={0}
+              disabled={!cliCommand}
+              onClick={onEnrolCli}
+              aria-label={tr("enrolCli.button")}
+              style={{ marginLeft: 4 }}
+            >
+              <IconTerminal size={16} />
+            </ActionIcon>
+          </Tooltip>
         )}
       </Group>
 
