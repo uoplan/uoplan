@@ -27,5 +27,7 @@ export * as DataProto from "@uoplan/proto/data";
 export * from "./poolHelpers";
 export * from "./implicitHonours";
 export * from "./generateSchedule";
+export { arrangementFingerprint } from "./engine/timetable/enumerator";
+export { timetableFixedCourseSet } from "./engine/integration";
 export * from "./scheduleFromState";
 export * from "./reconstruct";

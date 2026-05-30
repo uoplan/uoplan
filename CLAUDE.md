@@ -19,7 +19,7 @@ Always use `pnpm`, never `npm`.
 
 **uoplan** is a course planner for University of Ottawa students: a React SPA with a wizard (term → program → completed courses → requirements → schedule preferences) and a calendar of generated timetables.
 
-**Monorepo**: `apps/web` (Vite + React), `packages/schedule` (shared scheduling + requirements logic + protobuf schemas/types), `apps/scrapers`.
+**Monorepo**: `apps/web` (Vite + React), `packages/core` (shared scheduling + requirements logic + protobuf schemas/types), `apps/scrapers`.
 
 ### Tech Stack
 
@@ -31,7 +31,7 @@ React 19 + TypeScript, Zustand, Mantine, FullCalendar, Vite + Vitest, Zod, Frame
 Source JSON (`apps/scrapers/data`)
   → protobuf build step (`apps/scrapers/src/build_proto.ts`)
   → runtime `.pb` assets (`apps/web/public/data`)
-  → protobuf decode + DataCache (packages/schedule)
+  → protobuf decode + DataCache (packages/core)
   → Zustand (apps/web/src/store/)
   → React (apps/web/src/components/)
 ```
@@ -40,13 +40,13 @@ Source JSON (`apps/scrapers/data`)
 
 - **`apps/web/src/store/`** — Zustand slices (`appStore.ts` composes them), `requirementCompute.ts`, `scheduleHelpers.ts` (requirement pools + `computeCoursesPerPool`).
 - **`apps/web/src/lib/`** — `generateSchedulesAction.ts` (schedule generation orchestration), `implicitHonours.ts`, URL state encoding, etc.
-- **`packages/schedule/`** — `scheduleGenerator.ts` (backtracking), `requirements.ts`, `scheduleCandidates/` (`kUserKGeneral`, `explicitPoolPicks`), filters, prerequisites.
+- **`packages/core/`** — `generation/` (shared timetabling primitives: `sectionCombos.ts`, `overlaps.ts`, constraint filters), `engine/` (modular generation engine: composable constraint pipe, lazy seeded timetable + subset enumerators, relaxation diagnostics), `requirements/`, `scheduleCandidates/` (`kUserKGeneral`, `explicitPoolPicks`), filters, prerequisites. Schedule generation entry points are `generateSchedule.ts` (`generateBasicSchedule`, `generateAdvancedSchedule`).
 - **`apps/scrapers/data/`** — Source JSON datasets committed for diffability.
 - **`apps/web/public/data/`** — Runtime protobuf (`.pb`) assets served to the client.
 
 ### Schedule generation
 
-Orchestration lives in **`apps/web/src/lib/generateSchedulesAction.ts`**. The pure timetable solver is **`packages/schedule/src/scheduleGenerator.ts`** (`generateSchedules`, `generateSchedulesWithPinned`). Pool sizing and pinned-credit rules use **`apps/web/src/store/scheduleHelpers.ts`** and helpers from **`packages/schedule/src/scheduleCandidates/`**.
+Orchestration lives in **`apps/web/src/lib/generateSchedulesAction.ts`**. Both modes timetable through the modular **`packages/core/src/engine/`** engine (entry points `generateBasicSchedule` / `generateAdvancedSchedule` in `packages/core/src/generateSchedule.ts`). Fixed-course-set timetabling (e.g. course-swap) goes through `timetableFixedCourseSet`. Pool sizing and pinned-credit rules use **`apps/web/src/store/scheduleHelpers.ts`** and helpers from **`packages/core/src/scheduleCandidates/`**.
 
 ### URL sharing
 

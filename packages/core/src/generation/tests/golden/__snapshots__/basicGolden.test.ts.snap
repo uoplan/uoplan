@@ -1,0 +1,232 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateBasicSchedule golden behaviour > excludes blacklisted courses 1`] = `
+[
+  {
+    "courseSet": [
+      "CSI 2101",
+      "CSI 2110",
+      "MAT 1322",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 7,
+  },
+  {
+    "courseSet": [
+      "CSI 2101",
+      "CSI 2110",
+      "MAT 1320",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 7,
+  },
+  {
+    "courseSet": [
+      "CSI 2101",
+      "CSI 2110",
+      "MAT 1320",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 7,
+  },
+  {
+    "courseSet": [
+      "CSI 2110",
+      "CSI 2120",
+      "SEG 2105",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 7,
+  },
+  {
+    "courseSet": [
+      "CSI 2120",
+      "MAT 1320",
+      "MAT 1322",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 7,
+  },
+  {
+    "courseSet": [
+      "CSI 2120",
+      "MAT 1320",
+      "SEG 2105",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 7,
+  },
+  {
+    "courseSet": [
+      "CSI 2110",
+      "CSI 2120",
+      "SEG 2105",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 7,
+  },
+  {
+    "courseSet": [
+      "CSI 2101",
+      "CSI 2110",
+      "MAT 1322",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 7,
+  },
+]
+`;
+
+exports[`generateBasicSchedule golden behaviour > fills elective slots from the catalogue across seeds (snapshot) 1`] = `
+[
+  {
+    "courseSet": [
+      "CSI 2101",
+      "PHI 1101",
+      "SEG 2105",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 8,
+  },
+  {
+    "courseSet": [
+      "CSI 2101",
+      "MAT 1322",
+      "SEG 2105",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 8,
+  },
+  {
+    "courseSet": [
+      "CSI 2101",
+      "MAT 1322",
+      "SEG 2105",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 8,
+  },
+  {
+    "courseSet": [
+      "CSI 2101",
+      "CSI 2120",
+      "PHI 1101",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 8,
+  },
+  {
+    "courseSet": [
+      "HIS 1100",
+      "MAT 1322",
+      "PHI 1101",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 8,
+  },
+  {
+    "courseSet": [
+      "CSI 2120",
+      "MAT 1320",
+      "MAT 1322",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 8,
+  },
+  {
+    "courseSet": [
+      "CSI 2110",
+      "CSI 2120",
+      "MAT 1320",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 8,
+  },
+  {
+    "courseSet": [
+      "CSI 2110",
+      "HIS 1100",
+      "PHI 1101",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 8,
+  },
+]
+`;
+
+exports[`generateBasicSchedule golden behaviour > honours pinned courses and excluded categories 1`] = `
+[
+  {
+    "courseSet": [
+      "CSI 2101",
+      "CSI 2110",
+      "MAT 1322",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 6,
+  },
+  {
+    "courseSet": [
+      "CSI 2110",
+      "CSI 2120",
+      "MAT 1322",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 6,
+  },
+  {
+    "courseSet": [
+      "CSI 2110",
+      "MAT 1320",
+      "MAT 1322",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 6,
+  },
+  {
+    "courseSet": [
+      "CSI 2101",
+      "CSI 2110",
+      "CSI 2120",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 6,
+  },
+  {
+    "courseSet": [
+      "CSI 2110",
+      "MAT 1322",
+      "SEG 2105",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 6,
+  },
+  {
+    "courseSet": [
+      "CSI 2110",
+      "MAT 1320",
+      "SEG 2105",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 6,
+  },
+  {
+    "courseSet": [
+      "CSI 2110",
+      "CSI 2120",
+      "PHI 1101",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 6,
+  },
+  {
+    "courseSet": [
+      "CSI 2110",
+      "MAT 1322",
+      "PHI 1101",
+    ],
+    "hasSchedule": true,
+    "optionalPoolSize": 6,
+  },
+]
+`;
