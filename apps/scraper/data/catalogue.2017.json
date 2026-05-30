@@ -1232,7 +1232,8 @@
       "prereqText": "All required 2000-level ADM core courses",
       "prerequisites": {
         "type": "non_course",
-        "text": "All required 2000-level ADM core courses"
+        "text": "All required 2000-level ADM core courses",
+        "kind": "coursework"
       }
     },
     {
@@ -1694,7 +1695,8 @@
       "prereqText": "Tous les cours ADM du tronc commun de niveau 2000",
       "prerequisites": {
         "type": "non_course",
-        "text": "Tous les cours ADM du tronc commun de niveau 2000"
+        "text": "Tous les cours ADM du tronc commun de niveau 2000",
+        "kind": "coursework"
       }
     },
     {
@@ -1706,7 +1708,8 @@
       "prereqText": "Tous les cours ADM du tronc commun aux niveaux 1000 et 2000",
       "prerequisites": {
         "type": "non_course",
-        "text": "Tous les cours ADM du tronc commun aux niveaux 1000 et 2000"
+        "text": "Tous les cours ADM du tronc commun aux niveaux 1000 et 2000",
+        "kind": "coursework"
       }
     },
     {
@@ -1753,7 +1756,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "All required ADM core courses of levels 1000"
+            "text": "All required ADM core courses of levels 1000",
+            "kind": "coursework"
           },
           {
             "type": "non_course",
@@ -1836,7 +1840,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "All ADM core courses at the 1000"
+            "text": "All ADM core courses at the 1000",
+            "kind": "coursework"
           },
           {
             "type": "non_course",
@@ -2096,7 +2101,8 @@
       "prereqText": "All ADM core courses at the 1000 and 2000 levels",
       "prerequisites": {
         "type": "non_course",
-        "text": "All ADM core courses at the 1000 and 2000 levels"
+        "text": "All ADM core courses at the 1000 and 2000 levels",
+        "kind": "coursework"
       }
     },
     {
@@ -2455,7 +2461,8 @@
               },
               {
                 "type": "non_course",
-                "text": "4th year students registered in a related program in the Faculty of Science"
+                "text": "4th year students registered in a related program in the Faculty of Science",
+                "kind": "standing"
               },
               {
                 "type": "non_course",
@@ -2503,7 +2510,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Tous les cours ADM obligatoires du tronc commun de niveaux 1000"
+            "text": "Tous les cours ADM obligatoires du tronc commun de niveaux 1000",
+            "kind": "coursework"
           },
           {
             "type": "non_course",
@@ -2564,7 +2572,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Tous les cours ADM du tronc commun de niveaux 1000"
+            "text": "Tous les cours ADM du tronc commun de niveaux 1000",
+            "kind": "coursework"
           },
           {
             "type": "non_course",
@@ -2825,7 +2834,8 @@
       "prereqText": "Tous les cours ADM du tronc commun de niveaux 1000 et 2000",
       "prerequisites": {
         "type": "non_course",
-        "text": "Tous les cours ADM du tronc commun de niveaux 1000 et 2000"
+        "text": "Tous les cours ADM du tronc commun de niveaux 1000 et 2000",
+        "kind": "coursework"
       }
     },
     {
@@ -3146,7 +3156,8 @@
       "prereqText": "Ce cours est réservé aux étudiants inscrits: au B",
       "prerequisites": {
         "type": "non_course",
-        "text": "Ce cours est réservé aux étudiants inscrits: au B"
+        "text": "Ce cours est réservé aux étudiants inscrits: au B",
+        "kind": "standing"
       }
     },
     {
@@ -3158,7 +3169,8 @@
       "prereqText": "Tous les cours du tronc commun de niveau 2000",
       "prerequisites": {
         "type": "non_course",
-        "text": "Tous les cours du tronc commun de niveau 2000"
+        "text": "Tous les cours du tronc commun de niveau 2000",
+        "kind": "coursework"
       }
     },
     {
@@ -3183,7 +3195,8 @@
       "prereqText": "Seulement disponible pour les étudiants de 3ième et 4ième année ayant une MPC de 5,0 et plus et ayant réussi tous les cours ADM du tronc commun de niveaux 1000 et 2000 de leur programme",
       "prerequisites": {
         "type": "non_course",
-        "text": "Seulement disponible pour les étudiants de 3ième et 4ième année ayant une MPC de 5,0 et plus et ayant réussi tous les cours ADM du tronc commun de niveaux 1000 et 2000 de leur programme"
+        "text": "Seulement disponible pour les étudiants de 3ième et 4ième année ayant une MPC de 5,0 et plus et ayant réussi tous les cours ADM du tronc commun de niveaux 1000 et 2000 de leur programme",
+        "kind": "standing"
       }
     },
     {
@@ -3195,7 +3208,8 @@
       "prereqText": "Seulement disponible pour les étudiants de 3ième et 4ième année ayant une MPC de 5,0 et plus et ayant réussi tous les cours ADM du tronc commun de niveaux 1000 et 2000 de leur programme",
       "prerequisites": {
         "type": "non_course",
-        "text": "Seulement disponible pour les étudiants de 3ième et 4ième année ayant une MPC de 5,0 et plus et ayant réussi tous les cours ADM du tronc commun de niveaux 1000 et 2000 de leur programme"
+        "text": "Seulement disponible pour les étudiants de 3ième et 4ième année ayant une MPC de 5,0 et plus et ayant réussi tous les cours ADM du tronc commun de niveaux 1000 et 2000 de leur programme",
+        "kind": "standing"
       }
     },
     {
@@ -3224,11 +3238,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Réservé aux étudiants de quatrième année d'un programme spécialisé dont la MPC est de 7,0"
+            "text": "Réservé aux étudiants de quatrième année d'un programme spécialisé dont la MPC est de 7,0",
+            "kind": "standing"
           },
           {
             "type": "non_course",
-            "text": "plus et sujet à l'approbation du professeur et du Centre des services aux étudiants"
+            "text": "plus et sujet à l'approbation du professeur et du Centre des services aux étudiants",
+            "kind": "permission"
           }
         ]
       }
@@ -3246,11 +3262,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Réservé aux étudiants de quatrième année d'un programme spécialisé dont la MPC est de 7,0"
+            "text": "Réservé aux étudiants de quatrième année d'un programme spécialisé dont la MPC est de 7,0",
+            "kind": "standing"
           },
           {
             "type": "non_course",
-            "text": "plus et sujet à l'approbation du professeur et du Centre des services aux étudiants"
+            "text": "plus et sujet à l'approbation du professeur et du Centre des services aux étudiants",
+            "kind": "permission"
           }
         ]
       }
@@ -3341,7 +3359,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent for MBA students"
+            "text": "equivalent for MBA students",
+            "kind": "equivalent"
           },
           {
             "type": "course",
@@ -3574,7 +3593,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission du Département"
+            "text": "permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -3597,7 +3617,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission du Département"
+            "text": "permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -3759,7 +3780,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent et permission du Département"
+            "text": "l'équivalent et permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -3785,7 +3807,8 @@
               },
               {
                 "type": "non_course",
-                "text": "l'équivalent et permission du Département"
+                "text": "l'équivalent et permission du Département",
+                "kind": "permission"
               }
             ]
           },
@@ -3800,7 +3823,8 @@
               },
               {
                 "type": "non_course",
-                "text": "equivalent and permission of the Department"
+                "text": "equivalent and permission of the Department",
+                "kind": "permission"
               }
             ]
           }
@@ -3816,7 +3840,8 @@
       "prereqText": "To be determined according to the topic of the seminar",
       "prerequisites": {
         "type": "non_course",
-        "text": "To be determined according to the topic of the seminar"
+        "text": "To be determined according to the topic of the seminar",
+        "kind": "topic"
       }
     },
     {
@@ -3835,7 +3860,8 @@
       "prereqText": "À déterminer selon le sujet du séminaire",
       "prerequisites": {
         "type": "non_course",
-        "text": "À déterminer selon le sujet du séminaire"
+        "text": "À déterminer selon le sujet du séminaire",
+        "kind": "topic"
       }
     },
     {
@@ -3889,7 +3915,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission of the Co-ordinating Committee of the program"
+            "text": "permission of the Co-ordinating Committee of the program",
+            "kind": "permission"
           }
         ]
       }
@@ -5610,11 +5637,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Individual course aimed at deepening a student?s knowledge of a particular area"
+            "text": "Individual course aimed at deepening a student?s knowledge of a particular area",
+            "kind": "knowledge"
           },
           {
             "type": "non_course",
-            "text": "at gaining knowledge of a new area"
+            "text": "at gaining knowledge of a new area",
+            "kind": "knowledge"
           }
         ]
       }
@@ -7082,7 +7111,8 @@
       "prereqText": "According to the topics of the course",
       "prerequisites": {
         "type": "non_course",
-        "text": "According to the topics of the course"
+        "text": "According to the topics of the course",
+        "kind": "topic"
       }
     },
     {
@@ -7481,7 +7511,8 @@
       "prereqText": "Selon les thèmes du cours",
       "prerequisites": {
         "type": "non_course",
-        "text": "Selon les thèmes du cours"
+        "text": "Selon les thèmes du cours",
+        "kind": "topic"
       }
     },
     {
@@ -7917,7 +7948,8 @@
       "prereqText": "undergraduate statistics course is strongly recommended",
       "prerequisites": {
         "type": "non_course",
-        "text": "undergraduate statistics course is strongly recommended"
+        "text": "undergraduate statistics course is strongly recommended",
+        "kind": "recommended"
       }
     },
     {
@@ -7950,7 +7982,8 @@
       "prereqText": "cours de statistiques au baccalauréat est fortement recommandé",
       "prerequisites": {
         "type": "non_course",
-        "text": "cours de statistiques au baccalauréat est fortement recommandé"
+        "text": "cours de statistiques au baccalauréat est fortement recommandé",
+        "kind": "recommended"
       }
     },
     {
@@ -8673,7 +8706,8 @@
       "prereqText": "Completion of all compulsory courses",
       "prerequisites": {
         "type": "non_course",
-        "text": "Completion of all compulsory courses"
+        "text": "Completion of all compulsory courses",
+        "kind": "coursework"
       }
     },
     {
@@ -8776,7 +8810,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -8871,7 +8906,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -8894,7 +8930,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -8943,7 +8980,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent et permission du Département"
+            "text": "l'équivalent et permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -10214,7 +10252,8 @@
       "prereqText": "Permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du Département"
+        "text": "Permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -10523,7 +10562,8 @@
       "prereqText": "une solide connaissance théorique en art contemporain et en pratique d'exposition et approbation écrite du programme",
       "prerequisites": {
         "type": "non_course",
-        "text": "une solide connaissance théorique en art contemporain et en pratique d'exposition et approbation écrite du programme"
+        "text": "une solide connaissance théorique en art contemporain et en pratique d'exposition et approbation écrite du programme",
+        "kind": "permission"
       }
     },
     {
@@ -11917,7 +11957,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "minimum overall CGPA of 6.0"
+            "text": "minimum overall CGPA of 6.0",
+            "kind": "standing"
           },
           {
             "type": "non_course",
@@ -11926,7 +11967,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission from the Director of the BIM program"
+            "text": "permission from the Director of the BIM program",
+            "kind": "permission"
           }
         ]
       }
@@ -11944,7 +11986,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "minimum overall CGPA of 6.0"
+            "text": "minimum overall CGPA of 6.0",
+            "kind": "standing"
           },
           {
             "type": "non_course",
@@ -11953,7 +11996,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission from the Director of the BIM program"
+            "text": "permission from the Director of the BIM program",
+            "kind": "permission"
           }
         ]
       }
@@ -12094,7 +12138,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "4U Biology"
+            "text": "4U Biology",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -12144,7 +12189,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Biologie 4U"
+            "text": "Biologie 4U",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -14138,7 +14184,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission of instructor"
+            "text": "permission of instructor",
+            "kind": "permission"
           }
         ]
       }
@@ -14185,7 +14232,8 @@
           },
           {
             "type": "non_course",
-            "text": "written permission of the department"
+            "text": "written permission of the department",
+            "kind": "permission"
           }
         ]
       }
@@ -14220,7 +14268,8 @@
       "prereqText": "Graduate standing and permission of the department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Graduate standing and permission of the department"
+        "text": "Graduate standing and permission of the department",
+        "kind": "permission"
       }
     },
     {
@@ -14239,7 +14288,8 @@
       "prereqText": "Graduate standing, courses in elementary ecology and statistics and permission of the department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Graduate standing, courses in elementary ecology and statistics and permission of the department"
+        "text": "Graduate standing, courses in elementary ecology and statistics and permission of the department",
+        "kind": "permission"
       }
     },
     {
@@ -14258,7 +14308,8 @@
       "prereqText": "Graduate standing and permission of the department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Graduate standing and permission of the department"
+        "text": "Graduate standing and permission of the department",
+        "kind": "permission"
       }
     },
     {
@@ -14486,11 +14537,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Graduate standing plus basic courses in genetics and evolution"
+            "text": "Graduate standing plus basic courses in genetics and evolution",
+            "kind": "standing"
           },
           {
             "type": "non_course",
-            "text": "permission of the department"
+            "text": "permission of the department",
+            "kind": "permission"
           }
         ]
       }
@@ -14507,11 +14560,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Graduate standing plus basic courses in genetics and evolution"
+            "text": "Graduate standing plus basic courses in genetics and evolution",
+            "kind": "standing"
           },
           {
             "type": "non_course",
-            "text": "permission of the department (alternate years)"
+            "text": "permission of the department (alternate years)",
+            "kind": "permission"
           }
         ]
       }
@@ -14525,7 +14580,8 @@
       "prereqText": "Open to 4th year and graduate students with consent of the instructor",
       "prerequisites": {
         "type": "non_course",
-        "text": "Open to 4th year and graduate students with consent of the instructor"
+        "text": "Open to 4th year and graduate students with consent of the instructor",
+        "kind": "permission"
       }
     },
     {
@@ -14552,7 +14608,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission of the department"
+            "text": "permission of the department",
+            "kind": "permission"
           }
         ]
       }
@@ -14608,7 +14665,8 @@
       "prereqText": "Passive knowledge of French",
       "prerequisites": {
         "type": "non_course",
-        "text": "Passive knowledge of French"
+        "text": "Passive knowledge of French",
+        "kind": "language"
       }
     },
     {
@@ -14684,7 +14742,8 @@
       "prereqText": "approval of the program director",
       "prerequisites": {
         "type": "non_course",
-        "text": "approval of the program director"
+        "text": "approval of the program director",
+        "kind": "permission"
       }
     },
     {
@@ -14858,7 +14917,8 @@
       "prereqText": "knowledge of basic control system analyses and design concepts using root locus and frequency response methods",
       "prerequisites": {
         "type": "non_course",
-        "text": "knowledge of basic control system analyses and design concepts using root locus and frequency response methods"
+        "text": "knowledge of basic control system analyses and design concepts using root locus and frequency response methods",
+        "kind": "knowledge"
       }
     },
     {
@@ -14877,7 +14937,8 @@
       "prereqText": "Knowledge of integral and differential forms of mass, momentum, energy laws and fluid properties",
       "prerequisites": {
         "type": "non_course",
-        "text": "Knowledge of integral and differential forms of mass, momentum, energy laws and fluid properties"
+        "text": "Knowledge of integral and differential forms of mass, momentum, energy laws and fluid properties",
+        "kind": "knowledge"
       }
     },
     {
@@ -14917,7 +14978,8 @@
       "prereqText": "knowledge of electromagnetic theory",
       "prerequisites": {
         "type": "non_course",
-        "text": "knowledge of electromagnetic theory"
+        "text": "knowledge of electromagnetic theory",
+        "kind": "knowledge"
       }
     },
     {
@@ -15819,7 +15881,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission of the Program Co-ordinator"
+            "text": "permission of the Program Co-ordinator",
+            "kind": "permission"
           }
         ]
       }
@@ -15888,7 +15951,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission du coordonnateur du programme"
+            "text": "permission du coordonnateur du programme",
+            "kind": "permission"
           }
         ]
       }
@@ -17839,15 +17903,18 @@
         "children": [
           {
             "type": "non_course",
-            "text": "4U chemistry"
+            "text": "4U chemistry",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "OAC Chemistry"
+            "text": "OAC Chemistry",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -17878,15 +17945,18 @@
           },
           {
             "type": "non_course",
-            "text": "4U chemistry"
+            "text": "4U chemistry",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "OAC Chemistry"
+            "text": "OAC Chemistry",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -17914,15 +17984,18 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Le cours 4U chimie"
+            "text": "Le cours 4U chimie",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "CPO Chimie"
+            "text": "CPO Chimie",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -17953,15 +18026,18 @@
           },
           {
             "type": "non_course",
-            "text": "4U Chimie"
+            "text": "4U Chimie",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "CPO Chimie"
+            "text": "CPO Chimie",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -19113,7 +19189,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'étudiante doit avoir conservé une MPC minimale de 6.0 et avoir la permission du Département"
+            "text": "l'étudiante doit avoir conservé une MPC minimale de 6.0 et avoir la permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -19139,7 +19216,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'étudiante doit avoir conservé une MPC minimale de 6.0 et avoir la permission du Département"
+            "text": "l'étudiante doit avoir conservé une MPC minimale de 6.0 et avoir la permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -19771,7 +19849,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'étudiante doit avoir conservé une MPC minimale de 4.5 et avoir la permission du Département"
+            "text": "l'étudiante doit avoir conservé une MPC minimale de 4.5 et avoir la permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -19871,11 +19950,13 @@
             "children": [
               {
                 "type": "non_course",
-                "text": "equivalent."
+                "text": "equivalent.",
+                "kind": "equivalent"
               },
               {
                 "type": "non_course",
-                "text": "A basic knowledge of organic reaction mechanisms and stereochemistry"
+                "text": "A basic knowledge of organic reaction mechanisms and stereochemistry",
+                "kind": "knowledge"
               }
             ]
           }
@@ -20421,7 +20502,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -20458,7 +20540,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -20481,7 +20564,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -20504,7 +20588,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -20527,7 +20612,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -21472,7 +21558,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission of the Department"
+            "text": "permission of the Department",
+            "kind": "permission"
           }
         ]
       }
@@ -21515,7 +21602,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission du Département"
+            "text": "permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -25411,7 +25499,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission de la direction de la clinique (exceptionnellement être inscrit à ce cours au trimestre d'automne)"
+            "text": "permission de la direction de la clinique (exceptionnellement être inscrit à ce cours au trimestre d'automne)",
+            "kind": "permission"
           }
         ]
       }
@@ -25434,7 +25523,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission de la direction de la clinique (exceptionnellement être inscrit à ce cours au trimestre d'automne)"
+            "text": "permission de la direction de la clinique (exceptionnellement être inscrit à ce cours au trimestre d'automne)",
+            "kind": "permission"
           }
         ]
       }
@@ -25470,7 +25560,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission de la direction de la clinique"
+            "text": "permission de la direction de la clinique",
+            "kind": "permission"
           }
         ]
       }
@@ -25493,7 +25584,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission de la direction de la clinique"
+            "text": "permission de la direction de la clinique",
+            "kind": "permission"
           }
         ]
       }
@@ -31152,7 +31244,8 @@
       "prereqText": "Advanced Functions and Introductory Calculus 4U and Geometry and Discrete Mathematics 4U",
       "prerequisites": {
         "type": "non_course",
-        "text": "Advanced Functions and Introductory Calculus 4U and Geometry and Discrete Mathematics 4U"
+        "text": "Advanced Functions and Introductory Calculus 4U and Geometry and Discrete Mathematics 4U",
+        "kind": "highschool"
       }
     },
     {
@@ -31178,7 +31271,8 @@
       "prereqText": "Fonctions avancées et introduction au Calcul différentiel 4U et Géométrie et mathématiques discrètes 4U",
       "prerequisites": {
         "type": "non_course",
-        "text": "Fonctions avancées et introduction au Calcul différentiel 4U et Géométrie et mathématiques discrètes 4U"
+        "text": "Fonctions avancées et introduction au Calcul différentiel 4U et Géométrie et mathématiques discrètes 4U",
+        "kind": "highschool"
       }
     },
     {
@@ -31709,7 +31803,8 @@
       "prereqText": "Permission of the School",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the School"
+        "text": "Permission of the School",
+        "kind": "permission"
       }
     },
     {
@@ -31721,7 +31816,8 @@
       "prereqText": "Permission of the School",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the School"
+        "text": "Permission of the School",
+        "kind": "permission"
       }
     },
     {
@@ -32123,7 +32219,8 @@
       "prereqText": "Permission de l'École",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission de l'École"
+        "text": "Permission de l'École",
+        "kind": "permission"
       }
     },
     {
@@ -32135,7 +32232,8 @@
       "prereqText": "Permission de l'École",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission de l'École"
+        "text": "Permission de l'École",
+        "kind": "permission"
       }
     },
     {
@@ -32596,7 +32694,8 @@
       "prereqText": "familiarity with basic concepts in networks, network security, and applied cryptography",
       "prerequisites": {
         "type": "non_course",
-        "text": "familiarity with basic concepts in networks, network security, and applied cryptography"
+        "text": "familiarity with basic concepts in networks, network security, and applied cryptography",
+        "kind": "knowledge"
       }
     },
     {
@@ -32626,7 +32725,8 @@
               },
               {
                 "type": "non_course",
-                "text": "(in case of graduate students) permission of the instructor"
+                "text": "(in case of graduate students) permission of the instructor",
+                "kind": "permission"
               }
             ]
           }
@@ -32679,7 +32779,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -33055,7 +33156,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission of the instructor"
+            "text": "permission of the instructor",
+            "kind": "permission"
           }
         ]
       }
@@ -33092,7 +33194,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -33225,7 +33328,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -34277,7 +34381,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -34368,7 +34473,8 @@
       "prereqText": "B average, permission of supervisor",
       "prerequisites": {
         "type": "non_course",
-        "text": "B average, permission of supervisor"
+        "text": "B average, permission of supervisor",
+        "kind": "permission"
       }
     },
     {
@@ -34380,7 +34486,8 @@
       "prereqText": "B average, permission of supervisor",
       "prerequisites": {
         "type": "non_course",
-        "text": "B average, permission of supervisor"
+        "text": "B average, permission of supervisor",
+        "kind": "permission"
       }
     },
     {
@@ -34747,7 +34854,8 @@
       "prereqText": "Basic knowledge of third year-level undergraduate engineering mathematics",
       "prerequisites": {
         "type": "non_course",
-        "text": "Basic knowledge of third year-level undergraduate engineering mathematics"
+        "text": "Basic knowledge of third year-level undergraduate engineering mathematics",
+        "kind": "knowledge"
       }
     },
     {
@@ -37478,7 +37586,8 @@
       "prereqText": "réussite de tous les autres cours du programme",
       "prerequisites": {
         "type": "non_course",
-        "text": "réussite de tous les autres cours du programme"
+        "text": "réussite de tous les autres cours du programme",
+        "kind": "coursework"
       }
     },
     {
@@ -37838,7 +37947,8 @@
       "prereqText": "Connaissance active soit de l'anglais, soit du français et connaissance passive de l'autre langue",
       "prerequisites": {
         "type": "non_course",
-        "text": "Connaissance active soit de l'anglais, soit du français et connaissance passive de l'autre langue"
+        "text": "Connaissance active soit de l'anglais, soit du français et connaissance passive de l'autre langue",
+        "kind": "language"
       }
     },
     {
@@ -41746,7 +41856,8 @@
       "prereqText": "connaissance active soit du français soit de l?anglais et connaissance au moins passive de l?autre langue",
       "prerequisites": {
         "type": "non_course",
-        "text": "connaissance active soit du français soit de l?anglais et connaissance au moins passive de l?autre langue"
+        "text": "connaissance active soit du français soit de l?anglais et connaissance au moins passive de l?autre langue",
+        "kind": "language"
       }
     },
     {
@@ -41765,7 +41876,8 @@
       "prereqText": "réussite de toutes les exigences de cours",
       "prerequisites": {
         "type": "non_course",
-        "text": "réussite de toutes les exigences de cours"
+        "text": "réussite de toutes les exigences de cours",
+        "kind": "coursework"
       }
     },
     {
@@ -42145,7 +42257,8 @@
       "prereqText": "MPC d'au moins 7",
       "prerequisites": {
         "type": "non_course",
-        "text": "MPC d'au moins 7"
+        "text": "MPC d'au moins 7",
+        "kind": "standing"
       }
     },
     {
@@ -42157,7 +42270,8 @@
       "prereqText": "MPC d'au moins 7 / Préalable : MPC d'au moins 7, Préalable : MPC d'au moins 7",
       "prerequisites": {
         "type": "non_course",
-        "text": "MPC d'au moins 7 / Préalable : MPC d'au moins 7, Préalable : MPC d'au moins 7"
+        "text": "MPC d'au moins 7 / Préalable : MPC d'au moins 7, Préalable : MPC d'au moins 7",
+        "kind": "standing"
       }
     },
     {
@@ -42223,7 +42337,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -42267,7 +42382,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -45037,7 +45153,8 @@
           },
           {
             "type": "non_course",
-            "text": "and a CGPA of at least 6.0"
+            "text": "and a CGPA of at least 6.0",
+            "kind": "standing"
           }
         ]
       }
@@ -45793,7 +45910,8 @@
           },
           {
             "type": "non_course",
-            "text": "the permission of the Department"
+            "text": "the permission of the Department",
+            "kind": "permission"
           }
         ]
       }
@@ -46126,7 +46244,8 @@
           },
           {
             "type": "non_course",
-            "text": "the permission of the Department"
+            "text": "the permission of the Department",
+            "kind": "permission"
           }
         ]
       }
@@ -47868,7 +47987,8 @@
           },
           {
             "type": "non_course",
-            "text": "its equivalent"
+            "text": "its equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -48371,7 +48491,8 @@
           },
           {
             "type": "non_course",
-            "text": "être inscrit au certificat en études des francophonies"
+            "text": "être inscrit au certificat en études des francophonies",
+            "kind": "standing"
           }
         ]
       }
@@ -48394,7 +48515,8 @@
           },
           {
             "type": "non_course",
-            "text": "être inscrit au certificat en études des francophonies"
+            "text": "être inscrit au certificat en études des francophonies",
+            "kind": "standing"
           }
         ]
       }
@@ -48552,7 +48674,8 @@
       "prereqText": "Achèvement des trois premières années du programme d'études médicales de premier cycle",
       "prerequisites": {
         "type": "non_course",
-        "text": "Achèvement des trois premières années du programme d'études médicales de premier cycle"
+        "text": "Achèvement des trois premières années du programme d'études médicales de premier cycle",
+        "kind": "standing"
       }
     },
     {
@@ -48564,7 +48687,8 @@
       "prereqText": "Achèvement des trois premières années du programme d'études médicales de premier cycle",
       "prerequisites": {
         "type": "non_course",
-        "text": "Achèvement des trois premières années du programme d'études médicales de premier cycle"
+        "text": "Achèvement des trois premières années du programme d'études médicales de premier cycle",
+        "kind": "standing"
       }
     },
     {
@@ -49790,7 +49914,8 @@
       "prereqText": "Permission of the instructor",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the instructor"
+        "text": "Permission of the instructor",
+        "kind": "permission"
       }
     },
     {
@@ -49831,7 +49956,8 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -49912,7 +50038,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -49963,7 +50090,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -50150,7 +50278,8 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -50227,7 +50356,8 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -50285,7 +50415,8 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -50389,7 +50520,8 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -50468,7 +50600,8 @@
               },
               {
                 "type": "non_course",
-                "text": "the equivalent"
+                "text": "the equivalent",
+                "kind": "equivalent"
               }
             ]
           },
@@ -50488,7 +50621,8 @@
               },
               {
                 "type": "non_course",
-                "text": "the equivalent"
+                "text": "the equivalent",
+                "kind": "equivalent"
               }
             ]
           }
@@ -50691,7 +50825,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -50769,7 +50904,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -50791,7 +50927,8 @@
           },
           {
             "type": "non_course",
-            "text": "or the equivalent"
+            "text": "or the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -50814,7 +50951,8 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -50832,7 +50970,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Knowledge of Java, C/C+ +"
+            "text": "Knowledge of Java, C/C+ +",
+            "kind": "knowledge"
           },
           {
             "type": "non_course",
@@ -50850,7 +50989,8 @@
       "prereqText": "knowledge of C++ and of basic concepts of concurrency and distributed systems",
       "prerequisites": {
         "type": "non_course",
-        "text": "knowledge of C++ and of basic concepts of concurrency and distributed systems"
+        "text": "knowledge of C++ and of basic concepts of concurrency and distributed systems",
+        "kind": "knowledge"
       }
     },
     {
@@ -50881,7 +51021,8 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -50909,7 +51050,8 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -50942,7 +51084,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -50961,7 +51104,8 @@
       "prereqText": "Permission of the Institute",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Institute"
+        "text": "Permission of the Institute",
+        "kind": "permission"
       }
     },
     {
@@ -51044,7 +51188,8 @@
       "prereqText": "A basic knowledge of programming and multimedia design is strongly recommended",
       "prerequisites": {
         "type": "non_course",
-        "text": "A basic knowledge of programming and multimedia design is strongly recommended"
+        "text": "A basic knowledge of programming and multimedia design is strongly recommended",
+        "kind": "knowledge"
       }
     },
     {
@@ -51073,7 +51218,8 @@
               },
               {
                 "type": "non_course",
-                "text": "equivalent"
+                "text": "equivalent",
+                "kind": "equivalent"
               }
             ]
           },
@@ -51093,7 +51239,8 @@
               },
               {
                 "type": "non_course",
-                "text": "equivalent"
+                "text": "equivalent",
+                "kind": "equivalent"
               }
             ]
           }
@@ -51123,7 +51270,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -51158,7 +51306,8 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -51239,7 +51388,8 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -51315,7 +51465,8 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -51375,7 +51526,8 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -51424,7 +51576,8 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -51438,7 +51591,8 @@
       "prereqText": "Knowledge of C++ and/or Java, of operating system concepts",
       "prerequisites": {
         "type": "non_course",
-        "text": "Knowledge of C++ and/or Java, of operating system concepts"
+        "text": "Knowledge of C++ and/or Java, of operating system concepts",
+        "kind": "knowledge"
       }
     },
     {
@@ -51492,7 +51646,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -51734,7 +51889,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -51746,7 +51902,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -51758,7 +51915,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -53927,7 +54085,8 @@
       "prereqText": "Permission of the program co-ordinator",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the program co-ordinator"
+        "text": "Permission of the program co-ordinator",
+        "kind": "permission"
       }
     },
     {
@@ -54060,7 +54219,8 @@
       "prereqText": "Reserved for students registered in the Honours in Environmental Studies",
       "prerequisites": {
         "type": "non_course",
-        "text": "Reserved for students registered in the Honours in Environmental Studies"
+        "text": "Reserved for students registered in the Honours in Environmental Studies",
+        "kind": "standing"
       }
     },
     {
@@ -54109,7 +54269,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent and permission of instructor"
+            "text": "equivalent and permission of instructor",
+            "kind": "permission"
           }
         ]
       }
@@ -54625,7 +54786,8 @@
       "prereqText": "Permission of the program director",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the program director"
+        "text": "Permission of the program director",
+        "kind": "permission"
       }
     },
     {
@@ -54672,7 +54834,8 @@
       "prereqText": "Permission du responsable du programme",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du responsable du programme"
+        "text": "Permission du responsable du programme",
+        "kind": "permission"
       }
     },
     {
@@ -54831,7 +54994,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -55698,7 +55862,8 @@
       "prereqText": "Basic literacy in English and satisfactory placement test score",
       "prerequisites": {
         "type": "non_course",
-        "text": "Basic literacy in English and satisfactory placement test score"
+        "text": "Basic literacy in English and satisfactory placement test score",
+        "kind": "language"
       }
     },
     {
@@ -55719,7 +55884,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent placement test score"
+            "text": "equivalent placement test score",
+            "kind": "language"
           }
         ]
       }
@@ -55749,7 +55915,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent placement test score"
+            "text": "equivalent placement test score",
+            "kind": "language"
           }
         ]
       }
@@ -55772,7 +55939,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent placement test score"
+            "text": "equivalent placement test score",
+            "kind": "language"
           }
         ]
       }
@@ -55795,7 +55963,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent placement test score"
+            "text": "equivalent placement test score",
+            "kind": "language"
           }
         ]
       }
@@ -55809,7 +55978,8 @@
       "prereqText": "Permission from the department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission from the department"
+        "text": "Permission from the department",
+        "kind": "permission"
       }
     },
     {
@@ -55821,7 +55991,8 @@
       "prereqText": "Permission from department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission from department"
+        "text": "Permission from department",
+        "kind": "permission"
       }
     },
     {
@@ -55869,7 +56040,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -55906,7 +56078,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -55968,7 +56141,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -55991,7 +56165,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56070,7 +56245,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56093,7 +56269,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56116,7 +56293,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56139,7 +56317,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56162,7 +56341,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56239,7 +56419,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56288,7 +56469,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56311,7 +56493,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56334,7 +56517,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56357,7 +56541,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56389,7 +56574,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56437,7 +56623,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56496,7 +56683,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56528,7 +56716,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56608,7 +56797,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission du Département"
+            "text": "permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -56758,7 +56948,8 @@
               },
               {
                 "type": "non_course",
-                "text": "permission du Département"
+                "text": "permission du Département",
+                "kind": "permission"
               }
             ]
           },
@@ -56773,7 +56964,8 @@
               },
               {
                 "type": "non_course",
-                "text": "permission of the Department"
+                "text": "permission of the Department",
+                "kind": "permission"
               }
             ]
           }
@@ -56798,7 +56990,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission du Département"
+            "text": "permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -56821,7 +57014,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56844,7 +57038,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56867,7 +57062,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56890,7 +57086,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -56985,7 +57182,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -57032,7 +57230,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -57055,7 +57254,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -57078,7 +57278,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -57101,7 +57302,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -57150,7 +57352,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission du Département"
+            "text": "permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -57173,7 +57376,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission du Département"
+            "text": "permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -57196,7 +57400,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -57468,7 +57673,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -57948,7 +58154,8 @@
       "prereqText": "connaissance passive de l'anglais",
       "prerequisites": {
         "type": "non_course",
-        "text": "connaissance passive de l'anglais"
+        "text": "connaissance passive de l'anglais",
+        "kind": "language"
       }
     },
     {
@@ -57960,7 +58167,8 @@
       "prereqText": "Connaissance passive de l'anglais",
       "prerequisites": {
         "type": "non_course",
-        "text": "Connaissance passive de l'anglais"
+        "text": "Connaissance passive de l'anglais",
+        "kind": "language"
       }
     },
     {
@@ -58158,11 +58366,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Advanced Functions and Introductory Calculus 4U"
+            "text": "Advanced Functions and Introductory Calculus 4U",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "Calculus and Vectors 4U"
+            "text": "Calculus and Vectors 4U",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -58194,11 +58404,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Fonctions avancées et introduction au calcul différentiel 4U"
+            "text": "Fonctions avancées et introduction au calcul différentiel 4U",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "Calcul différentiel et vecteurs 4U"
+            "text": "Calcul différentiel et vecteurs 4U",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -58338,7 +58550,8 @@
       "prereqText": "Tous les cours obligatoires du B.Sc. en Sciences environnementales et avoir conservé une MPC de 6.0",
       "prerequisites": {
         "type": "non_course",
-        "text": "Tous les cours obligatoires du B.Sc. en Sciences environnementales et avoir conservé une MPC de 6.0"
+        "text": "Tous les cours obligatoires du B.Sc. en Sciences environnementales et avoir conservé une MPC de 6.0",
+        "kind": "standing"
       }
     },
     {
@@ -58350,7 +58563,8 @@
       "prereqText": "Tous les cours obligatoires du B.Sc. en Sciences environnementales et avoir conservé une MPC de 6.0",
       "prerequisites": {
         "type": "non_course",
-        "text": "Tous les cours obligatoires du B.Sc. en Sciences environnementales et avoir conservé une MPC de 6.0"
+        "text": "Tous les cours obligatoires du B.Sc. en Sciences environnementales et avoir conservé une MPC de 6.0",
+        "kind": "standing"
       }
     },
     {
@@ -59553,7 +59767,8 @@
       "prereqText": "Connaissance fondamentale de français et pointage satisfaisant au test de classement",
       "prerequisites": {
         "type": "non_course",
-        "text": "Connaissance fondamentale de français et pointage satisfaisant au test de classement"
+        "text": "Connaissance fondamentale de français et pointage satisfaisant au test de classement",
+        "kind": "language"
       }
     },
     {
@@ -59574,7 +59789,8 @@
           },
           {
             "type": "non_course",
-            "text": "pointage équivalant au test de classement"
+            "text": "pointage équivalant au test de classement",
+            "kind": "language"
           }
         ]
       }
@@ -59597,7 +59813,8 @@
           },
           {
             "type": "non_course",
-            "text": "pointage équivalant au test de classement"
+            "text": "pointage équivalant au test de classement",
+            "kind": "language"
           }
         ]
       }
@@ -59620,7 +59837,8 @@
           },
           {
             "type": "non_course",
-            "text": "pointage équivalant au test de classement"
+            "text": "pointage équivalant au test de classement",
+            "kind": "language"
           }
         ]
       }
@@ -59643,7 +59861,8 @@
           },
           {
             "type": "non_course",
-            "text": "pointage équivalant au test de classement"
+            "text": "pointage équivalant au test de classement",
+            "kind": "language"
           }
         ]
       }
@@ -59657,7 +59876,8 @@
       "prereqText": "Permission du département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du département"
+        "text": "Permission du département",
+        "kind": "permission"
       }
     },
     {
@@ -59669,7 +59889,8 @@
       "prereqText": "Permission du département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du département"
+        "text": "Permission du département",
+        "kind": "permission"
       }
     },
     {
@@ -59704,7 +59925,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -59767,7 +59989,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -59790,7 +60013,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -59813,7 +60037,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -59843,7 +60068,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -59866,7 +60092,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -59894,7 +60121,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -59948,7 +60176,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -59971,7 +60200,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -59994,7 +60224,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60022,7 +60253,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60054,7 +60286,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60077,7 +60310,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60109,7 +60343,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60162,7 +60397,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60185,7 +60421,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60213,7 +60450,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60236,7 +60474,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60268,7 +60507,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60291,7 +60531,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60339,7 +60580,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60371,7 +60613,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60403,7 +60646,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60426,7 +60670,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60458,7 +60703,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -60486,7 +60732,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -61378,7 +61625,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission du Département"
+            "text": "permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -62462,7 +62710,8 @@
       "prereqText": "permission of the Departement",
       "prerequisites": {
         "type": "non_course",
-        "text": "permission of the Departement"
+        "text": "permission of the Departement",
+        "kind": "permission"
       }
     },
     {
@@ -62525,7 +62774,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -62537,7 +62787,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -62724,7 +62975,8 @@
       "prereqText": "Permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du Département"
+        "text": "Permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -62736,7 +62988,8 @@
       "prereqText": "Permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du Département"
+        "text": "Permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -62824,7 +63077,8 @@
       "prereqText": "Student must have completed required basic courses in science and compulsory 3000 level courses within the field and have a minimum CGPA of 4.5",
       "prerequisites": {
         "type": "non_course",
-        "text": "Student must have completed required basic courses in science and compulsory 3000 level courses within the field and have a minimum CGPA of 4.5"
+        "text": "Student must have completed required basic courses in science and compulsory 3000 level courses within the field and have a minimum CGPA of 4.5",
+        "kind": "standing"
       }
     },
     {
@@ -62836,7 +63090,8 @@
       "prereqText": "Student must have completed required basic courses in science and compulsory 3000 level courses within the field and have a minimum CGPA of 4.5",
       "prerequisites": {
         "type": "non_course",
-        "text": "Student must have completed required basic courses in science and compulsory 3000 level courses within the field and have a minimum CGPA of 4.5"
+        "text": "Student must have completed required basic courses in science and compulsory 3000 level courses within the field and have a minimum CGPA of 4.5",
+        "kind": "standing"
       }
     },
     {
@@ -62864,7 +63119,8 @@
       "prereqText": "M.P.C. de 7,0, tous les cours GEG obligatoires pour le programme spécialisé des niveaux 1000 à 3000 et permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "M.P.C. de 7,0, tous les cours GEG obligatoires pour le programme spécialisé des niveaux 1000 à 3000 et permission du Département"
+        "text": "M.P.C. de 7,0, tous les cours GEG obligatoires pour le programme spécialisé des niveaux 1000 à 3000 et permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -62879,7 +63135,8 @@
       "prereqText": "M.P.C. de 7,0, tous les cours GEG obligatoires pour le programme spécialisé des niveaux 1000 à 3000 et permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "M.P.C. de 7,0, tous les cours GEG obligatoires pour le programme spécialisé des niveaux 1000 à 3000 et permission du Département"
+        "text": "M.P.C. de 7,0, tous les cours GEG obligatoires pour le programme spécialisé des niveaux 1000 à 3000 et permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -62975,7 +63232,8 @@
               },
               {
                 "type": "non_course",
-                "text": "permission of the Department"
+                "text": "permission of the Department",
+                "kind": "permission"
               }
             ]
           }
@@ -63325,7 +63583,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission du Département"
+            "text": "permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -63348,7 +63607,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission du Département"
+            "text": "permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -63609,11 +63869,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Advanced Functions and Introductory Calculus 4U"
+            "text": "Advanced Functions and Introductory Calculus 4U",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "Calculus and Vectors 4U"
+            "text": "Calculus and Vectors 4U",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -63652,11 +63914,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Advanced Functions and Introductory Calculus 4U"
+            "text": "Advanced Functions and Introductory Calculus 4U",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "Calculus and Vectors 4U"
+            "text": "Calculus and Vectors 4U",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -63695,11 +63959,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Fonctions avancées et intro. au calcul différentiel 4U"
+            "text": "Fonctions avancées et intro. au calcul différentiel 4U",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "le Calcul différentiel et vecteurs 4U"
+            "text": "le Calcul différentiel et vecteurs 4U",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -63738,11 +64004,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Fonctions avancées et introduction au calcul différentiel 4U"
+            "text": "Fonctions avancées et introduction au calcul différentiel 4U",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "Calcul différentiel et vecteurs 4U"
+            "text": "Calcul différentiel et vecteurs 4U",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -64782,7 +65050,8 @@
       "prereqText": "Student must have completed required basic courses in science and compulsory 3000 level courses within the field and have a minimum CGPA of 4.5",
       "prerequisites": {
         "type": "non_course",
-        "text": "Student must have completed required basic courses in science and compulsory 3000 level courses within the field and have a minimum CGPA of 4.5"
+        "text": "Student must have completed required basic courses in science and compulsory 3000 level courses within the field and have a minimum CGPA of 4.5",
+        "kind": "standing"
       }
     },
     {
@@ -64797,7 +65066,8 @@
       "prereqText": "Student must have completed required basic courses in science and compulsory 3000 level courses within the field and have a minimum CGPA of 4.5",
       "prerequisites": {
         "type": "non_course",
-        "text": "Student must have completed required basic courses in science and compulsory 3000 level courses within the field and have a minimum CGPA of 4.5"
+        "text": "Student must have completed required basic courses in science and compulsory 3000 level courses within the field and have a minimum CGPA of 4.5",
+        "kind": "standing"
       }
     },
     {
@@ -65137,7 +65407,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -65160,7 +65431,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -65351,11 +65623,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Physics 4U, advanced functions and Introductory Calculus 4U"
+            "text": "Physics 4U, advanced functions and Introductory Calculus 4U",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -65394,11 +65668,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Physique 4U, fonctions avancées et introduction au calcul différentiel 4U"
+            "text": "Physique 4U, fonctions avancées et introduction au calcul différentiel 4U",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -65419,7 +65695,8 @@
       "prereqText": "Permission of the Faculty",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Faculty"
+        "text": "Permission of the Faculty",
+        "kind": "permission"
       }
     },
     {
@@ -65438,7 +65715,8 @@
       "prereqText": "Permission de la Faculté",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission de la Faculté"
+        "text": "Permission de la Faculté",
+        "kind": "permission"
       }
     },
     {
@@ -65464,7 +65742,8 @@
       "prereqText": "Permission de la Faculté",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission de la Faculté"
+        "text": "Permission de la Faculté",
+        "kind": "permission"
       }
     },
     {
@@ -65476,7 +65755,8 @@
       "prereqText": "Permission of the Faculty",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Faculty"
+        "text": "Permission of the Faculty",
+        "kind": "permission"
       }
     },
     {
@@ -65522,7 +65802,8 @@
       "prereqText": "Permission de la Faculté",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission de la Faculté"
+        "text": "Permission de la Faculté",
+        "kind": "permission"
       }
     },
     {
@@ -65954,7 +66235,8 @@
           },
           {
             "type": "non_course",
-            "text": "approval of the M.H.A"
+            "text": "approval of the M.H.A",
+            "kind": "permission"
           }
         ]
       }
@@ -66103,7 +66385,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "avoir suivi avec succès tous les cours obligatoires du programme M.G.S.S"
+            "text": "avoir suivi avec succès tous les cours obligatoires du programme M.G.S.S",
+            "kind": "standing"
           },
           {
             "type": "or_group",
@@ -66116,7 +66399,8 @@
               },
               {
                 "type": "non_course",
-                "text": "l'approbation du directeur du programme M.G.S.S"
+                "text": "l'approbation du directeur du programme M.G.S.S",
+                "kind": "permission"
               }
             ]
           }
@@ -66136,11 +66420,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "avoir suivi avec succès tous les cours obligatoires de première année"
+            "text": "avoir suivi avec succès tous les cours obligatoires de première année",
+            "kind": "standing"
           },
           {
             "type": "non_course",
-            "text": "l'approbation du directeur du programme M.G.S.S"
+            "text": "l'approbation du directeur du programme M.G.S.S",
+            "kind": "permission"
           }
         ]
       }
@@ -66172,7 +66458,8 @@
           },
           {
             "type": "non_course",
-            "text": "approval of the MHA Program Director"
+            "text": "approval of the MHA Program Director",
+            "kind": "permission"
           }
         ]
       }
@@ -66204,7 +66491,8 @@
           },
           {
             "type": "non_course",
-            "text": "approval of the MHA Program Director"
+            "text": "approval of the MHA Program Director",
+            "kind": "permission"
           }
         ]
       }
@@ -66345,7 +66633,8 @@
           },
           {
             "type": "non_course",
-            "text": "approval of the MHA Program Director"
+            "text": "approval of the MHA Program Director",
+            "kind": "permission"
           }
         ]
       }
@@ -66377,7 +66666,8 @@
           },
           {
             "type": "non_course",
-            "text": "approval of the MHA Program Director"
+            "text": "approval of the MHA Program Director",
+            "kind": "permission"
           }
         ]
       }
@@ -66394,7 +66684,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Avoir suivi avec succès tous les cours obligatoires du programme M.G.S.S"
+            "text": "Avoir suivi avec succès tous les cours obligatoires du programme M.G.S.S",
+            "kind": "standing"
           },
           {
             "type": "or_group",
@@ -66416,7 +66707,8 @@
               },
               {
                 "type": "non_course",
-                "text": "l'approbation du directeur du programme M.G.S.S"
+                "text": "l'approbation du directeur du programme M.G.S.S",
+                "kind": "permission"
               }
             ]
           }
@@ -66435,7 +66727,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "avoir suivi avec succès tous les cours obligatoires du programme M.G.S.S"
+            "text": "avoir suivi avec succès tous les cours obligatoires du programme M.G.S.S",
+            "kind": "standing"
           },
           {
             "type": "or_group",
@@ -66457,7 +66750,8 @@
               },
               {
                 "type": "non_course",
-                "text": "l'approbation du directeur du programme M.G.S.S"
+                "text": "l'approbation du directeur du programme M.G.S.S",
+                "kind": "permission"
               }
             ]
           }
@@ -66498,7 +66792,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "avoir suivi avec succès tous les cours obligatoires du programme M.G.S.S"
+            "text": "avoir suivi avec succès tous les cours obligatoires du programme M.G.S.S",
+            "kind": "standing"
           },
           {
             "type": "or_group",
@@ -66520,7 +66815,8 @@
               },
               {
                 "type": "non_course",
-                "text": "l'approbation du directeur du programme M.G.S.S"
+                "text": "l'approbation du directeur du programme M.G.S.S",
+                "kind": "permission"
               }
             ]
           }
@@ -66580,11 +66876,13 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           },
           {
             "type": "non_course",
-            "text": "permission of the Department"
+            "text": "permission of the Department",
+            "kind": "permission"
           }
         ]
       }
@@ -66607,11 +66905,13 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           },
           {
             "type": "non_course",
-            "text": "permission of the Department"
+            "text": "permission of the Department",
+            "kind": "permission"
           }
         ]
       }
@@ -66634,11 +66934,13 @@
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           },
           {
             "type": "non_course",
-            "text": "permission of the Department"
+            "text": "permission of the Department",
+            "kind": "permission"
           }
         ]
       }
@@ -68593,7 +68895,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -69102,7 +69405,8 @@
       "prereqText": "Permission of the HMG program director",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the HMG program director"
+        "text": "Permission of the HMG program director",
+        "kind": "permission"
       }
     },
     {
@@ -69114,7 +69418,8 @@
       "prereqText": "Permission of the HMG program director",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the HMG program director"
+        "text": "Permission of the HMG program director",
+        "kind": "permission"
       }
     },
     {
@@ -69126,7 +69431,8 @@
       "prereqText": "Permission of the course coordinator",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the course coordinator"
+        "text": "Permission of the course coordinator",
+        "kind": "permission"
       }
     },
     {
@@ -69138,7 +69444,8 @@
       "prereqText": "Permission of the course coordinator",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the course coordinator"
+        "text": "Permission of the course coordinator",
+        "kind": "permission"
       }
     },
     {
@@ -69150,7 +69457,8 @@
       "prereqText": "Permission of the course coordinator",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the course coordinator"
+        "text": "Permission of the course coordinator",
+        "kind": "permission"
       }
     },
     {
@@ -69937,7 +70245,8 @@
       "prereqText": "passive knowledge of French",
       "prerequisites": {
         "type": "non_course",
-        "text": "passive knowledge of French"
+        "text": "passive knowledge of French",
+        "kind": "language"
       }
     },
     {
@@ -69949,7 +70258,8 @@
       "prereqText": "connaissance passive de l?anglais",
       "prerequisites": {
         "type": "non_course",
-        "text": "connaissance passive de l?anglais"
+        "text": "connaissance passive de l?anglais",
+        "kind": "language"
       }
     },
     {
@@ -69974,7 +70284,8 @@
       "prereqText": "passive knowledge of French",
       "prerequisites": {
         "type": "non_course",
-        "text": "passive knowledge of French"
+        "text": "passive knowledge of French",
+        "kind": "language"
       }
     },
     {
@@ -69986,7 +70297,8 @@
       "prereqText": "connaissance passive de l?anglais",
       "prerequisites": {
         "type": "non_course",
-        "text": "connaissance passive de l?anglais"
+        "text": "connaissance passive de l?anglais",
+        "kind": "language"
       }
     },
     {
@@ -70014,11 +70326,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "connaissance passive de l'anglais"
+            "text": "connaissance passive de l'anglais",
+            "kind": "language"
           },
           {
             "type": "non_course",
-            "text": "/ Prerequiste: passive knowledge of French"
+            "text": "/ Prerequiste: passive knowledge of French",
+            "kind": "language"
           }
         ]
       }
@@ -70052,7 +70366,8 @@
       "prereqText": "connaissance passive de l'anglais / Prerequiste: passive knowledge of French",
       "prerequisites": {
         "type": "non_course",
-        "text": "connaissance passive de l'anglais / Prerequiste: passive knowledge of French"
+        "text": "connaissance passive de l'anglais / Prerequiste: passive knowledge of French",
+        "kind": "language"
       }
     },
     {
@@ -70064,7 +70379,8 @@
       "prereqText": "connaissance passive de l'anglais / Prerequiste: passive knowledge of French",
       "prerequisites": {
         "type": "non_course",
-        "text": "connaissance passive de l'anglais / Prerequiste: passive knowledge of French"
+        "text": "connaissance passive de l'anglais / Prerequiste: passive knowledge of French",
+        "kind": "language"
       }
     },
     {
@@ -70076,7 +70392,8 @@
       "prereqText": "connaissance passive de l'anglais / Prerequiste: passive knowledge of French",
       "prerequisites": {
         "type": "non_course",
-        "text": "connaissance passive de l'anglais / Prerequiste: passive knowledge of French"
+        "text": "connaissance passive de l'anglais / Prerequiste: passive knowledge of French",
+        "kind": "language"
       }
     },
     {
@@ -70095,7 +70412,8 @@
       "prereqText": "Connaissance passive de l'anglais",
       "prerequisites": {
         "type": "non_course",
-        "text": "Connaissance passive de l'anglais"
+        "text": "Connaissance passive de l'anglais",
+        "kind": "language"
       }
     },
     {
@@ -71189,7 +71507,8 @@
       "prereqText": "No knowledge of Italian is required",
       "prerequisites": {
         "type": "non_course",
-        "text": "No knowledge of Italian is required"
+        "text": "No knowledge of Italian is required",
+        "kind": "language"
       }
     },
     {
@@ -71208,7 +71527,8 @@
       "prereqText": "Ce cours n'exige pas la connaissance de l'italien",
       "prerequisites": {
         "type": "non_course",
-        "text": "Ce cours n'exige pas la connaissance de l'italien"
+        "text": "Ce cours n'exige pas la connaissance de l'italien",
+        "kind": "knowledge"
       }
     },
     {
@@ -71243,7 +71563,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -71307,7 +71628,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -71370,7 +71692,8 @@
       "prereqText": "Permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du Département"
+        "text": "Permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -71408,7 +71731,8 @@
       "prereqText": "Permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du Département"
+        "text": "Permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -71494,7 +71818,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission du Départment"
+            "text": "permission du Départment",
+            "kind": "permission"
           }
         ]
       }
@@ -71525,7 +71850,8 @@
               },
               {
                 "type": "non_course",
-                "text": "permission du Département"
+                "text": "permission du Département",
+                "kind": "permission"
               }
             ]
           }
@@ -71550,7 +71876,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent et permission du Département"
+            "text": "l'équivalent et permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -71776,7 +72103,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -71799,7 +72127,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -72231,7 +72560,8 @@
       "prereqText": "connaissance passive de l'anglais",
       "prerequisites": {
         "type": "non_course",
-        "text": "connaissance passive de l'anglais"
+        "text": "connaissance passive de l'anglais",
+        "kind": "language"
       }
     },
     {
@@ -73528,7 +73858,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -73540,7 +73871,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -73552,7 +73884,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -73821,7 +74154,8 @@
       "prereqText": "Permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du Département"
+        "text": "Permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -73833,7 +74167,8 @@
       "prereqText": "Permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du Département"
+        "text": "Permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -73845,7 +74180,8 @@
       "prereqText": "Permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du Département"
+        "text": "Permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -74497,7 +74833,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -74561,7 +74898,8 @@
       "prereqText": "permission du département",
       "prerequisites": {
         "type": "non_course",
-        "text": "permission du département"
+        "text": "permission du département",
+        "kind": "permission"
       }
     },
     {
@@ -74629,7 +74967,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "One of Calculus and Vectors (MCV4U)"
+            "text": "One of Calculus and Vectors (MCV4U)",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -74652,11 +74991,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "One of Ontario 4U Mathematics of Data Management (MDM 4U)"
+            "text": "One of Ontario 4U Mathematics of Data Management (MDM 4U)",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "Ontario 4U Advanced Functions (MHF4U)"
+            "text": "Ontario 4U Advanced Functions (MHF4U)",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -74674,7 +75015,8 @@
               },
               {
                 "type": "non_course",
-                "text": "an equivalent"
+                "text": "an equivalent",
+                "kind": "equivalent"
               }
             ]
           }
@@ -74710,7 +75052,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "One of Advanced Functions (MHF4U)"
+            "text": "One of Advanced Functions (MHF4U)",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -74719,7 +75062,8 @@
           },
           {
             "type": "non_course",
-            "text": "an equivalent"
+            "text": "an equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -74737,11 +75081,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Ontario grade 11 Functions (MCR3U)"
+            "text": "Ontario grade 11 Functions (MCR3U)",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "the equivalent"
+            "text": "the equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -74768,11 +75114,13 @@
             "children": [
               {
                 "type": "non_course",
-                "text": "Ontario 4U Calculus and Vectors (MCV4U)"
+                "text": "Ontario 4U Calculus and Vectors (MCV4U)",
+                "kind": "highschool"
               },
               {
                 "type": "non_course",
-                "text": "an equivalent"
+                "text": "an equivalent",
+                "kind": "equivalent"
               }
             ]
           }
@@ -74827,11 +75175,13 @@
             "children": [
               {
                 "type": "non_course",
-                "text": "Ontario 4U Calculus and Vectors (MCV4U)"
+                "text": "Ontario 4U Calculus and Vectors (MCV4U)",
+                "kind": "highschool"
               },
               {
                 "type": "non_course",
-                "text": "an equivalent"
+                "text": "an equivalent",
+                "kind": "equivalent"
               }
             ]
           }
@@ -74864,7 +75214,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Ontario 4U Functions (MHF4U)"
+            "text": "Ontario 4U Functions (MHF4U)",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -74873,7 +75224,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -74900,13 +75252,15 @@
               },
               {
                 "type": "non_course",
-                "text": "Ontario 4U Calculus and Vectors (MCV4U)"
+                "text": "Ontario 4U Calculus and Vectors (MCV4U)",
+                "kind": "highschool"
               }
             ]
           },
           {
             "type": "non_course",
-            "text": "or an equivalent"
+            "text": "or an equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -74933,11 +75287,13 @@
           },
           {
             "type": "non_course",
-            "text": "Ontario 4U Advanced Functions (MHF4U)"
+            "text": "Ontario 4U Advanced Functions (MHF4U)",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -74960,11 +75316,13 @@
           },
           {
             "type": "non_course",
-            "text": "Ontario 4U Calculus and Vectors (MCV4U)"
+            "text": "Ontario 4U Calculus and Vectors (MCV4U)",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "an equivalent"
+            "text": "an equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -75028,7 +75386,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Calcul et vecteurs (MCV4U)"
+            "text": "Calcul et vecteurs (MCV4U)",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -75055,15 +75414,18 @@
             "children": [
               {
                 "type": "non_course",
-                "text": "Mathématiques 4U de l'Ontario"
+                "text": "Mathématiques 4U de l'Ontario",
+                "kind": "highschool"
               },
               {
                 "type": "non_course",
-                "text": "Mathématiques de la gestion de données (MDM 4U)"
+                "text": "Mathématiques de la gestion de données (MDM 4U)",
+                "kind": "highschool"
               },
               {
                 "type": "non_course",
-                "text": "Fonctions avancées (MHF4U)"
+                "text": "Fonctions avancées (MHF4U)",
+                "kind": "highschool"
               }
             ]
           },
@@ -75116,7 +75478,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Un des cours suivants : Fonctions avancées (MHF4U)"
+            "text": "Un des cours suivants : Fonctions avancées (MHF4U)",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -75125,7 +75488,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -75143,7 +75507,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Les Mathématiques de la 11e année de l'Ontario Fonctions (MCR3U)"
+            "text": "Les Mathématiques de la 11e année de l'Ontario Fonctions (MCR3U)",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
@@ -75170,11 +75535,13 @@
           },
           {
             "type": "non_course",
-            "text": "Mathématiques 4U de l'Ontario Calcul et vecteurs (MCV4U)"
+            "text": "Mathématiques 4U de l'Ontario Calcul et vecteurs (MCV4U)",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -75223,11 +75590,13 @@
           },
           {
             "type": "non_course",
-            "text": "Mathématiques 4U de l'Ontario (MCV4U)"
+            "text": "Mathématiques 4U de l'Ontario (MCV4U)",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -75258,7 +75627,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Mathématiques 4U de l'Ontario Fonctions avancées (MHF4U)"
+            "text": "Mathématiques 4U de l'Ontario Fonctions avancées (MHF4U)",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -75267,7 +75637,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -75290,11 +75661,13 @@
           },
           {
             "type": "non_course",
-            "text": "Mathématiques 4U de l'Ontario (MCV4U)"
+            "text": "Mathématiques 4U de l'Ontario (MCV4U)",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -75320,7 +75693,8 @@
             "children": [
               {
                 "type": "non_course",
-                "text": "4U de l'Ontario Fonctions avancées (MHF4U)"
+                "text": "4U de l'Ontario Fonctions avancées (MHF4U)",
+                "kind": "highschool"
               },
               {
                 "type": "non_course",
@@ -75349,11 +75723,13 @@
           },
           {
             "type": "non_course",
-            "text": "Mathématiques 4U de l'Ontario Calcul et vecteurs (MCV4U)"
+            "text": "Mathématiques 4U de l'Ontario Calcul et vecteurs (MCV4U)",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -75619,7 +75995,8 @@
               },
               {
                 "type": "non_course",
-                "text": "CEGEP linear algebra"
+                "text": "CEGEP linear algebra",
+                "kind": "coursework"
               }
             ]
           }
@@ -75802,7 +76179,8 @@
               },
               {
                 "type": "non_course",
-                "text": "the CEGEP linear algebra course"
+                "text": "the CEGEP linear algebra course",
+                "kind": "coursework"
               }
             ]
           }
@@ -76154,7 +76532,8 @@
               },
               {
                 "type": "non_course",
-                "text": "le cours d'algèbre linéaire du CEGEP"
+                "text": "le cours d'algèbre linéaire du CEGEP",
+                "kind": "coursework"
               }
             ]
           }
@@ -76337,7 +76716,8 @@
               },
               {
                 "type": "non_course",
-                "text": "le cours d'algèbre linéaire du CEGEP"
+                "text": "le cours d'algèbre linéaire du CEGEP",
+                "kind": "coursework"
               }
             ]
           }
@@ -80210,11 +80590,13 @@
           },
           {
             "type": "non_course",
-            "text": "l'étudiante doit être en 4ième année dans un programme spécialisé en mathématiques"
+            "text": "l'étudiante doit être en 4ième année dans un programme spécialisé en mathématiques",
+            "kind": "standing"
           },
           {
             "type": "non_course",
-            "text": "en statistique, avoir une MPC d'au moins 7.0 et obtenir la permission du Département"
+            "text": "en statistique, avoir une MPC d'au moins 7.0 et obtenir la permission du Département",
+            "kind": "permission"
           }
         ]
       }
@@ -80320,7 +80702,8 @@
       "prereqText": "Approval of the instructor",
       "prerequisites": {
         "type": "non_course",
-        "text": "Approval of the instructor"
+        "text": "Approval of the instructor",
+        "kind": "permission"
       }
     },
     {
@@ -80579,7 +80962,8 @@
       "prereqText": "undergraduate honours algebra, including group theory and finite fields",
       "prerequisites": {
         "type": "non_course",
-        "text": "undergraduate honours algebra, including group theory and finite fields"
+        "text": "undergraduate honours algebra, including group theory and finite fields",
+        "kind": "coursework"
       }
     },
     {
@@ -80595,11 +80979,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Honours undergraduate algebra"
+            "text": "Honours undergraduate algebra",
+            "kind": "coursework"
           },
           {
             "type": "non_course",
-            "text": "analysis and topology (or permission of the instructor)"
+            "text": "analysis and topology (or permission of the instructor)",
+            "kind": "permission"
           }
         ]
       }
@@ -80617,7 +81003,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Honours undergraduate algebra and either topology"
+            "text": "Honours undergraduate algebra and either topology",
+            "kind": "coursework"
           },
           {
             "type": "non_course",
@@ -80751,11 +81138,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Some familiarity with probability and stochastic processes and queueing,"
+            "text": "Some familiarity with probability and stochastic processes and queueing,",
+            "kind": "knowledge"
           },
           {
             "type": "non_course",
-            "text": "permission of the instructor"
+            "text": "permission of the instructor",
+            "kind": "permission"
           }
         ]
       }
@@ -81275,11 +81664,13 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent,"
+            "text": "equivalent,",
+            "kind": "equivalent"
           },
           {
             "type": "non_course",
-            "text": "the permission of the School"
+            "text": "the permission of the School",
+            "kind": "permission"
           },
           {
             "type": "non_course",
@@ -81618,7 +82009,8 @@
       "prereqText": "Permission de l'Institut",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission de l'Institut"
+        "text": "Permission de l'Institut",
+        "kind": "permission"
       }
     },
     {
@@ -82176,7 +82568,8 @@
       "prereqText": "Tous les cours de niveau 5000 associés au mode de livraison suivi",
       "prerequisites": {
         "type": "non_course",
-        "text": "Tous les cours de niveau 5000 associés au mode de livraison suivi"
+        "text": "Tous les cours de niveau 5000 associés au mode de livraison suivi",
+        "kind": "coursework"
       }
     },
     {
@@ -82373,7 +82766,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission of the MBA program director"
+            "text": "permission of the MBA program director",
+            "kind": "permission"
           }
         ]
       }
@@ -82688,7 +83082,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission du directeur du programme de MBA"
+            "text": "permission du directeur du programme de MBA",
+            "kind": "permission"
           }
         ]
       }
@@ -83858,7 +84253,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Completion of 3rd year Mechanical Engineering"
+            "text": "Completion of 3rd year Mechanical Engineering",
+            "kind": "standing"
           },
           {
             "type": "non_course",
@@ -83903,7 +84299,8 @@
               },
               {
                 "type": "non_course",
-                "text": "equivalent"
+                "text": "equivalent",
+                "kind": "equivalent"
               }
             ]
           }
@@ -84084,7 +84481,8 @@
               },
               {
                 "type": "non_course",
-                "text": "equivalent"
+                "text": "equivalent",
+                "kind": "equivalent"
               }
             ]
           }
@@ -84231,7 +84629,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -84535,7 +84934,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Completion of 3rd year Mechanical Engineering"
+            "text": "Completion of 3rd year Mechanical Engineering",
+            "kind": "standing"
           },
           {
             "type": "non_course",
@@ -84557,7 +84957,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Completion of 3rd year Mechanical Engineering"
+            "text": "Completion of 3rd year Mechanical Engineering",
+            "kind": "standing"
           },
           {
             "type": "non_course",
@@ -84579,7 +84980,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Completion of third year Mechanical Engineering"
+            "text": "Completion of third year Mechanical Engineering",
+            "kind": "standing"
           },
           {
             "type": "non_course",
@@ -84601,7 +85003,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Completion of third year Mechanical Engineering"
+            "text": "Completion of third year Mechanical Engineering",
+            "kind": "standing"
           },
           {
             "type": "non_course",
@@ -86233,7 +86636,8 @@
           },
           {
             "type": "non_course",
-            "text": "permission of the Co-ordinating Committee of the program"
+            "text": "permission of the Co-ordinating Committee of the program",
+            "kind": "permission"
           }
         ]
       }
@@ -87948,7 +88352,8 @@
       "prereqText": "Permission of the course coordinator",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the course coordinator"
+        "text": "Permission of the course coordinator",
+        "kind": "permission"
       }
     },
     {
@@ -88060,7 +88465,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -88083,7 +88489,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -88370,7 +88777,8 @@
       "prereqText": "Audition and permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Audition and permission of the Department"
+        "text": "Audition and permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -88382,7 +88790,8 @@
       "prereqText": "Audition and permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Audition and permission of the Department"
+        "text": "Audition and permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -88434,7 +88843,8 @@
       "prereqText": "Audition and/or permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Audition and/or permission of the Department"
+        "text": "Audition and/or permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -88446,7 +88856,8 @@
       "prereqText": "Audition and/or permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Audition and/or permission of the Department"
+        "text": "Audition and/or permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -89974,7 +90385,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -90015,7 +90427,8 @@
       "prereqText": "Audition",
       "prerequisites": {
         "type": "non_course",
-        "text": "Audition"
+        "text": "Audition",
+        "kind": "audition"
       }
     },
     {
@@ -90027,7 +90440,8 @@
       "prereqText": "Audition",
       "prerequisites": {
         "type": "non_course",
-        "text": "Audition"
+        "text": "Audition",
+        "kind": "audition"
       }
     },
     {
@@ -90481,7 +90895,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -90522,7 +90937,8 @@
       "prereqText": "Audition",
       "prerequisites": {
         "type": "non_course",
-        "text": "Audition"
+        "text": "Audition",
+        "kind": "audition"
       }
     },
     {
@@ -90696,7 +91112,8 @@
       "prereqText": "Audition obligatoire",
       "prerequisites": {
         "type": "non_course",
-        "text": "Audition obligatoire"
+        "text": "Audition obligatoire",
+        "kind": "audition"
       }
     },
     {
@@ -90708,7 +91125,8 @@
       "prereqText": "Audition obligatoire",
       "prerequisites": {
         "type": "non_course",
-        "text": "Audition obligatoire"
+        "text": "Audition obligatoire",
+        "kind": "audition"
       }
     },
     {
@@ -91227,7 +91645,8 @@
       "prereqText": "Audition et permission du coordonnateur du secteur",
       "prerequisites": {
         "type": "non_course",
-        "text": "Audition et permission du coordonnateur du secteur"
+        "text": "Audition et permission du coordonnateur du secteur",
+        "kind": "permission"
       }
     },
     {
@@ -91239,7 +91658,8 @@
       "prereqText": "Audition et permission du coordonnateur du secteur",
       "prerequisites": {
         "type": "non_course",
-        "text": "Audition et permission du coordonnateur du secteur"
+        "text": "Audition et permission du coordonnateur du secteur",
+        "kind": "permission"
       }
     },
     {
@@ -91758,7 +92178,8 @@
       "prereqText": "To be determined according to the topic of the seminar",
       "prerequisites": {
         "type": "non_course",
-        "text": "To be determined according to the topic of the seminar"
+        "text": "To be determined according to the topic of the seminar",
+        "kind": "topic"
       }
     },
     {
@@ -91770,7 +92191,8 @@
       "prereqText": "To be determined according to the topic of the seminar",
       "prerequisites": {
         "type": "non_course",
-        "text": "To be determined according to the topic of the seminar"
+        "text": "To be determined according to the topic of the seminar",
+        "kind": "topic"
       }
     },
     {
@@ -91928,7 +92350,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -92029,7 +92452,8 @@
       "prereqText": "À déterminer selon le sujet du séminaire",
       "prerequisites": {
         "type": "non_course",
-        "text": "À déterminer selon le sujet du séminaire"
+        "text": "À déterminer selon le sujet du séminaire",
+        "kind": "topic"
       }
     },
     {
@@ -92041,7 +92465,8 @@
       "prereqText": "À déterminer selon le sujet du séminaire",
       "prerequisites": {
         "type": "non_course",
-        "text": "À déterminer selon le sujet du séminaire"
+        "text": "À déterminer selon le sujet du séminaire",
+        "kind": "topic"
       }
     },
     {
@@ -92199,7 +92624,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -92248,7 +92674,8 @@
       "prereqText": "Permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du Département"
+        "text": "Permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -92260,7 +92687,8 @@
       "prereqText": "Permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du Département"
+        "text": "Permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -92285,7 +92713,8 @@
       "prereqText": "permission du professeur",
       "prerequisites": {
         "type": "non_course",
-        "text": "permission du professeur"
+        "text": "permission du professeur",
+        "kind": "permission"
       }
     },
     {
@@ -92297,7 +92726,8 @@
       "prereqText": "permission du professeur",
       "prerequisites": {
         "type": "non_course",
-        "text": "permission du professeur"
+        "text": "permission du professeur",
+        "kind": "permission"
       }
     },
     {
@@ -92362,7 +92792,8 @@
       "prereqText": "permission du professeur",
       "prerequisites": {
         "type": "non_course",
-        "text": "permission du professeur"
+        "text": "permission du professeur",
+        "kind": "permission"
       }
     },
     {
@@ -92534,7 +92965,8 @@
       "prereqText": "connaissance passive de l'anglais",
       "prerequisites": {
         "type": "non_course",
-        "text": "connaissance passive de l'anglais"
+        "text": "connaissance passive de l'anglais",
+        "kind": "language"
       }
     },
     {
@@ -93206,7 +93638,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -93261,7 +93694,8 @@
           },
           {
             "type": "non_course",
-            "text": "admission to the second entry program"
+            "text": "admission to the second entry program",
+            "kind": "standing"
           }
         ]
       }
@@ -93309,7 +93743,8 @@
           },
           {
             "type": "non_course",
-            "text": "admission to the Nursing Second Entry program"
+            "text": "admission to the Nursing Second Entry program",
+            "kind": "standing"
           }
         ]
       }
@@ -93350,7 +93785,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'admission au programme avec préalables universitaires"
+            "text": "l'admission au programme avec préalables universitaires",
+            "kind": "standing"
           }
         ]
       }
@@ -93398,7 +93834,8 @@
           },
           {
             "type": "non_course",
-            "text": "admission au programme avec préalables universitaires en sciences infirmières"
+            "text": "admission au programme avec préalables universitaires en sciences infirmières",
+            "kind": "standing"
           }
         ]
       }
@@ -98872,7 +99309,8 @@
       "prereqText": "Deux (2) cours (6 cr.) universitaires de mathématiques",
       "prerequisites": {
         "type": "non_course",
-        "text": "Deux (2) cours (6 cr.) universitaires de mathématiques"
+        "text": "Deux (2) cours (6 cr.) universitaires de mathématiques",
+        "kind": "coursework"
       }
     },
     {
@@ -102925,7 +103363,8 @@
       "prereqText": "Permission of instructor",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of instructor"
+        "text": "Permission of instructor",
+        "kind": "permission"
       }
     },
     {
@@ -103573,11 +104012,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "OAC"
+            "text": "OAC",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "4U Physics"
+            "text": "4U Physics",
+            "kind": "highschool"
           }
         ]
       }
@@ -103595,11 +104036,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "OAC"
+            "text": "OAC",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "4U Physics"
+            "text": "4U Physics",
+            "kind": "highschool"
           }
         ]
       }
@@ -103621,7 +104064,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "OAC"
+            "text": "OAC",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -103655,11 +104099,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "OAC"
+            "text": "OAC",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "4U Physics"
+            "text": "4U Physics",
+            "kind": "highschool"
           }
         ]
       }
@@ -103687,11 +104133,13 @@
           },
           {
             "type": "non_course",
-            "text": "OAC"
+            "text": "OAC",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "4U Physics"
+            "text": "4U Physics",
+            "kind": "highschool"
           }
         ]
       }
@@ -103716,11 +104164,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "4U"
+            "text": "4U",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "CPO physique"
+            "text": "CPO physique",
+            "kind": "highschool"
           }
         ]
       }
@@ -103738,11 +104188,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "CPO"
+            "text": "CPO",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "4U Physique"
+            "text": "4U Physique",
+            "kind": "highschool"
           }
         ]
       }
@@ -103760,7 +104212,8 @@
         "children": [
           {
             "type": "non_course",
-            "text": "4U"
+            "text": "4U",
+            "kind": "highschool"
           },
           {
             "type": "course",
@@ -103797,11 +104250,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "4U"
+            "text": "4U",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "CPO physique"
+            "text": "CPO physique",
+            "kind": "highschool"
           }
         ]
       }
@@ -103829,11 +104284,13 @@
           },
           {
             "type": "non_course",
-            "text": "CPO"
+            "text": "CPO",
+            "kind": "highschool"
           },
           {
             "type": "non_course",
-            "text": "4U Physique"
+            "text": "4U Physique",
+            "kind": "highschool"
           }
         ]
       }
@@ -105498,7 +105955,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -106454,7 +106912,8 @@
       "prereqText": "Enrolment in the graduate field of medical physics",
       "prerequisites": {
         "type": "non_course",
-        "text": "Enrolment in the graduate field of medical physics"
+        "text": "Enrolment in the graduate field of medical physics",
+        "kind": "standing"
       }
     },
     {
@@ -106599,7 +107058,8 @@
               },
               {
                 "type": "non_course",
-                "text": "familiarity with FORTRAN"
+                "text": "familiarity with FORTRAN",
+                "kind": "knowledge"
               }
             ]
           },
@@ -106695,7 +107155,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -106725,7 +107186,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -106803,7 +107265,8 @@
               },
               {
                 "type": "non_course",
-                "text": "familiarity with FORTRAN"
+                "text": "familiarity with FORTRAN",
+                "kind": "knowledge"
               }
             ]
           },
@@ -106840,7 +107303,8 @@
       "prereqText": "Être accepté dans l'option physique de la technologie moderne du programme de maîtrise et permission du département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Être accepté dans l'option physique de la technologie moderne du programme de maîtrise et permission du département"
+        "text": "Être accepté dans l'option physique de la technologie moderne du programme de maîtrise et permission du département",
+        "kind": "permission"
       }
     },
     {
@@ -106861,7 +107325,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -107183,7 +107648,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -107195,7 +107661,8 @@
       "prereqText": "Permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du Département"
+        "text": "Permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -115142,7 +115609,8 @@
       "prereqText": "knowledge of neuroanatomy",
       "prerequisites": {
         "type": "non_course",
-        "text": "knowledge of neuroanatomy"
+        "text": "knowledge of neuroanatomy",
+        "kind": "knowledge"
       }
     },
     {
@@ -115311,7 +115779,8 @@
       "prereqText": "une connaissance de la neuroanatomie",
       "prerequisites": {
         "type": "non_course",
-        "text": "une connaissance de la neuroanatomie"
+        "text": "une connaissance de la neuroanatomie",
+        "kind": "knowledge"
       }
     },
     {
@@ -115425,7 +115894,8 @@
       "prereqText": "knowledge of neuroanatomy",
       "prerequisites": {
         "type": "non_course",
-        "text": "knowledge of neuroanatomy"
+        "text": "knowledge of neuroanatomy",
+        "kind": "knowledge"
       }
     },
     {
@@ -116507,7 +116977,8 @@
       "prereqText": "connaissance passive de l'anglais",
       "prerequisites": {
         "type": "non_course",
-        "text": "connaissance passive de l'anglais"
+        "text": "connaissance passive de l'anglais",
+        "kind": "language"
       }
     },
     {
@@ -116859,7 +117330,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -116871,7 +117343,8 @@
       "prereqText": "Permission du Département",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission du Département"
+        "text": "Permission du Département",
+        "kind": "permission"
       }
     },
     {
@@ -116934,7 +117407,8 @@
               },
               {
                 "type": "non_course",
-                "text": "l'équivalent et permission du Département"
+                "text": "l'équivalent et permission du Département",
+                "kind": "permission"
               }
             ]
           },
@@ -120827,7 +121301,8 @@
       "prereqText": "moyenne de A-",
       "prerequisites": {
         "type": "non_course",
-        "text": "moyenne de A-"
+        "text": "moyenne de A-",
+        "kind": "standing"
       }
     },
     {
@@ -123824,7 +124299,8 @@
           },
           {
             "type": "non_course",
-            "text": "an open audition"
+            "text": "an open audition",
+            "kind": "audition"
           }
         ]
       }
@@ -123882,7 +124358,8 @@
           },
           {
             "type": "non_course",
-            "text": "an open audition"
+            "text": "an open audition",
+            "kind": "audition"
           }
         ]
       }
@@ -124020,7 +124497,8 @@
           },
           {
             "type": "non_course",
-            "text": "audition ponctuelle"
+            "text": "audition ponctuelle",
+            "kind": "audition"
           }
         ]
       }
@@ -124111,7 +124589,8 @@
       "prereqText": "Permission of the Department",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission of the Department"
+        "text": "Permission of the Department",
+        "kind": "permission"
       }
     },
     {
@@ -124171,7 +124650,8 @@
           },
           {
             "type": "non_course",
-            "text": "an open audition"
+            "text": "an open audition",
+            "kind": "audition"
           }
         ]
       }
@@ -124393,7 +124873,8 @@
           },
           {
             "type": "non_course",
-            "text": "audition ponctuelle"
+            "text": "audition ponctuelle",
+            "kind": "audition"
           }
         ]
       }
@@ -124583,7 +125064,8 @@
               },
               {
                 "type": "non_course",
-                "text": "audition ponctuelle"
+                "text": "audition ponctuelle",
+                "kind": "audition"
               }
             ]
           }
@@ -124631,7 +125113,8 @@
               },
               {
                 "type": "non_course",
-                "text": "audition ponctuelle"
+                "text": "audition ponctuelle",
+                "kind": "audition"
               }
             ]
           }
@@ -124937,7 +125420,8 @@
       "prereqText": "Réservé aux étudiants et étudiantes inscrits au programme de médecine moléculaire et translationnelle",
       "prerequisites": {
         "type": "non_course",
-        "text": "Réservé aux étudiants et étudiantes inscrits au programme de médecine moléculaire et translationnelle"
+        "text": "Réservé aux étudiants et étudiantes inscrits au programme de médecine moléculaire et translationnelle",
+        "kind": "standing"
       }
     },
     {
@@ -125882,7 +126366,8 @@
           },
           {
             "type": "non_course",
-            "text": "Permission of the STI"
+            "text": "Permission of the STI",
+            "kind": "permission"
           }
         ]
       }
@@ -126066,7 +126551,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -126089,7 +126575,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -126112,7 +126599,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -126135,7 +126623,8 @@
           },
           {
             "type": "non_course",
-            "text": "equivalent"
+            "text": "equivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -126246,7 +126735,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -126269,7 +126759,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -126292,7 +126783,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -126315,7 +126807,8 @@
           },
           {
             "type": "non_course",
-            "text": "l'équivalent"
+            "text": "l'équivalent",
+            "kind": "equivalent"
           }
         ]
       }
@@ -126368,7 +126861,8 @@
       "prereqText": "Permission de l'ÉTI",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission de l'ÉTI"
+        "text": "Permission de l'ÉTI",
+        "kind": "permission"
       }
     },
     {
@@ -126380,7 +126874,8 @@
       "prereqText": "Permission de l'ÉTI",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission de l'ÉTI"
+        "text": "Permission de l'ÉTI",
+        "kind": "permission"
       }
     },
     {
@@ -126405,7 +126900,8 @@
       "prereqText": "Permission de l'ÉTI",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission de l'ÉTI"
+        "text": "Permission de l'ÉTI",
+        "kind": "permission"
       }
     },
     {
@@ -126417,7 +126913,8 @@
       "prereqText": "Permission de l'ÉTI",
       "prerequisites": {
         "type": "non_course",
-        "text": "Permission de l'ÉTI"
+        "text": "Permission de l'ÉTI",
+        "kind": "permission"
       }
     },
     {
@@ -126931,7 +127428,8 @@
       "prereqText": "avoir réussi tous les cours obligatoires du programme",
       "prerequisites": {
         "type": "non_course",
-        "text": "avoir réussi tous les cours obligatoires du programme"
+        "text": "avoir réussi tous les cours obligatoires du programme",
+        "kind": "standing"
       }
     },
     {
@@ -127153,11 +127651,13 @@
         "children": [
           {
             "type": "non_course",
-            "text": "Réussir tous les cours"
+            "text": "Réussir tous les cours",
+            "kind": "coursework"
           },
           {
             "type": "non_course",
-            "text": "obtenir la permission de l'ÉTI"
+            "text": "obtenir la permission de l'ÉTI",
+            "kind": "permission"
           }
         ]
       }
@@ -162623,12 +163123,22 @@
             {
               "type": "elective",
               "title": "6 elective course units in social sciences at the 2000, 3000 or 4000 level",
-              "credits": 6
+              "credits": 6,
+              "levels": [
+                2000,
+                3000,
+                4000
+              ]
             },
             {
               "type": "elective",
               "title": "6 elective course units at the 2000, 3000 or 4000 level",
-              "credits": 6
+              "credits": 6,
+              "levels": [
+                2000,
+                3000,
+                4000
+              ]
             },
             {
               "type": "elective",
@@ -172560,7 +173070,10 @@
         {
           "type": "elective",
           "title": "6 course units at the 4000 level, 3 of which can be fulfilled by a special topics",
-          "credits": 6
+          "credits": 6,
+          "levels": [
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -172754,7 +173267,11 @@
         {
           "type": "elective",
           "title": "6 optional course units at the 3000 or 4000 level from the list of optional courses",
-          "credits": 6
+          "credits": 6,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -174702,7 +175219,10 @@
         {
           "type": "elective",
           "title": "12 course units of seminars at the 4000 level",
-          "credits": 12
+          "credits": 12,
+          "levels": [
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -181560,12 +182080,19 @@
             {
               "type": "elective",
               "title": "24 optional course units at the 3000 or 4000 level from the list of optional courses",
-              "credits": 24
+              "credits": 24,
+              "levels": [
+                3000,
+                4000
+              ]
             },
             {
               "type": "elective",
               "title": "3 optional course units at the 4000 level from the list of optional courses",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                4000
+              ]
             },
             {
               "type": "elective",
@@ -183814,6 +184341,10 @@
                       "type": "faculty_elective",
                       "title": "6 optional course units at the 3000 or 4000 level in science",
                       "credits": 6,
+                      "levels": [
+                        3000,
+                        4000
+                      ],
                       "faculty": "Science",
                       "indented": true
                     }
@@ -184035,6 +184566,10 @@
                       "type": "faculty_elective",
                       "title": "6 optional course units at the 3000 and 4000 level in science",
                       "credits": 6,
+                      "levels": [
+                        3000,
+                        4000
+                      ],
                       "faculty": "Science",
                       "indented": true
                     }
@@ -184362,6 +184897,10 @@
                       "type": "faculty_elective",
                       "title": "6 optional course units at the 3000 or 4000 level in science",
                       "credits": 6,
+                      "levels": [
+                        3000,
+                        4000
+                      ],
                       "faculty": "Science",
                       "indented": true
                     }
@@ -184573,6 +185112,10 @@
                       "type": "faculty_elective",
                       "title": "6 optional course units at the 3000 or 4000 level in science",
                       "credits": 6,
+                      "levels": [
+                        3000,
+                        4000
+                      ],
                       "faculty": "Science",
                       "indented": true
                     }
@@ -186886,7 +187429,11 @@
         {
           "type": "faculty_elective",
           "title": "18 optional course units at the 3000 or 4000 level offered by the Faculty of Science",
-          "credits": 18
+          "credits": 18,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -187091,6 +187638,10 @@
               "type": "elective",
               "title": "9 optional course units at the 3000 or 4000 level from the list of optional courses",
               "credits": 9,
+              "levels": [
+                3000,
+                4000
+              ],
               "indented": true
             }
           ]
@@ -187128,7 +187679,11 @@
         {
           "type": "faculty_elective",
           "title": "3 optional course units at the 3000 or 4000 level offered by the Faculty of Science",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -187403,6 +187958,10 @@
                   "type": "elective",
                   "title": "6 optional course units at the 3000 or 4000 level from the list of optional courses",
                   "credits": 6,
+                  "levels": [
+                    3000,
+                    4000
+                  ],
                   "indented": true
                 }
               ]
@@ -187444,7 +188003,11 @@
         {
           "type": "faculty_elective",
           "title": "3 optional course units at the 3000 or 4000 level offered by the Faculty of Science",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -187748,6 +188311,10 @@
               "type": "elective",
               "title": "9 optional course units at the 3000 or 4000 level from the list of optional courses",
               "credits": 9,
+              "levels": [
+                3000,
+                4000
+              ],
               "indented": true
             }
           ]
@@ -187760,7 +188327,11 @@
         {
           "type": "faculty_elective",
           "title": "3 course units at the 3000 or 4000 level offered by the Faculty of Science",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -188130,12 +188701,20 @@
         {
           "type": "elective",
           "title": "3 optional course units from the list of optional courses at the 3000 or 4000 level",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "faculty_elective",
           "title": "3 optional course units at the 3000 or 4000 level offered by the Faculty of Science",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -188452,6 +189031,10 @@
                       "type": "elective",
                       "title": "6 optional course units at the 3000 or 4000 level from the list of optional courses",
                       "credits": 6,
+                      "levels": [
+                        3000,
+                        4000
+                      ],
                       "indented": true
                     }
                   ]
@@ -188510,7 +189093,11 @@
         {
           "type": "faculty_elective",
           "title": "3 optional course units at the 3000 or 4000 level offered by the Faculty of Science",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -188885,7 +189472,11 @@
             {
               "type": "faculty_elective",
               "title": "3 optional course units at the 3000 or 4000 level offered by the Faculty of Science",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                3000,
+                4000
+              ]
             }
           ]
         },
@@ -188957,6 +189548,10 @@
                       "type": "elective",
                       "title": "6 optional course units from the list of optional courses for the Genomics Option at the 3000 or 4000 level",
                       "credits": 6,
+                      "levels": [
+                        3000,
+                        4000
+                      ],
                       "indented": true
                     }
                   ]
@@ -188971,7 +189566,11 @@
             {
               "type": "faculty_elective",
               "title": "3 optional course units at the 3000 or 4000 level offered by the Faculty of Science",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                3000,
+                4000
+              ]
             }
           ]
         },
@@ -191526,6 +192125,10 @@
               "type": "faculty_elective",
               "title": "9 optional course units at the 3000 or 4000 level from the list of optional courses offered by the Faculty of Science, the Faculty of Engineering, the Department of Geography (GEG) or from one of the options in the Honours BSc in Environmental Science program",
               "credits": 9,
+              "levels": [
+                3000,
+                4000
+              ],
               "indented": true
             }
           ]
@@ -191595,7 +192198,12 @@
         {
           "type": "faculty_elective",
           "title": "9 optional course units at the 2000, 3000 or 4000 level from the list of optional courses offered by the Faculty of Science, the Faculty of Engineering, the Department of Geography (GEG) or from one of the options in the Honours BSc in Environmental Science program",
-          "credits": 9
+          "credits": 9,
+          "levels": [
+            2000,
+            3000,
+            4000
+          ]
         },
         {
           "type": "course",
@@ -191687,7 +192295,12 @@
         {
           "type": "faculty_elective",
           "title": "6 optional course units at the 2000, 3000 or 4000 level from the list of optional courses offered by the Faculty of Science, the Faculty of Engineering, the Department of Geography (GEG) or from one of the options in the Honours BSc in Environmental Science program",
-          "credits": 6
+          "credits": 6,
+          "levels": [
+            2000,
+            3000,
+            4000
+          ]
         },
         {
           "type": "course",
@@ -191722,7 +192335,12 @@
         {
           "type": "faculty_elective",
           "title": "6 optional course units at the 2000, 3000 or 4000 level from the list of optional courses offered by the Faculty of Science, the Faculty of Engineering, the Department of Geography (GEG) or from one of the options in the Honours BSc in Environmental Science program",
-          "credits": 6
+          "credits": 6,
+          "levels": [
+            2000,
+            3000,
+            4000
+          ]
         },
         {
           "type": "and",
@@ -192869,12 +193487,19 @@
             {
               "type": "elective",
               "title": "21 optional course units at the 3000 or 4000 level from the list of optional courses",
-              "credits": 21
+              "credits": 21,
+              "levels": [
+                3000,
+                4000
+              ]
             },
             {
               "type": "elective",
               "title": "3 optional course units at the 4000 level from the list of optional courses",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                4000
+              ]
             },
             {
               "type": "elective",
@@ -193422,7 +194047,12 @@
         {
           "type": "faculty_elective",
           "title": "12 optional course units at the 2000, 3000 or 4000 level offered by the Faculty of Science",
-          "credits": 12
+          "credits": 12,
+          "levels": [
+            2000,
+            3000,
+            4000
+          ]
         }
       ]
     },
@@ -194167,6 +194797,11 @@
                   "type": "faculty_elective",
                   "title": "3 optional course units at the 2000, 3000 or 4000 level from the Faculty of Science or the Faculty of Engineering",
                   "credits": 3,
+                  "levels": [
+                    2000,
+                    3000,
+                    4000
+                  ],
                   "indented": true
                 }
               ]
@@ -197873,7 +198508,11 @@
         {
           "type": "elective",
           "title": "9 optional course units at the 3000 or 4000 level from the list of optional courses",
-          "credits": 9
+          "credits": 9,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -201591,22 +202230,38 @@
             {
               "type": "elective",
               "title": "3 course units in Canadian History (C) at the 2000 or 3000 level",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                2000,
+                3000
+              ]
             },
             {
               "type": "elective",
               "title": "3 course units in European History (E) at the 2000 or 3000 level",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                2000,
+                3000
+              ]
             },
             {
               "type": "elective",
               "title": "3 course units in United States History (A) at the 2000 or 3000 level",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                2000,
+                3000
+              ]
             },
             {
               "type": "non_discipline_elective",
               "title": "3 course units in Non-Western History (N) at the 2000 or 3000 level",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                2000,
+                3000
+              ]
             },
             {
               "type": "discipline_elective",
@@ -204769,7 +205424,11 @@
             {
               "type": "elective",
               "title": "3 optional units from the list of optional courses at the 3000 or 4000 level",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                3000,
+                4000
+              ]
             },
             {
               "type": "discipline_elective",
@@ -205476,22 +206135,38 @@
             {
               "type": "elective",
               "title": "3 course units in Canadian History (C) at the 2000 or 3000 level",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                2000,
+                3000
+              ]
             },
             {
               "type": "elective",
               "title": "3 course units in European History (E) at the 2000 or 3000 level",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                2000,
+                3000
+              ]
             },
             {
               "type": "elective",
               "title": "3 course units in United States History (A) at the 2000 or 3000 level",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                2000,
+                3000
+              ]
             },
             {
               "type": "non_discipline_elective",
               "title": "3 course units in Non-Western History (N) at the 2000 or 3000 level",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                2000,
+                3000
+              ]
             },
             {
               "type": "discipline_elective",
@@ -207029,12 +207704,19 @@
             {
               "type": "elective",
               "title": "9 optional course units at the 3000 or 4000 level from the list of optional courses",
-              "credits": 9
+              "credits": 9,
+              "levels": [
+                3000,
+                4000
+              ]
             },
             {
               "type": "elective",
               "title": "3 optional course units at the 4000 level from the list of optional courses",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                4000
+              ]
             },
             {
               "type": "discipline_elective",
@@ -207690,12 +208372,19 @@
             {
               "type": "elective",
               "title": "3 optional course units at the 4000 level from the list of optional courses",
-              "credits": 3
+              "credits": 3,
+              "levels": [
+                4000
+              ]
             },
             {
               "type": "elective",
               "title": "9 optional course units at the 3000 or 4000 level from the list of optional courses",
-              "credits": 9
+              "credits": 9,
+              "levels": [
+                3000,
+                4000
+              ]
             },
             {
               "type": "elective",
@@ -210461,7 +211150,11 @@
             {
               "type": "elective",
               "title": "12 optional course units at the 3000 or 4000 level from the list of optional courses",
-              "credits": 12
+              "credits": 12,
+              "levels": [
+                3000,
+                4000
+              ]
             },
             {
               "type": "elective",
@@ -211792,12 +212485,19 @@
         {
           "type": "elective",
           "title": "9 optional course units at the 3000 or 4000 level from the list of optional courses",
-          "credits": 9
+          "credits": 9,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "elective",
           "title": "3 optional course units at the 4000 level from the list of optional courses",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -213670,7 +214370,11 @@
         {
           "type": "elective",
           "title": "3 optional course units at the 3000 or 4000 level from the list of optional courses",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -214890,12 +215594,18 @@
         {
           "type": "elective",
           "title": "6 optional ART course units in History and Theory of Art (H) at the 3000 level",
-          "credits": 6
+          "credits": 6,
+          "levels": [
+            3000
+          ]
         },
         {
           "type": "elective",
           "title": "3 optional ART course units in History and Theory of Art (H) at the 4000 level",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            4000
+          ]
         }
       ]
     },
@@ -215386,12 +216096,19 @@
         {
           "type": "elective",
           "title": "9 optional course units at the 3000 or 4000 level from the list of optional courses",
-          "credits": 9
+          "credits": 9,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "elective",
           "title": "3 optional course units at the 4000 level from the list of optional courses",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            4000
+          ]
         },
         {
           "type": "course",
@@ -218657,12 +219374,19 @@
         {
           "type": "elective",
           "title": "3 optional course units at the 4000 level from the list of optional courses",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            4000
+          ]
         },
         {
           "type": "elective",
           "title": "12 optional course units at the 3000 or 4000 level from the list of optional courses",
-          "credits": 12
+          "credits": 12,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -219396,7 +220120,11 @@
         {
           "type": "elective",
           "title": "6 optional course units at the 3000 or 4000 level from the list of optional courses",
-          "credits": 6
+          "credits": 6,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "elective",
@@ -219887,7 +220615,11 @@
         {
           "type": "elective",
           "title": "3 optional course units in Applied Ethics at the 3000 or 4000 level from the list of optional courses",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "course",
@@ -224614,7 +225346,10 @@
         {
           "type": "elective",
           "title": "3 optional course units at the 3000 level from the list of optional courses",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            3000
+          ]
         },
         {
           "type": "elective",
@@ -225021,7 +225756,11 @@
         {
           "type": "elective",
           "title": "6 optional course units at the 3000 or 4000 level from the list of optional courses",
-          "credits": 6
+          "credits": 6,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "course",
@@ -226328,7 +227067,11 @@
         {
           "type": "elective",
           "title": "6 optional course units at the 3000 or 4000 level from the list of optional courses",
-          "credits": 6
+          "credits": 6,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "and",
@@ -227188,7 +227931,11 @@
         {
           "type": "elective",
           "title": "3 optional course units at the 3000 or 4000 level from the list of optional courses",
-          "credits": 3
+          "credits": 3,
+          "levels": [
+            3000,
+            4000
+          ]
         },
         {
           "type": "discipline_elective",

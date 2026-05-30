@@ -1,8 +1,50 @@
 {
   "termId": "2265",
-  "totalCourses": 11144,
-  "totalWithSchedules": 906,
+  "totalCourses": 11145,
+  "totalWithSchedules": 889,
   "schedules": [
+    {
+      "subject": "ACP",
+      "catalogNumber": "6001",
+      "courseCode": "ACP 6001",
+      "title": "Business Data Mining",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "X00-LEC Session C",
+            "sectionCode": "X00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 960,
+                "endMinutes": 1130,
+                "virtual": true,
+                "instructor": "Bijan Raahemi",
+                "meetingDates": [
+                  "2026-06-22",
+                  "2026-07-31"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 960,
+                "endMinutes": 1130,
+                "virtual": true,
+                "instructor": "Bijan Raahemi",
+                "meetingDates": [
+                  "2026-06-22",
+                  "2026-07-31"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
     {
       "subject": "ADM",
       "catalogNumber": "1100",
@@ -121,8 +163,19 @@
                 "day": "We",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
-                "virtual": true,
+                "virtual": false,
                 "instructor": "Chris Liboiron",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": true,
+                "instructor": "Bruce Millar",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-07-24"
@@ -162,7 +215,7 @@
                 "day": "Mo",
                 "startMinutes": 1050,
                 "endMinutes": 1130,
-                "virtual": true,
+                "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-05-04",
@@ -890,7 +943,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 235,
               "A": 224,
@@ -981,7 +1034,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 286,
               "A": 318,
@@ -1113,7 +1166,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 274,
               "A": 407,
@@ -1204,7 +1257,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 248,
               "A": 346,
@@ -1493,7 +1546,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 297,
               "A": 302,
@@ -1970,7 +2023,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 168,
               "A": 567,
@@ -2087,7 +2140,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 168,
               "A": 567,
@@ -3327,22 +3380,22 @@
       "subject": "ADM",
       "catalogNumber": "3313",
       "courseCode": "ADM 3313",
-      "title": "New Venture Creation",
+      "title": "Introduction to Business (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
           {
-            "section": "Y00-LEC Session A",
-            "sectionCode": "Y00",
+            "section": "X00-LEC Session A",
+            "sectionCode": "X00",
             "component": "LEC",
             "session": null,
             "times": [
               {
-                "day": "Th",
-                "startMinutes": 870,
-                "endMinutes": 1040,
+                "day": "We",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Stephen Daze",
+                "instructor": "Chris Liboiron",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-07-24"
@@ -3425,6 +3478,56 @@
     },
     {
       "subject": "ADM",
+      "catalogNumber": "3315",
+      "courseCode": "ADM 3315",
+      "title": "Business and Society (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "X00-LEC Session A",
+            "sectionCode": "X00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "John Palmer",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 10,
+              "A": 23,
+              "A-": 29,
+              "B+": 26,
+              "B": 16,
+              "C+": 9,
+              "C": 3,
+              "D+": 3,
+              "D": 1,
+              "E": 1,
+              "F": 0,
+              "EIN": 3,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ADM",
       "catalogNumber": "3316",
       "courseCode": "ADM 3316",
       "title": "Competitive Intelligence",
@@ -3449,7 +3552,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 73,
               "A": 120,
@@ -3840,7 +3943,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 278,
               "A": 334,
@@ -4631,47 +4734,6 @@
               "S": 0
             }
           }
-        ],
-        "LEC": [
-          {
-            "section": "X00-LEC Session A",
-            "sectionCode": "X00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "We",
-                "startMinutes": 960,
-                "endMinutes": 1130,
-                "virtual": true,
-                "instructor": "Saouré Kouamé",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 0,
-              "A": 8,
-              "A-": 0,
-              "B+": 0,
-              "B": 0,
-              "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
         ]
       }
     },
@@ -5377,25 +5439,6 @@
       }
     },
     {
-      "subject": "AFR",
-      "catalogNumber": "4103",
-      "courseCode": "AFR 4103",
-      "title": "CO-OP WORK TERM",
-      "timeZone": "America/Toronto",
-      "components": {
-        "STG": [
-          {
-            "section": "A00-STG Term",
-            "sectionCode": "A00",
-            "component": "STG",
-            "session": null,
-            "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
       "subject": "AHL",
       "catalogNumber": "1100",
       "courseCode": "AHL 1100",
@@ -5471,6 +5514,56 @@
             "session": null,
             "times": [],
             "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "AMM",
+      "catalogNumber": "5118",
+      "courseCode": "AMM 5118",
+      "title": "Human Anatomy and Physiology II",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "S00-LEC Session A",
+            "sectionCode": "S00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 960,
+                "endMinutes": 1130,
+                "virtual": true,
+                "instructor": "Joanne Savory",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 5,
+              "A-": 0,
+              "B+": 2,
+              "B": 1,
+              "C+": 0,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
           }
         ]
       }
@@ -6156,7 +6249,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Danica Vidotto",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -6217,7 +6310,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Manal Beydoun",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -6278,14 +6371,14 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Eileen O'Connor",
                 "meetingDates": [
                   "2026-06-22",
                   "2026-07-31"
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 205,
               "A": 190,
@@ -6339,7 +6432,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Gaétan Girard",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -6461,7 +6554,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Jocelyn East",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -6882,7 +6975,7 @@
             "component": "REC",
             "session": null,
             "times": [],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "B00-REC Term",
@@ -7447,44 +7540,6 @@
     },
     {
       "subject": "API",
-      "catalogNumber": "6735",
-      "courseCode": "API 6735",
-      "title": "Doing Data-based Projects",
-      "timeZone": "America/Toronto",
-      "components": {
-        "SEM": [
-          {
-            "section": "A00-SEM Session B",
-            "sectionCode": "A00",
-            "component": "SEM",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 1,
-              "A": 6,
-              "A-": 9,
-              "B+": 3,
-              "B": 2,
-              "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "API",
       "catalogNumber": "6737",
       "courseCode": "API 6737",
       "title": "Consolidation de la paix et reconstruction après conflits",
@@ -7934,7 +7989,7 @@
                 "startMinutes": 540,
                 "endMinutes": 720,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Emmeline Berger",
                 "meetingDates": [
                   "2026-06-01",
                   "2026-06-05"
@@ -8084,6 +8139,59 @@
       }
     },
     {
+      "subject": "AUD",
+      "catalogNumber": "5710",
+      "courseCode": "AUD 5710",
+      "title": "Biologie structurale des membranes",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "B00-LEC Term",
+            "sectionCode": "B00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 1050,
+                "endMinutes": 1130,
+                "virtual": true,
+                "instructor": "Danielle Carrier",
+                "meetingDates": [
+                  "2026-05-13",
+                  "2026-07-10"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 1050,
+                "endMinutes": 1130,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-05-13",
+                  "2026-07-10"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 590,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-05-13",
+                  "2026-07-10"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
       "subject": "BCH",
       "catalogNumber": "2333",
       "courseCode": "BCH 2333",
@@ -8172,7 +8280,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 351,
               "A": 444,
@@ -8339,44 +8447,6 @@
     },
     {
       "subject": "BCH",
-      "catalogNumber": "3756",
-      "courseCode": "BCH 3756",
-      "title": "Practicum",
-      "timeZone": "America/Toronto",
-      "components": {
-        "STG": [
-          {
-            "section": "A00-STG Term",
-            "sectionCode": "A00",
-            "component": "STG",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 13,
-              "A": 12,
-              "A-": 12,
-              "B+": 13,
-              "B": 7,
-              "C+": 7,
-              "C": 5,
-              "D+": 0,
-              "D": 3,
-              "E": 1,
-              "F": 1,
-              "EIN": 1,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "BCH",
       "catalogNumber": "4526",
       "courseCode": "BCH 4526",
       "title": "Biologie structurale des membranes",
@@ -8510,97 +8580,8 @@
             "sectionCode": "A00",
             "component": "LEC",
             "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 600,
-                "endMinutes": 960,
-                "virtual": false,
-                "instructor": "Steffany A.L. Bennett",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-05-04"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 600,
-                "endMinutes": 960,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-05-05",
-                  "2026-05-05"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 600,
-                "endMinutes": 960,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-05-06",
-                  "2026-05-06"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 600,
-                "endMinutes": 960,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-05-07",
-                  "2026-05-07"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 600,
-                "endMinutes": 960,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-05-08",
-                  "2026-05-08"
-                ]
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 600,
-                "endMinutes": 960,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-05-11",
-                  "2026-05-11"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 600,
-                "endMinutes": 960,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-05-12",
-                  "2026-05-12"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 600,
-                "endMinutes": 960,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-05-13",
-                  "2026-05-13"
-                ]
-              }
-            ],
-            "status": "Open",
+            "times": [],
+            "status": "Closed",
             "distribution": {
               "A+": 13,
               "A": 6,
@@ -9377,7 +9358,7 @@
                 "startMinutes": 510,
                 "endMinutes": 1050,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Marc Ekker",
                 "meetingDates": [
                   "2026-08-18",
                   "2026-08-18"
@@ -9388,7 +9369,7 @@
                 "startMinutes": 510,
                 "endMinutes": 1050,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Marc Ekker",
                 "meetingDates": [
                   "2026-08-19",
                   "2026-08-19"
@@ -9399,7 +9380,7 @@
                 "startMinutes": 510,
                 "endMinutes": 1050,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Marc Ekker",
                 "meetingDates": [
                   "2026-08-20",
                   "2026-08-20"
@@ -9410,7 +9391,7 @@
                 "startMinutes": 510,
                 "endMinutes": 1050,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Marc Ekker",
                 "meetingDates": [
                   "2026-08-21",
                   "2026-08-21"
@@ -9421,7 +9402,7 @@
                 "startMinutes": 510,
                 "endMinutes": 1050,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Marc Ekker",
                 "meetingDates": [
                   "2026-08-24",
                   "2026-08-24"
@@ -9432,7 +9413,7 @@
                 "startMinutes": 510,
                 "endMinutes": 1050,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Marc Ekker",
                 "meetingDates": [
                   "2026-08-25",
                   "2026-08-25"
@@ -9443,7 +9424,7 @@
                 "startMinutes": 510,
                 "endMinutes": 1050,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Marc Ekker",
                 "meetingDates": [
                   "2026-08-26",
                   "2026-08-26"
@@ -9454,7 +9435,7 @@
                 "startMinutes": 510,
                 "endMinutes": 1050,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Marc Ekker",
                 "meetingDates": [
                   "2026-08-27",
                   "2026-08-27"
@@ -9465,7 +9446,7 @@
                 "startMinutes": 510,
                 "endMinutes": 1050,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Marc Ekker",
                 "meetingDates": [
                   "2026-08-28",
                   "2026-08-28"
@@ -11000,6 +10981,73 @@
     },
     {
       "subject": "CHG",
+      "catalogNumber": "4307",
+      "courseCode": "CHG 4307",
+      "title": "Principles of Chemistry",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "H00-LEC Term",
+            "sectionCode": "H00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 110,
+              "A": 130,
+              "A-": 148,
+              "B+": 92,
+              "B": 54,
+              "C+": 19,
+              "C": 13,
+              "D+": 5,
+              "D": 0,
+              "E": 1,
+              "F": 0,
+              "EIN": 3,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ],
+        "LAB": [
+          {
+            "section": "H01-LAB Term",
+            "sectionCode": "H01",
+            "component": "LAB",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 110,
+              "A": 130,
+              "A-": 148,
+              "B+": 92,
+              "B": 54,
+              "C+": 19,
+              "C": 13,
+              "D+": 5,
+              "D": 0,
+              "E": 1,
+              "F": 0,
+              "EIN": 3,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CHG",
       "catalogNumber": "4901",
       "courseCode": "CHG 4901",
       "title": "Thesis and seminars I",
@@ -11087,7 +11135,19 @@
             "sectionCode": "S00",
             "component": "SEM",
             "session": null,
-            "times": [],
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 480,
+                "endMinutes": 1020,
+                "virtual": true,
+                "instructor": "Jan B. Haelssig",
+                "meetingDates": [
+                  "2026-07-22",
+                  "2026-07-22"
+                ]
+              }
+            ],
             "status": "Open"
           }
         ]
@@ -11106,7 +11166,19 @@
             "sectionCode": "S00",
             "component": "SEM",
             "session": null,
-            "times": [],
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 480,
+                "endMinutes": 1020,
+                "virtual": true,
+                "instructor": "Jan B. Haelssig",
+                "meetingDates": [
+                  "2026-07-22",
+                  "2026-07-22"
+                ]
+              }
+            ],
             "status": "Open"
           }
         ]
@@ -11618,9 +11690,20 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Darrin Richeson",
+                "instructor": "Chad Normandin",
                 "meetingDates": [
                   "2026-05-04",
+                  "2026-06-11"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Chad Normandin",
+                "meetingDates": [
+                  "2026-06-12",
                   "2026-07-24"
                 ]
               }
@@ -11758,6 +11841,17 @@
                 "instructor": "Chad Normandin",
                 "meetingDates": [
                   "2026-05-04",
+                  "2026-06-11"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Chad Normandin",
+                "meetingDates": [
+                  "2026-06-12",
                   "2026-07-24"
                 ]
               }
@@ -13805,7 +13899,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 540,
               "A": 842,
@@ -15958,7 +16052,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 128,
               "A": 109,
@@ -16353,44 +16447,6 @@
             "session": null,
             "times": [],
             "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "CVG",
-      "catalogNumber": "5124",
-      "courseCode": "CVG 5124",
-      "title": "Directed Studies I",
-      "timeZone": "America/Toronto",
-      "components": {
-        "REC": [
-          {
-            "section": "X00-REC Term",
-            "sectionCode": "X00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 91,
-              "A": 117,
-              "A-": 120,
-              "B+": 47,
-              "B": 32,
-              "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 1,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 2,
-              "P": 0,
-              "S": 0
-            }
           }
         ]
       }
@@ -16820,252 +16876,6 @@
             "component": "REC",
             "session": null,
             "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "DCL",
-      "catalogNumber": "5122",
-      "courseCode": "DCL 5122",
-      "title": "Droit notarial approfondi II (+1 combined)",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "AV00-LEC Session A",
-            "sectionCode": "AV00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 0,
-              "A": 1,
-              "A-": 12,
-              "B+": 11,
-              "B": 8,
-              "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "DCL",
-      "catalogNumber": "5206",
-      "courseCode": "DCL 5206",
-      "title": "Méthodologie de la recherche et de la rédaction juridiques (+1 combined)",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC Term",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 960,
-                "endMinutes": 1130,
-                "virtual": true,
-                "instructor": "Mistrale Goudreau",
-                "meetingDates": [
-                  "2026-07-02",
-                  "2026-08-12"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 960,
-                "endMinutes": 1130,
-                "virtual": true,
-                "instructor": "Mistrale Goudreau",
-                "meetingDates": [
-                  "2026-07-02",
-                  "2026-08-12"
-                ]
-              }
-            ],
             "status": "Open"
           }
         ]
@@ -17565,44 +17375,6 @@
     },
     {
       "subject": "DCL",
-      "catalogNumber": "6319",
-      "courseCode": "DCL 6319",
-      "title": "Thesis project",
-      "timeZone": "America/Toronto",
-      "components": {
-        "REC": [
-          {
-            "section": "A00-REC Term",
-            "sectionCode": "A00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 1,
-              "A": 5,
-              "A-": 6,
-              "B+": 6,
-              "B": 4,
-              "C+": 1,
-              "C": 0,
-              "D+": 0,
-              "D": 2,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "DCL",
       "catalogNumber": "6739",
       "courseCode": "DCL 6739",
       "title": "Thèmes choisis en droit (+1 combined)",
@@ -17647,210 +17419,6 @@
               "B": 4,
               "C+": 1,
               "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "DCL",
-      "catalogNumber": "7300",
-      "courseCode": "DCL 7300",
-      "title": "Droit notarial approfondi II (+1 combined)",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "AV00-LEC Session A",
-            "sectionCode": "AV00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": true,
-                "instructor": "Natacha Bouffard",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 4,
-              "A": 13,
-              "A-": 11,
-              "B+": 15,
-              "B": 3,
-              "C+": 1,
-              "C": 1,
               "D+": 0,
               "D": 0,
               "E": 0,
@@ -21138,6 +20706,44 @@
     },
     {
       "subject": "DVM",
+      "catalogNumber": "5100",
+      "courseCode": "DVM 5100",
+      "title": "Thesis Proposal",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "T00-REC Term",
+            "sectionCode": "T00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 10,
+              "A": 40,
+              "A-": 57,
+              "B+": 29,
+              "B": 3,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DVM",
       "catalogNumber": "5171",
       "courseCode": "DVM 5171",
       "title": "Monitoring and Evaluation",
@@ -21576,37 +21182,6 @@
     },
     {
       "subject": "DVM",
-      "catalogNumber": "5999",
-      "courseCode": "DVM 5999",
-      "title": "Interaction Design and Design Thinking",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "Z00-LEC Session A",
-            "sectionCode": "Z00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "We",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
-                "instructor": "Shaun K.S. Illingworth",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "DVM",
       "catalogNumber": "6112",
       "courseCode": "DVM 6112",
       "title": "Special Topics in Environment, Natural Resources and Sustainability",
@@ -21979,7 +21554,7 @@
                 "day": "Tu",
                 "startMinutes": 870,
                 "endMinutes": 1040,
-                "virtual": true,
+                "virtual": false,
                 "instructor": "Julien Pelletier",
                 "meetingDates": [
                   "2026-05-04",
@@ -21990,11 +21565,61 @@
                 "day": "Th",
                 "startMinutes": 870,
                 "endMinutes": 1040,
-                "virtual": true,
+                "virtual": false,
                 "instructor": "Julien Pelletier",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 71,
+              "A": 117,
+              "A-": 171,
+              "B+": 188,
+              "B": 175,
+              "C+": 151,
+              "C": 111,
+              "D+": 106,
+              "D": 66,
+              "E": 56,
+              "F": 75,
+              "EIN": 70,
+              "NS": 6,
+              "NC": 0,
+              "ABS": 7,
+              "P": 0,
+              "S": 36
+            }
+          },
+          {
+            "section": "A00-LEC Session C",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": true,
+                "instructor": "Sandra Charles",
+                "meetingDates": [
+                  "2026-06-22",
+                  "2026-07-31"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": true,
+                "instructor": "Sandra Charles",
+                "meetingDates": [
+                  "2026-06-22",
+                  "2026-07-31"
                 ]
               }
             ],
@@ -22094,6 +21719,25 @@
               "P": 0,
               "S": 0
             }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ECH",
+      "catalogNumber": "4324",
+      "courseCode": "ECH 4324",
+      "title": "Introduction to Macroeconomics",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Session B",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
           }
         ]
       }
@@ -22249,7 +21893,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 523,
               "A": 772,
@@ -22955,7 +22599,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": true,
-                "instructor": "Ather Akbari",
+                "instructor": "Syed Ather Akbari",
                 "meetingDates": [
                   "2026-06-22",
                   "2026-07-31"
@@ -22966,7 +22610,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": true,
-                "instructor": "Ather Akbari",
+                "instructor": "Syed Ather Akbari",
                 "meetingDates": [
                   "2026-06-22",
                   "2026-07-31"
@@ -22987,128 +22631,6 @@
               "E": 0,
               "F": 0,
               "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "ECO",
-      "catalogNumber": "4511",
-      "courseCode": "ECO 4511",
-      "title": "Théorie macroéconomique I",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC Session B",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "We",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": false,
-                "instructor": "Komlan Fiodendji",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-06-12"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": false,
-                "instructor": "Komlan Fiodendji",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-06-12"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 19,
-              "A": 16,
-              "A-": 15,
-              "B+": 18,
-              "B": 27,
-              "C+": 23,
-              "C": 19,
-              "D+": 22,
-              "D": 11,
-              "E": 4,
-              "F": 1,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "ECO",
-      "catalogNumber": "4592",
-      "courseCode": "ECO 4592",
-      "title": "Mathematical Economics I",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC Session B",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": false,
-                "instructor": "Quang Hung Truong",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-06-12"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": false,
-                "instructor": "Quang Hung Truong",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-06-12"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 8,
-              "A": 8,
-              "A-": 2,
-              "B+": 3,
-              "B": 1,
-              "C+": 0,
-              "C": 0,
-              "D+": 1,
-              "D": 2,
-              "E": 0,
-              "F": 0,
-              "EIN": 1,
               "NS": 0,
               "NC": 0,
               "ABS": 0,
@@ -24354,7 +23876,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 165,
               "A": 72,
@@ -24667,6 +24189,44 @@
     },
     {
       "subject": "EDU",
+      "catalogNumber": "5381",
+      "courseCode": "EDU 5381",
+      "title": "Thèmes choisis",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Session B",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Closed",
+            "distribution": {
+              "A+": 28,
+              "A": 45,
+              "A-": 11,
+              "B+": 3,
+              "B": 1,
+              "C+": 0,
+              "C": 1,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "EDU",
       "catalogNumber": "5384",
       "courseCode": "EDU 5384",
       "title": "Integrated Approaches to Language Curriculum",
@@ -24806,7 +24366,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -25341,25 +24901,6 @@
     },
     {
       "subject": "EDU",
-      "catalogNumber": "6536",
-      "courseCode": "EDU 6536",
-      "title": "Enjeux actuels de la recherche en didactique des langues secondes",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "DA00-LEC Session B",
-            "sectionCode": "DA00",
-            "component": "LEC",
-            "session": null,
-            "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "EDU",
       "catalogNumber": "6651",
       "courseCode": "EDU 6651",
       "title": "Éducation à la citoyenneté",
@@ -25532,7 +25073,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 7,
               "A": 16,
@@ -25616,44 +25157,6 @@
               "B+": 0,
               "B": 0,
               "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "EDU",
-      "catalogNumber": "7300",
-      "courseCode": "EDU 7300",
-      "title": "Clinical Placement - Non Mandatory Elective - Second Year (Part 3 of 3)",
-      "timeZone": "America/Toronto",
-      "components": {
-        "STG": [
-          {
-            "section": "A00-STG Term",
-            "sectionCode": "A00",
-            "component": "STG",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 9,
-              "A": 20,
-              "A-": 8,
-              "B+": 3,
-              "B": 0,
-              "C+": 1,
               "C": 0,
               "D+": 0,
               "D": 0,
@@ -25946,25 +25449,6 @@
     },
     {
       "subject": "ELE",
-      "catalogNumber": "4951",
-      "courseCode": "ELE 4951",
-      "title": "Enjeux actuels de la recherche en didactique des langues secondes",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "DA00-LEC Session B",
-            "sectionCode": "DA00",
-            "component": "LEC",
-            "session": null,
-            "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "ELE",
       "catalogNumber": "4962",
       "courseCode": "ELE 4962",
       "title": "Optional Rotation for Visiting Trainees from Non-Canadian Schools",
@@ -26157,44 +25641,6 @@
               "NS": 1,
               "NC": 0,
               "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "ELG",
-      "catalogNumber": "3175",
-      "courseCode": "ELG 3175",
-      "title": "Ph.D. Thesis Proposal",
-      "timeZone": "America/Toronto",
-      "components": {
-        "REC": [
-          {
-            "section": "DA00-REC Term",
-            "sectionCode": "DA00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 42,
-              "A": 34,
-              "A-": 34,
-              "B+": 48,
-              "B": 52,
-              "C+": 61,
-              "C": 61,
-              "D+": 83,
-              "D": 41,
-              "E": 34,
-              "F": 25,
-              "EIN": 18,
-              "NS": 1,
-              "NC": 0,
-              "ABS": 1,
               "P": 0,
               "S": 0
             }
@@ -26473,7 +25919,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 2349,
               "A": 3234,
@@ -27173,7 +26619,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 12,
               "A": 12,
@@ -27234,7 +26680,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 29,
               "A": 43,
@@ -27437,25 +26883,6 @@
               "P": 0,
               "S": 0
             }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "ENG",
-      "catalogNumber": "7331",
-      "courseCode": "ENG 7331",
-      "title": "Évaluation des impacts environnementaux (+1 combined)",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC Session B",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [],
-            "status": "Open"
           }
         ]
       }
@@ -27849,25 +27276,6 @@
               "P": 0,
               "S": 0
             }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "EPI",
-      "catalogNumber": "6276",
-      "courseCode": "EPI 6276",
-      "title": "Évaluation des impacts environnementaux (+1 combined)",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC Session B",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [],
-            "status": "Open"
           }
         ]
       }
@@ -29329,6 +28737,44 @@
     },
     {
       "subject": "FEM",
+      "catalogNumber": "3509",
+      "courseCode": "FEM 3509",
+      "title": "Thesis Proposal and Comprehensive Examination",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "X00-REC Term",
+            "sectionCode": "X00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 1,
+              "A": 2,
+              "A-": 1,
+              "B+": 2,
+              "B": 6,
+              "C+": 0,
+              "C": 0,
+              "D+": 2,
+              "D": 1,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "FEM",
       "catalogNumber": "6100",
       "courseCode": "FEM 6100",
       "title": "Special Topics in Feminist Studies",
@@ -30016,82 +29462,6 @@
     },
     {
       "subject": "FSS",
-      "catalogNumber": "3320",
-      "courseCode": "FSS 3320",
-      "title": "In-depth Experiential Learning Stream Self-directed Course II",
-      "timeZone": "America/Toronto",
-      "components": {
-        "SEM": [
-          {
-            "section": "SLC2-SEM Term",
-            "sectionCode": "SLC2",
-            "component": "SEM",
-            "session": null,
-            "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "FSS",
-      "catalogNumber": "3330",
-      "courseCode": "FSS 3330",
-      "title": "In-depth Experiential Learning Stream Self-directed Course III",
-      "timeZone": "America/Toronto",
-      "components": {
-        "SEM": [
-          {
-            "section": "SLC3-SEM Term",
-            "sectionCode": "SLC3",
-            "component": "SEM",
-            "session": null,
-            "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "FSS",
-      "catalogNumber": "3720",
-      "courseCode": "FSS 3720",
-      "title": "Cours autodirigé du Régime d’apprentissage expérientiel approfondi II",
-      "timeZone": "America/Toronto",
-      "components": {
-        "SEM": [
-          {
-            "section": "SLC2-SEM Term",
-            "sectionCode": "SLC2",
-            "component": "SEM",
-            "session": null,
-            "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "FSS",
-      "catalogNumber": "3730",
-      "courseCode": "FSS 3730",
-      "title": "Cours autodirigé du Régime d’apprentissage expérientiel approfondi III",
-      "timeZone": "America/Toronto",
-      "components": {
-        "SEM": [
-          {
-            "section": "SLC3-SEM Term",
-            "sectionCode": "SLC3",
-            "component": "SEM",
-            "session": null,
-            "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "FSS",
       "catalogNumber": "5152",
       "courseCode": "FSS 5152",
       "title": "Introduction to Health Workforce Studies: Planning, Policy & Management",
@@ -30162,25 +29532,6 @@
               "P": 0,
               "S": 0
             }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "FSS",
-      "catalogNumber": "6001",
-      "courseCode": "FSS 6001",
-      "title": "Preparation and Presentation of the MSc Thesis Project",
-      "timeZone": "America/Toronto",
-      "components": {
-        "REC": [
-          {
-            "section": "A00-REC Term",
-            "sectionCode": "A00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open"
           }
         ]
       }
@@ -31385,7 +30736,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 349,
               "A": 389,
@@ -31424,7 +30775,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 349,
               "A": 389,
@@ -32393,7 +31744,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 20,
               "A": 121,
@@ -32412,6 +31763,67 @@
               "ABS": 7,
               "P": 0,
               "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "HIS",
+      "catalogNumber": "2551",
+      "courseCode": "HIS 2551",
+      "title": "The Twentieth-Century World from 1945",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Session B",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Thomas Boogaart",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-06-12"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Thomas Boogaart",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-06-12"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 42,
+              "A": 57,
+              "A-": 53,
+              "B+": 30,
+              "B": 43,
+              "C+": 35,
+              "C": 24,
+              "D+": 26,
+              "D": 20,
+              "E": 13,
+              "F": 5,
+              "EIN": 7,
+              "NS": 3,
+              "NC": 0,
+              "ABS": 3,
+              "P": 0,
+              "S": 8
             }
           }
         ]
@@ -32804,94 +32216,6 @@
     },
     {
       "subject": "HIS",
-      "catalogNumber": "7333",
-      "courseCode": "HIS 7333",
-      "title": "Determinants of Health",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "WB00-LEC Session B",
-            "sectionCode": "WB00",
-            "component": "LEC",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 0,
-              "A": 6,
-              "A-": 4,
-              "B+": 3,
-              "B": 0,
-              "C+": 1,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          },
-          {
-            "section": "X00-LEC Session C",
-            "sectionCode": "X00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
-                "instructor": "Tien Nguyen",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
-                "instructor": "Tien Nguyen",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              }
-            ],
-            "status": "Closed",
-            "distribution": {
-              "A+": 0,
-              "A": 6,
-              "A-": 4,
-              "B+": 3,
-              "B": 0,
-              "C+": 1,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "HIS",
       "catalogNumber": "9982",
       "courseCode": "HIS 9982",
       "title": "Intellectual History",
@@ -33035,7 +32359,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "François Cossette",
                 "meetingDates": [
                   "2026-06-22",
                   "2026-07-31"
@@ -33046,7 +32370,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "François Cossette",
                 "meetingDates": [
                   "2026-06-22",
                   "2026-07-31"
@@ -33510,7 +32834,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 494,
               "A": 268,
@@ -33712,7 +33036,7 @@
             "component": "REC",
             "session": null,
             "times": [],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "B00-REC Term",
@@ -34423,7 +33747,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": true,
-                "instructor": "Aida Stratas",
+                "instructor": "Frédérique Bourdua",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -34502,7 +33826,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 47,
               "A": 77,
@@ -35570,7 +34894,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1082,
               "A": 564,
@@ -36657,7 +35981,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 245,
               "A": 123,
@@ -36698,7 +36022,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 245,
               "A": 123,
@@ -37101,6 +36425,108 @@
     },
     {
       "subject": "MAT",
+      "catalogNumber": "3373",
+      "courseCode": "MAT 3373",
+      "title": "Calcul différentiel et intégral pour les sciences de la vie I",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "X00-LEC Session A",
+            "sectionCode": "X00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 1140,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Sana Keita",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 1140,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Sana Keita",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 40,
+              "A": 42,
+              "A-": 38,
+              "B+": 25,
+              "B": 34,
+              "C+": 40,
+              "C": 32,
+              "D+": 22,
+              "D": 22,
+              "E": 9,
+              "F": 11,
+              "EIN": 11,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 2,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ],
+        "DGD": [
+          {
+            "section": "X01-DGD Session A",
+            "sectionCode": "X01",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 1050,
+                "endMinutes": 1130,
+                "virtual": false,
+                "instructor": "Sana Keita",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 40,
+              "A": 42,
+              "A-": 38,
+              "B+": 25,
+              "B": 34,
+              "C+": 40,
+              "C": 32,
+              "D+": 22,
+              "D": 22,
+              "E": 9,
+              "F": 11,
+              "EIN": 11,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 2,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "MAT",
       "catalogNumber": "5182",
       "courseCode": "MAT 5182",
       "title": "Modern Applied and Computational Statistics (+1 combined)",
@@ -37243,7 +36669,7 @@
             "component": "REC",
             "session": null,
             "times": [],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -39110,79 +38536,6 @@
     },
     {
       "subject": "MBA",
-      "catalogNumber": "6566",
-      "courseCode": "MBA 6566",
-      "title": "Thermodynamics I",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "Z00-LEC Session A",
-            "sectionCode": "Z00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "We",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": true,
-                "instructor": "Patrick François Richer",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Open"
-          }
-        ],
-        "TUT": [
-          {
-            "section": "Z01-TUT Session A",
-            "sectionCode": "Z01",
-            "component": "TUT",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 810,
-                "endMinutes": 950,
-                "virtual": true,
-                "instructor": "Patrick François Richer",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Closed"
-          },
-          {
-            "section": "Z02-TUT Session A",
-            "sectionCode": "Z02",
-            "component": "TUT",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 810,
-                "endMinutes": 950,
-                "virtual": true,
-                "instructor": "Patrick François Richer",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "MBA",
       "catalogNumber": "6643",
       "courseCode": "MBA 6643",
       "title": "Gestion de crise, continuité organisationnelle et résilience",
@@ -41018,37 +40371,6 @@
     },
     {
       "subject": "MED",
-      "catalogNumber": "5110",
-      "courseCode": "MED 5110",
-      "title": "Principles of Management and Leadership for Engineers",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "Z00-LEC Session A",
-            "sectionCode": "Z00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Th",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
-                "instructor": "Jac Van Beek",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "MED",
       "catalogNumber": "5301",
       "courseCode": "MED 5301",
       "title": "Seminar",
@@ -41358,7 +40680,7 @@
                 "day": "Mo",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
-                "virtual": false,
+                "virtual": true,
                 "instructor": "Scott Daniel Andrews",
                 "meetingDates": [
                   "2026-05-04",
@@ -41366,7 +40688,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "ZZ00-LEC Session A",
@@ -41378,7 +40700,7 @@
                 "day": "We",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
-                "virtual": false,
+                "virtual": true,
                 "instructor": "Scott Daniel Andrews",
                 "meetingDates": [
                   "2026-05-04",
@@ -41386,16 +40708,6 @@
                 ]
               }
             ],
-            "status": "Closed"
-          }
-        ],
-        "STG": [
-          {
-            "section": "T00-STG Term",
-            "sectionCode": "T00",
-            "component": "STG",
-            "session": null,
-            "times": [],
             "status": "Open"
           }
         ]
@@ -41515,37 +40827,6 @@
     },
     {
       "subject": "MGT",
-      "catalogNumber": "6560",
-      "courseCode": "MGT 6560",
-      "title": "Principles of Management and Leadership for Engineers",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "Z00-LEC Session A",
-            "sectionCode": "Z00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Th",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
-                "instructor": "Jac Van Beek",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "MGT",
       "catalogNumber": "6990",
       "courseCode": "MGT 6990",
       "title": "Praticum Research",
@@ -41556,6 +40837,25 @@
             "section": "T00-STG Term",
             "sectionCode": "T00",
             "component": "STG",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "MGT",
+      "catalogNumber": "6991",
+      "courseCode": "MGT 6991",
+      "title": "Thesis Project",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "T00-REC Term",
+            "sectionCode": "T00",
+            "component": "REC",
             "session": null,
             "times": [],
             "status": "Open"
@@ -43483,7 +42783,7 @@
             "component": "REC",
             "session": null,
             "times": [],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -44280,48 +43580,6 @@
     },
     {
       "subject": "PAP",
-      "catalogNumber": "9310",
-      "courseCode": "PAP 9310",
-      "title": "Principles, Processes and Methods of Evaluation",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC Session C",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": false,
-                "instructor": "Jackson Reggie",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": false,
-                "instructor": "Jackson Reggie",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              }
-            ],
-            "status": "Closed"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "PAP",
       "catalogNumber": "9989",
       "courseCode": "PAP 9989",
       "title": "Comprehensive Examination - Major Field",
@@ -44667,7 +43925,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 235,
               "A": 670,
@@ -44945,7 +44203,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 231,
               "A": 516,
@@ -46051,117 +45309,6 @@
     },
     {
       "subject": "PED",
-      "catalogNumber": "3765",
-      "courseCode": "PED 3765",
-      "title": "Apprentissage et enseignement au secondaire (+1 combined)",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "D100-LEC Term",
-            "sectionCode": "D100",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1140,
-                "endMinutes": 1250,
-                "virtual": false,
-                "instructor": "Roxanne Le Blanc-Lemieux",
-                "meetingDates": [
-                  "2026-05-05",
-                  "2026-05-28"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 1140,
-                "endMinutes": 1250,
-                "virtual": false,
-                "instructor": "Roxanne Le Blanc-Lemieux",
-                "meetingDates": [
-                  "2026-05-05",
-                  "2026-05-28"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 242,
-              "A": 265,
-              "A-": 260,
-              "B+": 101,
-              "B": 34,
-              "C+": 11,
-              "C": 2,
-              "D+": 0,
-              "D": 0,
-              "E": 1,
-              "F": 1,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          },
-          {
-            "section": "D200-LEC Term",
-            "sectionCode": "D200",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1140,
-                "endMinutes": 1250,
-                "virtual": false,
-                "instructor": "Roxanne Le Blanc-Lemieux",
-                "meetingDates": [
-                  "2026-05-05",
-                  "2026-05-28"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 1140,
-                "endMinutes": 1250,
-                "virtual": false,
-                "instructor": "Roxanne Le Blanc-Lemieux",
-                "meetingDates": [
-                  "2026-05-05",
-                  "2026-05-28"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 242,
-              "A": 265,
-              "A-": 260,
-              "B+": 101,
-              "B": 34,
-              "C+": 11,
-              "C": 2,
-              "D+": 0,
-              "D": 0,
-              "E": 1,
-              "F": 1,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "PED",
       "catalogNumber": "4200",
       "courseCode": "PED 4200",
       "title": "Practicum in the Primary Junior Division II",
@@ -46808,7 +45955,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 226,
               "A": 368,
@@ -46991,7 +46138,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1643,
               "A": 1261,
@@ -48084,7 +47231,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 250,
               "A": 189,
@@ -48614,7 +47761,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 397,
               "A": 234,
@@ -49580,7 +48727,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 120,
               "A": 98,
@@ -50094,56 +49241,6 @@
               "NS": 0,
               "NC": 0,
               "ABS": 5,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "PHY",
-      "catalogNumber": "1524",
-      "courseCode": "PHY 1524",
-      "title": "Pathophysiologie",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "S00-LEC Session A",
-            "sectionCode": "S00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 780,
-                "endMinutes": 950,
-                "virtual": false,
-                "instructor": "Yannick Benoit",
-                "meetingDates": [
-                  "2026-05-04",
-                  "2026-07-24"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 31,
-              "A": 32,
-              "A-": 49,
-              "B+": 44,
-              "B": 39,
-              "C+": 21,
-              "C": 24,
-              "D+": 14,
-              "D": 11,
-              "E": 6,
-              "F": 7,
-              "EIN": 6,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
               "P": 0,
               "S": 0
             }
@@ -50869,67 +49966,6 @@
     },
     {
       "subject": "POL",
-      "catalogNumber": "3180",
-      "courseCode": "POL 3180",
-      "title": "Introduction to Canadian Politics",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC Session C",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false,
-                "instructor": "Joseph Roman",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false,
-                "instructor": "Joseph Roman",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 62,
-              "A": 82,
-              "A-": 74,
-              "B+": 49,
-              "B": 13,
-              "C+": 8,
-              "C": 0,
-              "D+": 1,
-              "D": 1,
-              "E": 1,
-              "F": 0,
-              "EIN": 8,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "POL",
       "catalogNumber": "3509",
       "courseCode": "POL 3509",
       "title": "Le nationalisme",
@@ -50965,7 +50001,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 18,
               "A": 19,
@@ -51708,6 +50744,37 @@
             "component": "REC",
             "session": null,
             "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "POL",
+      "catalogNumber": "9619",
+      "courseCode": "POL 9619",
+      "title": "Interpersonal Relationships",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Session A",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": true,
+                "instructor": "Yaroslav Konar",
+                "meetingDates": [
+                  "2026-05-04",
+                  "2026-07-24"
+                ]
+              }
+            ],
             "status": "Open"
           }
         ]
@@ -52495,7 +51562,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 551,
               "A": 588,
@@ -53691,7 +52758,7 @@
                 "day": "Th",
                 "startMinutes": 1050,
                 "endMinutes": 1110,
-                "virtual": false,
+                "virtual": true,
                 "instructor": "Patrick Dumond",
                 "meetingDates": [
                   "2026-05-04",
@@ -54251,7 +53318,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 684,
               "A": 247,
@@ -55075,7 +54142,7 @@
                 "startMinutes": 540,
                 "endMinutes": 710,
                 "virtual": true,
-                "instructor": "Jean-Francois Chapman",
+                "instructor": "Nima Jangouk",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -55197,7 +54264,7 @@
                 "startMinutes": 540,
                 "endMinutes": 710,
                 "virtual": true,
-                "instructor": "Jean-Francois Chapman",
+                "instructor": "Nima Jangouk",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -55276,7 +54343,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 23,
               "A": 26,
