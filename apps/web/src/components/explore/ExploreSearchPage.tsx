@@ -1,8 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useLingui } from "@lingui/react";
-import { useMemo, useState } from "react";
-import type { Catalogue } from "@uoplan/core";
-import { normalizeCourseCode } from "@uoplan/core";
+import { useEffect, useMemo, useState } from "react";
 import {
   buildCourseSpotlightIndex,
   pickSpotlightVariants,
@@ -16,30 +14,40 @@ import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { ExploreCourseSpotlightGallery } from "./ExploreCourseSpotlightGallery";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
 
-function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
-  const m = new Map<string, string>();
-  if (!catalogue) return m;
-  for (const c of catalogue.courses) m.set(normalizeCourseCode(c.code), c.title);
-  return m;
+/** Defer the (synchronous, corpus-wide) spotlight build until after first paint. */
+function useDeferredAfterPaint(): boolean {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const ric = (
+      window as unknown as {
+        requestIdleCallback?: (cb: () => void) => number;
+        cancelIdleCallback?: (id: number) => void;
+      }
+    ).requestIdleCallback;
+    if (ric) {
+      const id = ric(() => setReady(true));
+      return () => {
+        (window as unknown as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback?.(
+          id,
+        );
+      };
+    }
+    const id = window.setTimeout(() => setReady(true), 0);
+    return () => window.clearTimeout(id);
+  }, []);
+  return ready;
 }
 
-export function ExploreSearchPage({
-  catalogue,
-  searchParams,
-}: {
-  catalogue: Catalogue | null;
-  searchParams: ExploreSearchParams;
-}) {
+export function ExploreSearchPage({ searchParams }: { searchParams: ExploreSearchParams }) {
   useLingui();
-  const { loading, offerings } = useExploreOfferings();
+  const { loading, offeringsByCourseNorm, getCourseEntryByNorm } = useExploreOfferings();
   const navigate = useNavigate();
   const [spotlightVariants] = useState(() => pickSpotlightVariants(3));
-
-  const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
+  const ready = useDeferredAfterPaint();
 
   const spotlightRows = useMemo(() => {
-    if (offerings.length === 0) return [];
-    const index = buildCourseSpotlightIndex(offerings, titleByCode);
+    if (!ready || loading || offeringsByCourseNorm.size === 0) return [];
+    const index = buildCourseSpotlightIndex(offeringsByCourseNorm, getCourseEntryByNorm());
     return spotlightVariants
       .map((variant, i) => ({
         variant,
@@ -48,7 +56,7 @@ export function ExploreSearchPage({
         reverse: i === 1,
       }))
       .filter((row) => row.courses.length >= SPOTLIGHT_MIN_GALLERY_ITEMS);
-  }, [offerings, titleByCode, spotlightVariants]);
+  }, [ready, loading, offeringsByCourseNorm, getCourseEntryByNorm, spotlightVariants]);
 
   const onSelectCourse = (entry: ExploreCourseSearchEntry) => {
     void navigate({

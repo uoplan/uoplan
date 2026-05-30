@@ -3,11 +3,9 @@ import { useLingui } from "@lingui/react";
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import type { Catalogue, ProfessorRatingsMap } from "@uoplan/core";
-import { normalizeCourseCode } from "@uoplan/core";
+import type { ProfessorRatingsMap } from "@uoplan/core";
 import { tr } from "../../i18n";
 import {
-  buildCourseSearchEntries,
   type ProfessorOfferingGroup,
   groupOfferingsByProfessor,
 } from "../../lib/explore/gradesSearch";
@@ -26,13 +24,6 @@ const EXPLORE_CHEVRON_RIGHT = {
   base: `calc(12px)`,
   xs: "max(12px, calc((100vw - min(100vw, 1200px)) / 2 + 12px))",
 };
-
-function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
-  const m = new Map<string, string>();
-  if (!catalogue) return m;
-  for (const c of catalogue.courses) m.set(normalizeCourseCode(c.code), c.title);
-  return m;
-}
 
 function CourseProfessorItem({
   group,
@@ -62,43 +53,34 @@ function CourseProfessorItem({
 
 export function ExploreCoursePage({
   urlCourseParam,
-  catalogue,
   professorRatings,
 }: {
   urlCourseParam: string;
-  catalogue: Catalogue | null;
   professorRatings: ProfessorRatingsMap | null;
 }) {
   useLingui();
-  const { loading, offerings } = useExploreOfferings();
+  const { loading, offeringsByCourseNorm } = useExploreOfferings();
   const navigate = useNavigate();
-
-  const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
-
-  const courseEntries = useMemo(
-    () => buildCourseSearchEntries(offerings, titleByCode),
-    [offerings, titleByCode],
-  );
 
   const urlNorm = useMemo(() => parseCoursePathParam(urlCourseParam), [urlCourseParam]);
 
-  // Redirect to /explore if course not found once data loads
-  useEffect(() => {
-    if (loading || courseEntries.length === 0) return;
-    if (urlNorm == null) return;
-    if (courseEntries.some((e) => e.normCode === urlNorm)) return;
-    void navigate({ to: "/explore", search: EMPTY_EXPLORE_SEARCH, replace: true });
-  }, [loading, courseEntries, urlNorm, navigate]);
-
-  const selectedCourseMeta = useMemo(() => {
-    if (loading || urlNorm == null) return null;
-    return courseEntries.find((e) => e.normCode === urlNorm) ?? null;
-  }, [loading, urlNorm, courseEntries]);
-
   const courseOfferings = useMemo(() => {
     if (urlNorm === null) return [];
-    return offerings.filter((o) => normalizeCourseCode(o.courseCode) === urlNorm);
-  }, [offerings, urlNorm]);
+    return offeringsByCourseNorm.get(urlNorm) ?? [];
+  }, [offeringsByCourseNorm, urlNorm]);
+
+  // Redirect to /explore if course has no offerings once data loads.
+  useEffect(() => {
+    if (loading || urlNorm == null) return;
+    if (courseOfferings.length > 0) return;
+    void navigate({ to: "/explore", search: EMPTY_EXPLORE_SEARCH, replace: true });
+  }, [loading, urlNorm, courseOfferings, navigate]);
+
+  const selectedCourseMeta = useMemo(() => {
+    if (loading || urlNorm == null || courseOfferings.length === 0) return null;
+    const first = courseOfferings[0];
+    return { courseCode: first.courseCode, courseTitle: first.courseTitle };
+  }, [loading, urlNorm, courseOfferings]);
 
   const professorGroups = useMemo(
     () => groupOfferingsByProfessor(courseOfferings),

@@ -1,7 +1,6 @@
-import { distributionGpa, GRADE_POINTS, normalizeCourseCode } from "@uoplan/core";
+import { distributionGpa, GRADE_POINTS } from "@uoplan/core";
 import {
-  buildCourseSearchEntries,
-  groupOfferingsByProfessor,
+  countDistinctProfessors,
   mergeGradeDistributionCounts,
   type ExploreCourseSearchEntry,
   type ExploreOfferingFlat,
@@ -98,33 +97,19 @@ function failHeadcount(dist: Record<string, number>): number {
 }
 
 export function buildCourseSpotlightIndex(
-  offerings: ExploreOfferingFlat[],
-  titleByCode: Map<string, string>,
+  offeringsByCourseNorm: Map<string, ExploreOfferingFlat[]>,
+  courseEntryByNorm: Map<string, ExploreCourseSearchEntry>,
 ): Map<string, CourseSpotlightRecord> {
-  const byNorm = new Map<string, ExploreOfferingFlat[]>();
-  for (const o of offerings) {
-    const norm = normalizeCourseCode(o.courseCode);
-    let list = byNorm.get(norm);
-    if (!list) {
-      list = [];
-      byNorm.set(norm, list);
-    }
-    list.push(o);
-  }
-
-  const entries = buildCourseSearchEntries(offerings, titleByCode);
-  const entryByNorm = new Map(entries.map((e) => [e.normCode, e]));
-
   const index = new Map<string, CourseSpotlightRecord>();
-  for (const [norm, courseOfferings] of byNorm) {
+  for (const [norm, courseOfferings] of offeringsByCourseNorm) {
     const mergedDist = mergeGradeDistributionCounts(courseOfferings.map((o) => o.distribution));
     const gpa = distributionGpa(mergedDist);
     const gradedCount = gradedHeadcount(mergedDist);
     if (gpa == null || gradedCount < SPOTLIGHT_MIN_GRADED_COUNT) continue;
 
     const failRate = failHeadcount(mergedDist) / gradedCount;
-    const professorCount = groupOfferingsByProfessor(courseOfferings).length;
-    const entry = entryByNorm.get(norm);
+    const professorCount = countDistinctProfessors(courseOfferings);
+    const entry = courseEntryByNorm.get(norm);
     if (!entry) continue;
 
     index.set(norm, {

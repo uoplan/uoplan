@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useShallow } from "zustand/react/shallow";
 import { ExploreCoursePage } from "../../../components/explore/ExploreCoursePage";
 import { useAppStore } from "../../../store/appStore";
 
@@ -9,20 +8,9 @@ export const Route = createFileRoute("/explore/course/$course")({
 });
 
 function ExploreCourseRoute() {
-  const { catalogue, professorRatings } = useAppStore(
-    useShallow((s) => ({
-      catalogue: s.catalogue,
-      professorRatings: s.professorRatings,
-    })),
-  );
+  const professorRatings = useAppStore((s) => s.professorRatings);
 
   const { course } = Route.useParams();
 
-  return (
-    <ExploreCoursePage
-      urlCourseParam={course}
-      catalogue={catalogue}
-      professorRatings={professorRatings}
-    />
-  );
+  return <ExploreCoursePage urlCourseParam={course} professorRatings={professorRatings} />;
 }

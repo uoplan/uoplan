@@ -158,6 +158,37 @@ export function createExploreFuse(offerings: ExploreOfferingFlat[]) {
   return new Fuse(offerings, EXPLORE_FUSE_OPTIONS);
 }
 
+/** Group offerings by normalized course code in a single pass (shared lookup index). */
+export function buildOfferingsByCourseNorm(
+  offerings: ExploreOfferingFlat[],
+): Map<string, ExploreOfferingFlat[]> {
+  const byNorm = new Map<string, ExploreOfferingFlat[]>();
+  for (const o of offerings) {
+    const norm = normalizeCourseCode(o.courseCode);
+    let list = byNorm.get(norm);
+    if (!list) {
+      list = [];
+      byNorm.set(norm, list);
+    }
+    list.push(o);
+  }
+  return byNorm;
+}
+
+/** Count distinct professors in a set of offerings using the same grouping key as
+ * {@link groupOfferingsByProfessor} (legacyId when present, else normalized name). */
+export function countDistinctProfessors(offerings: ExploreOfferingFlat[]): number {
+  const ids = new Set<string>();
+  for (const o of offerings) {
+    ids.add(
+      o.legacyId != null
+        ? `id:${o.legacyId}`
+        : `name:${normalizeProfessorName(o.professorName).toLowerCase()}`,
+    );
+  }
+  return ids.size;
+}
+
 export function buildCourseSearchEntries(
   offerings: ExploreOfferingFlat[],
   titleByCode?: Map<string, string> | null,

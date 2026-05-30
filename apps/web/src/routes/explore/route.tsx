@@ -12,13 +12,21 @@ export const Route = createFileRoute("/explore")({
 });
 
 function ExploreLayoutRoute() {
-  const { catalogue, terms } = useAppStore(
-    useShallow((s) => ({ catalogue: s.catalogue, terms: s.terms })),
+  const { catalogue, terms, professorRatings } = useAppStore(
+    useShallow((s) => ({
+      catalogue: s.catalogue,
+      terms: s.terms,
+      professorRatings: s.professorRatings,
+    })),
   );
 
   return (
     <AppDataRouteGate>
-      <ExploreOfferingsProvider catalogue={catalogue} terms={terms ?? []}>
+      <ExploreOfferingsProvider
+        catalogue={catalogue}
+        terms={terms ?? []}
+        professorRatings={professorRatings}
+      >
         <ExploreLayout>
           <Outlet />
         </ExploreLayout>

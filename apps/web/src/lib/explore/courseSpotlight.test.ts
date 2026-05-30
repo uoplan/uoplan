@@ -9,7 +9,24 @@ import {
   SPOTLIGHT_VARIANTS,
   type CourseSpotlightVariant,
 } from "./courseSpotlight";
-import type { ExploreOfferingFlat } from "./gradesSearch";
+import {
+  buildCourseSearchEntries,
+  buildOfferingsByCourseNorm,
+  type ExploreCourseSearchEntry,
+  type ExploreOfferingFlat,
+} from "./gradesSearch";
+
+/** Build the spotlight index from flat offerings the way the runtime context does. */
+function spotlightIndexFrom(
+  offerings: ExploreOfferingFlat[],
+  titleByCode: Map<string, string> = new Map(),
+) {
+  const offeringsByCourseNorm = buildOfferingsByCourseNorm(offerings);
+  const entryByNorm = new Map<string, ExploreCourseSearchEntry>(
+    buildCourseSearchEntries(offerings, titleByCode).map((e) => [e.normCode, e]),
+  );
+  return buildCourseSpotlightIndex(offeringsByCourseNorm, entryByNorm);
+}
 
 function distWithMass(mass: number, gpaHint: "high" | "low" | "fail"): Record<string, number> {
   if (gpaHint === "high") {
@@ -69,21 +86,18 @@ describe("gradedHeadcount", () => {
 
 describe("buildCourseSpotlightIndex", () => {
   it("drops courses below minimum graded count", () => {
-    const index = buildCourseSpotlightIndex(
-      [
-        sampleOffering({
-          id: "small",
-          courseCode: "MAT 1341",
-          distribution: { A: SPOTLIGHT_MIN_GRADED_COUNT - 1 },
-        }),
-        sampleOffering({
-          id: "big",
-          courseCode: "CSI 2110",
-          distribution: { A: SPOTLIGHT_MIN_GRADED_COUNT },
-        }),
-      ],
-      new Map(),
-    );
+    const index = spotlightIndexFrom([
+      sampleOffering({
+        id: "small",
+        courseCode: "MAT 1341",
+        distribution: { A: SPOTLIGHT_MIN_GRADED_COUNT - 1 },
+      }),
+      sampleOffering({
+        id: "big",
+        courseCode: "CSI 2110",
+        distribution: { A: SPOTLIGHT_MIN_GRADED_COUNT },
+      }),
+    ]);
     expect(index.size).toBe(1);
     expect(index.has("CSI 2110")).toBe(true);
   });
@@ -93,7 +107,7 @@ describe("rankCoursesForSpotlight", () => {
   const titleByCode = new Map<string, string>();
 
   function buildIndex(offerings: ExploreOfferingFlat[]) {
-    return buildCourseSpotlightIndex(offerings, titleByCode);
+    return spotlightIndexFrom(offerings, titleByCode);
   }
 
   it("ranks hardest by lowest GPA", () => {
