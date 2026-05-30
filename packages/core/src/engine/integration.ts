@@ -25,7 +25,7 @@ import { buildTimetableCourse, type TimetableCourse } from "./timetable/lazyComb
 import { enumerateArrangements } from "./timetable/enumerator";
 import { firstSubsetArrangement } from "./timetable/subsetEnumerator";
 
-export interface TimetablePipelineOptions {
+interface TimetablePipelineOptions {
   /** Include the blacklist as a hard course-scope constraint. */
   readonly applyBlacklist?: boolean;
   readonly blacklistedCourses?: readonly string[];
@@ -90,7 +90,7 @@ function scrambleSeed(n: number): number {
   return n ^ (n >>> 16);
 }
 
-export interface TimetableFixedCourseSetOptions extends TimetablePipelineOptions {
+interface TimetableFixedCourseSetOptions extends TimetablePipelineOptions {
   /** Seed driving the section arrangement order (deterministic per seed). */
   readonly seed?: number;
 }

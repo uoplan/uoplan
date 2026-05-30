@@ -67,7 +67,7 @@ export function makeSchedule(
   };
 }
 
-export function makeCourse(code: string, credits = 3): Course {
+function makeCourse(code: string, credits = 3): Course {
   return { code, title: code, credits, description: "" };
 }
 

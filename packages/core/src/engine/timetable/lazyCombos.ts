@@ -17,7 +17,7 @@
  */
 import type { ComponentSection } from "../../dataTypes";
 import type { DataCache } from "../../dataCache";
-import type { CourseEnrollment, PrecomputedCombo } from "../../generation";
+import type { PrecomputedCombo } from "../../generation";
 import { isHonoursProject } from "../../utils/courseUtils";
 import { shuffleInPlace } from "../../poolHelpers";
 import {
@@ -121,5 +121,3 @@ export function buildTimetableCourse(
   if (combos.length === 0) return null;
   return { code: canonicalCourseCode(code, cache), combos };
 }
-
-export type { CourseEnrollment };

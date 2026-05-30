@@ -31,7 +31,7 @@ import { buildTimetableCourse, type TimetableCourse } from "../timetable/lazyCom
 import { enumerateArrangements, arrangementFingerprint } from "../timetable/enumerator";
 import type { CandidatePlan } from "../courseSelection/candidatePlan";
 
-export interface StreamSchedule {
+interface StreamSchedule {
   readonly schedule: GeneratedSchedule;
   readonly plan: CandidatePlan;
   /** Full timetable fingerprint (courses + sections). */

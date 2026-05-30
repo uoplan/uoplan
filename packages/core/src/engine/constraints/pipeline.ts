@@ -8,7 +8,7 @@ import type { ComponentSection } from "../../dataTypes";
 import type { CourseEnrollment } from "../../generation";
 import type { Constraint, ConstraintContext, CourseSetCtx, RejectionTrace } from "./types";
 
-export type Tracer = (trace: RejectionTrace) => void;
+type Tracer = (trace: RejectionTrace) => void;
 
 export class ConstraintPipeline {
   private readonly constraints: Constraint[];

@@ -3,7 +3,7 @@ import { IconChevronLeft } from "@tabler/icons-react";
 import { useCanGoBack, useLocation, useNavigate, useRouter } from "@tanstack/react-router";
 import type { BackState } from "../../lib/navigation/backState";
 
-export type BackButtonProps = {
+type BackButtonProps = {
   /** Logical parent to navigate to when there is no in-app history to pop. */
   fallbackTo: string;
   /** Label shown when the originating page did not provide a back label. */
