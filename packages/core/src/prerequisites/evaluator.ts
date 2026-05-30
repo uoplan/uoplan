@@ -1,9 +1,41 @@
-import type { CoursePrereqNode } from "../dataTypes";
+import type { CoursePrereqKind, CoursePrereqNode } from "../dataTypes";
 import type { DataCache } from "../dataCache";
 import { normalizeCourseCode, getLanguageVariant } from "../utils/courseUtils";
 import type { PrereqContext } from "./types";
 
-export function meetsCoursePrereq(node: CoursePrereqNode, ctx: PrereqContext): boolean {
+/**
+ * Soft `non_course` kinds the planner cannot model from a student's course
+ * history (administrative, external, or high-school requirements). These are
+ * treated as satisfiable so a course gated only by e.g. "Permission of the
+ * Department" or "audition" is not permanently unschedulable.
+ *
+ * Conservative kinds (`equivalent`, `standing`, `coursework`, `knowledge`) are
+ * deliberately NOT included: they can represent real academic gates, so they
+ * remain blocking to avoid producing impossible schedules.
+ */
+const SOFT_PREREQ_KINDS: ReadonlySet<CoursePrereqKind> = new Set<CoursePrereqKind>([
+  "permission",
+  "audition",
+  "language",
+  "highschool",
+  "recommended",
+  "topic",
+]);
+
+function isSoftNonCourse(node: CoursePrereqNode): boolean {
+  return (
+    node.type === "non_course" &&
+    node.credits == null &&
+    node.kind !== undefined &&
+    SOFT_PREREQ_KINDS.has(node.kind)
+  );
+}
+
+export function meetsCoursePrereq(
+  node: CoursePrereqNode,
+  ctx: PrereqContext,
+  inOrGroup = false,
+): boolean {
   if (node.programs && node.programs.length > 0) {
     const inProgram = node.programs.some((p) => ctx.studentPrograms.includes(p));
     if (!inProgram) return false;
@@ -13,11 +45,11 @@ export function meetsCoursePrereq(node: CoursePrereqNode, ctx: PrereqContext): b
     case "course":
       return evaluateCourseRequirement(node, ctx);
     case "and_group":
-      return (node.children ?? []).every((child) => meetsCoursePrereq(child, ctx));
+      return (node.children ?? []).every((child) => meetsCoursePrereq(child, ctx, false));
     case "or_group":
-      return (node.children ?? []).some((child) => meetsCoursePrereq(child, ctx));
+      return (node.children ?? []).some((child) => meetsCoursePrereq(child, ctx, true));
     case "non_course":
-      return evaluateNonCourseRequirement(node, ctx);
+      return evaluateNonCourseRequirement(node, ctx, inOrGroup);
     default:
       return true;
   }
@@ -30,12 +62,22 @@ function evaluateCourseRequirement(node: CoursePrereqNode, ctx: PrereqContext): 
   return ctx.taken.some((c) => c.code === target || (variant !== null && c.code === variant));
 }
 
-function evaluateNonCourseRequirement(node: CoursePrereqNode, ctx: PrereqContext): boolean {
+function evaluateNonCourseRequirement(
+  node: CoursePrereqNode,
+  ctx: PrereqContext,
+  inOrGroup: boolean,
+): boolean {
   const credits = node.credits;
 
   if (credits == null) {
-    // Plain descriptive clauses (permission, standing, etc.) are not modeled;
-    // do not treat them as satisfied — course stays ineligible until we can evaluate.
+    // Soft, planner-external requirements (permission, audition, language, …)
+    // are treated as satisfiable so the course stays schedulable — except inside
+    // an or_group, where letting the soft branch pass would trivially satisfy the
+    // whole disjunction and hide the real (course) alternative.
+    if (isSoftNonCourse(node)) return !inOrGroup;
+
+    // Other descriptive clauses (standing, equivalent, unclassified, …) are not
+    // modeled; stay conservative and keep the course ineligible.
     return false;
   }
 
@@ -100,12 +142,15 @@ function creditsMatchingNonCourse(node: CoursePrereqNode, ctx: PrereqContext): n
 }
 
 /**
- * True if the prerequisite tree contains any `non_course` node (standing,
- * permission, etc.). Used to deprioritize those courses when sampling schedules.
+ * True if the prerequisite tree contains any `non_course` node that the planner
+ * actually treats as a constraint (standing, credit pools, unclassified
+ * requirements). Soft, planner-external kinds (permission, audition, …) are
+ * excluded so courses gated only by them are not deprioritized when sampling
+ * schedules. Used to deprioritize genuinely-constrained courses.
  */
 export function prerequisitesContainNonCourse(node: CoursePrereqNode | undefined): boolean {
   if (!node) return false;
-  if (node.type === "non_course") return true;
+  if (node.type === "non_course" && !isSoftNonCourse(node)) return true;
   for (const child of node.children ?? []) {
     if (prerequisitesContainNonCourse(child)) return true;
   }

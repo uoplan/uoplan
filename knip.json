@@ -19,8 +19,8 @@
       "entry": ["scripts/og-image.ts"],
       "ignoreDependencies": ["@marsidev/react-turnstile", "wrangler"]
     },
-    "apps/scrapers": {
-      "entry": ["src/verifyCatalogue.ts", "src/validate_schedule_dates.ts"],
+    "apps/scraper": {
+      "entry": ["src/cli/verifyCatalogue.ts", "src/cli/verifyScheduleDates.ts"],
       "project": ["src/**/*.ts"]
     },
     "packages/core": {},

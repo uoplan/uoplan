@@ -72,6 +72,22 @@ enum CoursePrereqNodeType {
   COURSE_PREREQ_NODE_TYPE_NON_COURSE = 4;
 }
 
+// Coarse classification of an opaque `non_course` prerequisite (one with no
+// credit pool), so consumers can decide whether it blocks scheduling.
+enum CoursePrereqKind {
+  COURSE_PREREQ_KIND_UNSPECIFIED = 0;
+  COURSE_PREREQ_KIND_PERMISSION = 1;
+  COURSE_PREREQ_KIND_AUDITION = 2;
+  COURSE_PREREQ_KIND_LANGUAGE = 3;
+  COURSE_PREREQ_KIND_EQUIVALENT = 4;
+  COURSE_PREREQ_KIND_HIGHSCHOOL = 5;
+  COURSE_PREREQ_KIND_STANDING = 6;
+  COURSE_PREREQ_KIND_TOPIC = 7;
+  COURSE_PREREQ_KIND_COURSEWORK = 8;
+  COURSE_PREREQ_KIND_KNOWLEDGE = 9;
+  COURSE_PREREQ_KIND_RECOMMENDED = 10;
+}
+
 message CoursePrereqDisciplineLevel {
   string discipline = 1;
   repeated uint32 levels = 2;
@@ -87,6 +103,7 @@ message CoursePrereqNode {
   repeated string programs = 7;
   repeated CoursePrereqNode children = 8;
   optional string text = 9;
+  optional CoursePrereqKind kind = 10;
 }
 
 enum RequirementType {
@@ -121,6 +138,7 @@ message ProgramRequirement {
   optional string faculty = 7;
   optional bool indented = 8;
   repeated ProgramRequirement options = 9;
+  repeated uint32 levels = 10;
 }
 
 message Program {

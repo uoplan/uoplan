@@ -25,7 +25,7 @@ No Worker requests happen on page load — state is read entirely from `localSto
 
 ### Notification delivery flow
 
-1. GitHub Action runs `pnpm check:terms` (fetches uOttawa's class search page, syncs `apps/scrapers/data/terms.json` to match the live dropdown, and reports any newly added term IDs)
+1. GitHub Action runs `pnpm check:terms` (fetches uOttawa's class search page, syncs `apps/scraper/data/terms.json` to match the live dropdown, and reports any newly added term IDs)
 2. If new terms are found, dispatches `daily-scrape.yml` and waits for it to finish
 3. Polls `git ls-remote origin main` for the new HEAD SHA after the scrape commit
 4. Polls the GitHub check-run API until the Cloudflare Pages build for that SHA shows `completed/success`
@@ -42,7 +42,7 @@ No Worker requests happen on page load — state is read entirely from `localSto
 
 **Change the notification content** — edit the `jq -n` payload block in the `Send push notifications` step of `check-new-terms.yml`.
 
-**Change the uOttawa selector** — if the term dropdown selector changes, update `#CLASS_SRCH_WRK2_STRM\\$35\\$` in `apps/scrapers/src/check_terms.ts` and update the unit tests in `check_terms.test.ts`.
+**Change the uOttawa selector** — if the term dropdown selector changes, update `#CLASS_SRCH_WRK2_STRM\\$35\\$` in `apps/scraper/src/check_terms.ts` and update the unit tests in `check_terms.test.ts`.
 
 **Toggle UI** — edit `apps/web/src/components/steps/NotificationToggle.tsx`. The component hides itself entirely if `PushManager` is not available (non-HTTPS or unsupported browser).
 
@@ -102,7 +102,7 @@ VITE_VAPID_PUBLIC_KEY=<your_public_key>
 ## Dependencies
 
 - **`web-push`** (npm) — VAPID signing and Web Push encryption in the Worker; requires `nodejs_compat` flag in `wrangler.json`
-- **`cheerio`** (already in `apps/scrapers`) — parses the term `<select>` dropdown from uOttawa's search page
+- **`cheerio`** (already in `apps/scraper`) — parses the term `<select>` dropdown from uOttawa's search page
 - **Cloudflare KV** — persistent subscription store; binding name `WEBPUSH_SUBSCRIPTIONS`
 - **Mantine `Switch`, `Tooltip`, `Group`** — toggle UI components (already in the web app)
 - **`@tabler/icons-react`** — `IconBell` / `IconBellOff` for the toggle (already in the web app)

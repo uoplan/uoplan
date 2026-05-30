@@ -145,7 +145,7 @@ Exposed via Vite env var `VITE_VAPID_PUBLIC_KEY` (set in Cloudflare Pages env or
 
 ## Part 3: New Scraper Script + GitHub Action
 
-### New scraper: `apps/scrapers/src/check_terms.ts`
+### New scraper: `apps/scraper/src/check_terms.ts`
 
 Fetches the uOttawa public class search page and parses the term `<select>` dropdown. Compares the found term IDs against `apps/web/public/data/terms.json`.
 
@@ -159,7 +159,7 @@ Empty array `[]` if no new terms.
 
 The script exits 0 regardless (new terms or not) — the GH Action checks whether the output array is empty.
 
-Add to `apps/scrapers/package.json` scripts:
+Add to `apps/scraper/package.json` scripts:
 
 ```json
 "check:terms": "tsx src/check_terms.ts"

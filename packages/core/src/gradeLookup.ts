@@ -7,7 +7,7 @@ import type {
 
 /**
  * Runtime grade-lookup contract — a direct port of the build-time enrichment in
- * `apps/scrapers/src/enrichSchedulesWithGrades.ts` (`buildGradeLookups` +
+ * `apps/scraper/src/schedules/enrich.ts` (`buildGradeLookups` +
  * `distributionForSection`). It reproduces, at runtime from `grades.pb`, the
  * per-section grade distribution that was historically baked into
  * `schedules.NNNN.pb`. Keeping a single algorithm here lets the scraper and the

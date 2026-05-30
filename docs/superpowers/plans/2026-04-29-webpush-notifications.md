@@ -22,8 +22,8 @@
 | Modify | `apps/web/src/main.tsx`                                | Register service worker on startup                                              |
 | Create | `apps/web/src/components/steps/NotificationToggle.tsx` | Bell toggle: localStorage state, subscribe/unsubscribe logic                    |
 | Modify | `apps/web/src/components/steps/TermStep.tsx`           | Add `<NotificationToggle />` at bottom                                          |
-| Create | `apps/scrapers/src/check_terms.ts`                     | Fetch uOttawa search page, compare to terms.json, print new terms JSON          |
-| Modify | `apps/scrapers/package.json`                           | Add `check:terms` script                                                        |
+| Create | `apps/scraper/src/check_terms.ts`                      | Fetch uOttawa search page, compare to terms.json, print new terms JSON          |
+| Modify | `apps/scraper/package.json`                            | Add `check:terms` script                                                        |
 | Modify | `package.json` (root)                                  | Add `check:terms` root script                                                   |
 | Create | `.github/workflows/check-new-terms.yml`                | 4-hour schedule: detect new terms → trigger scrape → wait for CF Pages → notify |
 
@@ -693,13 +693,13 @@ git commit -m "feat(web): add notification toggle to term selection step"
 
 **Files:**
 
-- Create: `apps/scrapers/src/check_terms.ts`
-- Modify: `apps/scrapers/package.json`
+- Create: `apps/scraper/src/check_terms.ts`
+- Modify: `apps/scraper/package.json`
 - Modify: `package.json` (root)
 
 - [ ] **Step 1: Write the failing test**
 
-Create `apps/scrapers/src/check_terms.test.ts`:
+Create `apps/scraper/src/check_terms.test.ts`:
 
 ```ts
 import { describe, it, expect } from "vitest";
@@ -771,7 +771,7 @@ pnpm --filter scrapers test
 
 Expected: FAIL — `parseTermDropdown` is not defined yet.
 
-- [ ] **Step 3: Create `apps/scrapers/src/check_terms.ts`**
+- [ ] **Step 3: Create `apps/scraper/src/check_terms.ts`**
 
 Export `parseTermDropdown` so the test can import it, then run the main check:
 
@@ -848,7 +848,7 @@ pnpm --filter scrapers test
 
 Expected: all 4 tests PASS.
 
-- [ ] **Step 6: Add `check:terms` script to `apps/scrapers/package.json`**
+- [ ] **Step 6: Add `check:terms` script to `apps/scraper/package.json`**
 
 In the `scripts` object, add:
 
@@ -875,7 +875,7 @@ Expected: `[]` (no new terms currently). If it prints something like `[{"termId"
 - [ ] **Step 9: Commit**
 
 ```bash
-git add apps/scrapers/src/check_terms.ts apps/scrapers/src/check_terms.test.ts apps/scrapers/package.json package.json
+git add apps/scraper/src/check_terms.ts apps/scraper/src/check_terms.test.ts apps/scraper/package.json package.json
 git commit -m "feat(scrapers): add check:terms script and unit tests"
 ```
 

@@ -1,4 +1,5 @@
 import {
+  CoursePrereqKind as ProtoCoursePrereqKind,
   CoursePrereqNodeType,
   DayOfWeek as ProtoDayOfWeek,
   RequirementType,
@@ -30,6 +31,18 @@ export type CoursePrereqDisciplineLevel = {
   levels?: number[];
 };
 
+export type CoursePrereqKind =
+  | "permission"
+  | "audition"
+  | "language"
+  | "equivalent"
+  | "highschool"
+  | "standing"
+  | "topic"
+  | "coursework"
+  | "knowledge"
+  | "recommended";
+
 export type CoursePrereqNode = {
   type: "course" | "or_group" | "and_group" | "non_course";
   code?: string;
@@ -39,6 +52,7 @@ export type CoursePrereqNode = {
   levels?: number[];
   disciplineLevels?: CoursePrereqDisciplineLevel[];
   programs?: string[];
+  kind?: CoursePrereqKind;
   children?: CoursePrereqNode[];
 };
 
@@ -72,6 +86,7 @@ export type ProgramRequirement = {
   code?: string;
   credits?: number;
   disciplineLevels?: Array<{ discipline: string; levels?: number[] }>;
+  levels?: number[];
   excluded_disciplines?: string[];
   faculty?: string;
   indented?: boolean;
@@ -335,6 +350,46 @@ function prereqTypeToProto(value: CoursePrereqNode["type"]): CoursePrereqNodeTyp
   }
 }
 
+const PREREQ_KIND_TO_PROTO: Record<CoursePrereqKind, ProtoCoursePrereqKind> = {
+  permission: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_PERMISSION,
+  audition: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_AUDITION,
+  language: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_LANGUAGE,
+  equivalent: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_EQUIVALENT,
+  highschool: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_HIGHSCHOOL,
+  standing: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_STANDING,
+  topic: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_TOPIC,
+  coursework: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_COURSEWORK,
+  knowledge: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_KNOWLEDGE,
+  recommended: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_RECOMMENDED,
+};
+
+function prereqKindFromProto(value: ProtoCoursePrereqKind): CoursePrereqNode["kind"] {
+  switch (value) {
+    case ProtoCoursePrereqKind.COURSE_PREREQ_KIND_PERMISSION:
+      return "permission";
+    case ProtoCoursePrereqKind.COURSE_PREREQ_KIND_AUDITION:
+      return "audition";
+    case ProtoCoursePrereqKind.COURSE_PREREQ_KIND_LANGUAGE:
+      return "language";
+    case ProtoCoursePrereqKind.COURSE_PREREQ_KIND_EQUIVALENT:
+      return "equivalent";
+    case ProtoCoursePrereqKind.COURSE_PREREQ_KIND_HIGHSCHOOL:
+      return "highschool";
+    case ProtoCoursePrereqKind.COURSE_PREREQ_KIND_STANDING:
+      return "standing";
+    case ProtoCoursePrereqKind.COURSE_PREREQ_KIND_TOPIC:
+      return "topic";
+    case ProtoCoursePrereqKind.COURSE_PREREQ_KIND_COURSEWORK:
+      return "coursework";
+    case ProtoCoursePrereqKind.COURSE_PREREQ_KIND_KNOWLEDGE:
+      return "knowledge";
+    case ProtoCoursePrereqKind.COURSE_PREREQ_KIND_RECOMMENDED:
+      return "recommended";
+    default:
+      return undefined;
+  }
+}
+
 function toProtoPrereq(node: CoursePrereqNode): ProtoCoursePrereqNode {
   return {
     type: prereqTypeToProto(node.type),
@@ -349,10 +404,12 @@ function toProtoPrereq(node: CoursePrereqNode): ProtoCoursePrereqNode {
     })),
     programs: node.programs ?? [],
     children: (node.children ?? []).map(toProtoPrereq),
+    kind: node.kind ? PREREQ_KIND_TO_PROTO[node.kind] : undefined,
   };
 }
 
 function fromProtoPrereq(node: ProtoCoursePrereqNode): CoursePrereqNode {
+  const kind = node.kind !== undefined ? prereqKindFromProto(node.kind) : undefined;
   return {
     type: prereqTypeFromProto(node.type),
     ...(node.code ? { code: node.code } : {}),
@@ -369,6 +426,7 @@ function fromProtoPrereq(node: ProtoCoursePrereqNode): CoursePrereqNode {
         }
       : {}),
     ...(node.programs.length > 0 ? { programs: node.programs } : {}),
+    ...(kind ? { kind } : {}),
     ...(node.children.length > 0 ? { children: node.children.map(fromProtoPrereq) } : {}),
   };
 }
@@ -510,6 +568,7 @@ function toProtoProgramRequirement(requirement: ProgramRequirement): ProtoProgra
     excludedDisciplines: requirement.excluded_disciplines ?? [],
     faculty: requirement.faculty,
     indented: requirement.indented,
+    levels: requirement.levels ?? [],
     options: (requirement.options ?? []).map(toProtoProgramRequirement),
   };
 }
@@ -533,6 +592,7 @@ function fromProtoProgramRequirement(requirement: ProtoProgramRequirement): Prog
       : {}),
     ...(requirement.faculty ? { faculty: requirement.faculty } : {}),
     ...(requirement.indented !== undefined ? { indented: requirement.indented } : {}),
+    ...(requirement.levels.length > 0 ? { levels: requirement.levels.map((n) => Number(n)) } : {}),
     ...(requirement.options.length > 0
       ? { options: requirement.options.map(fromProtoProgramRequirement) }
       : {}),
