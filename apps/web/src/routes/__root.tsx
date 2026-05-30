@@ -11,6 +11,7 @@ import { buildRootHead } from "../lib/seo";
 import { useEffect, useRef } from "react";
 import { useLingui } from "@lingui/react";
 import { Box, Text } from "@mantine/core";
+import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import { motion, useAnimation } from "framer-motion";
 import { usePersistState } from "../hooks/usePersistState";
 import { useAppStore } from "../store/appStore";
@@ -98,6 +99,20 @@ function RootLayout() {
     }
   }, [routerStatus, controls]);
 
+  useEffect(() => {
+    if (routerStatus === "pending") {
+      nprogress.start();
+    } else if (routerStatus === "idle") {
+      nprogress.complete();
+    }
+  }, [routerStatus]);
+
+  useEffect(() => {
+    return () => {
+      nprogress.reset();
+    };
+  }, []);
+
   return (
     <Box
       style={{
@@ -107,6 +122,7 @@ function RootLayout() {
         backgroundColor: "var(--app-bg)",
       }}
     >
+      <NavigationProgress color="var(--app-focus-ring)" />
       <HeadContent />
       <SharedScheduleModal />
       <Box style={{ flex: 1 }}>
