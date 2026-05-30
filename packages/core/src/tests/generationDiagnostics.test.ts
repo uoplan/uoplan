@@ -87,7 +87,7 @@ describe("diagnoseTimetableFailure", () => {
     });
     expect(d.kind).toBe("no_conflict_free_assignment");
     expect(d.eligibleCourseCount).toBe(2);
-    expect(d.suggestions.some((s) => s.includes("Compressed"))).toBe(false);
+    expect(d.suggestions).not.toContain("turn-off-compressed");
   });
 
   it("classifies pinned course with no sections as no_section_combos", () => {
@@ -130,8 +130,9 @@ describe("diagnoseTimetableFailure", () => {
       },
     });
     expect(d.relaxation?.kind).toBe("structural_conflict");
-    expect(d.suggestions.some((s) => s.includes("Compressed"))).toBe(false);
-    expect(d.suggestions.some((s) => s.includes("can't all fit"))).toBe(true);
+    expect(d.suggestions).not.toContain("turn-off-compressed");
+    expect(d.suggestions).toContain("structural-conflict");
+    expect(d.lead.code).toBe("structural-conflict");
   });
 
   it("blames Compressed only when removing it actually unblocks a timetable", () => {
@@ -158,6 +159,6 @@ describe("diagnoseTimetableFailure", () => {
       },
     });
     expect(d.relaxation?.kind).toBe("single_blockers");
-    expect(d.suggestions.some((s) => s.includes("Compressed"))).toBe(true);
+    expect(d.suggestions).toContain("turn-off-compressed");
   });
 });

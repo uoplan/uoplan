@@ -13,20 +13,44 @@ import type { Term } from "@uoplan/core";
 import type { ProfessorRatingsMap } from "@uoplan/core";
 import type { Discipline } from "@uoplan/core";
 import type { DecodedState } from "@uoplan/core";
-import type { TimetableFailureDiagnostics } from "@uoplan/core";
+import type { LeadDescriptor, TimetableFailureDiagnostics } from "@uoplan/core";
+
+/**
+ * Locale-agnostic description of an active, non-default generation filter.
+ * Produced in the (locale-less) schedule worker and translated at render time
+ * on the main thread, so no `tr()` call ever happens off the main thread.
+ */
+export type FilterHintDescriptor =
+  | { code: "start-after"; time: string }
+  | { code: "end-before"; time: string }
+  | { code: "days-excluded"; days: string[] }
+  | { code: "prof-rating"; rating: number }
+  | { code: "virtual-only" }
+  | { code: "closed-excluded" }
+  | { code: "language-filter"; langs: string[] };
+
+/**
+ * Locale-agnostic description of the primary generation-error headline.
+ * Translated on the main thread (see `formatGenerationMessage`).
+ */
+export type GenerationMessageDescriptor =
+  | { kind: "lead"; lead: LeadDescriptor }
+  | { kind: "unassigned-completed"; count: number; preview: string[]; overflow: number }
+  | { kind: "complete-assign" }
+  | { kind: "not-enough-courses" };
 
 export interface GenerationErrorDetails {
   emptyPools: Array<{ label: string; requirementId?: string; candidateCourses?: string[] }>;
   totalAvailable: number;
   totalNeeded: number;
   timetableFailure?: TimetableFailureDiagnostics;
-  /** Human-readable descriptions of non-default filters that may be restricting results. */
-  activeFilterHints?: string[];
+  /** Non-default filters that may be restricting results (translated at render). */
+  activeFilterHints?: FilterHintDescriptor[];
 }
 
 /** Primary message plus optional structured context for the expandable Details panel. */
 export type GenerationErrorState = {
-  message: string;
+  message: GenerationMessageDescriptor;
   details: GenerationErrorDetails | null;
 };
 

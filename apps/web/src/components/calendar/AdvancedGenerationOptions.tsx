@@ -1,6 +1,8 @@
 import { useMemo } from "react";
+import { useLingui } from "@lingui/react";
 import { useAppStore } from "../../store/appStore";
 import { tr } from "../../i18n";
+import { formatGenerationMessage } from "../../lib/generationDiagnosticsText";
 import {
   buildPoolCourseOptions,
   computeFirstYearCredits,
@@ -9,6 +11,7 @@ import {
 import { AdvancedGenerationOptionsView } from "./AdvancedGenerationOptionsView";
 
 export function AdvancedGenerationOptions() {
+  useLingui();
   const cache = useAppStore((s) => s.cache);
   const remainingRequirements = useAppStore((s) => s.remainingRequirements);
   const requirementTreeWithStatus = useAppStore((s) => s.requirementTreeWithStatus);
@@ -92,7 +95,7 @@ export function AdvancedGenerationOptions() {
         onBlacklistedCoursesChange: setBlacklistedCourses,
         onGenerate: () => {},
         generating: false,
-        error: generationError?.message ?? null,
+        error: generationError ? formatGenerationMessage(generationError.message) : null,
         errorDetails: generationError?.details ?? null,
         disableGenerate: unassignedCompletedCourses.length > 0,
         disableGenerateReason: tr("app.generate.disableReason", {

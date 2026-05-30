@@ -1,16 +1,22 @@
 import { List, Stack, Text } from "@mantine/core";
+import { useLingui } from "@lingui/react";
 import type { GenerationErrorDetails } from "../store/types";
+import { tr } from "../i18n";
+import { formatFilterHint, formatSuggestions } from "../lib/generationDiagnosticsText";
 
 function formatCourseList(courses: string[]): string {
   if (courses.length === 0) return "";
   if (courses.length === 1) return courses[0];
-  if (courses.length === 2) return `${courses[0]} or ${courses[1]}`;
+  if (courses.length === 2) return tr("gen.list.two", { a: courses[0], b: courses[1] });
   if (courses.length > 5) {
-    return `${courses.slice(0, 5).join(", ")}, or ${courses.length - 5} more`;
+    return tr("gen.list.overflow", {
+      head: courses.slice(0, 5).join(", "),
+      count: courses.length - 5,
+    });
   }
   const last = courses[courses.length - 1];
   const rest = courses.slice(0, -1);
-  return `${rest.join(", ")}, or ${last}`;
+  return tr("gen.list.many", { rest: rest.join(", "), last });
 }
 
 function hasDetailContent(errorDetails: GenerationErrorDetails): boolean {
@@ -30,32 +36,33 @@ export function GenerationErrorDetailBlocks({
   errorDetails: GenerationErrorDetails | null | undefined;
   summarizeEmptyPools: boolean;
 }) {
+  useLingui();
   if (!errorDetails || !hasDetailContent(errorDetails)) return null;
 
   const tf = errorDetails.timetableFailure;
+  const suggestions = tf ? formatSuggestions(tf) : [];
 
   return (
     <Stack gap="sm" pt="xs">
       {errorDetails.totalAvailable < errorDetails.totalNeeded && (
         <Text size="xs" c="dimmed">
-          Only {errorDetails.totalAvailable} of {errorDetails.totalNeeded} course slots can be
-          filled with your current filters
+          {tr("gen.slots.summary", {
+            available: errorDetails.totalAvailable,
+            needed: errorDetails.totalNeeded,
+          })}
           {errorDetails.emptyPools.length > 0 && !summarizeEmptyPools && (
             <>
               {" — "}
-              {errorDetails.emptyPools.length === 1 ? (
-                <Text size="xs" fw={500} span>
-                  {errorDetails.emptyPools[0].label}
+              {errorDetails.emptyPools.map((p, i) => (
+                <Text key={p.requirementId ?? p.label} size="xs" fw={500} span>
+                  {i > 0 &&
+                    (i === errorDetails.emptyPools.length - 1
+                      ? tr("gen.join.and")
+                      : tr("gen.join.comma"))}
+                  {p.label}
                 </Text>
-              ) : (
-                errorDetails.emptyPools.map((p, i) => (
-                  <Text key={p.requirementId ?? p.label} size="xs" fw={500} span>
-                    {i > 0 && (i === errorDetails.emptyPools.length - 1 ? " and " : ", ")}
-                    {p.label}
-                  </Text>
-                ))
-              )}{" "}
-              {errorDetails.emptyPools.length === 1 ? "has" : "have"} no eligible courses
+              ))}{" "}
+              {tr("gen.pools.haveNoCourses", { count: errorDetails.emptyPools.length })}
             </>
           )}
           .
@@ -64,15 +71,14 @@ export function GenerationErrorDetailBlocks({
 
       {errorDetails.emptyPools.length > 0 && summarizeEmptyPools && (
         <Text size="xs" c="dimmed">
-          {errorDetails.emptyPools.length} other requirements have no eligible courses (often
-          future-term sections not posted yet).
+          {tr("gen.pools.otherSummary", { count: errorDetails.emptyPools.length })}
         </Text>
       )}
 
       {errorDetails.emptyPools.length > 0 && !summarizeEmptyPools && (
         <>
           <Text size="xs" fw={600}>
-            Requirements with no eligible courses
+            {tr("gen.pools.heading")}
           </Text>
           <List size="xs" spacing={4} withPadding>
             {errorDetails.emptyPools.map((p) => {
@@ -85,14 +91,15 @@ export function GenerationErrorDetailBlocks({
                   {candidates.length > 0 ? (
                     <Text size="xs" c="dimmed" span>
                       {" "}
-                      — {formatCourseList(candidates)}{" "}
-                      {candidates.length === 1 ? "qualifies" : "qualify"} but{" "}
-                      {candidates.length === 1 ? "is" : "are"} blocked by current filters
+                      {tr("gen.pools.blockedByFilters", {
+                        count: candidates.length,
+                        courses: formatCourseList(candidates),
+                      })}
                     </Text>
                   ) : (
                     <Text size="xs" c="dimmed" span>
                       {" "}
-                      — no sections offered this term
+                      {tr("gen.pools.noSectionsThisTerm")}
                     </Text>
                   )}
                 </List.Item>
@@ -105,11 +112,11 @@ export function GenerationErrorDetailBlocks({
       {errorDetails.activeFilterHints && errorDetails.activeFilterHints.length > 0 && (
         <>
           <Text size="xs" fw={600}>
-            Active filters limiting results
+            {tr("gen.hints.heading")}
           </Text>
           <List size="xs" spacing={4} withPadding>
             {errorDetails.activeFilterHints.map((hint, i) => (
-              <List.Item key={i}>{hint}</List.Item>
+              <List.Item key={i}>{formatFilterHint(hint)}</List.Item>
             ))}
           </List>
         </>
@@ -118,20 +125,20 @@ export function GenerationErrorDetailBlocks({
       {tf && tf.coursesWithNoCombo.length > 0 && (
         <>
           <Text size="xs" fw={600}>
-            No matching sections (filters / timetable)
+            {tr("gen.noSections.heading")}
           </Text>
           <Text size="xs" c="dimmed" style={{ fontFamily: "monospace" }}>
             {tf.coursesWithNoCombo.join(", ")}
           </Text>
         </>
       )}
-      {tf && tf.suggestions.length > 0 && (
+      {suggestions.length > 0 && (
         <>
           <Text size="xs" fw={600}>
-            Quick fixes
+            {tr("gen.quickFixes.heading")}
           </Text>
           <List size="xs" spacing={4} withPadding>
-            {tf.suggestions.map((s, i) => (
+            {suggestions.map((s, i) => (
               <List.Item key={i}>{s}</List.Item>
             ))}
           </List>

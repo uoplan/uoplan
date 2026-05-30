@@ -109,7 +109,7 @@ exports[`generateAdvancedSchedule golden behaviour > enforces the first-year cre
 ]
 `;
 
-exports[`generateAdvancedSchedule golden behaviour > excludes blacklisted courses from the constrained set (documents general-pool leak) 1`] = `
+exports[`generateAdvancedSchedule golden behaviour > excludes blacklisted courses from the general pool 1`] = `
 [
   {
     "courseSet": [
@@ -130,14 +130,14 @@ exports[`generateAdvancedSchedule golden behaviour > excludes blacklisted course
   },
   {
     "courseSet": [
-      "MAT 1320",
+      "HIS 1100",
       "MAT 1322",
       "PHI 1101",
     ],
     "emptyPoolLabels": [],
     "hasSchedule": true,
     "optionalPool": [
-      "MAT 1320",
+      "HIS 1100",
       "MAT 1322",
       "PHI 1101",
     ],
@@ -148,64 +148,13 @@ exports[`generateAdvancedSchedule golden behaviour > excludes blacklisted course
   {
     "courseSet": [
       "HIS 1100",
-      "MAT 1320",
+      "MAT 1322",
       "PHI 1101",
     ],
     "emptyPoolLabels": [],
     "hasSchedule": true,
     "optionalPool": [
       "HIS 1100",
-      "MAT 1320",
-      "PHI 1101",
-    ],
-    "pinned": [],
-    "totalAvailable": 3,
-    "totalNeeded": 3,
-  },
-  {
-    "courseSet": [
-      "MAT 1320",
-      "MAT 1322",
-      "PHI 1101",
-    ],
-    "emptyPoolLabels": [],
-    "hasSchedule": true,
-    "optionalPool": [
-      "MAT 1320",
-      "MAT 1322",
-      "PHI 1101",
-    ],
-    "pinned": [],
-    "totalAvailable": 3,
-    "totalNeeded": 3,
-  },
-  {
-    "courseSet": [
-      "MAT 1320",
-      "MAT 1322",
-      "PHI 1101",
-    ],
-    "emptyPoolLabels": [],
-    "hasSchedule": true,
-    "optionalPool": [
-      "MAT 1320",
-      "MAT 1322",
-      "PHI 1101",
-    ],
-    "pinned": [],
-    "totalAvailable": 3,
-    "totalNeeded": 3,
-  },
-  {
-    "courseSet": [
-      "MAT 1320",
-      "MAT 1322",
-      "PHI 1101",
-    ],
-    "emptyPoolLabels": [],
-    "hasSchedule": true,
-    "optionalPool": [
-      "MAT 1320",
       "MAT 1322",
       "PHI 1101",
     ],
@@ -216,15 +165,15 @@ exports[`generateAdvancedSchedule golden behaviour > excludes blacklisted course
   {
     "courseSet": [
       "HIS 1100",
-      "MAT 1320",
       "MAT 1322",
+      "PHI 1101",
     ],
     "emptyPoolLabels": [],
     "hasSchedule": true,
     "optionalPool": [
       "HIS 1100",
-      "MAT 1320",
       "MAT 1322",
+      "PHI 1101",
     ],
     "pinned": [],
     "totalAvailable": 3,
@@ -232,14 +181,65 @@ exports[`generateAdvancedSchedule golden behaviour > excludes blacklisted course
   },
   {
     "courseSet": [
-      "MAT 1320",
+      "HIS 1100",
       "MAT 1322",
       "PHI 1101",
     ],
     "emptyPoolLabels": [],
     "hasSchedule": true,
     "optionalPool": [
-      "MAT 1320",
+      "HIS 1100",
+      "MAT 1322",
+      "PHI 1101",
+    ],
+    "pinned": [],
+    "totalAvailable": 3,
+    "totalNeeded": 3,
+  },
+  {
+    "courseSet": [
+      "HIS 1100",
+      "MAT 1322",
+      "PHI 1101",
+    ],
+    "emptyPoolLabels": [],
+    "hasSchedule": true,
+    "optionalPool": [
+      "HIS 1100",
+      "MAT 1322",
+      "PHI 1101",
+    ],
+    "pinned": [],
+    "totalAvailable": 3,
+    "totalNeeded": 3,
+  },
+  {
+    "courseSet": [
+      "HIS 1100",
+      "MAT 1322",
+      "PHI 1101",
+    ],
+    "emptyPoolLabels": [],
+    "hasSchedule": true,
+    "optionalPool": [
+      "HIS 1100",
+      "MAT 1322",
+      "PHI 1101",
+    ],
+    "pinned": [],
+    "totalAvailable": 3,
+    "totalNeeded": 3,
+  },
+  {
+    "courseSet": [
+      "HIS 1100",
+      "MAT 1322",
+      "PHI 1101",
+    ],
+    "emptyPoolLabels": [],
+    "hasSchedule": true,
+    "optionalPool": [
+      "HIS 1100",
       "MAT 1322",
       "PHI 1101",
     ],
