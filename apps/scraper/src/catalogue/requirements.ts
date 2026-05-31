@@ -183,6 +183,12 @@ export function processRequirements(reqs: ProgramRequirement[]): ProgramRequirem
   const foldedOptions: ProgramRequirement[] = [];
   let currentOptionsGroup: ProgramRequirement | null = null;
   let currentOptionList: ProgramRequirement[] | null = null;
+  // Whether the current option branch is "indented-style": its header (and
+  // therefore its children) are visually indented in the source table. When
+  // true, the end of indentation marks the end of the option (and the whole
+  // options group). Flat-style options (no indentation) instead rely on the
+  // next section as their boundary.
+  let currentOptionIndented = false;
 
   const isOptionHeader = (r: ProgramRequirement): boolean =>
     !!r.title && /^(?:option|opiton)\b/i.test(r.title.trim());
@@ -197,6 +203,8 @@ export function processRequirements(reqs: ProgramRequirement[]): ProgramRequirem
       foldedOptions.push(currentOptionsGroup);
     }
 
+    currentOptionIndented = !!r.indented;
+
     const optionList: ProgramRequirement[] = [];
     currentOptionsGroup.options!.push({
       type: "and",
@@ -204,6 +212,12 @@ export function processRequirements(reqs: ProgramRequirement[]): ProgramRequirem
       options: optionList,
     });
     return optionList;
+  };
+
+  const closeOptionsGroup = (): void => {
+    currentOptionsGroup = null;
+    currentOptionList = null;
+    currentOptionIndented = false;
   };
 
   for (let i = 0; i < cleaned.length; i++) {
@@ -221,6 +235,7 @@ export function processRequirements(reqs: ProgramRequirement[]): ProgramRequirem
         options: [],
       };
       currentOptionList = null;
+      currentOptionIndented = false;
       foldedOptions.push(currentOptionsGroup);
       continue;
     }
@@ -233,8 +248,12 @@ export function processRequirements(reqs: ProgramRequirement[]): ProgramRequirem
     if (currentOptionList !== null) {
       const optionList = currentOptionList;
       if (r.type === "section") {
-        currentOptionsGroup = null;
-        currentOptionList = null;
+        closeOptionsGroup();
+        foldedOptions.push(r);
+      } else if (currentOptionIndented && !r.indented) {
+        // The option's children are indented; this non-indented requirement is
+        // outside the option (and the whole options group).
+        closeOptionsGroup();
         foldedOptions.push(r);
       } else {
         optionList.push(r);
