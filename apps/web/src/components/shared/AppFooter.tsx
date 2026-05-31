@@ -29,18 +29,10 @@ export function AppFooter() {
           margin: "0 auto",
           paddingLeft: isMobile ? 12 : 20,
           paddingRight: isMobile ? 12 : 20,
-          ...(isMobile
-            ? {}
-            : {
-                display: "grid",
-                gridTemplateColumns: "minmax(0, 260px) minmax(0, 1fr) minmax(0, 260px)",
-              }),
         }}
       >
-        {!isMobile ? <Box /> : null}
-
-        <Stack gap="lg">
-          <Group gap={12} wrap="wrap" justify={isMobile ? "center" : "flex-start"} align="baseline">
+        <Stack gap="lg" align="center">
+          <Group gap={12} wrap="wrap" justify="center" align="baseline">
             <Anchor
               href="https://github.com/uoplan/uoplan"
               target="_blank"
@@ -110,23 +102,16 @@ export function AppFooter() {
           <Box
             role="note"
             style={{
-              ...(isMobile
-                ? {
-                    maxWidth: 440,
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                  }
-                : {
-                    borderLeft: "var(--app-border-width) solid var(--app-border-strong)",
-                    paddingLeft: 14,
-                  }),
+              maxWidth: 720,
+              marginLeft: "auto",
+              marginRight: "auto",
               paddingTop: 2,
             }}
           >
             <Text
               size="sm"
               lh={1.65}
-              ta={isMobile ? "center" : "left"}
+              ta="center"
               style={{
                 fontStyle: "italic",
                 letterSpacing: "0.01em",
@@ -161,8 +146,6 @@ export function AppFooter() {
             </Text>
           </Box>
         </Stack>
-
-        {!isMobile ? <Box /> : null}
       </Box>
     </Box>
   );

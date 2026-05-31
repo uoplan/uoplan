@@ -122,7 +122,7 @@
   right: 0;
   box-sizing: border-box;
   border: 1px solid color-mix(in srgb, var(--app-text-dim) 55%, transparent);
-  border-radius: var(--app-radius-sm);
+  border-radius: 4px;
   background-color: color-mix(in srgb, var(--app-text-dim) 12%, transparent);
   background-image: repeating-linear-gradient(
     45deg,

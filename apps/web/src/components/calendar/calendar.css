@@ -8,7 +8,7 @@
   justify-content: flex-start;
   padding: 0;
   font-size: 11px;
-  border-radius: var(--app-radius-sm);
+  border-radius: 4px;
   height: 100%;
   min-height: 100%;
   box-sizing: border-box;
