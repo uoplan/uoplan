@@ -39,7 +39,7 @@ import {
 import { tr } from "../../i18n";
 
 export const REQUIREMENT_INDENT_PX = 12;
-export const REQUIREMENT_BASE_PADDING_PX = 10;
+const REQUIREMENT_BASE_PADDING_PX = 10;
 
 const TITLE_FLEX = { flex: 1, minWidth: 0 } as const;
 const BADGE_NO_SHRINK = { flexShrink: 0 } as const;

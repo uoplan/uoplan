@@ -17,6 +17,12 @@ const STATUS_SOFT: Partial<Record<ScheduleDashboardCardStatus, string>> = {
   attention: "var(--app-warning-soft)",
 };
 
+const STATUS_BORDER: Record<ScheduleDashboardCardStatus, string> = {
+  ready: "color-mix(in srgb, var(--app-success) 55%, var(--app-surface))",
+  attention: "var(--app-warning)",
+  empty: "var(--app-text-dim)",
+};
+
 type ScheduleDashboardCardProps = {
   label: string;
   status: ScheduleDashboardCardStatus;
@@ -106,7 +112,7 @@ export function ScheduleDashboardCard({
 }: ScheduleDashboardCardProps) {
   useLingui();
   const locked = Boolean(gateMessage);
-  const accent = locked ? STATUS_ACCENT.empty : STATUS_ACCENT[status];
+  const accent = locked ? STATUS_BORDER.empty : STATUS_BORDER[status];
   const isExpandable = Boolean(expandableContent) && !locked;
 
   const handleClick = () => {

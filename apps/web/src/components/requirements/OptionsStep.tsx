@@ -39,7 +39,7 @@ export function OptionsStep({
         <Text size="sm">{tr("optionsStep.note")}</Text>
       </Alert>
 
-      <Stack gap="md">
+      <Stack gap="xs">
         {relevantNodes.map((node, idx) => {
           const nodeKey = getStableNodeKey(node, `options:${idx}`);
           return (
