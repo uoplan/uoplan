@@ -83,7 +83,7 @@ function WeekMiniCard({
             height: `${slot.heightPct}%`,
             minHeight: 3,
             backgroundColor: `rgb(${slot.r} ${slot.g} ${slot.b} / 70%)`,
-            borderRadius: "var(--app-radius-sm)",
+            borderRadius: 1,
           }}
         />
       ))}
