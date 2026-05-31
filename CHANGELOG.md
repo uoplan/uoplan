@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.0.0-beta.25](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.24...uoplan-monorepo-v1.0.0-beta.25) (2026-05-31)
+
+
+### Features
+
+* add ical library for generating calendars ([206dcd4](https://github.com/uoplan/uoplan/commit/206dcd486d40a163aefe1cb08b83f7292afe5446))
+* add progress bar when loading pages ([9baef15](https://github.com/uoplan/uoplan/commit/9baef153c5c433396a757ce8489761ad8dabf731))
+* improve generation button on schedule ([13a0283](https://github.com/uoplan/uoplan/commit/13a0283af6547d49daa8ee88b1d8a94a9392b1bf))
+* improve generation error messages ([7df81e0](https://github.com/uoplan/uoplan/commit/7df81e05b11dd3365ac93e2c01c77829bdd83c30))
+* improve layout of language and theme dropdowns on mobile ([91849bf](https://github.com/uoplan/uoplan/commit/91849bf864f44c04c91411feee565f8d8c546432))
+* improve perf of explore page ([074900f](https://github.com/uoplan/uoplan/commit/074900fcfbc87238bf96bac5873868f3971b4f3c))
+* move schedule and explore page out of beta ([991ae4f](https://github.com/uoplan/uoplan/commit/991ae4f68e1c42bc16ee8ad8daebc3bb34c2eec1))
+* rewrite generation engine ([028e3cd](https://github.com/uoplan/uoplan/commit/028e3cd49dd9419c643a0bd8f66154a408938feb))
+* **scraper:** rewrite scraper app and improve requirements parsing ([bd53b26](https://github.com/uoplan/uoplan/commit/bd53b26e53319d933b1acfc3252eca95e9d9014a))
+* **scraper:** speed up schedule scraper ([0308395](https://github.com/uoplan/uoplan/commit/03083958dfaced68e6c2ee5afe4e210d753d3840))
+* share colour map between worker and web ([ebbb07a](https://github.com/uoplan/uoplan/commit/ebbb07a6f9a49296c29f31e674683b8aef284a60))
+
+
+### Bug Fixes
+
+* avoid bad animations for calendar ([dfadb5d](https://github.com/uoplan/uoplan/commit/dfadb5df9fae3b87780a759e0a122fb512a5eeee))
+* do not show generation error multiple times in a row ([1750e01](https://github.com/uoplan/uoplan/commit/1750e01bc67e7a38460275d12fd56ab8169678df))
+* parse more requirements properly ([a8511ec](https://github.com/uoplan/uoplan/commit/a8511ecbd1ffe2c60d5d96cf61fa732669f4df5a))
+* use correct branch and versioning env var ([209a7d2](https://github.com/uoplan/uoplan/commit/209a7d288808945c2c9b2868130bb4287a68cd56))
+
 ## [1.0.0-beta.24](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.23...uoplan-monorepo-v1.0.0-beta.24) (2026-05-29)
 
 
