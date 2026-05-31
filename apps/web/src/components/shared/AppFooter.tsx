@@ -1,7 +1,8 @@
 import { useLingui } from "@lingui/react";
-import { Anchor, Box, Group, Stack, Text } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { Anchor, Box, Group, Kbd, Stack, Text, UnstyledButton } from "@mantine/core";
+import { useMediaQuery, useOs } from "@mantine/hooks";
 import { Link, useLocation } from "@tanstack/react-router";
+import { spotlight } from "@mantine/spotlight";
 import { tr } from "../../i18n";
 import { labelForPath } from "../../lib/navigation/backState";
 
@@ -12,6 +13,8 @@ export function AppFooter() {
 
   const isMobile = useMediaQuery("(max-width: 768px)");
   const pathname = useLocation({ select: (s) => s.pathname });
+  const os = useOs();
+  const modLabel = os === "macos" ? "⌘" : "Ctrl";
 
   return (
     <Box
@@ -77,6 +80,22 @@ export function AppFooter() {
             >
               {tr("app.footer.changelog")}
             </Text>
+            <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
+              ·
+            </Text>
+            <UnstyledButton
+              onClick={() => spotlight.open()}
+              aria-label={tr("app.footer.commandCenter")}
+              style={{ color: "var(--mantine-color-dimmed)" }}
+            >
+              <Group gap={6} align="center" wrap="nowrap">
+                <Text span size="sm" c="dimmed" lh={1.45}>
+                  {tr("app.footer.commandCenter")}
+                </Text>
+                <Kbd size="xs">{modLabel}</Kbd>
+                <Kbd size="xs">K</Kbd>
+              </Group>
+            </UnstyledButton>
             <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
               ·
             </Text>

@@ -1682,3 +1682,87 @@ msgstr ""
 
 #~ msgid "calendar.blockedTime.removeConfirm"
 #~ msgstr "Remove"
+
+#~ msgid "app.commandCenter.group.pages"
+#~ msgstr "Pages"
+
+#~ msgid "app.commandCenter.nothingFound"
+#~ msgstr "Nothing found…"
+
+#~ msgid "app.commandCenter.placeholder"
+#~ msgstr "Search pages…"
+
+#~ msgid "app.nav.dest.home.label"
+#~ msgstr "Home"
+
+#~ msgid "app.nav.dest.home.description"
+#~ msgstr "Return to the uoplan home page."
+
+#~ msgid "app.nav.dest.explore.label"
+#~ msgstr "Explore"
+
+#~ msgid "app.nav.dest.explore.description"
+#~ msgstr "Search courses and professors with grade distributions."
+
+#~ msgid "app.nav.dest.schedule.label"
+#~ msgstr "Schedule generator"
+
+#~ msgid "app.nav.dest.schedule.description"
+#~ msgstr "Plan your degree and generate conflict-free timetables."
+
+#~ msgid "app.nav.dest.calendar.label"
+#~ msgstr "Calendar"
+
+#~ msgid "app.nav.dest.calendar.description"
+#~ msgstr "View and browse your generated timetables."
+
+#~ msgid "app.nav.dest.trends.label"
+#~ msgstr "Grade trends"
+
+#~ msgid "app.nav.dest.trends.description"
+#~ msgstr "Track how grades shift over time across disciplines."
+
+#~ msgid "app.nav.dest.graph.label"
+#~ msgstr "Professor graph"
+
+#~ msgid "app.nav.dest.graph.description"
+#~ msgstr "See how professors connect through shared courses."
+
+#~ msgid "app.nav.dest.changelog.label"
+#~ msgstr "Changelog"
+
+#~ msgid "app.nav.dest.changelog.description"
+#~ msgstr "See what's new and recently updated."
+
+#~ msgid "app.shortcuts.title"
+#~ msgstr "Keyboard shortcuts"
+
+#~ msgid "app.shortcuts.group.global"
+#~ msgstr "Global"
+
+#~ msgid "app.shortcuts.group.quickNav"
+#~ msgstr "Quick navigation"
+
+#~ msgid "app.shortcuts.group.calendar"
+#~ msgstr "Calendar"
+
+#~ msgid "app.shortcuts.commandCenter"
+#~ msgstr "Open command center"
+
+#~ msgid "app.shortcuts.help"
+#~ msgstr "Show keyboard shortcuts"
+
+#~ msgid "app.shortcuts.quickNav.hint"
+#~ msgstr "Press G, then the page key."
+
+#~ msgid "app.shortcuts.then"
+#~ msgstr "then"
+
+#~ msgid "app.shortcuts.prevSchedule"
+#~ msgstr "Previous schedule"
+
+#~ msgid "app.shortcuts.nextSchedule"
+#~ msgstr "Next schedule"
+
+#~ msgid "app.footer.commandCenter"
+#~ msgstr "shortcuts"

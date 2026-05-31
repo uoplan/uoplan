@@ -1682,3 +1682,87 @@ msgstr ""
 
 #~ msgid "calendar.blockedTime.removeConfirm"
 #~ msgstr "Retirer"
+
+#~ msgid "app.commandCenter.group.pages"
+#~ msgstr "Pages"
+
+#~ msgid "app.commandCenter.nothingFound"
+#~ msgstr "Aucun résultat…"
+
+#~ msgid "app.commandCenter.placeholder"
+#~ msgstr "Rechercher des pages…"
+
+#~ msgid "app.nav.dest.home.label"
+#~ msgstr "Accueil"
+
+#~ msgid "app.nav.dest.home.description"
+#~ msgstr "Revenir à la page d'accueil d'uoplan."
+
+#~ msgid "app.nav.dest.explore.label"
+#~ msgstr "Explorer"
+
+#~ msgid "app.nav.dest.explore.description"
+#~ msgstr "Rechercher des cours et des professeurs avec les répartitions de notes."
+
+#~ msgid "app.nav.dest.schedule.label"
+#~ msgstr "Générateur d'horaire"
+
+#~ msgid "app.nav.dest.schedule.description"
+#~ msgstr "Planifiez votre programme et générez des horaires sans conflit."
+
+#~ msgid "app.nav.dest.calendar.label"
+#~ msgstr "Calendrier"
+
+#~ msgid "app.nav.dest.calendar.description"
+#~ msgstr "Consultez et parcourez vos horaires générés."
+
+#~ msgid "app.nav.dest.trends.label"
+#~ msgstr "Tendances des notes"
+
+#~ msgid "app.nav.dest.trends.description"
+#~ msgstr "Suivez l'évolution des notes au fil du temps selon les disciplines."
+
+#~ msgid "app.nav.dest.graph.label"
+#~ msgstr "Graphe des professeurs"
+
+#~ msgid "app.nav.dest.graph.description"
+#~ msgstr "Voyez comment les professeurs sont liés par les cours partagés."
+
+#~ msgid "app.nav.dest.changelog.label"
+#~ msgstr "Journal des modifications"
+
+#~ msgid "app.nav.dest.changelog.description"
+#~ msgstr "Découvrez les nouveautés et les mises à jour récentes."
+
+#~ msgid "app.shortcuts.title"
+#~ msgstr "Raccourcis clavier"
+
+#~ msgid "app.shortcuts.group.global"
+#~ msgstr "Général"
+
+#~ msgid "app.shortcuts.group.quickNav"
+#~ msgstr "Navigation rapide"
+
+#~ msgid "app.shortcuts.group.calendar"
+#~ msgstr "Calendrier"
+
+#~ msgid "app.shortcuts.commandCenter"
+#~ msgstr "Ouvrir le centre de commandes"
+
+#~ msgid "app.shortcuts.help"
+#~ msgstr "Afficher les raccourcis clavier"
+
+#~ msgid "app.shortcuts.quickNav.hint"
+#~ msgstr "Appuyez sur G, puis sur la touche de la page."
+
+#~ msgid "app.shortcuts.then"
+#~ msgstr "puis"
+
+#~ msgid "app.shortcuts.prevSchedule"
+#~ msgstr "Horaire précédent"
+
+#~ msgid "app.shortcuts.nextSchedule"
+#~ msgstr "Horaire suivant"
+
+#~ msgid "app.footer.commandCenter"
+#~ msgstr "raccourcis"

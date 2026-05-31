@@ -18,6 +18,9 @@ import { useAppStore } from "../store/appStore";
 import { tr } from "../i18n";
 import { AppFooter } from "../components/shared/AppFooter";
 import { SharedScheduleModal } from "../components/shared/SharedScheduleModal";
+import { CommandCenter } from "../components/shortcuts/CommandCenter";
+import { HotkeysHelpModal } from "../components/shortcuts/HotkeysHelpModal";
+import { useGlobalHotkeys } from "../hooks/useGlobalHotkeys";
 
 export const Route = createRootRoute({
   head: () => buildRootHead(),
@@ -65,6 +68,8 @@ function RootLayout() {
   const isCalendarRoute = pathname.startsWith("/schedule/calendar");
   const pendingAnimation = useRef(false);
   const lastNavAction = useRef<string>("PUSH");
+
+  useGlobalHotkeys();
 
   useEffect(() => {
     return router.history.subscribe(({ action }) => {
@@ -128,6 +133,8 @@ function RootLayout() {
       <NavigationProgress color="var(--app-focus-ring)" />
       <HeadContent />
       <SharedScheduleModal />
+      <CommandCenter />
+      <HotkeysHelpModal />
       <Box style={{ flex: 1, minHeight: 0 }}>
         <motion.div animate={controls} style={isCalendarRoute ? { height: "100%" } : undefined}>
           <Outlet />
