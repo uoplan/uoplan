@@ -1,7 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
 import * as cheerio from "cheerio";
-import pLimit from "p-limit";
 import type { Got } from "got";
 import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
 import { getErrorMessage } from "../shared/errors.ts";
@@ -188,16 +187,19 @@ async function createClient(): Promise<ClientInfo> {
   );
   return value;
 }
+type YearOfStudy = 1 | 2 | 3 | 4 | "grad";
+
 function buildSearchBody(args: {
   icsid: string;
   dataLang: string;
   icStateNum: string;
   subject: string;
-  catalogNbr: string;
+  catalogNbr?: string;
   termId?: string;
   virtual?: boolean;
+  yearOfStudy?: YearOfStudy;
 }): string {
-  const { icsid, dataLang, icStateNum, subject, catalogNbr, termId, virtual } = args;
+  const { icsid, dataLang, icStateNum, subject, catalogNbr, termId, virtual, yearOfStudy } = args;
 
   const params = new URLSearchParams();
 
@@ -237,10 +239,10 @@ function buildSearchBody(args: {
     params.set("CLASS_SRCH_WRK2_STRM$35$", termId);
   }
 
-  // Course criteria
+  // Course criteria. An empty catalog number performs a subject-only search (many courses).
   params.set("SSR_CLSRCH_WRK_SUBJECT$0", subject);
   params.set("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$0", "E"); // course number "exact match"
-  params.set("SSR_CLSRCH_WRK_CATALOG_NBR$0", catalogNbr);
+  params.set("SSR_CLSRCH_WRK_CATALOG_NBR$0", catalogNbr ?? "");
 
   // Keep other fields in a neutral state to mimic the real form as closely as possible.
   params.set("SSR_CLSRCH_WRK_ACAD_CAREER$0", "");
@@ -253,11 +255,15 @@ function buildSearchBody(args: {
   params.set("UO_PUB_SRCH_WRK_UO_LNG_EN$chk$0", "N");
   params.set("UO_PUB_SRCH_WRK_UO_LNG_OT$chk$0", "N");
   params.set("UO_PUB_SRCH_WRK_UO_LNG_BI$chk$0", "N");
-  params.set("UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_01$chk$0", "N");
-  params.set("UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_02$chk$0", "N");
-  params.set("UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_03$chk$0", "N");
-  params.set("UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_04$chk$0", "N");
-  params.set("UO_PUB_SRCH_WRK_GRADUATED_TBL_CD$chk$0", "N");
+  // Year-of-study facet. Selecting a single value narrows an otherwise-overflowing subject search.
+  for (const opt of ["01", "02", "03", "04"] as const) {
+    const on = yearOfStudy === Number(opt);
+    params.set(`UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_${opt}$chk$0`, on ? "Y" : "N");
+    if (on) params.set(`UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_${opt}$0`, "Y");
+  }
+  const gradOn = yearOfStudy === "grad";
+  params.set("UO_PUB_SRCH_WRK_GRADUATED_TBL_CD$chk$0", gradOn ? "Y" : "N");
+  if (gradOn) params.set("UO_PUB_SRCH_WRK_GRADUATED_TBL_CD$0", "Y");
   params.set("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$0", "GE");
   params.set("SSR_CLSRCH_WRK_MEETING_TIME_START$0", "");
   params.set("SSR_CLSRCH_WRK_SSR_END_TIME_OPR$0", "LE");
@@ -283,140 +289,220 @@ function buildSearchBody(args: {
   return params.toString();
 }
 
-function parseScheduleHtml(
-  html: string,
-  { subject, catalogNbr }: { subject: string; catalogNbr: string },
-  virtual: boolean = false,
-): CourseSchedule | null {
-  const $ = cheerio.load(html);
+const YEAR_SLICES: YearOfStudy[] = [1, 2, 3, 4, "grad"];
 
-  const headerAnchor = $('a[id^="SSR_CLSRSLT_WRK_GROUPBOX2$"]').first();
-  const anchorTitle = headerAnchor.attr("title") ?? "";
-  let title: string | null = null;
-  const titleMatch = anchorTitle.match(/\s-\s(.+)$/);
-  if (titleMatch) {
-    title = titleMatch[1].trim();
-  }
+type BannerKind = "none" | "empty" | "overflow";
 
-  const components: Record<string, ComponentSection[]> = {};
+/** Classify the PeopleSoft response banner before attempting to parse results. */
+function classifyBanner(html: string): BannerKind {
+  const text = cheerio
+    .load(html)("span.PSERRORTEXT, div.PSERRORTEXT, span.SSSMSGALERTTEXT")
+    .text()
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+  if (!text) return "none";
+  if (text.includes("maximum limit") || text.includes("exceed")) return "overflow";
+  if (text.includes("no classes") || text.includes("no results")) return "empty";
+  return "none";
+}
 
-  $('table[id^="SSR_CLSRCH_MTG1$scroll$"]').each((_, table) => {
-    const rows = $(table).find('tr[id^="trSSR_CLSRCH_MTG1"]');
-    rows.each((__, row) => {
-      const $row = $(row);
-      const sectionSpan = $row.find('span[id^="MTG_CLASSNAME$"]').first();
-      const sectionHtml = sectionSpan.html() || "";
-      const sectionLines = sectionHtml
-        .split(/<br\s*\/?>/i)
-        .map((line) =>
-          line
-            .replace(/<[^>]*>/g, "")
-            .replace(/\s+/g, " ")
-            .trim(),
-        )
-        .filter(Boolean);
-      const rawSection = sectionLines.join(" ");
+type CheerioRoot = ReturnType<typeof cheerio.load>;
+type CheerioSelection = ReturnType<CheerioRoot>;
 
-      const daysSpan = $row.find('span#MTG_DAYTIME\\$0, span[id^="MTG_DAYTIME$"]').first();
-      const daysHtml = daysSpan.html() || "";
-      const dayLines = daysHtml
-        .split(/<br\s*\/?>/i)
-        .map((line) =>
-          line
-            .replace(/<[^>]*>/g, "")
-            .replace(/\s+/g, " ")
-            .trim(),
-        )
-        .filter(Boolean);
+/** Parse a single meeting/section row into a component-keyed section, or null if the row is empty. */
+function parseSectionRow(
+  $row: CheerioSelection,
+  virtual: boolean,
+): { compKey: string; section: ComponentSection } | null {
+  const sectionSpan = $row.find('span[id^="MTG_CLASSNAME$"]').first();
+  const sectionHtml = sectionSpan.html() || "";
+  const sectionLines = sectionHtml
+    .split(/<br\s*\/?>/i)
+    .map((line) =>
+      line
+        .replace(/<[^>]*>/g, "")
+        .replace(/\s+/g, " ")
+        .trim(),
+    )
+    .filter(Boolean);
+  const rawSection = sectionLines.join(" ");
 
-      const instrSpan = $row.find('span#MTG_INSTR\\$0, span[id^="MTG_INSTR$"]').first();
-      const instrHtml = instrSpan.html() || "";
-      const instructorParts = instrHtml
-        .split(/<br\s*\/?>/i)
-        .map((line) =>
-          line
-            .replace(/<[^>]*>/g, "")
-            .replace(/\s+/g, " ")
-            .trim(),
-        )
-        .filter(Boolean);
+  const daysSpan = $row.find('span#MTG_DAYTIME\\$0, span[id^="MTG_DAYTIME$"]').first();
+  const daysHtml = daysSpan.html() || "";
+  const dayLines = daysHtml
+    .split(/<br\s*\/?>/i)
+    .map((line) =>
+      line
+        .replace(/<[^>]*>/g, "")
+        .replace(/\s+/g, " ")
+        .trim(),
+    )
+    .filter(Boolean);
 
-      const datesSpan = $row.find('span#MTG_TOPIC\\$0, span[id^="MTG_TOPIC$"]').first();
-      const datesHtml = datesSpan.html() || "";
-      const dateLines = datesHtml
-        .split(/<br\s*\/?>/i)
-        .map((line) =>
-          line
-            .replace(/<[^>]*>/g, "")
-            .replace(/\s+/g, " ")
-            .trim(),
-        )
-        .filter(Boolean);
-      const statusAlt =
-        $row.find('div[id^="win0divDERIVED_CLSRCH_SSR_STATUS_LONG$"] img').attr("alt") || null;
+  const instrSpan = $row.find('span#MTG_INSTR\\$0, span[id^="MTG_INSTR$"]').first();
+  const instrHtml = instrSpan.html() || "";
+  const instructorParts = instrHtml
+    .split(/<br\s*\/?>/i)
+    .map((line) =>
+      line
+        .replace(/<[^>]*>/g, "")
+        .replace(/\s+/g, " ")
+        .trim(),
+    )
+    .filter(Boolean);
 
-      if (
-        !rawSection &&
-        dayLines.length === 0 &&
-        instructorParts.length === 0 &&
-        dateLines.length === 0 &&
-        !statusAlt
-      ) {
-        return;
-      }
+  const datesSpan = $row.find('span#MTG_TOPIC\\$0, span[id^="MTG_TOPIC$"]').first();
+  const datesHtml = datesSpan.html() || "";
+  const dateLines = datesHtml
+    .split(/<br\s*\/?>/i)
+    .map((line) =>
+      line
+        .replace(/<[^>]*>/g, "")
+        .replace(/\s+/g, " ")
+        .trim(),
+    )
+    .filter(Boolean);
+  const statusAlt =
+    $row.find('div[id^="win0divDERIVED_CLSRCH_SSR_STATUS_LONG$"] img').attr("alt") || null;
 
-      const { sectionCode, component, session } = parseSectionHeader(sectionLines[0] || rawSection);
-
-      const times: MeetingTime[] = [];
-      for (let i = 0; i < dayLines.length; i++) {
-        const line = dayLines[i];
-        const m = line.match(/^([A-Za-z]{2,3})\s+(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})$/);
-        if (!m) continue;
-        const dayKey = DAY_MAP[m[1]];
-        if (!dayKey) continue;
-        const start = parseTimeToMinutes(m[2]);
-        const end = parseTimeToMinutes(m[3]);
-        if (start == null || end == null) continue;
-        times.push({
-          day: dayKey,
-          startMinutes: start,
-          endMinutes: end,
-          virtual,
-          instructor: instructorParts[i] ?? null,
-          meetingDates: dateLines[i] ? parseMeetingDates(dateLines[i]) : null,
-        });
-      }
-
-      const compKey = component || "UNKNOWN";
-      const section: ComponentSection = {
-        section: rawSection || sectionLines[0] || "",
-        sectionCode,
-        component,
-        session,
-        times,
-        status: statusAlt,
-      };
-
-      if (!components[compKey]) components[compKey] = [];
-      components[compKey].push(section);
-    });
-  });
-
-  const totalSections = Object.values(components).reduce((sum, arr) => sum + arr.length, 0);
-  if (totalSections === 0) {
+  if (
+    !rawSection &&
+    dayLines.length === 0 &&
+    instructorParts.length === 0 &&
+    dateLines.length === 0 &&
+    !statusAlt
+  ) {
     return null;
   }
 
-  const schedule: CourseSchedule = {
-    subject,
-    catalogNumber: catalogNbr,
-    courseCode: `${subject} ${catalogNbr}`,
-    title,
-    timeZone: "America/Toronto",
-    components,
+  const { sectionCode, component, session } = parseSectionHeader(sectionLines[0] || rawSection);
+
+  const times: MeetingTime[] = [];
+  for (let i = 0; i < dayLines.length; i++) {
+    const line = dayLines[i];
+    const m = line.match(/^([A-Za-z]{2,3})\s+(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})$/);
+    if (!m) continue;
+    const dayKey = DAY_MAP[m[1]];
+    if (!dayKey) continue;
+    const start = parseTimeToMinutes(m[2]);
+    const end = parseTimeToMinutes(m[3]);
+    if (start == null || end == null) continue;
+    times.push({
+      day: dayKey,
+      startMinutes: start,
+      endMinutes: end,
+      virtual,
+      instructor: instructorParts[i] ?? null,
+      meetingDates: dateLines[i] ? parseMeetingDates(dateLines[i]) : null,
+    });
+  }
+
+  const compKey = component || "UNKNOWN";
+  const section: ComponentSection = {
+    section: rawSection || sectionLines[0] || "",
+    sectionCode,
+    component,
+    session,
+    times,
+    status: statusAlt,
   };
 
-  return schedule;
+  return { compKey, section };
+}
+
+/** Build a component map from a set of meeting tables belonging to one course. */
+function parseTablesIntoComponents(
+  $: CheerioRoot,
+  tables: CheerioSelection[],
+  virtual: boolean,
+): Record<string, ComponentSection[]> {
+  const components: Record<string, ComponentSection[]> = {};
+  for (const table of tables) {
+    table.find('tr[id^="trSSR_CLSRCH_MTG1"]').each((_, row) => {
+      const parsed = parseSectionRow($(row), virtual);
+      if (!parsed) return;
+      if (!components[parsed.compKey]) components[parsed.compKey] = [];
+      components[parsed.compKey].push(parsed.section);
+    });
+  }
+  return components;
+}
+
+/** Extract subject / catalog number / title from a course groupbox anchor title. */
+function parseCourseAnchorTitle(
+  title: string,
+): { subject: string; catalogNbr: string; title: string | null } | null {
+  // e.g. "Collapse section ITI 1120 - Introduction to Computing I"
+  const m = title.match(/([A-Z]{3,4})\s+(\d{4,5}[A-Z]?)\s*-\s*(.+)$/);
+  if (!m) return null;
+  return { subject: m[1], catalogNbr: m[2], title: m[3].trim() || null };
+}
+
+/**
+ * Parse a PeopleSoft class-search response that may contain MANY courses (subject-level search).
+ * Course groupbox anchors and their meeting tables are flat siblings, so tables are associated with
+ * the most recent preceding course anchor in document order.
+ */
+export function parseSearchResultsHtml(html: string, virtual: boolean = false): CourseSchedule[] {
+  const $ = cheerio.load(html);
+
+  type Group = {
+    subject: string;
+    catalogNbr: string;
+    title: string | null;
+    tables: CheerioSelection[];
+  };
+  const groups: Group[] = [];
+  let current: Group | null = null;
+  let orphanTables = 0;
+
+  // A comma selector yields matches in document order, letting us walk anchors and tables together.
+  $('a[id^="SSR_CLSRSLT_WRK_GROUPBOX2$"], table[id^="SSR_CLSRCH_MTG1$scroll$"]').each((_, el) => {
+    const $el = $(el);
+    const id = $el.attr("id") || "";
+    if (id.startsWith("SSR_CLSRSLT_WRK_GROUPBOX2$")) {
+      const rawTitle = $el.attr("title") ?? "";
+      const parsed = parseCourseAnchorTitle(rawTitle);
+      if (!parsed) {
+        console.error(`Could not parse course anchor title: "${rawTitle}". Skipping its sections.`);
+        current = null;
+        return;
+      }
+      current = { ...parsed, tables: [] };
+      groups.push(current);
+    } else {
+      // A meeting table.
+      if (!current) {
+        orphanTables += 1;
+        return;
+      }
+      current.tables.push($el);
+    }
+  });
+
+  if (orphanTables > 0) {
+    console.error(
+      `${orphanTables} meeting table(s) appeared before any course header and were ignored.`,
+    );
+  }
+
+  const schedules: CourseSchedule[] = [];
+  for (const group of groups) {
+    const components = parseTablesIntoComponents($, group.tables, virtual);
+    const totalSections = Object.values(components).reduce((sum, arr) => sum + arr.length, 0);
+    if (totalSections === 0) continue;
+    schedules.push({
+      subject: group.subject,
+      catalogNumber: group.catalogNbr,
+      courseCode: `${group.subject} ${group.catalogNbr}`,
+      title: group.title,
+      timeZone: "America/Toronto",
+      components,
+    });
+  }
+
+  return schedules;
 }
 
 function timeKey(t: MeetingTime): string {
@@ -466,53 +552,84 @@ function mergeVirtualIntoBase(base: CourseSchedule, virtualOnly: CourseSchedule)
   return base;
 }
 
-async function fetchScheduleForCourseWithVirtual(
+/** Merge `src` course sections into `target` (same courseCode), deduping sections and times. */
+function mergeCourseInto(target: CourseSchedule, src: CourseSchedule): void {
+  if (!target.title && src.title) target.title = src.title;
+  for (const [compKey, srcSections] of Object.entries(src.components)) {
+    if (!target.components[compKey]) target.components[compKey] = [];
+    const targetSections = target.components[compKey];
+    const byKey = new Map<string, ComponentSection>();
+    targetSections.forEach((s) => byKey.set(sectionKey(compKey, s), s));
+    for (const srcSection of srcSections) {
+      const key = sectionKey(compKey, srcSection);
+      const existing = byKey.get(key);
+      if (!existing) {
+        targetSections.push(srcSection);
+        byKey.set(key, srcSection);
+        continue;
+      }
+      const timeKeys = new Set(existing.times.map(timeKey));
+      for (const t of srcSection.times) {
+        if (!timeKeys.has(timeKey(t))) {
+          existing.times.push(t);
+          timeKeys.add(timeKey(t));
+        }
+      }
+    }
+  }
+}
+
+/** Union a list of course schedules by course code, deduping sections/times. Preserves order. */
+function unionSchedulesByCourse(lists: CourseSchedule[][]): CourseSchedule[] {
+  const byCode = new Map<string, CourseSchedule>();
+  for (const list of lists) {
+    for (const schedule of list) {
+      const existing = byCode.get(schedule.courseCode);
+      if (!existing) {
+        byCode.set(schedule.courseCode, schedule);
+      } else {
+        mergeCourseInto(existing, schedule);
+      }
+    }
+  }
+  return Array.from(byCode.values());
+}
+
+/**
+ * Execute a single class-search POST and return its banner classification + raw HTML.
+ * Handles session-state refresh and login/redirect retries. Returns null only if a usable response
+ * could not be obtained (login wall) after retries.
+ */
+async function performSearch(
   clientInfo: ClientInfo,
-  course: ParsedCourseCode,
   termId: string,
-  virtual: boolean,
-): Promise<CourseSchedule | null> {
-  const { client, dataLang } = clientInfo;
-  const safeSubject = course.subject.replace(/[^A-Za-z0-9]+/g, "_");
-  const safeCatalog = course.catalogNbr.replace(/[^A-Za-z0-9]+/g, "_");
-  const cacheFilename = `${safeSubject}-${safeCatalog}-${termId}-${virtual ? "virtual" : "nonvirtual"}.html`;
+  sp: { subject: string; catalogNbr?: string; yearOfStudy?: YearOfStudy; virtual: boolean },
+  cacheLabel: string,
+): Promise<{ banner: BannerKind; html: string }> {
+  const { dataLang } = clientInfo;
+  const safeSubject = sp.subject.replace(/[^A-Za-z0-9]+/g, "_");
+  const cacheFilename = `${safeSubject}-${cacheLabel}-${termId}-${sp.virtual ? "virtual" : "nonvirtual"}.html`;
   const cachePath = path.join(HTML_CACHE_DIR, cacheFilename);
+  const label =
+    `${sp.subject}${sp.catalogNbr ? ` ${sp.catalogNbr}` : ""}` +
+    `${sp.yearOfStudy ? ` [y${sp.yearOfStudy}]` : ""}${sp.virtual ? " (virtual)" : ""}`;
 
   if (USE_CACHE_ONLY) {
     try {
       const cachedHtml = await fs.readFile(cachePath, "utf-8");
-
-      // Mirror the "no results" detection we do for live responses.
-      const bannerText = cheerio
-        .load(cachedHtml)("span.PSERRORTEXT, div.PSERRORTEXT, span.SSSMSGALERTTEXT")
-        .text()
-        .replace(/\s+/g, " ")
-        .trim()
-        .toLowerCase();
-      if (bannerText.includes("no classes") || bannerText.includes("no results")) {
-        return null;
-      }
-
-      const scheduleFromCache = parseScheduleHtml(
-        cachedHtml,
-        { subject: course.subject, catalogNbr: course.catalogNbr },
-        virtual,
-      );
-      if (scheduleFromCache) return scheduleFromCache;
-      return null;
+      return { banner: classifyBanner(cachedHtml), html: cachedHtml };
     } catch (err: unknown) {
       console.error(
-        `Cache miss for ${course.subject} ${course.catalogNbr} with use-cache enabled (expected ${cachePath}):`,
+        `Cache miss for ${label} with use-cache enabled (expected ${cachePath}):`,
         getErrorMessage(err),
       );
-      return null;
+      return { banner: "empty", html: "" };
     }
   }
 
   for (let attempt = 1; attempt <= 10; attempt++) {
     // Refresh page-level state (ICSID / ICStateNum) from a fresh criteria page load.
-    // This keeps us in sync with PeopleSoft even if previous interactions changed state.
-    const initRes = await client.get(BASE_URL);
+    const initRes = await clientInfo.client.get(BASE_URL);
     try {
       const $init = cheerio.load(initRes.body);
       const pageIcsid = $init("#ICSID").attr("value");
@@ -527,43 +644,34 @@ async function fetchScheduleForCourseWithVirtual(
       icsid: clientInfo.icsid,
       dataLang,
       icStateNum: clientInfo.icStateNum,
-      subject: course.subject,
-      catalogNbr: course.catalogNbr,
+      subject: sp.subject,
+      catalogNbr: sp.catalogNbr,
       termId,
-      virtual,
+      virtual: sp.virtual,
+      yearOfStudy: sp.yearOfStudy,
     });
 
-    const res = await client.post(BASE_URL, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
+    const res = await clientInfo.client.post(BASE_URL, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body,
     });
 
-    // Update session state (ICSID / ICStateNum) from the response for subsequent requests.
+    // Update session state from the response for subsequent requests.
     try {
       const $ = cheerio.load(res.body);
       const newIcsid = $("#ICSID").attr("value");
-      if (newIcsid) {
-        clientInfo.icsid = newIcsid;
-      }
+      if (newIcsid) clientInfo.icsid = newIcsid;
       const newStateNum = $("#ICStateNum").attr("value");
-      if (newStateNum) {
-        clientInfo.icStateNum = newStateNum;
-      }
+      if (newStateNum) clientInfo.icStateNum = newStateNum;
     } catch {
       // Non-fatal; fall back to previous state values.
     }
 
-    // Persist raw HTML per-course for debugging / verification.
     try {
       await fs.mkdir(HTML_CACHE_DIR, { recursive: true });
       if (WRITE_CACHE) await fs.writeFile(cachePath, res.body, "utf-8");
     } catch (err: unknown) {
-      console.error(
-        `Warning: failed to write HTML cache for ${course.subject} ${course.catalogNbr}:`,
-        getErrorMessage(err),
-      );
+      console.error(`Warning: failed to write HTML cache for ${label}:`, getErrorMessage(err));
     }
 
     // Detect login / redirect pages (not real search or results pages).
@@ -574,37 +682,30 @@ async function fetchScheduleForCourseWithVirtual(
       (/<meta[^>]+http-equiv=['"]refresh['"]/i.test(res.body) && res.body.includes("CAMPUS_URL="));
     if (looksLikeLogin) {
       console.error(
-        `Received login/redirect page instead of search results for ${course.subject} ${course.catalogNbr}. ` +
+        `Received login/redirect page instead of search results for ${label}. ` +
           `See cached HTML at ${cachePath}. Will retry with new session (attempt ${attempt}/10).`,
       );
       if (attempt < 10) {
-        // Replace this session with a fresh one (new cookie jar + fresh GET).
         const newSession = await createClient();
         Object.assign(clientInfo, newSession);
         await new Promise((resolve) => setTimeout(resolve, 500));
         continue;
       }
-      // On the final attempt, give up on this course but let the overall run continue.
-      return null;
+      return { banner: "empty", html: res.body };
     }
 
-    // Check for explicit "no results" banner; if present, do not retry.
-    const bannerText = cheerio
-      .load(res.body)("span.PSERRORTEXT, div.PSERRORTEXT, span.SSSMSGALERTTEXT")
-      .text()
-      .replace(/\s+/g, " ")
-      .trim()
-      .toLowerCase();
-    if (bannerText.includes("no classes") || bannerText.includes("no results")) {
-      return null;
+    const banner = classifyBanner(res.body);
+    if (banner !== "none") {
+      // "overflow" and "empty" are terminal states; no retry needed.
+      return { banner, html: res.body };
     }
 
-    const schedule = parseScheduleHtml(
-      res.body,
-      { subject: course.subject, catalogNbr: course.catalogNbr },
-      virtual,
-    );
-    if (schedule) return schedule;
+    // No banner: a real results page should contain at least one course header. If not, the page
+    // may not have rendered yet (transient) — retry as the old per-course path did.
+    const hasResults = res.body.includes("SSR_CLSRSLT_WRK_GROUPBOX2$");
+    if (hasResults) {
+      return { banner: "none", html: res.body };
+    }
 
     if (attempt < 10) {
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -612,26 +713,119 @@ async function fetchScheduleForCourseWithVirtual(
   }
 
   console.error(
-    `Failed to parse schedule for ${course.subject} ${course.catalogNbr} after 10 attempts. ` +
-      `See cached HTML at ${cachePath}`,
+    `Failed to obtain class-search results for ${label} after 10 attempts. See ${cachePath}`,
   );
-  // Exit the whole process so the failure is visible and repeatable.
   process.exit(1);
 }
 
-async function fetchScheduleForCourse(
+/** One subject+facet search returning parsed courses, or "overflow" when the 300-section cap hits. */
+async function fetchSubjectSlice(
   clientInfo: ClientInfo,
-  course: ParsedCourseCode,
   termId: string,
+  subject: string,
+  virtual: boolean,
+  yearOfStudy: YearOfStudy | undefined,
+  cacheLabel: string,
+): Promise<CourseSchedule[] | "overflow"> {
+  const { banner, html } = await performSearch(
+    clientInfo,
+    termId,
+    { subject, virtual, yearOfStudy },
+    cacheLabel,
+  );
+  if (banner === "overflow") return "overflow";
+  if (banner === "empty") return [];
+  return parseSearchResultsHtml(html, virtual);
+}
+
+/** Exact single-course search (per-course fallback for slices that still overflow). */
+async function fetchCourseExact(
+  clientInfo: ClientInfo,
+  termId: string,
+  course: ParsedCourseCode,
+  virtual: boolean,
 ): Promise<CourseSchedule | null> {
-  const base = await fetchScheduleForCourseWithVirtual(clientInfo, course, termId, false);
-  const virtualOnly = await fetchScheduleForCourseWithVirtual(clientInfo, course, termId, true);
+  const safeCatalog = course.catalogNbr.replace(/[^A-Za-z0-9]+/g, "_");
+  const { banner, html } = await performSearch(
+    clientInfo,
+    termId,
+    { subject: course.subject, catalogNbr: course.catalogNbr, virtual },
+    `c${safeCatalog}`,
+  );
+  if (banner !== "none") return null;
+  const schedules = parseSearchResultsHtml(html, virtual);
+  return schedules.find((s) => s.courseCode === course.code) ?? schedules[0] ?? null;
+}
 
-  if (!base && !virtualOnly) return null;
-  if (base && !virtualOnly) return base;
-  if (!base && virtualOnly) return virtualOnly;
+/**
+ * Fetch every scheduled course for a subject in one virtual/non-virtual pass:
+ * subject-only search, falling back to per-year-of-study slices on overflow, and finally to
+ * per-catalogue-course searches if an individual slice still overflows.
+ */
+async function fetchSubjectPass(
+  clientInfo: ClientInfo,
+  termId: string,
+  subject: string,
+  virtual: boolean,
+  subjectCourses: ParsedCourseCode[],
+): Promise<CourseSchedule[]> {
+  const subjectOnly = await fetchSubjectSlice(
+    clientInfo,
+    termId,
+    subject,
+    virtual,
+    undefined,
+    "all",
+  );
+  if (subjectOnly !== "overflow") return subjectOnly;
 
-  return mergeVirtualIntoBase(base!, virtualOnly!);
+  const sliceResults: CourseSchedule[][] = [];
+  let perCourseFallbackUsed = false;
+  for (const year of YEAR_SLICES) {
+    const slice = await fetchSubjectSlice(clientInfo, termId, subject, virtual, year, `y${year}`);
+    if (slice !== "overflow") {
+      sliceResults.push(slice);
+      continue;
+    }
+    // A single year-of-study slice still exceeds the cap (not observed empirically): fall back to
+    // exact per-course searches for this subject's catalogue courses just once.
+    if (!perCourseFallbackUsed) {
+      console.error(
+        `Subject ${subject} year slice "${year}" still overflowed; falling back to per-course search.`,
+      );
+      perCourseFallbackUsed = true;
+      const perCourse: CourseSchedule[] = [];
+      for (const course of subjectCourses) {
+        const schedule = await fetchCourseExact(clientInfo, termId, course, virtual);
+        if (schedule) perCourse.push(schedule);
+      }
+      sliceResults.push(perCourse);
+    }
+  }
+  return unionSchedulesByCourse(sliceResults);
+}
+
+/** Fetch a subject's schedules across both non-virtual and virtual passes, merged per course. */
+async function fetchSubjectSchedules(
+  clientInfo: ClientInfo,
+  termId: string,
+  subject: string,
+  subjectCourses: ParsedCourseCode[],
+): Promise<CourseSchedule[]> {
+  const base = await fetchSubjectPass(clientInfo, termId, subject, false, subjectCourses);
+  const virtualOnly = await fetchSubjectPass(clientInfo, termId, subject, true, subjectCourses);
+
+  const byCode = new Map<string, CourseSchedule>();
+  for (const schedule of base) byCode.set(schedule.courseCode, schedule);
+  for (const vSchedule of virtualOnly) {
+    const existing = byCode.get(vSchedule.courseCode);
+    if (existing) {
+      mergeVirtualIntoBase(existing, vSchedule);
+    } else {
+      byCode.set(vSchedule.courseCode, vSchedule);
+    }
+  }
+  return Array.from(byCode.values());
 }
 
 async function tryLoadGradeLookups(): Promise<GradeLookups | null> {
@@ -645,6 +839,37 @@ async function tryLoadGradeLookups(): Promise<GradeLookups | null> {
     );
     return null;
   }
+}
+
+function createClientPool(clients: ClientInfo[]) {
+  const available = [...clients];
+  const waiters: ((c: ClientInfo) => void)[] = [];
+  return {
+    acquire(): Promise<ClientInfo> {
+      const c = available.pop();
+      if (c) return Promise.resolve(c);
+      return new Promise<ClientInfo>((resolve) => waiters.push(resolve));
+    },
+    release(c: ClientInfo) {
+      const waiter = waiters.shift();
+      if (waiter) waiter(c);
+      else available.push(c);
+    },
+  };
+}
+
+/** Exact per-course base + virtual fetch (used for ONLY_CATALOG debugging). */
+async function fetchCourseSchedule(
+  clientInfo: ClientInfo,
+  course: ParsedCourseCode,
+  termId: string,
+): Promise<CourseSchedule | null> {
+  const base = await fetchCourseExact(clientInfo, termId, course, false);
+  const virtualOnly = await fetchCourseExact(clientInfo, termId, course, true);
+  if (!base && !virtualOnly) return null;
+  if (base && !virtualOnly) return base;
+  if (!base && virtualOnly) return virtualOnly;
+  return mergeVirtualIntoBase(base!, virtualOnly!);
 }
 
 export async function main(): Promise<void> {
@@ -667,7 +892,6 @@ export async function main(): Promise<void> {
   const clientInfos: ClientInfo[] = await Promise.all(
     Array.from({ length: clientCount }, createClient),
   );
-
   console.log(`Initialized ${clientInfos.length} PeopleSoft session(s).`);
 
   const gradeLookups = await tryLoadGradeLookups();
@@ -693,31 +917,58 @@ export async function main(): Promise<void> {
       );
     }
 
-    console.log(`Starting schedule scrape for ${term.name} (${term.termId})...`);
-    const limit = pLimit(MAX_CONCURRENCY);
+    // Group catalogue courses by subject for subject-level searching + per-course fallback.
+    const coursesBySubject = new Map<string, ParsedCourseCode[]>();
+    for (const course of courses) {
+      const list = coursesBySubject.get(course.subject) ?? [];
+      list.push(course);
+      coursesBySubject.set(course.subject, list);
+    }
+    const subjects = Array.from(coursesBySubject.keys()).sort();
+
+    const pool = createClientPool(USE_CACHE_ONLY ? [clientInfos[0]] : clientInfos);
     const results: CourseSchedule[] = [];
     let processed = 0;
 
-    const tasks = courses.map((course, index) =>
-      limit(async () => {
-        const clientInfo = clientInfos[index % clientInfos.length];
+    console.log(
+      `Starting schedule scrape for ${term.name} (${term.termId}) across ${subjects.length} subject(s)...`,
+    );
+
+    const tasks = subjects.map((subject) =>
+      (async () => {
+        const subjectCourses = coursesBySubject.get(subject) ?? [];
+        const clientInfo = await pool.acquire();
         try {
-          const schedule = await fetchScheduleForCourse(clientInfo, course, term.termId);
-          if (schedule) {
-            results.push(schedule);
+          let subjectResults: CourseSchedule[];
+          if (onlyCatalog) {
+            // Debugging a specific course: use the exact per-course path.
+            subjectResults = [];
+            for (const course of subjectCourses) {
+              const schedule = await fetchCourseSchedule(clientInfo, course, term.termId);
+              if (schedule) subjectResults.push(schedule);
+            }
+          } else {
+            subjectResults = await fetchSubjectSchedules(
+              clientInfo,
+              term.termId,
+              subject,
+              subjectCourses,
+            );
           }
+          for (const schedule of subjectResults) results.push(schedule);
         } catch (err: unknown) {
           console.error(
-            `Error fetching schedule for ${course.subject} ${course.catalogNbr} (${term.termId}):`,
+            `Error fetching schedules for subject ${subject} (${term.termId}):`,
             getErrorMessage(err),
           );
         } finally {
+          pool.release(clientInfo);
           processed += 1;
-          if (processed % 50 === 0 || processed === courses.length) {
-            console.log(`[${term.termId}] Processed ${processed}/${courses.length} courses...`);
-          }
+          console.log(
+            `[${term.termId}] Processed ${processed}/${subjects.length} subjects (${results.length} courses so far)...`,
+          );
         }
-      }),
+      })(),
     );
 
     await Promise.all(tasks);
