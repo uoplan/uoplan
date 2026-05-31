@@ -174,7 +174,16 @@ export function ScheduleDashboardCard({
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             style={{ overflow: "hidden" }}
           >
-            <Box style={{ borderTop: "1px solid var(--app-border)" }}>{expandableContent}</Box>
+            <Box
+              style={{
+                borderTop: "1px solid var(--app-border)",
+                borderBottomLeftRadius: "var(--app-radius)",
+                borderBottomRightRadius: "var(--app-radius)",
+                overflow: "hidden",
+              }}
+            >
+              {expandableContent}
+            </Box>
           </motion.div>
         ) : null}
       </AnimatePresence>
