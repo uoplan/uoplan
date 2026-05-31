@@ -1,6 +1,6 @@
 {
   "name": "uoplan-monorepo",
-  "version": "1.0.0-beta.24",
+  "version": "1.0.0-beta.25",
   "private": true,
   "scripts": {
     "dev": "pnpm generate && pnpm --filter scraper build:proto && pnpm --filter web dev",
