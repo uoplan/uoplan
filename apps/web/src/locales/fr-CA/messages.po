@@ -57,6 +57,18 @@ msgstr "Toutes les disciplines"
 msgid "trends.filter.noMatch"
 msgstr "Aucune discipline correspondante"
 
+msgid "trends.filter.program"
+msgstr "Programme"
+
+msgid "trends.filter.allPrograms"
+msgstr "Tous les programmes"
+
+msgid "trends.filter.programHint"
+msgstr "Estimé à partir des cours obligatoires du programme"
+
+msgid "trends.filter.noProgramMatch"
+msgstr "Aucun programme correspondant"
+
 msgid "trends.filter.level"
 msgstr "Niveau"
 
