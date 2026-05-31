@@ -28,6 +28,7 @@ import { useAppStore } from "../../store/appStore";
 import { BackButton } from "../shared/BackButton";
 import { ChromeControls } from "../shared/ChromeControls";
 import { AppCard } from "../shared/AppCard";
+import { AnimatedNumber } from "../shared/AnimatedNumber";
 import type { TrendsSearch, TrendsMetric, TrendsSort } from "../../routes/trends";
 
 type MetricId = TrendsMetric;
@@ -304,15 +305,13 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                 <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="md">
                   <StatCard
                     label={tr("trends.stat.latest")}
-                    value={formatMetric(activeMetric, latestValue)}
+                    value={latestValue}
+                    format={(n) => formatMetric(activeMetric, n)}
                   />
                   <StatCard
                     label={tr("trends.stat.change")}
-                    value={
-                      delta == null
-                        ? "—"
-                        : `${delta > 0 ? "+" : ""}${formatMetric(activeMetric, delta)}`
-                    }
+                    value={delta}
+                    format={(n) => `${n > 0 ? "+" : ""}${formatMetric(activeMetric, n)}`}
                     valueColor={
                       delta == null || delta === 0
                         ? undefined
@@ -323,11 +322,13 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                   />
                   <StatCard
                     label={tr("trends.stat.terms")}
-                    value={formatLocaleNumber(points.length)}
+                    value={points.length}
+                    format={(n) => formatLocaleNumber(Math.round(n))}
                   />
                   <StatCard
                     label={tr("trends.stat.volume")}
-                    value={formatLocaleNumber(totalVolume)}
+                    value={totalVolume}
+                    format={(n) => formatLocaleNumber(Math.round(n))}
                   />
                 </SimpleGrid>
 
@@ -459,10 +460,14 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
 function StatCard({
   label,
   value,
+  format,
+  placeholder = "—",
   valueColor,
 }: {
   label: string;
-  value: string;
+  value: number | null;
+  format: (value: number) => string;
+  placeholder?: string;
   valueColor?: string;
 }) {
   return (
@@ -471,8 +476,12 @@ function StatCard({
         <Text size="xs" c="dimmed" fw={600} style={{ letterSpacing: "0.02em" }}>
           {label}
         </Text>
-        <Text fw={700} size="lg" style={{ color: valueColor ?? "var(--app-text)" }}>
-          {value}
+        <Text
+          fw={700}
+          size="lg"
+          style={{ color: valueColor ?? "var(--app-text)", fontVariantNumeric: "tabular-nums" }}
+        >
+          <AnimatedNumber value={value} format={format} placeholder={placeholder} />
         </Text>
       </Stack>
     </AppCard>
