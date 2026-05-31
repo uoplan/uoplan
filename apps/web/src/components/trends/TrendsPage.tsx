@@ -17,8 +17,11 @@ import { useMemo } from "react";
 import { useShallow } from "zustand/react/shallow";
 import {
   availableDisciplines,
+  availablePrograms,
+  buildProgramCourseFilter,
   computeDisciplineLeaderboard,
   computeGradeTrends,
+  programSlug,
   type TrendPoint,
   type TermSeason,
 } from "@uoplan/core";
@@ -75,12 +78,14 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
   useLingui();
   const { data: grades, error: gradesError } = useCourseGradesPb();
   const disciplines = useAppStore(useShallow((s) => s.disciplines));
+  const catalogue = useAppStore((s) => s.catalogue);
   const isFr = i18n.locale.startsWith("fr");
 
   const extras = search;
   const discipline = search.discipline ?? null;
   const level = search.level ?? null;
   const season = (search.season as TermSeason | undefined) ?? null;
+  const programSlugValue = search.program ?? null;
 
   const metricOptions = useMemo(
     () => [
@@ -127,11 +132,28 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
     });
   }, [grades, disciplineNameByCode]);
 
+  // Program options: only degrees whose core courses have grade data.
+  const programOptions = useMemo(() => {
+    if (!grades || !catalogue) return [];
+    return availablePrograms(grades, catalogue.programs).map((p) => ({
+      value: p.slug,
+      label: p.title,
+    }));
+  }, [grades, catalogue]);
+
+  // Estimated core-course filter for the selected program (intersects with the
+  // discipline/level/season filters in computeGradeTrends).
+  const programFilter = useMemo(() => {
+    if (!programSlugValue || !catalogue) return null;
+    const program = catalogue.programs.find((p) => programSlug(p) === programSlugValue);
+    return program ? buildProgramCourseFilter(program) : null;
+  }, [programSlugValue, catalogue]);
+
   // Trend series depends on grades + active filters.
   const points = useMemo(() => {
     if (!grades) return [];
-    return computeGradeTrends(grades, { discipline, level, season }).points;
-  }, [grades, discipline, level, season]);
+    return computeGradeTrends(grades, { discipline, level, season, programFilter }).points;
+  }, [grades, discipline, level, season, programFilter]);
 
   // Leaderboard depends only on grades (global scope, by design).
   const leaderboard = useMemo(() => {
@@ -232,6 +254,20 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
             <AppCard p="md">
               <Stack gap="md">
                 <Group gap="md" align="flex-end" wrap="wrap">
+                  {programOptions.length > 0 ? (
+                    <Select
+                      label={tr("trends.filter.program")}
+                      placeholder={tr("trends.filter.allPrograms")}
+                      description={tr("trends.filter.programHint")}
+                      data={programOptions}
+                      value={programSlugValue}
+                      onChange={(value) => update({ program: value ?? undefined })}
+                      searchable
+                      clearable
+                      nothingFoundMessage={tr("trends.filter.noProgramMatch")}
+                      style={{ minWidth: 280 }}
+                    />
+                  ) : null}
                   <Select
                     label={tr("trends.filter.discipline")}
                     placeholder={tr("trends.filter.allDisciplines")}

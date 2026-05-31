@@ -1,6 +1,8 @@
 import type { CourseGradesData, GradeDistribution } from "./dataTypes";
 import { GRADE_POINTS, aPlusPercent, distributionGpa } from "./gradeDistribution";
 import { getCourseLevel, parseCourseCode } from "./utils/courseUtils";
+import type { ProgramCourseFilter } from "./programTrends";
+import { programFilterMatches } from "./programTrends";
 
 /**
  * Aggregate uOttawa grade analytics over time, built from the runtime grades
@@ -103,6 +105,12 @@ export interface TrendFilters {
   level?: number | null;
   /** Academic season. */
   season?: TermSeason | null;
+  /**
+   * Restrict to a program's estimated core course set (concrete required
+   * courses + discipline-scoped elective pools). Intersects with the other
+   * filters. See {@link buildProgramCourseFilter}.
+   */
+  programFilter?: ProgramCourseFilter | null;
 }
 
 export interface TrendPoint {
@@ -155,12 +163,14 @@ export function computeGradeTrends(
   const discipline = filters.discipline ? filters.discipline.toUpperCase() : null;
   const level = filters.level ?? null;
   const season = filters.season ?? null;
+  const programFilter = filters.programFilter ?? null;
 
   const byTerm = new Map<number, GradeDistribution>();
 
   for (const course of grades.courses) {
     if (discipline && disciplineOf(course.code) !== discipline) continue;
     if (level != null && levelOf(course.code) !== level) continue;
+    if (programFilter && !programFilterMatches(programFilter, course.code)) continue;
 
     for (const prof of course.professors) {
       const termId = Number(prof.termId);

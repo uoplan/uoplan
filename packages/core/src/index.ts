@@ -11,6 +11,7 @@ export * from "./professorCoTeachingGraph";
 export * from "./professorDisciplineColors";
 export * from "./gradeDistribution";
 export * from "./gradeTrends";
+export * from "./programTrends";
 export * from "./gradeLookup";
 export * from "./seededRandom";
 export * from "./dataCache";

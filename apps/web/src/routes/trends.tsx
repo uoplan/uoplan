@@ -13,6 +13,7 @@ export type TrendsSearch = {
   season?: TrendsSeason;
   metric?: TrendsMetric;
   sort?: TrendsSort;
+  program?: string;
 };
 
 const VALID_LEVELS = new Set([1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000]);
@@ -47,6 +48,7 @@ function toUrlSearch(search: TrendsSearch): Record<string, unknown> {
   if (search.season) out.season = SEASON_TO_URL[search.season];
   if (search.metric) out.metric = search.metric;
   if (search.sort) out.sort = search.sort;
+  if (search.program) out.program = search.program;
   return out;
 }
 
@@ -69,6 +71,9 @@ export const Route = createFileRoute("/trends")({
     }
     if (typeof search.sort === "string" && VALID_SORTS.has(search.sort as TrendsSort)) {
       out.sort = search.sort as TrendsSort;
+    }
+    if (typeof search.program === "string" && search.program.trim().length > 0) {
+      out.program = search.program.trim();
     }
     return out;
   },
