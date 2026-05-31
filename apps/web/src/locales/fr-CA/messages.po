@@ -1111,6 +1111,9 @@ msgstr "Aucune option à configurer pour ce programme."
 msgid "optionsStep.note"
 msgstr "Parcourez chaque choix ci-dessous. Touchez une option pour continuer; utilisez la flèche retour pour changer de parcours et choisir une autre branche."
 
+msgid "requirements.optionsPending"
+msgstr "Choisissez d’abord vos options de programme pour voir les exigences restantes."
+
 msgid "constrainStep.courseFilters"
 msgstr "Filtres de cours"
 

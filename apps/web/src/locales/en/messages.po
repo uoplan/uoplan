@@ -1102,6 +1102,9 @@ msgstr "No options to configure for this program."
 msgid "optionsStep.note"
 msgstr "Step through each choice below. Tap an option to continue; use the back arrow to change a path and pick a different branch."
 
+msgid "requirements.optionsPending"
+msgstr "Choose your program options first to see the remaining requirements."
+
 msgid "constrainStep.courseFilters"
 msgstr "Course filters"
 

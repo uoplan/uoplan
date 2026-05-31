@@ -11,8 +11,12 @@ import { RequirementNode, getStableNodeKey, getNodeDisplayTitle } from "./Requir
 import {
   applyOptionSelections,
   adjustNodeForAssignments,
+  nodeHasOptionGroups,
   partitionIncompleteConstrainRoots,
+  pruneUnresolvedOptionGroups,
 } from "../../lib/requirements/requirementUtils";
+
+import { tr } from "../../i18n";
 
 import { AdvancedCourseFiltersCard } from "./CourseFiltersCard";
 import { CompletedRequirementsAccordion } from "./CompletedRequirementsAccordion";
@@ -90,8 +94,12 @@ export function ConstrainStep({
     [flattenedTree, selectedPerRequirement, cache],
   );
 
+  // Display-only: drop option groups not yet resolved in the Program options step.
+  const displayTree = useMemo(() => pruneUnresolvedOptionGroups(adjustedTree), [adjustedTree]);
+  const hasPendingOptions = useMemo(() => flattenedTree.some(nodeHasOptionGroups), [flattenedTree]);
+
   const hasTree = adjustedTree.length > 0;
-  const incompleteNodes = adjustedTree.filter((node) => !node.complete);
+  const incompleteNodes = displayTree.filter((node) => !node.complete);
 
   const constrainCtx = useMemo(
     () => ({
@@ -287,8 +295,9 @@ export function ConstrainStep({
         ) : (
           <Alert color="blue" variant="light" radius="var(--app-radius)">
             <Text size="sm">
-              All requirements are currently satisfied by your completed courses. Nothing to
-              constrain.
+              {hasPendingOptions
+                ? tr("requirements.optionsPending")
+                : "All requirements are currently satisfied by your completed courses. Nothing to constrain."}
             </Text>
           </Alert>
         )}
