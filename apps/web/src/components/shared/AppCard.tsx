@@ -2,9 +2,9 @@ import { Paper } from "@mantine/core";
 import type { PaperProps } from "@mantine/core";
 import { forwardRef, type ReactNode } from "react";
 
-export type AppCardVariant = "surface" | "sunken" | "overlay";
+type AppCardVariant = "surface" | "sunken" | "overlay";
 
-export interface AppCardProps extends PaperProps {
+interface AppCardProps extends PaperProps {
   /** Which themed surface to render. Defaults to "surface". */
   variant?: AppCardVariant;
   /** Add the soft-lift hover affordance (for clickable cards). */

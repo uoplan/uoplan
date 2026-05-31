@@ -9,7 +9,6 @@ import {
   RequirementNode,
   getNodeDisplayTitle,
   getStableNodeKey,
-  REQUIREMENT_BASE_PADDING_PX,
   REQUIREMENT_INDENT_PX,
 } from "./RequirementNode";
 import { tr } from "../../i18n";
@@ -49,7 +48,7 @@ export function OptionsDrilldown({
 }: OptionsDrilldownProps) {
   const { node } = simplifySingleChildChain(rawNode);
 
-  const indent = depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX;
+  const indentMargin = depth > 0 ? depth * REQUIREMENT_INDENT_PX : undefined;
 
   const requirementNodeShared = {
     cache: null,
@@ -101,9 +100,9 @@ export function OptionsDrilldown({
           withBorder
           radius="var(--app-radius)"
           mt={depth > 0 ? "xs" : 0}
+          ml={indentMargin}
           data-missing-selection={showError ? "true" : undefined}
           style={{
-            paddingLeft: indent,
             backgroundColor: "var(--app-surface)",
           }}
         >
@@ -117,7 +116,7 @@ export function OptionsDrilldown({
               {tr("optionsDrilldown.selectOneError")}
             </Text>
           )}
-          <Stack gap="sm">
+          <Stack gap="xs">
             {options.map((opt, idx) => {
               const childKey = getStableNodeKey(opt, `${nodeKeyPrefix}:pick:${idx}`);
               const isSelected = selectedIdx === idx;
@@ -159,6 +158,7 @@ export function OptionsDrilldown({
         withBorder
         radius="var(--app-radius)"
         mt={depth > 0 ? "xs" : 0}
+        ml={indentMargin}
         p={0}
         style={{ overflow: "hidden" }}
       >
@@ -170,7 +170,6 @@ export function OptionsDrilldown({
             display: "block",
             width: "100%",
             padding: "var(--mantine-spacing-sm)",
-            paddingLeft: indent,
             border: "none",
             borderBottom: "var(--app-border-width) solid var(--app-border)",
             backgroundColor: "var(--app-surface)",
@@ -208,7 +207,6 @@ export function OptionsDrilldown({
         <Box
           p="sm"
           style={{
-            paddingLeft: indent,
             backgroundColor: "var(--app-bg)",
           }}
         >
@@ -229,7 +227,7 @@ export function OptionsDrilldown({
 
   if (node.type === "and" && node.options?.length) {
     return (
-      <Stack gap="lg">
+      <Stack gap="xs">
         {node.options.map((child, idx) => {
           const childPrefix = getStableNodeKey(child, `${nodeKeyPrefix}:and:${idx}`);
           return (
