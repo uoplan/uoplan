@@ -262,6 +262,7 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                       data={programOptions}
                       value={programSlugValue}
                       onChange={(value) => update({ program: value ?? undefined })}
+                      disabled={discipline != null}
                       searchable
                       clearable
                       nothingFoundMessage={tr("trends.filter.noProgramMatch")}
@@ -274,6 +275,7 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                     data={disciplineOptions}
                     value={discipline}
                     onChange={(value) => update({ discipline: value ?? undefined })}
+                    disabled={programSlugValue != null}
                     searchable
                     clearable
                     nothingFoundMessage={tr("trends.filter.noMatch")}

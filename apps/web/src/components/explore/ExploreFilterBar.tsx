@@ -263,9 +263,9 @@ function FilterDropdown({
     <motion.div
       ref={dropdownRef}
       key={filterKey}
-      initial={{ opacity: 0, y: -4, scale: 0.97 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -4, scale: 0.97 }}
+      initial={{ opacity: 0, y: -4 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -4 }}
       transition={{ duration: 0.15, ease: POPOVER_EASE }}
       style={{
         position: "fixed",

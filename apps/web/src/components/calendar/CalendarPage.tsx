@@ -280,10 +280,10 @@ export function CalendarPage() {
           {!isMobile && (
             <Button.Group>
               <Button
-                variant="light"
-                color="accentBlue"
+                variant="default"
                 size="sm"
                 radius="md"
+                style={{ flex: 1 }}
                 leftSection={<IconChevronLeft size={14} />}
                 disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
                 loading={scheduleGenerating}
@@ -292,10 +292,10 @@ export function CalendarPage() {
                 {tr("calendarPage.previous")}
               </Button>
               <Button
-                variant="filled"
-                color="accentBlue"
+                variant="default"
                 size="sm"
                 radius="md"
+                style={{ flex: 1 }}
                 rightSection={<IconChevronRight size={14} />}
                 disabled={scheduleGenerating || !canUseSeedNavigation}
                 loading={scheduleGenerating}
