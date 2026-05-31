@@ -13,8 +13,8 @@ function baseProps() {
     onMinStartMinutesChange: vi.fn(),
     maxEndMinutes: 22 * 60,
     onMaxEndMinutesChange: vi.fn(),
-    allowedDays: ["Mo", "Tu", "We", "Th", "Fr"] as const,
-    onAllowedDaysChange: vi.fn(),
+    avoidedDays: ["Sa", "Su"] as const,
+    onAvoidedDaysChange: vi.fn(),
     minProfessorRating: null,
     onMinProfessorRatingChange: vi.fn(),
     totalFirstYearCredits: 0,
@@ -34,7 +34,7 @@ function baseProps() {
 
 test("fires onGenerate when the generate button is clicked", async () => {
   const props = baseProps();
-  await renderWithProviders(<ScheduleCountStep {...props} allowedDays={[...props.allowedDays]} />);
+  await renderWithProviders(<ScheduleCountStep {...props} avoidedDays={[...props.avoidedDays]} />);
 
   const button = page.getByRole("button", { name: "Generate Schedules" });
   await expect.element(button).toBeInTheDocument();
@@ -45,7 +45,7 @@ test("fires onGenerate when the generate button is clicked", async () => {
 
 test("reflects preferEasier state and toggles it via the checkbox", async () => {
   const props = baseProps();
-  await renderWithProviders(<ScheduleCountStep {...props} allowedDays={[...props.allowedDays]} />);
+  await renderWithProviders(<ScheduleCountStep {...props} avoidedDays={[...props.avoidedDays]} />);
 
   const checkbox = page.getByRole("checkbox", { name: /Prefer easier courses/ });
   await expect.element(checkbox).not.toBeChecked();

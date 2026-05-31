@@ -125,7 +125,6 @@ describe("diagnoseTimetableFailure", () => {
       constraints: {
         minStartMinutes: 8 * 60,
         maxEndMinutes: 22 * 60,
-        allowedDays: [],
         compressedSchedule: true,
       },
     });
@@ -154,7 +153,6 @@ describe("diagnoseTimetableFailure", () => {
       constraints: {
         minStartMinutes: 8 * 60,
         maxEndMinutes: 22 * 60,
-        allowedDays: [],
         compressedSchedule: true,
       },
     });

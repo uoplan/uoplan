@@ -149,7 +149,6 @@ export function buildFixtureCache(): DataCache {
 export const DEFAULT_CONSTRAINTS: GenerationConstraints = {
   minStartMinutes: 0,
   maxEndMinutes: 24 * 60,
-  allowedDays: [],
 };
 
 /**

@@ -13,7 +13,6 @@ import {
 } from "../../lib/electiveEligibility";
 import {
   DEFAULT_COURSES_THIS_SEMESTER,
-  DEFAULT_GENERATION_ALLOWED_DAYS,
   DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
   DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
   DEFAULT_GENERATION_MAX_END_MINUTES,
@@ -21,6 +20,7 @@ import {
   DEFAULT_GENERATION_MIN_START_MINUTES,
   DEFAULT_GENERATION_PREFER_EASIER,
 } from "../generationDefaults";
+import { defaultBlockedTimes } from "../../lib/blockedTimes";
 
 interface SelectionSlice {
   setBasicPinnedCourses: AppStore["setBasicPinnedCourses"];
@@ -438,13 +438,12 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       coursesThisSemester: DEFAULT_COURSES_THIS_SEMESTER,
       generationMinStartMinutes: DEFAULT_GENERATION_MIN_START_MINUTES,
       generationMaxEndMinutes: DEFAULT_GENERATION_MAX_END_MINUTES,
-      generationAllowedDays: [...DEFAULT_GENERATION_ALLOWED_DAYS],
       generationMinProfessorRating: DEFAULT_GENERATION_MIN_PROFESSOR_RATING,
       generationLimitFirstYearCredits: DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
       generationCompressedSchedule: DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
       generationPreferEasier: DEFAULT_GENERATION_PREFER_EASIER,
       blacklistedCourses: [],
-      blockedTimes: [],
+      blockedTimes: defaultBlockedTimes(),
       levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
       languageBuckets: defaultLanguageBuckets,
       electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],

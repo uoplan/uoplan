@@ -2,10 +2,10 @@ import { describe, it, expect } from "vitest";
 import { createAppStore } from "../appStore";
 import {
   DEFAULT_COURSES_THIS_SEMESTER,
-  DEFAULT_GENERATION_ALLOWED_DAYS,
   DEFAULT_GENERATION_MAX_END_MINUTES,
   DEFAULT_GENERATION_MIN_START_MINUTES,
 } from "../generationDefaults";
+import { avoidedDaysFromBlocks, defaultBlockedTimes } from "../../lib/blockedTimes";
 
 describe("clearGenerationOptions", () => {
   it("resets generation options to defaults while preserving program/completed courses", () => {
@@ -15,7 +15,7 @@ describe("clearGenerationOptions", () => {
       coursesThisSemester: 2,
       generationMinStartMinutes: 10 * 60,
       generationMaxEndMinutes: 16 * 60,
-      generationAllowedDays: ["Mo", "We"],
+      blockedTimes: [{ id: "Mo-510-1320", day: "Mo", startMinutes: 510, endMinutes: 1320 }],
       generationMinProfessorRating: 4,
       generationLimitFirstYearCredits: false,
       generationCompressedSchedule: true,
@@ -33,7 +33,8 @@ describe("clearGenerationOptions", () => {
     expect(s.coursesThisSemester).toBe(DEFAULT_COURSES_THIS_SEMESTER);
     expect(s.generationMinStartMinutes).toBe(DEFAULT_GENERATION_MIN_START_MINUTES);
     expect(s.generationMaxEndMinutes).toBe(DEFAULT_GENERATION_MAX_END_MINUTES);
-    expect(s.generationAllowedDays).toEqual(DEFAULT_GENERATION_ALLOWED_DAYS);
+    expect(s.blockedTimes).toEqual(defaultBlockedTimes());
+    expect(avoidedDaysFromBlocks(s.blockedTimes).sort()).toEqual(["Sa", "Su"]);
     expect(s.generationMinProfessorRating).toBeNull();
     expect(s.generationLimitFirstYearCredits).toBe(true);
     expect(s.generationCompressedSchedule).toBe(false);

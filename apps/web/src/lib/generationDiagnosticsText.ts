@@ -36,7 +36,6 @@ const SUGGESTION_KEY: Record<SuggestionCode, string> = {
   "try-different-course": "gen.suggest.tryDifferentCourse",
   "turn-off-compressed": "gen.suggest.turnOffCompressed",
   "clear-min-rating": "gen.suggest.clearMinRating",
-  "allow-more-weekdays": "gen.suggest.allowMoreWeekdays",
   "widen-hours-days": "gen.suggest.widenHoursDays",
   "relax-fy-cap": "gen.suggest.relaxFyCap",
   "un-blacklist": "gen.suggest.unBlacklist",

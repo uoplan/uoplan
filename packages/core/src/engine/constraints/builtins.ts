@@ -28,7 +28,6 @@ export const overlapConstraint: Constraint = {
 /** Section meeting times must fall within allowed days and the time window. */
 export function timeWindowConstraint(constraints: GenerationConstraints): Constraint {
   const custom =
-    constraints.allowedDays.length > 0 ||
     constraints.minStartMinutes > 0 ||
     constraints.maxEndMinutes < 24 * 60 ||
     (constraints.blockedTimes?.length ?? 0) > 0;

@@ -9,6 +9,8 @@ import {
   countUniqueSelected,
 } from "../../lib/generation/advancedGenerationDerivations";
 import { AdvancedGenerationOptionsView } from "./AdvancedGenerationOptionsView";
+import { avoidedDaysFromBlocks } from "../../lib/blockedTimes";
+import { createCourseOptionsFilter, renderCourseOption } from "../shared/CourseSelect";
 
 export function AdvancedGenerationOptions() {
   useLingui();
@@ -24,7 +26,7 @@ export function AdvancedGenerationOptions() {
   const coursesThisSemester = useAppStore((s) => s.coursesThisSemester);
   const generationMinStartMinutes = useAppStore((s) => s.generationMinStartMinutes);
   const generationMaxEndMinutes = useAppStore((s) => s.generationMaxEndMinutes);
-  const generationAllowedDays = useAppStore((s) => s.generationAllowedDays);
+  const blockedTimes = useAppStore((s) => s.blockedTimes);
   const generationMinProfessorRating = useAppStore((s) => s.generationMinProfessorRating);
   const generationError = useAppStore((s) => s.generationError);
   const levelBuckets = useAppStore((s) => s.levelBuckets);
@@ -42,7 +44,7 @@ export function AdvancedGenerationOptions() {
   const setGenerationMinProfessorRating = useAppStore((s) => s.setGenerationMinProfessorRating);
   const setGenerationMinStartMinutes = useAppStore((s) => s.setGenerationMinStartMinutes);
   const setGenerationMaxEndMinutes = useAppStore((s) => s.setGenerationMaxEndMinutes);
-  const setGenerationAllowedDays = useAppStore((s) => s.setGenerationAllowedDays);
+  const setAvoidedDays = useAppStore((s) => s.setAvoidedDays);
   const setLevelBuckets = useAppStore((s) => s.setLevelBuckets);
   const setLanguageBuckets = useAppStore((s) => s.setLanguageBuckets);
   const setElectiveLevelBuckets = useAppStore((s) => s.setElectiveLevelBuckets);
@@ -61,6 +63,9 @@ export function AdvancedGenerationOptions() {
     [remainingRequirements, completedCourses],
   );
 
+  const blacklistRenderOption = useMemo(() => renderCourseOption(cache), [cache]);
+  const blacklistFilter = useMemo(() => createCourseOptionsFilter(cache), [cache]);
+
   const uniqueSelected = countUniqueSelected(selectedPerRequirement);
   const { total: totalFirstYearCredits, warn: warnFirstYearLimit } = computeFirstYearCredits(
     cache,
@@ -78,8 +83,8 @@ export function AdvancedGenerationOptions() {
         onMinStartMinutesChange: setGenerationMinStartMinutes,
         maxEndMinutes: generationMaxEndMinutes,
         onMaxEndMinutesChange: setGenerationMaxEndMinutes,
-        allowedDays: generationAllowedDays,
-        onAllowedDaysChange: setGenerationAllowedDays,
+        avoidedDays: avoidedDaysFromBlocks(blockedTimes),
+        onAvoidedDaysChange: setAvoidedDays,
         minProfessorRating: generationMinProfessorRating,
         onMinProfessorRatingChange: setGenerationMinProfessorRating,
         totalFirstYearCredits,
@@ -93,6 +98,8 @@ export function AdvancedGenerationOptions() {
         blacklistedCourses,
         allPoolCourses,
         onBlacklistedCoursesChange: setBlacklistedCourses,
+        blacklistRenderOption,
+        blacklistFilter,
         onGenerate: () => {},
         generating: false,
         error: generationError ? formatGenerationMessage(generationError.message) : null,

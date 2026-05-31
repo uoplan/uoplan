@@ -32,7 +32,6 @@ export interface BlockedTimeWindow {
 export interface GenerationConstraints {
   minStartMinutes: number;
   maxEndMinutes: number;
-  allowedDays: DayOfWeek[];
   minProfessorRating?: number;
   professorRatings?: ProfessorRatingsMap;
   /** Max credits from 1000-level courses allowed in the schedule (48 - already completed). */

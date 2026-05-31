@@ -162,7 +162,6 @@ async function run() {
     const constraints = {
       minStartMinutes: decoded.generationMinStartMinutes,
       maxEndMinutes: decoded.generationMaxEndMinutes,
-      allowedDays: decoded.generationAllowedDays,
       compressedSchedule: decoded.generationCompressedSchedule,
       blockedTimes: decoded.blockedTimes,
     };

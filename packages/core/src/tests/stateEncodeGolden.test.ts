@@ -50,8 +50,5 @@ describe("ShareableState golden wire format", () => {
     expect(decoded.coursesThisSemester).toBe(5);
     expect(decoded.generationMinStartMinutes).toBe(540);
     expect(decoded.generationMaxEndMinutes).toBe(1080);
-    // Day-of-week wire compatibility is the highest-risk field for future
-    // proto refactors — pin the exact decoded set.
-    expect(decoded.generationAllowedDays).toEqual(["Mo", "We", "Fr"]);
   });
 });

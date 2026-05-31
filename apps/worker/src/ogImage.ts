@@ -156,7 +156,6 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
     const constraints = {
       minStartMinutes: decoded.generationMinStartMinutes,
       maxEndMinutes: decoded.generationMaxEndMinutes,
-      allowedDays: decoded.generationAllowedDays,
       compressedSchedule: decoded.generationCompressedSchedule,
       blockedTimes: decoded.blockedTimes,
     };
