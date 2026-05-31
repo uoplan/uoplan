@@ -118,6 +118,8 @@ export function buildExploreOfferings(
     const norm = normalizeCourseCode(c.code);
     const title = titleByCode.get(norm) ?? "";
     for (const p of c.professors) {
+      // "Staff" is a placeholder for an unassigned instructor; never surface it.
+      if (normalizeProfessorName(p.name).toLowerCase() === "staff") continue;
       const termLabel = termNameById.get(p.termId) ?? formatUottawaTermIdLabel(p.termId);
       const fuseText = [
         c.code,

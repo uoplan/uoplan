@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildCourseSearchEntries,
+  buildExploreOfferings,
   buildExploreProfessorSearchEntries,
   createExploreCourseFuse,
   createExploreFuse,
@@ -234,5 +235,27 @@ describe("groupOfferingsByProfessor", () => {
     expect(groups).toHaveLength(1);
     expect(groups[0].offerings).toHaveLength(2);
     expect(groups[0].legacyId).toBe(10);
+  });
+});
+
+describe("buildExploreOfferings", () => {
+  it("omits the 'Staff' placeholder instructor", () => {
+    const offerings = buildExploreOfferings(
+      {
+        courses: [
+          {
+            code: "CSI 2110",
+            professors: [
+              { name: "Ada Lovelace", termId: 2251, distribution: { "A+": 1 } },
+              { name: "Staff", termId: 2251, distribution: { "A+": 1 } },
+              { name: "  staff ", termId: 2251, distribution: { "A+": 1 } },
+            ],
+          },
+        ],
+      },
+      new Map(),
+      new Map(),
+    );
+    expect(offerings.map((o) => o.professorName)).toEqual(["Ada Lovelace"]);
   });
 });
