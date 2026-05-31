@@ -194,6 +194,8 @@ export interface AppActions {
   generateSchedules: () => Promise<void>;
   clearSchedule: () => void;
   resetBasicCalendarSettings: () => void;
+  /** Reset all schedule generation options to their defaults (keeps term/program/completed courses). */
+  clearGenerationOptions: () => void;
   markBasicSettingsChanged: () => void;
   goToPreviousSeed: () => Promise<void>;
   goToNextSeed: () => Promise<void>;

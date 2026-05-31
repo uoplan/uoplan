@@ -4,18 +4,14 @@ import {
   IconCalendarDown,
   IconEraser,
   IconFileImport,
-  IconRefresh,
   IconShare,
   IconTerminal,
 } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { tr } from "../../i18n";
-import { ResetModal } from "../shared/ResetModal";
 import { SaveStatusIndicator } from "./SaveStatusIndicator";
 import { UEnrollImportModal } from "./UEnrollImportModal";
-import { navigateToWizardStep } from "../../lib/appNavigation";
-import { WizardStep } from "../../lib/wizardSteps";
 
 interface BasicCalendarHeaderActionsProps {
   cliCommand?: string | null;
@@ -34,9 +30,7 @@ export function BasicCalendarHeaderActions({
 }: BasicCalendarHeaderActionsProps) {
   const indices = useAppStore((s) => s.indices);
   const getShareUrl = useAppStore((s) => s.getShareUrl);
-  const resetToDefault = useAppStore((s) => s.resetToDefault);
 
-  const [resetModalOpen, setResetModalOpen] = useState(false);
   const [uenrollImportOpen, setUenrollImportOpen] = useState(false);
   const { shareCopied, handleCopyShare } = useShareUrl(getShareUrl);
 
@@ -76,18 +70,6 @@ export function BasicCalendarHeaderActions({
             </ActionIcon>
           </Tooltip>
         )}
-        <Tooltip label={tr("calendarPage.reset")} position="right" withArrow>
-          <ActionIcon
-            variant="subtle"
-            color="gray"
-            size="md"
-            radius={0}
-            onClick={() => setResetModalOpen(true)}
-            aria-label={tr("calendarPage.reset")}
-          >
-            <IconRefresh size={16} />
-          </ActionIcon>
-        </Tooltip>
         <Tooltip label={tr("basicCalendar.clear")} position="right" withArrow>
           <ActionIcon
             variant="subtle"
@@ -130,15 +112,6 @@ export function BasicCalendarHeaderActions({
         )}
       </Group>
 
-      <ResetModal
-        opened={resetModalOpen}
-        onClose={() => setResetModalOpen(false)}
-        onConfirm={() => {
-          resetToDefault();
-          setResetModalOpen(false);
-          navigateToWizardStep(WizardStep.Term);
-        }}
-      />
       <UEnrollImportModal opened={uenrollImportOpen} onClose={() => setUenrollImportOpen(false)} />
     </>
   );

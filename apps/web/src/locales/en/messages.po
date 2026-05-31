@@ -399,8 +399,8 @@ msgstr "Options"
 msgid "calendarPage.mobile.tryAnother"
 msgstr "Try another"
 
-msgid "calendarPage.reset"
-msgstr "Reset"
+msgid "calendarPage.clear"
+msgstr "Clear options"
 
 msgid "calendarPage.schedule.label"
 msgstr "Schedule #{index}"

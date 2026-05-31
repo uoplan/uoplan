@@ -17,6 +17,16 @@ import {
   DEFAULT_BASIC_LANGUAGE_BUCKETS,
   DEFAULT_BASIC_LEVEL_BUCKETS,
 } from "../lib/electiveEligibility";
+import {
+  DEFAULT_COURSES_THIS_SEMESTER,
+  DEFAULT_GENERATION_ALLOWED_DAYS,
+  DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
+  DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
+  DEFAULT_GENERATION_MAX_END_MINUTES,
+  DEFAULT_GENERATION_MIN_PROFESSOR_RATING,
+  DEFAULT_GENERATION_MIN_START_MINUTES,
+  DEFAULT_GENERATION_PREFER_EASIER,
+} from "./generationDefaults";
 
 export type AppStoreApi = StoreApi<AppStore>;
 
@@ -68,7 +78,7 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
       requirementSlotsUserTouched: {},
       selectedOptionsPerRequirement: {},
       constrainedPerRequirement: {},
-      coursesThisSemester: 5,
+      coursesThisSemester: DEFAULT_COURSES_THIS_SEMESTER,
       prereqEligibleCourses: [],
       filteredPrereqEligibleCourses: [],
       levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
@@ -87,16 +97,16 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
       firstSeed: generateRandomSeed(),
       currentSeed: 0, // Will be set to firstSeed when first generated
       lowestVisitedSeed: null,
-      generationMinStartMinutes: 8 * 60 + 30, // 8:30
-      generationMaxEndMinutes: 22 * 60, // 22:00
-      generationAllowedDays: ["Mo", "Tu", "We", "Th", "Fr"],
+      generationMinStartMinutes: DEFAULT_GENERATION_MIN_START_MINUTES,
+      generationMaxEndMinutes: DEFAULT_GENERATION_MAX_END_MINUTES,
+      generationAllowedDays: [...DEFAULT_GENERATION_ALLOWED_DAYS],
       includeClosedComponents: false,
       virtualSectionsOnly: false,
-      generationMinProfessorRating: null,
+      generationMinProfessorRating: DEFAULT_GENERATION_MIN_PROFESSOR_RATING,
       professorRatings: null,
-      generationLimitFirstYearCredits: true,
-      generationCompressedSchedule: false,
-      generationPreferEasier: false,
+      generationLimitFirstYearCredits: DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
+      generationCompressedSchedule: DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
+      generationPreferEasier: DEFAULT_GENERATION_PREFER_EASIER,
       frenchImmersionStream: false,
       calendarWeekIndex: null,
       calendarMode: null,
@@ -154,7 +164,7 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
           requirementSlotsUserTouched: {},
           selectedOptionsPerRequirement: {},
           constrainedPerRequirement: {},
-          coursesThisSemester: 5,
+          coursesThisSemester: DEFAULT_COURSES_THIS_SEMESTER,
           prereqEligibleCourses: [],
           filteredPrereqEligibleCourses: [],
           levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
