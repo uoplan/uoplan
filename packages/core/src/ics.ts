@@ -1,3 +1,4 @@
+import ical, { ICalEventRepeatingFreq } from "ical-generator";
 import type { DataCache } from "./dataCache";
 import type { GeneratedSchedule } from "./generation";
 import type { DayOfWeek } from "./dataTypes";
@@ -56,44 +57,18 @@ function jsUtcDayToIsoIndex(jsUtcDay: number): number {
   return jsUtcDay;
 }
 
-function formatUtcDateForIcs(d: Date): string {
-  return `${d.getUTCFullYear()}${pad2(d.getUTCMonth() + 1)}${pad2(d.getUTCDate())}`;
-}
-
-function formatLocalDateTimeForIcs(dateUtcMidnight: Date, minutes: number): string {
+/**
+ * Build a naive (timezone-less) ISO date-time string for a wall-clock time.
+ * `ical-generator` interprets this as a local time in the event's timezone,
+ * preserving the exact wall-clock value regardless of the host's timezone.
+ */
+function naiveLocalIso(dateUtcMidnight: Date, minutes: number): string {
+  const y = dateUtcMidnight.getUTCFullYear();
+  const mo = pad2(dateUtcMidnight.getUTCMonth() + 1);
+  const d = pad2(dateUtcMidnight.getUTCDate());
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
-  return `${formatUtcDateForIcs(dateUtcMidnight)}T${pad2(hours)}${pad2(mins)}00`;
-}
-
-function escapeIcsText(value: string): string {
-  return value
-    .replace(/\\/g, "\\\\")
-    .replace(/\r\n|\n|\r/g, "\\n")
-    .replace(/,/g, "\\,")
-    .replace(/;/g, "\\;");
-}
-
-function foldIcsLine(line: string): string[] {
-  // RFC folding is 75 octets; we approximate with 75 chars.
-  const MAX = 75;
-  if (line.length <= MAX) return [line];
-  const out: string[] = [];
-  out.push(line.slice(0, MAX));
-  let i = MAX;
-  while (i < line.length) {
-    out.push(` ${line.slice(i, i + MAX)}`);
-    i += MAX;
-  }
-  return out;
-}
-
-function lines(...raw: string[]): string {
-  const out: string[] = [];
-  for (const l of raw) {
-    for (const folded of foldIcsLine(l)) out.push(folded);
-  }
-  return out.join("\r\n") + "\r\n";
+  return `${y}-${mo}-${d}T${pad2(hours)}:${pad2(mins)}:00`;
 }
 
 function uniqNonEmpty(parts: Array<string | null | undefined>): string[] {
@@ -120,13 +95,6 @@ function pickLocation(sectionText: string): string | null {
   return `${building} ${room}`;
 }
 
-function dtstampUtc(): string {
-  const d = new Date();
-  return `${d.getUTCFullYear()}${pad2(d.getUTCMonth() + 1)}${pad2(d.getUTCDate())}T${pad2(
-    d.getUTCHours(),
-  )}${pad2(d.getUTCMinutes())}${pad2(d.getUTCSeconds())}Z`;
-}
-
 export function buildScheduleIcs(args: {
   schedule: GeneratedSchedule;
   cache: DataCache | null;
@@ -140,10 +108,12 @@ export function buildScheduleIcs(args: {
     throw new Error("Invalid date range for iCalendar export");
   }
 
-  const dtstamp = dtstampUtc();
+  // UTC midnight on the end date, matching the original export's UNTIL format.
+  const until = new Date(
+    Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate(), 0, 0, 0, 0),
+  );
 
-  let out = "";
-  out += lines("BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//uoplan//EN", "CALSCALE:GREGORIAN");
+  const calendar = ical({ prodId: "//uoplan//EN" });
 
   for (const enrollment of schedule.enrollments) {
     const courseCode = enrollment.courseCode;
@@ -164,11 +134,13 @@ export function buildScheduleIcs(args: {
 
       const location = pickLocation(section.section);
       const summary = `${courseCode}${location ? ` — ${location}` : ""}`;
-      const descriptionLines = [
+      const description = [
         courseTitle ? `Course: ${courseTitle}` : null,
         professor ? `Prof: ${professor}` : null,
         sectionLabel ? `Section: ${sectionLabel}` : null,
-      ].filter(Boolean) as string[];
+      ]
+        .filter(Boolean)
+        .join("\n");
 
       for (const t of section.times ?? []) {
         if (t.startMinutes >= t.endMinutes) continue;
@@ -178,28 +150,24 @@ export function buildScheduleIcs(args: {
         const delta = (startIsoDow - startDow + 7) % 7;
         const firstDay = addUtcDays(start, delta);
 
-        const dtStart = formatLocalDateTimeForIcs(firstDay, t.startMinutes);
-        const dtEnd = formatLocalDateTimeForIcs(firstDay, t.endMinutes);
-        // Match reference format (UTC midnight on end date).
-        const untilUtc = `${formatUtcDateForIcs(end)}T000000Z`;
         const uid = `${courseCode}-${component}-${t.day}-${t.startMinutes}-${t.endMinutes}@uoplan`;
 
-        out += lines(
-          "BEGIN:VEVENT",
-          `UID:${escapeIcsText(uid)}`,
-          `DTSTAMP:${dtstamp}`,
-          `DTSTART;TZID=${escapeIcsText(courseTzid)}:${dtStart}`,
-          `DTEND;TZID=${escapeIcsText(courseTzid)}:${dtEnd}`,
-          `RRULE:FREQ=WEEKLY;UNTIL=${untilUtc}`,
-          `SUMMARY:${escapeIcsText(summary)}`,
-          `DESCRIPTION:${escapeIcsText(descriptionLines.join("\n"))}`,
-          ...(location ? [`LOCATION:${escapeIcsText(location)}`] : []),
-          "END:VEVENT",
-        );
+        calendar.createEvent({
+          id: uid,
+          start: naiveLocalIso(firstDay, t.startMinutes),
+          end: naiveLocalIso(firstDay, t.endMinutes),
+          timezone: courseTzid,
+          summary,
+          description: description || undefined,
+          location: location || undefined,
+          repeating: {
+            freq: ICalEventRepeatingFreq.WEEKLY,
+            until,
+          },
+        });
       }
     }
   }
 
-  out += lines("END:VCALENDAR");
-  return out;
+  return calendar.toString();
 }

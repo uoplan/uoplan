@@ -73,6 +73,6 @@ describe("buildScheduleIcs", () => {
       "DESCRIPTION:Course: Data Structures\\, Algorithms\\nProf: Prof\\, Name\\; Jr\\n",
     );
     expect(ics).toContain("ection: LEC - A00\r\n");
-    expect(ics).toContain("END:VCALENDAR\r\n");
+    expect(ics.trimEnd().endsWith("END:VCALENDAR")).toBe(true);
   });
 });
