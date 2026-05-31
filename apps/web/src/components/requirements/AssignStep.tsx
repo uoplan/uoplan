@@ -9,7 +9,12 @@ import type {
 } from "@uoplan/core";
 import { useAppStore } from "../../store/appStore";
 import { RequirementNode, getStableNodeKey } from "./RequirementNode";
-import { applyOptionSelections } from "../../lib/requirements/requirementUtils";
+import {
+  applyOptionSelections,
+  nodeHasOptionGroups,
+  pruneUnresolvedOptionGroups,
+} from "../../lib/requirements/requirementUtils";
+import { tr } from "../../i18n";
 import { CompletedRequirementsAccordion } from "./CompletedRequirementsAccordion";
 import { FrenchImmersionRequirementsReadout } from "./FrenchImmersionRequirementsReadout";
 
@@ -61,6 +66,12 @@ export function AssignStep({
     [requirementTreeWithStatus, selectedOptionsPerRequirement],
   );
 
+  // Display-only: hide option groups the user has not resolved in the Program
+  // options step (they would otherwise render as bloated "one of the following"
+  // drilldowns). Keep `flattenedTree` for the assignment calculations below.
+  const displayTree = useMemo(() => pruneUnresolvedOptionGroups(flattenedTree), [flattenedTree]);
+  const hasPendingOptions = useMemo(() => flattenedTree.some(nodeHasOptionGroups), [flattenedTree]);
+
   const allAssignedCoursesNormalized = useMemo(() => {
     const set = new Set<string>();
     const walk = (nodes: RequirementWithStatus[]) => {
@@ -79,7 +90,7 @@ export function AssignStep({
   }, [flattenedTree, selectedPerRequirement]);
 
   const hasTree = flattenedTree.length > 0;
-  const incompleteNodes = flattenedTree.filter((node) => !node.complete);
+  const incompleteNodes = displayTree.filter((node) => !node.complete);
   const hasRemaining = incompleteNodes.length > 0;
   const hasCompleted = completedRequirementsList.length > 0;
 
@@ -164,7 +175,9 @@ export function AssignStep({
         ) : (
           <Alert color="blue" variant="light" radius="var(--app-radius)">
             <Text size="sm">
-              All requirements are currently satisfied by your completed courses.
+              {hasPendingOptions
+                ? tr("requirements.optionsPending")
+                : "All requirements are currently satisfied by your completed courses."}
             </Text>
           </Alert>
         )}

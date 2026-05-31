@@ -5,16 +5,9 @@ import {
   getOptionSecondarySummaryLine,
   simplifySingleChildChain,
 } from "../../lib/requirements/requirementUtils";
-import {
-  RequirementNode,
-  getNodeDisplayTitle,
-  getStableNodeKey,
-  REQUIREMENT_INDENT_PX,
-} from "./RequirementNode";
+import { getNodeDisplayTitle, getStableNodeKey, REQUIREMENT_INDENT_PX } from "./RequirementNode";
+import { OptionRequirementPreview } from "./OptionRequirementPreview";
 import { tr } from "../../i18n";
-
-const EMPTY_SET = new Set<string>();
-const EMPTY_RECORD: Record<string, string[]> = {};
 
 interface OptionsDrilldownProps {
   /** Stable prefix for child RequirementNode keys and registry. */
@@ -50,32 +43,8 @@ export function OptionsDrilldown({
 
   const indentMargin = depth > 0 ? depth * REQUIREMENT_INDENT_PX : undefined;
 
-  const requirementNodeShared = {
-    cache: null,
-    completedCourses,
-    selectedPerRequirement: EMPTY_RECORD,
-    onSelect: () => {},
-    prereqEligible: EMPTY_SET,
-    levelBuckets: ["undergrad", "grad"] as ("undergrad" | "grad")[],
-    languageBuckets: ["en", "fr", "other"] as ("en" | "fr" | "other")[],
-    electiveLevelBuckets: [] as number[],
-    unassignedCompletedSet: EMPTY_SET,
-    unassignedCompletedSetNormalized: EMPTY_SET,
-    allAssignedCoursesNormalized: EMPTY_SET,
-    includeClosedComponents: false,
-    virtualSectionsOnly: false,
-    hideSelection: true as const,
-  };
-
   if (node.type === "section") {
-    return (
-      <RequirementNode
-        node={node}
-        {...requirementNodeShared}
-        activeBranch={activeBranch}
-        depth={depth}
-      />
-    );
+    return <OptionRequirementPreview node={node} activeBranch={activeBranch} depth={depth} />;
   }
 
   const isOptionGroup =
@@ -124,9 +93,8 @@ export function OptionsDrilldown({
                 activeBranch && (selectedIdx == null || selectedIdx === idx);
               return (
                 <Box key={childKey}>
-                  <RequirementNode
+                  <OptionRequirementPreview
                     node={opt}
-                    {...requirementNodeShared}
                     radio={{
                       checked: isSelected,
                       onChange: () => onSelectOption(reqId, idx),
@@ -248,12 +216,5 @@ export function OptionsDrilldown({
     );
   }
 
-  return (
-    <RequirementNode
-      node={node}
-      {...requirementNodeShared}
-      activeBranch={activeBranch}
-      depth={depth}
-    />
-  );
+  return <OptionRequirementPreview node={node} activeBranch={activeBranch} depth={depth} />;
 }

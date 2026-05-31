@@ -13,6 +13,7 @@ import {
   isCourseInPerRequirementMaps,
   partitionIncompleteConstrainRoots,
   pruneOptionSelectionsForClear,
+  pruneUnresolvedOptionGroups,
   resolveRequirementIdsForScheduleCourse,
 } from "./requirementUtils";
 
@@ -343,6 +344,125 @@ describe("applyOptionSelections", () => {
     expect(out[0].type).toBe("and");
     expect(out[0].options ?? []).toHaveLength(3);
     expect(out[0].options!.map((x) => x.requirementId)).toEqual(["free", "req-a", "req-b"]);
+  });
+});
+
+describe("pruneUnresolvedOptionGroups", () => {
+  const courseLeaf = (id: string): RequirementWithStatus => ({
+    type: "course",
+    title: id,
+    complete: false,
+    satisfiedBy: [],
+    requirementId: id,
+    candidateCourses: ["SEG 3100"],
+    creditsNeeded: 3,
+  });
+
+  it("removes an unresolved option group (has requirementId, incomplete)", () => {
+    const tree: RequirementWithStatus[] = [
+      {
+        type: "options_group",
+        requirementId: "g",
+        complete: false,
+        satisfiedBy: [],
+        options: [courseLeaf("leaf")],
+      },
+    ];
+    expect(pruneUnresolvedOptionGroups(tree)).toHaveLength(0);
+  });
+
+  it("keeps a complete option group", () => {
+    const tree: RequirementWithStatus[] = [
+      {
+        type: "options_group",
+        requirementId: "g",
+        complete: true,
+        satisfiedBy: ["SEG 3100"],
+        satisfiedOptionIndex: 0,
+        options: [courseLeaf("leaf")],
+      },
+    ];
+    const out = pruneUnresolvedOptionGroups(tree);
+    expect(out).toHaveLength(1);
+    expect(out[0].requirementId).toBe("g");
+  });
+
+  it("keeps an option group that has no requirementId", () => {
+    const tree: RequirementWithStatus[] = [
+      { type: "or_group", complete: false, satisfiedBy: [], options: [courseLeaf("leaf")] },
+    ];
+    const out = pruneUnresolvedOptionGroups(tree);
+    expect(out).toHaveLength(1);
+    expect(out[0].type).toBe("or_group");
+  });
+
+  it("drops a structural wrapper emptied by pruning", () => {
+    const tree: RequirementWithStatus[] = [
+      {
+        type: "and",
+        complete: false,
+        satisfiedBy: [],
+        options: [
+          {
+            type: "options_group",
+            requirementId: "g",
+            complete: false,
+            satisfiedBy: [],
+            options: [courseLeaf("leaf")],
+          },
+        ],
+      },
+    ];
+    expect(pruneUnresolvedOptionGroups(tree)).toHaveLength(0);
+  });
+
+  it("keeps a wrapper that has a requirementId / candidates / credits even when emptied", () => {
+    const tree: RequirementWithStatus[] = [
+      {
+        type: "and",
+        complete: false,
+        satisfiedBy: [],
+        requirementId: "keep-me",
+        candidateCourses: ["CSI 1000"],
+        creditsNeeded: 3,
+        options: [
+          {
+            type: "options_group",
+            requirementId: "g",
+            complete: false,
+            satisfiedBy: [],
+            options: [courseLeaf("leaf")],
+          },
+        ],
+      },
+    ];
+    const out = pruneUnresolvedOptionGroups(tree);
+    expect(out).toHaveLength(1);
+    expect(out[0].requirementId).toBe("keep-me");
+    expect(out[0].options ?? []).toHaveLength(0);
+  });
+
+  it("removes a nested unresolved group but keeps surrounding siblings", () => {
+    const tree: RequirementWithStatus[] = [
+      {
+        type: "and",
+        complete: false,
+        satisfiedBy: [],
+        options: [
+          courseLeaf("free"),
+          {
+            type: "options_group",
+            requirementId: "g",
+            complete: false,
+            satisfiedBy: [],
+            options: [courseLeaf("leaf")],
+          },
+        ],
+      },
+    ];
+    const out = pruneUnresolvedOptionGroups(tree);
+    expect(out).toHaveLength(1);
+    expect(out[0].options!.map((x) => x.requirementId)).toEqual(["free"]);
   });
 });
 

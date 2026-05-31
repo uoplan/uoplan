@@ -225,6 +225,63 @@ export function applyOptionSelections(
 }
 
 /**
+ * True when a node carries no displayable requirement of its own — a pure
+ * structural shell whose only purpose is to group children. Used to decide
+ * whether a wrapper that has been emptied by pruning should also be dropped.
+ */
+function isEmptyableStructuralWrapper(node: RequirementWithStatus): boolean {
+  if (
+    node.type !== "and" &&
+    node.type !== "pick" &&
+    node.type !== "group" &&
+    node.type !== "section"
+  ) {
+    return false;
+  }
+  if (node.requirementId != null) return false;
+  if ((node.candidateCourses?.length ?? 0) > 0) return false;
+  if ((node.creditsNeeded ?? 0) > 0) return false;
+  if (node.complete) return false;
+  return true;
+}
+
+/**
+ * Display-only pass for Assign / Constrain: removes `or_group` / `options_group`
+ * nodes the user has not yet resolved (they have a `requirementId` and are not
+ * complete) so they render nothing — option selection belongs to the Program
+ * options step. Complete option groups are kept (they show a satisfied state),
+ * and groups without a `requirementId` are left untouched. Structural wrappers
+ * (`and` / `pick` / `group` / `section`) emptied by pruning are dropped so no
+ * empty cards remain.
+ *
+ * Must run AFTER {@link applyOptionSelections}. Never mutate / replace
+ * `applyOptionSelections` with this — that function is also used by non-display
+ * logic (course swap) that relies on unresolved branches staying searchable.
+ */
+export function pruneUnresolvedOptionGroups(
+  nodes: RequirementWithStatus[],
+): RequirementWithStatus[] {
+  const out: RequirementWithStatus[] = [];
+  for (const node of nodes) {
+    const isOptionType = node.type === "or_group" || node.type === "options_group";
+    if (isOptionType && node.requirementId != null && !node.complete) {
+      continue;
+    }
+
+    if (node.options?.length) {
+      const prunedOptions = pruneUnresolvedOptionGroups(node.options);
+      if (prunedOptions.length === 0 && isEmptyableStructuralWrapper(node)) {
+        continue;
+      }
+      out.push({ ...node, options: prunedOptions });
+    } else {
+      out.push(node);
+    }
+  }
+  return out;
+}
+
+/**
  * Requirement IDs that actually render a constrain MultiSelect for this course,
  * based on the same flattened tree as {@link ConstrainStep}.
  */
