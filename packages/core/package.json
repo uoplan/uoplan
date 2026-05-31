@@ -28,7 +28,8 @@
   },
   "dependencies": {
     "@uoplan/proto": "workspace:*",
-    "fflate": "^0.8.3"
+    "fflate": "^0.8.3",
+    "ical-generator": "^10.2.0"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
