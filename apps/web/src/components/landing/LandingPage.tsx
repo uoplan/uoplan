@@ -113,7 +113,6 @@ export function LandingPage() {
     [prefersReducedMotion],
   );
 
-  const betaLabel = tr("app.beta");
   const experimentalLabel = tr("app.experimental");
 
   return (
@@ -171,19 +170,15 @@ export function LandingPage() {
               to="/schedule"
               title={tr("landing.schedule.title")}
               description={tr("landing.schedule.description")}
-              badgeLabel={betaLabel}
-              badgeColor="blue"
               icon={<IconCalendar size={32} stroke={1.5} />}
-              ariaLabel={`${tr("landing.schedule.title")}, ${betaLabel}`}
+              ariaLabel={tr("landing.schedule.title")}
             />
             <LandingTile
               to="/explore"
               title={tr("explore.title")}
               description={tr("landing.explore.description")}
-              badgeLabel={betaLabel}
-              badgeColor="blue"
               icon={<IconCompass size={32} stroke={1.5} />}
-              ariaLabel={`${tr("explore.title")}, ${betaLabel}`}
+              ariaLabel={tr("explore.title")}
             />
             <LandingTile
               to="/graph"

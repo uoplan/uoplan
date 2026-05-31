@@ -172,7 +172,8 @@ export function ScheduleDashboardPage() {
       >
         <Stack gap="md" maw={760} mx="auto" w="100%">
           <Box
-            p="md"
+            px="sm"
+            py={8}
             style={{
               backgroundColor: "var(--app-surface)",
               border: "1px solid var(--app-border)",

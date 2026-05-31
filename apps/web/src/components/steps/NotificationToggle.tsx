@@ -210,7 +210,7 @@ export function NotificationToggle() {
         </Box>
       </Group>
       {warningMessage && (
-        <Alert color="yellow" icon={<IconAlertTriangle size={16} />} mt="xs" p="xs" radius="sm">
+        <Alert color="yellow" icon={<IconAlertTriangle size={14} />} mt={6} p={8} radius="sm">
           <Text size="xs">{warningMessage}</Text>
         </Alert>
       )}
