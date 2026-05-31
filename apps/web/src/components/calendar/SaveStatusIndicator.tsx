@@ -5,6 +5,7 @@ import { IconDeviceFloppy, IconCloudCheck } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { flushPersistedAppState } from "../../lib/persistAppState";
 import { tr } from "../../i18n";
+import { AnimatedIconSwap } from "../shared/AnimatedIconSwap";
 
 function formatRelativeTime(ts: number): string {
   const diffMs = Date.now() - ts;
@@ -26,46 +27,31 @@ export function SaveStatusIndicator() {
     return () => clearInterval(id);
   }, []);
 
-  if (hasPendingSave) {
-    const sinceLabel = lastSavedAt ? formatRelativeTime(lastSavedAt) : null;
-    const tooltip = sinceLabel
-      ? tr("saveStatus.unsavedSince", { time: sinceLabel })
-      : tr("saveStatus.unsaved");
+  if (!hasPendingSave && !lastSavedAt) return null;
 
-    return (
-      <Tooltip label={tooltip} withArrow position="right">
-        <ActionIcon
-          variant="subtle"
-          color="orange"
-          size="md"
-          radius={0}
-          onClick={flushPersistedAppState}
-          aria-label={tr("saveStatus.saveNow")}
-        >
-          <IconDeviceFloppy size={16} />
-        </ActionIcon>
-      </Tooltip>
-    );
-  }
-
-  if (!lastSavedAt) return null;
+  const tooltip = hasPendingSave
+    ? lastSavedAt
+      ? tr("saveStatus.unsavedSince", { time: formatRelativeTime(lastSavedAt) })
+      : tr("saveStatus.unsaved")
+    : tr("saveStatus.savedAt", { time: formatRelativeTime(lastSavedAt as number) });
 
   return (
-    <Tooltip
-      label={tr("saveStatus.savedAt", { time: formatRelativeTime(lastSavedAt) })}
-      withArrow
-      position="right"
-    >
+    <Tooltip label={tooltip} withArrow position="right">
       <ActionIcon
         variant="subtle"
-        color="gray"
+        color={hasPendingSave ? "orange" : "gray"}
         size="md"
         radius={0}
         onClick={flushPersistedAppState}
-        aria-label={tr("saveStatus.saved")}
-        style={{ opacity: 0.4 }}
+        aria-label={hasPendingSave ? tr("saveStatus.saveNow") : tr("saveStatus.saved")}
+        style={{
+          opacity: hasPendingSave ? 1 : 0.4,
+          transition: "opacity 0.2s ease, color 0.2s ease",
+        }}
       >
-        <IconCloudCheck size={16} />
+        <AnimatedIconSwap statusKey={hasPendingSave ? "pending" : "saved"}>
+          {hasPendingSave ? <IconDeviceFloppy size={16} /> : <IconCloudCheck size={16} />}
+        </AnimatedIconSwap>
       </ActionIcon>
     </Tooltip>
   );
