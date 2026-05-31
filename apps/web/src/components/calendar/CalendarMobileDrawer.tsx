@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 const SURFACE_STYLE = {
   backgroundColor: "var(--app-surface)",
-  borderTop: "2px solid var(--app-border)",
+  borderTop: "var(--app-border-width) solid var(--app-border)",
 };
 
 const DISMISS_DISTANCE = 80;
@@ -107,14 +107,14 @@ export function CalendarMobileDrawer({
           <Drawer.Header
             style={{
               ...SURFACE_STYLE,
-              borderBottom: "1px solid rgba(134, 142, 150, 0.2)",
+              borderBottom: "var(--app-border-width) solid var(--app-border)",
               flexShrink: 0,
             }}
           >
             <Drawer.Title
               style={{
                 color: "var(--app-text)",
-                fontFamily: '"DM Serif Display", serif',
+                fontFamily: "var(--app-font-heading)",
                 fontWeight: 400,
               }}
             >

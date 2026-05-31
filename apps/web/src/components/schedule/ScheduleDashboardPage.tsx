@@ -152,7 +152,7 @@ export function ScheduleDashboardPage() {
             fw={500}
             fz={{ base: "h2", sm: 44 }}
             lh={1.05}
-            style={{ fontFamily: '"DM Serif Display", serif', textWrap: "balance" }}
+            style={{ fontFamily: "var(--app-font-heading)", textWrap: "balance" }}
           >
             {tr("schedule.dashboard.title")}
           </Title>
@@ -176,7 +176,9 @@ export function ScheduleDashboardPage() {
             py={8}
             style={{
               backgroundColor: "var(--app-surface)",
-              border: "1px solid var(--app-border)",
+              border: "var(--app-border-width) solid var(--app-border)",
+              borderRadius: "var(--app-radius)",
+              boxShadow: "var(--app-shadow-sm)",
             }}
           >
             <NotificationToggle />
@@ -204,7 +206,7 @@ export function ScheduleDashboardPage() {
           <Group justify="space-between" mt="lg" gap="sm">
             <Button
               variant="default"
-              radius={0}
+              radius="md"
               leftSection={<IconRefresh size={16} />}
               onClick={() => setResetModalOpen(true)}
               styles={{
@@ -214,7 +216,7 @@ export function ScheduleDashboardPage() {
               {tr("app.reset.action")}
             </Button>
             <Button
-              radius={0}
+              radius="md"
               loading={scheduleGenerating}
               className={
                 blockers.length === 0 && !scheduleGenerating ? "generate-cta--ready" : undefined

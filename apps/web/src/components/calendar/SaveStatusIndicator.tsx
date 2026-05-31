@@ -41,7 +41,7 @@ export function SaveStatusIndicator() {
         variant="subtle"
         color={hasPendingSave ? "orange" : "gray"}
         size="md"
-        radius={0}
+        radius="md"
         onClick={flushPersistedAppState}
         aria-label={hasPendingSave ? tr("saveStatus.saveNow") : tr("saveStatus.saved")}
         style={{

@@ -44,21 +44,68 @@ a {
   text-decoration: underline;
 }
 
-/* Stamp hover effect for interactive cards */
+/* Soft lift effect for interactive cards/surfaces (cozy redesign).
+   `.stamp-hover` is kept as an alias so existing markup keeps working. */
+.soft-lift,
 .stamp-hover {
   transition:
-    transform 80ms ease,
-    box-shadow 80ms ease;
+    transform var(--app-transition),
+    box-shadow var(--app-transition),
+    border-color var(--app-transition);
+  will-change: transform;
 }
 
+.soft-lift:hover,
 .stamp-hover:hover {
-  transform: rotate(-1deg) scale(1.02);
-  box-shadow: 3px 3px 0px var(--app-stamp-shadow);
+  transform: var(--app-lift-hover);
+  box-shadow: var(--app-shadow-sm);
 }
 
+.soft-lift:active,
 .stamp-hover:active {
-  transform: rotate(0deg) scale(0.98);
-  box-shadow: none;
+  transform: translateY(0);
+  box-shadow: var(--app-shadow-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .soft-lift,
+  .stamp-hover {
+    transition: box-shadow var(--app-transition);
+  }
+  .soft-lift:hover,
+  .stamp-hover:hover {
+    transform: none;
+  }
+}
+
+/* Pill select (theme / language switchers): keep option hover + active states
+   on-theme. Active (selected) uses the app accent-soft surface; hover uses the
+   same colour at reduced opacity so the two states stay distinguishable. */
+.pill-select-option {
+  transition: background-color 0.16s ease;
+}
+
+.pill-select-option[data-combobox-active] {
+  background-color: var(--app-accent-soft);
+}
+
+.pill-select-option:hover {
+  background-color: color-mix(in srgb, var(--app-accent-soft) 55%, transparent);
+}
+
+/* Explore filter popover radio inputs */
+.explore-radio-input {
+  cursor: pointer;
+  background-color: var(--app-surface-overlay);
+  border-color: var(--app-border-strong);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.explore-radio-input:checked {
+  background-color: var(--app-accent);
+  border-color: var(--app-accent);
 }
 
 /* Changelog modal (build-time markdown → HTML) */

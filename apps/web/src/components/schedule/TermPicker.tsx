@@ -28,9 +28,9 @@ export function TermPicker({ terms, value, onChange }: TermPickerProps) {
               justifyContent: "space-between",
               width: "100%",
               padding: "14px var(--mantine-spacing-lg)",
-              backgroundColor: selected ? "rgba(81, 207, 102, 0.06)" : "transparent",
+              backgroundColor: selected ? "var(--app-info-soft)" : "transparent",
               borderBottom: isLast ? "none" : "1px solid var(--app-border)",
-              transition: "background-color 140ms ease",
+              transition: "var(--app-transition)",
               cursor: "pointer",
             }}
             onMouseEnter={(e) => {
@@ -51,7 +51,7 @@ export function TermPicker({ terms, value, onChange }: TermPickerProps) {
               <Box
                 aria-hidden="true"
                 style={{
-                  color: "#51cf66",
+                  color: "var(--app-info)",
                   display: "flex",
                   alignItems: "center",
                   flexShrink: 0,

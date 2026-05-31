@@ -12,8 +12,8 @@ import { ExploreFilterDrawer } from "./ExploreFilterDrawer";
 
 const FILTER_KEYS = ["level", "language", "difficulty", "rating", "sort"] as const;
 type FilterKey = (typeof FILTER_KEYS)[number];
-export const FILTER_PILL_RADIUS = 0;
-export const FILTER_POPOVER_RADIUS = 0;
+export const FILTER_PILL_RADIUS = "var(--app-radius-pill)";
+export const FILTER_POPOVER_RADIUS = "var(--app-radius)";
 
 const RATING_KEY: Record<number, string> = { 3: "good", 3.5: "great", 4: "excellent" };
 
@@ -59,17 +59,17 @@ function pillIsActive(key: FilterKey, filters: ExploreFilterState): boolean {
 
 function pillColors(key: FilterKey, filters: ExploreFilterState): { bg: string; border: string } {
   if (key === "difficulty" && filters.difficulty) {
-    if (filters.difficulty === "easy")
-      return { bg: "rgba(29,158,117,0.15)", border: "rgba(29,158,117,0.55)" };
-    if (filters.difficulty === "moderate")
-      return { bg: "rgba(186,117,23,0.15)", border: "rgba(186,117,23,0.55)" };
-    if (filters.difficulty === "tough")
-      return { bg: "rgba(163,45,45,0.18)", border: "rgba(163,45,45,0.55)" };
+    if (filters.difficulty === "easy") {
+      return { bg: "var(--app-success-soft)", border: "var(--app-success)" };
+    }
+    if (filters.difficulty === "moderate") {
+      return { bg: "var(--app-warning-soft)", border: "var(--app-warning)" };
+    }
+    return { bg: "var(--app-danger-soft)", border: "var(--app-danger)" };
   }
   if (key === "rating" && filters.minRating !== null) {
-    return { bg: "rgba(212,184,0,0.12)", border: "rgba(212,184,0,0.5)" };
+    return { bg: "var(--app-info-soft)", border: "var(--app-info)" };
   }
-  // Level and Language: neutral white tint
   return { bg: "var(--app-translucent)", border: "var(--app-translucent-strong)" };
 }
 
@@ -98,8 +98,9 @@ const FilterPill = forwardRef<HTMLButtonElement, FilterPillProps>(
         fontWeight: active ? 600 : 400,
         color: active ? "var(--app-text)" : "var(--app-text-dim)",
         backgroundColor: active ? activeBg : "var(--app-surface)",
-        border: `1px solid ${active ? activeBorder : "var(--app-border-strong)"}`,
-        transition: "border-color 120ms, background-color 120ms, color 120ms",
+        border: `var(--app-border-width) solid ${active ? activeBorder : "var(--app-border)"}`,
+        transition:
+          "border-color var(--app-transition), background-color var(--app-transition), color var(--app-transition), transform var(--app-transition)",
         whiteSpace: "nowrap",
         userSelect: "none",
       }}
@@ -272,11 +273,11 @@ function FilterDropdown({
         left: pos.left,
         zIndex: 300,
         backgroundColor: "var(--app-surface)",
-        border: "1px solid var(--app-border-strong)",
+        border: "var(--app-border-width) solid var(--app-border)",
         borderRadius: FILTER_POPOVER_RADIUS,
         padding: "12px 14px",
         minWidth: 180,
-        boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
+        boxShadow: "var(--app-shadow)",
         transformOrigin: "top left",
       }}
     >

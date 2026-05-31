@@ -16,7 +16,7 @@ export function ResetModal({ opened, onClose, onConfirm }: ResetModalProps) {
       title="Reset planner?"
       size="sm"
       centered
-      radius={0}
+      radius="lg"
       styles={{
         header: {
           padding: MODAL_PAD,

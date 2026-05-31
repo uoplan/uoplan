@@ -4,7 +4,6 @@ import {
   Alert,
   Box,
   Group,
-  Paper,
   Select,
   SegmentedControl,
   SimpleGrid,
@@ -28,6 +27,7 @@ import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useAppStore } from "../../store/appStore";
 import { BackButton } from "../shared/BackButton";
 import { ChromeControls } from "../shared/ChromeControls";
+import { AppCard } from "../shared/AppCard";
 import type { TrendsSearch, TrendsMetric, TrendsSort } from "../../routes/trends";
 
 type MetricId = TrendsMetric;
@@ -185,11 +185,6 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
     onChange(next as TrendsSearch);
   };
 
-  const surfaceCard: React.CSSProperties = {
-    backgroundColor: "var(--app-surface)",
-    border: "2px solid var(--app-border)",
-  };
-
   return (
     <Box
       component="main"
@@ -208,7 +203,7 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
             <Title
               order={1}
               style={{
-                fontFamily: '"DM Serif Display", serif',
+                fontFamily: "var(--app-font-heading)",
                 color: "var(--app-text)",
                 fontWeight: 400,
                 fontSize: "clamp(1.5rem, 4vw, 2rem)",
@@ -228,12 +223,12 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
             {gradesError}
           </Alert>
         ) : !grades || disciplineOptions.length === 0 ? (
-          <Paper radius={0} p="xl" style={surfaceCard}>
+          <AppCard p="xl">
             <Text c="dimmed">{tr("trends.empty.noData")}</Text>
-          </Paper>
+          </AppCard>
         ) : (
           <>
-            <Paper radius={0} p="md" style={surfaceCard}>
+            <AppCard p="md">
               <Stack gap="md">
                 <Group gap="md" align="flex-end" wrap="wrap">
                   <Select
@@ -298,19 +293,18 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                   />
                 </Stack>
               </Stack>
-            </Paper>
+            </AppCard>
 
             {points.length === 0 ? (
-              <Paper radius={0} p="xl" style={surfaceCard}>
+              <AppCard p="xl">
                 <Text c="dimmed">{tr("trends.empty.noResults")}</Text>
-              </Paper>
+              </AppCard>
             ) : (
               <>
                 <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="md">
                   <StatCard
                     label={tr("trends.stat.latest")}
                     value={formatMetric(activeMetric, latestValue)}
-                    style={surfaceCard}
                   />
                   <StatCard
                     label={tr("trends.stat.change")}
@@ -323,24 +317,21 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                       delta == null || delta === 0
                         ? undefined
                         : delta > 0
-                          ? "var(--mantine-color-teal-6)"
-                          : "var(--mantine-color-red-6)"
+                          ? "var(--app-info)"
+                          : "var(--app-warning)"
                     }
-                    style={surfaceCard}
                   />
                   <StatCard
                     label={tr("trends.stat.terms")}
                     value={formatLocaleNumber(points.length)}
-                    style={surfaceCard}
                   />
                   <StatCard
                     label={tr("trends.stat.volume")}
                     value={formatLocaleNumber(totalVolume)}
-                    style={surfaceCard}
                   />
                 </SimpleGrid>
 
-                <Paper radius={0} p="md" style={surfaceCard}>
+                <AppCard p="md">
                   <LineChart
                     h={320}
                     data={chartData}
@@ -364,11 +355,11 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                     }
                     valueFormatter={(value) => formatMetric(activeMetric, value)}
                   />
-                </Paper>
+                </AppCard>
               </>
             )}
 
-            <Paper radius={0} p="md" style={surfaceCard}>
+            <AppCard p="md">
               <Stack gap="sm">
                 <Group justify="space-between" align="flex-end" wrap="wrap" gap="sm">
                   <Stack gap={2}>
@@ -427,9 +418,9 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                                   size="sm"
                                   c={
                                     row.gpaDelta > 0
-                                      ? "teal.6"
+                                      ? "var(--app-info)"
                                       : row.gpaDelta < 0
-                                        ? "red.6"
+                                        ? "var(--app-warning)"
                                         : "dimmed"
                                   }
                                 >
@@ -457,7 +448,7 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                   </Table>
                 </Table.ScrollContainer>
               </Stack>
-            </Paper>
+            </AppCard>
           </>
         )}
       </Stack>
@@ -469,23 +460,21 @@ function StatCard({
   label,
   value,
   valueColor,
-  style,
 }: {
   label: string;
   value: string;
   valueColor?: string;
-  style: React.CSSProperties;
 }) {
   return (
-    <Paper radius={0} p="md" style={style}>
+    <AppCard p="md">
       <Stack gap={2}>
-        <Text size="xs" c="dimmed" fw={600} tt="uppercase" style={{ letterSpacing: "0.04em" }}>
+        <Text size="xs" c="dimmed" fw={600} style={{ letterSpacing: "0.02em" }}>
           {label}
         </Text>
         <Text fw={700} size="lg" style={{ color: valueColor ?? "var(--app-text)" }}>
           {value}
         </Text>
       </Stack>
-    </Paper>
+    </AppCard>
   );
 }

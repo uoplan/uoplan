@@ -48,7 +48,7 @@ function NotFound() {
       <Text c="dimmed" size="sm" ta="center">
         This page does not exist.
       </Text>
-      <Link to="/" style={{ color: "var(--mantine-color-violet-4)" }}>
+      <Link to="/" style={{ color: "var(--mantine-color-accentBlue-4)" }}>
         {tr("app.nav.back")} — uoplan
       </Link>
     </Box>

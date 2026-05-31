@@ -80,13 +80,13 @@ importers:
         version: 5.2.8
       '@lingui/core':
         specifier: ^5.9.3
-        version: 5.9.3(@lingui/babel-plugin-lingui-macro@5.9.4(typescript@5.9.3))
+        version: 5.9.3(@lingui/babel-plugin-lingui-macro@5.9.3(typescript@5.9.3))
       '@lingui/detect-locale':
         specifier: ^5.9.3
         version: 5.9.3
       '@lingui/react':
         specifier: ^5.9.3
-        version: 5.9.3(@lingui/babel-plugin-lingui-macro@5.9.4(typescript@5.9.3))(react@19.2.4)
+        version: 5.9.3(@lingui/babel-plugin-lingui-macro@5.9.3(typescript@5.9.3))(react@19.2.4)
       '@mantine/charts':
         specifier: ^9.2.1
         version: 9.2.1(@mantine/core@9.2.0(@mantine/hooks@9.2.0(react@19.2.4))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(@mantine/hooks@9.2.0(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(recharts@3.8.1(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react-is@18.3.1)(react@19.2.4)(redux@5.0.1))
@@ -6674,13 +6674,6 @@ snapshots:
     optionalDependencies:
       '@lingui/babel-plugin-lingui-macro': 5.9.3(typescript@5.9.3)
 
-  '@lingui/core@5.9.3(@lingui/babel-plugin-lingui-macro@5.9.4(typescript@5.9.3))':
-    dependencies:
-      '@babel/runtime': 7.29.2
-      '@lingui/message-utils': 5.9.3
-    optionalDependencies:
-      '@lingui/babel-plugin-lingui-macro': 5.9.4(typescript@5.9.3)
-
   '@lingui/core@5.9.4(@lingui/babel-plugin-lingui-macro@5.9.4(typescript@5.9.3))':
     dependencies:
       '@babel/runtime': 7.29.2
@@ -6718,13 +6711,13 @@ snapshots:
       '@messageformat/parser': 5.1.1
       js-sha256: 0.10.1
 
-  '@lingui/react@5.9.3(@lingui/babel-plugin-lingui-macro@5.9.4(typescript@5.9.3))(react@19.2.4)':
+  '@lingui/react@5.9.3(@lingui/babel-plugin-lingui-macro@5.9.3(typescript@5.9.3))(react@19.2.4)':
     dependencies:
       '@babel/runtime': 7.29.2
-      '@lingui/core': 5.9.3(@lingui/babel-plugin-lingui-macro@5.9.4(typescript@5.9.3))
+      '@lingui/core': 5.9.3(@lingui/babel-plugin-lingui-macro@5.9.3(typescript@5.9.3))
       react: 19.2.4
     optionalDependencies:
-      '@lingui/babel-plugin-lingui-macro': 5.9.4(typescript@5.9.3)
+      '@lingui/babel-plugin-lingui-macro': 5.9.3(typescript@5.9.3)
 
   '@lingui/vite-plugin@5.9.4(typescript@5.9.3)(vite@8.0.2(@types/node@25.5.0)(esbuild@0.27.3)(jiti@2.7.0)(terser@5.47.1)(tsx@4.22.2)(yaml@2.8.3))':
     dependencies:

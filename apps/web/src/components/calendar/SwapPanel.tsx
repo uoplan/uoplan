@@ -274,7 +274,7 @@ export function SwapPanel({
           {/* Grade distribution */}
           {modalState.gradeViz && (
             <Box px="sm" pt="sm" style={{ borderBottom: "1px solid var(--app-border)" }}>
-              <Text size="xs" c="dimmed" tt="uppercase" fw={600} mb={6}>
+              <Text size="xs" c="dimmed" fw={600} mb={6}>
                 {tr("calendar.grade.distribution")}
               </Text>
               <GradeDistributionExpanded gradeViz={modalState.gradeViz} />
@@ -283,7 +283,7 @@ export function SwapPanel({
 
           {/* Swap candidates */}
           <Box p="sm">
-            <Text size="xs" c="dimmed" tt="uppercase" fw={600} mb={8}>
+            <Text size="xs" c="dimmed" fw={600} mb={8}>
               Swap with
             </Text>
             <SwapCourseDropdown

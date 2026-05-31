@@ -20,7 +20,7 @@ export function CompletedRequirementsAccordion({
     <Paper
       p="sm"
       withBorder
-      radius={0}
+      radius="var(--app-radius)"
       style={{
         backgroundColor: completedOpen ? "var(--app-surface)" : "var(--app-surface-sunken)",
         cursor: "pointer",
@@ -35,7 +35,7 @@ export function CompletedRequirementsAccordion({
           size={14}
           style={{
             transform: completedOpen ? "rotate(0deg)" : "rotate(-90deg)",
-            transition: "transform 150ms ease",
+            transition: "var(--app-transition)",
           }}
         />
         <Text fw={600} size="sm">
@@ -51,8 +51,8 @@ export function CompletedRequirementsAccordion({
               py={6}
               style={{
                 backgroundColor: idx % 2 === 0 ? "var(--app-surface)" : "var(--app-bg)",
-                borderTop: idx === 0 ? "1px solid var(--app-border)" : "none",
-                borderBottom: "1px solid var(--app-border)",
+                borderTop: idx === 0 ? "var(--app-border-width) solid var(--app-border)" : "none",
+                borderBottom: "var(--app-border-width) solid var(--app-border)",
               }}
             >
               <Group justify="space-between" wrap="nowrap" align="center">

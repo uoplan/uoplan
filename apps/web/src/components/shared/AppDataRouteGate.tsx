@@ -1,10 +1,11 @@
-import { Alert, Box, Paper } from "@mantine/core";
+import { Alert, Box } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import type { ReactNode } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { tr } from "../../i18n";
 import { useAppStore } from "../../store/appStore";
 import { AppDataLoader } from "./AppDataLoader";
+import { AppCard } from "./AppCard";
 
 export function AppDataRouteGate({ children }: { children: ReactNode }) {
   useLingui();
@@ -34,20 +35,17 @@ export function AppDataRouteGate({ children }: { children: ReactNode }) {
           justifyContent: "center",
         }}
       >
-        <Paper
-          withBorder
+        <AppCard
+          p={32}
           style={{
-            border: "2px solid var(--app-border)",
-            padding: 32,
             maxWidth: 480,
             width: "100%",
-            backgroundColor: "var(--app-surface)",
           }}
         >
           <Alert color="red" title={tr("app.errorTitle")}>
             {error}
           </Alert>
-        </Paper>
+        </AppCard>
       </Box>
     );
   }

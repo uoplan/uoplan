@@ -85,7 +85,7 @@ export function AssignStep({
 
   if (!hasTree) {
     return (
-      <Alert color="blue" variant="light" radius={0}>
+      <Alert color="blue" variant="light" radius="var(--app-radius)">
         <Text size="sm">Select a program and complete the previous steps to see requirements.</Text>
       </Alert>
     );
@@ -102,7 +102,7 @@ export function AssignStep({
         <Alert
           color="yellow"
           variant="light"
-          radius={0}
+          radius="var(--app-radius)"
           title="Assign all completed courses before continuing"
           aria-live="polite"
         >
@@ -119,7 +119,7 @@ export function AssignStep({
         <Alert
           color="green"
           variant="light"
-          radius={0}
+          radius="var(--app-radius)"
           title="All courses assigned"
           aria-live="polite"
         >
@@ -127,7 +127,7 @@ export function AssignStep({
         </Alert>
       )}
 
-      <Alert color="blue" variant="light" radius={0}>
+      <Alert color="blue" variant="light" radius="var(--app-radius)">
         <Text size="sm">
           For each requirement below, assign the completed courses that satisfy it. Only your
           completed courses are shown in the dropdowns.
@@ -162,7 +162,7 @@ export function AssignStep({
             );
           })
         ) : (
-          <Alert color="blue" variant="light" radius={0}>
+          <Alert color="blue" variant="light" radius="var(--app-radius)">
             <Text size="sm">
               All requirements are currently satisfied by your completed courses.
             </Text>

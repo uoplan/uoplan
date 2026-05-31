@@ -130,11 +130,12 @@ export function ExperimentalCarousel({ items }: ExperimentalCarouselProps) {
                 height: 8,
                 padding: 0,
                 border: "none",
-                borderRadius: 999,
+                borderRadius: "var(--app-radius-pill)",
                 cursor: "pointer",
                 backgroundColor: isActive ? "var(--app-text)" : "var(--app-border)",
                 opacity: isActive ? 0.85 : 0.6,
-                transition: "width 0.25s ease, background-color 0.25s ease, opacity 0.25s ease",
+                transition:
+                  "width var(--app-transition), background-color var(--app-transition), opacity var(--app-transition)",
               }}
             />
           );

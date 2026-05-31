@@ -9,8 +9,8 @@ export const pillButtonStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
   gap: 6,
-  background: "var(--app-translucent)",
-  border: "1px solid var(--app-translucent-strong)",
+  background: "var(--app-surface)",
+  border: "1px solid var(--app-border)",
   borderRadius: 999,
   padding: "5px 10px 5px 8px",
   backdropFilter: "blur(8px)",
@@ -19,13 +19,13 @@ export const pillButtonStyle: CSSProperties = {
 };
 
 export function applyPillHover(el: HTMLElement): void {
-  el.style.background = "var(--app-translucent-strong)";
-  el.style.borderColor = "var(--app-translucent-strong)";
+  el.style.background = "color-mix(in srgb, var(--app-accent) 10%, var(--app-surface))";
+  el.style.borderColor = "var(--app-border-strong)";
 }
 
 export function resetPillHover(el: HTMLElement): void {
-  el.style.background = "var(--app-translucent)";
-  el.style.borderColor = "var(--app-translucent-strong)";
+  el.style.background = "var(--app-surface)";
+  el.style.borderColor = "var(--app-border)";
 }
 
 export const pillLabelStyle: CSSProperties = {

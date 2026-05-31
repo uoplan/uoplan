@@ -8,7 +8,7 @@
   justify-content: flex-start;
   padding: 0;
   font-size: 11px;
-  border-radius: 0;
+  border-radius: var(--app-radius-sm);
   height: 100%;
   min-height: 100%;
   box-sizing: border-box;
@@ -167,7 +167,7 @@
   align-items: center;
   flex-shrink: 0;
   padding: 1px 6px;
-  border-radius: 0;
+  border-radius: var(--app-radius-sm);
   font-size: 9px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
@@ -360,6 +360,7 @@ a.cal-rating:hover {
 .cal-event-rating-dot {
   width: 10px;
   height: 10px;
+  border-radius: 3px;
   border: 1px solid rgba(0, 0, 0, 0.45);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
 }

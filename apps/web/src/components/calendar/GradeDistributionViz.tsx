@@ -141,7 +141,7 @@ export function GradeDistributionHistogram({
                   <span
                     style={{
                       height: `${(sCount / snsTotal) * 100}%`,
-                      backgroundColor: "#3266ad",
+                      backgroundColor: "var(--app-info)",
                     }}
                   />
                 )}
@@ -149,7 +149,7 @@ export function GradeDistributionHistogram({
                   <span
                     style={{
                       height: `${(nsCount / snsTotal) * 100}%`,
-                      backgroundColor: "#A32D2D",
+                      backgroundColor: "var(--app-warning)",
                     }}
                   />
                 )}

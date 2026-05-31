@@ -18,7 +18,7 @@ export function SharedScheduleModal() {
       title={tr("sharedSchedule.title")}
       size="sm"
       centered
-      radius={0}
+      radius="lg"
       styles={{
         header: {
           padding: MODAL_PAD,

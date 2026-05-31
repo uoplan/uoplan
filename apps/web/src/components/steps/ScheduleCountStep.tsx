@@ -162,7 +162,7 @@ export function ScheduleCountStep({
         clearable
       />
       {warnFirstYearLimit && (
-        <Alert color="yellow" variant="light" radius={0}>
+        <Alert color="yellow" variant="light" radius="md">
           {tr("scheduleCount.firstYear.warning", { credits: totalFirstYearCredits })}
         </Alert>
       )}
@@ -202,7 +202,7 @@ export function ScheduleCountStep({
         />
       )}
       {error && (
-        <Alert color="red" variant="light" radius={0} title={error}>
+        <Alert color="red" variant="light" radius="md" title={error}>
           <GenerationErrorDetailBlocks
             errorDetails={errorDetails}
             summarizeEmptyPools={!!summarizeEmptyPools}
@@ -210,12 +210,12 @@ export function ScheduleCountStep({
         </Alert>
       )}
       {needMore && (
-        <Alert color="blue" variant="light" radius={0}>
+        <Alert color="blue" variant="light" radius="md">
           {tr("scheduleCount.needMore", { count: selectedCount })}
         </Alert>
       )}
       {disableGenerate && disableGenerateReason && (
-        <Alert color="yellow" variant="light" radius={0}>
+        <Alert color="yellow" variant="light" radius="md">
           {disableGenerateReason}
         </Alert>
       )}
@@ -223,13 +223,13 @@ export function ScheduleCountStep({
       {!hideGenerateButton && (
         <Button
           size="sm"
-          color="violet"
+          color="accentBlue"
           variant="filled"
           onClick={onGenerate}
           loading={generating}
           disabled={disableGenerate || generating}
-          radius={0}
-          style={{ border: "2px solid black" }}
+          radius="md"
+          style={{ border: "var(--app-border-width) solid var(--app-border-strong)" }}
         >
           {tr("scheduleCount.generate")}
         </Button>

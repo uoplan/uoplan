@@ -155,8 +155,11 @@ export function SwapCourseDropdown({
                 fontSize: 12,
                 fontWeight: sort === key ? 700 : 400,
                 color:
-                  sort === key ? "var(--mantine-color-violet-4)" : "var(--mantine-color-dimmed)",
-                backgroundColor: sort === key ? "var(--mantine-color-violet-light)" : "transparent",
+                  sort === key
+                    ? "var(--mantine-color-accentBlue-4)"
+                    : "var(--mantine-color-dimmed)",
+                backgroundColor:
+                  sort === key ? "var(--mantine-color-accentBlue-light)" : "transparent",
                 userSelect: "none",
               }}
             >

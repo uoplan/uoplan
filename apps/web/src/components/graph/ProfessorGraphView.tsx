@@ -16,9 +16,42 @@ import { placeIsolatedNodes } from "../../lib/graph/placeIsolatedNodes";
 import { runForceAtlas2Chunked } from "../../lib/graph/runForceAtlas2Chunked";
 import { buildGraphContainerStyle } from "../../lib/graph/graphContainerStyle";
 
-const NODE_DIM = "rgba(61, 66, 72, 0.42)";
-const NODE_ACTIVE = "#ffffff";
-const EDGE_FOCUS = "rgba(36, 39, 44, 0.14)";
+function themeValue(token: string): string {
+  return getComputedStyle(document.documentElement).getPropertyValue(token).trim();
+}
+
+function withAlpha(color: string, alpha: number): string {
+  const hex = color.match(/^#([0-9a-f]{6})$/i);
+  if (hex) {
+    const n = parseInt(hex[1], 16);
+    const r = (n >> 16) & 255;
+    const g = (n >> 8) & 255;
+    const b = n & 255;
+    return `${"rgba"}(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  return color;
+}
+
+type GraphTheme = {
+  nodeDim: string;
+  nodeActive: string;
+  edgeFocus: string;
+  labelColor: string;
+  defaultNodeColor: string;
+  labelFont: string;
+};
+
+function graphTheme(): GraphTheme {
+  const textDim = themeValue("--app-text-dim");
+  return {
+    nodeDim: withAlpha(textDim, 0.42),
+    nodeActive: themeValue("--app-accent"),
+    edgeFocus: withAlpha(themeValue("--app-text-muted"), 0.14),
+    labelColor: themeValue("--app-text"),
+    defaultNodeColor: textDim,
+    labelFont: themeValue("--app-font-body"),
+  };
+}
 
 export type ProfessorGraphPhase = "layout" | "ready";
 
@@ -58,6 +91,7 @@ function ProfessorGraphViewInner({
   const focusRef = useRef<string | null>(null);
   const neighborsRef = useRef<Set<string>>(new Set());
   const hoveredNodeRef = useRef<string | null>(null);
+  const graphThemeRef = useRef<GraphTheme | null>(null);
   const onNodeSelectRef = useRef(onNodeSelect);
   const onPhaseChangeRef = useRef(onPhaseChange);
   const onLayoutProgressRef = useRef(onLayoutProgress);
@@ -77,10 +111,11 @@ function ProfessorGraphViewInner({
 
     const focus = focusRef.current;
     if (!focus) return next;
+    const theme = graphThemeRef.current ?? graphTheme();
     if (node === focus) {
       return {
         ...next,
-        color: NODE_ACTIVE,
+        color: theme.nodeActive,
         size: Math.min(next.size * 1.35, next.size + 1.5),
         zIndex: 2,
       };
@@ -88,7 +123,7 @@ function ProfessorGraphViewInner({
     if (neighborsRef.current.has(node)) {
       return { ...next, zIndex: 1 };
     }
-    return { ...next, color: NODE_DIM, zIndex: 0 };
+    return { ...next, color: theme.nodeDim, zIndex: 0 };
   }, []);
 
   const edgeReducer = useCallback((edge: string, attrs: ProfessorEdgeAttributes) => {
@@ -97,7 +132,8 @@ function ProfessorGraphViewInner({
     if (!focus || !graph) return attrs;
     const [source, target] = graph.extremities(edge);
     if (source === focus || target === focus) {
-      return { ...attrs, color: EDGE_FOCUS, size: Math.min(attrs.size * 1.4, 1.4) };
+      const theme = graphThemeRef.current ?? graphTheme();
+      return { ...attrs, color: theme.edgeFocus, size: Math.min(attrs.size * 1.4, 1.4) };
     }
     return { ...attrs, hidden: true };
   }, []);
@@ -156,13 +192,16 @@ function ProfessorGraphViewInner({
 
       if (cancelled) return;
 
+      const theme = graphTheme();
+      graphThemeRef.current = theme;
+
       const sigma = new Sigma(graph, container, {
         renderLabels: false,
         labelSize: 12,
-        labelFont: "system-ui, -apple-system, sans-serif",
-        labelColor: { color: "var(--app-text)" },
+        labelFont: theme.labelFont,
+        labelColor: { color: theme.labelColor },
         defaultDrawNodeHover: drawProfessorNodeHover as never,
-        defaultNodeColor: "var(--app-text-dim)",
+        defaultNodeColor: theme.defaultNodeColor,
         defaultEdgeColor: GRAPH_EDGE_COLOR,
         minEdgeThickness: 0.3,
         antiAliasingFeather: 0.5,
@@ -221,6 +260,7 @@ function ProfessorGraphViewInner({
         sigmaRef.current = null;
       }
       graphRef.current = null;
+      graphThemeRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only rebuild layout when data changes
   }, [data, edgeReducer, nodeReducer]);

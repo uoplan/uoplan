@@ -95,10 +95,9 @@ export function ExploreFilterDrawer({
                       <Text
                         size="xs"
                         fw={700}
-                        tt="uppercase"
-                        c={initialSection === key ? "var(--mantine-color-violet-4)" : "dimmed"}
+                        c={initialSection === key ? "var(--app-accent)" : "dimmed"}
                         mb={12}
-                        style={{ letterSpacing: "0.06em" }}
+                        style={{ letterSpacing: "0.02em" }}
                       >
                         {filterSectionLabel(key)}
                       </Text>

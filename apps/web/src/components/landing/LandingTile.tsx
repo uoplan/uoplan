@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Badge, Box, Paper, Stack, Text } from "@mantine/core";
+import { Badge, Box, Stack, Text } from "@mantine/core";
 import type { ReactNode } from "react";
 import { tr } from "../../i18n";
+import { AppCard } from "../shared/AppCard";
 
 export type LandingTileProps = {
   to: string;
@@ -33,30 +34,44 @@ export function LandingTile({
         textDecoration: "none",
       }}
     >
-      <Paper
-        withBorder
-        radius={0}
-        className="stamp-hover"
+      <AppCard
+        interactive
         style={{
           position: "relative",
           height: "100%",
+          minHeight: 200,
           overflow: "hidden",
-          backgroundColor: "var(--app-surface)",
-          border: "2px solid var(--app-border)",
-          padding: "var(--mantine-spacing-lg)",
+          borderColor: "var(--app-border-strong)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: "var(--mantine-spacing-xl)",
           paddingBottom: badgeLabel
-            ? "calc(var(--mantine-spacing-lg) + 28px)"
-            : "var(--mantine-spacing-lg)",
+            ? "calc(var(--mantine-spacing-xl) + 28px)"
+            : "var(--mantine-spacing-xl)",
         }}
       >
-        <Stack gap="md" align="center" ta="center">
-          <Box c="violet.4" style={{ lineHeight: 0 }}>
+        <Stack gap="sm" align="center" ta="center">
+          <Box
+            aria-hidden
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 60,
+              height: 60,
+              borderRadius: "var(--app-radius-lg)",
+              background: "var(--app-accent-soft)",
+              color: "var(--app-accent)",
+              marginBottom: 4,
+            }}
+          >
             {icon}
           </Box>
-          <Text fw={600} size="md" c="var(--app-text)">
+          <Text fw={600} size="lg" c="var(--app-text)">
             {title}
           </Text>
-          <Text size="sm" c="dimmed" lh={1.5}>
+          <Text size="sm" c="var(--app-text-muted)" lh={1.55}>
             {description}
           </Text>
         </Stack>
@@ -72,10 +87,10 @@ export function LandingTile({
               transform: "translateX(-50%)",
               fontSize: 10,
               fontWeight: 600,
-              letterSpacing: "0.06em",
+              letterSpacing: "0.03em",
               background:
-                badgeColor === "blue" ? "rgba(51, 154, 240, 0.12)" : "rgba(255, 146, 43, 0.12)",
-              color: badgeColor === "blue" ? "#74C0FC" : "#FFA94D",
+                badgeColor === "blue" ? "var(--app-info-soft)" : "var(--app-warning-soft)",
+              color: badgeColor === "blue" ? "var(--app-info)" : "var(--app-warning)",
               border: "none",
               whiteSpace: "nowrap",
             }}
@@ -83,7 +98,7 @@ export function LandingTile({
             {badgeLabel}
           </Badge>
         ) : null}
-      </Paper>
+      </AppCard>
     </Link>
   );
 }

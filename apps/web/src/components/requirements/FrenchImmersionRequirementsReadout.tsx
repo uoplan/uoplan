@@ -66,7 +66,7 @@ export function FrenchImmersionRequirementsReadout() {
   const pendingAssign = unassignedCompletedCourses.length > 0;
 
   return (
-    <Paper withBorder radius={0} p="md" bg="var(--mantine-color-body)">
+    <Paper withBorder radius="var(--app-radius)" p="md" bg="var(--app-surface)">
       <Stack gap="sm">
         <div>
           <Text fw={600} size="sm">
@@ -99,26 +99,26 @@ export function FrenchImmersionRequirementsReadout() {
 
         <Stack gap={6}>
           <Text size="xs" c="dimmed">
-            <Text span fw={600} c="var(--mantine-color-text)">
+            <Text span fw={600} c="var(--app-text)">
               {tr("frenchImmersion.readout.cat1000")}
             </Text>{" "}
             {formatCodeList(grouped.level_1000_non_fls)}
           </Text>
           <Text size="xs" c="dimmed">
-            <Text span fw={600} c="var(--mantine-color-text)">
+            <Text span fw={600} c="var(--app-text)">
               {tr("frenchImmersion.readout.cat3000")}
             </Text>{" "}
             {formatCodeList(grouped.level_3000_4000_non_fls)}
           </Text>
           <Text size="xs" c="dimmed">
-            <Text span fw={600} c="var(--mantine-color-text)">
+            <Text span fw={600} c="var(--app-text)">
               {tr("frenchImmersion.readout.catCompanion")}
             </Text>{" "}
             {formatCodeList(grouped.accompanying_fls)}
           </Text>
           {grouped.other_french.length > 0 && (
             <Text size="xs" c="dimmed">
-              <Text span fw={600} c="var(--mantine-color-text)">
+              <Text span fw={600} c="var(--app-text)">
                 {tr("frenchImmersion.readout.catOther")}
               </Text>{" "}
               {formatCodeList(grouped.other_french)}
@@ -144,7 +144,7 @@ export function FrenchImmersionRequirementsReadout() {
           <Alert
             color="yellow"
             variant="light"
-            radius={0}
+            radius="var(--app-radius)"
             title={tr("frenchImmersion.fls3500.title")}
           >
             <Text size="sm">{tr("frenchImmersion.fls3500.body")}</Text>

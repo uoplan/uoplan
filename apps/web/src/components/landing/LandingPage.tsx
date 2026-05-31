@@ -29,26 +29,26 @@ export function LandingPage() {
     [prefersReducedMotion],
   );
 
-  const experimentalLabel = tr("app.experimental");
+  const betaLabel = tr("app.beta");
 
   const experimentalFeatures = [
-    {
-      to: "/graph",
-      title: tr("graph.title"),
-      description: tr("landing.graph.description"),
-      badgeLabel: experimentalLabel,
-      badgeColor: "orange" as const,
-      icon: <IconAffiliate size={32} stroke={1.5} />,
-      ariaLabel: `${tr("graph.title")}, ${experimentalLabel}`,
-    },
     {
       to: "/trends",
       title: tr("trends.title"),
       description: tr("landing.trends.description"),
-      badgeLabel: experimentalLabel,
+      badgeLabel: betaLabel,
       badgeColor: "orange" as const,
       icon: <IconChartHistogram size={32} stroke={1.5} />,
-      ariaLabel: `${tr("trends.title")}, ${experimentalLabel}`,
+      ariaLabel: `${tr("trends.title")}, ${betaLabel}`,
+    },
+    {
+      to: "/graph",
+      title: tr("graph.title"),
+      description: tr("landing.graph.description"),
+      badgeLabel: betaLabel,
+      badgeColor: "orange" as const,
+      icon: <IconAffiliate size={32} stroke={1.5} />,
+      ariaLabel: `${tr("graph.title")}, ${betaLabel}`,
     },
   ];
 
@@ -93,7 +93,7 @@ export function LandingPage() {
           <Title
             order={1}
             style={{
-              fontFamily: '"DM Serif Display", serif',
+              fontFamily: "var(--app-font-heading)",
               color: "var(--app-text)",
               fontWeight: 400,
               fontSize: "clamp(1.75rem, 5vw, 2.25rem)",
