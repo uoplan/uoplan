@@ -39,6 +39,12 @@ export function useScheduleTransition(
     latestScheduleRef.current = schedule;
   }, [schedule]);
 
+  // Tracks the schedule the animation last reacted to. Initialised to the
+  // mount value so the transition only fires when the schedule actually
+  // changes — without this the exit → enter sequence plays on first mount,
+  // making a freshly generated schedule flash as if it were regenerated.
+  const animatedScheduleRef = useRef(schedule);
+
   const clearTimers = useCallback(() => {
     if (exitTimerRef.current != null) {
       clearTimeout(exitTimerRef.current);
@@ -55,6 +61,13 @@ export function useScheduleTransition(
       clearTimers();
       return;
     }
+
+    // Skip on mount (and StrictMode's double-invoke) and whenever the schedule
+    // reference is unchanged, so we only animate genuine schedule changes.
+    if (schedule === animatedScheduleRef.current) {
+      return;
+    }
+    animatedScheduleRef.current = schedule;
 
     const startEnter = () => {
       phaseRef.current = "entering";
@@ -115,6 +128,10 @@ export function useWeekIndexTransition(
     latestRef.current = weekIndex;
   }, [weekIndex]);
 
+  // Tracks the week index the animation last reacted to (see the matching
+  // comment in useScheduleTransition) so we don't flash on initial mount.
+  const animatedWeekRef = useRef(weekIndex);
+
   const clearTimers = useCallback(() => {
     if (exitTimerRef.current != null) {
       clearTimeout(exitTimerRef.current);
@@ -131,6 +148,11 @@ export function useWeekIndexTransition(
       clearTimers();
       return;
     }
+
+    if (weekIndex === animatedWeekRef.current) {
+      return;
+    }
+    animatedWeekRef.current = weekIndex;
 
     const startEnter = () => {
       phaseRef.current = "entering";
