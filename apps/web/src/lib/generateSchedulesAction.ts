@@ -65,6 +65,7 @@ export type GenerateSchedulesInput = Pick<
   | "generationPreferEasier"
   | "frenchImmersionStream"
   | "blacklistedCourses"
+  | "blockedTimes"
 > & {
   /** Set explicitly by callers instead of read from module-global state. */
   mode: GenerateSchedulesMode;
@@ -108,6 +109,7 @@ export function pickGenerateSchedulesInput(
     generationPreferEasier: state.generationPreferEasier,
     frenchImmersionStream: state.frenchImmersionStream,
     blacklistedCourses: state.blacklistedCourses,
+    blockedTimes: state.blockedTimes,
   };
 }
 
@@ -346,6 +348,7 @@ export async function generateSchedulesAction(
       ? 48 - (completedFirstYearCredits ?? 0)
       : undefined,
     compressedSchedule: generationCompressedSchedule,
+    blockedTimes: input.blockedTimes,
   };
 
   const result = generateAdvancedSchedule({
@@ -474,6 +477,7 @@ async function handleBasicGeneration(
     allowedDays: generationAllowedDays,
     minProfessorRating: generationMinProfessorRating ?? undefined,
     professorRatings: professorRatings ?? undefined,
+    blockedTimes: input.blockedTimes,
   };
 
   const { schedule, optionalPool } = generateBasicSchedule({

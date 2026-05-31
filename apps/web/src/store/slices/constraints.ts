@@ -1,6 +1,7 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
 import { generateRandomSeed } from "@uoplan/core";
+import { normalizeBlockedTimes } from "../../lib/blockedTimes";
 
 interface ConstraintsSlice {
   setGenerationMinStartMinutes: AppStore["setGenerationMinStartMinutes"];
@@ -13,6 +14,9 @@ interface ConstraintsSlice {
   setGenerationCompressedSchedule: AppStore["setGenerationCompressedSchedule"];
   setGenerationPreferEasier: AppStore["setGenerationPreferEasier"];
   setBlacklistedCourses: AppStore["setBlacklistedCourses"];
+  addBlockedTime: AppStore["addBlockedTime"];
+  updateBlockedTime: AppStore["updateBlockedTime"];
+  removeBlockedTime: AppStore["removeBlockedTime"];
 }
 
 export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsSlice> = (
@@ -53,4 +57,40 @@ export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsS
       currentSeed: 0,
       lowestVisitedSeed: null,
     }),
+
+  addBlockedTime: (window) => {
+    const next = normalizeBlockedTimes([...get().blockedTimes, { id: "", ...window }]);
+    set({
+      blockedTimes: next,
+      firstSeed: generateRandomSeed(),
+      currentSeed: 0,
+      lowestVisitedSeed: null,
+    });
+    void get().generateSchedules();
+  },
+
+  updateBlockedTime: (id, window) => {
+    const next = normalizeBlockedTimes(
+      get().blockedTimes.map((b) => (b.id === id ? { id, ...window } : b)),
+    );
+    set({
+      blockedTimes: next,
+      firstSeed: generateRandomSeed(),
+      currentSeed: 0,
+      lowestVisitedSeed: null,
+    });
+    void get().generateSchedules();
+  },
+
+  removeBlockedTime: (id) => {
+    const next = get().blockedTimes.filter((b) => b.id !== id);
+    if (next.length === get().blockedTimes.length) return;
+    set({
+      blockedTimes: normalizeBlockedTimes(next),
+      firstSeed: generateRandomSeed(),
+      currentSeed: 0,
+      lowestVisitedSeed: null,
+    });
+    void get().generateSchedules();
+  },
 });

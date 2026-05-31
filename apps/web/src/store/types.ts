@@ -15,6 +15,14 @@ import type { Discipline } from "@uoplan/core";
 import type { DecodedState } from "@uoplan/core";
 import type { LeadDescriptor, TimetableFailureDiagnostics } from "@uoplan/core";
 
+/** A user-blocked recurring weekday window on the calendar. `id` is local-only (React keys). */
+export interface BlockedTime {
+  id: string;
+  day: DayOfWeek;
+  startMinutes: number;
+  endMinutes: number;
+}
+
 /**
  * Locale-agnostic description of an active, non-default generation filter.
  * Produced in the (locale-less) schedule worker and translated at render time
@@ -144,6 +152,8 @@ export interface AppState {
   scheduleNoVariety: boolean;
   /** Courses that must never appear in any generated schedule. */
   blacklistedCourses: string[];
+  /** Recurring per-weekday windows that no generated course may overlap. */
+  blockedTimes: BlockedTime[];
   /** Timestamp (Date.now()) of the last successful localStorage flush. Null before first save. */
   lastSavedAt: number | null;
   /** True when tracked state has changed since the last localStorage flush. */
@@ -210,6 +220,12 @@ export interface AppActions {
   setBlacklistedCourses: (courses: string[]) => void;
   blacklistCourseFromSwap: (enrollmentIndex: number) => void;
   unblacklistCourseFromSwap: (enrollmentIndex: number) => void;
+  /** Add a blocked window (merged with any it overlaps) and regenerate. */
+  addBlockedTime: (window: Omit<BlockedTime, "id">) => void;
+  /** Replace a blocked window's bounds (re-merging) and regenerate. */
+  updateBlockedTime: (id: string, window: Omit<BlockedTime, "id">) => void;
+  /** Remove a blocked window by id and regenerate. */
+  removeBlockedTime: (id: string) => void;
   setCalendarWeekIndex: (index: number | null) => void;
   setCalendarMode: (mode: CalendarVariant | null) => void;
   clearEnrollmentsCache: () => void;

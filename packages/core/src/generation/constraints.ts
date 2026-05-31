@@ -1,5 +1,5 @@
 import type { DayOfWeek } from "../dataTypes";
-import type { CourseEnrollment, GenerationConstraints, TimeSlot } from "./types";
+import type { BlockedTimeWindow, CourseEnrollment, GenerationConstraints, TimeSlot } from "./types";
 
 /** Default when the UI clears “days allowed” (empty array): same as initial app state (weekdays). */
 const DEFAULT_ALLOWED_DAYS: DayOfWeek[] = ["Mo", "Tu", "We", "Th", "Fr"];
@@ -8,13 +8,28 @@ export function effectiveAllowedDays(c: GenerationConstraints): DayOfWeek[] {
   return c.allowedDays.length > 0 ? c.allowedDays : DEFAULT_ALLOWED_DAYS;
 }
 
+/** True when the slot overlaps any blocked window on the same weekday (half-open overlap). */
+export function timeSlotOverlapsBlocked(
+  slot: TimeSlot,
+  blockedTimes: readonly BlockedTimeWindow[],
+): boolean {
+  for (const b of blockedTimes) {
+    if (b.day !== slot.day) continue;
+    if (slot.startMinutes < b.endMinutes && slot.endMinutes > b.startMinutes) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /** Time bounds are inclusive: a class starting at minStartMinutes or ending at maxEndMinutes is allowed. */
 export function timeSlotSatisfiesConstraints(slot: TimeSlot, c: GenerationConstraints): boolean {
   const allowedDays = effectiveAllowedDays(c);
   return (
     allowedDays.includes(slot.day) &&
     slot.startMinutes >= c.minStartMinutes &&
-    slot.endMinutes <= c.maxEndMinutes
+    slot.endMinutes <= c.maxEndMinutes &&
+    !(c.blockedTimes && c.blockedTimes.length > 0 && timeSlotOverlapsBlocked(slot, c.blockedTimes))
   );
 }
 

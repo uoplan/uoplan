@@ -9,6 +9,21 @@ export function minutesToPercent(minutes: number): number {
   return ((minutes - CAL_START_MINUTES) / CAL_SPAN_MINUTES) * 100;
 }
 
+/** Inverse of {@link minutesToPercent}: a 0–100 vertical position back to minutes. */
+export function percentToMinutes(percent: number): number {
+  return CAL_START_MINUTES + (percent / 100) * CAL_SPAN_MINUTES;
+}
+
+/** Snap minutes to the nearest `step` grid (default 5 minutes). */
+export function snapMinutes(minutes: number, step = 5): number {
+  return Math.round(minutes / step) * step;
+}
+
+/** Clamp minutes to the visible calendar window [08:00, 23:00]. */
+export function clampToCalendarRange(minutes: number): number {
+  return Math.max(CAL_START_MINUTES, Math.min(CAL_END_MINUTES, minutes));
+}
+
 export const WEEKDAY_CODES: DayOfWeekCode[] = ["Mo", "Tu", "We", "Th", "Fr"];
 export const FULL_WEEK_CODES: DayOfWeekCode[] = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 

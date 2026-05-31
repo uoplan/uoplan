@@ -30,7 +30,8 @@ export function timeWindowConstraint(constraints: GenerationConstraints): Constr
   const custom =
     constraints.allowedDays.length > 0 ||
     constraints.minStartMinutes > 0 ||
-    constraints.maxEndMinutes < 24 * 60;
+    constraints.maxEndMinutes < 24 * 60 ||
+    (constraints.blockedTimes?.length ?? 0) > 0;
   return {
     id: "time-window",
     label: "time-window",

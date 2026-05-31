@@ -13,6 +13,7 @@ import {
 import { recomputeStateForProgram } from "../requirementCompute";
 import type { Course } from "@uoplan/core";
 import { inferLowestVisitedSeedFromPersisted } from "../../lib/seedNavigation";
+import { toBlockedWindows, withBlockedIds } from "../../lib/blockedTimes";
 
 interface UrlSlice {
   loadEncodedState: AppStore["loadEncodedState"];
@@ -62,6 +63,7 @@ function buildEncodeInput(s: AppStore): EncodeInput {
     frenchImmersionStream: s.frenchImmersionStream,
     calendarWeekIndex: s.calendarWeekIndex,
     blacklistedCourses: s.blacklistedCourses,
+    blockedTimes: toBlockedWindows(s.blockedTimes),
   };
 }
 
@@ -200,6 +202,7 @@ export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, ge
       frenchImmersionStream: decoded.frenchImmersionStream ?? false,
       calendarWeekIndex: decoded.calendarWeekIndex ?? null,
       blacklistedCourses: decoded.blacklistedCourses ?? [],
+      blockedTimes: withBlockedIds(decoded.blockedTimes ?? []),
       generationError: null,
       constrainedPerRequirement,
       ...(decoded.selectedTermId != null ? { selectedTermId: decoded.selectedTermId } : {}),

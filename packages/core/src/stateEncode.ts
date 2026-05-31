@@ -4,6 +4,7 @@ import { DAY_OF_WEEK_CODES } from "./dataTypes";
 import type { CourseLevelBucket, CourseLanguageBucket } from "./courseFilters";
 import type { RemainingRequirement, RequirementWithStatus } from "./requirements";
 import type { Indices } from "./dataTypes";
+import type { BlockedTimeWindow } from "./generation";
 import { isOptCourse, getCourseLevel } from "./utils/courseUtils";
 import { isGroupToken, groupTokenPrefix } from "./utils/groupToken";
 import type { DayOfWeek as ProtoDayOfWeek } from "@uoplan/proto/state";
@@ -104,6 +105,7 @@ export interface EncodeInput {
   frenchImmersionStream: boolean;
   calendarWeekIndex?: number | null;
   blacklistedCourses: string[];
+  blockedTimes: BlockedTimeWindow[];
 }
 
 export interface DecodedState {
@@ -145,6 +147,7 @@ export interface DecodedState {
   frenchImmersionStream: boolean;
   calendarWeekIndex: number | null;
   blacklistedCourses: string[];
+  blockedTimes: BlockedTimeWindow[];
 }
 
 export interface CatalogueLike {
@@ -295,6 +298,11 @@ export function encodeState(
     blacklistedCourses: input.blacklistedCourses
       .map(encodeCourseCode)
       .filter((i): i is number => i !== undefined),
+    blockedTimes: input.blockedTimes.map((b) => ({
+      day: dayToProto(b.day),
+      startMinutes: b.startMinutes,
+      endMinutes: b.endMinutes,
+    })),
   };
 
   // Requirements
@@ -535,6 +543,11 @@ export function decodeState(
     frenchImmersionStream: state.frenchImmersionStream ?? false,
     calendarWeekIndex: state.calendarWeekIndex ?? null,
     blacklistedCourses,
+    blockedTimes: (state.blockedTimes ?? []).map((b) => ({
+      day: protoToDay(b.day as ProtoDayOfWeek),
+      startMinutes: b.startMinutes,
+      endMinutes: b.endMinutes,
+    })),
   };
 }
 

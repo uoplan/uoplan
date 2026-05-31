@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { timeSlotSatisfiesConstraints, satisfiesCompressedConstraint } from "../constraints";
-import type { CourseEnrollment, GenerationConstraints, TimeSlot } from "../types";
+import {
+  timeSlotSatisfiesConstraints,
+  satisfiesCompressedConstraint,
+  timeSlotOverlapsBlocked,
+} from "../constraints";
+import type {
+  BlockedTimeWindow,
+  CourseEnrollment,
+  GenerationConstraints,
+  TimeSlot,
+} from "../types";
 
 describe("constraints", () => {
   it("timeSlotSatisfiesConstraints respects time bounds and allowed days", () => {
@@ -21,6 +30,48 @@ describe("constraints", () => {
 
     const tooLate: TimeSlot = { day: "Mo", startMinutes: 1000, endMinutes: 1100 };
     expect(timeSlotSatisfiesConstraints(tooLate, c)).toBe(false);
+  });
+
+  it("timeSlotSatisfiesConstraints rejects slots overlapping a blocked window", () => {
+    const blockedTimes: BlockedTimeWindow[] = [
+      { day: "Mo", startMinutes: 600, endMinutes: 720 }, // 10:00 - 12:00
+    ];
+    const c: GenerationConstraints = {
+      minStartMinutes: 480,
+      maxEndMinutes: 1380,
+      allowedDays: ["Mo", "Tu"],
+      blockedTimes,
+    };
+
+    // Overlaps the block.
+    expect(timeSlotSatisfiesConstraints({ day: "Mo", startMinutes: 660, endMinutes: 780 }, c)).toBe(
+      false,
+    );
+    // Same time, different day: allowed.
+    expect(timeSlotSatisfiesConstraints({ day: "Tu", startMinutes: 660, endMinutes: 780 }, c)).toBe(
+      true,
+    );
+    // Touching the block end exactly: allowed (half-open).
+    expect(timeSlotSatisfiesConstraints({ day: "Mo", startMinutes: 720, endMinutes: 800 }, c)).toBe(
+      true,
+    );
+    // Touching the block start exactly: allowed.
+    expect(timeSlotSatisfiesConstraints({ day: "Mo", startMinutes: 540, endMinutes: 600 }, c)).toBe(
+      true,
+    );
+  });
+
+  it("timeSlotOverlapsBlocked detects same-day strict overlap only", () => {
+    const blocked: BlockedTimeWindow[] = [{ day: "We", startMinutes: 600, endMinutes: 700 }];
+    expect(
+      timeSlotOverlapsBlocked({ day: "We", startMinutes: 650, endMinutes: 660 }, blocked),
+    ).toBe(true);
+    expect(
+      timeSlotOverlapsBlocked({ day: "Th", startMinutes: 650, endMinutes: 660 }, blocked),
+    ).toBe(false);
+    expect(
+      timeSlotOverlapsBlocked({ day: "We", startMinutes: 700, endMinutes: 760 }, blocked),
+    ).toBe(false);
   });
 
   it("satisfiesCompressedConstraint allows at most one gap <= 90 mins", () => {
