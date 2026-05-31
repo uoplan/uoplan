@@ -32,6 +32,13 @@ describe("gradeDistribution", () => {
     expect(distributionGpa({ P: 1, S: 2 })).toBeNull();
   });
 
+  it("uses the uOttawa 10-point scale (A+ → 10, F → 0)", () => {
+    expect(GRADE_POINTS["A+"]).toBe(10);
+    expect(GRADE_POINTS.F).toBe(0);
+    expect(distributionGpa({ "A+": 5 })).toBeCloseTo(10, 5);
+    expect(distributionGpa({ F: 5 })).toBeCloseTo(0, 5);
+  });
+
   it("aggregateCourseDistribution sums section distributions", () => {
     const schedule: CourseSchedule = {
       subject: "ADM",

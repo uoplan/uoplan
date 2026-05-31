@@ -24,6 +24,114 @@ msgstr "Recherchez des cours et des professeurs avec les distributions de notes.
 msgid "landing.graph.description"
 msgstr "Découvrez comment les professeurs sont liés par des cours communs."
 
+msgid "landing.trends.description"
+msgstr "Suivez l'évolution des notes au fil du temps par discipline."
+
+msgid "landing.carousel.label"
+msgstr "Fonctionnalités expérimentales"
+
+msgid "landing.carousel.goTo"
+msgstr "Afficher {title}"
+
+msgid "trends.title"
+msgstr "Tendances des notes"
+
+msgid "trends.subtitle"
+msgstr "L'évolution des notes dans le temps, regroupées pour l'ensemble des cours et des professeurs répertoriés."
+
+msgid "trends.error.title"
+msgstr "Impossible de charger l'historique des notes"
+
+msgid "trends.empty.noData"
+msgstr "L'historique des notes n'est pas disponible pour le moment."
+
+msgid "trends.empty.noResults"
+msgstr "Aucune donnée de notes ne correspond à ces filtres."
+
+msgid "trends.filter.discipline"
+msgstr "Discipline"
+
+msgid "trends.filter.allDisciplines"
+msgstr "Toutes les disciplines"
+
+msgid "trends.filter.noMatch"
+msgstr "Aucune discipline correspondante"
+
+msgid "trends.filter.level"
+msgstr "Niveau"
+
+msgid "trends.filter.season"
+msgstr "Session"
+
+msgid "trends.filter.all"
+msgstr "Toutes"
+
+msgid "trends.season.fall"
+msgstr "Automne"
+
+msgid "trends.season.winter"
+msgstr "Hiver"
+
+msgid "trends.season.springSummer"
+msgstr "Printemps/été"
+
+msgid "trends.metric.label"
+msgstr "Mesure"
+
+msgid "trends.metric.gpa"
+msgstr "MPC moyenne"
+
+msgid "trends.metric.aPlus"
+msgstr "% A+"
+
+msgid "trends.metric.aRange"
+msgstr "% plage A"
+
+msgid "trends.metric.pass"
+msgstr "Taux de réussite"
+
+msgid "trends.metric.volume"
+msgstr "Volume noté"
+
+msgid "trends.stat.latest"
+msgstr "Dernière session"
+
+msgid "trends.stat.change"
+msgstr "Écart depuis le début"
+
+msgid "trends.stat.terms"
+msgstr "Sessions"
+
+msgid "trends.stat.volume"
+msgstr "Résultats notés"
+
+msgid "trends.leaderboard.title"
+msgstr "Disciplines dans le temps"
+
+msgid "trends.leaderboard.scope"
+msgstr "Toutes les disciplines · tous les niveaux · toutes les sessions"
+
+msgid "trends.leaderboard.rise"
+msgstr "Plus forte hausse"
+
+msgid "trends.leaderboard.easiest"
+msgstr "Plus faciles"
+
+msgid "trends.leaderboard.hardest"
+msgstr "Plus difficiles"
+
+msgid "trends.leaderboard.col.discipline"
+msgstr "Discipline"
+
+msgid "trends.leaderboard.col.currentGpa"
+msgstr "MPC actuelle"
+
+msgid "trends.leaderboard.col.change"
+msgstr "Écart"
+
+msgid "trends.leaderboard.col.span"
+msgstr "Période"
+
 msgid "app.constraints.description"
 msgstr "Épinglez des cours à des exigences précises - le générateur utilise d'abord vos choix, puis complète les placés restantes avec d'autres cours admissibles."
 
@@ -1130,6 +1238,16 @@ msgstr "Explorez comment les professeur·e·s de l'uOttawa sont relié·e·s par
 
 msgid "seo.graph.keywords"
 msgstr "professeurs uottawa, co-enseignement uottawa, réseau de faculté uottawa"
+
+msgid "seo.trends.title"
+msgstr "Tendances des notes de l'Université d'Ottawa | uoplan"
+
+msgid "seo.trends.description"
+msgstr "L'évolution des notes de l'Université d'Ottawa : MPC moyenne, taux de A+ et taux de réussite par session, avec répartition par discipline, niveau et session ainsi qu'un classement de l'inflation des notes."
+
+msgid "seo.trends.keywords"
+msgstr "tendances des notes uottawa, inflation des notes uottawa, mpc moyenne université d'ottawa, distribution des notes uottawa dans le temps"
+
 
 msgid "search.noResults"
 msgstr "Aucun résultat pour « {q} »"
