@@ -1,7 +1,7 @@
 {
   "termId": "2269",
   "totalCourses": 11145,
-  "totalWithSchedules": 3163,
+  "totalWithSchedules": 3162,
   "schedules": [
     {
       "subject": "ADM",
@@ -2831,7 +2831,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 164,
               "A": 306,
@@ -12651,19 +12651,8 @@
                 "day": "Mo",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
-                "virtual": false,
-                "instructor": "Eric Nelson",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Eric Nelson",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -27670,37 +27659,6 @@
     },
     {
       "subject": "APA",
-      "catalogNumber": "5507",
-      "courseCode": "APA 5507",
-      "title": "Economics of Public and International Affairs",
-      "timeZone": "America/Toronto",
-      "components": {
-        "SEM": [
-          {
-            "section": "A00-SEM FullSess.",
-            "sectionCode": "A00",
-            "component": "SEM",
-            "session": null,
-            "times": [
-              {
-                "day": "We",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": true,
-                "instructor": "Geranda Notten",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "APA",
       "catalogNumber": "5936",
       "courseCode": "APA 5936",
       "title": "Internship: Mental Performance Consulting",
@@ -29703,6 +29661,25 @@
               "P": 0,
               "S": 0
             }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "API",
+      "catalogNumber": "6999",
+      "courseCode": "API 6999",
+      "title": "Major Research Paper",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "F00-REC FullSess.",
+            "sectionCode": "F00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open"
           }
         ]
       }
@@ -38964,37 +38941,6 @@
               "P": 0,
               "S": 0
             }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "BIO",
-      "catalogNumber": "5105",
-      "courseCode": "BIO 5105",
-      "title": "Advanced Topics in Medical Instrumentation (+3 combined)",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
-            "status": "Open"
           }
         ]
       }
@@ -66763,6 +66709,67 @@
     },
     {
       "subject": "CML",
+      "catalogNumber": "4519",
+      "courseCode": "CML 4519",
+      "title": "Les droits linguistiques au Canada (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 590,
+                "virtual": false,
+                "instructor": "François Jean Larocque",
+                "meetingDates": [
+                  "2026-09-09",
+                  "2026-12-09"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "François Jean Larocque",
+                "meetingDates": [
+                  "2026-09-09",
+                  "2026-12-09"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 11,
+              "A": 24,
+              "A-": 24,
+              "B+": 31,
+              "B": 27,
+              "C+": 13,
+              "C": 7,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 1,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 1,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CML",
       "catalogNumber": "4520",
       "courseCode": "CML 4520",
       "title": "Droit pénal international (+1 combined)",
@@ -93757,56 +93764,6 @@
     },
     {
       "subject": "DRC",
-      "catalogNumber": "1709",
-      "courseCode": "DRC 1709",
-      "title": "Droit de la preuve civile",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "AA00-LEC FullSess.",
-            "sectionCode": "AA00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 780,
-                "endMinutes": 950,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 4,
-              "A": 3,
-              "A-": 14,
-              "B+": 30,
-              "B": 38,
-              "C+": 31,
-              "C": 26,
-              "D+": 22,
-              "D": 18,
-              "E": 5,
-              "F": 1,
-              "EIN": 2,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "DRC",
       "catalogNumber": "2500",
       "courseCode": "DRC 2500",
       "title": "Compétences des juristes II : Séminaire de recherche et d'exposé juridique",
@@ -100634,17 +100591,6 @@
                 "endMinutes": 680,
                 "virtual": false,
                 "instructor": "Daniel Rück",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": true,
-                "instructor": "Paul Robinson",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -108411,33 +108357,6 @@
     },
     {
       "subject": "EDU",
-      "catalogNumber": "5830",
-      "courseCode": "EDU 5830",
-      "title": "Critical Perspectives on Children's Literature and Learning",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "DA00-LEC FullSess.",
-            "sectionCode": "DA00",
-            "component": "LEC",
-            "session": null,
-            "times": [],
-            "status": "Open"
-          },
-          {
-            "section": "DA10-LEC FullSess.",
-            "sectionCode": "DA10",
-            "component": "LEC",
-            "session": null,
-            "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "EDU",
       "catalogNumber": "5871",
       "courseCode": "EDU 5871",
       "title": "Développement des habiletés en counselling et psychothérapie",
@@ -109126,44 +109045,6 @@
               "B+": 32,
               "B": 3,
               "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "EDU",
-      "catalogNumber": "6516",
-      "courseCode": "EDU 6516",
-      "title": "Modèles d'intégration des technologies de l'information et de la communication en contextes éducatif",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "DA00-LEC FullSess.",
-            "sectionCode": "DA00",
-            "component": "LEC",
-            "session": null,
-            "times": [],
-            "status": "Open",
-            "distribution": {
-              "A+": 6,
-              "A": 4,
-              "A-": 6,
-              "B+": 2,
-              "B": 3,
-              "C+": 1,
               "C": 0,
               "D+": 0,
               "D": 0,
@@ -109967,25 +109848,6 @@
           {
             "section": "F00-REC FullSess.",
             "sectionCode": "F00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "EFR",
-      "catalogNumber": "3500",
-      "courseCode": "EFR 3500",
-      "title": "Master's Thesis Proposal",
-      "timeZone": "America/Toronto",
-      "components": {
-        "REC": [
-          {
-            "section": "DA00-REC Term",
-            "sectionCode": "DA00",
             "component": "REC",
             "session": null,
             "times": [],
@@ -126789,7 +126651,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1265,
               "A": 565,
@@ -130480,6 +130342,25 @@
       "catalogNumber": "6997",
       "courseCode": "FEM 6997",
       "title": "Master's Thesis Proposal",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "F00-REC FullSess.",
+            "sectionCode": "F00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "FEM",
+      "catalogNumber": "6999",
+      "courseCode": "FEM 6999",
+      "title": "Research Paper",
       "timeZone": "America/Toronto",
       "components": {
         "REC": [
@@ -136487,6 +136368,82 @@
               "P": 0,
               "S": 1
             }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "FSS",
+      "catalogNumber": "3320",
+      "courseCode": "FSS 3320",
+      "title": "In-depth Experiential Learning Stream Self-directed Course II",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "SLC1-SEM FullSess.",
+            "sectionCode": "SLC1",
+            "component": "SEM",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "FSS",
+      "catalogNumber": "3330",
+      "courseCode": "FSS 3330",
+      "title": "In-depth Experiential Learning Stream Self-directed Course III",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "SLC1-SEM FullSess.",
+            "sectionCode": "SLC1",
+            "component": "SEM",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "FSS",
+      "catalogNumber": "3720",
+      "courseCode": "FSS 3720",
+      "title": "Cours autodirigé du Régime d’apprentissage expérientiel approfondi II",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "SLC1-SEM FullSess.",
+            "sectionCode": "SLC1",
+            "component": "SEM",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "FSS",
+      "catalogNumber": "3730",
+      "courseCode": "FSS 3730",
+      "title": "Cours autodirigé du Régime d’apprentissage expérientiel approfondi III",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "SLC1-SEM FullSess.",
+            "sectionCode": "SLC1",
+            "component": "SEM",
+            "session": null,
+            "times": [],
+            "status": "Open"
           }
         ]
       }
@@ -168306,7 +168263,7 @@
                 "day": "Mo",
                 "startMinutes": 960,
                 "endMinutes": 1040,
-                "virtual": true,
+                "virtual": false,
                 "instructor": "Anne Broadbent",
                 "meetingDates": [
                   "2026-09-09",
@@ -168317,7 +168274,7 @@
                 "day": "We",
                 "startMinutes": 870,
                 "endMinutes": 950,
-                "virtual": true,
+                "virtual": false,
                 "instructor": "Anne Broadbent",
                 "meetingDates": [
                   "2026-09-09",
@@ -177665,37 +177622,6 @@
             "component": "TLB",
             "session": null,
             "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "MED",
-      "catalogNumber": "5111",
-      "courseCode": "MED 5111",
-      "title": "Principles of Accounting and Finance for Engineers",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Th",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
             "status": "Open"
           }
         ]
@@ -194465,37 +194391,6 @@
     },
     {
       "subject": "NSG",
-      "catalogNumber": "7510",
-      "courseCode": "NSG 7510",
-      "title": "Étude de la discipline infirmière (+1 combined)",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "HC00-LEC FullSess.",
-            "sectionCode": "HC00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Th",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "NSG",
       "catalogNumber": "75101",
       "courseCode": "NSG 75101",
       "title": "Séminaire doctoral (Partie 1 de 2)",
@@ -199946,6 +199841,25 @@
           {
             "section": "A00-REC FullSess.",
             "sectionCode": "A00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PAP",
+      "catalogNumber": "7998",
+      "courseCode": "PAP 7998",
+      "title": "Research Paper",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "F00-REC FullSess.",
+            "sectionCode": "F00",
             "component": "REC",
             "session": null,
             "times": [],
@@ -208753,56 +208667,6 @@
               "NS": 0,
               "NC": 0,
               "ABS": 1,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "PED",
-      "catalogNumber": "3756",
-      "courseCode": "PED 3756",
-      "title": "Didactique des arts dramatiques au cycle intermédiaire (+1 combined)",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "OV10-LEC Term",
-            "sectionCode": "OV10",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-04"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 190,
-              "A": 865,
-              "A-": 601,
-              "B+": 221,
-              "B": 66,
-              "C+": 14,
-              "C": 3,
-              "D+": 1,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
               "P": 0,
               "S": 0
             }
@@ -234164,25 +234028,6 @@
     },
     {
       "subject": "POL",
-      "catalogNumber": "7536",
-      "courseCode": "POL 7536",
-      "title": "Thesis Proposal",
-      "timeZone": "America/Toronto",
-      "components": {
-        "REC": [
-          {
-            "section": "F00-REC FullSess.",
-            "sectionCode": "F00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "POL",
       "catalogNumber": "77661",
       "courseCode": "POL 77661",
       "title": "Préparation du projet de thèse (Partie 1 de 2)",
@@ -234207,6 +234052,25 @@
                 ]
               }
             ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "POL",
+      "catalogNumber": "7979",
+      "courseCode": "POL 7979",
+      "title": "Research Paper",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "F00-REC FullSess.",
+            "sectionCode": "F00",
+            "component": "REC",
+            "session": null,
+            "times": [],
             "status": "Open"
           }
         ]
@@ -234979,28 +234843,6 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 960,
-                "endMinutes": 1040,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 870,
-                "endMinutes": 950,
-                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
@@ -243925,14 +243767,14 @@
       "subject": "SCI",
       "catalogNumber": "6001",
       "courseCode": "SCI 6001",
-      "title": "Comprehensive Examination (+1 combined)",
+      "title": "Co-op Work Term",
       "timeZone": "America/Toronto",
       "components": {
-        "REC": [
+        "STG": [
           {
-            "section": "HC00-REC Term",
-            "sectionCode": "HC00",
-            "component": "REC",
+            "section": "A00-STG FullSess.",
+            "sectionCode": "A00",
+            "component": "STG",
             "session": null,
             "times": [],
             "status": "Open"
@@ -245733,68 +245575,6 @@
                 "startMinutes": 960,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
-            "status": "Open"
-          },
-          {
-            "section": "B00-LEC FullSess.",
-            "sectionCode": "B00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 590,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 600,
-                "endMinutes": 680,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
-            "status": "Open"
-          },
-          {
-            "section": "C00-LEC FullSess.",
-            "sectionCode": "C00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 590,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 600,
-                "endMinutes": 680,
-                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
@@ -252154,61 +251934,6 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
-            "status": "Open"
-          }
-        ],
-        "LAB": [
-          {
-            "section": "A00-LAB FullSess.",
-            "sectionCode": "A00",
-            "component": "LAB",
-            "session": null,
-            "times": [
-              {
-                "day": "We",
-                "startMinutes": 510,
-                "endMinutes": 590,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 510,
-                "endMinutes": 590,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 510,
-                "endMinutes": 590,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 510,
-                "endMinutes": 590,
-                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
