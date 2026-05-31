@@ -1,19 +1,22 @@
 import type { CourseSchedule } from "./dataTypes";
 import type { DataCache } from "./dataCache";
 
-/** Ottawa-style letter grades → 4.3-scale points for GPA-style summaries. */
+/**
+ * uOttawa official letter grades → 10-point numeric values for GPA-style summaries.
+ * Scale per policy A-3.1 (https://www.uottawa.ca/.../a-3-grading-system). The scale
+ * has no B-/C-/D- grades; ABS/EIN count as 0 but are handled via SKIP_GRADES below.
+ */
 export const GRADE_POINTS: Record<string, number> = {
-  "A+": 4.3,
-  A: 4.0,
-  "A-": 3.7,
-  "B+": 3.3,
-  B: 3.0,
-  "B-": 2.7,
-  "C+": 2.3,
-  C: 2.0,
-  "D+": 1.3,
-  D: 1.0,
-  E: 0.5,
+  "A+": 10,
+  A: 9,
+  "A-": 8,
+  "B+": 7,
+  B: 6,
+  "C+": 5,
+  C: 4,
+  "D+": 3,
+  D: 2,
+  E: 1,
   F: 0,
 };
 

@@ -24,6 +24,114 @@ msgstr "Search courses and professors with grade distributions."
 msgid "landing.graph.description"
 msgstr "See how professors connect through shared courses."
 
+msgid "landing.trends.description"
+msgstr "Track how grades shift over time across disciplines."
+
+msgid "landing.carousel.label"
+msgstr "Experimental features"
+
+msgid "landing.carousel.goTo"
+msgstr "Show {title}"
+
+msgid "trends.title"
+msgstr "Grade trends"
+
+msgid "trends.subtitle"
+msgstr "How grades have shifted over time, aggregated across every course and professor on record."
+
+msgid "trends.error.title"
+msgstr "Couldn't load grade history"
+
+msgid "trends.empty.noData"
+msgstr "Grade history isn't available right now."
+
+msgid "trends.empty.noResults"
+msgstr "No grade data matches these filters yet."
+
+msgid "trends.filter.discipline"
+msgstr "Discipline"
+
+msgid "trends.filter.allDisciplines"
+msgstr "All disciplines"
+
+msgid "trends.filter.noMatch"
+msgstr "No matching discipline"
+
+msgid "trends.filter.level"
+msgstr "Level"
+
+msgid "trends.filter.season"
+msgstr "Season"
+
+msgid "trends.filter.all"
+msgstr "All"
+
+msgid "trends.season.fall"
+msgstr "Fall"
+
+msgid "trends.season.winter"
+msgstr "Winter"
+
+msgid "trends.season.springSummer"
+msgstr "Spring/Summer"
+
+msgid "trends.metric.label"
+msgstr "Metric"
+
+msgid "trends.metric.gpa"
+msgstr "Average GPA"
+
+msgid "trends.metric.aPlus"
+msgstr "% A+"
+
+msgid "trends.metric.aRange"
+msgstr "% A range"
+
+msgid "trends.metric.pass"
+msgstr "Pass rate"
+
+msgid "trends.metric.volume"
+msgstr "Graded volume"
+
+msgid "trends.stat.latest"
+msgstr "Latest term"
+
+msgid "trends.stat.change"
+msgstr "Change since first"
+
+msgid "trends.stat.terms"
+msgstr "Terms"
+
+msgid "trends.stat.volume"
+msgstr "Graded results"
+
+msgid "trends.leaderboard.title"
+msgstr "Disciplines over time"
+
+msgid "trends.leaderboard.scope"
+msgstr "All disciplines · all levels · all seasons"
+
+msgid "trends.leaderboard.rise"
+msgstr "Biggest rise"
+
+msgid "trends.leaderboard.easiest"
+msgstr "Easiest now"
+
+msgid "trends.leaderboard.hardest"
+msgstr "Hardest now"
+
+msgid "trends.leaderboard.col.discipline"
+msgstr "Discipline"
+
+msgid "trends.leaderboard.col.currentGpa"
+msgstr "Current GPA"
+
+msgid "trends.leaderboard.col.change"
+msgstr "Change"
+
+msgid "trends.leaderboard.col.span"
+msgstr "Span"
+
 msgid "app.constraints.description"
 msgstr "Pin courses to specific requirements - the generator uses your picks first, filling any remaining slots from other eligible courses."
 
@@ -1149,6 +1257,15 @@ msgstr "Explore how uOttawa professors connect through shared courses. Interacti
 
 msgid "seo.graph.keywords"
 msgstr "uottawa professors, uottawa co-teaching, university of ottawa faculty network, uottawa course overlap"
+
+msgid "seo.trends.title"
+msgstr "uOttawa Grade Trends Over Time | uoplan"
+
+msgid "seo.trends.description"
+msgstr "How uOttawa grades change over time: average GPA, A+ rate, and pass rate across terms, with discipline, level, and season breakdowns plus a grade-inflation leaderboard."
+
+msgid "seo.trends.keywords"
+msgstr "uottawa grade trends, uottawa grade inflation, university of ottawa average gpa, uottawa grade distribution over time"
 
 msgid "search.noResults"
 msgstr "No results for \"{q}\""

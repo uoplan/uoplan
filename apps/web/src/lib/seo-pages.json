@@ -38,5 +38,15 @@
     "structuredName": "Professor network",
     "noscriptTitle": "Professor Co-Teaching Network | uoplan",
     "noscriptBody": "Interactive graph of uOttawa professor connections through shared course offerings."
+  },
+  "trends": {
+    "canonicalPath": "/trends",
+    "tabTitle": "Grade trends",
+    "title": "uOttawa Grade Trends Over Time | uoplan",
+    "description": "How uOttawa grades change over time: average GPA, A+ rate, and pass rate across terms, with discipline, level, and season breakdowns plus a grade-inflation leaderboard.",
+    "keywords": "uottawa grade trends, uottawa grade inflation, university of ottawa average gpa, uottawa grade distribution over time",
+    "structuredName": "Grade trends",
+    "noscriptTitle": "uOttawa Grade Trends Over Time | uoplan",
+    "noscriptBody": "Track how uOttawa grades change over time across disciplines, course levels, and seasons."
   }
 }
