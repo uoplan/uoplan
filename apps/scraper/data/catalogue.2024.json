@@ -186675,20 +186675,20 @@
                       "type": "elective",
                       "title": "Spring Term:",
                       "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "DCL 5532",
-                      "credits": 3
-                    },
-                    {
-                      "type": "course",
-                      "code": "DCL 5533",
-                      "credits": 3
                     }
                   ]
                 }
               ]
+            },
+            {
+              "type": "course",
+              "code": "DCL 5532",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "DCL 5533",
+              "credits": 3
             }
           ]
         },
@@ -212426,384 +212426,384 @@
                   "type": "course",
                   "code": "MAT 1332",
                   "indented": true
-                },
-                {
-                  "type": "group",
-                  "title": "12 course units from:",
-                  "credits": 12,
-                  "options": [
-                    {
-                      "type": "course",
-                      "code": "BIO 1130",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "BIO 1140",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 1311",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 1321",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "EVS 1101",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "GEO 1111",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "GEO 1115",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "ITI 1120",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "ITI 1121",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "MAT 1341",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "MAT 1348",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHY 1121",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHY 1122",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHY 1321",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHY 1322",
-                      "indented": true
-                    }
-                  ]
-                },
-                {
-                  "type": "pick",
-                  "title": "12 optional course units in biochemistry (BCH), biology (BIO), biomedical science (BIM), biopharmaceutical science (BPS), chemistry (CHM), environmental science (EVS), geology (GEO), mathematics (MAT), microbiology and immunology (MIC), physics (PHY), or CMM 4360, PHA 4107, PHS 3341, PHS 3342, PHS 4300, PHS 4336.",
-                  "credits": 12,
-                  "options": [
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any BCH",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "BCH"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any BIO",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "BIO"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any BIM",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "BIM"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any BPS",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "BPS"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any CHM",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CHM"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any EVS",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "EVS"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any GEO",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "GEO"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any MAT",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "MAT"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any MIC",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "MIC"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any PHY",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "PHY"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "course",
-                      "code": "CMM 4360"
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHA 4107"
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHS 3341"
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHS 3342"
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHS 4300"
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHS 4336"
-                    }
-                  ]
-                },
-                {
-                  "type": "pick",
-                  "title": "15 optional course units in biochemistry (BCH), biology (BIO), biomedical science (BIM), biopharmaceutical science (BPS), chemistry (CHM), environmental science (EVS), geology (GEO), mathematics (MAT), microbiology and immunology (MIC), physics (PHY) at the 3000 or 4000 level, or CMM 4360, PHA 4107, PHS 3341, PHS 3342, PHS 4300, PHS 4336.",
-                  "credits": 15,
-                  "options": [
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any BCH at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "BCH",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any BIO at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "BIO",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any BIM at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "BIM",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any BPS at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "BPS",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any CHM at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CHM",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any EVS at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "EVS",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any GEO at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "GEO",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any MAT at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "MAT",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any MIC at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "MIC",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any PHY at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "PHY",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "course",
-                      "code": "CMM 4360"
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHA 4107"
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHS 3341"
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHS 3342"
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHS 4300"
-                    },
-                    {
-                      "type": "course",
-                      "code": "PHS 4336"
-                    }
-                  ]
-                },
-                {
-                  "type": "faculty_elective",
-                  "title": "12 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-                  "credits": 12
-                },
-                {
-                  "type": "elective",
-                  "title": "33 elective course units",
-                  "credits": 33
                 }
               ]
             }
           ]
+        },
+        {
+          "type": "group",
+          "title": "12 course units from:",
+          "credits": 12,
+          "options": [
+            {
+              "type": "course",
+              "code": "BIO 1130",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "BIO 1140",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 1311",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 1321",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "EVS 1101",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "GEO 1111",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "GEO 1115",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "ITI 1120",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "ITI 1121",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "MAT 1341",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "MAT 1348",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "PHY 1121",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "PHY 1122",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "PHY 1321",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "PHY 1322",
+              "indented": true
+            }
+          ]
+        },
+        {
+          "type": "pick",
+          "title": "12 optional course units in biochemistry (BCH), biology (BIO), biomedical science (BIM), biopharmaceutical science (BPS), chemistry (CHM), environmental science (EVS), geology (GEO), mathematics (MAT), microbiology and immunology (MIC), physics (PHY), or CMM 4360, PHA 4107, PHS 3341, PHS 3342, PHS 4300, PHS 4336.",
+          "credits": 12,
+          "options": [
+            {
+              "type": "discipline_elective",
+              "title": "Any BCH",
+              "disciplineLevels": [
+                {
+                  "discipline": "BCH"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any BIO",
+              "disciplineLevels": [
+                {
+                  "discipline": "BIO"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any BIM",
+              "disciplineLevels": [
+                {
+                  "discipline": "BIM"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any BPS",
+              "disciplineLevels": [
+                {
+                  "discipline": "BPS"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any CHM",
+              "disciplineLevels": [
+                {
+                  "discipline": "CHM"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any EVS",
+              "disciplineLevels": [
+                {
+                  "discipline": "EVS"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any GEO",
+              "disciplineLevels": [
+                {
+                  "discipline": "GEO"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any MAT",
+              "disciplineLevels": [
+                {
+                  "discipline": "MAT"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any MIC",
+              "disciplineLevels": [
+                {
+                  "discipline": "MIC"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any PHY",
+              "disciplineLevels": [
+                {
+                  "discipline": "PHY"
+                }
+              ]
+            },
+            {
+              "type": "course",
+              "code": "CMM 4360"
+            },
+            {
+              "type": "course",
+              "code": "PHA 4107"
+            },
+            {
+              "type": "course",
+              "code": "PHS 3341"
+            },
+            {
+              "type": "course",
+              "code": "PHS 3342"
+            },
+            {
+              "type": "course",
+              "code": "PHS 4300"
+            },
+            {
+              "type": "course",
+              "code": "PHS 4336"
+            }
+          ]
+        },
+        {
+          "type": "pick",
+          "title": "15 optional course units in biochemistry (BCH), biology (BIO), biomedical science (BIM), biopharmaceutical science (BPS), chemistry (CHM), environmental science (EVS), geology (GEO), mathematics (MAT), microbiology and immunology (MIC), physics (PHY) at the 3000 or 4000 level, or CMM 4360, PHA 4107, PHS 3341, PHS 3342, PHS 4300, PHS 4336.",
+          "credits": 15,
+          "options": [
+            {
+              "type": "discipline_elective",
+              "title": "Any BCH at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "BCH",
+                  "levels": [
+                    3000,
+                    4000
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any BIO at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "BIO",
+                  "levels": [
+                    3000,
+                    4000
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any BIM at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "BIM",
+                  "levels": [
+                    3000,
+                    4000
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any BPS at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "BPS",
+                  "levels": [
+                    3000,
+                    4000
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any CHM at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "CHM",
+                  "levels": [
+                    3000,
+                    4000
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any EVS at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "EVS",
+                  "levels": [
+                    3000,
+                    4000
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any GEO at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "GEO",
+                  "levels": [
+                    3000,
+                    4000
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any MAT at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "MAT",
+                  "levels": [
+                    3000,
+                    4000
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any MIC at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "MIC",
+                  "levels": [
+                    3000,
+                    4000
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any PHY at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "PHY",
+                  "levels": [
+                    3000,
+                    4000
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "course",
+              "code": "CMM 4360"
+            },
+            {
+              "type": "course",
+              "code": "PHA 4107"
+            },
+            {
+              "type": "course",
+              "code": "PHS 3341"
+            },
+            {
+              "type": "course",
+              "code": "PHS 3342"
+            },
+            {
+              "type": "course",
+              "code": "PHS 4300"
+            },
+            {
+              "type": "course",
+              "code": "PHS 4336"
+            }
+          ]
+        },
+        {
+          "type": "faculty_elective",
+          "title": "12 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
+          "credits": 12
+        },
+        {
+          "type": "elective",
+          "title": "33 elective course units",
+          "credits": 33
         }
       ]
     },
@@ -221106,39 +221106,39 @@
                       "title": "0-12 elective course units",
                       "credits": 12,
                       "indented": true
-                    },
-                    {
-                      "type": "group",
-                      "title": "6 course units from:",
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "PED 2507",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "PED 2508",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "PED 2727",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "PED 3505",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "PED 3705",
-                          "indented": true
-                        }
-                      ]
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "6 course units from:",
+              "options": [
+                {
+                  "type": "course",
+                  "code": "PED 2507",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "PED 2508",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "PED 2727",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "PED 3505",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "PED 3705",
+                  "indented": true
                 }
               ]
             }
@@ -230608,43 +230608,43 @@
                         }
                       ],
                       "indented": true
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 course units from:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "PSY 3103",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "PSY 3108",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "PSY 3377",
-                          "indented": true
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "21 optional course units in psychology (PSY) at the 3000 or 4000 level",
-                      "credits": 21,
-                      "disciplineLevels": [
-                        {
-                          "discipline": "PSY",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
                     }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "PSY 3103",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "PSY 3108",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "PSY 3377",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "21 optional course units in psychology (PSY) at the 3000 or 4000 level",
+              "credits": 21,
+              "disciplineLevels": [
+                {
+                  "discipline": "PSY",
+                  "levels": [
+                    3000,
+                    4000
                   ]
                 }
               ]
@@ -257953,80 +257953,80 @@
                           ]
                         }
                       ]
-                    },
-                    {
-                      "type": "group",
-                      "title": "6 course units from:",
-                      "credits": 6,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "BCH 4101",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "BCH 4116",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "BCH 4122",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "BCH 4123",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "BCH 4124",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "BCH 4125",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "BCH 4126",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "BCH 4188",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "BCH 4300",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "BPS 3101",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "BPS 4121",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "BPS 4129",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CHM 4139",
-                          "indented": true
-                        }
-                      ]
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "6 course units from:",
+              "credits": 6,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "BCH 4101",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "BCH 4116",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "BCH 4122",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "BCH 4123",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "BCH 4124",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "BCH 4125",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "BCH 4126",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "BCH 4188",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "BCH 4300",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "BPS 3101",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "BPS 4121",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "BPS 4129",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CHM 4139",
+                  "indented": true
                 }
               ]
             }
@@ -268886,23 +268886,23 @@
                           "indented": true
                         }
                       ]
-                    },
-                    {
-                      "type": "elective",
-                      "title": "3 optional course units from the list of optional courses",
-                      "credits": 3
-                    },
-                    {
-                      "type": "faculty_elective",
-                      "title": "3 optional course units at the 3000 or 4000 level offered by the Faculty of Science",
-                      "credits": 3,
-                      "levels": [
-                        3000,
-                        4000
-                      ]
                     }
                   ]
                 }
+              ]
+            },
+            {
+              "type": "elective",
+              "title": "3 optional course units from the list of optional courses",
+              "credits": 3
+            },
+            {
+              "type": "faculty_elective",
+              "title": "3 optional course units at the 3000 or 4000 level offered by the Faculty of Science",
+              "credits": 3,
+              "levels": [
+                3000,
+                4000
               ]
             }
           ]
@@ -269299,57 +269299,57 @@
                       "title": "6 optional course units from the list of optional courses for the Medicinal Chemistry Option",
                       "credits": 6,
                       "indented": true
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 course units from:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "CHM 3126",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CHM 3127",
-                          "indented": true
-                        }
-                      ]
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 course units from:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "BIM 4316",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CHM 4354",
-                          "indented": true
-                        }
-                      ]
-                    },
-                    {
-                      "type": "elective",
-                      "title": "9 optional course units from the list of optional courses for the Medicinal Chemistry Option",
-                      "credits": 9
-                    },
-                    {
-                      "type": "faculty_elective",
-                      "title": "3 optional course units at the 3000 or 4000 level offered by the Faculty of Science",
-                      "credits": 3,
-                      "levels": [
-                        3000,
-                        4000
-                      ]
                     }
                   ]
                 }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "CHM 3126",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CHM 3127",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "BIM 4316",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CHM 4354",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "elective",
+              "title": "9 optional course units from the list of optional courses for the Medicinal Chemistry Option",
+              "credits": 9
+            },
+            {
+              "type": "faculty_elective",
+              "title": "3 optional course units at the 3000 or 4000 level offered by the Faculty of Science",
+              "credits": 3,
+              "levels": [
+                3000,
+                4000
               ]
             }
           ]
@@ -269427,23 +269427,23 @@
                         4000
                       ],
                       "indented": true
-                    },
-                    {
-                      "type": "elective",
-                      "title": "9 optional course units from the list of optional courses for the Genomics Option",
-                      "credits": 9
-                    },
-                    {
-                      "type": "faculty_elective",
-                      "title": "3 optional course units at the 3000 or 4000 level offered by the Faculty of Science",
-                      "credits": 3,
-                      "levels": [
-                        3000,
-                        4000
-                      ]
                     }
                   ]
                 }
+              ]
+            },
+            {
+              "type": "elective",
+              "title": "9 optional course units from the list of optional courses for the Genomics Option",
+              "credits": 9
+            },
+            {
+              "type": "faculty_elective",
+              "title": "3 optional course units at the 3000 or 4000 level offered by the Faculty of Science",
+              "credits": 3,
+              "levels": [
+                3000,
+                4000
               ]
             }
           ]
@@ -270185,90 +270185,90 @@
                   "type": "course",
                   "code": "PHY 1322",
                   "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2120",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2123",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2128",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2131",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2330",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2353",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2354",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 3120",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 3122",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 3140",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 3350",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 3373",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4318",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4354",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4380",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4118",
-                  "credits": 3
                 }
               ]
             }
           ]
+        },
+        {
+          "type": "course",
+          "code": "CHM 2120",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 2123",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 2128",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 2131",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 2330",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 2353",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 2354",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 3120",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 3122",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 3140",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 3350",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 3373",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4318",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4354",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4380",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4118",
+          "credits": 3
         },
         {
           "type": "options_group",
@@ -270309,202 +270309,202 @@
                     }
                   ],
                   "indented": true
-                },
-                {
-                  "type": "group",
-                  "title": "6 optional course units from:",
-                  "credits": 6,
-                  "options": [
-                    {
-                      "type": "course",
-                      "code": "CHM 3126",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4123",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4141",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4143",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4155",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4182",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4311",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4313",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4317",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4325",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4340",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4381",
-                      "indented": true
-                    }
-                  ]
-                },
-                {
-                  "type": "elective",
-                  "title": "6 optional course units from the list of optional courses below",
-                  "credits": 6
-                },
-                {
-                  "type": "faculty_elective",
-                  "title": "12 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-                  "credits": 12
-                },
-                {
-                  "type": "elective",
-                  "title": "18 elective course units",
-                  "credits": 18
-                },
-                {
-                  "type": "course",
-                  "code": "BCH 2333",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 3126",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4123",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4141",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4143",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4155",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4182",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4311",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4313",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4317",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4325",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4340",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4381",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEO 2163",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEO 3167",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "MAT 1341",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "PHY 2100",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "PHY 2323",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "PHY 2361",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "PHY 3350",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "PHY 4382",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "PHY 4387",
-                  "credits": 3
                 }
               ]
             }
           ]
+        },
+        {
+          "type": "group",
+          "title": "6 optional course units from:",
+          "credits": 6,
+          "options": [
+            {
+              "type": "course",
+              "code": "CHM 3126",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4123",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4141",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4143",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4155",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4182",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4311",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4313",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4317",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4325",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4340",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4381",
+              "indented": true
+            }
+          ]
+        },
+        {
+          "type": "elective",
+          "title": "6 optional course units from the list of optional courses below",
+          "credits": 6
+        },
+        {
+          "type": "faculty_elective",
+          "title": "12 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
+          "credits": 12
+        },
+        {
+          "type": "elective",
+          "title": "18 elective course units",
+          "credits": 18
+        },
+        {
+          "type": "course",
+          "code": "BCH 2333",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 3126",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4123",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4141",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4143",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4155",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4182",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4311",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4313",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4317",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4325",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4340",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4381",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEO 2163",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEO 3167",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "MAT 1341",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "PHY 2100",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "PHY 2323",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "PHY 2361",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "PHY 3350",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "PHY 4382",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "PHY 4387",
+          "credits": 3
         }
       ]
     },
@@ -270606,80 +270606,80 @@
                   "type": "course",
                   "code": "PHY 1322",
                   "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "BIO 2129",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2120",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2123",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2131",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2313",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2330",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2353",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 2354",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 3120",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 3122",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 3128",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 3350",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4129",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4354",
-                  "credits": 3
                 }
               ]
             }
           ]
+        },
+        {
+          "type": "course",
+          "code": "BIO 2129",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 2120",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 2123",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 2131",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 2313",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 2330",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 2353",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 2354",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 3120",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 3122",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 3128",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 3350",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4129",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4354",
+          "credits": 3
         },
         {
           "type": "options_group",
@@ -270720,302 +270720,302 @@
                     }
                   ],
                   "indented": true
-                },
-                {
-                  "type": "group",
-                  "title": "6 optional course units from:",
-                  "credits": 6,
-                  "options": [
-                    {
-                      "type": "course",
-                      "code": "CHM 3140",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 3373",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4123",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4139",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4155",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4182",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4311",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4317",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4325",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4380",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CHM 4381",
-                      "indented": true
-                    }
-                  ]
-                },
-                {
-                  "type": "elective",
-                  "title": "6 optional course units from the list of optional courses below",
-                  "credits": 6
-                },
-                {
-                  "type": "discipline_elective",
-                  "title": "3 optional course units in chemistry (CHM) at the 2000, 3000 or 4000 level",
-                  "credits": 3,
-                  "disciplineLevels": [
-                    {
-                      "discipline": "CHM",
-                      "levels": [
-                        2000,
-                        3000,
-                        4000
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "faculty_elective",
-                  "title": "12 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-                  "credits": 12
-                },
-                {
-                  "type": "elective",
-                  "title": "18 elective course units",
-                  "credits": 18
-                },
-                {
-                  "type": "course",
-                  "code": "BCH 2333",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "BIO 1140",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "BIO 3117",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "BIO 4146",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "BPS 4121",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "BPS 4123",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 3140",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 3373",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4123",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4139",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4155",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4182",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4311",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4317",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4325",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4380",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHM 4381",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CVG 2132",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "DVM 2105",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "DVM 3125",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "ECO 2121",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "ENV 1101",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "ENV 3101",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "ENV 4118",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "EVS 1101",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEG 1301",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEG 3302",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEG 4118",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEO 1111",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEO 2163",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEO 2166",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEO 2307",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEO 2334",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEO 3167",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEO 3342",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEO 3382",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "HIS 2129",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "MAT 2379",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "POL 1102",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "SOC 4310",
-                  "credits": 3
                 }
               ]
             }
           ]
+        },
+        {
+          "type": "group",
+          "title": "6 optional course units from:",
+          "credits": 6,
+          "options": [
+            {
+              "type": "course",
+              "code": "CHM 3140",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 3373",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4123",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4139",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4155",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4182",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4311",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4317",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4325",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4380",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CHM 4381",
+              "indented": true
+            }
+          ]
+        },
+        {
+          "type": "elective",
+          "title": "6 optional course units from the list of optional courses below",
+          "credits": 6
+        },
+        {
+          "type": "discipline_elective",
+          "title": "3 optional course units in chemistry (CHM) at the 2000, 3000 or 4000 level",
+          "credits": 3,
+          "disciplineLevels": [
+            {
+              "discipline": "CHM",
+              "levels": [
+                2000,
+                3000,
+                4000
+              ]
+            }
+          ]
+        },
+        {
+          "type": "faculty_elective",
+          "title": "12 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
+          "credits": 12
+        },
+        {
+          "type": "elective",
+          "title": "18 elective course units",
+          "credits": 18
+        },
+        {
+          "type": "course",
+          "code": "BCH 2333",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "BIO 1140",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "BIO 3117",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "BIO 4146",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "BPS 4121",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "BPS 4123",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 3140",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 3373",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4123",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4139",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4155",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4182",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4311",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4317",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4325",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4380",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHM 4381",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CVG 2132",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "DVM 2105",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "DVM 3125",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "ECO 2121",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "ENV 1101",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "ENV 3101",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "ENV 4118",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "EVS 1101",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEG 1301",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEG 3302",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEG 4118",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEO 1111",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEO 2163",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEO 2166",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEO 2307",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEO 2334",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEO 3167",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEO 3342",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEO 3382",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "HIS 2129",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "MAT 2379",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "POL 1102",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "SOC 4310",
+          "credits": 3
         }
       ]
     },
@@ -271280,52 +271280,52 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "type": "group",
-                  "title": "9 course units from:",
-                  "credits": 9,
-                  "options": [
-                    {
-                      "type": "course",
-                      "code": "CSI 4106",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CSI 4107",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CSI 4108",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CSI 4139",
-                      "indented": true
-                    }
-                  ]
-                },
-                {
-                  "type": "elective",
-                  "title": "6 elective course units",
-                  "credits": 6
-                },
-                {
-                  "type": "non_discipline_elective",
-                  "title": "24 elective course units of non-computing",
-                  "credits": 24,
-                  "excluded_disciplines": [
-                    "CEG",
-                    "CSI",
-                    "SEG",
-                    "ELG"
-                  ]
                 }
               ]
             }
+          ]
+        },
+        {
+          "type": "group",
+          "title": "9 course units from:",
+          "credits": 9,
+          "options": [
+            {
+              "type": "course",
+              "code": "CSI 4106",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CSI 4107",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CSI 4108",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CSI 4139",
+              "indented": true
+            }
+          ]
+        },
+        {
+          "type": "elective",
+          "title": "6 elective course units",
+          "credits": 6
+        },
+        {
+          "type": "non_discipline_elective",
+          "title": "24 elective course units of non-computing",
+          "credits": 24,
+          "excluded_disciplines": [
+            "CEG",
+            "CSI",
+            "SEG",
+            "ELG"
           ]
         }
       ]
@@ -271866,73 +271866,73 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "type": "discipline_elective",
-                  "title": "12 optional course units in computer science (CSI) at the 4000 level",
-                  "credits": 12,
-                  "disciplineLevels": [
-                    {
-                      "discipline": "CSI",
-                      "levels": [
-                        4000
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "pick",
-                  "title": "3 optional course units in computer science (CSI) or software engineering (SEG) at the 3000 or 4000 level",
-                  "credits": 3,
-                  "options": [
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any CSI at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CSI",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any SEG at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "SEG",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "non_discipline_elective",
-                  "title": "27 course units of non-computing, non mathematics courses",
-                  "credits": 27,
-                  "excluded_disciplines": [
-                    "CEG",
-                    "CSI",
-                    "SEG",
-                    "ELG",
-                    "MAT"
-                  ]
-                },
-                {
-                  "type": "free_elective",
-                  "title": "3 course units of free elective courses",
-                  "credits": 3
                 }
               ]
             }
           ]
+        },
+        {
+          "type": "discipline_elective",
+          "title": "12 optional course units in computer science (CSI) at the 4000 level",
+          "credits": 12,
+          "disciplineLevels": [
+            {
+              "discipline": "CSI",
+              "levels": [
+                4000
+              ]
+            }
+          ]
+        },
+        {
+          "type": "pick",
+          "title": "3 optional course units in computer science (CSI) or software engineering (SEG) at the 3000 or 4000 level",
+          "credits": 3,
+          "options": [
+            {
+              "type": "discipline_elective",
+              "title": "Any CSI at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "CSI",
+                  "levels": [
+                    3000,
+                    4000
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any SEG at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "SEG",
+                  "levels": [
+                    3000,
+                    4000
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "non_discipline_elective",
+          "title": "27 course units of non-computing, non mathematics courses",
+          "credits": 27,
+          "excluded_disciplines": [
+            "CEG",
+            "CSI",
+            "SEG",
+            "ELG",
+            "MAT"
+          ]
+        },
+        {
+          "type": "free_elective",
+          "title": "3 course units of free elective courses",
+          "credits": 3
         }
       ]
     },
@@ -276888,47 +276888,47 @@
                       "type": "course",
                       "code": "PHY 4906",
                       "indented": true
-                    },
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "pick",
+              "title": "3 optional course units in mathematics (MAT) at the 2000, 3000 or 4000 level, excluding MAT 2379",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "discipline_elective",
+                  "title": "Any MAT at 2000 or 3000 or 4000 level",
+                  "disciplineLevels": [
                     {
-                      "type": "pick",
-                      "title": "3 optional course units in mathematics (MAT) at the 2000, 3000 or 4000 level, excluding MAT 2379",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "discipline_elective",
-                          "title": "Any MAT at 2000 or 3000 or 4000 level",
-                          "disciplineLevels": [
-                            {
-                              "discipline": "MAT",
-                              "levels": [
-                                2000,
-                                3000,
-                                4000
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 2379"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "6 optional course units in biology (BIO) at the 2000, 3000 or 4000 level",
-                      "credits": 6,
-                      "disciplineLevels": [
-                        {
-                          "discipline": "BIO",
-                          "levels": [
-                            2000,
-                            3000,
-                            4000
-                          ]
-                        }
+                      "discipline": "MAT",
+                      "levels": [
+                        2000,
+                        3000,
+                        4000
                       ]
                     }
+                  ]
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 2379"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "6 optional course units in biology (BIO) at the 2000, 3000 or 4000 level",
+              "credits": 6,
+              "disciplineLevels": [
+                {
+                  "discipline": "BIO",
+                  "levels": [
+                    2000,
+                    3000,
+                    4000
                   ]
                 }
               ]
@@ -277420,46 +277420,46 @@
                       "type": "course",
                       "code": "PHY 4906",
                       "indented": true
-                    },
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "pick",
+              "title": "3 optional course units in mathematics (MAT) at the 2000, 3000 or 4000 level, excluding MAT 2379",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "discipline_elective",
+                  "title": "Any MAT at 2000 or 3000 or 4000 level",
+                  "disciplineLevels": [
                     {
-                      "type": "pick",
-                      "title": "3 optional course units in mathematics (MAT) at the 2000, 3000 or 4000 level, excluding MAT 2379",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "discipline_elective",
-                          "title": "Any MAT at 2000 or 3000 or 4000 level",
-                          "disciplineLevels": [
-                            {
-                              "discipline": "MAT",
-                              "levels": [
-                                2000,
-                                3000,
-                                4000
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 2379"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "9 optional course units in physics (PHY) at the 4000 or 5000 level",
-                      "credits": 9,
-                      "disciplineLevels": [
-                        {
-                          "discipline": "PHY",
-                          "levels": [
-                            4000,
-                            5000
-                          ]
-                        }
+                      "discipline": "MAT",
+                      "levels": [
+                        2000,
+                        3000,
+                        4000
                       ]
                     }
+                  ]
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 2379"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "9 optional course units in physics (PHY) at the 4000 or 5000 level",
+              "credits": 9,
+              "disciplineLevels": [
+                {
+                  "discipline": "PHY",
+                  "levels": [
+                    4000,
+                    5000
                   ]
                 }
               ]
@@ -278482,38 +278482,38 @@
                         }
                       ],
                       "indented": true
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 course units from:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "PSY 3109",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "PSY 4302",
-                          "indented": true
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "3 optional course units in psychology (PSY) at the 3000 or 4000 level",
-                      "credits": 3,
-                      "disciplineLevels": [
-                        {
-                          "discipline": "PSY",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
                     }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "PSY 3109",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "PSY 4302",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "3 optional course units in psychology (PSY) at the 3000 or 4000 level",
+              "credits": 3,
+              "disciplineLevels": [
+                {
+                  "discipline": "PSY",
+                  "levels": [
+                    3000,
+                    4000
                   ]
                 }
               ]
@@ -279994,30 +279994,30 @@
                       "type": "course",
                       "code": "CRM 4317",
                       "indented": true
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "6 optional course units in criminology (CRM)",
-                      "credits": 6,
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CRM"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "6 optional course units in criminology (CRM) at the 4000 level",
-                      "credits": 6,
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CRM",
-                          "levels": [
-                            4000
-                          ]
-                        }
-                      ]
                     }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "6 optional course units in criminology (CRM)",
+              "credits": 6,
+              "disciplineLevels": [
+                {
+                  "discipline": "CRM"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "6 optional course units in criminology (CRM) at the 4000 level",
+              "credits": 6,
+              "disciplineLevels": [
+                {
+                  "discipline": "CRM",
+                  "levels": [
+                    4000
                   ]
                 }
               ]
@@ -289989,122 +289989,132 @@
                 {
                   "type": "and",
                   "title": "Option 1: Course Focus",
-                  "options": [
-                    {
-                      "type": "discipline_elective",
-                      "title": "6 optional course units in criminology (CRM) at the 3000 level",
-                      "credits": 6,
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CRM",
-                          "levels": [
-                            3000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "6 optional course units in criminology (CRM) at the 4000 level",
-                      "credits": 6,
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CRM",
-                          "levels": [
-                            4000
-                          ]
-                        }
-                      ]
-                    }
+                  "options": []
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "6 optional course units in criminology (CRM) at the 3000 level",
+              "credits": 6,
+              "disciplineLevels": [
+                {
+                  "discipline": "CRM",
+                  "levels": [
+                    3000
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "6 optional course units in criminology (CRM) at the 4000 level",
+              "credits": 6,
+              "disciplineLevels": [
+                {
+                  "discipline": "CRM",
+                  "levels": [
+                    4000
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "options_group",
+              "title": "Options",
+              "options": [
                 {
                   "type": "and",
                   "title": "Option 2: Research Focus",
-                  "options": [
-                    {
-                      "type": "group",
-                      "title": "12 course units from:",
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "CRM 4301",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CRM 4303",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CRM 4305",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CRM 4306",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CRM 4310",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CRM 4311",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CRM 4312",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CRM 4313",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CRM 4314",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CRM 4315",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CRM 4316",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CRM 4318",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "FSS 4150",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "FSS 3210",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "FSS 4210",
-                          "indented": true
-                        }
-                      ]
-                    }
-                  ]
+                  "options": []
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "12 course units from:",
+              "options": [
+                {
+                  "type": "course",
+                  "code": "CRM 4301",
+                  "indented": true
                 },
+                {
+                  "type": "course",
+                  "code": "CRM 4303",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CRM 4305",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CRM 4306",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CRM 4310",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CRM 4311",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CRM 4312",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CRM 4313",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CRM 4314",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CRM 4315",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CRM 4316",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CRM 4318",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "FSS 4150",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "FSS 3210",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "FSS 4210",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "options_group",
+              "title": "Options",
+              "options": [
                 {
                   "type": "and",
                   "title": "Option 3: Field Placement",
@@ -290118,30 +290128,30 @@
                       "type": "course",
                       "code": "CRM 4317",
                       "indented": true
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "3 optional course units in criminology (CRM)",
-                      "credits": 3,
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CRM"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "3 optional course units in criminology (CRM) at the 4000 level",
-                      "credits": 3,
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CRM",
-                          "levels": [
-                            4000
-                          ]
-                        }
-                      ]
                     }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "3 optional course units in criminology (CRM)",
+              "credits": 3,
+              "disciplineLevels": [
+                {
+                  "discipline": "CRM"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "3 optional course units in criminology (CRM) at the 4000 level",
+              "credits": 3,
+              "disciplineLevels": [
+                {
+                  "discipline": "CRM",
+                  "levels": [
+                    4000
                   ]
                 }
               ]
@@ -294983,222 +294993,222 @@
                       "type": "course",
                       "code": "CML 1206",
                       "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 2309",
-                      "credits": 3
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 2312",
-                      "credits": 3
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 2313",
-                      "credits": 3
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 course units from:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "CML 2302",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3102",
-                          "indented": true
-                        }
-                      ]
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 course units from:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "CML 2101",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 2320",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 2321",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3119",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3120",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3121",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3125",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3127",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3128",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3132",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3139",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3140",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3142",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3154",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3158",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3165",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3180",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3234",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3248",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3313",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3315",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3317",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3366",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3385",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3388",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3391",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3449",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3450",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3922",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3923",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 4100",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 4116",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 4305",
-                          "indented": true
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "15 optional course units in common law (CML)",
-                      "credits": 15,
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CML"
-                        }
-                      ]
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "course",
+              "code": "CML 2309",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CML 2312",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CML 2313",
+              "credits": 3
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "CML 2302",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3102",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "CML 2101",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 2320",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 2321",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3119",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3120",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3121",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3125",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3127",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3128",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3132",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3139",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3140",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3142",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3154",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3158",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3165",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3180",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3234",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3248",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3313",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3315",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3317",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3366",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3385",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3388",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3391",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3449",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3450",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3922",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3923",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 4100",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 4116",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 4305",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "15 optional course units in common law (CML)",
+              "credits": 15,
+              "disciplineLevels": [
+                {
+                  "discipline": "CML"
                 }
               ]
             }
@@ -295321,222 +295331,222 @@
                       "type": "course",
                       "code": "CML 1206",
                       "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 2309",
-                      "credits": 3
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 2312",
-                      "credits": 3
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 2313",
-                      "credits": 3
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 course units from:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "CML 2302",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3102",
-                          "indented": true
-                        }
-                      ]
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 course units from:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "CML 2101",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 2320",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 2321",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3119",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3120",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3121",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3125",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3127",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3128",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3132",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3139",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3140",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3142",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3154",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3158",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3165",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3180",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3234",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3248",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3313",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3315",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3317",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3366",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3385",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3388",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3391",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3449",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3450",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3922",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3923",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 4100",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 4116",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 4305",
-                          "indented": true
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "45 optional course units in common law (CML)",
-                      "credits": 45,
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CML"
-                        }
-                      ]
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "course",
+              "code": "CML 2309",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CML 2312",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CML 2313",
+              "credits": 3
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "CML 2302",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3102",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "CML 2101",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 2320",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 2321",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3119",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3120",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3121",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3125",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3127",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3128",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3132",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3139",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3140",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3142",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3154",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3158",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3165",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3180",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3234",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3248",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3313",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3315",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3317",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3366",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3385",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3388",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3391",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3449",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3450",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3922",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3923",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 4100",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 4116",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 4305",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "45 optional course units in common law (CML)",
+              "credits": 45,
+              "disciplineLevels": [
+                {
+                  "discipline": "CML"
                 }
               ]
             }
@@ -295669,222 +295679,222 @@
                       "type": "course",
                       "code": "CML 1206",
                       "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 2309",
-                      "credits": 3
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 2312",
-                      "credits": 3
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 2313",
-                      "credits": 3
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 course units from:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "CML 2302",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3102",
-                          "indented": true
-                        }
-                      ]
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 course units from:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "CML 2101",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 2320",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 2321",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3119",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3120",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3121",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3125",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3127",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3128",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3132",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3139",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3140",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3142",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3154",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3158",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3165",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3180",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3234",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3248",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3313",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3315",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3317",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3366",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3385",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3388",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3391",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3449",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3450",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3922",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 3923",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 4100",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 4116",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "CML 4305",
-                          "indented": true
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "36 optional course units in common law (CML)",
-                      "credits": 36,
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CML"
-                        }
-                      ]
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "course",
+              "code": "CML 2309",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CML 2312",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CML 2313",
+              "credits": 3
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "CML 2302",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3102",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "CML 2101",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 2320",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 2321",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3119",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3120",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3121",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3125",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3127",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3128",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3132",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3139",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3140",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3142",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3154",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3158",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3165",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3180",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3234",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3248",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3313",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3315",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3317",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3366",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3385",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3388",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3391",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3449",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3450",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3922",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 3923",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 4100",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 4116",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CML 4305",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "36 optional course units in common law (CML)",
+              "credits": 36,
+              "disciplineLevels": [
+                {
+                  "discipline": "CML"
                 }
               ]
             }
@@ -296126,222 +296136,222 @@
                   "type": "course",
                   "code": "CML 1206",
                   "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "CML 2309",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CML 2312",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CML 2313",
-                  "credits": 3
-                },
-                {
-                  "type": "group",
-                  "title": "3 course units from:",
-                  "credits": 3,
-                  "options": [
-                    {
-                      "type": "course",
-                      "code": "CML 2302",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3102",
-                      "indented": true
-                    }
-                  ]
-                },
-                {
-                  "type": "group",
-                  "title": "3 course units from:",
-                  "credits": 3,
-                  "options": [
-                    {
-                      "type": "course",
-                      "code": "CML 2101",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 2320",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 2321",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3119",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3120",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3121",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3125",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3127",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3128",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3132",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3139",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3140",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3142",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3154",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3158",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3165",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3180",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3234",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3248",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3313",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3315",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3317",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3366",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3385",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3388",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3391",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3449",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3450",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3922",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 3923",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 4100",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 4116",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CML 4305",
-                      "indented": true
-                    }
-                  ]
-                },
-                {
-                  "type": "discipline_elective",
-                  "title": "45 optional course units in common law (CML)",
-                  "credits": 45,
-                  "disciplineLevels": [
-                    {
-                      "discipline": "CML"
-                    }
-                  ]
                 }
               ]
+            }
+          ]
+        },
+        {
+          "type": "course",
+          "code": "CML 2309",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CML 2312",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CML 2313",
+          "credits": 3
+        },
+        {
+          "type": "group",
+          "title": "3 course units from:",
+          "credits": 3,
+          "options": [
+            {
+              "type": "course",
+              "code": "CML 2302",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3102",
+              "indented": true
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "title": "3 course units from:",
+          "credits": 3,
+          "options": [
+            {
+              "type": "course",
+              "code": "CML 2101",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 2320",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 2321",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3119",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3120",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3121",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3125",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3127",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3128",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3132",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3139",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3140",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3142",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3154",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3158",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3165",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3180",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3234",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3248",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3313",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3315",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3317",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3366",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3385",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3388",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3391",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3449",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3450",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3922",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 3923",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 4100",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 4116",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CML 4305",
+              "indented": true
+            }
+          ]
+        },
+        {
+          "type": "discipline_elective",
+          "title": "45 optional course units in common law (CML)",
+          "credits": 45,
+          "disciplineLevels": [
+            {
+              "discipline": "CML"
             }
           ]
         }
@@ -302515,138 +302525,138 @@
                   "type": "course",
                   "code": "CLA 2104",
                   "indented": true
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "title": "3 course units from:",
+          "credits": 3,
+          "options": [
+            {
+              "type": "course",
+              "code": "CLA 2105",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CLA 2110",
+              "indented": true
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "title": "3 course units from:",
+          "credits": 3,
+          "options": [
+            {
+              "type": "course",
+              "code": "CLA 2130",
+              "indented": true
+            },
+            {
+              "type": "course",
+              "code": "CLA 2131",
+              "indented": true
+            }
+          ]
+        },
+        {
+          "type": "course",
+          "code": "CLA 3110",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CLA 3130",
+          "credits": 3
+        },
+        {
+          "type": "pick",
+          "title": "6 optional course units in classical studies (CLA) or classics (LCL)",
+          "credits": 6,
+          "options": [
+            {
+              "type": "discipline_elective",
+              "title": "Any CLA",
+              "disciplineLevels": [
                 {
-                  "type": "group",
-                  "title": "3 course units from:",
-                  "credits": 3,
-                  "options": [
-                    {
-                      "type": "course",
-                      "code": "CLA 2105",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CLA 2110",
-                      "indented": true
-                    }
+                  "discipline": "CLA"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any LCL",
+              "disciplineLevels": [
+                {
+                  "discipline": "LCL"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "pick",
+          "title": "6 optional course units in classical studies (CLA) or classics (LCL) at the 3000 or 4000 level",
+          "credits": 6,
+          "options": [
+            {
+              "type": "discipline_elective",
+              "title": "Any CLA at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "CLA",
+                  "levels": [
+                    3000,
+                    4000
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any LCL at 3000 or 4000 level",
+              "disciplineLevels": [
                 {
-                  "type": "group",
-                  "title": "3 course units from:",
-                  "credits": 3,
-                  "options": [
-                    {
-                      "type": "course",
-                      "code": "CLA 2130",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "CLA 2131",
-                      "indented": true
-                    }
+                  "discipline": "LCL",
+                  "levels": [
+                    3000,
+                    4000
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "pick",
+          "title": "6 optional course units in classical studies (CLA) or classics (LCL) at the 4000 level",
+          "credits": 6,
+          "options": [
+            {
+              "type": "discipline_elective",
+              "title": "Any CLA at 4000 level",
+              "disciplineLevels": [
                 {
-                  "type": "course",
-                  "code": "CLA 3110",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CLA 3130",
-                  "credits": 3
-                },
-                {
-                  "type": "pick",
-                  "title": "6 optional course units in classical studies (CLA) or classics (LCL)",
-                  "credits": 6,
-                  "options": [
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any CLA",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CLA"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any LCL",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "LCL"
-                        }
-                      ]
-                    }
+                  "discipline": "CLA",
+                  "levels": [
+                    4000
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any LCL at 4000 level",
+              "disciplineLevels": [
                 {
-                  "type": "pick",
-                  "title": "6 optional course units in classical studies (CLA) or classics (LCL) at the 3000 or 4000 level",
-                  "credits": 6,
-                  "options": [
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any CLA at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CLA",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any LCL at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "LCL",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "pick",
-                  "title": "6 optional course units in classical studies (CLA) or classics (LCL) at the 4000 level",
-                  "credits": 6,
-                  "options": [
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any CLA at 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CLA",
-                          "levels": [
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any LCL at 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "LCL",
-                          "levels": [
-                            4000
-                          ]
-                        }
-                      ]
-                    }
+                  "discipline": "LCL",
+                  "levels": [
+                    4000
                   ]
                 }
               ]
@@ -312255,185 +312265,185 @@
                   "type": "course",
                   "code": "JPN 2902",
                   "indented": true
-                },
-                {
-                  "type": "elective",
-                  "title": "15 optional course units from the list of optional courses",
-                  "credits": 15
-                },
-                {
-                  "type": "course",
-                  "code": "ANT 3307",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "ASI 3110",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "ASI 3111",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHN 1901",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHN 1902",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHN 2101",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHN 2901",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHN 2902",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHN 3901",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "CHN 3902",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "DVM 4125",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "GEG 4702",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "HIS 2175",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "HIS 2176",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "HIS 2177",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "HIS 2178",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "HIS 3175",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "HIS 3180",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "HIS 4184",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "JPN 1901",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "JPN 1902",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "JPN 2101",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "JPN 2901",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "JPN 2902",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "JPN 3901",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "JPN 3902",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "LCM 1101",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "LCM 1102",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "PHI 2389",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "POL 3114",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "SCS 3170",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "SRS 3312",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "SRS 3313",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "SRS 3318",
-                  "credits": 3
                 }
               ]
             }
           ]
+        },
+        {
+          "type": "elective",
+          "title": "15 optional course units from the list of optional courses",
+          "credits": 15
+        },
+        {
+          "type": "course",
+          "code": "ANT 3307",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "ASI 3110",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "ASI 3111",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHN 1901",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHN 1902",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHN 2101",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHN 2901",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHN 2902",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHN 3901",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "CHN 3902",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "DVM 4125",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "GEG 4702",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "HIS 2175",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "HIS 2176",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "HIS 2177",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "HIS 2178",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "HIS 3175",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "HIS 3180",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "HIS 4184",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "JPN 1901",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "JPN 1902",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "JPN 2101",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "JPN 2901",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "JPN 2902",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "JPN 3901",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "JPN 3902",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "LCM 1101",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "LCM 1102",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "PHI 2389",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "POL 3114",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "SCS 3170",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "SRS 3312",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "SRS 3313",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "SRS 3318",
+          "credits": 3
         }
       ]
     },
@@ -312814,42 +312824,42 @@
                   "type": "course",
                   "code": "PHY 1322",
                   "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "PHY 2325",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "BIO 3153",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "PHY 3325",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "PHY 4322",
-                  "credits": 3
-                },
-                {
-                  "type": "discipline_elective",
-                  "title": "3 optional course units in physics (PHY) at the 2000, 3000 or 4000 level",
-                  "credits": 3,
-                  "disciplineLevels": [
-                    {
-                      "discipline": "PHY",
-                      "levels": [
-                        2000,
-                        3000,
-                        4000
-                      ]
-                    }
-                  ]
                 }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "course",
+          "code": "PHY 2325",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "BIO 3153",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "PHY 3325",
+          "credits": 3
+        },
+        {
+          "type": "course",
+          "code": "PHY 4322",
+          "credits": 3
+        },
+        {
+          "type": "discipline_elective",
+          "title": "3 optional course units in physics (PHY) at the 2000, 3000 or 4000 level",
+          "credits": 3,
+          "disciplineLevels": [
+            {
+              "discipline": "PHY",
+              "levels": [
+                2000,
+                3000,
+                4000
               ]
             }
           ]
@@ -316590,63 +316600,63 @@
                   "type": "course",
                   "code": "CLA 2104",
                   "indented": true
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "pick",
+          "title": "12 optional course units in classical studies (CLA) or classics (LCL)",
+          "credits": 12,
+          "options": [
+            {
+              "type": "discipline_elective",
+              "title": "Any CLA",
+              "disciplineLevels": [
                 {
-                  "type": "pick",
-                  "title": "12 optional course units in classical studies (CLA) or classics (LCL)",
-                  "credits": 12,
-                  "options": [
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any CLA",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CLA"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any LCL",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "LCL"
-                        }
-                      ]
-                    }
+                  "discipline": "CLA"
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any LCL",
+              "disciplineLevels": [
+                {
+                  "discipline": "LCL"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "pick",
+          "title": "6 optional course units in classical studies (CLA) or classics (LCL) at the 3000 or 4000 level",
+          "credits": 6,
+          "options": [
+            {
+              "type": "discipline_elective",
+              "title": "Any CLA at 3000 or 4000 level",
+              "disciplineLevels": [
+                {
+                  "discipline": "CLA",
+                  "levels": [
+                    3000,
+                    4000
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "Any LCL at 3000 or 4000 level",
+              "disciplineLevels": [
                 {
-                  "type": "pick",
-                  "title": "6 optional course units in classical studies (CLA) or classics (LCL) at the 3000 or 4000 level",
-                  "credits": 6,
-                  "options": [
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any CLA at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "CLA",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "discipline_elective",
-                      "title": "Any LCL at 3000 or 4000 level",
-                      "disciplineLevels": [
-                        {
-                          "discipline": "LCL",
-                          "levels": [
-                            3000,
-                            4000
-                          ]
-                        }
-                      ]
-                    }
+                  "discipline": "LCL",
+                  "levels": [
+                    3000,
+                    4000
                   ]
                 }
               ]
@@ -317143,25 +317153,25 @@
                   "type": "course",
                   "code": "POR 1902",
                   "indented": true
-                },
-                {
-                  "type": "faculty_elective",
-                  "title": "6 optional course units from the list of optional courses offered at the Faculty of Arts",
-                  "credits": 6
-                },
-                {
-                  "type": "faculty_elective",
-                  "title": "6 optional course units from the list of optional courses offered at the Faculty of Social Sciences",
-                  "credits": 6
-                },
-                {
-                  "type": "faculty_elective",
-                  "title": "12 optional course units from the lists of optional courses offered at the Faculty of Arts and the Faculty of Social Sciences",
-                  "credits": 12
                 }
               ]
             }
           ]
+        },
+        {
+          "type": "faculty_elective",
+          "title": "6 optional course units from the list of optional courses offered at the Faculty of Arts",
+          "credits": 6
+        },
+        {
+          "type": "faculty_elective",
+          "title": "6 optional course units from the list of optional courses offered at the Faculty of Social Sciences",
+          "credits": 6
+        },
+        {
+          "type": "faculty_elective",
+          "title": "12 optional course units from the lists of optional courses offered at the Faculty of Arts and the Faculty of Social Sciences",
+          "credits": 12
         },
         {
           "type": "and",
@@ -318133,25 +318143,25 @@
                       "type": "course",
                       "code": "MAT 1332",
                       "indented": true
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 course units from:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "MAT 1348",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 1362",
-                          "indented": true
-                        }
-                      ]
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "MAT 1348",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 1362",
+                  "indented": true
                 }
               ]
             }
@@ -320434,151 +320444,151 @@
                       "type": "course",
                       "code": "MAT 1332",
                       "indented": true
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 course units from:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "MAT 1341",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 1302",
-                          "indented": true
-                        }
-                      ]
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 course units from:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "MAT 2375",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 2379",
-                          "indented": true
-                        }
-                      ]
-                    },
-                    {
-                      "type": "group",
-                      "title": "9 course units from:",
-                      "credits": 9,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "MAT 3172",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 3175",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 3375",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 3378",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 3379",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 4371",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 4374",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 4375",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 4376",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 4377",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 4378",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 4379",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 4380",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 4381",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "MAT 4382",
-                          "indented": true
-                        }
-                      ]
-                    },
-                    {
-                      "type": "group",
-                      "title": "3 optional course units in mathematics (MAT) at the 2000, 3000 or 4000 level, or from the following list:",
-                      "credits": 3,
-                      "options": [
-                        {
-                          "type": "course",
-                          "code": "BIO 4158",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "ECO 4186",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "GEG 4120",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
-                          "code": "GEO 4354",
-                          "indented": true
-                        }
-                      ]
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "MAT 1341",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 1302",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "MAT 2375",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 2379",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "9 course units from:",
+              "credits": 9,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "MAT 3172",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 3175",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 3375",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 3378",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 3379",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 4371",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 4374",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 4375",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 4376",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 4377",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 4378",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 4379",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 4380",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 4381",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "MAT 4382",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 optional course units in mathematics (MAT) at the 2000, 3000 or 4000 level, or from the following list:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "BIO 4158",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ECO 4186",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "GEG 4120",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "GEO 4354",
+                  "indented": true
                 }
               ]
             }
