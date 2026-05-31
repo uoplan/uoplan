@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.0.0-beta.26](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.25...uoplan-monorepo-v1.0.0-beta.26) (2026-05-31)
+
+
+### Features
+
+* add clear button to calendar ([07cf4e8](https://github.com/uoplan/uoplan/commit/07cf4e84d5594169ee6faf6f4486fcab65bd02ae))
+* add icon animations ([094956a](https://github.com/uoplan/uoplan/commit/094956a6dc33697d8cbabaec5a611d1ce273ecaa))
+* add number animations on trends page ([4595ff7](https://github.com/uoplan/uoplan/commit/4595ff798a4e35d912ac0b4472937681dc778d4b))
+* add program filter to trends page ([53e9ed6](https://github.com/uoplan/uoplan/commit/53e9ed6c695310ac0ce5e9c0768386faee834e74))
+* add time blocking to the calendar ([03c462a](https://github.com/uoplan/uoplan/commit/03c462a51d7fdef7e3cf5152a72f40cb497d970a))
+* add trends page ([f002888](https://github.com/uoplan/uoplan/commit/f0028889044592b72f2b940c18be1809c3da22b9))
+* improve spacing for program options ([f9d75ea](https://github.com/uoplan/uoplan/commit/f9d75ea3f983b339815dca05c61890820addf82b))
+* use a softer theme ([5cf20d3](https://github.com/uoplan/uoplan/commit/5cf20d3141602b3c429aa2a412504d0d00411e5e))
+* wait for schedule generation before loading calendar page ([6ccfde8](https://github.com/uoplan/uoplan/commit/6ccfde838586e7f04a5b7442c2f12a6a4c6338c6))
+
+
+### Bug Fixes
+
+* reduce corners on event cards, some overflow issues ([0bb834f](https://github.com/uoplan/uoplan/commit/0bb834f332657de6c1c139dd937ec9a5557591ad))
+* skip to busiest week with uenroll import ([44d7f28](https://github.com/uoplan/uoplan/commit/44d7f28854c0e4f15f3ff9a74c27f3860e604c4d))
+
 ## [1.0.0-beta.25](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.24...uoplan-monorepo-v1.0.0-beta.25) (2026-05-31)
 
 
