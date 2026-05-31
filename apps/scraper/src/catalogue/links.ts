@@ -20,7 +20,7 @@ export function isArchiveBaseUrl(baseUrl: string): boolean {
 }
 
 /** Returns the path-only prefix for the given baseUrl (e.g. "/archive/2021-2022" or ""). */
-export function hrefPrefix(baseUrl: string): string {
+function hrefPrefix(baseUrl: string): string {
   return baseUrl.replace(ROOT_URL, "");
 }
 

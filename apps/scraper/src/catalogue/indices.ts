@@ -3,7 +3,7 @@ import path from "path";
 import { urlToSlug } from "./links.ts";
 import { CatalogueSchema } from "./schema.ts";
 
-export function parseIndicesStringArray(value: unknown): string[] {
+function parseIndicesStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
   return value.filter((x): x is string => typeof x === "string");
 }
