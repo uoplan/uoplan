@@ -4,11 +4,17 @@ import { IconAlertCircle, IconCheck, IconChevronDown } from "@tabler/icons-react
 import { AnimatePresence, motion } from "framer-motion";
 import { type ReactNode } from "react";
 import type { ScheduleDashboardCardStatus } from "../../lib/scheduleDashboard";
+import { AppCard } from "../shared/AppCard";
 
 const STATUS_ACCENT: Record<ScheduleDashboardCardStatus, string> = {
-  ready: "#51cf66",
-  attention: "#fab005",
-  empty: "#5C5F66",
+  ready: "var(--app-success)",
+  attention: "var(--app-warning)",
+  empty: "var(--app-text-dim)",
+};
+
+const STATUS_SOFT: Partial<Record<ScheduleDashboardCardStatus, string>> = {
+  ready: "var(--app-success-soft)",
+  attention: "var(--app-warning-soft)",
 };
 
 type ScheduleDashboardCardProps = {
@@ -48,12 +54,12 @@ function StatusIcon({
           style={{
             width: 22,
             height: 22,
-            borderRadius: 999,
+            borderRadius: "var(--app-radius-pill)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             color: STATUS_ACCENT.ready,
-            backgroundColor: `${STATUS_ACCENT.ready}22`,
+            backgroundColor: STATUS_SOFT.ready,
             flexShrink: 0,
           }}
         >
@@ -116,23 +122,13 @@ export function ScheduleDashboardCard({
   };
 
   return (
-    <Box
+    <AppCard
+      interactive={isExpandable}
       style={{
-        backgroundColor: "var(--app-surface)",
-        border: "1px solid var(--app-border)",
-        borderLeft: `2px solid ${accent}`,
         opacity: locked ? 0.58 : 1,
-        transition: "border-color 180ms ease, background-color 180ms ease",
-      }}
-      onMouseEnter={(e) => {
-        if (!isExpandable) return;
-        e.currentTarget.style.backgroundColor = "var(--app-surface-hover)";
-        e.currentTarget.style.borderColor = "var(--app-border-strong)";
-      }}
-      onMouseLeave={(e) => {
-        if (!isExpandable) return;
-        e.currentTarget.style.backgroundColor = "var(--app-surface)";
-        e.currentTarget.style.borderColor = "var(--app-border)";
+        borderLeft: locked ? undefined : `3px solid ${accent}`,
+        boxShadow: open ? "var(--app-shadow-sm)" : undefined,
+        transition: "var(--app-transition)",
       }}
     >
       <Box
@@ -146,13 +142,7 @@ export function ScheduleDashboardCard({
       >
         <Group justify="space-between" align="center" gap="md" wrap="nowrap">
           <Stack gap={6} style={{ textAlign: "left" }}>
-            <Text
-              size="xs"
-              fw={700}
-              tt="uppercase"
-              c="var(--app-text-dim)"
-              style={{ letterSpacing: "0.08em" }}
-            >
+            <Text size="xs" fw={700} c="var(--app-text-dim)" style={{ letterSpacing: "0.03em" }}>
               {label}
             </Text>
             <Text size="md" c="var(--app-text)" fw={600} lh={1.25}>
@@ -182,6 +172,6 @@ export function ScheduleDashboardCard({
           </motion.div>
         ) : null}
       </AnimatePresence>
-    </Box>
+    </AppCard>
   );
 }

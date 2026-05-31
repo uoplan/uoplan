@@ -49,7 +49,7 @@ function WeekMiniCard({
       style={{
         width: CARD_W,
         height: CARD_H,
-        borderRadius: 0,
+        borderRadius: "var(--app-radius-sm)",
         backgroundColor: hovered && !selected ? "var(--app-surface-hover)" : "var(--app-surface)",
         border: selected ? "1px solid var(--app-border-strong)" : "1px solid var(--app-border)",
         cursor: "pointer",
@@ -65,7 +65,7 @@ function WeekMiniCard({
           style={{
             position: "absolute",
             inset: 0,
-            backgroundColor: "rgba(220, 220, 230, 0.07)",
+            backgroundColor: "color-mix(in srgb, var(--app-surface-hover) 42%, transparent)",
             pointerEvents: "none",
             zIndex: 1,
           }}
@@ -82,8 +82,8 @@ function WeekMiniCard({
             width: COL_W - 2,
             height: `${slot.heightPct}%`,
             minHeight: 3,
-            backgroundColor: `rgba(${slot.r}, ${slot.g}, ${slot.b}, 0.7)`,
-            borderRadius: 0,
+            backgroundColor: `rgb(${slot.r} ${slot.g} ${slot.b} / 70%)`,
+            borderRadius: "var(--app-radius-sm)",
           }}
         />
       ))}

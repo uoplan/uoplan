@@ -117,7 +117,7 @@ export function AppFooter() {
                     marginRight: "auto",
                   }
                 : {
-                    borderLeft: "2px solid rgba(124, 58, 237, 0.38)",
+                    borderLeft: "var(--app-border-width) solid var(--app-border-strong)",
                     paddingLeft: 14,
                   }),
               paddingTop: 2,

@@ -99,7 +99,7 @@ export function OptionsDrilldown({
         <Paper
           p="sm"
           withBorder
-          radius={0}
+          radius="var(--app-radius)"
           mt={depth > 0 ? "xs" : 0}
           data-missing-selection={showError ? "true" : undefined}
           style={{
@@ -155,7 +155,13 @@ export function OptionsDrilldown({
       path: backDescription,
     });
     return (
-      <Paper withBorder radius={0} mt={depth > 0 ? "xs" : 0} p={0} style={{ overflow: "hidden" }}>
+      <Paper
+        withBorder
+        radius="var(--app-radius)"
+        mt={depth > 0 ? "xs" : 0}
+        p={0}
+        style={{ overflow: "hidden" }}
+      >
         <UnstyledButton
           type="button"
           onClick={() => onClearOption(reqId)}
@@ -166,7 +172,7 @@ export function OptionsDrilldown({
             padding: "var(--mantine-spacing-sm)",
             paddingLeft: indent,
             border: "none",
-            borderBottom: "1px solid var(--app-border)",
+            borderBottom: "var(--app-border-width) solid var(--app-border)",
             backgroundColor: "var(--app-surface)",
             cursor: "pointer",
             textAlign: "left",
@@ -190,7 +196,7 @@ export function OptionsDrilldown({
               }}
             />
             <Stack gap={4} style={{ minWidth: 0, flex: 1 }}>
-              <Text size="xs" c="dimmed" fw={600} tt="uppercase" lh={1.2}>
+              <Text size="xs" c="dimmed" fw={500} lh={1.2}>
                 {tr("optionsDrilldown.changeRequirementSet")}
               </Text>
               <Text size="sm" lh={1.35} style={{ minWidth: 0 }}>

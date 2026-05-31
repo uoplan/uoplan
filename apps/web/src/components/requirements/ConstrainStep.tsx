@@ -155,7 +155,7 @@ export function ConstrainStep({
 
   if (!hasTree) {
     return (
-      <Alert color="blue" variant="light" radius={0} data-tour="constrain-schedule">
+      <Alert color="blue" variant="light" radius="var(--app-radius)" data-tour="constrain-schedule">
         <Text size="sm">Select a program and complete the previous steps to see requirements.</Text>
       </Alert>
     );
@@ -183,7 +183,7 @@ export function ConstrainStep({
         {hasRemaining ? (
           <>
             {primaryRoots.length === 0 && collapsedRoots.length > 0 && (
-              <Alert color="gray" variant="light" radius={0}>
+              <Alert color="gray" variant="light" radius="var(--app-radius)">
                 <Text size="sm">
                   The remaining requirements have no courses in the picker (e.g. missing
                   prerequisites or nothing offered this term). Expand{" "}
@@ -220,7 +220,7 @@ export function ConstrainStep({
               <Paper
                 p="sm"
                 withBorder
-                radius={0}
+                radius="var(--app-radius)"
                 style={{
                   backgroundColor: collapsedUnavailableOpen
                     ? "var(--app-surface)"
@@ -242,7 +242,7 @@ export function ConstrainStep({
                       size={14}
                       style={{
                         transform: collapsedUnavailableOpen ? "rotate(0deg)" : "rotate(-90deg)",
-                        transition: "transform 150ms ease",
+                        transition: "var(--app-transition)",
                       }}
                     />
                     <Text fw={600} size="sm">
@@ -285,7 +285,7 @@ export function ConstrainStep({
             )}
           </>
         ) : (
-          <Alert color="blue" variant="light" radius={0}>
+          <Alert color="blue" variant="light" radius="var(--app-radius)">
             <Text size="sm">
               All requirements are currently satisfied by your completed courses. Nothing to
               constrain.

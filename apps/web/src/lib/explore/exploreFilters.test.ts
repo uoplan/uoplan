@@ -5,6 +5,7 @@ import {
   EMPTY_FILTERS,
   compareCourseEntries,
   compareProfessorEntries,
+  filterCourseEntries,
   parseExploreFiltersSearch,
   serializeExploreFiltersSearch,
   type ExploreFilterState,
@@ -145,6 +146,48 @@ describe("compareCourseEntries", () => {
 
     const desc = [a, b].sort((x, y) => compareCourseEntries(x, y, "courseCode", "desc"));
     expect(desc.map((e) => e.courseCode)).toEqual(["CSI 2100", "CSI 1100"]);
+  });
+});
+
+describe("filterCourseEntries difficulty (average CGPA)", () => {
+  const easy = makeCourseEntry({
+    normCode: "easy",
+    gradeViz: makeGradeViz([{ grade: "A", count: 10 }]),
+  });
+  const moderate = makeCourseEntry({
+    normCode: "moderate",
+    gradeViz: makeGradeViz([{ grade: "A-", count: 10 }]),
+  });
+  const tough = makeCourseEntry({
+    normCode: "tough",
+    gradeViz: makeGradeViz([{ grade: "B+", count: 10 }]),
+  });
+  const noGrades = makeCourseEntry({ normCode: "none", gradeViz: null });
+  const all = [easy, moderate, tough, noGrades];
+
+  const withDifficulty = (difficulty: ExploreFilterState["difficulty"]): ExploreFilterState => ({
+    ...EMPTY_FILTERS,
+    difficulty,
+  });
+
+  it("buckets CGPA >= 9 as easy", () => {
+    const result = filterCourseEntries(all, withDifficulty("easy"));
+    expect(result.map((e) => e.normCode)).toEqual(["easy"]);
+  });
+
+  it("buckets 7.5 <= CGPA < 9 as moderate", () => {
+    const result = filterCourseEntries(all, withDifficulty("moderate"));
+    expect(result.map((e) => e.normCode)).toEqual(["moderate"]);
+  });
+
+  it("buckets CGPA < 7.5 as tough", () => {
+    const result = filterCourseEntries(all, withDifficulty("tough"));
+    expect(result.map((e) => e.normCode)).toEqual(["tough"]);
+  });
+
+  it("excludes courses without grade data", () => {
+    const result = filterCourseEntries(all, withDifficulty("easy"));
+    expect(result.map((e) => e.normCode)).not.toContain("none");
   });
 });
 

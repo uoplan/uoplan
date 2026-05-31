@@ -37,6 +37,7 @@ export function SearchResultDisciplineCard({
           },
         } as never
       }
+      className="soft-lift"
       style={{
         width: 190,
         minWidth: 190,
@@ -45,12 +46,13 @@ export function SearchResultDisciplineCard({
         flexDirection: "column",
         minHeight: 155,
         backgroundColor: "var(--app-surface-sunken)",
-        border: "1px solid var(--app-border)",
-        borderRadius: 0,
+        border: "var(--app-border-width) solid var(--app-border)",
+        borderRadius: "var(--app-radius)",
         overflow: "hidden",
         textDecoration: "none",
         color: "inherit",
-        transition: "background-color 120ms ease, border-color 120ms ease",
+        transition:
+          "background-color var(--app-transition), border-color var(--app-transition), transform var(--app-transition), box-shadow var(--app-transition)",
       }}
     >
       <Stack gap={5} p={12} style={{ flex: 1 }}>

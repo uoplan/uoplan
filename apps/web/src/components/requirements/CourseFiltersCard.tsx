@@ -107,7 +107,7 @@ export function BasicCourseFiltersCard({
           data={excludeElectiveSubjects.data}
           value={excludeElectiveSubjects.value}
           onChange={excludeElectiveSubjects.onChange}
-          radius={0}
+          radius="var(--app-radius-sm)"
         />
       )}
       {excludeCourses && (
@@ -122,7 +122,7 @@ export function BasicCourseFiltersCard({
           onChange={excludeCourses.onChange}
           renderOption={excludeCourses.renderOption}
           filter={excludeCourses.filter}
-          radius={0}
+          radius="var(--app-radius-sm)"
         />
       )}
       <Group gap="md" align="flex-start" style={{ alignItems: "center" }}>
@@ -186,7 +186,7 @@ export function BasicCourseFiltersCard({
   );
 
   return (
-    <Paper p="sm" withBorder radius={0}>
+    <Paper p="sm" withBorder radius="var(--app-radius)">
       <Stack gap="xs">
         {collapsible ? (
           <UnstyledButton
@@ -194,7 +194,7 @@ export function BasicCourseFiltersCard({
             onClick={toggleFilters}
             aria-expanded={filtersOpen}
             style={{
-              borderRadius: 0,
+              borderRadius: "var(--app-radius-sm)",
               textAlign: "left",
               width: "100%",
             }}
@@ -206,7 +206,7 @@ export function BasicCourseFiltersCard({
                   flexShrink: 0,
                   marginTop: 2,
                   transform: filtersOpen ? "rotate(0deg)" : "rotate(-90deg)",
-                  transition: "transform 0.15s ease",
+                  transition: "var(--app-transition)",
                 }}
                 aria-hidden
               />
@@ -262,7 +262,7 @@ export function AdvancedCourseFiltersCard({
     : new Set([1000, 2000, 3000, 4000]);
 
   return (
-    <Paper p="sm" withBorder radius={0}>
+    <Paper p="sm" withBorder radius="var(--app-radius)">
       <Stack gap="md">
         {/* Section 1: Course filters */}
         <Box>

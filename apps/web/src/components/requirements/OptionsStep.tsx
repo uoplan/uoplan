@@ -27,7 +27,7 @@ export function OptionsStep({
 
   if (relevantNodes.length === 0) {
     return (
-      <Alert color="blue" variant="light" radius={0} data-tour="options">
+      <Alert color="blue" variant="light" radius="var(--app-radius)" data-tour="options">
         <Text size="sm">{tr("optionsStep.none")}</Text>
       </Alert>
     );
@@ -35,7 +35,7 @@ export function OptionsStep({
 
   return (
     <Stack gap="md" data-tour="options">
-      <Alert color="blue" variant="light" radius={0}>
+      <Alert color="blue" variant="light" radius="var(--app-radius)">
         <Text size="sm">{tr("optionsStep.note")}</Text>
       </Alert>
 

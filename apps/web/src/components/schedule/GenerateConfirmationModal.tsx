@@ -24,7 +24,7 @@ export function GenerateConfirmationModal({
       onClose={onCancel}
       title={tr("schedule.generate.confirm.title")}
       centered
-      radius={0}
+      radius="lg"
       styles={{
         header: {
           backgroundColor: "var(--app-surface)",
@@ -55,10 +55,10 @@ export function GenerateConfirmationModal({
           {tr("schedule.generate.confirm.consequence")}
         </Text>
         <Stack gap="xs">
-          <Button variant="filled" color="gray" radius={0} onClick={onGenerateAnyway}>
+          <Button variant="filled" color="gray" radius="md" onClick={onGenerateAnyway}>
             {tr("schedule.generate.confirm.generateAnyway")}
           </Button>
-          <Button variant="subtle" color="gray" radius={0} onClick={onCancel}>
+          <Button variant="subtle" color="gray" radius="md" onClick={onCancel}>
             {tr("schedule.generate.confirm.cancel")}
           </Button>
         </Stack>

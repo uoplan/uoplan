@@ -224,7 +224,9 @@ export function ProfessorGraphPage({
                 onMouseLeave={() => setPreviewThrottled(null)}
                 style={{
                   backgroundColor: "color-mix(in srgb, var(--app-surface) 96%, transparent)",
-                  border: "1px solid var(--app-border)",
+                  border: "var(--app-border-width) solid var(--app-border)",
+                  borderRadius: "var(--app-radius)",
+                  boxShadow: "var(--app-shadow)",
                   maxHeight: 280,
                   overflowY: "auto",
                 }}
@@ -238,7 +240,7 @@ export function ProfessorGraphPage({
                       px="sm"
                       py={8}
                       style={{
-                        borderRadius: 6,
+                        borderRadius: "var(--app-radius-sm)",
                         display: "block",
                         width: "100%",
                         backgroundColor:
@@ -365,8 +367,8 @@ export function ProfessorGraphPage({
             <Progress
               value={overlayProgress}
               size="sm"
-              radius={0}
-              color="violet"
+              radius="xl"
+              color="accentBlue"
               w="100%"
               transitionDuration={0}
               aria-label={overlayMessage}

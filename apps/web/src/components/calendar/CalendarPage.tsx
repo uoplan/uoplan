@@ -224,7 +224,7 @@ export function CalendarPage() {
       <Title
         order={1}
         style={{
-          fontFamily: '"DM Serif Display", serif',
+          fontFamily: "var(--app-font-heading)",
           color: "var(--app-text)",
           marginBottom: 0,
           ...(isMobile ? { display: "none" } : {}),
@@ -249,9 +249,9 @@ export function CalendarPage() {
             <Button.Group>
               <Button
                 variant="light"
-                color="violet"
+                color="accentBlue"
                 size="sm"
-                radius={0}
+                radius="md"
                 leftSection={<IconChevronLeft size={14} />}
                 disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
                 loading={scheduleGenerating}
@@ -261,9 +261,9 @@ export function CalendarPage() {
               </Button>
               <Button
                 variant="filled"
-                color="violet"
+                color="accentBlue"
                 size="sm"
-                radius={0}
+                radius="md"
                 rightSection={<IconChevronRight size={14} />}
                 disabled={scheduleGenerating || !canUseSeedNavigation}
                 loading={scheduleGenerating}
@@ -284,7 +284,7 @@ export function CalendarPage() {
                 variant="subtle"
                 color="gray"
                 size="md"
-                radius={0}
+                radius="md"
                 disabled={!dateRangeOk || !currentSchedule}
                 onClick={handleDownloadIcs}
                 aria-label={tr("calendarPage.downloadIcs")}
@@ -304,7 +304,7 @@ export function CalendarPage() {
                   variant="subtle"
                   color={shareCopied ? "teal" : "gray"}
                   size="md"
-                  radius={0}
+                  radius="md"
                   onClick={handleCopyShare}
                   aria-label={tr("calendarPage.share")}
                   style={{ transition: "color 0.2s ease" }}
@@ -320,7 +320,7 @@ export function CalendarPage() {
                 variant="subtle"
                 color="gray"
                 size="md"
-                radius={0}
+                radius="md"
                 disabled={scheduleGenerating || !canUseSeedNavigation}
                 onClick={() => void randomizeSeed()}
                 aria-label={tr("calendarPage.randomize")}
@@ -333,7 +333,7 @@ export function CalendarPage() {
                 variant="subtle"
                 color="gray"
                 size="md"
-                radius={0}
+                radius="md"
                 onClick={handleClearGenerationOptions}
                 aria-label={tr("calendarPage.clear")}
               >
@@ -345,7 +345,7 @@ export function CalendarPage() {
                 variant="subtle"
                 color="gray"
                 size="md"
-                radius={0}
+                radius="md"
                 onClick={() => setUenrollImportOpen(true)}
                 aria-label={tr("uenrollImport.button")}
               >
@@ -357,7 +357,7 @@ export function CalendarPage() {
                 variant="subtle"
                 color="green"
                 size="md"
-                radius={0}
+                radius="md"
                 disabled={!cliCommand}
                 onClick={() => setEnrolCliOpen(true)}
                 aria-label={tr("enrolCli.button")}
@@ -375,7 +375,7 @@ export function CalendarPage() {
                 <Button
                   variant="default"
                   size="sm"
-                  radius={0}
+                  radius="md"
                   style={{ flex: 1 }}
                   leftSection={<IconChevronLeft size={14} />}
                   disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
@@ -387,7 +387,7 @@ export function CalendarPage() {
                 <Button
                   variant="default"
                   size="sm"
-                  radius={0}
+                  radius="md"
                   style={{ flex: 1 }}
                   rightSection={<IconChevronRight size={14} />}
                   disabled={scheduleGenerating || !canUseSeedNavigation}
@@ -412,7 +412,7 @@ export function CalendarPage() {
               variant="subtle"
               color="gray"
               size="xs"
-              radius={0}
+              radius="md"
               leftSection={<IconArrowBackUp size={12} />}
               onClick={() => undoLastSwap()}
               style={{ alignSelf: "flex-start", paddingInline: 6 }}
@@ -433,7 +433,7 @@ export function CalendarPage() {
       <UEnrollImportModal opened={uenrollImportOpen} onClose={() => setUenrollImportOpen(false)} />
 
       {scheduleNoVariety && !generationError && (
-        <Alert color="yellow" variant="light" radius={0} py="xs" style={{ flexShrink: 0 }}>
+        <Alert color="yellow" variant="light" radius="md" py="xs" style={{ flexShrink: 0 }}>
           {tr(hasProgram ? "calendarPage.noMoreSchedules" : "basicCalendar.noMoreSchedules")}
         </Alert>
       )}
@@ -555,7 +555,7 @@ export function CalendarPage() {
               display: "flex",
               gap: 0,
               backgroundColor: "var(--app-surface)",
-              borderTop: "2px solid var(--app-border)",
+              borderTop: "var(--app-border-width) solid var(--app-border)",
               paddingBottom: "env(safe-area-inset-bottom, 0)",
             }}
           >
@@ -563,7 +563,7 @@ export function CalendarPage() {
               variant="subtle"
               color="gray"
               size="md"
-              radius={0}
+              radius="md"
               aria-label={tr("calendarPage.mobile.menu")}
               style={{ flex: 1, border: "none", height: 56 }}
               onClick={() => setControlsOpen(true)}
@@ -574,7 +574,7 @@ export function CalendarPage() {
               variant="subtle"
               color="gray"
               size="md"
-              radius={0}
+              radius="md"
               aria-label={tr("calendarPage.mobile.previous")}
               style={{ flex: 1, border: "none", height: 56 }}
               disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
@@ -588,7 +588,7 @@ export function CalendarPage() {
               variant="subtle"
               color="gray"
               size="md"
-              radius={0}
+              radius="md"
               aria-label={tr("calendarPage.mobile.next")}
               style={{ flex: 1, border: "none", height: 56 }}
               disabled={scheduleGenerating || !canUseSeedNavigation}

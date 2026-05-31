@@ -122,7 +122,7 @@ export function BasicCalendarSidebarControls() {
           }}
           renderOption={renderCourseOption(cache)}
           filter={courseOptionsFilter}
-          radius={0}
+          radius="md"
         />
 
         <NumberInput
@@ -137,7 +137,7 @@ export function BasicCalendarSidebarControls() {
           }}
           min={0}
           max={8}
-          radius={0}
+          radius="md"
         />
 
         <BasicCourseFiltersCard
@@ -196,7 +196,7 @@ export function BasicCalendarSidebarControls() {
             setFrenchImmersionStream(e.currentTarget.checked);
             markBasicSettingsChanged();
           }}
-          radius={0}
+          radius="md"
           styles={{ description: { color: "var(--app-text-muted)" } }}
         />
 
@@ -224,14 +224,14 @@ export function BasicCalendarSidebarControls() {
             renderOption={renderCourseOption(cache)}
             filter={courseOptionsFilter}
             nothingFoundMessage={tr("basicCalendar.completed.notFound")}
-            radius={0}
+            radius="md"
           />
 
           <Button
             size="sm"
             color="gray"
             variant="light"
-            radius={0}
+            radius="md"
             leftSection={<IconFileUpload size={14} />}
             fullWidth
             onClick={() => navigateToWizardStep(WizardStep.Program)}

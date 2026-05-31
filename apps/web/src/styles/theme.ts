@@ -1,16 +1,16 @@
 import { createTheme, rem, type MantineColorsTuple } from "@mantine/core";
 
-const accentPurple: MantineColorsTuple = [
-  "#FAF5FE",
-  "#F1E6FB",
-  "#E4CDF6",
-  "#D5B2F0",
-  "#C99DF0",
-  "#BC88E8",
-  "#A96FD9",
-  "#9457C2",
-  "#7E47A8",
-  "#693A8C",
+const accentBlue: MantineColorsTuple = [
+  "#eff6ff",
+  "#dbeafe",
+  "#bfdbfe",
+  "#93c5fd",
+  "#60a5fa",
+  "#3b82f6",
+  "#2563eb",
+  "#1d4ed8",
+  "#1e40af",
+  "#1e3a8a",
 ];
 
 const constructBlack: MantineColorsTuple = [
@@ -53,54 +53,63 @@ const constructGreen: MantineColorsTuple = [
 ];
 
 export const theme = createTheme({
-  defaultRadius: 0,
+  defaultRadius: "md",
   primaryColor: "constructBlack",
+  radius: {
+    xs: rem(6),
+    sm: rem(8),
+    md: rem(12),
+    lg: rem(18),
+    xl: rem(24),
+  },
   colors: {
-    accentPurple,
+    accentBlue,
     constructBlack,
     constructRed,
     constructGreen,
   },
-  fontFamily: '"DM Mono", monospace',
+  fontFamily: "var(--app-font-body)",
   headings: {
-    fontFamily: '"DM Serif Display", serif',
+    fontFamily: "var(--app-font-heading)",
     fontWeight: "400",
   },
   components: {
     Button: {
       defaultProps: {
         variant: "filled",
-        radius: 0,
+        radius: "md",
       },
       styles: () => ({
         root: {
-          textTransform: "uppercase" as const,
-          fontWeight: 500,
-          letterSpacing: "0.05em",
-          transition: "transform 80ms ease, box-shadow 80ms ease",
+          fontWeight: 600,
+          letterSpacing: "0.01em",
+          transition: "transform var(--app-transition), box-shadow var(--app-transition)",
           "&:hover": {
-            transform: "rotate(-1deg) scale(1.02)",
-            boxShadow: "3px 3px 0px var(--app-stamp-shadow)",
+            transform: "var(--app-lift-hover)",
+            boxShadow: "var(--app-shadow)",
           },
           "&:active": {
-            transform: "rotate(0deg) scale(0.98)",
-            boxShadow: "none",
+            transform: "translateY(0)",
+            boxShadow: "var(--app-shadow-sm)",
           },
         },
       }),
     },
     Card: {
+      defaultProps: {
+        radius: "md",
+      },
       styles: () => ({
         root: {
-          border: "2px solid var(--app-ink)",
+          border: "var(--app-border-width) solid var(--app-border)",
         },
       }),
     },
     Input: {
       styles: () => ({
         input: {
-          border: "1px solid var(--app-border-strong)",
-          borderRadius: 0,
+          border: "var(--app-border-width) solid var(--app-border-strong)",
+          borderRadius: "var(--app-radius-sm)",
           "&:focus": {
             borderColor: "var(--app-focus-ring)",
           },
@@ -110,8 +119,8 @@ export const theme = createTheme({
     TextInput: {
       styles: () => ({
         input: {
-          border: "1px solid var(--app-border-strong)",
-          borderRadius: 0,
+          border: "var(--app-border-width) solid var(--app-border-strong)",
+          borderRadius: "var(--app-radius-sm)",
           "&:focus": {
             borderColor: "var(--app-focus-ring)",
           },
@@ -121,8 +130,8 @@ export const theme = createTheme({
     PasswordInput: {
       styles: () => ({
         input: {
-          border: "1px solid var(--app-border-strong)",
-          borderRadius: 0,
+          border: "var(--app-border-width) solid var(--app-border-strong)",
+          borderRadius: "var(--app-radius-sm)",
           "&:focus": {
             borderColor: "var(--app-focus-ring)",
           },
@@ -132,8 +141,8 @@ export const theme = createTheme({
     Select: {
       styles: () => ({
         input: {
-          border: "1px solid var(--app-border-strong)",
-          borderRadius: 0,
+          border: "var(--app-border-width) solid var(--app-border-strong)",
+          borderRadius: "var(--app-radius-sm)",
           "&:focus": {
             borderColor: "var(--app-focus-ring)",
           },
@@ -143,14 +152,16 @@ export const theme = createTheme({
     Modal: {
       defaultProps: {
         removeScrollProps: { removeScrollBar: false },
+        radius: "lg",
       },
       styles: () => ({
         content: {
-          border: "2px solid var(--app-ink)",
-          borderRadius: 0,
+          border: "var(--app-border-width) solid var(--app-border)",
+          borderRadius: "var(--app-radius-lg)",
+          boxShadow: "var(--app-shadow-lg)",
         },
         header: {
-          borderBottom: "2px solid var(--app-ink)",
+          borderBottom: "var(--app-border-width) solid var(--app-border)",
         },
         body: {
           paddingTop: rem(16),
@@ -158,38 +169,39 @@ export const theme = createTheme({
       }),
     },
     Badge: {
+      defaultProps: {
+        radius: "xl",
+      },
       styles: () => ({
         root: {
-          borderRadius: 0,
-          textTransform: "uppercase" as const,
-          fontFamily: '"DM Mono", monospace',
-          fontWeight: 500,
-          letterSpacing: "0.05em",
+          fontFamily: "var(--app-font-body)",
+          fontWeight: 600,
+          letterSpacing: "0.01em",
+          textTransform: "none" as const,
         },
       }),
     },
     Table: {
       styles: () => ({
         th: {
-          borderBottom: "2px solid var(--app-ink)",
-          textTransform: "uppercase" as const,
-          fontFamily: '"DM Mono", monospace',
+          borderBottom: "var(--app-border-width) solid var(--app-border-strong)",
+          fontFamily: "var(--app-font-body)",
           fontSize: rem(11),
-          letterSpacing: "0.08em",
-          fontWeight: 500,
+          letterSpacing: "0.04em",
+          fontWeight: 600,
         },
         td: {
-          borderBottom: "1px solid var(--app-border)",
+          borderBottom: "var(--app-border-width) solid var(--app-border)",
         },
       }),
     },
     Drawer: {
       styles: () => ({
         content: {
-          borderLeft: "2px solid var(--app-ink)",
+          borderLeft: "var(--app-border-width) solid var(--app-border)",
         },
         header: {
-          borderBottom: "2px solid var(--app-ink)",
+          borderBottom: "var(--app-border-width) solid var(--app-border)",
         },
       }),
     },
@@ -198,13 +210,13 @@ export const theme = createTheme({
         tooltip: {
           backgroundColor: "var(--app-surface-overlay)",
           color: "var(--app-text)",
-          border: "1px solid var(--app-border-strong)",
-          borderRadius: 0,
+          border: "var(--app-border-width) solid var(--app-border-strong)",
+          borderRadius: "var(--app-radius-sm)",
           fontWeight: 500,
         },
         arrow: {
           backgroundColor: "var(--app-surface-overlay)",
-          border: "1px solid var(--app-border-strong)",
+          border: "var(--app-border-width) solid var(--app-border-strong)",
         },
       }),
     },

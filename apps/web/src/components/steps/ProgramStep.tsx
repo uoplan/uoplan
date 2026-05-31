@@ -284,7 +284,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
             checked={frenchImmersionStream}
             onChange={(e) => setFrenchImmersionStream(e.currentTarget.checked)}
             size="md"
-            radius={0}
+            radius="md"
           />
           {frenchImmersionStream ? <FrenchImmersionProgramOverview /> : null}
         </>
@@ -303,7 +303,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
           size="sm"
           variant="light"
           color="gray"
-          radius={0}
+          radius="md"
           onClick={() => fileInputRef.current?.click()}
           disabled={transcriptLoading}
           leftSection={
@@ -322,7 +322,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
           size="sm"
           variant="subtle"
           color="gray"
-          radius={0}
+          radius="md"
           rightSection={<IconExternalLink size={14} stroke={1.8} />}
         >
           {tr("programStep.transcript.request")}

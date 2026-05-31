@@ -252,10 +252,10 @@ export function ExploreProfessorOfferingRows({
         return (
           <Paper
             key={o.id}
-            radius={0}
+            radius="var(--app-radius)"
             style={{
               backgroundColor: "var(--app-bg)",
-              borderBottom: isLast ? undefined : "1px solid var(--app-border)",
+              borderBottom: isLast ? undefined : "var(--app-border-width) solid var(--app-border)",
               borderTop: "none",
               borderLeft: "none",
               borderRight: "none",

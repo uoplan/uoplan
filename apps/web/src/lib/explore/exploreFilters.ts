@@ -203,9 +203,9 @@ export function compareProfessorEntries(
   return compareNullableNumber(a.maxRating, b.maxRating, sortDir);
 }
 
-function getDifficultyBucket(passingPercent: number): ExploreFilterDifficulty {
-  if (passingPercent > 0.75) return "easy";
-  if (passingPercent >= 0.5) return "moderate";
+function getDifficultyBucket(gpa: number): ExploreFilterDifficulty {
+  if (gpa >= 9) return "easy";
+  if (gpa >= 7.5) return "moderate";
   return "tough";
 }
 
@@ -221,9 +221,9 @@ export function filterCourseEntries(
       if (e.language === null || !filters.languages.includes(e.language)) return false;
     }
     if (filters.difficulty !== null) {
-      const pct = e.gradeViz?.passingPercent;
-      if (pct == null) return false;
-      if (getDifficultyBucket(pct) !== filters.difficulty) return false;
+      const gpa = gradeVizGpa(e.gradeViz);
+      if (gpa == null) return false;
+      if (getDifficultyBucket(gpa) !== filters.difficulty) return false;
     }
     if (filters.minRating !== null) {
       if (e.maxProfessorRating === null || e.maxProfessorRating < filters.minRating) return false;

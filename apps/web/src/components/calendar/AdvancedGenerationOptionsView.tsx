@@ -31,7 +31,7 @@ export function AdvancedGenerationOptionsView({
         beforeGenerate={
           <Paper
             withBorder
-            radius={0}
+            radius="md"
             data-testid="constraints-panel"
             style={{
               backgroundColor: constrainOpen ? "var(--app-surface)" : "var(--app-surface-sunken)",
@@ -69,7 +69,7 @@ export function AdvancedGenerationOptionsView({
                   {tr("app.constraints.heading")}
                 </Text>
               </Group>
-              <Badge size="sm" variant="light" color="violet">
+              <Badge size="sm" variant="light" color="accentBlue">
                 {tr("app.constraints.optional")}
               </Badge>
             </Group>
@@ -77,7 +77,7 @@ export function AdvancedGenerationOptionsView({
               <Alert
                 color="blue"
                 variant="light"
-                radius={0}
+                radius="md"
                 mx="sm"
                 mb="sm"
                 style={{ border: "none" }}

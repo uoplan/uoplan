@@ -44,7 +44,7 @@ export function BasicCalendarHeaderActions({
             variant="subtle"
             color="gray"
             size="md"
-            radius={0}
+            radius="md"
             disabled={downloadDisabled}
             onClick={onDownloadIcs}
             aria-label={tr("calendarPage.downloadIcs")}
@@ -64,7 +64,7 @@ export function BasicCalendarHeaderActions({
               variant="subtle"
               color={shareCopied ? "teal" : "gray"}
               size="md"
-              radius={0}
+              radius="md"
               onClick={handleCopyShare}
               aria-label={tr("calendarPage.share")}
               style={{ transition: "color 0.2s ease" }}
@@ -80,7 +80,7 @@ export function BasicCalendarHeaderActions({
             variant="subtle"
             color="gray"
             size="md"
-            radius={0}
+            radius="md"
             onClick={onClearOptions}
             aria-label={tr("basicCalendar.clear")}
           >
@@ -92,7 +92,7 @@ export function BasicCalendarHeaderActions({
             variant="subtle"
             color="gray"
             size="md"
-            radius={0}
+            radius="md"
             onClick={() => setUenrollImportOpen(true)}
             aria-label={tr("uenrollImport.button")}
           >
@@ -105,7 +105,7 @@ export function BasicCalendarHeaderActions({
               variant="subtle"
               color="green"
               size="md"
-              radius={0}
+              radius="md"
               disabled={!cliCommand}
               onClick={onEnrolCli}
               aria-label={tr("enrolCli.button")}

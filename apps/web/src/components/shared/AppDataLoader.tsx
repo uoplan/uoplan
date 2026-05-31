@@ -24,8 +24,8 @@ export function AppDataLoader({ progress }: { progress: number }) {
         <Progress
           value={clamped}
           size="sm"
-          radius={0}
-          color="violet"
+          radius="xl"
+          color="accentBlue"
           w="100%"
           aria-label={tr("app.loadingData")}
           styles={{

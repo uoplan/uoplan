@@ -69,11 +69,10 @@ const radioStyles = {
     fontSize: "var(--mantine-font-size-sm)",
     cursor: "pointer",
   },
-  radio: {
-    cursor: "pointer",
-    backgroundColor: "var(--app-surface-overlay)",
-    borderColor: "var(--app-border-strong)",
-  },
+};
+
+const radioClassNames = {
+  radio: "explore-radio-input",
 };
 
 const segmentedStyles = {
@@ -147,6 +146,8 @@ export function ExploreFilterPopoverContent({
               value={value}
               label={tr(labelKey)}
               styles={radioStyles}
+              classNames={radioClassNames}
+              iconColor="var(--app-on-accent)"
               onClick={() => {
                 if (filters.difficulty === value) onChange({ difficulty: null });
               }}
@@ -170,6 +171,8 @@ export function ExploreFilterPopoverContent({
               value={String(value)}
               label={tr(labelKey)}
               styles={radioStyles}
+              classNames={radioClassNames}
+              iconColor="var(--app-on-accent)"
               onClick={() => {
                 if (filters.minRating === value) onChange({ minRating: null });
               }}
@@ -193,7 +196,14 @@ export function ExploreFilterPopoverContent({
         >
           <Stack gap={8}>
             {SORT_OPTIONS.map(({ value, labelKey }) => (
-              <Radio key={value} value={value} label={tr(labelKey)} styles={radioStyles} />
+              <Radio
+                key={value}
+                value={value}
+                label={tr(labelKey)}
+                styles={radioStyles}
+                classNames={radioClassNames}
+                iconColor="var(--app-on-accent)"
+              />
             ))}
           </Stack>
         </Radio.Group>

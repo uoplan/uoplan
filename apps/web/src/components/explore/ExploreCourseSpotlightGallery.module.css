@@ -13,15 +13,15 @@
   mask-image: linear-gradient(
     to right,
     transparent,
-    #000 32px,
-    #000 calc(100% - 32px),
+    var(--app-text) 32px,
+    var(--app-text) calc(100% - 32px),
     transparent
   );
   -webkit-mask-image: linear-gradient(
     to right,
     transparent,
-    #000 32px,
-    #000 calc(100% - 32px),
+    var(--app-text) 32px,
+    var(--app-text) calc(100% - 32px),
     transparent
   );
 }
@@ -59,15 +59,15 @@
   mask-image: linear-gradient(
     to right,
     transparent,
-    #000 16px,
-    #000 calc(100% - 16px),
+    var(--app-text) 16px,
+    var(--app-text) calc(100% - 16px),
     transparent
   );
   -webkit-mask-image: linear-gradient(
     to right,
     transparent,
-    #000 16px,
-    #000 calc(100% - 16px),
+    var(--app-text) 16px,
+    var(--app-text) calc(100% - 16px),
     transparent
   );
 }

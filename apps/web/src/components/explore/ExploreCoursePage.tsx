@@ -139,16 +139,16 @@ export function ExploreCoursePage({
           >
             <Accordion
               multiple
-              radius={0}
+              radius="var(--app-radius)"
               chevronPosition="right"
               variant="default"
               styles={{
                 root: {
                   backgroundColor: "var(--app-bg)",
-                  borderTop: "1px solid var(--app-border)",
+                  borderTop: "var(--app-border-width) solid var(--app-border)",
                 },
                 item: {
-                  borderBottom: "1px solid var(--app-border)",
+                  borderBottom: "var(--app-border-width) solid var(--app-border)",
                   backgroundColor: "var(--app-surface-sunken)",
                   "&:last-of-type": { borderBottom: "none" },
                 },
@@ -158,7 +158,7 @@ export function ExploreCoursePage({
                   paddingBottom: "var(--mantine-spacing-lg)",
                   paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
                   paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
-                  borderRadius: 0,
+                  borderRadius: "var(--app-radius-sm)",
                   backgroundColor: "var(--app-surface-sunken)",
                   "@media (max-width: 540px)": {
                     paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,

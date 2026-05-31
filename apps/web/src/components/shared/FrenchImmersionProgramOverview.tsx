@@ -1,4 +1,4 @@
-import { Alert, Anchor, Card, Group, Progress, Stack, Text } from "@mantine/core";
+import { Alert, Anchor, Group, Progress, Stack, Text } from "@mantine/core";
 import { useMemo, type ReactNode } from "react";
 import { useShallow } from "zustand/react/shallow";
 import {
@@ -10,6 +10,7 @@ import {
 } from "@uoplan/core";
 import { useAppStore } from "../../store/appStore";
 import { tr } from "../../i18n";
+import { AppCard } from "./AppCard";
 
 const DIPLOMA_REQUIREMENTS_URL =
   "https://www.uottawa.ca/study/immersion/french/about/diploma-requirements";
@@ -105,8 +106,8 @@ export function FrenchImmersionProgramOverview({
         <Progress
           value={overallPct}
           size="xs"
-          radius={0}
-          color={volumeDone ? "teal" : "violet"}
+          radius="xl"
+          color={volumeDone ? "teal" : "accentBlue"}
           aria-label={tr("frenchImmersion.overview.volumeAria")}
         />
       </Stack>
@@ -114,21 +115,7 @@ export function FrenchImmersionProgramOverview({
   }
 
   return (
-    <Card
-      padding="md"
-      radius={0}
-      shadow="xs"
-      styles={{
-        root: dark
-          ? {
-              backgroundColor: "var(--app-surface)",
-              border: "none",
-            }
-          : {
-              border: "none",
-            },
-      }}
-    >
+    <AppCard p="md" shadow="xs">
       <Stack gap="sm">
         <div>
           <Text fw={600} size="sm" c={dark ? "gray.0" : undefined}>
@@ -146,7 +133,7 @@ export function FrenchImmersionProgramOverview({
 
         <div>
           <Group justify="space-between" gap="xs" wrap="nowrap" mb={6}>
-            <Text size="xs" fw={600} tt="uppercase" c={dark ? "gray.5" : "dimmed"}>
+            <Text size="xs" fw={600} c={dark ? "gray.5" : "dimmed"}>
               {tr("frenchImmersion.overview.volumeHeading")}
             </Text>
             <Text size="xs" ff="monospace" c={dark ? "gray.4" : "dimmed"}>
@@ -161,8 +148,8 @@ export function FrenchImmersionProgramOverview({
           <Progress
             value={overallPct}
             size="sm"
-            radius={0}
-            color={volumeDone ? "teal" : "violet"}
+            radius="xl"
+            color={volumeDone ? "teal" : "accentBlue"}
             aria-label={tr("frenchImmersion.overview.volumeAria")}
           />
         </div>
@@ -187,7 +174,7 @@ export function FrenchImmersionProgramOverview({
           target="_blank"
           rel="noreferrer"
           size="xs"
-          c={dark ? "violet.3" : undefined}
+          c={dark ? "accentBlue.3" : undefined}
         >
           {tr("frenchImmersion.progress.officialLink")}
         </Anchor>
@@ -196,13 +183,13 @@ export function FrenchImmersionProgramOverview({
           <Alert
             color="yellow"
             variant="light"
-            radius={0}
+            radius="xl"
             title={tr("frenchImmersion.fls3500.title")}
           >
             <Text size="sm">{tr("frenchImmersion.fls3500.body")}</Text>
           </Alert>
         )}
       </Stack>
-    </Card>
+    </AppCard>
   );
 }

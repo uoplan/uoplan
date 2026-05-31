@@ -11,18 +11,52 @@
 
 :root,
 [data-app-theme="dark"] {
-  /* Surfaces */
-  --app-bg: #1a1b22;
-  --app-surface: #232530;
-  --app-surface-sunken: #16171d;
-  --app-surface-overlay: #2b2d39;
-  --app-surface-hover: #32343f;
+  /* ---- Shape & motion primitives (theme-independent; light inherits these) ----
+     Soft, cozy geometry. Components reference these instead of hardcoding
+     `borderRadius: 0` / `2px solid` / hard offset shadows. */
+  --app-radius-sm: 8px;
+  --app-radius: 12px;
+  --app-radius-lg: 18px;
+  --app-radius-pill: 999px;
+  --app-border-width: 1px;
 
-  /* Borders & brutalist identity */
-  --app-border: #34374a;
-  --app-border-strong: #4a4d63;
-  --app-ink: #0e0f14;
+  --app-transition: 150ms ease;
+  --app-lift-hover: translateY(-2px);
+
+  /* ---- Typography families (theme-independent) ---- */
+  --app-font-body: "DM Mono", ui-monospace, Menlo, monospace;
+  --app-font-heading: "DM Serif Display", Georgia, "Times New Roman", serif;
+  --app-font-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Surfaces (warm neutral dark, less cold blue) */
+  --app-bg: #1b1a20;
+  --app-surface: #26242e;
+  --app-surface-sunken: #161519;
+  --app-surface-overlay: #2e2c38;
+  --app-surface-hover: #34323e;
+
+  /* Borders — barely-there hairlines (sit very close to the surface so cards
+     read as soft shapes, not outlined boxes). border-strong stays a touch more
+     visible for input affordances. */
+  --app-border: #2a2833;
+  --app-border-strong: #3d3b4a;
+  --app-ink: #2a2833;
   --app-stamp-shadow: rgba(0, 0, 0, 0.55);
+
+  /* Soft, diffuse shadows for the cozy lift (replaces hard offset stamp) */
+  --app-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.22);
+  --app-shadow: 0 2px 8px rgba(0, 0, 0, 0.34), 0 10px 28px rgba(0, 0, 0, 0.3);
+  --app-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.42), 0 20px 56px rgba(0, 0, 0, 0.36);
+
+  /* Informational / warning accents (token-ized; replaces raw hex in badges) */
+  --app-info: #74c0fc;
+  --app-info-soft: rgba(51, 154, 240, 0.16);
+  --app-warning: #ffa94d;
+  --app-warning-soft: rgba(255, 146, 43, 0.16);
+  --app-success: #69c08a;
+  --app-success-soft: rgba(101, 192, 129, 0.16);
+  --app-danger: #f07c7c;
+  --app-danger-soft: rgba(240, 124, 124, 0.16);
 
   /* Text */
   --app-text: #eceef5;
@@ -30,14 +64,14 @@
   --app-text-dim: #7c8099;
   --app-text-inverse: #1a1b22;
 
-  /* Accent (pastel lavender) */
-  --app-accent: #c99df0;
-  --app-accent-soft: #3a2f4d;
-  --app-on-accent: #1a1b22;
-  --app-focus-ring: #c99df0;
+  /* Accent (pastel baby blue) */
+  --app-accent: #93c5fd;
+  --app-accent-soft: #38476a;
+  --app-on-accent: #0f1b2e;
+  --app-focus-ring: #93c5fd;
 
   /* Misc chrome */
-  --app-selection-bg: rgba(201, 157, 240, 0.28);
+  --app-selection-bg: rgba(147, 197, 253, 0.26);
   --app-overlay-scrim: rgba(10, 11, 15, 0.6);
   --app-translucent: rgba(255, 255, 255, 0.06);
   --app-translucent-strong: rgba(255, 255, 255, 0.1);
@@ -62,10 +96,25 @@
   /* Borders & brutalist identity. Ink is softened on light so the 2px borders
      on inputs/buttons/cards read as a firm warm graphite rather than harsh
      near-black on the pale parchment surfaces. */
-  --app-border: #ddd8cf;
-  --app-border-strong: #c4bfb4;
-  --app-ink: #6f675b;
+  --app-border: #ebe6dd;
+  --app-border-strong: #d2cdc2;
+  --app-ink: #d2cdc2;
   --app-stamp-shadow: rgba(60, 54, 44, 0.22);
+
+  /* Soft warm shadows for the cozy lift */
+  --app-shadow-sm: 0 1px 2px rgba(60, 54, 44, 0.08), 0 2px 6px rgba(60, 54, 44, 0.06);
+  --app-shadow: 0 2px 10px rgba(60, 54, 44, 0.1), 0 10px 28px rgba(60, 54, 44, 0.08);
+  --app-shadow-lg: 0 12px 34px rgba(60, 54, 44, 0.14), 0 20px 54px rgba(60, 54, 44, 0.1);
+
+  /* Informational / warning accents (darker tier for contrast on light) */
+  --app-info: #1c7ed6;
+  --app-info-soft: rgba(34, 139, 230, 0.12);
+  --app-warning: #e8590c;
+  --app-warning-soft: rgba(232, 89, 12, 0.12);
+  --app-success: #2f9e44;
+  --app-success-soft: rgba(47, 158, 68, 0.12);
+  --app-danger: #e03131;
+  --app-danger-soft: rgba(224, 49, 49, 0.12);
 
   /* Text */
   --app-text: #2a2826;
@@ -73,14 +122,14 @@
   --app-text-dim: #8a857b;
   --app-text-inverse: #fffdfa;
 
-  /* Accent (pastel purple, darker tier for contrast on light) */
-  --app-accent: #9c6fd6;
-  --app-accent-soft: #efe5fa;
+  /* Accent (Tailwind blue-500, for contrast on light) */
+  --app-accent: #3b82f6;
+  --app-accent-soft: #e4eefe;
   --app-on-accent: #ffffff;
-  --app-focus-ring: #9c6fd6;
+  --app-focus-ring: #3b82f6;
 
   /* Misc chrome */
-  --app-selection-bg: rgba(156, 111, 214, 0.24);
+  --app-selection-bg: rgba(59, 130, 246, 0.2);
   --app-overlay-scrim: rgba(42, 38, 32, 0.4);
   --app-translucent: rgba(0, 0, 0, 0.05);
   --app-translucent-strong: rgba(0, 0, 0, 0.08);

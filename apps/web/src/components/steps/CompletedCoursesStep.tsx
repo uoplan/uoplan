@@ -27,7 +27,7 @@ export function CompletedCoursesStep({
 
   if (!hasProgram) {
     return (
-      <Alert color="blue" variant="light" radius={0}>
+      <Alert color="blue" variant="light" radius="md">
         <Text size="sm">{tr("completedCourses.selectProgramFirst")}</Text>
       </Alert>
     );

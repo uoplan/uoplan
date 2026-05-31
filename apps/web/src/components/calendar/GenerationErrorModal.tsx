@@ -26,7 +26,7 @@ export function GenerationErrorModal({ error, onClose }: GenerationErrorModalPro
       title={error ? formatGenerationMessage(error.message) : tr("gen.modal.title")}
       size="lg"
       centered
-      radius={0}
+      radius="md"
     >
       <GenerationErrorDetailBlocks
         errorDetails={details}

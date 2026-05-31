@@ -56,6 +56,7 @@ function SpotlightCard({
 
   return (
     <UnstyledButton
+      className="soft-lift"
       onClick={() => onSelect(course.entry)}
       aria-label={`${course.entry.courseCode}${title ? `, ${title}` : ""}`}
       style={{ flex: "0 0 auto" }}
@@ -64,10 +65,11 @@ function SpotlightCard({
         p="sm"
         w={176}
         style={{
-          borderRadius: 0,
-          border: `1px solid ${CARD_BORDER}`,
+          borderRadius: "var(--app-radius-sm)",
+          border: `var(--app-border-width) solid ${CARD_BORDER}`,
           backgroundColor: PAGE_BG,
-          transition: "border-color 140ms ease",
+          transition:
+            "border-color var(--app-transition), transform var(--app-transition), box-shadow var(--app-transition)",
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.borderColor = CARD_BORDER_HOVER;

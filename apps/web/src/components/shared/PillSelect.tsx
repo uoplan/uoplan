@@ -71,9 +71,10 @@ export function PillSelect<T extends string>({
           borderRadius: 12,
           padding: 4,
           minWidth: 150,
+          boxShadow: "var(--app-shadow)",
         }}
       >
-        <Combobox.Options>
+        <Combobox.Options style={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {options.map((option) => {
             const isActive = option.value === value;
             return (
@@ -81,6 +82,7 @@ export function PillSelect<T extends string>({
                 key={option.value}
                 value={option.value}
                 active={isActive}
+                className="pill-select-option"
                 style={{
                   display: "flex",
                   alignItems: "center",

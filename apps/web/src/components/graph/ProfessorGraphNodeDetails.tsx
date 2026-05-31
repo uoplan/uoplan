@@ -3,7 +3,7 @@ import { Badge, Box, Group, SegmentedControl, Stack, Text, UnstyledButton } from
 import { IconExternalLink } from "@tabler/icons-react";
 import { useMemo, type CSSProperties } from "react";
 import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/core";
-import { colorForDiscipline, normalizeProfessorName } from "@uoplan/core";
+import { normalizeProfessorName } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
@@ -26,16 +26,6 @@ const PROFILE_LINK_STYLE: CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
 };
-
-function hexToRgba(hex: string, alpha: number): string {
-  const match = hex.match(/^#([0-9a-f]{6})$/i);
-  if (!match) return hex;
-  const n = parseInt(match[1], 16);
-  const r = (n >> 16) & 255;
-  const g = (n >> 8) & 255;
-  const b = n & 255;
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
 
 function sortedDisciplines(disciplineWeights: Readonly<Record<string, number>>): string[] {
   return Object.entries(disciplineWeights)
@@ -69,7 +59,6 @@ function ProfessorProfileLink({
 }
 
 function DisciplineChip({ code }: { code: string }) {
-  const color = colorForDiscipline(code);
   return (
     <Badge
       size="xs"
@@ -78,9 +67,9 @@ function DisciplineChip({ code }: { code: string }) {
       styles={{
         root: {
           textTransform: "none",
-          backgroundColor: hexToRgba(color, 0.2),
-          color,
-          border: `1px solid ${hexToRgba(color, 0.45)}`,
+          backgroundColor: "var(--app-info-soft)",
+          color: "var(--app-info)",
+          border: "var(--app-border-width) solid var(--app-border)",
         },
       }}
     >
@@ -161,10 +150,10 @@ function NeighborRow({
       py="sm"
       px="xs"
       style={{
-        borderRadius: 6,
+        borderRadius: "var(--app-radius-sm)",
         display: "block",
         width: "100%",
-        borderTop: "1px solid rgba(134, 142, 150, 0.2)",
+        borderTop: "var(--app-border-width) solid var(--app-border)",
       }}
     >
       <Group justify="space-between" align="center" wrap="nowrap" gap="sm" w="100%">
@@ -248,7 +237,7 @@ export function ProfessorGraphNodeDetails({
       {showNeighbors && neighbors.length > 0 && (
         <Stack gap="sm">
           <Group justify="space-between" align="center" wrap="wrap" gap="xs">
-            <Text size="sm" fw={600} c="gray.2">
+            <Text size="sm" fw={600} c="var(--app-text)">
               {tr("graph.connectedProfessors")}
             </Text>
             <SegmentedControl
@@ -260,7 +249,7 @@ export function ProfessorGraphNodeDetails({
                 { label: tr("graph.sortByName"), value: "name" },
               ]}
               styles={{
-                root: { backgroundColor: "rgba(20, 21, 23, 0.8)" },
+                root: { backgroundColor: "var(--app-surface-sunken)" },
                 label: { color: "var(--app-text-muted)", fontSize: 11 },
               }}
             />

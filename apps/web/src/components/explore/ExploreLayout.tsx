@@ -68,7 +68,7 @@ function ExploreSearchInput({
           minHeight: 48,
           paddingInline: 18,
           fontSize: "var(--mantine-font-size-md)",
-          boxShadow: "0 1px 6px rgba(0, 0, 0, 0.22)",
+          boxShadow: "var(--app-shadow-sm)",
           "@media (min-width: 540px)": { minHeight: 52, paddingInline: 22 },
         },
       }}
@@ -93,7 +93,7 @@ function SearchCardSection({
     >
       <Stack gap={10}>
         <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs }}>
-          <Text size="xs" fw={700} tt="uppercase" c="dimmed" style={{ letterSpacing: "0.06em" }}>
+          <Text size="xs" fw={600} c="dimmed" style={{ letterSpacing: "0.02em" }}>
             {label}
           </Text>
         </Box>

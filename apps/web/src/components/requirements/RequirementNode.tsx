@@ -45,8 +45,8 @@ const TITLE_FLEX = { flex: 1, minWidth: 0 } as const;
 const BADGE_NO_SHRINK = { flexShrink: 0 } as const;
 
 const OPTION_CARD_BORDER_UNSELECTED = "var(--app-border)";
-const OPTION_CARD_BORDER_SELECTED = "var(--mantine-color-violet-6)";
-const OPTION_CARD_BG_SELECTED = "var(--mantine-color-violet-light)";
+const OPTION_CARD_BORDER_SELECTED = "var(--app-accent)";
+const OPTION_CARD_BG_SELECTED = "var(--app-info-soft)";
 const OPTION_CARD_HOVER_BG = "var(--app-surface-hover)";
 
 export function getStableNodeKey(node: RequirementWithStatus, fallback: string): string {
@@ -164,7 +164,7 @@ function SelectableOptionPaper({
     <Paper
       {...paperProps}
       withBorder={false}
-      radius={0}
+      radius="var(--app-radius)"
       role="radio"
       aria-checked={radio.checked}
       aria-disabled={radio.disabled}
@@ -194,18 +194,15 @@ function SelectableOptionPaper({
         ...restFlat,
         backgroundColor: visualBg,
         cursor: radio.disabled ? undefined : "pointer",
-        borderWidth: 1,
+        borderWidth: "var(--app-border-width)",
         borderStyle: "solid",
         borderColor: radio.checked ? OPTION_CARD_BORDER_SELECTED : OPTION_CARD_BORDER_UNSELECTED,
-        transition: "background-color 120ms ease, border-color 120ms ease",
-        boxShadow:
-          hover && !radio.disabled && !radio.checked
-            ? "0 0 0 1px var(--app-border-strong)"
-            : undefined,
+        transition: "var(--app-transition)",
+        boxShadow: hover && !radio.disabled && !radio.checked ? "var(--app-shadow-sm)" : undefined,
       }}
     >
       {optionsStepHideCardTitle && optionsStepOptionOrdinal != null ? (
-        <Text fw={500} size="sm" lh={1.25} c="gray.0" mb="xs" style={{ minWidth: 0 }}>
+        <Text fw={500} size="sm" lh={1.25} c="var(--app-text)" mb="xs" style={{ minWidth: 0 }}>
           {tr("optionsDrilldown.optionTitle", {
             number: optionsStepOptionOrdinal,
           })}
@@ -500,7 +497,7 @@ export const RequirementNode = memo(
         <Paper
           p="sm"
           withBorder
-          radius={0}
+          radius="var(--app-radius)"
           mt="xs"
           style={{
             paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
@@ -643,7 +640,7 @@ export const RequirementNode = memo(
         <Paper
           p="sm"
           withBorder
-          radius={0}
+          radius="var(--app-radius)"
           mt="xs"
           data-missing-selection={showError ? "true" : undefined}
           style={{
@@ -677,7 +674,7 @@ export const RequirementNode = memo(
                   style={{
                     flexShrink: 0,
                     transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
-                    transition: "transform 150ms ease",
+                    transition: "var(--app-transition)",
                   }}
                 />
               )}
@@ -802,7 +799,7 @@ export const RequirementNode = memo(
         <Paper
           p="sm"
           withBorder
-          radius={0}
+          radius="var(--app-radius)"
           mt="xs"
           data-missing-selection={showError ? "true" : undefined}
           style={{
@@ -836,7 +833,7 @@ export const RequirementNode = memo(
                   style={{
                     flexShrink: 0,
                     transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
-                    transition: "transform 150ms ease",
+                    transition: "var(--app-transition)",
                   }}
                 />
               )}
@@ -927,7 +924,7 @@ export const RequirementNode = memo(
         <Paper
           p="sm"
           withBorder
-          radius={0}
+          radius="var(--app-radius)"
           mt="xs"
           style={{
             paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
@@ -961,7 +958,7 @@ export const RequirementNode = memo(
                     style={{
                       flexShrink: 0,
                       transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
-                      transition: "transform 150ms ease",
+                      transition: "var(--app-transition)",
                     }}
                   />
                 )}
@@ -1112,7 +1109,7 @@ export const RequirementNode = memo(
       <Paper
         p="sm"
         withBorder
-        radius={0}
+        radius="var(--app-radius)"
         mt="xs"
         style={{
           paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
@@ -1145,7 +1142,7 @@ export const RequirementNode = memo(
                     flexShrink: 0,
                     marginTop: 2,
                     transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
-                    transition: "transform 150ms ease",
+                    transition: "var(--app-transition)",
                   }}
                 />
               )}

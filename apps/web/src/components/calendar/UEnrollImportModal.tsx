@@ -107,7 +107,7 @@ export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps)
       title={tr("uenrollImport.modal.title")}
       size="md"
       centered
-      radius={0}
+      radius="md"
     >
       <Stack gap="md">
         <TextInput
@@ -115,13 +115,13 @@ export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps)
           placeholder={tr("uenrollImport.modal.inputPlaceholder")}
           value={input}
           onChange={(e) => handleChange(e.currentTarget.value)}
-          radius={0}
+          radius="md"
         />
 
         {parseState.status === "parsed" && (
           <Stack gap="xs">
             {termMismatch && targetTermName && (
-              <Alert icon={<IconInfoCircle size={16} />} color="blue" radius={0}>
+              <Alert icon={<IconInfoCircle size={16} />} color="blue" radius="md">
                 <Text size="sm">
                   {tr("uenrollImport.modal.termSwitch", { term: targetTermName })}
                 </Text>
@@ -133,7 +133,7 @@ export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps)
                 icon={<IconCircleCheck size={16} />}
                 color="teal"
                 title={tr("uenrollImport.modal.recognized")}
-                radius={0}
+                radius="md"
               >
                 <List size="sm" spacing={2}>
                   {parseState.resolved.schedule.enrollments.map((e) => (
@@ -148,7 +148,7 @@ export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps)
                 icon={<IconAlertCircle size={16} />}
                 color="yellow"
                 title={tr("uenrollImport.modal.warnings")}
-                radius={0}
+                radius="md"
               >
                 <List size="sm" spacing={2}>
                   {parseState.resolved.warnings.map((w) => (
@@ -163,7 +163,7 @@ export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps)
                 icon={<IconAlertCircle size={16} />}
                 color="yellow"
                 title={tr("uenrollImport.modal.noCoursesTitle")}
-                radius={0}
+                radius="md"
               >
                 <Text size="sm">{tr("uenrollImport.modal.noCoursesDescription")}</Text>
               </Alert>
@@ -176,15 +176,15 @@ export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps)
             icon={<IconAlertCircle size={16} />}
             color="red"
             title={tr("uenrollImport.modal.invalid")}
-            radius={0}
+            radius="md"
           >
             <Text size="sm">{tr("uenrollImport.modal.invalidDescription")}</Text>
           </Alert>
         )}
 
         <Button
-          color="violet"
-          radius={0}
+          color="accentBlue"
+          radius="md"
           disabled={!canImport}
           loading={importing}
           onClick={() => void handleImport()}
