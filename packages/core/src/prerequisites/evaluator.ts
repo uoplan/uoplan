@@ -62,6 +62,29 @@ function evaluateCourseRequirement(node: CoursePrereqNode, ctx: PrereqContext): 
   return ctx.taken.some((c) => c.code === target || (variant !== null && c.code === variant));
 }
 
+function collectCourseCodes(node: CoursePrereqNode, codes: Set<string>): void {
+  if (node.type === "course" && node.code) {
+    const target = normalizeCourseCode(node.code);
+    const variant = getLanguageVariant(target);
+    codes.add(target);
+    if (variant !== null) codes.add(variant);
+  }
+
+  for (const child of node.children ?? []) {
+    collectCourseCodes(child, codes);
+  }
+}
+
+function creditsMatchingScopedChildren(node: CoursePrereqNode, ctx: PrereqContext): number {
+  const codes = new Set<string>();
+  for (const child of node.children ?? []) {
+    collectCourseCodes(child, codes);
+  }
+
+  if (codes.size === 0) return 0;
+  return ctx.taken.reduce((sum, course) => sum + (codes.has(course.code) ? course.credits : 0), 0);
+}
+
 function evaluateNonCourseRequirement(
   node: CoursePrereqNode,
   ctx: PrereqContext,
@@ -79,6 +102,10 @@ function evaluateNonCourseRequirement(
     // Other descriptive clauses (standing, equivalent, unclassified, …) are not
     // modeled; stay conservative and keep the course ineligible.
     return false;
+  }
+
+  if (node.children?.length) {
+    return creditsMatchingScopedChildren(node, ctx) >= credits;
   }
 
   return creditsMatchingNonCourse(node, ctx) >= credits;
