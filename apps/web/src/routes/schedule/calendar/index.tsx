@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { CalendarPage } from "../../../components/calendar/CalendarPage";
+import { AppDataLoader } from "../../../components/shared/AppDataLoader";
 import { useRepairSeedOnCalendarMount } from "../../../hooks/useRepairSeedOnCalendarMount";
 import { useAppStore } from "../../../store/appStore";
 import { buildTabTitle } from "../../../lib/seo";
@@ -19,6 +20,7 @@ function CalendarRoute() {
   const firstSeed = useAppStore((s) => s.firstSeed);
   const terms = useAppStore((s) => s.terms);
   const selectedTermId = useAppStore((s) => s.selectedTermId);
+  const loadProgress = useAppStore((s) => s.loadProgress);
 
   useEffect(() => {
     const termName = terms?.find((t) => String(t.termId) === selectedTermId)?.name;
@@ -42,6 +44,21 @@ function CalendarRoute() {
       void generateSchedules();
     }
   }, [indices, currentSchedule, firstSeed, generateSchedules, generationError]);
+
+  // Keep the data loader on screen until the very first schedule resolves, so the
+  // calendar doesn't flash an empty state during the initial auto-generation.
+  const firstScheduleResolved = currentSchedule !== null || generationError !== null;
+  const initialLoadResolvedRef = useRef(false);
+  useEffect(() => {
+    if (firstScheduleResolved) initialLoadResolvedRef.current = true;
+  }, [firstScheduleResolved]);
+
+  const awaitingFirstSchedule =
+    !firstScheduleResolved && !initialLoadResolvedRef.current && indices != null && firstSeed > 0;
+
+  if (awaitingFirstSchedule) {
+    return <AppDataLoader progress={loadProgress} />;
+  }
 
   return <CalendarPage />;
 }
