@@ -8,7 +8,7 @@ import { bootstrapPeopleSoft, PEOPLESOFT_CLASS_SEARCH_URL } from "../shared/peop
 const TERMS_JSON = path.join(SCRAPER_DATA_DIR, "terms.json");
 const SEARCH_URL = PEOPLESOFT_CLASS_SEARCH_URL;
 
-export type Term = { termId: string; name: string };
+type Term = { termId: string; name: string };
 
 export function sortTerms(terms: Term[]): Term[] {
   return [...terms].sort((a, b) => a.termId.localeCompare(b.termId));

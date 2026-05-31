@@ -20,7 +20,7 @@ import { CatalogueSchema, type Catalogue, type Course, type Program } from "./sc
 const OLDEST_YEAR = 2017;
 const CATALOGUE_JSON_RE = /^catalogue\.(\d{4})\.json$/;
 
-export async function scrapeYearCatalogue(
+async function scrapeYearCatalogue(
   baseUrl: string,
 ): Promise<{ catalogue: Catalogue; missingUrls: string[] } | null> {
   let disciplineLinks: string[];
@@ -96,7 +96,7 @@ export async function scrapeYearCatalogue(
 }
 
 /** Returns the missing URLs scraped, or null if the archive year returned 404. */
-export async function scrapeYear(
+async function scrapeYear(
   year: number,
   dataDir: string,
   force: boolean,

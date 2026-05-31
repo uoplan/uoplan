@@ -96,7 +96,7 @@ export function classifyNonCourse(text: string): CoursePrereqKind | undefined {
  * node structure, so regression comparisons against the old parser are
  * unaffected.
  */
-export function annotateNonCourseKinds(node: CoursePrereqNode): CoursePrereqNode {
+function annotateNonCourseKinds(node: CoursePrereqNode): CoursePrereqNode {
   if (
     node.type === "non_course" &&
     node.kind === undefined &&
@@ -186,7 +186,7 @@ function shouldSplitPrereqAndAt(left: string, right: string): boolean {
  * Extracts 1000/2000/… level numbers from prerequisite text (English + French).
  * Replaces the narrower `at the … level`-only helper used for program electives.
  */
-export function extractLevelsFromPrerequisiteText(text: string): number[] | undefined {
+function extractLevelsFromPrerequisiteText(text: string): number[] | undefined {
   const normalized = normalizeLevelOrDisjunction(text);
   const found = new Set<number>();
 

@@ -33,7 +33,7 @@ export type CoursePrereqNode = {
   children?: CoursePrereqNode[];
 };
 
-export const CoursePrereqKindSchema = z.enum([
+const CoursePrereqKindSchema = z.enum([
   "permission",
   "audition",
   "language",
@@ -46,7 +46,7 @@ export const CoursePrereqKindSchema = z.enum([
   "recommended",
 ]);
 
-export const CoursePrereqNodeSchema: z.ZodType<CoursePrereqNode> = z.lazy(() =>
+const CoursePrereqNodeSchema: z.ZodType<CoursePrereqNode> = z.lazy(() =>
   z.object({
     type: z.enum(["course", "or_group", "and_group", "non_course"]),
     code: z.string().optional(),
@@ -79,9 +79,8 @@ export const CourseSchema = z.object({
   prerequisites: CoursePrereqNodeSchema.optional(),
 });
 export type Course = z.infer<typeof CourseSchema>;
-export type CoursePrereqNodeType = CoursePrereqNode;
 
-export const RequirementTypeSchema = z.enum([
+const RequirementTypeSchema = z.enum([
   "course",
   "elective",
   "group",
@@ -97,7 +96,7 @@ export const RequirementTypeSchema = z.enum([
   "or_course",
 ]);
 
-export const DisciplineLevelSchema = z.object({
+const DisciplineLevelSchema = z.object({
   discipline: z.string(),
   levels: z.array(z.number()).optional(), // e.g. [3000, 4000]
 });
