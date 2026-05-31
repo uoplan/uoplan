@@ -65,6 +65,61 @@ describe("prerequisites", () => {
       expect(meetsCoursePrereq(reqFail, ctx)).toBe(false);
     });
 
+    describe("non_course scoped credit pools", () => {
+      const scopedPoolReq: CoursePrereqNode = {
+        type: "non_course",
+        text: "6 units from ART 2120, ART 2130, ART 2140",
+        credits: 6,
+        children: [
+          { type: "course", code: "ART 2120" },
+          { type: "course", code: "ART 2130" },
+          { type: "course", code: "ART 2140" },
+        ],
+      };
+
+      it("is satisfied when enough credits come from listed child courses", () => {
+        const ctx = {
+          taken: [
+            { code: "ART 2120", credits: 3, discipline: "ART", level: 2000 },
+            { code: "ART 2130", credits: 3, discipline: "ART", level: 2000 },
+          ],
+          totalCredits: 6,
+          disciplineCredits: { ART: 6 },
+          studentPrograms: [],
+        };
+        expect(meetsCoursePrereq(scopedPoolReq, ctx)).toBe(true);
+      });
+
+      it("is not satisfied by enough global credits when listed child credits are insufficient", () => {
+        const ctx = {
+          taken: [
+            { code: "ART 2120", credits: 3, discipline: "ART", level: 2000 },
+            { code: "HIS 1101", credits: 3, discipline: "HIS", level: 1000 },
+            { code: "MAT 1300", credits: 3, discipline: "MAT", level: 1000 },
+          ],
+          totalCredits: 9,
+          disciplineCredits: { ART: 3, HIS: 3, MAT: 3 },
+          studentPrograms: [],
+        };
+        expect(meetsCoursePrereq(scopedPoolReq, ctx)).toBe(false);
+      });
+
+      it("is not satisfied by only some listed child courses", () => {
+        const ctx = {
+          taken: [{ code: "ART 2140", credits: 3, discipline: "ART", level: 2000 }],
+          totalCredits: 3,
+          disciplineCredits: { ART: 3 },
+          studentPrograms: [],
+        };
+        expect(meetsCoursePrereq(scopedPoolReq, ctx)).toBe(false);
+      });
+
+      it("keeps childless credit non_course using the existing global fallback", () => {
+        const ctx = buildPrereqContext(["AAA 1000", "BBB 2000"], mockCache);
+        expect(meetsCoursePrereq({ type: "non_course", credits: 6 }, ctx)).toBe(true);
+      });
+    });
+
     describe("non_course kind semantics", () => {
       it("treats a soft kind (permission) as satisfiable at the root", () => {
         const ctx = buildPrereqContext([], mockCache);

@@ -184,6 +184,28 @@ export function processRequirements(reqs: ProgramRequirement[]): ProgramRequirem
   let currentOptionsGroup: ProgramRequirement | null = null;
   let currentOptionList: ProgramRequirement[] | null = null;
 
+  const isOptionHeader = (r: ProgramRequirement): boolean =>
+    !!r.title && /^(?:option|opiton)\b/i.test(r.title.trim());
+
+  const startOptionBranch = (r: ProgramRequirement): ProgramRequirement[] => {
+    if (!currentOptionsGroup) {
+      currentOptionsGroup = {
+        type: "options_group",
+        title: "Options",
+        options: [],
+      };
+      foldedOptions.push(currentOptionsGroup);
+    }
+
+    const optionList: ProgramRequirement[] = [];
+    currentOptionsGroup.options!.push({
+      type: "and",
+      title: r.title,
+      options: optionList,
+    });
+    return optionList;
+  };
+
   for (let i = 0; i < cleaned.length; i++) {
     const r = cleaned[i];
 
@@ -195,47 +217,27 @@ export function processRequirements(reqs: ProgramRequirement[]): ProgramRequirem
       currentOptionsGroup = {
         type: "options_group",
         title: r.title,
-        credits: r.credits,
+        ...(r.credits != null ? { credits: r.credits } : {}),
         options: [],
       };
+      currentOptionList = null;
       foldedOptions.push(currentOptionsGroup);
       continue;
     }
 
-    if (r.type === "section" && r.title && r.title.toLowerCase().startsWith("option ")) {
-      if (!currentOptionsGroup) {
-        currentOptionsGroup = {
-          type: "options_group",
-          title: "Options",
-          options: [],
-        };
-        foldedOptions.push(currentOptionsGroup);
-      }
-
-      currentOptionList = [];
-      currentOptionsGroup.options!.push({
-        type: "and",
-        title: r.title,
-        options: currentOptionList,
-      });
+    if (isOptionHeader(r) && (r.type === "section" || currentOptionsGroup)) {
+      currentOptionList = startOptionBranch(r);
       continue;
     }
 
-    if (currentOptionList) {
+    if (currentOptionList !== null) {
+      const optionList = currentOptionList;
       if (r.type === "section") {
-        // A new section always terminates the current options group.
         currentOptionsGroup = null;
         currentOptionList = null;
         foldedOptions.push(r);
-      } else if (r.indented) {
-        // Still visually indented under the current option; keep collecting.
-        currentOptionList.push(r);
       } else {
-        // First non-indented row after an option: end all option grouping and
-        // treat subsequent rows as top-level requirements.
-        currentOptionsGroup = null;
-        currentOptionList = null;
-        foldedOptions.push(r);
+        optionList.push(r);
       }
     } else {
       foldedOptions.push(r);
@@ -243,35 +245,73 @@ export function processRequirements(reqs: ProgramRequirement[]): ProgramRequirem
   }
 
   const foldedSections: ProgramRequirement[] = [];
-  let currentSection: ProgramRequirement | null = null;
+  let sectionStack: ProgramRequirement[] = [];
+
+  const isYearSection = (title: string): boolean => /^years?\b/i.test(title.trim());
+  const isTermSection = (title: string): boolean =>
+    /\b(?:fall|winter|spring|summer)\s+term\b/i.test(title);
+  const isUnitParentSection = (title: string): boolean =>
+    /\(\d+(?:\.\d+)?\s*(?:course\s*)?units?\)$/i.test(title.trim());
+  const isChildSection = (
+    parentTitle: string | undefined,
+    childTitle: string | undefined,
+  ): boolean => {
+    if (!parentTitle || !childTitle) return false;
+    if (isYearSection(parentTitle)) return isTermSection(childTitle);
+    if (/^home university\b/i.test(parentTitle.trim())) return isTermSection(childTitle);
+    if (isUnitParentSection(parentTitle)) return !isUnitParentSection(childTitle);
+    return false;
+  };
 
   for (let i = 0; i < foldedOptions.length; i++) {
     const r = foldedOptions[i];
 
     if (r.type === "section") {
       if (r.title && r.title.toLowerCase() === "or") {
-        const last = foldedSections.pop();
+        const currentContainer = sectionStack.length
+          ? sectionStack[sectionStack.length - 1].options!
+          : foldedSections;
+        const last = currentContainer.pop();
         const orGroup: ProgramRequirement = {
           type: "or_group",
           options: last ? [last] : [],
         };
-        foldedSections.push(orGroup);
-        currentSection = { type: "and", title: "Alternative", options: [] };
-        orGroup.options!.push(currentSection);
+        currentContainer.push(orGroup);
+        const alternative: ProgramRequirement = { type: "and", title: "Alternative", options: [] };
+        orGroup.options!.push(alternative);
+        sectionStack = [...sectionStack, alternative];
       } else {
-        currentSection = {
+        const nextSection: ProgramRequirement = {
           type: "and",
           title: r.title,
           options: [],
         };
-        foldedSections.push(currentSection);
+
+        let parentIndex = -1;
+        if (r.indented && sectionStack.length > 0) {
+          parentIndex = sectionStack.length - 1;
+        } else {
+          for (let j = sectionStack.length - 1; j >= 0; j--) {
+            if (isChildSection(sectionStack[j].title, r.title)) {
+              parentIndex = j;
+              break;
+            }
+          }
+        }
+
+        if (parentIndex >= 0) {
+          sectionStack = sectionStack.slice(0, parentIndex + 1);
+          sectionStack[parentIndex].options!.push(nextSection);
+          sectionStack.push(nextSection);
+        } else {
+          foldedSections.push(nextSection);
+          sectionStack = [nextSection];
+        }
       }
+    } else if (sectionStack.length > 0) {
+      sectionStack[sectionStack.length - 1].options!.push(r);
     } else {
-      if (currentSection) {
-        currentSection.options!.push(r);
-      } else {
-        foldedSections.push(r);
-      }
+      foldedSections.push(r);
     }
   }
 

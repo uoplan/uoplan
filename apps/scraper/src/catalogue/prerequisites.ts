@@ -148,9 +148,14 @@ function normalizeDisciplineOrInCredits(text: string): string {
 // Common abbreviations that shouldn't trigger splits
 const ABBREVIATIONS = new Set(["b.com", "m.com", "b.a", "m.a", "m.sc", "ph.d", "b.mus", "b.eng"]);
 
+function hasTopLevelOr(text: string): boolean {
+  return splitTopLevel(text, /\s+(?:or|ou)\s+/i).length > 1;
+}
+
 function shouldSplitPrereqAndAt(left: string, right: string): boolean {
   const leftTrim = left.trim().toLowerCase();
-  const rightTrim = right.trim().toLowerCase();
+  const rightRaw = right.trim();
+  const rightTrim = rightRaw.toLowerCase();
 
   // Check if left ends with an abbreviation like B.Com
   const leftEnd = leftTrim.slice(-6).toLowerCase();
@@ -158,6 +163,11 @@ function shouldSplitPrereqAndAt(left: string, right: string): boolean {
     if (leftEnd.includes(abbrev)) return false;
   }
 
+  // A leading "(" or a leading course code only forces an AND-split when the right
+  // operand has no top-level or/ou — otherwise OR binds wider (e.g. "A and B or C" is
+  // "(A and B) or C", not "A and (B or C)") and we defer to the OR split.
+  if (rightTrim.startsWith("(") && !hasTopLevelOr(rightRaw)) return true;
+  if (/^[A-Z]{3,4}\s*\d{4}/.test(rightRaw) && !hasTopLevelOr(rightRaw)) return true;
   if (leftTrim.endsWith(")")) return true;
 
   // Only split on digit if it looks like a credit count (1-3 digits, not 4-digit level/course code)
@@ -208,19 +218,29 @@ export function extractDisciplines(text: string): string[] {
   return Array.from(new Set(disciplines));
 }
 
+const EN_PREREQ_LABEL_SOURCE = String.raw`(?:P?Prerequisites?|Prererequisites?|Prerequistes?)`;
+const FR_PREREQ_LABEL_SOURCE = String.raw`(?:P?Pr[ée]alables?|Pr[ée]requis?s?)`;
+const ANY_PREREQ_LABEL_SOURCE = String.raw`(?:${EN_PREREQ_LABEL_SOURCE}|${FR_PREREQ_LABEL_SOURCE})`;
+
+function prereqLabelRegex(source: string, flags = "i"): RegExp {
+  return new RegExp(source, flags);
+}
+
 export function extractPrereqSentence(raw: string): string | undefined {
   const normalized = raw.replace(/\s+/g, " ").trim();
   if (!normalized) return undefined;
 
   // Check if text has bilingual format (contains both French and English labels)
   // Extract the first language version (whichever appears first in the text)
-  const hasEnglishLabel = /Prerequisite(s)?\s*[:：]/i.test(normalized);
-  const hasFrenchLabel = /Préalable(s)?\s*[:：]/i.test(normalized);
+  const englishLabel = prereqLabelRegex(`${EN_PREREQ_LABEL_SOURCE}\\s*[:：]`);
+  const frenchLabel = prereqLabelRegex(`${FR_PREREQ_LABEL_SOURCE}\\s*[:：]`);
+  const hasEnglishLabel = englishLabel.test(normalized);
+  const hasFrenchLabel = frenchLabel.test(normalized);
 
   if (hasEnglishLabel && hasFrenchLabel) {
     // Find positions of both labels to determine which comes first
-    const englishMatch = normalized.match(/Prerequisite(s)?\s*[:：]/i);
-    const frenchMatch = normalized.match(/Préalable(s)?\s*[:：]/i);
+    const englishMatch = normalized.match(englishLabel);
+    const frenchMatch = normalized.match(frenchLabel);
 
     if (englishMatch && frenchMatch) {
       const englishPos = englishMatch.index ?? 0;
@@ -229,28 +249,32 @@ export function extractPrereqSentence(raw: string): string | undefined {
       if (englishPos < frenchPos) {
         // English comes first - extract until "/ Préalable" or end
         const textMatch = normalized.match(
-          /Prerequisite(s)?\s*[:：]\s*(.*?)(?:\s*\/\s*Préalable|$)/i,
+          prereqLabelRegex(
+            `${EN_PREREQ_LABEL_SOURCE}\\s*[:：]\\s*(.*?)(?:\\s*\\/\\s*${FR_PREREQ_LABEL_SOURCE}|$)`,
+          ),
         );
-        if (textMatch && textMatch[2]) {
-          return extractFirstSentence(textMatch[2].trim());
+        if (textMatch && textMatch[1]) {
+          return extractFirstSentence(textMatch[1].trim());
         }
       } else {
         // French comes first - extract until "/ Prerequisite" or end
         const textMatch = normalized.match(
-          /Préalable(s)?\s*[:：]\s*(.*?)(?:\s*\/\s*Prerequisite|$)/i,
+          prereqLabelRegex(
+            `${FR_PREREQ_LABEL_SOURCE}\\s*[:：]\\s*(.*?)(?:\\s*\\/\\s*${EN_PREREQ_LABEL_SOURCE}|$)`,
+          ),
         );
-        if (textMatch && textMatch[2]) {
-          return extractFirstSentence(textMatch[2].trim());
+        if (textMatch && textMatch[1]) {
+          return extractFirstSentence(textMatch[1].trim());
         }
       }
     }
   }
 
-  const labelRegex = /(Prerequisite|Prerequisites|Prerequiste|Préalable|Préalables)\s*[:：]\s*/i;
+  const labelRegex = prereqLabelRegex(`${ANY_PREREQ_LABEL_SOURCE}\\s*[:：]\\s*`);
   if (!labelRegex.test(normalized)) return undefined;
 
   const afterLabel = normalized.replace(
-    /^(.*?)(Prerequisite|Prerequisites|Prerequiste|Préalable|Préalables)\s*[:：]\s*/i,
+    prereqLabelRegex(`^(.*?)${ANY_PREREQ_LABEL_SOURCE}\\s*[:：]\\s*`),
     "",
   );
   const trimmed = afterLabel.trim();
@@ -293,7 +317,7 @@ export function extractPrereqSentence(raw: string): string | undefined {
       if (
         i === trimmed.length - 1 ||
         /\s+[A-Z]/.test(trimmed.slice(i, i + 3)) ||
-        /\s*\/\s*(Prerequisite|Préalables)/i.test(afterPeriod)
+        prereqLabelRegex(`\\s*\\/\\s*${ANY_PREREQ_LABEL_SOURCE}`).test(afterPeriod)
       ) {
         sentenceEnd = i;
         break;
@@ -440,12 +464,132 @@ function enrichNonCourseWithLevels(node: CoursePrereqNode, sourceText: string): 
   return { ...node, levels };
 }
 
+function parseExplicitCreditPool(inner: string): CoursePrereqNode | undefined {
+  const credits = parseCreditRequirement(inner);
+  if (credits === undefined) return undefined;
+  if (
+    !/\b(?:from|among|parmi|parmis|of the following|de la liste suivante|des cours suivants)\b/i.test(
+      inner,
+    )
+  ) {
+    return undefined;
+  }
+  const codes = extractCourseCodes(inner);
+  if (codes.length === 0) return undefined;
+  const firstCode = inner.search(/\b[A-Z]{3,4}\s*\d{4}\b/);
+  const preCode = firstCode >= 0 ? inner.slice(0, firstCode) : inner;
+  if (
+    !/\b(?:from|among|parmi|parmis|of the following|de la liste suivante|des cours suivants)\b/i.test(
+      preCode,
+    )
+  ) {
+    return undefined;
+  }
+  return {
+    type: "non_course",
+    text: inner,
+    credits,
+    children: codes.map((code) => ({ type: "course", code })),
+  };
+}
+
+function parseIncludingCreditGate(inner: string): CoursePrereqNode | undefined {
+  const match = inner.match(
+    /^(.+?\b(?:units?|credits?|cr[ée]dits?|unit[ée]s?)\b.*?)\s+(?:including|incluant|y\s+compris)\s+(.+)$/i,
+  );
+  if (!match) return undefined;
+  const gateText = match[1].trim();
+  const includedText = match[2].trim();
+  const credits = parseCreditRequirement(gateText);
+  if (credits === undefined || !includedText) return undefined;
+  const included = parsePrereqClause(includedText);
+  if (!included) return undefined;
+  return {
+    type: "and_group",
+    text: inner,
+    children: [{ type: "non_course", text: gateText, credits }, included],
+  };
+}
+
+function parseLeadingOneOf(inner: string): CoursePrereqNode | undefined {
+  const match = inner.match(
+    /^(?:one\s+of|at\s+least\s+one\s+of|l['’]un(?:e)?\s+des|au\s+moins\s+un(?:e)?\s+(?:des?|de)|un(?:e)?\s+des?|un(?:e)?\s+de)\s+(.+)$/i,
+  );
+  if (!match) return undefined;
+  const listText = match[1].trim();
+  const commaParts = splitTopLevel(listText, /,/);
+  const rawParts = commaParts.length > 1 ? commaParts : splitTopLevel(listText, /\s+(?:or|ou)\s+/i);
+  if (rawParts.length < 2) return undefined;
+
+  const children: CoursePrereqNode[] = [];
+  for (const rawPart of rawParts) {
+    const node = parsePrereqClause(rawPart.trim());
+    if (!node) continue;
+    if (node.type === "or_group") children.push(...(node.children ?? []));
+    else children.push(node);
+  }
+  if (children.length === 0) return undefined;
+  if (children.length === 1) return children[0];
+  return { type: "or_group", text: inner, children };
+}
+
+function shouldSplitPrereqEtAt(left: string, right: string): boolean {
+  const leftTrim = left.trim().toLowerCase();
+  const rightRaw = right.trim();
+  const rightTrim = rightRaw.toLowerCase();
+  if (rightTrim.startsWith("(") && !hasTopLevelOr(rightRaw)) return true;
+  if (/^[A-Z]{3,4}\s*\d{4}/.test(rightRaw) && !hasTopLevelOr(rightRaw)) return true;
+  if (leftTrim.endsWith(")")) return true;
+  if (/^(\d+(?:\.\d+)?)\s/.test(rightTrim) && !/\s+ou\s+/.test(leftTrim)) return true;
+  return false;
+}
+
+function parsePrereqConjunction(
+  inner: string,
+  separators: RegExp,
+  shouldSplitAt: (left: string, right: string) => boolean,
+): CoursePrereqNode | undefined {
+  const parts = splitTopLevel(inner, separators);
+  if (parts.length <= 1) return undefined;
+
+  let allBoundariesValid = true;
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (!shouldSplitAt(parts[i], parts[i + 1])) {
+      allBoundariesValid = false;
+      break;
+    }
+  }
+  if (!allBoundariesValid) return undefined;
+
+  const children: CoursePrereqNode[] = [];
+  for (const part of parts) {
+    const trimmed = part.trim();
+    if (!trimmed) continue;
+    const node = parsePrereqClause(trimmed);
+    if (node) children.push(node);
+  }
+  if (children.length === 0) return undefined;
+  if (children.length === 1) return children[0];
+  return { type: "and_group", text: inner, children };
+}
+
 function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
   let inner = clause.replace(/\s+/g, " ").trim();
+  if (!inner) return undefined;
+  inner = inner.replace(/^(?:and|et)\s+/i, "").trim();
   if (!inner) return undefined;
 
   // Skip standalone grade indicators like (M), (B+), (A-)
   if (isGradeIndicator(inner)) return undefined;
+
+  const includingCreditGate = parseIncludingCreditGate(inner);
+  if (includingCreditGate) return includingCreditGate;
+
+  const explicitCreditPool = parseExplicitCreditPool(inner);
+  if (explicitCreditPool) return explicitCreditPool;
+
+  const leadingOneOf = parseLeadingOneOf(inner);
+  if (leadingOneOf) return leadingOneOf;
 
   // Detect multiple top-level parenthesized groups, e.g.
   // (ADM 1705 ou MAT 1702), (ADM 1770 ou ITI 1520)
@@ -517,32 +661,11 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
 
   // Split "((X) or Y) and 12 course units in …" / "SEG 2105 and 6 university course units …"
   // at depth 0 so nested `or` inside parentheses is parsed before top-level discipline OR.
-  const andParts = splitTopLevel(inner, /\s+and\s+/i);
-  if (andParts.length > 1) {
-    let allBoundariesValid = true;
-    for (let i = 0; i < andParts.length - 1; i++) {
-      if (!shouldSplitPrereqAndAt(andParts[i], andParts[i + 1])) {
-        allBoundariesValid = false;
-        break;
-      }
-    }
-    if (allBoundariesValid) {
-      const children: CoursePrereqNode[] = [];
-      for (const part of andParts) {
-        const trimmed = part.trim();
-        if (!trimmed) continue;
-        const node = parsePrereqClause(trimmed);
-        if (node) children.push(node);
-      }
-      if (children.length === 0) return undefined;
-      if (children.length === 1) return children[0];
-      return {
-        type: "and_group",
-        text: inner,
-        children,
-      };
-    }
-  }
+  const englishAnd = parsePrereqConjunction(inner, /\s+and\s+/i, shouldSplitPrereqAndAt);
+  if (englishAnd) return englishAnd;
+
+  const frenchEt = parsePrereqConjunction(inner, /\s+et\s+/i, shouldSplitPrereqEtAt);
+  if (frenchEt) return frenchEt;
 
   // Strip redundant outer parentheses (e.g. `((MAT 2371, STA 2100) or STA 2391)` → inner OR at depth 0).
   while (true) {
@@ -620,16 +743,41 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
           ),
         );
       } else if (codes.length === 1) {
-        children.push({
-          type: "course",
-          code: codes[0],
-          text: partTrim,
-        });
+        if (credits !== undefined) {
+          children.push({
+            type: "and_group",
+            text: partTrim,
+            children: [
+              { type: "course", code: codes[0] },
+              enrichNonCourseWithLevels(
+                {
+                  type: "non_course",
+                  text: partTrim,
+                  credits,
+                },
+                partTrim,
+              ),
+            ],
+          });
+        } else {
+          children.push({
+            type: "course",
+            code: codes[0],
+            text: partTrim,
+          });
+        }
       } else {
         const childNodes: CoursePrereqNode[] = codes.map((code) => ({ type: "course", code }));
         if (credits !== undefined) {
           childNodes.push(
-            enrichNonCourseWithLevels({ type: "non_course", text: partTrim, credits }, partTrim),
+            enrichNonCourseWithLevels(
+              {
+                type: "non_course",
+                text: partTrim,
+                credits,
+              },
+              partTrim,
+            ),
           );
         }
         children.push({
@@ -683,7 +831,12 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
 }
 
 export function parseCoursePrerequisites(text: string): CoursePrereqNode | undefined {
-  const body = text.replace(/\s+/g, " ").trim();
+  // Strip U+00AD soft hyphens (invisible discretionary hyphens from the source HTML)
+  // so they don't break token/parenthesis boundary detection (e.g. a trailing "…)\u00ad").
+  const body = text
+    .replace(/\u00ad/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
   if (!body) return undefined;
 
   // Split on semicolons or periods, but not:
