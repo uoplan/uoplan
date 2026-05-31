@@ -1,5 +1,6 @@
 import type { AppState } from "../store/types";
 import type {
+  BlockedTime,
   FilterHintDescriptor,
   GenerationErrorDetails,
   GenerationErrorState,
@@ -21,6 +22,7 @@ import {
   type PoolDiagnostics,
 } from "@uoplan/core";
 import { buildColorMap } from "./colorMap";
+import { avoidedDaysFromBlocks } from "./blockedTimes";
 
 // Re-export helpers used by tests and other modules
 export { expandConstrainedPerRequirement, buildPendingGroupPickCounts } from "@uoplan/core";
@@ -53,7 +55,6 @@ export type GenerateSchedulesInput = Pick<
   | "electiveLevelBuckets"
   | "generationMinStartMinutes"
   | "generationMaxEndMinutes"
-  | "generationAllowedDays"
   | "generationMinProfessorRating"
   | "professorRatings"
   | "currentSeed"
@@ -97,7 +98,6 @@ export function pickGenerateSchedulesInput(
     electiveLevelBuckets: state.electiveLevelBuckets,
     generationMinStartMinutes: state.generationMinStartMinutes,
     generationMaxEndMinutes: state.generationMaxEndMinutes,
-    generationAllowedDays: state.generationAllowedDays,
     generationMinProfessorRating: state.generationMinProfessorRating,
     professorRatings: state.professorRatings,
     currentSeed: state.currentSeed,
@@ -115,13 +115,12 @@ export function pickGenerateSchedulesInput(
 
 const DEFAULT_MIN_START_MINUTES = 8 * 60 + 30;
 const DEFAULT_MAX_END_MINUTES = 22 * 60;
-const DEFAULT_ALLOWED_DAYS = ["Mo", "Tu", "We", "Th", "Fr"];
 const DEFAULT_LANGUAGE_BUCKETS = ["en", "other"];
 
 function buildActiveFilterHints(opts: {
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
-  generationAllowedDays: string[];
+  blockedTimes: readonly BlockedTime[];
   generationMinProfessorRating: number | null | undefined;
   virtualSectionsOnly: boolean;
   includeClosedComponents: boolean;
@@ -131,7 +130,7 @@ function buildActiveFilterHints(opts: {
   const {
     generationMinStartMinutes,
     generationMaxEndMinutes,
-    generationAllowedDays,
+    blockedTimes,
     generationMinProfessorRating,
     virtualSectionsOnly,
     includeClosedComponents,
@@ -150,9 +149,9 @@ function buildActiveFilterHints(opts: {
     hints.push({ code: "end-before", time: `${h}:${m.toString().padStart(2, "0")}` });
   }
 
-  const missingDays = DEFAULT_ALLOWED_DAYS.filter((d) => !generationAllowedDays.includes(d));
-  if (missingDays.length > 0) {
-    hints.push({ code: "days-excluded", days: missingDays });
+  const avoidedDays = avoidedDaysFromBlocks(blockedTimes);
+  if (avoidedDays.length > 0) {
+    hints.push({ code: "days-excluded", days: avoidedDays });
   }
 
   if (generationMinProfessorRating != null) {
@@ -244,7 +243,6 @@ export async function generateSchedulesAction(
     electiveLevelBuckets,
     generationMinStartMinutes,
     generationMaxEndMinutes,
-    generationAllowedDays,
     generationMinProfessorRating,
     professorRatings,
     currentSeed,
@@ -341,7 +339,6 @@ export async function generateSchedulesAction(
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,
     maxEndMinutes: generationMaxEndMinutes,
-    allowedDays: generationAllowedDays,
     minProfessorRating: generationMinProfessorRating ?? undefined,
     professorRatings: professorRatings ?? undefined,
     maxFirstYearCredits: generationLimitFirstYearCredits
@@ -381,7 +378,7 @@ export async function generateSchedulesAction(
   const filterHints = buildActiveFilterHints({
     generationMinStartMinutes,
     generationMaxEndMinutes,
-    generationAllowedDays,
+    blockedTimes: input.blockedTimes,
     generationMinProfessorRating,
     virtualSectionsOnly,
     includeClosedComponents,
@@ -456,7 +453,6 @@ async function handleBasicGeneration(
     electiveLevelBuckets,
     generationMinStartMinutes,
     generationMaxEndMinutes,
-    generationAllowedDays,
     generationMinProfessorRating,
     professorRatings,
     currentSeed,
@@ -474,7 +470,6 @@ async function handleBasicGeneration(
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,
     maxEndMinutes: generationMaxEndMinutes,
-    allowedDays: generationAllowedDays,
     minProfessorRating: generationMinProfessorRating ?? undefined,
     professorRatings: professorRatings ?? undefined,
     blockedTimes: input.blockedTimes,

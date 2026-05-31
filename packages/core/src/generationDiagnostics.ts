@@ -12,8 +12,6 @@ export type TimetableFailureKind =
 export interface ActiveConstraintsSummary {
   compressedSchedule: boolean;
   minProfessorRating: boolean;
-  /** User narrowed allowed days (non-empty selection). */
-  allowedDaysCustom: boolean;
   maxFirstYearCredits: boolean;
 }
 
@@ -27,7 +25,6 @@ export type SuggestionCode =
   | "try-different-course"
   | "turn-off-compressed"
   | "clear-min-rating"
-  | "allow-more-weekdays"
   | "widen-hours-days"
   | "relax-fy-cap"
   | "un-blacklist"
@@ -95,7 +92,6 @@ function buildActiveConstraintsSummary(
     return {
       compressedSchedule: false,
       minProfessorRating: false,
-      allowedDaysCustom: false,
       maxFirstYearCredits: false,
     };
   }
@@ -103,7 +99,6 @@ function buildActiveConstraintsSummary(
     compressedSchedule: !!constraints.compressedSchedule,
     minProfessorRating:
       constraints.minProfessorRating != null && constraints.minProfessorRating > 0,
-    allowedDaysCustom: constraints.allowedDays.length > 0,
     maxFirstYearCredits: constraints.maxFirstYearCredits != null,
   };
 }
@@ -163,9 +158,6 @@ function buildSuggestions(
     }
     if (summary.minProfessorRating) {
       suggestions.push("clear-min-rating");
-    }
-    if (summary.allowedDaysCustom) {
-      suggestions.push("allow-more-weekdays");
     }
     if (summary.maxFirstYearCredits) {
       suggestions.push("relax-fy-cap");

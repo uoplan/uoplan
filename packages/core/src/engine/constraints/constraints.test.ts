@@ -30,7 +30,6 @@ function section(times: ComponentSection["times"]): ComponentSection {
 const FULL_DAY: GenerationConstraints = {
   minStartMinutes: 0,
   maxEndMinutes: 24 * 60,
-  allowedDays: [],
 };
 
 describe("ConstraintPipeline routing", () => {

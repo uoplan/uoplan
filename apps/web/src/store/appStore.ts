@@ -19,7 +19,6 @@ import {
 } from "../lib/electiveEligibility";
 import {
   DEFAULT_COURSES_THIS_SEMESTER,
-  DEFAULT_GENERATION_ALLOWED_DAYS,
   DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
   DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
   DEFAULT_GENERATION_MAX_END_MINUTES,
@@ -27,6 +26,7 @@ import {
   DEFAULT_GENERATION_MIN_START_MINUTES,
   DEFAULT_GENERATION_PREFER_EASIER,
 } from "./generationDefaults";
+import { defaultBlockedTimes } from "../lib/blockedTimes";
 
 export type AppStoreApi = StoreApi<AppStore>;
 
@@ -99,7 +99,6 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
       lowestVisitedSeed: null,
       generationMinStartMinutes: DEFAULT_GENERATION_MIN_START_MINUTES,
       generationMaxEndMinutes: DEFAULT_GENERATION_MAX_END_MINUTES,
-      generationAllowedDays: [...DEFAULT_GENERATION_ALLOWED_DAYS],
       includeClosedComponents: false,
       virtualSectionsOnly: false,
       generationMinProfessorRating: DEFAULT_GENERATION_MIN_PROFESSOR_RATING,
@@ -112,7 +111,7 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
       calendarMode: null,
       scheduleNoVariety: false,
       blacklistedCourses: [],
-      blockedTimes: [],
+      blockedTimes: defaultBlockedTimes(),
       lastSavedAt: null,
       hasPendingSave: false,
       pendingSharedState: null,

@@ -56,7 +56,6 @@ function tryApplyOneSwap(
     cache,
     generationMinStartMinutes,
     generationMaxEndMinutes,
-    generationAllowedDays,
     generationMinProfessorRating,
     professorRatings,
     includeClosedComponents,
@@ -76,7 +75,6 @@ function tryApplyOneSwap(
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,
     maxEndMinutes: generationMaxEndMinutes,
-    allowedDays: generationAllowedDays,
     minProfessorRating: generationMinProfessorRating ?? undefined,
     professorRatings: professorRatings ?? undefined,
     blockedTimes: state.blockedTimes,
@@ -486,7 +484,6 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         currentColorMap,
         generationMinStartMinutes,
         generationMaxEndMinutes,
-        generationAllowedDays,
         generationMinProfessorRating,
         professorRatings,
         includeClosedComponents,
@@ -539,7 +536,6 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       const constraints: GenerationConstraints = {
         minStartMinutes: generationMinStartMinutes,
         maxEndMinutes: generationMaxEndMinutes,
-        allowedDays: generationAllowedDays,
         minProfessorRating: generationMinProfessorRating ?? undefined,
         professorRatings: professorRatings ?? undefined,
         blockedTimes: get().blockedTimes,
@@ -648,7 +644,6 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         electiveLevelBuckets,
         generationMinStartMinutes,
         generationMaxEndMinutes,
-        generationAllowedDays,
         generationMinProfessorRating,
         professorRatings,
         includeClosedComponents,
@@ -717,7 +712,6 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
           const swapConstraints: GenerationConstraints = {
             minStartMinutes: generationMinStartMinutes,
             maxEndMinutes: generationMaxEndMinutes,
-            allowedDays: generationAllowedDays,
             minProfessorRating: generationMinProfessorRating ?? undefined,
             professorRatings: professorRatings ?? undefined,
             blockedTimes: get().blockedTimes,
@@ -838,7 +832,6 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       const swapConstraints: GenerationConstraints = {
         minStartMinutes: generationMinStartMinutes,
         maxEndMinutes: generationMaxEndMinutes,
-        allowedDays: generationAllowedDays,
         minProfessorRating: generationMinProfessorRating ?? undefined,
         professorRatings: professorRatings ?? undefined,
         blockedTimes: get().blockedTimes,

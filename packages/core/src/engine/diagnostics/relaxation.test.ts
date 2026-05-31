@@ -8,7 +8,6 @@ import { diagnoseByRelaxation } from "./relaxation";
 const NO_CONSTRAINTS: GenerationConstraints = {
   minStartMinutes: 0,
   maxEndMinutes: 24 * 60,
-  allowedDays: [],
 };
 
 function buildCache(): ReturnType<typeof buildDataCache> {

@@ -6,6 +6,7 @@ import {
   Alert,
   Group,
   MultiSelect,
+  type MultiSelectProps,
   TextInput,
   Select,
   Checkbox,
@@ -37,8 +38,8 @@ export interface ScheduleCountStepProps {
   onMinStartMinutesChange: (minutes: number) => void;
   maxEndMinutes: number;
   onMaxEndMinutesChange: (minutes: number) => void;
-  allowedDays: DayOfWeek[];
-  onAllowedDaysChange: (days: DayOfWeek[]) => void;
+  avoidedDays: DayOfWeek[];
+  onAvoidedDaysChange: (days: DayOfWeek[]) => void;
   minProfessorRating: number | null;
   onMinProfessorRatingChange: (rating: number | null) => void;
   /** Total 1000-level credits (completed + selected this semester). */
@@ -54,6 +55,10 @@ export interface ScheduleCountStepProps {
   blacklistedCourses: string[];
   allPoolCourses: { value: string; label: string }[];
   onBlacklistedCoursesChange: (courses: string[]) => void;
+  /** Renders "code – title" in the blacklist dropdown while pills show code only. */
+  blacklistRenderOption?: MultiSelectProps["renderOption"];
+  /** Title-aware search filter for the blacklist dropdown. */
+  blacklistFilter?: MultiSelectProps["filter"];
   onGenerate: () => void;
   generating?: boolean;
   error?: string | null;
@@ -73,8 +78,8 @@ export function ScheduleCountStep({
   onMinStartMinutesChange,
   maxEndMinutes,
   onMaxEndMinutesChange,
-  allowedDays,
-  onAllowedDaysChange,
+  avoidedDays,
+  onAvoidedDaysChange,
   minProfessorRating,
   onMinProfessorRatingChange,
   totalFirstYearCredits,
@@ -88,6 +93,8 @@ export function ScheduleCountStep({
   blacklistedCourses,
   allPoolCourses,
   onBlacklistedCoursesChange,
+  blacklistRenderOption,
+  blacklistFilter,
   onGenerate,
   generating = false,
   error,
@@ -144,12 +151,12 @@ export function ScheduleCountStep({
         />
       </Group>
       <MultiSelect
-        label={tr("scheduleCount.days.label")}
-        description={tr("scheduleCount.days.description")}
-        placeholder={tr("scheduleCount.days.placeholder")}
+        label={tr("scheduleCount.avoidDays.label")}
+        description={tr("scheduleCount.avoidDays.description")}
+        placeholder={tr("scheduleCount.avoidDays.placeholder")}
         data={dayOptions}
-        value={allowedDays}
-        onChange={(values) => onAllowedDaysChange(values as DayOfWeek[])}
+        value={avoidedDays}
+        onChange={(values) => onAvoidedDaysChange(values as DayOfWeek[])}
         clearable
       />
       <Select
@@ -197,6 +204,8 @@ export function ScheduleCountStep({
           data={allPoolCourses}
           value={blacklistedCourses}
           onChange={onBlacklistedCoursesChange}
+          renderOption={blacklistRenderOption}
+          filter={blacklistFilter}
           searchable
           clearable
         />

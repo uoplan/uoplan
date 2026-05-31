@@ -12,18 +12,18 @@ import type {
 } from "../types";
 
 describe("constraints", () => {
-  it("timeSlotSatisfiesConstraints respects time bounds and allowed days", () => {
+  it("timeSlotSatisfiesConstraints respects time bounds (day no longer constrained)", () => {
     const c: GenerationConstraints = {
       minStartMinutes: 480, // 8:00
       maxEndMinutes: 1020, // 17:00
-      allowedDays: ["Mo", "Tu"],
     };
 
     const valid: TimeSlot = { day: "Mo", startMinutes: 500, endMinutes: 600 };
     expect(timeSlotSatisfiesConstraints(valid, c)).toBe(true);
 
-    const wrongDay: TimeSlot = { day: "We", startMinutes: 500, endMinutes: 600 };
-    expect(timeSlotSatisfiesConstraints(wrongDay, c)).toBe(false);
+    // Any weekday is allowed now; day avoidance is expressed via blockedTimes.
+    const otherDay: TimeSlot = { day: "We", startMinutes: 500, endMinutes: 600 };
+    expect(timeSlotSatisfiesConstraints(otherDay, c)).toBe(true);
 
     const tooEarly: TimeSlot = { day: "Mo", startMinutes: 400, endMinutes: 500 };
     expect(timeSlotSatisfiesConstraints(tooEarly, c)).toBe(false);
@@ -39,7 +39,6 @@ describe("constraints", () => {
     const c: GenerationConstraints = {
       minStartMinutes: 480,
       maxEndMinutes: 1380,
-      allowedDays: ["Mo", "Tu"],
       blockedTimes,
     };
 

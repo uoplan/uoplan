@@ -130,7 +130,6 @@ export interface AppState {
   lowestVisitedSeed: number | null;
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
-  generationAllowedDays: DayOfWeek[];
   generationMinProfessorRating: number | null;
   professorRatings: ProfessorRatingsMap | null;
   includeClosedComponents: boolean;
@@ -187,7 +186,8 @@ export interface AppActions {
   setCoursesThisSemester: (n: number) => void;
   setGenerationMinStartMinutes: (minutes: number) => void;
   setGenerationMaxEndMinutes: (minutes: number) => void;
-  setGenerationAllowedDays: (days: DayOfWeek[]) => void;
+  /** Set which weekdays are avoided; reconciled into full-day blocked windows. */
+  setAvoidedDays: (days: DayOfWeek[]) => void;
   setGenerationMinProfessorRating: (rating: number | null) => void;
   setIncludeClosedComponents: (value: boolean) => void;
   setVirtualSectionsOnly: (value: boolean) => void;

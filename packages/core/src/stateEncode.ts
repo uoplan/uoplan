@@ -95,7 +95,6 @@ export interface EncodeInput {
   requirementSlotsUserTouched: Record<string, true>;
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
-  generationAllowedDays: SchemaDayOfWeek[];
   generationMinProfessorRating: number | null;
   generationLimitFirstYearCredits: boolean;
   generationCompressedSchedule: boolean;
@@ -137,7 +136,6 @@ export interface DecodedState {
   touchedReqIndices: number[];
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
-  generationAllowedDays: SchemaDayOfWeek[];
   generationMinProfessorRating: number | null;
   generationLimitFirstYearCredits: boolean;
   generationCompressedSchedule: boolean;
@@ -282,7 +280,7 @@ export function encodeState(
 
     generationMinStartMinutes: input.generationMinStartMinutes,
     generationMaxEndMinutes: input.generationMaxEndMinutes,
-    generationAllowedDays: input.generationAllowedDays.map(dayToProto),
+    generationAllowedDays: [],
     generationMinProfessorRating:
       input.generationMinProfessorRating !== null
         ? Math.round(input.generationMinProfessorRating * 10)
@@ -530,7 +528,6 @@ export function decodeState(
 
     generationMinStartMinutes: state.generationMinStartMinutes,
     generationMaxEndMinutes: state.generationMaxEndMinutes,
-    generationAllowedDays: state.generationAllowedDays.map(protoToDay),
     generationMinProfessorRating:
       state.generationMinProfessorRating !== undefined
         ? state.generationMinProfessorRating / 10

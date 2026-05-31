@@ -69,7 +69,6 @@ function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
     requirementSlotsUserTouched: {},
     generationMinStartMinutes: 480,
     generationMaxEndMinutes: 1320,
-    generationAllowedDays: ["Mo", "Tu", "We", "Th", "Fr"],
     generationMinProfessorRating: null,
     generationLimitFirstYearCredits: false,
     generationCompressedSchedule: false,
