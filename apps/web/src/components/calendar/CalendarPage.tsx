@@ -12,7 +12,7 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { useHotkeys, useMediaQuery } from "@mantine/hooks";
 import {
   IconArrowBackUp,
   IconArrowsShuffle,
@@ -179,6 +179,11 @@ export function CalendarPage() {
     if (scheduleGenerating || !canUseSeedNavigation) return;
     await goToNextSeed();
   };
+
+  useHotkeys([
+    ["ArrowLeft", () => canGoPrevious && void handlePrevious()],
+    ["ArrowRight", () => void handleNext()],
+  ]);
 
   const handleClearOptions = () => {
     resetBasicCalendarSettings();
