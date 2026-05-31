@@ -118,8 +118,9 @@ export function hasMissingOptionSelections(
     const isOptionType = node.type === "or_group" || node.type === "options_group";
     if (isOptionType && node.requirementId != null) {
       const idx = selectedOptions[node.requirementId];
-      if (idx == null) return true;
-      const child = node.options?.[idx];
+      const options = node.options ?? [];
+      if (idx == null || idx < 0 || idx >= options.length) return true;
+      const child = options[idx];
       if (child && hasMissingOptionSelections([child], selectedOptions)) return true;
     } else if (node.options?.length) {
       if (hasMissingOptionSelections(node.options, selectedOptions)) return true;

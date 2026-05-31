@@ -1093,6 +1093,12 @@ msgstr "Change this requirement set - go back to pick a different option. Curren
 msgid "optionsDrilldown.changeRequirementSet"
 msgstr "Change this requirement set"
 
+msgid "optionsDrilldown.change"
+msgstr "Change"
+
+msgid "optionsDrilldown.chosenLabel"
+msgstr "Chosen"
+
 msgid "optionsDrilldown.optionTitle"
 msgstr "Option {number}"
 
@@ -1100,7 +1106,19 @@ msgid "optionsStep.none"
 msgstr "No options to configure for this program."
 
 msgid "optionsStep.note"
-msgstr "Step through each choice below. Tap an option to continue; use the back arrow to change a path and pick a different branch."
+msgstr "Pick one option for each choice below. Your selection reveals any follow-up choices; use Change to switch a path."
+
+msgid "optionsStep.pager.position"
+msgstr "Choice {current} of {total}"
+
+msgid "optionsStep.pager.prev"
+msgstr "Previous choice"
+
+msgid "optionsStep.pager.next"
+msgstr "Next choice"
+
+msgid "optionsStep.pager.goTo"
+msgstr "Go to choice {number}"
 
 msgid "requirements.optionsPending"
 msgstr "Choose your program options first to see the remaining requirements."

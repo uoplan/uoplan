@@ -24,6 +24,36 @@ const OPTION_CARD_BORDER_UNSELECTED = "var(--app-border)";
 const OPTION_CARD_BORDER_SELECTED = "var(--app-accent)";
 const OPTION_CARD_BG_SELECTED = "var(--app-info-soft)";
 const OPTION_CARD_HOVER_BG = "var(--app-surface-hover)";
+const OPTION_CARD_IDLE_BG = "var(--app-surface)";
+
+/** Numbered circle indicator (①②③) shown on each selectable option card. */
+function NumberCircle({ number, selected }: { number: number; selected: boolean }) {
+  return (
+    <Box
+      aria-hidden
+      style={{
+        flexShrink: 0,
+        width: 24,
+        height: 24,
+        borderRadius: 999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: 12,
+        fontWeight: 600,
+        lineHeight: 1,
+        borderWidth: "var(--app-border-width)",
+        borderStyle: "solid",
+        borderColor: selected ? "var(--app-accent)" : "var(--app-border)",
+        backgroundColor: selected ? "var(--app-accent)" : "var(--app-bg)",
+        color: selected ? "var(--app-on-accent)" : "var(--app-text-muted)",
+        transition: "var(--app-transition)",
+      }}
+    >
+      {number}
+    </Box>
+  );
+}
 
 interface RadioConfig {
   checked: boolean;
@@ -78,14 +108,13 @@ function SelectableOptionPaper({
 }: SelectableOptionPaperProps) {
   const [hover, setHover] = useState(false);
   const flatStyle = (style ?? {}) as CSSProperties;
-  const { backgroundColor: bgFromStyle, ...restFlat } = flatStyle;
-  const fallbackIdle = optionsStepHideCardTitle ? "var(--app-bg)" : "var(--app-surface)";
-  const idleBg = (typeof bgFromStyle === "string" && bgFromStyle) || fallbackIdle;
+  const { backgroundColor: _ignoredBg, ...restFlat } = flatStyle;
   const visualBg = radio.checked
     ? OPTION_CARD_BG_SELECTED
     : hover && !radio.disabled
       ? OPTION_CARD_HOVER_BG
-      : idleBg;
+      : OPTION_CARD_IDLE_BG;
+  const showCircle = optionsStepOptionOrdinal != null;
 
   return (
     <Paper
@@ -128,12 +157,14 @@ function SelectableOptionPaper({
         boxShadow: hover && !radio.disabled && !radio.checked ? "var(--app-shadow-sm)" : undefined,
       }}
     >
-      {optionsStepHideCardTitle && optionsStepOptionOrdinal != null ? (
-        <Text fw={500} size="sm" lh={1.25} c="var(--app-text)" mb="xs" style={{ minWidth: 0 }}>
-          {tr("optionsDrilldown.optionTitle", { number: optionsStepOptionOrdinal })}
-        </Text>
-      ) : null}
-      {children}
+      {showCircle ? (
+        <Group gap="sm" wrap="nowrap" align="flex-start">
+          <NumberCircle number={optionsStepOptionOrdinal!} selected={radio.checked} />
+          <Box style={{ minWidth: 0, flex: 1 }}>{children}</Box>
+        </Group>
+      ) : (
+        children
+      )}
     </Paper>
   );
 }

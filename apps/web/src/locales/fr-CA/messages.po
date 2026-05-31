@@ -1102,6 +1102,12 @@ msgstr "Modifier cet ensemble d'exigences - revenez en arrière pour choisir une
 msgid "optionsDrilldown.changeRequirementSet"
 msgstr "Modifier cet ensemble d'exigences"
 
+msgid "optionsDrilldown.change"
+msgstr "Modifier"
+
+msgid "optionsDrilldown.chosenLabel"
+msgstr "Choisi"
+
 msgid "optionsDrilldown.optionTitle"
 msgstr "Option {number}"
 
@@ -1109,7 +1115,19 @@ msgid "optionsStep.none"
 msgstr "Aucune option à configurer pour ce programme."
 
 msgid "optionsStep.note"
-msgstr "Parcourez chaque choix ci-dessous. Touchez une option pour continuer; utilisez la flèche retour pour changer de parcours et choisir une autre branche."
+msgstr "Choisissez une option pour chaque choix ci-dessous. Votre sélection révèle les choix suivants; utilisez Modifier pour changer de parcours."
+
+msgid "optionsStep.pager.position"
+msgstr "Choix {current} sur {total}"
+
+msgid "optionsStep.pager.prev"
+msgstr "Choix précédent"
+
+msgid "optionsStep.pager.next"
+msgstr "Choix suivant"
+
+msgid "optionsStep.pager.goTo"
+msgstr "Aller au choix {number}"
 
 msgid "requirements.optionsPending"
 msgstr "Choisissez d’abord vos options de programme pour voir les exigences restantes."
