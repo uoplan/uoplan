@@ -345,8 +345,8 @@ msgstr "Suiv."
 msgid "calendarPage.mobile.tryAnother"
 msgstr "Essayer un autre"
 
-msgid "calendarPage.reset"
-msgstr "Réinitialiser"
+msgid "calendarPage.clear"
+msgstr "Effacer les options"
 
 msgid "calendarPage.schedule.label"
 msgstr "Horaire no {index}"

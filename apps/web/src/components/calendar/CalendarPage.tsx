@@ -19,8 +19,8 @@ import {
   IconCalendarDown,
   IconChevronLeft,
   IconChevronRight,
+  IconEraser,
   IconFileImport,
-  IconRefresh,
   IconSettings,
   IconShare,
   IconTerminal,
@@ -28,7 +28,6 @@ import {
 import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { CalendarView } from "./CalendarView";
-import { ResetModal } from "../shared/ResetModal";
 import { BackButton } from "../shared/BackButton";
 import { buildScheduleIcs } from "@uoplan/core";
 import { downloadTextFile } from "../../lib/downloadFile";
@@ -47,8 +46,6 @@ import { AdvancedGenerationOptions } from "./AdvancedGenerationOptions";
 import { BasicGenerationOptions } from "./BasicGenerationOptions";
 import { SaveStatusIndicator } from "./SaveStatusIndicator";
 import { encodeSchedulePayload } from "../../lib/encodeSchedulePayload";
-import { navigateToWizardStep } from "../../lib/appNavigation";
-import { WizardStep } from "../../lib/wizardSteps";
 import { useScheduleWeeks } from "../../hooks/useScheduleWeeks";
 
 export function CalendarPage() {
@@ -125,7 +122,8 @@ export function CalendarPage() {
   const randomizeSeed = useAppStore((s) => s.randomizeSeed);
   const getSwapCandidates = useAppStore((s) => s.getSwapCandidates);
   const swapCourseInSchedule = useAppStore((s) => s.swapCourseInSchedule);
-  const resetToDefault = useAppStore((s) => s.resetToDefault);
+  const clearGenerationOptions = useAppStore((s) => s.clearGenerationOptions);
+  const generateSchedules = useAppStore((s) => s.generateSchedules);
   const resetBasicCalendarSettings = useAppStore((s) => s.resetBasicCalendarSettings);
 
   const canGoPrevious = canGoToPreviousSeed(currentSeed, lowestVisitedSeed);
@@ -133,7 +131,6 @@ export function CalendarPage() {
     hasProgram || canGenerateBasicSchedule(basicPinnedCourses.length, basicElectivesCount);
 
   const [controlsOpen, setControlsOpen] = useState(false);
-  const [resetModalOpen, setResetModalOpen] = useState(false);
   const [enrolCliOpen, setEnrolCliOpen] = useState(false);
   const [uenrollImportOpen, setUenrollImportOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(CALENDAR_SIDEBAR_WIDTH_PX);
@@ -180,6 +177,11 @@ export function CalendarPage() {
 
   const handleClearOptions = () => {
     resetBasicCalendarSettings();
+  };
+
+  const handleClearGenerationOptions = () => {
+    clearGenerationOptions();
+    void generateSchedules();
   };
 
   const handleDownloadIcs = () => {
@@ -273,7 +275,7 @@ export function CalendarPage() {
         </>
       ) : (
         <Stack gap="md">
-          {/* Utility toolbar: download, share, randomize, reset */}
+          {/* Utility toolbar: download, share, randomize, clear */}
           <Group gap={4}>
             <Tooltip label={tr("calendarPage.downloadIcs")} withArrow position="right">
               <ActionIcon
@@ -321,16 +323,16 @@ export function CalendarPage() {
                 <IconArrowsShuffle size={16} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip label={tr("calendarPage.reset")} withArrow position="right">
+            <Tooltip label={tr("calendarPage.clear")} withArrow position="right">
               <ActionIcon
                 variant="subtle"
                 color="gray"
                 size="md"
                 radius={0}
-                onClick={() => setResetModalOpen(true)}
-                aria-label={tr("calendarPage.reset")}
+                onClick={handleClearGenerationOptions}
+                aria-label={tr("calendarPage.clear")}
               >
-                <IconRefresh size={16} />
+                <IconEraser size={16} />
               </ActionIcon>
             </Tooltip>
             <Tooltip label={tr("uenrollImport.button")} withArrow position="right">
@@ -415,16 +417,6 @@ export function CalendarPage() {
                 : tr("calendarPage.undoSwapCount", { count: currentSwaps.length })}
             </Button>
           )}
-
-          <ResetModal
-            opened={resetModalOpen}
-            onClose={() => setResetModalOpen(false)}
-            onConfirm={() => {
-              resetToDefault();
-              setResetModalOpen(false);
-              navigateToWizardStep(WizardStep.Term);
-            }}
-          />
         </Stack>
       )}
 
