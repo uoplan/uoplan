@@ -1087,6 +1087,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         swapsPerSeed: {},
         currentColorMap: colorMap,
         generationError: null,
+        calendarWeekIndex: null,
       });
       flushPersistedAppState();
     },
