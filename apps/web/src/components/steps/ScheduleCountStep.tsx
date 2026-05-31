@@ -136,38 +136,6 @@ export function ScheduleCountStep({
         min={1}
         max={10}
       />
-      <Group align="flex-end" gap="md">
-        <TextInput
-          label={tr("scheduleCount.time.earliest")}
-          type="time"
-          value={minutesToTimeString(minStartMinutes)}
-          onChange={(e) => onMinStartMinutesChange(timeStringToMinutes(e.currentTarget.value))}
-        />
-        <TextInput
-          label={tr("scheduleCount.time.latest")}
-          type="time"
-          value={minutesToTimeString(maxEndMinutes)}
-          onChange={(e) => onMaxEndMinutesChange(timeStringToMinutes(e.currentTarget.value))}
-        />
-      </Group>
-      <MultiSelect
-        label={tr("scheduleCount.avoidDays.label")}
-        description={tr("scheduleCount.avoidDays.description")}
-        placeholder={tr("scheduleCount.avoidDays.placeholder")}
-        data={dayOptions}
-        value={avoidedDays}
-        onChange={(values) => onAvoidedDaysChange(values as DayOfWeek[])}
-        clearable
-      />
-      <Select
-        label={tr("scheduleCount.rating.label")}
-        description={tr("scheduleCount.rating.description")}
-        placeholder={tr("scheduleCount.rating.placeholder")}
-        data={ratingOptions}
-        value={minProfessorRating == null ? null : String(minProfessorRating)}
-        onChange={(v) => onMinProfessorRatingChange(v == null ? null : Number(v))}
-        clearable
-      />
       {warnFirstYearLimit && (
         <Alert color="yellow" variant="light" radius="md">
           {tr("scheduleCount.firstYear.warning", { credits: totalFirstYearCredits })}
@@ -195,6 +163,38 @@ export function ScheduleCountStep({
         description={tr("scheduleCount.preferEasier.description")}
         checked={preferEasierCourses}
         onChange={(e) => onPreferEasierCoursesChange(e.currentTarget.checked)}
+      />
+      <Group align="flex-end" gap="md">
+        <TextInput
+          label={tr("scheduleCount.time.earliest")}
+          type="time"
+          value={minutesToTimeString(minStartMinutes)}
+          onChange={(e) => onMinStartMinutesChange(timeStringToMinutes(e.currentTarget.value))}
+        />
+        <TextInput
+          label={tr("scheduleCount.time.latest")}
+          type="time"
+          value={minutesToTimeString(maxEndMinutes)}
+          onChange={(e) => onMaxEndMinutesChange(timeStringToMinutes(e.currentTarget.value))}
+        />
+      </Group>
+      <Select
+        label={tr("scheduleCount.rating.label")}
+        description={tr("scheduleCount.rating.description")}
+        placeholder={tr("scheduleCount.rating.placeholder")}
+        data={ratingOptions}
+        value={minProfessorRating == null ? null : String(minProfessorRating)}
+        onChange={(v) => onMinProfessorRatingChange(v == null ? null : Number(v))}
+        clearable
+      />
+      <MultiSelect
+        label={tr("scheduleCount.avoidDays.label")}
+        description={tr("scheduleCount.avoidDays.description")}
+        placeholder={tr("scheduleCount.avoidDays.placeholder")}
+        data={dayOptions}
+        value={avoidedDays}
+        onChange={(values) => onAvoidedDaysChange(values as DayOfWeek[])}
+        clearable
       />
       {allPoolCourses.length > 0 && (
         <MultiSelect
