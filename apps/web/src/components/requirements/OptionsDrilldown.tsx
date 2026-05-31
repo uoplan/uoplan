@@ -1,11 +1,11 @@
-import { Box, Group, Paper, Stack, Text, UnstyledButton } from "@mantine/core";
-import { IconArrowLeft } from "@tabler/icons-react";
+import { Box, Group, Stack, Text, UnstyledButton } from "@mantine/core";
+import { IconCheck, IconPencil } from "@tabler/icons-react";
 import type { RequirementWithStatus } from "@uoplan/core";
 import {
   getOptionSecondarySummaryLine,
   simplifySingleChildChain,
 } from "../../lib/requirements/requirementUtils";
-import { getNodeDisplayTitle, getStableNodeKey, REQUIREMENT_INDENT_PX } from "./RequirementNode";
+import { getNodeDisplayTitle, getStableNodeKey } from "./RequirementNode";
 import { OptionRequirementPreview } from "./OptionRequirementPreview";
 import { tr } from "../../i18n";
 
@@ -29,6 +29,66 @@ function orGroupLabel(node: RequirementWithStatus): string {
     : rawTitle || node.code || tr("optionsDrilldown.chooseOne");
 }
 
+/**
+ * Compact, single-level "breadcrumb" row standing in for a resolved option
+ * group. Replaces the old bordered Paper + nested Box wrapper so the chosen
+ * branch reads as a flat path rather than a stack of cards.
+ */
+function ChosenBreadcrumb({
+  selectedChild,
+  onClear,
+}: {
+  selectedChild: RequirementWithStatus;
+  onClear: () => void;
+}) {
+  const title = getNodeDisplayTitle(selectedChild);
+  const summary = getOptionSecondarySummaryLine(selectedChild);
+  const backDescription = summary ?? title;
+  return (
+    <UnstyledButton
+      type="button"
+      onClick={onClear}
+      aria-label={tr("optionsDrilldown.changeRequirementSetAria", { path: backDescription })}
+      style={{
+        display: "block",
+        width: "100%",
+        padding: "8px 10px",
+        borderRadius: "var(--app-radius)",
+        border: "var(--app-border-width) solid var(--app-border)",
+        backgroundColor: "var(--app-surface)",
+        cursor: "pointer",
+        textAlign: "left",
+        transition: "var(--app-transition)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = "var(--app-surface-hover)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = "var(--app-surface)";
+      }}
+    >
+      <Group gap="xs" wrap="nowrap" align="center">
+        <IconCheck size={16} aria-hidden style={{ flexShrink: 0, color: "var(--app-success)" }} />
+        <Stack gap={0} style={{ minWidth: 0, flex: 1 }}>
+          <Text size="xs" c="var(--app-text-muted)" lh={1.2}>
+            {tr("optionsDrilldown.chosenLabel")}
+          </Text>
+          <Text size="sm" lh={1.3} c="var(--app-text)" lineClamp={2} style={{ minWidth: 0 }}>
+            {title}
+            {summary ? <Text span c="var(--app-text-muted)">{` · ${summary}`}</Text> : null}
+          </Text>
+        </Stack>
+        <Group gap={4} wrap="nowrap" style={{ flexShrink: 0, color: "var(--app-accent)" }}>
+          <IconPencil size={14} aria-hidden />
+          <Text size="xs" fw={500} c="var(--app-accent)">
+            {tr("optionsDrilldown.change")}
+          </Text>
+        </Group>
+      </Group>
+    </UnstyledButton>
+  );
+}
+
 export function OptionsDrilldown({
   nodeKeyPrefix,
   node: rawNode,
@@ -40,8 +100,6 @@ export function OptionsDrilldown({
   depth = 0,
 }: OptionsDrilldownProps) {
   const { node } = simplifySingleChildChain(rawNode);
-
-  const indentMargin = depth > 0 ? depth * REQUIREMENT_INDENT_PX : undefined;
 
   if (node.type === "section") {
     return <OptionRequirementPreview node={node} activeBranch={activeBranch} depth={depth} />;
@@ -60,28 +118,22 @@ export function OptionsDrilldown({
     const selOk = selectedIdx != null && selectedIdx >= 0 && selectedIdx < options.length;
     const selectedChild = selOk ? options[selectedIdx] : null;
 
-    const showError = activeBranch && selectedIdx == null && !node.complete;
+    const showError = activeBranch && !selOk && !node.complete;
 
     if (!selOk) {
       return (
-        <Paper
-          p="sm"
-          withBorder
-          radius="var(--app-radius)"
-          mt={depth > 0 ? "xs" : 0}
-          ml={indentMargin}
+        <Box
+          role="radiogroup"
+          aria-label={node.type === "or_group" ? orGroupLabel(node) : undefined}
           data-missing-selection={showError ? "true" : undefined}
-          style={{
-            backgroundColor: "var(--app-surface)",
-          }}
         >
           {node.type === "or_group" && (
-            <Text size="sm" c="dimmed" mb="xs">
+            <Text size="sm" c="var(--app-text-muted)" mb="xs">
               {orGroupLabel(node)}
             </Text>
           )}
           {showError && (
-            <Text size="xs" c="red" mb="xs">
+            <Text size="xs" c="var(--app-danger)" mb="xs">
               {tr("optionsDrilldown.selectOneError")}
             </Text>
           )}
@@ -92,92 +144,33 @@ export function OptionsDrilldown({
               const childActiveBranch =
                 activeBranch && (selectedIdx == null || selectedIdx === idx);
               return (
-                <Box key={childKey}>
-                  <OptionRequirementPreview
-                    node={opt}
-                    radio={{
-                      checked: isSelected,
-                      onChange: () => onSelectOption(reqId, idx),
-                      name: reqId,
-                      value: String(idx),
-                    }}
-                    activeBranch={childActiveBranch}
-                    depth={depth + 1}
-                    optionsStepHideCardTitle
-                    optionsStepOptionOrdinal={idx + 1}
-                  />
-                </Box>
+                <OptionRequirementPreview
+                  key={childKey}
+                  node={opt}
+                  radio={{
+                    checked: isSelected,
+                    onChange: () => onSelectOption(reqId, idx),
+                    name: reqId,
+                    value: String(idx),
+                  }}
+                  activeBranch={childActiveBranch}
+                  depth={0}
+                  optionsStepHideCardTitle
+                  optionsStepOptionOrdinal={idx + 1}
+                />
               );
             })}
           </Stack>
-        </Paper>
+        </Box>
       );
     }
 
-    const chosenHint =
-      getOptionSecondarySummaryLine(selectedChild!) ?? tr("optionsDrilldown.selectedBranch");
-    const backDescription =
-      getOptionSecondarySummaryLine(selectedChild!) ?? getNodeDisplayTitle(selectedChild!);
-    const backAriaLabel = tr("optionsDrilldown.changeRequirementSetAria", {
-      path: backDescription,
-    });
+    // Resolved: flat breadcrumb row + the chosen branch rendered inline along a
+    // subtle left rail (no nested card) so ownership stays clear.
     return (
-      <Paper
-        withBorder
-        radius="var(--app-radius)"
-        mt={depth > 0 ? "xs" : 0}
-        ml={indentMargin}
-        p={0}
-        style={{ overflow: "hidden" }}
-      >
-        <UnstyledButton
-          type="button"
-          onClick={() => onClearOption(reqId)}
-          aria-label={backAriaLabel}
-          style={{
-            display: "block",
-            width: "100%",
-            padding: "var(--mantine-spacing-sm)",
-            border: "none",
-            borderBottom: "var(--app-border-width) solid var(--app-border)",
-            backgroundColor: "var(--app-surface)",
-            cursor: "pointer",
-            textAlign: "left",
-            transition: "background-color 120ms ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "var(--app-surface-hover)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "var(--app-surface)";
-          }}
-        >
-          <Group gap="sm" wrap="nowrap" align="flex-start">
-            <IconArrowLeft
-              size={20}
-              aria-hidden
-              style={{
-                flexShrink: 0,
-                marginTop: 2,
-                color: "var(--mantine-color-gray-5)",
-              }}
-            />
-            <Stack gap={4} style={{ minWidth: 0, flex: 1 }}>
-              <Text size="xs" c="dimmed" fw={500} lh={1.2}>
-                {tr("optionsDrilldown.changeRequirementSet")}
-              </Text>
-              <Text size="sm" lh={1.35} style={{ minWidth: 0 }}>
-                {chosenHint}
-              </Text>
-            </Stack>
-          </Group>
-        </UnstyledButton>
-        <Box
-          p="sm"
-          style={{
-            backgroundColor: "var(--app-bg)",
-          }}
-        >
+      <Stack gap="xs">
+        <ChosenBreadcrumb selectedChild={selectedChild!} onClear={() => onClearOption(reqId)} />
+        <Box pl="sm" style={{ borderLeft: "var(--app-border-width) solid var(--app-border)" }}>
           <OptionsDrilldown
             nodeKeyPrefix={getStableNodeKey(selectedChild!, `${nodeKeyPrefix}:in:${selectedIdx}`)}
             node={selectedChild!}
@@ -189,7 +182,7 @@ export function OptionsDrilldown({
             depth={depth + 1}
           />
         </Box>
-      </Paper>
+      </Stack>
     );
   }
 
@@ -208,7 +201,7 @@ export function OptionsDrilldown({
               onSelectOption={onSelectOption}
               onClearOption={onClearOption}
               activeBranch={activeBranch}
-              depth={depth + 1}
+              depth={depth}
             />
           );
         })}
