@@ -102,6 +102,7 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
       calendarMode: null,
       scheduleNoVariety: false,
       blacklistedCourses: [],
+      blockedTimes: [],
       lastSavedAt: null,
       hasPendingSave: false,
       pendingSharedState: null,
@@ -176,6 +177,7 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
           frenchImmersionStream: false,
           calendarWeekIndex: null,
           blacklistedCourses: [],
+          blockedTimes: [],
         });
         if (typeof window !== "undefined") {
           localStorage.removeItem(LOCAL_STORAGE_KEY);

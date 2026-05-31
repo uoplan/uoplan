@@ -158,6 +158,7 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
       maxEndMinutes: decoded.generationMaxEndMinutes,
       allowedDays: decoded.generationAllowedDays,
       compressedSchedule: decoded.generationCompressedSchedule,
+      blockedTimes: decoded.blockedTimes,
     };
 
     const reconstructed = reconstructScheduleForPreview(decoded, cache, constraints);

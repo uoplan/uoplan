@@ -1,6 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { DataCache, DayOfWeekCode } from "@uoplan/core";
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
+import type { BlockedTime } from "../../../store/types";
+import { useAppStore } from "../../../store/appStore";
 import {
   WEEKDAY_CODES,
   FULL_WEEK_CODES,
@@ -10,6 +12,8 @@ import {
   assignLanes,
 } from "./weekCalendarLayout";
 import { WeekCalendarEvent } from "./WeekCalendarEvent";
+import { BlockedTimeLayer } from "./BlockedTimeLayer";
+import { BlockedTimeRemoveModal } from "../BlockedTimeRemoveModal";
 import "./weekCalendar.css";
 
 interface WeekCalendarProps {
@@ -35,6 +39,19 @@ export function WeekCalendar({
     () => (showWeekends ? FULL_WEEK_CODES : WEEKDAY_CODES),
     [showWeekends],
   );
+
+  const blockedTimes = useAppStore((s) => s.blockedTimes);
+  const addBlockedTime = useAppStore((s) => s.addBlockedTime);
+  const updateBlockedTime = useAppStore((s) => s.updateBlockedTime);
+  const removeBlockedTime = useAppStore((s) => s.removeBlockedTime);
+  const [blockToRemove, setBlockToRemove] = useState<BlockedTime | null>(null);
+
+  const blocksByDay = useMemo(() => {
+    const map = new Map<DayOfWeekCode, BlockedTime[]>();
+    for (const day of dayCodes) map.set(day, []);
+    for (const b of blockedTimes) map.get(b.day as DayOfWeekCode)?.push(b);
+    return map;
+  }, [blockedTimes, dayCodes]);
 
   const eventsByDay = useMemo(() => {
     const map = new Map<DayOfWeekCode, CalendarEvent[]>();
@@ -83,6 +100,17 @@ export function WeekCalendar({
                     aria-hidden
                   />
                 ))}
+                <BlockedTimeLayer
+                  day={day}
+                  blocks={blocksByDay.get(day) ?? []}
+                  onCommitCreate={(d, start, end) =>
+                    addBlockedTime({ day: d, startMinutes: start, endMinutes: end })
+                  }
+                  onCommitUpdate={(id, start, end) =>
+                    updateBlockedTime(id, { day, startMinutes: start, endMinutes: end })
+                  }
+                  onRequestRemove={setBlockToRemove}
+                />
                 {laid.map(({ event, laneIndex, laneCount }) => (
                   <WeekCalendarEvent
                     key={event.id}
@@ -99,6 +127,14 @@ export function WeekCalendar({
           );
         })}
       </div>
+      <BlockedTimeRemoveModal
+        block={blockToRemove}
+        onClose={() => setBlockToRemove(null)}
+        onConfirm={(id) => {
+          removeBlockedTime(id);
+          setBlockToRemove(null);
+        }}
+      />
     </div>
   );
 }

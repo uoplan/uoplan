@@ -79,6 +79,7 @@ function tryApplyOneSwap(
     allowedDays: generationAllowedDays,
     minProfessorRating: generationMinProfessorRating ?? undefined,
     professorRatings: professorRatings ?? undefined,
+    blockedTimes: state.blockedTimes,
   };
 
   const explicitExemptNormalized = new Set<string>();
@@ -541,6 +542,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         allowedDays: generationAllowedDays,
         minProfessorRating: generationMinProfessorRating ?? undefined,
         professorRatings: professorRatings ?? undefined,
+        blockedTimes: get().blockedTimes,
       };
 
       if (get().calendarMode === "basic") {
@@ -718,6 +720,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
             allowedDays: generationAllowedDays,
             minProfessorRating: generationMinProfessorRating ?? undefined,
             professorRatings: professorRatings ?? undefined,
+            blockedTimes: get().blockedTimes,
           };
           if (getValidSectionCombos(sched, swapConstraints).length === 0) continue;
 
@@ -838,6 +841,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         allowedDays: generationAllowedDays,
         minProfessorRating: generationMinProfessorRating ?? undefined,
         professorRatings: professorRatings ?? undefined,
+        blockedTimes: get().blockedTimes,
       };
 
       function getValidEnrollmentsFor(code: string): CourseEnrollment[] {

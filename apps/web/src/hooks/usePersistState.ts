@@ -40,6 +40,7 @@ function hasPersistedStateChange(next: AppStore, prev: AppStore): boolean {
     next.generationCompressedSchedule !== prev.generationCompressedSchedule ||
     next.generationPreferEasier !== prev.generationPreferEasier ||
     next.blacklistedCourses !== prev.blacklistedCourses ||
+    next.blockedTimes !== prev.blockedTimes ||
     next.requirementSlotsUserTouched !== prev.requirementSlotsUserTouched ||
     next.calendarWeekIndex !== prev.calendarWeekIndex
   );

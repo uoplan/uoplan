@@ -1514,3 +1514,18 @@ msgstr "sam"
 
 msgid "gen.day.sun"
 msgstr "dim"
+
+msgid "calendar.blockedTime.label"
+msgstr "Plage bloquée"
+
+msgid "calendar.blockedTime.removeTitle"
+msgstr "Retirer la plage bloquée?"
+
+msgid "calendar.blockedTime.removeBody"
+msgstr "Retirer la plage bloquée le {range}? Les horaires générés pourront de nouveau utiliser cette période."
+
+msgid "calendar.blockedTime.removeCancel"
+msgstr "Annuler"
+
+msgid "calendar.blockedTime.removeConfirm"
+msgstr "Retirer"

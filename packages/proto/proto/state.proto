@@ -49,6 +49,12 @@ message RequirementGroupSelection {
   repeated uint32 group_prefix_indices = 2;
 }
 
+message BlockedTime {
+  DayOfWeek day = 1;
+  uint32 start_minutes = 2;
+  uint32 end_minutes = 3;
+}
+
 message ShareableState {
   WizardMode wizard_mode = 1;
   repeated uint32 basic_pinned_courses = 2;
@@ -95,4 +101,5 @@ message ShareableState {
   bool french_immersion_stream = 36;
   optional uint32 calendar_week_index = 37;
   repeated uint32 blacklisted_courses = 38;
+  repeated BlockedTime blocked_times = 39;
 }

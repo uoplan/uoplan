@@ -78,6 +78,7 @@ function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
     showCalendar: false,
     frenchImmersionStream: false,
     blacklistedCourses: [],
+    blockedTimes: [],
     ...overrides,
   };
 }
@@ -154,6 +155,23 @@ describe("encodeState / decodeState roundtrip", () => {
     expect("error" in decoded).toBe(false);
     if ("error" in decoded) return;
     expect(decoded.frenchImmersionStream).toBe(true);
+  });
+
+  it("round-trips blockedTimes", () => {
+    const input = makeInput({
+      blockedTimes: [
+        { day: "Mo", startMinutes: 600, endMinutes: 720 },
+        { day: "We", startMinutes: 480, endMinutes: 540 },
+      ],
+    });
+    const bytes = encodeState(input, catalogue, indices)!;
+    const decoded = decodeState(bytes, catalogue, indices);
+    expect("error" in decoded).toBe(false);
+    if ("error" in decoded) return;
+    expect(decoded.blockedTimes).toEqual([
+      { day: "Mo", startMinutes: 600, endMinutes: 720 },
+      { day: "We", startMinutes: 480, endMinutes: 540 },
+    ]);
   });
 
   it("round-trips firstYear", () => {

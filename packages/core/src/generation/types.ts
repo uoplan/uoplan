@@ -22,6 +22,13 @@ export interface GeneratedSchedule {
   enrollments: CourseEnrollment[];
 }
 
+/** A recurring per-weekday window the user has blocked off. No course may meet inside it. */
+export interface BlockedTimeWindow {
+  day: DayOfWeek;
+  startMinutes: number;
+  endMinutes: number;
+}
+
 export interface GenerationConstraints {
   minStartMinutes: number;
   maxEndMinutes: number;
@@ -32,6 +39,8 @@ export interface GenerationConstraints {
   maxFirstYearCredits?: number;
   /** If true, each day may have at most one gap between classes, and that gap must be ≤ 90 minutes. */
   compressedSchedule?: boolean;
+  /** Recurring per-weekday windows that no course meeting time may overlap. */
+  blockedTimes?: BlockedTimeWindow[];
 }
 
 export interface PrecomputedCombo {

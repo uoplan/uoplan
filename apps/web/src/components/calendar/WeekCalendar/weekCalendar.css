@@ -108,7 +108,61 @@
   min-height: 0;
 }
 
-/* Animation phases */
+/* Blocked-time overlay layer */
+.cal-blocked-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  cursor: crosshair;
+}
+
+.cal-blocked {
+  position: absolute;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  border: 1px solid color-mix(in srgb, var(--app-text-dim) 55%, transparent);
+  border-radius: 0;
+  background-color: color-mix(in srgb, var(--app-text-dim) 12%, transparent);
+  background-image: repeating-linear-gradient(
+    45deg,
+    color-mix(in srgb, var(--app-text-dim) 26%, transparent) 0,
+    color-mix(in srgb, var(--app-text-dim) 26%, transparent) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  cursor: move;
+  touch-action: none;
+  z-index: 2;
+}
+
+.cal-blocked-draft {
+  pointer-events: none;
+  border-style: dashed;
+  opacity: 0.85;
+}
+
+.cal-blocked-handle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 8px;
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+.cal-blocked-handle-top {
+  top: -4px;
+}
+
+.cal-blocked-handle-bottom {
+  bottom: -4px;
+}
+
+/* Course events paint above the blocked layer so they stay clickable. */
+.cal-event {
+  z-index: 3;
+}
 @keyframes cal-exit-down {
   from {
     opacity: 1;
