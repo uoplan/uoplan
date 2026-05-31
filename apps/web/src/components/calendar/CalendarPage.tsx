@@ -17,6 +17,7 @@ import {
   IconArrowBackUp,
   IconArrowsShuffle,
   IconCalendarDown,
+  IconCheck,
   IconChevronLeft,
   IconChevronRight,
   IconEraser,
@@ -45,6 +46,7 @@ import { UEnrollImportModal } from "./UEnrollImportModal";
 import { AdvancedGenerationOptions } from "./AdvancedGenerationOptions";
 import { BasicGenerationOptions } from "./BasicGenerationOptions";
 import { SaveStatusIndicator } from "./SaveStatusIndicator";
+import { AnimatedIconSwap } from "../shared/AnimatedIconSwap";
 import { encodeSchedulePayload } from "../../lib/encodeSchedulePayload";
 import { useScheduleWeeks } from "../../hooks/useScheduleWeeks";
 
@@ -305,8 +307,11 @@ export function CalendarPage() {
                   radius={0}
                   onClick={handleCopyShare}
                   aria-label={tr("calendarPage.share")}
+                  style={{ transition: "color 0.2s ease" }}
                 >
-                  <IconShare size={16} />
+                  <AnimatedIconSwap statusKey={shareCopied ? "copied" : "share"}>
+                    {shareCopied ? <IconCheck size={16} /> : <IconShare size={16} />}
+                  </AnimatedIconSwap>
                 </ActionIcon>
               </Tooltip>
             )}

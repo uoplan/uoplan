@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ActionIcon, Group, Tooltip } from "@mantine/core";
 import {
   IconCalendarDown,
+  IconCheck,
   IconEraser,
   IconFileImport,
   IconShare,
@@ -11,6 +12,7 @@ import { useAppStore } from "../../store/appStore";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { tr } from "../../i18n";
 import { SaveStatusIndicator } from "./SaveStatusIndicator";
+import { AnimatedIconSwap } from "../shared/AnimatedIconSwap";
 import { UEnrollImportModal } from "./UEnrollImportModal";
 
 interface BasicCalendarHeaderActionsProps {
@@ -65,8 +67,11 @@ export function BasicCalendarHeaderActions({
               radius={0}
               onClick={handleCopyShare}
               aria-label={tr("calendarPage.share")}
+              style={{ transition: "color 0.2s ease" }}
             >
-              <IconShare size={16} />
+              <AnimatedIconSwap statusKey={shareCopied ? "copied" : "share"}>
+                {shareCopied ? <IconCheck size={16} /> : <IconShare size={16} />}
+              </AnimatedIconSwap>
             </ActionIcon>
           </Tooltip>
         )}
