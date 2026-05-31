@@ -139,6 +139,9 @@ export function CalendarPage() {
   const isResizing = useRef(false);
   const resizeStartX = useRef(0);
   const resizeStartWidth = useRef(0);
+  const pendingWidth = useRef(CALENDAR_SIDEBAR_WIDTH_PX);
+  const asideRef = useRef<HTMLDivElement>(null);
+  const previewLineRef = useRef<HTMLDivElement>(null);
 
   const cliCommand =
     currentSchedule && selectedTermId
@@ -198,21 +201,45 @@ export function CalendarPage() {
     downloadTextFile(filename, ics, "text/calendar;charset=utf-8");
   };
 
+  function clampSidebarWidth(width: number) {
+    return Math.min(600, Math.max(220, width));
+  }
+
+  function positionPreviewLine(width: number) {
+    const aside = asideRef.current;
+    const line = previewLineRef.current;
+    if (!aside || !line) return;
+    const asideLeft = aside.getBoundingClientRect().left;
+    line.style.left = `${asideLeft + width}px`;
+  }
+
   function handleResizePointerDown(e: React.PointerEvent) {
     isResizing.current = true;
     resizeStartX.current = e.clientX;
     resizeStartWidth.current = sidebarWidth;
+    pendingWidth.current = sidebarWidth;
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    const line = previewLineRef.current;
+    if (line) {
+      positionPreviewLine(sidebarWidth);
+      line.style.display = "block";
+    }
   }
 
   function handleResizePointerMove(e: React.PointerEvent) {
     if (!isResizing.current) return;
     const delta = e.clientX - resizeStartX.current;
-    setSidebarWidth(Math.min(600, Math.max(220, resizeStartWidth.current + delta)));
+    const next = clampSidebarWidth(resizeStartWidth.current + delta);
+    pendingWidth.current = next;
+    positionPreviewLine(next);
   }
 
   function handleResizePointerUp() {
+    if (!isResizing.current) return;
     isResizing.current = false;
+    const line = previewLineRef.current;
+    if (line) line.style.display = "none";
+    setSidebarWidth(pendingWidth.current);
   }
 
   const calendarTitle = tr("calendarPage.title");
@@ -468,6 +495,7 @@ export function CalendarPage() {
           <>
             <Box
               component="aside"
+              ref={asideRef}
               aria-label="Calendar Controls"
               style={{
                 width: sidebarWidth,
@@ -503,6 +531,21 @@ export function CalendarPage() {
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLDivElement).style.backgroundColor = "var(--app-border)";
+              }}
+            />
+            <div
+              ref={previewLineRef}
+              aria-hidden="true"
+              style={{
+                display: "none",
+                position: "fixed",
+                top: 0,
+                bottom: 0,
+                width: 2,
+                marginLeft: -1,
+                backgroundColor: "var(--app-border-strong)",
+                pointerEvents: "none",
+                zIndex: 1000,
               }}
             />
           </>
