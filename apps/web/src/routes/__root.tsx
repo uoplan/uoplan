@@ -62,6 +62,7 @@ function RootLayout() {
   const routerStatus = useRouterState({ select: (s) => s.status });
   const router = useRouter();
   const controls = useAnimation();
+  const isCalendarRoute = pathname.startsWith("/schedule/calendar");
   const pendingAnimation = useRef(false);
   const lastNavAction = useRef<string>("PUSH");
 
@@ -116,7 +117,9 @@ function RootLayout() {
   return (
     <Box
       style={{
-        minHeight: "100vh",
+        minHeight: isCalendarRoute ? undefined : "100vh",
+        height: isCalendarRoute ? "100dvh" : undefined,
+        overflow: isCalendarRoute ? "hidden" : undefined,
         display: "flex",
         flexDirection: "column",
         backgroundColor: "var(--app-bg)",
@@ -125,12 +128,12 @@ function RootLayout() {
       <NavigationProgress color="var(--app-focus-ring)" />
       <HeadContent />
       <SharedScheduleModal />
-      <Box style={{ flex: 1 }}>
-        <motion.div animate={controls}>
+      <Box style={{ flex: 1, minHeight: 0 }}>
+        <motion.div animate={controls} style={isCalendarRoute ? { height: "100%" } : undefined}>
           <Outlet />
         </motion.div>
       </Box>
-      {!pathname.startsWith("/schedule/calendar") && <AppFooter />}
+      {!isCalendarRoute && <AppFooter />}
     </Box>
   );
 }
