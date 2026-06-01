@@ -1,0 +1,311 @@
+import type { AppStore } from "../../types";
+import type { CourseEnrollment, GenerationConstraints, RequirementWithStatus } from "@uoplan/core";
+import {
+  buildPrereqContext,
+  canTakeCourse,
+  courseMatchesFilters,
+  enrollmentsOverlap,
+  getEffectiveSchedule,
+  getEnrollmentsForCourse,
+  getFirstOverlapWith,
+  getValidSectionCombos,
+  isElectiveRequirementType,
+  isHonoursProject,
+  isWithinElectiveLevelBuckets,
+  isWithinElectiveLevelCap,
+  normalizeCourseCode,
+  virtualScheduleFilterApplies,
+} from "@uoplan/core";
+import {
+  applyOptionSelections,
+  collectRequirementIdsWithCandidateCourse,
+} from "../../../lib/requirements/requirementUtils";
+
+export function getSwapCandidates(
+  enrollmentIndex: number,
+  get: () => AppStore,
+  validEnrollmentsByCourseCode: Map<string, CourseEnrollment[]>,
+): ReturnType<AppStore["getSwapCandidates"]> {
+  const {
+    basicPinnedCourses,
+    basicExcludedCategories,
+    studentPrograms,
+    cache,
+    currentSchedule,
+    remainingRequirements,
+    chosenCourseToRequirementId,
+    currentPoolMap,
+    completedCourses,
+    prereqEligibleCourses,
+    levelBuckets,
+    languageBuckets,
+    electiveLevelBuckets,
+    generationMinStartMinutes,
+    generationMaxEndMinutes,
+    generationMinProfessorRating,
+    professorRatings,
+    includeClosedComponents,
+    virtualSectionsOnly,
+    filteredPrereqEligibleCourses,
+    constrainedPerRequirement,
+    selectedPerRequirement,
+    generationLimitFirstYearCredits,
+    requirementTreeWithStatus,
+    selectedOptionsPerRequirement,
+  } = get();
+  if (!cache || !currentSchedule) {
+    return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
+  }
+
+  const schedule = currentSchedule;
+  const enrollment = schedule.enrollments[enrollmentIndex];
+  if (!enrollment) {
+    return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
+  }
+
+  const oldCode = enrollment.courseCode;
+
+  if (get().calendarMode === "basic") {
+    if (basicPinnedCourses.includes(oldCode)) {
+      return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
+    }
+
+    const optionalPool: string[] = [];
+    const excludedPrefixes = basicExcludedCategories.map((c) => c.toLowerCase());
+    const prereqCtx = buildPrereqContext(completedCourses, cache, studentPrograms);
+    const basicFilters = { levels: levelBuckets, languageBuckets };
+
+    for (const course of cache.getAllCourses()) {
+      const code = course.code;
+      if (code === oldCode) continue;
+      if (!courseMatchesFilters(code, basicFilters)) continue;
+      if (!isWithinElectiveLevelBuckets(code, electiveLevelBuckets)) continue;
+
+      const prefixMatch = code.match(/^([A-Z]{3,4})/i);
+      const prefix = prefixMatch ? prefixMatch[1].toLowerCase() : "";
+      if (excludedPrefixes.includes(prefix)) continue;
+
+      if (completedCourses.length > 0) {
+        if (course.prerequisites) {
+          if (!canTakeCourse(code, cache, prereqCtx)) continue;
+        } else if (course.prereqText) {
+          continue;
+        }
+      } else {
+        if (course.prerequisites || course.prereqText) continue;
+      }
+
+      if (basicPinnedCourses.includes(code)) continue;
+      const alreadyInSchedule = schedule.enrollments.some((e) => e.courseCode === code);
+      if (alreadyInSchedule) continue;
+
+      const sched = getEffectiveSchedule(cache, code, includeClosedComponents, virtualSectionsOnly);
+      if (!sched) continue;
+
+      const swapConstraints: GenerationConstraints = {
+        minStartMinutes: generationMinStartMinutes,
+        maxEndMinutes: generationMaxEndMinutes,
+        minProfessorRating: generationMinProfessorRating ?? undefined,
+        professorRatings: professorRatings ?? undefined,
+        blockedTimes: get().blockedTimes,
+      };
+      if (getValidSectionCombos(sched, swapConstraints).length === 0) continue;
+
+      optionalPool.push(code);
+    }
+
+    return {
+      candidates: optionalPool,
+      poolCourses: optionalPool,
+      requirementTitle: "Elective",
+      rejectedWithConflict: [],
+    };
+  }
+
+  const poolId = currentPoolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
+  const candidateSet = new Set<string>();
+  let poolRequirementType: string | undefined;
+  let requirementTitle: string | undefined;
+
+  function findReqNodeById(
+    nodes: RequirementWithStatus[],
+    id: string,
+  ): RequirementWithStatus | null {
+    for (const node of nodes) {
+      if (node.requirementId === id) return node;
+      if (node.options?.length) {
+        const found = findReqNodeById(node.options, id);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  if (poolId) {
+    // Check remaining requirements first; if already satisfied (complete), fall back to the full tree
+    const req = remainingRequirements.find((r) => r.requirementId === poolId);
+    if (req?.candidateCourses?.length) {
+      poolRequirementType = req.type;
+      requirementTitle = req.title;
+      for (const c of req.candidateCourses) candidateSet.add(c);
+    } else {
+      const node = findReqNodeById(requirementTreeWithStatus, poolId);
+      if (node?.candidateCourses?.length) {
+        poolRequirementType = node.type;
+        requirementTitle = node.title;
+        for (const c of node.candidateCourses) candidateSet.add(c);
+      }
+    }
+  }
+  if (candidateSet.size === 0) {
+    const oldCodeNorm = normalizeCourseCode(oldCode);
+    // Search remaining requirements
+    for (const req of remainingRequirements) {
+      if (!req.candidateCourses?.length) continue;
+      const hasOld = req.candidateCourses.some((c) => normalizeCourseCode(c) === oldCodeNorm);
+      if (hasOld) {
+        for (const c of req.candidateCourses) candidateSet.add(c);
+      }
+    }
+    // Also search the full tree (includes completed requirements)
+    if (candidateSet.size === 0) {
+      const flattened = applyOptionSelections(
+        requirementTreeWithStatus,
+        selectedOptionsPerRequirement,
+      );
+      const reqIds = collectRequirementIdsWithCandidateCourse(flattened, oldCodeNorm);
+      for (const reqId of reqIds) {
+        const node = findReqNodeById(flattened, reqId);
+        if (node?.candidateCourses?.length) {
+          if (!poolRequirementType) poolRequirementType = node.type;
+          if (!requirementTitle) requirementTitle = node.title;
+          for (const c of node.candidateCourses) candidateSet.add(c);
+        }
+      }
+    }
+  }
+  if (candidateSet.size === 0) {
+    for (const c of filteredPrereqEligibleCourses) candidateSet.add(c);
+  }
+
+  const explicitExemptNormalized = new Set<string>();
+  for (const codes of Object.values(constrainedPerRequirement)) {
+    for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
+  }
+  for (const codes of Object.values(selectedPerRequirement)) {
+    for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
+  }
+
+  const others = schedule.enrollments.filter(
+    (e, i) => i !== enrollmentIndex && e.courseCode !== oldCode,
+  );
+  const alreadyInSchedule = new Set(schedule.enrollments.map((e) => e.courseCode));
+
+  const isFirstYear = (code: string) => {
+    const m = code.match(/\d{4}/);
+    return m ? Number(m[0]) < 2000 : false;
+  };
+  const completedFirstYearCredits = generationLimitFirstYearCredits
+    ? completedCourses.reduce((sum, code) => {
+        if (!isFirstYear(code)) return sum;
+        return sum + (cache.getCourse(code)?.credits ?? 3);
+      }, 0)
+    : 0;
+  const othersFirstYearCredits = generationLimitFirstYearCredits
+    ? others.reduce((sum, e) => {
+        if (!isFirstYear(e.courseCode)) return sum;
+        return sum + (cache.getCourse(e.courseCode)?.credits ?? 3);
+      }, 0)
+    : 0;
+  const remainingFirstYearBudget = generationLimitFirstYearCredits
+    ? 48 - completedFirstYearCredits - othersFirstYearCredits
+    : Infinity;
+
+  const prereqEligibleSet = new Set(prereqEligibleCourses);
+  const swapConstraints: GenerationConstraints = {
+    minStartMinutes: generationMinStartMinutes,
+    maxEndMinutes: generationMaxEndMinutes,
+    minProfessorRating: generationMinProfessorRating ?? undefined,
+    professorRatings: professorRatings ?? undefined,
+    blockedTimes: get().blockedTimes,
+  };
+
+  function getValidEnrollmentsFor(code: string): CourseEnrollment[] {
+    const virtualOnly = virtualScheduleFilterApplies(
+      virtualSectionsOnly,
+      poolRequirementType,
+      code,
+      explicitExemptNormalized,
+    );
+    const cacheKey = `${code}:${includeClosedComponents}:${virtualOnly}`;
+    const cached = validEnrollmentsByCourseCode.get(cacheKey);
+    if (cached) return cached;
+    const sched = getEffectiveSchedule(cache!, code, includeClosedComponents, virtualOnly);
+    if (!sched) {
+      validEnrollmentsByCourseCode.set(cacheKey, []);
+      return [];
+    }
+    const combos = getValidSectionCombos(sched, swapConstraints);
+    const enrollments = combos.map((combo) => getEnrollmentsForCourse(sched, combo));
+    validEnrollmentsByCourseCode.set(cacheKey, enrollments);
+    return enrollments;
+  }
+
+  const filters = { levels: levelBuckets, languageBuckets };
+
+  const candidates: string[] = [];
+  const rejectedWithConflict: Array<{ code: string; conflictsWith: string }> = [];
+  for (const code of candidateSet) {
+    if (!prereqEligibleSet.has(code)) continue;
+    if (code === oldCode) continue;
+    if (completedCourses.includes(code)) continue;
+    if (alreadyInSchedule.has(code)) continue;
+    if (isHonoursProject(code, cache)) continue;
+    if (!courseMatchesFilters(code, filters)) continue;
+    if (isFirstYear(code) && (cache.getCourse(code)?.credits ?? 3) > remainingFirstYearBudget)
+      continue;
+
+    const isElectiveType = isElectiveRequirementType(poolRequirementType);
+    const isGenericElective =
+      poolRequirementType === "free_elective" ||
+      poolRequirementType === "non_discipline_elective" ||
+      poolRequirementType === "faculty_elective" ||
+      poolRequirementType === "elective";
+    if (isElectiveType && !isWithinElectiveLevelCap(code)) continue;
+    if (isGenericElective && electiveLevelBuckets.length > 0) {
+      const match = code.match(/\d{4}/);
+      if (match) {
+        const num = parseInt(match[0], 10);
+        if (!Number.isNaN(num)) {
+          const bucket = Math.floor(num / 1000) * 1000;
+          if (!electiveLevelBuckets.includes(bucket)) {
+            continue;
+          }
+        }
+      }
+    }
+    const possibleEnrollments = getValidEnrollmentsFor(code);
+    if (possibleEnrollments.length === 0) continue;
+
+    let added = false;
+    for (const candidate of possibleEnrollments) {
+      const conflicts = others.some((e) => enrollmentsOverlap(e, candidate));
+      if (!conflicts) {
+        candidates.push(code);
+        added = true;
+        break;
+      }
+    }
+    if (!added && others.length > 0 && possibleEnrollments.length > 0) {
+      const conflict = getFirstOverlapWith(possibleEnrollments[0], others);
+      if (conflict) {
+        rejectedWithConflict.push({
+          code,
+          conflictsWith: conflict.courseCode,
+        });
+      }
+    }
+  }
+  const poolCourses = [...candidateSet];
+  return { candidates, poolCourses, requirementTitle, rejectedWithConflict };
+}
