@@ -48,6 +48,46 @@ export function GradeDistributionPassingSummary({
   );
 }
 
+/** Bar heights (%) for the grayed-out "no grade data" placeholder. 15 bars to
+ * match the real compact histogram (14 grade letters + 1 S/NS bar). */
+const HISTOGRAM_PLACEHOLDER_BARS = [
+  30, 52, 78, 64, 44, 28, 40, 58, 70, 48, 34, 62, 50, 38, 56,
+] as const;
+
+/** Grayed-out stand-in shown in place of {@link GradeDistributionHistogram} when
+ * a professor / term / section has no grade data. */
+export function GradeDistributionHistogramPlaceholder({
+  variant = "compact",
+}: {
+  variant?: GradeHistogramVariant;
+}) {
+  const dims = HIST_DIMS[variant];
+  return (
+    <div
+      aria-hidden
+      style={{
+        display: "flex",
+        alignItems: "flex-end",
+        gap: 4,
+        width: "100%",
+        height: dims.minWrapHeight,
+      }}
+    >
+      {HISTOGRAM_PLACEHOLDER_BARS.map((h, i) => (
+        <div
+          key={i}
+          style={{
+            flex: 1,
+            height: `${h}%`,
+            backgroundColor: "var(--app-translucent-strong)",
+            borderRadius: 2,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 /** Vertical grade histogram (letter buckets + S/NS stack). */
 export function GradeDistributionHistogram({
   gradeViz,

@@ -497,23 +497,19 @@ export type CourseOfferingGroup = {
   offerings: ExploreOfferingFlat[];
 };
 
-function scheduleOfferingId(courseCode: string, name: string, termId: number, section: string) {
-  return [courseCode, "", normalizeProfessorName(name).toLowerCase(), String(termId), section].join(
-    "|",
-  );
+function scheduleOfferingId(courseCode: string, name: string, termId: number) {
+  return [courseCode, "", normalizeProfessorName(name).toLowerCase(), String(termId), ""].join("|");
 }
 
-function scheduleOfferingDedupKey(
-  courseCode: string,
-  name: string,
-  termId: number,
-  section: string,
-) {
+/**
+ * Dedup key for schedule-derived offerings, which carry no grade data and are
+ * combined per professor per term (section is intentionally ignored).
+ */
+function scheduleOfferingDedupKey(courseCode: string, name: string, termId: number) {
   return [
     normalizeCourseCode(courseCode),
     normalizeProfessorName(name).toLowerCase(),
     String(termId),
-    section,
   ].join("|");
 }
 
@@ -534,41 +530,41 @@ export function buildScheduleOfferings(
       const norm = normalizeCourseCode(sched.courseCode);
       const title = titleByCode.get(norm) ?? sched.title ?? "";
 
+      // Combine all sections by professor for this course + term. Schedule data
+      // has no grade distribution and its raw section labels (e.g. "M00-LEC
+      // FullSess.") are not meaningful here, so collapse to one row per prof.
+      const instructors = new Set<string>();
       for (const sections of Object.values(sched.components)) {
         for (const section of sections) {
-          const instructors = new Set<string>();
           for (const t of section.times) {
             if (t.instructor) instructors.add(t.instructor);
           }
-
-          for (const instructor of instructors) {
-            const key = scheduleOfferingDedupKey(
-              sched.courseCode,
-              instructor,
-              termId,
-              section.section,
-            );
-            if (seen.has(key)) continue;
-            seen.add(key);
-
-            const fuseText = [sched.courseCode, norm, title, instructor, termLabel, section.section]
-              .filter(Boolean)
-              .join(" ")
-              .toLowerCase();
-
-            out.push({
-              id: scheduleOfferingId(sched.courseCode, instructor, termId, section.section),
-              courseCode: sched.courseCode,
-              courseTitle: title,
-              professorName: instructor,
-              termId,
-              termLabel,
-              section: section.section,
-              fuseText,
-              distribution: {},
-            });
-          }
         }
+      }
+
+      for (const instructor of instructors) {
+        // "Staff" is a placeholder for an unassigned instructor; never surface it.
+        if (normalizeProfessorName(instructor).toLowerCase() === "staff") continue;
+
+        const key = scheduleOfferingDedupKey(sched.courseCode, instructor, termId);
+        if (seen.has(key)) continue;
+        seen.add(key);
+
+        const fuseText = [sched.courseCode, norm, title, instructor, termLabel]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        out.push({
+          id: scheduleOfferingId(sched.courseCode, instructor, termId),
+          courseCode: sched.courseCode,
+          courseTitle: title,
+          professorName: instructor,
+          termId,
+          termLabel,
+          fuseText,
+          distribution: {},
+        });
       }
     }
   }
@@ -580,17 +576,15 @@ export function mergeOfferingsWithSchedule(
   gradeOfferings: ExploreOfferingFlat[],
   scheduleOfferings: ExploreOfferingFlat[],
 ): ExploreOfferingFlat[] {
+  // Schedule offerings have no section, while grade offerings do, so dedup by
+  // (course, prof, term) ignoring section: a prof/term already present in grade
+  // data should not be duplicated by a section-less schedule row.
   const gradeKeys = new Set<string>();
   for (const o of gradeOfferings) {
-    gradeKeys.add(
-      scheduleOfferingDedupKey(o.courseCode, o.professorName, o.termId, o.section ?? ""),
-    );
+    gradeKeys.add(scheduleOfferingDedupKey(o.courseCode, o.professorName, o.termId));
   }
   const newEntries = scheduleOfferings.filter(
-    (o) =>
-      !gradeKeys.has(
-        scheduleOfferingDedupKey(o.courseCode, o.professorName, o.termId, o.section ?? ""),
-      ),
+    (o) => !gradeKeys.has(scheduleOfferingDedupKey(o.courseCode, o.professorName, o.termId)),
   );
   return [...gradeOfferings, ...newEntries];
 }
