@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   availableDisciplines,
+  computeCourseLeaderboard,
   computeDisciplineLeaderboard,
   computeGradeTrends,
   decodeTermMeta,
@@ -144,6 +145,73 @@ describe("computeDisciplineLeaderboard", () => {
   it("drops disciplines with no qualifying term", () => {
     const board = computeDisciplineLeaderboard(grades, { minTermVolume: 10_000 });
     expect(board).toHaveLength(0);
+  });
+
+  it("honours the level filter", () => {
+    const board = computeDisciplineLeaderboard(grades, { minTermVolume: 50, level: 2000 });
+    // Only PSY 2301 (level 2000) contributes; ADM/PSY 1000-level excluded.
+    expect(board.map((d) => d.discipline)).toEqual(["PSY"]);
+    expect(board[0].currentGpa).toBeCloseTo(6, 5);
+  });
+
+  it("honours the season filter", () => {
+    const board = computeDisciplineLeaderboard(grades, { minTermVolume: 50, season: "fall" });
+    // Fall 2017 only: PSY 1101 (A+) and ADM 1100 (C); each a single qualifying term.
+    expect(board.map((d) => d.discipline).sort()).toEqual(["ADM", "PSY"]);
+    for (const row of board) {
+      expect(row.qualifyingTerms).toBe(1);
+      expect(row.gpaDelta).toBeNull();
+    }
+  });
+});
+
+describe("computeCourseLeaderboard", () => {
+  it("groups by course code instead of discipline", () => {
+    const board = computeCourseLeaderboard(grades, {}, { minTermVolume: 50, minTerms: 2 });
+    expect(board.map((c) => c.code).sort()).toEqual(["ADM 1100", "PSY 1101", "PSY 2301"]);
+    const psy1101 = board.find((c) => c.code === "PSY 1101");
+    // PSY 1101: Fall 2017 all A+ (10) → Winter 2023 half A+/half F (5) → delta -5.
+    expect(psy1101?.earliestGpa).toBeCloseTo(10, 5);
+    expect(psy1101?.currentGpa).toBeCloseTo(5, 5);
+    expect(psy1101?.gpaDelta).toBeCloseTo(-5, 5);
+  });
+
+  it("keeps a row with null delta when a course has a single term", () => {
+    const board = computeCourseLeaderboard(grades, {}, { minTermVolume: 50, minTerms: 2 });
+    const psy2301 = board.find((c) => c.code === "PSY 2301");
+    expect(psy2301).toBeDefined();
+    expect(psy2301?.qualifyingTerms).toBe(1);
+    expect(psy2301?.gpaDelta).toBeNull();
+    expect(psy2301?.currentGpa).toBeCloseTo(6, 5);
+  });
+
+  it("still lists matched courses below the per-term volume guard", () => {
+    const board = computeCourseLeaderboard(grades, {}, { minTermVolume: 10_000 });
+    // No term clears the guard, but every course with grade data still appears.
+    expect(board.map((c) => c.code).sort()).toEqual(["ADM 1100", "PSY 1101", "PSY 2301"]);
+  });
+
+  it("restricts to explicit program-filter course codes", () => {
+    const board = computeCourseLeaderboard(
+      grades,
+      { programFilter: { codes: new Set(["PSY 1101"]), pools: [] } },
+      { minTermVolume: 50 },
+    );
+    expect(board.map((c) => c.code)).toEqual(["PSY 1101"]);
+  });
+
+  it("expands program-filter discipline pools to matching courses", () => {
+    const board = computeCourseLeaderboard(
+      grades,
+      { programFilter: { codes: new Set(), pools: [{ discipline: "ADM" }] } },
+      { minTermVolume: 50 },
+    );
+    expect(board.map((c) => c.code)).toEqual(["ADM 1100"]);
+  });
+
+  it("intersects discipline and level filters", () => {
+    const board = computeCourseLeaderboard(grades, { discipline: "PSY", level: 2000 });
+    expect(board.map((c) => c.code)).toEqual(["PSY 2301"]);
   });
 });
 

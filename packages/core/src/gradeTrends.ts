@@ -1,6 +1,6 @@
 import type { CourseGradesData, GradeDistribution } from "./dataTypes";
 import { GRADE_POINTS, aPlusPercent, distributionGpa } from "./gradeDistribution";
-import { getCourseLevel, parseCourseCode } from "./utils/courseUtils";
+import { getCourseLevel, normalizeCourseCode, parseCourseCode } from "./utils/courseUtils";
 import type { ProgramCourseFilter } from "./programTrends";
 import { programFilterMatches } from "./programTrends";
 
@@ -113,6 +113,21 @@ export interface TrendFilters {
   programFilter?: ProgramCourseFilter | null;
 }
 
+/**
+ * Code-level trend filter: true when `code` passes the discipline / level /
+ * program filters. Season is a per-term property, so it is filtered where terms
+ * are iterated (not here). Shared by {@link computeGradeTrends} and
+ * {@link computeCourseLeaderboard} so the chart and the per-course leaderboard
+ * always agree on which courses are in scope.
+ */
+export function courseMatchesTrendFilters(code: string, filters: TrendFilters): boolean {
+  const discipline = filters.discipline ? filters.discipline.toUpperCase() : null;
+  if (discipline && disciplineOf(code) !== discipline) return false;
+  if (filters.level != null && levelOf(code) !== filters.level) return false;
+  if (filters.programFilter && !programFilterMatches(filters.programFilter, code)) return false;
+  return true;
+}
+
 export interface TrendPoint {
   termId: number;
   year: number;
@@ -160,17 +175,12 @@ export function computeGradeTrends(
   grades: CourseGradesData,
   filters: TrendFilters = {},
 ): TrendSeries {
-  const discipline = filters.discipline ? filters.discipline.toUpperCase() : null;
-  const level = filters.level ?? null;
   const season = filters.season ?? null;
-  const programFilter = filters.programFilter ?? null;
 
   const byTerm = new Map<number, GradeDistribution>();
 
   for (const course of grades.courses) {
-    if (discipline && disciplineOf(course.code) !== discipline) continue;
-    if (level != null && levelOf(course.code) !== level) continue;
-    if (programFilter && !programFilterMatches(programFilter, course.code)) continue;
+    if (!courseMatchesTrendFilters(course.code, filters)) continue;
 
     for (const prof of course.professors) {
       const termId = Number(prof.termId);
@@ -228,15 +238,84 @@ export interface LeaderboardOptions {
   minTermVolume?: number;
   /** Minimum number of qualifying terms required to report a GPA delta. */
   minTerms?: number;
+  /** Restrict to a single course level bucket (1000, 2000, …). */
+  level?: number | null;
+  /** Restrict to a single academic season. */
+  season?: TermSeason | null;
 }
 
 const DEFAULT_MIN_TERM_VOLUME = 50;
 const DEFAULT_MIN_TERMS = 2;
+/** Per-term volume guard for the finer-grained per-course leaderboard. */
+const DEFAULT_COURSE_MIN_TERM_VOLUME = 5;
+
+interface TermSeriesSummary {
+  currentGpa: number | null;
+  earliestGpa: number | null;
+  gpaDelta: number | null;
+  currentAPlusPct: number | null;
+  totalVolume: number;
+  qualifyingTerms: number;
+  firstYear: number | null;
+  lastYear: number | null;
+}
+
+/**
+ * Reduce a `termId → distribution` map to an earliest-vs-latest GPA summary.
+ * Terms below `minTermVolume` graded results are ignored to limit small-sample
+ * noise. When `keepAnyData` is set and no term clears the guard, every term with
+ * graded data is used instead (so a row is still produced for any group that has
+ * grades at all). Returns null when there is no graded data.
+ */
+function summarizeTermSeries(
+  terms: Map<number, GradeDistribution>,
+  minTermVolume: number,
+  minTerms: number,
+  keepAnyData = false,
+): TermSeriesSummary | null {
+  let totalVolume = 0;
+  const all: Array<{ sortKey: number; year: number; dist: GradeDistribution }> = [];
+  let qualifying: Array<{ sortKey: number; year: number; dist: GradeDistribution }> = [];
+
+  for (const [termId, dist] of terms) {
+    const mass = countedMass(dist);
+    totalVolume += mass;
+    if (mass <= 0) continue;
+    const meta = decodeTermMeta(termId);
+    const entry = { sortKey: meta.sortKey, year: meta.year, dist };
+    all.push(entry);
+    if (mass >= minTermVolume) qualifying.push(entry);
+  }
+
+  if (qualifying.length === 0) {
+    if (!keepAnyData || all.length === 0) return null;
+    qualifying = all;
+  }
+  qualifying.sort((a, b) => a.sortKey - b.sortKey);
+
+  const earliest = qualifying[0];
+  const latest = qualifying[qualifying.length - 1];
+  const earliestGpa = distributionGpa(earliest.dist);
+  const currentGpa = distributionGpa(latest.dist);
+  const hasDelta = qualifying.length >= minTerms && earliestGpa != null && currentGpa != null;
+
+  return {
+    currentGpa,
+    earliestGpa,
+    gpaDelta: hasDelta ? currentGpa - earliestGpa : null,
+    currentAPlusPct: aPlusPercent(latest.dist),
+    totalVolume,
+    qualifyingTerms: qualifying.length,
+    firstYear: earliest.year || null,
+    lastYear: latest.year || null,
+  };
+}
 
 /**
  * Per-discipline grade-inflation summary: earliest vs latest qualifying-term GPA.
  * Terms below `minTermVolume` graded results are ignored to avoid small-sample
- * noise; disciplines with no qualifying term are dropped. Callers sort the result
+ * noise; disciplines with no qualifying term are dropped. The optional
+ * `level`/`season` filters narrow the aggregation. Callers sort the result
  * (e.g. by `gpaDelta` for inflation, or `currentGpa` for easiest/hardest now).
  */
 export function computeDisciplineLeaderboard(
@@ -245,6 +324,8 @@ export function computeDisciplineLeaderboard(
 ): DisciplineTrend[] {
   const minTermVolume = options.minTermVolume ?? DEFAULT_MIN_TERM_VOLUME;
   const minTerms = options.minTerms ?? DEFAULT_MIN_TERMS;
+  const level = options.level ?? null;
+  const season = options.season ?? null;
 
   // discipline → termId → summed distribution
   const byDiscipline = new Map<string, Map<number, GradeDistribution>>();
@@ -252,9 +333,11 @@ export function computeDisciplineLeaderboard(
   for (const course of grades.courses) {
     const discipline = disciplineOf(course.code);
     if (!discipline) continue;
+    if (level != null && levelOf(course.code) !== level) continue;
     for (const prof of course.professors) {
       const termId = Number(prof.termId);
       if (!Number.isFinite(termId) || termId === 0) continue;
+      if (season && decodeTermMeta(termId).season !== season) continue;
       if (!prof.distribution || typeof prof.distribution !== "object") continue;
       let terms = byDiscipline.get(discipline);
       if (!terms) {
@@ -272,38 +355,65 @@ export function computeDisciplineLeaderboard(
 
   const out: DisciplineTrend[] = [];
   for (const [discipline, terms] of byDiscipline) {
-    let totalVolume = 0;
-    const qualifying: Array<{ sortKey: number; year: number; dist: GradeDistribution }> = [];
+    const summary = summarizeTermSeries(terms, minTermVolume, minTerms);
+    if (!summary) continue;
+    out.push({ discipline, ...summary });
+  }
 
-    for (const [termId, dist] of terms) {
-      const mass = countedMass(dist);
-      totalVolume += mass;
-      if (mass >= minTermVolume) {
-        const meta = decodeTermMeta(termId);
-        qualifying.push({ sortKey: meta.sortKey, year: meta.year, dist });
+  return out;
+}
+
+/** Per-course variant of {@link DisciplineTrend}, keyed by normalized course code. */
+export interface CourseTrend extends TermSeriesSummary {
+  /** Normalized course code, e.g. `CSI 2110`. */
+  code: string;
+}
+
+/**
+ * Per-course grade-inflation summary scoped by the same filters as
+ * {@link computeGradeTrends} (discipline / level / season / programFilter), so
+ * the rows match the courses the chart is computed from. Every matched course
+ * with graded data yields a row (sub-guard courses keep `gpaDelta: null`).
+ */
+export function computeCourseLeaderboard(
+  grades: CourseGradesData,
+  filters: TrendFilters = {},
+  options: LeaderboardOptions = {},
+): CourseTrend[] {
+  const minTermVolume = options.minTermVolume ?? DEFAULT_COURSE_MIN_TERM_VOLUME;
+  const minTerms = options.minTerms ?? DEFAULT_MIN_TERMS;
+  const season = filters.season ?? null;
+
+  // normalized course code → termId → summed distribution
+  const byCourse = new Map<string, Map<number, GradeDistribution>>();
+
+  for (const course of grades.courses) {
+    if (!courseMatchesTrendFilters(course.code, filters)) continue;
+    const code = normalizeCourseCode(course.code);
+    for (const prof of course.professors) {
+      const termId = Number(prof.termId);
+      if (!Number.isFinite(termId) || termId === 0) continue;
+      if (season && decodeTermMeta(termId).season !== season) continue;
+      if (!prof.distribution || typeof prof.distribution !== "object") continue;
+      let terms = byCourse.get(code);
+      if (!terms) {
+        terms = new Map();
+        byCourse.set(code, terms);
       }
+      let acc = terms.get(termId);
+      if (!acc) {
+        acc = {};
+        terms.set(termId, acc);
+      }
+      addInto(acc, prof.distribution);
     }
+  }
 
-    if (qualifying.length === 0) continue;
-    qualifying.sort((a, b) => a.sortKey - b.sortKey);
-
-    const earliest = qualifying[0];
-    const latest = qualifying[qualifying.length - 1];
-    const earliestGpa = distributionGpa(earliest.dist);
-    const currentGpa = distributionGpa(latest.dist);
-    const hasDelta = qualifying.length >= minTerms && earliestGpa != null && currentGpa != null;
-
-    out.push({
-      discipline,
-      currentGpa,
-      earliestGpa,
-      gpaDelta: hasDelta ? currentGpa - earliestGpa : null,
-      currentAPlusPct: aPlusPercent(latest.dist),
-      totalVolume,
-      qualifyingTerms: qualifying.length,
-      firstYear: earliest.year || null,
-      lastYear: latest.year || null,
-    });
+  const out: CourseTrend[] = [];
+  for (const [code, terms] of byCourse) {
+    const summary = summarizeTermSeries(terms, minTermVolume, minTerms, true);
+    if (!summary) continue;
+    out.push({ code, ...summary });
   }
 
   return out;

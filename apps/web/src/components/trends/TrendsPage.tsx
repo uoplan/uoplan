@@ -19,8 +19,10 @@ import {
   availableDisciplines,
   availablePrograms,
   buildProgramCourseFilter,
+  computeCourseLeaderboard,
   computeDisciplineLeaderboard,
   computeGradeTrends,
+  normalizeCourseCode,
   programSlug,
   type TrendPoint,
   type TermSeason,
@@ -50,6 +52,18 @@ const SEASON_SHORT: Record<TermSeason, string> = {
 
 const LEADERBOARD_MIN_VOLUME = 50;
 const LEADERBOARD_LIMIT = 10;
+/** Lower per-term volume guard for the finer-grained per-course leaderboard. */
+const COURSE_LEADERBOARD_MIN_VOLUME = 5;
+
+type LeaderboardRow = {
+  key: string;
+  label: string;
+  name: string | null;
+  currentGpa: number | null;
+  gpaDelta: number | null;
+  firstYear: number | null;
+  lastYear: number | null;
+};
 
 const METRIC_COLOR: Record<MetricId, string> = {
   gpa: "violet.5",
@@ -155,11 +169,58 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
     return computeGradeTrends(grades, { discipline, level, season, programFilter }).points;
   }, [grades, discipline, level, season, programFilter]);
 
-  // Leaderboard depends only on grades (global scope, by design).
-  const leaderboard = useMemo(() => {
+  // Leaderboard: per-course rows when scoped to a program/discipline (matching
+  // the chart's course set), otherwise the global per-discipline leaderboard.
+  const filteredMode = programFilter != null || discipline != null;
+
+  const courseTitleByCode = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const course of catalogue?.courses ?? []) {
+      map.set(normalizeCourseCode(course.code), course.title);
+    }
+    return map;
+  }, [catalogue]);
+
+  const leaderboardRows = useMemo<LeaderboardRow[]>(() => {
     if (!grades) return [];
-    return computeDisciplineLeaderboard(grades, { minTermVolume: LEADERBOARD_MIN_VOLUME });
-  }, [grades]);
+    if (filteredMode) {
+      return computeCourseLeaderboard(
+        grades,
+        { discipline, level, season, programFilter },
+        { minTermVolume: COURSE_LEADERBOARD_MIN_VOLUME },
+      ).map((row) => ({
+        key: row.code,
+        label: row.code,
+        name: courseTitleByCode.get(row.code) ?? null,
+        currentGpa: row.currentGpa,
+        gpaDelta: row.gpaDelta,
+        firstYear: row.firstYear,
+        lastYear: row.lastYear,
+      }));
+    }
+    return computeDisciplineLeaderboard(grades, {
+      minTermVolume: LEADERBOARD_MIN_VOLUME,
+      level,
+      season,
+    }).map((row) => ({
+      key: row.discipline,
+      label: row.discipline,
+      name: disciplineNameByCode.get(row.discipline) ?? null,
+      currentGpa: row.currentGpa,
+      gpaDelta: row.gpaDelta,
+      firstYear: row.firstYear,
+      lastYear: row.lastYear,
+    }));
+  }, [
+    grades,
+    filteredMode,
+    discipline,
+    level,
+    season,
+    programFilter,
+    courseTitleByCode,
+    disciplineNameByCode,
+  ]);
 
   const chartData = useMemo(
     () =>
@@ -179,25 +240,49 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
 
   const leaderboardSort = (extras.sort ?? "rise") as LeaderboardSort;
 
-  const rankedDisciplines = useMemo(() => {
-    const rows = [...leaderboard];
+  const rankedRows = useMemo(() => {
+    const rows = [...leaderboardRows];
+    const limit = filteredMode ? rows.length : LEADERBOARD_LIMIT;
     if (leaderboardSort === "rise") {
+      if (filteredMode) {
+        // Keep every matched course; rows without a delta sink to the bottom.
+        return rows.sort((a, b) => {
+          if (a.gpaDelta == null && b.gpaDelta == null) return 0;
+          if (a.gpaDelta == null) return 1;
+          if (b.gpaDelta == null) return -1;
+          return b.gpaDelta - a.gpaDelta;
+        });
+      }
       return rows
         .filter((d) => d.gpaDelta != null)
         .sort((a, b) => (b.gpaDelta ?? 0) - (a.gpaDelta ?? 0))
-        .slice(0, LEADERBOARD_LIMIT);
+        .slice(0, limit);
     }
     if (leaderboardSort === "easiest") {
       return rows
         .filter((d) => d.currentGpa != null)
         .sort((a, b) => (b.currentGpa ?? 0) - (a.currentGpa ?? 0))
-        .slice(0, LEADERBOARD_LIMIT);
+        .slice(0, limit);
     }
     return rows
       .filter((d) => d.currentGpa != null)
       .sort((a, b) => (a.currentGpa ?? 0) - (b.currentGpa ?? 0))
-      .slice(0, LEADERBOARD_LIMIT);
-  }, [leaderboard, leaderboardSort]);
+      .slice(0, limit);
+  }, [leaderboardRows, leaderboardSort, filteredMode]);
+
+  const leaderboardScope = (() => {
+    if (programSlugValue) {
+      const title = programOptions.find((p) => p.value === programSlugValue)?.label;
+      return title ? tr("trends.leaderboard.scopeProgram", { name: title }) : null;
+    }
+    if (discipline) {
+      const name = disciplineNameByCode.get(discipline);
+      return tr("trends.leaderboard.scopeDiscipline", {
+        name: name ? `${discipline} · ${name}` : discipline,
+      });
+    }
+    return tr("trends.leaderboard.scope");
+  })();
 
   const update = (patch: Partial<TrendsSearch>) => {
     const next: Record<string, unknown> = { ...search, ...patch };
@@ -403,11 +488,15 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                 <Group justify="space-between" align="flex-end" wrap="wrap" gap="sm">
                   <Stack gap={2}>
                     <Text fw={600} c="var(--app-text)">
-                      {tr("trends.leaderboard.title")}
+                      {filteredMode
+                        ? tr("trends.leaderboard.titleCourses")
+                        : tr("trends.leaderboard.title")}
                     </Text>
-                    <Text size="xs" c="dimmed">
-                      {tr("trends.leaderboard.scope")}
-                    </Text>
+                    {leaderboardScope ? (
+                      <Text size="xs" c="dimmed">
+                        {leaderboardScope}
+                      </Text>
+                    ) : null}
                   </Stack>
                   <SegmentedControl
                     size="xs"
@@ -425,24 +514,35 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                   <Table highlightOnHover verticalSpacing="xs">
                     <Table.Thead>
                       <Table.Tr>
-                        <Table.Th>{tr("trends.leaderboard.col.discipline")}</Table.Th>
+                        <Table.Th>
+                          {filteredMode
+                            ? tr("trends.leaderboard.col.course")
+                            : tr("trends.leaderboard.col.discipline")}
+                        </Table.Th>
                         <Table.Th ta="right">{tr("trends.leaderboard.col.currentGpa")}</Table.Th>
                         <Table.Th ta="right">{tr("trends.leaderboard.col.change")}</Table.Th>
                         <Table.Th ta="right">{tr("trends.leaderboard.col.span")}</Table.Th>
                       </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                      {rankedDisciplines.map((row) => {
-                        const name = disciplineNameByCode.get(row.discipline);
-                        return (
-                          <Table.Tr key={row.discipline}>
+                      {rankedRows.length === 0 ? (
+                        <Table.Tr>
+                          <Table.Td colSpan={4}>
+                            <Text size="sm" c="dimmed">
+                              {tr("trends.leaderboard.empty")}
+                            </Text>
+                          </Table.Td>
+                        </Table.Tr>
+                      ) : (
+                        rankedRows.map((row) => (
+                          <Table.Tr key={row.key}>
                             <Table.Td>
                               <Text size="sm" fw={600} c="var(--app-text)">
-                                {row.discipline}
+                                {row.label}
                               </Text>
-                              {name ? (
+                              {row.name ? (
                                 <Text size="xs" c="dimmed">
-                                  {name}
+                                  {row.name}
                                 </Text>
                               ) : null}
                             </Table.Td>
@@ -481,8 +581,8 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                               </Text>
                             </Table.Td>
                           </Table.Tr>
-                        );
-                      })}
+                        ))
+                      )}
                     </Table.Tbody>
                   </Table>
                 </Table.ScrollContainer>

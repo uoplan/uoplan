@@ -150,6 +150,21 @@ msgstr ""
 #~ msgid "trends.leaderboard.col.span"
 #~ msgstr "Période"
 
+#~ msgid "trends.leaderboard.titleCourses"
+#~ msgstr "Cours dans le temps"
+
+#~ msgid "trends.leaderboard.col.course"
+#~ msgstr "Cours"
+
+#~ msgid "trends.leaderboard.scopeProgram"
+#~ msgstr "Cours de {name}"
+
+#~ msgid "trends.leaderboard.scopeDiscipline"
+#~ msgstr "Cours en {name}"
+
+#~ msgid "trends.leaderboard.empty"
+#~ msgstr "Aucun cours avec des données de notes ne correspond à ce filtre pour l’instant."
+
 #~ msgid "app.constraints.description"
 #~ msgstr "Épinglez des cours à des exigences précises - le générateur utilise d'abord vos choix, puis complète les placés restantes avec d'autres cours admissibles."
 
