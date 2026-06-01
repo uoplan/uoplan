@@ -124,6 +124,28 @@ export interface ExpandConstrainedResult {
   groupTokenSelections: Map<string, Map<string, number>>;
 }
 
+/**
+ * Build the full requirement universe the advanced generator schedules against: the base remaining
+ * requirements plus any requirements reachable through currently-selected option-group branches.
+ * Exported so callers (warnings UI + generation adapter) can resolve desired courses against the
+ * exact same set the engine uses, avoiding misclassification of branch-only courses.
+ */
+export function buildEffectiveRemainingRequirements(
+  remainingRequirements: RemainingRequirement[],
+  requirementTreeWithStatus: RequirementWithStatus[],
+  selectedOptionsPerRequirement: Record<string, number>,
+): RemainingRequirement[] {
+  const existingIds = new Set(
+    remainingRequirements.map((r) => r.requirementId).filter((id): id is string => id != null),
+  );
+  const branchRequirements = collectRequirementsFromSelectedBranches(
+    requirementTreeWithStatus,
+    selectedOptionsPerRequirement,
+    existingIds,
+  );
+  return [...remainingRequirements, ...branchRequirements];
+}
+
 export function expandConstrainedPerRequirement(
   raw: Record<string, string[]>,
 ): ExpandConstrainedResult {
@@ -416,6 +438,19 @@ export interface AdvancedScheduleParams {
   frenchImmersionStream: boolean;
   programTitle: string | undefined;
   blacklistedCourses: string[];
+  /**
+   * Elective subject prefixes (e.g. "CSI") to exclude from BROAD elective pools only. Mirrors the
+   * basic generator's `basicExcludedCategories`; scoped to broad-elective pools so it can never make
+   * a required/explicit course pool unsatisfiable in advanced mode.
+   */
+  basicExcludedCategories?: string[];
+  /**
+   * Courses the user explicitly wants this term that did NOT map to any remaining requirement
+   * (the unified "courses you want" list, standalone branch). They are force-pinned as their own
+   * pool: scheduled unconditionally, bypassing requirement membership and prerequisite eligibility,
+   * but still validated against schedule availability and section/time constraints.
+   */
+  forcedCourses?: string[];
   currentSeed: number;
   firstSeed: number;
 }
@@ -449,6 +484,8 @@ export function generateAdvancedSchedule(params: AdvancedScheduleParams): Advanc
     frenchImmersionStream,
     programTitle,
     blacklistedCourses,
+    basicExcludedCategories = [],
+    forcedCourses = [],
     currentSeed,
     firstSeed,
   } = params;
@@ -466,15 +503,11 @@ export function generateAdvancedSchedule(params: AdvancedScheduleParams): Advanc
     : undefined;
 
   // Build effectiveRemainingRequirements: base + branch requirements from selected option branches
-  const existingReqIds = new Set(
-    remainingRequirements.map((r) => r.requirementId).filter((id): id is string => id != null),
-  );
-  const branchRequirements = collectRequirementsFromSelectedBranches(
+  const effectiveRemainingRequirements = buildEffectiveRemainingRequirements(
+    remainingRequirements,
     requirementTreeWithStatus,
     selectedOptionsPerRequirement,
-    existingReqIds,
   );
-  const effectiveRemainingRequirements = [...remainingRequirements, ...branchRequirements];
 
   const { individualSelections: constrainedPerRequirement, groupTokenSelections } =
     expandConstrainedPerRequirement(constrainedPerRequirementRaw);
@@ -501,6 +534,16 @@ export function generateAdvancedSchedule(params: AdvancedScheduleParams): Advanc
   const completedSet = new Set(completedCourses.map(normalizeCourseCode));
   const prereqEligibleSet = new Set(prereqEligibleCourses);
   const blacklistedSet = new Set(blacklistedCourses.map(normalizeCourseCode));
+  const excludedElectivePrefixes = new Set(basicExcludedCategories.map((c) => c.toLowerCase()));
+
+  /** True if `code`'s subject prefix is excluded AND the pool is a broad elective pool. */
+  function isExcludedElectiveSubject(code: string, poolType: string | undefined): boolean {
+    if (excludedElectivePrefixes.size === 0) return false;
+    if (!isBroadElectivePoolType(poolType)) return false;
+    const prefixMatch = code.match(/^([A-Z]{3,4})/i);
+    const prefix = prefixMatch ? prefixMatch[1].toLowerCase() : "";
+    return excludedElectivePrefixes.has(prefix);
+  }
 
   const allConstrained = Object.values(constrainedPerRequirement).flat();
   const uniqueConstrained = [...new Set(allConstrained)];
@@ -569,11 +612,32 @@ export function generateAdvancedSchedule(params: AdvancedScheduleParams): Advanc
     effectiveTarget,
   );
 
+  // Force-pin "courses you want" that matched no remaining requirement: scheduled
+  // unconditionally, bypassing requirement membership and prerequisite eligibility, but still
+  // validated against schedule availability and the active section/time constraints. Added to
+  // explicitExemptNormalized so the virtual-only filter never strips their sections.
+  const forcedPinned: string[] = [];
+  const forcedSeen = new Set<string>();
+  for (const code of forcedCourses) {
+    const norm = normalizeCourseCode(code);
+    if (forcedSeen.has(norm) || completedSet.has(norm)) continue;
+    if (isHonoursProject(code, cache)) continue;
+    const sched = getEffectiveSchedule(cache, code, includeClosedComponents, false);
+    if (!sched) continue;
+    if (getValidSectionCombos(sched, constraints).length === 0) continue;
+    forcedSeen.add(norm);
+    forcedPinned.push(code);
+    explicitExemptNormalized.add(norm);
+  }
+
   const pinned: string[] = [...honoursSelected];
   if (pinAllExplicit) {
     for (const code of explicitUnion) {
       if (!pinned.includes(code)) pinned.push(code);
     }
+  }
+  for (const code of forcedPinned) {
+    if (!pinned.includes(code)) pinned.push(code);
   }
 
   function requirementIdForConstrainedCode(code: string): string | undefined {
@@ -623,6 +687,7 @@ export function generateAdvancedSchedule(params: AdvancedScheduleParams): Advanc
     }
     if (isHonoursProject(code, cache)) return false;
     if (isElectiveRequirementType(poolType) && !isWithinElectiveLevelCap(code)) return false;
+    if (isExcludedElectiveSubject(code, poolType)) return false;
     if (getValidSectionCombos(sched, constraints).length === 0) return false;
     if (blacklistedSet.has(normalizeCourseCode(code))) return false;
     return true;
@@ -707,6 +772,7 @@ export function generateAdvancedSchedule(params: AdvancedScheduleParams): Advanc
           continue;
         }
         if (isElectiveRequirementType(pool.type) && !isWithinElectiveLevelCap(code)) continue;
+        if (isExcludedElectiveSubject(code, pool.type)) continue;
         if (electiveLevelBuckets.length > 0 && isBroadElectivePoolType(pool.type)) {
           const match = code.match(/\d{4}/);
           if (match) {
@@ -1069,19 +1135,17 @@ export function generateAdvancedSchedule(params: AdvancedScheduleParams): Advanc
 
   if (remainingNeeded <= 0) {
     filteredOptionalPool = [];
-    // remainingNeeded <= 0 means pinned already fills (or over-fills) every slot.
-    // The legacy solver returned [] when pinned.length > coursesThisSemester, so a
-    // schedule is only produced when the pinned set exactly matches the target — in
-    // which case it is a fixed course set the enumerator arranges directly.
-    if (pinned.length <= coursesThisSemester) {
-      const arranged = firstSeededArrangement(
-        pinned,
-        effectiveCache,
-        timetablePipeline,
-        arrangementRng,
-      );
-      if (arranged) foundSchedule = arranged;
-    }
+    // remainingNeeded <= 0 means pinned already fills (or over-fills) every slot. All pinned
+    // courses — including force-pinned "courses you want" and constrained picks that exceed
+    // coursesThisSemester — are scheduled together: the target is effectively clamped up to the
+    // pinned count so a desired/forced course is never silently dropped.
+    const arranged = firstSeededArrangement(
+      pinned,
+      effectiveCache,
+      timetablePipeline,
+      arrangementRng,
+    );
+    if (arranged) foundSchedule = arranged;
   }
 
   return { schedule: foundSchedule, filteredOptionalPool, pinned, poolDiagnostics };

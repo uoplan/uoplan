@@ -18,11 +18,13 @@ import {
   type TimetableFailureDiagnostics,
   generateBasicSchedule,
   generateAdvancedSchedule,
+  buildEffectiveRemainingRequirements,
   buildCourseDifficultyIndexFromCache,
   type PoolDiagnostics,
 } from "@uoplan/core";
 import { buildColorMap } from "./colorMap";
 import { avoidedDaysFromBlocks } from "./blockedTimes";
+import { resolveDesiredCourses } from "./generation/resolveDesiredCourses";
 
 // Re-export helpers used by tests and other modules
 export { expandConstrainedPerRequirement, buildPendingGroupPickCounts } from "@uoplan/core";
@@ -236,6 +238,8 @@ export async function generateSchedulesAction(
     constrainedPerRequirement: rawConstrainedPerRequirement,
     coursesThisSemester,
     completedCourses,
+    basicPinnedCourses,
+    basicExcludedCategories,
     prereqEligibleCourses,
     unassignedCompletedCourses,
     levelBuckets,
@@ -342,11 +346,44 @@ export async function generateSchedulesAction(
     minProfessorRating: generationMinProfessorRating ?? undefined,
     professorRatings: professorRatings ?? undefined,
     maxFirstYearCredits: generationLimitFirstYearCredits
-      ? 48 - (completedFirstYearCredits ?? 0)
+      ? Math.max(0, 48 - (completedFirstYearCredits ?? 0))
       : undefined,
     compressedSchedule: generationCompressedSchedule,
     blockedTimes: input.blockedTimes,
   };
+
+  // Resolve the unified "courses you want" list against the SAME requirement universe the engine
+  // schedules against (base + selected option branches): prereq-eligible courses that match a
+  // requirement are unioned into the constrained map (so they count toward that requirement); the
+  // rest are force-pinned as their own pool.
+  const effectiveRemainingRequirements = buildEffectiveRemainingRequirements(
+    remainingRequirements,
+    requirementTreeWithStatus,
+    selectedOptionsPerRequirement,
+  );
+  const desiredResolution = resolveDesiredCourses(
+    effectiveRemainingRequirements,
+    basicPinnedCourses,
+    completedCourses,
+    rawConstrainedPerRequirement,
+    selectedPerRequirement,
+    prereqEligibleCourses,
+    cache,
+  );
+
+  const effectiveConstrainedPerRequirement: Record<string, string[]> = {};
+  for (const [reqId, codes] of Object.entries(rawConstrainedPerRequirement)) {
+    effectiveConstrainedPerRequirement[reqId] = [...codes];
+  }
+  for (const [reqId, codes] of Object.entries(desiredResolution.assigned)) {
+    const existing = effectiveConstrainedPerRequirement[reqId] ?? [];
+    const merged = new Set(existing.map((c) => normalizeCourseCode(c)));
+    const out = [...existing];
+    for (const code of codes) {
+      if (!merged.has(normalizeCourseCode(code))) out.push(code);
+    }
+    effectiveConstrainedPerRequirement[reqId] = out;
+  }
 
   const result = generateAdvancedSchedule({
     cache,
@@ -355,10 +392,11 @@ export async function generateSchedulesAction(
     prereqEligibleCourses,
     remainingRequirements,
     requirementTreeWithStatus,
-    constrainedPerRequirementRaw: rawConstrainedPerRequirement,
+    constrainedPerRequirementRaw: effectiveConstrainedPerRequirement,
     selectedPerRequirement,
     selectedOptionsPerRequirement,
     coursesThisSemester,
+    forcedCourses: desiredResolution.standalone,
     levelBuckets,
     languageBuckets,
     electiveLevelBuckets,
@@ -369,6 +407,7 @@ export async function generateSchedulesAction(
     frenchImmersionStream,
     programTitle: program?.title,
     blacklistedCourses: input.blacklistedCourses ?? [],
+    basicExcludedCategories,
     currentSeed,
     firstSeed,
   });
@@ -460,6 +499,8 @@ async function handleBasicGeneration(
     includeClosedComponents,
     virtualSectionsOnly,
     generationPreferEasier,
+    generationCompressedSchedule,
+    generationLimitFirstYearCredits,
     completedCourses,
     studentPrograms,
     program,
@@ -467,11 +508,22 @@ async function handleBasicGeneration(
     blacklistedCourses: basicBlacklistedCourses,
   } = input;
 
+  const completedFirstYearCredits = completedCourses.reduce((sum, code) => {
+    const m = code.match(/\d{4}/);
+    if (!m || Number(m[0]) >= 2000) return sum;
+    const course = cache.getCourse(code);
+    return sum + (course?.credits ?? 3);
+  }, 0);
+
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,
     maxEndMinutes: generationMaxEndMinutes,
     minProfessorRating: generationMinProfessorRating ?? undefined,
     professorRatings: professorRatings ?? undefined,
+    maxFirstYearCredits: generationLimitFirstYearCredits
+      ? Math.max(0, 48 - completedFirstYearCredits)
+      : undefined,
+    compressedSchedule: generationCompressedSchedule,
     blockedTimes: input.blockedTimes,
   };
 

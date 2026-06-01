@@ -18,7 +18,6 @@ import {
 
 import { tr } from "../../i18n";
 
-import { AdvancedCourseFiltersCard } from "./CourseFiltersCard";
 import { CompletedRequirementsAccordion } from "./CompletedRequirementsAccordion";
 import { FrenchImmersionRequirementsReadout } from "./FrenchImmersionRequirementsReadout";
 import { useAppStore } from "../../store/appStore";
@@ -39,13 +38,8 @@ export interface ConstrainStepProps {
   levelBuckets: ("undergrad" | "grad")[];
   languageBuckets: ("en" | "fr" | "other")[];
   electiveLevelBuckets: number[];
-  onChangeLevelBuckets: (buckets: ("undergrad" | "grad")[]) => void;
-  onChangeLanguageBuckets: (buckets: ("en" | "fr" | "other")[]) => void;
-  onChangeElectiveLevelBuckets: (buckets: number[]) => void;
   includeClosedComponents: boolean;
-  onIncludeClosedComponentsChange: (value: boolean) => void;
   virtualSectionsOnly: boolean;
-  onVirtualSectionsOnlyChange: (value: boolean) => void;
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -63,14 +57,9 @@ export function ConstrainStep({
   prereqEligibleCourses,
   levelBuckets,
   languageBuckets,
-  onChangeLevelBuckets,
-  onChangeLanguageBuckets,
   electiveLevelBuckets,
-  onChangeElectiveLevelBuckets,
   includeClosedComponents,
-  onIncludeClosedComponentsChange,
   virtualSectionsOnly,
-  onVirtualSectionsOnlyChange,
 }: ConstrainStepProps) {
   const [collapsedUnavailableOpen, setCollapsedUnavailableOpen] = useState(false);
 
@@ -174,18 +163,6 @@ export function ConstrainStep({
       {frenchImmersionStream && unassignedCount === 0 ? (
         <FrenchImmersionRequirementsReadout />
       ) : null}
-      <AdvancedCourseFiltersCard
-        levelBuckets={levelBuckets}
-        languageBuckets={languageBuckets}
-        electiveLevelBuckets={electiveLevelBuckets}
-        includeClosedComponents={includeClosedComponents}
-        onChangeLevelBuckets={onChangeLevelBuckets}
-        onChangeLanguageBuckets={onChangeLanguageBuckets}
-        onChangeElectiveLevelBuckets={onChangeElectiveLevelBuckets}
-        onIncludeClosedComponentsChange={onIncludeClosedComponentsChange}
-        virtualSectionsOnly={virtualSectionsOnly}
-        onVirtualSectionsOnlyChange={onVirtualSectionsOnlyChange}
-      />
 
       <Stack gap="md">
         {hasRemaining ? (

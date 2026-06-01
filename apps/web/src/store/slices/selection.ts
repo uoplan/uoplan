@@ -2,7 +2,7 @@ import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
 import { recomputeStateForProgram, getDisciplineCodesForProgram } from "../requirementCompute";
 import type { CourseLanguageBucket } from "@uoplan/core";
-import { generateRandomSeed } from "@uoplan/core";
+import { generateRandomSeed, normalizeCourseCode } from "@uoplan/core";
 import { getMergedCatalogue } from "./catalogueUtils";
 import { buildCacheWithOpt } from "../../lib/dataCacheLoader";
 import { pruneOptionSelectionsForClear } from "../../lib/requirements/requirementUtils";
@@ -22,6 +22,22 @@ import {
 } from "../generationDefaults";
 import { defaultBlockedTimes } from "../../lib/blockedTimes";
 
+/** Structural equality for `Record<string, string[]>` (same keys, same arrays in order). */
+function shallowRecordEqual(a: Record<string, string[]>, b: Record<string, string[]>): boolean {
+  const aKeys = Object.keys(a);
+  const bKeys = Object.keys(b);
+  if (aKeys.length !== bKeys.length) return false;
+  for (const key of aKeys) {
+    const av = a[key];
+    const bv = b[key];
+    if (!bv || av.length !== bv.length) return false;
+    for (let i = 0; i < av.length; i++) {
+      if (av[i] !== bv[i]) return false;
+    }
+  }
+  return true;
+}
+
 interface SelectionSlice {
   setBasicPinnedCourses: AppStore["setBasicPinnedCourses"];
   setBasicElectivesCount: AppStore["setBasicElectivesCount"];
@@ -34,6 +50,7 @@ interface SelectionSlice {
   removeCompletedCourse: AppStore["removeCompletedCourse"];
   setSelectedForRequirement: AppStore["setSelectedForRequirement"];
   setConstrainedForRequirement: AppStore["setConstrainedForRequirement"];
+  applyDesiredAutoAssignments: AppStore["applyDesiredAutoAssignments"];
   setSelectedOptionForRequirement: AppStore["setSelectedOptionForRequirement"];
   clearSelectedOptionForRequirement: AppStore["clearSelectedOptionForRequirement"];
   setCoursesThisSemester: AppStore["setCoursesThisSemester"];
@@ -56,6 +73,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       minorProgram: null, // Clear minor when main program changes
       studentPrograms,
       constrainedPerRequirement: {},
+      autoConstrainedPerRequirement: {},
       requirementSlotsUserTouched: {},
     });
     const { cache, completedCourses, levelBuckets, languageBuckets, includeClosedComponents } =
@@ -80,6 +98,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
     set({
       minorProgram,
       constrainedPerRequirement: {},
+      autoConstrainedPerRequirement: {},
       requirementSlotsUserTouched: {},
     });
     const {
@@ -410,6 +429,50 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
     }));
   },
 
+  applyDesiredAutoAssignments: (assigned) => {
+    set((s) => {
+      const prevAuto = s.autoConstrainedPerRequirement;
+      const nextConstrained: Record<string, string[]> = { ...s.constrainedPerRequirement };
+      const nextAuto: Record<string, string[]> = {};
+
+      const reqIds = new Set([...Object.keys(prevAuto), ...Object.keys(assigned)]);
+      for (const reqId of reqIds) {
+        const prevAutoNorm = new Set((prevAuto[reqId] ?? []).map((c) => normalizeCourseCode(c)));
+        // Manual picks = whatever is constrained today minus what we auto-added last time.
+        const manualBase = (s.constrainedPerRequirement[reqId] ?? []).filter(
+          (c) => !prevAutoNorm.has(normalizeCourseCode(c)),
+        );
+        const manualNorm = new Set(manualBase.map((c) => normalizeCourseCode(c)));
+
+        // Only track as auto the assigned courses that aren't already manual picks, so removing a
+        // desired course never clobbers a course the user locked manually.
+        const autoAdd: string[] = [];
+        for (const code of assigned[reqId] ?? []) {
+          const norm = normalizeCourseCode(code);
+          if (manualNorm.has(norm) || autoAdd.some((c) => normalizeCourseCode(c) === norm))
+            continue;
+          autoAdd.push(code);
+        }
+
+        const merged = [...manualBase, ...autoAdd];
+        if (merged.length > 0) nextConstrained[reqId] = merged;
+        else delete nextConstrained[reqId];
+        if (autoAdd.length > 0) nextAuto[reqId] = autoAdd;
+      }
+
+      if (
+        shallowRecordEqual(nextConstrained, s.constrainedPerRequirement) &&
+        shallowRecordEqual(nextAuto, prevAuto)
+      ) {
+        return {};
+      }
+      return {
+        constrainedPerRequirement: nextConstrained,
+        autoConstrainedPerRequirement: nextAuto,
+      };
+    });
+  },
+
   setCoursesThisSemester: (n) => set({ coursesThisSemester: n }),
 
   clearGenerationOptions: () => {
@@ -436,6 +499,8 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
 
     set({
       coursesThisSemester: DEFAULT_COURSES_THIS_SEMESTER,
+      basicPinnedCourses: [],
+      basicExcludedCategories: [],
       generationMinStartMinutes: DEFAULT_GENERATION_MIN_START_MINUTES,
       generationMaxEndMinutes: DEFAULT_GENERATION_MAX_END_MINUTES,
       generationMinProfessorRating: DEFAULT_GENERATION_MIN_PROFESSOR_RATING,
@@ -450,6 +515,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       includeClosedComponents: false,
       virtualSectionsOnly: false,
       constrainedPerRequirement: {},
+      autoConstrainedPerRequirement: {},
       currentSchedule: null,
       currentPoolMap: {},
       currentColorMap: {},

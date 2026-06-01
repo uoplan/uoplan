@@ -3,6 +3,13 @@ import type { AppStore } from "../types";
 import { generateRandomSeed } from "@uoplan/core";
 import { normalizeBlockedTimes, reconcileAvoidedDays } from "../../lib/blockedTimes";
 
+/** Regenerate using the path matching the active calendar mode (basic vs advanced). */
+function regenerateForActiveMode(get: () => AppStore): void {
+  void (get().calendarMode === "basic"
+    ? get().generateBasicSchedules()
+    : get().generateSchedules());
+}
+
 interface ConstraintsSlice {
   setGenerationMinStartMinutes: AppStore["setGenerationMinStartMinutes"];
   setGenerationMaxEndMinutes: AppStore["setGenerationMaxEndMinutes"];
@@ -45,7 +52,7 @@ export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsS
       currentSeed: 0,
       lowestVisitedSeed: null,
     });
-    void get().generateSchedules();
+    regenerateForActiveMode(get);
   },
 
   setGenerationMinProfessorRating: (rating) =>
@@ -75,7 +82,7 @@ export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsS
       currentSeed: 0,
       lowestVisitedSeed: null,
     });
-    void get().generateSchedules();
+    regenerateForActiveMode(get);
   },
 
   updateBlockedTime: (id, window) => {
@@ -88,7 +95,7 @@ export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsS
       currentSeed: 0,
       lowestVisitedSeed: null,
     });
-    void get().generateSchedules();
+    regenerateForActiveMode(get);
   },
 
   removeBlockedTime: (id) => {
@@ -100,6 +107,6 @@ export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsS
       currentSeed: 0,
       lowestVisitedSeed: null,
     });
-    void get().generateSchedules();
+    regenerateForActiveMode(get);
   },
 });
