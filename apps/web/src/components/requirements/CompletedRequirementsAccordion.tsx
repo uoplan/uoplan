@@ -1,7 +1,15 @@
-import { useState, type MouseEvent } from "react";
+import { useState, type KeyboardEvent, type MouseEvent } from "react";
 import { Paper, Group, Text, Badge, Collapse, Stack, Box, Tooltip } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import type { CompletedRequirementItem } from "@uoplan/core";
+
+function handleToggleKey(e: KeyboardEvent<HTMLElement>, toggle: () => void) {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    e.stopPropagation();
+    toggle();
+  }
+}
 
 interface CompletedRequirementsAccordionProps {
   completedItems: CompletedRequirementItem[];
@@ -11,6 +19,7 @@ export function CompletedRequirementsAccordion({
   completedItems,
 }: CompletedRequirementsAccordionProps) {
   const [completedOpen, setCompletedOpen] = useState(false);
+  const toggleCompletedOpen = () => setCompletedOpen((o) => !o);
 
   if (completedItems.length === 0) {
     return null;
@@ -27,8 +36,12 @@ export function CompletedRequirementsAccordion({
       }}
       onClick={(e: MouseEvent) => {
         e.stopPropagation();
-        setCompletedOpen((o) => !o);
+        toggleCompletedOpen();
       }}
+      onKeyDown={(e) => handleToggleKey(e, toggleCompletedOpen)}
+      role="button"
+      tabIndex={0}
+      aria-expanded={completedOpen}
     >
       <Group align="center" gap="xs" mb={completedOpen ? "sm" : 0}>
         <IconChevronDown

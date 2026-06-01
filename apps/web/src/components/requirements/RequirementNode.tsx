@@ -1,4 +1,4 @@
-import { useState, useMemo, memo, type MouseEvent } from "react";
+import { useState, useMemo, memo, type KeyboardEvent } from "react";
 import {
   Stack,
   MultiSelect,
@@ -32,6 +32,13 @@ const REQUIREMENT_BASE_PADDING_PX = 10;
 
 const TITLE_FLEX = { flex: 1, minWidth: 0 } as const;
 const BADGE_NO_SHRINK = { flexShrink: 0 } as const;
+
+function handleKeyboardToggle(e: KeyboardEvent<HTMLElement>, toggle: () => void) {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    toggle();
+  }
+}
 
 export function getStableNodeKey(node: RequirementWithStatus, fallback: string): string {
   if (node.requirementId) return `req:${node.requirementId}`;
@@ -123,8 +130,8 @@ export const RequirementNode = memo(
 
     const collapseIn = opened;
 
-    const toggleLocal = (e: MouseEvent) => {
-      e.stopPropagation();
+    const toggleLocal = (e?: { stopPropagation: () => void }) => {
+      e?.stopPropagation();
       if (!hasOptions) return;
       setOpened((o) => !o);
     };
@@ -446,6 +453,10 @@ export const RequirementNode = memo(
             wrap="nowrap"
             mb={0}
             onClick={toggleLocal}
+            onKeyDown={(e) => handleKeyboardToggle(e, toggleLocal)}
+            role="button"
+            tabIndex={0}
+            aria-expanded={opened}
             style={{ cursor: "pointer" }}
           >
             <Group gap="xs" align="center" style={TITLE_FLEX}>
@@ -550,6 +561,10 @@ export const RequirementNode = memo(
             wrap="nowrap"
             mb={0}
             onClick={toggleLocal}
+            onKeyDown={(e) => handleKeyboardToggle(e, toggleLocal)}
+            role="button"
+            tabIndex={0}
+            aria-expanded={opened}
             style={{ cursor: "pointer" }}
           >
             <Group gap="xs" align="center" style={TITLE_FLEX}>
@@ -630,6 +645,10 @@ export const RequirementNode = memo(
               wrap="nowrap"
               mb={0}
               onClick={toggleLocal}
+              onKeyDown={(e) => handleKeyboardToggle(e, toggleLocal)}
+              role="button"
+              tabIndex={0}
+              aria-expanded={opened}
               style={{ cursor: "pointer" }}
             >
               <Group gap="xs" align="center" style={TITLE_FLEX}>
@@ -736,6 +755,10 @@ export const RequirementNode = memo(
             wrap="nowrap"
             align="flex-start"
             onClick={hasOptions ? toggleLocal : undefined}
+            onKeyDown={hasOptions ? (e) => handleKeyboardToggle(e, toggleLocal) : undefined}
+            role={hasOptions ? "button" : undefined}
+            tabIndex={hasOptions ? 0 : undefined}
+            aria-expanded={hasOptions ? opened : undefined}
             style={hasOptions ? { cursor: "pointer" } : undefined}
           >
             <Group gap="xs" align="flex-start" style={TITLE_FLEX}>

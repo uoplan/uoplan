@@ -14,6 +14,8 @@ import {
 const MIN_BLOCK_MINUTES = 30;
 const MOVE_THRESHOLD_PX = 6;
 const LONG_PRESS_MS = 350;
+const BLOCKED_TIME_RESIZE_START_LABEL_ID = "calendar.blockedTime.resizeStart";
+const BLOCKED_TIME_RESIZE_END_LABEL_ID = "calendar.blockedTime.resizeEnd";
 
 type GestureKind = "create" | "move" | "resize-top" | "resize-bottom";
 
@@ -250,6 +252,35 @@ export function BlockedTimeLayer({
     setDraft(null);
   }, []);
 
+  const resizeBlockWithKeyboard = useCallback(
+    (e: React.KeyboardEvent, block: BlockedTime, edge: "start" | "end") => {
+      if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      const delta = e.key === "ArrowUp" ? -MIN_BLOCK_MINUTES : MIN_BLOCK_MINUTES;
+      const nextStart =
+        edge === "start"
+          ? Math.max(
+              CAL_START_MINUTES,
+              Math.min(block.startMinutes + delta, block.endMinutes - MIN_BLOCK_MINUTES),
+            )
+          : block.startMinutes;
+      const nextEnd =
+        edge === "end"
+          ? Math.min(
+              CAL_END_MINUTES,
+              Math.max(block.endMinutes + delta, block.startMinutes + MIN_BLOCK_MINUTES),
+            )
+          : block.endMinutes;
+
+      if (nextStart !== block.startMinutes || nextEnd !== block.endMinutes) {
+        onCommitUpdate(block.id, nextStart, nextEnd);
+      }
+    },
+    [onCommitUpdate],
+  );
+
   const renderedBlocks = blocks.map((b) =>
     draft && draft.blockId === b.id
       ? { id: b.id, day, startMinutes: draft.startMinutes, endMinutes: draft.endMinutes }
@@ -291,16 +322,40 @@ export function BlockedTimeLayer({
           >
             <div
               className="cal-blocked-handle cal-blocked-handle-top"
+              role="slider"
+              tabIndex={0}
+              aria-label={tr(BLOCKED_TIME_RESIZE_START_LABEL_ID)}
+              aria-orientation="vertical"
+              aria-valuemin={CAL_START_MINUTES}
+              aria-valuemax={b.endMinutes - MIN_BLOCK_MINUTES}
+              aria-valuenow={b.startMinutes}
               onPointerDown={(e) => {
                 const block = blocks.find((bl) => bl.id === b.id);
                 if (block) startGesture(e, "resize-top", block);
               }}
+              onKeyDown={(e) => {
+                e.stopPropagation();
+                const block = blocks.find((bl) => bl.id === b.id);
+                if (block) resizeBlockWithKeyboard(e, block, "start");
+              }}
             />
             <div
               className="cal-blocked-handle cal-blocked-handle-bottom"
+              role="slider"
+              tabIndex={0}
+              aria-label={tr(BLOCKED_TIME_RESIZE_END_LABEL_ID)}
+              aria-orientation="vertical"
+              aria-valuemin={b.startMinutes + MIN_BLOCK_MINUTES}
+              aria-valuemax={CAL_END_MINUTES}
+              aria-valuenow={b.endMinutes}
               onPointerDown={(e) => {
                 const block = blocks.find((bl) => bl.id === b.id);
                 if (block) startGesture(e, "resize-bottom", block);
+              }}
+              onKeyDown={(e) => {
+                e.stopPropagation();
+                const block = blocks.find((bl) => bl.id === b.id);
+                if (block) resizeBlockWithKeyboard(e, block, "end");
               }}
             />
           </div>

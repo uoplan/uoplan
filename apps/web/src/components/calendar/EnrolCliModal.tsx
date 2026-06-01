@@ -10,7 +10,9 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { IconCheck, IconCopy, IconDeviceMobileOff } from "@tabler/icons-react";
-import { useTr, tr } from "../../i18n";
+import { useTr } from "../../i18n";
+
+const COPY_CODE_LABEL_ID = "enrolCli.modal.copyCode";
 
 interface EnrolCliModalProps {
   opened: boolean;
@@ -26,7 +28,7 @@ function getInstallCommand(): string | null {
 }
 
 function CopyRow({ value }: { value: string }) {
-  useTr();
+  const tr = useTr();
   return (
     <Group gap="xs" wrap="nowrap" align="center">
       <Code block style={{ flex: 1, wordBreak: "break-all" }}>
@@ -38,7 +40,13 @@ function CopyRow({ value }: { value: string }) {
             label={copied ? tr("enrolCli.modal.copied") : tr("enrolCli.modal.copy")}
             withArrow
           >
-            <ActionIcon variant="light" color={copied ? "teal" : "gray"} onClick={copy}>
+            <ActionIcon
+              variant="light"
+              color={copied ? "teal" : "gray"}
+              onClick={copy}
+              aria-label={tr(COPY_CODE_LABEL_ID)}
+              title={tr(COPY_CODE_LABEL_ID)}
+            >
               {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
             </ActionIcon>
           </Tooltip>
@@ -49,7 +57,7 @@ function CopyRow({ value }: { value: string }) {
 }
 
 export function EnrolCliModal({ opened, onClose, command }: EnrolCliModalProps) {
-  useTr();
+  const tr = useTr();
   const installCommand = getInstallCommand();
 
   return (

@@ -282,6 +282,10 @@ msgstr "Niveaux"
 msgid "basicCourseFilters.title"
 msgstr "Options de cours à option"
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basicCourseFilters.toggle"
+msgstr "Afficher ou masquer les filtres de cours"
+
 msgid "calendar.blockedTime.label"
 msgstr "Plage bloquée"
 
@@ -296,6 +300,18 @@ msgstr "Retirer"
 
 msgid "calendar.blockedTime.removeTitle"
 msgstr "Retirer la plage bloquée?"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "calendar.blockedTime.resizeEnd"
+msgstr "Ajuster la fin du bloc de temps indisponible"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "calendar.blockedTime.resizeStart"
+msgstr "Ajuster le début du bloc de temps indisponible"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "calendar.event.ariaLabel"
+msgstr "{courseCode} {component}, {timeRange}"
 
 msgid "calendar.event.virtual"
 msgstr "Virtuel"
@@ -465,6 +481,14 @@ msgstr "Horaire semaine {current}/{total}"
 msgid "calendarView.empty"
 msgstr "Aucun horaire n'à encore ete généré. Completez les étapes ci-dessus et cliquez sur Générer."
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "calendarView.nextWeek"
+msgstr "Semaine suivante"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "calendarView.previousWeek"
+msgstr "Semaine précédente"
+
 msgid "completedCourses.description"
 msgstr "Cours que vous avez terminés ou que vous suivez. Vous pouvez aussi téléverser votre relevé à l'étape 1."
 
@@ -524,6 +548,10 @@ msgstr "Copié !"
 
 msgid "enrolCli.modal.copy"
 msgstr "Copier"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "enrolCli.modal.copyCode"
+msgstr "Copier le code"
 
 msgid "enrolCli.modal.description"
 msgstr "Collez cette commande dans votre terminal pour vous inscrire à cet horaire."
@@ -1263,8 +1291,20 @@ msgstr "Aucune option à configurer pour ce programme."
 msgid "optionsStep.note"
 msgstr "Choisissez une option pour chaque choix ci-dessous. Votre sélection révèle les choix suivants; utilisez Modifier pour changer de parcours."
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "optionsStep.pager.complete"
+msgstr "terminé"
+
 msgid "optionsStep.pager.goTo"
 msgstr "Aller au choix {number}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "optionsStep.pager.goToWithStatus"
+msgstr "Aller au choix {number} sur {total}, {status}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "optionsStep.pager.incomplete"
+msgstr "incomplet"
 
 msgid "optionsStep.pager.next"
 msgstr "Choix suivant"
@@ -1724,6 +1764,54 @@ msgstr "Choisir la session"
 
 msgid "stepNav.title"
 msgstr "Étapes"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.conflictsWith"
+msgstr "En conflit avec {course}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.loading"
+msgstr "Recherche d’options de remplacement…"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.noAlternatives"
+msgstr "Aucun cours de remplacement compatible avec votre horaire."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.noMatches"
+msgstr "Aucun résultat"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.option.conflictAria"
+msgstr "{course} est en conflit avec {conflict}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.option.selectAria"
+msgstr "Remplacer par {course}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.poolHad"
+msgstr "Le groupe contenait {count} cours"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.searchPlaceholder"
+msgstr "Rechercher des cours…"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.sort.alpha"
+msgstr "A–Z"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.sort.aplus"
+msgstr "A+"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.sort.rating"
+msgstr "★ Note"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.sortBy"
+msgstr "Trier par {label}"
 
 #: scripts/i18n/dynamic-keys.mjs
 msgid "term.season.fall"

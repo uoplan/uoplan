@@ -1,10 +1,26 @@
 import { useState, useMemo } from "react";
-import { Badge, Box, Group, Stack, Text, TextInput } from "@mantine/core";
+import { Badge, Box, Group, Stack, Text, TextInput, UnstyledButton } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import type { SwapCandidateOption, SwapModalState, SwapResult } from "../../hooks/useSwapModal";
+import { useTr } from "../../i18n";
 import { GradeDistributionHistogram } from "./GradeDistributionViz";
 
 type SortKey = "aplus" | "rating" | "alpha";
+
+const SWAP_I18N = {
+  optionConflictAria: "swapCourse.option.conflictAria",
+  optionSelectAria: "swapCourse.option.selectAria",
+  conflictsWith: "swapCourse.conflictsWith",
+  loading: "swapCourse.loading",
+  noAlternatives: "swapCourse.noAlternatives",
+  poolHad: "swapCourse.poolHad",
+  sortAplus: "swapCourse.sort.aplus",
+  sortRating: "swapCourse.sort.rating",
+  sortAlpha: "swapCourse.sort.alpha",
+  searchPlaceholder: "swapCourse.searchPlaceholder",
+  sortBy: "swapCourse.sortBy",
+  noMatches: "swapCourse.noMatches",
+} as const;
 
 function SwapCard({
   option,
@@ -13,17 +29,28 @@ function SwapCard({
   option: SwapCandidateOption;
   onSwap: (code: string) => void;
 }) {
+  const tr = useTr();
   const [hovered, setHovered] = useState(false);
   const rejected = option.disabled;
   const code = option.value.startsWith("__rejected:") ? option.value.slice(11) : option.value;
 
   return (
-    <Box
-      onClick={() => !rejected && onSwap(option.value)}
+    <UnstyledButton
+      type="button"
+      disabled={rejected}
+      aria-label={
+        rejected && option.conflictsWith
+          ? tr(SWAP_I18N.optionConflictAria, { course: code, conflict: option.conflictsWith })
+          : tr(SWAP_I18N.optionSelectAria, { course: code })
+      }
+      onClick={() => onSwap(option.value)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
         cursor: rejected ? "default" : "pointer",
+        display: "block",
+        width: "100%",
+        textAlign: "left",
         opacity: rejected ? 0.55 : 1,
         backgroundColor: hovered && !rejected ? "var(--app-surface)" : "transparent",
         transition: "background-color 80ms ease",
@@ -58,7 +85,7 @@ function SwapCard({
             )}
             {option.conflictsWith && (
               <Badge size="xs" color="red" variant="light">
-                × {option.conflictsWith}
+                {tr(SWAP_I18N.conflictsWith, { course: option.conflictsWith })}
               </Badge>
             )}
           </Group>
@@ -70,7 +97,7 @@ function SwapCard({
           </Box>
         )}
       </Group>
-    </Box>
+    </UnstyledButton>
   );
 }
 
@@ -96,12 +123,13 @@ export function SwapCourseDropdown({
   /** When true, the list renders without its own scroll container (parent scrolls). */
   inline?: boolean;
 }) {
+  const tr = useTr();
   const [sort, setSort] = useState<SortKey>("aplus");
 
   if (loading) {
     return (
       <Text size="sm" c="dimmed">
-        Finding swap options…
+        {tr(SWAP_I18N.loading)}
       </Text>
     );
   }
@@ -112,11 +140,11 @@ export function SwapCourseDropdown({
     return (
       <Stack gap="xs">
         <Text size="sm" c="dimmed">
-          No alternative courses available that fit your schedule.
+          {tr(SWAP_I18N.noAlternatives)}
         </Text>
         {pool.length > 0 && (
           <Text size="xs" c="dimmed" style={{ fontFamily: "monospace" }}>
-            Pool had {pool.length} course(s): {pool.slice(0, 20).sort().join(", ")}
+            {tr(SWAP_I18N.poolHad, { count: pool.length })}: {pool.slice(0, 20).sort().join(", ")}
             {pool.length > 20 ? "…" : ""}
           </Text>
         )}
@@ -127,16 +155,16 @@ export function SwapCourseDropdown({
   const q = query.trim().toLowerCase();
 
   const SORT_LABELS: Record<SortKey, string> = {
-    aplus: "A+",
-    rating: "★ Rating",
-    alpha: "A–Z",
+    aplus: tr(SWAP_I18N.sortAplus),
+    rating: tr(SWAP_I18N.sortRating),
+    alpha: tr(SWAP_I18N.sortAlpha),
   };
 
   return (
     <Stack gap="xs">
       <Group gap="xs" align="center">
         <TextInput
-          placeholder="Search courses…"
+          placeholder={tr(SWAP_I18N.searchPlaceholder)}
           value={query}
           onChange={(e) => setQuery(e.currentTarget.value)}
           leftSection={<IconSearch size={16} />}
@@ -145,9 +173,12 @@ export function SwapCourseDropdown({
         />
         <Group gap={4}>
           {(["aplus", "rating", "alpha"] as SortKey[]).map((key) => (
-            <Box
+            <UnstyledButton
               key={key}
+              type="button"
               onClick={() => setSort(key)}
+              aria-label={tr(SWAP_I18N.sortBy, { label: SORT_LABELS[key] })}
+              aria-current={sort === key ? "true" : undefined}
               style={{
                 padding: "4px 10px",
                 borderRadius: 6,
@@ -164,7 +195,7 @@ export function SwapCourseDropdown({
               }}
             >
               {SORT_LABELS[key]}
-            </Box>
+            </UnstyledButton>
           ))}
         </Group>
       </Group>
@@ -199,6 +230,8 @@ function SortedFilteredList({
   closeModal: () => void;
   inline?: boolean;
 }) {
+  const tr = useTr();
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     const base = q
@@ -225,7 +258,7 @@ function SortedFilteredList({
   if (filtered.length === 0) {
     return (
       <Text size="sm" c="dimmed" py="xs">
-        No matches
+        {tr(SWAP_I18N.noMatches)}
       </Text>
     );
   }

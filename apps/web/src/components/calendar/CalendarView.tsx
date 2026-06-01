@@ -16,9 +16,11 @@ import { WeekPreviewPanel } from "./WeekPreviewPanel";
 import type { CalendarEvent } from "../../hooks/useCalendarEvents";
 import type { WeekGroup } from "../../hooks/useScheduleWeeks";
 import { formatWeekCount } from "../../lib/formatWeekCount";
-import { tr } from "../../i18n";
+import { useTr } from "../../i18n";
 
 const EMPTY_COLOR_MAP: Record<string, number> = {};
+const PREVIOUS_WEEK_LABEL_ID = "calendarView.previousWeek";
+const NEXT_WEEK_LABEL_ID = "calendarView.nextWeek";
 
 function formatScheduleRange(start: string, end: string): string {
   const s = new Date(`${start}T00:00:00Z`);
@@ -68,6 +70,7 @@ export function CalendarView({
   weekIndex,
   setWeekIndex,
 }: CalendarViewProps) {
+  const tr = useTr();
   const isCompactCalendar = useMediaQuery("(max-width: 1200px)");
   const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });
   const prefersReduced = useMediaQuery("(prefers-reduced-motion: reduce)") ?? false;
@@ -176,7 +179,7 @@ export function CalendarView({
                   variant="subtle"
                   color="gray"
                   size="sm"
-                  aria-label="Previous week"
+                  aria-label={tr(PREVIOUS_WEEK_LABEL_ID)}
                   disabled={weekIndex === 0}
                   onClick={() => setWeekIndex(weekIndex - 1)}
                 >
@@ -191,7 +194,7 @@ export function CalendarView({
                   variant="subtle"
                   color="gray"
                   size="sm"
-                  aria-label="Next week"
+                  aria-label={tr(NEXT_WEEK_LABEL_ID)}
                   disabled={weekIndex === weekGroups.length - 1}
                   onClick={() => setWeekIndex(weekIndex + 1)}
                 >
@@ -211,11 +214,21 @@ export function CalendarView({
                 gap={8}
                 style={{ padding: "4px 12px 6px" }}
               >
-                <ActionIcon variant="subtle" color="gray" size="sm">
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  size="sm"
+                  aria-label={tr(PREVIOUS_WEEK_LABEL_ID)}
+                >
                   <IconChevronLeft size={14} />
                 </ActionIcon>
                 <Text size="xs">&nbsp;</Text>
-                <ActionIcon variant="subtle" color="gray" size="sm">
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  size="sm"
+                  aria-label={tr(NEXT_WEEK_LABEL_ID)}
+                >
                   <IconChevronRight size={14} />
                 </ActionIcon>
               </Group>

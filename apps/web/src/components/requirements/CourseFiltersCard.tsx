@@ -15,6 +15,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconChevronDown } from "@tabler/icons-react";
 import { tr } from "../../i18n";
 
+const BASIC_COURSE_FILTERS_TOGGLE_ID = "basicCourseFilters.toggle";
+
 interface ExcludeElectiveSubjectsProps {
   data: { value: string; label: string }[];
   value: string[];
@@ -192,6 +194,7 @@ export function BasicCourseFiltersCard({
           <UnstyledButton
             type="button"
             onClick={toggleFilters}
+            aria-label={tr(BASIC_COURSE_FILTERS_TOGGLE_ID)}
             aria-expanded={filtersOpen}
             style={{
               borderRadius: "var(--app-radius-sm)",
