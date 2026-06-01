@@ -12,6 +12,7 @@ import {
   Title,
 } from "@mantine/core";
 import { LineChart } from "@mantine/charts";
+import { useMediaQuery } from "@mantine/hooks";
 import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useShallow } from "zustand/react/shallow";
@@ -103,6 +104,14 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
   const disciplines = useAppStore(useShallow((s) => s.disciplines));
   const catalogue = useAppStore((s) => s.catalogue);
   const isFr = i18n.locale.startsWith("fr");
+  const isMobile = useMediaQuery("(max-width: 768px)", false, {
+    getInitialValueInEffect: false,
+  });
+
+  // On mobile, stack long-label segmented controls vertically so their options
+  // aren't clipped; numeric controls (e.g. level) just go full-width.
+  const verticalSegmented = isMobile ? ({ fullWidth: true, orientation: "vertical" } as const) : {};
+  const fullWidthSegmented = isMobile ? ({ fullWidth: true } as const) : {};
 
   const extras = search;
   const discipline = search.discipline ?? null;
@@ -345,7 +354,7 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
       style={{
         position: "relative",
         minHeight: "100vh",
-        padding: 24,
+        padding: isMobile ? 16 : 24,
         backgroundColor: "var(--app-bg)",
         boxSizing: "border-box",
       }}
@@ -397,7 +406,7 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                       searchable
                       clearable
                       nothingFoundMessage={tr("trends.filter.noProgramMatch")}
-                      style={{ minWidth: 280 }}
+                      style={{ flex: "1 1 240px", minWidth: 0 }}
                     />
                   ) : null}
                   <Select
@@ -410,14 +419,15 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                     searchable
                     clearable
                     nothingFoundMessage={tr("trends.filter.noMatch")}
-                    style={{ minWidth: 260 }}
+                    style={{ flex: "1 1 240px", minWidth: 0 }}
                   />
-                  <Stack gap={4}>
+                  <Stack gap={4} style={{ flex: isMobile ? "1 1 100%" : undefined }}>
                     <Text size="xs" c="dimmed" fw={600}>
                       {tr("trends.filter.level")}
                     </Text>
                     <SegmentedControl
                       size="xs"
+                      {...fullWidthSegmented}
                       value={level ? String(level) : "all"}
                       onChange={(value) =>
                         update({ level: value === "all" ? undefined : Number(value) })
@@ -431,12 +441,13 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                       ]}
                     />
                   </Stack>
-                  <Stack gap={4}>
+                  <Stack gap={4} style={{ flex: isMobile ? "1 1 100%" : undefined }}>
                     <Text size="xs" c="dimmed" fw={600}>
                       {tr("trends.filter.season")}
                     </Text>
                     <SegmentedControl
                       size="xs"
+                      {...verticalSegmented}
                       value={season ?? "all"}
                       onChange={(value) =>
                         update({ season: value === "all" ? undefined : (value as TermSeason) })
@@ -457,6 +468,7 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                   </Text>
                   <SegmentedControl
                     size="xs"
+                    {...verticalSegmented}
                     value={activeMetric}
                     onChange={(value) => update({ metric: value as MetricId })}
                     data={metricOptions.map((m) => ({ value: m.value, label: m.label }))}
@@ -560,6 +572,8 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                   </Stack>
                   <SegmentedControl
                     size="xs"
+                    {...verticalSegmented}
+                    style={isMobile ? { width: "100%" } : undefined}
                     value={leaderboardSort}
                     onChange={(value) => update({ sort: value as LeaderboardSort })}
                     data={[
