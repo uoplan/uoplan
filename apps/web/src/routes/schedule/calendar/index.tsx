@@ -5,6 +5,7 @@ import { AppDataLoader } from "../../../components/shared/AppDataLoader";
 import { useRepairSeedOnCalendarMount } from "../../../hooks/useRepairSeedOnCalendarMount";
 import { useAppStore } from "../../../store/appStore";
 import { buildTabTitle } from "../../../lib/seo";
+import { formatTermLabel } from "../../../lib/term/termLabel";
 
 export const Route = createFileRoute("/schedule/calendar/")({
   head: () => buildTabTitle("Your schedule"),
@@ -23,7 +24,8 @@ function CalendarRoute() {
   const loadProgress = useAppStore((s) => s.loadProgress);
 
   useEffect(() => {
-    const termName = terms?.find((t) => String(t.termId) === selectedTermId)?.name;
+    const hasTerm = terms?.some((t) => String(t.termId) === selectedTermId) ?? false;
+    const termName = hasTerm && selectedTermId ? formatTermLabel(selectedTermId) : null;
     document.title = termName ? `${termName} schedule` : "Your schedule";
   }, [terms, selectedTermId]);
 

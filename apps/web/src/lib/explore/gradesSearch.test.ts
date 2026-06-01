@@ -260,7 +260,6 @@ describe("buildExploreOfferings", () => {
         ],
       },
       new Map(),
-      new Map(),
     );
     expect(offerings.map((o) => o.professorName)).toEqual(["Ada Lovelace"]);
   });
@@ -311,7 +310,6 @@ describe("buildScheduleOfferings", () => {
           },
         ]),
       ],
-      new Map([[2271, "Winter 2027"]]),
       new Map(),
     );
     expect(offerings.map((o) => o.professorName)).toEqual(["Real Prof"]);
@@ -337,7 +335,6 @@ describe("buildScheduleOfferings", () => {
           },
         ]),
       ],
-      new Map([[2271, "Winter 2027"]]),
       new Map(),
     );
     expect(offerings).toHaveLength(1);

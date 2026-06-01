@@ -14,7 +14,7 @@ import {
   getCourseLanguageBucket,
 } from "@uoplan/core";
 import { searchProfessorsScored, type ProfessorSearchEntry } from "../graph/professorGraphSearch";
-import { formatUottawaTermIdLabel } from "./uottawaTermId";
+import { formatTermLabelPlain } from "../term/termLabel";
 import { getCourseLevel, type ExploreFilterLevel } from "./exploreFilters";
 
 /** Max section rows returned when searching all offerings (legacy / tests). */
@@ -114,7 +114,6 @@ function offeringId(parts: {
 export function buildExploreOfferings(
   grades: CourseGradesData,
   titleByCode: Map<string, string>,
-  termNameById: Map<number, string>,
 ): ExploreOfferingFlat[] {
   const out: ExploreOfferingFlat[] = [];
   for (const c of grades.courses) {
@@ -123,7 +122,7 @@ export function buildExploreOfferings(
     for (const p of c.professors) {
       // "Staff" is a placeholder for an unassigned instructor; never surface it.
       if (normalizeProfessorName(p.name).toLowerCase() === "staff") continue;
-      const termLabel = termNameById.get(p.termId) ?? formatUottawaTermIdLabel(p.termId);
+      const termLabel = formatTermLabelPlain(p.termId);
       const fuseText = [
         c.code,
         norm,
@@ -696,7 +695,6 @@ function scheduleOfferingDedupKey(courseCode: string, name: string, termId: numb
 
 export function buildScheduleOfferings(
   allSchedules: SchedulesData[],
-  termNameById: Map<number, string>,
   titleByCode: Map<string, string>,
 ): ExploreOfferingFlat[] {
   const seen = new Set<string>();
@@ -705,7 +703,7 @@ export function buildScheduleOfferings(
   for (const schedData of allSchedules) {
     const termId = Number.parseInt(schedData.termId, 10);
     if (!Number.isFinite(termId)) continue;
-    const termLabel = termNameById.get(termId) ?? formatUottawaTermIdLabel(termId);
+    const termLabel = formatTermLabelPlain(termId);
 
     for (const sched of schedData.schedules) {
       const norm = normalizeCourseCode(sched.courseCode);

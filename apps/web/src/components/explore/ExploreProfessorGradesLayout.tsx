@@ -8,8 +8,9 @@ import {
   GradeDistributionHistogramPlaceholder,
   GradeDistributionPassingSummary,
 } from "../calendar/GradeDistributionViz";
-import { tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
+import { formatTermLabel } from "../../lib/term/termLabel";
 import type { BackState } from "../../lib/navigation/backState";
 import {
   mergeGradeDistributionCounts,
@@ -249,6 +250,7 @@ export function ExploreProfessorOfferingRows({
   offerings,
   showCourseCode = false,
 }: ExploreProfessorOfferingRowsProps) {
+  useTr();
   return (
     <Stack gap={0}>
       {offerings.map((o, index) => {
@@ -303,7 +305,7 @@ export function ExploreProfessorOfferingRows({
                 ) : null}
                 <Group gap="xs" wrap="wrap" align="baseline">
                   <Text size="sm" fw={600} c="var(--app-text)">
-                    {o.termLabel}
+                    {formatTermLabel(o.termId)}
                   </Text>
                   {o.section ? (
                     <Text size="xs" c="dimmed">

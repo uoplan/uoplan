@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useRef, type ReactNode } from "react";
 import type Fuse from "fuse.js";
-import type { Catalogue, ProfessorRatingsMap, Term } from "@uoplan/core";
+import type { Catalogue, ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeCourseCode } from "@uoplan/core";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useAllSchedulesData } from "../../hooks/useAllSchedulesData";
@@ -65,15 +65,6 @@ function buildTitleByCode(catalogue: Catalogue | null): Map<string, string> {
   return m;
 }
 
-function buildTermNameById(terms: Term[]): Map<number, string> {
-  const m = new Map<number, string>();
-  for (const t of terms) {
-    const id = Number.parseInt(t.termId, 10);
-    if (Number.isFinite(id)) m.set(id, t.name);
-  }
-  return m;
-}
-
 type DerivedCache = {
   courseEntries?: ExploreCourseSearchEntry[];
   courseEntryByNorm?: Map<string, ExploreCourseSearchEntry>;
@@ -83,12 +74,10 @@ type DerivedCache = {
 
 export function ExploreOfferingsProvider({
   catalogue,
-  terms,
   professorRatings,
   children,
 }: {
   catalogue: Catalogue | null;
-  terms: Term[];
   professorRatings: ProfessorRatingsMap | null;
   children: ReactNode;
 }) {
@@ -96,15 +85,14 @@ export function ExploreOfferingsProvider({
   const allSchedules = useAllSchedulesData();
 
   const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
-  const termNameById = useMemo(() => buildTermNameById(terms), [terms]);
   const aliasGroups = useMemo(() => buildAliasGroups(catalogue), [catalogue]);
 
   const offerings = useMemo(() => {
-    const gradeOfferings = grades ? buildExploreOfferings(grades, titleByCode, termNameById) : [];
+    const gradeOfferings = grades ? buildExploreOfferings(grades, titleByCode) : [];
     if (allSchedules.length === 0) return gradeOfferings;
-    const scheduleOfferings = buildScheduleOfferings(allSchedules, termNameById, titleByCode);
+    const scheduleOfferings = buildScheduleOfferings(allSchedules, titleByCode);
     return mergeOfferingsWithSchedule(gradeOfferings, scheduleOfferings);
-  }, [grades, allSchedules, titleByCode, termNameById]);
+  }, [grades, allSchedules, titleByCode]);
 
   const offeringsByCourseNorm = useMemo(() => buildOfferingsByCourseNorm(offerings), [offerings]);
   const offeringsByComponent = useMemo(

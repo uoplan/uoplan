@@ -1,5 +1,6 @@
 import type { Program, RequirementWithStatus, Term } from "@uoplan/core";
 import { hasMissingOptionSelections, nodeHasOptionGroups } from "./requirements/requirementUtils";
+import { formatTermLabel } from "./term/termLabel";
 import { tr } from "../i18n";
 
 export type ScheduleDashboardCardStatus = "ready" | "attention" | "empty";
@@ -60,7 +61,7 @@ function hasMissingOptions(state: ScheduleDashboardInput): boolean {
 
 function selectedTermName(state: ScheduleDashboardInput): string | null {
   const selected = state.terms?.find((term) => String(term.termId) === state.selectedTermId);
-  return selected?.name ?? null;
+  return selected ? formatTermLabel(selected.termId) : null;
 }
 
 function gateToTerm(card: Omit<ScheduleDashboardCardState, "gateMessage">) {
