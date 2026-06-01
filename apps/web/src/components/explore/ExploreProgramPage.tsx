@@ -14,6 +14,7 @@ import {
 } from "../../lib/explore/gradesSearch";
 import { programSlugToPathParam } from "../../lib/explore/programSearch";
 import type { BackState } from "../../lib/navigation/backState";
+import { GradeDistributionHistogramPlaceholder } from "../calendar/GradeDistributionViz";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
@@ -28,7 +29,6 @@ const EXPLORE_CHEVRON_RIGHT = {
 
 const mobileMediaQuery = "@media (max-width: 540px)";
 const EXPLORE_HISTOGRAM_WIDTH_PX = 288;
-const PLACEHOLDER_BARS = [30, 52, 78, 64, 44, 28, 40, 58];
 
 /** True when a course group carries any counted grade data (vs schedule-only). */
 function hasGradeData(group: CourseOfferingGroup): boolean {
@@ -78,30 +78,15 @@ function GrayedCourseRow({ code, title }: { code: string; title: string | null }
         </Text>
       </Stack>
       <Box
-        aria-hidden
         style={{
           flex: "0 0 auto",
           width: EXPLORE_HISTOGRAM_WIDTH_PX,
           maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
           marginLeft: "auto",
-          display: "flex",
-          alignItems: "flex-end",
-          gap: 4,
-          height: 52,
           [mobileMediaQuery]: { width: "100%", maxWidth: "100%", marginLeft: 0 },
         }}
       >
-        {PLACEHOLDER_BARS.map((h, i) => (
-          <div
-            key={i}
-            style={{
-              flex: 1,
-              height: `${h}%`,
-              backgroundColor: "var(--app-translucent-strong)",
-              borderRadius: 2,
-            }}
-          />
-        ))}
+        <GradeDistributionHistogramPlaceholder />
       </Box>
     </Box>
   );

@@ -3,10 +3,12 @@ import {
   buildCourseSearchEntries,
   buildExploreOfferings,
   buildExploreProfessorSearchEntries,
+  buildScheduleOfferings,
   createExploreCourseFuse,
   createExploreFuse,
   exploreProfessorsSectionFirst,
   mergeGradeDistributionCounts,
+  mergeOfferingsWithSchedule,
   searchExplore,
   searchExploreCourses,
   searchExploreOfferings,
@@ -14,6 +16,7 @@ import {
   groupOfferingsByProfessor,
   type ExploreOfferingFlat,
 } from "./gradesSearch";
+import type { CourseSchedule, SchedulesData } from "@uoplan/core";
 
 function sampleOffering(partial: Partial<ExploreOfferingFlat>): ExploreOfferingFlat {
   const defaults: ExploreOfferingFlat = {
@@ -257,5 +260,120 @@ describe("buildExploreOfferings", () => {
       new Map(),
     );
     expect(offerings.map((o) => o.professorName)).toEqual(["Ada Lovelace"]);
+  });
+});
+
+function scheduleSection(
+  section: string,
+  component: string,
+  instructors: Array<string | null>,
+): CourseSchedule["components"][string][number] {
+  return {
+    section,
+    sectionCode: section.slice(0, 3),
+    component,
+    session: null,
+    status: "Open",
+    times: instructors.map((instructor) => ({
+      day: "Mo",
+      startMinutes: 540,
+      endMinutes: 630,
+      virtual: false,
+      instructor,
+    })),
+  };
+}
+
+function scheduleData(termId: string, schedules: CourseSchedule[]): SchedulesData {
+  return { termId, schedules };
+}
+
+describe("buildScheduleOfferings", () => {
+  it("omits the 'Staff' placeholder instructor", () => {
+    const offerings = buildScheduleOfferings(
+      [
+        scheduleData("2271", [
+          {
+            subject: "ADM",
+            catalogNumber: "1100",
+            courseCode: "ADM 1100",
+            title: "Intro to Business",
+            timeZone: "America/Toronto",
+            components: {
+              LEC: [
+                scheduleSection("A00-LEC FullSess.", "LEC", ["Real Prof"]),
+                scheduleSection("B00-LEC FullSess.", "LEC", ["Staff"]),
+              ],
+            },
+          },
+        ]),
+      ],
+      new Map([[2271, "Winter 2027"]]),
+      new Map(),
+    );
+    expect(offerings.map((o) => o.professorName)).toEqual(["Real Prof"]);
+  });
+
+  it("combines multiple sections of the same prof/term into one section-less offering", () => {
+    const offerings = buildScheduleOfferings(
+      [
+        scheduleData("2271", [
+          {
+            subject: "ADM",
+            catalogNumber: "1100",
+            courseCode: "ADM 1100",
+            title: "Intro to Business",
+            timeZone: "America/Toronto",
+            components: {
+              LEC: [
+                scheduleSection("A00-LEC FullSess.", "LEC", ["Alan O'Sullivan"]),
+                scheduleSection("B00-LEC FullSess.", "LEC", ["Alan O'Sullivan"]),
+              ],
+              DGD: [scheduleSection("D01-DGD FullSess.", "DGD", ["Alan O'Sullivan"])],
+            },
+          },
+        ]),
+      ],
+      new Map([[2271, "Winter 2027"]]),
+      new Map(),
+    );
+    expect(offerings).toHaveLength(1);
+    expect(offerings[0].professorName).toBe("Alan O'Sullivan");
+    expect(offerings[0].section).toBeUndefined();
+    expect(offerings[0].fuseText).not.toContain("fullsess");
+  });
+});
+
+describe("mergeOfferingsWithSchedule", () => {
+  it("dedups schedule rows against grade rows by prof/term ignoring section", () => {
+    const gradeOfferings: ExploreOfferingFlat[] = [
+      sampleOffering({
+        id: "grade",
+        courseCode: "ADM 1100",
+        professorName: "Alan O'Sullivan",
+        termId: 2271,
+        section: "A00",
+      }),
+    ];
+    const scheduleOfferings: ExploreOfferingFlat[] = [
+      sampleOffering({
+        id: "sched-dup",
+        courseCode: "ADM 1100",
+        professorName: "Alan O'Sullivan",
+        termId: 2271,
+        section: undefined,
+        distribution: {},
+      }),
+      sampleOffering({
+        id: "sched-new",
+        courseCode: "ADM 1100",
+        professorName: "New Prof",
+        termId: 2271,
+        section: undefined,
+        distribution: {},
+      }),
+    ];
+    const merged = mergeOfferingsWithSchedule(gradeOfferings, scheduleOfferings);
+    expect(merged.map((o) => o.id)).toEqual(["grade", "sched-new"]);
   });
 });

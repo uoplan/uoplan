@@ -5,6 +5,7 @@ import type { ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeProfessorName, normalizeGradeVizDistribution } from "@uoplan/core";
 import {
   GradeDistributionHistogram,
+  GradeDistributionHistogramPlaceholder,
   GradeDistributionPassingSummary,
 } from "../calendar/GradeDistributionViz";
 import { tr } from "../../i18n";
@@ -119,23 +120,25 @@ export function ExploreProfessorSummaryBar({
         {ratingLine}
         {combinedViz ? <GradeDistributionPassingSummary gradeViz={combinedViz} compact /> : null}
       </Stack>
-      {combinedViz ? (
-        <Box
-          style={{
-            flex: "0 0 auto",
-            width: EXPLORE_HISTOGRAM_WIDTH_PX,
-            maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
-            marginLeft: "auto",
-            [mobileMediaQuery]: {
-              width: "100%",
-              maxWidth: "100%",
-              marginLeft: 0,
-            },
-          }}
-        >
+      <Box
+        style={{
+          flex: "0 0 auto",
+          width: EXPLORE_HISTOGRAM_WIDTH_PX,
+          maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
+          marginLeft: "auto",
+          [mobileMediaQuery]: {
+            width: "100%",
+            maxWidth: "100%",
+            marginLeft: 0,
+          },
+        }}
+      >
+        {combinedViz ? (
           <GradeDistributionHistogram gradeViz={combinedViz} variant="compact" showStudentCount />
-        </Box>
-      ) : null}
+        ) : (
+          <GradeDistributionHistogramPlaceholder />
+        )}
+      </Box>
     </Box>
   );
 }
@@ -196,23 +199,25 @@ export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSu
         )}
         {combinedViz ? <GradeDistributionPassingSummary gradeViz={combinedViz} compact /> : null}
       </Stack>
-      {combinedViz ? (
-        <Box
-          style={{
-            flex: "0 0 auto",
-            width: EXPLORE_HISTOGRAM_WIDTH_PX,
-            maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
-            marginLeft: "auto",
-            [mobileMediaQuery]: {
-              width: "100%",
-              maxWidth: "100%",
-              marginLeft: 0,
-            },
-          }}
-        >
+      <Box
+        style={{
+          flex: "0 0 auto",
+          width: EXPLORE_HISTOGRAM_WIDTH_PX,
+          maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
+          marginLeft: "auto",
+          [mobileMediaQuery]: {
+            width: "100%",
+            maxWidth: "100%",
+            marginLeft: 0,
+          },
+        }}
+      >
+        {combinedViz ? (
           <GradeDistributionHistogram gradeViz={combinedViz} variant="compact" showStudentCount />
-        </Box>
-      ) : null}
+        ) : (
+          <GradeDistributionHistogramPlaceholder />
+        )}
+      </Box>
     </Box>
   );
 }
@@ -314,27 +319,29 @@ export function ExploreProfessorOfferingRows({
                   </Text>
                 )}
               </Stack>
-              {sectionViz ? (
-                <Box
-                  style={{
-                    flex: "0 0 auto",
-                    width: EXPLORE_HISTOGRAM_WIDTH_PX,
-                    maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
-                    marginLeft: "auto",
-                    [mobileMediaQuery]: {
-                      width: "100%",
-                      maxWidth: "100%",
-                      marginLeft: 0,
-                    },
-                  }}
-                >
+              <Box
+                style={{
+                  flex: "0 0 auto",
+                  width: EXPLORE_HISTOGRAM_WIDTH_PX,
+                  maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
+                  marginLeft: "auto",
+                  [mobileMediaQuery]: {
+                    width: "100%",
+                    maxWidth: "100%",
+                    marginLeft: 0,
+                  },
+                }}
+              >
+                {sectionViz ? (
                   <GradeDistributionHistogram
                     gradeViz={sectionViz}
                     variant="compact"
                     showStudentCount
                   />
-                </Box>
-              ) : null}
+                ) : (
+                  <GradeDistributionHistogramPlaceholder />
+                )}
+              </Box>
             </Box>
           </Paper>
         );
