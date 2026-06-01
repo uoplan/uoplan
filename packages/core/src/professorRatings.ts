@@ -6,6 +6,22 @@ export type ProfessorRatingsEntry = {
 };
 export type ProfessorRatingsMap = Record<string, ProfessorRatingsEntry>;
 
+/**
+ * True when an entry represents a real RateMyProfessors rating. Unrated
+ * professors come through the data as `rating: 0, numRatings: 0`, which must be
+ * treated as "no rating" rather than a 0.0 average.
+ */
+export function hasProfessorRatings(
+  entry: ProfessorRatingsEntry | null | undefined,
+): entry is ProfessorRatingsEntry {
+  return (
+    entry != null &&
+    (entry.numRatings ?? 0) > 0 &&
+    Number.isFinite(entry.rating) &&
+    entry.rating > 0
+  );
+}
+
 export function normalizeProfessorName(name: string): string {
   return (name ?? "").trim().replace(/\s+/g, " ");
 }

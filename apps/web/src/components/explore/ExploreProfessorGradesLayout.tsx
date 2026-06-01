@@ -2,7 +2,11 @@ import { Link } from "@tanstack/react-router";
 import { Accordion, Box, Group, Paper, Stack, Text } from "@mantine/core";
 import { useMemo } from "react";
 import type { ProfessorRatingsMap } from "@uoplan/core";
-import { normalizeProfessorName, normalizeGradeVizDistribution } from "@uoplan/core";
+import {
+  normalizeProfessorName,
+  normalizeGradeVizDistribution,
+  hasProfessorRatings,
+} from "@uoplan/core";
 import {
   GradeDistributionHistogram,
   GradeDistributionHistogramPlaceholder,
@@ -47,7 +51,14 @@ const mobileMediaQuery = `@media (max-width: ${MOBILE_BREAKPOINT_PX}px)`;
 function professorRatingLine(displayName: string, professorRatings: ProfessorRatingsMap | null) {
   if (!professorRatings) return null;
   const entry = professorRatings[normalizeProfessorName(displayName)];
-  if (!entry || !Number.isFinite(entry.rating)) return null;
+  if (!entry) return null;
+  if (!hasProfessorRatings(entry)) {
+    return (
+      <Text component="span" size="xs" c="dimmed" style={{ whiteSpace: "nowrap" }}>
+        {tr("search.noRating")}
+      </Text>
+    );
+  }
   return (
     <Text component="span" size="xs" c="dimmed" style={{ whiteSpace: "nowrap" }}>
       {entry.rating.toFixed(1)} · {entry.numRatings} ratings

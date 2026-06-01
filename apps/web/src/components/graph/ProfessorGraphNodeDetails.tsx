@@ -3,7 +3,7 @@ import { Badge, Box, Group, SegmentedControl, Stack, Text, UnstyledButton } from
 import { IconExternalLink } from "@tabler/icons-react";
 import { useMemo, type CSSProperties } from "react";
 import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/core";
-import { normalizeProfessorName } from "@uoplan/core";
+import { normalizeProfessorName, hasProfessorRatings } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
@@ -102,7 +102,14 @@ function histogramBoxStyle(widthPx: number): CSSProperties {
 function professorRatingLine(displayName: string, professorRatings: ProfessorRatingsMap | null) {
   if (!professorRatings) return null;
   const entry = professorRatings[normalizeProfessorName(displayName)];
-  if (!entry || !Number.isFinite(entry.rating)) return null;
+  if (!entry) return null;
+  if (!hasProfessorRatings(entry)) {
+    return (
+      <Text size="xs" c="dimmed">
+        {tr("search.noRating")}
+      </Text>
+    );
+  }
   return (
     <Text size="xs" c="dimmed">
       {entry.rating.toFixed(1)} · {entry.numRatings} ratings
