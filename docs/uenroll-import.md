@@ -42,7 +42,7 @@ No env vars or feature flags. The button appears whenever the calendar page is r
 
 ## Dependencies
 
-- `normalizeCourseCode` — `packages/schedule/src/utils/courseUtils.ts`
-- `getEnrollmentsForCourse` — `packages/schedule/src/generation/sectionCombos.ts`
-- `DataCache.getSchedule` — `packages/schedule/src/dataCache.ts`
+- `normalizeCourseCode` — `packages/core/src/utils/courseUtils.ts`
+- `getEnrollmentsForCourse` — `packages/core/src/generation/sectionCombos.ts`
+- `DataCache.getSchedule` — `packages/core/src/dataCache.ts`
 - Mantine `Modal`, `TextInput`, `Alert`, `List`, `Button`

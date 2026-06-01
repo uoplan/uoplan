@@ -2,13 +2,13 @@
 
 This document explains how course prerequisites are represented in the scraped catalogue data, and how they can be integrated into the requirements / eligibility engine.
 
-The scraper lives in `scripts/scraper.ts`. It writes per-year files (`public/data/catalogue.2024.json`, etc.) and a manifest at `public/data/catalogue.json` — see `docs/multi-year-catalogue.md` for details.
+The catalogue scraper entrypoint is `apps/scraper/src/cli/catalogue.ts`, with scrape logic in `apps/scraper/src/catalogue/`. It writes source JSON per-year files (`apps/scraper/data/catalogue.2024.json`, etc.) and a manifest at `apps/scraper/data/catalogue.json`; `pnpm build:data-proto` converts them to runtime protobuf files in `apps/web/public/data/` — see `docs/multi-year-catalogue.md` for details.
 
 ---
 
 ### Data model overview
 
-Each course in `catalogue.json` now has two prerequisite-related fields:
+Each course in a catalogue year file now has two prerequisite-related fields:
 
 - `prereqText?: string`
 - `prerequisites?: CoursePrereqNode`
@@ -22,6 +22,7 @@ type Course = {
   credits: number; // course credit value (e.g. 3)
   description: string;
   component?: string; // e.g. "Lecture", "Discussion Group, Lecture"
+  aliases?: string[];
 
   // NEW:
   prereqText?: string;
@@ -46,12 +47,28 @@ Use this as the “ground truth” text for debugging or for any future parsing 
 Prerequisites are represented as a small AST that can encode basic AND/OR logic, explicit course requirements, credit thresholds, and discipline-scoped credit thresholds.
 
 ```ts
+type CoursePrereqKind =
+  | "permission"
+  | "audition"
+  | "language"
+  | "equivalent"
+  | "highschool"
+  | "standing"
+  | "topic"
+  | "coursework"
+  | "knowledge"
+  | "recommended";
+
 type CoursePrereqNode = {
   type: "course" | "or_group" | "and_group" | "non_course";
   code?: string; // for type === 'course'
   text?: string; // human-readable clause text
   credits?: number; // numeric credit requirement (if any)
   disciplines?: string[]; // discipline codes like ['ANT'] for scoped credit requirements
+  levels?: number[]; // course levels like [3000, 4000]
+  disciplineLevels?: { discipline: string; levels?: number[] }[];
+  programs?: string[]; // program codes this node applies to
+  kind?: CoursePrereqKind; // coarse kind for opaque non-course requirements
   children?: CoursePrereqNode[]; // for group nodes
 };
 ```
@@ -107,6 +124,10 @@ type CoursePrereqNode = {
       - Example:
         - `"9 course units in anthropology (ANT)"` ⇒
           - `{ type: 'non_course', credits: 9, disciplines: ['ANT'] }`
+    - `levels?: number[]` / `disciplineLevels?: { discipline: string; levels?: number[] }[]`
+      - Used for level-constrained credit pools, optionally scoped by discipline.
+    - `kind?: CoursePrereqKind`
+      - Coarse classification for opaque non-course requirements, such as `permission`, `standing`, or `knowledge`.
     - `text?: string`
       - Always set to the human-readable clause, for reference and for requirements the engine does not interpret structurally (e.g. “All 1000-, 2000-, and 3000-level core ADM courses completed”).
 
@@ -247,7 +268,7 @@ How you handle `non_course` nodes will depend on what the engine currently knows
 
 ### Examples from the live data
 
-These are representative patterns currently seen in `public/data/catalogue.json`:
+These are representative patterns currently seen in the source catalogue data (`apps/scraper/data/catalogue.*.json`, encoded as `.pb` for runtime):
 
 - **Simple single-course prerequisite**
 
@@ -343,9 +364,9 @@ These patterns should be enough for another agent to wire the prerequisites into
 
 ### Multi-year catalogue merge
 
-When the user selects a first year of study, `getMergedCatalogue` (`apps/web/src/store/slices/catalogueUtils.ts`) combines the latest catalogue with that year's snapshot before building `DataCache`. **Prerequisite fields always come from the start-year row** for courses that exist in both catalogues; if the year row has no `prerequisites` or `prereqText`, those fields are omitted on the merged course even when the latest row has them. Completed courses that exist in the year catalogue keep the full year row (credits and metadata). See `docs/multi-year-catalogue.md` for the full merge table.
+When the user selects a first year of study, `getMergedCatalogue` (`apps/web/src/store/slices/catalogueUtils.ts`, using helpers from `packages/core/src/dataCache.ts`) combines the latest catalogue with that year's snapshot before building `DataCache`. **Prerequisite fields always come from the start-year row** for courses that exist in both catalogues; if the year row has no `prerequisites` or `prereqText`, those fields are omitted on the merged course even when the latest row has them. Completed courses that exist in the year catalogue keep the full year row (credits and metadata). See `docs/multi-year-catalogue.md` for the full merge table.
 
-Runtime checks (`canTakeCourse`, schedule pools) read `course.prerequisites` from this merged cache only.
+Runtime checks (`canTakeCourse` in `packages/core/src/prerequisites/evaluator.ts`, schedule pools) read `course.prerequisites` from this merged cache only.
 
 ---
 

@@ -11,7 +11,7 @@ import {
   professorGraphId,
 } from "@uoplan/core";
 import { mergeGradeDistributionCounts, type ExploreOfferingFlat } from "../explore/gradesSearch";
-import { formatTermLabelPlain } from "../term/termLabel";
+import { formatTermLabelPlain } from "../term/termLabelPlain";
 
 export type NeighborSortMode = "strength" | "name";
 

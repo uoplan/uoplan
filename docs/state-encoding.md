@@ -4,33 +4,23 @@ URL sharing and localStorage persistence both use a compact binary format to enc
 
 ## How it works
 
-`src/lib/stateEncode.ts` serialises the relevant app state to a `Uint8Array`, base64-encodes it, and attaches it as the `?s=` query parameter. On load the same bytes are decoded back into app state.
+`packages/core/src/stateEncode.ts` serialises the relevant app state to a protobuf `Uint8Array`, deflate-compresses and base64-encodes it, and attaches it as the `?s=` query parameter. On load the same bytes are inflated and decoded back into app state.
 
 LocalStorage (`uoplan-state`) stores the same base64 blob so the previous session is restored automatically.
 
-### Binary format (VERSION 5)
+### Binary format (compressed `ShareableState` protobuf)
 
-| Field                   | Type                                                             | Notes                                                     |
-| ----------------------- | ---------------------------------------------------------------- | --------------------------------------------------------- |
-| version                 | U8                                                               | Must equal 5                                              |
-| termId length           | U8                                                               | 0 = absent                                                |
-| termId                  | ASCII bytes                                                      | e.g. `"202509"`                                           |
-| firstYear               | U16                                                              | 0 = null/current                                          |
-| programIndex            | U16                                                              | Index into `indices.json` programs; `0xFFFF` = no program |
-| completedCount          | U16                                                              |                                                           |
-| completedCourses        | U16 × count                                                      | Index into `indices.json` courses                         |
-| levelBuckets            | U8 count + U8 × count                                            | 0=undergrad, 1=grad                                       |
-| languageBuckets         | U8 count + U8 × count                                            | 0=en, 1=fr, 2=other                                       |
-| electiveLevelBuckets    | U8 count + U16 × count                                           | e.g. 1000, 2000                                           |
-| coursesThisSemester     | U8                                                               |                                                           |
-| selectedScheduleIndex   | U16                                                              |                                                           |
-| generationSeed          | U32                                                              |                                                           |
-| includeClosedComponents | U8                                                               | 0 or 1                                                    |
-| optionSelections        | U16 count + (U16 reqIndex, U16 optionIndex) × count              |                                                           |
-| courseSelections        | U16 count + (U16 reqIndex, U16 selCount, U16 × selCount) × count |                                                           |
-| studentPrograms         | U8 count + (U8 len, ASCII bytes) × count                         | Discipline codes                                          |
+The wire schema lives in `packages/proto/proto/state.proto`; generated TypeScript is exported as `@uoplan/proto/state` and re-exported through `@uoplan/core`'s state helpers. `ShareableState.magic` must equal `STATE_MAGIC` (`0x554f504c`, ASCII `UOPL`).
 
-All multi-byte integers are **little-endian**.
+| Field group            | Proto fields                                                                                                                                                                                                                                                                                       | Notes                                                       |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Mode                   | `wizard_mode`, `basic_pinned_courses`, `basic_electives_count`, `basic_excluded_category_indices`                                                                                                                                                                                                  | Basic/advanced wizard state                                 |
+| Catalogue identity     | `selected_term_id`, `first_year`, `program_index`, `minor_program_index`, `student_program_indices`                                                                                                                                                                                                | Program/course/discipline values are indices into `indices` |
+| Course filters         | `completed_courses`, `level_buckets`, `language_buckets`, `elective_level_buckets`, `courses_this_semester`                                                                                                                                                                                        | Completed courses are packed pairs of course indices        |
+| Schedule navigation    | `first_seed`, `current_seed`, `swaps`, `calendar_week_index`                                                                                                                                                                                                                                       | `selected_schedule_index` is obsolete                       |
+| Requirement selections | `option_selections`, `course_selections`, `constrained_selections`, `constrained_group_selections`, `touched_req_indices`                                                                                                                                                                          | Requirement references are stable traversal indices         |
+| Generation preferences | `include_closed_components`, `virtual_sections_only`, `generation_min_start_minutes`, `generation_max_end_minutes`, `generation_min_professor_rating`, `generation_limit_first_year_credits`, `generation_compressed_schedule`, `generation_prefer_easier`, `blacklisted_courses`, `blocked_times` | User-controlled generation constraints                      |
+| UI state               | `active_step`, `show_calendar`, `french_immersion_stream`, `magic`                                                                                                                                                                                                                                 | `magic` guards incompatible/corrupted state data            |
 
 ## Program slugs
 
@@ -41,23 +31,25 @@ https://catalogue.uottawa.ca/en/undergrad/bsc-cs/              → undergrad/bsc
 https://catalogue.uottawa.ca/archive/2024-2025/en/undergrad/bsc-cs/ → undergrad/bsc-cs
 ```
 
-The helper `urlToSlug(url)` in `stateEncode.ts` performs this conversion. Programmes scraped via `scripts/scraper.ts` have a `slug` field pre-computed; for old catalogue files without the field, the slug is derived on the fly.
+The helper `urlToSlug(url)` in `packages/core/src/stateEncode.ts` performs this conversion. Programmes scraped via `apps/scraper/` have a `slug` field pre-computed; for old catalogue files without the field, the slug is derived on the fly.
 
-`public/data/indices.json` stores slugs (not full URLs) in its `programs` array.
+`apps/scraper/data/indices.json` stores slugs (not full URLs) in its `programs` array; the runtime app loads the protobuf form from `apps/web/public/data/indices.pb`.
 
 ## Peeking term & year early
 
-`peekTermAndYear(bytes)` reads only the header of the binary (version + termId + firstYear) without needing the catalogue or indices. `loadData` in `appStore.ts` calls this before fetching schedules and the year catalogue so the right data files are loaded upfront.
+`peekTermAndYear(bytes)` decodes the `ShareableState` protobuf and reads only `selectedTermId` and `firstYear` without needing the catalogue or indices. `loadData` in `src/store/slices/data.ts` calls this before fetching schedules and the year catalogue so the right data files are loaded upfront.
 
 ## How to change it
 
-- **Add a new field**: bump `VERSION`, add to `EncodeInput` and `DecodedState`, encode/decode it in `encodeState`/`decodeState`, and update `getEncodedStateBase64` + `getShareUrl` in `appStore.ts`. If the field is needed before catalogue load, also update `peekTermAndYear`.
+- **Add a new field**: add it to `packages/proto/proto/state.proto`, regenerate `@uoplan/proto`, add to `EncodeInput` and `DecodedState`, encode/decode it in `encodeState`/`decodeState`, and update `getEncodedStateBase64` + `getShareUrl` in `src/store/slices/url.ts`. If the field is needed before catalogue load, also update `peekTermAndYear`.
 - **Change the program index format**: update `encodeState` (uses `programSlug()`), `decodeState` (uses slug lookup), and regenerate `indices.json` via `pnpm scrape:catalogue`.
-- **Regenerate indices.json**: run `pnpm scrape:catalogue` — [`apps/scraper/src/scraper.ts`](../apps/scraper/src/scraper.ts) calls `generateIndices()` after the scrape. It **merges** with any existing `indices.json`: existing entries keep their order and indices; for each `catalogue.YYYY.json` present under `public/data` (academic years ascending), course codes and program slugs not already seen are **appended** in file order within each year (so encoded URLs and localStorage stay stable as catalogues grow). Years without a file are skipped.
+- **Regenerate indices.json**: run `pnpm scrape:catalogue` — [`apps/scraper/src/catalogue/scrape.ts`](../apps/scraper/src/catalogue/scrape.ts) calls `generateIndices()` after the scrape. It **merges** with any existing `indices.json`: existing entries keep their order and indices; for each `catalogue.YYYY.json` present under `apps/scraper/data` (academic years ascending), course codes and program slugs not already seen are **appended** in file order within each year (so encoded URLs and localStorage stay stable as catalogues grow). Years without a file are skipped.
 
 ## Dependencies
 
-- `src/schemas/indices.ts` — Zod schema for `indices.json`
-- `src/schemas/catalogue.ts` — `Program` type (optional `slug` field)
-- `src/store/appStore.ts` — calls `encodeState`/`decodeState`, `peekTermAndYear`
+- `packages/core/src/stateEncode.ts` — `encodeState`/`decodeState`, `peekTermAndYear`, base64 helpers
+- `packages/proto/proto/state.proto` — `ShareableState` wire schema (`@uoplan/proto/state` generated exports)
+- `packages/core/src/dataTypes.ts` — `Indices` and `Program` types (optional `slug` field)
+- `src/store/slices/url.ts` — calls `encodeStateToBase64()` and applies decoded state
+- `src/store/slices/data.ts` — calls `peekTermAndYear`, `decodeState`, and `decodeStateFromBase64` during data load
 - `src/hooks/usePersistState.ts` — debounce-saves encoded state to localStorage
