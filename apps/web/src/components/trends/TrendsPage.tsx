@@ -12,6 +12,7 @@ import {
   Title,
 } from "@mantine/core";
 import { LineChart } from "@mantine/charts";
+import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useShallow } from "zustand/react/shallow";
 import {
@@ -29,11 +30,20 @@ import {
 import { useTr, formatLocaleNumber, tr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useAppStore } from "../../store/appStore";
+import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
+import { programSlugToPathParam } from "../../lib/explore/programSearch";
+import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
+import type { BackState } from "../../lib/navigation/backState";
 import { BackButton } from "../shared/BackButton";
 import { ChromeControls } from "../shared/ChromeControls";
 import { AppCard } from "../shared/AppCard";
 import { AnimatedNumber } from "../shared/AnimatedNumber";
-import type { TrendsSearch, TrendsMetric, TrendsSort } from "../../routes/trends";
+import {
+  toUrlSearch,
+  type TrendsSearch,
+  type TrendsMetric,
+  type TrendsSort,
+} from "../../routes/trends";
 
 type MetricId = TrendsMetric;
 type LeaderboardSort = TrendsSort;
@@ -292,6 +302,43 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
     onChange(next as TrendsSearch);
   };
 
+  const trendsBack = useMemo<BackState>(
+    () => ({ to: "/trends", search: toUrlSearch(search), label: tr("trends.title") }),
+    [search],
+  );
+
+  const renderRowLabel = (row: LeaderboardRow) => {
+    const label = (
+      <Text size="sm" fw={600} c="var(--app-accent)" span>
+        {row.label}
+      </Text>
+    );
+    if (filteredMode) {
+      return (
+        <Link
+          to="/explore/course/$course"
+          params={{ course: courseNormToPathParam(row.key) }}
+          search={EMPTY_EXPLORE_SEARCH}
+          state={{ back: trendsBack } as never}
+          style={{ textDecoration: "none" }}
+        >
+          {label}
+        </Link>
+      );
+    }
+    return (
+      <Link
+        to="/explore/discipline/$discipline"
+        params={{ discipline: row.key.toLowerCase() }}
+        search={EMPTY_EXPLORE_SEARCH}
+        state={{ back: trendsBack } as never}
+        style={{ textDecoration: "none" }}
+      >
+        {label}
+      </Link>
+    );
+  };
+
   return (
     <Box
       component="main"
@@ -492,9 +539,23 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                         : tr("trends.leaderboard.title")}
                     </Text>
                     {leaderboardScope ? (
-                      <Text size="xs" c="dimmed">
-                        {leaderboardScope}
-                      </Text>
+                      programSlugValue ? (
+                        <Link
+                          to="/explore/program/$"
+                          params={{ _splat: programSlugToPathParam(programSlugValue) }}
+                          search={EMPTY_EXPLORE_SEARCH}
+                          state={{ back: trendsBack } as never}
+                          style={{ textDecoration: "none" }}
+                        >
+                          <Text size="xs" c="var(--app-accent)" span>
+                            {leaderboardScope}
+                          </Text>
+                        </Link>
+                      ) : (
+                        <Text size="xs" c="dimmed">
+                          {leaderboardScope}
+                        </Text>
+                      )
                     ) : null}
                   </Stack>
                   <SegmentedControl
@@ -536,9 +597,7 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                         rankedRows.map((row) => (
                           <Table.Tr key={row.key}>
                             <Table.Td>
-                              <Text size="sm" fw={600} c="var(--app-text)">
-                                {row.label}
-                              </Text>
+                              {renderRowLabel(row)}
                               {row.name ? (
                                 <Text size="xs" c="dimmed">
                                   {row.name}

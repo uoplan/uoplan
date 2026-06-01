@@ -41,7 +41,7 @@ const VALID_METRICS: ReadonlySet<TrendsMetric> = new Set<TrendsMetric>([
 const VALID_SORTS: ReadonlySet<TrendsSort> = new Set<TrendsSort>(["rise", "easiest", "hardest"]);
 
 /** Convert internal search state into the kebab-case object serialized to the URL. */
-function toUrlSearch(search: TrendsSearch): Record<string, unknown> {
+export function toUrlSearch(search: TrendsSearch): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   if (search.discipline) out.discipline = search.discipline;
   if (search.level != null) out.level = search.level;

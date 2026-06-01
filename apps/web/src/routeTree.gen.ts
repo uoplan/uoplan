@@ -18,6 +18,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ScheduleIndexRouteImport } from './routes/schedule/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
 import { Route as ScheduleCalendarIndexRouteImport } from './routes/schedule/calendar/index'
+import { Route as ExploreProgramSplatRouteImport } from './routes/explore/program/$'
 import { Route as ExploreProfessorLegacyIdRouteImport } from './routes/explore/professor/$legacyId'
 import { Route as ExploreDisciplineDisciplineRouteImport } from './routes/explore/discipline/$discipline'
 import { Route as ExploreCourseCourseRouteImport } from './routes/explore/course/$course'
@@ -67,6 +68,11 @@ const ScheduleCalendarIndexRoute = ScheduleCalendarIndexRouteImport.update({
   path: '/calendar/',
   getParentRoute: () => ScheduleRouteRoute,
 } as any)
+const ExploreProgramSplatRoute = ExploreProgramSplatRouteImport.update({
+  id: '/program/$',
+  path: '/program/$',
+  getParentRoute: () => ExploreRouteRoute,
+} as any)
 const ExploreProfessorLegacyIdRoute =
   ExploreProfessorLegacyIdRouteImport.update({
     id: '/professor/$legacyId',
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/explore/course/$course': typeof ExploreCourseCourseRoute
   '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
   '/explore/professor/$legacyId': typeof ExploreProfessorLegacyIdRoute
+  '/explore/program/$': typeof ExploreProgramSplatRoute
   '/schedule/calendar/': typeof ScheduleCalendarIndexRoute
 }
 export interface FileRoutesByTo {
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/explore/course/$course': typeof ExploreCourseCourseRoute
   '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
   '/explore/professor/$legacyId': typeof ExploreProfessorLegacyIdRoute
+  '/explore/program/$': typeof ExploreProgramSplatRoute
   '/schedule/calendar': typeof ScheduleCalendarIndexRoute
 }
 export interface FileRoutesById {
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/explore/course/$course': typeof ExploreCourseCourseRoute
   '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
   '/explore/professor/$legacyId': typeof ExploreProfessorLegacyIdRoute
+  '/explore/program/$': typeof ExploreProgramSplatRoute
   '/schedule/calendar/': typeof ScheduleCalendarIndexRoute
 }
 export interface FileRouteTypes {
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/explore/course/$course'
     | '/explore/discipline/$discipline'
     | '/explore/professor/$legacyId'
+    | '/explore/program/$'
     | '/schedule/calendar/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -152,6 +162,7 @@ export interface FileRouteTypes {
     | '/explore/course/$course'
     | '/explore/discipline/$discipline'
     | '/explore/professor/$legacyId'
+    | '/explore/program/$'
     | '/schedule/calendar'
   id:
     | '__root__'
@@ -166,6 +177,7 @@ export interface FileRouteTypes {
     | '/explore/course/$course'
     | '/explore/discipline/$discipline'
     | '/explore/professor/$legacyId'
+    | '/explore/program/$'
     | '/schedule/calendar/'
   fileRoutesById: FileRoutesById
 }
@@ -243,6 +255,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ScheduleCalendarIndexRouteImport
       parentRoute: typeof ScheduleRouteRoute
     }
+    '/explore/program/$': {
+      id: '/explore/program/$'
+      path: '/program/$'
+      fullPath: '/explore/program/$'
+      preLoaderRoute: typeof ExploreProgramSplatRouteImport
+      parentRoute: typeof ExploreRouteRoute
+    }
     '/explore/professor/$legacyId': {
       id: '/explore/professor/$legacyId'
       path: '/professor/$legacyId'
@@ -272,6 +291,7 @@ interface ExploreRouteRouteChildren {
   ExploreCourseCourseRoute: typeof ExploreCourseCourseRoute
   ExploreDisciplineDisciplineRoute: typeof ExploreDisciplineDisciplineRoute
   ExploreProfessorLegacyIdRoute: typeof ExploreProfessorLegacyIdRoute
+  ExploreProgramSplatRoute: typeof ExploreProgramSplatRoute
 }
 
 const ExploreRouteRouteChildren: ExploreRouteRouteChildren = {
@@ -279,6 +299,7 @@ const ExploreRouteRouteChildren: ExploreRouteRouteChildren = {
   ExploreCourseCourseRoute: ExploreCourseCourseRoute,
   ExploreDisciplineDisciplineRoute: ExploreDisciplineDisciplineRoute,
   ExploreProfessorLegacyIdRoute: ExploreProfessorLegacyIdRoute,
+  ExploreProgramSplatRoute: ExploreProgramSplatRoute,
 }
 
 const ExploreRouteRouteWithChildren = ExploreRouteRoute._addFileChildren(

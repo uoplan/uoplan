@@ -24,6 +24,11 @@ import {
   type ExploreSearchParams,
   type ExploreFilterState,
 } from "../../lib/explore/exploreFilters";
+import {
+  buildProgramSearchEntries,
+  createExploreProgramFuse,
+  searchExplorePrograms,
+} from "../../lib/explore/programSearch";
 import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { BackButton } from "../shared/BackButton";
@@ -32,6 +37,7 @@ import { EXPLORE_ACCORDION_PAD_INLINE } from "./ExploreProfessorGradesLayout";
 import { SearchResultCourseCard } from "./SearchResultCourseCard";
 import { SearchResultDisciplineCard } from "./SearchResultDisciplineCard";
 import { SearchResultProfessorCard } from "./SearchResultProfessorCard";
+import { SearchResultProgramCard } from "./SearchResultProgramCard";
 
 const EMPTY_COURSE_ENTRIES: ExploreCourseSearchEntry[] = [];
 const EMPTY_PROFESSOR_ENTRIES: ExploreProfessorSearchEntry[] = [];
@@ -290,13 +296,27 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       .slice(0, DISCIPLINE_MAX_RESULTS);
   }, [debouncedQuery, disciplines]);
 
+  const programEntries = useMemo(
+    () => (catalogue ? buildProgramSearchEntries(catalogue.programs) : []),
+    [catalogue],
+  );
+  const programFuse = useMemo(
+    () => (programEntries.length > 0 ? createExploreProgramFuse(programEntries) : null),
+    [programEntries],
+  );
+  const programResults = useMemo(
+    () => searchExplorePrograms(programFuse, programEntries, debouncedQuery),
+    [programFuse, programEntries, debouncedQuery],
+  );
+
   const showResults = searchEngaged && (debouncedQuery.trim().length > 0 || activeFilters);
   const renderResults = onIndex && showResults;
   const hasResults =
     (searchResults?.courses.length ?? 0) > 0 ||
     (filterOnlyCourses?.length ?? 0) > 0 ||
     (searchResults?.professors.length ?? 0) > 0 ||
-    disciplineResults.length > 0;
+    disciplineResults.length > 0 ||
+    programResults.length > 0;
 
   const displayedCourses = filterOnlyCourses ?? searchResults?.courses ?? [];
 
@@ -370,9 +390,27 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       </SearchCardSection>
     ) : null;
 
+  const programsSection =
+    programResults.length > 0 ? (
+      <SearchCardSection label={tr("explore.resultsPrograms")} delay={0.08}>
+        {programResults.map((program) => (
+          <motion.div
+            key={program.slug}
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.94 }}
+            transition={{ duration: 0.14, ease: "easeOut" }}
+            style={{ flexShrink: 0 }}
+          >
+            <SearchResultProgramCard program={program} query={debouncedQuery} />
+          </motion.div>
+        ))}
+      </SearchCardSection>
+    ) : null;
+
   const orderedSections = searchResults?.professorsFirst
-    ? [professorsSection, coursesSection, disciplinesSection]
-    : [coursesSection, disciplinesSection, professorsSection];
+    ? [professorsSection, coursesSection, disciplinesSection, programsSection]
+    : [coursesSection, disciplinesSection, programsSection, professorsSection];
 
   return (
     <Box
