@@ -155,6 +155,11 @@ export interface AppState {
   calendarMode: CalendarVariant | null;
   /** True when the last seed navigation returned the same course set as the current schedule. */
   scheduleNoVariety: boolean;
+  /**
+   * True when a generation option has changed since the last generation. Drives the
+   * calendar "Next" → "Generate" relabel. Ephemeral UI state, not persisted to the URL.
+   */
+  generationOptionsDirty: boolean;
   /** Courses that must never appear in any generated schedule. */
   blacklistedCourses: string[];
   /** Recurring per-weekday windows that no generated course may overlap. */

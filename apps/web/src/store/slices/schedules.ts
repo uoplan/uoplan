@@ -201,6 +201,7 @@ function applyScheduleGenerationResult(
     lowestVisitedSeed,
     calendarWeekIndex: null,
     scheduleNoVariety: false,
+    generationOptionsDirty: false,
   });
 }
 
@@ -328,12 +329,14 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         currentSeed: 0,
         lowestVisitedSeed: null,
         scheduleNoVariety: false,
+        generationOptionsDirty: false,
       }),
 
     markBasicSettingsChanged: () =>
       set({
         generationError: null,
         scheduleNoVariety: false,
+        generationOptionsDirty: true,
       }),
 
     goToPreviousSeed: async () => {
@@ -385,6 +388,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
             swapsPerSeed: updatedSwapsPerSeed,
             calendarWeekIndex: null,
             scheduleNoVariety: noVariety,
+            generationOptionsDirty: false,
           });
         }
       });
@@ -944,6 +948,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
           basicPinnedCourses: [...basicPinnedCourses, canonical],
           basicElectivesCount: basicElectivesAfterPinnedDelta(basicElectivesCount, 1),
           generationError: null,
+          generationOptionsDirty: true,
         });
         return;
       }
@@ -997,6 +1002,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         if (merged === constrained) return {};
         return {
           constrainedPerRequirement: { ...s.constrainedPerRequirement, [targetId]: merged },
+          generationOptionsDirty: true,
         };
       });
     },
@@ -1023,6 +1029,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
             next.length - basicPinnedCourses.length,
           ),
           generationError: null,
+          generationOptionsDirty: true,
         });
         return;
       }
@@ -1037,7 +1044,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         if (filtered.length > 0) next[rid] = filtered;
       }
       if (!changed) return;
-      set({ constrainedPerRequirement: next });
+      set({ constrainedPerRequirement: next, generationOptionsDirty: true });
     },
 
     blacklistCourseFromSwap: (enrollmentIndex) => {
@@ -1054,6 +1061,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         firstSeed: generateRandomSeed(),
         currentSeed: 0,
         lowestVisitedSeed: null,
+        generationOptionsDirty: true,
       });
     },
 
@@ -1070,6 +1078,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         firstSeed: generateRandomSeed(),
         currentSeed: 0,
         lowestVisitedSeed: null,
+        generationOptionsDirty: true,
       });
     },
 

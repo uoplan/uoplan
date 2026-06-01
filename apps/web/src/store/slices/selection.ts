@@ -62,9 +62,12 @@ interface SelectionSlice {
 }
 
 export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice> = (set, get) => ({
-  setBasicPinnedCourses: (courses) => set({ basicPinnedCourses: courses }),
-  setBasicElectivesCount: (count) => set({ basicElectivesCount: count }),
-  setBasicExcludedCategories: (categories) => set({ basicExcludedCategories: categories }),
+  setBasicPinnedCourses: (courses) =>
+    set({ basicPinnedCourses: courses, generationOptionsDirty: true }),
+  setBasicElectivesCount: (count) =>
+    set({ basicElectivesCount: count, generationOptionsDirty: true }),
+  setBasicExcludedCategories: (categories) =>
+    set({ basicExcludedCategories: categories, generationOptionsDirty: true }),
 
   setProgram: (program) => {
     const studentPrograms = getDisciplineCodesForProgram(program);
@@ -197,7 +200,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       studentPrograms,
       requirementSlotsUserTouched,
     );
-    set(state);
+    set({ ...state, generationOptionsDirty: true });
   },
 
   addCompletedCourse: (code) => {
@@ -242,7 +245,11 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       studentPrograms,
       requirementSlotsUserTouchedNext,
     );
-    set({ ...state, requirementSlotsUserTouched: requirementSlotsUserTouchedNext });
+    set({
+      ...state,
+      requirementSlotsUserTouched: requirementSlotsUserTouchedNext,
+      generationOptionsDirty: true,
+    });
   },
 
   setLevelBuckets: (buckets) => {
@@ -272,7 +279,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       studentPrograms,
       requirementSlotsUserTouched,
     );
-    set(state);
+    set({ ...state, generationOptionsDirty: true });
   },
 
   setLanguageBuckets: (buckets) => {
@@ -302,16 +309,16 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       studentPrograms,
       requirementSlotsUserTouched,
     );
-    set(state);
+    set({ ...state, generationOptionsDirty: true });
   },
 
   setElectiveLevelBuckets: (buckets) => {
-    set({ electiveLevelBuckets: buckets });
+    set({ electiveLevelBuckets: buckets, generationOptionsDirty: true });
   },
 
   setFrenchImmersionStream: (enabled) => {
     if (!enabled) {
-      set({ frenchImmersionStream: false });
+      set({ frenchImmersionStream: false, generationOptionsDirty: true });
       return;
     }
     const {
@@ -334,7 +341,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
     // Basic mode does not use requirement-tree / filtered-prereq state on the calendar;
     // skipping the full recompute avoids scanning the entire catalogue on toggle (UI freeze).
     if (get().calendarMode === "basic") {
-      set({ frenchImmersionStream: true, languageBuckets: nextLang });
+      set({ frenchImmersionStream: true, languageBuckets: nextLang, generationOptionsDirty: true });
       return;
     }
 
@@ -351,7 +358,12 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       studentPrograms,
       requirementSlotsUserTouched,
     );
-    set({ ...state, frenchImmersionStream: true, languageBuckets: nextLang });
+    set({
+      ...state,
+      frenchImmersionStream: true,
+      languageBuckets: nextLang,
+      generationOptionsDirty: true,
+    });
   },
 
   setSelectedOptionForRequirement: (requirementId, optionIndex) => {
@@ -384,7 +396,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       studentPrograms,
       requirementSlotsUserTouched,
     );
-    set(state);
+    set({ ...state, generationOptionsDirty: true });
   },
 
   clearSelectedOptionForRequirement: (requirementId) => {
@@ -417,7 +429,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       studentPrograms,
       requirementSlotsUserTouched,
     );
-    set(state);
+    set({ ...state, generationOptionsDirty: true });
   },
 
   setConstrainedForRequirement: (requirementId, courses) => {
@@ -426,6 +438,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
         ...s.constrainedPerRequirement,
         [requirementId]: courses,
       },
+      generationOptionsDirty: true,
     }));
   },
 
@@ -473,7 +486,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
     });
   },
 
-  setCoursesThisSemester: (n) => set({ coursesThisSemester: n }),
+  setCoursesThisSemester: (n) => set({ coursesThisSemester: n, generationOptionsDirty: true }),
 
   clearGenerationOptions: () => {
     const {
@@ -528,6 +541,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       currentSeed: 0,
       lowestVisitedSeed: null,
       scheduleNoVariety: false,
+      generationOptionsDirty: false,
     });
 
     // Buckets / closed-component visibility feed the requirement tree and eligible-course
