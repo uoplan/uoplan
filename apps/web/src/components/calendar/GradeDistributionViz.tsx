@@ -55,34 +55,51 @@ const HISTOGRAM_PLACEHOLDER_BARS = [
 ] as const;
 
 /** Grayed-out stand-in shown in place of {@link GradeDistributionHistogram} when
- * a professor / term / section has no grade data. */
+ * a professor / term / section has no grade data. Mirrors the real histogram's
+ * markup (same classes, gaps, flex sizing, wider S/NS bar, and label row) so the
+ * two line up pixel-for-pixel. */
 export function GradeDistributionHistogramPlaceholder({
   variant = "compact",
 }: {
   variant?: GradeHistogramVariant;
 }) {
   const dims = HIST_DIMS[variant];
+  const histClass = [
+    "cal-grade-histogram",
+    variant === "compact" ? "cal-grade-histogram--compact" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const lastIndex = HISTOGRAM_PLACEHOLDER_BARS.length - 1;
   return (
     <div
+      className={histClass}
+      style={{ paddingTop: dims.padTopPx, minHeight: dims.minWrapHeight }}
       aria-hidden
-      style={{
-        display: "flex",
-        alignItems: "flex-end",
-        gap: 4,
-        width: "100%",
-        height: dims.minWrapHeight,
-      }}
     >
       {HISTOGRAM_PLACEHOLDER_BARS.map((h, i) => (
         <div
           key={i}
-          style={{
-            flex: 1,
-            height: `${h}%`,
-            backgroundColor: "var(--app-translucent-strong)",
-            borderRadius: 2,
-          }}
-        />
+          className={`cal-grade-histogram-item${
+            i === lastIndex ? " cal-grade-histogram-item--sns" : ""
+          }`}
+        >
+          <div
+            className="cal-grade-histogram-bar"
+            style={{
+              height: `${(h / 100) * dims.maxBarPx}px`,
+              backgroundColor: "var(--app-translucent-strong)",
+            }}
+          />
+          <Text
+            style={{ fontSize: dims.labelFontPx }}
+            c="gray.5"
+            ta="center"
+            className="cal-grade-histogram-label"
+          >
+            {"\u00A0"}
+          </Text>
+        </div>
       ))}
     </div>
   );
