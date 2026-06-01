@@ -2009,7 +2009,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 168,
               "A": 567,
@@ -7136,7 +7136,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 80,
               "A": 101,
@@ -14700,7 +14700,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 276,
               "A": 319,
@@ -18614,7 +18614,7 @@
             "component": "REC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1,
               "A": 3,
@@ -33484,7 +33484,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 47,
               "A": 77,
@@ -46704,7 +46704,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 250,
               "A": 189,
@@ -49397,7 +49397,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 26,
               "A": 48,
@@ -49557,7 +49557,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 18,
               "A": 19,
