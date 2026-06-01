@@ -642,6 +642,30 @@ msgstr "No grade history found for this instructor."
 msgid "explore.profileLink"
 msgstr "Profile"
 
+#: apps/web/src/components/explore/SearchResultProgramCard.tsx:67
+msgid "explore.program.courseCount"
+msgstr "{count, plural, one {# core course} other {# core courses}}"
+
+#: apps/web/src/components/explore/ExploreProgramPage.tsx:101
+msgid "explore.program.noCourses"
+msgstr "No required courses found for this program."
+
+#: apps/web/src/components/explore/ExploreProgramPage.tsx:77
+msgid "explore.program.noGradeData"
+msgstr "No grade data"
+
+#: apps/web/src/components/explore/ExploreProgramPage.tsx:89
+msgid "explore.program.officialPage"
+msgstr "Official program page"
+
+#: apps/web/src/components/explore/ExploreProgramPage.tsx:97
+msgid "explore.program.requiredCourses"
+msgstr "Required courses"
+
+#: apps/web/src/components/explore/ExploreProgramPage.tsx:53
+msgid "explore.program.title"
+msgstr "Program"
+
 msgid "explore.resultsCourses"
 msgstr "Courses"
 
@@ -650,6 +674,10 @@ msgstr "Disciplines"
 
 msgid "explore.resultsProfessors"
 msgstr "Professors"
+
+#: apps/web/src/components/explore/ExploreLayout.tsx:395
+msgid "explore.resultsPrograms"
+msgstr "Programs"
 
 msgid "explore.searchPlaceholder"
 msgstr "Search courses or professors…"

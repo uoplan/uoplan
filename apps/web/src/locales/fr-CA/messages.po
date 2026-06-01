@@ -642,6 +642,30 @@ msgstr "Aucune donnée de notes pour ce professeur."
 msgid "explore.profileLink"
 msgstr "Profil"
 
+#: apps/web/src/components/explore/SearchResultProgramCard.tsx:67
+msgid "explore.program.courseCount"
+msgstr "{count, plural, one {# cours de base} other {# cours de base}}"
+
+#: apps/web/src/components/explore/ExploreProgramPage.tsx:101
+msgid "explore.program.noCourses"
+msgstr "Aucun cours obligatoire trouvé pour ce programme."
+
+#: apps/web/src/components/explore/ExploreProgramPage.tsx:77
+msgid "explore.program.noGradeData"
+msgstr "Aucune donnée de notes"
+
+#: apps/web/src/components/explore/ExploreProgramPage.tsx:89
+msgid "explore.program.officialPage"
+msgstr "Page officielle du programme"
+
+#: apps/web/src/components/explore/ExploreProgramPage.tsx:97
+msgid "explore.program.requiredCourses"
+msgstr "Cours obligatoires"
+
+#: apps/web/src/components/explore/ExploreProgramPage.tsx:53
+msgid "explore.program.title"
+msgstr "Programme"
+
 msgid "explore.resultsCourses"
 msgstr "Cours"
 
@@ -650,6 +674,10 @@ msgstr "Disciplines"
 
 msgid "explore.resultsProfessors"
 msgstr "Professeurs"
+
+#: apps/web/src/components/explore/ExploreLayout.tsx:395
+msgid "explore.resultsPrograms"
+msgstr "Programmes"
 
 msgid "explore.searchPlaceholder"
 msgstr "Rechercher des cours ou des professeurs…"
