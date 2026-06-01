@@ -379,6 +379,51 @@ describe("mergeOfferingsWithSchedule", () => {
     const merged = mergeOfferingsWithSchedule(gradeOfferings, scheduleOfferings);
     expect(merged.map((o) => o.id)).toEqual(["grade", "sched-new"]);
   });
+
+  it("backfills grade legacyId onto schedule rows so the professor groups into one entry", () => {
+    const gradeOfferings: ExploreOfferingFlat[] = [
+      sampleOffering({
+        id: "grade",
+        courseCode: "CSI 2110",
+        professorName: "Miguel Garzon",
+        legacyId: 42,
+        termId: 2251,
+        section: "A00",
+      }),
+    ];
+    const scheduleOfferings: ExploreOfferingFlat[] = [
+      sampleOffering({
+        id: "sched",
+        courseCode: "CSI 3104",
+        professorName: "Miguel Garzon",
+        termId: 2261,
+        section: undefined,
+        distribution: {},
+      }),
+    ];
+    const merged = mergeOfferingsWithSchedule(gradeOfferings, scheduleOfferings);
+    expect(merged.find((o) => o.id === "sched")?.legacyId).toBe(42);
+    expect(groupOfferingsByProfessor(merged)).toHaveLength(1);
+  });
+
+  it("leaves schedule rows unmerged when a name maps to multiple legacyIds", () => {
+    const gradeOfferings: ExploreOfferingFlat[] = [
+      sampleOffering({ id: "g1", professorName: "John Smith", legacyId: 1, termId: 2251 }),
+      sampleOffering({ id: "g2", professorName: "John Smith", legacyId: 2, termId: 2251 }),
+    ];
+    const scheduleOfferings: ExploreOfferingFlat[] = [
+      sampleOffering({
+        id: "sched",
+        courseCode: "CSI 9999",
+        professorName: "John Smith",
+        termId: 2261,
+        section: undefined,
+        distribution: {},
+      }),
+    ];
+    const merged = mergeOfferingsWithSchedule(gradeOfferings, scheduleOfferings);
+    expect(merged.find((o) => o.id === "sched")?.legacyId).toBeUndefined();
+  });
 });
 
 function aliasCatalogue(rows: { code: string; title?: string; aliases?: string[] }[]): Catalogue {

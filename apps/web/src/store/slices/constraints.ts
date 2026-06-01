@@ -1,14 +1,6 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
-import { generateRandomSeed } from "@uoplan/core";
 import { normalizeBlockedTimes, reconcileAvoidedDays } from "../../lib/blockedTimes";
-
-/** Regenerate using the path matching the active calendar mode (basic vs advanced). */
-function regenerateForActiveMode(get: () => AppStore): void {
-  void (get().calendarMode === "basic"
-    ? get().generateBasicSchedules()
-    : get().generateSchedules());
-}
 
 interface ConstraintsSlice {
   setGenerationMinStartMinutes: AppStore["setGenerationMinStartMinutes"];
@@ -32,81 +24,58 @@ export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsS
 ) => ({
   setIncludeClosedComponents: (value) => {
     get().clearEnrollmentsCache();
-    set({ includeClosedComponents: value });
+    set({ includeClosedComponents: value, generationOptionsDirty: true });
   },
 
   setVirtualSectionsOnly: (value) => {
     get().clearEnrollmentsCache();
-    set({ virtualSectionsOnly: value });
+    set({ virtualSectionsOnly: value, generationOptionsDirty: true });
   },
 
-  setGenerationMinStartMinutes: (minutes) => set({ generationMinStartMinutes: minutes }),
+  setGenerationMinStartMinutes: (minutes) =>
+    set({ generationMinStartMinutes: minutes, generationOptionsDirty: true }),
 
-  setGenerationMaxEndMinutes: (minutes) => set({ generationMaxEndMinutes: minutes }),
+  setGenerationMaxEndMinutes: (minutes) =>
+    set({ generationMaxEndMinutes: minutes, generationOptionsDirty: true }),
 
   setAvoidedDays: (days) => {
     const next = reconcileAvoidedDays(get().blockedTimes, days);
-    set({
-      blockedTimes: next,
-      firstSeed: generateRandomSeed(),
-      currentSeed: 0,
-      lowestVisitedSeed: null,
-    });
-    regenerateForActiveMode(get);
+    set({ blockedTimes: next, generationOptionsDirty: true });
   },
 
   setGenerationMinProfessorRating: (rating) =>
     set({
       generationMinProfessorRating: rating == null ? null : Number(rating),
+      generationOptionsDirty: true,
     }),
 
-  setGenerationLimitFirstYearCredits: (v) => set({ generationLimitFirstYearCredits: v }),
+  setGenerationLimitFirstYearCredits: (v) =>
+    set({ generationLimitFirstYearCredits: v, generationOptionsDirty: true }),
 
-  setGenerationCompressedSchedule: (v) => set({ generationCompressedSchedule: v }),
+  setGenerationCompressedSchedule: (v) =>
+    set({ generationCompressedSchedule: v, generationOptionsDirty: true }),
 
-  setGenerationPreferEasier: (v) => set({ generationPreferEasier: v }),
+  setGenerationPreferEasier: (v) =>
+    set({ generationPreferEasier: v, generationOptionsDirty: true }),
 
   setBlacklistedCourses: (courses) =>
-    set({
-      blacklistedCourses: courses,
-      firstSeed: generateRandomSeed(),
-      currentSeed: 0,
-      lowestVisitedSeed: null,
-    }),
+    set({ blacklistedCourses: courses, generationOptionsDirty: true }),
 
   addBlockedTime: (window) => {
     const next = normalizeBlockedTimes([...get().blockedTimes, { id: "", ...window }]);
-    set({
-      blockedTimes: next,
-      firstSeed: generateRandomSeed(),
-      currentSeed: 0,
-      lowestVisitedSeed: null,
-    });
-    regenerateForActiveMode(get);
+    set({ blockedTimes: next, generationOptionsDirty: true });
   },
 
   updateBlockedTime: (id, window) => {
     const next = normalizeBlockedTimes(
       get().blockedTimes.map((b) => (b.id === id ? { id, ...window } : b)),
     );
-    set({
-      blockedTimes: next,
-      firstSeed: generateRandomSeed(),
-      currentSeed: 0,
-      lowestVisitedSeed: null,
-    });
-    regenerateForActiveMode(get);
+    set({ blockedTimes: next, generationOptionsDirty: true });
   },
 
   removeBlockedTime: (id) => {
     const next = get().blockedTimes.filter((b) => b.id !== id);
     if (next.length === get().blockedTimes.length) return;
-    set({
-      blockedTimes: normalizeBlockedTimes(next),
-      firstSeed: generateRandomSeed(),
-      currentSeed: 0,
-      lowestVisitedSeed: null,
-    });
-    regenerateForActiveMode(get);
+    set({ blockedTimes: normalizeBlockedTimes(next), generationOptionsDirty: true });
   },
 });

@@ -753,6 +753,33 @@ export function buildScheduleOfferings(
   return out;
 }
 
+/**
+ * Maps each professor's normalized name to its grade-data legacyId, but only
+ * when that name resolves to exactly one legacyId. Names shared by distinct
+ * professors (multiple legacyIds) are omitted so we never mis-merge two people.
+ */
+function buildUnambiguousLegacyIdByName(
+  gradeOfferings: ExploreOfferingFlat[],
+): Map<string, number> {
+  const idsByName = new Map<string, Set<number>>();
+  for (const o of gradeOfferings) {
+    if (o.legacyId == null) continue;
+    const name = normalizeProfessorName(o.professorName).toLowerCase();
+    if (!name) continue;
+    let ids = idsByName.get(name);
+    if (!ids) {
+      ids = new Set();
+      idsByName.set(name, ids);
+    }
+    ids.add(o.legacyId);
+  }
+  const out = new Map<string, number>();
+  for (const [name, ids] of idsByName) {
+    if (ids.size === 1) out.set(name, [...ids][0]);
+  }
+  return out;
+}
+
 export function mergeOfferingsWithSchedule(
   gradeOfferings: ExploreOfferingFlat[],
   scheduleOfferings: ExploreOfferingFlat[],
@@ -764,9 +791,18 @@ export function mergeOfferingsWithSchedule(
   for (const o of gradeOfferings) {
     gradeKeys.add(scheduleOfferingDedupKey(o.courseCode, o.professorName, o.termId));
   }
-  const newEntries = scheduleOfferings.filter(
-    (o) => !gradeKeys.has(scheduleOfferingDedupKey(o.courseCode, o.professorName, o.termId)),
-  );
+  // Backfill legacyId onto schedule rows so a professor who has grade data is not
+  // split into a separate name-keyed entry by their schedule-only offerings.
+  const legacyIdByName = buildUnambiguousLegacyIdByName(gradeOfferings);
+  const newEntries = scheduleOfferings
+    .filter(
+      (o) => !gradeKeys.has(scheduleOfferingDedupKey(o.courseCode, o.professorName, o.termId)),
+    )
+    .map((o) => {
+      if (o.legacyId != null) return o;
+      const legacyId = legacyIdByName.get(normalizeProfessorName(o.professorName).toLowerCase());
+      return legacyId == null ? o : { ...o, legacyId };
+    });
   return [...gradeOfferings, ...newEntries];
 }
 

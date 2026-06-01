@@ -72,6 +72,7 @@ export function CalendarPage() {
     basicPinnedCourses,
     basicElectivesCount,
     scheduleNoVariety,
+    generationOptionsDirty,
     selectedTermId,
     program,
   } = useAppStore(
@@ -89,6 +90,7 @@ export function CalendarPage() {
       basicPinnedCourses: s.basicPinnedCourses,
       basicElectivesCount: s.basicElectivesCount,
       scheduleNoVariety: s.scheduleNoVariety,
+      generationOptionsDirty: s.generationOptionsDirty,
       selectedTermId: s.selectedTermId,
       program: s.program,
     })),
@@ -179,6 +181,8 @@ export function CalendarPage() {
     if (scheduleGenerating || !canUseSeedNavigation) return;
     await goToNextSeed();
   };
+
+  const nextLabel = generationOptionsDirty ? tr("calendarPage.generate") : tr("calendarPage.next");
 
   useHotkeys([
     ["ArrowLeft", () => canGoPrevious && void handlePrevious()],
@@ -292,7 +296,7 @@ export function CalendarPage() {
                 {tr("calendarPage.previous")}
               </Button>
               <Button
-                variant="default"
+                variant={generationOptionsDirty ? "filled" : "default"}
                 size="sm"
                 radius="md"
                 style={{ flex: 1 }}
@@ -301,7 +305,7 @@ export function CalendarPage() {
                 loading={scheduleGenerating}
                 onClick={handleNext}
               >
-                {tr("calendarPage.next")}
+                {nextLabel}
               </Button>
             </Button.Group>
           )}
@@ -417,7 +421,7 @@ export function CalendarPage() {
                   {tr("calendarPage.previous")}
                 </Button>
                 <Button
-                  variant="default"
+                  variant={generationOptionsDirty ? "filled" : "default"}
                   size="sm"
                   radius="md"
                   style={{ flex: 1 }}
@@ -426,7 +430,7 @@ export function CalendarPage() {
                   loading={scheduleGenerating}
                   onClick={handleNext}
                 >
-                  {tr("calendarPage.next")}
+                  {nextLabel}
                 </Button>
               </Button.Group>
             </Stack>
@@ -633,16 +637,20 @@ export function CalendarPage() {
               <IconChevronLeft size={22} stroke={1.75} />
             </Button>
             <Button
-              variant="subtle"
-              color="gray"
+              variant={generationOptionsDirty ? "light" : "subtle"}
+              color={generationOptionsDirty ? undefined : "gray"}
               size="md"
               radius="md"
-              aria-label={tr("calendarPage.mobile.next")}
+              aria-label={
+                generationOptionsDirty
+                  ? tr("calendarPage.generate")
+                  : tr("calendarPage.mobile.next")
+              }
               style={{ flex: 1, border: "none", height: 56 }}
               disabled={scheduleGenerating || !canUseSeedNavigation}
               loading={scheduleGenerating}
               onClick={handleNext}
-              title="Next schedule"
+              title={generationOptionsDirty ? tr("calendarPage.generate") : "Next schedule"}
             >
               <IconChevronRight size={22} stroke={1.75} />
             </Button>

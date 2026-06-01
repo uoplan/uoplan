@@ -111,6 +111,7 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
       calendarWeekIndex: null,
       calendarMode: null,
       scheduleNoVariety: false,
+      generationOptionsDirty: false,
       blacklistedCourses: [],
       blockedTimes: defaultBlockedTimes(),
       lastSavedAt: null,
