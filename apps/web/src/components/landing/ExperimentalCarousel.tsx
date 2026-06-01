@@ -64,7 +64,7 @@ export function ExperimentalCarousel({ items }: ExperimentalCarouselProps) {
     };
     raf = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(raf);
-  }, [prefersReducedMotion, paused, count]);
+  }, [prefersReducedMotion, paused, count, index]);
 
   // Under reduced motion, advance on a plain interval with no animated fill.
   useEffect(() => {
