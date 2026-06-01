@@ -8,6 +8,7 @@ import type { Catalogue } from "@uoplan/core";
 import { useTr, tr } from "../../i18n";
 import {
   searchExplore,
+  dedupeCourseEntriesByComponent,
   type ExploreCourseSearchEntry,
   type ExploreProfessorSearchEntry,
 } from "../../lib/explore/gradesSearch";
@@ -272,7 +273,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
   const filterOnlyCourses = useMemo(() => {
     const q = debouncedQuery.trim();
     if (q || !activeFilters) return null;
-    const filtered = filterCourseEntries(courseEntries, filters);
+    const filtered = dedupeCourseEntriesByComponent(filterCourseEntries(courseEntries, filters));
     if (filters.sortKey === "relevance") return filtered.slice(0, 24);
     if (filters.sortKey === "profRating") return filtered.slice(0, 24);
     return filtered

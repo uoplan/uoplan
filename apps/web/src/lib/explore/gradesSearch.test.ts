@@ -1,11 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
+  buildAliasGroups,
   buildCourseSearchEntries,
   buildExploreOfferings,
   buildExploreProfessorSearchEntries,
+  buildOfferingsByComponent,
   buildScheduleOfferings,
   createExploreCourseFuse,
   createExploreFuse,
+  dedupeCourseEntriesByComponent,
   exploreProfessorsSectionFirst,
   mergeGradeDistributionCounts,
   mergeOfferingsWithSchedule,
@@ -16,7 +19,7 @@ import {
   groupOfferingsByProfessor,
   type ExploreOfferingFlat,
 } from "./gradesSearch";
-import type { CourseSchedule, SchedulesData } from "@uoplan/core";
+import type { Catalogue, CourseSchedule, SchedulesData } from "@uoplan/core";
 
 function sampleOffering(partial: Partial<ExploreOfferingFlat>): ExploreOfferingFlat {
   const defaults: ExploreOfferingFlat = {
@@ -375,5 +378,169 @@ describe("mergeOfferingsWithSchedule", () => {
     ];
     const merged = mergeOfferingsWithSchedule(gradeOfferings, scheduleOfferings);
     expect(merged.map((o) => o.id)).toEqual(["grade", "sched-new"]);
+  });
+});
+
+function aliasCatalogue(rows: { code: string; title?: string; aliases?: string[] }[]): Catalogue {
+  return {
+    courses: rows.map((r) => ({
+      code: r.code,
+      title: r.title ?? "",
+      credits: 3,
+      description: "",
+      aliases: r.aliases,
+    })),
+    programs: [],
+  } as unknown as Catalogue;
+}
+
+describe("buildAliasGroups", () => {
+  it("unions transitively and keys components by the smallest member code", () => {
+    // A -> B, B -> C should collapse into a single component {A,B,C}.
+    const { componentByNorm, membersByComponent } = buildAliasGroups(
+      aliasCatalogue([
+        { code: "STA 2391", aliases: ["MAT 2377"] },
+        { code: "MAT 2377", aliases: ["MAT 2371"] },
+      ]),
+    );
+    const id = componentByNorm.get("STA 2391");
+    expect(id).toBe("MAT 2371"); // lexicographically smallest
+    expect(componentByNorm.get("MAT 2377")).toBe(id);
+    expect(componentByNorm.get("MAT 2371")).toBe(id);
+    expect(membersByComponent.get("MAT 2371")).toEqual(["MAT 2371", "MAT 2377", "STA 2391"]);
+  });
+
+  it("merges hub aliases shared by distinct courses into one component", () => {
+    const { componentByNorm, membersByComponent } = buildAliasGroups(
+      aliasCatalogue([
+        { code: "ART 3916", aliases: ["ART 3016"] },
+        { code: "ART 3917", aliases: ["ART 3016"] },
+      ]),
+    );
+    const id = componentByNorm.get("ART 3916");
+    expect(componentByNorm.get("ART 3917")).toBe(id);
+    expect(componentByNorm.get("ART 3016")).toBe(id);
+    expect(membersByComponent.get(id as string)).toHaveLength(3);
+  });
+
+  it("omits courses with no alias relation (standalone)", () => {
+    const { componentByNorm } = buildAliasGroups(aliasCatalogue([{ code: "CSI 2110" }]));
+    expect(componentByNorm.has("CSI 2110")).toBe(false);
+  });
+
+  it("returns empty groups for a null catalogue", () => {
+    const groups = buildAliasGroups(null);
+    expect(groups.componentByNorm.size).toBe(0);
+    expect(groups.membersByComponent.size).toBe(0);
+  });
+});
+
+describe("alias-aware course aggregation", () => {
+  const catalogue = aliasCatalogue([
+    { code: "STA 2391", title: "Probability", aliases: ["MAT 2377"] },
+  ]);
+  const { componentByNorm, membersByComponent } = buildAliasGroups(catalogue);
+  const titleByCode = new Map([
+    ["STA 2391", "Probability"],
+    ["MAT 2377", "Probability"],
+  ]);
+
+  // Data is split across the two codes: old code MAT 2377 and new code STA 2391.
+  const offerings = [
+    sampleOffering({
+      id: "old",
+      courseCode: "MAT 2377",
+      courseTitle: "Probability",
+      professorName: "Old Prof",
+      termId: 2191,
+      distribution: { "A+": 2 },
+    }),
+    sampleOffering({
+      id: "new",
+      courseCode: "STA 2391",
+      courseTitle: "Probability",
+      professorName: "New Prof",
+      termId: 2251,
+      distribution: { B: 4 },
+    }),
+  ];
+
+  it("buckets offerings from both codes into one component", () => {
+    const byComponent = buildOfferingsByComponent(offerings, componentByNorm);
+    expect(byComponent.size).toBe(1);
+    expect(byComponent.get("MAT 2377")).toHaveLength(2);
+  });
+
+  it("exposes merged grade stats on every member entry", () => {
+    const entries = buildCourseSearchEntries(
+      offerings,
+      titleByCode,
+      null,
+      componentByNorm,
+      membersByComponent,
+    );
+    const sta = entries.find((e) => e.normCode === "STA 2391");
+    const mat = entries.find((e) => e.normCode === "MAT 2377");
+    expect(sta?.componentId).toBe("MAT 2377");
+    expect(mat?.componentId).toBe("MAT 2377");
+    // Both expose the combined A+ and B counts from the two codes.
+    const total = (g: typeof sta) =>
+      g?.gradeViz?.histogram.reduce((sum, h) => sum + h.count, 0) ?? 0;
+    expect(total(sta)).toBe(6);
+    expect(total(mat)).toBe(6);
+  });
+
+  it("synthesizes a searchable entry for an alias code with no offerings of its own", () => {
+    const onlyNew = [offerings[1]]; // only STA 2391 has offerings
+    const entries = buildCourseSearchEntries(
+      onlyNew,
+      titleByCode,
+      null,
+      componentByNorm,
+      membersByComponent,
+    );
+    const mat = entries.find((e) => e.normCode === "MAT 2377");
+    expect(mat).toBeDefined();
+    expect(mat?.courseTitle).toBe("Probability");
+    const fuse = createExploreCourseFuse(entries);
+    // Searching the old code surfaces the merged course displayed under that code.
+    const hit = searchExploreCourses(fuse, entries, "mat 2377");
+    expect(hit.map((e) => e.normCode)).toContain("MAT 2377");
+  });
+
+  it("dedupes search results to one entry per alias component", () => {
+    const entries = buildCourseSearchEntries(
+      offerings,
+      titleByCode,
+      null,
+      componentByNorm,
+      membersByComponent,
+    );
+    const fuse = createExploreCourseFuse(entries);
+    // "probability" matches both member titles; only one component result should remain.
+    const hits = searchExploreCourses(fuse, entries, "probability");
+    expect(hits).toHaveLength(1);
+  });
+});
+
+describe("dedupeCourseEntriesByComponent", () => {
+  it("keeps the first entry per component in input order", () => {
+    const entries = buildCourseSearchEntries(
+      [
+        sampleOffering({ id: "1", courseCode: "MAT 2377" }),
+        sampleOffering({ id: "2", courseCode: "STA 2391" }),
+        sampleOffering({ id: "3", courseCode: "CSI 2110" }),
+      ],
+      null,
+      null,
+      new Map([
+        ["MAT 2377", "MAT 2377"],
+        ["STA 2391", "MAT 2377"],
+      ]),
+      new Map([["MAT 2377", ["MAT 2377", "STA 2391"]]]),
+    );
+    const deduped = dedupeCourseEntriesByComponent(entries);
+    const codes = deduped.map((e) => e.componentId).sort();
+    expect(codes).toEqual(["CSI 2110", "MAT 2377"]);
   });
 });
