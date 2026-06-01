@@ -1766,3 +1766,57 @@ msgstr ""
 
 #~ msgid "app.footer.commandCenter"
 #~ msgstr "shortcuts"
+
+#~ msgid "generationOptions.courses.label"
+#~ msgstr "Courses you want"
+
+#~ msgid "generationOptions.courses.description"
+#~ msgstr "Add any specific courses you'd like in your schedule."
+
+#~ msgid "generationOptions.courses.placeholder"
+#~ msgstr "Search courses…"
+
+#~ msgid "generationOptions.count.label"
+#~ msgstr "Courses this semester"
+
+#~ msgid "generationOptions.count.description"
+#~ msgstr "How many courses to include in each generated schedule."
+
+#~ msgid "generationOptions.warn.assigned.title"
+#~ msgstr "Counts toward your requirements"
+
+#~ msgid "generationOptions.warn.assigned.fallbackTitle"
+#~ msgstr "Requirement {index}"
+
+#~ msgid "generationOptions.warn.noRequirement.title"
+#~ msgstr "Won't count toward a requirement"
+
+#~ msgid "generationOptions.warn.noRequirement.body"
+#~ msgstr "These courses will be scheduled, but they don't match any of your remaining requirements, so they may not count toward your program:"
+
+#~ msgid "generationOptions.warn.overflow.title"
+#~ msgstr "Requirement already full"
+
+#~ msgid "generationOptions.warn.overflow.body"
+#~ msgstr "These courses will be scheduled, but the requirement they match is already full, so they may not count toward your program:"
+
+#~ msgid "generationOptions.warn.prereqUnmet.title"
+#~ msgstr "Prerequisites may not be met"
+
+#~ msgid "generationOptions.warn.prereqUnmet.body"
+#~ msgstr "These courses will be scheduled, but you may not meet the prerequisites. You will likely need instructor permission to enrol:"
+
+#~ msgid "generationOptions.warn.unavailable.title"
+#~ msgstr "Not offered this term"
+
+#~ msgid "generationOptions.warn.unavailable.body"
+#~ msgstr "These courses aren't offered this term, so they can't be added to your schedule:"
+
+#~ msgid "advancedOptions.heading"
+#~ msgstr "Advanced options"
+
+#~ msgid "advancedOptions.description"
+#~ msgstr "Pick specific courses for individual requirements. These picks are kept exactly as you set them."
+
+#~ msgid "advancedOptions.picksActive"
+#~ msgstr "{count, plural, one {# advanced pick} other {# advanced picks}} active"

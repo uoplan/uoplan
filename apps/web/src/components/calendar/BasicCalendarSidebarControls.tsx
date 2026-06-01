@@ -1,27 +1,21 @@
 import { useMemo } from "react";
-import {
-  Button,
-  MultiSelect,
-  NumberInput,
-  Stack,
-  Box,
-  Text,
-  Switch,
-  type OptionsFilter,
-} from "@mantine/core";
+import { Box, Button, MultiSelect, Stack, Text, type OptionsFilter } from "@mantine/core";
 import { IconFileUpload } from "@tabler/icons-react";
-import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
+import { getCourseCredits, normalizeCourseCode } from "@uoplan/core";
+import { useAppStore } from "../../store/appStore";
 import {
   createCourseOptions,
   renderCourseOption,
   createCourseOptionsFilter,
 } from "../shared/CourseSelect";
-import { BasicCourseFiltersCard } from "../requirements/CourseFiltersCard";
-import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
+import { GenerationOptionsFields } from "./generationOptions/GenerationOptionsFields";
+import { avoidedDaysFromBlocks } from "../../lib/blockedTimes";
 import { tr } from "../../i18n";
 import { navigateToWizardStep } from "../../lib/appNavigation";
 import { WizardStep } from "../../lib/wizardSteps";
+
+const FIRST_YEAR_CREDIT_CAP = 48;
 
 export function BasicCalendarSidebarControls() {
   const {
@@ -36,6 +30,13 @@ export function BasicCalendarSidebarControls() {
     virtualSectionsOnly,
     completedCourses,
     frenchImmersionStream,
+    blockedTimes,
+    generationMinStartMinutes,
+    generationMaxEndMinutes,
+    generationMinProfessorRating,
+    generationLimitFirstYearCredits,
+    generationCompressedSchedule,
+    generationPreferEasier,
   } = useAppStore(
     useShallow((s) => ({
       cache: s.cache,
@@ -49,11 +50,17 @@ export function BasicCalendarSidebarControls() {
       virtualSectionsOnly: s.virtualSectionsOnly,
       completedCourses: s.completedCourses,
       frenchImmersionStream: s.frenchImmersionStream,
+      blockedTimes: s.blockedTimes,
+      generationMinStartMinutes: s.generationMinStartMinutes,
+      generationMaxEndMinutes: s.generationMaxEndMinutes,
+      generationMinProfessorRating: s.generationMinProfessorRating,
+      generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
+      generationCompressedSchedule: s.generationCompressedSchedule,
+      generationPreferEasier: s.generationPreferEasier,
     })),
   );
 
   const setFrenchImmersionStream = useAppStore((s) => s.setFrenchImmersionStream);
-
   const blacklistedCourses = useAppStore((s) => s.blacklistedCourses);
   const setBlacklistedCourses = useAppStore((s) => s.setBlacklistedCourses);
   const setBasicPinnedCourses = useAppStore((s) => s.setBasicPinnedCourses);
@@ -66,6 +73,15 @@ export function BasicCalendarSidebarControls() {
   const setIncludeClosedComponents = useAppStore((s) => s.setIncludeClosedComponents);
   const setVirtualSectionsOnly = useAppStore((s) => s.setVirtualSectionsOnly);
   const setCompletedCourses = useAppStore((s) => s.setCompletedCourses);
+  const setGenerationMinStartMinutes = useAppStore((s) => s.setGenerationMinStartMinutes);
+  const setGenerationMaxEndMinutes = useAppStore((s) => s.setGenerationMaxEndMinutes);
+  const setAvoidedDays = useAppStore((s) => s.setAvoidedDays);
+  const setGenerationMinProfessorRating = useAppStore((s) => s.setGenerationMinProfessorRating);
+  const setGenerationLimitFirstYearCredits = useAppStore(
+    (s) => s.setGenerationLimitFirstYearCredits,
+  );
+  const setGenerationCompressedSchedule = useAppStore((s) => s.setGenerationCompressedSchedule);
+  const setGenerationPreferEasier = useAppStore((s) => s.setGenerationPreferEasier);
 
   const allCategories = useMemo(() => {
     if (!cache) return [] as string[];
@@ -101,107 +117,140 @@ export function BasicCalendarSidebarControls() {
     [cache],
   );
 
+  // The "courses you want" dropdown should not offer courses the student has already completed.
+  const desiredCourseOptions = useMemo(() => {
+    if (completedCourses.length === 0) return requiredCourseOptions;
+    const completed = new Set(completedCourses.map(normalizeCourseCode));
+    return requiredCourseOptions.filter((o) => !completed.has(normalizeCourseCode(o.value)));
+  }, [requiredCourseOptions, completedCourses]);
+
   const completedCourseOptions = useMemo(() => {
     if (!cache) return [];
     const unique = [...new Set(cache.getAllCourses().map((c) => c.code))];
     return createCourseOptions(unique, cache);
   }, [cache]);
 
+  // First-year (1xxx) credits the user has committed (completed + courses they want this term).
+  const totalFirstYearCredits = useMemo(() => {
+    if (!cache) return 0;
+    const seen = new Set<string>();
+    let total = 0;
+    for (const code of [...completedCourses, ...basicPinnedCourses]) {
+      const norm = normalizeCourseCode(code);
+      if (seen.has(norm)) continue;
+      seen.add(norm);
+      const m = norm.match(/\d{4}/);
+      if (!m || Number(m[0]) >= 2000) continue;
+      total += getCourseCredits(norm, cache);
+    }
+    return total;
+  }, [cache, completedCourses, basicPinnedCourses]);
+
+  const totalCount = basicPinnedCourses.length + basicElectivesCount;
+
   return (
     <>
-      <Stack gap="md">
-        <MultiSelect
-          label={tr("basicCalendar.required.label")}
-          placeholder={tr("basicCalendar.required.placeholder")}
-          searchable
-          data={requiredCourseOptions}
-          value={basicPinnedCourses}
-          onChange={(v) => {
-            setBasicPinnedCourses(v);
+      <GenerationOptionsFields
+        courseOptions={desiredCourseOptions}
+        desiredCourses={basicPinnedCourses}
+        onDesiredCoursesChange={(v) => {
+          setBasicPinnedCourses(v);
+          markBasicSettingsChanged();
+        }}
+        renderCourseOption={renderCourseOption(cache)}
+        courseFilter={courseOptionsFilter}
+        countValue={totalCount}
+        onCountChange={(total) => {
+          const next = Math.max(0, Math.min(8, total - basicPinnedCourses.length));
+          if (next === basicElectivesCount) return;
+          setBasicElectivesCount(next);
+          markBasicSettingsChanged();
+        }}
+        countMin={Math.max(1, basicPinnedCourses.length)}
+        countMax={basicPinnedCourses.length + 8}
+        totalFirstYearCredits={totalFirstYearCredits}
+        warnFirstYearLimit={totalFirstYearCredits > FIRST_YEAR_CREDIT_CAP}
+        limitFirstYearCredits={generationLimitFirstYearCredits}
+        onLimitFirstYearCreditsChange={(v) => {
+          setGenerationLimitFirstYearCredits(v);
+          markBasicSettingsChanged();
+        }}
+        compressedSchedule={generationCompressedSchedule}
+        onCompressedScheduleChange={(v) => {
+          setGenerationCompressedSchedule(v);
+          markBasicSettingsChanged();
+        }}
+        preferEasierCourses={generationPreferEasier}
+        onPreferEasierCoursesChange={(v) => {
+          setGenerationPreferEasier(v);
+          markBasicSettingsChanged();
+        }}
+        minStartMinutes={generationMinStartMinutes}
+        onMinStartMinutesChange={(m) => {
+          setGenerationMinStartMinutes(m);
+          markBasicSettingsChanged();
+        }}
+        maxEndMinutes={generationMaxEndMinutes}
+        onMaxEndMinutesChange={(m) => {
+          setGenerationMaxEndMinutes(m);
+          markBasicSettingsChanged();
+        }}
+        avoidedDays={avoidedDaysFromBlocks(blockedTimes)}
+        onAvoidedDaysChange={(days) => setAvoidedDays(days)}
+        minProfessorRating={generationMinProfessorRating}
+        onMinProfessorRatingChange={(r) => {
+          setGenerationMinProfessorRating(r);
+          markBasicSettingsChanged();
+        }}
+        levelBuckets={levelBuckets}
+        languageBuckets={languageBuckets}
+        electiveLevelBuckets={electiveLevelBuckets}
+        includeClosedComponents={includeClosedComponents}
+        virtualSectionsOnly={virtualSectionsOnly}
+        onChangeLevelBuckets={(buckets) => {
+          setLevelBuckets(buckets);
+          markBasicSettingsChanged();
+        }}
+        onChangeLanguageBuckets={(buckets) => {
+          setLanguageBuckets(buckets);
+          markBasicSettingsChanged();
+        }}
+        onChangeElectiveLevelBuckets={(buckets) => {
+          setElectiveLevelBuckets(buckets);
+          markBasicSettingsChanged();
+        }}
+        onIncludeClosedComponentsChange={(checked) => {
+          setIncludeClosedComponents(checked);
+          markBasicSettingsChanged();
+        }}
+        onVirtualSectionsOnlyChange={(checked) => {
+          setVirtualSectionsOnly(checked);
+          markBasicSettingsChanged();
+        }}
+        excludeSubjects={{
+          data: allCategories.map((c) => ({ value: c, label: c })),
+          value: basicExcludedCategories,
+          onChange: (v) => {
+            setBasicExcludedCategories(v);
             markBasicSettingsChanged();
-          }}
-          renderOption={renderCourseOption(cache)}
-          filter={courseOptionsFilter}
-          radius="md"
-        />
-
-        <NumberInput
-          label={tr("basicCalendar.electives.label")}
-          value={basicElectivesCount}
-          onChange={(v) => {
-            if (typeof v !== "number" || Number.isNaN(v)) return;
-            const nextCount = Math.max(0, Math.min(8, Math.trunc(v)));
-            if (nextCount === basicElectivesCount) return;
-            setBasicElectivesCount(nextCount);
+          },
+        }}
+        excludeCourses={{
+          data: requiredCourseOptions,
+          value: blacklistedCourses,
+          onChange: (v) => {
+            setBlacklistedCourses(v);
             markBasicSettingsChanged();
-          }}
-          min={0}
-          max={8}
-          radius="md"
-        />
-
-        <BasicCourseFiltersCard
-          levelBuckets={levelBuckets}
-          languageBuckets={languageBuckets}
-          electiveLevelBuckets={electiveLevelBuckets}
-          includeClosedComponents={includeClosedComponents}
-          virtualSectionsOnly={virtualSectionsOnly}
-          showGraduateElectiveLevels
-          collapsible
-          excludeElectiveSubjects={{
-            data: allCategories.map((c) => ({ value: c, label: c })),
-            value: basicExcludedCategories,
-            onChange: (v) => {
-              setBasicExcludedCategories(v);
-              markBasicSettingsChanged();
-            },
-          }}
-          excludeCourses={{
-            data: requiredCourseOptions,
-            value: blacklistedCourses,
-            onChange: (v) => {
-              setBlacklistedCourses(v);
-              markBasicSettingsChanged();
-            },
-            renderOption: renderCourseOption(cache),
-            filter: courseOptionsFilter,
-          }}
-          onChangeLevelBuckets={(buckets) => {
-            setLevelBuckets(buckets);
-            markBasicSettingsChanged();
-          }}
-          onChangeLanguageBuckets={(buckets) => {
-            setLanguageBuckets(buckets);
-            markBasicSettingsChanged();
-          }}
-          onChangeElectiveLevelBuckets={(buckets) => {
-            setElectiveLevelBuckets(buckets);
-            markBasicSettingsChanged();
-          }}
-          onIncludeClosedComponentsChange={(checked) => {
-            setIncludeClosedComponents(checked);
-            markBasicSettingsChanged();
-          }}
-          onVirtualSectionsOnlyChange={(checked) => {
-            setVirtualSectionsOnly(checked);
-            markBasicSettingsChanged();
-          }}
-        />
-
-        <Switch
-          label={tr("frenchImmersion.toggle.label")}
-          description={tr("frenchImmersion.toggle.description")}
-          checked={frenchImmersionStream}
-          onChange={(e) => {
-            setFrenchImmersionStream(e.currentTarget.checked);
-            markBasicSettingsChanged();
-          }}
-          radius="md"
-          styles={{ description: { color: "var(--app-text-muted)" } }}
-        />
-
-        {frenchImmersionStream ? <FrenchImmersionProgramOverview variant="compact" /> : null}
-      </Stack>
+          },
+          renderOption: renderCourseOption(cache),
+          filter: courseOptionsFilter,
+        }}
+        frenchImmersionStream={frenchImmersionStream}
+        onFrenchImmersionStreamChange={(checked) => {
+          setFrenchImmersionStream(checked);
+          markBasicSettingsChanged();
+        }}
+      />
 
       <Box style={{ borderTop: "1px solid var(--app-border)", paddingTop: 16, marginTop: 8 }}>
         <Text size="sm" fw={600} mb={8} style={{ color: "var(--app-text)" }}>

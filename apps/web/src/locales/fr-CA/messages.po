@@ -1766,3 +1766,57 @@ msgstr ""
 
 #~ msgid "app.footer.commandCenter"
 #~ msgstr "raccourcis"
+
+#~ msgid "generationOptions.courses.label"
+#~ msgstr "Cours souhaités"
+
+#~ msgid "generationOptions.courses.description"
+#~ msgstr "Ajoutez les cours précis que vous aimeriez avoir dans votre horaire."
+
+#~ msgid "generationOptions.courses.placeholder"
+#~ msgstr "Rechercher des cours…"
+
+#~ msgid "generationOptions.count.label"
+#~ msgstr "Cours ce trimestre"
+
+#~ msgid "generationOptions.count.description"
+#~ msgstr "Nombre de cours à inclure dans chaque horaire généré."
+
+#~ msgid "generationOptions.warn.assigned.title"
+#~ msgstr "Comptent dans vos exigences"
+
+#~ msgid "generationOptions.warn.assigned.fallbackTitle"
+#~ msgstr "Exigence {index}"
+
+#~ msgid "generationOptions.warn.noRequirement.title"
+#~ msgstr "Ne comptera pour aucune exigence"
+
+#~ msgid "generationOptions.warn.noRequirement.body"
+#~ msgstr "Ces cours seront planifiés, mais ils ne correspondent à aucune de vos exigences restantes; ils pourraient donc ne pas compter dans votre programme :"
+
+#~ msgid "generationOptions.warn.overflow.title"
+#~ msgstr "Exigence déjà comblée"
+
+#~ msgid "generationOptions.warn.overflow.body"
+#~ msgstr "Ces cours seront planifiés, mais l'exigence à laquelle ils correspondent est déjà comblée; ils pourraient donc ne pas compter dans votre programme :"
+
+#~ msgid "generationOptions.warn.prereqUnmet.title"
+#~ msgstr "Préalables possiblement non satisfaits"
+
+#~ msgid "generationOptions.warn.prereqUnmet.body"
+#~ msgstr "Ces cours seront planifiés, mais vous pourriez ne pas satisfaire les préalables. Vous aurez probablement besoin de la permission de l'enseignant pour vous inscrire :"
+
+#~ msgid "generationOptions.warn.unavailable.title"
+#~ msgstr "Non offert ce trimestre"
+
+#~ msgid "generationOptions.warn.unavailable.body"
+#~ msgstr "Ces cours ne sont pas offerts ce trimestre; ils ne peuvent donc pas être ajoutés à votre horaire :"
+
+#~ msgid "advancedOptions.heading"
+#~ msgstr "Options avancées"
+
+#~ msgid "advancedOptions.description"
+#~ msgstr "Choisissez des cours précis pour des exigences individuelles. Ces choix sont conservés exactement comme vous les définissez."
+
+#~ msgid "advancedOptions.picksActive"
+#~ msgstr "{count, plural, one {# choix avancé} other {# choix avancés}} actif"

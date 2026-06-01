@@ -104,6 +104,12 @@ export interface AppState {
   requirementSlotsUserTouched: Record<string, true>;
   selectedOptionsPerRequirement: Record<string, number>;
   constrainedPerRequirement: Record<string, string[]>;
+  /**
+   * Courses written into `constrainedPerRequirement` automatically from the unified "courses you
+   * want" list (advanced mode), tracked separately so they can be reconciled/removed without
+   * clobbering the user's manual constraint picks.
+   */
+  autoConstrainedPerRequirement: Record<string, string[]>;
   coursesThisSemester: number;
   prereqEligibleCourses: string[];
   filteredPrereqEligibleCourses: string[];
@@ -181,6 +187,12 @@ export interface AppActions {
   removeCompletedCourse: (code: string) => void;
   setSelectedForRequirement: (requirementId: string, courses: string[]) => void;
   setConstrainedForRequirement: (requirementId: string, courses: string[]) => void;
+  /**
+   * Reconcile auto-assigned desired courses into `constrainedPerRequirement`, preserving manual
+   * picks. `assigned` is keyed by requirement id (the resolver output); previously auto-added
+   * courses no longer present are removed.
+   */
+  applyDesiredAutoAssignments: (assigned: Record<string, string[]>) => void;
   setSelectedOptionForRequirement: (requirementId: string, optionIndex: number) => void;
   clearSelectedOptionForRequirement: (requirementId: string) => void;
   setCoursesThisSemester: (n: number) => void;
