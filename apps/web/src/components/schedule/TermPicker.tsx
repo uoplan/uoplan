@@ -1,6 +1,8 @@
 import { Box, Stack, Text, UnstyledButton } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 import type { Term } from "@uoplan/core";
+import { useTr } from "../../i18n";
+import { formatTermLabel } from "../../lib/term/termLabel";
 
 interface TermPickerProps {
   terms: Term[];
@@ -9,6 +11,7 @@ interface TermPickerProps {
 }
 
 export function TermPicker({ terms, value, onChange }: TermPickerProps) {
+  useTr();
   return (
     <Stack gap={0} data-tour="term-select">
       {terms.map((term, index) => {
@@ -45,7 +48,7 @@ export function TermPicker({ terms, value, onChange }: TermPickerProps) {
               c={selected ? "var(--app-text)" : "var(--app-text-muted)"}
               fw={selected ? 600 : 500}
             >
-              {term.name}
+              {formatTermLabel(term.termId)}
             </Text>
             {selected ? (
               <Box

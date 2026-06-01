@@ -1673,6 +1673,18 @@ msgstr "Choisir la session"
 msgid "stepNav.title"
 msgstr "Étapes"
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "term.season.fall"
+msgstr "Automne"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "term.season.summer"
+msgstr "Été"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "term.season.winter"
+msgstr "Hiver"
+
 msgid "termStep.label"
 msgstr "Sélectionnez votre session"
 

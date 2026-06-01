@@ -10,6 +10,7 @@ import {
   type UEnrollResolveResult,
 } from "../../lib/importFromUEnroll";
 import { useTr, tr } from "../../i18n";
+import { formatTermLabel } from "../../lib/term/termLabel";
 
 interface UEnrollImportModalProps {
   opened: boolean;
@@ -24,10 +25,9 @@ type ParseState =
 export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps) {
   useTr();
 
-  const { cache, terms, selectedTermId, setSelectedTermId, importSchedule } = useAppStore(
+  const { cache, selectedTermId, setSelectedTermId, importSchedule } = useAppStore(
     useShallow((s) => ({
       cache: s.cache,
-      terms: s.terms,
       selectedTermId: s.selectedTermId,
       setSelectedTermId: s.setSelectedTermId,
       importSchedule: s.importSchedule,
@@ -92,9 +92,8 @@ export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps)
     parseState.parsed.termId !== selectedTermId;
 
   const targetTermName =
-    termMismatch && parseState.status === "parsed"
-      ? (terms?.find((t) => t.termId === parseState.parsed.termId)?.name ??
-        parseState.parsed.termId)
+    termMismatch && parseState.status === "parsed" && parseState.parsed.termId !== null
+      ? formatTermLabel(parseState.parsed.termId)
       : null;
 
   const canImport = parseState.status === "parsed" && (parseState.resolved.ok || termMismatch);

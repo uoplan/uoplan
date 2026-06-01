@@ -11,7 +11,7 @@ import {
   professorGraphId,
 } from "@uoplan/core";
 import { mergeGradeDistributionCounts, type ExploreOfferingFlat } from "../explore/gradesSearch";
-import { formatUottawaTermIdLabel } from "../explore/uottawaTermId";
+import { formatTermLabelPlain } from "../term/termLabel";
 
 export type NeighborSortMode = "strength" | "name";
 
@@ -51,7 +51,7 @@ export function buildOfferingsByProfessorId(
     const norm = normalizeCourseCode(c.code);
 
     for (const p of c.professors) {
-      const termLabel = formatUottawaTermIdLabel(p.termId);
+      const termLabel = formatTermLabelPlain(p.termId);
       const fuseText = [
         c.code,
         norm,

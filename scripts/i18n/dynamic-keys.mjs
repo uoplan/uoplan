@@ -77,6 +77,6 @@ export const DYNAMIC_TR_IDS = [
   ]),
   // apps/web/src/lib/generationDiagnosticsText.ts: DAY_SHORT_KEY
   ...family("gen.day.", ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]),
-  // apps/web/src/lib/generationDiagnosticsText.ts: LANG_KEY
-  ...family("gen.lang.", ["english", "french", "other"]),
+  // apps/web/src/lib/term/termLabel.ts: SEASON_LABEL_ID
+  ...family("term.season.", ["winter", "summer", "fall"]),
 ];

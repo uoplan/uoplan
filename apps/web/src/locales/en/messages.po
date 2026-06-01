@@ -1673,6 +1673,18 @@ msgstr "Choose term"
 msgid "stepNav.title"
 msgstr "Steps"
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "term.season.fall"
+msgstr "Fall"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "term.season.summer"
+msgstr "Summer"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "term.season.winter"
+msgstr "Winter"
+
 msgid "termStep.label"
 msgstr "Select your term"
 
