@@ -11,5 +11,6 @@ export function registerServiceWorker(): void {
   if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) {
     return;
   }
+  // Service worker registration is best-effort and intentionally not surfaced to users.
   navigator.serviceWorker.register("/sw.js", { type: "classic" }).catch(console.error);
 }
