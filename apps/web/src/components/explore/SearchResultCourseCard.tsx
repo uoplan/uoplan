@@ -1,8 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Box, Stack, Text } from "@mantine/core";
-import { useLingui } from "@lingui/react";
 import type { GradeVizData } from "@uoplan/core";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import type { ExploreCourseSearchEntry } from "../../lib/explore/gradesSearch";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
@@ -30,7 +29,7 @@ export function SearchResultCourseCard({
   query?: string;
   searchParams: ExploreSearchParams;
 }) {
-  useLingui();
+  useTr();
   const { gradeViz } = entry;
   const grade = gradeViz ? mostCommonGrade(gradeViz) : null;
   const passing = gradeViz ? Math.round(gradeViz.passingPercent) : null;

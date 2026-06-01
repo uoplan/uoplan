@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ActionIcon, Box, Group, Stack, Text, UnstyledButton } from "@mantine/core";
 import { IconCheck, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { useLingui } from "@lingui/react";
 import type { RequirementWithStatus } from "@uoplan/core";
 import { getStableNodeKey } from "./RequirementNode";
 import { OptionsDrilldown } from "./OptionsDrilldown";
@@ -9,7 +8,7 @@ import {
   hasMissingOptionSelections,
   nodeHasOptionGroups,
 } from "../../lib/requirements/requirementUtils";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 
 interface OptionsStepProps {
   requirementTreeWithStatus: RequirementWithStatus[];
@@ -26,7 +25,7 @@ export function OptionsStep({
   onSelectOption,
   onClearOption,
 }: OptionsStepProps) {
-  useLingui();
+  useTr();
   const completedCoursesSet = new Set(completedCourses);
 
   // Only show top-level nodes that contain (or are) option groups needing selection.

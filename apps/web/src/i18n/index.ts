@@ -1,4 +1,5 @@
 import { i18n } from "@lingui/core";
+import { useLingui } from "@lingui/react";
 import { detect, fromNavigator, fromStorage } from "@lingui/detect-locale";
 
 const LOCALE_STORAGE_KEY = "uoplan.lang";
@@ -88,6 +89,19 @@ export function tr(id: string, values?: Record<string, unknown>): string {
     id,
     values,
   });
+}
+
+/**
+ * Subscribe a React component to locale changes and return the `tr` helper.
+ *
+ * `tr()` reads the active locale at call time but does not itself trigger a
+ * re-render, so any component rendering translated text must call this hook
+ * (it wraps Lingui's `useLingui()`). Returns `tr` for convenience
+ * (`const tr = useTr()`); non-React code keeps importing `tr` directly.
+ */
+export function useTr(): typeof tr {
+  useLingui();
+  return tr;
 }
 
 /** Locale-aware number formatting (e.g. `12,000` en · `12 000` fr-CA). */

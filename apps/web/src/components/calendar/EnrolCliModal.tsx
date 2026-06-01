@@ -10,8 +10,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { IconCheck, IconCopy, IconDeviceMobileOff } from "@tabler/icons-react";
-import { useLingui } from "@lingui/react";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 
 interface EnrolCliModalProps {
   opened: boolean;
@@ -27,7 +26,7 @@ function getInstallCommand(): string | null {
 }
 
 function CopyRow({ value }: { value: string }) {
-  useLingui();
+  useTr();
   return (
     <Group gap="xs" wrap="nowrap" align="center">
       <Code block style={{ flex: 1, wordBreak: "break-all" }}>
@@ -50,7 +49,7 @@ function CopyRow({ value }: { value: string }) {
 }
 
 export function EnrolCliModal({ opened, onClose, command }: EnrolCliModalProps) {
-  useLingui();
+  useTr();
   const installCommand = getInstallCommand();
 
   return (

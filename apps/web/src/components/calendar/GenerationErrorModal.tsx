@@ -1,8 +1,7 @@
 import { Modal } from "@mantine/core";
-import { useLingui } from "@lingui/react";
 import { GenerationErrorDetailBlocks } from "../GenerationErrorDetailBlocks";
 import type { GenerationErrorState } from "../../store/types";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import { formatGenerationMessage } from "../../lib/generationDiagnosticsText";
 
 interface GenerationErrorModalProps {
@@ -11,7 +10,7 @@ interface GenerationErrorModalProps {
 }
 
 export function GenerationErrorModal({ error, onClose }: GenerationErrorModalProps) {
-  useLingui();
+  useTr();
   const details = error?.details ?? null;
   const summarizeEmptyPools = !!(
     details &&

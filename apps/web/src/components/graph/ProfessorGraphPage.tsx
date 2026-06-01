@@ -12,11 +12,10 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { useDebouncedValue, useMediaQuery } from "@mantine/hooks";
-import { useLingui } from "@lingui/react";
 import { IconSearch, IconExternalLink } from "@tabler/icons-react";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import type { ProfessorGraphNode } from "@uoplan/core";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useProfessorGraphBuild } from "../../hooks/useProfessorGraphBuild";
 import { getGraphNeighbors, type NeighborSortMode } from "../../lib/graph/professorGraphDetails";
@@ -49,7 +48,7 @@ export function ProfessorGraphPage({
   urlProfParam?: string;
   navigateGraph: ProfessorGraphNavigate;
 }) {
-  useLingui();
+  useTr();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
   const professorRatings = useAppStore((s) => s.professorRatings);

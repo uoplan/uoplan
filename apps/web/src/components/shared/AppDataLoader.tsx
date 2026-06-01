@@ -1,9 +1,8 @@
 import { Box, Progress, Stack, Text } from "@mantine/core";
-import { useLingui } from "@lingui/react";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 
 export function AppDataLoader({ progress }: { progress: number }) {
-  useLingui();
+  useTr();
   const clamped = Math.min(100, Math.max(0, progress));
 
   return (

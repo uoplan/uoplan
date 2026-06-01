@@ -9,13 +9,12 @@ import {
 } from "@tanstack/react-router";
 import { buildRootHead } from "../lib/seo";
 import { useEffect, useRef } from "react";
-import { useLingui } from "@lingui/react";
 import { Box, Text } from "@mantine/core";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import { motion, useAnimation } from "framer-motion";
 import { usePersistState } from "../hooks/usePersistState";
 import { useAppStore } from "../store/appStore";
-import { tr } from "../i18n";
+import { useTr, tr } from "../i18n";
 import { AppFooter } from "../components/shared/AppFooter";
 import { SharedScheduleModal } from "../components/shared/SharedScheduleModal";
 import { CommandCenter } from "../components/shortcuts/CommandCenter";
@@ -29,7 +28,7 @@ export const Route = createRootRoute({
 });
 
 function NotFound() {
-  useLingui();
+  useTr();
 
   return (
     <Box

@@ -18,7 +18,7 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 export const LOCALES = ["en", "fr-CA"];
 
 /** @param {string} locale */
-function catalogPath(locale) {
+export function catalogPath(locale) {
   return resolve(repoRoot, "apps/web/src/locales", locale, "messages.po");
 }
 
@@ -27,14 +27,17 @@ function catalogPath(locale) {
  * @property {string} id
  * @property {string[]} msgstr
  * @property {boolean} fuzzy
- * @property {boolean} obsolete
  */
 
 /**
  * @typedef {object} Catalog
  * @property {string} locale
  * @property {string} path
- * @property {Map<string, CatalogEntry>} entries  Keyed by msgid (header excluded).
+ * @property {Map<string, CatalogEntry>} entries  Active entries keyed by msgid (header and
+ *   obsolete `#~` entries excluded). Obsolete entries never satisfy key presence — a `tr()` id
+ *   backed only by an obsolete entry is reported missing, so a stray `lingui extract` that
+ *   comments out the catalog can no longer pass silently.
+ * @property {Set<string>} obsoleteIds  msgids present only as obsolete (`#~`) entries.
  */
 
 /** @type {Map<string, Catalog>} */
@@ -54,18 +57,25 @@ export function loadCatalog(locale) {
 
   /** @type {Map<string, CatalogEntry>} */
   const entries = new Map();
+  /** @type {Set<string>} */
+  const obsoleteIds = new Set();
   for (const item of po.items) {
     // The empty-id header is not represented as an item by pofile, but guard anyway.
     if (!item.msgid) continue;
+    // Obsolete (`#~`) entries are excluded from runtime catalogs by Lingui, so they must not
+    // satisfy presence/parity checks here either.
+    if (item.obsolete) {
+      obsoleteIds.add(item.msgid);
+      continue;
+    }
     entries.set(item.msgid, {
       id: item.msgid,
       msgstr: item.msgstr ?? [],
       fuzzy: Boolean(item.flags && item.flags.fuzzy),
-      obsolete: Boolean(item.obsolete),
     });
   }
 
-  const catalog = { locale, path, entries };
+  const catalog = { locale, path, entries, obsoleteIds };
   cache.set(locale, catalog);
   return catalog;
 }

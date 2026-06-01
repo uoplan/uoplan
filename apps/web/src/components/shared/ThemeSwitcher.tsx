@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
-import { useLingui } from "@lingui/react";
 import { IconDeviceDesktop, IconMoon, IconSun } from "@tabler/icons-react";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import { useAppTheme } from "../../theme/AppThemeProvider";
 import type { ThemeSelection } from "../../theme/themes";
 import { PillSelect, type PillSelectOption } from "./PillSelect";
@@ -14,7 +13,7 @@ function iconFor(selection: ThemeSelection): ReactNode {
 }
 
 export function ThemeSwitcher() {
-  useLingui();
+  useTr();
   const { selection, setSelection, themes } = useAppTheme();
 
   const options: PillSelectOption<ThemeSelection>[] = [

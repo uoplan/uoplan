@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useLingui } from "@lingui/react";
 import { Box, Stack, Title } from "@mantine/core";
 import changelogHtml from "virtual:changelog-html";
-import { tr } from "../i18n";
+import { useTr, tr } from "../i18n";
 import { buildTabTitle } from "../lib/seo";
 import { BackButton } from "../components/shared/BackButton";
 
@@ -12,7 +11,7 @@ export const Route = createFileRoute("/changelog")({
 });
 
 function ChangelogRoute() {
-  useLingui();
+  useTr();
 
   return (
     <Box

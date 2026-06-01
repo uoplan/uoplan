@@ -1,7 +1,6 @@
 import { Button, Group, Modal, Stack, Text } from "@mantine/core";
-import { useLingui } from "@lingui/react";
 import type { BlockedTime } from "../../store/types";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import { DAY_LABELS } from "@uoplan/calendar";
 import { formatTimeRange } from "./calendarEventDisplayUtils";
 
@@ -12,7 +11,7 @@ interface BlockedTimeRemoveModalProps {
 }
 
 export function BlockedTimeRemoveModal({ block, onClose, onConfirm }: BlockedTimeRemoveModalProps) {
-  useLingui();
+  useTr();
   const range = block
     ? `${DAY_LABELS[block.day]} · ${formatTimeRange(block.startMinutes, block.endMinutes)}`
     : "";

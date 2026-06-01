@@ -18,6 +18,7 @@
 
 import { LOCALES, isUntranslated, loadAllCatalogs, relPath } from "./i18n/catalog.mjs";
 import { collectTrUsages } from "./i18n/tr-ids.mjs";
+import { DYNAMIC_TR_IDS } from "./i18n/dynamic-keys.mjs";
 
 /** @param {string} msg */
 function fail(lines) {
@@ -27,7 +28,16 @@ function fail(lines) {
 function main() {
   const catalogs = loadAllCatalogs();
   const byLocale = new Map(catalogs.map((c) => [c.locale, c]));
-  const usages = collectTrUsages();
+  // Static tr() ids resolved from source, plus dynamic ids that the AST scanner cannot resolve.
+  const usages = [
+    ...collectTrUsages(),
+    ...DYNAMIC_TR_IDS.map((id) => ({
+      id,
+      file: "scripts/i18n/dynamic-keys.mjs",
+      line: 0,
+      column: 0,
+    })),
+  ];
 
   /** @type {string[][]} grouped problem blocks */
   const problems = [];
@@ -77,7 +87,6 @@ function main() {
   const emptyLines = [];
   for (const c of catalogs) {
     for (const entry of c.entries.values()) {
-      if (entry.obsolete) continue;
       if (isUntranslated(entry)) {
         emptyLines.push(`    [${c.locale}] "${entry.id}"  (${relPath(c.path)})`);
       }
@@ -85,6 +94,23 @@ function main() {
   }
   if (emptyLines.length > 0) {
     problems.push([`✖ ${emptyLines.length} entry/entries with empty translation:`, ...emptyLines]);
+  }
+
+  // 4. obsolete — `#~` entries indicate catalog corruption. This hand-maintained, id-based
+  //    workflow never uses `lingui extract`, so obsolete markers only appear when a stray CLI run
+  //    comments out the catalog (entries excluded from runtime would silently render raw ids).
+  /** @type {string[]} */
+  const obsoleteLines = [];
+  for (const c of catalogs) {
+    for (const id of c.obsoleteIds) {
+      obsoleteLines.push(`    [${c.locale}] "${id}"  (${relPath(c.path)})`);
+    }
+  }
+  if (obsoleteLines.length > 0) {
+    problems.push([
+      `✖ ${obsoleteLines.length} obsolete (#~) catalog entry/entries — reactivate or delete them:`,
+      ...obsoleteLines,
+    ]);
   }
 
   if (problems.length > 0) {

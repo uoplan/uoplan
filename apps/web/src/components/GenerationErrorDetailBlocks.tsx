@@ -1,7 +1,6 @@
 import { List, Stack, Text } from "@mantine/core";
-import { useLingui } from "@lingui/react";
 import type { GenerationErrorDetails } from "../store/types";
-import { tr } from "../i18n";
+import { useTr, tr } from "../i18n";
 import { formatFilterHint, formatSuggestions } from "../lib/generationDiagnosticsText";
 
 function formatCourseList(courses: string[]): string {
@@ -36,7 +35,7 @@ export function GenerationErrorDetailBlocks({
   errorDetails: GenerationErrorDetails | null | undefined;
   summarizeEmptyPools: boolean;
 }) {
-  useLingui();
+  useTr();
   if (!errorDetails || !hasDetailContent(errorDetails)) return null;
 
   const tf = errorDetails.timetableFailure;

@@ -1,10 +1,9 @@
 import { Box, Group, UnstyledButton } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { useLingui } from "@lingui/react";
 import { IconArrowsSort } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { ExploreFilterPopoverContent } from "./ExploreFilterPopoverContent";
@@ -119,7 +118,7 @@ export function ExploreFilterBar({
   filters: ExploreFilterState;
   onChange: (next: Partial<ExploreFilterState>) => void;
 }) {
-  useLingui();
+  useTr();
   const isMobile = useMediaQuery("(max-width: 539px)", false, {
     getInitialValueInEffect: false,
   });

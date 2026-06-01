@@ -1,9 +1,8 @@
-import { useLingui } from "@lingui/react";
 import { Text } from "@mantine/core";
 import { Spotlight, type SpotlightActionGroupData } from "@mantine/spotlight";
 import { useNavigate } from "@tanstack/react-router";
 import { APP_DESTINATIONS } from "../../lib/navigation/appDestinations";
-import { i18n, tr } from "../../i18n";
+import { useTr, i18n, tr } from "../../i18n";
 
 /**
  * Global command center (Cmd/Ctrl+K) for quickly jumping between the app's
@@ -11,7 +10,7 @@ import { i18n, tr } from "../../i18n";
  * handled by Spotlight itself and is ignored while typing in form fields.
  */
 export function CommandCenter() {
-  useLingui();
+  useTr();
   const navigate = useNavigate();
 
   const groups: SpotlightActionGroupData[] = [

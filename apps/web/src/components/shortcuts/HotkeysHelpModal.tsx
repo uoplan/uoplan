@@ -1,9 +1,8 @@
-import { useLingui } from "@lingui/react";
 import { Divider, Group, Kbd, Modal, Stack, Text } from "@mantine/core";
 import { useOs } from "@mantine/hooks";
 import { APP_DESTINATIONS } from "../../lib/navigation/appDestinations";
 import { useHelpModalStore } from "../../store/uiHelpStore";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 
 function ShortcutRow({ label, keys }: { label: string; keys: React.ReactNode }) {
   return (
@@ -21,7 +20,7 @@ function ShortcutRow({ label, keys }: { label: string; keys: React.ReactNode }) 
  * discoverability button. Mounted once in the root layout.
  */
 export function HotkeysHelpModal() {
-  useLingui();
+  useTr();
   const isOpen = useHelpModalStore((s) => s.isOpen);
   const close = useHelpModalStore((s) => s.close);
   const os = useOs();

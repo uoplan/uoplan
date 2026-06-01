@@ -12,1826 +12,1826 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#~ msgid "app.beta"
-#~ msgstr "Beta"
+msgid "advancedCourseFilters.course.hint"
+msgstr "S'applique aux cours obligatoires et aux cours à option."
 
-#~ msgid "app.experimental"
-#~ msgstr "Expérimental"
+msgid "advancedCourseFilters.course.title"
+msgstr "Filtres de cours"
 
-#~ msgid "landing.schedule.title"
-#~ msgstr "Générateur d'horaires"
+msgid "advancedCourseFilters.elective.hint"
+msgstr "S'applique uniquement aux cours à option."
 
-#~ msgid "landing.schedule.description"
-#~ msgstr "Planifiez votre parcours et générez des horaires sans conflit."
+msgid "advancedCourseFilters.elective.title"
+msgstr "Filtres de cours à option"
 
-#~ msgid "landing.explore.description"
-#~ msgstr "Recherchez des cours et des professeurs avec les distributions de notes."
+msgid "advancedOptions.description"
+msgstr "Choisissez des cours précis pour des exigences individuelles. Ces choix sont conservés exactement comme vous les définissez."
 
-#~ msgid "landing.graph.description"
-#~ msgstr "Découvrez comment les professeurs sont liés par des cours communs."
+msgid "advancedOptions.heading"
+msgstr "Options avancées"
 
-#~ msgid "landing.trends.description"
-#~ msgstr "Suivez l'évolution des notes au fil du temps par discipline."
+msgid "advancedOptions.picksActive"
+msgstr "{count, plural, one {# choix avancé} other {# choix avancés}} actif"
 
-#~ msgid "landing.carousel.label"
-#~ msgstr "Fonctionnalités expérimentales"
+msgid "app.beta"
+msgstr "Beta"
 
-#~ msgid "landing.carousel.goTo"
-#~ msgstr "Afficher {title}"
+msgid "app.changelog.title"
+msgstr "Journal des modifications"
 
-#~ msgid "trends.title"
-#~ msgstr "Tendances des notes"
+msgid "app.commandCenter.group.pages"
+msgstr "Pages"
 
-#~ msgid "trends.subtitle"
-#~ msgstr "L'évolution des notes dans le temps, regroupées pour l'ensemble des cours et des professeurs répertoriés."
+msgid "app.commandCenter.nothingFound"
+msgstr "Aucun résultat…"
 
-#~ msgid "trends.error.title"
-#~ msgstr "Impossible de charger l'historique des notes"
+msgid "app.commandCenter.placeholder"
+msgstr "Rechercher des pages…"
 
-#~ msgid "trends.empty.noData"
-#~ msgstr "L'historique des notes n'est pas disponible pour le moment."
+msgid "app.constraints.description"
+msgstr "Épinglez des cours à des exigences précises - le générateur utilise d'abord vos choix, puis complète les placés restantes avec d'autres cours admissibles."
 
-#~ msgid "trends.empty.noResults"
-#~ msgstr "Aucune donnée de notes ne correspond à ces filtres."
+msgid "app.constraints.heading"
+msgstr "Choisir des cours précis"
 
-#~ msgid "trends.filter.discipline"
-#~ msgstr "Discipline"
+msgid "app.constraints.optional"
+msgstr "Optionnel"
 
-#~ msgid "trends.filter.allDisciplines"
-#~ msgstr "Toutes les disciplines"
+msgid "app.errorTitle"
+msgstr "Erreur"
 
-#~ msgid "trends.filter.noMatch"
-#~ msgstr "Aucune discipline correspondante"
+msgid "app.experimental"
+msgstr "Expérimental"
 
-#~ msgid "trends.filter.program"
-#~ msgstr "Programme"
+msgid "app.footer.buildBranchFallback"
+msgstr "local"
 
-#~ msgid "trends.filter.allPrograms"
-#~ msgstr "Tous les programmes"
+msgid "app.footer.changelog"
+msgstr "journal des modifications"
 
-#~ msgid "trends.filter.programHint"
-#~ msgstr "Estimé à partir des cours obligatoires du programme"
+msgid "app.footer.commandCenter"
+msgstr "raccourcis"
 
-#~ msgid "trends.filter.noProgramMatch"
-#~ msgstr "Aucun programme correspondant"
+msgid "app.footer.explore"
+msgstr "explorer"
 
-#~ msgid "trends.filter.level"
-#~ msgstr "Niveau"
+msgid "app.footer.feedbackPrompt"
+msgstr "écrivez-nous à"
 
-#~ msgid "trends.filter.season"
-#~ msgstr "Session"
+msgid "app.footer.gradeDataAttribution.actLink"
+msgstr "Loi sur l'accès à l'information et la protection de la vie privée"
 
-#~ msgid "trends.filter.all"
-#~ msgstr "Toutes"
+msgid "app.footer.gradeDataAttribution.after"
+msgstr " de l'Ontario."
 
-#~ msgid "trends.season.fall"
-#~ msgstr "Automne"
+msgid "app.footer.gradeDataAttribution.before"
+msgstr "Les données de notes ont été obtenues dans le cadre d'une demande d'accès à l'information en vertu de la "
 
-#~ msgid "trends.season.winter"
-#~ msgstr "Hiver"
+msgid "app.footer.graph"
+msgstr "graphe"
 
-#~ msgid "trends.season.springSummer"
-#~ msgstr "Printemps/été"
+msgid "app.generate.disableReason"
+msgstr "Vous devez encore assigner {count} cours terminé{suffix} dans Exigences avant de pouvoir générer des horaires."
 
-#~ msgid "trends.metric.label"
-#~ msgstr "Mesure"
+msgid "app.generationOptions.title"
+msgstr "Options de génération"
 
-#~ msgid "trends.metric.gpa"
-#~ msgstr "MPC moyenne"
+msgid "app.loadingData"
+msgstr "Chargement des données de cours..."
 
-#~ msgid "trends.metric.aPlus"
-#~ msgstr "% A+"
+msgid "app.nav.back"
+msgstr "Retour"
 
-#~ msgid "trends.metric.aRange"
-#~ msgstr "% plage A"
+msgid "app.nav.backHome"
+msgstr "Accueil"
 
-#~ msgid "trends.metric.pass"
-#~ msgstr "Taux de réussite"
+msgid "app.nav.backToCourse"
+msgstr "Retour à {course}"
 
-#~ msgid "trends.metric.volume"
-#~ msgstr "Volume noté"
+msgid "app.nav.dest.calendar.description"
+msgstr "Consultez et parcourez vos horaires générés."
 
-#~ msgid "trends.stat.latest"
-#~ msgstr "Dernière session"
+msgid "app.nav.dest.calendar.label"
+msgstr "Calendrier"
 
-#~ msgid "trends.stat.change"
-#~ msgstr "Écart depuis le début"
+msgid "app.nav.dest.changelog.description"
+msgstr "Découvrez les nouveautés et les mises à jour récentes."
 
-#~ msgid "trends.stat.terms"
-#~ msgstr "Sessions"
+msgid "app.nav.dest.changelog.label"
+msgstr "Journal des modifications"
 
-#~ msgid "trends.stat.volume"
-#~ msgstr "Résultats notés"
+msgid "app.nav.dest.explore.description"
+msgstr "Rechercher des cours et des professeurs avec les répartitions de notes."
 
-#~ msgid "trends.leaderboard.title"
-#~ msgstr "Disciplines dans le temps"
+msgid "app.nav.dest.explore.label"
+msgstr "Explorer"
 
-#~ msgid "trends.leaderboard.scope"
-#~ msgstr "Toutes les disciplines · tous les niveaux · toutes les sessions"
+msgid "app.nav.dest.graph.description"
+msgstr "Voyez comment les professeurs sont liés par les cours partagés."
 
-#~ msgid "trends.leaderboard.rise"
-#~ msgstr "Plus forte hausse"
+msgid "app.nav.dest.graph.label"
+msgstr "Graphe des professeurs"
 
-#~ msgid "trends.leaderboard.easiest"
-#~ msgstr "Plus faciles"
+msgid "app.nav.dest.home.description"
+msgstr "Revenir à la page d'accueil d'uoplan."
 
-#~ msgid "trends.leaderboard.hardest"
-#~ msgstr "Plus difficiles"
+msgid "app.nav.dest.home.label"
+msgstr "Accueil"
 
-#~ msgid "trends.leaderboard.col.discipline"
-#~ msgstr "Discipline"
+msgid "app.nav.dest.schedule.description"
+msgstr "Planifiez votre programme et générez des horaires sans conflit."
 
-#~ msgid "trends.leaderboard.col.currentGpa"
-#~ msgstr "MPC actuelle"
+msgid "app.nav.dest.schedule.label"
+msgstr "Générateur d'horaire"
 
-#~ msgid "trends.leaderboard.col.change"
-#~ msgstr "Écart"
+msgid "app.nav.dest.trends.description"
+msgstr "Suivez l'évolution des notes au fil du temps selon les disciplines."
 
-#~ msgid "trends.leaderboard.col.span"
-#~ msgstr "Période"
+msgid "app.nav.dest.trends.label"
+msgstr "Tendances des notes"
 
-#~ msgid "trends.leaderboard.titleCourses"
-#~ msgstr "Cours dans le temps"
+msgid "app.nav.next"
+msgstr "Suivant"
 
-#~ msgid "trends.leaderboard.col.course"
-#~ msgstr "Cours"
+msgid "app.reset.action"
+msgstr "Réinitialiser"
 
-#~ msgid "trends.leaderboard.scopeProgram"
-#~ msgstr "Cours de {name}"
+msgid "app.share.action"
+msgstr "Partager"
 
-#~ msgid "trends.leaderboard.scopeDiscipline"
-#~ msgstr "Cours en {name}"
+msgid "app.share.copied"
+msgstr "Lien copié"
 
-#~ msgid "trends.leaderboard.empty"
-#~ msgstr "Aucun cours avec des données de notes ne correspond à ce filtre pour l’instant."
+msgid "app.shortcuts.commandCenter"
+msgstr "Ouvrir le centre de commandes"
 
-#~ msgid "app.constraints.description"
-#~ msgstr "Épinglez des cours à des exigences précises - le générateur utilise d'abord vos choix, puis complète les placés restantes avec d'autres cours admissibles."
+msgid "app.shortcuts.group.calendar"
+msgstr "Calendrier"
 
-#~ msgid "app.constraints.heading"
-#~ msgstr "Choisir des cours précis"
+msgid "app.shortcuts.group.global"
+msgstr "Général"
 
-#~ msgid "app.constraints.optional"
-#~ msgstr "Optionnel"
+msgid "app.shortcuts.group.quickNav"
+msgstr "Navigation rapide"
 
-#~ msgid "app.errorTitle"
-#~ msgstr "Erreur"
+msgid "app.shortcuts.help"
+msgstr "Afficher les raccourcis clavier"
 
-#~ msgid "app.generate.disableReason"
-#~ msgstr "Vous devez encore assigner {count} cours terminé{suffix} dans Exigences avant de pouvoir générer des horaires."
+msgid "app.shortcuts.nextSchedule"
+msgstr "Horaire suivant"
 
-#~ msgid "app.loadingData"
-#~ msgstr "Chargement des données de cours..."
+msgid "app.shortcuts.prevSchedule"
+msgstr "Horaire précédent"
 
-#~ msgid "app.nav.back"
-#~ msgstr "Retour"
+msgid "app.shortcuts.quickNav.hint"
+msgstr "Appuyez sur G, puis sur la touche de la page."
 
-#~ msgid "app.nav.backHome"
-#~ msgstr "Accueil"
+msgid "app.shortcuts.then"
+msgstr "puis"
 
-#~ msgid "app.nav.backToCourse"
-#~ msgstr "Retour à {course}"
+msgid "app.shortcuts.title"
+msgstr "Raccourcis clavier"
 
-#~ msgid "app.nav.next"
-#~ msgstr "Suivant"
+msgid "app.stepHeader"
+msgstr "Étape {current} sur {total} - {description}"
 
-#~ msgid "app.wizard.continueToCalendar"
-#~ msgstr "Continuer vers le calendrier"
+msgid "app.tour.action"
+msgstr "Visite"
 
-#~ msgid "app.generationOptions.title"
-#~ msgstr "Options de génération"
+msgid "app.wizard.continueToCalendar"
+msgstr "Continuer vers le calendrier"
 
-#~ msgid "app.footer.gradeDataAttribution.before"
-#~ msgstr "Les données de notes ont été obtenues dans le cadre d'une demande d'accès à l'information en vertu de la "
+msgid "basicCalendar.changeMode"
+msgstr "Changer de mode"
 
-#~ msgid "app.footer.gradeDataAttribution.actLink"
-#~ msgstr "Loi sur l'accès à l'information et la protection de la vie privée"
+msgid "basicCalendar.clear"
+msgstr "Effacer les options"
 
-#~ msgid "app.footer.gradeDataAttribution.after"
-#~ msgstr " de l'Ontario."
+msgid "basicCalendar.completed.notFound"
+msgstr "Aucun cours trouvé"
 
-#~ msgid "app.footer.changelog"
-#~ msgstr "journal des modifications"
+msgid "basicCalendar.completed.placeholder"
+msgstr "Rechercher par code ou titre..."
 
-#~ msgid "app.footer.explore"
-#~ msgstr "explorer"
+msgid "basicCalendar.downloadIcs"
+msgstr "Télécharger ICS"
 
-#~ msgid "app.footer.graph"
-#~ msgstr "graphe"
+msgid "basicCalendar.electives.label"
+msgstr "Nombre de cours au choix"
 
-#~ msgid "graph.title"
-#~ msgstr "Réseau de professeurs"
+msgid "basicCalendar.exclude.label"
+msgstr "Exclure des matières"
 
-#~ msgid "graph.searchPlaceholder"
-#~ msgstr "Rechercher un professeur…"
+msgid "basicCalendar.exclude.placeholder"
+msgstr "ex. ADM, CSI"
 
-#~ msgid "graph.loadingGrades"
-#~ msgstr "Chargement de l'historique des notes…"
+msgid "basicCalendar.generate"
+msgstr "Générer un horaire"
 
-#~ msgid "graph.building"
-#~ msgstr "Construction du graphe de co-enseignement…"
+msgid "basicCalendar.generatedSchedules"
+msgstr "Horaires générés"
 
-#~ msgid "graph.layouting"
-#~ msgstr "Disposition du graphe…"
+msgid "basicCalendar.mobile.close"
+msgstr "Fermer"
 
-#~ msgid "graph.noResults"
-#~ msgstr "Aucun professeur correspondant."
+msgid "basicCalendar.mobile.menu"
+msgstr "Menu"
 
-#~ msgid "graph.connections"
-#~ msgstr "{count, plural, one {# connexion} other {# connexions}}"
+msgid "basicCalendar.noMoreSchedules"
+msgstr "Plus d'horaires"
 
-#~ msgid "graph.noConnections"
-#~ msgstr "Aucun cours en commun avec d'autres professeurs dans ces données."
+msgid "basicCalendar.prereq.description"
+msgstr "Ajoutez vos cours complétés pour débloquer automatiquement plus de cours au choix qui exigent des préalables."
 
-#~ msgid "graph.loadErrorTitle"
-#~ msgstr "Impossible de charger le graphe"
+msgid "basicCalendar.prereq.heading"
+msgstr "Avez-vous déjà suivi des cours?"
 
-#~ msgid "graph.connectedProfessors"
-#~ msgstr "Professeurs connectés"
+msgid "basicCalendar.required.label"
+msgstr "Cours obligatoires"
 
-#~ msgid "graph.sortByStrength"
-#~ msgstr "Force"
+msgid "basicCalendar.required.placeholder"
+msgstr "Sélectionner des cours obligatoires"
 
-#~ msgid "graph.sortByName"
-#~ msgstr "Nom"
+msgid "basicCalendar.schedule.label"
+msgstr "Horaire no {index}"
 
-#~ msgid "graph.sharedCourses"
-#~ msgstr "{weight, plural, one {# offre commune} other {# offres communes}}"
+msgid "basicCalendar.subtitle"
+msgstr "Ajoutez des cours obligatoires et des cours au choix pour générer un horaire."
 
-#~ msgid "graph.noGradeData"
-#~ msgstr "Aucune distribution de notes dans cet ensemble de données."
+msgid "basicCalendar.title"
+msgstr "Constructeur de base"
 
-#~ msgid "graph.close"
-#~ msgstr "Fermer"
+msgid "basicCalendar.transcript.parseFailed"
+msgstr "Impossible d'analyser le relevé PDF"
 
-#~ msgid "graph.nodeDetails"
-#~ msgstr "Détails du professeur"
+msgid "basicCalendar.transcript.parsing"
+msgstr "Analyse..."
 
-#~ msgid "explore.title"
-#~ msgstr "Explorateur de cours"
+msgid "basicCalendar.transcript.upload"
+msgstr "Téléverser le relevé"
 
-#~ msgid "explore.subtitle"
-#~ msgstr "Consultez les répartitions de notes par cours, titre ou nom de professeur."
+msgid "basicCourseFilters.careers.label"
+msgstr "Carrières"
 
-#~ msgid "explore.searchPlaceholder"
-#~ msgstr "Rechercher des cours ou des professeurs…"
+msgid "basicCourseFilters.hint"
+msgstr "Les options s'appliquent aux cours à option générés."
 
-#~ msgid "explore.loadingGrades"
-#~ msgstr "Chargement des notes historiques…"
+msgid "basicCourseFilters.levels.label"
+msgstr "Niveaux"
 
-#~ msgid "explore.loadError"
-#~ msgstr "Impossible de charger les notes : {message}"
+msgid "basicCourseFilters.title"
+msgstr "Options de cours à option"
 
-#~ msgid "explore.searchUpdating"
-#~ msgstr "Mise à jour des résultats…"
+msgid "calendar.blockedTime.label"
+msgstr "Plage bloquée"
 
-#~ msgid "explore.noResults"
-#~ msgstr "Aucun professeur ou cours correspondant."
+msgid "calendar.blockedTime.removeBody"
+msgstr "Retirer la plage bloquée le {range}? Les horaires générés pourront de nouveau utiliser cette période."
 
-#~ msgid "explore.resultsProfessors"
-#~ msgstr "Professeurs"
+msgid "calendar.blockedTime.removeCancel"
+msgstr "Annuler"
 
-#~ msgid "explore.resultsCourses"
-#~ msgstr "Cours"
+msgid "calendar.blockedTime.removeConfirm"
+msgstr "Retirer"
 
-#~ msgid "explore.resultsDisciplines"
-#~ msgstr "Disciplines"
+msgid "calendar.blockedTime.removeTitle"
+msgstr "Retirer la plage bloquée?"
 
-#~ msgid "explore.disciplineCourseCount"
-#~ msgstr "{count, plural, one {# cours} other {# cours}}"
+msgid "calendar.event.virtual"
+msgstr "Virtuel"
 
-#~ msgid "explore.disciplineNoData"
-#~ msgstr "Aucun cours trouvé pour cette discipline."
+msgid "calendar.grade.compactTooltip"
+msgstr "{passing} % de reussite · {aPlus} % A+"
 
-#~ msgid "explore.professorCourseCount"
-#~ msgstr "{count, plural, one {# cours} other {# cours}}"
+msgid "calendar.grade.distribution"
+msgstr "Distribution des notes"
 
-#~ msgid "explore.section"
-#~ msgstr "Section {section}"
+msgid "calendar.grade.histogramTooltip"
+msgstr "{grade} : {count} etudiant{count, plural, one {} other {s}} ({percent} %)"
 
-#~ msgid "explore.courseNoProfessors"
-#~ msgstr "Aucune donnée de notes pour ce cours."
+msgid "calendar.grade.passing"
+msgstr "{percent}% de reussite"
 
-#~ msgid "explore.sectionNoGrades"
-#~ msgstr "Pas de répartition des notes pour cette section."
+msgid "calendar.grade.passingAndAPlus"
+msgstr "{passing} % de reussite · {aPlus} % A+"
 
-#~ msgid "explore.distributionHeading"
-#~ msgstr "Répartition des notes"
+msgid "calendar.grade.snsLabel"
+msgstr "S/NS"
 
-#~ msgid "explore.profileLink"
-#~ msgstr "Profil"
+msgid "calendar.grade.snsTooltip"
+msgstr "Repartition S/NS: {s} S, {ns} NS"
 
-#~ msgid "explore.backToSearch"
-#~ msgstr "Résultats pour \"{q}\""
+msgid "calendar.swap.alreadyAssigned"
+msgstr "Déjà assigné à une exigence dans l'assistant"
 
-#~ msgid "explore.professorFallback"
-#~ msgstr "Professeur"
+msgid "calendar.swap.alreadyLocked"
+msgstr "Déjà ajouté"
 
-#~ msgid "explore.professorNoCourses"
-#~ msgstr "Aucune donnée de notes pour ce professeur."
+msgid "calendar.swap.blacklistAria"
+msgstr "Exclure le cours de la génération d'horaires"
 
-#~ msgid "explore.invalidProfessor"
-#~ msgstr "Lien professeur invalide."
+msgid "calendar.swap.blacklistTooltip"
+msgstr "Empêche ce cours d'apparaître dans tout horaire généré."
 
-#~ msgid "explore.histogramStudents"
-#~ msgstr "{count, plural, one {# étudiant} other {# étudiants}}"
+msgid "calendar.swap.lockAria"
+msgstr "Ajouter le cours aux sélections pour la génération d'horaires"
 
-#~ msgid "explore.spotlight.gallery"
-#~ msgstr "Cours en vedette"
+msgid "calendar.swap.lockNoPool"
+msgstr "Impossible de rattacher ce cours à un sélecteur d'exigence."
 
-#~ msgid "explore.spotlight.hardest"
-#~ msgstr "Cours les plus difficiles"
+msgid "calendar.swap.lockTooltip"
+msgstr "Ajoute ce cours aux sélections utilisées pour générer les horaires."
 
-#~ msgid "explore.spotlight.easiest"
-#~ msgstr "Cours les plus faciles"
+msgid "calendar.swap.unblacklistAria"
+msgstr "Retirer le cours de la liste d'exclusion"
 
-#~ msgid "explore.spotlight.mostGraded"
-#~ msgstr "Cours les plus notés"
+msgid "calendar.swap.unblacklistTooltip"
+msgstr "Retire ce cours de la liste d'exclusion afin qu'il puisse apparaître dans les horaires générés."
 
-#~ msgid "explore.spotlight.highestFailRate"
-#~ msgstr "Taux d'échec le plus élevé"
+msgid "calendar.swap.unlockAria"
+msgstr "Retirer le cours des sélections pour la génération d'horaires"
 
-#~ msgid "explore.spotlight.mostProfessors"
-#~ msgstr "Plus d'instructeurs"
+msgid "calendar.swap.unlockTooltip"
+msgstr "Retire ce cours des sélections utilisées pour générer les horaires."
 
-#~ msgid "explore.spotlight.avgGpa"
-#~ msgstr "{gpa} moy."
+msgid "calendarPage.backToSetup"
+msgstr "Retour à la configuration"
 
-#~ msgid "explore.spotlight.gradeCount"
-#~ msgstr "{count} notes"
+msgid "calendarPage.clear"
+msgstr "Effacer les options"
 
-#~ msgid "explore.spotlight.failRate"
-#~ msgstr "{pct} % d'échecs"
+msgid "calendarPage.downloadIcs"
+msgstr "Télécharger ICS"
 
-#~ msgid "explore.spotlight.professorCount"
-#~ msgstr "{count} profs"
+msgid "calendarPage.generate"
+msgstr "Générer"
 
-#~ msgid "app.footer.feedbackPrompt"
-#~ msgstr "écrivez-nous à"
+msgid "calendarPage.generatedTotal"
+msgstr "{count} tôtal - cliquez sur un bloc pour échanger"
 
-#~ msgid "app.footer.buildBranchFallback"
-#~ msgstr "local"
+msgid "calendarPage.generateNew"
+msgstr "Générer un nouvel horaire"
 
-#~ msgid "app.changelog.title"
-#~ msgstr "Journal des modifications"
+msgid "calendarPage.mobile.back"
+msgstr "Retour"
 
-#~ msgid "app.reset.action"
-#~ msgstr "Réinitialiser"
+msgid "calendarPage.mobile.close"
+msgstr "Fermer"
 
-#~ msgid "app.share.action"
-#~ msgstr "Partager"
+msgid "calendarPage.mobile.controlsAria"
+msgstr "Options de l'horaire"
 
-#~ msgid "app.share.copied"
-#~ msgstr "Lien copié"
+msgid "calendarPage.mobile.menu"
+msgstr "Options"
 
-#~ msgid "app.tour.action"
-#~ msgstr "Visite"
+msgid "calendarPage.mobile.next"
+msgstr "Suiv."
 
-#~ msgid "basicCalendar.changeMode"
-#~ msgstr "Changer de mode"
+msgid "calendarPage.mobile.previous"
+msgstr "Préc."
 
-#~ msgid "basicCalendar.clear"
-#~ msgstr "Effacer les options"
+msgid "calendarPage.mobile.tryAnother"
+msgstr "Essayer un autre"
 
-#~ msgid "basicCalendar.completed.notFound"
-#~ msgstr "Aucun cours trouvé"
+msgid "calendarPage.next"
+msgstr "Suivant"
 
-#~ msgid "basicCalendar.completed.placeholder"
-#~ msgstr "Rechercher par code ou titre..."
+msgid "calendarPage.noMoreSchedules"
+msgstr "Plus d'horaires"
 
-#~ msgid "basicCalendar.downloadIcs"
-#~ msgstr "Télécharger ICS"
+msgid "calendarPage.noSchedule"
+msgstr "Aucun horaire généré pour l'instant."
 
-#~ msgid "basicCalendar.electives.label"
-#~ msgstr "Nombre de cours au choix"
+msgid "calendarPage.previous"
+msgstr "Précédent"
 
-#~ msgid "basicCalendar.exclude.label"
-#~ msgstr "Exclure des matières"
+msgid "calendarPage.randomize"
+msgstr "Aléatoire"
 
-#~ msgid "basicCalendar.exclude.placeholder"
-#~ msgstr "ex. ADM, CSI"
+msgid "calendarPage.schedule.label"
+msgstr "Horaire no {index}"
 
-#~ msgid "basicCalendar.generate"
-#~ msgstr "Générer un horaire"
+msgid "calendarPage.schedule.selectLabel"
+msgstr "Horaire"
 
-#~ msgid "basicCalendar.generatedSchedules"
-#~ msgstr "Horaires générés"
+msgid "calendarPage.scheduleNav.label"
+msgstr "Parcourir les horaires"
 
-#~ msgid "basicCalendar.mobile.close"
-#~ msgstr "Fermer"
+msgid "calendarPage.seedLabel"
+msgstr "Valeur de départ : {seed}"
 
-#~ msgid "basicCalendar.mobile.menu"
-#~ msgstr "Menu"
+msgid "calendarPage.share"
+msgstr "Partager"
 
-#~ msgid "basicCalendar.prereq.description"
-#~ msgstr "Ajoutez vos cours complétés pour débloquer automatiquement plus de cours au choix qui exigent des préalables."
+msgid "calendarPage.shareModal.copied"
+msgstr "Copié dans le presse-papiers"
 
-#~ msgid "basicCalendar.prereq.heading"
-#~ msgstr "Avez-vous déjà suivi des cours?"
+msgid "calendarPage.shareModal.copy"
+msgstr "Copiér le lien partageable"
 
-#~ msgid "basicCalendar.required.label"
-#~ msgstr "Cours obligatoires"
+msgid "calendarPage.shareModal.description"
+msgstr "Partagez cette URL pour permettre à d'autres personnes de charger votre programme, vos cours complétés et vos sélections. Le code est l'état intégré dans l'URL."
 
-#~ msgid "basicCalendar.required.placeholder"
-#~ msgstr "Sélectionner des cours obligatoires"
+msgid "calendarPage.shareModal.stateCode"
+msgstr "Code d'état"
 
-#~ msgid "basicCalendar.schedule.label"
-#~ msgstr "Horaire no {index}"
+msgid "calendarPage.shareModal.title"
+msgstr "Partager l'état de l'horaire"
 
-#~ msgid "basicCalendar.subtitle"
-#~ msgstr "Ajoutez des cours obligatoires et des cours au choix pour générer un horaire."
+msgid "calendarPage.shareModal.url"
+msgstr "URL"
 
-#~ msgid "basicCalendar.title"
-#~ msgstr "Constructeur de base"
+msgid "calendarPage.showingBlocks"
+msgstr "{count} bloc{suffix} de cours affiché{suffix} cette semaine"
 
-#~ msgid "basicCalendar.transcript.parseFailed"
-#~ msgstr "Impossible d'analyser le relevé PDF"
+msgid "calendarPage.subtitle"
+msgstr "Passez en revue vos horaires générés. Cliquez sur un bloc pour échanger des cours."
 
-#~ msgid "basicCalendar.transcript.parsing"
-#~ msgstr "Analyse..."
+msgid "calendarPage.title"
+msgstr "Horaire"
 
-#~ msgid "basicCalendar.transcript.upload"
-#~ msgstr "Téléverser le relevé"
+msgid "calendarPage.undoSwap"
+msgstr "Annuler l'echange"
 
-#~ msgid "calendarPage.backToSetup"
-#~ msgstr "Retour à la configuration"
+msgid "calendarPage.undoSwapCount"
+msgstr "Annuler l'echange ({count})"
 
-#~ msgid "calendarPage.downloadIcs"
-#~ msgstr "Télécharger ICS"
+msgid "calendarPage.weekCount"
+msgstr "{weeks, plural, one {1 semaine} other {se répète pendant # semaines}}"
 
-#~ msgid "calendarPage.generateNew"
-#~ msgstr "Générer un nouvel horaire"
+msgid "calendarPage.weekOf"
+msgstr "Horaire semaine {current}/{total}"
 
-#~ msgid "calendarPage.generatedTotal"
-#~ msgstr "{count} tôtal - cliquez sur un bloc pour échanger"
+msgid "calendarView.empty"
+msgstr "Aucun horaire n'à encore ete généré. Completez les étapes ci-dessus et cliquez sur Générer."
 
-#~ msgid "calendarPage.mobile.close"
-#~ msgstr "Fermer"
+msgid "completedCourses.description"
+msgstr "Cours que vous avez terminés ou que vous suivez. Vous pouvez aussi téléverser votre relevé à l'étape 1."
 
-#~ msgid "calendarPage.mobile.back"
-#~ msgstr "Retour"
+msgid "completedCourses.label"
+msgstr "Cours que vous avez terminés ou que vous suivez actuellement"
 
-#~ msgid "calendarPage.mobile.controlsAria"
-#~ msgstr "Options de l'horaire"
+msgid "completedCourses.notFound"
+msgstr "Aucun cours trouvé"
 
-#~ msgid "calendarPage.mobile.menu"
-#~ msgstr "Options"
+msgid "completedCourses.placeholder"
+msgstr "Rechercher par code de cours ou titre..."
 
-#~ msgid "calendarPage.mobile.previous"
-#~ msgstr "Préc."
+msgid "completedCourses.selectProgramFirst"
+msgstr "Sélectionnez d'abord un programme à l'étape 1."
 
-#~ msgid "calendarPage.mobile.next"
-#~ msgstr "Suiv."
+msgid "constrainStep.courseFilters"
+msgstr "Filtres de cours"
 
-#~ msgid "calendarPage.mobile.tryAnother"
-#~ msgstr "Essayer un autre"
+msgid "constrainStep.electiveLevels.label"
+msgstr "Niveaux"
 
-#~ msgid "calendarPage.clear"
-#~ msgstr "Effacer les options"
+msgid "constrainStep.filtersHint"
+msgstr "Les filtres s'appliquent aux cours suggérés et recherchables pour cette étape."
 
-#~ msgid "calendarPage.schedule.label"
-#~ msgstr "Horaire no {index}"
+msgid "constrainStep.includeClosedSections"
+msgstr "Inclure les sections fermées"
 
-#~ msgid "calendarPage.schedule.selectLabel"
-#~ msgstr "Horaire"
+msgid "constrainStep.languages.english"
+msgstr "Anglais"
 
-#~ msgid "calendarPage.share"
-#~ msgstr "Partager"
+msgid "constrainStep.languages.french"
+msgstr "Français"
 
-#~ msgid "calendarPage.shareModal.copied"
-#~ msgstr "Copié dans le presse-papiers"
+msgid "constrainStep.languages.label"
+msgstr "Langues"
 
-#~ msgid "calendarPage.shareModal.copy"
-#~ msgstr "Copiér le lien partageable"
+msgid "constrainStep.languages.other"
+msgstr "Autre"
 
-#~ msgid "calendarPage.shareModal.description"
-#~ msgstr "Partagez cette URL pour permettre à d'autres personnes de charger votre programme, vos cours complétés et vos sélections. Le code est l'état intégré dans l'URL."
+msgid "constrainStep.levels.grad"
+msgstr "Cycles supérieurs (5XXX+)"
 
-#~ msgid "calendarPage.shareModal.stateCode"
-#~ msgstr "Code d'état"
+msgid "constrainStep.levels.label"
+msgstr "Niveaux"
 
-#~ msgid "calendarPage.shareModal.title"
-#~ msgstr "Partager l'état de l'horaire"
+msgid "constrainStep.levels.undergrad"
+msgstr "Premier cycle (0–4XXX)"
 
-#~ msgid "calendarPage.shareModal.url"
-#~ msgstr "URL"
+msgid "constrainStep.virtualSectionsOnly"
+msgstr "Horaires virtuels seulement"
 
-#~ msgid "calendarPage.showingBlocks"
-#~ msgstr "{count} bloc{suffix} de cours affiché{suffix} cette semaine"
+msgid "enrolCli.button"
+msgstr "Inscrire via CLI"
 
-#~ msgid "calendarPage.subtitle"
-#~ msgstr "Passez en revue vos horaires générés. Cliquez sur un bloc pour échanger des cours."
+msgid "enrolCli.modal.copied"
+msgstr "Copié !"
 
-#~ msgid "calendarPage.title"
-#~ msgstr "Horaire"
+msgid "enrolCli.modal.copy"
+msgstr "Copier"
 
-#~ msgid "calendarPage.weekCount"
-#~ msgstr "{weeks, plural, one {1 semaine} other {se répète pendant # semaines}}"
+msgid "enrolCli.modal.description"
+msgstr "Collez cette commande dans votre terminal pour vous inscrire à cet horaire."
 
-#~ msgid "calendarPage.weekOf"
-#~ msgstr "Horaire semaine {current}/{total}"
+msgid "enrolCli.modal.mobileUnavailable"
+msgstr "Le CLI uoplan n'est pas disponible sur mobile. Ouvrez cette page sur un ordinateur pour l'utiliser."
 
-#~ msgid "calendarPage.undoSwap"
-#~ msgstr "Annuler l'echange"
+msgid "enrolCli.modal.stepInstall"
+msgstr "1. Installer uoplan"
 
-#~ msgid "calendarPage.undoSwapCount"
-#~ msgstr "Annuler l'echange ({count})"
+msgid "enrolCli.modal.stepRun"
+msgstr "2. S'inscrire"
 
-#~ msgid "calendarPage.scheduleNav.label"
-#~ msgstr "Parcourir les horaires"
+msgid "enrolCli.modal.title"
+msgstr "Inscrire via CLI"
 
-#~ msgid "calendarView.empty"
-#~ msgstr "Aucun horaire n'à encore ete généré. Completez les étapes ci-dessus et cliquez sur Générer."
+msgid "explore.backToSearch"
+msgstr "Résultats pour \"{q}\""
 
-#~ msgid "calendar.event.virtual"
-#~ msgstr "Virtuel"
+msgid "explore.courseNoProfessors"
+msgstr "Aucune donnée de notes pour ce cours."
 
-#~ msgid "calendar.grade.distribution"
-#~ msgstr "Distribution des notes"
+msgid "explore.disciplineCourseCount"
+msgstr "{count, plural, one {# cours} other {# cours}}"
 
-#~ msgid "calendar.grade.passing"
-#~ msgstr "{percent}% de reussite"
+msgid "explore.disciplineNoData"
+msgstr "Aucun cours trouvé pour cette discipline."
 
-#~ msgid "calendar.grade.snsTooltip"
-#~ msgstr "Repartition S/NS: {s} S, {ns} NS"
+msgid "explore.distributionHeading"
+msgstr "Répartition des notes"
 
-#~ msgid "calendar.grade.histogramTooltip"
-#~ msgstr "{grade} : {count} etudiant{count, plural, one {} other {s}} ({percent} %)"
+msgid "explore.filter.clearAll"
+msgstr "Tout effacer"
 
-#~ msgid "calendar.grade.compactTooltip"
-#~ msgstr "{passing} % de reussite · {aPlus} % A+"
+msgid "explore.filter.clearFilters"
+msgstr "Effacer les filtres"
 
-#~ msgid "calendar.grade.passingAndAPlus"
-#~ msgstr "{passing} % de reussite · {aPlus} % A+"
+msgid "explore.filter.difficulty"
+msgstr "Difficulté"
 
-#~ msgid "calendar.grade.snsLabel"
-#~ msgstr "S/NS"
+msgid "explore.filter.difficulty.easy"
+msgstr "Facile"
 
-#~ msgid "calendar.swap.lockAria"
-#~ msgstr "Ajouter le cours aux sélections pour la génération d'horaires"
+msgid "explore.filter.difficulty.moderate"
+msgstr "Modéré"
 
-#~ msgid "calendar.swap.lockTooltip"
-#~ msgstr "Ajoute ce cours aux sélections utilisées pour générer les horaires."
+msgid "explore.filter.difficulty.tough"
+msgstr "Difficile"
 
-#~ msgid "calendar.swap.alreadyLocked"
-#~ msgstr "Déjà ajouté"
+msgid "explore.filter.language"
+msgstr "Langue"
 
-#~ msgid "calendar.swap.alreadyAssigned"
-#~ msgstr "Déjà assigné à une exigence dans l'assistant"
+msgid "explore.filter.language.en"
+msgstr "Anglais"
 
-#~ msgid "calendar.swap.unlockAria"
-#~ msgstr "Retirer le cours des sélections pour la génération d'horaires"
+msgid "explore.filter.language.fr"
+msgstr "Français"
 
-#~ msgid "calendar.swap.unlockTooltip"
-#~ msgstr "Retire ce cours des sélections utilisées pour générer les horaires."
+msgid "explore.filter.level"
+msgstr "Niveau"
 
-#~ msgid "calendar.swap.lockNoPool"
-#~ msgstr "Impossible de rattacher ce cours à un sélecteur d'exigence."
+msgid "explore.filter.level.1000"
+msgstr "1re année"
 
-#~ msgid "calendar.swap.blacklistAria"
-#~ msgstr "Exclure le cours de la génération d'horaires"
+msgid "explore.filter.level.2000"
+msgstr "2e année"
 
-#~ msgid "calendar.swap.blacklistTooltip"
-#~ msgstr "Empêche ce cours d'apparaître dans tout horaire généré."
+msgid "explore.filter.level.3000"
+msgstr "3e année"
 
-#~ msgid "calendar.swap.unblacklistAria"
-#~ msgstr "Retirer le cours de la liste d'exclusion"
+msgid "explore.filter.level.4000"
+msgstr "4e année"
 
-#~ msgid "calendar.swap.unblacklistTooltip"
-#~ msgstr "Retire ce cours de la liste d'exclusion afin qu'il puisse apparaître dans les horaires générés."
+msgid "explore.filter.level.5000"
+msgstr "Cycles supérieurs"
 
-#~ msgid "languageSwitcher.ariaLabel"
-#~ msgstr "Choisir la langue de l'application"
+msgid "explore.filter.noResults"
+msgstr "Aucun cours ne correspond à ces filtres."
 
-#~ msgid "settings.ariaLabel"
-#~ msgstr "Paramètres"
+msgid "explore.filter.rating"
+msgstr "Évaluation"
 
-#~ msgid "language.en"
-#~ msgstr "Anglais"
+msgid "explore.filter.rating.excellent"
+msgstr "Excellent (4,0+)"
 
-#~ msgid "language.frCA"
-#~ msgstr "Français"
+msgid "explore.filter.rating.good"
+msgstr "Bien (3,0+)"
 
-#~ msgid "modeStep.advanced.aria"
-#~ msgstr "Mode avancé"
+msgid "explore.filter.rating.great"
+msgstr "Très bien (3,5+)"
 
-#~ msgid "modeStep.advanced.badge"
-#~ msgstr "plus précis"
+msgid "explore.histogramStudents"
+msgstr "{count, plural, one {# étudiant} other {# étudiants}}"
 
-#~ msgid "modeStep.advanced.description"
-#~ msgstr "Sélectionnez votre programme et créez un plan de diplôme complet. Suit les cours complétés et les compare à vos exigences de programme."
+msgid "explore.invalidProfessor"
+msgstr "Lien professeur invalide."
 
-#~ msgid "modeStep.advanced.title"
-#~ msgstr "Mode avancé"
+msgid "explore.loadError"
+msgstr "Impossible de charger les notes : {message}"
 
-#~ msgid "modeStep.basic.aria"
-#~ msgstr "Mode de base"
+msgid "explore.loadingGrades"
+msgstr "Chargement des notes historiques…"
 
-#~ msgid "modeStep.basic.badge"
-#~ msgstr "moins de configuration"
+msgid "explore.noResults"
+msgstr "Aucun professeur ou cours correspondant."
 
-#~ msgid "modeStep.basic.description"
-#~ msgstr "Sélectionnez rapidement des cours obligatoires et des cours au choix pour générer un horaire. Idéal pour une planification simple sans suivi complet du programme."
+msgid "explore.professorCourseCount"
+msgstr "{count, plural, one {# cours} other {# cours}}"
 
-#~ msgid "modeStep.basic.title"
-#~ msgstr "Mode de base"
+msgid "explore.professorFallback"
+msgstr "Professeur"
 
-#~ msgid "programStep.disciplines.description"
-#~ msgstr "Utilisé pour évaluer les préalables propres au programme. Rempli automatiquement à partir des cours de votre programme."
+msgid "explore.professorNoCourses"
+msgstr "Aucune donnée de notes pour ce professeur."
 
-#~ msgid "programStep.disciplines.label"
-#~ msgstr "Disciplines de votre programme"
+msgid "explore.profileLink"
+msgstr "Profil"
 
-#~ msgid "programStep.firstYear.description"
-#~ msgstr "Determiné quelles exigences de programme s'appliquent à vous."
+msgid "explore.resultsCourses"
+msgstr "Cours"
 
-#~ msgid "programStep.firstYear.label"
-#~ msgstr "Année initiale d'études"
+msgid "explore.resultsDisciplines"
+msgstr "Disciplines"
 
-#~ msgid "programStep.firstYear.placeholder"
-#~ msgstr "Sélectionnez votre année de début..."
+msgid "explore.resultsProfessors"
+msgstr "Professeurs"
 
-#~ msgid "programStep.optional"
-#~ msgstr "Optionnel."
+msgid "explore.searchPlaceholder"
+msgstr "Rechercher des cours ou des professeurs…"
 
-#~ msgid "programStep.program.label"
-#~ msgstr "Sélectionnez votre programme"
+msgid "explore.searchUpdating"
+msgstr "Mise à jour des résultats…"
 
-#~ msgid "programStep.program.notFound"
-#~ msgstr "Aucun programme trouvé"
+msgid "explore.section"
+msgstr "Section {section}"
 
-#~ msgid "programStep.program.placeholder"
-#~ msgstr "Rechercher votre programme..."
+msgid "explore.sectionNoGrades"
+msgstr "Pas de répartition des notes pour cette section."
 
-#~ msgid "programStep.transcript.addAnyway"
-#~ msgstr "Ajouter quand même"
+msgid "explore.sort.ascending"
+msgstr "Croissant"
 
-#~ msgid "programStep.transcript.added"
-#~ msgstr "{count} cours{suffix} ajouté{suffix} depuis le relevé."
+msgid "explore.sort.avgGrade"
+msgstr "Note moyenne"
 
-#~ msgid "programStep.transcript.choose"
-#~ msgstr "Choisir le relevé"
+msgid "explore.sort.courseCode"
+msgstr "Code du cours"
 
-#~ msgid "programStep.transcript.codesNotFound"
-#~ msgstr "{count} code{suffix} du PDF n'ont pas été trouvés dans le catalogue : {codes}"
+msgid "explore.sort.descending"
+msgstr "Décroissant"
 
-#~ msgid "programStep.transcript.description"
-#~ msgstr "Téléverser votre relevé vous évite de sélectionner manuellement votre année de début, votre programme et vos cours complétés - tout est détecté automatiquement. Votre PDF est traité entièrement sur votre appareil et n'est jamais envoyé à un serveur."
+msgid "explore.sort.direction"
+msgstr "Direction"
 
-#~ msgid "programStep.transcript.notInCatalogue"
-#~ msgstr "Introuvable dans le catalogue"
+msgid "explore.sort.label"
+msgstr "Trier"
 
-#~ msgid "programStep.transcript.parseFailed"
-#~ msgstr "Impossible d'analyser le relevé PDF"
+msgid "explore.sort.profRating"
+msgstr "Note du professeur"
 
-#~ msgid "programStep.transcript.parsing"
-#~ msgstr "Analyse..."
+msgid "explore.sort.relevance"
+msgstr "Pertinence"
 
-#~ msgid "programStep.transcript.programDetected"
-#~ msgstr "Programme détecté :"
+msgid "explore.spotlight.avgGpa"
+msgstr "{gpa} moy."
 
-#~ msgid "programStep.transcript.withMinor"
-#~ msgstr "avec une mineure en"
+msgid "explore.spotlight.easiest"
+msgstr "Cours les plus faciles"
 
-#~ msgid "programStep.transcript.request"
-#~ msgstr "Demander un relevé sur uoZone"
+msgid "explore.spotlight.failRate"
+msgstr "{pct} % d'échecs"
 
-#~ msgid "programStep.transcript.uploadAria"
-#~ msgstr "Téléverser un relevé PDF"
+msgid "explore.spotlight.gallery"
+msgstr "Cours en vedette"
 
-#~ msgid "programStep.transcript.uploadFailed"
-#~ msgstr "Téléversement échoué"
+msgid "explore.spotlight.gradeCount"
+msgstr "{count} notes"
 
-#~ msgid "programStep.skip.body"
-#~ msgstr "Sans compléter la configuration, vous manquerez:"
+msgid "explore.spotlight.hardest"
+msgstr "Cours les plus difficiles"
 
-#~ msgid "programStep.skip.basicModeNote"
-#~ msgstr "Vous pouvez tout de même construire un horaire en sélectionnant des cours obligatoires et un nombre de cours optionnels."
+msgid "explore.spotlight.highestFailRate"
+msgstr "Taux d'échec le plus élevé"
 
-#~ msgid "frenchImmersion.toggle.label"
-#~ msgstr "Volet d’immersion française"
+msgid "explore.spotlight.mostGraded"
+msgstr "Cours les plus notés"
 
-#~ msgid "frenchImmersion.toggle.description"
-#~ msgstr "Suivez la progression vers la mention « immersion française » et gardez les cours en français dans les filtres de langue."
+msgid "explore.spotlight.mostProfessors"
+msgstr "Plus d'instructeurs"
 
-#~ msgid "frenchImmersion.progress.disclaimer"
-#~ msgstr "Totaux indicatifs d’après les cours complétés et l’horaire actuel. Ce n’est pas une vérification officielle."
+msgid "explore.spotlight.professorCount"
+msgstr "{count} profs"
 
-#~ msgid "frenchImmersion.progress.cardTitle"
-#~ msgstr "Progression — immersion française"
+msgid "explore.subtitle"
+msgstr "Consultez les répartitions de notes par cours, titre ou nom de professeur."
 
-#~ msgid "frenchImmersion.progress.sectionVolume"
-#~ msgstr "Volume pour la mention"
+msgid "explore.title"
+msgstr "Explorateur de cours"
 
-#~ msgid "frenchImmersion.progress.sectionLevels"
-#~ msgstr "Exigences de niveau (hors FLS)"
+msgid "frenchImmersion.fls3500.body"
+msgstr "Vous devez réussir le test de certification FLS 3500 avant d’obtenir le diplôme avec la mention immersion française."
 
-#~ msgid "frenchImmersion.progress.sectionAccompanying"
-#~ msgstr "Plafonds FLS d’accompagnement"
+msgid "frenchImmersion.fls3500.title"
+msgstr "Test de certification de langue seconde (FLS 3500)"
 
-#~ msgid "frenchImmersion.progress.sectionCountedCodes"
-#~ msgstr "Cours comptés pour le volume"
+msgid "frenchImmersion.overview.check1000"
+msgstr "Au moins deux cours de niveau 1000 en français hors FLS (6 unités minimum)."
 
-#~ msgid "frenchImmersion.progress.sectionExcluded"
-#~ msgstr "Non comptés (plafond)"
+msgid "frenchImmersion.overview.check3000"
+msgstr "Au moins deux cours de niveau 3000 ou 4000 en français hors FLS (6 unités minimum)."
 
-#~ msgid "frenchImmersion.progress.excludedCompanionsHint"
-#~ msgstr "Ces crédits FLS d’accompagnement dépassent le maximum admissible pour la mention."
+msgid "frenchImmersion.overview.checkCompanion"
+msgstr "FLS d’accompagnement dans les plafonds (max. 4 cours / 12 unités ; max. 2 × FLS 2581)."
 
-#~ msgid "frenchImmersion.progress.metricCourses"
-#~ msgstr "Cours admissibles"
+msgid "frenchImmersion.overview.checkVolume"
+msgstr "Nombre minimal de cours et d’unités en français pour la mention (selon le critère le plus exigeant)."
 
-#~ msgid "frenchImmersion.progress.metricUnits"
-#~ msgstr "Unités admissibles"
+msgid "frenchImmersion.overview.compactLine"
+msgstr "Immersion : {courses}/{reqC} cours · {units}/{reqU} unités"
 
-#~ msgid "frenchImmersion.progress.metricLevel1000"
-#~ msgstr "Cours de niveau 1000 (min. 2)"
+msgid "frenchImmersion.overview.title"
+msgstr "Mention immersion française"
 
-#~ msgid "frenchImmersion.progress.metricLevel1000Units"
-#~ msgstr "Unités de niveau 1000 (min. 6)"
+msgid "frenchImmersion.overview.volumeAria"
+msgstr "Progression vers l’exigence de volume pour la mention immersion française"
 
-#~ msgid "frenchImmersion.progress.metricLevel3000"
-#~ msgstr "Cours de niveau 3000 ou 4000 (min. 2)"
+msgid "frenchImmersion.overview.volumeCounts"
+msgstr "{courses}/{reqC} cours · {units}/{reqU} unités"
 
-#~ msgid "frenchImmersion.progress.metricLevel3000Units"
-#~ msgstr "Unités de niveau 3000 ou 4000 (min. 6)"
+msgid "frenchImmersion.overview.volumeHeading"
+msgstr "Progression vers le volume"
 
-#~ msgid "frenchImmersion.progress.metricCompanionTotal"
-#~ msgstr "Cours FLS d’accompagnement (max. 4)"
+msgid "frenchImmersion.progress.cardTitle"
+msgstr "Progression — immersion française"
 
-#~ msgid "frenchImmersion.progress.metricCompanion2581"
-#~ msgstr "FLS 2581 (max. 2)"
+msgid "frenchImmersion.progress.disclaimer"
+msgstr "Totaux indicatifs d’après les cours complétés et l’horaire actuel. Ce n’est pas une vérification officielle."
 
-#~ msgid "frenchImmersion.progress.valueCrU"
-#~ msgstr "{c} cr · {u} u"
+msgid "frenchImmersion.progress.excludedCompanionsHint"
+msgstr "Ces crédits FLS d’accompagnement dépassent le maximum admissible pour la mention."
 
-#~ msgid "frenchImmersion.progress.officialLink"
-#~ msgstr "Exigences officielles du diplôme (uOttawa)"
+msgid "frenchImmersion.progress.metricCompanion2581"
+msgstr "FLS 2581 (max. 2)"
 
-#~ msgid "frenchImmersion.fls3500.title"
-#~ msgstr "Test de certification de langue seconde (FLS 3500)"
+msgid "frenchImmersion.progress.metricCompanionTotal"
+msgstr "Cours FLS d’accompagnement (max. 4)"
 
-#~ msgid "frenchImmersion.fls3500.body"
-#~ msgstr "Vous devez réussir le test de certification FLS 3500 avant d’obtenir le diplôme avec la mention immersion française."
+msgid "frenchImmersion.progress.metricCourses"
+msgstr "Cours admissibles"
 
-#~ msgid "frenchImmersion.progress.nursing"
-#~ msgstr "Programme en sciences infirmières : 12 cours en français (36 unités) au lieu de 14 (42)."
+msgid "frenchImmersion.progress.metricLevel1000"
+msgstr "Cours de niveau 1000 (min. 2)"
 
-#~ msgid "frenchImmersion.overview.title"
-#~ msgstr "Mention immersion française"
+msgid "frenchImmersion.progress.metricLevel1000Units"
+msgstr "Unités de niveau 1000 (min. 6)"
 
-#~ msgid "frenchImmersion.overview.volumeHeading"
-#~ msgstr "Progression vers le volume"
+msgid "frenchImmersion.progress.metricLevel3000"
+msgstr "Cours de niveau 3000 ou 4000 (min. 2)"
 
-#~ msgid "frenchImmersion.overview.volumeCounts"
-#~ msgstr "{courses}/{reqC} cours · {units}/{reqU} unités"
+msgid "frenchImmersion.progress.metricLevel3000Units"
+msgstr "Unités de niveau 3000 ou 4000 (min. 6)"
 
-#~ msgid "frenchImmersion.overview.volumeAria"
-#~ msgstr "Progression vers l’exigence de volume pour la mention immersion française"
+msgid "frenchImmersion.progress.metricUnits"
+msgstr "Unités admissibles"
 
-#~ msgid "frenchImmersion.overview.checkVolume"
-#~ msgstr "Nombre minimal de cours et d’unités en français pour la mention (selon le critère le plus exigeant)."
+msgid "frenchImmersion.progress.nursing"
+msgstr "Programme en sciences infirmières : 12 cours en français (36 unités) au lieu de 14 (42)."
 
-#~ msgid "frenchImmersion.overview.check1000"
-#~ msgstr "Au moins deux cours de niveau 1000 en français hors FLS (6 unités minimum)."
+msgid "frenchImmersion.progress.officialLink"
+msgstr "Exigences officielles du diplôme (uOttawa)"
 
-#~ msgid "frenchImmersion.overview.check3000"
-#~ msgstr "Au moins deux cours de niveau 3000 ou 4000 en français hors FLS (6 unités minimum)."
+msgid "frenchImmersion.progress.sectionAccompanying"
+msgstr "Plafonds FLS d’accompagnement"
 
-#~ msgid "frenchImmersion.overview.checkCompanion"
-#~ msgstr "FLS d’accompagnement dans les plafonds (max. 4 cours / 12 unités ; max. 2 × FLS 2581)."
+msgid "frenchImmersion.progress.sectionCountedCodes"
+msgstr "Cours comptés pour le volume"
 
-#~ msgid "frenchImmersion.overview.compactLine"
-#~ msgstr "Immersion : {courses}/{reqC} cours · {units}/{reqU} unités"
+msgid "frenchImmersion.progress.sectionExcluded"
+msgstr "Non comptés (plafond)"
 
-#~ msgid "frenchImmersion.readout.title"
-#~ msgstr "Mention immersion française"
+msgid "frenchImmersion.progress.sectionLevels"
+msgstr "Exigences de niveau (hors FLS)"
 
-#~ msgid "frenchImmersion.readout.intro"
-#~ msgstr "Comment vos cours complétés et l’horaire actuel se répartissent selon les règles de la mention (indicatif)."
+msgid "frenchImmersion.progress.sectionVolume"
+msgstr "Volume pour la mention"
 
-#~ msgid "frenchImmersion.readout.pendingAssign"
-#~ msgstr "Attribuez les cours complétés ci-dessous ; les totaux se mettent à jour au fur et à mesure."
+msgid "frenchImmersion.progress.valueCrU"
+msgstr "{c} cr · {u} u"
 
-#~ msgid "frenchImmersion.readout.cat1000"
-#~ msgstr "Niveau 1000 (hors FLS, FR) :"
+msgid "frenchImmersion.readout.cat1000"
+msgstr "Niveau 1000 (hors FLS, FR) :"
 
-#~ msgid "frenchImmersion.readout.cat3000"
-#~ msgstr "Niveau 3000 ou 4000 (hors FLS, FR) :"
+msgid "frenchImmersion.readout.cat3000"
+msgstr "Niveau 3000 ou 4000 (hors FLS, FR) :"
 
-#~ msgid "frenchImmersion.readout.catCompanion"
-#~ msgstr "FLS d’accompagnement :"
+msgid "frenchImmersion.readout.catCompanion"
+msgstr "FLS d’accompagnement :"
 
-#~ msgid "frenchImmersion.readout.catOther"
-#~ msgstr "Autres cours en français comptés :"
+msgid "frenchImmersion.readout.catOther"
+msgstr "Autres cours en français comptés :"
 
-#~ msgid "frenchImmersion.readout.excludedLabel"
-#~ msgstr "Exclus par les plafonds d’accompagnement :"
+msgid "frenchImmersion.readout.excludedLabel"
+msgstr "Exclus par les plafonds d’accompagnement :"
 
-#~ msgid "scheduleCount.compressed.description"
-#~ msgstr "Au plus une pause par jour, jusqu'à 90 minutes."
+msgid "frenchImmersion.readout.intro"
+msgstr "Comment vos cours complétés et l’horaire actuel se répartissent selon les règles de la mention (indicatif)."
 
-#~ msgid "scheduleCount.compressed.label"
-#~ msgstr "Horaire compact"
+msgid "frenchImmersion.readout.pendingAssign"
+msgstr "Attribuez les cours complétés ci-dessous ; les totaux se mettent à jour au fur et à mesure."
 
-#~ msgid "scheduleCount.preferEasier.description"
-#~ msgstr "Lors de la génération, les cours avec un taux historique de A+ plus élevé ont plus de chances d’être choisis dans chaque bassin d’exigences."
+msgid "frenchImmersion.readout.title"
+msgstr "Mention immersion française"
 
-#~ msgid "scheduleCount.preferEasier.label"
-#~ msgstr "Préférer les cours plus faciles (taux de A+ passés)"
+msgid "frenchImmersion.toggle.description"
+msgstr "Suivez la progression vers la mention « immersion française » et gardez les cours en français dans les filtres de langue."
 
-#~ msgid "scheduleCount.blacklist.label"
-#~ msgstr "Cours exclus"
+msgid "frenchImmersion.toggle.label"
+msgstr "Volet d’immersion française"
 
-#~ msgid "scheduleCount.blacklist.description"
-#~ msgstr "Les cours sélectionnés ici n'apparaîtront jamais dans les horaires générés."
+msgid "gen.day.fri"
+msgstr "ven"
 
-#~ msgid "scheduleCount.blacklist.placeholder"
-#~ msgstr "Ajouter un cours à exclure…"
+msgid "gen.day.mon"
+msgstr "lun"
 
-#~ msgid "scheduleCount.courses.label"
-#~ msgstr "Combien de cours voulez-vous cette session?"
+msgid "gen.day.sat"
+msgstr "sam"
 
-#~ msgid "scheduleCount.day.friday"
-#~ msgstr "Vendredi"
+msgid "gen.day.sun"
+msgstr "dim"
 
-#~ msgid "scheduleCount.day.monday"
-#~ msgstr "Lundi"
+msgid "gen.day.thu"
+msgstr "jeu"
 
-#~ msgid "scheduleCount.day.saturday"
-#~ msgstr "Samedi"
+msgid "gen.day.tue"
+msgstr "mar"
 
-#~ msgid "scheduleCount.day.sunday"
-#~ msgstr "Dimanche"
+msgid "gen.day.wed"
+msgstr "mer"
 
-#~ msgid "scheduleCount.day.thursday"
-#~ msgstr "Jeudi"
+msgid "gen.error.completeAssign"
+msgstr "Complétez les exigences Assigner avant de générer des horaires."
 
-#~ msgid "scheduleCount.day.tuesday"
-#~ msgstr "Mardi"
+msgid "gen.error.coursesMore"
+msgstr " (+{count} de plus)"
 
-#~ msgid "scheduleCount.day.wednesday"
-#~ msgstr "Mercredi"
+msgid "gen.error.notEnoughCourses"
+msgstr "Pas assez de cours correspondent à vos filtres."
 
-#~ msgid "scheduleCount.avoidDays.description"
-#~ msgstr "Par défaut, la fin de semaine. Aucun cours ne sera planifié les jours que vous sélectionnez ici."
+msgid "gen.error.unassignedCompleted"
+msgstr "Vous avez {count, plural, one {# cours complété} other {# cours complétés}} non assigné(s) à une exigence : {courses}. Vous devez {count, plural, one {l'assigner} other {les assigner}} à des exigences, ou les déplacer vers la section Exclus."
 
-#~ msgid "scheduleCount.avoidDays.label"
-#~ msgstr "Jours de la semaine à éviter"
+msgid "gen.hint.closedExcluded"
+msgstr "Sections fermées exclues — essayez d'activer « Inclure les sections fermées »"
 
-#~ msgid "scheduleCount.avoidDays.placeholder"
-#~ msgstr "Sélectionner les jours"
+msgid "gen.hint.daysExcluded"
+msgstr "Jours exclus : {days}"
 
-#~ msgid "schedule.dashboard.assign.attention"
-#~ msgstr "{count, plural, one {# cours terminé doit être assigné} other {# cours terminés doivent être assignés}}"
+msgid "gen.hint.endBefore"
+msgstr "Fin limitée à avant {time}"
 
-#~ msgid "schedule.dashboard.assign.label"
-#~ msgstr "Remplir les exigences"
+msgid "gen.hint.languageFilter"
+msgstr "Filtre de langue : {langs} seulement"
 
-#~ msgid "schedule.dashboard.assign.ready"
-#~ msgstr "Tous les cours terminés sont placés"
+msgid "gen.hint.profRating"
+msgstr "Note du professeur ≥ {rating}"
 
-#~ msgid "schedule.dashboard.completed.label"
-#~ msgstr "Cours terminés"
+msgid "gen.hint.startAfter"
+msgstr "Début limité à après {time}"
 
-#~ msgid "schedule.dashboard.completed.summary"
-#~ msgstr "{count, plural, one {# cours terminé sélectionné} other {# cours terminés sélectionnés}}"
+msgid "gen.hint.virtualOnly"
+msgstr "Sections virtuelles seulement"
 
-#~ msgid "schedule.dashboard.program.courseCount"
-#~ msgstr "{count, plural, one {# cours} other {# cours}}"
+msgid "gen.hints.heading"
+msgstr "Filtres actifs limitant les résultats"
 
-#~ msgid "schedule.dashboard.term.loading"
-#~ msgstr "Chargement des trimestres…"
+msgid "gen.join.and"
+msgstr " et "
 
-#~ msgid "schedule.programCourses.completedHeading"
-#~ msgstr "Cours terminés"
+msgid "gen.join.comma"
+msgstr ", "
 
-#~ msgid "schedule.programCourses.completedHint"
-#~ msgstr "Ajoute les cours déjà terminés afin que les exigences et les préalables restent exacts. L’importation d’un relevé les remplit automatiquement."
+msgid "gen.lang.english"
+msgstr "Anglais"
 
-#~ msgid "schedule.dashboard.gate.program"
-#~ msgstr "Choisis d’abord un programme"
+msgid "gen.lang.french"
+msgstr "Français"
 
-#~ msgid "schedule.dashboard.gate.term"
-#~ msgstr "Choisis d’abord un trimestre"
+msgid "gen.lang.other"
+msgstr "Autre"
 
-#~ msgid "schedule.dashboard.generate"
-#~ msgstr "Générer"
+msgid "gen.lead.coursesMore"
+msgstr "{shown} +{count} de plus"
 
-#~ msgid "schedule.dashboard.options.attention"
-#~ msgstr "Certains choix de programme doivent encore être sélectionnés"
+msgid "gen.lead.noClashFree"
+msgstr "Aucun horaire sans conflit avec vos paramètres actuels."
 
-#~ msgid "schedule.dashboard.options.label"
-#~ msgstr "Options du programme"
+msgid "gen.lead.noSections"
+msgstr "Aucune section ne correspond à vos filtres actuels."
 
-#~ msgid "schedule.dashboard.options.ready"
-#~ msgstr "Tous les choix de programme sont résolus"
+msgid "gen.lead.noSectionsNamed"
+msgstr "Aucune section ne correspond à vos filtres : {courses}."
 
-#~ msgid "schedule.dashboard.program.empty"
-#~ msgstr "Aucun programme sélectionné"
+msgid "gen.lead.structural"
+msgstr "Ces cours ne peuvent pas être placés ensemble, même sans aucun filtre."
 
-#~ msgid "schedule.dashboard.program.label"
-#~ msgstr "Programme et cours"
+msgid "gen.lead.tooFew"
+msgstr "Seulement {eligible}/{target} cours ont des sections valides."
 
-#~ msgid "schedule.dashboard.ready"
-#~ msgstr "Prêt à générer"
+msgid "gen.list.many"
+msgstr "{rest}, ou {last}"
 
-#~ msgid "schedule.dashboard.readyCount"
-#~ msgstr "{ready} de {total} entrées prêtes"
+msgid "gen.list.overflow"
+msgstr "{head}, ou {count} de plus"
 
-#~ msgid "schedule.dashboard.term.empty"
-#~ msgstr "Choisir un trimestre"
+msgid "gen.list.two"
+msgstr "{a} ou {b}"
 
-#~ msgid "schedule.dashboard.term.label"
-#~ msgstr "Trimestre"
+msgid "gen.modal.title"
+msgstr "Erreur de génération"
 
-#~ msgid "schedule.dashboard.title"
-#~ msgstr "Construis ton horaire"
+msgid "gen.noSections.heading"
+msgstr "Aucune section correspondante (filtres / horaire)"
 
-#~ msgid "schedule.generate.confirm.assign.consequence"
-#~ msgstr "Les cours terminés non assignés pourraient ne pas compter pour la bonne exigence."
+msgid "gen.pools.blockedByFilters"
+msgstr "{count, plural, one {— {courses} est admissible mais bloqué par les filtres actuels} other {— {courses} sont admissibles mais bloqués par les filtres actuels}}"
 
-#~ msgid "schedule.generate.confirm.assign.description"
-#~ msgstr "{count, plural, one {# cours terminé n’est pas assigné.} other {# cours terminés ne sont pas assignés.}}"
+msgid "gen.pools.haveNoCourses"
+msgstr "{count, plural, one {n'a aucun cours admissible} other {n'ont aucun cours admissible}}"
 
-#~ msgid "schedule.generate.confirm.assign.label"
-#~ msgstr "Cours terminés non assignés"
+msgid "gen.pools.heading"
+msgstr "Exigences sans cours admissibles"
 
-#~ msgid "schedule.generate.confirm.body"
-#~ msgstr "Certains détails de configuration sont incomplets. Tu peux continuer, mais l’horaire généré pourrait utiliser un mode plus simple ou manquer de contexte."
+msgid "gen.pools.noSectionsThisTerm"
+msgstr "— aucune section offerte ce trimestre"
 
-#~ msgid "schedule.generate.confirm.cancel"
-#~ msgstr "Annuler"
+msgid "gen.pools.otherSummary"
+msgstr "{count} autres exigences n'ont aucun cours admissible (souvent des sections de trimestres à venir pas encore publiées)."
 
-#~ msgid "schedule.generate.confirm.consequence"
-#~ msgstr "Tu peux revenir à la configuration en tout temps pour compléter les détails manquants."
+msgid "gen.quickFixes.heading"
+msgstr "Solutions rapides"
 
-#~ msgid "schedule.generate.confirm.generateAnyway"
-#~ msgstr "Générer quand même"
+msgid "gen.slots.summary"
+msgstr "Seulement {available} des {needed} places de cours peuvent être remplies avec vos filtres actuels"
 
-#~ msgid "schedule.generate.confirm.options.consequence"
-#~ msgstr "Le générateur pourrait ignorer les branches non résolues ou produire des exigences moins exactes."
+msgid "gen.suggest.clearMinRating"
+msgstr "Retirez la note minimale du professeur."
 
-#~ msgid "schedule.generate.confirm.options.description"
-#~ msgstr "Un ou plusieurs groupes d’options du programme doivent encore être sélectionnés."
+msgid "gen.suggest.combinedBlockersIntro"
+msgstr "Aucun filtre unique n'est en cause — en assouplir plusieurs ensemble aide :"
 
-#~ msgid "schedule.generate.confirm.options.label"
-#~ msgstr "Options de programme non résolues"
+msgid "gen.suggest.relaxFilters"
+msgstr "Assouplissez la plage horaire, la note du professeur ou les jours permis."
 
-#~ msgid "schedule.generate.confirm.program.label"
-#~ msgstr "Aucun programme sélectionné"
+msgid "gen.suggest.relaxFyCap"
+msgstr "Assouplissez le plafond de crédits de niveau 1000 si possible."
 
-#~ msgid "schedule.generate.confirm.term.consequence"
-#~ msgstr "La génération pourrait échouer sans trimestre."
+msgid "gen.suggest.structural"
+msgstr "Ces cours ne peuvent pas tous tenir dans un seul horaire, même sans filtres. Essayez d'autres choix Contraindre / Assigner ou moins de cours."
 
-#~ msgid "schedule.generate.confirm.term.description"
-#~ msgstr "Aucun trimestre d’horaire n’est sélectionné."
+msgid "gen.suggest.tryDifferentCourse"
+msgstr "Horaire pas encore publié ? Essayez un autre cours ou revenez plus tard."
 
-#~ msgid "schedule.generate.confirm.term.label"
-#~ msgstr "Aucun trimestre sélectionné"
+msgid "gen.suggest.turnOffCompressed"
+msgstr "Désactivez l'horaire compact."
 
-#~ msgid "schedule.generate.confirm.title"
-#~ msgstr "Générer avec une configuration incomplète?"
+msgid "gen.suggest.unBlacklist"
+msgstr "Réautorisez un cours que vous aviez retiré."
 
-#~ msgid "scheduleCount.firstYear.limitDescription"
-#~ msgstr "Vous avez actuellement {credits} credit{suffix} de cours de niveau 1000 (terminés + sélectionnés). La limite du premier cycle est de 48."
+msgid "gen.suggest.widenHoursDays"
+msgstr "Élargissez les heures de cours ou permettez plus de jours."
 
-#~ msgid "scheduleCount.firstYear.limitLabel"
-#~ msgstr "Limiter les cours de niveau 1000 à 48 crédits"
+msgid "gen.suggest.widenOrChangePicks"
+msgstr "Élargissez les heures de cours ou modifiez vos choix Contraindre / Assigner."
 
-#~ msgid "scheduleCount.firstYear.warning"
-#~ msgstr "Vos cours sélectionnés pourraient porter votre total de crédits de niveau 1000 à {credits}/48, dépassant la limite du premier cycle. Activez l'option ci-dessous pour plafonner à 48."
+msgid "generationOptions.count.description"
+msgstr "Nombre de cours à inclure dans chaque horaire généré."
 
-#~ msgid "scheduleCount.generate"
-#~ msgstr "Générer des horaires"
+msgid "generationOptions.count.label"
+msgstr "Cours ce trimestre"
 
-#~ msgid "scheduleCount.needMore"
-#~ msgstr "Vous avez sélectionné {count} cours. Nous proposerons des cours additionnels de vos exigences restantes pour compléter votre horaire."
+msgid "generationOptions.courses.description"
+msgstr "Ajoutez les cours précis que vous aimeriez avoir dans votre horaire."
 
-#~ msgid "scheduleCount.rating.description"
-#~ msgstr "Les professeurs sans note sont toujours permis."
+msgid "generationOptions.courses.label"
+msgstr "Cours souhaités"
 
-#~ msgid "scheduleCount.rating.label"
-#~ msgstr "Note minimale RateMyProfessors"
+msgid "generationOptions.courses.placeholder"
+msgstr "Rechercher des cours…"
 
-#~ msgid "scheduleCount.rating.placeholder"
-#~ msgstr "Aucun minimum"
+msgid "generationOptions.warn.assigned.fallbackTitle"
+msgstr "Exigence {index}"
 
-#~ msgid "scheduleCount.time.earliest"
-#~ msgstr "Début de cours le plus tôt"
+msgid "generationOptions.warn.assigned.title"
+msgstr "Comptent dans vos exigences"
 
-#~ msgid "scheduleCount.time.latest"
-#~ msgstr "Fin de cours la plus tard"
+msgid "generationOptions.warn.noRequirement.body"
+msgstr "Ces cours seront planifiés, mais ils ne correspondent à aucune de vos exigences restantes; ils pourraient donc ne pas compter dans votre programme :"
 
-#~ msgid "stepNav.mobileProgress"
-#~ msgstr "Étape {current} sur {total} · {label}"
+msgid "generationOptions.warn.noRequirement.title"
+msgstr "Ne comptera pour aucune exigence"
 
-#~ msgid "stepNav.step.completed.description"
-#~ msgstr "Marquer les cours complétés"
+msgid "generationOptions.warn.overflow.body"
+msgstr "Ces cours seront planifiés, mais l'exigence à laquelle ils correspondent est déjà comblée; ils pourraient donc ne pas compter dans votre programme :"
 
-#~ msgid "stepNav.step.completed.label"
-#~ msgstr "Ajouter les cours complétés"
+msgid "generationOptions.warn.overflow.title"
+msgstr "Exigence déjà comblée"
 
-#~ msgid "stepNav.step.generate.description"
-#~ msgstr "Préférences et génération"
+msgid "generationOptions.warn.prereqUnmet.body"
+msgstr "Ces cours seront planifiés, mais vous pourriez ne pas satisfaire les préalables. Vous aurez probablement besoin de la permission de l'enseignant pour vous inscrire :"
 
-#~ msgid "stepNav.step.generate.label"
-#~ msgstr "Générer des horaires"
+msgid "generationOptions.warn.prereqUnmet.title"
+msgstr "Préalables possiblement non satisfaits"
 
-#~ msgid "stepNav.step.mode.description"
-#~ msgstr "Sélectionner le mode"
+msgid "generationOptions.warn.unavailable.body"
+msgstr "Ces cours ne sont pas offerts ce trimestre; ils ne peuvent donc pas être ajoutés à votre horaire :"
 
-#~ msgid "stepNav.step.mode.label"
-#~ msgstr "Choisir le mode"
+msgid "generationOptions.warn.unavailable.title"
+msgstr "Non offert ce trimestre"
 
-#~ msgid "stepNav.step.path.description"
-#~ msgstr "Choisir les options de programme"
+msgid "graph.building"
+msgstr "Construction du graphe de co-enseignement…"
 
-#~ msgid "stepNav.step.path.label"
-#~ msgstr "Choisir le parcours"
+msgid "graph.close"
+msgstr "Fermer"
 
-#~ msgid "stepNav.step.program.description"
-#~ msgstr "Programme et relevé"
+msgid "graph.connectedProfessors"
+msgstr "Professeurs connectés"
 
-#~ msgid "stepNav.step.program.label"
-#~ msgstr "Sélectionner le programme"
+msgid "graph.connections"
+msgstr "{count, plural, one {# connexion} other {# connexions}}"
 
-#~ msgid "stepNav.step.requirements.description"
-#~ msgstr "Assigner les cours complétés"
+msgid "graph.layouting"
+msgstr "Disposition du graphe…"
 
-#~ msgid "stepNav.step.requirements.label"
-#~ msgstr "Remplir les exigences"
+msgid "graph.loadErrorTitle"
+msgstr "Impossible de charger le graphe"
 
-#~ msgid "stepNav.step.term.description"
-#~ msgstr "Choisir la session"
+msgid "graph.loadingGrades"
+msgstr "Chargement de l'historique des notes…"
 
-#~ msgid "stepNav.step.term.label"
-#~ msgstr "Choisir la session"
+msgid "graph.noConnections"
+msgstr "Aucun cours en commun avec d'autres professeurs dans ces données."
 
-#~ msgid "stepNav.title"
-#~ msgstr "Étapes"
+msgid "graph.nodeDetails"
+msgstr "Détails du professeur"
 
-#~ msgid "tour.back"
-#~ msgstr "Retour"
+msgid "graph.noGradeData"
+msgstr "Aucune distribution de notes dans cet ensemble de données."
 
-#~ msgid "tour.done"
-#~ msgstr "Terminé"
+msgid "graph.noResults"
+msgstr "Aucun professeur correspondant."
 
-#~ msgid "tour.next"
-#~ msgstr "Suivant"
+msgid "graph.searchPlaceholder"
+msgstr "Rechercher un professeur…"
 
-#~ msgid "tour.progress"
-#~ msgstr "{{current}} sur {{total}}"
+msgid "graph.sharedCourses"
+msgstr "{weight, plural, one {# offre commune} other {# offres communes}}"
 
-#~ msgid "completedCourses.selectProgramFirst"
-#~ msgstr "Sélectionnez d'abord un programme à l'étape 1."
+msgid "graph.sortByName"
+msgstr "Nom"
 
-#~ msgid "completedCourses.label"
-#~ msgstr "Cours que vous avez terminés ou que vous suivez actuellement"
+msgid "graph.sortByStrength"
+msgstr "Force"
 
-#~ msgid "completedCourses.placeholder"
-#~ msgstr "Rechercher par code de cours ou titre..."
+msgid "graph.title"
+msgstr "Réseau de professeurs"
 
-#~ msgid "completedCourses.notFound"
-#~ msgstr "Aucun cours trouvé"
+msgid "landing.carousel.goTo"
+msgstr "Afficher {title}"
 
-#~ msgid "completedCourses.description"
-#~ msgstr "Cours que vous avez terminés ou que vous suivez. Vous pouvez aussi téléverser votre relevé à l'étape 1."
+msgid "landing.carousel.label"
+msgstr "Fonctionnalités expérimentales"
 
-#~ msgid "requirementNode.searchPlaceholder"
-#~ msgstr "Rechercher par code de cours ou titre..."
+msgid "landing.explore.description"
+msgstr "Recherchez des cours et des professeurs avec les distributions de notes."
 
-#~ msgid "requirementNode.noCoursesFound"
-#~ msgstr "Aucun cours trouvé"
+msgid "landing.graph.description"
+msgstr "Découvrez comment les professeurs sont liés par des cours communs."
 
-#~ msgid "optionsDrilldown.orGroupLabel.default"
-#~ msgstr "L'un des éléments suivants doit être complété"
+msgid "landing.schedule.description"
+msgstr "Planifiez votre parcours et générez des horaires sans conflit."
 
-#~ msgid "optionsDrilldown.chooseOne"
-#~ msgstr "Choisir une option"
+msgid "landing.schedule.title"
+msgstr "Générateur d'horaires"
 
-#~ msgid "optionsDrilldown.selectOneError"
-#~ msgstr "Sélectionnez exactement une option dans ce groupe."
+msgid "landing.trends.description"
+msgstr "Suivez l'évolution des notes au fil du temps par discipline."
 
-#~ msgid "optionsDrilldown.selectedBranch"
-#~ msgstr "Branche sélectionnée"
+msgid "language.en"
+msgstr "Anglais"
 
-#~ msgid "optionsDrilldown.changeRequirementSetAria"
-#~ msgstr "Modifier cet ensemble d'exigences - revenez en arrière pour choisir une autre option. Parcours actuel : {path}"
+msgid "language.frCA"
+msgstr "Français"
 
-#~ msgid "optionsDrilldown.changeRequirementSet"
-#~ msgstr "Modifier cet ensemble d'exigences"
+msgid "languageSwitcher.ariaLabel"
+msgstr "Choisir la langue de l'application"
 
-#~ msgid "optionsDrilldown.change"
-#~ msgstr "Modifier"
+msgid "modeStep.advanced.aria"
+msgstr "Mode avancé"
 
-#~ msgid "optionsDrilldown.chosenLabel"
-#~ msgstr "Choisi"
+msgid "modeStep.advanced.badge"
+msgstr "plus précis"
 
-#~ msgid "optionsDrilldown.optionTitle"
-#~ msgstr "Option {number}"
+msgid "modeStep.advanced.description"
+msgstr "Sélectionnez votre programme et créez un plan de diplôme complet. Suit les cours complétés et les compare à vos exigences de programme."
 
-#~ msgid "optionsStep.none"
-#~ msgstr "Aucune option à configurer pour ce programme."
+msgid "modeStep.advanced.title"
+msgstr "Mode avancé"
 
-#~ msgid "optionsStep.note"
-#~ msgstr "Choisissez une option pour chaque choix ci-dessous. Votre sélection révèle les choix suivants; utilisez Modifier pour changer de parcours."
+msgid "modeStep.basic.aria"
+msgstr "Mode de base"
 
-#~ msgid "optionsStep.pager.position"
-#~ msgstr "Choix {current} sur {total}"
+msgid "modeStep.basic.badge"
+msgstr "moins de configuration"
 
-#~ msgid "optionsStep.pager.prev"
-#~ msgstr "Choix précédent"
+msgid "modeStep.basic.description"
+msgstr "Sélectionnez rapidement des cours obligatoires et des cours au choix pour générer un horaire. Idéal pour une planification simple sans suivi complet du programme."
 
-#~ msgid "optionsStep.pager.next"
-#~ msgstr "Choix suivant"
+msgid "modeStep.basic.title"
+msgstr "Mode de base"
 
-#~ msgid "optionsStep.pager.goTo"
-#~ msgstr "Aller au choix {number}"
+msgid "optionsDrilldown.change"
+msgstr "Modifier"
 
-#~ msgid "requirements.optionsPending"
-#~ msgstr "Choisissez d’abord vos options de programme pour voir les exigences restantes."
+msgid "optionsDrilldown.changeRequirementSet"
+msgstr "Modifier cet ensemble d'exigences"
 
-#~ msgid "constrainStep.courseFilters"
-#~ msgstr "Filtres de cours"
+msgid "optionsDrilldown.changeRequirementSetAria"
+msgstr "Modifier cet ensemble d'exigences - revenez en arrière pour choisir une autre option. Parcours actuel : {path}"
 
-#~ msgid "constrainStep.filtersHint"
-#~ msgstr "Les filtres s'appliquent aux cours suggérés et recherchables pour cette étape."
+msgid "optionsDrilldown.chooseOne"
+msgstr "Choisir une option"
 
-#~ msgid "constrainStep.levels.label"
-#~ msgstr "Niveaux"
+msgid "optionsDrilldown.chosenLabel"
+msgstr "Choisi"
 
-#~ msgid "constrainStep.levels.undergrad"
-#~ msgstr "Premier cycle (0–4XXX)"
+msgid "optionsDrilldown.optionTitle"
+msgstr "Option {number}"
 
-#~ msgid "constrainStep.levels.grad"
-#~ msgstr "Cycles supérieurs (5XXX+)"
+msgid "optionsDrilldown.orGroupLabel.default"
+msgstr "L'un des éléments suivants doit être complété"
 
-#~ msgid "constrainStep.languages.label"
-#~ msgstr "Langues"
+msgid "optionsDrilldown.selectedBranch"
+msgstr "Branche sélectionnée"
 
-#~ msgid "constrainStep.languages.english"
-#~ msgstr "Anglais"
+msgid "optionsDrilldown.selectOneError"
+msgstr "Sélectionnez exactement une option dans ce groupe."
 
-#~ msgid "constrainStep.languages.french"
-#~ msgstr "Français"
+msgid "optionsStep.none"
+msgstr "Aucune option à configurer pour ce programme."
 
-#~ msgid "constrainStep.languages.other"
-#~ msgstr "Autre"
+msgid "optionsStep.note"
+msgstr "Choisissez une option pour chaque choix ci-dessous. Votre sélection révèle les choix suivants; utilisez Modifier pour changer de parcours."
 
-#~ msgid "constrainStep.electiveLevels.label"
-#~ msgstr "Niveaux"
+msgid "optionsStep.pager.goTo"
+msgstr "Aller au choix {number}"
 
-#~ msgid "constrainStep.includeClosedSections"
-#~ msgstr "Inclure les sections fermées"
+msgid "optionsStep.pager.next"
+msgstr "Choix suivant"
 
-#~ msgid "constrainStep.virtualSectionsOnly"
-#~ msgstr "Horaires virtuels seulement"
+msgid "optionsStep.pager.position"
+msgstr "Choix {current} sur {total}"
 
-#~ msgid "requirementNode.satisfiedBy"
-#~ msgstr "Satisfait par : {courses}"
+msgid "optionsStep.pager.prev"
+msgstr "Choix précédent"
 
-#~ msgid "requirementNode.overSelected"
-#~ msgstr "Vous avez sélectionné {selectedCredits} crédits, ce qui dépasse les {creditsNeeded} crédit{suffix} requis. Les cours supplémentaires pourraient ne pas compter pour cette exigence."
+msgid "programStep.disciplines.description"
+msgstr "Utilisé pour évaluer les préalables propres au programme. Rempli automatiquement à partir des cours de votre programme."
 
-#~ msgid "requirementNode.progress"
-#~ msgstr "{selectedCredits} crédits sur {creditsNeeded} sélectionnés - {nextAction}"
+msgid "programStep.disciplines.label"
+msgstr "Disciplines de votre programme"
 
-#~ msgid "requirementNode.pickMore"
-#~ msgstr "choisir {count} autre{suffix} cours"
+msgid "programStep.firstYear.description"
+msgstr "Determiné quelles exigences de programme s'appliquent à vous."
 
-#~ msgid "requirementNode.satisfied"
-#~ msgstr "exigence satisfaite"
+msgid "programStep.firstYear.label"
+msgstr "Année initiale d'études"
 
-#~ msgid "requirementNode.selectToFulfill"
-#~ msgstr "Sélectionnez des cours pour satisfaire cette exigence ({creditsRemaining} crédit{suffix} requis)."
+msgid "programStep.firstYear.placeholder"
+msgstr "Sélectionnez votre année de début..."
 
-#~ msgid "requirementNode.coursesLabel"
-#~ msgstr "Cours pour cette exigence"
+msgid "programStep.optional"
+msgstr "Optionnel."
 
-#~ msgid "requirementNode.anyCourseGroup"
-#~ msgstr "Tout cours {prefix}"
+msgid "programStep.program.label"
+msgstr "Sélectionnez votre programme"
 
-#~ msgid "requirementNode.anyCourseGroupAdd"
-#~ msgstr "Ajouter un cours {prefix}"
+msgid "programStep.program.notFound"
+msgstr "Aucun programme trouvé"
 
-#~ msgid "termStep.label"
-#~ msgstr "Sélectionnez votre session"
+msgid "programStep.program.placeholder"
+msgstr "Rechercher votre programme..."
 
-#~ msgid "termStep.placeholder"
-#~ msgstr "Choisir une session..."
+msgid "programStep.skip.basicModeNote"
+msgstr "Vous pouvez tout de même construire un horaire en sélectionnant des cours obligatoires et un nombre de cours optionnels."
 
-#~ msgid "termStep.note"
-#~ msgstr "Le choix de la session détermine quelles sections de cours sont disponibles pour la génération d'horaires."
+msgid "programStep.skip.body"
+msgstr "Sans compléter la configuration, vous manquerez:"
 
-#~ msgid "app.stepHeader"
-#~ msgstr "Étape {current} sur {total} - {description}"
+msgid "programStep.transcript.addAnyway"
+msgstr "Ajouter quand même"
 
-#~ msgid "basicCourseFilters.title"
-#~ msgstr "Options de cours à option"
+msgid "programStep.transcript.added"
+msgstr "{count} cours{suffix} ajouté{suffix} depuis le relevé."
 
-#~ msgid "basicCourseFilters.hint"
-#~ msgstr "Les options s'appliquent aux cours à option générés."
+msgid "programStep.transcript.choose"
+msgstr "Choisir le relevé"
 
-#~ msgid "basicCourseFilters.careers.label"
-#~ msgstr "Carrières"
+msgid "programStep.transcript.codesNotFound"
+msgstr "{count} code{suffix} du PDF n'ont pas été trouvés dans le catalogue : {codes}"
 
-#~ msgid "basicCourseFilters.levels.label"
-#~ msgstr "Niveaux"
+msgid "programStep.transcript.description"
+msgstr "Téléverser votre relevé vous évite de sélectionner manuellement votre année de début, votre programme et vos cours complétés - tout est détecté automatiquement. Votre PDF est traité entièrement sur votre appareil et n'est jamais envoyé à un serveur."
 
-#~ msgid "advancedCourseFilters.course.title"
-#~ msgstr "Filtres de cours"
+msgid "programStep.transcript.notInCatalogue"
+msgstr "Introuvable dans le catalogue"
 
-#~ msgid "advancedCourseFilters.course.hint"
-#~ msgstr "S'applique aux cours obligatoires et aux cours à option."
+msgid "programStep.transcript.parseFailed"
+msgstr "Impossible d'analyser le relevé PDF"
 
-#~ msgid "advancedCourseFilters.elective.title"
-#~ msgstr "Filtres de cours à option"
+msgid "programStep.transcript.parsing"
+msgstr "Analyse..."
 
-#~ msgid "advancedCourseFilters.elective.hint"
-#~ msgstr "S'applique uniquement aux cours à option."
+msgid "programStep.transcript.programDetected"
+msgstr "Programme détecté :"
 
-#~ msgid "calendarPage.noMoreSchedules"
-#~ msgstr "Plus d'horaires"
+msgid "programStep.transcript.request"
+msgstr "Demander un relevé sur uoZone"
 
-#~ msgid "basicCalendar.noMoreSchedules"
-#~ msgstr "Plus d'horaires"
+msgid "programStep.transcript.uploadAria"
+msgstr "Téléverser un relevé PDF"
 
-#~ msgid "seo.home.title"
-#~ msgstr "uoplan | Planificateur de cours uOttawa"
+msgid "programStep.transcript.uploadFailed"
+msgstr "Téléversement échoué"
 
-#~ msgid "seo.home.description"
-#~ msgstr "Outils gratuits pour les étudiant·e·s de l'Université d'Ottawa : planifiez votre parcours, explorez les notes de cours et parcourez le réseau de co-enseignement des professeurs."
+msgid "programStep.transcript.withMinor"
+msgstr "avec une mineure en"
 
-#~ msgid "seo.home.keywords"
-#~ msgstr "planificateur de cours uottawa, horaire uottawa, notes de cours uottawa, université d'ottawa"
+msgid "requirementNode.anyCourseGroup"
+msgstr "Tout cours {prefix}"
 
-#~ msgid "seo.schedule.title"
-#~ msgstr "uoplan | Planificateur de cours et générateur d'horaires uOttawa"
+msgid "requirementNode.anyCourseGroupAdd"
+msgstr "Ajouter un cours {prefix}"
 
-#~ msgid "seo.schedule.description"
-#~ msgstr "Planificateur de cours et générateur d'horaires gratuit pour les étudiant·e·s de l'Université d'Ottawa. Planifiez votre programme, vérifiez les prérequis et générez des horaires sans conflit en quelques secondes."
+msgid "requirementNode.coursesLabel"
+msgstr "Cours pour cette exigence"
 
-#~ msgid "seo.schedule.keywords"
-#~ msgstr "planificateur de cours uottawa, horaire uottawa, emploi du temps uottawa, planificateur de diplôme uottawa"
+msgid "requirementNode.noCoursesFound"
+msgstr "Aucun cours trouvé"
 
-#~ msgid "seo.explore.title"
-#~ msgstr "Explorer les cours et notes uOttawa | uoplan"
+msgid "requirementNode.overSelected"
+msgstr "Vous avez sélectionné {selectedCredits} crédits, ce qui dépasse les {creditsNeeded} crédit{suffix} requis. Les cours supplémentaires pourraient ne pas compter pour cette exigence."
 
-#~ msgid "seo.explore.description"
-#~ msgstr "Recherchez des cours et des professeur·e·s de l'Université d'Ottawa. Consultez les distributions de notes historiques et comparez les sections."
+msgid "requirementNode.pickMore"
+msgstr "choisir {count} autre{suffix} cours"
 
-#~ msgid "seo.explore.keywords"
-#~ msgstr "notes de cours uottawa, distribution des notes uottawa, professeurs uottawa"
+msgid "requirementNode.progress"
+msgstr "{selectedCredits} crédits sur {creditsNeeded} sélectionnés - {nextAction}"
 
-#~ msgid "seo.graph.title"
-#~ msgstr "Réseau de co-enseignement des professeur·e·s | uoplan"
+msgid "requirementNode.satisfied"
+msgstr "exigence satisfaite"
 
-#~ msgid "seo.graph.description"
-#~ msgstr "Explorez comment les professeur·e·s de l'uOttawa sont relié·e·s par des cours communs. Graphe interactif des co-enseignements et des chevauchements de cours."
+msgid "requirementNode.satisfiedBy"
+msgstr "Satisfait par : {courses}"
 
-#~ msgid "seo.graph.keywords"
-#~ msgstr "professeurs uottawa, co-enseignement uottawa, réseau de faculté uottawa"
+msgid "requirementNode.searchPlaceholder"
+msgstr "Rechercher par code de cours ou titre..."
 
-#~ msgid "seo.trends.title"
-#~ msgstr "Tendances des notes de l'Université d'Ottawa | uoplan"
+msgid "requirementNode.selectToFulfill"
+msgstr "Sélectionnez des cours pour satisfaire cette exigence ({creditsRemaining} crédit{suffix} requis)."
 
-#~ msgid "seo.trends.description"
-#~ msgstr "L'évolution des notes de l'Université d'Ottawa : MPC moyenne, taux de A+ et taux de réussite par session, avec répartition par discipline, niveau et session ainsi qu'un classement de l'inflation des notes."
+msgid "requirements.optionsPending"
+msgstr "Choisissez d’abord vos options de programme pour voir les exigences restantes."
 
-#~ msgid "seo.trends.keywords"
-#~ msgstr "tendances des notes uottawa, inflation des notes uottawa, mpc moyenne université d'ottawa, distribution des notes uottawa dans le temps"
+msgid "saveStatus.justNow"
+msgstr "à l'instant"
 
-#~ msgid "search.noResults"
-#~ msgstr "Aucun résultat pour « {q} »"
+msgid "saveStatus.saved"
+msgstr "Enregistré"
 
-#~ msgid "search.passingPercent"
-#~ msgstr "{percent} % de réussite"
+msgid "saveStatus.savedAt"
+msgstr "Enregistré {time}"
 
-#~ msgid "search.noRating"
-#~ msgstr "Pas de note"
+msgid "saveStatus.savedMinuteAgo"
+msgstr "il y a 1 minute"
 
-#~ msgid "search.noGradeData"
-#~ msgstr "Pas de données"
+msgid "saveStatus.savedMinutesAgo"
+msgstr "il y a {n} minutes"
 
-#~ msgid "explore.filter.level"
-#~ msgstr "Niveau"
+msgid "saveStatus.saveNow"
+msgstr "Enregistrer maintenant"
 
-#~ msgid "explore.filter.language"
-#~ msgstr "Langue"
+msgid "saveStatus.unsaved"
+msgstr "Modifications non enregistrées — cliquer pour enregistrer"
 
-#~ msgid "explore.filter.difficulty"
-#~ msgstr "Difficulté"
+msgid "saveStatus.unsavedSince"
+msgstr "Modifications non enregistrées (dernier enregistrement {time}) — cliquer pour enregistrer"
 
-#~ msgid "explore.filter.rating"
-#~ msgstr "Évaluation"
+msgid "schedule.dashboard.assign.attention"
+msgstr "{count, plural, one {# cours terminé doit être assigné} other {# cours terminés doivent être assignés}}"
 
-#~ msgid "explore.filter.clearAll"
-#~ msgstr "Tout effacer"
+msgid "schedule.dashboard.assign.label"
+msgstr "Remplir les exigences"
 
-#~ msgid "explore.sort.label"
-#~ msgstr "Trier"
+msgid "schedule.dashboard.assign.ready"
+msgstr "Tous les cours terminés sont placés"
 
-#~ msgid "explore.sort.relevance"
-#~ msgstr "Pertinence"
+msgid "schedule.dashboard.completed.label"
+msgstr "Cours terminés"
 
-#~ msgid "explore.sort.avgGrade"
-#~ msgstr "Note moyenne"
+msgid "schedule.dashboard.completed.summary"
+msgstr "{count, plural, one {# cours terminé sélectionné} other {# cours terminés sélectionnés}}"
 
-#~ msgid "explore.sort.courseCode"
-#~ msgstr "Code du cours"
+msgid "schedule.dashboard.gate.program"
+msgstr "Choisis d’abord un programme"
 
-#~ msgid "explore.sort.profRating"
-#~ msgstr "Note du professeur"
+msgid "schedule.dashboard.gate.term"
+msgstr "Choisis d’abord un trimestre"
 
-#~ msgid "explore.sort.direction"
-#~ msgstr "Direction"
+msgid "schedule.dashboard.generate"
+msgstr "Générer"
 
-#~ msgid "explore.sort.ascending"
-#~ msgstr "Croissant"
+msgid "schedule.dashboard.options.attention"
+msgstr "Certains choix de programme doivent encore être sélectionnés"
 
-#~ msgid "explore.sort.descending"
-#~ msgstr "Décroissant"
+msgid "schedule.dashboard.options.label"
+msgstr "Options du programme"
 
-#~ msgid "explore.filter.level.1000"
-#~ msgstr "1re année"
+msgid "schedule.dashboard.options.ready"
+msgstr "Tous les choix de programme sont résolus"
 
-#~ msgid "explore.filter.level.2000"
-#~ msgstr "2e année"
+msgid "schedule.dashboard.program.courseCount"
+msgstr "{count, plural, one {# cours} other {# cours}}"
 
-#~ msgid "explore.filter.level.3000"
-#~ msgstr "3e année"
+msgid "schedule.dashboard.program.empty"
+msgstr "Aucun programme sélectionné"
 
-#~ msgid "explore.filter.level.4000"
-#~ msgstr "4e année"
+msgid "schedule.dashboard.program.label"
+msgstr "Programme et cours"
 
-#~ msgid "explore.filter.level.5000"
-#~ msgstr "Cycles supérieurs"
+msgid "schedule.dashboard.ready"
+msgstr "Prêt à générer"
 
-#~ msgid "explore.filter.language.en"
-#~ msgstr "Anglais"
+msgid "schedule.dashboard.readyCount"
+msgstr "{ready} de {total} entrées prêtes"
 
-#~ msgid "explore.filter.language.fr"
-#~ msgstr "Français"
+msgid "schedule.dashboard.term.empty"
+msgstr "Choisir un trimestre"
 
-#~ msgid "explore.filter.difficulty.easy"
-#~ msgstr "Facile"
+msgid "schedule.dashboard.term.label"
+msgstr "Trimestre"
 
-#~ msgid "explore.filter.difficulty.moderate"
-#~ msgstr "Modéré"
+msgid "schedule.dashboard.term.loading"
+msgstr "Chargement des trimestres…"
 
-#~ msgid "explore.filter.difficulty.tough"
-#~ msgstr "Difficile"
+msgid "schedule.dashboard.title"
+msgstr "Construis ton horaire"
 
-#~ msgid "explore.filter.rating.good"
-#~ msgstr "Bien (3,0+)"
+msgid "schedule.editor.back"
+msgstr "Retour au planificateur"
 
-#~ msgid "explore.filter.rating.great"
-#~ msgstr "Très bien (3,5+)"
+msgid "schedule.generate.confirm.assign.consequence"
+msgstr "Les cours terminés non assignés pourraient ne pas compter pour la bonne exigence."
 
-#~ msgid "explore.filter.rating.excellent"
-#~ msgstr "Excellent (4,0+)"
+msgid "schedule.generate.confirm.assign.description"
+msgstr "{count, plural, one {# cours terminé n’est pas assigné.} other {# cours terminés ne sont pas assignés.}}"
 
-#~ msgid "explore.filter.noResults"
-#~ msgstr "Aucun cours ne correspond à ces filtres."
+msgid "schedule.generate.confirm.assign.label"
+msgstr "Cours terminés non assignés"
 
-#~ msgid "explore.filter.clearFilters"
-#~ msgstr "Effacer les filtres"
+msgid "schedule.generate.confirm.body"
+msgstr "Certains détails de configuration sont incomplets. Tu peux continuer, mais l’horaire généré pourrait utiliser un mode plus simple ou manquer de contexte."
 
-#~ msgid "enrolCli.button"
-#~ msgstr "Inscrire via CLI"
+msgid "schedule.generate.confirm.cancel"
+msgstr "Annuler"
 
-#~ msgid "enrolCli.modal.title"
-#~ msgstr "Inscrire via CLI"
+msgid "schedule.generate.confirm.consequence"
+msgstr "Tu peux revenir à la configuration en tout temps pour compléter les détails manquants."
 
-#~ msgid "enrolCli.modal.description"
-#~ msgstr "Collez cette commande dans votre terminal pour vous inscrire à cet horaire."
+msgid "schedule.generate.confirm.generateAnyway"
+msgstr "Générer quand même"
 
-#~ msgid "enrolCli.modal.copy"
-#~ msgstr "Copier"
+msgid "schedule.generate.confirm.options.consequence"
+msgstr "Le générateur pourrait ignorer les branches non résolues ou produire des exigences moins exactes."
 
-#~ msgid "enrolCli.modal.copied"
-#~ msgstr "Copié !"
+msgid "schedule.generate.confirm.options.description"
+msgstr "Un ou plusieurs groupes d’options du programme doivent encore être sélectionnés."
 
-#~ msgid "enrolCli.modal.mobileUnavailable"
-#~ msgstr "Le CLI uoplan n'est pas disponible sur mobile. Ouvrez cette page sur un ordinateur pour l'utiliser."
+msgid "schedule.generate.confirm.options.label"
+msgstr "Options de programme non résolues"
 
-#~ msgid "enrolCli.modal.stepInstall"
-#~ msgstr "1. Installer uoplan"
+msgid "schedule.generate.confirm.program.label"
+msgstr "Aucun programme sélectionné"
 
-#~ msgid "enrolCli.modal.stepRun"
-#~ msgstr "2. S'inscrire"
+msgid "schedule.generate.confirm.term.consequence"
+msgstr "La génération pourrait échouer sans trimestre."
 
-#~ msgid "uenrollImport.button"
-#~ msgstr "Importer depuis uEnroll"
+msgid "schedule.generate.confirm.term.description"
+msgstr "Aucun trimestre d’horaire n’est sélectionné."
 
-#~ msgid "uenrollImport.modal.title"
-#~ msgstr "Importer depuis uEnroll"
+msgid "schedule.generate.confirm.term.label"
+msgstr "Aucun trimestre sélectionné"
 
-#~ msgid "uenrollImport.modal.inputLabel"
-#~ msgstr "URL uEnroll"
+msgid "schedule.generate.confirm.title"
+msgstr "Générer avec une configuration incomplète?"
 
-#~ msgid "uenrollImport.modal.inputPlaceholder"
-#~ msgstr "Collez votre URL uEnroll ou le paramètre data"
+msgid "schedule.programCourses.completedHeading"
+msgstr "Cours terminés"
 
-#~ msgid "uenrollImport.modal.confirm"
-#~ msgstr "Importer l'horaire"
+msgid "schedule.programCourses.completedHint"
+msgstr "Ajoute les cours déjà terminés afin que les exigences et les préalables restent exacts. L’importation d’un relevé les remplit automatiquement."
 
-#~ msgid "uenrollImport.modal.recognized"
-#~ msgstr "Cours reconnus"
+msgid "scheduleCount.avoidDays.description"
+msgstr "Par défaut, la fin de semaine. Aucun cours ne sera planifié les jours que vous sélectionnez ici."
 
-#~ msgid "uenrollImport.modal.warnings"
-#~ msgstr "Certains cours n'ont pas été trouvés"
+msgid "scheduleCount.avoidDays.label"
+msgstr "Jours de la semaine à éviter"
 
-#~ msgid "uenrollImport.modal.invalid"
-#~ msgstr "URL uEnroll invalide"
+msgid "scheduleCount.avoidDays.placeholder"
+msgstr "Sélectionner les jours"
 
-#~ msgid "uenrollImport.modal.invalidDescription"
-#~ msgstr "Cela ne ressemble pas à une URL uEnroll ou à un paramètre data valide."
+msgid "scheduleCount.blacklist.description"
+msgstr "Les cours sélectionnés ici n'apparaîtront jamais dans les horaires générés."
 
-#~ msgid "uenrollImport.modal.termSwitch"
-#~ msgstr "La session sera changée à {term} lors de l'importation."
+msgid "scheduleCount.blacklist.label"
+msgstr "Cours exclus"
 
-#~ msgid "uenrollImport.modal.noCoursesTitle"
-#~ msgstr "Aucun cours trouvé"
+msgid "scheduleCount.blacklist.placeholder"
+msgstr "Ajouter un cours à exclure…"
 
-#~ msgid "uenrollImport.modal.noCoursesDescription"
-#~ msgstr "Aucun de ces cours n'existe dans les données de la session actuelle. Essayez de changer de session d'abord."
+msgid "scheduleCount.compressed.description"
+msgstr "Au plus une pause par jour, jusqu'à 90 minutes."
 
-#~ msgid "saveStatus.unsaved"
-#~ msgstr "Modifications non enregistrées — cliquer pour enregistrer"
+msgid "scheduleCount.compressed.label"
+msgstr "Horaire compact"
 
-#~ msgid "saveStatus.unsavedSince"
-#~ msgstr "Modifications non enregistrées (dernier enregistrement {time}) — cliquer pour enregistrer"
+msgid "scheduleCount.courses.label"
+msgstr "Combien de cours voulez-vous cette session?"
 
-#~ msgid "saveStatus.saveNow"
-#~ msgstr "Enregistrer maintenant"
+msgid "scheduleCount.day.friday"
+msgstr "Vendredi"
 
-#~ msgid "saveStatus.saved"
-#~ msgstr "Enregistré"
+msgid "scheduleCount.day.monday"
+msgstr "Lundi"
 
-#~ msgid "saveStatus.savedAt"
-#~ msgstr "Enregistré {time}"
+msgid "scheduleCount.day.saturday"
+msgstr "Samedi"
 
-#~ msgid "saveStatus.justNow"
-#~ msgstr "à l'instant"
+msgid "scheduleCount.day.sunday"
+msgstr "Dimanche"
 
-#~ msgid "saveStatus.savedMinuteAgo"
-#~ msgstr "il y a 1 minute"
+msgid "scheduleCount.day.thursday"
+msgstr "Jeudi"
 
-#~ msgid "saveStatus.savedMinutesAgo"
-#~ msgstr "il y a {n} minutes"
+msgid "scheduleCount.day.tuesday"
+msgstr "Mardi"
 
-#~ msgid "sharedSchedule.title"
-#~ msgstr "Horaire partagé"
+msgid "scheduleCount.day.wednesday"
+msgstr "Mercredi"
 
-#~ msgid "sharedSchedule.body"
-#~ msgstr "Quelqu'un a partagé un horaire avec vous. Voulez-vous le charger? Cela remplacera votre planificateur actuel."
+msgid "scheduleCount.firstYear.limitDescription"
+msgstr "Vous avez actuellement {credits} credit{suffix} de cours de niveau 1000 (terminés + sélectionnés). La limite du premier cycle est de 48."
 
-#~ msgid "sharedSchedule.keepMine"
-#~ msgstr "Garder le mien"
+msgid "scheduleCount.firstYear.limitLabel"
+msgstr "Limiter les cours de niveau 1000 à 48 crédits"
 
-#~ msgid "sharedSchedule.load"
-#~ msgstr "Charger l'horaire partagé"
+msgid "scheduleCount.firstYear.warning"
+msgstr "Vos cours sélectionnés pourraient porter votre total de crédits de niveau 1000 à {credits}/48, dépassant la limite du premier cycle. Activez l'option ci-dessous pour plafonner à 48."
 
-#~ msgid "theme.system"
-#~ msgstr "Système"
+msgid "scheduleCount.generate"
+msgstr "Générer des horaires"
 
-#~ msgid "theme.light"
-#~ msgstr "Clair"
+msgid "scheduleCount.needMore"
+msgstr "Vous avez sélectionné {count} cours. Nous proposerons des cours additionnels de vos exigences restantes pour compléter votre horaire."
 
-#~ msgid "theme.dark"
-#~ msgstr "Sombre"
+msgid "scheduleCount.preferEasier.description"
+msgstr "Lors de la génération, les cours avec un taux historique de A+ plus élevé ont plus de chances d’être choisis dans chaque bassin d’exigences."
 
-#~ msgid "themeSwitcher.ariaLabel"
-#~ msgstr "Choisir le thème"
+msgid "scheduleCount.preferEasier.label"
+msgstr "Préférer les cours plus faciles (taux de A+ passés)"
 
-#~ msgid "schedule.editor.back"
-#~ msgstr "Retour au planificateur"
+msgid "scheduleCount.rating.description"
+msgstr "Les professeurs sans note sont toujours permis."
 
-#~ msgid "calendarPage.generate"
-#~ msgstr "Générer"
+msgid "scheduleCount.rating.label"
+msgstr "Note minimale RateMyProfessors"
 
-#~ msgid "calendarPage.previous"
-#~ msgstr "Précédent"
+msgid "scheduleCount.rating.placeholder"
+msgstr "Aucun minimum"
 
-#~ msgid "calendarPage.next"
-#~ msgstr "Suivant"
+msgid "scheduleCount.time.earliest"
+msgstr "Début de cours le plus tôt"
 
-#~ msgid "calendarPage.randomize"
-#~ msgstr "Aléatoire"
+msgid "scheduleCount.time.latest"
+msgstr "Fin de cours la plus tard"
 
-#~ msgid "calendarPage.seedLabel"
-#~ msgstr "Valeur de départ : {seed}"
+msgid "search.noGradeData"
+msgstr "Pas de données"
 
-#~ msgid "calendarPage.noSchedule"
-#~ msgstr "Aucun horaire généré pour l'instant."
+msgid "search.noRating"
+msgstr "Pas de note"
 
-#~ msgid "gen.modal.title"
-#~ msgstr "Erreur de génération"
+msgid "search.noResults"
+msgstr "Aucun résultat pour « {q} »"
 
-#~ msgid "gen.lead.coursesMore"
-#~ msgstr "{shown} +{count} de plus"
+msgid "search.passingPercent"
+msgstr "{percent} % de réussite"
 
-#~ msgid "gen.lead.noSectionsNamed"
-#~ msgstr "Aucune section ne correspond à vos filtres : {courses}."
+msgid "seo.explore.description"
+msgstr "Recherchez des cours et des professeur·e·s de l'Université d'Ottawa. Consultez les distributions de notes historiques et comparez les sections."
 
-#~ msgid "gen.lead.noSections"
-#~ msgstr "Aucune section ne correspond à vos filtres actuels."
+msgid "seo.explore.keywords"
+msgstr "notes de cours uottawa, distribution des notes uottawa, professeurs uottawa"
 
-#~ msgid "gen.lead.tooFew"
-#~ msgstr "Seulement {eligible}/{target} cours ont des sections valides."
+msgid "seo.explore.title"
+msgstr "Explorer les cours et notes uOttawa | uoplan"
 
-#~ msgid "gen.lead.structural"
-#~ msgstr "Ces cours ne peuvent pas être placés ensemble, même sans aucun filtre."
+msgid "seo.graph.description"
+msgstr "Explorez comment les professeur·e·s de l'uOttawa sont relié·e·s par des cours communs. Graphe interactif des co-enseignements et des chevauchements de cours."
 
-#~ msgid "gen.lead.noClashFree"
-#~ msgstr "Aucun horaire sans conflit avec vos paramètres actuels."
+msgid "seo.graph.keywords"
+msgstr "professeurs uottawa, co-enseignement uottawa, réseau de faculté uottawa"
 
-#~ msgid "gen.suggest.relaxFilters"
-#~ msgstr "Assouplissez la plage horaire, la note du professeur ou les jours permis."
+msgid "seo.graph.title"
+msgstr "Réseau de co-enseignement des professeur·e·s | uoplan"
 
-#~ msgid "gen.suggest.tryDifferentCourse"
-#~ msgstr "Horaire pas encore publié ? Essayez un autre cours ou revenez plus tard."
+msgid "seo.home.description"
+msgstr "Outils gratuits pour les étudiant·e·s de l'Université d'Ottawa : planifiez votre parcours, explorez les notes de cours et parcourez le réseau de co-enseignement des professeurs."
 
-#~ msgid "gen.suggest.turnOffCompressed"
-#~ msgstr "Désactivez l'horaire compact."
+msgid "seo.home.keywords"
+msgstr "planificateur de cours uottawa, horaire uottawa, notes de cours uottawa, université d'ottawa"
 
-#~ msgid "gen.suggest.clearMinRating"
-#~ msgstr "Retirez la note minimale du professeur."
+msgid "seo.home.title"
+msgstr "uoplan | Planificateur de cours uOttawa"
 
-#~ msgid "gen.suggest.widenHoursDays"
-#~ msgstr "Élargissez les heures de cours ou permettez plus de jours."
+msgid "seo.schedule.description"
+msgstr "Planificateur de cours et générateur d'horaires gratuit pour les étudiant·e·s de l'Université d'Ottawa. Planifiez votre programme, vérifiez les prérequis et générez des horaires sans conflit en quelques secondes."
 
-#~ msgid "gen.suggest.relaxFyCap"
-#~ msgstr "Assouplissez le plafond de crédits de niveau 1000 si possible."
+msgid "seo.schedule.keywords"
+msgstr "planificateur de cours uottawa, horaire uottawa, emploi du temps uottawa, planificateur de diplôme uottawa"
 
-#~ msgid "gen.suggest.unBlacklist"
-#~ msgstr "Réautorisez un cours que vous aviez retiré."
+msgid "seo.schedule.title"
+msgstr "uoplan | Planificateur de cours et générateur d'horaires uOttawa"
 
-#~ msgid "gen.suggest.widenOrChangePicks"
-#~ msgstr "Élargissez les heures de cours ou modifiez vos choix Contraindre / Assigner."
+msgid "seo.trends.description"
+msgstr "L'évolution des notes de l'Université d'Ottawa : MPC moyenne, taux de A+ et taux de réussite par session, avec répartition par discipline, niveau et session ainsi qu'un classement de l'inflation des notes."
 
-#~ msgid "gen.suggest.combinedBlockersIntro"
-#~ msgstr "Aucun filtre unique n'est en cause — en assouplir plusieurs ensemble aide :"
+msgid "seo.trends.keywords"
+msgstr "tendances des notes uottawa, inflation des notes uottawa, mpc moyenne université d'ottawa, distribution des notes uottawa dans le temps"
 
-#~ msgid "gen.suggest.structural"
-#~ msgstr "Ces cours ne peuvent pas tous tenir dans un seul horaire, même sans filtres. Essayez d'autres choix Contraindre / Assigner ou moins de cours."
+msgid "seo.trends.title"
+msgstr "Tendances des notes de l'Université d'Ottawa | uoplan"
 
-#~ msgid "gen.error.notEnoughCourses"
-#~ msgstr "Pas assez de cours correspondent à vos filtres."
+msgid "settings.ariaLabel"
+msgstr "Paramètres"
 
-#~ msgid "gen.error.unassignedCompleted"
-#~ msgstr "Vous avez {count, plural, one {# cours complété} other {# cours complétés}} non assigné(s) à une exigence : {courses}. Vous devez {count, plural, one {l'assigner} other {les assigner}} à des exigences, ou les déplacer vers la section Exclus."
+msgid "sharedSchedule.body"
+msgstr "Quelqu'un a partagé un horaire avec vous. Voulez-vous le charger? Cela remplacera votre planificateur actuel."
 
-#~ msgid "gen.error.coursesMore"
-#~ msgstr " (+{count} de plus)"
+msgid "sharedSchedule.keepMine"
+msgstr "Garder le mien"
 
-#~ msgid "gen.error.completeAssign"
-#~ msgstr "Complétez les exigences Assigner avant de générer des horaires."
+msgid "sharedSchedule.load"
+msgstr "Charger l'horaire partagé"
 
-#~ msgid "gen.hint.startAfter"
-#~ msgstr "Début limité à après {time}"
+msgid "sharedSchedule.title"
+msgstr "Horaire partagé"
 
-#~ msgid "gen.hint.endBefore"
-#~ msgstr "Fin limitée à avant {time}"
+msgid "stepNav.mobileProgress"
+msgstr "Étape {current} sur {total} · {label}"
 
-#~ msgid "gen.hint.daysExcluded"
-#~ msgstr "Jours exclus : {days}"
+msgid "stepNav.step.completed.description"
+msgstr "Marquer les cours complétés"
 
-#~ msgid "gen.hint.profRating"
-#~ msgstr "Note du professeur ≥ {rating}"
+msgid "stepNav.step.completed.label"
+msgstr "Ajouter les cours complétés"
 
-#~ msgid "gen.hint.virtualOnly"
-#~ msgstr "Sections virtuelles seulement"
+msgid "stepNav.step.generate.description"
+msgstr "Préférences et génération"
 
-#~ msgid "gen.hint.closedExcluded"
-#~ msgstr "Sections fermées exclues — essayez d'activer « Inclure les sections fermées »"
+msgid "stepNav.step.generate.label"
+msgstr "Générer des horaires"
 
-#~ msgid "gen.hint.languageFilter"
-#~ msgstr "Filtre de langue : {langs} seulement"
+msgid "stepNav.step.mode.description"
+msgstr "Sélectionner le mode"
 
-#~ msgid "gen.lang.english"
-#~ msgstr "Anglais"
+msgid "stepNav.step.mode.label"
+msgstr "Choisir le mode"
 
-#~ msgid "gen.lang.french"
-#~ msgstr "Français"
+msgid "stepNav.step.path.description"
+msgstr "Choisir les options de programme"
 
-#~ msgid "gen.lang.other"
-#~ msgstr "Autre"
+msgid "stepNav.step.path.label"
+msgstr "Choisir le parcours"
 
-#~ msgid "gen.list.two"
-#~ msgstr "{a} ou {b}"
+msgid "stepNav.step.program.description"
+msgstr "Programme et relevé"
 
-#~ msgid "gen.list.overflow"
-#~ msgstr "{head}, ou {count} de plus"
+msgid "stepNav.step.program.label"
+msgstr "Sélectionner le programme"
 
-#~ msgid "gen.list.many"
-#~ msgstr "{rest}, ou {last}"
+msgid "stepNav.step.requirements.description"
+msgstr "Assigner les cours complétés"
 
-#~ msgid "gen.slots.summary"
-#~ msgstr "Seulement {available} des {needed} places de cours peuvent être remplies avec vos filtres actuels"
+msgid "stepNav.step.requirements.label"
+msgstr "Remplir les exigences"
 
-#~ msgid "gen.join.and"
-#~ msgstr " et "
+msgid "stepNav.step.term.description"
+msgstr "Choisir la session"
 
-#~ msgid "gen.join.comma"
-#~ msgstr ", "
+msgid "stepNav.step.term.label"
+msgstr "Choisir la session"
 
-#~ msgid "gen.pools.haveNoCourses"
-#~ msgstr "{count, plural, one {n'a aucun cours admissible} other {n'ont aucun cours admissible}}"
+msgid "stepNav.title"
+msgstr "Étapes"
 
-#~ msgid "gen.pools.otherSummary"
-#~ msgstr "{count} autres exigences n'ont aucun cours admissible (souvent des sections de trimestres à venir pas encore publiées)."
+msgid "termStep.label"
+msgstr "Sélectionnez votre session"
 
-#~ msgid "gen.pools.heading"
-#~ msgstr "Exigences sans cours admissibles"
+msgid "termStep.note"
+msgstr "Le choix de la session détermine quelles sections de cours sont disponibles pour la génération d'horaires."
 
-#~ msgid "gen.pools.blockedByFilters"
-#~ msgstr "{count, plural, one {— {courses} est admissible mais bloqué par les filtres actuels} other {— {courses} sont admissibles mais bloqués par les filtres actuels}}"
+msgid "termStep.placeholder"
+msgstr "Choisir une session..."
 
-#~ msgid "gen.pools.noSectionsThisTerm"
-#~ msgstr "— aucune section offerte ce trimestre"
+msgid "theme.dark"
+msgstr "Sombre"
 
-#~ msgid "gen.hints.heading"
-#~ msgstr "Filtres actifs limitant les résultats"
+msgid "theme.light"
+msgstr "Clair"
 
-#~ msgid "gen.noSections.heading"
-#~ msgstr "Aucune section correspondante (filtres / horaire)"
+msgid "theme.system"
+msgstr "Système"
 
-#~ msgid "gen.quickFixes.heading"
-#~ msgstr "Solutions rapides"
+msgid "themeSwitcher.ariaLabel"
+msgstr "Choisir le thème"
 
-#~ msgid "gen.day.mon"
-#~ msgstr "lun"
+msgid "tour.back"
+msgstr "Retour"
 
-#~ msgid "gen.day.tue"
-#~ msgstr "mar"
+msgid "tour.done"
+msgstr "Terminé"
 
-#~ msgid "gen.day.wed"
-#~ msgstr "mer"
+msgid "tour.next"
+msgstr "Suivant"
 
-#~ msgid "gen.day.thu"
-#~ msgstr "jeu"
+msgid "tour.progress"
+msgstr "{{current}} sur {{total}}"
 
-#~ msgid "gen.day.fri"
-#~ msgstr "ven"
+msgid "trends.empty.noData"
+msgstr "L'historique des notes n'est pas disponible pour le moment."
 
-#~ msgid "gen.day.sat"
-#~ msgstr "sam"
+msgid "trends.empty.noResults"
+msgstr "Aucune donnée de notes ne correspond à ces filtres."
 
-#~ msgid "gen.day.sun"
-#~ msgstr "dim"
+msgid "trends.error.title"
+msgstr "Impossible de charger l'historique des notes"
 
-#~ msgid "calendar.blockedTime.label"
-#~ msgstr "Plage bloquée"
+msgid "trends.filter.all"
+msgstr "Toutes"
 
-#~ msgid "calendar.blockedTime.removeTitle"
-#~ msgstr "Retirer la plage bloquée?"
+msgid "trends.filter.allDisciplines"
+msgstr "Toutes les disciplines"
 
-#~ msgid "calendar.blockedTime.removeBody"
-#~ msgstr "Retirer la plage bloquée le {range}? Les horaires générés pourront de nouveau utiliser cette période."
+msgid "trends.filter.allPrograms"
+msgstr "Tous les programmes"
 
-#~ msgid "calendar.blockedTime.removeCancel"
-#~ msgstr "Annuler"
+msgid "trends.filter.discipline"
+msgstr "Discipline"
 
-#~ msgid "calendar.blockedTime.removeConfirm"
-#~ msgstr "Retirer"
+msgid "trends.filter.level"
+msgstr "Niveau"
 
-#~ msgid "app.commandCenter.group.pages"
-#~ msgstr "Pages"
+msgid "trends.filter.noMatch"
+msgstr "Aucune discipline correspondante"
 
-#~ msgid "app.commandCenter.nothingFound"
-#~ msgstr "Aucun résultat…"
+msgid "trends.filter.noProgramMatch"
+msgstr "Aucun programme correspondant"
 
-#~ msgid "app.commandCenter.placeholder"
-#~ msgstr "Rechercher des pages…"
+msgid "trends.filter.program"
+msgstr "Programme"
 
-#~ msgid "app.nav.dest.home.label"
-#~ msgstr "Accueil"
+msgid "trends.filter.programHint"
+msgstr "Estimé à partir des cours obligatoires du programme"
 
-#~ msgid "app.nav.dest.home.description"
-#~ msgstr "Revenir à la page d'accueil d'uoplan."
+msgid "trends.filter.season"
+msgstr "Session"
 
-#~ msgid "app.nav.dest.explore.label"
-#~ msgstr "Explorer"
+msgid "trends.leaderboard.col.change"
+msgstr "Écart"
 
-#~ msgid "app.nav.dest.explore.description"
-#~ msgstr "Rechercher des cours et des professeurs avec les répartitions de notes."
+msgid "trends.leaderboard.col.course"
+msgstr "Cours"
 
-#~ msgid "app.nav.dest.schedule.label"
-#~ msgstr "Générateur d'horaire"
+msgid "trends.leaderboard.col.currentGpa"
+msgstr "MPC actuelle"
 
-#~ msgid "app.nav.dest.schedule.description"
-#~ msgstr "Planifiez votre programme et générez des horaires sans conflit."
+msgid "trends.leaderboard.col.discipline"
+msgstr "Discipline"
 
-#~ msgid "app.nav.dest.calendar.label"
-#~ msgstr "Calendrier"
+msgid "trends.leaderboard.col.span"
+msgstr "Période"
 
-#~ msgid "app.nav.dest.calendar.description"
-#~ msgstr "Consultez et parcourez vos horaires générés."
+msgid "trends.leaderboard.easiest"
+msgstr "Plus faciles"
 
-#~ msgid "app.nav.dest.trends.label"
-#~ msgstr "Tendances des notes"
+msgid "trends.leaderboard.empty"
+msgstr "Aucun cours avec des données de notes ne correspond à ce filtre pour l’instant."
 
-#~ msgid "app.nav.dest.trends.description"
-#~ msgstr "Suivez l'évolution des notes au fil du temps selon les disciplines."
+msgid "trends.leaderboard.hardest"
+msgstr "Plus difficiles"
 
-#~ msgid "app.nav.dest.graph.label"
-#~ msgstr "Graphe des professeurs"
+msgid "trends.leaderboard.rise"
+msgstr "Plus forte hausse"
 
-#~ msgid "app.nav.dest.graph.description"
-#~ msgstr "Voyez comment les professeurs sont liés par les cours partagés."
+msgid "trends.leaderboard.scope"
+msgstr "Toutes les disciplines · tous les niveaux · toutes les sessions"
 
-#~ msgid "app.nav.dest.changelog.label"
-#~ msgstr "Journal des modifications"
+msgid "trends.leaderboard.scopeDiscipline"
+msgstr "Cours en {name}"
 
-#~ msgid "app.nav.dest.changelog.description"
-#~ msgstr "Découvrez les nouveautés et les mises à jour récentes."
+msgid "trends.leaderboard.scopeProgram"
+msgstr "Cours de {name}"
 
-#~ msgid "app.shortcuts.title"
-#~ msgstr "Raccourcis clavier"
+msgid "trends.leaderboard.title"
+msgstr "Disciplines dans le temps"
 
-#~ msgid "app.shortcuts.group.global"
-#~ msgstr "Général"
+msgid "trends.leaderboard.titleCourses"
+msgstr "Cours dans le temps"
 
-#~ msgid "app.shortcuts.group.quickNav"
-#~ msgstr "Navigation rapide"
+msgid "trends.metric.aPlus"
+msgstr "% A+"
 
-#~ msgid "app.shortcuts.group.calendar"
-#~ msgstr "Calendrier"
+msgid "trends.metric.aRange"
+msgstr "% plage A"
 
-#~ msgid "app.shortcuts.commandCenter"
-#~ msgstr "Ouvrir le centre de commandes"
+msgid "trends.metric.gpa"
+msgstr "MPC moyenne"
 
-#~ msgid "app.shortcuts.help"
-#~ msgstr "Afficher les raccourcis clavier"
+msgid "trends.metric.label"
+msgstr "Mesure"
 
-#~ msgid "app.shortcuts.quickNav.hint"
-#~ msgstr "Appuyez sur G, puis sur la touche de la page."
+msgid "trends.metric.pass"
+msgstr "Taux de réussite"
 
-#~ msgid "app.shortcuts.then"
-#~ msgstr "puis"
+msgid "trends.metric.volume"
+msgstr "Volume noté"
 
-#~ msgid "app.shortcuts.prevSchedule"
-#~ msgstr "Horaire précédent"
+msgid "trends.season.fall"
+msgstr "Automne"
 
-#~ msgid "app.shortcuts.nextSchedule"
-#~ msgstr "Horaire suivant"
+msgid "trends.season.springSummer"
+msgstr "Printemps/été"
 
-#~ msgid "app.footer.commandCenter"
-#~ msgstr "raccourcis"
+msgid "trends.season.winter"
+msgstr "Hiver"
 
-#~ msgid "generationOptions.courses.label"
-#~ msgstr "Cours souhaités"
+msgid "trends.stat.change"
+msgstr "Écart depuis le début"
 
-#~ msgid "generationOptions.courses.description"
-#~ msgstr "Ajoutez les cours précis que vous aimeriez avoir dans votre horaire."
+msgid "trends.stat.latest"
+msgstr "Dernière session"
 
-#~ msgid "generationOptions.courses.placeholder"
-#~ msgstr "Rechercher des cours…"
+msgid "trends.stat.terms"
+msgstr "Sessions"
 
-#~ msgid "generationOptions.count.label"
-#~ msgstr "Cours ce trimestre"
+msgid "trends.stat.volume"
+msgstr "Résultats notés"
 
-#~ msgid "generationOptions.count.description"
-#~ msgstr "Nombre de cours à inclure dans chaque horaire généré."
+msgid "trends.subtitle"
+msgstr "L'évolution des notes dans le temps, regroupées pour l'ensemble des cours et des professeurs répertoriés."
 
-#~ msgid "generationOptions.warn.assigned.title"
-#~ msgstr "Comptent dans vos exigences"
+msgid "trends.title"
+msgstr "Tendances des notes"
 
-#~ msgid "generationOptions.warn.assigned.fallbackTitle"
-#~ msgstr "Exigence {index}"
+msgid "uenrollImport.button"
+msgstr "Importer depuis uEnroll"
 
-#~ msgid "generationOptions.warn.noRequirement.title"
-#~ msgstr "Ne comptera pour aucune exigence"
+msgid "uenrollImport.modal.confirm"
+msgstr "Importer l'horaire"
 
-#~ msgid "generationOptions.warn.noRequirement.body"
-#~ msgstr "Ces cours seront planifiés, mais ils ne correspondent à aucune de vos exigences restantes; ils pourraient donc ne pas compter dans votre programme :"
+msgid "uenrollImport.modal.inputLabel"
+msgstr "URL uEnroll"
 
-#~ msgid "generationOptions.warn.overflow.title"
-#~ msgstr "Exigence déjà comblée"
+msgid "uenrollImport.modal.inputPlaceholder"
+msgstr "Collez votre URL uEnroll ou le paramètre data"
 
-#~ msgid "generationOptions.warn.overflow.body"
-#~ msgstr "Ces cours seront planifiés, mais l'exigence à laquelle ils correspondent est déjà comblée; ils pourraient donc ne pas compter dans votre programme :"
+msgid "uenrollImport.modal.invalid"
+msgstr "URL uEnroll invalide"
 
-#~ msgid "generationOptions.warn.prereqUnmet.title"
-#~ msgstr "Préalables possiblement non satisfaits"
+msgid "uenrollImport.modal.invalidDescription"
+msgstr "Cela ne ressemble pas à une URL uEnroll ou à un paramètre data valide."
 
-#~ msgid "generationOptions.warn.prereqUnmet.body"
-#~ msgstr "Ces cours seront planifiés, mais vous pourriez ne pas satisfaire les préalables. Vous aurez probablement besoin de la permission de l'enseignant pour vous inscrire :"
+msgid "uenrollImport.modal.noCoursesDescription"
+msgstr "Aucun de ces cours n'existe dans les données de la session actuelle. Essayez de changer de session d'abord."
 
-#~ msgid "generationOptions.warn.unavailable.title"
-#~ msgstr "Non offert ce trimestre"
+msgid "uenrollImport.modal.noCoursesTitle"
+msgstr "Aucun cours trouvé"
 
-#~ msgid "generationOptions.warn.unavailable.body"
-#~ msgstr "Ces cours ne sont pas offerts ce trimestre; ils ne peuvent donc pas être ajoutés à votre horaire :"
+msgid "uenrollImport.modal.recognized"
+msgstr "Cours reconnus"
 
-#~ msgid "advancedOptions.heading"
-#~ msgstr "Options avancées"
+msgid "uenrollImport.modal.termSwitch"
+msgstr "La session sera changée à {term} lors de l'importation."
 
-#~ msgid "advancedOptions.description"
-#~ msgstr "Choisissez des cours précis pour des exigences individuelles. Ces choix sont conservés exactement comme vous les définissez."
+msgid "uenrollImport.modal.title"
+msgstr "Importer depuis uEnroll"
 
-#~ msgid "advancedOptions.picksActive"
-#~ msgstr "{count, plural, one {# choix avancé} other {# choix avancés}} actif"
+msgid "uenrollImport.modal.warnings"
+msgstr "Certains cours n'ont pas été trouvés"

@@ -1,10 +1,10 @@
 import { Box, Group, Stack, Text } from "@mantine/core";
-import { useLingui } from "@lingui/react";
 import { IconAlertCircle, IconCheck, IconChevronDown } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { type ReactNode } from "react";
 import type { ScheduleDashboardCardStatus } from "../../lib/scheduleDashboard";
 import { AppCard } from "../shared/AppCard";
+import { useTr } from "../../i18n";
 
 const STATUS_ACCENT: Record<ScheduleDashboardCardStatus, string> = {
   ready: "var(--app-success)",
@@ -110,7 +110,7 @@ export function ScheduleDashboardCard({
   gateMessage,
   expandableContent,
 }: ScheduleDashboardCardProps) {
-  useLingui();
+  useTr();
   const locked = Boolean(gateMessage);
   const accent = locked ? STATUS_BORDER.empty : STATUS_BORDER[status];
   const isExpandable = Boolean(expandableContent) && !locked;

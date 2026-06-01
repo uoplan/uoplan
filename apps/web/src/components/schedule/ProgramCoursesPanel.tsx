@@ -1,12 +1,11 @@
 import { Divider, Stack, Text } from "@mantine/core";
-import { useLingui } from "@lingui/react";
 import { useAppStore } from "../../store/appStore";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import { ProgramStep } from "../steps/ProgramStep";
 import { CompletedCoursesStep } from "../steps/CompletedCoursesStep";
 
 export function ProgramCoursesPanel() {
-  useLingui();
+  useTr();
   const catalogue = useAppStore((s) => s.catalogue);
   const program = useAppStore((s) => s.program);
   const setProgram = useAppStore((s) => s.setProgram);

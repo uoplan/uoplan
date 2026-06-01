@@ -1,10 +1,9 @@
 import { Accordion, Box, Stack, Text, Title } from "@mantine/core";
-import { useLingui } from "@lingui/react";
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import type { ProfessorRatingsMap } from "@uoplan/core";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import {
   type ProfessorOfferingGroup,
   groupOfferingsByProfessor,
@@ -58,7 +57,7 @@ export function ExploreCoursePage({
   urlCourseParam: string;
   professorRatings: ProfessorRatingsMap | null;
 }) {
-  useLingui();
+  useTr();
   const { loading, offeringsByCourseNorm } = useExploreOfferings();
   const navigate = useNavigate();
 

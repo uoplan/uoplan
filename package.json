@@ -12,6 +12,7 @@
     "lint:fix": "oxlint --fix apps/web/src apps/scraper/src packages/core/src",
     "check:arch": "node scripts/check-architecture.mjs",
     "check:i18n": "node scripts/check-i18n.mjs",
+    "i18n:sync": "node scripts/i18n-sync.mjs",
     "sync:proto-cli": "cp packages/proto/proto/cli.proto apps/cli/proto/cli.proto",
     "format": "oxfmt",
     "format:check": "oxfmt --check",

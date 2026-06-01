@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Alert, Button, List, Modal, Stack, Text, TextInput } from "@mantine/core";
 import { IconAlertCircle, IconCircleCheck, IconInfoCircle } from "@tabler/icons-react";
-import { useLingui } from "@lingui/react";
 import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import {
@@ -10,7 +9,7 @@ import {
   type ParsedUEnrollData,
   type UEnrollResolveResult,
 } from "../../lib/importFromUEnroll";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 
 interface UEnrollImportModalProps {
   opened: boolean;
@@ -23,7 +22,7 @@ type ParseState =
   | { status: "parse-error" };
 
 export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps) {
-  useLingui();
+  useTr();
 
   const { cache, terms, selectedTermId, setSelectedTermId, importSchedule } = useAppStore(
     useShallow((s) => ({

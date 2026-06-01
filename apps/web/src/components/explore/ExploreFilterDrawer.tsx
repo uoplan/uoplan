@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { Box, Divider, Drawer, Group, Stack, Text, UnstyledButton } from "@mantine/core";
-import { useLingui } from "@lingui/react";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { ExploreFilterPopoverContent, filterSectionLabel } from "./ExploreFilterPopoverContent";
@@ -22,7 +21,7 @@ export function ExploreFilterDrawer({
   onChange: (next: Partial<ExploreFilterState>) => void;
   initialSection?: FilterKey;
 }) {
-  useLingui();
+  useTr();
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
