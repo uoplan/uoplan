@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Box, Stack, Text } from "@mantine/core";
 import type { GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
-import { normalizeProfessorName } from "@uoplan/core";
+import { normalizeProfessorName, hasProfessorRatings } from "@uoplan/core";
 import { useTr, tr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import type { ExploreProfessorSearchEntry } from "../../lib/explore/gradesSearch";
@@ -44,7 +44,7 @@ export function SearchResultProfessorCard({
   const rmpEntry = professorRatings
     ? professorRatings[normalizeProfessorName(entry.displayName)]
     : null;
-  const hasRating = rmpEntry != null && Number.isFinite(rmpEntry.rating);
+  const hasRating = hasProfessorRatings(rmpEntry);
 
   const q = query?.trim() ?? "";
 

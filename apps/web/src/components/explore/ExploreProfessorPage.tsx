@@ -2,7 +2,7 @@ import { Accordion, Box, Group, Stack, Text, Title } from "@mantine/core";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import type { ProfessorRatingsMap } from "@uoplan/core";
-import { normalizeProfessorName } from "@uoplan/core";
+import { normalizeProfessorName, hasProfessorRatings } from "@uoplan/core";
 import { useTr, tr } from "../../i18n";
 import { groupOfferingsByCourse } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
@@ -48,7 +48,8 @@ export function ExploreProfessorPage({
   );
 
   const rmpEntry = professorRatings ? professorRatings[normalizeProfessorName(displayName)] : null;
-  const hasRating = rmpEntry != null && Number.isFinite(rmpEntry.rating);
+  const hasRating = hasProfessorRatings(rmpEntry);
+  const hasRmpLink = legacyId != null && Number.isFinite(legacyId) && legacyId > 0;
 
   const profRouteParam = legacyId != null ? String(legacyId) : encodeURIComponent(displayName);
 
@@ -70,16 +71,18 @@ export function ExploreProfessorPage({
           <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
             {displayName}
           </Title>
-          {(hasRating || (legacyId != null && Number.isFinite(legacyId) && legacyId > 0)) && (
+          {(hasRating || hasRmpLink) && (
             <Group gap={6} align="center" mt={8} wrap="wrap">
               {hasRating ? (
                 <Text size="sm" c="dimmed">
                   {rmpEntry?.rating.toFixed(1)} · {rmpEntry?.numRatings} ratings
                 </Text>
-              ) : null}
-              {legacyId != null && Number.isFinite(legacyId) && legacyId > 0 ? (
-                <RateMyProfessorLink legacyId={legacyId} />
-              ) : null}
+              ) : (
+                <Text size="sm" c="dimmed">
+                  {tr("search.noRating")}
+                </Text>
+              )}
+              {hasRmpLink && legacyId != null ? <RateMyProfessorLink legacyId={legacyId} /> : null}
             </Group>
           )}
         </Box>
