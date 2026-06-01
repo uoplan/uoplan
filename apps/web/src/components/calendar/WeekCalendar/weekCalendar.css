@@ -159,6 +159,13 @@
   bottom: -4px;
 }
 
+.cal-event:focus-visible,
+.cal-blocked:focus-visible,
+.cal-blocked-handle:focus-visible {
+  outline: 2px solid var(--mantine-color-accentBlue-4);
+  outline-offset: 2px;
+}
+
 /* Course events paint above the blocked layer so they stay clickable. */
 .cal-event {
   z-index: 3;

@@ -10,6 +10,10 @@ import {
 } from "../../lib/requirements/requirementUtils";
 import { useTr, tr } from "../../i18n";
 
+const PAGER_INCOMPLETE_ID = "optionsStep.pager.incomplete";
+const PAGER_COMPLETE_ID = "optionsStep.pager.complete";
+const PAGER_GOTO_WITH_STATUS_ID = "optionsStep.pager.goToWithStatus";
+
 interface OptionsStepProps {
   requirementTreeWithStatus: RequirementWithStatus[];
   completedCourses: string[];
@@ -97,12 +101,17 @@ export function OptionsStep({
             <Group gap={6} justify="center" wrap="wrap">
               {pages.map((p, idx) => {
                 const isActive = idx === activeIndex;
+                const status = p.incomplete ? tr(PAGER_INCOMPLETE_ID) : tr(PAGER_COMPLETE_ID);
                 const color = p.incomplete ? "var(--app-warning)" : "var(--app-success)";
                 return (
                   <UnstyledButton
                     key={p.key}
                     onClick={() => setActiveKey(p.key)}
-                    aria-label={tr("optionsStep.pager.goTo", { number: idx + 1 })}
+                    aria-label={tr(PAGER_GOTO_WITH_STATUS_ID, {
+                      number: idx + 1,
+                      total: pages.length,
+                      status,
+                    })}
                     aria-current={isActive ? "step" : undefined}
                     style={{
                       width: isActive ? 22 : 10,

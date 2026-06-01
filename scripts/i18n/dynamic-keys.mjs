@@ -92,6 +92,30 @@ export const DYNAMIC_TR_IDS = [
   "notifications.scheduleWorkerFallback.title",
   "notifications.scheduleWorkerFallback.message",
 
+  // Accessibility workstream: ids intentionally routed through constants until catalogs are updated centrally.
+  "calendar.event.ariaLabel",
+  "calendar.blockedTime.resizeStart",
+  "calendar.blockedTime.resizeEnd",
+  "calendarView.previousWeek",
+  "calendarView.nextWeek",
+  "enrolCli.modal.copyCode",
+  "swapCourse.option.conflictAria",
+  "swapCourse.option.selectAria",
+  "swapCourse.conflictsWith",
+  "swapCourse.loading",
+  "swapCourse.noAlternatives",
+  "swapCourse.poolHad",
+  "swapCourse.sort.aplus",
+  "swapCourse.sort.rating",
+  "swapCourse.sort.alpha",
+  "swapCourse.searchPlaceholder",
+  "swapCourse.sortBy",
+  "swapCourse.noMatches",
+  "optionsStep.pager.incomplete",
+  "optionsStep.pager.complete",
+  "optionsStep.pager.goToWithStatus",
+  "basicCourseFilters.toggle",
+
   // apps/web/src/lib/term/termLabel.ts: SEASON_LABEL_ID
   ...family("term.season.", ["winter", "summer", "fall"]),
 ];

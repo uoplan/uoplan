@@ -4,7 +4,7 @@ import type { DataCache } from "@uoplan/core";
 import { COURSE_COLORS, COURSE_COLOR_HEX, ratingToColor } from "@uoplan/core";
 import { ratingColorToCssVar } from "../../../lib/ratingColor";
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
-import { tr } from "../../../i18n";
+import { useTr } from "../../../i18n";
 import { GradeDistributionBottomBar } from "../GradeDistributionViz";
 import { componentKindOnly, formatTimeRange } from "../calendarEventDisplayUtils";
 import { CalendarEventFace } from "../CalendarEventFace";
@@ -20,6 +20,7 @@ interface WeekCalendarEventProps {
 }
 
 const LANE_GAP_PX = 1;
+const CALENDAR_EVENT_ARIA_LABEL_ID = "calendar.event.ariaLabel";
 
 export function WeekCalendarEvent({
   event,
@@ -29,6 +30,8 @@ export function WeekCalendarEvent({
   colorMap,
   onClick,
 }: WeekCalendarEventProps) {
+  const tr = useTr();
+
   const courseTitle = useMemo(
     () => cache?.getCourse(event.courseCode)?.title ?? "",
     [cache, event.courseCode],
@@ -83,9 +86,19 @@ export function WeekCalendarEvent({
 
   const gradeBottom = <GradeDistributionBottomBar gradeViz={event.gradeViz} />;
 
+  const handleActivate = () => onClick(event);
+
+  const accessibleLabel = tr(CALENDAR_EVENT_ARIA_LABEL_ID, {
+    courseCode: event.courseCode,
+    component: componentKindOnly(event.componentSection),
+    timeRange,
+  });
+
   return (
-    <div
-      className="cal-event cal-event"
+    <button
+      type="button"
+      className="cal-event"
+      aria-label={accessibleLabel}
       style={{
         position: "absolute",
         top: `${top}%`,
@@ -95,11 +108,24 @@ export function WeekCalendarEvent({
         width: `calc(${widthPct}% - ${laneIndex > 0 ? LANE_GAP_PX : 0}px - ${laneIndex < laneCount - 1 ? LANE_GAP_PX : 0}px)`,
         cursor: "pointer",
         boxSizing: "border-box",
+        appearance: "none",
+        border: 0,
+        borderLeft: "4px solid var(--event-color, var(--app-border-strong))",
+        padding: 0,
+        color: "inherit",
+        font: "inherit",
+        textAlign: "left",
         overflow: "hidden",
         ["--event-color" as string]: hex,
       }}
       data-color={markerColor}
-      onClick={() => onClick(event)}
+      onClick={handleActivate}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleActivate();
+        }
+      }}
     >
       <CalendarEventFace
         courseCode={event.courseCode}
@@ -124,6 +150,6 @@ export function WeekCalendarEvent({
       ) : (
         <div className="cal-grade-bar-hitbox">{gradeBottom}</div>
       )}
-    </div>
+    </button>
   );
 }
