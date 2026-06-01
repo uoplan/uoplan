@@ -1,9 +1,17 @@
 import { useRef, useState } from "react";
 import { Alert, Box, Group, Loader, Switch, Text } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { IconAlertTriangle, IconBell, IconBellOff } from "@tabler/icons-react";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { useTr } from "../../i18n";
 
 const VAPID_PUBLIC_KEY = (import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined) ?? "";
+const PUSH_SETUP_MISSING_TITLE_ID = "notifications.pushSetupMissing.title";
+const PUSH_SETUP_MISSING_MESSAGE_ID = "notifications.pushSetupMissing.message";
+const PUSH_SUBSCRIBE_FAILED_TITLE_ID = "notifications.pushSubscribeFailed.title";
+const PUSH_SUBSCRIBE_FAILED_MESSAGE_ID = "notifications.pushSubscribeFailed.message";
+const PUSH_UNSUBSCRIBE_FAILED_TITLE_ID = "notifications.pushUnsubscribeFailed.title";
+const PUSH_UNSUBSCRIBE_FAILED_MESSAGE_ID = "notifications.pushUnsubscribeFailed.message";
 const TURNSTILE_SITE_KEY =
   (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) ?? "0x4AAAAAADGEYLH_6_yl1r5j";
 const LS_KEY = "uoplan-notifications";
@@ -50,6 +58,7 @@ function getUnsupportedReason(): string | null {
 }
 
 export function NotificationToggle() {
+  const tr = useTr();
   const [state, setState] = useState<NotifState>(loadState);
   const [loading, setLoading] = useState(false);
 
@@ -84,6 +93,11 @@ export function NotificationToggle() {
   async function handleEnable() {
     if (!VAPID_PUBLIC_KEY) {
       console.error("VITE_VAPID_PUBLIC_KEY is not set");
+      notifications.show({
+        color: "red",
+        title: tr(PUSH_SETUP_MISSING_TITLE_ID),
+        message: tr(PUSH_SETUP_MISSING_MESSAGE_ID),
+      });
       return;
     }
     setLoading(true);
@@ -105,17 +119,25 @@ export function NotificationToggle() {
       const token = await getTurnstileToken();
       turnstileRef.current?.reset();
 
-      await fetch("/api/subscribe", {
+      const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...sub.toJSON(), "cf-turnstile-response": token }),
       });
+      if (!res.ok) {
+        throw new Error(`Subscribe request failed with HTTP ${res.status}`);
+      }
 
       const next: NotifState = { status: "subscribed", subscription: sub.toJSON() };
       saveState(next);
       setState(next);
     } catch (err) {
       console.error("Failed to subscribe to push notifications:", err);
+      notifications.show({
+        color: "red",
+        title: tr(PUSH_SUBSCRIBE_FAILED_TITLE_ID),
+        message: tr(PUSH_SUBSCRIBE_FAILED_MESSAGE_ID),
+      });
     } finally {
       setLoading(false);
     }
@@ -132,7 +154,7 @@ export function NotificationToggle() {
       const sub = await reg.pushManager.getSubscription();
       await sub?.unsubscribe();
 
-      await fetch("/api/unsubscribe", {
+      const res = await fetch("/api/unsubscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -140,11 +162,19 @@ export function NotificationToggle() {
           "cf-turnstile-response": token,
         }),
       });
+      if (!res.ok) {
+        throw new Error(`Unsubscribe request failed with HTTP ${res.status}`);
+      }
 
       saveState({ status: "disabled" });
       setState({ status: "disabled" });
     } catch (err) {
       console.error("Failed to unsubscribe from push notifications:", err);
+      notifications.show({
+        color: "red",
+        title: tr(PUSH_UNSUBSCRIBE_FAILED_TITLE_ID),
+        message: tr(PUSH_UNSUBSCRIBE_FAILED_MESSAGE_ID),
+      });
     } finally {
       setLoading(false);
     }

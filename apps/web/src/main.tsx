@@ -1,7 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { I18nProvider } from "@lingui/react";
+import { Notifications } from "@mantine/notifications";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { ErrorBoundary } from "./components/shared/ErrorBoundary";
 import { routeTree } from "./routeTree.gen";
 import { setRouterInstance } from "./routerRef";
 import { AppThemeProvider } from "./theme/AppThemeProvider";
@@ -32,8 +34,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <I18nProvider i18n={i18n}>
       <AppThemeProvider>
+        <Notifications />
         <AppStoreProvider store={defaultAppStore}>
-          <RouterProvider router={router} />
+          <ErrorBoundary>
+            <RouterProvider router={router} />
+          </ErrorBoundary>
         </AppStoreProvider>
       </AppThemeProvider>
     </I18nProvider>

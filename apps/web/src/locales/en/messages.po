@@ -540,6 +540,18 @@ msgstr "2. Enrol"
 msgid "enrolCli.modal.title"
 msgstr "Enrol via CLI"
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "errorBoundary.message"
+msgstr "uoplan hit an unexpected error. Reload the app to try again."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "errorBoundary.reload"
+msgstr "Reload"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "errorBoundary.title"
+msgstr "Something went wrong"
+
 #: apps/web/src/components/explore/ExploreCoursePage.tsx:147
 msgid "explore.alsoKnownAs"
 msgstr "Also known as:"
@@ -1177,6 +1189,46 @@ msgstr "Quickly select required courses and electives to generate a schedule. Be
 
 msgid "modeStep.basic.title"
 msgstr "Basic Mode"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.pushSetupMissing.message"
+msgstr "Push notifications are unavailable in this build."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.pushSetupMissing.title"
+msgstr "Notifications are not configured"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.pushSubscribeFailed.message"
+msgstr "Please try again in a moment."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.pushSubscribeFailed.title"
+msgstr "Could not enable notifications"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.pushUnsubscribeFailed.message"
+msgstr "Please try again in a moment."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.pushUnsubscribeFailed.title"
+msgstr "Could not disable notifications"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.scheduleWorkerFallback.message"
+msgstr "The background worker failed, so uoplan is finishing the generation in the app."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.scheduleWorkerFallback.title"
+msgstr "Schedule generation is running more slowly"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.yearCatalogueLoadFailed.message"
+msgstr "Try another year, or reload and try again."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.yearCatalogueLoadFailed.title"
+msgstr "Could not load that catalogue year"
 
 msgid "optionsDrilldown.change"
 msgstr "Change"

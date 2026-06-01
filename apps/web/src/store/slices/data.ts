@@ -1,4 +1,5 @@
 import type { StateCreator } from "zustand";
+import { notifications } from "@mantine/notifications";
 import type { AppStore } from "../types";
 import {
   type Course,
@@ -33,7 +34,11 @@ import {
 import { recomputeStateForProgram } from "../requirementCompute";
 import { LOCAL_STORAGE_KEY } from "../constants";
 import { applyHydrationNavigation } from "../../lib/hydrateNavigation";
+import { tr } from "../../i18n";
 import type { AppServices } from "../services";
+
+const YEAR_CATALOGUE_LOAD_FAILED_TITLE_ID = "notifications.yearCatalogueLoadFailed.title";
+const YEAR_CATALOGUE_LOAD_FAILED_MESSAGE_ID = "notifications.yearCatalogueLoadFailed.message";
 
 interface DataSlice {
   loadData: AppStore["loadData"];
@@ -146,6 +151,11 @@ export const createDataSlice =
       } catch (err) {
         set({ yearCatalogueLoading: false });
         console.error("Failed to load year catalogue:", err);
+        notifications.show({
+          color: "red",
+          title: tr(YEAR_CATALOGUE_LOAD_FAILED_TITLE_ID),
+          message: tr(YEAR_CATALOGUE_LOAD_FAILED_MESSAGE_ID),
+        });
       }
       get().setProgram(null);
     },

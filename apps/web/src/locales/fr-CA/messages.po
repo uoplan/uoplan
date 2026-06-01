@@ -540,6 +540,18 @@ msgstr "2. S'inscrire"
 msgid "enrolCli.modal.title"
 msgstr "Inscrire via CLI"
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "errorBoundary.message"
+msgstr "uoplan a rencontré une erreur inattendue. Rechargez l’application pour réessayer."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "errorBoundary.reload"
+msgstr "Recharger"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "errorBoundary.title"
+msgstr "Une erreur est survenue"
+
 #: apps/web/src/components/explore/ExploreCoursePage.tsx:147
 msgid "explore.alsoKnownAs"
 msgstr "Aussi connu sous le nom de :"
@@ -1177,6 +1189,46 @@ msgstr "Sélectionnez rapidement des cours obligatoires et des cours au choix po
 
 msgid "modeStep.basic.title"
 msgstr "Mode de base"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.pushSetupMissing.message"
+msgstr "Les notifications poussées ne sont pas disponibles dans cette version."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.pushSetupMissing.title"
+msgstr "Les notifications ne sont pas configurées"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.pushSubscribeFailed.message"
+msgstr "Veuillez réessayer dans un instant."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.pushSubscribeFailed.title"
+msgstr "Impossible d’activer les notifications"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.pushUnsubscribeFailed.message"
+msgstr "Veuillez réessayer dans un instant."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.pushUnsubscribeFailed.title"
+msgstr "Impossible de désactiver les notifications"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.scheduleWorkerFallback.message"
+msgstr "Le travailleur en arrière-plan a échoué; uoplan termine donc la génération dans l’application."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.scheduleWorkerFallback.title"
+msgstr "La génération d’horaire est plus lente"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.yearCatalogueLoadFailed.message"
+msgstr "Essayez une autre année, ou rechargez la page et réessayez."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.yearCatalogueLoadFailed.title"
+msgstr "Impossible de charger cette année du catalogue"
 
 msgid "optionsDrilldown.change"
 msgstr "Modifier"

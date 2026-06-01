@@ -1,4 +1,5 @@
 import * as Comlink from "comlink";
+import { notifications } from "@mantine/notifications";
 import type { AppState } from "../store/types";
 import type { CacheDataKey } from "../lib/dataCacheLoader";
 import {
@@ -7,7 +8,11 @@ import {
   type GenerateSchedulesMode,
   type GenerateSchedulesResult,
 } from "../lib/generateSchedulesAction";
+import { tr } from "../i18n";
 import type { ScheduleWorkerApi } from "./scheduleWorkerApi";
+
+const SCHEDULE_WORKER_FALLBACK_TITLE_ID = "notifications.scheduleWorkerFallback.title";
+const SCHEDULE_WORKER_FALLBACK_MESSAGE_ID = "notifications.scheduleWorkerFallback.message";
 
 /**
  * Return true if we can spawn a Web Worker in this environment. False for
@@ -72,6 +77,11 @@ export async function runScheduleGeneration(
         return await getRemote().generateSchedules(dataKey, input);
       } catch (err) {
         console.error("[scheduleWorker] generation failed, falling back in-process", err);
+        notifications.show({
+          color: "yellow",
+          title: tr(SCHEDULE_WORKER_FALLBACK_TITLE_ID),
+          message: tr(SCHEDULE_WORKER_FALLBACK_MESSAGE_ID),
+        });
         // fall through to the in-process path so the user still gets a result
       }
     }
@@ -92,6 +102,7 @@ export async function prewarmScheduleWorker(state: AppState): Promise<void> {
   try {
     await getRemote().loadData(dataKey);
   } catch (err) {
+    // Worker prewarm is intentionally best-effort; generation can load data on demand.
     console.warn("[scheduleWorker] prewarm failed", err);
   }
 }

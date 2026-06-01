@@ -77,6 +77,21 @@ export const DYNAMIC_TR_IDS = [
   ]),
   // apps/web/src/lib/generationDiagnosticsText.ts: DAY_SHORT_KEY
   ...family("gen.day.", ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]),
+  // apps/web/src/components/shared/ErrorBoundary.tsx + error notification id constants.
+  "errorBoundary.title",
+  "errorBoundary.message",
+  "errorBoundary.reload",
+  "notifications.yearCatalogueLoadFailed.title",
+  "notifications.yearCatalogueLoadFailed.message",
+  "notifications.pushSetupMissing.title",
+  "notifications.pushSetupMissing.message",
+  "notifications.pushSubscribeFailed.title",
+  "notifications.pushSubscribeFailed.message",
+  "notifications.pushUnsubscribeFailed.title",
+  "notifications.pushUnsubscribeFailed.message",
+  "notifications.scheduleWorkerFallback.title",
+  "notifications.scheduleWorkerFallback.message",
+
   // apps/web/src/lib/term/termLabel.ts: SEASON_LABEL_ID
   ...family("term.season.", ["winter", "summer", "fall"]),
 ];
