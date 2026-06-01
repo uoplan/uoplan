@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.0.0-beta.28](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.27...uoplan-monorepo-v1.0.0-beta.28) (2026-06-01)
+
+
+### Features
+
+* add aliases to explore page ([c81bfd4](https://github.com/uoplan/uoplan/commit/c81bfd427167acab3ba8540fbf7a3ef49323d680))
+* add links to explore from trends, add programs to explore ([c93470b](https://github.com/uoplan/uoplan/commit/c93470b89fcbdd65518458d4b3954aa8472d3b8a))
+* add progress to pill on home page ([5054b15](https://github.com/uoplan/uoplan/commit/5054b150968f93b577c7f83a94319ac0e02e5938))
+* add toast notifications and error boundary ([f6d0fcd](https://github.com/uoplan/uoplan/commit/f6d0fcdbe21c92c57053a694a816b5bea743a61a))
+* improve accessibility of calendar and requirements ([898aaea](https://github.com/uoplan/uoplan/commit/898aaea863d3b14655513e6f55c751e303d7f85a))
+* improve placeholder grade data, filter out fake profs ([3363b2e](https://github.com/uoplan/uoplan/commit/3363b2ec1aeddb2ec30a33720991a2c2090956e2))
+* make term formatting consistent ([da6db64](https://github.com/uoplan/uoplan/commit/da6db64ed79552b4b6737a5c4297db2197f371b5))
+* make trends page mobile-friendly ([196bc9b](https://github.com/uoplan/uoplan/commit/196bc9ba393ef024286b311d8f51601a280065f8))
+* show dirty state for calendar generation, do not regenerate when blocking times ([0934bfb](https://github.com/uoplan/uoplan/commit/0934bfbfa5d47169a721a9ea2ebb51275e817df9))
+* show no rating instead of 0 for ratemyprof ([78782be](https://github.com/uoplan/uoplan/commit/78782be8be8d1f8a6883bbe1a38abf5777fda928))
+
+
+### Bug Fixes
+
+* align grade placeholder with real ([596b36a](https://github.com/uoplan/uoplan/commit/596b36a2fe0a31b4fb0016a6f1888bc56f862874))
+* make progress bar continue after changing cards ([0f8dcd3](https://github.com/uoplan/uoplan/commit/0f8dcd386f74fd358fe5e369d1cf3a6e5959a0d2))
+* reset seed when options are dirty ([24d40ef](https://github.com/uoplan/uoplan/commit/24d40ef2421be280f05f38b53b60cca5c68ed3ba))
+* resolve build issues ([ec9c0ef](https://github.com/uoplan/uoplan/commit/ec9c0efaea8535482f7764894770a5aa7de342f4))
+* use proper document title for courses on explore page ([006a5c2](https://github.com/uoplan/uoplan/commit/006a5c2e81a467b4e16db9f61598d84fc30ad180))
+
 ## [1.0.0-beta.27](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.26...uoplan-monorepo-v1.0.0-beta.27) (2026-06-01)
 
 
