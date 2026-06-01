@@ -2,55 +2,92 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+Always use `pnpm`, never `npm`.
+
 ## Commands
 
 ```bash
-pnpm dev              # Start Vite dev server (apps/web)
-pnpm build            # Production build
-pnpm test             # Run tests once (vitest)
-pnpm test:watch       # Watch mode
-pnpm scrape:catalogue # Scrape course/program data
-pnpm scrape:schedules # Scrape schedule data
+pnpm dev              # Vite dev server (runs generate + data-proto build first)
+pnpm build            # Production build (generate + data-proto + vite + prerender)
+pnpm test             # Run all workspace tests once (vitest)
+pnpm test:watch       # Watch mode (apps/web)
+pnpm typecheck        # tsgo typecheck across all packages (+ wrangler types)
+pnpm lint             # oxlint over apps/web, apps/scraper, packages/core
+pnpm lint:fix         # oxlint --fix
+pnpm format           # oxfmt   (pnpm format:check for the CI dry-run)
+pnpm check:arch       # Package-layering + worker-purity guardrails
+pnpm check:i18n       # Translation completeness / locale parity
+pnpm i18n:sync        # Scaffold missing msgids into both PO files
+pnpm deadcode         # knip
+
+# Scraper / data
+pnpm scrape:catalogue # Scrape per-year course/program data (--force to re-scrape)
+pnpm scrape:schedules # Scrape PeopleSoft schedule data
+pnpm build:data-proto # Compile apps/scraper/data JSON → apps/web/public/data .pb
 ```
 
-Always use `pnpm`, never `npm`.
+Run a single test with vitest directly, e.g.
+`pnpm --filter @uoplan/core exec vitest run src/path/file.test.ts -t "case name"`.
+
+Tooling is **oxc-based** — `oxlint` (`oxlint.config.ts`), `oxfmt` (`oxfmt.config.ts`), and `tsgo` (TypeScript native preview) for typechecking, not eslint/prettier/tsc. Git hooks run via `lefthook` (`lefthook.yml`, installed by `pnpm prepare`). CI (`.github/workflows/ci.yml`) runs: generate → lint → format:check → typecheck → check:arch → check:i18n → test → build. `apps/cli/**` is excluded (it has its own workflow).
 
 ## Architecture
 
-**uoplan** is a course planner for University of Ottawa students: a React SPA with a wizard (term → program → completed courses → requirements → schedule preferences) and a calendar of generated timetables.
+**uoplan** (`uoplan.party`) is a requirement-first course planner for University of Ottawa students: a React SPA wizard (term → program → completed courses → requirements → schedule preferences) that turns degree requirements into conflict-free weekly timetables.
 
-**Monorepo**: `apps/web` (Vite + React), `packages/core` (shared scheduling + requirements logic + protobuf schemas/types), `apps/scraper`.
+**Monorepo** (`pnpm-workspace.yaml` → `apps/*`, `packages/*`):
+
+- `apps/web` — Vite + React 19 SPA (the planner UI).
+- `apps/worker` — Cloudflare Worker (Hono): share redirect, OG image, web-push API.
+- `apps/scraper` — Node scrapers that produce the source JSON datasets.
+- `apps/cli` — Rust enrolment CLI (`@uoplan/cli` / `npx @uoplan/cli`), PeopleSoft search/enrol.
+- `packages/proto` — protobuf schemas + generated TS (single source of truth).
+- `packages/core` — scheduling engine, requirements, prerequisites, data cache, state encoding, grades.
+- `packages/data` — runtime data client/loaders/transport (browser + node + worker).
+- `packages/calendar` — calendar rendering primitives (layout, events, colours).
+- `packages/transcript` — pdfjs-based transcript parsing (browser only).
 
 ### Tech Stack
 
-React 19 + TypeScript, Zustand, Mantine, FullCalendar, Vite + Vitest, Zod, Framer Motion, pdfjs-dist.
+React 19 + TypeScript, Zustand, Mantine v9, FullCalendar + a custom `WeekCalendar`, TanStack Router, Zod, Framer Motion, comlink web workers, pdfjs-dist (browser only).
+
+### Package layering
+
+`pnpm check:arch` (`scripts/check-architecture.mjs`) enforces that dependencies only point "downward":
+
+```
+proto  ←  core  ←  { data, calendar, transcript }  ←  apps (web, worker, scraper)
+```
+
+Apps are leaves (nothing depends on them). The deployed Worker bundle must **never** contain `pdfjs-dist` — transcript parsing is browser-only, and the arch check fails the build if it leaks in.
 
 ### Data Flow
 
 ```
-Source JSON (`apps/scraper/data`)
-  → protobuf build step (`apps/scraper/src/build_proto.ts`)
-  → runtime `.pb` assets (`apps/web/public/data`)
-  → protobuf decode + DataCache (packages/core)
-  → Zustand (apps/web/src/store/)
-  → React (apps/web/src/components/)
+apps/scraper/data/*.json        (source datasets, committed for diffability)
+  → proto build (pnpm build:data-proto → apps/scraper/src/cli/proto.ts)
+  → apps/web/public/data/*.pb    (git-ignored build artifacts, regenerated; NOT committed)
+  → protobuf decode + DataCache (packages/core) via @uoplan/data client
+  → Zustand slices (apps/web/src/store/)
+  → React components (apps/web/src/components/)
 ```
 
 ### Key paths
 
-- **`apps/web/src/store/`** — Zustand slices (`appStore.ts` composes them), `requirementCompute.ts`, `scheduleHelpers.ts` (requirement pools + `computeCoursesPerPool`).
-- **`apps/web/src/lib/`** — `generateSchedulesAction.ts` (schedule generation orchestration), `implicitHonours.ts`, URL state encoding, etc.
-- **`packages/core/`** — `generation/` (shared timetabling primitives: `sectionCombos.ts`, `overlaps.ts`, constraint filters), `engine/` (modular generation engine: composable constraint pipe, lazy seeded timetable + subset enumerators, relaxation diagnostics), `requirements/`, `scheduleCandidates/` (`kUserKGeneral`, `explicitPoolPicks`), filters, prerequisites. Schedule generation entry points are `generateSchedule.ts` (`generateBasicSchedule`, `generateAdvancedSchedule`).
-- **`apps/scraper/data/`** — Source JSON datasets committed for diffability.
-- **`apps/web/public/data/`** — Runtime protobuf (`.pb`) assets served to the client.
+- **`apps/web/src/store/`** — Zustand slices (`appStore.ts` composes them; see `docs/store-architecture.md`), `requirementCompute.ts`, `scheduleHelpers.ts` (requirement pools + `computeCoursesPerPool`).
+- **`apps/web/src/lib/`** — `generateSchedulesAction.ts` (schedule-generation orchestration), URL/state glue, `encodeSchedulePayload.ts`, `importFromUEnroll.ts`.
+- **`packages/core/src/`** — `generateSchedule.ts` (`generateBasicSchedule` / `generateAdvancedSchedule`), `engine/` (modular generation engine: composable constraint pipe, lazy seeded timetable + subset enumerators, relaxation diagnostics), `generation/` (shared primitives: `sectionCombos.ts`, `overlaps.ts`, `types.ts`), `scheduleCandidates/`, `requirements/`, `prerequisites/`, `dataCache.ts`, `stateEncode.ts`, `implicitHonours.ts`, `scheduleFromState.ts`.
+- **`packages/proto/`** — `proto/{state,data,cli}.proto`; generated TS in `src/generated/*` (git-ignored), exported via `@uoplan/proto` namespaces (`StateProto`/`DataProto`/`CliProto`) or subpaths (`@uoplan/proto/state|data|cli`). Regenerate with `pnpm --filter @uoplan/proto generate`. `cli.proto` is synced to the Rust CLI via `pnpm sync:proto-cli`.
+- **`apps/scraper/data/`** — source JSON datasets (committed).
+- **`apps/web/public/data/`** — runtime protobuf `.pb` assets (git-ignored build artifacts).
 
 ### Schedule generation
 
-Orchestration lives in **`apps/web/src/lib/generateSchedulesAction.ts`**. Both modes timetable through the modular **`packages/core/src/engine/`** engine (entry points `generateBasicSchedule` / `generateAdvancedSchedule` in `packages/core/src/generateSchedule.ts`). Fixed-course-set timetabling (e.g. course-swap) goes through `timetableFixedCourseSet`. Pool sizing and pinned-credit rules use **`apps/web/src/store/scheduleHelpers.ts`** and helpers from **`packages/core/src/scheduleCandidates/`**.
+Orchestration lives in **`apps/web/src/lib/generateSchedulesAction.ts`**. Both modes timetable through the modular **`packages/core/src/engine/`** engine (entry points `generateBasicSchedule` / `generateAdvancedSchedule` in `packages/core/src/generateSchedule.ts`). The OG-image worker generates from a `DecodedState` via `packages/core/src/scheduleFromState.ts`. Pool sizing and pinned-credit rules use **`apps/web/src/store/scheduleHelpers.ts`** plus helpers from **`packages/core/src/scheduleCandidates/`**. See `docs/schedule-generation.md`.
 
-### URL sharing
+### Documentation
 
-`apps/web/src/store/slices/url.ts` (and related) encodes state for shareable URLs.
+`docs/` documents the non-obvious subsystems — consult it before changing them (`docs/README.md` is the index): store architecture, state/URL encoding, schedule generation, requirements steps, course prerequisites, the custom calendar view, multi-year catalogue scraping, explore search, web-push notifications, and the CLI.
 
 ### Internationalisation (i18n)
 

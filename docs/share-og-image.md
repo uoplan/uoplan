@@ -10,7 +10,7 @@ Two worker endpoints that turn a schedule state into a social-preview share link
 
 When a user clicks **Share**, `getShareUrl()` in `apps/web/src/store/slices/url.ts`:
 
-1. Encodes the current Zustand state to a compressed protobuf using `encodeStateToBase64()` from `@uoplan/schedule`
+1. Encodes the current Zustand state to a compressed protobuf using `encodeStateToBase64()` from `@uoplan/core`
 2. Converts the resulting standard base64 string to **base64url** (replaces `+`→`-`, `/`→`_`, strips `=`) so it is safe as a URL path segment
 3. Returns `${origin}/api/share/${base64url}`
 
@@ -31,11 +31,11 @@ When a social bot (Discord, iMessage, etc.) scrapes the page it sees the OG tags
 Implemented in `apps/worker/src/ogImage.ts`:
 
 1. **Cache lookup** — checks the Workers Cache API keyed on the state string
-2. **Peek** — `peekTermAndYearFromBase64()` reads `termId` and `firstYear` without fully decoding
+2. **Peek** — `peekTermAndYearFromBase64()` reads `termId` and `firstYear` without catalogue-dependent state decoding
 3. **Fetch data assets** from `env.ASSETS` (catalogue manifest → catalogue year → schedules for term → indices)
 4. **Decode state** — `decodeStateFromBase64()` returns `DecodedState` with all selections and swaps
-5. **Reconstruct schedule** — `reconstructScheduleForPreview()` from `@uoplan/calendar` calls `generateScheduleFromDecodedState()`, which uses the **exact same algorithm** as the web app's `generateSchedulesAction` (shared via `packages/calendar/src/generateSchedule.ts`). This guarantees the OG image shows the same courses the user sees in their browser.
-6. **Render** — `reconstructScheduleForPreview()` returns `{ schedule, colorMap }`; the `colorMap` already has swap colour-inheritance applied so colours match the live calendar. `scheduleToEvents()` then `renderCalendarToSvg()` produce an SVG; `@resvg/resvg-wasm` converts SVG → PNG
+5. **Reconstruct schedule** — `reconstructScheduleForPreview()` from `@uoplan/core` delegates to `generateScheduleFromDecodedState()`, which uses the **exact same algorithm** as the web app's `generateSchedulesAction` (shared via `packages/core/src/scheduleFromState.ts` and `packages/core/src/generateSchedule.ts`). This guarantees the OG image shows the same courses the user sees in their browser.
+6. **Render** — `reconstructScheduleForPreview()` returns `{ schedule, colorMap }`; the `colorMap` already has swap colour-inheritance applied so colours match the live calendar. `scheduleToEvents()` and `renderCalendarToSvg()` from `@uoplan/calendar` produce an SVG; `@resvg/resvg-wasm` converts SVG → PNG
 7. **Cache** — the PNG response is stored in the Workers Cache with `max-age=86400`
 
 If any step fails (invalid state, missing data, generation produces no schedule) a fallback PNG with the uoplan wordmark is returned.
@@ -46,17 +46,17 @@ If any step fails (invalid state, missing data, generation produces no schedule)
 
 Edit `packages/calendar/src/render.ts` — `renderCalendarToSvg()` is a pure function that receives `CalendarEvent[]` and `colorMap`. Change the SVG geometry, colors, or layout there. Key constants:
 
-| Constant            | Default    | Meaning                        |
-| ------------------- | ---------- | ------------------------------ |
-| `W` / `H`           | 1200 / 630 | OG image pixel size            |
-| `TIME_AXIS_W`       | 52         | Width of left time axis column |
-| `HEADER_H`          | 36         | Height of day-name header row  |
-| `CAL_START_MINUTES` | 480        | Earliest time shown (08:00)    |
-| `CAL_END_MINUTES`   | 1380       | Latest time shown (23:00)      |
+| Constant            | Default    | Meaning                                  |
+| ------------------- | ---------- | ---------------------------------------- |
+| `W` / `H`           | 1200 / 630 | OG image pixel size                      |
+| `LEFT_BORDER_W`     | 6          | Width of each event's colour stripe      |
+| `GRADE_BAR_H`       | 6          | Height of each event's grade bar         |
+| `CAL_START_MINUTES` | 480        | Earliest time shown (08:00), from layout |
+| `CAL_END_MINUTES`   | 1380       | Latest time shown (23:00), from layout   |
 
 ### Changing what schedule is reconstructed
 
-Edit `packages/calendar/src/reconstruct.ts` — `reconstructScheduleForPreview()`. The function extracts course codes from `decoded.courseSelections`, shuffles with `createSeededRng(currentSeed)`, runs `generateSchedules()` (limit=1), then applies swaps. This is a best-effort approximation of the user's actual displayed schedule.
+Edit `packages/core/src/reconstruct.ts` — `reconstructScheduleForPreview()` — and the underlying `packages/core/src/scheduleFromState.ts`. The function delegates to `generateScheduleFromDecodedState()`, which reconstructs the decoded state through the same pool-pick algorithm as `generateSchedulesAction`, then applies swaps.
 
 ### Adding more OG tags
 
@@ -73,8 +73,9 @@ Both are already present in the standard worker deployment.
 
 ## Dependencies
 
-| Package             | Purpose                                                                   |
-| ------------------- | ------------------------------------------------------------------------- |
-| `@uoplan/calendar`  | Calendar layout, event conversion, SVG rendering, schedule reconstruction |
-| `@uoplan/schedule`  | State decoding, data cache building, schedule generation, proto decoding  |
-| `@resvg/resvg-wasm` | SVG → PNG conversion in the Worker (WASM, no native modules)              |
+| Package             | Purpose                                                          |
+| ------------------- | ---------------------------------------------------------------- |
+| `@uoplan/calendar`  | Calendar layout, event conversion, and SVG rendering             |
+| `@uoplan/core`      | State decoding, data cache building, and schedule reconstruction |
+| `@uoplan/data`      | Loading `.pb` data assets in the Worker                          |
+| `@resvg/resvg-wasm` | SVG → PNG conversion in the Worker (WASM, no native modules)     |

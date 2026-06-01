@@ -14,7 +14,7 @@ import {
   getCourseLanguageBucket,
 } from "@uoplan/core";
 import { searchProfessorsScored, type ProfessorSearchEntry } from "../graph/professorGraphSearch";
-import { formatTermLabelPlain } from "../term/termLabel";
+import { formatTermLabelPlain } from "../term/termLabelPlain";
 import { getCourseLevel, type ExploreFilterLevel } from "./exploreFilters";
 
 /** Max section rows returned when searching all offerings (legacy / tests). */
