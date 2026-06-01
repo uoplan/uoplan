@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
+import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 import { defaultAppStore } from "../appStore";
 
 const generateSchedulesActionMock = vi.fn();
@@ -69,5 +70,25 @@ describe("generationOptionsDirty", () => {
 
     expect(defaultAppStore.getState().generationOptionsDirty).toBe(false);
     expect(generateSchedulesActionMock).toHaveBeenCalled();
+  });
+
+  it("randomizeSeed resets the seed ladder so Previous is disabled", async () => {
+    // Simulate having navigated forward a few variants before changing options.
+    defaultAppStore.setState({
+      ...defaultAppStore.getState(),
+      currentSeed: firstSeed + 3,
+      lowestVisitedSeed: firstSeed,
+      generationOptionsDirty: true,
+    });
+    expect(canGoToPreviousSeed(firstSeed + 3, defaultAppStore.getState().lowestVisitedSeed)).toBe(
+      true,
+    );
+
+    await defaultAppStore.getState().randomizeSeed();
+
+    const state = defaultAppStore.getState();
+    expect(state.lowestVisitedSeed).toBe(state.currentSeed);
+    expect(canGoToPreviousSeed(state.currentSeed, state.lowestVisitedSeed)).toBe(false);
+    expect(state.generationOptionsDirty).toBe(false);
   });
 });

@@ -179,6 +179,12 @@ export function CalendarPage() {
 
   const handleNext = async () => {
     if (scheduleGenerating || !canUseSeedNavigation) return;
+    if (generationOptionsDirty) {
+      // Regenerate from a fresh random seed so the previous-variant ladder resets
+      // (Previous becomes unavailable) instead of advancing the existing seed.
+      await randomizeSeed();
+      return;
+    }
     await goToNextSeed();
   };
 
