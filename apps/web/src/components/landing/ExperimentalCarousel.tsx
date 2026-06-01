@@ -24,7 +24,9 @@ export function ExperimentalCarousel({ items }: ExperimentalCarouselProps) {
   const count = items.length;
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [progress, setProgress] = useState(0);
   const pointerStartX = useRef<number | null>(null);
+  const elapsedRef = useRef(0);
 
   const goTo = useCallback(
     (next: number) => {
@@ -34,8 +36,39 @@ export function ExperimentalCarousel({ items }: ExperimentalCarouselProps) {
     [count],
   );
 
+  // Reset the slide timer whenever the active slide changes (auto or manual).
+  useEffect(() => {
+    elapsedRef.current = 0;
+    setProgress(0);
+  }, [index]);
+
+  // Animated progress driver. Accumulates time while not paused and advances
+  // (resetting progress) when the bar fills. Pausing freezes progress in place.
   useEffect(() => {
     if (prefersReducedMotion || paused || count <= 1) return;
+    let raf = 0;
+    let last: number | null = null;
+    const tick = (ts: number) => {
+      if (last === null) last = ts;
+      elapsedRef.current += ts - last;
+      last = ts;
+      const next = Math.min(elapsedRef.current / ADVANCE_MS, 1);
+      if (next >= 1) {
+        elapsedRef.current = 0;
+        setProgress(0);
+        setIndex((current) => (current + 1) % count);
+        return;
+      }
+      setProgress(next);
+      raf = window.requestAnimationFrame(tick);
+    };
+    raf = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(raf);
+  }, [prefersReducedMotion, paused, count]);
+
+  // Under reduced motion, advance on a plain interval with no animated fill.
+  useEffect(() => {
+    if (!prefersReducedMotion || paused || count <= 1) return;
     const id = window.setInterval(() => {
       setIndex((current) => (current + 1) % count);
     }, ADVANCE_MS);
@@ -117,6 +150,7 @@ export function ExperimentalCarousel({ items }: ExperimentalCarouselProps) {
       >
         {items.map((item, i) => {
           const isActive = i === index;
+          const fill = prefersReducedMotion ? 1 : progress;
           return (
             <button
               key={item.to}
@@ -126,18 +160,33 @@ export function ExperimentalCarousel({ items }: ExperimentalCarouselProps) {
               aria-label={tr("landing.carousel.goTo", { title: item.title })}
               onClick={() => goTo(i)}
               style={{
+                position: "relative",
+                overflow: "hidden",
                 width: isActive ? 22 : 8,
                 height: 8,
                 padding: 0,
                 border: "none",
                 borderRadius: "var(--app-radius-pill)",
                 cursor: "pointer",
-                backgroundColor: isActive ? "var(--app-text)" : "var(--app-border)",
+                backgroundColor: "var(--app-border)",
                 opacity: isActive ? 0.85 : 0.6,
                 transition:
                   "width var(--app-transition), background-color var(--app-transition), opacity var(--app-transition)",
               }}
-            />
+            >
+              {isActive && (
+                <span
+                  aria-hidden
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    transformOrigin: "left center",
+                    transform: `scaleX(${fill})`,
+                    backgroundColor: "var(--app-text)",
+                  }}
+                />
+              )}
+            </button>
           );
         })}
       </Box>
