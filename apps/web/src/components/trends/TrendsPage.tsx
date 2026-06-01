@@ -1,4 +1,3 @@
-import { useLingui } from "@lingui/react";
 import { i18n } from "@lingui/core";
 import {
   Alert,
@@ -27,7 +26,7 @@ import {
   type TrendPoint,
   type TermSeason,
 } from "@uoplan/core";
-import { formatLocaleNumber, tr } from "../../i18n";
+import { useTr, formatLocaleNumber, tr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useAppStore } from "../../store/appStore";
 import { BackButton } from "../shared/BackButton";
@@ -89,7 +88,7 @@ function pointMetric(point: TrendPoint, metric: MetricId): number | null {
 }
 
 export function TrendsPage({ search, onChange }: TrendsPageProps) {
-  useLingui();
+  useTr();
   const { data: grades, error: gradesError } = useCourseGradesPb();
   const disciplines = useAppStore(useShallow((s) => s.disciplines));
   const catalogue = useAppStore((s) => s.catalogue);

@@ -1,9 +1,8 @@
 import { useEffect, useMemo } from "react";
-import { useLingui } from "@lingui/react";
 import { Alert } from "@mantine/core";
 import { buildEffectiveRemainingRequirements, normalizeCourseCode } from "@uoplan/core";
 import { useAppStore } from "../../store/appStore";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import { computeFirstYearCredits } from "../../lib/generation/advancedGenerationDerivations";
 import { AdvancedGenerationOptionsView } from "./AdvancedGenerationOptionsView";
 import { DesiredCourseWarnings } from "./generationOptions/DesiredCourseWarnings";
@@ -12,7 +11,7 @@ import { avoidedDaysFromBlocks } from "../../lib/blockedTimes";
 import { createCourseOptionsFilter, renderCourseOption } from "../shared/CourseSelect";
 
 export function AdvancedGenerationOptions() {
-  useLingui();
+  useTr();
   const cache = useAppStore((s) => s.cache);
   const remainingRequirements = useAppStore((s) => s.remainingRequirements);
   const requirementTreeWithStatus = useAppStore((s) => s.requirementTreeWithStatus);

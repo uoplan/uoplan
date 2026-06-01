@@ -1,10 +1,9 @@
 import { Accordion, Box, Group, Stack, Text, Title } from "@mantine/core";
-import { useLingui } from "@lingui/react";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import type { ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeProfessorName } from "@uoplan/core";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import { groupOfferingsByCourse } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
 import {
@@ -31,7 +30,7 @@ export function ExploreProfessorPage({
 ) & {
   professorRatings: ProfessorRatingsMap | null;
 }) {
-  useLingui();
+  useTr();
   const { offerings: allOfferings } = useExploreOfferings();
 
   const professorOfferings = useMemo(() => {

@@ -1,16 +1,15 @@
-import { useLingui } from "@lingui/react";
 import { Box, SimpleGrid, Stack, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconAffiliate, IconCalendar, IconChartHistogram, IconCompass } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { useCallback, useState } from "react";
-import { dynamicActivate, tr, type AppLocale } from "../../i18n";
+import { useTr, dynamicActivate, tr, type AppLocale } from "../../i18n";
 import { ChromeControls } from "../shared/ChromeControls";
 import { ExperimentalCarousel } from "./ExperimentalCarousel";
 import { LandingTile } from "./LandingTile";
 
 export function LandingPage() {
-  useLingui();
+  useTr();
 
   const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const [isLangTransitioning, setIsLangTransitioning] = useState(false);

@@ -1,9 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Box, Stack, Text } from "@mantine/core";
-import { useLingui } from "@lingui/react";
 import type { GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeProfessorName } from "@uoplan/core";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import type { ExploreProfessorSearchEntry } from "../../lib/explore/gradesSearch";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
@@ -37,7 +36,7 @@ export function SearchResultProfessorCard({
   query?: string;
   searchParams: ExploreSearchParams;
 }) {
-  useLingui();
+  useTr();
   const { gradeViz } = entry;
   const grade = gradeViz ? mostCommonGrade(gradeViz) : null;
   const passing = gradeViz ? Math.round(gradeViz.passingPercent) : null;

@@ -11,9 +11,7 @@
     "test": "vitest run --project unit",
     "test:watch": "vitest --project unit",
     "test:browser": "vitest run --project browser",
-    "test:e2e": "playwright test",
-    "i18n:extract": "lingui extract",
-    "i18n:compile": "lingui compile"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@fontsource/dm-mono": "^5.2.7",

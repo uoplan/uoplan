@@ -1,5 +1,4 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useLingui } from "@lingui/react";
 import { useEffect, useMemo, useState } from "react";
 import {
   buildCourseSpotlightIndex,
@@ -13,6 +12,7 @@ import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { ExploreCourseSpotlightGallery } from "./ExploreCourseSpotlightGallery";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
+import { useTr } from "../../i18n";
 
 /** Defer the (synchronous, corpus-wide) spotlight build until after first paint. */
 function useDeferredAfterPaint(): boolean {
@@ -39,7 +39,7 @@ function useDeferredAfterPaint(): boolean {
 }
 
 export function ExploreSearchPage({ searchParams }: { searchParams: ExploreSearchParams }) {
-  useLingui();
+  useTr();
   const { loading, offeringsByCourseNorm, getCourseEntryByNorm } = useExploreOfferings();
   const navigate = useNavigate();
   const [spotlightVariants] = useState(() => pickSpotlightVariants(3));

@@ -1,6 +1,5 @@
 import { Box, Checkbox, Group, Radio, SegmentedControl, Stack, Text } from "@mantine/core";
-import { useLingui } from "@lingui/react";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import type {
   ExploreFilterDifficulty,
   ExploreFilterLevel,
@@ -89,7 +88,7 @@ export function ExploreFilterPopoverContent({
   filters: ExploreFilterState;
   onChange: (next: Partial<ExploreFilterState>) => void;
 }) {
-  useLingui();
+  useTr();
 
   if (filterKey === "level") {
     return (

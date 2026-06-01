@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Box, Group } from "@mantine/core";
 import { useClickOutside } from "@mantine/hooks";
-import { useLingui } from "@lingui/react";
 import { IconSettings } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { tr, type AppLocale } from "../../i18n";
+import { useTr, tr, type AppLocale } from "../../i18n";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { applyPillHover, pillButtonStyle, pillIconStyle, resetPillHover } from "./pillButtonStyle";
@@ -20,7 +19,7 @@ interface ChromeControlsProps {
  * it so they never crowd the page content.
  */
 export function ChromeControls({ onLangSwitch }: ChromeControlsProps) {
-  useLingui();
+  useTr();
   const [opened, setOpened] = useState(false);
   const containerRef = useClickOutside(() => setOpened(false));
 

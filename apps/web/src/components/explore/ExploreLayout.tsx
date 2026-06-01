@@ -1,12 +1,11 @@
 import { Link, useNavigate, useRouterState, useSearch } from "@tanstack/react-router";
 import { Anchor, Box, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { useLingui } from "@lingui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Catalogue } from "@uoplan/core";
 
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import {
   searchExplore,
   type ExploreCourseSearchEntry,
@@ -137,7 +136,7 @@ type ExploreLayoutProps = {
 const EXPLORE_INDEX_ROUTE_ID = "/explore/";
 
 export function ExploreLayout({ children }: ExploreLayoutProps) {
-  useLingui();
+  useTr();
   const { loading, getCourseEntries, getProfessorEntries, getCourseFuse } = useExploreOfferings();
   const navigate = useNavigate();
   const { catalogue, professorRatings, disciplines } = useAppStore(

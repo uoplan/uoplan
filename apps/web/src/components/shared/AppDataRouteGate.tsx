@@ -1,14 +1,13 @@
 import { Alert, Box } from "@mantine/core";
-import { useLingui } from "@lingui/react";
 import type { ReactNode } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import { useAppStore } from "../../store/appStore";
 import { AppDataLoader } from "./AppDataLoader";
 import { AppCard } from "./AppCard";
 
 export function AppDataRouteGate({ children }: { children: ReactNode }) {
-  useLingui();
+  useTr();
 
   const { loadProgress, error, hasBooted } = useAppStore(
     useShallow((s) => ({

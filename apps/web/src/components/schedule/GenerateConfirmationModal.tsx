@@ -1,7 +1,6 @@
 import { Button, List, Modal, Stack, Text } from "@mantine/core";
-import { useLingui } from "@lingui/react";
 import type { GenerateBlocker } from "../../lib/scheduleDashboard";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 
 type GenerateConfirmationModalProps = {
   opened: boolean;
@@ -16,7 +15,7 @@ export function GenerateConfirmationModal({
   onCancel,
   onGenerateAnyway,
 }: GenerateConfirmationModalProps) {
-  useLingui();
+  useTr();
 
   return (
     <Modal

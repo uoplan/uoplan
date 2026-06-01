@@ -1,15 +1,14 @@
-import { useLingui } from "@lingui/react";
 import { Anchor, Box, Group, Kbd, Stack, Text, UnstyledButton } from "@mantine/core";
 import { useMediaQuery, useOs } from "@mantine/hooks";
 import { Link, useLocation } from "@tanstack/react-router";
 import { spotlight } from "@mantine/spotlight";
-import { tr } from "../../i18n";
+import { useTr, tr } from "../../i18n";
 import { labelForPath } from "../../lib/navigation/backState";
 
 const ONTARIO_FIPPA_ACT_URL = "https://www.ontario.ca/laws/statute/90f31";
 
 export function AppFooter() {
-  useLingui();
+  useTr();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
   const pathname = useLocation({ select: (s) => s.pathname });
