@@ -1,6 +1,7 @@
 import Fuse from "fuse.js";
 import type { IFuseOptions } from "fuse.js";
 import type {
+  Catalogue,
   CourseGradesData,
   GradeVizData,
   ProfessorRatingsMap,
@@ -44,6 +45,8 @@ export type ExploreCourseSearchEntry = {
   level: ExploreFilterLevel | null;
   language: "en" | "fr" | null;
   maxProfessorRating: number | null;
+  /** Identifier of the alias group this course belongs to (its own normCode when standalone). */
+  componentId: string;
 };
 
 /** One row per distinct professor — search index for explore. */
@@ -191,10 +194,122 @@ export function countDistinctProfessors(offerings: ExploreOfferingFlat[]): numbe
   return ids.size;
 }
 
+/** Connected-component grouping of course codes linked by catalogue aliases. */
+export type AliasGroups = {
+  /** Maps each member's normalized code to its component id. Standalone courses are absent. */
+  componentByNorm: Map<string, string>;
+  /** Maps a component id to its sorted member normalized codes (size >= 2). */
+  membersByComponent: Map<string, string[]>;
+};
+
+/**
+ * Build connected components over the undirected alias graph. Each course is linked to
+ * every code in its `aliases` list; the transitive closure forms a component that is
+ * treated as one course. The component id is the lexicographically smallest member code
+ * (deterministic). Courses with no alias relation are omitted (callers treat a missing
+ * lookup as a standalone component keyed by the code itself).
+ */
+export function buildAliasGroups(catalogue: Catalogue | null): AliasGroups {
+  const parent = new Map<string, string>();
+  const add = (x: string) => {
+    if (!parent.has(x)) parent.set(x, x);
+  };
+  const find = (x: string): string => {
+    let root = x;
+    while (parent.get(root) !== root) root = parent.get(root) as string;
+    let cur = x;
+    while (parent.get(cur) !== root) {
+      const next = parent.get(cur) as string;
+      parent.set(cur, root);
+      cur = next;
+    }
+    return root;
+  };
+  const union = (a: string, b: string) => {
+    add(a);
+    add(b);
+    const ra = find(a);
+    const rb = find(b);
+    if (ra !== rb) parent.set(rb, ra);
+  };
+
+  if (catalogue) {
+    for (const c of catalogue.courses) {
+      const own = normalizeCourseCode(c.code);
+      add(own);
+      for (const a of c.aliases ?? []) {
+        const aliasNorm = normalizeCourseCode(a);
+        if (aliasNorm && aliasNorm !== own) union(own, aliasNorm);
+      }
+    }
+  }
+
+  const membersByRoot = new Map<string, string[]>();
+  for (const node of parent.keys()) {
+    const root = find(node);
+    let list = membersByRoot.get(root);
+    if (!list) {
+      list = [];
+      membersByRoot.set(root, list);
+    }
+    list.push(node);
+  }
+
+  const componentByNorm = new Map<string, string>();
+  const membersByComponent = new Map<string, string[]>();
+  for (const members of membersByRoot.values()) {
+    if (members.length < 2) continue;
+    members.sort((a, b) => a.localeCompare(b, "en"));
+    const id = members[0];
+    membersByComponent.set(id, members);
+    for (const m of members) componentByNorm.set(m, id);
+  }
+  return { componentByNorm, membersByComponent };
+}
+
+/** Resolve a normalized code to its alias-component id (the code itself when standalone). */
+export function resolveComponentId(norm: string, componentByNorm: Map<string, string>): string {
+  return componentByNorm.get(norm) ?? norm;
+}
+
+/** Bucket offerings by alias-component id so an alias group shares one merged offering list. */
+export function buildOfferingsByComponent(
+  offerings: ExploreOfferingFlat[],
+  componentByNorm: Map<string, string>,
+): Map<string, ExploreOfferingFlat[]> {
+  const byComponent = new Map<string, ExploreOfferingFlat[]>();
+  for (const o of offerings) {
+    const comp = resolveComponentId(normalizeCourseCode(o.courseCode), componentByNorm);
+    let list = byComponent.get(comp);
+    if (!list) {
+      list = [];
+      byComponent.set(comp, list);
+    }
+    list.push(o);
+  }
+  return byComponent;
+}
+
+/** Keep one entry per alias component, preserving input order (caller controls ranking). */
+export function dedupeCourseEntriesByComponent(
+  entries: ExploreCourseSearchEntry[],
+): ExploreCourseSearchEntry[] {
+  const seen = new Set<string>();
+  const out: ExploreCourseSearchEntry[] = [];
+  for (const e of entries) {
+    if (seen.has(e.componentId)) continue;
+    seen.add(e.componentId);
+    out.push(e);
+  }
+  return out;
+}
+
 export function buildCourseSearchEntries(
   offerings: ExploreOfferingFlat[],
   titleByCode?: Map<string, string> | null,
   professorRatings?: ProfessorRatingsMap | null,
+  componentByNorm?: Map<string, string> | null,
+  membersByComponent?: Map<string, string[]> | null,
 ): ExploreCourseSearchEntry[] {
   type Acc = {
     courseCode: string;
@@ -220,30 +335,86 @@ export function buildCourseSearchEntries(
       });
     }
   }
-  return [...byNorm.entries()].map(([norm, { courseCode, courseTitle, dists, professorNames }]) => {
-    let maxProfessorRating: number | null = null;
-    if (professorRatings) {
-      for (const name of professorNames) {
-        const entry = professorRatings[normalizeProfessorName(name)];
-        if (entry && Number.isFinite(entry.rating)) {
-          if (maxProfessorRating === null || entry.rating > maxProfessorRating) {
-            maxProfessorRating = entry.rating;
-          }
-        }
+
+  const componentIdFor = (norm: string) =>
+    componentByNorm ? resolveComponentId(norm, componentByNorm) : norm;
+
+  // Merge grade distributions and professor names across each component's member codes so
+  // every member entry exposes the same combined stats ("as if the same course").
+  const compDists = new Map<string, Record<string, number>[]>();
+  const compProfessorNames = new Map<string, string[]>();
+  for (const [norm, acc] of byNorm) {
+    const id = componentIdFor(norm);
+    let dists = compDists.get(id);
+    if (!dists) {
+      dists = [];
+      compDists.set(id, dists);
+    }
+    for (const d of acc.dists) dists.push(d);
+    let names = compProfessorNames.get(id);
+    if (!names) {
+      names = [];
+      compProfessorNames.set(id, names);
+    }
+    for (const n of acc.professorNames) names.push(n);
+  }
+
+  const mergedRatingFor = (id: string): number | null => {
+    if (!professorRatings) return null;
+    let max: number | null = null;
+    for (const name of compProfessorNames.get(id) ?? []) {
+      const entry = professorRatings[normalizeProfessorName(name)];
+      if (entry && Number.isFinite(entry.rating)) {
+        if (max === null || entry.rating > max) max = entry.rating;
       }
     }
+    return max;
+  };
+  const mergedVizFor = (id: string): GradeVizData | null =>
+    normalizeGradeVizDistribution(mergeGradeDistributionCounts(compDists.get(id) ?? []));
+
+  const makeEntry = (
+    norm: string,
+    courseCode: string,
+    courseTitle: string,
+  ): ExploreCourseSearchEntry => {
+    const id = componentIdFor(norm);
     const langBucket = getCourseLanguageBucket(courseCode);
     return {
       normCode: norm,
       courseCode,
       courseTitle,
       fuseText: [courseCode, norm, courseTitle].filter(Boolean).join(" ").toLowerCase(),
-      gradeViz: normalizeGradeVizDistribution(mergeGradeDistributionCounts(dists)),
+      gradeViz: mergedVizFor(id),
       level: getCourseLevel(courseCode),
       language: langBucket === "en" || langBucket === "fr" ? langBucket : null,
-      maxProfessorRating,
+      maxProfessorRating: mergedRatingFor(id),
+      componentId: id,
     };
-  });
+  };
+
+  const entries: ExploreCourseSearchEntry[] = [];
+  const emitted = new Set<string>();
+  for (const [norm, acc] of byNorm) {
+    entries.push(makeEntry(norm, acc.courseCode, acc.courseTitle));
+    emitted.add(norm);
+  }
+
+  // Synthesize searchable entries for alias members that have no offerings of their own,
+  // so searching an older code still surfaces the merged course.
+  if (membersByComponent) {
+    for (const [id, members] of membersByComponent) {
+      if (!compDists.has(id)) continue;
+      for (const m of members) {
+        if (emitted.has(m)) continue;
+        const title = titleByCode?.get(m)?.trim() ?? "";
+        entries.push(makeEntry(m, m, title));
+        emitted.add(m);
+      }
+    }
+  }
+
+  return entries;
 }
 
 export function createExploreCourseFuse(entries: ExploreCourseSearchEntry[]) {
@@ -351,10 +522,20 @@ function searchExploreCoursesScored(
   const pool = narrowCoursesBySubstring(entries, q);
   const engine = pool.length > 0 ? new Fuse(pool, EXPLORE_COURSE_FUSE_OPTIONS) : fuse;
 
-  const results = engine.search(q).slice(0, EXPLORE_MAX_COURSE_RESULTS);
+  // Dedupe in score order so each alias group surfaces once via its closest-matched
+  // (i.e. the user-requested) member code, then cap the result count.
+  const rawResults = engine.search(q);
+  const seen = new Set<string>();
+  const deduped: typeof rawResults = [];
+  for (const r of rawResults) {
+    if (seen.has(r.item.componentId)) continue;
+    seen.add(r.item.componentId);
+    deduped.push(r);
+    if (deduped.length >= EXPLORE_MAX_COURSE_RESULTS) break;
+  }
   return {
-    items: results.map((r) => r.item),
-    topScore: results[0]?.score ?? null,
+    items: deduped.map((r) => r.item),
+    topScore: deduped[0]?.score ?? null,
   };
 }
 

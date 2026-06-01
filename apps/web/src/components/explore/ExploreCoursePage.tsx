@@ -1,17 +1,19 @@
 import { Accordion, Box, Stack, Text, Title } from "@mantine/core";
 import { useEffect, useMemo } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import type { ProfessorRatingsMap } from "@uoplan/core";
+import { normalizeCourseCode } from "@uoplan/core";
 import { useTr, tr } from "../../i18n";
 import {
   type ProfessorOfferingGroup,
   groupOfferingsByProfessor,
+  resolveComponentId,
 } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
 import type { BackState } from "../../lib/navigation/backState";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
-import { parseCoursePathParam } from "../../lib/explore/courseSearchParams";
+import { courseNormToPathParam, parseCoursePathParam } from "../../lib/explore/courseSearchParams";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
@@ -58,15 +60,21 @@ export function ExploreCoursePage({
   professorRatings: ProfessorRatingsMap | null;
 }) {
   useTr();
-  const { loading, offeringsByCourseNorm } = useExploreOfferings();
+  const { loading, offeringsByCourseNorm, offeringsByComponent, aliasGroups } =
+    useExploreOfferings();
   const navigate = useNavigate();
 
   const urlNorm = useMemo(() => parseCoursePathParam(urlCourseParam), [urlCourseParam]);
 
+  const componentId = useMemo(
+    () => (urlNorm === null ? null : resolveComponentId(urlNorm, aliasGroups.componentByNorm)),
+    [urlNorm, aliasGroups],
+  );
+
   const courseOfferings = useMemo(() => {
-    if (urlNorm === null) return [];
-    return offeringsByCourseNorm.get(urlNorm) ?? [];
-  }, [offeringsByCourseNorm, urlNorm]);
+    if (urlNorm === null || componentId === null) return [];
+    return offeringsByComponent.get(componentId) ?? offeringsByCourseNorm.get(urlNorm) ?? [];
+  }, [offeringsByComponent, offeringsByCourseNorm, componentId, urlNorm]);
 
   // Redirect to /explore if course has no offerings once data loads.
   useEffect(() => {
@@ -77,9 +85,21 @@ export function ExploreCoursePage({
 
   const selectedCourseMeta = useMemo(() => {
     if (loading || urlNorm == null || courseOfferings.length === 0) return null;
-    const first = courseOfferings[0];
-    return { courseCode: first.courseCode, courseTitle: first.courseTitle };
+    // Display the requested code (the one the user navigated to), even when the data is
+    // sourced from an aliased member code.
+    const requested = courseOfferings.find((o) => normalizeCourseCode(o.courseCode) === urlNorm);
+    const courseCode = requested?.courseCode ?? urlNorm;
+    const courseTitle = requested?.courseTitle ?? courseOfferings[0].courseTitle;
+    return { courseCode, courseTitle };
   }, [loading, urlNorm, courseOfferings]);
+
+  // Other codes in the same alias group that actually have data, for the "also known as" note.
+  const aliasCodes = useMemo(() => {
+    if (urlNorm == null || componentId == null) return [];
+    const members = aliasGroups.membersByComponent.get(componentId);
+    if (!members) return [];
+    return members.filter((m) => m !== urlNorm && offeringsByCourseNorm.has(m));
+  }, [urlNorm, componentId, aliasGroups, offeringsByCourseNorm]);
 
   const professorGroups = useMemo(
     () => groupOfferingsByProfessor(courseOfferings),
@@ -117,6 +137,29 @@ export function ExploreCoursePage({
             {selectedCourseMeta.courseTitle ? (
               <Text size="sm" c="dimmed" lh={1.5} mt={8}>
                 {selectedCourseMeta.courseTitle}
+              </Text>
+            ) : null}
+            {aliasCodes.length > 0 ? (
+              <Text size="sm" c="dimmed" lh={1.5} mt={8}>
+                {tr("explore.alsoKnownAs")}{" "}
+                {aliasCodes.map((code, i) => (
+                  <span key={code}>
+                    {i > 0 ? ", " : null}
+                    <Link
+                      to="/explore/course/$course"
+                      params={{ course: courseNormToPathParam(code) }}
+                      search={EMPTY_EXPLORE_SEARCH}
+                      state={{ back: courseEntry } as never}
+                      style={{
+                        color: "var(--app-text)",
+                        fontWeight: 500,
+                        textDecoration: "none",
+                      }}
+                    >
+                      {code}
+                    </Link>
+                  </span>
+                ))}
               </Text>
             ) : null}
           </Box>

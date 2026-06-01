@@ -540,6 +540,10 @@ msgstr "2. S'inscrire"
 msgid "enrolCli.modal.title"
 msgstr "Inscrire via CLI"
 
+#: apps/web/src/components/explore/ExploreCoursePage.tsx:147
+msgid "explore.alsoKnownAs"
+msgstr "Aussi connu sous le nom de :"
+
 msgid "explore.backToSearch"
 msgstr "Résultats pour \"{q}\""
 

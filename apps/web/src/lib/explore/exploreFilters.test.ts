@@ -35,6 +35,7 @@ function makeCourseEntry(partial: Partial<ExploreCourseSearchEntry>): ExploreCou
     level: partial.level ?? 1000,
     language: partial.language ?? "en",
     maxProfessorRating: partial.maxProfessorRating ?? null,
+    componentId: partial.componentId ?? partial.normCode ?? "csi1100",
   };
 }
 
