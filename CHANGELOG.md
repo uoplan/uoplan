@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.0.0-beta.27](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.26...uoplan-monorepo-v1.0.0-beta.27) (2026-06-01)
+
+
+### Features
+
+* add shortcuts ([5c73e14](https://github.com/uoplan/uoplan/commit/5c73e14d3bc68c1451449f0ada3025ece1db226e))
+* filter course table by program in trends page ([347527a](https://github.com/uoplan/uoplan/commit/347527a81d9067ad648c6359dd50fd33630d5f92))
+* improve ux for calendar ([58ee2d4](https://github.com/uoplan/uoplan/commit/58ee2d4fbe6988d5347d82fdac67f67a561b527e))
+* reduce lag when resizing calendar sidebar ([a1d258f](https://github.com/uoplan/uoplan/commit/a1d258fb7288375b8c4d5010ea28d67424333c95))
+* reduce nesting for requirements ([980677f](https://github.com/uoplan/uoplan/commit/980677fd41d0408cea10de38a829a23bc2047e97))
+* reorder calendar sidebar ([4ff41e0](https://github.com/uoplan/uoplan/commit/4ff41e02c8375078882e07f942de4aed05c14dd3))
+* unify blocked time slot options ([e7d46f2](https://github.com/uoplan/uoplan/commit/e7d46f27661205b2da2e004d9cec07a52ab4f22c))
+
+
+### Bug Fixes
+
+* correctly parse options ([f567435](https://github.com/uoplan/uoplan/commit/f567435061cc35f15b9b269d7a524bacabb6fbd7))
+* filter out staff from explore page ([82adbb2](https://github.com/uoplan/uoplan/commit/82adbb2ca0301534d14cd8346140615f21e172ff))
+* **i18n:** restore translation catalogs and replace broken lingui extract ([3565e49](https://github.com/uoplan/uoplan/commit/3565e4927d7d6fff7e75fb9962ab6b7d054481ab))
+* make ux more consistent ([c1c57c2](https://github.com/uoplan/uoplan/commit/c1c57c2b572bd404400a1d60d9d29117958d1087))
+* remove extra gap in calendar on mobile ([d5bbf78](https://github.com/uoplan/uoplan/commit/d5bbf78af4668a20653cb4b79cf3da449f33630a))
+* use proper corners for calendar preview ([fa49d01](https://github.com/uoplan/uoplan/commit/fa49d0198a9953c9b88e0dcc7c574cfe728b8688))
+* wait for loading before redirecting on explore page ([8a94f65](https://github.com/uoplan/uoplan/commit/8a94f6584aa2a6ce0bf5cdcd47f52eeccbd556d0))
+
 ## [1.0.0-beta.26](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.25...uoplan-monorepo-v1.0.0-beta.26) (2026-05-31)
 
 
