@@ -1,7 +1,7 @@
 {
   "termId": "2269",
   "totalCourses": 11145,
-  "totalWithSchedules": 3159,
+  "totalWithSchedules": 3173,
   "schedules": [
     {
       "subject": "ADM",
@@ -2441,7 +2441,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 164,
               "A": 306,
@@ -2519,7 +2519,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 164,
               "A": 306,
@@ -6599,7 +6599,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 168,
               "A": 567,
@@ -6677,7 +6677,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 168,
               "A": 567,
@@ -6833,7 +6833,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 168,
               "A": 567,
@@ -6989,7 +6989,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 168,
               "A": 567,
@@ -9049,7 +9049,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 176,
               "A": 333,
@@ -12108,6 +12108,59 @@
     },
     {
       "subject": "ADM",
+      "catalogNumber": "3395",
+      "courseCode": "ADM 3395",
+      "title": "Telfer Innovation Sprint II",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 960,
+                "endMinutes": 1080,
+                "virtual": false,
+                "instructor": "Emma Segal",
+                "meetingDates": [
+                  "2026-11-20",
+                  "2026-11-20"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 540,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Emma Segal",
+                "meetingDates": [
+                  "2026-11-21",
+                  "2026-11-21"
+                ]
+              },
+              {
+                "day": "Su",
+                "startMinutes": 540,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Emma Segal",
+                "meetingDates": [
+                  "2026-11-22",
+                  "2026-11-22"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ADM",
       "catalogNumber": "3396",
       "courseCode": "ADM 3396",
       "title": "Seminar in Administration",
@@ -13867,6 +13920,59 @@
     },
     {
       "subject": "ADM",
+      "catalogNumber": "3795",
+      "courseCode": "ADM 3795",
+      "title": "Sprint d'innovation de Telfer II",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 960,
+                "endMinutes": 1080,
+                "virtual": false,
+                "instructor": "Emma Segal",
+                "meetingDates": [
+                  "2026-11-20",
+                  "2026-11-20"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 540,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Emma Segal",
+                "meetingDates": [
+                  "2026-11-21",
+                  "2026-11-21"
+                ]
+              },
+              {
+                "day": "Su",
+                "startMinutes": 540,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Emma Segal",
+                "meetingDates": [
+                  "2026-11-22",
+                  "2026-11-22"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ADM",
       "catalogNumber": "3994",
       "courseCode": "ADM 3994",
       "title": "Preparation and Participation to Business Cases I",
@@ -14172,7 +14278,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 153,
               "A": 531,
@@ -15083,7 +15189,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 107,
               "A": 107,
@@ -16329,7 +16435,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Milena Parent",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -22123,7 +22229,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "A05-LAB FullSess.",
@@ -22183,7 +22289,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "A08-LAB FullSess.",
@@ -22939,7 +23045,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "A05-LAB FullSess.",
@@ -22979,7 +23085,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -24854,7 +24960,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 8,
               "A": 14,
@@ -25323,7 +25429,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 28,
               "A": 55,
@@ -25362,7 +25468,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 28,
               "A": 55,
@@ -26080,7 +26186,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 20,
               "A": 18,
@@ -26119,7 +26225,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 20,
               "A": 18,
@@ -29009,7 +29115,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Philip Micheal Rourke",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -29337,7 +29443,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mathieu Landriault",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -31459,7 +31565,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 6,
               "A": 46,
@@ -31509,7 +31615,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1,
               "A": 25,
@@ -31659,7 +31765,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 31,
               "A": 19,
@@ -32885,7 +32991,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 39,
               "A": 22,
@@ -32995,7 +33101,7 @@
                 "startMinutes": 690,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -33034,7 +33140,7 @@
                 "startMinutes": 690,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -33073,7 +33179,7 @@
                 "startMinutes": 690,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -33225,7 +33331,7 @@
                 "startMinutes": 690,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -33264,7 +33370,7 @@
                 "startMinutes": 690,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -40421,7 +40527,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 35,
               "A": 22,
@@ -41640,7 +41746,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 103,
               "A": 126,
@@ -41759,7 +41865,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 103,
               "A": 126,
@@ -49232,7 +49338,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1356,
               "A": 1134,
@@ -50934,7 +51040,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 16,
               "A": 19,
@@ -57659,7 +57765,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 13,
               "A": 15,
@@ -70650,7 +70756,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 41,
               "A": 62,
@@ -75529,7 +75635,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 76,
               "A": 167,
@@ -75590,7 +75696,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 61,
               "A": 88,
@@ -75712,7 +75818,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 43,
               "A": 68,
@@ -76147,7 +76253,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 112,
               "A": 110,
@@ -76186,7 +76292,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 112,
               "A": 110,
@@ -76915,7 +77021,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 85,
               "A": 141,
@@ -79343,7 +79449,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 160,
               "A": 147,
@@ -81602,7 +81708,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 86,
               "A": 64,
@@ -82573,6 +82679,25 @@
     },
     {
       "subject": "CSI",
+      "catalogNumber": "5188",
+      "courseCode": "CSI 5188",
+      "title": "Trusted Computing and Emerging Attacks",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IF00-LEC FullSess.",
+            "sectionCode": "IF00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CSI",
       "catalogNumber": "5218",
       "courseCode": "CSI 5218",
       "title": "Uncertainty Evaluation in Engineering Measurements and Machine Learning (+1 combined)",
@@ -82682,6 +82807,25 @@
           {
             "section": "IC00-LEC FullSess.",
             "sectionCode": "IC00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CSI",
+      "catalogNumber": "5352",
+      "courseCode": "CSI 5352",
+      "title": "Internet Measurement and Security",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "I00-LEC FullSess.",
+            "sectionCode": "I00",
             "component": "LEC",
             "session": null,
             "times": [],
@@ -85145,7 +85289,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 63,
               "A": 39,
@@ -87716,6 +87860,82 @@
     },
     {
       "subject": "CVG",
+      "catalogNumber": "7109",
+      "courseCode": "CVG 7109",
+      "title": "Geotechnical Earthquake Engineering",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IF00-LEC FullSess.",
+            "sectionCode": "IF00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CVG",
+      "catalogNumber": "7110",
+      "courseCode": "CVG 7110",
+      "title": "Road Safety Analysis",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IF00-LEC FullSess.",
+            "sectionCode": "IF00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CVG",
+      "catalogNumber": "7111",
+      "courseCode": "CVG 7111",
+      "title": "Advanced Building Characterization, Conservation and Rehabilitation",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IF00-LEC FullSess.",
+            "sectionCode": "IF00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CVG",
+      "catalogNumber": "7120",
+      "courseCode": "CVG 7120",
+      "title": "Solid Mechanics",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IF00-LEC FullSess.",
+            "sectionCode": "IF00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CVG",
       "catalogNumber": "7122",
       "courseCode": "CVG 7122",
       "title": "Finite Element Analysis 1",
@@ -87783,9 +88003,47 @@
     },
     {
       "subject": "CVG",
+      "catalogNumber": "7153",
+      "courseCode": "CVG 7153",
+      "title": "Urban Transportation",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IF00-LEC FullSess.",
+            "sectionCode": "IF00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CVG",
       "catalogNumber": "7170",
       "courseCode": "CVG 7170",
       "title": "Fundamentals of Fire Safety Engineering",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IF00-LEC FullSess.",
+            "sectionCode": "IF00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CVG",
+      "catalogNumber": "7306",
+      "courseCode": "CVG 7306",
+      "title": "Topics in Geotechnique",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -105511,7 +105769,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 75,
               "A": 23,
@@ -111207,7 +111465,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 301,
               "A": 213,
@@ -111365,7 +111623,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 301,
               "A": 213,
@@ -113836,6 +114094,44 @@
     },
     {
       "subject": "ELG",
+      "catalogNumber": "6302",
+      "courseCode": "ELG 6302",
+      "title": "Renewable and Distributed Energy Resource Technologies",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IF00-LEC FullSess.",
+            "sectionCode": "IF00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ELG",
+      "catalogNumber": "6305",
+      "courseCode": "ELG 6305",
+      "title": "Electric Motor Drives",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IA00-LEC FullSess.",
+            "sectionCode": "IA00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ELG",
       "catalogNumber": "6312",
       "courseCode": "ELG 6312",
       "title": "Sensor Fusion for Autonomous Systems",
@@ -113943,6 +114239,25 @@
     },
     {
       "subject": "ELG",
+      "catalogNumber": "6344",
+      "courseCode": "ELG 6344",
+      "title": "Neural Networks for High-Speed /High Frequency Circuit Design",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IF00-LEC FullSess.",
+            "sectionCode": "IF00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ELG",
       "catalogNumber": "6353",
       "courseCode": "ELG 6353",
       "title": "Radio Frequency Integrated Circuit Design",
@@ -113952,6 +114267,25 @@
           {
             "section": "I00-LEC FullSess.",
             "sectionCode": "I00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ELG",
+      "catalogNumber": "6358",
+      "courseCode": "ELG 6358",
+      "title": "Advanced Methods for Simulation of Large-Scale Circuits and Systems",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IF00-LEC FullSess.",
+            "sectionCode": "IF00",
             "component": "LEC",
             "session": null,
             "times": [],
@@ -120309,7 +120643,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 276,
               "A": 722,
@@ -121927,7 +122261,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 46,
               "A": 9,
@@ -123829,8 +124163,8 @@
             "times": [
               {
                 "day": "Th",
-                "startMinutes": 510,
-                "endMinutes": 680,
+                "startMinutes": 600,
+                "endMinutes": 660,
                 "virtual": false,
                 "instructor": "Renate Margarete Sander-Regier",
                 "meetingDates": [
@@ -127114,7 +127448,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1265,
               "A": 565,
@@ -127309,7 +127643,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1265,
               "A": 565,
@@ -128143,18 +128477,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 600,
-                "endMinutes": 680,
-                "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Stephanie Ketha Meyer",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -128204,7 +128527,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Gabrielle Dorr",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -135103,7 +135426,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 34,
               "A": 34,
@@ -142493,7 +142816,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 595,
               "A": 405,
@@ -144087,7 +144410,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 149,
               "A": 156,
@@ -147895,7 +148218,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 43,
               "A": 33,
@@ -148450,7 +148773,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 4,
               "A": 10,
@@ -151005,7 +151328,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 187,
               "A": 151,
@@ -161946,7 +162269,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1015,
               "A": 425,
@@ -163201,7 +163524,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Patrick Boily",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -163212,7 +163535,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Patrick Boily",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -163721,7 +164044,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Patrick Boily",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -163760,7 +164083,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Patrick Boily",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -163799,7 +164122,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Patrick Boily",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -163838,7 +164161,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Patrick Boily",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -164570,7 +164893,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 494,
               "A": 241,
@@ -174399,7 +174722,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 58,
               "A": 70,
@@ -183996,7 +184319,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "D00-LAB FullSess.",
@@ -186127,7 +186450,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "AI00-LAB FullSess.",
@@ -188289,7 +188612,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 158,
               "A": 290,
@@ -188350,7 +188673,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 158,
               "A": 290,
@@ -188655,7 +188978,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 158,
               "A": 290,
@@ -188716,7 +189039,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 158,
               "A": 290,
@@ -188777,7 +189100,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 158,
               "A": 290,
@@ -189899,7 +190222,7 @@
             "times": [
               {
                 "day": "Tu",
-                "startMinutes": 60,
+                "startMinutes": 780,
                 "endMinutes": 1070,
                 "virtual": false,
                 "instructor": "Staff",
@@ -190733,7 +191056,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 114,
               "A": 134,
@@ -190794,7 +191117,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 114,
               "A": 134,
@@ -190855,7 +191178,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 114,
               "A": 134,
@@ -190916,7 +191239,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 114,
               "A": 134,
@@ -190977,7 +191300,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 114,
               "A": 134,
@@ -191221,7 +191544,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 114,
               "A": 134,
@@ -193600,7 +193923,7 @@
       "subject": "NSG",
       "catalogNumber": "5380",
       "courseCode": "NSG 5380",
-      "title": "Therapeutics in Primary Health Care I",
+      "title": "Therapeutics Interventions I",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -194089,7 +194412,7 @@
       "subject": "NSG",
       "catalogNumber": "5780",
       "courseCode": "NSG 5780",
-      "title": "Méthodes thérapeutiques en soins de santé primaires I",
+      "title": "Interventions thérapeutiques I",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -194894,7 +195217,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 18,
               "A": 22,
@@ -211582,7 +211905,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Josée Beaudry",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-11-20"
@@ -225430,7 +225753,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 264,
               "A": 107,
@@ -231053,7 +231376,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 70,
               "A": 162,
@@ -231547,7 +231870,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 114,
               "A": 111,
@@ -232535,7 +232858,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 11,
               "A": 28,
@@ -238921,7 +239244,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 389,
               "A": 201,
@@ -239601,7 +239924,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 311,
               "A": 296,
@@ -257330,7 +257653,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "D00-LAB FullSess.",
@@ -257454,7 +257777,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "D01-DGD FullSess.",
@@ -260214,7 +260537,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }

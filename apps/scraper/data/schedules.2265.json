@@ -12183,7 +12183,7 @@
             "component": "REC",
             "session": null,
             "times": [],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -21399,7 +21399,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 94,
               "A": 88,
@@ -49336,7 +49336,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 173,
               "A": 116,
