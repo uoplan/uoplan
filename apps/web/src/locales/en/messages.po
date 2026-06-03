@@ -337,6 +337,39 @@ msgstr "S/NS"
 msgid "calendar.grade.snsTooltip"
 msgstr "S/NS split: {s} S, {ns} NS"
 
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:101
+msgid "calendar.hover.dates"
+msgstr "Dates"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:176
+msgid "calendar.hover.hint"
+msgstr "Click to view details and swap options"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:116
+msgid "calendar.hover.instructor"
+msgstr "Instructor"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:154
+msgid "calendar.hover.ratingNone"
+msgstr "No rating"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:139
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:146
+msgid "calendar.hover.ratingValue"
+msgstr "{rating}/5 ({count} ratings)"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:84
+msgid "calendar.hover.section"
+msgstr "Section"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:179
+msgid "calendar.hover.viewDetails"
+msgstr "View details"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:92
+msgid "calendar.hover.when"
+msgstr "When"
+
 msgid "calendar.swap.alreadyAssigned"
 msgstr "Already assigned to a requirement in the wizard"
 
