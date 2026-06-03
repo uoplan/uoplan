@@ -162,8 +162,15 @@ export function WeekCalendarEvent({
       middlewares={{ flip: true, shift: true }}
     >
       <Popover.Target>{eventButton}</Popover.Target>
-      <Popover.Dropdown p="sm" style={{ width: 360, maxWidth: "min(360px, 92vw)" }}>
-        <div style={{ maxHeight: "min(70vh, 560px)", overflowY: "auto", margin: -4, padding: 4 }}>
+      <Popover.Dropdown p={0} style={{ width: 360, maxWidth: "min(360px, 92vw)" }}>
+        <div
+          style={{
+            maxHeight: "min(70vh, 560px)",
+            overflowY: "auto",
+            padding: "var(--mantine-spacing-sm)",
+            scrollbarGutter: "stable",
+          }}
+        >
           <CalendarEventDetails event={event} courseTitle={courseTitle} />
         </div>
       </Popover.Dropdown>
