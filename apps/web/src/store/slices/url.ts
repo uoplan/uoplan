@@ -41,6 +41,7 @@ function buildEncodeInput(s: AppStore): EncodeInput {
     selectedPerRequirement: s.selectedPerRequirement,
     selectedOptionsPerRequirement: s.selectedOptionsPerRequirement,
     constrainedPerRequirement: s.constrainedPerRequirement,
+    requirementPriorities: s.requirementPriorities,
     requirementTreeWithStatus: s.requirementTreeWithStatus,
     remainingRequirements: s.remainingRequirements,
     includeClosedComponents: s.includeClosedComponents,
@@ -154,6 +155,12 @@ export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, ge
         .map((id) => [id, true as const]),
     );
 
+    const requirementPriorities: Record<string, number> = {};
+    for (const { reqIndex, priority } of decoded.requirementPrioritySelections) {
+      const reqId = reqIndexToId.get(reqIndex);
+      if (reqId != null && priority > 0) requirementPriorities[reqId] = priority;
+    }
+
     const full = recomputeStateForProgram(
       program,
       minorProgram,
@@ -203,6 +210,7 @@ export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, ge
       blockedTimes: withBlockedIds(decoded.blockedTimes ?? []),
       generationError: null,
       constrainedPerRequirement,
+      requirementPriorities,
       ...(decoded.selectedTermId != null ? { selectedTermId: decoded.selectedTermId } : {}),
       ...(decoded.firstYear != null ? { firstYear: decoded.firstYear } : {}),
       requirementSlotsUserTouched,

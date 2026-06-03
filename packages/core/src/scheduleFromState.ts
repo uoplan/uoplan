@@ -2,6 +2,7 @@ import type { DataCache, DecodedState, GeneratedSchedule, GenerationConstraints 
 import {
   computeRequirementsState,
   requirementIdsFromTree,
+  gateRemainingByPriority,
   buildPrereqContext,
   canTakeCourse,
   getEffectiveSchedule,
@@ -148,6 +149,13 @@ export function generateScheduleFromDecodedState(
     if (reqId != null) selectedPerRequirement[reqId] = courseCodes;
   }
 
+  // Map requirement priorities to requirement IDs for the strict priority gate.
+  const requirementPriorities: Record<string, number> = {};
+  for (const { reqIndex, priority } of decoded.requirementPrioritySelections) {
+    const reqId = reqIndexToId.get(reqIndex);
+    if (reqId != null && priority > 0) requirementPriorities[reqId] = priority;
+  }
+
   // Build prereq-eligible courses
   const ctx = buildPrereqContext(decoded.completedCourseCodes, cache, decoded.studentPrograms);
   const candidateSet = new Set<string>();
@@ -165,7 +173,7 @@ export function generateScheduleFromDecodedState(
     constraints,
     completedCourses: decoded.completedCourseCodes,
     prereqEligibleCourses,
-    remainingRequirements: firstPass.remaining,
+    remainingRequirements: gateRemainingByPriority(firstPass.remaining, requirementPriorities),
     requirementTreeWithStatus: firstPass.tree,
     constrainedPerRequirementRaw,
     selectedPerRequirement,

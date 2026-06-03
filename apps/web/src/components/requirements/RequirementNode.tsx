@@ -1,4 +1,4 @@
-import { useState, useMemo, memo, type KeyboardEvent } from "react";
+import { useState, useMemo, memo, type KeyboardEvent, type ReactNode } from "react";
 import {
   Stack,
   MultiSelect,
@@ -86,6 +86,8 @@ interface RequirementNodeProps {
   virtualSectionsOnly: boolean;
   /** When true, restrict the dropdown to only courses in completedCourses (Assign step). */
   completedOnly?: boolean;
+  /** Optional element rendered on the right side of the card header (e.g. a priority control). */
+  headerAccessory?: ReactNode;
 }
 
 export const RequirementNode = memo(
@@ -108,6 +110,7 @@ export const RequirementNode = memo(
     includeClosedComponents,
     virtualSectionsOnly,
     completedOnly = false,
+    headerAccessory,
   }: RequirementNodeProps) {
     const { node, autoExpanded } = simplifySingleChildChain(rawNode);
 
@@ -472,11 +475,14 @@ export const RequirementNode = memo(
                 {groupLabel}
               </Text>
             </Group>
-            {node.complete && node.satisfiedOptionIndex != null && (
-              <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-                Complete
-              </Badge>
-            )}
+            <Stack gap={4} align="flex-end" style={BADGE_NO_SHRINK}>
+              {node.complete && node.satisfiedOptionIndex != null && (
+                <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
+                  Complete
+                </Badge>
+              )}
+              {headerAccessory}
+            </Stack>
           </Group>
           {orGroupShared}
         </Paper>
@@ -580,11 +586,14 @@ export const RequirementNode = memo(
                 {title}
               </Text>
             </Group>
-            {node.complete && (
-              <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-                Complete
-              </Badge>
-            )}
+            <Stack gap={4} align="flex-end" style={BADGE_NO_SHRINK}>
+              {node.complete && (
+                <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
+                  Complete
+                </Badge>
+              )}
+              {headerAccessory}
+            </Stack>
           </Group>
           {optionsGroupShared}
         </Paper>
@@ -664,11 +673,14 @@ export const RequirementNode = memo(
                   {title}
                 </Text>
               </Group>
-              {node.complete && (
-                <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-                  Complete
-                </Badge>
-              )}
+              <Stack gap={4} align="flex-end" style={BADGE_NO_SHRINK}>
+                {node.complete && (
+                  <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
+                    Complete
+                  </Badge>
+                )}
+                {headerAccessory}
+              </Stack>
             </Group>
           )}
           {andCollapse}
@@ -779,7 +791,10 @@ export const RequirementNode = memo(
                 </Text>
               </Tooltip>
             </Group>
-            {leafBadgeRow}
+            <Stack gap={4} align="flex-end" style={BADGE_NO_SHRINK}>
+              {leafBadgeRow}
+              {headerAccessory}
+            </Stack>
           </Group>
           {multiSelectBlock}
           {leafPickCollapse}

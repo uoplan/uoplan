@@ -105,6 +105,13 @@ export interface AppState {
   selectedOptionsPerRequirement: Record<string, number>;
   constrainedPerRequirement: Record<string, string[]>;
   /**
+   * User-assigned generation priority per requirement id (default `0`). The scheduler only offers
+   * courses from the lowest priority tier still outstanding, so a higher number defers a
+   * requirement until everything below it is satisfied. Set on a group, it is stamped onto every
+   * descendant pool. Absent keys mean priority `0`.
+   */
+  requirementPriorities: Record<string, number>;
+  /**
    * Courses written into `constrainedPerRequirement` automatically from the unified "courses you
    * want" list (advanced mode), tracked separately so they can be reconciled/removed without
    * clobbering the user's manual constraint picks.
@@ -192,6 +199,11 @@ export interface AppActions {
   removeCompletedCourse: (code: string) => void;
   setSelectedForRequirement: (requirementId: string, courses: string[]) => void;
   setConstrainedForRequirement: (requirementId: string, courses: string[]) => void;
+  /**
+   * Merge requirement-priority updates (requirementId → priority). A priority of `0` clears the
+   * entry. Used to stamp a group's chosen priority onto all of its descendant pools.
+   */
+  setRequirementPriorities: (updates: Record<string, number>) => void;
   /**
    * Reconcile auto-assigned desired courses into `constrainedPerRequirement`, preserving manual
    * picks. `assigned` is keyed by requirement id (the resolver output); previously auto-added

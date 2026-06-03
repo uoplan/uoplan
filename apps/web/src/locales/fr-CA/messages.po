@@ -516,6 +516,12 @@ msgstr "Retirer une fois"
 msgid "completedCourses.selectProgramFirst"
 msgstr "Sélectionnez d'abord un programme à l'étape 1."
 
+msgid "constrain.priority.help"
+msgstr "Priorité de planification pour cette exigence. Les nombres plus petits sont planifiés en premier : tout ce qui porte un nombre donné est satisfait avant tout ce qui porte un nombre plus élevé. Laissez à 0 pour planifier cette exigence en même temps que les autres."
+
+msgid "constrain.priority.label"
+msgstr "Priorité"
+
 msgid "constrainStep.courseFilters"
 msgstr "Filtres de cours"
 

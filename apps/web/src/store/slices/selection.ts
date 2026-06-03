@@ -50,6 +50,7 @@ interface SelectionSlice {
   removeCompletedCourse: AppStore["removeCompletedCourse"];
   setSelectedForRequirement: AppStore["setSelectedForRequirement"];
   setConstrainedForRequirement: AppStore["setConstrainedForRequirement"];
+  setRequirementPriorities: AppStore["setRequirementPriorities"];
   applyDesiredAutoAssignments: AppStore["applyDesiredAutoAssignments"];
   setSelectedOptionForRequirement: AppStore["setSelectedOptionForRequirement"];
   clearSelectedOptionForRequirement: AppStore["clearSelectedOptionForRequirement"];
@@ -453,6 +454,27 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
     }));
   },
 
+  setRequirementPriorities: (updates) => {
+    set((s) => {
+      const next: Record<string, number> = { ...s.requirementPriorities };
+      let changed = false;
+      for (const [reqId, priority] of Object.entries(updates)) {
+        const value = Math.max(0, Math.trunc(priority));
+        if (value <= 0) {
+          if (next[reqId] !== undefined) {
+            delete next[reqId];
+            changed = true;
+          }
+        } else if (next[reqId] !== value) {
+          next[reqId] = value;
+          changed = true;
+        }
+      }
+      if (!changed) return {};
+      return { requirementPriorities: next, generationOptionsDirty: true };
+    });
+  },
+
   applyDesiredAutoAssignments: (assigned) => {
     set((s) => {
       const prevAuto = s.autoConstrainedPerRequirement;
@@ -540,6 +562,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       virtualSectionsOnly: false,
       constrainedPerRequirement: {},
       autoConstrainedPerRequirement: {},
+      requirementPriorities: {},
       currentSchedule: null,
       currentPoolMap: {},
       currentColorMap: {},
