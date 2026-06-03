@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import type { DataCache, ProfessorRatingsMap, GradeVizData } from "@uoplan/core";
 import {
   courseAPlusPercent,
+  distributionGpa,
   getRatingsForInstructors,
   normalizeCourseCode,
   aggregateCourseDistribution,
@@ -24,6 +25,8 @@ type SwapCandidatesGetter = (enrollmentIndex: number) => {
 export interface SwapModalState {
   enrollmentIndex: number;
   courseCode: string;
+  /** Unique id of the clicked calendar block (anchors the desktop popover). */
+  eventId?: string;
   /** Set from the clicked calendar block when opening the swap modal. */
   virtual?: boolean;
   /** Component/section line for the clicked block (e.g. "LEC - A01"). */
@@ -52,6 +55,8 @@ export interface SwapCandidateOption {
   title: string | null;
   aPlusPercent: number | null;
   avgRating: number | null;
+  /** Mean course GPA (0–10) from aggregated grade distribution, for difficulty filtering. */
+  gpa: number | null;
   gradeViz: GradeVizData | null;
 }
 
@@ -104,9 +109,9 @@ export function useSwapModal(
       const title = (course?.title ?? "").trim() || null;
       const sched = cache?.getSchedule(norm);
       const aPlus = sched ? courseAPlusPercent(sched) : null;
-      const gradeViz = sched
-        ? normalizeGradeVizDistribution(aggregateCourseDistribution(sched))
-        : null;
+      const dist = sched ? aggregateCourseDistribution(sched) : null;
+      const gpa = dist ? distributionGpa(dist) : null;
+      const gradeViz = dist ? normalizeGradeVizDistribution(dist) : null;
       const instructors = sched
         ? [
             ...new Set(
@@ -123,7 +128,7 @@ export function useSwapModal(
           ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10
           : null;
       const label = title ? `${code} — ${title}` : code;
-      return { label, title, aPlusPercent: aPlus, avgRating, gradeViz };
+      return { label, title, aPlusPercent: aPlus, avgRating, gpa, gradeViz };
     }
 
     const valid = swapResult.candidates.map((code) => ({
@@ -146,11 +151,17 @@ export function useSwapModal(
     (
       enrollmentIndex: number,
       courseCode: string,
-      ctx?: { virtual?: boolean; componentSection?: string; gradeViz?: GradeVizData | null },
+      ctx?: {
+        eventId?: string;
+        virtual?: boolean;
+        componentSection?: string;
+        gradeViz?: GradeVizData | null;
+      },
     ) => {
       setSwapModal({
         enrollmentIndex,
         courseCode,
+        eventId: ctx?.eventId,
         virtual: ctx?.virtual,
         componentSection: ctx?.componentSection,
         gradeViz: ctx?.gradeViz,

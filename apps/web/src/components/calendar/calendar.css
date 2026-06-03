@@ -42,6 +42,11 @@
   margin-top: 0;
 }
 
+/* Swap candidate rows in the swap overlay list. */
+.swap-card:not([data-rejected]):hover {
+  background-color: var(--app-surface);
+}
+
 .cal-event-row-tail {
   display: flex;
   flex-direction: row;
