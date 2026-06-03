@@ -86,6 +86,7 @@ export interface EncodeInput {
   selectedPerRequirement: Record<string, string[]>;
   selectedOptionsPerRequirement: Record<string, number>;
   constrainedPerRequirement: Record<string, string[]>;
+  requirementPriorities: Record<string, number>;
   requirementTreeWithStatus: RequirementWithStatus[];
   remainingRequirements: RemainingRequirement[];
   includeClosedComponents: boolean;
@@ -129,6 +130,7 @@ export interface DecodedState {
   courseSelections: Array<{ reqIndex: number; courseCodes: string[] }>;
   constrainedSelections: Array<{ reqIndex: number; courseCodes: string[] }>;
   constrainedGroupSelections: Array<{ reqIndex: number; groupPrefixes: string[] }>;
+  requirementPrioritySelections: Array<{ reqIndex: number; priority: number }>;
   includeClosedComponents: boolean;
   virtualSectionsOnly: boolean;
   studentPrograms: string[];
@@ -273,6 +275,7 @@ export function encodeState(
     courseSelections: [],
     constrainedSelections: [],
     constrainedGroupSelections: [],
+    requirementPriorities: [],
     touchedReqIndices: [],
 
     includeClosedComponents: input.includeClosedComponents,
@@ -350,6 +353,12 @@ export function encodeState(
   for (const reqId of Object.keys(input.requirementSlotsUserTouched)) {
     const reqIndex = reqIdToIndex.get(reqId);
     if (reqIndex !== undefined) state.touchedReqIndices.push(reqIndex);
+  }
+
+  for (const [reqId, priority] of Object.entries(input.requirementPriorities)) {
+    if (priority <= 0) continue;
+    const reqIndex = reqIdToIndex.get(reqId);
+    if (reqIndex !== undefined) state.requirementPriorities.push({ reqIndex, priority });
   }
 
   try {
@@ -517,6 +526,10 @@ export function decodeState(
     courseSelections,
     constrainedSelections,
     constrainedGroupSelections,
+    requirementPrioritySelections: state.requirementPriorities.map((p) => ({
+      reqIndex: p.reqIndex,
+      priority: p.priority,
+    })),
 
     includeClosedComponents: state.includeClosedComponents,
     virtualSectionsOnly: state.virtualSectionsOnly,

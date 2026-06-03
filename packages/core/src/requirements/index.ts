@@ -10,6 +10,7 @@ import type {
 } from "./types";
 
 export * from "./types";
+export * from "./priority";
 
 export function runRequirementPass(
   program: Program,

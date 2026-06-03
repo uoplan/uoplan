@@ -516,6 +516,12 @@ msgstr "Remove one instance"
 msgid "completedCourses.selectProgramFirst"
 msgstr "Select a program in Step 1 first."
 
+msgid "constrain.priority.help"
+msgstr "Scheduling priority for this requirement. Lower numbers are scheduled first: everything at a given number is satisfied before anything with a higher number. Leave at 0 to schedule this together with everything else."
+
+msgid "constrain.priority.label"
+msgstr "Priority"
+
 msgid "constrainStep.courseFilters"
 msgstr "Course filters"
 

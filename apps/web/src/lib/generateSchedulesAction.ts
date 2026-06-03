@@ -20,6 +20,7 @@ import {
   generateAdvancedSchedule,
   buildEffectiveRemainingRequirements,
   buildCourseDifficultyIndexFromCache,
+  gateRemainingByPriority,
   type PoolDiagnostics,
 } from "@uoplan/core";
 import { buildColorMap } from "./colorMap";
@@ -49,6 +50,7 @@ export type GenerateSchedulesInput = Pick<
   | "selectedPerRequirement"
   | "selectedOptionsPerRequirement"
   | "constrainedPerRequirement"
+  | "requirementPriorities"
   | "coursesThisSemester"
   | "prereqEligibleCourses"
   | "unassignedCompletedCourses"
@@ -92,6 +94,7 @@ export function pickGenerateSchedulesInput(
     selectedPerRequirement: state.selectedPerRequirement,
     selectedOptionsPerRequirement: state.selectedOptionsPerRequirement,
     constrainedPerRequirement: state.constrainedPerRequirement,
+    requirementPriorities: state.requirementPriorities,
     coursesThisSemester: state.coursesThisSemester,
     prereqEligibleCourses: state.prereqEligibleCourses,
     unassignedCompletedCourses: state.unassignedCompletedCourses,
@@ -231,7 +234,8 @@ export async function generateSchedulesAction(
   }
 
   const {
-    remainingRequirements,
+    remainingRequirements: rawRemainingRequirements,
+    requirementPriorities,
     requirementTreeWithStatus,
     selectedPerRequirement,
     selectedOptionsPerRequirement,
@@ -259,6 +263,13 @@ export async function generateSchedulesAction(
     program,
     frenchImmersionStream,
   } = input;
+
+  // Strict priority gate: only offer requirements at the lowest priority tier still outstanding.
+  // A no-op when the user has not set any priorities (all default 0).
+  const remainingRequirements = gateRemainingByPriority(
+    rawRemainingRequirements,
+    requirementPriorities,
+  );
 
   const unassigned = [...new Set(unassignedCompletedCourses)].sort();
   if (unassigned.length > 0) {

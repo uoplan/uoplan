@@ -61,6 +61,7 @@ function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
     selectedPerRequirement: {},
     selectedOptionsPerRequirement: {},
     constrainedPerRequirement: {},
+    requirementPriorities: {},
     requirementTreeWithStatus: [],
     remainingRequirements: [],
     includeClosedComponents: false,
@@ -171,6 +172,23 @@ describe("encodeState / decodeState roundtrip", () => {
       { day: "Mo", startMinutes: 600, endMinutes: 720 },
       { day: "We", startMinutes: 480, endMinutes: 540 },
     ]);
+  });
+
+  it("round-trips requirement priorities", () => {
+    const requirementTreeWithStatus = [
+      { type: "group", requirementId: "req-a", complete: false, satisfiedBy: [] },
+      { type: "group", requirementId: "req-b", complete: false, satisfiedBy: [] },
+    ] as unknown as EncodeInput["requirementTreeWithStatus"];
+    const input = makeInput({
+      requirementTreeWithStatus,
+      requirementPriorities: { "req-a": 2, "req-b": 0 },
+    });
+    const bytes = encodeState(input, catalogue, indices)!;
+    const decoded = decodeState(bytes, catalogue, indices);
+    expect("error" in decoded).toBe(false);
+    if ("error" in decoded) return;
+    // Only non-zero priorities are encoded; req-a is reqIndex 0.
+    expect(decoded.requirementPrioritySelections).toEqual([{ reqIndex: 0, priority: 2 }]);
   });
 
   it("round-trips firstYear", () => {

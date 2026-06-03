@@ -7,7 +7,9 @@ import type {
   RequirementWithStatus,
   CompletedRequirementItem,
 } from "@uoplan/core";
+import { collectRequirementIds } from "@uoplan/core";
 import { RequirementNode, getStableNodeKey, getNodeDisplayTitle } from "./RequirementNode";
+import { RequirementPriorityControl } from "./RequirementPriorityControl";
 import {
   applyOptionSelections,
   adjustNodeForAssignments,
@@ -179,6 +181,7 @@ export function ConstrainStep({
             )}
             {primaryRoots.map(({ node, rootIndex }) => {
               const nodeKey = getStableNodeKey(node, `root:${rootIndex}`);
+              const descendantReqIds = collectRequirementIds(node);
               return (
                 <RequirementNode
                   key={nodeKey}
@@ -198,6 +201,11 @@ export function ConstrainStep({
                   allAssignedCoursesNormalized={new Set()}
                   includeClosedComponents={includeClosedComponents}
                   virtualSectionsOnly={virtualSectionsOnly}
+                  headerAccessory={
+                    descendantReqIds.length > 0 ? (
+                      <RequirementPriorityControl requirementIds={descendantReqIds} />
+                    ) : undefined
+                  }
                 />
               );
             })}
