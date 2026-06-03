@@ -1,12 +1,13 @@
 import { useMemo } from "react";
-import { HoverCard } from "@mantine/core";
+import { Popover } from "@mantine/core";
 import type { DataCache } from "@uoplan/core";
 import { COURSE_COLORS, COURSE_COLOR_HEX, ratingToColor } from "@uoplan/core";
 import { ratingColorToCssVar } from "../../../lib/ratingColor";
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
 import { useTr } from "../../../i18n";
 import { GradeDistributionBottomBar } from "../GradeDistributionViz";
-import { CalendarEventHoverCard } from "../CalendarEventHoverCard";
+import { CalendarEventDetails } from "../CalendarEventDetails";
+import { useSwapContext } from "../swapContext";
 import { componentKindOnly, formatTimeRange } from "../calendarEventDisplayUtils";
 import { CalendarEventFace } from "../CalendarEventFace";
 import { minutesToPercent } from "./weekCalendarLayout";
@@ -32,6 +33,7 @@ export function WeekCalendarEvent({
   onClick,
 }: WeekCalendarEventProps) {
   const tr = useTr();
+  const swapCtx = useSwapContext();
 
   const courseTitle = useMemo(
     () => cache?.getCourse(event.courseCode)?.title ?? "",
@@ -80,76 +82,91 @@ export function WeekCalendarEvent({
     timeRange,
   });
 
+  const isActive = swapCtx?.activeEventId === event.id;
+  const popoverOpened = isActive && !(swapCtx?.isMobile ?? false);
+
+  const eventButton = (
+    <button
+      type="button"
+      className="cal-event"
+      aria-label={accessibleLabel}
+      style={{
+        position: "absolute",
+        top: `${top}%`,
+        height: `${height}%`,
+        minHeight: 0,
+        left: `calc(${leftPct}% + ${laneIndex > 0 ? LANE_GAP_PX : 0}px)`,
+        width: `calc(${widthPct}% - ${laneIndex > 0 ? LANE_GAP_PX : 0}px - ${laneIndex < laneCount - 1 ? LANE_GAP_PX : 0}px)`,
+        cursor: "pointer",
+        boxSizing: "border-box",
+        appearance: "none",
+        border: 0,
+        borderLeft: "4px solid var(--event-color, var(--app-border-strong))",
+        padding: 0,
+        color: "inherit",
+        font: "inherit",
+        textAlign: "left",
+        overflow: "hidden",
+        ["--event-color" as string]: hex,
+      }}
+      data-color={markerColor}
+      onClick={handleActivate}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleActivate();
+        }
+      }}
+    >
+      <CalendarEventFace
+        courseCode={event.courseCode}
+        courseTitle={courseTitle}
+        componentSectionDisplay={componentKindOnly(event.componentSection)}
+        timeRange={timeRange}
+        professor={event.professor}
+        virtual={event.virtual}
+        layout={{ showSection: true, showTime: true, showProfessor: true }}
+        ratingTier={ratingTier}
+        hasProfessorRating={hasProfessorRating}
+        hasNumericRating={hasNumericRating}
+        professorRatingValue={event.professorRatingValue ?? null}
+        legacyId={legacyId ?? null}
+        professorRatingDetails={event.professorRatingDetails}
+        interaction="interactive"
+        professorTooltip={false}
+      />
+      <div className="cal-grade-bar-hitbox">{gradeBottom}</div>
+    </button>
+  );
+
+  // On mobile the active event opens a bottom drawer (rendered by CalendarView),
+  // so we never anchor a popover there.
+  if (!swapCtx || swapCtx.isMobile) {
+    return eventButton;
+  }
+
   return (
-    <HoverCard
-      openDelay={120}
-      closeDelay={100}
+    <Popover
+      opened={popoverOpened}
+      onChange={(opened) => {
+        if (!opened && isActive) swapCtx.closeModal();
+      }}
       position="right"
       withArrow
       withinPortal
+      trapFocus
+      closeOnEscape
+      closeOnClickOutside
       shadow="md"
       radius="md"
+      middlewares={{ flip: true, shift: true }}
     >
-      <HoverCard.Target>
-        <button
-          type="button"
-          className="cal-event"
-          aria-label={accessibleLabel}
-          style={{
-            position: "absolute",
-            top: `${top}%`,
-            height: `${height}%`,
-            minHeight: 0,
-            left: `calc(${leftPct}% + ${laneIndex > 0 ? LANE_GAP_PX : 0}px)`,
-            width: `calc(${widthPct}% - ${laneIndex > 0 ? LANE_GAP_PX : 0}px - ${laneIndex < laneCount - 1 ? LANE_GAP_PX : 0}px)`,
-            cursor: "pointer",
-            boxSizing: "border-box",
-            appearance: "none",
-            border: 0,
-            borderLeft: "4px solid var(--event-color, var(--app-border-strong))",
-            padding: 0,
-            color: "inherit",
-            font: "inherit",
-            textAlign: "left",
-            overflow: "hidden",
-            ["--event-color" as string]: hex,
-          }}
-          data-color={markerColor}
-          onClick={handleActivate}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              handleActivate();
-            }
-          }}
-        >
-          <CalendarEventFace
-            courseCode={event.courseCode}
-            courseTitle={courseTitle}
-            componentSectionDisplay={componentKindOnly(event.componentSection)}
-            timeRange={timeRange}
-            professor={event.professor}
-            virtual={event.virtual}
-            layout={{ showSection: true, showTime: true, showProfessor: true }}
-            ratingTier={ratingTier}
-            hasProfessorRating={hasProfessorRating}
-            hasNumericRating={hasNumericRating}
-            professorRatingValue={event.professorRatingValue ?? null}
-            legacyId={legacyId ?? null}
-            professorRatingDetails={event.professorRatingDetails}
-            interaction="interactive"
-            professorTooltip={false}
-          />
-          <div className="cal-grade-bar-hitbox">{gradeBottom}</div>
-        </button>
-      </HoverCard.Target>
-      <HoverCard.Dropdown p="sm">
-        <CalendarEventHoverCard
-          event={event}
-          courseTitle={courseTitle}
-          onOpenDetails={handleActivate}
-        />
-      </HoverCard.Dropdown>
-    </HoverCard>
+      <Popover.Target>{eventButton}</Popover.Target>
+      <Popover.Dropdown p="sm" style={{ width: 360, maxWidth: "min(360px, 92vw)" }}>
+        <div style={{ maxHeight: "min(70vh, 560px)", overflowY: "auto", margin: -4, padding: 4 }}>
+          <CalendarEventDetails event={event} courseTitle={courseTitle} />
+        </div>
+      </Popover.Dropdown>
+    </Popover>
   );
 }

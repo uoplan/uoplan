@@ -341,10 +341,6 @@ msgstr "S/NS split: {s} S, {ns} NS"
 msgid "calendar.hover.dates"
 msgstr "Dates"
 
-#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:176
-msgid "calendar.hover.hint"
-msgstr "Click to view details and swap options"
-
 #: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:116
 msgid "calendar.hover.instructor"
 msgstr "Instructor"
@@ -362,10 +358,6 @@ msgstr "{rating}/5 ({count} ratings)"
 msgid "calendar.hover.section"
 msgstr "Section"
 
-#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:179
-msgid "calendar.hover.viewDetails"
-msgstr "View details"
-
 #: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:92
 msgid "calendar.hover.when"
 msgstr "When"
@@ -382,6 +374,10 @@ msgstr "Exclude course from schedule generation"
 msgid "calendar.swap.blacklistTooltip"
 msgstr "Prevents this course from appearing in any generated schedule."
 
+#: apps/web/src/components/calendar/CalendarEventDetails.tsx:113
+msgid "calendar.swap.close"
+msgstr "Close"
+
 msgid "calendar.swap.lockAria"
 msgstr "Add course to schedule-generation selections"
 
@@ -390,6 +386,11 @@ msgstr "Can't attach this course to a requirement picker."
 
 msgid "calendar.swap.lockTooltip"
 msgstr "Adds this course to the selections used when schedules are generated."
+
+#: apps/web/src/components/calendar/CalendarEventDetails.tsx:126
+#: apps/web/src/components/calendar/CalendarView.tsx:343
+msgid "calendar.swap.swapWith"
+msgstr "Swap with"
 
 msgid "calendar.swap.unblacklistAria"
 msgstr "Remove course from exclusion list"
@@ -1821,6 +1822,34 @@ msgid "swapCourse.conflictsWith"
 msgstr "Conflicts with {course}"
 
 #: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.difficulty.all"
+msgstr "All difficulties"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.difficulty.easy"
+msgstr "Easy"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.difficulty.moderate"
+msgstr "Moderate"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.difficulty.tough"
+msgstr "Tough"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.filter.label"
+msgstr "Difficulty"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.group.bestMatches"
+msgstr "Best matches"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.group.otherOptions"
+msgstr "Other options"
+
+#: scripts/i18n/dynamic-keys.mjs
 msgid "swapCourse.loading"
 msgstr "Finding swap options…"
 
@@ -1854,15 +1883,19 @@ msgstr "A–Z"
 
 #: scripts/i18n/dynamic-keys.mjs
 msgid "swapCourse.sort.aplus"
-msgstr "A+"
+msgstr "Easiest"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.sort.best"
+msgstr "Best match"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "swapCourse.sort.label"
+msgstr "Sort"
 
 #: scripts/i18n/dynamic-keys.mjs
 msgid "swapCourse.sort.rating"
-msgstr "★ Rating"
-
-#: scripts/i18n/dynamic-keys.mjs
-msgid "swapCourse.sortBy"
-msgstr "Sort by {label}"
+msgstr "Highest rated"
 
 #: scripts/i18n/dynamic-keys.mjs
 msgid "term.season.fall"

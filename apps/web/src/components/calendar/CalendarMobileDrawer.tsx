@@ -29,13 +29,15 @@ export function CalendarMobileDrawer({
   const isDragging = useRef(false);
   const startY = useRef(0);
   const startTime = useRef(0);
-  const bodyRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!opened) setDragOffset(0);
   }, [opened]);
 
   function handleTouchStart(e: React.TouchEvent) {
+    // Only start a dismiss drag when the content is scrolled to the top.
+    if (contentRef.current && contentRef.current.scrollTop > 0) return;
     startY.current = e.touches[0].clientY;
     startTime.current = Date.now();
     isDragging.current = true;
@@ -47,9 +49,10 @@ export function CalendarMobileDrawer({
     const delta = e.touches[0].clientY - startY.current;
     if (delta <= 0) return;
 
-    // Don't steal scroll when body is scrolled down
-    if (bodyRef.current && bodyRef.current.scrollTop > 0) {
+    // Don't steal scroll once the content has scrolled away from the top.
+    if (contentRef.current && contentRef.current.scrollTop > 0) {
       isDragging.current = false;
+      setDragOffset(0);
       return;
     }
 
@@ -72,16 +75,25 @@ export function CalendarMobileDrawer({
   }
 
   return (
-    <Drawer.Root opened={opened} onClose={onClose} position="bottom" size="auto">
+    <Drawer.Root
+      opened={opened}
+      onClose={onClose}
+      position="bottom"
+      size="auto"
+      styles={{ inner: { top: "auto", bottom: 0, height: "auto", alignItems: "flex-end" } }}
+    >
       <Drawer.Overlay backgroundOpacity={0.5} />
       <Drawer.Content
+        ref={contentRef}
         aria-label={ariaLabel}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         style={{
           ...SURFACE_STYLE,
+          height: "auto",
           maxHeight: "85vh",
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
+          overflowY: "auto",
           transform: `translateY(${dragOffset}px)`,
           transition: isDragging.current
             ? "none"
@@ -89,64 +101,41 @@ export function CalendarMobileDrawer({
         }}
       >
         <div
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}
+          style={{
+            width: 36,
+            height: 4,
+            borderRadius: 2,
+            background: "var(--app-border-strong)",
+            margin: "10px auto 0",
+          }}
+        />
+        <Drawer.Header
+          style={{
+            ...SURFACE_STYLE,
+            borderBottom: "var(--app-border-width) solid var(--app-border)",
+          }}
         >
-          <div
+          <Drawer.Title
             style={{
-              width: 36,
-              height: 4,
-              borderRadius: 2,
-              background: "var(--app-border-strong)",
-              margin: "10px auto 0",
-              flexShrink: 0,
-            }}
-          />
-          <Drawer.Header
-            style={{
-              ...SURFACE_STYLE,
-              borderBottom: "var(--app-border-width) solid var(--app-border)",
-              flexShrink: 0,
+              color: "var(--app-text)",
+              fontFamily: "var(--app-font-heading)",
+              fontWeight: 400,
             }}
           >
-            <Drawer.Title
-              style={{
-                color: "var(--app-text)",
-                fontFamily: "var(--app-font-heading)",
-                fontWeight: 400,
-              }}
-            >
-              {title}
-            </Drawer.Title>
-            <Drawer.CloseButton style={{ color: "var(--app-text-dim)" }} />
-          </Drawer.Header>
-          <Drawer.Body
-            style={{
-              flex: 1,
-              minHeight: 0,
-              overflow: "hidden",
-              padding: 0,
-            }}
-          >
-            <div
-              ref={bodyRef}
-              style={{
-                height: "100%",
-                overflowY: "auto",
-                overflowX: "hidden",
-                overscrollBehavior: "contain",
-                paddingTop: 8,
-                paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))",
-                paddingLeft: 16,
-                paddingRight: 16,
-              }}
-            >
-              {children}
-            </div>
-          </Drawer.Body>
-        </div>
+            {title}
+          </Drawer.Title>
+          <Drawer.CloseButton style={{ color: "var(--app-text-dim)" }} />
+        </Drawer.Header>
+        <Drawer.Body
+          style={{
+            paddingTop: 8,
+            paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))",
+            paddingLeft: 16,
+            paddingRight: 16,
+          }}
+        >
+          {children}
+        </Drawer.Body>
       </Drawer.Content>
     </Drawer.Root>
   );
