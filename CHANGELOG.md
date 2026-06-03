@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0-beta.29](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.28...uoplan-monorepo-v1.0.0-beta.29) (2026-06-03)
+
+
+### Features
+
+* add advanced priority scheduling ([d9a4c74](https://github.com/uoplan/uoplan/commit/d9a4c744084bfec50e0c6062bf895ff3cee4e343))
+* add hover card to calendar, improve animation ([3211e70](https://github.com/uoplan/uoplan/commit/3211e70e86988901cc0ea6331db5754b6e0e2a47))
+* allow fls courses to be chosen multiple times ([89cf9f2](https://github.com/uoplan/uoplan/commit/89cf9f2d2e40d4c0e8589cb9bbb23768285b87e3))
+* integrate swap panel back into the popover ([7df4b2f](https://github.com/uoplan/uoplan/commit/7df4b2fc9115a6ab2c22161c4a89ce83fcfcc743))
+* move scrollbar outside of content in desktop popover ([d6ea0ad](https://github.com/uoplan/uoplan/commit/d6ea0ada54670ba7accde3b91ab3072ef622aaf8))
+
 ## [1.0.0-beta.28](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.27...uoplan-monorepo-v1.0.0-beta.28) (2026-06-01)
 
 
