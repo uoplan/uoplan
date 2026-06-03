@@ -36,6 +36,9 @@ type CalendarEventFaceProps = {
   professorRatingDetails: CalendarEventFaceRatingDetail[] | null | undefined;
   /** Interactive: tooltips + RMP links. Static: no tooltips, rating is span only. */
   interaction: "interactive" | "static";
+  /** When false, the professor row never shows its own RMP hover tooltip
+   * (e.g. when a richer hover popover wraps the whole event). Defaults to true. */
+  professorTooltip?: boolean;
 };
 
 export function CalendarEventFace({
@@ -53,6 +56,7 @@ export function CalendarEventFace({
   legacyId,
   professorRatingDetails,
   interaction,
+  professorTooltip = true,
 }: CalendarEventFaceProps) {
   const virtualTail = virtual ? (
     <div className="cal-event-row-tail">
@@ -95,6 +99,7 @@ export function CalendarEventFace({
   const professorBlock =
     layout.showProfessor && professor.trim() !== "" ? (
       interaction === "interactive" &&
+      professorTooltip &&
       hasProfessorRating &&
       professorRatingDetails &&
       professorRatingDetails.length > 0 ? (

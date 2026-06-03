@@ -15,6 +15,7 @@ import { IconBan, IconLock, IconLockFilled } from "@tabler/icons-react";
 import { normalizeCourseCode } from "@uoplan/core";
 import { useMemo } from "react";
 import { tr } from "../../i18n";
+import { CALENDAR_HEADER_MIN_HEIGHT } from "./calendarHeaderLayout";
 
 export function SwapPanel({
   schedule,
@@ -178,6 +179,10 @@ export function SwapPanel({
       <Box
         style={{
           flexShrink: 0,
+          minHeight: CALENDAR_HEADER_MIN_HEIGHT,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
           borderBottom: "1px solid var(--app-border)",
           backgroundColor: "var(--app-surface)",
           padding: "8px 12px",

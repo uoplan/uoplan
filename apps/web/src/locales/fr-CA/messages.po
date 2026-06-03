@@ -337,6 +337,39 @@ msgstr "S/NS"
 msgid "calendar.grade.snsTooltip"
 msgstr "Repartition S/NS: {s} S, {ns} NS"
 
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:101
+msgid "calendar.hover.dates"
+msgstr "Dates"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:176
+msgid "calendar.hover.hint"
+msgstr "Cliquez pour voir les détails et les options de remplacement"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:116
+msgid "calendar.hover.instructor"
+msgstr "Enseignant"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:154
+msgid "calendar.hover.ratingNone"
+msgstr "Aucune note"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:139
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:146
+msgid "calendar.hover.ratingValue"
+msgstr "{rating}/5 ({count} notes)"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:84
+msgid "calendar.hover.section"
+msgstr "Section"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:179
+msgid "calendar.hover.viewDetails"
+msgstr "Voir les détails"
+
+#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:92
+msgid "calendar.hover.when"
+msgstr "Horaire"
+
 msgid "calendar.swap.alreadyAssigned"
 msgstr "Déjà assigné à une exigence dans l'assistant"
 

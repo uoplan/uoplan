@@ -1,11 +1,12 @@
 import { useMemo } from "react";
-import { Tooltip } from "@mantine/core";
+import { HoverCard } from "@mantine/core";
 import type { DataCache } from "@uoplan/core";
 import { COURSE_COLORS, COURSE_COLOR_HEX, ratingToColor } from "@uoplan/core";
 import { ratingColorToCssVar } from "../../../lib/ratingColor";
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
 import { useTr } from "../../../i18n";
 import { GradeDistributionBottomBar } from "../GradeDistributionViz";
+import { CalendarEventHoverCard } from "../CalendarEventHoverCard";
 import { componentKindOnly, formatTimeRange } from "../calendarEventDisplayUtils";
 import { CalendarEventFace } from "../CalendarEventFace";
 import { minutesToPercent } from "./weekCalendarLayout";
@@ -64,21 +65,6 @@ export function WeekCalendarEvent({
     [event.startMinutes, event.endMinutes],
   );
 
-  const aPlusPercent = useMemo(() => {
-    const gv = event.gradeViz;
-    if (!gv || gv.total <= 0) return 0;
-    const aPlusCount = gv.histogram.find((entry) => entry.grade === "A+")?.count ?? 0;
-    return Math.round((aPlusCount / gv.total) * 100);
-  }, [event.gradeViz]);
-
-  const gradeTooltip =
-    event.gradeViz && event.gradeViz.total > 0
-      ? tr("calendar.grade.compactTooltip", {
-          passing: Math.round(event.gradeViz.passingPercent),
-          aPlus: aPlusPercent,
-        })
-      : null;
-
   const top = minutesToPercent(event.startMinutes);
   const height = minutesToPercent(event.endMinutes) - top;
   const widthPct = 100 / laneCount;
@@ -95,61 +81,75 @@ export function WeekCalendarEvent({
   });
 
   return (
-    <button
-      type="button"
-      className="cal-event"
-      aria-label={accessibleLabel}
-      style={{
-        position: "absolute",
-        top: `${top}%`,
-        height: `${height}%`,
-        minHeight: 0,
-        left: `calc(${leftPct}% + ${laneIndex > 0 ? LANE_GAP_PX : 0}px)`,
-        width: `calc(${widthPct}% - ${laneIndex > 0 ? LANE_GAP_PX : 0}px - ${laneIndex < laneCount - 1 ? LANE_GAP_PX : 0}px)`,
-        cursor: "pointer",
-        boxSizing: "border-box",
-        appearance: "none",
-        border: 0,
-        borderLeft: "4px solid var(--event-color, var(--app-border-strong))",
-        padding: 0,
-        color: "inherit",
-        font: "inherit",
-        textAlign: "left",
-        overflow: "hidden",
-        ["--event-color" as string]: hex,
-      }}
-      data-color={markerColor}
-      onClick={handleActivate}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          handleActivate();
-        }
-      }}
+    <HoverCard
+      openDelay={120}
+      closeDelay={100}
+      position="right"
+      withArrow
+      withinPortal
+      shadow="md"
+      radius="md"
     >
-      <CalendarEventFace
-        courseCode={event.courseCode}
-        courseTitle={courseTitle}
-        componentSectionDisplay={componentKindOnly(event.componentSection)}
-        timeRange={timeRange}
-        professor={event.professor}
-        virtual={event.virtual}
-        layout={{ showSection: true, showTime: true, showProfessor: true }}
-        ratingTier={ratingTier}
-        hasProfessorRating={hasProfessorRating}
-        hasNumericRating={hasNumericRating}
-        professorRatingValue={event.professorRatingValue ?? null}
-        legacyId={legacyId ?? null}
-        professorRatingDetails={event.professorRatingDetails}
-        interaction="interactive"
-      />
-      {gradeTooltip ? (
-        <Tooltip label={gradeTooltip} withArrow position="top" withinPortal>
+      <HoverCard.Target>
+        <button
+          type="button"
+          className="cal-event"
+          aria-label={accessibleLabel}
+          style={{
+            position: "absolute",
+            top: `${top}%`,
+            height: `${height}%`,
+            minHeight: 0,
+            left: `calc(${leftPct}% + ${laneIndex > 0 ? LANE_GAP_PX : 0}px)`,
+            width: `calc(${widthPct}% - ${laneIndex > 0 ? LANE_GAP_PX : 0}px - ${laneIndex < laneCount - 1 ? LANE_GAP_PX : 0}px)`,
+            cursor: "pointer",
+            boxSizing: "border-box",
+            appearance: "none",
+            border: 0,
+            borderLeft: "4px solid var(--event-color, var(--app-border-strong))",
+            padding: 0,
+            color: "inherit",
+            font: "inherit",
+            textAlign: "left",
+            overflow: "hidden",
+            ["--event-color" as string]: hex,
+          }}
+          data-color={markerColor}
+          onClick={handleActivate}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              handleActivate();
+            }
+          }}
+        >
+          <CalendarEventFace
+            courseCode={event.courseCode}
+            courseTitle={courseTitle}
+            componentSectionDisplay={componentKindOnly(event.componentSection)}
+            timeRange={timeRange}
+            professor={event.professor}
+            virtual={event.virtual}
+            layout={{ showSection: true, showTime: true, showProfessor: true }}
+            ratingTier={ratingTier}
+            hasProfessorRating={hasProfessorRating}
+            hasNumericRating={hasNumericRating}
+            professorRatingValue={event.professorRatingValue ?? null}
+            legacyId={legacyId ?? null}
+            professorRatingDetails={event.professorRatingDetails}
+            interaction="interactive"
+            professorTooltip={false}
+          />
           <div className="cal-grade-bar-hitbox">{gradeBottom}</div>
-        </Tooltip>
-      ) : (
-        <div className="cal-grade-bar-hitbox">{gradeBottom}</div>
-      )}
-    </button>
+        </button>
+      </HoverCard.Target>
+      <HoverCard.Dropdown p="sm">
+        <CalendarEventHoverCard
+          event={event}
+          courseTitle={courseTitle}
+          onOpenDetails={handleActivate}
+        />
+      </HoverCard.Dropdown>
+    </HoverCard>
   );
 }
