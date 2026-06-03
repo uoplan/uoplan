@@ -2,7 +2,7 @@ import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
 import { recomputeStateForProgram, getDisciplineCodesForProgram } from "../requirementCompute";
 import type { CourseLanguageBucket } from "@uoplan/core";
-import { generateRandomSeed, normalizeCourseCode } from "@uoplan/core";
+import { generateRandomSeed, normalizeCourseCode, isRepeatableCourse } from "@uoplan/core";
 import { getMergedCatalogue } from "./catalogueUtils";
 import { buildCacheWithOpt } from "../../lib/dataCacheLoader";
 import { pruneOptionSelectionsForClear } from "../../lib/requirements/requirementUtils";
@@ -205,13 +205,24 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
 
   addCompletedCourse: (code) => {
     const { completedCourses } = get();
-    if (completedCourses.includes(code)) return;
+    // Repeatable courses (e.g. accompanying FLS companions) may be added more than once,
+    // since each instance can satisfy a different requirement slot.
+    if (completedCourses.includes(code) && !isRepeatableCourse(code)) return;
     get().setCompletedCourses([...completedCourses, code]);
   },
 
   removeCompletedCourse: (code) => {
     const { completedCourses } = get();
-    get().setCompletedCourses(completedCourses.filter((c) => c !== code));
+    // Remove a single instance so repeated courses can be decremented one at a time.
+    const idx = completedCourses.indexOf(code);
+    if (idx === -1) {
+      get().setCompletedCourses(completedCourses.filter((c) => c !== code));
+      return;
+    }
+    get().setCompletedCourses([
+      ...completedCourses.slice(0, idx),
+      ...completedCourses.slice(idx + 1),
+    ]);
   },
 
   setSelectedForRequirement: (requirementId, courses) => {

@@ -19,6 +19,8 @@ const minimalCatalogue: Catalogue = {
     { code: "ESL 3351", title: "ESL 3351", credits: 3, description: "", component: "LEC" },
     { code: "ENG 1100", title: "Literature", credits: 3, description: "", component: "LEC" },
     { code: "ENG 2100", title: "Writing", credits: 3, description: "", component: "LEC" },
+    { code: "FLS 2581", title: "FLS 2581", credits: 3, description: "", component: "LEC" },
+    { code: "FLS 3581", title: "FLS 3581", credits: 3, description: "", component: "LEC" },
   ],
   programs: [],
 };
@@ -540,5 +542,45 @@ describe("collectCompletedRequirements", () => {
     const completed = collectCompletedRequirements(tree);
     // or_group itself is not complete; child course node may appear as completed when walking tree
     expect(completed.length).toBeLessThanOrEqual(1);
+  });
+});
+
+describe("repeatable courses (accompanying FLS)", () => {
+  const cache = buildDataCache(minimalCatalogue, emptySchedules);
+
+  // Two separate requirement slots that both accept the same repeatable companion course.
+  const program: Program = {
+    title: "Test",
+    url: "",
+    requirements: [
+      { type: "course", code: "FLS 2581", credits: 3 },
+      { type: "course", code: "FLS 2581", credits: 3 },
+    ],
+  };
+
+  it("a single instance satisfies only one of two slots", () => {
+    const remaining = computeRemainingRequirements(program, ["FLS 2581"], cache);
+    expect(remaining).toHaveLength(1);
+    expect(remaining[0].candidateCourses).toEqual(["FLS 2581"]);
+  });
+
+  it("a repeated instance satisfies both slots", () => {
+    const remaining = computeRemainingRequirements(program, ["FLS 2581", "FLS 2581"], cache);
+    expect(remaining).toHaveLength(0);
+  });
+
+  it("non-repeatable duplicates still satisfy only one slot", () => {
+    const eslProgram: Program = {
+      title: "Test",
+      url: "",
+      requirements: [
+        { type: "course", code: "ESL 2100", credits: 3 },
+        { type: "course", code: "ESL 2100", credits: 3 },
+      ],
+    };
+    // A non-repeatable course is capped at one instance in the pool, so a stray duplicate
+    // (e.g. from a hand-crafted share URL) can never over-satisfy: one slot stays remaining.
+    const remaining = computeRemainingRequirements(eslProgram, ["ESL 2100", "ESL 2100"], cache);
+    expect(remaining).toHaveLength(1);
   });
 });

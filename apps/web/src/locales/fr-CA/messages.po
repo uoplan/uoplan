@@ -501,6 +501,18 @@ msgstr "Aucun cours trouvé"
 msgid "completedCourses.placeholder"
 msgstr "Rechercher par code de cours ou titre..."
 
+msgid "completedCourses.repeatable.add"
+msgstr "Ajouter une autre fois"
+
+msgid "completedCourses.repeatable.heading"
+msgstr "Cours répétables"
+
+msgid "completedCourses.repeatable.hint"
+msgstr "Certains cours (comme les cours d'accompagnement FLS) peuvent être suivis plus d'une fois. Utilisez les contrôles pour indiquer combien de fois vous les avez réussis."
+
+msgid "completedCourses.repeatable.remove"
+msgstr "Retirer une fois"
+
 msgid "completedCourses.selectProgramFirst"
 msgstr "Sélectionnez d'abord un programme à l'étape 1."
 
