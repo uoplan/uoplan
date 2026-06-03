@@ -108,6 +108,28 @@ export function isOptCourse(code: string): boolean {
 }
 
 /**
+ * The accompanying ("companion") FLS courses are taken alongside a content course
+ * and are explicitly repeatable: a student may take e.g. FLS 2581 multiple times,
+ * paired with different content courses, and each instance counts.
+ * See {@link analyzeFrenchImmersionProgress} for the immersion-volume capping rules.
+ */
+const REPEATABLE_FLS_NUMBERS = new Set([2581, 3581, 4581, 4781]);
+
+/**
+ * Whether a course may legitimately be taken more than once for credit (i.e. the
+ * same code can appear multiple times in a student's completed courses and each
+ * instance counts toward requirements). Currently limited to the accompanying FLS
+ * companion courses; later this can be driven by a catalogue `repeatable` flag.
+ */
+export function isRepeatableCourse(code: string): boolean {
+  const parsed = parseCourseCode(normalizeCourseCode(code));
+  if (!parsed || parsed.discipline !== "FLS") return false;
+  const digits = parsed.number.replace(/[^0-9]/g, "");
+  const primary = parseInt(digits.slice(0, 4), 10);
+  return !Number.isNaN(primary) && REPEATABLE_FLS_NUMBERS.has(primary);
+}
+
+/**
  * Check if a course is a non-degree mandatory course (e.g., ethics).
  * These courses are required for all uOttawa students but don't count
  * towards degree requirements and are not in the catalogue.

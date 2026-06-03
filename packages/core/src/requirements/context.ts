@@ -1,11 +1,17 @@
 import type { Program, ProgramRequirement } from "../dataTypes";
 import type { DataCache } from "../dataCache";
-import { getLanguageVariant } from "../utils/courseUtils";
+import { getLanguageVariant, isRepeatableCourse } from "../utils/courseUtils";
 import type { RemainingRequirement, RequirementWithStatus } from "./types";
 
 export class RequirementContext {
   public remaining: RemainingRequirement[] = [];
-  public pool: Set<string>;
+  /**
+   * Multiset of available completed courses keyed by canonical code → remaining count.
+   * Non-repeatable courses are capped at one instance (so a stray duplicate can never
+   * over-satisfy), while repeatable courses (e.g. accompanying FLS companions) keep every
+   * instance so each can satisfy a different requirement slot.
+   */
+  public pool: Map<string, number>;
 
   constructor(
     public program: Program,
@@ -13,18 +19,31 @@ export class RequirementContext {
     public cache: DataCache,
     public selectedOptionsPerRequirement: Record<string, number> = {},
   ) {
-    this.pool = new Set(completedCourses.map((c) => cache.resolveToCanonical(c)));
+    this.pool = new Map();
+    for (const c of completedCourses) {
+      const canonical = cache.resolveToCanonical(c);
+      const current = this.pool.get(canonical) ?? 0;
+      if (current > 0 && !isRepeatableCourse(canonical)) continue;
+      this.pool.set(canonical, current + 1);
+    }
   }
 
   reqId(path: string): string {
     return `req-${path}`;
   }
 
+  private consume(canonical: string, dryRun: boolean): void {
+    if (dryRun) return;
+    const remaining = (this.pool.get(canonical) ?? 0) - 1;
+    if (remaining > 0) this.pool.set(canonical, remaining);
+    else this.pool.delete(canonical);
+  }
+
   takeFromPool(codes: string[], dryRun: boolean): { displayCode: string; norm: string } | null {
     for (const c of codes) {
       const canonical = this.cache.resolveToCanonical(c);
-      if (this.pool.has(canonical)) {
-        if (!dryRun) this.pool.delete(canonical);
+      if ((this.pool.get(canonical) ?? 0) > 0) {
+        this.consume(canonical, dryRun);
         const displayCode = this.cache.getCourse(canonical)?.code ?? canonical;
         return { displayCode, norm: canonical };
       }
@@ -32,8 +51,8 @@ export class RequirementContext {
       const variant = getLanguageVariant(canonical);
       if (variant) {
         const variantCanonical = this.cache.resolveToCanonical(variant);
-        if (this.pool.has(variantCanonical)) {
-          if (!dryRun) this.pool.delete(variantCanonical);
+        if ((this.pool.get(variantCanonical) ?? 0) > 0) {
+          this.consume(variantCanonical, dryRun);
           const displayCode = this.cache.getCourse(variantCanonical)?.code ?? variantCanonical;
           return { displayCode, norm: variantCanonical };
         }

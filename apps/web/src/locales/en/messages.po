@@ -501,6 +501,18 @@ msgstr "No courses found"
 msgid "completedCourses.placeholder"
 msgstr "Search by course code or title..."
 
+msgid "completedCourses.repeatable.add"
+msgstr "Add another instance"
+
+msgid "completedCourses.repeatable.heading"
+msgstr "Repeatable courses"
+
+msgid "completedCourses.repeatable.hint"
+msgstr "Some courses (like FLS companion courses) can be taken more than once. Use the controls to set how many times you have completed each."
+
+msgid "completedCourses.repeatable.remove"
+msgstr "Remove one instance"
+
 msgid "completedCourses.selectProgramFirst"
 msgstr "Select a program in Step 1 first."
 
