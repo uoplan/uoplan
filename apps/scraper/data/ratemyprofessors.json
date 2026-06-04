@@ -1,5 +1,5 @@
 {
-  "resultCount": 4567,
+  "resultCount": 4566,
   "professors": [
     {
       "id": "VGVhY2hlci04Nzk2OTM=",
@@ -299,8 +299,8 @@
       "id": "VGVhY2hlci05NTYwMzA=",
       "legacyId": 956030,
       "name": "Adam Brown",
-      "rating": 3.2,
-      "numRatings": 129
+      "rating": 3.1,
+      "numRatings": 131
     },
     {
       "id": "VGVhY2hlci0xMjUyNDUz",
@@ -10152,13 +10152,6 @@
       "numRatings": 2
     },
     {
-      "id": "VGVhY2hlci0zMDgyMzE1",
-      "legacyId": 3082315,
-      "name": "Gabrielle Manning",
-      "rating": 0,
-      "numRatings": 0
-    },
-    {
       "id": "VGVhY2hlci05Njc4MTE=",
       "legacyId": 967811,
       "name": "Gabrielle St-Hilaire",
@@ -10723,7 +10716,7 @@
       "legacyId": 85962,
       "name": "Gilles Levasseur",
       "rating": 3.3,
-      "numRatings": 267
+      "numRatings": 268
     },
     {
       "id": "VGVhY2hlci00OTk3Mjc=",
@@ -12368,7 +12361,7 @@
       "legacyId": 1508609,
       "name": "Ivy Bourgeault",
       "rating": 1.9,
-      "numRatings": 24
+      "numRatings": 25
     },
     {
       "id": "VGVhY2hlci0xMzM0OTk4",
@@ -26606,7 +26599,7 @@
       "legacyId": 1521831,
       "name": "Roberto Chica",
       "rating": 3.4,
-      "numRatings": 71
+      "numRatings": 73
     },
     {
       "id": "VGVhY2hlci02NjAwNzM=",
