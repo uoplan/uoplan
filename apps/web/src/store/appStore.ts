@@ -18,6 +18,7 @@ import {
   DEFAULT_BASIC_LEVEL_BUCKETS,
 } from "../lib/electiveEligibility";
 import {
+  DEFAULT_BASIC_ELECTIVES_COUNT,
   DEFAULT_COURSES_THIS_SEMESTER,
   DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
   DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
@@ -67,7 +68,7 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
       program: null,
       minorProgram: null,
       basicPinnedCourses: [],
-      basicElectivesCount: 0,
+      basicElectivesCount: DEFAULT_BASIC_ELECTIVES_COUNT,
       basicExcludedCategories: [],
       studentPrograms: [],
       completedCourses: [],
@@ -151,7 +152,7 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
           availableYears,
           firstYear: null,
           basicPinnedCourses: [],
-          basicElectivesCount: 0,
+          basicElectivesCount: DEFAULT_BASIC_ELECTIVES_COUNT,
           basicExcludedCategories: [],
           yearCataloguePrograms: null,
           yearCatalogueCourses: null,

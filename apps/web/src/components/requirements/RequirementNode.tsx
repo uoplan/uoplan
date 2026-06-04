@@ -1,15 +1,5 @@
 import { useState, useMemo, memo, type KeyboardEvent, type ReactNode } from "react";
-import {
-  Stack,
-  MultiSelect,
-  Text,
-  Paper,
-  Badge,
-  Group,
-  Box,
-  Collapse,
-  Tooltip,
-} from "@mantine/core";
+import { Stack, Text, Paper, Badge, Group, Box, Collapse, Tooltip } from "@mantine/core";
 import { IconCheck, IconChevronDown, IconX, IconChartCohort } from "@tabler/icons-react";
 import type { ComboboxItem } from "@mantine/core";
 import type { DataCache } from "@uoplan/core";
@@ -25,6 +15,7 @@ import {
   getConstrainMultiSelectOptions,
   simplifySingleChildChain,
 } from "../../lib/requirements/requirementUtils";
+import { VirtualizedMultiSelect } from "../shared/VirtualizedMultiSelect";
 import { tr } from "../../i18n";
 
 export const REQUIREMENT_INDENT_PX = 12;
@@ -247,7 +238,7 @@ export const RequirementNode = memo(
                   })}
           </Text>
         )}
-        <MultiSelect
+        <VirtualizedMultiSelect
           label={tr("requirementNode.coursesLabel")}
           placeholder={tr("requirementNode.searchPlaceholder")}
           data={options}
@@ -262,8 +253,9 @@ export const RequirementNode = memo(
             onSelect(node.requirementId!, withInstances);
           }}
           onClick={(e) => e.stopPropagation()}
-          searchable
           clearable
+          clearAriaLabel={tr("requirementNode.clearAll")}
+          getRemoveAriaLabel={(course) => tr("requirementNode.removeCourse", { course })}
           renderOption={({ option }) => {
             if (isGroupToken(option.value)) {
               return (

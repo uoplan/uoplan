@@ -1445,6 +1445,9 @@ msgstr "Tout cours {prefix}"
 msgid "requirementNode.anyCourseGroupAdd"
 msgstr "Ajouter un cours {prefix}"
 
+msgid "requirementNode.clearAll"
+msgstr "Effacer tous les cours sélectionnés"
+
 msgid "requirementNode.coursesLabel"
 msgstr "Cours pour cette exigence"
 
@@ -1459,6 +1462,9 @@ msgstr "choisir {count} autre{suffix} cours"
 
 msgid "requirementNode.progress"
 msgstr "{selectedCredits} crédits sur {creditsNeeded} sélectionnés - {nextAction}"
+
+msgid "requirementNode.removeCourse"
+msgstr "Retirer {course}"
 
 msgid "requirementNode.satisfied"
 msgstr "exigence satisfaite"

@@ -2,6 +2,8 @@ import type { DayOfWeek } from "@uoplan/core";
 
 /** Default generation options shared by the initial store state and the "clear" action. */
 export const DEFAULT_COURSES_THIS_SEMESTER = 5;
+/** Default elective slots in basic mode, so "Courses this semester" starts at a full load. */
+export const DEFAULT_BASIC_ELECTIVES_COUNT = 5;
 export const DEFAULT_GENERATION_MIN_START_MINUTES = 8 * 60 + 30; // 8:30
 export const DEFAULT_GENERATION_MAX_END_MINUTES = 22 * 60; // 22:00
 /** A day is "avoided" when a blocked window covers this span. Avoiding a day adds it; un-avoiding subtracts it. */
