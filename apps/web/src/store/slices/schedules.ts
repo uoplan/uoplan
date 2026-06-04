@@ -12,6 +12,7 @@ import {
 } from "@uoplan/core";
 import { normalizeCourseCode } from "@uoplan/core";
 import { basicElectivesAfterPinnedDelta } from "../../lib/basicCalendarPins";
+import { DEFAULT_BASIC_ELECTIVES_COUNT } from "../generationDefaults";
 import {
   DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS,
   DEFAULT_BASIC_LANGUAGE_BUCKETS,
@@ -107,7 +108,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     resetBasicCalendarSettings: () =>
       set({
         basicPinnedCourses: [],
-        basicElectivesCount: 0,
+        basicElectivesCount: DEFAULT_BASIC_ELECTIVES_COUNT,
         basicExcludedCategories: [],
         completedCourses: [],
         frenchImmersionStream: false,

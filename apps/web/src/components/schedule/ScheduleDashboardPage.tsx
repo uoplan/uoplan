@@ -85,15 +85,17 @@ export function ScheduleDashboardPage() {
 
   const generateAndNavigate = () => {
     setConfirmOpen(false);
-    void storeApi
-      .getState()
-      .generateSchedules()
-      .then(() =>
-        navigate({
-          to: "/schedule/calendar",
-          state: { back: { to: "/schedule", label: tr("landing.schedule.title") } } as never,
-        }),
-      );
+    // Basic mode (no program selected) must use the basic-elective generation
+    // path; the advanced path has no requirement courses and would error out.
+    const state = storeApi.getState();
+    const generate =
+      state.program === null ? state.generateBasicSchedules : state.generateSchedules;
+    void generate().then(() =>
+      navigate({
+        to: "/schedule/calendar",
+        state: { back: { to: "/schedule", label: tr("landing.schedule.title") } } as never,
+      }),
+    );
   };
 
   const contentForStep = (id: ScheduleStepId) => {
