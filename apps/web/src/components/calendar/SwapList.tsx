@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import {
   ActionIcon,
@@ -6,6 +6,7 @@ import {
   Box,
   Group,
   Menu,
+  Skeleton,
   Stack,
   Text,
   TextInput,
@@ -13,12 +14,20 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { IconArrowsSort, IconCheck, IconFilter, IconSearch } from "@tabler/icons-react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import type { SwapCandidateOption, SwapModalState, SwapResult } from "../../hooks/useSwapModal";
 import { useTr } from "../../i18n";
 import { GradeDistributionHistogram } from "./GradeDistributionViz";
 
 type SwapSortKey = "best" | "aplus" | "rating" | "alpha";
 type SwapDifficulty = "easy" | "moderate" | "tough";
+
+/** Render the list inside a bounded, virtualized scroll area past this many cards. */
+const VIRTUALIZE_THRESHOLD = 20;
+/** Max height (px) of the virtualized inner scroll area. */
+const VIRTUAL_LIST_MAX_HEIGHT = 360;
+/** Estimated row height (px) used before dynamic measurement kicks in. */
+const ESTIMATED_ROW_HEIGHT = 64;
 
 const SWAP_I18N = {
   optionConflictAria: "swapCourse.option.conflictAria",
@@ -136,6 +145,24 @@ function GroupHeading({ label }: { label: string }) {
   );
 }
 
+/** Flat row model so the same list can render virtualized or inline. */
+type SwapRow =
+  | { kind: "heading"; key: string; label: string; divider: boolean }
+  | { kind: "card"; key: string; option: SwapCandidateOption };
+
+function SwapListRow({ row, onSwap }: { row: SwapRow; onSwap: (code: string) => void }) {
+  if (row.kind === "heading") {
+    return row.divider ? (
+      <Box style={{ borderTop: "1px solid var(--app-border)" }}>
+        <GroupHeading label={row.label} />
+      </Box>
+    ) : (
+      <GroupHeading label={row.label} />
+    );
+  }
+  return <SwapCard option={row.option} onSwap={onSwap} />;
+}
+
 export interface SwapListProps {
   modalState: SwapModalState;
   loading: boolean;
@@ -244,6 +271,39 @@ export function SwapList({
     closeModal();
   };
 
+  // Flatten the groups into a single row list (headings + cards) so the same
+  // markup can render inline or inside the virtualizer.
+  const rows = useMemo<SwapRow[]>(() => {
+    const out: SwapRow[] = [];
+    if (bestMatches.length > 0) {
+      out.push({ kind: "heading", key: "h:best", label: tr(SWAP_I18N.groupBest), divider: false });
+      for (const o of bestMatches) out.push({ kind: "card", key: o.value, option: o });
+    }
+    if (otherOptions.length > 0) {
+      if (bestMatches.length > 0) {
+        out.push({
+          kind: "heading",
+          key: "h:other",
+          label: tr(SWAP_I18N.groupOther),
+          divider: true,
+        });
+      }
+      for (const o of otherOptions) out.push({ kind: "card", key: o.value, option: o });
+    }
+    for (const o of rejected) out.push({ kind: "card", key: o.value, option: o });
+    return out;
+  }, [bestMatches, otherOptions, rejected, tr]);
+
+  const virtualize = filteredCount > VIRTUALIZE_THRESHOLD;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const virtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => scrollRef.current,
+    estimateSize: () => ESTIMATED_ROW_HEIGHT,
+    overscan: 6,
+    getItemKey: (index) => rows[index].key,
+  });
+
   const sortOptions: Array<{ key: SwapSortKey; label: string }> = [
     { key: "best", label: tr(SWAP_I18N.sortBest) },
     { key: "aplus", label: tr(SWAP_I18N.sortAplus) },
@@ -318,9 +378,26 @@ export function SwapList({
   let body: ReactNode;
   if (loading) {
     body = (
-      <Text size="sm" c="dimmed">
-        {tr(SWAP_I18N.loading)}
-      </Text>
+      <>
+        <TextInput
+          placeholder={tr(SWAP_I18N.searchPlaceholder)}
+          leftSection={<IconSearch size={16} />}
+          size="sm"
+          disabled
+        />
+        <Box style={{ border: "1px solid var(--app-border)", borderRadius: 8, overflow: "hidden" }}>
+          {Array.from({ length: 5 }, (_, i) => (
+            <Group key={i} px={10} py={8} align="flex-start" wrap="nowrap" gap="sm">
+              <Stack gap={6} style={{ flex: 1, minWidth: 0 }}>
+                <Skeleton height={12} width="55%" radius="sm" />
+                <Skeleton height={10} width="80%" radius="sm" />
+                <Skeleton height={14} width={70} radius="sm" />
+              </Stack>
+              <Skeleton height={36} width="33%" radius="sm" />
+            </Group>
+          ))}
+        </Box>
+      </>
     );
   } else if (!hasAnyCandidate) {
     const pool = result.poolCourses;
@@ -352,34 +429,44 @@ export function SwapList({
           <Text size="sm" c="dimmed" py="xs">
             {tr(SWAP_I18N.noMatches)}
           </Text>
+        ) : virtualize ? (
+          <Box
+            ref={scrollRef}
+            style={{
+              border: "1px solid var(--app-border)",
+              borderRadius: 8,
+              overflowY: "auto",
+              maxHeight: VIRTUAL_LIST_MAX_HEIGHT,
+            }}
+          >
+            <div style={{ height: virtualizer.getTotalSize(), position: "relative" }}>
+              {virtualizer.getVirtualItems().map((virtualRow) => {
+                const row = rows[virtualRow.index];
+                return (
+                  <div
+                    key={virtualRow.key}
+                    data-index={virtualRow.index}
+                    ref={virtualizer.measureElement}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      transform: `translateY(${virtualRow.start}px)`,
+                    }}
+                  >
+                    <SwapListRow row={row} onSwap={handleSwap} />
+                  </div>
+                );
+              })}
+            </div>
+          </Box>
         ) : (
           <Box
             style={{ border: "1px solid var(--app-border)", borderRadius: 8, overflow: "hidden" }}
           >
-            {bestMatches.length > 0 && (
-              <>
-                <GroupHeading label={tr(SWAP_I18N.groupBest)} />
-                {bestMatches.map((option) => (
-                  <SwapCard key={option.value} option={option} onSwap={handleSwap} />
-                ))}
-              </>
-            )}
-
-            {otherOptions.length > 0 && (
-              <>
-                {bestMatches.length > 0 && (
-                  <Box style={{ borderTop: "1px solid var(--app-border)" }}>
-                    <GroupHeading label={tr(SWAP_I18N.groupOther)} />
-                  </Box>
-                )}
-                {otherOptions.map((option) => (
-                  <SwapCard key={option.value} option={option} onSwap={handleSwap} />
-                ))}
-              </>
-            )}
-
-            {rejected.map((option) => (
-              <SwapCard key={option.value} option={option} onSwap={handleSwap} />
+            {rows.map((row) => (
+              <SwapListRow key={row.key} row={row} onSwap={handleSwap} />
             ))}
           </Box>
         )}
