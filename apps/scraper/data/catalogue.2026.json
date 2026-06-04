@@ -190235,6 +190235,11 @@
             },
             {
               "type": "course",
+              "code": "DCL 6125",
+              "credits": 3
+            },
+            {
+              "type": "course",
               "code": "DCL 6300",
               "credits": 3
             },
@@ -190246,11 +190251,6 @@
             {
               "type": "course",
               "code": "DCL 6350",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "DCL 6734",
               "credits": 3
             }
           ]
