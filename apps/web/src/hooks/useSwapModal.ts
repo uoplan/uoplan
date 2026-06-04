@@ -82,21 +82,15 @@ export function useSwapModal(
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
 
-  // Load candidates when modal opens
+  // Keep candidates in sync if the underlying getter changes while the modal is
+  // open. The initial result is computed synchronously in `openModal` so the
+  // popover's first paint already shows the correct list (no open-then-flash).
+  // This effect only refreshes that result without flipping `loading` back on or
+  // clearing the list, so it can't reintroduce a flash/reflow.
   useEffect(() => {
     if (!swapModal) return;
-
-    // Defer to let modal paint before heavier work
-    const t = window.setTimeout(() => {
-      setLoading(true);
-      setSwapResult(EMPTY_SWAP_RESULT);
-      setQuery("");
-      const next = getSwapCandidates(swapModal.enrollmentIndex);
-      setSwapResult(next);
-      setLoading(false);
-    }, 0);
-
-    return () => window.clearTimeout(t);
+    setSwapResult(getSwapCandidates(swapModal.enrollmentIndex));
+    setLoading(false);
   }, [getSwapCandidates, swapModal]);
 
   // Build dropdown options from candidates
@@ -166,11 +160,13 @@ export function useSwapModal(
         componentSection: ctx?.componentSection,
         gradeViz: ctx?.gradeViz,
       });
-      setSwapResult(EMPTY_SWAP_RESULT);
-      setLoading(true);
+      // Compute candidates synchronously so the list is already correct on the
+      // popover's first paint instead of flashing in a tick later.
+      setSwapResult(getSwapCandidates(enrollmentIndex));
+      setLoading(false);
       setQuery("");
     },
-    [],
+    [getSwapCandidates],
   );
 
   const closeModal = useCallback(() => {

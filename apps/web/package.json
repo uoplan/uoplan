@@ -28,6 +28,7 @@
     "@marsidev/react-turnstile": "^1.5.0",
     "@tabler/icons-react": "^3.40.0",
     "@tanstack/react-router": "^1.169.2",
+    "@tanstack/react-virtual": "^3.13.26",
     "@uoplan/calendar": "workspace:^",
     "@uoplan/core": "workspace:^",
     "@uoplan/data": "workspace:^",
