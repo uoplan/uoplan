@@ -1,7 +1,7 @@
 {
   "termId": "2265",
   "totalCourses": 11145,
-  "totalWithSchedules": 885,
+  "totalWithSchedules": 884,
   "schedules": [
     {
       "subject": "ADM",
@@ -9118,155 +9118,6 @@
             "session": null,
             "times": [],
             "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "BIO",
-      "catalogNumber": "5128",
-      "courseCode": "BIO 5128",
-      "title": "Molecular Methods",
-      "timeZone": "America/Toronto",
-      "components": {
-        "TLB": [
-          {
-            "section": "A00-TLB Term",
-            "sectionCode": "A00",
-            "component": "TLB",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 1050,
-                "virtual": false,
-                "instructor": "Marc Ekker",
-                "meetingDates": [
-                  "2026-08-17",
-                  "2026-08-17"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 510,
-                "endMinutes": 1050,
-                "virtual": false,
-                "instructor": "Marc Ekker",
-                "meetingDates": [
-                  "2026-08-18",
-                  "2026-08-18"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 510,
-                "endMinutes": 1050,
-                "virtual": false,
-                "instructor": "Marc Ekker",
-                "meetingDates": [
-                  "2026-08-19",
-                  "2026-08-19"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 510,
-                "endMinutes": 1050,
-                "virtual": false,
-                "instructor": "Marc Ekker",
-                "meetingDates": [
-                  "2026-08-20",
-                  "2026-08-20"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 510,
-                "endMinutes": 1050,
-                "virtual": false,
-                "instructor": "Marc Ekker",
-                "meetingDates": [
-                  "2026-08-21",
-                  "2026-08-21"
-                ]
-              },
-              {
-                "day": "Mo",
-                "startMinutes": 510,
-                "endMinutes": 1050,
-                "virtual": false,
-                "instructor": "Marc Ekker",
-                "meetingDates": [
-                  "2026-08-24",
-                  "2026-08-24"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 510,
-                "endMinutes": 1050,
-                "virtual": false,
-                "instructor": "Marc Ekker",
-                "meetingDates": [
-                  "2026-08-25",
-                  "2026-08-25"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 510,
-                "endMinutes": 1050,
-                "virtual": false,
-                "instructor": "Marc Ekker",
-                "meetingDates": [
-                  "2026-08-26",
-                  "2026-08-26"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 510,
-                "endMinutes": 1050,
-                "virtual": false,
-                "instructor": "Marc Ekker",
-                "meetingDates": [
-                  "2026-08-27",
-                  "2026-08-27"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 510,
-                "endMinutes": 1050,
-                "virtual": false,
-                "instructor": "Marc Ekker",
-                "meetingDates": [
-                  "2026-08-28",
-                  "2026-08-28"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 5,
-              "A": 5,
-              "A-": 3,
-              "B+": 0,
-              "B": 0,
-              "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
           }
         ]
       }
@@ -21574,7 +21425,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 523,
               "A": 772,
@@ -22298,7 +22149,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 5,
               "A": 6,
@@ -33362,7 +33213,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 149,
               "A": 248,
@@ -49397,7 +49248,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 26,
               "A": 48,
@@ -52241,7 +52092,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 80,
               "A": 95,
