@@ -1414,6 +1414,15 @@ msgstr "Vous pouvez tout de même construire un horaire en sélectionnant des co
 msgid "programStep.skip.body"
 msgstr "Sans compléter la configuration, vous manquerez:"
 
+msgid "programStep.skip.missing.completedCourses"
+msgstr "Détection automatique de vos cours complétés"
+
+msgid "programStep.skip.missing.programMatching"
+msgstr "Recommandations de cours optionnels personnalisées"
+
+msgid "programStep.skip.missing.requirements"
+msgstr "Suivi des exigences selon votre programme"
+
 msgid "programStep.transcript.addAnyway"
 msgstr "Ajouter quand même"
 

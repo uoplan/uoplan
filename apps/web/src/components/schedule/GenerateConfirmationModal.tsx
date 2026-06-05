@@ -44,6 +44,13 @@ export function GenerateConfirmationModal({
                 {blocker.label}:{" "}
               </Text>
               {blocker.description}
+              {blocker.details && blocker.details.length > 0 && (
+                <List size="sm" c="var(--app-text-muted)" withPadding spacing={2} mt={4}>
+                  {blocker.details.map((detail) => (
+                    <List.Item key={detail}>{detail}</List.Item>
+                  ))}
+                </List>
+              )}
               <Text size="xs" c="var(--app-text-dim)" mt={2}>
                 {blocker.consequence}
               </Text>

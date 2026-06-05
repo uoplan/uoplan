@@ -1414,6 +1414,15 @@ msgstr "You can still build a schedule by selecting required courses and a numbe
 msgid "programStep.skip.body"
 msgstr "Without completing setup, you'll be missing out on:"
 
+msgid "programStep.skip.missing.completedCourses"
+msgstr "Automatic detection of your completed courses"
+
+msgid "programStep.skip.missing.programMatching"
+msgstr "Personalized elective recommendations"
+
+msgid "programStep.skip.missing.requirements"
+msgstr "Requirement tracking based on your program"
+
 msgid "programStep.transcript.addAnyway"
 msgstr "Add anyway"
 

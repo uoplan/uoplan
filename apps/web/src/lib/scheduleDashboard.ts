@@ -37,6 +37,7 @@ export type GenerateBlocker = {
   id: GenerateBlockerId;
   label: string;
   description: string;
+  details?: string[];
   consequence: string;
 };
 
@@ -174,6 +175,11 @@ export function getGenerateBlockers(state: ScheduleDashboardInput): GenerateBloc
       id: "program",
       label: tr("schedule.generate.confirm.program.label"),
       description: tr("programStep.skip.body"),
+      details: [
+        tr("programStep.skip.missing.requirements"),
+        tr("programStep.skip.missing.completedCourses"),
+        tr("programStep.skip.missing.programMatching"),
+      ],
       consequence: tr("programStep.skip.basicModeNote"),
     });
   }
