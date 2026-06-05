@@ -3,6 +3,7 @@ import type { CourseEnrollment, GenerationConstraints, RequirementWithStatus } f
 import {
   buildPrereqContext,
   canTakeCourse,
+  cacheWithPerCourseVirtualFilter,
   courseMatchesFilters,
   enrollmentsOverlap,
   getEffectiveSchedule,
@@ -14,6 +15,7 @@ import {
   isWithinElectiveLevelBuckets,
   isWithinElectiveLevelCap,
   normalizeCourseCode,
+  timetableFixedCourseSet,
   virtualScheduleFilterApplies,
 } from "@uoplan/core";
 import {
@@ -74,6 +76,22 @@ export function getSwapCandidates(
     const excludedPrefixes = basicExcludedCategories.map((c) => c.toLowerCase());
     const prereqCtx = buildPrereqContext(completedCourses, cache, studentPrograms);
     const basicFilters = { levels: levelBuckets, languageBuckets };
+    const alreadyInSchedule = new Set(schedule.enrollments.map((e) => e.courseCode));
+    const pinnedNormalized = new Set(basicPinnedCourses.map(normalizeCourseCode));
+    const effectiveCache = cacheWithPerCourseVirtualFilter(
+      cache,
+      includeClosedComponents,
+      (code) => virtualSectionsOnly && !pinnedNormalized.has(normalizeCourseCode(code)),
+    );
+    const swapConstraints: GenerationConstraints = {
+      minStartMinutes: generationMinStartMinutes,
+      maxEndMinutes: generationMaxEndMinutes,
+      minProfessorRating: generationMinProfessorRating ?? undefined,
+      professorRatings: professorRatings ?? undefined,
+      blockedTimes: get().blockedTimes,
+    };
+    const swappedCodes = schedule.enrollments.map((e) => e.courseCode);
+    const currentSeed = get().currentSeed;
 
     for (const course of cache.getAllCourses()) {
       const code = course.code;
@@ -96,20 +114,13 @@ export function getSwapCandidates(
       }
 
       if (basicPinnedCourses.includes(code)) continue;
-      const alreadyInSchedule = schedule.enrollments.some((e) => e.courseCode === code);
-      if (alreadyInSchedule) continue;
+      if (alreadyInSchedule.has(code)) continue;
 
-      const sched = getEffectiveSchedule(cache, code, includeClosedComponents, virtualSectionsOnly);
-      if (!sched) continue;
-
-      const swapConstraints: GenerationConstraints = {
-        minStartMinutes: generationMinStartMinutes,
-        maxEndMinutes: generationMaxEndMinutes,
-        minProfessorRating: generationMinProfessorRating ?? undefined,
-        professorRatings: professorRatings ?? undefined,
-        blockedTimes: get().blockedTimes,
-      };
-      if (getValidSectionCombos(sched, swapConstraints).length === 0) continue;
+      swappedCodes[enrollmentIndex] = code;
+      const timetabled = timetableFixedCourseSet(swappedCodes, effectiveCache, swapConstraints, {
+        seed: currentSeed,
+      });
+      if (!timetabled) continue;
 
       optionalPool.push(code);
     }
