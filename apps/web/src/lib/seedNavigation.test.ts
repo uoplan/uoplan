@@ -5,6 +5,7 @@ import {
   nextSeed,
   noteLowestVisitedSeed,
   repairSeedPosition,
+  hasPersistedGeneratedSchedule,
 } from "./seedNavigation";
 
 describe("seedNavigation", () => {
@@ -31,6 +32,21 @@ describe("seedNavigation", () => {
     it("resets orphan seeds below firstSeed to unset (0)", () => {
       expect(repairSeedPosition(firstSeed, 3)).toBe(0);
       expect(repairSeedPosition(firstSeed, firstSeed - 1)).toBe(0);
+    });
+  });
+
+  describe("hasPersistedGeneratedSchedule", () => {
+    it("is false before the first successful schedule seed is persisted", () => {
+      expect(hasPersistedGeneratedSchedule(firstSeed, 0)).toBe(false);
+    });
+
+    it("is true when a generated schedule seed has been persisted", () => {
+      expect(hasPersistedGeneratedSchedule(firstSeed, firstSeed)).toBe(true);
+      expect(hasPersistedGeneratedSchedule(firstSeed, firstSeed + 2)).toBe(true);
+    });
+
+    it("ignores repaired orphan seed positions", () => {
+      expect(hasPersistedGeneratedSchedule(firstSeed, firstSeed - 1)).toBe(false);
     });
   });
 
