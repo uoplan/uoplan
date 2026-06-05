@@ -2,7 +2,12 @@ import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
 import { recomputeStateForProgram, getDisciplineCodesForProgram } from "../requirementCompute";
 import type { CourseLanguageBucket } from "@uoplan/core";
-import { generateRandomSeed, normalizeCourseCode, isRepeatableCourse } from "@uoplan/core";
+import {
+  generateRandomSeed,
+  normalizeCourseCode,
+  isRepeatableCourse,
+  parseCourseCode,
+} from "@uoplan/core";
 import { getMergedCatalogue } from "./catalogueUtils";
 import { buildCacheWithOpt } from "../../lib/dataCacheLoader";
 import { pruneOptionSelectionsForClear } from "../../lib/requirements/requirementUtils";
@@ -36,6 +41,10 @@ function shallowRecordEqual(a: Record<string, string[]>, b: Record<string, strin
     }
   }
   return true;
+}
+
+function hasFlsCourse(courses: string[]): boolean {
+  return courses.some((code) => parseCourseCode(code)?.discipline === "FLS");
 }
 
 interface SelectionSlice {
@@ -161,6 +170,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
   },
 
   setCompletedCourses: (courses) => {
+    const hadFlsCourse = hasFlsCourse(get().completedCourses);
     set({ completedCourses: courses });
     const { catalogue, yearCatalogueCourses, schedulesData } = get();
     if (yearCatalogueCourses && catalogue && schedulesData) {
@@ -202,6 +212,9 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       requirementSlotsUserTouched,
     );
     set({ ...state, generationOptionsDirty: true });
+    if (!hadFlsCourse && hasFlsCourse(courses) && !get().frenchImmersionStream) {
+      get().setFrenchImmersionStream(true);
+    }
   },
 
   addCompletedCourse: (code) => {
