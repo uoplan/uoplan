@@ -109,8 +109,6 @@ function SearchCardSection({
             overflowX: "auto",
             overflowY: "visible",
             paddingBottom: 10,
-            scrollbarWidth: "thin",
-            scrollbarColor: "var(--app-border-strong) transparent",
           }}
         >
           <Box style={{ display: "flex", gap: 10, width: "max-content" }}>
