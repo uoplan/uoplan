@@ -30,16 +30,13 @@ export function CompletedCoursesStep({
   const repeatableCompleted = completedCourses.filter((c) => isRepeatableCourse(c));
   const nonRepeatableCompleted = completedCourses.filter((c) => !isRepeatableCourse(c));
   const completedNonRepeatableSet = new Set(nonRepeatableCompleted);
+  const completedRepeatableSet = new Set(repeatableCompleted);
   const availableCandidates = allCandidates.filter(
-    (c) => !isRepeatableCourse(c) && !completedNonRepeatableSet.has(c),
+    (c) => !completedNonRepeatableSet.has(c) && !completedRepeatableSet.has(c),
   );
   const options = createCourseOptions(availableCandidates, cache);
 
-  // Repeatable candidate courses to expose as steppers: requirement candidates that are
-  // repeatable, unioned with any repeatable course the student has already added.
-  const repeatableCodes = [
-    ...new Set([...allCandidates.filter(isRepeatableCourse), ...repeatableCompleted]),
-  ].sort();
+  const repeatableCodes = [...new Set(repeatableCompleted)].sort();
   const repeatableCounts = new Map<string, number>();
   for (const code of repeatableCompleted) {
     repeatableCounts.set(code, (repeatableCounts.get(code) ?? 0) + 1);
