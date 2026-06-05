@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import type { ReactNode } from "react";
 import {
   ActionIcon,
@@ -18,9 +18,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import type { SwapCandidateOption, SwapModalState, SwapResult } from "../../hooks/useSwapModal";
 import { useTr } from "../../i18n";
 import { GradeDistributionHistogram } from "./GradeDistributionViz";
-
-type SwapSortKey = "best" | "aplus" | "rating" | "alpha";
-type SwapDifficulty = "easy" | "moderate" | "tough";
+import type { SwapDifficulty, SwapSortKey } from "./swapContext";
 
 /** Render the list inside a bounded, virtualized scroll area past this many cards. */
 const VIRTUALIZE_THRESHOLD = 20;
@@ -176,6 +174,12 @@ export interface SwapListProps {
   preferEasier: boolean;
   /** A+ percentage of the course currently in the schedule (for ranking). */
   currentAPlusPercent: number | null;
+  /** Sort order (lifted to context so it survives popover ⇄ fullscreen swaps). */
+  sortKey: SwapSortKey;
+  setSortKey: (key: SwapSortKey) => void;
+  /** Difficulty filter (lifted to context so it survives popover ⇄ fullscreen swaps). */
+  difficulty: SwapDifficulty | null;
+  setDifficulty: (difficulty: SwapDifficulty | null) => void;
 }
 
 export function SwapList({
@@ -189,10 +193,12 @@ export function SwapList({
   onSwap,
   preferEasier,
   currentAPlusPercent,
+  sortKey,
+  setSortKey,
+  difficulty,
+  setDifficulty,
 }: SwapListProps) {
   const tr = useTr();
-  const [sortKey, setSortKey] = useState<SwapSortKey>("best");
-  const [difficulty, setDifficulty] = useState<SwapDifficulty | null>(null);
 
   const { bestMatches, otherOptions, rejected, filteredCount } = useMemo(() => {
     const q = query.trim().toLowerCase();

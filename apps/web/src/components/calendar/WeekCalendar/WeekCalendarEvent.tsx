@@ -83,7 +83,8 @@ export function WeekCalendarEvent({
   });
 
   const isActive = swapCtx?.activeEventId === event.id;
-  const popoverOpened = isActive && !(swapCtx?.isMobile ?? false);
+  const popoverOpened =
+    isActive && !(swapCtx?.isMobile ?? false) && !(swapCtx?.isFullscreen ?? false);
 
   const eventButton = (
     <button

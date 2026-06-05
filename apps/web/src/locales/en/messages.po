@@ -378,6 +378,11 @@ msgstr "Prevents this course from appearing in any generated schedule."
 msgid "calendar.swap.close"
 msgstr "Close"
 
+#: apps/web/src/components/calendar/CalendarEventDetails.tsx:91
+#: apps/web/src/components/calendar/CalendarEventDetails.tsx:96
+msgid "calendar.swap.expand"
+msgstr "Expand to full screen"
+
 msgid "calendar.swap.lockAria"
 msgstr "Add course to schedule-generation selections"
 
