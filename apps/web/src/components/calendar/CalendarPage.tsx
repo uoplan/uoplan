@@ -12,7 +12,7 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import { useHotkeys, useMediaQuery } from "@mantine/hooks";
+import { useHotkeys, useLocalStorage, useMediaQuery } from "@mantine/hooks";
 import {
   IconArrowBackUp,
   IconArrowsShuffle,
@@ -50,6 +50,7 @@ import { SaveStatusIndicator } from "./SaveStatusIndicator";
 import { AnimatedIconSwap } from "../shared/AnimatedIconSwap";
 import { encodeSchedulePayload } from "../../lib/encodeSchedulePayload";
 import { useScheduleWeeks } from "../../hooks/useScheduleWeeks";
+import { formatWeekLabel } from "../../lib/formatWeekCount";
 
 export function CalendarPage() {
   useEffect(() => {
@@ -138,7 +139,11 @@ export function CalendarPage() {
   const [controlsOpen, setControlsOpen] = useState(false);
   const [enrolCliOpen, setEnrolCliOpen] = useState(false);
   const [uenrollImportOpen, setUenrollImportOpen] = useState(false);
-  const [sidebarWidth, setSidebarWidth] = useState(CALENDAR_SIDEBAR_WIDTH_PX);
+  const [sidebarWidth, setSidebarWidth] = useLocalStorage<number>({
+    key: "uoplan.calendar.sidebarWidth",
+    defaultValue: CALENDAR_SIDEBAR_WIDTH_PX,
+    getInitialValueInEffect: false,
+  });
   const isResizing = useRef(false);
   const resizeStartX = useRef(0);
   const resizeStartWidth = useRef(0);
@@ -648,6 +653,47 @@ export function CalendarPage() {
             setWeekIndex={setWeekIndex}
           />
         </Box>
+
+        {/* Mobile week navigation bar (above the bottom nav) */}
+        {isMobile && weekGroups.length > 0 && (
+          <Box
+            style={{
+              flexShrink: 0,
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "6px 12px",
+              backgroundColor: "var(--app-surface)",
+              borderTop: "var(--app-border-width) solid var(--app-border)",
+            }}
+          >
+            <ActionIcon
+              variant="subtle"
+              color="gray"
+              size="md"
+              radius="md"
+              aria-label={tr("calendarView.previousWeek")}
+              disabled={weekIndex === 0}
+              onClick={() => setWeekIndex(weekIndex - 1)}
+            >
+              <IconChevronLeft size={18} />
+            </ActionIcon>
+            <Text size="xs" c="dimmed" style={{ flex: 1, textAlign: "center" }}>
+              {formatWeekLabel(weekGroups, weekIndex)}
+            </Text>
+            <ActionIcon
+              variant="subtle"
+              color="gray"
+              size="md"
+              radius="md"
+              aria-label={tr("calendarView.nextWeek")}
+              disabled={weekIndex === weekGroups.length - 1}
+              onClick={() => setWeekIndex(weekIndex + 1)}
+            >
+              <IconChevronRight size={18} />
+            </ActionIcon>
+          </Box>
+        )}
 
         {/* Mobile bottom nav */}
         {isMobile && (

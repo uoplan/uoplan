@@ -16,3 +16,20 @@ export function formatWeekCount(group: WeekGroup): string {
   const weeks = Math.round((end.getTime() - start.getTime() + MS_PER_DAY) / MS_PER_WEEK);
   return tr("calendarPage.weekCount", { weeks });
 }
+
+/**
+ * Active-week label shown in the week header (desktop) and mobile week nav bar:
+ * "Week X of Y · N weeks" when multiple groups exist, otherwise just the week count.
+ */
+export function formatWeekLabel(weekGroups: WeekGroup[], weekIndex: number): string {
+  const group = weekGroups[weekIndex];
+  if (!group) return "";
+  if (weekGroups.length > 1) {
+    const ordinal = tr("calendarPage.weekOf", {
+      current: weekIndex + 1,
+      total: weekGroups.length,
+    });
+    return `${ordinal} · ${formatWeekCount(group)}`;
+  }
+  return formatWeekCount(group);
+}

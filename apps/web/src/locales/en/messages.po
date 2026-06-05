@@ -531,6 +531,9 @@ msgstr "Next week"
 msgid "calendarView.previousWeek"
 msgstr "Previous week"
 
+msgid "calendarView.resizePreviewBar"
+msgstr "Resize week preview bar"
+
 msgid "completedCourses.description"
 msgstr "Courses you have completed or are taking. You can also upload your transcript in Step 1."
 
