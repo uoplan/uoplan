@@ -37,9 +37,9 @@ export async function createClient(): Promise<ClientInfo> {
   );
   return value;
 }
-export type YearOfStudy = 1 | 2 | 3 | 4 | "grad";
+type YearOfStudy = 1 | 2 | 3 | 4 | "grad";
 
-export function buildSearchBody(args: {
+function buildSearchBody(args: {
   icsid: string;
   dataLang: string;
   icStateNum: string;
@@ -141,10 +141,10 @@ export function buildSearchBody(args: {
 
 const YEAR_SLICES: YearOfStudy[] = [1, 2, 3, 4, "grad"];
 
-export type BannerKind = "none" | "empty" | "overflow";
+type BannerKind = "none" | "empty" | "overflow";
 
 /** Classify the PeopleSoft response banner before attempting to parse results. */
-export function classifyBanner(html: string): BannerKind {
+function classifyBanner(html: string): BannerKind {
   const text = cheerio
     .load(html)("span.PSERRORTEXT, div.PSERRORTEXT, span.SSSMSGALERTTEXT")
     .text()
@@ -157,7 +157,7 @@ export function classifyBanner(html: string): BannerKind {
   return "none";
 }
 
-export async function performSearch(
+async function performSearch(
   clientInfo: ClientInfo,
   termId: string,
   sp: { subject: string; catalogNbr?: string; yearOfStudy?: YearOfStudy; virtual: boolean },
@@ -276,7 +276,7 @@ export async function performSearch(
 }
 
 /** One subject+facet search returning parsed courses, or "overflow" when the 300-section cap hits. */
-export async function fetchSubjectSlice(
+async function fetchSubjectSlice(
   clientInfo: ClientInfo,
   termId: string,
   subject: string,
@@ -296,7 +296,7 @@ export async function fetchSubjectSlice(
 }
 
 /** Exact single-course search (per-course fallback for slices that still overflow). */
-export async function fetchCourseExact(
+async function fetchCourseExact(
   clientInfo: ClientInfo,
   termId: string,
   course: ParsedCourseCode,
@@ -319,7 +319,7 @@ export async function fetchCourseExact(
  * subject-only search, falling back to per-year-of-study slices on overflow, and finally to
  * per-catalogue-course searches if an individual slice still overflows.
  */
-export async function fetchSubjectPass(
+async function fetchSubjectPass(
   clientInfo: ClientInfo,
   termId: string,
   subject: string,

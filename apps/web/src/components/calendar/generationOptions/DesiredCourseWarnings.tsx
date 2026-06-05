@@ -4,12 +4,12 @@ import type { DesiredCourseResolution } from "../../../lib/generation/resolveDes
 import { tr } from "../../../i18n";
 
 /** Desired courses that count toward one remaining requirement (grouped for display). */
-export interface DesiredCourseAssignment {
+interface DesiredCourseAssignment {
   requirementTitle: string;
   codes: string[];
 }
 
-export interface DesiredCourseWarningsProps {
+interface DesiredCourseWarningsProps {
   resolution: DesiredCourseResolution;
   /** Prereq-eligible desired courses that matched a remaining requirement, grouped by requirement. */
   assignments: DesiredCourseAssignment[];

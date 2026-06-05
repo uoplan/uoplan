@@ -10,7 +10,7 @@ import type {
 } from "@uoplan/proto/data";
 import type { CoursePrereqKind, CoursePrereqNode, ProgramRequirement } from "./domain";
 
-export function reqTypeFromProto(value: RequirementType): ProgramRequirement["type"] {
+function reqTypeFromProto(value: RequirementType): ProgramRequirement["type"] {
   switch (value) {
     case RequirementType.REQUIREMENT_TYPE_COURSE:
       return "course";
@@ -43,7 +43,7 @@ export function reqTypeFromProto(value: RequirementType): ProgramRequirement["ty
   }
 }
 
-export function reqTypeToProto(value: ProgramRequirement["type"]): RequirementType {
+function reqTypeToProto(value: ProgramRequirement["type"]): RequirementType {
   switch (value) {
     case "course":
       return RequirementType.REQUIREMENT_TYPE_COURSE;
@@ -74,7 +74,7 @@ export function reqTypeToProto(value: ProgramRequirement["type"]): RequirementTy
   }
 }
 
-export function prereqTypeFromProto(value: CoursePrereqNodeType): CoursePrereqNode["type"] {
+function prereqTypeFromProto(value: CoursePrereqNodeType): CoursePrereqNode["type"] {
   switch (value) {
     case CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_COURSE:
       return "course";
@@ -89,7 +89,7 @@ export function prereqTypeFromProto(value: CoursePrereqNodeType): CoursePrereqNo
   }
 }
 
-export function prereqTypeToProto(value: CoursePrereqNode["type"]): CoursePrereqNodeType {
+function prereqTypeToProto(value: CoursePrereqNode["type"]): CoursePrereqNodeType {
   switch (value) {
     case "course":
       return CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_COURSE;
@@ -102,7 +102,7 @@ export function prereqTypeToProto(value: CoursePrereqNode["type"]): CoursePrereq
   }
 }
 
-export const PREREQ_KIND_TO_PROTO: Record<CoursePrereqKind, ProtoCoursePrereqKind> = {
+const PREREQ_KIND_TO_PROTO: Record<CoursePrereqKind, ProtoCoursePrereqKind> = {
   permission: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_PERMISSION,
   audition: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_AUDITION,
   language: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_LANGUAGE,
@@ -115,7 +115,7 @@ export const PREREQ_KIND_TO_PROTO: Record<CoursePrereqKind, ProtoCoursePrereqKin
   recommended: ProtoCoursePrereqKind.COURSE_PREREQ_KIND_RECOMMENDED,
 };
 
-export function prereqKindFromProto(value: ProtoCoursePrereqKind): CoursePrereqNode["kind"] {
+function prereqKindFromProto(value: ProtoCoursePrereqKind): CoursePrereqNode["kind"] {
   switch (value) {
     case ProtoCoursePrereqKind.COURSE_PREREQ_KIND_PERMISSION:
       return "permission";

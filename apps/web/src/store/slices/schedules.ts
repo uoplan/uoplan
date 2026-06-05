@@ -35,7 +35,6 @@ import {
   withScheduleGenerating,
 } from "./schedules/generationState";
 import { getSwapCandidates } from "./schedules/swapCandidates";
-export type { SchedulesSlice } from "./schedules/types";
 import type { ScheduleGenerationResult, SchedulesSlice } from "./schedules/types";
 
 export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice> = (set, get) => {

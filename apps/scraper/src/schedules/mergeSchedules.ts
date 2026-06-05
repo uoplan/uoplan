@@ -51,7 +51,7 @@ export function mergeVirtualIntoBase(
 }
 
 /** Merge `src` course sections into `target` (same courseCode), deduping sections and times. */
-export function mergeCourseInto(target: CourseSchedule, src: CourseSchedule): void {
+function mergeCourseInto(target: CourseSchedule, src: CourseSchedule): void {
   if (!target.title && src.title) target.title = src.title;
   for (const [compKey, srcSections] of Object.entries(src.components)) {
     if (!target.components[compKey]) target.components[compKey] = [];

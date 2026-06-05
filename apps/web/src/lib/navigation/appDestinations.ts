@@ -19,7 +19,7 @@ type IconComponent = ComponentType<
  * command center (Cmd/Ctrl+K), the global quick-nav hotkeys (`g` + key) and the
  * keyboard-shortcuts help overlay so the three never drift apart.
  */
-export type AppDestination = {
+type AppDestination = {
   /** Stable id (also the Spotlight action id). */
   id: string;
   /** Router path to navigate to. */

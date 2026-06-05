@@ -161,7 +161,7 @@ function SwapListRow({ row, onSwap }: { row: SwapRow; onSwap: (code: string) => 
   return <SwapCard option={row.option} onSwap={onSwap} />;
 }
 
-export interface SwapListProps {
+interface SwapListProps {
   modalState: SwapModalState;
   loading: boolean;
   result: SwapResult;
