@@ -14,6 +14,11 @@ export function repairSeedPosition(firstSeed: number, currentSeed: number): numb
   return currentSeed;
 }
 
+/** True when persisted state points at a generated schedule seed. */
+export function hasPersistedGeneratedSchedule(firstSeed: number, currentSeed: number): boolean {
+  return repairSeedPosition(firstSeed, currentSeed) !== 0;
+}
+
 /** Record the earliest seed the user has successfully generated at this session. */
 export function noteLowestVisitedSeed(lowestVisitedSeed: number | null, seed: number): number {
   if (lowestVisitedSeed == null) return seed;

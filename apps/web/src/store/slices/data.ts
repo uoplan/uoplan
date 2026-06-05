@@ -34,6 +34,7 @@ import {
 import { recomputeStateForProgram } from "../requirementCompute";
 import { LOCAL_STORAGE_KEY } from "../constants";
 import { applyHydrationNavigation } from "../../lib/hydrateNavigation";
+import { hasPersistedGeneratedSchedule } from "../../lib/seedNavigation";
 import { tr } from "../../i18n";
 import type { AppServices } from "../services";
 
@@ -355,18 +356,31 @@ export const createDataSlice =
             if ("error" in decoded) {
               set({ error: decoded.error });
             } else {
-              const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-              if (stored) {
-                // User has existing state — ask before replacing it
-                const existing = decodeStateFromBase64(stored, parsedCatalogue, indices);
-                if (!("error" in existing)) {
-                  get().loadEncodedState(existing);
-                  applyHydrationNavigation(existing, services.navigation);
-                }
-                set({ pendingSharedState: decoded });
-              } else {
+              const loadSharedState = () => {
+                // Fully replace any existing state first so a leftover program or
+                // requirement selection can't linger and make generation fail for the
+                // shared schedule (it would otherwise generate nothing and error out).
+                get().resetToDefault();
                 get().loadEncodedState(decoded);
                 applyHydrationNavigation(decoded, services.navigation);
+              };
+
+              const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+              if (stored) {
+                const existing = decodeStateFromBase64(stored, parsedCatalogue, indices);
+                if (
+                  !("error" in existing) &&
+                  hasPersistedGeneratedSchedule(existing.firstSeed, existing.currentSeed)
+                ) {
+                  // User has an existing generated schedule — ask before replacing it.
+                  get().loadEncodedState(existing);
+                  applyHydrationNavigation(existing, services.navigation);
+                  set({ pendingSharedState: decoded });
+                } else {
+                  loadSharedState();
+                }
+              } else {
+                loadSharedState();
               }
             }
           } else {
