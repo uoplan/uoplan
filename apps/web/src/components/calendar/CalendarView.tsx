@@ -1,7 +1,6 @@
-import { useMemo, useCallback } from "react";
-import { ActionIcon, Box, Group, Text } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { useMemo, useCallback, useRef, useState } from "react";
+import { Box, Text } from "@mantine/core";
+import { useLocalStorage, useMediaQuery } from "@mantine/hooks";
 import type { DataCache } from "@uoplan/core";
 import type { GeneratedSchedule } from "@uoplan/core";
 import type { ProfessorRatingsMap } from "@uoplan/core";
@@ -16,15 +15,19 @@ import { CalendarEventDetails } from "./CalendarEventDetails";
 import { SwapContextProvider, type SwapContextValue } from "./swapContext";
 import { useAppStore } from "../../store/appStore";
 import { CALENDAR_HEADER_MIN_HEIGHT } from "./calendarHeaderLayout";
+import {
+  CALENDAR_PREVIEW_BAR_LARGE_QUERY,
+  CALENDAR_PREVIEW_BAR_MAX_PX,
+  CALENDAR_PREVIEW_BAR_MIN_PX,
+  CALENDAR_PREVIEW_BAR_WIDTH_LARGE_PX,
+  CALENDAR_PREVIEW_BAR_WIDTH_PX,
+} from "./calendarLayout";
 import type { CalendarEvent } from "../../hooks/useCalendarEvents";
 import type { WeekGroup } from "../../hooks/useScheduleWeeks";
-import { formatWeekCount } from "../../lib/formatWeekCount";
-import { useTr } from "../../i18n";
+import { formatWeekLabel } from "../../lib/formatWeekCount";
 import { tr as staticTr } from "../../i18n";
 
 const EMPTY_COLOR_MAP: Record<string, number> = {};
-const PREVIOUS_WEEK_LABEL_ID = "calendarView.previousWeek";
-const NEXT_WEEK_LABEL_ID = "calendarView.nextWeek";
 
 function formatScheduleRange(start: string, end: string): string {
   const s = new Date(`${start}T00:00:00Z`);
@@ -74,10 +77,61 @@ export function CalendarView({
   weekIndex,
   setWeekIndex,
 }: CalendarViewProps) {
-  const tr = useTr();
   const isCompactCalendar = useMediaQuery("(max-width: 1200px)");
   const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });
+  const isLargeScreen = useMediaQuery(CALENDAR_PREVIEW_BAR_LARGE_QUERY, false);
   const prefersReduced = useMediaQuery("(prefers-reduced-motion: reduce)") ?? false;
+
+  const [previewBarWidth, setPreviewBarWidth] = useLocalStorage<number>({
+    key: "uoplan.calendar.previewBarWidth",
+    defaultValue: isLargeScreen
+      ? CALENDAR_PREVIEW_BAR_WIDTH_LARGE_PX
+      : CALENDAR_PREVIEW_BAR_WIDTH_PX,
+    getInitialValueInEffect: false,
+  });
+
+  const previewResizing = useRef(false);
+  const previewStartX = useRef(0);
+  const previewStartWidth = useRef(0);
+  // Transient width during an active drag; committed to localStorage on pointer-up
+  // so we don't write to storage on every pointer-move.
+  const [draggingPreviewWidth, setDraggingPreviewWidth] = useState<number | null>(null);
+  const effectivePreviewWidth = draggingPreviewWidth ?? previewBarWidth;
+
+  const clampPreviewWidth = useCallback(
+    (width: number) =>
+      Math.min(CALENDAR_PREVIEW_BAR_MAX_PX, Math.max(CALENDAR_PREVIEW_BAR_MIN_PX, width)),
+    [],
+  );
+
+  const handlePreviewResizeDown = useCallback(
+    (e: React.PointerEvent) => {
+      previewResizing.current = true;
+      previewStartX.current = e.clientX;
+      previewStartWidth.current = previewBarWidth;
+      setDraggingPreviewWidth(previewBarWidth);
+      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    },
+    [previewBarWidth],
+  );
+
+  const handlePreviewResizeMove = useCallback(
+    (e: React.PointerEvent) => {
+      if (!previewResizing.current) return;
+      const delta = e.clientX - previewStartX.current;
+      setDraggingPreviewWidth(clampPreviewWidth(previewStartWidth.current + delta));
+    },
+    [clampPreviewWidth],
+  );
+
+  const handlePreviewResizeUp = useCallback(() => {
+    if (!previewResizing.current) return;
+    previewResizing.current = false;
+    setDraggingPreviewWidth((current) => {
+      if (current !== null) setPreviewBarWidth(current);
+      return null;
+    });
+  }, [setPreviewBarWidth]);
 
   const { displayedSchedule, animationPhase: schedulePhase } = useScheduleTransition(
     schedule,
@@ -215,97 +269,37 @@ export function CalendarView({
             overflow: "hidden",
           }}
         >
-          <Box
-            style={{
-              flexShrink: 0,
-              minHeight: CALENDAR_HEADER_MIN_HEIGHT,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              borderBottom: "1px solid var(--app-border)",
-              backgroundColor: "var(--app-surface)",
-            }}
-          >
-            {weekGroups.length > 0 && (
-              <>
-                {scheduleDateRange && (
-                  <Text
-                    size="xs"
-                    c="dimmed"
-                    style={{
-                      textAlign: "center",
-                      padding: "4px 12px 0",
-                    }}
-                  >
-                    {formatScheduleRange(scheduleDateRange.start, scheduleDateRange.end)}
+          {!isMobile && (
+            <Box
+              style={{
+                flexShrink: 0,
+                minHeight: CALENDAR_HEADER_MIN_HEIGHT,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                borderBottom: "1px solid var(--app-border)",
+                backgroundColor: "var(--app-surface)",
+              }}
+            >
+              {weekGroups.length > 0 ? (
+                <Box style={{ padding: "6px 12px", textAlign: "center" }}>
+                  {scheduleDateRange && (
+                    <Text size="xs" c="dimmed">
+                      {formatScheduleRange(scheduleDateRange.start, scheduleDateRange.end)}
+                    </Text>
+                  )}
+                  <Text size="xs" c="dimmed">
+                    {formatWeekLabel(weekGroups, weekIndex)}
                   </Text>
-                )}
-                <Group
-                  justify="space-between"
-                  align="center"
-                  gap={8}
-                  style={{ padding: "4px 12px 6px" }}
-                >
-                  <ActionIcon
-                    variant="subtle"
-                    color="gray"
-                    size="sm"
-                    aria-label={tr(PREVIOUS_WEEK_LABEL_ID)}
-                    disabled={weekIndex === 0}
-                    onClick={() => setWeekIndex(weekIndex - 1)}
-                  >
-                    <IconChevronLeft size={14} />
-                  </ActionIcon>
-                  <Text size="xs" c="dimmed" style={{ textAlign: "center", flex: 1 }}>
-                    {weekGroups.length > 1
-                      ? `${tr("calendarPage.weekOf", { current: weekIndex + 1, total: weekGroups.length })} · ${formatWeekCount(weekGroups[weekIndex])}`
-                      : formatWeekCount(weekGroups[0])}
-                  </Text>
-                  <ActionIcon
-                    variant="subtle"
-                    color="gray"
-                    size="sm"
-                    aria-label={tr(NEXT_WEEK_LABEL_ID)}
-                    disabled={weekIndex === weekGroups.length - 1}
-                    onClick={() => setWeekIndex(weekIndex + 1)}
-                  >
-                    <IconChevronRight size={14} />
-                  </ActionIcon>
-                </Group>
-              </>
-            )}
-            {weekGroups.length === 0 && (
-              <div style={{ visibility: "hidden" }}>
-                <Text size="xs" style={{ padding: "4px 12px 0" }}>
-                  &nbsp;
-                </Text>
-                <Group
-                  justify="space-between"
-                  align="center"
-                  gap={8}
-                  style={{ padding: "4px 12px 6px" }}
-                >
-                  <ActionIcon
-                    variant="subtle"
-                    color="gray"
-                    size="sm"
-                    aria-label={tr(PREVIOUS_WEEK_LABEL_ID)}
-                  >
-                    <IconChevronLeft size={14} />
-                  </ActionIcon>
+                </Box>
+              ) : (
+                <Box style={{ padding: "6px 12px", textAlign: "center", visibility: "hidden" }}>
                   <Text size="xs">&nbsp;</Text>
-                  <ActionIcon
-                    variant="subtle"
-                    color="gray"
-                    size="sm"
-                    aria-label={tr(NEXT_WEEK_LABEL_ID)}
-                  >
-                    <IconChevronRight size={14} />
-                  </ActionIcon>
-                </Group>
-              </div>
-            )}
-          </Box>
+                  <Text size="xs">&nbsp;</Text>
+                </Box>
+              )}
+            </Box>
+          )}
           <Box
             style={{
               flex: 1,
@@ -316,13 +310,39 @@ export function CalendarView({
             }}
           >
             {!isMobile && (
-              <WeekPreviewPanel
-                schedule={schedule}
-                weekGroups={weekGroups}
-                weekIndex={weekIndex}
-                setWeekIndex={setWeekIndex}
-                colorMap={colorMap}
-              />
+              <>
+                <WeekPreviewPanel
+                  schedule={schedule}
+                  weekGroups={weekGroups}
+                  weekIndex={weekIndex}
+                  setWeekIndex={setWeekIndex}
+                  colorMap={colorMap}
+                  barWidth={effectivePreviewWidth}
+                />
+                <div
+                  role="separator"
+                  aria-label={staticTr("calendarView.resizePreviewBar")}
+                  onPointerDown={handlePreviewResizeDown}
+                  onPointerMove={handlePreviewResizeMove}
+                  onPointerUp={handlePreviewResizeUp}
+                  style={{
+                    width: 6,
+                    flexShrink: 0,
+                    cursor: "col-resize",
+                    backgroundColor: "var(--app-border)",
+                    transition: "background-color 0.15s",
+                    touchAction: "none",
+                    zIndex: 1,
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.backgroundColor =
+                      "var(--app-border-strong)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.backgroundColor = "var(--app-border)";
+                  }}
+                />
+              </>
             )}
             <div style={{ flex: 1, minWidth: 0 }}>
               <WeekCalendar

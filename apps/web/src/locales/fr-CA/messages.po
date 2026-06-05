@@ -531,6 +531,9 @@ msgstr "Semaine suivante"
 msgid "calendarView.previousWeek"
 msgstr "Semaine précédente"
 
+msgid "calendarView.resizePreviewBar"
+msgstr "Redimensionner la barre d'aperçu des semaines"
+
 msgid "completedCourses.description"
 msgstr "Cours que vous avez terminés ou que vous suivez. Vous pouvez aussi téléverser votre relevé à l'étape 1."
 

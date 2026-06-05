@@ -3,6 +3,7 @@ import type { GeneratedSchedule } from "@uoplan/core";
 import { COURSE_COLORS, COURSE_COLOR_HEX, hexToRgb } from "@uoplan/core";
 import type { WeekGroup } from "../../hooks/useScheduleWeeks";
 import { slotActiveInWeek } from "../../hooks/useScheduleWeeks";
+import { CALENDAR_PREVIEW_CARD_ASPECT } from "./calendarLayout";
 
 const DAY_ORDER: Record<string, number> = { Mo: 0, Tu: 1, We: 2, Th: 3, Fr: 4 };
 const NUM_DAYS = 5;
@@ -10,10 +11,8 @@ const TIME_MIN = 480; // 8:00 AM
 const TIME_MAX = 1320; // 10:00 PM
 const TIME_RANGE = TIME_MAX - TIME_MIN;
 
-// landscape — matches the calendar's wider-than-tall aspect ratio
-const CARD_W = 80;
-const CARD_H = 56;
-const COL_W = CARD_W / NUM_DAYS; // 16px per day column
+/** Horizontal padding (px) inside the bar on each side of a card. */
+const CARD_INSET = 8;
 
 interface Slot {
   dayIdx: number;
@@ -26,6 +25,9 @@ interface Slot {
 
 interface WeekMiniCardProps {
   slots: Slot[];
+  cardW: number;
+  cardH: number;
+  colW: number;
   selected: boolean;
   hovered: boolean;
   onClick: () => void;
@@ -35,6 +37,9 @@ interface WeekMiniCardProps {
 
 function WeekMiniCard({
   slots,
+  cardW,
+  cardH,
+  colW,
   selected,
   hovered,
   onClick,
@@ -47,8 +52,8 @@ function WeekMiniCard({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       style={{
-        width: CARD_W,
-        height: CARD_H,
+        width: cardW,
+        height: cardH,
         borderRadius: "var(--app-radius-sm)",
         backgroundColor: hovered && !selected ? "var(--app-surface-hover)" : "var(--app-surface)",
         border: selected ? "1px solid var(--app-border-strong)" : "1px solid var(--app-border)",
@@ -77,9 +82,9 @@ function WeekMiniCard({
           key={i}
           style={{
             position: "absolute",
-            left: slot.dayIdx * COL_W + 1,
+            left: slot.dayIdx * colW + 1,
             top: `${slot.topPct}%`,
-            width: COL_W - 2,
+            width: colW - 2,
             height: `${slot.heightPct}%`,
             minHeight: 3,
             backgroundColor: `rgb(${slot.r} ${slot.g} ${slot.b} / 70%)`,
@@ -97,6 +102,8 @@ interface WeekPreviewPanelProps {
   weekIndex: number;
   setWeekIndex: (index: number) => void;
   colorMap: Record<string, number>;
+  /** Total width (px) of the bar; cards scale to fill it. */
+  barWidth: number;
 }
 
 export function WeekPreviewPanel({
@@ -105,8 +112,13 @@ export function WeekPreviewPanel({
   weekIndex,
   setWeekIndex,
   colorMap,
+  barWidth,
 }: WeekPreviewPanelProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const cardW = Math.max(40, barWidth - CARD_INSET * 2);
+  const cardH = Math.round(cardW * CALENDAR_PREVIEW_CARD_ASPECT);
+  const colW = cardW / NUM_DAYS;
 
   const weekSlots = useMemo<Slot[][]>(() => {
     if (!schedule) return weekGroups.map(() => []);
@@ -144,7 +156,7 @@ export function WeekPreviewPanel({
   return (
     <div
       style={{
-        width: CARD_W + 16,
+        width: barWidth,
         height: "100%",
         flexShrink: 0,
         overflowY: "auto",
@@ -162,6 +174,9 @@ export function WeekPreviewPanel({
         <WeekMiniCard
           key={group.startDate}
           slots={weekSlots[idx] ?? []}
+          cardW={cardW}
+          cardH={cardH}
+          colW={colW}
           selected={idx === weekIndex}
           hovered={idx === hoveredIndex}
           onClick={() => setWeekIndex(idx)}
