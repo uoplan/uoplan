@@ -32,11 +32,11 @@ export function SharedScheduleModal() {
         <Text size="sm" c="dimmed">
           {tr("sharedSchedule.body")}
         </Text>
-        <Group justify="flex-end" gap="xs">
+        <Group justify="flex-end" gap="xs" wrap="nowrap">
           <Button variant="default" onClick={dismissSharedState}>
             {tr("sharedSchedule.keepMine")}
           </Button>
-          <Button variant="filled" onClick={acceptSharedState}>
+          <Button variant="filled" color="red" onClick={acceptSharedState}>
             {tr("sharedSchedule.load")}
           </Button>
         </Group>
