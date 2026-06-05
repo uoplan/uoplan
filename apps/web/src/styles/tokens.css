@@ -83,6 +83,14 @@
   --app-on-event: #f3f1ee;
   --event-fill: 38%;
   --event-mix-base: var(--app-bg);
+
+  /* Custom scrollbars — thin rounded thumb on a transparent track, muted at
+     rest and stronger on hover. Consumed by the global rules in global.css and
+     the Mantine ScrollArea override. */
+  --app-scrollbar-size: 10px;
+  --app-scrollbar-track: transparent;
+  --app-scrollbar-thumb: rgba(255, 255, 255, 0.16);
+  --app-scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
 }
 
 [data-app-theme="light"] {
@@ -137,4 +145,8 @@
   --app-on-event: #2a2722;
   --event-fill: 60%;
   --event-mix-base: #ffffff;
+
+  /* Custom scrollbars — warm graphite thumb on the pale parchment surfaces. */
+  --app-scrollbar-thumb: rgba(60, 54, 44, 0.26);
+  --app-scrollbar-thumb-hover: rgba(60, 54, 44, 0.42);
 }
