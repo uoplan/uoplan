@@ -378,6 +378,11 @@ msgstr "Empêche ce cours d'apparaître dans tout horaire généré."
 msgid "calendar.swap.close"
 msgstr "Fermer"
 
+#: apps/web/src/components/calendar/CalendarEventDetails.tsx:91
+#: apps/web/src/components/calendar/CalendarEventDetails.tsx:96
+msgid "calendar.swap.expand"
+msgstr "Afficher en plein écran"
+
 msgid "calendar.swap.lockAria"
 msgstr "Ajouter le cours aux sélections pour la génération d'horaires"
 

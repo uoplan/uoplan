@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { ActionIcon, Anchor, Box, Group, Stack, Text, Tooltip } from "@mantine/core";
-import { IconBan, IconLock, IconLockFilled, IconX } from "@tabler/icons-react";
+import { IconArrowsMaximize, IconBan, IconLock, IconLockFilled, IconX } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-router";
 import { courseAPlusPercent, normalizeCourseCode } from "@uoplan/core";
 import type { CalendarEvent } from "../../hooks/useCalendarEvents";
@@ -87,6 +87,19 @@ export function CalendarEventDetails({
           ) : null}
         </Box>
         <Group gap={2} wrap="nowrap" style={{ flexShrink: 0 }}>
+          {!ctx.isMobile && !ctx.isFullscreen && (
+            <Tooltip label={tr("calendar.swap.expand")} position="bottom" withArrow>
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                size="sm"
+                aria-label={tr("calendar.swap.expand")}
+                onClick={ctx.openFullscreen}
+              >
+                <IconArrowsMaximize size={16} stroke={1.5} />
+              </ActionIcon>
+            </Tooltip>
+          )}
           <Tooltip label={actions.blacklistTooltip} position="bottom" withArrow>
             <Box component="span" style={{ display: "inline-flex" }}>
               <ActionIcon
@@ -153,6 +166,10 @@ export function CalendarEventDetails({
           onSwap={ctx.onSwap}
           preferEasier={ctx.preferEasier}
           currentAPlusPercent={currentAPlusPercent}
+          sortKey={ctx.sortKey}
+          setSortKey={ctx.setSortKey}
+          difficulty={ctx.difficulty}
+          setDifficulty={ctx.setDifficulty}
         />
       </Box>
     </Stack>

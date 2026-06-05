@@ -1,6 +1,7 @@
-import { useMemo, useCallback, useRef, useState } from "react";
-import { Box, Text } from "@mantine/core";
+import { useMemo, useCallback, useEffect, useRef, useState } from "react";
+import { Box, FocusTrap, Text } from "@mantine/core";
 import { useLocalStorage, useMediaQuery } from "@mantine/hooks";
+import { AnimatePresence, motion } from "framer-motion";
 import type { DataCache } from "@uoplan/core";
 import type { GeneratedSchedule } from "@uoplan/core";
 import type { ProfessorRatingsMap } from "@uoplan/core";
@@ -13,6 +14,7 @@ import { WeekPreviewPanel } from "./WeekPreviewPanel";
 import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
 import { CalendarEventDetails } from "./CalendarEventDetails";
 import { SwapContextProvider, type SwapContextValue } from "./swapContext";
+import type { SwapDifficulty, SwapSortKey } from "./swapContext";
 import { useAppStore } from "../../store/appStore";
 import { CALENDAR_HEADER_MIN_HEIGHT } from "./calendarHeaderLayout";
 import {
@@ -147,6 +149,32 @@ export function CalendarView({
 
   const swap = useSwapModal(getSwapCandidates, cache, professorRatings);
 
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [sortKey, setSortKey] = useState<SwapSortKey>("best");
+  const [difficulty, setDifficulty] = useState<SwapDifficulty | null>(null);
+
+  // Closing the overlay (or the swap entirely) dismisses both: the overlay
+  // animates out and the active event is deselected.
+  const handleCloseModal = useCallback(() => {
+    setIsFullscreen(false);
+    swap.closeModal();
+  }, [swap]);
+
+  const openFullscreen = useCallback(() => setIsFullscreen(true), []);
+  const closeFullscreen = useCallback(() => setIsFullscreen(false), []);
+
+  // Keep fullscreen from lingering if the swap closes by any other path, and
+  // reset the list's sort/filter when a different event is opened (matching the
+  // previous per-open reset when the popover content remounted).
+  const activeEventKey = swap.modalState?.eventId ?? null;
+  useEffect(() => {
+    if (!swap.isOpen) setIsFullscreen(false);
+  }, [swap.isOpen]);
+  useEffect(() => {
+    setSortKey("best");
+    setDifficulty(null);
+  }, [activeEventKey]);
+
   const allEvents = useCalendarEvents(displayedSchedule, professorRatings);
 
   const scheduleDateRange = useMemo(() => {
@@ -225,11 +253,18 @@ export function CalendarView({
       candidateOptions: swap.candidateOptions,
       query: swap.query,
       setQuery: swap.setQuery,
-      closeModal: swap.closeModal,
+      closeModal: handleCloseModal,
       onSwap,
       cache,
       professorRatings,
       preferEasier: generationPreferEasier,
+      isFullscreen,
+      openFullscreen,
+      closeFullscreen,
+      sortKey,
+      setSortKey,
+      difficulty,
+      setDifficulty,
     }),
     [
       swap.modalState?.enrollmentIndex,
@@ -239,12 +274,17 @@ export function CalendarView({
       swap.candidateOptions,
       swap.query,
       swap.setQuery,
-      swap.closeModal,
+      handleCloseModal,
       isMobile,
       onSwap,
       cache,
       professorRatings,
       generationPreferEasier,
+      isFullscreen,
+      openFullscreen,
+      closeFullscreen,
+      sortKey,
+      difficulty,
     ],
   );
 
@@ -257,6 +297,7 @@ export function CalendarView({
           flexDirection: "column",
           minHeight: 0,
           overflow: "hidden",
+          position: "relative",
         }}
       >
         <Box
@@ -356,12 +397,68 @@ export function CalendarView({
             </div>
           </Box>
         </Box>
+
+        <AnimatePresence>
+          {!isMobile && isFullscreen && activeEvent && (
+            <motion.div
+              key="calendar-fullscreen-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: prefersReduced ? 0 : 0.18, ease: [0.22, 1, 0.36, 1] }}
+              onClick={handleCloseModal}
+              style={{
+                position: "absolute",
+                inset: 0,
+                zIndex: 20,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "clamp(16px, 4vh, 48px)",
+                background: "var(--app-overlay-scrim)",
+              }}
+            >
+              <FocusTrap active>
+                <motion.div
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={staticTr("calendar.swap.swapWith")}
+                  tabIndex={-1}
+                  initial={prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 10 }}
+                  animate={prefersReduced ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
+                  exit={prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 6 }}
+                  transition={{ duration: prefersReduced ? 0 : 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  onClick={(e) => e.stopPropagation()}
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                      e.stopPropagation();
+                      handleCloseModal();
+                    }
+                  }}
+                  style={{
+                    width: "min(960px, 100%)",
+                    maxHeight: "100%",
+                    overflowY: "auto",
+                    backgroundColor: "var(--app-bg)",
+                    border: "var(--app-border-width) solid var(--app-border)",
+                    borderRadius: "var(--app-radius-lg)",
+                    boxShadow: "var(--app-shadow-lg)",
+                    padding: "var(--mantine-spacing-lg)",
+                    scrollbarGutter: "stable",
+                  }}
+                >
+                  <CalendarEventDetails event={activeEvent} courseTitle={activeCourseTitle} />
+                </motion.div>
+              </FocusTrap>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </Box>
 
       {isMobile && activeEvent && (
         <CalendarMobileDrawer
           opened={swap.isOpen}
-          onClose={swap.closeModal}
+          onClose={handleCloseModal}
           title={activeEvent.courseCode}
           ariaLabel={staticTr("calendar.swap.swapWith")}
         >
