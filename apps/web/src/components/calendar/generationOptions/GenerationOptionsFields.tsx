@@ -1,17 +1,23 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import {
   Alert,
+  Badge,
+  Box,
   Checkbox,
+  Collapse,
   Group,
   MultiSelect,
   NumberInput,
+  Paper,
   Select,
   Stack,
   Switch,
+  Text,
   TextInput,
   type MultiSelectProps,
   type OptionsFilter,
 } from "@mantine/core";
+import { IconChevronDown } from "@tabler/icons-react";
 import type { DayOfWeek } from "@uoplan/core";
 import { BasicCourseFiltersCard } from "../../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../../shared/FrenchImmersionProgramOverview";
@@ -40,6 +46,13 @@ interface SimpleMultiSelectProps {
 interface ExcludeCoursesProps extends SimpleMultiSelectProps {
   renderOption?: MultiSelectProps["renderOption"];
   filter?: MultiSelectProps["filter"];
+}
+
+interface SecondaryOptionsDisclosure {
+  heading: string;
+  badgeLabel?: string;
+  collapseId: string;
+  defaultOpen?: boolean;
 }
 
 export interface GenerationOptionsFieldsProps {
@@ -99,15 +112,21 @@ export interface GenerationOptionsFieldsProps {
   /** French immersion stream. */
   frenchImmersionStream: boolean;
   onFrenchImmersionStreamChange: (v: boolean) => void;
+
+  /** Optional disclosure wrapper for the lower-priority fine-tuning controls. */
+  secondaryOptionsDisclosure?: SecondaryOptionsDisclosure;
 }
 
 /**
- * The unified generation-option field set rendered identically on both calendar sidebars (basic and
- * advanced). Purely presentational and prop-driven — each mode supplies its own change handlers and
- * count semantics. Mode-specific extras (desired-course warnings, the per-requirement "pick specific
- * courses" panel, the basic completed-courses editor) are composed around this by the wrappers.
+ * The unified generation-option field set shared by both calendar sidebars. Purely presentational and
+ * prop-driven — each mode supplies its own change handlers, count semantics, and optional grouping for
+ * lower-priority controls. Mode-specific extras (desired-course warnings, the per-requirement "pick
+ * specific courses" panel, the basic completed-courses editor) are composed around this by the wrappers.
  */
 export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
+  const [secondaryOptionsOpen, setSecondaryOptionsOpen] = useState(
+    props.secondaryOptionsDisclosure?.defaultOpen ?? false,
+  );
   const ratingOptions = [
     { value: "2", label: "2.0+" },
     { value: "2.5", label: "2.5+" },
@@ -126,11 +145,134 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
     { value: "Su", label: tr("scheduleCount.day.sunday") },
   ];
 
+  const timeWindowControl = (
+    <Group align="flex-end" gap="md">
+      <TextInput
+        label={tr("scheduleCount.time.earliest")}
+        type="time"
+        value={minutesToTimeString(props.minStartMinutes)}
+        onChange={(e) => props.onMinStartMinutesChange(timeStringToMinutes(e.currentTarget.value))}
+      />
+      <TextInput
+        label={tr("scheduleCount.time.latest")}
+        type="time"
+        value={minutesToTimeString(props.maxEndMinutes)}
+        onChange={(e) => props.onMaxEndMinutesChange(timeStringToMinutes(e.currentTarget.value))}
+      />
+    </Group>
+  );
+
+  const professorRatingControl = (
+    <Select
+      label={tr("scheduleCount.rating.label")}
+      description={tr("scheduleCount.rating.description")}
+      placeholder={tr("scheduleCount.rating.placeholder")}
+      data={ratingOptions}
+      value={props.minProfessorRating == null ? null : String(props.minProfessorRating)}
+      onChange={(v) => props.onMinProfessorRatingChange(v == null ? null : Number(v))}
+      clearable
+    />
+  );
+
+  const avoidedDaysControl = (
+    <MultiSelect
+      label={tr("scheduleCount.avoidDays.label")}
+      description={tr("scheduleCount.avoidDays.description")}
+      placeholder={tr("scheduleCount.avoidDays.placeholder")}
+      data={dayOptions}
+      value={props.avoidedDays}
+      onChange={(values) => props.onAvoidedDaysChange(values as DayOfWeek[])}
+      clearable
+    />
+  );
+
+  const compressedControl = (
+    <Checkbox
+      label={tr("scheduleCount.compressed.label")}
+      description={tr("scheduleCount.compressed.description")}
+      checked={props.compressedSchedule}
+      onChange={(e) => props.onCompressedScheduleChange(e.currentTarget.checked)}
+    />
+  );
+
+  const preferEasierControl = (
+    <Checkbox
+      label={tr("scheduleCount.preferEasier.label")}
+      description={tr("scheduleCount.preferEasier.description")}
+      checked={props.preferEasierCourses}
+      onChange={(e) => props.onPreferEasierCoursesChange(e.currentTarget.checked)}
+    />
+  );
+
+  const courseFiltersControl = (
+    <BasicCourseFiltersCard
+      levelBuckets={props.levelBuckets}
+      languageBuckets={props.languageBuckets}
+      electiveLevelBuckets={props.electiveLevelBuckets}
+      includeClosedComponents={props.includeClosedComponents}
+      virtualSectionsOnly={props.virtualSectionsOnly}
+      showGraduateElectiveLevels
+      collapsible
+      excludeElectiveSubjects={props.excludeSubjects}
+      excludeCourses={props.excludeCourses}
+      onChangeLevelBuckets={props.onChangeLevelBuckets}
+      onChangeLanguageBuckets={props.onChangeLanguageBuckets}
+      onChangeElectiveLevelBuckets={props.onChangeElectiveLevelBuckets}
+      onIncludeClosedComponentsChange={props.onIncludeClosedComponentsChange}
+      onVirtualSectionsOnlyChange={props.onVirtualSectionsOnlyChange}
+    />
+  );
+
+  const frenchImmersionControl = (
+    <>
+      <Switch
+        label={tr("frenchImmersion.toggle.label")}
+        description={tr("frenchImmersion.toggle.description")}
+        checked={props.frenchImmersionStream}
+        onChange={(e) => props.onFrenchImmersionStreamChange(e.currentTarget.checked)}
+        radius="md"
+        styles={{ description: { color: "var(--app-text-muted)" } }}
+      />
+      {props.frenchImmersionStream ? <FrenchImmersionProgramOverview variant="compact" /> : null}
+    </>
+  );
+
+  // Common scheduling preferences worth surfacing directly in the basic sidebar.
+  const fineTuningControls = (
+    <>
+      {timeWindowControl}
+      {compressedControl}
+      {preferEasierControl}
+      {avoidedDaysControl}
+    </>
+  );
+
+  // Bulkier / nicher controls kept behind the disclosure in basic mode.
+  const disclosureControls = (
+    <>
+      {professorRatingControl}
+      {courseFiltersControl}
+      {frenchImmersionControl}
+    </>
+  );
+
+  // Advanced mode renders every secondary control inline in its original order.
+  const secondaryOptionsInline = (
+    <>
+      {timeWindowControl}
+      {professorRatingControl}
+      {avoidedDaysControl}
+      {courseFiltersControl}
+      {compressedControl}
+      {preferEasierControl}
+      {frenchImmersionControl}
+    </>
+  );
+
   return (
     <Stack gap="md" data-testid="generation-options-fields">
       <MultiSelect
         label={tr("generationOptions.courses.label")}
-        description={tr("generationOptions.courses.description")}
         placeholder={tr("generationOptions.courses.placeholder")}
         searchable
         data={props.courseOptions}
@@ -145,7 +287,6 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
 
       <NumberInput
         label={tr("generationOptions.count.label")}
-        description={tr("generationOptions.count.description")}
         value={props.countValue}
         onChange={(v) => {
           if (typeof v !== "number" || Number.isNaN(v)) return;
@@ -175,79 +316,69 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
         />
       )}
 
-      <Checkbox
-        label={tr("scheduleCount.compressed.label")}
-        description={tr("scheduleCount.compressed.description")}
-        checked={props.compressedSchedule}
-        onChange={(e) => props.onCompressedScheduleChange(e.currentTarget.checked)}
-      />
-      <Checkbox
-        label={tr("scheduleCount.preferEasier.label")}
-        description={tr("scheduleCount.preferEasier.description")}
-        checked={props.preferEasierCourses}
-        onChange={(e) => props.onPreferEasierCoursesChange(e.currentTarget.checked)}
-      />
-      <Group align="flex-end" gap="md">
-        <TextInput
-          label={tr("scheduleCount.time.earliest")}
-          type="time"
-          value={minutesToTimeString(props.minStartMinutes)}
-          onChange={(e) =>
-            props.onMinStartMinutesChange(timeStringToMinutes(e.currentTarget.value))
-          }
-        />
-        <TextInput
-          label={tr("scheduleCount.time.latest")}
-          type="time"
-          value={minutesToTimeString(props.maxEndMinutes)}
-          onChange={(e) => props.onMaxEndMinutesChange(timeStringToMinutes(e.currentTarget.value))}
-        />
-      </Group>
-      <Select
-        label={tr("scheduleCount.rating.label")}
-        description={tr("scheduleCount.rating.description")}
-        placeholder={tr("scheduleCount.rating.placeholder")}
-        data={ratingOptions}
-        value={props.minProfessorRating == null ? null : String(props.minProfessorRating)}
-        onChange={(v) => props.onMinProfessorRatingChange(v == null ? null : Number(v))}
-        clearable
-      />
-      <MultiSelect
-        label={tr("scheduleCount.avoidDays.label")}
-        description={tr("scheduleCount.avoidDays.description")}
-        placeholder={tr("scheduleCount.avoidDays.placeholder")}
-        data={dayOptions}
-        value={props.avoidedDays}
-        onChange={(values) => props.onAvoidedDaysChange(values as DayOfWeek[])}
-        clearable
-      />
-
-      <BasicCourseFiltersCard
-        levelBuckets={props.levelBuckets}
-        languageBuckets={props.languageBuckets}
-        electiveLevelBuckets={props.electiveLevelBuckets}
-        includeClosedComponents={props.includeClosedComponents}
-        virtualSectionsOnly={props.virtualSectionsOnly}
-        showGraduateElectiveLevels
-        collapsible
-        excludeElectiveSubjects={props.excludeSubjects}
-        excludeCourses={props.excludeCourses}
-        onChangeLevelBuckets={props.onChangeLevelBuckets}
-        onChangeLanguageBuckets={props.onChangeLanguageBuckets}
-        onChangeElectiveLevelBuckets={props.onChangeElectiveLevelBuckets}
-        onIncludeClosedComponentsChange={props.onIncludeClosedComponentsChange}
-        onVirtualSectionsOnlyChange={props.onVirtualSectionsOnlyChange}
-      />
-
-      <Switch
-        label={tr("frenchImmersion.toggle.label")}
-        description={tr("frenchImmersion.toggle.description")}
-        checked={props.frenchImmersionStream}
-        onChange={(e) => props.onFrenchImmersionStreamChange(e.currentTarget.checked)}
-        radius="md"
-        styles={{ description: { color: "var(--app-text-muted)" } }}
-      />
-      {props.frenchImmersionStream ? <FrenchImmersionProgramOverview variant="compact" /> : null}
+      {props.secondaryOptionsDisclosure ? (
+        <>
+          {fineTuningControls}
+          <Paper
+            withBorder
+            radius="md"
+            data-testid="generation-options-secondary-panel"
+            style={{
+              backgroundColor: secondaryOptionsOpen
+                ? "var(--app-surface)"
+                : "var(--app-surface-sunken)",
+            }}
+          >
+            <Group
+              justify="space-between"
+              align="center"
+              p="sm"
+              style={{ cursor: "pointer" }}
+              onClick={() => setSecondaryOptionsOpen((o) => !o)}
+              aria-expanded={secondaryOptionsOpen}
+              aria-controls={props.secondaryOptionsDisclosure.collapseId}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setSecondaryOptionsOpen((o) => !o);
+                }
+              }}
+            >
+              <Group gap="xs" align="center">
+                <IconChevronDown
+                  size={14}
+                  aria-hidden="true"
+                  style={{
+                    flexShrink: 0,
+                    transform: secondaryOptionsOpen ? "rotate(0deg)" : "rotate(-90deg)",
+                    transition: "transform 150ms ease",
+                  }}
+                />
+                <Text fw={600} size="sm">
+                  {props.secondaryOptionsDisclosure.heading}
+                </Text>
+              </Group>
+              {props.secondaryOptionsDisclosure.badgeLabel ? (
+                <Badge size="sm" variant="light" color="gray">
+                  {props.secondaryOptionsDisclosure.badgeLabel}
+                </Badge>
+              ) : null}
+            </Group>
+            <Collapse
+              id={props.secondaryOptionsDisclosure.collapseId}
+              expanded={secondaryOptionsOpen}
+            >
+              <Box p="sm" pt={0}>
+                <Stack gap="md">{disclosureControls}</Stack>
+              </Box>
+            </Collapse>
+          </Paper>
+        </>
+      ) : (
+        secondaryOptionsInline
+      )}
     </Stack>
   );
 }
