@@ -28,24 +28,6 @@ export function isWithinElectiveLevelCap(code: string): boolean {
 }
 
 /**
- * When buckets are provided, only include matching course levels.
- * Unknown levels remain eligible to avoid over-filtering malformed codes.
- * When buckets are empty, fallback to the legacy <= 4000 cap.
- */
-export function isWithinElectiveLevelBuckets(
-  code: string,
-  electiveLevelBuckets: number[],
-): boolean {
-  if (electiveLevelBuckets.length === 0) {
-    return isWithinElectiveLevelCap(code);
-  }
-  const level = getCourseLevel(code);
-  if (level == null) return true;
-  const bucket = Math.floor(level / 1000) * 1000;
-  return electiveLevelBuckets.includes(bucket);
-}
-
-/**
  * Returns whether we should apply the "virtual sections only" filter to this
  * course, given the requirement context and explicit-exemption rules.
  *

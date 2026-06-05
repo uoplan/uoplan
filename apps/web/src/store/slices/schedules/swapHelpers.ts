@@ -10,7 +10,7 @@ import {
 } from "@uoplan/core";
 import type { ScheduleGenerationResult } from "./types";
 
-export function tryApplyOneSwap(
+function tryApplyOneSwap(
   schedule: GeneratedSchedule,
   enrollmentIndex: number,
   newCourseCode: string,

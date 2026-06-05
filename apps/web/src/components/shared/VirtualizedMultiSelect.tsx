@@ -20,7 +20,7 @@ const DROPDOWN_MAX_HEIGHT = 300;
 /** Estimated option row height (px) before dynamic measurement. */
 const ESTIMATED_OPTION_HEIGHT = 36;
 
-export interface VirtualizedMultiSelectProps {
+interface VirtualizedMultiSelectProps {
   label?: ReactNode;
   placeholder?: string;
   data: ComboboxItem[];

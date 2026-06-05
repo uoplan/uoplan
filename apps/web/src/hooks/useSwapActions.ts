@@ -7,7 +7,7 @@ import {
 import { useAppStore } from "../store/appStore";
 import { tr } from "../i18n";
 
-export interface SwapActions {
+interface SwapActions {
   showLockedIcon: boolean;
   isBlacklisted: boolean;
   lockControlDisabled: boolean;

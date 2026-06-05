@@ -7,7 +7,7 @@ const SEASON_LABEL_EN: Record<TermSeason, string> = {
   fall: "Fall",
 };
 
-export type DecodedTerm = { season: TermSeason; year: number };
+type DecodedTerm = { season: TermSeason; year: number };
 
 export function decode(termId: number | string): DecodedTerm | null {
   const id = typeof termId === "string" ? Number.parseInt(termId, 10) : termId;
