@@ -1,7 +1,7 @@
 {
   "termId": "2271",
   "totalCourses": 11145,
-  "totalWithSchedules": 3137,
+  "totalWithSchedules": 3136,
   "schedules": [
     {
       "subject": "ADM",
@@ -32069,7 +32069,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Josée Coutu",
                 "meetingDates": [
                   "2027-01-13",
                   "2027-01-13"
@@ -32080,7 +32080,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-01-20",
                   "2027-01-20"
@@ -32163,7 +32163,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Josée Coutu",
                 "meetingDates": [
                   "2027-01-13",
                   "2027-01-13"
@@ -32174,7 +32174,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-01-27",
                   "2027-01-27"
@@ -32257,7 +32257,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Josée Coutu",
                 "meetingDates": [
                   "2027-01-15",
                   "2027-01-15"
@@ -32268,7 +32268,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-01-22",
                   "2027-01-22"
@@ -32351,7 +32351,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Josée Coutu",
                 "meetingDates": [
                   "2027-01-15",
                   "2027-01-15"
@@ -32362,7 +32362,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-01-29",
                   "2027-01-29"
@@ -32445,7 +32445,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Josée Coutu",
                 "meetingDates": [
                   "2027-01-15",
                   "2027-01-15"
@@ -32456,7 +32456,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-01-22",
                   "2027-01-22"
@@ -55245,7 +55245,7 @@
                 "startMinutes": 510,
                 "endMinutes": 620,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jolene Hansell",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -55910,7 +55910,7 @@
                 "startMinutes": 780,
                 "endMinutes": 890,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jolene Hansell",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -58616,8 +58616,8 @@
       "components": {
         "STG": [
           {
-            "section": "J100-STG Session F",
-            "sectionCode": "J100",
+            "section": "JI00-STG Session F",
+            "sectionCode": "JI00",
             "component": "STG",
             "session": null,
             "times": [
@@ -62612,7 +62612,7 @@
                 "startMinutes": 1020,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kris Klein",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -62623,7 +62623,7 @@
                 "startMinutes": 1080,
                 "endMinutes": 1190,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kris Klein",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -66333,67 +66333,6 @@
     },
     {
       "subject": "CML",
-      "catalogNumber": "4105",
-      "courseCode": "CML 4105",
-      "title": "International Trade Law",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "M00-LEC Session H",
-            "sectionCode": "M00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1140,
-                "endMinutes": 1250,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-02-01",
-                  "2027-04-14"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 1020,
-                "endMinutes": 1130,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-02-01",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 2,
-              "A": 15,
-              "A-": 25,
-              "B+": 22,
-              "B": 24,
-              "C+": 3,
-              "C": 1,
-              "D+": 0,
-              "D": 1,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "CML",
       "catalogNumber": "4106",
       "courseCode": "CML 4106",
       "title": "Studies in Private Law",
@@ -67060,7 +66999,7 @@
                 "startMinutes": 1020,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jeffrey Johnston",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -67071,7 +67010,7 @@
                 "startMinutes": 1020,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jeffrey Johnston",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -67906,7 +67845,7 @@
                 "startMinutes": 1080,
                 "endMinutes": 1190,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Wolfgang Alschner",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -79534,7 +79473,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Frederico Fagundes Soares",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -79884,7 +79823,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Patrick M. Pilon",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -91729,7 +91668,7 @@
                 "startMinutes": 1020,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kris Klein",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -91740,7 +91679,7 @@
                 "startMinutes": 1080,
                 "endMinutes": 1190,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kris Klein",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -93034,7 +92973,7 @@
                 "startMinutes": 1080,
                 "endMinutes": 1190,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Wolfgang Alschner",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -99832,6 +99771,30 @@
           {
             "section": "E00-TUT FullSess.",
             "sectionCode": "E00",
+            "component": "TUT",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          },
+          {
+            "section": "F00-TUT FullSess.",
+            "sectionCode": "F00",
+            "component": "TUT",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          },
+          {
+            "section": "G00-TUT FullSess.",
+            "sectionCode": "G00",
+            "component": "TUT",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          },
+          {
+            "section": "H00-TUT FullSess.",
+            "sectionCode": "H00",
             "component": "TUT",
             "session": null,
             "times": [],
@@ -107932,7 +107895,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -124277,7 +124240,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 12,
               "A": 36,
@@ -147662,7 +147625,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 237,
               "A": 269,
@@ -157171,7 +157134,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Suzy Ahn",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -166603,45 +166566,6 @@
           {
             "section": "A01-DGD FullSess.",
             "sectionCode": "A01",
-            "component": "DGD",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 780,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Paul Eugène J. Parent",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 14,
-              "A": 5,
-              "A-": 4,
-              "B+": 12,
-              "B": 4,
-              "C+": 16,
-              "C": 13,
-              "D+": 8,
-              "D": 12,
-              "E": 12,
-              "F": 22,
-              "EIN": 11,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 4,
-              "P": 0,
-              "S": 0
-            }
-          },
-          {
-            "section": "A02-DGD FullSess.",
-            "sectionCode": "A02",
             "component": "DGD",
             "session": null,
             "times": [
@@ -182179,7 +182103,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Robert Rival",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182190,7 +182114,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Robert Rival",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182240,7 +182164,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dillon Parmer",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182251,7 +182175,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dillon Parmer",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182373,7 +182297,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Roxane Lise Prevost",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182384,7 +182308,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Roxane Lise Prevost",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182434,7 +182358,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Geneviève Barbara Bazinet",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182484,7 +182408,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Geneviève Barbara Bazinet",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182495,7 +182419,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Geneviève Barbara Bazinet",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -186530,7 +186454,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "MF00-LAB FullSess.",
@@ -215361,7 +215285,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 250,
               "A": 189,
@@ -215776,7 +215700,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 250,
               "A": 189,
@@ -235450,7 +235374,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 110,
               "A": 126,
@@ -251275,8 +251199,63 @@
                 "virtual": false,
                 "instructor": "Lisa Michelle D'Ambrosio",
                 "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
+                  "2027-01-12",
+                  "2027-01-12"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Keith Wheaton",
+                "meetingDates": [
+                  "2027-01-19",
+                  "2027-01-19"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Lisa Michelle D'Ambrosio",
+                "meetingDates": [
+                  "2027-01-26",
+                  "2027-01-26"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Keith Wheaton",
+                "meetingDates": [
+                  "2027-02-02",
+                  "2027-02-02"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Lisa Michelle D'Ambrosio",
+                "meetingDates": [
+                  "2027-02-09",
+                  "2027-02-09"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Keith Wheaton",
+                "meetingDates": [
+                  "2027-02-23",
+                  "2027-02-23"
                 ]
               }
             ],
@@ -251295,10 +251274,54 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Lisa Michelle D'Ambrosio",
                 "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
+                  "2027-03-02",
+                  "2027-03-02"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Keith Wheaton",
+                "meetingDates": [
+                  "2027-03-09",
+                  "2027-03-09"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Lisa Michelle D'Ambrosio",
+                "meetingDates": [
+                  "2027-03-16",
+                  "2027-03-16"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Keith Wheaton",
+                "meetingDates": [
+                  "2027-03-23",
+                  "2027-03-23"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Lisa Michelle D'Ambrosio",
+                "meetingDates": [
+                  "2027-03-30",
+                  "2027-03-30"
                 ]
               }
             ],
