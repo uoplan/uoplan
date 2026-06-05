@@ -452,6 +452,14 @@ msgstr "No more schedules"
 msgid "calendarPage.noSchedule"
 msgstr "No schedule generated yet."
 
+#: apps/web/src/components/calendar/CalendarPage.tsx:510
+msgid "calendarPage.noTimeslotCourses.description"
+msgstr "These courses are included but have no meeting times."
+
+#: apps/web/src/components/calendar/CalendarPage.tsx:507
+msgid "calendarPage.noTimeslotCourses.title"
+msgstr "Some courses don't appear on the schedule"
+
 msgid "calendarPage.previous"
 msgstr "Previous"
 

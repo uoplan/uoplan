@@ -22,6 +22,7 @@ import {
   IconChevronRight,
   IconEraser,
   IconFileImport,
+  IconInfoCircle,
   IconSettings,
   IconShare,
   IconTerminal,
@@ -165,6 +166,16 @@ export function CalendarPage() {
   );
 
   const eventCount = currentSchedule?.enrollments.reduce((sum, e) => sum + e.times.length, 0) ?? 0;
+  const noTimeslotCourses =
+    currentSchedule?.enrollments
+      .filter((enrollment) => enrollment.times.length === 0)
+      .map((enrollment) => {
+        const title = cache?.getCourse(enrollment.courseCode)?.title.trim();
+        return {
+          code: enrollment.courseCode,
+          title: title || null,
+        };
+      }) ?? [];
 
   const startOk =
     Boolean(timetableStartDate) && !Number.isNaN(Date.parse(`${timetableStartDate}T00:00:00Z`));
@@ -277,6 +288,40 @@ export function CalendarPage() {
       <Text size="sm" style={{ color: "var(--app-text-muted)", marginTop: isMobile ? 0 : -8 }}>
         {calendarSubtitle}
       </Text>
+
+      {noTimeslotCourses.length > 0 && (
+        <Alert
+          icon={<IconInfoCircle size={16} />}
+          radius="md"
+          py="xs"
+          style={{
+            flexShrink: 0,
+            backgroundColor: "var(--app-info-soft)",
+            border: "1px solid var(--app-info)",
+          }}
+        >
+          <Stack gap={6}>
+            <Text size="sm" fw={700} style={{ color: "var(--app-text)" }}>
+              {tr("calendarPage.noTimeslotCourses.title")}
+            </Text>
+            <Text size="xs" style={{ color: "var(--app-text-muted)" }}>
+              {tr("calendarPage.noTimeslotCourses.description")}
+            </Text>
+            <Stack component="ul" gap={4} style={{ margin: 0, paddingInlineStart: 18 }}>
+              {noTimeslotCourses.map((course) => (
+                <Text
+                  component="li"
+                  key={course.code}
+                  size="xs"
+                  style={{ color: "var(--app-text)" }}
+                >
+                  {course.title ? `${course.code}: ${course.title}` : course.code}
+                </Text>
+              ))}
+            </Stack>
+          </Stack>
+        </Alert>
+      )}
 
       {!hasProgram ? (
         <>
