@@ -452,6 +452,14 @@ msgstr "Plus d'horaires"
 msgid "calendarPage.noSchedule"
 msgstr "Aucun horaire généré pour l'instant."
 
+#: apps/web/src/components/calendar/CalendarPage.tsx:510
+msgid "calendarPage.noTimeslotCourses.description"
+msgstr "Ces cours sont inclus, mais n'ont pas d'heures de rencontre."
+
+#: apps/web/src/components/calendar/CalendarPage.tsx:507
+msgid "calendarPage.noTimeslotCourses.title"
+msgstr "Certains cours n'apparaissent pas dans l'horaire"
+
 msgid "calendarPage.previous"
 msgstr "Précédent"
 
