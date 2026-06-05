@@ -145,6 +145,16 @@ describe("getGenerateBlockers", () => {
     ).toEqual(["program"]);
   });
 
+  it("lists the benefits missed when no program is selected", () => {
+    const [program] = getGenerateBlockers(baseState({ program: null }));
+    expect(program?.id).toBe("program");
+    expect(program?.details).toEqual([
+      "Requirement tracking based on your program",
+      "Automatic detection of your completed courses",
+      "Personalized elective recommendations",
+    ]);
+  });
+
   it("does not block when advanced setup is resolved", () => {
     expect(getGenerateBlockers(baseState())).toEqual([]);
   });
