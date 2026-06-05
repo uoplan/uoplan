@@ -17,7 +17,12 @@ import {
   optional,
 } from "@uoplan/data";
 import { createAssetsTransport } from "@uoplan/data/worker";
-import { renderCalendarToSvg, scheduleToEvents } from "@uoplan/calendar";
+import {
+  renderCalendarToSvg,
+  scheduleToEvents,
+  computeWeekGroups,
+  slotActiveInWeek,
+} from "@uoplan/calendar";
 import type { Env } from "./index.js";
 
 // @ts-ignore - wrangler handles .wasm imports as WebAssembly.Module
@@ -166,7 +171,18 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
     }
 
     const events = scheduleToEvents(reconstructed.schedule, null);
-    const svg = renderCalendarToSvg(events, reconstructed.colorMap);
+
+    // Match the app's calendar default: show only the busiest week rather than
+    // merging every week's meetings onto one grid.
+    const { groups, busiestIndex } = computeWeekGroups(reconstructed.schedule);
+    const busiestGroup = groups[busiestIndex] ?? null;
+    const weekEvents = busiestGroup
+      ? events.filter(
+          (e) => !e.meetingDates || slotActiveInWeek(e.day, e.meetingDates, busiestGroup.startDate),
+        )
+      : events;
+
+    const svg = renderCalendarToSvg(weekEvents, reconstructed.colorMap);
 
     return svgToPng(svg, fonts);
   } catch (err) {
