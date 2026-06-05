@@ -1123,20 +1123,18 @@ msgstr "Élargissez les heures de cours ou permettez plus de jours."
 msgid "gen.suggest.widenOrChangePicks"
 msgstr "Élargissez les heures de cours ou modifiez vos choix Contraindre / Assigner."
 
-msgid "generationOptions.count.description"
-msgstr "Nombre de cours à inclure dans chaque horaire généré."
-
 msgid "generationOptions.count.label"
 msgstr "Cours ce trimestre"
-
-msgid "generationOptions.courses.description"
-msgstr "Ajoutez les cours précis que vous aimeriez avoir dans votre horaire."
 
 msgid "generationOptions.courses.label"
 msgstr "Cours souhaités"
 
 msgid "generationOptions.courses.placeholder"
 msgstr "Rechercher des cours…"
+
+#: apps/web/src/components/calendar/BasicCalendarSidebarControls.tsx:254
+msgid "generationOptions.moreOptions.heading"
+msgstr "Plus d’options"
 
 msgid "generationOptions.warn.assigned.fallbackTitle"
 msgstr "Exigence {index}"

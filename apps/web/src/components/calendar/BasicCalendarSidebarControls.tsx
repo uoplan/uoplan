@@ -250,6 +250,11 @@ export function BasicCalendarSidebarControls() {
           setFrenchImmersionStream(checked);
           markBasicSettingsChanged();
         }}
+        secondaryOptionsDisclosure={{
+          heading: tr("generationOptions.moreOptions.heading"),
+          badgeLabel: tr("app.constraints.optional"),
+          collapseId: "basic-more-options-collapse",
+        }}
       />
 
       <Box style={{ borderTop: "1px solid var(--app-border)", paddingTop: 16, marginTop: 8 }}>

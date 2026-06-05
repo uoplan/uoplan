@@ -1123,20 +1123,18 @@ msgstr "Widen class hours or allow more weekdays."
 msgid "gen.suggest.widenOrChangePicks"
 msgstr "Widen class hours or change Constrain / Assign picks."
 
-msgid "generationOptions.count.description"
-msgstr "How many courses to include in each generated schedule."
-
 msgid "generationOptions.count.label"
 msgstr "Courses this semester"
-
-msgid "generationOptions.courses.description"
-msgstr "Add any specific courses you'd like in your schedule."
 
 msgid "generationOptions.courses.label"
 msgstr "Courses you want"
 
 msgid "generationOptions.courses.placeholder"
 msgstr "Search courses…"
+
+#: apps/web/src/components/calendar/BasicCalendarSidebarControls.tsx:254
+msgid "generationOptions.moreOptions.heading"
+msgstr "More options"
 
 msgid "generationOptions.warn.assigned.fallbackTitle"
 msgstr "Requirement {index}"
