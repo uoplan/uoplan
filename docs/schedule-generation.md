@@ -80,6 +80,16 @@ The WASM engine must be built before the web/worker builds. `pnpm build` runs `b
 `pnpm --filter @uoplan/engine build:wasm` (release) or `build:wasm:dev`. Rust tests:
 `pnpm --filter @uoplan/engine test:rust`.
 
+### Benchmarks
+
+Criterion benchmarks live in `packages/engine/benches/generation.rs` and run natively against the
+committed `.pb` datasets (build them first with `pnpm build:data-proto`; the benches skip cleanly if
+the artifacts are absent). Run with `pnpm --filter @uoplan/engine bench` (i.e. `cargo bench`). They
+cover engine construction, fixed-set timetabling swept over course counts (5/10/15/20) and across
+hard-constraint configs (default, compressed, time-window, blocked-times, virtual-only), and full
+basic-mode generation with pinned courses and with elective selection. Benchmarks are not run in CI
+(`cargo test` does not build `[[bench]]` targets).
+
 ### References
 
 | Piece                             | Location                                                                        |

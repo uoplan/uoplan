@@ -22,6 +22,13 @@ default = ["console_error_panic_hook"]
 prost-build = "0.14"
 protox = "0.9"
 
+[dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "generation"
+harness = false
+
 [profile.release]
 opt-level = "s"
 lto = true
