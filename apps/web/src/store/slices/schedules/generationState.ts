@@ -36,7 +36,12 @@ export async function withScheduleGenerating(
   set: Parameters<StateCreator<AppStore, [], [], SchedulesSlice>>[0],
   run: () => Promise<void>,
 ) {
-  set({ scheduleGenerating: true });
+  // Clear the dirty flag as the run begins so that any generation-option change
+  // made while this run is in flight is a genuine `false -> true` transition. The
+  // CalendarPage subscription keys off that transition to cancel the in-flight
+  // run; without the reset, a run started while already-dirty could never be
+  // cancelled and would hang until the hard timeout.
+  set({ scheduleGenerating: true, generationOptionsDirty: false });
   try {
     await run();
   } finally {
