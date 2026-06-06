@@ -23,6 +23,7 @@ import {
   computeWeekGroups,
   slotActiveInWeek,
 } from "@uoplan/calendar";
+import { buildEngine } from "./engineHost.js";
 import type { Env } from "./index.js";
 
 // @ts-ignore - wrangler handles .wasm imports as WebAssembly.Module
@@ -165,7 +166,15 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
       blockedTimes: decoded.blockedTimes,
     };
 
-    const reconstructed = reconstructScheduleForPreview(decoded, cache, constraints);
+    const engine = buildEngine(catalogue, schedulesData);
+    let reconstructed: ReturnType<typeof reconstructScheduleForPreview>;
+    try {
+      reconstructed = reconstructScheduleForPreview(engine, decoded, cache, constraints);
+    } finally {
+      // Release the WASM-side allocation so engines don't accumulate in the
+      // isolate across OG cache misses.
+      (engine as unknown as { free?: () => void }).free?.();
+    }
     if (!reconstructed || reconstructed.schedule.enrollments.length === 0) {
       return fallback();
     }

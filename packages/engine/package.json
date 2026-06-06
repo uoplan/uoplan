@@ -1,0 +1,24 @@
+{
+  "name": "@uoplan/engine",
+  "version": "0.1.0",
+  "private": true,
+  "files": [
+    "pkg"
+  ],
+  "type": "module",
+  "main": "./pkg/uoplan_engine.js",
+  "types": "./pkg/uoplan_engine.d.ts",
+  "exports": {
+    ".": {
+      "types": "./pkg/uoplan_engine.d.ts",
+      "default": "./pkg/uoplan_engine.js"
+    },
+    "./wasm": "./pkg/uoplan_engine_bg.wasm",
+    "./engine.wasm": "./pkg/uoplan_engine_bg.wasm"
+  },
+  "scripts": {
+    "build:wasm": "wasm-pack build --target web --out-dir pkg --release",
+    "build:wasm:dev": "wasm-pack build --target web --out-dir pkg --dev",
+    "test:rust": "cargo test"
+  }
+}

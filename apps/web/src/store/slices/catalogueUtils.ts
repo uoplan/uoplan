@@ -54,3 +54,32 @@ export function getMergedCatalogue(
   const courses = removeMergedCoursesSupersededByAliases(catalogue.courses, withAliases);
   return { ...catalogue, courses };
 }
+
+let effectiveMemoInputs: readonly [Catalogue | null, Course[] | null, string[]] | null = null;
+let effectiveMemoResult: Catalogue | null = null;
+
+/**
+ * Identity-memoized {@link getMergedCatalogue}. Returns the same merged catalogue
+ * reference while its inputs are unchanged, so callers that build the WASM engine
+ * from it (synchronous swap paths, in-process generation fallback) get a stable
+ * object the engine memo can key on instead of rebuilding the engine each call.
+ * This is the catalogue the store's `cache` is built from, so the engine sees the
+ * same year-merged prerequisites/credits as response mapping.
+ */
+export function getEffectiveCatalogue(
+  catalogue: Catalogue | null,
+  yearCatalogueCourses: Course[] | null,
+  completedCourses: string[],
+): Catalogue | null {
+  if (
+    effectiveMemoInputs &&
+    effectiveMemoInputs[0] === catalogue &&
+    effectiveMemoInputs[1] === yearCatalogueCourses &&
+    effectiveMemoInputs[2] === completedCourses
+  ) {
+    return effectiveMemoResult;
+  }
+  effectiveMemoResult = getMergedCatalogue(catalogue, yearCatalogueCourses, completedCourses);
+  effectiveMemoInputs = [catalogue, yearCatalogueCourses, completedCourses];
+  return effectiveMemoResult;
+}

@@ -7,8 +7,8 @@ Always use `pnpm`, never `npm`.
 ## Commands
 
 ```bash
-pnpm dev              # Vite dev server (runs generate + data-proto build first)
-pnpm build            # Production build (generate + data-proto + vite + prerender)
+pnpm dev              # Vite dev server (runs generate + engine-wasm:dev + data-proto build first)
+pnpm build            # Production build (generate + engine-wasm + data-proto + vite + prerender)
 pnpm test             # Run all workspace tests once (vitest)
 pnpm test:watch       # Watch mode (apps/web)
 pnpm typecheck        # tsgo typecheck across all packages (+ wrangler types)
@@ -20,6 +20,11 @@ pnpm check:i18n       # Translation completeness / locale parity
 pnpm i18n:sync        # Scaffold missing msgids into both PO files
 pnpm deadcode         # knip
 
+# Rust/WASM schedule engine (packages/engine)
+pnpm build:engine-wasm                   # wasm-pack build --release (run before vite/worker builds)
+pnpm build:engine-wasm:dev               # wasm-pack build --dev
+pnpm --filter @uoplan/engine test:rust   # cargo test for the engine crate
+
 # Scraper / data
 pnpm scrape:catalogue # Scrape per-year course/program data (--force to re-scrape)
 pnpm scrape:schedules # Scrape PeopleSoft schedule data
@@ -29,7 +34,7 @@ pnpm build:data-proto # Compile apps/scraper/data JSON → apps/web/public/data 
 Run a single test with vitest directly, e.g.
 `pnpm --filter @uoplan/core exec vitest run src/path/file.test.ts -t "case name"`.
 
-Tooling is **oxc-based** — `oxlint` (`oxlint.config.ts`), `oxfmt` (`oxfmt.config.ts`), and `tsgo` (TypeScript native preview) for typechecking, not eslint/prettier/tsc. Git hooks run via `lefthook` (`lefthook.yml`, installed by `pnpm prepare`). CI (`.github/workflows/ci.yml`) runs: generate → lint → format:check → typecheck → check:arch → check:i18n → test → build. `apps/cli/**` is excluded (it has its own workflow).
+Tooling is **oxc-based** — `oxlint` (`oxlint.config.ts`), `oxfmt` (`oxfmt.config.ts`), and `tsgo` (TypeScript native preview) for typechecking, not eslint/prettier/tsc. Git hooks run via `lefthook` (`lefthook.yml`, installed by `pnpm prepare`). CI (`.github/workflows/ci.yml`) runs: install → setup Rust + wasm-pack → generate → build:engine-wasm → cargo test → lint → format:check → typecheck → check:arch → check:i18n → test → build. The engine WASM must be built before typecheck/test/build (web tests load it). `apps/cli/**` is excluded (it has its own workflow).
 
 ## Architecture
 
@@ -42,7 +47,8 @@ Tooling is **oxc-based** — `oxlint` (`oxlint.config.ts`), `oxfmt` (`oxfmt.conf
 - `apps/scraper` — Node scrapers that produce the source JSON datasets.
 - `apps/cli` — Rust enrolment CLI (`@uoplan/cli` / `npx @uoplan/cli`), PeopleSoft search/enrol.
 - `packages/proto` — protobuf schemas + generated TS (single source of truth).
-- `packages/core` — scheduling engine, requirements, prerequisites, data cache, state encoding, grades.
+- `packages/engine` — **Rust → WASM** schedule-generation engine (selection + timetabling), built with `wasm-pack`. The single source of truth for generation; consumed in-process by both the web schedule worker and the OG-image worker.
+- `packages/core` — requirements, prerequisites, data cache, state encoding, grades, the TS↔engine bridge (`engineBridge.ts`), and retained TS relaxation diagnostics.
 - `packages/data` — runtime data client/loaders/transport (browser + node + worker).
 - `packages/calendar` — calendar rendering primitives (layout, events, colours).
 - `packages/transcript` — pdfjs-based transcript parsing (browser only).
@@ -75,15 +81,16 @@ apps/scraper/data/*.json        (source datasets, committed for diffability)
 ### Key paths
 
 - **`apps/web/src/store/`** — Zustand slices (`appStore.ts` composes them; see `docs/store-architecture.md`), `requirementCompute.ts`, `scheduleHelpers.ts` (requirement pools + `computeCoursesPerPool`).
-- **`apps/web/src/lib/`** — `generateSchedulesAction.ts` (schedule-generation orchestration), URL/state glue, `encodeSchedulePayload.ts`, `importFromUEnroll.ts`.
-- **`packages/core/src/`** — `generateSchedule.ts` (`generateBasicSchedule` / `generateAdvancedSchedule`), `engine/` (modular generation engine: composable constraint pipe, lazy seeded timetable + subset enumerators, relaxation diagnostics), `generation/` (shared primitives: `sectionCombos.ts`, `overlaps.ts`, `types.ts`), `scheduleCandidates/`, `requirements/`, `prerequisites/`, `dataCache.ts`, `stateEncode.ts`, `implicitHonours.ts`, `scheduleFromState.ts`.
-- **`packages/proto/`** — `proto/{state,data,cli}.proto`; generated TS in `src/generated/*` (git-ignored), exported via `@uoplan/proto` namespaces (`StateProto`/`DataProto`/`CliProto`) or subpaths (`@uoplan/proto/state|data|cli`). Regenerate with `pnpm --filter @uoplan/proto generate`. `cli.proto` is synced to the Rust CLI via `pnpm sync:proto-cli`.
+- **`apps/web/src/lib/`** — `generateSchedulesAction.ts` (schedule-generation orchestration: builds the request, runs the WASM engine, maps the response), `engine/engineHost.ts` (web WASM init + engine memoization), URL/state glue, `encodeSchedulePayload.ts`, `importFromUEnroll.ts`.
+- **`packages/engine/`** — Rust crate (`src/lib.rs`, `advanced.rs`, …) compiled to WASM. `package.json` exports `./wasm` (Vite `?url`) and `./engine.wasm` (wrangler). Scripts: `build:wasm`(release)/`build:wasm:dev`/`test:rust`.
+- **`packages/core/src/`** — `engineBridge.ts` (TS↔engine boundary: `buildBasicRequest`/`buildAdvancedRequest`, `mapGenerationResponse`, `ScheduleEngine` interface, runners), `scheduleFromStateEngine.ts` (OG reconstruction via the engine), `reconstruct.ts`, `engine/` (retained TS **relaxation diagnostics** only — `constraints/`, `timetable/`, `diagnostics/`), `generation/` (shared primitives + types: `sectionCombos.ts`, `overlaps.ts`, `types.ts`, `fingerprint.ts`), `requirements/`, `prerequisites/`, `dataCache.ts`, `stateEncode.ts`, `implicitHonours.ts`.
+- **`packages/proto/`** — `proto/{state,data,cli,engine}.proto`; generated TS in `src/generated/*` (git-ignored), exported via `@uoplan/proto` namespaces (`StateProto`/`DataProto`/`CliProto`/`EngineProto`) or subpaths (`@uoplan/proto/state|data|cli|engine`). Regenerate with `pnpm --filter @uoplan/proto generate`. `cli.proto` is synced to the Rust CLI via `pnpm sync:proto-cli`; the Rust engine decodes `engine.proto`/`data.proto` directly via `prost`.
 - **`apps/scraper/data/`** — source JSON datasets (committed).
 - **`apps/web/public/data/`** — runtime protobuf `.pb` assets (git-ignored build artifacts).
 
 ### Schedule generation
 
-Orchestration lives in **`apps/web/src/lib/generateSchedulesAction.ts`**. Both modes timetable through the modular **`packages/core/src/engine/`** engine (entry points `generateBasicSchedule` / `generateAdvancedSchedule` in `packages/core/src/generateSchedule.ts`). The OG-image worker generates from a `DecodedState` via `packages/core/src/scheduleFromState.ts`. Pool sizing and pinned-credit rules use **`apps/web/src/store/scheduleHelpers.ts`** plus helpers from **`packages/core/src/scheduleCandidates/`**. See `docs/schedule-generation.md`.
+Generation is implemented in **Rust → WASM** (`packages/engine`); there is **no JS generation implementation**. TS only builds the `GenerationRequest`, runs the engine, and maps the `GenerationResponse`. Orchestration lives in **`apps/web/src/lib/generateSchedulesAction.ts`** (via the Comlink worker `scheduleWorker.ts` + `engineHost.ts`); the TS↔engine bridge is **`packages/core/src/engineBridge.ts`**. The OG-image worker generates from a `DecodedState` in-process via **`packages/core/src/scheduleFromStateEngine.ts`** + `apps/worker/src/engineHost.ts`, then renders with resvg. Pool sizing and pinned-credit rules still use **`apps/web/src/store/scheduleHelpers.ts`**. Build the engine before web/worker builds (`pnpm build:engine-wasm`). See `docs/schedule-generation.md`.
 
 ### Documentation
 

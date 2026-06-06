@@ -22,11 +22,6 @@ import type {
   SchedulesData,
 } from "../../../dataTypes";
 import type { GenerationConstraints } from "../../types";
-import type {
-  AdvancedScheduleParams,
-  AdvancedScheduleResult,
-  BasicScheduleParams,
-} from "../../../generateSchedule";
 
 type TimeLite = { day: DayOfWeek; start: number; end: number };
 
@@ -150,96 +145,3 @@ export const DEFAULT_CONSTRAINTS: GenerationConstraints = {
   minStartMinutes: 0,
   maxEndMinutes: 24 * 60,
 };
-
-/**
- * A normalized, time-independent summary of a generation result used as the
- * golden snapshot. Section/time arrangement is intentionally excluded.
- */
-export interface AdvancedGoldenSummary {
-  courseSet: string[];
-  pinned: string[];
-  optionalPool: string[];
-  emptyPoolLabels: string[];
-  totalAvailable: number | null;
-  totalNeeded: number | null;
-  hasSchedule: boolean;
-}
-
-export function summarizeAdvanced(result: AdvancedScheduleResult): AdvancedGoldenSummary {
-  return {
-    courseSet: result.schedule ? result.schedule.enrollments.map((e) => e.courseCode).sort() : [],
-    pinned: [...result.pinned].sort(),
-    optionalPool: [...result.filteredOptionalPool].sort(),
-    emptyPoolLabels: (result.poolDiagnostics?.emptyPools ?? []).map((p) => p.label).sort(),
-    totalAvailable: result.poolDiagnostics?.totalAvailable ?? null,
-    totalNeeded: result.poolDiagnostics?.totalNeeded ?? null,
-    hasSchedule: result.schedule != null,
-  };
-}
-
-/**
- * Base advanced params with empty selections; override per scenario. Pools are
- * passed via `remainingRequirements` to avoid needing the full requirements
- * computation in a unit fixture.
- */
-export function baseAdvancedParams(cache: DataCache): AdvancedScheduleParams {
-  return {
-    cache,
-    constraints: DEFAULT_CONSTRAINTS,
-    completedCourses: [],
-    prereqEligibleCourses: [],
-    remainingRequirements: [],
-    requirementTreeWithStatus: [],
-    constrainedPerRequirementRaw: {},
-    selectedPerRequirement: {},
-    selectedOptionsPerRequirement: {},
-    coursesThisSemester: 4,
-    levelBuckets: ["undergrad"],
-    languageBuckets: ["en", "fr", "other"],
-    electiveLevelBuckets: [],
-    includeClosedComponents: true,
-    virtualSectionsOnly: false,
-    generationPreferEasier: false,
-    frenchImmersionStream: false,
-    programTitle: undefined,
-    blacklistedCourses: [],
-    currentSeed: 1,
-    firstSeed: 1,
-  };
-}
-
-export function baseBasicParams(cache: DataCache): BasicScheduleParams {
-  return {
-    cache,
-    constraints: DEFAULT_CONSTRAINTS,
-    pinned: [],
-    completedCourses: [],
-    studentPrograms: [],
-    levelBuckets: ["undergrad"],
-    languageBuckets: ["en", "fr", "other"],
-    electiveLevelBuckets: [],
-    basicExcludedCategories: [],
-    basicElectivesCount: 4,
-    includeClosedComponents: true,
-    virtualSectionsOnly: false,
-    generationPreferEasier: false,
-    frenchImmersionStream: false,
-    programTitle: undefined,
-    blacklistedCourses: [],
-    currentSeed: 1,
-    firstSeed: 1,
-  };
-}
-
-/** All non-honours fixture course codes (useful as a prereq-eligible set). */
-export const ALL_FIXTURE_CODES = [
-  "CSI 2110",
-  "CSI 2120",
-  "CSI 2101",
-  "SEG 2105",
-  "MAT 1320",
-  "MAT 1322",
-  "PHI 1101",
-  "HIS 1100",
-  "CSI 4900",
-];

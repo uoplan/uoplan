@@ -1,0 +1,181 @@
+syntax = "proto3";
+
+package engine;
+
+// ---------------------------------------------------------------------------
+// engine.proto — I/O contract for the Rust/WASM schedule-generation engine.
+//
+// The engine is fed the catalogue/schedule/grade datasets (decoded from the
+// existing data.proto `.pb` assets) once, then answers `GenerationRequest`s
+// with `GenerationResponse`s. The TypeScript side keeps ownership of state
+// encoding/decoding, requirement-tree computation and the `DataCache`; it
+// serializes a request, calls the engine, and maps the response back into the
+// existing `GeneratedSchedule` shape by looking section ids up in its cache.
+// ---------------------------------------------------------------------------
+
+enum Mode {
+  MODE_BASIC = 0;
+  MODE_ADVANCED = 1;
+}
+
+// proto3 maps cannot have `repeated` values, so wrap string lists.
+message StringList {
+  repeated string values = 1;
+}
+
+message BlockedTime {
+  uint32 day = 1; // 0 = Monday ... 6 = Sunday
+  uint32 start_minutes = 2;
+  uint32 end_minutes = 3;
+}
+
+message GenerationConstraints {
+  uint32 min_start_minutes = 1;
+  uint32 max_end_minutes = 2;
+  optional double min_professor_rating = 3;
+  // Max credits from 1000-level courses allowed (48 - already completed).
+  optional double max_first_year_credits = 4;
+  bool compressed_schedule = 5;
+  repeated BlockedTime blocked_times = 6;
+}
+
+message DisciplineLevel {
+  string discipline = 1;
+  repeated uint32 levels = 2;
+}
+
+// Mirror of the TS RemainingRequirement (advanced mode input).
+message RemainingRequirement {
+  string requirement_id = 1;
+  string type = 2;
+  optional string title = 3;
+  repeated string candidate_courses = 4;
+  optional double credits_needed = 5;
+  optional uint32 picked_count = 6;
+  repeated string satisfied_by = 7;
+}
+
+// Mirror of the TS RequirementWithStatus tree node (advanced mode input).
+message RequirementWithStatus {
+  string type = 1;
+  optional string title = 2;
+  optional string code = 3;
+  optional double credits = 4;
+  repeated DisciplineLevel discipline_levels = 5;
+  repeated string excluded_disciplines = 6;
+  optional string faculty = 7;
+  repeated RequirementWithStatus options = 8;
+  bool complete = 9;
+  repeated string satisfied_by = 10;
+  optional uint32 satisfied_option_index = 11;
+  optional string requirement_id = 12;
+  repeated string candidate_courses = 13;
+  optional double credits_needed = 14;
+  optional uint32 picked_count = 15;
+}
+
+message GenerationRequest {
+  Mode mode = 1;
+
+  // --- Basic mode selection ---
+  repeated string basic_pinned_courses = 2;
+  uint32 basic_electives_count = 3;
+  repeated string basic_excluded_categories = 4;
+
+  // --- Shared selection / context ---
+  repeated string completed_courses = 5;
+  repeated string student_programs = 6;
+  optional string program_title = 7;
+
+  // --- Advanced mode selection (requirement tree computed in TS) ---
+  repeated RemainingRequirement remaining_requirements = 8;
+  repeated RequirementWithStatus requirement_tree = 9;
+  map<string, StringList> selected_per_requirement = 10;
+  map<string, uint32> selected_options_per_requirement = 11;
+  map<string, StringList> constrained_per_requirement = 12;
+  map<string, uint32> requirement_priorities = 13;
+  uint32 courses_this_semester = 14;
+  repeated string prereq_eligible_courses = 15;
+  repeated string forced_courses = 16;
+
+  // --- Filters / preferences ---
+  repeated string level_buckets = 17;
+  repeated string language_buckets = 18;
+  repeated uint32 elective_level_buckets = 19;
+  bool include_closed_components = 20;
+  bool virtual_sections_only = 21;
+  bool generation_prefer_easier = 22;
+  bool french_immersion_stream = 23;
+  repeated string blacklisted_courses = 24;
+
+  // --- Constraints ---
+  GenerationConstraints constraints = 25;
+
+  // --- Seeds ---
+  uint32 current_seed = 26;
+  uint32 first_seed = 27;
+
+  // Term id of the schedule dataset to generate against.
+  optional uint32 term_id = 28;
+
+  // Normalized professor name -> RateMyProfessors rating (only rated profs).
+  // Used by the minimum-professor-rating section filter.
+  map<string, double> professor_ratings = 29;
+
+  // Course code -> A+ percentage, used by the "prefer easier" soft weighting.
+  map<string, double> course_aplus = 30;
+}
+
+// Re-timetable a FIXED set of courses (the UI swap feature): given an exact set
+// of course codes, find one seeded conflict-free arrangement, or report failure.
+message TimetableRequest {
+  repeated string course_codes = 1;
+  GenerationConstraints constraints = 2;
+  uint32 seed = 3;
+  bool include_closed_components = 4;
+  bool virtual_sections_only = 5;
+  // Courses exempt from the virtual-only filter (e.g. pinned courses keep all times).
+  repeated string virtual_exempt_courses = 6;
+  map<string, double> professor_ratings = 7;
+  bool apply_blacklist = 8;
+  repeated string blacklisted_courses = 9;
+}
+
+// A component -> section choice for a chosen course. The TS side rebuilds the
+// full `CourseEnrollment` (sections + times) from its `DataCache`.
+message ComponentChoice {
+  string component = 1;
+  string section = 2;
+}
+
+message ChosenCourse {
+  string course_code = 1;
+  repeated ComponentChoice components = 2;
+}
+
+message EmptyPool {
+  string label = 1;
+  optional string requirement_id = 2;
+  repeated string candidate_courses = 3;
+}
+
+message PoolDiagnostics {
+  repeated EmptyPool empty_pools = 1;
+  uint32 total_available = 2;
+  uint32 total_needed = 3;
+}
+
+message GenerationResponse {
+  // True when a conflict-free schedule was produced.
+  bool has_schedule = 1;
+  repeated ChosenCourse courses = 2;
+
+  // Swap pool / remaining optional candidates (basic + advanced).
+  repeated string optional_pool = 3;
+  repeated string pinned = 4;
+  map<string, string> chosen_course_to_requirement = 5;
+
+  optional PoolDiagnostics pool_diagnostics = 6;
+  // Non-empty when generation failed for a structured reason.
+  optional string error = 7;
+}

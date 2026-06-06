@@ -5,12 +5,13 @@ import {
   getValidSectionCombos,
   getEnrollmentsForCourse,
   enrollmentsOverlap,
-  timetableFixedCourseSet,
-  cacheWithPerCourseVirtualFilter,
+  runTimetableFixedSet,
   type CourseEnrollment,
   type GenerationConstraints,
 } from "@uoplan/core";
 import { normalizeCourseCode } from "@uoplan/core";
+import { getEngineSync } from "../../lib/engine/engineHost";
+import { getEffectiveCatalogue } from "./catalogueUtils";
 import { basicElectivesAfterPinnedDelta } from "../../lib/basicCalendarPins";
 import { DEFAULT_BASIC_ELECTIVES_COUNT } from "../generationDefaults";
 import {
@@ -282,6 +283,10 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         basicPinnedCourses,
         currentSchedule,
         cache,
+        catalogue,
+        schedulesData,
+        yearCatalogueCourses,
+        completedCourses,
         chosenCourseToRequirementId,
         currentPoolMap,
         currentColorMap,
@@ -348,16 +353,28 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         const allCodes = schedule.enrollments.map((e) => e.courseCode);
         allCodes[enrollmentIndex] = newCourseCode;
 
-        const pinnedNormalized = new Set(basicPinnedCourses.map(normalizeCourseCode));
-        const effectiveCache = cacheWithPerCourseVirtualFilter(
-          cache,
-          includeClosedComponents,
-          (code) => virtualSectionsOnly && !pinnedNormalized.has(normalizeCourseCode(code)),
-        );
-
-        const newSched = timetableFixedCourseSet(allCodes, effectiveCache, constraints, {
-          seed: get().currentSeed,
-        });
+        const engine =
+          catalogue && schedulesData
+            ? getEngineSync(
+                getEffectiveCatalogue(catalogue, yearCatalogueCourses, completedCourses) ??
+                  catalogue,
+                schedulesData,
+              )
+            : null;
+        const newSched = engine
+          ? runTimetableFixedSet(
+              engine,
+              {
+                courseCodes: allCodes,
+                constraints,
+                seed: get().currentSeed,
+                includeClosedComponents,
+                virtualSectionsOnly,
+                virtualExemptCourses: basicPinnedCourses,
+              },
+              cache,
+            )
+          : null;
 
         const validSchedules = newSched ? [newSched] : [];
         if (validSchedules.length > 0) {

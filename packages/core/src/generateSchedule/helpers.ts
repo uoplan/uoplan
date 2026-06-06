@@ -1,18 +1,6 @@
 import type { RemainingRequirement, RequirementWithStatus } from "../index";
 import { canonicalGroupToken, groupTokenPrefix, isGroupToken } from "../index";
 
-export const EASIER_APLUS_PIVOT = 20;
-export const EASIER_APLUS_BASE = 5.25;
-export const EASIER_APLUS_SCALE = 10;
-
-// Avalanche-mix a 32-bit integer so adjacent integer seeds map to distant
-// points in the RNG space (splitmix32-style finalizer).
-export function scrambleSeed(n: number): number {
-  n = Math.imul(n ^ (n >>> 16), 0x45d9f3b);
-  n = Math.imul(n ^ (n >>> 16), 0x45d9f3b);
-  return n ^ (n >>> 16);
-}
-
 function collectRequirementsFromSelectedBranches(
   nodes: RequirementWithStatus[],
   selectedOptions: Record<string, number>,
@@ -131,16 +119,6 @@ export function buildPendingGroupPickCounts(
       agg.set(pfx, (agg.get(pfx) ?? 0) + count);
     }
     if (agg.size > 0) out.set(reqId, agg);
-  }
-  return out;
-}
-
-export function clonePendingGroupPickCounts(
-  src: Map<string, Map<string, number>>,
-): Map<string, Map<string, number>> {
-  const out = new Map<string, Map<string, number>>();
-  for (const [k, v] of src) {
-    out.set(k, new Map(v));
   }
   return out;
 }

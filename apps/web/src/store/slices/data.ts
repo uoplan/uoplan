@@ -340,6 +340,15 @@ export const createDataSlice =
           void import("../../workers/scheduleWorkerClient").then(({ prewarmScheduleWorker }) =>
             prewarmScheduleWorker(get()),
           );
+          // Pre-warm the main-thread WASM engine for synchronous swap paths.
+          const dataKey = {
+            termId: initialTermId,
+            firstYear: initialFirstYear,
+            completedCourses: [] as string[],
+          };
+          void import("../../lib/engine/engineHost").then(({ getScheduleEngine }) =>
+            getScheduleEngine(dataKey).catch(() => undefined),
+          );
         }
 
         if (indices && typeof window !== "undefined") {

@@ -38,12 +38,20 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  */
 const LAYERS = {
   "@uoplan/proto": [],
+  "@uoplan/engine": [],
   "@uoplan/core": ["@uoplan/proto"],
   "@uoplan/data": ["@uoplan/proto", "@uoplan/core"],
   "@uoplan/calendar": ["@uoplan/proto", "@uoplan/core"],
   "@uoplan/transcript": ["@uoplan/proto", "@uoplan/core"],
-  web: ["@uoplan/proto", "@uoplan/core", "@uoplan/data", "@uoplan/calendar", "@uoplan/transcript"],
-  worker: ["@uoplan/proto", "@uoplan/core", "@uoplan/data", "@uoplan/calendar"],
+  web: [
+    "@uoplan/proto",
+    "@uoplan/engine",
+    "@uoplan/core",
+    "@uoplan/data",
+    "@uoplan/calendar",
+    "@uoplan/transcript",
+  ],
+  worker: ["@uoplan/proto", "@uoplan/engine", "@uoplan/core", "@uoplan/data", "@uoplan/calendar"],
   scraper: ["@uoplan/proto"],
 };
 

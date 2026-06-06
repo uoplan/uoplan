@@ -34,7 +34,7 @@ Implemented in `apps/worker/src/ogImage.ts`:
 2. **Peek** — `peekTermAndYearFromBase64()` reads `termId` and `firstYear` without catalogue-dependent state decoding
 3. **Fetch data assets** from `env.ASSETS` (catalogue manifest → catalogue year → schedules for term → indices)
 4. **Decode state** — `decodeStateFromBase64()` returns `DecodedState` with all selections and swaps
-5. **Reconstruct schedule** — `reconstructScheduleForPreview()` from `@uoplan/core` delegates to `generateScheduleFromDecodedState()`, which uses the **exact same algorithm** as the web app's `generateSchedulesAction` (shared via `packages/core/src/scheduleFromState.ts` and `packages/core/src/generateSchedule.ts`). This guarantees the OG image shows the same courses the user sees in their browser.
+5. **Reconstruct schedule** — `reconstructScheduleForPreview(engine, decoded, cache, constraints)` from `@uoplan/core` delegates to `generateScheduleFromDecodedState()` in `packages/core/src/scheduleFromStateEngine.ts`, which builds a `GenerationRequest` and calls the **shared Rust/WASM engine** — the same engine the web app uses (`packages/engine`, see [schedule-generation.md](schedule-generation.md)). The Worker initializes the engine in-process via `apps/worker/src/engineHost.ts` (`initSync` + `import engineWasm from "@uoplan/engine/engine.wasm"`). This guarantees the OG image shows the same courses the user sees in their browser, with no duplicated generation logic.
 6. **Render** — `reconstructScheduleForPreview()` returns `{ schedule, colorMap }`; the `colorMap` already has swap colour-inheritance applied so colours match the live calendar. `scheduleToEvents()` and `renderCalendarToSvg()` from `@uoplan/calendar` produce an SVG; `@resvg/resvg-wasm` converts SVG → PNG
 7. **Cache** — the PNG response is stored in the Workers Cache with `max-age=86400`
 
@@ -56,7 +56,7 @@ Edit `packages/calendar/src/render.ts` — `renderCalendarToSvg()` is a pure fun
 
 ### Changing what schedule is reconstructed
 
-Edit `packages/core/src/reconstruct.ts` — `reconstructScheduleForPreview()` — and the underlying `packages/core/src/scheduleFromState.ts`. The function delegates to `generateScheduleFromDecodedState()`, which reconstructs the decoded state through the same pool-pick algorithm as `generateSchedulesAction`, then applies swaps.
+Edit `packages/core/src/reconstruct.ts` — `reconstructScheduleForPreview()` — and the underlying `packages/core/src/scheduleFromStateEngine.ts`. The function builds a `GenerationRequest` from the decoded state and runs the shared Rust/WASM engine (same code path as `generateSchedulesAction`), then applies swaps.
 
 ### Adding more OG tags
 

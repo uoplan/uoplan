@@ -8,6 +8,7 @@
         "src/main.tsx",
         "src/workers/sw.ts",
         "src/test/browserSetup.ts",
+        "src/test/engineSetup.ts",
         "scripts/**/*.mjs",
         "vite.config.ts",
         "lingui.config.ts",
@@ -24,6 +25,9 @@
       "project": ["src/**/*.ts"]
     },
     "packages/core": {},
+    "packages/engine": {
+      "ignoreBinaries": ["wasm-pack"]
+    },
     "packages/proto": {
       "ignoreDependencies": ["@bufbuild/protobuf", "ts-proto"]
     },

@@ -67,6 +67,16 @@ export interface DataClient {
   fetchBytes: FetchBytes;
   /** Fetch + decode + merge + build the DataCache for a data key. */
   loadEffectiveCache(dataKey: CacheDataKey): Promise<DataCache>;
+  /**
+   * Like {@link loadEffectiveCache} but also returns the merged catalogue and
+   * schedules domain objects, so callers can re-encode them to proto bytes for
+   * the WASM engine. Backed by the same LRU memo.
+   */
+  loadEffectiveDataset(dataKey: CacheDataKey): Promise<{
+    cache: DataCache;
+    catalogue: Catalogue;
+    schedulesData: SchedulesData;
+  }>;
   /** Drop all cached promises and built caches. */
   clear(): void;
 }
@@ -103,13 +113,13 @@ export function createDataClient(options: DataClientOptions): DataClient {
     return p;
   };
 
-  async function loadEffectiveCache(dataKey: CacheDataKey): Promise<DataCache> {
+  async function loadEffectiveDataset(dataKey: CacheDataKey): Promise<MemoEntry> {
     const key = memoKey(dataKey);
     const hit = cacheMemo.get(key);
     if (hit) {
       cacheMemo.delete(key);
       cacheMemo.set(key, hit);
-      return hit.cache;
+      return hit;
     }
 
     const { years } = await loadCatalogueManifest(fetchBytes);
@@ -137,13 +147,18 @@ export function createDataClient(options: DataClientOptions): DataClient {
     ]);
 
     const cache = buildCacheWithOpt(effectiveCatalogue, schedulesData, dataKey.completedCourses);
-    cacheMemo.set(key, { cache, catalogue: effectiveCatalogue, schedulesData });
+    const entry: MemoEntry = { cache, catalogue: effectiveCatalogue, schedulesData };
+    cacheMemo.set(key, entry);
     while (cacheMemo.size > cacheSize) {
       const oldestKey = cacheMemo.keys().next().value;
       if (oldestKey === undefined) break;
       cacheMemo.delete(oldestKey);
     }
-    return cache;
+    return entry;
+  }
+
+  async function loadEffectiveCache(dataKey: CacheDataKey): Promise<DataCache> {
+    return (await loadEffectiveDataset(dataKey)).cache;
   }
 
   function clear(): void {
@@ -151,5 +166,5 @@ export function createDataClient(options: DataClientOptions): DataClient {
     cacheMemo.clear();
   }
 
-  return { fetchBytes, loadEffectiveCache, clear };
+  return { fetchBytes, loadEffectiveCache, loadEffectiveDataset, clear };
 }

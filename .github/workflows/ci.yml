@@ -43,8 +43,35 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: clippy, rustfmt
+
+      - name: Cache Cargo build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            packages/engine/target
+          key: cargo-${{ runner.os }}-${{ hashFiles('packages/engine/Cargo.lock') }}
+          restore-keys: cargo-${{ runner.os }}-
+
+      - name: Install wasm-pack
+        uses: jetli/wasm-pack-action@v0.4.0
+        with:
+          version: latest
+
       - name: Run generator
         run: pnpm generate
+
+      - name: Build engine WASM
+        run: pnpm build:engine-wasm
+
+      - name: Run Rust engine tests
+        run: pnpm --filter @uoplan/engine test:rust
 
       - name: Run linter
         run: pnpm lint
