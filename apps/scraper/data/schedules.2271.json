@@ -1,7 +1,7 @@
 {
   "termId": "2271",
   "totalCourses": 11145,
-  "totalWithSchedules": 3136,
+  "totalWithSchedules": 3159,
   "schedules": [
     {
       "subject": "ADM",
@@ -15146,7 +15146,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joseph Lukas Beddows",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -15528,7 +15528,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Sylvain Schryburt",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -16924,6 +16924,44 @@
     },
     {
       "subject": "ANP",
+      "catalogNumber": "1111",
+      "courseCode": "ANP 1111",
+      "title": "Essentials of Human Anatomy and Physiology I",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "X00-LEC FullSess.",
+            "sectionCode": "X00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 365,
+              "A": 255,
+              "A-": 216,
+              "B+": 223,
+              "B": 189,
+              "C+": 179,
+              "C": 169,
+              "D+": 131,
+              "D": 151,
+              "E": 117,
+              "F": 92,
+              "EIN": 25,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ANP",
       "catalogNumber": "1115",
       "courseCode": "ANP 1115",
       "title": "Essentials of Human Anatomy and Physiology II",
@@ -17252,6 +17290,44 @@
               "NS": 0,
               "NC": 0,
               "ABS": 0,
+              "P": 0,
+              "S": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ANP",
+      "catalogNumber": "1511",
+      "courseCode": "ANP 1511",
+      "title": "Principes d’anatomie et de physiologie humaines I",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "W00-LEC FullSess.",
+            "sectionCode": "W00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 117,
+              "A": 58,
+              "A-": 52,
+              "B+": 56,
+              "B": 68,
+              "C+": 63,
+              "C": 67,
+              "D+": 75,
+              "D": 93,
+              "E": 73,
+              "F": 39,
+              "EIN": 17,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 1,
               "P": 0,
               "S": 1
             }
@@ -21761,7 +21837,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 266,
               "A": 169,
@@ -30632,7 +30708,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-18",
                   "2027-01-18"
@@ -30643,7 +30719,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-02-01"
@@ -30726,7 +30802,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-25",
                   "2027-01-25"
@@ -30737,7 +30813,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-08",
                   "2027-02-08"
@@ -30820,7 +30896,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-18",
                   "2027-01-18"
@@ -30831,7 +30907,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-02-01"
@@ -30914,7 +30990,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-25",
                   "2027-01-25"
@@ -30925,7 +31001,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-08",
                   "2027-02-08"
@@ -31008,7 +31084,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-19",
                   "2027-01-19"
@@ -31019,7 +31095,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-02",
                   "2027-02-02"
@@ -31102,7 +31178,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-26",
                   "2027-01-26"
@@ -31113,7 +31189,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-09",
                   "2027-02-09"
@@ -31196,7 +31272,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-19",
                   "2027-01-19"
@@ -31207,7 +31283,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-02",
                   "2027-02-02"
@@ -31290,7 +31366,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-26",
                   "2027-01-26"
@@ -31301,7 +31377,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-09",
                   "2027-02-09"
@@ -31384,7 +31460,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-20",
                   "2027-01-20"
@@ -31395,7 +31471,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-03",
                   "2027-02-03"
@@ -31478,7 +31554,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-27",
                   "2027-01-27"
@@ -31489,7 +31565,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-10",
                   "2027-02-10"
@@ -31572,7 +31648,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-21",
                   "2027-01-21"
@@ -31583,7 +31659,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-04",
                   "2027-02-04"
@@ -31666,7 +31742,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-28",
                   "2027-01-28"
@@ -31677,7 +31753,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-11",
                   "2027-02-11"
@@ -31749,7 +31825,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-21",
                   "2027-01-21"
@@ -31760,7 +31836,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-04",
                   "2027-02-04"
@@ -31843,7 +31919,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-28",
                   "2027-01-28"
@@ -31854,7 +31930,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-11",
                   "2027-02-11"
@@ -32080,7 +32156,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-20",
                   "2027-01-20"
@@ -32091,7 +32167,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-03",
                   "2027-02-03"
@@ -32174,7 +32250,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-27",
                   "2027-01-27"
@@ -32185,7 +32261,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-10",
                   "2027-02-10"
@@ -32268,7 +32344,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-22",
                   "2027-01-22"
@@ -32279,7 +32355,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-05",
                   "2027-02-05"
@@ -32362,7 +32438,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-29",
                   "2027-01-29"
@@ -32373,7 +32449,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-12",
                   "2027-02-12"
@@ -32456,7 +32532,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Christian Prud'homme",
+                "instructor": "Luc Poitras",
                 "meetingDates": [
                   "2027-01-22",
                   "2027-01-22"
@@ -32467,7 +32543,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Prud'homme",
                 "meetingDates": [
                   "2027-02-05",
                   "2027-02-05"
@@ -33571,7 +33647,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 38,
               "A": 40,
@@ -43247,6 +43323,44 @@
               "P": 0,
               "S": 0
             }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "BMG",
+      "catalogNumber": "5304",
+      "courseCode": "BMG 5304",
+      "title": "Interactive Networked Systems and Telemedicine",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "BMG",
+      "catalogNumber": "5305",
+      "courseCode": "BMG 5305",
+      "title": "Pattern Classification and Experiment Design",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
           }
         ]
       }
@@ -54242,7 +54356,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 48,
               "A": 51,
@@ -58611,93 +58725,10 @@
       "subject": "CML",
       "catalogNumber": "2179",
       "courseCode": "CML 2179",
-      "title": "Access to Justice Practicum (Level I)",
+      "title": "Access to Justice Practicum (Level I) (+1 combined)",
       "timeZone": "America/Toronto",
       "components": {
         "STG": [
-          {
-            "section": "JI00-STG Session F",
-            "sectionCode": "JI00",
-            "component": "STG",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 960,
-                "endMinutes": 1130,
-                "virtual": false,
-                "instructor": "Cynthia Westaway",
-                "meetingDates": [
-                  "2027-01-05",
-                  "2027-01-22"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 960,
-                "endMinutes": 1130,
-                "virtual": false,
-                "instructor": "Cynthia Westaway",
-                "meetingDates": [
-                  "2027-01-05",
-                  "2027-01-22"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 960,
-                "endMinutes": 1130,
-                "virtual": false,
-                "instructor": "Cynthia Westaway",
-                "meetingDates": [
-                  "2027-01-05",
-                  "2027-01-22"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 960,
-                "endMinutes": 1130,
-                "virtual": false,
-                "instructor": "Cynthia Westaway",
-                "meetingDates": [
-                  "2027-01-05",
-                  "2027-01-22"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 960,
-                "endMinutes": 1130,
-                "virtual": false,
-                "instructor": "Cynthia Westaway",
-                "meetingDates": [
-                  "2027-01-05",
-                  "2027-01-22"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 0,
-              "A": 0,
-              "A-": 0,
-              "B+": 0,
-              "B": 0,
-              "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 352
-            }
-          },
           {
             "section": "WM00-STG Session H",
             "sectionCode": "WM00",
@@ -90483,9 +90514,123 @@
     },
     {
       "subject": "CVG",
+      "catalogNumber": "7100",
+      "courseCode": "CVG 7100",
+      "title": "Geotechnical Case Studies",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CVG",
+      "catalogNumber": "7123",
+      "courseCode": "CVG 7123",
+      "title": "Earthquake Analysis and Design of Structures",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CVG",
+      "catalogNumber": "7124",
+      "courseCode": "CVG 7124",
+      "title": "Finite Element Analysis 2",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CVG",
+      "catalogNumber": "7130",
+      "courseCode": "CVG 7130",
+      "title": "Advanced  Mechanics of Reinforced Concrete",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CVG",
       "catalogNumber": "7171",
       "courseCode": "CVG 7171",
       "title": "Fire Dynamics I",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CVG",
+      "catalogNumber": "7175",
+      "courseCode": "CVG 7175",
+      "title": "Design for Fire Resistance",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "CVG",
+      "catalogNumber": "7184",
+      "courseCode": "CVG 7184",
+      "title": "Blast Load Effects on Structures",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -114161,7 +114306,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 61,
               "A": 40,
@@ -114200,7 +114345,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 61,
               "A": 40,
@@ -117423,6 +117568,25 @@
     },
     {
       "subject": "ELG",
+      "catalogNumber": "6102",
+      "courseCode": "ELG 6102",
+      "title": "Pattern Classification and Experiment Design",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ELG",
       "catalogNumber": "6104",
       "courseCode": "ELG 6104",
       "title": "Optimization for Engineering Applications",
@@ -117646,6 +117810,25 @@
     },
     {
       "subject": "ELG",
+      "catalogNumber": "6162",
+      "courseCode": "ELG 6162",
+      "title": "Digital Signal Processing",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ELG",
       "catalogNumber": "6184",
       "courseCode": "ELG 6184",
       "title": "Advanced Topics in Communication Systems",
@@ -117724,6 +117907,139 @@
             "session": null,
             "times": [],
             "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ELG",
+      "catalogNumber": "6315",
+      "courseCode": "ELG 6315",
+      "title": "Model-Driven Security Engineering",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ELG",
+      "catalogNumber": "6341",
+      "courseCode": "ELG 6341",
+      "title": "Signal Integrity in High-Speed Designs: Modeling and Analysis",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ELG",
+      "catalogNumber": "6342",
+      "courseCode": "ELG 6342",
+      "title": "Introduction to Electronic Design Automation Algorithms and Techniques",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IA00-LEC FullSess.",
+            "sectionCode": "IA00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ELG",
+      "catalogNumber": "6367",
+      "courseCode": "ELG 6367",
+      "title": "Fundamentals of Antenna Engineering",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 6,
+              "A": 2,
+              "A-": 2,
+              "B+": 1,
+              "B": 1,
+              "C+": 0,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 3,
+              "EIN": 2,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ELG",
+      "catalogNumber": "6372",
+      "courseCode": "ELG 6372",
+      "title": "Principles of Photonics",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 8,
+              "A": 1,
+              "A-": 2,
+              "B+": 1,
+              "B": 4,
+              "C+": 0,
+              "C": 5,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 1,
+              "P": 0,
+              "S": 0
+            }
           }
         ]
       }
@@ -129560,6 +129876,25 @@
     },
     {
       "subject": "EVG",
+      "catalogNumber": "7001",
+      "courseCode": "EVG 7001",
+      "title": "Topics in Environmental Engineering",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "EVG",
       "catalogNumber": "7200",
       "courseCode": "EVG 7200",
       "title": "Climate Change and Engineering",
@@ -136078,7 +136413,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Sylvain Schryburt",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -136361,7 +136696,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Anne-Marie Ouellet",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -136662,7 +136997,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Louise Frappier",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -144368,7 +144703,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joseph Lukas Beddows",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -161659,7 +161994,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1082,
               "A": 564,
@@ -174003,7 +174338,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 64,
               "A": 62,
@@ -176451,6 +176786,25 @@
     },
     {
       "subject": "MCG",
+      "catalogNumber": "5300",
+      "courseCode": "MCG 5300",
+      "title": "Fundamentals of Fluid Dynamics",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "MCG",
       "catalogNumber": "5315",
       "courseCode": "MCG 5315",
       "title": "Orbital Mechanics and Space Craft Control",
@@ -176471,6 +176825,44 @@
             "section": "IW01-LAB FullSess.",
             "sectionCode": "IW01",
             "component": "LAB",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "MCG",
+      "catalogNumber": "5329",
+      "courseCode": "MCG 5329",
+      "title": "Space Robotics",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "MCG",
+      "catalogNumber": "5350",
+      "courseCode": "MCG 5350",
+      "title": "Advanced Vibration Analysis",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
             "session": null,
             "times": [],
             "status": "Open"
@@ -176512,6 +176904,25 @@
               "P": 0,
               "S": 0
             }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "MCG",
+      "catalogNumber": "5376",
+      "courseCode": "MCG 5376",
+      "title": "Special Topics in Mechanical and Aerospace Engineering",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
           }
         ]
       }
@@ -176562,6 +176973,25 @@
               "P": 0,
               "S": 0
             }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "MCG",
+      "catalogNumber": "5483",
+      "courseCode": "MCG 5483",
+      "title": "Fundamentals of Combustion",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "IW00-LEC FullSess.",
+            "sectionCode": "IW00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
           }
         ]
       }
@@ -182531,7 +182961,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Michael Van der Sloot",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182571,7 +183001,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Paul Marleyn",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182771,7 +183201,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Robert Rival",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182782,7 +183212,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Robert Rival",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182924,7 +183354,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dillon Parmer",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182935,7 +183365,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dillon Parmer",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182966,7 +183396,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Julie Pedneault D",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -182977,7 +183407,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Julie Pedneault D",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -183100,7 +183530,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1070,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dinuk Wijeratne",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -183111,7 +183541,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1070,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dinuk Wijeratne",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -183222,7 +183652,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christiane Riel",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -183233,7 +183663,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christiane Riel",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -183832,7 +184262,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Michael Van der Sloot",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -183872,7 +184302,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Paul Marleyn",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -183985,7 +184415,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dinuk Wijeratne",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -184283,7 +184713,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Julie Pedneault D",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -184333,7 +184763,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Robert Rival",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -184344,7 +184774,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Robert Rival",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -184493,7 +184923,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dinuk Wijeratne",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -184563,7 +184993,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Michael Van der Sloot",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -184603,7 +185033,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Paul Marleyn",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -184746,7 +185176,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Lori Burns",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -184873,7 +185303,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Daniel Mroz",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185130,7 +185560,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1070,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dinuk Wijeratne",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185141,7 +185571,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1070,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dinuk Wijeratne",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185191,7 +185621,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1070,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dinuk Wijeratne",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185202,7 +185632,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1070,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dinuk Wijeratne",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185233,7 +185663,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1070,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dinuk Wijeratne",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185244,7 +185674,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1070,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dinuk Wijeratne",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185295,7 +185725,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Michael Van der Sloot",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185335,7 +185765,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Paul Marleyn",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185406,7 +185836,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Michael Van der Sloot",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185446,7 +185876,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Paul Marleyn",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185559,7 +185989,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christiane Riel",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185570,7 +186000,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christiane Riel",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185693,7 +186123,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christiane Riel",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185704,7 +186134,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christiane Riel",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185735,7 +186165,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christiane Riel",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -185746,7 +186176,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christiane Riel",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -186017,7 +186447,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christopher Lee Moore",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -186474,7 +186904,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "MG00-LAB FullSess.",
@@ -219102,7 +219532,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 163,
               "A": 107,
@@ -237562,7 +237992,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Yana Meerzon",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -240532,7 +240962,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 135,
               "A": 38,
@@ -247604,7 +248034,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Yana Meerzon",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -248031,7 +248461,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joseph Lukas Beddows",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -248180,7 +248610,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kristina Watt",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -248241,7 +248671,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "André Perrier",
                 "meetingDates": [
                   "2027-01-01",
                   "2027-04-30"
@@ -248291,7 +248721,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Miriam Cusson",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -248638,7 +249068,7 @@
                 "startMinutes": 600,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "André Perrier",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -248856,7 +249286,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Sylvain Schryburt",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -249019,7 +249449,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Yana Meerzon",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -249069,7 +249499,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Daniel Mroz",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -249318,7 +249748,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kristina Watt",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -249616,7 +250046,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Anne-Marie Ouellet",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -250033,7 +250463,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Daniel Mroz",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -250122,7 +250552,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Louise Frappier",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
