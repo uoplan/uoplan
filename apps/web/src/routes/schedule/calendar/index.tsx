@@ -77,7 +77,7 @@ function CalendarRoute() {
     hasPersistedGeneratedSchedule(firstSeed, currentSeed);
 
   if (awaitingFirstSchedule) {
-    return <AppDataLoader progress={loadProgress} />;
+    return <AppDataLoader progress={loadProgress} mode="generating" />;
   }
 
   return <CalendarPage />;

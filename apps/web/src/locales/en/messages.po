@@ -99,6 +99,9 @@ msgstr "Generation Options"
 msgid "app.loadingData"
 msgstr "Loading course data..."
 
+msgid "app.generatingSchedule"
+msgstr "Generating schedule..."
+
 msgid "app.nav.back"
 msgstr "Back"
 
@@ -1012,6 +1015,9 @@ msgstr " (+{count} more)"
 
 msgid "gen.error.notEnoughCourses"
 msgstr "Not enough courses match your filters."
+
+msgid "gen.error.timeout"
+msgstr "Schedule generation took too long and was stopped. Try fewer courses or looser preferences, then generate again."
 
 msgid "gen.error.unassignedCompleted"
 msgstr "You have {count, plural, one {# completed course} other {# completed courses}} not assigned to a requirement: {courses}. You must assign {count, plural, one {it} other {them}} to requirements, or move them to the Excluded section."

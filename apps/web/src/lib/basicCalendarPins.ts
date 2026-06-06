@@ -1,4 +1,4 @@
-const BASIC_ELECTIVES_COUNT_MAX = 8;
+import { SCHEDULE_COURSE_COUNT_MAX } from "../store/generationDefaults";
 
 /** Basic mode needs at least one required course or elective slot before seed navigation / generation. */
 export function canGenerateBasicSchedule(
@@ -13,5 +13,5 @@ export function basicElectivesAfterPinnedDelta(
   currentElectives: number,
   pinnedDelta: number,
 ): number {
-  return Math.max(0, Math.min(BASIC_ELECTIVES_COUNT_MAX, currentElectives - pinnedDelta));
+  return Math.max(0, Math.min(SCHEDULE_COURSE_COUNT_MAX, currentElectives - pinnedDelta));
 }

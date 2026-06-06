@@ -99,6 +99,9 @@ msgstr "Options de génération"
 msgid "app.loadingData"
 msgstr "Chargement des données de cours..."
 
+msgid "app.generatingSchedule"
+msgstr "Génération de l’horaire..."
+
 msgid "app.nav.back"
 msgstr "Retour"
 
@@ -1012,6 +1015,9 @@ msgstr " (+{count} de plus)"
 
 msgid "gen.error.notEnoughCourses"
 msgstr "Pas assez de cours correspondent à vos filtres."
+
+msgid "gen.error.timeout"
+msgstr "La génération d’horaire a été trop longue et a été interrompue. Essayez moins de cours ou des préférences plus souples, puis relancez la génération."
 
 msgid "gen.error.unassignedCompleted"
 msgstr "Vous avez {count, plural, one {# cours complété} other {# cours complétés}} non assigné(s) à une exigence : {courses}. Vous devez {count, plural, one {l'assigner} other {les assigner}} à des exigences, ou les déplacer vers la section Exclus."

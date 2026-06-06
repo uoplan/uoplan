@@ -9,6 +9,7 @@ import { DesiredCourseWarnings } from "./generationOptions/DesiredCourseWarnings
 import { resolveDesiredCourses } from "../../lib/generation/resolveDesiredCourses";
 import { avoidedDaysFromBlocks } from "../../lib/blockedTimes";
 import { createCourseOptionsFilter, renderCourseOption } from "../shared/CourseSelect";
+import { SCHEDULE_COURSE_COUNT_MAX } from "../../store/generationDefaults";
 
 export function AdvancedGenerationOptions() {
   useTr();
@@ -172,9 +173,10 @@ export function AdvancedGenerationOptions() {
         courseFilter: courseOptionsFilter,
         belowCourses: <DesiredCourseWarnings resolution={resolution} assignments={assignments} />,
         countValue: coursesThisSemester,
-        onCountChange: (n) => setCoursesThisSemester(Math.max(1, Math.min(10, n))),
+        onCountChange: (n) =>
+          setCoursesThisSemester(Math.max(1, Math.min(SCHEDULE_COURSE_COUNT_MAX, n))),
         countMin: 1,
-        countMax: 10,
+        countMax: SCHEDULE_COURSE_COUNT_MAX,
         belowCount: (
           <>
             {unassignedCompletedCourses.length > 0 && (

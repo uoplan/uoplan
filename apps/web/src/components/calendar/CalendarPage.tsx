@@ -27,7 +27,7 @@ import {
   IconShare,
   IconTerminal,
 } from "@tabler/icons-react";
-import { useAppStore, useAppStoreApi } from "../../store/appStore";
+import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { CalendarView } from "./CalendarView";
 import { BackButton } from "../shared/BackButton";
@@ -35,13 +35,13 @@ import { buildScheduleIcs } from "@uoplan/core";
 import { downloadTextFile } from "../../lib/downloadFile";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateRange";
+import { useGenerationErrorToast } from "../../hooks/useGenerationErrorToast";
 import { tr } from "../../i18n";
 import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
 import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 import { CALENDAR_SIDEBAR_WIDTH_PX } from "./calendarLayout";
 import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
 import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
-import { GenerationErrorModal } from "./GenerationErrorModal";
 import { EnrolCliModal } from "./EnrolCliModal";
 import { UEnrollImportModal } from "./UEnrollImportModal";
 import { AdvancedGenerationOptions } from "./AdvancedGenerationOptions";
@@ -119,8 +119,8 @@ export function CalendarPage() {
     setCalendarWeekIndex(weekIndex);
   }, [weekIndex, setCalendarWeekIndex]);
 
-  const storeApi = useAppStoreApi();
-  const clearGenerationError = () => storeApi.setState({ generationError: null });
+  useGenerationErrorToast(generationError);
+
   const undoLastSwap = useAppStore((s) => s.undoLastSwap);
   const getShareUrl = useAppStore((s) => s.getShareUrl);
   const goToPreviousSeed = useAppStore((s) => s.goToPreviousSeed);
@@ -543,7 +543,6 @@ export function CalendarPage() {
 
   return (
     <>
-      <GenerationErrorModal error={generationError} onClose={clearGenerationError} />
       <Box
         component="main"
         data-testid="calendar-page"
