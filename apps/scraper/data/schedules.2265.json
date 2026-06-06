@@ -21425,7 +21425,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 523,
               "A": 772,
@@ -27245,7 +27245,7 @@
                 "startMinutes": 540,
                 "endMinutes": 980,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rose Martini",
                 "meetingDates": [
                   "2026-06-05",
                   "2026-06-05"
@@ -27398,7 +27398,7 @@
                 "startMinutes": 540,
                 "endMinutes": 980,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rose Martini",
                 "meetingDates": [
                   "2026-06-05",
                   "2026-06-05"
