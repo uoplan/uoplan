@@ -14,6 +14,7 @@ import { avoidedDaysFromBlocks } from "../../lib/blockedTimes";
 import { tr } from "../../i18n";
 import { navigateToWizardStep } from "../../lib/appNavigation";
 import { WizardStep } from "../../lib/wizardSteps";
+import { SCHEDULE_COURSE_COUNT_MAX } from "../../store/generationDefaults";
 
 const FIRST_YEAR_CREDIT_CAP = 48;
 
@@ -161,13 +162,16 @@ export function BasicCalendarSidebarControls() {
         courseFilter={courseOptionsFilter}
         countValue={totalCount}
         onCountChange={(total) => {
-          const next = Math.max(0, Math.min(8, total - basicPinnedCourses.length));
+          const next = Math.max(
+            0,
+            Math.min(SCHEDULE_COURSE_COUNT_MAX, total - basicPinnedCourses.length),
+          );
           if (next === basicElectivesCount) return;
           setBasicElectivesCount(next);
           markBasicSettingsChanged();
         }}
         countMin={Math.max(1, basicPinnedCourses.length)}
-        countMax={basicPinnedCourses.length + 8}
+        countMax={basicPinnedCourses.length + SCHEDULE_COURSE_COUNT_MAX}
         totalFirstYearCredits={totalFirstYearCredits}
         warnFirstYearLimit={totalFirstYearCredits > FIRST_YEAR_CREDIT_CAP}
         limitFirstYearCredits={generationLimitFirstYearCredits}

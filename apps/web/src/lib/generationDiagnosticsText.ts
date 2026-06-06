@@ -63,6 +63,8 @@ export function formatGenerationMessage(message: GenerationMessageDescriptor): s
       return tr("gen.error.completeAssign");
     case "not-enough-courses":
       return tr("gen.error.notEnoughCourses");
+    case "timeout":
+      return tr("gen.error.timeout");
     case "unassigned-completed": {
       const suffix =
         message.overflow > 0 ? tr("gen.error.coursesMore", { count: message.overflow }) : "";

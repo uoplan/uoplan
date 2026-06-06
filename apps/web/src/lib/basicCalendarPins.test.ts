@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { basicElectivesAfterPinnedDelta, canGenerateBasicSchedule } from "./basicCalendarPins";
+import { SCHEDULE_COURSE_COUNT_MAX } from "../store/generationDefaults";
 
 describe("canGenerateBasicSchedule", () => {
   it("is false when there are no required courses and electives are 0", () => {
@@ -21,8 +22,10 @@ describe("basicElectivesAfterPinnedDelta", () => {
     expect(basicElectivesAfterPinnedDelta(2, -1)).toBe(3);
   });
 
-  it("clamps to 0 and 8", () => {
+  it("clamps to 0 and the max course count", () => {
     expect(basicElectivesAfterPinnedDelta(0, 1)).toBe(0);
-    expect(basicElectivesAfterPinnedDelta(8, -1)).toBe(8);
+    expect(basicElectivesAfterPinnedDelta(SCHEDULE_COURSE_COUNT_MAX, -1)).toBe(
+      SCHEDULE_COURSE_COUNT_MAX,
+    );
   });
 });

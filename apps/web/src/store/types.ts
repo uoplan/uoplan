@@ -45,7 +45,8 @@ export type GenerationMessageDescriptor =
   | { kind: "lead"; lead: LeadDescriptor }
   | { kind: "unassigned-completed"; count: number; preview: string[]; overflow: number }
   | { kind: "complete-assign" }
-  | { kind: "not-enough-courses" };
+  | { kind: "not-enough-courses" }
+  | { kind: "timeout" };
 
 export interface GenerationErrorDetails {
   emptyPools: Array<{ label: string; requirementId?: string; candidateCourses?: string[] }>;
