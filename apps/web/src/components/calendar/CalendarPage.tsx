@@ -13,6 +13,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { useHotkeys, useLocalStorage, useMediaQuery } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import {
   IconArrowBackUp,
   IconArrowsShuffle,
@@ -27,7 +28,7 @@ import {
   IconShare,
   IconTerminal,
 } from "@tabler/icons-react";
-import { useAppStore } from "../../store/appStore";
+import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { CalendarView } from "./CalendarView";
 import { BackButton } from "../shared/BackButton";
@@ -51,6 +52,7 @@ import { AnimatedIconSwap } from "../shared/AnimatedIconSwap";
 import { encodeSchedulePayload } from "../../lib/encodeSchedulePayload";
 import { useScheduleWeeks } from "../../hooks/useScheduleWeeks";
 import { formatWeekLabel } from "../../lib/formatWeekCount";
+import { cancelScheduleGeneration } from "../../workers/scheduleWorkerClient";
 
 export function CalendarPage() {
   useEffect(() => {
@@ -59,6 +61,23 @@ export function CalendarPage() {
       document.documentElement.classList.remove("calendar-no-scrollbar-gutter");
     };
   }, []);
+
+  const storeApi = useAppStoreApi();
+  useEffect(() => {
+    // Cancel an in-flight generation the moment the user changes a generation
+    // option (any setter flips generationOptionsDirty to true). The previous
+    // schedule stays put and the now-dirty options prompt a manual re-run.
+    return storeApi.subscribe((next, prev) => {
+      if (next.scheduleGenerating && next.generationOptionsDirty && !prev.generationOptionsDirty) {
+        cancelScheduleGeneration();
+        notifications.show({
+          color: "gray",
+          title: tr("notifications.scheduleGenerationCancelled.title"),
+          message: tr("notifications.scheduleGenerationCancelled.message"),
+        });
+      }
+    });
+  }, [storeApi]);
 
   const {
     currentSchedule,
