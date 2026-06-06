@@ -25,6 +25,30 @@ class ScheduleGenerationTimeoutError extends Error {
   }
 }
 
+/** Sentinel error thrown when a run is cancelled via {@link cancelScheduleGeneration}. */
+class ScheduleGenerationCancelledError extends Error {
+  constructor() {
+    super("schedule-generation-cancelled");
+    this.name = "ScheduleGenerationCancelledError";
+  }
+}
+
+/**
+ * Reject hook for the in-flight generation, set while a worker call is racing.
+ * {@link cancelScheduleGeneration} invokes it to abort the current run; it is
+ * cleared once the run settles.
+ */
+let cancelInFlightGeneration: (() => void) | null = null;
+
+/**
+ * Abort the in-flight schedule generation, if any. Terminates the worker so the
+ * running computation is abandoned; {@link runScheduleGeneration} then returns
+ * `null` (no result applied). Safe to call when nothing is running.
+ */
+export function cancelScheduleGeneration(): void {
+  cancelInFlightGeneration?.();
+}
+
 /** Structured result surfaced to the store when generation is killed for timing out. */
 function timeoutGenerationResult(): GenerateSchedulesResult {
   return {
@@ -66,20 +90,31 @@ function terminateScheduleWorker(): void {
 }
 
 /**
- * Race a worker call against a timeout. On timeout the returned promise rejects
- * with a {@link ScheduleGenerationTimeoutError}; the caller is responsible for
- * tearing down the (now-unresponsive) worker.
+ * Race a worker call against a timeout and an external cancel signal. On timeout
+ * the returned promise rejects with a {@link ScheduleGenerationTimeoutError}; on
+ * cancel it rejects with a {@link ScheduleGenerationCancelledError}. Either way
+ * the caller is responsible for tearing down the (now-unresponsive) worker.
+ * While the call is in flight {@link cancelInFlightGeneration} is set so
+ * {@link cancelScheduleGeneration} can abort it.
  */
 function withGenerationTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return new Promise<T>((resolve, reject) => {
     const timer = setTimeout(() => reject(new ScheduleGenerationTimeoutError()), ms);
+    const settle = () => {
+      clearTimeout(timer);
+      cancelInFlightGeneration = null;
+    };
+    cancelInFlightGeneration = () => {
+      settle();
+      reject(new ScheduleGenerationCancelledError());
+    };
     promise.then(
       (value) => {
-        clearTimeout(timer);
+        settle();
         resolve(value);
       },
       (err) => {
-        clearTimeout(timer);
+        settle();
         reject(err);
       },
     );
@@ -130,6 +165,16 @@ export async function runScheduleGeneration(
           SCHEDULE_GENERATION_TIMEOUT_MS,
         );
       } catch (err) {
+        if (err instanceof ScheduleGenerationCancelledError) {
+          // The user changed a generation option mid-run; abandon this stale
+          // computation. Kill the worker (the comlink call can't be aborted) and
+          // pre-warm a fresh one. Return null so the caller applies nothing and
+          // simply resolves its loading state, leaving the previous schedule and
+          // the now-dirty options in place for a manual re-run.
+          terminateScheduleWorker();
+          void prewarmScheduleWorker(state);
+          return null;
+        }
         if (err instanceof ScheduleGenerationTimeoutError) {
           // The worker is stuck in a runaway generation; kill it so the hung
           // computation is abandoned, then respawn a clean one for next time.

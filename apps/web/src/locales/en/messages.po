@@ -93,14 +93,14 @@ msgstr "graph"
 msgid "app.generate.disableReason"
 msgstr "You still need to assign {count} completed course{suffix} in Requirements before you can generate schedules."
 
+msgid "app.generatingSchedule"
+msgstr "Generating schedule..."
+
 msgid "app.generationOptions.title"
 msgstr "Generation Options"
 
 msgid "app.loadingData"
 msgstr "Loading course data..."
-
-msgid "app.generatingSchedule"
-msgstr "Generating schedule..."
 
 msgid "app.nav.back"
 msgstr "Back"
@@ -1313,6 +1313,16 @@ msgstr "Please try again in a moment."
 #: scripts/i18n/dynamic-keys.mjs
 msgid "notifications.pushUnsubscribeFailed.title"
 msgstr "Could not disable notifications"
+
+#: apps/web/src/components/calendar/CalendarPage.tsx:80
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.scheduleGenerationCancelled.message"
+msgstr "You changed a generation option, so the running generation was stopped. Generate again to apply your changes."
+
+#: apps/web/src/components/calendar/CalendarPage.tsx:79
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.scheduleGenerationCancelled.title"
+msgstr "Generation cancelled"
 
 #: scripts/i18n/dynamic-keys.mjs
 msgid "notifications.scheduleWorkerFallback.message"

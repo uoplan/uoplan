@@ -93,14 +93,14 @@ msgstr "graphe"
 msgid "app.generate.disableReason"
 msgstr "Vous devez encore assigner {count} cours terminé{suffix} dans Exigences avant de pouvoir générer des horaires."
 
+msgid "app.generatingSchedule"
+msgstr "Génération de l’horaire..."
+
 msgid "app.generationOptions.title"
 msgstr "Options de génération"
 
 msgid "app.loadingData"
 msgstr "Chargement des données de cours..."
-
-msgid "app.generatingSchedule"
-msgstr "Génération de l’horaire..."
 
 msgid "app.nav.back"
 msgstr "Retour"
@@ -1313,6 +1313,16 @@ msgstr "Veuillez réessayer dans un instant."
 #: scripts/i18n/dynamic-keys.mjs
 msgid "notifications.pushUnsubscribeFailed.title"
 msgstr "Impossible de désactiver les notifications"
+
+#: apps/web/src/components/calendar/CalendarPage.tsx:80
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.scheduleGenerationCancelled.message"
+msgstr "Vous avez modifié une option de génération, donc la génération en cours a été arrêtée. Générez de nouveau pour appliquer vos changements."
+
+#: apps/web/src/components/calendar/CalendarPage.tsx:79
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.scheduleGenerationCancelled.title"
+msgstr "Génération annulée"
 
 #: scripts/i18n/dynamic-keys.mjs
 msgid "notifications.scheduleWorkerFallback.message"

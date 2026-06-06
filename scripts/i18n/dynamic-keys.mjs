@@ -91,6 +91,8 @@ export const DYNAMIC_TR_IDS = [
   "notifications.pushUnsubscribeFailed.message",
   "notifications.scheduleWorkerFallback.title",
   "notifications.scheduleWorkerFallback.message",
+  "notifications.scheduleGenerationCancelled.title",
+  "notifications.scheduleGenerationCancelled.message",
 
   // Accessibility workstream: ids intentionally routed through constants until catalogs are updated centrally.
   "calendar.event.ariaLabel",
