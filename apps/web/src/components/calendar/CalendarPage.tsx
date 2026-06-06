@@ -189,7 +189,6 @@ export function CalendarPage() {
     setTimetableEndDate,
   );
 
-  const eventCount = currentSchedule?.enrollments.reduce((sum, e) => sum + e.times.length, 0) ?? 0;
   const noTimeslotCourses =
     currentSchedule?.enrollments
       .filter((enrollment) => enrollment.times.length === 0)
@@ -548,15 +547,6 @@ export function CalendarPage() {
           {tr(hasProgram ? "calendarPage.noMoreSchedules" : "basicCalendar.noMoreSchedules")}
         </Alert>
       )}
-
-      <Stack gap={0}>
-        <Text size="xs" c="dimmed">
-          {tr("calendarPage.showingBlocks", {
-            count: eventCount,
-            suffix: eventCount === 1 ? "" : "s",
-          })}
-        </Text>
-      </Stack>
     </>
   );
 

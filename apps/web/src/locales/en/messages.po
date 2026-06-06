@@ -507,9 +507,6 @@ msgstr "Share timetable state"
 msgid "calendarPage.shareModal.url"
 msgstr "URL"
 
-msgid "calendarPage.showingBlocks"
-msgstr "Showing {count} course block{suffix} this week"
-
 msgid "calendarPage.subtitle"
 msgstr "Review your generated schedules. Click a block to swap courses."
 

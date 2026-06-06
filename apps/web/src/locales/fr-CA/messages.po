@@ -507,9 +507,6 @@ msgstr "Partager l'état de l'horaire"
 msgid "calendarPage.shareModal.url"
 msgstr "URL"
 
-msgid "calendarPage.showingBlocks"
-msgstr "{count} bloc{suffix} de cours affiché{suffix} cette semaine"
-
 msgid "calendarPage.subtitle"
 msgstr "Passez en revue vos horaires générés. Cliquez sur un bloc pour échanger des cours."
 
