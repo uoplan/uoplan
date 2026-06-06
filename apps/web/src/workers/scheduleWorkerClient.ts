@@ -15,7 +15,7 @@ const SCHEDULE_WORKER_FALLBACK_TITLE_ID = "notifications.scheduleWorkerFallback.
 const SCHEDULE_WORKER_FALLBACK_MESSAGE_ID = "notifications.scheduleWorkerFallback.message";
 
 /** Hard cap on a single schedule-generation run; the worker is killed past this. */
-const SCHEDULE_GENERATION_TIMEOUT_MS = 10_000;
+const SCHEDULE_GENERATION_TIMEOUT_MS = 1_000;
 
 /** Sentinel error thrown when generation exceeds {@link SCHEDULE_GENERATION_TIMEOUT_MS}. */
 class ScheduleGenerationTimeoutError extends Error {
