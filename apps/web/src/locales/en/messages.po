@@ -608,6 +608,46 @@ msgstr "Undergraduate (0–4XXX)"
 msgid "constrainStep.virtualSectionsOnly"
 msgstr "Virtual meeting times only"
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.command.geegees.description"
+msgstr "Unlock the hidden Gee-Gees theme"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.command.geegees.label"
+msgstr "Garnet & Grey theme"
+
+#: apps/web/src/components/shortcuts/CommandCenter.tsx:42
+msgid "easterEgg.command.group"
+msgstr "Secrets"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.aprilFools"
+msgstr "no easter eggs here, we promise"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.canadaDay"
+msgstr "Happy Canada Day!"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.examSeason"
+msgstr "good luck on exams"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.halloween"
+msgstr "spooky season"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.holidays"
+msgstr "happy holidays"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.newYear"
+msgstr "Happy New Year!"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.winter"
+msgstr "bundle up, it's Ottawa cold"
+
 msgid "enrolCli.button"
 msgstr "Enrol via CLI"
 
@@ -1962,6 +2002,10 @@ msgstr "Choose a term..."
 
 msgid "theme.dark"
 msgstr "Dark"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "theme.geegees"
+msgstr "Gee-Gees"
 
 msgid "theme.light"
 msgstr "Light"

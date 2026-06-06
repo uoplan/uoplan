@@ -150,3 +150,63 @@
   --app-scrollbar-thumb: rgba(60, 54, 44, 0.26);
   --app-scrollbar-thumb-hover: rgba(60, 54, 44, 0.42);
 }
+
+/* ----------------------------------------------------------------------------
+   Hidden easter-egg theme: "Garnet & Grey" (uOttawa Gee-Gees).
+   A dark-based scheme tinted with the university's garnet and grey. Unlocked
+   via the command center (type "geegees") or kept out of the switcher until
+   then. Inherits the shape/motion/typography primitives from the dark block.
+---------------------------------------------------------------------------- */
+[data-app-theme="geegees"] {
+  /* Surfaces — deep garnet-tinted charcoals. */
+  --app-bg: #1a1012;
+  --app-surface: #261519;
+  --app-surface-sunken: #140b0d;
+  --app-surface-overlay: #2f191e;
+  --app-surface-hover: #3a1f25;
+
+  /* Borders — garnet-leaning hairlines. */
+  --app-border: #2f1a1f;
+  --app-border-strong: #4a2a31;
+  --app-ink: #2f1a1f;
+  --app-stamp-shadow: rgba(0, 0, 0, 0.6);
+
+  --app-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(40, 0, 10, 0.3);
+  --app-shadow: 0 2px 8px rgba(0, 0, 0, 0.42), 0 10px 28px rgba(40, 0, 10, 0.34);
+  --app-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5), 0 20px 56px rgba(40, 0, 10, 0.4);
+
+  /* Status accents (kept readable on the garnet charcoal). */
+  --app-info: #74c0fc;
+  --app-info-soft: rgba(51, 154, 240, 0.16);
+  --app-warning: #ffc078;
+  --app-warning-soft: rgba(255, 146, 43, 0.16);
+  --app-success: #8ce0a8;
+  --app-success-soft: rgba(101, 192, 129, 0.16);
+  --app-danger: #ff9a9a;
+  --app-danger-soft: rgba(240, 124, 124, 0.18);
+
+  /* Text — warm off-white on garnet. */
+  --app-text: #f4ebec;
+  --app-text-muted: #cbb4b8;
+  --app-text-dim: #9c8186;
+  --app-text-inverse: #1a1012;
+
+  /* Accent — uOttawa garnet, brightened for contrast on the dark surface. */
+  --app-accent: #d11a3a;
+  --app-accent-soft: #4a1c25;
+  --app-on-accent: #fff5f6;
+  --app-focus-ring: #e5546b;
+
+  /* Misc chrome. */
+  --app-selection-bg: rgba(209, 26, 58, 0.3);
+  --app-overlay-scrim: rgba(12, 6, 8, 0.62);
+  --app-translucent: rgba(255, 255, 255, 0.06);
+  --app-translucent-strong: rgba(255, 255, 255, 0.1);
+
+  --app-on-event: #f6eef0;
+  --event-fill: 38%;
+  --event-mix-base: var(--app-bg);
+
+  --app-scrollbar-thumb: rgba(229, 84, 107, 0.26);
+  --app-scrollbar-thumb-hover: rgba(229, 84, 107, 0.42);
+}
