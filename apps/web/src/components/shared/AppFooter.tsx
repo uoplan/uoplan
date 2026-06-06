@@ -4,6 +4,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { spotlight } from "@mantine/spotlight";
 import { useTr, tr } from "../../i18n";
 import { labelForPath } from "../../lib/navigation/backState";
+import { seasonalFlourish } from "../../lib/easterEggs/seasonal";
 
 const ONTARIO_FIPPA_ACT_URL = "https://www.ontario.ca/laws/statute/90f31";
 
@@ -14,6 +15,7 @@ export function AppFooter() {
   const pathname = useLocation({ select: (s) => s.pathname });
   const os = useOs();
   const modLabel = os === "macos" ? "⌘" : "Ctrl";
+  const flourish = seasonalFlourish();
 
   return (
     <Box
@@ -106,6 +108,16 @@ export function AppFooter() {
               {" · "}
               {(typeof __COMMIT_HASH__ !== "undefined" ? __COMMIT_HASH__ : "dev").toLowerCase()}
             </Text>
+            {flourish ? (
+              <>
+                <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
+                  ·
+                </Text>
+                <Text span size="xs" c="dimmed" lh={1.45} style={{ opacity: 0.85 }}>
+                  <span aria-hidden>{flourish.emoji}</span> {tr(flourish.msgId)}
+                </Text>
+              </>
+            ) : null}
             <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
               ·
             </Text>

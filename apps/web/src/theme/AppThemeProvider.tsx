@@ -6,11 +6,14 @@ import { theme } from "../styles/theme";
 import {
   type AppTheme,
   type ColorSchemeBase,
+  type ThemeId,
   type ThemeSelection,
   THEME_LIST,
   getSystemBase,
   persistSelection,
+  persistUnlockedTheme,
   readStoredSelection,
+  readUnlockedThemes,
   resolveTheme,
 } from "./themes";
 
@@ -21,8 +24,12 @@ interface AppThemeContextValue {
   resolved: AppTheme;
   /** All registered themes (for building a switcher). */
   themes: AppTheme[];
+  /** Hidden theme ids the user has unlocked (easter eggs). */
+  unlockedThemes: ThemeId[];
   /** Persist and apply a new selection. */
   setSelection: (selection: ThemeSelection) => void;
+  /** Unlock a hidden (easter-egg) theme so it appears in the switcher. */
+  unlockTheme: (id: ThemeId) => void;
 }
 
 const AppThemeContext = createContext<AppThemeContextValue | null>(null);
@@ -63,6 +70,7 @@ export function AppThemeProvider({ children, initialSelection }: AppThemeProvide
     () => initialSelection ?? readStoredSelection(),
   );
   const [systemBase, setSystemBase] = useState<ColorSchemeBase>(() => getSystemBase());
+  const [unlockedThemes, setUnlockedThemes] = useState<ThemeId[]>(() => readUnlockedThemes());
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.matchMedia) return;
@@ -84,9 +92,13 @@ export function AppThemeProvider({ children, initialSelection }: AppThemeProvide
     setSelectionState(next);
   }, []);
 
+  const unlockTheme = useCallback((id: ThemeId) => {
+    setUnlockedThemes(persistUnlockedTheme(id));
+  }, []);
+
   const value = useMemo<AppThemeContextValue>(
-    () => ({ selection, resolved, themes: THEME_LIST, setSelection }),
-    [selection, resolved, setSelection],
+    () => ({ selection, resolved, themes: THEME_LIST, unlockedThemes, setSelection, unlockTheme }),
+    [selection, resolved, unlockedThemes, setSelection, unlockTheme],
   );
 
   return (

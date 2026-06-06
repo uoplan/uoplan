@@ -608,6 +608,46 @@ msgstr "Premier cycle (0–4XXX)"
 msgid "constrainStep.virtualSectionsOnly"
 msgstr "Horaires virtuels seulement"
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.command.geegees.description"
+msgstr "Débloquez le thème caché des Gee-Gees"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.command.geegees.label"
+msgstr "Thème Grenat et Gris"
+
+#: apps/web/src/components/shortcuts/CommandCenter.tsx:42
+msgid "easterEgg.command.group"
+msgstr "Secrets"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.aprilFools"
+msgstr "aucun œuf de Pâques ici, promis"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.canadaDay"
+msgstr "Bonne fête du Canada !"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.examSeason"
+msgstr "bonne chance aux examens"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.halloween"
+msgstr "saison frissons"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.holidays"
+msgstr "joyeuses fêtes"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.newYear"
+msgstr "Bonne année !"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "easterEgg.seasonal.winter"
+msgstr "couvrez-vous, c'est le froid d'Ottawa"
+
 msgid "enrolCli.button"
 msgstr "Inscrire via CLI"
 
@@ -1962,6 +2002,10 @@ msgstr "Choisir une session..."
 
 msgid "theme.dark"
 msgstr "Sombre"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "theme.geegees"
+msgstr "Gee-Gees"
 
 msgid "theme.light"
 msgstr "Clair"
