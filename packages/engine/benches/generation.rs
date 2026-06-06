@@ -144,7 +144,7 @@ fn bench_timetable_amounts(c: &mut Criterion) {
     let mut group = c.benchmark_group("timetable_fixed_set/amount");
     group.sample_size(30);
     let default_cfg = &configs()[0];
-    for &n in &[5usize, 10, 15, 20] {
+    for &n in &[5usize, 10, 15, 20, 24] {
         if ds.schedulable.len() < n {
             continue;
         }

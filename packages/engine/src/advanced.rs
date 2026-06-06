@@ -21,7 +21,10 @@ use crate::pools::{
 };
 use crate::prereq::prerequisites_contain_non_course;
 use crate::rng::{scramble_seed, shuffle_in_place, weighted_random_pick_index, Rng};
-use crate::timetable::{first_seeded_arrangement, has_valid_section_combos, FnResolver};
+use crate::timetable::{
+    allows_enrollment, arrange_prebuilt, build_timetable_course, first_seeded_arrangement,
+    has_valid_section_combos, passes_final, FnResolver, TimetableCourse,
+};
 use crate::types::Enrollment;
 
 const EASIER_APLUS_PIVOT: f64 = 20.0;
@@ -644,34 +647,66 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
 
         let pending_base = build_pending_group_picks(&group_token_selections);
 
-        let mut seen_course_sets: HashSet<String> = HashSet::new();
         let mut last_filtered_pool: Vec<String> = Vec::new();
 
-        for _attempt in 0..10_000usize {
+        // Seeded one-time shuffle of candidate lists (per-seed value-ordering variety).
+        for list in candidates_by_requirement.values_mut() {
+            if !french_immersion_stream {
+                shuffle_in_place(list, &mut rng);
+            }
+        }
+
+        // Pinned courses are always part of the timetable; precompute their
+        // (code, virtual-only) feasibility keys once.
+        let vo_for = |code: &str, req_type: Option<&str>| -> bool {
+            virtual_schedule_filter_applies(
+                virtual_sections_only,
+                req_type,
+                &normalize_course_code(code),
+                &explicit_exempt,
+            )
+        };
+        let mut pinned_placed: Vec<(String, bool)> = Vec::with_capacity(pinned.len());
+        for code in &pinned {
+            let req_type = requirement_id_for_pinned(code)
+                .and_then(|r| requirement_type_by_id.get(&r).cloned());
+            pinned_placed.push((code.clone(), vo_for(code, req_type.as_deref())));
+        }
+
+        // Combos are probed many times during feasibility-aware selection; build
+        // them lazily once and reuse across allocations.
+        let mut arena = ComboArena::new(
+            data,
+            constraints,
+            include_closed,
+            scramble_seed(effective_seed) ^ 0x5151_5151,
+        );
+
+        // Deterministic allocation order: primary courses_per_pool first, then the
+        // high-level redistributions, then the remaining single redistributions.
+        let mut allocations: Vec<BTreeMap<String, usize>> = vec![courses_per_pool.clone()];
+        for alt in &high_level_redist_alts {
+            if !allocations.iter().any(|a| a == alt) {
+                allocations.push(alt.clone());
+            }
+        }
+        for alt in &redistribution_alts {
+            if !allocations.iter().any(|a| a == alt) {
+                allocations.push(alt.clone());
+            }
+        }
+
+        for alloc in &allocations {
             if found_schedule.is_some() {
                 break;
             }
-
-            for list in candidates_by_requirement.values_mut() {
-                if !french_immersion_stream {
-                    shuffle_in_place(list, &mut rng);
-                }
-            }
-
-            let mut allocation_pool: Vec<&BTreeMap<String, usize>> = vec![&courses_per_pool];
-            for alt in &high_level_redist_alts {
-                allocation_pool.push(alt);
-            }
-            let pick_idx = (rng.next_f64() * allocation_pool.len() as f64).floor() as usize;
-            let pick_idx = pick_idx.min(allocation_pool.len() - 1);
-            let first_alloc = allocation_pool[pick_idx].clone();
-
-            let mut pass = run_pool_pick_pass(
-                &first_alloc,
+            if let Some((chosen_map, arranged)) = run_pool_pick_pass(
+                alloc,
                 &pools,
                 &candidates_by_requirement,
                 &constrained_per_requirement,
                 &pinned,
+                &pinned_placed,
                 &explicit_set,
                 explicit_only,
                 &pending_base,
@@ -680,122 +715,17 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
                 &is_eligible_candidate,
                 params.prefer_easier,
                 params.course_aplus,
+                &vo_for,
+                &mut arena,
                 &mut rng,
-            );
-            if pass.is_none() && first_alloc != courses_per_pool {
-                pass = run_pool_pick_pass(
-                    &courses_per_pool,
-                    &pools,
-                    &candidates_by_requirement,
-                    &constrained_per_requirement,
-                    &pinned,
-                    &explicit_set,
-                    explicit_only,
-                    &pending_base,
-                    &requirement_id_for_pinned,
-                    data,
-                    &is_eligible_candidate,
-                    params.prefer_easier,
-                    params.course_aplus,
-                    &mut rng,
-                );
-            }
-            if pass.is_none() {
-                for alt in &redistribution_alts {
-                    if *alt == first_alloc {
-                        continue;
-                    }
-                    pass = run_pool_pick_pass(
-                        alt,
-                        &pools,
-                        &candidates_by_requirement,
-                        &constrained_per_requirement,
-                        &pinned,
-                        &explicit_set,
-                        explicit_only,
-                        &pending_base,
-                        &requirement_id_for_pinned,
-                        data,
-                        &is_eligible_candidate,
-                        params.prefer_easier,
-                        params.course_aplus,
-                        &mut rng,
-                    );
-                    if pass.is_some() {
-                        break;
-                    }
-                }
-            }
-
-            let chosen_from_pool = match pass {
-                Some(c) => c,
-                None => continue,
-            };
-
-            let mut chosen_codes: Vec<String> = pinned.clone();
-            for code in chosen_from_pool.keys() {
-                if !chosen_codes.contains(code) {
-                    chosen_codes.push(code.clone());
-                }
-            }
-            let optional_pool: Vec<String> = chosen_codes
-                .iter()
-                .filter(|code| !pinned.contains(code))
-                .cloned()
-                .collect();
-            let slots_from_optional = params.courses_this_semester.saturating_sub(pinned.len());
-            if optional_pool.len() < slots_from_optional {
-                if optional_pool.len() > last_filtered_pool.len() {
-                    last_filtered_pool = optional_pool;
-                }
-                continue;
-            }
-
-            last_filtered_pool = optional_pool;
-            shuffle_in_place(&mut last_filtered_pool, &mut rng);
-
-            let chosen_from_pool_ref = &chosen_from_pool;
-            let resolver = FnResolver {
-                data,
-                include_closed,
-                virtual_for: |code: &str| {
-                    let norm = normalize_course_code(code);
-                    let req_id = chosen_from_pool_ref
-                        .get(code)
-                        .cloned()
-                        .or_else(|| requirement_id_for_pinned(code));
-                    let req_type = req_id
-                        .as_ref()
-                        .and_then(|r| requirement_type_by_id.get(r))
-                        .map(|s| s.as_str());
-                    virtual_schedule_filter_applies(
-                        virtual_sections_only,
-                        req_type,
-                        &norm,
-                        &explicit_exempt,
-                    )
-                },
-            };
-
-            let mut full_set: Vec<String> = pinned.clone();
-            full_set.extend(last_filtered_pool.iter().cloned());
-            let arranged = first_seeded_arrangement(
-                &full_set,
-                data,
-                &resolver,
-                constraints,
-                &mut arrangement_rng,
-            );
-            if let Some(arranged) = arranged {
-                let mut codes: Vec<String> =
-                    arranged.iter().map(|e| e.course_code.clone()).collect();
-                codes.sort();
-                let fingerprint = codes.join(",");
-                if !seen_course_sets.contains(&fingerprint) {
-                    seen_course_sets.insert(fingerprint);
-                    chosen_to_requirement = chosen_from_pool.clone();
-                    found_schedule = Some(arranged);
-                }
+            ) {
+                last_filtered_pool = chosen_map
+                    .keys()
+                    .filter(|code| !pinned.contains(*code))
+                    .cloned()
+                    .collect();
+                chosen_to_requirement = chosen_map;
+                found_schedule = Some(arranged);
             }
         }
 
@@ -849,6 +779,329 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
     }
 }
 
+/// Lazy `(code, virtual_only)` → prebuilt section combos cache. Combos are
+/// expensive to build, are reused across allocation attempts, and (because the
+/// concrete-timetable search holds long-lived references to them) must live in a
+/// stable location — hence the boxed arena.
+struct ComboArena<'a> {
+    data: &'a DataView,
+    constraints: &'a Constraints,
+    include_closed: bool,
+    rng: Rng,
+    built: Vec<Box<TimetableCourse>>,
+    index: HashMap<(String, bool), Option<usize>>,
+}
+
+impl<'a> ComboArena<'a> {
+    fn new(data: &'a DataView, constraints: &'a Constraints, include_closed: bool, seed: u32) -> Self {
+        ComboArena {
+            data,
+            constraints,
+            include_closed,
+            rng: Rng::new(seed),
+            built: Vec::new(),
+            index: HashMap::new(),
+        }
+    }
+
+    /// Index of the prebuilt combos for `(code, virtual_only)`, building (and
+    /// caching) them on first use. `None` means the course cannot be scheduled.
+    fn course_idx(&mut self, code: &str, virtual_only: bool) -> Option<usize> {
+        let key = (code.to_string(), virtual_only);
+        if let Some(slot) = self.index.get(&key) {
+            return *slot;
+        }
+        let resolver = FnResolver {
+            data: self.data,
+            include_closed: self.include_closed,
+            virtual_for: |_: &str| virtual_only,
+        };
+        let built = build_timetable_course(code, self.data, &resolver, self.constraints, &mut self.rng);
+        let slot = match built {
+            Some(tc) => {
+                self.built.push(Box::new(tc));
+                Some(self.built.len() - 1)
+            }
+            None => None,
+        };
+        self.index.insert(key, slot);
+        slot
+    }
+}
+
+/// One optional candidate within a pool's fill order.
+struct Cand {
+    code: String,
+    combo_idx: usize,
+    prefix: String,
+    is_s: bool,
+}
+
+/// A pool to fill: its quota is satisfied by placing `need_s` constrained
+/// (S-pick) courses plus `need_g` general (G) courses, honouring any group-token
+/// per-prefix minimums (`pending`).
+struct PoolFill {
+    req_id: String,
+    need_s: usize,
+    need_g: usize,
+    pending: BTreeMap<String, usize>,
+    order: Vec<Cand>,
+}
+
+impl PoolFill {
+    fn need(&self) -> usize {
+        self.need_s + self.need_g
+    }
+}
+
+/// Per-restart cap on **expensive** placement probes (full timetable re-solves).
+/// Cheap placements — slotting a candidate into the *current* arrangement without
+/// rearranging anything — are unlimited and dominate a healthy descent; a full
+/// re-solve only happens when a candidate doesn't fit the fixed arrangement, and
+/// those are what make a *stuck* descent slow. Capping them means a descent that
+/// keeps needing rearrangements gives up early and restarts (fresh shuffle)
+/// instead of grinding through thousands of re-solves. Rearrangement power is
+/// retained across restarts, so reliability holds while the worst case stays far
+/// under the 1 s worker kill.
+const SELECTION_RESOLVE_BUDGET: u64 = 50;
+
+/// Overall per-restart probe cap (cheap + expensive), bounding any backtracking
+/// blow-up so total work is a pure function of the inputs, never the wall clock.
+const SELECTION_PLACEMENT_BUDGET: u64 = 3_000;
+
+/// Randomized-restart greedy passes before giving up. Each restart reshuffles the
+/// candidate order, so independent restarts drive the chance that *every* one
+/// stalls to effectively zero — making success independent of the seed.
+const SELECTION_RESTARTS: u32 = 100;
+
+
+/// Mutable per-position progress while filling a single pool.
+struct FillProgress {
+    idx: usize,
+    s_used: usize,
+    g_used: usize,
+    count: usize,
+    prefix_used: BTreeMap<String, usize>,
+}
+
+/// Joint, quota-aware subset selection + timetabling. Unlike the former
+/// generate-and-test (pick a full course set at random, then check whether it
+/// timetables), this fills each pool by trying candidate courses in seeded order
+/// and accepting one only when the *whole* selection (pinned + already-selected +
+/// candidate) still timetables — verified by a full re-solve
+/// ([`arrange_prebuilt`]), which is free to rearrange every course's sections so
+/// an early section choice never blocks a later required course.
+struct Search<'a> {
+    built: &'a [Box<TimetableCourse>],
+    pinned: &'a [usize],
+    pools_fill: &'a [PoolFill],
+    constraints: &'a Constraints,
+    data: &'a DataView,
+    selected: Vec<usize>,
+    assign: BTreeMap<String, String>,
+    used: HashSet<String>,
+    budget: u64,
+    resolve_budget: u64,
+    arrangement: Option<Vec<Enrollment>>,
+}
+
+impl<'a> Search<'a> {
+    fn run(&mut self) -> bool {
+        match self.resolve_with(None) {
+            Some(arr) => self.arrangement = Some(arr),
+            None => return false,
+        }
+        self.fill_from(0)
+    }
+
+    fn resolve_with(&self, extra: Option<usize>) -> Option<Vec<Enrollment>> {
+        let mut refs: Vec<&TimetableCourse> =
+            Vec::with_capacity(self.pinned.len() + self.selected.len() + 1);
+        for &i in self.pinned {
+            refs.push(self.built[i].as_ref());
+        }
+        for &i in &self.selected {
+            refs.push(self.built[i].as_ref());
+        }
+        if let Some(i) = extra {
+            refs.push(self.built[i].as_ref());
+        }
+        arrange_prebuilt(&refs, self.constraints, self.data)
+    }
+
+    /// Feasibility-preserving placement of candidate `extra` onto the current
+    /// arrangement. We place `extra` iff the full set (pinned + selected + extra)
+    /// can be timetabled — identical to [`resolve_with`] — but we first try the
+    /// cheap case: keep every already-placed section fixed and slot `extra` into
+    /// the first of its combos that is conflict-free with the current
+    /// arrangement (and still globally valid). That holds for the vast majority
+    /// of placements during a descent (the schedule has slack), turning an
+    /// O(whole-set re-solve) probe into an O(combos) overlap scan. Only when no
+    /// combo fits the *fixed* arrangement do we fall back to a full re-solve,
+    /// which is free to rearrange earlier sections — so the accept/reject
+    /// decision is exactly the re-solve's, just reached far more cheaply.
+    fn try_place(&mut self, extra: usize) -> Option<Vec<Enrollment>> {
+        if let Some(cur) = self.arrangement.as_ref() {
+            for combo in &self.built[extra].combos {
+                if allows_enrollment(combo, cur) {
+                    let mut next = cur.clone();
+                    next.push(combo.clone());
+                    if passes_final(&next, self.constraints, self.data) {
+                        return Some(next);
+                    }
+                }
+            }
+        }
+        // Cheap fit failed: a full re-solve might still place `extra` by
+        // rearranging earlier sections. Those re-solves are the expensive part of
+        // a stuck descent, so they get their own small per-restart budget — once
+        // spent, remaining ill-fitting candidates are simply skipped and the pass
+        // restarts (with a fresh shuffle) rather than grinding through thousands
+        // of full re-solves. Rearrangement power is retained across restarts, so
+        // reliability holds while the worst-case stays far under the worker kill.
+        if self.resolve_budget == 0 {
+            return None;
+        }
+        self.resolve_budget -= 1;
+        self.resolve_with(Some(extra))
+    }
+
+    fn fill_from(&mut self, pos: usize) -> bool {
+        if pos == self.pools_fill.len() {
+            return true;
+        }
+        let pool = &self.pools_fill[pos];
+        let mut fp = FillProgress {
+            idx: 0,
+            s_used: 0,
+            g_used: 0,
+            count: 0,
+            prefix_used: BTreeMap::new(),
+        };
+        self.fill_pool(pos, pool, &mut fp)
+    }
+
+    fn pool_forward_ok(&self, pool: &PoolFill, fp: &FillProgress) -> bool {
+        let need_s_left = pool.need_s.saturating_sub(fp.s_used);
+        let need_g_left = pool.need_g.saturating_sub(fp.g_used);
+        let mut s_avail = 0usize;
+        let mut g_avail = 0usize;
+        let mut prefix_avail: BTreeMap<String, usize> = BTreeMap::new();
+        for c in &pool.order[fp.idx..] {
+            if self.used.contains(&c.code) {
+                continue;
+            }
+            if c.is_s {
+                s_avail += 1;
+            } else {
+                g_avail += 1;
+            }
+            if pool.pending.contains_key(&c.prefix) {
+                *prefix_avail.entry(c.prefix.clone()).or_insert(0) += 1;
+            }
+        }
+        if s_avail < need_s_left || g_avail < need_g_left {
+            return false;
+        }
+        for (pfx, min) in &pool.pending {
+            let used_p = fp.prefix_used.get(pfx).copied().unwrap_or(0);
+            if used_p < *min {
+                let need_p = min - used_p;
+                if prefix_avail.get(pfx).copied().unwrap_or(0) < need_p {
+                    return false;
+                }
+            }
+        }
+        true
+    }
+
+    fn fill_pool(&mut self, pos: usize, pool: &'a PoolFill, fp: &mut FillProgress) -> bool {
+        if fp.count == pool.need() {
+            for (pfx, min) in &pool.pending {
+                if fp.prefix_used.get(pfx).copied().unwrap_or(0) < *min {
+                    return false;
+                }
+            }
+            return self.fill_from(pos + 1);
+        }
+        if self.budget == 0 || fp.idx >= pool.order.len() {
+            return false;
+        }
+        if !self.pool_forward_ok(pool, fp) {
+            return false;
+        }
+
+        let c = &pool.order[fp.idx];
+        let cap_ok = if c.is_s {
+            fp.s_used < pool.need_s
+        } else {
+            fp.g_used < pool.need_g
+        };
+
+        if cap_ok && !self.used.contains(&c.code) {
+            self.budget = self.budget.saturating_sub(1);
+            if let Some(arr) = self.try_place(c.combo_idx) {
+                let prev = self.arrangement.take();
+                self.arrangement = Some(arr);
+                self.selected.push(c.combo_idx);
+                self.used.insert(c.code.clone());
+                self.assign.insert(c.code.clone(), pool.req_id.clone());
+                fp.idx += 1;
+                fp.count += 1;
+                if c.is_s {
+                    fp.s_used += 1;
+                } else {
+                    fp.g_used += 1;
+                }
+                *fp.prefix_used.entry(c.prefix.clone()).or_insert(0) += 1;
+
+                if self.fill_pool(pos, pool, fp) {
+                    return true;
+                }
+
+                if let Some(v) = fp.prefix_used.get_mut(&c.prefix) {
+                    *v -= 1;
+                }
+                if c.is_s {
+                    fp.s_used -= 1;
+                } else {
+                    fp.g_used -= 1;
+                }
+                fp.count -= 1;
+                fp.idx -= 1;
+                self.assign.remove(&c.code);
+                self.used.remove(&c.code);
+                self.selected.pop();
+                self.arrangement = prev;
+            }
+        }
+
+        fp.idx += 1;
+        let skipped = self.fill_pool(pos, pool, fp);
+        fp.idx -= 1;
+        skipped
+    }
+}
+
+/// Builds a weighted-random permutation of `items` (each `(cand, weight)`), so
+/// higher-weighted candidates tend to appear earlier and are therefore preferred
+/// by the place-first search — preserving the level / prefer-easier soft biases
+/// while keeping per-seed variety.
+fn weighted_permutation(mut items: Vec<(Cand, f64)>, rng: &mut Rng) -> Vec<Cand> {
+    let mut out: Vec<Cand> = Vec::with_capacity(items.len());
+    while !items.is_empty() {
+        let weights: Vec<f64> = items.iter().map(|x| x.1).collect();
+        let pick = weighted_random_pick_index(&weights, rng);
+        out.push(items.remove(pick).0);
+    }
+    out
+}
+
+/// Runs one feasibility-aware selection pass for a single per-pool allocation.
+/// Returns the chosen `code -> requirement_id` map (including pinned non-honours
+/// courses) together with the proven conflict-free arrangement, or `None` if no
+/// requirement-satisfying, timetable-feasible selection exists for this
+/// allocation (within the deterministic search budget).
 #[allow(clippy::too_many_arguments)]
 fn run_pool_pick_pass(
     per_pool_need: &BTreeMap<String, usize>,
@@ -856,6 +1109,7 @@ fn run_pool_pick_pass(
     candidates_by_requirement: &BTreeMap<String, Vec<String>>,
     constrained_per_requirement: &BTreeMap<String, Vec<String>>,
     pinned: &[String],
+    pinned_placed: &[(String, bool)],
     explicit_set: &HashSet<String>,
     explicit_only: bool,
     pending_base: &BTreeMap<String, BTreeMap<String, usize>>,
@@ -864,27 +1118,24 @@ fn run_pool_pick_pass(
     is_eligible_candidate: &dyn Fn(&str, Option<&str>) -> bool,
     prefer_easier: bool,
     course_aplus: &HashMap<String, f64>,
+    vo_for: &dyn Fn(&str, Option<&str>) -> bool,
+    arena: &mut ComboArena,
     rng: &mut Rng,
-) -> Option<BTreeMap<String, String>> {
-    let mut chosen_codes: HashSet<String> = pinned.iter().cloned().collect();
-    let mut local_chosen_from_pool: BTreeMap<String, String> = BTreeMap::new();
+) -> Option<(BTreeMap<String, String>, Vec<Enrollment>)> {
+    let chosen_codes: HashSet<String> = pinned.iter().cloned().collect();
+
+    // Pinned non-honours requirement assignment (carried into the result map).
+    let mut assign: BTreeMap<String, String> = BTreeMap::new();
     for code in pinned {
         if data.is_honours_project(code) {
             continue;
         }
         if let Some(rid) = requirement_id_for_pinned(code) {
-            local_chosen_from_pool.insert(code.clone(), rid);
+            assign.insert(code.clone(), rid);
         }
     }
 
-    let mut remaining: BTreeMap<String, usize> = BTreeMap::new();
-    for pool in pools {
-        let n = *per_pool_need.get(&pool.requirement_id).unwrap_or(&0);
-        if n > 0 {
-            remaining.insert(pool.requirement_id.clone(), n);
-        }
-    }
-
+    // Group-token (pending) picks already satisfied by pinned courses.
     let mut pending_group_picks = pending_base.clone();
     for code in pinned {
         if data.is_honours_project(code) {
@@ -907,11 +1158,29 @@ fn run_pool_pick_pass(
         }
     }
 
-    let total_remaining = |rem: &BTreeMap<String, usize>| -> usize { rem.values().sum() };
+    let easier_mult = |code: &str| -> f64 {
+        if !prefer_easier {
+            return 1.0;
+        }
+        match course_aplus.get(code) {
+            None => 1.0,
+            Some(&a) => EASIER_APLUS_BASE.powf((a - EASIER_APLUS_PIVOT) / EASIER_APLUS_SCALE),
+        }
+    };
 
-    // pre-flight feasibility
+    let weight_of = |code: &str, level_counts: &HashMap<i64, usize>| -> f64 {
+        let level = course_level_sort_key(code);
+        let has_non_course_prereq = prerequisites_contain_non_course(
+            data.get_course(code).and_then(|c| c.prerequisites.as_ref()),
+        );
+        let bucket_size = *level_counts.get(&level).unwrap_or(&1) as f64;
+        (candidate_pool_weight(level, has_non_course_prereq) / bucket_size) * easier_mult(code)
+    };
+
+    // Build a fill descriptor for each pool with remaining quota.
+    let mut pools_fill: Vec<PoolFill> = Vec::new();
     for pool in pools {
-        let r = *remaining.get(&pool.requirement_id).unwrap_or(&0);
+        let r = *per_pool_need.get(&pool.requirement_id).unwrap_or(&0);
         if r == 0 {
             continue;
         }
@@ -929,19 +1198,14 @@ fn run_pool_pick_pass(
             .get(&pool.requirement_id)
             .cloned()
             .unwrap_or_default();
-        let g_list: Vec<String> = candidates
-            .iter()
-            .filter(|code| !s_set.contains(*code))
-            .cloned()
-            .collect();
         let s_avail: Vec<String> = s_list
             .iter()
             .filter(|code| !chosen_codes.contains(*code))
             .cloned()
             .collect();
-        let mut g_avail: Vec<String> = g_list
+        let mut g_avail: Vec<String> = candidates
             .iter()
-            .filter(|code| !chosen_codes.contains(*code))
+            .filter(|code| !s_set.contains(*code) && !chosen_codes.contains(*code))
             .cloned()
             .collect();
         if explicit_only {
@@ -953,195 +1217,106 @@ fn run_pool_pick_pass(
             return None;
         }
 
-        if let Some(pend) = pending_group_picks.get(&pool.requirement_id) {
-            if !pend.is_empty() {
-                let mut forced_in_pool = 0usize;
-                for (pfx, rem) in pend {
-                    if *rem == 0 {
-                        continue;
-                    }
-                    if !pool.candidate_courses.iter().any(|c| subject_prefix(c) == *pfx) {
-                        continue;
-                    }
-                    forced_in_pool += rem;
-                }
-                if forced_in_pool > r {
-                    return None;
-                }
-                for (pfx, rem) in pend {
-                    if *rem == 0 {
-                        continue;
-                    }
-                    if !pool.candidate_courses.iter().any(|c| subject_prefix(c) == *pfx) {
-                        continue;
-                    }
-                    let n_prefix_avail = candidates
-                        .iter()
-                        .filter(|c| {
-                            subject_prefix(c) == *pfx
-                                && !chosen_codes.contains(*c)
-                                && is_eligible_candidate(c, Some(pool.req_type.as_str()))
-                        })
-                        .count();
-                    if n_prefix_avail < *rem {
-                        return None;
-                    }
-                }
-            }
-        }
-    }
-
-    let easier_mult = |code: &str| -> f64 {
-        if !prefer_easier {
-            return 1.0;
-        }
-        match course_aplus.get(code) {
-            None => 1.0,
-            Some(&a) => EASIER_APLUS_BASE.powf((a - EASIER_APLUS_PIVOT) / EASIER_APLUS_SCALE),
-        }
-    };
-
-    while total_remaining(&remaining) > 0 {
-        // (code, requirement_id, weight)
-        let mut cands: Vec<(String, String, f64)> = Vec::new();
-
-        for pool in pools {
-            let r = *remaining.get(&pool.requirement_id).unwrap_or(&0);
-            if r == 0 {
-                continue;
-            }
-            let constrained_for_pool = constrained_per_requirement
-                .get(&pool.requirement_id)
-                .cloned()
-                .unwrap_or_default();
-            let s_list: Vec<String> = constrained_for_pool
-                .iter()
-                .filter(|code| is_eligible_candidate(code, Some(pool.req_type.as_str())))
-                .cloned()
-                .collect();
-            let s_set: HashSet<String> = s_list.iter().cloned().collect();
-            let candidates = candidates_by_requirement
-                .get(&pool.requirement_id)
-                .cloned()
-                .unwrap_or_default();
-            let g_list: Vec<String> = candidates
-                .iter()
-                .filter(|code| !s_set.contains(*code))
-                .cloned()
-                .collect();
-            let s_avail: Vec<String> = s_list
-                .iter()
-                .filter(|code| !chosen_codes.contains(*code))
-                .cloned()
-                .collect();
-            let mut g_avail: Vec<String> = g_list
-                .iter()
-                .filter(|code| !chosen_codes.contains(*code))
-                .cloned()
-                .collect();
-            if explicit_only {
-                g_avail.retain(|code| explicit_set.contains(code));
-            }
-            let need_s = r.min(s_avail.len());
-            let need_g = r - need_s;
-            if need_g > g_avail.len() {
-                return None;
-            }
-
-            let mut forced_prefix: Option<String> = None;
-            if let Some(pend) = pending_group_picks.get(&pool.requirement_id) {
-                for (pfx, rem) in pend {
-                    if *rem == 0 {
-                        continue;
-                    }
-                    if !pool.candidate_courses.iter().any(|c| subject_prefix(c) == *pfx) {
-                        continue;
-                    }
-                    let has_avail = candidates.iter().any(|c| {
-                        subject_prefix(c) == *pfx
-                            && !chosen_codes.contains(c)
-                            && is_eligible_candidate(c, Some(pool.req_type.as_str()))
-                    });
-                    if has_avail {
-                        forced_prefix = Some(pfx.clone());
-                        break;
-                    }
-                }
-            }
-
-            let list: Vec<String> = if let Some(ref pfx) = forced_prefix {
-                let l: Vec<String> = candidates
-                    .iter()
-                    .filter(|c| {
-                        subject_prefix(c) == *pfx
-                            && !chosen_codes.contains(*c)
-                            && is_eligible_candidate(c, Some(pool.req_type.as_str()))
+        let pending: BTreeMap<String, usize> = pending_group_picks
+            .get(&pool.requirement_id)
+            .map(|agg| {
+                agg.iter()
+                    .filter(|(pfx, rem)| {
+                        **rem > 0 && pool.candidate_courses.iter().any(|c| subject_prefix(c) == **pfx)
                     })
-                    .cloned()
-                    .collect();
-                if l.is_empty() {
-                    return None;
-                }
-                l
-            } else {
-                let pick_from_s = need_s > 0;
-                let l = if pick_from_s { s_avail } else { g_avail };
-                if l.is_empty() {
-                    continue;
-                }
-                l
-            };
+                    .map(|(pfx, rem)| (pfx.clone(), *rem))
+                    .collect()
+            })
+            .unwrap_or_default();
+        // Group-token minimums must be reachable within this pool's quota.
+        let pending_total: usize = pending.values().sum();
+        if pending_total > r {
+            return None;
+        }
 
+        let req_type = pool.req_type.clone();
+        let mut build_cands = |codes: &[String], is_s: bool| -> Vec<Cand> {
             let mut level_counts: HashMap<i64, usize> = HashMap::new();
-            for code in &list {
+            for code in codes {
                 *level_counts.entry(course_level_sort_key(code)).or_insert(0) += 1;
             }
-
-            for code in &list {
-                let level = course_level_sort_key(code);
-                let has_non_course_prereq = prerequisites_contain_non_course(
-                    data.get_course(code).and_then(|c| c.prerequisites.as_ref()),
-                );
-                let bucket_size = *level_counts.get(&level).unwrap_or(&1) as f64;
-                let weight = (candidate_pool_weight(level, has_non_course_prereq) / bucket_size)
-                    * easier_mult(code);
-                cands.push((code.clone(), pool.requirement_id.clone(), weight));
+            let mut weighted: Vec<(Cand, f64)> = Vec::new();
+            for code in codes {
+                let vo = vo_for(code, Some(req_type.as_str()));
+                let combo_idx = match arena.course_idx(code, vo) {
+                    Some(i) => i,
+                    None => continue,
+                };
+                weighted.push((
+                    Cand {
+                        code: code.clone(),
+                        combo_idx,
+                        prefix: subject_prefix(code),
+                        is_s,
+                    },
+                    weight_of(code, &level_counts),
+                ));
             }
-        }
+            weighted_permutation(weighted, rng)
+        };
 
-        if cands.is_empty() {
-            break;
-        }
+        let mut order = build_cands(&s_avail, true);
+        order.extend(build_cands(&g_avail, false));
 
-        let weights: Vec<f64> = cands.iter().map(|c| c.2).collect();
-        let idx = weighted_random_pick_index(&weights, rng);
-        let (picked_code, picked_req, _) = cands[idx].clone();
-
-        chosen_codes.insert(picked_code.clone());
-        local_chosen_from_pool.insert(picked_code.clone(), picked_req.clone());
-        if let Some(v) = remaining.get_mut(&picked_req) {
-            *v -= 1;
-            if *v == 0 {
-                remaining.remove(&picked_req);
-            }
-        }
-
-        if let Some(agg) = pending_group_picks.get_mut(&picked_req) {
-            if !agg.is_empty() {
-                let pfx = subject_prefix(&picked_code);
-                if let Some(cur) = agg.get_mut(&pfx) {
-                    if *cur > 0 {
-                        *cur -= 1;
-                    }
-                }
-            }
-        }
+        pools_fill.push(PoolFill {
+            req_id: pool.requirement_id.clone(),
+            need_s,
+            need_g,
+            pending,
+            order,
+        });
     }
 
-    if total_remaining(&remaining) > 0 {
-        return None;
+    // Most-constrained pool first keeps cross-pool retries shallow.
+    pools_fill.sort_by_key(|p| p.order.len());
+
+    // Prebuild pinned combos; any unschedulable pinned course is fatal.
+    let mut pinned_idx: Vec<usize> = Vec::with_capacity(pinned_placed.len());
+    for (code, vo) in pinned_placed {
+        pinned_idx.push(arena.course_idx(code, *vo)?);
     }
-    Some(local_chosen_from_pool)
+    pinned_idx.sort_by_key(|&i| arena.built[i].combos.len());
+
+    // Randomized-restart greedy selection. Each restart greedily fills the pools
+    // in a shuffled candidate order, accepting a course whenever the whole
+    // selection still timetables (a feasibility-aware probe — see `try_place`).
+    // A single order occasionally stalls a few courses short of `need` (a greedy
+    // local maximum); rather than exhaustively backtrack that rare bad order —
+    // which is what made the old generate-and-test seed-dependent — we reshuffle
+    // and try again. Independent reshuffles drive the probability that *every*
+    // restart stalls to effectively zero, so a feasible schedule is found for
+    // every seed while total work stays bounded. The first restart keeps the
+    // preference-weighted order (so the level / prefer-easier biases still shape
+    // the result); later restarts use uniform reshuffles purely to find feasibility.
+    for restart in 0..SELECTION_RESTARTS {
+        if restart > 0 {
+            for pf in &mut pools_fill {
+                shuffle_in_place(&mut pf.order, rng);
+            }
+        }
+        let mut search = Search {
+            built: &arena.built,
+            pinned: &pinned_idx,
+            pools_fill: &pools_fill,
+            constraints: arena.constraints,
+            data: arena.data,
+            selected: Vec::new(),
+            assign: assign.clone(),
+            used: chosen_codes.clone(),
+            budget: SELECTION_PLACEMENT_BUDGET,
+            resolve_budget: SELECTION_RESOLVE_BUDGET,
+            arrangement: None,
+        };
+        if search.run() {
+            return Some((search.assign, search.arrangement.unwrap_or_default()));
+        }
+    }
+    None
 }
 
 #[allow(clippy::too_many_arguments)]
