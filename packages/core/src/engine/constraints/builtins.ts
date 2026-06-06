@@ -110,7 +110,7 @@ function firstYearCredits(code: string, credits: number | undefined): number {
  * this while picking courses; here the course set is fixed per plan, so it is a
  * whole-timetable check on the (fixed) set's first-year credit sum.
  */
-export function maxFirstYearCreditsConstraint(constraints: GenerationConstraints): Constraint {
+function maxFirstYearCreditsConstraint(constraints: GenerationConstraints): Constraint {
   const cap = constraints.maxFirstYearCredits;
   return {
     id: "max-first-year-credits",

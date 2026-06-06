@@ -104,6 +104,19 @@ describe("basic getSwapCandidates", () => {
     defaultAppStore.setState({
       calendarMode: "basic",
       cache,
+      catalogue: {
+        courses: [course("OLD 1100"), course("FIX 1100"), course("BAD 1100"), course("GOOD 1100")],
+        programs: [],
+      },
+      schedulesData: {
+        termId: "2261",
+        schedules: [
+          schedule("OLD 1100", oldTime),
+          schedule("FIX 1100", fixedTime),
+          schedule("BAD 1100", conflictingTime),
+          schedule("GOOD 1100", fittingTime),
+        ],
+      },
       currentSchedule: {
         enrollments: [enrollment("OLD 1100", oldTime), enrollment("FIX 1100", fixedTime)],
       },

@@ -155,9 +155,9 @@ export async function runScheduleGeneration(
   mode: GenerateSchedulesMode,
 ): Promise<GenerateSchedulesResult | null> {
   const input = inputFromState(state, mode);
+  const dataKey = dataKeyFromState(state);
 
   if (isWorkerAvailable()) {
-    const dataKey = dataKeyFromState(state);
     if (dataKey) {
       try {
         return await withGenerationTimeout(
@@ -200,11 +200,27 @@ export async function runScheduleGeneration(
     }
   }
 
-  // Fallback: load the action and run it on the main thread using the
-  // already-built DataCache from state.
-  if (!state.cache) return null;
+  // Fallback: build the WASM engine on the main thread and run the action
+  // in-process (SSR/tests, or when the worker is unavailable/failed). Prefer the
+  // in-memory catalogue/schedules already in state (no asset refetch); fall back
+  // to loading by data key when those aren't present.
   const { generateSchedulesAction } = await import("../lib/generateSchedulesAction");
-  return generateSchedulesAction(input, state.cache);
+  if (state.catalogue && state.schedulesData && state.cache) {
+    const [{ getInMemoryEngine }, { getEffectiveCatalogue }] = await Promise.all([
+      import("../lib/engine/engineHost"),
+      import("../store/slices/catalogueUtils"),
+    ]);
+    const effectiveCatalogue =
+      getEffectiveCatalogue(state.catalogue, state.yearCatalogueCourses, state.completedCourses) ??
+      state.catalogue;
+    const engine = await getInMemoryEngine(effectiveCatalogue, state.schedulesData);
+    if (!engine) return null;
+    return generateSchedulesAction(input, state.cache, engine);
+  }
+  if (!dataKey) return null;
+  const { getScheduleEngine } = await import("../lib/engine/engineHost");
+  const { engine, cache } = await getScheduleEngine(dataKey);
+  return generateSchedulesAction(input, cache, engine);
 }
 
 /** Pre-warm the worker's DataCache. Safe to call once after main-thread data loads. */

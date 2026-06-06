@@ -9,11 +9,16 @@ import {
   getValidSectionCombos,
   getEnrollmentsForCourse,
   enrollmentsOverlap,
-  buildCourseDifficultyIndexFromCache,
   buildColorMap,
   transferSwapColor,
 } from "./index";
-import { generateBasicSchedule, generateAdvancedSchedule } from "./generateSchedule";
+import {
+  type AdvancedRequestInput,
+  type BasicRequestInput,
+  type ScheduleEngine,
+  runAdvancedGeneration,
+  runBasicGeneration,
+} from "./engineBridge";
 
 export interface ReconstructedPreview {
   schedule: GeneratedSchedule;
@@ -78,38 +83,38 @@ function applySwaps(
 }
 
 /**
- * Reconstructs a GeneratedSchedule from a DecodedState + DataCache using the
- * canonical generation algorithm shared with the web app.
+ * Reconstructs a {@link GeneratedSchedule} from a {@link DecodedState} by running
+ * the shared Rust/WASM {@link ScheduleEngine}. The engine owns all generation;
+ * this only builds the request inputs from the decoded wizard state (mirroring
+ * the web app's request building) and replays the decoded swaps over the result.
  */
 export function generateScheduleFromDecodedState(
+  engine: ScheduleEngine,
   decoded: DecodedState,
   cache: DataCache,
   constraints: GenerationConstraints,
 ): ReconstructedPreview | null {
-  const courseDifficultyIndex = buildCourseDifficultyIndexFromCache(cache);
   if (decoded.wizardMode === "basic") {
-    const result = generateBasicSchedule({
-      cache,
+    const basicInput: BasicRequestInput = {
       constraints,
-      pinned: decoded.basicPinnedCourses,
+      basicPinnedCourses: decoded.basicPinnedCourses,
+      basicElectivesCount: decoded.basicElectivesCount,
+      basicExcludedCategories: decoded.basicExcludedCategories ?? [],
       completedCourses: decoded.completedCourseCodes,
       studentPrograms: decoded.studentPrograms,
       levelBuckets: decoded.levelBuckets,
       languageBuckets: decoded.languageBuckets,
       electiveLevelBuckets: decoded.electiveLevelBuckets,
-      basicExcludedCategories: decoded.basicExcludedCategories ?? [],
-      basicElectivesCount: decoded.basicElectivesCount,
       includeClosedComponents: decoded.includeClosedComponents,
       virtualSectionsOnly: decoded.virtualSectionsOnly ?? false,
       generationPreferEasier: decoded.generationPreferEasier ?? false,
-      courseDifficultyIndex,
       frenchImmersionStream: decoded.frenchImmersionStream ?? false,
-      programTitle: decoded.program?.title,
       blacklistedCourses: decoded.blacklistedCourses,
       currentSeed: decoded.currentSeed,
       firstSeed: decoded.firstSeed,
-    });
-    return applySwaps(result.schedule, decoded, cache, constraints);
+    };
+    const { schedule } = runBasicGeneration(engine, basicInput, cache);
+    return applySwaps(schedule, decoded, cache, constraints);
   }
 
   // Advanced mode
@@ -168,8 +173,7 @@ export function generateScheduleFromDecodedState(
     if (canTakeCourse(code, cache, ctx)) prereqEligibleCourses.push(code);
   }
 
-  const result = generateAdvancedSchedule({
-    cache,
+  const advancedInput: AdvancedRequestInput = {
     constraints,
     completedCourses: decoded.completedCourseCodes,
     prereqEligibleCourses,
@@ -179,19 +183,20 @@ export function generateScheduleFromDecodedState(
     selectedPerRequirement,
     selectedOptionsPerRequirement,
     coursesThisSemester: decoded.coursesThisSemester,
+    forcedCourses: [],
     levelBuckets: decoded.levelBuckets,
     languageBuckets: decoded.languageBuckets,
     electiveLevelBuckets: decoded.electiveLevelBuckets,
     includeClosedComponents: decoded.includeClosedComponents,
     virtualSectionsOnly: decoded.virtualSectionsOnly ?? false,
     generationPreferEasier: decoded.generationPreferEasier ?? false,
-    courseDifficultyIndex,
     frenchImmersionStream: decoded.frenchImmersionStream ?? false,
-    programTitle: decoded.program?.title,
+    basicExcludedCategories: [],
     blacklistedCourses: decoded.blacklistedCourses,
     currentSeed: decoded.currentSeed,
     firstSeed: decoded.firstSeed,
-  });
+  };
 
-  return applySwaps(result.schedule, decoded, cache, constraints);
+  const { schedule } = runAdvancedGeneration(engine, advancedInput, cache);
+  return applySwaps(schedule, decoded, cache, constraints);
 }

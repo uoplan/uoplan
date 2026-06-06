@@ -11,6 +11,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { initWasm, Resvg } from "@resvg/resvg-wasm";
+import { initSync as initEngineWasm, Engine } from "@uoplan/engine";
 import {
   DataProto,
   buildDataCache,
@@ -22,6 +23,9 @@ import {
   getMergedCatalogue,
   peekTermAndYearFromBase64,
   reconstructScheduleForPreview,
+  toProtoCatalogue,
+  toProtoSchedulesData,
+  type ScheduleEngine,
 } from "@uoplan/core";
 import { renderCalendarToSvg, scheduleToEvents } from "@uoplan/calendar";
 
@@ -166,7 +170,18 @@ async function run() {
       blockedTimes: decoded.blockedTimes,
     };
 
-    const reconstructed = reconstructScheduleForPreview(decoded, cache, constraints);
+    const engineWasmBytes = readFileSync(join(ROOT, "packages/engine/pkg/uoplan_engine_bg.wasm"));
+    const ModuleCtor = WebAssembly.Module as unknown as new (
+      bytes: Uint8Array,
+    ) => WebAssembly.Module;
+    initEngineWasm({ module: new ModuleCtor(engineWasmBytes) });
+    const catalogueBytes = DataProto.Catalogue.encode(toProtoCatalogue(catalogue)).finish();
+    const schedulesProtoBytes = DataProto.SchedulesData.encode(
+      toProtoSchedulesData(schedulesData),
+    ).finish();
+    const engine = new Engine(catalogueBytes, schedulesProtoBytes) as unknown as ScheduleEngine;
+
+    const reconstructed = reconstructScheduleForPreview(engine, decoded, cache, constraints);
     if (!reconstructed || reconstructed.schedule.enrollments.length === 0) {
       console.warn("[og-image] No schedule reconstructed — using fallback");
       svg = fallbackSvg();

@@ -19,6 +19,8 @@ import type { ConstraintContext } from "../constraints/types";
 import type { ConstraintPipeline } from "../constraints/pipeline";
 import type { TimetableCourse } from "./lazyCombos";
 
+export { arrangementFingerprint } from "../../generation/fingerprint";
+
 /**
  * Yields each distinct conflict-free arrangement (one combo per course) of the
  * full `courses` set. Courses are visited fewest-combos-first to prune early;
@@ -49,20 +51,4 @@ export function* enumerateArrangements(
   }
 
   yield* solve(0);
-}
-
-/**
- * Stable, order-independent fingerprint of a full timetable: course codes plus
- * the chosen section per component. Used to dedup arrangements across the
- * stream (two arrangements differing only in section order are identical).
- */
-export function arrangementFingerprint(schedule: GeneratedSchedule): string {
-  const parts = schedule.enrollments.map((e) => {
-    const sections = Object.keys(e.sectionCombo)
-      .sort()
-      .map((k) => `${k}:${e.sectionCombo[k].section.section}`)
-      .join("|");
-    return `${e.courseCode}{${sections}}`;
-  });
-  return parts.sort().join(",");
 }

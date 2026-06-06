@@ -11,17 +11,19 @@ import {
   type GeneratedSchedule,
   type GenerationConstraints,
   type RequirementWithStatus,
+  type ScheduleEngine,
+  type AdvancedRequestInput,
+  type BasicRequestInput,
+  type MappedGenerationResult,
   cacheWithClosedFilter,
   cacheWithPerCourseVirtualFilter,
   normalizeCourseCode,
   diagnoseTimetableFailure,
   type TimetableFailureDiagnostics,
-  generateBasicSchedule,
-  generateAdvancedSchedule,
+  runBasicGeneration,
+  runAdvancedGeneration,
   buildEffectiveRemainingRequirements,
-  buildCourseDifficultyIndexFromCache,
   gateRemainingByPriority,
-  type PoolDiagnostics,
 } from "@uoplan/core";
 import { buildColorMap } from "./colorMap";
 import { avoidedDaysFromBlocks } from "./blockedTimes";
@@ -29,6 +31,9 @@ import { resolveDesiredCourses } from "./generation/resolveDesiredCourses";
 
 // Re-export helpers used by tests and other modules
 export { expandConstrainedPerRequirement, buildPendingGroupPickCounts } from "@uoplan/core";
+
+/** Pool diagnostics shape carried by a mapped engine response. */
+type PoolDiagnostics = NonNullable<MappedGenerationResult["poolDiagnostics"]>;
 
 export type GenerateSchedulesMode = "basic" | "advanced";
 
@@ -228,9 +233,10 @@ export type { GenerateSchedulesResult };
 export async function generateSchedulesAction(
   input: GenerateSchedulesInput,
   cache: DataCache,
+  engine: ScheduleEngine,
 ): Promise<GenerateSchedulesResult | null> {
   if (input.mode === "basic") {
-    return await handleBasicGeneration(input, cache);
+    return await handleBasicGeneration(input, cache, engine);
   }
 
   const {
@@ -260,7 +266,6 @@ export async function generateSchedulesAction(
     generationLimitFirstYearCredits,
     generationCompressedSchedule,
     generationPreferEasier,
-    program,
     frenchImmersionStream,
   } = input;
 
@@ -396,8 +401,7 @@ export async function generateSchedulesAction(
     effectiveConstrainedPerRequirement[reqId] = out;
   }
 
-  const result = generateAdvancedSchedule({
-    cache,
+  const advancedInput: AdvancedRequestInput = {
     constraints,
     completedCourses,
     prereqEligibleCourses,
@@ -414,16 +418,20 @@ export async function generateSchedulesAction(
     includeClosedComponents,
     virtualSectionsOnly,
     generationPreferEasier,
-    courseDifficultyIndex: buildCourseDifficultyIndexFromCache(cache),
     frenchImmersionStream,
-    programTitle: program?.title,
     blacklistedCourses: input.blacklistedCourses ?? [],
     basicExcludedCategories,
     currentSeed,
     firstSeed,
-  });
+  };
+  const result = runAdvancedGeneration(engine, advancedInput, cache);
 
-  const { schedule: foundSchedule, filteredOptionalPool, pinned, poolDiagnostics } = result;
+  const {
+    schedule: foundSchedule,
+    optionalPool: filteredOptionalPool,
+    pinned,
+    poolDiagnostics,
+  } = result;
 
   const filterHints = buildActiveFilterHints({
     generationMinStartMinutes,
@@ -493,6 +501,7 @@ export async function generateSchedulesAction(
 async function handleBasicGeneration(
   input: GenerateSchedulesInput,
   cache: DataCache,
+  engine: ScheduleEngine,
 ): Promise<GenerateSchedulesResult | null> {
   const {
     basicPinnedCourses,
@@ -514,7 +523,6 @@ async function handleBasicGeneration(
     generationLimitFirstYearCredits,
     completedCourses,
     studentPrograms,
-    program,
     frenchImmersionStream,
     blacklistedCourses: basicBlacklistedCourses,
   } = input;
@@ -538,27 +546,26 @@ async function handleBasicGeneration(
     blockedTimes: input.blockedTimes,
   };
 
-  const { schedule, optionalPool } = generateBasicSchedule({
-    cache,
+  const basicInput: BasicRequestInput = {
     constraints,
-    pinned: basicPinnedCourses,
+    basicPinnedCourses,
+    basicElectivesCount,
+    basicExcludedCategories,
     completedCourses,
     studentPrograms,
     levelBuckets,
     languageBuckets,
     electiveLevelBuckets,
-    basicExcludedCategories,
-    basicElectivesCount,
     includeClosedComponents,
     virtualSectionsOnly,
     generationPreferEasier,
-    courseDifficultyIndex: buildCourseDifficultyIndexFromCache(cache),
     frenchImmersionStream,
-    programTitle: program?.title,
     blacklistedCourses: basicBlacklistedCourses ?? [],
     currentSeed,
     firstSeed,
-  });
+  };
+
+  const { schedule, optionalPool } = runBasicGeneration(engine, basicInput, cache);
 
   const swapPool = [...new Set([...basicPinnedCourses, ...optionalPool])];
 

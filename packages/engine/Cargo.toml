@@ -1,0 +1,30 @@
+[package]
+name = "uoplan-engine"
+version = "0.1.0"
+edition = "2021"
+description = "Schedule-generation engine for uoplan, compiled to WASM and shared by the web app and the OG-image worker"
+license = "MIT"
+repository = "https://github.com/uoplan/uoplan"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+prost = "0.14"
+console_error_panic_hook = { version = "0.1", optional = true }
+
+[features]
+default = ["console_error_panic_hook"]
+
+[build-dependencies]
+prost-build = "0.14"
+protox = "0.9"
+
+[profile.release]
+opt-level = "s"
+lto = true
+
+[lints.clippy]
+pedantic = "warn"

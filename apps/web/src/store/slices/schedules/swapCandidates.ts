@@ -3,7 +3,6 @@ import type { CourseEnrollment, GenerationConstraints, RequirementWithStatus } f
 import {
   buildPrereqContext,
   canTakeCourse,
-  cacheWithPerCourseVirtualFilter,
   courseMatchesFilters,
   enrollmentsOverlap,
   getEffectiveSchedule,
@@ -15,13 +14,15 @@ import {
   isWithinElectiveLevelBuckets,
   isWithinElectiveLevelCap,
   normalizeCourseCode,
-  timetableFixedCourseSet,
+  runTimetableFixedSet,
   virtualScheduleFilterApplies,
 } from "@uoplan/core";
 import {
   applyOptionSelections,
   collectRequirementIdsWithCandidateCourse,
 } from "../../../lib/requirements/requirementUtils";
+import { getEngineSync } from "../../../lib/engine/engineHost";
+import { getEffectiveCatalogue } from "../catalogueUtils";
 
 export function getSwapCandidates(
   enrollmentIndex: number,
@@ -33,6 +34,9 @@ export function getSwapCandidates(
     basicExcludedCategories,
     studentPrograms,
     cache,
+    catalogue,
+    schedulesData,
+    yearCatalogueCourses,
     currentSchedule,
     remainingRequirements,
     chosenCourseToRequirementId,
@@ -77,12 +81,6 @@ export function getSwapCandidates(
     const prereqCtx = buildPrereqContext(completedCourses, cache, studentPrograms);
     const basicFilters = { levels: levelBuckets, languageBuckets };
     const alreadyInSchedule = new Set(schedule.enrollments.map((e) => e.courseCode));
-    const pinnedNormalized = new Set(basicPinnedCourses.map(normalizeCourseCode));
-    const effectiveCache = cacheWithPerCourseVirtualFilter(
-      cache,
-      includeClosedComponents,
-      (code) => virtualSectionsOnly && !pinnedNormalized.has(normalizeCourseCode(code)),
-    );
     const swapConstraints: GenerationConstraints = {
       minStartMinutes: generationMinStartMinutes,
       maxEndMinutes: generationMaxEndMinutes,
@@ -92,6 +90,16 @@ export function getSwapCandidates(
     };
     const swappedCodes = schedule.enrollments.map((e) => e.courseCode);
     const currentSeed = get().currentSeed;
+    const engine =
+      catalogue && schedulesData
+        ? getEngineSync(
+            getEffectiveCatalogue(catalogue, yearCatalogueCourses, completedCourses) ?? catalogue,
+            schedulesData,
+          )
+        : null;
+    if (!engine) {
+      return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
+    }
 
     for (const course of cache.getAllCourses()) {
       const code = course.code;
@@ -117,9 +125,18 @@ export function getSwapCandidates(
       if (alreadyInSchedule.has(code)) continue;
 
       swappedCodes[enrollmentIndex] = code;
-      const timetabled = timetableFixedCourseSet(swappedCodes, effectiveCache, swapConstraints, {
-        seed: currentSeed,
-      });
+      const timetabled = runTimetableFixedSet(
+        engine,
+        {
+          courseCodes: swappedCodes,
+          constraints: swapConstraints,
+          seed: currentSeed,
+          includeClosedComponents,
+          virtualSectionsOnly,
+          virtualExemptCourses: basicPinnedCourses,
+        },
+        cache,
+      );
       if (!timetabled) continue;
 
       optionalPool.push(code);
