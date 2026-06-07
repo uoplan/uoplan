@@ -43,6 +43,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Setup nightly Rust (engine WASM build-std)
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          targets: wasm32-unknown-unknown
+          components: rust-src
+
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
