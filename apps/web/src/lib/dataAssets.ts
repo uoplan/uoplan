@@ -19,7 +19,7 @@ for (const [sourcePath, url] of Object.entries(urlModules)) {
 }
 
 /** Resolve a `.pb` asset id (bare filename) to the URL Vite serves it from. */
-export function resolveDataUrl(id: string): string | undefined {
+function resolveDataUrl(id: string): string | undefined {
   return urlById[id];
 }
 

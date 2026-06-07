@@ -25,7 +25,7 @@ export interface SecretCommand {
 }
 
 /** Side-effecting handlers the secret commands need from their host component. */
-export interface SecretCommandHandlers {
+interface SecretCommandHandlers {
   /** Unlock and apply the hidden Garnet & Grey (Gee-Gees) theme. */
   unlockGeegees: () => void;
 }

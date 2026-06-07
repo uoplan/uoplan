@@ -1,7 +1,7 @@
 import type { ComboboxItem, OptionsFilter } from "@mantine/core";
 
 /** Searchable fields for a single option: its short `code` and a longer `text` (name/title). */
-export type RankableOption = { code: string; text: string };
+type RankableOption = { code: string; text: string };
 
 /**
  * Match tiers (lower = more relevant), mirroring the professor-search ranking but

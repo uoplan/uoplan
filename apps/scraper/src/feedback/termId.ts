@@ -20,7 +20,7 @@ const SEASON_CODE: Record<string, number> = {
   autumn: 9,
 };
 
-export interface ParsedTermLabel {
+interface ParsedTermLabel {
   season: string;
   year: number;
   termId: string;

@@ -12,7 +12,7 @@ import * as cheerio from "cheerio";
 import type { Locator, Page } from "playwright";
 import { normalizeWhitespace } from "../shared/text.ts";
 
-export interface ListRow {
+interface ListRow {
   /**
    * SelectedIDforPrint hash — unique per report, used to open the individual
    * report. `null` for reports that aren't eligible to open (e.g. too few
@@ -33,7 +33,7 @@ export function parseTotalReports(html: string): number | null {
   return m ? Number(m[1].replace(/,/g, "")) : null;
 }
 
-export interface ResultsRange {
+interface ResultsRange {
   from: number;
   to: number;
   total: number;
@@ -54,7 +54,7 @@ export function parseResultsRange(html: string): ResultsRange | null {
 }
 
 /** Stable per-row key (the report id when clickable, else the title text). */
-export function rowKey(row: ListRow): string {
+function rowKey(row: ListRow): string {
   return row.reportId ?? row.title;
 }
 
