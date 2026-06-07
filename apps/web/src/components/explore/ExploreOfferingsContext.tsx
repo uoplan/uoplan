@@ -12,12 +12,14 @@ import {
   buildOfferingsByComponent,
   buildOfferingsByCourseNorm,
   buildScheduleOfferings,
+  buildTermPresenceIndex,
   createExploreCourseFuse,
   mergeOfferingsWithSchedule,
   type AliasGroups,
   type ExploreCourseSearchEntry,
   type ExploreOfferingFlat,
   type ExploreProfessorSearchEntry,
+  type TermPresenceIndex,
 } from "../../lib/explore/gradesSearch";
 
 type ExploreOfferingsCtx = {
@@ -35,6 +37,8 @@ type ExploreOfferingsCtx = {
   getCourseEntryByNorm: () => Map<string, ExploreCourseSearchEntry>;
   /** Lazily built + cached professor search entries. */
   getProfessorEntries: () => ExploreProfessorSearchEntry[];
+  /** Lazily built + cached per-term presence index (courses + professors by term id). */
+  getTermPresence: () => TermPresenceIndex;
   /** Lazily built + cached Fuse index over course entries (null when empty). */
   getCourseFuse: () => Fuse<ExploreCourseSearchEntry> | null;
 };
@@ -48,6 +52,7 @@ const ExploreOfferingsContext = createContext<ExploreOfferingsCtx>({
   getCourseEntries: () => [],
   getCourseEntryByNorm: () => new Map(),
   getProfessorEntries: () => [],
+  getTermPresence: () => ({ courseComponentsByTerm: new Map(), profGroupsByTerm: new Map() }),
   getCourseFuse: () => null,
 });
 
@@ -69,6 +74,7 @@ type DerivedCache = {
   courseEntries?: ExploreCourseSearchEntry[];
   courseEntryByNorm?: Map<string, ExploreCourseSearchEntry>;
   professorEntries?: ExploreProfessorSearchEntry[];
+  termPresence?: TermPresenceIndex;
   courseFuse?: Fuse<ExploreCourseSearchEntry> | null;
 };
 
@@ -145,6 +151,16 @@ export function ExploreOfferingsProvider({
     return cacheRef.current.professorEntries;
   }, [offerings, professorRatings]);
 
+  const getTermPresence = useCallback(() => {
+    if (!cacheRef.current.termPresence) {
+      cacheRef.current.termPresence = buildTermPresenceIndex(
+        offerings,
+        aliasGroups.componentByNorm,
+      );
+    }
+    return cacheRef.current.termPresence;
+  }, [offerings, aliasGroups]);
+
   const getCourseFuse = useCallback(() => {
     if (cacheRef.current.courseFuse === undefined) {
       const entries = getCourseEntries();
@@ -163,6 +179,7 @@ export function ExploreOfferingsProvider({
       getCourseEntries,
       getCourseEntryByNorm,
       getProfessorEntries,
+      getTermPresence,
       getCourseFuse,
     }),
     [
@@ -174,6 +191,7 @@ export function ExploreOfferingsProvider({
       getCourseEntries,
       getCourseEntryByNorm,
       getProfessorEntries,
+      getTermPresence,
       getCourseFuse,
     ],
   );

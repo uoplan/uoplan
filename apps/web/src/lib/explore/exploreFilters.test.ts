@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { GradeVizData } from "@uoplan/core";
-import type { ExploreCourseSearchEntry, ExploreProfessorSearchEntry } from "./gradesSearch";
+import {
+  buildTermPresenceIndex,
+  type ExploreCourseSearchEntry,
+  type ExploreOfferingFlat,
+  type ExploreProfessorSearchEntry,
+} from "./gradesSearch";
 import {
   EMPTY_FILTERS,
   compareCourseEntries,
@@ -53,6 +58,21 @@ function makeProfessorEntry(
     disciplines: partial.disciplines ?? [],
     gradeViz: partial.gradeViz ?? null,
     maxRating: partial.maxRating ?? null,
+  };
+}
+
+function makeOffering(partial: Partial<ExploreOfferingFlat>): ExploreOfferingFlat {
+  return {
+    id: partial.id ?? "offering",
+    courseCode: partial.courseCode ?? "CSI 1100",
+    courseTitle: partial.courseTitle ?? "Intro",
+    professorName: partial.professorName ?? "Ada Lovelace",
+    legacyId: partial.legacyId,
+    termId: partial.termId ?? 2269,
+    termLabel: partial.termLabel ?? "Fall 2026",
+    section: partial.section,
+    fuseText: partial.fuseText ?? "",
+    distribution: partial.distribution ?? {},
   };
 }
 
@@ -110,6 +130,7 @@ describe("serializeExploreFiltersSearch", () => {
       disciplines: ["BIO", "CSI"],
       difficulty: "easy",
       minRating: 4,
+      termId: null,
       sortKey: "grade",
       sortDir: "desc",
     };
@@ -119,10 +140,22 @@ describe("serializeExploreFiltersSearch", () => {
       langs: "en",
       disc: "BIO,CSI",
       difficulty: "easy",
-      rating: "4",
+      rating: 4,
       sort: "grade",
       dir: "desc",
     });
+  });
+
+  it("round-trips the term filter through search params", () => {
+    const params = serializeExploreFiltersSearch({ ...EMPTY_FILTERS, termId: 2269 });
+    expect(params).toEqual({ term: 2269 });
+    expect(parseExploreFiltersSearch(params).termId).toBe(2269);
+  });
+
+  it("ignores invalid term values", () => {
+    expect(parseExploreFiltersSearch({ term: "abc" }).termId).toBeNull();
+    expect(parseExploreFiltersSearch({ term: "0" }).termId).toBeNull();
+    expect(parseExploreFiltersSearch({ term: "12.5" }).termId).toBeNull();
   });
 });
 
@@ -268,5 +301,60 @@ describe("filterProfessorEntries", () => {
 
   it("returns all entries when no relevant filter is active", () => {
     expect(filterProfessorEntries(all, EMPTY_FILTERS)).toHaveLength(3);
+  });
+});
+
+describe("term presence filter", () => {
+  it("restricts courses to those present in the selected term", () => {
+    const a = makeCourseEntry({ normCode: "csi1100", componentId: "csi1100" });
+    const b = makeCourseEntry({ normCode: "csi2100", componentId: "csi2100" });
+    const filters: ExploreFilterState = { ...EMPTY_FILTERS, termId: 2269 };
+    const termSets = { courseComponents: new Set(["csi1100"]), profGroups: null };
+
+    const result = filterCourseEntries([a, b], filters, termSets);
+    expect(result.map((e) => e.normCode)).toEqual(["csi1100"]);
+  });
+
+  it("excludes all courses when the term has no presence set", () => {
+    const a = makeCourseEntry({ normCode: "csi1100", componentId: "csi1100" });
+    const filters: ExploreFilterState = { ...EMPTY_FILTERS, termId: 2269 };
+
+    expect(filterCourseEntries([a], filters, undefined)).toHaveLength(0);
+    expect(
+      filterCourseEntries([a], filters, { courseComponents: null, profGroups: null }),
+    ).toHaveLength(0);
+  });
+
+  it("restricts professors to those present in the selected term", () => {
+    const inTerm = makeProfessorEntry({ groupId: "id:1" });
+    const outOfTerm = makeProfessorEntry({ groupId: "id:2" });
+    const filters: ExploreFilterState = { ...EMPTY_FILTERS, termId: 2269 };
+    const termSets = { courseComponents: null, profGroups: new Set(["id:1"]) };
+
+    const result = filterProfessorEntries([inTerm, outOfTerm], filters, termSets);
+    expect(result.map((e) => e.groupId)).toEqual(["id:1"]);
+  });
+});
+
+describe("buildTermPresenceIndex", () => {
+  it("maps offerings to course-component and professor-group sets per term", () => {
+    const offerings = [
+      makeOffering({
+        courseCode: "CSI 1100",
+        professorName: "Ada Lovelace",
+        legacyId: 1,
+        termId: 2269,
+      }),
+      makeOffering({ courseCode: "MAT 1320", professorName: "Carl Gauss", termId: 2269 }),
+      makeOffering({ courseCode: "CSI 1100", professorName: "Staff", legacyId: 9, termId: 2271 }),
+    ];
+
+    const index = buildTermPresenceIndex(offerings, new Map([["CSI 1100", "comp-csi"]]));
+
+    expect(index.courseComponentsByTerm.get(2269)).toEqual(new Set(["comp-csi", "MAT 1320"]));
+    expect(index.courseComponentsByTerm.get(2271)).toEqual(new Set(["comp-csi"]));
+    expect(index.profGroupsByTerm.get(2269)).toEqual(new Set(["id:1", "name:carl gauss"]));
+    // "Staff" placeholder instructors are never indexed as professors.
+    expect(index.profGroupsByTerm.get(2271)).toBeUndefined();
   });
 });

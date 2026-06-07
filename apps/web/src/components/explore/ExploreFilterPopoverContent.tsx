@@ -20,9 +20,10 @@ import type {
   ExploreSortKey,
 } from "../../lib/explore/exploreFilters";
 
-type FilterKey = "level" | "language" | "discipline" | "difficulty" | "rating" | "sort";
+type FilterKey = "level" | "language" | "discipline" | "difficulty" | "rating" | "term" | "sort";
 
 export type DisciplineOption = { code: string; name: string };
+export type TermOption = { value: string; label: string };
 
 const LEVELS: { value: ExploreFilterLevel; labelKey: string }[] = [
   { value: 1000, labelKey: "explore.filter.level.1000" },
@@ -98,11 +99,13 @@ export function ExploreFilterPopoverContent({
   filters,
   onChange,
   disciplineOptions = [],
+  termOptions = [],
 }: {
   filterKey: FilterKey;
   filters: ExploreFilterState;
   onChange: (next: Partial<ExploreFilterState>) => void;
   disciplineOptions?: DisciplineOption[];
+  termOptions?: TermOption[];
 }) {
   useTr();
 
@@ -295,6 +298,31 @@ export function ExploreFilterPopoverContent({
     );
   }
 
+  if (filterKey === "term") {
+    return (
+      <Radio.Group
+        value={filters.termId != null ? String(filters.termId) : ""}
+        onChange={(v) => onChange({ termId: v === "" ? null : Number(v) })}
+      >
+        <Stack gap={8}>
+          {termOptions.map((opt) => (
+            <Radio
+              key={opt.value}
+              value={opt.value}
+              label={opt.label}
+              styles={radioStyles}
+              classNames={radioClassNames}
+              iconColor="var(--app-on-accent)"
+              onClick={() => {
+                if (filters.termId === Number(opt.value)) onChange({ termId: null });
+              }}
+            />
+          ))}
+        </Stack>
+      </Radio.Group>
+    );
+  }
+
   return <Box />;
 }
 
@@ -310,6 +338,8 @@ export function filterSectionLabel(key: FilterKey): string {
       return tr("explore.filter.difficulty");
     case "rating":
       return tr("explore.filter.rating");
+    case "term":
+      return tr("explore.filter.term");
     case "sort":
       return tr("explore.sort.label");
   }

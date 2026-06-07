@@ -11,10 +11,20 @@ export type ExploreSearchParams = {
   langs: string | undefined;
   disc: string | undefined;
   difficulty: string | undefined;
-  rating: string | undefined;
+  rating: number | undefined;
+  term: number | undefined;
   sort: string | undefined;
   dir: string | undefined;
 };
+
+function toFiniteNumber(value: unknown): number | undefined {
+  if (typeof value === "number") return Number.isFinite(value) ? value : undefined;
+  if (typeof value === "string" && value.length > 0) {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : undefined;
+  }
+  return undefined;
+}
 
 export function validateExploreSearch(search: Record<string, unknown>): ExploreSearchParams {
   return {
@@ -27,8 +37,8 @@ export function validateExploreSearch(search: Record<string, unknown>): ExploreS
       typeof search.difficulty === "string" && search.difficulty.length > 0
         ? search.difficulty
         : undefined,
-    rating:
-      typeof search.rating === "string" && search.rating.length > 0 ? search.rating : undefined,
+    rating: toFiniteNumber(search.rating),
+    term: toFiniteNumber(search.term),
     sort: typeof search.sort === "string" && search.sort.length > 0 ? search.sort : undefined,
     dir: typeof search.dir === "string" && search.dir.length > 0 ? search.dir : undefined,
   };
@@ -41,6 +51,7 @@ export const EMPTY_EXPLORE_SEARCH: ExploreSearchParams = {
   disc: undefined,
   difficulty: undefined,
   rating: undefined,
+  term: undefined,
   sort: undefined,
   dir: undefined,
 };
@@ -51,6 +62,7 @@ export type ExploreFilterState = {
   disciplines: string[];
   difficulty: ExploreFilterDifficulty | null;
   minRating: number | null;
+  termId: number | null;
   sortKey: ExploreSortKey;
   sortDir: ExploreSortDir;
 };
@@ -61,6 +73,7 @@ export const EMPTY_FILTERS: ExploreFilterState = {
   disciplines: [],
   difficulty: null,
   minRating: null,
+  termId: null,
   sortKey: "relevance",
   sortDir: "desc",
 };
@@ -71,7 +84,8 @@ export function hasActiveFilters(f: ExploreFilterState): boolean {
     f.languages.length > 0 ||
     f.disciplines.length > 0 ||
     f.difficulty !== null ||
-    f.minRating !== null
+    f.minRating !== null ||
+    f.termId !== null
   );
 }
 
@@ -138,9 +152,12 @@ export function parseExploreFiltersSearch(search: Record<string, unknown>): Expl
     ? (search.difficulty as ExploreFilterDifficulty)
     : null;
 
-  const minRatingRaw = typeof search.rating === "string" ? Number(search.rating) : null;
+  const minRatingRaw = search.rating != null ? Number(search.rating) : null;
   const minRating =
     minRatingRaw != null && MIN_RATING_VALUES.includes(minRatingRaw) ? minRatingRaw : null;
+
+  const termRaw = search.term != null ? Number(search.term) : null;
+  const termId = termRaw != null && Number.isInteger(termRaw) && termRaw > 0 ? termRaw : null;
 
   const sortKey = parseSortKey(search.sort);
   const sortDir = parseSortDir(search.dir, sortKey);
@@ -151,19 +168,23 @@ export function parseExploreFiltersSearch(search: Record<string, unknown>): Expl
     disciplines,
     difficulty,
     minRating,
+    termId,
     sortKey,
     sortDir,
   };
 }
 
-export function serializeExploreFiltersSearch(filters: ExploreFilterState): Record<string, string> {
-  const params: Record<string, string> = {};
+export function serializeExploreFiltersSearch(
+  filters: ExploreFilterState,
+): Partial<ExploreSearchParams> {
+  const params: Partial<ExploreSearchParams> = {};
 
   if (filters.levels.length > 0) params.levels = filters.levels.join(",");
   if (filters.languages.length > 0) params.langs = filters.languages.join(",");
   if (filters.disciplines.length > 0) params.disc = filters.disciplines.join(",");
   if (filters.difficulty !== null) params.difficulty = filters.difficulty;
-  if (filters.minRating !== null) params.rating = String(filters.minRating);
+  if (filters.minRating !== null) params.rating = filters.minRating;
+  if (filters.termId !== null) params.term = filters.termId;
 
   if (filters.sortKey !== "relevance") {
     params.sort = filters.sortKey;
@@ -238,10 +259,17 @@ function getDifficultyBucket(gpa: number): ExploreFilterDifficulty {
   return "tough";
 }
 
+export type ExploreTermSets = {
+  courseComponents: Set<string> | null;
+  profGroups: Set<string> | null;
+};
+
 export function filterCourseEntries(
   entries: ExploreCourseSearchEntry[],
   filters: ExploreFilterState,
+  termSets?: ExploreTermSets,
 ): ExploreCourseSearchEntry[] {
+  const byTerm = filters.termId !== null;
   return entries.filter((e) => {
     if (filters.levels.length > 0) {
       if (e.level === null || !filters.levels.includes(e.level)) return false;
@@ -261,6 +289,9 @@ export function filterCourseEntries(
     if (filters.minRating !== null) {
       if (e.maxProfessorRating === null || e.maxProfessorRating < filters.minRating) return false;
     }
+    if (byTerm) {
+      if (!termSets?.courseComponents?.has(e.componentId)) return false;
+    }
     return true;
   });
 }
@@ -268,13 +299,16 @@ export function filterCourseEntries(
 export function filterProfessorEntries(
   entries: ExploreProfessorSearchEntry[],
   filters: ExploreFilterState,
+  termSets?: ExploreTermSets,
 ): ExploreProfessorSearchEntry[] {
   const byDiscipline = filters.disciplines.length > 0;
   const byRating = filters.minRating !== null;
-  if (!byDiscipline && !byRating) return entries;
+  const byTerm = filters.termId !== null;
+  if (!byDiscipline && !byRating && !byTerm) return entries;
   return entries.filter((e) => {
     if (byRating && (e.maxRating === null || e.maxRating < filters.minRating!)) return false;
     if (byDiscipline && !e.disciplines.some((d) => filters.disciplines.includes(d))) return false;
+    if (byTerm && !termSets?.profGroups?.has(e.groupId)) return false;
     return true;
   });
 }

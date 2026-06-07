@@ -781,6 +781,12 @@ msgstr "Bien (3,0+)"
 msgid "explore.filter.rating.great"
 msgstr "Très bien (3,5+)"
 
+#: apps/web/src/components/explore/ExploreFilterBar.tsx:59
+#: apps/web/src/components/explore/ExploreFilterBar.tsx:61
+#: apps/web/src/components/explore/ExploreFilterPopoverContent.tsx:342
+msgid "explore.filter.term"
+msgstr "Trimestre"
+
 msgid "explore.histogramStudents"
 msgstr "{count, plural, one {# étudiant} other {# étudiants}}"
 

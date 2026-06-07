@@ -4,9 +4,17 @@ import { useTr, tr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { ExploreFilterPopoverContent, filterSectionLabel } from "./ExploreFilterPopoverContent";
-import type { DisciplineOption } from "./ExploreFilterPopoverContent";
+import type { DisciplineOption, TermOption } from "./ExploreFilterPopoverContent";
 
-const FILTER_KEYS = ["level", "language", "discipline", "difficulty", "rating", "sort"] as const;
+const FILTER_KEYS = [
+  "level",
+  "language",
+  "discipline",
+  "difficulty",
+  "rating",
+  "term",
+  "sort",
+] as const;
 type FilterKey = (typeof FILTER_KEYS)[number];
 
 export function ExploreFilterDrawer({
@@ -16,6 +24,7 @@ export function ExploreFilterDrawer({
   onChange,
   initialSection,
   disciplineOptions = [],
+  termOptions = [],
 }: {
   opened: boolean;
   onClose: () => void;
@@ -23,6 +32,7 @@ export function ExploreFilterDrawer({
   onChange: (next: Partial<ExploreFilterState>) => void;
   initialSection?: FilterKey;
   disciplineOptions?: DisciplineOption[];
+  termOptions?: TermOption[];
 }) {
   useTr();
 
@@ -108,6 +118,7 @@ export function ExploreFilterDrawer({
                         filters={filters}
                         onChange={onChange}
                         disciplineOptions={disciplineOptions}
+                        termOptions={termOptions}
                       />
                     </Box>
                   </Box>
