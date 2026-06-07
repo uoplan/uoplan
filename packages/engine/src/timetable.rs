@@ -176,10 +176,14 @@ const ARRANGEMENT_NODE_BUDGET: u64 = 5_000_000;
 /// combo scanned costs `placed + 1` units, an overlap scan being O(placed) — so
 /// it is a true wall-clock bound regardless of how large or permissive the
 /// optional pool is, rather than a node count that hides O(pool) work per node.
-/// Sized so any realistically packable request resolves far below it while an
-/// infeasible request fails fast and deterministically for every seed. Mirrors
-/// `advanced.rs`'s `SELECTION_GLOBAL_WORK_BUDGET`.
-const SUBSET_WORK_BUDGET: u64 = 200_000_000;
+/// Sized so any realistically packable request resolves far below it (the
+/// term-2271 23-elective repro tops out at ~5M work units across 64 seeds, a
+/// >10x margin) while an infeasible request — which always consumes the whole
+/// budget — fails fast and deterministically for every seed. Kept well under
+/// `advanced.rs`'s `SELECTION_GLOBAL_WORK_BUDGET` so the infeasible worst case
+/// stays comfortably below the 3 s worker kill even as WASM (~1.5-2x this native
+/// build) on slow CI hardware, where 200M measured ~2.3 s natively (≈4 s WASM).
+const SUBSET_WORK_BUDGET: u64 = 60_000_000;
 
 /// Forward-checking + MRV backtracking solver over a fixed set of courses. Each
 /// course's domain is its list of seeded-ordered valid section combos; the solver
