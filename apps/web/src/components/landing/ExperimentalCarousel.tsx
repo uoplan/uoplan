@@ -1,6 +1,6 @@
 import { Box } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { tr } from "../../i18n";
 import { LandingTile, type LandingTileProps } from "./LandingTile";
@@ -115,7 +115,7 @@ export function ExperimentalCarousel({ items }: ExperimentalCarouselProps) {
         {items.map((item, i) => {
           const isActive = i === index;
           return (
-            <motion.div
+            <m.div
               key={item.to}
               aria-hidden={!isActive}
               inert={!isActive}
@@ -129,7 +129,7 @@ export function ExperimentalCarousel({ items }: ExperimentalCarouselProps) {
               }}
             >
               <LandingTile {...item} />
-            </motion.div>
+            </m.div>
           );
         })}
       </Box>

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { I18nProvider } from "@lingui/react";
-import { MotionConfig } from "framer-motion";
+import { domAnimation, LazyMotion, MotionConfig } from "framer-motion";
 import { render } from "vitest-browser-react";
 
 import { i18n } from "../i18n";
@@ -33,7 +33,9 @@ function AppTestProviders({ children, store }: { children: ReactNode; store: App
     <I18nProvider i18n={i18n}>
       <AppThemeProvider initialSelection="dark">
         <AppStoreProvider store={store}>
-          <MotionConfig reducedMotion="always">{children}</MotionConfig>
+          <MotionConfig reducedMotion="always">
+            <LazyMotion features={domAnimation}>{children}</LazyMotion>
+          </MotionConfig>
         </AppStoreProvider>
       </AppThemeProvider>
     </I18nProvider>

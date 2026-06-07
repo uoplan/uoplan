@@ -1,7 +1,8 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Text } from "@mantine/core";
 import {
   Spotlight,
+  spotlight,
   type SpotlightActionData,
   type SpotlightActionGroupData,
   type SpotlightFilterFunction,
@@ -14,6 +15,7 @@ import {
   type SecretCommand,
 } from "../../lib/easterEggs/secretCommands";
 import { useAppTheme } from "../../theme/AppThemeProvider";
+import { useCommandCenterStore } from "../../store/commandCenterStore";
 import { useTr, i18n, tr } from "../../i18n";
 
 /** Lowercase, comma-joined keyword string for substring matching. */
@@ -66,6 +68,14 @@ export function CommandCenter() {
   useTr();
   const navigate = useNavigate();
   const { setSelection, unlockTheme } = useAppTheme();
+
+  // Each open request (footer button or the pre-mount `mod + K` listener) bumps
+  // `openSignal`; this effect opens the now-mounted Spotlight in response. The
+  // initial render already has a non-zero signal from the activating request.
+  const openSignal = useCommandCenterStore((s) => s.openSignal);
+  useEffect(() => {
+    if (openSignal > 0) spotlight.open();
+  }, [openSignal]);
 
   const secretCommands = useMemo(
     () =>

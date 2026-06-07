@@ -1,8 +1,6 @@
 import type { CacheDataKey } from "../lib/dataCacheLoader";
-import type {
-  GenerateSchedulesInput,
-  GenerateSchedulesResult,
-} from "../lib/generateSchedulesAction";
+import type { GenerateSchedulesInput } from "../lib/generateSchedulesInput";
+import type { GenerateSchedulesResult } from "../lib/generateSchedulesAction";
 
 /**
  * Typed RPC surface exposed by the schedule worker. Both the worker entry

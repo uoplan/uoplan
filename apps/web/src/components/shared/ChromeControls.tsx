@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, Group } from "@mantine/core";
 import { useClickOutside } from "@mantine/hooks";
 import { IconSettings } from "@tabler/icons-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { useTr, tr, type AppLocale } from "../../i18n";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeSwitcher } from "./ThemeSwitcher";
@@ -46,18 +46,18 @@ export function ChromeControls({ onLangSwitch }: ChromeControlsProps) {
           onMouseEnter={(e) => applyPillHover(e.currentTarget)}
           onMouseLeave={(e) => resetPillHover(e.currentTarget)}
         >
-          <motion.span
+          <m.span
             animate={{ rotate: opened ? 90 : 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             style={{ display: "flex" }}
           >
             <IconSettings size={16} style={pillIconStyle} />
-          </motion.span>
+          </m.span>
         </button>
 
         <AnimatePresence>
           {opened ? (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: -6, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -6, scale: 0.97 }}
@@ -76,7 +76,7 @@ export function ChromeControls({ onLangSwitch }: ChromeControlsProps) {
             >
               <ThemeSwitcher />
               <LanguageSwitcher onSwitch={onLangSwitch} />
-            </motion.div>
+            </m.div>
           ) : null}
         </AnimatePresence>
       </Box>

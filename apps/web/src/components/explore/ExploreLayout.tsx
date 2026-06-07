@@ -2,7 +2,7 @@ import { Link, useNavigate, useRouterState, useSearch } from "@tanstack/react-ro
 import { Anchor, Box, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Catalogue } from "@uoplan/core";
 
@@ -93,7 +93,7 @@ function SearchCardSection({
   children: ReactNode;
 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1], delay }}
@@ -119,7 +119,7 @@ function SearchCardSection({
           </Box>
         </Box>
       </Stack>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -336,7 +336,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     displayedCourses.length > 0 ? (
       <SearchCardSection label={tr("explore.resultsCourses")} delay={0}>
         {displayedCourses.map((entry) => (
-          <motion.div
+          <m.div
             key={entry.normCode}
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -349,7 +349,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
               query={debouncedQuery}
               searchParams={currentSearchParams}
             />
-          </motion.div>
+          </m.div>
         ))}
       </SearchCardSection>
     ) : null;
@@ -358,7 +358,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     disciplineResults.length > 0 ? (
       <SearchCardSection label={tr("explore.resultsDisciplines")} delay={0.04}>
         {disciplineResults.map((d) => (
-          <motion.div
+          <m.div
             key={d.code}
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -372,7 +372,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
               query={debouncedQuery}
               searchParams={currentSearchParams}
             />
-          </motion.div>
+          </m.div>
         ))}
       </SearchCardSection>
     ) : null;
@@ -381,7 +381,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     searchResults && searchResults.professors.length > 0 ? (
       <SearchCardSection label={tr("explore.resultsProfessors")} delay={0.06}>
         {searchResults.professors.map((entry) => (
-          <motion.div
+          <m.div
             key={entry.groupId}
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -395,7 +395,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
               query={debouncedQuery}
               searchParams={currentSearchParams}
             />
-          </motion.div>
+          </m.div>
         ))}
       </SearchCardSection>
     ) : null;
@@ -404,7 +404,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     programResults.length > 0 ? (
       <SearchCardSection label={tr("explore.resultsPrograms")} delay={0.08}>
         {programResults.map((program) => (
-          <motion.div
+          <m.div
             key={program.slug}
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -413,7 +413,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
             style={{ flexShrink: 0 }}
           >
             <SearchResultProgramCard program={program} query={debouncedQuery} />
-          </motion.div>
+          </m.div>
         ))}
       </SearchCardSection>
     ) : null;
@@ -499,7 +499,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       >
         <AnimatePresence mode="wait" initial={false}>
           {renderResults ? (
-            <motion.div
+            <m.div
               key="search-results"
               initial={{ y: 14 }}
               animate={{ y: 0 }}
@@ -538,9 +538,9 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
                   )}
                 </Box>
               )}
-            </motion.div>
+            </m.div>
           ) : (
-            <motion.div
+            <m.div
               key="page-content"
               initial={false}
               animate={{ opacity: 1 }}
@@ -549,7 +549,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
               style={{ flex: 1, display: "flex", flexDirection: "column" }}
             >
               {children}
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </Box>

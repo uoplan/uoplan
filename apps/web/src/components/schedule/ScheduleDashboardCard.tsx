@@ -1,6 +1,6 @@
 import { Box, Group, Stack, Text } from "@mantine/core";
 import { IconAlertCircle, IconCheck, IconChevronDown } from "@tabler/icons-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { type ReactNode } from "react";
 import type { ScheduleDashboardCardStatus } from "../../lib/scheduleDashboard";
 import { AppCard } from "../shared/AppCard";
@@ -166,7 +166,7 @@ export function ScheduleDashboardCard({
 
       <AnimatePresence initial={false}>
         {isExpandable && open ? (
-          <motion.div
+          <m.div
             key="content"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -184,7 +184,7 @@ export function ScheduleDashboardCard({
             >
               {expandableContent}
             </Box>
-          </motion.div>
+          </m.div>
         ) : null}
       </AnimatePresence>
     </AppCard>

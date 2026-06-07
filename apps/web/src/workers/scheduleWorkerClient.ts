@@ -6,8 +6,8 @@ import {
   pickGenerateSchedulesInput,
   type GenerateSchedulesInput,
   type GenerateSchedulesMode,
-  type GenerateSchedulesResult,
-} from "../lib/generateSchedulesAction";
+} from "../lib/generateSchedulesInput";
+import type { GenerateSchedulesResult } from "../lib/generateSchedulesAction";
 import { tr } from "../i18n";
 import type { ScheduleWorkerApi } from "./scheduleWorkerApi";
 

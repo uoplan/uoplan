@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Box, Button, Group, Stack, Text, Title } from "@mantine/core";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { IconRefresh, IconSparkles } from "@tabler/icons-react";
 import { useShallow } from "zustand/react/shallow";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../explore/ExploreProfessorGradesLayout";
@@ -186,7 +186,7 @@ export function ScheduleDashboardPage() {
           </Box>
 
           {cards.map((card, index) => (
-            <motion.div
+            <m.div
               key={card.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -201,7 +201,7 @@ export function ScheduleDashboardPage() {
                 onToggle={() => toggleStep(card.id)}
                 expandableContent={contentForStep(card.id)}
               />
-            </motion.div>
+            </m.div>
           ))}
 
           <Group justify="space-between" mt="lg" gap="sm">

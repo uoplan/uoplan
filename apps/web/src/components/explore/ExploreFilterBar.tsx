@@ -1,7 +1,7 @@
 import { Box, Group, UnstyledButton } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconArrowsSort } from "@tabler/icons-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useTr, tr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
@@ -272,7 +272,7 @@ function FilterDropdown({
   disciplineOptions: DisciplineOption[];
 }) {
   return (
-    <motion.div
+    <m.div
       ref={dropdownRef}
       key={filterKey}
       initial={{ opacity: 0, y: -4 }}
@@ -299,6 +299,6 @@ function FilterDropdown({
         onChange={onChange}
         disciplineOptions={disciplineOptions}
       />
-    </motion.div>
+    </m.div>
   );
 }

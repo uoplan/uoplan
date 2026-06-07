@@ -4,11 +4,21 @@ import { lingui } from "@lingui/vite-plugin";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { playwright } from "@vitest/browser-playwright";
+import { visualizer } from "rollup-plugin-visualizer";
 import { changelogHtmlPlugin } from "./vite/changelog-html-plugin";
+
+const analyze = process.env.ANALYZE === "1";
 
 export default defineConfig({
   plugins: [
     changelogHtmlPlugin(),
+    analyze &&
+      visualizer({
+        filename: "dist/stats.html",
+        gzipSize: true,
+        brotliSize: true,
+        template: "treemap",
+      }),
     tanstackRouter({
       target: "react",
       autoCodeSplitting: true,

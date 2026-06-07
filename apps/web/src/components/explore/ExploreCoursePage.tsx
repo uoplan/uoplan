@@ -1,7 +1,7 @@
 import { Accordion, Box, Stack, Text, Title } from "@mantine/core";
 import { useEffect, useMemo } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import type { ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeCourseCode } from "@uoplan/core";
 import { useTr, tr } from "../../i18n";
@@ -116,7 +116,7 @@ export function ExploreCoursePage({
   }, [selectedCourseMeta, urlCourseParam]);
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
@@ -238,6 +238,6 @@ export function ExploreCoursePage({
           </Box>
         )}
       </Stack>
-    </motion.div>
+    </m.div>
   );
 }

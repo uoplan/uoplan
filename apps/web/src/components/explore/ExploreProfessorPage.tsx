@@ -1,6 +1,6 @@
 import { Accordion, Box, Group, Stack, Text, Title } from "@mantine/core";
 import { useMemo } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import type { ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeProfessorName, hasProfessorRatings } from "@uoplan/core";
 import { useTr, tr } from "../../i18n";
@@ -54,7 +54,7 @@ export function ExploreProfessorPage({
   const profRouteParam = legacyId != null ? String(legacyId) : encodeURIComponent(displayName);
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
@@ -170,6 +170,6 @@ export function ExploreProfessorPage({
           </Box>
         )}
       </Stack>
-    </motion.div>
+    </m.div>
   );
 }
