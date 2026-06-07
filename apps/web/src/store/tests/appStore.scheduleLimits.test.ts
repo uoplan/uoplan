@@ -354,6 +354,74 @@ describe("schedule generation respects per-category limits", () => {
     expect(generationError).not.toBeNull();
   });
 
+  it("keeps the previous schedule when a re-generation fails", async () => {
+    const gradOnlyCatalogue: Catalogue = {
+      courses: [
+        { code: "SEG 5100", title: "SEG 5100", credits: 3, description: "", component: "LEC" },
+      ],
+      programs: [],
+    };
+    const gradOnlySchedules: SchedulesData = {
+      termId: "2261",
+      schedules: [
+        {
+          subject: "SEG",
+          catalogNumber: "5100",
+          courseCode: "SEG 5100",
+          title: "SEG 5100",
+          timeZone: "America/Toronto",
+          components: {},
+        },
+      ],
+    };
+    const freeElectiveOnly: Program = {
+      title: "Free elective only",
+      url: "",
+      requirements: [{ type: "free_elective", title: "3 free elective credits", credits: 3 }],
+    };
+
+    const cache = buildDataCache(gradOnlyCatalogue, gradOnlySchedules);
+    const completedCourses: string[] = [];
+    const { remaining } = computeRequirementsState(freeElectiveOnly, completedCourses, cache);
+    const store = defaultAppStore;
+
+    // A schedule already on screen (the object identity is the assertion target).
+    const existingSchedule = { enrollments: [] };
+
+    store.setState({
+      ...store.getState(),
+      catalogue: { courses: gradOnlyCatalogue.courses, programs: [freeElectiveOnly] },
+      schedulesData: gradOnlySchedules,
+      cache,
+      program: freeElectiveOnly,
+      completedCourses,
+      remainingRequirements: remaining,
+      requirementTreeWithStatus: [],
+      completedRequirementsList: [],
+      selectedPerRequirement: {},
+      requirementSlotsUserTouched: {},
+      selectedOptionsPerRequirement: {},
+      prereqEligibleCourses: ["SEG 5100"],
+      filteredPrereqEligibleCourses: ["SEG 5100"],
+      levelBuckets: ["undergrad", "grad"],
+      languageBuckets: ["en", "other"],
+      electiveLevelBuckets: [1000, 2000, 3000, 4000],
+      coursesThisSemester: 1,
+      currentSchedule: existingSchedule,
+      currentSeed: 1234,
+      generationError: null,
+    });
+
+    await store.getState().generateSchedules();
+
+    const { currentSchedule, generationError, currentSeed } = store.getState();
+    // The failing re-generation must not wipe the calendar.
+    expect(currentSchedule).toBe(existingSchedule);
+    expect(currentSeed).toBe(1234);
+    // ...but the error is still surfaced so the toast fires.
+    expect(generationError).not.toBeNull();
+  });
+
   it("applies elective-level buckets only to elective pools", async () => {
     const scopedCatalogue: Catalogue = {
       courses: [

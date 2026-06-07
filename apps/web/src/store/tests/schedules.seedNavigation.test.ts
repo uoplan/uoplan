@@ -167,4 +167,19 @@ describe("schedules navigation variety detection (full timetable fingerprint)", 
     expect(defaultAppStore.getState().scheduleNoVariety).toBe(true);
     expect(generateSchedulesActionMock).toHaveBeenCalledTimes(30);
   });
+
+  it("keeps the current schedule and seed when a seed-nav generation fails", async () => {
+    generateSchedulesActionMock.mockResolvedValue({
+      ...mockResult,
+      currentSchedule: null,
+      generationError: { message: { kind: "lead", lead: "no-courses" }, details: null },
+    });
+
+    await defaultAppStore.getState().goToNextSeed();
+
+    const state = defaultAppStore.getState();
+    expect(state.currentSchedule?.enrollments[0].sectionCombo.LEC.section.section).toBe("A");
+    expect(state.currentSeed).toBe(firstSeed);
+    expect(state.generationError).not.toBeNull();
+  });
 });
