@@ -860,10 +860,10 @@ msgstr "No grade breakdown for this section."
 msgid "explore.sort.ascending"
 msgstr "Ascending"
 
-msgid "explore.sort.avgGrade"
+msgid "explore.sort.grade"
 msgstr "Average grade"
 
-msgid "explore.sort.courseCode"
+msgid "explore.sort.code"
 msgstr "Course code"
 
 msgid "explore.sort.descending"
@@ -875,7 +875,7 @@ msgstr "Direction"
 msgid "explore.sort.label"
 msgstr "Sort"
 
-msgid "explore.sort.profRating"
+msgid "explore.sort.rating"
 msgstr "Professor rating"
 
 msgid "explore.sort.relevance"

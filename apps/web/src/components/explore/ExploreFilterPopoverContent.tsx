@@ -51,16 +51,16 @@ const RATINGS: { value: number; labelKey: string }[] = [
 
 const SORT_OPTIONS: { value: ExploreSortKey; labelKey: string }[] = [
   { value: "relevance", labelKey: "explore.sort.relevance" },
-  { value: "avgGrade", labelKey: "explore.sort.avgGrade" },
-  { value: "courseCode", labelKey: "explore.sort.courseCode" },
-  { value: "profRating", labelKey: "explore.sort.profRating" },
+  { value: "grade", labelKey: "explore.sort.grade" },
+  { value: "code", labelKey: "explore.sort.code" },
+  { value: "rating", labelKey: "explore.sort.rating" },
 ];
 
 const SORT_DEFAULT_DIR: Record<ExploreSortKey, ExploreSortDir> = {
   relevance: "desc",
-  avgGrade: "desc",
-  courseCode: "asc",
-  profRating: "desc",
+  grade: "desc",
+  code: "asc",
+  rating: "desc",
 };
 
 const checkboxStyles = {

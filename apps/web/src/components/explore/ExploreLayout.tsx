@@ -199,7 +199,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       langs: params.langs ?? undefined,
       disc: params.disc ?? undefined,
       difficulty: params.difficulty ?? undefined,
-      minRating: params.minRating ?? undefined,
+      rating: params.rating ?? undefined,
       sort: params.sort ?? undefined,
       dir: params.dir ?? undefined,
     };
@@ -262,8 +262,8 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     if (!activeFilters) return rawSearchResults;
     const filteredCourses = filterCourseEntries(rawSearchResults.courses, filters);
     const filteredProfessors = filterProfessorEntries(rawSearchResults.professors, filters);
-    const shouldSortCourses = filters.sortKey === "avgGrade" || filters.sortKey === "courseCode";
-    const shouldSortProfessors = filters.sortKey === "profRating";
+    const shouldSortCourses = filters.sortKey === "grade" || filters.sortKey === "code";
+    const shouldSortProfessors = filters.sortKey === "rating";
     return {
       ...rawSearchResults,
       courses: shouldSortCourses
@@ -284,7 +284,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     if (q || !activeFilters) return null;
     const filtered = dedupeCourseEntriesByComponent(filterCourseEntries(courseEntries, filters));
     if (filters.sortKey === "relevance") return filtered.slice(0, 24);
-    if (filters.sortKey === "profRating") return filtered.slice(0, 24);
+    if (filters.sortKey === "rating") return filtered.slice(0, 24);
     return filtered
       .slice()
       .sort((a, b) => compareCourseEntries(a, b, filters.sortKey, filters.sortDir))
