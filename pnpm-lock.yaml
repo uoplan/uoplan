@@ -241,9 +241,6 @@ importers:
       '@uoplan/data':
         specifier: workspace:*
         version: link:../../packages/data
-      '@uoplan/engine':
-        specifier: workspace:*
-        version: link:../../packages/engine
       '@uoplan/proto':
         specifier: workspace:*
         version: link:../../packages/proto

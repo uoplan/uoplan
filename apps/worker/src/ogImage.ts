@@ -1,21 +1,11 @@
 import { initWasm, Resvg } from "@resvg/resvg-wasm";
 import {
-  buildDataCache,
-  decodeStateFromBase64,
   enrichSchedulesDataWithGrades,
   getGradeLookups,
-  getMergedCatalogue,
-  peekTermAndYearFromBase64,
-  reconstructScheduleForPreview,
+  reconstructScheduleFromPreview,
 } from "@uoplan/core";
-import {
-  loadCatalogue,
-  loadCatalogueManifest,
-  loadGrades,
-  loadIndices,
-  loadSchedules,
-  optional,
-} from "@uoplan/data";
+import { SchedulePreview } from "@uoplan/proto/state";
+import { loadGrades, loadSchedules, optional } from "@uoplan/data";
 import { createAssetsTransport } from "@uoplan/data/worker";
 import {
   renderCalendarToSvg,
@@ -23,7 +13,6 @@ import {
   computeWeekGroups,
   slotActiveInWeek,
 } from "@uoplan/calendar";
-import { buildEngine } from "./engineHost.js";
 import type { Env } from "./index.js";
 
 // @ts-ignore - wrangler handles .wasm imports as WebAssembly.Module
@@ -37,10 +26,13 @@ async function ensureWasm() {
   wasmInitialized = true;
 }
 
-function base64urlToBase64(s: string): string {
+function base64urlToBytes(s: string): Uint8Array {
   const padded = s.replace(/-/g, "+").replace(/_/g, "/");
   const pad = (4 - (padded.length % 4)) % 4;
-  return padded + "=".repeat(pad);
+  const binary = atob(padded + "=".repeat(pad));
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
 }
 
 function fallbackSvg(): string {
@@ -69,15 +61,19 @@ const defaultCache = (caches as unknown as { default: Cache }).default;
 
 export async function handleOgImage(
   stateBase64url: string,
+  schedulePayload: string | undefined,
   env: Env,
   origin: string,
 ): Promise<Response> {
-  const cacheKey = new Request(`https://og-cache.internal/v1/${stateBase64url}`);
+  // The rendered image depends solely on the embedded schedule payload (courses
+  // + sections), so cache on it. Links without a payload share the placeholder.
+  const cacheId = schedulePayload ?? `nopayload/${stateBase64url}`;
+  const cacheKey = new Request(`https://og-cache.internal/v2/${cacheId}`);
 
   const cached = await defaultCache.match(cacheKey);
   if (cached) return cached;
 
-  const png = await generatePng(stateBase64url, env, origin);
+  const png = await generatePng(schedulePayload, env, origin);
 
   const response = new Response(png.buffer as ArrayBuffer, {
     headers: {
@@ -90,8 +86,11 @@ export async function handleOgImage(
   return response;
 }
 
-async function generatePng(stateBase64url: string, env: Env, origin: string): Promise<Uint8Array> {
-  const base64 = base64urlToBase64(stateBase64url);
+async function generatePng(
+  schedulePayload: string | undefined,
+  env: Env,
+  origin: string,
+): Promise<Uint8Array> {
   const transport = createAssetsTransport(env.ASSETS, origin);
   const [fontRegular, fontBold] = await Promise.all([
     optional(transport, "/fonts/dm-mono-regular.ttf"),
@@ -100,81 +99,28 @@ async function generatePng(stateBase64url: string, env: Env, origin: string): Pr
   const fonts = [fontRegular, fontBold].filter(Boolean) as Uint8Array[];
   const fallback = () => svgToPng(fallbackSvg(), fonts);
 
+  if (!schedulePayload) return fallback();
+
   try {
-    const peek = peekTermAndYearFromBase64(base64);
-    if (!peek) {
-      return fallback();
-    }
-    const termId = peek.termId;
-    if (!termId) {
+    const preview = SchedulePreview.decode(base64urlToBytes(schedulePayload));
+    const termId = String(preview.termId);
+    if (!termId || preview.courses.length === 0) {
       return fallback();
     }
 
-    const manifest = await loadCatalogueManifest(transport);
-    const yearForCatalogue = peek.firstYear
-      ? (manifest.years.find((y) => y <= peek.firstYear!) ??
-        manifest.years[manifest.years.length - 1])
-      : manifest.years[0];
-    const latestYear = manifest.years[0];
-    if (!yearForCatalogue || latestYear === undefined) {
-      return fallback();
-    }
-
-    const [latestCatalogue, yearCatalogueObj, rawSchedules, indices, grades] = await Promise.all([
-      loadCatalogue(transport, latestYear),
-      yearForCatalogue !== latestYear
-        ? loadCatalogue(transport, yearForCatalogue)
-        : Promise.resolve(null),
+    const [rawSchedules, grades] = await Promise.all([
       loadSchedules(transport, termId),
-      loadIndices(transport),
       loadGrades(transport).catch(() => null),
     ]);
 
     // Grade distributions are no longer embedded in schedules.NNNN.pb, so
-    // reconstruct them from grades.pb. This keeps both the "prefer easier"
-    // difficulty index used by reconstruction AND the grade bars rendered on
-    // the OG image correct. Grades are optional: a failure degrades gracefully.
+    // reconstruct them from grades.pb for the grade bars rendered on the OG
+    // image. Grades are optional: a failure degrades gracefully.
     const schedulesData = grades
       ? enrichSchedulesDataWithGrades(rawSchedules, getGradeLookups(grades), Number(termId))
       : rawSchedules;
 
-    const catalogueForDecode = getMergedCatalogue(
-      latestCatalogue,
-      yearCatalogueObj?.courses ?? null,
-      [],
-    );
-    const decodedForCompleted = decodeStateFromBase64(base64, catalogueForDecode, indices);
-    const completedCourses =
-      "error" in decodedForCompleted ? [] : decodedForCompleted.completedCourseCodes;
-    const catalogue = getMergedCatalogue(
-      latestCatalogue,
-      yearCatalogueObj?.courses ?? null,
-      completedCourses,
-    );
-
-    const cache = buildDataCache(catalogue, schedulesData);
-
-    const decoded = decodeStateFromBase64(base64, catalogue, indices);
-    if ("error" in decoded) {
-      return fallback();
-    }
-
-    const constraints = {
-      minStartMinutes: decoded.generationMinStartMinutes,
-      maxEndMinutes: decoded.generationMaxEndMinutes,
-      compressedSchedule: decoded.generationCompressedSchedule,
-      blockedTimes: decoded.blockedTimes,
-    };
-
-    const engine = buildEngine(catalogue, schedulesData);
-    let reconstructed: ReturnType<typeof reconstructScheduleForPreview>;
-    try {
-      reconstructed = reconstructScheduleForPreview(engine, decoded, cache, constraints);
-    } finally {
-      // Release the WASM-side allocation so engines don't accumulate in the
-      // isolate across OG cache misses.
-      (engine as unknown as { free?: () => void }).free?.();
-    }
+    const reconstructed = reconstructScheduleFromPreview(preview, schedulesData);
     if (!reconstructed || reconstructed.schedule.enrollments.length === 0) {
       return fallback();
     }

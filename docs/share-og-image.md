@@ -12,33 +12,40 @@ When a user clicks **Share**, `getShareUrl()` in `apps/web/src/store/slices/url.
 
 1. Encodes the current Zustand state to a compressed protobuf using `encodeStateToBase64()` from `@uoplan/core`
 2. Converts the resulting standard base64 string to **base64url** (replaces `+`→`-`, `/`→`_`, strips `=`) so it is safe as a URL path segment
-3. Returns `${origin}/api/share/${base64url}`
+3. If a schedule has been generated, encodes the **currently displayed schedule** as an index-based `SchedulePreview` (`@uoplan/proto`'s `schedule.SchedulePreview`) via `encodeSchedulePreview()` and appends it as a `?p=<payload>` query param. Rather than course/section strings, selections are stored as indices into the term's schedules dataset (`schedules.<term>.pb`) — `courseIndex` into the schedules array, and parallel packed `componentIndices`/`sectionIndices` arrays (component into the course's sorted component keys, section into that component's sections) — which keeps the URL compact since the worker loads the same dataset
+4. Returns `${origin}/api/share/${base64url}` (with `?p=…` when a schedule exists)
+
+The `?p` payload lets the OG-image worker render the exact schedule **without re-running schedule generation**. The primary state (path segment) remains the canonical share state used for the redirect; `?p` is only consumed by the OG image.
 
 ### `/api/share/:state` (HTML redirect)
 
 `buildShareHtml()` in `apps/worker/src/index.ts` produces a minimal HTML page with:
 
 - `og:title`, `og:description`, `og:type`
-- `og:image` → `https://uoplan.party/api/og-image/:state`
+- `og:image` → `https://uoplan.party/api/og-image/:state?p=<payload>` (the `?p` schedule payload is forwarded only to the OG image)
 - `og:image:width` / `og:image:height` (1200×630)
 - `twitter:card summary_large_image`
-- A `<script>` that immediately redirects to `/schedule/calendar/?s=<state>` (the state is converted back from base64url to standard base64 for the `?s=` query parameter used by the app)
+- A `<script>` that immediately redirects to `/schedule/calendar/?s=<state>` — built from the **primary** path state only (converted back from base64url to standard base64). The `?p` payload is **not** preserved in the redirect.
 
 When a social bot (Discord, iMessage, etc.) scrapes the page it sees the OG tags; regular browsers are instantly redirected to the app.
 
 ### `/api/og-image/:state` (PNG)
 
-Implemented in `apps/worker/src/ogImage.ts`:
+Implemented in `apps/worker/src/ogImage.ts`. It renders directly from the embedded `?p` schedule payload — **no engine, no catalogue/indices, no wizard-state decoding**:
 
-1. **Cache lookup** — checks the Workers Cache API keyed on the state string
-2. **Peek** — `peekTermAndYearFromBase64()` reads `termId` and `firstYear` without catalogue-dependent state decoding
-3. **Fetch data assets** from `env.ASSETS` (catalogue manifest → catalogue year → schedules for term → indices)
-4. **Decode state** — `decodeStateFromBase64()` returns `DecodedState` with all selections and swaps
-5. **Reconstruct schedule** — `reconstructScheduleForPreview(engine, decoded, cache, constraints)` from `@uoplan/core` delegates to `generateScheduleFromDecodedState()` in `packages/core/src/scheduleFromStateEngine.ts`, which builds a `GenerationRequest` and calls the **shared Rust/WASM engine** — the same engine the web app uses (`packages/engine`, see [schedule-generation.md](schedule-generation.md)). The Worker initializes the engine in-process via `apps/worker/src/engineHost.ts` (`initSync` + `import engineWasm from "@uoplan/engine/engine.wasm"`). This guarantees the OG image shows the same courses the user sees in their browser, with no duplicated generation logic.
-6. **Render** — `reconstructScheduleForPreview()` returns `{ schedule, colorMap }`; the `colorMap` already has swap colour-inheritance applied so colours match the live calendar. `scheduleToEvents()` and `renderCalendarToSvg()` from `@uoplan/calendar` produce an SVG; `@resvg/resvg-wasm` converts SVG → PNG
+1. **Cache lookup** — checks the Workers Cache API keyed on the `?p` payload (links without a payload share a single placeholder cache entry)
+2. **Decode payload** — `SchedulePreview.decode()` yields the term + the chosen courses and sections as indices. If `?p` is absent or invalid, a fallback PNG with the uoplan wordmark is returned (there is **no** fallback to full generation)
+3. **Fetch data assets** from `env.ASSETS` — only `schedules.<termId>.pb` (+ optional `grades.pb`)
+4. **Enrich grades** — `enrichSchedulesDataWithGrades()` re-attaches grade distributions (no longer embedded in `schedules.*.pb`) so the grade bars render; degrades gracefully if grades are missing
+5. **Reconstruct** — `reconstructScheduleFromPreview(preview, schedulesData)` from `@uoplan/core` resolves each course/section index against the schedules data, assembles the `SectionCombo`s + meeting times, and returns `{ schedule, colorMap }` (colours recomputed with `buildColorMap`). This is fast because it skips the requirement solve + timetabling entirely
+6. **Render** — `scheduleToEvents()` and `renderCalendarToSvg()` from `@uoplan/calendar` produce an SVG; `@resvg/resvg-wasm` converts SVG → PNG
 7. **Cache** — the PNG response is stored in the Workers Cache with `max-age=86400`
 
-If any step fails (invalid state, missing data, generation produces no schedule) a fallback PNG with the uoplan wordmark is returned.
+> **Note on colours and swaps:** colours are recomputed from the final schedule via `buildColorMap`, so they match the live calendar exactly for generated schedules. After manual course _swaps_ the recomputed colours may differ slightly from the live calendar.
+>
+> **Note on old links:** share links created before this change (no `?p`) render the placeholder image rather than the schedule.
+>
+> **Note on index stability:** the `?p` indices reference the deployed `schedules.<term>.pb`. If that dataset is re-scraped/redeployed between a link being created and a bot scraping it, the indices could shift; in practice bots scrape links within seconds, and a mismatch only degrades to a wrong/placeholder preview (never affects the redirect).
 
 ## How to change it
 
@@ -56,7 +63,7 @@ Edit `packages/calendar/src/render.ts` — `renderCalendarToSvg()` is a pure fun
 
 ### Changing what schedule is reconstructed
 
-Edit `packages/core/src/reconstruct.ts` — `reconstructScheduleForPreview()` — and the underlying `packages/core/src/scheduleFromStateEngine.ts`. The function builds a `GenerationRequest` from the decoded state and runs the shared Rust/WASM engine (same code path as `generateSchedulesAction`), then applies swaps.
+Edit `packages/core/src/schedulePreview.ts` — `reconstructScheduleFromPreview()`. It resolves the embedded `SchedulePreview` indices against the term's `SchedulesData` to build enrollments. The payload itself is produced by `buildSchedulePreview()` (same file) — wrapped by `encodeSchedulePreview()` in `apps/web/src/lib/encodeSchedulePreview.ts`; the encode and decode sides must agree on the index basis (course → `SchedulesData.schedules[]`, component → sorted component keys, section → that component's array).
 
 ### Adding more OG tags
 
@@ -66,16 +73,19 @@ Edit `buildShareHtml()` in `apps/worker/src/index.ts`.
 
 No additional env vars or wrangler bindings are needed. The endpoints rely on:
 
-- `env.ASSETS` — to fetch `.pb` data files (`catalogue.pb`, `catalogue.YEAR.pb`, `schedules.TERMID.pb`, `indices.pb`)
+- `env.ASSETS` — to fetch `.pb` data files (`schedules.TERMID.pb`, optional `grades.pb`)
 - `caches.default` — Workers Cache API for PNG memoisation
 
 Both are already present in the standard worker deployment.
 
 ## Dependencies
 
-| Package             | Purpose                                                          |
-| ------------------- | ---------------------------------------------------------------- |
-| `@uoplan/calendar`  | Calendar layout, event conversion, and SVG rendering             |
-| `@uoplan/core`      | State decoding, data cache building, and schedule reconstruction |
-| `@uoplan/data`      | Loading `.pb` data assets in the Worker                          |
-| `@resvg/resvg-wasm` | SVG → PNG conversion in the Worker (WASM, no native modules)     |
+| Package             | Purpose                                                              |
+| ------------------- | -------------------------------------------------------------------- |
+| `@uoplan/calendar`  | Calendar layout, event conversion, and SVG rendering                 |
+| `@uoplan/core`      | `reconstructScheduleFromPreview`, grade enrichment                   |
+| `@uoplan/proto`     | `schedule.SchedulePreview` wire format for the embedded `?p` payload |
+| `@uoplan/data`      | Loading `.pb` data assets in the Worker                              |
+| `@resvg/resvg-wasm` | SVG → PNG conversion in the Worker (WASM, no native modules)         |
+
+The worker no longer depends on `@uoplan/engine`: the OG image is rendered from the embedded schedule payload rather than re-running schedule generation.

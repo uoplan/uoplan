@@ -1,32 +1,29 @@
 #!/usr/bin/env node
 /**
  * Local OG image test script.
- * Usage: pnpm og-image <base64url_state>
+ * Usage: pnpm og-image <base64url_schedule_payload>
  *
- * Reads .pb data files from apps/web/public/data/, runs the same pipeline as
- * the worker's /api/og-image/:state endpoint, and writes playground/og-image.png.
+ * The argument is the `p` payload embedded in a share URL — a base64url-encoded
+ * `SchedulePreview` (index-based courses + sections + term), the same value the
+ * web app appends in `getShareUrl()`. This script reads .pb data files from
+ * apps/web/public/data/, runs the same fast-path pipeline as the worker's
+ * /api/og-image endpoint (no schedule generation), and writes
+ * playground/og-image.png.
  */
 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { initWasm, Resvg } from "@resvg/resvg-wasm";
-import { initSync as initEngineWasm, Engine } from "@uoplan/engine";
 import {
   DataProto,
-  buildDataCache,
-  decodeStateFromBase64,
-  fromProtoCatalogue,
-  fromProtoCatalogueManifest,
-  fromProtoIndices,
+  enrichSchedulesDataWithGrades,
+  fromProtoCourseGradesData,
   fromProtoSchedulesData,
-  getMergedCatalogue,
-  peekTermAndYearFromBase64,
-  reconstructScheduleForPreview,
-  toProtoCatalogue,
-  toProtoSchedulesData,
-  type ScheduleEngine,
+  getGradeLookups,
+  reconstructScheduleFromPreview,
 } from "@uoplan/core";
+import { SchedulePreview } from "@uoplan/proto/state";
 import { renderCalendarToSvg, scheduleToEvents } from "@uoplan/calendar";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -37,10 +34,10 @@ const _workerRoot: string =
 const ROOT = join(_workerRoot, "../..");
 const DATA_DIR = join(ROOT, "apps/web/public/data");
 
-function base64urlToBase64(s: string): string {
+function base64urlToBytes(s: string): Uint8Array {
   const padded = s.replace(/-/g, "+").replace(/_/g, "/");
   const pad = (4 - (padded.length % 4)) % 4;
-  return padded + "=".repeat(pad);
+  return new Uint8Array(Buffer.from(padded + "=".repeat(pad), "base64"));
 }
 
 function readData(filename: string): Uint8Array | null {
@@ -60,9 +57,9 @@ function fallbackSvg(): string {
 }
 
 async function run() {
-  const stateBase64url = process.argv.slice(2).find((a) => a !== "--");
-  if (!stateBase64url) {
-    console.error("Usage: pnpm og-image <base64url_state>");
+  const payloadBase64url = process.argv.slice(2).find((a) => a !== "--");
+  if (!payloadBase64url) {
+    console.error("Usage: pnpm og-image <base64url_schedule_payload>");
     process.exit(1);
   }
 
@@ -76,112 +73,25 @@ async function run() {
 
   let svg: string;
 
-  const base64 = base64urlToBase64(stateBase64url);
+  const payload = SchedulePreview.decode(base64urlToBytes(payloadBase64url));
+  const termId = String(payload.termId);
+  console.log("[og-image] termId:", termId, "courses:", payload.courses.length);
 
-  console.log("[og-image] base64url length:", stateBase64url.length);
-  console.log("[og-image] base64 (first 80):", base64.slice(0, 80));
-
-  const peek = peekTermAndYearFromBase64(base64);
-  console.log("[og-image] peek:", peek);
-  if (!peek) {
-    console.warn("[og-image] Could not peek term/year from state — using fallback");
+  const schedulesBytes = readData(`schedules.${termId}.pb`);
+  if (!schedulesBytes || payload.courses.length === 0) {
+    console.warn("[og-image] Missing schedules data or empty payload — using fallback");
     svg = fallbackSvg();
   } else {
-    const manifestBytes = readData("catalogue.pb");
-    const indicesBytes = readData("indices.pb");
-
-    if (!manifestBytes || !indicesBytes) {
-      console.error("Missing catalogue.pb or indices.pb in", DATA_DIR);
-      process.exit(1);
-    }
-
-    const manifest = fromProtoCatalogueManifest(DataProto.CatalogueManifest.decode(manifestBytes));
-    console.log("[og-image] manifest years:", manifest.years);
-    const yearForCatalogue = peek.firstYear
-      ? (manifest.years.find((y) => y <= peek.firstYear!) ??
-        manifest.years[manifest.years.length - 1])
-      : manifest.years[0];
-
-    console.log(
-      "[og-image] peek.firstYear:",
-      peek.firstYear,
-      "→ yearForCatalogue:",
-      yearForCatalogue,
-    );
-
-    if (!yearForCatalogue) {
-      console.error("No matching catalogue year for firstYear:", peek.firstYear);
-      process.exit(1);
-    }
-
-    const termId = peek.termId;
-    console.log("[og-image] termId:", termId);
-    if (!termId) {
-      console.error("No termId in state");
-      process.exit(1);
-    }
-
-    const latestYear = manifest.years[0]!;
-    const latestCatalogueBytes = readData(`catalogue.${latestYear}.pb`);
-    const yearCatalogueBytes =
-      yearForCatalogue !== latestYear ? readData(`catalogue.${yearForCatalogue}.pb`) : null;
-    const schedulesBytes = readData(`schedules.${termId}.pb`);
-
-    if (!latestCatalogueBytes || !schedulesBytes) {
-      console.error(`Missing catalogue.${latestYear}.pb or schedules.${termId}.pb in ${DATA_DIR}`);
-      process.exit(1);
-    }
-
-    const latestCatalogue = fromProtoCatalogue(DataProto.Catalogue.decode(latestCatalogueBytes));
-    const yearCatalogueObj = yearCatalogueBytes
-      ? fromProtoCatalogue(DataProto.Catalogue.decode(yearCatalogueBytes))
+    const rawSchedules = fromProtoSchedulesData(DataProto.SchedulesData.decode(schedulesBytes));
+    const gradesBytes = readData("grades.pb");
+    const grades = gradesBytes
+      ? fromProtoCourseGradesData(DataProto.GradesData.decode(gradesBytes))
       : null;
-    const indices = fromProtoIndices(DataProto.Indices.decode(indicesBytes));
+    const schedulesData = grades
+      ? enrichSchedulesDataWithGrades(rawSchedules, getGradeLookups(grades), Number(termId))
+      : rawSchedules;
 
-    // Decode first with empty completedCourses to get the actual completed courses,
-    // then re-merge with them (mirrors the web app's two-step load).
-    const catalogueForDecode = getMergedCatalogue(
-      latestCatalogue,
-      yearCatalogueObj?.courses ?? null,
-      [],
-    );
-    const decodedForCompleted = decodeStateFromBase64(base64, catalogueForDecode, indices);
-    const completedCourses =
-      "error" in decodedForCompleted ? [] : decodedForCompleted.completedCourseCodes;
-    const catalogue = getMergedCatalogue(
-      latestCatalogue,
-      yearCatalogueObj?.courses ?? null,
-      completedCourses,
-    );
-
-    const schedulesData = fromProtoSchedulesData(DataProto.SchedulesData.decode(schedulesBytes));
-    const cache = buildDataCache(catalogue, schedulesData);
-
-    const decoded = decodeStateFromBase64(base64, catalogue, indices);
-    if ("error" in decoded) {
-      console.error("Failed to decode state:", decoded.error);
-      process.exit(1);
-    }
-
-    const constraints = {
-      minStartMinutes: decoded.generationMinStartMinutes,
-      maxEndMinutes: decoded.generationMaxEndMinutes,
-      compressedSchedule: decoded.generationCompressedSchedule,
-      blockedTimes: decoded.blockedTimes,
-    };
-
-    const engineWasmBytes = readFileSync(join(ROOT, "packages/engine/pkg/uoplan_engine_bg.wasm"));
-    const ModuleCtor = WebAssembly.Module as unknown as new (
-      bytes: Uint8Array,
-    ) => WebAssembly.Module;
-    initEngineWasm({ module: new ModuleCtor(engineWasmBytes) });
-    const catalogueBytes = DataProto.Catalogue.encode(toProtoCatalogue(catalogue)).finish();
-    const schedulesProtoBytes = DataProto.SchedulesData.encode(
-      toProtoSchedulesData(schedulesData),
-    ).finish();
-    const engine = new Engine(catalogueBytes, schedulesProtoBytes) as unknown as ScheduleEngine;
-
-    const reconstructed = reconstructScheduleForPreview(engine, decoded, cache, constraints);
+    const reconstructed = reconstructScheduleFromPreview(payload, schedulesData);
     if (!reconstructed || reconstructed.schedule.enrollments.length === 0) {
       console.warn("[og-image] No schedule reconstructed — using fallback");
       svg = fallbackSvg();
