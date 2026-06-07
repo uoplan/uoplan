@@ -78,7 +78,32 @@ export type ExploreOfferingFlat = {
   section?: string;
   fuseText: string;
   distribution: Record<string, number>;
+  /** True when the section has no real instructor (e.g. the "Staff" placeholder). */
+  unassignedInstructor?: boolean;
 };
+
+/**
+ * Display name used for offerings without a real instructor. Kept empty so these
+ * rows never surface "Staff" in search text, links, or professor indices.
+ */
+const UNASSIGNED_INSTRUCTOR = "";
+
+/** Stable group id collecting every unassigned-instructor offering of a course. */
+const UNASSIGNED_GROUP_ID = "unassigned";
+
+/**
+ * "Staff" is uOttawa's placeholder for an unassigned instructor. Treat it (and an
+ * already-empty name) as "no professor" rather than a real person.
+ */
+function isUnassignedInstructorName(name: string): boolean {
+  const norm = normalizeProfessorName(name).toLowerCase();
+  return norm === "" || norm === "staff";
+}
+
+/** Whether an offering has no real instructor (collapsed into the unassigned group). */
+function isUnassignedOffering(o: ExploreOfferingFlat): boolean {
+  return o.unassignedInstructor === true || isUnassignedInstructorName(o.professorName);
+}
 
 const EXPLORE_FUSE_OPTIONS: IFuseOptions<ExploreOfferingFlat> = {
   keys: ["fuseText"],
@@ -121,15 +146,18 @@ export function buildExploreOfferings(
     const norm = normalizeCourseCode(c.code);
     const title = titleByCode.get(norm) ?? "";
     for (const p of c.professors) {
-      // "Staff" is a placeholder for an unassigned instructor; never surface it.
-      if (normalizeProfessorName(p.name).toLowerCase() === "staff") continue;
+      // "Staff" is a placeholder for an unassigned instructor: keep the offering so the
+      // course stays searchable, but strip the fake professor (no name, no legacyId).
+      const unassigned = isUnassignedInstructorName(p.name);
+      const professorName = unassigned ? UNASSIGNED_INSTRUCTOR : p.name;
+      const legacyId = unassigned ? undefined : p.legacyId;
       const termLabel = formatTermLabelPlain(p.termId);
       const fuseText = [
         c.code,
         norm,
         title,
-        p.name,
-        p.legacyId != null ? String(p.legacyId) : "",
+        professorName,
+        legacyId != null ? String(legacyId) : "",
         termLabel,
         p.section ?? "",
       ]
@@ -139,20 +167,21 @@ export function buildExploreOfferings(
       out.push({
         id: offeringId({
           courseCode: c.code,
-          legacyId: p.legacyId,
-          name: p.name,
+          legacyId,
+          name: professorName,
           termId: p.termId,
           section: p.section,
         }),
         courseCode: c.code,
         courseTitle: title,
-        professorName: p.name,
-        legacyId: p.legacyId,
+        professorName,
+        legacyId,
         termId: p.termId,
         termLabel,
         section: p.section,
         fuseText,
         distribution: p.distribution,
+        unassignedInstructor: unassigned,
       });
     }
   }
@@ -425,36 +454,39 @@ export function buildExploreProfessorSearchEntries(
   offerings: ExploreOfferingFlat[],
   professorRatings?: ProfessorRatingsMap | null,
 ): ExploreProfessorSearchEntry[] {
-  return groupOfferingsByProfessor(offerings).map((g) => {
-    const rmpEntry = professorRatings?.[normalizeProfessorName(g.displayName)];
-    const maxRating = rmpEntry && Number.isFinite(rmpEntry.rating) ? rmpEntry.rating : null;
-    const disciplines = Array.from(
-      new Set(
-        g.offerings
-          .map((o) => getCourseDiscipline(o.courseCode))
-          .filter((d): d is string => d !== null),
-      ),
-    );
-    return {
-      groupId: g.groupId,
-      legacyId: g.legacyId,
-      displayName: g.displayName,
-      searchText: [g.displayName, g.legacyId != null ? String(g.legacyId) : ""]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase(),
-      uniqueCourseCount: new Set(g.offerings.map((o) => normalizeCourseCode(o.courseCode))).size,
-      disciplines,
-      gradeViz: normalizeGradeVizDistribution(
-        mergeGradeDistributionCounts(g.offerings.map((o) => o.distribution)),
-      ),
-      maxRating,
-    };
-  });
+  return groupOfferingsByProfessor(offerings)
+    .filter((g) => !g.unassigned)
+    .map((g) => {
+      const rmpEntry = professorRatings?.[normalizeProfessorName(g.displayName)];
+      const maxRating = rmpEntry && Number.isFinite(rmpEntry.rating) ? rmpEntry.rating : null;
+      const disciplines = Array.from(
+        new Set(
+          g.offerings
+            .map((o) => getCourseDiscipline(o.courseCode))
+            .filter((d): d is string => d !== null),
+        ),
+      );
+      return {
+        groupId: g.groupId,
+        legacyId: g.legacyId,
+        displayName: g.displayName,
+        searchText: [g.displayName, g.legacyId != null ? String(g.legacyId) : ""]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase(),
+        uniqueCourseCount: new Set(g.offerings.map((o) => normalizeCourseCode(o.courseCode))).size,
+        disciplines,
+        gradeViz: normalizeGradeVizDistribution(
+          mergeGradeDistributionCounts(g.offerings.map((o) => o.distribution)),
+        ),
+        maxRating,
+      };
+    });
 }
 
 /** Stable group id for an offering's professor, matching {@link groupOfferingsByProfessor}. */
 function professorGroupIdForOffering(o: ExploreOfferingFlat): string {
+  if (isUnassignedOffering(o)) return UNASSIGNED_GROUP_ID;
   return o.legacyId != null
     ? `id:${o.legacyId}`
     : `name:${normalizeProfessorName(o.professorName).toLowerCase()}`;
@@ -492,7 +524,7 @@ export function buildTermPresenceIndex(
     courses.add(componentId);
 
     // "Staff" is a placeholder for an unassigned instructor; never index it as a prof.
-    if (normalizeProfessorName(o.professorName).toLowerCase() !== "staff") {
+    if (!o.unassignedInstructor && !isUnassignedInstructorName(o.professorName)) {
       let profs = profGroupsByTerm.get(o.termId);
       if (!profs) {
         profs = new Set();
@@ -685,15 +717,19 @@ export type ProfessorOfferingGroup = {
   legacyId?: number;
   displayName: string;
   offerings: ExploreOfferingFlat[];
+  /** True for the synthetic group collecting sections with no real instructor. */
+  unassigned?: boolean;
 };
 
 export function groupOfferingsByProfessor(items: ExploreOfferingFlat[]): ProfessorOfferingGroup[] {
   const byGroup = new Map<string, ExploreOfferingFlat[]>();
-  const meta = new Map<string, { legacyId?: number; displayName: string }>();
+  const meta = new Map<string, { legacyId?: number; displayName: string; unassigned: boolean }>();
 
   for (const o of items) {
-    const groupId =
-      o.legacyId != null
+    const unassigned = isUnassignedOffering(o);
+    const groupId = unassigned
+      ? UNASSIGNED_GROUP_ID
+      : o.legacyId != null
         ? `id:${o.legacyId}`
         : `name:${normalizeProfessorName(o.professorName).toLowerCase()}`;
     let list = byGroup.get(groupId);
@@ -705,7 +741,11 @@ export function groupOfferingsByProfessor(items: ExploreOfferingFlat[]): Profess
 
     const prev = meta.get(groupId);
     if (!prev) {
-      meta.set(groupId, { legacyId: o.legacyId, displayName: o.professorName });
+      meta.set(groupId, {
+        legacyId: unassigned ? undefined : o.legacyId,
+        displayName: unassigned ? UNASSIGNED_INSTRUCTOR : o.professorName,
+        unassigned,
+      });
     }
   }
 
@@ -724,10 +764,15 @@ export function groupOfferingsByProfessor(items: ExploreOfferingFlat[]): Profess
       legacyId: m.legacyId,
       displayName: m.displayName,
       offerings,
+      unassigned: m.unassigned,
     });
   }
 
-  groups.sort((a, b) => a.displayName.localeCompare(b.displayName, "en"));
+  // Real professors sorted by name; the unassigned group (if any) always sorts last.
+  groups.sort((a, b) => {
+    if (a.unassigned !== b.unassigned) return a.unassigned ? 1 : -1;
+    return a.displayName.localeCompare(b.displayName, "en");
+  });
   return groups;
 }
 
@@ -783,27 +828,30 @@ export function buildScheduleOfferings(
       }
 
       for (const instructor of instructors) {
-        // "Staff" is a placeholder for an unassigned instructor; never surface it.
-        if (normalizeProfessorName(instructor).toLowerCase() === "staff") continue;
+        // "Staff" means no real instructor: keep the section so the course is searchable,
+        // but collapse all such sections to a single unassigned offering (no professor).
+        const unassigned = isUnassignedInstructorName(instructor);
+        const professorName = unassigned ? UNASSIGNED_INSTRUCTOR : instructor;
 
-        const key = scheduleOfferingDedupKey(sched.courseCode, instructor, termId);
+        const key = scheduleOfferingDedupKey(sched.courseCode, professorName, termId);
         if (seen.has(key)) continue;
         seen.add(key);
 
-        const fuseText = [sched.courseCode, norm, title, instructor, termLabel]
+        const fuseText = [sched.courseCode, norm, title, professorName, termLabel]
           .filter(Boolean)
           .join(" ")
           .toLowerCase();
 
         out.push({
-          id: scheduleOfferingId(sched.courseCode, instructor, termId),
+          id: scheduleOfferingId(sched.courseCode, professorName, termId),
           courseCode: sched.courseCode,
           courseTitle: title,
-          professorName: instructor,
+          professorName,
           termId,
           termLabel,
           fuseText,
           distribution: {},
+          unassignedInstructor: unassigned,
         });
       }
     }

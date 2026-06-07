@@ -790,6 +790,10 @@ msgstr "Trimestre"
 msgid "explore.histogramStudents"
 msgstr "{count, plural, one {# étudiant} other {# étudiants}}"
 
+#: apps/web/src/components/explore/ExploreProfessorGradesLayout.tsx:118
+msgid "explore.instructorUnassigned"
+msgstr "Aucun enseignant attribué"
+
 msgid "explore.invalidProfessor"
 msgstr "Lien professeur invalide."
 

@@ -790,6 +790,10 @@ msgstr "Term"
 msgid "explore.histogramStudents"
 msgstr "{count, plural, one {# student} other {# students}}"
 
+#: apps/web/src/components/explore/ExploreProfessorGradesLayout.tsx:118
+msgid "explore.instructorUnassigned"
+msgstr "No instructor assigned"
+
 msgid "explore.invalidProfessor"
 msgstr "Invalid professor link."
 

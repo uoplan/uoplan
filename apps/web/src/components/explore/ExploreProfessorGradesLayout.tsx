@@ -87,7 +87,9 @@ export function ExploreProfessorSummaryBar({
     [group.offerings],
   );
 
-  const ratingLine = professorRatingLine(group.displayName, professorRatings);
+  const ratingLine = group.unassigned
+    ? null
+    : professorRatingLine(group.displayName, professorRatings);
 
   return (
     <Box
@@ -106,29 +108,40 @@ export function ExploreProfessorSummaryBar({
       }}
     >
       <Stack gap={4} style={{ minWidth: 0, flex: "1 1 auto" }}>
-        <Link
-          to="/explore/professor/$legacyId"
-          params={{
-            legacyId:
-              group.legacyId != null
-                ? String(group.legacyId)
-                : encodeURIComponent(group.displayName),
-          }}
-          search={EMPTY_EXPLORE_SEARCH}
-          state={currentEntry ? ({ back: currentEntry } as never) : undefined}
-          onClick={(e) => {
-            if (stopPropagation) e.stopPropagation();
-          }}
-          className="explore-name-link"
-          style={{
-            fontWeight: 600,
-            color: "var(--app-text)",
-            display: "inline",
-            alignSelf: "flex-start",
-          }}
-        >
-          {group.displayName}
-        </Link>
+        {group.unassigned ? (
+          <Text
+            fw={600}
+            c="var(--app-text-muted)"
+            fs="italic"
+            style={{ display: "inline", alignSelf: "flex-start" }}
+          >
+            {tr("explore.instructorUnassigned")}
+          </Text>
+        ) : (
+          <Link
+            to="/explore/professor/$legacyId"
+            params={{
+              legacyId:
+                group.legacyId != null
+                  ? String(group.legacyId)
+                  : encodeURIComponent(group.displayName),
+            }}
+            search={EMPTY_EXPLORE_SEARCH}
+            state={currentEntry ? ({ back: currentEntry } as never) : undefined}
+            onClick={(e) => {
+              if (stopPropagation) e.stopPropagation();
+            }}
+            className="explore-name-link"
+            style={{
+              fontWeight: 600,
+              color: "var(--app-text)",
+              display: "inline",
+              alignSelf: "flex-start",
+            }}
+          >
+            {group.displayName}
+          </Link>
+        )}
         {ratingLine}
         {combinedViz ? <GradeDistributionPassingSummary gradeViz={combinedViz} compact /> : null}
       </Stack>
