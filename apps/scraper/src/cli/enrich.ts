@@ -1,5 +1,5 @@
 /**
- * Re-enrich apps/scraper/data/schedules.*.json with grade distributions from grades.json.
+ * Re-enrich apps/scraper/data/schedules/schedules.*.json with grade distributions from grades.json.
  * Use when grades.json changes without re-running the schedule scraper.
  *
  * Usage:
@@ -9,7 +9,7 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import { SCRAPER_DATA_DIR, SCHEDULES_DATA_DIR } from "../shared/paths.ts";
 import {
   buildGradeLookups,
   enrichSchedulesPayload,
@@ -29,11 +29,11 @@ export async function main(): Promise<void> {
   const gradesRaw = JSON.parse(await fs.readFile(gradesPath, "utf-8")) as unknown;
   const lookups = buildGradeLookups(gradesRaw);
 
-  const entries = await fs.readdir(SCRAPER_DATA_DIR);
+  const entries = await fs.readdir(SCHEDULES_DATA_DIR);
   const scheduleFiles = entries.filter((f) => /^schedules\.\d+\.json$/i.test(f)).sort();
 
   if (scheduleFiles.length === 0) {
-    console.warn(`No schedules.*.json files under ${SCRAPER_DATA_DIR}`);
+    console.warn(`No schedules.*.json files under ${SCHEDULES_DATA_DIR}`);
     return;
   }
 
@@ -46,7 +46,7 @@ export async function main(): Promise<void> {
   };
 
   for (const file of scheduleFiles) {
-    const filePath = path.join(SCRAPER_DATA_DIR, file);
+    const filePath = path.join(SCHEDULES_DATA_DIR, file);
     const stats: GradeEnrichmentStats = { sectionsTotal: 0, matched: 0, fallback: 0, none: 0 };
     const raw = await fs.readFile(filePath, "utf-8");
     const data = JSON.parse(raw) as SchedulesFilePayload;

@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import { SCHEDULES_DATA_DIR } from "../shared/paths.ts";
 import type { SchedulesData } from "../../../../packages/core/src/dataTypes.ts";
 
 const DAY_INDEX: Record<string, number> = {
@@ -22,19 +22,19 @@ function endDayIndex(isoDate: string): number {
 
 export function main(): void {
   const files = fs
-    .readdirSync(SCRAPER_DATA_DIR)
+    .readdirSync(SCHEDULES_DATA_DIR)
     .filter((f) => /^schedules\.\d+\.json$/.test(f))
     .sort();
 
   if (files.length === 0) {
-    console.error("No schedules.*.json files found in", SCRAPER_DATA_DIR);
+    console.error("No schedules.*.json files found in", SCHEDULES_DATA_DIR);
     process.exit(1);
   }
 
   let totalViolations = 0;
 
   for (const file of files) {
-    const filePath = path.join(SCRAPER_DATA_DIR, file);
+    const filePath = path.join(SCHEDULES_DATA_DIR, file);
     const data = JSON.parse(fs.readFileSync(filePath, "utf-8")) as SchedulesData;
     let fileViolations = 0;
 

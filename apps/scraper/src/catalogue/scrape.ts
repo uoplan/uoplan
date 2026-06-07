@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import pLimit from "p-limit";
-import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import { CATALOGUE_DATA_DIR } from "../shared/paths.ts";
 import { getErrorMessage, NotFoundError } from "../shared/errors.ts";
 import { generateIndices, parseMissingByYear } from "./indices.ts";
 import {
@@ -135,7 +135,7 @@ async function scrapeYear(
 }
 
 export async function main() {
-  const dataDir = SCRAPER_DATA_DIR;
+  const dataDir = CATALOGUE_DATA_DIR;
   const force = process.argv.includes("--force");
   const academicYear = getCurrentAcademicYear();
   const calendarYear = new Date().getFullYear();
@@ -214,7 +214,7 @@ export async function main() {
   );
   console.log(`\nWrote catalogue.json manifest: years ${years[0]}–${years[years.length - 1]}`);
 
-  await generateIndices(dataDir);
+  await generateIndices();
 }
 
 if (process.argv[1] && import.meta.url === `file://${process.argv[1]}`) {

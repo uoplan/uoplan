@@ -12,12 +12,12 @@
  *
  * Stage 2 (parse) reads only the cache and writes the committed dataset:
  *
- *   apps/scraper/data/feedback.<termId>.json
+ *   apps/scraper/data/feedback/feedback.<termId>.json
  */
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import { FEEDBACK_DATA_DIR } from "../shared/paths.ts";
 
 const FEEDBACK_CACHE_DIR = path.resolve(".cache", "feedback");
 const RAW_DIR = path.join(FEEDBACK_CACHE_DIR, "raw");
@@ -56,7 +56,7 @@ function reportHtmlPath(termId: string, reportId: string): string {
 }
 
 export function outputPath(termId: string): string {
-  return path.join(SCRAPER_DATA_DIR, `feedback.${termId}.json`);
+  return path.join(FEEDBACK_DATA_DIR, `feedback.${termId}.json`);
 }
 
 /**
@@ -65,7 +65,7 @@ export function outputPath(termId: string): string {
  * rather than being duplicated across every section in the per-term datasets.
  */
 export function optionsPath(): string {
-  return path.join(SCRAPER_DATA_DIR, "feedback.options.json");
+  return path.join(FEEDBACK_DATA_DIR, "feedback.options.json");
 }
 
 async function exists(p: string): Promise<boolean> {

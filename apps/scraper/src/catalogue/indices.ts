@@ -2,6 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 import { urlToSlug } from "./links.ts";
 import { CatalogueSchema } from "./schema.ts";
+import { CATALOGUE_DATA_DIR, SCRAPER_DATA_DIR } from "../shared/paths.ts";
 
 function parseIndicesStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
@@ -19,8 +20,8 @@ export function parseMissingByYear(value: unknown): Record<string, string[]> {
 
 const CATALOGUE_JSON_RE = /^catalogue\.(\d{4})\.json$/;
 
-export async function generateIndices(dataDir: string): Promise<void> {
-  const indicesPath = path.join(dataDir, "indices.json");
+export async function generateIndices(): Promise<void> {
+  const indicesPath = path.join(SCRAPER_DATA_DIR, "indices.json");
   let existingCourses: string[] = [];
   let existingPrograms: string[] = [];
   try {
@@ -35,7 +36,7 @@ export async function generateIndices(dataDir: string): Promise<void> {
     // Missing or unreadable file — start fresh
   }
 
-  const dirEntries = await fs.readdir(dataDir);
+  const dirEntries = await fs.readdir(CATALOGUE_DATA_DIR);
   const catalogueYears = dirEntries
     .map((name) => {
       const m = CATALOGUE_JSON_RE.exec(name);
@@ -50,7 +51,7 @@ export async function generateIndices(dataDir: string): Promise<void> {
   const programsOut = [...existingPrograms];
 
   for (const y of catalogueYears) {
-    const raw = await fs.readFile(path.join(dataDir, `catalogue.${y}.json`), "utf-8");
+    const raw = await fs.readFile(path.join(CATALOGUE_DATA_DIR, `catalogue.${y}.json`), "utf-8");
     const catalogue = CatalogueSchema.parse(JSON.parse(raw) as unknown);
     for (const c of catalogue.courses) {
       const code = c.code;

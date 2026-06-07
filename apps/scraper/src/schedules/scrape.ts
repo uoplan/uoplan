@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import { SCRAPER_DATA_DIR, CATALOGUE_DATA_DIR, SCHEDULES_DATA_DIR } from "../shared/paths.ts";
 import { getErrorMessage } from "../shared/errors.ts";
 import {
   buildGradeLookups,
@@ -35,7 +35,7 @@ function getCatalogueYearForTerm(termName: string): number {
 }
 
 async function loadCatalogue(year: number): Promise<ParsedCourseCode[]> {
-  const raw = await fs.readFile(path.join(SCRAPER_DATA_DIR, `catalogue.${year}.json`), "utf-8");
+  const raw = await fs.readFile(path.join(CATALOGUE_DATA_DIR, `catalogue.${year}.json`), "utf-8");
   const data = JSON.parse(raw) as { courses?: CatalogueCourse[] };
   if (!Array.isArray(data.courses)) {
     throw new Error("catalogue.json does not contain a courses array");
@@ -208,7 +208,8 @@ export async function main(): Promise<void> {
       console.log(formatGradeEnrichmentLine(`Grades (${term.termId})`, enrichmentStats));
     }
 
-    const outPath = path.join(SCRAPER_DATA_DIR, `schedules.${term.termId}.json`);
+    const outPath = path.join(SCHEDULES_DATA_DIR, `schedules.${term.termId}.json`);
+    await fs.mkdir(SCHEDULES_DATA_DIR, { recursive: true });
     await fs.writeFile(outPath, JSON.stringify(output, null, 2), "utf-8");
     console.log(
       `Done. Saved schedules for ${results.length} courses (out of ${courses.length}) to ${path.basename(outPath)}`,
