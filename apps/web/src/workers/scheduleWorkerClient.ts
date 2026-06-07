@@ -14,8 +14,15 @@ import type { ScheduleWorkerApi } from "./scheduleWorkerApi";
 const SCHEDULE_WORKER_FALLBACK_TITLE_ID = "notifications.scheduleWorkerFallback.title";
 const SCHEDULE_WORKER_FALLBACK_MESSAGE_ID = "notifications.scheduleWorkerFallback.message";
 
-/** Hard cap on a single schedule-generation run; the worker is killed past this. */
-const SCHEDULE_GENERATION_TIMEOUT_MS = 1_000;
+/**
+ * Hard cap on a single schedule-generation run; the worker is killed past this.
+ * This is only a last-resort safety net — the Rust engine bounds its own work
+ * internally (work-charged budgets in `advanced.rs` / `timetable.rs`), so a run's
+ * latency is a function of the inputs, not the seed or wall clock. The cap is set
+ * above the engine's worst-case bound (including the ~1.5-2x WASM slowdown) so a
+ * legitimately hard-but-feasible request is never killed mid-search.
+ */
+const SCHEDULE_GENERATION_TIMEOUT_MS = 3_000;
 
 /** Sentinel error thrown when generation exceeds {@link SCHEDULE_GENERATION_TIMEOUT_MS}. */
 class ScheduleGenerationTimeoutError extends Error {

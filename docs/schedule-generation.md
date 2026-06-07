@@ -74,15 +74,26 @@ schedule is returned. The search itself is a **forward-checking + MRV** backtrac
   are still checked at the leaf via `passes_final`.
 - **Deterministic budget:** the search is bounded by an internal node budget
   (`ARRANGEMENT_NODE_BUDGET`), so the outcome is a pure function of the inputs and never
-  depends on the worker's wall-clock timeout. The 1 s kill in
+  depends on the worker's wall-clock timeout. The 3 s kill in
   `apps/web/src/workers/scheduleWorkerClient.ts` remains only as a last-resort safety net.
 
 This guarantees **seed-stable success**: if a conflict-free arrangement exists for a
 selected set, it is found for _every_ seed (the seed only varies which valid arrangement
-you get). The basic-mode pinned+fill path (`first_seeded_subset_arrangement`) uses the
-same forward-checking + budget treatment. Regression coverage:
+you get). The **basic-mode** pinned+fill path (`first_seeded_subset_arrangement`) instead
+uses a **randomized-restart greedy with a work-charged budget** (the same design as the
+selection loop below, see _Course selection_): the optional pool here is the entire
+filter-matching catalogue (hundreds of courses), so the old exhaustive backtracking fill
+scanned the whole remaining pool at every node and bounded node _count_ — not work —
+making a single run do billions of overlap checks and most seeds return a **false
+negative** (claiming no schedule when one existed). Each restart now reshuffles the
+placement order and greedily seats the first compatible combo per course, charging the
+budget (`SUBSET_WORK_BUDGET`) by **actual overlap work** (`placed + 1` per combo scanned),
+so latency is a function of the inputs and a feasible packing is found for every seed.
+Regression coverage:
 `packages/engine/tests/seed_stability.rs` (a 24-course set must succeed identically across
-256 seeds) plus the `timetable::tests` unit tests.
+256 seeds), `packages/engine/tests/basic_feasibility.rs` (the user's real share-link repro:
+23 electives from the default-filter pool must succeed for every seed within budget; an
+over-capacity request must fast-fail), plus the `timetable::tests` unit tests.
 
 ### Course selection (Rust)
 
@@ -90,7 +101,7 @@ Advanced generation must also choose _which_ courses go into each requirement po
 approach was **generate-and-test**: pick a full course set by weighted-random sampling, then
 check whether that exact set timetables. Feasible large sets (≈20+ courses) are rare per random
 draw, so whether a run succeeded depended on the seed stumbling onto one before the worker's
-1 s kill — the reported "≈50/50 at 22 courses" non-determinism.
+3 s kill — the reported "≈50/50 at 22 courses" non-determinism.
 
 Selection is now **feasibility-aware** (`run_pool_pick_pass` in `advanced.rs`): a
 **randomized-restart greedy** fill in which a candidate is accepted only when the whole
@@ -113,7 +124,7 @@ selection (pinned + already-selected + candidate) still timetables.
   (`SELECTION_RESOLVE_BUDGET`) separately from the overall probe budget
   (`SELECTION_PLACEMENT_BUDGET`); cheap placements stay unlimited. A descent that keeps needing
   rearrangements gives up early and restarts rather than grinding through thousands of re-solves,
-  keeping the worst case a pure function of the inputs (well under the 1 s kill, ≈0.3–0.5 s as
+  keeping the worst case a pure function of the inputs (well under the 3 s kill, ≈0.3–0.5 s as
   WASM even at 24 courses) instead of the wall clock.
 
 Regression coverage: `packages/engine/tests/selection_feasibility.rs` requires a realistic
