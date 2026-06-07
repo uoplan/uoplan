@@ -163,6 +163,20 @@ a {
   border-color: var(--app-accent);
 }
 
+.explore-checkbox-input {
+  cursor: pointer;
+  background-color: var(--app-surface-overlay);
+  border-color: var(--app-border-strong);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.explore-checkbox-input:checked {
+  background-color: var(--app-accent);
+  border-color: var(--app-accent);
+}
+
 /* Changelog modal (build-time markdown → HTML) */
 .changelog-html {
   color: var(--app-text-muted);
