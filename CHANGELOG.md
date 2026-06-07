@@ -1,5 +1,61 @@
 # Changelog
 
+## [1.0.0-beta.30](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.29...uoplan-monorepo-v1.0.0-beta.30) (2026-06-07)
+
+
+### Features
+
+* add discipline filter to explore page ([cd98e53](https://github.com/uoplan/uoplan/commit/cd98e538d715aac06ae19428fd19dfe8d648abf9))
+* add easter eggs ([1c5a0bd](https://github.com/uoplan/uoplan/commit/1c5a0bdcd5d6903e7f7113f7eabf6ee3ef98e720))
+* add feedback data to explore and trends pages ([1c98415](https://github.com/uoplan/uoplan/commit/1c984153b34f7f723159857654fd08f5d5183d37))
+* add feedback filter and generation option ([5640259](https://github.com/uoplan/uoplan/commit/56402590382470563c67415bcd5d9070ae12efbb))
+* add feedback sort on explore page ([6e5cdab](https://github.com/uoplan/uoplan/commit/6e5cdab983adf7aa3d69d8752b1dc43130a3e15d))
+* add fullscreen button to calendar event popover ([626fee0](https://github.com/uoplan/uoplan/commit/626fee0e78c46fb0b71adfb4c6cd7d7107727f4c))
+* add more data to trends page ([bfee344](https://github.com/uoplan/uoplan/commit/bfee34448b42c11b99f009f5d8c5c4fe6656f8ee))
+* add parsing for feedback forms ([0209fc0](https://github.com/uoplan/uoplan/commit/0209fc0fc20e96fea8b7789cd456c793a60cd7a6))
+* add scraper for feedback forms ([1ef2906](https://github.com/uoplan/uoplan/commit/1ef2906139413eec943d0e67bed3493d1b0c4cdb))
+* add term filter to explore page ([6248265](https://github.com/uoplan/uoplan/commit/6248265cad4baea0f08c902f34b7fcc6061a539e))
+* **calendar:** list scheduled courses without time slots ([5f8344f](https://github.com/uoplan/uoplan/commit/5f8344f0668e3eecf3eab0f978cb320312191092))
+* **calendar:** reorganize basic sidebar by option frequency ([119d68f](https://github.com/uoplan/uoplan/commit/119d68f8428489117d577bd1448e042eecbbf54c))
+* cancel pending generation if options change ([4eec4e2](https://github.com/uoplan/uoplan/commit/4eec4e207ef490c6fb03be8b4950b0f5317b73d8))
+* improve cachability of protobuf data ([c92ac9d](https://github.com/uoplan/uoplan/commit/c92ac9d8082595caf3855fd46068488a321dacfe))
+* improve layout of feedback explore page ([a02af86](https://github.com/uoplan/uoplan/commit/a02af86a6ac8cc87334ecb95a982220e70d9a1ef))
+* improve schedule generator to be more consistent ([ebab29e](https://github.com/uoplan/uoplan/commit/ebab29e5151e6d6a54f0426ce6b33745f40bec67))
+* increase course limit, add generation timeout ([49fe61b](https://github.com/uoplan/uoplan/commit/49fe61b658a97dd349d922621748e8406e5773f5))
+* make week preview sidebar resizeable ([4fbca1c](https://github.com/uoplan/uoplan/commit/4fbca1cd8303a4ee48f3c4554cc0a0c38acdbe71))
+* only show most popular week in worker og-image ([5bbf43c](https://github.com/uoplan/uoplan/commit/5bbf43c9c852d8c70106b739ece251c6c6d961c3))
+* reduce bundle sizes ([65b9c5b](https://github.com/uoplan/uoplan/commit/65b9c5b32a3366c7a86c238c7da2cfd427f4ff82))
+* rewrite schedule generator in rust ([c189923](https://github.com/uoplan/uoplan/commit/c18992360f85f9024ddfd964ca1f0861d8a04e27))
+* **schedule:** refine repeatable courses and auto-enable FLS stream ([783daa3](https://github.com/uoplan/uoplan/commit/783daa3ac05ea868dac5ab3c6fedfef7110558b4))
+* shrink schedule generator binary size ([a9240d3](https://github.com/uoplan/uoplan/commit/a9240d3d57fd864fc6c86c1dde4f7bbb66a2596c))
+* simplify url params for explore page ([fc16286](https://github.com/uoplan/uoplan/commit/fc162866d729d9e455a52b4edb99b8693644c942))
+* use better scrollbar ([fe7638d](https://github.com/uoplan/uoplan/commit/fe7638d05174165c1388d1863d9a04da14756af3))
+* use better sorting for searching disciplines ([1a6ccc0](https://github.com/uoplan/uoplan/commit/1a6ccc07b633990fc96348abb407eade2688a5df))
+* use secondary state for fast og-image rendering ([90ca97d](https://github.com/uoplan/uoplan/commit/90ca97ddd13f44941aa74d8c46936b7b971cb005))
+* virtualize course lists ([546a016](https://github.com/uoplan/uoplan/commit/546a016e0c536193947ffc4a3102a913cb1d0656))
+
+
+### Bug Fixes
+
+* add all of the features the user misses out on with basic mode ([89bbb48](https://github.com/uoplan/uoplan/commit/89bbb48c5d4ed5dc2ce95a211a89e4be6f4ae500))
+* **calendar:** only offer swap candidates that fit the schedule ([cd668aa](https://github.com/uoplan/uoplan/commit/cd668aa4e16685fa29433e20f343dc03989abc2a))
+* cancel generation on option change in subsequent runs ([5fc5cd4](https://github.com/uoplan/uoplan/commit/5fc5cd452472f70bbdba5b6602891784a3d1ec59))
+* **ci:** make tests pass, build wasm-bindgen ([d1dbeef](https://github.com/uoplan/uoplan/commit/d1dbeef47056647a1ab3cbc6da73747dd98b3522))
+* include courses with no prof in explore ([bbe3696](https://github.com/uoplan/uoplan/commit/bbe3696b9a0d1a7b113b9411267a5f8a95fc02e0))
+* keep existing schedule if generation fails ([a2c0aa0](https://github.com/uoplan/uoplan/commit/a2c0aa00d6174db61396294be52ef0e793536628))
+* **share:** load shared schedule immediately when none generated ([8952426](https://github.com/uoplan/uoplan/commit/89524266d2f7e4875bc4885980657d9db81bd226))
+* **share:** make shared load destructive and keep actions inline ([6133983](https://github.com/uoplan/uoplan/commit/6133983b84b6d73933ea36346abc9b7714585150))
+* show checkmarks on explore page ([0653324](https://github.com/uoplan/uoplan/commit/0653324737393952e19311a912985b58b11834cc))
+* use basic generator on load when needed, default to 5 courses ([3cb4a55](https://github.com/uoplan/uoplan/commit/3cb4a5597095e4771edf7fd820e584bee95a090b))
+* use better script to setup cloudflare ci ([7dbd569](https://github.com/uoplan/uoplan/commit/7dbd569d5297b3bcbb12269ca5ae7713d3c2ffa7))
+
+
+### Performance Improvements
+
+* improve performance of schedule generator ([5c11dc6](https://github.com/uoplan/uoplan/commit/5c11dc6358a2c103b5d68fab49ed1c9bb60e1fe4))
+* memoize calendar popover ([7d398f5](https://github.com/uoplan/uoplan/commit/7d398f5219c7a1f1cc0c23ce9506876d541f0db8))
+* speed up schedule generation algorithm ([e22fdf3](https://github.com/uoplan/uoplan/commit/e22fdf3bf9395f21a65722aaf04d3d219098adf9))
+
 ## [1.0.0-beta.29](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.28...uoplan-monorepo-v1.0.0-beta.29) (2026-06-03)
 
 
