@@ -21,7 +21,7 @@ package feedback;
 // as "For your program, this course is") have no average (stored as 0) and are not
 // charted; `FeedbackQuestion.scale` flags the ones that ever carry an average.
 // The full per-option distribution and standard deviation are intentionally NOT
-// stored here; the raw values remain in the committed `data/feedback.<termId>.json`
+// stored here; the raw values remain in the committed `data/feedback/feedback.<termId>.json`
 // source if ever needed.
 
 // A distinct survey question. `scale` is true when the question is an ordinal

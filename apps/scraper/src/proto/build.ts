@@ -3,7 +3,12 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import * as DataProto from "@uoplan/proto/data";
 import * as FeedbackProto from "@uoplan/proto/feedback";
-import { SCRAPER_DATA_DIR, WEB_PUBLIC_DATA_DIR } from "../shared/paths.ts";
+import {
+  SCRAPER_DATA_DIR,
+  WEB_PUBLIC_DATA_DIR,
+  CATALOGUE_DATA_DIR,
+  SCHEDULES_DATA_DIR,
+} from "../shared/paths.ts";
 import { readJson } from "../shared/json.ts";
 import { buildFeedbackData } from "./feedback.ts";
 
@@ -389,12 +394,13 @@ function isScheduleJson(name: string): boolean {
 export async function main(): Promise<void> {
   await fs.mkdir(WEB_PUBLIC_DATA_DIR, { recursive: true });
 
-  const entries = await fs.readdir(SCRAPER_DATA_DIR);
-  const yearCatalogues = entries.filter(isCatalogueYearJson).sort();
-  const scheduleFiles = entries.filter(isScheduleJson).sort();
+  const catalogueEntries = await fs.readdir(CATALOGUE_DATA_DIR).catch(() => [] as string[]);
+  const scheduleEntries = await fs.readdir(SCHEDULES_DATA_DIR).catch(() => [] as string[]);
+  const yearCatalogues = catalogueEntries.filter(isCatalogueYearJson).sort();
+  const scheduleFiles = scheduleEntries.filter(isScheduleJson).sort();
 
   const manifest = await readJson<{ years: number[] }>(
-    path.join(SCRAPER_DATA_DIR, "catalogue.json"),
+    path.join(CATALOGUE_DATA_DIR, "catalogue.json"),
   );
   await writePb(
     path.join(WEB_PUBLIC_DATA_DIR, "catalogue.pb"),
@@ -452,14 +458,14 @@ export async function main(): Promise<void> {
   );
 
   for (const fileName of yearCatalogues) {
-    const fullPath = path.join(SCRAPER_DATA_DIR, fileName);
+    const fullPath = path.join(CATALOGUE_DATA_DIR, fileName);
     const data = await readJson<JsonObject>(fullPath);
     const encoded = DataProto.Catalogue.encode(mapCatalogue(data)).finish();
     await writePb(path.join(WEB_PUBLIC_DATA_DIR, fileName.replace(/\.json$/, ".pb")), encoded);
   }
 
   for (const fileName of scheduleFiles) {
-    const fullPath = path.join(SCRAPER_DATA_DIR, fileName);
+    const fullPath = path.join(SCHEDULES_DATA_DIR, fileName);
     const data = await readJson<JsonObject>(fullPath);
     const encoded = DataProto.SchedulesData.encode(mapSchedules(data)).finish();
     await writePb(path.join(WEB_PUBLIC_DATA_DIR, fileName.replace(/\.json$/, ".pb")), encoded);

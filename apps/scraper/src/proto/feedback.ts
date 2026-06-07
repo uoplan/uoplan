@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import * as FeedbackProto from "@uoplan/proto/feedback";
 import { optionsPath } from "../feedback/cache.ts";
-import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import { FEEDBACK_DATA_DIR, SCRAPER_DATA_DIR } from "../shared/paths.ts";
 import { readJson } from "../shared/json.ts";
 
 interface JsonOption {
@@ -114,14 +114,14 @@ function feedbackJsonFiles(entries: string[]): string[] {
  * Returns `null` when no feedback datasets are present (so callers can skip).
  */
 export async function buildFeedbackData(): Promise<FeedbackProto.FeedbackData | null> {
-  const entries = await fs.readdir(SCRAPER_DATA_DIR);
+  const entries = await fs.readdir(FEEDBACK_DATA_DIR).catch(() => [] as string[]);
   const files = feedbackJsonFiles(entries);
   if (files.length === 0) return null;
 
   const terms: Array<{ termId: number; courses: JsonCourse[] }> = [];
   for (const file of files) {
     const termId = Number.parseInt(file.match(/\d+/)![0], 10);
-    const courses = await readJson<JsonCourse[]>(path.join(SCRAPER_DATA_DIR, file));
+    const courses = await readJson<JsonCourse[]>(path.join(FEEDBACK_DATA_DIR, file));
     terms.push({ termId, courses });
   }
 

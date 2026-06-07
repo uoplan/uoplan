@@ -6,8 +6,8 @@ Student program requirements are based on the academic year they first enrolled,
 
 **Scraper (`apps/scraper/src/cli/catalogue.ts` → `apps/scraper/src/catalogue/scrape.ts`)** produces one source JSON file per academic year:
 
-- `apps/scraper/data/catalogue.{year}.json` — full catalogue (courses + programs) for that year, where `year` is the first calendar year of the academic year range (e.g. `2021` = 2021–2022)
-- `apps/scraper/data/catalogue.json` — manifest listing all available years: `{ "years": [2024, 2023, ..., 2017] }`
+- `apps/scraper/data/catalogue/catalogue.{year}.json` — full catalogue (courses + programs) for that year, where `year` is the first calendar year of the academic year range (e.g. `2021` = 2021–2022)
+- `apps/scraper/data/catalogue/catalogue.json` — manifest listing all available years: `{ "years": [2024, 2023, ..., 2017] }`
 
 `pnpm build:data-proto` converts those committed source JSON files into git-ignored runtime protobuf assets in `apps/web/public/data/` (`catalogue.{year}.pb` and `catalogue.pb`).
 

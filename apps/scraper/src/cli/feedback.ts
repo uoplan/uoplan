@@ -9,7 +9,7 @@
  * Two-stage pipeline (raw cache -> committed dataset):
  *   fetch    Stage 1: download raw list pages (+ reports/charts with --stats) into
  *            the gitignored cache, skipping anything already saved.
- *   parse    Stage 2: parse the cache into data/feedback.<termId>.json.
+ *   parse    Stage 2: parse the cache into data/feedback/feedback.<termId>.json.
  *   scrape   fetch then parse (default).
  *
  * Flags: --term <id> | --terms <a,b,c> (default: all), --force, --stats,

@@ -1,6 +1,6 @@
 /**
  * Stage 2 — parse. Read the raw cache produced by stage 1 and emit the committed
- * per-term dataset `apps/scraper/data/feedback.<termId>.json`. Runs fully offline.
+ * per-term dataset `apps/scraper/data/feedback/feedback.<termId>.json`. Runs fully offline.
  *
  * The list titles alone yield the primary prof <-> section <-> course join key; when
  * `stats` is set and report HTML was cached, per-question summary stats are attached.
@@ -219,7 +219,7 @@ export async function runParse(options: ParseOptions = {}): Promise<void> {
       }
       console.log(
         `  [${termId}] ${parsedTerm.termLabel}: wrote ${String(parsedTerm.output.length)} course(s) / ` +
-          `${String(parsedTerm.sectionCount)} section(s) -> data/feedback.${termId}.json`,
+          `${String(parsedTerm.sectionCount)} section(s) -> data/feedback/feedback.${termId}.json`,
       );
     }
   } finally {
@@ -229,7 +229,7 @@ export async function runParse(options: ParseOptions = {}): Promise<void> {
   if (labelsChanged) {
     await writeOptionLabels(optionLabels);
     console.log(
-      `  wrote ${String(Object.keys(optionLabels).length)} question option set(s) -> data/feedback.options.json`,
+      `  wrote ${String(Object.keys(optionLabels).length)} question option set(s) -> data/feedback/feedback.options.json`,
     );
   }
 }
