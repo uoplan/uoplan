@@ -2,7 +2,7 @@ import { Accordion, Box, Paper, Stack, Text, Title } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import type { Discipline, ProfessorRatingsMap } from "@uoplan/core";
 import {
   groupOfferingsByCourse,
@@ -164,7 +164,7 @@ export function ExploreDisciplinePage({
   );
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
@@ -263,6 +263,6 @@ export function ExploreDisciplinePage({
           </Box>
         )}
       </Stack>
-    </motion.div>
+    </m.div>
   );
 }

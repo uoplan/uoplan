@@ -1,7 +1,7 @@
 import { Anchor, Box, Group, Kbd, Stack, Text, UnstyledButton } from "@mantine/core";
 import { useMediaQuery, useOs } from "@mantine/hooks";
 import { Link, useLocation } from "@tanstack/react-router";
-import { spotlight } from "@mantine/spotlight";
+import { useCommandCenterStore } from "../../store/commandCenterStore";
 import { useTr, tr } from "../../i18n";
 import { labelForPath } from "../../lib/navigation/backState";
 import { seasonalFlourish } from "../../lib/easterEggs/seasonal";
@@ -85,7 +85,7 @@ export function AppFooter() {
               ·
             </Text>
             <UnstyledButton
-              onClick={() => spotlight.open()}
+              onClick={() => useCommandCenterStore.getState().requestOpen()}
               aria-label={tr("app.footer.commandCenter")}
               style={{ color: "var(--mantine-color-dimmed)" }}
             >

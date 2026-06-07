@@ -1,7 +1,7 @@
 import { Accordion, Anchor, Box, Stack, Text, Title } from "@mantine/core";
 import { IconExternalLink } from "@tabler/icons-react";
 import { useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useEffect, useMemo } from "react";
 import type { Catalogue, Program } from "@uoplan/core";
 import { buildProgramCourseFilter, normalizeCourseCode, programSlug } from "@uoplan/core";
@@ -160,7 +160,7 @@ export function ExploreProgramPage({
   if (!program) return null;
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
@@ -285,6 +285,6 @@ export function ExploreProgramPage({
           </Box>
         )}
       </Stack>
-    </motion.div>
+    </m.div>
   );
 }

@@ -126,14 +126,26 @@ export function createDataClient(options: DataClientOptions): DataClient {
     const latestYear = years[0];
     if (latestYear === undefined) throw new Error("Catalogue manifest has no years");
 
-    const [latestCatalogue, rawSchedules, yearCatalogue, grades] = await Promise.all([
+    // When the student's first year is the same as the latest catalogue year, the
+    // year-specific catalogue is byte-identical to the latest one. The fetch is
+    // already de-duplicated by `fetchBytes`, but decoding a ~3 MB protobuf twice
+    // is wasted main-thread work — reuse the decoded `latestCatalogue` instead.
+    const needSeparateYearCatalogue =
+      dataKey.firstYear !== null && dataKey.firstYear !== latestYear;
+
+    const [latestCatalogue, rawSchedules, loadedYearCatalogue, grades] = await Promise.all([
       loadCatalogue(fetchBytes, latestYear),
       loadSchedules(fetchBytes, dataKey.termId),
-      dataKey.firstYear !== null
-        ? loadCatalogue(fetchBytes, dataKey.firstYear)
+      needSeparateYearCatalogue
+        ? loadCatalogue(fetchBytes, dataKey.firstYear ?? latestYear)
         : Promise.resolve(null),
       loadGrades(fetchBytes).catch(() => null),
     ]);
+
+    const yearCatalogue =
+      dataKey.firstYear !== null && !needSeparateYearCatalogue
+        ? latestCatalogue
+        : loadedYearCatalogue;
 
     // Reconstruct per-section grade distributions at runtime from grades.pb
     // (these are no longer embedded in schedules.NNNN.pb). Grades are optional:

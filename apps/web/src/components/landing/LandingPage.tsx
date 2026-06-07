@@ -1,7 +1,7 @@
 import { Box, SimpleGrid, Stack, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconAffiliate, IconCalendar, IconChartHistogram, IconCompass } from "@tabler/icons-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useCallback, useState } from "react";
 import { useTr, dynamicActivate, tr, type AppLocale } from "../../i18n";
 import { ChromeControls } from "../shared/ChromeControls";
@@ -52,7 +52,7 @@ export function LandingPage() {
   ];
 
   return (
-    <motion.div
+    <m.div
       animate={{ opacity: isLangTransitioning ? 0 : 1 }}
       transition={{ duration: 0.13 }}
       style={{ width: "100%", minHeight: "100vh" }}
@@ -120,6 +120,6 @@ export function LandingPage() {
           </SimpleGrid>
         </Stack>
       </Box>
-    </motion.div>
+    </m.div>
   );
 }

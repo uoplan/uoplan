@@ -11,15 +11,17 @@ import { buildRootHead } from "../lib/seo";
 import { useEffect, useRef } from "react";
 import { Box, Text } from "@mantine/core";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
-import { motion, useAnimation } from "framer-motion";
+import { LazyMotion, m, useAnimation } from "framer-motion";
 import { usePersistState } from "../hooks/usePersistState";
 import { useAppStore } from "../store/appStore";
 import { useTr, tr } from "../i18n";
 import { AppFooter } from "../components/shared/AppFooter";
 import { SharedScheduleModal } from "../components/shared/SharedScheduleModal";
-import { CommandCenter } from "../components/shortcuts/CommandCenter";
+import { LazyCommandCenter } from "../components/shortcuts/LazyCommandCenter";
 import { HotkeysHelpModal } from "../components/shortcuts/HotkeysHelpModal";
 import { useGlobalHotkeys } from "../hooks/useGlobalHotkeys";
+
+const loadMotionFeatures = () => import("../lib/motionFeatures").then((mod) => mod.default);
 
 export const Route = createRootRoute({
   head: () => buildRootHead(),
@@ -119,27 +121,29 @@ function RootLayout() {
   }, []);
 
   return (
-    <Box
-      style={{
-        minHeight: isCalendarRoute ? undefined : "100vh",
-        height: isCalendarRoute ? "100dvh" : undefined,
-        overflow: isCalendarRoute ? "hidden" : undefined,
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "var(--app-bg)",
-      }}
-    >
-      <NavigationProgress color="var(--app-focus-ring)" />
-      <HeadContent />
-      <SharedScheduleModal />
-      <CommandCenter />
-      <HotkeysHelpModal />
-      <Box style={{ flex: 1, minHeight: 0 }}>
-        <motion.div animate={controls} style={isCalendarRoute ? { height: "100%" } : undefined}>
-          <Outlet />
-        </motion.div>
+    <LazyMotion features={loadMotionFeatures} strict>
+      <Box
+        style={{
+          minHeight: isCalendarRoute ? undefined : "100vh",
+          height: isCalendarRoute ? "100dvh" : undefined,
+          overflow: isCalendarRoute ? "hidden" : undefined,
+          display: "flex",
+          flexDirection: "column",
+          backgroundColor: "var(--app-bg)",
+        }}
+      >
+        <NavigationProgress color="var(--app-focus-ring)" />
+        <HeadContent />
+        <SharedScheduleModal />
+        <LazyCommandCenter />
+        <HotkeysHelpModal />
+        <Box style={{ flex: 1, minHeight: 0 }}>
+          <m.div animate={controls} style={isCalendarRoute ? { height: "100%" } : undefined}>
+            <Outlet />
+          </m.div>
+        </Box>
+        {!isCalendarRoute && <AppFooter />}
       </Box>
-      {!isCalendarRoute && <AppFooter />}
-    </Box>
+    </LazyMotion>
   );
 }

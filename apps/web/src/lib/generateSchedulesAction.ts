@@ -1,4 +1,3 @@
-import type { AppState } from "../store/types";
 import type {
   BlockedTime,
   FilterHintDescriptor,
@@ -28,100 +27,18 @@ import {
 import { buildColorMap } from "./colorMap";
 import { avoidedDaysFromBlocks } from "./blockedTimes";
 import { resolveDesiredCourses } from "./generation/resolveDesiredCourses";
+import { type GenerateSchedulesInput } from "./generateSchedulesInput";
 
 // Re-export helpers used by tests and other modules
 export { expandConstrainedPerRequirement, buildPendingGroupPickCounts } from "@uoplan/core";
+export {
+  type GenerateSchedulesInput,
+  type GenerateSchedulesMode,
+  pickGenerateSchedulesInput,
+} from "./generateSchedulesInput";
 
 /** Pool diagnostics shape carried by a mapped engine response. */
 type PoolDiagnostics = NonNullable<MappedGenerationResult["poolDiagnostics"]>;
-
-export type GenerateSchedulesMode = "basic" | "advanced";
-
-/**
- * Subset of {@link AppState} fields the generator reads. Pick<> keeps this in
- * lock-step with AppState so adding a new field to the action automatically
- * propagates a compile error here.
- */
-export type GenerateSchedulesInput = Pick<
-  AppState,
-  | "basicPinnedCourses"
-  | "basicElectivesCount"
-  | "basicExcludedCategories"
-  | "completedCourses"
-  | "studentPrograms"
-  | "program"
-  | "remainingRequirements"
-  | "requirementTreeWithStatus"
-  | "selectedPerRequirement"
-  | "selectedOptionsPerRequirement"
-  | "constrainedPerRequirement"
-  | "requirementPriorities"
-  | "coursesThisSemester"
-  | "prereqEligibleCourses"
-  | "unassignedCompletedCourses"
-  | "levelBuckets"
-  | "languageBuckets"
-  | "electiveLevelBuckets"
-  | "generationMinStartMinutes"
-  | "generationMaxEndMinutes"
-  | "generationMinProfessorRating"
-  | "professorRatings"
-  | "currentSeed"
-  | "firstSeed"
-  | "includeClosedComponents"
-  | "virtualSectionsOnly"
-  | "generationLimitFirstYearCredits"
-  | "generationCompressedSchedule"
-  | "generationPreferEasier"
-  | "frenchImmersionStream"
-  | "blacklistedCourses"
-  | "blockedTimes"
-> & {
-  /** Set explicitly by callers instead of read from module-global state. */
-  mode: GenerateSchedulesMode;
-};
-
-/** Extract the worker-safe input from an AppState snapshot. */
-export function pickGenerateSchedulesInput(
-  state: AppState,
-  mode: GenerateSchedulesMode,
-): GenerateSchedulesInput {
-  return {
-    mode,
-    basicPinnedCourses: state.basicPinnedCourses,
-    basicElectivesCount: state.basicElectivesCount,
-    basicExcludedCategories: state.basicExcludedCategories,
-    completedCourses: state.completedCourses,
-    studentPrograms: state.studentPrograms,
-    program: state.program,
-    remainingRequirements: state.remainingRequirements,
-    requirementTreeWithStatus: state.requirementTreeWithStatus,
-    selectedPerRequirement: state.selectedPerRequirement,
-    selectedOptionsPerRequirement: state.selectedOptionsPerRequirement,
-    constrainedPerRequirement: state.constrainedPerRequirement,
-    requirementPriorities: state.requirementPriorities,
-    coursesThisSemester: state.coursesThisSemester,
-    prereqEligibleCourses: state.prereqEligibleCourses,
-    unassignedCompletedCourses: state.unassignedCompletedCourses,
-    levelBuckets: state.levelBuckets,
-    languageBuckets: state.languageBuckets,
-    electiveLevelBuckets: state.electiveLevelBuckets,
-    generationMinStartMinutes: state.generationMinStartMinutes,
-    generationMaxEndMinutes: state.generationMaxEndMinutes,
-    generationMinProfessorRating: state.generationMinProfessorRating,
-    professorRatings: state.professorRatings,
-    currentSeed: state.currentSeed,
-    firstSeed: state.firstSeed,
-    includeClosedComponents: state.includeClosedComponents,
-    virtualSectionsOnly: state.virtualSectionsOnly,
-    generationLimitFirstYearCredits: state.generationLimitFirstYearCredits,
-    generationCompressedSchedule: state.generationCompressedSchedule,
-    generationPreferEasier: state.generationPreferEasier,
-    frenchImmersionStream: state.frenchImmersionStream,
-    blacklistedCourses: state.blacklistedCourses,
-    blockedTimes: state.blockedTimes,
-  };
-}
 
 const DEFAULT_MIN_START_MINUTES = 8 * 60 + 30;
 const DEFAULT_MAX_END_MINUTES = 22 * 60;

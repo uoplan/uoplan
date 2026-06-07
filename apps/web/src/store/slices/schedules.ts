@@ -28,7 +28,7 @@ import { compareReqPreference, type AutoAssignReqMeta } from "../requirementComp
 import { flushPersistedAppState } from "../../lib/persistAppState";
 import { nextSeed, repairSeedPosition } from "../../lib/seedNavigation";
 import { runScheduleGeneration } from "../../workers/scheduleWorkerClient";
-import type { GenerateSchedulesMode } from "../../lib/generateSchedulesAction";
+import type { GenerateSchedulesMode } from "../../lib/generateSchedulesInput";
 import { applySwapsToResult } from "./schedules/swapHelpers";
 import {
   applyScheduleGenerationResult,

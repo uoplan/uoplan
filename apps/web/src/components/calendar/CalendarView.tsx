@@ -1,7 +1,7 @@
 import { useMemo, useCallback, useEffect, useRef, useState } from "react";
 import { Box, FocusTrap, Text } from "@mantine/core";
 import { useLocalStorage, useMediaQuery } from "@mantine/hooks";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import type { DataCache } from "@uoplan/core";
 import type { GeneratedSchedule } from "@uoplan/core";
 import type { ProfessorRatingsMap } from "@uoplan/core";
@@ -404,7 +404,7 @@ export function CalendarView({
 
         <AnimatePresence>
           {!isMobile && isFullscreen && activeEvent && (
-            <motion.div
+            <m.div
               key="calendar-fullscreen-overlay"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -423,7 +423,7 @@ export function CalendarView({
               }}
             >
               <FocusTrap active>
-                <motion.div
+                <m.div
                   role="dialog"
                   aria-modal="true"
                   aria-label={staticTr("calendar.swap.swapWith")}
@@ -452,9 +452,9 @@ export function CalendarView({
                   }}
                 >
                   <CalendarEventDetails event={activeEvent} courseTitle={activeCourseTitle} />
-                </motion.div>
+                </m.div>
               </FocusTrap>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </Box>

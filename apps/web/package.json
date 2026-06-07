@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/generate-og-image.mjs && vite build && node scripts/prerender-seo-html.mjs",
+    "analyze": "ANALYZE=1 vite build",
     "typecheck": "tsgo --noEmit -p tsconfig.json && tsgo --noEmit -p tsconfig.node.json && tsgo --noEmit -p tsconfig.sw.json",
     "preview": "vite preview",
     "test": "vitest run --project unit",
@@ -62,6 +63,7 @@
     "@vitest/browser-playwright": "^4.1.7",
     "markdown-it": "^14.1.1",
     "playwright": "^1.60.0",
+    "rollup-plugin-visualizer": "^7.0.1",
     "sharp": "^0.34.5",
     "vite": "^8.0.0",
     "vite-plugin-pwa": "^1.3.0",

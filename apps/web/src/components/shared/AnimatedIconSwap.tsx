@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { useMediaQuery } from "@mantine/hooks";
 
 interface AnimatedIconSwapProps {
@@ -32,7 +32,7 @@ export function AnimatedIconSwap({ statusKey, children, size = 16 }: AnimatedIco
       }}
     >
       <AnimatePresence mode="popLayout" initial={false}>
-        <motion.span
+        <m.span
           key={statusKey}
           initial={prefersReduced ? false : { opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -47,7 +47,7 @@ export function AnimatedIconSwap({ statusKey, children, size = 16 }: AnimatedIco
           }}
         >
           {children}
-        </motion.span>
+        </m.span>
       </AnimatePresence>
     </span>
   );
