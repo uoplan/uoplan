@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Box, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
+import { Badge, Box, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { LineChart } from "@mantine/charts";
 import { Link } from "@tanstack/react-router";
@@ -321,15 +321,17 @@ export function ExploreFeedbackContent({
               ) : (
                 series.map((q) => (
                   <AppCard key={q.questionId} p="md">
-                    <Text fw={600} size="sm" mb={8} style={{ lineHeight: 1.4 }}>
-                      {q.text}
-                    </Text>
-                    <Group gap={6} mb={8}>
-                      <Text size="xs" c="dimmed">
-                        {tr("explore.feedback.responsesCount", {
-                          count: q.points.reduce((s, p) => s + p.responses, 0),
-                        })}
+                    <Group gap="sm" mb={8} wrap="nowrap" align="flex-start" justify="space-between">
+                      <Text fw={600} size="sm" style={{ lineHeight: 1.4 }}>
+                        {q.text}
                       </Text>
+                      {showScaleLabels ? (
+                        <Badge variant="light" size="sm" radius="sm" style={{ flexShrink: 0 }}>
+                          {tr("explore.feedback.responsesCount", {
+                            count: q.points.reduce((s, p) => s + p.responses, 0),
+                          })}
+                        </Badge>
+                      ) : null}
                     </Group>
                     <Group gap="md" wrap="nowrap" align="center">
                       <FeedbackScaleLegend
