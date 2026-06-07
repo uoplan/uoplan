@@ -860,9 +860,6 @@ msgstr "Pas de répartition des notes pour cette section."
 msgid "explore.sort.ascending"
 msgstr "Croissant"
 
-msgid "explore.sort.grade"
-msgstr "Note moyenne"
-
 msgid "explore.sort.code"
 msgstr "Code du cours"
 
@@ -871,6 +868,9 @@ msgstr "Décroissant"
 
 msgid "explore.sort.direction"
 msgstr "Direction"
+
+msgid "explore.sort.grade"
+msgstr "Note moyenne"
 
 msgid "explore.sort.label"
 msgstr "Trier"
@@ -2042,6 +2042,146 @@ msgstr "Suivant"
 msgid "tour.progress"
 msgstr "{{current}} sur {{total}}"
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "trends.band.excellent"
+msgstr "Excellent"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "trends.band.failing"
+msgstr "Échec"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "trends.band.good"
+msgstr "Bon"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "trends.band.lowPass"
+msgstr "Passage faible"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "trends.band.midPass"
+msgstr "Passage moyen"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "trends.band.nearExcellent"
+msgstr "Presque excellent"
+
+#: apps/web/src/components/trends/DisciplineBarCard.tsx:30
+msgid "trends.chart.disciplineBar.desc"
+msgstr "Comparaison de la mesure choisie entre les disciplines."
+
+#: apps/web/src/components/trends/DisciplineBarCard.tsx:29
+msgid "trends.chart.disciplineBar.title"
+msgstr "Par discipline"
+
+#: apps/web/src/components/trends/DisciplineBarCard.tsx:32
+#: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:51
+#: apps/web/src/components/trends/GradeBandAreaCard.tsx:49
+#: apps/web/src/components/trends/GradeHistogramCard.tsx:28
+#: apps/web/src/components/trends/LevelBarCard.tsx:29
+#: apps/web/src/components/trends/ProfessorSpreadCard.tsx:38
+#: apps/web/src/components/trends/SeasonBarCard.tsx:41
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:51
+msgid "trends.chart.empty"
+msgstr "Pas encore assez de données pour ce graphique."
+
+#: apps/web/src/components/trends/GradeBandAreaCard.tsx:47
+msgid "trends.chart.gradeBand.desc"
+msgstr "Proportion des notes dans chaque tranche, session par session."
+
+#: apps/web/src/components/trends/GradeBandAreaCard.tsx:46
+msgid "trends.chart.gradeBand.title"
+msgstr "Composition des notes au fil du temps"
+
+#: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:49
+msgid "trends.chart.heatmap.descMetric"
+msgstr "{metric} par discipline et par année."
+
+#: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:109
+msgid "trends.chart.heatmap.legendHigh"
+msgstr "Plus élevé"
+
+#: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:98
+msgid "trends.chart.heatmap.legendLow"
+msgstr "Plus faible"
+
+#: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:48
+msgid "trends.chart.heatmap.title"
+msgstr "Disciplines au fil du temps"
+
+#: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:76
+msgid "trends.chart.heatmap.tooltip"
+msgstr "{discipline} · {year} : {value} ({volume} notes)"
+
+#: apps/web/src/components/trends/GradeHistogramCard.tsx:26
+msgid "trends.chart.histogram.desc"
+msgstr "Notes littérales pour la sélection actuelle."
+
+#: apps/web/src/components/trends/GradeHistogramCard.tsx:25
+msgid "trends.chart.histogram.title"
+msgstr "Répartition des notes"
+
+#: apps/web/src/components/trends/GradeHistogramCard.tsx:44
+msgid "trends.chart.histogram.tooltip"
+msgstr "{grade} : {count} ({pct} %)"
+
+#: apps/web/src/components/trends/LevelBarCard.tsx:27
+msgid "trends.chart.level.desc"
+msgstr "Évolution de la mesure choisie des cours de niveau 1000 à 9000."
+
+#: apps/web/src/components/trends/LevelBarCard.tsx:26
+msgid "trends.chart.level.title"
+msgstr "Par niveau de cours"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:602
+#: apps/web/src/components/trends/TrendsPage.tsx:614
+msgid "trends.chart.needScope"
+msgstr "Choisissez un programme ou une discipline pour voir ce graphique."
+
+#: apps/web/src/components/trends/ProfessorSpreadCard.tsx:36
+#: apps/web/src/components/trends/TrendsPage.tsx:612
+msgid "trends.chart.profSpread.desc"
+msgstr "MPC moyenne accordée par chaque professeur dans cette sélection."
+
+#: apps/web/src/components/trends/ProfessorSpreadCard.tsx:35
+#: apps/web/src/components/trends/TrendsPage.tsx:611
+msgid "trends.chart.profSpread.title"
+msgstr "Écart de notation des professeurs"
+
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:64
+msgid "trends.chart.scatter.axisGpa"
+msgstr "MPC moyenne"
+
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:63
+msgid "trends.chart.scatter.axisVolume"
+msgstr "Résultats notés"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:600
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:49
+msgid "trends.chart.scatter.desc"
+msgstr "Chaque point est un cours : effectif selon la MPC moyenne."
+
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:58
+msgid "trends.chart.scatter.series"
+msgstr "Cours"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:599
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:48
+msgid "trends.chart.scatter.title"
+msgstr "Popularité et MPC"
+
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:25
+msgid "trends.chart.scatter.tooltip"
+msgstr "MPC {gpa} · {volume} notes"
+
+#: apps/web/src/components/trends/SeasonBarCard.tsx:39
+msgid "trends.chart.season.desc"
+msgstr "Variation de la mesure choisie entre l'automne, l'hiver et le printemps-été."
+
+#: apps/web/src/components/trends/SeasonBarCard.tsx:38
+msgid "trends.chart.season.title"
+msgstr "Par session"
+
 msgid "trends.empty.noData"
 msgstr "L'historique des notes n'est pas disponible pour le moment."
 
@@ -2065,6 +2205,14 @@ msgstr "Discipline"
 
 msgid "trends.filter.level"
 msgstr "Niveau"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:858
+msgid "trends.filter.mobileButton"
+msgstr "Filtres"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:868
+msgid "trends.filter.mobileTitle"
+msgstr "Filtrer les tendances"
 
 msgid "trends.filter.noMatch"
 msgstr "Aucune discipline correspondante"
@@ -2149,6 +2297,30 @@ msgstr "Printemps/été"
 
 msgid "trends.season.winter"
 msgstr "Hiver"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:589
+msgid "trends.section.courseChoice"
+msgstr "Choisir ses cours"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:590
+msgid "trends.section.courseChoiceDesc"
+msgstr "Des indices pour choisir vos cours optionnels, vos sections et le bon trimestre."
+
+#: apps/web/src/components/trends/TrendsPage.tsx:581
+msgid "trends.section.disciplines"
+msgstr "Disciplines"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:582
+msgid "trends.section.disciplinesDesc"
+msgstr "Comparez la notation entre les matières et suivez son évolution d'année en année."
+
+#: apps/web/src/components/trends/TrendsPage.tsx:503
+msgid "trends.section.overview"
+msgstr "Aperçu"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:504
+msgid "trends.section.overviewDesc"
+msgstr "Mesures clés et évolution des notes au fil du temps."
 
 msgid "trends.stat.change"
 msgstr "Écart depuis le début"

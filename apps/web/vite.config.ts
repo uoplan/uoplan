@@ -61,6 +61,8 @@ export default defineConfig({
       "zustand/vanilla",
       "zustand/react/shallow",
       "@mantine/hooks",
+      "@mantine/charts",
+      "recharts",
       "@tabler/icons-react",
     ],
   },

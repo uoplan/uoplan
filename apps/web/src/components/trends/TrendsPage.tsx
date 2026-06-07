@@ -1,7 +1,9 @@
 import { i18n } from "@lingui/core";
 import {
   Alert,
+  Badge,
   Box,
+  Button,
   Group,
   Select,
   SegmentedControl,
@@ -13,8 +15,9 @@ import {
 } from "@mantine/core";
 import { LineChart } from "@mantine/charts";
 import { useMediaQuery } from "@mantine/hooks";
+import { IconAdjustmentsHorizontal } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import {
   availableDisciplines,
@@ -35,11 +38,24 @@ import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import { programSlugToPathParam } from "../../lib/explore/programSearch";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { createRankedOptionsFilter } from "../../lib/explore/optionRanking";
+import { METRIC_COLOR, formatMetricValue } from "../../lib/trends/metrics";
 import type { BackState } from "../../lib/navigation/backState";
 import { BackButton } from "../shared/BackButton";
 import { ChromeControls } from "../shared/ChromeControls";
 import { AppCard } from "../shared/AppCard";
 import { AnimatedNumber } from "../shared/AnimatedNumber";
+import { CalendarMobileDrawer } from "../calendar/CalendarMobileDrawer";
+import { TrendsSection } from "./TrendsSection";
+import { ChartCard } from "./ChartCard";
+import { DisciplineBarCard } from "./DisciplineBarCard";
+import { DisciplineHeatmapCard } from "./DisciplineHeatmapCard";
+import { GradeBandAreaCard } from "./GradeBandAreaCard";
+import { GradeHistogramCard } from "./GradeHistogramCard";
+import { LevelBarCard } from "./LevelBarCard";
+import { ProfessorSpreadCard } from "./ProfessorSpreadCard";
+import { SeasonBarCard } from "./SeasonBarCard";
+import { VolumeGpaScatterCard } from "./VolumeGpaScatterCard";
+import type { TrendsCardContext } from "./cardContext";
 import {
   toUrlSearch,
   type TrendsSearch,
@@ -76,14 +92,6 @@ type LeaderboardRow = {
   lastYear: number | null;
 };
 
-const METRIC_COLOR: Record<MetricId, string> = {
-  gpa: "violet.5",
-  "a-plus": "teal.6",
-  "a-range": "blue.5",
-  pass: "green.6",
-  volume: "orange.5",
-};
-
 function pointMetric(point: TrendPoint, metric: MetricId): number | null {
   switch (metric) {
     case "gpa":
@@ -109,10 +117,12 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
     getInitialValueInEffect: false,
   });
 
-  // On mobile, stack long-label segmented controls vertically so their options
-  // aren't clipped; numeric controls (e.g. level) just go full-width.
+  // On mobile, the leaderboard sort segmented control stacks vertically so its
+  // longer option labels aren't clipped; the filter controls switch to compact
+  // Select dropdowns instead (see below).
   const verticalSegmented = isMobile ? ({ fullWidth: true, orientation: "vertical" } as const) : {};
-  const fullWidthSegmented = isMobile ? ({ fullWidth: true } as const) : {};
+
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const extras = search;
   const discipline = search.discipline ?? null;
@@ -134,16 +144,22 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
   const activeMetric: MetricId =
     metricOptions.find((m) => m.value === extras.metric)?.value ?? "gpa";
 
-  const formatMetric = (metricId: MetricId, value: number | null): string => {
-    if (value == null) return "—";
-    if (metricId === "gpa") {
-      return formatLocaleNumber(value, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-    }
-    if (metricId === "volume") {
-      return formatLocaleNumber(Math.round(value));
-    }
-    return `${formatLocaleNumber(value, { maximumFractionDigits: 1 })}%`;
-  };
+  const levelData = [
+    { value: "all", label: tr("trends.filter.all") },
+    { value: "1000", label: "1000" },
+    { value: "2000", label: "2000" },
+    { value: "3000", label: "3000" },
+    { value: "4000", label: "4000" },
+  ];
+  const seasonData = [
+    { value: "all", label: tr("trends.filter.all") },
+    { value: "fall", label: tr("trends.season.fall") },
+    { value: "winter", label: tr("trends.season.winter") },
+    { value: "springSummer", label: tr("trends.season.springSummer") },
+  ];
+
+  const formatMetric = (metricId: MetricId, value: number | null): string =>
+    formatMetricValue(metricId, value);
 
   const disciplineNameByCode = useMemo(() => {
     const map = new Map<string, string>();
@@ -326,6 +342,21 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
     [search],
   );
 
+  const metricLabel = metricOptions.find((m) => m.value === activeMetric)?.label ?? "";
+
+  const cardContext = useMemo<TrendsCardContext | null>(() => {
+    if (!grades) return null;
+    return {
+      grades,
+      discipline,
+      level,
+      season,
+      programFilter,
+      metric: activeMetric,
+      metricLabel,
+    };
+  }, [grades, discipline, level, season, programFilter, activeMetric, metricLabel]);
+
   const renderRowLabel = (row: LeaderboardRow) => {
     const label = (
       <Text size="sm" fw={600} c="var(--app-accent)" span>
@@ -358,6 +389,127 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
     );
   };
 
+  const activeFilterCount =
+    (programSlugValue || discipline ? 1 : 0) + (level ? 1 : 0) + (season ? 1 : 0);
+
+  const scopeSummary = (() => {
+    const parts: string[] = [];
+    if (programSlugValue) {
+      parts.push(
+        programOptions.find((p) => p.value === programSlugValue)?.label ?? programSlugValue,
+      );
+    } else if (discipline) {
+      parts.push(discipline);
+    }
+    if (level) parts.push(String(level));
+    if (season) parts.push(seasonData.find((s) => s.value === season)?.label ?? season);
+    return parts.length > 0 ? parts.join(" · ") : tr("trends.filter.allDisciplines");
+  })();
+
+  const filterControls = (
+    <Stack gap="md">
+      <Group gap="md" align="flex-end" wrap="wrap">
+        {programOptions.length > 0 ? (
+          <Select
+            label={tr("trends.filter.program")}
+            placeholder={tr("trends.filter.allPrograms")}
+            description={tr("trends.filter.programHint")}
+            data={programOptions}
+            value={programSlugValue}
+            onChange={(value) => update({ program: value ?? undefined })}
+            disabled={discipline != null}
+            searchable
+            clearable
+            nothingFoundMessage={tr("trends.filter.noProgramMatch")}
+            style={{ flex: "1 1 240px", minWidth: 0 }}
+          />
+        ) : null}
+        <Select
+          label={tr("trends.filter.discipline")}
+          placeholder={tr("trends.filter.allDisciplines")}
+          data={disciplineOptions}
+          value={discipline}
+          onChange={(value) => update({ discipline: value ?? undefined })}
+          disabled={programSlugValue != null}
+          searchable
+          clearable
+          filter={disciplineOptionsFilter}
+          nothingFoundMessage={tr("trends.filter.noMatch")}
+          style={{ flex: "1 1 240px", minWidth: 0 }}
+        />
+        <Stack gap={4} style={{ flex: isMobile ? "1 1 120px" : undefined, minWidth: 0 }}>
+          <Text size="xs" c="dimmed" fw={600}>
+            {tr("trends.filter.level")}
+          </Text>
+          {isMobile ? (
+            <Select
+              size="xs"
+              value={level ? String(level) : "all"}
+              onChange={(value) =>
+                update({ level: !value || value === "all" ? undefined : Number(value) })
+              }
+              data={levelData}
+            />
+          ) : (
+            <SegmentedControl
+              size="xs"
+              value={level ? String(level) : "all"}
+              onChange={(value) => update({ level: value === "all" ? undefined : Number(value) })}
+              data={levelData}
+            />
+          )}
+        </Stack>
+        <Stack gap={4} style={{ flex: isMobile ? "1 1 120px" : undefined, minWidth: 0 }}>
+          <Text size="xs" c="dimmed" fw={600}>
+            {tr("trends.filter.season")}
+          </Text>
+          {isMobile ? (
+            <Select
+              size="xs"
+              value={season ?? "all"}
+              onChange={(value) =>
+                update({
+                  season: !value || value === "all" ? undefined : (value as TermSeason),
+                })
+              }
+              data={seasonData}
+            />
+          ) : (
+            <SegmentedControl
+              size="xs"
+              value={season ?? "all"}
+              onChange={(value) =>
+                update({ season: value === "all" ? undefined : (value as TermSeason) })
+              }
+              data={seasonData}
+            />
+          )}
+        </Stack>
+      </Group>
+
+      <Stack gap={4}>
+        <Text size="xs" c="dimmed" fw={600}>
+          {tr("trends.metric.label")}
+        </Text>
+        {isMobile ? (
+          <Select
+            size="xs"
+            value={activeMetric}
+            onChange={(value) => value && update({ metric: value as MetricId })}
+            data={metricOptions.map((m) => ({ value: m.value, label: m.label }))}
+          />
+        ) : (
+          <SegmentedControl
+            size="xs"
+            value={activeMetric}
+            onChange={(value) => update({ metric: value as MetricId })}
+            data={metricOptions.map((m) => ({ value: m.value, label: m.label }))}
+          />
+        )}
+      </Stack>
+    </Stack>
+  );
+
   return (
     <Box
       component="main"
@@ -365,8 +517,10 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
         position: "relative",
         minHeight: "100vh",
         padding: isMobile ? 16 : 24,
+        paddingBottom: isMobile ? "calc(88px + env(safe-area-inset-bottom))" : 24,
         backgroundColor: "var(--app-bg)",
         boxSizing: "border-box",
+        overflowX: "clip",
       }}
     >
       <Stack gap="lg" w="100%" maw={1000} mx="auto">
@@ -401,156 +555,147 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
           </AppCard>
         ) : (
           <>
-            <AppCard p="md">
-              <Stack gap="md">
-                <Group gap="md" align="flex-end" wrap="wrap">
-                  {programOptions.length > 0 ? (
-                    <Select
-                      label={tr("trends.filter.program")}
-                      placeholder={tr("trends.filter.allPrograms")}
-                      description={tr("trends.filter.programHint")}
-                      data={programOptions}
-                      value={programSlugValue}
-                      onChange={(value) => update({ program: value ?? undefined })}
-                      disabled={discipline != null}
-                      searchable
-                      clearable
-                      nothingFoundMessage={tr("trends.filter.noProgramMatch")}
-                      style={{ flex: "1 1 240px", minWidth: 0 }}
-                    />
-                  ) : null}
-                  <Select
-                    label={tr("trends.filter.discipline")}
-                    placeholder={tr("trends.filter.allDisciplines")}
-                    data={disciplineOptions}
-                    value={discipline}
-                    onChange={(value) => update({ discipline: value ?? undefined })}
-                    disabled={programSlugValue != null}
-                    searchable
-                    clearable
-                    filter={disciplineOptionsFilter}
-                    nothingFoundMessage={tr("trends.filter.noMatch")}
-                    style={{ flex: "1 1 240px", minWidth: 0 }}
-                  />
-                  <Stack gap={4} style={{ flex: isMobile ? "1 1 100%" : undefined }}>
-                    <Text size="xs" c="dimmed" fw={600}>
-                      {tr("trends.filter.level")}
-                    </Text>
-                    <SegmentedControl
-                      size="xs"
-                      {...fullWidthSegmented}
-                      value={level ? String(level) : "all"}
-                      onChange={(value) =>
-                        update({ level: value === "all" ? undefined : Number(value) })
-                      }
-                      data={[
-                        { value: "all", label: tr("trends.filter.all") },
-                        { value: "1000", label: "1000" },
-                        { value: "2000", label: "2000" },
-                        { value: "3000", label: "3000" },
-                        { value: "4000", label: "4000" },
-                      ]}
-                    />
-                  </Stack>
-                  <Stack gap={4} style={{ flex: isMobile ? "1 1 100%" : undefined }}>
-                    <Text size="xs" c="dimmed" fw={600}>
-                      {tr("trends.filter.season")}
-                    </Text>
-                    <SegmentedControl
-                      size="xs"
-                      {...verticalSegmented}
-                      value={season ?? "all"}
-                      onChange={(value) =>
-                        update({ season: value === "all" ? undefined : (value as TermSeason) })
-                      }
-                      data={[
-                        { value: "all", label: tr("trends.filter.all") },
-                        { value: "fall", label: tr("trends.season.fall") },
-                        { value: "winter", label: tr("trends.season.winter") },
-                        { value: "springSummer", label: tr("trends.season.springSummer") },
-                      ]}
-                    />
-                  </Stack>
-                </Group>
+            {!isMobile ? (
+              <Box
+                style={{
+                  position: "sticky",
+                  top: 0,
+                  zIndex: 5,
+                  width: "100vw",
+                  marginInline: "calc(50% - 50vw)",
+                  backgroundColor: "var(--app-surface-sunken)",
+                  borderBottom: "var(--app-border-width) solid var(--app-border)",
+                  padding: "16px 24px",
+                  boxSizing: "border-box",
+                }}
+              >
+                <Box w="100%" maw={1000} mx="auto">
+                  {filterControls}
+                </Box>
+              </Box>
+            ) : null}
 
-                <Stack gap={4}>
-                  <Text size="xs" c="dimmed" fw={600}>
-                    {tr("trends.metric.label")}
-                  </Text>
-                  <SegmentedControl
-                    size="xs"
-                    {...verticalSegmented}
-                    value={activeMetric}
-                    onChange={(value) => update({ metric: value as MetricId })}
-                    data={metricOptions.map((m) => ({ value: m.value, label: m.label }))}
-                  />
-                </Stack>
-              </Stack>
-            </AppCard>
-
-            {points.length === 0 ? (
-              <AppCard p="xl">
-                <Text c="dimmed">{tr("trends.empty.noResults")}</Text>
-              </AppCard>
-            ) : (
-              <>
-                <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="md">
-                  <StatCard
-                    label={tr("trends.stat.latest")}
-                    value={latestValue}
-                    format={(n) => formatMetric(activeMetric, n)}
-                  />
-                  <StatCard
-                    label={tr("trends.stat.change")}
-                    value={delta}
-                    format={(n) => `${n > 0 ? "+" : ""}${formatMetric(activeMetric, n)}`}
-                    valueColor={
-                      delta == null || delta === 0
-                        ? undefined
-                        : delta > 0
-                          ? "var(--app-info)"
-                          : "var(--app-warning)"
-                    }
-                  />
-                  <StatCard
-                    label={tr("trends.stat.terms")}
-                    value={points.length}
-                    format={(n) => formatLocaleNumber(Math.round(n))}
-                  />
-                  <StatCard
-                    label={tr("trends.stat.volume")}
-                    value={totalVolume}
-                    format={(n) => formatLocaleNumber(Math.round(n))}
-                  />
-                </SimpleGrid>
-
-                <AppCard p="md">
-                  <LineChart
-                    h={320}
-                    data={chartData}
-                    dataKey="term"
-                    series={[
-                      {
-                        name: "value",
-                        label: metricOptions.find((m) => m.value === activeMetric)?.label,
-                        color: METRIC_COLOR[activeMetric],
-                      },
-                    ]}
-                    curveType="monotone"
-                    connectNulls
-                    withDots={chartData.length <= 24}
-                    yAxisProps={
-                      activeMetric === "gpa"
-                        ? { domain: [0, 10] }
-                        : activeMetric === "volume"
-                          ? { domain: [0, "auto"] }
-                          : { domain: [0, 100] }
-                    }
-                    valueFormatter={(value) => formatMetric(activeMetric, value)}
-                  />
+            <TrendsSection
+              title={tr("trends.section.overview")}
+              description={tr("trends.section.overviewDesc")}
+            >
+              {points.length === 0 ? (
+                <AppCard p="xl">
+                  <Text c="dimmed">{tr("trends.empty.noResults")}</Text>
                 </AppCard>
+              ) : (
+                <>
+                  <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="md">
+                    <StatCard
+                      label={tr("trends.stat.latest")}
+                      value={latestValue}
+                      format={(n) => formatMetric(activeMetric, n)}
+                    />
+                    <StatCard
+                      label={tr("trends.stat.change")}
+                      value={delta}
+                      format={(n) => `${n > 0 ? "+" : ""}${formatMetric(activeMetric, n)}`}
+                      valueColor={
+                        delta == null || delta === 0
+                          ? undefined
+                          : delta > 0
+                            ? "var(--app-info)"
+                            : "var(--app-warning)"
+                      }
+                    />
+                    <StatCard
+                      label={tr("trends.stat.terms")}
+                      value={points.length}
+                      format={(n) => formatLocaleNumber(Math.round(n))}
+                    />
+                    <StatCard
+                      label={tr("trends.stat.volume")}
+                      value={totalVolume}
+                      format={(n) => formatLocaleNumber(Math.round(n))}
+                    />
+                  </SimpleGrid>
+
+                  <AppCard p="md">
+                    <LineChart
+                      h={320}
+                      data={chartData}
+                      dataKey="term"
+                      series={[
+                        {
+                          name: "value",
+                          label: metricOptions.find((m) => m.value === activeMetric)?.label,
+                          color: METRIC_COLOR[activeMetric],
+                        },
+                      ]}
+                      curveType="monotone"
+                      connectNulls
+                      withDots={chartData.length <= 24}
+                      yAxisProps={
+                        activeMetric === "gpa"
+                          ? { domain: [0, 10] }
+                          : activeMetric === "volume"
+                            ? { domain: [0, "auto"] }
+                            : { domain: [0, 100] }
+                      }
+                      valueFormatter={(value) => formatMetric(activeMetric, value)}
+                    />
+                  </AppCard>
+                </>
+              )}
+
+              {cardContext ? (
+                <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
+                  <GradeBandAreaCard {...cardContext} />
+                  <GradeHistogramCard {...cardContext} />
+                </SimpleGrid>
+              ) : null}
+            </TrendsSection>
+
+            {cardContext ? (
+              <>
+                <TrendsSection
+                  title={tr("trends.section.disciplines")}
+                  description={tr("trends.section.disciplinesDesc")}
+                >
+                  <DisciplineBarCard {...cardContext} />
+                  <DisciplineHeatmapCard {...cardContext} />
+                </TrendsSection>
+
+                <TrendsSection
+                  title={tr("trends.section.courseChoice")}
+                  description={tr("trends.section.courseChoiceDesc")}
+                >
+                  <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
+                    <SeasonBarCard {...cardContext} />
+                    <LevelBarCard {...cardContext} />
+                    {filteredMode ? (
+                      <VolumeGpaScatterCard {...cardContext} />
+                    ) : (
+                      <ChartCard
+                        title={tr("trends.chart.scatter.title")}
+                        description={tr("trends.chart.scatter.desc")}
+                        empty
+                        emptyText={tr("trends.chart.needScope")}
+                      >
+                        {null}
+                      </ChartCard>
+                    )}
+                    {filteredMode ? (
+                      <ProfessorSpreadCard {...cardContext} />
+                    ) : (
+                      <ChartCard
+                        title={tr("trends.chart.profSpread.title")}
+                        description={tr("trends.chart.profSpread.desc")}
+                        empty
+                        emptyText={tr("trends.chart.needScope")}
+                      >
+                        {null}
+                      </ChartCard>
+                    )}
+                  </SimpleGrid>
+                </TrendsSection>
               </>
-            )}
+            ) : null}
 
             <AppCard p="md">
               <Stack gap="sm">
@@ -671,6 +816,59 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                 </Table.ScrollContainer>
               </Stack>
             </AppCard>
+
+            {isMobile ? (
+              <>
+                <Box
+                  style={{
+                    position: "fixed",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    zIndex: 150,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    padding: "10px 16px",
+                    paddingBottom: "calc(10px + env(safe-area-inset-bottom))",
+                    backgroundColor: "var(--app-surface)",
+                    borderTop: "var(--app-border-width) solid var(--app-border)",
+                  }}
+                >
+                  <Stack gap={0} style={{ flex: 1, minWidth: 0 }}>
+                    <Text size="xs" c="dimmed">
+                      {metricLabel}
+                    </Text>
+                    <Text size="sm" fw={600} truncate c="var(--app-text)">
+                      {scopeSummary}
+                    </Text>
+                  </Stack>
+                  <Button
+                    variant="light"
+                    leftSection={<IconAdjustmentsHorizontal size={16} stroke={1.6} />}
+                    onClick={() => setFiltersOpen(true)}
+                    rightSection={
+                      activeFilterCount > 0 ? (
+                        <Badge size="sm" circle variant="filled">
+                          {activeFilterCount}
+                        </Badge>
+                      ) : undefined
+                    }
+                  >
+                    {tr("trends.filter.mobileButton")}
+                  </Button>
+                </Box>
+
+                <CalendarMobileDrawer
+                  opened={filtersOpen}
+                  onClose={() => setFiltersOpen(false)}
+                  title={tr("trends.filter.mobileTitle")}
+                  ariaLabel={tr("trends.filter.mobileTitle")}
+                >
+                  {filterControls}
+                </CalendarMobileDrawer>
+              </>
+            ) : null}
           </>
         )}
       </Stack>
