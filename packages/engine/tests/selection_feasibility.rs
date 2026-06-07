@@ -111,7 +111,7 @@ fn run_target(engine: &Engine, pool: &[String], target: u32) {
         assert!(
             elapsed <= PER_SEED_BUDGET,
             "target {target}, seed {seed}: took {elapsed:?} (> {PER_SEED_BUDGET:?}); \
-             a slow seed risks the 1 s worker timeout once run as WASM"
+             a slow seed risks the 3 s worker timeout once run as WASM"
         );
     }
     eprintln!("target {target}: {SEEDS} seeds OK, worst {worst:?}");
