@@ -8,6 +8,7 @@
     "scrape:catalogue": "node src/cli/catalogue.ts",
     "backfill:aliases": "node src/cli/backfillAliases.ts",
     "scrape:schedules": "node src/cli/schedules.ts",
+    "scrape:feedback": "node src/cli/feedback.ts",
     "scrape:disciplines": "node src/cli/disciplines.ts",
     "enrich:schedules": "node --experimental-transform-types --experimental-specifier-resolution=node src/cli/enrich.ts",
     "scrape:ratemyprofessors": "node src/cli/ratemyprofessors.ts",
@@ -21,6 +22,7 @@
     "got": "^14.6.6",
     "jsdom": "^28.1.0",
     "p-limit": "^7.3.0",
+    "playwright": "^1.60.0",
     "tough-cookie": "^6.0.1",
     "zod": "^4.3.6"
   },
