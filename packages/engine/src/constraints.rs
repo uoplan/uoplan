@@ -7,7 +7,7 @@
 use std::collections::HashMap;
 
 use crate::model::{first_four_digit_number, DataView};
-use crate::types::{RtSection, RtTime};
+use crate::types::{Enrollment, RtSection, RtTime};
 
 #[derive(Clone, Default)]
 pub struct Constraints {
@@ -89,14 +89,18 @@ impl Constraints {
     }
 
     /// Final-timetable check: compressed schedule + first-year credit cap.
-    pub fn allows_final(&self, codes_times: &[(String, Vec<RtTime>)], data: &DataView) -> bool {
-        if self.compressed && !satisfies_compressed(codes_times) {
+    /// Operates on enrollments by reference (no per-call allocation).
+    pub fn allows_final(&self, chosen: &[Enrollment], data: &DataView) -> bool {
+        if self.compressed && !satisfies_compressed(chosen) {
             return false;
         }
         if let Some(cap) = self.max_first_year_credits {
             let mut total = 0.0;
-            for (code, _) in codes_times {
-                total += first_year_credits(code, data.get_course(code).map(|c| c.credits));
+            for e in chosen {
+                total += first_year_credits(
+                    &e.course_code,
+                    data.get_course(&e.course_code).map(|c| c.credits),
+                );
                 if total > cap {
                     return false;
                 }
@@ -117,10 +121,10 @@ fn first_year_credits(code: &str, credits: Option<f64>) -> f64 {
     }
 }
 
-fn satisfies_compressed(codes_times: &[(String, Vec<RtTime>)]) -> bool {
+fn satisfies_compressed(chosen: &[Enrollment]) -> bool {
     let mut by_day: HashMap<u8, Vec<(u32, u32)>> = HashMap::new();
-    for (_, times) in codes_times {
-        for t in times {
+    for e in chosen {
+        for t in &e.times {
             by_day.entry(t.day).or_default().push((t.start, t.end));
         }
     }

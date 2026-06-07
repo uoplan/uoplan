@@ -9,7 +9,8 @@ use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Through
 use prost::Message;
 use uoplan_engine::proto::data::SchedulesData;
 use uoplan_engine::proto::engine::{
-    BlockedTime, GenerationConstraints, GenerationRequest, Mode, TimetableRequest,
+    BlockedTime, GenerationConstraints, GenerationRequest, Mode, RemainingRequirement,
+    TimetableRequest,
 };
 use uoplan_engine::Engine;
 
@@ -50,6 +51,53 @@ fn load_dataset() -> Option<Dataset> {
 
     let engine = Engine::new(&cat_bytes, &sched_bytes).ok()?;
     Some(Dataset { engine, schedulable })
+}
+
+/// Undergrad (level 1000-4000) subset of the schedulable codes, mirroring the
+/// `undergrad_schedulable` helper in `tests/selection_feasibility.rs` so the
+/// advanced benches exercise the same realistic full-pool selection.
+fn undergrad_pool(schedulable: &[String]) -> Vec<String> {
+    let mut out: Vec<String> = schedulable
+        .iter()
+        .filter(|code| {
+            let first_digit = code
+                .chars()
+                .skip_while(|c| c.is_alphabetic())
+                .find(|c| c.is_ascii_digit())
+                .and_then(|c| c.to_digit(10));
+            matches!(first_digit, Some(1..=4))
+        })
+        .cloned()
+        .collect();
+    out.sort();
+    out.dedup();
+    out
+}
+
+/// Advanced-mode full-pool generation request: select `target` courses (3 credits
+/// each) from a single "core" requirement spanning the whole `pool`.
+fn advanced_request(pool: &[String], target: u32, seed: u32) -> Vec<u8> {
+    GenerationRequest {
+        mode: Mode::Advanced as i32,
+        courses_this_semester: target,
+        include_closed_components: true,
+        level_buckets: vec!["undergrad".to_string(), "grad".to_string()],
+        language_buckets: vec!["en".to_string(), "fr".to_string(), "other".to_string()],
+        prereq_eligible_courses: pool.to_vec(),
+        remaining_requirements: vec![RemainingRequirement {
+            requirement_id: "core".to_string(),
+            r#type: "core".to_string(),
+            title: Some("Core".to_string()),
+            candidate_courses: pool.to_vec(),
+            credits_needed: Some(f64::from(target) * 3.0),
+            picked_count: None,
+            satisfied_by: vec![],
+        }],
+        current_seed: seed,
+        first_seed: seed,
+        ..Default::default()
+    }
+    .encode_to_vec()
 }
 
 /// A named hard-constraint configuration applied to a timetable request.
@@ -245,6 +293,58 @@ fn bench_basic_electives(c: &mut Criterion) {
     group.finish();
 }
 
+/// Bench: advanced-mode full-pool selection over the realistic undergrad pool,
+/// swept over near-capacity targets. This is the path that regressed on slow CI
+/// (`selection_feasibility::advanced_full_pool_every_seed_succeeds_quickly`);
+/// seeds are the ones CI flagged as worst-case so the bench tracks the tail, not
+/// the average.
+fn bench_advanced_full_pool(c: &mut Criterion) {
+    let Some(ds) = load_dataset() else {
+        eprintln!("skipping advanced benches: .pb artifacts not built (run `pnpm build:data-proto`)");
+        return;
+    };
+    let pool = undergrad_pool(&ds.schedulable);
+    if pool.len() < 1000 {
+        return;
+    }
+
+    let mut group = c.benchmark_group("advanced_generate/full_pool");
+    group.sample_size(10);
+    // (target, heavy seed). Seed 60 at target 24 is the CI worst-case repro.
+    for &(target, seed) in &[(22u32, 7u32), (24u32, 60u32)] {
+        let request = advanced_request(&pool, target, seed);
+        group.throughput(Throughput::Elements(u64::from(target)));
+        group.bench_with_input(
+            BenchmarkId::from_parameter(target),
+            &request,
+            |b, req| b.iter(|| std::hint::black_box(ds.engine.generate(req).unwrap())),
+        );
+    }
+    group.finish();
+}
+
+/// Bench: advanced-mode infeasible request (40 conflict-free courses can't fit in
+/// one week). This is the fast-fail path that regressed on slow CI
+/// (`selection_feasibility::advanced_infeasible_request_fails_fast_for_every_seed`);
+/// it must exhaust the work budget and bail quickly. Seed 1 is the CI worst-case.
+fn bench_advanced_infeasible(c: &mut Criterion) {
+    let Some(ds) = load_dataset() else {
+        return;
+    };
+    let pool = undergrad_pool(&ds.schedulable);
+    if pool.len() < 1000 {
+        return;
+    }
+
+    let mut group = c.benchmark_group("advanced_generate/infeasible");
+    group.sample_size(10);
+    let request = advanced_request(&pool, 40, 1);
+    group.bench_with_input(BenchmarkId::from_parameter(40), &request, |b, req| {
+        b.iter(|| std::hint::black_box(ds.engine.generate(req).unwrap()));
+    });
+    group.finish();
+}
+
 criterion_group!(
     benches,
     bench_engine_new,
@@ -252,5 +352,7 @@ criterion_group!(
     bench_timetable_configs,
     bench_basic_pinned,
     bench_basic_electives,
+    bench_advanced_full_pool,
+    bench_advanced_infeasible,
 );
 criterion_main!(benches);
