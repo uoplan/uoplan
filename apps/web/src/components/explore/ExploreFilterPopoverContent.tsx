@@ -84,11 +84,10 @@ const checkboxStyles = {
     fontSize: "var(--mantine-font-size-sm)",
     cursor: "pointer",
   },
-  input: {
-    cursor: "pointer",
-    backgroundColor: "var(--app-surface-overlay)",
-    borderColor: "var(--app-border-strong)",
-  },
+};
+
+const checkboxClassNames = {
+  input: "explore-checkbox-input",
 };
 
 const radioStyles = {
@@ -138,6 +137,8 @@ export function ExploreFilterPopoverContent({
             label={tr(labelKey)}
             checked={filters.levels.includes(value)}
             styles={checkboxStyles}
+            classNames={checkboxClassNames}
+            iconColor="var(--app-on-accent)"
             onChange={(e) => {
               const next = e.currentTarget.checked
                 ? [...filters.levels, value]
@@ -159,6 +160,8 @@ export function ExploreFilterPopoverContent({
             label={tr(labelKey)}
             checked={filters.languages.includes(value)}
             styles={checkboxStyles}
+            classNames={checkboxClassNames}
+            iconColor="var(--app-on-accent)"
             onChange={(e) => {
               const next = e.currentTarget.checked
                 ? [...filters.languages, value]
