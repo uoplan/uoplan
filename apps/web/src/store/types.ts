@@ -153,6 +153,14 @@ export interface AppState {
   generationCompressedSchedule: boolean;
   /** Bias pool picks toward courses with higher historical grade averages. */
   generationPreferEasier: boolean;
+  /** Bias pool picks toward courses with higher overall feedback sentiment. */
+  generationPreferHigherSentiment: boolean;
+  /**
+   * Overall course-feedback sentiment (1-5) keyed by normalized course code, lazily
+   * built from the feedback dataset when {@link generationPreferHigherSentiment} is on.
+   * Null until loaded; consumed only by schedule generation.
+   */
+  courseSentimentByNorm: Map<string, number> | null;
   frenchImmersionStream: boolean;
   /** The week group index the user last navigated to in the calendar, for URL sharing. */
   calendarWeekIndex: number | null;
@@ -248,6 +256,8 @@ export interface AppActions {
   setGenerationLimitFirstYearCredits: (v: boolean) => void;
   setGenerationCompressedSchedule: (v: boolean) => void;
   setGenerationPreferEasier: (v: boolean) => void;
+  setGenerationPreferHigherSentiment: (v: boolean) => void;
+  setCourseSentimentByNorm: (map: Map<string, number> | null) => void;
   setFrenchImmersionStream: (enabled: boolean) => void;
   setBlacklistedCourses: (courses: string[]) => void;
   blacklistCourseFromSwap: (enrollmentIndex: number) => void;

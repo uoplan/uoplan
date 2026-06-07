@@ -74,6 +74,7 @@ function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
     generationLimitFirstYearCredits: false,
     generationCompressedSchedule: false,
     generationPreferEasier: false,
+    generationPreferHigherSentiment: false,
     activeStep: 0,
     showCalendar: false,
     frenchImmersionStream: false,
@@ -146,6 +147,15 @@ describe("encodeState / decodeState roundtrip", () => {
     expect("error" in decoded).toBe(false);
     if ("error" in decoded) return;
     expect(decoded.generationPreferEasier).toBe(true);
+  });
+
+  it("round-trips generationPreferHigherSentiment", () => {
+    const input = makeInput({ generationPreferHigherSentiment: true });
+    const bytes = encodeState(input, catalogue, indices)!;
+    const decoded = decodeState(bytes, catalogue, indices);
+    expect("error" in decoded).toBe(false);
+    if ("error" in decoded) return;
+    expect(decoded.generationPreferHigherSentiment).toBe(true);
   });
 
   it("round-trips frenchImmersionStream", () => {

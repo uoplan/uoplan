@@ -21,6 +21,7 @@ import {
 } from "@uoplan/proto/engine";
 import type { DataCache } from "./dataCache";
 import { courseAPlusPercent } from "./gradeDistribution";
+import { normalizeCourseCode } from "./utils/courseUtils";
 import { getEnrollmentsForCourse } from "./generation/sectionCombos";
 import type {
   CourseEnrollment,
@@ -51,6 +52,14 @@ interface CommonRequestInput {
   includeClosedComponents: boolean;
   virtualSectionsOnly: boolean;
   generationPreferEasier: boolean;
+  /** Soft "prefer higher sentiment" (course-feedback overall rating) preference. */
+  generationPreferHigherSentiment: boolean;
+  /**
+   * Overall course-feedback sentiment (1-5) keyed by normalized course code,
+   * supplied by the caller (built from the lazily-loaded feedback dataset). Only
+   * consumed when {@link generationPreferHigherSentiment} is true.
+   */
+  courseSentimentByNorm?: Map<string, number> | null;
   blacklistedCourses: string[];
   currentSeed: number;
   firstSeed: number;
@@ -148,6 +157,24 @@ function buildCourseAplusMap(cache: DataCache): Record<string, number> {
   return out;
 }
 
+/**
+ * Course code -> overall feedback sentiment (1-5) for the "prefer higher
+ * sentiment" soft weighting. Keyed by the schedule's raw course code (matching
+ * {@link buildCourseAplusMap}) so the engine's per-course lookups line up; values
+ * come from the caller's normalized-code sentiment map.
+ */
+function buildCourseSentimentMap(
+  cache: DataCache,
+  byNorm: Map<string, number>,
+): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const schedule of cache.getAllSchedules()) {
+    const s = byNorm.get(normalizeCourseCode(schedule.courseCode));
+    if (s != null && Number.isFinite(s)) out[schedule.courseCode] = s;
+  }
+  return out;
+}
+
 function stringListMap(rec: Record<string, string[]>): Record<string, StringList> {
   const out: Record<string, StringList> = {};
   for (const [k, v] of Object.entries(rec)) out[k] = { values: v };
@@ -219,6 +246,11 @@ export function buildBasicRequest(input: BasicRequestInput, cache: DataCache): G
     firstSeed: input.firstSeed,
     professorRatings: professorRatingsToProto(input.constraints),
     courseAplus: input.generationPreferEasier ? buildCourseAplusMap(cache) : {},
+    generationPreferHigherSentiment: input.generationPreferHigherSentiment,
+    courseSentiment:
+      input.generationPreferHigherSentiment && input.courseSentimentByNorm
+        ? buildCourseSentimentMap(cache, input.courseSentimentByNorm)
+        : {},
   };
 }
 
@@ -255,6 +287,11 @@ export function buildAdvancedRequest(
     firstSeed: input.firstSeed,
     professorRatings: professorRatingsToProto(input.constraints),
     courseAplus: input.generationPreferEasier ? buildCourseAplusMap(cache) : {},
+    generationPreferHigherSentiment: input.generationPreferHigherSentiment,
+    courseSentiment:
+      input.generationPreferHigherSentiment && input.courseSentimentByNorm
+        ? buildCourseSentimentMap(cache, input.courseSentimentByNorm)
+        : {},
   };
 }
 

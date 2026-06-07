@@ -124,6 +124,12 @@ message GenerationRequest {
 
   // Course code -> A+ percentage, used by the "prefer easier" soft weighting.
   map<string, double> course_aplus = 30;
+
+  // Soft "prefer higher sentiment" preference (course-feedback overall rating).
+  bool generation_prefer_higher_sentiment = 31;
+  // Course code -> overall feedback sentiment (1-5). Used by the
+  // "prefer higher sentiment" soft selection weighting.
+  map<string, double> course_sentiment = 32;
 }
 
 // Re-timetable a FIXED set of courses (the UI swap feature): given an exact set

@@ -26,6 +26,8 @@ function fields(): GenerationOptionsFieldsProps {
     onCompressedScheduleChange: vi.fn(),
     preferEasierCourses: false,
     onPreferEasierCoursesChange: vi.fn(),
+    preferHigherSentiment: false,
+    onPreferHigherSentimentChange: vi.fn(),
     minStartMinutes: 0,
     onMinStartMinutesChange: vi.fn(),
     maxEndMinutes: 1440,

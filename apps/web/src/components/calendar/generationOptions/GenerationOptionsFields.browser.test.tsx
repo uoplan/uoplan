@@ -24,6 +24,8 @@ function baseProps(): GenerationOptionsFieldsProps {
     onCompressedScheduleChange: vi.fn(),
     preferEasierCourses: false,
     onPreferEasierCoursesChange: vi.fn(),
+    preferHigherSentiment: false,
+    onPreferHigherSentimentChange: vi.fn(),
     minStartMinutes: 8 * 60,
     onMinStartMinutesChange: vi.fn(),
     maxEndMinutes: 18 * 60,
@@ -66,6 +68,7 @@ test("surfaces common scheduling options and tucks filters behind a disclosure",
   // Common scheduling preferences are now surfaced directly, not hidden.
   await expect.element(page.getByText("Earliest class start")).toBeInTheDocument();
   await expect.element(page.getByText("Compressed schedule")).toBeInTheDocument();
+  await expect.element(page.getByText("Prefer courses with better feedback")).toBeInTheDocument();
 
   const toggle = page.getByRole("button", { name: /More options/i });
   await expect.element(toggle).toHaveAttribute("aria-expanded", "false");

@@ -16,6 +16,7 @@ const FILTER_KEYS = [
   "discipline",
   "difficulty",
   "rating",
+  "feedback",
   "term",
   "sort",
 ] as const;
@@ -24,6 +25,7 @@ export const FILTER_PILL_RADIUS = "var(--app-radius-pill)";
 export const FILTER_POPOVER_RADIUS = "var(--app-radius)";
 
 const RATING_KEY: Record<number, string> = { 3: "good", 3.5: "great", 4: "excellent" };
+const FEEDBACK_KEY: Record<number, string> = { 3: "good", 3.5: "great", 4: "excellent" };
 
 function pillLabel(key: FilterKey, filters: ExploreFilterState, termOptions: TermOption[]): string {
   if (key === "level") {
@@ -51,6 +53,11 @@ function pillLabel(key: FilterKey, filters: ExploreFilterState, termOptions: Ter
     const rk = RATING_KEY[filters.minRating];
     return rk ? tr(`explore.filter.rating.${rk}`) : tr("explore.filter.rating");
   }
+  if (key === "feedback") {
+    if (filters.minFeedback === null) return tr("explore.filter.feedback");
+    const fk = FEEDBACK_KEY[filters.minFeedback];
+    return fk ? tr(`explore.filter.feedback.${fk}`) : tr("explore.filter.feedback");
+  }
   if (key === "term") {
     if (filters.termId === null) return tr("explore.filter.term");
     const match = termOptions.find((t) => t.value === String(filters.termId));
@@ -72,6 +79,7 @@ function pillIsActive(key: FilterKey, filters: ExploreFilterState): boolean {
   if (key === "discipline") return filters.disciplines.length > 0;
   if (key === "difficulty") return filters.difficulty !== null;
   if (key === "rating") return filters.minRating !== null;
+  if (key === "feedback") return filters.minFeedback !== null;
   if (key === "term") return filters.termId !== null;
   if (key === "sort") return filters.sortKey !== "relevance";
   return false;
@@ -88,6 +96,9 @@ function pillColors(key: FilterKey, filters: ExploreFilterState): { bg: string; 
     return { bg: "var(--app-danger-soft)", border: "var(--app-danger)" };
   }
   if (key === "rating" && filters.minRating !== null) {
+    return { bg: "var(--app-info-soft)", border: "var(--app-info)" };
+  }
+  if (key === "feedback" && filters.minFeedback !== null) {
     return { bg: "var(--app-info-soft)", border: "var(--app-info)" };
   }
   return { bg: "var(--app-translucent)", border: "var(--app-translucent-strong)" };
@@ -199,6 +210,7 @@ export function ExploreFilterBar({
     filters.disciplines.length > 0 ||
     filters.difficulty !== null ||
     filters.minRating !== null ||
+    filters.minFeedback !== null ||
     filters.termId !== null ||
     filters.sortKey !== "relevance";
 

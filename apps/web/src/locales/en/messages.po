@@ -805,6 +805,24 @@ msgstr "No disciplines found"
 msgid "explore.filter.discipline.placeholder"
 msgstr "Search disciplines"
 
+#: apps/web/src/components/explore/ExploreFilterBar.tsx:57
+#: apps/web/src/components/explore/ExploreFilterBar.tsx:59
+#: apps/web/src/components/explore/ExploreFilterPopoverContent.tsx:373
+msgid "explore.filter.feedback"
+msgstr "Feedback"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "explore.filter.feedback.excellent"
+msgstr "Excellent (4.0+)"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "explore.filter.feedback.good"
+msgstr "Good (3.0+)"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "explore.filter.feedback.great"
+msgstr "Great (3.5+)"
+
 msgid "explore.filter.language"
 msgstr "Language"
 
@@ -1853,6 +1871,12 @@ msgstr "When generating, courses with a higher historical A+ rate are more likel
 
 msgid "scheduleCount.preferEasier.label"
 msgstr "Prefer easier courses (past A+ rates)"
+
+msgid "scheduleCount.preferSentiment.description"
+msgstr "When generating, courses with higher overall student-feedback ratings are more likely to be picked from each requirement pool."
+
+msgid "scheduleCount.preferSentiment.label"
+msgstr "Prefer courses with better feedback"
 
 msgid "scheduleCount.rating.description"
 msgstr "Professors without a rating are always allowed."

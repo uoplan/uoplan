@@ -12,6 +12,7 @@ const FILTER_KEYS = [
   "discipline",
   "difficulty",
   "rating",
+  "feedback",
   "term",
   "sort",
 ] as const;

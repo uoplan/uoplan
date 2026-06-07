@@ -5,6 +5,11 @@ import { useLingui } from "@lingui/react";
 import { AnimatePresence, m } from "framer-motion";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Catalogue } from "@uoplan/core";
+import {
+  courseSentimentByNorm,
+  professorSentimentByName,
+  normalizeProfessorName,
+} from "@uoplan/core";
 
 import { useTr, tr } from "../../i18n";
 import {
@@ -26,6 +31,7 @@ import {
   type ExploreSearchParams,
   type ExploreFilterState,
   type ExploreTermSets,
+  type ExploreSentimentSets,
 } from "../../lib/explore/exploreFilters";
 import {
   buildProgramSearchEntries,
@@ -42,6 +48,7 @@ import { SearchResultCourseCard } from "./SearchResultCourseCard";
 import { SearchResultDisciplineCard } from "./SearchResultDisciplineCard";
 import { SearchResultProfessorCard } from "./SearchResultProfessorCard";
 import { SearchResultProgramCard } from "./SearchResultProgramCard";
+import { useFeedbackData } from "../../hooks/useFeedbackData";
 
 const EMPTY_COURSE_ENTRIES: ExploreCourseSearchEntry[] = [];
 const EMPTY_PROFESSOR_ENTRIES: ExploreProfessorSearchEntry[] = [];
@@ -214,6 +221,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       disc: params.disc ?? undefined,
       difficulty: params.difficulty ?? undefined,
       rating: params.rating ?? undefined,
+      feedback: params.feedback ?? undefined,
       term: params.term ?? undefined,
       sort: params.sort ?? undefined,
       dir: params.dir ?? undefined,
@@ -281,14 +289,37 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     };
   }, [filters.termId, getTermPresence]);
 
+  // Course-feedback overall sentiment, only fetched/computed when the feedback
+  // filter is engaged. Course sentiment keys by normCode; professor sentiment is
+  // re-keyed onto the explore groupId via the normalized display name.
+  const feedbackActive = filters.minFeedback !== null;
+  const { data: feedbackIndex } = useFeedbackData(feedbackActive);
+  const sentimentSets = useMemo<ExploreSentimentSets | undefined>(() => {
+    if (!feedbackActive) return undefined;
+    if (!feedbackIndex) return { courseByNorm: null, professorByGroupId: null };
+    const byName = professorSentimentByName(feedbackIndex);
+    const professorByGroupId = new Map<string, number>();
+    for (const e of professorEntries) {
+      const s = byName.get(normalizeProfessorName(e.displayName));
+      if (s != null) professorByGroupId.set(e.groupId, s);
+    }
+    return { courseByNorm: courseSentimentByNorm(feedbackIndex), professorByGroupId };
+  }, [feedbackActive, feedbackIndex, professorEntries]);
+
   const searchResults = useMemo(() => {
     if (!rawSearchResults) return null;
     if (!activeFilters) return rawSearchResults;
-    const filteredCourses = filterCourseEntries(rawSearchResults.courses, filters, termSets);
+    const filteredCourses = filterCourseEntries(
+      rawSearchResults.courses,
+      filters,
+      termSets,
+      sentimentSets,
+    );
     const filteredProfessors = filterProfessorEntries(
       rawSearchResults.professors,
       filters,
       termSets,
+      sentimentSets,
     );
     const shouldSortCourses = filters.sortKey === "grade" || filters.sortKey === "code";
     const shouldSortProfessors = filters.sortKey === "rating";
@@ -305,13 +336,13 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
             .sort((a, b) => compareProfessorEntries(a, b, filters.sortKey, filters.sortDir))
         : filteredProfessors,
     };
-  }, [rawSearchResults, activeFilters, filters, termSets]);
+  }, [rawSearchResults, activeFilters, filters, termSets, sentimentSets]);
 
   const filterOnlyCourses = useMemo(() => {
     const q = debouncedQuery.trim();
     if (q || !activeFilters) return null;
     const filtered = dedupeCourseEntriesByComponent(
-      filterCourseEntries(courseEntries, filters, termSets),
+      filterCourseEntries(courseEntries, filters, termSets, sentimentSets),
     );
     if (filters.sortKey === "relevance") return filtered.slice(0, 24);
     if (filters.sortKey === "rating") return filtered.slice(0, 24);
@@ -319,7 +350,22 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       .slice()
       .sort((a, b) => compareCourseEntries(a, b, filters.sortKey, filters.sortDir))
       .slice(0, 24);
-  }, [debouncedQuery, activeFilters, courseEntries, filters, termSets]);
+  }, [debouncedQuery, activeFilters, courseEntries, filters, termSets, sentimentSets]);
+
+  // Mirror of `filterOnlyCourses` for professors: when no query is typed but a
+  // filter is active (e.g. rating or feedback), surface matching professors too.
+  const filterOnlyProfessors = useMemo(() => {
+    const q = debouncedQuery.trim();
+    if (q || !activeFilters) return null;
+    const filtered = filterProfessorEntries(professorEntries, filters, termSets, sentimentSets);
+    if (filters.sortKey === "rating") {
+      return filtered
+        .slice()
+        .sort((a, b) => compareProfessorEntries(a, b, filters.sortKey, filters.sortDir))
+        .slice(0, 24);
+    }
+    return filtered.slice(0, 24);
+  }, [debouncedQuery, activeFilters, professorEntries, filters, termSets, sentimentSets]);
 
   const disciplineCourseCount = useMemo(() => buildDisciplineCourseCount(catalogue), [catalogue]);
 
@@ -355,10 +401,12 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     (searchResults?.courses.length ?? 0) > 0 ||
     (filterOnlyCourses?.length ?? 0) > 0 ||
     (searchResults?.professors.length ?? 0) > 0 ||
+    (filterOnlyProfessors?.length ?? 0) > 0 ||
     disciplineResults.length > 0 ||
     programResults.length > 0;
 
   const displayedCourses = filterOnlyCourses ?? searchResults?.courses ?? [];
+  const displayedProfessors = filterOnlyProfessors ?? searchResults?.professors ?? [];
 
   const currentSearchParams = useMemo(() => buildSearchParams(filters, query), [filters, query]);
 
@@ -408,9 +456,9 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     ) : null;
 
   const professorsSection =
-    searchResults && searchResults.professors.length > 0 ? (
+    displayedProfessors.length > 0 ? (
       <SearchCardSection label={tr("explore.resultsProfessors")} delay={0.06}>
-        {searchResults.professors.map((entry) => (
+        {displayedProfessors.map((entry) => (
           <m.div
             key={entry.groupId}
             initial={{ opacity: 0, scale: 0.94 }}

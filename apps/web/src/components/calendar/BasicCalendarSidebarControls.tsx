@@ -38,6 +38,7 @@ export function BasicCalendarSidebarControls() {
     generationLimitFirstYearCredits,
     generationCompressedSchedule,
     generationPreferEasier,
+    generationPreferHigherSentiment,
   } = useAppStore(
     useShallow((s) => ({
       cache: s.cache,
@@ -58,6 +59,7 @@ export function BasicCalendarSidebarControls() {
       generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
       generationCompressedSchedule: s.generationCompressedSchedule,
       generationPreferEasier: s.generationPreferEasier,
+      generationPreferHigherSentiment: s.generationPreferHigherSentiment,
     })),
   );
 
@@ -83,6 +85,9 @@ export function BasicCalendarSidebarControls() {
   );
   const setGenerationCompressedSchedule = useAppStore((s) => s.setGenerationCompressedSchedule);
   const setGenerationPreferEasier = useAppStore((s) => s.setGenerationPreferEasier);
+  const setGenerationPreferHigherSentiment = useAppStore(
+    (s) => s.setGenerationPreferHigherSentiment,
+  );
 
   const allCategories = useMemo(() => {
     if (!cache) return [] as string[];
@@ -187,6 +192,11 @@ export function BasicCalendarSidebarControls() {
         preferEasierCourses={generationPreferEasier}
         onPreferEasierCoursesChange={(v) => {
           setGenerationPreferEasier(v);
+          markBasicSettingsChanged();
+        }}
+        preferHigherSentiment={generationPreferHigherSentiment}
+        onPreferHigherSentimentChange={(v) => {
+          setGenerationPreferHigherSentiment(v);
           markBasicSettingsChanged();
         }}
         minStartMinutes={generationMinStartMinutes}
