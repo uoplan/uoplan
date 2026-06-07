@@ -7,8 +7,8 @@ describe("createDataClient.fetchBytes", () => {
     const transport = vi.fn(async (path: string) => new Uint8Array([path.length]));
     const client = createDataClient({ transport });
 
-    const a = await client.fetchBytes("/data/x.pb");
-    const b = await client.fetchBytes("/data/x.pb");
+    const a = await client.fetchBytes("terms.pb");
+    const b = await client.fetchBytes("terms.pb");
 
     expect(transport).toHaveBeenCalledTimes(1);
     expect(a).toBe(b);
@@ -23,8 +23,8 @@ describe("createDataClient.fetchBytes", () => {
     });
     const client = createDataClient({ transport });
 
-    await expect(client.fetchBytes("/data/x.pb")).rejects.toThrow("transient");
-    const bytes = await client.fetchBytes("/data/x.pb");
+    await expect(client.fetchBytes("terms.pb")).rejects.toThrow("transient");
+    const bytes = await client.fetchBytes("terms.pb");
 
     expect(transport).toHaveBeenCalledTimes(2);
     expect(bytes).toEqual(new Uint8Array([1]));
@@ -34,11 +34,42 @@ describe("createDataClient.fetchBytes", () => {
     const transport = vi.fn(async () => new Uint8Array([1]));
     const client = createDataClient({ transport });
 
-    await client.fetchBytes("/data/x.pb");
+    await client.fetchBytes("terms.pb");
     client.clear();
-    await client.fetchBytes("/data/x.pb");
+    await client.fetchBytes("terms.pb");
 
     expect(transport).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe("createDataClient.load", () => {
+  it("decodes once and memoizes the decoded message per id", async () => {
+    const transport = vi.fn(async () => new Uint8Array([1, 2, 3]));
+    const decode = vi.fn((bytes: Uint8Array) => ({ length: bytes.length }));
+    const client = createDataClient({ transport });
+
+    const a = await client.load({ decode }, "terms.pb");
+    const b = await client.load({ decode }, "terms.pb");
+
+    expect(transport).toHaveBeenCalledTimes(1);
+    expect(decode).toHaveBeenCalledTimes(1);
+    expect(a).toBe(b);
+    expect(a).toEqual({ length: 3 });
+  });
+
+  it("does not memoize a failed decode (retryable)", async () => {
+    const transport = vi.fn(async () => new Uint8Array([1]));
+    let calls = 0;
+    const decode = vi.fn(() => {
+      calls += 1;
+      if (calls === 1) throw new Error("bad wire");
+      return { ok: true };
+    });
+    const client = createDataClient({ transport });
+
+    await expect(client.load({ decode }, "terms.pb")).rejects.toThrow("bad wire");
+    await expect(client.load({ decode }, "terms.pb")).resolves.toEqual({ ok: true });
+    expect(decode).toHaveBeenCalledTimes(2);
   });
 });
 
@@ -46,12 +77,12 @@ describe("optional", () => {
   it("returns null when the transport rejects", async () => {
     const result = await optional(async () => {
       throw new Error("missing");
-    }, "/data/x.pb");
+    }, "terms.pb");
     expect(result).toBeNull();
   });
 
   it("returns bytes when the transport resolves", async () => {
-    const result = await optional(async () => new Uint8Array([7]), "/data/x.pb");
+    const result = await optional(async () => new Uint8Array([7]), "terms.pb");
     expect(result).toEqual(new Uint8Array([7]));
   });
 });

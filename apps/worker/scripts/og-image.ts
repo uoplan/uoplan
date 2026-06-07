@@ -6,7 +6,7 @@
  * The argument is the `p` payload embedded in a share URL — a base64url-encoded
  * `SchedulePreview` (index-based courses + sections + term), the same value the
  * web app appends in `getShareUrl()`. This script reads .pb data files from
- * apps/web/public/data/, runs the same fast-path pipeline as the worker's
+ * apps/web/src/assets/data/, runs the same fast-path pipeline as the worker's
  * /api/og-image endpoint (no schedule generation), and writes
  * playground/og-image.png.
  */
@@ -32,7 +32,7 @@ declare const WORKER_ROOT: string | undefined;
 const _workerRoot: string =
   typeof WORKER_ROOT !== "undefined" ? WORKER_ROOT : join(__dirname, "..");
 const ROOT = join(_workerRoot, "../..");
-const DATA_DIR = join(ROOT, "apps/web/public/data");
+const DATA_DIR = join(ROOT, "apps/web/src/assets/data");
 
 function base64urlToBytes(s: string): Uint8Array {
   const padded = s.replace(/-/g, "+").replace(/_/g, "/");

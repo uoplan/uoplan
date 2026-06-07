@@ -63,8 +63,14 @@ export interface DataClientOptions {
  * are NOT memoized, so a transient error can't permanently disable an asset.
  */
 export interface DataClient {
-  /** Memoized fetch of raw bytes (rejections evict the entry). */
+  /** Memoized fetch of raw bytes by asset id (rejections evict the entry). */
   fetchBytes: FetchBytes;
+  /**
+   * Fetch an asset by id and decode it with `type.decode`, memoizing the decoded
+   * message so repeat callers reuse it. Failed fetches/decodes are not memoized.
+   * The caller is responsible for always pairing an id with the same proto type.
+   */
+  load<T>(type: ProtoDecoder<T>, id: string): Promise<T>;
   /** Fetch + decode + merge + build the DataCache for a data key. */
   loadEffectiveCache(dataKey: CacheDataKey): Promise<DataCache>;
   /**
@@ -79,6 +85,11 @@ export interface DataClient {
   }>;
   /** Drop all cached promises and built caches. */
   clear(): void;
+}
+
+/** A protobuf message type that can decode bytes into `T` (e.g. `DataProto.TermsData`). */
+export interface ProtoDecoder<T> {
+  decode(bytes: Uint8Array): T;
 }
 
 interface MemoEntry {
@@ -98,20 +109,32 @@ function memoKey(dataKey: CacheDataKey): string {
 export function createDataClient(options: DataClientOptions): DataClient {
   const { transport, cacheSize = 4, mergeCatalogue = getMergedCatalogue } = options;
   const bytesMemo = new Map<string, Promise<Uint8Array>>();
+  const decodedMemo = new Map<string, Promise<unknown>>();
   const cacheMemo = new Map<string, MemoEntry>();
 
-  const fetchBytes: FetchBytes = (path) => {
-    const hit = bytesMemo.get(path);
+  const fetchBytes: FetchBytes = (id) => {
+    const hit = bytesMemo.get(id);
     if (hit) return hit;
-    const p = transport(path);
-    bytesMemo.set(path, p);
+    const p = transport(id);
+    bytesMemo.set(id, p);
     // Never memoize a rejection: a transient failure must not permanently
     // disable an asset for the lifetime of the client.
     p.catch(() => {
-      if (bytesMemo.get(path) === p) bytesMemo.delete(path);
+      if (bytesMemo.get(id) === p) bytesMemo.delete(id);
     });
     return p;
   };
+
+  function load<T>(type: ProtoDecoder<T>, id: string): Promise<T> {
+    const hit = decodedMemo.get(id);
+    if (hit) return hit as Promise<T>;
+    const p = fetchBytes(id).then((bytes) => type.decode(bytes));
+    decodedMemo.set(id, p);
+    p.catch(() => {
+      if (decodedMemo.get(id) === p) decodedMemo.delete(id);
+    });
+    return p;
+  }
 
   async function loadEffectiveDataset(dataKey: CacheDataKey): Promise<MemoEntry> {
     const key = memoKey(dataKey);
@@ -175,8 +198,9 @@ export function createDataClient(options: DataClientOptions): DataClient {
 
   function clear(): void {
     bytesMemo.clear();
+    decodedMemo.clear();
     cacheMemo.clear();
   }
 
-  return { fetchBytes, loadEffectiveCache, loadEffectiveDataset, clear };
+  return { fetchBytes, load, loadEffectiveCache, loadEffectiveDataset, clear };
 }

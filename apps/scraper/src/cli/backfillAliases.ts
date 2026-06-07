@@ -1,9 +1,9 @@
 import fs from "fs/promises";
 import path from "path";
-import { WEB_PUBLIC_DATA_DIR } from "../shared/paths.ts";
+import { WEB_ASSETS_DATA_DIR } from "../shared/paths.ts";
 import { extractPreviouslyAliases } from "../catalogue/aliases.ts";
 
-const dataDir = WEB_PUBLIC_DATA_DIR;
+const dataDir = WEB_ASSETS_DATA_DIR;
 
 async function main(): Promise<void> {
   const entries = await fs.readdir(dataDir);

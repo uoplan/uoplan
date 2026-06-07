@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { DataProto, fromProtoSchedulesData, type SchedulesData } from "@uoplan/core";
+import { dataAssetIds } from "@uoplan/data";
 import { useAppStore } from "../store/appStore";
 import { fetchProtoBytes } from "../lib/protoFetch";
 
@@ -15,7 +16,7 @@ export function useAllSchedulesData(): SchedulesData[] {
     const load = async () => {
       const results = await Promise.allSettled(
         terms.map((t) =>
-          fetchProtoBytes(`/data/schedules.${t.termId}.pb`).then((bytes) =>
+          fetchProtoBytes(dataAssetIds.schedules(t.termId)).then((bytes) =>
             fromProtoSchedulesData(DataProto.SchedulesData.decode(bytes)),
           ),
         ),

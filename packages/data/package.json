@@ -9,7 +9,8 @@
     ".": "./src/index.ts",
     "./browser": "./src/browser.ts",
     "./worker": "./src/worker.ts",
-    "./node": "./src/node.ts"
+    "./node": "./src/node.ts",
+    "./codegen": "./src/codegen.ts"
   },
   "scripts": {
     "typecheck": "tsgo -b tsconfig.json",

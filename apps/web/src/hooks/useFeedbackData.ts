@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { buildFeedbackIndex, FeedbackProto, type FeedbackIndex } from "@uoplan/core";
-import { dataPaths } from "@uoplan/data";
+import { dataAssetIds } from "@uoplan/data";
 import { useAppStore } from "../store/appStore";
+import { loadProto } from "../lib/protoFetch";
 
 interface FeedbackState {
   loading: boolean;
@@ -17,10 +18,7 @@ async function loadFeedbackIndex(indicesCourses: readonly string[]): Promise<Fee
   if (cachedIndex) return cachedIndex;
   if (!inFlight) {
     inFlight = (async () => {
-      const res = await fetch(dataPaths.feedback);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const bytes = new Uint8Array(await res.arrayBuffer());
-      const decoded = FeedbackProto.FeedbackData.decode(bytes);
+      const decoded = await loadProto(FeedbackProto.FeedbackData, dataAssetIds.feedback);
       cachedIndex = buildFeedbackIndex(decoded, indicesCourses);
       return cachedIndex;
     })().catch((err) => {
