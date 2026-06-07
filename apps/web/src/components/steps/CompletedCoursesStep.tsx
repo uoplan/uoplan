@@ -1,7 +1,10 @@
 import { Alert, MultiSelect, Text, Stack, Group, ActionIcon } from "@mantine/core";
-import type { ComboboxItem } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
-import { createCourseOptions, renderCourseOption } from "../shared/CourseSelect";
+import {
+  createCourseOptions,
+  createCourseOptionsFilter,
+  renderCourseOption,
+} from "../shared/CourseSelect";
 import type { DataCache } from "@uoplan/core";
 import type { RemainingRequirement } from "@uoplan/core";
 import { isRepeatableCourse, formatCourseWithTitle } from "@uoplan/core";
@@ -77,13 +80,7 @@ export function CompletedCoursesStep({
         searchable
         clearable
         renderOption={renderCourseOption(cache)}
-        filter={({ options, search }) => {
-          const q = search.toLowerCase().trim();
-          if (!q) return options;
-          return (options as ComboboxItem[]).filter(
-            (o) => o.value.toLowerCase().includes(q) || o.label.toLowerCase().includes(q),
-          );
-        }}
+        filter={createCourseOptionsFilter(cache)}
         nothingFoundMessage={tr("completedCourses.notFound")}
         description={tr("completedCourses.description")}
       />

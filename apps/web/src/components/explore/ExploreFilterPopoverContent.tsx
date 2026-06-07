@@ -4,7 +4,6 @@ import {
   type ComboboxItem,
   Group,
   MultiSelect,
-  type OptionsFilter,
   Radio,
   SegmentedControl,
   Stack,
@@ -12,6 +11,7 @@ import {
 } from "@mantine/core";
 import { useMemo } from "react";
 import { useTr, tr } from "../../i18n";
+import { createRankedOptionsFilter } from "../../lib/explore/optionRanking";
 import type {
   ExploreFilterDifficulty,
   ExploreFilterLevel,
@@ -172,14 +172,10 @@ export function ExploreFilterPopoverContent({
       );
     };
 
-    const optionsFilter: OptionsFilter = ({ options, search }) => {
-      const words = search.toLowerCase().trim().split(/\s+/).filter(Boolean);
-      if (words.length === 0) return options;
-      return (options as ComboboxItem[]).filter((option) => {
-        const haystack = `${option.value} ${nameByCode.get(option.value) ?? ""}`.toLowerCase();
-        return words.every((word) => haystack.includes(word));
-      });
-    };
+    const optionsFilter = createRankedOptionsFilter((option) => ({
+      code: option.value,
+      text: nameByCode.get(option.value) ?? "",
+    }));
 
     return (
       <MultiSelect
