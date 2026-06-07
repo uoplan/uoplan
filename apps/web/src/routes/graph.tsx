@@ -25,7 +25,7 @@ function GraphRoute() {
     navigate({ search: opts.search, replace: opts.replace });
 
   return (
-    <AppDataRouteGate>
+    <AppDataRouteGate requires={["ratings", "grades"]}>
       <ProfessorGraphPage urlProfParam={prof} navigateGraph={navigateGraph} />
     </AppDataRouteGate>
   );

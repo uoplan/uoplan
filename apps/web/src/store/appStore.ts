@@ -55,6 +55,10 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
       cache: null,
       courseGrades: null,
       courseGradesError: null,
+      // Defaults to true: grade data is lazily loaded, so "not fetched yet" must
+      // read as loading to consumers (e.g. explore redirect guards) until the
+      // lazy `ensureCourseGrades` resolves it to false.
+      courseGradesLoading: true,
       disciplines: null,
       loading: false,
       loadProgress: 0,
@@ -135,6 +139,7 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
           cache,
           courseGrades,
           courseGradesError,
+          courseGradesLoading,
           disciplines,
           loading,
           loadProgress,
@@ -148,6 +153,7 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
           cache,
           courseGrades,
           courseGradesError,
+          courseGradesLoading,
           disciplines,
           loading,
           loadProgress,

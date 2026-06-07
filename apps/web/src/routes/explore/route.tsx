@@ -20,7 +20,7 @@ function ExploreLayoutRoute() {
   );
 
   return (
-    <AppDataRouteGate>
+    <AppDataRouteGate requires={["grades", "ratings", "disciplines"]}>
       <ExploreOfferingsProvider catalogue={catalogue} professorRatings={professorRatings}>
         <ExploreLayout>
           <Outlet />
