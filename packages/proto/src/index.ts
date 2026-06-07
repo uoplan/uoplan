@@ -12,3 +12,4 @@ export * as DataProto from "./generated/data";
 export * as StateProto from "./generated/state";
 export * as CliProto from "./generated/cli";
 export * as EngineProto from "./generated/engine";
+export * as FeedbackProto from "./generated/feedback";

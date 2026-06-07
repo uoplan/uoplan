@@ -8,6 +8,7 @@
 
 import {
   cachedTermIds,
+  listIsComplete,
   outputExists,
   outputPath,
   readListMeta,
@@ -17,22 +18,28 @@ import {
 } from "./cache.ts";
 import { parseListRows } from "./list.ts";
 import { parseReport, type ReportQuestionStats } from "./report.ts";
-import { type ParsedCourse, parseReportTitle } from "./title.ts";
+import { parseReportTitle } from "./title.ts";
 
-export interface FeedbackReport {
-  reportId: string | null;
+export interface FeedbackSection {
+  /** Section code, e.g. "A00", "S100", "0". */
+  section: string;
+  /** "First Last" display order (matches grades.json). */
   professor: string;
-  courses: ParsedCourse[];
+  /** Course title as it appeared on the report (language-specific). */
+  title: string;
+  /** Per-question survey stats; present once the report HTML has been fetched. */
   questions?: ReportQuestionStats[];
 }
 
-export interface FeedbackFile {
-  termId: string;
-  termLabel: string;
-  totalReports: number;
-  generatedAt: string;
-  reports: FeedbackReport[];
+/** One course code and every section/report evaluated under it that term. */
+export interface FeedbackCourse {
+  /** Course code, normalized to grades.json format, e.g. "ITI 1120". */
+  code: string;
+  /** Cross-listed reports contribute a section entry under each of their codes. */
+  sections: FeedbackSection[];
 }
+
+export type FeedbackFile = FeedbackCourse[];
 
 export interface ParseOptions {
   terms?: string[];
@@ -40,12 +47,19 @@ export interface ParseOptions {
   stats?: boolean;
 }
 
-async function parseTerm(termId: string, stats: boolean): Promise<FeedbackFile | null> {
+interface ParsedTerm {
+  termLabel: string;
+  sectionCount: number;
+  output: FeedbackFile;
+}
+
+async function parseTerm(termId: string): Promise<ParsedTerm | null> {
   const pages = await readListPages(termId);
   if (pages.length === 0) return null;
   const meta = await readListMeta(termId);
 
-  const reports: FeedbackReport[] = [];
+  const byCourse = new Map<string, FeedbackSection[]>();
+  let sectionCount = 0;
   let unparsedTitles = 0;
 
   for (const html of pages) {
@@ -56,18 +70,30 @@ async function parseTerm(termId: string, stats: boolean): Promise<FeedbackFile |
         continue;
       }
 
-      const report: FeedbackReport = {
-        reportId: row.reportId,
-        professor: parsed.professor,
-        courses: parsed.courses,
-      };
-
-      if (stats && row.reportId) {
+      // Survey stats live on the individual report page; embed them when that HTML
+      // has been cached (the `fetch --stats` pass), otherwise leave `questions` off.
+      let questions: ReportQuestionStats[] | undefined;
+      if (row.reportId) {
         const reportHtml = await readReportHtml(termId, row.reportId);
-        if (reportHtml) report.questions = parseReport(reportHtml).questions;
+        if (reportHtml) {
+          const parsedReport = parseReport(reportHtml).questions;
+          if (parsedReport.length > 0) questions = parsedReport;
+        }
       }
 
-      reports.push(report);
+      for (const course of parsed.courses) {
+        const section: FeedbackSection = {
+          section: course.section,
+          professor: parsed.professor,
+          title: course.title,
+        };
+        if (questions) section.questions = questions;
+
+        const list = byCourse.get(course.code);
+        if (list) list.push(section);
+        else byCourse.set(course.code, [section]);
+        sectionCount += 1;
+      }
     }
   }
 
@@ -75,13 +101,16 @@ async function parseTerm(termId: string, stats: boolean): Promise<FeedbackFile |
     console.warn(`  [${termId}] ${unparsedTitles} row title(s) could not be parsed.`);
   }
 
-  return {
-    termId,
-    termLabel: meta?.termLabel ?? termId,
-    totalReports: meta?.totalReports ?? reports.length,
-    generatedAt: new Date().toISOString(),
-    reports,
-  };
+  const output: FeedbackFile = [...byCourse.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([code, sections]) => {
+      sections.sort(
+        (a, b) => a.section.localeCompare(b.section) || a.professor.localeCompare(b.professor),
+      );
+      return { code, sections };
+    });
+
+  return { termLabel: meta?.termLabel ?? termId, sectionCount, output };
 }
 
 export async function runParse(options: ParseOptions = {}): Promise<void> {
@@ -98,15 +127,22 @@ export async function runParse(options: ParseOptions = {}): Promise<void> {
       console.log(`  [${termId}] feedback.${termId}.json already exists, skipping.`);
       continue;
     }
-    const file = await parseTerm(termId, options.stats ?? false);
-    if (!file) {
+    // Never emit a dataset from a partially-fetched term: its list cache is missing
+    // pages, so the output would silently drop reports. Only the fetch stage marks a
+    // term complete once its row count matches the portal's reported total.
+    if (!options.force && !(await listIsComplete(termId))) {
+      console.warn(`  [${termId}] list cache is incomplete; skipping (re-run fetch).`);
+      continue;
+    }
+    const parsedTerm = await parseTerm(termId);
+    if (!parsedTerm) {
       console.warn(`  [${termId}] no cached list pages found, skipping.`);
       continue;
     }
-    await writeJsonFile(outputPath(termId), file);
+    await writeJsonFile(outputPath(termId), parsedTerm.output);
     console.log(
-      `  [${termId}] ${file.termLabel}: wrote ${file.reports.length} report(s) -> ` +
-        `data/feedback.${termId}.json`,
+      `  [${termId}] ${parsedTerm.termLabel}: wrote ${String(parsedTerm.output.length)} course(s) / ` +
+        `${String(parsedTerm.sectionCount)} section(s) -> data/feedback.${termId}.json`,
     );
   }
 }

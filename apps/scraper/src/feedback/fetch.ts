@@ -39,12 +39,13 @@ export interface FetchOptions {
   maxReports?: number;
   /** Number of terms to fetch in parallel (default 4, or 2 with stats). */
   concurrency?: number;
+  /** Number of report pages to fetch in parallel, shared across all terms (default 12). */
+  reportConcurrency?: number;
 }
 
 const LIST_READY_SELECTOR = 'a[href*="SelectedIDforPrint"]';
 const ENTER_TIMEOUT_MS = 60_000;
 const REPORT_TIMEOUT_MS = 45_000;
-const REPORT_DELAY_MS = 250;
 
 function selectTerms(links: TermLink[], wanted?: string[]): TermLink[] {
   if (!wanted || wanted.length === 0) return links;
@@ -182,6 +183,7 @@ async function processTerm(
   session: StoredSession,
   term: TermLink,
   options: FetchOptions,
+  reportLimit: <T>(fn: () => Promise<T>) => Promise<T>,
 ): Promise<void> {
   // Each term gets its own isolated context so concurrent ASP.NET postbacks across
   // terms never share viewstate/session and clobber each other's pagination.
@@ -202,23 +204,29 @@ async function processTerm(
 
     const limited =
       options.maxReports != null ? reportUrls.slice(0, options.maxReports) : reportUrls;
+
+    // Report pages are independent GETs, so fetch them in parallel under a global
+    // limiter (shared across all terms) rather than serially per term.
     let fetched = 0;
     let skipped = 0;
-    for (const { reportId, url } of limited) {
-      if (!options.force && (await reportIsCached(term.termId, reportId))) {
-        skipped += 1;
-        continue;
-      }
-      try {
-        await fetchReport(context, term.termId, reportId, url);
-        fetched += 1;
-      } catch (err) {
-        console.warn(`    report ${reportId} failed: ${getErrorMessage(err)}`);
-      }
-      await new Promise((r) => setTimeout(r, REPORT_DELAY_MS));
-    }
+    await Promise.all(
+      limited.map(({ reportId, url }) =>
+        reportLimit(async () => {
+          if (!options.force && (await reportIsCached(term.termId, reportId))) {
+            skipped += 1;
+            return;
+          }
+          try {
+            await fetchReport(context, term.termId, reportId, url);
+            fetched += 1;
+          } catch (err) {
+            console.warn(`    report ${reportId} failed: ${getErrorMessage(err)}`);
+          }
+        }),
+      ),
+    );
     console.log(
-      `  [${term.termId}] stats: fetched ${fetched}, skipped ${skipped} cached report(s).`,
+      `  [${term.termId}] stats: fetched ${String(fetched)}, skipped ${String(skipped)} cached report(s).`,
     );
   } finally {
     await context.close().catch(() => {});
@@ -235,19 +243,22 @@ export async function runFetch(options: FetchOptions = {}): Promise<void> {
     return;
   }
   const concurrency = Math.max(1, options.concurrency ?? (options.stats ? 2 : 4));
+  const reportConcurrency = Math.max(1, options.reportConcurrency ?? 12);
   console.log(
-    `Fetching ${terms.length} term(s)${options.stats ? " with stats" : ""} ` +
-      `(${concurrency} in parallel)...`,
+    `Fetching ${String(terms.length)} term(s)${options.stats ? " with stats" : ""} ` +
+      `(${String(concurrency)} term(s) in parallel` +
+      `${options.stats ? `, ${String(reportConcurrency)} report(s) in parallel` : ""})...`,
   );
 
   const { browser } = await launchBrowser();
   const limit = pLimit(concurrency);
+  const reportLimit = pLimit(reportConcurrency);
   try {
     await Promise.all(
       terms.map((term) =>
         limit(async () => {
           try {
-            await processTerm(browser, session, term, options);
+            await processTerm(browser, session, term, options, reportLimit);
           } catch (err) {
             console.warn(`  [${term.termId}] ${term.label} failed: ${getErrorMessage(err)}`);
           }

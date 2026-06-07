@@ -27,6 +27,7 @@ interface CliArgs {
   stats: boolean;
   maxReports?: number;
   concurrency?: number;
+  reportConcurrency?: number;
 }
 
 function parseArgs(argv: string[]): CliArgs {
@@ -52,6 +53,9 @@ function parseArgs(argv: string[]): CliArgs {
         break;
       case "--concurrency":
         args.concurrency = Number(argv[++i]);
+        break;
+      case "--report-concurrency":
+        args.reportConcurrency = Number(argv[++i]);
         break;
       default:
         console.warn(`Ignoring unknown argument: ${a}`);
@@ -121,7 +125,8 @@ async function main(): Promise<void> {
       console.error(`Unknown command: ${cmd}`);
       console.error(
         "Usage: scrape:feedback <login|whoami|logout|fetch|parse|scrape> " +
-          "[--term <id> | --terms <a,b>] [--force] [--stats] [--max-reports <n>]",
+          "[--term <id> | --terms <a,b>] [--force] [--stats] [--max-reports <n>] " +
+          "[--concurrency <n>] [--report-concurrency <n>]",
       );
       process.exitCode = 1;
   }
