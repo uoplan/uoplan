@@ -10,7 +10,7 @@ use crate::model::DataView;
 use crate::rng::{shuffle_in_place, Rng};
 use crate::types::{
     collect_times, has_internal_overlap, section_has_times, enrollments_overlap, Enrollment,
-    RtSchedule, RtSection,
+    RtSchedule, RtSection, WeekMask,
 };
 
 /// Whether the schedule has at least one conflict-free section combo under the
@@ -92,6 +92,7 @@ pub fn build_timetable_course(
                 course_code: data.canonical_code_str(code),
                 sections: BTreeMap::new(),
                 times: Vec::new(),
+                mask: WeekMask::EMPTY,
             }],
         });
     }
@@ -131,6 +132,7 @@ pub fn build_timetable_course(
             combos.push(Enrollment {
                 course_code: schedule.course_code.clone(),
                 sections,
+                mask: WeekMask::from_times(&times),
                 times,
             });
         }
@@ -155,11 +157,7 @@ pub fn build_timetable_course(
 }
 
 pub(crate) fn passes_final(chosen: &[Enrollment], constraints: &Constraints, data: &DataView) -> bool {
-    let codes_times: Vec<(String, Vec<_>)> = chosen
-        .iter()
-        .map(|e| (e.course_code.clone(), e.times.clone()))
-        .collect();
-    constraints.allows_final(&codes_times, data)
+    constraints.allows_final(chosen, data)
 }
 
 pub(crate) fn allows_enrollment(candidate: &Enrollment, partial: &[Enrollment]) -> bool {
@@ -388,10 +386,15 @@ pub fn arrange_prebuilt_with_budget(
 
 /// Find the first combo of `course` compatible with the current partial
 /// assignment, charging `placed + 1` work units per combo scanned (an overlap
-/// scan is O(placed)). Returns `None` if the budget runs out or nothing fits.
+/// scan is O(placed)). `chosen_mask` is the incrementally-maintained union of the
+/// chosen enrollments' occupancy masks: a combo whose mask is disjoint from it
+/// shares no time slot with anything placed and therefore fits immediately (an
+/// exact O(1) accept), so only mask-intersecting combos pay the precise scan.
+/// Returns `None` if the budget runs out or nothing fits.
 fn first_fit_combo(
     course: &TimetableCourse,
     chosen: &[Enrollment],
+    chosen_mask: &WeekMask,
     work: &mut u64,
 ) -> Option<Enrollment> {
     for combo in &course.combos {
@@ -399,7 +402,12 @@ fn first_fit_combo(
             return None;
         }
         *work = work.saturating_sub(chosen.len() as u64 + 1);
-        if allows_enrollment(combo, chosen) {
+        let fits = if combo.mask.intersects(chosen_mask) {
+            allows_enrollment(combo, chosen)
+        } else {
+            true
+        };
+        if fits {
             return Some(combo.clone());
         }
     }
@@ -473,11 +481,14 @@ pub fn first_seeded_subset_arrangement(
         restart += 1;
 
         let mut chosen: Vec<Enrollment> = Vec::with_capacity(target_count);
+        let mut chosen_mask = WeekMask::EMPTY;
 
         // Seat every pinned course; abandon the restart if one can't be placed.
         let mut pinned_ok = true;
         for &pi in &pinned_order {
-            if let Some(combo) = first_fit_combo(&pinned_courses[pi], &chosen, &mut work) {
+            if let Some(combo) = first_fit_combo(&pinned_courses[pi], &chosen, &chosen_mask, &mut work)
+            {
+                chosen_mask.union_with(&combo.mask);
                 chosen.push(combo);
             } else {
                 if work == 0 {
@@ -500,7 +511,10 @@ pub fn first_seeded_subset_arrangement(
             if work == 0 {
                 return None;
             }
-            if let Some(combo) = first_fit_combo(&optional_courses[oi], &chosen, &mut work) {
+            if let Some(combo) =
+                first_fit_combo(&optional_courses[oi], &chosen, &chosen_mask, &mut work)
+            {
+                chosen_mask.union_with(&combo.mask);
                 chosen.push(combo);
                 filled += 1;
             }
@@ -524,10 +538,12 @@ mod tests {
     }
 
     fn enr(code: &str, slots: &[(u8, u32, u32)]) -> Enrollment {
+        let times: Vec<RtTime> = slots.iter().map(|&(d, s, e)| t(d, s, e)).collect();
         Enrollment {
             course_code: code.to_string(),
             sections: BTreeMap::new(),
-            times: slots.iter().map(|&(d, s, e)| t(d, s, e)).collect(),
+            mask: crate::types::WeekMask::from_times(&times),
+            times,
         }
     }
 

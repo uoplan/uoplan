@@ -25,7 +25,7 @@ use crate::timetable::{
     allows_enrollment, arrange_prebuilt_with_budget, build_timetable_course,
     first_seeded_arrangement, has_valid_section_combos, passes_final, FnResolver, TimetableCourse,
 };
-use crate::types::Enrollment;
+use crate::types::{Enrollment, WeekMask};
 
 const EASIER_APLUS_PIVOT: f64 = 20.0;
 const EASIER_APLUS_BASE: f64 = 5.25;
@@ -912,6 +912,28 @@ struct FillProgress {
 /// candidate) still timetables — verified by a full re-solve
 /// ([`arrange_prebuilt`]), which is free to rearrange every course's sections so
 /// an early section choice never blocks a later required course.
+/// Outcome of placing a candidate course onto the current arrangement.
+// `Append` (the hot path, taken for every placement) intentionally carries the
+// `Enrollment` inline; boxing it to equalise the variant sizes would reintroduce
+// a per-placement heap allocation, which is exactly what this path avoids.
+#[allow(clippy::large_enum_variant)]
+enum Placement {
+    /// Cheap path: append this single enrollment to the fixed arrangement.
+    Append(Enrollment),
+    /// Re-solve fallback (disabled by default): replace the whole arrangement
+    /// with this rearranged set.
+    Replace(Vec<Enrollment>),
+}
+
+/// Union of the weekly occupancy masks of an arrangement.
+fn mask_of(arr: &[Enrollment]) -> WeekMask {
+    let mut m = WeekMask::EMPTY;
+    for e in arr {
+        m.union_with(&e.mask);
+    }
+    m
+}
+
 struct Search<'a> {
     built: &'a [Box<TimetableCourse>],
     pinned: &'a [usize],
@@ -925,13 +947,20 @@ struct Search<'a> {
     global: u64,
     resolve_budget: u64,
     arrange_nodes: u64,
-    arrangement: Option<Vec<Enrollment>>,
+    arrangement: Vec<Enrollment>,
+    /// Incrementally-maintained union of `arrangement`'s occupancy masks, so the
+    /// common "candidate has no time conflict with anything placed" case is an
+    /// O(1) mask test instead of an O(placed) overlap scan.
+    agg_mask: WeekMask,
 }
 
 impl<'a> Search<'a> {
     fn run(&mut self) -> bool {
         match self.resolve_with(None) {
-            Some(arr) => self.arrangement = Some(arr),
+            Some(arr) => {
+                self.agg_mask = mask_of(&arr);
+                self.arrangement = arr;
+            }
             None => return false,
         }
         self.fill_from(0)
@@ -963,30 +992,43 @@ impl<'a> Search<'a> {
     /// combo fits the *fixed* arrangement do we fall back to a full re-solve,
     /// which is free to rearrange earlier sections — so the accept/reject
     /// decision is exactly the re-solve's, just reached far more cheaply.
-    fn try_place(&mut self, extra: usize) -> Option<Vec<Enrollment>> {
-        if let Some(cur) = self.arrangement.as_ref() {
-            let placed = cur.len() as u64;
-            for combo in &self.built[extra].combos {
-                // Charge the global budget by the real work of this probe so the
-                // budget is a genuine wall-clock bound — independent of pool
-                // density or course count, a near-capacity descent (deep,
-                // expensive probes) and a sparse one (shallow, cheap probes) both
-                // stop at roughly the same elapsed time. An overlap scan costs
-                // O(placed); a combo that *fits* additionally pays the
-                // arrangement clone + final-constraint check (another O(placed)),
-                // which dominates on permissive pools where most combos fit.
-                self.global = self.global.saturating_sub(placed + 1);
-                if allows_enrollment(combo, cur) {
-                    self.global = self.global.saturating_sub(2 * (placed + 1));
-                    let mut next = cur.clone();
-                    next.push(combo.clone());
-                    if passes_final(&next, self.constraints, self.data) {
-                        return Some(next);
-                    }
+    fn try_place(&mut self, extra: usize) -> Option<Placement> {
+        let placed = self.arrangement.len() as u64;
+        let combos_len = self.built[extra].combos.len();
+        for k in 0..combos_len {
+            // Charge the global budget by the real work of this probe so the
+            // budget is a genuine wall-clock bound — independent of pool
+            // density or course count, a near-capacity descent (deep,
+            // expensive probes) and a sparse one (shallow, cheap probes) both
+            // stop at roughly the same elapsed time. An overlap scan costs
+            // O(placed); a combo that *fits* additionally pays the
+            // final-constraint check (another O(placed)), which dominates on
+            // permissive pools where most combos fit. (Charging is unchanged from
+            // the pre-mask implementation so the search is bit-for-bit identical;
+            // the aggregate mask just makes each charged unit cheaper.)
+            self.global = self.global.saturating_sub(placed + 1);
+            // Exact fast accept: a candidate whose occupancy mask is disjoint from
+            // the whole arrangement shares no time slot with anything placed and
+            // therefore can't conflict (regardless of meeting dates). Only when the
+            // masks intersect do we pay for the precise O(placed) overlap scan.
+            let fits = if self.built[extra].combos[k].mask.intersects(&self.agg_mask) {
+                allows_enrollment(&self.built[extra].combos[k], &self.arrangement)
+            } else {
+                true
+            };
+            if fits {
+                self.global = self.global.saturating_sub(2 * (placed + 1));
+                // Final-constraint check on (arrangement + candidate) without
+                // cloning the whole arrangement: push, test, then pop back off.
+                self.arrangement.push(self.built[extra].combos[k].clone());
+                let ok = passes_final(&self.arrangement, self.constraints, self.data);
+                let combo = self.arrangement.pop().expect("just pushed");
+                if ok {
+                    return Some(Placement::Append(combo));
                 }
-                if self.global == 0 {
-                    return None;
-                }
+            }
+            if self.global == 0 {
+                return None;
             }
         }
         // Cheap fit failed: a full re-solve might still place `extra` by
@@ -1000,7 +1042,7 @@ impl<'a> Search<'a> {
             return None;
         }
         self.resolve_budget -= 1;
-        self.resolve_with(Some(extra))
+        self.resolve_with(Some(extra)).map(Placement::Replace)
     }
 
     fn fill_from(&mut self, pos: usize) -> bool {
@@ -1021,9 +1063,34 @@ impl<'a> Search<'a> {
     fn pool_forward_ok(&self, pool: &PoolFill, fp: &FillProgress) -> bool {
         let need_s_left = pool.need_s.saturating_sub(fp.s_used);
         let need_g_left = pool.need_g.saturating_sub(fp.g_used);
+
+        if pool.pending.is_empty() {
+            // No group-token minimums: feasibility only needs enough S and G
+            // candidates left. Count with an early exit as soon as both thresholds
+            // are met — turning the O(remaining pool) scan (which dominates per-node
+            // cost on a 1000+ course pool) into O(need) on the common path.
+            let mut s_avail = 0usize;
+            let mut g_avail = 0usize;
+            for c in &pool.order[fp.idx..] {
+                if self.used.contains(&c.code) {
+                    continue;
+                }
+                if c.is_s {
+                    s_avail += 1;
+                } else {
+                    g_avail += 1;
+                }
+                if s_avail >= need_s_left && g_avail >= need_g_left {
+                    return true;
+                }
+            }
+            return s_avail >= need_s_left && g_avail >= need_g_left;
+        }
+
+        // Group-token minimums present: need full per-prefix availability counts.
         let mut s_avail = 0usize;
         let mut g_avail = 0usize;
-        let mut prefix_avail: BTreeMap<String, usize> = BTreeMap::new();
+        let mut prefix_avail: BTreeMap<&str, usize> = BTreeMap::new();
         for c in &pool.order[fp.idx..] {
             if self.used.contains(&c.code) {
                 continue;
@@ -1034,7 +1101,7 @@ impl<'a> Search<'a> {
                 g_avail += 1;
             }
             if pool.pending.contains_key(&c.prefix) {
-                *prefix_avail.entry(c.prefix.clone()).or_insert(0) += 1;
+                *prefix_avail.entry(c.prefix.as_str()).or_insert(0) += 1;
             }
         }
         if s_avail < need_s_left || g_avail < need_g_left {
@@ -1044,7 +1111,7 @@ impl<'a> Search<'a> {
             let used_p = fp.prefix_used.get(pfx).copied().unwrap_or(0);
             if used_p < *min {
                 let need_p = min - used_p;
-                if prefix_avail.get(pfx).copied().unwrap_or(0) < need_p {
+                if prefix_avail.get(pfx.as_str()).copied().unwrap_or(0) < need_p {
                     return false;
                 }
             }
@@ -1082,9 +1149,22 @@ impl<'a> Search<'a> {
 
         if cap_ok && !self.used.contains(&c.code) {
             self.budget = self.budget.saturating_sub(1);
-            if let Some(arr) = self.try_place(c.combo_idx) {
-                let prev = self.arrangement.take();
-                self.arrangement = Some(arr);
+            if let Some(placement) = self.try_place(c.combo_idx) {
+                // Apply the placement in place (no whole-arrangement clone) and
+                // save just enough to undo it on backtrack. `agg_mask` is a union
+                // and can't be un-ORed, so snapshot it (cheap fixed-size copy).
+                let prev_mask = self.agg_mask;
+                let prev_arr: Option<Vec<Enrollment>> = match placement {
+                    Placement::Append(combo) => {
+                        self.agg_mask.union_with(&combo.mask);
+                        self.arrangement.push(combo);
+                        None
+                    }
+                    Placement::Replace(arr) => {
+                        self.agg_mask = mask_of(&arr);
+                        Some(std::mem::replace(&mut self.arrangement, arr))
+                    }
+                };
                 self.selected.push(c.combo_idx);
                 self.used.insert(c.code.clone());
                 self.assign.insert(c.code.clone(), pool.req_id.clone());
@@ -1114,7 +1194,15 @@ impl<'a> Search<'a> {
                 self.assign.remove(&c.code);
                 self.used.remove(&c.code);
                 self.selected.pop();
-                self.arrangement = prev;
+                match prev_arr {
+                    None => {
+                        self.arrangement.pop();
+                    }
+                    Some(prev) => {
+                        self.arrangement = prev;
+                    }
+                }
+                self.agg_mask = prev_mask;
             }
         }
 
@@ -1369,10 +1457,11 @@ fn run_pool_pick_pass(
             global,
             resolve_budget: resolve_total,
             arrange_nodes,
-            arrangement: None,
+            arrangement: Vec::new(),
+            agg_mask: WeekMask::EMPTY,
         };
         if search.run() {
-            return Some((search.assign, search.arrangement.unwrap_or_default()));
+            return Some((search.assign, search.arrangement));
         }
         // Carry the remaining global budgets into the next restart so total work
         // (cheap probes + expensive re-solves) is hard-bounded regardless of how

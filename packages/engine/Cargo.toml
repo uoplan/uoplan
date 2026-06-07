@@ -31,7 +31,8 @@ harness = false
 
 [profile.release]
 opt-level = "s"
-lto = true
+lto = "thin"
+codegen-units = 1
 
 [lints.clippy]
 pedantic = "warn"
