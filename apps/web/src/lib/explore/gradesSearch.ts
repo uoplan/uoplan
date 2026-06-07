@@ -15,7 +15,7 @@ import {
 } from "@uoplan/core";
 import { searchProfessorsScored, type ProfessorSearchEntry } from "../graph/professorGraphSearch";
 import { formatTermLabelPlain } from "../term/termLabelPlain";
-import { getCourseLevel, type ExploreFilterLevel } from "./exploreFilters";
+import { getCourseLevel, getCourseDiscipline, type ExploreFilterLevel } from "./exploreFilters";
 
 /** Max section rows returned when searching all offerings (legacy / tests). */
 const EXPLORE_MAX_RESULTS = 120;
@@ -56,6 +56,7 @@ export type ExploreProfessorSearchEntry = {
   displayName: string;
   searchText: string;
   uniqueCourseCount: number;
+  disciplines: string[];
   gradeViz: GradeVizData | null;
   maxRating: number | null;
 };
@@ -427,6 +428,13 @@ export function buildExploreProfessorSearchEntries(
   return groupOfferingsByProfessor(offerings).map((g) => {
     const rmpEntry = professorRatings?.[normalizeProfessorName(g.displayName)];
     const maxRating = rmpEntry && Number.isFinite(rmpEntry.rating) ? rmpEntry.rating : null;
+    const disciplines = Array.from(
+      new Set(
+        g.offerings
+          .map((o) => getCourseDiscipline(o.courseCode))
+          .filter((d): d is string => d !== null),
+      ),
+    );
     return {
       groupId: g.groupId,
       legacyId: g.legacyId,
@@ -436,6 +444,7 @@ export function buildExploreProfessorSearchEntries(
         .join(" ")
         .toLowerCase(),
       uniqueCourseCount: new Set(g.offerings.map((o) => normalizeCourseCode(o.courseCode))).size,
+      disciplines,
       gradeViz: normalizeGradeVizDistribution(
         mergeGradeDistributionCounts(g.offerings.map((o) => o.distribution)),
       ),

@@ -1,4 +1,16 @@
-import { Box, Checkbox, Group, Radio, SegmentedControl, Stack, Text } from "@mantine/core";
+import {
+  Box,
+  Checkbox,
+  type ComboboxItem,
+  Group,
+  MultiSelect,
+  type OptionsFilter,
+  Radio,
+  SegmentedControl,
+  Stack,
+  Text,
+} from "@mantine/core";
+import { useMemo } from "react";
 import { useTr, tr } from "../../i18n";
 import type {
   ExploreFilterDifficulty,
@@ -8,7 +20,9 @@ import type {
   ExploreSortKey,
 } from "../../lib/explore/exploreFilters";
 
-type FilterKey = "level" | "language" | "difficulty" | "rating" | "sort";
+type FilterKey = "level" | "language" | "discipline" | "difficulty" | "rating" | "sort";
+
+export type DisciplineOption = { code: string; name: string };
 
 const LEVELS: { value: ExploreFilterLevel; labelKey: string }[] = [
   { value: 1000, labelKey: "explore.filter.level.1000" },
@@ -83,12 +97,20 @@ export function ExploreFilterPopoverContent({
   filterKey,
   filters,
   onChange,
+  disciplineOptions = [],
 }: {
   filterKey: FilterKey;
   filters: ExploreFilterState;
   onChange: (next: Partial<ExploreFilterState>) => void;
+  disciplineOptions?: DisciplineOption[];
 }) {
   useTr();
+
+  const nameByCode = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const opt of disciplineOptions) map.set(opt.code, opt.name);
+    return map;
+  }, [disciplineOptions]);
 
   if (filterKey === "level") {
     return (
@@ -129,6 +151,55 @@ export function ExploreFilterPopoverContent({
           />
         ))}
       </Stack>
+    );
+  }
+
+  if (filterKey === "discipline") {
+    const data: ComboboxItem[] = disciplineOptions.map((opt) => ({
+      value: opt.code,
+      label: opt.code,
+    }));
+
+    const renderOption: (input: { option: ComboboxItem }) => React.ReactNode = ({ option }) => {
+      const name = nameByCode.get(option.value) ?? "";
+      return (
+        <Text size="sm" component="span" style={{ color: "var(--app-text)" }}>
+          <Text component="span" inherit style={{ color: "var(--app-text-dim)" }}>
+            {option.value} •
+          </Text>{" "}
+          {name}
+        </Text>
+      );
+    };
+
+    const optionsFilter: OptionsFilter = ({ options, search }) => {
+      const words = search.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      if (words.length === 0) return options;
+      return (options as ComboboxItem[]).filter((option) => {
+        const haystack = `${option.value} ${nameByCode.get(option.value) ?? ""}`.toLowerCase();
+        return words.every((word) => haystack.includes(word));
+      });
+    };
+
+    return (
+      <MultiSelect
+        data={data}
+        value={filters.disciplines}
+        onChange={(values) => onChange({ disciplines: values })}
+        renderOption={renderOption}
+        filter={optionsFilter}
+        searchable
+        clearable
+        radius="md"
+        w={224}
+        maxDropdownHeight={240}
+        placeholder={
+          filters.disciplines.length === 0 ? tr("explore.filter.discipline.placeholder") : undefined
+        }
+        nothingFoundMessage={tr("explore.filter.discipline.empty")}
+        comboboxProps={{ withinPortal: true, zIndex: 400 }}
+        styles={{ dropdown: { minWidth: 240 } }}
+      />
     );
   }
 
@@ -237,6 +308,8 @@ export function filterSectionLabel(key: FilterKey): string {
       return tr("explore.filter.level");
     case "language":
       return tr("explore.filter.language");
+    case "discipline":
+      return tr("explore.filter.discipline");
     case "difficulty":
       return tr("explore.filter.difficulty");
     case "rating":

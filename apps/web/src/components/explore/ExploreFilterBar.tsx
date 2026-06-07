@@ -6,10 +6,10 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import { useTr, tr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
-import { ExploreFilterPopoverContent } from "./ExploreFilterPopoverContent";
+import { ExploreFilterPopoverContent, type DisciplineOption } from "./ExploreFilterPopoverContent";
 import { ExploreFilterDrawer } from "./ExploreFilterDrawer";
 
-const FILTER_KEYS = ["level", "language", "difficulty", "rating", "sort"] as const;
+const FILTER_KEYS = ["level", "language", "discipline", "difficulty", "rating", "sort"] as const;
 type FilterKey = (typeof FILTER_KEYS)[number];
 export const FILTER_PILL_RADIUS = "var(--app-radius-pill)";
 export const FILTER_POPOVER_RADIUS = "var(--app-radius)";
@@ -27,6 +27,11 @@ function pillLabel(key: FilterKey, filters: ExploreFilterState): string {
     if (filters.languages.length === 1)
       return tr(`explore.filter.language.${filters.languages[0]}`);
     return `${tr("explore.filter.language.en")} · ${tr("explore.filter.language.fr")}`;
+  }
+  if (key === "discipline") {
+    if (filters.disciplines.length === 0) return tr("explore.filter.discipline");
+    if (filters.disciplines.length === 1) return filters.disciplines[0];
+    return `${tr("explore.filter.discipline")} (${filters.disciplines.length})`;
   }
   if (key === "difficulty") {
     if (!filters.difficulty) return tr("explore.filter.difficulty");
@@ -50,6 +55,7 @@ function pillLabel(key: FilterKey, filters: ExploreFilterState): string {
 function pillIsActive(key: FilterKey, filters: ExploreFilterState): boolean {
   if (key === "level") return filters.levels.length > 0;
   if (key === "language") return filters.languages.length > 0;
+  if (key === "discipline") return filters.disciplines.length > 0;
   if (key === "difficulty") return filters.difficulty !== null;
   if (key === "rating") return filters.minRating !== null;
   if (key === "sort") return filters.sortKey !== "relevance";
@@ -114,9 +120,11 @@ FilterPill.displayName = "FilterPill";
 export function ExploreFilterBar({
   filters,
   onChange,
+  disciplineOptions = [],
 }: {
   filters: ExploreFilterState;
   onChange: (next: Partial<ExploreFilterState>) => void;
+  disciplineOptions?: DisciplineOption[];
 }) {
   useTr();
   const isMobile = useMediaQuery("(max-width: 539px)", false, {
@@ -171,6 +179,7 @@ export function ExploreFilterBar({
   const anyActive =
     filters.levels.length > 0 ||
     filters.languages.length > 0 ||
+    filters.disciplines.length > 0 ||
     filters.difficulty !== null ||
     filters.minRating !== null ||
     filters.sortKey !== "relevance";
@@ -228,6 +237,7 @@ export function ExploreFilterBar({
             dropdownRef={dropdownRef}
             filters={filters}
             onChange={handleChange}
+            disciplineOptions={disciplineOptions}
           />
         )}
       </AnimatePresence>
@@ -238,6 +248,7 @@ export function ExploreFilterBar({
         filters={filters}
         onChange={handleChange}
         initialSection={drawerSection}
+        disciplineOptions={disciplineOptions}
       />
     </>
   );
@@ -251,12 +262,14 @@ function FilterDropdown({
   dropdownRef,
   filters,
   onChange,
+  disciplineOptions,
 }: {
   filterKey: FilterKey;
   pos: { top: number; left: number };
   dropdownRef: React.RefObject<HTMLDivElement | null>;
   filters: ExploreFilterState;
   onChange: (next: Partial<ExploreFilterState>) => void;
+  disciplineOptions: DisciplineOption[];
 }) {
   return (
     <motion.div
@@ -280,7 +293,12 @@ function FilterDropdown({
         transformOrigin: "top left",
       }}
     >
-      <ExploreFilterPopoverContent filterKey={filterKey} filters={filters} onChange={onChange} />
+      <ExploreFilterPopoverContent
+        filterKey={filterKey}
+        filters={filters}
+        onChange={onChange}
+        disciplineOptions={disciplineOptions}
+      />
     </motion.div>
   );
 }
