@@ -1,6 +1,7 @@
 import { Link, useNavigate, useRouterState, useSearch } from "@tanstack/react-router";
 import { Anchor, Box, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
+import { useLingui } from "@lingui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Catalogue } from "@uoplan/core";
@@ -142,6 +143,7 @@ const EXPLORE_INDEX_ROUTE_ID = "/explore/";
 
 export function ExploreLayout({ children }: ExploreLayoutProps) {
   useTr();
+  const { i18n } = useLingui();
   const { loading, getCourseEntries, getProfessorEntries, getCourseFuse } = useExploreOfferings();
   const navigate = useNavigate();
   const { catalogue, professorRatings, disciplines } = useAppStore(
@@ -151,6 +153,14 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       disciplines: s.disciplines,
     })),
   );
+
+  const disciplineOptions = useMemo(() => {
+    if (!disciplines) return [];
+    const isFr = i18n.locale.startsWith("fr");
+    return disciplines
+      .map((d) => ({ code: d.code, name: isFr ? (d.nameFr ?? d.name) : d.name }))
+      .sort((a, b) => a.code.localeCompare(b.code, "en"));
+  }, [disciplines, i18n.locale]);
 
   const searchParams = useSearch({ from: "/explore" });
 
@@ -187,6 +197,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       q: trimmed.length > 0 ? trimmed : undefined,
       levels: params.levels ?? undefined,
       langs: params.langs ?? undefined,
+      disc: params.disc ?? undefined,
       difficulty: params.difficulty ?? undefined,
       minRating: params.minRating ?? undefined,
       sort: params.sort ?? undefined,
@@ -469,7 +480,11 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
           />
         </Stack>
         <Box mt="md">
-          <ExploreFilterBar filters={filters} onChange={handleFilterChange} />
+          <ExploreFilterBar
+            filters={filters}
+            onChange={handleFilterChange}
+            disciplineOptions={disciplineOptions}
+          />
         </Box>
       </Box>
 

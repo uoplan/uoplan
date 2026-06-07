@@ -9,6 +9,7 @@ export type ExploreSearchParams = {
   q: string | undefined;
   levels: string | undefined;
   langs: string | undefined;
+  disc: string | undefined;
   difficulty: string | undefined;
   minRating: string | undefined;
   sort: string | undefined;
@@ -21,6 +22,7 @@ export function validateExploreSearch(search: Record<string, unknown>): ExploreS
     levels:
       typeof search.levels === "string" && search.levels.length > 0 ? search.levels : undefined,
     langs: typeof search.langs === "string" && search.langs.length > 0 ? search.langs : undefined,
+    disc: typeof search.disc === "string" && search.disc.length > 0 ? search.disc : undefined,
     difficulty:
       typeof search.difficulty === "string" && search.difficulty.length > 0
         ? search.difficulty
@@ -38,6 +40,7 @@ export const EMPTY_EXPLORE_SEARCH: ExploreSearchParams = {
   q: undefined,
   levels: undefined,
   langs: undefined,
+  disc: undefined,
   difficulty: undefined,
   minRating: undefined,
   sort: undefined,
@@ -47,6 +50,7 @@ export const EMPTY_EXPLORE_SEARCH: ExploreSearchParams = {
 export type ExploreFilterState = {
   levels: ExploreFilterLevel[];
   languages: ("en" | "fr")[];
+  disciplines: string[];
   difficulty: ExploreFilterDifficulty | null;
   minRating: number | null;
   sortKey: ExploreSortKey;
@@ -56,6 +60,7 @@ export type ExploreFilterState = {
 export const EMPTY_FILTERS: ExploreFilterState = {
   levels: [],
   languages: [],
+  disciplines: [],
   difficulty: null,
   minRating: null,
   sortKey: "relevance",
@@ -64,7 +69,11 @@ export const EMPTY_FILTERS: ExploreFilterState = {
 
 export function hasActiveFilters(f: ExploreFilterState): boolean {
   return (
-    f.levels.length > 0 || f.languages.length > 0 || f.difficulty !== null || f.minRating !== null
+    f.levels.length > 0 ||
+    f.languages.length > 0 ||
+    f.disciplines.length > 0 ||
+    f.difficulty !== null ||
+    f.minRating !== null
   );
 }
 
@@ -90,6 +99,18 @@ function parseCsv(input: unknown): string[] {
     .filter(Boolean);
 }
 
+function parseDisciplineCsv(input: unknown): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const value of parseCsv(input)) {
+    const code = value.toUpperCase();
+    if (seen.has(code)) continue;
+    seen.add(code);
+    out.push(code);
+  }
+  return out;
+}
+
 function parseSortKey(input: unknown): ExploreSortKey {
   if (typeof input !== "string") return "relevance";
   return SORT_KEYS.includes(input as ExploreSortKey) ? (input as ExploreSortKey) : "relevance";
@@ -113,6 +134,8 @@ export function parseExploreFiltersSearch(search: Record<string, unknown>): Expl
     LANGUAGE_VALUES.includes(value as "en" | "fr"),
   );
 
+  const disciplines = parseDisciplineCsv(search.disc);
+
   const difficulty = DIFFICULTY_VALUES.includes(search.difficulty as ExploreFilterDifficulty)
     ? (search.difficulty as ExploreFilterDifficulty)
     : null;
@@ -127,6 +150,7 @@ export function parseExploreFiltersSearch(search: Record<string, unknown>): Expl
   return {
     levels,
     languages,
+    disciplines,
     difficulty,
     minRating,
     sortKey,
@@ -139,6 +163,7 @@ export function serializeExploreFiltersSearch(filters: ExploreFilterState): Reco
 
   if (filters.levels.length > 0) params.levels = filters.levels.join(",");
   if (filters.languages.length > 0) params.langs = filters.languages.join(",");
+  if (filters.disciplines.length > 0) params.disc = filters.disciplines.join(",");
   if (filters.difficulty !== null) params.difficulty = filters.difficulty;
   if (filters.minRating !== null) params.minRating = String(filters.minRating);
 
@@ -148,6 +173,12 @@ export function serializeExploreFiltersSearch(filters: ExploreFilterState): Reco
   }
 
   return params;
+}
+
+export function getCourseDiscipline(code: string): string | null {
+  const match = code.match(/^([A-Za-z]{3,4})/);
+  if (!match) return null;
+  return match[1].toUpperCase();
 }
 
 export function getCourseLevel(code: string): ExploreFilterLevel | null {
@@ -220,6 +251,10 @@ export function filterCourseEntries(
     if (filters.languages.length > 0) {
       if (e.language === null || !filters.languages.includes(e.language)) return false;
     }
+    if (filters.disciplines.length > 0) {
+      const discipline = getCourseDiscipline(e.courseCode);
+      if (discipline === null || !filters.disciplines.includes(discipline)) return false;
+    }
     if (filters.difficulty !== null) {
       const gpa = gradeVizGpa(e.gradeViz);
       if (gpa == null) return false;
@@ -236,6 +271,12 @@ export function filterProfessorEntries(
   entries: ExploreProfessorSearchEntry[],
   filters: ExploreFilterState,
 ): ExploreProfessorSearchEntry[] {
-  if (filters.minRating === null) return entries;
-  return entries.filter((e) => e.maxRating !== null && e.maxRating >= filters.minRating!);
+  const byDiscipline = filters.disciplines.length > 0;
+  const byRating = filters.minRating !== null;
+  if (!byDiscipline && !byRating) return entries;
+  return entries.filter((e) => {
+    if (byRating && (e.maxRating === null || e.maxRating < filters.minRating!)) return false;
+    if (byDiscipline && !e.disciplines.some((d) => filters.disciplines.includes(d))) return false;
+    return true;
+  });
 }

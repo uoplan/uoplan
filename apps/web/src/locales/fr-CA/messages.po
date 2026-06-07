@@ -725,6 +725,20 @@ msgstr "Modéré"
 msgid "explore.filter.difficulty.tough"
 msgstr "Difficile"
 
+#: apps/web/src/components/explore/ExploreFilterBar.tsx:32
+#: apps/web/src/components/explore/ExploreFilterBar.tsx:34
+#: apps/web/src/components/explore/ExploreFilterPopoverContent.tsx:312
+msgid "explore.filter.discipline"
+msgstr "Discipline"
+
+#: apps/web/src/components/explore/ExploreFilterPopoverContent.tsx:199
+msgid "explore.filter.discipline.empty"
+msgstr "Aucune discipline trouvée"
+
+#: apps/web/src/components/explore/ExploreFilterPopoverContent.tsx:197
+msgid "explore.filter.discipline.placeholder"
+msgstr "Rechercher des disciplines"
+
 msgid "explore.filter.language"
 msgstr "Langue"
 

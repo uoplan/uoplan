@@ -6,6 +6,8 @@ import {
   compareCourseEntries,
   compareProfessorEntries,
   filterCourseEntries,
+  filterProfessorEntries,
+  getCourseDiscipline,
   parseExploreFiltersSearch,
   serializeExploreFiltersSearch,
   type ExploreFilterState,
@@ -48,6 +50,7 @@ function makeProfessorEntry(
     displayName: partial.displayName ?? "Prof One",
     searchText: partial.searchText ?? "prof one",
     uniqueCourseCount: partial.uniqueCourseCount ?? 2,
+    disciplines: partial.disciplines ?? [],
     gradeViz: partial.gradeViz ?? null,
     maxRating: partial.maxRating ?? null,
   };
@@ -58,6 +61,7 @@ describe("parseExploreFiltersSearch", () => {
     const parsed = parseExploreFiltersSearch({
       levels: "1000,2000,9000",
       langs: "en,fr,es",
+      disc: "bio, CSI ,bio",
       difficulty: "moderate",
       minRating: "3.5",
       sort: "courseCode",
@@ -66,6 +70,7 @@ describe("parseExploreFiltersSearch", () => {
 
     expect(parsed.levels).toEqual([1000, 2000]);
     expect(parsed.languages).toEqual(["en", "fr"]);
+    expect(parsed.disciplines).toEqual(["BIO", "CSI"]);
     expect(parsed.difficulty).toBe("moderate");
     expect(parsed.minRating).toBe(3.5);
     expect(parsed.sortKey).toBe("courseCode");
@@ -102,6 +107,7 @@ describe("serializeExploreFiltersSearch", () => {
     const filters: ExploreFilterState = {
       levels: [1000, 2000],
       languages: ["en"],
+      disciplines: ["BIO", "CSI"],
       difficulty: "easy",
       minRating: 4,
       sortKey: "avgGrade",
@@ -111,6 +117,7 @@ describe("serializeExploreFiltersSearch", () => {
     expect(serializeExploreFiltersSearch(filters)).toEqual({
       levels: "1000,2000",
       langs: "en",
+      disc: "BIO,CSI",
       difficulty: "easy",
       minRating: "4",
       sort: "avgGrade",
@@ -207,5 +214,63 @@ describe("compareProfessorEntries", () => {
       compareProfessorEntries(a, b, "profRating", "asc"),
     );
     expect(asc.map((e) => e.groupId)).toEqual(["p-none", "p-low", "p-high"]);
+  });
+});
+
+describe("getCourseDiscipline", () => {
+  it("extracts the uppercase subject prefix", () => {
+    expect(getCourseDiscipline("BIO 1130")).toBe("BIO");
+    expect(getCourseDiscipline("csi2110")).toBe("CSI");
+    expect(getCourseDiscipline("ADM1100")).toBe("ADM");
+  });
+
+  it("returns null when no prefix is present", () => {
+    expect(getCourseDiscipline("1130")).toBeNull();
+  });
+});
+
+describe("filterCourseEntries disciplines", () => {
+  const bio = makeCourseEntry({ normCode: "bio1130", courseCode: "BIO 1130" });
+  const csi = makeCourseEntry({ normCode: "csi2110", courseCode: "CSI 2110" });
+  const mat = makeCourseEntry({ normCode: "mat1320", courseCode: "MAT 1320" });
+  const all = [bio, csi, mat];
+
+  it("keeps only courses in the selected disciplines", () => {
+    const result = filterCourseEntries(all, { ...EMPTY_FILTERS, disciplines: ["BIO", "MAT"] });
+    expect(result.map((e) => e.courseCode)).toEqual(["BIO 1130", "MAT 1320"]);
+  });
+
+  it("returns all courses when no discipline is selected", () => {
+    const result = filterCourseEntries(all, EMPTY_FILTERS);
+    expect(result).toHaveLength(3);
+  });
+});
+
+describe("filterProfessorEntries", () => {
+  const bioProf = makeProfessorEntry({ groupId: "bio", disciplines: ["BIO"], maxRating: 4.5 });
+  const csiProf = makeProfessorEntry({ groupId: "csi", disciplines: ["CSI"], maxRating: 3.1 });
+  const multiProf = makeProfessorEntry({
+    groupId: "multi",
+    disciplines: ["BIO", "CSI"],
+    maxRating: null,
+  });
+  const all = [bioProf, csiProf, multiProf];
+
+  it("filters by discipline (any overlap)", () => {
+    const result = filterProfessorEntries(all, { ...EMPTY_FILTERS, disciplines: ["BIO"] });
+    expect(result.map((e) => e.groupId)).toEqual(["bio", "multi"]);
+  });
+
+  it("combines discipline and rating filters", () => {
+    const result = filterProfessorEntries(all, {
+      ...EMPTY_FILTERS,
+      disciplines: ["BIO"],
+      minRating: 4,
+    });
+    expect(result.map((e) => e.groupId)).toEqual(["bio"]);
+  });
+
+  it("returns all entries when no relevant filter is active", () => {
+    expect(filterProfessorEntries(all, EMPTY_FILTERS)).toHaveLength(3);
   });
 });
