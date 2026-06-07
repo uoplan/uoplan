@@ -29,7 +29,7 @@ export interface ParsedReportTitle {
 
 const PREFIX_RE = /\b(?:for|pour)\b\s+/i;
 const COURSE_RE =
-  /([A-Z]{2,4})\s?(\d{4,5}[A-Z]?)\s+([A-Z0-9]{2,5})\s+(.*?)(?=,\s*[A-Z]{2,4}\s?\d{4,5}[A-Z]?\s+[A-Z0-9]{2,5}\b|$)/g;
+  /([A-Z]{2,4})\s?(\d{3,5}[A-Z]?)\s+([A-Z0-9]{1,5})\s+(.*?)(?=,\s*[A-Z]{2,4}\s?\d{3,5}[A-Z]?\s+[A-Z0-9]{1,5}\b|$)/g;
 
 export function parseReportTitle(rawTitle: string): ParsedReportTitle | null {
   const title = normalizeWhitespace(rawTitle);

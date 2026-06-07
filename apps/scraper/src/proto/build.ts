@@ -2,8 +2,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import * as DataProto from "@uoplan/proto/data";
+import * as FeedbackProto from "@uoplan/proto/feedback";
 import { SCRAPER_DATA_DIR, WEB_PUBLIC_DATA_DIR } from "../shared/paths.ts";
 import { readJson } from "../shared/json.ts";
+import { buildFeedbackData } from "./feedback.ts";
 
 type JsonObject = Record<string, unknown>;
 
@@ -469,8 +471,16 @@ export async function main(): Promise<void> {
     DataProto.GradesData.encode(mapGradesJson(gradesJson)).finish(),
   );
 
+  const feedback = await buildFeedbackData();
+  if (feedback) {
+    await writePb(
+      path.join(WEB_PUBLIC_DATA_DIR, "feedback.pb"),
+      FeedbackProto.FeedbackData.encode(feedback).finish(),
+    );
+  }
+
   console.log(
-    `Generated protobuf data: ${yearCatalogues.length} catalogue files, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb`,
+    `Generated protobuf data: ${yearCatalogues.length} catalogue files, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb${feedback ? ", feedback.pb" : ""}`,
   );
 }
 
