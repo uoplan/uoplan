@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { Popover } from "@mantine/core";
 import type { DataCache } from "@uoplan/core";
 import { COURSE_COLORS, COURSE_COLOR_HEX, ratingToColor } from "@uoplan/core";
@@ -7,7 +7,6 @@ import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
 import { useTr } from "../../../i18n";
 import { GradeDistributionBottomBar } from "../GradeDistributionViz";
 import { CalendarEventDetails } from "../CalendarEventDetails";
-import { useSwapContext } from "../swapContext";
 import { componentKindOnly, formatTimeRange } from "../calendarEventDisplayUtils";
 import { CalendarEventFace } from "../CalendarEventFace";
 import { minutesToPercent } from "./weekCalendarLayout";
@@ -19,21 +18,32 @@ interface WeekCalendarEventProps {
   cache: DataCache | null;
   colorMap: Record<string, number>;
   onClick: (event: CalendarEvent) => void;
+  /** Whether this event is the one whose swap overlay is open. */
+  isActive: boolean;
+  /** Mobile renders a bottom drawer (in `CalendarView`), so no popover here. */
+  isMobile: boolean;
+  /** Fullscreen overlay (rendered by `CalendarView`) suppresses the popover. */
+  isFullscreen: boolean;
+  /** Dismiss the active swap overlay (used when the popover closes itself). */
+  onRequestClose: () => void;
 }
 
 const LANE_GAP_PX = 1;
 const CALENDAR_EVENT_ARIA_LABEL_ID = "calendar.event.ariaLabel";
 
-export function WeekCalendarEvent({
+function WeekCalendarEventImpl({
   event,
   laneIndex,
   laneCount,
   cache,
   colorMap,
   onClick,
+  isActive,
+  isMobile,
+  isFullscreen,
+  onRequestClose,
 }: WeekCalendarEventProps) {
   const tr = useTr();
-  const swapCtx = useSwapContext();
 
   const courseTitle = useMemo(
     () => cache?.getCourse(event.courseCode)?.title ?? "",
@@ -82,9 +92,7 @@ export function WeekCalendarEvent({
     timeRange,
   });
 
-  const isActive = swapCtx?.activeEventId === event.id;
-  const popoverOpened =
-    isActive && !(swapCtx?.isMobile ?? false) && !(swapCtx?.isFullscreen ?? false);
+  const isActivePopover = isActive && !isMobile && !isFullscreen;
 
   const eventButton = (
     <button
@@ -142,15 +150,15 @@ export function WeekCalendarEvent({
 
   // On mobile the active event opens a bottom drawer (rendered by CalendarView),
   // so we never anchor a popover there.
-  if (!swapCtx || swapCtx.isMobile) {
+  if (isMobile) {
     return eventButton;
   }
 
   return (
     <Popover
-      opened={popoverOpened}
+      opened={isActivePopover}
       onChange={(opened) => {
-        if (!opened && isActive) swapCtx.closeModal();
+        if (!opened && isActive) onRequestClose();
       }}
       position="right"
       withArrow
@@ -178,3 +186,10 @@ export function WeekCalendarEvent({
     </Popover>
   );
 }
+
+/**
+ * Memoized so that opening/closing the swap overlay (which changes only the
+ * active event's `isActive`) re-renders just the previously- and newly-active
+ * events instead of every event block on the grid.
+ */
+export const WeekCalendarEvent = memo(WeekCalendarEventImpl);

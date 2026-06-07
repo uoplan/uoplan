@@ -393,6 +393,10 @@ export function CalendarView({
                 onEventClick={handleEventClick}
                 showWeekends={showWeekends ?? false}
                 animationPhase={animationPhase}
+                activeEventId={swap.modalState?.eventId ?? null}
+                isMobile={isMobile ?? false}
+                isFullscreen={isFullscreen}
+                onEventClose={handleCloseModal}
               />
             </div>
           </Box>

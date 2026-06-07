@@ -23,6 +23,12 @@ interface WeekCalendarProps {
   onEventClick: (event: CalendarEvent) => void;
   showWeekends: boolean;
   animationPhase: "idle" | "exiting" | "entering";
+  /** Id of the event whose swap overlay is open (anchors the desktop popover). */
+  activeEventId: string | null;
+  isMobile: boolean;
+  isFullscreen: boolean;
+  /** Dismiss the active swap overlay. */
+  onEventClose: () => void;
 }
 
 const EMPTY_COLOR_MAP: Record<string, number> = {};
@@ -34,6 +40,10 @@ export function WeekCalendar({
   onEventClick,
   showWeekends,
   animationPhase,
+  activeEventId,
+  isMobile,
+  isFullscreen,
+  onEventClose,
 }: WeekCalendarProps) {
   const dayCodes: DayOfWeekCode[] = useMemo(
     () => (showWeekends ? FULL_WEEK_CODES : WEEKDAY_CODES),
@@ -120,6 +130,10 @@ export function WeekCalendar({
                     cache={cache}
                     colorMap={colorMap}
                     onClick={onEventClick}
+                    isActive={event.id === activeEventId}
+                    isMobile={isMobile}
+                    isFullscreen={isFullscreen}
+                    onRequestClose={onEventClose}
                   />
                 ))}
               </div>
