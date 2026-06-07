@@ -19,14 +19,14 @@ import * as DataProto from "@uoplan/proto/data";
  * Contract / golden tests for committed runtime `.pb` assets.
  *
  * These guard the proto wire contract: every committed protobuf asset in
- * `apps/web/public/data` must decode with the currently generated TypeScript
+ * `apps/web/src/assets/data` must decode with the currently generated TypeScript
  * codecs AND round-trip through the domain converters without throwing. Any
  * proto schema change that breaks an existing committed asset (e.g. reusing a
  * field number, renumbering an enum) will fail here.
  */
 
 const here = dirname(fileURLToPath(import.meta.url));
-const dataDir = join(here, "..", "..", "..", "..", "apps", "web", "public", "data");
+const dataDir = join(here, "..", "..", "..", "..", "apps", "web", "src", "assets", "data");
 
 function read(name: string): Uint8Array {
   return new Uint8Array(readFileSync(join(dataDir, name)));

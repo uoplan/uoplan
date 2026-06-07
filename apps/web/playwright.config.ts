@@ -6,7 +6,7 @@ const BASE_URL = `http://localhost:${PORT}`;
 /**
  * Playwright end-to-end config for the web app.
  *
- * Runs against the Vite dev server (committed `.pb` assets in `public/data`
+ * Runs against the Vite dev server (committed `.pb` assets in `src/assets/data`
  * make the app deterministic without a network). Phase 5 adds fixture-based
  * data seams for fully hermetic flows; this scaffold covers smoke coverage.
  */

@@ -32,9 +32,9 @@ use uoplan_engine::proto::engine::{GenerationRequest, GenerationResponse, Mode};
 use uoplan_engine::Engine;
 
 const CATALOGUE_PB: &str =
-    concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/public/data/catalogue.2026.pb");
+    concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/src/assets/data/catalogue.2026.pb");
 const SCHEDULES_PB: &str =
-    concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/public/data/schedules.2271.pb");
+    concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/src/assets/data/schedules.2271.pb");
 
 const SEEDS: u32 = 64;
 

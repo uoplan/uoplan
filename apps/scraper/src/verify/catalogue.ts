@@ -1,6 +1,6 @@
 import * as fs from "fs/promises";
 import * as path from "path";
-import { WEB_PUBLIC_DATA_DIR } from "../shared/paths.ts";
+import { WEB_ASSETS_DATA_DIR } from "../shared/paths.ts";
 import { extractCourseCodes } from "../shared/text.ts";
 
 interface CoursePrereqNode {
@@ -151,7 +151,7 @@ async function loadCatalogue(filePath: string): Promise<Catalogue> {
 }
 
 export async function main() {
-  const dataDir = WEB_PUBLIC_DATA_DIR;
+  const dataDir = WEB_ASSETS_DATA_DIR;
 
   // Find all catalogue files
   const files = await fs.readdir(dataDir);

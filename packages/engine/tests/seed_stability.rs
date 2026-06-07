@@ -16,9 +16,9 @@ use uoplan_engine::proto::engine::{GenerationResponse, TimetableRequest};
 use uoplan_engine::Engine;
 
 const CATALOGUE_PB: &str =
-    concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/public/data/catalogue.2026.pb");
+    concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/src/assets/data/catalogue.2026.pb");
 const SCHEDULES_PB: &str =
-    concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/public/data/schedules.2269.pb");
+    concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/src/assets/data/schedules.2269.pb");
 
 /// Target size for the stress set (the reported failure was ~23-24 courses).
 const TARGET_COURSES: usize = 24;

@@ -3,13 +3,10 @@ import { join } from "node:path";
 import type { FetchBytes } from "./transport";
 
 /**
- * Node/test transport that reads assets from a local directory. `dir` points at
- * the served data directory (e.g. `apps/web/public/data`); the leading `/data/`
- * of a public path is stripped before joining.
+ * Node/test transport that reads assets straight off disk by id. `dir` points at
+ * the data directory holding the `.pb` files (e.g. `apps/web/src/assets/data`);
+ * the asset id is the bare filename, so it is simply joined onto `dir`.
  */
 export function createFileTransport(dir: string): FetchBytes {
-  return async (path) => {
-    const rel = path.startsWith("/data/") ? path.slice("/data/".length) : path.replace(/^\/+/, "");
-    return new Uint8Array(await readFile(join(dir, rel)));
-  };
+  return async (id) => new Uint8Array(await readFile(join(dir, id)));
 }

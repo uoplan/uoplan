@@ -6,12 +6,14 @@ import { VitePWA } from "vite-plugin-pwa";
 import { playwright } from "@vitest/browser-playwright";
 import { visualizer } from "rollup-plugin-visualizer";
 import { changelogHtmlPlugin } from "./vite/changelog-html-plugin";
+import { dataManifestPlugin } from "./vite/data-manifest-plugin";
 
 const analyze = process.env.ANALYZE === "1";
 
 export default defineConfig({
   plugins: [
     changelogHtmlPlugin(),
+    dataManifestPlugin(),
     analyze &&
       visualizer({
         filename: "dist/stats.html",
@@ -99,5 +101,8 @@ export default defineConfig({
   },
   build: {
     sourcemap: true,
+    // Never inline `.pb` data assets — they must stay as content-hashed files so
+    // they're cacheable (immutable) and resolvable by the worker via the manifest.
+    assetsInlineLimit: (filePath: string) => (filePath.endsWith(".pb") ? false : undefined),
   },
 });

@@ -19,7 +19,8 @@ import {
 import { buildDataCache } from "@uoplan/core";
 import { enrichSchedulesDataWithGrades, getGradeLookups } from "@uoplan/core";
 import { getMergedCatalogue } from "./catalogueUtils";
-import { fetchProtoBytes } from "../../lib/protoFetch";
+import { fetchProtoBytes, optionalProtoBytes } from "../../lib/protoFetch";
+import { dataAssetIds } from "@uoplan/data";
 import { buildCacheWithOpt } from "../../lib/dataCacheLoader";
 import { buildProfessorRatingsMap } from "@uoplan/core";
 import {
@@ -58,7 +59,7 @@ export const createDataSlice =
         const { catalogue, yearCatalogueCourses, completedCourses } = get();
         if (!catalogue) throw new Error("Catalogue not loaded");
 
-        const schedulesBytes = await fetchProtoBytes(`/data/schedules.${termId}.pb`);
+        const schedulesBytes = await fetchProtoBytes(dataAssetIds.schedules(termId));
         const parsedSchedulesRaw = fromProtoSchedulesData(
           DataProto.SchedulesData.decode(schedulesBytes),
         );
@@ -131,7 +132,7 @@ export const createDataSlice =
             set({ cache });
           }
         } else {
-          const bytes = await fetchProtoBytes(`/data/catalogue.${year}.pb`);
+          const bytes = await fetchProtoBytes(dataAssetIds.catalogue(year));
           const parsed = fromProtoCatalogue(DataProto.Catalogue.decode(bytes));
           set({
             yearCataloguePrograms: parsed.programs,
@@ -171,36 +172,32 @@ export const createDataSlice =
 
       set({ loading: true, error: null, loadProgress: 0 });
       try {
-        const [manifestRes, termsRes, indicesRes, rmpRes, gradesRes, disciplinesRes] =
+        const [manifestBytes, termsBytes, indicesBytes, rmpBytes, gradesBytes, disciplinesBytes] =
           await Promise.all([
-            fetch("/data/catalogue.pb"),
-            fetch("/data/terms.pb"),
-            fetch("/data/indices.pb").catch(() => null),
-            fetch("/data/ratemyprofessors.pb").catch(() => null),
-            fetch("/data/grades.pb").catch(() => null),
-            fetch("/data/disciplines.pb").catch(() => null),
+            fetchProtoBytes(dataAssetIds.manifest),
+            fetchProtoBytes(dataAssetIds.terms),
+            optionalProtoBytes(dataAssetIds.indices),
+            optionalProtoBytes(dataAssetIds.rateMyProfessors),
+            optionalProtoBytes(dataAssetIds.grades),
+            optionalProtoBytes(dataAssetIds.disciplines),
           ]);
-        if (!manifestRes.ok || !termsRes.ok) throw new Error("Failed to load data");
         bumpLoadProgress();
 
-        const manifestBytes = new Uint8Array(await manifestRes.arrayBuffer());
         const availableYears = fromProtoCatalogueManifest(
           DataProto.CatalogueManifest.decode(manifestBytes),
         ).years;
         const latestYear = availableYears[0];
         if (!latestYear) throw new Error("Catalogue manifest has no years");
 
-        const catalogueBytes = await fetchProtoBytes(`/data/catalogue.${latestYear}.pb`);
+        const catalogueBytes = await fetchProtoBytes(dataAssetIds.catalogue(latestYear));
         bumpLoadProgress();
-        const termsBytes = new Uint8Array(await termsRes.arrayBuffer());
 
         const parsedCatalogue = fromProtoCatalogue(DataProto.Catalogue.decode(catalogueBytes));
         const parsedTerms = fromProtoTermsData(DataProto.TermsData.decode(termsBytes));
 
         let professorRatings = null;
-        if (rmpRes?.ok) {
+        if (rmpBytes) {
           try {
-            const rmpBytes = new Uint8Array(await rmpRes.arrayBuffer());
             const rmpData = fromProtoRateMyProfessorsData(
               DataProto.RateMyProfessorsData.decode(rmpBytes),
             );
@@ -212,25 +209,21 @@ export const createDataSlice =
 
         let courseGrades = null;
         let courseGradesError: string | null = null;
-        if (gradesRes?.ok) {
+        if (gradesBytes) {
           try {
-            const gradesBytes = new Uint8Array(await gradesRes.arrayBuffer());
             courseGrades = fromProtoCourseGradesData(DataProto.GradesData.decode(gradesBytes));
           } catch (err) {
             courseGradesError =
               err instanceof Error ? err.message : "Failed to parse grade history";
           }
         } else {
-          courseGradesError = gradesRes
-            ? `HTTP ${gradesRes.status}`
-            : "Failed to load grade history";
+          courseGradesError = "Failed to load grade history";
         }
         bumpLoadProgress();
 
         let disciplines: Discipline[] | null = null;
-        if (disciplinesRes?.ok) {
+        if (disciplinesBytes) {
           try {
-            const disciplinesBytes = new Uint8Array(await disciplinesRes.arrayBuffer());
             disciplines = fromProtoDisciplinesData(
               DataProto.DisciplinesData.decode(disciplinesBytes),
             ).disciplines;
@@ -241,8 +234,7 @@ export const createDataSlice =
         bumpLoadProgress();
 
         let indices: Indices | null = null;
-        if (indicesRes?.ok) {
-          const indicesBytes = new Uint8Array(await indicesRes.arrayBuffer());
+        if (indicesBytes) {
           indices = fromProtoIndices(DataProto.Indices.decode(indicesBytes));
         } else {
           indices = {
@@ -291,7 +283,7 @@ export const createDataSlice =
         let yearCatalogueCourses: Course[] | null = null;
         if (initialFirstYear !== null) {
           try {
-            const yearBytes = await fetchProtoBytes(`/data/catalogue.${initialFirstYear}.pb`);
+            const yearBytes = await fetchProtoBytes(dataAssetIds.catalogue(initialFirstYear));
             const parsedYear = fromProtoCatalogue(DataProto.Catalogue.decode(yearBytes));
             yearCataloguePrograms = parsedYear.programs;
             yearCatalogueCourses = parsedYear.courses;
@@ -300,7 +292,7 @@ export const createDataSlice =
           }
         }
 
-        const schedulesBytes = await fetchProtoBytes(`/data/schedules.${initialTermId}.pb`);
+        const schedulesBytes = await fetchProtoBytes(dataAssetIds.schedules(initialTermId));
         const parsedSchedulesRaw = fromProtoSchedulesData(
           DataProto.SchedulesData.decode(schedulesBytes),
         );

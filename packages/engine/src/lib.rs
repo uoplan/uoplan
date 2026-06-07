@@ -417,9 +417,9 @@ mod tests {
     #[test]
     fn real_data_basic_generation() {
         let cat_path =
-            concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/public/data/catalogue.2026.pb");
+            concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/src/assets/data/catalogue.2026.pb");
         let sched_path =
-            concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/public/data/schedules.2269.pb");
+            concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/src/assets/data/schedules.2269.pb");
         let (Ok(cat_bytes), Ok(sched_bytes)) =
             (std::fs::read(cat_path), std::fs::read(sched_path))
         else {
