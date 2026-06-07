@@ -46,6 +46,7 @@ import { AppCard } from "../shared/AppCard";
 import { AnimatedNumber } from "../shared/AnimatedNumber";
 import { CalendarMobileDrawer } from "../calendar/CalendarMobileDrawer";
 import { TrendsSection } from "./TrendsSection";
+import { TrendsFeedbackSection } from "./TrendsFeedbackSection";
 import { ChartCard } from "./ChartCard";
 import { DisciplineBarCard } from "./DisciplineBarCard";
 import { DisciplineHeatmapCard } from "./DisciplineHeatmapCard";
@@ -696,6 +697,8 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                 </TrendsSection>
               </>
             ) : null}
+
+            <TrendsFeedbackSection />
 
             <AppCard p="md">
               <Stack gap="sm">

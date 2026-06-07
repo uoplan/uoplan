@@ -1,4 +1,4 @@
-import { Accordion, Box, Stack, Text, Title } from "@mantine/core";
+import { Accordion, Box, Flex, Stack, Text, Title } from "@mantine/core";
 import { useEffect, useMemo } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { m } from "framer-motion";
@@ -11,6 +11,8 @@ import {
   resolveComponentId,
 } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
+import { useCourseFeedbackViews } from "../../hooks/useFeedbackViews";
+import { FeedbackSummaryCard } from "./feedback/FeedbackSummaryCard";
 import type { BackState } from "../../lib/navigation/backState";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { courseNormToPathParam, parseCoursePathParam } from "../../lib/explore/courseSearchParams";
@@ -115,6 +117,9 @@ export function ExploreCoursePage({
     };
   }, [selectedCourseMeta, urlCourseParam]);
 
+  const { views: feedbackViews, loading: feedbackLoading } = useCourseFeedbackViews(urlCourseParam);
+  const showFeedback = feedbackLoading || feedbackViews.length > 0;
+
   return (
     <m.div
       initial={{ opacity: 0, y: 12 }}
@@ -124,44 +129,62 @@ export function ExploreCoursePage({
       <Stack gap={0}>
         {selectedCourseMeta ? (
           <Box
-            pt={4}
-            pb={32}
+            pt={{ base: 4, md: 0 }}
+            pb="md"
             style={{
               paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
               paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
             }}
           >
-            <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
-              {selectedCourseMeta.courseCode}
-            </Title>
-            {selectedCourseMeta.courseTitle ? (
-              <Text size="sm" c="dimmed" lh={1.5} mt={8}>
-                {selectedCourseMeta.courseTitle}
-              </Text>
-            ) : null}
-            {aliasCodes.length > 0 ? (
-              <Text size="sm" c="dimmed" lh={1.5} mt={8}>
-                {tr("explore.alsoKnownAs")}{" "}
-                {aliasCodes.map((code, i) => (
-                  <span key={code}>
-                    {i > 0 ? ", " : null}
-                    <Link
-                      to="/explore/course/$course"
-                      params={{ course: courseNormToPathParam(code) }}
-                      search={EMPTY_EXPLORE_SEARCH}
-                      state={{ back: courseEntry } as never}
-                      style={{
-                        color: "var(--app-text)",
-                        fontWeight: 500,
-                        textDecoration: "none",
-                      }}
-                    >
-                      {code}
-                    </Link>
-                  </span>
-                ))}
-              </Text>
-            ) : null}
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              gap="lg"
+              align={{ base: "stretch", md: "center" }}
+            >
+              <Box style={{ flex: 1, minWidth: 0 }}>
+                <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
+                  {selectedCourseMeta.courseCode}
+                </Title>
+                {selectedCourseMeta.courseTitle ? (
+                  <Text size="sm" c="dimmed" lh={1.5} mt={8}>
+                    {selectedCourseMeta.courseTitle}
+                  </Text>
+                ) : null}
+                {aliasCodes.length > 0 ? (
+                  <Text size="sm" c="dimmed" lh={1.5} mt={8}>
+                    {tr("explore.alsoKnownAs")}{" "}
+                    {aliasCodes.map((code, i) => (
+                      <span key={code}>
+                        {i > 0 ? ", " : null}
+                        <Link
+                          to="/explore/course/$course"
+                          params={{ course: courseNormToPathParam(code) }}
+                          search={EMPTY_EXPLORE_SEARCH}
+                          state={{ back: courseEntry } as never}
+                          style={{
+                            color: "var(--app-text)",
+                            fontWeight: 500,
+                            textDecoration: "none",
+                          }}
+                        >
+                          {code}
+                        </Link>
+                      </span>
+                    ))}
+                  </Text>
+                ) : null}
+              </Box>
+              {showFeedback ? (
+                <Box style={{ width: "100%", maxWidth: 420 }}>
+                  <FeedbackSummaryCard
+                    to="/explore/course/$course/feedback"
+                    params={{ course: urlCourseParam }}
+                    views={feedbackViews}
+                    loading={feedbackLoading}
+                  />
+                </Box>
+              ) : null}
+            </Flex>
           </Box>
         ) : null}
 

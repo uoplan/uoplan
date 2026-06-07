@@ -5,37 +5,44 @@ package feedback;
 // Combined uOttawa course-evaluation ("S-Report") survey data for every scraped
 // term. Every repeated value lives in a dictionary referenced by index, so no
 // string (or repeated structure) is ever duplicated:
-//   * question texts and answer-option labels -> `questions` / `option_sets`;
+//   * question texts -> `questions`;
 //   * the ordered list of questions a section was evaluated on -> `question_sets`
 //     (only a handful of distinct sequences exist across the whole corpus);
 //   * professor names -> `professors`;
 //   * course codes -> the shared `indices.pb` course list (see `courses` below).
 //
-// There are two report eras in the source data:
-//   * older reports expose the per-option Likert distribution, captured (flattened)
-//     in `FeedbackSection.counts`; their per-question response total is the sum of
-//     that question's counts, so `responses` is left empty for them;
-//   * modern reports bake the distribution into a chart image, so only the
-//     response count (and invited/`registered`) is available, `counts` is empty,
-//     and `responses` is stored explicitly.
-// Percentages are always derivable as `count / responses`, so they are not stored.
-// The mean and standard deviation are intentionally NOT stored: for older reports
-// they are recomputable from the distribution, and the raw values remain in the
-// committed `data/feedback.<termId>.json` source if ever needed.
+// Each evaluated question carries a single per-question **average** rating on a
+// 1-5 scale (`FeedbackSection.averages`, stored as round(avg * 10)). The source
+// has two report eras (older reports expose a per-option Likert distribution,
+// modern reports a chart-baked summary), but both are reduced to this one average:
+// modern reports use the reported mean directly; older reports have the mean
+// recomputed from their distribution (N/A options excluded, ordinal options mapped
+// best-first to 5..1). Questions with no ordinal scale (categorical questions such
+// as "For your program, this course is") have no average (stored as 0) and are not
+// charted; `FeedbackQuestion.scale` flags the ones that ever carry an average.
+// The full per-option distribution and standard deviation are intentionally NOT
+// stored here; the raw values remain in the committed `data/feedback.<termId>.json`
+// source if ever needed.
 
-// An ordered Likert scale: the answer labels in their display order, e.g.
-// ["strongly agree", "agree", "disagree", "strongly disagree"].
-message FeedbackOptionSet {
-  repeated string labels = 1;
-}
-
-// A distinct survey question. `option_set` indexes `FeedbackData.option_sets` and
-// is set for every question whose per-option distribution has been observed (i.e.
-// any question that ever carried counts); purely chart-only questions leave it
-// unset.
+// A distinct survey question. `scale` is true when the question is an ordinal
+// rating question that carries a numeric average (so it can be charted over time);
+// categorical questions leave it false.
 message FeedbackQuestion {
   string text = 1;
-  optional uint32 option_set = 2;
+  bool scale = 2;
+  // 1-based index into `FeedbackData.option_sets` naming this scale question's
+  // ordinal response options, or 0 when unknown. Only older reports expose the
+  // option labels in HTML (modern reports bake them into a chart image), so a
+  // scale question only carries an option set when it appeared in an older report.
+  uint32 option_set = 3;
+}
+
+// The ordered response options of an ordinal scale question, best-first: index 0
+// is the top of the 1-5 scale (maps to 5) and the last entry is the bottom (1).
+// Non-answer options (e.g. "question not applicable") are excluded. Per-option
+// counts are intentionally not stored; only the labels are kept.
+message FeedbackOptionSet {
+  repeated string options = 1;
 }
 
 // An ordered list of questions (indices into `FeedbackData.questions`) that a
@@ -47,22 +54,20 @@ message FeedbackQuestionSet {
 }
 
 // One section's evaluations within a term, stored column-wise. `question_set`
-// indexes `FeedbackData.question_sets`; `responses` and `registered` are packed
-// arrays aligned with that question set's questions. `registered` is empty for
-// older reports (invited counts unavailable) and aligned for modern reports.
-// `responses` is the reverse: empty for older reports (recompute each entry as the
-// sum of that question's `counts` slice) and aligned for modern reports. `counts`
-// holds the per-option distribution for older reports, flattened across questions
-// in order and empty for modern reports; the slice for question i has the length
-// of that question's option set
-// (`FeedbackData.option_sets[questions[question_set][i].option_set]`).
+// indexes `FeedbackData.question_sets`; `responses`, `registered` and `averages`
+// are packed arrays aligned with that question set's questions.
+//   * `responses[i]`  - number of students who answered question i.
+//   * `registered[i]` - number of students invited; empty for older reports where
+//     the invited count is unavailable, otherwise aligned (uniform per section).
+//   * `averages[i]`   - round(mean * 10) on a 1-5 scale, or 0 when the question
+//     has no ordinal average (categorical questions / missing data).
 message FeedbackSection {
   string section = 1;
   uint32 professor = 2;
   uint32 question_set = 3;
   repeated uint32 responses = 4;
   repeated uint32 registered = 5;
-  repeated uint32 counts = 6;
+  repeated uint32 averages = 6;
 }
 
 // All evaluated sections of one course within one term.
@@ -76,9 +81,9 @@ message FeedbackTermCourse {
   repeated FeedbackSection sections = 2;
 }
 
-// One term's evaluations. Aggregating a course across its sections (sum `counts`
-// and `responses`) yields the course-level term summary used by the dedicated
-// feedback explore page.
+// One term's evaluations. Aggregating a course across its sections (response-
+// weighted mean of `averages`, sum of `responses`) yields the course-level term
+// summary used by the dedicated feedback explore page.
 message FeedbackTerm {
   uint32 term_id = 1;
   repeated FeedbackTermCourse courses = 2;
@@ -86,7 +91,6 @@ message FeedbackTerm {
 
 // Top-level combined dataset: dictionaries followed by the per-term tree.
 message FeedbackData {
-  repeated FeedbackOptionSet option_sets = 1;
   repeated FeedbackQuestion questions = 2;
   repeated string professors = 3;
   // Course codes not present in `indices.pb`, addressed by course indices >=
@@ -98,4 +102,7 @@ message FeedbackData {
   repeated FeedbackTerm terms = 6;
   // Distinct ordered question sequences, referenced by `FeedbackSection.question_set`.
   repeated FeedbackQuestionSet question_sets = 7;
+  // Distinct ordinal response-option label sets, referenced (1-based) by
+  // `FeedbackQuestion.option_set`. Only a handful of distinct scales exist.
+  repeated FeedbackOptionSet option_sets = 8;
 }

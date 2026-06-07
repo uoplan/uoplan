@@ -24,6 +24,18 @@ export function formatTermLabel(termId: number | string): string {
 }
 
 /**
+ * Compact localized term label for dense axes, e.g. `W25` (French `H25`).
+ * Season initial (localized) + two-digit year. Falls back to the raw id.
+ */
+export function formatTermLabelShort(termId: number | string): string {
+  const decoded = decode(termId);
+  if (!decoded) return fallback(termId);
+  const season = tr(SEASON_LABEL_ID[decoded.season]);
+  const initial = season.charAt(0).toUpperCase();
+  return `${initial}${String(decoded.year).slice(-2)}`;
+}
+
+/**
  * Re-exported for convenience. Non-localized counterpart to
  * {@link formatTermLabel}; defined in `./termLabelPlain` (which has no i18n
  * dependency) so it can be used from web workers and search indexing without

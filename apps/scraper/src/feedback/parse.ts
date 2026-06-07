@@ -6,9 +6,13 @@
  * `stats` is set and report HTML was cached, per-question summary stats are attached.
  */
 
+import fs from "node:fs/promises";
+import path from "node:path";
 import {
   cachedTermIds,
+  chartPath,
   listIsComplete,
+  optionsPath,
   outputExists,
   outputPath,
   readListMeta,
@@ -17,8 +21,13 @@ import {
   writeJsonFile,
 } from "./cache.ts";
 import { parseListRows } from "./list.ts";
+import { extractChartLabels, terminateOcr } from "./ocr.ts";
 import { parseReport, type ReportQuestionStats } from "./report.ts";
+import { ordinalOptionLabels } from "./scales.ts";
 import { parseReportTitle } from "./title.ts";
+
+/** Sidecar mapping each scale question's text to its best-first option labels. */
+type OptionLabelMap = Record<string, string[]>;
 
 export interface FeedbackSection {
   /** Section code, e.g. "A00", "S100", "0". */
@@ -51,6 +60,39 @@ interface ParsedTerm {
   termLabel: string;
   sectionCount: number;
   output: FeedbackFile;
+  /** Best-first option labels discovered this term, keyed by question text. */
+  optionLabels: OptionLabelMap;
+}
+
+/**
+ * Record a scale question's ordinal option labels (best-first) into `sink`,
+ * keyed by question text, the first time the question is seen. Older reports
+ * carry the labels in their HTML option table; modern reports omit them (the
+ * distribution lives only in the `ChartPic_*.png`), so those are recovered by
+ * OCRing the chart. Only the labels are kept — they are a per-question property,
+ * stored once in the committed sidecar rather than duplicated per section.
+ */
+async function harvestOptionLabels(
+  termId: string,
+  reportId: string,
+  questions: ReportQuestionStats[],
+  sink: OptionLabelMap,
+): Promise<void> {
+  for (const q of questions) {
+    if (sink[q.question]) continue; // already learned this term
+
+    let rawLabels: string[] | null = null;
+    if (q.options.length > 0) {
+      rawLabels = q.options.map((o) => o.label);
+    } else if (q.chartUrl) {
+      const image = await chartPath(termId, reportId, path.basename(q.chartUrl));
+      if (image) rawLabels = await extractChartLabels(image);
+    }
+    if (!rawLabels) continue;
+
+    const labels = ordinalOptionLabels(rawLabels);
+    if (labels) sink[q.question] = labels;
+  }
 }
 
 async function parseTerm(termId: string): Promise<ParsedTerm | null> {
@@ -61,6 +103,10 @@ async function parseTerm(termId: string): Promise<ParsedTerm | null> {
   const byCourse = new Map<string, FeedbackSection[]>();
   let sectionCount = 0;
   let unparsedTitles = 0;
+
+  // Per-question option labels harvested this term (HTML table or OCR'd chart);
+  // a chart is OCR'd only once per distinct question text.
+  const optionLabels: OptionLabelMap = {};
 
   for (const html of pages) {
     for (const row of parseListRows(html)) {
@@ -77,7 +123,10 @@ async function parseTerm(termId: string): Promise<ParsedTerm | null> {
         const reportHtml = await readReportHtml(termId, row.reportId);
         if (reportHtml) {
           const parsedReport = parseReport(reportHtml).questions;
-          if (parsedReport.length > 0) questions = parsedReport;
+          if (parsedReport.length > 0) {
+            await harvestOptionLabels(termId, row.reportId, parsedReport, optionLabels);
+            questions = parsedReport;
+          }
         }
       }
 
@@ -110,7 +159,23 @@ async function parseTerm(termId: string): Promise<ParsedTerm | null> {
       return { code, sections };
     });
 
-  return { termLabel: meta?.termLabel ?? termId, sectionCount, output };
+  return { termLabel: meta?.termLabel ?? termId, sectionCount, output, optionLabels };
+}
+
+/** Read the committed option-label sidecar, or an empty map when absent. */
+async function readOptionLabels(): Promise<OptionLabelMap> {
+  try {
+    return JSON.parse(await fs.readFile(optionsPath(), "utf-8")) as OptionLabelMap;
+  } catch {
+    return {};
+  }
+}
+
+/** Write the option-label sidecar with question texts sorted for stable diffs. */
+async function writeOptionLabels(labels: OptionLabelMap): Promise<void> {
+  const sorted: OptionLabelMap = {};
+  for (const key of Object.keys(labels).sort()) sorted[key] = labels[key];
+  await writeJsonFile(optionsPath(), sorted);
 }
 
 export async function runParse(options: ParseOptions = {}): Promise<void> {
@@ -122,27 +187,49 @@ export async function runParse(options: ParseOptions = {}): Promise<void> {
   }
   console.log(`Parsing ${termIds.length} cached term(s)...`);
 
-  for (const termId of termIds) {
-    if (!options.force && (await outputExists(termId))) {
-      console.log(`  [${termId}] feedback.${termId}.json already exists, skipping.`);
-      continue;
+  // Merge newly-discovered labels into the committed sidecar so incremental
+  // single-term parses accumulate rather than clobber other terms' questions.
+  const optionLabels = await readOptionLabels();
+  let labelsChanged = false;
+
+  try {
+    for (const termId of termIds) {
+      if (!options.force && (await outputExists(termId))) {
+        console.log(`  [${termId}] feedback.${termId}.json already exists, skipping.`);
+        continue;
+      }
+      // Never emit a dataset from a partially-fetched term: its list cache is missing
+      // pages, so the output would silently drop reports. Only the fetch stage marks a
+      // term complete once its row count matches the portal's reported total.
+      if (!options.force && !(await listIsComplete(termId))) {
+        console.warn(`  [${termId}] list cache is incomplete; skipping (re-run fetch).`);
+        continue;
+      }
+      const parsedTerm = await parseTerm(termId);
+      if (!parsedTerm) {
+        console.warn(`  [${termId}] no cached list pages found, skipping.`);
+        continue;
+      }
+      await writeJsonFile(outputPath(termId), parsedTerm.output);
+      for (const [question, labels] of Object.entries(parsedTerm.optionLabels)) {
+        if (!optionLabels[question]) {
+          optionLabels[question] = labels;
+          labelsChanged = true;
+        }
+      }
+      console.log(
+        `  [${termId}] ${parsedTerm.termLabel}: wrote ${String(parsedTerm.output.length)} course(s) / ` +
+          `${String(parsedTerm.sectionCount)} section(s) -> data/feedback.${termId}.json`,
+      );
     }
-    // Never emit a dataset from a partially-fetched term: its list cache is missing
-    // pages, so the output would silently drop reports. Only the fetch stage marks a
-    // term complete once its row count matches the portal's reported total.
-    if (!options.force && !(await listIsComplete(termId))) {
-      console.warn(`  [${termId}] list cache is incomplete; skipping (re-run fetch).`);
-      continue;
-    }
-    const parsedTerm = await parseTerm(termId);
-    if (!parsedTerm) {
-      console.warn(`  [${termId}] no cached list pages found, skipping.`);
-      continue;
-    }
-    await writeJsonFile(outputPath(termId), parsedTerm.output);
+  } finally {
+    await terminateOcr();
+  }
+
+  if (labelsChanged) {
+    await writeOptionLabels(optionLabels);
     console.log(
-      `  [${termId}] ${parsedTerm.termLabel}: wrote ${String(parsedTerm.output.length)} course(s) / ` +
-        `${String(parsedTerm.sectionCount)} section(s) -> data/feedback.${termId}.json`,
+      `  wrote ${String(Object.keys(optionLabels).length)} question option set(s) -> data/feedback.options.json`,
     );
   }
 }

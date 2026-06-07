@@ -2,11 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Box, Text } from "@mantine/core";
 import { useShallow } from "zustand/react/shallow";
-import { ExploreProfessorPage } from "../../../components/explore/ExploreProfessorPage";
-import { tr } from "../../../i18n";
-import { useAppStore } from "../../../store/appStore";
+import { ExploreProfessorPage } from "../../../../components/explore/ExploreProfessorPage";
+import { tr } from "../../../../i18n";
+import { useAppStore } from "../../../../store/appStore";
 
-export const Route = createFileRoute("/explore/professor/$legacyId")({
+export const Route = createFileRoute("/explore/professor/$legacyId/")({
   head: ({ params }) => {
     const id = Number.parseInt(params.legacyId, 10);
     const isNumeric = Number.isFinite(id) && id > 0;

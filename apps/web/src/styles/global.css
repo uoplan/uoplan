@@ -103,6 +103,13 @@ a {
   will-change: transform;
 }
 
+/* Recharts forces `cursor: default` on its wrapper; keep the pointer cursor when
+   the chart sits inside a clickable card (e.g. the feedback summary preview). */
+.chart-cursor-inherit .recharts-wrapper,
+.chart-cursor-inherit .recharts-surface {
+  cursor: inherit !important;
+}
+
 .soft-lift:hover,
 .stamp-hover:hover {
   transform: var(--app-lift-hover);
