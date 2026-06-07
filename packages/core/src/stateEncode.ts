@@ -100,6 +100,7 @@ export interface EncodeInput {
   generationLimitFirstYearCredits: boolean;
   generationCompressedSchedule: boolean;
   generationPreferEasier: boolean;
+  generationPreferHigherSentiment: boolean;
   activeStep: number;
   showCalendar: boolean;
   frenchImmersionStream: boolean;
@@ -142,6 +143,7 @@ export interface DecodedState {
   generationLimitFirstYearCredits: boolean;
   generationCompressedSchedule: boolean;
   generationPreferEasier: boolean;
+  generationPreferHigherSentiment: boolean;
   activeStep: number;
   showCalendar: boolean;
   frenchImmersionStream: boolean;
@@ -291,6 +293,7 @@ export function encodeState(
     generationLimitFirstYearCredits: input.generationLimitFirstYearCredits,
     generationCompressedSchedule: input.generationCompressedSchedule,
     generationPreferEasier: input.generationPreferEasier,
+    generationPreferHigherSentiment: input.generationPreferHigherSentiment,
     frenchImmersionStream: input.frenchImmersionStream,
     magic: STATE_MAGIC,
     activeStep: input.activeStep,
@@ -548,6 +551,7 @@ export function decodeState(
     generationLimitFirstYearCredits: state.generationLimitFirstYearCredits,
     generationCompressedSchedule: state.generationCompressedSchedule,
     generationPreferEasier: state.generationPreferEasier,
+    generationPreferHigherSentiment: state.generationPreferHigherSentiment ?? false,
     activeStep: state.activeStep ?? 0,
     showCalendar: state.showCalendar ?? false,
     frenchImmersionStream: state.frenchImmersionStream ?? false,

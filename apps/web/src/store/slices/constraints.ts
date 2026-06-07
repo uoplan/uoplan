@@ -12,6 +12,8 @@ interface ConstraintsSlice {
   setGenerationLimitFirstYearCredits: AppStore["setGenerationLimitFirstYearCredits"];
   setGenerationCompressedSchedule: AppStore["setGenerationCompressedSchedule"];
   setGenerationPreferEasier: AppStore["setGenerationPreferEasier"];
+  setGenerationPreferHigherSentiment: AppStore["setGenerationPreferHigherSentiment"];
+  setCourseSentimentByNorm: AppStore["setCourseSentimentByNorm"];
   setBlacklistedCourses: AppStore["setBlacklistedCourses"];
   addBlockedTime: AppStore["addBlockedTime"];
   updateBlockedTime: AppStore["updateBlockedTime"];
@@ -57,6 +59,11 @@ export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsS
 
   setGenerationPreferEasier: (v) =>
     set({ generationPreferEasier: v, generationOptionsDirty: true }),
+
+  setGenerationPreferHigherSentiment: (v) =>
+    set({ generationPreferHigherSentiment: v, generationOptionsDirty: true }),
+
+  setCourseSentimentByNorm: (map) => set({ courseSentimentByNorm: map }),
 
   setBlacklistedCourses: (courses) =>
     set({ blacklistedCourses: courses, generationOptionsDirty: true }),

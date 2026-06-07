@@ -37,6 +37,7 @@ import { downloadTextFile } from "../../lib/downloadFile";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateRange";
 import { useGenerationErrorToast } from "../../hooks/useGenerationErrorToast";
+import { useGenerationSentiment } from "../../hooks/useGenerationSentiment";
 import { tr } from "../../i18n";
 import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
 import { canGoToPreviousSeed } from "../../lib/seedNavigation";
@@ -139,6 +140,7 @@ export function CalendarPage() {
   }, [weekIndex, setCalendarWeekIndex]);
 
   useGenerationErrorToast(generationError);
+  useGenerationSentiment();
 
   const undoLastSwap = useAppStore((s) => s.undoLastSwap);
   const getShareUrl = useAppStore((s) => s.getShareUrl);

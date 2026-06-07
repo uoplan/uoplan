@@ -45,6 +45,8 @@ export type GenerateSchedulesInput = Pick<
   | "generationLimitFirstYearCredits"
   | "generationCompressedSchedule"
   | "generationPreferEasier"
+  | "generationPreferHigherSentiment"
+  | "courseSentimentByNorm"
   | "frenchImmersionStream"
   | "blacklistedCourses"
   | "blockedTimes"
@@ -89,6 +91,8 @@ export function pickGenerateSchedulesInput(
     generationLimitFirstYearCredits: state.generationLimitFirstYearCredits,
     generationCompressedSchedule: state.generationCompressedSchedule,
     generationPreferEasier: state.generationPreferEasier,
+    generationPreferHigherSentiment: state.generationPreferHigherSentiment,
+    courseSentimentByNorm: state.courseSentimentByNorm,
     frenchImmersionStream: state.frenchImmersionStream,
     blacklistedCourses: state.blacklistedCourses,
     blockedTimes: state.blockedTimes,

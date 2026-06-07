@@ -31,6 +31,11 @@ const EASIER_APLUS_PIVOT: f64 = 20.0;
 const EASIER_APLUS_BASE: f64 = 5.25;
 const EASIER_APLUS_SCALE: f64 = 10.0;
 
+// "Prefer higher sentiment" soft weighting over the 1-5 course-feedback scale.
+const SENTIMENT_PIVOT: f64 = 3.5;
+const SENTIMENT_BASE: f64 = 2.0;
+const SENTIMENT_SCALE: f64 = 1.0;
+
 /// Mirror of the TS RequirementWithStatus tree node.
 #[derive(Clone)]
 pub struct RequirementWithStatus {
@@ -62,6 +67,8 @@ pub struct AdvancedParams<'a> {
     pub virtual_sections_only: bool,
     pub prefer_easier: bool,
     pub course_aplus: &'a HashMap<String, f64>,
+    pub prefer_higher_sentiment: bool,
+    pub course_sentiment: &'a HashMap<String, f64>,
     pub french_immersion_stream: bool,
     pub blacklisted_courses: Vec<String>,
     pub basic_excluded_categories: Vec<String>,
@@ -715,6 +722,8 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
                 &is_eligible_candidate,
                 params.prefer_easier,
                 params.course_aplus,
+                params.prefer_higher_sentiment,
+                params.course_sentiment,
                 &vo_for,
                 &mut arena,
                 &mut rng,
@@ -1248,6 +1257,8 @@ fn run_pool_pick_pass(
     is_eligible_candidate: &dyn Fn(&str, Option<&str>) -> bool,
     prefer_easier: bool,
     course_aplus: &HashMap<String, f64>,
+    prefer_higher_sentiment: bool,
+    course_sentiment: &HashMap<String, f64>,
     vo_for: &dyn Fn(&str, Option<&str>) -> bool,
     arena: &mut ComboArena,
     rng: &mut Rng,
@@ -1298,13 +1309,25 @@ fn run_pool_pick_pass(
         }
     };
 
+    let sentiment_mult = |code: &str| -> f64 {
+        if !prefer_higher_sentiment {
+            return 1.0;
+        }
+        match course_sentiment.get(code) {
+            None => 1.0,
+            Some(&s) => SENTIMENT_BASE.powf((s - SENTIMENT_PIVOT) / SENTIMENT_SCALE),
+        }
+    };
+
     let weight_of = |code: &str, level_counts: &HashMap<i64, usize>| -> f64 {
         let level = course_level_sort_key(code);
         let has_non_course_prereq = prerequisites_contain_non_course(
             data.get_course(code).and_then(|c| c.prerequisites.as_ref()),
         );
         let bucket_size = *level_counts.get(&level).unwrap_or(&1) as f64;
-        (candidate_pool_weight(level, has_non_course_prereq) / bucket_size) * easier_mult(code)
+        (candidate_pool_weight(level, has_non_course_prereq) / bucket_size)
+            * easier_mult(code)
+            * sentiment_mult(code)
     };
 
     // Build a fill descriptor for each pool with remaining quota.

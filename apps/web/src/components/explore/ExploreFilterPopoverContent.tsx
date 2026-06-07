@@ -20,7 +20,15 @@ import type {
   ExploreSortKey,
 } from "../../lib/explore/exploreFilters";
 
-type FilterKey = "level" | "language" | "discipline" | "difficulty" | "rating" | "term" | "sort";
+type FilterKey =
+  | "level"
+  | "language"
+  | "discipline"
+  | "difficulty"
+  | "rating"
+  | "feedback"
+  | "term"
+  | "sort";
 
 export type DisciplineOption = { code: string; name: string };
 export type TermOption = { value: string; label: string };
@@ -48,6 +56,12 @@ const RATINGS: { value: number; labelKey: string }[] = [
   { value: 3.0, labelKey: "explore.filter.rating.good" },
   { value: 3.5, labelKey: "explore.filter.rating.great" },
   { value: 4.0, labelKey: "explore.filter.rating.excellent" },
+];
+
+const FEEDBACKS: { value: number; labelKey: string }[] = [
+  { value: 3.0, labelKey: "explore.filter.feedback.good" },
+  { value: 3.5, labelKey: "explore.filter.feedback.great" },
+  { value: 4.0, labelKey: "explore.filter.feedback.excellent" },
 ];
 
 const SORT_OPTIONS: { value: ExploreSortKey; labelKey: string }[] = [
@@ -252,6 +266,31 @@ export function ExploreFilterPopoverContent({
     );
   }
 
+  if (filterKey === "feedback") {
+    return (
+      <Radio.Group
+        value={filters.minFeedback != null ? String(filters.minFeedback) : ""}
+        onChange={(v) => onChange({ minFeedback: v === "" ? null : Number(v) })}
+      >
+        <Stack gap={8}>
+          {FEEDBACKS.map(({ value, labelKey }) => (
+            <Radio
+              key={value}
+              value={String(value)}
+              label={tr(labelKey)}
+              styles={radioStyles}
+              classNames={radioClassNames}
+              iconColor="var(--app-on-accent)"
+              onClick={() => {
+                if (filters.minFeedback === value) onChange({ minFeedback: null });
+              }}
+            />
+          ))}
+        </Stack>
+      </Radio.Group>
+    );
+  }
+
   if (filterKey === "sort") {
     const showDirection = filters.sortKey !== "relevance";
     return (
@@ -338,6 +377,8 @@ export function filterSectionLabel(key: FilterKey): string {
       return tr("explore.filter.difficulty");
     case "rating":
       return tr("explore.filter.rating");
+    case "feedback":
+      return tr("explore.filter.feedback");
     case "term":
       return tr("explore.filter.term");
     case "sort":

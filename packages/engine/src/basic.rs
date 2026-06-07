@@ -17,6 +17,12 @@ const EASIER_APLUS_PIVOT: f64 = 20.0;
 const EASIER_APLUS_BASE: f64 = 5.25;
 const EASIER_APLUS_SCALE: f64 = 10.0;
 
+// "Prefer higher sentiment" soft weighting over the 1-5 course-feedback scale.
+// Pivot 3.5 is neutral; a course one point above gets ~2x weight, one below ~0.5x.
+const SENTIMENT_PIVOT: f64 = 3.5;
+const SENTIMENT_BASE: f64 = 2.0;
+const SENTIMENT_SCALE: f64 = 1.0;
+
 pub struct BasicParams<'a> {
     pub data: &'a DataView,
     pub constraints: &'a Constraints,
@@ -32,6 +38,8 @@ pub struct BasicParams<'a> {
     pub virtual_sections_only: bool,
     pub prefer_easier: bool,
     pub course_aplus: &'a HashMap<String, f64>,
+    pub prefer_higher_sentiment: bool,
+    pub course_sentiment: &'a HashMap<String, f64>,
     pub blacklisted_courses: Vec<String>,
     pub current_seed: u32,
     pub first_seed: u32,
@@ -52,16 +60,44 @@ fn easier_weight(code: &str, prefer_easier: bool, aplus: &HashMap<String, f64>) 
     }
 }
 
+fn sentiment_weight(
+    code: &str,
+    prefer_higher_sentiment: bool,
+    sentiment: &HashMap<String, f64>,
+) -> f64 {
+    if !prefer_higher_sentiment {
+        return 1.0;
+    }
+    match sentiment.get(code) {
+        None => 1.0,
+        Some(&s) => SENTIMENT_BASE.powf((s - SENTIMENT_PIVOT) / SENTIMENT_SCALE),
+    }
+}
+
+/// Combined soft selection multiplier (prefer-easier × prefer-higher-sentiment).
+fn selection_weight(
+    code: &str,
+    prefer_easier: bool,
+    aplus: &HashMap<String, f64>,
+    prefer_higher_sentiment: bool,
+    sentiment: &HashMap<String, f64>,
+) -> f64 {
+    easier_weight(code, prefer_easier, aplus)
+        * sentiment_weight(code, prefer_higher_sentiment, sentiment)
+}
+
 fn reorder_optional_pool(
     codes: &mut Vec<String>,
     prefer_easier: bool,
     aplus: &HashMap<String, f64>,
+    prefer_higher_sentiment: bool,
+    sentiment: &HashMap<String, f64>,
     rng: &mut Rng,
 ) {
     if codes.len() <= 1 {
         return;
     }
-    if !prefer_easier {
+    if !prefer_easier && !prefer_higher_sentiment {
         shuffle_in_place(codes, rng);
         return;
     }
@@ -69,7 +105,7 @@ fn reorder_optional_pool(
     while !remaining.is_empty() {
         let weights: Vec<f64> = remaining
             .iter()
-            .map(|c| easier_weight(c, prefer_easier, aplus))
+            .map(|c| selection_weight(c, prefer_easier, aplus, prefer_higher_sentiment, sentiment))
             .collect();
         let idx = weighted_random_pick_index(&weights, rng);
         codes.push(remaining.remove(idx));
@@ -92,6 +128,8 @@ pub fn generate_basic(params: BasicParams) -> BasicResult {
         virtual_sections_only,
         prefer_easier,
         course_aplus,
+        prefer_higher_sentiment,
+        course_sentiment,
         blacklisted_courses,
         current_seed,
         first_seed,
@@ -168,7 +206,14 @@ pub fn generate_basic(params: BasicParams) -> BasicResult {
         optional_pool.push(code.to_string());
     }
 
-    reorder_optional_pool(&mut optional_pool, prefer_easier, course_aplus, &mut rng);
+    reorder_optional_pool(
+        &mut optional_pool,
+        prefer_easier,
+        course_aplus,
+        prefer_higher_sentiment,
+        course_sentiment,
+        &mut rng,
+    );
 
     let resolver = FnResolver {
         data,

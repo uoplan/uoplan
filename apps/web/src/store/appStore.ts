@@ -26,6 +26,7 @@ import {
   DEFAULT_GENERATION_MIN_PROFESSOR_RATING,
   DEFAULT_GENERATION_MIN_START_MINUTES,
   DEFAULT_GENERATION_PREFER_EASIER,
+  DEFAULT_GENERATION_PREFER_HIGHER_SENTIMENT,
 } from "./generationDefaults";
 import { defaultBlockedTimes } from "../lib/blockedTimes";
 
@@ -109,6 +110,8 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
       generationLimitFirstYearCredits: DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
       generationCompressedSchedule: DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
       generationPreferEasier: DEFAULT_GENERATION_PREFER_EASIER,
+      generationPreferHigherSentiment: DEFAULT_GENERATION_PREFER_HIGHER_SENTIMENT,
+      courseSentimentByNorm: null,
       frenchImmersionStream: false,
       calendarWeekIndex: null,
       calendarMode: null,

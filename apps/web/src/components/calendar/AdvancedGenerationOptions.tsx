@@ -38,6 +38,7 @@ export function AdvancedGenerationOptions() {
   const generationLimitFirstYearCredits = useAppStore((s) => s.generationLimitFirstYearCredits);
   const generationCompressedSchedule = useAppStore((s) => s.generationCompressedSchedule);
   const generationPreferEasier = useAppStore((s) => s.generationPreferEasier);
+  const generationPreferHigherSentiment = useAppStore((s) => s.generationPreferHigherSentiment);
   const blacklistedCourses = useAppStore((s) => s.blacklistedCourses);
   const frenchImmersionStream = useAppStore((s) => s.frenchImmersionStream);
   const unassignedCompletedCourses = useAppStore((s) => s.unassignedCompletedCourses);
@@ -59,6 +60,9 @@ export function AdvancedGenerationOptions() {
   );
   const setGenerationCompressedSchedule = useAppStore((s) => s.setGenerationCompressedSchedule);
   const setGenerationPreferEasier = useAppStore((s) => s.setGenerationPreferEasier);
+  const setGenerationPreferHigherSentiment = useAppStore(
+    (s) => s.setGenerationPreferHigherSentiment,
+  );
   const setBlacklistedCourses = useAppStore((s) => s.setBlacklistedCourses);
   const setFrenchImmersionStream = useAppStore((s) => s.setFrenchImmersionStream);
   const setConstrainedForRequirement = useAppStore((s) => s.setConstrainedForRequirement);
@@ -197,6 +201,8 @@ export function AdvancedGenerationOptions() {
         onCompressedScheduleChange: setGenerationCompressedSchedule,
         preferEasierCourses: generationPreferEasier,
         onPreferEasierCoursesChange: setGenerationPreferEasier,
+        preferHigherSentiment: generationPreferHigherSentiment,
+        onPreferHigherSentimentChange: setGenerationPreferHigherSentiment,
         minStartMinutes: generationMinStartMinutes,
         onMinStartMinutesChange: setGenerationMinStartMinutes,
         maxEndMinutes: generationMaxEndMinutes,

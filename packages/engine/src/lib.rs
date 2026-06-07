@@ -238,6 +238,7 @@ fn enrollment_to_chosen(e: &Enrollment) -> ChosenCourse {
 fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse {
     let constraints = build_constraints(&req);
     let course_aplus = &req.course_aplus;
+    let course_sentiment = &req.course_sentiment;
 
     if req.mode == Mode::Basic as i32 {
         let result = basic::generate_basic(basic::BasicParams {
@@ -255,6 +256,8 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
             virtual_sections_only: req.virtual_sections_only,
             prefer_easier: req.generation_prefer_easier,
             course_aplus,
+            prefer_higher_sentiment: req.generation_prefer_higher_sentiment,
+            course_sentiment,
             blacklisted_courses: req.blacklisted_courses.clone(),
             current_seed: req.current_seed,
             first_seed: req.first_seed,
@@ -317,6 +320,8 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
         virtual_sections_only: req.virtual_sections_only,
         prefer_easier: req.generation_prefer_easier,
         course_aplus,
+        prefer_higher_sentiment: req.generation_prefer_higher_sentiment,
+        course_sentiment,
         french_immersion_stream: req.french_immersion_stream,
         blacklisted_courses: req.blacklisted_courses.clone(),
         basic_excluded_categories: req.basic_excluded_categories.clone(),

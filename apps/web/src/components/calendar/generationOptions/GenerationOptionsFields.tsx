@@ -86,6 +86,8 @@ export interface GenerationOptionsFieldsProps {
   onCompressedScheduleChange: (v: boolean) => void;
   preferEasierCourses: boolean;
   onPreferEasierCoursesChange: (v: boolean) => void;
+  preferHigherSentiment: boolean;
+  onPreferHigherSentimentChange: (v: boolean) => void;
   minStartMinutes: number;
   onMinStartMinutesChange: (minutes: number) => void;
   maxEndMinutes: number;
@@ -204,6 +206,15 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
     />
   );
 
+  const preferHigherSentimentControl = (
+    <Checkbox
+      label={tr("scheduleCount.preferSentiment.label")}
+      description={tr("scheduleCount.preferSentiment.description")}
+      checked={props.preferHigherSentiment}
+      onChange={(e) => props.onPreferHigherSentimentChange(e.currentTarget.checked)}
+    />
+  );
+
   const courseFiltersControl = (
     <BasicCourseFiltersCard
       levelBuckets={props.levelBuckets}
@@ -243,6 +254,7 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
       {timeWindowControl}
       {compressedControl}
       {preferEasierControl}
+      {preferHigherSentimentControl}
       {avoidedDaysControl}
     </>
   );
@@ -265,6 +277,7 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
       {courseFiltersControl}
       {compressedControl}
       {preferEasierControl}
+      {preferHigherSentimentControl}
       {frenchImmersionControl}
     </>
   );

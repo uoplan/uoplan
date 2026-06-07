@@ -1,5 +1,6 @@
 import type { FeedbackProto } from "@uoplan/proto";
 import { normalizeCourseCode } from "./utils/courseUtils";
+import { normalizeProfessorName } from "./professorRatings";
 
 /** Metadata for one distinct survey question. */
 export interface FeedbackQuestionMeta {
@@ -277,5 +278,47 @@ export function feedbackOverallSeries(views: readonly FeedbackSectionView[]): Fe
 export function feedbackAllViews(index: FeedbackIndex): FeedbackSectionView[] {
   const out: FeedbackSectionView[] = [];
   for (const bucket of index.byCourseNorm.values()) out.push(...bucket);
+  return out;
+}
+
+/**
+ * Per-course overall sentiment (response-weighted 1-5 average across the course's
+ * sections), keyed by normalized course code. Each course's value already blends
+ * its sections — and therefore the professors who taught them — so it carries a
+ * combined course + professor signal. Courses with no scale feedback are omitted.
+ */
+export function courseSentimentByNorm(index: FeedbackIndex): Map<string, number> {
+  const out = new Map<string, number>();
+  for (const [norm, views] of index.byCourseNorm) {
+    const avg = feedbackSummary(views).overallAverage;
+    if (avg != null) out.set(norm, avg);
+  }
+  return out;
+}
+
+/**
+ * Per-professor overall sentiment (response-weighted 1-5 average across every
+ * section that professor taught), keyed by {@link normalizeProfessorName}.
+ * Professors with no scale feedback are omitted.
+ */
+export function professorSentimentByName(index: FeedbackIndex): Map<string, number> {
+  const byName = new Map<string, FeedbackSectionView[]>();
+  for (const views of index.byCourseNorm.values()) {
+    for (const view of views) {
+      const key = normalizeProfessorName(view.professorName);
+      if (!key) continue;
+      let bucket = byName.get(key);
+      if (!bucket) {
+        bucket = [];
+        byName.set(key, bucket);
+      }
+      bucket.push(view);
+    }
+  }
+  const out = new Map<string, number>();
+  for (const [key, views] of byName) {
+    const avg = feedbackSummary(views).overallAverage;
+    if (avg != null) out.set(key, avg);
+  }
   return out;
 }

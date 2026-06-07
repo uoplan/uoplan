@@ -35,7 +35,7 @@ async function loadFeedbackIndex(indicesCourses: readonly string[]): Promise<Fee
  * the decoded index is memoized process-wide. Needs the shared `indices.pb` course
  * list (already in the store) to resolve course codes.
  */
-export function useFeedbackData(): FeedbackState {
+export function useFeedbackData(enabled = true): FeedbackState {
   const indicesCourses = useAppStore((s) => s.indices?.courses ?? null);
   const [state, setState] = useState<FeedbackState>(() => ({
     loading: cachedIndex == null,
@@ -44,7 +44,7 @@ export function useFeedbackData(): FeedbackState {
   }));
 
   useEffect(() => {
-    if (!indicesCourses || cachedIndex) {
+    if (!enabled || !indicesCourses || cachedIndex) {
       if (cachedIndex) setState({ loading: false, data: cachedIndex, error: null });
       return;
     }
@@ -66,7 +66,7 @@ export function useFeedbackData(): FeedbackState {
     return () => {
       active = false;
     };
-  }, [indicesCourses]);
+  }, [enabled, indicesCourses]);
 
   return state;
 }

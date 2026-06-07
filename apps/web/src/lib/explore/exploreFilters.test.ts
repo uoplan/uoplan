@@ -130,6 +130,7 @@ describe("serializeExploreFiltersSearch", () => {
       disciplines: ["BIO", "CSI"],
       difficulty: "easy",
       minRating: 4,
+      minFeedback: null,
       termId: null,
       sortKey: "grade",
       sortDir: "desc",
@@ -150,6 +151,17 @@ describe("serializeExploreFiltersSearch", () => {
     const params = serializeExploreFiltersSearch({ ...EMPTY_FILTERS, termId: 2269 });
     expect(params).toEqual({ term: 2269 });
     expect(parseExploreFiltersSearch(params).termId).toBe(2269);
+  });
+
+  it("round-trips the feedback filter through search params", () => {
+    const params = serializeExploreFiltersSearch({ ...EMPTY_FILTERS, minFeedback: 3.5 });
+    expect(params).toEqual({ feedback: 3.5 });
+    expect(parseExploreFiltersSearch(params).minFeedback).toBe(3.5);
+  });
+
+  it("ignores invalid feedback values", () => {
+    expect(parseExploreFiltersSearch({ feedback: "nope" }).minFeedback).toBeNull();
+    expect(parseExploreFiltersSearch({ feedback: "2" }).minFeedback).toBeNull();
   });
 
   it("ignores invalid term values", () => {
@@ -301,6 +313,51 @@ describe("filterProfessorEntries", () => {
 
   it("returns all entries when no relevant filter is active", () => {
     expect(filterProfessorEntries(all, EMPTY_FILTERS)).toHaveLength(3);
+  });
+});
+
+describe("feedback (overall sentiment) filter", () => {
+  const a = makeCourseEntry({ normCode: "csi1100", componentId: "csi1100" });
+  const b = makeCourseEntry({ normCode: "csi2100", componentId: "csi2100" });
+  const c = makeCourseEntry({ normCode: "csi3100", componentId: "csi3100" });
+  const courses = [a, b, c];
+  const courseSentiment = new Map([
+    ["csi1100", 4.2],
+    ["csi2100", 3.1],
+    // csi3100 has no feedback
+  ]);
+
+  it("keeps only courses at/above the threshold (excluding those without feedback)", () => {
+    const result = filterCourseEntries(courses, { ...EMPTY_FILTERS, minFeedback: 3.5 }, undefined, {
+      courseByNorm: courseSentiment,
+      professorByGroupId: null,
+    });
+    expect(result.map((e) => e.normCode)).toEqual(["csi1100"]);
+  });
+
+  it("skips the feedback filter while the sentiment map is still loading (null)", () => {
+    const result = filterCourseEntries(courses, { ...EMPTY_FILTERS, minFeedback: 3.5 }, undefined, {
+      courseByNorm: null,
+      professorByGroupId: null,
+    });
+    expect(result).toHaveLength(3);
+  });
+
+  it("filters professors by their sentiment", () => {
+    const p1 = makeProfessorEntry({ groupId: "p1" });
+    const p2 = makeProfessorEntry({ groupId: "p2" });
+    const p3 = makeProfessorEntry({ groupId: "p3" });
+    const profSentiment = new Map([
+      ["p1", 4.0],
+      ["p2", 3.0],
+    ]);
+    const result = filterProfessorEntries(
+      [p1, p2, p3],
+      { ...EMPTY_FILTERS, minFeedback: 3.5 },
+      undefined,
+      { courseByNorm: null, professorByGroupId: profSentiment },
+    );
+    expect(result.map((e) => e.groupId)).toEqual(["p1"]);
   });
 });
 

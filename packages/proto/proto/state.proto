@@ -108,6 +108,7 @@ message ShareableState {
   repeated uint32 blacklisted_courses = 38;
   repeated BlockedTime blocked_times = 39;
   repeated RequirementPriority requirement_priorities = 40;
+  bool generation_prefer_higher_sentiment = 41;
 }
 
 // --- OG-image share preview -------------------------------------------------

@@ -38,6 +38,7 @@ function hasPersistedStateChange(next: AppStore, prev: AppStore): boolean {
     next.generationLimitFirstYearCredits !== prev.generationLimitFirstYearCredits ||
     next.generationCompressedSchedule !== prev.generationCompressedSchedule ||
     next.generationPreferEasier !== prev.generationPreferEasier ||
+    next.generationPreferHigherSentiment !== prev.generationPreferHigherSentiment ||
     next.blacklistedCourses !== prev.blacklistedCourses ||
     next.blockedTimes !== prev.blockedTimes ||
     next.requirementSlotsUserTouched !== prev.requirementSlotsUserTouched ||
