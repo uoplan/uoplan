@@ -245,7 +245,7 @@ describe("groupOfferingsByProfessor", () => {
 });
 
 describe("buildExploreOfferings", () => {
-  it("omits the 'Staff' placeholder instructor", () => {
+  it("keeps the 'Staff' placeholder as an unassigned offering (no professor)", () => {
     const offerings = buildExploreOfferings(
       {
         courses: [
@@ -261,7 +261,23 @@ describe("buildExploreOfferings", () => {
       },
       new Map(),
     );
-    expect(offerings.map((o) => o.professorName)).toEqual(["Ada Lovelace"]);
+
+    // Real professor preserved.
+    const real = offerings.filter((o) => !o.unassignedInstructor);
+    expect(real.map((o) => o.professorName)).toEqual(["Ada Lovelace"]);
+
+    // "Staff" rows are kept but stripped of a real instructor.
+    const unassigned = offerings.filter((o) => o.unassignedInstructor);
+    expect(unassigned.length).toBeGreaterThan(0);
+    for (const o of unassigned) {
+      expect(o.professorName).toBe("");
+      expect(o.legacyId).toBeUndefined();
+      expect(o.fuseText).not.toContain("staff");
+    }
+
+    // The placeholder never becomes a searchable professor.
+    const profEntries = buildExploreProfessorSearchEntries(offerings);
+    expect(profEntries.map((e) => e.displayName)).toEqual(["Ada Lovelace"]);
   });
 });
 
@@ -291,7 +307,7 @@ function scheduleData(termId: string, schedules: CourseSchedule[]): SchedulesDat
 }
 
 describe("buildScheduleOfferings", () => {
-  it("omits the 'Staff' placeholder instructor", () => {
+  it("keeps a 'Staff' section as an unassigned offering instead of dropping it", () => {
     const offerings = buildScheduleOfferings(
       [
         scheduleData("2271", [
@@ -312,7 +328,50 @@ describe("buildScheduleOfferings", () => {
       ],
       new Map(),
     );
-    expect(offerings.map((o) => o.professorName)).toEqual(["Real Prof"]);
+
+    const real = offerings.filter((o) => !o.unassignedInstructor);
+    expect(real.map((o) => o.professorName)).toEqual(["Real Prof"]);
+
+    const unassigned = offerings.filter((o) => o.unassignedInstructor);
+    expect(unassigned).toHaveLength(1);
+    expect(unassigned[0].professorName).toBe("");
+    expect(unassigned[0].fuseText).not.toContain("staff");
+  });
+
+  it("keeps a Staff-only course searchable with a single unassigned group", () => {
+    const offerings = buildScheduleOfferings(
+      [
+        scheduleData("2275", [
+          {
+            subject: "BIO",
+            catalogNumber: "3350",
+            courseCode: "BIO 3350",
+            title: "Some Bio Course",
+            timeZone: "America/Toronto",
+            components: {
+              LEC: [
+                scheduleSection("A00-LEC FullSess.", "LEC", ["Staff"]),
+                scheduleSection("B00-LEC FullSess.", "LEC", ["Staff"]),
+              ],
+            },
+          },
+        ]),
+      ],
+      new Map(),
+    );
+
+    // One unassigned offering survives, so the course is indexable.
+    expect(offerings).toHaveLength(1);
+    expect(offerings[0].unassignedInstructor).toBe(true);
+
+    const courseEntries = buildCourseSearchEntries(offerings);
+    expect(courseEntries.map((e) => e.normCode)).toContain("BIO 3350");
+
+    // The unassigned section forms one non-professor group, and no prof is indexed.
+    const groups = groupOfferingsByProfessor(offerings);
+    expect(groups).toHaveLength(1);
+    expect(groups[0].unassigned).toBe(true);
+    expect(buildExploreProfessorSearchEntries(offerings)).toHaveLength(0);
   });
 
   it("combines multiple sections of the same prof/term into one section-less offering", () => {
