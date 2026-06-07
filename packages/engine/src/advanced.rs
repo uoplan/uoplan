@@ -22,8 +22,8 @@ use crate::pools::{
 use crate::prereq::prerequisites_contain_non_course;
 use crate::rng::{scramble_seed, shuffle_in_place, weighted_random_pick_index, Rng};
 use crate::timetable::{
-    allows_enrollment, arrange_prebuilt, build_timetable_course, first_seeded_arrangement,
-    has_valid_section_combos, passes_final, FnResolver, TimetableCourse,
+    allows_enrollment, arrange_prebuilt_with_budget, build_timetable_course,
+    first_seeded_arrangement, has_valid_section_combos, passes_final, FnResolver, TimetableCourse,
 };
 use crate::types::Enrollment;
 
@@ -854,25 +854,46 @@ impl PoolFill {
     }
 }
 
-/// Per-restart cap on **expensive** placement probes (full timetable re-solves).
-/// Cheap placements — slotting a candidate into the *current* arrangement without
-/// rearranging anything — are unlimited and dominate a healthy descent; a full
-/// re-solve only happens when a candidate doesn't fit the fixed arrangement, and
-/// those are what make a *stuck* descent slow. Capping them means a descent that
-/// keeps needing rearrangements gives up early and restarts (fresh shuffle)
-/// instead of grinding through thousands of re-solves. Rearrangement power is
-/// retained across restarts, so reliability holds while the worst case stays far
-/// under the 1 s worker kill.
-const SELECTION_RESOLVE_BUDGET: u64 = 50;
+/// Per-restart cap on cheap placement probes. A restart that can't pack the
+/// target this cheaply has wandered into a dead end; bailing here (and
+/// restarting with a fresh shuffle) is far cheaper than letting it thrash, and
+/// empirically maximizes feasible-packs-per-unit-time near the capacity limit.
+const SELECTION_PLACEMENT_BUDGET: u64 = 400;
 
-/// Overall per-restart probe cap (cheap + expensive), bounding any backtracking
-/// blow-up so total work is a pure function of the inputs, never the wall clock.
-const SELECTION_PLACEMENT_BUDGET: u64 = 3_000;
-
-/// Randomized-restart greedy passes before giving up. Each restart reshuffles the
+/// Restart ceiling. The real limiter is [`SELECTION_GLOBAL_WORK_BUDGET`]; this
+/// is just a high safety bound on the loop count (each restart reshuffles the
 /// candidate order, so independent restarts drive the chance that *every* one
-/// stalls to effectively zero — making success independent of the seed.
-const SELECTION_RESTARTS: u32 = 100;
+/// stalls to effectively zero — making success independent of the seed).
+const SELECTION_RESTARTS: u32 = 100_000;
+
+
+/// Hard global cap on placement *work* across the WHOLE generation call (shared
+/// by every restart). The unit is overlap-check work, not attempts: each cheap
+/// placement probe charges O(courses-already-placed) (see [`Search::try_place`]),
+/// so this is a genuine wall-clock bound that holds regardless of pool density
+/// or course count — a sparse pool (many cheap probes) and a near-capacity one
+/// (fewer, expensive probes) both stop at roughly the same elapsed time. This is
+/// what makes latency a function of the inputs, not the seed: any request —
+/// feasible, near-capacity, or outright impossible (e.g. 24+ courses, which
+/// exceeds the weekly slot budget) — stops here and reports "no schedule"
+/// quickly instead of grinding into the worker's wall-clock kill. Sized so the
+/// worst case stays well under the 3 s worker timeout even as WASM (~1.5-2x this
+/// native build).
+const SELECTION_GLOBAL_WORK_BUDGET: u64 = 200_000_000;
+
+/// Global cap on full timetable re-solves across the WHOLE generation call.
+/// Cheap fixed-arrangement placement (see [`Search::try_place`]) is both the
+/// reliable and the fast path near the capacity limit; expensive re-solves
+/// barely move reliability yet are unbounded by the cheap-probe budget, so they
+/// are disabled by default to keep latency a clean function of the probe budget.
+const SELECTION_RESOLVE_TOTAL: u64 = 0;
+
+/// Node budget for a single *selection* re-solve. Far tighter than the one-shot
+/// [`crate::timetable`] full-solve budget: a rearrangement that needs a deep
+/// search rarely pays off versus trying another candidate or restart, and an
+/// unbounded probe over a 20+ course set is what made the worst case explode.
+const SELECTION_ARRANGE_NODE_BUDGET: u64 = 20_000;
+
 
 
 /// Mutable per-position progress while filling a single pool.
@@ -901,7 +922,9 @@ struct Search<'a> {
     assign: BTreeMap<String, String>,
     used: HashSet<String>,
     budget: u64,
+    global: u64,
     resolve_budget: u64,
+    arrange_nodes: u64,
     arrangement: Option<Vec<Enrollment>>,
 }
 
@@ -926,7 +949,7 @@ impl<'a> Search<'a> {
         if let Some(i) = extra {
             refs.push(self.built[i].as_ref());
         }
-        arrange_prebuilt(&refs, self.constraints, self.data)
+        arrange_prebuilt_with_budget(&refs, self.constraints, self.data, self.arrange_nodes)
     }
 
     /// Feasibility-preserving placement of candidate `extra` onto the current
@@ -942,13 +965,27 @@ impl<'a> Search<'a> {
     /// decision is exactly the re-solve's, just reached far more cheaply.
     fn try_place(&mut self, extra: usize) -> Option<Vec<Enrollment>> {
         if let Some(cur) = self.arrangement.as_ref() {
+            let placed = cur.len() as u64;
             for combo in &self.built[extra].combos {
+                // Charge the global budget by the real work of this probe so the
+                // budget is a genuine wall-clock bound — independent of pool
+                // density or course count, a near-capacity descent (deep,
+                // expensive probes) and a sparse one (shallow, cheap probes) both
+                // stop at roughly the same elapsed time. An overlap scan costs
+                // O(placed); a combo that *fits* additionally pays the
+                // arrangement clone + final-constraint check (another O(placed)),
+                // which dominates on permissive pools where most combos fit.
+                self.global = self.global.saturating_sub(placed + 1);
                 if allows_enrollment(combo, cur) {
+                    self.global = self.global.saturating_sub(2 * (placed + 1));
                     let mut next = cur.clone();
                     next.push(combo.clone());
                     if passes_final(&next, self.constraints, self.data) {
                         return Some(next);
                     }
+                }
+                if self.global == 0 {
+                    return None;
                 }
             }
         }
@@ -1024,9 +1061,14 @@ impl<'a> Search<'a> {
             }
             return self.fill_from(pos + 1);
         }
-        if self.budget == 0 || fp.idx >= pool.order.len() {
+        if self.budget == 0 || self.global == 0 || fp.idx >= pool.order.len() {
             return false;
         }
+        // Charge the forward-feasibility scan (O(remaining pool)); it runs at
+        // every node and dominates the per-node cost on large pools, so it must
+        // be metered for the global budget to bound wall time rather than just
+        // placement attempts.
+        self.global = self.global.saturating_sub((pool.order.len() - fp.idx) as u64);
         if !self.pool_forward_ok(pool, fp) {
             return false;
         }
@@ -1293,7 +1335,22 @@ fn run_pool_pick_pass(
     // every seed while total work stays bounded. The first restart keeps the
     // preference-weighted order (so the level / prefer-easier biases still shape
     // the result); later restarts use uniform reshuffles purely to find feasibility.
-    for restart in 0..SELECTION_RESTARTS {
+    //
+    // Total work is hard-bounded by ONE global work budget shared across all
+    // restarts (`SELECTION_GLOBAL_WORK_BUDGET`, charged per overlap-check so it
+    // tracks wall time), so latency is a pure function of the inputs — never the
+    // seed or wall clock. Any expensive full re-solves (disabled by default, see
+    // `SELECTION_RESOLVE_TOTAL`) likewise share one budget, bounded to
+    // `SELECTION_ARRANGE_NODE_BUDGET` nodes each.
+    let restarts = SELECTION_RESTARTS;
+    let placement_budget = SELECTION_PLACEMENT_BUDGET;
+    let arrange_nodes = SELECTION_ARRANGE_NODE_BUDGET;
+    let mut resolve_total = SELECTION_RESOLVE_TOTAL;
+    let mut global = SELECTION_GLOBAL_WORK_BUDGET;
+    for restart in 0..restarts {
+        if global == 0 {
+            break;
+        }
         if restart > 0 {
             for pf in &mut pools_fill {
                 shuffle_in_place(&mut pf.order, rng);
@@ -1308,13 +1365,20 @@ fn run_pool_pick_pass(
             selected: Vec::new(),
             assign: assign.clone(),
             used: chosen_codes.clone(),
-            budget: SELECTION_PLACEMENT_BUDGET,
-            resolve_budget: SELECTION_RESOLVE_BUDGET,
+            budget: placement_budget,
+            global,
+            resolve_budget: resolve_total,
+            arrange_nodes,
             arrangement: None,
         };
         if search.run() {
             return Some((search.assign, search.arrangement.unwrap_or_default()));
         }
+        // Carry the remaining global budgets into the next restart so total work
+        // (cheap probes + expensive re-solves) is hard-bounded regardless of how
+        // many restarts that takes — making latency independent of feasibility.
+        resolve_total = search.resolve_budget;
+        global = search.global;
     }
     None
 }

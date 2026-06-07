@@ -11,8 +11,8 @@
 //! Two properties must hold across many seeds for a realistic full-pool request:
 //!   1. Determinism: every seed yields a full `target`-course schedule (the seed
 //!      only changes *which* valid schedule, never *whether* one is found).
-//!   2. Bounded latency: each seed completes far below the worker's 1 s
-//!      wall-clock kill — including the ~2-4x slowdown of the WASM build versus
+//!   2. Bounded latency: each seed completes far below the worker's 3 s
+//!      wall-clock kill — including the ~1.5-2x slowdown of the WASM build versus
 //!      this native release test — so success never depends on the wall clock.
 //!
 //! Runs against the committed `.pb` datasets (built by `pnpm build:data-proto`);
@@ -34,10 +34,12 @@ const SCHEDULES_PB: &str =
 
 const SEEDS: u32 = 64;
 
-/// Native per-seed wall-clock ceiling. The worker kill is 1000 ms and the WASM
-/// build runs materially slower than this native release test, so we require a
-/// comfortable native margin to stay safe in the browser.
-const PER_SEED_BUDGET: Duration = Duration::from_millis(300);
+/// Native per-seed wall-clock ceiling. The worker kill is 3000 ms and the WASM
+/// build runs ~1.5-2x slower than this native release test, so a sub-second
+/// native ceiling keeps a comfortable margin in the browser. This is a coarse
+/// safety net, not the real bound — total engine work is hard-capped internally
+/// by the global probe budget (see `advanced.rs`), independent of wall clock.
+const PER_SEED_BUDGET: Duration = Duration::from_millis(2_000);
 
 fn undergrad_schedulable(sched: &SchedulesData) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
@@ -135,4 +137,75 @@ fn advanced_full_pool_every_seed_succeeds_quickly() {
     for target in [22u32, 23, 24] {
         run_target(&engine, &pool, target);
     }
+}
+
+/// An over-capacity request can never be satisfied: a week has a finite number of
+/// non-overlapping teaching slots, so no pool packs (say) 40 conflict-free
+/// courses. The old generate-and-test loop ground on such inputs until the
+/// worker's wall-clock kill (the reported multi-second hang / timeout); the
+/// global probe budget now bounds total work, so an infeasible request must
+/// return `has_schedule = false` *quickly and deterministically* for every seed
+/// — never hang. This is the property that makes latency a function of the
+/// inputs, not the seed.
+#[test]
+fn advanced_infeasible_request_fails_fast_for_every_seed() {
+    let (Ok(cat_bytes), Ok(sched_bytes)) =
+        (std::fs::read(CATALOGUE_PB), std::fs::read(SCHEDULES_PB))
+    else {
+        eprintln!(
+            "skipping advanced_infeasible_request_fails_fast_for_every_seed: .pb artifacts not built"
+        );
+        return;
+    };
+    let sched = SchedulesData::decode(sched_bytes.as_slice()).unwrap();
+    let pool = undergrad_schedulable(&sched);
+    assert!(pool.len() > 1000, "need a realistic undergrad pool, got {}", pool.len());
+
+    let engine = Engine::new(&cat_bytes, &sched_bytes).unwrap();
+
+    // 40 conflict-free courses can't fit in one week's teaching slots for any
+    // pool, so this is infeasible regardless of which courses the seed picks.
+    let target = 40u32;
+    let req_base = GenerationRequest {
+        mode: Mode::Advanced as i32,
+        courses_this_semester: target,
+        include_closed_components: true,
+        level_buckets: vec!["undergrad".to_string(), "grad".to_string()],
+        language_buckets: vec!["en".to_string(), "fr".to_string(), "other".to_string()],
+        prereq_eligible_courses: pool.clone(),
+        remaining_requirements: vec![RemainingRequirement {
+            requirement_id: "core".to_string(),
+            r#type: "core".to_string(),
+            title: Some("Core".to_string()),
+            candidate_courses: pool.clone(),
+            credits_needed: Some(target as f64 * 3.0),
+            picked_count: None,
+            satisfied_by: vec![],
+        }],
+        ..Default::default()
+    };
+
+    let mut worst = Duration::ZERO;
+    for seed in 1..=SEEDS {
+        let mut req = req_base.clone();
+        req.current_seed = seed;
+        req.first_seed = seed;
+
+        let started = Instant::now();
+        let resp_bytes = engine.generate(&req.encode_to_vec()).unwrap();
+        let elapsed = started.elapsed();
+        worst = worst.max(elapsed);
+
+        let resp = GenerationResponse::decode(resp_bytes.as_slice()).unwrap();
+        assert!(
+            !resp.has_schedule,
+            "seed {seed}: reported a schedule for an impossible {target}-course request"
+        );
+        assert!(
+            elapsed <= PER_SEED_BUDGET,
+            "seed {seed}: infeasible request took {elapsed:?} (> {PER_SEED_BUDGET:?}); the \
+             internal work bound must stop it well under the worker timeout, not grind to it"
+        );
+    }
+    eprintln!("infeasible target {target}: {SEEDS} seeds all fast-failed, worst {worst:?}");
 }

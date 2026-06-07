@@ -173,6 +173,16 @@ pub(crate) fn allows_enrollment(candidate: &Enrollment, partial: &[Enrollment]) 
 /// gives up deterministically (returns `None`).
 const ARRANGEMENT_NODE_BUDGET: u64 = 5_000_000;
 
+/// Work-unit budget for the basic-mode randomized-restart greedy fill (see
+/// `first_seeded_subset_arrangement`). Charged by *actual overlap work* — every
+/// combo scanned costs `placed + 1` units, an overlap scan being O(placed) — so
+/// it is a true wall-clock bound regardless of how large or permissive the
+/// optional pool is, rather than a node count that hides O(pool) work per node.
+/// Sized so any realistically packable request resolves far below it while an
+/// infeasible request fails fast and deterministically for every seed. Mirrors
+/// `advanced.rs`'s `SELECTION_GLOBAL_WORK_BUDGET`.
+const SUBSET_WORK_BUDGET: u64 = 200_000_000;
+
 /// Forward-checking + MRV backtracking solver over a fixed set of courses. Each
 /// course's domain is its list of seeded-ordered valid section combos; the solver
 /// branches on the unassigned course with the fewest remaining compatible combos
@@ -189,20 +199,34 @@ struct ArrangeSolver<'a> {
     assigned: Vec<Option<usize>>,
     /// Remaining search budget; decremented per combo expansion.
     budget: u64,
+    /// Budget the solver started with (for `expansions()` diagnostics).
+    #[cfg_attr(not(test), allow(dead_code))]
+    start_budget: u64,
 }
 
 impl<'a> ArrangeSolver<'a> {
+    #[cfg(test)]
     fn new(
         courses: &'a [&'a TimetableCourse],
         constraints: &'a Constraints,
         data: &'a DataView,
+    ) -> Self {
+        Self::with_budget(courses, constraints, data, ARRANGEMENT_NODE_BUDGET)
+    }
+
+    fn with_budget(
+        courses: &'a [&'a TimetableCourse],
+        constraints: &'a Constraints,
+        data: &'a DataView,
+        budget: u64,
     ) -> Self {
         ArrangeSolver {
             assigned: vec![None; courses.len()],
             courses,
             constraints,
             data,
-            budget: ARRANGEMENT_NODE_BUDGET,
+            budget,
+            start_budget: budget,
         }
     }
 
@@ -240,7 +264,7 @@ impl<'a> ArrangeSolver<'a> {
     /// prevents.
     #[cfg(test)]
     fn expansions(&self) -> u64 {
-        ARRANGEMENT_NODE_BUDGET - self.budget
+        self.start_budget - self.budget
     }
 
     fn solve(&mut self, domains: &mut [Vec<usize>], assigned_count: usize) -> bool {
@@ -331,13 +355,27 @@ pub fn arrange_prebuilt(
     constraints: &Constraints,
     data: &DataView,
 ) -> Option<Vec<Enrollment>> {
+    arrange_prebuilt_with_budget(courses, constraints, data, ARRANGEMENT_NODE_BUDGET)
+}
+
+/// Like [`arrange_prebuilt`] but with a caller-chosen node budget. Feasibility-
+/// driven *selection* probes this many times over a growing set, so it uses a
+/// much tighter budget than the one-shot full solve: a rearrangement that needs
+/// a deep search is unlikely to pay off versus simply trying another candidate
+/// or restart, and an unbounded probe is what made worst-case selection blow up.
+pub fn arrange_prebuilt_with_budget(
+    courses: &[&TimetableCourse],
+    constraints: &Constraints,
+    data: &DataView,
+    node_budget: u64,
+) -> Option<Vec<Enrollment>> {
     // Stable secondary ordering by domain size keeps the MRV tie-break deterministic.
     let mut ordered: Vec<&TimetableCourse> = courses.to_vec();
     ordered.sort_by_key(|c| c.combos.len());
 
     let mut domains: Vec<Vec<usize>> =
         ordered.iter().map(|c| (0..c.combos.len()).collect()).collect();
-    let mut solver = ArrangeSolver::new(&ordered, constraints, data);
+    let mut solver = ArrangeSolver::with_budget(&ordered, constraints, data, node_budget);
     if solver.solve(&mut domains, 0) {
         let chosen: Vec<Enrollment> = (0..ordered.len())
             .map(|i| ordered[i].combos[solver.assigned[i].expect("complete assignment")].clone())
@@ -348,24 +386,40 @@ pub fn arrange_prebuilt(
     }
 }
 
-fn arrangement_fingerprint(chosen: &[Enrollment]) -> String {
-    let mut parts: Vec<String> = chosen
-        .iter()
-        .map(|e| {
-            let sections: Vec<String> = e
-                .sections
-                .iter()
-                .map(|(k, v)| format!("{k}:{v}"))
-                .collect();
-            format!("{}{{{}}}", e.course_code, sections.join("|"))
-        })
-        .collect();
-    parts.sort();
-    parts.join(",")
+/// Find the first combo of `course` compatible with the current partial
+/// assignment, charging `placed + 1` work units per combo scanned (an overlap
+/// scan is O(placed)). Returns `None` if the budget runs out or nothing fits.
+fn first_fit_combo(
+    course: &TimetableCourse,
+    chosen: &[Enrollment],
+    work: &mut u64,
+) -> Option<Enrollment> {
+    for combo in &course.combos {
+        if *work == 0 {
+            return None;
+        }
+        *work = work.saturating_sub(chosen.len() as u64 + 1);
+        if allows_enrollment(combo, chosen) {
+            return Some(combo.clone());
+        }
+    }
+    None
 }
 
 /// First seeded subset timetable that pins all `pinned` and fills to
-/// `target_count` from `optional` (in the given seeded order), or None.
+/// `target_count` from `optional`, or None if no conflict-free arrangement is
+/// found within the work budget.
+///
+/// Implemented as a **randomized-restart greedy** with a work-charged global
+/// budget (mirroring `advanced.rs`). The previous exhaustive chronological DFS
+/// scanned the whole remaining pool at every node and bounded node *count* (not
+/// work), so on a permissive pool a single run did billions of overlap checks
+/// and most seeds exhausted the budget and returned a *false negative* even when
+/// a packing existed — making success depend on the RNG seed. Each restart here
+/// reshuffles the placement order and greedily seats a compatible combo per
+/// course; charging the budget by real overlap work makes latency a function of
+/// the inputs, and the restarts make a feasible packing discoverable for EVERY
+/// seed (the seed only reorders which valid schedule is returned first).
 #[allow(clippy::too_many_arguments)]
 pub fn first_seeded_subset_arrangement(
     pinned: &[String],
@@ -396,127 +450,66 @@ pub fn first_seeded_subset_arrangement(
         }
     }
 
-    // Most-constrained pinned course first keeps the mandatory backtracking shallow.
-    pinned_courses.sort_by_key(|c| c.combos.len());
-
-    let mut chosen: Vec<Enrollment> = Vec::new();
     let slots = target_count - pinned_courses.len();
-    let mut budget: u64 = ARRANGEMENT_NODE_BUDGET;
-
-    /// Every remaining (unplaced) pinned course still has at least one combo that
-    /// fits the current partial assignment. A cheap forward check that prunes
-    /// pinned branches which can no longer be completed.
-    fn pinned_feasible(rest: &[TimetableCourse], chosen: &[Enrollment]) -> bool {
-        rest.iter()
-            .all(|c| c.combos.iter().any(|combo| allows_enrollment(combo, chosen)))
+    if optional_courses.len() < slots {
+        return None;
     }
 
-    /// At least `need` of the remaining optional courses (`optional[idx..]`) still
-    /// have a combo compatible with the current partial assignment. An admissible
-    /// (never over-pruning) forward check: a course with no compatible combo can
-    /// never fill a slot, so it cannot count toward the remaining slots.
-    fn enough_optional_feasible(
-        optional: &[TimetableCourse],
-        idx: usize,
-        need: usize,
-        chosen: &[Enrollment],
-    ) -> bool {
-        if need == 0 {
-            return true;
+    let mut work: u64 = SUBSET_WORK_BUDGET;
+    let mut pinned_order: Vec<usize> = (0..pinned_courses.len()).collect();
+    let mut optional_order: Vec<usize> = (0..optional_courses.len()).collect();
+
+    let mut restart = 0u64;
+    loop {
+        if work == 0 {
+            return None;
         }
-        let mut count = 0usize;
-        for course in &optional[idx..] {
-            if course.combos.iter().any(|combo| allows_enrollment(combo, chosen)) {
-                count += 1;
-                if count >= need {
-                    return true;
+        // The first attempt keeps the incoming seeded order (per-seed variety);
+        // later restarts reshuffle to escape a greedy dead-end.
+        if restart > 0 {
+            shuffle_in_place(&mut pinned_order, rng);
+            shuffle_in_place(&mut optional_order, rng);
+        }
+        restart += 1;
+
+        let mut chosen: Vec<Enrollment> = Vec::with_capacity(target_count);
+
+        // Seat every pinned course; abandon the restart if one can't be placed.
+        let mut pinned_ok = true;
+        for &pi in &pinned_order {
+            if let Some(combo) = first_fit_combo(&pinned_courses[pi], &chosen, &mut work) {
+                chosen.push(combo);
+            } else {
+                if work == 0 {
+                    return None;
                 }
+                pinned_ok = false;
+                break;
             }
         }
-        false
-    }
+        if !pinned_ok {
+            continue;
+        }
 
-    fn fill_optional(
-        idx: usize,
-        slots_left: usize,
-        optional: &[TimetableCourse],
-        chosen: &mut Vec<Enrollment>,
-        constraints: &Constraints,
-        data: &DataView,
-        budget: &mut u64,
-    ) -> bool {
-        if slots_left == 0 {
-            return passes_final(chosen, constraints, data);
-        }
-        if *budget == 0 {
-            return false;
-        }
-        // Forward check: prune unless enough remaining optional courses can still
-        // each fit the current assignment (subsumes the plain count check).
-        if !enough_optional_feasible(optional, idx, slots_left, chosen) {
-            return false;
-        }
-        for combo in &optional[idx].combos {
-            if !allows_enrollment(combo, chosen) {
-                continue;
+        // Greedily fill the remaining slots from the optional pool.
+        let mut filled = 0usize;
+        for &oi in &optional_order {
+            if filled == slots {
+                break;
             }
-            *budget = budget.saturating_sub(1);
-            chosen.push(combo.clone());
-            if fill_optional(idx + 1, slots_left - 1, optional, chosen, constraints, data, budget) {
-                return true;
+            if work == 0 {
+                return None;
             }
-            chosen.pop();
+            if let Some(combo) = first_fit_combo(&optional_courses[oi], &chosen, &mut work) {
+                chosen.push(combo);
+                filled += 1;
+            }
         }
-        fill_optional(idx + 1, slots_left, optional, chosen, constraints, data, budget)
-    }
 
-    fn place_pinned(
-        idx: usize,
-        pinned: &[TimetableCourse],
-        optional: &[TimetableCourse],
-        slots: usize,
-        chosen: &mut Vec<Enrollment>,
-        constraints: &Constraints,
-        data: &DataView,
-        budget: &mut u64,
-    ) -> bool {
-        if idx == pinned.len() {
-            return fill_optional(0, slots, optional, chosen, constraints, data, budget);
+        if filled == slots && passes_final(&chosen, constraints, data) {
+            return Some(chosen);
         }
-        for combo in &pinned[idx].combos {
-            if !allows_enrollment(combo, chosen) {
-                continue;
-            }
-            if *budget == 0 {
-                return false;
-            }
-            *budget = budget.saturating_sub(1);
-            chosen.push(combo.clone());
-            // Forward check: prune unless every remaining pinned course can still fit.
-            if pinned_feasible(&pinned[idx + 1..], chosen)
-                && place_pinned(idx + 1, pinned, optional, slots, chosen, constraints, data, budget)
-            {
-                return true;
-            }
-            chosen.pop();
-        }
-        false
-    }
-
-    if place_pinned(
-        0,
-        &pinned_courses,
-        &optional_courses,
-        slots,
-        &mut chosen,
-        constraints,
-        data,
-        &mut budget,
-    ) {
-        let _ = arrangement_fingerprint(&chosen); // dedup not needed for "first"
-        Some(chosen)
-    } else {
-        None
+        // Otherwise reshuffle and retry until the work budget is exhausted.
     }
 }
 
