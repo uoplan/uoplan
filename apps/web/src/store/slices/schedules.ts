@@ -32,6 +32,7 @@ import type { GenerateSchedulesMode } from "../../lib/generateSchedulesAction";
 import { applySwapsToResult } from "./schedules/swapHelpers";
 import {
   applyScheduleGenerationResult,
+  isFailurePreservingPrevious,
   scheduleFingerprint,
   withScheduleGenerating,
 } from "./schedules/generationState";
@@ -176,20 +177,23 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         }
 
         if (finalResult) {
-          const newSwaps = updatedSwapsPerSeed[finalSeed] ?? [];
+          const preserve = isFailurePreservingPrevious(get(), finalResult);
           const noVariety =
             prevFingerprint !== null &&
             finalResult.currentSchedule !== null &&
             scheduleFingerprint(finalResult.currentSchedule) === prevFingerprint;
-          set({
-            ...finalResult,
-            currentSeed: finalSeed,
-            currentSwaps: newSwaps,
-            swapsPerSeed: updatedSwapsPerSeed,
-            calendarWeekIndex: null,
-            scheduleNoVariety: noVariety,
-            generationOptionsDirty: false,
-          });
+          if (!preserve) {
+            const newSwaps = updatedSwapsPerSeed[finalSeed] ?? [];
+            set({
+              currentSwaps: newSwaps,
+              swapsPerSeed: updatedSwapsPerSeed,
+              calendarWeekIndex: null,
+            });
+          }
+          applyScheduleGenerationResult(set, get, finalResult, finalSeed);
+          if (!preserve && noVariety) {
+            set({ scheduleNoVariety: true });
+          }
         }
       });
     },
@@ -228,14 +232,18 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         }
 
         if (finalResult) {
-          const newSwaps = updatedSwapsPerSeed[trySeed] ?? [];
-          set({
-            currentSwaps: newSwaps,
-            swapsPerSeed: updatedSwapsPerSeed,
-            calendarWeekIndex: null,
-          });
+          const preserve = isFailurePreservingPrevious(get(), finalResult);
+          if (!preserve) {
+            const newSwaps = updatedSwapsPerSeed[trySeed] ?? [];
+            set({
+              currentSwaps: newSwaps,
+              swapsPerSeed: updatedSwapsPerSeed,
+              calendarWeekIndex: null,
+            });
+          }
           applyScheduleGenerationResult(set, get, finalResult, trySeed);
           if (
+            !preserve &&
             prevFingerprint !== null &&
             finalResult.currentSchedule !== null &&
             scheduleFingerprint(finalResult.currentSchedule) === prevFingerprint
@@ -253,21 +261,25 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         : null;
       await withScheduleGenerating(set, async () => {
         const newFirstSeed = generateRandomSeed();
-        set({
-          firstSeed: newFirstSeed,
-          currentSeed: newFirstSeed,
-          lowestVisitedSeed: newFirstSeed,
-          currentSwaps: [],
-          swapsPerSeed: {},
-        });
         const mode: GenerateSchedulesMode = get().calendarMode === "basic" ? "basic" : "advanced";
         const result = await runScheduleGeneration(
           { ...get(), firstSeed: newFirstSeed, currentSeed: newFirstSeed },
           mode,
         );
         if (result) {
+          const preserve = isFailurePreservingPrevious(get(), result);
+          if (!preserve) {
+            set({
+              firstSeed: newFirstSeed,
+              currentSeed: newFirstSeed,
+              lowestVisitedSeed: newFirstSeed,
+              currentSwaps: [],
+              swapsPerSeed: {},
+            });
+          }
           applyScheduleGenerationResult(set, get, result, newFirstSeed);
           if (
+            !preserve &&
             prevFingerprint !== null &&
             result.currentSchedule !== null &&
             scheduleFingerprint(result.currentSchedule) === prevFingerprint

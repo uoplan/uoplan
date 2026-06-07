@@ -15,12 +15,40 @@ export function scheduleFingerprint(schedule: GeneratedSchedule): string {
   return arrangementFingerprint(schedule);
 }
 
+/**
+ * True when a generation attempt failed (no schedule + an error) but a schedule
+ * is already on screen. In that case we keep the existing schedule rather than
+ * wiping the calendar, and only surface the error. The very first generation
+ * (no previous schedule) is unaffected and still shows the empty-state error.
+ */
+export function isFailurePreservingPrevious(
+  prev: Pick<AppStore, "currentSchedule">,
+  result: ScheduleGenerationResult,
+): boolean {
+  return (
+    result.currentSchedule === null &&
+    result.generationError !== null &&
+    prev.currentSchedule !== null
+  );
+}
+
 export function applyScheduleGenerationResult(
   set: Parameters<StateCreator<AppStore, [], [], SchedulesSlice>>[0],
   get: Parameters<StateCreator<AppStore, [], [], SchedulesSlice>>[1],
   result: ScheduleGenerationResult,
   seed: number,
 ) {
+  if (isFailurePreservingPrevious(get(), result)) {
+    // Keep the schedule (and its seed / pool / color / swap state) on screen and
+    // only raise the error; the toast fires off the fresh error object.
+    set({
+      generationError: result.generationError,
+      scheduleNoVariety: false,
+      generationOptionsDirty: false,
+    });
+    return;
+  }
+
   const lowestVisitedSeed = noteLowestVisitedSeed(get().lowestVisitedSeed, seed);
   set({
     ...result,
