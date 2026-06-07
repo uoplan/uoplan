@@ -9,7 +9,7 @@
  */
 
 // Trailing non-answer options that are not part of the ordinal scale.
-export const NA_OPTION_LABELS = new Set<string>([
+const NA_OPTION_LABELS = new Set<string>([
   "question not applicable",
   "no feedback",
   "no classroom meetings were scheduled",
@@ -39,7 +39,7 @@ const CANONICAL_LOOKUP = CANONICAL_SCALES.map((scale) => ({
  * scale, returning the clean canonical labels when a strong majority match, else
  * the input unchanged. Best-first ordering is preserved.
  */
-export function snapToCanonicalScale(labels: string[]): string[] {
+function snapToCanonicalScale(labels: string[]): string[] {
   const inputKeys = labels.map(looseKey);
   let best: { scale: string[]; score: number; lenDiff: number } | null = null;
   for (const { scale, keys } of CANONICAL_LOOKUP) {

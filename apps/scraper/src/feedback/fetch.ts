@@ -28,7 +28,7 @@ import { parseListRows, parseTotalReports, walkListPages } from "./list.ts";
 import { getErrorMessage } from "../shared/errors.ts";
 import type { StoredSession } from "./keychain.ts";
 
-export interface FetchOptions {
+interface FetchOptions {
   /** Term ids to fetch; default = every term the landing page exposes. */
   terms?: string[];
   /** Re-fetch terms/reports even if already cached. */

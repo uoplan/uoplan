@@ -31,11 +31,7 @@ import { type GenerateSchedulesInput } from "./generateSchedulesInput";
 
 // Re-export helpers used by tests and other modules
 export { expandConstrainedPerRequirement, buildPendingGroupPickCounts } from "@uoplan/core";
-export {
-  type GenerateSchedulesInput,
-  type GenerateSchedulesMode,
-  pickGenerateSchedulesInput,
-} from "./generateSchedulesInput";
+export { type GenerateSchedulesInput } from "./generateSchedulesInput";
 
 /** Pool diagnostics shape carried by a mapped engine response. */
 type PoolDiagnostics = NonNullable<MappedGenerationResult["poolDiagnostics"]>;

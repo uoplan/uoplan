@@ -29,7 +29,7 @@ import { parseReportTitle } from "./title.ts";
 /** Sidecar mapping each scale question's text to its best-first option labels. */
 type OptionLabelMap = Record<string, string[]>;
 
-export interface FeedbackSection {
+interface FeedbackSection {
   /** Section code, e.g. "A00", "S100", "0". */
   section: string;
   /** "First Last" display order (matches grades.json). */
@@ -41,16 +41,16 @@ export interface FeedbackSection {
 }
 
 /** One course code and every section/report evaluated under it that term. */
-export interface FeedbackCourse {
+interface FeedbackCourse {
   /** Course code, normalized to grades.json format, e.g. "ITI 1120". */
   code: string;
   /** Cross-listed reports contribute a section entry under each of their codes. */
   sections: FeedbackSection[];
 }
 
-export type FeedbackFile = FeedbackCourse[];
+type FeedbackFile = FeedbackCourse[];
 
-export interface ParseOptions {
+interface ParseOptions {
   terms?: string[];
   force?: boolean;
   stats?: boolean;

@@ -12,7 +12,7 @@ import { normalizeWhitespace } from "../shared/text.ts";
  * alone yields the prof <-> section <-> course join key with no per-report fetch.
  */
 
-export interface ParsedCourse {
+interface ParsedCourse {
   /** Normalized to grades.json format, e.g. "FEM 1100". */
   code: string;
   /** Section code, e.g. "B00", "NG00". */
@@ -21,7 +21,7 @@ export interface ParsedCourse {
   title: string;
 }
 
-export interface ParsedReportTitle {
+interface ParsedReportTitle {
   /** Display order "First Last" (matches grades.json), e.g. "Helen Abbot". */
   professor: string;
   courses: ParsedCourse[];

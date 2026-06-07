@@ -41,7 +41,7 @@ export function formatMetricValue(metric: TrendsMetric, value: number | null): s
 }
 
 /** Metric fields shared by the comparison rows the cards consume. */
-export interface MetricBundle {
+interface MetricBundle {
   gpa: number | null;
   aPlusPct: number | null;
   aRangePct: number | null;
@@ -61,17 +61,4 @@ export function metricDomain(metric: TrendsMetric): [number, number | "auto"] {
   if (metric === "gpa") return [0, 10];
   if (metric === "volume") return [0, "auto"];
   return [0, 100];
-}
-
-/**
- * Diverging colour for a GPA cell on the 0–10 scale (red → amber → green),
- * used by the discipline×year heatmap. `null` returns a neutral surface.
- */
-export function gpaCellColor(gpa: number | null): string {
-  if (gpa == null) return "var(--app-surface-muted, rgba(127,127,127,0.08))";
-  // Anchor the visible range to typical GPA spread (≈5–9) for contrast.
-  const t = Math.max(0, Math.min(1, (gpa - 5) / 4));
-  // Hue 0 (red) → 130 (green); keep saturation/lightness readable in both themes.
-  const hue = Math.round(t * 130);
-  return `hsl(${hue}, 58%, 46%)`;
 }

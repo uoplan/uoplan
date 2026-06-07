@@ -31,7 +31,7 @@ export interface ReportQuestionStats {
   options: ReportOption[];
 }
 
-export interface ParsedReport {
+interface ParsedReport {
   questions: ReportQuestionStats[];
 }
 

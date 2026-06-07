@@ -210,7 +210,7 @@ function buildCookieJar(session: StoredSession): CookieJar {
 }
 
 /** Build a `got` client that replays the stored session cookies. */
-export function clientFromSession(session: StoredSession): Got {
+function clientFromSession(session: StoredSession): Got {
   const jar = buildCookieJar(session);
   return got.extend({
     cookieJar: jar,
@@ -221,22 +221,6 @@ export function clientFromSession(session: StoredSession): Got {
     },
     retry: { limit: 2 },
   });
-}
-
-/**
- * Convert stored cookies to Playwright's cookie shape and launch a headless
- * Chromium context that replays them under a normal desktop UA. Used to drive the
- * Bluera report-list and report viewer (which `got` cannot, because of the SAML
- * auto-POST), while still passing the WAF.
- *
- * Caller owns the returned browser/context and must close them.
- */
-export async function browserContextFromSession(
-  session: StoredSession,
-): Promise<{ browser: Browser; context: BrowserContext }> {
-  const browser = await chromium.launch({ headless: true });
-  const context = await newAuthedContext(browser, session);
-  return { browser, context };
 }
 
 /** Launch a headless Chromium (normal-UA contexts are created per caller). */

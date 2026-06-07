@@ -8,7 +8,7 @@
  * (e.g. Apr 1, Jul 1, Oct 31) are checked before whole-month fallbacks.
  */
 
-export interface SeasonalFlourish {
+interface SeasonalFlourish {
   emoji: string;
   /** tr() id for the short phrase shown after the emoji. */
   msgId: string;

@@ -22,7 +22,7 @@ import { FEEDBACK_DATA_DIR } from "../shared/paths.ts";
 const FEEDBACK_CACHE_DIR = path.resolve(".cache", "feedback");
 const RAW_DIR = path.join(FEEDBACK_CACHE_DIR, "raw");
 
-export interface ListMeta {
+interface ListMeta {
   termId: string;
   termLabel: string;
   termUrl: string;
