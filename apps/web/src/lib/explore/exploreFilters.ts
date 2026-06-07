@@ -3,7 +3,7 @@ import type { ExploreCourseSearchEntry, ExploreProfessorSearchEntry } from "./gr
 
 export type ExploreFilterLevel = 1000 | 2000 | 3000 | 4000 | 5000;
 export type ExploreFilterDifficulty = "easy" | "moderate" | "tough";
-export type ExploreSortKey = "relevance" | "avgGrade" | "courseCode" | "profRating";
+export type ExploreSortKey = "relevance" | "grade" | "code" | "rating";
 export type ExploreSortDir = "asc" | "desc";
 export type ExploreSearchParams = {
   q: string | undefined;
@@ -11,7 +11,7 @@ export type ExploreSearchParams = {
   langs: string | undefined;
   disc: string | undefined;
   difficulty: string | undefined;
-  minRating: string | undefined;
+  rating: string | undefined;
   sort: string | undefined;
   dir: string | undefined;
 };
@@ -27,10 +27,8 @@ export function validateExploreSearch(search: Record<string, unknown>): ExploreS
       typeof search.difficulty === "string" && search.difficulty.length > 0
         ? search.difficulty
         : undefined,
-    minRating:
-      typeof search.minRating === "string" && search.minRating.length > 0
-        ? search.minRating
-        : undefined,
+    rating:
+      typeof search.rating === "string" && search.rating.length > 0 ? search.rating : undefined,
     sort: typeof search.sort === "string" && search.sort.length > 0 ? search.sort : undefined,
     dir: typeof search.dir === "string" && search.dir.length > 0 ? search.dir : undefined,
   };
@@ -42,7 +40,7 @@ export const EMPTY_EXPLORE_SEARCH: ExploreSearchParams = {
   langs: undefined,
   disc: undefined,
   difficulty: undefined,
-  minRating: undefined,
+  rating: undefined,
   sort: undefined,
   dir: undefined,
 };
@@ -77,13 +75,13 @@ export function hasActiveFilters(f: ExploreFilterState): boolean {
   );
 }
 
-const SORT_KEYS: ExploreSortKey[] = ["relevance", "avgGrade", "courseCode", "profRating"];
+const SORT_KEYS: ExploreSortKey[] = ["relevance", "grade", "code", "rating"];
 const SORT_DIRS: ExploreSortDir[] = ["asc", "desc"];
 const SORT_DEFAULT_DIR: Record<ExploreSortKey, ExploreSortDir> = {
   relevance: "desc",
-  avgGrade: "desc",
-  courseCode: "asc",
-  profRating: "desc",
+  grade: "desc",
+  code: "asc",
+  rating: "desc",
 };
 
 const LEVEL_VALUES: ExploreFilterLevel[] = [1000, 2000, 3000, 4000, 5000];
@@ -140,7 +138,7 @@ export function parseExploreFiltersSearch(search: Record<string, unknown>): Expl
     ? (search.difficulty as ExploreFilterDifficulty)
     : null;
 
-  const minRatingRaw = typeof search.minRating === "string" ? Number(search.minRating) : null;
+  const minRatingRaw = typeof search.rating === "string" ? Number(search.rating) : null;
   const minRating =
     minRatingRaw != null && MIN_RATING_VALUES.includes(minRatingRaw) ? minRatingRaw : null;
 
@@ -165,7 +163,7 @@ export function serializeExploreFiltersSearch(filters: ExploreFilterState): Reco
   if (filters.languages.length > 0) params.langs = filters.languages.join(",");
   if (filters.disciplines.length > 0) params.disc = filters.disciplines.join(",");
   if (filters.difficulty !== null) params.difficulty = filters.difficulty;
-  if (filters.minRating !== null) params.minRating = String(filters.minRating);
+  if (filters.minRating !== null) params.rating = String(filters.minRating);
 
   if (filters.sortKey !== "relevance") {
     params.sort = filters.sortKey;
@@ -214,10 +212,10 @@ export function compareCourseEntries(
   sortKey: ExploreSortKey,
   sortDir: ExploreSortDir,
 ): number {
-  if (sortKey === "avgGrade") {
+  if (sortKey === "grade") {
     return compareNullableNumber(gradeVizGpa(a.gradeViz), gradeVizGpa(b.gradeViz), sortDir);
   }
-  if (sortKey === "courseCode") {
+  if (sortKey === "code") {
     const cmp = a.courseCode.localeCompare(b.courseCode, "en");
     return sortDir === "asc" ? cmp : -cmp;
   }
@@ -230,7 +228,7 @@ export function compareProfessorEntries(
   sortKey: ExploreSortKey,
   sortDir: ExploreSortDir,
 ): number {
-  if (sortKey !== "profRating") return 0;
+  if (sortKey !== "rating") return 0;
   return compareNullableNumber(a.maxRating, b.maxRating, sortDir);
 }
 

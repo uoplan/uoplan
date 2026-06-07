@@ -63,8 +63,8 @@ describe("parseExploreFiltersSearch", () => {
       langs: "en,fr,es",
       disc: "bio, CSI ,bio",
       difficulty: "moderate",
-      minRating: "3.5",
-      sort: "courseCode",
+      rating: "3.5",
+      sort: "code",
       dir: "asc",
     });
 
@@ -73,7 +73,7 @@ describe("parseExploreFiltersSearch", () => {
     expect(parsed.disciplines).toEqual(["BIO", "CSI"]);
     expect(parsed.difficulty).toBe("moderate");
     expect(parsed.minRating).toBe(3.5);
-    expect(parsed.sortKey).toBe("courseCode");
+    expect(parsed.sortKey).toBe("code");
     expect(parsed.sortDir).toBe("asc");
   });
 
@@ -91,8 +91,8 @@ describe("parseExploreFiltersSearch", () => {
   });
 
   it("defaults sort direction per sort key", () => {
-    const parsed = parseExploreFiltersSearch({ sort: "avgGrade" });
-    expect(parsed.sortKey).toBe("avgGrade");
+    const parsed = parseExploreFiltersSearch({ sort: "grade" });
+    expect(parsed.sortKey).toBe("grade");
     expect(parsed.sortDir).toBe("desc");
   });
 });
@@ -110,7 +110,7 @@ describe("serializeExploreFiltersSearch", () => {
       disciplines: ["BIO", "CSI"],
       difficulty: "easy",
       minRating: 4,
-      sortKey: "avgGrade",
+      sortKey: "grade",
       sortDir: "desc",
     };
 
@@ -119,8 +119,8 @@ describe("serializeExploreFiltersSearch", () => {
       langs: "en",
       disc: "BIO,CSI",
       difficulty: "easy",
-      minRating: "4",
-      sort: "avgGrade",
+      rating: "4",
+      sort: "grade",
       dir: "desc",
     });
   });
@@ -138,10 +138,10 @@ describe("compareCourseEntries", () => {
     });
     const none = makeCourseEntry({ normCode: "csi3100", gradeViz: null });
 
-    const desc = [low, none, high].sort((a, b) => compareCourseEntries(a, b, "avgGrade", "desc"));
+    const desc = [low, none, high].sort((a, b) => compareCourseEntries(a, b, "grade", "desc"));
     expect(desc.map((e) => e.normCode)).toEqual(["csi2100", "csi1100", "csi3100"]);
 
-    const asc = [low, none, high].sort((a, b) => compareCourseEntries(a, b, "avgGrade", "asc"));
+    const asc = [low, none, high].sort((a, b) => compareCourseEntries(a, b, "grade", "asc"));
     expect(asc.map((e) => e.normCode)).toEqual(["csi3100", "csi1100", "csi2100"]);
   });
 
@@ -149,10 +149,10 @@ describe("compareCourseEntries", () => {
     const a = makeCourseEntry({ normCode: "csi1100", courseCode: "CSI 1100" });
     const b = makeCourseEntry({ normCode: "csi2100", courseCode: "CSI 2100" });
 
-    const asc = [b, a].sort((x, y) => compareCourseEntries(x, y, "courseCode", "asc"));
+    const asc = [b, a].sort((x, y) => compareCourseEntries(x, y, "code", "asc"));
     expect(asc.map((e) => e.courseCode)).toEqual(["CSI 1100", "CSI 2100"]);
 
-    const desc = [a, b].sort((x, y) => compareCourseEntries(x, y, "courseCode", "desc"));
+    const desc = [a, b].sort((x, y) => compareCourseEntries(x, y, "code", "desc"));
     expect(desc.map((e) => e.courseCode)).toEqual(["CSI 2100", "CSI 1100"]);
   });
 });
@@ -205,14 +205,10 @@ describe("compareProfessorEntries", () => {
     const low = makeProfessorEntry({ groupId: "p-low", maxRating: 3.2 });
     const none = makeProfessorEntry({ groupId: "p-none", maxRating: null });
 
-    const desc = [low, none, high].sort((a, b) =>
-      compareProfessorEntries(a, b, "profRating", "desc"),
-    );
+    const desc = [low, none, high].sort((a, b) => compareProfessorEntries(a, b, "rating", "desc"));
     expect(desc.map((e) => e.groupId)).toEqual(["p-high", "p-low", "p-none"]);
 
-    const asc = [low, none, high].sort((a, b) =>
-      compareProfessorEntries(a, b, "profRating", "asc"),
-    );
+    const asc = [low, none, high].sort((a, b) => compareProfessorEntries(a, b, "rating", "asc"));
     expect(asc.map((e) => e.groupId)).toEqual(["p-none", "p-low", "p-high"]);
   });
 });
