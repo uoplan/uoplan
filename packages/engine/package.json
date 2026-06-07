@@ -19,7 +19,7 @@
   "scripts": {
     "build:wasm": "wasm-pack build --target web --out-dir pkg --release",
     "build:wasm:dev": "wasm-pack build --target web --out-dir pkg --dev",
-    "test:rust": "cargo test",
+    "test:rust": "cargo test --release",
     "bench": "cargo bench"
   }
 }
