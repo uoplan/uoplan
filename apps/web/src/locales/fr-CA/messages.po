@@ -963,6 +963,9 @@ msgstr "Décroissant"
 msgid "explore.sort.direction"
 msgstr "Direction"
 
+msgid "explore.sort.feedback"
+msgstr "Appréciation étudiante"
+
 msgid "explore.sort.grade"
 msgstr "Note moyenne"
 

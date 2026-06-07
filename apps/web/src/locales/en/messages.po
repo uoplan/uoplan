@@ -963,6 +963,9 @@ msgstr "Descending"
 msgid "explore.sort.direction"
 msgstr "Direction"
 
+msgid "explore.sort.feedback"
+msgstr "Student feedback"
+
 msgid "explore.sort.grade"
 msgstr "Average grade"
 

@@ -3,7 +3,7 @@ import type { ExploreCourseSearchEntry, ExploreProfessorSearchEntry } from "./gr
 
 export type ExploreFilterLevel = 1000 | 2000 | 3000 | 4000 | 5000;
 export type ExploreFilterDifficulty = "easy" | "moderate" | "tough";
-export type ExploreSortKey = "relevance" | "grade" | "code" | "rating";
+export type ExploreSortKey = "relevance" | "grade" | "code" | "rating" | "feedback";
 export type ExploreSortDir = "asc" | "desc";
 export type ExploreSearchParams = {
   q: string | undefined;
@@ -95,13 +95,14 @@ export function hasActiveFilters(f: ExploreFilterState): boolean {
   );
 }
 
-const SORT_KEYS: ExploreSortKey[] = ["relevance", "grade", "code", "rating"];
+const SORT_KEYS: ExploreSortKey[] = ["relevance", "grade", "code", "rating", "feedback"];
 const SORT_DIRS: ExploreSortDir[] = ["asc", "desc"];
 const SORT_DEFAULT_DIR: Record<ExploreSortKey, ExploreSortDir> = {
   relevance: "desc",
   grade: "desc",
   code: "asc",
   rating: "desc",
+  feedback: "desc",
 };
 
 const LEVEL_VALUES: ExploreFilterLevel[] = [1000, 2000, 3000, 4000, 5000];
@@ -245,6 +246,7 @@ export function compareCourseEntries(
   b: ExploreCourseSearchEntry,
   sortKey: ExploreSortKey,
   sortDir: ExploreSortDir,
+  feedbackByNorm?: Map<string, number> | null,
 ): number {
   if (sortKey === "grade") {
     return compareNullableNumber(gradeVizGpa(a.gradeViz), gradeVizGpa(b.gradeViz), sortDir);
@@ -252,6 +254,11 @@ export function compareCourseEntries(
   if (sortKey === "code") {
     const cmp = a.courseCode.localeCompare(b.courseCode, "en");
     return sortDir === "asc" ? cmp : -cmp;
+  }
+  if (sortKey === "feedback") {
+    const fa = feedbackByNorm?.get(a.normCode) ?? null;
+    const fb = feedbackByNorm?.get(b.normCode) ?? null;
+    return compareNullableNumber(fa, fb, sortDir);
   }
   return 0;
 }
@@ -261,9 +268,17 @@ export function compareProfessorEntries(
   b: ExploreProfessorSearchEntry,
   sortKey: ExploreSortKey,
   sortDir: ExploreSortDir,
+  feedbackByGroupId?: Map<string, number> | null,
 ): number {
-  if (sortKey !== "rating") return 0;
-  return compareNullableNumber(a.maxRating, b.maxRating, sortDir);
+  if (sortKey === "rating") {
+    return compareNullableNumber(a.maxRating, b.maxRating, sortDir);
+  }
+  if (sortKey === "feedback") {
+    const fa = feedbackByGroupId?.get(a.groupId) ?? null;
+    const fb = feedbackByGroupId?.get(b.groupId) ?? null;
+    return compareNullableNumber(fa, fb, sortDir);
+  }
+  return 0;
 }
 
 function getDifficultyBucket(gpa: number): ExploreFilterDifficulty {

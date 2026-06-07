@@ -292,7 +292,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
   // Course-feedback overall sentiment, only fetched/computed when the feedback
   // filter is engaged. Course sentiment keys by normCode; professor sentiment is
   // re-keyed onto the explore groupId via the normalized display name.
-  const feedbackActive = filters.minFeedback !== null;
+  const feedbackActive = filters.minFeedback !== null || filters.sortKey === "feedback";
   const { data: feedbackIndex } = useFeedbackData(feedbackActive);
   const sentimentSets = useMemo<ExploreSentimentSets | undefined>(() => {
     if (!feedbackActive) return undefined;
@@ -321,19 +321,36 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       termSets,
       sentimentSets,
     );
-    const shouldSortCourses = filters.sortKey === "grade" || filters.sortKey === "code";
-    const shouldSortProfessors = filters.sortKey === "rating";
+    const shouldSortCourses =
+      filters.sortKey === "grade" || filters.sortKey === "code" || filters.sortKey === "feedback";
+    const shouldSortProfessors = filters.sortKey === "rating" || filters.sortKey === "feedback";
     return {
       ...rawSearchResults,
       courses: shouldSortCourses
         ? filteredCourses
             .slice()
-            .sort((a, b) => compareCourseEntries(a, b, filters.sortKey, filters.sortDir))
+            .sort((a, b) =>
+              compareCourseEntries(
+                a,
+                b,
+                filters.sortKey,
+                filters.sortDir,
+                sentimentSets?.courseByNorm,
+              ),
+            )
         : filteredCourses,
       professors: shouldSortProfessors
         ? filteredProfessors
             .slice()
-            .sort((a, b) => compareProfessorEntries(a, b, filters.sortKey, filters.sortDir))
+            .sort((a, b) =>
+              compareProfessorEntries(
+                a,
+                b,
+                filters.sortKey,
+                filters.sortDir,
+                sentimentSets?.professorByGroupId,
+              ),
+            )
         : filteredProfessors,
     };
   }, [rawSearchResults, activeFilters, filters, termSets, sentimentSets]);
@@ -348,7 +365,9 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     if (filters.sortKey === "rating") return filtered.slice(0, 24);
     return filtered
       .slice()
-      .sort((a, b) => compareCourseEntries(a, b, filters.sortKey, filters.sortDir))
+      .sort((a, b) =>
+        compareCourseEntries(a, b, filters.sortKey, filters.sortDir, sentimentSets?.courseByNorm),
+      )
       .slice(0, 24);
   }, [debouncedQuery, activeFilters, courseEntries, filters, termSets, sentimentSets]);
 
@@ -358,10 +377,18 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     const q = debouncedQuery.trim();
     if (q || !activeFilters) return null;
     const filtered = filterProfessorEntries(professorEntries, filters, termSets, sentimentSets);
-    if (filters.sortKey === "rating") {
+    if (filters.sortKey === "rating" || filters.sortKey === "feedback") {
       return filtered
         .slice()
-        .sort((a, b) => compareProfessorEntries(a, b, filters.sortKey, filters.sortDir))
+        .sort((a, b) =>
+          compareProfessorEntries(
+            a,
+            b,
+            filters.sortKey,
+            filters.sortDir,
+            sentimentSets?.professorByGroupId,
+          ),
+        )
         .slice(0, 24);
     }
     return filtered.slice(0, 24);

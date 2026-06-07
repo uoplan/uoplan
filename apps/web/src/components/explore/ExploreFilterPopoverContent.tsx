@@ -69,6 +69,7 @@ const SORT_OPTIONS: { value: ExploreSortKey; labelKey: string }[] = [
   { value: "grade", labelKey: "explore.sort.grade" },
   { value: "code", labelKey: "explore.sort.code" },
   { value: "rating", labelKey: "explore.sort.rating" },
+  { value: "feedback", labelKey: "explore.sort.feedback" },
 ];
 
 const SORT_DEFAULT_DIR: Record<ExploreSortKey, ExploreSortDir> = {
@@ -76,6 +77,7 @@ const SORT_DEFAULT_DIR: Record<ExploreSortKey, ExploreSortDir> = {
   grade: "desc",
   code: "asc",
   rating: "desc",
+  feedback: "desc",
 };
 
 const checkboxStyles = {
