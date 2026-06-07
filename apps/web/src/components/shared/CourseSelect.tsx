@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
-import type { ComboboxItem, OptionsFilter } from "@mantine/core";
+import type { OptionsFilter } from "@mantine/core";
 import type { DataCache } from "@uoplan/core";
+import { createRankedOptionsFilter } from "../../lib/explore/optionRanking";
 
 /** Options use label = code so selected pills show only the code; use renderOption in MultiSelect to show "code – title" in the dropdown. */
 export function createCourseOptions(
@@ -29,13 +30,8 @@ export function renderCourseOption(
  * even though option labels only contain the code.
  */
 export function createCourseOptionsFilter(cache: DataCache | null): OptionsFilter {
-  return ({ options, search }) => {
-    const words = search.toLowerCase().trim().split(/\s+/).filter(Boolean);
-    if (words.length === 0) return options;
-    return (options as ComboboxItem[]).filter((option) => {
-      const title = cache?.getCourse(option.value)?.title ?? "";
-      const haystack = `${option.label} ${title}`.toLowerCase();
-      return words.every((word) => haystack.includes(word));
-    });
-  };
+  return createRankedOptionsFilter((option) => ({
+    code: option.value,
+    text: cache?.getCourse(option.value)?.title ?? "",
+  }));
 }

@@ -34,6 +34,7 @@ import { useAppStore } from "../../store/appStore";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import { programSlugToPathParam } from "../../lib/explore/programSearch";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
+import { createRankedOptionsFilter } from "../../lib/explore/optionRanking";
 import type { BackState } from "../../lib/navigation/backState";
 import { BackButton } from "../shared/BackButton";
 import { ChromeControls } from "../shared/ChromeControls";
@@ -163,6 +164,15 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
       };
     });
   }, [grades, disciplineNameByCode]);
+
+  const disciplineOptionsFilter = useMemo(
+    () =>
+      createRankedOptionsFilter((option) => ({
+        code: option.value,
+        text: disciplineNameByCode.get(option.value) ?? "",
+      })),
+    [disciplineNameByCode],
+  );
 
   // Program options: only degrees whose core courses have grade data.
   const programOptions = useMemo(() => {
@@ -418,6 +428,7 @@ export function TrendsPage({ search, onChange }: TrendsPageProps) {
                     disabled={programSlugValue != null}
                     searchable
                     clearable
+                    filter={disciplineOptionsFilter}
                     nothingFoundMessage={tr("trends.filter.noMatch")}
                     style={{ flex: "1 1 240px", minWidth: 0 }}
                   />
