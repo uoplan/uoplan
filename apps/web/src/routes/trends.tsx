@@ -85,7 +85,7 @@ function TrendsRoute() {
   const navigate = Route.useNavigate();
 
   return (
-    <AppDataRouteGate>
+    <AppDataRouteGate requires={["grades", "disciplines"]}>
       <TrendsPage
         search={search}
         onChange={(next) =>

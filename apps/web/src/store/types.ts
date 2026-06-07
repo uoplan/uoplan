@@ -78,6 +78,8 @@ export interface AppState {
   cache: DataCache | null;
   courseGrades: CourseGradesData | null;
   courseGradesError: string | null;
+  /** True while the lazily-loaded {@link courseGrades} asset is being fetched/decoded. */
+  courseGradesLoading: boolean;
   disciplines: Discipline[] | null;
   loading: boolean;
   /** 0–100 while {@link loading} is true. */
@@ -193,6 +195,14 @@ export interface AppActions {
   generateBasicSchedules: () => Promise<void>;
 
   loadData: () => Promise<void>;
+  /** Lazily fetch + decode `grades.pb`, then re-enrich schedules + rebuild the cache. Idempotent. */
+  ensureCourseGrades: () => Promise<void>;
+  /** Lazily fetch + decode `ratemyprofessors.pb` into the professor-ratings map. Idempotent. */
+  ensureProfessorRatings: () => Promise<void>;
+  /** Lazily fetch + decode `disciplines.pb`. Idempotent. */
+  ensureDisciplines: () => Promise<void>;
+  /** Lazily load the year-specific catalogue for the current `firstYear` and recompute. Idempotent. */
+  ensureYearCatalogue: () => Promise<void>;
   setSelectedTermId: (termId: string) => Promise<void>;
   setFirstYear: (year: number | null) => Promise<void>;
   loadEncodedState: (decoded: DecodedState) => void;

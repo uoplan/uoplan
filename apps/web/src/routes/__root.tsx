@@ -60,7 +60,6 @@ function NotFound() {
 }
 
 function RootLayout() {
-  const loadData = useAppStore((s) => s.loadData);
   const indices = useAppStore((s) => s.indices);
   const { pathname } = useLocation();
   const routerStatus = useRouterState({ select: (s) => s.status });
@@ -77,10 +76,6 @@ function RootLayout() {
       lastNavAction.current = action.type;
     });
   }, [router.history]);
-
-  useEffect(() => {
-    void loadData();
-  }, [loadData]);
 
   usePersistState(!!indices);
 

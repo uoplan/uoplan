@@ -7,7 +7,7 @@ export const Route = createFileRoute("/schedule")({
 
 function ScheduleLayoutRoute() {
   return (
-    <AppDataRouteGate>
+    <AppDataRouteGate requires={["ratings", "disciplines"]} prewarm>
       <Outlet />
     </AppDataRouteGate>
   );

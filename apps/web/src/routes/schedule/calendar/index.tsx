@@ -16,6 +16,11 @@ export const Route = createFileRoute("/schedule/calendar/")({
 function CalendarRoute() {
   useRepairSeedOnCalendarMount();
 
+  const ensureCourseGrades = useAppStore((s) => s.ensureCourseGrades);
+  useEffect(() => {
+    void ensureCourseGrades();
+  }, [ensureCourseGrades]);
+
   const generateSchedules = useAppStore((s) => s.generateSchedules);
   const generateBasicSchedules = useAppStore((s) => s.generateBasicSchedules);
   const program = useAppStore((s) => s.program);
