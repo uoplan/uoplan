@@ -33,11 +33,15 @@ async function verifyTurnstile(token: string, secret: string, ip: string): Promi
   return data.success;
 }
 
-function buildShareHtml(stateBase64url: string): string {
+function buildShareHtml(stateBase64url: string, schedulePayload?: string | null): string {
   const base64 = stateBase64url.replace(/-/g, "+").replace(/_/g, "/");
   const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
   const appUrl = `/schedule/calendar/?s=${encodeURIComponent(padded)}`;
-  const ogImage = `https://uoplan.party/api/og-image/${stateBase64url}`;
+  // The `p` payload (courses + sections of the already-generated schedule) lets
+  // the OG-image worker render without re-running schedule generation. It is
+  // only forwarded to the OG image; the redirect above uses the primary state.
+  const ogQuery = schedulePayload ? `?p=${encodeURIComponent(schedulePayload)}` : "";
+  const ogImage = `https://uoplan.party/api/og-image/${stateBase64url}${ogQuery}`;
   const ogUrl = `https://uoplan.party/api/share/${stateBase64url}`;
 
   return `<!DOCTYPE html>
@@ -66,13 +70,15 @@ const app = new Hono<{ Bindings: Env }>();
 
 app.get("/api/share/:state", (c) => {
   const state = c.req.param("state");
-  return c.html(buildShareHtml(state));
+  const schedulePayload = c.req.query("p");
+  return c.html(buildShareHtml(state, schedulePayload));
 });
 
 app.get("/api/og-image/:state", async (c) => {
   const state = c.req.param("state");
+  const schedulePayload = c.req.query("p");
   const origin = new URL(c.req.url).origin;
-  return handleOgImage(state, c.env, origin);
+  return handleOgImage(state, schedulePayload, c.env, origin);
 });
 
 app.use(

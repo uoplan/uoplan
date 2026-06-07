@@ -12,7 +12,6 @@
     "@uoplan/calendar": "workspace:*",
     "@uoplan/core": "workspace:*",
     "@uoplan/data": "workspace:*",
-    "@uoplan/engine": "workspace:*",
     "@uoplan/proto": "workspace:*",
     "hono": "^4.7.11"
   },

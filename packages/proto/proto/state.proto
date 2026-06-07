@@ -109,3 +109,27 @@ message ShareableState {
   repeated BlockedTime blocked_times = 39;
   repeated RequirementPriority requirement_priorities = 40;
 }
+
+// --- OG-image share preview -------------------------------------------------
+//
+// A compact, index-based encoding of an already-generated schedule, embedded in
+// share URLs (the `?p=` query param) so the OG-image worker can render it
+// WITHOUT re-running schedule generation. All indices reference the term's
+// schedules dataset (`schedules.<term_id>.pb`), which both the web app and the
+// worker load:
+//   - course_index    → index into SchedulesData.schedules[]
+//   - component_index → index into the course's component keys, sorted ascending
+//   - section_index   → index into that component's sections[]
+// component_indices[i] and section_indices[i] form one (component, section)
+// pick; the two arrays are parallel and packed, avoiding per-section message
+// framing to keep the share payload as small as possible.
+message PreviewCourseSelection {
+  uint32 course_index = 1;
+  repeated uint32 component_indices = 2;
+  repeated uint32 section_indices = 3;
+}
+
+message SchedulePreview {
+  uint32 term_id = 1;
+  repeated PreviewCourseSelection courses = 2;
+}

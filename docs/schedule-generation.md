@@ -26,10 +26,10 @@ maps the engine's response back into UI/store shapes.
    completed courses, level/language/elective buckets, blacklist, seeds, preferences, the computed
    requirement tree + remaining requirements) into a `GenerationRequest` proto
    (`@uoplan/proto/engine`). The web adapter **`apps/web/src/lib/generateSchedulesAction.ts`**
-   resolves desired courses, adds error reporting, and adapts `AppState`. The OG worker reconstructs
-   schedules via **`packages/core/src/scheduleFromStateEngine.ts`** (`reconstruct.ts` →
-   `reconstructScheduleForPreview(engine, decoded, cache, constraints)`), which adapts a
-   `DecodedState` to the same request types.
+   resolves desired courses, adds error reporting, and adapts `AppState`. The OG worker no longer
+   runs the engine: it renders the already-generated schedule embedded in the share URL — see
+   [share-og-image.md](share-og-image.md). (`packages/core/src/scheduleFromStateEngine.ts` /
+   `reconstruct.ts` are retained for in-app reconstruction but are no longer used by the worker.)
 
 4. **Generation (Rust/WASM)** — the engine decodes the request, builds requirement pools, and
    **selects** a requirement-satisfying, conflict-free course set that it timetables through the
@@ -52,8 +52,8 @@ maps the engine's response back into UI/store shapes.
   `getScheduleEngine(dataKey)` builds + memoizes an engine for the worker / fallback;
   `getEngineSync(catalogue, schedulesData)` serves synchronous swap paths; `getInMemoryEngine`
   awaits init then builds from in-memory data (used by the main-thread fallback and tests).
-- **Worker** (`apps/worker/src/engineHost.ts`) — synchronous init via `initSync({ module })` with
-  `import engineWasm from "@uoplan/engine/engine.wasm"`.
+- **Worker** — the OG-image worker no longer initializes the engine; it renders the schedule
+  embedded in the share URL (see [share-og-image.md](share-og-image.md)).
 - **Node tests** — `initEngineWasmFromModule` + the `apps/web/src/test/engineSetup.ts` vitest setup
   compile the built `packages/engine/pkg/uoplan_engine_bg.wasm` and sync-init it.
 
@@ -171,9 +171,8 @@ basic-mode generation with pinned courses and with elective selection. Benchmark
 | Rust/WASM engine                  | `packages/engine/` (`src/lib.rs`, `advanced.rs`, …), `engine.proto`             |
 | TS ↔ engine boundary              | `packages/core/src/engineBridge.ts`                                             |
 | Web app adapter (AppState)        | `apps/web/src/lib/generateSchedulesAction.ts`                                   |
-| OG image adapter (DecodedState)   | `packages/core/src/scheduleFromStateEngine.ts`, `reconstruct.ts`                |
+| OG image (no engine; embedded)    | `apps/worker/src/ogImage.ts`, `packages/core/src/schedulePreview.ts`            |
 | Web WASM host                     | `apps/web/src/lib/engine/engineHost.ts`                                         |
-| Worker WASM host                  | `apps/worker/src/engineHost.ts`                                                 |
 | Honours inference                 | `packages/core/src/implicitHonours.ts`                                          |
 | Shared timetable primitives/types | `packages/core/src/generation/` (`types.ts`, `overlaps.ts`, `sectionCombos.ts`) |
 | Relaxation diagnostics (TS)       | `packages/core/src/engine/diagnostics/`, `generationDiagnostics.ts`             |

@@ -29,4 +29,5 @@ export * from "./generateSchedule";
 export * from "./engineBridge";
 export { arrangementFingerprint } from "./generation/fingerprint";
 export * from "./scheduleFromStateEngine";
+export * from "./schedulePreview";
 export * from "./reconstruct";

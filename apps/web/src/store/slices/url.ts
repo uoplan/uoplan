@@ -12,6 +12,7 @@ import {
 } from "@uoplan/core";
 import { recomputeStateForProgram } from "../requirementCompute";
 import type { Course } from "@uoplan/core";
+import { encodeSchedulePreview } from "../../lib/encodeSchedulePreview";
 import { inferLowestVisitedSeedFromPersisted } from "../../lib/seedNavigation";
 import { toBlockedWindows, withBlockedIds } from "../../lib/blockedTimes";
 
@@ -231,6 +232,15 @@ export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, ge
     const base64 = encodeStateToBase64(input, s.catalogue, s.indices);
     if (!base64) return null;
     const base64url = base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
-    return `${window.location.origin}/api/share/${base64url}`;
+    let url = `${window.location.origin}/api/share/${base64url}`;
+    // Embed the already-generated schedule as index-based references into the
+    // term's schedules dataset, so the OG-image worker can render it directly
+    // without re-running schedule generation. The redirect only uses the
+    // primary state above; this `p` payload is solely for the OG preview.
+    if (s.currentSchedule && s.schedulesData && s.selectedTermId) {
+      const preview = encodeSchedulePreview(s.currentSchedule, s.schedulesData, s.selectedTermId);
+      if (preview) url += `?p=${preview}`;
+    }
+    return url;
   },
 });
