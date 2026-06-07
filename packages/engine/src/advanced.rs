@@ -887,8 +887,12 @@ const SELECTION_RESTARTS: u32 = 100_000;
 /// exceeds the weekly slot budget) — stops here and reports "no schedule"
 /// quickly instead of grinding into the worker's wall-clock kill. Sized so the
 /// worst case stays well under the 3 s worker timeout even as WASM (~1.5-2x this
-/// native build).
-const SELECTION_GLOBAL_WORK_BUDGET: u64 = 200_000_000;
+/// native build), while leaving comfortable headroom above the work a genuinely
+/// feasible near-capacity request (~24 courses) needs: the worst feasible seed
+/// finishes in well under a tenth of this budget, so feasibility never hinges on
+/// the seed stumbling onto a packing just under the cap. An infeasible request
+/// burns the whole budget (~0.5 s native / ~1 s WASM) before fast-failing.
+const SELECTION_GLOBAL_WORK_BUDGET: u64 = 1_000_000_000;
 
 /// Global cap on full timetable re-solves across the WHOLE generation call.
 /// Cheap fixed-arrangement placement (see [`Search::try_place`]) is both the
