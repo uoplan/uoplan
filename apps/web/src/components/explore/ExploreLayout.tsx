@@ -25,6 +25,7 @@ import {
   serializeExploreFiltersSearch,
   type ExploreSearchParams,
   type ExploreFilterState,
+  type ExploreTermSets,
 } from "../../lib/explore/exploreFilters";
 import {
   buildProgramSearchEntries,
@@ -35,6 +36,7 @@ import { useAppStore } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { BackButton } from "../shared/BackButton";
 import { ExploreFilterBar } from "./ExploreFilterBar";
+import { formatTermLabel } from "../../lib/term/termLabel";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "./ExploreProfessorGradesLayout";
 import { SearchResultCourseCard } from "./SearchResultCourseCard";
 import { SearchResultDisciplineCard } from "./SearchResultDisciplineCard";
@@ -144,13 +146,15 @@ const EXPLORE_INDEX_ROUTE_ID = "/explore/";
 export function ExploreLayout({ children }: ExploreLayoutProps) {
   useTr();
   const { i18n } = useLingui();
-  const { loading, getCourseEntries, getProfessorEntries, getCourseFuse } = useExploreOfferings();
+  const { loading, getCourseEntries, getProfessorEntries, getTermPresence, getCourseFuse } =
+    useExploreOfferings();
   const navigate = useNavigate();
-  const { catalogue, professorRatings, disciplines } = useAppStore(
+  const { catalogue, professorRatings, disciplines, terms } = useAppStore(
     useShallow((s) => ({
       catalogue: s.catalogue,
       professorRatings: s.professorRatings,
       disciplines: s.disciplines,
+      terms: s.terms,
     })),
   );
 
@@ -161,6 +165,16 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       .map((d) => ({ code: d.code, name: isFr ? (d.nameFr ?? d.name) : d.name }))
       .sort((a, b) => a.code.localeCompare(b.code, "en"));
   }, [disciplines, i18n.locale]);
+
+  const termOptions = useMemo(() => {
+    if (!terms) return [];
+    // Reference the active locale so labels recompute when it changes
+    // (formatTermLabel localizes via the current locale at call time).
+    void i18n.locale;
+    return terms
+      .map((t) => ({ value: String(t.termId), label: formatTermLabel(Number(t.termId)) }))
+      .sort((a, b) => Number(b.value) - Number(a.value));
+  }, [terms, i18n.locale]);
 
   const searchParams = useSearch({ from: "/explore" });
 
@@ -200,6 +214,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       disc: params.disc ?? undefined,
       difficulty: params.difficulty ?? undefined,
       rating: params.rating ?? undefined,
+      term: params.term ?? undefined,
       sort: params.sort ?? undefined,
       dir: params.dir ?? undefined,
     };
@@ -257,11 +272,24 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     return searchExplore(q, { courseFuse, courseEntries, professorEntries });
   }, [debouncedQuery, courseFuse, courseEntries, professorEntries]);
 
+  const termSets = useMemo<ExploreTermSets | undefined>(() => {
+    if (filters.termId === null) return undefined;
+    const presence = getTermPresence();
+    return {
+      courseComponents: presence.courseComponentsByTerm.get(filters.termId) ?? null,
+      profGroups: presence.profGroupsByTerm.get(filters.termId) ?? null,
+    };
+  }, [filters.termId, getTermPresence]);
+
   const searchResults = useMemo(() => {
     if (!rawSearchResults) return null;
     if (!activeFilters) return rawSearchResults;
-    const filteredCourses = filterCourseEntries(rawSearchResults.courses, filters);
-    const filteredProfessors = filterProfessorEntries(rawSearchResults.professors, filters);
+    const filteredCourses = filterCourseEntries(rawSearchResults.courses, filters, termSets);
+    const filteredProfessors = filterProfessorEntries(
+      rawSearchResults.professors,
+      filters,
+      termSets,
+    );
     const shouldSortCourses = filters.sortKey === "grade" || filters.sortKey === "code";
     const shouldSortProfessors = filters.sortKey === "rating";
     return {
@@ -277,19 +305,21 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
             .sort((a, b) => compareProfessorEntries(a, b, filters.sortKey, filters.sortDir))
         : filteredProfessors,
     };
-  }, [rawSearchResults, activeFilters, filters]);
+  }, [rawSearchResults, activeFilters, filters, termSets]);
 
   const filterOnlyCourses = useMemo(() => {
     const q = debouncedQuery.trim();
     if (q || !activeFilters) return null;
-    const filtered = dedupeCourseEntriesByComponent(filterCourseEntries(courseEntries, filters));
+    const filtered = dedupeCourseEntriesByComponent(
+      filterCourseEntries(courseEntries, filters, termSets),
+    );
     if (filters.sortKey === "relevance") return filtered.slice(0, 24);
     if (filters.sortKey === "rating") return filtered.slice(0, 24);
     return filtered
       .slice()
       .sort((a, b) => compareCourseEntries(a, b, filters.sortKey, filters.sortDir))
       .slice(0, 24);
-  }, [debouncedQuery, activeFilters, courseEntries, filters]);
+  }, [debouncedQuery, activeFilters, courseEntries, filters, termSets]);
 
   const disciplineCourseCount = useMemo(() => buildDisciplineCourseCount(catalogue), [catalogue]);
 
@@ -484,6 +514,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
             filters={filters}
             onChange={handleFilterChange}
             disciplineOptions={disciplineOptions}
+            termOptions={termOptions}
           />
         </Box>
       </Box>

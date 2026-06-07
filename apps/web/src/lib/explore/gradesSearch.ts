@@ -453,6 +453,58 @@ export function buildExploreProfessorSearchEntries(
   });
 }
 
+/** Stable group id for an offering's professor, matching {@link groupOfferingsByProfessor}. */
+function professorGroupIdForOffering(o: ExploreOfferingFlat): string {
+  return o.legacyId != null
+    ? `id:${o.legacyId}`
+    : `name:${normalizeProfessorName(o.professorName).toLowerCase()}`;
+}
+
+/**
+ * Per-term presence index derived from the merged offerings. Keyed by numeric term id,
+ * each set lists the course-component ids / professor-group ids that appear in that term —
+ * the same identities carried by {@link ExploreCourseSearchEntry.componentId} and
+ * {@link ExploreProfessorSearchEntry.groupId}, so result entries can be intersected
+ * directly against a term's sets.
+ */
+export type TermPresenceIndex = {
+  courseComponentsByTerm: Map<number, Set<string>>;
+  profGroupsByTerm: Map<number, Set<string>>;
+};
+
+export function buildTermPresenceIndex(
+  offerings: ExploreOfferingFlat[],
+  componentByNorm?: Map<string, string> | null,
+): TermPresenceIndex {
+  const courseComponentsByTerm = new Map<number, Set<string>>();
+  const profGroupsByTerm = new Map<number, Set<string>>();
+
+  for (const o of offerings) {
+    if (!Number.isFinite(o.termId)) continue;
+
+    const norm = normalizeCourseCode(o.courseCode);
+    const componentId = componentByNorm ? resolveComponentId(norm, componentByNorm) : norm;
+    let courses = courseComponentsByTerm.get(o.termId);
+    if (!courses) {
+      courses = new Set();
+      courseComponentsByTerm.set(o.termId, courses);
+    }
+    courses.add(componentId);
+
+    // "Staff" is a placeholder for an unassigned instructor; never index it as a prof.
+    if (normalizeProfessorName(o.professorName).toLowerCase() !== "staff") {
+      let profs = profGroupsByTerm.get(o.termId);
+      if (!profs) {
+        profs = new Set();
+        profGroupsByTerm.set(o.termId, profs);
+      }
+      profs.add(professorGroupIdForOffering(o));
+    }
+  }
+
+  return { courseComponentsByTerm, profGroupsByTerm };
+}
+
 function exploreProfessorToGraphEntry(e: ExploreProfessorSearchEntry): ProfessorSearchEntry {
   return {
     id: e.groupId,

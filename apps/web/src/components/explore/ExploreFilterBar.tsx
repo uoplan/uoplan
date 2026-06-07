@@ -7,16 +7,25 @@ import { useTr, tr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { ExploreFilterPopoverContent, type DisciplineOption } from "./ExploreFilterPopoverContent";
+import type { TermOption } from "./ExploreFilterPopoverContent";
 import { ExploreFilterDrawer } from "./ExploreFilterDrawer";
 
-const FILTER_KEYS = ["level", "language", "discipline", "difficulty", "rating", "sort"] as const;
+const FILTER_KEYS = [
+  "level",
+  "language",
+  "discipline",
+  "difficulty",
+  "rating",
+  "term",
+  "sort",
+] as const;
 type FilterKey = (typeof FILTER_KEYS)[number];
 export const FILTER_PILL_RADIUS = "var(--app-radius-pill)";
 export const FILTER_POPOVER_RADIUS = "var(--app-radius)";
 
 const RATING_KEY: Record<number, string> = { 3: "good", 3.5: "great", 4: "excellent" };
 
-function pillLabel(key: FilterKey, filters: ExploreFilterState): string {
+function pillLabel(key: FilterKey, filters: ExploreFilterState, termOptions: TermOption[]): string {
   if (key === "level") {
     if (filters.levels.length === 0) return tr("explore.filter.level");
     if (filters.levels.length === 1) return tr(`explore.filter.level.${filters.levels[0]}`);
@@ -42,6 +51,11 @@ function pillLabel(key: FilterKey, filters: ExploreFilterState): string {
     const rk = RATING_KEY[filters.minRating];
     return rk ? tr(`explore.filter.rating.${rk}`) : tr("explore.filter.rating");
   }
+  if (key === "term") {
+    if (filters.termId === null) return tr("explore.filter.term");
+    const match = termOptions.find((t) => t.value === String(filters.termId));
+    return match?.label ?? tr("explore.filter.term");
+  }
   if (key === "sort") {
     const label = tr(`explore.sort.${filters.sortKey}`);
     if (filters.sortKey === "relevance") return label;
@@ -58,6 +72,7 @@ function pillIsActive(key: FilterKey, filters: ExploreFilterState): boolean {
   if (key === "discipline") return filters.disciplines.length > 0;
   if (key === "difficulty") return filters.difficulty !== null;
   if (key === "rating") return filters.minRating !== null;
+  if (key === "term") return filters.termId !== null;
   if (key === "sort") return filters.sortKey !== "relevance";
   return false;
 }
@@ -121,10 +136,12 @@ export function ExploreFilterBar({
   filters,
   onChange,
   disciplineOptions = [],
+  termOptions = [],
 }: {
   filters: ExploreFilterState;
   onChange: (next: Partial<ExploreFilterState>) => void;
   disciplineOptions?: DisciplineOption[];
+  termOptions?: TermOption[];
 }) {
   useTr();
   const isMobile = useMediaQuery("(max-width: 539px)", false, {
@@ -182,6 +199,7 @@ export function ExploreFilterBar({
     filters.disciplines.length > 0 ||
     filters.difficulty !== null ||
     filters.minRating !== null ||
+    filters.termId !== null ||
     filters.sortKey !== "relevance";
 
   return (
@@ -200,7 +218,7 @@ export function ExploreFilterBar({
                 ref={(el) => {
                   pillRefs.current.set(key, el);
                 }}
-                label={pillLabel(key, filters)}
+                label={pillLabel(key, filters, termOptions)}
                 active={active}
                 activeBg={bg}
                 activeBorder={border}
@@ -238,6 +256,7 @@ export function ExploreFilterBar({
             filters={filters}
             onChange={handleChange}
             disciplineOptions={disciplineOptions}
+            termOptions={termOptions}
           />
         )}
       </AnimatePresence>
@@ -249,6 +268,7 @@ export function ExploreFilterBar({
         onChange={handleChange}
         initialSection={drawerSection}
         disciplineOptions={disciplineOptions}
+        termOptions={termOptions}
       />
     </>
   );
@@ -263,6 +283,7 @@ function FilterDropdown({
   filters,
   onChange,
   disciplineOptions,
+  termOptions,
 }: {
   filterKey: FilterKey;
   pos: { top: number; left: number };
@@ -270,6 +291,7 @@ function FilterDropdown({
   filters: ExploreFilterState;
   onChange: (next: Partial<ExploreFilterState>) => void;
   disciplineOptions: DisciplineOption[];
+  termOptions: TermOption[];
 }) {
   return (
     <m.div
@@ -298,6 +320,7 @@ function FilterDropdown({
         filters={filters}
         onChange={onChange}
         disciplineOptions={disciplineOptions}
+        termOptions={termOptions}
       />
     </m.div>
   );
