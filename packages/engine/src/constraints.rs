@@ -111,7 +111,14 @@ impl Constraints {
 }
 
 pub fn normalize_professor_name(name: &str) -> String {
-    name.split_whitespace().collect::<Vec<_>>().join(" ")
+    let mut out = String::with_capacity(name.len());
+    for word in name.split_whitespace() {
+        if !out.is_empty() {
+            out.push(' ');
+        }
+        out.push_str(word);
+    }
+    out
 }
 
 fn first_year_credits(code: &str, credits: Option<f64>) -> f64 {

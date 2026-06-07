@@ -152,10 +152,15 @@ pub fn build_pool_caps(pools: &[RequirementPool]) -> BTreeMap<String, usize> {
 }
 
 fn alloc_key(m: &BTreeMap<String, usize>) -> String {
-    m.iter()
-        .map(|(id, n)| format!("{id}:{n}"))
-        .collect::<Vec<_>>()
-        .join("|")
+    use std::fmt::Write;
+    let mut key = String::new();
+    for (id, n) in m {
+        if !key.is_empty() {
+            key.push('|');
+        }
+        let _ = write!(key, "{id}:{n}");
+    }
+    key
 }
 
 pub fn enumerate_single_redistributions(

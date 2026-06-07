@@ -16,7 +16,9 @@ prost = "0.14"
 console_error_panic_hook = { version = "0.1", optional = true }
 
 [features]
-default = ["console_error_panic_hook"]
+# Off by default so release WASM doesn't pay for the panic hook (~3 KB). The dev
+# WASM build re-enables it (see scripts/build-engine-wasm.sh) for readable panics.
+default = []
 
 [build-dependencies]
 prost-build = "0.14"
@@ -30,9 +32,13 @@ name = "generation"
 harness = false
 
 [profile.release]
-opt-level = "s"
+opt-level = "z"
 lto = "thin"
 codegen-units = 1
+panic = "abort"
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ["-Oz"]
 
 [lints.clippy]
 pedantic = "warn"

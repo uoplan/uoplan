@@ -1,0 +1,10 @@
+# Aggressive size optimisation for the WASM build. Requires a nightly toolchain
+# with the `rust-src` component (see scripts/build-engine-wasm.sh). `[unstable]`
+# is ignored by stable cargo, and the `-Z` rustflags are scoped to the wasm
+# target so stable `cargo test`/typecheck on the host are unaffected.
+[unstable]
+build-std = ["std", "panic_abort"]
+build-std-features = ["optimize_for_size"]
+
+[target.wasm32-unknown-unknown]
+rustflags = ["-Zlocation-detail=none", "-Zfmt-debug=none"]
