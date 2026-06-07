@@ -860,9 +860,6 @@ msgstr "No grade breakdown for this section."
 msgid "explore.sort.ascending"
 msgstr "Ascending"
 
-msgid "explore.sort.grade"
-msgstr "Average grade"
-
 msgid "explore.sort.code"
 msgstr "Course code"
 
@@ -871,6 +868,9 @@ msgstr "Descending"
 
 msgid "explore.sort.direction"
 msgstr "Direction"
+
+msgid "explore.sort.grade"
+msgstr "Average grade"
 
 msgid "explore.sort.label"
 msgstr "Sort"
@@ -2042,6 +2042,146 @@ msgstr "Next"
 msgid "tour.progress"
 msgstr "{{current}} of {{total}}"
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "trends.band.excellent"
+msgstr "Excellent"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "trends.band.failing"
+msgstr "Failing"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "trends.band.good"
+msgstr "Good"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "trends.band.lowPass"
+msgstr "Low pass"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "trends.band.midPass"
+msgstr "Mid pass"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "trends.band.nearExcellent"
+msgstr "Near excellent"
+
+#: apps/web/src/components/trends/DisciplineBarCard.tsx:30
+msgid "trends.chart.disciplineBar.desc"
+msgstr "How the selected metric compares across disciplines."
+
+#: apps/web/src/components/trends/DisciplineBarCard.tsx:29
+msgid "trends.chart.disciplineBar.title"
+msgstr "By discipline"
+
+#: apps/web/src/components/trends/DisciplineBarCard.tsx:32
+#: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:51
+#: apps/web/src/components/trends/GradeBandAreaCard.tsx:49
+#: apps/web/src/components/trends/GradeHistogramCard.tsx:28
+#: apps/web/src/components/trends/LevelBarCard.tsx:29
+#: apps/web/src/components/trends/ProfessorSpreadCard.tsx:38
+#: apps/web/src/components/trends/SeasonBarCard.tsx:41
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:51
+msgid "trends.chart.empty"
+msgstr "Not enough data to chart yet."
+
+#: apps/web/src/components/trends/GradeBandAreaCard.tsx:47
+msgid "trends.chart.gradeBand.desc"
+msgstr "Share of grades in each band, term by term."
+
+#: apps/web/src/components/trends/GradeBandAreaCard.tsx:46
+msgid "trends.chart.gradeBand.title"
+msgstr "Grade composition over time"
+
+#: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:49
+msgid "trends.chart.heatmap.descMetric"
+msgstr "{metric} by discipline and year."
+
+#: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:109
+msgid "trends.chart.heatmap.legendHigh"
+msgstr "Higher"
+
+#: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:98
+msgid "trends.chart.heatmap.legendLow"
+msgstr "Lower"
+
+#: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:48
+msgid "trends.chart.heatmap.title"
+msgstr "Disciplines over time"
+
+#: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:76
+msgid "trends.chart.heatmap.tooltip"
+msgstr "{discipline} · {year}: {value} ({volume} grades)"
+
+#: apps/web/src/components/trends/GradeHistogramCard.tsx:26
+msgid "trends.chart.histogram.desc"
+msgstr "Letter grades across the current selection."
+
+#: apps/web/src/components/trends/GradeHistogramCard.tsx:25
+msgid "trends.chart.histogram.title"
+msgstr "Grade distribution"
+
+#: apps/web/src/components/trends/GradeHistogramCard.tsx:44
+msgid "trends.chart.histogram.tooltip"
+msgstr "{grade}: {count} ({pct}%)"
+
+#: apps/web/src/components/trends/LevelBarCard.tsx:27
+msgid "trends.chart.level.desc"
+msgstr "How the selected metric shifts from 1000- to 9000-level courses."
+
+#: apps/web/src/components/trends/LevelBarCard.tsx:26
+msgid "trends.chart.level.title"
+msgstr "By course level"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:602
+#: apps/web/src/components/trends/TrendsPage.tsx:614
+msgid "trends.chart.needScope"
+msgstr "Pick a program or discipline to see this chart."
+
+#: apps/web/src/components/trends/ProfessorSpreadCard.tsx:36
+#: apps/web/src/components/trends/TrendsPage.tsx:612
+msgid "trends.chart.profSpread.desc"
+msgstr "Average GPA awarded by each professor in this selection."
+
+#: apps/web/src/components/trends/ProfessorSpreadCard.tsx:35
+#: apps/web/src/components/trends/TrendsPage.tsx:611
+msgid "trends.chart.profSpread.title"
+msgstr "Professor grading spread"
+
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:64
+msgid "trends.chart.scatter.axisGpa"
+msgstr "Average GPA"
+
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:63
+msgid "trends.chart.scatter.axisVolume"
+msgstr "Graded students"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:600
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:49
+msgid "trends.chart.scatter.desc"
+msgstr "Each point is a course: enrolment against average GPA."
+
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:58
+msgid "trends.chart.scatter.series"
+msgstr "Courses"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:599
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:48
+msgid "trends.chart.scatter.title"
+msgstr "Popularity vs. GPA"
+
+#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:25
+msgid "trends.chart.scatter.tooltip"
+msgstr "GPA {gpa} · {volume} grades"
+
+#: apps/web/src/components/trends/SeasonBarCard.tsx:39
+msgid "trends.chart.season.desc"
+msgstr "How the selected metric varies between Fall, Winter, and Spring/Summer."
+
+#: apps/web/src/components/trends/SeasonBarCard.tsx:38
+msgid "trends.chart.season.title"
+msgstr "By season"
+
 msgid "trends.empty.noData"
 msgstr "Grade history isn't available right now."
 
@@ -2065,6 +2205,14 @@ msgstr "Discipline"
 
 msgid "trends.filter.level"
 msgstr "Level"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:858
+msgid "trends.filter.mobileButton"
+msgstr "Filters"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:868
+msgid "trends.filter.mobileTitle"
+msgstr "Filter trends"
 
 msgid "trends.filter.noMatch"
 msgstr "No matching discipline"
@@ -2149,6 +2297,30 @@ msgstr "Spring/Summer"
 
 msgid "trends.season.winter"
 msgstr "Winter"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:589
+msgid "trends.section.courseChoice"
+msgstr "Choosing courses"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:590
+msgid "trends.section.courseChoiceDesc"
+msgstr "Signals to help you pick electives, sections, and the right term."
+
+#: apps/web/src/components/trends/TrendsPage.tsx:581
+msgid "trends.section.disciplines"
+msgstr "Disciplines"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:582
+msgid "trends.section.disciplinesDesc"
+msgstr "Compare grading across subjects and watch it evolve year over year."
+
+#: apps/web/src/components/trends/TrendsPage.tsx:503
+msgid "trends.section.overview"
+msgstr "Overview"
+
+#: apps/web/src/components/trends/TrendsPage.tsx:504
+msgid "trends.section.overviewDesc"
+msgstr "Headline metrics and how grades have shifted over time."
 
 msgid "trends.stat.change"
 msgstr "Change since first"

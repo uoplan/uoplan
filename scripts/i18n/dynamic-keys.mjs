@@ -142,4 +142,14 @@ export const DYNAMIC_TR_IDS = [
 
   // apps/web/src/lib/term/termLabel.ts: SEASON_LABEL_ID
   ...family("term.season.", ["winter", "summer", "fall"]),
+
+  // apps/web/src/components/trends/GradeBandAreaCard.tsx: BAND_LABEL_KEY
+  ...family("trends.band.", [
+    "failing",
+    "lowPass",
+    "midPass",
+    "good",
+    "nearExcellent",
+    "excellent",
+  ]),
 ];

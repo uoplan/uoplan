@@ -72,7 +72,7 @@ const FAILING_GRADES = ["E", "F"] as const;
 const A_RANGE_GRADES = ["A-", "A", "A+"] as const;
 
 /** Summed count of grades that contribute to GPA/averages (excludes P/S/ABS/EIN…). */
-function countedMass(dist: GradeDistribution): number {
+export function countedMass(dist: GradeDistribution): number {
   let total = 0;
   for (const letter of COUNTED_GRADES) {
     const n = Number(dist[letter] ?? 0);
@@ -90,7 +90,7 @@ function sumGrades(dist: GradeDistribution, grades: readonly string[]): number {
   return total;
 }
 
-function addInto(target: GradeDistribution, source: GradeDistribution): void {
+export function addInto(target: GradeDistribution, source: GradeDistribution): void {
   for (const [k, v] of Object.entries(source)) {
     const n = Number(v);
     if (!Number.isFinite(n)) continue;
@@ -149,7 +149,7 @@ export interface TrendSeries {
   points: TrendPoint[];
 }
 
-function metricsForDistribution(
+export function metricsForDistribution(
   dist: GradeDistribution,
 ): Omit<TrendPoint, "termId" | "year" | "season" | "sortKey"> {
   const mass = countedMass(dist);
