@@ -39,7 +39,7 @@ export const DYNAMIC_TR_IDS = [
   ...family("explore.filter.difficulty.", ["easy", "moderate", "tough"]),
   ...family("explore.filter.rating.", ["good", "great", "excellent"]),
   ...family("explore.filter.feedback.", ["good", "great", "excellent"]),
-  ...family("explore.sort.", ["relevance", "grade", "code", "rating"]),
+  ...family("explore.sort.", ["relevance", "grade", "code", "rating", "feedback"]),
 
   // apps/web/src/lib/seo.ts: tr(`seo.${pageId}.${field}`) — seo-pages.json x fields
   ...cross(
