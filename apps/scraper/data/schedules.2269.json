@@ -1,7 +1,7 @@
 {
   "termId": "2269",
   "totalCourses": 11145,
-  "totalWithSchedules": 3185,
+  "totalWithSchedules": 3186,
   "schedules": [
     {
       "subject": "ADM",
@@ -2311,7 +2311,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 164,
               "A": 306,
@@ -2519,7 +2519,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 164,
               "A": 306,
@@ -22248,7 +22248,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "A05-LAB FullSess.",
@@ -38784,7 +38784,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 34,
               "A": 83,
@@ -65459,7 +65459,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "KELLY KEENAN",
+                "instructor": "Kelly Keenan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -91201,8 +91201,8 @@
             "times": [
               {
                 "day": "Tu",
-                "startMinutes": 510,
-                "endMinutes": 680,
+                "startMinutes": 960,
+                "endMinutes": 1130,
                 "virtual": false,
                 "instructor": "Michelle Giroux",
                 "meetingDates": [
@@ -96081,8 +96081,8 @@
             "times": [
               {
                 "day": "Tu",
-                "startMinutes": 510,
-                "endMinutes": 680,
+                "startMinutes": 960,
+                "endMinutes": 1130,
                 "virtual": false,
                 "instructor": "Michelle Giroux",
                 "meetingDates": [
@@ -96155,6 +96155,89 @@
               "E": 0,
               "F": 0,
               "EIN": 1,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DRC",
+      "catalogNumber": "4763",
+      "courseCode": "DRC 4763",
+      "title": "Traditions juridiques autochtones",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "AA00-LEC FullSess.",
+            "sectionCode": "AA00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 960,
+                "virtual": false,
+                "instructor": "Florence Robert",
+                "meetingDates": [
+                  "2026-10-29",
+                  "2026-10-29"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 960,
+                "virtual": false,
+                "instructor": "Florence Robert",
+                "meetingDates": [
+                  "2026-10-30",
+                  "2026-10-30"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 510,
+                "endMinutes": 960,
+                "virtual": false,
+                "instructor": "Florence Robert",
+                "meetingDates": [
+                  "2026-10-31",
+                  "2026-10-31"
+                ]
+              },
+              {
+                "day": "Su",
+                "startMinutes": 510,
+                "endMinutes": 960,
+                "virtual": false,
+                "instructor": "Florence Robert",
+                "meetingDates": [
+                  "2026-11-01",
+                  "2026-11-01"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 2,
+              "A": 6,
+              "A-": 8,
+              "B+": 5,
+              "B": 4,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "EIN": 0,
               "NS": 0,
               "NC": 0,
               "ABS": 0,
@@ -111294,7 +111377,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 301,
               "A": 213,
@@ -111374,7 +111457,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 301,
               "A": 213,
@@ -118816,7 +118899,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1193,
               "A": 1436,
@@ -158684,7 +158767,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 37,
               "A": 33,
@@ -161562,7 +161645,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1282,
               "A": 568,
@@ -162341,7 +162424,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1015,
               "A": 425,
@@ -163286,7 +163369,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -163694,7 +163777,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1082,
               "A": 564,
@@ -163733,7 +163816,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1082,
               "A": 564,
@@ -164965,7 +165048,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 494,
               "A": 241,
@@ -169954,7 +170037,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -169965,7 +170048,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -170560,7 +170643,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -170571,7 +170654,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -192836,7 +192919,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -196525,7 +196608,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 46,
               "A": 57,
@@ -231987,7 +232070,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 152,
               "A": 77,
@@ -233086,7 +233169,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 17,
               "A": 41,
