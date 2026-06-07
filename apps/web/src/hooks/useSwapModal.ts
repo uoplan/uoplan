@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import type { DataCache, ProfessorRatingsMap, GradeVizData } from "@uoplan/core";
 import {
   courseAPlusPercent,
@@ -82,16 +82,22 @@ export function useSwapModal(
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
 
-  // Keep candidates in sync if the underlying getter changes while the modal is
-  // open. The initial result is computed synchronously in `openModal` so the
-  // popover's first paint already shows the correct list (no open-then-flash).
-  // This effect only refreshes that result without flipping `loading` back on or
-  // clearing the list, so it can't reintroduce a flash/reflow.
+  // Refresh the open modal's candidates only when the underlying getter identity
+  // actually changes (e.g. the store rebinds it). The initial open is already
+  // computed synchronously in `openModal`, so we must NOT recompute here just
+  // because `swapModal` was set — that doubled the (potentially expensive)
+  // candidate computation on every open.
+  const swapModalRef = useRef(swapModal);
+  swapModalRef.current = swapModal;
+  const lastGetterRef = useRef(getSwapCandidates);
   useEffect(() => {
-    if (!swapModal) return;
-    setSwapResult(getSwapCandidates(swapModal.enrollmentIndex));
+    if (lastGetterRef.current === getSwapCandidates) return;
+    lastGetterRef.current = getSwapCandidates;
+    const current = swapModalRef.current;
+    if (!current) return;
+    setSwapResult(getSwapCandidates(current.enrollmentIndex));
     setLoading(false);
-  }, [getSwapCandidates, swapModal]);
+  }, [getSwapCandidates]);
 
   // Build dropdown options from candidates
   const candidateOptions = useMemo<SwapCandidateOption[]>(() => {
@@ -170,10 +176,13 @@ export function useSwapModal(
   );
 
   const closeModal = useCallback(() => {
+    // Only clear the open/active state. Keep the last `swapResult`/`query` so the
+    // popover's content stays stable through its close transition instead of
+    // collapsing (candidate list + requirement title vanishing) and visibly
+    // shifting up. `openModal` always sets fresh data, so stale values held while
+    // closed are never shown again.
     setSwapModal(null);
-    setSwapResult(EMPTY_SWAP_RESULT);
     setLoading(false);
-    setQuery("");
   }, []);
 
   return {

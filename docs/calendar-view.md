@@ -48,6 +48,7 @@ Defined in `weekCalendarLayout.ts`:
 - **Time range**: Adjust `CAL_START_MINUTES` / `CAL_END_MINUTES` in `weekCalendarLayout.ts`.
 - **Animation timing**: Change `TRANSITION_MS` in `useScheduleTransition.ts` and the matching `160ms` durations in `weekCalendar.css`.
 - **Event appearance**: Edit `WeekCalendarEvent.tsx`. The inner layout is delegated to `CalendarEventFace.tsx` which is also used by the swap modal.
+- **Swap overlay anchoring / performance**: `WeekCalendarEvent` is wrapped in `React.memo` and receives its active/overlay state (`isActive`, `isMobile`, `isFullscreen`, `onRequestClose`) as props from `WeekCalendar` rather than reading the swap context directly. This keeps a click from re-rendering every event's Mantine `Popover` — only the previously- and newly-active events re-render. The popover dropdown content (`CalendarEventDetails`) still reads the swap context itself and mounts lazily for the active event only. Don't reintroduce a `useSwapContext()` call inside `WeekCalendarEvent`'s render path.
 - **Column headers or day ordering**: Edit `DAY_LABELS` / `WEEKDAY_CODES` / `WEEKEND_CODES` in `weekCalendarLayout.ts`.
 - **Swap modal**: `useSwapModal` hook + `SwapModalContent.tsx` — these are unrelated to the calendar grid.
 

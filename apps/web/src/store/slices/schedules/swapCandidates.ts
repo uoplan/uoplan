@@ -14,15 +14,12 @@ import {
   isWithinElectiveLevelBuckets,
   isWithinElectiveLevelCap,
   normalizeCourseCode,
-  runTimetableFixedSet,
   virtualScheduleFilterApplies,
 } from "@uoplan/core";
 import {
   applyOptionSelections,
   collectRequirementIdsWithCandidateCourse,
 } from "../../../lib/requirements/requirementUtils";
-import { getEngineSync } from "../../../lib/engine/engineHost";
-import { getEffectiveCatalogue } from "../catalogueUtils";
 
 export function getSwapCandidates(
   enrollmentIndex: number,
@@ -34,9 +31,6 @@ export function getSwapCandidates(
     basicExcludedCategories,
     studentPrograms,
     cache,
-    catalogue,
-    schedulesData,
-    yearCatalogueCourses,
     currentSchedule,
     remainingRequirements,
     chosenCourseToRequirementId,
@@ -88,18 +82,16 @@ export function getSwapCandidates(
       professorRatings: professorRatings ?? undefined,
       blockedTimes: get().blockedTimes,
     };
-    const swappedCodes = schedule.enrollments.map((e) => e.courseCode);
-    const currentSeed = get().currentSeed;
-    const engine =
-      catalogue && schedulesData
-        ? getEngineSync(
-            getEffectiveCatalogue(catalogue, yearCatalogueCourses, completedCourses) ?? catalogue,
-            schedulesData,
-          )
-        : null;
-    if (!engine) {
-      return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
-    }
+    // The other courses keep their currently-assigned sections; a candidate is
+    // feasible if it has at least one section combo that satisfies the time
+    // constraints and doesn't overlap any of them. This mirrors the advanced
+    // path (and the actual single-course swap) and avoids running a full WASM
+    // re-timetable over every catalogue course, which made the popover take
+    // seconds on large schedules.
+    const others = schedule.enrollments.filter((_, i) => i !== enrollmentIndex);
+    // Candidates are never pinned (skipped below), so the virtual-only filter
+    // applies to them whenever it is enabled.
+    const virtualOnly = virtualSectionsOnly;
 
     for (const course of cache.getAllCourses()) {
       const code = course.code;
@@ -124,20 +116,24 @@ export function getSwapCandidates(
       if (basicPinnedCourses.includes(code)) continue;
       if (alreadyInSchedule.has(code)) continue;
 
-      swappedCodes[enrollmentIndex] = code;
-      const timetabled = runTimetableFixedSet(
-        engine,
-        {
-          courseCodes: swappedCodes,
-          constraints: swapConstraints,
-          seed: currentSeed,
-          includeClosedComponents,
-          virtualSectionsOnly,
-          virtualExemptCourses: basicPinnedCourses,
-        },
-        cache,
+      const cacheKey = `${code}:${includeClosedComponents}:${virtualOnly}`;
+      let possibleEnrollments = validEnrollmentsByCourseCode.get(cacheKey);
+      if (!possibleEnrollments) {
+        const sched = getEffectiveSchedule(cache, code, includeClosedComponents, virtualOnly);
+        if (!sched) {
+          possibleEnrollments = [];
+        } else {
+          const combos = getValidSectionCombos(sched, swapConstraints);
+          possibleEnrollments = combos.map((combo) => getEnrollmentsForCourse(sched, combo));
+        }
+        validEnrollmentsByCourseCode.set(cacheKey, possibleEnrollments);
+      }
+      if (possibleEnrollments.length === 0) continue;
+
+      const fits = possibleEnrollments.some(
+        (candidate) => !others.some((e) => enrollmentsOverlap(e, candidate)),
       );
-      if (!timetabled) continue;
+      if (!fits) continue;
 
       optionalPool.push(code);
     }
