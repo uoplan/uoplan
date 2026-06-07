@@ -707,6 +707,72 @@ msgstr "Aucun cours trouvé pour cette discipline."
 msgid "explore.distributionHeading"
 msgstr "Répartition des notes"
 
+#: apps/web/src/components/explore/feedback/FeedbackSummaryCard.tsx:122
+msgid "explore.feedback.cardStat.rate"
+msgstr "Taux"
+
+#: apps/web/src/components/explore/feedback/FeedbackSummaryCard.tsx:117
+msgid "explore.feedback.cardStat.responses"
+msgstr "Réponses"
+
+#: apps/web/src/components/explore/feedback/FeedbackSummaryCard.tsx:113
+msgid "explore.feedback.cardStat.sentiment"
+msgstr "Sentiment"
+
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:110
+msgid "explore.feedback.empty"
+msgstr "Aucune donnée d'évaluation n'est encore disponible."
+
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:110
+#: apps/web/src/components/trends/TrendsFeedbackSection.tsx:42
+msgid "explore.feedback.loading"
+msgstr "Chargement des évaluations…"
+
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:174
+msgid "explore.feedback.noScaleQuestions"
+msgstr "Aucune question notée à afficher."
+
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:170
+msgid "explore.feedback.questionsHeading"
+msgstr "Questions au fil du temps"
+
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:142
+msgid "explore.feedback.responseRateTrend"
+msgstr "Taux de réponse au fil du temps"
+
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:184
+msgid "explore.feedback.responsesCount"
+msgstr "{count, plural, one {# réponse} other {# réponses}}"
+
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:126
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:155
+#: apps/web/src/components/trends/TrendsFeedbackSection.tsx:91
+msgid "explore.feedback.stat.responseRate"
+msgstr "Taux de réponse"
+
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:122
+msgid "explore.feedback.stat.responses"
+msgstr "Réponses totales"
+
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:116
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:200
+#: apps/web/src/components/trends/TrendsFeedbackSection.tsx:69
+msgid "explore.feedback.stat.sentiment"
+msgstr "Sentiment global"
+
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:134
+msgid "explore.feedback.stat.terms"
+msgstr "Trimestres"
+
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:104
+msgid "explore.feedback.subtitle"
+msgstr "Évaluations des cours par les étudiants"
+
+#: apps/web/src/components/explore/ExploreCoursePage.tsx:170
+#: apps/web/src/components/explore/ExploreProfessorPage.tsx:131
+msgid "explore.feedback.viewLink"
+msgstr "Évaluations étudiantes"
+
 msgid "explore.filter.clearAll"
 msgstr "Tout effacer"
 
@@ -2201,6 +2267,14 @@ msgstr "Aucune donnée de notes ne correspond à ces filtres."
 msgid "trends.error.title"
 msgstr "Impossible de charger l'historique des notes"
 
+#: apps/web/src/components/trends/TrendsFeedbackSection.tsx:80
+msgid "trends.feedback.responseRate"
+msgstr "Taux de réponse au fil du temps"
+
+#: apps/web/src/components/trends/TrendsFeedbackSection.tsx:58
+msgid "trends.feedback.sentiment"
+msgstr "Sentiment moyen au fil du temps"
+
 msgid "trends.filter.all"
 msgstr "Toutes"
 
@@ -2323,6 +2397,16 @@ msgstr "Disciplines"
 #: apps/web/src/components/trends/TrendsPage.tsx:582
 msgid "trends.section.disciplinesDesc"
 msgstr "Comparez la notation entre les matières et suivez son évolution d'année en année."
+
+#: apps/web/src/components/trends/TrendsFeedbackSection.tsx:38
+#: apps/web/src/components/trends/TrendsFeedbackSection.tsx:52
+msgid "trends.section.feedback"
+msgstr "Évaluations des cours"
+
+#: apps/web/src/components/trends/TrendsFeedbackSection.tsx:39
+#: apps/web/src/components/trends/TrendsFeedbackSection.tsx:53
+msgid "trends.section.feedbackDesc"
+msgstr "Comment les étudiants ont évalué leurs cours au fil des trimestres, à l'échelle de l'université."
 
 #: apps/web/src/components/trends/TrendsPage.tsx:503
 msgid "trends.section.overview"

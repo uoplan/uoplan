@@ -8,6 +8,7 @@ import {
   type SchedulesData,
   type TermsData,
   DataProto,
+  FeedbackProto,
   buildProfessorRatingsMap,
   fromProtoCatalogue,
   fromProtoCatalogueManifest,
@@ -30,6 +31,7 @@ export const dataPaths = {
   rateMyProfessors: "/data/ratemyprofessors.pb",
   grades: "/data/grades.pb",
   disciplines: "/data/disciplines.pb",
+  feedback: "/data/feedback.pb",
 } as const;
 
 export interface CatalogueManifest {
@@ -83,4 +85,10 @@ export async function loadDisciplines(fetchBytes: FetchBytes): Promise<Disciplin
   return fromProtoDisciplinesData(
     DataProto.DisciplinesData.decode(await fetchBytes(dataPaths.disciplines)),
   );
+}
+
+/** Decode the combined course-evaluation dataset. Build a lookup with
+ * `buildFeedbackIndex` (it needs the shared `indices.pb` course list). */
+export async function loadFeedback(fetchBytes: FetchBytes): Promise<FeedbackProto.FeedbackData> {
+  return FeedbackProto.FeedbackData.decode(await fetchBytes(dataPaths.feedback));
 }

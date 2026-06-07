@@ -59,6 +59,15 @@ export function outputPath(termId: string): string {
   return path.join(SCRAPER_DATA_DIR, `feedback.${termId}.json`);
 }
 
+/**
+ * Committed sidecar mapping each scale question's text to its ordinal response
+ * labels (best-first). Labels are a per-question property, so they live here once
+ * rather than being duplicated across every section in the per-term datasets.
+ */
+export function optionsPath(): string {
+  return path.join(SCRAPER_DATA_DIR, "feedback.options.json");
+}
+
 async function exists(p: string): Promise<boolean> {
   try {
     await fs.access(p);
@@ -156,6 +165,19 @@ export async function writeChart(
   const dir = path.join(reportDir(termId, reportId), "charts");
   await fs.mkdir(dir, { recursive: true });
   await fs.writeFile(path.join(dir, fileName), data);
+}
+
+/**
+ * Absolute path of a cached chart image, or `null` when it was never fetched.
+ * `fileName` is the basename of the report's `chartUrl`.
+ */
+export async function chartPath(
+  termId: string,
+  reportId: string,
+  fileName: string,
+): Promise<string | null> {
+  const p = path.join(reportDir(termId, reportId), "charts", fileName);
+  return (await exists(p)) ? p : null;
 }
 
 /** Term ids that have a raw cache directory (any stage 1 output). */

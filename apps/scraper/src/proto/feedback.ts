@@ -2,6 +2,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import * as FeedbackProto from "@uoplan/proto/feedback";
+import { optionsPath } from "../feedback/cache.ts";
 import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
 import { readJson } from "../shared/json.ts";
 
@@ -48,6 +49,51 @@ class Dict {
   }
 }
 
+// Older reports whose distribution can be reduced to a 1-5 mean. A question whose
+// non-N/A options match one of these signatures (verbatim) gets a computed
+// average; everything else is categorical and unscored.
+const OLD_SCALE_SIGNATURES: string[][] = [
+  ["almost always", "often", "sometimes", "rarely", "almost never"],
+  ["strongly agree", "agree", "disagree", "strongly disagree"],
+  ["very useful", "useful", "not very useful", "useless"],
+  ["excellent", "good", "acceptable", "poor", "very poor"],
+  ["enhanced the learning", "had no impact on learning", "detracted from learning"],
+];
+const OLD_SCALE_KEYS = new Set(OLD_SCALE_SIGNATURES.map((s) => s.join("\u0000")));
+
+// Older reports expose a per-option Likert distribution; we reduce it to a single
+// 1-5 average comparable with the modern reports' reported mean. Non-answer
+// options are excluded from the mean, and the remaining ordinal options are mapped
+// best-first onto 5..1.
+const NA_OPTION_LABELS = new Set<string>([
+  "question not applicable",
+  "no feedback",
+  "no classroom meetings were scheduled",
+]);
+
+/**
+ * Reduce an older report's per-option distribution to a 1-5 average (best-first
+ * linear mapping over the non-N/A ordinal options), or `null` when the question is
+ * categorical (not an ordinal quality scale).
+ */
+function oldEraAverage(options: JsonOption[]): number | null {
+  const ordinal = options.filter((o) => !NA_OPTION_LABELS.has(o.label));
+  if (ordinal.length < 2) return null;
+  if (!OLD_SCALE_KEYS.has(ordinal.map((o) => o.label).join("\u0000"))) return null;
+  const n = ordinal.length;
+  let weighted = 0;
+  let total = 0;
+  for (let i = 0; i < n; i++) {
+    const count = ordinal[i].count ?? 0;
+    // Best-first: first option scores 5, last scores 1.
+    const score = 5 - (i * 4) / (n - 1);
+    weighted += count * score;
+    total += count;
+  }
+  if (total === 0) return null;
+  return weighted / total;
+}
+
 function feedbackJsonFiles(entries: string[]): string[] {
   return entries
     .filter((name) => /^feedback\.\d+\.json$/.test(name))
@@ -58,10 +104,12 @@ function feedbackJsonFiles(entries: string[]): string[] {
 
 /**
  * Combine every `feedback.<termId>.json` into a single `FeedbackData` message.
- * Questions, option labels and professor names are interned into head
- * dictionaries; course codes are referenced against the shared `indices.pb` list
- * (with a small `extraCourses` overflow for historical codes). Sections are
- * stored column-wise (parallel packed arrays) to avoid per-result framing.
+ * Question texts and professor names are interned into head dictionaries; course
+ * codes are referenced against the shared `indices.pb` list (with a small
+ * `extraCourses` overflow for historical codes). Sections are stored column-wise
+ * (parallel packed arrays) carrying, per question, the response count, invited
+ * count, and a single 1-5 average (scaled by 100) — modern reports use the
+ * reported mean, older reports have it recomputed from their distribution.
  *
  * Returns `null` when no feedback datasets are present (so callers can skip).
  */
@@ -77,9 +125,23 @@ export async function buildFeedbackData(): Promise<FeedbackProto.FeedbackData | 
     terms.push({ termId, courses });
   }
 
-  // Pass 1: discover the option set each question is associated with. Each
-  // question text maps to a single option-label signature (verified across the
-  // corpus); the first observed distribution wins.
+  // Per-question ordinal option labels (best-first), produced by the parse stage
+  // (HTML tables / OCR'd charts) and stored once per question in this sidecar.
+  const optionLabelsByText = await readJson<Record<string, string[]>>(optionsPath()).catch(
+    (): Record<string, string[]> => ({}),
+  );
+
+  // Question dictionary. `scale` is set for any question that ever yields a
+  // numeric average (so the client knows which questions are chartable).
+  // `optionSet` records the 1-based index of the question's ordinal response
+  // labels (from the sidecar; 0 = unknown).
+  const questionDict = new Map<string, number>();
+  const questionTexts: string[] = [];
+  const questionScale: boolean[] = [];
+  const questionOptionSet: number[] = [];
+
+  // Distinct ordinal option-label sets (best-first), referenced 1-based by
+  // questions. Only a handful of scales exist across the corpus.
   const optionSetDict = new Map<string, number>();
   const optionSets: string[][] = [];
   const internOptionSet = (labels: string[]): number => {
@@ -90,21 +152,20 @@ export async function buildFeedbackData(): Promise<FeedbackProto.FeedbackData | 
       optionSetDict.set(key, i);
       optionSets.push(labels);
     }
-    return i;
+    return i + 1; // 1-based; 0 means "unknown".
   };
 
-  const questionDict = new Map<string, number>();
-  const questionTexts: string[] = [];
-  const questionOptionSet: Array<number | undefined> = [];
-  const internQuestion = (text: string, optionSetIdx: number | undefined): number => {
+  const internQuestion = (text: string, hasAverage: boolean): number => {
     let i = questionDict.get(text);
     if (i === undefined) {
       i = questionTexts.length;
       questionDict.set(text, i);
       questionTexts.push(text);
-      questionOptionSet.push(optionSetIdx);
-    } else if (questionOptionSet[i] === undefined && optionSetIdx !== undefined) {
-      questionOptionSet[i] = optionSetIdx;
+      questionScale.push(hasAverage);
+      const labels = optionLabelsByText[text];
+      questionOptionSet.push(labels && labels.length >= 2 ? internOptionSet(labels) : 0);
+    } else if (hasAverage) {
+      questionScale[i] = true;
     }
     return i;
   };
@@ -153,42 +214,44 @@ export async function buildFeedbackData(): Promise<FeedbackProto.FeedbackData | 
         const questions = section.questions ?? [];
         if (questions.length === 0) continue; // no openable report -> nothing to display
 
-        // Columnar parallel arrays. `registered`/`counts`/`responses` presence is
-        // uniform per section (verified): older reports carry `counts` (and the
-        // per-question response total equals each count slice's sum, so
-        // `responses` is dropped); modern reports carry `responses`/`registered`.
+        // Columnar parallel arrays aligned with the section's question set.
+        // `responses` is the number of answers; `registered` the invited count
+        // (empty when unavailable, i.e. older reports); `averages` the 1-5 mean
+        // scaled by 100 (0 when the question carries no ordinal average).
         const questionIdx: number[] = [];
         const responses: number[] = [];
         const registered: number[] = [];
-        const counts: number[] = [];
+        const averages: number[] = [];
         let anyRegistered = false;
-        let anyCounts = false;
         for (const q of questions) {
           const hasOptions = q.options.length > 0;
-          const optionSetIdx = hasOptions
-            ? internOptionSet(q.options.map((o) => o.label))
-            : undefined;
-          questionIdx.push(internQuestion(q.question, optionSetIdx));
-          responses.push(q.responses ?? 0);
+          // The per-question average is the modern reports' reported mean
+          // (`q.average`); older reports have no mean and instead have it
+          // recomputed from their per-option distribution.
+          const average = q.average ?? (hasOptions ? oldEraAverage(q.options) : null);
+          const scaledAverage = average != null ? Math.round(average * 10) : 0;
+          // Modern reports report the response total directly; older reports lack
+          // it, so sum their per-option counts.
+          const responseCount =
+            q.responses ?? (hasOptions ? q.options.reduce((sum, o) => sum + (o.count ?? 0), 0) : 0);
+
+          questionIdx.push(internQuestion(q.question, scaledAverage > 0));
+          responses.push(responseCount);
+          averages.push(scaledAverage);
           if (q.registeredStudents != null) {
             anyRegistered = true;
             registered.push(q.registeredStudents);
           } else {
             registered.push(0);
           }
-          if (hasOptions) {
-            anyCounts = true;
-            for (const o of q.options) counts.push(o.count ?? 0);
-          }
         }
         sections.push({
           section: section.section,
           professor: professors.intern(section.professor),
           questionSet: internQuestionSet(questionIdx),
-          // Older reports recompute responses from `counts`, so omit them.
-          responses: anyCounts ? [] : responses,
+          responses,
           registered: anyRegistered ? registered : [],
-          counts,
+          averages,
         });
       }
       if (sections.length === 0) continue;
@@ -197,13 +260,34 @@ export async function buildFeedbackData(): Promise<FeedbackProto.FeedbackData | 
     protoTerms.push({ termId: term.termId, courses: protoCourses });
   }
 
+  // Only scale (chartable) questions show a legend, so keep just the option sets
+  // they reference and re-index them 1-based (dropping ones used solely by
+  // categorical questions).
+  const optionSetRemap = new Map<number, number>();
+  const usedOptionSets: string[][] = [];
+  const resolveOptionSet = (i: number): number => {
+    const set = questionOptionSet[i];
+    if (set === 0 || !questionScale[i]) return 0;
+    let next = optionSetRemap.get(set);
+    if (next === undefined) {
+      usedOptionSets.push(optionSets[set - 1]);
+      next = usedOptionSets.length;
+      optionSetRemap.set(set, next);
+    }
+    return next;
+  };
+
   return {
-    optionSets: optionSets.map((labels) => ({ labels })),
-    questions: questionTexts.map((text, i) => ({ text, optionSet: questionOptionSet[i] })),
+    questions: questionTexts.map((text, i) => ({
+      text,
+      scale: questionScale[i],
+      optionSet: resolveOptionSet(i),
+    })),
     professors: professors.values,
     extraCourses: extraCourses.values,
     indicesCourseCount,
     terms: protoTerms,
     questionSets: questionSets.map((questions) => ({ questions })),
+    optionSets: usedOptionSets.map((options) => ({ options })),
   };
 }

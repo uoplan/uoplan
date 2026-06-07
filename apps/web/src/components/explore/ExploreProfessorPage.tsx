@@ -1,4 +1,4 @@
-import { Accordion, Box, Group, Stack, Text, Title } from "@mantine/core";
+import { Accordion, Box, Flex, Group, Stack, Text, Title } from "@mantine/core";
 import { useMemo } from "react";
 import { m } from "framer-motion";
 import type { ProfessorRatingsMap } from "@uoplan/core";
@@ -6,6 +6,8 @@ import { normalizeProfessorName, hasProfessorRatings } from "@uoplan/core";
 import { useTr, tr } from "../../i18n";
 import { groupOfferingsByCourse } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
+import { useProfessorFeedbackViews } from "../../hooks/useFeedbackViews";
+import { FeedbackSummaryCard } from "./feedback/FeedbackSummaryCard";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
@@ -53,6 +55,11 @@ export function ExploreProfessorPage({
 
   const profRouteParam = legacyId != null ? String(legacyId) : encodeURIComponent(displayName);
 
+  const { views: feedbackViews, loading: feedbackLoading } = useProfessorFeedbackViews(
+    legacyId != null ? { legacyId } : { professorName: professorNameProp ?? "" },
+  );
+  const showFeedback = feedbackLoading || feedbackViews.length > 0;
+
   return (
     <m.div
       initial={{ opacity: 0, y: 12 }}
@@ -61,30 +68,50 @@ export function ExploreProfessorPage({
     >
       <Stack gap={0}>
         <Box
-          pt={4}
-          pb={32}
+          pt={{ base: 4, md: 0 }}
+          pb="md"
           style={{
             paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
             paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
           }}
         >
-          <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
-            {displayName}
-          </Title>
-          {(hasRating || hasRmpLink) && (
-            <Group gap={6} align="center" mt={8} wrap="wrap">
-              {hasRating ? (
-                <Text size="sm" c="dimmed">
-                  {rmpEntry?.rating.toFixed(1)} · {rmpEntry?.numRatings} ratings
-                </Text>
-              ) : (
-                <Text size="sm" c="dimmed">
-                  {tr("search.noRating")}
-                </Text>
+          <Flex
+            direction={{ base: "column", md: "row" }}
+            gap="lg"
+            align={{ base: "stretch", md: "center" }}
+          >
+            <Box style={{ flex: 1, minWidth: 0 }}>
+              <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
+                {displayName}
+              </Title>
+              {(hasRating || hasRmpLink) && (
+                <Group gap={6} align="center" mt={8} wrap="wrap">
+                  {hasRating ? (
+                    <Text size="sm" c="dimmed">
+                      {rmpEntry?.rating.toFixed(1)} · {rmpEntry?.numRatings} ratings
+                    </Text>
+                  ) : (
+                    <Text size="sm" c="dimmed">
+                      {tr("search.noRating")}
+                    </Text>
+                  )}
+                  {hasRmpLink && legacyId != null ? (
+                    <RateMyProfessorLink legacyId={legacyId} />
+                  ) : null}
+                </Group>
               )}
-              {hasRmpLink && legacyId != null ? <RateMyProfessorLink legacyId={legacyId} /> : null}
-            </Group>
-          )}
+            </Box>
+            {showFeedback ? (
+              <Box style={{ width: "100%", maxWidth: 420 }}>
+                <FeedbackSummaryCard
+                  to="/explore/professor/$legacyId/feedback"
+                  params={{ legacyId: profRouteParam }}
+                  views={feedbackViews}
+                  loading={feedbackLoading}
+                />
+              </Box>
+            ) : null}
+          </Flex>
         </Box>
 
         {courseGroups.length === 0 ? (
