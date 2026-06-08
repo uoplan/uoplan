@@ -1,4 +1,4 @@
-import { computeLevelComparison } from "@uoplan/core";
+import { computeLevelComparison, MAX_LEVEL_BUCKET } from "@uoplan/core";
 import { tr, useTr } from "../../i18n";
 import type { TrendsCardContext } from "./cardContext";
 import { MetricBarChartCard } from "./MetricBarChartCard";
@@ -8,11 +8,11 @@ function buildLevelRows({ grades, discipline, season }: TrendsCardContext) {
 }
 
 function getLevelLabel(row: ReturnType<typeof buildLevelRows>[number]): string {
-  return String(row.level);
+  return row.level >= MAX_LEVEL_BUCKET ? `${MAX_LEVEL_BUCKET}+` : String(row.level);
 }
 
 /**
- * Compares the active metric across course-level buckets (1000 → 9000) for the
+ * Compares the active metric across course-level buckets (1000 → 5000+) for the
  * current discipline scope — shows how difficulty shifts with level. Ignores the
  * page's level filter.
  */

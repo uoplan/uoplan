@@ -2258,7 +2258,7 @@ msgstr "{grade}: {count} ({pct}%)"
 
 #: apps/web/src/components/trends/LevelBarCard.tsx:27
 msgid "trends.chart.level.desc"
-msgstr "How the selected metric shifts from 1000- to 9000-level courses."
+msgstr "How the selected metric shifts from 1000- to 5000+-level courses."
 
 #: apps/web/src/components/trends/LevelBarCard.tsx:26
 msgid "trends.chart.level.title"
