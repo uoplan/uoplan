@@ -97,6 +97,13 @@ body {
   border-radius: calc(var(--mantine-radius-lg) - var(--spotlight-actions-list-padding));
 }
 
+/* The global Input theme adds a border to every input; on the Spotlight search
+   field that reads as a stray ring around the search bar. Keep it borderless
+   (Spotlight's default) so the search row sits flush. */
+.mantine-Spotlight-search.mantine-Input-input {
+  border-color: transparent !important;
+}
+
 a {
   color: inherit;
   text-decoration: none;

@@ -3,6 +3,14 @@ import { defineConfig, devices } from "@playwright/test";
 const PORT = 5173;
 const BASE_URL = `http://localhost:${PORT}`;
 
+// When E2E_SERVER=preview, serve the already-built production bundle via
+// `vite preview` instead of the dev server. CI uses this for the accessibility
+// job so it tests the real bundle without rebuilding the WASM engine.
+const USE_PREVIEW = process.env.E2E_SERVER === "preview";
+const WEB_SERVER_COMMAND = USE_PREVIEW
+  ? `pnpm exec vite preview --port ${PORT} --strictPort`
+  : "pnpm dev";
+
 /**
  * Playwright end-to-end config for the web app.
  *
@@ -27,7 +35,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "pnpm dev",
+    command: WEB_SERVER_COMMAND,
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

@@ -1,5 +1,7 @@
 ## uoplan.party
 
+[![Latest term in data](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fuoplan%2Fuoplan%2Fmain%2Fapps%2Fscraper%2Fdata%2Fterms.json&query=%24.terms%5B-1%3A%5D.name&label=data&color=2ea44f)](apps/scraper/data/terms.json)
+
 `uoplan.party` is a fast, no-nonsense course planner for uOttawa that turns degree requirements into a real weekly timetable.
 
 - **Plan by requirement**: pick your program, mark the courses you've completed, then choose courses by requirement instead of by guesswork.

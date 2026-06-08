@@ -22,26 +22,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  quality:
+  # Builds the Rust → WASM schedule engine once and shares it with every
+  # downstream job as an artifact, so the (expensive) Rust toolchain only runs
+  # here. Downstream jobs re-run the cheap `pnpm generate` (proto TS + data .pb)
+  # themselves and consume `packages/engine/pkg` from this artifact.
+  build-engine:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: false
-
-      - name: Setup Node 24
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24.x
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Setup nightly Rust (engine WASM build-std)
         uses: dtolnay/rust-toolchain@nightly
@@ -79,23 +71,138 @@ jobs:
       - name: Run Rust engine tests
         run: pnpm --filter @uoplan/engine test:rust
 
+      - name: Upload engine WASM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: engine-pkg
+          path: packages/engine/pkg
+          retention-days: 1
+          if-no-files-found: error
+
+  lint-format:
+    runs-on: ubuntu-latest
+    needs: build-engine
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
+      - name: Download engine WASM artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: engine-pkg
+          path: packages/engine/pkg
+      - name: Run generator
+        run: pnpm generate
       - name: Run linter
         run: pnpm lint
-
       - name: Check formatting
         run: pnpm format:check
 
+  typecheck:
+    runs-on: ubuntu-latest
+    needs: build-engine
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
+      - name: Download engine WASM artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: engine-pkg
+          path: packages/engine/pkg
+      - name: Run generator
+        run: pnpm generate
       - name: Run typecheck
         run: pnpm typecheck
 
+  checks:
+    runs-on: ubuntu-latest
+    needs: build-engine
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
+      - name: Download engine WASM artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: engine-pkg
+          path: packages/engine/pkg
+      - name: Run generator
+        run: pnpm generate
       - name: Check architecture guardrails
         run: pnpm check:arch
-
       - name: Check translations
         run: pnpm check:i18n
 
+  test:
+    runs-on: ubuntu-latest
+    needs: build-engine
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
+      - name: Download engine WASM artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: engine-pkg
+          path: packages/engine/pkg
+      - name: Run generator
+        run: pnpm generate
       - name: Run tests
         run: pnpm test
 
-      - name: Run production build
-        run: pnpm build
+  build:
+    runs-on: ubuntu-latest
+    needs: build-engine
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
+      - name: Download engine WASM artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: engine-pkg
+          path: packages/engine/pkg
+      - name: Run generator
+        run: pnpm generate
+      # Build the web app directly (not the root `build`, which would rebuild the
+      # engine). The engine WASM comes from the artifact above.
+      - name: Build data proto + web app
+        run: pnpm --filter scraper build:proto && pnpm --filter web build
+      - name: Check bundle size budgets
+        run: pnpm --filter web size
+      - name: Upload web dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist
+          retention-days: 1
+          if-no-files-found: error
+
+  # Accessibility scan (axe-core) against the built site. Depends on `build` so
+  # it serves the production bundle via `vite preview` (no engine rebuild, no
+  # dev server, no Rust toolchain).
+  a11y:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
+      - name: Download web dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist
+      - name: Install Playwright Chromium
+        run: pnpm --filter web exec playwright install --with-deps chromium
+      - name: Run accessibility tests
+        env:
+          E2E_SERVER: preview
+        run: pnpm --filter web exec playwright test e2e/a11y.spec.ts
