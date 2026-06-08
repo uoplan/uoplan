@@ -1,0 +1,37 @@
+[
+  {
+    "name": "main entry (app shell + react core)",
+    "path": ["dist/assets/index-*.js", "dist/assets/react-*.js"],
+    "limit": "80 kB"
+  },
+  {
+    "name": "calendar route",
+    "path": "dist/assets/calendar-*.js",
+    "limit": "52 kB"
+  },
+  {
+    "name": "graph route (sigma + graphology)",
+    "path": "dist/assets/graph-*.js",
+    "limit": "52 kB"
+  },
+  {
+    "name": "trends route",
+    "path": "dist/assets/trends-*.js",
+    "limit": "31 kB"
+  },
+  {
+    "name": "charts (recharts)",
+    "path": "dist/assets/LineChart-*.js",
+    "limit": "100 kB"
+  },
+  {
+    "name": "schedule worker",
+    "path": "dist/assets/scheduleWorker-*.js",
+    "limit": "26 kB"
+  },
+  {
+    "name": "pdf (lazy, browser-only — must stay code-split)",
+    "path": "dist/assets/pdf-*.js",
+    "limit": "110 kB"
+  }
+]

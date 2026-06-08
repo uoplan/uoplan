@@ -1,7 +1,7 @@
 import { defineConfig } from "oxlint";
 
 export default defineConfig({
-  plugins: ["typescript", "react"],
+  plugins: ["typescript", "react", "jsx-a11y"],
   jsPlugins: ["./scripts/i18n/oxlint-plugin.mjs"],
   categories: {
     correctness: "error",
@@ -53,6 +53,15 @@ export default defineConfig({
         "react/rules-of-hooks": "error",
         "react/exhaustive-deps": "warn",
         "i18n-tr/tr-key-exists": "error",
+        // jsx-a11y: the plugin is enabled globally, so all accessibility rules
+        // are enforced at `error` (via the `correctness` category). The four
+        // rules below have pre-existing violations in the current UI; they are
+        // kept at `warn` to surface for incremental cleanup without failing CI.
+        // New violations of any other a11y rule still fail the build.
+        "jsx-a11y/prefer-tag-over-role": "warn",
+        "jsx-a11y/interactive-supports-focus": "warn",
+        "jsx-a11y/no-static-element-interactions": "warn",
+        "jsx-a11y/click-events-have-key-events": "warn",
         "typescript/no-floating-promises": "off",
         "typescript/require-await": "off",
         "typescript/no-misused-promises": [
