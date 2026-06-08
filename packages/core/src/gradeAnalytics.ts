@@ -326,9 +326,14 @@ export interface LevelComparisonOptions {
 
 const DEFAULT_LEVEL_MIN_VOLUME = 50;
 
+/** Highest discrete level bucket; everything at or above collapses into `5000+`. */
+export const MAX_LEVEL_BUCKET = 5000;
+
 /**
- * Aggregate matched offerings by course-level bucket (1000, 2000, …) regardless
- * of the `level` filter, honoring discipline / season. Ascending by level.
+ * Aggregate matched offerings by course-level bucket (1000, 2000, 3000, 4000,
+ * 5000+) regardless of the `level` filter, honoring discipline / season. Levels
+ * at or above {@link MAX_LEVEL_BUCKET} collapse into a single `5000+` bucket.
+ * Ascending by level.
  */
 export function computeLevelComparison(
   grades: CourseGradesData,
@@ -341,8 +346,9 @@ export function computeLevelComparison(
   const byLevel = new Map<number, GradeDistribution>();
   for (const course of grades.courses) {
     if (discipline && disciplineOf(course.code) !== discipline) continue;
-    const level = levelOf(course.code);
-    if (level == null) continue;
+    const rawLevel = levelOf(course.code);
+    if (rawLevel == null) continue;
+    const level = Math.min(rawLevel, MAX_LEVEL_BUCKET);
     for (const prof of course.professors) {
       const termId = Number(prof.termId);
       if (!isValidTermId(termId)) continue;

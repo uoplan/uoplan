@@ -126,6 +126,17 @@ describe("computeLevelComparison", () => {
     const rows = computeLevelComparison(grades, { discipline: "CSI", minVolume: 1 });
     expect(rows.map((r) => r.level)).toEqual([1000, 2000]);
   });
+
+  it("collapses levels at or above 5000 into a single 5000+ bucket", () => {
+    const gradLevels = makeGrades([
+      { code: "CSI 5101", name: "Grad A", termId: 2239, dist: { A: 60 } },
+      { code: "CSI 6101", name: "Grad B", termId: 2239, dist: { B: 40 } },
+      { code: "CSI 8101", name: "Grad C", termId: 2239, dist: { C: 20 } },
+    ]);
+    const rows = computeLevelComparison(gradLevels, { discipline: "CSI", minVolume: 1 });
+    expect(rows.map((r) => r.level)).toEqual([5000]);
+    expect(rows[0]?.volume).toBe(120);
+  });
 });
 
 describe("computeDisciplineYearHeatmap", () => {
