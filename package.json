@@ -30,6 +30,7 @@
     "scrape:schedules": "pnpm --filter scraper scrape:schedules",
     "scrape:disciplines": "pnpm --filter scraper scrape:disciplines",
     "enrich:schedules": "pnpm --filter scraper enrich:schedules",
+    "scrape:grades": "pnpm --filter scraper scrape:grades",
     "scrape:ratemyprofessors": "pnpm --filter scraper scrape:ratemyprofessors",
     "build:data-proto": "pnpm --filter scraper build:proto",
     "check:terms": "pnpm --filter scraper check:terms",
