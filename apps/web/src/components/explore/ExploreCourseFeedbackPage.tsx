@@ -21,16 +21,6 @@ export function ExploreCourseFeedbackPage({ urlCourseParam }: { urlCourseParam: 
   const title = resolved == null ? urlCourseParam.toUpperCase() : normalizeCourseCode(resolved);
 
   return (
-    <ExploreFeedbackContent
-      title={title}
-      backLink={{
-        to: "/explore/course/$course",
-        params: { course: urlCourseParam },
-        label: title,
-      }}
-      views={views}
-      questions={questions}
-      loading={loading}
-    />
+    <ExploreFeedbackContent title={title} views={views} questions={questions} loading={loading} />
   );
 }

@@ -939,6 +939,34 @@ msgstr "Professors"
 msgid "explore.resultsPrograms"
 msgstr "Programs"
 
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:306
+msgid "explore.schedule.conflict"
+msgstr "Selected sections overlap"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:284
+msgid "explore.schedule.loading"
+msgstr "Loading course times…"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:149
+msgid "explore.schedule.noTimes"
+msgstr "No scheduled times"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:289
+msgid "explore.schedule.notOffered"
+msgstr "This course isn't offered in the selected term."
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:144
+msgid "explore.schedule.overlaps"
+msgstr "Time conflict"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:279
+msgid "explore.schedule.selectTerm"
+msgstr "Select a term to view course times."
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:297
+msgid "explore.schedule.viewGrades"
+msgstr "View grade history"
+
 msgid "explore.searchPlaceholder"
 msgstr "Search courses or professors…"
 

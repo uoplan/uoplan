@@ -10,6 +10,7 @@ import { CalendarEventDetails } from "../CalendarEventDetails";
 import { componentKindOnly, formatTimeRange } from "../calendarEventDisplayUtils";
 import { CalendarEventFace } from "../CalendarEventFace";
 import { minutesToPercent } from "./weekCalendarLayout";
+import "../calendar.css";
 
 interface WeekCalendarEventProps {
   event: CalendarEvent;

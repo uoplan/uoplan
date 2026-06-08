@@ -43,7 +43,6 @@ function buildRouter() {
     component: () => (
       <ExploreFeedbackContent
         title="CSI 2110"
-        backLink={{ to: "/explore", params: {}, label: "Back" }}
         views={views}
         questions={questions}
         loading={false}

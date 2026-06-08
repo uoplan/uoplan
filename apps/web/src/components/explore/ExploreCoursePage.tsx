@@ -1,10 +1,14 @@
-import { Accordion, Box, Flex, Stack, Text, Title } from "@mantine/core";
+import { Accordion, Box, Flex, Group, Stack, Text, Title } from "@mantine/core";
 import { useEffect, useMemo } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { m } from "framer-motion";
+import { IconClock } from "@tabler/icons-react";
 import type { ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeCourseCode } from "@uoplan/core";
+import { useShallow } from "zustand/react/shallow";
 import { useTr, tr } from "../../i18n";
+import { useAppStore } from "../../store/appStore";
+import { formatTermLabel } from "../../lib/term/termLabel";
 import {
   type ProfessorOfferingGroup,
   groupOfferingsByProfessor,
@@ -62,9 +66,10 @@ export function ExploreCoursePage({
   professorRatings: ProfessorRatingsMap | null;
 }) {
   useTr();
-  const { loading, offeringsByCourseNorm, offeringsByComponent, aliasGroups } =
+  const { loading, offeringsByCourseNorm, offeringsByComponent, aliasGroups, getTermPresence } =
     useExploreOfferings();
   const navigate = useNavigate();
+  const terms = useAppStore(useShallow((s) => s.terms));
 
   const urlNorm = useMemo(() => parseCoursePathParam(urlCourseParam), [urlCourseParam]);
 
@@ -107,6 +112,21 @@ export function ExploreCoursePage({
     () => groupOfferingsByProfessor(courseOfferings),
     [courseOfferings],
   );
+
+  // Schedule terms (those with timetables) in which this course is offered,
+  // most recent first — each deep-links into the course-times schedule page.
+  const scheduleTerms = useMemo(() => {
+    if (componentId === null || !terms || terms.length === 0) return [];
+    const presence = getTermPresence();
+    const ids: number[] = [];
+    for (const t of terms) {
+      const termId = Number(t.termId);
+      if (!Number.isFinite(termId)) continue;
+      if (!presence.courseComponentsByTerm.get(termId)?.has(componentId)) continue;
+      ids.push(termId);
+    }
+    return ids.sort((a, b) => b - a);
+  }, [componentId, terms, getTermPresence]);
 
   const courseEntry = useMemo<BackState | undefined>(() => {
     if (!selectedCourseMeta) return undefined;
@@ -172,6 +192,39 @@ export function ExploreCoursePage({
                       </span>
                     ))}
                   </Text>
+                ) : null}
+                {scheduleTerms.length > 0 ? (
+                  <Group gap={8} mt={12}>
+                    {scheduleTerms.map((termId) => (
+                      <Link
+                        key={termId}
+                        to="/explore/course/$course/schedule"
+                        params={{ course: urlCourseParam }}
+                        search={{ ...EMPTY_EXPLORE_SEARCH, term: termId }}
+                        state={{ back: courseEntry } as never}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Group
+                          gap={6}
+                          wrap="nowrap"
+                          px={12}
+                          py={6}
+                          className="soft-lift"
+                          style={{
+                            borderRadius: 9999,
+                            border: "var(--app-border-width) solid var(--app-border-strong)",
+                            backgroundColor: "var(--app-surface)",
+                            color: "var(--app-text)",
+                            fontWeight: 600,
+                            fontSize: "var(--mantine-font-size-sm)",
+                          }}
+                        >
+                          <IconClock size={14} stroke={1.7} />
+                          {formatTermLabel(termId)}
+                        </Group>
+                      </Link>
+                    ))}
+                  </Group>
                 ) : null}
               </Box>
               {showFeedback ? (

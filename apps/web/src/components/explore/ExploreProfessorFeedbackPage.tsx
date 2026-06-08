@@ -22,19 +22,8 @@ export function ExploreProfessorFeedbackPage({
   }, [loading, views, navigate]);
 
   const title = displayName || tr("explore.professorFallback");
-  const backParam = legacyId != null ? String(legacyId) : encodeURIComponent(title);
 
   return (
-    <ExploreFeedbackContent
-      title={title}
-      backLink={{
-        to: "/explore/professor/$legacyId",
-        params: { legacyId: backParam },
-        label: title,
-      }}
-      views={views}
-      questions={questions}
-      loading={loading}
-    />
+    <ExploreFeedbackContent title={title} views={views} questions={questions} loading={loading} />
   );
 }
