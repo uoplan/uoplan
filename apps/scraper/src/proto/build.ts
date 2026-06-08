@@ -12,371 +12,17 @@ import {
 } from "../shared/paths.ts";
 import { readJson } from "../shared/json.ts";
 import { buildFeedbackData } from "./feedback.ts";
+import { mapCatalogue, type CatalogueJsonInput } from "./catalogue.ts";
+import { mapDisciplinesJson, mapGradesJson } from "./grades.ts";
+import { mapSchedules, type SchedulesJsonInput } from "./schedules.ts";
+import { parseTermIdToNumber } from "./shared.ts";
 
-type JsonObject = Record<string, unknown>;
-
-function parseTermIdToNumber(termId: string): number {
-  const parsed = Number.parseInt(termId, 10);
-  return Number.isFinite(parsed) ? parsed : 0;
-}
-
-function dateStringToYyyymmdd(value: string): number {
-  const compact = value.replaceAll("-", "");
-  const parsed = Number.parseInt(compact, 10);
-  return Number.isFinite(parsed) ? parsed : 0;
-}
-
-function dayToProto(day: string): number {
-  switch (day) {
-    case "Mo":
-      return DataProto.DayOfWeek.DAY_OF_WEEK_MO;
-    case "Tu":
-      return DataProto.DayOfWeek.DAY_OF_WEEK_TU;
-    case "We":
-      return DataProto.DayOfWeek.DAY_OF_WEEK_WE;
-    case "Th":
-      return DataProto.DayOfWeek.DAY_OF_WEEK_TH;
-    case "Fr":
-      return DataProto.DayOfWeek.DAY_OF_WEEK_FR;
-    case "Sa":
-      return DataProto.DayOfWeek.DAY_OF_WEEK_SA;
-    case "Su":
-      return DataProto.DayOfWeek.DAY_OF_WEEK_SU;
-    default:
-      return DataProto.DayOfWeek.DAY_OF_WEEK_UNSPECIFIED;
-  }
-}
-
-function prereqTypeToProto(type: string): number {
-  switch (type) {
-    case "course":
-      return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_COURSE;
-    case "or_group":
-      return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_OR_GROUP;
-    case "and_group":
-      return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_AND_GROUP;
-    case "non_course":
-      return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_NON_COURSE;
-    default:
-      return DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_UNSPECIFIED;
-  }
-}
-
-function requirementTypeToProto(type: string): number {
-  const t = DataProto.RequirementType;
-  switch (type) {
-    case "course":
-      return t.REQUIREMENT_TYPE_COURSE;
-    case "elective":
-      return t.REQUIREMENT_TYPE_ELECTIVE;
-    case "group":
-      return t.REQUIREMENT_TYPE_GROUP;
-    case "pick":
-      return t.REQUIREMENT_TYPE_PICK;
-    case "options_group":
-      return t.REQUIREMENT_TYPE_OPTIONS_GROUP;
-    case "discipline_elective":
-      return t.REQUIREMENT_TYPE_DISCIPLINE_ELECTIVE;
-    case "free_elective":
-      return t.REQUIREMENT_TYPE_FREE_ELECTIVE;
-    case "non_discipline_elective":
-      return t.REQUIREMENT_TYPE_NON_DISCIPLINE_ELECTIVE;
-    case "faculty_elective":
-      return t.REQUIREMENT_TYPE_FACULTY_ELECTIVE;
-    case "section":
-      return t.REQUIREMENT_TYPE_SECTION;
-    case "and":
-      return t.REQUIREMENT_TYPE_AND;
-    case "or_group":
-      return t.REQUIREMENT_TYPE_OR_GROUP;
-    case "or_course":
-      return t.REQUIREMENT_TYPE_OR_COURSE;
-    default:
-      return t.REQUIREMENT_TYPE_UNSPECIFIED;
-  }
-}
-
-function sectionStatusToProto(status: unknown): number {
-  if (status === "Open") return DataProto.SectionStatus.SECTION_STATUS_OPEN;
-  if (status === "Closed") return DataProto.SectionStatus.SECTION_STATUS_CLOSED;
-  return DataProto.SectionStatus.SECTION_STATUS_UNSPECIFIED;
-}
-
-function normalizeCode(value: unknown): string {
-  return String(value ?? "")
-    .trim()
-    .replace(/\s+/g, " ");
-}
-
-function prereqKindToProto(kind: unknown): number | undefined {
-  const k = DataProto.CoursePrereqKind;
-  switch (kind) {
-    case "permission":
-      return k.COURSE_PREREQ_KIND_PERMISSION;
-    case "audition":
-      return k.COURSE_PREREQ_KIND_AUDITION;
-    case "language":
-      return k.COURSE_PREREQ_KIND_LANGUAGE;
-    case "equivalent":
-      return k.COURSE_PREREQ_KIND_EQUIVALENT;
-    case "highschool":
-      return k.COURSE_PREREQ_KIND_HIGHSCHOOL;
-    case "standing":
-      return k.COURSE_PREREQ_KIND_STANDING;
-    case "topic":
-      return k.COURSE_PREREQ_KIND_TOPIC;
-    case "coursework":
-      return k.COURSE_PREREQ_KIND_COURSEWORK;
-    case "knowledge":
-      return k.COURSE_PREREQ_KIND_KNOWLEDGE;
-    case "recommended":
-      return k.COURSE_PREREQ_KIND_RECOMMENDED;
-    default:
-      return undefined;
-  }
-}
-
-function mapPrereq(node: any): any {
-  return {
-    type: prereqTypeToProto(String(node.type ?? "")),
-    code: node.code,
-    text: node.text,
-    credits: node.credits,
-    disciplines: node.disciplines ?? [],
-    levels: node.levels ?? [],
-    disciplineLevels: (node.disciplineLevels ?? []).map((d: any) => ({
-      discipline: d.discipline,
-      levels: d.levels ?? [],
-    })),
-    programs: node.programs ?? [],
-    children: (node.children ?? []).map(mapPrereq),
-    kind: prereqKindToProto(node.kind),
-  };
-}
-
-function mapRequirement(req: any): any {
-  return {
-    type: requirementTypeToProto(String(req.type ?? "")),
-    title: req.title,
-    code: req.code,
-    credits: req.credits,
-    disciplineLevels: (req.disciplineLevels ?? []).map((d: any) => ({
-      discipline: d.discipline,
-      levels: d.levels ?? [],
-    })),
-    excludedDisciplines: req.excluded_disciplines ?? [],
-    faculty: req.faculty,
-    indented: req.indented,
-    levels: req.levels ?? [],
-    options: (req.options ?? []).map(mapRequirement),
-  };
-}
-
-function mapCatalogue(input: any): any {
-  const courseCodes: string[] = [];
-  const indexByCode = new Map<string, number>();
-  const addCode = (code: string): number => {
-    const normalized = normalizeCode(code);
-    const existing = indexByCode.get(normalized);
-    if (existing !== undefined) return existing;
-    const idx = courseCodes.length;
-    courseCodes.push(normalized);
-    indexByCode.set(normalized, idx);
-    return idx;
-  };
-
-  for (const course of input.courses ?? []) {
-    addCode(String(course.code ?? ""));
-    for (const alias of course.aliases ?? []) addCode(String(alias ?? ""));
-  }
-
-  return {
-    courseCodes,
-    courses: (input.courses ?? []).map((course: any) => ({
-      code: { index: addCode(String(course.code ?? "")) },
-      title: course.title,
-      credits: course.credits,
-      component: course.component,
-      aliases: (course.aliases ?? []).map((alias: unknown) => ({
-        index: addCode(String(alias ?? "")),
-      })),
-      hasPrereqText: Boolean(course.prereqText),
-      prerequisites: course.prerequisites ? mapPrereq(course.prerequisites) : undefined,
-    })),
-    programs: (input.programs ?? []).map((program: any) => ({
-      title: program.title,
-      programKey: program.slug ?? program.url ?? program.title,
-      requirements: (program.requirements ?? []).map(mapRequirement),
-    })),
-  };
-}
-
-function mapLetterGradeDistributionToProto(dist: unknown): {
-  aPlus: number;
-  a: number;
-  aMinus: number;
-  bPlus: number;
-  b: number;
-  cPlus: number;
-  c: number;
-  dPlus: number;
-  d: number;
-  e: number;
-  f: number;
-  ein: number;
-  ns: number;
-  nc: number;
-  abs: number;
-  p: number;
-  s: number;
-} {
-  const d = dist && typeof dist === "object" ? (dist as Record<string, unknown>) : {};
-  const n = (k: string): number => {
-    const v = d[k];
-    const num = Number(v);
-    return Number.isFinite(num) ? num : 0;
-  };
-  return {
-    aPlus: n("A+"),
-    a: n("A"),
-    aMinus: n("A-"),
-    bPlus: n("B+"),
-    b: n("B"),
-    cPlus: n("C+"),
-    c: n("C"),
-    dPlus: n("D+"),
-    d: n("D"),
-    e: n("E"),
-    f: n("F"),
-    ein: n("EIN"),
-    ns: n("NS"),
-    nc: n("NC"),
-    abs: n("ABS"),
-    p: n("P"),
-    s: n("S"),
-  };
-}
-
-function mapSchedules(input: any): any {
-  const courseCodes: string[] = [];
-  const indexByCode = new Map<string, number>();
-  const addCode = (code: string): number => {
-    const normalized = normalizeCode(code);
-    const existing = indexByCode.get(normalized);
-    if (existing !== undefined) return existing;
-    const idx = courseCodes.length;
-    courseCodes.push(normalized);
-    indexByCode.set(normalized, idx);
-    return idx;
-  };
-
-  return {
-    termId: parseTermIdToNumber(String(input.termId ?? "")),
-    courseCodes,
-    totalCourses: input.totalCourses,
-    totalWithSchedules: input.totalWithSchedules,
-    schedules: (input.schedules ?? []).map((schedule: any) => ({
-      course: { index: addCode(String(schedule.courseCode ?? "")) },
-      title: schedule.title ?? undefined,
-      timeZone: schedule.timeZone,
-      components: Object.fromEntries(
-        Object.entries(schedule.components ?? {}).map(([component, sections]: [string, any]) => [
-          component,
-          {
-            items: (sections ?? []).map((section: any) => ({
-              section: section.section,
-              sectionCode: section.sectionCode ?? undefined,
-              component: section.component ?? undefined,
-              session: section.session ?? undefined,
-              times: (section.times ?? []).map((time: any) => ({
-                day: dayToProto(time.day),
-                startMinutes: time.startMinutes,
-                endMinutes: time.endMinutes,
-                virtual: Boolean(time.virtual),
-                instructor: time.instructor ?? undefined,
-                meetingDates:
-                  Array.isArray(time.meetingDates) && time.meetingDates.length >= 2
-                    ? {
-                        startYyyymmdd: dateStringToYyyymmdd(String(time.meetingDates[0] ?? "")),
-                        endYyyymmdd: dateStringToYyyymmdd(String(time.meetingDates[1] ?? "")),
-                      }
-                    : undefined,
-              })),
-              status: sectionStatusToProto(section.status),
-            })),
-          },
-        ]),
-      ),
-    })),
-  };
-}
-
-function mapDisciplinesJson(input: unknown): {
-  disciplines: Array<{ code: string; name: string; nameFr: string }>;
-} {
-  const obj = input && typeof input === "object" ? (input as Record<string, unknown>) : {};
-  const rows = Array.isArray(obj.disciplines) ? obj.disciplines : [];
-
-  return {
-    disciplines: rows
-      .map((row) => {
-        const r = row && typeof row === "object" ? (row as Record<string, unknown>) : {};
-        const code = normalizeCode(r.code);
-        const name = String(r.name ?? "").trim();
-        const nameFr = typeof r.nameFr === "string" ? r.nameFr.trim() : "";
-        if (!code || !name) return null;
-        return { code, name, nameFr };
-      })
-      .filter((row): row is { code: string; name: string; nameFr: string } => row != null),
-  };
-}
-
-function mapGradesJson(rows: unknown[]) {
-  if (!Array.isArray(rows)) {
-    throw new Error("grades.json: expected top-level array");
-  }
-
-  return {
-    courses: rows
-      .map((row: unknown) => {
-        const r = row as { code?: unknown; professors?: unknown };
-        const profs = Array.isArray(r.professors) ? r.professors : [];
-        return {
-          code: normalizeCode(r.code),
-          professors: profs
-            .map((p: unknown) => {
-              const x = p as {
-                name?: unknown;
-                legacyId?: unknown;
-                termId?: unknown;
-                distribution?: unknown;
-                section?: unknown;
-              };
-              const termParsed = Number.parseInt(String(x.termId ?? ""), 10);
-              const termId = Number.isFinite(termParsed) ? termParsed : 0;
-              const sec =
-                typeof x.section === "string" && x.section.trim() ? x.section.trim() : undefined;
-              const legacyRaw = x.legacyId;
-              let legacyId: number | undefined;
-              if (typeof legacyRaw === "number" && Number.isFinite(legacyRaw)) {
-                legacyId = legacyRaw;
-              } else if (typeof legacyRaw === "string" && legacyRaw.trim()) {
-                const parsed = Number.parseInt(legacyRaw, 10);
-                legacyId = Number.isFinite(parsed) ? parsed : undefined;
-              }
-              return {
-                name: String(x.name ?? ""),
-                ...(legacyId !== undefined ? { legacyId } : {}),
-                termId,
-                distribution: mapLetterGradeDistributionToProto(x.distribution),
-                section: sec,
-              };
-            })
-            .filter((p) => p.termId !== 0 && String(p.name).trim().length > 0),
-        };
-      })
-      .filter((c) => c.professors.length > 0),
-  };
+interface RateMyProfessorInput {
+  id?: string;
+  legacyId?: number;
+  name?: string;
+  rating?: number | null;
+  numRatings?: number;
 }
 
 async function writePb(filePath: string, bytes: Uint8Array): Promise<void> {
@@ -385,11 +31,9 @@ async function writePb(filePath: string, bytes: Uint8Array): Promise<void> {
 }
 
 /**
- * Scaffold a placeholder data-asset manifest (id → `/data/<id>`) so typecheck,
- * dev, and the worker bundle always have the generated module. The real,
- * content-hashed URLs are written over this by the web Vite build
- * (apps/web/vite/data-manifest-plugin.ts). Only writes if the module is missing,
- * to avoid clobbering a manifest produced by a real build.
+ * Ensure build:data-proto leaves behind the generated data-manifest module when
+ * no Vite build has created it yet. Existing manifests are preserved so content-
+ * hashed asset URLs from the web build are not clobbered.
  */
 async function scaffoldDataManifest(): Promise<void> {
   if (
@@ -408,8 +52,6 @@ async function scaffoldDataManifest(): Promise<void> {
   const body = Object.keys(manifest)
     .map((id) => `  ${JSON.stringify(id)}: ${JSON.stringify(manifest[id])},`)
     .join("\n");
-  // Mirrors packages/data/src/codegen.ts (renderDataManifestModule); the web Vite
-  // build overwrites this with content-hashed URLs.
   const source = `// AUTO-GENERATED by the data-manifest build. Do not edit.
 // Maps each \`.pb\` asset id (its bare filename) to the URL it is served from.
 // A placeholder is scaffolded by \`pnpm build:data-proto\`; the real, content-
@@ -474,17 +116,17 @@ export async function main(): Promise<void> {
     }).finish(),
   );
 
-  const rmp = await readJson<{ resultCount: number; professors: any[] }>(
+  const rmp = await readJson<{ resultCount?: number; professors?: RateMyProfessorInput[] }>(
     path.join(SCRAPER_DATA_DIR, "ratemyprofessors.json"),
   );
   await writePb(
     path.join(WEB_ASSETS_DATA_DIR, "ratemyprofessors.pb"),
     DataProto.RateMyProfessorsData.encode({
       resultCount: rmp.resultCount ?? 0,
-      professors: (rmp.professors ?? []).map((p: any) => ({
+      professors: (rmp.professors ?? []).map((p) => ({
         id: p.id ?? "",
         legacyId: p.legacyId,
-        name: p.name,
+        name: p.name ?? "",
         rating: p.rating ?? undefined,
         numRatings: p.numRatings,
       })),
@@ -499,14 +141,14 @@ export async function main(): Promise<void> {
 
   for (const fileName of yearCatalogues) {
     const fullPath = path.join(CATALOGUE_DATA_DIR, fileName);
-    const data = await readJson<JsonObject>(fullPath);
+    const data = await readJson<CatalogueJsonInput>(fullPath);
     const encoded = DataProto.Catalogue.encode(mapCatalogue(data)).finish();
     await writePb(path.join(WEB_ASSETS_DATA_DIR, fileName.replace(/\.json$/, ".pb")), encoded);
   }
 
   for (const fileName of scheduleFiles) {
     const fullPath = path.join(SCHEDULES_DATA_DIR, fileName);
-    const data = await readJson<JsonObject>(fullPath);
+    const data = await readJson<SchedulesJsonInput>(fullPath);
     const encoded = DataProto.SchedulesData.encode(mapSchedules(data)).finish();
     await writePb(path.join(WEB_ASSETS_DATA_DIR, fileName.replace(/\.json$/, ".pb")), encoded);
   }

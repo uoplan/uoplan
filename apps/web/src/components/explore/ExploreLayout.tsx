@@ -1,148 +1,17 @@
-import { Link, useNavigate, useRouterState, useSearch } from "@tanstack/react-router";
-import { Anchor, Box, Stack, Text, TextInput, Title } from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
+import { useRouterState } from "@tanstack/react-router";
+import { Box } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { AnimatePresence, m } from "framer-motion";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
-import type { Catalogue } from "@uoplan/core";
-import {
-  courseSentimentByNorm,
-  professorSentimentByName,
-  normalizeProfessorName,
-} from "@uoplan/core";
-
-import { useTr, tr } from "../../i18n";
-import {
-  searchExplore,
-  dedupeCourseEntriesByComponent,
-  type ExploreCourseSearchEntry,
-  type ExploreProfessorSearchEntry,
-} from "../../lib/explore/gradesSearch";
-import { useExploreOfferings } from "./ExploreOfferingsContext";
-import {
-  EMPTY_FILTERS,
-  compareCourseEntries,
-  compareProfessorEntries,
-  filterCourseEntries,
-  filterProfessorEntries,
-  hasActiveFilters,
-  parseExploreFiltersSearch,
-  serializeExploreFiltersSearch,
-  type ExploreSearchParams,
-  type ExploreFilterState,
-  type ExploreTermSets,
-  type ExploreSentimentSets,
-} from "../../lib/explore/exploreFilters";
-import {
-  buildProgramSearchEntries,
-  createExploreProgramFuse,
-  searchExplorePrograms,
-} from "../../lib/explore/programSearch";
-import { useAppStore } from "../../store/appStore";
+import { useMemo, type ReactNode } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { BackButton } from "../shared/BackButton";
-import { ExploreFilterBar } from "./ExploreFilterBar";
+import { useTr } from "../../i18n";
+import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { formatTermLabel } from "../../lib/term/termLabel";
-import { EXPLORE_ACCORDION_PAD_INLINE } from "./ExploreProfessorGradesLayout";
-import { SearchResultCourseCard } from "./SearchResultCourseCard";
-import { SearchResultDisciplineCard } from "./SearchResultDisciplineCard";
-import { SearchResultProfessorCard } from "./SearchResultProfessorCard";
-import { SearchResultProgramCard } from "./SearchResultProgramCard";
-import { useFeedbackData } from "../../hooks/useFeedbackData";
-
-const EMPTY_COURSE_ENTRIES: ExploreCourseSearchEntry[] = [];
-const EMPTY_PROFESSOR_ENTRIES: ExploreProfessorSearchEntry[] = [];
-
-function ExploreSearchInput({
-  value,
-  onChange,
-  onFocus,
-  disabled,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  onFocus?: () => void;
-  disabled: boolean;
-}) {
-  return (
-    <TextInput
-      placeholder={tr("explore.searchPlaceholder")}
-      value={value}
-      onChange={(e) => onChange(e.currentTarget.value)}
-      onFocus={onFocus}
-      size="lg"
-      radius={9999}
-      disabled={disabled}
-      w="100%"
-      autoComplete="off"
-      aria-label={tr("explore.searchPlaceholder")}
-      styles={{
-        root: { width: "100%" },
-        input: {
-          backgroundColor: "var(--app-surface)",
-          borderColor: "var(--app-border-strong)",
-          minHeight: 48,
-          paddingInline: 18,
-          fontSize: "var(--mantine-font-size-md)",
-          boxShadow: "var(--app-shadow-sm)",
-          "@media (min-width: 540px)": { minHeight: 52, paddingInline: 22 },
-        },
-      }}
-    />
-  );
-}
-
-function SearchCardSection({
-  label,
-  delay = 0,
-  children,
-}: {
-  label: string;
-  delay?: number;
-  children: ReactNode;
-}) {
-  return (
-    <m.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1], delay }}
-    >
-      <Stack gap={10}>
-        <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs }}>
-          <Text size="xs" fw={600} c="dimmed" style={{ letterSpacing: "0.02em" }}>
-            {label}
-          </Text>
-        </Box>
-        <Box
-          style={{
-            paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
-            overflowX: "auto",
-            overflowY: "visible",
-            paddingBottom: 10,
-          }}
-        >
-          <Box style={{ display: "flex", gap: 10, width: "max-content" }}>
-            <AnimatePresence mode="popLayout" initial={false}>
-              {children}
-            </AnimatePresence>
-          </Box>
-        </Box>
-      </Stack>
-    </m.div>
-  );
-}
-
-const DISCIPLINE_MAX_RESULTS = 8;
-
-function buildDisciplineCourseCount(catalogue: Catalogue | null): Map<string, number> {
-  const m = new Map<string, number>();
-  if (!catalogue) return m;
-  for (const c of catalogue.courses) {
-    const disc = c.code.split(/\s+/)[0]?.toUpperCase();
-    if (disc) m.set(disc, (m.get(disc) ?? 0) + 1);
-  }
-  return m;
-}
+import { useAppStore } from "../../store/appStore";
+import { ExploreLayoutHeader } from "./ExploreLayoutHeader";
+import { ExploreSearchResults } from "./ExploreSearchResults";
+import { useExploreResults } from "./useExploreResults";
+import { useExploreSearch } from "./useExploreSearch";
 
 type ExploreLayoutProps = {
   children: ReactNode;
@@ -153,9 +22,12 @@ const EXPLORE_INDEX_ROUTE_ID = "/explore/";
 export function ExploreLayout({ children }: ExploreLayoutProps) {
   useTr();
   const { i18n } = useLingui();
-  const { loading, getCourseEntries, getProfessorEntries, getTermPresence, getCourseFuse } =
-    useExploreOfferings();
-  const navigate = useNavigate();
+  const leafRouteId = useRouterState({
+    select: (s) => s.matches[s.matches.length - 1]?.routeId as string | undefined,
+  });
+  const onIndex = leafRouteId === EXPLORE_INDEX_ROUTE_ID;
+  const showBackButton = !onIndex;
+
   const { catalogue, professorRatings, disciplines, terms } = useAppStore(
     useShallow((s) => ({
       catalogue: s.catalogue,
@@ -175,357 +47,37 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
 
   const termOptions = useMemo(() => {
     if (!terms) return [];
-    // Reference the active locale so labels recompute when it changes
-    // (formatTermLabel localizes via the current locale at call time).
     void i18n.locale;
     return terms
       .map((t) => ({ value: String(t.termId), label: formatTermLabel(Number(t.termId)) }))
       .sort((a, b) => Number(b.value) - Number(a.value));
   }, [terms, i18n.locale]);
 
-  const searchParams = useSearch({ from: "/explore" });
+  const {
+    query,
+    debouncedQuery,
+    filters,
+    activeFilters,
+    searchEngaged,
+    setSearchEngaged,
+    currentSearchParams,
+    handleQueryChange,
+    handleFilterChange,
+  } = useExploreSearch(onIndex);
 
-  const leafRouteId = useRouterState({
-    select: (s) => s.matches[s.matches.length - 1]?.routeId as string | undefined,
-  });
-  const onIndex = leafRouteId === EXPLORE_INDEX_ROUTE_ID;
-  const showBackButton = !onIndex;
-
-  const parsedFilters = useMemo(
-    () => parseExploreFiltersSearch(searchParams ?? {}),
-    [searchParams],
-  );
-  const [query, setQueryState] = useState(searchParams.q ?? "");
-  const [debouncedQuery] = useDebouncedValue(query, 120);
-  const [filters, setFilters] = useState<ExploreFilterState>(parsedFilters);
-  const [searchEngaged, setSearchEngaged] = useState(onIndex);
-
-  useEffect(() => {
-    setQueryState(searchParams.q ?? "");
-  }, [searchParams.q]);
-
-  useEffect(() => {
-    setFilters(parsedFilters);
-  }, [parsedFilters]);
-
-  const buildSearchParams = (
-    nextFilters: ExploreFilterState,
-    nextQuery: string,
-  ): ExploreSearchParams => {
-    const params = serializeExploreFiltersSearch(nextFilters);
-    const trimmed = nextQuery.trim();
-    return {
-      q: trimmed.length > 0 ? trimmed : undefined,
-      levels: params.levels ?? undefined,
-      langs: params.langs ?? undefined,
-      disc: params.disc ?? undefined,
-      difficulty: params.difficulty ?? undefined,
-      rating: params.rating ?? undefined,
-      feedback: params.feedback ?? undefined,
-      term: params.term ?? undefined,
-      sort: params.sort ?? undefined,
-      dir: params.dir ?? undefined,
-    };
-  };
-
-  // Search/filter edits always land on the index route's results view. When
-  // already on the index we replace history so keystrokes don't pile up; from a
-  // detail page we push so the in-app/browser back returns to the detail page.
-  const handleQueryChange = (v: string) => {
-    setQueryState(v);
-    setSearchEngaged(true);
-    void navigate({
-      to: "/explore",
-      search: buildSearchParams(filters, v) as any,
-      replace: onIndex,
-    });
-  };
-
-  const handleFilterChange = (next: Partial<ExploreFilterState>) => {
-    setSearchEngaged(true);
-    setFilters((prev) => {
-      const updated = { ...prev, ...next };
-      void navigate({
-        to: "/explore",
-        search: buildSearchParams(updated, query) as any,
-        replace: onIndex,
-      });
-      return updated;
-    });
-  };
-
-  const activeFilters = hasActiveFilters(filters) || filters.sortKey !== "relevance";
-
-  // The corpus-wide search indices are only needed once the user engages search
-  // (a query or any active filter). Latch the moment they're first needed and keep
-  // it true so clearing the query doesn't discard/rebuild the cached indices.
-  const needsSearchIndex = debouncedQuery.trim().length > 0 || activeFilters;
-  const [indexNeeded, setIndexNeeded] = useState(
-    () =>
-      (searchParams.q?.trim().length ?? 0) > 0 ||
-      hasActiveFilters(parsedFilters) ||
-      parsedFilters.sortKey !== "relevance",
-  );
-  useEffect(() => {
-    if (needsSearchIndex) setIndexNeeded(true);
-  }, [needsSearchIndex]);
-
-  const courseEntries = indexNeeded ? getCourseEntries() : EMPTY_COURSE_ENTRIES;
-  const professorEntries = indexNeeded ? getProfessorEntries() : EMPTY_PROFESSOR_ENTRIES;
-  const courseFuse = indexNeeded ? getCourseFuse() : null;
-
-  const rawSearchResults = useMemo(() => {
-    const q = debouncedQuery.trim();
-    if (!q || !courseFuse) return null;
-    return searchExplore(q, { courseFuse, courseEntries, professorEntries });
-  }, [debouncedQuery, courseFuse, courseEntries, professorEntries]);
-
-  const termSets = useMemo<ExploreTermSets | undefined>(() => {
-    if (filters.termId === null) return undefined;
-    const presence = getTermPresence();
-    return {
-      courseComponents: presence.courseComponentsByTerm.get(filters.termId) ?? null,
-      profGroups: presence.profGroupsByTerm.get(filters.termId) ?? null,
-    };
-  }, [filters.termId, getTermPresence]);
-
-  // Course-feedback overall sentiment, only fetched/computed when the feedback
-  // filter is engaged. Course sentiment keys by normCode; professor sentiment is
-  // re-keyed onto the explore groupId via the normalized display name.
-  const feedbackActive = filters.minFeedback !== null || filters.sortKey === "feedback";
-  const { data: feedbackIndex } = useFeedbackData(feedbackActive);
-  const sentimentSets = useMemo<ExploreSentimentSets | undefined>(() => {
-    if (!feedbackActive) return undefined;
-    if (!feedbackIndex) return { courseByNorm: null, professorByGroupId: null };
-    const byName = professorSentimentByName(feedbackIndex);
-    const professorByGroupId = new Map<string, number>();
-    for (const e of professorEntries) {
-      const s = byName.get(normalizeProfessorName(e.displayName));
-      if (s != null) professorByGroupId.set(e.groupId, s);
-    }
-    return { courseByNorm: courseSentimentByNorm(feedbackIndex), professorByGroupId };
-  }, [feedbackActive, feedbackIndex, professorEntries]);
-
-  const searchResults = useMemo(() => {
-    if (!rawSearchResults) return null;
-    if (!activeFilters) return rawSearchResults;
-    const filteredCourses = filterCourseEntries(
-      rawSearchResults.courses,
-      filters,
-      termSets,
-      sentimentSets,
-    );
-    const filteredProfessors = filterProfessorEntries(
-      rawSearchResults.professors,
-      filters,
-      termSets,
-      sentimentSets,
-    );
-    const shouldSortCourses =
-      filters.sortKey === "grade" || filters.sortKey === "code" || filters.sortKey === "feedback";
-    const shouldSortProfessors = filters.sortKey === "rating" || filters.sortKey === "feedback";
-    return {
-      ...rawSearchResults,
-      courses: shouldSortCourses
-        ? filteredCourses
-            .slice()
-            .sort((a, b) =>
-              compareCourseEntries(
-                a,
-                b,
-                filters.sortKey,
-                filters.sortDir,
-                sentimentSets?.courseByNorm,
-              ),
-            )
-        : filteredCourses,
-      professors: shouldSortProfessors
-        ? filteredProfessors
-            .slice()
-            .sort((a, b) =>
-              compareProfessorEntries(
-                a,
-                b,
-                filters.sortKey,
-                filters.sortDir,
-                sentimentSets?.professorByGroupId,
-              ),
-            )
-        : filteredProfessors,
-    };
-  }, [rawSearchResults, activeFilters, filters, termSets, sentimentSets]);
-
-  const filterOnlyCourses = useMemo(() => {
-    const q = debouncedQuery.trim();
-    if (q || !activeFilters) return null;
-    const filtered = dedupeCourseEntriesByComponent(
-      filterCourseEntries(courseEntries, filters, termSets, sentimentSets),
-    );
-    if (filters.sortKey === "relevance") return filtered.slice(0, 24);
-    if (filters.sortKey === "rating") return filtered.slice(0, 24);
-    return filtered
-      .slice()
-      .sort((a, b) =>
-        compareCourseEntries(a, b, filters.sortKey, filters.sortDir, sentimentSets?.courseByNorm),
-      )
-      .slice(0, 24);
-  }, [debouncedQuery, activeFilters, courseEntries, filters, termSets, sentimentSets]);
-
-  // Mirror of `filterOnlyCourses` for professors: when no query is typed but a
-  // filter is active (e.g. rating or feedback), surface matching professors too.
-  const filterOnlyProfessors = useMemo(() => {
-    const q = debouncedQuery.trim();
-    if (q || !activeFilters) return null;
-    const filtered = filterProfessorEntries(professorEntries, filters, termSets, sentimentSets);
-    if (filters.sortKey === "rating" || filters.sortKey === "feedback") {
-      return filtered
-        .slice()
-        .sort((a, b) =>
-          compareProfessorEntries(
-            a,
-            b,
-            filters.sortKey,
-            filters.sortDir,
-            sentimentSets?.professorByGroupId,
-          ),
-        )
-        .slice(0, 24);
-    }
-    return filtered.slice(0, 24);
-  }, [debouncedQuery, activeFilters, professorEntries, filters, termSets, sentimentSets]);
-
-  const disciplineCourseCount = useMemo(() => buildDisciplineCourseCount(catalogue), [catalogue]);
-
-  const disciplineResults = useMemo(() => {
-    const q = debouncedQuery.trim().toLowerCase();
-    if (!q || !disciplines) return [];
-    return disciplines
-      .filter(
-        (d) =>
-          d.code.toLowerCase().includes(q) ||
-          d.name.toLowerCase().includes(q) ||
-          (d.nameFr?.toLowerCase().includes(q) ?? false),
-      )
-      .slice(0, DISCIPLINE_MAX_RESULTS);
-  }, [debouncedQuery, disciplines]);
-
-  const programEntries = useMemo(
-    () => (catalogue ? buildProgramSearchEntries(catalogue.programs) : []),
-    [catalogue],
-  );
-  const programFuse = useMemo(
-    () => (programEntries.length > 0 ? createExploreProgramFuse(programEntries) : null),
-    [programEntries],
-  );
-  const programResults = useMemo(
-    () => searchExplorePrograms(programFuse, programEntries, debouncedQuery),
-    [programFuse, programEntries, debouncedQuery],
-  );
+  const {
+    loading,
+    displayedCourses,
+    displayedProfessors,
+    disciplineResults,
+    programResults,
+    disciplineCourseCount,
+    hasResults,
+    professorsFirst,
+  } = useExploreResults({ query, debouncedQuery, filters, activeFilters, catalogue, disciplines });
 
   const showResults = searchEngaged && (debouncedQuery.trim().length > 0 || activeFilters);
   const renderResults = onIndex && showResults;
-  const hasResults =
-    (searchResults?.courses.length ?? 0) > 0 ||
-    (filterOnlyCourses?.length ?? 0) > 0 ||
-    (searchResults?.professors.length ?? 0) > 0 ||
-    (filterOnlyProfessors?.length ?? 0) > 0 ||
-    disciplineResults.length > 0 ||
-    programResults.length > 0;
-
-  const displayedCourses = filterOnlyCourses ?? searchResults?.courses ?? [];
-  const displayedProfessors = filterOnlyProfessors ?? searchResults?.professors ?? [];
-
-  const currentSearchParams = useMemo(() => buildSearchParams(filters, query), [filters, query]);
-
-  const coursesSection =
-    displayedCourses.length > 0 ? (
-      <SearchCardSection label={tr("explore.resultsCourses")} delay={0}>
-        {displayedCourses.map((entry) => (
-          <m.div
-            key={entry.normCode}
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.94 }}
-            transition={{ duration: 0.14, ease: "easeOut" }}
-            style={{ flexShrink: 0 }}
-          >
-            <SearchResultCourseCard
-              entry={entry}
-              query={debouncedQuery}
-              searchParams={currentSearchParams}
-            />
-          </m.div>
-        ))}
-      </SearchCardSection>
-    ) : null;
-
-  const disciplinesSection =
-    disciplineResults.length > 0 ? (
-      <SearchCardSection label={tr("explore.resultsDisciplines")} delay={0.04}>
-        {disciplineResults.map((d) => (
-          <m.div
-            key={d.code}
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.94 }}
-            transition={{ duration: 0.14, ease: "easeOut" }}
-            style={{ flexShrink: 0 }}
-          >
-            <SearchResultDisciplineCard
-              discipline={d}
-              courseCount={disciplineCourseCount.get(d.code) ?? 0}
-              query={debouncedQuery}
-              searchParams={currentSearchParams}
-            />
-          </m.div>
-        ))}
-      </SearchCardSection>
-    ) : null;
-
-  const professorsSection =
-    displayedProfessors.length > 0 ? (
-      <SearchCardSection label={tr("explore.resultsProfessors")} delay={0.06}>
-        {displayedProfessors.map((entry) => (
-          <m.div
-            key={entry.groupId}
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.94 }}
-            transition={{ duration: 0.14, ease: "easeOut" }}
-            style={{ flexShrink: 0 }}
-          >
-            <SearchResultProfessorCard
-              entry={entry}
-              professorRatings={professorRatings}
-              query={debouncedQuery}
-              searchParams={currentSearchParams}
-            />
-          </m.div>
-        ))}
-      </SearchCardSection>
-    ) : null;
-
-  const programsSection =
-    programResults.length > 0 ? (
-      <SearchCardSection label={tr("explore.resultsPrograms")} delay={0.08}>
-        {programResults.map((program) => (
-          <m.div
-            key={program.slug}
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.94 }}
-            transition={{ duration: 0.14, ease: "easeOut" }}
-            style={{ flexShrink: 0 }}
-          >
-            <SearchResultProgramCard program={program} query={debouncedQuery} />
-          </m.div>
-        ))}
-      </SearchCardSection>
-    ) : null;
-
-  const orderedSections = searchResults?.professorsFirst
-    ? [professorsSection, coursesSection, disciplinesSection, programsSection]
-    : [coursesSection, disciplinesSection, programsSection, professorsSection];
 
   return (
     <Box
@@ -539,62 +91,19 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
         overflowX: "hidden",
       }}
     >
-      {/* Header */}
-      <Box
-        pt={24}
-        pb="md"
-        style={{
-          flexShrink: 0,
-          paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
-          paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
-        }}
-      >
-        <Box mb={8}>
-          <BackButton
-            fallbackTo={onIndex ? "/" : "/explore"}
-            fallbackLabel={onIndex ? tr("app.nav.backHome") : tr("explore.title")}
-          />
-        </Box>
-        <Stack gap="md" maw={520}>
-          <Title
-            order={showBackButton ? 3 : 2}
-            c="var(--app-text)"
-            fw={600}
-            fz={showBackButton ? { base: "h4", sm: "h3" } : { base: "h3", sm: "h2" }}
-          >
-            {showBackButton ? (
-              <Anchor
-                component={Link}
-                to="/explore"
-                c="inherit"
-                underline="hover"
-                fz="inherit"
-                fw="inherit"
-              >
-                {tr("explore.title")}
-              </Anchor>
-            ) : (
-              tr("explore.title")
-            )}
-          </Title>
-          <ExploreSearchInput
-            value={query}
-            onChange={handleQueryChange}
-            onFocus={() => setSearchEngaged(true)}
-            disabled={loading}
-          />
-        </Stack>
-        <Box mt="md">
-          <ExploreFilterBar
-            filters={filters}
-            onChange={handleFilterChange}
-            disciplineOptions={disciplineOptions}
-            termOptions={termOptions}
-          />
-        </Box>
-      </Box>
+      <ExploreLayoutHeader
+        onIndex={onIndex}
+        showBackButton={showBackButton}
+        query={query}
+        onQueryChange={handleQueryChange}
+        onSearchFocus={() => setSearchEngaged(true)}
+        loading={loading}
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        disciplineOptions={disciplineOptions}
+        termOptions={termOptions}
+      />
 
-      {/* Content area */}
       <Box
         style={{
           flex: 1,
@@ -605,46 +114,21 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       >
         <AnimatePresence mode="wait" initial={false}>
           {renderResults ? (
-            <m.div
-              key="search-results"
-              initial={{ y: 14 }}
-              animate={{ y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-              style={{ flex: 1 }}
-            >
-              {hasResults ? (
-                <Stack gap={28} mt={8}>
-                  {orderedSections}
-                </Stack>
-              ) : (
-                <Box
-                  style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs, paddingRight: 24 }}
-                  mt={8}
-                >
-                  <Text size="sm" c="dimmed">
-                    {activeFilters && !debouncedQuery.trim()
-                      ? tr("explore.filter.noResults")
-                      : tr("search.noResults", { q: query.trim() })}
-                  </Text>
-                  {activeFilters && (
-                    <Text
-                      size="sm"
-                      c="var(--app-accent)"
-                      mt={4}
-                      style={{
-                        cursor: "pointer",
-                        textDecoration: "underline",
-                        textUnderlineOffset: 2,
-                      }}
-                      onClick={() => handleFilterChange(EMPTY_FILTERS)}
-                    >
-                      {tr("explore.filter.clearFilters")}
-                    </Text>
-                  )}
-                </Box>
-              )}
-            </m.div>
+            <ExploreSearchResults
+              hasResults={hasResults}
+              activeFilters={activeFilters}
+              query={query}
+              debouncedQuery={debouncedQuery}
+              onClearFilters={() => handleFilterChange(EMPTY_FILTERS)}
+              professorsFirst={professorsFirst}
+              displayedCourses={displayedCourses}
+              displayedProfessors={displayedProfessors}
+              disciplineResults={disciplineResults}
+              programResults={programResults}
+              disciplineCourseCount={disciplineCourseCount}
+              professorRatings={professorRatings}
+              currentSearchParams={currentSearchParams}
+            />
           ) : (
             <m.div
               key="page-content"

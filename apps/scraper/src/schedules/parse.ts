@@ -108,61 +108,47 @@ export function parseCourseCode(code: string): ParsedCourseCode | null {
 type CheerioRoot = ReturnType<typeof cheerio.load>;
 type CheerioSelection = ReturnType<CheerioRoot>;
 
-/** Parse a single meeting/section row into a component-keyed section, or null if the row is empty. */
-function parseSectionRow(
-  $row: CheerioSelection,
+function extractLines(html: string | null | undefined): string[] {
+  return (html || "")
+    .split(/<br\s*\/?>/i)
+    .map((line) =>
+      line
+        .replace(/<[^>]*>/g, "")
+        .replace(/\s+/g, " ")
+        .trim(),
+    )
+    .filter(Boolean);
+}
+
+function extractSpanLines($row: CheerioSelection, selector: string): string[] {
+  return extractLines($row.find(selector).first().html());
+}
+
+interface ParsedSectionRowParts {
+  sectionLines: string[];
+  dayLines: string[];
+  instructorParts: string[];
+  dateLines: string[];
+  statusAlt: string | null;
+}
+
+function parseSectionRowParts($row: CheerioSelection): ParsedSectionRowParts {
+  return {
+    sectionLines: extractSpanLines($row, 'span[id^="MTG_CLASSNAME$"]'),
+    dayLines: extractSpanLines($row, 'span#MTG_DAYTIME\\$0, span[id^="MTG_DAYTIME$"]'),
+    instructorParts: extractSpanLines($row, 'span#MTG_INSTR\\$0, span[id^="MTG_INSTR$"]'),
+    dateLines: extractSpanLines($row, 'span#MTG_TOPIC\\$0, span[id^="MTG_TOPIC$"]'),
+    statusAlt:
+      $row.find('div[id^="win0divDERIVED_CLSRCH_SSR_STATUS_LONG$"] img').attr("alt") || null,
+  };
+}
+
+function normalizeSectionRow(
+  parts: ParsedSectionRowParts,
   virtual: boolean,
 ): { compKey: string; section: ComponentSection } | null {
-  const sectionSpan = $row.find('span[id^="MTG_CLASSNAME$"]').first();
-  const sectionHtml = sectionSpan.html() || "";
-  const sectionLines = sectionHtml
-    .split(/<br\s*\/?>/i)
-    .map((line) =>
-      line
-        .replace(/<[^>]*>/g, "")
-        .replace(/\s+/g, " ")
-        .trim(),
-    )
-    .filter(Boolean);
+  const { sectionLines, dayLines, instructorParts, dateLines, statusAlt } = parts;
   const rawSection = sectionLines.join(" ");
-
-  const daysSpan = $row.find('span#MTG_DAYTIME\\$0, span[id^="MTG_DAYTIME$"]').first();
-  const daysHtml = daysSpan.html() || "";
-  const dayLines = daysHtml
-    .split(/<br\s*\/?>/i)
-    .map((line) =>
-      line
-        .replace(/<[^>]*>/g, "")
-        .replace(/\s+/g, " ")
-        .trim(),
-    )
-    .filter(Boolean);
-
-  const instrSpan = $row.find('span#MTG_INSTR\\$0, span[id^="MTG_INSTR$"]').first();
-  const instrHtml = instrSpan.html() || "";
-  const instructorParts = instrHtml
-    .split(/<br\s*\/?>/i)
-    .map((line) =>
-      line
-        .replace(/<[^>]*>/g, "")
-        .replace(/\s+/g, " ")
-        .trim(),
-    )
-    .filter(Boolean);
-
-  const datesSpan = $row.find('span#MTG_TOPIC\\$0, span[id^="MTG_TOPIC$"]').first();
-  const datesHtml = datesSpan.html() || "";
-  const dateLines = datesHtml
-    .split(/<br\s*\/?>/i)
-    .map((line) =>
-      line
-        .replace(/<[^>]*>/g, "")
-        .replace(/\s+/g, " ")
-        .trim(),
-    )
-    .filter(Boolean);
-  const statusAlt =
-    $row.find('div[id^="win0divDERIVED_CLSRCH_SSR_STATUS_LONG$"] img').attr("alt") || null;
 
   if (
     !rawSection &&
@@ -207,6 +193,14 @@ function parseSectionRow(
   };
 
   return { compKey, section };
+}
+
+/** Parse a single meeting/section row into a component-keyed section, or null if the row is empty. */
+function parseSectionRow(
+  $row: CheerioSelection,
+  virtual: boolean,
+): { compKey: string; section: ComponentSection } | null {
+  return normalizeSectionRow(parseSectionRowParts($row), virtual);
 }
 
 /** Build a component map from a set of meeting tables belonging to one course. */

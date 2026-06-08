@@ -31,6 +31,5 @@ export * from "./engineBridge";
 export { arrangementFingerprint } from "./generation/fingerprint";
 export * from "./scheduleFromStateEngine";
 export * from "./schedulePreview";
-export * from "./reconstruct";
 export * from "./feedback";
 export * as FeedbackProto from "@uoplan/proto/feedback";

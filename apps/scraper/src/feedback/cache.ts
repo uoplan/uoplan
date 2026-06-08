@@ -110,7 +110,6 @@ export async function outputExists(termId: string): Promise<boolean> {
   return exists(outputPath(termId));
 }
 
-/** Read every cached list page for a term, in pagination order. */
 export async function readListPages(termId: string): Promise<string[]> {
   const dir = listDir(termId);
   let entries: string[];
@@ -133,7 +132,6 @@ export async function writeListPage(
   await fs.writeFile(p, html, "utf-8");
 }
 
-/** Remove any cached list pages + meta for a term (before a fresh walk). */
 export async function clearListCache(termId: string): Promise<void> {
   await fs.rm(listDir(termId), { recursive: true, force: true });
 }
@@ -180,7 +178,6 @@ export async function chartPath(
   return (await exists(p)) ? p : null;
 }
 
-/** Term ids that have a raw cache directory (any stage 1 output). */
 export async function cachedTermIds(): Promise<string[]> {
   try {
     const entries = await fs.readdir(RAW_DIR, { withFileTypes: true });

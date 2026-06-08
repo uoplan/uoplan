@@ -2,6 +2,7 @@ mod api;
 mod auth;
 mod commands;
 mod error;
+mod time_util;
 mod update;
 
 pub mod proto {

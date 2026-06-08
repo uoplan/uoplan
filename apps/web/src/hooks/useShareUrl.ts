@@ -1,10 +1,6 @@
 import { useState, useCallback } from "react";
 import { flushPersistedAppState } from "../lib/persistAppState";
 
-/**
- * Hook for handling share URL copy functionality.
- * Encapsulates the common pattern of copying a URL and showing feedback.
- */
 export function useShareUrl(getShareUrl: () => string | null) {
   const [shareCopied, setShareCopied] = useState(false);
 

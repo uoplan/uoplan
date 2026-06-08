@@ -13,6 +13,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import ts from "typescript";
 import { repoRoot } from "./catalog.mjs";
+import { staticTsIds } from "./static-ids.mjs";
 
 const WEB_SRC = resolve(repoRoot, "apps/web/src");
 const I18N_MODULE = resolve(WEB_SRC, "i18n"); // resolves to i18n/index.ts
@@ -65,23 +66,6 @@ function findTrBinding(sf, filePath) {
 }
 
 /**
- * Extract the string id(s) a `tr()` first argument resolves to statically.
- * @param {ts.Expression} arg
- * @returns {string[]} resolved ids (empty when dynamic / unresolvable)
- */
-function staticIds(arg) {
-  if (ts.isStringLiteralLike(arg)) return [arg.text];
-  if (ts.isParenthesizedExpression(arg)) return staticIds(arg.expression);
-  if (ts.isConditionalExpression(arg)) {
-    const whenTrue = staticIds(arg.whenTrue);
-    const whenFalse = staticIds(arg.whenFalse);
-    // Only resolvable when both branches are themselves resolvable.
-    if (whenTrue.length > 0 && whenFalse.length > 0) return [...whenTrue, ...whenFalse];
-  }
-  return [];
-}
-
-/**
  * @typedef {object} TrUsage
  * @property {string} id
  * @property {string} file   repo-relative path
@@ -116,7 +100,7 @@ export function collectTrUsages() {
         const { line, character } = sf.getLineAndCharacterOfPosition(
           node.arguments[0].getStart(sf),
         );
-        for (const id of staticIds(node.arguments[0])) {
+        for (const id of staticTsIds(ts, node.arguments[0])) {
           usages.push({ id, file: relFile, line: line + 1, column: character + 1 });
         }
       }
