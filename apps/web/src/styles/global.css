@@ -78,6 +78,25 @@ body {
   background-color: var(--app-scrollbar-thumb-hover) !important;
 }
 
+/* Command center (Spotlight): its scrollable actions list reserves a scrollbar
+   gutter only on the inline-end side, making the right padding larger than the
+   left. Drop the reserved gutter (and the matching negative margin) so the
+   action rows sit with symmetric left/right padding. */
+.mantine-Spotlight-actionsList {
+  margin-inline-end: 0;
+}
+
+.mantine-Spotlight-actionsList .mantine-ScrollArea-viewport {
+  padding-inline-end: 0;
+}
+
+/* Match the action hover/selection highlight radius to the card so the gap
+   around it stays uniform into the corners: inner radius = card radius (lg)
+   minus the surrounding gap (the actions-list padding). */
+.mantine-Spotlight-action {
+  border-radius: calc(var(--mantine-radius-lg) - var(--spotlight-actions-list-padding));
+}
+
 a {
   color: inherit;
   text-decoration: none;
