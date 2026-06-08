@@ -26,25 +26,20 @@ import { parseReport, type ReportQuestionStats } from "./report.ts";
 import { ordinalOptionLabels } from "./scales.ts";
 import { parseReportTitle } from "./title.ts";
 
-/** Sidecar mapping each scale question's text to its best-first option labels. */
 type OptionLabelMap = Record<string, string[]>;
 
 interface FeedbackSection {
-  /** Section code, e.g. "A00", "S100", "0". */
   section: string;
   /** "First Last" display order (matches grades.json). */
   professor: string;
-  /** Course title as it appeared on the report (language-specific). */
   title: string;
   /** Per-question survey stats; present once the report HTML has been fetched. */
   questions?: ReportQuestionStats[];
 }
 
-/** One course code and every section/report evaluated under it that term. */
 interface FeedbackCourse {
   /** Course code, normalized to grades.json format, e.g. "ITI 1120". */
   code: string;
-  /** Cross-listed reports contribute a section entry under each of their codes. */
   sections: FeedbackSection[];
 }
 
@@ -60,7 +55,6 @@ interface ParsedTerm {
   termLabel: string;
   sectionCount: number;
   output: FeedbackFile;
-  /** Best-first option labels discovered this term, keyed by question text. */
   optionLabels: OptionLabelMap;
 }
 
@@ -79,7 +73,7 @@ async function harvestOptionLabels(
   sink: OptionLabelMap,
 ): Promise<void> {
   for (const q of questions) {
-    if (sink[q.question]) continue; // already learned this term
+    if (sink[q.question]) continue;
 
     let rawLabels: string[] | null = null;
     if (q.options.length > 0) {
@@ -104,8 +98,6 @@ async function parseTerm(termId: string): Promise<ParsedTerm | null> {
   let sectionCount = 0;
   let unparsedTitles = 0;
 
-  // Per-question option labels harvested this term (HTML table or OCR'd chart);
-  // a chart is OCR'd only once per distinct question text.
   const optionLabels: OptionLabelMap = {};
 
   for (const html of pages) {
@@ -162,7 +154,6 @@ async function parseTerm(termId: string): Promise<ParsedTerm | null> {
   return { termLabel: meta?.termLabel ?? termId, sectionCount, output, optionLabels };
 }
 
-/** Read the committed option-label sidecar, or an empty map when absent. */
 async function readOptionLabels(): Promise<OptionLabelMap> {
   try {
     return JSON.parse(await fs.readFile(optionsPath(), "utf-8")) as OptionLabelMap;
@@ -171,7 +162,6 @@ async function readOptionLabels(): Promise<OptionLabelMap> {
   }
 }
 
-/** Write the option-label sidecar with question texts sorted for stable diffs. */
 async function writeOptionLabels(labels: OptionLabelMap): Promise<void> {
   const sorted: OptionLabelMap = {};
   for (const key of Object.keys(labels).sort()) sorted[key] = labels[key];

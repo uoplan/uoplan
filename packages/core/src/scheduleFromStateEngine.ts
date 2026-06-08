@@ -82,59 +82,55 @@ function applySwaps(
   return { schedule, colorMap };
 }
 
-/**
- * Reconstructs a {@link GeneratedSchedule} from a {@link DecodedState} by running
- * the shared Rust/WASM {@link ScheduleEngine}. The engine owns all generation;
- * this only builds the request inputs from the decoded wizard state (mirroring
- * the web app's request building) and replays the decoded swaps over the result.
- */
-export function generateScheduleFromDecodedState(
-  engine: ScheduleEngine,
+function buildBasicInput(
   decoded: DecodedState,
-  cache: DataCache,
   constraints: GenerationConstraints,
-): ReconstructedPreview | null {
-  if (decoded.wizardMode === "basic") {
-    const basicInput: BasicRequestInput = {
-      constraints,
-      basicPinnedCourses: decoded.basicPinnedCourses,
-      basicElectivesCount: decoded.basicElectivesCount,
-      basicExcludedCategories: decoded.basicExcludedCategories ?? [],
-      completedCourses: decoded.completedCourseCodes,
-      studentPrograms: decoded.studentPrograms,
-      levelBuckets: decoded.levelBuckets,
-      languageBuckets: decoded.languageBuckets,
-      electiveLevelBuckets: decoded.electiveLevelBuckets,
-      includeClosedComponents: decoded.includeClosedComponents,
-      virtualSectionsOnly: decoded.virtualSectionsOnly ?? false,
-      generationPreferEasier: decoded.generationPreferEasier ?? false,
-      generationPreferHigherSentiment: decoded.generationPreferHigherSentiment ?? false,
-      frenchImmersionStream: decoded.frenchImmersionStream ?? false,
-      blacklistedCourses: decoded.blacklistedCourses,
-      currentSeed: decoded.currentSeed,
-      firstSeed: decoded.firstSeed,
-    };
-    const { schedule } = runBasicGeneration(engine, basicInput, cache);
-    return applySwaps(schedule, decoded, cache, constraints);
-  }
+): BasicRequestInput {
+  return {
+    constraints,
+    basicPinnedCourses: decoded.basicPinnedCourses,
+    basicElectivesCount: decoded.basicElectivesCount,
+    basicExcludedCategories: decoded.basicExcludedCategories ?? [],
+    completedCourses: decoded.completedCourseCodes,
+    studentPrograms: decoded.studentPrograms,
+    levelBuckets: decoded.levelBuckets,
+    languageBuckets: decoded.languageBuckets,
+    electiveLevelBuckets: decoded.electiveLevelBuckets,
+    includeClosedComponents: decoded.includeClosedComponents,
+    virtualSectionsOnly: decoded.virtualSectionsOnly ?? false,
+    generationPreferEasier: decoded.generationPreferEasier ?? false,
+    generationPreferHigherSentiment: decoded.generationPreferHigherSentiment ?? false,
+    frenchImmersionStream: decoded.frenchImmersionStream ?? false,
+    blacklistedCourses: decoded.blacklistedCourses,
+    currentSeed: decoded.currentSeed,
+    firstSeed: decoded.firstSeed,
+  };
+}
 
-  // Advanced mode
-  const program = decoded.program;
-  if (!program) return null;
+type RequirementsState = ReturnType<typeof computeRequirementsState>;
+type RequirementIndexToId = Map<number, string>;
 
-  // First pass: build requirement tree so we can map index → requirement ID
-  const firstPass = computeRequirementsState(program, decoded.completedCourseCodes, cache);
-  const reqIds = requirementIdsFromTree(firstPass.tree);
-  const reqIndexToId = new Map<number, string>(reqIds.map((id, i) => [i, id]));
+function buildRequirementIndexToId(tree: RequirementsState["tree"]): RequirementIndexToId {
+  const reqIds = requirementIdsFromTree(tree);
+  return new Map<number, string>(reqIds.map((id, i) => [i, id]));
+}
 
-  // Map option selections (encoded by index) to requirement IDs
+function buildSelectedOptionsPerRequirement(
+  decoded: DecodedState,
+  reqIndexToId: RequirementIndexToId,
+): Record<string, number> {
   const selectedOptionsPerRequirement: Record<string, number> = {};
   for (const { reqIndex, optionIndex } of decoded.optionSelections) {
     const reqId = reqIndexToId.get(reqIndex);
     if (reqId != null) selectedOptionsPerRequirement[reqId] = optionIndex;
   }
+  return selectedOptionsPerRequirement;
+}
 
-  // Map constrained selections to requirement IDs (group tokens use "group:PREFIX" format)
+function buildConstrainedPerRequirementRaw(
+  decoded: DecodedState,
+  reqIndexToId: RequirementIndexToId,
+): Record<string, string[]> {
   const constrainedPerRequirementRaw: Record<string, string[]> = {};
   for (const { reqIndex, courseCodes } of decoded.constrainedSelections) {
     const reqId = reqIndexToId.get(reqIndex);
@@ -147,22 +143,38 @@ export function generateScheduleFromDecodedState(
     const existing = constrainedPerRequirementRaw[reqId] ?? [];
     constrainedPerRequirementRaw[reqId] = [...existing, ...groupPrefixes.map((p) => `group:${p}`)];
   }
+  return constrainedPerRequirementRaw;
+}
 
-  // Map course selections to requirement IDs
+function buildSelectedPerRequirement(
+  decoded: DecodedState,
+  reqIndexToId: RequirementIndexToId,
+): Record<string, string[]> {
   const selectedPerRequirement: Record<string, string[]> = {};
   for (const { reqIndex, courseCodes } of decoded.courseSelections) {
     const reqId = reqIndexToId.get(reqIndex);
     if (reqId != null) selectedPerRequirement[reqId] = courseCodes;
   }
+  return selectedPerRequirement;
+}
 
-  // Map requirement priorities to requirement IDs for the strict priority gate.
+function buildRequirementPriorities(
+  decoded: DecodedState,
+  reqIndexToId: RequirementIndexToId,
+): Record<string, number> {
   const requirementPriorities: Record<string, number> = {};
   for (const { reqIndex, priority } of decoded.requirementPrioritySelections) {
     const reqId = reqIndexToId.get(reqIndex);
     if (reqId != null && priority > 0) requirementPriorities[reqId] = priority;
   }
+  return requirementPriorities;
+}
 
-  // Build prereq-eligible courses
+function buildPrereqEligibleCourses(
+  firstPass: RequirementsState,
+  decoded: DecodedState,
+  cache: DataCache,
+): string[] {
   const ctx = buildPrereqContext(decoded.completedCourseCodes, cache, decoded.studentPrograms);
   const candidateSet = new Set<string>();
   for (const req of firstPass.remaining) {
@@ -173,16 +185,30 @@ export function generateScheduleFromDecodedState(
   for (const code of candidateSet) {
     if (canTakeCourse(code, cache, ctx)) prereqEligibleCourses.push(code);
   }
+  return prereqEligibleCourses;
+}
 
-  const advancedInput: AdvancedRequestInput = {
+function buildAdvancedInput(
+  decoded: DecodedState,
+  cache: DataCache,
+  constraints: GenerationConstraints,
+): AdvancedRequestInput | null {
+  const program = decoded.program;
+  if (!program) return null;
+
+  const firstPass = computeRequirementsState(program, decoded.completedCourseCodes, cache);
+  const reqIndexToId = buildRequirementIndexToId(firstPass.tree);
+  const requirementPriorities = buildRequirementPriorities(decoded, reqIndexToId);
+
+  return {
     constraints,
     completedCourses: decoded.completedCourseCodes,
-    prereqEligibleCourses,
+    prereqEligibleCourses: buildPrereqEligibleCourses(firstPass, decoded, cache),
     remainingRequirements: gateRemainingByPriority(firstPass.remaining, requirementPriorities),
     requirementTreeWithStatus: firstPass.tree,
-    constrainedPerRequirementRaw,
-    selectedPerRequirement,
-    selectedOptionsPerRequirement,
+    constrainedPerRequirementRaw: buildConstrainedPerRequirementRaw(decoded, reqIndexToId),
+    selectedPerRequirement: buildSelectedPerRequirement(decoded, reqIndexToId),
+    selectedOptionsPerRequirement: buildSelectedOptionsPerRequirement(decoded, reqIndexToId),
     coursesThisSemester: decoded.coursesThisSemester,
     forcedCourses: [],
     levelBuckets: decoded.levelBuckets,
@@ -198,7 +224,27 @@ export function generateScheduleFromDecodedState(
     currentSeed: decoded.currentSeed,
     firstSeed: decoded.firstSeed,
   };
+}
 
+/**
+ * Reconstructs a {@link GeneratedSchedule} from a {@link DecodedState} by running
+ * the shared Rust/WASM {@link ScheduleEngine}. The engine owns all generation;
+ * this only builds the request inputs from the decoded wizard state (mirroring
+ * the web app's request building) and replays the decoded swaps over the result.
+ */
+export function generateScheduleFromDecodedState(
+  engine: ScheduleEngine,
+  decoded: DecodedState,
+  cache: DataCache,
+  constraints: GenerationConstraints,
+): ReconstructedPreview | null {
+  if (decoded.wizardMode === "basic") {
+    const { schedule } = runBasicGeneration(engine, buildBasicInput(decoded, constraints), cache);
+    return applySwaps(schedule, decoded, cache, constraints);
+  }
+
+  const advancedInput = buildAdvancedInput(decoded, cache, constraints);
+  if (!advancedInput) return null;
   const { schedule } = runAdvancedGeneration(engine, advancedInput, cache);
   return applySwaps(schedule, decoded, cache, constraints);
 }

@@ -43,7 +43,6 @@ pub struct RequirementWithStatus {
     pub title: Option<String>,
     pub options: Vec<RequirementWithStatus>,
     pub complete: bool,
-    pub satisfied_by: Vec<String>,
     pub requirement_id: Option<String>,
     pub candidate_courses: Vec<String>,
     pub credits_needed: Option<f64>,
@@ -134,7 +133,6 @@ fn collect_from_selected_branches(
                         title: node.title.clone(),
                         candidate_courses: node.candidate_courses.clone(),
                         credits_needed: node.credits_needed.unwrap_or(0.0),
-                        satisfied_by: node.satisfied_by.clone(),
                     });
                 }
             }

@@ -3,18 +3,10 @@
 # Build the Rust -> WASM schedule engine (packages/engine), bootstrapping the
 # Rust toolchain + wasm-pack first if they are missing.
 #
-# Why this exists: CI and local dev already have Rust + wasm-pack, but the
-# Cloudflare Workers Builds container ships only Node + pnpm. Without a toolchain
-# the build fails with `sh: 1: wasm-pack: not found`. Running the install and the
-# `wasm-pack` invocation in this single shell means the PATH we export below is
-# in scope for the build step — which would NOT be the case across separate
-# `&&`-chained npm scripts.
-#
-# Idempotent: a no-op once the toolchain is present (the normal case locally/CI).
-#
 # Usage:
 #   bash scripts/build-engine-wasm.sh            # release build
 #   bash scripts/build-engine-wasm.sh --dev      # dev build
+# Idempotently installs missing Rust/wasm-pack tools before building.
 set -euo pipefail
 
 PROFILE_FLAG="--release"

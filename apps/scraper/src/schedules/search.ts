@@ -39,6 +39,86 @@ export async function createClient(): Promise<ClientInfo> {
 }
 type YearOfStudy = 1 | 2 | 3 | 4 | "grad";
 
+const PEOPLESOFT_PANEL_PREFIX_FIELDS: ReadonlyArray<readonly [string, string]> = [
+  ["ICType", "Panel"],
+  ["ICElementNum", "0"],
+];
+
+const PEOPLESOFT_PANEL_POST_STATE_FIELDS: ReadonlyArray<readonly [string, string]> = [
+  ["ICAction", "CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH"],
+  ["ICModelCancel", "0"],
+  ["ICXPos", "0"],
+  ["ICYPos", "0"],
+  ["ResponsetoDiffFrame", "-1"],
+  ["TargetFrameName", "None"],
+  ["FacetPath", "None"],
+  ["PrmtTbl", ""],
+  ["PrmtTbl_fn", ""],
+  ["PrmtTbl_fv", ""],
+  ["TA_SkipFldNms", ""],
+  ["ICFocus", ""],
+  ["ICSaveWarningFilter", "0"],
+  ["ICChanged", "-1"],
+  ["ICSkipPending", "0"],
+  ["ICAutoSave", "0"],
+  ["ICResubmit", "0"],
+];
+
+const PEOPLESOFT_PANEL_SUFFIX_FIELDS: ReadonlyArray<readonly [string, string]> = [
+  ["ICActionPrompt", "false"],
+  ["ICTypeAheadID", ""],
+  ["ICBcDomData", ""],
+  ["ICPanelName", ""],
+  ["ICFind", ""],
+  ["ICAddCount", ""],
+  ["ICAppClsData", ""],
+];
+
+const NEUTRAL_CRITERIA_FIELDS: ReadonlyArray<readonly [string, string]> = [
+  ["SSR_CLSRCH_WRK_ACAD_CAREER$0", ""],
+  ["SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$0", "N"],
+  ["SSR_CLSRCH_WRK_SSR_OPEN_ONLY$0", "N"],
+  ["UO_PUB_SRCH_WRK_ACAD_GROUP$0", ""],
+  ["SSR_CLSRCH_WRK_DESCR$0", ""],
+  ["UO_PUB_SRCH_WRK_UO_LNG_FR$chk$0", "N"],
+  ["UO_PUB_SRCH_WRK_UO_LNG_EN$chk$0", "N"],
+  ["UO_PUB_SRCH_WRK_UO_LNG_OT$chk$0", "N"],
+  ["UO_PUB_SRCH_WRK_UO_LNG_BI$chk$0", "N"],
+];
+
+const MEETING_FILTER_FIELDS: ReadonlyArray<readonly [string, string]> = [
+  ["SSR_CLSRCH_WRK_SSR_START_TIME_OPR$0", "GE"],
+  ["SSR_CLSRCH_WRK_MEETING_TIME_START$0", ""],
+  ["SSR_CLSRCH_WRK_SSR_END_TIME_OPR$0", "LE"],
+  ["SSR_CLSRCH_WRK_MEETING_TIME_END$0", ""],
+  ["SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$0", "I"],
+  ["SSR_CLSRCH_WRK_MON$chk$0", ""],
+  ["SSR_CLSRCH_WRK_TUES$chk$0", ""],
+  ["SSR_CLSRCH_WRK_WED$chk$0", ""],
+  ["SSR_CLSRCH_WRK_THURS$chk$0", ""],
+  ["SSR_CLSRCH_WRK_FRI$chk$0", ""],
+  ["SSR_CLSRCH_WRK_SAT$chk$0", ""],
+  ["SSR_CLSRCH_WRK_SUN$chk$0", ""],
+  ["SSR_CLSRCH_WRK_SSR_EXACT_MATCH2$0", "B"],
+  ["SSR_CLSRCH_WRK_LAST_NAME$0", ""],
+  ["SSR_CLSRCH_WRK_SSR_COMPONENT$0", ""],
+  ["SSR_CLSRCH_WRK_SESSION_CODE$0", ""],
+  ["SSR_CLSRCH_WRK_INSTRUCTION_MODE$0", ""],
+];
+
+const ONLINE_FILTER_FIELDS: ReadonlyArray<readonly [string, string]> = [
+  ["UO_PUB_SRCH_WRK_UO_ONLINE_COURSES$chk$0", "N"],
+  ["UO_PUB_SRCH_WRK_UO_AUDITOR_PERMITD$chk$0", "N"],
+  ["UO_PUB_SRCH_WRK_UO_UOTTA_CARLETON$chk$0", "N"],
+];
+
+function setFields(
+  params: URLSearchParams,
+  fields: ReadonlyArray<readonly [string, string]>,
+): void {
+  for (const [key, value] of fields) params.set(key, value);
+}
+
 function buildSearchBody(args: {
   icsid: string;
   dataLang: string;
@@ -53,59 +133,22 @@ function buildSearchBody(args: {
 
   const params = new URLSearchParams();
 
-  // Core PeopleSoft navigation / panel fields (non-AJAX, full page response)
-  params.set("ICType", "Panel");
-  params.set("ICElementNum", "0");
+  setFields(params, PEOPLESOFT_PANEL_PREFIX_FIELDS);
   params.set("ICStateNum", icStateNum);
-  params.set("ICAction", "CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH");
-  params.set("ICModelCancel", "0");
-  params.set("ICXPos", "0");
-  params.set("ICYPos", "0");
-  params.set("ResponsetoDiffFrame", "-1");
-  params.set("TargetFrameName", "None");
-  params.set("FacetPath", "None");
-  params.set("PrmtTbl", "");
-  params.set("PrmtTbl_fn", "");
-  params.set("PrmtTbl_fv", "");
-  params.set("TA_SkipFldNms", "");
-  params.set("ICFocus", "");
-  params.set("ICSaveWarningFilter", "0");
-  params.set("ICChanged", "-1");
-  params.set("ICSkipPending", "0");
-  params.set("ICAutoSave", "0");
-  params.set("ICResubmit", "0");
+  setFields(params, PEOPLESOFT_PANEL_POST_STATE_FIELDS);
   params.set("ICSID", icsid);
-  params.set("ICActionPrompt", "false");
-  params.set("ICTypeAheadID", "");
-  params.set("ICBcDomData", "");
-  params.set("ICPanelName", "");
-  params.set("ICFind", "");
-  params.set("ICAddCount", "");
-  params.set("ICAppClsData", "");
+  setFields(params, PEOPLESOFT_PANEL_SUFFIX_FIELDS);
 
-  // Language / term
   params.set("#ICDataLang", dataLang || "ENG");
   if (termId) {
     params.set("CLASS_SRCH_WRK2_STRM$35$", termId);
   }
 
-  // Course criteria. An empty catalog number performs a subject-only search (many courses).
   params.set("SSR_CLSRCH_WRK_SUBJECT$0", subject);
-  params.set("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$0", "E"); // course number "exact match"
+  params.set("SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$0", "E");
   params.set("SSR_CLSRCH_WRK_CATALOG_NBR$0", catalogNbr ?? "");
 
-  // Keep other fields in a neutral state to mimic the real form as closely as possible.
-  params.set("SSR_CLSRCH_WRK_ACAD_CAREER$0", "");
-  // Open only flag unchecked (send both variants as "N"/empty)
-  params.set("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$0", "N");
-  params.set("SSR_CLSRCH_WRK_SSR_OPEN_ONLY$0", "N");
-  params.set("UO_PUB_SRCH_WRK_ACAD_GROUP$0", "");
-  params.set("SSR_CLSRCH_WRK_DESCR$0", "");
-  params.set("UO_PUB_SRCH_WRK_UO_LNG_FR$chk$0", "N");
-  params.set("UO_PUB_SRCH_WRK_UO_LNG_EN$chk$0", "N");
-  params.set("UO_PUB_SRCH_WRK_UO_LNG_OT$chk$0", "N");
-  params.set("UO_PUB_SRCH_WRK_UO_LNG_BI$chk$0", "N");
-  // Year-of-study facet. Selecting a single value narrows an otherwise-overflowing subject search.
+  setFields(params, NEUTRAL_CRITERIA_FIELDS);
   for (const opt of ["01", "02", "03", "04"] as const) {
     const on = yearOfStudy === Number(opt);
     params.set(`UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_${opt}$chk$0`, on ? "Y" : "N");
@@ -114,27 +157,9 @@ function buildSearchBody(args: {
   const gradOn = yearOfStudy === "grad";
   params.set("UO_PUB_SRCH_WRK_GRADUATED_TBL_CD$chk$0", gradOn ? "Y" : "N");
   if (gradOn) params.set("UO_PUB_SRCH_WRK_GRADUATED_TBL_CD$0", "Y");
-  params.set("SSR_CLSRCH_WRK_SSR_START_TIME_OPR$0", "GE");
-  params.set("SSR_CLSRCH_WRK_MEETING_TIME_START$0", "");
-  params.set("SSR_CLSRCH_WRK_SSR_END_TIME_OPR$0", "LE");
-  params.set("SSR_CLSRCH_WRK_MEETING_TIME_END$0", "");
-  params.set("SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$0", "I");
-  params.set("SSR_CLSRCH_WRK_MON$chk$0", "");
-  params.set("SSR_CLSRCH_WRK_TUES$chk$0", "");
-  params.set("SSR_CLSRCH_WRK_WED$chk$0", "");
-  params.set("SSR_CLSRCH_WRK_THURS$chk$0", "");
-  params.set("SSR_CLSRCH_WRK_FRI$chk$0", "");
-  params.set("SSR_CLSRCH_WRK_SAT$chk$0", "");
-  params.set("SSR_CLSRCH_WRK_SUN$chk$0", "");
-  params.set("SSR_CLSRCH_WRK_SSR_EXACT_MATCH2$0", "B");
-  params.set("SSR_CLSRCH_WRK_LAST_NAME$0", "");
-  params.set("SSR_CLSRCH_WRK_SSR_COMPONENT$0", "");
-  params.set("SSR_CLSRCH_WRK_SESSION_CODE$0", "");
-  params.set("SSR_CLSRCH_WRK_INSTRUCTION_MODE$0", "");
+  setFields(params, MEETING_FILTER_FIELDS);
   params.set("SSR_CLSRCH_WRK_LOCATION$0", virtual ? "ZZVIRTL" : "");
-  params.set("UO_PUB_SRCH_WRK_UO_ONLINE_COURSES$chk$0", "N");
-  params.set("UO_PUB_SRCH_WRK_UO_AUDITOR_PERMITD$chk$0", "N");
-  params.set("UO_PUB_SRCH_WRK_UO_UOTTA_CARLETON$chk$0", "N");
+  setFields(params, ONLINE_FILTER_FIELDS);
 
   return params.toString();
 }
@@ -155,6 +180,18 @@ function classifyBanner(html: string): BannerKind {
   if (text.includes("maximum limit") || text.includes("exceed")) return "overflow";
   if (text.includes("no classes") || text.includes("no results")) return "empty";
   return "none";
+}
+
+function refreshPeopleSoftState(clientInfo: ClientInfo, response: { body: string }): void {
+  try {
+    const $ = cheerio.load(response.body);
+    const icsid = $("#ICSID").attr("value");
+    if (icsid) clientInfo.icsid = icsid;
+    const stateNum = $("#ICStateNum").attr("value");
+    if (stateNum) clientInfo.icStateNum = stateNum;
+  } catch {
+    // Keep the previous state when PeopleSoft returns a transient non-search page.
+  }
 }
 
 async function performSearch(
@@ -185,17 +222,8 @@ async function performSearch(
   }
 
   for (let attempt = 1; attempt <= 10; attempt++) {
-    // Refresh page-level state (ICSID / ICStateNum) from a fresh criteria page load.
     const initRes = await clientInfo.client.get(BASE_URL);
-    try {
-      const $init = cheerio.load(initRes.body);
-      const pageIcsid = $init("#ICSID").attr("value");
-      if (pageIcsid) clientInfo.icsid = pageIcsid;
-      const pageState = $init("#ICStateNum").attr("value");
-      if (pageState) clientInfo.icStateNum = pageState;
-    } catch {
-      // Ignore and fall back to previously known state.
-    }
+    refreshPeopleSoftState(clientInfo, initRes);
 
     const body = buildSearchBody({
       icsid: clientInfo.icsid,
@@ -212,17 +240,7 @@ async function performSearch(
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body,
     });
-
-    // Update session state from the response for subsequent requests.
-    try {
-      const $ = cheerio.load(res.body);
-      const newIcsid = $("#ICSID").attr("value");
-      if (newIcsid) clientInfo.icsid = newIcsid;
-      const newStateNum = $("#ICStateNum").attr("value");
-      if (newStateNum) clientInfo.icStateNum = newStateNum;
-    } catch {
-      // Non-fatal; fall back to previous state values.
-    }
+    refreshPeopleSoftState(clientInfo, res);
 
     try {
       await fs.mkdir(HTML_CACHE_DIR, { recursive: true });

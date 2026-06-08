@@ -34,11 +34,6 @@ function ensureWasm(): Promise<void> {
   return initPromise;
 }
 
-/**
- * Synchronously initializes the engine WASM from an already-compiled
- * {@link WebAssembly.Module}. Used by the Node test harness (which cannot fetch
- * the `?url` asset) to make {@link getEngineSync} usable without async init.
- */
 export function initEngineWasmFromModule(module: WebAssembly.Module): void {
   if (wasmReady) return;
   initSync({ module });
@@ -68,12 +63,6 @@ const engineMemo = new Map<string, EngineEntry>();
 const engineBuilding = new Map<string, Promise<EngineEntry>>();
 const ENGINE_CACHE_SIZE = 4;
 
-/**
- * Loads (and memoizes) a WASM {@link Engine} built from the merged catalogue +
- * schedules for a data key, re-encoding the domain objects back into the
- * `data.proto` bytes the engine decodes. Returns the engine plus the matching
- * {@link DataCache} used to map responses back into enrollments.
- */
 export async function getScheduleEngine(dataKey: CacheDataKey): Promise<EngineEntry> {
   const key = datasetKey(dataKey);
   const hit = engineMemo.get(key);
@@ -121,13 +110,6 @@ interface SyncEngineEntry {
 
 let syncEntry: SyncEngineEntry | null = null;
 
-/**
- * Synchronously builds (and identity-memoizes) a WASM {@link Engine} for the
- * given domain catalogue + schedules. Returns `null` when the WASM module has
- * not finished initializing yet (callers should have prewarmed via
- * {@link getScheduleEngine} on data load); a background init is kicked off so a
- * subsequent call succeeds. Used by synchronous store swap paths.
- */
 export function getEngineSync(
   catalogue: DomainCatalogue,
   schedulesData: DomainSchedulesData,
@@ -147,13 +129,6 @@ export function getEngineSync(
   return engine;
 }
 
-/**
- * Async variant of {@link getEngineSync}: ensures the WASM module is initialized
- * (awaiting the fetch-based init when needed), then builds/memoizes an engine
- * from in-memory domain data. Used by the main-thread generation fallback (no
- * worker / tests), where the data already lives in the store rather than being
- * loaded by data key.
- */
 export async function getInMemoryEngine(
   catalogue: DomainCatalogue,
   schedulesData: DomainSchedulesData,

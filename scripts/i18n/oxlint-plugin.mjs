@@ -11,21 +11,7 @@
  */
 
 import { LOCALES, loadCatalog } from "./catalog.mjs";
-
-/** Resolve the static string id(s) an argument node resolves to, else []. */
-function staticIds(node) {
-  if (!node) return [];
-  if (node.type === "Literal" && typeof node.value === "string") return [node.value];
-  if (node.type === "TemplateLiteral" && node.expressions.length === 0) {
-    return [node.quasis[0].value.cooked];
-  }
-  if (node.type === "ConditionalExpression") {
-    const a = staticIds(node.consequent);
-    const b = staticIds(node.alternate);
-    if (a.length > 0 && b.length > 0) return [...a, ...b];
-  }
-  return [];
-}
+import { staticEstreeIds } from "./static-ids.mjs";
 
 const plugin = {
   meta: { name: "i18n-tr" },
@@ -53,7 +39,7 @@ const plugin = {
           },
           CallExpression(node) {
             if (!trName || node.callee.type !== "Identifier" || node.callee.name !== trName) return;
-            const ids = staticIds(node.arguments[0]);
+            const ids = staticEstreeIds(node.arguments[0]);
             for (const id of ids) {
               const absent = LOCALES.filter((loc) => !loadCatalog(loc).entries.has(id));
               if (absent.length > 0) {

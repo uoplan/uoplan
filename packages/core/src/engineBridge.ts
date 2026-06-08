@@ -216,23 +216,37 @@ function requirementTreeToProto(nodes: RequirementWithStatus[]): ProtoRequiremen
   }));
 }
 
-export function buildBasicRequest(input: BasicRequestInput, cache: DataCache): GenerationRequest {
+type CommonGenerationRequestFields = Pick<
+  GenerationRequest,
+  | "basicExcludedCategories"
+  | "completedCourses"
+  | "levelBuckets"
+  | "languageBuckets"
+  | "electiveLevelBuckets"
+  | "includeClosedComponents"
+  | "virtualSectionsOnly"
+  | "generationPreferEasier"
+  | "frenchImmersionStream"
+  | "blacklistedCourses"
+  | "constraints"
+  | "currentSeed"
+  | "firstSeed"
+  | "professorRatings"
+  | "courseAplus"
+  | "generationPreferHigherSentiment"
+  | "courseSentiment"
+>;
+
+type InputWithCommonGenerationFields = CommonRequestInput &
+  Pick<BasicRequestInput, "basicExcludedCategories" | "frenchImmersionStream">;
+
+function buildCommonGenerationRequestFields(
+  input: InputWithCommonGenerationFields,
+  cache: DataCache,
+): CommonGenerationRequestFields {
   return {
-    mode: Mode.MODE_BASIC,
-    basicPinnedCourses: input.basicPinnedCourses,
-    basicElectivesCount: input.basicElectivesCount,
     basicExcludedCategories: input.basicExcludedCategories,
     completedCourses: input.completedCourses,
-    studentPrograms: input.studentPrograms,
-    remainingRequirements: [],
-    requirementTree: [],
-    selectedPerRequirement: {},
-    selectedOptionsPerRequirement: {},
-    constrainedPerRequirement: {},
-    requirementPriorities: {},
-    coursesThisSemester: 0,
-    prereqEligibleCourses: [],
-    forcedCourses: [],
     levelBuckets: input.levelBuckets,
     languageBuckets: input.languageBuckets,
     electiveLevelBuckets: input.electiveLevelBuckets,
@@ -254,16 +268,53 @@ export function buildBasicRequest(input: BasicRequestInput, cache: DataCache): G
   };
 }
 
+export function buildBasicRequest(input: BasicRequestInput, cache: DataCache): GenerationRequest {
+  const common = buildCommonGenerationRequestFields(input, cache);
+  return {
+    mode: Mode.MODE_BASIC,
+    basicPinnedCourses: input.basicPinnedCourses,
+    basicElectivesCount: input.basicElectivesCount,
+    basicExcludedCategories: common.basicExcludedCategories,
+    completedCourses: common.completedCourses,
+    studentPrograms: input.studentPrograms,
+    remainingRequirements: [],
+    requirementTree: [],
+    selectedPerRequirement: {},
+    selectedOptionsPerRequirement: {},
+    constrainedPerRequirement: {},
+    requirementPriorities: {},
+    coursesThisSemester: 0,
+    prereqEligibleCourses: [],
+    forcedCourses: [],
+    levelBuckets: common.levelBuckets,
+    languageBuckets: common.languageBuckets,
+    electiveLevelBuckets: common.electiveLevelBuckets,
+    includeClosedComponents: common.includeClosedComponents,
+    virtualSectionsOnly: common.virtualSectionsOnly,
+    generationPreferEasier: common.generationPreferEasier,
+    frenchImmersionStream: common.frenchImmersionStream,
+    blacklistedCourses: common.blacklistedCourses,
+    constraints: common.constraints,
+    currentSeed: common.currentSeed,
+    firstSeed: common.firstSeed,
+    professorRatings: common.professorRatings,
+    courseAplus: common.courseAplus,
+    generationPreferHigherSentiment: common.generationPreferHigherSentiment,
+    courseSentiment: common.courseSentiment,
+  };
+}
+
 export function buildAdvancedRequest(
   input: AdvancedRequestInput,
   cache: DataCache,
 ): GenerationRequest {
+  const common = buildCommonGenerationRequestFields(input, cache);
   return {
     mode: Mode.MODE_ADVANCED,
     basicPinnedCourses: [],
     basicElectivesCount: 0,
-    basicExcludedCategories: input.basicExcludedCategories,
-    completedCourses: input.completedCourses,
+    basicExcludedCategories: common.basicExcludedCategories,
+    completedCourses: common.completedCourses,
     studentPrograms: [],
     remainingRequirements: remainingToProto(input.remainingRequirements),
     requirementTree: requirementTreeToProto(input.requirementTreeWithStatus),
@@ -274,24 +325,21 @@ export function buildAdvancedRequest(
     coursesThisSemester: input.coursesThisSemester,
     prereqEligibleCourses: input.prereqEligibleCourses,
     forcedCourses: input.forcedCourses,
-    levelBuckets: input.levelBuckets,
-    languageBuckets: input.languageBuckets,
-    electiveLevelBuckets: input.electiveLevelBuckets,
-    includeClosedComponents: input.includeClosedComponents,
-    virtualSectionsOnly: input.virtualSectionsOnly,
-    generationPreferEasier: input.generationPreferEasier,
-    frenchImmersionStream: input.frenchImmersionStream,
-    blacklistedCourses: input.blacklistedCourses,
-    constraints: constraintsToProto(input.constraints),
-    currentSeed: input.currentSeed,
-    firstSeed: input.firstSeed,
-    professorRatings: professorRatingsToProto(input.constraints),
-    courseAplus: input.generationPreferEasier ? buildCourseAplusMap(cache) : {},
-    generationPreferHigherSentiment: input.generationPreferHigherSentiment,
-    courseSentiment:
-      input.generationPreferHigherSentiment && input.courseSentimentByNorm
-        ? buildCourseSentimentMap(cache, input.courseSentimentByNorm)
-        : {},
+    levelBuckets: common.levelBuckets,
+    languageBuckets: common.languageBuckets,
+    electiveLevelBuckets: common.electiveLevelBuckets,
+    includeClosedComponents: common.includeClosedComponents,
+    virtualSectionsOnly: common.virtualSectionsOnly,
+    generationPreferEasier: common.generationPreferEasier,
+    frenchImmersionStream: common.frenchImmersionStream,
+    blacklistedCourses: common.blacklistedCourses,
+    constraints: common.constraints,
+    currentSeed: common.currentSeed,
+    firstSeed: common.firstSeed,
+    professorRatings: common.professorRatings,
+    courseAplus: common.courseAplus,
+    generationPreferHigherSentiment: common.generationPreferHigherSentiment,
+    courseSentiment: common.courseSentiment,
   };
 }
 
@@ -356,7 +404,7 @@ export function mapGenerationResponse(
 }
 
 /** Map a fixed-set timetable {@link GenerationResponse} to a schedule (or null). */
-export function mapTimetableResponse(
+function mapTimetableResponse(
   response: GenerationResponse,
   cache: DataCache,
 ): GeneratedSchedule | null {

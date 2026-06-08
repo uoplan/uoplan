@@ -235,6 +235,41 @@ fn enrollment_to_chosen(e: &Enrollment) -> ChosenCourse {
     }
 }
 
+fn generation_response(
+    schedule: Option<Vec<Enrollment>>,
+    optional_pool: Vec<String>,
+    pinned: Vec<String>,
+    chosen_course_to_requirement: HashMap<String, String>,
+    pool_diagnostics: Option<advanced::PoolDiagnostics>,
+    error: Option<String>,
+) -> GenerationResponse {
+    let has_schedule = schedule.is_some();
+    GenerationResponse {
+        has_schedule,
+        courses: schedule
+            .as_ref()
+            .map(|s| s.iter().map(enrollment_to_chosen).collect())
+            .unwrap_or_default(),
+        optional_pool,
+        pinned,
+        chosen_course_to_requirement,
+        pool_diagnostics: pool_diagnostics.map(|d| PoolDiagnostics {
+            empty_pools: d
+                .empty_pools
+                .into_iter()
+                .map(|p| EmptyPool {
+                    label: p.label,
+                    requirement_id: Some(p.requirement_id),
+                    candidate_courses: p.candidate_courses,
+                })
+                .collect(),
+            total_available: d.total_available as u32,
+            total_needed: d.total_needed as u32,
+        }),
+        error: if has_schedule { None } else { error },
+    }
+}
+
 fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse {
     let constraints = build_constraints(&req);
     let course_aplus = &req.course_aplus;
@@ -263,24 +298,14 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
             first_seed: req.first_seed,
         });
 
-        let has_schedule = result.schedule.is_some();
-        return GenerationResponse {
-            has_schedule,
-            courses: result
-                .schedule
-                .as_ref()
-                .map(|s| s.iter().map(enrollment_to_chosen).collect())
-                .unwrap_or_default(),
-            optional_pool: result.optional_pool,
-            pinned: req.basic_pinned_courses.clone(),
-            chosen_course_to_requirement: HashMap::new(),
-            pool_diagnostics: None,
-            error: if has_schedule {
-                None
-            } else {
-                Some("no_schedule".to_string())
-            },
-        };
+        return generation_response(
+            result.schedule,
+            result.optional_pool,
+            req.basic_pinned_courses.clone(),
+            HashMap::new(),
+            None,
+            Some("no_schedule".to_string()),
+        );
     }
 
     let result = advanced::generate_advanced(advanced::AdvancedParams {
@@ -297,7 +322,6 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
                 title: r.title.clone(),
                 candidate_courses: r.candidate_courses.clone(),
                 credits_needed: r.credits_needed.unwrap_or(0.0),
-                satisfied_by: r.satisfied_by.clone(),
             })
             .collect(),
         requirement_tree: req
@@ -330,36 +354,14 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
         first_seed: req.first_seed,
     });
 
-    let has_schedule = result.schedule.is_some();
-    GenerationResponse {
-        has_schedule,
-        courses: result
-            .schedule
-            .as_ref()
-            .map(|s| s.iter().map(enrollment_to_chosen).collect())
-            .unwrap_or_default(),
-        optional_pool: result.filtered_optional_pool,
-        pinned: result.pinned,
-        chosen_course_to_requirement: result.chosen_to_requirement.into_iter().collect(),
-        pool_diagnostics: result.pool_diagnostics.map(|d| PoolDiagnostics {
-            empty_pools: d
-                .empty_pools
-                .into_iter()
-                .map(|p| EmptyPool {
-                    label: p.label,
-                    requirement_id: Some(p.requirement_id),
-                    candidate_courses: p.candidate_courses,
-                })
-                .collect(),
-            total_available: d.total_available as u32,
-            total_needed: d.total_needed as u32,
-        }),
-        error: if has_schedule {
-            None
-        } else {
-            Some("no_schedule".to_string())
-        },
-    }
+    generation_response(
+        result.schedule,
+        result.filtered_optional_pool,
+        result.pinned,
+        result.chosen_to_requirement.into_iter().collect(),
+        result.pool_diagnostics,
+        Some("no_schedule".to_string()),
+    )
 }
 
 fn convert_requirement_node(
@@ -370,7 +372,6 @@ fn convert_requirement_node(
         title: node.title.clone(),
         options: node.options.iter().map(convert_requirement_node).collect(),
         complete: node.complete,
-        satisfied_by: node.satisfied_by.clone(),
         requirement_id: node.requirement_id.clone(),
         candidate_courses: node.candidate_courses.clone(),
         credits_needed: node.credits_needed,

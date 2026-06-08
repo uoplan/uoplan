@@ -13,6 +13,32 @@ export type FetchBytes = (id: string) => Promise<Uint8Array>;
 /** Resolves an asset id to the URL it is served from, or `undefined` if unknown. */
 export type ResolveUrl = (id: string) => string | undefined;
 
+export interface FetchResponse {
+  ok: boolean;
+  status: number;
+  arrayBuffer(): Promise<ArrayBuffer>;
+}
+
+export interface FetchBytesTransportOptions {
+  resolve: ResolveUrl;
+  fetch(this: void, url: string): Promise<FetchResponse>;
+  baseUrl?: string;
+}
+
+export function createFetchBytesTransport({
+  resolve,
+  fetch: fetchUrl,
+  baseUrl = "",
+}: FetchBytesTransportOptions): FetchBytes {
+  return async (id) => {
+    const url = resolve(id);
+    if (url === undefined) throw new Error(`Unknown data asset: ${id}`);
+    const res = await fetchUrl(`${baseUrl}${url}`);
+    if (!res.ok) throw new Error(`Failed to load ${id} (${url}): HTTP ${res.status}`);
+    return new Uint8Array(await res.arrayBuffer());
+  };
+}
+
 /** Resolve to `null` instead of rejecting when an optional asset is missing. */
 export async function optional(fetchBytes: FetchBytes, id: string): Promise<Uint8Array | null> {
   try {

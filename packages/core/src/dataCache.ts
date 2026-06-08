@@ -15,17 +15,9 @@ export interface DataCache {
   getAllSchedules(): CourseSchedule[];
 }
 
-// Use the centralized utility
-const isStageWorkTermCourse = isWorkTermCourse;
-
 /**
- * After merging a first-year (or other) catalogue snapshot with the latest catalogue,
- * copy each course's `aliases` from the latest rows when defined so the data cache
- * and prerequisite alias map match current "Previously …" renumbering.
- */
-/**
- * When merging catalogues for a student's first year of study, prerequisite fields
- * always come from the year row. Strips latest prereqs when the year row has none.
+ * When merging a first-year catalogue with the latest catalogue, prerequisite
+ * fields always come from the year row, stripping latest prereqs when absent.
  */
 export function applyYearPrerequisites(latest: Course, year: Course): Course {
   const { prerequisites: _p, prereqText: _t, ...rest } = latest;
@@ -164,7 +156,7 @@ export function buildDataCache(catalogue: Catalogue, schedulesData: SchedulesDat
       courseMap.set(normalizeCourseCode(alias), course);
     }
 
-    if (isStageWorkTermCourse(course)) {
+    if (isWorkTermCourse(course)) {
       continue;
     }
 

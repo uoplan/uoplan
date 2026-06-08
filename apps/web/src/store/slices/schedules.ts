@@ -43,54 +43,35 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
   // Per-store memo of valid section enrollments, invalidated via clearEnrollmentsCache.
   const validEnrollmentsByCourseCode = new Map<string, CourseEnrollment[]>();
 
+  const generateSchedulesForMode = async (mode: GenerateSchedulesMode) => {
+    if (get().scheduleGenerating) return;
+    await withScheduleGenerating(set, async () => {
+      const state = get();
+      const swapsToApply = state.currentSwaps;
+      const repairedSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
+      const isFirstGen = repairedSeed === 0;
+      const effectiveState = isFirstGen
+        ? { ...state, currentSeed: state.firstSeed }
+        : { ...state, currentSeed: repairedSeed };
+      const result = await runScheduleGeneration(effectiveState, mode);
+      if (result) {
+        const resultWithSwaps = applySwapsToResult(result, swapsToApply, get());
+        applyScheduleGenerationResult(
+          set,
+          get,
+          resultWithSwaps,
+          isFirstGen ? state.firstSeed : repairedSeed,
+        );
+      }
+    });
+  };
+
   return {
     clearEnrollmentsCache: () => validEnrollmentsByCourseCode.clear(),
 
-    generateSchedules: async () => {
-      if (get().scheduleGenerating) return;
-      await withScheduleGenerating(set, async () => {
-        const state = get();
-        const swapsToApply = state.currentSwaps;
-        const repairedSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
-        const isFirstGen = repairedSeed === 0;
-        const effectiveState = isFirstGen
-          ? { ...state, currentSeed: state.firstSeed }
-          : { ...state, currentSeed: repairedSeed };
-        const result = await runScheduleGeneration(effectiveState, "advanced");
-        if (result) {
-          const resultWithSwaps = applySwapsToResult(result, swapsToApply, get());
-          applyScheduleGenerationResult(
-            set,
-            get,
-            resultWithSwaps,
-            isFirstGen ? state.firstSeed : repairedSeed,
-          );
-        }
-      });
-    },
+    generateSchedules: () => generateSchedulesForMode("advanced"),
 
-    generateBasicSchedules: async () => {
-      if (get().scheduleGenerating) return;
-      await withScheduleGenerating(set, async () => {
-        const state = get();
-        const swapsToApply = state.currentSwaps;
-        const repairedSeed = repairSeedPosition(state.firstSeed, state.currentSeed);
-        const isFirstGen = repairedSeed === 0;
-        const effectiveState = isFirstGen
-          ? { ...state, currentSeed: state.firstSeed }
-          : { ...state, currentSeed: repairedSeed };
-        const result = await runScheduleGeneration(effectiveState, "basic");
-        if (result) {
-          const resultWithSwaps = applySwapsToResult(result, swapsToApply, get());
-          applyScheduleGenerationResult(
-            set,
-            get,
-            resultWithSwaps,
-            isFirstGen ? state.firstSeed : repairedSeed,
-          );
-        }
-      });
-    },
+    generateBasicSchedules: () => generateSchedulesForMode("basic"),
 
     clearSchedule: () =>
       set((state) => {

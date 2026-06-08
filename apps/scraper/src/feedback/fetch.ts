@@ -53,7 +53,16 @@ function selectTerms(links: TermLink[], wanted?: string[]): TermLink[] {
   return links.filter((l) => set.has(l.termId));
 }
 
-/** Navigate a term entry link, clearing any SAML "continue" interstitial. */
+async function dismissSamlInterstitial(page: Page): Promise<boolean> {
+  const submit = page.locator('input[type="submit"], button[type="submit"]').first();
+  if ((await submit.count()) === 0) return false;
+  await Promise.all([
+    page.waitForLoadState("domcontentloaded").catch(() => {}),
+    submit.click().catch(() => {}),
+  ]);
+  return true;
+}
+
 async function enterTerm(page: Page, termUrl: string): Promise<void> {
   await page.goto(termUrl, { waitUntil: "domcontentloaded" }).catch(() => {});
 
@@ -65,13 +74,7 @@ async function enterTerm(page: Page, termUrl: string): Promise<void> {
     if (ready) return;
 
     // SAML auto-POST interstitial ("Working... Click Submit to continue").
-    const submit = page.locator('input[type="submit"], button[type="submit"]').first();
-    if ((await submit.count()) > 0) {
-      await Promise.all([
-        page.waitForLoadState("domcontentloaded").catch(() => {}),
-        submit.click().catch(() => {}),
-      ]);
-    }
+    await dismissSamlInterstitial(page);
   }
 
   await page.waitForSelector(LIST_READY_SELECTOR, { timeout: ENTER_TIMEOUT_MS });
@@ -146,14 +149,7 @@ async function fetchReport(
   const page = await context.newPage();
   try {
     await page.goto(reportUrl, { waitUntil: "domcontentloaded", timeout: REPORT_TIMEOUT_MS });
-    // Clear a SAML interstitial if the viewer bounced through one.
-    const submit = page.locator('input[type="submit"], button[type="submit"]').first();
-    if ((await submit.count()) > 0 && (await page.locator(".report-block").count()) === 0) {
-      await Promise.all([
-        page.waitForLoadState("domcontentloaded").catch(() => {}),
-        submit.click().catch(() => {}),
-      ]);
-    }
+    if ((await page.locator(".report-block").count()) === 0) await dismissSamlInterstitial(page);
     await page.waitForSelector(".report-block", { timeout: REPORT_TIMEOUT_MS }).catch(() => {});
 
     const html = await page.content();

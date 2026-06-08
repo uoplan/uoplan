@@ -28,8 +28,6 @@ pub struct RemainingRequirement {
     pub title: Option<String>,
     pub candidate_courses: Vec<String>,
     pub credits_needed: f64,
-    #[allow(dead_code)]
-    pub satisfied_by: Vec<String>,
 }
 
 pub fn build_requirement_pools(remaining: &[RemainingRequirement]) -> Vec<RequirementPool> {

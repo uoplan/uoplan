@@ -7,12 +7,7 @@ import {
 import { SchedulePreview } from "@uoplan/proto/state";
 import { loadGrades, loadSchedules, optional } from "@uoplan/data";
 import { createAssetsTransport } from "@uoplan/data/worker";
-import {
-  renderCalendarToSvg,
-  scheduleToEvents,
-  computeWeekGroups,
-  slotActiveInWeek,
-} from "@uoplan/calendar";
+import { renderSchedulePreviewToSvg } from "@uoplan/calendar";
 import type { Env } from "./index.js";
 
 // @ts-ignore - wrangler handles .wasm imports as WebAssembly.Module
@@ -65,8 +60,6 @@ export async function handleOgImage(
   env: Env,
   origin: string,
 ): Promise<Response> {
-  // The rendered image depends solely on the embedded schedule payload (courses
-  // + sections), so cache on it. Links without a payload share the placeholder.
   const cacheId = schedulePayload ?? `nopayload/${stateBase64url}`;
   const cacheKey = new Request(`https://og-cache.internal/v2/${cacheId}`);
 
@@ -113,9 +106,6 @@ async function generatePng(
       loadGrades(transport).catch(() => null),
     ]);
 
-    // Grade distributions are no longer embedded in schedules.NNNN.pb, so
-    // reconstruct them from grades.pb for the grade bars rendered on the OG
-    // image. Grades are optional: a failure degrades gracefully.
     const schedulesData = grades
       ? enrichSchedulesDataWithGrades(rawSchedules, getGradeLookups(grades), Number(termId))
       : rawSchedules;
@@ -125,21 +115,10 @@ async function generatePng(
       return fallback();
     }
 
-    const events = scheduleToEvents(reconstructed.schedule, null);
-
-    // Match the app's calendar default: show only the busiest week rather than
-    // merging every week's meetings onto one grid.
-    const { groups, busiestIndex } = computeWeekGroups(reconstructed.schedule);
-    const busiestGroup = groups[busiestIndex] ?? null;
-    const weekEvents = busiestGroup
-      ? events.filter(
-          (e) => !e.meetingDates || slotActiveInWeek(e.day, e.meetingDates, busiestGroup.startDate),
-        )
-      : events;
-
-    const svg = renderCalendarToSvg(weekEvents, reconstructed.colorMap);
-
-    return svgToPng(svg, fonts);
+    return svgToPng(
+      renderSchedulePreviewToSvg(reconstructed.schedule, reconstructed.colorMap),
+      fonts,
+    );
   } catch (err) {
     console.error("[og-image] unexpected error:", err);
     return fallback();

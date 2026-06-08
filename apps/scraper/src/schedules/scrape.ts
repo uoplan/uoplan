@@ -41,13 +41,6 @@ async function loadCatalogue(year: number): Promise<ParsedCourseCode[]> {
     throw new Error("catalogue.json does not contain a courses array");
   }
 
-  //const mat1300 = data.courses.find(c => c.code === 'MAT 1300');
-
-  /*data.courses = data.courses.slice(0, 100);
-  if (!data.courses.includes(mat1300!)) {
-    data.courses.push(mat1300!);
-  }*/
-
   const unique = new Map<string, ParsedCourseCode>();
   for (const course of data.courses) {
     if (!course || typeof course.code !== "string") continue;

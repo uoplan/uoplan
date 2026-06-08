@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { flushPersistedAppState } from "../lib/persistAppState";
-import { useAppStore, useAppStoreApi } from "../store/appStore";
+import { useAppStoreApi } from "../store/appStore";
 import type { AppStore } from "../store/types";
 
 const DEBOUNCE_MS = 400;
@@ -54,7 +54,6 @@ export { hasPersistedStateChange };
  * is ready (e.g. wait for `indices` to be loaded).
  */
 export function usePersistState(enabled: boolean): void {
-  const getEncodedStateBase64 = useAppStore((s) => s.getEncodedStateBase64);
   const storeApi = useAppStoreApi();
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -78,5 +77,5 @@ export function usePersistState(enabled: boolean): void {
       unsub();
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [enabled, getEncodedStateBase64, storeApi]);
+  }, [enabled, storeApi]);
 }

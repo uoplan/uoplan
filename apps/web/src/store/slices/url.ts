@@ -3,7 +3,10 @@ import type { AppStore } from "../types";
 import {
   encodeStateToBase64,
   urlToSlug,
+  type Course,
+  type DecodedState,
   type EncodeInput,
+  type Program,
   requirementIdsFromTree,
   withExtraCourses,
   isOptCourse,
@@ -11,10 +14,9 @@ import {
   makeGroupTokenInstance,
 } from "@uoplan/core";
 import { recomputeStateForProgram } from "../requirementCompute";
-import type { Course } from "@uoplan/core";
-import { encodeSchedulePreview } from "../../lib/encodeSchedulePreview";
 import { inferLowestVisitedSeedFromPersisted } from "../../lib/seedNavigation";
 import { toBlockedWindows, withBlockedIds } from "../../lib/blockedTimes";
+import { buildShareUrl } from "../../lib/buildShareUrl";
 
 interface UrlSlice {
   loadEncodedState: AppStore["loadEncodedState"];
@@ -69,111 +71,200 @@ function buildEncodeInput(s: AppStore): EncodeInput {
   };
 }
 
+type LoadedCache = NonNullable<AppStore["cache"]>;
+type DecodedCourseSelection = DecodedState["courseSelections"][number];
+
+function remapProgramToYearCatalogue(
+  program: Program | null,
+  yearCataloguePrograms: AppStore["yearCataloguePrograms"],
+): Program | null {
+  if (program == null || yearCataloguePrograms == null) return program;
+
+  const slug = urlToSlug(program.url);
+  const yearProgram = yearCataloguePrograms.find((p) => urlToSlug(p.url) === slug);
+  return yearProgram ?? program;
+}
+
+function cacheWithOptTransferCredits(
+  baseCache: LoadedCache,
+  completedCourseCodes: string[],
+): LoadedCache {
+  const optCodes = completedCourseCodes.map(normalizeCourseCode).filter(isOptCourse);
+  if (optCodes.length === 0) return baseCache;
+
+  return withExtraCourses(
+    baseCache,
+    optCodes.map((code): Course => ({ code, title: code, credits: 3, description: "" })),
+  );
+}
+
+function buildRequirementIndex(
+  decoded: DecodedState,
+  program: Program | null,
+  minorProgram: Program | null,
+  cache: LoadedCache,
+): Map<number, string> {
+  const firstPass = recomputeStateForProgram(
+    program,
+    minorProgram,
+    decoded.completedCourseCodes,
+    cache,
+    {},
+    {},
+    decoded.levelBuckets,
+    decoded.languageBuckets,
+    decoded.includeClosedComponents ?? true,
+    decoded.studentPrograms,
+    {},
+  );
+  const orderedReqIds = requirementIdsFromTree(firstPass.requirementTreeWithStatus);
+  const reqIndexToId = new Map<number, string>();
+  orderedReqIds.forEach((id, i) => reqIndexToId.set(i, id));
+  return reqIndexToId;
+}
+
+function mapOptionSelections(
+  optionSelections: DecodedState["optionSelections"],
+  reqIndexToId: Map<number, string>,
+): Record<string, number> {
+  const selectedOptionsPerRequirement: Record<string, number> = {};
+  for (const { reqIndex, optionIndex } of optionSelections) {
+    const reqId = reqIndexToId.get(reqIndex);
+    if (reqId != null) selectedOptionsPerRequirement[reqId] = optionIndex;
+  }
+  return selectedOptionsPerRequirement;
+}
+
+function filterValidDecodedCodes(courseCodes: string[], inCatalogue: Set<string>): string[] {
+  return courseCodes.filter(
+    (code) => isOptCourse(normalizeCourseCode(code)) || inCatalogue.has(code),
+  );
+}
+
+function mapCourseSelections(
+  selections: readonly DecodedCourseSelection[],
+  reqIndexToId: Map<number, string>,
+  inCatalogue: Set<string>,
+): Record<string, string[]> {
+  const byRequirement: Record<string, string[]> = {};
+  for (const { reqIndex, courseCodes } of selections) {
+    const reqId = reqIndexToId.get(reqIndex);
+    if (reqId == null) continue;
+    const valid = filterValidDecodedCodes(courseCodes, inCatalogue);
+    if (valid.length) byRequirement[reqId] = valid;
+  }
+  return byRequirement;
+}
+
+function appendConstrainedGroupSelections(
+  constrainedPerRequirement: Record<string, string[]>,
+  groupSelections: DecodedState["constrainedGroupSelections"],
+  reqIndexToId: Map<number, string>,
+): void {
+  for (const { reqIndex, groupPrefixes } of groupSelections) {
+    const reqId = reqIndexToId.get(reqIndex);
+    if (reqId == null) continue;
+    const tokens = groupPrefixes.map((prefix) => makeGroupTokenInstance(prefix));
+    constrainedPerRequirement[reqId] = [...(constrainedPerRequirement[reqId] ?? []), ...tokens];
+  }
+}
+
+function mapTouchedRequirements(
+  touchedReqIndices: DecodedState["touchedReqIndices"],
+  reqIndexToId: Map<number, string>,
+): Record<string, true> {
+  return Object.fromEntries(
+    touchedReqIndices
+      .map((idx) => reqIndexToId.get(idx))
+      .filter((id): id is string => id != null)
+      .map((id) => [id, true as const]),
+  );
+}
+
+function mapRequirementPriorities(
+  prioritySelections: DecodedState["requirementPrioritySelections"],
+  reqIndexToId: Map<number, string>,
+): Record<string, number> {
+  const requirementPriorities: Record<string, number> = {};
+  for (const { reqIndex, priority } of prioritySelections) {
+    const reqId = reqIndexToId.get(reqIndex);
+    if (reqId != null && priority > 0) requirementPriorities[reqId] = priority;
+  }
+  return requirementPriorities;
+}
+
+function recomputeDecodedState(
+  decoded: DecodedState,
+  program: Program | null,
+  minorProgram: Program | null,
+  cache: LoadedCache,
+  selectedPerRequirement: Record<string, string[]>,
+  selectedOptionsPerRequirement: Record<string, number>,
+  requirementSlotsUserTouched: Record<string, true>,
+): ReturnType<typeof recomputeStateForProgram> {
+  return recomputeStateForProgram(
+    program,
+    minorProgram,
+    decoded.completedCourseCodes,
+    cache,
+    selectedPerRequirement,
+    selectedOptionsPerRequirement,
+    decoded.levelBuckets,
+    decoded.languageBuckets,
+    decoded.includeClosedComponents ?? true,
+    decoded.studentPrograms,
+    requirementSlotsUserTouched,
+  );
+}
+
 export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, get) => ({
   loadEncodedState: (decoded) => {
     const { catalogue, indices, cache: baseCache, yearCataloguePrograms } = get();
     if (!catalogue || !baseCache || !indices) return;
 
-    let program = decoded.program;
-    if (program != null && yearCataloguePrograms != null) {
-      const slug = urlToSlug(program.url);
-      const yearProgram = yearCataloguePrograms.find((p) => urlToSlug(p.url) === slug);
-      if (yearProgram) program = yearProgram;
-    }
-
-    let minorProgram = decoded.minorProgram ?? null;
-    if (minorProgram != null && yearCataloguePrograms != null) {
-      const slug = urlToSlug(minorProgram.url);
-      const yearProgram = yearCataloguePrograms.find((p) => urlToSlug(p.url) === slug);
-      if (yearProgram) minorProgram = yearProgram;
-    }
-
-    // Augment cache with fake entries for any OPT transfer credit codes
-    const optCodes = decoded.completedCourseCodes.map(normalizeCourseCode).filter(isOptCourse);
-    const cache =
-      optCodes.length > 0
-        ? withExtraCourses(
-            baseCache,
-            optCodes.map((code): Course => ({ code, title: code, credits: 3, description: "" })),
-          )
-        : baseCache;
-
+    const program = remapProgramToYearCatalogue(decoded.program, yearCataloguePrograms);
+    const minorProgram = remapProgramToYearCatalogue(
+      decoded.minorProgram ?? null,
+      yearCataloguePrograms,
+    );
+    const cache = cacheWithOptTransferCredits(baseCache, decoded.completedCourseCodes);
     const studentPrograms = decoded.studentPrograms;
-    const firstPass = recomputeStateForProgram(
-      program,
-      minorProgram,
-      decoded.completedCourseCodes,
-      cache,
-      {},
-      {},
-      decoded.levelBuckets,
-      decoded.languageBuckets,
-      decoded.includeClosedComponents ?? true,
-      studentPrograms,
-      {},
+    const reqIndexToId = buildRequirementIndex(decoded, program, minorProgram, cache);
+    const selectedOptionsPerRequirement = mapOptionSelections(
+      decoded.optionSelections,
+      reqIndexToId,
     );
-    const orderedReqIds = requirementIdsFromTree(firstPass.requirementTreeWithStatus);
-    const reqIndexToId = new Map<number, string>();
-    orderedReqIds.forEach((id, i) => reqIndexToId.set(i, id));
-
-    const selectedOptionsPerRequirement: Record<string, number> = {};
-    for (const { reqIndex, optionIndex } of decoded.optionSelections) {
-      const reqId = reqIndexToId.get(reqIndex);
-      if (reqId != null) selectedOptionsPerRequirement[reqId] = optionIndex;
-    }
-
     const inCatalogue = new Set(catalogue.courses.map((c) => c.code));
-    const selectedPerRequirement: Record<string, string[]> = {};
-    for (const { reqIndex, courseCodes } of decoded.courseSelections) {
-      const reqId = reqIndexToId.get(reqIndex);
-      if (reqId == null) continue;
-      const valid = courseCodes.filter(
-        (code) => isOptCourse(normalizeCourseCode(code)) || inCatalogue.has(code),
-      );
-      if (valid.length) selectedPerRequirement[reqId] = valid;
-    }
-
-    const constrainedPerRequirement: Record<string, string[]> = {};
-    for (const { reqIndex, courseCodes } of decoded.constrainedSelections) {
-      const reqId = reqIndexToId.get(reqIndex);
-      if (reqId == null) continue;
-      const valid = courseCodes.filter(
-        (code) => isOptCourse(normalizeCourseCode(code)) || inCatalogue.has(code),
-      );
-      if (valid.length) constrainedPerRequirement[reqId] = valid;
-    }
-
-    for (const { reqIndex, groupPrefixes } of decoded.constrainedGroupSelections) {
-      const reqId = reqIndexToId.get(reqIndex);
-      if (reqId == null) continue;
-      const tokens = groupPrefixes.map((prefix) => makeGroupTokenInstance(prefix));
-      constrainedPerRequirement[reqId] = [...(constrainedPerRequirement[reqId] ?? []), ...tokens];
-    }
-
-    const requirementSlotsUserTouched: Record<string, true> = Object.fromEntries(
-      decoded.touchedReqIndices
-        .map((idx) => reqIndexToId.get(idx))
-        .filter((id): id is string => id != null)
-        .map((id) => [id, true as const]),
+    const selectedPerRequirement = mapCourseSelections(
+      decoded.courseSelections,
+      reqIndexToId,
+      inCatalogue,
     );
-
-    const requirementPriorities: Record<string, number> = {};
-    for (const { reqIndex, priority } of decoded.requirementPrioritySelections) {
-      const reqId = reqIndexToId.get(reqIndex);
-      if (reqId != null && priority > 0) requirementPriorities[reqId] = priority;
-    }
-
-    const full = recomputeStateForProgram(
+    const constrainedPerRequirement = mapCourseSelections(
+      decoded.constrainedSelections,
+      reqIndexToId,
+      inCatalogue,
+    );
+    appendConstrainedGroupSelections(
+      constrainedPerRequirement,
+      decoded.constrainedGroupSelections,
+      reqIndexToId,
+    );
+    const requirementSlotsUserTouched = mapTouchedRequirements(
+      decoded.touchedReqIndices,
+      reqIndexToId,
+    );
+    const requirementPriorities = mapRequirementPriorities(
+      decoded.requirementPrioritySelections,
+      reqIndexToId,
+    );
+    const full = recomputeDecodedState(
+      decoded,
       program,
       minorProgram,
-      decoded.completedCourseCodes,
       cache,
       selectedPerRequirement,
       selectedOptionsPerRequirement,
-      decoded.levelBuckets,
-      decoded.languageBuckets,
-      decoded.includeClosedComponents ?? true,
-      studentPrograms,
       requirementSlotsUserTouched,
     );
 
@@ -233,16 +324,12 @@ export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, ge
     const input = buildEncodeInput(s);
     const base64 = encodeStateToBase64(input, s.catalogue, s.indices);
     if (!base64) return null;
-    const base64url = base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
-    let url = `${window.location.origin}/api/share/${base64url}`;
-    // Embed the already-generated schedule as index-based references into the
-    // term's schedules dataset, so the OG-image worker can render it directly
-    // without re-running schedule generation. The redirect only uses the
-    // primary state above; this `p` payload is solely for the OG preview.
-    if (s.currentSchedule && s.schedulesData && s.selectedTermId) {
-      const preview = encodeSchedulePreview(s.currentSchedule, s.schedulesData, s.selectedTermId);
-      if (preview) url += `?p=${preview}`;
-    }
-    return url;
+    return buildShareUrl({
+      origin: window.location.origin,
+      encodedStateBase64: base64,
+      currentSchedule: s.currentSchedule,
+      schedulesData: s.schedulesData,
+      selectedTermId: s.selectedTermId,
+    });
   },
 });

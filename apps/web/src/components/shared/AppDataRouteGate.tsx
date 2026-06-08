@@ -6,9 +6,6 @@ import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { AppDataLoader } from "./AppDataLoader";
 import { AppCard } from "./AppCard";
 
-/** Secondary, lazily-loaded datasets a route can opt into via {@link AppDataRouteGate}. */
-export type SecondaryAsset = "grades" | "ratings" | "disciplines";
-
 /**
  * Boots the core dataset on first mount of any data-gated route, and optionally
  * pulls in the secondary assets (`grades.pb` / `ratemyprofessors.pb` /
@@ -21,7 +18,7 @@ export function AppDataRouteGate({
   prewarm = false,
 }: {
   children: ReactNode;
-  requires?: readonly SecondaryAsset[];
+  requires?: readonly ("grades" | "ratings" | "disciplines")[];
   /** Pre-warm the schedule worker once the core data is loaded. */
   prewarm?: boolean;
 }) {
