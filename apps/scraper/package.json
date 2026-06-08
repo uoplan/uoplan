@@ -12,6 +12,7 @@
     "scrape:disciplines": "node src/cli/disciplines.ts",
     "enrich:schedules": "node --experimental-transform-types --experimental-specifier-resolution=node src/cli/enrich.ts",
     "scrape:ratemyprofessors": "node src/cli/ratemyprofessors.ts",
+    "scrape:grades": "node src/cli/grades.ts",
     "build:proto": "node --experimental-transform-types --experimental-specifier-resolution=node src/cli/proto.ts",
     "check:terms": "node src/cli/terms.ts",
     "typecheck": "tsgo --noEmit -p tsconfig.json"
@@ -19,6 +20,7 @@
   "dependencies": {
     "@uoplan/proto": "workspace:*",
     "cheerio": "^1.2.0",
+    "csv-parse": "^6.2.1",
     "got": "^14.6.6",
     "jsdom": "^28.1.0",
     "p-limit": "^7.3.0",

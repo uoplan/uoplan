@@ -17,3 +17,6 @@ test-results
 .vitest-attachments
 __screenshots__
 *.traineddata
+
+# Raw, user-provided grade-distribution CSVs consumed by the grades scraper.
+apps/scraper/data/raw/
