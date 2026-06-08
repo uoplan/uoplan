@@ -100,7 +100,7 @@ export function AppFooter() {
             <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
               ·
             </Text>
-            <Text span size="xs" c="dimmed" ff="monospace" lh={1.45} style={{ opacity: 0.85 }}>
+            <Text span size="xs" c="dimmed" ff="monospace" lh={1.45}>
               {(typeof __BRANCH_NAME__ !== "undefined" && __BRANCH_NAME__
                 ? __BRANCH_NAME__
                 : tr("app.footer.buildBranchFallback")
@@ -113,7 +113,7 @@ export function AppFooter() {
                 <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
                   ·
                 </Text>
-                <Text span size="xs" c="dimmed" lh={1.45} style={{ opacity: 0.85 }}>
+                <Text span size="xs" c="dimmed" lh={1.45}>
                   <span aria-hidden>{flourish.emoji}</span> {tr(flourish.msgId)}
                 </Text>
               </>

@@ -40,18 +40,24 @@ const AppThemeContext = createContext<AppThemeContextValue | null>(null);
  * follow the active theme without per-component overrides. The tokens already
  * switch via `data-app-theme`, so the same mapping works for every scheme.
  */
+const mantineTokenMap = {
+  "--mantine-color-body": "var(--app-bg)",
+  "--mantine-color-text": "var(--app-text)",
+  "--mantine-color-dimmed": "var(--app-text-dim)",
+  "--mantine-color-default": "var(--app-surface)",
+  "--mantine-color-default-hover": "var(--app-surface-hover)",
+  "--mantine-color-default-border": "var(--app-border)",
+  "--mantine-color-placeholder": "var(--app-text-dim)",
+} as const;
+
+// The map is also emitted into Mantine's scheme-specific blocks (`light`/`dark`)
+// so scheme-scoped defaults like `--mantine-color-dimmed` (which Mantine sets
+// under `[data-mantine-color-scheme]`) don't win on specificity and leave
+// `c="dimmed"` / placeholders stuck on Mantine's low-contrast greys.
 const cssVariablesResolver: CSSVariablesResolver = () => ({
-  variables: {
-    "--mantine-color-body": "var(--app-bg)",
-    "--mantine-color-text": "var(--app-text)",
-    "--mantine-color-dimmed": "var(--app-text-dim)",
-    "--mantine-color-default": "var(--app-surface)",
-    "--mantine-color-default-hover": "var(--app-surface-hover)",
-    "--mantine-color-default-border": "var(--app-border)",
-    "--mantine-color-placeholder": "var(--app-text-dim)",
-  },
-  light: {},
-  dark: {},
+  variables: mantineTokenMap,
+  light: mantineTokenMap,
+  dark: mantineTokenMap,
 });
 
 interface AppThemeProviderProps {

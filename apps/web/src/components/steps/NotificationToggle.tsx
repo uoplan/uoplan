@@ -237,6 +237,7 @@ export function NotificationToggle() {
             }}
           >
             <Switch
+              aria-label="Notify me when new terms are added"
               checked={isSubscribed}
               disabled={!!unsupportedReasonId || isDenied || loading}
               onChange={isSubscribed ? handleDisable : handleEnable}

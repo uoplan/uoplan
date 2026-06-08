@@ -121,6 +121,7 @@ function SelectableOptionPaper({
       {...paperProps}
       withBorder={false}
       radius="var(--app-radius)"
+      // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- rich selectable option card in a radiogroup; native <input type="radio"> can't wrap this content
       role="radio"
       aria-checked={radio.checked}
       aria-disabled={radio.disabled}

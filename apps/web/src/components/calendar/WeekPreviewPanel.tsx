@@ -3,6 +3,7 @@ import type { GeneratedSchedule } from "@uoplan/core";
 import { COURSE_COLORS, COURSE_COLOR_HEX, hexToRgb } from "@uoplan/core";
 import type { WeekGroup } from "../../hooks/useScheduleWeeks";
 import { slotActiveInWeek } from "../../hooks/useScheduleWeeks";
+import { formatWeekLabel } from "../../lib/formatWeekCount";
 import { CALENDAR_PREVIEW_CARD_ASPECT } from "./calendarLayout";
 
 const DAY_ORDER: Record<string, number> = { Mo: 0, Tu: 1, We: 2, Th: 3, Fr: 4 };
@@ -30,6 +31,7 @@ interface WeekMiniCardProps {
   colW: number;
   selected: boolean;
   hovered: boolean;
+  ariaLabel: string;
   onClick: () => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
@@ -42,16 +44,25 @@ function WeekMiniCard({
   colW,
   selected,
   hovered,
+  ariaLabel,
   onClick,
   onMouseEnter,
   onMouseLeave,
 }: WeekMiniCardProps) {
   return (
-    <div
+    <button
+      type="button"
+      aria-label={ariaLabel}
+      aria-pressed={selected}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       style={{
+        appearance: "none",
+        padding: 0,
+        font: "inherit",
+        color: "inherit",
+        textAlign: "left",
         width: cardW,
         height: cardH,
         borderRadius: "var(--app-radius-sm)",
@@ -92,7 +103,7 @@ function WeekMiniCard({
           }}
         />
       ))}
-    </div>
+    </button>
   );
 }
 
@@ -179,6 +190,7 @@ export function WeekPreviewPanel({
           colW={colW}
           selected={idx === weekIndex}
           hovered={idx === hoveredIndex}
+          ariaLabel={formatWeekLabel(weekGroups, idx)}
           onClick={() => setWeekIndex(idx)}
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}

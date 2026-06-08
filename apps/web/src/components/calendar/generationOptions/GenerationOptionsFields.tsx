@@ -14,6 +14,7 @@ import {
   Switch,
   Text,
   TextInput,
+  UnstyledButton,
   type MultiSelectProps,
   type OptionsFilter,
 } from "@mantine/core";
@@ -342,21 +343,17 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
                 : "var(--app-surface-sunken)",
             }}
           >
-            <Group
-              justify="space-between"
-              align="center"
+            <UnstyledButton
+              w="100%"
               p="sm"
-              style={{ cursor: "pointer" }}
               onClick={() => setSecondaryOptionsOpen((o) => !o)}
               aria-expanded={secondaryOptionsOpen}
               aria-controls={props.secondaryOptionsDisclosure.collapseId}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setSecondaryOptionsOpen((o) => !o);
-                }
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                cursor: "pointer",
               }}
             >
               <Group gap="xs" align="center">
@@ -378,7 +375,7 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
                   {props.secondaryOptionsDisclosure.badgeLabel}
                 </Badge>
               ) : null}
-            </Group>
+            </UnstyledButton>
             <Collapse
               id={props.secondaryOptionsDisclosure.collapseId}
               expanded={secondaryOptionsOpen}

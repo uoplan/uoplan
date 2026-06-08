@@ -61,7 +61,7 @@
   /* Text */
   --app-text: #eceef5;
   --app-text-muted: #aeb2c2;
-  --app-text-dim: #7c8099;
+  --app-text-dim: #888ca5;
   --app-text-inverse: #1a1b22;
 
   /* Accent (pastel baby blue) */
@@ -115,9 +115,9 @@
   --app-shadow-lg: 0 12px 34px rgba(60, 54, 44, 0.14), 0 20px 54px rgba(60, 54, 44, 0.1);
 
   /* Informational / warning accents (darker tier for contrast on light) */
-  --app-info: #1c7ed6;
+  --app-info: #1971c2;
   --app-info-soft: rgba(34, 139, 230, 0.12);
-  --app-warning: #e8590c;
+  --app-warning: #b34209;
   --app-warning-soft: rgba(232, 89, 12, 0.12);
   --app-success: #2f9e44;
   --app-success-soft: rgba(47, 158, 68, 0.12);
@@ -127,14 +127,14 @@
   /* Text */
   --app-text: #2a2826;
   --app-text-muted: #5e5a52;
-  --app-text-dim: #8a857b;
+  --app-text-dim: #6f695f;
   --app-text-inverse: #fffdfa;
 
-  /* Accent (Tailwind blue-500, for contrast on light) */
-  --app-accent: #3b82f6;
+  /* Accent (Tailwind blue-600, for white-on-accent contrast on light) */
+  --app-accent: #2563eb;
   --app-accent-soft: #e4eefe;
   --app-on-accent: #ffffff;
-  --app-focus-ring: #3b82f6;
+  --app-focus-ring: #2563eb;
 
   /* Misc chrome */
   --app-selection-bg: rgba(59, 130, 246, 0.2);

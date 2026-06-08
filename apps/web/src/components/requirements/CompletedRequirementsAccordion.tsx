@@ -1,15 +1,17 @@
-import { useState, type KeyboardEvent, type MouseEvent } from "react";
-import { Paper, Group, Text, Badge, Collapse, Stack, Box, Tooltip } from "@mantine/core";
+import { useState } from "react";
+import {
+  Paper,
+  Group,
+  Text,
+  Badge,
+  Collapse,
+  Stack,
+  Box,
+  Tooltip,
+  UnstyledButton,
+} from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import type { CompletedRequirementItem } from "@uoplan/core";
-
-function handleToggleKey(e: KeyboardEvent<HTMLElement>, toggle: () => void) {
-  if (e.key === "Enter" || e.key === " ") {
-    e.preventDefault();
-    e.stopPropagation();
-    toggle();
-  }
-}
 
 interface CompletedRequirementsAccordionProps {
   completedItems: CompletedRequirementItem[];
@@ -32,29 +34,30 @@ export function CompletedRequirementsAccordion({
       radius="var(--app-radius)"
       style={{
         backgroundColor: completedOpen ? "var(--app-surface)" : "var(--app-surface-sunken)",
-        cursor: "pointer",
       }}
-      onClick={(e: MouseEvent) => {
-        e.stopPropagation();
-        toggleCompletedOpen();
-      }}
-      onKeyDown={(e) => handleToggleKey(e, toggleCompletedOpen)}
-      role="button"
-      tabIndex={0}
-      aria-expanded={completedOpen}
     >
-      <Group align="center" gap="xs" mb={completedOpen ? "sm" : 0}>
-        <IconChevronDown
-          size={14}
-          style={{
-            transform: completedOpen ? "rotate(0deg)" : "rotate(-90deg)",
-            transition: "var(--app-transition)",
-          }}
-        />
-        <Text fw={600} size="sm">
-          {completedItems.length} completed requirement{completedItems.length !== 1 ? "s" : ""}
-        </Text>
-      </Group>
+      <UnstyledButton
+        w="100%"
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleCompletedOpen();
+        }}
+        aria-expanded={completedOpen}
+        style={{ cursor: "pointer" }}
+      >
+        <Group align="center" gap="xs" mb={completedOpen ? "sm" : 0}>
+          <IconChevronDown
+            size={14}
+            style={{
+              transform: completedOpen ? "rotate(0deg)" : "rotate(-90deg)",
+              transition: "var(--app-transition)",
+            }}
+          />
+          <Text fw={600} size="sm">
+            {completedItems.length} completed requirement{completedItems.length !== 1 ? "s" : ""}
+          </Text>
+        </Group>
+      </UnstyledButton>
       <Collapse expanded={completedOpen}>
         <Stack gap={0} mt="sm">
           {completedItems.map((item, idx) => (

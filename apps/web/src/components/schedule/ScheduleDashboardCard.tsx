@@ -130,6 +130,7 @@ export function ScheduleDashboardCard({
   return (
     <AppCard
       interactive={isExpandable}
+      aria-disabled={locked || undefined}
       style={{
         opacity: locked ? 0.58 : 1,
         borderLeft: locked ? undefined : `3px solid ${accent}`,

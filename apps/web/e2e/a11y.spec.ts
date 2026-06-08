@@ -16,11 +16,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 /** Rule ids exempted for now. Empty = every critical/serious rule is enforced.
  *  Remove ids as the underlying issues are fixed so coverage ratchets up. */
-const KNOWN_ISSUES = new Set<string>([
-  "aria-progressbar-name", // nprogress loading bar lacks an accessible name (all routes)
-  "color-contrast", // theme tokens below WCAG AA contrast in several spots (all routes)
-  "label", // an unlabeled form control on /schedule
-]);
+const KNOWN_ISSUES = new Set<string>([]);
 
 const BLOCKING_IMPACTS = new Set(["critical", "serious"]);
 

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Badge, Box, Flex, Group, Loader, Stack, Text, Title } from "@mantine/core";
+import { Badge, Box, Flex, Group, Loader, Stack, Text, Title, UnstyledButton } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconAlertTriangle, IconVideo } from "@tabler/icons-react";
 import {
@@ -98,18 +98,10 @@ function SectionOption({
   const interactive = !disabled;
 
   return (
-    <Box
-      role="button"
+    <UnstyledButton
       aria-pressed={selected}
-      aria-disabled={disabled}
-      tabIndex={interactive ? 0 : -1}
-      onClick={interactive ? onSelect : undefined}
-      onKeyDown={(e) => {
-        if (interactive && (e.key === "Enter" || e.key === " ")) {
-          e.preventDefault();
-          onSelect();
-        }
-      }}
+      disabled={disabled}
+      onClick={onSelect}
       className={interactive ? "soft-lift" : undefined}
       style={{
         width: "100%",
@@ -169,7 +161,7 @@ function SectionOption({
         </Stack>
       </Stack>
       <GradeDistributionBottomBar gradeViz={sectionViz} />
-    </Box>
+    </UnstyledButton>
   );
 }
 
