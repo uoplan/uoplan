@@ -127,7 +127,7 @@ function RootLayout() {
           backgroundColor: "var(--app-bg)",
         }}
       >
-        <NavigationProgress color="var(--app-focus-ring)" />
+        <NavigationProgress color="var(--app-focus-ring)" aria-label="Page loading progress" />
         <HeadContent />
         <SharedScheduleModal />
         <LazyCommandCenter />

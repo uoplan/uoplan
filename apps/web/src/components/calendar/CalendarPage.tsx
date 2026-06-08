@@ -293,6 +293,19 @@ export function CalendarPage() {
     setSidebarWidth(pendingWidth.current);
   }
 
+  function handleResizeKeyDown(e: React.KeyboardEvent) {
+    const STEP = 16;
+    let next: number | null = null;
+    if (e.key === "ArrowLeft") next = clampSidebarWidth(sidebarWidth - STEP);
+    else if (e.key === "ArrowRight") next = clampSidebarWidth(sidebarWidth + STEP);
+    else if (e.key === "Home") next = clampSidebarWidth(0);
+    else if (e.key === "End") next = clampSidebarWidth(Number.POSITIVE_INFINITY);
+    if (next !== null) {
+      e.preventDefault();
+      setSidebarWidth(next);
+    }
+  }
+
   const calendarTitle = tr("calendarPage.title");
   const calendarSubtitle = tr(hasProgram ? "calendarPage.subtitle" : "basicCalendar.subtitle");
 
@@ -587,8 +600,15 @@ export function CalendarPage() {
               {sidebarControls}
             </Box>
             <div
+              // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- WAI-ARIA window-splitter resize handle, not an <hr>
               role="separator"
               aria-label="Resize sidebar"
+              aria-orientation="vertical"
+              aria-valuemin={220}
+              aria-valuemax={600}
+              aria-valuenow={Math.round(sidebarWidth)}
+              tabIndex={0}
+              onKeyDown={handleResizeKeyDown}
               onPointerDown={handleResizePointerDown}
               onPointerMove={handleResizePointerMove}
               onPointerUp={handleResizePointerUp}

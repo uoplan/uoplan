@@ -1,5 +1,15 @@
 import { useState, useMemo, memo, type KeyboardEvent, type ReactNode } from "react";
-import { Stack, Text, Paper, Badge, Group, Box, Collapse, Tooltip } from "@mantine/core";
+import {
+  Stack,
+  Text,
+  Paper,
+  Badge,
+  Group,
+  Box,
+  Collapse,
+  Tooltip,
+  UnstyledButton,
+} from "@mantine/core";
 import { IconCheck, IconChevronDown, IconX, IconChartCohort } from "@tabler/icons-react";
 import type { ComboboxItem } from "@mantine/core";
 import type { DataCache } from "@uoplan/core";
@@ -442,31 +452,26 @@ export const RequirementNode = memo(
             backgroundColor: opened ? "var(--app-surface)" : "var(--app-surface-sunken)",
           }}
         >
-          <Group
-            justify="space-between"
-            align="center"
-            wrap="nowrap"
-            mb={0}
-            onClick={toggleLocal}
-            onKeyDown={(e) => handleKeyboardToggle(e, toggleLocal)}
-            role="button"
-            tabIndex={0}
-            aria-expanded={opened}
-            style={{ cursor: "pointer" }}
-          >
-            <Group gap="xs" align="center" style={TITLE_FLEX}>
-              <IconChevronDown
-                size={14}
-                style={{
-                  flexShrink: 0,
-                  transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
-                  transition: "var(--app-transition)",
-                }}
-              />
-              <Text fw={500} size="sm" lh={1.25} style={{ minWidth: 0 }}>
-                {groupLabel}
-              </Text>
-            </Group>
+          <Group justify="space-between" align="center" wrap="nowrap" mb={0}>
+            <UnstyledButton
+              onClick={toggleLocal}
+              aria-expanded={opened}
+              style={{ flex: 1, minWidth: 0, cursor: "pointer" }}
+            >
+              <Group gap="xs" align="center" style={TITLE_FLEX}>
+                <IconChevronDown
+                  size={14}
+                  style={{
+                    flexShrink: 0,
+                    transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
+                    transition: "var(--app-transition)",
+                  }}
+                />
+                <Text fw={500} size="sm" lh={1.25} style={{ minWidth: 0 }}>
+                  {groupLabel}
+                </Text>
+              </Group>
+            </UnstyledButton>
             <Stack gap={4} align="flex-end" style={BADGE_NO_SHRINK}>
               {node.complete && node.satisfiedOptionIndex != null && (
                 <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
@@ -553,31 +558,26 @@ export const RequirementNode = memo(
             backgroundColor: opened ? "var(--app-surface)" : "var(--app-surface-sunken)",
           }}
         >
-          <Group
-            justify="space-between"
-            align="center"
-            wrap="nowrap"
-            mb={0}
-            onClick={toggleLocal}
-            onKeyDown={(e) => handleKeyboardToggle(e, toggleLocal)}
-            role="button"
-            tabIndex={0}
-            aria-expanded={opened}
-            style={{ cursor: "pointer" }}
-          >
-            <Group gap="xs" align="center" style={TITLE_FLEX}>
-              <IconChevronDown
-                size={14}
-                style={{
-                  flexShrink: 0,
-                  transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
-                  transition: "var(--app-transition)",
-                }}
-              />
-              <Text fw={500} size="sm" lh={1.25} style={{ minWidth: 0 }}>
-                {title}
-              </Text>
-            </Group>
+          <Group justify="space-between" align="center" wrap="nowrap" mb={0}>
+            <UnstyledButton
+              onClick={toggleLocal}
+              aria-expanded={opened}
+              style={{ flex: 1, minWidth: 0, cursor: "pointer" }}
+            >
+              <Group gap="xs" align="center" style={TITLE_FLEX}>
+                <IconChevronDown
+                  size={14}
+                  style={{
+                    flexShrink: 0,
+                    transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
+                    transition: "var(--app-transition)",
+                  }}
+                />
+                <Text fw={500} size="sm" lh={1.25} style={{ minWidth: 0 }}>
+                  {title}
+                </Text>
+              </Group>
+            </UnstyledButton>
             <Stack gap={4} align="flex-end" style={BADGE_NO_SHRINK}>
               {node.complete && (
                 <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
@@ -640,31 +640,26 @@ export const RequirementNode = memo(
           }}
         >
           {title && (
-            <Group
-              justify="space-between"
-              align="center"
-              wrap="nowrap"
-              mb={0}
-              onClick={toggleLocal}
-              onKeyDown={(e) => handleKeyboardToggle(e, toggleLocal)}
-              role="button"
-              tabIndex={0}
-              aria-expanded={opened}
-              style={{ cursor: "pointer" }}
-            >
-              <Group gap="xs" align="center" style={TITLE_FLEX}>
-                <IconChevronDown
-                  size={14}
-                  style={{
-                    flexShrink: 0,
-                    transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
-                    transition: "var(--app-transition)",
-                  }}
-                />
-                <Text fw={500} size="sm" lh={1.25} style={{ minWidth: 0 }}>
-                  {title}
-                </Text>
-              </Group>
+            <Group justify="space-between" align="center" wrap="nowrap" mb={0}>
+              <UnstyledButton
+                onClick={toggleLocal}
+                aria-expanded={opened}
+                style={{ flex: 1, minWidth: 0, cursor: "pointer" }}
+              >
+                <Group gap="xs" align="center" style={TITLE_FLEX}>
+                  <IconChevronDown
+                    size={14}
+                    style={{
+                      flexShrink: 0,
+                      transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
+                      transition: "var(--app-transition)",
+                    }}
+                  />
+                  <Text fw={500} size="sm" lh={1.25} style={{ minWidth: 0 }}>
+                    {title}
+                  </Text>
+                </Group>
+              </UnstyledButton>
               <Stack gap={4} align="flex-end" style={BADGE_NO_SHRINK}>
                 {node.complete && (
                   <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>

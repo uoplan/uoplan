@@ -135,6 +135,22 @@ export function CalendarView({
     });
   }, [setPreviewBarWidth]);
 
+  const handlePreviewResizeKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      const STEP = 12;
+      let next: number | null = null;
+      if (e.key === "ArrowLeft") next = clampPreviewWidth(effectivePreviewWidth - STEP);
+      else if (e.key === "ArrowRight") next = clampPreviewWidth(effectivePreviewWidth + STEP);
+      else if (e.key === "Home") next = CALENDAR_PREVIEW_BAR_MIN_PX;
+      else if (e.key === "End") next = CALENDAR_PREVIEW_BAR_MAX_PX;
+      if (next !== null) {
+        e.preventDefault();
+        setPreviewBarWidth(next);
+      }
+    },
+    [clampPreviewWidth, effectivePreviewWidth, setPreviewBarWidth],
+  );
+
   const { displayedSchedule, animationPhase: schedulePhase } = useScheduleTransition(
     schedule,
     prefersReduced,
@@ -361,8 +377,15 @@ export function CalendarView({
                   barWidth={effectivePreviewWidth}
                 />
                 <div
+                  // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- WAI-ARIA window-splitter resize handle, not an <hr>
                   role="separator"
                   aria-label={staticTr("calendarView.resizePreviewBar")}
+                  aria-orientation="vertical"
+                  aria-valuemin={CALENDAR_PREVIEW_BAR_MIN_PX}
+                  aria-valuemax={CALENDAR_PREVIEW_BAR_MAX_PX}
+                  aria-valuenow={Math.round(effectivePreviewWidth)}
+                  tabIndex={0}
+                  onKeyDown={handlePreviewResizeKeyDown}
                   onPointerDown={handlePreviewResizeDown}
                   onPointerMove={handlePreviewResizeMove}
                   onPointerUp={handlePreviewResizeUp}
@@ -424,6 +447,7 @@ export function CalendarView({
             >
               <FocusTrap active>
                 <m.div
+                  // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- animated modal dialog (framer-motion); native <dialog> can't be used here
                   role="dialog"
                   aria-modal="true"
                   aria-label={staticTr("calendar.swap.swapWith")}

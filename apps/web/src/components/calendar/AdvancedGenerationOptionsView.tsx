@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Alert, Badge, Box, Collapse, Group, Paper, Stack, Text } from "@mantine/core";
+import {
+  Alert,
+  Badge,
+  Box,
+  Collapse,
+  Group,
+  Paper,
+  Stack,
+  Text,
+  UnstyledButton,
+} from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import { ConstrainStep, type ConstrainStepProps } from "../requirements/ConstrainStep";
 import {
@@ -41,21 +51,17 @@ export function AdvancedGenerationOptionsView({
           backgroundColor: advancedOpen ? "var(--app-surface)" : "var(--app-surface-sunken)",
         }}
       >
-        <Group
-          justify="space-between"
-          align="center"
+        <UnstyledButton
+          w="100%"
           p="sm"
-          style={{ cursor: "pointer" }}
           onClick={() => setAdvancedOpen((o) => !o)}
           aria-expanded={advancedOpen}
           aria-controls="advanced-options-collapse"
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              setAdvancedOpen((o) => !o);
-            }
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            cursor: "pointer",
           }}
         >
           <Group gap="xs" align="center">
@@ -81,7 +87,7 @@ export function AdvancedGenerationOptionsView({
               {tr("app.constraints.optional")}
             </Badge>
           )}
-        </Group>
+        </UnstyledButton>
         <Collapse id="advanced-options-collapse" expanded={advancedOpen}>
           <Box p="sm" pt={0}>
             <Alert color="blue" variant="light" radius="md" mb="sm" style={{ border: "none" }}>
