@@ -77,3 +77,9 @@ export async function main(): Promise<void> {
     console.log("Dry run: no files written.");
   }
 }
+
+main().catch((err) => {
+  console.error("Schedule grade enrichment failed.");
+  console.error(err);
+  process.exit(1);
+});
