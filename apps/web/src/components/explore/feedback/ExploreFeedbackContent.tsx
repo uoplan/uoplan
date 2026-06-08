@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Badge, Box, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
+import { Badge, Box, Group, SimpleGrid, Stack, Text, Title, Tooltip } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { LineChart } from "@mantine/charts";
 import { Link } from "@tanstack/react-router";
@@ -134,9 +134,15 @@ function FeedbackScaleLegend({
               }}
             >
               {showLabels ? (
-                <Text size="xs" c="dimmed" truncate style={{ textAlign: "right" }}>
-                  {sentenceCase(option)}
-                </Text>
+                <Tooltip
+                  label={sentenceCase(option)}
+                  withArrow
+                  events={{ hover: true, focus: true, touch: true }}
+                >
+                  <Text size="xs" c="dimmed" truncate style={{ textAlign: "right" }}>
+                    {sentenceCase(option)}
+                  </Text>
+                </Tooltip>
               ) : null}
               <Text
                 size="xs"
