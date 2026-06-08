@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Alert, Box, Group, Loader, Switch, Text } from "@mantine/core";
+import { Box, Group, Loader, Switch, Text, Tooltip } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconAlertTriangle, IconBell, IconBellOff } from "@tabler/icons-react";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
@@ -12,6 +12,9 @@ const PUSH_SUBSCRIBE_FAILED_TITLE_ID = "notifications.pushSubscribeFailed.title"
 const PUSH_SUBSCRIBE_FAILED_MESSAGE_ID = "notifications.pushSubscribeFailed.message";
 const PUSH_UNSUBSCRIBE_FAILED_TITLE_ID = "notifications.pushUnsubscribeFailed.title";
 const PUSH_UNSUBSCRIBE_FAILED_MESSAGE_ID = "notifications.pushUnsubscribeFailed.message";
+const WARNING_UNSUPPORTED_ID = "notifications.warning.unsupported";
+const WARNING_IOS_HOME_SCREEN_ID = "notifications.warning.iosHomeScreen";
+const WARNING_BLOCKED_ID = "notifications.warning.blocked";
 const TURNSTILE_SITE_KEY =
   (import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined) ?? "0x4AAAAAADGEYLH_6_yl1r5j";
 const LS_KEY = "uoplan-notifications";
@@ -46,15 +49,15 @@ function urlBase64ToUint8Array(base64: string): Uint8Array {
   return Uint8Array.from(raw, (c) => c.charCodeAt(0));
 }
 
-function getUnsupportedReason(): string | null {
+function getUnsupportedReasonId(): string | null {
   if ("PushManager" in window) return null;
   const isIOS =
     /iphone|ipad|ipod/i.test(navigator.userAgent) ||
     (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   if (isIOS) {
-    return "Add uoplan to your Home Screen to enable notifications";
+    return WARNING_IOS_HOME_SCREEN_ID;
   }
-  return "Push notifications are not supported in this browser";
+  return WARNING_UNSUPPORTED_ID;
 }
 
 export function NotificationToggle() {
@@ -86,7 +89,7 @@ export function NotificationToggle() {
     rejectTokenRef.current = null;
   }
 
-  const unsupportedReason = getUnsupportedReason();
+  const unsupportedReasonId = getUnsupportedReasonId();
   const isSubscribed = state.status === "subscribed";
   const isDenied = state.status === "denied";
 
@@ -181,11 +184,23 @@ export function NotificationToggle() {
   }
 
   const icon = isSubscribed ? <IconBell size={14} /> : <IconBellOff size={14} />;
-  const warningMessage =
-    unsupportedReason ?? (isDenied ? "Notifications blocked in browser settings" : null);
+  const warningMessage = unsupportedReasonId
+    ? tr(unsupportedReasonId)
+    : isDenied
+      ? tr(WARNING_BLOCKED_ID)
+      : null;
 
   return (
-    <>
+    <Box
+      px="sm"
+      py={8}
+      style={{
+        backgroundColor: "var(--app-surface)",
+        border: "var(--app-border-width) solid var(--app-border)",
+        borderRadius: "var(--app-radius)",
+        boxShadow: "var(--app-shadow-sm)",
+      }}
+    >
       <Turnstile
         ref={turnstileRef}
         siteKey={TURNSTILE_SITE_KEY}
@@ -202,48 +217,54 @@ export function NotificationToggle() {
             Notify me when new terms are added
           </Text>
         </Group>
-        <Box
-          style={{
-            position: "relative",
-            flexShrink: 0,
-            display: "flex",
-            alignItems: "center",
-            cursor: "pointer",
-          }}
-        >
-          <Switch
-            checked={isSubscribed}
-            disabled={!!unsupportedReason || isDenied || loading}
-            onChange={isSubscribed ? handleDisable : handleEnable}
-            size="sm"
-            style={
-              {
-                "--switch-cursor": "pointer",
-                opacity: loading ? 0 : 1,
-                transition: "opacity 200ms ease",
-                pointerEvents: loading ? "none" : "auto",
-              } as React.CSSProperties
-            }
-          />
-          <Loader
-            size="xs"
-            color="blue"
+        <Group gap="xs" wrap="nowrap" style={{ flexShrink: 0 }}>
+          {warningMessage && (
+            <Tooltip label={warningMessage} withArrow multiline maw={240} position="top">
+              <Box
+                component="span"
+                style={{ display: "inline-flex", alignItems: "center", cursor: "help" }}
+              >
+                <IconAlertTriangle size={16} color="var(--app-warning)" />
+              </Box>
+            </Tooltip>
+          )}
+          <Box
             style={{
-              position: "absolute",
-              left: "50%",
-              transform: "translateX(-50%)",
-              opacity: loading ? 1 : 0,
-              transition: "opacity 200ms ease",
-              pointerEvents: "none",
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
             }}
-          />
-        </Box>
+          >
+            <Switch
+              checked={isSubscribed}
+              disabled={!!unsupportedReasonId || isDenied || loading}
+              onChange={isSubscribed ? handleDisable : handleEnable}
+              size="sm"
+              style={
+                {
+                  "--switch-cursor": "pointer",
+                  opacity: loading ? 0 : 1,
+                  transition: "opacity 200ms ease",
+                  pointerEvents: loading ? "none" : "auto",
+                } as React.CSSProperties
+              }
+            />
+            <Loader
+              size="xs"
+              color="blue"
+              style={{
+                position: "absolute",
+                left: "50%",
+                transform: "translateX(-50%)",
+                opacity: loading ? 1 : 0,
+                transition: "opacity 200ms ease",
+                pointerEvents: "none",
+              }}
+            />
+          </Box>
+        </Group>
       </Group>
-      {warningMessage && (
-        <Alert color="yellow" icon={<IconAlertTriangle size={14} />} mt={6} p={8} radius="sm">
-          <Text size="xs">{warningMessage}</Text>
-        </Alert>
-      )}
-    </>
+    </Box>
   );
 }
