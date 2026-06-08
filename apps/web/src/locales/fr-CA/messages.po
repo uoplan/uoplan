@@ -939,6 +939,34 @@ msgstr "Professeurs"
 msgid "explore.resultsPrograms"
 msgstr "Programmes"
 
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:306
+msgid "explore.schedule.conflict"
+msgstr "Les sections sélectionnées se chevauchent"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:284
+msgid "explore.schedule.loading"
+msgstr "Chargement de l’horaire…"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:149
+msgid "explore.schedule.noTimes"
+msgstr "Aucune plage horaire"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:289
+msgid "explore.schedule.notOffered"
+msgstr "Ce cours n’est pas offert à la session sélectionnée."
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:144
+msgid "explore.schedule.overlaps"
+msgstr "Conflit d’horaire"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:279
+msgid "explore.schedule.selectTerm"
+msgstr "Sélectionnez une session pour voir l’horaire des cours."
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:297
+msgid "explore.schedule.viewGrades"
+msgstr "Voir l’historique des notes"
+
 msgid "explore.searchPlaceholder"
 msgstr "Rechercher des cours ou des professeurs…"
 

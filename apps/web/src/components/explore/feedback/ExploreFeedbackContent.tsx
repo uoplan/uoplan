@@ -2,8 +2,6 @@ import { useMemo } from "react";
 import { Badge, Box, Group, SimpleGrid, Stack, Text, Title, Tooltip } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { LineChart } from "@mantine/charts";
-import { Link } from "@tanstack/react-router";
-import { IconArrowLeft } from "@tabler/icons-react";
 import { m } from "framer-motion";
 import {
   feedbackQuestionSeries,
@@ -14,7 +12,6 @@ import {
 } from "@uoplan/core";
 import { useTr, tr } from "../../../i18n";
 import { formatTermLabel, formatTermLabelShort } from "../../../lib/term/termLabel";
-import { EMPTY_EXPLORE_SEARCH } from "../../../lib/explore/exploreFilters";
 import { AppCard } from "../../shared/AppCard";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../ExploreProfessorGradesLayout";
 
@@ -186,13 +183,11 @@ function FeedbackStatCard({ label, value }: { label: string; value: string }) {
  */
 export function ExploreFeedbackContent({
   title,
-  backLink,
   views,
   questions,
   loading,
 }: {
   title: string;
-  backLink: { to: string; params: Record<string, string>; label: string };
   views: readonly FeedbackSectionView[];
   questions: readonly FeedbackQuestionMeta[];
   loading: boolean;
@@ -226,23 +221,7 @@ export function ExploreFeedbackContent({
         }}
       >
         <Box>
-          <Link
-            to={backLink.to}
-            params={backLink.params}
-            search={EMPTY_EXPLORE_SEARCH}
-            style={{
-              color: "var(--app-text-muted)",
-              textDecoration: "none",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 4,
-              fontSize: "var(--mantine-font-size-sm)",
-            }}
-          >
-            <IconArrowLeft size={16} />
-            {backLink.label}
-          </Link>
-          <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }} mt={8}>
+          <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
             {title}
           </Title>
           <Text size="sm" c="dimmed" mt={4}>
