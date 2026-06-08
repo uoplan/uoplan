@@ -46,7 +46,7 @@ export function TrendsFeedbackPage() {
   }, [data]);
 
   if (loading && !data) {
-    return <TrendsGridSkeleton count={2} height={240} />;
+    return <TrendsGridSkeleton count={2} height={300} />;
   }
 
   if (sentiment.length === 0 && rate.length === 0) {
