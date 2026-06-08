@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import type { GeneratedSchedule } from "@uoplan/core";
-import { COURSE_COLORS, COURSE_COLOR_HEX, hexToRgb } from "@uoplan/core";
+import { COURSE_COLORS, COURSE_COLOR_OKLCH } from "@uoplan/core";
 import type { WeekGroup } from "../../hooks/useScheduleWeeks";
 import { slotActiveInWeek } from "../../hooks/useScheduleWeeks";
 import { formatWeekLabel } from "../../lib/formatWeekCount";
@@ -19,9 +19,7 @@ interface Slot {
   dayIdx: number;
   topPct: number;
   heightPct: number;
-  r: number;
-  g: number;
-  b: number;
+  color: string;
 }
 
 interface WeekMiniCardProps {
@@ -98,7 +96,7 @@ function WeekMiniCard({
             width: colW - 2,
             height: `${slot.heightPct}%`,
             minHeight: 3,
-            backgroundColor: `rgb(${slot.r} ${slot.g} ${slot.b} / 70%)`,
+            backgroundColor: `color-mix(in oklab, ${slot.color} 70%, transparent)`,
             borderRadius: 1,
           }}
         />
@@ -138,8 +136,7 @@ export function WeekPreviewPanel({
       const slots: Slot[] = [];
       for (const [enrollIdx, enrollment] of schedule.enrollments.entries()) {
         const colorIdx = (colorMap[enrollment.courseCode] ?? enrollIdx) % COURSE_COLORS.length;
-        const hex = COURSE_COLOR_HEX[COURSE_COLORS[colorIdx]];
-        const { r, g, b } = hexToRgb(hex);
+        const color = COURSE_COLOR_OKLCH[COURSE_COLORS[colorIdx]];
 
         for (const { section } of Object.values(enrollment.sectionCombo)) {
           for (const t of section.times) {
@@ -156,7 +153,7 @@ export function WeekPreviewPanel({
             const topPct = ((clampedStart - TIME_MIN) / TIME_RANGE) * 100;
             const heightPct = Math.max(0, ((clampedEnd - clampedStart) / TIME_RANGE) * 100);
 
-            slots.push({ dayIdx, topPct, heightPct, r, g, b });
+            slots.push({ dayIdx, topPct, heightPct, color });
           }
         }
       }

@@ -29,6 +29,10 @@ export type CourseColor = (typeof COURSE_COLORS)[number];
 
 /**
  * Hex color values for course colors.
+ *
+ * Retained for the OG-image SVG renderer (`@uoplan/calendar` → resvg), which
+ * does not support `oklch()`. Browser consumers should prefer
+ * `COURSE_COLOR_OKLCH` / `getCourseColorOklch`.
  */
 export const COURSE_COLOR_HEX: Record<CourseColor, string> = {
   violet: "#7950f2",
@@ -49,6 +53,29 @@ export const COURSE_COLOR_HEX: Record<CourseColor, string> = {
 };
 
 /**
+ * OKLCH color values for course colors — the values used by the browser
+ * calendar. Equivalent to `COURSE_COLOR_HEX` but expressed in the oklch color
+ * space (use these for any DOM/CSS consumer; the hex map is only for resvg).
+ */
+export const COURSE_COLOR_OKLCH: Record<CourseColor, string> = {
+  violet: "oklch(0.5692 0.2289 288.56)",
+  blue: "oklch(0.6259 0.1641 250.29)",
+  teal: "oklch(0.6946 0.1435 164.88)",
+  cyan: "oklch(0.6777 0.1144 210.62)",
+  pink: "oklch(0.6396 0.1968 3.19)",
+  grape: "oklch(0.6239 0.2251 318.91)",
+  indigo: "oklch(0.5896 0.2054 268.62)",
+  orange: "oklch(0.7265 0.1832 51.48)",
+  red: "oklch(0.6706 0.2045 24.52)",
+  green: "oklch(0.7146 0.1835 146.44)",
+  yellow: "oklch(0.8069 0.1674 78.12)",
+  lime: "oklch(0.76 0.1996 131.08)",
+  plum: "oklch(0.6029 0.2175 289.69)",
+  fuschia: "oklch(0.6924 0.1765 1.25)",
+  sky: "oklch(0.6689 0.1575 248.32)",
+};
+
+/**
  * Get a course color by index (cycles through available colors).
  */
 export function getCourseColor(index: number): CourseColor {
@@ -57,10 +84,21 @@ export function getCourseColor(index: number): CourseColor {
 
 /**
  * Get the hex value for a course color by index.
+ *
+ * Hex form is retained for the OG-image SVG renderer (resvg has no `oklch`
+ * support). Browser callers should use `getCourseColorOklch`.
  */
 export function getCourseColorHex(index: number): string {
   const color = getCourseColor(index);
   return COURSE_COLOR_HEX[color];
+}
+
+/**
+ * Get the oklch value for a course color by index (browser/DOM consumers).
+ */
+export function getCourseColorOklch(index: number): string {
+  const color = getCourseColor(index);
+  return COURSE_COLOR_OKLCH[color];
 }
 
 /**
