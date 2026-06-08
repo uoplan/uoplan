@@ -1,28 +1,26 @@
-import { Box, Skeleton, SimpleGrid, Stack } from "@mantine/core";
+import { Box, SimpleGrid } from "@mantine/core";
 import { AppCard } from "../shared/AppCard";
 
 /**
- * A single placeholder chart card: a title/description stub above a large block
- * standing in for the chart. Used while trends datasets are still loading.
+ * Loading placeholder for the shared filter bar: an empty block reserving the
+ * bar's height so the live controls don't shift layout when they swap in.
+ */
+export function TrendsFilterBarSkeleton() {
+  return <Box h={160} />;
+}
+
+/**
+ * A single empty placeholder card standing in for a chart card while trends
+ * datasets are still loading.
  */
 export function TrendsChartCardSkeleton({
-  height = 200,
+  height = 280,
   style,
 }: {
   height?: number;
   style?: React.CSSProperties;
 }) {
-  return (
-    <AppCard p="md" h="100%" style={style}>
-      <Stack gap="sm" h="100%">
-        <Stack gap={6}>
-          <Skeleton height={14} width="42%" radius="sm" />
-          <Skeleton height={9} width="68%" radius="sm" />
-        </Stack>
-        <Skeleton height={height} radius="sm" mt="auto" />
-      </Stack>
-    </AppCard>
-  );
+  return <AppCard p="md" h={height} style={style} />;
 }
 
 /**
@@ -40,13 +38,13 @@ export function TrendsHubSkeleton({ isMobile }: { isMobile: boolean }) {
       }}
     >
       <TrendsChartCardSkeleton
-        height={240}
+        height={310}
         style={{ gridColumn: isMobile ? undefined : "1 / -1" }}
       />
-      <TrendsChartCardSkeleton height={128} />
-      <TrendsChartCardSkeleton height={128} />
-      <TrendsChartCardSkeleton height={128} />
-      <TrendsChartCardSkeleton height={128} />
+      <TrendsChartCardSkeleton height={215} />
+      <TrendsChartCardSkeleton height={215} />
+      <TrendsChartCardSkeleton height={215} />
+      <TrendsChartCardSkeleton height={215} />
     </Box>
   );
 }
@@ -57,7 +55,7 @@ export function TrendsHubSkeleton({ isMobile }: { isMobile: boolean }) {
  */
 export function TrendsGridSkeleton({
   count = 4,
-  height = 240,
+  height = 300,
 }: {
   count?: number;
   height?: number;

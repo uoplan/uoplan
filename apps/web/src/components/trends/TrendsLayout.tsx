@@ -8,7 +8,7 @@ import { ChromeControls } from "../shared/ChromeControls";
 import { CalendarMobileDrawer } from "../calendar/CalendarMobileDrawer";
 import { useTrends } from "./TrendsFilterProvider";
 import { TrendsFilterControls } from "./TrendsFilterControls";
-import { TrendsHubSkeleton } from "./TrendsSkeletons";
+import { TrendsFilterBarSkeleton, TrendsHubSkeleton } from "./TrendsSkeletons";
 
 /**
  * Persistent shell for every `/trends` route: page header, the shared sticky
@@ -63,7 +63,28 @@ export function TrendsLayout() {
             {gradesError}
           </Alert>
         ) : !ready ? (
-          <TrendsHubSkeleton isMobile={isMobile} />
+          <>
+            {!isMobile ? (
+              <Box
+                style={{
+                  position: "sticky",
+                  top: 0,
+                  zIndex: 5,
+                  width: "100vw",
+                  marginInline: "calc(50% - 50vw)",
+                  backgroundColor: "var(--app-surface-sunken)",
+                  borderBottom: "var(--app-border-width) solid var(--app-border)",
+                  padding: "16px 24px",
+                  boxSizing: "border-box",
+                }}
+              >
+                <Box w="100%" maw={1000} mx="auto">
+                  <TrendsFilterBarSkeleton />
+                </Box>
+              </Box>
+            ) : null}
+            <TrendsHubSkeleton isMobile={isMobile} />
+          </>
         ) : (
           <>
             {!isMobile ? (
