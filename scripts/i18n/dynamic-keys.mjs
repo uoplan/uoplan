@@ -108,6 +108,10 @@ export const DYNAMIC_TR_IDS = [
   "notifications.scheduleWorkerFallback.message",
   "notifications.scheduleGenerationCancelled.title",
   "notifications.scheduleGenerationCancelled.message",
+  // apps/web/src/components/steps/NotificationToggle.tsx: warning reason ids
+  "notifications.warning.unsupported",
+  "notifications.warning.iosHomeScreen",
+  "notifications.warning.blocked",
 
   // Accessibility workstream: ids intentionally routed through constants until catalogs are updated centrally.
   "calendar.event.ariaLabel",

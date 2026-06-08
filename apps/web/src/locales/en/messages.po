@@ -1512,6 +1512,18 @@ msgid "notifications.scheduleWorkerFallback.title"
 msgstr "Schedule generation is running more slowly"
 
 #: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.warning.blocked"
+msgstr "Notifications blocked in browser settings"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.warning.iosHomeScreen"
+msgstr "Add uoplan to your Home Screen to enable notifications"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.warning.unsupported"
+msgstr "Push notifications are not supported in this browser"
+
+#: scripts/i18n/dynamic-keys.mjs
 msgid "notifications.yearCatalogueLoadFailed.message"
 msgstr "Try another year, or reload and try again."
 

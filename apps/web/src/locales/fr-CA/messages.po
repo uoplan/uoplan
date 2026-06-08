@@ -1512,6 +1512,18 @@ msgid "notifications.scheduleWorkerFallback.title"
 msgstr "La génération d’horaire est plus lente"
 
 #: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.warning.blocked"
+msgstr "Notifications bloquées dans les paramètres du navigateur"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.warning.iosHomeScreen"
+msgstr "Ajoutez uoplan à votre écran d'accueil pour activer les notifications"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "notifications.warning.unsupported"
+msgstr "Les notifications push ne sont pas prises en charge par ce navigateur"
+
+#: scripts/i18n/dynamic-keys.mjs
 msgid "notifications.yearCatalogueLoadFailed.message"
 msgstr "Essayez une autre année, ou rechargez la page et réessayez."
 

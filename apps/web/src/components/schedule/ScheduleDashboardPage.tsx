@@ -172,18 +172,7 @@ export function ScheduleDashboardPage() {
         }}
       >
         <Stack gap="md" maw={760} mx="auto" w="100%">
-          <Box
-            px="sm"
-            py={8}
-            style={{
-              backgroundColor: "var(--app-surface)",
-              border: "var(--app-border-width) solid var(--app-border)",
-              borderRadius: "var(--app-radius)",
-              boxShadow: "var(--app-shadow-sm)",
-            }}
-          >
-            <NotificationToggle />
-          </Box>
+          <NotificationToggle />
 
           {cards.map((card, index) => (
             <m.div
