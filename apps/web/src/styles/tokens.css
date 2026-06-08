@@ -29,18 +29,18 @@
   --app-font-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* Surfaces (warm neutral dark, less cold blue) */
-  --app-bg: #1b1a20;
-  --app-surface: #26242e;
-  --app-surface-sunken: #161519;
-  --app-surface-overlay: #2e2c38;
-  --app-surface-hover: #34323e;
+  --app-bg: oklch(0.2216 0.0117 293.07);
+  --app-surface: oklch(0.2668 0.0186 294.27);
+  --app-surface-sunken: oklch(0.1987 0.008 297.1);
+  --app-surface-overlay: oklch(0.3003 0.0216 292.69);
+  --app-surface-hover: oklch(0.3241 0.0212 292.82);
 
   /* Borders — barely-there hairlines (sit very close to the surface so cards
      read as soft shapes, not outlined boxes). border-strong stays a touch more
      visible for input affordances. */
-  --app-border: #2a2833;
-  --app-border-strong: #3d3b4a;
-  --app-ink: #2a2833;
+  --app-border: oklch(0.2837 0.0201 293.41);
+  --app-border-strong: oklch(0.3604 0.0258 291.16);
+  --app-ink: oklch(0.2837 0.0201 293.41);
   --app-stamp-shadow: rgba(0, 0, 0, 0.55);
 
   /* Soft, diffuse shadows for the cozy lift (replaces hard offset stamp) */
@@ -49,26 +49,26 @@
   --app-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.42), 0 20px 56px rgba(0, 0, 0, 0.36);
 
   /* Informational / warning accents (token-ized; replaces raw hex in badges) */
-  --app-info: #74c0fc;
+  --app-info: oklch(0.782 0.1147 243.83);
   --app-info-soft: rgba(51, 154, 240, 0.16);
-  --app-warning: #ffa94d;
+  --app-warning: oklch(0.8034 0.1461 64.6);
   --app-warning-soft: rgba(255, 146, 43, 0.16);
-  --app-success: #69c08a;
+  --app-success: oklch(0.7385 0.116 155.05);
   --app-success-soft: rgba(101, 192, 129, 0.16);
-  --app-danger: #f07c7c;
+  --app-danger: oklch(0.7177 0.143 21.26);
   --app-danger-soft: rgba(240, 124, 124, 0.16);
 
   /* Text */
-  --app-text: #eceef5;
-  --app-text-muted: #aeb2c2;
-  --app-text-dim: #888ca5;
-  --app-text-inverse: #1a1b22;
+  --app-text: oklch(0.9496 0.0096 273.35);
+  --app-text-muted: oklch(0.7654 0.0232 274.64);
+  --app-text-dim: oklch(0.6454 0.0375 278.13);
+  --app-text-inverse: oklch(0.2242 0.0137 278.83);
 
   /* Accent (pastel baby blue) */
-  --app-accent: #93c5fd;
-  --app-accent-soft: #38476a;
-  --app-on-accent: #0f1b2e;
-  --app-focus-ring: #93c5fd;
+  --app-accent: oklch(0.8091 0.0956 251.81);
+  --app-accent-soft: oklch(0.4012 0.0625 265.94);
+  --app-on-accent: oklch(0.2217 0.0412 259.27);
+  --app-focus-ring: oklch(0.8091 0.0956 251.81);
 
   /* Misc chrome */
   --app-selection-bg: rgba(147, 197, 253, 0.26);
@@ -80,7 +80,7 @@
      --event-mix-base by --event-fill; --app-on-event is the text colour that
      sits on that background. On dark themes the mix base is dark so the card is
      a dark tint and the text stays light. */
-  --app-on-event: #f3f1ee;
+  --app-on-event: oklch(0.9588 0.0045 78.3);
   --event-fill: 38%;
   --event-mix-base: var(--app-bg);
 
@@ -95,18 +95,18 @@
 
 [data-app-theme="light"] {
   /* Surfaces (warm pastel parchment, not pure white) */
-  --app-bg: #f7f5f2;
-  --app-surface: #fffdfa;
-  --app-surface-sunken: #efece6;
-  --app-surface-overlay: #ffffff;
-  --app-surface-hover: #f0eee8;
+  --app-bg: oklch(0.9709 0.0045 78.3);
+  --app-surface: oklch(0.9947 0.0045 78.3);
+  --app-surface-sunken: oklch(0.9437 0.0086 84.57);
+  --app-surface-overlay: oklch(1 0 0);
+  --app-surface-hover: oklch(0.949 0.0083 91.48);
 
   /* Borders & brutalist identity. Ink is softened on light so the 2px borders
      on inputs/buttons/cards read as a firm warm graphite rather than harsh
      near-black on the pale parchment surfaces. */
-  --app-border: #ebe6dd;
-  --app-border-strong: #d2cdc2;
-  --app-ink: #d2cdc2;
+  --app-border: oklch(0.9264 0.0132 82.4);
+  --app-border-strong: oklch(0.8493 0.016 86.43);
+  --app-ink: oklch(0.8493 0.016 86.43);
   --app-stamp-shadow: rgba(60, 54, 44, 0.22);
 
   /* Soft warm shadows for the cozy lift */
@@ -115,26 +115,26 @@
   --app-shadow-lg: 0 12px 34px rgba(60, 54, 44, 0.14), 0 20px 54px rgba(60, 54, 44, 0.1);
 
   /* Informational / warning accents (darker tier for contrast on light) */
-  --app-info: #1971c2;
+  --app-info: oklch(0.5426 0.1485 251.67);
   --app-info-soft: rgba(34, 139, 230, 0.12);
-  --app-warning: #b34209;
+  --app-warning: oklch(0.5295 0.1582 41.1);
   --app-warning-soft: rgba(232, 89, 12, 0.12);
-  --app-success: #2f9e44;
+  --app-success: oklch(0.6172 0.1624 146.43);
   --app-success-soft: rgba(47, 158, 68, 0.12);
-  --app-danger: #e03131;
+  --app-danger: oklch(0.5928 0.2106 26.53);
   --app-danger-soft: rgba(224, 49, 49, 0.12);
 
   /* Text */
-  --app-text: #2a2826;
-  --app-text-muted: #5e5a52;
-  --app-text-dim: #6f695f;
-  --app-text-inverse: #fffdfa;
+  --app-text: oklch(0.2782 0.0047 67.63);
+  --app-text-muted: oklch(0.4688 0.0136 84.59);
+  --app-text-dim: oklch(0.5232 0.0171 80.65);
+  --app-text-inverse: oklch(0.9947 0.0045 78.3);
 
   /* Accent (Tailwind blue-600, for white-on-accent contrast on light) */
-  --app-accent: #2563eb;
-  --app-accent-soft: #e4eefe;
-  --app-on-accent: #ffffff;
-  --app-focus-ring: #2563eb;
+  --app-accent: oklch(0.5461 0.2152 262.88);
+  --app-accent-soft: oklch(0.9464 0.0241 259.82);
+  --app-on-accent: oklch(1 0 0);
+  --app-focus-ring: oklch(0.5461 0.2152 262.88);
 
   /* Misc chrome */
   --app-selection-bg: rgba(59, 130, 246, 0.2);
@@ -142,9 +142,9 @@
   --app-translucent: rgba(0, 0, 0, 0.05);
   --app-translucent-strong: rgba(0, 0, 0, 0.08);
 
-  --app-on-event: #2a2722;
+  --app-on-event: oklch(0.2742 0.01 80.64);
   --event-fill: 60%;
-  --event-mix-base: #ffffff;
+  --event-mix-base: oklch(1 0 0);
 
   /* Custom scrollbars — warm graphite thumb on the pale parchment surfaces. */
   --app-scrollbar-thumb: rgba(60, 54, 44, 0.26);
@@ -159,16 +159,16 @@
 ---------------------------------------------------------------------------- */
 [data-app-theme="geegees"] {
   /* Surfaces — deep garnet-tinted charcoals. */
-  --app-bg: #1a1012;
-  --app-surface: #261519;
-  --app-surface-sunken: #140b0d;
-  --app-surface-overlay: #2f191e;
-  --app-surface-hover: #3a1f25;
+  --app-bg: oklch(0.1872 0.0172 5.61);
+  --app-surface: oklch(0.2204 0.0285 4.34);
+  --app-surface-sunken: oklch(0.163 0.0162 4.35);
+  --app-surface-overlay: oklch(0.2452 0.0359 5.34);
+  --app-surface-hover: oklch(0.2775 0.0427 5.88);
 
   /* Borders — garnet-leaning hairlines. */
-  --app-border: #2f1a1f;
-  --app-border-strong: #4a2a31;
-  --app-ink: #2f1a1f;
+  --app-border: oklch(0.2478 0.0343 4.41);
+  --app-border-strong: oklch(0.328 0.0485 5.93);
+  --app-ink: oklch(0.2478 0.0343 4.41);
   --app-stamp-shadow: rgba(0, 0, 0, 0.6);
 
   --app-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(40, 0, 10, 0.3);
@@ -176,26 +176,26 @@
   --app-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5), 0 20px 56px rgba(40, 0, 10, 0.4);
 
   /* Status accents (kept readable on the garnet charcoal). */
-  --app-info: #74c0fc;
+  --app-info: oklch(0.782 0.1147 243.83);
   --app-info-soft: rgba(51, 154, 240, 0.16);
-  --app-warning: #ffc078;
+  --app-warning: oklch(0.8503 0.1149 68.95);
   --app-warning-soft: rgba(255, 146, 43, 0.16);
-  --app-success: #8ce0a8;
+  --app-success: oklch(0.8381 0.114 154.06);
   --app-success-soft: rgba(101, 192, 129, 0.16);
-  --app-danger: #ff9a9a;
+  --app-danger: oklch(0.7903 0.1213 20.14);
   --app-danger-soft: rgba(240, 124, 124, 0.18);
 
   /* Text — warm off-white on garnet. */
-  --app-text: #f4ebec;
-  --app-text-muted: #cbb4b8;
-  --app-text-dim: #9c8186;
-  --app-text-inverse: #1a1012;
+  --app-text: oklch(0.9474 0.0098 9.54);
+  --app-text-muted: oklch(0.7907 0.0269 5.83);
+  --app-text-dim: oklch(0.6299 0.0338 5.59);
+  --app-text-inverse: oklch(0.1872 0.0172 5.61);
 
   /* Accent — uOttawa garnet, brightened for contrast on the dark surface. */
-  --app-accent: #d11a3a;
-  --app-accent-soft: #4a1c25;
-  --app-on-accent: #fff5f6;
-  --app-focus-ring: #e5546b;
+  --app-accent: oklch(0.5529 0.2103 20.26);
+  --app-accent-soft: oklch(0.2982 0.0705 10.25);
+  --app-on-accent: oklch(0.9782 0.0108 10.33);
+  --app-focus-ring: oklch(0.6445 0.1797 14.3);
 
   /* Misc chrome. */
   --app-selection-bg: rgba(209, 26, 58, 0.3);
@@ -203,7 +203,7 @@
   --app-translucent: rgba(255, 255, 255, 0.06);
   --app-translucent-strong: rgba(255, 255, 255, 0.1);
 
-  --app-on-event: #f6eef0;
+  --app-on-event: oklch(0.9559 0.009 0.13);
   --event-fill: 38%;
   --event-mix-base: var(--app-bg);
 

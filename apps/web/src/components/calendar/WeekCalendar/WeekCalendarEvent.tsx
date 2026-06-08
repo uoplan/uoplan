@@ -1,7 +1,7 @@
 import { memo, useMemo } from "react";
 import { Popover } from "@mantine/core";
 import type { DataCache } from "@uoplan/core";
-import { COURSE_COLORS, COURSE_COLOR_HEX, ratingToColor } from "@uoplan/core";
+import { COURSE_COLORS, COURSE_COLOR_OKLCH, ratingToColor } from "@uoplan/core";
 import { ratingColorToCssVar } from "../../../lib/ratingColor";
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
 import { useTr } from "../../../i18n";
@@ -53,7 +53,7 @@ function WeekCalendarEventImpl({
 
   const colorIdx = colorMap[event.courseCode] ?? event.enrollmentIndex;
   const colorName = COURSE_COLORS[colorIdx % COURSE_COLORS.length];
-  const hex = COURSE_COLOR_HEX[colorName];
+  const eventColor = COURSE_COLOR_OKLCH[colorName];
 
   const legacyId = useMemo(
     () => event.professorRatingDetails?.find((d) => d.legacyId)?.legacyId,
@@ -117,7 +117,7 @@ function WeekCalendarEventImpl({
         font: "inherit",
         textAlign: "left",
         overflow: "hidden",
-        ["--event-color" as string]: hex,
+        ["--event-color" as string]: eventColor,
       }}
       data-color={markerColor}
       onClick={handleActivate}
