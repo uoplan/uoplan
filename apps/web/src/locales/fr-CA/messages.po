@@ -111,6 +111,9 @@ msgstr "Accueil"
 msgid "app.nav.backToCourse"
 msgstr "Retour à {course}"
 
+msgid "app.nav.backTrends"
+msgstr "Tendances"
+
 msgid "app.nav.dest.calendar.description"
 msgstr "Consultez et parcourez vos horaires générés."
 

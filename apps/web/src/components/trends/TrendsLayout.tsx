@@ -1,8 +1,9 @@
 import { Alert, Badge, Box, Button, Group, Stack, Text, Title } from "@mantine/core";
 import { IconAdjustmentsHorizontal } from "@tabler/icons-react";
-import { Outlet } from "@tanstack/react-router";
+import { Outlet, useLocation } from "@tanstack/react-router";
 import { useState } from "react";
 import { tr, useTr } from "../../i18n";
+import { toUrlSearch } from "../../lib/trends/searchParams";
 import { BackButton } from "../shared/BackButton";
 import { ChromeControls } from "../shared/ChromeControls";
 import { CalendarMobileDrawer } from "../calendar/CalendarMobileDrawer";
@@ -18,10 +19,17 @@ import { TrendsFilterBarSkeleton, TrendsHubSkeleton } from "./TrendsSkeletons";
  */
 export function TrendsLayout() {
   useTr();
-  const { isMobile, ready, gradesError, scopeSummary, metricLabel, activeFilterCount } =
+  const { isMobile, ready, gradesError, scopeSummary, metricLabel, activeFilterCount, search } =
     useTrends();
 
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  // The layout is shared across the hub and its sub-pages; on a sub-page the
+  // back affordance should return to the trends hub (carrying current filters)
+  // rather than all the way to the home page.
+  const onSubPage = useLocation({
+    select: (s) => s.pathname.replace(/\/+$/, "") !== "/trends",
+  });
 
   return (
     <Box
@@ -39,7 +47,15 @@ export function TrendsLayout() {
       <Stack gap="lg" w="100%" maw={1000} mx="auto">
         <Group align="flex-start" justify="space-between" wrap="nowrap">
           <Stack gap={4}>
-            <BackButton fallbackTo="/" fallbackLabel={tr("app.nav.backHome")} />
+            {onSubPage ? (
+              <BackButton
+                fallbackTo="/trends"
+                fallbackLabel={tr("app.nav.backTrends")}
+                fallbackSearch={toUrlSearch(search)}
+              />
+            ) : (
+              <BackButton fallbackTo="/" fallbackLabel={tr("app.nav.backHome")} />
+            )}
             <Title
               order={1}
               style={{

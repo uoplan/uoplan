@@ -111,6 +111,9 @@ msgstr "Home"
 msgid "app.nav.backToCourse"
 msgstr "Back to {course}"
 
+msgid "app.nav.backTrends"
+msgstr "Trends"
+
 msgid "app.nav.dest.calendar.description"
 msgstr "View and browse your generated timetables."
 
