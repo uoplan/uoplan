@@ -57,12 +57,21 @@ export function GradeHistogramCard({
                   style={{
                     flex: 1,
                     minWidth: 0,
-                    height: `${heightPct}%`,
-                    minHeight: bar.count > 0 ? 2 : 0,
-                    backgroundColor: bar.color,
-                    borderRadius: "var(--app-radius-sm, 3px) var(--app-radius-sm, 3px) 0 0",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "flex-end",
                   }}
-                />
+                >
+                  <Box
+                    style={{
+                      width: "100%",
+                      height: `${heightPct}%`,
+                      minHeight: bar.count > 0 ? 2 : 0,
+                      backgroundColor: bar.color,
+                      borderRadius: "var(--app-radius-sm, 3px) var(--app-radius-sm, 3px) 0 0",
+                    }}
+                  />
+                </Box>
               </Tooltip>
             );
           })}

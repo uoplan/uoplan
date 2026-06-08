@@ -2205,6 +2205,18 @@ msgstr "Comparaison de la mesure choisie entre les disciplines."
 msgid "trends.chart.disciplineBar.title"
 msgstr "Par discipline"
 
+#: apps/web/src/components/trends/DisciplineScatterCard.tsx:53
+msgid "trends.chart.disciplineScatter.desc"
+msgstr "Popularité par rapport à la moyenne pondérée, un point par discipline."
+
+#: apps/web/src/components/trends/DisciplineScatterCard.tsx:62
+msgid "trends.chart.disciplineScatter.series"
+msgstr "Disciplines"
+
+#: apps/web/src/components/trends/DisciplineScatterCard.tsx:52
+msgid "trends.chart.disciplineScatter.title"
+msgstr "Popularité c. moyenne"
+
 #: apps/web/src/components/trends/DisciplineBarCard.tsx:32
 #: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:51
 #: apps/web/src/components/trends/GradeBandAreaCard.tsx:49
@@ -2322,6 +2334,14 @@ msgstr "Aucune donnée de notes ne correspond à ces filtres."
 msgid "trends.error.title"
 msgstr "Impossible de charger l'historique des notes"
 
+#: apps/web/src/components/trends/TrendsFeedbackPage.tsx:143
+msgid "trends.feedback.byQuestion"
+msgstr "Par question du sondage"
+
+#: apps/web/src/components/trends/TrendsFeedbackPage.tsx:146
+msgid "trends.feedback.byQuestionDesc"
+msgstr "Note moyenne par trimestre pour les questions les plus répondues."
+
 #: apps/web/src/components/trends/TrendsFeedbackSection.tsx:80
 msgid "trends.feedback.responseRate"
 msgstr "Taux de réponse au fil du temps"
@@ -2367,6 +2387,10 @@ msgstr "Estimé à partir des cours obligatoires du programme"
 
 msgid "trends.filter.season"
 msgstr "Session"
+
+#: apps/web/src/components/trends/TrendsHubPage.tsx:85
+msgid "trends.hub.leaderboardDesc"
+msgstr "Plus fortes hausses, disciplines et cours les plus faciles et difficiles."
 
 msgid "trends.leaderboard.col.change"
 msgstr "Écart"

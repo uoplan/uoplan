@@ -2205,6 +2205,18 @@ msgstr "How the selected metric compares across disciplines."
 msgid "trends.chart.disciplineBar.title"
 msgstr "By discipline"
 
+#: apps/web/src/components/trends/DisciplineScatterCard.tsx:53
+msgid "trends.chart.disciplineScatter.desc"
+msgstr "Popularity versus average GPA, one point per discipline."
+
+#: apps/web/src/components/trends/DisciplineScatterCard.tsx:62
+msgid "trends.chart.disciplineScatter.series"
+msgstr "Disciplines"
+
+#: apps/web/src/components/trends/DisciplineScatterCard.tsx:52
+msgid "trends.chart.disciplineScatter.title"
+msgstr "Popularity vs GPA"
+
 #: apps/web/src/components/trends/DisciplineBarCard.tsx:32
 #: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:51
 #: apps/web/src/components/trends/GradeBandAreaCard.tsx:49
@@ -2322,6 +2334,14 @@ msgstr "No grade data matches these filters yet."
 msgid "trends.error.title"
 msgstr "Couldn't load grade history"
 
+#: apps/web/src/components/trends/TrendsFeedbackPage.tsx:143
+msgid "trends.feedback.byQuestion"
+msgstr "By survey question"
+
+#: apps/web/src/components/trends/TrendsFeedbackPage.tsx:146
+msgid "trends.feedback.byQuestionDesc"
+msgstr "Average rating per term for the most-answered questions."
+
 #: apps/web/src/components/trends/TrendsFeedbackSection.tsx:80
 msgid "trends.feedback.responseRate"
 msgstr "Response rate over time"
@@ -2367,6 +2387,10 @@ msgstr "Estimated from program core courses"
 
 msgid "trends.filter.season"
 msgstr "Season"
+
+#: apps/web/src/components/trends/TrendsHubPage.tsx:85
+msgid "trends.hub.leaderboardDesc"
+msgstr "Biggest risers, easiest, and hardest disciplines and courses."
 
 msgid "trends.leaderboard.col.change"
 msgstr "Change"

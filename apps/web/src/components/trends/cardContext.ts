@@ -1,5 +1,5 @@
 import type { CourseGradesData, ProgramCourseFilter, TermSeason } from "@uoplan/core";
-import type { TrendsMetric } from "../../routes/trends";
+import type { TrendsMetric } from "../../lib/trends/searchParams";
 
 /** Resolved filter context shared by the trends chart cards. */
 export interface TrendsCardContext {

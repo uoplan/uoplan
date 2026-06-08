@@ -1,7 +1,7 @@
 import type { AnalyticsMetric } from "@uoplan/core";
 import { metricValue } from "@uoplan/core";
 import { formatLocaleNumber } from "../../i18n";
-import type { TrendsMetric } from "../../routes/trends";
+import type { TrendsMetric } from "./searchParams";
 
 /** Series colour per metric, shared by every trends chart. */
 export const METRIC_COLOR: Record<TrendsMetric, string> = {

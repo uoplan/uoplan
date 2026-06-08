@@ -48,5 +48,45 @@
     "structuredName": "Grade trends",
     "noscriptTitle": "uOttawa Grade Trends Over Time | uoplan",
     "noscriptBody": "Track how uOttawa grades change over time across disciplines, course levels, and seasons."
+  },
+  "trendsDisciplines": {
+    "canonicalPath": "/trends/disciplines",
+    "tabTitle": "Discipline trends",
+    "title": "uOttawa Grades by Discipline | uoplan",
+    "description": "Compare University of Ottawa disciplines by average GPA, A+ rate, and popularity, with a discipline-by-year heatmap of grade drift over time.",
+    "keywords": "uottawa grades by discipline, uottawa department gpa, university of ottawa grade comparison, uottawa easiest disciplines",
+    "structuredName": "Grade trends by discipline",
+    "noscriptTitle": "uOttawa Grades by Discipline | uoplan",
+    "noscriptBody": "Compare uOttawa disciplines by GPA, A+ rate, and enrollment over time."
+  },
+  "trendsCourses": {
+    "canonicalPath": "/trends/courses",
+    "tabTitle": "Course trends",
+    "title": "uOttawa Course Choice Trends | uoplan",
+    "description": "See how University of Ottawa grades shift by season and course level, plus popularity-versus-GPA and per-professor grading spread for a chosen scope.",
+    "keywords": "uottawa course difficulty, uottawa grades by season, uottawa grades by level, university of ottawa professor grading",
+    "structuredName": "Course choice trends",
+    "noscriptTitle": "uOttawa Course Choice Trends | uoplan",
+    "noscriptBody": "How uOttawa grades shift by season, course level, and professor."
+  },
+  "trendsFeedback": {
+    "canonicalPath": "/trends/feedback",
+    "tabTitle": "Feedback trends",
+    "title": "uOttawa Course Feedback Trends | uoplan",
+    "description": "University-wide course-evaluation trends at the University of Ottawa: overall student sentiment and survey response rate over time, broken down by question.",
+    "keywords": "uottawa course evaluations, uottawa student feedback, university of ottawa course survey, uottawa teaching evaluations",
+    "structuredName": "Course feedback trends",
+    "noscriptTitle": "uOttawa Course Feedback Trends | uoplan",
+    "noscriptBody": "University-wide uOttawa course-evaluation sentiment and response-rate trends over time."
+  },
+  "trendsLeaderboard": {
+    "canonicalPath": "/trends/leaderboard",
+    "tabTitle": "Grade leaderboard",
+    "title": "uOttawa Grade Inflation Leaderboard | uoplan",
+    "description": "Ranked University of Ottawa grade trends: the biggest risers, the easiest, and the hardest disciplines and courses by average GPA over time.",
+    "keywords": "uottawa grade inflation, uottawa easiest courses, uottawa hardest courses, university of ottawa gpa ranking",
+    "structuredName": "Grade inflation leaderboard",
+    "noscriptTitle": "uOttawa Grade Inflation Leaderboard | uoplan",
+    "noscriptBody": "Ranked uOttawa grade trends: biggest risers, easiest, and hardest disciplines and courses."
   }
 }
