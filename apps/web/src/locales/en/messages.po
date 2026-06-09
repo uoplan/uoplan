@@ -2473,9 +2473,6 @@ msgstr "No matching program"
 msgid "trends.filter.program"
 msgstr "Program"
 
-msgid "trends.filter.programHint"
-msgstr "Estimated from program core courses"
-
 msgid "trends.filter.season"
 msgstr "Season"
 

@@ -2473,9 +2473,6 @@ msgstr "Aucun programme correspondant"
 msgid "trends.filter.program"
 msgstr "Programme"
 
-msgid "trends.filter.programHint"
-msgstr "Estimé à partir des cours obligatoires du programme"
-
 msgid "trends.filter.season"
 msgstr "Session"
 

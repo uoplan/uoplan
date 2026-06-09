@@ -6,7 +6,7 @@ import { AppCard } from "../shared/AppCard";
  * bar's height so the live controls don't shift layout when they swap in.
  */
 export function TrendsFilterBarSkeleton() {
-  return <Box h={160} />;
+  return <Box h={50} />;
 }
 
 /**
