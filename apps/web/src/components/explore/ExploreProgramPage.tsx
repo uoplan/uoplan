@@ -1,5 +1,4 @@
-import { Accordion, Anchor, Box, Stack, Text, Title } from "@mantine/core";
-import { IconExternalLink } from "@tabler/icons-react";
+import { Accordion, Box, Group, Stack, Text, Title } from "@mantine/core";
 import { useNavigate } from "@tanstack/react-router";
 import { m } from "framer-motion";
 import { useEffect, useMemo } from "react";
@@ -15,6 +14,7 @@ import {
 import { programSlugToPathParam } from "../../lib/explore/programSearch";
 import type { BackState } from "../../lib/navigation/backState";
 import { GradeDistributionHistogramPlaceholder } from "../calendar/GradeDistributionViz";
+import { CatalogueLink } from "./CatalogueLink";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
@@ -174,23 +174,14 @@ export function ExploreProgramPage({
             paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
           }}
         >
-          <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
-            {program.title}
-          </Title>
-          {program.url ? (
-            <Anchor
-              href={program.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              size="sm"
-              mt={8}
-              c="var(--app-accent)"
-              style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
-            >
-              {tr("explore.program.officialPage")}
-              <IconExternalLink size={14} />
-            </Anchor>
-          ) : null}
+          <Group gap={8} align="center" wrap="nowrap">
+            <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
+              {program.title}
+            </Title>
+            {program.url ? (
+              <CatalogueLink href={program.url} label={tr("explore.program.officialPage")} />
+            ) : null}
+          </Group>
           <Text size="xs" fw={600} c="dimmed" mt={20} style={{ letterSpacing: "0.02em" }}>
             {tr("explore.program.requiredCourses")}
           </Text>

@@ -952,6 +952,10 @@ msgstr "Chargement des notes historiques…"
 msgid "explore.noResults"
 msgstr "Aucun professeur ou cours correspondant."
 
+#: apps/web/src/components/explore/ExploreCoursePage.tsx:177
+msgid "explore.openInCatalogue"
+msgstr "Ouvrir dans le catalogue des cours"
+
 msgid "explore.professorCourseCount"
 msgstr "{count, plural, one {# cours} other {# cours}}"
 

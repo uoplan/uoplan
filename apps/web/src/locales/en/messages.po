@@ -952,6 +952,10 @@ msgstr "Loading grade history…"
 msgid "explore.noResults"
 msgstr "No matching professors or courses."
 
+#: apps/web/src/components/explore/ExploreCoursePage.tsx:177
+msgid "explore.openInCatalogue"
+msgstr "Open in course catalogue"
+
 msgid "explore.professorCourseCount"
 msgstr "{count, plural, one {# course} other {# courses}}"
 
