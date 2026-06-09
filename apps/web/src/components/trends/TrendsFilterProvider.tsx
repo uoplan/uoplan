@@ -24,7 +24,7 @@ import type { TrendsCardContext } from "./cardContext";
 
 type SelectOption = { value: string; label: string };
 
-export interface TrendsContextValue {
+interface TrendsContextValue {
   /** Raw grades dataset (null until loaded). */
   grades: CourseGradesData | null;
   gradesError: string | null;

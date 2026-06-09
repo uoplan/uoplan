@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { courseSentimentByNorm, professorSentimentByName } from "@uoplan/core";
 import { useFeedbackData } from "./useFeedbackData";
 
-export interface ScheduleSentimentMaps {
+interface ScheduleSentimentMaps {
   courseByNorm: Map<string, number> | null;
   professorByName: Map<string, number> | null;
 }

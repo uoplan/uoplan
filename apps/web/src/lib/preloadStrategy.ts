@@ -5,7 +5,7 @@
  * user has opted into Save-Data or is on a slow connection (`slow-2g` / `2g`), where
  * we return `false` to avoid spending their bandwidth on speculative chunk loads.
  */
-export type PreloadStrategy = "intent" | false;
+type PreloadStrategy = "intent" | false;
 
 interface NetworkInformationLike {
   saveData?: boolean;

@@ -6,7 +6,7 @@ import { toUrlSearch } from "../../lib/trends/searchParams";
 import { AppCard } from "../shared/AppCard";
 import { useTrends } from "./TrendsFilterProvider";
 
-export type TrendsCategoryTo =
+type TrendsCategoryTo =
   | "/trends/disciplines"
   | "/trends/courses"
   | "/trends/feedback"

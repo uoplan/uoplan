@@ -16,7 +16,7 @@ import { type Distribution, orderDistribution } from "./distribution.ts";
 import { buildFeedbackProfIndex, feedbackKey } from "./feedbackProfs.ts";
 import { buildProfessorResolver, type ProfessorResolver } from "./rmp.ts";
 
-export interface ProfessorGrades {
+interface ProfessorGrades {
   name: string;
   legacyId?: number;
   termId: number;
@@ -24,12 +24,12 @@ export interface ProfessorGrades {
   distribution: Distribution;
 }
 
-export interface CourseGrades {
+interface CourseGrades {
   code: string;
   professors: ProfessorGrades[];
 }
 
-export interface BuildStats {
+interface BuildStats {
   codes: number;
   codesWithProfessors: number;
   professorEntries: number;
@@ -37,7 +37,7 @@ export interface BuildStats {
   professorsWithoutLegacyId: number;
 }
 
-export interface BuildResult {
+interface BuildResult {
   output: CourseGrades[];
   stats: BuildStats;
 }
@@ -118,7 +118,7 @@ export function assembleGrades(
   };
 }
 
-export async function buildGrades(): Promise<BuildResult> {
+async function buildGrades(): Promise<BuildResult> {
   const rows = await readGradeRows(RAW_DATA_DIR);
   const termIds = rows.map((r) => r.termId);
   const [feedbackIndex, resolveProfessor, catalogueCodes] = await Promise.all([

@@ -13,7 +13,7 @@ export function TrendsFilterBarSkeleton() {
  * A single empty placeholder card standing in for a chart card while trends
  * datasets are still loading.
  */
-export function TrendsChartCardSkeleton({
+function TrendsChartCardSkeleton({
   height = 280,
   style,
 }: {
