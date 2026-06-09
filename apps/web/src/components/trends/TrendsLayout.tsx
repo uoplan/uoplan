@@ -88,9 +88,11 @@ export function TrendsLayout() {
                   zIndex: 5,
                   width: "100vw",
                   marginInline: "calc(50% - 50vw)",
-                  backgroundColor: "var(--app-surface-sunken)",
+                  backgroundColor: "color-mix(in srgb, var(--app-surface-sunken) 78%, transparent)",
+                  backdropFilter: "blur(8px)",
+                  WebkitBackdropFilter: "blur(8px)",
                   borderBottom: "var(--app-border-width) solid var(--app-border)",
-                  padding: "16px 24px",
+                  padding: "20px 24px",
                   boxSizing: "border-box",
                 }}
               >
@@ -111,9 +113,11 @@ export function TrendsLayout() {
                   zIndex: 5,
                   width: "100vw",
                   marginInline: "calc(50% - 50vw)",
-                  backgroundColor: "var(--app-surface-sunken)",
+                  backgroundColor: "color-mix(in srgb, var(--app-surface-sunken) 78%, transparent)",
+                  backdropFilter: "blur(8px)",
+                  WebkitBackdropFilter: "blur(8px)",
                   borderBottom: "var(--app-border-width) solid var(--app-border)",
-                  padding: "16px 24px",
+                  padding: "20px 24px",
                   boxSizing: "border-box",
                 }}
               >
