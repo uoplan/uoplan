@@ -69,3 +69,23 @@ test("renders a thin 1-5 scale legend with the best (5) and worst (1) option lab
   await expect.element(page.getByText("1", { exact: true })).toBeInTheDocument();
   await expect.element(page.getByText("5", { exact: true })).toBeInTheDocument();
 });
+
+test("on narrow screens, an info button opens a popover of options with their 1-5 scores", async () => {
+  await page.viewport(390, 844);
+  const router = buildRouter();
+  await renderWithProviders(<RouterProvider router={router} />);
+
+  // The per-option legend labels are hidden on narrow screens; the info button reveals them.
+  const trigger = page.getByRole("button", { name: "Response scale" });
+  await expect.element(trigger).toBeInTheDocument();
+  await trigger.click();
+
+  // Best-first options (hidden from the legend on narrow screens) with their score;
+  // "4" and "2" are scores the legend never labels and no stat shows, so they prove
+  // the popover rendered each option's value.
+  await expect.element(page.getByText("Strongly agree")).toBeInTheDocument();
+  await expect.element(page.getByText("Strongly disagree")).toBeInTheDocument();
+  await expect.element(page.getByText("Neither agree nor disagree")).toBeInTheDocument();
+  await expect.element(page.getByText("4", { exact: true })).toBeInTheDocument();
+  await expect.element(page.getByText("2", { exact: true })).toBeInTheDocument();
+});
