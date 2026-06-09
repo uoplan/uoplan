@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const webRoot = path.join(__dirname, "..");
-const distDir = path.join(webRoot, "dist");
+const distDir = path.join(webRoot, "dist", "client");
 const templatePath = path.join(distDir, "index.html");
 const seoPagesPath = path.join(webRoot, "src/lib/seo-pages.json");
 

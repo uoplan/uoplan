@@ -127,15 +127,30 @@ function checkWorkerBundle() {
   /** @type {string[]} */
   const errors = [];
 
-  // wrangler validates the assets directory; ensure it exists so this check
-  // can run on a fresh checkout without a prior `pnpm build`.
-  mkdirSync(join(repoRoot, "apps/web/dist"), { recursive: true });
+  // `assets.directory` is no longer set in wrangler.json (the Cloudflare Vite
+  // plugin populates it at build time). This standalone bundle isn't a real
+  // deploy — it only needs the worker JS to scan for pdfjs — so point wrangler
+  // at an (empty) assets directory via `--assets` and ensure it exists so the
+  // check can run on a fresh checkout without a prior `pnpm build`.
+  const assetsDir = join(repoRoot, "apps/web/dist/client");
+  mkdirSync(assetsDir, { recursive: true });
 
   const outdir = mkdtempSync(join(tmpdir(), "uoplan-worker-bundle-"));
   try {
     execFileSync(
       "pnpm",
-      ["--filter", "worker", "exec", "wrangler", "deploy", "--dry-run", "--outdir", outdir],
+      [
+        "--filter",
+        "worker",
+        "exec",
+        "wrangler",
+        "deploy",
+        "--dry-run",
+        "--assets",
+        assetsDir,
+        "--outdir",
+        outdir,
+      ],
       { cwd: repoRoot, stdio: "pipe" },
     );
   } catch (err) {

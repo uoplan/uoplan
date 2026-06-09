@@ -9,6 +9,8 @@ dist
 .eslintcache
 *.tsbuildinfo
 .env*
+.dev.vars*
+!.dev.vars.example
 playground
 worker-configuration.d.ts
 .wrangler
