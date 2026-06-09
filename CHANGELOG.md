@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.0.0-beta.31](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.30...uoplan-monorepo-v1.0.0-beta.31) (2026-06-09)
+
+
+### Features
+
+* add bloat gate, a11y coverage ([c60bc43](https://github.com/uoplan/uoplan/commit/c60bc43da30a2958bab6861c5d01164ba24933bd))
+* add course times to explore page ([0e2c2bf](https://github.com/uoplan/uoplan/commit/0e2c2bf3abde3b876a3f0ef3e0719f2c069e6cae))
+* add external link for courses ([2fc9085](https://github.com/uoplan/uoplan/commit/2fc90856a5a180211cadc3d9b1388ff7565e02fa))
+* add feedback options in popover for small screens ([ef287d6](https://github.com/uoplan/uoplan/commit/ef287d6aa5c02e4d0cd051a17efb3a18d214438d))
+* add full-bleed for explore page filter bar ([a8521fc](https://github.com/uoplan/uoplan/commit/a8521fcc6ff5907ea75f6102275795fed0dcc59b))
+* add professor predictions when none is assigned yet ([3054939](https://github.com/uoplan/uoplan/commit/3054939b46a3745a04fb103f5622677ed88ea240))
+* add tooltip to feedback options ([5097820](https://github.com/uoplan/uoplan/commit/5097820e548fd0505d73510d933b199af5bd4e46))
+* add trends button on the top ([4c775d2](https://github.com/uoplan/uoplan/commit/4c775d2aecbb83f1d96ebca4514f22f79197ac2c))
+* group trends into categories ([59105a3](https://github.com/uoplan/uoplan/commit/59105a3306990480b4dfc48ae0cfad04bb454f3f))
+* improve accessibility ([9275230](https://github.com/uoplan/uoplan/commit/9275230bbac08931701af52ec954d0d10a288552))
+* improve prof matching for grades ([cd88b40](https://github.com/uoplan/uoplan/commit/cd88b40909ef8d7413513023f6a5e5e69bfb4158))
+* improve rating display on calendar ([bd1875d](https://github.com/uoplan/uoplan/commit/bd1875d207ea25a275c848cf0ea2f922087c6b05))
+* improve warning for notifications being disabled ([28df006](https://github.com/uoplan/uoplan/commit/28df006e9c2c99ef78e6b9bc965b3de74155e020))
+* reduce eager data loading ([7b7af0d](https://github.com/uoplan/uoplan/commit/7b7af0d419cc206d89c0694686500c2c6bb26208))
+* slim down trends filter ([f0f9a7f](https://github.com/uoplan/uoplan/commit/f0f9a7fb0e661c41d6c61a53c14609367ef05158))
+* use better skeleton loader for trends ([0df6c97](https://github.com/uoplan/uoplan/commit/0df6c9702327b179fd6c8fc3179ac2e087d71150))
+* use oklch for colour ([d5a08b1](https://github.com/uoplan/uoplan/commit/d5a08b19c49ec44c18ab50d48bb4fd7af57f6787))
+* use satisfaction instead of ratemyprof for main numbers ([b8eac87](https://github.com/uoplan/uoplan/commit/b8eac871541be5398acd7650ef3f5cf2bda359a6))
+
+
+### Bug Fixes
+
+* bucket levels into 5000+ ([9f93e98](https://github.com/uoplan/uoplan/commit/9f93e98187ebeb706a0c31fe3eae9ce2c3687801))
+* make budgets better for test timing ([432e2f1](https://github.com/uoplan/uoplan/commit/432e2f1a7f566b047f96fe40891ec0bab72d4ea0))
+* resolve drawer issue on mobile explore page ([7575270](https://github.com/uoplan/uoplan/commit/75752702bdb77cff0263b98245abb63aec6571d3))
+* resolve some bugs ([4c51e9f](https://github.com/uoplan/uoplan/commit/4c51e9f19298020f4a2d3a52be54ab1394020d92))
+* use correct padding for command center ([ca41d85](https://github.com/uoplan/uoplan/commit/ca41d85cc05eba9b6b7f2d1f98f2c9be137cad97))
+
+
+### Performance Improvements
+
+* add prefetching ([ce0d534](https://github.com/uoplan/uoplan/commit/ce0d53455b25c45fddead9d065d2936782815a20))
+
 ## [1.0.0-beta.30](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.29...uoplan-monorepo-v1.0.0-beta.30) (2026-06-07)
 
 
