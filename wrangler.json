@@ -4,7 +4,6 @@
   "compatibility_date": "2025-04-29",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
-    "directory": "apps/web/dist",
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
     "run_worker_first": [

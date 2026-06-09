@@ -1,4 +1,5 @@
 import { defineConfig } from "vitest/config";
+import { cloudflare } from "@cloudflare/vite-plugin";
 import react from "@vitejs/plugin-react";
 import { lingui } from "@lingui/vite-plugin";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
@@ -43,6 +44,18 @@ export default defineConfig({
         type: "classic",
       },
     }),
+    // Runs the Cloudflare Worker (apps/worker) in workerd inside the Vite dev
+    // server and bundles it on `vite build`. Disabled under Vitest so the
+    // Cloudflare environments don't interfere with the test runner.
+    !process.env.VITEST &&
+      cloudflare({
+        configPath: "../../wrangler.json",
+        // Persist local KV/D1/etc. state at the repo root (next to the wrangler
+        // config) instead of under apps/web, so it matches where
+        // `wrangler d1 migrations apply --local` writes. Without this the dev
+        // server reads an empty DB and D1 queries fail with "no such table".
+        persistState: { path: "../../.wrangler/state" },
+      }),
   ],
   define: {
     // Cloudflare Workers Builds exposes WORKERS_CI_* at build time.

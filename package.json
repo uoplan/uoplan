@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "pnpm generate && pnpm build:engine-wasm && pnpm --filter scraper build:proto && pnpm --filter web dev",
     "build": "pnpm generate && pnpm build:engine-wasm && pnpm --filter scraper build:proto && pnpm --filter web build",
-    "deploy": "wrangler deploy",
+    "deploy": "pnpm build && wrangler deploy -c apps/web/dist/uoplan/wrangler.json",
     "generate": "pnpm -r generate && pnpm build:data-proto",
     "typecheck": "pnpm wrangler types && pnpm -r typecheck",
     "lint": "oxlint apps/web/src apps/scraper/src packages/core/src",
@@ -48,7 +48,7 @@
     "oxlint-tsgolint": "^0.22.1",
     "pofile": "^1.1.4",
     "typescript": "^5.9.3",
-    "wrangler": "^4.84.1"
+    "wrangler": "^4.96.0"
   },
   "packageManager": "pnpm@10.27.0"
 }

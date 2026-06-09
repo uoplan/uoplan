@@ -8,9 +8,9 @@ import type { Plugin } from "vite";
  * Emits the generated data manifest consumed by the Cloudflare worker.
  *
  * The browser resolves `.pb` asset ids via `import.meta.glob('?url')`, but the
- * worker is bundled separately by wrangler and can't see Vite's glob. After the
- * web build hashes every `src/assets/data/*.pb` into `dist/assets/`, this plugin
- * records the resulting `id → /assets/<hash>.pb` map into
+ * worker is bundled separately and can't see Vite's glob. After the client
+ * build hashes every `src/assets/data/*.pb` into `dist/client/assets/`, this
+ * plugin records the resulting `id → /assets/<hash>.pb` map into
  * `packages/data/src/generated/dataManifest.ts`, which the worker statically
  * imports (see packages/data/src/worker.ts). A placeholder is scaffolded by
  * `pnpm build:data-proto` so typecheck/dev always have the module.
@@ -47,6 +47,13 @@ export function dataManifestPlugin(): Plugin {
     name: "data-manifest",
     apply: "build",
     generateBundle(_options, bundle) {
+      // With the Cloudflare plugin this hook also fires for the worker
+      // environment, whose bundle has no `.pb` assets. Only the client build
+      // carries them, so skip other environments to avoid clobbering the
+      // manifest with an empty map.
+      const envName = this.environment?.name;
+      if (envName && envName !== "client") return;
+
       const manifest: DataManifest = {};
       for (const chunk of Object.values(bundle)) {
         if (chunk.type !== "asset") continue;

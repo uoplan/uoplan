@@ -1,0 +1,15 @@
+# Local development secrets for the Cloudflare Worker (apps/worker).
+#
+# Copy this file to `.dev.vars` (gitignored) and fill in real values to exercise
+# the worker's authenticated/external paths in `pnpm dev`. The Cloudflare Vite
+# plugin loads `.dev.vars` from the directory containing the wrangler config
+# (this repo root). Non-secret config lives in `wrangler.json` under `vars`.
+
+# Web-push (VAPID) private key — pairs with VAPID_PUBLIC_KEY in wrangler.json.
+VAPID_PRIVATE_KEY=""
+
+# Bearer secret required by POST /api/send.
+NOTIFY_SECRET=""
+
+# Cloudflare Turnstile secret key for /api/subscribe and /api/unsubscribe.
+TURNSTILE_SECRET_KEY=""
