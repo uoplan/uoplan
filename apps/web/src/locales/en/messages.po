@@ -874,6 +874,10 @@ msgstr "Great (3.5+)"
 msgid "explore.filter.term"
 msgstr "Term"
 
+#: apps/web/src/components/explore/ExploreFilterDrawer.tsx:79
+msgid "explore.filter.title"
+msgstr "Filters"
+
 msgid "explore.histogramStudents"
 msgstr "{count, plural, one {# student} other {# students}}"
 

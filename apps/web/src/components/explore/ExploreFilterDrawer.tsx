@@ -1,5 +1,6 @@
 import { useRef } from "react";
-import { Box, Divider, Drawer, Group, Stack, Text, UnstyledButton } from "@mantine/core";
+import { ActionIcon, Box, Divider, Drawer, Group, Stack, Text, Tooltip } from "@mantine/core";
+import { IconEraser } from "@tabler/icons-react";
 import { useTr, tr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
@@ -40,11 +41,20 @@ export function ExploreFilterDrawer({
   const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Drawer.Root opened={opened} onClose={onClose} position="bottom" size="auto" radius="md">
+    <Drawer.Root
+      opened={opened}
+      onClose={onClose}
+      position="bottom"
+      size="auto"
+      radius="md"
+      styles={{ inner: { top: "auto", bottom: 0, height: "auto", alignItems: "flex-end" } }}
+    >
       <Drawer.Overlay backgroundOpacity={0.5} />
       <Drawer.Content
         style={{
           backgroundColor: "var(--app-surface)",
+          width: "100%",
+          maxWidth: "100%",
           maxHeight: "85dvh",
           display: "flex",
           flexDirection: "column",
@@ -73,9 +83,23 @@ export function ExploreFilterDrawer({
                 fontSize: "var(--mantine-font-size-md)",
               }}
             >
-              {tr("explore.filter.clearAll")}
+              {tr("explore.filter.title")}
             </Drawer.Title>
-            <Drawer.CloseButton style={{ color: "var(--app-text-muted)" }} />
+            <Group gap={4} wrap="nowrap">
+              <Tooltip label={tr("explore.filter.clearAll")} withArrow>
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  size="md"
+                  radius="md"
+                  onClick={() => onChange(EMPTY_FILTERS)}
+                  aria-label={tr("explore.filter.clearAll")}
+                >
+                  <IconEraser size={16} />
+                </ActionIcon>
+              </Tooltip>
+              <Drawer.CloseButton style={{ color: "var(--app-text-muted)" }} />
+            </Group>
           </Drawer.Header>
           <Drawer.Body style={{ flex: 1, minHeight: 0, padding: 0 }}>
             <div
@@ -86,21 +110,7 @@ export function ExploreFilterDrawer({
                 overscrollBehavior: "contain",
               }}
             >
-              <Stack gap={0} pb={24}>
-                <Group justify="flex-end" px={16} pb={8}>
-                  <UnstyledButton
-                    onClick={() => onChange(EMPTY_FILTERS)}
-                    style={{
-                      fontSize: "var(--mantine-font-size-xs)",
-                      color: "var(--app-text-dim)",
-                      textDecoration: "underline",
-                      textUnderlineOffset: 2,
-                    }}
-                  >
-                    {tr("explore.filter.clearAll")}
-                  </UnstyledButton>
-                </Group>
-
+              <Stack gap={0} pb={24} pt={8}>
                 {FILTER_KEYS.map((key, i) => (
                   <Box key={key} id={`drawer-section-${key}`}>
                     {i > 0 && <Divider color="var(--app-border)" my={16} />}

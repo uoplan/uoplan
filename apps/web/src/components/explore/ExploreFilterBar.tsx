@@ -1,6 +1,6 @@
-import { Box, Group, UnstyledButton } from "@mantine/core";
+import { ActionIcon, Box, Group, Tooltip, UnstyledButton } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconArrowsSort } from "@tabler/icons-react";
+import { IconArrowsSort, IconEraser } from "@tabler/icons-react";
 import { AnimatePresence, m } from "framer-motion";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useTr, tr } from "../../i18n";
@@ -241,19 +241,18 @@ export function ExploreFilterBar({
           })}
 
           {anyActive && (
-            <UnstyledButton
-              onClick={() => onChange(EMPTY_FILTERS)}
-              style={{
-                fontSize: "var(--mantine-font-size-xs)",
-                color: "var(--app-text-dim)",
-                paddingInline: 4,
-                whiteSpace: "nowrap",
-                textDecoration: "underline",
-                textUnderlineOffset: 2,
-              }}
-            >
-              {tr("explore.filter.clearAll")}
-            </UnstyledButton>
+            <Tooltip label={tr("explore.filter.clearAll")} withArrow>
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                size="md"
+                radius="md"
+                onClick={() => onChange(EMPTY_FILTERS)}
+                aria-label={tr("explore.filter.clearAll")}
+              >
+                <IconEraser size={16} />
+              </ActionIcon>
+            </Tooltip>
           )}
         </Group>
       </Box>
