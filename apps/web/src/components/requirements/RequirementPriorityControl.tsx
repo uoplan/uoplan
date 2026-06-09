@@ -2,26 +2,11 @@ import { Group, NumberInput, Tooltip, ThemeIcon } from "@mantine/core";
 import { IconHelpCircle } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { tr } from "../../i18n";
+import { priorityForIds, stampPriorityForIds } from "../../lib/requirements/requirementPriority";
 
 interface RequirementPriorityControlProps {
   /** All requirement ids in the root's subtree; setting the control stamps every one of them. */
   requirementIds: string[];
-}
-
-/** The value shown for a subtree: the max priority among its requirement ids (default 0). */
-export function priorityForIds(
-  requirementIds: string[],
-  priorities: Record<string, number>,
-): number {
-  return requirementIds.reduce((max, id) => Math.max(max, priorities[id] ?? 0), 0);
-}
-
-/** The patch applied when the control changes: stamp the chosen priority onto every id. */
-export function stampPriorityForIds(
-  requirementIds: string[],
-  priority: number,
-): Record<string, number> {
-  return Object.fromEntries(requirementIds.map((id) => [id, priority]));
 }
 
 /**

@@ -14,7 +14,7 @@ import {
   groupOfferingsByProfessor,
   resolveComponentId,
 } from "../../lib/explore/gradesSearch";
-import { useExploreOfferings } from "./ExploreOfferingsContext";
+import { useExploreOfferings } from "./exploreOfferingsContext";
 import { CatalogueLink } from "./CatalogueLink";
 import { useCourseFeedbackViews } from "../../hooks/useFeedbackViews";
 import { FeedbackSummaryCard } from "./feedback/FeedbackSummaryCard";
@@ -22,11 +22,13 @@ import type { BackState } from "../../lib/navigation/backState";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { courseNormToPathParam, parseCoursePathParam } from "../../lib/explore/courseSearchParams";
 import {
-  EXPLORE_ACCORDION_PAD_INLINE,
-  EXPLORE_ACCORDION_PAD_RIGHT,
   ExploreProfessorOfferingRows,
   ExploreProfessorSummaryBar,
 } from "./ExploreProfessorGradesLayout";
+import {
+  EXPLORE_ACCORDION_PAD_INLINE,
+  EXPLORE_ACCORDION_PAD_RIGHT,
+} from "../../lib/explore/accordionPadding";
 
 const EXPLORE_CHEVRON_RIGHT = {
   base: `calc(12px)`,

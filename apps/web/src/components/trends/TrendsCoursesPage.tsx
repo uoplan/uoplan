@@ -7,7 +7,7 @@ import { LevelBarCard } from "./LevelBarCard";
 import { ProfessorSpreadCard } from "./ProfessorSpreadCard";
 import { SeasonBarCard } from "./SeasonBarCard";
 import { VolumeGpaScatterCard } from "./VolumeGpaScatterCard";
-import { useTrends } from "./TrendsFilterProvider";
+import { useTrends } from "./trendsContext";
 
 /**
  * "When and what to take" comparisons: the overall grade distribution and

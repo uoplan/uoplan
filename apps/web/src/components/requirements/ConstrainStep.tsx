@@ -8,7 +8,8 @@ import type {
   CompletedRequirementItem,
 } from "@uoplan/core";
 import { collectRequirementIds } from "@uoplan/core";
-import { RequirementNode, getStableNodeKey, getNodeDisplayTitle } from "./RequirementNode";
+import { RequirementNode } from "./RequirementNode";
+import { getStableNodeKey, getNodeDisplayTitle } from "../../lib/requirements/requirementNodeUtils";
 import { RequirementPriorityControl } from "./RequirementPriorityControl";
 import {
   applyOptionSelections,

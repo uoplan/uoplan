@@ -14,7 +14,7 @@ import {
   matchSecretCommands,
   type SecretCommand,
 } from "../../lib/easterEggs/secretCommands";
-import { useAppTheme } from "../../theme/AppThemeProvider";
+import { useAppTheme } from "../../theme/appThemeContext";
 import { useCommandCenterStore } from "../../store/commandCenterStore";
 import { useTr, i18n, tr } from "../../i18n";
 

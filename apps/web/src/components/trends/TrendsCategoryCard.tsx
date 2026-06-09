@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { toUrlSearch } from "../../lib/trends/searchParams";
 import { AppCard } from "../shared/AppCard";
-import { useTrends } from "./TrendsFilterProvider";
+import { useTrends } from "./trendsContext";
 
 type TrendsCategoryTo =
   | "/trends/disciplines"

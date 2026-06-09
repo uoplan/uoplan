@@ -8,7 +8,8 @@ import type {
   CompletedRequirementItem,
 } from "@uoplan/core";
 import { useAppStore } from "../../store/appStore";
-import { RequirementNode, getStableNodeKey } from "./RequirementNode";
+import { RequirementNode } from "./RequirementNode";
+import { getStableNodeKey } from "../../lib/requirements/requirementNodeUtils";
 import {
   applyOptionSelections,
   nodeHasOptionGroups,

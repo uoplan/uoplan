@@ -30,8 +30,8 @@ import { formatTimeRange } from "../calendar/calendarEventDisplayUtils";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import { formatTermLabel } from "../../lib/term/termLabel";
 import { WeekCalendar } from "../calendar/WeekCalendar";
-import { useExploreOfferings } from "./ExploreOfferingsContext";
-import { EXPLORE_ACCORDION_PAD_INLINE } from "./ExploreProfessorGradesLayout";
+import { useExploreOfferings } from "./exploreOfferingsContext";
+import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 
 function sectionId(section: ComponentSection): string {
   return section.sectionCode ?? section.section;

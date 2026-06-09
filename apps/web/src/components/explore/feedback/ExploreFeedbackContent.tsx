@@ -25,7 +25,7 @@ import {
 import { useTr, tr } from "../../../i18n";
 import { formatTermLabel, formatTermLabelShort } from "../../../lib/term/termLabel";
 import { AppCard } from "../../shared/AppCard";
-import { EXPLORE_ACCORDION_PAD_INLINE } from "../ExploreProfessorGradesLayout";
+import { EXPLORE_ACCORDION_PAD_INLINE } from "../../../lib/explore/accordionPadding";
 
 const SENTIMENT_COLOR = "var(--app-info)";
 const RATE_COLOR = "var(--app-success)";

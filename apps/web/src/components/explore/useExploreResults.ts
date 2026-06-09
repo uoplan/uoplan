@@ -26,7 +26,7 @@ import {
   searchExplorePrograms,
 } from "../../lib/explore/programSearch";
 import { useFeedbackData } from "../../hooks/useFeedbackData";
-import { useExploreOfferings } from "./ExploreOfferingsContext";
+import { useExploreOfferings } from "./exploreOfferingsContext";
 
 const EMPTY_COURSE_ENTRIES: ExploreCourseSearchEntry[] = [];
 const EMPTY_PROFESSOR_ENTRIES: ExploreProfessorSearchEntry[] = [];

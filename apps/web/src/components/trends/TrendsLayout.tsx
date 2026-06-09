@@ -7,7 +7,7 @@ import { toUrlSearch } from "../../lib/trends/searchParams";
 import { BackButton } from "../shared/BackButton";
 import { ChromeControls } from "../shared/ChromeControls";
 import { CalendarMobileDrawer } from "../calendar/CalendarMobileDrawer";
-import { useTrends } from "./TrendsFilterProvider";
+import { useTrends } from "./trendsContext";
 import { TrendsFilterControls } from "./TrendsFilterControls";
 import { TrendsFilterBarSkeleton, TrendsHubSkeleton } from "./TrendsSkeletons";
 

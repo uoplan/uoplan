@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { IconBallFootball, IconDeviceDesktop, IconMoon, IconSun } from "@tabler/icons-react";
 import { useTr, tr } from "../../i18n";
-import { useAppTheme } from "../../theme/AppThemeProvider";
+import { useAppTheme } from "../../theme/appThemeContext";
 import { isThemeVisible, type ThemeSelection } from "../../theme/themes";
 import { PillSelect, type PillSelectOption } from "./PillSelect";
 import { pillIconStyle } from "./pillButtonStyle";

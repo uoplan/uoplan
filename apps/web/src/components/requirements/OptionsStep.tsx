@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ActionIcon, Box, Group, Stack, Text, UnstyledButton } from "@mantine/core";
 import { IconCheck, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import type { RequirementWithStatus } from "@uoplan/core";
-import { getStableNodeKey } from "./RequirementNode";
+import { getStableNodeKey } from "../../lib/requirements/requirementNodeUtils";
 import { OptionsDrilldown } from "./OptionsDrilldown";
 import {
   hasMissingOptionSelections,

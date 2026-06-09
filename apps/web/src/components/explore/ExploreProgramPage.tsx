@@ -15,12 +15,12 @@ import { programSlugToPathParam } from "../../lib/explore/programSearch";
 import type { BackState } from "../../lib/navigation/backState";
 import { GradeDistributionHistogramPlaceholder } from "../calendar/GradeDistributionViz";
 import { CatalogueLink } from "./CatalogueLink";
-import { useExploreOfferings } from "./ExploreOfferingsContext";
+import { useExploreOfferings } from "./exploreOfferingsContext";
+import { ExploreCourseItem } from "./ExploreProfessorGradesLayout";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
-  ExploreCourseItem,
-} from "./ExploreProfessorGradesLayout";
+} from "../../lib/explore/accordionPadding";
 
 const EXPLORE_CHEVRON_RIGHT = {
   base: "12px",

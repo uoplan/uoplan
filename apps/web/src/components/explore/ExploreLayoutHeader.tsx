@@ -4,7 +4,7 @@ import { tr, useTr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { BackButton } from "../shared/BackButton";
 import { ExploreFilterBar } from "./ExploreFilterBar";
-import { EXPLORE_ACCORDION_PAD_INLINE } from "./ExploreProfessorGradesLayout";
+import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 
 type ExploreLayoutHeaderProps = {
   onIndex: boolean;

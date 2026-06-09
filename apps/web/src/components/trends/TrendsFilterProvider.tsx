@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, type ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { useShallow } from "zustand/react/shallow";
 import {
@@ -7,10 +7,7 @@ import {
   buildProgramCourseFilter,
   programSlug,
   computeGradeTrends,
-  type CourseGradesData,
-  type ProgramCourseFilter,
   type TermSeason,
-  type TrendPoint,
 } from "@uoplan/core";
 import { i18n } from "@lingui/core";
 import { tr } from "../../i18n";
@@ -21,56 +18,7 @@ import { formatMetricValue } from "../../lib/trends/metrics";
 import { toUrlSearch, type TrendsMetric, type TrendsSearch } from "../../lib/trends/searchParams";
 import type { BackState } from "../../lib/navigation/backState";
 import type { TrendsCardContext } from "./cardContext";
-
-type SelectOption = { value: string; label: string };
-
-interface TrendsContextValue {
-  /** Raw grades dataset (null until loaded). */
-  grades: CourseGradesData | null;
-  gradesError: string | null;
-  /** True once grades + named disciplines are available to render charts. */
-  ready: boolean;
-  isMobile: boolean;
-  isFr: boolean;
-
-  search: TrendsSearch;
-  update: (patch: Partial<TrendsSearch>) => void;
-
-  discipline: string | null;
-  level: number | null;
-  season: TermSeason | null;
-  programSlugValue: string | null;
-  programFilter: ProgramCourseFilter | null;
-
-  activeMetric: TrendsMetric;
-  metricLabel: string;
-  metricOptions: { value: TrendsMetric; label: string }[];
-
-  disciplineOptions: SelectOption[];
-  programOptions: SelectOption[];
-  disciplineOptionsFilter: ReturnType<typeof createRankedOptionsFilter>;
-  disciplineNameByCode: Map<string, string>;
-  levelData: SelectOption[];
-  seasonData: SelectOption[];
-
-  points: TrendPoint[];
-  cardContext: TrendsCardContext | null;
-  filteredMode: boolean;
-
-  scopeSummary: string;
-  activeFilterCount: number;
-  trendsBack: BackState;
-
-  formatMetric: (metric: TrendsMetric, value: number | null) => string;
-}
-
-const TrendsContext = createContext<TrendsContextValue | null>(null);
-
-export function useTrends(): TrendsContextValue {
-  const ctx = useContext(TrendsContext);
-  if (!ctx) throw new Error("useTrends must be used within a TrendsFilterProvider");
-  return ctx;
-}
+import { TrendsContext, type TrendsContextValue } from "./trendsContext";
 
 type TrendsFilterProviderProps = {
   search: TrendsSearch;

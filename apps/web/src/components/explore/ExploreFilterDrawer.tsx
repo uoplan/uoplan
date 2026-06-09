@@ -4,7 +4,8 @@ import { IconEraser } from "@tabler/icons-react";
 import { useTr, tr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
-import { ExploreFilterPopoverContent, filterSectionLabel } from "./ExploreFilterPopoverContent";
+import { ExploreFilterPopoverContent } from "./ExploreFilterPopoverContent";
+import { filterSectionLabel } from "../../lib/explore/filterLabels";
 import type { DisciplineOption, TermOption } from "./ExploreFilterPopoverContent";
 
 const FILTER_KEYS = [
