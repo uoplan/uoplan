@@ -1,7 +1,14 @@
 import { Box, Stack, Text } from "@mantine/core";
+import { useMemo } from "react";
 import { AnimatePresence, m } from "framer-motion";
 import type { Discipline, ProfessorRatingsMap } from "@uoplan/core";
+import {
+  courseSentimentByNorm,
+  normalizeProfessorName,
+  professorSentimentByName,
+} from "@uoplan/core";
 import { tr, useTr } from "../../i18n";
+import { useFeedbackData } from "../../hooks/useFeedbackData";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import type {
   ExploreCourseSearchEntry,
@@ -88,6 +95,18 @@ export function ExploreSearchResults({
 }: ExploreSearchResultsProps) {
   useTr();
 
+  // Lazily load the course-evaluation dataset so every card can show its overall
+  // satisfaction; the numbers fill in once the (~900 KB) asset has decoded.
+  const { data: feedback } = useFeedbackData();
+  const courseSentiment = useMemo(
+    () => (feedback ? courseSentimentByNorm(feedback) : null),
+    [feedback],
+  );
+  const professorSentiment = useMemo(
+    () => (feedback ? professorSentimentByName(feedback) : null),
+    [feedback],
+  );
+
   const coursesSection =
     displayedCourses.length > 0 ? (
       <SearchCardSection label={tr("explore.resultsCourses")} delay={0}>
@@ -102,6 +121,7 @@ export function ExploreSearchResults({
           >
             <SearchResultCourseCard
               entry={entry}
+              sentiment={courseSentiment?.get(entry.normCode) ?? null}
               query={debouncedQuery}
               searchParams={currentSearchParams}
             />
@@ -148,6 +168,7 @@ export function ExploreSearchResults({
             <SearchResultProfessorCard
               entry={entry}
               professorRatings={professorRatings}
+              sentiment={professorSentiment?.get(normalizeProfessorName(entry.displayName)) ?? null}
               query={debouncedQuery}
               searchParams={currentSearchParams}
             />

@@ -319,6 +319,10 @@ msgstr "Ajuster le début du bloc de temps indisponible"
 msgid "calendar.event.ariaLabel"
 msgstr "{courseCode} {component}, {timeRange}"
 
+#: apps/web/src/components/calendar/CalendarEventFace.tsx:54
+msgid "calendar.event.satisfaction"
+msgstr "Satisfaction du cours"
+
 msgid "calendar.event.virtual"
 msgstr "Virtuel"
 
@@ -359,14 +363,27 @@ msgstr "Enseignant·e prévu·e"
 msgid "calendar.hover.instructorPredictedHint"
 msgstr "estimation"
 
-#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:154
-msgid "calendar.hover.ratingNone"
-msgstr "Aucune note"
-
 #: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:139
 #: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:146
 msgid "calendar.hover.ratingValue"
-msgstr "{rating}/5 ({count} notes)"
+msgstr "RMP {rating}/5 ({count} notes)"
+
+#: apps/web/src/components/calendar/EventInfoSection.tsx:97
+msgid "calendar.hover.satisfaction"
+msgstr "Satisfaction"
+
+#: apps/web/src/components/calendar/EventInfoSection.tsx:102
+msgid "calendar.hover.satisfactionCourse"
+msgstr "Cours"
+
+#: apps/web/src/components/calendar/EventInfoSection.tsx:114
+msgid "calendar.hover.satisfactionProfessor"
+msgstr "Professeur"
+
+#: apps/web/src/components/calendar/EventInfoSection.tsx:105
+#: apps/web/src/components/calendar/EventInfoSection.tsx:117
+msgid "calendar.hover.satisfactionValue"
+msgstr "{value}/5"
 
 #: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:84
 msgid "calendar.hover.section"
@@ -391,6 +408,11 @@ msgstr "Empêche ce cours d'apparaître dans tout horaire généré."
 #: apps/web/src/components/calendar/CalendarEventDetails.tsx:113
 msgid "calendar.swap.close"
 msgstr "Fermer"
+
+#: apps/web/src/components/calendar/CalendarEventDetails.tsx:115
+#: apps/web/src/components/calendar/CalendarEventDetails.tsx:120
+msgid "calendar.swap.collapse"
+msgstr "Réduire à l'infobulle"
 
 #: apps/web/src/components/calendar/CalendarEventDetails.tsx:91
 #: apps/web/src/components/calendar/CalendarEventDetails.tsx:96
@@ -1979,6 +2001,15 @@ msgstr "Aucun résultat pour « {q} »"
 
 msgid "search.passingPercent"
 msgstr "{percent} % de réussite"
+
+#: apps/web/src/components/explore/SearchResultProfessorCard.tsx:99
+msgid "search.rmpRating"
+msgstr "RMP {rating}/5 ({count} notes)"
+
+#: apps/web/src/components/explore/SearchResultCourseCard.tsx:98
+#: apps/web/src/components/explore/SearchResultProfessorCard.tsx:94
+msgid "search.satisfactionSuffix"
+msgstr "/5 satisfaction"
 
 msgid "seo.explore.description"
 msgstr "Recherchez des cours et des professeur·e·s de l'Université d'Ottawa. Consultez les distributions de notes historiques et comparez les sections."

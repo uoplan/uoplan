@@ -6,6 +6,7 @@ import type { DataCache } from "@uoplan/core";
 import type { GeneratedSchedule } from "@uoplan/core";
 import type { ProfessorRatingsMap } from "@uoplan/core";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
+import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
 import { useSwapModal } from "../../hooks/useSwapModal";
 import { useScheduleTransition, useWeekIndexTransition } from "../../hooks/useScheduleTransition";
 import { slotActiveInWeek } from "../../hooks/useScheduleWeeks";
@@ -166,6 +167,11 @@ export function CalendarView({
   const swap = useSwapModal(getSwapCandidates, cache, professorRatings);
 
   const [isFullscreen, setIsFullscreen] = useState(false);
+  // Stays true while the fullscreen overlay plays its exit animation. The
+  // popover re-opens immediately (so it's visible before the overlay finishes
+  // closing), and this flag makes that open instant — no fade-pop on top of the
+  // fading overlay.
+  const [overlayExiting, setOverlayExiting] = useState(false);
   const [sortKey, setSortKey] = useState<SwapSortKey>("best");
   const [difficulty, setDifficulty] = useState<SwapDifficulty | null>(null);
 
@@ -177,7 +183,10 @@ export function CalendarView({
   }, [swap]);
 
   const openFullscreen = useCallback(() => setIsFullscreen(true), []);
-  const closeFullscreen = useCallback(() => setIsFullscreen(false), []);
+  const closeFullscreen = useCallback(() => {
+    setOverlayExiting(true);
+    setIsFullscreen(false);
+  }, []);
 
   // Keep fullscreen from lingering if the swap closes by any other path, and
   // reset the list's sort/filter when a different event is opened (matching the
@@ -191,7 +200,8 @@ export function CalendarView({
     setDifficulty(null);
   }, [activeEventKey]);
 
-  const allEvents = useCalendarEvents(displayedSchedule, professorRatings);
+  const sentiment = useScheduleSentiment();
+  const allEvents = useCalendarEvents(displayedSchedule, professorRatings, sentiment);
 
   const scheduleDateRange = useMemo(() => {
     if (!schedule) return null;
@@ -419,13 +429,14 @@ export function CalendarView({
                 activeEventId={swap.modalState?.eventId ?? null}
                 isMobile={isMobile ?? false}
                 isFullscreen={isFullscreen}
+                instantPopover={overlayExiting}
                 onEventClose={handleCloseModal}
               />
             </div>
           </Box>
         </Box>
 
-        <AnimatePresence>
+        <AnimatePresence onExitComplete={() => setOverlayExiting(false)}>
           {!isMobile && isFullscreen && activeEvent && (
             <m.div
               key="calendar-fullscreen-overlay"

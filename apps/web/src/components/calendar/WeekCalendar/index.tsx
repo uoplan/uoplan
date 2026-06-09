@@ -27,6 +27,9 @@ interface WeekCalendarProps {
   activeEventId: string | null;
   isMobile: boolean;
   isFullscreen: boolean;
+  /** Open the active event's popover with no entrance transition (used when
+   * shrinking out of fullscreen so it appears instantly under the fading overlay). */
+  instantPopover?: boolean;
   /** Dismiss the active swap overlay. */
   onEventClose: () => void;
 }
@@ -43,6 +46,7 @@ export function WeekCalendar({
   activeEventId,
   isMobile,
   isFullscreen,
+  instantPopover = false,
   onEventClose,
 }: WeekCalendarProps) {
   const dayCodes: DayOfWeekCode[] = useMemo(
@@ -133,6 +137,7 @@ export function WeekCalendar({
                     isActive={event.id === activeEventId}
                     isMobile={isMobile}
                     isFullscreen={isFullscreen}
+                    instantPopover={instantPopover && event.id === activeEventId}
                     onRequestClose={onEventClose}
                   />
                 ))}

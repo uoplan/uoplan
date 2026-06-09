@@ -1,21 +1,9 @@
-import type { MouseEvent } from "react";
-import { Box, Tooltip } from "@mantine/core";
-import { ProfessorRatingTooltipLabel } from "./ProfessorRatingTooltipLabel";
 import { tr } from "../../i18n";
 
 type CalendarEventFaceLayout = {
   showSection: boolean;
   showTime: boolean;
   showProfessor: boolean;
-};
-
-/** Professor rating row detail (matches calendar event / swap modal). */
-type CalendarEventFaceRatingDetail = {
-  id?: string;
-  legacyId?: number;
-  name: string;
-  rating: number;
-  numRatings: number;
 };
 
 type CalendarEventFaceProps = {
@@ -27,18 +15,11 @@ type CalendarEventFaceProps = {
   professor: string;
   virtual: boolean;
   layout: CalendarEventFaceLayout;
-  /** Mantine rating tier key for `cal-rating--*`. */
-  ratingTier: string;
-  hasProfessorRating: boolean;
-  hasNumericRating: boolean;
-  professorRatingValue: number | null;
-  legacyId?: number | null;
-  professorRatingDetails: CalendarEventFaceRatingDetail[] | null | undefined;
-  /** Interactive: tooltips + RMP links. Static: no tooltips, rating is span only. */
-  interaction: "interactive" | "static";
-  /** When false, the professor row never shows its own RMP hover tooltip
-   * (e.g. when a richer hover popover wraps the whole event). Defaults to true. */
-  professorTooltip?: boolean;
+  /**
+   * Course-evaluation satisfaction (1-5) for this course — the primary quality
+   * signal shown inline. `null` hides the value.
+   */
+  sentimentValue: number | null;
 };
 
 export function CalendarEventFace({
@@ -49,14 +30,7 @@ export function CalendarEventFace({
   professor,
   virtual,
   layout,
-  ratingTier,
-  hasProfessorRating,
-  hasNumericRating,
-  professorRatingValue,
-  legacyId,
-  professorRatingDetails,
-  interaction,
-  professorTooltip = true,
+  sentimentValue,
 }: CalendarEventFaceProps) {
   const virtualTail = virtual ? (
     <div className="cal-event-row-tail">
@@ -64,56 +38,26 @@ export function CalendarEventFace({
     </div>
   ) : null;
 
-  const ratingEl =
-    hasNumericRating && professorRatingValue != null ? (
+  const sentimentEl =
+    sentimentValue != null && sentimentValue > 0 ? (
       <>
         <span className="cal-event-sep" aria-hidden>
           ·
         </span>
-        <Box
-          component={interaction === "interactive" && legacyId ? "a" : "span"}
-          href={
-            interaction === "interactive" && legacyId
-              ? `https://www.ratemyprofessors.com/professor/${legacyId}`
-              : undefined
-          }
-          target={interaction === "interactive" && legacyId ? "_blank" : undefined}
-          rel={interaction === "interactive" && legacyId ? "noopener noreferrer" : undefined}
-          onClick={(e: MouseEvent) => e.stopPropagation()}
-          className={`cal-rating cal-rating--${ratingTier}`}
-        >
-          {professorRatingValue.toFixed(1)}
-        </Box>
+        <span className="cal-event-sentiment" title={tr("calendar.event.satisfaction")}>
+          {sentimentValue.toFixed(1)}
+        </span>
       </>
     ) : null;
 
-  const professorRowInner = (
-    <div className="cal-event-prof-row">
-      <span className="cal-event-prof-name" title={professor}>
-        {professor}
-      </span>
-      {ratingEl}
-    </div>
-  );
-
   const professorBlock =
     layout.showProfessor && professor.trim() !== "" ? (
-      interaction === "interactive" &&
-      professorTooltip &&
-      hasProfessorRating &&
-      professorRatingDetails &&
-      professorRatingDetails.length > 0 ? (
-        <Tooltip
-          label={<ProfessorRatingTooltipLabel details={professorRatingDetails} />}
-          withArrow
-          position="top"
-          withinPortal
-        >
-          {professorRowInner}
-        </Tooltip>
-      ) : (
-        professorRowInner
-      )
+      <div className="cal-event-prof-row">
+        <span className="cal-event-prof-name" title={professor}>
+          {professor}
+        </span>
+        {sentimentEl}
+      </div>
     ) : null;
 
   return (

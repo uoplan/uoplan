@@ -22,10 +22,12 @@ function mostCommonGrade(gradeViz: GradeVizData): string | null {
 
 export function SearchResultCourseCard({
   entry,
+  sentiment,
   query,
   searchParams,
 }: {
   entry: ExploreCourseSearchEntry;
+  sentiment?: number | null;
   query?: string;
   searchParams: ExploreSearchParams;
 }) {
@@ -88,6 +90,14 @@ export function SearchResultCourseCard({
           </Text>
         ) : null}
         <Box style={{ flex: 1 }} />
+        {sentiment != null && sentiment > 0 ? (
+          <Text size="xs" c="var(--app-text-muted)" lh={1.3}>
+            <Text component="span" fw={700} c="var(--app-text)">
+              {sentiment.toFixed(1)}
+            </Text>{" "}
+            {tr("search.satisfactionSuffix")}
+          </Text>
+        ) : null}
         {gradeViz ? (
           <Text size="xs" c="var(--app-text-muted)" lh={1.3}>
             {grade ? (

@@ -28,11 +28,13 @@ function professorLegacyParam(entry: ExploreProfessorSearchEntry): string {
 export function SearchResultProfessorCard({
   entry,
   professorRatings,
+  sentiment,
   query,
   searchParams,
 }: {
   entry: ExploreProfessorSearchEntry;
   professorRatings: ProfessorRatingsMap | null;
+  sentiment?: number | null;
   query?: string;
   searchParams: ExploreSearchParams;
 }) {
@@ -84,15 +86,26 @@ export function SearchResultProfessorCard({
         <Text size="sm" fw={700} c="var(--app-text)" lh={1.3} style={{ wordBreak: "break-word" }}>
           {entry.displayName}
         </Text>
-        {hasRating ? (
+        {sentiment != null && sentiment > 0 ? (
           <Text size="xs" c="var(--app-text-muted)" lh={1.3}>
-            ★ {rmpEntry?.rating.toFixed(1)} · {rmpEntry?.numRatings} ratings
+            <Text component="span" fw={700} c="var(--app-text)">
+              {sentiment.toFixed(1)}
+            </Text>{" "}
+            {tr("search.satisfactionSuffix")}
           </Text>
-        ) : (
+        ) : null}
+        {hasRating ? (
+          <Text size="xs" c="dimmed" lh={1.3}>
+            {tr("search.rmpRating", {
+              rating: rmpEntry?.rating.toFixed(1),
+              count: rmpEntry?.numRatings,
+            })}
+          </Text>
+        ) : sentiment == null ? (
           <Text size="xs" c="dimmed" lh={1.3}>
             {tr("search.noRating")}
           </Text>
-        )}
+        ) : null}
         <Text size="xs" c="dimmed" lh={1.3}>
           {tr("explore.professorCourseCount", {
             count: entry.uniqueCourseCount,

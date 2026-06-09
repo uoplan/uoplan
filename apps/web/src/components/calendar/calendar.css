@@ -166,6 +166,16 @@
   flex-shrink: 0;
 }
 
+.cal-event-prof-row .cal-event-sentiment {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.25;
+  color: color-mix(in srgb, var(--app-on-event) 80%, transparent);
+  white-space: nowrap;
+}
+
 .cal-rating {
   --rmp-accent: var(--mantine-color-gray-5);
   display: inline-flex;

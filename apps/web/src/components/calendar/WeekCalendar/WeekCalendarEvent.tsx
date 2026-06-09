@@ -25,6 +25,8 @@ interface WeekCalendarEventProps {
   isMobile: boolean;
   /** Fullscreen overlay (rendered by `CalendarView`) suppresses the popover. */
   isFullscreen: boolean;
+  /** When true, open the popover with no entrance transition (shrinking from fullscreen). */
+  instantPopover: boolean;
   /** Dismiss the active swap overlay (used when the popover closes itself). */
   onRequestClose: () => void;
 }
@@ -42,6 +44,7 @@ function WeekCalendarEventImpl({
   isActive,
   isMobile,
   isFullscreen,
+  instantPopover,
   onRequestClose,
 }: WeekCalendarEventProps) {
   const tr = useTr();
@@ -55,23 +58,9 @@ function WeekCalendarEventImpl({
   const colorName = COURSE_COLORS[colorIdx % COURSE_COLORS.length];
   const eventColor = COURSE_COLOR_OKLCH[colorName];
 
-  const legacyId = useMemo(
-    () => event.professorRatingDetails?.find((d) => d.legacyId)?.legacyId,
-    [event.professorRatingDetails],
-  );
-  const ratingTier = useMemo(
-    () => ratingToColor(event.professorRatingValue ?? null),
-    [event.professorRatingValue],
-  );
-  const markerColor = useMemo(() => ratingColorToCssVar(ratingTier), [ratingTier]);
-  const hasProfessorRating = !!(
-    event.professorRatingDetails && event.professorRatingDetails.length > 0
-  );
-  const hasNumericRating =
-    hasProfessorRating &&
-    event.professorRatingValue != null &&
-    event.professorRatingValue > 0 &&
-    !!event.professorRatingDetails;
+  const sentimentValue = event.courseSentiment ?? null;
+  const sentimentTier = useMemo(() => ratingToColor(sentimentValue), [sentimentValue]);
+  const markerColor = useMemo(() => ratingColorToCssVar(sentimentTier), [sentimentTier]);
 
   const timeRange = useMemo(
     () => formatTimeRange(event.startMinutes, event.endMinutes),
@@ -136,14 +125,7 @@ function WeekCalendarEventImpl({
         professor={event.professor}
         virtual={event.virtual}
         layout={{ showSection: true, showTime: true, showProfessor: true }}
-        ratingTier={ratingTier}
-        hasProfessorRating={hasProfessorRating}
-        hasNumericRating={hasNumericRating}
-        professorRatingValue={event.professorRatingValue ?? null}
-        legacyId={legacyId ?? null}
-        professorRatingDetails={event.professorRatingDetails}
-        interaction="interactive"
-        professorTooltip={false}
+        sentimentValue={sentimentValue}
       />
       <div className="cal-grade-bar-hitbox">{gradeBottom}</div>
     </button>
@@ -169,6 +151,7 @@ function WeekCalendarEventImpl({
       closeOnClickOutside
       shadow="md"
       radius="md"
+      transitionProps={instantPopover ? { duration: 0 } : undefined}
       middlewares={{ flip: true, shift: true }}
     >
       <Popover.Target>{eventButton}</Popover.Target>

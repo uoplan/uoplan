@@ -22,6 +22,7 @@ import { useShallow } from "zustand/react/shallow";
 import { useTr, tr } from "../../i18n";
 import { useAppStore } from "../../store/appStore";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
+import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
 import { useTermScheduleData } from "../../hooks/useTermScheduleData";
 import { parseCoursePathParam } from "../../lib/explore/courseSearchParams";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
@@ -238,7 +239,8 @@ export function ExploreCourseSchedulePage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [course, componentKeys, selection]);
 
-  const events = useCalendarEvents(previewSchedule, professorRatings);
+  const sentiment = useScheduleSentiment();
+  const events = useCalendarEvents(previewSchedule, professorRatings, sentiment);
   const colorMap = useMemo(
     () => (previewSchedule ? buildColorMap(previewSchedule) : {}),
     [previewSchedule],
