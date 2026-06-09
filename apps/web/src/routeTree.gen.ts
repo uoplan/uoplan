@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as GraphRouteImport } from './routes/graph'
+import { Route as DonateRouteImport } from './routes/donate'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as TrendsRouteRouteImport } from './routes/trends/route'
 import { Route as ScheduleRouteRouteImport } from './routes/schedule/route'
@@ -34,6 +35,11 @@ import { Route as ExploreCourseCourseFeedbackRouteImport } from './routes/explor
 const GraphRoute = GraphRouteImport.update({
   id: '/graph',
   path: '/graph',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DonateRoute = DonateRouteImport.update({
+  id: '/donate',
+  path: '/donate',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChangelogRoute = ChangelogRouteImport.update({
@@ -149,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/schedule': typeof ScheduleRouteRouteWithChildren
   '/trends': typeof TrendsRouteRouteWithChildren
   '/changelog': typeof ChangelogRoute
+  '/donate': typeof DonateRoute
   '/graph': typeof GraphRoute
   '/trends/courses': typeof TrendsCoursesRoute
   '/trends/disciplines': typeof TrendsDisciplinesRoute
@@ -169,6 +176,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
+  '/donate': typeof DonateRoute
   '/graph': typeof GraphRoute
   '/trends/courses': typeof TrendsCoursesRoute
   '/trends/disciplines': typeof TrendsDisciplinesRoute
@@ -193,6 +201,7 @@ export interface FileRoutesById {
   '/schedule': typeof ScheduleRouteRouteWithChildren
   '/trends': typeof TrendsRouteRouteWithChildren
   '/changelog': typeof ChangelogRoute
+  '/donate': typeof DonateRoute
   '/graph': typeof GraphRoute
   '/trends/courses': typeof TrendsCoursesRoute
   '/trends/disciplines': typeof TrendsDisciplinesRoute
@@ -218,6 +227,7 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/trends'
     | '/changelog'
+    | '/donate'
     | '/graph'
     | '/trends/courses'
     | '/trends/disciplines'
@@ -238,6 +248,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/changelog'
+    | '/donate'
     | '/graph'
     | '/trends/courses'
     | '/trends/disciplines'
@@ -261,6 +272,7 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/trends'
     | '/changelog'
+    | '/donate'
     | '/graph'
     | '/trends/courses'
     | '/trends/disciplines'
@@ -285,6 +297,7 @@ export interface RootRouteChildren {
   ScheduleRouteRoute: typeof ScheduleRouteRouteWithChildren
   TrendsRouteRoute: typeof TrendsRouteRouteWithChildren
   ChangelogRoute: typeof ChangelogRoute
+  DonateRoute: typeof DonateRoute
   GraphRoute: typeof GraphRoute
 }
 
@@ -295,6 +308,13 @@ declare module '@tanstack/react-router' {
       path: '/graph'
       fullPath: '/graph'
       preLoaderRoute: typeof GraphRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/donate': {
+      id: '/donate'
+      path: '/donate'
+      fullPath: '/donate'
+      preLoaderRoute: typeof DonateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/changelog': {
@@ -506,6 +526,7 @@ const rootRouteChildren: RootRouteChildren = {
   ScheduleRouteRoute: ScheduleRouteRouteWithChildren,
   TrendsRouteRoute: TrendsRouteRouteWithChildren,
   ChangelogRoute: ChangelogRoute,
+  DonateRoute: DonateRoute,
   GraphRoute: GraphRoute,
 }
 export const routeTree = rootRouteImport

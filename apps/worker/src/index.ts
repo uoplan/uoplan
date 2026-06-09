@@ -2,15 +2,22 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { sendPushNotification } from "./webpush.js";
 import { handleOgImage } from "./ogImage.js";
+import { buildDonationSummary } from "./donations.js";
+import { handleDonationEmail } from "./donationEmail.js";
 
 export interface Env {
   ASSETS: Fetcher;
   WEBPUSH_SUBSCRIPTIONS: KVNamespace;
+  DONATIONS: KVNamespace;
+  DONATIONS_DB: D1Database;
   VAPID_PUBLIC_KEY: string;
   VAPID_PRIVATE_KEY: string;
   VAPID_SUBJECT: string;
   NOTIFY_SECRET: string;
   TURNSTILE_SECRET_KEY: string;
+  DONATION_GOAL_CENTS: string;
+  DONATION_CURRENCY: string;
+  DONATION_EMAIL: string;
 }
 
 const ALLOWED_ORIGINS = ["https://uoplan.party", "http://localhost:5173"];
@@ -85,10 +92,16 @@ app.use(
   "/api/*",
   cors({
     origin: (origin) => (ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]),
-    allowMethods: ["POST"],
+    allowMethods: ["GET", "POST"],
     allowHeaders: ["Content-Type", "Authorization"],
   }),
 );
+
+app.get("/api/donations", async (c) => {
+  const summary = await buildDonationSummary(c.env);
+  c.header("Cache-Control", "public, max-age=60");
+  return c.json(summary);
+});
 
 app.post("/api/subscribe", async (c) => {
   const sub = await c.req.json<{
@@ -178,4 +191,7 @@ app.post("/api/send", async (c) => {
   return c.json({ sent, failed, cleaned });
 });
 
-export default app;
+export default {
+  fetch: app.fetch,
+  email: handleDonationEmail,
+};

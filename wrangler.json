@@ -12,18 +12,34 @@
       "/api/unsubscribe",
       "/api/send",
       "/api/share/*",
-      "/api/og-image/*"
+      "/api/og-image/*",
+      "/api/donations"
     ]
   },
   "kv_namespaces": [
     {
       "binding": "WEBPUSH_SUBSCRIPTIONS",
       "id": "ba766a014e684f69931d70eb9612d833"
+    },
+    {
+      "binding": "DONATIONS",
+      "id": "10a5a3bab59847f39470360e2e816d34"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DONATIONS_DB",
+      "database_name": "uoplan-donations",
+      "database_id": "94d45525-d7b5-4609-a759-2739fcc16011",
+      "migrations_dir": "apps/worker/migrations"
     }
   ],
   "vars": {
     "VAPID_PUBLIC_KEY": "BNodMtd7rpjTP3AD6InGuID2KYaqSETOSgR3WRGu71TBPaAX9dq3OCdpHjXzGHOVJU4ArrXzfo6bOf-AgITnSuE",
-    "VAPID_SUBJECT": "mailto:admin@uoplan.party"
+    "VAPID_SUBJECT": "mailto:admin@uoplan.party",
+    "DONATION_GOAL_CENTS": "100000",
+    "DONATION_CURRENCY": "CAD",
+    "DONATION_EMAIL": "donate@uoplan.party"
   },
   "routes": [
     {
