@@ -148,11 +148,13 @@ export function ExploreFilterBar({
   onChange,
   disciplineOptions = [],
   termOptions = [],
+  padInline = "0px",
 }: {
   filters: ExploreFilterState;
   onChange: (next: Partial<ExploreFilterState>) => void;
   disciplineOptions?: DisciplineOption[];
   termOptions?: TermOption[];
+  padInline?: string;
 }) {
   useTr();
   const isMobile = useMediaQuery("(max-width: 539px)", false, {
@@ -220,7 +222,7 @@ export function ExploreFilterBar({
         ref={pillBarRef}
         style={{ overflowX: "auto", overflowY: "visible", scrollbarWidth: "none" }}
       >
-        <Group gap={6} wrap="nowrap" style={{ width: "max-content" }}>
+        <Group gap={6} wrap="nowrap" style={{ width: "max-content", paddingInline: padInline }}>
           {FILTER_KEYS.map((key) => {
             const active = pillIsActive(key, filters);
             const { bg, border } = pillColors(key, filters);
