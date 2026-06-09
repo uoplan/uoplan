@@ -119,12 +119,19 @@ export function ExploreLayoutHeader({
           disabled={loading}
         />
       </Stack>
-      <Box mt="md">
+      <Box
+        mt="md"
+        style={{
+          marginLeft: `calc(-1 * ${EXPLORE_ACCORDION_PAD_INLINE.xs})`,
+          marginRight: `calc(-1 * ${EXPLORE_ACCORDION_PAD_INLINE.xs})`,
+        }}
+      >
         <ExploreFilterBar
           filters={filters}
           onChange={onFilterChange}
           disciplineOptions={disciplineOptions}
           termOptions={termOptions}
+          padInline={EXPLORE_ACCORDION_PAD_INLINE.xs}
         />
       </Box>
     </Box>
