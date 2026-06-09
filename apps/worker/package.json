@@ -13,7 +13,8 @@
     "@uoplan/core": "workspace:*",
     "@uoplan/data": "workspace:*",
     "@uoplan/proto": "workspace:*",
-    "hono": "^4.7.11"
+    "hono": "^4.7.11",
+    "postal-mime": "^2.7.4"
   },
   "devDependencies": {
     "@marsidev/react-turnstile": "^1.5.0",

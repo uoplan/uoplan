@@ -653,6 +653,48 @@ msgstr "Premier cycle (0–4XXX)"
 msgid "constrainStep.virtualSectionsOnly"
 msgstr "Horaires virtuels seulement"
 
+#: apps/web/src/routes/donate.tsx:122
+#: apps/web/src/routes/donate.tsx:135
+msgid "donate.copied"
+msgstr "Copié!"
+
+#: apps/web/src/routes/donate.tsx:122
+#: apps/web/src/routes/donate.tsx:135
+msgid "donate.copy"
+msgstr "Copier"
+
+#: apps/web/src/routes/donate.tsx:114
+msgid "donate.how.body"
+msgstr "Envoyez un virement Interac à l'adresse ci-dessous. Le dépôt automatique est activé, aucune question de sécurité n'est donc requise."
+
+#: apps/web/src/routes/donate.tsx:142
+msgid "donate.how.note"
+msgstr "uoplan est un projet gratuit créé par des étudiants. Les dons sont anonymes et servent uniquement à couvrir les frais de fonctionnement."
+
+#: apps/web/src/routes/donate.tsx:111
+msgid "donate.how.title"
+msgstr "Comment faire un don"
+
+#: apps/web/src/routes/donate.tsx:94
+msgid "donate.ofGoal"
+msgstr "de l'objectif de {goal} · {percent} % atteint"
+
+#: apps/web/src/routes/donate.tsx:88
+msgid "donate.raisedLabel"
+msgstr "Recueilli jusqu'à présent"
+
+#: apps/web/src/routes/donate.tsx:78
+msgid "donate.subtitle"
+msgstr "Aidez à garder uoplan gratuit et fonctionnel."
+
+#: apps/web/src/routes/donate.tsx:75
+msgid "donate.title"
+msgstr "Soutenir uoplan"
+
+#: apps/web/src/routes/donate.tsx:101
+msgid "donate.unavailable"
+msgstr "Le total en direct est temporairement indisponible."
+
 #: scripts/i18n/dynamic-keys.mjs
 msgid "easterEgg.command.geegees.description"
 msgstr "Débloquez le thème caché des Gee-Gees"

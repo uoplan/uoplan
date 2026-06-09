@@ -653,6 +653,48 @@ msgstr "Undergraduate (0–4XXX)"
 msgid "constrainStep.virtualSectionsOnly"
 msgstr "Virtual meeting times only"
 
+#: apps/web/src/routes/donate.tsx:122
+#: apps/web/src/routes/donate.tsx:135
+msgid "donate.copied"
+msgstr "Copied!"
+
+#: apps/web/src/routes/donate.tsx:122
+#: apps/web/src/routes/donate.tsx:135
+msgid "donate.copy"
+msgstr "Copy"
+
+#: apps/web/src/routes/donate.tsx:114
+msgid "donate.how.body"
+msgstr "Send an Interac e-Transfer to the address below. Auto-deposit is enabled, so no security question is required."
+
+#: apps/web/src/routes/donate.tsx:142
+msgid "donate.how.note"
+msgstr "uoplan is a free, student-built project. Donations are anonymous and only help cover running costs."
+
+#: apps/web/src/routes/donate.tsx:111
+msgid "donate.how.title"
+msgstr "How to donate"
+
+#: apps/web/src/routes/donate.tsx:94
+msgid "donate.ofGoal"
+msgstr "of {goal} goal · {percent}% of the way there"
+
+#: apps/web/src/routes/donate.tsx:88
+msgid "donate.raisedLabel"
+msgstr "Raised so far"
+
+#: apps/web/src/routes/donate.tsx:78
+msgid "donate.subtitle"
+msgstr "Help keep uoplan free and running."
+
+#: apps/web/src/routes/donate.tsx:75
+msgid "donate.title"
+msgstr "Support uoplan"
+
+#: apps/web/src/routes/donate.tsx:101
+msgid "donate.unavailable"
+msgstr "The live total is temporarily unavailable."
+
 #: scripts/i18n/dynamic-keys.mjs
 msgid "easterEgg.command.geegees.description"
 msgstr "Unlock the hidden Gee-Gees theme"
