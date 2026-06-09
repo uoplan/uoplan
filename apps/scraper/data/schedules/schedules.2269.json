@@ -1,7 +1,7 @@
 {
   "termId": "2269",
   "totalCourses": 11145,
-  "totalWithSchedules": 3186,
+  "totalWithSchedules": 3187,
   "schedules": [
     {
       "subject": "ADM",
@@ -476,7 +476,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 150,
               "A": 471,
@@ -1178,7 +1178,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 150,
               "A": 471,
@@ -2753,7 +2753,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 164,
               "A": 306,
@@ -22982,7 +22982,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ],
         "LAB": [
@@ -23064,7 +23064,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "A05-LAB FullSess.",
@@ -37311,7 +37311,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Nicolas Corradi",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -37361,7 +37361,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Nicolas Corradi",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -38572,7 +38572,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 4,
               "A": 13,
@@ -39710,7 +39710,7 @@
               {
                 "day": "Tu",
                 "startMinutes": 690,
-                "endMinutes": 750,
+                "endMinutes": 770,
                 "virtual": false,
                 "instructor": "Francois-Xavier Campbell-Valois",
                 "meetingDates": [
@@ -47535,7 +47535,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 33,
               "A": 17,
@@ -65459,7 +65459,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Kelly Keenan",
+                "instructor": "KELLY KEENAN",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -71303,7 +71303,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 66,
               "A": 69,
@@ -91212,26 +91212,6 @@
               }
             ],
             "status": "Open"
-          },
-          {
-            "section": "B00-LEC FullSess.",
-            "sectionCode": "B00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 960,
-                "endMinutes": 1130,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
-            "status": "Open"
           }
         ]
       }
@@ -91836,7 +91816,7 @@
             "session": null,
             "times": [
               {
-                "day": "Fr",
+                "day": "We",
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
@@ -93451,7 +93431,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 18,
               "A": 61,
@@ -93490,7 +93470,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 18,
               "A": 61,
@@ -93529,7 +93509,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 18,
               "A": 61,
@@ -93618,7 +93598,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 93,
               "A": 91,
@@ -93657,7 +93637,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 93,
               "A": 91,
@@ -93696,7 +93676,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 93,
               "A": 91,
@@ -93863,7 +93843,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 62,
               "A": 96,
@@ -93952,7 +93932,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 46,
               "A": 81,
@@ -93991,7 +93971,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 46,
               "A": 81,
@@ -94030,7 +94010,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 46,
               "A": 81,
@@ -95335,16 +95315,16 @@
       "components": {
         "STG": [
           {
-            "section": "A00-STG FullSess.",
-            "sectionCode": "A00",
+            "section": "C00-STG FullSess.",
+            "sectionCode": "C00",
             "component": "STG",
             "session": null,
             "times": [],
             "status": "Open"
           },
           {
-            "section": "B00-STG FullSess.",
-            "sectionCode": "B00",
+            "section": "D00-STG FullSess.",
+            "sectionCode": "D00",
             "component": "STG",
             "session": null,
             "times": [],
@@ -95880,7 +95860,7 @@
             "session": null,
             "times": [
               {
-                "day": "Fr",
+                "day": "We",
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
@@ -96637,7 +96617,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 4,
               "A": 2,
@@ -105799,7 +105779,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 16,
               "A": 18,
@@ -111377,7 +111357,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 301,
               "A": 213,
@@ -111615,7 +111595,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 301,
               "A": 213,
@@ -118587,7 +118567,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1193,
               "A": 1436,
@@ -133344,8 +133324,8 @@
             "times": [
               {
                 "day": "Fr",
-                "startMinutes": 690,
-                "endMinutes": 770,
+                "startMinutes": 600,
+                "endMinutes": 680,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -142971,7 +142951,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 595,
               "A": 405,
@@ -143010,7 +142990,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 595,
               "A": 405,
@@ -152719,7 +152699,7 @@
                 "startMinutes": 870,
                 "endMinutes": 920,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jason Steffener",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -167752,7 +167732,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mathieu Lemire",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -167763,7 +167743,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mathieu Lemire",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -168704,7 +168684,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mahdi Ammar",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -168715,7 +168695,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mahdi Ammar",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -170037,7 +170017,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -170048,7 +170028,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -170643,7 +170623,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -170654,7 +170634,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -174573,7 +174553,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 48,
               "A": 60,
@@ -184253,6 +184233,48 @@
     },
     {
       "subject": "MUS",
+      "catalogNumber": "43151",
+      "courseCode": "MUS 43151",
+      "title": "Topics in Music Technology (Part 1 of 2)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "James Law",
+                "meetingDates": [
+                  "2026-09-09",
+                  "2026-12-09"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "James Law",
+                "meetingDates": [
+                  "2026-09-09",
+                  "2026-12-09"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "MUS",
       "catalogNumber": "4710",
       "courseCode": "MUS 4710",
       "title": "Thèmes choisis en théorie et analyse musicale",
@@ -192997,7 +193019,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -193667,7 +193689,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -212965,7 +212987,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "C02-DGD Multi-Term",
@@ -212985,7 +213007,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "D01-DGD Multi-Term",
@@ -213440,7 +213462,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -232847,7 +232869,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 6,
               "A": 19,
@@ -244854,7 +244876,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }

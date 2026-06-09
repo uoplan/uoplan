@@ -1,5 +1,5 @@
 {
-  "resultCount": 4566,
+  "resultCount": 4565,
   "professors": [
     {
       "id": "VGVhY2hlci04Nzk2OTM=",
@@ -2441,8 +2441,8 @@
       "id": "VGVhY2hlci0yNDAyMDQy",
       "legacyId": 2402042,
       "name": "Aneta Traikova",
-      "rating": 4.4,
-      "numRatings": 56
+      "rating": 4.3,
+      "numRatings": 57
     },
     {
       "id": "VGVhY2hlci0xNzEyMzQx",
@@ -8371,7 +8371,7 @@
       "legacyId": 1509804,
       "name": "Elena Ilina",
       "rating": 3,
-      "numRatings": 122
+      "numRatings": 124
     },
     {
       "id": "VGVhY2hlci0xNDM4NzYx",
@@ -11941,7 +11941,7 @@
       "legacyId": 83412,
       "name": "Ian Dennis",
       "rating": 3,
-      "numRatings": 73
+      "numRatings": 74
     },
     {
       "id": "VGVhY2hlci05MDg1Nzk=",
@@ -14566,7 +14566,7 @@
       "legacyId": 1885661,
       "name": "John Pezacki",
       "rating": 2.6,
-      "numRatings": 51
+      "numRatings": 52
     },
     {
       "id": "VGVhY2hlci0xMjkyMDk3",
@@ -20319,8 +20319,8 @@
       "id": "VGVhY2hlci0zMDI5MDQ4",
       "legacyId": 3029048,
       "name": "Matthieu Dabrowski",
-      "rating": 2.8,
-      "numRatings": 12
+      "rating": 2.6,
+      "numRatings": 11
     },
     {
       "id": "VGVhY2hlci0xNjUxODY0",
@@ -21061,8 +21061,8 @@
       "id": "VGVhY2hlci0yMTUyOTQy",
       "legacyId": 2152942,
       "name": "Michael Wong",
-      "rating": 4.1,
-      "numRatings": 40
+      "rating": 3.9,
+      "numRatings": 46
     },
     {
       "id": "VGVhY2hlci0zMTQ0ODg0",
@@ -21440,7 +21440,7 @@
       "legacyId": 3157471,
       "name": "Mihir Deo",
       "rating": 3.8,
-      "numRatings": 11
+      "numRatings": 12
     },
     {
       "id": "VGVhY2hlci0zMDgwMDM1",
@@ -22106,13 +22106,6 @@
       "name": "Monika Plutecka",
       "rating": 0,
       "numRatings": 0
-    },
-    {
-      "id": "VGVhY2hlci0yNzkxMTA2",
-      "legacyId": 2791106,
-      "name": "Monim Benaissa",
-      "rating": 1,
-      "numRatings": 1
     },
     {
       "id": "VGVhY2hlci03OTUyNg==",
@@ -30231,8 +30224,8 @@
       "id": "VGVhY2hlci0yNDA0ODIw",
       "legacyId": 2404820,
       "name": "Tina Goralski",
-      "rating": 3.2,
-      "numRatings": 21
+      "rating": 3.1,
+      "numRatings": 22
     },
     {
       "id": "VGVhY2hlci0xNDExMzky",
@@ -30540,7 +30533,7 @@
       "legacyId": 1186546,
       "name": "Vajmeh Tabibi",
       "rating": 2.4,
-      "numRatings": 146
+      "numRatings": 147
     },
     {
       "id": "VGVhY2hlci0yOTUzMzU0",
