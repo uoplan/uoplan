@@ -874,6 +874,10 @@ msgstr "Très bien (3,5+)"
 msgid "explore.filter.term"
 msgstr "Trimestre"
 
+#: apps/web/src/components/explore/ExploreFilterDrawer.tsx:79
+msgid "explore.filter.title"
+msgstr "Filtres"
+
 msgid "explore.histogramStudents"
 msgstr "{count, plural, one {# étudiant} other {# étudiants}}"
 
