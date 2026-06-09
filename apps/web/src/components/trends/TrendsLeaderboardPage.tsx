@@ -14,7 +14,7 @@ import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import { programSlugToPathParam } from "../../lib/explore/programSearch";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import type { TrendsSort } from "../../lib/trends/searchParams";
-import { useTrends } from "./TrendsFilterProvider";
+import { useTrends } from "./trendsContext";
 
 const LEADERBOARD_MIN_VOLUME = 50;
 const LEADERBOARD_LIMIT = 10;

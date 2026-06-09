@@ -4,7 +4,7 @@ import { Box, Button, Group, Stack, Text, Title } from "@mantine/core";
 import { m } from "framer-motion";
 import { IconRefresh, IconSparkles } from "@tabler/icons-react";
 import { useShallow } from "zustand/react/shallow";
-import { EXPLORE_ACCORDION_PAD_INLINE } from "../explore/ExploreProfessorGradesLayout";
+import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { ResetModal } from "../shared/ResetModal";
 import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { useTr, tr } from "../../i18n";

@@ -7,7 +7,7 @@ import {
 } from "@uoplan/core";
 import { resolveComponentId } from "../lib/explore/gradesSearch";
 import { parseCoursePathParam } from "../lib/explore/courseSearchParams";
-import { useExploreOfferings } from "../components/explore/ExploreOfferingsContext";
+import { useExploreOfferings } from "../components/explore/exploreOfferingsContext";
 import { useFeedbackData } from "./useFeedbackData";
 
 interface FeedbackViews {

@@ -9,16 +9,18 @@ import {
   groupOfferingsByProfessor,
   type CourseOfferingGroup,
 } from "../../lib/explore/gradesSearch";
-import { useExploreOfferings } from "./ExploreOfferingsContext";
+import { useExploreOfferings } from "./exploreOfferingsContext";
 import type { BackState } from "../../lib/navigation/backState";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
-  EXPLORE_ACCORDION_PAD_INLINE,
-  EXPLORE_ACCORDION_PAD_RIGHT,
   ExploreCourseSummaryBar,
   ExploreProfessorSummaryBar,
 } from "./ExploreProfessorGradesLayout";
+import {
+  EXPLORE_ACCORDION_PAD_INLINE,
+  EXPLORE_ACCORDION_PAD_RIGHT,
+} from "../../lib/explore/accordionPadding";
 
 const EXPLORE_CHEVRON_RIGHT = {
   base: "12px",

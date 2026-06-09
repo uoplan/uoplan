@@ -2,7 +2,7 @@ import { Group, Select } from "@mantine/core";
 import type { TermSeason } from "@uoplan/core";
 import { tr } from "../../i18n";
 import type { TrendsMetric } from "../../lib/trends/searchParams";
-import { useTrends } from "./TrendsFilterProvider";
+import { useTrends } from "./trendsContext";
 
 /**
  * Shared filter bar for the trends pages: program / discipline scope, level and

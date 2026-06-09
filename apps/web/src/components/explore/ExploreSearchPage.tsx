@@ -11,7 +11,7 @@ import { type ExploreCourseSearchEntry } from "../../lib/explore/gradesSearch";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { ExploreCourseSpotlightGallery } from "./ExploreCourseSpotlightGallery";
-import { useExploreOfferings } from "./ExploreOfferingsContext";
+import { useExploreOfferings } from "./exploreOfferingsContext";
 import { useTr } from "../../i18n";
 
 /** Defer the (synchronous, corpus-wide) spotlight build until after first paint. */

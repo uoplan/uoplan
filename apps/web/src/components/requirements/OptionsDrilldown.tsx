@@ -5,7 +5,7 @@ import {
   getOptionSecondarySummaryLine,
   simplifySingleChildChain,
 } from "../../lib/requirements/requirementUtils";
-import { getNodeDisplayTitle, getStableNodeKey } from "./RequirementNode";
+import { getNodeDisplayTitle, getStableNodeKey } from "../../lib/requirements/requirementNodeUtils";
 import { OptionRequirementPreview } from "./OptionRequirementPreview";
 import { tr } from "../../i18n";
 

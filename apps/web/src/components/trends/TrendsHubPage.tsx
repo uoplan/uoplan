@@ -18,7 +18,7 @@ import type { TrendsMetric } from "../../lib/trends/searchParams";
 import { AppCard } from "../shared/AppCard";
 import { AnimatedNumber } from "../shared/AnimatedNumber";
 import { CATEGORY_PREVIEW_HEIGHT, TrendsCategoryCard } from "./TrendsCategoryCard";
-import { useTrends } from "./TrendsFilterProvider";
+import { useTrends } from "./trendsContext";
 
 const SEASON_SHORT: Record<TermSeason, string> = {
   fall: "F",

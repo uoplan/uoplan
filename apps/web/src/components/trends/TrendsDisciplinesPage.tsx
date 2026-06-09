@@ -3,7 +3,7 @@ import { useTr } from "../../i18n";
 import { DisciplineBarCard } from "./DisciplineBarCard";
 import { DisciplineHeatmapCard } from "./DisciplineHeatmapCard";
 import { DisciplineScatterCard } from "./DisciplineScatterCard";
-import { useTrends } from "./TrendsFilterProvider";
+import { useTrends } from "./trendsContext";
 
 /**
  * Cross-discipline comparisons: ranked metric bar, popularity↔GPA scatter, and a

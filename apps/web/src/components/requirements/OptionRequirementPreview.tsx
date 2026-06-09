@@ -12,7 +12,8 @@ import {
   getOptionSecondarySummaryLine,
   simplifySingleChildChain,
 } from "../../lib/requirements/requirementUtils";
-import { getNodeDisplayTitle, getStableNodeKey, REQUIREMENT_INDENT_PX } from "./RequirementNode";
+import { REQUIREMENT_INDENT_PX } from "./RequirementNode";
+import { getNodeDisplayTitle, getStableNodeKey } from "../../lib/requirements/requirementNodeUtils";
 import { tr } from "../../i18n";
 
 const REQUIREMENT_BASE_PADDING_PX = 10;

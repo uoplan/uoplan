@@ -19,16 +19,7 @@ import type {
   ExploreSortDir,
   ExploreSortKey,
 } from "../../lib/explore/exploreFilters";
-
-type FilterKey =
-  | "level"
-  | "language"
-  | "discipline"
-  | "difficulty"
-  | "rating"
-  | "feedback"
-  | "term"
-  | "sort";
+import type { FilterKey } from "../../lib/explore/filterLabels";
 
 export type DisciplineOption = { code: string; name: string };
 export type TermOption = { value: string; label: string };
@@ -368,25 +359,4 @@ export function ExploreFilterPopoverContent({
   }
 
   return <Box />;
-}
-
-export function filterSectionLabel(key: FilterKey): string {
-  switch (key) {
-    case "level":
-      return tr("explore.filter.level");
-    case "language":
-      return tr("explore.filter.language");
-    case "discipline":
-      return tr("explore.filter.discipline");
-    case "difficulty":
-      return tr("explore.filter.difficulty");
-    case "rating":
-      return tr("explore.filter.rating");
-    case "feedback":
-      return tr("explore.filter.feedback");
-    case "term":
-      return tr("explore.filter.term");
-    case "sort":
-      return tr("explore.sort.label");
-  }
 }

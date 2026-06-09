@@ -15,7 +15,7 @@ import type {
   ExploreProfessorSearchEntry,
 } from "../../lib/explore/gradesSearch";
 import type { ExploreProgramSearchEntry } from "../../lib/explore/programSearch";
-import { EXPLORE_ACCORDION_PAD_INLINE } from "./ExploreProfessorGradesLayout";
+import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { SearchResultCourseCard } from "./SearchResultCourseCard";
 import { SearchResultDisciplineCard } from "./SearchResultDisciplineCard";
 import { SearchResultProfessorCard } from "./SearchResultProfessorCard";

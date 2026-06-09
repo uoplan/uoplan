@@ -26,6 +26,7 @@ import {
   simplifySingleChildChain,
 } from "../../lib/requirements/requirementUtils";
 import { VirtualizedMultiSelect } from "../shared/VirtualizedMultiSelect";
+import { getStableNodeKey } from "../../lib/requirements/requirementNodeUtils";
 import { tr } from "../../i18n";
 
 export const REQUIREMENT_INDENT_PX = 12;
@@ -41,26 +42,9 @@ function handleKeyboardToggle(e: KeyboardEvent<HTMLElement>, toggle: () => void)
   }
 }
 
-export function getStableNodeKey(node: RequirementWithStatus, fallback: string): string {
-  if (node.requirementId) return `req:${node.requirementId}`;
-  const title = (node.title ?? "").trim();
-  const code = (node.code ?? "").trim();
-  return `node:${node.type}:${code}:${title}:${fallback}`;
-}
-
 function getSelectedCredits(cache: DataCache | null, courseCodes: string[]): number {
   if (!cache) return 0;
   return courseCodes.reduce((sum, code) => sum + (cache.getCourse(code)?.credits ?? 3), 0);
-}
-
-export function getNodeDisplayTitle(node: RequirementWithStatus): string {
-  const rawTitle = (node.title ?? "").trim();
-  const fallback = rawTitle || node.code || `${node.type} requirement`;
-  if (node.type === "or_group") {
-    const useGenericLabel = rawTitle === "" || rawTitle.toLowerCase() === "or";
-    return useGenericLabel ? "One of the following must be completed" : fallback;
-  }
-  return fallback;
 }
 
 interface RequirementNodeProps {

@@ -52,6 +52,7 @@ export default defineConfig({
       rules: {
         "react/rules-of-hooks": "error",
         "react/exhaustive-deps": "warn",
+        "react/only-export-components": ["error", { allowConstantExport: true }],
         "i18n-tr/tr-key-exists": "error",
         "jsx-a11y/prefer-tag-over-role": "error",
         "jsx-a11y/interactive-supports-focus": "error",
@@ -78,12 +79,22 @@ export default defineConfig({
         "**/__tests__/**/*.{ts,tsx}",
       ],
       rules: {
+        "react/only-export-components": "off",
         "typescript/no-unsafe-assignment": "off",
         "typescript/no-unsafe-call": "off",
         "typescript/no-unsafe-member-access": "off",
         "typescript/no-unsafe-argument": "off",
         "typescript/no-unsafe-return": "off",
         "typescript/consistent-type-imports": "off",
+      },
+    },
+    {
+      // TanStack route files export `Route` next to an inline route component
+      // (idiomatic), and test utilities export render helpers alongside
+      // wrapper components — neither is worth splitting for Fast Refresh.
+      files: ["apps/web/src/routes/**/*.{ts,tsx}", "apps/web/src/test/**/*.{ts,tsx}"],
+      rules: {
+        "react/only-export-components": "off",
       },
     },
   ],

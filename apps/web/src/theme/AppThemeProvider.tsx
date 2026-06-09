@@ -1,10 +1,9 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { MantineProvider } from "@mantine/core";
 import type { CSSVariablesResolver } from "@mantine/core";
 import { theme } from "../styles/theme";
 import {
-  type AppTheme,
   type ColorSchemeBase,
   type ThemeId,
   type ThemeSelection,
@@ -16,23 +15,7 @@ import {
   readUnlockedThemes,
   resolveTheme,
 } from "./themes";
-
-interface AppThemeContextValue {
-  /** Current user selection ("system" or a theme id). */
-  selection: ThemeSelection;
-  /** The concrete theme currently applied. */
-  resolved: AppTheme;
-  /** All registered themes (for building a switcher). */
-  themes: AppTheme[];
-  /** Hidden theme ids the user has unlocked (easter eggs). */
-  unlockedThemes: ThemeId[];
-  /** Persist and apply a new selection. */
-  setSelection: (selection: ThemeSelection) => void;
-  /** Unlock a hidden (easter-egg) theme so it appears in the switcher. */
-  unlockTheme: (id: ThemeId) => void;
-}
-
-const AppThemeContext = createContext<AppThemeContextValue | null>(null);
+import { AppThemeContext, type AppThemeContextValue } from "./appThemeContext";
 
 /**
  * Map Mantine's surface/text variables onto our semantic tokens so Mantine's
@@ -118,12 +101,4 @@ export function AppThemeProvider({ children, initialSelection }: AppThemeProvide
       </MantineProvider>
     </AppThemeContext.Provider>
   );
-}
-
-export function useAppTheme(): AppThemeContextValue {
-  const ctx = useContext(AppThemeContext);
-  if (!ctx) {
-    throw new Error("useAppTheme must be used within an AppThemeProvider");
-  }
-  return ctx;
 }
