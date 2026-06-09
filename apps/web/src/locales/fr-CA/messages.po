@@ -667,10 +667,6 @@ msgstr "Copier"
 msgid "donate.how.body"
 msgstr "Envoyez un virement Interac à l'adresse ci-dessous. Le dépôt automatique est activé, aucune question de sécurité n'est donc requise."
 
-#: apps/web/src/routes/donate.tsx:142
-msgid "donate.how.note"
-msgstr "uoplan est un projet gratuit créé par des étudiants. Les dons sont anonymes et servent uniquement à couvrir les frais de fonctionnement."
-
 #: apps/web/src/routes/donate.tsx:111
 msgid "donate.how.title"
 msgstr "Comment faire un don"
@@ -685,11 +681,11 @@ msgstr "Recueilli jusqu'à présent"
 
 #: apps/web/src/routes/donate.tsx:78
 msgid "donate.subtitle"
-msgstr "Aidez à garder uoplan gratuit et fonctionnel."
+msgstr "Aidez-nous à rester gratuits et fonctionnels."
 
 #: apps/web/src/routes/donate.tsx:75
 msgid "donate.title"
-msgstr "Soutenir uoplan"
+msgstr "Nous soutenir"
 
 #: apps/web/src/routes/donate.tsx:101
 msgid "donate.unavailable"

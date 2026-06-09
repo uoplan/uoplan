@@ -13,6 +13,7 @@ interface DonationSummary {
   totalCents: number;
   currency: string;
   updatedAt: string;
+  reason?: string;
 }
 
 export const Route = createFileRoute("/donate")({
@@ -56,6 +57,7 @@ function DonateRoute() {
   const totalCents = summary?.totalCents ?? 0;
   const percent = goalCents > 0 ? totalCents / goalCents : 0;
   const percentLabel = Math.round(percent * 100);
+  const reason = summary?.reason?.trim();
 
   return (
     <Box
@@ -106,41 +108,44 @@ function DonateRoute() {
         </Card>
 
         <Card withBorder radius="lg" padding="lg" bg="var(--app-surface)">
-          <Stack gap={10}>
+          <Stack gap={12}>
             <Title order={4} c="var(--app-text)" fw={600}>
               {tr("donate.how.title")}
             </Title>
             <Text size="sm" c="var(--app-text)">
               {tr("donate.how.body")}
             </Text>
-            <Group gap={8} align="center">
-              <Text size="sm" fw={600} c="var(--app-text)" ff="monospace">
-                {DONATION_EMAIL}
-              </Text>
-              <CopyButton value={DONATION_EMAIL}>
-                {({ copied, copy }) => (
-                  <Tooltip label={copied ? tr("donate.copied") : tr("donate.copy")} withArrow>
-                    <Text
-                      component="button"
-                      onClick={copy}
-                      size="sm"
-                      c="var(--mantine-color-accentBlue-4)"
-                      style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        padding: 0,
-                      }}
-                    >
-                      {copied ? tr("donate.copied") : tr("donate.copy")}
+            <CopyButton value={DONATION_EMAIL}>
+              {({ copied, copy }) => (
+                <Tooltip label={copied ? tr("donate.copied") : tr("donate.copy")} withArrow>
+                  <Box
+                    component="button"
+                    onClick={copy}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 10,
+                      width: "100%",
+                      background: "var(--app-bg)",
+                      border: "1px solid var(--app-border, var(--mantine-color-default-border))",
+                      borderRadius: 10,
+                      cursor: "pointer",
+                      padding: "14px 20px",
+                    }}
+                  >
+                    <Text size="lg" fw={700} c="var(--app-text)" ff="monospace">
+                      {DONATION_EMAIL}
                     </Text>
-                  </Tooltip>
-                )}
-              </CopyButton>
-            </Group>
-            <Text size="xs" c="dimmed">
-              {tr("donate.how.note")}
-            </Text>
+                  </Box>
+                </Tooltip>
+              )}
+            </CopyButton>
+            {reason && (
+              <Text size="xs" c="dimmed">
+                {reason}
+              </Text>
+            )}
           </Stack>
         </Card>
       </Stack>

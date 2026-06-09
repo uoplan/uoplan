@@ -7,6 +7,7 @@ export interface DonationSummary {
   totalCents: number;
   currency: string;
   updatedAt: string;
+  reason?: string;
 }
 
 /**
@@ -36,10 +37,12 @@ export async function sumDonationsFromD1(env: Env): Promise<number> {
 export async function buildDonationSummary(env: Env): Promise<DonationSummary> {
   const goalCents = Number.parseInt(env.DONATION_GOAL_CENTS ?? "0", 10) || 0;
   const totalCents = await getDonationTotalCents(env);
+  const reason = env.DONATION_REASON?.trim();
   return {
     goalCents,
     totalCents,
     currency: env.DONATION_CURRENCY ?? "CAD",
     updatedAt: new Date().toISOString(),
+    ...(reason ? { reason } : {}),
   };
 }
