@@ -15,6 +15,7 @@ import {
   resolveComponentId,
 } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./ExploreOfferingsContext";
+import { CatalogueLink } from "./CatalogueLink";
 import { useCourseFeedbackViews } from "../../hooks/useFeedbackViews";
 import { FeedbackSummaryCard } from "./feedback/FeedbackSummaryCard";
 import type { BackState } from "../../lib/navigation/backState";
@@ -140,6 +141,12 @@ export function ExploreCoursePage({
   const { views: feedbackViews, loading: feedbackLoading } = useCourseFeedbackViews(urlCourseParam);
   const showFeedback = feedbackLoading || feedbackViews.length > 0;
 
+  const catalogueUrl = useMemo(() => {
+    if (!selectedCourseMeta) return null;
+    const params = new URLSearchParams({ P: selectedCourseMeta.courseCode });
+    return `https://catalogue.uottawa.ca/search/?${params.toString()}`;
+  }, [selectedCourseMeta]);
+
   return (
     <m.div
       initial={{ opacity: 0, y: 12 }}
@@ -162,9 +169,14 @@ export function ExploreCoursePage({
               align={{ base: "stretch", md: "center" }}
             >
               <Box style={{ flex: 1, minWidth: 0 }}>
-                <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
-                  {selectedCourseMeta.courseCode}
-                </Title>
+                <Group gap={8} align="center" wrap="nowrap">
+                  <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
+                    {selectedCourseMeta.courseCode}
+                  </Title>
+                  {catalogueUrl ? (
+                    <CatalogueLink href={catalogueUrl} label={tr("explore.openInCatalogue")} />
+                  ) : null}
+                </Group>
                 {selectedCourseMeta.courseTitle ? (
                   <Text size="sm" c="dimmed" lh={1.5} mt={8}>
                     {selectedCourseMeta.courseTitle}
