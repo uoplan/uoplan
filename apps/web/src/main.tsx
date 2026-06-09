@@ -4,6 +4,7 @@ import { I18nProvider } from "@lingui/react";
 import { Notifications } from "@mantine/notifications";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { ErrorBoundary } from "./components/shared/ErrorBoundary";
+import { shouldEnablePreload } from "./lib/preloadStrategy";
 import { routeTree } from "./routeTree.gen";
 import { setRouterInstance } from "./routerRef";
 import { AppThemeProvider } from "./theme/AppThemeProvider";
@@ -22,7 +23,11 @@ await initializeI18n();
 
 printConsoleGreeting();
 
-const router = createRouter({ routeTree });
+const router = createRouter({
+  routeTree,
+  defaultPreload: shouldEnablePreload(),
+  defaultPreloadDelay: 50,
+});
 setRouterInstance(router);
 
 declare module "@tanstack/react-router" {
