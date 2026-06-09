@@ -20,6 +20,11 @@ export interface CalendarEvent {
     rating: number;
     numRatings: number;
   }>;
+  /**
+   * Build-time guess of instructors, present only when the section has no known
+   * instructor. Informational only — never used for ratings or generation.
+   */
+  predictedInstructors?: Array<{ name: string; legacyId?: number | null }>;
   gradeViz?: GradeVizData | null;
   meetingDates?: [string, string] | null;
 }

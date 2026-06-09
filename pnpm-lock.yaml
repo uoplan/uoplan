@@ -41,6 +41,9 @@ importers:
 
   apps/scraper:
     dependencies:
+      '@uoplan/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@uoplan/proto':
         specifier: workspace:*
         version: link:../../packages/proto

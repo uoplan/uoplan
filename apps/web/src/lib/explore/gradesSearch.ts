@@ -4,14 +4,17 @@ import type {
   Catalogue,
   CourseGradesData,
   GradeVizData,
+  PredictedInstructor,
   ProfessorRatingsMap,
   SchedulesData,
 } from "@uoplan/core";
 import {
   normalizeCourseCode,
   normalizeProfessorName,
+  normalizeInstructorName,
   normalizeGradeVizDistribution,
   getCourseLanguageBucket,
+  sectionInstructors,
 } from "@uoplan/core";
 import { searchProfessorsScored, type ProfessorSearchEntry } from "../graph/professorGraphSearch";
 import { formatTermLabelPlain } from "../term/termLabelPlain";
@@ -80,6 +83,18 @@ export type ExploreOfferingFlat = {
   distribution: Record<string, number>;
   /** True when the section has no real instructor (e.g. the "Staff" placeholder). */
   unassignedInstructor?: boolean;
+  /**
+   * Build-time guess of who might teach this (unassigned) section, deduped across
+   * the sections that share the exact same combination. Informational only — never
+   * fed into grade lookups, professor-rating filters, or schedule generation.
+   */
+  predictedInstructors?: PredictedInstructor[];
+  /**
+   * True for a predicted copy of an unassigned offering placed under a candidate
+   * professor's group (see {@link groupOfferingsByProfessor}). Marks the row as a
+   * build-time guess rather than a confirmed teaching assignment.
+   */
+  predicted?: boolean;
 };
 
 /**
@@ -103,6 +118,21 @@ function isUnassignedInstructorName(name: string): boolean {
 /** Whether an offering has no real instructor (collapsed into the unassigned group). */
 function isUnassignedOffering(o: ExploreOfferingFlat): boolean {
   return o.unassignedInstructor === true || isUnassignedInstructorName(o.professorName);
+}
+
+/**
+ * Stable signature of a predicted-instructor combination, identifying it by
+ * legacyId (or normalized name when absent), order-independent. Empty string for
+ * "no guess". Unassigned offerings sharing this key are grouped together.
+ */
+function predictedComboKey(guess: readonly PredictedInstructor[] | undefined): string {
+  if (!guess || guess.length === 0) return "";
+  return guess
+    .map((p) =>
+      p.legacyId != null ? `id:${p.legacyId}` : `name:${normalizeInstructorName(p.name)}`,
+    )
+    .sort()
+    .join("|");
 }
 
 const EXPLORE_FUSE_OPTIONS: IFuseOptions<ExploreOfferingFlat> = {
@@ -717,35 +747,128 @@ export type ProfessorOfferingGroup = {
   legacyId?: number;
   displayName: string;
   offerings: ExploreOfferingFlat[];
-  /** True for the synthetic group collecting sections with no real instructor. */
+  /** True for a synthetic group collecting sections with no real instructor. */
   unassigned?: boolean;
+  /**
+   * For the unassigned group, the build-time guesses (when any). Predicted
+   * offerings are normally fanned out under each candidate professor instead;
+   * this stays populated only for the residual no-instructor rows.
+   */
+  predictedInstructors?: PredictedInstructor[];
+  /** True when this group contains at least one predicted (guessed) offering. */
+  hasPredicted?: boolean;
 };
+
+/** Stable group id for a professor identified by legacyId (preferred) or name. */
+function professorGroupId(legacyId: number | undefined, name: string): string {
+  return legacyId != null ? `id:${legacyId}` : `name:${normalizeProfessorName(name).toLowerCase()}`;
+}
 
 export function groupOfferingsByProfessor(items: ExploreOfferingFlat[]): ProfessorOfferingGroup[] {
   const byGroup = new Map<string, ExploreOfferingFlat[]>();
-  const meta = new Map<string, { legacyId?: number; displayName: string; unassigned: boolean }>();
-
-  for (const o of items) {
-    const unassigned = isUnassignedOffering(o);
-    const groupId = unassigned
-      ? UNASSIGNED_GROUP_ID
-      : o.legacyId != null
-        ? `id:${o.legacyId}`
-        : `name:${normalizeProfessorName(o.professorName).toLowerCase()}`;
+  const meta = new Map<
+    string,
+    {
+      legacyId?: number;
+      displayName: string;
+      unassigned: boolean;
+      predictedInstructors?: PredictedInstructor[];
+      hasPredicted?: boolean;
+    }
+  >();
+  // (groupId|course|term) keys already covered by a confirmed offering, so a
+  // predicted copy for the same professor/term is suppressed as redundant.
+  const confirmedKeys = new Set<string>();
+  // Reconcile predicted profs (keyed by legacyId) with confirmed schedule rows
+  // (which may be keyed by name when no legacyId was backfilled): map a normalized
+  // professor name to its existing confirmed group id and course/term coverage.
+  const confirmedGroupByName = new Map<string, string>();
+  const confirmedNameCourseTerm = new Set<string>();
+  const profName = (name: string) => normalizeProfessorName(name).toLowerCase();
+  const nameCourseTermKey = (name: string, o: ExploreOfferingFlat) =>
+    `${profName(name)}|${normalizeCourseCode(o.courseCode)}|${o.termId}`;
+  const slot = (groupId: string) => {
     let list = byGroup.get(groupId);
     if (!list) {
       list = [];
       byGroup.set(groupId, list);
     }
-    list.push(o);
+    return list;
+  };
+  const offeringTermKey = (groupId: string, o: ExploreOfferingFlat) =>
+    `${groupId}|${normalizeCourseCode(o.courseCode)}|${o.termId}`;
 
-    const prev = meta.get(groupId);
-    if (!prev) {
+  // First pass: real (confirmed) offerings define professor groups.
+  for (const o of items) {
+    if (isUnassignedOffering(o)) continue;
+    const groupId = professorGroupId(o.legacyId, o.professorName);
+    slot(groupId).push(o);
+    confirmedKeys.add(offeringTermKey(groupId, o));
+    const name = profName(o.professorName);
+    if (name) {
+      if (!confirmedGroupByName.has(name)) confirmedGroupByName.set(name, groupId);
+      confirmedNameCourseTerm.add(nameCourseTermKey(o.professorName, o));
+    }
+    if (!meta.has(groupId)) {
       meta.set(groupId, {
-        legacyId: unassigned ? undefined : o.legacyId,
-        displayName: unassigned ? UNASSIGNED_INSTRUCTOR : o.professorName,
-        unassigned,
+        legacyId: o.legacyId,
+        displayName: o.professorName,
+        unassigned: false,
       });
+    }
+  }
+
+  // Second pass: each unassigned offering is fanned out as a predicted copy under
+  // every candidate professor's group (so it appears in their dropdown). Rows with
+  // no guess remain in the single shared "no instructor assigned" group.
+  for (const o of items) {
+    if (!isUnassignedOffering(o)) continue;
+    const guesses = o.predictedInstructors ?? [];
+    if (guesses.length === 0) {
+      const groupId = `${UNASSIGNED_GROUP_ID}:`;
+      slot(groupId).push(o);
+      if (!meta.has(groupId)) {
+        meta.set(groupId, {
+          displayName: UNASSIGNED_INSTRUCTOR,
+          unassigned: true,
+          predictedInstructors: undefined,
+        });
+      }
+      continue;
+    }
+    for (const guess of guesses) {
+      const guessLegacyId = guess.legacyId ?? undefined;
+      // The professor may already have a confirmed group keyed by name (no
+      // backfilled legacyId); reuse it so we never split one person in two.
+      const groupId =
+        confirmedGroupByName.get(profName(guess.name)) ??
+        professorGroupId(guessLegacyId, guess.name);
+      const termKey = offeringTermKey(groupId, o);
+      // Don't shadow a confirmed teaching (matched by group id or by name), and
+      // don't duplicate a guess already placed under this professor for the term.
+      if (confirmedKeys.has(termKey)) continue;
+      if (confirmedNameCourseTerm.has(nameCourseTermKey(guess.name, o))) continue;
+      const list = slot(groupId);
+      if (list.some((e) => e.predicted && offeringTermKey(groupId, e) === termKey)) continue;
+      list.push({
+        ...o,
+        id: `${o.id}|pred:${groupId}`,
+        predicted: true,
+        unassignedInstructor: false,
+        professorName: guess.name,
+        legacyId: guessLegacyId,
+      });
+      const m = meta.get(groupId);
+      if (m) {
+        m.hasPredicted = true;
+      } else {
+        meta.set(groupId, {
+          legacyId: guessLegacyId,
+          displayName: guess.name,
+          unassigned: false,
+          hasPredicted: true,
+        });
+      }
     }
   }
 
@@ -765,10 +888,12 @@ export function groupOfferingsByProfessor(items: ExploreOfferingFlat[]): Profess
       displayName: m.displayName,
       offerings,
       unassigned: m.unassigned,
+      predictedInstructors: m.predictedInstructors,
+      hasPredicted: m.hasPredicted,
     });
   }
 
-  // Real professors sorted by name; the unassigned group (if any) always sorts last.
+  // Real professors sorted by name; the unassigned group always sorts last.
   groups.sort((a, b) => {
     if (a.unassigned !== b.unassigned) return a.unassigned ? 1 : -1;
     return a.displayName.localeCompare(b.displayName, "en");
@@ -783,19 +908,23 @@ export type CourseOfferingGroup = {
   offerings: ExploreOfferingFlat[];
 };
 
-function scheduleOfferingId(courseCode: string, name: string, termId: number) {
-  return [courseCode, "", normalizeProfessorName(name).toLowerCase(), String(termId), ""].join("|");
+function scheduleOfferingId(courseCode: string, name: string, termId: number, combo = "") {
+  return [courseCode, "", normalizeProfessorName(name).toLowerCase(), String(termId), combo].join(
+    "|",
+  );
 }
 
 /**
  * Dedup key for schedule-derived offerings, which carry no grade data and are
- * combined per professor per term (section is intentionally ignored).
+ * combined per professor per term (section is intentionally ignored). For
+ * unassigned rows the predicted-instructor combo keeps distinct guesses apart.
  */
-function scheduleOfferingDedupKey(courseCode: string, name: string, termId: number) {
+function scheduleOfferingDedupKey(courseCode: string, name: string, termId: number, combo = "") {
   return [
     normalizeCourseCode(courseCode),
     normalizeProfessorName(name).toLowerCase(),
     String(termId),
+    combo,
   ].join("|");
 }
 
@@ -815,35 +944,50 @@ export function buildScheduleOfferings(
       const norm = normalizeCourseCode(sched.courseCode);
       const title = titleByCode.get(norm) ?? sched.title ?? "";
 
-      // Combine all sections by professor for this course + term. Schedule data
-      // has no grade distribution and its raw section labels (e.g. "M00-LEC
-      // FullSess.") are not meaningful here, so collapse to one row per prof.
-      const instructors = new Set<string>();
+      // Collapse this course+term's sections to one row per real instructor, plus
+      // up to two unassigned rows: one carrying the union of every predicted
+      // instructor (fanned out under each candidate professor's group later), and
+      // a separate "no guess" row when some unassigned sections have no prediction
+      // at all (so those genuinely-unstaffed sections still surface). Raw section
+      // labels (e.g. "M00-LEC FullSess.") are not meaningful here, so section is
+      // dropped.
+      const realInstructors = new Set<string>();
+      const predictedByKey = new Map<string, PredictedInstructor>();
+      let hasNoGuessSection = false;
       for (const sections of Object.values(sched.components)) {
         for (const section of sections) {
-          for (const t of section.times) {
-            if (t.instructor) instructors.add(t.instructor);
+          const info = sectionInstructors(section);
+          if (info.kind === "known") {
+            for (const name of info.names) realInstructors.add(name);
+          } else if (info.guess.length === 0) {
+            hasNoGuessSection = true;
+          } else {
+            for (const guess of info.guess) {
+              const key =
+                guess.legacyId != null
+                  ? `id:${guess.legacyId}`
+                  : `name:${normalizeInstructorName(guess.name)}`;
+              if (!predictedByKey.has(key)) predictedByKey.set(key, guess);
+            }
           }
         }
       }
 
-      for (const instructor of instructors) {
-        // "Staff" means no real instructor: keep the section so the course is searchable,
-        // but collapse all such sections to a single unassigned offering (no professor).
-        const unassigned = isUnassignedInstructorName(instructor);
-        const professorName = unassigned ? UNASSIGNED_INSTRUCTOR : instructor;
-
-        const key = scheduleOfferingDedupKey(sched.courseCode, professorName, termId);
-        if (seen.has(key)) continue;
+      const pushOffering = (
+        professorName: string,
+        unassigned: boolean,
+        combo: string,
+        predictedInstructors: PredictedInstructor[] | undefined,
+      ) => {
+        const key = scheduleOfferingDedupKey(sched.courseCode, professorName, termId, combo);
+        if (seen.has(key)) return;
         seen.add(key);
-
         const fuseText = [sched.courseCode, norm, title, professorName, termLabel]
           .filter(Boolean)
           .join(" ")
           .toLowerCase();
-
         out.push({
-          id: scheduleOfferingId(sched.courseCode, professorName, termId),
+          id: scheduleOfferingId(sched.courseCode, professorName, termId, combo),
           courseCode: sched.courseCode,
           courseTitle: title,
           professorName,
@@ -852,7 +996,19 @@ export function buildScheduleOfferings(
           fuseText,
           distribution: {},
           unassignedInstructor: unassigned,
+          predictedInstructors,
         });
+      };
+
+      for (const instructor of realInstructors) {
+        pushOffering(instructor, false, "", undefined);
+      }
+      if (predictedByKey.size > 0) {
+        const guesses = [...predictedByKey.values()];
+        pushOffering(UNASSIGNED_INSTRUCTOR, true, predictedComboKey(guesses), guesses);
+      }
+      if (hasNoGuessSection) {
+        pushOffering(UNASSIGNED_INSTRUCTOR, true, "", undefined);
       }
     }
   }

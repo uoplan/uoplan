@@ -144,6 +144,12 @@ function SectionOption({
           <Text size="xs" c="dimmed" lh={1.3} truncate>
             {instructors.join(", ")}
           </Text>
+        ) : section.predictedInstructors && section.predictedInstructors.length > 0 ? (
+          <Text size="xs" c="dimmed" lh={1.3} truncate fs="italic">
+            {tr("explore.schedule.predictedInstructors", {
+              names: section.predictedInstructors.map((p) => p.name).join(", "),
+            })}
+          </Text>
         ) : null}
         <Stack gap={2}>
           {timeRows.length > 0 ? (

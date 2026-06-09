@@ -198,6 +198,17 @@ enum SectionStatus {
   SECTION_STATUS_CLOSED = 2;
 }
 
+// A build-time guess of who may teach a section that has no assigned
+// instructor (every meeting time is "Staff"/blank). Informational only: these
+// names are NEVER fed into grade lookups, professor-rating filters, or the
+// schedule-generation engine.
+message PredictedInstructor {
+  string name = 1;
+  // RateMyProfessors legacy id, resolved from grades.json when the name can be
+  // matched. Absent for schedule-only candidates with no grades record.
+  optional uint32 legacy_id = 2;
+}
+
 message ComponentSection {
   string section = 1;
   optional string section_code = 2;
@@ -210,6 +221,9 @@ message ComponentSection {
   // is reconstructed at runtime from grades.pb (see @uoplan/core gradeLookup).
   reserved 9;
   reserved "distribution";
+  // Populated ONLY when the section has no known instructor; the build-time
+  // guess of who may teach it. Empty for sections with an assigned instructor.
+  repeated PredictedInstructor predicted_instructors = 10;
 }
 
 message ComponentSectionList {

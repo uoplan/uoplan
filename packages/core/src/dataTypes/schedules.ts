@@ -267,6 +267,10 @@ export function toProtoSchedulesData(input: SchedulesData): ProtoSchedulesData {
                     : undefined,
                 })),
                 status: statusToProto(section.status),
+                predictedInstructors: (section.predictedInstructors ?? []).map((p) => ({
+                  name: p.name,
+                  legacyId: p.legacyId ?? undefined,
+                })),
               })),
             },
           ]),
@@ -318,6 +322,14 @@ export function fromProtoSchedulesData(input: ProtoSchedulesData): SchedulesData
                   }),
                 ),
                 status: statusFromProto(section.status),
+                ...(section.predictedInstructors.length > 0
+                  ? {
+                      predictedInstructors: section.predictedInstructors.map((p) => ({
+                        name: p.name,
+                        legacyId: p.legacyId ?? null,
+                      })),
+                    }
+                  : {}),
               }),
             ),
           ]),
