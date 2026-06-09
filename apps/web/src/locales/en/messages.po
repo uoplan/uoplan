@@ -667,10 +667,6 @@ msgstr "Copy"
 msgid "donate.how.body"
 msgstr "Send an Interac e-Transfer to the address below. Auto-deposit is enabled, so no security question is required."
 
-#: apps/web/src/routes/donate.tsx:142
-msgid "donate.how.note"
-msgstr "uoplan is a free, student-built project. Donations are anonymous and only help cover running costs."
-
 #: apps/web/src/routes/donate.tsx:111
 msgid "donate.how.title"
 msgstr "How to donate"
@@ -685,11 +681,11 @@ msgstr "Raised so far"
 
 #: apps/web/src/routes/donate.tsx:78
 msgid "donate.subtitle"
-msgstr "Help keep uoplan free and running."
+msgstr "Help keep us free and running."
 
 #: apps/web/src/routes/donate.tsx:75
 msgid "donate.title"
-msgstr "Support uoplan"
+msgstr "Support us"
 
 #: apps/web/src/routes/donate.tsx:101
 msgid "donate.unavailable"

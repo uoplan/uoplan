@@ -18,6 +18,7 @@ export interface Env {
   DONATION_GOAL_CENTS: string;
   DONATION_CURRENCY: string;
   DONATION_EMAIL: string;
+  DONATION_REASON?: string;
 }
 
 const ALLOWED_ORIGINS = ["https://uoplan.party", "http://localhost:5173"];

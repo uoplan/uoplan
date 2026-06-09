@@ -39,7 +39,8 @@
     "VAPID_SUBJECT": "mailto:admin@uoplan.party",
     "DONATION_GOAL_CENTS": "100000",
     "DONATION_CURRENCY": "CAD",
-    "DONATION_EMAIL": "donate@uoplan.party"
+    "DONATION_EMAIL": "donate@uoplan.party",
+    "DONATION_REASON": "Donations help the creator of uo.grades.zone cover the costs of the original grade data."
   },
   "routes": [
     {
