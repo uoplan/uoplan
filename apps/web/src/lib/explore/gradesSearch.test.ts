@@ -285,6 +285,7 @@ function scheduleSection(
   section: string,
   component: string,
   instructors: Array<string | null>,
+  predictedInstructors?: Array<{ name: string; legacyId?: number }>,
 ): CourseSchedule["components"][string][number] {
   return {
     section,
@@ -299,6 +300,7 @@ function scheduleSection(
       virtual: false,
       instructor,
     })),
+    predictedInstructors,
   };
 }
 
@@ -400,6 +402,253 @@ describe("buildScheduleOfferings", () => {
     expect(offerings[0].professorName).toBe("Alan O'Sullivan");
     expect(offerings[0].section).toBeUndefined();
     expect(offerings[0].fuseText).not.toContain("fullsess");
+  });
+
+  it("unions predicted instructors across a course/term into one unassigned offering", () => {
+    const offerings = buildScheduleOfferings(
+      [
+        scheduleData("2271", [
+          {
+            subject: "ITI",
+            catalogNumber: "1120",
+            courseCode: "ITI 1120",
+            title: "Intro to Computing",
+            timeZone: "America/Toronto",
+            components: {
+              LEC: [
+                scheduleSection(
+                  "A00-LEC FullSess.",
+                  "LEC",
+                  ["Staff"],
+                  [
+                    { name: "Ann Bee", legacyId: 1 },
+                    { name: "Cy Dee", legacyId: 3 },
+                  ],
+                ),
+                // Overlapping guess (Ann) plus a new one (Em) → all unioned.
+                scheduleSection(
+                  "C00-LEC FullSess.",
+                  "LEC",
+                  ["Staff"],
+                  [
+                    { name: "Ann Bee", legacyId: 1 },
+                    { name: "Em Eff", legacyId: 5 },
+                  ],
+                ),
+                // No guess of its own, but keeps the term unassigned.
+                scheduleSection("D00-LEC FullSess.", "LEC", ["Staff"]),
+              ],
+            },
+          },
+        ]),
+      ],
+      new Map(),
+    );
+
+    const unassigned = offerings.filter((o) => o.unassignedInstructor);
+    // Two unassigned rows: the predicted union, plus a no-guess row for D00 so the
+    // genuinely-unpredicted section still surfaces.
+    expect(unassigned).toHaveLength(2);
+    const predictedRow = unassigned.find((o) => (o.predictedInstructors?.length ?? 0) > 0);
+    expect(predictedRow?.predictedInstructors?.map((p) => p.legacyId).sort()).toEqual([1, 3, 5]);
+    const noGuessRow = unassigned.find((o) => !o.predictedInstructors?.length);
+    expect(noGuessRow).toBeDefined();
+  });
+
+  it("fans an unassigned offering out as a predicted row under each candidate prof", () => {
+    const offerings = buildScheduleOfferings(
+      [
+        scheduleData("2271", [
+          {
+            subject: "ITI",
+            catalogNumber: "1120",
+            courseCode: "ITI 1120",
+            title: "Intro to Computing",
+            timeZone: "America/Toronto",
+            components: {
+              LEC: [
+                scheduleSection(
+                  "A00-LEC FullSess.",
+                  "LEC",
+                  ["Staff"],
+                  [
+                    { name: "Ann Bee", legacyId: 1 },
+                    { name: "Cy Dee", legacyId: 3 },
+                  ],
+                ),
+              ],
+            },
+          },
+        ]),
+      ],
+      new Map(),
+    );
+
+    const groups = groupOfferingsByProfessor(offerings);
+    // No unassigned group: every guess landed under a professor instead.
+    expect(groups.some((g) => g.unassigned)).toBe(false);
+    expect(groups.map((g) => g.displayName).sort()).toEqual(["Ann Bee", "Cy Dee"]);
+    for (const g of groups) {
+      expect(g.hasPredicted).toBe(true);
+      expect(g.offerings).toHaveLength(1);
+      expect(g.offerings[0].predicted).toBe(true);
+      expect(g.offerings[0].unassignedInstructor).toBe(false);
+    }
+    // legacyId is carried through so the group links to the professor page.
+    expect(groups.find((g) => g.displayName === "Cy Dee")?.legacyId).toBe(3);
+  });
+
+  it("keeps a no-guess unassigned section in the shared unassigned group", () => {
+    const offerings = buildScheduleOfferings(
+      [
+        scheduleData("2271", [
+          {
+            subject: "ITI",
+            catalogNumber: "1120",
+            courseCode: "ITI 1120",
+            title: "Intro to Computing",
+            timeZone: "America/Toronto",
+            components: { LEC: [scheduleSection("A00-LEC FullSess.", "LEC", ["Staff"])] },
+          },
+        ]),
+      ],
+      new Map(),
+    );
+    const groups = groupOfferingsByProfessor(offerings);
+    expect(groups).toHaveLength(1);
+    expect(groups[0].unassigned).toBe(true);
+    expect(groups[0].hasPredicted).toBeFalsy();
+  });
+
+  it("does not add a predicted row when the prof already confirmedly teaches that term", () => {
+    const offerings = buildScheduleOfferings(
+      [
+        scheduleData("2271", [
+          {
+            subject: "ITI",
+            catalogNumber: "1120",
+            courseCode: "ITI 1120",
+            title: "Intro to Computing",
+            timeZone: "America/Toronto",
+            components: {
+              LEC: [
+                scheduleSection("A00-LEC FullSess.", "LEC", ["Ann Bee"]),
+                // Predicted to be Ann (already teaching) or Cy (not) this term.
+                scheduleSection(
+                  "B00-LEC FullSess.",
+                  "LEC",
+                  ["Staff"],
+                  [
+                    { name: "Ann Bee", legacyId: 1 },
+                    { name: "Cy Dee", legacyId: 3 },
+                  ],
+                ),
+              ],
+            },
+          },
+        ]),
+      ],
+      new Map(),
+    );
+    const groups = groupOfferingsByProfessor(offerings);
+    const ann = groups.find((g) => g.displayName === "Ann Bee");
+    // Ann has a single confirmed offering — no duplicate predicted row.
+    expect(ann?.offerings).toHaveLength(1);
+    expect(ann?.offerings[0].predicted).toBeFalsy();
+    // Cy still gets a predicted row.
+    const cy = groups.find((g) => g.displayName === "Cy Dee");
+    expect(cy?.offerings).toHaveLength(1);
+    expect(cy?.offerings[0].predicted).toBe(true);
+  });
+
+  it("keeps unpredicted Staff sections in the unassigned group even when others are predicted", () => {
+    // The ITI 1120 case: a prof confirmed on some sections, a Staff section
+    // predicted to that same prof, and a Staff section with no guess at all.
+    const offerings = buildScheduleOfferings(
+      [
+        scheduleData("2269", [
+          {
+            subject: "ITI",
+            catalogNumber: "1120",
+            courseCode: "ITI 1120",
+            title: "Intro to Computing",
+            timeZone: "America/Toronto",
+            components: {
+              LEC: [
+                scheduleSection("A00-LEC FullSess.", "LEC", ["Vida Dujmovic"]),
+                scheduleSection(
+                  "D00-LEC FullSess.",
+                  "LEC",
+                  ["Staff"],
+                  [{ name: "Vida Dujmovic", legacyId: 1948393 }],
+                ),
+                scheduleSection("C00-LEC FullSess.", "LEC", ["Staff"]),
+              ],
+            },
+          },
+        ]),
+      ],
+      new Map(),
+    );
+    const groups = groupOfferingsByProfessor(offerings);
+    // Vida appears once (confirmed, no badge); the no-guess C00 section keeps a
+    // visible "unassigned" group instead of vanishing.
+    const vida = groups.find((g) => g.displayName === "Vida Dujmovic");
+    expect(vida?.offerings).toHaveLength(1);
+    expect(vida?.offerings[0].predicted).toBeFalsy();
+    expect(groups.some((g) => g.unassigned)).toBe(true);
+  });
+
+  it("collects predicted rows for the same prof across terms into one group", () => {
+    const sectionWith = (section: string) =>
+      scheduleSection(section, "LEC", ["Staff"], [{ name: "Ann Bee", legacyId: 1 }]);
+    const course = (code: string): CourseSchedule => ({
+      subject: "ITI",
+      catalogNumber: "1120",
+      courseCode: code,
+      title: "Intro to Computing",
+      timeZone: "America/Toronto",
+      components: { LEC: [sectionWith("A00")] },
+    });
+    const offerings = buildScheduleOfferings(
+      [scheduleData("2271", [course("ITI 1120")]), scheduleData("2275", [course("ITI 1120")])],
+      new Map(),
+    );
+    expect(offerings.filter((o) => o.unassignedInstructor)).toHaveLength(2); // one per term
+
+    const groups = groupOfferingsByProfessor(offerings);
+    expect(groups).toHaveLength(1);
+    expect(groups[0].displayName).toBe("Ann Bee");
+    expect(groups[0].hasPredicted).toBe(true);
+    expect(groups[0].offerings).toHaveLength(2); // one predicted row per term
+  });
+
+  it("reconciles a name-keyed confirmed offering with a legacyId-keyed prediction", () => {
+    // Confirmed schedule row with no backfilled legacyId (name-keyed) ...
+    const confirmed = sampleOffering({
+      id: "confirmed",
+      courseCode: "ITI 1120",
+      professorName: "Vida Dujmovic",
+      termId: 2269,
+      distribution: {},
+    });
+    // ... and a same-term unassigned row predicted to the same person by legacyId.
+    const predicted = sampleOffering({
+      id: "predicted",
+      courseCode: "ITI 1120",
+      professorName: "",
+      termId: 2269,
+      distribution: {},
+      unassignedInstructor: true,
+      predictedInstructors: [{ name: "Vida Dujmovic", legacyId: 1948393 }],
+    });
+    const groups = groupOfferingsByProfessor([confirmed, predicted]);
+    // One Vida group, no duplicate, and the prediction is suppressed (confirmed).
+    expect(groups).toHaveLength(1);
+    expect(groups[0].displayName).toBe("Vida Dujmovic");
+    expect(groups[0].offerings).toHaveLength(1);
+    expect(groups[0].offerings[0].predicted).toBeFalsy();
+    expect(groups[0].hasPredicted).toBeFalsy();
   });
 });
 

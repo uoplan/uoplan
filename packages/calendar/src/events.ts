@@ -42,6 +42,14 @@ export function scheduleToEvents(
         sectionInstructors,
         professorRatings,
       );
+      // Only surface guesses when there is no confirmed instructor.
+      const hasKnownInstructor = sectionInstructors.some(
+        (name) => name.trim() !== "" && name !== "Staff",
+      );
+      const predictedInstructors =
+        !hasKnownInstructor && section.predictedInstructors?.length
+          ? section.predictedInstructors
+          : undefined;
 
       for (const t of section.times) {
         if (t.startMinutes >= t.endMinutes) continue;
@@ -58,6 +66,7 @@ export function scheduleToEvents(
           professor,
           professorRatingValue,
           professorRatingDetails,
+          ...(predictedInstructors ? { predictedInstructors } : {}),
           gradeViz,
           meetingDates: t.meetingDates ?? null,
         });

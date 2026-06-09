@@ -66,7 +66,10 @@ function sectionStatusToProto(status: unknown): number {
   return DataProto.SectionStatus.SECTION_STATUS_UNSPECIFIED;
 }
 
-export function mapSchedules(input: SchedulesJsonInput) {
+export function mapSchedules(
+  input: SchedulesJsonInput,
+  predictions?: Map<string, Array<{ name: string; legacyId?: number }>>,
+) {
   const indexer = new CourseCodeIndexer();
 
   return {
@@ -74,38 +77,49 @@ export function mapSchedules(input: SchedulesJsonInput) {
     courseCodes: indexer.courseCodes,
     totalCourses: input.totalCourses,
     totalWithSchedules: input.totalWithSchedules,
-    schedules: (input.schedules ?? []).map((schedule) => ({
-      course: { index: indexer.add(String(schedule.courseCode ?? "")) },
-      title: schedule.title ?? undefined,
-      timeZone: schedule.timeZone ?? "",
-      components: Object.fromEntries(
-        Object.entries(schedule.components ?? {}).map(([component, sections]) => [
-          component,
-          {
-            items: (sections ?? []).map((section) => ({
-              section: section.section ?? "",
-              sectionCode: section.sectionCode ?? undefined,
-              component: section.component ?? undefined,
-              session: section.session ?? undefined,
-              times: (section.times ?? []).map((time) => ({
-                day: dayToProto(time.day),
-                startMinutes: time.startMinutes ?? 0,
-                endMinutes: time.endMinutes ?? 0,
-                virtual: Boolean(time.virtual),
-                instructor: time.instructor ?? undefined,
-                meetingDates:
-                  Array.isArray(time.meetingDates) && time.meetingDates.length >= 2
-                    ? {
-                        startYyyymmdd: dateStringToYyyymmdd(String(time.meetingDates[0] ?? "")),
-                        endYyyymmdd: dateStringToYyyymmdd(String(time.meetingDates[1] ?? "")),
-                      }
-                    : undefined,
+    schedules: (input.schedules ?? []).map((schedule) => {
+      const courseCode = String(schedule.courseCode ?? "");
+      return {
+        course: { index: indexer.add(courseCode) },
+        title: schedule.title ?? undefined,
+        timeZone: schedule.timeZone ?? "",
+        components: Object.fromEntries(
+          Object.entries(schedule.components ?? {}).map(([component, sections]) => [
+            component,
+            {
+              items: (sections ?? []).map((section) => ({
+                section: section.section ?? "",
+                sectionCode: section.sectionCode ?? undefined,
+                component: section.component ?? undefined,
+                session: section.session ?? undefined,
+                times: (section.times ?? []).map((time) => ({
+                  day: dayToProto(time.day),
+                  startMinutes: time.startMinutes ?? 0,
+                  endMinutes: time.endMinutes ?? 0,
+                  virtual: Boolean(time.virtual),
+                  instructor: time.instructor ?? undefined,
+                  meetingDates:
+                    Array.isArray(time.meetingDates) && time.meetingDates.length >= 2
+                      ? {
+                          startYyyymmdd: dateStringToYyyymmdd(String(time.meetingDates[0] ?? "")),
+                          endYyyymmdd: dateStringToYyyymmdd(String(time.meetingDates[1] ?? "")),
+                        }
+                      : undefined,
+                })),
+                status: sectionStatusToProto(section.status),
+                predictedInstructors: (
+                  predictions?.get(
+                    `${courseCode}\u0000${component}\u0000${section.section ?? ""}`,
+                  ) ?? []
+                ).map((p) => ({
+                  name: p.name,
+                  legacyId: p.legacyId ?? undefined,
+                })),
               })),
-              status: sectionStatusToProto(section.status),
-            })),
-          },
-        ]),
-      ),
-    })),
+            },
+          ]),
+        ),
+      };
+    }),
   };
 }

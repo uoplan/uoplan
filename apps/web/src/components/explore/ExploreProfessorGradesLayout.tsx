@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Accordion, Box, Group, Paper, Stack, Text } from "@mantine/core";
+import { Accordion, Badge, Box, Group, HoverCard, Paper, Stack, Text } from "@mantine/core";
 import { useMemo } from "react";
 import type { ProfessorRatingsMap } from "@uoplan/core";
 import {
@@ -335,6 +335,33 @@ export function ExploreProfessorOfferingRows({
                     <Text size="xs" c="dimmed">
                       {tr("explore.section", { section: o.section })}
                     </Text>
+                  ) : null}
+                  {o.predicted ? (
+                    <HoverCard
+                      width={260}
+                      shadow="md"
+                      radius="var(--app-radius-sm)"
+                      openDelay={80}
+                      withinPortal
+                      position="top"
+                    >
+                      <HoverCard.Target>
+                        <Badge
+                          size="xs"
+                          variant="light"
+                          color="gray"
+                          radius="sm"
+                          style={{ textTransform: "none", cursor: "help" }}
+                        >
+                          {tr("explore.instructorPredictedHint")}
+                        </Badge>
+                      </HoverCard.Target>
+                      <HoverCard.Dropdown>
+                        <Text size="xs" c="dimmed">
+                          {tr("explore.instructorPredictedExplain")}
+                        </Text>
+                      </HoverCard.Dropdown>
+                    </HoverCard>
                   ) : null}
                 </Group>
                 {sectionViz ? (

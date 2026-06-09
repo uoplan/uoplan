@@ -113,6 +113,15 @@ export type MeetingTime = {
 
 export type GradeDistribution = Record<string, number>;
 
+/**
+ * Build-time guess of an instructor for a section that has no assigned
+ * instructor. Informational only — never fed into grade/rating/engine paths.
+ */
+export type PredictedInstructor = {
+  name: string;
+  legacyId?: number | null;
+};
+
 export type ComponentSection = {
   section: string;
   sectionCode: string | null;
@@ -121,6 +130,8 @@ export type ComponentSection = {
   times: MeetingTime[];
   status: string | null;
   distribution?: GradeDistribution;
+  /** Guessed instructors; present only for sections with no known instructor. */
+  predictedInstructors?: PredictedInstructor[];
 };
 
 export type CourseSchedule = {

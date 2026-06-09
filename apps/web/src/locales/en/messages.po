@@ -351,6 +351,14 @@ msgstr "Dates"
 msgid "calendar.hover.instructor"
 msgstr "Instructor"
 
+#: apps/web/src/components/calendar/EventInfoSection.tsx:161
+msgid "calendar.hover.instructorPredicted"
+msgstr "Predicted instructor"
+
+#: apps/web/src/components/calendar/EventInfoSection.tsx:164
+msgid "calendar.hover.instructorPredictedHint"
+msgstr "guess"
+
 #: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:154
 msgid "calendar.hover.ratingNone"
 msgstr "No rating"
@@ -886,6 +894,14 @@ msgstr "Filters"
 msgid "explore.histogramStudents"
 msgstr "{count, plural, one {# student} other {# students}}"
 
+#: apps/web/src/components/explore/ExploreProfessorGradesLayout.tsx:361
+msgid "explore.instructorPredictedExplain"
+msgstr "Predicted from historical data."
+
+#: apps/web/src/components/explore/ExploreProfessorGradesLayout.tsx:143
+msgid "explore.instructorPredictedHint"
+msgstr "predicted"
+
 #: apps/web/src/components/explore/ExploreProfessorGradesLayout.tsx:118
 msgid "explore.instructorUnassigned"
 msgstr "No instructor assigned"
@@ -970,6 +986,10 @@ msgstr "This course isn't offered in the selected term."
 #: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:144
 msgid "explore.schedule.overlaps"
 msgstr "Time conflict"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:149
+msgid "explore.schedule.predictedInstructors"
+msgstr "Possibly: {names}"
 
 #: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:279
 msgid "explore.schedule.selectTerm"

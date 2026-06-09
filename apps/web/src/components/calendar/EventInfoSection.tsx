@@ -152,6 +152,45 @@ export function EventInfoSection({ event }: EventInfoSectionProps) {
         </>
       ) : null}
 
+      {!hasProfessor && (event.predictedInstructors?.length ?? 0) > 0 ? (
+        <>
+          <Divider />
+          <Stack gap={4}>
+            <Group gap={6} wrap="nowrap" justify="space-between" align="baseline">
+              <Text size="xs" c="dimmed">
+                {tr("calendar.hover.instructorPredicted")}
+              </Text>
+              <Text size="xs" c="dimmed" fs="italic">
+                {tr("calendar.hover.instructorPredictedHint")}
+              </Text>
+            </Group>
+            {event.predictedInstructors?.map((p) =>
+              p.legacyId != null ? (
+                <Anchor
+                  key={`${p.name}-${p.legacyId}`}
+                  size="xs"
+                  fw={500}
+                  onClick={(e: MouseEvent) => e.stopPropagation()}
+                  renderRoot={(props) => (
+                    <Link
+                      to="/explore/professor/$legacyId"
+                      params={{ legacyId: String(p.legacyId) }}
+                      {...props}
+                    />
+                  )}
+                >
+                  {p.name}
+                </Anchor>
+              ) : (
+                <Text key={p.name} size="xs" fw={500}>
+                  {p.name}
+                </Text>
+              ),
+            )}
+          </Stack>
+        </>
+      ) : null}
+
       {event.gradeViz && event.gradeViz.total > 0 ? (
         <>
           <Divider />

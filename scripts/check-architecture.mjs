@@ -52,7 +52,7 @@ const LAYERS = {
     "@uoplan/transcript",
   ],
   worker: ["@uoplan/proto", "@uoplan/engine", "@uoplan/core", "@uoplan/data", "@uoplan/calendar"],
-  scraper: ["@uoplan/proto"],
+  scraper: ["@uoplan/proto", "@uoplan/core"],
 };
 
 const WORKSPACE_GLOBS = ["apps", "packages"];

@@ -351,6 +351,14 @@ msgstr "Dates"
 msgid "calendar.hover.instructor"
 msgstr "Enseignant"
 
+#: apps/web/src/components/calendar/EventInfoSection.tsx:161
+msgid "calendar.hover.instructorPredicted"
+msgstr "Enseignant·e prévu·e"
+
+#: apps/web/src/components/calendar/EventInfoSection.tsx:164
+msgid "calendar.hover.instructorPredictedHint"
+msgstr "estimation"
+
 #: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:154
 msgid "calendar.hover.ratingNone"
 msgstr "Aucune note"
@@ -886,6 +894,14 @@ msgstr "Filtres"
 msgid "explore.histogramStudents"
 msgstr "{count, plural, one {# étudiant} other {# étudiants}}"
 
+#: apps/web/src/components/explore/ExploreProfessorGradesLayout.tsx:361
+msgid "explore.instructorPredictedExplain"
+msgstr "Prédiction fondée sur des données historiques."
+
+#: apps/web/src/components/explore/ExploreProfessorGradesLayout.tsx:143
+msgid "explore.instructorPredictedHint"
+msgstr "prédiction"
+
 #: apps/web/src/components/explore/ExploreProfessorGradesLayout.tsx:118
 msgid "explore.instructorUnassigned"
 msgstr "Aucun enseignant attribué"
@@ -970,6 +986,10 @@ msgstr "Ce cours n’est pas offert à la session sélectionnée."
 #: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:144
 msgid "explore.schedule.overlaps"
 msgstr "Conflit d’horaire"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:149
+msgid "explore.schedule.predictedInstructors"
+msgstr "Possiblement : {names}"
 
 #: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:279
 msgid "explore.schedule.selectTerm"

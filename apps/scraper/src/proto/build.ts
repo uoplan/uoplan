@@ -15,6 +15,12 @@ import { buildFeedbackData } from "./feedback.ts";
 import { mapCatalogue, type CatalogueJsonInput } from "./catalogue.ts";
 import { mapDisciplinesJson, mapGradesJson } from "./grades.ts";
 import { mapSchedules, type SchedulesJsonInput } from "./schedules.ts";
+import {
+  buildPredictionContext,
+  predictInstructorsForTerm,
+  type GradesCourseInput,
+  type ScheduleFileInput,
+} from "../schedules/predictInstructors.ts";
 import { parseTermIdToNumber } from "./shared.ts";
 
 interface RateMyProfessorInput {
@@ -146,14 +152,30 @@ export async function main(): Promise<void> {
     await writePb(path.join(WEB_ASSETS_DATA_DIR, fileName.replace(/\.json$/, ".pb")), encoded);
   }
 
+  const gradesJson = await readJson<unknown[]>(path.join(SCRAPER_DATA_DIR, "grades.json"));
+
+  // Load every schedule file once so build-time instructor prediction can draw
+  // candidates from all recent terms; predictions are informational only.
+  const scheduleJsonByFile = new Map<string, SchedulesJsonInput>();
   for (const fileName of scheduleFiles) {
-    const fullPath = path.join(SCHEDULES_DATA_DIR, fileName);
-    const data = await readJson<SchedulesJsonInput>(fullPath);
-    const encoded = DataProto.SchedulesData.encode(mapSchedules(data)).finish();
+    scheduleJsonByFile.set(
+      fileName,
+      await readJson<SchedulesJsonInput>(path.join(SCHEDULES_DATA_DIR, fileName)),
+    );
+  }
+  const predictionContext = buildPredictionContext({
+    grades: gradesJson as GradesCourseInput[],
+    scheduleFiles: [...scheduleJsonByFile.values()] as ScheduleFileInput[],
+    rmp: rmp.professors ?? [],
+  });
+
+  for (const fileName of scheduleFiles) {
+    const data = scheduleJsonByFile.get(fileName)!;
+    const predictions = predictInstructorsForTerm(data as ScheduleFileInput, predictionContext);
+    const encoded = DataProto.SchedulesData.encode(mapSchedules(data, predictions)).finish();
     await writePb(path.join(WEB_ASSETS_DATA_DIR, fileName.replace(/\.json$/, ".pb")), encoded);
   }
 
-  const gradesJson = await readJson<unknown[]>(path.join(SCRAPER_DATA_DIR, "grades.json"));
   await writePb(
     path.join(WEB_ASSETS_DATA_DIR, "grades.pb"),
     DataProto.GradesData.encode(mapGradesJson(gradesJson)).finish(),
