@@ -1,4 +1,4 @@
-import { SimpleGrid, Stack, Text } from "@mantine/core";
+import { Box, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { LineChart } from "@mantine/charts";
 import {
   feedbackAllViews,
@@ -11,20 +11,27 @@ import { tr, useTr } from "../../i18n";
 import { formatTermLabel, formatTermLabelShort } from "../../lib/term/termLabel";
 import { useFeedbackData } from "../../hooks/useFeedbackData";
 import { AppCard } from "../shared/AppCard";
+import { MiniChartTooltip } from "../shared/MiniChartTooltip";
 import { TrendsGridSkeleton } from "./TrendsSkeletons";
 
 const SENTIMENT_COLOR = "var(--app-info)";
 const RATE_COLOR = "var(--app-success)";
 
-/** Distinct series colours for the per-question chart. */
-const QUESTION_COLORS = ["violet.5", "teal.6", "blue.5", "orange.5", "pink.5", "lime.6"];
-
-const MAX_QUESTIONS = 6;
-
-/** Shorten a long survey-question label so the legend stays readable. */
-function shortQuestion(text: string): string {
-  return text.length > 48 ? `${text.slice(0, 47)}…` : text;
-}
+/** Distinct, cycled series colours so each question row reads differently. */
+const QUESTION_COLORS = [
+  "violet.5",
+  "teal.6",
+  "blue.5",
+  "orange.5",
+  "pink.5",
+  "lime.6",
+  "cyan.6",
+  "grape.5",
+  "yellow.6",
+  "indigo.5",
+  "red.5",
+  "green.6",
+];
 
 /**
  * University-wide course-feedback trends: overall sentiment and response rate
@@ -41,7 +48,7 @@ export function TrendsFeedbackPage() {
     return {
       sentiment: feedbackOverallSeries(views),
       rate: feedbackResponseRateSeries(views),
-      questions: feedbackQuestionSeries(views, data.questions).slice(0, MAX_QUESTIONS),
+      questions: feedbackQuestionSeries(views, data.questions),
     };
   }, [data]);
 
@@ -56,25 +63,6 @@ export function TrendsFeedbackPage() {
       </Text>
     );
   }
-
-  // Merge every question's per-term average into a single keyed-by-term dataset.
-  const questionChartData = (() => {
-    const byTerm = new Map<number, Record<string, string | number>>();
-    for (const series of questions) {
-      for (const point of series.points) {
-        let row = byTerm.get(point.termId);
-        if (!row) {
-          row = {
-            term: formatTermLabelShort(point.termId),
-            fullTerm: formatTermLabel(point.termId),
-          };
-          byTerm.set(point.termId, row);
-        }
-        row[`q${series.questionId}`] = Number(point.average.toFixed(2));
-      }
-    }
-    return [...byTerm.entries()].sort((a, b) => a[0] - b[0]).map(([, row]) => row);
-  })();
 
   return (
     <Stack gap="md">
@@ -130,8 +118,8 @@ export function TrendsFeedbackPage() {
       </SimpleGrid>
 
       {questions.length > 0 ? (
-        <AppCard p="md">
-          <Stack gap={2} mb={8}>
+        <Stack gap="sm">
+          <Stack gap={2}>
             <Text fw={600} size="sm">
               {tr("trends.feedback.byQuestion")}
             </Text>
@@ -139,23 +127,62 @@ export function TrendsFeedbackPage() {
               {tr("trends.feedback.byQuestionDesc")}
             </Text>
           </Stack>
-          <LineChart
-            h={320}
-            data={questionChartData}
-            dataKey="term"
-            series={questions.map((series, i) => ({
-              name: `q${series.questionId}`,
-              label: shortQuestion(series.text),
-              color: QUESTION_COLORS[i % QUESTION_COLORS.length],
-            }))}
-            curveType="monotone"
-            connectNulls
-            withDots={false}
-            yAxisProps={{ domain: [1, 5] }}
-            valueFormatter={(value) => value.toFixed(2)}
-            withLegend
-          />
-        </AppCard>
+          <Stack gap="xs">
+            {questions.map((series, i) => {
+              const color = QUESTION_COLORS[i % QUESTION_COLORS.length];
+              const current = series.points.at(-1)?.average ?? null;
+              const chartData = series.points.map((p) => ({
+                term: formatTermLabelShort(p.termId),
+                fullTerm: formatTermLabel(p.termId),
+                average: Number(p.average.toFixed(2)),
+              }));
+              return (
+                <AppCard key={series.questionId} p="sm">
+                  <Group wrap="nowrap" align="center" gap="md">
+                    <Text size="sm" style={{ flex: 1, minWidth: 0 }}>
+                      {series.text}
+                    </Text>
+                    <Text
+                      fw={700}
+                      size="lg"
+                      c={color}
+                      w={48}
+                      ta="right"
+                      style={{ flexShrink: 0, fontVariantNumeric: "tabular-nums" }}
+                    >
+                      {current != null ? current.toFixed(2) : "—"}
+                    </Text>
+                    <Box w={{ base: 104, xs: 140, sm: 176 }} style={{ flexShrink: 0 }}>
+                      <LineChart
+                        h={44}
+                        data={chartData}
+                        dataKey="term"
+                        series={[
+                          { name: "average", label: tr("trends.feedback.questionValue"), color },
+                        ]}
+                        withXAxis={false}
+                        withYAxis={false}
+                        gridAxis="none"
+                        withDots={false}
+                        curveType="monotone"
+                        connectNulls
+                        valueFormatter={(value) => value.toFixed(2)}
+                        tooltipProps={{
+                          content: ({ payload }) => (
+                            <MiniChartTooltip
+                              payload={payload as never}
+                              format={(v) => v.toFixed(2)}
+                            />
+                          ),
+                        }}
+                      />
+                    </Box>
+                  </Group>
+                </AppCard>
+              );
+            })}
+          </Stack>
+        </Stack>
       ) : null}
     </Stack>
   );

@@ -25,6 +25,7 @@ import {
 import { useTr, tr } from "../../../i18n";
 import { formatTermLabel, formatTermLabelShort } from "../../../lib/term/termLabel";
 import { AppCard } from "../../shared/AppCard";
+import { MiniChartTooltip } from "../../shared/MiniChartTooltip";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../../lib/explore/accordionPadding";
 
 const SENTIMENT_COLOR = "var(--app-info)";
@@ -39,40 +40,6 @@ const CHART_PLOT_BOTTOM = 35;
 /** Sentence-case a lowercase data label ("strongly agree" -> "Strongly agree"). */
 function sentenceCase(label: string): string {
   return label.charAt(0).toUpperCase() + label.slice(1);
-}
-
-/**
- * A compact chart tooltip: the hovered term and its value in a small chip, instead
- * of Mantine's default series popover. Paired with the chart's vertical cursor.
- */
-function MiniChartTooltip({
-  payload,
-  format,
-}: {
-  payload?: Array<{ value?: number | string; payload?: { fullTerm?: string } }>;
-  format: (value: number) => string;
-}) {
-  const point = payload?.[0];
-  if (point?.value == null) return null;
-  const num = typeof point.value === "number" ? point.value : Number(point.value);
-  const term = point.payload?.fullTerm;
-  return (
-    <Box
-      style={{
-        background: "var(--app-surface)",
-        border: "var(--app-border-width) solid var(--app-border)",
-        borderRadius: "var(--app-radius-sm)",
-        padding: "1px 6px",
-        fontSize: 11,
-        fontWeight: 600,
-        color: "var(--app-text)",
-        fontVariantNumeric: "tabular-nums",
-      }}
-    >
-      {term ? `${term} · ` : ""}
-      {format(num)}
-    </Box>
-  );
 }
 
 /**

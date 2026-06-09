@@ -2431,7 +2431,10 @@ msgstr "Par question du sondage"
 
 #: apps/web/src/components/trends/TrendsFeedbackPage.tsx:146
 msgid "trends.feedback.byQuestionDesc"
-msgstr "Note moyenne par trimestre pour les questions les plus répondues."
+msgstr "Note moyenne par trimestre pour chaque question du sondage. Survolez une courbe pour voir les valeurs exactes."
+
+msgid "trends.feedback.questionValue"
+msgstr "Note moyenne"
 
 #: apps/web/src/components/trends/TrendsFeedbackSection.tsx:80
 msgid "trends.feedback.responseRate"
