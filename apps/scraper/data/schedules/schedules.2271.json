@@ -1,7 +1,7 @@
 {
   "termId": "2271",
   "totalCourses": 11145,
-  "totalWithSchedules": 3159,
+  "totalWithSchedules": 3160,
   "schedules": [
     {
       "subject": "ADM",
@@ -16583,8 +16583,8 @@
       "components": {
         "LEC": [
           {
-            "section": "A-LEC FullSess.",
-            "sectionCode": "A",
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
             "component": "LEC",
             "session": null,
             "times": [
@@ -29265,7 +29265,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 3,
               "A": 17,
@@ -33509,8 +33509,8 @@
               },
               {
                 "day": "We",
-                "startMinutes": 150,
-                "endMinutes": 230,
+                "startMinutes": 870,
+                "endMinutes": 950,
                 "virtual": false,
                 "instructor": "Francois-Xavier Campbell-Valois",
                 "meetingDates": [
@@ -43908,7 +43908,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Christopher Boddy",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -47337,7 +47337,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 78,
               "A": 73,
@@ -47378,7 +47378,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 78,
               "A": 73,
@@ -48339,6 +48339,56 @@
                 "endMinutes": 680,
                 "virtual": false,
                 "instructor": "Christopher Lan",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 253,
+              "A": 171,
+              "A-": 169,
+              "B+": 103,
+              "B": 64,
+              "C+": 30,
+              "C": 4,
+              "D+": 3,
+              "D": 2,
+              "E": 1,
+              "F": 2,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 6,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "G00-LEC FullSess.",
+            "sectionCode": "G00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 590,
+                "virtual": false,
+                "instructor": "Adya Karthikeyan",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Adya Karthikeyan",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -73486,7 +73536,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Lena Hübner",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -74965,7 +75015,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Sylvie Grosjean",
+                "instructor": "Lena Hübner",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -87659,6 +87709,45 @@
               "P": 0,
               "S": 0
             }
+          },
+          {
+            "section": "A03-TUT FullSess.",
+            "sectionCode": "A03",
+            "component": "TUT",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 49,
+              "A": 48,
+              "A-": 40,
+              "B+": 33,
+              "B": 28,
+              "C+": 22,
+              "C": 14,
+              "D+": 13,
+              "D": 6,
+              "E": 6,
+              "F": 3,
+              "EIN": 2,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
           }
         ]
       }
@@ -92977,6 +93066,81 @@
     },
     {
       "subject": "DCL",
+      "catalogNumber": "5602",
+      "courseCode": "DCL 5602",
+      "title": "Thèmes choisis en droit du commerce international et investissements étrangers (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "J00-SEM Session F",
+            "sectionCode": "J00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Alexander Gay",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Alexander Gay",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Alexander Gay",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Alexander Gay",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Alexander Gay",
+                "meetingDates": [
+                  "2027-01-05",
+                  "2027-01-22"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DCL",
       "catalogNumber": "5603",
       "courseCode": "DCL 5603",
       "title": "Thèmes choisis en droit et justice sociale (+1 combined)",
@@ -94217,89 +94381,6 @@
       "timeZone": "America/Toronto",
       "components": {
         "SEM": [
-          {
-            "section": "V00-SEM Session F",
-            "sectionCode": "V00",
-            "component": "SEM",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false,
-                "instructor": "Alexander Gay",
-                "meetingDates": [
-                  "2027-01-05",
-                  "2027-01-22"
-                ]
-              },
-              {
-                "day": "Tu",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false,
-                "instructor": "Alexander Gay",
-                "meetingDates": [
-                  "2027-01-05",
-                  "2027-01-22"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false,
-                "instructor": "Alexander Gay",
-                "meetingDates": [
-                  "2027-01-05",
-                  "2027-01-22"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false,
-                "instructor": "Alexander Gay",
-                "meetingDates": [
-                  "2027-01-05",
-                  "2027-01-22"
-                ]
-              },
-              {
-                "day": "Fr",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false,
-                "instructor": "Alexander Gay",
-                "meetingDates": [
-                  "2027-01-05",
-                  "2027-01-22"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 1,
-              "A": 2,
-              "A-": 2,
-              "B+": 2,
-              "B": 4,
-              "C+": 1,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          },
           {
             "section": "W00-SEM Session F",
             "sectionCode": "W00",
@@ -97979,8 +98060,8 @@
       "components": {
         "STG": [
           {
-            "section": "E00-STG FullSess.",
-            "sectionCode": "E00",
+            "section": "G00-STG FullSess.",
+            "sectionCode": "G00",
             "component": "STG",
             "session": null,
             "times": [],
@@ -107879,9 +107960,9 @@
             "session": null,
             "times": [
               {
-                "day": "Mo",
-                "startMinutes": 690,
-                "endMinutes": 860,
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 680,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -123991,7 +124072,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 7,
               "A": 14,
@@ -158359,7 +158440,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Catalin Constantin Rada",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -158370,7 +158451,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Catalin Constantin Rada",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -158411,7 +158492,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Catalin Constantin Rada",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -158450,7 +158531,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Catalin Constantin Rada",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -161488,7 +161569,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Hai Yan Liu",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -161499,7 +161580,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Hai Yan Liu",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -161540,7 +161621,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Hai Yan Liu",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -161579,7 +161660,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Hai Yan Liu",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -161618,7 +161699,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Hai Yan Liu",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -161657,7 +161738,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Hai Yan Liu",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -166260,45 +166341,6 @@
             }
           },
           {
-            "section": "A02-DGD FullSess.",
-            "sectionCode": "A02",
-            "component": "DGD",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1050,
-                "endMinutes": 1130,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 80,
-              "A": 14,
-              "A-": 55,
-              "B+": 50,
-              "B": 65,
-              "C+": 53,
-              "C": 69,
-              "D+": 52,
-              "D": 56,
-              "E": 36,
-              "F": 109,
-              "EIN": 33,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 8,
-              "P": 0,
-              "S": 0
-            }
-          },
-          {
             "section": "B01-DGD FullSess.",
             "sectionCode": "B01",
             "component": "DGD",
@@ -166500,7 +166542,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Xinhou Hua",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -166511,7 +166553,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Xinhou Hua",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -168594,7 +168636,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -168605,7 +168647,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -168616,7 +168658,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -168627,7 +168669,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -174338,7 +174380,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 64,
               "A": 62,
@@ -194199,72 +194241,6 @@
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
-                  "2027-03-03",
-                  "2027-03-03"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-03",
-                  "2027-03-03"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-03",
-                  "2027-03-03"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-03",
-                  "2027-03-03"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-03",
-                  "2027-03-03"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-03",
-                  "2027-03-03"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
                   "2027-03-10",
                   "2027-03-10"
                 ]
@@ -194276,140 +194252,8 @@
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
-                  "2027-03-17",
-                  "2027-03-17"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-17",
-                  "2027-03-17"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-17",
-                  "2027-03-17"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-17",
-                  "2027-03-17"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-17",
-                  "2027-03-17"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-17",
-                  "2027-03-17"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
                   "2027-03-24",
                   "2027-03-24"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-31",
-                  "2027-03-31"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-31",
-                  "2027-03-31"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-31",
-                  "2027-03-31"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-31",
-                  "2027-03-31"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-31",
-                  "2027-03-31"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-03-31",
-                  "2027-03-31"
                 ]
               },
               {
@@ -205725,7 +205569,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "C02-DGD Term",
@@ -205745,7 +205589,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "D01-DGD Term",
@@ -218515,7 +218359,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 73,
               "A": 74,
@@ -227580,7 +227424,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 20,
               "A": 16,
@@ -227841,7 +227685,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 61,
               "A": 99,
@@ -252560,7 +252404,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 7,
               "A": 1,
