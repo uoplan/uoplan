@@ -2431,7 +2431,10 @@ msgstr "By survey question"
 
 #: apps/web/src/components/trends/TrendsFeedbackPage.tsx:146
 msgid "trends.feedback.byQuestionDesc"
-msgstr "Average rating per term for the most-answered questions."
+msgstr "Average rating per term for each survey question. Hover a trend line for exact values."
+
+msgid "trends.feedback.questionValue"
+msgstr "Average rating"
 
 #: apps/web/src/components/trends/TrendsFeedbackSection.tsx:80
 msgid "trends.feedback.responseRate"
