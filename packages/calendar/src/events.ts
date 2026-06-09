@@ -2,14 +2,29 @@ import type { GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/core";
 import {
   getRatingsForInstructors,
   getRatingDetailsForInstructors,
+  normalizeCourseCode,
+  normalizeProfessorName,
   normalizeGradeVizDistribution,
 } from "@uoplan/core";
 import type { CalendarEvent } from "./types";
 
+/**
+ * Optional course-evaluation sentiment maps (1-5), used to surface satisfaction
+ * on calendar events. Both are keyed the way `@uoplan/core` produces them
+ * (`courseSentimentByNorm` / `professorSentimentByName`).
+ */
+export interface ScheduleSentiment {
+  courseByNorm?: Map<string, number> | null;
+  professorByName?: Map<string, number> | null;
+}
+
 export function scheduleToEvents(
   schedule: GeneratedSchedule,
   professorRatings: ProfessorRatingsMap | null,
+  sentiment?: ScheduleSentiment | null,
 ): CalendarEvent[] {
+  const courseByNorm = sentiment?.courseByNorm ?? null;
+  const professorByName = sentiment?.professorByName ?? null;
   return schedule.enrollments.flatMap((enrollment, enrollIdx) => {
     const aggregateDistribution: Record<string, number> = {};
     for (const { section } of Object.values(enrollment.sectionCombo)) {
@@ -22,6 +37,10 @@ export function scheduleToEvents(
       }
     }
     const gradeViz = normalizeGradeVizDistribution(aggregateDistribution);
+
+    const courseSentiment = courseByNorm
+      ? (courseByNorm.get(normalizeCourseCode(enrollment.courseCode)) ?? null)
+      : null;
 
     const out: CalendarEvent[] = [];
     let timeIdx = 0;
@@ -42,6 +61,9 @@ export function scheduleToEvents(
         sectionInstructors,
         professorRatings,
       );
+      const professorSentiment = professorByName
+        ? averageSentiment(sectionInstructors, professorByName)
+        : null;
       // Only surface guesses when there is no confirmed instructor.
       const hasKnownInstructor = sectionInstructors.some(
         (name) => name.trim() !== "" && name !== "Staff",
@@ -66,6 +88,8 @@ export function scheduleToEvents(
           professor,
           professorRatingValue,
           professorRatingDetails,
+          courseSentiment,
+          professorSentiment,
           ...(predictedInstructors ? { predictedInstructors } : {}),
           gradeViz,
           meetingDates: t.meetingDates ?? null,
@@ -75,4 +99,25 @@ export function scheduleToEvents(
     }
     return out;
   });
+}
+
+/** Mean course-evaluation sentiment (1-5) across the instructors that have one. */
+function averageSentiment(
+  instructors: string[],
+  professorByName: Map<string, number>,
+): number | null {
+  let sum = 0;
+  let n = 0;
+  const seen = new Set<string>();
+  for (const raw of instructors) {
+    const key = normalizeProfessorName(raw);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    const value = professorByName.get(key);
+    if (value != null && Number.isFinite(value)) {
+      sum += value;
+      n += 1;
+    }
+  }
+  return n > 0 ? sum / n : null;
 }

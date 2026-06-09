@@ -319,6 +319,10 @@ msgstr "Resize blocked time start"
 msgid "calendar.event.ariaLabel"
 msgstr "{courseCode} {component}, {timeRange}"
 
+#: apps/web/src/components/calendar/CalendarEventFace.tsx:54
+msgid "calendar.event.satisfaction"
+msgstr "Course satisfaction"
+
 msgid "calendar.event.virtual"
 msgstr "Virtual"
 
@@ -359,14 +363,27 @@ msgstr "Predicted instructor"
 msgid "calendar.hover.instructorPredictedHint"
 msgstr "guess"
 
-#: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:154
-msgid "calendar.hover.ratingNone"
-msgstr "No rating"
-
 #: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:139
 #: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:146
 msgid "calendar.hover.ratingValue"
-msgstr "{rating}/5 ({count} ratings)"
+msgstr "RMP {rating}/5 ({count} ratings)"
+
+#: apps/web/src/components/calendar/EventInfoSection.tsx:97
+msgid "calendar.hover.satisfaction"
+msgstr "Satisfaction"
+
+#: apps/web/src/components/calendar/EventInfoSection.tsx:102
+msgid "calendar.hover.satisfactionCourse"
+msgstr "Course"
+
+#: apps/web/src/components/calendar/EventInfoSection.tsx:114
+msgid "calendar.hover.satisfactionProfessor"
+msgstr "Professor"
+
+#: apps/web/src/components/calendar/EventInfoSection.tsx:105
+#: apps/web/src/components/calendar/EventInfoSection.tsx:117
+msgid "calendar.hover.satisfactionValue"
+msgstr "{value}/5"
 
 #: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:84
 msgid "calendar.hover.section"
@@ -391,6 +408,11 @@ msgstr "Prevents this course from appearing in any generated schedule."
 #: apps/web/src/components/calendar/CalendarEventDetails.tsx:113
 msgid "calendar.swap.close"
 msgstr "Close"
+
+#: apps/web/src/components/calendar/CalendarEventDetails.tsx:115
+#: apps/web/src/components/calendar/CalendarEventDetails.tsx:120
+msgid "calendar.swap.collapse"
+msgstr "Shrink to popover"
 
 #: apps/web/src/components/calendar/CalendarEventDetails.tsx:91
 #: apps/web/src/components/calendar/CalendarEventDetails.tsx:96
@@ -1979,6 +2001,15 @@ msgstr "No results for \"{q}\""
 
 msgid "search.passingPercent"
 msgstr "{percent}% passing"
+
+#: apps/web/src/components/explore/SearchResultProfessorCard.tsx:99
+msgid "search.rmpRating"
+msgstr "RMP {rating}/5 ({count} ratings)"
+
+#: apps/web/src/components/explore/SearchResultCourseCard.tsx:98
+#: apps/web/src/components/explore/SearchResultProfessorCard.tsx:94
+msgid "search.satisfactionSuffix"
+msgstr "/5 satisfaction"
 
 msgid "seo.explore.description"
 msgstr "Search University of Ottawa courses and professors. View historical grade distributions, compare sections, and find the easiest or hardest offerings."

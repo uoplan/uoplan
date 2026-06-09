@@ -1,6 +1,13 @@
 import { useMemo } from "react";
-import { ActionIcon, Anchor, Box, Group, Stack, Text, Tooltip } from "@mantine/core";
-import { IconArrowsMaximize, IconBan, IconLock, IconLockFilled, IconX } from "@tabler/icons-react";
+import { ActionIcon, Anchor, Badge, Box, Group, Stack, Text, Tooltip } from "@mantine/core";
+import {
+  IconArrowsMaximize,
+  IconArrowsMinimize,
+  IconBan,
+  IconLock,
+  IconLockFilled,
+  IconX,
+} from "@tabler/icons-react";
 import { Link } from "@tanstack/react-router";
 import { courseAPlusPercent, normalizeCourseCode } from "@uoplan/core";
 import type { CalendarEvent } from "../../hooks/useCalendarEvents";
@@ -76,30 +83,59 @@ export function CalendarEventDetails({
             ) : null}
           </Group>
           {courseTitle ? (
-            <Text size="xs" c="dimmed" lh={1.3}>
-              {courseTitle}
-            </Text>
+            <Tooltip
+              label={courseTitle}
+              withArrow
+              multiline
+              maw={300}
+              position="bottom"
+              openDelay={300}
+            >
+              <Text size="xs" c="dimmed" lh={1.3} truncate style={{ cursor: "default" }}>
+                {courseTitle}
+              </Text>
+            </Tooltip>
           ) : null}
           {requirementTitle ? (
-            <Text size="xs" c="dimmed" lh={1.3} truncate>
+            <Badge
+              variant="light"
+              color="gray"
+              size="sm"
+              radius="sm"
+              mt={4}
+              style={{ maxWidth: "100%", textTransform: "none" }}
+            >
               {requirementTitle}
-            </Text>
+            </Badge>
           ) : null}
         </Box>
         <Group gap={2} wrap="nowrap" style={{ flexShrink: 0 }}>
-          {!ctx.isMobile && !ctx.isFullscreen && (
-            <Tooltip label={tr("calendar.swap.expand")} position="bottom" withArrow>
-              <ActionIcon
-                variant="subtle"
-                color="gray"
-                size="sm"
-                aria-label={tr("calendar.swap.expand")}
-                onClick={ctx.openFullscreen}
-              >
-                <IconArrowsMaximize size={16} stroke={1.5} />
-              </ActionIcon>
-            </Tooltip>
-          )}
+          {!ctx.isMobile &&
+            (ctx.isFullscreen ? (
+              <Tooltip label={tr("calendar.swap.collapse")} position="bottom" withArrow>
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  size="sm"
+                  aria-label={tr("calendar.swap.collapse")}
+                  onClick={ctx.closeFullscreen}
+                >
+                  <IconArrowsMinimize size={16} stroke={1.5} />
+                </ActionIcon>
+              </Tooltip>
+            ) : (
+              <Tooltip label={tr("calendar.swap.expand")} position="bottom" withArrow>
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  size="sm"
+                  aria-label={tr("calendar.swap.expand")}
+                  onClick={ctx.openFullscreen}
+                >
+                  <IconArrowsMaximize size={16} stroke={1.5} />
+                </ActionIcon>
+              </Tooltip>
+            ))}
           <Tooltip label={actions.blacklistTooltip} position="bottom" withArrow>
             <Box component="span" style={{ display: "inline-flex" }}>
               <ActionIcon
