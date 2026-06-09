@@ -122,7 +122,8 @@ function WeekCalendarEventImpl({
         courseTitle={courseTitle}
         componentSectionDisplay={componentKindOnly(event.componentSection)}
         timeRange={timeRange}
-        professor={event.professor}
+        professor={event.predictedInstructors?.[0]?.name ?? event.professor}
+        professorPredicted={(event.predictedInstructors?.length ?? 0) > 0}
         virtual={event.virtual}
         layout={{ showSection: true, showTime: true, showProfessor: true }}
         sentimentValue={sentimentValue}

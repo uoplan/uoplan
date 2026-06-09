@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import type { MouseEvent } from "react";
-import { Anchor, Box, Divider, Group, Stack, Text } from "@mantine/core";
+import { Anchor, Badge, Box, Divider, Group, HoverCard, Stack, Text } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
 import { DAY_LABELS } from "@uoplan/calendar";
 import type { CalendarEvent } from "../../hooks/useCalendarEvents";
@@ -33,12 +33,29 @@ interface EventInfoSectionProps {
   event: CalendarEvent;
 }
 
-type ProfessorRatingDetail = NonNullable<CalendarEvent["professorRatingDetails"]>[number];
-
-/** Explore-page route param for a professor: numeric legacyId when known,
- * otherwise the URL-encoded name (the route handles both). */
-function professorRouteParam(detail: ProfessorRatingDetail): string {
-  return detail.legacyId != null ? String(detail.legacyId) : encodeURIComponent(detail.name);
+/** A professor name linked to its explore page — by numeric legacyId when
+ * known, otherwise by URL-encoded name (the route handles both). Rendered in
+ * the app text colour (not the default anchor colour) so it reads as a normal
+ * name, and stops click propagation so following the link doesn't toggle the
+ * swap overlay it lives inside. */
+function ProfessorLink({ name, legacyId }: { name: string; legacyId?: number | null }) {
+  return (
+    <Anchor
+      size="xs"
+      fw={500}
+      c="var(--app-text)"
+      onClick={(e: MouseEvent) => e.stopPropagation()}
+      renderRoot={(props) => (
+        <Link
+          to="/explore/professor/$legacyId"
+          params={{ legacyId: legacyId != null ? String(legacyId) : encodeURIComponent(name) }}
+          {...props}
+        />
+      )}
+    >
+      {name}
+    </Anchor>
+  );
 }
 
 /** Read-only details for a calendar event (section, time, instructor, ratings,
@@ -57,6 +74,17 @@ export function EventInfoSection({ event }: EventInfoSectionProps) {
 
   const ratingDetails = event.professorRatingDetails ?? [];
   const hasProfessor = event.professor.trim() !== "" && event.professor !== "—";
+  const instructors =
+    ratingDetails.length > 0
+      ? ratingDetails.map((d) => ({ name: d.name, legacyId: d.legacyId }))
+      : event.professor.split(", ").map((name) => ({ name, legacyId: undefined }));
+  const ratedInstructors = ratingDetails.filter((d) => d.numRatings > 0);
+  // RMP detail for a *single* predicted instructor — a multi-candidate average
+  // would be misleading, so we only surface a rating when there is one guess.
+  const predictedRating =
+    (event.predictedInstructors?.length ?? 0) === 1
+      ? (event.predictedRatingDetails?.find((d) => d.numRatings > 0) ?? null)
+      : null;
 
   return (
     <Stack gap={8}>
@@ -124,107 +152,213 @@ export function EventInfoSection({ event }: EventInfoSectionProps) {
         </>
       ) : null}
 
+      {ratedInstructors.length > 0 ? (
+        <>
+          <Divider />
+          <Stack gap={4}>
+            <Text size="xs" c="dimmed" fw={600}>
+              {tr("calendar.hover.rmp")}
+            </Text>
+            {ratedInstructors.map((d, _i, arr) => {
+              const value = tr("calendar.hover.rmpValue", {
+                rating: d.rating.toFixed(1).replace(/\.0$/, ""),
+                count: d.numRatings,
+              });
+              return (
+                <Group key={d.name} gap={6} wrap="nowrap" justify="space-between" align="baseline">
+                  <Text size="xs" c="dimmed" style={{ minWidth: 0 }}>
+                    {arr.length > 1 ? d.name : tr("calendar.hover.satisfactionProfessor")}
+                  </Text>
+                  {d.legacyId ? (
+                    <Anchor
+                      href={`https://www.ratemyprofessors.com/professor/${d.legacyId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      size="xs"
+                      fw={600}
+                      c="var(--app-text)"
+                      style={{
+                        whiteSpace: "nowrap",
+                        flexShrink: 0,
+                        fontVariantNumeric: "tabular-nums",
+                      }}
+                      onClick={(e: MouseEvent) => e.stopPropagation()}
+                    >
+                      {value}
+                    </Anchor>
+                  ) : (
+                    <Text
+                      size="xs"
+                      fw={600}
+                      style={{
+                        whiteSpace: "nowrap",
+                        flexShrink: 0,
+                        fontVariantNumeric: "tabular-nums",
+                      }}
+                    >
+                      {value}
+                    </Text>
+                  )}
+                </Group>
+              );
+            })}
+          </Stack>
+        </>
+      ) : null}
+
       {hasProfessor ? (
         <>
           <Divider />
-          <Group gap={6} wrap="nowrap" justify="space-between" align="flex-start">
+          <Group gap={6} wrap="nowrap" justify="space-between" align="baseline">
             <Text size="xs" c="dimmed" style={{ flexShrink: 0 }}>
               {tr("calendar.hover.instructor")}
             </Text>
-            {ratingDetails.length > 0 ? (
-              <Stack gap={2} align="flex-end" style={{ minWidth: 0 }}>
-                {ratingDetails.map((d) => (
-                  <Group key={d.name} gap={6} wrap="nowrap" align="baseline">
-                    <Anchor
-                      size="xs"
-                      fw={500}
-                      ta="right"
-                      onClick={(e: MouseEvent) => e.stopPropagation()}
-                      renderRoot={(props) => (
-                        <Link
-                          to="/explore/professor/$legacyId"
-                          params={{ legacyId: professorRouteParam(d) }}
-                          {...props}
-                        />
-                      )}
-                    >
-                      {d.name}
-                    </Anchor>
-                    {d.numRatings > 0 ? (
-                      d.legacyId ? (
-                        <Anchor
-                          href={`https://www.ratemyprofessors.com/professor/${d.legacyId}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          size="xs"
-                          c="dimmed"
-                          style={{ whiteSpace: "nowrap", flexShrink: 0 }}
-                          onClick={(e: MouseEvent) => e.stopPropagation()}
-                        >
-                          {tr("calendar.hover.ratingValue", {
-                            rating: d.rating.toFixed(1).replace(/\.0$/, ""),
-                            count: d.numRatings,
-                          })}
-                        </Anchor>
-                      ) : (
-                        <Text size="xs" c="dimmed" style={{ whiteSpace: "nowrap", flexShrink: 0 }}>
-                          {tr("calendar.hover.ratingValue", {
-                            rating: d.rating.toFixed(1).replace(/\.0$/, ""),
-                            count: d.numRatings,
-                          })}
-                        </Text>
-                      )
-                    ) : null}
-                  </Group>
-                ))}
-              </Stack>
-            ) : (
-              <Text size="xs" fw={500} ta="right">
-                {event.professor}
-              </Text>
-            )}
+            <Box
+              style={{
+                flex: 1,
+                minWidth: 0,
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textAlign: "right",
+              }}
+            >
+              {instructors.map((p, i, arr) => (
+                <Fragment key={p.name}>
+                  <ProfessorLink name={p.name} legacyId={p.legacyId} />
+                  {i < arr.length - 1 ? (
+                    <Text span size="xs" c="dimmed">
+                      {", "}
+                    </Text>
+                  ) : null}
+                </Fragment>
+              ))}
+            </Box>
           </Group>
         </>
       ) : null}
 
-      {!hasProfessor && (event.predictedInstructors?.length ?? 0) > 0 ? (
+      {!hasProfessor && predictedRating ? (
         <>
           <Divider />
           <Stack gap={4}>
+            <Text size="xs" c="dimmed" fw={600}>
+              {tr("calendar.hover.rmp")}
+            </Text>
             <Group gap={6} wrap="nowrap" justify="space-between" align="baseline">
-              <Text size="xs" c="dimmed">
-                {tr("calendar.hover.instructorPredicted")}
+              <Text size="xs" c="dimmed" style={{ minWidth: 0 }}>
+                {tr("calendar.hover.satisfactionProfessor")}
               </Text>
-              <Text size="xs" c="dimmed" fs="italic">
-                {tr("calendar.hover.instructorPredictedHint")}
-              </Text>
+              {(() => {
+                const value = tr("calendar.hover.rmpValue", {
+                  rating: predictedRating.rating.toFixed(1).replace(/\.0$/, ""),
+                  count: predictedRating.numRatings,
+                });
+                return predictedRating.legacyId ? (
+                  <Anchor
+                    href={`https://www.ratemyprofessors.com/professor/${predictedRating.legacyId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    size="xs"
+                    fw={600}
+                    c="var(--app-text)"
+                    style={{
+                      whiteSpace: "nowrap",
+                      flexShrink: 0,
+                      fontVariantNumeric: "tabular-nums",
+                    }}
+                    onClick={(e: MouseEvent) => e.stopPropagation()}
+                  >
+                    {value}
+                  </Anchor>
+                ) : (
+                  <Text
+                    size="xs"
+                    fw={600}
+                    style={{
+                      whiteSpace: "nowrap",
+                      flexShrink: 0,
+                      fontVariantNumeric: "tabular-nums",
+                    }}
+                  >
+                    {value}
+                  </Text>
+                );
+              })()}
             </Group>
-            {event.predictedInstructors?.map((p) =>
-              p.legacyId != null ? (
-                <Anchor
-                  key={`${p.name}-${p.legacyId}`}
-                  size="xs"
-                  fw={500}
-                  onClick={(e: MouseEvent) => e.stopPropagation()}
-                  renderRoot={(props) => (
-                    <Link
-                      to="/explore/professor/$legacyId"
-                      params={{ legacyId: String(p.legacyId) }}
-                      {...props}
-                    />
-                  )}
-                >
-                  {p.name}
-                </Anchor>
-              ) : (
-                <Text key={p.name} size="xs" fw={500}>
-                  {p.name}
-                </Text>
-              ),
-            )}
           </Stack>
         </>
       ) : null}
+
+      {!hasProfessor && (event.predictedInstructors?.length ?? 0) > 0
+        ? (() => {
+            const predicted = event.predictedInstructors ?? [];
+            const [first, ...rest] = predicted;
+            return (
+              <>
+                <Divider />
+                <Group gap={6} wrap="nowrap" justify="space-between" align="baseline">
+                  <Text size="xs" c="dimmed" style={{ flexShrink: 0 }}>
+                    {tr("calendar.hover.instructorPredicted")}
+                  </Text>
+                  <Group
+                    gap={6}
+                    wrap="nowrap"
+                    align="baseline"
+                    justify="flex-end"
+                    style={{ minWidth: 0, flex: 1 }}
+                  >
+                    <Box
+                      style={{
+                        minWidth: 0,
+                        overflow: "hidden",
+                        whiteSpace: "nowrap",
+                        textAlign: "right",
+                      }}
+                    >
+                      <ProfessorLink name={first.name} legacyId={first.legacyId} />
+                    </Box>
+                    {rest.length > 0 ? (
+                      <HoverCard
+                        width={200}
+                        shadow="md"
+                        radius="var(--app-radius-sm)"
+                        openDelay={80}
+                        withinPortal
+                        position="top"
+                      >
+                        <HoverCard.Target>
+                          <Badge
+                            size="xs"
+                            variant="light"
+                            color="gray"
+                            radius="sm"
+                            style={{ textTransform: "none", cursor: "help", flexShrink: 0 }}
+                          >
+                            {tr("calendar.hover.instructorPredictedMore", { count: rest.length })}
+                          </Badge>
+                        </HoverCard.Target>
+                        <HoverCard.Dropdown>
+                          <Stack gap={4}>
+                            <Text size="xs" c="dimmed">
+                              {tr("calendar.hover.instructorPredictedOthers")}
+                            </Text>
+                            {rest.map((p) => (
+                              <ProfessorLink
+                                key={`${p.name}-${p.legacyId ?? "x"}`}
+                                name={p.name}
+                                legacyId={p.legacyId}
+                              />
+                            ))}
+                          </Stack>
+                        </HoverCard.Dropdown>
+                      </HoverCard>
+                    ) : null}
+                  </Group>
+                </Group>
+              </>
+            );
+          })()
+        : null}
 
       {event.gradeViz && event.gradeViz.total > 0 ? (
         <>

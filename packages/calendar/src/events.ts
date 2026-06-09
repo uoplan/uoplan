@@ -2,6 +2,7 @@ import type { GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/core";
 import {
   getRatingsForInstructors,
   getRatingDetailsForInstructors,
+  isUnknownInstructorName,
   normalizeCourseCode,
   normalizeProfessorName,
   normalizeGradeVizDistribution,
@@ -51,7 +52,10 @@ export function scheduleToEvents(
       const sectionInstructors = [
         ...new Set(section.times.map((t) => t.instructor).filter((i): i is string => i !== null)),
       ];
-      const professor = sectionInstructors.filter(Boolean).join(", ") || "—";
+      // "Staff"/"TBA"/blank are placeholders, not real instructors — drop them
+      // from the display so unassigned sections fall back to predictions.
+      const knownInstructors = sectionInstructors.filter((name) => !isUnknownInstructorName(name));
+      const professor = knownInstructors.join(", ") || "—";
       const ratings = getRatingsForInstructors(sectionInstructors, professorRatings);
       const professorRatingValue =
         ratings.length > 0
@@ -61,17 +65,30 @@ export function scheduleToEvents(
         sectionInstructors,
         professorRatings,
       );
-      const professorSentiment = professorByName
-        ? averageSentiment(sectionInstructors, professorByName)
-        : null;
       // Only surface guesses when there is no confirmed instructor.
-      const hasKnownInstructor = sectionInstructors.some(
-        (name) => name.trim() !== "" && name !== "Staff",
-      );
+      const hasKnownInstructor = knownInstructors.length > 0;
       const predictedInstructors =
         !hasKnownInstructor && section.predictedInstructors?.length
           ? section.predictedInstructors
           : undefined;
+      // For predicted sections, the satisfaction signal is the average across
+      // the guessed candidates (the section has no confirmed instructor);
+      // otherwise it's the average across the confirmed instructor(s).
+      const sentimentInstructors = predictedInstructors
+        ? predictedInstructors.map((p) => p.name)
+        : sectionInstructors;
+      const professorSentiment = professorByName
+        ? averageSentiment(sentimentInstructors, professorByName)
+        : null;
+      // Predicted candidates' RMP rating details — only displayed when there is
+      // a single guess (a multi-candidate average would be misleading). The
+      // satisfaction signal above still pools across all guesses.
+      const predictedRatingDetails = predictedInstructors
+        ? getRatingDetailsForInstructors(
+            predictedInstructors.map((p) => p.name),
+            professorRatings,
+          )
+        : [];
 
       for (const t of section.times) {
         if (t.startMinutes >= t.endMinutes) continue;
@@ -90,7 +107,7 @@ export function scheduleToEvents(
           professorRatingDetails,
           courseSentiment,
           professorSentiment,
-          ...(predictedInstructors ? { predictedInstructors } : {}),
+          ...(predictedInstructors ? { predictedInstructors, predictedRatingDetails } : {}),
           gradeViz,
           meetingDates: t.meetingDates ?? null,
         });

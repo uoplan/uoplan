@@ -360,13 +360,25 @@ msgid "calendar.hover.instructorPredicted"
 msgstr "Enseignant·e prévu·e"
 
 #: apps/web/src/components/calendar/EventInfoSection.tsx:164
-msgid "calendar.hover.instructorPredictedHint"
-msgstr "estimation"
+msgid "calendar.hover.instructorPredictedMore"
+msgstr "+{count}"
+
+#: apps/web/src/components/calendar/EventInfoSection.tsx:164
+msgid "calendar.hover.instructorPredictedOthers"
+msgstr "Autres prédictions"
 
 #: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:139
 #: apps/web/src/components/calendar/CalendarEventHoverCard.tsx:146
 msgid "calendar.hover.ratingValue"
 msgstr "RMP {rating}/5 ({count} notes)"
+
+#: apps/web/src/components/calendar/EventInfoSection.tsx:177
+msgid "calendar.hover.rmp"
+msgstr "RateMyProfessors"
+
+#: apps/web/src/components/calendar/EventInfoSection.tsx:180
+msgid "calendar.hover.rmpValue"
+msgstr "{rating}/5 ({count, plural, one {# évaluation} other {# évaluations}})"
 
 #: apps/web/src/components/calendar/EventInfoSection.tsx:97
 msgid "calendar.hover.satisfaction"
