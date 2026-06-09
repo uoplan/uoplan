@@ -1,7 +1,19 @@
 import { useMemo } from "react";
-import { Badge, Box, Group, SimpleGrid, Stack, Text, Title, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Box,
+  Group,
+  Popover,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
+  Tooltip,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { LineChart } from "@mantine/charts";
+import { IconInfoCircle } from "@tabler/icons-react";
 import { m } from "framer-motion";
 import {
   feedbackQuestionSeries,
@@ -157,6 +169,64 @@ function FeedbackScaleLegend({
   );
 }
 
+/**
+ * The score the large-screen `FeedbackScaleLegend` draws each option at: option 0
+ * sits at the top (5) and the last at the bottom (1), evenly spaced. Integers render
+ * plainly ("5"); anything in between gets a single decimal.
+ */
+function optionScore(index: number, total: number): string {
+  const score = 5 - (index / (total - 1)) * 4;
+  return Number.isInteger(score) ? String(score) : score.toFixed(1);
+}
+
+/**
+ * A small info button (shown on narrow screens, where the legend's per-option labels
+ * are hidden) that opens a popover listing each response option best->worst with its
+ * score on the 1-5 scale — the same values the legend implies on wide screens.
+ */
+function QuestionOptionsPopover({ options }: { options: readonly string[] }) {
+  useTr();
+  if (options.length < 2) return null;
+  return (
+    <Popover width={240} position="bottom-end" withArrow shadow="md" radius="md">
+      <Popover.Target>
+        <ActionIcon
+          variant="subtle"
+          size="sm"
+          radius="xl"
+          color="gray"
+          aria-label={tr("explore.feedback.scaleOptions")}
+          style={{ flexShrink: 0 }}
+        >
+          <IconInfoCircle size={16} />
+        </ActionIcon>
+      </Popover.Target>
+      <Popover.Dropdown>
+        <Stack gap={6}>
+          <Text size="xs" c="dimmed" fw={600} style={{ letterSpacing: "0.02em" }}>
+            {tr("explore.feedback.scaleOptions")}
+          </Text>
+          {options.map((option, i) => (
+            <Group key={`${String(i)}-${option}`} gap="sm" wrap="nowrap" justify="space-between">
+              <Text size="sm" c="var(--app-text)" style={{ lineHeight: 1.3 }}>
+                {sentenceCase(option)}
+              </Text>
+              <Text
+                size="sm"
+                fw={700}
+                c="var(--app-text)"
+                style={{ flexShrink: 0, fontVariantNumeric: "tabular-nums" }}
+              >
+                {optionScore(i, options.length)}
+              </Text>
+            </Group>
+          ))}
+        </Stack>
+      </Popover.Dropdown>
+    </Popover>
+  );
+}
+
 function FeedbackStatCard({ label, value }: { label: string; value: string }) {
   return (
     <AppCard p="md">
@@ -307,9 +377,16 @@ export function ExploreFeedbackContent({
                 series.map((q) => (
                   <AppCard key={q.questionId} p="md">
                     <Group gap="sm" mb={8} wrap="nowrap" align="flex-start" justify="space-between">
-                      <Text fw={600} size="sm" style={{ lineHeight: 1.4 }}>
-                        {q.text}
-                      </Text>
+                      <Group gap={6} wrap="nowrap" align="flex-start" style={{ minWidth: 0 }}>
+                        <Text fw={600} size="sm" style={{ lineHeight: 1.4 }}>
+                          {q.text}
+                        </Text>
+                        {!showScaleLabels ? (
+                          <QuestionOptionsPopover
+                            options={questions[q.questionId]?.options ?? []}
+                          />
+                        ) : null}
+                      </Group>
                       {showScaleLabels ? (
                         <Badge variant="light" size="sm" radius="sm" style={{ flexShrink: 0 }}>
                           {tr("explore.feedback.responsesCount", {

@@ -747,6 +747,11 @@ msgstr "Response rate over time"
 msgid "explore.feedback.responsesCount"
 msgstr "{count, plural, one {# response} other {# responses}}"
 
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:197
+#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:206
+msgid "explore.feedback.scaleOptions"
+msgstr "Response scale"
+
 #: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:126
 #: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:155
 #: apps/web/src/components/trends/TrendsFeedbackSection.tsx:91
