@@ -13,6 +13,8 @@ type CalendarEventFaceProps = {
   componentSectionDisplay: string;
   timeRange: string | null;
   professor: string;
+  /** When true, the professor is a build-time prediction — render it italic. */
+  professorPredicted?: boolean;
   virtual: boolean;
   layout: CalendarEventFaceLayout;
   /**
@@ -28,6 +30,7 @@ export function CalendarEventFace({
   componentSectionDisplay,
   timeRange,
   professor,
+  professorPredicted = false,
   virtual,
   layout,
   sentimentValue,
@@ -53,7 +56,11 @@ export function CalendarEventFace({
   const professorBlock =
     layout.showProfessor && professor.trim() !== "" ? (
       <div className="cal-event-prof-row">
-        <span className="cal-event-prof-name" title={professor}>
+        <span
+          className="cal-event-prof-name"
+          title={professor}
+          style={professorPredicted ? { fontStyle: "italic" } : undefined}
+        >
           {professor}
         </span>
         {sentimentEl}

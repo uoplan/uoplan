@@ -36,6 +36,19 @@ export interface CalendarEvent {
    * instructor. Informational only — never used for ratings or generation.
    */
   predictedInstructors?: Array<{ name: string; legacyId?: number | null }>;
+  /**
+   * RateMyProfessors rating details for the predicted candidates that have a
+   * rating (same shape as `professorRatingDetails`). Only meaningful to display
+   * when there is a single predicted instructor — a multi-candidate average is
+   * misleading. Informational only — never used for ratings or generation.
+   */
+  predictedRatingDetails?: Array<{
+    id?: string;
+    legacyId?: number;
+    name: string;
+    rating: number;
+    numRatings: number;
+  }>;
   gradeViz?: GradeVizData | null;
   meetingDates?: [string, string] | null;
 }
