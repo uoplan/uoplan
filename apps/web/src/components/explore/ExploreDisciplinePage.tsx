@@ -211,6 +211,7 @@ export function ExploreDisciplinePage({
               radius="var(--app-radius)"
               chevronPosition="right"
               variant="default"
+              classNames={{ control: "explore-accordion-control" }}
               styles={{
                 root: {
                   backgroundColor: "var(--app-bg)",
@@ -233,7 +234,6 @@ export function ExploreDisciplinePage({
                     paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
                     paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.base,
                   },
-                  "&:hover": { backgroundColor: "var(--app-translucent)" },
                 },
                 label: { flex: 1, minWidth: 0, paddingRight: 0 },
                 panel: { padding: 0, backgroundColor: "var(--app-bg)" },

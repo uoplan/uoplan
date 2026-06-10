@@ -45,14 +45,7 @@ export function AppFooter() {
               c="dimmed"
               underline="never"
               lh={1.45}
-              styles={{
-                root: {
-                  "&:hover": {
-                    color: "var(--mantine-color-gray-4)",
-                    textDecoration: "underline",
-                  },
-                },
-              }}
+              className="app-footer-link"
             >
               github
             </Anchor>
@@ -66,17 +59,10 @@ export function AppFooter() {
               size="sm"
               c="dimmed"
               lh={1.45}
+              className="app-footer-link"
               style={{
                 textDecoration: "none",
                 cursor: "pointer",
-              }}
-              styles={{
-                root: {
-                  "&:hover": {
-                    color: "var(--mantine-color-gray-4)",
-                    textDecoration: "underline",
-                  },
-                },
               }}
             >
               {tr("app.footer.changelog")}
@@ -157,17 +143,11 @@ export function AppFooter() {
                 fz="sm"
                 lh={1.65}
                 underline="hover"
+                className="app-footer-link"
                 style={{
                   fontStyle: "italic",
                   letterSpacing: "0.01em",
                   color: "var(--app-text-dim)",
-                }}
-                styles={{
-                  root: {
-                    "&:hover": {
-                      color: "var(--mantine-color-gray-4)",
-                    },
-                  },
                 }}
               >
                 {tr("app.footer.gradeDataAttribution.actLink")}

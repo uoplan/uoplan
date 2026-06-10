@@ -84,14 +84,6 @@ export const theme = createTheme({
           fontWeight: 600,
           letterSpacing: "0.01em",
           transition: "transform var(--app-transition), box-shadow var(--app-transition)",
-          "&:hover": {
-            transform: "var(--app-lift-hover)",
-            boxShadow: "var(--app-shadow)",
-          },
-          "&:active": {
-            transform: "translateY(0)",
-            boxShadow: "var(--app-shadow-sm)",
-          },
         },
       }),
     },
@@ -102,50 +94,6 @@ export const theme = createTheme({
       styles: () => ({
         root: {
           border: "var(--app-border-width) solid var(--app-border)",
-        },
-      }),
-    },
-    Input: {
-      styles: () => ({
-        input: {
-          border: "var(--app-border-width) solid var(--app-border-strong)",
-          borderRadius: "var(--app-radius-sm)",
-          "&:focus": {
-            borderColor: "var(--app-focus-ring)",
-          },
-        },
-      }),
-    },
-    TextInput: {
-      styles: () => ({
-        input: {
-          border: "var(--app-border-width) solid var(--app-border-strong)",
-          borderRadius: "var(--app-radius-sm)",
-          "&:focus": {
-            borderColor: "var(--app-focus-ring)",
-          },
-        },
-      }),
-    },
-    PasswordInput: {
-      styles: () => ({
-        input: {
-          border: "var(--app-border-width) solid var(--app-border-strong)",
-          borderRadius: "var(--app-radius-sm)",
-          "&:focus": {
-            borderColor: "var(--app-focus-ring)",
-          },
-        },
-      }),
-    },
-    Select: {
-      styles: () => ({
-        input: {
-          border: "var(--app-border-width) solid var(--app-border-strong)",
-          borderRadius: "var(--app-radius-sm)",
-          "&:focus": {
-            borderColor: "var(--app-focus-ring)",
-          },
         },
       }),
     },

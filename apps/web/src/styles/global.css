@@ -97,11 +97,65 @@ body {
   border-radius: calc(var(--mantine-radius-lg) - var(--spotlight-actions-list-padding));
 }
 
+/* Inputs: drive border / focus-ring / radius through Mantine's input CSS vars
+   (not inline styles) so the accent focus ring actually applies and follows the
+   active theme (garnet on geegees, blue on dark/light). Covers TextInput,
+   Select, PasswordInput, NumberInput, Textarea — all share this base class. */
+.mantine-Input-input {
+  --input-bd: var(--app-border-strong);
+  --input-bd-focus: var(--app-focus-ring);
+  --input-radius: var(--app-radius-sm);
+}
+
 /* The global Input theme adds a border to every input; on the Spotlight search
    field that reads as a stray ring around the search bar. Keep it borderless
    (Spotlight's default) so the search row sits flush. */
 .mantine-Spotlight-search.mantine-Input-input {
   border-color: transparent !important;
+}
+
+/* Primary-driven controls follow the theme accent (Mantine's primary colour is
+   kept deliberately neutral for buttons/badges, so these are accented per
+   component via their own CSS vars). */
+.mantine-Checkbox-root {
+  --checkbox-color: var(--app-accent);
+}
+
+.mantine-Radio-root {
+  --radio-color: var(--app-accent);
+}
+
+.mantine-Switch-root {
+  --switch-color: var(--app-accent);
+}
+
+.mantine-Tabs-root {
+  --tabs-color: var(--app-accent);
+}
+
+/* Selected dropdown option (Combobox hardcodes this to the primary colour). */
+.mantine-Combobox-option[data-combobox-selected] {
+  background-color: var(--app-accent);
+  color: var(--app-on-accent);
+}
+
+/* Button hover/active lift (Mantine v9 ignores nested pseudo-styles in the
+   `styles` API, so this lives in real CSS). Buttons themselves stay neutral. */
+.mantine-Button-root:hover {
+  transform: var(--app-lift-hover);
+  box-shadow: var(--app-shadow);
+}
+
+.mantine-Button-root:active {
+  transform: translateY(0);
+  box-shadow: var(--app-shadow-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mantine-Button-root:hover,
+  .mantine-Button-root:active {
+    transform: none;
+  }
 }
 
 a {
@@ -116,6 +170,19 @@ a {
 
 .explore-name-link:hover {
   text-decoration: underline;
+}
+
+/* Footer dimmed links: hover colour + underline (Mantine v9 ignores nested
+   pseudo-styles in the `styles` API, so this lives in real CSS). */
+.app-footer-link:hover {
+  color: var(--mantine-color-gray-4);
+  text-decoration: underline;
+}
+
+/* Explore accordion row hover highlight (was a dead `&:hover` in a Mantine
+   `styles` prop). */
+.explore-accordion-control:hover {
+  background-color: var(--app-translucent);
 }
 
 /* Soft lift effect for interactive cards/surfaces (cozy redesign).
