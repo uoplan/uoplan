@@ -1,10 +1,6 @@
 import type { DataCache } from "../dataCache";
-import { getCourseLevel } from "../utils/courseUtils";
+import { getCourseLevel, getDiscipline } from "../utils/courseUtils";
 import type { PrereqContext, TakenCourse } from "./types";
-
-function getDiscipline(code: string): string {
-  return code.split(/\s+/)[0]?.toUpperCase() ?? "";
-}
 
 export function buildPrereqContext(
   completedCourseCodes: string[],

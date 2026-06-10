@@ -2,7 +2,7 @@ import type { Env } from "./index.js";
 
 export const TOTAL_CENTS_KEY = "total_cents";
 
-export interface DonationSummary {
+interface DonationSummary {
   goalCents: number;
   totalCents: number;
   currency: string;
@@ -15,7 +15,7 @@ export interface DonationSummary {
  * path; if it is missing (e.g. first run or after a KV reset) we recompute the
  * authoritative sum from D1 and backfill KV.
  */
-export async function getDonationTotalCents(env: Env): Promise<number> {
+async function getDonationTotalCents(env: Env): Promise<number> {
   const cached = await env.DONATIONS.get(TOTAL_CENTS_KEY);
   if (cached !== null) {
     const parsed = Number.parseInt(cached, 10);
@@ -27,7 +27,7 @@ export async function getDonationTotalCents(env: Env): Promise<number> {
   return total;
 }
 
-export async function sumDonationsFromD1(env: Env): Promise<number> {
+async function sumDonationsFromD1(env: Env): Promise<number> {
   const row = await env.DONATIONS_DB.prepare(
     "SELECT COALESCE(SUM(amount_cents), 0) AS total FROM donations",
   ).first<{ total: number }>();

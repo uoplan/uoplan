@@ -6,7 +6,7 @@ import type { GradeVizBucketId, TermSeason } from "@uoplan/core";
  * harmonise with the active theme (dark / light / geegees). Cycle with
  * `colorForIndex` when a chart has more categories than colours.
  */
-export const CATEGORICAL_PALETTE: readonly string[] = [
+const CATEGORICAL_PALETTE: readonly string[] = [
   "var(--app-chart-1)",
   "var(--app-chart-2)",
   "var(--app-chart-3)",

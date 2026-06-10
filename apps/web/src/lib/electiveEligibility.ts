@@ -1,52 +1,13 @@
-import { getCourseLevel, normalizeCourseCode } from "@uoplan/core";
-import { isBroadElectivePoolType } from "../store/scheduleHelpers";
+// Elective-eligibility predicates (isElectiveRequirementType,
+// isWithinElectiveLevelCap, virtualScheduleFilterApplies) live in @uoplan/core
+// (poolHelpers). They are re-exported here alongside the web-only "basic mode"
+// default buckets so existing app imports keep a single entry point.
+export {
+  isElectiveRequirementType,
+  isWithinElectiveLevelCap,
+  virtualScheduleFilterApplies,
+} from "@uoplan/core";
 
-const MAX_ELECTIVE_LEVEL = 4000;
 export const DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS = [1000, 2000];
 export const DEFAULT_BASIC_LEVEL_BUCKETS = ["undergrad"] as const;
 export const DEFAULT_BASIC_LANGUAGE_BUCKETS = ["en", "other"] as const;
-
-const ELECTIVE_REQUIREMENT_TYPES = new Set([
-  "discipline_elective",
-  "elective",
-  "faculty_elective",
-  "free_elective",
-  "non_discipline_elective",
-]);
-
-export function isElectiveRequirementType(type: string | undefined): boolean {
-  return type != null && ELECTIVE_REQUIREMENT_TYPES.has(type);
-}
-
-/**
- * Electives are capped at 4000-level.
- * Courses with unknown level parsing are left eligible.
- */
-export function isWithinElectiveLevelCap(code: string): boolean {
-  const level = getCourseLevel(code);
-  return level == null || level <= MAX_ELECTIVE_LEVEL;
-}
-
-/**
- * Returns whether we should apply the "virtual sections only" filter to this
- * course, given the requirement context and explicit-exemption rules.
- *
- * Policy:
- * - If virtualSectionsOnly is off, never filter.
- * - Only filter for broad (whole-catalog) elective pools — same notion as
- *   {@link isBroadElectivePoolType}. Discipline-scoped pools (e.g. discipline_elective)
- *   are treated like structured requirements.
- * - If the course appears in explicit picks (constrained/assigned), exempt it.
- */
-export function virtualScheduleFilterApplies(
-  virtualSectionsOnly: boolean,
-  requirementType: string | undefined,
-  courseCode: string,
-  explicitExemptNormalized: Set<string>,
-): boolean {
-  if (!virtualSectionsOnly) return false;
-  if (!isBroadElectivePoolType(requirementType ?? "")) return false;
-  const norm = normalizeCourseCode(courseCode);
-  if (explicitExemptNormalized.has(norm)) return false;
-  return true;
-}

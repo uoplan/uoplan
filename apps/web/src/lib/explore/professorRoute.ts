@@ -16,7 +16,7 @@ export function professorRouteParam(entry: {
   return encodeURIComponent(entry.displayName);
 }
 
-export interface ResolvedProfessorRoute {
+interface ResolvedProfessorRoute {
   /** 0-based registry index, when the param resolves to a registry entry. */
   index: number | null;
   entry: ProfessorRegistryEntry | null;

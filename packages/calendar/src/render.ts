@@ -1,4 +1,4 @@
-import { getCourseColorHex, hexToRgb } from "@uoplan/core";
+import { getCourseColorHex, hexToRgb, formatTimeRange24 } from "@uoplan/core";
 import type { CalendarEvent } from "./types";
 import { assignLanes, CAL_START_MINUTES, CAL_END_MINUTES, WEEKDAY_CODES } from "./layout";
 
@@ -36,9 +36,7 @@ function componentKindOnly(componentSection: string): string {
 }
 
 function formatTimeRange(startMinutes: number, endMinutes: number): string {
-  const fmt = (m: number) =>
-    `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
-  return `${fmt(startMinutes)}–${fmt(endMinutes)}`;
+  return formatTimeRange24(startMinutes, endMinutes, "–");
 }
 
 export function renderCalendarToSvg(

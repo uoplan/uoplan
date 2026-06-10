@@ -55,6 +55,18 @@ export function formatTimeRange(startMinutes: number, endMinutes: number): strin
 }
 
 /**
+ * Format a time range using 24-hour clock values, with a configurable separator.
+ * e.g., (510, 620) -> "08:30 - 10:20"
+ */
+export function formatTimeRange24(
+  startMinutes: number,
+  endMinutes: number,
+  separator: string = " - ",
+): string {
+  return `${minutesToTime24(startMinutes)}${separator}${minutesToTime24(endMinutes)}`;
+}
+
+/**
  * Day abbreviation offsets for calendar positioning.
  * Sunday = 0, Monday = 1, etc.
  */
