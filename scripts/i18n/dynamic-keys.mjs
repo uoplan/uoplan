@@ -55,10 +55,6 @@ export const DYNAMIC_TR_IDS = [
     ["label", "description"],
   ),
 
-  // apps/web/src/components/shared/LanguageSwitcher.tsx: LABEL_ID
-  "language.en",
-  "language.frCA",
-
   // apps/web/src/theme/themes.ts: labelId
   "theme.dark",
   "theme.light",

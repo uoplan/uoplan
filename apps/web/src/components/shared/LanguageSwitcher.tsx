@@ -4,9 +4,9 @@ import { dynamicActivate, tr, type AppLocale } from "../../i18n";
 import { PillSelect, type PillSelectOption } from "./PillSelect";
 import { pillIconStyle } from "./pillButtonStyle";
 
-const LABEL_ID: Record<AppLocale, string> = {
-  en: "language.en",
-  "fr-CA": "language.frCA",
+const NATIVE_LABEL: Record<AppLocale, string> = {
+  en: "English",
+  "fr-CA": "Français",
 };
 
 interface LanguageSwitcherProps {
@@ -17,10 +17,10 @@ export function LanguageSwitcher({ onSwitch }: LanguageSwitcherProps) {
   const { i18n } = useLingui();
   const locale = (i18n.locale || "en") as AppLocale;
 
-  const options: PillSelectOption<AppLocale>[] = (Object.keys(LABEL_ID) as AppLocale[]).map(
+  const options: PillSelectOption<AppLocale>[] = (Object.keys(NATIVE_LABEL) as AppLocale[]).map(
     (value) => ({
       value,
-      label: tr(LABEL_ID[value]),
+      label: NATIVE_LABEL[value],
       icon: <IconWorld size={14} style={pillIconStyle} />,
     }),
   );

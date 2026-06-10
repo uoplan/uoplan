@@ -1,0 +1,47 @@
+.banner {
+  transition:
+    transform var(--app-transition),
+    box-shadow var(--app-transition);
+  will-change: transform;
+}
+
+.banner:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--app-shadow-sm);
+}
+
+.banner:active {
+  transform: translateY(0);
+}
+
+.cta {
+  transition:
+    box-shadow var(--app-transition),
+    background-color var(--app-transition);
+}
+
+.banner:hover .cta {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--app-accent) 22%, transparent);
+  background-color: color-mix(in srgb, var(--app-accent) 88%, var(--app-text));
+}
+
+.arrow {
+  transition: transform var(--app-transition);
+}
+
+.banner:hover .arrow {
+  transform: translateX(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner,
+  .cta,
+  .arrow {
+    transition: box-shadow var(--app-transition);
+  }
+
+  .banner:hover,
+  .banner:hover .arrow {
+    transform: none;
+  }
+}

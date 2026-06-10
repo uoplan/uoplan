@@ -1530,6 +1530,18 @@ msgstr "Afficher {title}"
 msgid "landing.carousel.label"
 msgstr "Fonctionnalités expérimentales"
 
+#: apps/web/src/components/landing/DonationBanner.tsx:71
+msgid "landing.donate.cta"
+msgstr "Faire un don"
+
+#: apps/web/src/components/landing/DonationBanner.tsx:80
+msgid "landing.donate.dismiss"
+msgstr "Fermer"
+
+#: apps/web/src/components/landing/DonationBanner.tsx:51
+msgid "landing.donate.text"
+msgstr "Nous sommes gratuits et gérés par des étudiants. Aidez-nous à continuer."
+
 msgid "landing.explore.description"
 msgstr "Recherchez des cours et des professeurs avec les distributions de notes."
 
@@ -1544,12 +1556,6 @@ msgstr "Générateur d'horaires"
 
 msgid "landing.trends.description"
 msgstr "Suivez l'évolution des notes au fil du temps par discipline."
-
-msgid "language.en"
-msgstr "Anglais"
-
-msgid "language.frCA"
-msgstr "Français"
 
 msgid "languageSwitcher.ariaLabel"
 msgstr "Choisir la langue de l'application"
