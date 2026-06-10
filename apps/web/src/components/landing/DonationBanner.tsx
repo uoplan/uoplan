@@ -34,7 +34,13 @@ export function DonationBanner() {
           borderRadius: "var(--app-radius-lg)",
         }}
       >
-        <Group wrap="nowrap" gap="sm" align="center" style={{ padding: "10px 48px 10px 16px" }}>
+        <Group
+          wrap="nowrap"
+          gap="sm"
+          align="center"
+          className={classes.row}
+          style={{ padding: "10px 48px 10px 16px" }}
+        >
           <Box
             aria-hidden
             style={{
@@ -47,8 +53,22 @@ export function DonationBanner() {
             <IconHeartFilled size={18} />
           </Box>
 
-          <Text size="sm" c="var(--app-text)" style={{ flex: 1, minWidth: 0 }}>
+          <Text
+            size="sm"
+            c="var(--app-text)"
+            className={classes.textFull}
+            style={{ flex: 1, minWidth: 0 }}
+          >
             {tr("landing.donate.text")}
+          </Text>
+
+          <Text
+            size="sm"
+            c="var(--app-text)"
+            className={classes.textShort}
+            style={{ flex: 1, minWidth: 0 }}
+          >
+            {tr("landing.donate.textShort")}
           </Text>
 
           <Box

@@ -1542,6 +1542,10 @@ msgstr "Fermer"
 msgid "landing.donate.text"
 msgstr "Nous sommes gratuits et gérés par des étudiants. Aidez-nous à continuer."
 
+#: apps/web/src/components/landing/DonationBanner.tsx:60
+msgid "landing.donate.textShort"
+msgstr "Aidez-nous à rester gratuits."
+
 msgid "landing.explore.description"
 msgstr "Recherchez des cours et des professeurs avec les distributions de notes."
 
