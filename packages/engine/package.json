@@ -20,6 +20,8 @@
     "build:wasm": "wasm-pack build --target web --out-dir pkg --release",
     "build:wasm:dev": "wasm-pack build --target web --out-dir pkg --dev",
     "test:rust": "cargo test --release",
+    "coverage": "cargo llvm-cov --release --html",
+    "coverage:lcov": "cargo llvm-cov --release --lcov --output-path lcov.info",
     "bench": "cargo bench"
   }
 }

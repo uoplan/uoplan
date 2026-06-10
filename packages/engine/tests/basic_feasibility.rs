@@ -45,6 +45,15 @@ const SEEDS: u32 = 64;
 /// budget, independent of wall clock.
 const PER_SEED_BUDGET: Duration = Duration::from_millis(2_000);
 
+/// True when the test binary runs under coverage instrumentation
+/// (`cargo llvm-cov`), which heavily skews wall-clock timing. The coarse
+/// per-seed wall-clock net is meaningless there, so it is relaxed while the
+/// correctness assertions (feasibility, course counts) still run. The real
+/// bound is the internal work-charged budget, independent of wall clock.
+fn coverage_instrumented() -> bool {
+    std::env::var_os("LLVM_PROFILE_FILE").is_some()
+}
+
 /// Default basic-mode filters (undergrad, English + other, 1000/2000 level), with
 /// no completed courses and no pinned courses — the exact shape of the reported
 /// repro (term 2271, 23 electives, default options, no transcript).
@@ -104,7 +113,7 @@ fn basic_full_electives_every_seed_succeeds_quickly() {
             resp.courses.len()
         );
         assert!(
-            elapsed <= PER_SEED_BUDGET,
+            coverage_instrumented() || elapsed <= PER_SEED_BUDGET,
             "seed {seed}: took {elapsed:?} (> {PER_SEED_BUDGET:?}); a slow seed risks the \
              worker timeout once run as WASM"
         );
@@ -133,7 +142,7 @@ fn basic_reported_repro_seeds_both_succeed() {
         assert!(resp.has_schedule, "reported seed {seed}: no schedule");
         assert_eq!(resp.courses.len(), 23, "reported seed {seed}: not 23 courses");
         assert!(
-            elapsed <= PER_SEED_BUDGET,
+            coverage_instrumented() || elapsed <= PER_SEED_BUDGET,
             "reported seed {seed}: took {elapsed:?} (> {PER_SEED_BUDGET:?})"
         );
     }
@@ -169,7 +178,7 @@ fn basic_infeasible_request_fails_fast_for_every_seed() {
             "seed {seed}: reported a schedule for an impossible 40-course basic request"
         );
         assert!(
-            elapsed <= PER_SEED_BUDGET,
+            coverage_instrumented() || elapsed <= PER_SEED_BUDGET,
             "seed {seed}: infeasible request took {elapsed:?} (> {PER_SEED_BUDGET:?}); the \
              internal work bound must stop it well under the worker timeout, not grind to it"
         );

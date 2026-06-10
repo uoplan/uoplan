@@ -20,5 +20,9 @@ test-results
 __screenshots__
 *.traineddata
 
+# Test-coverage artifacts (Vitest v8 + Rust cargo-llvm-cov).
+coverage/
+lcov.info
+
 # Raw, user-provided grade-distribution CSVs consumed by the grades scraper.
 apps/scraper/data/raw/
