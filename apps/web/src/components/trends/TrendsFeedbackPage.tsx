@@ -9,6 +9,7 @@ import {
 import { useMemo } from "react";
 import { tr, useTr } from "../../i18n";
 import { formatTermLabel, formatTermLabelShort } from "../../lib/term/termLabel";
+import { colorForIndex } from "../../lib/trends/palette";
 import { useFeedbackData } from "../../hooks/useFeedbackData";
 import { AppCard } from "../shared/AppCard";
 import { MiniChartTooltip } from "../shared/MiniChartTooltip";
@@ -16,22 +17,6 @@ import { TrendsGridSkeleton } from "./TrendsSkeletons";
 
 const SENTIMENT_COLOR = "var(--app-info)";
 const RATE_COLOR = "var(--app-success)";
-
-/** Distinct, cycled series colours so each question row reads differently. */
-const QUESTION_COLORS = [
-  "violet.5",
-  "teal.6",
-  "blue.5",
-  "orange.5",
-  "pink.5",
-  "lime.6",
-  "cyan.6",
-  "grape.5",
-  "yellow.6",
-  "indigo.5",
-  "red.5",
-  "green.6",
-];
 
 /**
  * University-wide course-feedback trends: overall sentiment and response rate
@@ -129,7 +114,7 @@ export function TrendsFeedbackPage() {
           </Stack>
           <Stack gap="xs">
             {questions.map((series, i) => {
-              const color = QUESTION_COLORS[i % QUESTION_COLORS.length];
+              const color = colorForIndex(i);
               const current = series.points.at(-1)?.average ?? null;
               const chartData = series.points.map((p) => ({
                 term: formatTermLabelShort(p.termId),

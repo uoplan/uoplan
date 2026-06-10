@@ -19,12 +19,6 @@ export interface AppTheme {
   labelId: string;
   /** Base Mantine colour scheme this theme renders on top of. */
   base: ColorSchemeBase;
-  /**
-   * Hidden themes are easter eggs: they don't appear in the theme switcher
-   * until the user unlocks them (see {@link readUnlockedThemes}). Omitted means
-   * always visible.
-   */
-  hidden?: boolean;
 }
 
 /**
@@ -34,7 +28,7 @@ export interface AppTheme {
 const THEMES: Record<ThemeId, AppTheme> = {
   dark: { id: "dark", labelId: "theme.dark", base: "dark" },
   light: { id: "light", labelId: "theme.light", base: "light" },
-  geegees: { id: "geegees", labelId: "theme.geegees", base: "dark", hidden: true },
+  geegees: { id: "geegees", labelId: "theme.geegees", base: "dark" },
 };
 
 export const THEME_LIST: AppTheme[] = Object.values(THEMES);
@@ -87,47 +81,6 @@ export function persistSelection(selection: ThemeSelection): void {
   } catch {
     /* ignore */
   }
-}
-
-/** localStorage key holding the comma-separated list of unlocked hidden themes. */
-export const UNLOCKED_THEMES_STORAGE_KEY = "uoplan.unlockedThemes";
-
-/** Hidden theme ids the user has unlocked (always includes none by default). */
-export function readUnlockedThemes(): ThemeId[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(UNLOCKED_THEMES_STORAGE_KEY);
-    if (!raw) return [];
-    return raw
-      .split(",")
-      .map((id) => id.trim())
-      .filter((id): id is ThemeId => isThemeId(id));
-  } catch {
-    return [];
-  }
-}
-
-/** Persist `id` as unlocked, returning the full updated unlocked-theme list. */
-export function persistUnlockedTheme(id: ThemeId): ThemeId[] {
-  const current = readUnlockedThemes();
-  if (current.includes(id)) return current;
-  const next = [...current, id];
-  if (typeof window !== "undefined") {
-    try {
-      window.localStorage.setItem(UNLOCKED_THEMES_STORAGE_KEY, next.join(","));
-    } catch {
-      /* ignore */
-    }
-  }
-  return next;
-}
-
-/**
- * Whether `theme` should be offered in the switcher given the set of unlocked
- * hidden themes. Non-hidden themes are always visible.
- */
-export function isThemeVisible(theme: AppTheme, unlocked: readonly ThemeId[]): boolean {
-  return !theme.hidden || unlocked.includes(theme.id);
 }
 
 /**

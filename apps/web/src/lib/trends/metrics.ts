@@ -3,13 +3,13 @@ import { metricValue } from "@uoplan/core";
 import { formatLocaleNumber } from "../../i18n";
 import type { TrendsMetric } from "./searchParams";
 
-/** Series colour per metric, shared by every trends chart. */
+/** Series colour per metric (theme-aware tokens), shared by single-series charts. */
 export const METRIC_COLOR: Record<TrendsMetric, string> = {
-  gpa: "violet.5",
-  "a-plus": "teal.6",
-  "a-range": "blue.5",
-  pass: "green.6",
-  volume: "orange.5",
+  gpa: "var(--app-chart-1)",
+  "a-plus": "var(--app-chart-2)",
+  "a-range": "var(--app-chart-8)",
+  pass: "var(--app-chart-3)",
+  volume: "var(--app-chart-4)",
 };
 
 /** Map the page's URL metric to the core analytics metric (volume has none). */

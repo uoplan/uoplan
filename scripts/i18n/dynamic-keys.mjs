@@ -60,8 +60,6 @@ export const DYNAMIC_TR_IDS = [
   "theme.light",
   "theme.geegees",
 
-  // apps/web/src/lib/easterEggs/secretCommands.ts: tr(command.labelId/descriptionId)
-  ...cross("easterEgg.command.", ["geegees"], ["label", "description"]),
   // apps/web/src/lib/easterEggs/seasonal.ts: tr(flourish.msgId)
   ...family("easterEgg.seasonal.", [
     "newYear",

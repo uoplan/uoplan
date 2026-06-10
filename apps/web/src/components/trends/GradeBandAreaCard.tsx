@@ -7,6 +7,7 @@ import {
 } from "@uoplan/core";
 import { useMemo } from "react";
 import { formatLocaleNumber, tr } from "../../i18n";
+import { GRADE_BAND_TOKEN } from "../../lib/trends/palette";
 import { ChartCard } from "./ChartCard";
 import type { TrendsCardContext } from "./cardContext";
 
@@ -64,7 +65,7 @@ export function GradeBandAreaCard({
         series={GRADE_BAND_META.map((band) => ({
           name: band.id,
           label: tr(BAND_LABEL_KEY[band.id]),
-          color: band.color,
+          color: GRADE_BAND_TOKEN[band.id],
         }))}
         yAxisProps={{ domain: [0, 100] }}
         valueFormatter={(value) => `${formatLocaleNumber(value, { maximumFractionDigits: 0 })}%`}

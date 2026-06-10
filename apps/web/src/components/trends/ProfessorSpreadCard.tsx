@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { tr } from "../../i18n";
 import { ChartCard } from "./ChartCard";
 import { METRIC_COLOR, formatMetricValue } from "../../lib/trends/metrics";
+import { colorForIndex } from "../../lib/trends/palette";
 import type { TrendsCardContext } from "./cardContext";
 
 const LIMIT = 14;
@@ -33,7 +34,11 @@ export function ProfessorSpreadCard({
     return rows
       .filter((row): row is typeof row & { gpa: number } => row.gpa != null)
       .sort((a, b) => b.gpa - a.gpa)
-      .map((row) => ({ name: shortName(row.name), value: row.gpa }));
+      .map((row, index) => ({
+        name: shortName(row.name),
+        value: row.gpa,
+        color: colorForIndex(index),
+      }));
   }, [grades, discipline, level, season, programFilter]);
 
   return (

@@ -91,6 +91,30 @@
   --app-scrollbar-track: transparent;
   --app-scrollbar-thumb: rgba(255, 255, 255, 0.16);
   --app-scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
+
+  /* ---- Chart palette ----
+     Categorical hues for trends charts; bright pastels that read clearly on the
+     dark surfaces. --app-chart-N is a generic distinct-colour cycle; the season
+     and grade tokens are semantic (Fall/Winter/Spring, failing → excellent). */
+  --app-chart-1: oklch(0.78 0.13 245);
+  --app-chart-2: oklch(0.8 0.12 175);
+  --app-chart-3: oklch(0.8 0.14 150);
+  --app-chart-4: oklch(0.81 0.14 65);
+  --app-chart-5: oklch(0.72 0.15 25);
+  --app-chart-6: oklch(0.75 0.15 350);
+  --app-chart-7: oklch(0.75 0.13 300);
+  --app-chart-8: oklch(0.82 0.11 210);
+
+  --app-chart-season-fall: oklch(0.8 0.14 60);
+  --app-chart-season-winter: oklch(0.82 0.1 230);
+  --app-chart-season-springsummer: oklch(0.8 0.14 150);
+
+  --app-chart-grade-red: oklch(0.7 0.16 25);
+  --app-chart-grade-amber: oklch(0.78 0.15 55);
+  --app-chart-grade-yellow: oklch(0.85 0.13 95);
+  --app-chart-grade-blue: oklch(0.75 0.12 245);
+  --app-chart-grade-teal: oklch(0.8 0.11 180);
+  --app-chart-grade-green: oklch(0.8 0.14 150);
 }
 
 [data-app-theme="light"] {
@@ -149,13 +173,34 @@
   /* Custom scrollbars — warm graphite thumb on the pale parchment surfaces. */
   --app-scrollbar-thumb: rgba(60, 54, 44, 0.26);
   --app-scrollbar-thumb-hover: rgba(60, 54, 44, 0.42);
+
+  /* Chart palette — darker, more saturated hues for contrast on the pale
+     parchment surfaces. */
+  --app-chart-1: oklch(0.55 0.2 255);
+  --app-chart-2: oklch(0.58 0.13 190);
+  --app-chart-3: oklch(0.58 0.16 150);
+  --app-chart-4: oklch(0.62 0.15 60);
+  --app-chart-5: oklch(0.57 0.21 27);
+  --app-chart-6: oklch(0.58 0.21 350);
+  --app-chart-7: oklch(0.52 0.2 300);
+  --app-chart-8: oklch(0.6 0.13 215);
+
+  --app-chart-season-fall: oklch(0.62 0.16 55);
+  --app-chart-season-winter: oklch(0.55 0.16 245);
+  --app-chart-season-springsummer: oklch(0.58 0.16 150);
+
+  --app-chart-grade-red: oklch(0.57 0.21 27);
+  --app-chart-grade-amber: oklch(0.64 0.16 55);
+  --app-chart-grade-yellow: oklch(0.7 0.15 90);
+  --app-chart-grade-blue: oklch(0.55 0.18 250);
+  --app-chart-grade-teal: oklch(0.58 0.13 185);
+  --app-chart-grade-green: oklch(0.58 0.16 150);
 }
 
 /* ----------------------------------------------------------------------------
-   Hidden easter-egg theme: "Garnet & Grey" (uOttawa Gee-Gees).
-   A dark-based scheme tinted with the university's garnet and grey. Unlocked
-   via the command center (type "geegees") or kept out of the switcher until
-   then. Inherits the shape/motion/typography primitives from the dark block.
+   Theme: "Garnet & Grey" (uOttawa Gee-Gees).
+   A dark-based scheme tinted with the university's garnet and grey. Inherits the
+   shape/motion/typography primitives from the dark block.
 ---------------------------------------------------------------------------- */
 [data-app-theme="geegees"] {
   /* Surfaces — deep garnet-tinted charcoals. */
@@ -209,4 +254,25 @@
 
   --app-scrollbar-thumb: rgba(229, 84, 107, 0.26);
   --app-scrollbar-thumb-hover: rgba(229, 84, 107, 0.42);
+
+  /* Chart palette — bright pastels tuned to read on the garnet charcoal. */
+  --app-chart-1: oklch(0.78 0.13 245);
+  --app-chart-2: oklch(0.8 0.12 175);
+  --app-chart-3: oklch(0.8 0.14 150);
+  --app-chart-4: oklch(0.83 0.14 70);
+  --app-chart-5: oklch(0.74 0.16 30);
+  --app-chart-6: oklch(0.77 0.15 350);
+  --app-chart-7: oklch(0.76 0.13 300);
+  --app-chart-8: oklch(0.83 0.11 210);
+
+  --app-chart-season-fall: oklch(0.82 0.14 62);
+  --app-chart-season-winter: oklch(0.82 0.1 230);
+  --app-chart-season-springsummer: oklch(0.8 0.14 150);
+
+  --app-chart-grade-red: oklch(0.74 0.16 28);
+  --app-chart-grade-amber: oklch(0.8 0.15 58);
+  --app-chart-grade-yellow: oklch(0.86 0.13 95);
+  --app-chart-grade-blue: oklch(0.76 0.12 245);
+  --app-chart-grade-teal: oklch(0.81 0.11 180);
+  --app-chart-grade-green: oklch(0.81 0.14 150);
 }

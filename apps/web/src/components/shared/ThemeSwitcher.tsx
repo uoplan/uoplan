@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { IconBallFootball, IconDeviceDesktop, IconMoon, IconSun } from "@tabler/icons-react";
 import { useTr, tr } from "../../i18n";
 import { useAppTheme } from "../../theme/appThemeContext";
-import { isThemeVisible, type ThemeSelection } from "../../theme/themes";
+import { type ThemeSelection } from "../../theme/themes";
 import { PillSelect, type PillSelectOption } from "./PillSelect";
 import { pillIconStyle } from "./pillButtonStyle";
 
@@ -15,17 +15,15 @@ function iconFor(selection: ThemeSelection): ReactNode {
 
 export function ThemeSwitcher() {
   useTr();
-  const { selection, setSelection, themes, unlockedThemes } = useAppTheme();
+  const { selection, setSelection, themes } = useAppTheme();
 
   const options: PillSelectOption<ThemeSelection>[] = [
     { value: "system", label: tr("theme.system"), icon: iconFor("system") },
-    ...themes
-      .filter((theme) => isThemeVisible(theme, unlockedThemes))
-      .map((theme) => ({
-        value: theme.id,
-        label: tr(theme.labelId),
-        icon: iconFor(theme.id),
-      })),
+    ...themes.map((theme) => ({
+      value: theme.id,
+      label: tr(theme.labelId),
+      icon: iconFor(theme.id),
+    })),
   ];
 
   return (

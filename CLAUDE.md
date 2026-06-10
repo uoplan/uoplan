@@ -107,6 +107,7 @@ All user-visible text in `apps/web` must be translated into both **English** and
 - IDs reached only through dynamic `tr()` calls (template literals / record lookups) are enumerated in `scripts/i18n/dynamic-keys.mjs` so the tooling can see them.
 - Workflow for new strings:
   1. Add the `tr("my.id")` call (or a dynamic family entry in `scripts/i18n/dynamic-keys.mjs`).
-  2. Run `pnpm i18n:sync` to scaffold the missing `msgid` (empty `msgstr`) into **both** PO files (`--prune` deletes unused ids; `--check` is the CI dry-run).
+  2. Run `pnpm i18n:sync` to scaffold the missing `msgid` (empty `msgstr`) into **both** PO files (`--check` is the CI dry-run).
   3. Fill in the English and French `msgstr` for the new ids.
   4. `pnpm check:i18n` (CI + pre-commit) enforces completeness, locale parity, no empty `msgstr`, and **no obsolete (`#~`) entries**.
+- **Do not run `pnpm i18n:sync --prune`** to clean up a few ids. `check:i18n` tolerates extra/unused catalog keys, and the catalogs carry hundreds of them (ids reachable only via patterns `--prune`'s scan doesn't capture), so `--prune` mass-deletes ~hundreds of legitimately-used entries. When removing a string, delete just that `msgid`/`msgstr` block from **both** PO files (and its `dynamic-keys.mjs` entry) by hand.

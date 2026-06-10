@@ -7,11 +7,15 @@ import {
   metricDomain,
   pickMetric,
 } from "../../lib/trends/metrics";
+import { colorForIndex } from "../../lib/trends/palette";
 import { ChartCard } from "./ChartCard";
 import type { TrendsCardContext } from "./cardContext";
 
 type MetricRow = Parameters<typeof pickMetric>[0];
-type MetricBarDatum<TAxisKey extends string> = Record<TAxisKey, string> & { value: number };
+type MetricBarDatum<TAxisKey extends string> = Record<TAxisKey, string> & {
+  value: number;
+  color: string;
+};
 
 type MetricBarChartCardProps<
   TRow extends MetricRow,
@@ -22,6 +26,8 @@ type MetricBarChartCardProps<
   axisKey: TAxisKey;
   buildRows: (context: TrendsCardContext) => TRow[];
   getAxisValue: (row: TRow) => string;
+  /** Per-bar colour; defaults to cycling the categorical palette by index. */
+  getColor?: (row: TRow, index: number) => string;
 };
 
 export function MetricBarChartCard<TRow extends MetricRow, TAxisKey extends string>({
@@ -30,6 +36,7 @@ export function MetricBarChartCard<TRow extends MetricRow, TAxisKey extends stri
   axisKey,
   buildRows,
   getAxisValue,
+  getColor,
   grades,
   discipline,
   level,
@@ -43,10 +50,16 @@ export function MetricBarChartCard<TRow extends MetricRow, TAxisKey extends stri
   const data = useMemo(() => {
     const context = { grades, discipline, level, season, programFilter, metric, metricLabel };
     const rows: MetricBarDatum<TAxisKey>[] = [];
+    let index = 0;
     for (const row of buildRows(context)) {
       const value = pickMetric(row, metric);
       if (value != null) {
-        rows.push({ [axisKey]: getAxisValue(row), value } as MetricBarDatum<TAxisKey>);
+        rows.push({
+          [axisKey]: getAxisValue(row),
+          value,
+          color: getColor ? getColor(row, index) : colorForIndex(index),
+        } as MetricBarDatum<TAxisKey>);
+        index += 1;
       }
     }
     return rows;
@@ -54,6 +67,7 @@ export function MetricBarChartCard<TRow extends MetricRow, TAxisKey extends stri
     axisKey,
     buildRows,
     getAxisValue,
+    getColor,
     grades,
     discipline,
     level,
