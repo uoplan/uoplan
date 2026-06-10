@@ -663,6 +663,10 @@ msgstr "Copié!"
 msgid "donate.copy"
 msgstr "Copier"
 
+#: apps/web/src/routes/donate.tsx:105
+msgid "donate.goalReached"
+msgstr "Objectif atteint !"
+
 #: apps/web/src/routes/donate.tsx:114
 msgid "donate.how.body"
 msgstr "Envoyez un virement Interac à l'adresse ci-dessous. Le dépôt automatique est activé, aucune question de sécurité n'est donc requise."
@@ -2056,14 +2060,14 @@ msgstr "Aucun résultat pour « {q} »"
 msgid "search.passingPercent"
 msgstr "{percent} % de réussite"
 
-#: apps/web/src/components/explore/SearchResultProfessorCard.tsx:99
-msgid "search.rmpRating"
-msgstr "RMP {rating}/5 ({count} notes)"
-
 #: apps/web/src/components/explore/SearchResultCourseCard.tsx:98
 #: apps/web/src/components/explore/SearchResultProfessorCard.tsx:94
 msgid "search.ratingOutOf5"
 msgstr "/5"
+
+#: apps/web/src/components/explore/SearchResultProfessorCard.tsx:99
+msgid "search.rmpRating"
+msgstr "RMP {rating}/5 ({count} notes)"
 
 msgid "seo.explore.description"
 msgstr "Recherchez des cours et des professeur·e·s de l'Université d'Ottawa. Consultez les distributions de notes historiques et comparez les sections."

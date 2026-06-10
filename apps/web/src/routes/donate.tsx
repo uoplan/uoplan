@@ -58,6 +58,7 @@ function DonateRoute() {
   const totalCents = summary?.totalCents ?? 0;
   const percent = goalCents > 0 ? totalCents / goalCents : 0;
   const percentLabel = Math.round(percent * 100);
+  const reached = percent >= 1;
   const reason = summary?.reason?.trim();
 
   return (
@@ -100,10 +101,12 @@ function DonateRoute() {
                 />
               </Text>
               <Text size="sm" c="dimmed">
-                {tr("donate.ofGoal", {
-                  goal: formatCurrency(goalCents, currency),
-                  percent: percentLabel,
-                })}
+                {reached
+                  ? tr("donate.goalReached")
+                  : tr("donate.ofGoal", {
+                      goal: formatCurrency(goalCents, currency),
+                      percent: percentLabel,
+                    })}
               </Text>
               {error && (
                 <Text size="xs" c="dimmed" fs="italic">
