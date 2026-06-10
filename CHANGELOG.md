@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.0.0-beta.32](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.31...uoplan-monorepo-v1.0.0-beta.32) (2026-06-10)
+
+
+### Features
+
+* add better charts for feedback trends ([659b42c](https://github.com/uoplan/uoplan/commit/659b42cca030fde016c2534a0f17974a31ec6fc7))
+* add donation banner to home page ([a77cd03](https://github.com/uoplan/uoplan/commit/a77cd033680d0751b2457988580e31304b6ca455))
+* add donation page wip ([2c9a153](https://github.com/uoplan/uoplan/commit/2c9a1539ed3ad5c0ca67ef09a8c5de1aae554c34))
+* add reason to donation page, clean it up ([5c86db9](https://github.com/uoplan/uoplan/commit/5c86db9a1244c1541d1bcf3c2fdd896e67c39ba1))
+* canonicalize and centralize prof names ([c008a70](https://github.com/uoplan/uoplan/commit/c008a70e0f3d7d234d5f8850bd3d4bdc628dbf47))
+* count up donation number ([78b2131](https://github.com/uoplan/uoplan/commit/78b2131b599868308b640a0f0a379f196b9fa708))
+* improve donation complete message ([4617af1](https://github.com/uoplan/uoplan/commit/4617af17ee9142b1d7fd4d42de6bed8707cacf7a))
+* make banner mobile-friendly ([b9ec83f](https://github.com/uoplan/uoplan/commit/b9ec83f35acd6ceb1a1d23bafdf46e73a3bc71e3))
+* make geegees theme public instead of an easter egg ([9e5c140](https://github.com/uoplan/uoplan/commit/9e5c1400a7deb0bbb5eb32e96f8e8b9978cdf2c7))
+* remove easter egg, use nicer colours ([28b70e6](https://github.com/uoplan/uoplan/commit/28b70e6fa7e1f60db7828887f2868fc79662070b))
+* switch to cloudflare/vite-plugin ([a60944f](https://github.com/uoplan/uoplan/commit/a60944fe7194b67d8080e47b6ddd033938846565))
+* **worker:** forward inbound email to inbox after donation inspection ([7b65987](https://github.com/uoplan/uoplan/commit/7b6598779471e1f40a2d0e8f9282f33ca400e18c))
+
+
+### Bug Fixes
+
+* a11y test ([bb2406b](https://github.com/uoplan/uoplan/commit/bb2406b4b7022dc64147edeeca04f2f3c8c21cc0))
+* use proper colours for themes ([292c985](https://github.com/uoplan/uoplan/commit/292c985f570b254ab4f34a138cf8555c93bf5844))
+
 ## [1.0.0-beta.31](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.30...uoplan-monorepo-v1.0.0-beta.31) (2026-06-09)
 
 
