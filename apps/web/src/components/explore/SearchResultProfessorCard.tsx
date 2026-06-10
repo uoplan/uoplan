@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Box, Stack, Text } from "@mantine/core";
+import { Box, Group, Stack, Text } from "@mantine/core";
 import type { GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeProfessorName, hasProfessorRatings } from "@uoplan/core";
 import { useTr, tr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
+import { RatingBadge } from "../shared/RatingBadge";
 import type { ExploreProfessorSearchEntry } from "../../lib/explore/gradesSearch";
 import { professorRouteParam } from "../../lib/explore/professorRoute";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
@@ -52,6 +53,10 @@ export function SearchResultProfessorCard({
     ? professorRatings[normalizeProfessorName(entry.displayName)]
     : null;
   const hasRating = hasProfessorRatings(rmpEntry);
+  const isOnRmp = entry.legacyId != null && Number.isFinite(entry.legacyId) && entry.legacyId > 0;
+  const showRmp = hasRating || isOnRmp;
+  const showSatisfaction = sentiment != null && sentiment > 0;
+  const rmpLegacyId = entry.legacyId ?? rmpEntry?.legacyId ?? null;
 
   const q = query?.trim() ?? "";
 
@@ -91,32 +96,32 @@ export function SearchResultProfessorCard({
         <Text size="sm" fw={700} c="var(--app-text)" lh={1.3} style={{ wordBreak: "break-word" }}>
           {entry.displayName}
         </Text>
-        {sentiment != null && sentiment > 0 ? (
-          <Text size="xs" c="var(--app-text-muted)" lh={1.3}>
-            <Text component="span" fw={700} c="var(--app-text)">
-              {sentiment.toFixed(1)}
-            </Text>
-            {tr("search.ratingOutOf5")}
-          </Text>
-        ) : null}
-        {hasRating ? (
-          <Text size="xs" c="dimmed" lh={1.3}>
-            {tr("search.rmpRating", {
-              rating: rmpEntry?.rating.toFixed(1),
-              count: rmpEntry?.numRatings,
-            })}
-          </Text>
-        ) : sentiment == null ? (
-          <Text size="xs" c="dimmed" lh={1.3}>
-            {tr("search.noRating")}
-          </Text>
-        ) : null}
         <Text size="xs" c="dimmed" lh={1.3}>
           {tr("explore.professorCourseCount", {
             count: entry.uniqueCourseCount,
           })}
         </Text>
         <Box style={{ flex: 1 }} />
+        {showSatisfaction || showRmp ? (
+          <Group gap={6} wrap="nowrap" align="center" component="span">
+            {showSatisfaction ? (
+              <RatingBadge kind="satisfaction" value={sentiment ?? null} />
+            ) : null}
+            {showSatisfaction && showRmp ? (
+              <Text component="span" size="xs" c="dimmed">
+                ·
+              </Text>
+            ) : null}
+            {showRmp ? (
+              <RatingBadge
+                kind="rmp"
+                value={hasRating && rmpEntry ? rmpEntry.rating : null}
+                count={hasRating && rmpEntry ? rmpEntry.numRatings : null}
+                legacyId={rmpLegacyId}
+              />
+            ) : null}
+          </Group>
+        ) : null}
         {gradeViz ? (
           <Text size="xs" c="var(--app-text-muted)" lh={1.3}>
             {grade ? (

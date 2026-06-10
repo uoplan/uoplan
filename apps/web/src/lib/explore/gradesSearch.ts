@@ -636,6 +636,24 @@ export function mergeGradeDistributionCounts(
 }
 
 /**
+ * Aggregate grade distribution across a set of normalized course codes (used for the
+ * explore discipline / program cards). Returns null when none of the codes have offerings.
+ */
+export function aggregateGradeVizForCourseNorms(
+  offeringsByCourseNorm: Map<string, ExploreOfferingFlat[]>,
+  norms: Iterable<string>,
+): GradeVizData | null {
+  const dists: Record<string, number>[] = [];
+  for (const norm of norms) {
+    const list = offeringsByCourseNorm.get(norm);
+    if (!list) continue;
+    for (const o of list) dists.push(o.distribution);
+  }
+  if (dists.length === 0) return null;
+  return normalizeGradeVizDistribution(mergeGradeDistributionCounts(dists));
+}
+
+/**
  * Cheap substring pre-pass on a bounded scan, then Fuse only on that subset (or full index fallback).
  */
 function narrowOfferingsBySubstring(

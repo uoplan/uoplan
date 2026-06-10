@@ -17,6 +17,7 @@ import {
   type NeighborSortMode,
 } from "../../lib/graph/professorGraphDetails";
 import type { ExploreOfferingFlat } from "../../lib/explore/gradesSearch";
+import { RatingBadge } from "../shared/RatingBadge";
 
 const HISTOGRAM_ROW_WIDTH_PX = 88;
 const PROFILE_LINK_STYLE: CSSProperties = {
@@ -99,11 +100,16 @@ function histogramBoxStyle(widthPx: number): CSSProperties {
   };
 }
 
-function professorRatingLine(displayName: string, professorRatings: ProfessorRatingsMap | null) {
-  if (!professorRatings) return null;
-  const entry = professorRatings[normalizeProfessorName(displayName)];
-  if (!entry) return null;
-  if (!hasProfessorRatings(entry)) {
+function professorRatingLine(
+  displayName: string,
+  professorRatings: ProfessorRatingsMap | null,
+  legacyId: number | null,
+) {
+  const onRmp = legacyId != null && Number.isFinite(legacyId) && legacyId > 0;
+  const entry = professorRatings?.[normalizeProfessorName(displayName)] ?? null;
+  const rated = hasProfessorRatings(entry);
+  if (!rated && !onRmp) {
+    if (!professorRatings || !entry) return null;
     return (
       <Text size="xs" c="dimmed">
         {tr("search.noRating")}
@@ -111,9 +117,12 @@ function professorRatingLine(displayName: string, professorRatings: ProfessorRat
     );
   }
   return (
-    <Text size="xs" c="dimmed">
-      {entry.rating.toFixed(1)} · {entry.numRatings} ratings
-    </Text>
+    <RatingBadge
+      kind="rmp"
+      value={rated && entry ? entry.rating : null}
+      count={rated && entry ? entry.numRatings : null}
+      legacyId={legacyId}
+    />
   );
 }
 
@@ -227,7 +236,7 @@ export function ProfessorGraphNodeDetails({
           </Text>
           {node.legacyId != null ? <ProfessorProfileLink legacyId={node.legacyId} /> : null}
         </Group>
-        {professorRatingLine(node.displayName, professorRatings)}
+        {professorRatingLine(node.displayName, professorRatings, node.legacyId ?? null)}
         <Text size="xs" c="dimmed">
           {tr("graph.connections", { count: node.degree })}
         </Text>

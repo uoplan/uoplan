@@ -1,18 +1,23 @@
 import { Link } from "@tanstack/react-router";
-import { Stack, Text } from "@mantine/core";
+import { Box, Stack, Text } from "@mantine/core";
+import type { GradeVizData } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
   programSlugToPathParam,
   type ExploreProgramSearchEntry,
 } from "../../lib/explore/programSearch";
+import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
+import { RatingBadge } from "../shared/RatingBadge";
 
 type Props = {
   program: ExploreProgramSearchEntry;
+  gradeViz?: GradeVizData | null;
+  sentiment?: number | null;
   query?: string;
 };
 
-export function SearchResultProgramCard({ program, query }: Props) {
+export function SearchResultProgramCard({ program, gradeViz, sentiment, query }: Props) {
   const q = query?.trim() ?? "";
 
   return (
@@ -62,12 +67,17 @@ export function SearchResultProgramCard({ program, query }: Props) {
         >
           {program.title}
         </Text>
+        <Box style={{ flex: 1 }} />
+        {sentiment != null && sentiment > 0 ? (
+          <RatingBadge kind="satisfaction" value={sentiment} />
+        ) : null}
         {program.courseCount > 0 ? (
-          <Text size="xs" c="dimmed" lh={1.3} mt="auto">
+          <Text size="xs" c="dimmed" lh={1.3}>
             {tr("explore.program.courseCount", { count: program.courseCount })}
           </Text>
         ) : null}
       </Stack>
+      <GradeDistributionBottomBar gradeViz={gradeViz} />
     </Link>
   );
 }

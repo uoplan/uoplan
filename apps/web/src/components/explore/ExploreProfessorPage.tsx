@@ -14,7 +14,7 @@ import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
 } from "../../lib/explore/accordionPadding";
-import { RateMyProfessorLink } from "./RateMyProfessorLink";
+import { RatingBadge } from "../shared/RatingBadge";
 
 const EXPLORE_CHEVRON_RIGHT = {
   base: "12px",
@@ -97,18 +97,12 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
               </Title>
               {(hasRating || hasRmpLink) && (
                 <Group gap={6} align="center" mt={8} wrap="wrap">
-                  {hasRating ? (
-                    <Text size="sm" c="dimmed">
-                      {rating?.toFixed(1)} · {numRatings} ratings
-                    </Text>
-                  ) : (
-                    <Text size="sm" c="dimmed">
-                      {tr("search.noRating")}
-                    </Text>
-                  )}
-                  {hasRmpLink && rmpLegacyId != null ? (
-                    <RateMyProfessorLink legacyId={rmpLegacyId} />
-                  ) : null}
+                  <RatingBadge
+                    kind="rmp"
+                    value={hasRating ? rating : null}
+                    count={hasRating ? numRatings : null}
+                    legacyId={rmpLegacyId}
+                  />
                 </Group>
               )}
             </Box>
