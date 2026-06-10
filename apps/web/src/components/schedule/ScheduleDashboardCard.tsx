@@ -44,12 +44,31 @@ function StatusIcon({
 }) {
   if (locked) {
     return (
-      <Box
-        aria-hidden="true"
-        style={{ color: STATUS_ACCENT.empty, display: "flex", alignItems: "center", flexShrink: 0 }}
-      >
-        <IconAlertCircle size={20} stroke={2} />
-      </Box>
+      <Group gap={10} wrap="nowrap" align="center">
+        <Box
+          aria-hidden="true"
+          style={{
+            color: STATUS_ACCENT.empty,
+            display: "flex",
+            alignItems: "center",
+            flexShrink: 0,
+          }}
+        >
+          <IconAlertCircle size={20} stroke={2} />
+        </Box>
+        <Box
+          aria-hidden="true"
+          style={{
+            color: "var(--app-text-dim)",
+            opacity: 0.4,
+            display: "flex",
+            alignItems: "center",
+            flexShrink: 0,
+          }}
+        >
+          <IconChevronDown size={18} stroke={2} />
+        </Box>
+      </Group>
     );
   }
   return (
@@ -168,13 +187,8 @@ export function ScheduleDashboardCard({
               {label}
             </Text>
             <Text size="md" c="var(--app-text)" fw={600} lh={1.25}>
-              {summary}
+              {locked ? gateMessage : summary}
             </Text>
-            {gateMessage ? (
-              <Text size="sm" c="var(--app-text-muted)">
-                {gateMessage}
-              </Text>
-            ) : null}
           </Stack>
           <StatusIcon status={status} locked={locked} isOpen={open} />
         </Group>
