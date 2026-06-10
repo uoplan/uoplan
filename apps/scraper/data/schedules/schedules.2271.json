@@ -1,7 +1,7 @@
 {
   "termId": "2271",
-  "totalCourses": 11145,
-  "totalWithSchedules": 3160,
+  "totalCourses": 11102,
+  "totalWithSchedules": 3187,
   "schedules": [
     {
       "subject": "ADM",
@@ -18751,8 +18751,8 @@
             "times": [
               {
                 "day": "Th",
-                "startMinutes": 510,
-                "endMinutes": 680,
+                "startMinutes": 690,
+                "endMinutes": 860,
                 "virtual": false,
                 "instructor": "Héritier Raphaël Mesa",
                 "meetingDates": [
@@ -29115,7 +29115,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 20,
               "A": 28,
@@ -49423,7 +49423,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 487,
               "A": 394,
@@ -93253,8 +93253,85 @@
                 "virtual": false,
                 "instructor": "Eva Ottawa",
                 "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
+                  "2027-01-14",
+                  "2027-01-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-01-21",
+                  "2027-01-21"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-01-28",
+                  "2027-01-28"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-02-04",
+                  "2027-02-04"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 840,
+                "endMinutes": 1230,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-02-26",
+                  "2027-02-26"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 540,
+                "endMinutes": 1290,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-02-27",
+                  "2027-02-27"
+                ]
+              },
+              {
+                "day": "Su",
+                "startMinutes": 540,
+                "endMinutes": 690,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-02-28",
+                  "2027-02-28"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-03-18",
+                  "2027-03-18"
                 ]
               }
             ],
@@ -96267,7 +96344,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 16,
               "A": 47,
@@ -96456,7 +96533,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 29,
               "A": 72,
@@ -96623,7 +96700,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 49,
               "A": 61,
@@ -96712,7 +96789,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 4,
               "A": 3,
@@ -96751,7 +96828,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 4,
               "A": 3,
@@ -96790,7 +96867,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 4,
               "A": 3,
@@ -96957,7 +97034,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 9,
               "A": 22,
@@ -99242,8 +99319,8 @@
       "components": {
         "LEC": [
           {
-            "section": "AA00-LEC FullSess.",
-            "sectionCode": "AA00",
+            "section": "BB00-LEC FullSess.",
+            "sectionCode": "BB00",
             "component": "LEC",
             "session": null,
             "times": [
@@ -99254,8 +99331,85 @@
                 "virtual": false,
                 "instructor": "Eva Ottawa",
                 "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
+                  "2027-01-14",
+                  "2027-01-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-01-21",
+                  "2027-01-21"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-01-28",
+                  "2027-01-28"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-02-04",
+                  "2027-02-04"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 840,
+                "endMinutes": 1230,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-02-26",
+                  "2027-02-26"
+                ]
+              },
+              {
+                "day": "Sa",
+                "startMinutes": 540,
+                "endMinutes": 1290,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-02-27",
+                  "2027-02-27"
+                ]
+              },
+              {
+                "day": "Su",
+                "startMinutes": 540,
+                "endMinutes": 690,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-02-28",
+                  "2027-02-28"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Eva Ottawa",
+                "meetingDates": [
+                  "2027-03-18",
+                  "2027-03-18"
                 ]
               }
             ],
@@ -101587,7 +101741,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Lina Aburas Awadalla",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -101598,7 +101752,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Lina Aburas Awadalla",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -101770,7 +101924,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Remy Nabeel Bargout",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -101781,7 +101935,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Remy Nabeel Bargout",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -101831,7 +101985,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kablan Pascal Kacou",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -101842,7 +101996,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kablan Pascal Kacou",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -101953,7 +102107,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Abdelhamid Benhmade",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -101964,7 +102118,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Abdelhamid Benhmade",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102014,7 +102168,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Abdelhamid Benhmade",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102025,7 +102179,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Abdelhamid Benhmade",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102056,7 +102210,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Abdelhamid Benhmade",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102067,7 +102221,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Abdelhamid Benhmade",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102117,7 +102271,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Abdelhamid Benhmade",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102128,7 +102282,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Abdelhamid Benhmade",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102159,7 +102313,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Zakaria Zoundi",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102170,7 +102324,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Zakaria Zoundi",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102220,7 +102374,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kablan Pascal Kacou",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102231,7 +102385,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kablan Pascal Kacou",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102331,7 +102485,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Abdelhamid Benhmade",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102503,7 +102657,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Phuong Mai Anh Tran",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102553,7 +102707,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Phuong Mai Anh Tran",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102765,7 +102919,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Chokri Kooli",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102776,7 +102930,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Chokri Kooli",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102826,7 +102980,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Tida Goudiaby",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102837,7 +102991,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Tida Goudiaby",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -102894,7 +103048,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 27,
               "A": 18,
@@ -103318,7 +103472,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Walner Osna",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -133405,7 +133559,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Catherine Elena Buchanan",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -133416,7 +133570,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Catherine Elena Buchanan",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -150004,7 +150158,7 @@
                 "startMinutes": 870,
                 "endMinutes": 920,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jason Steffener",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -173438,7 +173592,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 112,
               "A": 103,
@@ -194266,6 +194420,105 @@
                   "2027-04-07",
                   "2027-04-07"
                 ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-03",
+                  "2027-03-03"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-03",
+                  "2027-03-03"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-03",
+                  "2027-03-03"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 865,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-17",
+                  "2027-03-17"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-17",
+                  "2027-03-17"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-17",
+                  "2027-03-17"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-31",
+                  "2027-03-31"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-31",
+                  "2027-03-31"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-31",
+                  "2027-03-31"
+                ]
               }
             ],
             "status": "Open",
@@ -213160,6 +213413,3755 @@
       }
     },
     {
+      "subject": "PHM",
+      "catalogNumber": "1504",
+      "courseCode": "PHM 1504",
+      "title": "Introduction et dispensation communautaire",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Valérie France Simoncic",
+                "meetingDates": [
+                  "2027-01-13",
+                  "2027-01-13"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 930,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-13",
+                  "2027-01-13"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 930,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-13",
+                  "2027-01-13"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-20",
+                  "2027-01-20"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 930,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-20",
+                  "2027-01-20"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-27",
+                  "2027-01-27"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 930,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-27",
+                  "2027-01-27"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-03",
+                  "2027-02-03"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 930,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-03",
+                  "2027-02-03"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 930,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-10",
+                  "2027-02-10"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-10",
+                  "2027-02-10"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-24",
+                  "2027-02-24"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 930,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-24",
+                  "2027-02-24"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "1505",
+      "courseCode": "PHM 1505",
+      "title": "Magistrales non-stériles et calculs pharmaceutiques",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 570,
+                "endMinutes": 740,
+                "virtual": false,
+                "instructor": "Audrey Boisvert",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-01-11"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 560,
+                "virtual": false,
+                "instructor": "Benjamin Tanguay",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-01-11"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 570,
+                "endMinutes": 740,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-18",
+                  "2027-01-18"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 560,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-18",
+                  "2027-01-18"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 570,
+                "endMinutes": 740,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-25",
+                  "2027-01-25"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 560,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-25",
+                  "2027-01-25"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 570,
+                "endMinutes": 740,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-02-01"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 560,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-02-01"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 570,
+                "endMinutes": 740,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-08",
+                  "2027-02-08"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 560,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-08",
+                  "2027-02-08"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 570,
+                "endMinutes": 740,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-22",
+                  "2027-02-22"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 560,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-22",
+                  "2027-02-22"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 570,
+                "endMinutes": 740,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-01",
+                  "2027-03-01"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 560,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-01",
+                  "2027-03-01"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 570,
+                "endMinutes": 740,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-08",
+                  "2027-03-08"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 560,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-08",
+                  "2027-03-08"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-15",
+                  "2027-03-15"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-17",
+                  "2027-03-17"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-18",
+                  "2027-03-18"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-25",
+                  "2027-03-25"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "1508",
+      "courseCode": "PHM 1508",
+      "title": "Le pharmacien expert du médicament III",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 810,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Jean-Michel Rabanel",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-01-11"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 830,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-14",
+                  "2027-01-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-14",
+                  "2027-01-14"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 810,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-18",
+                  "2027-01-18"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 830,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-21",
+                  "2027-01-21"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-21",
+                  "2027-01-21"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 810,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-25",
+                  "2027-01-25"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 830,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-28",
+                  "2027-01-28"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-28",
+                  "2027-01-28"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 810,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-02-01"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 830,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-04",
+                  "2027-02-04"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-04",
+                  "2027-02-04"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 810,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-08",
+                  "2027-02-08"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 830,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-11",
+                  "2027-02-11"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-11",
+                  "2027-02-11"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 810,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-22",
+                  "2027-02-22"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 830,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-25",
+                  "2027-02-25"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-25",
+                  "2027-02-25"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-04",
+                  "2027-03-04"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "1513",
+      "courseCode": "PHM 1513",
+      "title": "Consultations pharmaceutiques de première ligne I",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Laurent Montpetit",
+                "meetingDates": [
+                  "2027-01-15",
+                  "2027-01-15"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 630,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-15",
+                  "2027-01-15"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-15",
+                  "2027-01-15"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-22",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 630,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-22",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-22",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-29",
+                  "2027-01-29"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 630,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-29",
+                  "2027-01-29"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-29",
+                  "2027-01-29"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-05",
+                  "2027-02-05"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 630,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-05",
+                  "2027-02-05"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-05",
+                  "2027-02-05"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-12",
+                  "2027-02-12"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 630,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-12",
+                  "2027-02-12"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-12",
+                  "2027-02-12"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-26",
+                  "2027-02-26"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 630,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-26",
+                  "2027-02-26"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-26",
+                  "2027-02-26"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-05",
+                  "2027-03-05"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-05",
+                  "2027-03-05"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 630,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-05",
+                  "2027-03-05"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-12",
+                  "2027-03-12"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-12",
+                  "2027-03-12"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 630,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-12",
+                  "2027-03-12"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-19",
+                  "2027-03-19"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-24",
+                  "2027-03-24"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "1515",
+      "courseCode": "PHM 1515",
+      "title": "Gestion thérapeutique I",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": false,
+                "instructor": "Kaviyarasan Mahalingam",
+                "meetingDates": [
+                  "2027-02-09",
+                  "2027-02-09"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-24",
+                  "2027-02-24"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-23",
+                  "2027-02-23"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-02",
+                  "2027-03-02"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 750,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-02",
+                  "2027-03-02"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-09",
+                  "2027-03-09"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-11",
+                  "2027-03-11"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-11",
+                  "2027-03-11"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-18",
+                  "2027-03-18"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 750,
+                "endMinutes": 920,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-16",
+                  "2027-03-16"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-23",
+                  "2027-03-23"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-24",
+                  "2027-03-24"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-22",
+                  "2027-03-22"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-18",
+                  "2027-03-18"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-24",
+                  "2027-02-24"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 750,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-02",
+                  "2027-03-02"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "1901",
+      "courseCode": "PHM 1901",
+      "title": "Community Rotation I",
+      "timeZone": "America/Toronto",
+      "components": {
+        "STG": [
+          {
+            "section": "A00-STG Multi-Term",
+            "sectionCode": "A00",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 650,
+                "virtual": false,
+                "instructor": "Valérie France Simoncic",
+                "meetingDates": [
+                  "2027-03-03",
+                  "2027-03-03"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 480,
+                "endMinutes": 1050,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-04-06",
+                  "2027-04-30"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "B00-STG Multi-Term",
+            "sectionCode": "B00",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 650,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-03",
+                  "2027-03-03"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 480,
+                "endMinutes": 1050,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-05-03",
+                  "2027-05-28"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "C00-STG Multi-Term",
+            "sectionCode": "C00",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 650,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-03",
+                  "2027-03-03"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 1050,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-05-31",
+                  "2027-06-25"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "2504",
+      "courseCode": "PHM 2504",
+      "title": "Dispensation hospitalière",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Élise De Francesco",
+                "meetingDates": [
+                  "2027-01-21",
+                  "2027-02-11"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 830,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-28",
+                  "2027-02-11"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-25",
+                  "2027-02-25"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 830,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-25",
+                  "2027-02-25"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 870,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-25",
+                  "2027-02-25"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 540,
+                "endMinutes": 650,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-11",
+                  "2027-03-11"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-11",
+                  "2027-03-11"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "2505",
+      "courseCode": "PHM 2505",
+      "title": "Magistrales stériles et calculs pharmaceutiques",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 900,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Audrey Boisvert",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-01-11"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 870,
+                "endMinutes": 990,
+                "virtual": false,
+                "instructor": "Benjamin Tanguay",
+                "meetingDates": [
+                  "2027-01-18",
+                  "2027-01-18"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 740,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-12",
+                  "2027-02-09"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 870,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-08",
+                  "2027-02-08"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 870,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-22",
+                  "2027-03-08"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 740,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-23",
+                  "2027-03-09"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 840,
+                "endMinutes": 1010,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-15",
+                  "2027-03-15"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 780,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-17",
+                  "2027-03-17"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-24",
+                  "2027-03-24"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 810,
+                "endMinutes": 920,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-19",
+                  "2027-01-19"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 900,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-02-01"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "2507",
+      "courseCode": "PHM 2507",
+      "title": "Continuité des soins",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 810,
+                "endMinutes": 920,
+                "virtual": false,
+                "instructor": "Corey Christopher Tsang",
+                "meetingDates": [
+                  "2027-01-26",
+                  "2027-01-26"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 870,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-02",
+                  "2027-02-02"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 810,
+                "endMinutes": 920,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-09",
+                  "2027-02-09"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 870,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-23",
+                  "2027-02-23"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 810,
+                "endMinutes": 920,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-02",
+                  "2027-03-02"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 870,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-09",
+                  "2027-03-09"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 870,
+                "endMinutes": 920,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-16",
+                  "2027-03-16"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 780,
+                "endMinutes": 1010,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-22",
+                  "2027-03-22"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "2508",
+      "courseCode": "PHM 2508",
+      "title": "Suivi thérapeutique I",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 750,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-01-11"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-02-05",
+                  "2027-02-05"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 780,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-02-10",
+                  "2027-02-10"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 810,
+                "endMinutes": 920,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-02-10",
+                  "2027-02-10"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-02-26",
+                  "2027-02-26"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 60,
+                "endMinutes": 170,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-01-13",
+                  "2027-01-13"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-01-22",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 600,
+                "endMinutes": 690,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-01-29",
+                  "2027-01-29"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 720,
+                "endMinutes": 840,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-01-29",
+                  "2027-01-29"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 600,
+                "endMinutes": 690,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-03-04",
+                  "2027-03-04"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 840,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-03-04",
+                  "2027-03-04"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-03-12",
+                  "2027-03-12"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-03-15",
+                  "2027-03-15"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-03-19",
+                  "2027-03-19"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 660,
+                "endMinutes": 750,
+                "virtual": false,
+                "instructor": "Pierre Giguère",
+                "meetingDates": [
+                  "2027-01-13",
+                  "2027-01-13"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "2516",
+      "courseCode": "PHM 2516",
+      "title": "Gestion thérapeutique VIII",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-22",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-27",
+                  "2027-01-27"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-29",
+                  "2027-01-29"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 800,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-05",
+                  "2027-02-05"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-08",
+                  "2027-02-08"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-10",
+                  "2027-02-10"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-24",
+                  "2027-02-24"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-26",
+                  "2027-02-26"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 660,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-05",
+                  "2027-03-05"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-17",
+                  "2027-03-17"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 630,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-12",
+                  "2027-02-12"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "2519",
+      "courseCode": "PHM 2519",
+      "title": "Éducation des patients",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 660,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Ayat Al Badri",
+                "meetingDates": [
+                  "2027-02-08",
+                  "2027-02-08"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 660,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Philippe Comtois",
+                "meetingDates": [
+                  "2027-02-22",
+                  "2027-03-15"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 660,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-01",
+                  "2027-03-01"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 720,
+                "endMinutes": 830,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-02-22",
+                  "2027-03-08"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "2901",
+      "courseCode": "PHM 2901",
+      "title": "Hosptial Rotation I",
+      "timeZone": "America/Toronto",
+      "components": {
+        "STG": [
+          {
+            "section": "A00-STG Multi-Term",
+            "sectionCode": "A00",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Geneviève Goulet",
+                "meetingDates": [
+                  "2027-03-10",
+                  "2027-03-10"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 480,
+                "endMinutes": 1050,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-04-06",
+                  "2027-04-30"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "B00-STG Multi-Term",
+            "sectionCode": "B00",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-10",
+                  "2027-03-10"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 480,
+                "endMinutes": 1050,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-05-03",
+                  "2027-05-28"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "C00-STG Multi-Term",
+            "sectionCode": "C00",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-10",
+                  "2027-03-10"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 480,
+                "endMinutes": 1050,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-05-31",
+                  "2027-06-25"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "3501",
+      "courseCode": "PHM 3501",
+      "title": "Communication en pharmacie III",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 740,
+                "virtual": false,
+                "instructor": "Élise De Francesco",
+                "meetingDates": [
+                  "2027-03-03",
+                  "2027-03-03"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 750,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Élise De Francesco",
+                "meetingDates": [
+                  "2027-03-03",
+                  "2027-03-03"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 540,
+                "endMinutes": 590,
+                "virtual": false,
+                "instructor": "Élise De Francesco",
+                "meetingDates": [
+                  "2027-03-08",
+                  "2027-03-08"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 600,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Élise De Francesco",
+                "meetingDates": [
+                  "2027-03-08",
+                  "2027-03-08"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 740,
+                "virtual": false,
+                "instructor": "Élise De Francesco",
+                "meetingDates": [
+                  "2027-03-17",
+                  "2027-03-17"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 750,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Élise De Francesco",
+                "meetingDates": [
+                  "2027-03-17",
+                  "2027-03-17"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 560,
+                "virtual": false,
+                "instructor": "Élise De Francesco",
+                "meetingDates": [
+                  "2027-03-22",
+                  "2027-03-22"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Élise De Francesco",
+                "meetingDates": [
+                  "2027-03-22",
+                  "2027-03-22"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 840,
+                "endMinutes": 890,
+                "virtual": false,
+                "instructor": "Élise De Francesco",
+                "meetingDates": [
+                  "2027-04-06",
+                  "2027-04-06"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 900,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Élise De Francesco",
+                "meetingDates": [
+                  "2027-04-06",
+                  "2027-04-06"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Élise De Francesco",
+                "meetingDates": [
+                  "2027-04-07",
+                  "2027-04-07"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "3504",
+      "courseCode": "PHM 3504",
+      "title": "Suivi thérapeutique II",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 600,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-02-02",
+                  "2027-02-02"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 600,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-02-02",
+                  "2027-02-02"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 750,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-02-02",
+                  "2027-02-02"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-02-09",
+                  "2027-02-09"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-02-23",
+                  "2027-02-23"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 750,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-02-23",
+                  "2027-02-23"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-03-02",
+                  "2027-03-02"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-03-09",
+                  "2027-03-09"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 750,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-03-09",
+                  "2027-03-09"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-03-16",
+                  "2027-03-16"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 600,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-03-23",
+                  "2027-03-23"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 660,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-03-23",
+                  "2027-03-23"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-03-30",
+                  "2027-03-30"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 630,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-04-06",
+                  "2027-04-06"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 660,
+                "endMinutes": 780,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-04-06",
+                  "2027-04-06"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 600,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Joanne Leclair",
+                "meetingDates": [
+                  "2027-04-13",
+                  "2027-04-13"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "3505",
+      "courseCode": "PHM 3505",
+      "title": "Administration de médicaments",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A-TLB Term",
+            "sectionCode": "A",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 570,
+                "endMinutes": 690,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-03-05",
+                  "2027-03-05"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 720,
+                "endMinutes": 900,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-03-05",
+                  "2027-03-05"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 870,
+                "endMinutes": 900,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-03-05",
+                  "2027-03-05"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-03-12",
+                  "2027-03-12"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-03-12",
+                  "2027-03-12"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 840,
+                "endMinutes": 870,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-03-12",
+                  "2027-03-12"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-03-19",
+                  "2027-03-19"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-03-19",
+                  "2027-03-19"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 840,
+                "endMinutes": 870,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-03-19",
+                  "2027-03-19"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 630,
+                "endMinutes": 740,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-03-23",
+                  "2027-03-23"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-03-23",
+                  "2027-03-23"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 930,
+                "endMinutes": 960,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-03-23",
+                  "2027-03-23"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-04-06",
+                  "2027-04-06"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-04-06",
+                  "2027-04-06"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 840,
+                "endMinutes": 870,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-04-06",
+                  "2027-04-06"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-04-14",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-04-14",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 840,
+                "endMinutes": 870,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-04-14",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 780,
+                "endMinutes": 890,
+                "virtual": false,
+                "instructor": "Sarah Tessier",
+                "meetingDates": [
+                  "2027-04-19",
+                  "2027-04-19"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "3506",
+      "courseCode": "PHM 3506",
+      "title": "Formation professionnelle III",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Term",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 560,
+                "virtual": false,
+                "instructor": "Helene Jolin",
+                "meetingDates": [
+                  "2027-01-14",
+                  "2027-01-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Helene Jolin",
+                "meetingDates": [
+                  "2027-01-14",
+                  "2027-01-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Helene Jolin",
+                "meetingDates": [
+                  "2027-01-14",
+                  "2027-01-14"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Helene Jolin",
+                "meetingDates": [
+                  "2027-01-21",
+                  "2027-01-21"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 560,
+                "virtual": false,
+                "instructor": "Helene Jolin",
+                "meetingDates": [
+                  "2027-01-28",
+                  "2027-01-28"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 560,
+                "virtual": false,
+                "instructor": "Helene Jolin",
+                "meetingDates": [
+                  "2027-01-28",
+                  "2027-01-28"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Helene Jolin",
+                "meetingDates": [
+                  "2027-01-28",
+                  "2027-01-28"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Helene Jolin",
+                "meetingDates": [
+                  "2027-02-04",
+                  "2027-02-04"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Helene Jolin",
+                "meetingDates": [
+                  "2027-02-04",
+                  "2027-02-04"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Helene Jolin",
+                "meetingDates": [
+                  "2027-02-11",
+                  "2027-02-11"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Helene Jolin",
+                "meetingDates": [
+                  "2027-02-11",
+                  "2027-02-11"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 690,
+                "virtual": false,
+                "instructor": "Helene Jolin",
+                "meetingDates": [
+                  "2027-02-12",
+                  "2027-02-12"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "3514",
+      "courseCode": "PHM 3514",
+      "title": "Gestion thérapeutique XV",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": false,
+                "instructor": "Caitlin Richler",
+                "meetingDates": [
+                  "2027-01-13",
+                  "2027-01-13"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Charlène Roussel",
+                "meetingDates": [
+                  "2027-01-15",
+                  "2027-01-15"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Caitlin Richler",
+                "meetingDates": [
+                  "2027-01-20",
+                  "2027-01-20"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": false,
+                "instructor": "Charlène Roussel",
+                "meetingDates": [
+                  "2027-01-20",
+                  "2027-01-20"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Caitlin Richler",
+                "meetingDates": [
+                  "2027-01-22",
+                  "2027-01-22"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Charlène Roussel",
+                "meetingDates": [
+                  "2027-01-27",
+                  "2027-01-27"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Caitlin Richler",
+                "meetingDates": [
+                  "2027-01-29",
+                  "2027-01-29"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Charlène Roussel",
+                "meetingDates": [
+                  "2027-02-03",
+                  "2027-02-03"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Caitlin Richler",
+                "meetingDates": [
+                  "2027-02-10",
+                  "2027-02-10"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 930,
+                "endMinutes": 1050,
+                "virtual": false,
+                "instructor": "Charlène Roussel",
+                "meetingDates": [
+                  "2027-02-12",
+                  "2027-02-12"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Caitlin Richler",
+                "meetingDates": [
+                  "2027-02-12",
+                  "2027-02-12"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "3515",
+      "courseCode": "PHM 3515",
+      "title": "Gestion thérapeutique XVI",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Corey Christopher Tsang",
+                "meetingDates": [
+                  "2027-01-18",
+                  "2027-01-18"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Corey Christopher Tsang",
+                "meetingDates": [
+                  "2027-01-21",
+                  "2027-01-21"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Corey Christopher Tsang",
+                "meetingDates": [
+                  "2027-01-26",
+                  "2027-01-26"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 660,
+                "endMinutes": 830,
+                "virtual": false,
+                "instructor": "Corey Christopher Tsang",
+                "meetingDates": [
+                  "2027-01-26",
+                  "2027-01-26"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 750,
+                "endMinutes": 920,
+                "virtual": false,
+                "instructor": "Corey Christopher Tsang",
+                "meetingDates": [
+                  "2027-01-28",
+                  "2027-01-28"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 620,
+                "virtual": false,
+                "instructor": "Corey Christopher Tsang",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-02-01"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Corey Christopher Tsang",
+                "meetingDates": [
+                  "2027-02-01",
+                  "2027-02-01"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Corey Christopher Tsang",
+                "meetingDates": [
+                  "2027-02-08",
+                  "2027-02-08"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 720,
+                "endMinutes": 890,
+                "virtual": false,
+                "instructor": "Corey Christopher Tsang",
+                "meetingDates": [
+                  "2027-02-08",
+                  "2027-02-08"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Corey Christopher Tsang",
+                "meetingDates": [
+                  "2027-02-22",
+                  "2027-02-22"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 750,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Corey Christopher Tsang",
+                "meetingDates": [
+                  "2027-02-22",
+                  "2027-02-22"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "3516",
+      "courseCode": "PHM 3516",
+      "title": "Sécurité des patients",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Term",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 830,
+                "virtual": false,
+                "instructor": "Erika MacDonald",
+                "meetingDates": [
+                  "2027-02-11",
+                  "2027-02-11"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 930,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Erika MacDonald",
+                "meetingDates": [
+                  "2027-02-24",
+                  "2027-02-24"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 930,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Erika MacDonald",
+                "meetingDates": [
+                  "2027-03-03",
+                  "2027-03-03"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 870,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Erika MacDonald",
+                "meetingDates": [
+                  "2027-03-11",
+                  "2027-03-11"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 930,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Erika MacDonald",
+                "meetingDates": [
+                  "2027-03-17",
+                  "2027-03-17"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 930,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Erika MacDonald",
+                "meetingDates": [
+                  "2027-03-24",
+                  "2027-03-24"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "3519",
+      "courseCode": "PHM 3519",
+      "title": "Éducation des professionnels",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Term",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 870,
+                "endMinutes": 980,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-02-25",
+                  "2027-02-25"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-03-04",
+                  "2027-03-04"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 840,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-03-04",
+                  "2027-03-04"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 830,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-03-11",
+                  "2027-03-11"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-03-11",
+                  "2027-03-11"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-03-11",
+                  "2027-03-11"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-03-18",
+                  "2027-03-18"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 840,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-03-18",
+                  "2027-03-18"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 840,
+                "endMinutes": 900,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-03-18",
+                  "2027-03-18"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-03-25",
+                  "2027-03-25"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 840,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-03-25",
+                  "2027-03-25"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 840,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-03-25",
+                  "2027-03-25"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-04-08",
+                  "2027-04-08"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 840,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-04-08",
+                  "2027-04-08"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 840,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-04-08",
+                  "2027-04-08"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 720,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-04-13",
+                  "2027-04-13"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 840,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-04-13",
+                  "2027-04-13"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 840,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-04-13",
+                  "2027-04-13"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-04-15",
+                  "2027-04-15"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 840,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-04-15",
+                  "2027-04-15"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 840,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-04-15",
+                  "2027-04-15"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-04-22",
+                  "2027-04-22"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 840,
+                "endMinutes": 1020,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-04-22",
+                  "2027-04-22"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 720,
+                "endMinutes": 830,
+                "virtual": false,
+                "instructor": "Pierre Thabet",
+                "meetingDates": [
+                  "2027-04-29",
+                  "2027-04-29"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "3520",
+      "courseCode": "PHM 3520",
+      "title": "Maintien des connaissances en pharmacie",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Term",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Erika MacDonald",
+                "meetingDates": [
+                  "2027-03-18",
+                  "2027-03-18"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Erika MacDonald",
+                "meetingDates": [
+                  "2027-03-25",
+                  "2027-03-25"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Erika MacDonald",
+                "meetingDates": [
+                  "2027-04-08",
+                  "2027-04-08"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 570,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Erika MacDonald",
+                "meetingDates": [
+                  "2027-04-15",
+                  "2027-04-15"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 780,
+                "endMinutes": 890,
+                "virtual": false,
+                "instructor": "Erika MacDonald",
+                "meetingDates": [
+                  "2027-04-19",
+                  "2027-04-19"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 510,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Erika MacDonald",
+                "meetingDates": [
+                  "2027-04-21",
+                  "2027-04-21"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "4501",
+      "courseCode": "PHM 4501",
+      "title": "Intégration de la gestion thérapeutique",
+      "timeZone": "America/Toronto",
+      "components": {
+        "TLB": [
+          {
+            "section": "A00-TLB Term",
+            "sectionCode": "A00",
+            "component": "TLB",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 480,
+                "endMinutes": 1050,
+                "virtual": false,
+                "instructor": "Geneviève Goulet",
+                "meetingDates": [
+                  "2027-04-12",
+                  "2027-04-23"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "4901",
+      "courseCode": "PHM 4901",
+      "title": "Community Rotation lI",
+      "timeZone": "America/Toronto",
+      "components": {
+        "STG": [
+          {
+            "section": "A00-STG Term",
+            "sectionCode": "A00",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 570,
+                "endMinutes": 720,
+                "virtual": false,
+                "instructor": "Geneviève Goulet",
+                "meetingDates": [
+                  "2027-04-09",
+                  "2027-04-09"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "B00-STG Term",
+            "sectionCode": "B00",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 570,
+                "endMinutes": 720,
+                "virtual": false,
+                "instructor": "Geneviève Goulet",
+                "meetingDates": [
+                  "2027-04-09",
+                  "2027-04-09"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "4903",
+      "courseCode": "PHM 4903",
+      "title": "Hospital Rotation II",
+      "timeZone": "America/Toronto",
+      "components": {
+        "STG": [
+          {
+            "section": "A00-STG Term",
+            "sectionCode": "A00",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 570,
+                "endMinutes": 720,
+                "virtual": false,
+                "instructor": "Geneviève Goulet",
+                "meetingDates": [
+                  "2027-04-09",
+                  "2027-04-09"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "B00-STG Term",
+            "sectionCode": "B00",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 570,
+                "endMinutes": 720,
+                "virtual": false,
+                "instructor": "Geneviève Goulet",
+                "meetingDates": [
+                  "2027-04-09",
+                  "2027-04-09"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "4904",
+      "courseCode": "PHM 4904",
+      "title": "Hospital Rotation III",
+      "timeZone": "America/Toronto",
+      "components": {
+        "STG": [
+          {
+            "section": "A00-STG Term",
+            "sectionCode": "A00",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 570,
+                "endMinutes": 720,
+                "virtual": false,
+                "instructor": "Geneviève Goulet",
+                "meetingDates": [
+                  "2027-04-09",
+                  "2027-04-09"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHM",
+      "catalogNumber": "4905",
+      "courseCode": "PHM 4905",
+      "title": "Professional Exploration Rotation",
+      "timeZone": "America/Toronto",
+      "components": {
+        "STG": [
+          {
+            "section": "A00-STG Term",
+            "sectionCode": "A00",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 570,
+                "endMinutes": 720,
+                "virtual": false,
+                "instructor": "Geneviève Goulet",
+                "meetingDates": [
+                  "2027-04-09",
+                  "2027-04-09"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "B00-STG Term",
+            "sectionCode": "B00",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 570,
+                "endMinutes": 720,
+                "virtual": false,
+                "instructor": "Geneviève Goulet",
+                "meetingDates": [
+                  "2027-04-09",
+                  "2027-04-09"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
       "subject": "PHS",
       "catalogNumber": "3342",
       "courseCode": "PHS 3342",
@@ -218774,7 +222776,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 73,
               "A": 74,
@@ -236018,7 +240020,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 57,
               "A": 41,
@@ -236059,7 +240061,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 57,
               "A": 41,
