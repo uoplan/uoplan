@@ -2062,8 +2062,8 @@ msgstr "RMP {rating}/5 ({count} ratings)"
 
 #: apps/web/src/components/explore/SearchResultCourseCard.tsx:98
 #: apps/web/src/components/explore/SearchResultProfessorCard.tsx:94
-msgid "search.satisfactionSuffix"
-msgstr "/5 satisfaction"
+msgid "search.ratingOutOf5"
+msgstr "/5"
 
 msgid "seo.explore.description"
 msgstr "Search University of Ottawa courses and professors. View historical grade distributions, compare sections, and find the easiest or hardest offerings."

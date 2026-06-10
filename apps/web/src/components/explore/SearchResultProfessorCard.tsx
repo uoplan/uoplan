@@ -95,8 +95,8 @@ export function SearchResultProfessorCard({
           <Text size="xs" c="var(--app-text-muted)" lh={1.3}>
             <Text component="span" fw={700} c="var(--app-text)">
               {sentiment.toFixed(1)}
-            </Text>{" "}
-            {tr("search.satisfactionSuffix")}
+            </Text>
+            {tr("search.ratingOutOf5")}
           </Text>
         ) : null}
         {hasRating ? (

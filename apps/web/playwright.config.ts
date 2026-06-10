@@ -5,10 +5,13 @@ const BASE_URL = `http://localhost:${PORT}`;
 
 // When E2E_SERVER=preview, serve the already-built production bundle via
 // `vite preview` instead of the dev server. CI uses this for the accessibility
-// job so it tests the real bundle without rebuilding the WASM engine.
+// job so it tests the real bundle without rebuilding the WASM engine. The
+// Cloudflare plugin is disabled in this mode (see vite.config.ts), so Vite's
+// default `build.outDir` is `dist`; the client bundle lives in `dist/client`,
+// so point preview there explicitly.
 const USE_PREVIEW = process.env.E2E_SERVER === "preview";
 const WEB_SERVER_COMMAND = USE_PREVIEW
-  ? `pnpm exec vite preview --port ${PORT} --strictPort`
+  ? `pnpm exec vite preview --outDir dist/client --port ${PORT} --strictPort`
   : "pnpm dev";
 
 /**

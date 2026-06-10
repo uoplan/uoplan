@@ -46,8 +46,11 @@ export default defineConfig({
     }),
     // Runs the Cloudflare Worker (apps/worker) in workerd inside the Vite dev
     // server and bundles it on `vite build`. Disabled under Vitest so the
-    // Cloudflare environments don't interfere with the test runner.
+    // Cloudflare environments don't interfere with the test runner, and under
+    // `E2E_SERVER=preview` (the a11y job) where `vite preview` only serves the
+    // static client bundle and has no `.wrangler/deploy/config.json`.
     !process.env.VITEST &&
+      process.env.E2E_SERVER !== "preview" &&
       cloudflare({
         configPath: "../../wrangler.json",
         // Persist local KV/D1/etc. state at the repo root (next to the wrangler
