@@ -663,6 +663,10 @@ msgstr "Copied!"
 msgid "donate.copy"
 msgstr "Copy"
 
+#: apps/web/src/routes/donate.tsx:105
+msgid "donate.goalReached"
+msgstr "We made it!"
+
 #: apps/web/src/routes/donate.tsx:114
 msgid "donate.how.body"
 msgstr "Send an Interac e-Transfer to the address below. Auto-deposit is enabled, so no security question is required."
@@ -2056,14 +2060,14 @@ msgstr "No results for \"{q}\""
 msgid "search.passingPercent"
 msgstr "{percent}% passing"
 
-#: apps/web/src/components/explore/SearchResultProfessorCard.tsx:99
-msgid "search.rmpRating"
-msgstr "RMP {rating}/5 ({count} ratings)"
-
 #: apps/web/src/components/explore/SearchResultCourseCard.tsx:98
 #: apps/web/src/components/explore/SearchResultProfessorCard.tsx:94
 msgid "search.ratingOutOf5"
 msgstr "/5"
+
+#: apps/web/src/components/explore/SearchResultProfessorCard.tsx:99
+msgid "search.rmpRating"
+msgstr "RMP {rating}/5 ({count} ratings)"
 
 msgid "seo.explore.description"
 msgstr "Search University of Ottawa courses and professors. View historical grade distributions, compare sections, and find the easiest or hardest offerings."
