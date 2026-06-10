@@ -1,6 +1,6 @@
 import type { Course, Catalogue } from "./dataTypes";
 import type { CourseSchedule, SchedulesData } from "./dataTypes";
-import { normalizeCourseCode, isWorkTermCourse } from "./utils/courseUtils";
+import { normalizeCourseCode, isWorkTermCourse, getDiscipline } from "./utils/courseUtils";
 
 // Re-export for backwards compatibility
 export { normalizeCourseCode } from "./utils/courseUtils";
@@ -112,7 +112,7 @@ export function withExtraCourses(base: DataCache, courses: Course[]): DataCache 
   for (const course of courses) {
     const key = normalizeCourseCode(course.code);
     extra.set(key, course);
-    const discipline = course.code.split(/\s+/)[0]?.toUpperCase() ?? "";
+    const discipline = getDiscipline(course.code);
     if (discipline) {
       const list = byDiscipline.get(discipline) ?? [];
       list.push(course);

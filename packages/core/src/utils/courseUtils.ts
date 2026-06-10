@@ -64,6 +64,16 @@ export function parseCourseCode(code: string): {
 }
 
 /**
+ * Discipline (subject) prefix of a course code via whitespace split, uppercased.
+ * Returns "" when the code is empty. Unlike {@link parseCourseCode}, this does
+ * not validate the code shape — it simply takes the first whitespace-delimited
+ * token (e.g. "CSI 2101" -> "CSI").
+ */
+export function getDiscipline(code: string): string {
+  return code.split(/\s+/)[0]?.toUpperCase() ?? "";
+}
+
+/**
  * Get the level of a course (1000, 2000, 12000, etc.) from its code.
  * Parses the full course number and floors to the nearest thousand.
  */

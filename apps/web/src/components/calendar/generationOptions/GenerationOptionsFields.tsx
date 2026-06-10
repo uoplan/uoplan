@@ -20,16 +20,10 @@ import {
 } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import type { DayOfWeek } from "@uoplan/core";
+import { minutesToTime24 } from "@uoplan/core";
 import { BasicCourseFiltersCard } from "../../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../../i18n";
-
-/** Format minutes since midnight as HH:mm for input type="time". */
-function minutesToTimeString(minutes: number): string {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
-}
 
 /** Parse HH:mm from input type="time" to minutes since midnight. */
 function timeStringToMinutes(value: string): number {
@@ -153,13 +147,13 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
       <TextInput
         label={tr("scheduleCount.time.earliest")}
         type="time"
-        value={minutesToTimeString(props.minStartMinutes)}
+        value={minutesToTime24(props.minStartMinutes)}
         onChange={(e) => props.onMinStartMinutesChange(timeStringToMinutes(e.currentTarget.value))}
       />
       <TextInput
         label={tr("scheduleCount.time.latest")}
         type="time"
-        value={minutesToTimeString(props.maxEndMinutes)}
+        value={minutesToTime24(props.maxEndMinutes)}
         onChange={(e) => props.onMaxEndMinutesChange(timeStringToMinutes(e.currentTarget.value))}
       />
     </Group>

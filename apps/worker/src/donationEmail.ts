@@ -26,7 +26,7 @@ interface ParsedDonation {
  * English ("$1,234.56") and Canadian-French ("1 234,56 $") money formats.
  * Returns integer cents, or null when no amount can be confidently extracted.
  */
-export function parseAmountCents(text: string): number | null {
+function parseAmountCents(text: string): number | null {
   const english = text.match(/\$\s*([\d,]+\.\d{2})\b/);
   if (english) {
     const normalized = english[1].replace(/,/g, "");

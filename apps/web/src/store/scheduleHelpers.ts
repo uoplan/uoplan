@@ -5,7 +5,6 @@ export {
   computeCoursesPerPool,
   buildPoolCaps,
   poolCourseCap,
-  isBroadElectivePoolType,
   enumerateSingleRedistributions,
   weightedRandomPick,
 } from "@uoplan/core";

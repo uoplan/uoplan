@@ -28,7 +28,7 @@ import {
 } from "./buildRegistry.ts";
 
 export const PROFESSORS_FILE = path.join(SCRAPER_DATA_DIR, "professors.json");
-export const PROFESSORS_OVERRIDES_FILE = path.join(SCRAPER_DATA_DIR, "professors.overrides.json");
+const PROFESSORS_OVERRIDES_FILE = path.join(SCRAPER_DATA_DIR, "professors.overrides.json");
 
 interface RmpFile {
   professors?: RmpInput[];
@@ -63,7 +63,7 @@ async function listJsonFiles(dir: string, prefix: RegExp): Promise<string[]> {
 }
 
 /** Gather every professor-name source into the registry-builder input shape. */
-export async function collectRegistryInputs(): Promise<RegistryInputs> {
+async function collectRegistryInputs(): Promise<RegistryInputs> {
   const rmp = (await readJsonOptional<RmpFile>(RATEMYPROFESSORS_FILE))?.professors ?? [];
 
   const gradesJson = (await readJsonOptional<GradesCourse[]>(GRADES_FILE)) ?? [];
