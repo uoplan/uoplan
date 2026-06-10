@@ -58,8 +58,7 @@ const WEEK_MASK_SLOT_MINUTES: u32 = 5;
 /// Slots per day covering a full 24h (1440 / 5 = 288).
 const WEEK_MASK_SLOTS_PER_DAY: u32 = (24 * 60) / WEEK_MASK_SLOT_MINUTES;
 /// `ceil(7 * 288 / 64)` = 32 u64 words (2016 bits used of 2048).
-const WEEK_MASK_WORDS: usize =
-    ((WEEK_MASK_DAYS * WEEK_MASK_SLOTS_PER_DAY) as usize).div_ceil(64);
+const WEEK_MASK_WORDS: usize = ((WEEK_MASK_DAYS * WEEK_MASK_SLOTS_PER_DAY) as usize).div_ceil(64);
 
 /// Fixed-size weekly time-occupancy bitmask (see [`Enrollment::mask`]).
 #[derive(Clone, Copy, Debug)]
@@ -74,7 +73,9 @@ impl Default for WeekMask {
 }
 
 impl WeekMask {
-    pub const EMPTY: WeekMask = WeekMask { words: [0; WEEK_MASK_WORDS] };
+    pub const EMPTY: WeekMask = WeekMask {
+        words: [0; WEEK_MASK_WORDS],
+    };
 
     /// Mark the half-open minute range `[start, end)` on `day` as occupied,
     /// rounding the start *down* and end *up* to slot boundaries (conservative:

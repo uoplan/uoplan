@@ -12,16 +12,7 @@ use crate::prereq::{build_prereq_context, can_take_course};
 use crate::rng::{scramble_seed, shuffle_in_place, weighted_random_pick_index, Rng};
 use crate::timetable::{first_seeded_subset_arrangement, has_valid_section_combos, FnResolver};
 use crate::types::Enrollment;
-
-const EASIER_APLUS_PIVOT: f64 = 20.0;
-const EASIER_APLUS_BASE: f64 = 5.25;
-const EASIER_APLUS_SCALE: f64 = 10.0;
-
-// "Prefer higher sentiment" soft weighting over the 1-5 course-feedback scale.
-// Pivot 3.5 is neutral; a course one point above gets ~2x weight, one below ~0.5x.
-const SENTIMENT_PIVOT: f64 = 3.5;
-const SENTIMENT_BASE: f64 = 2.0;
-const SENTIMENT_SCALE: f64 = 1.0;
+use crate::weights::{easier_weight, sentiment_weight};
 
 pub struct BasicParams<'a> {
     pub data: &'a DataView,
@@ -48,30 +39,6 @@ pub struct BasicParams<'a> {
 pub struct BasicResult {
     pub schedule: Option<Vec<Enrollment>>,
     pub optional_pool: Vec<String>,
-}
-
-fn easier_weight(code: &str, prefer_easier: bool, aplus: &HashMap<String, f64>) -> f64 {
-    if !prefer_easier {
-        return 1.0;
-    }
-    match aplus.get(code) {
-        None => 1.0,
-        Some(&a) => EASIER_APLUS_BASE.powf((a - EASIER_APLUS_PIVOT) / EASIER_APLUS_SCALE),
-    }
-}
-
-fn sentiment_weight(
-    code: &str,
-    prefer_higher_sentiment: bool,
-    sentiment: &HashMap<String, f64>,
-) -> f64 {
-    if !prefer_higher_sentiment {
-        return 1.0;
-    }
-    match sentiment.get(code) {
-        None => 1.0,
-        Some(&s) => SENTIMENT_BASE.powf((s - SENTIMENT_PIVOT) / SENTIMENT_SCALE),
-    }
 }
 
 /// Combined soft selection multiplier (prefer-easier × prefer-higher-sentiment).
@@ -136,7 +103,11 @@ pub fn generate_basic(params: BasicParams) -> BasicResult {
     } = params;
 
     let pinned_norm: Vec<String> = pinned.iter().map(|c| normalize_course_code(c)).collect();
-    let effective_seed = if current_seed != 0 { current_seed } else { first_seed };
+    let effective_seed = if current_seed != 0 {
+        current_seed
+    } else {
+        first_seed
+    };
     let mut rng = Rng::new(scramble_seed(effective_seed));
 
     let target_count = pinned.len() + basic_electives_count;

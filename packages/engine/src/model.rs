@@ -113,7 +113,10 @@ pub fn first_four_digit_number(code: &str) -> Option<u32> {
 /// Course level floored to the nearest thousand (1000, 2000, ...), or None.
 pub fn course_level(code: &str) -> Option<i64> {
     let (_, number) = parse_course_code(code)?;
-    let num: i64 = number.trim_end_matches(|c: char| c.is_ascii_alphabetic()).parse().ok()?;
+    let num: i64 = number
+        .trim_end_matches(|c: char| c.is_ascii_alphabetic())
+        .parse()
+        .ok()?;
     Some((num / 1000) * 1000)
 }
 
@@ -137,7 +140,11 @@ pub enum LanguageBucket {
 
 pub fn level_bucket(code: &str) -> Option<LevelBucket> {
     let n = first_numeric(code)?;
-    Some(if n >= 5000 { LevelBucket::Grad } else { LevelBucket::Undergrad })
+    Some(if n >= 5000 {
+        LevelBucket::Grad
+    } else {
+        LevelBucket::Undergrad
+    })
 }
 
 pub fn language_bucket(code: &str) -> Option<LanguageBucket> {
@@ -241,7 +248,9 @@ impl DataView {
                 .unwrap_or_default();
             course_code_str.push(code.clone());
 
-            course_index.entry(normalize_course_code(&code)).or_insert(i);
+            course_index
+                .entry(normalize_course_code(&code))
+                .or_insert(i);
             for alias in &course.aliases {
                 if let Some(a) = catalogue.course_codes.get(alias.index as usize) {
                     course_index.entry(normalize_course_code(a)).or_insert(i);
