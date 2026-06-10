@@ -11,6 +11,8 @@ pnpm dev              # Vite dev server (runs generate + engine-wasm:dev + data-
 pnpm build            # Production build (generate + engine-wasm + data-proto + vite + prerender)
 pnpm test             # Run all workspace tests once (vitest)
 pnpm test:watch       # Watch mode (apps/web)
+pnpm test:coverage    # Per-package Vitest coverage (v8; text + HTML in each pkg's coverage/)
+pnpm test:ui          # Interactive Vitest UI for apps/web (per-package: pnpm --filter <pkg> test:ui)
 pnpm typecheck        # tsgo typecheck across all packages (+ wrangler types)
 pnpm lint             # oxlint over apps/web, apps/scraper, packages/core
 pnpm lint:fix         # oxlint --fix
@@ -24,6 +26,9 @@ pnpm deadcode         # knip
 pnpm build:engine-wasm                   # wasm-pack build --release (run before vite/worker builds)
 pnpm build:engine-wasm:dev               # wasm-pack build --dev
 pnpm --filter @uoplan/engine test:rust   # cargo test for the engine crate
+pnpm coverage:rust                       # cargo-llvm-cov HTML report (target/llvm-cov/html)
+# Rust coverage needs the tool once: cargo install cargo-llvm-cov && rustup component add llvm-tools-preview
+# (runs tests under --release; wall-clock timing asserts auto-relax under instrumentation)
 
 # Scraper / data
 pnpm scrape:catalogue # Scrape per-year course/program data (--force to re-scrape)
@@ -82,7 +87,7 @@ apps/scraper/data/*.json        (source datasets, committed for diffability)
 
 - **`apps/web/src/store/`** — Zustand slices (`appStore.ts` composes them; see `docs/store-architecture.md`), `requirementCompute.ts`, `scheduleHelpers.ts` (requirement pools + `computeCoursesPerPool`).
 - **`apps/web/src/lib/`** — `generateSchedulesAction.ts` (schedule-generation orchestration: builds the request, runs the WASM engine, maps the response), `engine/engineHost.ts` (web WASM init + engine memoization), URL/state glue, `encodeSchedulePayload.ts`, `importFromUEnroll.ts`.
-- **`packages/engine/`** — Rust crate (`src/lib.rs`, `advanced.rs`, …) compiled to WASM. `package.json` exports `./wasm` (Vite `?url`) and `./engine.wasm` (wrangler). Scripts: `build:wasm`(release)/`build:wasm:dev`/`test:rust`/`bench` (criterion).
+- **`packages/engine/`** — Rust crate (`src/lib.rs`, `advanced.rs`, …) compiled to WASM. `package.json` exports `./wasm` (Vite `?url`) and `./engine.wasm` (wrangler). Scripts: `build:wasm`(release)/`build:wasm:dev`/`test:rust`/`coverage`(cargo-llvm-cov HTML)/`coverage:lcov`/`bench` (criterion).
 - **`packages/core/src/`** — `engineBridge.ts` (TS↔engine boundary: `buildBasicRequest`/`buildAdvancedRequest`, `mapGenerationResponse`, `ScheduleEngine` interface, runners), `scheduleFromStateEngine.ts` (OG reconstruction via the engine), `reconstruct.ts`, `engine/` (retained TS **relaxation diagnostics** only — `constraints/`, `timetable/`, `diagnostics/`), `generation/` (shared primitives + types: `sectionCombos.ts`, `overlaps.ts`, `types.ts`, `fingerprint.ts`), `requirements/`, `prerequisites/`, `dataCache.ts`, `stateEncode.ts`, `implicitHonours.ts`.
 - **`packages/proto/`** — `proto/{state,data,cli,engine}.proto`; generated TS in `src/generated/*` (git-ignored), exported via `@uoplan/proto` namespaces (`StateProto`/`DataProto`/`CliProto`/`EngineProto`) or subpaths (`@uoplan/proto/state|data|cli|engine`). Regenerate with `pnpm --filter @uoplan/proto generate`. `cli.proto` is synced to the Rust CLI via `pnpm sync:proto-cli`; the Rust engine decodes `engine.proto`/`data.proto` directly via `prost`.
 - **`apps/scraper/data/`** — source JSON datasets (committed).

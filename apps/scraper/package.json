@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui --coverage",
     "scrape:catalogue": "node src/cli/catalogue.ts",
     "backfill:aliases": "node src/cli/backfillAliases.ts",
     "scrape:schedules": "node src/cli/schedules.ts",
@@ -32,6 +34,8 @@
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
+    "@vitest/coverage-v8": "4.1.7",
+    "@vitest/ui": "4.1.7",
     "tesseract.js": "^7.0.0",
     "vitest": "^4.1.0"
   }

@@ -106,7 +106,14 @@ fn large_fixed_set_is_seed_stable() {
     // Loose performance guard: with FC+MRV the whole 256-seed sweep is near-instant.
     // The pre-fix thrashing solver would blow far past this on a hard set.
     assert!(
-        elapsed.as_secs() < 20,
+        coverage_instrumented() || elapsed.as_secs() < 20,
         "seed sweep took too long ({elapsed:?}); the timetabler may be thrashing"
     );
+}
+
+/// True when running under coverage instrumentation (`cargo llvm-cov`), where
+/// wall-clock timing is heavily skewed; the loose performance guard is relaxed
+/// while correctness assertions still run.
+fn coverage_instrumented() -> bool {
+    std::env::var_os("LLVM_PROFILE_FILE").is_some()
 }

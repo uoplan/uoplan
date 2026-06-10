@@ -85,6 +85,19 @@ export default defineConfig({
     ],
   },
   test: {
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html"],
+      reportsDirectory: "coverage",
+      include: ["src/**"],
+      exclude: [
+        "src/**/*.test.{ts,tsx}",
+        "src/**/*.browser.test.{ts,tsx}",
+        "src/**/*.d.ts",
+        "src/test/**",
+        "src/routeTree.gen.ts",
+      ],
+    },
     projects: [
       {
         extends: true,

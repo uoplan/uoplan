@@ -12,6 +12,8 @@
     "preview": "vite preview",
     "test": "vitest run --project unit",
     "test:watch": "vitest --project unit",
+    "test:coverage": "vitest run --project unit --coverage",
+    "test:ui": "vitest --project unit --ui --coverage",
     "test:browser": "vitest run --project browser",
     "test:e2e": "playwright test"
   },
@@ -65,6 +67,8 @@
     "@vitejs/plugin-react": "^6.0.1",
     "@vitest/browser": "^4.1.7",
     "@vitest/browser-playwright": "^4.1.7",
+    "@vitest/coverage-v8": "4.1.7",
+    "@vitest/ui": "4.1.7",
     "markdown-it": "^14.1.1",
     "playwright": "^1.60.0",
     "rollup-plugin-visualizer": "^7.0.1",

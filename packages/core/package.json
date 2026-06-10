@@ -25,6 +25,8 @@
     "publish:npm": "pnpm build && pnpm publish --access public --no-git-checks",
     "typecheck": "tsgo -b tsconfig.json",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui --coverage",
     "bench": "vitest bench"
   },
   "dependencies": {
@@ -34,6 +36,8 @@
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
+    "@vitest/coverage-v8": "4.1.7",
+    "@vitest/ui": "4.1.7",
     "vitest": "^4.1.0"
   }
 }

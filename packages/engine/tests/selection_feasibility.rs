@@ -41,6 +41,14 @@ const SEEDS: u32 = 64;
 /// by the global probe budget (see `advanced.rs`), independent of wall clock.
 const PER_SEED_BUDGET: Duration = Duration::from_millis(2_000);
 
+/// True when running under coverage instrumentation (`cargo llvm-cov`), where
+/// wall-clock timing is heavily skewed; the per-seed wall-clock net is relaxed
+/// while the correctness assertions still run. The real bound is the internal
+/// global probe budget, independent of wall clock.
+fn coverage_instrumented() -> bool {
+    std::env::var_os("LLVM_PROFILE_FILE").is_some()
+}
+
 fn undergrad_schedulable(sched: &SchedulesData) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
     for s in &sched.schedules {
@@ -109,7 +117,7 @@ fn run_target(engine: &Engine, pool: &[String], target: u32) {
             resp.courses.len()
         );
         assert!(
-            elapsed <= PER_SEED_BUDGET,
+            coverage_instrumented() || elapsed <= PER_SEED_BUDGET,
             "target {target}, seed {seed}: took {elapsed:?} (> {PER_SEED_BUDGET:?}); \
              a slow seed risks the 3 s worker timeout once run as WASM"
         );
@@ -202,7 +210,7 @@ fn advanced_infeasible_request_fails_fast_for_every_seed() {
             "seed {seed}: reported a schedule for an impossible {target}-course request"
         );
         assert!(
-            elapsed <= PER_SEED_BUDGET,
+            coverage_instrumented() || elapsed <= PER_SEED_BUDGET,
             "seed {seed}: infeasible request took {elapsed:?} (> {PER_SEED_BUDGET:?}); the \
              internal work bound must stop it well under the worker timeout, not grind to it"
         );
