@@ -10,6 +10,7 @@ import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
 import { useSwapModal } from "../../hooks/useSwapModal";
 import { useScheduleTransition, useWeekIndexTransition } from "../../hooks/useScheduleTransition";
 import { slotActiveInWeek } from "../../hooks/useScheduleWeeks";
+import { computeScheduleDateBounds } from "../../hooks/useTimetableDateRange";
 import { WeekCalendar } from "./WeekCalendar";
 import { WeekPreviewPanel } from "./WeekPreviewPanel";
 import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
@@ -204,19 +205,8 @@ export function CalendarView({
   const allEvents = useCalendarEvents(displayedSchedule, professorRatings, sentiment);
 
   const scheduleDateRange = useMemo(() => {
-    if (!schedule) return null;
-    let min: string | null = null;
-    let max: string | null = null;
-    for (const enrollment of schedule.enrollments) {
-      for (const { section } of Object.values(enrollment.sectionCombo)) {
-        for (const t of section.times) {
-          if (!t.meetingDates) continue;
-          if (!min || t.meetingDates[0] < min) min = t.meetingDates[0];
-          if (!max || t.meetingDates[1] > max) max = t.meetingDates[1];
-        }
-      }
-    }
-    return min && max ? { start: min, end: max } : null;
+    const { start, end } = computeScheduleDateBounds(schedule);
+    return start && end ? { start, end } : null;
   }, [schedule]);
 
   const currentGroup: WeekGroup | null = weekGroups[displayedWeekIndex] ?? null;

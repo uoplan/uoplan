@@ -9,6 +9,7 @@ import {
 } from "../../lib/explore/programSearch";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import { RatingBadge } from "../shared/RatingBadge";
+import { EXPLORE_RESULT_CARD_STYLE, exploreCardBackState } from "./exploreResultCardShared";
 
 type Props = {
   program: ExploreProgramSearchEntry;
@@ -18,39 +19,14 @@ type Props = {
 };
 
 export function SearchResultProgramCard({ program, gradeViz, sentiment, query }: Props) {
-  const q = query?.trim() ?? "";
-
   return (
     <Link
       to="/explore/program/$"
       params={{ _splat: programSlugToPathParam(program.slug) }}
       search={EMPTY_EXPLORE_SEARCH}
-      state={
-        {
-          back: {
-            to: "/explore",
-            search: EMPTY_EXPLORE_SEARCH,
-            label: q ? tr("explore.backToSearch", { q }) : tr("explore.title"),
-          },
-        } as never
-      }
+      state={exploreCardBackState(EMPTY_EXPLORE_SEARCH, query) as never}
       className="soft-lift"
-      style={{
-        width: 190,
-        minWidth: 190,
-        flexShrink: 0,
-        display: "flex",
-        flexDirection: "column",
-        minHeight: 155,
-        backgroundColor: "var(--app-surface-sunken)",
-        border: "var(--app-border-width) solid var(--app-border)",
-        borderRadius: "var(--app-radius)",
-        overflow: "hidden",
-        textDecoration: "none",
-        color: "inherit",
-        transition:
-          "background-color var(--app-transition), border-color var(--app-transition), transform var(--app-transition), box-shadow var(--app-transition)",
-      }}
+      style={EXPLORE_RESULT_CARD_STYLE}
     >
       <Stack gap={5} p={12} style={{ flex: 1 }}>
         <Text
