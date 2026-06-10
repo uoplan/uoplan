@@ -1,6 +1,8 @@
 import { page } from "vitest/browser";
 import { expect, test } from "vitest";
 import { useState } from "react";
+import { MotionConfig } from "framer-motion";
+import { render } from "vitest-browser-react";
 
 import { AnimatedNumber } from "./AnimatedNumber";
 import { renderWithProviders } from "../../test/renderWithProviders";
@@ -40,4 +42,65 @@ test("snaps to the new value when it changes (reduced motion)", async () => {
 
   await page.getByRole("button", { name: "bump" }).click();
   await expect.element(page.getByText("42 pts")).toBeInTheDocument();
+});
+
+test("countOnLoad snaps straight to the value under reduced motion", async () => {
+  function Harness() {
+    const [value, setValue] = useState<number | null>(null);
+    return (
+      <div>
+        <button type="button" onClick={() => setValue(500)}>
+          load
+        </button>
+        <AnimatedNumber
+          value={value}
+          format={(n) => `$${Math.round(n)}`}
+          countOnLoad
+          placeholder="—"
+        />
+      </div>
+    );
+  }
+
+  await renderWithProviders(<Harness />);
+  await expect.element(page.getByText("—")).toBeInTheDocument();
+
+  await page.getByRole("button", { name: "load" }).click();
+  await expect.element(page.getByText("$500")).toBeInTheDocument();
+});
+
+test("countOnLoad counts up from 0 to the loaded value", async () => {
+  const seen = new Set<number>();
+
+  function Harness() {
+    const [value, setValue] = useState<number | null>(null);
+    return (
+      <MotionConfig reducedMotion="never">
+        <button type="button" onClick={() => setValue(1000)}>
+          load
+        </button>
+        <AnimatedNumber
+          value={value}
+          format={(n) => {
+            const rounded = Math.round(n);
+            seen.add(rounded);
+            return `$${rounded}`;
+          }}
+          countOnLoad
+          duration={0.6}
+          placeholder="—"
+        />
+      </MotionConfig>
+    );
+  }
+
+  await render(<Harness />);
+  await expect.element(page.getByText("—")).toBeInTheDocument();
+
+  await page.getByRole("button", { name: "load" }).click();
+  await expect.element(page.getByText("$1000")).toBeInTheDocument();
+
+  // It animated through intermediate values rather than snapping to the target.
+  const intermediates = [...seen].filter((n) => n > 0 && n < 1000);
+  expect(intermediates.length).toBeGreaterThan(0);
 });
