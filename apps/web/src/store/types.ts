@@ -11,6 +11,7 @@ import type { CourseLanguageBucket, CourseLevelBucket } from "@uoplan/core";
 import type { Indices } from "@uoplan/core";
 import type { Term } from "@uoplan/core";
 import type { ProfessorRatingsMap } from "@uoplan/core";
+import type { ProfessorRegistry } from "@uoplan/core";
 import type { Discipline } from "@uoplan/core";
 import type { DecodedState } from "@uoplan/core";
 import type { LeadDescriptor, TimetableFailureDiagnostics } from "@uoplan/core";
@@ -81,6 +82,8 @@ export interface AppState {
   /** True while the lazily-loaded {@link courseGrades} asset is being fetched/decoded. */
   courseGradesLoading: boolean;
   disciplines: Discipline[] | null;
+  /** Canonical professor registry (slug/legacyId lookups), lazily loaded from `professors.pb`. */
+  professors: ProfessorRegistry | null;
   loading: boolean;
   /** 0–100 while {@link loading} is true. */
   loadProgress: number;
@@ -201,6 +204,8 @@ export interface AppActions {
   ensureProfessorRatings: () => Promise<void>;
   /** Lazily fetch + decode `disciplines.pb`. Idempotent. */
   ensureDisciplines: () => Promise<void>;
+  /** Lazily fetch + decode `professors.pb` into the canonical registry. Idempotent. */
+  ensureProfessors: () => Promise<void>;
   /** Lazily load the year-specific catalogue for the current `firstYear` and recompute. Idempotent. */
   ensureYearCatalogue: () => Promise<void>;
   setSelectedTermId: (termId: string) => Promise<void>;

@@ -1,5 +1,13 @@
 import * as DataProto from "@uoplan/proto/data";
 import { CourseCodeIndexer, parseTermIdToNumber } from "./shared.ts";
+import type { ProfessorResolver } from "../professors/buildRegistry.ts";
+
+/** Convert a 0-based registry index (or null) to a 1-based proto ref (undefined = none). */
+function toProfessorRef(resolver: ProfessorResolver | undefined, name: string, legacyId?: number) {
+  if (!resolver || !name) return undefined;
+  const idx = resolver.index(name, legacyId);
+  return idx == null ? undefined : idx + 1;
+}
 
 interface ScheduleTimeInput {
   day?: string;
@@ -69,6 +77,7 @@ function sectionStatusToProto(status: unknown): number {
 export function mapSchedules(
   input: SchedulesJsonInput,
   predictions?: Map<string, Array<{ name: string; legacyId?: number }>>,
+  resolver?: ProfessorResolver,
 ) {
   const indexer = new CourseCodeIndexer();
 
@@ -98,6 +107,7 @@ export function mapSchedules(
                   endMinutes: time.endMinutes ?? 0,
                   virtual: Boolean(time.virtual),
                   instructor: time.instructor ?? undefined,
+                  professorRef: toProfessorRef(resolver, time.instructor ?? ""),
                   meetingDates:
                     Array.isArray(time.meetingDates) && time.meetingDates.length >= 2
                       ? {
@@ -114,6 +124,7 @@ export function mapSchedules(
                 ).map((p) => ({
                   name: p.name,
                   legacyId: p.legacyId ?? undefined,
+                  professorRef: toProfessorRef(resolver, p.name, p.legacyId),
                 })),
               })),
             },

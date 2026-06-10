@@ -26,9 +26,9 @@ import { Route as TrendsCoursesRouteImport } from './routes/trends/courses'
 import { Route as ScheduleCalendarIndexRouteImport } from './routes/schedule/calendar/index'
 import { Route as ExploreProgramSplatRouteImport } from './routes/explore/program/$'
 import { Route as ExploreDisciplineDisciplineRouteImport } from './routes/explore/discipline/$discipline'
-import { Route as ExploreProfessorLegacyIdIndexRouteImport } from './routes/explore/professor/$legacyId/index'
+import { Route as ExploreProfessorSlugIndexRouteImport } from './routes/explore/professor/$slug/index'
 import { Route as ExploreCourseCourseIndexRouteImport } from './routes/explore/course/$course/index'
-import { Route as ExploreProfessorLegacyIdFeedbackRouteImport } from './routes/explore/professor/$legacyId/feedback'
+import { Route as ExploreProfessorSlugFeedbackRouteImport } from './routes/explore/professor/$slug/feedback'
 import { Route as ExploreCourseCourseScheduleRouteImport } from './routes/explore/course/$course/schedule'
 import { Route as ExploreCourseCourseFeedbackRouteImport } from './routes/explore/course/$course/feedback'
 
@@ -118,10 +118,10 @@ const ExploreDisciplineDisciplineRoute =
     path: '/discipline/$discipline',
     getParentRoute: () => ExploreRouteRoute,
   } as any)
-const ExploreProfessorLegacyIdIndexRoute =
-  ExploreProfessorLegacyIdIndexRouteImport.update({
-    id: '/professor/$legacyId/',
-    path: '/professor/$legacyId/',
+const ExploreProfessorSlugIndexRoute =
+  ExploreProfessorSlugIndexRouteImport.update({
+    id: '/professor/$slug/',
+    path: '/professor/$slug/',
     getParentRoute: () => ExploreRouteRoute,
   } as any)
 const ExploreCourseCourseIndexRoute =
@@ -130,10 +130,10 @@ const ExploreCourseCourseIndexRoute =
     path: '/course/$course/',
     getParentRoute: () => ExploreRouteRoute,
   } as any)
-const ExploreProfessorLegacyIdFeedbackRoute =
-  ExploreProfessorLegacyIdFeedbackRouteImport.update({
-    id: '/professor/$legacyId/feedback',
-    path: '/professor/$legacyId/feedback',
+const ExploreProfessorSlugFeedbackRoute =
+  ExploreProfessorSlugFeedbackRouteImport.update({
+    id: '/professor/$slug/feedback',
+    path: '/professor/$slug/feedback',
     getParentRoute: () => ExploreRouteRoute,
   } as any)
 const ExploreCourseCourseScheduleRoute =
@@ -169,9 +169,9 @@ export interface FileRoutesByFullPath {
   '/schedule/calendar/': typeof ScheduleCalendarIndexRoute
   '/explore/course/$course/feedback': typeof ExploreCourseCourseFeedbackRoute
   '/explore/course/$course/schedule': typeof ExploreCourseCourseScheduleRoute
-  '/explore/professor/$legacyId/feedback': typeof ExploreProfessorLegacyIdFeedbackRoute
+  '/explore/professor/$slug/feedback': typeof ExploreProfessorSlugFeedbackRoute
   '/explore/course/$course/': typeof ExploreCourseCourseIndexRoute
-  '/explore/professor/$legacyId/': typeof ExploreProfessorLegacyIdIndexRoute
+  '/explore/professor/$slug/': typeof ExploreProfessorSlugIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -190,9 +190,9 @@ export interface FileRoutesByTo {
   '/schedule/calendar': typeof ScheduleCalendarIndexRoute
   '/explore/course/$course/feedback': typeof ExploreCourseCourseFeedbackRoute
   '/explore/course/$course/schedule': typeof ExploreCourseCourseScheduleRoute
-  '/explore/professor/$legacyId/feedback': typeof ExploreProfessorLegacyIdFeedbackRoute
+  '/explore/professor/$slug/feedback': typeof ExploreProfessorSlugFeedbackRoute
   '/explore/course/$course': typeof ExploreCourseCourseIndexRoute
-  '/explore/professor/$legacyId': typeof ExploreProfessorLegacyIdIndexRoute
+  '/explore/professor/$slug': typeof ExploreProfessorSlugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -215,9 +215,9 @@ export interface FileRoutesById {
   '/schedule/calendar/': typeof ScheduleCalendarIndexRoute
   '/explore/course/$course/feedback': typeof ExploreCourseCourseFeedbackRoute
   '/explore/course/$course/schedule': typeof ExploreCourseCourseScheduleRoute
-  '/explore/professor/$legacyId/feedback': typeof ExploreProfessorLegacyIdFeedbackRoute
+  '/explore/professor/$slug/feedback': typeof ExploreProfessorSlugFeedbackRoute
   '/explore/course/$course/': typeof ExploreCourseCourseIndexRoute
-  '/explore/professor/$legacyId/': typeof ExploreProfessorLegacyIdIndexRoute
+  '/explore/professor/$slug/': typeof ExploreProfessorSlugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -241,9 +241,9 @@ export interface FileRouteTypes {
     | '/schedule/calendar/'
     | '/explore/course/$course/feedback'
     | '/explore/course/$course/schedule'
-    | '/explore/professor/$legacyId/feedback'
+    | '/explore/professor/$slug/feedback'
     | '/explore/course/$course/'
-    | '/explore/professor/$legacyId/'
+    | '/explore/professor/$slug/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -262,9 +262,9 @@ export interface FileRouteTypes {
     | '/schedule/calendar'
     | '/explore/course/$course/feedback'
     | '/explore/course/$course/schedule'
-    | '/explore/professor/$legacyId/feedback'
+    | '/explore/professor/$slug/feedback'
     | '/explore/course/$course'
-    | '/explore/professor/$legacyId'
+    | '/explore/professor/$slug'
   id:
     | '__root__'
     | '/'
@@ -286,9 +286,9 @@ export interface FileRouteTypes {
     | '/schedule/calendar/'
     | '/explore/course/$course/feedback'
     | '/explore/course/$course/schedule'
-    | '/explore/professor/$legacyId/feedback'
+    | '/explore/professor/$slug/feedback'
     | '/explore/course/$course/'
-    | '/explore/professor/$legacyId/'
+    | '/explore/professor/$slug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -422,11 +422,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExploreDisciplineDisciplineRouteImport
       parentRoute: typeof ExploreRouteRoute
     }
-    '/explore/professor/$legacyId/': {
-      id: '/explore/professor/$legacyId/'
-      path: '/professor/$legacyId'
-      fullPath: '/explore/professor/$legacyId/'
-      preLoaderRoute: typeof ExploreProfessorLegacyIdIndexRouteImport
+    '/explore/professor/$slug/': {
+      id: '/explore/professor/$slug/'
+      path: '/professor/$slug'
+      fullPath: '/explore/professor/$slug/'
+      preLoaderRoute: typeof ExploreProfessorSlugIndexRouteImport
       parentRoute: typeof ExploreRouteRoute
     }
     '/explore/course/$course/': {
@@ -436,11 +436,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExploreCourseCourseIndexRouteImport
       parentRoute: typeof ExploreRouteRoute
     }
-    '/explore/professor/$legacyId/feedback': {
-      id: '/explore/professor/$legacyId/feedback'
-      path: '/professor/$legacyId/feedback'
-      fullPath: '/explore/professor/$legacyId/feedback'
-      preLoaderRoute: typeof ExploreProfessorLegacyIdFeedbackRouteImport
+    '/explore/professor/$slug/feedback': {
+      id: '/explore/professor/$slug/feedback'
+      path: '/professor/$slug/feedback'
+      fullPath: '/explore/professor/$slug/feedback'
+      preLoaderRoute: typeof ExploreProfessorSlugFeedbackRouteImport
       parentRoute: typeof ExploreRouteRoute
     }
     '/explore/course/$course/schedule': {
@@ -466,9 +466,9 @@ interface ExploreRouteRouteChildren {
   ExploreProgramSplatRoute: typeof ExploreProgramSplatRoute
   ExploreCourseCourseFeedbackRoute: typeof ExploreCourseCourseFeedbackRoute
   ExploreCourseCourseScheduleRoute: typeof ExploreCourseCourseScheduleRoute
-  ExploreProfessorLegacyIdFeedbackRoute: typeof ExploreProfessorLegacyIdFeedbackRoute
+  ExploreProfessorSlugFeedbackRoute: typeof ExploreProfessorSlugFeedbackRoute
   ExploreCourseCourseIndexRoute: typeof ExploreCourseCourseIndexRoute
-  ExploreProfessorLegacyIdIndexRoute: typeof ExploreProfessorLegacyIdIndexRoute
+  ExploreProfessorSlugIndexRoute: typeof ExploreProfessorSlugIndexRoute
 }
 
 const ExploreRouteRouteChildren: ExploreRouteRouteChildren = {
@@ -477,9 +477,9 @@ const ExploreRouteRouteChildren: ExploreRouteRouteChildren = {
   ExploreProgramSplatRoute: ExploreProgramSplatRoute,
   ExploreCourseCourseFeedbackRoute: ExploreCourseCourseFeedbackRoute,
   ExploreCourseCourseScheduleRoute: ExploreCourseCourseScheduleRoute,
-  ExploreProfessorLegacyIdFeedbackRoute: ExploreProfessorLegacyIdFeedbackRoute,
+  ExploreProfessorSlugFeedbackRoute: ExploreProfessorSlugFeedbackRoute,
   ExploreCourseCourseIndexRoute: ExploreCourseCourseIndexRoute,
-  ExploreProfessorLegacyIdIndexRoute: ExploreProfessorLegacyIdIndexRoute,
+  ExploreProfessorSlugIndexRoute: ExploreProfessorSlugIndexRoute,
 }
 
 const ExploreRouteRouteWithChildren = ExploreRouteRoute._addFileChildren(

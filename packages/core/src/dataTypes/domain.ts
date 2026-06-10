@@ -109,6 +109,12 @@ export type MeetingTime = {
   virtual: boolean;
   instructor?: string | null;
   meetingDates?: [string, string] | null;
+  /**
+   * 1-based index into the canonical professor registry (`ProfessorsData`),
+   * 0/undefined when unassigned ("Staff") or unresolved. Resolve via
+   * `professorIndexFromRef` / the registry runtime helpers.
+   */
+  professorRef?: number;
 };
 
 export type GradeDistribution = Record<string, number>;
@@ -120,6 +126,8 @@ export type GradeDistribution = Record<string, number>;
 export type PredictedInstructor = {
   name: string;
   legacyId?: number | null;
+  /** 1-based canonical professor registry ref (0/undefined = unresolved). */
+  professorRef?: number;
 };
 
 export type ComponentSection = {

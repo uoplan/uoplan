@@ -60,6 +60,7 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
       // lazy `ensureCourseGrades` resolves it to false.
       courseGradesLoading: true,
       disciplines: null,
+      professors: null,
       loading: false,
       loadProgress: 0,
       error: null,

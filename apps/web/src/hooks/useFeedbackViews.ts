@@ -68,18 +68,20 @@ export function useCourseFeedbackViews(urlCourseParam: string): FeedbackViews & 
  */
 export function useProfessorFeedbackViews(
   arg:
-    | { legacyId: number; professorName?: undefined }
-    | { professorName: string; legacyId?: undefined },
+    | { professorRef: number; legacyId?: undefined; professorName?: undefined }
+    | { legacyId: number; professorRef?: undefined; professorName?: undefined }
+    | { professorName: string; professorRef?: undefined; legacyId?: undefined },
 ): FeedbackViews & { displayName: string } {
-  const { legacyId, professorName: professorNameProp } = arg;
+  const { professorRef, legacyId, professorName: professorNameProp } = arg;
   const { data: feedback, loading: feedbackLoading } = useFeedbackData();
   const { offerings, loading: offeringsLoading } = useExploreOfferings();
 
   const professorOfferings = useMemo(() => {
+    if (professorRef != null) return offerings.filter((o) => o.professorRef === professorRef);
     if (legacyId != null) return offerings.filter((o) => o.legacyId === legacyId);
     const nameLower = professorNameProp?.toLowerCase() ?? "";
     return offerings.filter((o) => o.professorName.toLowerCase() === nameLower);
-  }, [offerings, legacyId, professorNameProp]);
+  }, [offerings, professorRef, legacyId, professorNameProp]);
 
   const displayName = professorOfferings[0]?.professorName ?? professorNameProp ?? "";
 

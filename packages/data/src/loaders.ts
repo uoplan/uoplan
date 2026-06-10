@@ -4,6 +4,7 @@ import {
   type DisciplinesData,
   type Indices,
   type ProfessorRatingsMap,
+  type ProfessorRegistryEntry,
   type RateMyProfessorsData,
   type SchedulesData,
   type TermsData,
@@ -15,6 +16,7 @@ import {
   fromProtoCourseGradesData,
   fromProtoDisciplinesData,
   fromProtoIndices,
+  fromProtoProfessorsData,
   fromProtoRateMyProfessorsData,
   fromProtoSchedulesData,
   fromProtoTermsData,
@@ -32,6 +34,7 @@ export const dataAssetIds = {
   grades: "grades.pb",
   disciplines: "disciplines.pb",
   feedback: "feedback.pb",
+  professors: "professors.pb",
 } as const;
 
 export interface CatalogueManifest {
@@ -75,6 +78,12 @@ export async function loadRateMyProfessors(fetchBytes: FetchBytes): Promise<Rate
 
 export async function loadProfessorRatings(fetchBytes: FetchBytes): Promise<ProfessorRatingsMap> {
   return buildProfessorRatingsMap(await loadRateMyProfessors(fetchBytes));
+}
+
+export async function loadProfessors(fetchBytes: FetchBytes): Promise<ProfessorRegistryEntry[]> {
+  return fromProtoProfessorsData(
+    DataProto.ProfessorsData.decode(await fetchBytes(dataAssetIds.professors)),
+  );
 }
 
 export async function loadGrades(fetchBytes: FetchBytes): Promise<CourseGradesData> {

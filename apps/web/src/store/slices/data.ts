@@ -8,6 +8,8 @@ import {
   fromProtoCourseGradesData,
   fromProtoDisciplinesData,
   fromProtoIndices,
+  fromProtoProfessorsData,
+  buildProfessorRegistry,
   fromProtoRateMyProfessorsData,
   fromProtoSchedulesData,
   fromProtoTermsData,
@@ -44,6 +46,7 @@ interface DataSlice {
   ensureCourseGrades: AppStore["ensureCourseGrades"];
   ensureProfessorRatings: AppStore["ensureProfessorRatings"];
   ensureDisciplines: AppStore["ensureDisciplines"];
+  ensureProfessors: AppStore["ensureProfessors"];
   ensureYearCatalogue: AppStore["ensureYearCatalogue"];
   setSelectedTermId: AppStore["setSelectedTermId"];
   setFirstYear: AppStore["setFirstYear"];
@@ -61,6 +64,7 @@ export const createDataSlice =
     let gradesPromise: Promise<void> | null = null;
     let ratingsPromise: Promise<void> | null = null;
     let disciplinesPromise: Promise<void> | null = null;
+    let professorsPromise: Promise<void> | null = null;
     let yearCataloguePromise: Promise<void> | null = null;
 
     /** Rebuild the effective merged catalogue for the current store state. */
@@ -467,6 +471,28 @@ export const createDataSlice =
           throw err;
         });
         return disciplinesPromise;
+      },
+
+      ensureProfessors: async () => {
+        if (get().professors) return;
+        if (professorsPromise) return professorsPromise;
+        professorsPromise = (async () => {
+          const bytes = await optionalProtoBytes(dataAssetIds.professors);
+          if (!bytes) return;
+          try {
+            set({
+              professors: buildProfessorRegistry(
+                fromProtoProfessorsData(DataProto.ProfessorsData.decode(bytes)),
+              ),
+            });
+          } catch {
+            // Registry is optional; leave it null on a decode failure.
+          }
+        })().catch((err) => {
+          professorsPromise = null;
+          throw err;
+        });
+        return professorsPromise;
       },
 
       ensureYearCatalogue: async () => {

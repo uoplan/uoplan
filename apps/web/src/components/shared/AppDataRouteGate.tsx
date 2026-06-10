@@ -18,7 +18,7 @@ export function AppDataRouteGate({
   prewarm = false,
 }: {
   children: ReactNode;
-  requires?: readonly ("grades" | "ratings" | "disciplines")[];
+  requires?: readonly ("grades" | "ratings" | "disciplines" | "professors")[];
   /** Pre-warm the schedule worker once the core data is loaded. */
   prewarm?: boolean;
 }) {
@@ -37,6 +37,7 @@ export function AppDataRouteGate({
   const ensureCourseGrades = useAppStore((s) => s.ensureCourseGrades);
   const ensureProfessorRatings = useAppStore((s) => s.ensureProfessorRatings);
   const ensureDisciplines = useAppStore((s) => s.ensureDisciplines);
+  const ensureProfessors = useAppStore((s) => s.ensureProfessors);
 
   useEffect(() => {
     void loadData();
@@ -49,7 +50,15 @@ export function AppDataRouteGate({
     if (assets.includes("grades")) void ensureCourseGrades();
     if (assets.includes("ratings")) void ensureProfessorRatings();
     if (assets.includes("disciplines")) void ensureDisciplines();
-  }, [hasBooted, requiresKey, ensureCourseGrades, ensureProfessorRatings, ensureDisciplines]);
+    if (assets.includes("professors")) void ensureProfessors();
+  }, [
+    hasBooted,
+    requiresKey,
+    ensureCourseGrades,
+    ensureProfessorRatings,
+    ensureDisciplines,
+    ensureProfessors,
+  ]);
 
   useEffect(() => {
     if (!hasBooted || !prewarm || typeof window === "undefined") return;
