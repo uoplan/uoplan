@@ -14,10 +14,14 @@ use uoplan_engine::proto::engine::{
 };
 use uoplan_engine::Engine;
 
-const CATALOGUE_PB: &str =
-    concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/src/assets/data/catalogue.2026.pb");
-const SCHEDULES_PB: &str =
-    concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/src/assets/data/schedules.2269.pb");
+const CATALOGUE_PB: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../../apps/web/src/assets/data/catalogue.2026.pb"
+);
+const SCHEDULES_PB: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../../apps/web/src/assets/data/schedules.2269.pb"
+);
 
 /// Loaded real dataset plus a deterministic list of schedulable course codes.
 struct Dataset {
@@ -50,7 +54,10 @@ fn load_dataset() -> Option<Dataset> {
     schedulable.dedup();
 
     let engine = Engine::new(&cat_bytes, &sched_bytes).ok()?;
-    Some(Dataset { engine, schedulable })
+    Some(Dataset {
+        engine,
+        schedulable,
+    })
 }
 
 /// Undergrad (level 1000-4000) subset of the schedulable codes, mirroring the
@@ -109,12 +116,19 @@ struct Config {
 
 fn configs() -> Vec<Config> {
     let blocked_mornings: Vec<BlockedTime> = (0u32..5)
-        .map(|day| BlockedTime { day, start_minutes: 0, end_minutes: 600 })
+        .map(|day| BlockedTime {
+            day,
+            start_minutes: 0,
+            end_minutes: 600,
+        })
         .collect();
     vec![
         Config {
             name: "default",
-            constraints: GenerationConstraints { max_end_minutes: 24 * 60, ..Default::default() },
+            constraints: GenerationConstraints {
+                max_end_minutes: 24 * 60,
+                ..Default::default()
+            },
             virtual_sections_only: false,
         },
         Config {
@@ -146,7 +160,10 @@ fn configs() -> Vec<Config> {
         },
         Config {
             name: "virtual_only",
-            constraints: GenerationConstraints { max_end_minutes: 24 * 60, ..Default::default() },
+            constraints: GenerationConstraints {
+                max_end_minutes: 24 * 60,
+                ..Default::default()
+            },
             virtual_sections_only: true,
         },
     ]
@@ -169,7 +186,9 @@ fn bench_engine_new(c: &mut Criterion) {
     let (Ok(cat_bytes), Ok(sched_bytes)) =
         (std::fs::read(CATALOGUE_PB), std::fs::read(SCHEDULES_PB))
     else {
-        eprintln!("skipping engine_new bench: .pb artifacts not built (run `pnpm build:data-proto`)");
+        eprintln!(
+            "skipping engine_new bench: .pb artifacts not built (run `pnpm build:data-proto`)"
+        );
         return;
     };
 
@@ -185,7 +204,9 @@ fn bench_engine_new(c: &mut Criterion) {
 /// over course counts to show how cost scales with the number of courses.
 fn bench_timetable_amounts(c: &mut Criterion) {
     let Some(ds) = load_dataset() else {
-        eprintln!("skipping timetable benches: .pb artifacts not built (run `pnpm build:data-proto`)");
+        eprintln!(
+            "skipping timetable benches: .pb artifacts not built (run `pnpm build:data-proto`)"
+        );
         return;
     };
 
@@ -300,7 +321,9 @@ fn bench_basic_electives(c: &mut Criterion) {
 /// the average.
 fn bench_advanced_full_pool(c: &mut Criterion) {
     let Some(ds) = load_dataset() else {
-        eprintln!("skipping advanced benches: .pb artifacts not built (run `pnpm build:data-proto`)");
+        eprintln!(
+            "skipping advanced benches: .pb artifacts not built (run `pnpm build:data-proto`)"
+        );
         return;
     };
     let pool = undergrad_pool(&ds.schedulable);
@@ -314,11 +337,9 @@ fn bench_advanced_full_pool(c: &mut Criterion) {
     for &(target, seed) in &[(22u32, 7u32), (24u32, 60u32)] {
         let request = advanced_request(&pool, target, seed);
         group.throughput(Throughput::Elements(u64::from(target)));
-        group.bench_with_input(
-            BenchmarkId::from_parameter(target),
-            &request,
-            |b, req| b.iter(|| std::hint::black_box(ds.engine.generate(req).unwrap())),
-        );
+        group.bench_with_input(BenchmarkId::from_parameter(target), &request, |b, req| {
+            b.iter(|| std::hint::black_box(ds.engine.generate(req).unwrap()))
+        });
     }
     group.finish();
 }

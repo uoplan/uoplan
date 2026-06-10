@@ -9,7 +9,7 @@ use std::collections::{BTreeMap, HashMap, HashSet};
 
 use crate::constraints::Constraints;
 use crate::model::{
-    course_matches_filters, course_level_sort_key, first_four_digit_number, normalize_course_code,
+    course_level_sort_key, course_matches_filters, first_four_digit_number, normalize_course_code,
     subject_prefix, DataView, LanguageBucket, LevelBucket,
 };
 use crate::pools::{
@@ -26,15 +26,7 @@ use crate::timetable::{
     first_seeded_arrangement, has_valid_section_combos, passes_final, FnResolver, TimetableCourse,
 };
 use crate::types::{Enrollment, WeekMask};
-
-const EASIER_APLUS_PIVOT: f64 = 20.0;
-const EASIER_APLUS_BASE: f64 = 5.25;
-const EASIER_APLUS_SCALE: f64 = 10.0;
-
-// "Prefer higher sentiment" soft weighting over the 1-5 course-feedback scale.
-const SENTIMENT_PIVOT: f64 = 3.5;
-const SENTIMENT_BASE: f64 = 2.0;
-const SENTIMENT_SCALE: f64 = 1.0;
+use crate::weights::{easier_weight, sentiment_weight};
 
 /// Mirror of the TS RequirementWithStatus tree node.
 #[derive(Clone)]
@@ -298,7 +290,9 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
         excluded_elective_prefixes.contains(&prefix)
     };
 
-    let eff_sched = |code: &str, virtual_only: bool| data.effective_schedule(code, include_closed, virtual_only);
+    let eff_sched = |code: &str, virtual_only: bool| {
+        data.effective_schedule(code, include_closed, virtual_only)
+    };
 
     // --- honours selections ---
     let all_constrained: Vec<String> = constrained_per_requirement
@@ -314,25 +308,24 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
 
     let mut honours_selected: Vec<String> = Vec::new();
     let mut seen_honours: HashSet<String> = HashSet::new();
-    let consider_honours = |code: &str,
-                                honours_selected: &mut Vec<String>,
-                                seen_honours: &mut HashSet<String>| {
-        if !data.is_honours_project(code) {
-            return;
-        }
-        let norm = normalize_course_code(code);
-        if completed_set.contains(&norm) {
-            return;
-        }
-        if !prereq_eligible_set.contains(code) {
-            return;
-        }
-        if seen_honours.contains(&norm) {
-            return;
-        }
-        seen_honours.insert(norm);
-        honours_selected.push(code.to_string());
-    };
+    let consider_honours =
+        |code: &str, honours_selected: &mut Vec<String>, seen_honours: &mut HashSet<String>| {
+            if !data.is_honours_project(code) {
+                return;
+            }
+            let norm = normalize_course_code(code);
+            if completed_set.contains(&norm) {
+                return;
+            }
+            if !prereq_eligible_set.contains(code) {
+                return;
+            }
+            if seen_honours.contains(&norm) {
+                return;
+            }
+            seen_honours.insert(norm);
+            honours_selected.push(code.to_string());
+        };
     for code in &unique_constrained {
         consider_honours(code, &mut honours_selected, &mut seen_honours);
     }
@@ -447,7 +440,10 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
         None
     };
 
-    let non_honours_pinned_count = pinned.iter().filter(|c| !data.is_honours_project(c)).count();
+    let non_honours_pinned_count = pinned
+        .iter()
+        .filter(|c| !data.is_honours_project(c))
+        .count();
     let remaining_needed = effective_target.saturating_sub(non_honours_pinned_count);
 
     let mut filtered_optional_pool: Vec<String> = Vec::new();
@@ -457,8 +453,12 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
 
     let is_eligible_candidate = |code: &str, pool_type: Option<&str>| -> bool {
         let norm = normalize_course_code(code);
-        let virtual_only =
-            virtual_schedule_filter_applies(virtual_sections_only, pool_type, &norm, &explicit_exempt);
+        let virtual_only = virtual_schedule_filter_applies(
+            virtual_sections_only,
+            pool_type,
+            &norm,
+            &explicit_exempt,
+        );
         let sched = match eff_sched(code, virtual_only) {
             Some(s) => s,
             None => return false,
@@ -473,7 +473,8 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
         if data.is_honours_project(code) {
             return false;
         }
-        if is_elective_requirement_type(pool_type.unwrap_or("")) && !is_within_elective_level_cap(code)
+        if is_elective_requirement_type(pool_type.unwrap_or(""))
+            && !is_within_elective_level_cap(code)
         {
             return false;
         }
@@ -577,11 +578,16 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
                 if pinned.iter().any(|p| p == code)
                     || params.completed_courses.iter().any(|c| c == code)
                     || !prereq_eligible_set.contains(code)
-                    || !course_matches_filters(code, &params.level_buckets, &params.language_buckets)
+                    || !course_matches_filters(
+                        code,
+                        &params.level_buckets,
+                        &params.language_buckets,
+                    )
                 {
                     continue;
                 }
-                if is_elective_requirement_type(&pool.req_type) && !is_within_elective_level_cap(code)
+                if is_elective_requirement_type(&pool.req_type)
+                    && !is_within_elective_level_cap(code)
                 {
                     continue;
                 }
@@ -758,13 +764,8 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
             include_closed,
             virtual_for: |_code: &str| false,
         };
-        let arranged = first_seeded_arrangement(
-            &pinned,
-            data,
-            &resolver,
-            constraints,
-            &mut arrangement_rng,
-        );
+        let arranged =
+            first_seeded_arrangement(&pinned, data, &resolver, constraints, &mut arrangement_rng);
         if let Some(arranged) = arranged {
             for code in &pinned {
                 if let Some(rid) = requirement_id_for_pinned(code) {
@@ -800,7 +801,12 @@ struct ComboArena<'a> {
 }
 
 impl<'a> ComboArena<'a> {
-    fn new(data: &'a DataView, constraints: &'a Constraints, include_closed: bool, seed: u32) -> Self {
+    fn new(
+        data: &'a DataView,
+        constraints: &'a Constraints,
+        include_closed: bool,
+        seed: u32,
+    ) -> Self {
         ComboArena {
             data,
             constraints,
@@ -823,7 +829,8 @@ impl<'a> ComboArena<'a> {
             include_closed: self.include_closed,
             virtual_for: |_: &str| virtual_only,
         };
-        let built = build_timetable_course(code, self.data, &resolver, self.constraints, &mut self.rng);
+        let built =
+            build_timetable_course(code, self.data, &resolver, self.constraints, &mut self.rng);
         let slot = match built {
             Some(tc) => {
                 self.built.push(Box::new(tc));
@@ -873,7 +880,6 @@ const SELECTION_PLACEMENT_BUDGET: u64 = 400;
 /// stalls to effectively zero — making success independent of the seed).
 const SELECTION_RESTARTS: u32 = 100_000;
 
-
 /// Hard global cap on placement *work* across the WHOLE generation call (shared
 /// by every restart). The unit is overlap-check work, not attempts: each cheap
 /// placement probe charges O(courses-already-placed) (see [`Search::try_place`]),
@@ -904,8 +910,6 @@ const SELECTION_RESOLVE_TOTAL: u64 = 0;
 /// search rarely pays off versus trying another candidate or restart, and an
 /// unbounded probe over a 20+ course set is what made the worst case explode.
 const SELECTION_ARRANGE_NODE_BUDGET: u64 = 20_000;
-
-
 
 /// Mutable per-position progress while filling a single pool.
 struct FillProgress {
@@ -1146,7 +1150,9 @@ impl<'a> Search<'a> {
         // every node and dominates the per-node cost on large pools, so it must
         // be metered for the global budget to bound wall time rather than just
         // placement attempts.
-        self.global = self.global.saturating_sub((pool.order.len() - fp.idx) as u64);
+        self.global = self
+            .global
+            .saturating_sub((pool.order.len() - fp.idx) as u64);
         if !self.pool_forward_ok(pool, fp) {
             return false;
         }
@@ -1301,26 +1307,6 @@ fn run_pool_pick_pass(
         }
     }
 
-    let easier_mult = |code: &str| -> f64 {
-        if !prefer_easier {
-            return 1.0;
-        }
-        match course_aplus.get(code) {
-            None => 1.0,
-            Some(&a) => EASIER_APLUS_BASE.powf((a - EASIER_APLUS_PIVOT) / EASIER_APLUS_SCALE),
-        }
-    };
-
-    let sentiment_mult = |code: &str| -> f64 {
-        if !prefer_higher_sentiment {
-            return 1.0;
-        }
-        match course_sentiment.get(code) {
-            None => 1.0,
-            Some(&s) => SENTIMENT_BASE.powf((s - SENTIMENT_PIVOT) / SENTIMENT_SCALE),
-        }
-    };
-
     let weight_of = |code: &str, level_counts: &HashMap<i64, usize>| -> f64 {
         let level = course_level_sort_key(code);
         let has_non_course_prereq = prerequisites_contain_non_course(
@@ -1328,8 +1314,8 @@ fn run_pool_pick_pass(
         );
         let bucket_size = *level_counts.get(&level).unwrap_or(&1) as f64;
         (candidate_pool_weight(level, has_non_course_prereq) / bucket_size)
-            * easier_mult(code)
-            * sentiment_mult(code)
+            * easier_weight(code, prefer_easier, course_aplus)
+            * sentiment_weight(code, prefer_higher_sentiment, course_sentiment)
     };
 
     // Build a fill descriptor for each pool with remaining quota.
@@ -1377,7 +1363,11 @@ fn run_pool_pick_pass(
             .map(|agg| {
                 agg.iter()
                     .filter(|(pfx, rem)| {
-                        **rem > 0 && pool.candidate_courses.iter().any(|c| subject_prefix(c) == **pfx)
+                        **rem > 0
+                            && pool
+                                .candidate_courses
+                                .iter()
+                                .any(|c| subject_prefix(c) == **pfx)
                     })
                     .map(|(pfx, rem)| (pfx.clone(), *rem))
                     .collect()

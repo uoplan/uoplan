@@ -27,10 +27,14 @@ use uoplan_engine::proto::engine::{
 };
 use uoplan_engine::Engine;
 
-const CATALOGUE_PB: &str =
-    concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/src/assets/data/catalogue.2026.pb");
-const SCHEDULES_PB: &str =
-    concat!(env!("CARGO_MANIFEST_DIR"), "/../../apps/web/src/assets/data/schedules.2269.pb");
+const CATALOGUE_PB: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../../apps/web/src/assets/data/catalogue.2026.pb"
+);
+const SCHEDULES_PB: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../../apps/web/src/assets/data/schedules.2269.pb"
+);
 
 const SEEDS: u32 = 64;
 
@@ -137,7 +141,11 @@ fn advanced_full_pool_every_seed_succeeds_quickly() {
     };
     let sched = SchedulesData::decode(sched_bytes.as_slice()).unwrap();
     let pool = undergrad_schedulable(&sched);
-    assert!(pool.len() > 1000, "need a realistic undergrad pool, got {}", pool.len());
+    assert!(
+        pool.len() > 1000,
+        "need a realistic undergrad pool, got {}",
+        pool.len()
+    );
 
     let engine = Engine::new(&cat_bytes, &sched_bytes).unwrap();
 
@@ -167,7 +175,11 @@ fn advanced_infeasible_request_fails_fast_for_every_seed() {
     };
     let sched = SchedulesData::decode(sched_bytes.as_slice()).unwrap();
     let pool = undergrad_schedulable(&sched);
-    assert!(pool.len() > 1000, "need a realistic undergrad pool, got {}", pool.len());
+    assert!(
+        pool.len() > 1000,
+        "need a realistic undergrad pool, got {}",
+        pool.len()
+    );
 
     let engine = Engine::new(&cat_bytes, &sched_bytes).unwrap();
 

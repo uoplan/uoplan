@@ -2,7 +2,9 @@
 
 use std::collections::HashMap;
 
-use crate::model::{course_level, language_variant, normalize_course_code, subject_prefix, DataView};
+use crate::model::{
+    course_level, language_variant, normalize_course_code, subject_prefix, DataView,
+};
 use crate::proto::data::{CoursePrereqKind, CoursePrereqNode, CoursePrereqNodeType};
 
 pub struct TakenCourse {
@@ -94,7 +96,10 @@ pub fn can_take_course(code: &str, data: &DataView, ctx: &PrereqContext) -> bool
 
 fn meets_prereq(node: &CoursePrereqNode, ctx: &PrereqContext, in_or_group: bool) -> bool {
     if !node.programs.is_empty() {
-        let in_program = node.programs.iter().any(|p| ctx.student_programs.contains(p));
+        let in_program = node
+            .programs
+            .iter()
+            .any(|p| ctx.student_programs.contains(p));
         if !in_program {
             return false;
         }
@@ -202,7 +207,11 @@ fn credits_matching_non_course(node: &CoursePrereqNode, ctx: &PrereqContext) -> 
 
     // 2. both disciplines and levels
     if !node.disciplines.is_empty() && !node.levels.is_empty() {
-        let dset: Vec<String> = node.disciplines.iter().map(|d| d.to_ascii_uppercase()).collect();
+        let dset: Vec<String> = node
+            .disciplines
+            .iter()
+            .map(|d| d.to_ascii_uppercase())
+            .collect();
         let mut sum = 0.0;
         for t in &ctx.taken {
             if !dset.contains(&t.discipline.to_ascii_uppercase()) {
@@ -235,7 +244,11 @@ fn credits_matching_non_course(node: &CoursePrereqNode, ctx: &PrereqContext) -> 
         return node
             .disciplines
             .iter()
-            .map(|d| *ctx.discipline_credits.get(&d.to_ascii_uppercase()).unwrap_or(&0.0))
+            .map(|d| {
+                *ctx.discipline_credits
+                    .get(&d.to_ascii_uppercase())
+                    .unwrap_or(&0.0)
+            })
             .sum();
     }
 
@@ -252,5 +265,7 @@ pub fn prerequisites_contain_non_course(node: Option<&CoursePrereqNode>) -> bool
     if node.r#type == CoursePrereqNodeType::NonCourse as i32 && !is_soft_non_course(node) {
         return true;
     }
-    node.children.iter().any(|c| prerequisites_contain_non_course(Some(c)))
+    node.children
+        .iter()
+        .any(|c| prerequisites_contain_non_course(Some(c)))
 }
