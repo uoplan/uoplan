@@ -130,6 +130,17 @@ body {
   --switch-thumb-bg: var(--app-switch-thumb);
 }
 
+/* Off-state track: Mantine defaults the unchecked track to a flat grey
+   (`--mantine-color-dark-5`), which looks out of place against the accent-tinted
+   switch. Tint it with a darker shade of the accent instead. Scoped to the dark
+   themes (the light theme's grey track reads fine); the checked/on-track keeps
+   `--switch-color` via Mantine's higher-specificity `:checked` rule. The override
+   must sit on the track element itself, since Mantine sets `--switch-bg` there. */
+[data-app-theme="dark"] .mantine-Switch-track,
+[data-app-theme="geegees"] .mantine-Switch-track {
+  --switch-bg: color-mix(in oklab, var(--app-accent) 14%, var(--app-bg));
+}
+
 .mantine-Tabs-root {
   --tabs-color: var(--app-accent);
 }
