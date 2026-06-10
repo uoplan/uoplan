@@ -259,6 +259,7 @@ export function toProtoSchedulesData(input: SchedulesData): ProtoSchedulesData {
                   endMinutes: time.endMinutes,
                   virtual: time.virtual,
                   instructor: time.instructor ?? undefined,
+                  professorRef: time.professorRef,
                   meetingDates: time.meetingDates
                     ? {
                         startYyyymmdd: dateStringToYyyymmdd(time.meetingDates[0] ?? ""),
@@ -270,6 +271,7 @@ export function toProtoSchedulesData(input: SchedulesData): ProtoSchedulesData {
                 predictedInstructors: (section.predictedInstructors ?? []).map((p) => ({
                   name: p.name,
                   legacyId: p.legacyId ?? undefined,
+                  professorRef: p.professorRef,
                 })),
               })),
             },
@@ -313,6 +315,7 @@ export function fromProtoSchedulesData(input: ProtoSchedulesData): SchedulesData
                     endMinutes: Number(time.endMinutes),
                     virtual: time.virtual,
                     instructor: time.instructor ?? null,
+                    ...(time.professorRef ? { professorRef: time.professorRef } : {}),
                     meetingDates: time.meetingDates
                       ? [
                           yyyymmddToDateString(Number(time.meetingDates.startYyyymmdd)),
@@ -327,6 +330,7 @@ export function fromProtoSchedulesData(input: ProtoSchedulesData): SchedulesData
                       predictedInstructors: section.predictedInstructors.map((p) => ({
                         name: p.name,
                         legacyId: p.legacyId ?? null,
+                        ...(p.professorRef ? { professorRef: p.professorRef } : {}),
                       })),
                     }
                   : {}),

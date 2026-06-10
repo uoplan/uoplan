@@ -1,4 +1,12 @@
 import { normalizeCode } from "./shared.ts";
+import type { ProfessorResolver } from "../professors/buildRegistry.ts";
+
+/** Convert a 0-based registry index (or null) to a 1-based proto ref (undefined = none). */
+function toProfessorRef(resolver: ProfessorResolver | undefined, name: string, legacyId?: number) {
+  if (!resolver) return undefined;
+  const idx = resolver.index(name, legacyId);
+  return idx == null ? undefined : idx + 1;
+}
 
 interface GradeProfessorInput {
   name?: string;
@@ -68,22 +76,24 @@ function parseLegacyId(value: unknown): number | undefined {
   return undefined;
 }
 
-function mapProfessor(p: unknown) {
+function mapProfessor(p: unknown, resolver?: ProfessorResolver) {
   const x = p as GradeProfessorInput;
   const termParsed = Number.parseInt(String(x.termId ?? ""), 10);
   const termId = Number.isFinite(termParsed) ? termParsed : 0;
   const sec = typeof x.section === "string" && x.section.trim() ? x.section.trim() : undefined;
   const legacyId = parseLegacyId(x.legacyId);
+  const name = String(x.name ?? "");
   return {
-    name: String(x.name ?? ""),
+    name,
     ...(legacyId !== undefined ? { legacyId } : {}),
     termId,
     distribution: mapLetterGradeDistributionToProto(x.distribution),
     section: sec,
+    professorRef: toProfessorRef(resolver, name, legacyId),
   };
 }
 
-export function mapGradesJson(rows: unknown[]) {
+export function mapGradesJson(rows: unknown[], resolver?: ProfessorResolver) {
   if (!Array.isArray(rows)) {
     throw new Error("grades.json: expected top-level array");
   }
@@ -96,7 +106,7 @@ export function mapGradesJson(rows: unknown[]) {
         return {
           code: normalizeCode(r.code),
           professors: profs
-            .map(mapProfessor)
+            .map((p) => mapProfessor(p, resolver))
             .filter((p) => p.termId !== 0 && String(p.name).trim().length > 0),
         };
       })

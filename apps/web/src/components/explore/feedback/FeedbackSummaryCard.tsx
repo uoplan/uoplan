@@ -11,7 +11,7 @@ import { AppCard } from "../../shared/AppCard";
 
 const SENTIMENT_COLOR = "var(--app-info)";
 
-type FeedbackRoute = "/explore/course/$course/feedback" | "/explore/professor/$legacyId/feedback";
+type FeedbackRoute = "/explore/course/$course/feedback" | "/explore/professor/$slug/feedback";
 
 /** A compact, stacked stat (value over label) sitting inline beside the chart. */
 function MiniStat({ label, value }: { label: string; value: string }) {

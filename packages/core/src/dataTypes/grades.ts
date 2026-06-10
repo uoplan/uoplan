@@ -54,6 +54,8 @@ export function fromProtoDistribution(
 export type CourseGradesProfessor = {
   name: string;
   legacyId?: number;
+  /** 1-based ref into the canonical professor registry (`professors.pb`). */
+  professorRef?: number;
   termId: number;
   distribution: GradeDistribution;
   section?: string;
@@ -91,6 +93,7 @@ function fromProtoGradeProfessorOfferingRow(
   return {
     name: p.name,
     ...(p.legacyId !== undefined ? { legacyId: Number(p.legacyId) } : {}),
+    ...(p.professorRef !== undefined ? { professorRef: Number(p.professorRef) } : {}),
     termId: Number(p.termId),
     distribution,
     ...(p.section ? { section: p.section } : {}),

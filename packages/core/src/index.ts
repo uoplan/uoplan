@@ -3,6 +3,8 @@ export * from "./generationDiagnostics";
 export * from "./dataTypes";
 export * from "./scheduleFilters";
 export * from "./courseFilters";
+export * from "./professorIdentity";
+export * from "./professorRegistry";
 export * from "./professorRatings";
 export * from "./professorCoTeachingGraph";
 export * from "./professorDisciplineColors";

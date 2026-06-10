@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef } from "react";
 import type Fuse from "fuse.js";
-import type { Catalogue, ProfessorRatingsMap } from "@uoplan/core";
+import type { Catalogue, ProfessorRatingsMap, ProfessorRegistry } from "@uoplan/core";
 import { normalizeCourseCode } from "@uoplan/core";
 import { useAllSchedulesData } from "../../hooks/useAllSchedulesData";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
@@ -67,6 +67,7 @@ type DerivedCache = {
 export function useExploreOfferingsValue(
   catalogue: Catalogue | null,
   professorRatings: ProfessorRatingsMap | null,
+  registry: ProfessorRegistry | null,
 ): ExploreOfferingsValue {
   const { loading, data: grades } = useCourseGradesPb();
   const allSchedules = useAllSchedulesData();
@@ -75,11 +76,11 @@ export function useExploreOfferingsValue(
   const aliasGroups = useMemo(() => buildAliasGroups(catalogue), [catalogue]);
 
   const offerings = useMemo(() => {
-    const gradeOfferings = grades ? buildExploreOfferings(grades, titleByCode) : [];
+    const gradeOfferings = grades ? buildExploreOfferings(grades, titleByCode, registry) : [];
     if (allSchedules.length === 0) return gradeOfferings;
-    const scheduleOfferings = buildScheduleOfferings(allSchedules, titleByCode);
+    const scheduleOfferings = buildScheduleOfferings(allSchedules, titleByCode, registry);
     return mergeOfferingsWithSchedule(gradeOfferings, scheduleOfferings);
-  }, [grades, allSchedules, titleByCode]);
+  }, [grades, allSchedules, titleByCode, registry]);
 
   const offeringsByCourseNorm = useMemo(() => buildOfferingsByCourseNorm(offerings), [offerings]);
   const offeringsByComponent = useMemo(
@@ -88,14 +89,15 @@ export function useExploreOfferingsValue(
   );
 
   const cacheRef = useRef<DerivedCache>({});
-  const inputsRef = useRef({ offerings, titleByCode, professorRatings, aliasGroups });
+  const inputsRef = useRef({ offerings, titleByCode, professorRatings, aliasGroups, registry });
   if (
     inputsRef.current.offerings !== offerings ||
     inputsRef.current.titleByCode !== titleByCode ||
     inputsRef.current.professorRatings !== professorRatings ||
-    inputsRef.current.aliasGroups !== aliasGroups
+    inputsRef.current.aliasGroups !== aliasGroups ||
+    inputsRef.current.registry !== registry
   ) {
-    inputsRef.current = { offerings, titleByCode, professorRatings, aliasGroups };
+    inputsRef.current = { offerings, titleByCode, professorRatings, aliasGroups, registry };
     cacheRef.current = {};
   }
 
@@ -124,10 +126,11 @@ export function useExploreOfferingsValue(
       cacheRef.current.professorEntries = buildExploreProfessorSearchEntries(
         offerings,
         professorRatings,
+        registry,
       );
     }
     return cacheRef.current.professorEntries;
-  }, [offerings, professorRatings]);
+  }, [offerings, professorRatings, registry]);
 
   const getTermPresence = useCallback(() => {
     if (!cacheRef.current.termPresence) {

@@ -47,8 +47,8 @@ function ProfessorLink({ name, legacyId }: { name: string; legacyId?: number | n
       onClick={(e: MouseEvent) => e.stopPropagation()}
       renderRoot={(props) => (
         <Link
-          to="/explore/professor/$legacyId"
-          params={{ legacyId: legacyId != null ? String(legacyId) : encodeURIComponent(name) }}
+          to="/explore/professor/$slug"
+          params={{ slug: legacyId != null ? String(legacyId) : encodeURIComponent(name) }}
           {...props}
         />
       )}

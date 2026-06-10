@@ -105,4 +105,10 @@ message FeedbackData {
   // Distinct ordinal response-option label sets, referenced (1-based) by
   // `FeedbackQuestion.option_set`. Only a handful of distinct scales exist.
   repeated FeedbackOptionSet option_sets = 8;
+  // Parallel to `professors`: `professor_refs[i]` is the 1-based index into the
+  // canonical professor registry (`ProfessorsData.professors`) for the professor
+  // named `professors[i]`, or 0 when unresolved. Lets feedback share one
+  // canonical professor identity with grades/schedules without changing the
+  // section-level `professor` dictionary index.
+  repeated uint32 professor_refs = 9;
 }

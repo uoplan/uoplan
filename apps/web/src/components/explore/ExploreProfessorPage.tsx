@@ -1,10 +1,11 @@
 import { Accordion, Box, Flex, Group, Stack, Text, Title } from "@mantine/core";
 import { useMemo } from "react";
 import { m } from "framer-motion";
-import type { ProfessorRatingsMap } from "@uoplan/core";
-import { normalizeProfessorName, hasProfessorRatings } from "@uoplan/core";
+import { useShallow } from "zustand/react/shallow";
 import { useTr, tr } from "../../i18n";
 import { groupOfferingsByCourse } from "../../lib/explore/gradesSearch";
+import { resolveProfessorRoute, professorRouteParam } from "../../lib/explore/professorRoute";
+import { useAppStore } from "../../store/appStore";
 import { useExploreOfferings } from "./exploreOfferingsContext";
 import { useProfessorFeedbackViews } from "../../hooks/useFeedbackViews";
 import { FeedbackSummaryCard } from "./feedback/FeedbackSummaryCard";
@@ -22,42 +23,52 @@ const EXPLORE_CHEVRON_RIGHT = {
 
 const mobileMediaQuery = "@media (max-width: 540px)";
 
-export function ExploreProfessorPage({
-  legacyId,
-  professorName: professorNameProp,
-  professorRatings,
-}: (
-  | { legacyId: number; professorName?: undefined }
-  | { professorName: string; legacyId?: undefined }
-) & {
-  professorRatings: ProfessorRatingsMap | null;
-}) {
+export function ExploreProfessorPage({ slug }: { slug: string }) {
   useTr();
   const { offerings: allOfferings } = useExploreOfferings();
+  const registry = useAppStore(useShallow((s) => s.professors));
+
+  const resolved = useMemo(() => resolveProfessorRoute(registry, slug), [registry, slug]);
+  const { index, entry, legacyId } = resolved;
 
   const professorOfferings = useMemo(() => {
+    if (index != null) return allOfferings.filter((o) => o.professorRef === index);
     if (legacyId != null) return allOfferings.filter((o) => o.legacyId === legacyId);
-    const nameLower = professorNameProp?.toLowerCase() ?? "";
+    const nameLower = resolved.displayName.toLowerCase();
     return allOfferings.filter((o) => o.professorName.toLowerCase() === nameLower);
-  }, [allOfferings, legacyId, professorNameProp]);
+  }, [allOfferings, index, legacyId, resolved.displayName]);
 
   const displayName =
-    professorOfferings[0]?.professorName ?? professorNameProp ?? tr("explore.professorFallback");
+    entry?.name ??
+    professorOfferings[0]?.professorName ??
+    resolved.displayName ??
+    tr("explore.professorFallback");
 
   const courseGroups = useMemo(
     () => groupOfferingsByCourse(professorOfferings),
     [professorOfferings],
   );
 
-  const rmpEntry = professorRatings ? professorRatings[normalizeProfessorName(displayName)] : null;
-  const hasRating = hasProfessorRatings(rmpEntry);
-  const hasRmpLink = legacyId != null && Number.isFinite(legacyId) && legacyId > 0;
+  const rating = entry?.rating ?? null;
+  const numRatings = entry?.numRatings ?? null;
+  const hasRating = rating != null && Number.isFinite(rating);
+  const rmpLegacyId = legacyId;
+  const hasRmpLink = rmpLegacyId != null && Number.isFinite(rmpLegacyId) && rmpLegacyId > 0;
 
-  const profRouteParam = legacyId != null ? String(legacyId) : encodeURIComponent(displayName);
+  const profRouteParam = entry
+    ? professorRouteParam({ slug: entry.slug, legacyId: legacyId ?? undefined, displayName })
+    : professorRouteParam({ legacyId: legacyId ?? undefined, displayName });
 
-  const { views: feedbackViews, loading: feedbackLoading } = useProfessorFeedbackViews(
-    legacyId != null ? { legacyId } : { professorName: professorNameProp ?? "" },
+  const feedbackArg = useMemo(
+    () =>
+      index != null
+        ? { professorRef: index }
+        : legacyId != null
+          ? { legacyId }
+          : { professorName: displayName },
+    [index, legacyId, displayName],
   );
+  const { views: feedbackViews, loading: feedbackLoading } = useProfessorFeedbackViews(feedbackArg);
   const showFeedback = feedbackLoading || feedbackViews.length > 0;
 
   return (
@@ -88,15 +99,15 @@ export function ExploreProfessorPage({
                 <Group gap={6} align="center" mt={8} wrap="wrap">
                   {hasRating ? (
                     <Text size="sm" c="dimmed">
-                      {rmpEntry?.rating.toFixed(1)} · {rmpEntry?.numRatings} ratings
+                      {rating?.toFixed(1)} · {numRatings} ratings
                     </Text>
                   ) : (
                     <Text size="sm" c="dimmed">
                       {tr("search.noRating")}
                     </Text>
                   )}
-                  {hasRmpLink && legacyId != null ? (
-                    <RateMyProfessorLink legacyId={legacyId} />
+                  {hasRmpLink && rmpLegacyId != null ? (
+                    <RateMyProfessorLink legacyId={rmpLegacyId} />
                   ) : null}
                 </Group>
               )}
@@ -104,8 +115,8 @@ export function ExploreProfessorPage({
             {showFeedback ? (
               <Box style={{ width: "100%", maxWidth: 420 }}>
                 <FeedbackSummaryCard
-                  to="/explore/professor/$legacyId/feedback"
-                  params={{ legacyId: profRouteParam }}
+                  to="/explore/professor/$slug/feedback"
+                  params={{ slug: profRouteParam }}
                   views={feedbackViews}
                   loading={feedbackLoading}
                 />
@@ -187,8 +198,8 @@ export function ExploreProfessorPage({
                   key={g.groupId}
                   group={g}
                   currentEntry={{
-                    to: "/explore/professor/$legacyId",
-                    params: { legacyId: profRouteParam },
+                    to: "/explore/professor/$slug",
+                    params: { slug: profRouteParam },
                     label: displayName,
                   }}
                 />

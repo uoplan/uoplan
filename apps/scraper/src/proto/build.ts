@@ -16,6 +16,11 @@ import { mapCatalogue, type CatalogueJsonInput } from "./catalogue.ts";
 import { mapDisciplinesJson, mapGradesJson } from "./grades.ts";
 import { mapSchedules, type SchedulesJsonInput } from "./schedules.ts";
 import {
+  createResolverFromRegistry,
+  type ProfessorRegistryEntry,
+} from "../professors/buildRegistry.ts";
+import { PROFESSORS_FILE } from "../professors/build.ts";
+import {
   buildPredictionContext,
   predictInstructorsForTerm,
   type GradesCourseInput,
@@ -145,6 +150,27 @@ export async function main(): Promise<void> {
     DataProto.DisciplinesData.encode(mapDisciplinesJson(disciplinesJson)).finish(),
   );
 
+  // Canonical professor registry (committed data/professors.json): emit the
+  // dictionary and build the resolver every other dataset uses to reference a
+  // professor by his registry index.
+  const registry =
+    (await readJson<{ professors?: ProfessorRegistryEntry[] }>(PROFESSORS_FILE).catch(() => null))
+      ?.professors ?? [];
+  const professorResolver = createResolverFromRegistry(registry);
+  await writePb(
+    path.join(WEB_ASSETS_DATA_DIR, "professors.pb"),
+    DataProto.ProfessorsData.encode({
+      professors: registry.map((p) => ({
+        slug: p.slug,
+        name: p.name,
+        legacyIds: p.legacyIds,
+        rating: p.rating,
+        numRatings: p.numRatings,
+        aliases: p.aliases,
+      })),
+    }).finish(),
+  );
+
   for (const fileName of yearCatalogues) {
     const fullPath = path.join(CATALOGUE_DATA_DIR, fileName);
     const data = await readJson<CatalogueJsonInput>(fullPath);
@@ -172,16 +198,18 @@ export async function main(): Promise<void> {
   for (const fileName of scheduleFiles) {
     const data = scheduleJsonByFile.get(fileName)!;
     const predictions = predictInstructorsForTerm(data as ScheduleFileInput, predictionContext);
-    const encoded = DataProto.SchedulesData.encode(mapSchedules(data, predictions)).finish();
+    const encoded = DataProto.SchedulesData.encode(
+      mapSchedules(data, predictions, professorResolver),
+    ).finish();
     await writePb(path.join(WEB_ASSETS_DATA_DIR, fileName.replace(/\.json$/, ".pb")), encoded);
   }
 
   await writePb(
     path.join(WEB_ASSETS_DATA_DIR, "grades.pb"),
-    DataProto.GradesData.encode(mapGradesJson(gradesJson)).finish(),
+    DataProto.GradesData.encode(mapGradesJson(gradesJson, professorResolver)).finish(),
   );
 
-  const feedback = await buildFeedbackData();
+  const feedback = await buildFeedbackData(professorResolver);
   if (feedback) {
     await writePb(
       path.join(WEB_ASSETS_DATA_DIR, "feedback.pb"),

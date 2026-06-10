@@ -5,6 +5,7 @@ import { normalizeProfessorName, hasProfessorRatings } from "@uoplan/core";
 import { useTr, tr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import type { ExploreProfessorSearchEntry } from "../../lib/explore/gradesSearch";
+import { professorRouteParam } from "../../lib/explore/professorRoute";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 
 const LETTER_GRADES = new Set(["F", "E", "D", "D+", "C", "C+", "B", "B+", "A-", "A", "A+"]);
@@ -22,7 +23,11 @@ function mostCommonGrade(gradeViz: GradeVizData): string | null {
 }
 
 function professorLegacyParam(entry: ExploreProfessorSearchEntry): string {
-  return entry.legacyId != null ? String(entry.legacyId) : encodeURIComponent(entry.displayName);
+  return professorRouteParam({
+    slug: entry.slug,
+    legacyId: entry.legacyId,
+    displayName: entry.displayName,
+  });
 }
 
 export function SearchResultProfessorCard({
@@ -52,8 +57,8 @@ export function SearchResultProfessorCard({
 
   return (
     <Link
-      to="/explore/professor/$legacyId"
-      params={{ legacyId: professorLegacyParam(entry) }}
+      to="/explore/professor/$slug"
+      params={{ slug: professorLegacyParam(entry) }}
       search={searchParams}
       state={
         {

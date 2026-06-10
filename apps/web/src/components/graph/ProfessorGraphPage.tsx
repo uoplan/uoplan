@@ -252,8 +252,8 @@ export function ProfessorGraphPage({
                         </Text>
                         {entry.legacyId != null && (
                           <Link
-                            to="/explore/professor/$legacyId"
-                            params={{ legacyId: String(entry.legacyId) }}
+                            to="/explore/professor/$slug"
+                            params={{ slug: String(entry.legacyId) }}
                             search={EMPTY_EXPLORE_SEARCH}
                             onClick={(e) => e.stopPropagation()}
                             target="_blank"

@@ -6,6 +6,7 @@ import type {
   GradeVizData,
   PredictedInstructor,
   ProfessorRatingsMap,
+  ProfessorRegistry,
   SchedulesData,
 } from "@uoplan/core";
 import {
@@ -15,6 +16,8 @@ import {
   normalizeGradeVizDistribution,
   getCourseLanguageBucket,
   sectionInstructors,
+  professorIndexFromRef,
+  professorIndexByName,
 } from "@uoplan/core";
 import { searchProfessorsScored, type ProfessorSearchEntry } from "../graph/professorGraphSearch";
 import { formatTermLabelPlain } from "../term/termLabelPlain";
@@ -56,6 +59,10 @@ export type ExploreCourseSearchEntry = {
 export type ExploreProfessorSearchEntry = {
   groupId: string;
   legacyId?: number;
+  /** 0-based canonical registry index, when resolved. */
+  professorRef?: number;
+  /** URL slug for the canonical professor, when resolved from the registry. */
+  slug?: string;
   displayName: string;
   searchText: string;
   uniqueCourseCount: number;
@@ -76,6 +83,8 @@ export type ExploreOfferingFlat = {
   courseTitle: string;
   professorName: string;
   legacyId?: number;
+  /** 0-based canonical professor registry index; the primary identity key when present. */
+  professorRef?: number;
   termId: number;
   termLabel: string;
   section?: string;
@@ -118,6 +127,27 @@ function isUnassignedInstructorName(name: string): boolean {
 /** Whether an offering has no real instructor (collapsed into the unassigned group). */
 function isUnassignedOffering(o: ExploreOfferingFlat): boolean {
   return o.unassignedInstructor === true || isUnassignedInstructorName(o.professorName);
+}
+
+/**
+ * Resolve a professor to his canonical registry identity. Prefers an explicit
+ * 0-based registry index, then a RateMyProfessors legacyId, then a first+last
+ * name-key lookup. Returns the canonical display name when resolved so every
+ * data source shows one name per person; falls back to the raw name otherwise.
+ */
+function resolveCanonicalProfessor(
+  registry: ProfessorRegistry | null | undefined,
+  index: number | null | undefined,
+  legacyId: number | undefined,
+  name: string,
+): { professorRef?: number; professorName: string } {
+  if (!registry) return { professorName: name };
+  let idx: number | null = index ?? null;
+  if (idx == null && legacyId != null) idx = registry.byLegacyId.get(legacyId) ?? null;
+  if (idx == null) idx = professorIndexByName(registry, name);
+  if (idx == null) return { professorName: name };
+  const entry = registry.entries[idx];
+  return { professorRef: idx, professorName: entry?.name ?? name };
 }
 
 /**
@@ -170,6 +200,7 @@ function offeringId(parts: {
 export function buildExploreOfferings(
   grades: CourseGradesData,
   titleByCode: Map<string, string>,
+  registry?: ProfessorRegistry | null,
 ): ExploreOfferingFlat[] {
   const out: ExploreOfferingFlat[] = [];
   for (const c of grades.courses) {
@@ -179,7 +210,16 @@ export function buildExploreOfferings(
       // "Staff" is a placeholder for an unassigned instructor: keep the offering so the
       // course stays searchable, but strip the fake professor (no name, no legacyId).
       const unassigned = isUnassignedInstructorName(p.name);
-      const professorName = unassigned ? UNASSIGNED_INSTRUCTOR : p.name;
+      const canonical = unassigned
+        ? { professorName: UNASSIGNED_INSTRUCTOR }
+        : resolveCanonicalProfessor(
+            registry,
+            professorIndexFromRef(p.professorRef),
+            p.legacyId,
+            p.name,
+          );
+      const professorName = canonical.professorName;
+      const professorRef = canonical.professorRef;
       const legacyId = unassigned ? undefined : p.legacyId;
       const termLabel = formatTermLabelPlain(p.termId);
       const fuseText = [
@@ -206,6 +246,7 @@ export function buildExploreOfferings(
         courseTitle: title,
         professorName,
         legacyId,
+        ...(professorRef != null ? { professorRef } : {}),
         termId: p.termId,
         termLabel,
         section: p.section,
@@ -240,15 +281,11 @@ export function buildOfferingsByCourseNorm(
 }
 
 /** Count distinct professors in a set of offerings using the same grouping key as
- * {@link groupOfferingsByProfessor} (legacyId when present, else normalized name). */
+ * {@link groupOfferingsByProfessor} (registry index when present, else legacyId, else name). */
 export function countDistinctProfessors(offerings: ExploreOfferingFlat[]): number {
   const ids = new Set<string>();
   for (const o of offerings) {
-    ids.add(
-      o.legacyId != null
-        ? `id:${o.legacyId}`
-        : `name:${normalizeProfessorName(o.professorName).toLowerCase()}`,
-    );
+    ids.add(professorGroupId(o.professorRef, o.legacyId, o.professorName));
   }
   return ids.size;
 }
@@ -483,12 +520,19 @@ export function createExploreCourseFuse(entries: ExploreCourseSearchEntry[]) {
 export function buildExploreProfessorSearchEntries(
   offerings: ExploreOfferingFlat[],
   professorRatings?: ProfessorRatingsMap | null,
+  registry?: ProfessorRegistry | null,
 ): ExploreProfessorSearchEntry[] {
-  return groupOfferingsByProfessor(offerings)
+  return groupOfferingsByProfessor(offerings, registry)
     .filter((g) => !g.unassigned)
     .map((g) => {
+      const entry = g.professorRef != null ? registry?.entries[g.professorRef] : null;
       const rmpEntry = professorRatings?.[normalizeProfessorName(g.displayName)];
-      const maxRating = rmpEntry && Number.isFinite(rmpEntry.rating) ? rmpEntry.rating : null;
+      const maxRating =
+        entry?.rating != null && Number.isFinite(entry.rating)
+          ? entry.rating
+          : rmpEntry && Number.isFinite(rmpEntry.rating)
+            ? rmpEntry.rating
+            : null;
       const disciplines = Array.from(
         new Set(
           g.offerings
@@ -499,6 +543,8 @@ export function buildExploreProfessorSearchEntries(
       return {
         groupId: g.groupId,
         legacyId: g.legacyId,
+        ...(g.professorRef != null ? { professorRef: g.professorRef } : {}),
+        ...(entry?.slug ? { slug: entry.slug } : {}),
         displayName: g.displayName,
         searchText: [g.displayName, g.legacyId != null ? String(g.legacyId) : ""]
           .filter(Boolean)
@@ -517,9 +563,7 @@ export function buildExploreProfessorSearchEntries(
 /** Stable group id for an offering's professor, matching {@link groupOfferingsByProfessor}. */
 function professorGroupIdForOffering(o: ExploreOfferingFlat): string {
   if (isUnassignedOffering(o)) return UNASSIGNED_GROUP_ID;
-  return o.legacyId != null
-    ? `id:${o.legacyId}`
-    : `name:${normalizeProfessorName(o.professorName).toLowerCase()}`;
+  return professorGroupId(o.professorRef, o.legacyId, o.professorName);
 }
 
 /**
@@ -745,6 +789,10 @@ export function searchExploreOfferings(
 export type ProfessorOfferingGroup = {
   groupId: string;
   legacyId?: number;
+  /** 0-based canonical registry index of this group's professor, when resolved. */
+  professorRef?: number;
+  /** Canonical URL slug for this group's professor, when resolved from the registry. */
+  slug?: string;
   displayName: string;
   offerings: ExploreOfferingFlat[];
   /** True for a synthetic group collecting sections with no real instructor. */
@@ -759,17 +807,30 @@ export type ProfessorOfferingGroup = {
   hasPredicted?: boolean;
 };
 
-/** Stable group id for a professor identified by legacyId (preferred) or name. */
-function professorGroupId(legacyId: number | undefined, name: string): string {
+/**
+ * Stable group id for a professor: the canonical registry index when resolved
+ * (so every data source collapses into one group), else a RateMyProfessors
+ * legacyId, else the normalized name.
+ */
+function professorGroupId(
+  professorRef: number | undefined,
+  legacyId: number | undefined,
+  name: string,
+): string {
+  if (professorRef != null) return `ref:${professorRef}`;
   return legacyId != null ? `id:${legacyId}` : `name:${normalizeProfessorName(name).toLowerCase()}`;
 }
 
-export function groupOfferingsByProfessor(items: ExploreOfferingFlat[]): ProfessorOfferingGroup[] {
+export function groupOfferingsByProfessor(
+  items: ExploreOfferingFlat[],
+  registry?: ProfessorRegistry | null,
+): ProfessorOfferingGroup[] {
   const byGroup = new Map<string, ExploreOfferingFlat[]>();
   const meta = new Map<
     string,
     {
       legacyId?: number;
+      professorRef?: number;
       displayName: string;
       unassigned: boolean;
       predictedInstructors?: PredictedInstructor[];
@@ -801,7 +862,7 @@ export function groupOfferingsByProfessor(items: ExploreOfferingFlat[]): Profess
   // First pass: real (confirmed) offerings define professor groups.
   for (const o of items) {
     if (isUnassignedOffering(o)) continue;
-    const groupId = professorGroupId(o.legacyId, o.professorName);
+    const groupId = professorGroupId(o.professorRef, o.legacyId, o.professorName);
     slot(groupId).push(o);
     confirmedKeys.add(offeringTermKey(groupId, o));
     const name = profName(o.professorName);
@@ -812,6 +873,7 @@ export function groupOfferingsByProfessor(items: ExploreOfferingFlat[]): Profess
     if (!meta.has(groupId)) {
       meta.set(groupId, {
         legacyId: o.legacyId,
+        professorRef: o.professorRef,
         displayName: o.professorName,
         unassigned: false,
       });
@@ -838,16 +900,22 @@ export function groupOfferingsByProfessor(items: ExploreOfferingFlat[]): Profess
     }
     for (const guess of guesses) {
       const guessLegacyId = guess.legacyId ?? undefined;
+      // Resolve the guess to its canonical registry identity so a predicted copy
+      // lands in the same group as the professor's confirmed/registry-keyed rows.
+      const canonical = resolveCanonicalProfessor(registry, null, guessLegacyId, guess.name);
+      const guessRef = canonical.professorRef;
+      const guessName = canonical.professorName;
       // The professor may already have a confirmed group keyed by name (no
-      // backfilled legacyId); reuse it so we never split one person in two.
+      // backfilled legacyId / registry ref); reuse it so we never split one person.
       const groupId =
-        confirmedGroupByName.get(profName(guess.name)) ??
-        professorGroupId(guessLegacyId, guess.name);
+        (guessRef != null ? `ref:${guessRef}` : undefined) ??
+        confirmedGroupByName.get(profName(guessName)) ??
+        professorGroupId(guessRef, guessLegacyId, guessName);
       const termKey = offeringTermKey(groupId, o);
       // Don't shadow a confirmed teaching (matched by group id or by name), and
       // don't duplicate a guess already placed under this professor for the term.
       if (confirmedKeys.has(termKey)) continue;
-      if (confirmedNameCourseTerm.has(nameCourseTermKey(guess.name, o))) continue;
+      if (confirmedNameCourseTerm.has(nameCourseTermKey(guessName, o))) continue;
       const list = slot(groupId);
       if (list.some((e) => e.predicted && offeringTermKey(groupId, e) === termKey)) continue;
       list.push({
@@ -855,8 +923,9 @@ export function groupOfferingsByProfessor(items: ExploreOfferingFlat[]): Profess
         id: `${o.id}|pred:${groupId}`,
         predicted: true,
         unassignedInstructor: false,
-        professorName: guess.name,
+        professorName: guessName,
         legacyId: guessLegacyId,
+        ...(guessRef != null ? { professorRef: guessRef } : {}),
       });
       const m = meta.get(groupId);
       if (m) {
@@ -864,7 +933,8 @@ export function groupOfferingsByProfessor(items: ExploreOfferingFlat[]): Profess
       } else {
         meta.set(groupId, {
           legacyId: guessLegacyId,
-          displayName: guess.name,
+          professorRef: guessRef,
+          displayName: guessName,
           unassigned: false,
           hasPredicted: true,
         });
@@ -885,6 +955,10 @@ export function groupOfferingsByProfessor(items: ExploreOfferingFlat[]): Profess
     groups.push({
       groupId,
       legacyId: m.legacyId,
+      professorRef: m.professorRef,
+      ...(m.professorRef != null && registry?.entries[m.professorRef]?.slug
+        ? { slug: registry.entries[m.professorRef]!.slug }
+        : {}),
       displayName: m.displayName,
       offerings,
       unassigned: m.unassigned,
@@ -931,6 +1005,7 @@ function scheduleOfferingDedupKey(courseCode: string, name: string, termId: numb
 export function buildScheduleOfferings(
   allSchedules: SchedulesData[],
   titleByCode: Map<string, string>,
+  registry?: ProfessorRegistry | null,
 ): ExploreOfferingFlat[] {
   const seen = new Set<string>();
   const out: ExploreOfferingFlat[] = [];
@@ -974,11 +1049,18 @@ export function buildScheduleOfferings(
       }
 
       const pushOffering = (
-        professorName: string,
+        rawName: string,
         unassigned: boolean,
         combo: string,
         predictedInstructors: PredictedInstructor[] | undefined,
       ) => {
+        // Resolve real instructors to their canonical registry identity so two
+        // spelling variants of one person collapse into a single offering/group.
+        const canonical = unassigned
+          ? { professorName: rawName }
+          : resolveCanonicalProfessor(registry, null, undefined, rawName);
+        const professorName = canonical.professorName;
+        const professorRef = canonical.professorRef;
         const key = scheduleOfferingDedupKey(sched.courseCode, professorName, termId, combo);
         if (seen.has(key)) return;
         seen.add(key);
@@ -991,6 +1073,7 @@ export function buildScheduleOfferings(
           courseCode: sched.courseCode,
           courseTitle: title,
           professorName,
+          ...(professorRef != null ? { professorRef } : {}),
           termId,
           termLabel,
           fuseText,
@@ -1047,20 +1130,27 @@ export function mergeOfferingsWithSchedule(
   gradeOfferings: ExploreOfferingFlat[],
   scheduleOfferings: ExploreOfferingFlat[],
 ): ExploreOfferingFlat[] {
+  // Identity for dedup prefers the canonical registry index so two name variants
+  // of one person never produce duplicate grade+schedule rows; falls back to the
+  // normalized name when a professor is not in the registry.
+  const identityToken = (o: ExploreOfferingFlat) =>
+    o.professorRef != null
+      ? `ref:${o.professorRef}`
+      : `name:${normalizeProfessorName(o.professorName).toLowerCase()}`;
+  const mergeKey = (o: ExploreOfferingFlat) =>
+    `${normalizeCourseCode(o.courseCode)}|${identityToken(o)}|${o.termId}`;
   // Schedule offerings have no section, while grade offerings do, so dedup by
   // (course, prof, term) ignoring section: a prof/term already present in grade
   // data should not be duplicated by a section-less schedule row.
   const gradeKeys = new Set<string>();
   for (const o of gradeOfferings) {
-    gradeKeys.add(scheduleOfferingDedupKey(o.courseCode, o.professorName, o.termId));
+    gradeKeys.add(mergeKey(o));
   }
   // Backfill legacyId onto schedule rows so a professor who has grade data is not
   // split into a separate name-keyed entry by their schedule-only offerings.
   const legacyIdByName = buildUnambiguousLegacyIdByName(gradeOfferings);
   const newEntries = scheduleOfferings
-    .filter(
-      (o) => !gradeKeys.has(scheduleOfferingDedupKey(o.courseCode, o.professorName, o.termId)),
-    )
+    .filter((o) => !gradeKeys.has(mergeKey(o)))
     .map((o) => {
       if (o.legacyId != null) return o;
       const legacyId = legacyIdByName.get(normalizeProfessorName(o.professorName).toLowerCase());

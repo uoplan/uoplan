@@ -13,6 +13,7 @@
     "enrich:schedules": "node --experimental-transform-types --experimental-specifier-resolution=node src/cli/enrich.ts",
     "scrape:ratemyprofessors": "node src/cli/ratemyprofessors.ts",
     "scrape:grades": "node src/cli/grades.ts",
+    "build:professors": "node --experimental-transform-types --experimental-specifier-resolution=node src/cli/professors.ts",
     "build:proto": "node --experimental-transform-types --experimental-specifier-resolution=node src/cli/proto.ts",
     "check:terms": "node src/cli/terms.ts",
     "typecheck": "tsgo --noEmit -p tsconfig.json"

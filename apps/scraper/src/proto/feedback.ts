@@ -5,6 +5,7 @@ import * as FeedbackProto from "@uoplan/proto/feedback";
 import { optionsPath } from "../feedback/cache.ts";
 import { FEEDBACK_DATA_DIR, SCRAPER_DATA_DIR } from "../shared/paths.ts";
 import { readJson } from "../shared/json.ts";
+import type { ProfessorResolver } from "../professors/buildRegistry.ts";
 
 interface JsonOption {
   label: string;
@@ -113,7 +114,9 @@ function feedbackJsonFiles(entries: string[]): string[] {
  *
  * Returns `null` when no feedback datasets are present (so callers can skip).
  */
-export async function buildFeedbackData(): Promise<FeedbackProto.FeedbackData | null> {
+export async function buildFeedbackData(
+  resolver?: ProfessorResolver,
+): Promise<FeedbackProto.FeedbackData | null> {
   const entries = await fs.readdir(FEEDBACK_DATA_DIR).catch(() => [] as string[]);
   const files = feedbackJsonFiles(entries);
   if (files.length === 0) return null;
@@ -284,6 +287,10 @@ export async function buildFeedbackData(): Promise<FeedbackProto.FeedbackData | 
       optionSet: resolveOptionSet(i),
     })),
     professors: professors.values,
+    professorRefs: professors.values.map((name) => {
+      const idx = resolver?.index(name) ?? null;
+      return idx == null ? 0 : idx + 1;
+    }),
     extraCourses: extraCourses.values,
     indicesCourseCount,
     terms: protoTerms,

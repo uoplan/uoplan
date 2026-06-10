@@ -16,6 +16,32 @@ message Indices {
   repeated string disciplines = 3;
 }
 
+// The canonical professor registry: one entry per real person, collapsing the
+// name/diacritic/middle-name variants the same professor accumulates across
+// RateMyProfessors, grades, schedules and feedback. Every other dataset
+// references a professor by his INDEX into `ProfessorsData.professors` rather
+// than repeating a name string. Built by the scraper from the committed
+// `data/professors.json` (see @uoplan/core professorIdentity / the scraper
+// buildRegistry).
+message ProfessorsData {
+  repeated ProfessorEntry professors = 1;
+}
+
+message ProfessorEntry {
+  // URL-safe public id derived from `name` (diacritics removed, kebab-case),
+  // unique across the registry. Used in shareable professor URLs.
+  string slug = 1;
+  // Canonical display name: the fullest variant (keeps accents and middle names).
+  string name = 2;
+  // Every RateMyProfessors legacyId merged into this person (combined reviews).
+  repeated uint32 legacy_ids = 3;
+  // Response-weighted average rating across all merged RMP profiles, when rated.
+  optional double rating = 4;
+  optional uint32 num_ratings = 5;
+  // Other observed spellings of this person's name (for search), excluding `name`.
+  repeated string aliases = 6;
+}
+
 message TermsData {
   repeated Term terms = 1;
 }
@@ -165,6 +191,9 @@ message MeetingTime {
   bool virtual = 4;
   optional string instructor = 5;
   optional MeetingDateRange meeting_dates = 6;
+  // 1-based index into `ProfessorsData.professors`; absent when unassigned
+  // ("Staff") or unresolved. 1-based so a present value is never the default 0.
+  optional uint32 professor_ref = 7;
 }
 
 message MeetingDateRange {
@@ -207,6 +236,8 @@ message PredictedInstructor {
   // RateMyProfessors legacy id, resolved from grades.json when the name can be
   // matched. Absent for schedule-only candidates with no grades record.
   optional uint32 legacy_id = 2;
+  // 1-based index into `ProfessorsData.professors` (0 = unresolved).
+  optional uint32 professor_ref = 3;
 }
 
 message ComponentSection {
@@ -260,4 +291,6 @@ message GradeProfessorOffering {
   uint32 term_id = 3;
   GradeDistribution distribution = 4;
   optional string section = 5;
+  // 1-based index into `ProfessorsData.professors` (0 = unresolved).
+  optional uint32 professor_ref = 6;
 }

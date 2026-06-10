@@ -23,6 +23,7 @@ import {
   type ProfessorOfferingGroup,
 } from "../../lib/explore/gradesSearch";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
+import { professorRouteParam } from "../../lib/explore/professorRoute";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
@@ -108,12 +109,13 @@ export function ExploreProfessorSummaryBar({
           </Text>
         ) : (
           <Link
-            to="/explore/professor/$legacyId"
+            to="/explore/professor/$slug"
             params={{
-              legacyId:
-                group.legacyId != null
-                  ? String(group.legacyId)
-                  : encodeURIComponent(group.displayName),
+              slug: professorRouteParam({
+                slug: group.slug,
+                legacyId: group.legacyId,
+                displayName: group.displayName,
+              }),
             }}
             search={EMPTY_EXPLORE_SEARCH}
             state={currentEntry ? ({ back: currentEntry } as never) : undefined}

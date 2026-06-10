@@ -43,8 +43,8 @@ function ProfessorProfileLink({
 }) {
   return (
     <Link
-      to="/explore/professor/$legacyId"
-      params={{ legacyId: String(legacyId) }}
+      to="/explore/professor/$slug"
+      params={{ slug: String(legacyId) }}
       search={EMPTY_EXPLORE_SEARCH}
       onClick={onClick}
       target="_blank"
