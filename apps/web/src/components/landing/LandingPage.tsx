@@ -5,6 +5,7 @@ import { m } from "framer-motion";
 import { useCallback, useState } from "react";
 import { useTr, dynamicActivate, tr, type AppLocale } from "../../i18n";
 import { ChromeControls } from "../shared/ChromeControls";
+import { DonationBanner } from "./DonationBanner";
 import { ExperimentalCarousel } from "./ExperimentalCarousel";
 import { LandingTile } from "./LandingTile";
 
@@ -70,12 +71,17 @@ export function LandingPage() {
           alignItems: "center",
         }}
       >
+        <DonationBanner />
+
         <Box
           style={{
             display: "flex",
             justifyContent: "flex-end",
             gap: 8,
             width: "100%",
+            maxWidth: 960,
+            marginLeft: "auto",
+            marginRight: "auto",
           }}
         >
           <ChromeControls onLangSwitch={handleLangSwitch} />

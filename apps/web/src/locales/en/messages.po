@@ -1530,6 +1530,18 @@ msgstr "Show {title}"
 msgid "landing.carousel.label"
 msgstr "Experimental features"
 
+#: apps/web/src/components/landing/DonationBanner.tsx:71
+msgid "landing.donate.cta"
+msgstr "Donate"
+
+#: apps/web/src/components/landing/DonationBanner.tsx:80
+msgid "landing.donate.dismiss"
+msgstr "Dismiss"
+
+#: apps/web/src/components/landing/DonationBanner.tsx:51
+msgid "landing.donate.text"
+msgstr "We're free and student-run. Help keep us running."
+
 msgid "landing.explore.description"
 msgstr "Search courses and professors with grade distributions."
 
@@ -1544,12 +1556,6 @@ msgstr "Schedule generator"
 
 msgid "landing.trends.description"
 msgstr "Track how grades shift over time across disciplines."
-
-msgid "language.en"
-msgstr "English"
-
-msgid "language.frCA"
-msgstr "French"
 
 msgid "languageSwitcher.ariaLabel"
 msgstr "Select application language"
