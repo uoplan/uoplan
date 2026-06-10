@@ -23287,7 +23287,7 @@
       "title": "Réseaux optiques",
       "credits": 3,
       "description": "Introduction aux réseaux optiques. Composants et systèmes pour commutation optique. Multiplexage en longueur d'onde. Réseaux WDM. Réseaux optiques en anneaux vs réseaux maillés optiques. Architecture de contrôle pour réseaux optiques. Algorithmes de routage et d'allocation de longueur d'onde. Mécanismes de protection et de restauration pour réseaux optiques. Études de cas en réseaux optiques.",
-      "component": "Groupe de discussion, Laboratoire, Cours magistralPréalable : CEG 3585.",
+      "component": "Cours magistral, Groupe de discussion, LaboratoirePréalable : CEG 3585.",
       "prereqText": "CEG 3585",
       "prerequisites": {
         "type": "course",
@@ -24961,13 +24961,6 @@
       "component": "Lecture"
     },
     {
-      "code": "CHG 8115",
-      "title": "Heat Transfer I",
-      "credits": 3,
-      "description": "The general law of heat conduction. Steady and unsteady heat conduction in solids with or without internal heat sources. Radiant heat transmission.",
-      "component": "Lecture"
-    },
-    {
       "code": "CHG 8116",
       "title": "Advanced Transport Phenomena",
       "credits": 3,
@@ -25537,7 +25530,7 @@
       "title": "Physical Chemistry: Introduction to the Molecular Properties of Matter",
       "credits": 3,
       "description": "Introduction to the molecular interpretation of physico-chemical phenomena. Introduction to quantum mechanics, statistical mechanics andspectroscopy (vibrational, rotational, nmr). Kinetic theory of gases. Chemical kinetics (order of a reaction, Arrhenius equation, reaction mechanism). Surface chemistry, adsorption isotherms, structure of adsorbed layers, colloids, viscosity, diffusion, and sedimentation. Previously CHM 2130 and CHM 2136.",
-      "component": "Discussion Group, Laboratory, LecturePrerequisites: (CHM 1301 or CHM 1311), (MAT 1322 or MAT 1332), (PHY 1121 or PHY 1321 or PHY 1122 or PHY 1331).",
+      "component": "Discussion Group, Lecture, LaboratoryPrerequisites: (CHM 1301 or CHM 1311), (MAT 1322 or MAT 1332), (PHY 1121 or PHY 1321 or PHY 1122 or PHY 1331).",
       "aliases": [
         "CHM 2130",
         "CHM 2136"
@@ -26092,7 +26085,7 @@
       "title": "Applications of Spectroscopy in Chemistry",
       "credits": 3,
       "description": "Introduction to infrared, visible and ultraviolet spectroscopy, multinuclear magnetic resonance (with emphasis on 1H and 13C), Fourier-transform. NMR, mass spectrometry.",
-      "component": "Discussion Group, LecturePrerequisite: CHM 2120.",
+      "component": "Lecture, Discussion GroupPrerequisite: CHM 2120.",
       "prereqText": "CHM 2120",
       "prerequisites": {
         "type": "course",
@@ -27120,53 +27113,11 @@
       }
     },
     {
-      "code": "CHM 5105",
-      "title": "Radiochemistry",
-      "credits": 3,
-      "description": "A study of nuclear stability and decay; chemical studies of nuclear phenomena. Application of radioactivity.",
-      "component": "LecturePermission of the Department is required."
-    },
-    {
-      "code": "CHM 5108",
-      "title": "Surface Chemistry and Nanostructures",
-      "credits": 3,
-      "description": "Surface structure, thermodynamics and kinetics, specifically regarding adsorption/desorption and high vacuum models. Nanoscale structures and their formation, reactivity and characterization. Thin films, carbon nanotubes, self-assembled monolayers and supramolecular aggregates. This course is equivalent to CHEM 5108 at Carleton University",
-      "component": "Lecture"
-    },
-    {
       "code": "CHM 5109",
       "title": "Advanced Applications in Mass Spectrometry",
       "credits": 3,
       "description": "Detailed breakdown of the physical, electrical and chemical operation of mass spectrometers. Applications in MS ranging from the analysis of small molecules to large biological macromolecules. Descriptions of the use of mass spectrometry in industry as well as commercial opportunities in the field. This course is equivalent to CHEM 5109 at Carleton University.",
       "component": "Lecture"
-    },
-    {
-      "code": "CHM 5206",
-      "title": "Physical Methods of Nanotechnology",
-      "credits": 3,
-      "description": "An overview of methods used in nanotechnology. Principles of scanning probe techniques ranging from surface physics to biology. State of the art methods to create nanostructures for future applications in areas such as nanolithography, nanoelectronics, nano-optics, data storage and bio-analytical nanosystems. This course is equivalent to CHEM 5206 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CHM 5207",
-      "title": "Macromolecular Nanotechnology",
-      "credits": 1.5,
-      "description": "Fundamentals of synthetic macromolecules related to nanoscale phenomena. Challenges and opportunities associated with polymers on the nanoscale. Topics include molecular recognition, self-assembled nanostructures, functional nanomaterials, amphiphilic architectures, nanocomposites, and nanomachines. Applications to sensing, drug delivery, and polymer based devices. This course is equivalent to CHEM 5207 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CHM 5208",
-      "title": "Bio Macromolecular Nanotechnology",
-      "credits": 1.5,
-      "description": "Fundamentals of biological macromolecules related to nanoscale phenomena. Challenges and opportunities associated with natural polymers on the nanoscale. Topics include molecular recognition, self-assembled nanostructures, scaffolds and templates, functional nanomaterials, amphiphilic architectures, nanocomposites, and nanomachines. Applications to sensing, biomaterials, drug delivery, and devices. This course is equivalent to CHEM 5208 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CHM 5606",
-      "title": "Environmental Chemistry and Toxicology",
-      "credits": 1.5,
-      "description": "Overview of environmental chemistry and toxicology principles including chemical sources, fate, and effects in the environment. Examining organic reactions occurring in abiotic environments and biological systems, and study aspects of toxicant disposition and biotransformation. Emphasis on contemporary problems in human health and the environment. This course is equivalent to CHEM 5606 at Carleton University",
-      "component": "Cours magistral"
     },
     {
       "code": "CHM 8104",
@@ -27183,70 +27134,11 @@
       "component": "Lecture"
     },
     {
-      "code": "CHM 8134",
-      "title": "Spectroscopy for Organic Chemists",
-      "credits": 3,
-      "description": "Analysis of proton NMR spectra. Fourier transform 13C NMR, strategies for structure elucidation, relaxation times, two-dimensional NMR. Aspects of mass spectrometry. This course is equivalent to CHEM 5407 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CHM 8150",
-      "title": "Special Topics in Molecular Spectroscopy",
-      "credits": 3,
-      "description": "Topics of current interest in molecular spectroscopy. In past years, the following areas have been covered: electronic spectra of diatomic and triatomic molecules and their interpretation using molecular orbital diagrams; Raman and resonance Raman spectroscopy; symmetry aspects of vibrational and electronic levels of ions and molecules in solids in the presence of weak and strong resonant laser radiation. This course is equivalent to CHEM 5009 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
       "code": "CHM 8158",
       "title": "Directed Special Studies",
       "credits": 3,
       "description": "Under unusual circumstances and with the recommendation of the research supervisor, it is possible to engage in a directed study on a topic of particular value to the student. This may also be used for unit if there are insufficient course offerings in a particular field of chemistry. This course is equivalent to CHEM 5900 at Carleton University.",
       "component": "Lecture"
-    },
-    {
-      "code": "CHM 8164",
-      "title": "Organic Polymer Chemistry",
-      "credits": 3,
-      "description": "Basic principles of industrial and synthetic polymers. Polymerization and polymer characterization. Selected topics to cover some important polymers with emphasis on the synthesis, commodity plastics, engineering thermoplastics and specialty polymers. Students should have a basic knowledge of organic reaction mechanisms and stereochemistry. This course is equivalent to CHEM 5406 at Carleton University.",
-      "component": "LecturePrerequisites: CHM 3120, CHM 4120, CHM 4125, equivalent. or A basic knowledge of organic reaction mechanisms and stereochemistry.",
-      "prereqText": "CHM 3120, CHM 4120, CHM 4125, equivalent. or A basic knowledge of organic reaction mechanisms and stereochemistry",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "CHM 3120, CHM 4120, CHM 4125, equivalent. or A basic knowledge of organic reaction mechanisms and stereochemistry",
-        "children": [
-          {
-            "type": "course",
-            "code": "CHM 3120",
-            "text": "CHM 3120"
-          },
-          {
-            "type": "course",
-            "code": "CHM 4120",
-            "text": "CHM 4120"
-          },
-          {
-            "type": "course",
-            "code": "CHM 4125",
-            "text": "CHM 4125"
-          },
-          {
-            "type": "or_group",
-            "text": "equivalent. or A basic knowledge of organic reaction mechanisms and stereochemistry",
-            "children": [
-              {
-                "type": "non_course",
-                "text": "equivalent.",
-                "kind": "equivalent"
-              },
-              {
-                "type": "non_course",
-                "text": "A basic knowledge of organic reaction mechanisms and stereochemistry",
-                "kind": "knowledge"
-              }
-            ]
-          }
-        ]
-      }
     },
     {
       "code": "CHM 8165",
@@ -27260,13 +27152,6 @@
       "title": "Introduction to Molecular Simulation and Statistical Mechanics (Part A)",
       "credits": 1.5,
       "description": "A practical introduction to modern molecular simulation techniques widely used as tools in chemical research. Classical molecular dynamics and Monte Carlo simulations methods are discussed. The necessary statistical mechanics required to understand and properly interpret the molecular simulations and link the results to measured bulk properties are introduced. An introduction to modern scientific computing environments and the Linux operating system is also provided. This course is equivalent to CHEM 5114 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CHM 8174",
-      "title": "Stereoselective Synthesis",
-      "credits": 1.5,
-      "description": "Fundamentals of stereoselective synthesis and catalysis, including conformational analysis, substrate and catalyst control. Includes the use of allylic, chiral auxiliaries, directed reactions and chiral catalysts. This course is equivalent to CHM 5113 at Carleton University.",
       "component": "Lecture"
     },
     {
@@ -27296,13 +27181,6 @@
       "credits": 3,
       "description": "Basic classical scattering theory and quantum mechanical scattering theory. Experimental aspects, such as electron optics, electron gun fundamentals, energy analyzers and electron detectors. Applications to the understanding of the chemistry of materials. This course is equivalent to CHEM 5101 at Carleton University.",
       "component": "Lecture"
-    },
-    {
-      "code": "CHM 8256",
-      "title": "Seminar I",
-      "credits": 1,
-      "description": "A seminar course in which students are required to present a seminar on a topic not related to their research project. In addition, students are required to attend the seminar of their fellow classmates and actively participate in the discussion following the seminar. This course is equivalent to CHEM 5801 at Carleton University.",
-      "component": "Seminar"
     },
     {
       "code": "CHM 8257",
@@ -27340,13 +27218,6 @@
       "component": "Lecture"
     },
     {
-      "code": "CHM 8308",
-      "title": "Multinuclear Magnetic Resonance Spectroscopy",
-      "credits": 1.5,
-      "description": "Principles of Nuclear Magnetic Resonance (NMR). Study of NMR parameters: chemical shift, spin-spin coupling, electric quadrupole coupling, spin-spin and spin-lattice relaxation rates. NMR and the periodic table. Dynamic NMR. Applications in chemistry and biochemistry. Fourier Transform technique. Pulse sequences. Basic principles and applications of two-dimensional NMR. This course is equivalent to CHEM 5002 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
       "code": "CHM 8309",
       "title": "Advanced Topics in Physical",
       "credits": 1.5,
@@ -27372,13 +27243,6 @@
         "code": "CHM 8310",
         "text": "CHM 8310"
       }
-    },
-    {
-      "code": "CHM 8314",
-      "title": "Surface Chemistry Aspects of Electrochemical Science",
-      "credits": 1.5,
-      "description": "Introduction to electrode processes and electrolysis. Potential differences at interfaces. Characterization of the electrical double layer. Dipole orientation effects, charge-transfer in adsorbed layers, electrochemical origins of surface science concepts. Theory of electron transfer, electrode kinetics, electrocatalysis. This course is equivalent to CHEM 5504 at Carleton University.",
-      "component": "Lecture"
     },
     {
       "code": "CHM 8315",
@@ -27410,24 +27274,10 @@
       "component": "Lecture"
     },
     {
-      "code": "CHM 8319",
-      "title": "Total Syntheses",
-      "credits": 1.5,
-      "description": "Discussion on philosophy and strategy development for complex syntheses, along with modern reagents and reactions that have shortened classical routes and lead to more efficient and atom economy. This course is equivalent to CHEM 5403 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
       "code": "CHM 8320",
       "title": "Pericyclic and Stereoelectronic Effects",
       "credits": 1.5,
       "description": "Pericyclic reactions, facial selectivity, stereoelectronic effects in carbohydrates and related acetal cleavage. Applications to complex synthetic problems. This course is equivalent to CHEM 5405 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CHM 8321",
-      "title": "Solid State Chemistry",
-      "credits": 1.5,
-      "description": "Thermodynamic and kinetic aspects of solid state synthesis. Characterization of solids. Chemical and physical properties of solids that may include aspects of intercalation reactions, ionic conductors, glasses, electronic, magnetic optical and physical/mechanical properties. This course is equivalent to CHEM 5201 at Carleton University.",
       "component": "Lecture"
     },
     {
@@ -27436,37 +27286,6 @@
       "credits": 1.5,
       "description": "Brief introduction to basic concepts in coordination chemistry. Topics to include the following: carbon dioxide fixation, dinitrogen fixation, activation, olefin metathesis, nature of the M-M bond. This course is equivalent to CHEM 5203 at Carleton University.",
       "component": "Lecture"
-    },
-    {
-      "code": "CHM 8323",
-      "title": "Quantum Mechanical Methods - Theory",
-      "credits": 1.5,
-      "description": "Examination of the theory behind quantum mechanical methods (HF, MP2, CI, DFT). Semi-empirical. This course is equivalent to CHEM 5600 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CHM 8324",
-      "title": "Quantum Mechanical Methods - Applications",
-      "credits": 1.5,
-      "description": "Practical applications of methods taught in CHM 8323 such as thermochemistry, reaction pathway moeling, structure predictions. This course is equivalent to CHEM 5601 at Carleton University.",
-      "component": "LecturePrerequisite: CHM 8323 or CHM 8723",
-      "prereqText": "CHM 8323 or CHM 8723",
-      "prerequisites": {
-        "type": "or_group",
-        "text": "CHM 8323 or CHM 8723",
-        "children": [
-          {
-            "type": "course",
-            "code": "CHM 8323",
-            "text": "CHM 8323"
-          },
-          {
-            "type": "course",
-            "code": "CHM 8723",
-            "text": "CHM 8723"
-          }
-        ]
-      }
     },
     {
       "code": "CHM 8325",
@@ -27539,13 +27358,6 @@
       "component": "Lecture"
     },
     {
-      "code": "CHM 8336",
-      "title": "Non-Equilibrium Kinetics",
-      "credits": 1.5,
-      "description": "Gas phase chemical kinetics of elementary and complex reaction mechanisms, as seen from a microscopic viewpoint. Unimolecular and bimolecular reactions under conditions of non-Boltzmann energy distributions. Consequences for combustion and atmospheric chemistry, as well as for fundamental kinetics. This course is equivalent to CHEM 5604 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
       "code": "CHM 8337",
       "title": "Non-Linear Chemical Kinetics",
       "credits": 1.5,
@@ -27578,20 +27390,6 @@
       "title": "Transition-Metal Catalyzed Polymerization",
       "credits": 1.5,
       "description": "Recent developments in polymerization catalysis via transition metal complexes, including insertion, metathesis, and atom-transfer polymerization. Brief overview of relevant concepts in polymer chemistry (e.g. molecular weight, polydispersity, living polymerization, the glass transition). This course is equivalent to CHEM 5107 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CHM 8343",
-      "title": "Chemistry of the Main Group Elements",
-      "credits": 1.5,
-      "description": "Fundamental and applied aspects of main group element chemistry. Topics may include non-metal chemistry, main group organometallic chemistry, application of main group element compounds to 3 uses of main group element compounds in synthesis. This course is equivalent to CHEM 5202 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CHM 8344",
-      "title": "Computational Approaches in Medicinal Chemistry",
-      "credits": 1.5,
-      "description": "Theory and application of methods used in the pharmaceutical industry including molecular mechanics. This course is equivalent to CHEM 5602 at Carleton University.",
       "component": "Lecture"
     },
     {
@@ -41021,7 +40819,7 @@
       "title": "Machine Learning",
       "credits": 3,
       "description": "Concepts, techniques, and algorithms in machine learning; representation, regularization and generalization; supervised learning; unsupervised learning; advanced methods such as support vector machines, online algorithms, neural networks, hidden Markov models, and Bayesian networks; curse of dimensionality and large-scale machine learning. Category T in course list. This course is equivalent to COMP 5116 at Carleton University.",
-      "component": "LectureCourses CSI 5155, DTO 5100, DTO 5101, ELG 5255, IAI 5100, IAI 5101, MIA 5100, SYS 5185 cannot be combined for units."
+      "component": "LectureCourses CSI 5155, ELG 5255, IAI 5100, IAI 5101, MIA 5100, SYS 5185 cannot be combined for units."
     },
     {
       "code": "CSI 5161",
@@ -41610,21 +41408,21 @@
       "code": "CTM 7101",
       "title": "MSc Seminar",
       "credits": 3,
-      "description": "Compulsory for all students enrolled in the master program. Presentation of two seminars or one seminar and one poster required during the year as well as regular attendance at the CTM seminar series.",
+      "description": "Compulsory for all students enrolled in the master’s program. Presentation of a seminar and completing activities linked to Scientific Communication. Regular attendance at scientific presentations, including CTM and Faculty seminar series.",
       "component": "Seminar"
     },
     {
       "code": "CTM 71011",
       "title": "MSc Seminar (Part 1 of 2)",
       "credits": 0,
-      "description": "Compulsory for all students enrolled in the master program. Presentation of two seminars or one seminar and one poster required during the year as well as regular attendance at the CTM seminar series. (Part 1 of 2)",
+      "description": "Compulsory for all students enrolled in the master’s program. Presentation of a seminar and completing activities linked to Scientific Communication. Regular attendance at scientific presentations, including CTM and Faculty seminar series. (Part 1 of 2)",
       "component": "Seminar"
     },
     {
       "code": "CTM 71012",
       "title": "MSc Seminar (Part 2 of 2)",
       "credits": 3,
-      "description": "Compulsory for all students enrolled in the master program. Presentation of two seminars or one seminar and one poster required during the year as well as regular attendance at the CTM seminar series. (Part 2 of 2)",
+      "description": "Compulsory for all students enrolled in the master’s program. Presentation of a seminar and completing activities linked to Scientific Communication. Regular attendance at scientific presentations, including CTM and Faculty seminar series. (Part 2 of 2)",
       "component": "SeminarPrerequisite: CTM 71011.",
       "prereqText": "CTM 71011",
       "prerequisites": {
@@ -41665,7 +41463,7 @@
       "code": "CTM 7501",
       "title": "MSc Séminaire",
       "credits": 3,
-      "description": "Obligatoire pour tous les étudiants inscrits au programme de maîtrise. Présentation de deux séminaires ou un séminaire et un poster requis au cours de l'année, ainsi qu'une participation régulière à la série de séminaires MCT.",
+      "description": "Obligatoire pour tous les étudiants inscrits au programme de maîtrise. Présentation d’un séminaire et réalisation d’activités liées à la communication scientifique. Participation régulière aux présentations scientifiques, y compris la série de séminaires du MCT et de la Faculté.",
       "component": "Séminaire"
     },
     {
@@ -41679,21 +41477,21 @@
       "code": "CTM 8102",
       "title": "PhD Seminar",
       "credits": 3,
-      "description": "Compulsory for all students enrolled in the doctorate program. Presentation of two seminars or one seminar and one poster required during the year as well as regular attendance at the CTM seminar series.",
+      "description": "Compulsory for all students enrolled in the doctorate program. Presentation of a seminar and completing activities linked to Scientific Communication. Regular attendance at scientific presentations, including CTM and Faculty seminar series.",
       "component": "Seminar"
     },
     {
       "code": "CTM 81021",
       "title": "PhD Seminar (Part 1 of 2)",
       "credits": 0,
-      "description": "Compulsory for all students enrolled in the doctorate program. Presentation of two seminars or one seminar and one poster required during the year as well as regular attendance at the CTM seminar series. (Part 1 of 2)",
+      "description": "Compulsory for all students enrolled in the doctorate program. Presentation of a seminar and completing activities linked to Scientific Communication. Regular attendance at scientific presentations, including CTM and Faculty seminar series. (Part 1 of 2)",
       "component": "Seminar"
     },
     {
       "code": "CTM 81022",
       "title": "PhD Seminar (Part 2 of 2)",
       "credits": 3,
-      "description": "Compulsory for all students enrolled in the doctorate program. Presentation of two seminars or one seminar and one poster required during the year as well as regular attendance at the CTM seminar series. (Part 2 of 2)",
+      "description": "Compulsory for all students enrolled in the doctorate program. Presentation of a seminar and completing activities linked to Scientific Communication. Regular attendance at scientific presentations, including CTM and Faculty seminar series. (Part 2 of 2)",
       "component": "SeminarPrerequisite: CTM 81021.",
       "prereqText": "CTM 81021",
       "prerequisites": {
@@ -41774,9 +41572,9 @@
     },
     {
       "code": "CTM 8113",
-      "title": "Special Topics in Cardiac Computed Tomography and Magnetic Resonance Imaging",
+      "title": "Special Topics in Cardiac Computed Tomography",
       "credits": 3,
-      "description": "Study of recent advances in imaging, including cardiac imaging in CT and MRI. Examine the basics of MR and CT physics, CT and MR instrumentation, calcium scoring, non-invasive coronary angiography, cardiac anatomy, function, viability and perfusion imaging, and valvular abnormalities.",
+      "description": "Study of recent advances in cardiac CT imaging. Examine the basics of CT physics, CT instrumentation, calcium scoring, non-invasive coronary angiography, cardiac anatomy, function, viability and perfusion imaging, and valvular abnormalities.",
       "component": "Lecture, Seminar"
     },
     {
@@ -41965,7 +41763,7 @@
       "code": "CTM 8502",
       "title": "PhD Séminaire",
       "credits": 3,
-      "description": "Obligatoire pour tous les étudiants inscrits au programme de doctorat. Présentation de deux séminaires ou un séminaire et un poster requis au cours de l'année, ainsi qu'une participation régulière à la série de séminaires MCT.",
+      "description": "Obligatoire pour tous les étudiants inscrits au programme de doctorat. Présentation d’un séminaire et réalisation d’activités liées à la communication scientifique. Participation régulière aux présentations scientifiques, y compris la série de séminaires du MCT et de la Faculté.",
       "component": "Séminaire"
     },
     {
@@ -42113,7 +41911,7 @@
       "title": "Measurements I",
       "credits": 4,
       "description": "Principles and analysis of civil engineering measurements. Probability and normal distribution; systematic and random errors; probabilistic principles of errors; statistical treatment of experimental data. Basic theory of mechanical and electrical strain measurement systems. Measurements in water resources and geotechnical engineering.",
-      "component": "Discussion Group, Laboratory, Lecture, Research, Seminar, Work Term, Theory and Laboratory, TutorialPrerequisites: MAT 1320, MAT 1322, MAT 1341.",
+      "component": "Research, Discussion Group, Laboratory, Lecture, Seminar, Work Term, Theory and Laboratory, TutorialPrerequisites: MAT 1320, MAT 1322, MAT 1341.",
       "prereqText": "MAT 1320, MAT 1322, MAT 1341",
       "prerequisites": {
         "type": "and_group",
@@ -43224,13 +43022,6 @@
       "component": "Lecture"
     },
     {
-      "code": "CVG 5142",
-      "title": "Advanced Structural Dynamics",
-      "credits": 3,
-      "description": "Dynamic behaviour of civil engineering structures under excitations due to earthquakes, wind, waves, etc. Advanced methods in dynamic analysis of structures. Prediction of structural response. Design considerations. This course is equivalent to CIVJ 5201 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
       "code": "CVG 5143",
       "title": "Advanced Structural Steel Design",
       "credits": 3,
@@ -43249,27 +43040,6 @@
       "title": "Theory of Elasticity",
       "credits": 3,
       "description": "Stress-strain relations. Theories of plane stress and plane strain. Use of stress functions, energy and variational methods in the analysis of elastostatic problems. This course is equivalent to CIVJ 5203 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CVG 5146",
-      "title": "Numerical Methods of Structural Analysis",
-      "credits": 3,
-      "description": "Numerical procedures and methods of successive approximations for the solution of structural problems. Virtual work, principles of minimum potential and complementary energy. Applications of variation and finite difference techniques to the solutions of complicated problems in beams, plates and shells. This course is equivalent to CIVJ 5302 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CVG 5147",
-      "title": "Theory of Plates and Shells",
-      "credits": 3,
-      "description": "Stress distribution in flat plates of various shapes. Large deflection theory, numerical methods. Membrane theory, bending theory for cylindrical shells, bending theory for shells of revolution. This course is equivalent to CIVJ 5204 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CVG 5148",
-      "title": "Prestressed Concrete Design",
-      "credits": 3,
-      "description": "Materials, methods of prestressing, prestress losses, and anchorage zone stresses. Elastic analysis, design and behaviour of simple and continuous prestressed concrete beams, frames and slabs. Discussion of current design specifications. Ultimate strength of members. This course is equivalent to CIVJ 5305 at Carleton University.",
       "component": "Lecture"
     },
     {
@@ -43326,13 +43096,6 @@
       "title": "Finite Element Methods II",
       "credits": 3,
       "description": "Application of finite elements to folded plates, shells and continua. Convergence criteria and order of accuracy. Inertial and initial stress properties. Dynamic and buckling problems. Non-linear deflections and plasticity. This course is equivalent to CIVJ 5303 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CVG 5158",
-      "title": "Elements of Bridge Engineering",
-      "credits": 3,
-      "description": "Introduction; limit state design; highway bridge design loads; analysis and design of concrete decks; impact and dynamics; load capacity rating of existing bridges and construction in cold climate. This course is equivalent to CIVJ 5307 at Carleton University.",
       "component": "Lecture"
     },
     {
@@ -43536,13 +43299,6 @@
       "title": "Geotechnical Hazards",
       "credits": 3,
       "description": "Understanding of assessment, prevention, and mitigation of geotechnical hazards, overview of natural and man-made geo-hazards; concepts of hazards, disasters, vulnerability and risks; geotechnical hazards induced by problem soils: fundamentals, assessment, and mitigation; landslide hazards and risk assessment: fundamentals, solutions (prevention, stabilization) for landslides and slope instability; monitoring of landslides and slope; mining geotechnical hazards: hazards related to surface mining geotechnical facilities; hazards related to underground mining geotechnical facilities. This course is equivalent to CIVJ 5109 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "CVG 5320",
-      "title": "Fire Behaviour of Materials",
-      "credits": 3,
-      "description": "Fundamentals and scientific aspects of the behaviour of materials during fires and the fire hazards of materials. Topics to be covered include material specifications, thermal and mechanical properties, structural fire response, residual strength, failure criteria, mechanisms of flame retardancy, and standards and testing protocols. This course is equivalent to CIVE 5615 at Carleton University.",
       "component": "Lecture"
     },
     {
@@ -48913,14 +48669,14 @@
       "title": "Data Science Applications",
       "credits": 3,
       "description": "Analysis and design of various data cleaning, wrangling, blending, and visualization, statistical inference, classification, clustering, regression, and content analysis methods. Use of machine learning algorithms to extract meaningful information from data to make decisions. Formulating analytics problems for business and developing, evaluating, and maintaining machine learning models. Analyzing, generating, and communicating insights on the models. Hands-on experience with an integrated set of current data analytics, data mining, and machine learning tools.",
-      "component": "LectureCourses CSI 5155, CSI 5387, DTI 5125, DTI 5126, DTO 5120, GNG 5125, MIA 5126, SYS 5170 cannot be combined for units"
+      "component": "LectureCourses CSI 5155, CSI 5387, DTI 5125, DTI 5126, GNG 5125, MIA 5126, SYS 5170 cannot be combined for units."
     },
     {
       "code": "DTI 5126",
       "title": "Fundamentals for Applied Data Science",
       "credits": 3,
       "description": "Essential data science concepts relevant to practical applications are covered including: problem formulation; data acquisition; data pre-preprocessing, modeling and statistical analysis. Hands on experience with data science tools and techniques including: supervised and unsupervised machine learning; presentation of results; applications in areas such as accounting, finance, marketing and supply chain management.",
-      "component": "LectureCourses DTI 5126, DTI 5125, DTO 5120, IAI 5120, MIA 5126, SYS 5170 cannot be combined for units."
+      "component": "LectureCourses DTI 5126, DTI 5125, IAI 5120, MIA 5126, SYS 5170 cannot be combined for units."
     },
     {
       "code": "DTI 5175",
@@ -49165,34 +48921,6 @@
       "credits": 0,
       "description": "",
       "component": "Recherche / Research"
-    },
-    {
-      "code": "DTO 5100",
-      "title": "Foundations and Applications of Machine Learning",
-      "credits": 3,
-      "description": "The capabilities and limitations of machine learning; problem formulation; supervised and unsupervised learning techniques; deploying, monitoring, and evaluating machine learning models; storytelling and assessing the results of learning; current advances in application areas such as business, law, arts, social sciences and education.",
-      "component": "LectureThe courses CSI 5155, ELG 5255, IAI 5100, IAI 5101, MIA 5100, DTO 5100 cannot be combined for units."
-    },
-    {
-      "code": "DTO 5101",
-      "title": "Foundations of Machine Learning for Scientists and Engineers",
-      "credits": 3,
-      "description": "The capabilities and limitations of machine learning; problem formulation and requirement engineering; supervised and unsupervised learning techniques; designing, deploying, monitoring and evaluating machine learning models; assessing the results of learning; current advances in application areas such as engineering, science and health.",
-      "component": "LectureCourses CSI 5155, ELG 5255, IAI 5101, IAI 5100, MIA 5100, DTO 5101 cannot be combined for units."
-    },
-    {
-      "code": "DTO 5120",
-      "title": "Essential Concepts in Data Science",
-      "credits": 3,
-      "description": "An introduction to the foundations of data science using a case study approach; overview of the data science process: types of tasks and models, data manipulation, exploratory data analysis, data summarization and data visualization; predictive modeling, descriptive modeling; reporting and deployment.",
-      "component": "LectureCourses CSI 4142, DTI 5125, DTI 5126, MAT 4373, DTO 5120 cannot be combined for units."
-    },
-    {
-      "code": "DTO 5140",
-      "title": "Engineering Design",
-      "credits": 3,
-      "description": "Open ended, hands-on engineering design course that provides students with fundamentals and advanced concepts of the engineering design process from client empathy to prototyping and testing. Students work directly with clients to solve a real societal need. There is a strong component of teamwork and lifelong learning.",
-      "component": "Lecture"
     },
     {
       "code": "DTO 5150",
@@ -59465,7 +59193,13 @@
       "title": "Synthesis Seminar",
       "credits": 3,
       "description": "Integration of theoretical knowledge to contribute to educational practice.",
-      "component": "LectureThis course is graded as S (Satisfactory) or (Non Satisfactory)."
+      "component": "LecturePrerequisite: 21 university course units at the graduate level. This course is graded as S (Satisfactory) or (Non Satisfactory).",
+      "prereqText": "21 university course units at the graduate level",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "21 university course units at the graduate level",
+        "credits": 21
+      }
     },
     {
       "code": "EDU 5202",
@@ -59871,7 +59605,13 @@
       "title": "Séminaire de synthèse",
       "credits": 3,
       "description": "Démarche vers une intégration des savoirs théoriques et pratiques qui doit contribuer à la pratique éducative.",
-      "component": "Cours magistralL'évaluation de se cours se fera sur une base S (satisfaisant) ou NS (non satisfaisant)."
+      "component": "Cours magistralPréalable: 21 crédits de cours universitaire de niveau gradué. L'évaluation de se cours se fera sur une base S (satisfaisant) ou NS (non satisfaisant).",
+      "prereqText": "21 crédits de cours universitaire de niveau gradué",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "21 crédits de cours universitaire de niveau gradué",
+        "credits": 21
+      }
     },
     {
       "code": "EDU 5600",
@@ -62656,7 +62396,7 @@
       "title": "Applied Machine Learning",
       "credits": 3,
       "description": "Machine learning is an effective tool to design systems that learn from experience and adapt to an environment. Theory and applications of machine learning to the design of electrical and computer systems, devices and networks by using techniques that utilize statistics, neural computation and information theory. Fundamentals of supervised learning, Bayesian estimation, clustering and unsupervised learning, multivariate, parametric and non-parametric methods, kernel machines, hidden Markov models, multilayer perceptron networks and deep neural networks, ensemble learning and reinforcement learning. Design and testing of machine learning techniques integrated into real-world systems, devices and networks. Guidelines for machine learning experiments, methods for cross-validation and resampling, classifier performance analysis and tools for comparing classification algorithms and analysis of variance to compare multiple algorithms.",
-      "component": "LectureCourses ELG 5255, CSI 5155, DTO 5100, DTO 5101, IAI 5100, IAI 5101, MIA 5100, SYS 5185 cannot be combined for units."
+      "component": "LectureCourses CSI 5155, ELG 5255, IAI 5100, IAI 5101, MIA 5100, SYS 5185 cannot be combined for units."
     },
     {
       "code": "ELG 5271",
@@ -63572,20 +63312,6 @@
       "credits": 3,
       "description": "Ce cours est équivalent à EACJ 5008 à la Carleton University.",
       "component": "Cours magistral"
-    },
-    {
-      "code": "ELG 8000",
-      "title": "Co-Op Work Term I / Co-Op Work Term I",
-      "credits": 0,
-      "description": "Pour les étudiants et les étudiantes d'un programme coopératif de maîtrise qui font leur première session de travail. / For students in a co-operative master's program who are on their first work session.",
-      "component": "Stage / Work Term"
-    },
-    {
-      "code": "ELG 8001",
-      "title": "Co-Op Work Term II / Co-Op Work Term II",
-      "credits": 0,
-      "description": "Pour les candidats et les candidates à un programme coopératif de maîtrise qui font leur deuxième session de travail. / For students in a co-operative master's program who are on their second work session.",
-      "component": "Stage / Work Term"
     },
     {
       "code": "ELG 9997",
@@ -71225,13 +70951,6 @@
       "title": "Multiphase Flow in Soils",
       "credits": 3,
       "description": "This course is equivalent to ENVE 5303 at Carleton University.",
-      "component": "Lecture"
-    },
-    {
-      "code": "EVG 7401",
-      "title": "Environmental Impact Assessment of Major Projects",
-      "credits": 3,
-      "description": "This course is equivalent to ENVE 5401 at Carleton University.",
       "component": "Lecture"
     },
     {
@@ -87464,14 +87183,14 @@
       "title": "Foundations and Applications of Machine Learning",
       "credits": 3,
       "description": "The capabilities and limitations of machine learning; problem formulation; supervised and unsupervised learning techniques; deploying, monitoring, and evaluating machine learning models; storytelling and assessing the results of learning; current advances in application areas such as business, law, arts, social sciences and education. Recommended prerequisite: Aptitude for analytics. Although no specific programming background is required, students should be comfortable with computing technologies.",
-      "component": "LectureCourses CSI 5155, DTO 5100, DTO 5101, ELG 5255, IAI 5100, IAI 5101, MIA 5100 cannot be combined for units."
+      "component": "LectureCourses CSI 5155, ELG 5255, IAI 5100, IAI 5101, MIA 5100 cannot be combined for units."
     },
     {
       "code": "IAI 5101",
       "title": "Foundations of Machine Learning for Scientists and Engineers",
       "credits": 3,
       "description": "The capabilities and limitations of machine learning; problem formulation and requirement engineering; supervised and unsupervised learning techniques; designing, deploying, monitoring and evaluating machine learning models; assessing the results of learning; current advances in application areas such as engineering, science and health. Recommended prerequisite: No specific programming required, students should have taken an introduction to programming at the undergraduate level as well as linear algebra I & calculus II.",
-      "component": "LectureCourses CSI 5155, DTO 5100, DTO 5101, ELG 5255, IAI 5100, IAI 5101, MIA 5100, SYS 5185 cannot be combined for units."
+      "component": "LectureCourses CSI 5155, ELG 5255, IAI 5100, IAI 5101, MIA 5100, SYS 5185 cannot be combined for units."
     },
     {
       "code": "IAI 5120",
@@ -104101,7 +103820,7 @@
       "title": "Mechatronics",
       "credits": 3,
       "description": "Models for passive and active components for electro-mechanical systems. Network representation of signals and energy transmission and conversion. Selection of sensors and actuators for the control of mechanical systems. Modelling and simulation for the design of mixed dynamic systems. Courses MCG 5184, MCG 4136 cannot be combined for units. This course is equivalent to MAAJ 5804 at Carleton University.",
-      "component": "Lecture, Tutorial"
+      "component": "Tutorial, Lecture"
     },
     {
       "code": "MCG 5185",
@@ -106991,7 +106710,7 @@
       "title": "Foundations and Applications of Machine Learning",
       "credits": 3,
       "description": "The capabilities and limitations of machine learning; problem formulation; supervised and unsupervised learning techniques; deploying, monitoring, and evaluating machine learning models; storytelling and assessing the results of learning; current advances in application areas such as business, law, arts, social sciences and education. Recommended prerequisite: Aptitude for analytics. Although no specific programming background is required, students should be comfortable with computing technologies.",
-      "component": "LectureCourses CSI 5155, DTO 5100, DTO 5101, ELG 5255, IAI 5100, IAI 5101, MIA 5100, SYS 5185 cannot be combined for units."
+      "component": "LectureCourses CSI 5155, ELG 5255, IAI 5100, IAI 5101, MIA 5100, SYS 5185 cannot be combined for units."
     },
     {
       "code": "MIA 5110",
@@ -109839,7 +109558,7 @@
     },
     {
       "code": "MUS 3958",
-      "title": "Pépertoire vocal II / Vocal Repertoire II",
+      "title": "Répertoire vocal II / Vocal Repertoire II",
       "credits": 3,
       "description": "Survol de la littérature pour voix solo à partir d'analyses et de prestations. Étude des conventions stylistiques, du rapport texte-musique et d'autres éléments reliés à l'interprétation. / Survey of solo vocal literature through analysis and performance with emphasis on style, text-music relationships, interpretation, and presentation.",
       "component": "Tutoriel / TutorialAu moins un des MUS 3957 ou MUS 3958 doit être pris avant la fin de la quatrième année pour les étudiants en BMus (chant) et avant la fin de la cinquième année pour les étudiants en BMus/BSc (chant). / At least one of MUS 3957 or MUS 3958 must be taken before the end of the fourth year for BMus voice students and before the end of the fifth year for BMus/BSc voice students."
@@ -112733,7 +112452,7 @@
       "title": "Practicum: Family-Centered Care of Children with Acute and Chronic Illness",
       "credits": 3,
       "description": "Family-centered care of children experiencing acute and chronic illness. Practice in health care and simulation settings.",
-      "component": "Work Term, LaboratoryPrerequisite: NSG 2313. NSG 3107 is corequisite to NSG 3307.",
+      "component": "Laboratory, Work TermPrerequisite: NSG 2313. NSG 3107 is corequisite to NSG 3307.",
       "prereqText": "NSG 2313",
       "prerequisites": {
         "type": "course",
@@ -114025,22 +113744,22 @@
       "code": "NSG 5350",
       "title": "Pathophysiology for the Nurse Practitioner",
       "credits": 3,
-      "description": "Examine theoretical and practice related concepts in pathophysiology as a basis for advanced nursing practice. Explore alterations in physiological function with an emphasis on age-related, acute, episodic, and chronic conditions found in primary health care practice. Seminar: 3 hours/week.",
-      "component": "LectureCourse for PHCNP students only."
+      "description": "Examine theoretical and practice related concepts in pathophysiology as a basis for advanced nursing practice. Explore alterations in physiological function with an emphasis on age-related, acute, episodic, and chronic conditions. Seminar: 3 hours/week.",
+      "component": "SeminarCourse for NP students only."
     },
     {
       "code": "NSG 53501",
       "title": "Pathophysiology for the Nurse Practitioner (Part 1 of 2)",
       "credits": 0,
-      "description": "Examine theoretical and practice related concepts in pathophysiology as a basis for advanced nursing practice. Explore alterations in physiological function with an emphasis on age-related, acute, episodic, and chronic conditions found in primary health care practice. Seminar: 3 hours/week. (Part 1 of 2)",
-      "component": "LectureCourse for PHCNP students only."
+      "description": "Examine theoretical and practice related concepts in pathophysiology as a basis for advanced nursing practice. Explore alterations in physiological function with an emphasis on age-related, acute, episodic, and chronic conditions. Seminar: 3 hours/week. (Part 1 of 2)",
+      "component": "SeminarCourse for NP students only."
     },
     {
       "code": "NSG 53502",
       "title": "Pathophysiology for the Nurse Practitioner (Part 2 of 2)",
       "credits": 3,
-      "description": "Examine theoretical and practice related concepts in pathophysiology as a basis for advanced nursing practice. Explore alterations in physiological function with an emphasis on age-related, acute, episodic, and chronic conditions found in primary health care practice. Seminar: 3 hours/week. (Part 2 of 2)",
-      "component": "LecturePrerequisite: NSG 53501. Course for PHCNP students only.",
+      "description": "Examine theoretical and practice related concepts in pathophysiology as a basis for advanced nursing practice. Explore alterations in physiological function with an emphasis on age-related, acute, episodic, and chronic conditions. Seminar: 3 hours/week. (Part 2 of 2)",
+      "component": "SeminarPrerequisite: NSG 53501. Course for NP students only.",
       "prereqText": "NSG 53501",
       "prerequisites": {
         "type": "course",
@@ -114052,22 +113771,22 @@
       "code": "NSG 5360",
       "title": "Roles and Responsibilities of the Nurse Practitioner",
       "credits": 3,
-      "description": "Compare and contrast advanced practice nursing and related frameworks to develop, integrate, sustain, and evaluate the role of the nurse practitioner within primary health care. Critically analyze and develop strategies to implement advanced practice nursing competencies with a focus on the community. Seminar: 3 hours/week.",
-      "component": "LectureCourse for PHCNP students only."
+      "description": "Compare and contrast advanced practice nursing and related frameworks to develop, integrate, sustain, and evaluate the role of the nurse practitioner. Critically analyze and develop strategies to implement advanced practice nursing competencies with a focus on the community. Seminar: 3 hours/week.",
+      "component": "SeminarCourse for NP students only."
     },
     {
       "code": "NSG 53601",
       "title": "Roles and Responsibilities of the Nurse Practitioner (Part 1 of 2)",
       "credits": 0,
-      "description": "Compare and contrast advanced practice nursing and related frameworks to develop, integrate, sustain, and evaluate the role of the nurse practitioner within primary health care. Critically analyze and develop strategies to implement advanced practice nursing competencies with a focus on the community. Seminar: 3 hours/week. Course for PHCNP students only. (Part 1 of 2)",
-      "component": "LectureCourse for PHCNP students only."
+      "description": "Compare and contrast advanced practice nursing and related frameworks to develop, integrate, sustain, and evaluate the role of the nurse practitioner. Critically analyze and develop strategies to implement advanced practice nursing competencies with a focus on the community. Seminar: 3 hours/week. (Part 1 of 2)",
+      "component": "SeminarCourse for NP students only."
     },
     {
       "code": "NSG 53602",
       "title": "Roles and Responsibilities of the Nurse Practitioner (Part 2 of 2)",
       "credits": 3,
-      "description": "Compare and contrast advanced practice nursing and related frameworks to develop, integrate, sustain, and evaluate the role of the nurse practitioner within primary health care. Critically analyze and develop strategies to implement advanced practice nursing competencies with a focus on the community. Seminar: 3 hours/week. Course for PHCNP students only. (Part 2 of 2)",
-      "component": "LecturePrerequisite: NSG 53601. Course for PHCNP students only.",
+      "description": "Compare and contrast advanced practice nursing and related frameworks to develop, integrate, sustain, and evaluate the role of the nurse practitioner. Critically analyze and develop strategies to implement advanced practice nursing competencies with a focus on the community. Seminar: 3 hours/week. (Part 2 of 2)",
+      "component": "SeminarPrerequisite: NSG 53601. Course for NP students only.",
       "prereqText": "NSG 53601",
       "prerequisites": {
         "type": "course",
@@ -114079,35 +113798,35 @@
       "code": "NSG 5370",
       "title": "Advanced Health Assessment and Diagnosis I",
       "credits": 3,
-      "description": "Analyze and critique concepts and frameworks essential to advanced health assessment and diagnosis using clinical reasoning skills. Apply clinical, theoretical and research knowledge in comprehensive and focused health assessment for the individual client's diagnostic plan of care. Course for PHCNP students only. Corequisite: NSG 5350.",
-      "component": "LectureNSG 53501 is corequisite to NSG 5370."
+      "description": "Analyze and critique concepts and frameworks essential to advanced health assessment and diagnosis using clinical reasoning skills. Apply clinical, theoretical and research knowledge in comprehensive and focused health assessment for the individual client's diagnostic plan of care. Seminar: 3 hours per week. Clinical work term: 6 hours per week.",
+      "component": "Seminar, Work TermNSG 53501 is corequisite to NSG 5370. Course for NP students only."
     },
     {
       "code": "NSG 5375",
       "title": "Advanced Health Assessment and Diagnosis II",
       "credits": 3,
-      "description": "Integrate knowledge and apply conceptual frameworks integral to advanced health assessment and diagnosis in advanced nursing practice. Demonstrate initiative, responsibility, and accountability in complex decision making for individuals, groups, and/or families within the nurse practitioner scope of practice based on current research findings. Seminar: 3 hours per week. Clinical: 6 hours per week.",
-      "component": "LecturePrerequisite: NSG 5370. Course for PHCNP students only.",
-      "prereqText": "NSG 5370",
+      "description": "Integrate knowledge and apply conceptual frameworks integral to advanced health assessment and diagnosis in advanced nursing practice. Demonstrate initiative, responsibility, and accountability in complex decision making for individuals, groups, and/or families within the nurse practitioner scope of practice based on current research findings. Seminar: 3 hours per week. Clinical work term: 6 hours per week.",
+      "component": "Seminar, Work TermPrerequisite: NSG 5370.Course for NP students only.",
+      "prereqText": "NSG 5370.Course for NP students only",
       "prerequisites": {
         "type": "course",
         "code": "NSG 5370",
-        "text": "NSG 5370"
+        "text": "NSG 5370.Course for NP students only"
       }
     },
     {
       "code": "NSG 5380",
-      "title": "Therapeutics in Primary Health Care I",
+      "title": "Therapeutics Interventions I",
       "credits": 3,
-      "description": "Critically appraise and interpret concepts and frameworks integral to pharmacotherapy, advanced counseling, and complementary therapies for common conditions across the lifespan. Develop, initiate, manage, and evaluate therapeutic plans of care that incorporate client values and acceptability, goals of therapy, analysis of different approaches, pharmacotherapeutic principles. Course for PHCNP students only. Corequisite: NSG 5370.",
-      "component": "LectureNSG 5370 is corequisite to NSG 5380."
+      "description": "Critically appraise and interpret concepts and frameworks integral to pharmacotherapy, advanced counseling, and complementary therapies for common conditions across the lifespan. Develop, initiate, manage, and evaluate therapeutic plans of care that incorporate client values and acceptability, goals of therapy, analysis of different approaches, pharmacotherapeutic principles. Seminar: 3 hours per week. Clinical work term: 6 hours per week.",
+      "component": "Seminar, Work TermNSG 5370 is corequisite to NSG 5380. Course for NP students only."
     },
     {
       "code": "NSG 5385",
-      "title": "Therapeutics in Primary Health Care II",
+      "title": "Therapeutics Interventions II",
       "credits": 3,
-      "description": "Integrate conceptual frameworks and evidence underlying the study of pharmacotherapy, advanced counseling, and complementary therapies for complex client situations. Demonstrate substantive initiative, responsibility, and accountability in complex decision making.",
-      "component": "LecturePrerequisite: NSG 5380. NSG 5375 is corequisite to NSG 5385. Course for PHCNP students only.",
+      "description": "Integrate conceptual frameworks and evidence underlying the study of pharmacotherapy, advanced counseling, and complementary therapies for complex client situations. Demonstrate substantive initiative, responsibility, and accountability in complex decision making. Seminar: 3 hours per week. Clinical work term: 6 hours per week.",
+      "component": "Seminar, Work TermPrerequisite: NSG 5380. NSG 5375 is corequisite to NSG 5385. Course for NP students only.",
       "prereqText": "NSG 5380",
       "prerequisites": {
         "type": "course",
@@ -114119,43 +113838,36 @@
       "code": "NSG 5401",
       "title": "Integrative Practicum",
       "credits": 12,
-      "description": "Synthesize the competencies essential to advanced nursing practice to provide primary health care for clients across the life span. Demonstrate autonomy, decision-making, and critical analysis of organizational and system issues that influence scope of practice, professional accountability, and outcomes. Course for PHCNP students only.",
-      "component": "LecturePrerequisites: NSG 5350, NSG 5360, NSG 5370, NSG 5375, NSG 5380 and NSG 5385.",
-      "prereqText": "NSG 5350, NSG 5360, NSG 5370, NSG 5375, NSG 5380 and NSG 5385",
+      "description": "Synthesize the competencies essential to advanced nursing practice to provide care for clients across the life span. Demonstrate autonomy, decision-making, and critical analysis of organizational and system issues that influence scope of practice, professional accountability, and outcomes.",
+      "component": "Work TermPrerequisites: NSG 5350, NSG 5360, NSG 5370, NSG 5375, NSG 5380, NSG 5385. Course for NP students only.",
+      "prereqText": "NSG 5350, NSG 5360, NSG 5370, NSG 5375, NSG 5380, NSG 5385",
       "prerequisites": {
         "type": "and_group",
-        "text": "NSG 5350, NSG 5360, NSG 5370, NSG 5375, NSG 5380 and NSG 5385",
+        "text": "NSG 5350, NSG 5360, NSG 5370, NSG 5375, NSG 5380, NSG 5385",
         "children": [
           {
-            "type": "and_group",
-            "text": "NSG 5350, NSG 5360, NSG 5370, NSG 5375, NSG 5380",
-            "children": [
-              {
-                "type": "course",
-                "code": "NSG 5350"
-              },
-              {
-                "type": "course",
-                "code": "NSG 5360"
-              },
-              {
-                "type": "course",
-                "code": "NSG 5370"
-              },
-              {
-                "type": "course",
-                "code": "NSG 5375"
-              },
-              {
-                "type": "course",
-                "code": "NSG 5380"
-              }
-            ]
+            "type": "course",
+            "code": "NSG 5350"
           },
           {
             "type": "course",
-            "code": "NSG 5385",
-            "text": "NSG 5385"
+            "code": "NSG 5360"
+          },
+          {
+            "type": "course",
+            "code": "NSG 5370"
+          },
+          {
+            "type": "course",
+            "code": "NSG 5375"
+          },
+          {
+            "type": "course",
+            "code": "NSG 5380"
+          },
+          {
+            "type": "course",
+            "code": "NSG 5385"
           }
         ]
       }
@@ -114211,22 +113923,22 @@
       "code": "NSG 5750",
       "title": "Physiopathologie pour infirmières et infirmiers praticiens",
       "credits": 3,
-      "description": "Examen des concepts théoriques et pratiques reliés à la physiopathologie comme fondement de la pratique de niveau avancé des soins infirmiers. Exploration des changements aux fonctions physiologiques en mettant l'accent sur les modifications liées à l'âge, aux troubles aigus, épisodiques et chroniques rencontrés dans la pratique en soins de santé primaires. Séminaire : 3 heures / semaine.",
-      "component": "Cours magistralCours pour étudiants CSSPIIP seulement."
+      "description": "Examen des concepts théoriques et pratiques reliés à la physiopathologie comme fondement de la pratique de niveau avancé des soins infirmiers. Exploration des changements aux fonctions physiologiques en mettant l'accent sur les modifications liées à l'âge, aux troubles aigus, épisodiques et chroniques. Séminaire : 3 heures / semaine.",
+      "component": "SéminaireCours pour étudiantes et étudiants IIP seulement."
     },
     {
       "code": "NSG 57501",
       "title": "Physiopathologie pour infirmières et infirmiers praticiens (Partie 1 de 2)",
       "credits": 0,
-      "description": "Examen des concepts théoriques et pratiques reliés à la physiopathologie comme fondement de la pratique de niveau avancé des soins infirmiers. Exploration des changements aux fonctions physiologiques en mettant l'accent sur les modifications liées à l'âge, aux troubles aigus, épisodiques et chroniques rencontrés dans la pratique en soins de santé primaires. Séminaire : 3 heures / semaine. (Partie 1 de 2)",
-      "component": "Cours magistralCours pour étudiants CSSPIIP seulement."
+      "description": "Examen des concepts théoriques et pratiques reliés à la physiopathologie comme fondement de la pratique de niveau avancé des soins infirmiers. Exploration des changements aux fonctions physiologiques en mettant l'accent sur les modifications liées à l'âge, aux troubles aigus, épisodiques et chroniques. Séminaire : 3 heures / semaine. (Partie 1 de 2)",
+      "component": "SéminaireCours pour étudiantes et étudiants IIP seulement."
     },
     {
       "code": "NSG 57502",
       "title": "Physiopathologie pour infirmières et infirmiers praticiens (Partie 2 de 2)",
       "credits": 3,
-      "description": "Examen des concepts théoriques et pratiques reliés à la physiopathologie comme fondement de la pratique de niveau avancé des soins infirmiers. Exploration des changements aux fonctions physiologiques en mettant l'accent sur les modifications liées à l'âge, aux troubles aigus, épisodiques et chroniques rencontrés dans la pratique en soins de santé primaires. Séminaire : 3 heures / semaine. (Partie 2 de 2)",
-      "component": "Cours magistralPréalable: NSG 57501. Cours pour étudiants CSSPIIP seulement.",
+      "description": "Examen des concepts théoriques et pratiques reliés à la physiopathologie comme fondement de la pratique de niveau avancé des soins infirmiers. Exploration des changements aux fonctions physiologiques en mettant l'accent sur les modifications liées à l'âge, aux troubles aigus, épisodiques et chroniques. Séminaire : 3 heures / semaine. (Partie 2 de 2)",
+      "component": "SéminairePréalable: NSG 57501. Cours pour étudiantes et étudiants IIP seulement.",
       "prereqText": "NSG 57501",
       "prerequisites": {
         "type": "course",
@@ -114238,22 +113950,22 @@
       "code": "NSG 5760",
       "title": "Rôles et responsabilités des infirmières et infirmiers praticiens",
       "credits": 3,
-      "description": "Comparaison et mise en contraste des cadres de référence en pratique de soins infirmiers de niveau avancé et d'autres cadres connexes afin de développer, d'intégrer, de soutenir, et d'évaluer le rôle de l'infirmière et de l'infirmier praticiens en soins de santé primaires. Analyse critique et élaboration de stratégies pour la mise en oeuvre de compétences en pratique de soins infirmiers de niveau avancé axés sur la communauté. Séminaire : 3 heures / semaine.",
-      "component": "Cours magistralCours pour étudiants CSSPIIP seulement."
+      "description": "Comparaison et mise en contraste des cadres de référence en pratique de soins infirmiers de niveau avancé et d'autres cadres connexes afin de développer, d'intégrer, de soutenir, et d'évaluer le rôle de l'infirmière et de l'infirmier praticiens. Analyse critique et élaboration de stratégies pour la mise en oeuvre de compétences en pratique de soins infirmiers de niveau avancé axés sur la communauté. Séminaire : 3 heures / semaine.",
+      "component": "SéminaireCours pour étudiantes et étudiants IIP seulement."
     },
     {
       "code": "NSG 57601",
       "title": "Rôles et responsabilités des infirmières et infirmiers praticiens (Partie 1 de 2)",
       "credits": 0,
-      "description": "Comparaison et mise en contraste des cadres de référence en pratique de soins infirmiers de niveau avancé et d'autres cadres connexes afin de développer, d'intégrer, de soutenir, et d'évaluer le rôle de l'infirmière et de l'infirmier praticiens en soins de santé primaires. Analyse critique et élaboration de stratégies pour la mise en oeuvre de compétences en pratique de soins infirmiers de niveau avancé axés sur la communauté. Séminaire : 3 heures / semaine. (Partie 1 de 2)",
-      "component": "Cours magistralCours réservé aux étudiants en soins de santé primaires."
+      "description": "Comparaison et mise en contraste des cadres de référence en pratique de soins infirmiers de niveau avancé et d'autres cadres connexes afin de développer, d'intégrer, de soutenir, et d'évaluer le rôle de l'infirmière et de l'infirmier praticiens. Analyse critique et élaboration de stratégies pour la mise en oeuvre de compétences en pratique de soins infirmiers de niveau avancé axés sur la communauté. Séminaire : 3 heures / semaine. (Partie 1 de 2)",
+      "component": "SéminaireCours pour étudiantes et étudiants IIP seulement."
     },
     {
       "code": "NSG 57602",
       "title": "Rôles et responsabilités des infirmières et infirmiers praticiens (Partie 2 de 2)",
       "credits": 3,
-      "description": "Comparaison et mise en contraste des cadres de référence en pratique de soins infirmiers de niveau avancé et d'autres cadres connexes afin de développer, d'intégrer, de soutenir, et d'évaluer le rôle de l'infirmière et de l'infirmier praticiens en soins de santé primaires. Analyse critique et élaboration de stratégies pour la mise en oeuvre de compétences en pratique de soins infirmiers de niveau avancé axés sur la communauté. Séminaire : 3 heures / semaine. (Partie 2 de 2)",
-      "component": "Cours magistralPréalable: NSG 57601. Cours réservé aux étudiants en soins de santé primaires.",
+      "description": "Comparaison et mise en contraste des cadres de référence en pratique de soins infirmiers de niveau avancé et d'autres cadres connexes afin de développer, d'intégrer, de soutenir, et d'évaluer le rôle de l'infirmière et de l'infirmier praticiens. Analyse critique et élaboration de stratégies pour la mise en oeuvre de compétences en pratique de soins infirmiers de niveau avancé axés sur la communauté. Séminaire : 3 heures / semaine. (Partie 2 de 2)",
+      "component": "SéminairePréalable: NSG 57601. Cours pour étudiantes et étudiants IIP seulement.",
       "prereqText": "NSG 57601",
       "prerequisites": {
         "type": "course",
@@ -114265,15 +113977,15 @@
       "code": "NSG 5770",
       "title": "Formation avancée en évaluation de la santé et diagnostic I",
       "credits": 3,
-      "description": "Analyse et critique des concepts et des cadres de référence essentiels à la formation avancée en évaluation de la santé et en diagnostic en utilisant des habiletés de raisonnement clinique. Application des connaissances cliniques, théoriques et de recherche à l'évaluation complète de la santé axée sur le diagnostic et le plan de soins individualisé du client. Cours pour étudiantes CSSPIIP seulement. Séminaire : 3 heures par semaine. Clinique : 6 heures par semaine. Concomitant : NSG 5750.",
-      "component": "Cours magistralNSG 57501 est concomitant à NSG 5770."
+      "description": "Analyse et critique des concepts et des cadres de référence essentiels à la formation avancée en évaluation de la santé et en diagnostic en utilisant des habiletés de raisonnement clinique. Application des connaissances cliniques, théoriques et de recherche à l'évaluation complète de la santé axée sur le diagnostic et le plan de soins individualisé du client. Séminaire : 3 heures par semaine. Stage clinique : 6 heures par semaine.",
+      "component": "Séminaire, StageNSG 57501 est concomitant à NSG 5770. Cours pour étudiantes et étudiants IIP seulement."
     },
     {
       "code": "NSG 5775",
       "title": "Formation avancée en évaluation de la santé et diagnostic II",
       "credits": 3,
-      "description": "Intégration des connaissances et application des cadres conceptuels comme partie intégrante à l'évaluation de la santé et au diagnostic dans la pratique des soins infirmiers de niveau avancé. Initiative, sens de responsabilité et responsabilisation dans la prise de décisions complexes à l'égard d'individus, de groupes et de familles à l'intérieur du champ de pratique de l'infirmière et infirmier praticiens, lesquelles sont fondées sur l'état des résultats actuels de recherche. Cours pour étudiantes CSSPIIP seulement. Séminaire : 3 heures par semaine. Clinique : 6 heures par semaine.",
-      "component": "Cours magistralPréalable : NSG 5770.",
+      "description": "Intégration des connaissances et application des cadres conceptuels comme partie intégrante à l'évaluation de la santé et au diagnostic dans la pratique des soins infirmiers de niveau avancé. Initiative, sens de responsabilité et responsabilisation dans la prise de décisions complexes à l'égard d'individus, de groupes et de familles à l'intérieur du champ de pratique de l'infirmière et infirmier praticiens, lesquelles sont fondées sur l'état des résultats actuels de recherche. Séminaire : 3 heures par semaine. Stage clinique : 6 heures par semaine.",
+      "component": "Séminaire, StagePréalable : NSG 5770. Cours pour étudiantes et étudiants IIP seulement.",
       "prereqText": "NSG 5770",
       "prerequisites": {
         "type": "course",
@@ -114283,17 +113995,17 @@
     },
     {
       "code": "NSG 5780",
-      "title": "Méthodes thérapeutiques en soins de santé primaires I",
+      "title": "Interventions thérapeutiques I",
       "credits": 3,
-      "description": "Évaluation critique et interprétation des concepts et des cadres de référence comme partie intégrante de la pharmacothérapie, du counseling de niveau avancé et des thérapies complémentaires, pour des conditions communes à tous les âges de la vie. Développement, initiation, gestion et évaluation des plans de soins thérapeutiques qui intègrent les valeurs des clients, l'acceptabilité, les buts de la thérapie, l'analyse des différentes approches et les principes de la thérapie pharmacologique. Cours pour étudiantes CSSPIIP seulement. Séminaire : 3 heures par semaine. Clinique : 6 heures par semaine. Concomitant : NSG 5770.",
-      "component": "Cours magistralNSG 5370 est concomitant à NSG 5780."
+      "description": "Évaluation critique et interprétation des concepts et des cadres de référence comme partie intégrante de la pharmacothérapie, du counseling de niveau avancé et des thérapies complémentaires, pour des conditions communes à tous les âges de la vie. Développement, initiation, gestion et évaluation des plans de soins thérapeutiques qui intègrent les valeurs des clients, l'acceptabilité, les buts de la thérapie, l'analyse des différentes approches et les principes de la thérapie pharmacologique. Séminaire : 3 heures par semaine. Stage clinique : 6 heures par semaine.",
+      "component": "Séminaire, StageNSG 5370 est concomitant à NSG 5780. Cours pour étudiantes et étudiants IIP seulement."
     },
     {
       "code": "NSG 5785",
-      "title": "Méthodes thérapeutiques en soins de santé primaires II",
+      "title": "Interventions thérapeutiques II",
       "credits": 3,
-      "description": "Intégration des cadres conceptuels et des faits sous-jacents à l'étude de la pharmacothérapie, du counseling de niveau avancé et des thérapies complémentaires, pour les situations complexes des clients. Haut niveau d'initiative, de sens des responsabilités, et de responsabilisation en situation de prise de décision complexe. Séminaire : 3 heures par semaine. Clinique : 6 heures par semaine. Cours pour étudiantes CSSPIIP seulement.",
-      "component": "Cours magistralPréalable : NSG 5780. NSG 5775 est concomitant à NSG 5785.",
+      "description": "Intégration des cadres conceptuels et des faits sous-jacents à l'étude de la pharmacothérapie, du counseling de niveau avancé et des thérapies complémentaires, pour les situations complexes des clients. Haut niveau d'initiative, de sens des responsabilités, et de responsabilisation en situation de prise de décision complexe. Séminaire : 3 heures par semaine. Stage clinique : 6 heures par semaine.",
+      "component": "Séminaire, StagePréalable : NSG 5780. NSG 5775 est concomitant à NSG 5785. Cours pour étudiantes et étudiants IIP seulement.",
       "prereqText": "NSG 5780",
       "prerequisites": {
         "type": "course",
@@ -114305,43 +114017,36 @@
       "code": "NSG 5801",
       "title": "Stage d'intégration",
       "credits": 12,
-      "description": "Synthèse des compétences essentielles à la pratique des soins infirmiers de niveau avancé afin de dispenser des soins de santé primaires aux clients à tous les âges de la vie. Autonomie, prise de décision et analyse critique à l'égard des enjeux organisationnels et systémiques qui exercent une influence sur l'étendue de la pratique, la responsabilisation professionnelle et les résultats attendus. Cours pour étudiantes CSSPIIP seulement.",
-      "component": "Cours magistralPréalables : NSG 5750, NSG 5760, NSG 5770, NSG 5775, NSG 5780 et NSG 5785.",
-      "prereqText": "NSG 5750, NSG 5760, NSG 5770, NSG 5775, NSG 5780 et NSG 5785",
+      "description": "Synthèse des compétences essentielles à la pratique des soins infirmiers de niveau avancé afin de dispenser des soins aux clients à tous les âges de la vie. Autonomie, prise de décision et analyse critique à l'égard des enjeux organisationnels et systémiques qui exercent une influence sur l'étendue de la pratique, la responsabilisation professionnelle et les résultats attendus.",
+      "component": "StagePréalables : NSG 5750, NSG 5760, NSG 5770, NSG 5775, NSG 5780, NSG 5785. Cours pour étudiantes et étudiants IIP seulement.",
+      "prereqText": "NSG 5750, NSG 5760, NSG 5770, NSG 5775, NSG 5780, NSG 5785",
       "prerequisites": {
         "type": "and_group",
-        "text": "NSG 5750, NSG 5760, NSG 5770, NSG 5775, NSG 5780 et NSG 5785",
+        "text": "NSG 5750, NSG 5760, NSG 5770, NSG 5775, NSG 5780, NSG 5785",
         "children": [
           {
-            "type": "and_group",
-            "text": "NSG 5750, NSG 5760, NSG 5770, NSG 5775, NSG 5780",
-            "children": [
-              {
-                "type": "course",
-                "code": "NSG 5750"
-              },
-              {
-                "type": "course",
-                "code": "NSG 5760"
-              },
-              {
-                "type": "course",
-                "code": "NSG 5770"
-              },
-              {
-                "type": "course",
-                "code": "NSG 5775"
-              },
-              {
-                "type": "course",
-                "code": "NSG 5780"
-              }
-            ]
+            "type": "course",
+            "code": "NSG 5750"
           },
           {
             "type": "course",
-            "code": "NSG 5785",
-            "text": "NSG 5785"
+            "code": "NSG 5760"
+          },
+          {
+            "type": "course",
+            "code": "NSG 5770"
+          },
+          {
+            "type": "course",
+            "code": "NSG 5775"
+          },
+          {
+            "type": "course",
+            "code": "NSG 5780"
+          },
+          {
+            "type": "course",
+            "code": "NSG 5785"
           }
         ]
       }
@@ -114391,7 +114096,7 @@
       "title": "End of Life Care: Palliative",
       "credits": 3,
       "description": "Philosophy and practice of palliative/end of life care across the lifespan and in diverse health settings. Critical examination of theory, research, practice and policy issues related to care of individuals and families facing life threatening illness. Exploration of concepts of death, dying, bereavement within health care systems, culture, and society using an interprofessional approach.",
-      "component": "Lecture"
+      "component": "Seminar"
     },
     {
       "code": "NSG 6140",
@@ -114431,12 +114136,12 @@
       "code": "NSG 6401",
       "title": "Clinical Project in Advanced Nursing Practice",
       "credits": 6,
-      "description": "Utilization of theory and evidence based practices relevant to a clinical field. Clinical practicum structured around the design, implementation, and evaluation of a clinical project.",
-      "component": "LecturePrerequisites: (NSG 5140, NSG 5215, NSG 5216) or (NSG 5140, NSG 5210) or (NSG 5140, NSG 5220) or (NSG 5140, NSG 5360).",
-      "prereqText": "(NSG 5140, NSG 5215, NSG 5216) or (NSG 5140, NSG 5210) or (NSG 5140, NSG 5220) or (NSG 5140, NSG 5360)",
+      "description": "Utilization of theory and evidence-based practices relevant to a clinical field. Clinical practicum structured around the design, implementation, and evaluation of a clinical project.",
+      "component": "LecturePrerequisites: (NSG 5140, NSG 5215, NSG 5216) or (NSG 5140, NSG 5360).",
+      "prereqText": "(NSG 5140, NSG 5215, NSG 5216) or (NSG 5140, NSG 5360)",
       "prerequisites": {
         "type": "or_group",
-        "text": "(NSG 5140, NSG 5215, NSG 5216) or (NSG 5140, NSG 5210) or (NSG 5140, NSG 5220) or (NSG 5140, NSG 5360)",
+        "text": "(NSG 5140, NSG 5215, NSG 5216) or (NSG 5140, NSG 5360)",
         "children": [
           {
             "type": "and_group",
@@ -114453,34 +114158,6 @@
               {
                 "type": "course",
                 "code": "NSG 5216"
-              }
-            ]
-          },
-          {
-            "type": "and_group",
-            "text": "(NSG 5140, NSG 5210)",
-            "children": [
-              {
-                "type": "course",
-                "code": "NSG 5140"
-              },
-              {
-                "type": "course",
-                "code": "NSG 5210"
-              }
-            ]
-          },
-          {
-            "type": "and_group",
-            "text": "(NSG 5140, NSG 5220)",
-            "children": [
-              {
-                "type": "course",
-                "code": "NSG 5140"
-              },
-              {
-                "type": "course",
-                "code": "NSG 5220"
               }
             ]
           },
@@ -114506,11 +114183,11 @@
       "title": "Clinical Project in Advanced Nursing Practice (Part 1 of 2)",
       "credits": 0,
       "description": "Utilization of theory and evidence based practices relevant to a clinical field. Clinical practicum structured around the design, implementation, and evaluation of a clinical project. (Part 1 of 2)",
-      "component": "LecturePrerequisites: (NSG 5140, NSG 5215, NSG 5216) or (NSG 5140, NSG 52101, NSG 52102) or (NSG 5140, NSG 52201, NSG 52202) or (NSG 5140, NSG 53601, NSG 53602).",
-      "prereqText": "(NSG 5140, NSG 5215, NSG 5216) or (NSG 5140, NSG 52101, NSG 52102) or (NSG 5140, NSG 52201, NSG 52202) or (NSG 5140, NSG 53601, NSG 53602)",
+      "component": "LecturePrerequisites: (NSG 5140, NSG 5215, NSG 5216) or (NSG 5140, NSG 53601, NSG 53602).",
+      "prereqText": "(NSG 5140, NSG 5215, NSG 5216) or (NSG 5140, NSG 53601, NSG 53602)",
       "prerequisites": {
         "type": "or_group",
-        "text": "(NSG 5140, NSG 5215, NSG 5216) or (NSG 5140, NSG 52101, NSG 52102) or (NSG 5140, NSG 52201, NSG 52202) or (NSG 5140, NSG 53601, NSG 53602)",
+        "text": "(NSG 5140, NSG 5215, NSG 5216) or (NSG 5140, NSG 53601, NSG 53602)",
         "children": [
           {
             "type": "and_group",
@@ -114527,42 +114204,6 @@
               {
                 "type": "course",
                 "code": "NSG 5216"
-              }
-            ]
-          },
-          {
-            "type": "and_group",
-            "text": "(NSG 5140, NSG 52101, NSG 52102)",
-            "children": [
-              {
-                "type": "course",
-                "code": "NSG 5140"
-              },
-              {
-                "type": "course",
-                "code": "NSG 52101"
-              },
-              {
-                "type": "course",
-                "code": "NSG 52102"
-              }
-            ]
-          },
-          {
-            "type": "and_group",
-            "text": "(NSG 5140, NSG 52201, NSG 52202)",
-            "children": [
-              {
-                "type": "course",
-                "code": "NSG 5140"
-              },
-              {
-                "type": "course",
-                "code": "NSG 52201"
-              },
-              {
-                "type": "course",
-                "code": "NSG 52202"
               }
             ]
           },
@@ -114619,7 +114260,7 @@
       "title": "Soins palliatifs et de fin de vie : Une approche interprofessionnelle",
       "credits": 3,
       "description": "Philosophie et pratique des soins palliatifs et de fin de vie, au long de l'existence et dans divers milieux de santé. Examen critique de la théorie, la recherche, la pratique et les problématiques d'ordre politique associées aux soins des personnes et des familles aux prises avec une maladie mortelle. Exploration des concepts de mort, d'agonie et de deuil dans les systèmes de soins de santé, la culture et la société et selon une approche interprofessionnelle.",
-      "component": "Cours magistral"
+      "component": "Séminaire"
     },
     {
       "code": "NSG 6540",
@@ -114660,11 +114301,11 @@
       "title": "Projet clinique en pratique des soins infirmiers de niveau avancé",
       "credits": 6,
       "description": "Utilisation de la théorie et des évidences systématiques pertinentes au domaine de spécialisation choisi. Stage structuré autour de la planification, de l'exécution et de l'évaluation d'un projet clinique.",
-      "component": "Cours magistralPréalables : (NSG 5540, NSG 5615, NSG 5616) ou (NSG 5540, NSG 5610) ou (NSG 5540, NSG 5620) ou (NSG 5540, NSG 5760).",
-      "prereqText": "(NSG 5540, NSG 5615, NSG 5616) ou (NSG 5540, NSG 5610) ou (NSG 5540, NSG 5620) ou (NSG 5540, NSG 5760)",
+      "component": "Cours magistralPréalables : (NSG 5540, NSG 5615, NSG 5616) ou (NSG 5540, NSG 5760).",
+      "prereqText": "(NSG 5540, NSG 5615, NSG 5616) ou (NSG 5540, NSG 5760)",
       "prerequisites": {
         "type": "or_group",
-        "text": "(NSG 5540, NSG 5615, NSG 5616) ou (NSG 5540, NSG 5610) ou (NSG 5540, NSG 5620) ou (NSG 5540, NSG 5760)",
+        "text": "(NSG 5540, NSG 5615, NSG 5616) ou (NSG 5540, NSG 5760)",
         "children": [
           {
             "type": "and_group",
@@ -114681,34 +114322,6 @@
               {
                 "type": "course",
                 "code": "NSG 5616"
-              }
-            ]
-          },
-          {
-            "type": "and_group",
-            "text": "(NSG 5540, NSG 5610)",
-            "children": [
-              {
-                "type": "course",
-                "code": "NSG 5540"
-              },
-              {
-                "type": "course",
-                "code": "NSG 5610"
-              }
-            ]
-          },
-          {
-            "type": "and_group",
-            "text": "(NSG 5540, NSG 5620)",
-            "children": [
-              {
-                "type": "course",
-                "code": "NSG 5540"
-              },
-              {
-                "type": "course",
-                "code": "NSG 5620"
               }
             ]
           },
@@ -114734,11 +114347,11 @@
       "title": "Projet clinique en pratique des soins infirmiers de niveau avancé (Partie 1 de 2)",
       "credits": 0,
       "description": "Utilisation de la théorie et des évidences systématiques pertinentes au domaine de spécialisation choisi. Stage structuré autour de la planification, de l'exécution et de l'évaluation d'un projet clinique. (Partie 1 de 2)",
-      "component": "Cours magistralPréalables : (NSG 5540, NSG 5615, NSG 5616) ou (NSG 5540, NSG 56101, NSG 56102) ou (NSG 5540, NSG 56201, NSG 56202) ou (NSG 5540, NSG 57601, NSG 57602).",
-      "prereqText": "(NSG 5540, NSG 5615, NSG 5616) ou (NSG 5540, NSG 56101, NSG 56102) ou (NSG 5540, NSG 56201, NSG 56202) ou (NSG 5540, NSG 57601, NSG 57602)",
+      "component": "Cours magistralPréalables : (NSG 5540, NSG 5615, NSG 5616) ou (NSG 5540, NSG 57601, NSG 57602).",
+      "prereqText": "(NSG 5540, NSG 5615, NSG 5616) ou (NSG 5540, NSG 57601, NSG 57602)",
       "prerequisites": {
         "type": "or_group",
-        "text": "(NSG 5540, NSG 5615, NSG 5616) ou (NSG 5540, NSG 56101, NSG 56102) ou (NSG 5540, NSG 56201, NSG 56202) ou (NSG 5540, NSG 57601, NSG 57602)",
+        "text": "(NSG 5540, NSG 5615, NSG 5616) ou (NSG 5540, NSG 57601, NSG 57602)",
         "children": [
           {
             "type": "and_group",
@@ -114755,42 +114368,6 @@
               {
                 "type": "course",
                 "code": "NSG 5616"
-              }
-            ]
-          },
-          {
-            "type": "and_group",
-            "text": "(NSG 5540, NSG 56101, NSG 56102)",
-            "children": [
-              {
-                "type": "course",
-                "code": "NSG 5540"
-              },
-              {
-                "type": "course",
-                "code": "NSG 56101"
-              },
-              {
-                "type": "course",
-                "code": "NSG 56102"
-              }
-            ]
-          },
-          {
-            "type": "and_group",
-            "text": "(NSG 5540, NSG 56201, NSG 56202)",
-            "children": [
-              {
-                "type": "course",
-                "code": "NSG 5540"
-              },
-              {
-                "type": "course",
-                "code": "NSG 56201"
-              },
-              {
-                "type": "course",
-                "code": "NSG 56202"
               }
             ]
           },
@@ -114848,26 +114425,6 @@
       "credits": 3,
       "description": "Critical analysis of nursing knowledge development and the influence on nursing research and practice. Comparison and contrast of theories and philosophies in nursing with an emphasis on substantive areas of nursing that are of interest to the student. Course is reserved for PhD students.",
       "component": "Lecture"
-    },
-    {
-      "code": "NSG 7105",
-      "title": "Research Seminar I",
-      "credits": 3,
-      "description": "In-depth coverage and critical analysis of diverse research problems. Development of the research project through peer discussions, and presentations by experts. Course reserved for PhD students.",
-      "component": "Seminar"
-    },
-    {
-      "code": "NSG 7106",
-      "title": "Research Seminar II",
-      "credits": 3,
-      "description": "In-depth coverage and critical analysis of diverse research design methods. Development of the thesis proposal through peer discussions, and presentations by experts.",
-      "component": "SeminarPrerequiste: NSG 7105. Course reserved for PhD students.",
-      "prereqText": "NSG 7105",
-      "prerequisites": {
-        "type": "course",
-        "code": "NSG 7105",
-        "text": "NSG 7105"
-      }
     },
     {
       "code": "NSG 7110",
@@ -114937,26 +114494,6 @@
       "credits": 3,
       "description": "Analyse critique du développement des connaissances en soins infirmiers et de l'influence sur la recherche infirmière et la pratique. Comparaison et contraste de théories et philosophies de soins infirmiers avec un accent sur les zones de fond de soins infirmiers qui sont d'intérêt pour l'étudiant. Cours réservé aux doctorants.",
       "component": "Cours magistral"
-    },
-    {
-      "code": "NSG 7505",
-      "title": "Séminaire de recherche I",
-      "credits": 3,
-      "description": "Étude approfondie de diverses problématiques de recherche et analyse critique des écrits qui s'y rapportent. Développement du projet de thèse grâce à des discussions de groupe et des présentations par des experts. Cours réservé aux doctorants.",
-      "component": "Séminaire"
-    },
-    {
-      "code": "NSG 7506",
-      "title": "Séminaire de recherche II",
-      "credits": 3,
-      "description": "Étude approfondie de divers devis de recherche et analyse critique des écrits qui s'y rapportent. Développement du projet de thèse grâce à des discussions de groupe et des présentations par des experts. Cours réservé aux doctorants.",
-      "component": "SéminairePréalable : NSG 7505.",
-      "prereqText": "NSG 7505",
-      "prerequisites": {
-        "type": "course",
-        "code": "NSG 7505",
-        "text": "NSG 7505"
-      }
     },
     {
       "code": "NSG 7510",
@@ -115052,13 +114589,6 @@
           }
         ]
       }
-    },
-    {
-      "code": "NSG 9998",
-      "title": "Examen de synthèse / Comprehensive Examination",
-      "credits": 0,
-      "description": "L'examen de synthèse est un élément obligatoire du programme de doctorat et doit être complété avec succès avant de s'inscrire à la thèse. Il comporte une épreuve écrite et une épreuve orale portant sur un ou des thèmes reliés au champ de recherche de l'étudiant et l'étudiante. Concomitant : NSG 7110. / The comprehensive exam is mandatory in the doctoral program and must be successfully completed before registration to the thesis. The exam has a written and an oral component focusing on one or several topics related to the student's research field. Corequisite: NSG 7110.",
-      "component": "Recherche / Research"
     },
     {
       "code": "NUT 1104",
@@ -123562,336 +123092,6 @@
       "component": "Cours magistralPermission du Département est requise."
     },
     {
-      "code": "PHA 1501",
-      "title": "Professionnalisme et déontologie en pharmacie",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances reliées au professionnalisme, à la déontologie, à la confidentialité, à la responsabilité professionnelle et à certains aspects législatifs pertinents à la pratique de la pharmacie.",
-      "component": "Cours magistral"
-    },
-    {
-      "code": "PHA 1502",
-      "title": "Communication en pharmacie I",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux techniques de communication de base afin de favoriser l’efficacité et la sécurité des activités professionnelles pertinentes à la pratique de la pharmacie, incluant l’utilisation des technologies en santé.",
-      "component": "Cours magistral"
-    },
-    {
-      "code": "PHA 1503",
-      "title": "Le pharmacien et le réseau de santé",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances reliées à l’organisation des soins, à l’offre de services en santé, aux champs de pratique de la pharmacie et aux déterminants socio-économiques de la santé dans les provinces ayant des minorités francophones.",
-      "component": "Cours magistral"
-    },
-    {
-      "code": "PHA 1504",
-      "title": "Introduction et dispensation communautaire",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la législation, à la cueillette d’information, à la validation de prescriptions, à l’étiquetage des médicaments, à leur stabilité et à la documentation des activités professionnelles dans le contexte de la dispensation des médicaments en pharmacie communautaire, lors de soins à domicile ou par télépharmacie.",
-      "component": "Théorie et laboratoire"
-    },
-    {
-      "code": "PHA 1505",
-      "title": "Magistrales non-stériles et calculs pharmaceutiques",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la préparation de médicaments non-stériles selon les normes établies, incluant les calculs pharmaceutiques pertinents à leur réalisation.",
-      "component": "Théorie et laboratoire"
-    },
-    {
-      "code": "PHA 1506",
-      "title": "Le pharmacien expert du médicament I",
-      "credits": 3,
-      "description": "Acquisition et mise en application des connaissances reliées à la formulation des médicaments, à la dissolution des principes actifs, à leur absorption, distribution, métabolisme, élimination et interaction avec les cibles thérapeutiques de l’organisme.",
-      "component": "Théorie et laboratoire"
-    },
-    {
-      "code": "PHA 1507",
-      "title": "Le pharmacien expert du médicament II",
-      "credits": 3,
-      "description": "Acquisition et mise en application des connaissances reliées à la formulation des médicaments, à la dissolution des principes actifs, à leur absorption, distribution, métabolisme, élimination et interaction avec les cibles thérapeutiques de l’organisme.",
-      "component": "Théorie et laboratoire"
-    },
-    {
-      "code": "PHA 1508",
-      "title": "Le pharmacien expert du médicament III",
-      "credits": 3,
-      "description": "Acquisition et mise en application des connaissances reliées à la formulation des médicaments, à la dissolution des principes actifs, à leur absorption, distribution, métabolisme, élimination et interaction avec les cibles thérapeutiques de l’organisme.",
-      "component": "Théorie et laboratoire"
-    },
-    {
-      "code": "PHA 1509",
-      "title": "Introduction aux soins pharmaceutiques",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances reliées aux soins centrés sur le patient, aux problèmes reliés à la pharmacothérapie, à la pharmacothérapie individualisée et à la prise de décisions cliniques dans le contexte de la prestation de soins pharmaceutiques.",
-      "component": "Cours magistral"
-    },
-    {
-      "code": "PHA 1510",
-      "title": "Un corps en santé I",
-      "credits": 3,
-      "description": "Acquisition et mise en application des connaissances reliées aux systèmes physiologiques majeurs du corps humain, incluant des notions d’anatomie, d’histologie, de physiologie, de biochimie, d’immunologie, de microbiologie, de nutrition, et de saines habitudes de vie pertinentes à la pratique de la pharmacie.",
-      "component": "Cours magistral"
-    },
-    {
-      "code": "PHA 1511",
-      "title": "Un corps en santé II",
-      "credits": 3,
-      "description": "Acquisition et mise en application des connaissances reliées aux systèmes physiologiques majeurs du corps humain, incluant des notions d’anatomie, d’histologie, de physiologie, de biochimie, d’immunologie, de microbiologie, de nutrition, et de saines habitudes de vie pertinentes à la pratique de la pharmacie.",
-      "component": "Cours magistral"
-    },
-    {
-      "code": "PHA 1512",
-      "title": "Un corps en santé III",
-      "credits": 3,
-      "description": "Acquisition et mise en application des connaissances reliées aux systèmes physiologiques majeurs du corps humain, incluant des notions d’anatomie, d’histologie, de physiologie, de biochimie, d’immunologie, de microbiologie, de nutrition, et de saines habitudes de vie pertinentes à la pratique de la pharmacie.",
-      "component": "Cours magistral"
-    },
-    {
-      "code": "PHA 1513",
-      "title": "Consultations pharmaceutiques de première ligne I",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’évaluation et au traitement optimal de problèmes de santé mineurs présentés par un patient auprès du pharmacien, incluant les médicaments de vente libre, les produits de santé naturels et la référence à d’autres professionnels. Les cours de consultations pharmaceutiques sont organisés en fonction des raisons de consultation principales des patients en contexte de première ligne.",
-      "component": "Théorie et laboratoire"
-    },
-    {
-      "code": "PHA 1514",
-      "title": "Formation interprofessionnelle I",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux rôles et responsabilités des différents intervenants en matière de santé, leurs champs de pratique professionnelle et leurs interactions dans le contexte d’une institution ou d’un réseau local de santé. Ce cours permet aux étudiants en pharmacie d’interagir avec ceux des autres écoles pertinentes à la santé.",
-      "component": "Cours magistral"
-    },
-    {
-      "code": "PHA 1515",
-      "title": "Gestion thérapeutique I",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoire"
-    },
-    {
-      "code": "PHA 1516",
-      "title": "Démarche scientifique",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la pensée critique, à la démarche scientifique, aux soins basés sur la preuve, au processus décisionnel et à la recherche en pharmacie, incluant la revue d’utilisation des médicaments.",
-      "component": "Cours magistral"
-    },
-    {
-      "code": "PHA 1901",
-      "title": "Stage communautaire I/Community Rotation",
-      "credits": 4,
-      "description": "Mise en application des connaissances et habiletés acquises en première année dans la prestation de certaines activités professionnelles pertinentes à la pratique de la pharmacie en milieu communautaire. / Application of knowledge and skills acquired in the first year in the delivery of selected professional activities relevant to the practice of pharmacy in a community setting.",
-      "component": "Stage / Work Term"
-    },
-    {
-      "code": "PHA 2502",
-      "title": "Communication en pharmacie II",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux techniques de communication avancées afin de favoriser l’efficacité et la sécurité des activités professionnelles pertinentes à la pratique de la pharmacie, incluant l’utilisation des technologies en santé.",
-      "component": "Cours magistralPréalable : PHM 1502.",
-      "prereqText": "PHM 1502",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1502",
-        "text": "PHM 1502"
-      }
-    },
-    {
-      "code": "PHA 2503",
-      "title": "Gestion des opérations communautaires",
-      "credits": 3,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la bonne gestion des opérations afin créer un milieu de travail qui favorise l’efficacité et la sécurité des activités professionnelles pertinentes à la pratique de la pharmacie communautaire, avec une emphase sur le travail d’équipe et la pratique en milieu rural.",
-      "component": "Théorie et laboratoire"
-    },
-    {
-      "code": "PHA 2504",
-      "title": "Dispensation hospitalière",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la législation, à la cueillette d’information, à la validation de prescriptions, à l’étiquetage des médicaments, à leur stabilité, à la délégation des actes et à la documentation des activités professionnelles dans le contexte de la dispensation des médicaments en pharmacie hospitalière.",
-      "component": "Théorie et laboratoirePréalable : PHM 1504.",
-      "prereqText": "PHM 1504",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1504",
-        "text": "PHM 1504"
-      }
-    },
-    {
-      "code": "PHA 2505",
-      "title": "Magistrales stériles et calculs pharmaceutiques",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la préparation de médicaments stériles selon les normes établies, incluant les calculs pharmaceutiques pertinents à leur réalisation.",
-      "component": "Théorie et laboratoirePréalable : PHM 1505.",
-      "prereqText": "PHM 1505",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1505",
-        "text": "PHM 1505"
-      }
-    },
-    {
-      "code": "PHA 2506",
-      "title": "Consultations pharmaceutiques de première ligne II",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’évaluation et au traitement optimal de problèmes de santé mineurs présentés par un patient auprès du pharmacien, incluant les médicaments de vente libre, les produits de santé naturels et la référence à d’autres professionnels. Les cours de consultations pharmaceutiques sont organisés en fonction des raisons de consultation principales des patients en contexte de première ligne.",
-      "component": "Théorie et laboratoirePréalable : PHM 1513.",
-      "prereqText": "PHM 1513",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1513",
-        "text": "PHM 1513"
-      }
-    },
-    {
-      "code": "PHA 2507",
-      "title": "Continuité des soins",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’organisation des soins, à la réalisation d’un bilan comparatif et à l’évaluation des problèmes reliés à la pharmacothérapie dans le contexte de la pratique de la pharmacie.",
-      "component": "Théorie et laboratoire"
-    },
-    {
-      "code": "PHA 2508",
-      "title": "Suivi thérapeutique I",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées au suivi de l’observance thérapeutique, à la déclaration des effets indésirables et à la prolongation des prescriptions dans le contexte de la pratique de la pharmacie communautaire.",
-      "component": "Théorie et laboratoire"
-    },
-    {
-      "code": "PHA 2509",
-      "title": "Formation Interprofessionnelle II",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la dynamique et au travail d’équipes, à la communication interprofessionnelle, à la rétroaction et à la résolution de conflits. Ce cours permet aux étudiants en pharmacie d’interagir avec ceux des autres écoles pertinentes à la santé.",
-      "component": "Cours magistralPréalable : PHM 1514.",
-      "prereqText": "PHM 1514",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1514",
-        "text": "PHM 1514"
-      }
-    },
-    {
-      "code": "PHA 2510",
-      "title": "Gestion thérapeutique II",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalable : PHM 1515.",
-      "prereqText": "PHM 1515",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1515",
-        "text": "PHM 1515"
-      }
-    },
-    {
-      "code": "PHA 2511",
-      "title": "Gestion thérapeutique III",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalable : PHM 1515.",
-      "prereqText": "PHM 1515",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1515",
-        "text": "PHM 1515"
-      }
-    },
-    {
-      "code": "PHA 2512",
-      "title": "Geston thérapeutique IV",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalable : PHM 1515.",
-      "prereqText": "PHM 1515",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1515",
-        "text": "PHM 1515"
-      }
-    },
-    {
-      "code": "PHA 2513",
-      "title": "Gestion thérapeutique V",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalable : PHM 1515.",
-      "prereqText": "PHM 1515",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1515",
-        "text": "PHM 1515"
-      }
-    },
-    {
-      "code": "PHA 2514",
-      "title": "Gestion thérapeutique VI",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalable : PHM 1515.",
-      "prereqText": "PHM 1515",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1515",
-        "text": "PHM 1515"
-      }
-    },
-    {
-      "code": "PHA 2515",
-      "title": "Gestion thérapeutique VII",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalable : PHM 1515",
-      "prereqText": "PHM 1515",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1515",
-        "text": "PHM 1515"
-      }
-    },
-    {
-      "code": "PHA 2516",
-      "title": "Gestion thérapeutique VIII",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalable : PHM 1515.",
-      "prereqText": "PHM 1515",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1515",
-        "text": "PHM 1515"
-      }
-    },
-    {
-      "code": "PHA 2517",
-      "title": "Évaluation critique de la littérature",
-      "credits": 3,
-      "description": "Acquisition et mise en application des connaissances reliées à la recherche bibliographique, aux devis expérimentaux cliniques, aux biostatistiques, à la validité interne des études et à la synthèse scientifique dans le contexte de la pratique de la pharmacie et d’activités d’éducation et de promotion de la santé.",
-      "component": "Cours magistral"
-    },
-    {
-      "code": "PHA 2518",
-      "title": "Introduction à l'éducation et à la promotion de la santé",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’usage responsable des médicaments, à la prévention de maladies, à la réduction des méfaits et au concept de bien-être dans le contexte de la pratique de la pharmacie et d’activités d’éducation et de promotion de la santé.",
-      "component": "Cours magistral"
-    },
-    {
-      "code": "PHA 2519",
-      "title": "Éducation des patients",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux conseils pertinents à prodiguer pour l’usage optimal des médicaments, à l’utilisation d’outils de support à l’éducation, à la prévention des méfaits dans le contexte de la pratique de la pharmacie, lors de soins à domicile ou par télépharmacie.",
-      "component": "Théorie et laboratoirePréalable : PHM 1502.",
-      "prereqText": "PHM 1502",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1502",
-        "text": "PHM 1502"
-      }
-    },
-    {
-      "code": "PHA 2901",
-      "title": "Stage hospitalier I / Hosptial Rotation I",
-      "credits": 4,
-      "description": "Mise en application des connaissances et habiletés acquises en deuxième année dans la prestation de certaines activités professionnelles pertinentes à la pratique de la pharmacie en milieu hospitalier. /Application of the knowledge and skills acquired in the second year in the delivery of certain professional activities relevant to the practice of pharmacy in a hospital setting.",
-      "component": "Stage / Work Term"
-    },
-    {
       "code": "PHA 3112",
       "title": "Clinical Pharmacology",
       "credits": 3,
@@ -123933,288 +123133,6 @@
                 "code": "ANP 1115"
               }
             ]
-          }
-        ]
-      }
-    },
-    {
-      "code": "PHA 3501",
-      "title": "Communication en pharmacie III",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux techniques de communication en situations difficiles et aux aspects culturels afin de favoriser l’efficacité et la sécurité des activités professionnelles pertinentes à la pratique de la pharmacie, incluant l’utilisation des technologies en santé.",
-      "component": "Théorie et laboratoirePréalable : PHM 2502.",
-      "prereqText": "PHM 2502",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 2502",
-        "text": "PHM 2502"
-      }
-    },
-    {
-      "code": "PHA 3502",
-      "title": "Gestion des opérations hospitalières",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la bonne gestion des opérations afin créer un milieu de travail qui favorise l’efficacité et la sécurité des activités professionnelles pertinentes à la pratique de la pharmacie hospitalière, avec une emphase sur le travail d’équipe et la pratique dans les centres hospitaliers régionaux.",
-      "component": "Théorie et laboratoire"
-    },
-    {
-      "code": "PHA 3503",
-      "title": "Consultations pharmaceutiques de première ligne",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’évaluation et au traitement optimal de problèmes de santé mineurs présentés par un patient auprès du pharmacien, incluant les médicaments de vente libre, les produits de santé naturels et la référence à d’autres professionnels. Les cours de consultations pharmaceutiques sont organisés en fonction des raisons de consultation principales des patients en contexte de première ligne.",
-      "component": "Théorie et laboratoirePréalable : PHM 2502.",
-      "prereqText": "PHM 2502",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 2502",
-        "text": "PHM 2502"
-      }
-    },
-    {
-      "code": "PHA 3504",
-      "title": "Suivi thérapeutique II",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la pharmacométrie dans le contexte de la pratique de la pharmacie hospitalière.",
-      "component": "Théorie et laboratoirePréalable : PHM 2506.",
-      "prereqText": "PHM 2506",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 2506",
-        "text": "PHM 2506"
-      }
-    },
-    {
-      "code": "PHA 3505",
-      "title": "Administration de médicaments",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux techniques d’administration des médicaments ou à l’utilisation d’outils diagnostiques dans le contexte de la pratique de la pharmacie.",
-      "component": "Théorie et laboratoirePréalable : PHM 2502.",
-      "prereqText": "PHM 2502",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 2502",
-        "text": "PHM 2502"
-      }
-    },
-    {
-      "code": "PHA 3506",
-      "title": "Formation professionnelle III",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées au développement de plans de soins collaboratifs, à la continuité des soins et à la pratique collaborative des équipes de soins. Ce cours permet aux étudiants en pharmacie d’interagir avec ceux des autres écoles pertinentes à la santé.",
-      "component": "Cours magistralPréalable : PHM 2507.",
-      "prereqText": "PHM 2507",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 2507",
-        "text": "PHM 2507"
-      }
-    },
-    {
-      "code": "PHA 3507",
-      "title": "Gestion thérapeutique IX",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
-      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-        "children": [
-          {
-            "type": "course",
-            "code": "PHM 2508"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2509"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2510"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2511"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2512"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2513"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2514"
-          }
-        ]
-      }
-    },
-    {
-      "code": "PHA 3508",
-      "title": "Gestion thérapeutique X",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
-      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-        "children": [
-          {
-            "type": "course",
-            "code": "PHM 2508"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2509"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2510"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2511"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2512"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2513"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2514"
-          }
-        ]
-      }
-    },
-    {
-      "code": "PHA 3509",
-      "title": "Gestion thérapeutique XI",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
-      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-        "children": [
-          {
-            "type": "course",
-            "code": "PHM 2508"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2509"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2510"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2511"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2512"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2513"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2514"
-          }
-        ]
-      }
-    },
-    {
-      "code": "PHA 3510",
-      "title": "Gestion thérapeutique XII",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
-      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-        "children": [
-          {
-            "type": "course",
-            "code": "PHM 2508"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2509"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2510"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2511"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2512"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2513"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2514"
-          }
-        ]
-      }
-    },
-    {
-      "code": "PHA 3511",
-      "title": "Gestion thérapeutique XIII",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
-      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-        "children": [
-          {
-            "type": "course",
-            "code": "PHM 2508"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2509"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2510"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2511"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2512"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2513"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2514"
           }
         ]
       }
@@ -124266,197 +123184,6 @@
       }
     },
     {
-      "code": "PHA 3513",
-      "title": "Gestion thérapeutique XIV",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
-      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-        "children": [
-          {
-            "type": "course",
-            "code": "PHM 2508"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2509"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2510"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2511"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2512"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2513"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2514"
-          }
-        ]
-      }
-    },
-    {
-      "code": "PHA 3514",
-      "title": "Gestion thérapeutique XV",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
-      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-        "children": [
-          {
-            "type": "course",
-            "code": "PHM 2508"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2509"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2510"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2511"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2512"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2513"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2514"
-          }
-        ]
-      }
-    },
-    {
-      "code": "PHA 3515",
-      "title": "Gestion thérapeutique XVI",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
-      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
-      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
-        "children": [
-          {
-            "type": "course",
-            "code": "PHM 2508"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2509"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2510"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2511"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2512"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2513"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2514"
-          }
-        ]
-      }
-    },
-    {
-      "code": "PHA 3516",
-      "title": "Sécurité des patients",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances reliées à l’utilisation sécuritaire des médicaments, aux principes de sécurité des patients, à la notion d’une culture non-punitive et à la déclaration d’effets indésirables des médicaments dans le contexte de la pratique de la pharmacie t et de l’organisation du travail.",
-      "component": "Cours magistralPréalables : PHM 2503, PHM 3502.",
-      "prereqText": "PHM 2503, PHM 3502",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "PHM 2503, PHM 3502",
-        "children": [
-          {
-            "type": "course",
-            "code": "PHM 2503"
-          },
-          {
-            "type": "course",
-            "code": "PHM 3502"
-          }
-        ]
-      }
-    },
-    {
-      "code": "PHA 3517",
-      "title": "Éducation des populations et promotion de la santé",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux activités de santé publique collaboratives, incluant l’usage optimal des médicaments, les déterminants pharmaco-économiques, la promotion de la santé et la préparation à des situations d’urgences.",
-      "component": "Cours magistralPréalables : PHM 2502, PHM 2516.",
-      "prereqText": "PHM 2502, PHM 2516",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "PHM 2502, PHM 2516",
-        "children": [
-          {
-            "type": "course",
-            "code": "PHM 2502"
-          },
-          {
-            "type": "course",
-            "code": "PHM 2516"
-          }
-        ]
-      }
-    },
-    {
-      "code": "PHA 3518",
-      "title": "Projet de promotion de la santé",
-      "credits": 3,
-      "description": "Mise en application, sous forme de projet, des connaissances et habiletés reliées aux activités de santé publique collaboratives.",
-      "component": "RechercheLe cours PHM 3516 est concomitant à PHM 3518."
-    },
-    {
-      "code": "PHA 3519",
-      "title": "Éducation des professionnels",
-      "credits": 2,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la rédaction d’objectifs d’apprentissage, aux bonnes pratiques de présentation, à l’écriture scientifique et aux méthodes de sondage dans le contexte de l’éducation pharmaceutique des professionnels.",
-      "component": "Cours magistral"
-    },
-    {
-      "code": "PHA 3520",
-      "title": "Maintien des connaissances en pharmacie",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances reliées au cycle de développement professionnel continue et au maintien général des connaissances et des compétences selon les attentes des organismes régulateurs.",
-      "component": "Cours magistral"
-    },
-    {
       "code": "PHA 4107",
       "title": "Introductory Pharmacology - Drugs and Living Systems",
       "credits": 3,
@@ -124505,59 +123232,6 @@
       }
     },
     {
-      "code": "PHA 4501",
-      "title": "Intégration de la gestion thérapeutique",
-      "credits": 3,
-      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, sévères et complexes. Ce cours vise à exposer l’étudiant à la gestion thérapeutique chez des patients présentant de multiples comorbidités dans plusieurs systèmes physiologiques.",
-      "component": "Théorie et laboratoirePréalables : PHM 3506, PHM 3507, PHM 3508, PHM 3509, PHM 3510, PHM 3511, PHM 3513, PHM 3514.",
-      "prereqText": "PHM 3506, PHM 3507, PHM 3508, PHM 3509, PHM 3510, PHM 3511, PHM 3513, PHM 3514",
-      "prerequisites": {
-        "type": "and_group",
-        "text": "PHM 3506, PHM 3507, PHM 3508, PHM 3509, PHM 3510, PHM 3511, PHM 3513, PHM 3514",
-        "children": [
-          {
-            "type": "course",
-            "code": "PHM 3506"
-          },
-          {
-            "type": "course",
-            "code": "PHM 3507"
-          },
-          {
-            "type": "course",
-            "code": "PHM 3508"
-          },
-          {
-            "type": "course",
-            "code": "PHM 3509"
-          },
-          {
-            "type": "course",
-            "code": "PHM 3510"
-          },
-          {
-            "type": "course",
-            "code": "PHM 3511"
-          },
-          {
-            "type": "course",
-            "code": "PHM 3513"
-          },
-          {
-            "type": "course",
-            "code": "PHM 3514"
-          }
-        ]
-      }
-    },
-    {
-      "code": "PHA 4502",
-      "title": "Maintien des connaissances en pharmacie",
-      "credits": 1,
-      "description": "Acquisition et mise en application des connaissances reliées au cycle de développement professionnel continue et au maintien général des connaissances et des compétences selon les attentes des organismes régulateurs.",
-      "component": "Cours magistral"
-    },
-    {
       "code": "PHA 4507",
       "title": "Introduction à la pharmacologie - les médicaments et les systèmes vivants",
       "credits": 3,
@@ -124603,71 +123277,6 @@
             ]
           }
         ]
-      }
-    },
-    {
-      "code": "PHA 4901",
-      "title": "Stage Communautaire II / Community Rotation lI",
-      "credits": 6,
-      "description": "Mise en application des connaissances et habiletés acquises à la prestation de certaines activités professionnelles pertinentes à la pratique de la pharmacie en milieu communautaire ou de soins ambulatoires. / Application of acquired knowledge and skills in the delivery of selected professional activities relevant to the practice of pharmacy in community or ambulatory care settings.",
-      "component": "Stage / Work TermPréalable : PHM 1514.",
-      "prereqText": "PHM 1514",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1514",
-        "text": "PHM 1514"
-      }
-    },
-    {
-      "code": "PHA 4902",
-      "title": "Stage Communautaire III / Community Rotation III",
-      "credits": 7,
-      "description": "Mise en application des connaissances et habiletés acquises à la prestation de certaines activités professionnelles pertinentes à la pratique de la pharmacie en milieu communautaire ou de soins ambulatoires. / Application of acquired knowledge and skills in the delivery of selected professional activities relevant to the practice of pharmacy in community or ambulatory care settings.",
-      "component": "Stage / Work TermPréalable : PHM 1514.",
-      "prereqText": "PHM 1514",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 1514",
-        "text": "PHM 1514"
-      }
-    },
-    {
-      "code": "PHA 4903",
-      "title": "Stage hospitalier II / Hospital Rotation II",
-      "credits": 6,
-      "description": "Mise en application des connaissances et habiletés acquises à la prestation de certaines activités professionnelles pertinentes à la pratique de la pharmacie en milieu hospitalier ou de soins de longue durée. / Application of acquired knowledge and skills in the delivery of selected professional activities relevant to the practice of pharmacy in a hospital or long-term care setting.",
-      "component": "Stage / Work TermPréalable : PHM 2507.",
-      "prereqText": "PHM 2507",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 2507",
-        "text": "PHM 2507"
-      }
-    },
-    {
-      "code": "PHA 4904",
-      "title": "Stage hospitalier III / Hospital Rotation III",
-      "credits": 7,
-      "description": "Mise en application des connaissances et habiletés acquises à la prestation de certaines activités professionnelles pertinentes à la pratique de la pharmacie en milieu hospitalier ou de soins de longue durée. /Application of acquired knowledge and skills in the delivery of selected professional activities relevant to the practice of pharmacy in a hospital or long-term care setting.",
-      "component": "Stage / Work TermPréalable : PHM 2507.",
-      "prereqText": "PHM 2507",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 2507",
-        "text": "PHM 2507"
-      }
-    },
-    {
-      "code": "PHA 4905",
-      "title": "Stage d’exploration professionnelle / Professional Exploration Rotation",
-      "credits": 6,
-      "description": "Stage relié à la pharmacie, mais sans faire l’objet de soins directs aux patients. Ce stage permet aux étudiants d’explorer certains volets de la profession qui sont moins usuels, qui font appel à une expertise particulière ou qui nécessitent des études aux cycles supérieurs./A practicum that is related to pharmacy but does not involve direct patient care. This practicum allows students to explore areas of the profession that are less common, require specific expertise, or require graduate studies.",
-      "component": "Stage / Work TermPréalable : PHM 3517.",
-      "prereqText": "PHM 3517",
-      "prerequisites": {
-        "type": "course",
-        "code": "PHM 3517",
-        "text": "PHM 3517"
       }
     },
     {
@@ -125848,7 +124457,7 @@
       "title": "History of analytic philosophy",
       "credits": 3,
       "description": "Study of an aspect or a specific set of texts in contemporary analytic philosophy (19th-20th centuries). This course has variable topics and may be taken several times if the themes are different.",
-      "component": "Lecture"
+      "component": "Seminar"
     },
     {
       "code": "PHI 5321",
@@ -126175,6 +124784,920 @@
       "credits": 0,
       "description": "Rédaction du projet de thèse de doctorat en consultation avec le superviseur, évaluation par le comité de thèse et, dans le cas d’une approbation, présentation et défense du projet dans le cadre d’un séminaire. La note donnée sera S (satisfaisant) ou NS (non satisfaisant). / Writing of the Ph.D. thesis project in consultation with the supervisor, evaluation by the thesis committee, and, in the case of approbation, presentation and defence of the project in a seminar. The course will be graded S (satisfactory) / NS (Not satisfactory).",
       "component": "Recherche / Research"
+    },
+    {
+      "code": "PHM 1501",
+      "title": "Professionnalisme et déontologie en pharmacie",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances reliées au professionnalisme, à la déontologie, à la confidentialité, à la responsabilité professionnelle et à certains aspects législatifs pertinents à la pratique de la pharmacie.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "PHM 1502",
+      "title": "Communication en pharmacie I",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux techniques de communication de base afin de favoriser l’efficacité et la sécurité des activités professionnelles pertinentes à la pratique de la pharmacie, incluant l’utilisation des technologies en santé.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "PHM 1503",
+      "title": "Le pharmacien et le réseau de santé",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances reliées à l’organisation des soins, à l’offre de services en santé, aux champs de pratique de la pharmacie et aux déterminants socio-économiques de la santé dans les provinces ayant des minorités francophones.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "PHM 1504",
+      "title": "Introduction et dispensation communautaire",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la législation, à la cueillette d’information, à la validation de prescriptions, à l’étiquetage des médicaments, à leur stabilité et à la documentation des activités professionnelles dans le contexte de la dispensation des médicaments en pharmacie communautaire, lors de soins à domicile ou par télépharmacie.",
+      "component": "Théorie et laboratoire"
+    },
+    {
+      "code": "PHM 1505",
+      "title": "Magistrales non-stériles et calculs pharmaceutiques",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la préparation de médicaments non-stériles selon les normes établies, incluant les calculs pharmaceutiques pertinents à leur réalisation.",
+      "component": "Théorie et laboratoire"
+    },
+    {
+      "code": "PHM 1506",
+      "title": "Le pharmacien expert du médicament I",
+      "credits": 3,
+      "description": "Acquisition et mise en application des connaissances reliées à la formulation des médicaments, à la dissolution des principes actifs, à leur absorption, distribution, métabolisme, élimination et interaction avec les cibles thérapeutiques de l’organisme.",
+      "component": "Théorie et laboratoire"
+    },
+    {
+      "code": "PHM 1507",
+      "title": "Le pharmacien expert du médicament II",
+      "credits": 3,
+      "description": "Acquisition et mise en application des connaissances reliées à la formulation des médicaments, à la dissolution des principes actifs, à leur absorption, distribution, métabolisme, élimination et interaction avec les cibles thérapeutiques de l’organisme.",
+      "component": "Théorie et laboratoire"
+    },
+    {
+      "code": "PHM 1508",
+      "title": "Le pharmacien expert du médicament III",
+      "credits": 3,
+      "description": "Acquisition et mise en application des connaissances reliées à la formulation des médicaments, à la dissolution des principes actifs, à leur absorption, distribution, métabolisme, élimination et interaction avec les cibles thérapeutiques de l’organisme.",
+      "component": "Théorie et laboratoire"
+    },
+    {
+      "code": "PHM 1509",
+      "title": "Introduction aux soins pharmaceutiques",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances reliées aux soins centrés sur le patient, aux problèmes reliés à la pharmacothérapie, à la pharmacothérapie individualisée et à la prise de décisions cliniques dans le contexte de la prestation de soins pharmaceutiques.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "PHM 1510",
+      "title": "Un corps en santé I",
+      "credits": 3,
+      "description": "Acquisition et mise en application des connaissances reliées aux systèmes physiologiques majeurs du corps humain, incluant des notions d’anatomie, d’histologie, de physiologie, de biochimie, d’immunologie, de microbiologie, de nutrition, et de saines habitudes de vie pertinentes à la pratique de la pharmacie.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "PHM 1511",
+      "title": "Un corps en santé II",
+      "credits": 3,
+      "description": "Acquisition et mise en application des connaissances reliées aux systèmes physiologiques majeurs du corps humain, incluant des notions d’anatomie, d’histologie, de physiologie, de biochimie, d’immunologie, de microbiologie, de nutrition, et de saines habitudes de vie pertinentes à la pratique de la pharmacie.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "PHM 1512",
+      "title": "Un corps en santé III",
+      "credits": 3,
+      "description": "Acquisition et mise en application des connaissances reliées aux systèmes physiologiques majeurs du corps humain, incluant des notions d’anatomie, d’histologie, de physiologie, de biochimie, d’immunologie, de microbiologie, de nutrition, et de saines habitudes de vie pertinentes à la pratique de la pharmacie.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "PHM 1513",
+      "title": "Consultations pharmaceutiques de première ligne I",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’évaluation et au traitement optimal de problèmes de santé mineurs présentés par un patient auprès du pharmacien, incluant les médicaments de vente libre, les produits de santé naturels et la référence à d’autres professionnels. Les cours de consultations pharmaceutiques sont organisés en fonction des raisons de consultation principales des patients en contexte de première ligne.",
+      "component": "Théorie et laboratoire"
+    },
+    {
+      "code": "PHM 1514",
+      "title": "Formation interprofessionnelle I",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux rôles et responsabilités des différents intervenants en matière de santé, leurs champs de pratique professionnelle et leurs interactions dans le contexte d’une institution ou d’un réseau local de santé. Ce cours permet aux étudiants en pharmacie d’interagir avec ceux des autres écoles pertinentes à la santé.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "PHM 1515",
+      "title": "Gestion thérapeutique I",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoire"
+    },
+    {
+      "code": "PHM 1516",
+      "title": "Démarche scientifique",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la pensée critique, à la démarche scientifique, aux soins basés sur la preuve, au processus décisionnel et à la recherche en pharmacie, incluant la revue d’utilisation des médicaments.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "PHM 1901",
+      "title": "Stage communautaire I / Community Rotation I",
+      "credits": 4,
+      "description": "Mise en application des connaissances et habiletés acquises en première année dans la prestation de certaines activités professionnelles pertinentes à la pratique de la pharmacie en milieu communautaire. / Application of knowledge and skills acquired in the first year in the delivery of selected professional activities relevant to the practice of pharmacy in a community setting.",
+      "component": "Stage / Work Term"
+    },
+    {
+      "code": "PHM 2502",
+      "title": "Communication en pharmacie II",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux techniques de communication avancées afin de favoriser l’efficacité et la sécurité des activités professionnelles pertinentes à la pratique de la pharmacie, incluant l’utilisation des technologies en santé.",
+      "component": "Cours magistralPréalable : PHM 1502.",
+      "prereqText": "PHM 1502",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1502",
+        "text": "PHM 1502"
+      }
+    },
+    {
+      "code": "PHM 2503",
+      "title": "Gestion des opérations communautaires",
+      "credits": 3,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la bonne gestion des opérations afin créer un milieu de travail qui favorise l’efficacité et la sécurité des activités professionnelles pertinentes à la pratique de la pharmacie communautaire, avec une emphase sur le travail d’équipe et la pratique en milieu rural.",
+      "component": "Théorie et laboratoire"
+    },
+    {
+      "code": "PHM 2504",
+      "title": "Dispensation hospitalière",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la législation, à la cueillette d’information, à la validation de prescriptions, à l’étiquetage des médicaments, à leur stabilité, à la délégation des actes et à la documentation des activités professionnelles dans le contexte de la dispensation des médicaments en pharmacie hospitalière.",
+      "component": "Théorie et laboratoirePréalable : PHM 1504.",
+      "prereqText": "PHM 1504",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1504",
+        "text": "PHM 1504"
+      }
+    },
+    {
+      "code": "PHM 2505",
+      "title": "Magistrales stériles et calculs pharmaceutiques",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la préparation de médicaments stériles selon les normes établies, incluant les calculs pharmaceutiques pertinents à leur réalisation.",
+      "component": "Théorie et laboratoirePréalable : PHM 1505.",
+      "prereqText": "PHM 1505",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1505",
+        "text": "PHM 1505"
+      }
+    },
+    {
+      "code": "PHM 2506",
+      "title": "Consultations pharmaceutiques de première ligne II",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’évaluation et au traitement optimal de problèmes de santé mineurs présentés par un patient auprès du pharmacien, incluant les médicaments de vente libre, les produits de santé naturels et la référence à d’autres professionnels. Les cours de consultations pharmaceutiques sont organisés en fonction des raisons de consultation principales des patients en contexte de première ligne.",
+      "component": "Théorie et laboratoirePréalable : PHM 1513.",
+      "prereqText": "PHM 1513",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1513",
+        "text": "PHM 1513"
+      }
+    },
+    {
+      "code": "PHM 2507",
+      "title": "Continuité des soins",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’organisation des soins, à la réalisation d’un bilan comparatif et à l’évaluation des problèmes reliés à la pharmacothérapie dans le contexte de la pratique de la pharmacie.",
+      "component": "Théorie et laboratoire"
+    },
+    {
+      "code": "PHM 2508",
+      "title": "Suivi thérapeutique I",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées au suivi de l’observance thérapeutique, à la déclaration des effets indésirables et à la prolongation des prescriptions dans le contexte de la pratique de la pharmacie communautaire.",
+      "component": "Théorie et laboratoire"
+    },
+    {
+      "code": "PHM 2509",
+      "title": "Formation Interprofessionnelle II",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la dynamique et au travail d’équipes, à la communication interprofessionnelle, à la rétroaction et à la résolution de conflits. Ce cours permet aux étudiants en pharmacie d’interagir avec ceux des autres écoles pertinentes à la santé.",
+      "component": "Cours magistralPréalable : PHM 1514.",
+      "prereqText": "PHM 1514",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1514",
+        "text": "PHM 1514"
+      }
+    },
+    {
+      "code": "PHM 2510",
+      "title": "Gestion thérapeutique II",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalable : PHM 1515.",
+      "prereqText": "PHM 1515",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1515",
+        "text": "PHM 1515"
+      }
+    },
+    {
+      "code": "PHM 2511",
+      "title": "Gestion thérapeutique III",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalable : PHM 1515.",
+      "prereqText": "PHM 1515",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1515",
+        "text": "PHM 1515"
+      }
+    },
+    {
+      "code": "PHM 2512",
+      "title": "Geston thérapeutique IV",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalable : PHM 1515.",
+      "prereqText": "PHM 1515",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1515",
+        "text": "PHM 1515"
+      }
+    },
+    {
+      "code": "PHM 2513",
+      "title": "Gestion thérapeutique V",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalable : PHM 1515.",
+      "prereqText": "PHM 1515",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1515",
+        "text": "PHM 1515"
+      }
+    },
+    {
+      "code": "PHM 2514",
+      "title": "Gestion thérapeutique VI",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalable : PHM 1515.",
+      "prereqText": "PHM 1515",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1515",
+        "text": "PHM 1515"
+      }
+    },
+    {
+      "code": "PHM 2515",
+      "title": "Gestion thérapeutique VII",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalable : PHM 1515",
+      "prereqText": "PHM 1515",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1515",
+        "text": "PHM 1515"
+      }
+    },
+    {
+      "code": "PHM 2516",
+      "title": "Gestion thérapeutique VIII",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques légers à modérés. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalable : PHM 1515.",
+      "prereqText": "PHM 1515",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1515",
+        "text": "PHM 1515"
+      }
+    },
+    {
+      "code": "PHM 2517",
+      "title": "Évaluation critique de la littérature",
+      "credits": 3,
+      "description": "Acquisition et mise en application des connaissances reliées à la recherche bibliographique, aux devis expérimentaux cliniques, aux biostatistiques, à la validité interne des études et à la synthèse scientifique dans le contexte de la pratique de la pharmacie et d’activités d’éducation et de promotion de la santé.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "PHM 2518",
+      "title": "Introduction à l'éducation et à la promotion de la santé",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’usage responsable des médicaments, à la prévention de maladies, à la réduction des méfaits et au concept de bien-être dans le contexte de la pratique de la pharmacie et d’activités d’éducation et de promotion de la santé.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "PHM 2519",
+      "title": "Éducation des patients",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux conseils pertinents à prodiguer pour l’usage optimal des médicaments, à l’utilisation d’outils de support à l’éducation, à la prévention des méfaits dans le contexte de la pratique de la pharmacie, lors de soins à domicile ou par télépharmacie.",
+      "component": "Théorie et laboratoirePréalable : PHM 1502.",
+      "prereqText": "PHM 1502",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1502",
+        "text": "PHM 1502"
+      }
+    },
+    {
+      "code": "PHM 2901",
+      "title": "Stage hospitalier I / Hosptial Rotation I",
+      "credits": 4,
+      "description": "Mise en application des connaissances et habiletés acquises en deuxième année dans la prestation de certaines activités professionnelles pertinentes à la pratique de la pharmacie en milieu hospitalier. / Application of the knowledge and skills acquired in the second year in the delivery of certain professional activities relevant to the practice of pharmacy in a hospital setting.",
+      "component": "Stage / Work Term"
+    },
+    {
+      "code": "PHM 3501",
+      "title": "Communication en pharmacie III",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux techniques de communication en situations difficiles et aux aspects culturels afin de favoriser l’efficacité et la sécurité des activités professionnelles pertinentes à la pratique de la pharmacie, incluant l’utilisation des technologies en santé.",
+      "component": "Théorie et laboratoirePréalable : PHM 2502.",
+      "prereqText": "PHM 2502",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 2502",
+        "text": "PHM 2502"
+      }
+    },
+    {
+      "code": "PHM 3502",
+      "title": "Gestion des opérations hospitalières",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la bonne gestion des opérations afin créer un milieu de travail qui favorise l’efficacité et la sécurité des activités professionnelles pertinentes à la pratique de la pharmacie hospitalière, avec une emphase sur le travail d’équipe et la pratique dans les centres hospitaliers régionaux.",
+      "component": "Théorie et laboratoire"
+    },
+    {
+      "code": "PHM 3503",
+      "title": "Consultations pharmaceutiques de première ligne",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’évaluation et au traitement optimal de problèmes de santé mineurs présentés par un patient auprès du pharmacien, incluant les médicaments de vente libre, les produits de santé naturels et la référence à d’autres professionnels. Les cours de consultations pharmaceutiques sont organisés en fonction des raisons de consultation principales des patients en contexte de première ligne.",
+      "component": "Théorie et laboratoirePréalable : PHM 2502.",
+      "prereqText": "PHM 2502",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 2502",
+        "text": "PHM 2502"
+      }
+    },
+    {
+      "code": "PHM 3504",
+      "title": "Suivi thérapeutique II",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la pharmacométrie dans le contexte de la pratique de la pharmacie hospitalière.",
+      "component": "Théorie et laboratoirePréalable : PHM 2506.",
+      "prereqText": "PHM 2506",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 2506",
+        "text": "PHM 2506"
+      }
+    },
+    {
+      "code": "PHM 3505",
+      "title": "Administration de médicaments",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux techniques d’administration des médicaments ou à l’utilisation d’outils diagnostiques dans le contexte de la pratique de la pharmacie.",
+      "component": "Théorie et laboratoirePréalable : PHM 2502.",
+      "prereqText": "PHM 2502",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 2502",
+        "text": "PHM 2502"
+      }
+    },
+    {
+      "code": "PHM 3506",
+      "title": "Formation professionnelle III",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées au développement de plans de soins collaboratifs, à la continuité des soins et à la pratique collaborative des équipes de soins. Ce cours permet aux étudiants en pharmacie d’interagir avec ceux des autres écoles pertinentes à la santé.",
+      "component": "Cours magistralPréalable : PHM 2507.",
+      "prereqText": "PHM 2507",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 2507",
+        "text": "PHM 2507"
+      }
+    },
+    {
+      "code": "PHM 3507",
+      "title": "Gestion thérapeutique IX",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
+      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+        "children": [
+          {
+            "type": "course",
+            "code": "PHM 2508"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2509"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2510"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2511"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2512"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2513"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2514"
+          }
+        ]
+      }
+    },
+    {
+      "code": "PHM 3508",
+      "title": "Gestion thérapeutique X",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
+      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+        "children": [
+          {
+            "type": "course",
+            "code": "PHM 2508"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2509"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2510"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2511"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2512"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2513"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2514"
+          }
+        ]
+      }
+    },
+    {
+      "code": "PHM 3509",
+      "title": "Gestion thérapeutique XI",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
+      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+        "children": [
+          {
+            "type": "course",
+            "code": "PHM 2508"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2509"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2510"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2511"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2512"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2513"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2514"
+          }
+        ]
+      }
+    },
+    {
+      "code": "PHM 3510",
+      "title": "Gestion thérapeutique XII",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
+      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+        "children": [
+          {
+            "type": "course",
+            "code": "PHM 2508"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2509"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2510"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2511"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2512"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2513"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2514"
+          }
+        ]
+      }
+    },
+    {
+      "code": "PHM 3511",
+      "title": "Gestion thérapeutique XIII",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
+      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+        "children": [
+          {
+            "type": "course",
+            "code": "PHM 2508"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2509"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2510"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2511"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2512"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2513"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2514"
+          }
+        ]
+      }
+    },
+    {
+      "code": "PHM 3513",
+      "title": "Gestion thérapeutique XIV",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
+      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+        "children": [
+          {
+            "type": "course",
+            "code": "PHM 2508"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2509"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2510"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2511"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2512"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2513"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2514"
+          }
+        ]
+      }
+    },
+    {
+      "code": "PHM 3514",
+      "title": "Gestion thérapeutique XV",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
+      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+        "children": [
+          {
+            "type": "course",
+            "code": "PHM 2508"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2509"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2510"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2511"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2512"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2513"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2514"
+          }
+        ]
+      }
+    },
+    {
+      "code": "PHM 3515",
+      "title": "Gestion thérapeutique XVI",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, modérés à sévères. Les cours de gestion thérapeutique sont intégrés et organisés en fonction des systèmes physiologiques majeurs. Ils incluent des notions de pathophysiologie, de galénique appliquée, de chimie médicinale, de pharmacocinétique clinique, de pharmacologie clinique, de pharmacogénétique, de pharmaco-économie et de pharmacothérapie.",
+      "component": "Théorie et laboratoirePréalables : PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514.",
+      "prereqText": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "PHM 2508, PHM 2509, PHM 2510, PHM 2511, PHM 2512, PHM 2513, PHM 2514",
+        "children": [
+          {
+            "type": "course",
+            "code": "PHM 2508"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2509"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2510"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2511"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2512"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2513"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2514"
+          }
+        ]
+      }
+    },
+    {
+      "code": "PHM 3516",
+      "title": "Sécurité des patients",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances reliées à l’utilisation sécuritaire des médicaments, aux principes de sécurité des patients, à la notion d’une culture non-punitive et à la déclaration d’effets indésirables des médicaments dans le contexte de la pratique de la pharmacie t et de l’organisation du travail.",
+      "component": "Cours magistralPréalables : PHM 2503, PHM 3502.",
+      "prereqText": "PHM 2503, PHM 3502",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "PHM 2503, PHM 3502",
+        "children": [
+          {
+            "type": "course",
+            "code": "PHM 2503"
+          },
+          {
+            "type": "course",
+            "code": "PHM 3502"
+          }
+        ]
+      }
+    },
+    {
+      "code": "PHM 3517",
+      "title": "Éducation des populations et promotion de la santé",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées aux activités de santé publique collaboratives, incluant l’usage optimal des médicaments, les déterminants pharmaco-économiques, la promotion de la santé et la préparation à des situations d’urgences.",
+      "component": "Cours magistralPréalables : PHM 2502, PHM 2516.",
+      "prereqText": "PHM 2502, PHM 2516",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "PHM 2502, PHM 2516",
+        "children": [
+          {
+            "type": "course",
+            "code": "PHM 2502"
+          },
+          {
+            "type": "course",
+            "code": "PHM 2516"
+          }
+        ]
+      }
+    },
+    {
+      "code": "PHM 3518",
+      "title": "Projet de promotion de la santé",
+      "credits": 3,
+      "description": "Mise en application, sous forme de projet, des connaissances et habiletés reliées aux activités de santé publique collaboratives.",
+      "component": "RechercheLe cours PHM 3516 est concomitant à PHM 3518."
+    },
+    {
+      "code": "PHM 3519",
+      "title": "Éducation des professionnels",
+      "credits": 2,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à la rédaction d’objectifs d’apprentissage, aux bonnes pratiques de présentation, à l’écriture scientifique et aux méthodes de sondage dans le contexte de l’éducation pharmaceutique des professionnels.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "PHM 3520",
+      "title": "Maintien des connaissances en pharmacie",
+      "credits": 1,
+      "description": "Acquisition et mise en application des connaissances reliées au cycle de développement professionnel continue et au maintien général des connaissances et des compétences selon les attentes des organismes régulateurs.",
+      "component": "Cours magistral"
+    },
+    {
+      "code": "PHM 4501",
+      "title": "Intégration de la gestion thérapeutique",
+      "credits": 3,
+      "description": "Acquisition et mise en application des connaissances et habiletés reliées à l’optimisation de la thérapie médicamenteuse des patients ayants de problèmes de santé aigus ou chroniques, sévères et complexes. Ce cours vise à exposer l’étudiant à la gestion thérapeutique chez des patients présentant de multiples comorbidités dans plusieurs systèmes physiologiques.",
+      "component": "Théorie et laboratoirePréalables : PHM 3506, PHM 3507, PHM 3508, PHM 3509, PHM 3510, PHM 3511, PHM 3513, PHM 3514.",
+      "prereqText": "PHM 3506, PHM 3507, PHM 3508, PHM 3509, PHM 3510, PHM 3511, PHM 3513, PHM 3514",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "PHM 3506, PHM 3507, PHM 3508, PHM 3509, PHM 3510, PHM 3511, PHM 3513, PHM 3514",
+        "children": [
+          {
+            "type": "course",
+            "code": "PHM 3506"
+          },
+          {
+            "type": "course",
+            "code": "PHM 3507"
+          },
+          {
+            "type": "course",
+            "code": "PHM 3508"
+          },
+          {
+            "type": "course",
+            "code": "PHM 3509"
+          },
+          {
+            "type": "course",
+            "code": "PHM 3510"
+          },
+          {
+            "type": "course",
+            "code": "PHM 3511"
+          },
+          {
+            "type": "course",
+            "code": "PHM 3513"
+          },
+          {
+            "type": "course",
+            "code": "PHM 3514"
+          }
+        ]
+      }
+    },
+    {
+      "code": "PHM 4901",
+      "title": "Stage Communautaire II / Community Rotation lI",
+      "credits": 6,
+      "description": "Mise en application des connaissances et habiletés acquises à la prestation de certaines activités professionnelles pertinentes à la pratique de la pharmacie en milieu communautaire ou de soins ambulatoires. / Application of acquired knowledge and skills in the delivery of selected professional activities relevant to the practice of pharmacy in community or ambulatory care settings.",
+      "component": "Stage / Work TermPréalable : PHM 1514.",
+      "prereqText": "PHM 1514",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1514",
+        "text": "PHM 1514"
+      }
+    },
+    {
+      "code": "PHM 4902",
+      "title": "Stage Communautaire III / Community Rotation III",
+      "credits": 7,
+      "description": "Mise en application des connaissances et habiletés acquises à la prestation de certaines activités professionnelles pertinentes à la pratique de la pharmacie en milieu communautaire ou de soins ambulatoires. / Application of acquired knowledge and skills in the delivery of selected professional activities relevant to the practice of pharmacy in community or ambulatory care settings.",
+      "component": "Stage / Work TermPréalable : PHM 1514.",
+      "prereqText": "PHM 1514",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 1514",
+        "text": "PHM 1514"
+      }
+    },
+    {
+      "code": "PHM 4903",
+      "title": "Stage hospitalier II / Hospital Rotation II",
+      "credits": 6,
+      "description": "Mise en application des connaissances et habiletés acquises à la prestation de certaines activités professionnelles pertinentes à la pratique de la pharmacie en milieu hospitalier ou de soins de longue durée. / Application of acquired knowledge and skills in the delivery of selected professional activities relevant to the practice of pharmacy in a hospital or long-term care setting.",
+      "component": "Stage / Work TermPréalable : PHM 2507.",
+      "prereqText": "PHM 2507",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 2507",
+        "text": "PHM 2507"
+      }
+    },
+    {
+      "code": "PHM 4904",
+      "title": "Stage hospitalier III / Hospital Rotation III",
+      "credits": 7,
+      "description": "Mise en application des connaissances et habiletés acquises à la prestation de certaines activités professionnelles pertinentes à la pratique de la pharmacie en milieu hospitalier ou de soins de longue durée. / Application of acquired knowledge and skills in the delivery of selected professional activities relevant to the practice of pharmacy in a hospital or long-term care setting.",
+      "component": "Stage / Work TermPréalable : PHM 2507.",
+      "prereqText": "PHM 2507",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 2507",
+        "text": "PHM 2507"
+      }
+    },
+    {
+      "code": "PHM 4905",
+      "title": "Stage d’exploration professionnelle / Professional Exploration Rotation",
+      "credits": 6,
+      "description": "Stage relié à la pharmacie, mais sans faire l’objet de soins directs aux patients. Ce stage permet aux étudiants d’explorer certains volets de la profession qui sont moins usuels, qui font appel à une expertise particulière ou qui nécessitent des études aux cycles supérieurs. / A practicum that is related to pharmacy but does not involve direct patient care. This practicum allows students to explore areas of the profession that are less common, require specific expertise, or require graduate studies.",
+      "component": "Stage / Work TermPréalable : PHM 3517.",
+      "prereqText": "PHM 3517",
+      "prerequisites": {
+        "type": "course",
+        "code": "PHM 3517",
+        "text": "PHM 3517"
+      }
     },
     {
       "code": "PHR 6102",
@@ -144493,7 +144016,7 @@
       "code": "RCH 7015",
       "title": "Practicum de recherche à l’international / International Research Practicum",
       "credits": 0,
-      "description": "Practicum de recherche à l’international; recherche conduite liée au projet de recherche ou à la thèse; durée minimale de 90 heures. / International research practicum; research activity related to the research project or the thesis; minimum duration of 90 hours.",
+      "description": "Practicum de recherche à l’international; recherche conduite liée au projet de recherche ou à la thèse. / International research practicum; research activity related to the research project or the thesis.",
       "component": "Recherche / ResearchGraded S (Satisfactory) / NS (Not satisfactory). Program permission is required."
     },
     {
@@ -152829,7 +152352,7 @@
       "title": "Introduction à la pratique théâtrale : Les métiers de la scène",
       "credits": 3,
       "description": "Introduction au théâtre en tant qu'art collaboratif avec une attention particulière à ses aspects scéniques. Des laboratoires hebdomadaires liant la théorie à la pratique.",
-      "component": "Laboratoire, Cours magistral"
+      "component": "Cours magistral, Laboratoire"
     },
     {
       "code": "THE 1501",
@@ -159076,27 +158599,6 @@
       "credits": 3,
       "description": "",
       "component": "Cours magistralAntérieurement SVS 6761."
-    },
-    {
-      "code": "TSO 7101",
-      "title": "Epistemology and Social Work",
-      "credits": 3,
-      "description": "Study of key theories of knowledge (positivism, phenomenology, constructivism, structuralism, critical theory, postmodern perspectives) and their relationship with social work intervention and research. Links between theories of knowledge and the problematization of research questions in social work.",
-      "component": "LecturePreviously SVS 7101."
-    },
-    {
-      "code": "TSO 7102",
-      "title": "Advanced Study of the Theories and Practices of Social Intervention",
-      "credits": 3,
-      "description": "In-depth study and critical examination of conceptual tools (configuration, field, social world, micro-power, etc.) useful for the contextualized analysis of social intervention practices.",
-      "component": "LecturePreviously SVS 7102."
-    },
-    {
-      "code": "TSO 7190",
-      "title": "Advanced Research Seminar in Social Work",
-      "credits": 3,
-      "description": "Advanced research skills. All steps of the scientific process will be considered and discussed. In addition to an analysis of the most recent methodological approaches in social sciences, the seminar will provide students with the opportunity to reflect on the challenges of interdisciplinary in social work research.",
-      "component": "SeminarPreviously SVS 7190."
     },
     {
       "code": "TSO 7501",
@@ -166016,21 +165518,21 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
-              "code": "TSO 7101",
+              "code": "TSO 7501",
               "credits": 3
             },
             {
               "type": "course",
-              "code": "TSO 7102",
+              "code": "TSO 7502",
               "credits": 3
             },
             {
               "type": "course",
-              "code": "TSO 7190",
+              "code": "TSO 7590",
               "credits": 3
             },
             {
@@ -166042,7 +165544,7 @@
         },
         {
           "type": "and",
-          "title": "Comprehensive Examination: 2",
+          "title": "Comprehensive Examination 2",
           "options": [
             {
               "type": "course",
@@ -166052,7 +165554,7 @@
         },
         {
           "type": "and",
-          "title": "Research Project:",
+          "title": "Research Project",
           "options": [
             {
               "type": "course",
@@ -166062,7 +165564,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -181904,26 +181406,6 @@
             },
             {
               "type": "course",
-              "code": "DTO 5100",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "DTO 5101",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "DTO 5120",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "DTO 5140",
-              "credits": 3
-            },
-            {
-              "type": "course",
               "code": "DTO 5150",
               "credits": 3
             },
@@ -188137,7 +187619,7 @@
             {
               "type": "course",
               "code": "MHA 6260",
-              "credits": 1.5
+              "credits": 3
             },
             {
               "type": "course",
@@ -188147,7 +187629,7 @@
             {
               "type": "course",
               "code": "MHA 6301",
-              "credits": 3
+              "credits": 1.5
             },
             {
               "type": "course",
@@ -189671,26 +189153,6 @@
               "type": "elective",
               "title": "18 optional course units from the list of optional courses",
               "credits": 18
-            },
-            {
-              "type": "course",
-              "code": "DTO 5100",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "DTO 5101",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "DTO 5120",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "DTO 5140",
-              "credits": 3
             },
             {
               "type": "course",
@@ -197427,7 +196889,7 @@
         {
           "type": "course",
           "code": "MHA 6301",
-          "credits": 3
+          "credits": 1.5
         },
         {
           "type": "course",
@@ -274073,11 +273535,6 @@
                         },
                         {
                           "type": "course",
-                          "code": "FSS 4150",
-                          "indented": true
-                        },
-                        {
-                          "type": "course",
                           "code": "FSS 3210",
                           "indented": true
                         },
@@ -286852,11 +286309,6 @@
                 },
                 {
                   "type": "course",
-                  "code": "FSS 4150",
-                  "indented": true
-                },
-                {
-                  "type": "course",
                   "code": "FSS 3210",
                   "indented": true
                 },
@@ -296266,11 +295718,6 @@
                 {
                   "type": "course",
                   "code": "DVM 3180",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "FSS 4150",
                   "indented": true
                 },
                 {
