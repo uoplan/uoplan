@@ -31,6 +31,8 @@ export function LandingPage() {
 
   const betaLabel = tr("app.beta");
 
+  const experimentalIconColor = "var(--app-chart-4)";
+
   const experimentalFeatures = [
     {
       to: "/trends",
@@ -39,6 +41,7 @@ export function LandingPage() {
       badgeLabel: betaLabel,
       badgeColor: "orange" as const,
       icon: <IconChartHistogram size={32} stroke={1.5} />,
+      iconColor: experimentalIconColor,
       ariaLabel: `${tr("trends.title")}, ${betaLabel}`,
     },
     {
@@ -48,6 +51,7 @@ export function LandingPage() {
       badgeLabel: betaLabel,
       badgeColor: "orange" as const,
       icon: <IconAffiliate size={32} stroke={1.5} />,
+      iconColor: experimentalIconColor,
       ariaLabel: `${tr("graph.title")}, ${betaLabel}`,
     },
   ];
@@ -113,6 +117,7 @@ export function LandingPage() {
               title={tr("landing.schedule.title")}
               description={tr("landing.schedule.description")}
               icon={<IconCalendar size={32} stroke={1.5} />}
+              iconColor="var(--app-chart-1)"
               ariaLabel={tr("landing.schedule.title")}
             />
             <LandingTile
@@ -120,6 +125,7 @@ export function LandingPage() {
               title={tr("explore.title")}
               description={tr("landing.explore.description")}
               icon={<IconCompass size={32} stroke={1.5} />}
+              iconColor="var(--app-chart-3)"
               ariaLabel={tr("explore.title")}
             />
             <ExperimentalCarousel items={experimentalFeatures} />

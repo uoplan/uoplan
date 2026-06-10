@@ -11,6 +11,8 @@ export type LandingTileProps = {
   badgeLabel?: string;
   badgeColor?: "blue" | "orange";
   icon: ReactNode;
+  /** CSS colour for the icon; falls back to the theme accent when omitted. */
+  iconColor?: string;
   ariaLabel: string;
 };
 
@@ -21,6 +23,7 @@ export function LandingTile({
   badgeLabel,
   badgeColor = "blue",
   icon,
+  iconColor,
   ariaLabel,
 }: LandingTileProps) {
   return (
@@ -62,8 +65,10 @@ export function LandingTile({
               width: 60,
               height: 60,
               borderRadius: "var(--app-radius-lg)",
-              background: "var(--app-accent-soft)",
-              color: "var(--app-accent)",
+              background: iconColor
+                ? `color-mix(in oklab, ${iconColor} 16%, transparent)`
+                : "var(--app-accent-soft)",
+              color: iconColor ?? "var(--app-accent)",
               marginBottom: 4,
             }}
           >
