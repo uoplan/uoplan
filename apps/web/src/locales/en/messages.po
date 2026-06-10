@@ -1542,6 +1542,10 @@ msgstr "Dismiss"
 msgid "landing.donate.text"
 msgstr "We're free and student-run. Help keep us running."
 
+#: apps/web/src/components/landing/DonationBanner.tsx:60
+msgid "landing.donate.textShort"
+msgstr "Help keep us free & running."
+
 msgid "landing.explore.description"
 msgstr "Search courses and professors with grade distributions."
 

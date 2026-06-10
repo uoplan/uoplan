@@ -33,6 +33,31 @@
   transform: translateX(2px);
 }
 
+.textShort {
+  display: none;
+}
+
+@media (max-width: 47.99em) {
+  .row {
+    min-height: 56px;
+  }
+
+  .textFull {
+    display: none;
+  }
+
+  .textShort {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cta {
+    display: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .banner,
   .cta,
