@@ -14,6 +14,7 @@
     "check:i18n": "node scripts/check-i18n.mjs",
     "i18n:sync": "node scripts/i18n-sync.mjs",
     "sync:proto-cli": "cp packages/proto/proto/cli.proto apps/cli/proto/cli.proto",
+    "build:cf": "bash scripts/cf-build.sh",
     "build:engine-wasm": "bash scripts/build-engine-wasm.sh",
     "build:engine-wasm:dev": "bash scripts/build-engine-wasm.sh --dev",
     "format": "oxfmt",
