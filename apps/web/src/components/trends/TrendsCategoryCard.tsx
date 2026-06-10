@@ -13,7 +13,7 @@ type TrendsCategoryTo =
   | "/trends/leaderboard";
 
 /** Shared preview height so every category card lines up to the same height. */
-export const CATEGORY_PREVIEW_HEIGHT = 128;
+export const CATEGORY_PREVIEW_HEIGHT = 168;
 
 /**
  * Hub navigation card for a trends category: a label, a short blurb, and a
