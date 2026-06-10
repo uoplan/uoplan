@@ -70,11 +70,30 @@ export async function handleDonationEmail(
   message: ForwardableEmailMessage,
   env: Env,
 ): Promise<void> {
-  if (!isInteracSender(message.from)) {
-    console.warn("Rejecting non-Interac email from %s", message.from);
-    message.setReject("Unrecognized sender");
-    return;
+  try {
+    await inspectDonation(message, env);
+  } catch (err) {
+    console.error("Failed to inspect donation email from %s: %o", message.from, err);
   }
+
+  // The worker only observes the message; Email Routing does not continue on its
+  // own once a worker handles mail, so we explicitly forward every message to
+  // the configured inbox. This runs even when inspection above fails so no email
+  // is ever lost.
+  try {
+    await message.forward(env.FORWARD_EMAIL);
+  } catch (err) {
+    console.error(
+      "Failed to forward email from %s to %s: %o",
+      message.from,
+      env.FORWARD_EMAIL,
+      err,
+    );
+  }
+}
+
+async function inspectDonation(message: ForwardableEmailMessage, env: Env): Promise<void> {
+  if (!isInteracSender(message.from)) return;
 
   const raw = await readRaw(message);
   const parsed = await PostalMime.parse(raw);
