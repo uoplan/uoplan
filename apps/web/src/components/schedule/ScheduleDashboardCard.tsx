@@ -131,13 +131,28 @@ export function ScheduleDashboardCard({
     <AppCard
       interactive={isExpandable}
       aria-disabled={locked || undefined}
+      radius="lg"
       style={{
+        position: "relative",
         opacity: locked ? 0.58 : 1,
-        borderLeft: locked ? undefined : `3px solid ${accent}`,
         boxShadow: open ? "var(--app-shadow-sm)" : undefined,
         transition: "var(--app-transition)",
       }}
     >
+      {locked ? null : (
+        <Box
+          aria-hidden
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 12,
+            bottom: 12,
+            width: 3,
+            borderRadius: "var(--app-radius-pill)",
+            background: accent,
+          }}
+        />
+      )}
       <Box
         role={isExpandable ? "button" : undefined}
         tabIndex={isExpandable ? 0 : undefined}
@@ -178,8 +193,8 @@ export function ScheduleDashboardCard({
             <Box
               style={{
                 borderTop: "1px solid var(--app-border)",
-                borderBottomLeftRadius: "var(--app-radius)",
-                borderBottomRightRadius: "var(--app-radius)",
+                borderBottomLeftRadius: "var(--app-radius-lg)",
+                borderBottomRightRadius: "var(--app-radius-lg)",
                 overflow: "hidden",
               }}
             >
