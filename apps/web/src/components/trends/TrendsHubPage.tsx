@@ -17,6 +17,7 @@ import { METRIC_COLOR, formatMetricValue, pickMetric } from "../../lib/trends/me
 import type { TrendsMetric } from "../../lib/trends/searchParams";
 import { AppCard } from "../shared/AppCard";
 import { AnimatedNumber } from "../shared/AnimatedNumber";
+import { SEASON_COLOR, colorForIndex } from "../../lib/trends/palette";
 import { CATEGORY_PREVIEW_HEIGHT, TrendsCategoryCard } from "./TrendsCategoryCard";
 import { useTrends } from "./trendsContext";
 
@@ -201,7 +202,8 @@ function DisciplinePreview() {
       .map((row) => ({ discipline: row.discipline, value: pickMetric(row, activeMetric) }))
       .filter((row): row is { discipline: string; value: number } => row.value != null)
       .sort((a, b) => b.value - a.value)
-      .slice(0, 5);
+      .slice(0, 5)
+      .map((row, index) => ({ ...row, color: colorForIndex(index) }));
   }, [grades, level, season, activeMetric]);
 
   if (data.length === 0) return null;
@@ -226,8 +228,12 @@ function SeasonPreview() {
   const data = useMemo(() => {
     if (!grades) return [];
     return computeSeasonComparison(grades, { discipline, level, programFilter })
-      .map((row) => ({ season: tr(SEASON_KEY[row.season]), value: pickMetric(row, activeMetric) }))
-      .filter((row): row is { season: string; value: number } => row.value != null);
+      .map((row) => ({
+        season: tr(SEASON_KEY[row.season]),
+        value: pickMetric(row, activeMetric),
+        color: SEASON_COLOR[row.season],
+      }))
+      .filter((row): row is { season: string; value: number; color: string } => row.value != null);
   }, [grades, discipline, level, programFilter, activeMetric]);
 
   if (data.length === 0) return null;

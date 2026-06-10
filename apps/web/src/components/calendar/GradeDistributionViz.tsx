@@ -2,6 +2,7 @@ import "./gradeDistribution.css";
 import { Stack, Text, Tooltip } from "@mantine/core";
 import type { GradeVizData } from "@uoplan/core";
 import { tr } from "../../i18n";
+import { GRADE_BAND_TOKEN } from "../../lib/trends/palette";
 
 const HIST_DIMS = {
   default: { maxBarPx: 88, snsPx: 88, padTopPx: 20, minWrapHeight: 94, labelFontPx: 10 },
@@ -162,7 +163,10 @@ export function GradeDistributionHistogram({
                 className="cal-grade-histogram-bar"
                 style={{
                   height: `${Math.max(4, (entry.count / maxHistogramCount) * dims.maxBarPx)}px`,
-                  backgroundColor: entry.count > 0 ? entry.color : "var(--app-translucent-strong)",
+                  backgroundColor:
+                    entry.count > 0
+                      ? GRADE_BAND_TOKEN[entry.bucketId]
+                      : "var(--app-translucent-strong)",
                 }}
               />
               {!hideLabels ? (
@@ -262,7 +266,7 @@ export function GradeDistributionBottomBar({ gradeViz }: { gradeViz?: GradeVizDa
             key={bucket.id}
             style={{
               width: `${(bucket.count / gradeViz.total) * 100}%`,
-              backgroundColor: bucket.color,
+              backgroundColor: GRADE_BAND_TOKEN[bucket.id],
             }}
           />
         );

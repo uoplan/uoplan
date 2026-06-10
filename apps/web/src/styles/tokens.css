@@ -48,15 +48,18 @@
   --app-shadow: 0 2px 8px rgba(0, 0, 0, 0.34), 0 10px 28px rgba(0, 0, 0, 0.3);
   --app-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.42), 0 20px 56px rgba(0, 0, 0, 0.36);
 
-  /* Informational / warning accents (token-ized; replaces raw hex in badges) */
-  --app-info: oklch(0.782 0.1147 243.83);
-  --app-info-soft: rgba(51, 154, 240, 0.16);
-  --app-warning: oklch(0.8034 0.1461 64.6);
-  --app-warning-soft: rgba(255, 146, 43, 0.16);
-  --app-success: oklch(0.7385 0.116 155.05);
-  --app-success-soft: rgba(101, 192, 129, 0.16);
-  --app-danger: oklch(0.7177 0.143 21.26);
-  --app-danger-soft: rgba(240, 124, 124, 0.16);
+  /* Informational / status accents — soft, dimmed pastels (cool, for the violet
+     charcoal). Lower lightness + chroma than Tailwind 300 so they read calm, not
+     bright, on the dark surface. The *-soft fills derive from the base via
+     color-mix so they always track the hue. */
+  --app-info: oklch(0.755 0.1 234);
+  --app-info-soft: color-mix(in oklab, var(--app-info) 16%, transparent);
+  --app-warning: oklch(0.775 0.115 64);
+  --app-warning-soft: color-mix(in oklab, var(--app-warning) 16%, transparent);
+  --app-success: oklch(0.755 0.11 155);
+  --app-success-soft: color-mix(in oklab, var(--app-success) 16%, transparent);
+  --app-danger: oklch(0.725 0.115 22);
+  --app-danger-soft: color-mix(in oklab, var(--app-danger) 16%, transparent);
 
   /* Text */
   --app-text: oklch(0.9496 0.0096 273.35);
@@ -64,11 +67,14 @@
   --app-text-dim: oklch(0.6454 0.0375 278.13);
   --app-text-inverse: oklch(0.2242 0.0137 278.83);
 
-  /* Accent (pastel baby blue) */
-  --app-accent: oklch(0.8091 0.0956 251.81);
+  /* Accent (pastel baby blue — Tailwind blue-300) */
+  --app-accent: oklch(0.809 0.105 251.813);
   --app-accent-soft: oklch(0.4012 0.0625 265.94);
   --app-on-accent: oklch(0.2217 0.0412 259.27);
-  --app-focus-ring: oklch(0.8091 0.0956 251.81);
+  --app-focus-ring: oklch(0.809 0.105 251.813);
+
+  /* Switch knob — theme-aware (replaces Mantine's hardcoded pure white) */
+  --app-switch-thumb: var(--app-text);
 
   /* Misc chrome */
   --app-selection-bg: rgba(147, 197, 253, 0.26);
@@ -96,25 +102,25 @@
      Categorical hues for trends charts; bright pastels that read clearly on the
      dark surfaces. --app-chart-N is a generic distinct-colour cycle; the season
      and grade tokens are semantic (Fall/Winter/Spring, failing → excellent). */
-  --app-chart-1: oklch(0.78 0.13 245);
-  --app-chart-2: oklch(0.8 0.12 175);
-  --app-chart-3: oklch(0.8 0.14 150);
-  --app-chart-4: oklch(0.81 0.14 65);
-  --app-chart-5: oklch(0.72 0.15 25);
-  --app-chart-6: oklch(0.75 0.15 350);
-  --app-chart-7: oklch(0.75 0.13 300);
-  --app-chart-8: oklch(0.82 0.11 210);
+  --app-chart-1: oklch(0.74 0.1 252);
+  --app-chart-2: oklch(0.77 0.1 181);
+  --app-chart-3: oklch(0.76 0.11 154);
+  --app-chart-4: oklch(0.78 0.115 75);
+  --app-chart-5: oklch(0.72 0.115 22);
+  --app-chart-6: oklch(0.74 0.115 346);
+  --app-chart-7: oklch(0.72 0.11 293);
+  --app-chart-8: oklch(0.75 0.1 230);
 
-  --app-chart-season-fall: oklch(0.8 0.14 60);
-  --app-chart-season-winter: oklch(0.82 0.1 230);
-  --app-chart-season-springsummer: oklch(0.8 0.14 150);
+  --app-chart-season-fall: oklch(0.77 0.115 64);
+  --app-chart-season-winter: oklch(0.75 0.09 245);
+  --app-chart-season-springsummer: oklch(0.76 0.115 150);
 
-  --app-chart-grade-red: oklch(0.7 0.16 25);
-  --app-chart-grade-amber: oklch(0.78 0.15 55);
-  --app-chart-grade-yellow: oklch(0.85 0.13 95);
-  --app-chart-grade-blue: oklch(0.75 0.12 245);
-  --app-chart-grade-teal: oklch(0.8 0.11 180);
-  --app-chart-grade-green: oklch(0.8 0.14 150);
+  --app-chart-grade-red: oklch(0.7 0.115 22);
+  --app-chart-grade-amber: oklch(0.76 0.115 58);
+  --app-chart-grade-yellow: oklch(0.81 0.11 95);
+  --app-chart-grade-blue: oklch(0.73 0.1 245);
+  --app-chart-grade-teal: oklch(0.77 0.1 181);
+  --app-chart-grade-green: oklch(0.76 0.115 150);
 }
 
 [data-app-theme="light"] {
@@ -138,15 +144,16 @@
   --app-shadow: 0 2px 10px rgba(60, 54, 44, 0.1), 0 10px 28px rgba(60, 54, 44, 0.08);
   --app-shadow-lg: 0 12px 34px rgba(60, 54, 44, 0.14), 0 20px 54px rgba(60, 54, 44, 0.1);
 
-  /* Informational / warning accents (darker tier for contrast on light) */
-  --app-info: oklch(0.5426 0.1485 251.67);
-  --app-info-soft: rgba(34, 139, 230, 0.12);
-  --app-warning: oklch(0.5295 0.1582 41.1);
-  --app-warning-soft: rgba(232, 89, 12, 0.12);
-  --app-success: oklch(0.6172 0.1624 146.43);
-  --app-success-soft: rgba(47, 158, 68, 0.12);
-  --app-danger: oklch(0.5928 0.2106 26.53);
-  --app-danger-soft: rgba(224, 49, 49, 0.12);
+  /* Status accents — "naturally-dark pastel": softened, lower-chroma tones that
+     stay readable on the pale parchment (no harsh yellow). */
+  --app-info: oklch(0.6 0.13 240);
+  --app-info-soft: color-mix(in oklab, var(--app-info) 12%, transparent);
+  --app-warning: oklch(0.64 0.14 58);
+  --app-warning-soft: color-mix(in oklab, var(--app-warning) 12%, transparent);
+  --app-success: oklch(0.59 0.13 150);
+  --app-success-soft: color-mix(in oklab, var(--app-success) 12%, transparent);
+  --app-danger: oklch(0.59 0.16 22);
+  --app-danger-soft: color-mix(in oklab, var(--app-danger) 12%, transparent);
 
   /* Text */
   --app-text: oklch(0.2782 0.0047 67.63);
@@ -154,11 +161,14 @@
   --app-text-dim: oklch(0.5232 0.0171 80.65);
   --app-text-inverse: oklch(0.9947 0.0045 78.3);
 
-  /* Accent (Tailwind blue-600, for white-on-accent contrast on light) */
-  --app-accent: oklch(0.5461 0.2152 262.88);
-  --app-accent-soft: oklch(0.9464 0.0241 259.82);
+  /* Accent (softer blue — pastel-ified yet dark enough for white-on-accent text) */
+  --app-accent: oklch(0.56 0.15 258);
+  --app-accent-soft: oklch(0.945 0.024 260);
   --app-on-accent: oklch(1 0 0);
-  --app-focus-ring: oklch(0.5461 0.2152 262.88);
+  --app-focus-ring: oklch(0.56 0.15 258);
+
+  /* Switch knob — theme-aware light parchment knob on light surfaces */
+  --app-switch-thumb: var(--app-surface);
 
   /* Misc chrome */
   --app-selection-bg: rgba(59, 130, 246, 0.2);
@@ -176,25 +186,25 @@
 
   /* Chart palette — darker, more saturated hues for contrast on the pale
      parchment surfaces. */
-  --app-chart-1: oklch(0.55 0.2 255);
-  --app-chart-2: oklch(0.58 0.13 190);
-  --app-chart-3: oklch(0.58 0.16 150);
-  --app-chart-4: oklch(0.62 0.15 60);
-  --app-chart-5: oklch(0.57 0.21 27);
-  --app-chart-6: oklch(0.58 0.21 350);
-  --app-chart-7: oklch(0.52 0.2 300);
-  --app-chart-8: oklch(0.6 0.13 215);
+  --app-chart-1: oklch(0.56 0.14 255);
+  --app-chart-2: oklch(0.58 0.11 188);
+  --app-chart-3: oklch(0.57 0.13 150);
+  --app-chart-4: oklch(0.62 0.13 62);
+  --app-chart-5: oklch(0.58 0.16 24);
+  --app-chart-6: oklch(0.58 0.16 350);
+  --app-chart-7: oklch(0.55 0.16 295);
+  --app-chart-8: oklch(0.58 0.12 215);
 
-  --app-chart-season-fall: oklch(0.62 0.16 55);
-  --app-chart-season-winter: oklch(0.55 0.16 245);
-  --app-chart-season-springsummer: oklch(0.58 0.16 150);
+  --app-chart-season-fall: oklch(0.62 0.14 58);
+  --app-chart-season-winter: oklch(0.56 0.14 248);
+  --app-chart-season-springsummer: oklch(0.57 0.13 150);
 
-  --app-chart-grade-red: oklch(0.57 0.21 27);
-  --app-chart-grade-amber: oklch(0.64 0.16 55);
-  --app-chart-grade-yellow: oklch(0.7 0.15 90);
-  --app-chart-grade-blue: oklch(0.55 0.18 250);
-  --app-chart-grade-teal: oklch(0.58 0.13 185);
-  --app-chart-grade-green: oklch(0.58 0.16 150);
+  --app-chart-grade-red: oklch(0.58 0.16 24);
+  --app-chart-grade-amber: oklch(0.64 0.14 58);
+  --app-chart-grade-yellow: oklch(0.72 0.13 92);
+  --app-chart-grade-blue: oklch(0.56 0.14 250);
+  --app-chart-grade-teal: oklch(0.58 0.11 186);
+  --app-chart-grade-green: oklch(0.57 0.13 150);
 }
 
 /* ----------------------------------------------------------------------------
@@ -220,15 +230,16 @@
   --app-shadow: 0 2px 8px rgba(0, 0, 0, 0.42), 0 10px 28px rgba(40, 0, 10, 0.34);
   --app-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5), 0 20px 56px rgba(40, 0, 10, 0.4);
 
-  /* Status accents (kept readable on the garnet charcoal). */
-  --app-info: oklch(0.782 0.1147 243.83);
-  --app-info-soft: rgba(51, 154, 240, 0.16);
-  --app-warning: oklch(0.8503 0.1149 68.95);
-  --app-warning-soft: rgba(255, 146, 43, 0.16);
-  --app-success: oklch(0.8381 0.114 154.06);
-  --app-success-soft: rgba(101, 192, 129, 0.16);
-  --app-danger: oklch(0.7903 0.1213 20.14);
-  --app-danger-soft: rgba(240, 124, 124, 0.18);
+  /* Status accents — warm-leaning pastels, a touch brighter than the cool `dark`
+     theme so the two read distinctly. The garnet brand accent below is kept. */
+  --app-info: oklch(0.78 0.1 242);
+  --app-info-soft: color-mix(in oklab, var(--app-info) 16%, transparent);
+  --app-warning: oklch(0.815 0.12 72);
+  --app-warning-soft: color-mix(in oklab, var(--app-warning) 16%, transparent);
+  --app-success: oklch(0.795 0.115 150);
+  --app-success-soft: color-mix(in oklab, var(--app-success) 16%, transparent);
+  --app-danger: oklch(0.78 0.12 16);
+  --app-danger-soft: color-mix(in oklab, var(--app-danger) 18%, transparent);
 
   /* Text — warm off-white on garnet. */
   --app-text: oklch(0.9474 0.0098 9.54);
@@ -241,6 +252,9 @@
   --app-accent-soft: oklch(0.2982 0.0705 10.25);
   --app-on-accent: oklch(0.9782 0.0108 10.33);
   --app-focus-ring: oklch(0.6445 0.1797 14.3);
+
+  /* Switch knob — theme-aware (warm off-white on the garnet charcoal) */
+  --app-switch-thumb: var(--app-text);
 
   /* Misc chrome. */
   --app-selection-bg: rgba(209, 26, 58, 0.3);
@@ -255,24 +269,24 @@
   --app-scrollbar-thumb: rgba(229, 84, 107, 0.26);
   --app-scrollbar-thumb-hover: rgba(229, 84, 107, 0.42);
 
-  /* Chart palette — bright pastels tuned to read on the garnet charcoal. */
-  --app-chart-1: oklch(0.78 0.13 245);
-  --app-chart-2: oklch(0.8 0.12 175);
-  --app-chart-3: oklch(0.8 0.14 150);
-  --app-chart-4: oklch(0.83 0.14 70);
-  --app-chart-5: oklch(0.74 0.16 30);
-  --app-chart-6: oklch(0.77 0.15 350);
-  --app-chart-7: oklch(0.76 0.13 300);
-  --app-chart-8: oklch(0.83 0.11 210);
+  /* Chart palette — warm-leaning pastels, distinct from the cool `dark` theme. */
+  --app-chart-1: oklch(0.77 0.1 250);
+  --app-chart-2: oklch(0.8 0.1 178);
+  --app-chart-3: oklch(0.79 0.11 150);
+  --app-chart-4: oklch(0.82 0.12 70);
+  --app-chart-5: oklch(0.76 0.12 20);
+  --app-chart-6: oklch(0.78 0.115 350);
+  --app-chart-7: oklch(0.76 0.11 300);
+  --app-chart-8: oklch(0.79 0.1 225);
 
-  --app-chart-season-fall: oklch(0.82 0.14 62);
-  --app-chart-season-winter: oklch(0.82 0.1 230);
-  --app-chart-season-springsummer: oklch(0.8 0.14 150);
+  --app-chart-season-fall: oklch(0.81 0.12 62);
+  --app-chart-season-winter: oklch(0.79 0.09 240);
+  --app-chart-season-springsummer: oklch(0.79 0.115 148);
 
-  --app-chart-grade-red: oklch(0.74 0.16 28);
-  --app-chart-grade-amber: oklch(0.8 0.15 58);
-  --app-chart-grade-yellow: oklch(0.86 0.13 95);
-  --app-chart-grade-blue: oklch(0.76 0.12 245);
-  --app-chart-grade-teal: oklch(0.81 0.11 180);
-  --app-chart-grade-green: oklch(0.81 0.14 150);
+  --app-chart-grade-red: oklch(0.76 0.12 20);
+  --app-chart-grade-amber: oklch(0.8 0.12 58);
+  --app-chart-grade-yellow: oklch(0.85 0.11 95);
+  --app-chart-grade-blue: oklch(0.77 0.1 245);
+  --app-chart-grade-teal: oklch(0.8 0.1 180);
+  --app-chart-grade-green: oklch(0.79 0.115 150);
 }

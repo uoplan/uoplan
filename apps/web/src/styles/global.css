@@ -126,6 +126,8 @@ body {
 
 .mantine-Switch-root {
   --switch-color: var(--app-accent);
+  /* Mantine hardcodes the thumb to pure white; follow the active theme instead. */
+  --switch-thumb-bg: var(--app-switch-thumb);
 }
 
 .mantine-Tabs-root {
