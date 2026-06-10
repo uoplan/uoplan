@@ -10,6 +10,14 @@ interface AnimatedNumberProps {
   placeholder?: string;
   /** Tween duration in seconds. */
   duration?: number;
+  /**
+   * When `true`, the first appearance of a value (initial mount with a value, or
+   * the first `null` → value transition) counts up from `from` instead of
+   * snapping. Subsequent value changes always animate. Reduced motion still snaps.
+   */
+  countOnLoad?: boolean;
+  /** Starting value for the `countOnLoad` count-up. Defaults to `0`. */
+  from?: number;
 }
 
 // Strong ease-out (expo-like): ticks fast, then decelerates into the final value.
@@ -24,12 +32,17 @@ const COUNT_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
  * without animating when transitioning to/from `null` or when the user prefers
  * reduced motion. The display reformats on every render, so locale/format
  * changes are reflected even while idle.
+ *
+ * Opt into a load-time count-up with `countOnLoad`: the first appearance of a
+ * value animates from `from` (default `0`) up to the target.
  */
 export function AnimatedNumber({
   value,
   format,
   placeholder = "—",
   duration = 0.7,
+  countOnLoad = false,
+  from = 0,
 }: AnimatedNumberProps) {
   const prefersReduced = useReducedMotion();
   const [display, setDisplay] = useState<number>(value ?? 0);
@@ -46,7 +59,26 @@ export function AnimatedNumber({
     const cameFromNull = !hadValueRef.current;
     hadValueRef.current = true;
 
-    if (isFirstRef.current || cameFromNull || prefersReduced) {
+    const isAppearance = isFirstRef.current || cameFromNull;
+
+    if (countOnLoad && isAppearance && !prefersReduced) {
+      isFirstRef.current = false;
+      const controls = animate(from, value, {
+        duration,
+        ease: COUNT_EASE,
+        onUpdate: (latest) => {
+          displayedRef.current = latest;
+          setDisplay(latest);
+        },
+        onComplete: () => {
+          displayedRef.current = value;
+          setDisplay(value);
+        },
+      });
+      return () => controls.stop();
+    }
+
+    if (isAppearance || prefersReduced) {
       isFirstRef.current = false;
       displayedRef.current = value;
       setDisplay(value);
@@ -67,7 +99,7 @@ export function AnimatedNumber({
       },
     });
     return () => controls.stop();
-  }, [value, prefersReduced, duration]);
+  }, [value, prefersReduced, duration, countOnLoad, from]);
 
   return <>{value == null ? placeholder : format(display)}</>;
 }

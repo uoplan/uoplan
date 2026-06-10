@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Box, Card, CopyButton, Group, Stack, Text, Title, Tooltip } from "@mantine/core";
 import { DonationJar } from "../components/donate/DonationJar";
+import { AnimatedNumber } from "../components/shared/AnimatedNumber";
 import { BackButton } from "../components/shared/BackButton";
 import { useTr, tr, formatLocaleNumber } from "../i18n";
 import { buildTabTitle } from "../lib/seo";
@@ -90,7 +91,13 @@ function DonateRoute() {
                 {tr("donate.raisedLabel")}
               </Text>
               <Text size="2.4rem" fw={700} c="var(--app-text)" lh={1.1}>
-                {summary ? formatCurrency(totalCents, currency) : "—"}
+                <AnimatedNumber
+                  value={summary ? totalCents : null}
+                  format={(n) => formatCurrency(n, currency)}
+                  placeholder="—"
+                  countOnLoad
+                  duration={1.1}
+                />
               </Text>
               <Text size="sm" c="dimmed">
                 {tr("donate.ofGoal", {
