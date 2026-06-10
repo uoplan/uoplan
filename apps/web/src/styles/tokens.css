@@ -73,8 +73,9 @@
   --app-on-accent: oklch(0.2217 0.0412 259.27);
   --app-focus-ring: oklch(0.809 0.105 251.813);
 
-  /* Switch knob — theme-aware (replaces Mantine's hardcoded pure white) */
-  --app-switch-thumb: var(--app-text);
+  /* Switch knob — a darker shade of the accent (same family as the on-track,
+     not a contrasting grey); reads clearly on the dark off-track too. */
+  --app-switch-thumb: var(--app-accent-soft);
 
   /* Misc chrome */
   --app-selection-bg: rgba(147, 197, 253, 0.26);
@@ -253,8 +254,9 @@
   --app-on-accent: oklch(0.9782 0.0108 10.33);
   --app-focus-ring: oklch(0.6445 0.1797 14.3);
 
-  /* Switch knob — theme-aware (warm off-white on the garnet charcoal) */
-  --app-switch-thumb: var(--app-text);
+  /* Switch knob — a darker shade of the garnet accent (same family as the
+     on-track, not a contrasting grey); reads clearly on the dark off-track too. */
+  --app-switch-thumb: var(--app-accent-soft);
 
   /* Misc chrome. */
   --app-selection-bg: rgba(209, 26, 58, 0.3);
