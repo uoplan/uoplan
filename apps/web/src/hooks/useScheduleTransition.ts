@@ -7,43 +7,40 @@ const EXIT_MS = 180;
 const ENTER_MS = 220;
 
 /**
- * Drives the schedule fade-out / fade-in animation.
+ * Generic exit → swap → enter transition driver.
  *
- * When `schedule` changes the hook starts an exit animation, swaps
- * `displayedSchedule` to the new value once the exit finishes, then plays
- * an enter animation.
+ * When `value` changes the hook starts an exit animation, swaps the displayed
+ * value to the new one once the exit finishes, then plays an enter animation.
  *
- * If another schedule arrives mid-animation:
- *  - during exit  → restart the exit timer (latest schedule shown at the end)
- *  - during enter → show the new schedule immediately and restart the enter
+ * If a new value arrives mid-animation:
+ *  - during exit  → restart the exit timer (latest value shown at the end)
+ *  - during enter → swap immediately and restart the enter
  *
+ * Equality is `===`, so object values transition on reference change and
+ * primitives on value change.
  */
-export function useScheduleTransition(
-  schedule: GeneratedSchedule | null,
+function useTimedTransition<T>(
+  value: T,
   prefersReduced: boolean,
-): {
-  displayedSchedule: GeneratedSchedule | null;
-  animationPhase: Phase;
-} {
-  const [displayedSchedule, setDisplayedSchedule] = useState(schedule);
+): { displayedValue: T; animationPhase: Phase } {
+  const [displayedValue, setDisplayedValue] = useState(value);
   const [phase, setPhase] = useState<Phase>("idle");
 
-  const phaseRef = useRef<Phase>("idle");
   const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const enterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Always holds the latest schedule so timers pick it up even if they
-  // were set before this render.
-  const latestScheduleRef = useRef(schedule);
+  // Always holds the latest value so timers pick it up even if they were set
+  // before this render.
+  const latestRef = useRef(value);
   useEffect(() => {
-    latestScheduleRef.current = schedule;
-  }, [schedule]);
+    latestRef.current = value;
+  }, [value]);
 
-  // Tracks the schedule the animation last reacted to. Initialised to the
-  // mount value so the transition only fires when the schedule actually
-  // changes — without this the exit → enter sequence plays on first mount,
-  // making a freshly generated schedule flash as if it were regenerated.
-  const animatedScheduleRef = useRef(schedule);
+  // Tracks the value the animation last reacted to. Initialised to the mount
+  // value so the transition only fires on genuine changes — without this the
+  // exit → enter sequence plays on first mount, making freshly generated
+  // content flash as if it were regenerated.
+  const animatedRef = useRef(value);
 
   const clearTimers = useCallback(() => {
     if (exitTimerRef.current != null) {
@@ -62,29 +59,26 @@ export function useScheduleTransition(
       return;
     }
 
-    // Skip on mount (and StrictMode's double-invoke) and whenever the schedule
-    // reference is unchanged, so we only animate genuine schedule changes.
-    if (schedule === animatedScheduleRef.current) {
+    // Skip on mount (and StrictMode's double-invoke) and whenever the value is
+    // unchanged, so we only animate genuine changes.
+    if (value === animatedRef.current) {
       return;
     }
-    animatedScheduleRef.current = schedule;
+    animatedRef.current = value;
 
     const startEnter = () => {
-      phaseRef.current = "entering";
       setPhase("entering");
       enterTimerRef.current = setTimeout(() => {
         enterTimerRef.current = null;
-        phaseRef.current = "idle";
         setPhase("idle");
       }, ENTER_MS);
     };
 
     const startExit = () => {
-      phaseRef.current = "exiting";
       setPhase("exiting");
       exitTimerRef.current = setTimeout(() => {
         exitTimerRef.current = null;
-        setDisplayedSchedule(latestScheduleRef.current);
+        setDisplayedValue(latestRef.current);
         startEnter();
       }, EXIT_MS);
     };
@@ -96,93 +90,39 @@ export function useScheduleTransition(
     startExit();
 
     return clearTimers;
-  }, [schedule, prefersReduced, clearTimers]);
+  }, [value, prefersReduced, clearTimers]);
 
   useEffect(() => () => clearTimers(), [clearTimers]);
 
-  // When reduced motion is preferred, skip the animation entirely.
   return {
-    displayedSchedule: prefersReduced ? schedule : displayedSchedule,
+    displayedValue: prefersReduced ? value : displayedValue,
     animationPhase: prefersReduced ? "idle" : phase,
   };
 }
 
 /**
- * Same exit → swap → enter pattern as useScheduleTransition, but for
- * a numeric week index. When weekIndex changes the hook plays the exit
- * animation, updates displayedWeekIndex, then plays the enter animation.
+ * Drives the schedule fade-out / fade-in animation. Thin wrapper around
+ * {@link useTimedTransition}.
+ */
+export function useScheduleTransition(
+  schedule: GeneratedSchedule | null,
+  prefersReduced: boolean,
+): {
+  displayedSchedule: GeneratedSchedule | null;
+  animationPhase: Phase;
+} {
+  const { displayedValue, animationPhase } = useTimedTransition(schedule, prefersReduced);
+  return { displayedSchedule: displayedValue, animationPhase };
+}
+
+/**
+ * Same exit → swap → enter pattern as {@link useScheduleTransition}, but for a
+ * numeric week index.
  */
 export function useWeekIndexTransition(
   weekIndex: number,
   prefersReduced: boolean,
 ): { displayedWeekIndex: number; animationPhase: Phase } {
-  const [displayedWeekIndex, setDisplayedWeekIndex] = useState(weekIndex);
-  const [phase, setPhase] = useState<Phase>("idle");
-
-  const phaseRef = useRef<Phase>("idle");
-  const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const enterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const latestRef = useRef(weekIndex);
-  useEffect(() => {
-    latestRef.current = weekIndex;
-  }, [weekIndex]);
-
-  // Tracks the week index the animation last reacted to (see the matching
-  // comment in useScheduleTransition) so we don't flash on initial mount.
-  const animatedWeekRef = useRef(weekIndex);
-
-  const clearTimers = useCallback(() => {
-    if (exitTimerRef.current != null) {
-      clearTimeout(exitTimerRef.current);
-      exitTimerRef.current = null;
-    }
-    if (enterTimerRef.current != null) {
-      clearTimeout(enterTimerRef.current);
-      enterTimerRef.current = null;
-    }
-  }, []);
-
-  useEffect(() => {
-    if (prefersReduced) {
-      clearTimers();
-      return;
-    }
-
-    if (weekIndex === animatedWeekRef.current) {
-      return;
-    }
-    animatedWeekRef.current = weekIndex;
-
-    const startEnter = () => {
-      phaseRef.current = "entering";
-      setPhase("entering");
-      enterTimerRef.current = setTimeout(() => {
-        enterTimerRef.current = null;
-        phaseRef.current = "idle";
-        setPhase("idle");
-      }, ENTER_MS);
-    };
-
-    const startExit = () => {
-      phaseRef.current = "exiting";
-      setPhase("exiting");
-      exitTimerRef.current = setTimeout(() => {
-        exitTimerRef.current = null;
-        setDisplayedWeekIndex(latestRef.current);
-        startEnter();
-      }, EXIT_MS);
-    };
-
-    clearTimers();
-    startExit();
-    return clearTimers;
-  }, [weekIndex, prefersReduced, clearTimers]);
-
-  useEffect(() => () => clearTimers(), [clearTimers]);
-
-  return {
-    displayedWeekIndex: prefersReduced ? weekIndex : displayedWeekIndex,
-    animationPhase: prefersReduced ? "idle" : phase,
-  };
+  const { displayedValue, animationPhase } = useTimedTransition(weekIndex, prefersReduced);
+  return { displayedWeekIndex: displayedValue, animationPhase };
 }

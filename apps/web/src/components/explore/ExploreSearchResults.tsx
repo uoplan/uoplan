@@ -54,14 +54,16 @@ type ExploreSearchResultsProps = {
   currentSearchParams: ExploreSearchParams;
 };
 
+type SearchCardItem = { key: string; node: ReactNode };
+
 function SearchCardSection({
   label,
   delay = 0,
-  children,
+  items,
 }: {
   label: string;
   delay?: number;
-  children: ReactNode;
+  items: SearchCardItem[];
 }) {
   return (
     <m.div
@@ -85,7 +87,18 @@ function SearchCardSection({
         >
           <Box style={{ display: "flex", gap: 10, width: "max-content" }}>
             <AnimatePresence mode="popLayout" initial={false}>
-              {children}
+              {items.map((item) => (
+                <m.div
+                  key={item.key}
+                  initial={{ opacity: 0, scale: 0.94 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.94 }}
+                  transition={{ duration: 0.14, ease: "easeOut" }}
+                  style={{ flexShrink: 0 }}
+                >
+                  {item.node}
+                </m.div>
+              ))}
             </AnimatePresence>
           </Box>
         </Box>
@@ -165,39 +178,31 @@ export function ExploreSearchResults({
 
   const coursesSection =
     displayedCourses.length > 0 ? (
-      <SearchCardSection label={tr("explore.resultsCourses")} delay={0}>
-        {displayedCourses.map((entry) => (
-          <m.div
-            key={entry.normCode}
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.94 }}
-            transition={{ duration: 0.14, ease: "easeOut" }}
-            style={{ flexShrink: 0 }}
-          >
+      <SearchCardSection
+        label={tr("explore.resultsCourses")}
+        delay={0}
+        items={displayedCourses.map((entry) => ({
+          key: entry.normCode,
+          node: (
             <SearchResultCourseCard
               entry={entry}
               sentiment={courseSentiment?.get(entry.normCode) ?? null}
               query={debouncedQuery}
               searchParams={currentSearchParams}
             />
-          </m.div>
-        ))}
-      </SearchCardSection>
+          ),
+        }))}
+      />
     ) : null;
 
   const disciplinesSection =
     disciplineResults.length > 0 ? (
-      <SearchCardSection label={tr("explore.resultsDisciplines")} delay={0.04}>
-        {disciplineResults.map((d) => (
-          <m.div
-            key={d.code}
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.94 }}
-            transition={{ duration: 0.14, ease: "easeOut" }}
-            style={{ flexShrink: 0 }}
-          >
+      <SearchCardSection
+        label={tr("explore.resultsDisciplines")}
+        delay={0.04}
+        items={disciplineResults.map((d) => ({
+          key: d.code,
+          node: (
             <SearchResultDisciplineCard
               discipline={d}
               courseCount={disciplineCourseCount.get(d.code) ?? 0}
@@ -206,23 +211,19 @@ export function ExploreSearchResults({
               query={debouncedQuery}
               searchParams={currentSearchParams}
             />
-          </m.div>
-        ))}
-      </SearchCardSection>
+          ),
+        }))}
+      />
     ) : null;
 
   const professorsSection =
     displayedProfessors.length > 0 ? (
-      <SearchCardSection label={tr("explore.resultsProfessors")} delay={0.06}>
-        {displayedProfessors.map((entry) => (
-          <m.div
-            key={entry.groupId}
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.94 }}
-            transition={{ duration: 0.14, ease: "easeOut" }}
-            style={{ flexShrink: 0 }}
-          >
+      <SearchCardSection
+        label={tr("explore.resultsProfessors")}
+        delay={0.06}
+        items={displayedProfessors.map((entry) => ({
+          key: entry.groupId,
+          node: (
             <SearchResultProfessorCard
               entry={entry}
               professorRatings={professorRatings}
@@ -230,32 +231,28 @@ export function ExploreSearchResults({
               query={debouncedQuery}
               searchParams={currentSearchParams}
             />
-          </m.div>
-        ))}
-      </SearchCardSection>
+          ),
+        }))}
+      />
     ) : null;
 
   const programsSection =
     programResults.length > 0 ? (
-      <SearchCardSection label={tr("explore.resultsPrograms")} delay={0.08}>
-        {programResults.map((program) => (
-          <m.div
-            key={program.slug}
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.94 }}
-            transition={{ duration: 0.14, ease: "easeOut" }}
-            style={{ flexShrink: 0 }}
-          >
+      <SearchCardSection
+        label={tr("explore.resultsPrograms")}
+        delay={0.08}
+        items={programResults.map((program) => ({
+          key: program.slug,
+          node: (
             <SearchResultProgramCard
               program={program}
               gradeViz={programStats.get(program.slug)?.gradeViz ?? null}
               sentiment={programStats.get(program.slug)?.sentiment ?? null}
               query={debouncedQuery}
             />
-          </m.div>
-        ))}
-      </SearchCardSection>
+          ),
+        }))}
+      />
     ) : null;
 
   const orderedSections = professorsFirst
