@@ -1,15 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   getSystemBase,
-  isThemeVisible,
   persistSelection,
-  persistUnlockedTheme,
   readStoredSelection,
-  readUnlockedThemes,
   resolveTheme,
   THEME_STORAGE_KEY,
-  UNLOCKED_THEMES_STORAGE_KEY,
-  type AppTheme,
   type ThemeSelection,
 } from "./themes";
 
@@ -90,43 +85,5 @@ describe("persistSelection", () => {
     const store = stubWindow({});
     persistSelection("dark");
     expect(store[THEME_STORAGE_KEY]).toBe("dark");
-  });
-});
-
-describe("hidden theme unlocking", () => {
-  it("reads no unlocked themes by default", () => {
-    stubWindow({});
-    expect(readUnlockedThemes()).toEqual([]);
-  });
-
-  it("persists and reads back an unlocked theme", () => {
-    const store = stubWindow({});
-    expect(persistUnlockedTheme("geegees")).toEqual(["geegees"]);
-    expect(store[UNLOCKED_THEMES_STORAGE_KEY]).toBe("geegees");
-    expect(readUnlockedThemes()).toEqual(["geegees"]);
-  });
-
-  it("does not duplicate an already-unlocked theme", () => {
-    stubWindow({ store: { [UNLOCKED_THEMES_STORAGE_KEY]: "geegees" } });
-    expect(persistUnlockedTheme("geegees")).toEqual(["geegees"]);
-  });
-
-  it("ignores unknown stored ids", () => {
-    stubWindow({ store: { [UNLOCKED_THEMES_STORAGE_KEY]: "geegees,bogus" } });
-    expect(readUnlockedThemes()).toEqual(["geegees"]);
-  });
-});
-
-describe("isThemeVisible", () => {
-  const visible: AppTheme = { id: "dark", labelId: "theme.dark", base: "dark" };
-  const hidden: AppTheme = { id: "geegees", labelId: "theme.geegees", base: "dark", hidden: true };
-
-  it("always shows non-hidden themes", () => {
-    expect(isThemeVisible(visible, [])).toBe(true);
-  });
-
-  it("hides a hidden theme until it is unlocked", () => {
-    expect(isThemeVisible(hidden, [])).toBe(false);
-    expect(isThemeVisible(hidden, ["geegees"])).toBe(true);
   });
 });

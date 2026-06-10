@@ -5,14 +5,11 @@ import type { CSSVariablesResolver } from "@mantine/core";
 import { theme } from "../styles/theme";
 import {
   type ColorSchemeBase,
-  type ThemeId,
   type ThemeSelection,
   THEME_LIST,
   getSystemBase,
   persistSelection,
-  persistUnlockedTheme,
   readStoredSelection,
-  readUnlockedThemes,
   resolveTheme,
 } from "./themes";
 import { AppThemeContext, type AppThemeContextValue } from "./appThemeContext";
@@ -59,7 +56,6 @@ export function AppThemeProvider({ children, initialSelection }: AppThemeProvide
     () => initialSelection ?? readStoredSelection(),
   );
   const [systemBase, setSystemBase] = useState<ColorSchemeBase>(() => getSystemBase());
-  const [unlockedThemes, setUnlockedThemes] = useState<ThemeId[]>(() => readUnlockedThemes());
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.matchMedia) return;
@@ -81,13 +77,9 @@ export function AppThemeProvider({ children, initialSelection }: AppThemeProvide
     setSelectionState(next);
   }, []);
 
-  const unlockTheme = useCallback((id: ThemeId) => {
-    setUnlockedThemes(persistUnlockedTheme(id));
-  }, []);
-
   const value = useMemo<AppThemeContextValue>(
-    () => ({ selection, resolved, themes: THEME_LIST, unlockedThemes, setSelection, unlockTheme }),
-    [selection, resolved, unlockedThemes, setSelection, unlockTheme],
+    () => ({ selection, resolved, themes: THEME_LIST, setSelection }),
+    [selection, resolved, setSelection],
   );
 
   return (

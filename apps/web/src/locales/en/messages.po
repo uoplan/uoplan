@@ -2348,10 +2348,6 @@ msgstr "By discipline"
 msgid "trends.chart.disciplineScatter.desc"
 msgstr "Popularity versus average GPA, one point per discipline."
 
-#: apps/web/src/components/trends/DisciplineScatterCard.tsx:62
-msgid "trends.chart.disciplineScatter.series"
-msgstr "Disciplines"
-
 #: apps/web/src/components/trends/DisciplineScatterCard.tsx:52
 msgid "trends.chart.disciplineScatter.title"
 msgstr "Popularity vs GPA"
@@ -2442,10 +2438,6 @@ msgstr "Graded students"
 #: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:49
 msgid "trends.chart.scatter.desc"
 msgstr "Each point is a course: enrolment against average GPA."
-
-#: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:58
-msgid "trends.chart.scatter.series"
-msgstr "Courses"
 
 #: apps/web/src/components/trends/TrendsPage.tsx:599
 #: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:48

@@ -4,7 +4,8 @@ import { computeCourseScatter } from "@uoplan/core";
 import { useMemo } from "react";
 import { formatLocaleNumber, tr } from "../../i18n";
 import { ChartCard } from "./ChartCard";
-import { METRIC_COLOR, formatMetricValue } from "../../lib/trends/metrics";
+import { formatMetricValue } from "../../lib/trends/metrics";
+import { colorForIndex } from "../../lib/trends/palette";
 import type { TrendsCardContext } from "./cardContext";
 
 interface ScatterDatum {
@@ -43,28 +44,29 @@ export function VolumeGpaScatterCard({
   season,
   programFilter,
 }: TrendsCardContext) {
-  const points = useMemo(() => {
+  const series = useMemo(() => {
     return computeCourseScatter(grades, { discipline, level, season, programFilter })
       .filter((point): point is typeof point & { gpa: number } => point.gpa != null)
-      .map((point) => ({ volume: point.volume, gpa: point.gpa, code: point.code }));
+      .map((point, index) => ({
+        color: colorForIndex(index),
+        name: point.code,
+        data: [{ volume: point.volume, gpa: point.gpa, code: point.code }] as unknown as Record<
+          string,
+          number
+        >[],
+      }));
   }, [grades, discipline, level, season, programFilter]);
 
   return (
     <ChartCard
       title={tr("trends.chart.scatter.title")}
       description={tr("trends.chart.scatter.desc")}
-      empty={points.length === 0}
+      empty={series.length === 0}
       emptyText={tr("trends.chart.empty")}
     >
       <ScatterChart
         h={300}
-        data={[
-          {
-            color: METRIC_COLOR.gpa,
-            name: tr("trends.chart.scatter.series"),
-            data: points as unknown as Record<string, number>[],
-          },
-        ]}
+        data={series}
         dataKey={{ x: "volume", y: "gpa" }}
         xAxisLabel={tr("trends.chart.scatter.axisVolume")}
         yAxisLabel={tr("trends.chart.scatter.axisGpa")}

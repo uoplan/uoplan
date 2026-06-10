@@ -9,6 +9,7 @@ import {
   metricDomain,
   pickMetric,
 } from "../../lib/trends/metrics";
+import { colorForIndex } from "../../lib/trends/palette";
 import type { TrendsCardContext } from "./cardContext";
 
 const TOP_N = 15;
@@ -30,7 +31,8 @@ export function DisciplineBarCard({
       .map((row) => ({ discipline: row.discipline, value: pickMetric(row, metric) }))
       .filter((row): row is { discipline: string; value: number } => row.value != null)
       .sort((a, b) => b.value - a.value)
-      .slice(0, TOP_N);
+      .slice(0, TOP_N)
+      .map((row, index) => ({ ...row, color: colorForIndex(index) }));
   }, [grades, level, season, metric]);
 
   const [min, max] = metricDomain(metric);

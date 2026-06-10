@@ -4,7 +4,8 @@ import { computeDisciplineComparison } from "@uoplan/core";
 import { useMemo } from "react";
 import { formatLocaleNumber, tr } from "../../i18n";
 import { ChartCard } from "./ChartCard";
-import { METRIC_COLOR, formatMetricValue } from "../../lib/trends/metrics";
+import { formatMetricValue } from "../../lib/trends/metrics";
+import { colorForIndex } from "../../lib/trends/palette";
 import type { TrendsCardContext } from "./cardContext";
 
 interface DisciplineScatterDatum {
@@ -41,28 +42,28 @@ function ScatterTooltip({
  * the discipline filter); honors level / season.
  */
 export function DisciplineScatterCard({ grades, level, season }: TrendsCardContext) {
-  const points = useMemo(() => {
+  const series = useMemo(() => {
     return computeDisciplineComparison(grades, { level, season })
       .filter((row): row is typeof row & { gpa: number } => row.gpa != null)
-      .map((row) => ({ volume: row.volume, gpa: row.gpa, discipline: row.discipline }));
+      .map((row, index) => ({
+        color: colorForIndex(index),
+        name: row.discipline,
+        data: [
+          { volume: row.volume, gpa: row.gpa, discipline: row.discipline },
+        ] as unknown as Record<string, number>[],
+      }));
   }, [grades, level, season]);
 
   return (
     <ChartCard
       title={tr("trends.chart.disciplineScatter.title")}
       description={tr("trends.chart.disciplineScatter.desc")}
-      empty={points.length === 0}
+      empty={series.length === 0}
       emptyText={tr("trends.chart.empty")}
     >
       <ScatterChart
         h={300}
-        data={[
-          {
-            color: METRIC_COLOR.gpa,
-            name: tr("trends.chart.disciplineScatter.series"),
-            data: points as unknown as Record<string, number>[],
-          },
-        ]}
+        data={series}
         dataKey={{ x: "volume", y: "gpa" }}
         xAxisLabel={tr("trends.chart.scatter.axisVolume")}
         yAxisLabel={tr("trends.chart.scatter.axisGpa")}

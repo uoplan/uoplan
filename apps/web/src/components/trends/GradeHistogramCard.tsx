@@ -2,6 +2,7 @@ import { Box, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { computeGradeHistogram } from "@uoplan/core";
 import { useMemo } from "react";
 import { formatLocaleNumber, tr } from "../../i18n";
+import { GRADE_BAND_TOKEN } from "../../lib/trends/palette";
 import { ChartCard } from "./ChartCard";
 import type { TrendsCardContext } from "./cardContext";
 
@@ -67,7 +68,7 @@ export function GradeHistogramCard({
                       width: "100%",
                       height: `${heightPct}%`,
                       minHeight: bar.count > 0 ? 2 : 0,
-                      backgroundColor: bar.color,
+                      backgroundColor: GRADE_BAND_TOKEN[bar.bucketId],
                       borderRadius: "var(--app-radius-sm, 3px) var(--app-radius-sm, 3px) 0 0",
                     }}
                   />

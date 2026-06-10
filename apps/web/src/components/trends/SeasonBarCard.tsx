@@ -1,5 +1,6 @@
 import { computeSeasonComparison, type TermSeason } from "@uoplan/core";
 import { tr, useTr } from "../../i18n";
+import { SEASON_COLOR } from "../../lib/trends/palette";
 import type { TrendsCardContext } from "./cardContext";
 import { MetricBarChartCard } from "./MetricBarChartCard";
 
@@ -13,13 +14,21 @@ function buildSeasonRows({ grades, discipline, level, programFilter }: TrendsCar
   return computeSeasonComparison(grades, { discipline, level, programFilter });
 }
 
-function getSeasonLabel(row: ReturnType<typeof buildSeasonRows>[number]): string {
+type SeasonRow = ReturnType<typeof buildSeasonRows>[number];
+
+function getSeasonLabel(row: SeasonRow): string {
   return tr(SEASON_KEY[row.season]);
+}
+
+function getSeasonColor(row: SeasonRow): string {
+  return SEASON_COLOR[row.season];
 }
 
 /**
  * Compares the active metric across academic seasons for the current scope —
  * "when is this easiest?". Always compares all seasons (ignores season filter).
+ * Each season bar is tinted with its semantic colour (Fall amber, Winter icy
+ * blue, Spring/Summer green).
  */
 export function SeasonBarCard(props: TrendsCardContext) {
   useTr();
@@ -31,6 +40,7 @@ export function SeasonBarCard(props: TrendsCardContext) {
       axisKey="season"
       buildRows={buildSeasonRows}
       getAxisValue={getSeasonLabel}
+      getColor={getSeasonColor}
       {...props}
     />
   );
