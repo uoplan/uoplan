@@ -1788,6 +1788,30 @@ msgstr "Téléversement échoué"
 msgid "programStep.transcript.withMinor"
 msgstr "avec une mineure en"
 
+msgid "rating.rmp.count"
+msgstr "{count, plural, one {# évaluation} other {# évaluations}}"
+
+msgid "rating.rmp.explain"
+msgstr "Note moyenne du professeur sur RateMyProfessors, sur une échelle de 1 à 5."
+
+msgid "rating.rmp.label"
+msgstr "RateMyProfessors"
+
+msgid "rating.rmp.unrated"
+msgstr "Sur RateMyProfessors, mais pas encore évalué."
+
+msgid "rating.rmp.viewOn"
+msgstr "Voir sur RateMyProfessors"
+
+msgid "rating.satisfaction.explain"
+msgstr "Satisfaction moyenne tirée des évaluations de cours de l'Université d'Ottawa, sur une échelle de 1 à 5."
+
+msgid "rating.satisfaction.label"
+msgstr "Satisfaction des étudiants"
+
+msgid "rating.value"
+msgstr "{value}/5"
+
 msgid "requirementNode.anyCourseGroup"
 msgstr "Tout cours {prefix}"
 
@@ -2069,15 +2093,6 @@ msgstr "Aucun résultat pour « {q} »"
 
 msgid "search.passingPercent"
 msgstr "{percent} % de réussite"
-
-#: apps/web/src/components/explore/SearchResultCourseCard.tsx:98
-#: apps/web/src/components/explore/SearchResultProfessorCard.tsx:94
-msgid "search.ratingOutOf5"
-msgstr "/5"
-
-#: apps/web/src/components/explore/SearchResultProfessorCard.tsx:99
-msgid "search.rmpRating"
-msgstr "RMP {rating}/5 ({count} notes)"
 
 msgid "seo.explore.description"
 msgstr "Recherchez des cours et des professeur·e·s de l'Université d'Ottawa. Consultez les distributions de notes historiques et comparez les sections."

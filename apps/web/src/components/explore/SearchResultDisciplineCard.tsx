@@ -1,13 +1,17 @@
 import { Link } from "@tanstack/react-router";
-import { Stack, Text } from "@mantine/core";
+import { Box, Stack, Text } from "@mantine/core";
 import { useLingui } from "@lingui/react";
-import type { Discipline } from "@uoplan/core";
+import type { Discipline, GradeVizData } from "@uoplan/core";
 import { tr } from "../../i18n";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
+import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
+import { RatingBadge } from "../shared/RatingBadge";
 
 type Props = {
   discipline: Discipline;
   courseCount: number;
+  gradeViz?: GradeVizData | null;
+  sentiment?: number | null;
   query?: string;
   searchParams: ExploreSearchParams;
 };
@@ -15,6 +19,8 @@ type Props = {
 export function SearchResultDisciplineCard({
   discipline,
   courseCount,
+  gradeViz,
+  sentiment,
   query,
   searchParams,
 }: Props) {
@@ -72,10 +78,15 @@ export function SearchResultDisciplineCard({
         >
           {displayName}
         </Text>
-        <Text size="xs" c="dimmed" lh={1.3} mt="auto">
+        <Box style={{ flex: 1 }} />
+        {sentiment != null && sentiment > 0 ? (
+          <RatingBadge kind="satisfaction" value={sentiment} />
+        ) : null}
+        <Text size="xs" c="dimmed" lh={1.3}>
           {tr("explore.disciplineCourseCount", { count: courseCount })}
         </Text>
       </Stack>
+      <GradeDistributionBottomBar gradeViz={gradeViz} />
     </Link>
   );
 }

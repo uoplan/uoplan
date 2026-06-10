@@ -1788,6 +1788,30 @@ msgstr "Upload failed"
 msgid "programStep.transcript.withMinor"
 msgstr "with a minor in"
 
+msgid "rating.rmp.count"
+msgstr "{count, plural, one {# rating} other {# ratings}}"
+
+msgid "rating.rmp.explain"
+msgstr "Average professor rating from RateMyProfessors, on a scale of 1 to 5."
+
+msgid "rating.rmp.label"
+msgstr "RateMyProfessors"
+
+msgid "rating.rmp.unrated"
+msgstr "On RateMyProfessors, but not yet rated."
+
+msgid "rating.rmp.viewOn"
+msgstr "View on RateMyProfessors"
+
+msgid "rating.satisfaction.explain"
+msgstr "Average satisfaction from uOttawa course evaluations, on a scale of 1 to 5."
+
+msgid "rating.satisfaction.label"
+msgstr "Student satisfaction"
+
+msgid "rating.value"
+msgstr "{value}/5"
+
 msgid "requirementNode.anyCourseGroup"
 msgstr "Any {prefix} course"
 
@@ -2069,15 +2093,6 @@ msgstr "No results for \"{q}\""
 
 msgid "search.passingPercent"
 msgstr "{percent}% passing"
-
-#: apps/web/src/components/explore/SearchResultCourseCard.tsx:98
-#: apps/web/src/components/explore/SearchResultProfessorCard.tsx:94
-msgid "search.ratingOutOf5"
-msgstr "/5"
-
-#: apps/web/src/components/explore/SearchResultProfessorCard.tsx:99
-msgid "search.rmpRating"
-msgstr "RMP {rating}/5 ({count} ratings)"
 
 msgid "seo.explore.description"
 msgstr "Search University of Ottawa courses and professors. View historical grade distributions, compare sections, and find the easiest or hardest offerings."

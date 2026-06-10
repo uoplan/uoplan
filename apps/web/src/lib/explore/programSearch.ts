@@ -9,6 +9,8 @@ export type ExploreProgramSearchEntry = {
   title: string;
   /** Number of concrete required course codes (for the result card). */
   courseCount: number;
+  /** Normalized core/required course codes (for the card's aggregate grade + satisfaction). */
+  coreCodes: string[];
   searchText: string;
 };
 
@@ -42,11 +44,12 @@ export function buildProgramSearchEntries(programs: Program[]): ExploreProgramSe
     const slug = programSlug(program);
     if (!slug || seen.has(slug)) continue;
     seen.add(slug);
-    const courseCount = buildProgramCourseFilter(program).codes.size;
+    const coreCodes = [...buildProgramCourseFilter(program).codes];
     out.push({
       slug,
       title: program.title,
-      courseCount,
+      courseCount: coreCodes.length,
+      coreCodes,
       searchText: [program.title, slug].filter(Boolean).join(" ").toLowerCase(),
     });
   }

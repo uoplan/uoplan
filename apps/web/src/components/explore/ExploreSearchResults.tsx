@@ -1,7 +1,7 @@
 import { Box, Stack, Text } from "@mantine/core";
 import { useMemo } from "react";
 import { AnimatePresence, m } from "framer-motion";
-import type { Discipline, ProfessorRatingsMap } from "@uoplan/core";
+import type { Discipline, GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
 import {
   courseSentimentByNorm,
   normalizeProfessorName,
@@ -14,13 +14,29 @@ import type {
   ExploreCourseSearchEntry,
   ExploreProfessorSearchEntry,
 } from "../../lib/explore/gradesSearch";
+import { aggregateGradeVizForCourseNorms } from "../../lib/explore/gradesSearch";
 import type { ExploreProgramSearchEntry } from "../../lib/explore/programSearch";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
+import { useExploreOfferings } from "./exploreOfferingsContext";
 import { SearchResultCourseCard } from "./SearchResultCourseCard";
 import { SearchResultDisciplineCard } from "./SearchResultDisciplineCard";
 import { SearchResultProfessorCard } from "./SearchResultProfessorCard";
 import { SearchResultProgramCard } from "./SearchResultProgramCard";
 import type { ReactNode } from "react";
+
+type AggregateStats = { gradeViz: GradeVizData | null; sentiment: number | null };
+
+function meanSentiment(values: Iterable<number | undefined>): number | null {
+  let sum = 0;
+  let n = 0;
+  for (const v of values) {
+    if (v != null) {
+      sum += v;
+      n += 1;
+    }
+  }
+  return n > 0 ? sum / n : null;
+}
 
 type ExploreSearchResultsProps = {
   hasResults: boolean;
@@ -98,6 +114,7 @@ export function ExploreSearchResults({
   // Lazily load the course-evaluation dataset so every card can show its overall
   // satisfaction; the numbers fill in once the (~900 KB) asset has decoded.
   const { data: feedback } = useFeedbackData();
+  const { offeringsByCourseNorm } = useExploreOfferings();
   const courseSentiment = useMemo(
     () => (feedback ? courseSentimentByNorm(feedback) : null),
     [feedback],
@@ -106,6 +123,45 @@ export function ExploreSearchResults({
     () => (feedback ? professorSentimentByName(feedback) : null),
     [feedback],
   );
+
+  // Aggregate grade distribution + satisfaction per discipline (all courses whose code
+  // shares the discipline prefix) for the discipline cards.
+  const disciplineStats = useMemo(() => {
+    const stats = new Map<string, AggregateStats>();
+    for (const d of disciplineResults) {
+      const prefix = d.code.toUpperCase();
+      const norms: string[] = [];
+      for (const key of offeringsByCourseNorm.keys()) {
+        if (key.split(" ")[0] === prefix) norms.push(key);
+      }
+      const sentimentValues: number[] = [];
+      if (courseSentiment) {
+        for (const [norm, value] of courseSentiment) {
+          if (norm.split(" ")[0] === prefix) sentimentValues.push(value);
+        }
+      }
+      stats.set(d.code, {
+        gradeViz: aggregateGradeVizForCourseNorms(offeringsByCourseNorm, norms),
+        sentiment: meanSentiment(sentimentValues),
+      });
+    }
+    return stats;
+  }, [disciplineResults, offeringsByCourseNorm, courseSentiment]);
+
+  // Aggregate grade distribution + satisfaction per program (its core/required courses).
+  const programStats = useMemo(() => {
+    const stats = new Map<string, AggregateStats>();
+    for (const p of programResults) {
+      const sentiment = courseSentiment
+        ? meanSentiment(p.coreCodes.map((code) => courseSentiment.get(code)))
+        : null;
+      stats.set(p.slug, {
+        gradeViz: aggregateGradeVizForCourseNorms(offeringsByCourseNorm, p.coreCodes),
+        sentiment,
+      });
+    }
+    return stats;
+  }, [programResults, offeringsByCourseNorm, courseSentiment]);
 
   const coursesSection =
     displayedCourses.length > 0 ? (
@@ -145,6 +201,8 @@ export function ExploreSearchResults({
             <SearchResultDisciplineCard
               discipline={d}
               courseCount={disciplineCourseCount.get(d.code) ?? 0}
+              gradeViz={disciplineStats.get(d.code)?.gradeViz ?? null}
+              sentiment={disciplineStats.get(d.code)?.sentiment ?? null}
               query={debouncedQuery}
               searchParams={currentSearchParams}
             />
@@ -189,7 +247,12 @@ export function ExploreSearchResults({
             transition={{ duration: 0.14, ease: "easeOut" }}
             style={{ flexShrink: 0 }}
           >
-            <SearchResultProgramCard program={program} query={debouncedQuery} />
+            <SearchResultProgramCard
+              program={program}
+              gradeViz={programStats.get(program.slug)?.gradeViz ?? null}
+              sentiment={programStats.get(program.slug)?.sentiment ?? null}
+              query={debouncedQuery}
+            />
           </m.div>
         ))}
       </SearchCardSection>

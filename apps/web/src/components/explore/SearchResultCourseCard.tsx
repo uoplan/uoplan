@@ -3,6 +3,7 @@ import { Box, Stack, Text } from "@mantine/core";
 import type { GradeVizData } from "@uoplan/core";
 import { useTr, tr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
+import { RatingBadge } from "../shared/RatingBadge";
 import type { ExploreCourseSearchEntry } from "../../lib/explore/gradesSearch";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
@@ -91,12 +92,7 @@ export function SearchResultCourseCard({
         ) : null}
         <Box style={{ flex: 1 }} />
         {sentiment != null && sentiment > 0 ? (
-          <Text size="xs" c="var(--app-text-muted)" lh={1.3}>
-            <Text component="span" fw={700} c="var(--app-text)">
-              {sentiment.toFixed(1)}
-            </Text>
-            {tr("search.ratingOutOf5")}
-          </Text>
+          <RatingBadge kind="satisfaction" value={sentiment} />
         ) : null}
         {gradeViz ? (
           <Text size="xs" c="var(--app-text-muted)" lh={1.3}>
