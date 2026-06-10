@@ -104,7 +104,6 @@ body {
 .mantine-Input-input {
   --input-bd: var(--app-border-strong);
   --input-bd-focus: var(--app-focus-ring);
-  --input-radius: var(--app-radius-sm);
 }
 
 /* The global Input theme adds a border to every input; on the Spotlight search

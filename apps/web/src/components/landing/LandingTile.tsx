@@ -36,6 +36,7 @@ export function LandingTile({
     >
       <AppCard
         interactive
+        radius={40}
         style={{
           position: "relative",
           height: "100%",
