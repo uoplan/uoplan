@@ -1,10 +1,12 @@
+import type { CanonicalProfessorName, ProfessorNameKey } from "./brand";
 import type { CourseGradesData } from "./dataTypes";
+import { pickCanonicalProfessorName } from "./professorIdentity";
 import { normalizeProfessorName } from "./professorRatings";
 import { parseCourseCode } from "./utils/courseUtils";
 
 export type ProfessorGraphNode = {
   id: string;
-  displayName: string;
+  displayName: CanonicalProfessorName;
   legacyId?: number;
   degree: number;
   /** Subject prefixes with section-offering counts (one per professor row in grades data). */
@@ -25,7 +27,8 @@ export type ProfessorCoTeachingGraph = {
 
 export function professorGraphId(legacyId?: number, name?: string): string {
   if (legacyId != null) return `id:${legacyId}`;
-  return `name:${normalizeProfessorName(name ?? "").toLowerCase()}`;
+  const key: ProfessorNameKey = normalizeProfessorName(name ?? "");
+  return `name:${key.toLowerCase()}`;
 }
 
 function subjectFromCourseCode(code: string): string {
@@ -55,7 +58,7 @@ export function buildProfessorCoTeachingGraph(
   const nodeMeta = new Map<
     string,
     {
-      displayName: string;
+      displayName: CanonicalProfessorName;
       legacyId?: number;
       disciplineWeights: Map<string, number>;
     }
@@ -72,7 +75,11 @@ export function buildProfessorCoTeachingGraph(
 
       let meta = nodeMeta.get(id);
       if (!meta) {
-        meta = { displayName: p.name, legacyId: p.legacyId, disciplineWeights: new Map() };
+        meta = {
+          displayName: pickCanonicalProfessorName([p.name]),
+          legacyId: p.legacyId,
+          disciplineWeights: new Map(),
+        };
         nodeMeta.set(id, meta);
       }
       const subject = subjectFromCourseCode(course.code);

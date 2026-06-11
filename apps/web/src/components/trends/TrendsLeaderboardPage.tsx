@@ -62,7 +62,7 @@ export function TrendsLeaderboardPage() {
   const courseTitleByCode = useMemo(() => {
     const map = new Map<string, string>();
     for (const course of catalogue?.courses ?? []) {
-      map.set(normalizeCourseCode(course.code), course.title);
+      map.set(course.code, course.title);
     }
     return map;
   }, [catalogue]);
@@ -164,7 +164,7 @@ export function TrendsLeaderboardPage() {
       return (
         <Link
           to="/explore/course/$course"
-          params={{ course: courseNormToPathParam(row.key) }}
+          params={{ course: courseNormToPathParam(normalizeCourseCode(row.key)) }}
           search={EMPTY_EXPLORE_SEARCH}
           state={{ back: trendsBack } as never}
           style={{ textDecoration: "none" }}

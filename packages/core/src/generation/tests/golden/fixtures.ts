@@ -22,6 +22,7 @@ import type {
   SchedulesData,
 } from "../../../dataTypes";
 import type { GenerationConstraints } from "../../types";
+import { normalizeCourseCode } from "../../../utils/courseUtils";
 
 type TimeLite = { day: DayOfWeek; start: number; end: number };
 
@@ -55,7 +56,7 @@ export function makeSchedule(
   return {
     subject,
     catalogNumber,
-    courseCode,
+    courseCode: normalizeCourseCode(courseCode),
     title: courseCode,
     timeZone: "America/Toronto",
     components,
@@ -63,7 +64,7 @@ export function makeSchedule(
 }
 
 function makeCourse(code: string, credits = 3): Course {
-  return { code, title: code, credits, description: "" };
+  return { code: normalizeCourseCode(code), title: code, credits, description: "" };
 }
 
 /**
@@ -81,7 +82,7 @@ export function buildFixtureCache(): DataCache {
 
   const schedules: CourseSchedule[] = [
     makeSchedule(
-      "CSI 2110",
+      normalizeCourseCode("CSI 2110"),
       lec(
         [
           { day: "Mo", start: 600, end: 690 },
@@ -94,46 +95,46 @@ export function buildFixtureCache(): DataCache {
       ),
     ),
     makeSchedule(
-      "CSI 2120",
+      normalizeCourseCode("CSI 2120"),
       lec([{ day: "Mo", start: 720, end: 810 }], [{ day: "We", start: 1020, end: 1110 }]),
     ),
     makeSchedule(
-      "CSI 2101",
+      normalizeCourseCode("CSI 2101"),
       lec([{ day: "Tu", start: 600, end: 690 }], [{ day: "Th", start: 720, end: 810 }]),
     ),
     makeSchedule(
-      "SEG 2105",
+      normalizeCourseCode("SEG 2105"),
       lec([{ day: "Fr", start: 600, end: 690 }], [{ day: "Mo", start: 1020, end: 1110 }]),
     ),
     makeSchedule(
-      "MAT 1320",
+      normalizeCourseCode("MAT 1320"),
       lec([{ day: "Tu", start: 720, end: 810 }], [{ day: "Th", start: 1020, end: 1110 }]),
     ),
     makeSchedule(
-      "MAT 1322",
+      normalizeCourseCode("MAT 1322"),
       lec([{ day: "We", start: 720, end: 810 }], [{ day: "Fr", start: 900, end: 990 }]),
     ),
     makeSchedule(
-      "PHI 1101",
+      normalizeCourseCode("PHI 1101"),
       lec([{ day: "Mo", start: 840, end: 930 }], [{ day: "We", start: 840, end: 930 }]),
     ),
     makeSchedule(
-      "HIS 1100",
+      normalizeCourseCode("HIS 1100"),
       lec([{ day: "Tu", start: 1020, end: 1110 }], [{ day: "Th", start: 600, end: 690 }]),
     ),
   ];
 
   const courses: Course[] = [
-    makeCourse("CSI 2110"),
-    makeCourse("CSI 2120"),
-    makeCourse("CSI 2101"),
-    makeCourse("SEG 2105"),
-    makeCourse("MAT 1320"),
-    makeCourse("MAT 1322"),
-    makeCourse("PHI 1101"),
-    makeCourse("HIS 1100"),
+    makeCourse(normalizeCourseCode("CSI 2110")),
+    makeCourse(normalizeCourseCode("CSI 2120")),
+    makeCourse(normalizeCourseCode("CSI 2101")),
+    makeCourse(normalizeCourseCode("SEG 2105")),
+    makeCourse(normalizeCourseCode("MAT 1320")),
+    makeCourse(normalizeCourseCode("MAT 1322")),
+    makeCourse(normalizeCourseCode("PHI 1101")),
+    makeCourse(normalizeCourseCode("HIS 1100")),
     // Honours project: code ending in 900, no schedule row (scheduled specially).
-    makeCourse("CSI 4900", 6),
+    makeCourse(normalizeCourseCode("CSI 4900"), 6),
   ];
 
   const catalogue: Catalogue = { courses, programs: [] };

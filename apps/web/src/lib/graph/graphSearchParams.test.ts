@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { ProfessorGraphNode } from "@uoplan/core";
 import { parseProfessorSearchParam, professorToSearchParam } from "./graphSearchParams";
+import { testProfessorName } from "../../test/brands";
 
 function node(
   partial: Partial<ProfessorGraphNode> & Pick<ProfessorGraphNode, "id" | "displayName">,
@@ -14,20 +15,24 @@ function node(
 }
 
 describe("graphSearchParams", () => {
-  const janeLegacy = node({ id: "id:42", displayName: "Jane", legacyId: 42 });
-  const janeName = node({ id: "name:jane doe", displayName: "Jane Doe" });
+  const janeLegacy = node({ id: "id:42", displayName: testProfessorName("Jane"), legacyId: 42 });
+  const janeName = node({ id: "name:jane doe", displayName: testProfessorName("Jane Doe") });
   const nodesById = new Map<string, ProfessorGraphNode>([
     [janeLegacy.id, janeLegacy],
     [janeName.id, janeName],
   ]);
 
   it("professorToSearchParam prefers legacy id", () => {
-    expect(professorToSearchParam(node({ id: "id:42", displayName: "Jane", legacyId: 42 }))).toBe(
-      "42",
-    );
-    expect(professorToSearchParam(node({ id: "name:jane doe", displayName: "Jane Doe" }))).toBe(
-      "name:jane doe",
-    );
+    expect(
+      professorToSearchParam(
+        node({ id: "id:42", displayName: testProfessorName("Jane"), legacyId: 42 }),
+      ),
+    ).toBe("42");
+    expect(
+      professorToSearchParam(
+        node({ id: "name:jane doe", displayName: testProfessorName("Jane Doe") }),
+      ),
+    ).toBe("name:jane doe");
   });
 
   it("parseProfessorSearchParam resolves legacy id and graph ids", () => {

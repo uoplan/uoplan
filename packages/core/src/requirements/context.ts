@@ -1,5 +1,6 @@
 import type { Program, ProgramRequirement } from "../dataTypes";
 import type { DataCache } from "../dataCache";
+import type { NormalizedCourseCode } from "../brand";
 import { getLanguageVariant, isRepeatableCourse } from "../utils/courseUtils";
 import type { RemainingRequirement, RequirementWithStatus } from "./types";
 
@@ -11,7 +12,7 @@ export class RequirementContext {
    * over-satisfy), while repeatable courses (e.g. accompanying FLS companions) keep every
    * instance so each can satisfy a different requirement slot.
    */
-  public pool: Map<string, number>;
+  public pool: Map<NormalizedCourseCode, number>;
 
   constructor(
     public program: Program,
@@ -32,14 +33,17 @@ export class RequirementContext {
     return `req-${path}`;
   }
 
-  private consume(canonical: string, dryRun: boolean): void {
+  private consume(canonical: NormalizedCourseCode, dryRun: boolean): void {
     if (dryRun) return;
     const remaining = (this.pool.get(canonical) ?? 0) - 1;
     if (remaining > 0) this.pool.set(canonical, remaining);
     else this.pool.delete(canonical);
   }
 
-  takeFromPool(codes: string[], dryRun: boolean): { displayCode: string; norm: string } | null {
+  takeFromPool(
+    codes: NormalizedCourseCode[],
+    dryRun: boolean,
+  ): { displayCode: string; norm: NormalizedCourseCode } | null {
     for (const c of codes) {
       const canonical = this.cache.resolveToCanonical(c);
       if ((this.pool.get(canonical) ?? 0) > 0) {

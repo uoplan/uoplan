@@ -4,11 +4,18 @@
  * grouping/aggregation concern lives on its own. Shares offering identity
  * primitives with the search module via `offeringTypes.ts`.
  */
-import type { PredictedInstructor, ProfessorRegistry, SchedulesData } from "@uoplan/core";
+import type {
+  CanonicalProfessorName,
+  NormalizedCourseCode,
+  PredictedInstructor,
+  ProfessorRegistry,
+  SchedulesData,
+} from "@uoplan/core";
 import {
   normalizeCourseCode,
   normalizeProfessorName,
   normalizeInstructorName,
+  pickCanonicalProfessorName,
   sectionInstructors,
 } from "@uoplan/core";
 import { formatTermLabelPlain } from "../term/termLabelPlain";
@@ -29,7 +36,7 @@ export type ProfessorOfferingGroup = {
   professorRef?: number;
   /** Canonical URL slug for this group's professor, when resolved from the registry. */
   slug?: string;
-  displayName: string;
+  displayName: CanonicalProfessorName;
   offerings: ExploreOfferingFlat[];
   /** True for a synthetic group collecting sections with no real instructor. */
   unassigned?: boolean;
@@ -56,7 +63,7 @@ export function groupOfferingsByProfessor(
     {
       legacyId?: number;
       professorRef?: number;
-      displayName: string;
+      displayName: CanonicalProfessorName;
       unassigned: boolean;
       predictedInstructors?: PredictedInstructor[];
       hasPredicted?: boolean;
@@ -201,8 +208,8 @@ export function groupOfferingsByProfessor(
 }
 
 export type CourseOfferingGroup = {
-  groupId: string;
-  courseCode: string;
+  groupId: NormalizedCourseCode;
+  courseCode: NormalizedCourseCode;
   courseTitles: string[];
   offerings: ExploreOfferingFlat[];
 };
@@ -282,7 +289,7 @@ export function buildScheduleOfferings(
         // Resolve real instructors to their canonical registry identity so two
         // spelling variants of one person collapse into a single offering/group.
         const canonical = unassigned
-          ? { professorName: rawName }
+          ? { professorName: pickCanonicalProfessorName([rawName]) }
           : resolveCanonicalProfessor(registry, null, undefined, rawName);
         const professorName = canonical.professorName;
         const professorRef = canonical.professorRef;
@@ -385,11 +392,11 @@ export function mergeOfferingsWithSchedule(
 }
 
 export function groupOfferingsByCourse(items: ExploreOfferingFlat[]): CourseOfferingGroup[] {
-  const byGroup = new Map<string, ExploreOfferingFlat[]>();
-  const titles = new Map<string, Set<string>>();
+  const byGroup = new Map<NormalizedCourseCode, ExploreOfferingFlat[]>();
+  const titles = new Map<NormalizedCourseCode, Set<string>>();
 
   for (const o of items) {
-    const normCode = normalizeCourseCode(o.courseCode);
+    const normCode = o.courseCode;
 
     // Add to group
     let list = byGroup.get(normCode);

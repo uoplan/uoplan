@@ -1,4 +1,6 @@
 import type { ProfessorsData, ProfessorEntry as ProtoProfessorEntry } from "@uoplan/proto/data";
+import { unsafeBrand } from "./brand";
+import type { CanonicalProfessorName, ProfessorMatchKey, ProfessorSlug } from "./brand";
 import { professorMatchKey } from "./professorIdentity";
 
 /**
@@ -13,9 +15,9 @@ import { professorMatchKey } from "./professorIdentity";
 
 export interface ProfessorRegistryEntry {
   /** URL-safe public id, unique across the registry. */
-  slug: string;
+  slug: ProfessorSlug;
   /** Canonical display name (fullest variant; keeps accents and middle names). */
-  name: string;
+  name: CanonicalProfessorName;
   /** Every RateMyProfessors legacyId merged into this person. */
   legacyIds: number[];
   /** Response-weighted average RMP rating across merged profiles, when rated. */
@@ -28,10 +30,10 @@ export interface ProfessorRegistryEntry {
 export interface ProfessorRegistry {
   /** Registry entries; array position is the professor's registry index. */
   entries: ProfessorRegistryEntry[];
-  bySlug: Map<string, number>;
+  bySlug: Map<ProfessorSlug, number>;
   byLegacyId: Map<number, number>;
   /** First+last match key (see {@link professorMatchKey}) → registry index, for name lookups. */
-  byMatchKey: Map<string, number>;
+  byMatchKey: Map<ProfessorMatchKey, number>;
 }
 
 /** Map a stored 1-based professor ref to a 0-based registry index (null = none). */
@@ -42,8 +44,8 @@ export function professorIndexFromRef(ref: number | null | undefined): number | 
 /** Convert decoded `professors.pb` entries to the runtime registry shape. */
 export function fromProtoProfessorsData(data: ProfessorsData): ProfessorRegistryEntry[] {
   return (data.professors ?? []).map((p: ProtoProfessorEntry) => ({
-    slug: p.slug,
-    name: p.name,
+    slug: unsafeBrand<ProfessorSlug>(p.slug),
+    name: unsafeBrand<CanonicalProfessorName>(p.name),
     legacyIds: (p.legacyIds ?? []).map((n) => Number(n)),
     ...(p.rating != null ? { rating: Number(p.rating) } : {}),
     ...(p.numRatings != null ? { numRatings: Number(p.numRatings) } : {}),
@@ -53,9 +55,9 @@ export function fromProtoProfessorsData(data: ProfessorsData): ProfessorRegistry
 
 /** Build the lookup tables (slug → index, legacyId → index, matchKey → index). */
 export function buildProfessorRegistry(entries: ProfessorRegistryEntry[]): ProfessorRegistry {
-  const bySlug = new Map<string, number>();
+  const bySlug = new Map<ProfessorSlug, number>();
   const byLegacyId = new Map<number, number>();
-  const byMatchKey = new Map<string, number>();
+  const byMatchKey = new Map<ProfessorMatchKey, number>();
   entries.forEach((entry, idx) => {
     if (entry.slug && !bySlug.has(entry.slug)) bySlug.set(entry.slug, idx);
     for (const id of entry.legacyIds) {
@@ -81,7 +83,7 @@ export function professorAt(
 /** Resolve a registry entry (and its index) by URL slug. */
 export function professorBySlug(
   registry: ProfessorRegistry | null | undefined,
-  slug: string,
+  slug: ProfessorSlug,
 ): { index: number; entry: ProfessorRegistryEntry } | null {
   if (!registry) return null;
   const index = registry.bySlug.get(slug);

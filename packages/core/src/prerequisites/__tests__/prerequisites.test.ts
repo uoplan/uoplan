@@ -4,23 +4,29 @@ import { buildPrereqContext } from "../context";
 import type { Course } from "../../dataTypes";
 import { meetsCoursePrereq, canTakeCourse, prerequisitesContainNonCourse } from "../evaluator";
 import type { CoursePrereqNode } from "../../dataTypes";
+import { normalizeCourseCode } from "../../utils/courseUtils";
 
 describe("prerequisites", () => {
   let mockCache: DataCache;
 
   beforeEach(() => {
-    const courseA: Course = { code: "AAA 1000", credits: 3, title: "A", description: "" };
+    const courseA: Course = {
+      code: normalizeCourseCode("AAA 1000"),
+      credits: 3,
+      title: "A",
+      description: "",
+    };
     const courseB: Course = {
-      code: "BBB 2000",
+      code: normalizeCourseCode("BBB 2000"),
       credits: 3,
       title: "B",
       description: "",
-      prerequisites: { type: "course", code: "AAA 1000" },
+      prerequisites: { type: "course", code: normalizeCourseCode("AAA 1000") },
     };
     const courses = [courseA, courseB];
     mockCache = {
-      getCourse: (c) => courses.find((x) => x.code === c) || undefined,
-      resolveToCanonical: (c) => c,
+      getCourse: (c) => courses.find((x) => x.code === normalizeCourseCode(c)) || undefined,
+      resolveToCanonical: (c) => normalizeCourseCode(c),
       getAllCourses: () => courses,
       getCoursesByDiscipline: () => [],
       getSchedule: () => undefined,
@@ -30,7 +36,10 @@ describe("prerequisites", () => {
 
   describe("context", () => {
     it("builds context with total credits", () => {
-      const ctx = buildPrereqContext(["AAA 1000", "BBB 2000"], mockCache);
+      const ctx = buildPrereqContext(
+        [normalizeCourseCode("AAA 1000"), normalizeCourseCode("BBB 2000")],
+        mockCache,
+      );
       expect(ctx.totalCredits).toBe(6);
       expect(ctx.taken.length).toBe(2);
       expect(ctx.disciplineCredits["AAA"]).toBe(3);
@@ -39,17 +48,17 @@ describe("prerequisites", () => {
 
   describe("evaluator", () => {
     it("can take course with met prereq", () => {
-      const ctx = buildPrereqContext(["AAA 1000"], mockCache);
-      expect(canTakeCourse("BBB 2000", mockCache, ctx)).toBe(true);
+      const ctx = buildPrereqContext([normalizeCourseCode("AAA 1000")], mockCache);
+      expect(canTakeCourse(normalizeCourseCode("BBB 2000"), mockCache, ctx)).toBe(true);
     });
 
     it("cannot take course without met prereq", () => {
       const ctx = buildPrereqContext([], mockCache);
-      expect(canTakeCourse("BBB 2000", mockCache, ctx)).toBe(false);
+      expect(canTakeCourse(normalizeCourseCode("BBB 2000"), mockCache, ctx)).toBe(false);
     });
 
     it("evaluates non_course level requirement", () => {
-      const ctx = buildPrereqContext(["AAA 1000"], mockCache);
+      const ctx = buildPrereqContext([normalizeCourseCode("AAA 1000")], mockCache);
       const req: CoursePrereqNode = {
         type: "non_course",
         credits: 3,
@@ -71,17 +80,17 @@ describe("prerequisites", () => {
         text: "6 units from ART 2120, ART 2130, ART 2140",
         credits: 6,
         children: [
-          { type: "course", code: "ART 2120" },
-          { type: "course", code: "ART 2130" },
-          { type: "course", code: "ART 2140" },
+          { type: "course", code: normalizeCourseCode("ART 2120") },
+          { type: "course", code: normalizeCourseCode("ART 2130") },
+          { type: "course", code: normalizeCourseCode("ART 2140") },
         ],
       };
 
       it("is satisfied when enough credits come from listed child courses", () => {
         const ctx = {
           taken: [
-            { code: "ART 2120", credits: 3, discipline: "ART", level: 2000 },
-            { code: "ART 2130", credits: 3, discipline: "ART", level: 2000 },
+            { code: normalizeCourseCode("ART 2120"), credits: 3, discipline: "ART", level: 2000 },
+            { code: normalizeCourseCode("ART 2130"), credits: 3, discipline: "ART", level: 2000 },
           ],
           totalCredits: 6,
           disciplineCredits: { ART: 6 },
@@ -93,9 +102,9 @@ describe("prerequisites", () => {
       it("is not satisfied by enough global credits when listed child credits are insufficient", () => {
         const ctx = {
           taken: [
-            { code: "ART 2120", credits: 3, discipline: "ART", level: 2000 },
-            { code: "HIS 1101", credits: 3, discipline: "HIS", level: 1000 },
-            { code: "MAT 1300", credits: 3, discipline: "MAT", level: 1000 },
+            { code: normalizeCourseCode("ART 2120"), credits: 3, discipline: "ART", level: 2000 },
+            { code: normalizeCourseCode("HIS 1101"), credits: 3, discipline: "HIS", level: 1000 },
+            { code: normalizeCourseCode("MAT 1300"), credits: 3, discipline: "MAT", level: 1000 },
           ],
           totalCredits: 9,
           disciplineCredits: { ART: 3, HIS: 3, MAT: 3 },
@@ -106,7 +115,9 @@ describe("prerequisites", () => {
 
       it("is not satisfied by only some listed child courses", () => {
         const ctx = {
-          taken: [{ code: "ART 2140", credits: 3, discipline: "ART", level: 2000 }],
+          taken: [
+            { code: normalizeCourseCode("ART 2140"), credits: 3, discipline: "ART", level: 2000 },
+          ],
           totalCredits: 3,
           disciplineCredits: { ART: 3 },
           studentPrograms: [],
@@ -115,7 +126,10 @@ describe("prerequisites", () => {
       });
 
       it("keeps childless credit non_course using the existing global fallback", () => {
-        const ctx = buildPrereqContext(["AAA 1000", "BBB 2000"], mockCache);
+        const ctx = buildPrereqContext(
+          [normalizeCourseCode("AAA 1000"), normalizeCourseCode("BBB 2000")],
+          mockCache,
+        );
         expect(meetsCoursePrereq({ type: "non_course", credits: 6 }, ctx)).toBe(true);
       });
     });
@@ -157,11 +171,11 @@ describe("prerequisites", () => {
       });
 
       it("does not let a soft kind block a conjunction", () => {
-        const ctx = buildPrereqContext(["AAA 1000"], mockCache);
+        const ctx = buildPrereqContext([normalizeCourseCode("AAA 1000")], mockCache);
         const req: CoursePrereqNode = {
           type: "and_group",
           children: [
-            { type: "course", code: "AAA 1000" },
+            { type: "course", code: normalizeCourseCode("AAA 1000") },
             { type: "non_course", kind: "permission" },
           ],
         };
@@ -174,13 +188,13 @@ describe("prerequisites", () => {
         const req: CoursePrereqNode = {
           type: "or_group",
           children: [
-            { type: "course", code: "AAA 1000" },
+            { type: "course", code: normalizeCourseCode("AAA 1000") },
             { type: "non_course", kind: "permission" },
           ],
         };
         expect(meetsCoursePrereq(req, ctx)).toBe(false);
 
-        const ctxWith = buildPrereqContext(["AAA 1000"], mockCache);
+        const ctxWith = buildPrereqContext([normalizeCourseCode("AAA 1000")], mockCache);
         expect(meetsCoursePrereq(req, ctxWith)).toBe(true);
       });
     });

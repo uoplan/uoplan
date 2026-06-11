@@ -2,9 +2,10 @@ import { describe, expect, it } from "vitest";
 import type { Catalogue, CourseSchedule, RemainingRequirement, SchedulesData } from "@uoplan/core";
 import { buildDataCache } from "@uoplan/core";
 import { resolveDesiredCourses } from "./resolveDesiredCourses";
+import { testCourseCode } from "../../test/brands";
 
 function mkCourse(code: string, credits = 3) {
-  return { code, title: code, credits, description: "" };
+  return { code: testCourseCode(code), title: code, credits, description: "" };
 }
 
 function mkSchedule(code: string): CourseSchedule {
@@ -12,7 +13,7 @@ function mkSchedule(code: string): CourseSchedule {
   return {
     subject,
     catalogNumber,
-    courseCode: code,
+    courseCode: testCourseCode(code),
     title: code,
     timeZone: "America/Toronto",
     components: {

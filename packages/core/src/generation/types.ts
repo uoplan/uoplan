@@ -1,4 +1,5 @@
 import type { ComponentSection, DayOfWeek } from "../dataTypes";
+import type { NormalizedCourseCode } from "../brand";
 import type { ProfessorRatingsMap } from "../professorRatings";
 
 export interface TimeSlot {
@@ -9,7 +10,7 @@ export interface TimeSlot {
 }
 
 export interface CourseEnrollment {
-  courseCode: string;
+  courseCode: NormalizedCourseCode;
   sectionCombo: SectionCombo;
   times: TimeSlot[];
 }

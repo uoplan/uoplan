@@ -1,3 +1,4 @@
+export * from "./brand";
 export * from "./generation";
 export * from "./generationDiagnostics";
 export * from "./dataTypes";

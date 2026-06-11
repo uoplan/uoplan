@@ -12,9 +12,9 @@ import {
 import {
   buildCourseSearchEntries,
   buildOfferingsByCourseNorm,
-  type ExploreCourseSearchEntry,
   type ExploreOfferingFlat,
 } from "./gradesSearch";
+import { testCourseCode, testProfessorName } from "../../test/brands";
 
 /** Build the spotlight index from flat offerings the way the runtime context does. */
 function spotlightIndexFrom(
@@ -22,7 +22,7 @@ function spotlightIndexFrom(
   titleByCode: Map<string, string> = new Map(),
 ) {
   const offeringsByCourseNorm = buildOfferingsByCourseNorm(offerings);
-  const entryByNorm = new Map<string, ExploreCourseSearchEntry>(
+  const entryByNorm = new Map(
     buildCourseSearchEntries(offerings, titleByCode).map((e) => [e.normCode, e]),
   );
   return buildCourseSpotlightIndex(offeringsByCourseNorm, entryByNorm);
@@ -38,12 +38,17 @@ function distWithMass(mass: number, gpaHint: "high" | "low" | "fail"): Record<st
   return { F: Math.floor(mass * 0.5), E: mass - Math.floor(mass * 0.5) };
 }
 
-function sampleOffering(partial: Partial<ExploreOfferingFlat>): ExploreOfferingFlat {
+type OfferingPartial = Partial<Omit<ExploreOfferingFlat, "courseCode" | "professorName">> & {
+  courseCode?: string;
+  professorName?: string;
+};
+
+function sampleOffering(partial: OfferingPartial): ExploreOfferingFlat {
   const defaults: ExploreOfferingFlat = {
     id: "id",
-    courseCode: "CSI 2110",
+    courseCode: testCourseCode("CSI 2110"),
     courseTitle: "Data Structures",
-    professorName: "Ada Lovelace",
+    professorName: testProfessorName("Ada Lovelace"),
     termId: 2251,
     termLabel: "Fall 2025",
     fuseText: "",
@@ -52,6 +57,8 @@ function sampleOffering(partial: Partial<ExploreOfferingFlat>): ExploreOfferingF
   return {
     ...defaults,
     ...partial,
+    courseCode: testCourseCode(partial.courseCode ?? defaults.courseCode),
+    professorName: testProfessorName(partial.professorName ?? defaults.professorName),
     fuseText: partial.fuseText ?? defaults.fuseText,
   };
 }
@@ -174,21 +181,21 @@ describe("rankCoursesForSpotlight", () => {
       sampleOffering({
         id: "a1",
         courseCode: "CSI 2110",
-        professorName: "Prof A",
+        professorName: testProfessorName("Prof A"),
         legacyId: 1,
         distribution: { A: 20 },
       }),
       sampleOffering({
         id: "a2",
         courseCode: "CSI 2110",
-        professorName: "Prof B",
+        professorName: testProfessorName("Prof B"),
         legacyId: 2,
         distribution: { A: 20 },
       }),
       sampleOffering({
         id: "b1",
         courseCode: "MAT 1341",
-        professorName: "Prof C",
+        professorName: testProfessorName("Prof C"),
         legacyId: 3,
         distribution: dist,
       }),

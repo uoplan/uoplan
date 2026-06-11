@@ -14,6 +14,7 @@ import {
   type RejectionTrace,
 } from "./index";
 import { buildFixtureCache } from "../../generation/tests/golden/fixtures";
+import { normalizeCourseCode } from "../../utils/courseUtils";
 
 const cache = buildFixtureCache();
 const ctx: ConstraintContext = {
@@ -37,25 +38,27 @@ describe("ConstraintPipeline routing", () => {
     const inert: Constraint = { id: "x", label: "x", active: false, allowsCourse: () => false };
     const p = new ConstraintPipeline([inert]);
     expect(p.active).toHaveLength(0);
-    expect(p.allowsCourse("CSI 2110", ctx)).toBe(true);
+    expect(p.allowsCourse(normalizeCourseCode("CSI 2110"), ctx)).toBe(true);
   });
 
   it("short-circuits and records the rejecting constraint", () => {
-    const p = new ConstraintPipeline([blacklistConstraint(["CSI 2110"])]);
+    const p = new ConstraintPipeline([blacklistConstraint([normalizeCourseCode("CSI 2110")])]);
     const traces: RejectionTrace[] = [];
-    expect(p.allowsCourse("CSI 2110", ctx, (t) => traces.push(t))).toBe(false);
-    expect(p.allowsCourse("CSI 2120", ctx)).toBe(true);
-    expect(traces).toEqual([{ scope: "course", constraintId: "blacklist", subject: "CSI 2110" }]);
+    expect(p.allowsCourse(normalizeCourseCode("CSI 2110"), ctx, (t) => traces.push(t))).toBe(false);
+    expect(p.allowsCourse(normalizeCourseCode("CSI 2120"), ctx)).toBe(true);
+    expect(traces).toEqual([
+      { scope: "course", constraintId: "blacklist", subject: normalizeCourseCode("CSI 2110") },
+    ]);
   });
 
   it("normalises codes for the blacklist", () => {
     const p = new ConstraintPipeline([blacklistConstraint(["csi2110"])]);
-    expect(p.allowsCourse("CSI 2110", ctx)).toBe(false);
+    expect(p.allowsCourse(normalizeCourseCode("CSI 2110"), ctx)).toBe(false);
   });
 
   it("`without` removes a single constraint for relaxation", () => {
-    const p = new ConstraintPipeline([blacklistConstraint(["CSI 2110"])]);
-    expect(p.without("blacklist").allowsCourse("CSI 2110", ctx)).toBe(true);
+    const p = new ConstraintPipeline([blacklistConstraint([normalizeCourseCode("CSI 2110")])]);
+    expect(p.without("blacklist").allowsCourse(normalizeCourseCode("CSI 2110"), ctx)).toBe(true);
   });
 });
 
@@ -65,8 +68,8 @@ describe("section-scope constraints", () => {
     expect(c.active).toBe(true);
     const early = section([{ day: "Mo", startMinutes: 600, endMinutes: 690, virtual: false }]);
     const late = section([{ day: "Mo", startMinutes: 720, endMinutes: 810, virtual: false }]);
-    expect(c.allowsSection?.("CSI 2110", early, ctx)).toBe(false);
-    expect(c.allowsSection?.("CSI 2110", late, ctx)).toBe(true);
+    expect(c.allowsSection?.(normalizeCourseCode("CSI 2110"), early, ctx)).toBe(false);
+    expect(c.allowsSection?.(normalizeCourseCode("CSI 2110"), late, ctx)).toBe(true);
   });
 
   it("time window is inert when the window is unrestricted", () => {
@@ -82,7 +85,7 @@ describe("section-scope constraints", () => {
     const s = section([
       { day: "Mo", startMinutes: 600, endMinutes: 690, virtual: false, instructor: "Jane Doe" },
     ]);
-    expect(c.allowsSection?.("CSI 2110", s, ctx)).toBe(false);
+    expect(c.allowsSection?.(normalizeCourseCode("CSI 2110"), s, ctx)).toBe(false);
   });
 });
 
@@ -92,7 +95,7 @@ describe("timetable-scope constraints", () => {
     s: number,
     e: number,
   ): CourseEnrollment => ({
-    courseCode: "X",
+    courseCode: normalizeCourseCode("X"),
     sectionCombo: {},
     times: [{ day, startMinutes: s, endMinutes: e }],
   });
@@ -118,7 +121,9 @@ describe("ordering weights", () => {
     const a: Constraint = { id: "a", label: "a", active: true, orderingWeight: () => 2 };
     const b: Constraint = { id: "b", label: "b", active: true, orderingWeight: () => 3 };
     const zero: Constraint = { id: "z", label: "z", active: true, orderingWeight: () => 0 };
-    expect(new ConstraintPipeline([a, b, zero]).orderingWeight("CSI 2110", ctx)).toBe(6);
+    expect(
+      new ConstraintPipeline([a, b, zero]).orderingWeight(normalizeCourseCode("CSI 2110"), ctx),
+    ).toBe(6);
   });
 
   it("course-set candidate routing works", () => {
@@ -129,7 +134,7 @@ describe("ordering weights", () => {
       allowsCandidate: (code) => code.startsWith("CSI"),
     };
     const p = new ConstraintPipeline([onlyCsi]);
-    expect(p.allowsCandidate("CSI 2110", setCtx)).toBe(true);
-    expect(p.allowsCandidate("MAT 1320", setCtx)).toBe(false);
+    expect(p.allowsCandidate(normalizeCourseCode("CSI 2110"), setCtx)).toBe(true);
+    expect(p.allowsCandidate(normalizeCourseCode("MAT 1320"), setCtx)).toBe(false);
   });
 });

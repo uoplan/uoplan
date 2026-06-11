@@ -7,11 +7,24 @@ import type {
   RequirementWithStatus,
 } from "@uoplan/core";
 import { defaultAppStore } from "../appStore";
+import { testCourseCode } from "../../test/brands";
 
 const testCatalogue: Catalogue = {
   courses: [
-    { code: "CSI 2132", title: "CSI 2132", credits: 3, description: "", component: "LEC" },
-    { code: "MAT 1341", title: "MAT 1341", credits: 3, description: "", component: "LEC" },
+    {
+      code: testCourseCode("CSI 2132"),
+      title: "CSI 2132",
+      credits: 3,
+      description: "",
+      component: "LEC",
+    },
+    {
+      code: testCourseCode("MAT 1341"),
+      title: "MAT 1341",
+      credits: 3,
+      description: "",
+      component: "LEC",
+    },
   ],
   programs: [],
 };
@@ -22,7 +35,7 @@ function makeSchedule(courseCode: string): GeneratedSchedule {
   return {
     enrollments: [
       {
-        courseCode,
+        courseCode: testCourseCode(courseCode),
         sectionCombo: {
           LEC: {
             section: {

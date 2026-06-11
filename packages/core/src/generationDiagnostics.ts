@@ -1,4 +1,5 @@
 import type { DataCache } from "./dataCache";
+import type { NormalizedCourseCode } from "./brand";
 import type { GenerationConstraints } from "./generation";
 import { getValidSectionCombos } from "./generation";
 import { isHonoursProject, normalizeCourseCode } from "./utils/courseUtils";
@@ -70,7 +71,8 @@ export interface TimetableFailureDiagnostics {
 }
 
 function canonicalDisplayCode(code: string, cache: DataCache): string {
-  return cache.getCourse(normalizeCourseCode(code))?.code ?? code;
+  const normalized = normalizeCourseCode(code);
+  return cache.getCourse(normalized)?.code ?? normalized;
 }
 
 /** Combo count for generation: honours always schedulable (empty times); else valid section combos. */
@@ -254,7 +256,7 @@ function diagnoseTimetableFailureBase(
   };
 
   if (pinnedCourseCodes.length === 0) {
-    const seen = new Set<string>();
+    const seen = new Set<NormalizedCourseCode>();
     let eligibleCourseCount = 0;
     for (const code of optionalCourseCodes) {
       const key = normalizeCourseCode(code);
@@ -316,14 +318,15 @@ function diagnoseTimetableFailureBase(
   }
 
   const remainingSlots = targetCount - pinnedCourseCodes.length;
-  const optionalSeen = new Set<string>();
+  const optionalSeen = new Set<NormalizedCourseCode>();
+  const pinnedSet = new Set(pinnedCourseCodes.map(normalizeCourseCode));
   let optionalEligibleCount = 0;
 
   for (const code of optionalCourseCodes) {
-    if (pinnedCourseCodes.some((p) => normalizeCourseCode(p) === normalizeCourseCode(code))) {
+    const key = normalizeCourseCode(code);
+    if (pinnedSet.has(key)) {
       continue;
     }
-    const key = normalizeCourseCode(code);
     if (optionalSeen.has(key)) continue;
     optionalSeen.add(key);
 

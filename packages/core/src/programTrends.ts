@@ -1,4 +1,5 @@
 import type { CourseGradesData, GradeDistribution, Program, ProgramRequirement } from "./dataTypes";
+import type { NormalizedCourseCode } from "./brand";
 import { GRADE_POINTS } from "./gradeDistribution";
 import { disciplineOf, levelOf } from "./gradeTrends";
 import { normalizeCourseCode } from "./utils/courseUtils";
@@ -26,7 +27,7 @@ export interface ProgramDisciplinePool {
 /** A matcher over course codes describing a program's estimated core course set. */
 export interface ProgramCourseFilter {
   /** Concrete required course codes (normalised, e.g. `CSI 2110`). */
-  codes: Set<string>;
+  codes: Set<NormalizedCourseCode>;
   /** Discipline-scoped elective pools. */
   pools: ProgramDisciplinePool[];
 }
@@ -115,7 +116,7 @@ function countedMass(dist: GradeDistribution): number {
  * de-duplicated by slug and sorted by title.
  */
 export function availablePrograms(grades: CourseGradesData, programs: Program[]): ProgramOption[] {
-  const gradedCodes = new Set<string>();
+  const gradedCodes = new Set<NormalizedCourseCode>();
   const gradedDisciplines = new Set<string>();
   for (const course of grades.courses) {
     let mass = 0;
@@ -124,7 +125,7 @@ export function availablePrograms(grades: CourseGradesData, programs: Program[])
       mass += countedMass(prof.distribution);
     }
     if (mass <= 0) continue;
-    gradedCodes.add(normalizeCourseCode(course.code));
+    gradedCodes.add(course.code);
     const discipline = disciplineOf(course.code);
     if (discipline) gradedDisciplines.add(discipline);
   }

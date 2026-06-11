@@ -20,13 +20,19 @@ import {
   type ExploreOfferingFlat,
 } from "./gradesSearch";
 import type { Catalogue, CourseSchedule, SchedulesData } from "@uoplan/core";
+import { testCourseCode, testProfessorName } from "../../test/brands";
 
-function sampleOffering(partial: Partial<ExploreOfferingFlat>): ExploreOfferingFlat {
+type OfferingPartial = Partial<Omit<ExploreOfferingFlat, "courseCode" | "professorName">> & {
+  courseCode?: string;
+  professorName?: string;
+};
+
+function sampleOffering(partial: OfferingPartial): ExploreOfferingFlat {
   const defaults: ExploreOfferingFlat = {
     id: "id",
-    courseCode: "CSI 2110",
+    courseCode: testCourseCode("CSI 2110"),
     courseTitle: "",
-    professorName: "Ada Lovelace",
+    professorName: testProfessorName("Ada Lovelace"),
     termId: 2251,
     termLabel: "Fall 2025",
     fuseText: "",
@@ -35,6 +41,8 @@ function sampleOffering(partial: Partial<ExploreOfferingFlat>): ExploreOfferingF
   return {
     ...defaults,
     ...partial,
+    courseCode: testCourseCode(partial.courseCode ?? defaults.courseCode),
+    professorName: testProfessorName(partial.professorName ?? defaults.professorName),
     fuseText: partial.fuseText ?? defaults.fuseText,
   };
 }
@@ -45,7 +53,7 @@ describe("searchExploreOfferings", () => {
       sampleOffering({
         id: "1",
         fuseText: "csi 2110 fall bob",
-        professorName: "Bob",
+        professorName: testProfessorName("Bob"),
       }),
     ];
     const fuse = createExploreFuse(offerings);
@@ -61,7 +69,7 @@ describe("searchExploreOfferings", () => {
           id: `x${i}`,
           fuseText: `csi ${i} fall prof smith`,
           courseCode: `CSI ${1000 + i}`,
-          professorName: "Smith",
+          professorName: testProfessorName("Smith"),
         }),
       );
     }
@@ -76,9 +84,9 @@ describe("searchExploreCourses", () => {
       sampleOffering({
         id: "a",
         fuseText: "csi 2110 data structures fall ada",
-        courseCode: "CSI 2110",
+        courseCode: testCourseCode("CSI 2110"),
         courseTitle: "Data Structures",
-        professorName: "Nobody Jones",
+        professorName: testProfessorName("Nobody Jones"),
       }),
     ];
     const entries = buildCourseSearchEntries(offerings);
@@ -93,17 +101,17 @@ describe("searchExploreCourses", () => {
     const offerings = [
       sampleOffering({
         id: "1",
-        courseCode: "MAT 1341",
+        courseCode: testCourseCode("MAT 1341"),
         courseTitle: "Calc",
-        professorName: "A",
+        professorName: testProfessorName("A"),
         termId: 1,
         fuseText: "x",
       }),
       sampleOffering({
         id: "2",
-        courseCode: "MAT 1341",
+        courseCode: testCourseCode("MAT 1341"),
         courseTitle: "Calc",
-        professorName: "B",
+        professorName: testProfessorName("B"),
         termId: 2,
         fuseText: "y",
       }),
@@ -132,8 +140,8 @@ describe("searchExploreProfessors", () => {
       sampleOffering({
         id: "a",
         fuseText: "csi 2110 fall",
-        courseCode: "CSI 2110",
-        professorName: "John Smith",
+        courseCode: testCourseCode("CSI 2110"),
+        professorName: testProfessorName("John Smith"),
         legacyId: 100,
       }),
     ];
@@ -152,17 +160,17 @@ describe("searchExplore", () => {
     sampleOffering({
       id: "a",
       fuseText: "csi 2110 data structures fall john smith",
-      courseCode: "CSI 2110",
+      courseCode: testCourseCode("CSI 2110"),
       courseTitle: "Data Structures",
-      professorName: "John Smith",
+      professorName: testProfessorName("John Smith"),
       legacyId: 100,
     }),
     sampleOffering({
       id: "b",
       fuseText: "mat 1341 calculus fall jane doe",
-      courseCode: "MAT 1341",
+      courseCode: testCourseCode("MAT 1341"),
       courseTitle: "Calculus",
-      professorName: "Jane Doe",
+      professorName: testProfessorName("Jane Doe"),
       legacyId: 200,
     }),
   ];
@@ -228,14 +236,14 @@ describe("groupOfferingsByProfessor", () => {
       sampleOffering({
         id: "a",
         legacyId: 10,
-        professorName: "Same Person",
-        courseCode: "A",
+        professorName: testProfessorName("Same Person"),
+        courseCode: testCourseCode("A"),
       }),
       sampleOffering({
         id: "b",
         legacyId: 10,
-        professorName: "Same Person",
-        courseCode: "B",
+        professorName: testProfessorName("Same Person"),
+        courseCode: testCourseCode("B"),
       }),
     ]);
     expect(groups).toHaveLength(1);
@@ -250,7 +258,7 @@ describe("buildExploreOfferings", () => {
       {
         courses: [
           {
-            code: "CSI 2110",
+            code: testCourseCode("CSI 2110"),
             professors: [
               { name: "Ada Lovelace", termId: 2251, distribution: { "A+": 1 } },
               { name: "Staff", termId: 2251, distribution: { "A+": 1 } },
@@ -316,7 +324,7 @@ describe("buildScheduleOfferings", () => {
           {
             subject: "ADM",
             catalogNumber: "1100",
-            courseCode: "ADM 1100",
+            courseCode: testCourseCode("ADM 1100"),
             title: "Intro to Business",
             timeZone: "America/Toronto",
             components: {
@@ -347,7 +355,7 @@ describe("buildScheduleOfferings", () => {
           {
             subject: "BIO",
             catalogNumber: "3350",
-            courseCode: "BIO 3350",
+            courseCode: testCourseCode("BIO 3350"),
             title: "Some Bio Course",
             timeZone: "America/Toronto",
             components: {
@@ -383,7 +391,7 @@ describe("buildScheduleOfferings", () => {
           {
             subject: "ADM",
             catalogNumber: "1100",
-            courseCode: "ADM 1100",
+            courseCode: testCourseCode("ADM 1100"),
             title: "Intro to Business",
             timeZone: "America/Toronto",
             components: {
@@ -411,7 +419,7 @@ describe("buildScheduleOfferings", () => {
           {
             subject: "ITI",
             catalogNumber: "1120",
-            courseCode: "ITI 1120",
+            courseCode: testCourseCode("ITI 1120"),
             title: "Intro to Computing",
             timeZone: "America/Toronto",
             components: {
@@ -462,7 +470,7 @@ describe("buildScheduleOfferings", () => {
           {
             subject: "ITI",
             catalogNumber: "1120",
-            courseCode: "ITI 1120",
+            courseCode: testCourseCode("ITI 1120"),
             title: "Intro to Computing",
             timeZone: "America/Toronto",
             components: {
@@ -505,7 +513,7 @@ describe("buildScheduleOfferings", () => {
           {
             subject: "ITI",
             catalogNumber: "1120",
-            courseCode: "ITI 1120",
+            courseCode: testCourseCode("ITI 1120"),
             title: "Intro to Computing",
             timeZone: "America/Toronto",
             components: { LEC: [scheduleSection("A00-LEC FullSess.", "LEC", ["Staff"])] },
@@ -527,7 +535,7 @@ describe("buildScheduleOfferings", () => {
           {
             subject: "ITI",
             catalogNumber: "1120",
-            courseCode: "ITI 1120",
+            courseCode: testCourseCode("ITI 1120"),
             title: "Intro to Computing",
             timeZone: "America/Toronto",
             components: {
@@ -570,7 +578,7 @@ describe("buildScheduleOfferings", () => {
           {
             subject: "ITI",
             catalogNumber: "1120",
-            courseCode: "ITI 1120",
+            courseCode: testCourseCode("ITI 1120"),
             title: "Intro to Computing",
             timeZone: "America/Toronto",
             components: {
@@ -605,7 +613,7 @@ describe("buildScheduleOfferings", () => {
     const course = (code: string): CourseSchedule => ({
       subject: "ITI",
       catalogNumber: "1120",
-      courseCode: code,
+      courseCode: testCourseCode(code),
       title: "Intro to Computing",
       timeZone: "America/Toronto",
       components: { LEC: [sectionWith("A00")] },
@@ -627,16 +635,16 @@ describe("buildScheduleOfferings", () => {
     // Confirmed schedule row with no backfilled legacyId (name-keyed) ...
     const confirmed = sampleOffering({
       id: "confirmed",
-      courseCode: "ITI 1120",
-      professorName: "Vida Dujmovic",
+      courseCode: testCourseCode("ITI 1120"),
+      professorName: testProfessorName("Vida Dujmovic"),
       termId: 2269,
       distribution: {},
     });
     // ... and a same-term unassigned row predicted to the same person by legacyId.
     const predicted = sampleOffering({
       id: "predicted",
-      courseCode: "ITI 1120",
-      professorName: "",
+      courseCode: testCourseCode("ITI 1120"),
+      professorName: testProfessorName(""),
       termId: 2269,
       distribution: {},
       unassignedInstructor: true,
@@ -657,8 +665,8 @@ describe("mergeOfferingsWithSchedule", () => {
     const gradeOfferings: ExploreOfferingFlat[] = [
       sampleOffering({
         id: "grade",
-        courseCode: "ADM 1100",
-        professorName: "Alan O'Sullivan",
+        courseCode: testCourseCode("ADM 1100"),
+        professorName: testProfessorName("Alan O'Sullivan"),
         termId: 2271,
         section: "A00",
       }),
@@ -666,16 +674,16 @@ describe("mergeOfferingsWithSchedule", () => {
     const scheduleOfferings: ExploreOfferingFlat[] = [
       sampleOffering({
         id: "sched-dup",
-        courseCode: "ADM 1100",
-        professorName: "Alan O'Sullivan",
+        courseCode: testCourseCode("ADM 1100"),
+        professorName: testProfessorName("Alan O'Sullivan"),
         termId: 2271,
         section: undefined,
         distribution: {},
       }),
       sampleOffering({
         id: "sched-new",
-        courseCode: "ADM 1100",
-        professorName: "New Prof",
+        courseCode: testCourseCode("ADM 1100"),
+        professorName: testProfessorName("New Prof"),
         termId: 2271,
         section: undefined,
         distribution: {},
@@ -689,8 +697,8 @@ describe("mergeOfferingsWithSchedule", () => {
     const gradeOfferings: ExploreOfferingFlat[] = [
       sampleOffering({
         id: "grade",
-        courseCode: "CSI 2110",
-        professorName: "Miguel Garzon",
+        courseCode: testCourseCode("CSI 2110"),
+        professorName: testProfessorName("Miguel Garzon"),
         legacyId: 42,
         termId: 2251,
         section: "A00",
@@ -699,8 +707,8 @@ describe("mergeOfferingsWithSchedule", () => {
     const scheduleOfferings: ExploreOfferingFlat[] = [
       sampleOffering({
         id: "sched",
-        courseCode: "CSI 3104",
-        professorName: "Miguel Garzon",
+        courseCode: testCourseCode("CSI 3104"),
+        professorName: testProfessorName("Miguel Garzon"),
         termId: 2261,
         section: undefined,
         distribution: {},
@@ -713,14 +721,24 @@ describe("mergeOfferingsWithSchedule", () => {
 
   it("leaves schedule rows unmerged when a name maps to multiple legacyIds", () => {
     const gradeOfferings: ExploreOfferingFlat[] = [
-      sampleOffering({ id: "g1", professorName: "John Smith", legacyId: 1, termId: 2251 }),
-      sampleOffering({ id: "g2", professorName: "John Smith", legacyId: 2, termId: 2251 }),
+      sampleOffering({
+        id: "g1",
+        professorName: testProfessorName("John Smith"),
+        legacyId: 1,
+        termId: 2251,
+      }),
+      sampleOffering({
+        id: "g2",
+        professorName: testProfessorName("John Smith"),
+        legacyId: 2,
+        termId: 2251,
+      }),
     ];
     const scheduleOfferings: ExploreOfferingFlat[] = [
       sampleOffering({
         id: "sched",
-        courseCode: "CSI 9999",
-        professorName: "John Smith",
+        courseCode: testCourseCode("CSI 9999"),
+        professorName: testProfessorName("John Smith"),
         termId: 2261,
         section: undefined,
         distribution: {},
@@ -749,33 +767,39 @@ describe("buildAliasGroups", () => {
     // A -> B, B -> C should collapse into a single component {A,B,C}.
     const { componentByNorm, membersByComponent } = buildAliasGroups(
       aliasCatalogue([
-        { code: "STA 2391", aliases: ["MAT 2377"] },
-        { code: "MAT 2377", aliases: ["MAT 2371"] },
+        { code: testCourseCode("STA 2391"), aliases: ["MAT 2377"] },
+        { code: testCourseCode("MAT 2377"), aliases: ["MAT 2371"] },
       ]),
     );
-    const id = componentByNorm.get("STA 2391");
+    const id = componentByNorm.get(testCourseCode("STA 2391"));
     expect(id).toBe("MAT 2371"); // lexicographically smallest
-    expect(componentByNorm.get("MAT 2377")).toBe(id);
-    expect(componentByNorm.get("MAT 2371")).toBe(id);
-    expect(membersByComponent.get("MAT 2371")).toEqual(["MAT 2371", "MAT 2377", "STA 2391"]);
+    expect(componentByNorm.get(testCourseCode("MAT 2377"))).toBe(id);
+    expect(componentByNorm.get(testCourseCode("MAT 2371"))).toBe(id);
+    expect(membersByComponent.get(testCourseCode("MAT 2371"))).toEqual([
+      "MAT 2371",
+      "MAT 2377",
+      "STA 2391",
+    ]);
   });
 
   it("merges hub aliases shared by distinct courses into one component", () => {
     const { componentByNorm, membersByComponent } = buildAliasGroups(
       aliasCatalogue([
-        { code: "ART 3916", aliases: ["ART 3016"] },
-        { code: "ART 3917", aliases: ["ART 3016"] },
+        { code: testCourseCode("ART 3916"), aliases: ["ART 3016"] },
+        { code: testCourseCode("ART 3917"), aliases: ["ART 3016"] },
       ]),
     );
-    const id = componentByNorm.get("ART 3916");
-    expect(componentByNorm.get("ART 3917")).toBe(id);
-    expect(componentByNorm.get("ART 3016")).toBe(id);
-    expect(membersByComponent.get(id as string)).toHaveLength(3);
+    const id = componentByNorm.get(testCourseCode("ART 3916"));
+    expect(componentByNorm.get(testCourseCode("ART 3917"))).toBe(id);
+    expect(componentByNorm.get(testCourseCode("ART 3016"))).toBe(id);
+    expect(id ? membersByComponent.get(id) : undefined).toHaveLength(3);
   });
 
   it("omits courses with no alias relation (standalone)", () => {
-    const { componentByNorm } = buildAliasGroups(aliasCatalogue([{ code: "CSI 2110" }]));
-    expect(componentByNorm.has("CSI 2110")).toBe(false);
+    const { componentByNorm } = buildAliasGroups(
+      aliasCatalogue([{ code: testCourseCode("CSI 2110") }]),
+    );
+    expect(componentByNorm.has(testCourseCode("CSI 2110"))).toBe(false);
   });
 
   it("returns empty groups for a null catalogue", () => {
@@ -787,7 +811,7 @@ describe("buildAliasGroups", () => {
 
 describe("alias-aware course aggregation", () => {
   const catalogue = aliasCatalogue([
-    { code: "STA 2391", title: "Probability", aliases: ["MAT 2377"] },
+    { code: testCourseCode("STA 2391"), title: "Probability", aliases: ["MAT 2377"] },
   ]);
   const { componentByNorm, membersByComponent } = buildAliasGroups(catalogue);
   const titleByCode = new Map([
@@ -799,17 +823,17 @@ describe("alias-aware course aggregation", () => {
   const offerings = [
     sampleOffering({
       id: "old",
-      courseCode: "MAT 2377",
+      courseCode: testCourseCode("MAT 2377"),
       courseTitle: "Probability",
-      professorName: "Old Prof",
+      professorName: testProfessorName("Old Prof"),
       termId: 2191,
       distribution: { "A+": 2 },
     }),
     sampleOffering({
       id: "new",
-      courseCode: "STA 2391",
+      courseCode: testCourseCode("STA 2391"),
       courseTitle: "Probability",
-      professorName: "New Prof",
+      professorName: testProfessorName("New Prof"),
       termId: 2251,
       distribution: { B: 4 },
     }),
@@ -818,7 +842,7 @@ describe("alias-aware course aggregation", () => {
   it("buckets offerings from both codes into one component", () => {
     const byComponent = buildOfferingsByComponent(offerings, componentByNorm);
     expect(byComponent.size).toBe(1);
-    expect(byComponent.get("MAT 2377")).toHaveLength(2);
+    expect(byComponent.get(testCourseCode("MAT 2377"))).toHaveLength(2);
   });
 
   it("exposes merged grade stats on every member entry", () => {
@@ -877,17 +901,19 @@ describe("dedupeCourseEntriesByComponent", () => {
   it("keeps the first entry per component in input order", () => {
     const entries = buildCourseSearchEntries(
       [
-        sampleOffering({ id: "1", courseCode: "MAT 2377" }),
-        sampleOffering({ id: "2", courseCode: "STA 2391" }),
-        sampleOffering({ id: "3", courseCode: "CSI 2110" }),
+        sampleOffering({ id: "1", courseCode: testCourseCode("MAT 2377") }),
+        sampleOffering({ id: "2", courseCode: testCourseCode("STA 2391") }),
+        sampleOffering({ id: "3", courseCode: testCourseCode("CSI 2110") }),
       ],
       null,
       null,
       new Map([
-        ["MAT 2377", "MAT 2377"],
-        ["STA 2391", "MAT 2377"],
+        [testCourseCode("MAT 2377"), testCourseCode("MAT 2377")],
+        [testCourseCode("STA 2391"), testCourseCode("MAT 2377")],
       ]),
-      new Map([["MAT 2377", ["MAT 2377", "STA 2391"]]]),
+      new Map([
+        [testCourseCode("MAT 2377"), [testCourseCode("MAT 2377"), testCourseCode("STA 2391")]],
+      ]),
     );
     const deduped = dedupeCourseEntriesByComponent(entries);
     const codes = deduped.map((e) => e.componentId).sort();

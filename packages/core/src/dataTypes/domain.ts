@@ -1,3 +1,5 @@
+import type { NormalizedCourseCode } from "../brand";
+
 export type CoursePrereqDisciplineLevel = {
   discipline: string;
   levels?: number[];
@@ -29,12 +31,12 @@ export type CoursePrereqNode = {
 };
 
 export type Course = {
-  code: string;
+  code: NormalizedCourseCode;
   title: string;
   credits: number;
   description: string;
   component?: string;
-  aliases?: string[];
+  aliases?: NormalizedCourseCode[];
   prereqText?: string;
   prerequisites?: CoursePrereqNode;
 };
@@ -145,7 +147,7 @@ export type ComponentSection = {
 export type CourseSchedule = {
   subject: string;
   catalogNumber: string;
-  courseCode: string;
+  courseCode: NormalizedCourseCode;
   title: string | null;
   timeZone: string;
   components: Record<string, ComponentSection[]>;

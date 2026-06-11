@@ -9,6 +9,7 @@ import {
   sumGradeDistributions,
 } from "../gradeLookup";
 import type { CourseGradesData, SchedulesData } from "../dataTypes";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 describe("normalizeInstructorName", () => {
   it("strips accents, lowercases, and collapses whitespace", () => {
@@ -27,7 +28,7 @@ describe("sumGradeDistributions", () => {
 const grades: CourseGradesData = {
   courses: [
     {
-      code: "CSI 2110",
+      code: normalizeCourseCode("CSI 2110"),
       professors: [
         { name: "Alice Smith", termId: 2231, distribution: { "A+": 10, B: 2 } },
         { name: "Álice Smith", termId: 2231, distribution: { "A+": 5 } },
@@ -36,7 +37,7 @@ const grades: CourseGradesData = {
       ],
     },
     {
-      code: "MAT 1320",
+      code: normalizeCourseCode("MAT 1320"),
       professors: [{ name: "Zoe Zero", termId: 2231, distribution: { F: 0 } }],
     },
   ],
@@ -46,41 +47,56 @@ describe("buildGradeLookups + lookupSectionDistribution", () => {
   const lookups = buildGradeLookups(grades);
 
   it("merges distributions across name-normalized duplicates for matched instructors", () => {
-    const res = lookupSectionDistribution(lookups, "CSI 2110", 2231, ["Alice Smith"]);
+    const res = lookupSectionDistribution(lookups, normalizeCourseCode("CSI 2110"), 2231, [
+      "Alice Smith",
+    ]);
     expect(res.kind).toBe("matched");
     expect(res.distribution).toEqual({ "A+": 15, B: 2 });
   });
 
   it("sums multiple matched instructors", () => {
-    const res = lookupSectionDistribution(lookups, "CSI 2110", 2231, ["Alice Smith", "Bob Jones"]);
+    const res = lookupSectionDistribution(lookups, normalizeCourseCode("CSI 2110"), 2231, [
+      "Alice Smith",
+      "Bob Jones",
+    ]);
     expect(res.kind).toBe("matched");
     expect(res.distribution).toEqual({ "A+": 15, B: 2, C: 4 });
   });
 
   it("falls back to the course aggregate when no instructor matches for the term", () => {
-    const res = lookupSectionDistribution(lookups, "CSI 2110", 2231, ["Nobody Here"]);
+    const res = lookupSectionDistribution(lookups, normalizeCourseCode("CSI 2110"), 2231, [
+      "Nobody Here",
+    ]);
     expect(res.kind).toBe("fallback");
     // aggregate spans ALL professor rows regardless of term
     expect(res.distribution).toEqual({ "A+": 16, B: 2, C: 4 });
   });
 
   it("skips the literal 'staff' instructor", () => {
-    const res = lookupSectionDistribution(lookups, "CSI 2110", 2231, ["Staff"]);
+    const res = lookupSectionDistribution(lookups, normalizeCourseCode("CSI 2110"), 2231, [
+      "Staff",
+    ]);
     expect(res.kind).toBe("fallback");
   });
 
   it("returns none when the course has no positive grade data", () => {
-    const res = lookupSectionDistribution(lookups, "MAT 1320", 2231, ["Zoe Zero"]);
+    const res = lookupSectionDistribution(lookups, normalizeCourseCode("MAT 1320"), 2231, [
+      "Zoe Zero",
+    ]);
     expect(res.kind).toBe("none");
     expect(res.distribution).toBeUndefined();
   });
 
   it("returns none for an unknown course", () => {
-    expect(lookupSectionDistribution(lookups, "PHY 9999", 2231, ["Anyone"]).kind).toBe("none");
+    expect(
+      lookupSectionDistribution(lookups, normalizeCourseCode("PHY 9999"), 2231, ["Anyone"]).kind,
+    ).toBe("none");
   });
 
   it("does not match instructors from a different term but still allows aggregate fallback", () => {
-    const res = lookupSectionDistribution(lookups, "CSI 2110", 2229, ["Alice Smith"]);
+    const res = lookupSectionDistribution(lookups, normalizeCourseCode("CSI 2110"), 2229, [
+      "Alice Smith",
+    ]);
     // Alice has no 2229 row, so matched fails; aggregate fallback applies.
     expect(res.kind).toBe("fallback");
   });
@@ -88,7 +104,7 @@ describe("buildGradeLookups + lookupSectionDistribution", () => {
 
 describe("distributionForSection", () => {
   it("ignores fallback once any instructor matches", () => {
-    const profMap = new Map([["alice smith", { "A+": 3 }]]);
+    const profMap = new Map([[normalizeInstructorName("Alice Smith"), { "A+": 3 }]]);
     const aggregate = { "A+": 99 };
     const res = distributionForSection(["Alice Smith", "Unknown"], profMap, aggregate);
     expect(res).toEqual({ distribution: { "A+": 3 }, kind: "matched" });
@@ -108,7 +124,7 @@ describe("enrichSchedulesDataWithGrades", () => {
       {
         subject: "CSI",
         catalogNumber: "2110",
-        courseCode: "CSI 2110",
+        courseCode: normalizeCourseCode("CSI 2110"),
         title: "Data Structures",
         timeZone: "America/Toronto",
         components: {
@@ -184,7 +200,7 @@ describe("enrichSchedulesDataWithGrades", () => {
       schedules: [
         {
           ...baseSchedules.schedules[0],
-          courseCode: "PHY 9999",
+          courseCode: normalizeCourseCode("PHY 9999"),
           components: {
             LEC: [
               {

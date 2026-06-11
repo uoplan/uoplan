@@ -2,8 +2,10 @@ import Fuse from "fuse.js";
 import type { IFuseOptions } from "fuse.js";
 import type {
   Catalogue,
+  CanonicalProfessorName,
   CourseGradesData,
   GradeVizData,
+  NormalizedCourseCode,
   ProfessorRatingsMap,
   ProfessorRegistry,
 } from "@uoplan/core";
@@ -64,8 +66,8 @@ const SUBSTRING_MAX_SCAN = 120_000;
 
 /** One row per distinct normalized course code — search index for explore (course-only). */
 export type ExploreCourseSearchEntry = {
-  normCode: string;
-  courseCode: string;
+  normCode: NormalizedCourseCode;
+  courseCode: NormalizedCourseCode;
   courseTitle: string;
   fuseText: string;
   gradeViz: GradeVizData | null;
@@ -73,7 +75,7 @@ export type ExploreCourseSearchEntry = {
   language: "en" | "fr" | null;
   maxProfessorRating: number | null;
   /** Identifier of the alias group this course belongs to (its own normCode when standalone). */
-  componentId: string;
+  componentId: NormalizedCourseCode;
 };
 
 /** One row per distinct professor — search index for explore. */
@@ -84,7 +86,7 @@ export type ExploreProfessorSearchEntry = {
   professorRef?: number;
   /** URL slug for the canonical professor, when resolved from the registry. */
   slug?: string;
-  displayName: string;
+  displayName: CanonicalProfessorName;
   searchText: string;
   uniqueCourseCount: number;
   disciplines: string[];
@@ -226,9 +228,9 @@ export function countDistinctProfessors(offerings: ExploreOfferingFlat[]): numbe
 /** Connected-component grouping of course codes linked by catalogue aliases. */
 export type AliasGroups = {
   /** Maps each member's normalized code to its component id. Standalone courses are absent. */
-  componentByNorm: Map<string, string>;
+  componentByNorm: Map<NormalizedCourseCode, NormalizedCourseCode>;
   /** Maps a component id to its sorted member normalized codes (size >= 2). */
-  membersByComponent: Map<string, string[]>;
+  membersByComponent: Map<NormalizedCourseCode, NormalizedCourseCode[]>;
 };
 
 /**
@@ -239,22 +241,22 @@ export type AliasGroups = {
  * lookup as a standalone component keyed by the code itself).
  */
 export function buildAliasGroups(catalogue: Catalogue | null): AliasGroups {
-  const parent = new Map<string, string>();
-  const add = (x: string) => {
+  const parent = new Map<NormalizedCourseCode, NormalizedCourseCode>();
+  const add = (x: NormalizedCourseCode) => {
     if (!parent.has(x)) parent.set(x, x);
   };
-  const find = (x: string): string => {
+  const find = (x: NormalizedCourseCode): NormalizedCourseCode => {
     let root = x;
-    while (parent.get(root) !== root) root = parent.get(root) as string;
+    while (parent.get(root) !== root) root = parent.get(root) as NormalizedCourseCode;
     let cur = x;
     while (parent.get(cur) !== root) {
-      const next = parent.get(cur) as string;
+      const next = parent.get(cur) as NormalizedCourseCode;
       parent.set(cur, root);
       cur = next;
     }
     return root;
   };
-  const union = (a: string, b: string) => {
+  const union = (a: NormalizedCourseCode, b: NormalizedCourseCode) => {
     add(a);
     add(b);
     const ra = find(a);
@@ -264,7 +266,7 @@ export function buildAliasGroups(catalogue: Catalogue | null): AliasGroups {
 
   if (catalogue) {
     for (const c of catalogue.courses) {
-      const own = normalizeCourseCode(c.code);
+      const own = c.code;
       add(own);
       for (const a of c.aliases ?? []) {
         const aliasNorm = normalizeCourseCode(a);
@@ -273,7 +275,7 @@ export function buildAliasGroups(catalogue: Catalogue | null): AliasGroups {
     }
   }
 
-  const membersByRoot = new Map<string, string[]>();
+  const membersByRoot = new Map<NormalizedCourseCode, NormalizedCourseCode[]>();
   for (const node of parent.keys()) {
     const root = find(node);
     let list = membersByRoot.get(root);
@@ -284,8 +286,8 @@ export function buildAliasGroups(catalogue: Catalogue | null): AliasGroups {
     list.push(node);
   }
 
-  const componentByNorm = new Map<string, string>();
-  const membersByComponent = new Map<string, string[]>();
+  const componentByNorm = new Map<NormalizedCourseCode, NormalizedCourseCode>();
+  const membersByComponent = new Map<NormalizedCourseCode, NormalizedCourseCode[]>();
   for (const members of membersByRoot.values()) {
     if (members.length < 2) continue;
     members.sort((a, b) => a.localeCompare(b, "en"));
@@ -297,18 +299,21 @@ export function buildAliasGroups(catalogue: Catalogue | null): AliasGroups {
 }
 
 /** Resolve a normalized code to its alias-component id (the code itself when standalone). */
-export function resolveComponentId(norm: string, componentByNorm: Map<string, string>): string {
+export function resolveComponentId(
+  norm: NormalizedCourseCode,
+  componentByNorm: Map<NormalizedCourseCode, NormalizedCourseCode>,
+): NormalizedCourseCode {
   return componentByNorm.get(norm) ?? norm;
 }
 
 /** Bucket offerings by alias-component id so an alias group shares one merged offering list. */
 export function buildOfferingsByComponent(
   offerings: ExploreOfferingFlat[],
-  componentByNorm: Map<string, string>,
-): Map<string, ExploreOfferingFlat[]> {
-  const byComponent = new Map<string, ExploreOfferingFlat[]>();
+  componentByNorm: Map<NormalizedCourseCode, NormalizedCourseCode>,
+): Map<NormalizedCourseCode, ExploreOfferingFlat[]> {
+  const byComponent = new Map<NormalizedCourseCode, ExploreOfferingFlat[]>();
   for (const o of offerings) {
-    const comp = resolveComponentId(normalizeCourseCode(o.courseCode), componentByNorm);
+    const comp = resolveComponentId(o.courseCode, componentByNorm);
     let list = byComponent.get(comp);
     if (!list) {
       list = [];
@@ -323,7 +328,7 @@ export function buildOfferingsByComponent(
 export function dedupeCourseEntriesByComponent(
   entries: ExploreCourseSearchEntry[],
 ): ExploreCourseSearchEntry[] {
-  const seen = new Set<string>();
+  const seen = new Set<NormalizedCourseCode>();
   const out: ExploreCourseSearchEntry[] = [];
   for (const e of entries) {
     if (seen.has(e.componentId)) continue;
@@ -337,18 +342,18 @@ export function buildCourseSearchEntries(
   offerings: ExploreOfferingFlat[],
   titleByCode?: Map<string, string> | null,
   professorRatings?: ProfessorRatingsMap | null,
-  componentByNorm?: Map<string, string> | null,
-  membersByComponent?: Map<string, string[]> | null,
+  componentByNorm?: Map<NormalizedCourseCode, NormalizedCourseCode> | null,
+  membersByComponent?: Map<NormalizedCourseCode, NormalizedCourseCode[]> | null,
 ): ExploreCourseSearchEntry[] {
   type Acc = {
-    courseCode: string;
+    courseCode: NormalizedCourseCode;
     courseTitle: string;
     dists: Record<string, number>[];
     professorNames: string[];
   };
-  const byNorm = new Map<string, Acc>();
+  const byNorm = new Map<NormalizedCourseCode, Acc>();
   for (const o of offerings) {
-    const norm = normalizeCourseCode(o.courseCode);
+    const norm = o.courseCode;
     const existing = byNorm.get(norm);
     if (existing) {
       existing.dists.push(o.distribution);
@@ -365,13 +370,13 @@ export function buildCourseSearchEntries(
     }
   }
 
-  const componentIdFor = (norm: string) =>
+  const componentIdFor = (norm: NormalizedCourseCode): NormalizedCourseCode =>
     componentByNorm ? resolveComponentId(norm, componentByNorm) : norm;
 
   // Merge grade distributions and professor names across each component's member codes so
   // every member entry exposes the same combined stats ("as if the same course").
-  const compDists = new Map<string, Record<string, number>[]>();
-  const compProfessorNames = new Map<string, string[]>();
+  const compDists = new Map<NormalizedCourseCode, Record<string, number>[]>();
+  const compProfessorNames = new Map<NormalizedCourseCode, string[]>();
   for (const [norm, acc] of byNorm) {
     const id = componentIdFor(norm);
     let dists = compDists.get(id);
@@ -388,7 +393,7 @@ export function buildCourseSearchEntries(
     for (const n of acc.professorNames) names.push(n);
   }
 
-  const mergedRatingFor = (id: string): number | null => {
+  const mergedRatingFor = (id: NormalizedCourseCode): number | null => {
     if (!professorRatings) return null;
     let max: number | null = null;
     for (const name of compProfessorNames.get(id) ?? []) {
@@ -399,12 +404,12 @@ export function buildCourseSearchEntries(
     }
     return max;
   };
-  const mergedVizFor = (id: string): GradeVizData | null =>
+  const mergedVizFor = (id: NormalizedCourseCode): GradeVizData | null =>
     normalizeGradeVizDistribution(mergeGradeDistributionCounts(compDists.get(id) ?? []));
 
   const makeEntry = (
-    norm: string,
-    courseCode: string,
+    norm: NormalizedCourseCode,
+    courseCode: NormalizedCourseCode,
     courseTitle: string,
   ): ExploreCourseSearchEntry => {
     const id = componentIdFor(norm);
@@ -423,7 +428,7 @@ export function buildCourseSearchEntries(
   };
 
   const entries: ExploreCourseSearchEntry[] = [];
-  const emitted = new Set<string>();
+  const emitted = new Set<NormalizedCourseCode>();
   for (const [norm, acc] of byNorm) {
     entries.push(makeEntry(norm, acc.courseCode, acc.courseTitle));
     emitted.add(norm);
@@ -507,21 +512,21 @@ function professorGroupIdForOffering(o: ExploreOfferingFlat): string {
  * directly against a term's sets.
  */
 export type TermPresenceIndex = {
-  courseComponentsByTerm: Map<number, Set<string>>;
+  courseComponentsByTerm: Map<number, Set<NormalizedCourseCode>>;
   profGroupsByTerm: Map<number, Set<string>>;
 };
 
 export function buildTermPresenceIndex(
   offerings: ExploreOfferingFlat[],
-  componentByNorm?: Map<string, string> | null,
+  componentByNorm?: Map<NormalizedCourseCode, NormalizedCourseCode> | null,
 ): TermPresenceIndex {
-  const courseComponentsByTerm = new Map<number, Set<string>>();
+  const courseComponentsByTerm = new Map<number, Set<NormalizedCourseCode>>();
   const profGroupsByTerm = new Map<number, Set<string>>();
 
   for (const o of offerings) {
     if (!Number.isFinite(o.termId)) continue;
 
-    const norm = normalizeCourseCode(o.courseCode);
+    const norm = o.courseCode;
     const componentId = componentByNorm ? resolveComponentId(norm, componentByNorm) : norm;
     let courses = courseComponentsByTerm.get(o.termId);
     if (!courses) {

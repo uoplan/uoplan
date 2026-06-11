@@ -10,6 +10,7 @@ import type {
   GenerationConstraints,
   TimeSlot,
 } from "../types";
+import { normalizeCourseCode } from "../../utils/courseUtils";
 
 describe("constraints", () => {
   it("timeSlotSatisfiesConstraints respects time bounds (day no longer constrained)", () => {
@@ -76,7 +77,7 @@ describe("constraints", () => {
   it("satisfiesCompressedConstraint allows at most one gap <= 90 mins", () => {
     const validEnrollments: CourseEnrollment[] = [
       {
-        courseCode: "A",
+        courseCode: normalizeCourseCode("A"),
         sectionCombo: {},
         times: [
           { day: "Mo", startMinutes: 600, endMinutes: 690 }, // 10:00 - 11:30
@@ -88,7 +89,7 @@ describe("constraints", () => {
 
     const tooLongGap: CourseEnrollment[] = [
       {
-        courseCode: "A",
+        courseCode: normalizeCourseCode("A"),
         sectionCombo: {},
         times: [
           { day: "Mo", startMinutes: 600, endMinutes: 690 }, // 10:00 - 11:30
@@ -100,7 +101,7 @@ describe("constraints", () => {
 
     const tooManyGaps: CourseEnrollment[] = [
       {
-        courseCode: "A",
+        courseCode: normalizeCourseCode("A"),
         sectionCombo: {},
         times: [
           { day: "Mo", startMinutes: 600, endMinutes: 690 }, // 10:00 - 11:30

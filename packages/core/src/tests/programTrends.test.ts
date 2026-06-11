@@ -7,6 +7,7 @@ import {
 } from "../programTrends";
 import { computeGradeTrends } from "../gradeTrends";
 import type { CourseGradesData, Program } from "../dataTypes";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 const program: Program = {
   title: "Honours BSc Computer Science",
@@ -17,15 +18,15 @@ const program: Program = {
       type: "and",
       title: "Compulsory:",
       options: [
-        { type: "course", code: "CSI 2110" },
-        { type: "course", code: "MAT 1320" },
+        { type: "course", code: normalizeCourseCode("CSI 2110") },
+        { type: "course", code: normalizeCourseCode("MAT 1320") },
         {
           type: "options_group",
           options: [
             {
               type: "and",
               options: [
-                { type: "or_course", code: "CSI 2372" },
+                { type: "or_course", code: normalizeCourseCode("CSI 2372") },
                 {
                   type: "pick",
                   options: [
@@ -62,7 +63,11 @@ const program: Program = {
 describe("buildProgramCourseFilter", () => {
   it("collects concrete codes and discipline pools, ignoring broad electives", () => {
     const filter = buildProgramCourseFilter(program);
-    expect([...filter.codes].sort()).toEqual(["CSI 2110", "CSI 2372", "MAT 1320"]);
+    expect([...filter.codes].sort()).toEqual([
+      normalizeCourseCode("CSI 2110"),
+      normalizeCourseCode("CSI 2372"),
+      normalizeCourseCode("MAT 1320"),
+    ]);
     expect(filter.pools).toEqual([
       { discipline: "CSI", levels: [4000] },
       { discipline: "SEG", levels: undefined },
@@ -74,7 +79,7 @@ describe("buildProgramCourseFilter", () => {
       ...program,
       requirements: [{ type: "course", code: "csi2110" }],
     });
-    expect(filter.codes.has("CSI 2110")).toBe(true);
+    expect(filter.codes.has(normalizeCourseCode("CSI 2110"))).toBe(true);
   });
 });
 
@@ -82,23 +87,23 @@ describe("programFilterMatches", () => {
   const filter = buildProgramCourseFilter(program);
 
   it("matches explicit core codes (case/space-insensitive)", () => {
-    expect(programFilterMatches(filter, "CSI 2110")).toBe(true);
+    expect(programFilterMatches(filter, normalizeCourseCode("CSI 2110"))).toBe(true);
     expect(programFilterMatches(filter, "csi2110")).toBe(true);
-    expect(programFilterMatches(filter, "MAT 1320")).toBe(true);
+    expect(programFilterMatches(filter, normalizeCourseCode("MAT 1320"))).toBe(true);
   });
 
   it("matches a discipline+level pool only at the right level", () => {
-    expect(programFilterMatches(filter, "CSI 4120")).toBe(true); // CSI 4000 pool
-    expect(programFilterMatches(filter, "CSI 3120")).toBe(false); // CSI but wrong level, not explicit
+    expect(programFilterMatches(filter, normalizeCourseCode("CSI 4120"))).toBe(true); // CSI 4000 pool
+    expect(programFilterMatches(filter, normalizeCourseCode("CSI 3120"))).toBe(false); // CSI but wrong level, not explicit
   });
 
   it("matches any level for a pool without levels", () => {
-    expect(programFilterMatches(filter, "SEG 2105")).toBe(true);
-    expect(programFilterMatches(filter, "SEG 4910")).toBe(true);
+    expect(programFilterMatches(filter, normalizeCourseCode("SEG 2105"))).toBe(true);
+    expect(programFilterMatches(filter, normalizeCourseCode("SEG 4910"))).toBe(true);
   });
 
   it("rejects unrelated disciplines and uncodeable input", () => {
-    expect(programFilterMatches(filter, "PSY 1101")).toBe(false);
+    expect(programFilterMatches(filter, normalizeCourseCode("PSY 1101"))).toBe(false);
     expect(programFilterMatches(filter, "not a code")).toBe(false);
   });
 });
@@ -119,20 +124,20 @@ describe("programSlug", () => {
 const grades: CourseGradesData = {
   courses: [
     {
-      code: "CSI 2110",
+      code: normalizeCourseCode("CSI 2110"),
       professors: [{ name: "A", termId: 2179, distribution: { "A+": 100 } }],
     },
     {
-      code: "CSI 4120",
+      code: normalizeCourseCode("CSI 4120"),
       professors: [{ name: "B", termId: 2179, distribution: { A: 50, F: 50 } }],
     },
     {
-      code: "PSY 1101",
+      code: normalizeCourseCode("PSY 1101"),
       professors: [{ name: "C", termId: 2179, distribution: { "A+": 80 } }],
     },
     {
       // No graded mass — should not make a program "available".
-      code: "BIO 1130",
+      code: normalizeCourseCode("BIO 1130"),
       professors: [{ name: "D", termId: 2179, distribution: { P: 10 } }],
     },
   ],
@@ -145,13 +150,13 @@ describe("availablePrograms", () => {
       title: "BSc Biology",
       url: "https://catalogue.uottawa.ca/en/undergrad/bsc-biology/",
       slug: "undergrad/bsc-biology",
-      requirements: [{ type: "course", code: "BIO 1130" }],
+      requirements: [{ type: "course", code: normalizeCourseCode("BIO 1130") }],
     };
     const psyProgram: Program = {
       title: "Anonymous Psychology",
       url: "https://catalogue.uottawa.ca/en/undergrad/psych/",
       slug: "undergrad/psych",
-      requirements: [{ type: "course", code: "PSY 1101" }],
+      requirements: [{ type: "course", code: normalizeCourseCode("PSY 1101") }],
     };
     const duplicate = { ...csOnly };
 

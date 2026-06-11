@@ -4,6 +4,7 @@ import { Catalogue as ProtoCatalogue, CoursePrereqKind } from "@uoplan/proto/dat
 
 import type { Catalogue, CoursePrereqKind as DomainKind } from "../dataTypes";
 import { fromProtoCatalogue, toProtoCatalogue } from "../dataTypes";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 const ALL_KINDS: DomainKind[] = [
   "permission",
@@ -41,7 +42,7 @@ describe("course-prereq kind wire contract", () => {
   it("round-trips every kind through proto + binary encoding", () => {
     const catalogue: Catalogue = {
       courses: ALL_KINDS.map((kind, i) => ({
-        code: `XXX ${1000 + i}`,
+        code: normalizeCourseCode(`XXX ${1000 + i}`),
         title: `Course ${kind}`,
         credits: 3,
         description: "",
@@ -63,7 +64,7 @@ describe("course-prereq kind wire contract", () => {
     const catalogue: Catalogue = {
       courses: [
         {
-          code: "XXX 2000",
+          code: normalizeCourseCode("XXX 2000"),
           title: "No kind",
           credits: 3,
           description: "",

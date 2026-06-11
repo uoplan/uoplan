@@ -22,6 +22,7 @@
 import type { ComponentSection } from "../../dataTypes";
 import type { DataCache } from "../../dataCache";
 import type { CourseEnrollment } from "../../generation";
+import type { NormalizedCourseCode } from "../../brand";
 
 /**
  * Read-only context shared by every constraint hook. Concrete constraints pull
@@ -31,9 +32,9 @@ import type { CourseEnrollment } from "../../generation";
 export interface ConstraintContext {
   readonly cache: DataCache;
   /** Normalised codes of already-completed courses. */
-  readonly completed: ReadonlySet<string>;
+  readonly completed: ReadonlySet<NormalizedCourseCode>;
   /** Normalised codes the student is allowed to take (prereqs satisfied). */
-  readonly prereqEligible: ReadonlySet<string>;
+  readonly prereqEligible: ReadonlySet<NormalizedCourseCode>;
 }
 
 /** Additional context for course-set scoped hooks. */
@@ -54,16 +55,20 @@ export interface Constraint {
   readonly active: boolean;
 
   /** Course scope: may this course ever be scheduled? */
-  allowsCourse?(courseCode: string, ctx: ConstraintContext): boolean;
+  allowsCourse?(courseCode: NormalizedCourseCode, ctx: ConstraintContext): boolean;
 
   /** Course-set scope: may this course fill the given requirement slot? */
-  allowsCandidate?(courseCode: string, ctx: CourseSetCtx): boolean;
+  allowsCandidate?(courseCode: NormalizedCourseCode, ctx: CourseSetCtx): boolean;
 
   /** Course-set scope: is a complete chosen multiset structurally valid? */
-  allowsCourseSet?(courseCodes: readonly string[], ctx: ConstraintContext): boolean;
+  allowsCourseSet?(courseCodes: readonly NormalizedCourseCode[], ctx: ConstraintContext): boolean;
 
   /** Section scope: is this section of the course usable under the constraint? */
-  allowsSection?(courseCode: string, section: ComponentSection, ctx: ConstraintContext): boolean;
+  allowsSection?(
+    courseCode: NormalizedCourseCode,
+    section: ComponentSection,
+    ctx: ConstraintContext,
+  ): boolean;
 
   /**
    * Timetable scope (incremental): may `candidate` be added to a timetable that
@@ -83,7 +88,7 @@ export interface Constraint {
    * Soft ordering: relative weight (>0) used to bias the seeded enumeration
    * order toward preferred courses. 1 = neutral. Never filters.
    */
-  orderingWeight?(courseCode: string, ctx: ConstraintContext): number;
+  orderingWeight?(courseCode: NormalizedCourseCode, ctx: ConstraintContext): number;
 }
 
 /** Why a constraint pipeline rejected a candidate, for diagnostics/tracing. */

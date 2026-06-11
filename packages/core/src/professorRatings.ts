@@ -1,3 +1,5 @@
+import type { ProfessorNameKey } from "./brand";
+
 export type ProfessorRatingsEntry = {
   id?: string;
   legacyId?: number;
@@ -22,8 +24,8 @@ export function hasProfessorRatings(
   );
 }
 
-export function normalizeProfessorName(name: string): string {
-  return (name ?? "").trim().replace(/\s+/g, " ");
+export function normalizeProfessorName(name: string): ProfessorNameKey {
+  return (name ?? "").trim().replace(/\s+/g, " ") as ProfessorNameKey;
 }
 
 export function buildProfessorRatingsMap(input: {
@@ -52,7 +54,7 @@ export function getRatingsForInstructors(
 ): number[] {
   if (!map || !instructors?.length) return [];
   const out: number[] = [];
-  const seen = new Set<string>();
+  const seen = new Set<ProfessorNameKey>();
   for (const raw of instructors) {
     const key = normalizeProfessorName(raw);
     if (!key || seen.has(key)) continue;
@@ -75,7 +77,7 @@ export function getRatingDetailsForInstructors(
     rating: number;
     numRatings: number;
   }> = [];
-  const seen = new Set<string>();
+  const seen = new Set<ProfessorNameKey>();
   for (const raw of instructors) {
     const key = normalizeProfessorName(raw);
     if (!key || seen.has(key)) continue;

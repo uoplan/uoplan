@@ -40,6 +40,8 @@ import {
   toProtoPrereq,
   toProtoProgramRequirement,
 } from "./prereqs";
+import { normalizeCourseCode } from "../utils/courseUtils";
+import type { NormalizedCourseCode } from "../brand";
 
 function protoDayToCode(day: ProtoDayOfWeek): DayOfWeekCode {
   switch (day) {
@@ -108,12 +110,12 @@ function parseCourseCodeParts(courseCode: string): {
 
 function createCourseCodeTable(courses: Course[]): {
   table: string[];
-  indexByCode: Map<string, number>;
+  indexByCode: Map<NormalizedCourseCode, number>;
 } {
   const table: string[] = [];
-  const indexByCode = new Map<string, number>();
+  const indexByCode = new Map<NormalizedCourseCode, number>();
   const add = (code: string) => {
-    const normalized = code.trim();
+    const normalized = normalizeCourseCode(code);
     if (!normalized) return;
     if (indexByCode.has(normalized)) return;
     indexByCode.set(normalized, table.length);
@@ -127,16 +129,19 @@ function createCourseCodeTable(courses: Course[]): {
 }
 
 function courseIndexFromCode(
-  indexByCode: Map<string, number>,
+  indexByCode: Map<NormalizedCourseCode, number>,
   code: string,
 ): ProtoCourseIndex | undefined {
-  const idx = indexByCode.get(code.trim());
+  const idx = indexByCode.get(normalizeCourseCode(code));
   return idx === undefined ? undefined : { index: idx };
 }
 
-function codeFromCourseIndex(table: string[], index: ProtoCourseIndex | undefined): string {
-  if (!index) return "";
-  return table[index.index] ?? "";
+function codeFromCourseIndex(
+  table: string[],
+  index: ProtoCourseIndex | undefined,
+): NormalizedCourseCode {
+  if (!index) return normalizeCourseCode("");
+  return normalizeCourseCode(table[index.index] ?? "");
 }
 
 function programKeyFromProgram(program: Program): string {
@@ -224,9 +229,9 @@ export function fromProtoCatalogue(input: ProtoCatalogue): Catalogue {
 
 export function toProtoSchedulesData(input: SchedulesData): ProtoSchedulesData {
   const courseCodes: string[] = [];
-  const indexByCode = new Map<string, number>();
+  const indexByCode = new Map<NormalizedCourseCode, number>();
   const addCode = (code: string): ProtoCourseIndex => {
-    const normalized = code.trim();
+    const normalized = normalizeCourseCode(code);
     const existing = indexByCode.get(normalized);
     if (existing !== undefined) return { index: existing };
     const index = courseCodes.length;

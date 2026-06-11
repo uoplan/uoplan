@@ -9,6 +9,7 @@
  * of modelling constraints as first-class, individually removable objects.
  */
 import type { DataCache } from "../../dataCache";
+import type { NormalizedCourseCode } from "../../brand";
 import type { GenerationConstraints } from "../../generation";
 import { buildHardConstraintPipeline } from "../constraints/builtins";
 import { ConstraintPipeline } from "../constraints/pipeline";
@@ -51,7 +52,7 @@ interface RelaxationInput {
 }
 
 function makeCtx(cache: DataCache): ConstraintContext {
-  const empty: ReadonlySet<string> = new Set<string>();
+  const empty: ReadonlySet<NormalizedCourseCode> = new Set<NormalizedCourseCode>();
   return { cache, completed: empty, prereqEligible: empty };
 }
 

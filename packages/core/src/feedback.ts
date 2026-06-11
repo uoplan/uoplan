@@ -1,4 +1,5 @@
 import type { FeedbackProto } from "@uoplan/proto";
+import type { NormalizedCourseCode, ProfessorNameKey } from "./brand";
 import { normalizeCourseCode } from "./utils/courseUtils";
 import { normalizeProfessorName } from "./professorRatings";
 
@@ -41,7 +42,7 @@ export interface FeedbackSectionView {
 export interface FeedbackIndex {
   questions: FeedbackQuestionMeta[];
   /** Section views keyed by normalized course code. */
-  byCourseNorm: Map<string, FeedbackSectionView[]>;
+  byCourseNorm: Map<NormalizedCourseCode, FeedbackSectionView[]>;
 }
 
 /**
@@ -66,7 +67,7 @@ export function buildFeedbackIndex(
     return data.extraCourses[course - data.indicesCourseCount] ?? null;
   };
 
-  const byCourseNorm = new Map<string, FeedbackSectionView[]>();
+  const byCourseNorm = new Map<NormalizedCourseCode, FeedbackSectionView[]>();
   for (const term of data.terms) {
     for (const course of term.courses) {
       const code = resolveCode(course.course);
@@ -287,8 +288,8 @@ export function feedbackAllViews(index: FeedbackIndex): FeedbackSectionView[] {
  * its sections — and therefore the professors who taught them — so it carries a
  * combined course + professor signal. Courses with no scale feedback are omitted.
  */
-export function courseSentimentByNorm(index: FeedbackIndex): Map<string, number> {
-  const out = new Map<string, number>();
+export function courseSentimentByNorm(index: FeedbackIndex): Map<NormalizedCourseCode, number> {
+  const out = new Map<NormalizedCourseCode, number>();
   for (const [norm, views] of index.byCourseNorm) {
     const avg = feedbackSummary(views).overallAverage;
     if (avg != null) out.set(norm, avg);
@@ -301,8 +302,8 @@ export function courseSentimentByNorm(index: FeedbackIndex): Map<string, number>
  * section that professor taught), keyed by {@link normalizeProfessorName}.
  * Professors with no scale feedback are omitted.
  */
-export function professorSentimentByName(index: FeedbackIndex): Map<string, number> {
-  const byName = new Map<string, FeedbackSectionView[]>();
+export function professorSentimentByName(index: FeedbackIndex): Map<ProfessorNameKey, number> {
+  const byName = new Map<ProfessorNameKey, FeedbackSectionView[]>();
   for (const views of index.byCourseNorm.values()) {
     for (const view of views) {
       const key = normalizeProfessorName(view.professorName);
@@ -315,7 +316,7 @@ export function professorSentimentByName(index: FeedbackIndex): Map<string, numb
       bucket.push(view);
     }
   }
-  const out = new Map<string, number>();
+  const out = new Map<ProfessorNameKey, number>();
   for (const [key, views] of byName) {
     const avg = feedbackSummary(views).overallAverage;
     if (avg != null) out.set(key, avg);

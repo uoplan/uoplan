@@ -1,5 +1,16 @@
-import type { ProfessorRegistry, ProfessorRegistryEntry } from "@uoplan/core";
-import { professorBySlug, professorByLegacyId, professorByName } from "@uoplan/core";
+import type {
+  CanonicalProfessorName,
+  ProfessorRegistry,
+  ProfessorRegistryEntry,
+  ProfessorSlug,
+} from "@uoplan/core";
+import {
+  pickCanonicalProfessorName,
+  professorBySlug,
+  professorByLegacyId,
+  professorByName,
+  unsafeBrand,
+} from "@uoplan/core";
 
 /**
  * Build the URL path-segment used to link to a professor. Prefers the canonical
@@ -9,7 +20,7 @@ import { professorBySlug, professorByLegacyId, professorByName } from "@uoplan/c
 export function professorRouteParam(entry: {
   slug?: string;
   legacyId?: number;
-  displayName: string;
+  displayName: CanonicalProfessorName;
 }): string {
   if (entry.slug) return entry.slug;
   if (entry.legacyId != null) return String(entry.legacyId);
@@ -23,7 +34,7 @@ interface ResolvedProfessorRoute {
   /** RateMyProfessors legacyId for external links, when known. */
   legacyId: number | null;
   /** Canonical (or best-effort) display name. */
-  displayName: string;
+  displayName: CanonicalProfessorName;
 }
 
 /**
@@ -35,7 +46,7 @@ export function resolveProfessorRoute(
   registry: ProfessorRegistry | null | undefined,
   param: string,
 ): ResolvedProfessorRoute {
-  const bySlug = professorBySlug(registry, param);
+  const bySlug = professorBySlug(registry, unsafeBrand<ProfessorSlug>(param));
   if (bySlug) {
     return {
       index: bySlug.index,
@@ -57,7 +68,12 @@ export function resolveProfessorRoute(
         displayName: byId.entry.name,
       };
     }
-    return { index: null, entry: null, legacyId: numeric, displayName: "" };
+    return {
+      index: null,
+      entry: null,
+      legacyId: numeric,
+      displayName: pickCanonicalProfessorName([""]),
+    };
   }
 
   const name = decodeURIComponent(param);
@@ -70,5 +86,10 @@ export function resolveProfessorRoute(
       displayName: byName.entry.name,
     };
   }
-  return { index: null, entry: null, legacyId: null, displayName: name };
+  return {
+    index: null,
+    entry: null,
+    legacyId: null,
+    displayName: pickCanonicalProfessorName([name]),
+  };
 }

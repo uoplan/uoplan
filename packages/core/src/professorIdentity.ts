@@ -1,3 +1,5 @@
+import type { CanonicalProfessorName, ProfessorMatchKey, ProfessorSlug } from "./brand";
+
 /**
  * Single source of truth for professor name identity across the whole site.
  *
@@ -47,11 +49,11 @@ export function professorNameTokens(name: string): string[] {
  * Returns "" when no usable token exists (e.g. "Staff"/empty handled by callers)
  * and the single token itself when only one is present.
  */
-export function professorMatchKey(name: string): string {
+export function professorMatchKey(name: string): ProfessorMatchKey {
   const tokens = professorNameTokens(name);
-  if (tokens.length === 0) return "";
-  if (tokens.length === 1) return tokens[0];
-  return `${tokens[0]}|${tokens[tokens.length - 1]}`;
+  if (tokens.length === 0) return "" as ProfessorMatchKey;
+  if (tokens.length === 1) return tokens[0] as ProfessorMatchKey;
+  return `${tokens[0]}|${tokens[tokens.length - 1]}` as ProfessorMatchKey;
 }
 
 /**
@@ -61,7 +63,7 @@ export function professorMatchKey(name: string): string {
  * locale compare for determinism. Surrounding whitespace and any leading/trailing
  * stray periods or commas (e.g. ".Klempan," / "Smith.") are trimmed.
  */
-export function pickCanonicalProfessorName(variants: Iterable<string>): string {
+export function pickCanonicalProfessorName(variants: Iterable<string>): CanonicalProfessorName {
   let best: string | null = null;
   let bestScore: [number, number, number] | null = null;
 
@@ -77,7 +79,7 @@ export function pickCanonicalProfessorName(variants: Iterable<string>): string {
     }
   }
 
-  return best ?? "";
+  return (best ?? "") as CanonicalProfessorName;
 }
 
 /**
@@ -85,11 +87,11 @@ export function pickCanonicalProfessorName(variants: Iterable<string>): string {
  * display name: diacritics removed, lowercased, non-alphanumerics collapsed to
  * single dashes, no leading/trailing dash. ("Geneviève Tellier" → "genevieve-tellier".)
  */
-export function slugifyProfessor(name: string): string {
+export function slugifyProfessor(name: string): ProfessorSlug {
   return deburr(name)
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+    .replace(/^-+|-+$/g, "") as ProfessorSlug;
 }
 
 /** Trim whitespace and any leading/trailing stray periods or commas from a display name. */

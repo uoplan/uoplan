@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useShallow } from "zustand/react/shallow";
+import { pickCanonicalProfessorName } from "@uoplan/core";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { resolveProfessorRoute } from "../../lib/explore/professorRoute";
 import { useAppStore } from "../../store/appStore";
@@ -30,7 +31,10 @@ export function ExploreProfessorFeedbackPage({ slug }: { slug: string }) {
     void navigate({ to: "/explore", search: EMPTY_EXPLORE_SEARCH, replace: true });
   }, [loading, views, navigate]);
 
-  const title = displayName || resolved.displayName || tr("explore.professorFallback");
+  const title =
+    displayName ||
+    resolved.displayName ||
+    pickCanonicalProfessorName([tr("explore.professorFallback")]);
 
   return (
     <ExploreFeedbackContent title={title} views={views} questions={questions} loading={loading} />

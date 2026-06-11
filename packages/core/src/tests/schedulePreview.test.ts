@@ -5,6 +5,7 @@ import type { CourseSchedule, SchedulesData } from "../dataTypes";
 import type { GeneratedSchedule } from "../generation/types";
 import { buildColorMap } from "../utils/uiUtils";
 import { buildSchedulePreview, reconstructScheduleFromPreview } from "../schedulePreview";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 function makeSchedule(
   courseCode: string,
@@ -14,7 +15,7 @@ function makeSchedule(
   return {
     subject,
     catalogNumber,
-    courseCode,
+    courseCode: normalizeCourseCode(courseCode),
     title: courseCode,
     timeZone: "America/Toronto",
     components,
@@ -24,7 +25,7 @@ function makeSchedule(
 const schedulesData: SchedulesData = {
   termId: "2261",
   schedules: [
-    makeSchedule("ITI 1120", {
+    makeSchedule(normalizeCourseCode("ITI 1120"), {
       LEC: [
         {
           section: "A00-LEC",
@@ -55,7 +56,7 @@ const schedulesData: SchedulesData = {
         },
       ],
     }),
-    makeSchedule("MAT 1320", {
+    makeSchedule(normalizeCourseCode("MAT 1320"), {
       LEC: [
         {
           section: "B00-LEC",
@@ -77,7 +78,7 @@ function generatedSchedule(): GeneratedSchedule {
   return {
     enrollments: [
       {
-        courseCode: "ITI 1120",
+        courseCode: normalizeCourseCode("ITI 1120"),
         sectionCombo: {
           LEC: { section: iti.components.LEC[0] },
           LAB: { section: iti.components.LAB[0] },
@@ -85,7 +86,7 @@ function generatedSchedule(): GeneratedSchedule {
         times: [],
       },
       {
-        courseCode: "MAT 1320",
+        courseCode: normalizeCourseCode("MAT 1320"),
         sectionCombo: { LEC: { section: mat.components.LEC[0] } },
         times: [],
       },
@@ -118,7 +119,10 @@ describe("schedulePreview index encoding", () => {
     expect(result).not.toBeNull();
     const { schedule, colorMap } = result!;
 
-    expect(schedule.enrollments.map((e) => e.courseCode)).toEqual(["ITI 1120", "MAT 1320"]);
+    expect(schedule.enrollments.map((e) => e.courseCode)).toEqual([
+      normalizeCourseCode("ITI 1120"),
+      normalizeCourseCode("MAT 1320"),
+    ]);
 
     const iti = schedule.enrollments[0];
     expect(Object.keys(iti.sectionCombo).sort()).toEqual(["LAB", "LEC"]);
@@ -152,6 +156,8 @@ describe("schedulePreview index encoding", () => {
     };
     const result = reconstructScheduleFromPreview(preview, schedulesData);
     expect(result).not.toBeNull();
-    expect(result!.schedule.enrollments.map((e) => e.courseCode)).toEqual(["ITI 1120"]);
+    expect(result!.schedule.enrollments.map((e) => e.courseCode)).toEqual([
+      normalizeCourseCode("ITI 1120"),
+    ]);
   });
 });

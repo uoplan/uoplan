@@ -10,12 +10,13 @@ import { LevelBarCard } from "./LevelBarCard";
 import { ProfessorSpreadCard } from "./ProfessorSpreadCard";
 import { SeasonBarCard } from "./SeasonBarCard";
 import { VolumeGpaScatterCard } from "./VolumeGpaScatterCard";
+import { testCourseCode } from "../../test/brands";
 
 /** Minimal multi-discipline / multi-term grades fixture for render smoke tests. */
 const grades: CourseGradesData = {
   courses: [
     {
-      code: "CSI 1101",
+      code: testCourseCode("CSI 1101"),
       professors: [
         { name: "Easy", termId: 2239, distribution: { "A+": 80, A: 20 } },
         { name: "Hard", termId: 2241, distribution: { C: 60, D: 40 } },
@@ -23,11 +24,11 @@ const grades: CourseGradesData = {
       ],
     },
     {
-      code: "CSI 2110",
+      code: testCourseCode("CSI 2110"),
       professors: [{ name: "Mid", termId: 2249, distribution: { B: 50, "B+": 30, F: 20 } }],
     },
     {
-      code: "PSY 1101",
+      code: testCourseCode("PSY 1101"),
       professors: [
         { name: "Kind", termId: 2239, distribution: { A: 100 } },
         { name: "Kind", termId: 2249, distribution: { A: 90, "A-": 10 } },

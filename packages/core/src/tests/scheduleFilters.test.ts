@@ -7,12 +7,13 @@ import {
 import type { CourseSchedule } from "../dataTypes";
 import type { DataCache } from "../dataCache";
 import { describe, it, expect } from "vitest";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 function makeSchedule(components: CourseSchedule["components"]): CourseSchedule {
   return {
     subject: "CSI",
     catalogNumber: "1234",
-    courseCode: "CSI 1234",
+    courseCode: normalizeCourseCode("CSI 1234"),
     title: "Test",
     timeZone: "America/Toronto",
     components,
@@ -195,26 +196,26 @@ describe("getEffectiveSchedule", () => {
   it("returns raw schedule when includeClosed is true", () => {
     const cache: DataCache = {
       getCourse: () => undefined,
-      resolveToCanonical: (code) => code,
+      resolveToCanonical: (code) => normalizeCourseCode(code),
       getSchedule: () => schedOpen,
       getCoursesByDiscipline: () => [],
       getAllCourses: () => [],
       getAllSchedules: () => [schedOpen],
     };
-    const out = getEffectiveSchedule(cache, "CSI 1234", true);
+    const out = getEffectiveSchedule(cache, normalizeCourseCode("CSI 1234"), true);
     expect(out).toBe(schedOpen);
   });
 
   it("returns undefined when code not in cache", () => {
     const cache: DataCache = {
       getCourse: () => undefined,
-      resolveToCanonical: (code) => code,
+      resolveToCanonical: (code) => normalizeCourseCode(code),
       getSchedule: () => undefined,
       getCoursesByDiscipline: () => [],
       getAllCourses: () => [],
       getAllSchedules: () => [],
     };
-    const out = getEffectiveSchedule(cache, "CSI 9999", false);
+    const out = getEffectiveSchedule(cache, normalizeCourseCode("CSI 9999"), false);
     expect(out).toBeUndefined();
   });
 
@@ -233,13 +234,15 @@ describe("getEffectiveSchedule", () => {
     });
     const cache: DataCache = {
       getCourse: () => undefined,
-      resolveToCanonical: (code) => code,
+      resolveToCanonical: (code) => normalizeCourseCode(code),
       getSchedule: () => schedNonVirtual,
       getCoursesByDiscipline: () => [],
       getAllCourses: () => [],
       getAllSchedules: () => [schedNonVirtual],
     };
-    expect(getEffectiveSchedule(cache, "CSI 1234", true, true)).toBeUndefined();
+    expect(
+      getEffectiveSchedule(cache, normalizeCourseCode("CSI 1234"), true, true),
+    ).toBeUndefined();
   });
 });
 
@@ -263,16 +266,20 @@ describe("cacheWithPerCourseVirtualFilter", () => {
 
     const cache: DataCache = {
       getCourse: () => undefined,
-      resolveToCanonical: (code) => code,
-      getSchedule: (code) => (code === "CSI 1234" ? schedBoth : undefined),
+      resolveToCanonical: (code) => normalizeCourseCode(code),
+      getSchedule: (code) => (code === normalizeCourseCode("CSI 1234") ? schedBoth : undefined),
       getCoursesByDiscipline: () => [],
       getAllCourses: () => [],
       getAllSchedules: () => [],
     };
 
-    const wrapped = cacheWithPerCourseVirtualFilter(cache, true, (code) => code === "CSI 1234");
+    const wrapped = cacheWithPerCourseVirtualFilter(
+      cache,
+      true,
+      (code) => code === normalizeCourseCode("CSI 1234"),
+    );
 
-    const out = wrapped.getSchedule("CSI 1234");
+    const out = wrapped.getSchedule(normalizeCourseCode("CSI 1234"));
     expect(out).toBeDefined();
     expect(out?.components.LEC[0].times).toHaveLength(1);
     expect(out?.components.LEC[0].times[0].virtual).toBe(true);
@@ -297,7 +304,7 @@ describe("cacheWithPerCourseVirtualFilter", () => {
 
     const cache: DataCache = {
       getCourse: () => undefined,
-      resolveToCanonical: (code) => code,
+      resolveToCanonical: (code) => normalizeCourseCode(code),
       getSchedule: () => schedBoth,
       getCoursesByDiscipline: () => [],
       getAllCourses: () => [],
@@ -305,7 +312,7 @@ describe("cacheWithPerCourseVirtualFilter", () => {
     };
 
     const wrapped = cacheWithPerCourseVirtualFilter(cache, true, () => false);
-    const out = wrapped.getSchedule("CSI 1234");
+    const out = wrapped.getSchedule(normalizeCourseCode("CSI 1234"));
     expect(out).toBeDefined();
     expect(out?.components.LEC[0].times).toHaveLength(2);
   });

@@ -1,14 +1,15 @@
 import type { Course } from "../dataTypes";
 import type { DataCache } from "../dataCache";
+import type { NormalizedCourseCode } from "../brand";
 
 /**
  * Normalize course code for consistent lookup.
  * Handles variations like "AMM 5101", "AMM5101", "amm 5101" -> "AMM 5101"
  */
-export function normalizeCourseCode(code: string): string {
+export function normalizeCourseCode(code: string): NormalizedCourseCode {
   const match = code.match(/^([A-Z]{3,4})\s*(\d{4,5}[A-Z]?)$/i);
-  if (!match) return code.trim();
-  return `${match[1].toUpperCase()} ${match[2]}`;
+  if (!match) return code.trim() as NormalizedCourseCode;
+  return `${match[1].toUpperCase()} ${match[2]}` as NormalizedCourseCode;
 }
 
 /**
@@ -92,7 +93,9 @@ export function getCourseLevel(code: string): number | null {
  *
  * e.g. "CRM 1301" → "CRM 1701", "CRM 1701" → "CRM 1301", "ESP 1991" → null
  */
-export function getLanguageVariant(normalizedCode: string): string | null {
+export function getLanguageVariant(
+  normalizedCode: NormalizedCourseCode,
+): NormalizedCourseCode | null {
   const parsed = parseCourseCode(normalizedCode);
   if (!parsed) return null;
 
@@ -103,8 +106,12 @@ export function getLanguageVariant(normalizedCode: string): string | null {
   const suffix = numMatch[2];
   const hundreds = Math.floor(n / 100) % 10;
 
-  if (hundreds >= 1 && hundreds <= 4) return `${parsed.discipline} ${n + 400}${suffix}`;
-  if (hundreds >= 5 && hundreds <= 8) return `${parsed.discipline} ${n - 400}${suffix}`;
+  if (hundreds >= 1 && hundreds <= 4) {
+    return `${parsed.discipline} ${n + 400}${suffix}` as NormalizedCourseCode;
+  }
+  if (hundreds >= 5 && hundreds <= 8) {
+    return `${parsed.discipline} ${n - 400}${suffix}` as NormalizedCourseCode;
+  }
   return null;
 }
 

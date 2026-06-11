@@ -2,7 +2,9 @@ import type {
   GradeProfessorOffering as ProtoGradeProfessorOffering,
   GradesData as ProtoGradesData,
 } from "@uoplan/proto/data";
+import type { NormalizedCourseCode } from "../brand";
 import type { GradeDistribution } from "./domain";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 export function fromProtoDistribution(
   distribution:
@@ -62,7 +64,7 @@ export type CourseGradesProfessor = {
 };
 
 export type CourseGradesEntry = {
-  code: string;
+  code: NormalizedCourseCode;
   professors: CourseGradesProfessor[];
 };
 
@@ -79,7 +81,7 @@ export function fromProtoCourseGradesData(input: ProtoGradesData): CourseGradesD
       if (row) professors.push(row);
     }
     if (professors.length > 0) {
-      courses.push({ code: c.code, professors });
+      courses.push({ code: normalizeCourseCode(c.code), professors });
     }
   }
   return { courses };

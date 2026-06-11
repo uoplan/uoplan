@@ -1,5 +1,6 @@
 import type { ComponentSection, CourseSchedule } from "../dataTypes";
 import type { DataCache } from "../dataCache";
+import type { NormalizedCourseCode } from "../brand";
 import { isSectionAllowedByMinRating } from "../professorRatings";
 import { isHonoursProject, normalizeCourseCode } from "../utils/courseUtils";
 import { timeSlotSatisfiesConstraints } from "./constraints";
@@ -125,8 +126,9 @@ export function getEnrollmentsForCourse(
   };
 }
 
-export function canonicalCourseCode(code: string, cache: DataCache): string {
-  return cache.getCourse(normalizeCourseCode(code))?.code ?? code;
+export function canonicalCourseCode(code: string, cache: DataCache): NormalizedCourseCode {
+  const normalized = normalizeCourseCode(code);
+  return cache.getCourse(normalized)?.code ?? normalized;
 }
 
 export function enrollmentForPicker(
@@ -143,7 +145,7 @@ export function enrollmentForPicker(
   }
   const schedule = cache.getSchedule(code);
   if (!schedule) {
-    return { courseCode: code, sectionCombo: combo, times: [] };
+    return { courseCode: normalizeCourseCode(code), sectionCombo: combo, times: [] };
   }
   return getEnrollmentsForCourse(schedule, combo);
 }

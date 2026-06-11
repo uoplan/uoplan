@@ -3,6 +3,7 @@ import type { DataCache } from "@uoplan/core";
 import type { RequirementWithStatus } from "@uoplan/core";
 import { isGroupToken, normalizeCourseCode } from "@uoplan/core";
 import { i18n } from "../../i18n";
+import { testCourseCode } from "../../test/brands";
 import {
   applyOptionSelections,
   appendCourseDedupedByNorm,
@@ -25,8 +26,10 @@ beforeAll(() => {
 function emptyScheduleCache(): DataCache {
   return {
     getCourse: (code) =>
-      ({ code, title: "Test", credits: 3 }) as NonNullable<ReturnType<DataCache["getCourse"]>>,
-    resolveToCanonical: (code) => code,
+      ({ code: testCourseCode(code), title: "Test", credits: 3 }) as NonNullable<
+        ReturnType<DataCache["getCourse"]>
+      >,
+    resolveToCanonical: (code) => testCourseCode(code),
     getSchedule: () => undefined,
     getCoursesByDiscipline: () => [],
     getAllCourses: () => [],
@@ -63,8 +66,8 @@ describe("resolveRequirementIdsForScheduleCourse", () => {
     ];
     expect(
       resolveRequirementIdsForScheduleCourse({
-        courseCode: "CSI 2132",
-        courseNorm: normalizeCourseCode("CSI 2132"),
+        courseCode: testCourseCode("CSI 2132"),
+        courseNorm: testCourseCode("CSI 2132"),
         requirementTreeWithStatus: tree,
         selectedOptionsPerRequirement: {},
         currentPoolMap: {},
@@ -77,8 +80,8 @@ describe("resolveRequirementIdsForScheduleCourse", () => {
   it("falls back to pool map when tree has no match", () => {
     expect(
       resolveRequirementIdsForScheduleCourse({
-        courseCode: "SEG 3100",
-        courseNorm: normalizeCourseCode("SEG 3100"),
+        courseCode: testCourseCode("SEG 3100"),
+        courseNorm: testCourseCode("SEG 3100"),
         requirementTreeWithStatus: [],
         selectedOptionsPerRequirement: {},
         currentPoolMap: { "SEG 3100": "req-pool" },
@@ -105,13 +108,11 @@ describe("isCourseInPerRequirementMaps", () => {
 describe("appendCourseDedupedByNorm", () => {
   it("does not append when normalized code already exists", () => {
     const prev = ["CSI2132"];
-    expect(appendCourseDedupedByNorm(prev, "CSI 2132", normalizeCourseCode("CSI 2132"))).toEqual(
-      prev,
-    );
+    expect(appendCourseDedupedByNorm(prev, "CSI 2132", testCourseCode("CSI 2132"))).toEqual(prev);
   });
 
   it("appends canonical when not present", () => {
-    expect(appendCourseDedupedByNorm([], "CSI 2132", normalizeCourseCode("CSI 2132"))).toEqual([
+    expect(appendCourseDedupedByNorm([], "CSI 2132", testCourseCode("CSI 2132"))).toEqual([
       "CSI 2132",
     ]);
   });
@@ -166,7 +167,7 @@ describe("collectRequirementIdsWithCandidateCourse", () => {
       },
     ];
     expect(
-      collectRequirementIdsWithCandidateCourse(tree, normalizeCourseCode("SEG 3100")).sort(),
+      collectRequirementIdsWithCandidateCourse(tree, testCourseCode("SEG 3100")).sort(),
     ).toEqual(["req-a", "req-b"].sort());
   });
 });
@@ -484,11 +485,13 @@ describe("getConstrainMultiSelectOptions", () => {
   it("excludes 5000+ courses from elective dropdown options", () => {
     const cacheWithSchedules: DataCache = {
       getCourse: (code) =>
-        ({ code, title: "Test", credits: 3 }) as NonNullable<ReturnType<DataCache["getCourse"]>>,
-      resolveToCanonical: (code) => code,
+        ({ code: testCourseCode(code), title: "Test", credits: 3 }) as NonNullable<
+          ReturnType<DataCache["getCourse"]>
+        >,
+      resolveToCanonical: (code) => testCourseCode(code),
       getSchedule: (code) =>
         ({
-          courseCode: code,
+          courseCode: testCourseCode(code),
           components: {},
         }) as NonNullable<ReturnType<DataCache["getSchedule"]>>,
       getCoursesByDiscipline: () => [],
@@ -519,7 +522,7 @@ describe("getConstrainMultiSelectOptions", () => {
       subject: "SEG",
       catalogNumber: "3100",
       title: "Test",
-      courseCode: "SEG 3100",
+      courseCode: testCourseCode("SEG 3100"),
       timeZone: "America/Toronto",
       components: {
         LEC: [
@@ -537,8 +540,10 @@ describe("getConstrainMultiSelectOptions", () => {
 
     const cacheWithNonVirtual: DataCache = {
       getCourse: (code) =>
-        ({ code, title: "Test", credits: 3 }) as NonNullable<ReturnType<DataCache["getCourse"]>>,
-      resolveToCanonical: (code) => code,
+        ({ code: testCourseCode(code), title: "Test", credits: 3 }) as NonNullable<
+          ReturnType<DataCache["getCourse"]>
+        >,
+      resolveToCanonical: (code) => testCourseCode(code),
       getSchedule: (code) => (code === "SEG 3100" ? schedNonVirtualOnly : undefined),
       getCoursesByDiscipline: () => [],
       getAllCourses: () => [],
@@ -582,7 +587,7 @@ describe("getConstrainMultiSelectOptions", () => {
       subject: "SEG",
       catalogNumber: "3100",
       title: "Test",
-      courseCode: "SEG 3100",
+      courseCode: testCourseCode("SEG 3100"),
       timeZone: "America/Toronto",
       components: {
         LEC: [
@@ -600,8 +605,10 @@ describe("getConstrainMultiSelectOptions", () => {
 
     const cacheWithNonVirtual: DataCache = {
       getCourse: (code) =>
-        ({ code, title: "Test", credits: 3 }) as NonNullable<ReturnType<DataCache["getCourse"]>>,
-      resolveToCanonical: (code) => code,
+        ({ code: testCourseCode(code), title: "Test", credits: 3 }) as NonNullable<
+          ReturnType<DataCache["getCourse"]>
+        >,
+      resolveToCanonical: (code) => testCourseCode(code),
       getSchedule: (code) => (code === "SEG 3100" ? schedNonVirtualOnly : undefined),
       getCoursesByDiscipline: () => [],
       getAllCourses: () => [],
@@ -634,14 +641,14 @@ describe("getConstrainMultiSelectOptions", () => {
     const cacheWithSchedules: DataCache = {
       getCourse: () =>
         ({
-          code: "ADM 1101",
+          code: testCourseCode("ADM 1101"),
           title: businessTitle,
           credits: 3,
         }) as NonNullable<ReturnType<DataCache["getCourse"]>>,
-      resolveToCanonical: (code) => code,
+      resolveToCanonical: (code) => testCourseCode(code),
       getSchedule: (code) =>
         ({
-          courseCode: code,
+          courseCode: testCourseCode(code),
           components: {},
         }) as NonNullable<ReturnType<DataCache["getSchedule"]>>,
       getCoursesByDiscipline: () => [],

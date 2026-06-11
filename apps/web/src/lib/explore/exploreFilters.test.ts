@@ -17,6 +17,7 @@ import {
   serializeExploreFiltersSearch,
   type ExploreFilterState,
 } from "./exploreFilters";
+import { testCourseCode, testProfessorName } from "../../test/brands";
 
 function makeGradeViz(entries: Array<{ grade: string; count: number }>): GradeVizData {
   return {
@@ -32,27 +33,35 @@ function makeGradeViz(entries: Array<{ grade: string; count: number }>): GradeVi
   };
 }
 
-function makeCourseEntry(partial: Partial<ExploreCourseSearchEntry>): ExploreCourseSearchEntry {
+type CourseEntryPartial = Partial<
+  Omit<ExploreCourseSearchEntry, "normCode" | "courseCode" | "componentId">
+> & {
+  normCode?: string;
+  courseCode?: string;
+  componentId?: string;
+};
+
+function makeCourseEntry(partial: CourseEntryPartial): ExploreCourseSearchEntry {
   return {
-    normCode: partial.normCode ?? "csi1100",
-    courseCode: partial.courseCode ?? "CSI 1100",
+    normCode: testCourseCode(partial.normCode ?? "csi1100"),
+    courseCode: testCourseCode(partial.courseCode ?? "CSI 1100"),
     courseTitle: partial.courseTitle ?? "Intro",
     fuseText: partial.fuseText ?? "csi 1100 intro",
     gradeViz: partial.gradeViz ?? null,
     level: partial.level ?? 1000,
     language: partial.language ?? "en",
     maxProfessorRating: partial.maxProfessorRating ?? null,
-    componentId: partial.componentId ?? partial.normCode ?? "csi1100",
+    componentId: testCourseCode(partial.componentId ?? partial.normCode ?? "csi1100"),
   };
 }
 
 function makeProfessorEntry(
-  partial: Partial<ExploreProfessorSearchEntry>,
+  partial: Partial<Omit<ExploreProfessorSearchEntry, "displayName">> & { displayName?: string },
 ): ExploreProfessorSearchEntry {
   return {
     groupId: partial.groupId ?? "prof-1",
     legacyId: partial.legacyId,
-    displayName: partial.displayName ?? "Prof One",
+    displayName: testProfessorName(partial.displayName ?? "Prof One"),
     searchText: partial.searchText ?? "prof one",
     uniqueCourseCount: partial.uniqueCourseCount ?? 2,
     disciplines: partial.disciplines ?? [],
@@ -61,12 +70,17 @@ function makeProfessorEntry(
   };
 }
 
-function makeOffering(partial: Partial<ExploreOfferingFlat>): ExploreOfferingFlat {
+type OfferingPartial = Partial<Omit<ExploreOfferingFlat, "courseCode" | "professorName">> & {
+  courseCode?: string;
+  professorName?: string;
+};
+
+function makeOffering(partial: OfferingPartial): ExploreOfferingFlat {
   return {
     id: partial.id ?? "offering",
-    courseCode: partial.courseCode ?? "CSI 1100",
+    courseCode: testCourseCode(partial.courseCode ?? "CSI 1100"),
     courseTitle: partial.courseTitle ?? "Intro",
-    professorName: partial.professorName ?? "Ada Lovelace",
+    professorName: testProfessorName(partial.professorName ?? "Ada Lovelace"),
     legacyId: partial.legacyId,
     termId: partial.termId ?? 2269,
     termLabel: partial.termLabel ?? "Fall 2026",
@@ -398,15 +412,27 @@ describe("buildTermPresenceIndex", () => {
     const offerings = [
       makeOffering({
         courseCode: "CSI 1100",
-        professorName: "Ada Lovelace",
+        professorName: testProfessorName("Ada Lovelace"),
         legacyId: 1,
         termId: 2269,
       }),
-      makeOffering({ courseCode: "MAT 1320", professorName: "Carl Gauss", termId: 2269 }),
-      makeOffering({ courseCode: "CSI 1100", professorName: "Staff", legacyId: 9, termId: 2271 }),
+      makeOffering({
+        courseCode: "MAT 1320",
+        professorName: testProfessorName("Carl Gauss"),
+        termId: 2269,
+      }),
+      makeOffering({
+        courseCode: "CSI 1100",
+        professorName: testProfessorName("Staff"),
+        legacyId: 9,
+        termId: 2271,
+      }),
     ];
 
-    const index = buildTermPresenceIndex(offerings, new Map([["CSI 1100", "comp-csi"]]));
+    const index = buildTermPresenceIndex(
+      offerings,
+      new Map([[testCourseCode("CSI 1100"), testCourseCode("comp-csi")]]),
+    );
 
     expect(index.courseComponentsByTerm.get(2269)).toEqual(new Set(["comp-csi", "MAT 1320"]));
     expect(index.courseComponentsByTerm.get(2271)).toEqual(new Set(["comp-csi"]));

@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Accordion, Badge, Box, Group, HoverCard, Paper, Stack, Text } from "@mantine/core";
 import { useMemo } from "react";
-import type { ProfessorRatingsMap } from "@uoplan/core";
+import type { CanonicalProfessorName, ProfessorRatingsMap } from "@uoplan/core";
 import {
   normalizeProfessorName,
   normalizeGradeVizDistribution,
@@ -38,7 +38,10 @@ const EXPLORE_HISTOGRAM_WIDTH_PX = 288;
 /** CSS media query for mobile stacking. */
 const mobileMediaQuery = `@media (max-width: ${MOBILE_BREAKPOINT_PX}px)`;
 
-function professorRatingLine(displayName: string, professorRatings: ProfessorRatingsMap | null) {
+function professorRatingLine(
+  displayName: CanonicalProfessorName,
+  professorRatings: ProfessorRatingsMap | null,
+) {
   if (!professorRatings) return null;
   const entry = professorRatings[normalizeProfessorName(displayName)];
   if (!entry) return null;

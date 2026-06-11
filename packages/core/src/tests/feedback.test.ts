@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { FeedbackProto } from "@uoplan/proto";
+import { normalizeCourseCode } from "../utils/courseUtils";
 import {
   buildFeedbackIndex,
   feedbackAllViews,
@@ -18,7 +19,7 @@ function sampleData(): FeedbackProto.FeedbackData {
       { text: "For your program, this course is", scale: false, optionSet: 0 },
     ],
     professors: ["Ada Lovelace", "Alan Turing"],
-    extraCourses: ["XYZ 9999"],
+    extraCourses: [normalizeCourseCode("XYZ 9999")],
     indicesCourseCount: 2,
     questionSets: [{ questions: [0, 1] }],
     optionSets: [{ options: ["strongly agree", "agree", "disagree", "strongly disagree"] }],
@@ -73,10 +74,10 @@ function sampleData(): FeedbackProto.FeedbackData {
         ],
       },
     ],
-  } as FeedbackProto.FeedbackData;
+  } as unknown as FeedbackProto.FeedbackData;
 }
 
-const INDICES = ["CSI 2110", "MAT 1320"];
+const INDICES = [normalizeCourseCode("CSI 2110"), normalizeCourseCode("MAT 1320")];
 
 describe("buildFeedbackIndex", () => {
   it("resolves shared-index and extra course codes and decodes averages", () => {
@@ -94,7 +95,7 @@ describe("buildFeedbackIndex", () => {
     ]);
     expect(index.questions[1].options).toEqual([]);
 
-    const csi = index.byCourseNorm.get("CSI 2110");
+    const csi = index.byCourseNorm.get(normalizeCourseCode("CSI 2110"));
     expect(csi).toBeDefined();
     expect(csi).toHaveLength(2); // one per term
 
@@ -105,22 +106,22 @@ describe("buildFeedbackIndex", () => {
     expect(first.questions[1].average).toBeNull(); // categorical -> null
 
     // extra_courses overflow code resolves too.
-    expect(index.byCourseNorm.get("XYZ 9999")).toHaveLength(1);
-    const extra = index.byCourseNorm.get("XYZ 9999")![0];
+    expect(index.byCourseNorm.get(normalizeCourseCode("XYZ 9999"))).toHaveLength(1);
+    const extra = index.byCourseNorm.get(normalizeCourseCode("XYZ 9999"))![0];
     expect(extra.registered).toBeNull(); // empty registered array
     expect(extra.questions[0].average).toBeCloseTo(3.0);
   });
 
   it("normalizes whitespace in course codes", () => {
-    const index = buildFeedbackIndex(sampleData(), ["csi  2110", "MAT 1320"]);
-    expect(index.byCourseNorm.has("CSI 2110")).toBe(true);
+    const index = buildFeedbackIndex(sampleData(), ["csi  2110", normalizeCourseCode("MAT 1320")]);
+    expect(index.byCourseNorm.has(normalizeCourseCode("CSI 2110"))).toBe(true);
   });
 });
 
 describe("feedback aggregation helpers", () => {
   it("builds a response-weighted per-question series over terms", () => {
     const index = buildFeedbackIndex(sampleData(), INDICES);
-    const views = index.byCourseNorm.get("CSI 2110")!;
+    const views = index.byCourseNorm.get(normalizeCourseCode("CSI 2110"))!;
     const series = feedbackQuestionSeries(views, index.questions);
 
     // Only the scale question is charted.
@@ -133,7 +134,7 @@ describe("feedback aggregation helpers", () => {
 
   it("summarizes overall sentiment, responses and response rate", () => {
     const index = buildFeedbackIndex(sampleData(), INDICES);
-    const views = index.byCourseNorm.get("CSI 2110")!;
+    const views = index.byCourseNorm.get(normalizeCourseCode("CSI 2110"))!;
     const summary = feedbackSummary(views);
 
     // weighted: (4.2*40 + 4.8*20) / 60 = 4.4
@@ -146,12 +147,16 @@ describe("feedback aggregation helpers", () => {
 
   it("emits a response-rate series only for terms with invited counts", () => {
     const index = buildFeedbackIndex(sampleData(), INDICES);
-    const rate = feedbackResponseRateSeries(index.byCourseNorm.get("CSI 2110")!);
+    const rate = feedbackResponseRateSeries(
+      index.byCourseNorm.get(normalizeCourseCode("CSI 2110"))!,
+    );
     expect(rate.map((p) => p.termId)).toEqual([2231, 2241]);
     expect(rate[0].rate).toBeCloseTo(40 / 50);
 
     // The extra course has no registered data -> no rate points.
-    expect(feedbackResponseRateSeries(index.byCourseNorm.get("XYZ 9999")!)).toHaveLength(0);
+    expect(
+      feedbackResponseRateSeries(index.byCourseNorm.get(normalizeCourseCode("XYZ 9999"))!),
+    ).toHaveLength(0);
   });
 
   it("computes a university-wide overall series across all views", () => {

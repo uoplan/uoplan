@@ -4,6 +4,7 @@ import {
   professorGraphId,
   type CourseGradesData,
 } from "@uoplan/core";
+import { testCourseCode, testProfessorName } from "../../test/brands";
 import {
   buildOfferingsByProfessorId,
   getAggregateGradeViz,
@@ -15,7 +16,7 @@ function buildFixture(): CourseGradesData {
   return {
     courses: [
       {
-        code: "CSI 2110",
+        code: testCourseCode("CSI 2110"),
         professors: [
           {
             name: "Alice Shared",
@@ -27,7 +28,7 @@ function buildFixture(): CourseGradesData {
         ],
       },
       {
-        code: "MAT 1341",
+        code: testCourseCode("MAT 1341"),
         professors: [
           { name: "Alice Shared", legacyId: 1, termId: 2251, distribution: { B: 8, C: 2 } },
           { name: "Bob Shared", legacyId: 2, termId: 2241, distribution: { A: 12 } },
@@ -78,7 +79,7 @@ describe("getGraphNeighbors and sortGraphNeighbors", () => {
       {
         node: {
           id: "b",
-          displayName: "Zed",
+          displayName: testProfessorName("Zed"),
           degree: 1,
           disciplineWeights: {},
           subjects: [],
@@ -88,7 +89,7 @@ describe("getGraphNeighbors and sortGraphNeighbors", () => {
       {
         node: {
           id: "a",
-          displayName: "Amy",
+          displayName: testProfessorName("Amy"),
           degree: 1,
           disciplineWeights: {},
           subjects: [],

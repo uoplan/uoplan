@@ -3,6 +3,7 @@ import { diagnoseTimetableFailure } from "../generationDiagnostics";
 import { buildDataCache } from "../dataCache";
 import type { Catalogue } from "../dataTypes";
 import type { SchedulesData, CourseSchedule, DayOfWeek } from "../dataTypes";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 const emptyCatalogue: Catalogue = { courses: [], programs: [] };
 
@@ -13,7 +14,7 @@ function makeSchedule(
   return {
     subject: courseCode.split(" ")[0],
     catalogNumber: courseCode.split(" ")[1],
-    courseCode,
+    courseCode: normalizeCourseCode(courseCode),
     title: null,
     timeZone: "America/Toronto",
     components: {

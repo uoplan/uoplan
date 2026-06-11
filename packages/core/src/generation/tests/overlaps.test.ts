@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { enrollmentsOverlap, timesOverlap } from "../overlaps";
 import type { CourseEnrollment, TimeSlot } from "../types";
+import { normalizeCourseCode } from "../../utils/courseUtils";
 
 describe("overlaps", () => {
   it("timesOverlap detects overlapping times on the same day", () => {
@@ -66,7 +67,7 @@ describe("overlaps", () => {
 
   it("enrollmentsOverlap checks all time slots in enrollments", () => {
     const e1: CourseEnrollment = {
-      courseCode: "AAA 1000",
+      courseCode: normalizeCourseCode("AAA 1000"),
       sectionCombo: {},
       times: [
         { day: "Mo", startMinutes: 600, endMinutes: 700 },
@@ -74,7 +75,7 @@ describe("overlaps", () => {
       ],
     };
     const e2: CourseEnrollment = {
-      courseCode: "BBB 2000",
+      courseCode: normalizeCourseCode("BBB 2000"),
       sectionCombo: {},
       times: [
         { day: "Tu", startMinutes: 600, endMinutes: 700 },

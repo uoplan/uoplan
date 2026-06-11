@@ -1,5 +1,7 @@
+import type { NormalizedCourseCode } from "../brand";
+
 export interface TakenCourse {
-  code: string;
+  code: NormalizedCourseCode;
   credits: number;
   discipline: string;
   /** Thousands digit × 1000 from course code (e.g. CSI 3101 → 3000), or null if unparsable. */

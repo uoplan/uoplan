@@ -2,13 +2,14 @@ import { describe, it, expect } from "vitest";
 import { buildScheduleIcs } from "../ics";
 import type { GeneratedSchedule } from "../generation";
 import type { DataCache } from "../dataCache";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 describe("buildScheduleIcs", () => {
   it("creates weekly recurring events with bounded UNTIL and escapes fields", () => {
     const sched: GeneratedSchedule = {
       enrollments: [
         {
-          courseCode: "CSI 2132",
+          courseCode: normalizeCourseCode("CSI 2132"),
           times: [{ day: "Mo", startMinutes: 540, endMinutes: 600 }],
           sectionCombo: {
             LEC: {
@@ -37,9 +38,9 @@ describe("buildScheduleIcs", () => {
 
     const cache: DataCache = {
       getCourse: (code) => {
-        if (code === "CSI 2132") {
+        if (code === normalizeCourseCode("CSI 2132")) {
           return {
-            code: "CSI 2132",
+            code: normalizeCourseCode("CSI 2132"),
             title: "Data Structures, Algorithms",
             credits: 3,
             description: "",
@@ -48,7 +49,7 @@ describe("buildScheduleIcs", () => {
         }
         return undefined;
       },
-      resolveToCanonical: (code) => code,
+      resolveToCanonical: (code) => normalizeCourseCode(code),
       getSchedule: () => undefined,
       getCoursesByDiscipline: () => [],
       getAllCourses: () => [],
