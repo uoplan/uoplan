@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 import { defaultAppStore } from "../appStore";
+import { emptyScheduleGenerationResult, resetStoreForSeedTests } from "./scheduleTestHelpers";
 
 const generateSchedulesActionMock = vi.fn();
 
@@ -11,30 +12,12 @@ vi.mock("../../workers/scheduleWorkerClient", () => ({
   inputFromState: (s: unknown) => s,
 }));
 
-const mockResult = {
-  currentSchedule: { enrollments: [] },
-  swapPool: [],
-  chosenCourseToRequirementId: {},
-  currentPoolMap: {},
-  currentColorMap: {},
-  generationError: null,
-};
-
 describe("generationOptionsDirty", () => {
   const firstSeed = 1_000_000_000;
 
   beforeEach(() => {
-    generateSchedulesActionMock.mockReset();
-    generateSchedulesActionMock.mockResolvedValue(mockResult);
-    defaultAppStore.setState({
-      ...defaultAppStore.getState(),
+    resetStoreForSeedTests(generateSchedulesActionMock, firstSeed, {
       calendarMode: "basic",
-      firstSeed,
-      currentSeed: 0,
-      lowestVisitedSeed: null,
-      currentSchedule: null,
-      scheduleGenerating: false,
-      currentSwaps: [],
       blockedTimes: [],
       generationOptionsDirty: false,
     });
@@ -84,7 +67,7 @@ describe("generationOptionsDirty", () => {
     generateSchedulesActionMock.mockImplementation(() => {
       dirtyWhileRunning = defaultAppStore.getState().generationOptionsDirty;
       expect(defaultAppStore.getState().scheduleGenerating).toBe(true);
-      return Promise.resolve(mockResult);
+      return Promise.resolve(emptyScheduleGenerationResult());
     });
 
     await defaultAppStore.getState().generateBasicSchedules();

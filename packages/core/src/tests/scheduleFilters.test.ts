@@ -9,6 +9,23 @@ import type { DataCache } from "../dataCache";
 import { describe, it, expect } from "vitest";
 import { normalizeCourseCode } from "../utils/courseUtils";
 
+function makeSection(
+  section: string,
+  status: string | null,
+  times: CourseSchedule["components"][string][number]["times"] = [
+    { day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false },
+  ],
+): CourseSchedule["components"][string][number] {
+  return {
+    section,
+    sectionCode: section,
+    component: "LEC",
+    session: null,
+    times,
+    status,
+  };
+}
+
 function makeSchedule(components: CourseSchedule["components"]): CourseSchedule {
   return {
     subject: "CSI",
@@ -20,20 +37,47 @@ function makeSchedule(components: CourseSchedule["components"]): CourseSchedule 
   };
 }
 
+function openSchedule(
+  times: CourseSchedule["components"][string][number]["times"] = [
+    { day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false },
+  ],
+): CourseSchedule {
+  return makeSchedule({
+    LEC: [makeSection("A00", "Open", times)],
+  });
+}
+
+function scheduleWithMixedVirtualTimes(): CourseSchedule {
+  return openSchedule([
+    { day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false },
+    { day: "We", startMinutes: 540, endMinutes: 630, virtual: true },
+  ]);
+}
+
+function cacheReturning(
+  schedule?: CourseSchedule,
+  shouldReturnSchedule: (code: string) => boolean = () => true,
+): DataCache {
+  return {
+    getCourse: () => undefined,
+    resolveToCanonical: (code) => normalizeCourseCode(code),
+    getSchedule: (code) => (schedule && shouldReturnSchedule(code) ? schedule : undefined),
+    getCoursesByDiscipline: () => [],
+    getAllCourses: () => [],
+    getAllSchedules: () => (schedule ? [schedule] : []),
+  };
+}
+
+function expectOnlyVirtualLectureTime(schedule: CourseSchedule | undefined) {
+  expect(schedule).toBeDefined();
+  expect(schedule?.components.LEC).toHaveLength(1);
+  expect(schedule?.components.LEC[0].times).toHaveLength(1);
+  expect(schedule?.components.LEC[0].times[0].virtual).toBe(true);
+}
+
 describe("filterScheduleExcludingClosed", () => {
   it("returns same schedule when all sections are open or non-closed", () => {
-    const sched = makeSchedule({
-      LEC: [
-        {
-          section: "A00",
-          sectionCode: "A00",
-          component: "LEC",
-          session: null,
-          times: [{ day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false }],
-          status: "Open",
-        },
-      ],
-    });
+    const sched = openSchedule();
     const out = filterScheduleExcludingClosed(sched);
     expect(out).toBeDefined();
     expect(out?.components.LEC).toHaveLength(1);
@@ -42,16 +86,7 @@ describe("filterScheduleExcludingClosed", () => {
 
   it("returns undefined when one component has only closed sections", () => {
     const sched = makeSchedule({
-      LEC: [
-        {
-          section: "A00",
-          sectionCode: "A00",
-          component: "LEC",
-          session: null,
-          times: [{ day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false }],
-          status: "Closed",
-        },
-      ],
+      LEC: [makeSection("A00", "Closed")],
     });
     const out = filterScheduleExcludingClosed(sched);
     expect(out).toBeUndefined();
@@ -60,22 +95,10 @@ describe("filterScheduleExcludingClosed", () => {
   it("filters out closed sections and keeps open in same component", () => {
     const sched = makeSchedule({
       LEC: [
-        {
-          section: "A00",
-          sectionCode: "A00",
-          component: "LEC",
-          session: null,
-          times: [{ day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false }],
-          status: "Open",
-        },
-        {
-          section: "A01",
-          sectionCode: "A01",
-          component: "LEC",
-          session: null,
-          times: [{ day: "Tu", startMinutes: 540, endMinutes: 630, virtual: false }],
-          status: "Closed",
-        },
+        makeSection("A00", "Open"),
+        makeSection("A01", "Closed", [
+          { day: "Tu", startMinutes: 540, endMinutes: 630, virtual: false },
+        ]),
       ],
     });
     const out = filterScheduleExcludingClosed(sched);
@@ -86,24 +109,13 @@ describe("filterScheduleExcludingClosed", () => {
 
   it("returns undefined when one of multiple components ends up empty", () => {
     const sched = makeSchedule({
-      LEC: [
-        {
-          section: "A00",
-          sectionCode: "A00",
-          component: "LEC",
-          session: null,
-          times: [{ day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false }],
-          status: "Open",
-        },
-      ],
+      LEC: [makeSection("A00", "Open")],
       TUT: [
         {
-          section: "T01",
-          sectionCode: "T01",
+          ...makeSection("T01", "Closed", [
+            { day: "We", startMinutes: 540, endMinutes: 630, virtual: false },
+          ]),
           component: "TUT",
-          session: null,
-          times: [{ day: "We", startMinutes: 540, endMinutes: 630, virtual: false }],
-          status: "Closed",
         },
       ],
     });
@@ -114,64 +126,29 @@ describe("filterScheduleExcludingClosed", () => {
 
 describe("filterScheduleVirtualOnly", () => {
   it("keeps hybrid section with only virtual times remaining", () => {
-    const sched = makeSchedule({
-      LEC: [
-        {
-          section: "A00",
-          sectionCode: "A00",
-          component: "LEC",
-          session: null,
-          times: [
-            { day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false },
-            { day: "We", startMinutes: 540, endMinutes: 630, virtual: true },
-          ],
-          status: "Open",
-        },
-      ],
-    });
+    const sched = scheduleWithMixedVirtualTimes();
     const out = filterScheduleVirtualOnly(sched);
-    expect(out).toBeDefined();
-    expect(out?.components.LEC).toHaveLength(1);
-    expect(out?.components.LEC[0].times).toHaveLength(1);
-    expect(out?.components.LEC[0].times[0].virtual).toBe(true);
+    expectOnlyVirtualLectureTime(out);
   });
 
   it("returns undefined when all times are non-virtual", () => {
-    const sched = makeSchedule({
-      LEC: [
-        {
-          section: "A00",
-          sectionCode: "A00",
-          component: "LEC",
-          session: null,
-          times: [{ day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false }],
-          status: "Open",
-        },
-      ],
-    });
+    const sched = openSchedule();
     expect(filterScheduleVirtualOnly(sched)).toBeUndefined();
   });
 
   it("returns undefined when one component has no sections left after strip", () => {
     const sched = makeSchedule({
       LEC: [
-        {
-          section: "A00",
-          sectionCode: "A00",
-          component: "LEC",
-          session: null,
-          times: [{ day: "Mo", startMinutes: 540, endMinutes: 630, virtual: true }],
-          status: "Open",
-        },
+        makeSection("A00", "Open", [
+          { day: "Mo", startMinutes: 540, endMinutes: 630, virtual: true },
+        ]),
       ],
       TUT: [
         {
-          section: "T01",
-          sectionCode: "T01",
+          ...makeSection("T01", "Open", [
+            { day: "We", startMinutes: 540, endMinutes: 630, virtual: false },
+          ]),
           component: "TUT",
-          session: null,
-          times: [{ day: "We", startMinutes: 540, endMinutes: 630, virtual: false }],
-          status: "Open",
         },
       ],
     });
@@ -180,66 +157,23 @@ describe("filterScheduleVirtualOnly", () => {
 });
 
 describe("getEffectiveSchedule", () => {
-  const schedOpen = makeSchedule({
-    LEC: [
-      {
-        section: "A00",
-        sectionCode: "A00",
-        component: "LEC",
-        session: null,
-        times: [{ day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false }],
-        status: "Open",
-      },
-    ],
-  });
+  const schedOpen = openSchedule();
 
   it("returns raw schedule when includeClosed is true", () => {
-    const cache: DataCache = {
-      getCourse: () => undefined,
-      resolveToCanonical: (code) => normalizeCourseCode(code),
-      getSchedule: () => schedOpen,
-      getCoursesByDiscipline: () => [],
-      getAllCourses: () => [],
-      getAllSchedules: () => [schedOpen],
-    };
+    const cache = cacheReturning(schedOpen);
     const out = getEffectiveSchedule(cache, normalizeCourseCode("CSI 1234"), true);
     expect(out).toBe(schedOpen);
   });
 
   it("returns undefined when code not in cache", () => {
-    const cache: DataCache = {
-      getCourse: () => undefined,
-      resolveToCanonical: (code) => normalizeCourseCode(code),
-      getSchedule: () => undefined,
-      getCoursesByDiscipline: () => [],
-      getAllCourses: () => [],
-      getAllSchedules: () => [],
-    };
+    const cache = cacheReturning();
     const out = getEffectiveSchedule(cache, normalizeCourseCode("CSI 9999"), false);
     expect(out).toBeUndefined();
   });
 
   it("returns undefined when virtualOnly and no virtual times remain", () => {
-    const schedNonVirtual = makeSchedule({
-      LEC: [
-        {
-          section: "A00",
-          sectionCode: "A00",
-          component: "LEC",
-          session: null,
-          times: [{ day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false }],
-          status: "Open",
-        },
-      ],
-    });
-    const cache: DataCache = {
-      getCourse: () => undefined,
-      resolveToCanonical: (code) => normalizeCourseCode(code),
-      getSchedule: () => schedNonVirtual,
-      getCoursesByDiscipline: () => [],
-      getAllCourses: () => [],
-      getAllSchedules: () => [schedNonVirtual],
-    };
+    const schedNonVirtual = openSchedule();
+    const cache = cacheReturning(schedNonVirtual);
     expect(
       getEffectiveSchedule(cache, normalizeCourseCode("CSI 1234"), true, true),
     ).toBeUndefined();
@@ -248,30 +182,8 @@ describe("getEffectiveSchedule", () => {
 
 describe("cacheWithPerCourseVirtualFilter", () => {
   it("applies virtual filtering per-code", () => {
-    const schedBoth = makeSchedule({
-      LEC: [
-        {
-          section: "A00",
-          sectionCode: "A00",
-          component: "LEC",
-          session: null,
-          times: [
-            { day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false },
-            { day: "We", startMinutes: 540, endMinutes: 630, virtual: true },
-          ],
-          status: "Open",
-        },
-      ],
-    });
-
-    const cache: DataCache = {
-      getCourse: () => undefined,
-      resolveToCanonical: (code) => normalizeCourseCode(code),
-      getSchedule: (code) => (code === normalizeCourseCode("CSI 1234") ? schedBoth : undefined),
-      getCoursesByDiscipline: () => [],
-      getAllCourses: () => [],
-      getAllSchedules: () => [],
-    };
+    const schedBoth = scheduleWithMixedVirtualTimes();
+    const cache = cacheReturning(schedBoth, (code) => code === normalizeCourseCode("CSI 1234"));
 
     const wrapped = cacheWithPerCourseVirtualFilter(
       cache,
@@ -280,36 +192,12 @@ describe("cacheWithPerCourseVirtualFilter", () => {
     );
 
     const out = wrapped.getSchedule(normalizeCourseCode("CSI 1234"));
-    expect(out).toBeDefined();
-    expect(out?.components.LEC[0].times).toHaveLength(1);
-    expect(out?.components.LEC[0].times[0].virtual).toBe(true);
+    expectOnlyVirtualLectureTime(out);
   });
 
   it("keeps non-virtual times when virtualOnly is false", () => {
-    const schedBoth = makeSchedule({
-      LEC: [
-        {
-          section: "A00",
-          sectionCode: "A00",
-          component: "LEC",
-          session: null,
-          times: [
-            { day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false },
-            { day: "We", startMinutes: 540, endMinutes: 630, virtual: true },
-          ],
-          status: "Open",
-        },
-      ],
-    });
-
-    const cache: DataCache = {
-      getCourse: () => undefined,
-      resolveToCanonical: (code) => normalizeCourseCode(code),
-      getSchedule: () => schedBoth,
-      getCoursesByDiscipline: () => [],
-      getAllCourses: () => [],
-      getAllSchedules: () => [],
-    };
+    const schedBoth = scheduleWithMixedVirtualTimes();
+    const cache = cacheReturning(schedBoth);
 
     const wrapped = cacheWithPerCourseVirtualFilter(cache, true, () => false);
     const out = wrapped.getSchedule(normalizeCourseCode("CSI 1234"));

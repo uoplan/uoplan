@@ -8,27 +8,7 @@ import type { CalendarEvent } from "../../hooks/useCalendarEvents";
 import { tr } from "../../i18n";
 import { GradeDistributionExpanded } from "./GradeDistributionViz";
 import { formatTimeRange } from "./calendarEventDisplayUtils";
-
-function formatMeetingDateRange(meetingDates: [string, string]): string {
-  const [start, end] = meetingDates;
-  const s = new Date(`${start}T00:00:00Z`);
-  const e = new Date(`${end}T00:00:00Z`);
-  if (Number.isNaN(s.getTime()) || Number.isNaN(e.getTime())) return "";
-  const sameYear = s.getUTCFullYear() === e.getUTCFullYear();
-  const fmtNoYear = new Intl.DateTimeFormat(undefined, {
-    month: "short",
-    day: "numeric",
-    timeZone: "UTC",
-  });
-  const fmtWithYear = new Intl.DateTimeFormat(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC",
-  });
-  const startStr = sameYear ? fmtNoYear.format(s) : fmtWithYear.format(s);
-  return `${startStr} – ${fmtWithYear.format(e)}`;
-}
+import { formatUtcDateRange } from "./calendarDateRange";
 
 interface EventInfoSectionProps {
   event: CalendarEvent;
@@ -65,6 +45,39 @@ function ProfessorLink({
   );
 }
 
+function RmpRatingValue({ legacyId, value }: { legacyId?: number | null; value: string }) {
+  return legacyId ? (
+    <Anchor
+      href={`https://www.ratemyprofessors.com/professor/${legacyId}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      size="xs"
+      fw={600}
+      c="var(--app-text)"
+      style={{
+        whiteSpace: "nowrap",
+        flexShrink: 0,
+        fontVariantNumeric: "tabular-nums",
+      }}
+      onClick={(e: MouseEvent) => e.stopPropagation()}
+    >
+      {value}
+    </Anchor>
+  ) : (
+    <Text
+      size="xs"
+      fw={600}
+      style={{
+        whiteSpace: "nowrap",
+        flexShrink: 0,
+        fontVariantNumeric: "tabular-nums",
+      }}
+    >
+      {value}
+    </Text>
+  );
+}
+
 /** Read-only details for a calendar event (section, time, instructor, ratings,
  * grade distribution). Shown inside the swap overlay (popover on desktop,
  * drawer on mobile) above the list of swap candidates. */
@@ -75,7 +88,7 @@ export function EventInfoSection({ event }: EventInfoSectionProps) {
   );
   const dayLabel = DAY_LABELS[event.day];
   const dateRange = useMemo(
-    () => (event.meetingDates ? formatMeetingDateRange(event.meetingDates) : ""),
+    () => (event.meetingDates ? formatUtcDateRange(...event.meetingDates, "") : ""),
     [event.meetingDates],
   );
 
@@ -178,36 +191,7 @@ export function EventInfoSection({ event }: EventInfoSectionProps) {
                   <Text size="xs" c="dimmed" style={{ minWidth: 0 }}>
                     {arr.length > 1 ? d.name : tr("calendar.hover.satisfactionProfessor")}
                   </Text>
-                  {d.legacyId ? (
-                    <Anchor
-                      href={`https://www.ratemyprofessors.com/professor/${d.legacyId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      size="xs"
-                      fw={600}
-                      c="var(--app-text)"
-                      style={{
-                        whiteSpace: "nowrap",
-                        flexShrink: 0,
-                        fontVariantNumeric: "tabular-nums",
-                      }}
-                      onClick={(e: MouseEvent) => e.stopPropagation()}
-                    >
-                      {value}
-                    </Anchor>
-                  ) : (
-                    <Text
-                      size="xs"
-                      fw={600}
-                      style={{
-                        whiteSpace: "nowrap",
-                        flexShrink: 0,
-                        fontVariantNumeric: "tabular-nums",
-                      }}
-                    >
-                      {value}
-                    </Text>
-                  )}
+                  <RmpRatingValue legacyId={d.legacyId} value={value} />
                 </Group>
               );
             })}
@@ -262,36 +246,7 @@ export function EventInfoSection({ event }: EventInfoSectionProps) {
                   rating: predictedRating.rating.toFixed(1).replace(/\.0$/, ""),
                   count: predictedRating.numRatings,
                 });
-                return predictedRating.legacyId ? (
-                  <Anchor
-                    href={`https://www.ratemyprofessors.com/professor/${predictedRating.legacyId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    size="xs"
-                    fw={600}
-                    c="var(--app-text)"
-                    style={{
-                      whiteSpace: "nowrap",
-                      flexShrink: 0,
-                      fontVariantNumeric: "tabular-nums",
-                    }}
-                    onClick={(e: MouseEvent) => e.stopPropagation()}
-                  >
-                    {value}
-                  </Anchor>
-                ) : (
-                  <Text
-                    size="xs"
-                    fw={600}
-                    style={{
-                      whiteSpace: "nowrap",
-                      flexShrink: 0,
-                      fontVariantNumeric: "tabular-nums",
-                    }}
-                  >
-                    {value}
-                  </Text>
-                );
+                return <RmpRatingValue legacyId={predictedRating.legacyId} value={value} />;
               })()}
             </Group>
           </Stack>

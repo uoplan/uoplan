@@ -3,7 +3,7 @@ import path from "path";
 import pLimit from "p-limit";
 import { CATALOGUE_DATA_DIR } from "../shared/paths.ts";
 import { getErrorMessage, NotFoundError } from "../shared/errors.ts";
-import { generateIndices, parseMissingByYear } from "./indices.ts";
+import { generateIndices, parseCatalogueYears, parseMissingByYear } from "./indices.ts";
 import {
   buildBaseUrl,
   getCurrentAcademicYear,
@@ -18,7 +18,28 @@ import { processRequirements } from "./requirements.ts";
 import { CatalogueSchema, type Catalogue, type Course, type Program } from "./schema.ts";
 
 const OLDEST_YEAR = 2017;
-const CATALOGUE_JSON_RE = /^catalogue\.(\d{4})\.json$/;
+
+async function scrapeCatalogueItem<T>(
+  url: string,
+  missingUrls: string[],
+  scrape: () => Promise<T>,
+  messages: {
+    missing: (url: string) => string;
+    error: (url: string, message: string) => string;
+  },
+): Promise<T | undefined> {
+  try {
+    return await scrape();
+  } catch (e: unknown) {
+    if (e instanceof NotFoundError) {
+      console.warn(messages.missing(url));
+      missingUrls.push(url);
+      return undefined;
+    }
+    console.error(messages.error(url, getErrorMessage(e)));
+    throw e;
+  }
+}
 
 async function scrapeYearCatalogue(
   baseUrl: string,
@@ -45,17 +66,12 @@ async function scrapeYearCatalogue(
     limit(async () => {
       // hrefs are root-relative paths, so always use ROOT_URL as the domain
       const url = `${ROOT_URL}${link}`;
-      try {
-        const courses = await scrapeCourses(url);
+      const courses = await scrapeCatalogueItem(url, missingUrls, () => scrapeCourses(url), {
+        missing: (u) => `Skipping missing course page: ${u}`,
+        error: (u, message) => `Error scraping courses at ${u}: ${message}`,
+      });
+      if (courses !== undefined) {
         allCourses.push(...courses);
-      } catch (e: unknown) {
-        if (e instanceof NotFoundError) {
-          console.warn(`Skipping missing course page: ${url}`);
-          missingUrls.push(url);
-        } else {
-          console.error(`Error scraping courses at ${url}: ${getErrorMessage(e)}`);
-          throw e;
-        }
       }
     }),
   );
@@ -64,17 +80,12 @@ async function scrapeYearCatalogue(
   const programPromises = programLinks.map((link) =>
     limit(async () => {
       const url = `${ROOT_URL}${link}`;
-      try {
-        const prog = await scrapeProgram(url);
+      const prog = await scrapeCatalogueItem(url, missingUrls, () => scrapeProgram(url), {
+        missing: (u) => `Skipping missing program: ${u}`,
+        error: (u, message) => `Error scraping program at ${u}: ${message}`,
+      });
+      if (prog !== undefined) {
         allPrograms.push(prog);
-      } catch (e: unknown) {
-        if (e instanceof NotFoundError) {
-          console.warn(`Skipping missing program: ${url}`);
-          missingUrls.push(url);
-        } else {
-          console.error(`Error scraping program at ${url}: ${getErrorMessage(e)}`);
-          throw e;
-        }
       }
     }),
   );
@@ -199,13 +210,7 @@ export async function main() {
 
   // Build the manifest from files actually present in the data dir
   const dirEntries = await fs.readdir(dataDir);
-  const years = dirEntries
-    .map((name) => {
-      const m = CATALOGUE_JSON_RE.exec(name);
-      return m ? Number(m[1]) : null;
-    })
-    .filter((y): y is number => y !== null)
-    .sort((a, b) => b - a);
+  const years = parseCatalogueYears(dirEntries, "descending");
 
   await fs.writeFile(
     path.join(dataDir, "catalogue.json"),

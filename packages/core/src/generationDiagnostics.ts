@@ -105,6 +105,27 @@ function buildActiveConstraintsSummary(
   };
 }
 
+function buildTimetableFailureDiagnostics(
+  kind: TimetableFailureKind,
+  eligibleCourseCount: number,
+  targetCount: number,
+  coursesWithNoCombo: string[],
+  comboCountByCourse: Record<string, number>,
+  activeConstraintsSummary: ActiveConstraintsSummary,
+): TimetableFailureDiagnostics {
+  const lead = buildLeadDescriptor(kind, eligibleCourseCount, targetCount, coursesWithNoCombo);
+  return {
+    kind,
+    coursesWithNoCombo: [...new Set(coursesWithNoCombo)],
+    comboCountByCourse,
+    eligibleCourseCount,
+    targetCount,
+    suggestions: buildSuggestions(kind, activeConstraintsSummary, coursesWithNoCombo),
+    activeConstraintsSummary,
+    lead,
+  };
+}
+
 const RELAX_SUGGESTION_BY_ID: Record<string, SuggestionCode> = {
   "compressed-schedule": "turn-off-compressed",
   "min-professor-rating": "clear-min-rating",
@@ -280,17 +301,14 @@ function diagnoseTimetableFailureBase(
       kind = "no_conflict_free_assignment";
     }
 
-    const lead = buildLeadDescriptor(kind, eligibleCourseCount, targetCount, coursesWithNoCombo);
-    return {
+    return buildTimetableFailureDiagnostics(
       kind,
-      coursesWithNoCombo: [...new Set(coursesWithNoCombo)],
-      comboCountByCourse,
       eligibleCourseCount,
       targetCount,
-      suggestions: buildSuggestions(kind, summary, coursesWithNoCombo),
-      activeConstraintsSummary: summary,
-      lead,
-    };
+      coursesWithNoCombo,
+      comboCountByCourse,
+      summary,
+    );
   }
 
   for (const code of pinnedCourseCodes) {
@@ -348,16 +366,13 @@ function diagnoseTimetableFailureBase(
   }
 
   const eligibleCourseCount = pinnedCourseCodes.length + optionalEligibleCount;
-  const lead = buildLeadDescriptor(kind, eligibleCourseCount, targetCount, coursesWithNoCombo);
 
-  return {
+  return buildTimetableFailureDiagnostics(
     kind,
-    coursesWithNoCombo: [...new Set(coursesWithNoCombo)],
-    comboCountByCourse,
     eligibleCourseCount,
     targetCount,
-    suggestions: buildSuggestions(kind, summary, coursesWithNoCombo),
-    activeConstraintsSummary: summary,
-    lead,
-  };
+    coursesWithNoCombo,
+    comboCountByCourse,
+    summary,
+  );
 }

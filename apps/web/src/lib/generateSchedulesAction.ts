@@ -40,6 +40,18 @@ const DEFAULT_MIN_START_MINUTES = 8 * 60 + 30;
 const DEFAULT_MAX_END_MINUTES = 22 * 60;
 const DEFAULT_LANGUAGE_BUCKETS = ["en", "other"];
 
+function sumCompletedFirstYearCredits(
+  completedCourses: readonly string[],
+  cache: DataCache,
+): number {
+  return completedCourses.reduce((sum, code) => {
+    const m = code.match(/\d{4}/);
+    if (!m || Number(m[0]) >= 2000) return sum;
+    const course = cache.getCourse(code);
+    return sum + (course?.credits ?? 3);
+  }, 0);
+}
+
 function buildActiveFilterHints(opts: {
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
@@ -264,12 +276,7 @@ export async function generateSchedulesAction(
     };
   }
 
-  const completedFirstYearCredits = completedCourses.reduce((sum, code) => {
-    const m = code.match(/\d{4}/);
-    if (!m || Number(m[0]) >= 2000) return sum;
-    const course = cache.getCourse(code);
-    return sum + (course?.credits ?? 3);
-  }, 0);
+  const completedFirstYearCredits = sumCompletedFirstYearCredits(completedCourses, cache);
 
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,
@@ -446,12 +453,7 @@ async function handleBasicGeneration(
     blacklistedCourses: basicBlacklistedCourses,
   } = input;
 
-  const completedFirstYearCredits = completedCourses.reduce((sum, code) => {
-    const m = code.match(/\d{4}/);
-    if (!m || Number(m[0]) >= 2000) return sum;
-    const course = cache.getCourse(code);
-    return sum + (course?.credits ?? 3);
-  }, 0);
+  const completedFirstYearCredits = sumCompletedFirstYearCredits(completedCourses, cache);
 
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,

@@ -1,5 +1,6 @@
 import { page } from "vitest/browser";
 import { expect, test } from "vitest";
+import type { ReactElement } from "react";
 import { useState } from "react";
 import { MotionConfig } from "framer-motion";
 import { render } from "vitest-browser-react";
@@ -9,6 +10,18 @@ import { renderWithProviders } from "../../test/renderWithProviders";
 
 // renderWithProviders wraps children in `MotionConfig reducedMotion="always"`,
 // so the count animation is disabled and values resolve immediately.
+
+async function renderLoadHarness(
+  ui: ReactElement,
+  renderHarness: (ui: ReactElement) => unknown,
+  loadedText: string,
+) {
+  await renderHarness(ui);
+  await expect.element(page.getByText("—")).toBeInTheDocument();
+
+  await page.getByRole("button", { name: "load" }).click();
+  await expect.element(page.getByText(loadedText)).toBeInTheDocument();
+}
 
 test("renders the formatted value immediately under reduced motion", async () => {
   await renderWithProviders(<AnimatedNumber value={1234} format={(n) => `$${n}`} />);
@@ -62,11 +75,7 @@ test("countOnLoad snaps straight to the value under reduced motion", async () =>
     );
   }
 
-  await renderWithProviders(<Harness />);
-  await expect.element(page.getByText("—")).toBeInTheDocument();
-
-  await page.getByRole("button", { name: "load" }).click();
-  await expect.element(page.getByText("$500")).toBeInTheDocument();
+  await renderLoadHarness(<Harness />, renderWithProviders, "$500");
 });
 
 test("countOnLoad counts up from 0 to the loaded value", async () => {
@@ -94,11 +103,7 @@ test("countOnLoad counts up from 0 to the loaded value", async () => {
     );
   }
 
-  await render(<Harness />);
-  await expect.element(page.getByText("—")).toBeInTheDocument();
-
-  await page.getByRole("button", { name: "load" }).click();
-  await expect.element(page.getByText("$1000")).toBeInTheDocument();
+  await renderLoadHarness(<Harness />, render, "$1000");
 
   // It animated through intermediate values rather than snapping to the target.
   const intermediates = [...seen].filter((n) => n > 0 && n < 1000);

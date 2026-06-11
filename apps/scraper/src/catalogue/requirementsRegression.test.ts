@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import oracle from "./__fixtures__/programReqOracle.json" with { type: "json" };
 import type { ProgramRequirement } from "./schema.ts";
 import { parseElectiveRequirement } from "./requirements.ts";
+import { canonicalizeDisciplineLevels } from "./regressionTestHelpers.ts";
 
 /**
  * Frozen-corpus regression guard for the program degree-requirement parser.
@@ -36,13 +37,8 @@ function canonicalize(node: ProgramRequirement | null | undefined): unknown {
   if (node.faculty) out.faculty = node.faculty;
   if (node.excluded_disciplines?.length)
     out.excluded_disciplines = [...node.excluded_disciplines].sort();
-  if (node.disciplineLevels?.length)
-    out.disciplineLevels = node.disciplineLevels
-      .map((d) => ({
-        discipline: d.discipline,
-        levels: d.levels ? [...d.levels].sort((a, b) => a - b) : undefined,
-      }))
-      .sort((a, b) => a.discipline.localeCompare(b.discipline));
+  const disciplineLevels = canonicalizeDisciplineLevels(node.disciplineLevels);
+  if (disciplineLevels) out.disciplineLevels = disciplineLevels;
   if (node.title) out.title = node.title;
   if (node.options?.length) out.options = node.options.map(canonicalize);
   return out;

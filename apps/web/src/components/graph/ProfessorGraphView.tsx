@@ -15,21 +15,10 @@ import { animateCameraToHighlightedNodes } from "../../lib/graph/fitViewportToNo
 import { placeIsolatedNodes } from "../../lib/graph/placeIsolatedNodes";
 import { runForceAtlas2Chunked } from "../../lib/graph/runForceAtlas2Chunked";
 import { buildGraphContainerStyle } from "../../lib/graph/graphContainerStyle";
+import { hexColorWithAlpha } from "../../lib/graph/colorWithAlpha";
 
 function themeValue(token: string): string {
   return getComputedStyle(document.documentElement).getPropertyValue(token).trim();
-}
-
-function withAlpha(color: string, alpha: number): string {
-  const hex = color.match(/^#([0-9a-f]{6})$/i);
-  if (hex) {
-    const n = parseInt(hex[1], 16);
-    const r = (n >> 16) & 255;
-    const g = (n >> 8) & 255;
-    const b = n & 255;
-    return `${"rgba"}(${r}, ${g}, ${b}, ${alpha})`;
-  }
-  return color;
 }
 
 type GraphTheme = {
@@ -44,9 +33,9 @@ type GraphTheme = {
 function graphTheme(): GraphTheme {
   const textDim = themeValue("--app-text-dim");
   return {
-    nodeDim: withAlpha(textDim, 0.42),
+    nodeDim: hexColorWithAlpha(textDim, 0.42),
     nodeActive: themeValue("--app-accent"),
-    edgeFocus: withAlpha(themeValue("--app-text-muted"), 0.14),
+    edgeFocus: hexColorWithAlpha(themeValue("--app-text-muted"), 0.14),
     labelColor: themeValue("--app-text"),
     defaultNodeColor: textDim,
     labelFont: themeValue("--app-font-body"),

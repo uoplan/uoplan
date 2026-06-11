@@ -7,9 +7,8 @@ import {
   type FeedbackQuestionMeta,
   type FeedbackSectionView,
 } from "@uoplan/core";
-import { resolveComponentId } from "../lib/explore/gradesSearch";
-import { parseCoursePathParam } from "../lib/explore/courseSearchParams";
 import { useExploreOfferings } from "../components/explore/exploreOfferingsContext";
+import { useCourseAliasResolution } from "./useCourseAliasResolution";
 import { useFeedbackData } from "./useFeedbackData";
 
 interface FeedbackViews {
@@ -31,18 +30,7 @@ export function useCourseFeedbackViews(urlCourseParam: string): FeedbackViews & 
   const { data: feedback, loading: feedbackLoading } = useFeedbackData();
   const { loading: offeringsLoading, aliasGroups } = useExploreOfferings();
 
-  const urlNorm = useMemo(() => parseCoursePathParam(urlCourseParam), [urlCourseParam]);
-
-  const componentId = useMemo(
-    () => (urlNorm === null ? null : resolveComponentId(urlNorm, aliasGroups.componentByNorm)),
-    [urlNorm, aliasGroups],
-  );
-
-  const memberNorms = useMemo(() => {
-    if (urlNorm === null) return [];
-    if (componentId === null) return [urlNorm];
-    return aliasGroups.membersByComponent.get(componentId) ?? [urlNorm];
-  }, [urlNorm, componentId, aliasGroups]);
+  const { urlNorm, memberNorms } = useCourseAliasResolution(urlCourseParam, aliasGroups);
 
   const views = useMemo<FeedbackSectionView[]>(() => {
     if (!feedback) return [];

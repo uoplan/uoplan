@@ -4,18 +4,27 @@
   "files": [
     "dist"
   ],
+  "type": "module",
   "sideEffects": false,
   "main": "src/index.ts",
   "types": "src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./src/generation/types": "./src/generation/types.ts"
+    "./src/generation/types": "./src/generation/types.ts",
+    "./professorIdentity": "./src/professorIdentity.ts",
+    "./gradeLookup": "./src/gradeLookup.ts",
+    "./utils/courseUtils": "./src/utils/courseUtils.ts",
+    "./dataTypes/protoDates": "./src/dataTypes/protoDates.ts"
   },
   "publishConfig": {
     "access": "public",
     "exports": {
       ".": "./dist/index.js",
-      "./src/generation/types": "./dist/generation/types.js"
+      "./src/generation/types": "./dist/generation/types.js",
+      "./professorIdentity": "./dist/professorIdentity.js",
+      "./gradeLookup": "./dist/gradeLookup.js",
+      "./utils/courseUtils": "./dist/utils/courseUtils.js",
+      "./dataTypes/protoDates": "./dist/dataTypes/protoDates.js"
     },
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts"

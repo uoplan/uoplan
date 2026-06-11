@@ -28,6 +28,25 @@ export function normalizeProfessorName(name: string): ProfessorNameKey {
   return (name ?? "").trim().replace(/\s+/g, " ") as ProfessorNameKey;
 }
 
+/**
+ * Yield each instructor exactly once, paired with its normalized name key.
+ * Empty names and duplicate keys are skipped. Shared by every consumer that
+ * walks a section's instructor list (ratings, sentiment) so the dedupe/normalize
+ * rule lives in one place.
+ */
+export function* uniqueInstructors(
+  instructors: Iterable<string> | null | undefined,
+): Generator<{ key: ProfessorNameKey; raw: string }> {
+  if (!instructors) return;
+  const seen = new Set<ProfessorNameKey>();
+  for (const raw of instructors) {
+    const key = normalizeProfessorName(raw);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    yield { key, raw };
+  }
+}
+
 export function buildProfessorRatingsMap(input: {
   professors: Array<{
     id?: string;
@@ -54,11 +73,7 @@ export function getRatingsForInstructors(
 ): number[] {
   if (!map || !instructors?.length) return [];
   const out: number[] = [];
-  const seen = new Set<ProfessorNameKey>();
-  for (const raw of instructors) {
-    const key = normalizeProfessorName(raw);
-    if (!key || seen.has(key)) continue;
-    seen.add(key);
+  for (const { key } of uniqueInstructors(instructors)) {
     const entry = map[key];
     if (entry && Number.isFinite(entry.rating) && entry.numRatings > 0) out.push(entry.rating);
   }
@@ -77,11 +92,7 @@ export function getRatingDetailsForInstructors(
     rating: number;
     numRatings: number;
   }> = [];
-  const seen = new Set<ProfessorNameKey>();
-  for (const raw of instructors) {
-    const key = normalizeProfessorName(raw);
-    if (!key || seen.has(key)) continue;
-    seen.add(key);
+  for (const { key, raw } of uniqueInstructors(instructors)) {
     const entry = map[key];
     if (entry && Number.isFinite(entry.rating)) {
       out.push({

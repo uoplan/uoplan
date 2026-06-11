@@ -10,16 +10,20 @@ import {
 } from "@uoplan/core";
 import { useMemo, useState } from "react";
 import { tr, useTr } from "../../i18n";
-import { formatTermLabel, formatTermLabelShort } from "../../lib/term/termLabel";
 import { colorForIndex } from "../../lib/trends/palette";
 import { useFeedbackData } from "../../hooks/useFeedbackData";
 import { AppCard } from "../shared/AppCard";
-import { MiniChartTooltip } from "../shared/MiniChartTooltip";
 import { TrendsGridSkeleton } from "./TrendsSkeletons";
 import { FeedbackQuestionChart } from "../explore/feedback/FeedbackQuestionChart";
-
-const SENTIMENT_COLOR = "var(--app-info)";
-const RATE_COLOR = "var(--app-success)";
+import {
+  FEEDBACK_SENTIMENT_COLOR,
+  feedbackAverageChartData,
+  formatFeedbackAverage,
+} from "../explore/feedback/feedbackChartData";
+import {
+  FeedbackAverageTooltip,
+  FeedbackRateLineChart,
+} from "../explore/feedback/feedbackChartShared";
 
 /**
  * University-wide course-feedback trends: overall sentiment and response rate
@@ -77,47 +81,27 @@ export function TrendsFeedbackPage() {
           </Text>
           <LineChart
             h={240}
-            data={sentiment.map((p) => ({
-              term: formatTermLabelShort(p.termId),
-              fullTerm: formatTermLabel(p.termId),
-              average: Number(p.average.toFixed(2)),
-            }))}
+            data={feedbackAverageChartData(sentiment)}
             dataKey="term"
             series={[
               {
                 name: "average",
                 label: tr("explore.feedback.stat.sentiment"),
-                color: SENTIMENT_COLOR,
+                color: FEEDBACK_SENTIMENT_COLOR,
               },
             ]}
             curveType="monotone"
             connectNulls
             withDots={sentiment.length <= 24}
             yAxisProps={{ domain: [1, 5] }}
-            valueFormatter={(value) => value.toFixed(2)}
+            valueFormatter={formatFeedbackAverage}
           />
         </AppCard>
         <AppCard p="md">
           <Text fw={600} size="sm" mb={8}>
             {tr("trends.feedback.responseRate")}
           </Text>
-          <LineChart
-            h={240}
-            data={rate.map((p) => ({
-              term: formatTermLabelShort(p.termId),
-              fullTerm: formatTermLabel(p.termId),
-              rate: Math.round(p.rate * 100),
-            }))}
-            dataKey="term"
-            series={[
-              { name: "rate", label: tr("explore.feedback.stat.responseRate"), color: RATE_COLOR },
-            ]}
-            curveType="monotone"
-            connectNulls
-            withDots={rate.length <= 24}
-            yAxisProps={{ domain: [0, 100] }}
-            valueFormatter={(value) => `${value}%`}
-          />
+          <FeedbackRateLineChart height={240} points={rate} withDots={rate.length <= 24} />
         </AppCard>
       </SimpleGrid>
 
@@ -137,11 +121,7 @@ export function TrendsFeedbackPage() {
               const current = series.points.at(-1)?.average ?? null;
               const isOpen = openQuestionIds.has(series.questionId);
               const panelId = `trends-feedback-question-${String(series.questionId)}`;
-              const chartData = series.points.map((p) => ({
-                term: formatTermLabelShort(p.termId),
-                fullTerm: formatTermLabel(p.termId),
-                average: Number(p.average.toFixed(2)),
-              }));
+              const chartData = feedbackAverageChartData(series.points);
               return (
                 <AppCard key={series.questionId} p="sm">
                   <UnstyledButton
@@ -184,13 +164,10 @@ export function TrendsFeedbackPage() {
                           withDots={false}
                           curveType="monotone"
                           connectNulls
-                          valueFormatter={(value) => value.toFixed(2)}
+                          valueFormatter={formatFeedbackAverage}
                           tooltipProps={{
                             content: ({ payload }) => (
-                              <MiniChartTooltip
-                                payload={payload as never}
-                                format={(v) => v.toFixed(2)}
-                              />
+                              <FeedbackAverageTooltip payload={payload as never} />
                             ),
                           }}
                         />

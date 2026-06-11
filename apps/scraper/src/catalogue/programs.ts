@@ -17,6 +17,17 @@ export async function scrapeProgram(url: string): Promise<Program> {
   const requirements: ProgramRequirement[] = [];
   let currentGroup: ProgramRequirement | null = null;
 
+  function pushSectionHeader(title: string, isIndented: boolean): void {
+    currentGroup = null;
+    requirements.push(
+      ProgramRequirementSchema.parse({
+        type: "section",
+        title,
+        indented: isIndented || undefined,
+      }),
+    );
+  }
+
   $("table.sc_courselist tr").each((_, el) => {
     const rowClass = $(el).attr("class") || "";
     if (rowClass.includes("listsum")) return;
@@ -31,27 +42,13 @@ export async function scrapeProgram(url: string): Promise<Program> {
 
     if (isHeaderRow) {
       if (isSectionHeader) {
-        currentGroup = null;
-        requirements.push(
-          ProgramRequirementSchema.parse({
-            type: "section",
-            title: $(el).text().replace(/\s+/g, " ").trim(),
-            indented: isIndented || undefined,
-          }),
-        );
+        pushSectionHeader($(el).text().replace(/\s+/g, " ").trim(), isIndented);
       }
       return;
     }
 
     if (isSectionHeader) {
-      currentGroup = null;
-      requirements.push(
-        ProgramRequirementSchema.parse({
-          type: "section",
-          title: $(el).text().replace(/\s+/g, " ").trim(),
-          indented: isIndented || undefined,
-        }),
-      );
+      pushSectionHeader($(el).text().replace(/\s+/g, " ").trim(), isIndented);
       return;
     }
 

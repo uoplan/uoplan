@@ -1,5 +1,6 @@
-import type { CourseSchedule } from "./dataTypes";
+import type { CourseSchedule, GradeDistribution } from "./dataTypes";
 import type { DataCache } from "./dataCache";
+import { sumGradeDistributions } from "./gradeLookup";
 
 /**
  * uOttawa official letter grades → 10-point numeric values for GPA-style summaries.
@@ -21,6 +22,19 @@ export const GRADE_POINTS: Record<string, number> = {
 };
 
 const SKIP_GRADES = new Set(["P", "S", "NS", "NC", "ABS", "EIN"]);
+
+/** Letter grades that count toward GPA / graded totals (the 10-point scale). */
+const COUNTED_GRADES = Object.keys(GRADE_POINTS);
+
+/** Summed count of grades that contribute to GPA/averages (excludes P/S/NS/NC/ABS/EIN). */
+export function countedMass(dist: GradeDistribution): number {
+  let total = 0;
+  for (const letter of COUNTED_GRADES) {
+    const n = Number(dist[letter] ?? 0);
+    if (Number.isFinite(n) && n > 0) total += n;
+  }
+  return total;
+}
 
 export const GRADE_VIZ_COLORS = {
   red: "#A32D2D",
@@ -77,6 +91,27 @@ const HISTOGRAM_GRADE_ORDER = [
   "A+",
 ] as const;
 
+function gradePointEntriesExcludingSkipped(
+  dist: Record<string, number>,
+): Array<{ points: number; count: number }> {
+  const entries: Array<{ points: number; count: number }> = [];
+  for (const [letter, count] of Object.entries(dist)) {
+    if (SKIP_GRADES.has(letter)) continue;
+    const pts = GRADE_POINTS[letter];
+    if (pts === undefined) continue;
+    const n = Number(count);
+    if (!Number.isFinite(n) || n <= 0) continue;
+    entries.push({ points: pts, count: n });
+  }
+  return entries;
+}
+
+function massExcludingSkippedGrades(dist: Record<string, number>): number {
+  let mass = 0;
+  for (const { count } of gradePointEntriesExcludingSkipped(dist)) mass += count;
+  return mass;
+}
+
 /**
  * Weighted mean GPA over counted letter grades (excludes P/S/NS/NC/ABS/EIN).
  * Returns null if there is no countable mass.
@@ -85,14 +120,9 @@ export function distributionGpa(dist: Record<string, number> | null | undefined)
   if (!dist || typeof dist !== "object") return null;
   let weighted = 0;
   let mass = 0;
-  for (const [letter, count] of Object.entries(dist)) {
-    if (SKIP_GRADES.has(letter)) continue;
-    const pts = GRADE_POINTS[letter];
-    if (pts === undefined) continue;
-    const n = Number(count);
-    if (!Number.isFinite(n) || n <= 0) continue;
-    weighted += pts * n;
-    mass += n;
+  for (const { points, count } of gradePointEntriesExcludingSkipped(dist)) {
+    weighted += points * count;
+    mass += count;
   }
   if (mass <= 0) return null;
   return weighted / mass;
@@ -100,7 +130,7 @@ export function distributionGpa(dist: Record<string, number> | null | undefined)
 
 /** Sum every section's optional `distribution` across all components. */
 export function aggregateCourseDistribution(schedule: CourseSchedule): Record<string, number> {
-  const parts: Record<string, number>[] = [];
+  const parts: GradeDistribution[] = [];
   for (const sections of Object.values(schedule.components ?? {})) {
     if (!Array.isArray(sections)) continue;
     for (const sec of sections) {
@@ -108,15 +138,7 @@ export function aggregateCourseDistribution(schedule: CourseSchedule): Record<st
       if (d && typeof d === "object") parts.push(d);
     }
   }
-  const out: Record<string, number> = {};
-  for (const d of parts) {
-    for (const [k, v] of Object.entries(d)) {
-      const n = Number(v);
-      if (!Number.isFinite(n)) continue;
-      out[k] = (out[k] ?? 0) + n;
-    }
-  }
-  return out;
+  return sumGradeDistributions(parts);
 }
 
 /** Course-level GPA from aggregated section distributions. */
@@ -131,15 +153,7 @@ export function courseGpa(schedule: CourseSchedule): number | null {
 export function aPlusPercent(dist: Record<string, number> | null | undefined): number | null {
   if (!dist || typeof dist !== "object") return null;
   const aPlus = Number(dist["A+"] ?? 0);
-  let total = 0;
-  for (const [letter, count] of Object.entries(dist)) {
-    if (SKIP_GRADES.has(letter)) continue;
-    const pts = GRADE_POINTS[letter];
-    if (pts === undefined) continue;
-    const n = Number(count);
-    if (!Number.isFinite(n) || n <= 0) continue;
-    total += n;
-  }
+  const total = massExcludingSkippedGrades(dist);
   if (total <= 0) return null;
   return (aPlus / total) * 100;
 }

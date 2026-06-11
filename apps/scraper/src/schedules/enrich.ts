@@ -1,7 +1,20 @@
 /**
  * Enrich schedule JSON with per-section grade `distribution` from grades data
  * (instructor match → course aggregate fallback).
+ *
+ * The pure matching/aggregation primitives are the single source of truth in
+ * `@uoplan/core` (`gradeLookup`); this module keeps only the build-time wrappers
+ * that walk the raw scraper JSON. A contract test (`gradeLookupContract.test.ts`)
+ * guards that the runtime path reproduces these build-time values.
  */
+
+import {
+  accumulateInstructorDistribution,
+  distributionForSection,
+  normalizeInstructorName,
+  sumGradeDistributions,
+} from "@uoplan/core/gradeLookup";
+import type { InstructorNameKey } from "@uoplan/core";
 
 export type GradeDistribution = Record<string, number>;
 
@@ -41,36 +54,6 @@ export interface SectionGradeFields {
   distribution?: GradeDistribution;
 }
 
-function normalizeNameForMatch(value: string): string {
-  return String(value)
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ");
-}
-
-function sumDistributions(dists: Array<GradeDistribution | null | undefined>): GradeDistribution {
-  const out: GradeDistribution = {};
-  for (const d of dists) {
-    if (!d || typeof d !== "object") continue;
-    for (const [k, v] of Object.entries(d)) {
-      const n = Number(v);
-      if (!Number.isFinite(n)) continue;
-      out[k] = (out[k] ?? 0) + n;
-    }
-  }
-  return out;
-}
-
-function hasGradeData(dist: GradeDistribution | null | undefined): boolean {
-  if (!dist || typeof dist !== "object") return false;
-  for (const v of Object.values(dist)) {
-    if (Number(v) > 0) return true;
-  }
-  return false;
-}
-
 function parseSchedulesTermId(data: { termId?: string | number }): number {
   const parsed = Number.parseInt(String(data.termId ?? ""), 10);
   return Number.isFinite(parsed) ? parsed : 0;
@@ -83,45 +66,6 @@ function parseGradeRowTermId(raw: unknown): number {
     return Number.isFinite(parsed) ? parsed : 0;
   }
   return 0;
-}
-
-function distributionForSection(
-  instructors: string[] | undefined,
-  profMap: Map<string, GradeDistribution> | undefined,
-  courseAggregate: GradeDistribution | undefined,
-): { distribution?: GradeDistribution; kind: "matched" | "fallback" | "none" } {
-  const matchedParts: GradeDistribution[] = [];
-  const seen = new Set<string>();
-
-  if (Array.isArray(instructors)) {
-    for (const raw of instructors) {
-      if (typeof raw !== "string") continue;
-      const trimmed = raw.trim();
-      if (!trimmed) continue;
-      const norm = normalizeNameForMatch(trimmed);
-      if (!norm || norm === "staff") continue;
-      if (seen.has(norm)) continue;
-      seen.add(norm);
-
-      const entry = profMap?.get(norm);
-      if (entry && hasGradeData(entry)) {
-        matchedParts.push(entry);
-      }
-    }
-  }
-
-  if (matchedParts.length > 0) {
-    const merged = sumDistributions(matchedParts);
-    if (hasGradeData(merged)) {
-      return { distribution: merged, kind: "matched" };
-    }
-  }
-
-  if (courseAggregate && hasGradeData(courseAggregate)) {
-    return { distribution: courseAggregate, kind: "fallback" };
-  }
-
-  return { kind: "none" };
 }
 
 export function buildGradeLookups(gradesRaw: unknown): GradeLookups {
@@ -152,30 +96,20 @@ export function buildGradeLookups(gradesRaw: unknown): GradeLookups {
       const termId = parseGradeRowTermId(prof.termId);
       if (termId === 0) continue;
 
-      const key = normalizeNameForMatch(name);
+      const key = normalizeInstructorName(name);
       if (!key) continue;
 
-      let termMap = byCourseTermName.get(code);
-      if (!termMap) {
-        termMap = new Map();
-        byCourseTermName.set(code, termMap);
-      }
-      let profMap = termMap.get(termId);
-      if (!profMap) {
-        profMap = new Map();
-        termMap.set(termId, profMap);
-      }
-
-      const existing = profMap.get(key);
-      if (existing) {
-        profMap.set(key, sumDistributions([existing, dist as GradeDistribution]));
-      } else {
-        profMap.set(key, { ...(dist as GradeDistribution) });
-      }
+      accumulateInstructorDistribution(
+        byCourseTermName,
+        code,
+        termId,
+        key,
+        dist as GradeDistribution,
+      );
       allDists.push(dist as GradeDistribution);
     }
 
-    aggregateByCourse.set(code, sumDistributions(allDists));
+    aggregateByCourse.set(code, sumGradeDistributions(allDists));
   }
 
   return { byCourseTermName, aggregateByCourse };
@@ -217,7 +151,7 @@ export function enrichSchedulesPayload(
           .filter((i): i is string => typeof i === "string" && i.length > 0);
         const { distribution, kind } = distributionForSection(
           sectionInstructors,
-          profMap,
+          profMap as Map<InstructorNameKey, GradeDistribution> | undefined,
           aggregate,
         );
 

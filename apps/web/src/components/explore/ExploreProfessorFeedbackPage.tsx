@@ -1,12 +1,11 @@
-import { useEffect, useMemo } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { useMemo } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { pickCanonicalProfessorName } from "@uoplan/core";
-import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { resolveProfessorRoute } from "../../lib/explore/professorRoute";
 import { useAppStore } from "../../store/appStore";
 import { tr } from "../../i18n";
 import { useProfessorFeedbackViews } from "../../hooks/useFeedbackViews";
+import { useRedirectToExploreWhenNoFeedback } from "../../hooks/useRedirectToExploreWhenNoFeedback";
 import { ExploreFeedbackContent } from "./feedback/ExploreFeedbackContent";
 
 export function ExploreProfessorFeedbackPage({ slug }: { slug: string }) {
@@ -23,13 +22,7 @@ export function ExploreProfessorFeedbackPage({ slug }: { slug: string }) {
     [resolved.index, resolved.legacyId, resolved.displayName],
   );
   const { views, questions, loading, displayName } = useProfessorFeedbackViews(arg);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (loading) return;
-    if (views.length > 0) return;
-    void navigate({ to: "/explore", search: EMPTY_EXPLORE_SEARCH, replace: true });
-  }, [loading, views, navigate]);
+  useRedirectToExploreWhenNoFeedback(loading, views);
 
   const title =
     displayName ||

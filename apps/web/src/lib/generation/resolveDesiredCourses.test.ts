@@ -1,36 +1,12 @@
 import { describe, expect, it } from "vitest";
-import type { Catalogue, CourseSchedule, RemainingRequirement, SchedulesData } from "@uoplan/core";
+import type { Catalogue, RemainingRequirement, SchedulesData } from "@uoplan/core";
 import { buildDataCache } from "@uoplan/core";
 import { resolveDesiredCourses } from "./resolveDesiredCourses";
 import { testCourseCode } from "../../test/brands";
+import { testScheduledCourse } from "../../test/courseScheduleFixtures";
 
 function mkCourse(code: string, credits = 3) {
   return { code: testCourseCode(code), title: code, credits, description: "" };
-}
-
-function mkSchedule(code: string): CourseSchedule {
-  const [subject, catalogNumber] = code.split(/\s+/);
-  return {
-    subject,
-    catalogNumber,
-    courseCode: testCourseCode(code),
-    title: code,
-    timeZone: "America/Toronto",
-    components: {
-      LEC: [
-        {
-          section: "A",
-          sectionCode: "A",
-          component: "LEC",
-          session: null,
-          status: null,
-          times: [
-            { day: "Mo", startMinutes: 600, endMinutes: 690, virtual: false, instructor: null },
-          ],
-        },
-      ],
-    },
-  };
 }
 
 // CSI 2110/2120 + MAT 1320/1322 + PHI 1101 are offered; NOS 9999 has no schedule row.
@@ -43,7 +19,7 @@ function buildCache() {
   };
   const schedules: SchedulesData = {
     termId: "0000",
-    schedules: SCHEDULED.map(mkSchedule),
+    schedules: SCHEDULED.map(testScheduledCourse),
   };
   return buildDataCache(catalogue, schedules);
 }

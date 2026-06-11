@@ -26,6 +26,9 @@ export type CoursePrereqNode = {
   levels?: number[];
   disciplineLevels?: CoursePrereqDisciplineLevel[];
   programs?: string[];
+  // For opaque `non_course` requirements (no credit pool): a coarse classification
+  // of the requirement so downstream consumers can decide whether it blocks
+  // scheduling (e.g. "permission"/"audition" are soft, "standing" is conservative).
   kind?: CoursePrereqKind;
   children?: CoursePrereqNode[];
 };

@@ -6,9 +6,9 @@
  * `professors.pb`; every other dataset references a professor by his INDEX into
  * this registry instead of repeating a name string.
  *
- * Merge model — identical to `@uoplan/core` `professorIdentity` (the helpers are
- * inlined here because the scraper build cannot resolve core's directory barrel
- * at runtime; the `__buildRegistryTest` export is parity-checked against core):
+ * Merge model — uses the shared identity primitives from `@uoplan/core`
+ * (`professorIdentity`), so registry build, runtime lookup, and URL slug
+ * generation all compute identity the same way:
  *   - group by `professorMatchKey` (first token + last token, diacritics
  *     stripped, middle names dropped);
  *   - the canonical display name is the fullest variant in the group;
@@ -18,83 +18,12 @@
  *     key whose first+last is shared by genuinely different people.
  */
 
-/** ---- identity primitives (inlined parity copy of @uoplan/core) ---- */
-
-function deburr(value: string): string {
-  return String(value ?? "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-}
-
-function professorNameTokens(name: string): string[] {
-  return deburr(name)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim()
-    .split(" ")
-    .filter(Boolean);
-}
-
-function professorMatchKey(name: string): string {
-  const tokens = professorNameTokens(name);
-  if (tokens.length === 0) return "";
-  if (tokens.length === 1) return tokens[0];
-  return `${tokens[0]}|${tokens[tokens.length - 1]}`;
-}
-
-function slugifyProfessor(name: string): string {
-  return deburr(name)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-function cleanDisplayName(value: string): string {
-  return String(value ?? "")
-    .replace(/\s+/g, " ")
-    .trim()
-    .replace(/^[.,]+|[.,]+$/g, "")
-    .trim();
-}
-
-function countAccentedChars(value: string): number {
-  let count = 0;
-  for (const ch of String(value).normalize("NFD")) {
-    if (ch >= "\u0300" && ch <= "\u036f") count++;
-  }
-  return count;
-}
-
-function pickCanonicalProfessorName(variants: Iterable<string>): string {
-  let best: string | null = null;
-  let bestScore: [number, number, number] | null = null;
-  for (const raw of variants) {
-    const name = cleanDisplayName(raw);
-    if (!name) continue;
-    const score: [number, number, number] = [
-      professorNameTokens(name).length,
-      countAccentedChars(name),
-      name.length,
-    ];
-    if (best === null || bestScore === null || betterScore(score, bestScore, name, best)) {
-      best = name;
-      bestScore = score;
-    }
-  }
-  return best ?? "";
-}
-
-function betterScore(
-  candidate: [number, number, number],
-  current: [number, number, number],
-  candidateName: string,
-  currentName: string,
-): boolean {
-  for (let i = 0; i < candidate.length; i++) {
-    if (candidate[i] !== current[i]) return candidate[i] > current[i];
-  }
-  return candidateName.localeCompare(currentName, "en") < 0;
-}
+import {
+  cleanDisplayName,
+  pickCanonicalProfessorName,
+  professorMatchKey,
+  slugifyProfessor,
+} from "@uoplan/core/professorIdentity";
 
 /** Placeholder names that are NOT real people and must never enter the registry. */
 function isUnassignedName(name: string): boolean {
@@ -414,12 +343,3 @@ export function createResolverFromRegistry(
     },
   };
 }
-
-/** Internal pure helpers, exported for parity tests against @uoplan/core. */
-export const __buildRegistryTest = {
-  deburr,
-  professorNameTokens,
-  professorMatchKey,
-  slugifyProfessor,
-  pickCanonicalProfessorName,
-};

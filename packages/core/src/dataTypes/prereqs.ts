@@ -11,6 +11,15 @@ import type {
 import type { CoursePrereqKind, CoursePrereqNode, ProgramRequirement } from "./domain";
 import { normalizeCourseCode } from "../utils/courseUtils";
 
+function disciplineLevelsFromProto(
+  disciplineLevels: readonly ProtoDisciplineLevel[],
+): Array<{ discipline: string; levels?: number[] }> {
+  return disciplineLevels.map((d) => ({
+    discipline: d.discipline,
+    ...(d.levels.length > 0 ? { levels: d.levels.map((n) => Number(n)) } : {}),
+  }));
+}
+
 function reqTypeFromProto(value: RequirementType): ProgramRequirement["type"] {
   switch (value) {
     case RequirementType.REQUIREMENT_TYPE_COURSE:
@@ -171,12 +180,7 @@ export function fromProtoPrereq(node: ProtoCoursePrereqNode): CoursePrereqNode {
     ...(node.disciplines.length > 0 ? { disciplines: node.disciplines } : {}),
     ...(node.levels.length > 0 ? { levels: node.levels.map((n) => Number(n)) } : {}),
     ...(node.disciplineLevels.length > 0
-      ? {
-          disciplineLevels: node.disciplineLevels.map((d) => ({
-            discipline: d.discipline,
-            ...(d.levels.length > 0 ? { levels: d.levels.map((n) => Number(n)) } : {}),
-          })),
-        }
+      ? { disciplineLevels: disciplineLevelsFromProto(node.disciplineLevels) }
       : {}),
     ...(node.programs.length > 0 ? { programs: node.programs } : {}),
     ...(kind ? { kind } : {}),
@@ -215,12 +219,7 @@ export function fromProtoProgramRequirement(
     ...(requirement.code ? { code: normalizeCourseCode(requirement.code) } : {}),
     ...(requirement.credits !== undefined ? { credits: Number(requirement.credits) } : {}),
     ...(requirement.disciplineLevels.length > 0
-      ? {
-          disciplineLevels: requirement.disciplineLevels.map((d) => ({
-            discipline: d.discipline,
-            ...(d.levels.length > 0 ? { levels: d.levels.map((n) => Number(n)) } : {}),
-          })),
-        }
+      ? { disciplineLevels: disciplineLevelsFromProto(requirement.disciplineLevels) }
       : {}),
     ...(requirement.excludedDisciplines.length > 0
       ? { excluded_disciplines: requirement.excludedDisciplines }

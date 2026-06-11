@@ -122,6 +122,21 @@ export interface FeedbackQuestionSeries {
   points: FeedbackTermPoint[];
 }
 
+type WeightedFeedbackCell = { weighted: number; responses: number };
+
+function addWeightedTermAverage(
+  byTerm: Map<number, WeightedFeedbackCell>,
+  termId: number,
+  average: number,
+  responses: number,
+): void {
+  const weight = responses > 0 ? responses : 1;
+  const cell = byTerm.get(termId) ?? { weighted: 0, responses: 0 };
+  cell.weighted += average * weight;
+  cell.responses += weight;
+  byTerm.set(termId, cell);
+}
+
 /**
  * For each scale question, the response-weighted average per term (ascending),
  * across the supplied section views. Questions with no data are omitted.
@@ -131,7 +146,7 @@ export function feedbackQuestionSeries(
   questions: readonly FeedbackQuestionMeta[],
 ): FeedbackQuestionSeries[] {
   // questionId -> termId -> { weighted, responses }
-  const acc = new Map<number, Map<number, { weighted: number; responses: number }>>();
+  const acc = new Map<number, Map<number, WeightedFeedbackCell>>();
   for (const view of views) {
     for (const stat of view.questions) {
       if (stat.average == null) continue;
@@ -140,11 +155,7 @@ export function feedbackQuestionSeries(
         byTerm = new Map();
         acc.set(stat.questionId, byTerm);
       }
-      const weight = stat.responses > 0 ? stat.responses : 1;
-      const cell = byTerm.get(view.termId) ?? { weighted: 0, responses: 0 };
-      cell.weighted += stat.average * weight;
-      cell.responses += weight;
-      byTerm.set(view.termId, cell);
+      addWeightedTermAverage(byTerm, view.termId, stat.average, stat.responses);
     }
   }
 
@@ -256,15 +267,11 @@ export function feedbackResponseRateSeries(
  * university-wide (or scoped) sentiment-over-time line.
  */
 export function feedbackOverallSeries(views: readonly FeedbackSectionView[]): FeedbackTermPoint[] {
-  const byTerm = new Map<number, { weighted: number; responses: number }>();
+  const byTerm = new Map<number, WeightedFeedbackCell>();
   for (const view of views) {
     for (const stat of view.questions) {
       if (stat.average == null) continue;
-      const weight = stat.responses > 0 ? stat.responses : 1;
-      const cell = byTerm.get(view.termId) ?? { weighted: 0, responses: 0 };
-      cell.weighted += stat.average * weight;
-      cell.responses += weight;
-      byTerm.set(view.termId, cell);
+      addWeightedTermAverage(byTerm, view.termId, stat.average, stat.responses);
     }
   }
   return [...byTerm.entries()]

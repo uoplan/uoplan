@@ -1,4 +1,5 @@
 import { normalizeCode } from "./shared.ts";
+import type { GradeDistribution } from "@uoplan/proto/data";
 import type { ProfessorResolver } from "../professors/buildRegistry.ts";
 
 /** Convert a 0-based registry index (or null) to a 1-based proto ref (undefined = none). */
@@ -21,25 +22,7 @@ interface GradeCourseInput {
   professors?: unknown;
 }
 
-function mapLetterGradeDistributionToProto(dist: unknown): {
-  aPlus: number;
-  a: number;
-  aMinus: number;
-  bPlus: number;
-  b: number;
-  cPlus: number;
-  c: number;
-  dPlus: number;
-  d: number;
-  e: number;
-  f: number;
-  ein: number;
-  ns: number;
-  nc: number;
-  abs: number;
-  p: number;
-  s: number;
-} {
+function mapLetterGradeDistributionToProto(dist: unknown): GradeDistribution {
   const d = dist && typeof dist === "object" ? (dist as Record<string, unknown>) : {};
   const n = (k: string): number => {
     const v = d[k];

@@ -15,6 +15,21 @@ import {
 
 const TARGET_TERM = 2271; // Winter 2027 → year 2027
 
+type TestSection = {
+  section: string;
+  times: Array<{
+    day: string;
+    startMinutes: number;
+    endMinutes: number;
+    instructor?: string;
+  }>;
+};
+
+type TestCourse = {
+  courseCode: string;
+  components: Record<string, TestSection[]>;
+};
+
 function gradesFor(
   code: string,
   rows: Array<{ name: string; termId: number; legacyId?: number }>,
@@ -22,25 +37,40 @@ function gradesFor(
   return { code, professors: rows };
 }
 
-function scheduleFile(
-  termId: number,
-  courses: Array<{
-    courseCode: string;
-    components: Record<
-      string,
-      Array<{
-        section: string;
-        times: Array<{
-          day: string;
-          startMinutes: number;
-          endMinutes: number;
-          instructor?: string;
-        }>;
-      }>
-    >;
-  }>,
-): ScheduleFileInput {
+function scheduleFile(termId: number, courses: TestCourse[]): ScheduleFileInput {
   return { termId, schedules: courses };
+}
+
+function section(
+  sectionCode: string,
+  instructor = "Staff",
+  day = "Mo",
+  startMinutes = 600,
+  endMinutes = 690,
+): TestSection {
+  return {
+    section: sectionCode,
+    times: [{ day, startMinutes, endMinutes, instructor }],
+  };
+}
+
+function course(courseCode: string, sections: TestSection[], component = "LEC"): TestCourse {
+  return { courseCode, components: { [component]: sections } };
+}
+
+function targetSchedule(courses: TestCourse[]): ScheduleFileInput {
+  return scheduleFile(TARGET_TERM, courses);
+}
+
+function targetStaffSchedule(sectionOverride: Partial<TestSection> = {}): ScheduleFileInput {
+  return targetSchedule([
+    course("CSI 2110", [
+      {
+        ...section("A00"),
+        ...sectionOverride,
+      },
+    ]),
+  ]);
 }
 
 describe("predictInstructorsForTerm", () => {
@@ -49,24 +79,8 @@ describe("predictInstructorsForTerm", () => {
       grades: [gradesFor("CSI 2110", [{ name: "Ada Lovelace", termId: 2261, legacyId: 1 }])],
       scheduleFiles: [],
     });
-    const target = scheduleFile(TARGET_TERM, [
-      {
-        courseCode: "CSI 2110",
-        components: {
-          LEC: [
-            {
-              section: "A00",
-              times: [
-                { day: "Mo", startMinutes: 600, endMinutes: 690, instructor: "Grace Hopper" },
-              ],
-            },
-            {
-              section: "B00",
-              times: [{ day: "Tu", startMinutes: 600, endMinutes: 690, instructor: "Staff" }],
-            },
-          ],
-        },
-      },
+    const target = targetSchedule([
+      course("CSI 2110", [section("A00", "Grace Hopper"), section("B00", "Staff", "Tu")]),
     ]);
     const out = predictInstructorsForTerm(target, context);
     expect(out.has(sectionKey("CSI 2110", "LEC", "A00"))).toBe(false);
@@ -85,19 +99,7 @@ describe("predictInstructorsForTerm", () => {
       ],
       scheduleFiles: [],
     });
-    const target = scheduleFile(TARGET_TERM, [
-      {
-        courseCode: "CSI 2110",
-        components: {
-          LEC: [
-            {
-              section: "A00",
-              times: [{ day: "Mo", startMinutes: 600, endMinutes: 690, instructor: "Staff" }],
-            },
-          ],
-        },
-      },
-    ]);
+    const target = targetStaffSchedule();
     const out = predictInstructorsForTerm(target, context, {
       recencyYears: 3,
     });
@@ -116,31 +118,11 @@ describe("predictInstructorsForTerm", () => {
       ],
       scheduleFiles: [],
     });
-    const target = scheduleFile(TARGET_TERM, [
-      {
-        courseCode: "MAT 1320",
-        components: {
-          // Busy Prof is teaching MAT 1320 Mo 10:00-11:30 in the target term.
-          LEC: [
-            {
-              section: "Z00",
-              times: [{ day: "Mo", startMinutes: 600, endMinutes: 690, instructor: "Busy Prof" }],
-            },
-          ],
-        },
-      },
-      {
-        courseCode: "CSI 2110",
-        components: {
-          // Unassigned section overlaps Mo 10:30-12:00 → conflicts with Busy Prof.
-          LEC: [
-            {
-              section: "A00",
-              times: [{ day: "Mo", startMinutes: 630, endMinutes: 720, instructor: "Staff" }],
-            },
-          ],
-        },
-      },
+    const target = targetSchedule([
+      // Busy Prof is teaching MAT 1320 Mo 10:00-11:30 in the target term.
+      course("MAT 1320", [section("Z00", "Busy Prof")]),
+      // Unassigned section overlaps Mo 10:30-12:00 → conflicts with Busy Prof.
+      course("CSI 2110", [section("A00", "Staff", "Mo", 630, 720)]),
     ]);
     const out = predictInstructorsForTerm(target, context);
     expect(out.get(sectionKey("CSI 2110", "LEC", "A00"))).toEqual([
@@ -153,30 +135,10 @@ describe("predictInstructorsForTerm", () => {
       grades: [gradesFor("CSI 2110", [{ name: "Busy Prof", termId: 2261, legacyId: 1 }])],
       scheduleFiles: [],
     });
-    const target = scheduleFile(TARGET_TERM, [
-      {
-        courseCode: "MAT 1320",
-        components: {
-          LEC: [
-            {
-              section: "Z00",
-              times: [{ day: "Mo", startMinutes: 600, endMinutes: 690, instructor: "Busy Prof" }],
-            },
-          ],
-        },
-      },
-      {
-        courseCode: "CSI 2110",
-        components: {
-          LEC: [
-            {
-              section: "A00",
-              // Tuesday — no overlap with Busy Prof's Monday slot.
-              times: [{ day: "Tu", startMinutes: 600, endMinutes: 690, instructor: "Staff" }],
-            },
-          ],
-        },
-      },
+    const target = targetSchedule([
+      course("MAT 1320", [section("Z00", "Busy Prof")]),
+      // Tuesday — no overlap with Busy Prof's Monday slot.
+      course("CSI 2110", [section("A00", "Staff", "Tu")]),
     ]);
     const out = predictInstructorsForTerm(target, context);
     expect(out.get(sectionKey("CSI 2110", "LEC", "A00"))).toEqual([
@@ -189,36 +151,15 @@ describe("predictInstructorsForTerm", () => {
       grades: [gradesFor("CSI 2110", [{ name: "Frédéric Côté", termId: 2261, legacyId: 99 }])],
       scheduleFiles: [
         scheduleFile(2261, [
-          {
-            courseCode: "CSI 2110",
-            components: {
-              LEC: [
-                {
-                  section: "A00",
-                  // Accent-stripped duplicate from a schedule file, no legacyId.
-                  times: [
-                    { day: "Mo", startMinutes: 600, endMinutes: 690, instructor: "Frederic Cote" },
-                  ],
-                },
-              ],
-            },
-          },
+          // Accent-stripped duplicate from a schedule file, no legacyId.
+          course("CSI 2110", [section("A00", "Frederic Cote")]),
         ]),
       ],
     });
-    const target = scheduleFile(TARGET_TERM, [
-      {
-        courseCode: "CSI 2110",
-        components: {
-          LEC: [
-            {
-              section: "B00",
-              times: [{ day: "We", startMinutes: 600, endMinutes: 690, instructor: "Staff" }],
-            },
-          ],
-        },
-      },
-    ]);
+    const target = targetStaffSchedule({
+      section: "B00",
+      times: [section("B00", "Staff", "We").times[0]],
+    });
     const guesses = predictInstructorsForTerm(target, context).get(
       sectionKey("CSI 2110", "LEC", "B00"),
     );
@@ -235,19 +176,7 @@ describe("predictInstructorsForTerm", () => {
       grades: [gradesFor("CSI 2110", rows)],
       scheduleFiles: [],
     });
-    const target = scheduleFile(TARGET_TERM, [
-      {
-        courseCode: "CSI 2110",
-        components: {
-          LEC: [
-            {
-              section: "A00",
-              times: [{ day: "Mo", startMinutes: 600, endMinutes: 690, instructor: "Staff" }],
-            },
-          ],
-        },
-      },
-    ]);
+    const target = targetStaffSchedule();
     const all = predictInstructorsForTerm(target, context).get(
       sectionKey("CSI 2110", "LEC", "A00"),
     );
@@ -261,37 +190,12 @@ describe("predictInstructorsForTerm", () => {
   it("omits legacyId when it cannot be resolved", () => {
     const context = buildPredictionContext({
       grades: [],
-      scheduleFiles: [
-        scheduleFile(2261, [
-          {
-            courseCode: "CSI 2110",
-            components: {
-              LEC: [
-                {
-                  section: "A00",
-                  times: [
-                    { day: "Mo", startMinutes: 600, endMinutes: 690, instructor: "Nameless Prof" },
-                  ],
-                },
-              ],
-            },
-          },
-        ]),
-      ],
+      scheduleFiles: [scheduleFile(2261, [course("CSI 2110", [section("A00", "Nameless Prof")])])],
     });
-    const target = scheduleFile(TARGET_TERM, [
-      {
-        courseCode: "CSI 2110",
-        components: {
-          LEC: [
-            {
-              section: "B00",
-              times: [{ day: "Tu", startMinutes: 600, endMinutes: 690, instructor: "Staff" }],
-            },
-          ],
-        },
-      },
-    ]);
+    const target = targetStaffSchedule({
+      section: "B00",
+      times: [section("B00", "Staff", "Tu").times[0]],
+    });
     expect(
       predictInstructorsForTerm(target, context).get(sectionKey("CSI 2110", "LEC", "B00")),
     ).toEqual([{ name: "Nameless Prof" }]);
@@ -307,30 +211,10 @@ describe("predictInstructorsForTerm", () => {
       ],
       scheduleFiles: [],
     });
-    const target = scheduleFile(TARGET_TERM, [
-      {
-        // Active Prof is teaching some other known section in the target term.
-        courseCode: "MAT 1320",
-        components: {
-          LEC: [
-            {
-              section: "Z00",
-              times: [{ day: "Fr", startMinutes: 540, endMinutes: 630, instructor: "Active Prof" }],
-            },
-          ],
-        },
-      },
-      {
-        courseCode: "CSI 2110",
-        components: {
-          LEC: [
-            {
-              section: "A00",
-              times: [{ day: "Mo", startMinutes: 600, endMinutes: 690, instructor: "Staff" }],
-            },
-          ],
-        },
-      },
+    const target = targetSchedule([
+      // Active Prof is teaching some other known section in the target term.
+      course("MAT 1320", [section("Z00", "Active Prof", "Fr", 540, 630)]),
+      course("CSI 2110", [section("A00")]),
     ]);
     // Absent Prof taught the course recently but is not in the term → an active
     // candidate exists, so the absent one is dropped.
@@ -349,19 +233,7 @@ describe("predictInstructorsForTerm", () => {
       ],
       scheduleFiles: [],
     });
-    const target = scheduleFile(TARGET_TERM, [
-      {
-        courseCode: "CSI 2110",
-        components: {
-          LEC: [
-            {
-              section: "A00",
-              times: [{ day: "Mo", startMinutes: 600, endMinutes: 690, instructor: "Staff" }],
-            },
-          ],
-        },
-      },
-    ]);
+    const target = targetStaffSchedule();
     // Neither candidate teaches in the target term, so both surface (recent-first).
     expect(
       predictInstructorsForTerm(target, context).get(sectionKey("CSI 2110", "LEC", "A00")),
@@ -376,19 +248,7 @@ describe("predictInstructorsForTerm", () => {
       grades: [gradesFor("CSI 2110", [{ name: "Absent Prof", termId: 2261, legacyId: 1 }])],
       scheduleFiles: [],
     });
-    const target = scheduleFile(TARGET_TERM, [
-      {
-        courseCode: "CSI 2110",
-        components: {
-          LEC: [
-            {
-              section: "A00",
-              times: [{ day: "Mo", startMinutes: 600, endMinutes: 690, instructor: "Staff" }],
-            },
-          ],
-        },
-      },
-    ]);
+    const target = targetStaffSchedule();
     expect(
       predictInstructorsForTerm(target, context, { fallbackToInactive: false }).has(
         sectionKey("CSI 2110", "LEC", "A00"),

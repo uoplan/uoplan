@@ -1,6 +1,6 @@
-import type { CourseGradesData, GradeDistribution, Program, ProgramRequirement } from "./dataTypes";
+import type { CourseGradesData, Program, ProgramRequirement } from "./dataTypes";
 import type { NormalizedCourseCode } from "./brand";
-import { GRADE_POINTS } from "./gradeDistribution";
+import { countedMass } from "./gradeDistribution";
 import { disciplineOf, levelOf, normalizeCourseCode } from "./utils/courseUtils";
 import { urlToSlug } from "./stateEncode";
 
@@ -95,18 +95,6 @@ export function programSlug(program: Program): string {
 export interface ProgramOption {
   slug: string;
   title: string;
-}
-
-const COUNTED_GRADES = Object.keys(GRADE_POINTS);
-
-/** Summed count of grades that contribute to GPA/averages (excludes P/S/ABS…). */
-function countedMass(dist: GradeDistribution): number {
-  let total = 0;
-  for (const letter of COUNTED_GRADES) {
-    const n = Number(dist[letter] ?? 0);
-    if (Number.isFinite(n) && n > 0) total += n;
-  }
-  return total;
 }
 
 /**

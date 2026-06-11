@@ -281,6 +281,15 @@ export function BlockedTimeLayer({
     [onCommitUpdate],
   );
 
+  const handleResizeKeyDown = useCallback(
+    (e: React.KeyboardEvent, blockId: string, edge: "start" | "end") => {
+      e.stopPropagation();
+      const block = blocks.find((bl) => bl.id === blockId);
+      if (block) resizeBlockWithKeyboard(e, block, edge);
+    },
+    [blocks, resizeBlockWithKeyboard],
+  );
+
   const renderedBlocks = blocks.map((b) =>
     draft && draft.blockId === b.id
       ? { id: b.id, day, startMinutes: draft.startMinutes, endMinutes: draft.endMinutes }
@@ -335,11 +344,7 @@ export function BlockedTimeLayer({
                 const block = blocks.find((bl) => bl.id === b.id);
                 if (block) startGesture(e, "resize-top", block);
               }}
-              onKeyDown={(e) => {
-                e.stopPropagation();
-                const block = blocks.find((bl) => bl.id === b.id);
-                if (block) resizeBlockWithKeyboard(e, block, "start");
-              }}
+              onKeyDown={(e) => handleResizeKeyDown(e, b.id, "start")}
             />
             <div
               className="cal-blocked-handle cal-blocked-handle-bottom"
@@ -355,11 +360,7 @@ export function BlockedTimeLayer({
                 const block = blocks.find((bl) => bl.id === b.id);
                 if (block) startGesture(e, "resize-bottom", block);
               }}
-              onKeyDown={(e) => {
-                e.stopPropagation();
-                const block = blocks.find((bl) => bl.id === b.id);
-                if (block) resizeBlockWithKeyboard(e, block, "end");
-              }}
+              onKeyDown={(e) => handleResizeKeyDown(e, b.id, "end")}
             />
           </div>
         );

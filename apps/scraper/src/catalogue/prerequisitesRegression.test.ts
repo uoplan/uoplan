@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import oracle from "./__fixtures__/prereqOracle.json" with { type: "json" };
 import type { CoursePrereqNode } from "./schema.ts";
 import { classifyNonCourse, parseCoursePrerequisites } from "./prerequisites.ts";
+import { canonicalizeDisciplineLevels } from "./regressionTestHelpers.ts";
 
 /**
  * Frozen-corpus regression guard for the prerequisite parser.
@@ -46,13 +47,8 @@ function canonicalize(node: CoursePrereqNode | null | undefined): unknown {
   if (node.credits != null) out.credits = node.credits;
   if (node.disciplines?.length) out.disciplines = [...node.disciplines].sort();
   if (node.levels?.length) out.levels = [...node.levels].sort((a, b) => a - b);
-  if (node.disciplineLevels?.length)
-    out.disciplineLevels = node.disciplineLevels
-      .map((d) => ({
-        discipline: d.discipline,
-        levels: d.levels ? [...d.levels].sort((a, b) => a - b) : undefined,
-      }))
-      .sort((a, b) => a.discipline.localeCompare(b.discipline));
+  const disciplineLevels = canonicalizeDisciplineLevels(node.disciplineLevels);
+  if (disciplineLevels) out.disciplineLevels = disciplineLevels;
   if (node.programs?.length) out.programs = [...node.programs].sort();
   if (node.children?.length) {
     const kids = node.children.map(canonicalize);

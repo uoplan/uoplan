@@ -1,16 +1,9 @@
 import { Alert, Anchor, Group, Progress, Stack, Text } from "@mantine/core";
-import { useMemo, type ReactNode } from "react";
-import { useShallow } from "zustand/react/shallow";
-import {
-  analyzeFrenchImmersionProgress,
-  completedCoursesIncludeFls3500,
-  frenchImmersionOverallVolumePercent,
-  normalizeCourseCode,
-  programTitleIndicatesNursing,
-} from "@uoplan/core";
-import { useAppStore } from "../../store/appStore";
+import type { ReactNode } from "react";
+import { completedCoursesIncludeFls3500, frenchImmersionOverallVolumePercent } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { AppCard } from "./AppCard";
+import { useFrenchImmersionProgressState } from "./useFrenchImmersionProgressState";
 
 const DIPLOMA_REQUIREMENTS_URL =
   "https://www.uottawa.ca/study/immersion/french/about/diploma-requirements";
@@ -62,23 +55,7 @@ export function FrenchImmersionProgramOverview({
   const dark = variant === "calendarSidebar";
   const compact = variant === "compact";
 
-  const { frenchImmersionStream, completedCourses, currentSchedule, cache, program } = useAppStore(
-    useShallow((s) => ({
-      frenchImmersionStream: s.frenchImmersionStream,
-      completedCourses: s.completedCourses,
-      currentSchedule: s.currentSchedule,
-      cache: s.cache,
-      program: s.program,
-    })),
-  );
-
-  const progress = useMemo(() => {
-    const scheduleCodes = currentSchedule?.enrollments.map((e) => e.courseCode) ?? [];
-    const merged = [...completedCourses, ...scheduleCodes].map((c) => normalizeCourseCode(c));
-    return analyzeFrenchImmersionProgress(merged, cache, {
-      isNursingProgram: programTitleIndicatesNursing(program?.title),
-    });
-  }, [completedCourses, currentSchedule, cache, program?.title]);
+  const { frenchImmersionStream, completedCourses, progress } = useFrenchImmersionProgressState();
 
   const overallPct = frenchImmersionOverallVolumePercent(progress);
   const volumeDone = progress.volumeMet;

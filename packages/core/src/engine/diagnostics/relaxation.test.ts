@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { buildDataCache } from "../../dataCache";
-import type { Catalogue, SchedulesData } from "../../dataTypes";
+import type { SchedulesData } from "../../dataTypes";
 import type { GenerationConstraints } from "../../generation";
 import { makeSchedule, makeSection } from "../../generation/tests/golden/fixtures";
 import { diagnoseByRelaxation } from "./relaxation";
+import { makeRelaxationCatalogue } from "../../tests/engineTestHelpers";
 import { normalizeCourseCode } from "../../utils/courseUtils";
 
 const NO_CONSTRAINTS: GenerationConstraints = {
@@ -12,13 +13,6 @@ const NO_CONSTRAINTS: GenerationConstraints = {
 };
 
 function buildCache(): ReturnType<typeof buildDataCache> {
-  const catalogue: Catalogue = {
-    courses: [
-      { code: normalizeCourseCode("AAA 1000"), title: "A", credits: 3, description: "" },
-      { code: normalizeCourseCode("BBB 1000"), title: "B", credits: 3, description: "" },
-    ],
-    programs: [],
-  };
   const schedules: SchedulesData = {
     termId: "0",
     schedules: [
@@ -32,7 +26,7 @@ function buildCache(): ReturnType<typeof buildDataCache> {
       }),
     ],
   };
-  return buildDataCache(catalogue, schedules);
+  return buildDataCache(makeRelaxationCatalogue(), schedules);
 }
 
 const cache = buildCache();
@@ -62,13 +56,6 @@ describe("diagnoseByRelaxation", () => {
   });
 
   it("reports structural_conflict when the courses themselves clash", () => {
-    const catalogue: Catalogue = {
-      courses: [
-        { code: normalizeCourseCode("AAA 1000"), title: "A", credits: 3, description: "" },
-        { code: normalizeCourseCode("BBB 1000"), title: "B", credits: 3, description: "" },
-      ],
-      programs: [],
-    };
     const schedules: SchedulesData = {
       termId: "0",
       schedules: [
@@ -80,7 +67,7 @@ describe("diagnoseByRelaxation", () => {
         }),
       ],
     };
-    const clashCache = buildDataCache(catalogue, schedules);
+    const clashCache = buildDataCache(makeRelaxationCatalogue(), schedules);
     const out = diagnoseByRelaxation({
       pinned: [normalizeCourseCode("AAA 1000"), normalizeCourseCode("BBB 1000")],
       optional: [],

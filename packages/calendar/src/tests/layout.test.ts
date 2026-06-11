@@ -10,7 +10,33 @@ import {
   percentToMinutes,
   snapMinutes,
 } from "../layout";
+import type { CalendarEvent } from "../types";
 import { makeEvent } from "./fixtures";
+
+type LaneFixture = Pick<CalendarEvent, "id" | "startMinutes" | "endMinutes">;
+type LaneExpectation = [id: string, laneIndex: number, laneCount: number];
+
+function assignFixtureLanes(events: LaneFixture[]) {
+  return assignLanes(events.map((event) => makeEvent(event)));
+}
+
+function partiallyOverlappingCluster(
+  cEvent: Pick<LaneFixture, "startMinutes" | "endMinutes">,
+): LaneFixture[] {
+  return [
+    { id: "a", startMinutes: 540, endMinutes: 600 },
+    { id: "b", startMinutes: 570, endMinutes: 630 },
+    { id: "c", ...cEvent },
+  ];
+}
+
+function expectedPartialClusterLanes(cLaneCount: number): LaneExpectation[] {
+  return [
+    ["a", 0, 2],
+    ["b", 1, 2],
+    ["c", 0, cLaneCount],
+  ];
+}
 
 describe("assignLanes", () => {
   it("sorts events by start time and gives non-overlapping events the full lane", () => {
@@ -43,36 +69,23 @@ describe("assignLanes", () => {
     ]);
   });
 
-  it("reuses a lane inside a partially overlapping cluster without shrinking the cluster width", () => {
-    const laidOut = assignLanes([
-      makeEvent({ id: "a", startMinutes: 540, endMinutes: 600 }),
-      makeEvent({ id: "b", startMinutes: 570, endMinutes: 630 }),
-      makeEvent({ id: "c", startMinutes: 600, endMinutes: 660 }),
-    ]);
+  it.each([
+    [
+      "reuses a lane inside a partially overlapping cluster without shrinking the cluster width",
+      partiallyOverlappingCluster({ startMinutes: 600, endMinutes: 660 }),
+      expectedPartialClusterLanes(2),
+    ],
+    [
+      "starts a new one-lane cluster after a real gap",
+      partiallyOverlappingCluster({ startMinutes: 660, endMinutes: 720 }),
+      expectedPartialClusterLanes(1),
+    ],
+  ] as const)("%s", (_name, events, expected) => {
+    const laidOut = assignFixtureLanes(events);
 
     expect(
       laidOut.map(({ event, laneIndex, laneCount }) => [event.id, laneIndex, laneCount]),
-    ).toEqual([
-      ["a", 0, 2],
-      ["b", 1, 2],
-      ["c", 0, 2],
-    ]);
-  });
-
-  it("starts a new one-lane cluster after a real gap", () => {
-    const laidOut = assignLanes([
-      makeEvent({ id: "a", startMinutes: 540, endMinutes: 600 }),
-      makeEvent({ id: "b", startMinutes: 570, endMinutes: 630 }),
-      makeEvent({ id: "c", startMinutes: 660, endMinutes: 720 }),
-    ]);
-
-    expect(
-      laidOut.map(({ event, laneIndex, laneCount }) => [event.id, laneIndex, laneCount]),
-    ).toEqual([
-      ["a", 0, 2],
-      ["b", 1, 2],
-      ["c", 0, 1],
-    ]);
+    ).toEqual(expected);
   });
 });
 

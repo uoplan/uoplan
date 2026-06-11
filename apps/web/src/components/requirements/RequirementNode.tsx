@@ -1,15 +1,5 @@
 import { useState, useMemo, memo, type KeyboardEvent, type ReactNode } from "react";
-import {
-  Stack,
-  Text,
-  Paper,
-  Badge,
-  Group,
-  Box,
-  Collapse,
-  Tooltip,
-  UnstyledButton,
-} from "@mantine/core";
+import { Stack, Text, Paper, Badge, Group, Collapse, Tooltip, UnstyledButton } from "@mantine/core";
 import { IconCheck, IconChevronDown, IconX, IconChartCohort } from "@tabler/icons-react";
 import type { ComboboxItem } from "@mantine/core";
 import type { DataCache } from "@uoplan/core";
@@ -26,14 +16,21 @@ import {
   simplifySingleChildChain,
 } from "../../lib/requirements/requirementUtils";
 import { VirtualizedMultiSelect } from "../shared/VirtualizedMultiSelect";
-import { getStableNodeKey } from "../../lib/requirements/requirementNodeUtils";
 import { tr } from "../../i18n";
-
-export const REQUIREMENT_INDENT_PX = 12;
-const REQUIREMENT_BASE_PADDING_PX = 10;
-
-const TITLE_FLEX = { flex: 1, minWidth: 0 } as const;
-const BADGE_NO_SHRINK = { flexShrink: 0 } as const;
+import {
+  CompleteBadge,
+  RequirementChildStack,
+  RequirementChoiceGroupBody,
+  RequirementCompleteCard,
+  RequirementSectionHeading,
+} from "./requirementRenderUtils";
+import {
+  BADGE_NO_SHRINK,
+  TITLE_FLEX,
+  getRequirementChoiceGroupState,
+  getRequirementRenderMeta,
+  requirementIndentStyle,
+} from "./requirementRenderPrimitives";
 
 function handleKeyboardToggle(e: KeyboardEvent<HTMLElement>, toggle: () => void) {
   if (e.key === "Enter" || e.key === " ") {
@@ -45,6 +42,48 @@ function handleKeyboardToggle(e: KeyboardEvent<HTMLElement>, toggle: () => void)
 function getSelectedCredits(cache: DataCache | null, courseCodes: string[]): number {
   if (!cache) return 0;
   return courseCodes.reduce((sum, code) => sum + (cache.getCourse(code)?.credits ?? 3), 0);
+}
+
+function CollapsibleRequirementHeader({
+  label,
+  opened,
+  onToggle,
+  showComplete,
+  headerAccessory,
+}: {
+  label: string;
+  opened: boolean;
+  onToggle: (e?: { stopPropagation: () => void }) => void;
+  showComplete: boolean;
+  headerAccessory?: ReactNode;
+}) {
+  return (
+    <Group justify="space-between" align="center" wrap="nowrap" mb={0}>
+      <UnstyledButton
+        onClick={onToggle}
+        aria-expanded={opened}
+        style={{ flex: 1, minWidth: 0, cursor: "pointer" }}
+      >
+        <Group gap="xs" align="center" style={TITLE_FLEX}>
+          <IconChevronDown
+            size={14}
+            style={{
+              flexShrink: 0,
+              transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
+              transition: "var(--app-transition)",
+            }}
+          />
+          <Text fw={500} size="sm" lh={1.25} style={{ minWidth: 0 }}>
+            {label}
+          </Text>
+        </Group>
+      </UnstyledButton>
+      <Stack gap={4} align="flex-end" style={BADGE_NO_SHRINK}>
+        {showComplete && <CompleteBadge />}
+        {headerAccessory}
+      </Stack>
+    </Group>
+  );
 }
 
 interface RequirementNodeProps {
@@ -99,15 +138,17 @@ export const RequirementNode = memo(
   }: RequirementNodeProps) {
     const { node, autoExpanded } = simplifySingleChildChain(rawNode);
 
-    const hasOptions = node.options && node.options.length > 0;
-    const rawTitle = (node.title ?? "").trim();
-    const title = rawTitle || node.code || `${node.type} requirement`;
-    const isOrGroup = node.type === "or_group";
-    const isOptionsGroup = node.type === "options_group";
-    const isAnd = node.type === "and";
-    const isSection = node.type === "section";
-
-    const creditsNeeded = node.creditsNeeded ?? 0;
+    const {
+      hasOptions,
+      rawTitle,
+      title,
+      isOrGroup,
+      isOptionsGroup,
+      isAnd,
+      isSection,
+      creditsNeeded,
+      hasRequirementId,
+    } = getRequirementRenderMeta(node);
     const hasNiceTitle = rawTitle.length > 0;
     const hasCode = !!node.code;
     const hasCreditsInfo = creditsNeeded > 0;
@@ -132,7 +173,6 @@ export const RequirementNode = memo(
       selectedCreditsForComplete >= creditsNeeded;
     const allSelectedTaken = selected.length > 0 && selected.every((c) => completedCourses.has(c));
     const showAsComplete = (node.complete && node.satisfiedBy.length > 0) || satisfiedBySelection;
-    const hasRequirementId = node.requirementId != null;
     const { selectedForDisplay, options } = useMemo(() => {
       const { selectedForDisplay, options } = getConstrainMultiSelectOptions(
         node,
@@ -184,11 +224,7 @@ export const RequirementNode = memo(
     ]);
 
     if (isSection) {
-      return (
-        <Text fw={600} size="sm" c="dimmed" mt={depth > 0 ? "md" : 0} mb="xs">
-          {title}
-        </Text>
-      );
+      return <RequirementSectionHeading title={title} depth={depth} />;
     }
 
     const selectedCredits = getSelectedCredits(cache, selectedForDisplay);
@@ -321,107 +357,65 @@ export const RequirementNode = memo(
       </Stack>
     ) : null;
 
+    const renderChildNode = (child: RequirementWithStatus, childActiveBranch: boolean) => (
+      <RequirementNode
+        node={child}
+        cache={cache}
+        completedCourses={completedCourses}
+        selectedPerRequirement={selectedPerRequirement}
+        onSelect={onSelect}
+        activeBranch={childActiveBranch}
+        depth={depth + 1}
+        prereqEligible={prereqEligible}
+        levelBuckets={levelBuckets}
+        languageBuckets={languageBuckets}
+        electiveLevelBuckets={electiveLevelBuckets}
+        unassignedCompletedSet={unassignedCompletedSet}
+        unassignedCompletedSetNormalized={unassignedCompletedSetNormalized}
+        allAssignedCoursesNormalized={allAssignedCoursesNormalized}
+        includeClosedComponents={includeClosedComponents}
+        virtualSectionsOnly={virtualSectionsOnly}
+        completedOnly={completedOnly}
+      />
+    );
+
     // Only show compact read-only "Complete" card for tree-matched leaves (no requirementId, no dropdown).
     if (node.complete && node.satisfiedBy.length > 0 && !hasOptions) {
       return (
-        <Paper
-          p="sm"
-          withBorder
-          radius="var(--app-radius)"
-          mt="xs"
-          style={{
-            paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
-            backgroundColor: "var(--app-bg)",
-          }}
-        >
-          <Group gap="xs" wrap="nowrap" align="center">
-            <Tooltip label={title} multiline maw={320} withArrow disabled={!title}>
-              <Text size="sm" c="dimmed" lineClamp={1} style={TITLE_FLEX}>
-                {title}
-              </Text>
-            </Tooltip>
-            <Text size="xs" c="dimmed" style={{ minWidth: 0 }}>
-              {satisfiedByDisplayUnique.sort().join(", ")}
-            </Text>
-            <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-              Complete
-            </Badge>
-          </Group>
-        </Paper>
+        <RequirementCompleteCard
+          title={title}
+          satisfiedBy={satisfiedByDisplayUnique}
+          depth={depth}
+        />
       );
     }
 
-    if (isOrGroup && hasOptions) {
-      const selectedOptionIndex = node.satisfiedOptionIndex;
-      const showError =
-        activeBranch && node.requirementId != null && selectedOptionIndex == null && !node.complete;
+    if ((isOrGroup || isOptionsGroup) && hasOptions) {
+      const {
+        selectedOptionIndex,
+        showError,
+        groupLabel,
+        showSatisfiedSummary,
+        satisfiedSummaryCourses,
+      } = getRequirementChoiceGroupState({
+        node,
+        activeBranch,
+        rawTitle,
+        title,
+        isOrGroup,
+      });
 
-      const useGenericLabel = rawTitle === "" || rawTitle.toLowerCase() === "or";
-      const groupLabel = useGenericLabel ? "One of the following must be completed" : title;
-
-      const orGroupShared = (
-        <>
-          {showError && (
-            <Text size="xs" c="red" mt={4}>
-              {tr("optionsDrilldown.selectOneError")}
-            </Text>
-          )}
-          {node.complete && node.satisfiedOptionIndex != null && (
-            <Text size="xs" c="dimmed" mb="xs">
-              {tr("requirementNode.satisfiedBy", {
-                courses: node.satisfiedBy.join(", "),
-              })}
-            </Text>
-          )}
-          <Collapse expanded={collapseIn}>
-            <Stack gap="xs">
-              {node.options!.map((opt, idx) => {
-                const isSatisfiedOption = node.satisfiedOptionIndex === idx && opt.complete;
-                const childActiveBranch =
-                  activeBranch &&
-                  (!node.requirementId ||
-                    selectedOptionIndex == null ||
-                    selectedOptionIndex === idx);
-                const childKey = getStableNodeKey(
-                  opt,
-                  `${getStableNodeKey(node, "parent")}:opt:${idx}`,
-                );
-                return (
-                  <Box key={childKey}>
-                    <RequirementNode
-                      node={opt}
-                      cache={cache}
-                      completedCourses={completedCourses}
-                      selectedPerRequirement={selectedPerRequirement}
-                      onSelect={onSelect}
-                      activeBranch={childActiveBranch}
-                      depth={depth + 1}
-                      prereqEligible={prereqEligible}
-                      levelBuckets={levelBuckets}
-                      languageBuckets={languageBuckets}
-                      electiveLevelBuckets={electiveLevelBuckets}
-                      unassignedCompletedSet={unassignedCompletedSet}
-                      unassignedCompletedSetNormalized={unassignedCompletedSetNormalized}
-                      allAssignedCoursesNormalized={allAssignedCoursesNormalized}
-                      includeClosedComponents={includeClosedComponents}
-                      virtualSectionsOnly={virtualSectionsOnly}
-                      completedOnly={completedOnly}
-                    />
-                    {isSatisfiedOption && opt.satisfiedBy.length > 0 && (
-                      <Box pl="sm" mt={4}>
-                        <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-                          {tr("requirementNode.satisfiedBy", {
-                            courses: opt.satisfiedBy.join(", "),
-                          })}
-                        </Badge>
-                      </Box>
-                    )}
-                  </Box>
-                );
-              })}
-            </Stack>
-          </Collapse>
-        </>
+      const optionGroupBody = (
+        <RequirementChoiceGroupBody
+          node={node}
+          activeBranch={activeBranch}
+          selectedOptionIndex={selectedOptionIndex}
+          showError={showError}
+          satisfiedBy={satisfiedSummaryCourses}
+          collapseExpanded={collapseIn}
+          includeSatisfiedOptionBadge={isOrGroup}
+          renderChild={(opt, _idx, childActiveBranch) => renderChildNode(opt, childActiveBranch)}
+        />
       );
 
       return (
@@ -431,147 +425,19 @@ export const RequirementNode = memo(
           radius="var(--app-radius)"
           mt="xs"
           data-missing-selection={showError ? "true" : undefined}
-          style={{
-            paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
-            backgroundColor: opened ? "var(--app-surface)" : "var(--app-surface-sunken)",
-          }}
-        >
-          <Group justify="space-between" align="center" wrap="nowrap" mb={0}>
-            <UnstyledButton
-              onClick={toggleLocal}
-              aria-expanded={opened}
-              style={{ flex: 1, minWidth: 0, cursor: "pointer" }}
-            >
-              <Group gap="xs" align="center" style={TITLE_FLEX}>
-                <IconChevronDown
-                  size={14}
-                  style={{
-                    flexShrink: 0,
-                    transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
-                    transition: "var(--app-transition)",
-                  }}
-                />
-                <Text fw={500} size="sm" lh={1.25} style={{ minWidth: 0 }}>
-                  {groupLabel}
-                </Text>
-              </Group>
-            </UnstyledButton>
-            <Stack gap={4} align="flex-end" style={BADGE_NO_SHRINK}>
-              {node.complete && node.satisfiedOptionIndex != null && (
-                <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-                  Complete
-                </Badge>
-              )}
-              {headerAccessory}
-            </Stack>
-          </Group>
-          {orGroupShared}
-        </Paper>
-      );
-    }
-
-    if (isOptionsGroup && hasOptions) {
-      const selectedOptionIndex = node.satisfiedOptionIndex;
-      const showError =
-        activeBranch && node.requirementId != null && selectedOptionIndex == null && !node.complete;
-
-      const optionsGroupShared = (
-        <>
-          {showError && (
-            <Text size="xs" c="red" mt={4}>
-              {tr("optionsDrilldown.selectOneError")}
-            </Text>
+          style={requirementIndentStyle(
+            depth,
+            opened ? "var(--app-surface)" : "var(--app-surface-sunken)",
           )}
-          {node.complete && node.satisfiedOptionIndex != null && (
-            <Text size="xs" c="dimmed" mb="xs">
-              {tr("requirementNode.satisfiedBy", {
-                courses: node.satisfiedBy.join(", "),
-              })}
-            </Text>
-          )}
-          <Collapse expanded={collapseIn}>
-            <Stack gap="xs">
-              {node.options!.map((opt, idx) => {
-                const childActiveBranch =
-                  activeBranch &&
-                  (!node.requirementId ||
-                    selectedOptionIndex == null ||
-                    selectedOptionIndex === idx);
-                const childKey = getStableNodeKey(
-                  opt,
-                  `${getStableNodeKey(node, "parent")}:opt:${idx}`,
-                );
-                return (
-                  <Box key={childKey}>
-                    <RequirementNode
-                      node={opt}
-                      cache={cache}
-                      completedCourses={completedCourses}
-                      selectedPerRequirement={selectedPerRequirement}
-                      onSelect={onSelect}
-                      activeBranch={childActiveBranch}
-                      depth={depth + 1}
-                      prereqEligible={prereqEligible}
-                      levelBuckets={levelBuckets}
-                      languageBuckets={languageBuckets}
-                      electiveLevelBuckets={electiveLevelBuckets}
-                      unassignedCompletedSet={unassignedCompletedSet}
-                      unassignedCompletedSetNormalized={unassignedCompletedSetNormalized}
-                      allAssignedCoursesNormalized={allAssignedCoursesNormalized}
-                      includeClosedComponents={includeClosedComponents}
-                      virtualSectionsOnly={virtualSectionsOnly}
-                      completedOnly={completedOnly}
-                    />
-                  </Box>
-                );
-              })}
-            </Stack>
-          </Collapse>
-        </>
-      );
-
-      return (
-        <Paper
-          p="sm"
-          withBorder
-          radius="var(--app-radius)"
-          mt="xs"
-          data-missing-selection={showError ? "true" : undefined}
-          style={{
-            paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
-            backgroundColor: opened ? "var(--app-surface)" : "var(--app-surface-sunken)",
-          }}
         >
-          <Group justify="space-between" align="center" wrap="nowrap" mb={0}>
-            <UnstyledButton
-              onClick={toggleLocal}
-              aria-expanded={opened}
-              style={{ flex: 1, minWidth: 0, cursor: "pointer" }}
-            >
-              <Group gap="xs" align="center" style={TITLE_FLEX}>
-                <IconChevronDown
-                  size={14}
-                  style={{
-                    flexShrink: 0,
-                    transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
-                    transition: "var(--app-transition)",
-                  }}
-                />
-                <Text fw={500} size="sm" lh={1.25} style={{ minWidth: 0 }}>
-                  {title}
-                </Text>
-              </Group>
-            </UnstyledButton>
-            <Stack gap={4} align="flex-end" style={BADGE_NO_SHRINK}>
-              {node.complete && (
-                <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-                  Complete
-                </Badge>
-              )}
-              {headerAccessory}
-            </Stack>
-          </Group>
-          {optionsGroupShared}
+          <CollapsibleRequirementHeader
+            label={groupLabel}
+            opened={opened}
+            onToggle={toggleLocal}
+            showComplete={isOrGroup ? showSatisfiedSummary : node.complete}
+            headerAccessory={headerAccessory}
+          />
+          {optionGroupBody}
         </Paper>
       );
     }
@@ -579,36 +445,10 @@ export const RequirementNode = memo(
     if (isAnd && hasOptions) {
       const andCollapse = (
         <Collapse expanded={collapseIn}>
-          <Stack gap="xs">
-            {node.options!.map((child, idx) => {
-              const childKey = getStableNodeKey(
-                child,
-                `${getStableNodeKey(node, "parent")}:child:${idx}`,
-              );
-              return (
-                <RequirementNode
-                  key={childKey}
-                  node={child}
-                  cache={cache}
-                  completedCourses={completedCourses}
-                  selectedPerRequirement={selectedPerRequirement}
-                  onSelect={onSelect}
-                  activeBranch={activeBranch}
-                  depth={depth + 1}
-                  prereqEligible={prereqEligible}
-                  levelBuckets={levelBuckets}
-                  languageBuckets={languageBuckets}
-                  electiveLevelBuckets={electiveLevelBuckets}
-                  unassignedCompletedSet={unassignedCompletedSet}
-                  unassignedCompletedSetNormalized={unassignedCompletedSetNormalized}
-                  allAssignedCoursesNormalized={allAssignedCoursesNormalized}
-                  includeClosedComponents={includeClosedComponents}
-                  virtualSectionsOnly={virtualSectionsOnly}
-                  completedOnly={completedOnly}
-                />
-              );
-            })}
-          </Stack>
+          <RequirementChildStack
+            node={node}
+            renderChild={(child) => renderChildNode(child, activeBranch)}
+          />
         </Collapse>
       );
 
@@ -618,41 +458,19 @@ export const RequirementNode = memo(
           withBorder
           radius="var(--app-radius)"
           mt="xs"
-          style={{
-            paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
-            backgroundColor: opened ? "var(--app-surface)" : "var(--app-surface-sunken)",
-          }}
+          style={requirementIndentStyle(
+            depth,
+            opened ? "var(--app-surface)" : "var(--app-surface-sunken)",
+          )}
         >
           {title && (
-            <Group justify="space-between" align="center" wrap="nowrap" mb={0}>
-              <UnstyledButton
-                onClick={toggleLocal}
-                aria-expanded={opened}
-                style={{ flex: 1, minWidth: 0, cursor: "pointer" }}
-              >
-                <Group gap="xs" align="center" style={TITLE_FLEX}>
-                  <IconChevronDown
-                    size={14}
-                    style={{
-                      flexShrink: 0,
-                      transform: opened ? "rotate(0deg)" : "rotate(-90deg)",
-                      transition: "var(--app-transition)",
-                    }}
-                  />
-                  <Text fw={500} size="sm" lh={1.25} style={{ minWidth: 0 }}>
-                    {title}
-                  </Text>
-                </Group>
-              </UnstyledButton>
-              <Stack gap={4} align="flex-end" style={BADGE_NO_SHRINK}>
-                {node.complete && (
-                  <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-                    Complete
-                  </Badge>
-                )}
-                {headerAccessory}
-              </Stack>
-            </Group>
+            <CollapsibleRequirementHeader
+              label={title}
+              opened={opened}
+              onToggle={toggleLocal}
+              showComplete={node.complete}
+              headerAccessory={headerAccessory}
+            />
           )}
           {andCollapse}
         </Paper>
@@ -667,36 +485,11 @@ export const RequirementNode = memo(
     const leafPickCollapse =
       hasOptions && (node.type === "pick" || node.type === "group") ? (
         <Collapse expanded={collapseIn}>
-          <Stack gap="xs" pl="xs">
-            {node.options!.map((child, idx) => {
-              const childKey = getStableNodeKey(
-                child,
-                `${getStableNodeKey(node, "parent")}:child:${idx}`,
-              );
-              return (
-                <RequirementNode
-                  key={childKey}
-                  node={child}
-                  cache={cache}
-                  completedCourses={completedCourses}
-                  selectedPerRequirement={selectedPerRequirement}
-                  onSelect={onSelect}
-                  activeBranch={activeBranch}
-                  depth={depth + 1}
-                  prereqEligible={prereqEligible}
-                  levelBuckets={levelBuckets}
-                  languageBuckets={languageBuckets}
-                  electiveLevelBuckets={electiveLevelBuckets}
-                  unassignedCompletedSet={unassignedCompletedSet}
-                  unassignedCompletedSetNormalized={unassignedCompletedSetNormalized}
-                  allAssignedCoursesNormalized={allAssignedCoursesNormalized}
-                  includeClosedComponents={includeClosedComponents}
-                  virtualSectionsOnly={virtualSectionsOnly}
-                  completedOnly={completedOnly}
-                />
-              );
-            })}
-          </Stack>
+          <RequirementChildStack
+            node={node}
+            pl="xs"
+            renderChild={(child) => renderChildNode(child, activeBranch)}
+          />
         </Collapse>
       ) : null;
 
@@ -727,10 +520,7 @@ export const RequirementNode = memo(
         withBorder
         radius="var(--app-radius)"
         mt="xs"
-        style={{
-          paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
-          backgroundColor: defaultPaperBg,
-        }}
+        style={requirementIndentStyle(depth, defaultPaperBg)}
       >
         <Stack gap="xs">
           <Group

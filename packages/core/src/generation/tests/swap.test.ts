@@ -36,6 +36,13 @@ function schedule(code: string, lectureSections: ComponentSection[]): CourseSche
   };
 }
 
+function csi2110WithMondayAndTuesdayOptions(): CourseSchedule {
+  return schedule("CSI 2110", [
+    section("A", [meeting("Mo", 600, 660)]),
+    section("B", [meeting("Tu", 600, 660)]),
+  ]);
+}
+
 function enrollmentAt(
   code: string,
   day: MeetingTime["day"],
@@ -61,10 +68,7 @@ describe("firstFittingEnrollment", () => {
   });
 
   it("skips a section that overlaps an existing enrollment and returns the next that fits", () => {
-    const data = schedule("CSI 2110", [
-      section("A", [meeting("Mo", 600, 660)]), // overlaps the existing Mo 10:00 class
-      section("B", [meeting("Tu", 600, 660)]), // free slot
-    ]);
+    const data = csi2110WithMondayAndTuesdayOptions();
     const others = [enrollmentAt("MAT 1320", "Mo", 600, 660)];
     const result = firstFittingEnrollment(data, NO_CONSTRAINTS, others);
     expect(result?.times).toEqual([
@@ -90,10 +94,7 @@ describe("firstFittingEnrollment", () => {
   });
 
   it("agrees with the underlying combo enumeration", () => {
-    const data = schedule("CSI 2110", [
-      section("A", [meeting("Mo", 600, 660)]),
-      section("B", [meeting("Tu", 600, 660)]),
-    ]);
+    const data = csi2110WithMondayAndTuesdayOptions();
     const others = [enrollmentAt("MAT 1320", "Mo", 600, 660)];
     const combos = getValidSectionCombos(data, NO_CONSTRAINTS);
     const expected = combos

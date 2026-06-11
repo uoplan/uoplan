@@ -13,6 +13,7 @@ import {
   fromProtoRateMyProfessorsData,
   fromProtoSchedulesData,
   fromProtoTermsData,
+  type DataCache,
   type Indices,
 } from "@uoplan/core";
 import { buildDataCache } from "@uoplan/core";
@@ -74,6 +75,23 @@ export const createDataSlice =
       return getMergedCatalogue(catalogue, yearCatalogueCourses, completedCourses) ?? catalogue;
     };
 
+    const recomputeCurrentProgramState = (cache: DataCache) => {
+      const s = get();
+      return recomputeStateForProgram(
+        s.program,
+        s.minorProgram,
+        s.completedCourses,
+        cache,
+        s.selectedPerRequirement,
+        s.selectedOptionsPerRequirement,
+        s.levelBuckets,
+        s.languageBuckets,
+        s.includeClosedComponents,
+        s.studentPrograms,
+        s.requirementSlotsUserTouched,
+      );
+    };
+
     return {
       setSelectedTermId: async (termId: string) => {
         set({ loading: true, error: null });
@@ -104,20 +122,7 @@ export const createDataSlice =
             completedCourses,
           );
 
-          const s = get();
-          const full = recomputeStateForProgram(
-            s.program,
-            s.minorProgram,
-            s.completedCourses,
-            cache,
-            s.selectedPerRequirement,
-            s.selectedOptionsPerRequirement,
-            s.levelBuckets,
-            s.languageBuckets,
-            s.includeClosedComponents,
-            s.studentPrograms,
-            s.requirementSlotsUserTouched,
-          );
+          const full = recomputeCurrentProgramState(cache);
 
           set({
             selectedTermId: termId,
@@ -523,19 +528,7 @@ export const createDataSlice =
               s.schedulesData,
               s.completedCourses,
             );
-            const full = recomputeStateForProgram(
-              s.program,
-              s.minorProgram,
-              s.completedCourses,
-              cache,
-              s.selectedPerRequirement,
-              s.selectedOptionsPerRequirement,
-              s.levelBuckets,
-              s.languageBuckets,
-              s.includeClosedComponents,
-              s.studentPrograms,
-              s.requirementSlotsUserTouched,
-            );
+            const full = recomputeCurrentProgramState(cache);
             set({ cache, ...full });
           }
         })().catch((err) => {

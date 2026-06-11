@@ -21,13 +21,11 @@ import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
 } from "../../lib/explore/accordionPadding";
-
-const EXPLORE_CHEVRON_RIGHT = {
-  base: "12px",
-  xs: "max(12px, calc((100vw - min(100vw, 1200px)) / 2 + 12px))",
-};
-
-const mobileMediaQuery = "@media (max-width: 540px)";
+import {
+  ExploreAccordion,
+  ExploreFullBleed,
+  EXPLORE_MOBILE_MEDIA_QUERY,
+} from "./ExploreEntityLayout";
 
 function DisciplineProfessorRows({
   group,
@@ -61,7 +59,7 @@ function DisciplineProfessorRows({
               paddingBottom: "var(--mantine-spacing-lg)",
               paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
               paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
-              [mobileMediaQuery]: {
+              [EXPLORE_MOBILE_MEDIA_QUERY]: {
                 paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
                 paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.base,
               },
@@ -199,60 +197,8 @@ export function ExploreDisciplinePage({
             </Text>
           </Box>
         ) : (
-          <Box
-            style={{
-              width: "100vw",
-              maxWidth: "100vw",
-              marginInline: "calc(50% - 50vw)",
-            }}
-          >
-            <Accordion
-              multiple
-              radius="var(--app-radius)"
-              chevronPosition="right"
-              variant="default"
-              classNames={{ control: "explore-accordion-control" }}
-              styles={{
-                root: {
-                  backgroundColor: "var(--app-bg)",
-                  borderTop: "var(--app-border-width) solid var(--app-border)",
-                },
-                item: {
-                  borderBottom: "var(--app-border-width) solid var(--app-border)",
-                  backgroundColor: "var(--app-surface-sunken)",
-                  "&:last-of-type": { borderBottom: "none" },
-                },
-                control: {
-                  position: "relative",
-                  paddingTop: "var(--mantine-spacing-lg)",
-                  paddingBottom: "var(--mantine-spacing-lg)",
-                  paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
-                  paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
-                  borderRadius: "var(--app-radius-sm)",
-                  backgroundColor: "var(--app-surface-sunken)",
-                  "@media (max-width: 540px)": {
-                    paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
-                    paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.base,
-                  },
-                },
-                label: { flex: 1, minWidth: 0, paddingRight: 0 },
-                panel: { padding: 0, backgroundColor: "var(--app-bg)" },
-                content: { padding: 0 },
-                chevron: {
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  right: EXPLORE_CHEVRON_RIGHT.xs,
-                  display: "flex",
-                  alignItems: "center",
-                  marginLeft: 0,
-                  color: "var(--app-text-muted)",
-                  "@media (max-width: 540px)": {
-                    right: EXPLORE_CHEVRON_RIGHT.base,
-                  },
-                },
-              }}
-            >
+          <ExploreFullBleed>
+            <ExploreAccordion>
               {courseGroups.map((g) => (
                 <DisciplineCourseItem
                   key={g.groupId}
@@ -261,8 +207,8 @@ export function ExploreDisciplinePage({
                   currentEntry={disciplineEntry}
                 />
               ))}
-            </Accordion>
-          </Box>
+            </ExploreAccordion>
+          </ExploreFullBleed>
         )}
       </Stack>
     </m.div>

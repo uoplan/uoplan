@@ -1,4 +1,5 @@
 import type {
+  GradeDistribution as ProtoGradeDistribution,
   GradeProfessorOffering as ProtoGradeProfessorOffering,
   GradesData as ProtoGradesData,
 } from "@uoplan/proto/data";
@@ -7,27 +8,7 @@ import type { GradeDistribution } from "./domain";
 import { normalizeCourseCode } from "../utils/courseUtils";
 
 export function fromProtoDistribution(
-  distribution:
-    | {
-        aPlus: number;
-        a: number;
-        aMinus: number;
-        bPlus: number;
-        b: number;
-        cPlus: number;
-        c: number;
-        dPlus: number;
-        d: number;
-        e: number;
-        f: number;
-        ein: number;
-        ns: number;
-        nc: number;
-        abs: number;
-        p: number;
-        s: number;
-      }
-    | undefined,
+  distribution: ProtoGradeDistribution | undefined,
 ): GradeDistribution | undefined {
   if (!distribution) return undefined;
   const out: GradeDistribution = {

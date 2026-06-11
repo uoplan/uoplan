@@ -1,189 +1,158 @@
 import { describe, it, expect } from "vitest";
 import { buildDataCache } from "@uoplan/core";
 import type { Catalogue, Program } from "@uoplan/core";
-import type { SchedulesData } from "@uoplan/core";
 import { computeRequirementsState } from "@uoplan/core";
 import { defaultAppStore } from "../appStore";
 import { testCourseCode } from "../../test/brands";
+import { testCourse, testSchedule, testSchedulesData } from "./scheduleTestHelpers";
 
 const testCatalogue: Catalogue = {
   courses: [
     // CSI 4000-level candidates
-    {
-      code: testCourseCode("CSI 4101"),
-      title: "CSI 4101",
-      credits: 3,
-      description: "",
-      component: "LEC",
-    },
-    {
-      code: testCourseCode("CSI 4102"),
-      title: "CSI 4102",
-      credits: 3,
-      description: "",
-      component: "LEC",
-    },
-    {
-      code: testCourseCode("CSI 4103"),
-      title: "CSI 4103",
-      credits: 3,
-      description: "",
-      component: "LEC",
-    },
+    testCourse("CSI 4101"),
+    testCourse("CSI 4102"),
+    testCourse("CSI 4103"),
     // Non-computing non-math electives
-    {
-      code: testCourseCode("ENG 2100"),
-      title: "ENG 2100",
-      credits: 3,
-      description: "",
-      component: "LEC",
-    },
-    {
-      code: testCourseCode("ENG 2101"),
-      title: "ENG 2101",
-      credits: 3,
-      description: "",
-      component: "LEC",
-    },
-    {
-      code: testCourseCode("HIS 2100"),
-      title: "HIS 2100",
-      credits: 3,
-      description: "",
-      component: "LEC",
-    },
+    testCourse("ENG 2100"),
+    testCourse("ENG 2101"),
+    testCourse("HIS 2100"),
   ],
   programs: [],
 };
 
 // Give every course a trivial non-overlapping schedule so time generation
 // never prunes them; the test focuses on requirement/category limits.
-const simpleSchedules: SchedulesData = {
-  termId: "2261",
-  schedules: [
-    {
-      subject: "CSI",
-      catalogNumber: "4101",
-      courseCode: testCourseCode("CSI 4101"),
-      title: "CSI 4101",
-      timeZone: "America/Toronto",
-      components: {},
-    },
-    {
-      subject: "CSI",
-      catalogNumber: "4102",
-      courseCode: testCourseCode("CSI 4102"),
-      title: "CSI 4102",
-      timeZone: "America/Toronto",
-      components: {},
-    },
-    {
-      subject: "CSI",
-      catalogNumber: "4103",
-      courseCode: testCourseCode("CSI 4103"),
-      title: "CSI 4103",
-      timeZone: "America/Toronto",
-      components: {},
-    },
-    {
-      subject: "ENG",
-      catalogNumber: "2100",
-      courseCode: testCourseCode("ENG 2100"),
-      title: "ENG 2100",
-      timeZone: "America/Toronto",
-      components: {},
-    },
-    {
-      subject: "ENG",
-      catalogNumber: "2101",
-      courseCode: testCourseCode("ENG 2101"),
-      title: "ENG 2101",
-      timeZone: "America/Toronto",
-      components: {},
-    },
-    {
-      subject: "HIS",
-      catalogNumber: "2100",
-      courseCode: testCourseCode("HIS 2100"),
-      title: "HIS 2100",
-      timeZone: "America/Toronto",
-      components: {},
-    },
-  ],
-};
+const simpleSchedules = testSchedulesData(testCatalogue.courses.map((c) => testSchedule(c.code)));
+
+function groupRequirement(
+  title: string,
+  credits: number,
+  codes: string[],
+): Program["requirements"][number] {
+  return {
+    type: "group",
+    title,
+    credits,
+    options: codes.map((code) => ({ type: "course", code: testCourseCode(code) })),
+  };
+}
 
 const programWithCsiAndElectives: Program = {
   title: "Test CSI + electives",
   url: "",
   requirements: [
-    {
-      type: "group",
-      title: "3 credits of CSI 4000",
-      credits: 3,
-      options: [
-        { type: "course", code: testCourseCode("CSI 4101") },
-        { type: "course", code: testCourseCode("CSI 4102") },
-        { type: "course", code: testCourseCode("CSI 4103") },
-      ],
-    },
-    {
-      type: "group",
-      title: "6 credits of non-computing electives",
-      credits: 6,
-      options: [
-        { type: "course", code: testCourseCode("ENG 2100") },
-        { type: "course", code: testCourseCode("ENG 2101") },
-        { type: "course", code: testCourseCode("HIS 2100") },
-      ],
-    },
+    groupRequirement("3 credits of CSI 4000", 3, ["CSI 4101", "CSI 4102", "CSI 4103"]),
+    groupRequirement("6 credits of non-computing electives", 6, [
+      "ENG 2100",
+      "ENG 2101",
+      "HIS 2100",
+    ]),
   ],
 };
 
+function setGenerationFixture({
+  catalogue,
+  schedulesData,
+  cache,
+  program,
+  completedCourses,
+  remaining,
+  coursesThisSemester,
+  state,
+}: {
+  catalogue: Catalogue;
+  schedulesData: ReturnType<typeof testSchedulesData>;
+  cache: ReturnType<typeof buildDataCache>;
+  program: Program;
+  completedCourses: string[];
+  remaining: ReturnType<typeof computeRequirementsState>["remaining"];
+  coursesThisSemester: number;
+  state?: Partial<ReturnType<typeof defaultAppStore.getState>>;
+}) {
+  const store = defaultAppStore;
+  store.setState({
+    ...store.getState(),
+    catalogue: { courses: catalogue.courses, programs: [program] },
+    schedulesData,
+    cache,
+    program,
+    completedCourses,
+    remainingRequirements: remaining,
+    requirementTreeWithStatus: [],
+    completedRequirementsList: [],
+    selectedPerRequirement: {},
+    requirementSlotsUserTouched: {},
+    selectedOptionsPerRequirement: {},
+    prereqEligibleCourses: catalogue.courses.map((c) => c.code),
+    filteredPrereqEligibleCourses: catalogue.courses.map((c) => c.code),
+    levelBuckets: ["undergrad"],
+    languageBuckets: ["en", "other"],
+    electiveLevelBuckets: [],
+    coursesThisSemester,
+    currentSchedule: null,
+    generationError: null,
+    ...state,
+  });
+}
+
+function graduateOnlyFixture() {
+  const catalogue: Catalogue = {
+    courses: [testCourse("SEG 5100")],
+    programs: [],
+  };
+  const schedulesData = testSchedulesData([testSchedule("SEG 5100")]);
+  const program: Program = {
+    title: "Free elective only",
+    url: "",
+    requirements: [{ type: "free_elective", title: "3 free elective credits", credits: 3 }],
+  };
+  const cache = buildDataCache(catalogue, schedulesData);
+  const completedCourses: string[] = [];
+  const { remaining } = computeRequirementsState(program, completedCourses, cache);
+  return { catalogue, schedulesData, program, cache, completedCourses, remaining };
+}
+
+const scheduleLimitsCache = buildDataCache(testCatalogue, simpleSchedules);
+
+async function generateScheduleForProgram(
+  program: Program,
+  coursesThisSemester: number,
+  state?: Partial<ReturnType<typeof defaultAppStore.getState>>,
+) {
+  const completedCourses: string[] = [];
+  const { remaining } = computeRequirementsState(program, completedCourses, scheduleLimitsCache);
+  setGenerationFixture({
+    catalogue: testCatalogue,
+    schedulesData: simpleSchedules,
+    cache: scheduleLimitsCache,
+    program,
+    completedCourses,
+    remaining,
+    coursesThisSemester,
+    state,
+  });
+  await defaultAppStore.getState().generateSchedules();
+  return { currentSchedule: defaultAppStore.getState().currentSchedule, remaining };
+}
+
+function scheduleCourseFamilies(
+  currentSchedule: NonNullable<ReturnType<typeof defaultAppStore.getState>["currentSchedule"]>,
+) {
+  const codes = currentSchedule.enrollments.map((e) => e.courseCode);
+  return {
+    codes,
+    csiCourses: codes.filter((c) => c.startsWith("CSI")),
+    nonComputing: codes.filter((c) => !c.startsWith("CSI")),
+  };
+}
+
 describe("schedule generation respects per-category limits", () => {
-  const cache = buildDataCache(testCatalogue, simpleSchedules);
-
   it("avoids adding extra CSI courses beyond the required credits when other unmet categories exist", async () => {
-    // Compute remaining requirements from a clean slate.
-    const completedCourses: string[] = [];
-    const { remaining } = computeRequirementsState(
-      programWithCsiAndElectives,
-      completedCourses,
-      cache,
-    );
-
-    // Initialize store with our synthetic data and requirements state.
-    const store = defaultAppStore;
-
-    store.setState({
-      ...store.getState(),
-      catalogue: { courses: testCatalogue.courses, programs: [programWithCsiAndElectives] },
-      schedulesData: simpleSchedules,
-      cache,
-      program: programWithCsiAndElectives,
-      completedCourses,
-      remainingRequirements: remaining,
-      requirementTreeWithStatus: [],
-      completedRequirementsList: [],
-      selectedPerRequirement: {},
-      requirementSlotsUserTouched: {},
-      selectedOptionsPerRequirement: {},
-      prereqEligibleCourses: testCatalogue.courses.map((c) => c.code),
-      filteredPrereqEligibleCourses: testCatalogue.courses.map((c) => c.code),
-      levelBuckets: ["undergrad"],
-      languageBuckets: ["en", "other"],
-      coursesThisSemester: 3,
-    });
-
-    await store.getState().generateSchedules();
-
-    const { currentSchedule } = store.getState();
+    const { currentSchedule } = await generateScheduleForProgram(programWithCsiAndElectives, 3);
     expect(currentSchedule).not.toBeNull();
 
     if (currentSchedule) {
-      const schedule = currentSchedule;
-      const codes = schedule.enrollments.map((e) => e.courseCode);
-      const csiCourses = codes.filter((c) => c.startsWith("CSI"));
-      const nonComputing = codes.filter((c) => !c.startsWith("CSI"));
+      const { csiCourses, nonComputing } = scheduleCourseFamilies(currentSchedule);
 
       // Exactly one CSI course should appear (3 credits required) when there are
       // enough non-computing electives available to fill the rest.
@@ -200,64 +169,20 @@ describe("schedule generation respects per-category limits", () => {
       title: "Test CSI 2x + electives",
       url: "",
       requirements: [
-        {
-          type: "group",
-          title: "6 credits of CSI 4000",
-          credits: 6,
-          options: [
-            { type: "course", code: testCourseCode("CSI 4101") },
-            { type: "course", code: testCourseCode("CSI 4102") },
-            { type: "course", code: testCourseCode("CSI 4103") },
-          ],
-        },
-        {
-          type: "group",
-          title: "6 credits of non-computing electives",
-          credits: 6,
-          options: [
-            { type: "course", code: testCourseCode("ENG 2100") },
-            { type: "course", code: testCourseCode("ENG 2101") },
-            { type: "course", code: testCourseCode("HIS 2100") },
-          ],
-        },
+        groupRequirement("6 credits of CSI 4000", 6, ["CSI 4101", "CSI 4102", "CSI 4103"]),
+        groupRequirement("6 credits of non-computing electives", 6, [
+          "ENG 2100",
+          "ENG 2101",
+          "HIS 2100",
+        ]),
       ],
     };
 
-    const completedCourses: string[] = [];
-    const { remaining } = computeRequirementsState(programWithMoreCsi, completedCourses, cache);
-
-    const store = defaultAppStore;
-
-    store.setState({
-      ...store.getState(),
-      catalogue: { courses: testCatalogue.courses, programs: [programWithMoreCsi] },
-      schedulesData: simpleSchedules,
-      cache,
-      program: programWithMoreCsi,
-      completedCourses,
-      remainingRequirements: remaining,
-      requirementTreeWithStatus: [],
-      completedRequirementsList: [],
-      selectedPerRequirement: {},
-      requirementSlotsUserTouched: {},
-      selectedOptionsPerRequirement: {},
-      prereqEligibleCourses: testCatalogue.courses.map((c) => c.code),
-      filteredPrereqEligibleCourses: testCatalogue.courses.map((c) => c.code),
-      levelBuckets: ["undergrad"],
-      languageBuckets: ["en", "other"],
-      coursesThisSemester: 4,
-    });
-
-    await store.getState().generateSchedules();
-
-    const { currentSchedule } = store.getState();
+    const { currentSchedule } = await generateScheduleForProgram(programWithMoreCsi, 4);
     expect(currentSchedule).not.toBeNull();
 
     if (currentSchedule) {
-      const schedule = currentSchedule;
-      const codes = schedule.enrollments.map((e) => e.courseCode);
-      const csiCourses = codes.filter((c) => c.startsWith("CSI"));
-      const nonComputing = codes.filter((c) => !c.startsWith("CSI"));
+      const { codes, csiCourses, nonComputing } = scheduleCourseFamilies(currentSchedule);
 
       expect(codes.length).toBe(4);
       expect(csiCourses.length).toBeLessThanOrEqual(2);
@@ -271,42 +196,31 @@ describe("schedule generation respects per-category limits", () => {
     const { remaining } = computeRequirementsState(
       programWithCsiAndElectives,
       completedCourses,
-      cache,
+      scheduleLimitsCache,
     );
     const csiReqId = remaining[0]?.requirementId ?? "req-0";
-
-    const store = defaultAppStore;
 
     // Pin CSI 4101 via constrainedPerRequirement to simulate the user explicitly
     // choosing it. The generator should treat it as pinned and only pull one
     // additional CSI course from the pools, plus enough non-computing courses
     // to reach the term target. Use 3 courses so: 1 pinned CSI + 2 from pools.
-    store.setState({
-      ...store.getState(),
-      catalogue: { courses: testCatalogue.courses, programs: [programWithCsiAndElectives] },
+    setGenerationFixture({
+      catalogue: testCatalogue,
       schedulesData: simpleSchedules,
-      cache,
+      cache: scheduleLimitsCache,
       program: programWithCsiAndElectives,
       completedCourses,
-      remainingRequirements: remaining,
-      requirementTreeWithStatus: [],
-      completedRequirementsList: [],
-      selectedPerRequirement: {},
-      requirementSlotsUserTouched: {},
-      constrainedPerRequirement: { [csiReqId]: ["CSI 4101"] },
-      selectedOptionsPerRequirement: {},
-      prereqEligibleCourses: testCatalogue.courses.map((c) => c.code),
-      filteredPrereqEligibleCourses: testCatalogue.courses.map((c) => c.code),
-      levelBuckets: ["undergrad"],
-      languageBuckets: ["en", "other"],
-      electiveLevelBuckets: [1000, 2000, 3000, 4000],
+      remaining,
       coursesThisSemester: 3,
-      currentSchedule: null,
+      state: {
+        constrainedPerRequirement: { [csiReqId]: ["CSI 4101"] },
+        electiveLevelBuckets: [1000, 2000, 3000, 4000],
+      },
     });
 
-    await store.getState().generateSchedules();
+    await defaultAppStore.getState().generateSchedules();
 
-    const { currentSchedule } = store.getState();
+    const { currentSchedule } = defaultAppStore.getState();
     expect(currentSchedule).not.toBeNull();
 
     if (currentSchedule) {
@@ -318,146 +232,43 @@ describe("schedule generation respects per-category limits", () => {
   });
 
   it("treats 5000+ courses as ineligible for elective requirements", async () => {
-    const gradOnlyCatalogue: Catalogue = {
-      courses: [
-        {
-          code: testCourseCode("SEG 5100"),
-          title: "SEG 5100",
-          credits: 3,
-          description: "",
-          component: "LEC",
-        },
-      ],
-      programs: [],
-    };
-
-    const gradOnlySchedules: SchedulesData = {
-      termId: "2261",
-      schedules: [
-        {
-          subject: "SEG",
-          catalogNumber: "5100",
-          courseCode: testCourseCode("SEG 5100"),
-          title: "SEG 5100",
-          timeZone: "America/Toronto",
-          components: {},
-        },
-      ],
-    };
-
-    const freeElectiveOnly: Program = {
-      title: "Free elective only",
-      url: "",
-      requirements: [
-        {
-          type: "free_elective",
-          title: "3 free elective credits",
-          credits: 3,
-        },
-      ],
-    };
-
-    const cache = buildDataCache(gradOnlyCatalogue, gradOnlySchedules);
-    const completedCourses: string[] = [];
-    const { remaining } = computeRequirementsState(freeElectiveOnly, completedCourses, cache);
-    const store = defaultAppStore;
-    store.setState({
-      ...store.getState(),
-      catalogue: { courses: gradOnlyCatalogue.courses, programs: [freeElectiveOnly] },
-      schedulesData: gradOnlySchedules,
-      cache,
-      program: freeElectiveOnly,
-      completedCourses,
-      remainingRequirements: remaining,
-      requirementTreeWithStatus: [],
-      completedRequirementsList: [],
-      selectedPerRequirement: {},
-      requirementSlotsUserTouched: {},
-      selectedOptionsPerRequirement: {},
-      prereqEligibleCourses: ["SEG 5100"],
-      filteredPrereqEligibleCourses: ["SEG 5100"],
-      levelBuckets: ["undergrad", "grad"],
-      languageBuckets: ["en", "other"],
-      electiveLevelBuckets: [1000, 2000, 3000, 4000],
+    const fixture = graduateOnlyFixture();
+    setGenerationFixture({
+      ...fixture,
       coursesThisSemester: 1,
-      currentSchedule: null,
-      generationError: null,
+      state: {
+        levelBuckets: ["undergrad", "grad"],
+        electiveLevelBuckets: [1000, 2000, 3000, 4000],
+      },
     });
 
-    await store.getState().generateSchedules();
+    await defaultAppStore.getState().generateSchedules();
 
-    const { currentSchedule, generationError } = store.getState();
+    const { currentSchedule, generationError } = defaultAppStore.getState();
     expect(currentSchedule).toBeNull();
     expect(generationError).not.toBeNull();
   });
 
   it("keeps the previous schedule when a re-generation fails", async () => {
-    const gradOnlyCatalogue: Catalogue = {
-      courses: [
-        {
-          code: testCourseCode("SEG 5100"),
-          title: "SEG 5100",
-          credits: 3,
-          description: "",
-          component: "LEC",
-        },
-      ],
-      programs: [],
-    };
-    const gradOnlySchedules: SchedulesData = {
-      termId: "2261",
-      schedules: [
-        {
-          subject: "SEG",
-          catalogNumber: "5100",
-          courseCode: testCourseCode("SEG 5100"),
-          title: "SEG 5100",
-          timeZone: "America/Toronto",
-          components: {},
-        },
-      ],
-    };
-    const freeElectiveOnly: Program = {
-      title: "Free elective only",
-      url: "",
-      requirements: [{ type: "free_elective", title: "3 free elective credits", credits: 3 }],
-    };
-
-    const cache = buildDataCache(gradOnlyCatalogue, gradOnlySchedules);
-    const completedCourses: string[] = [];
-    const { remaining } = computeRequirementsState(freeElectiveOnly, completedCourses, cache);
-    const store = defaultAppStore;
+    const fixture = graduateOnlyFixture();
 
     // A schedule already on screen (the object identity is the assertion target).
     const existingSchedule = { enrollments: [] };
 
-    store.setState({
-      ...store.getState(),
-      catalogue: { courses: gradOnlyCatalogue.courses, programs: [freeElectiveOnly] },
-      schedulesData: gradOnlySchedules,
-      cache,
-      program: freeElectiveOnly,
-      completedCourses,
-      remainingRequirements: remaining,
-      requirementTreeWithStatus: [],
-      completedRequirementsList: [],
-      selectedPerRequirement: {},
-      requirementSlotsUserTouched: {},
-      selectedOptionsPerRequirement: {},
-      prereqEligibleCourses: ["SEG 5100"],
-      filteredPrereqEligibleCourses: ["SEG 5100"],
-      levelBuckets: ["undergrad", "grad"],
-      languageBuckets: ["en", "other"],
-      electiveLevelBuckets: [1000, 2000, 3000, 4000],
+    setGenerationFixture({
+      ...fixture,
       coursesThisSemester: 1,
-      currentSchedule: existingSchedule,
-      currentSeed: 1234,
-      generationError: null,
+      state: {
+        levelBuckets: ["undergrad", "grad"],
+        electiveLevelBuckets: [1000, 2000, 3000, 4000],
+        currentSchedule: existingSchedule,
+        currentSeed: 1234,
+      },
     });
 
-    await store.getState().generateSchedules();
+    await defaultAppStore.getState().generateSchedules();
 
-    const { currentSchedule, generationError, currentSeed } = store.getState();
+    const { currentSchedule, generationError, currentSeed } = defaultAppStore.getState();
     // The failing re-generation must not wipe the calendar.
     expect(currentSchedule).toBe(existingSchedule);
     expect(currentSeed).toBe(1234);
@@ -467,61 +278,13 @@ describe("schedule generation respects per-category limits", () => {
 
   it("applies elective-level buckets only to elective pools", async () => {
     const scopedCatalogue: Catalogue = {
-      courses: [
-        {
-          code: testCourseCode("CSI 4101"),
-          title: "CSI 4101",
-          credits: 3,
-          description: "",
-          component: "LEC",
-        },
-        {
-          code: testCourseCode("ENG 1100"),
-          title: "ENG 1100",
-          credits: 3,
-          description: "",
-          component: "LEC",
-        },
-        {
-          code: testCourseCode("ENG 2100"),
-          title: "ENG 2100",
-          credits: 3,
-          description: "",
-          component: "LEC",
-        },
-      ],
+      courses: [testCourse("CSI 4101"), testCourse("ENG 1100"), testCourse("ENG 2100")],
       programs: [],
     };
 
-    const scopedSchedules: SchedulesData = {
-      termId: "2261",
-      schedules: [
-        {
-          subject: "CSI",
-          catalogNumber: "4101",
-          courseCode: testCourseCode("CSI 4101"),
-          title: "CSI 4101",
-          timeZone: "America/Toronto",
-          components: {},
-        },
-        {
-          subject: "ENG",
-          catalogNumber: "1100",
-          courseCode: testCourseCode("ENG 1100"),
-          title: "ENG 1100",
-          timeZone: "America/Toronto",
-          components: {},
-        },
-        {
-          subject: "ENG",
-          catalogNumber: "2100",
-          courseCode: testCourseCode("ENG 2100"),
-          title: "ENG 2100",
-          timeZone: "America/Toronto",
-          components: {},
-        },
-      ],
-    };
+    const scopedSchedules = testSchedulesData(
+      scopedCatalogue.courses.map((c) => testSchedule(c.code)),
+    );
 
     const scopedProgram: Program = {
       title: "Scoped elective filter test",
@@ -543,36 +306,20 @@ describe("schedule generation respects per-category limits", () => {
     expect(disciplineReq?.candidateCourses?.includes("ENG 1100")).toBe(true);
     expect(courseReq?.candidateCourses).toContain("CSI 4101");
 
-    const store = defaultAppStore;
-    store.setState({
-      ...store.getState(),
-      catalogue: {
-        courses: scopedCatalogue.courses,
-        programs: [scopedProgram],
-      },
+    setGenerationFixture({
+      catalogue: scopedCatalogue,
       schedulesData: scopedSchedules,
       cache: scopedCache,
       program: scopedProgram,
       completedCourses,
-      remainingRequirements: remaining,
-      requirementTreeWithStatus: [],
-      completedRequirementsList: [],
-      selectedPerRequirement: {},
-      requirementSlotsUserTouched: {},
-      selectedOptionsPerRequirement: {},
-      prereqEligibleCourses: scopedCatalogue.courses.map((c) => c.code),
-      filteredPrereqEligibleCourses: scopedCatalogue.courses.map((c) => c.code),
-      levelBuckets: ["undergrad"],
-      languageBuckets: ["en", "other"],
-      electiveLevelBuckets: [1000],
+      remaining,
       coursesThisSemester: 2,
-      currentSchedule: null,
-      generationError: null,
+      state: { electiveLevelBuckets: [1000] },
     });
 
-    await store.getState().generateSchedules();
+    await defaultAppStore.getState().generateSchedules();
 
-    const { currentSchedule, generationError } = store.getState();
+    const { currentSchedule, generationError } = defaultAppStore.getState();
     expect(currentSchedule).not.toBeNull();
     expect(generationError).toBeNull();
     const firstCodes =

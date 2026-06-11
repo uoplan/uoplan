@@ -245,6 +245,11 @@ type CommonGenerationRequestFields = Pick<
   | "courseSentiment"
 >;
 
+type SharedGenerationRequestFields = Omit<
+  CommonGenerationRequestFields,
+  "basicExcludedCategories" | "completedCourses"
+>;
+
 type InputWithCommonGenerationFields = CommonRequestInput &
   Pick<BasicRequestInput, "basicExcludedCategories" | "frenchImmersionStream">;
 
@@ -276,6 +281,28 @@ function buildCommonGenerationRequestFields(
   };
 }
 
+function buildSharedGenerationRequestFields(
+  common: CommonGenerationRequestFields,
+): SharedGenerationRequestFields {
+  return {
+    levelBuckets: common.levelBuckets,
+    languageBuckets: common.languageBuckets,
+    electiveLevelBuckets: common.electiveLevelBuckets,
+    includeClosedComponents: common.includeClosedComponents,
+    virtualSectionsOnly: common.virtualSectionsOnly,
+    generationPreferEasier: common.generationPreferEasier,
+    frenchImmersionStream: common.frenchImmersionStream,
+    blacklistedCourses: common.blacklistedCourses,
+    constraints: common.constraints,
+    currentSeed: common.currentSeed,
+    firstSeed: common.firstSeed,
+    professorRatings: common.professorRatings,
+    courseAplus: common.courseAplus,
+    generationPreferHigherSentiment: common.generationPreferHigherSentiment,
+    courseSentiment: common.courseSentiment,
+  };
+}
+
 export function buildBasicRequest(input: BasicRequestInput, cache: DataCache): GenerationRequest {
   const common = buildCommonGenerationRequestFields(input, cache);
   return {
@@ -294,21 +321,7 @@ export function buildBasicRequest(input: BasicRequestInput, cache: DataCache): G
     coursesThisSemester: 0,
     prereqEligibleCourses: [],
     forcedCourses: [],
-    levelBuckets: common.levelBuckets,
-    languageBuckets: common.languageBuckets,
-    electiveLevelBuckets: common.electiveLevelBuckets,
-    includeClosedComponents: common.includeClosedComponents,
-    virtualSectionsOnly: common.virtualSectionsOnly,
-    generationPreferEasier: common.generationPreferEasier,
-    frenchImmersionStream: common.frenchImmersionStream,
-    blacklistedCourses: common.blacklistedCourses,
-    constraints: common.constraints,
-    currentSeed: common.currentSeed,
-    firstSeed: common.firstSeed,
-    professorRatings: common.professorRatings,
-    courseAplus: common.courseAplus,
-    generationPreferHigherSentiment: common.generationPreferHigherSentiment,
-    courseSentiment: common.courseSentiment,
+    ...buildSharedGenerationRequestFields(common),
   };
 }
 
@@ -333,21 +346,7 @@ export function buildAdvancedRequest(
     coursesThisSemester: input.coursesThisSemester,
     prereqEligibleCourses: input.prereqEligibleCourses,
     forcedCourses: input.forcedCourses,
-    levelBuckets: common.levelBuckets,
-    languageBuckets: common.languageBuckets,
-    electiveLevelBuckets: common.electiveLevelBuckets,
-    includeClosedComponents: common.includeClosedComponents,
-    virtualSectionsOnly: common.virtualSectionsOnly,
-    generationPreferEasier: common.generationPreferEasier,
-    frenchImmersionStream: common.frenchImmersionStream,
-    blacklistedCourses: common.blacklistedCourses,
-    constraints: common.constraints,
-    currentSeed: common.currentSeed,
-    firstSeed: common.firstSeed,
-    professorRatings: common.professorRatings,
-    courseAplus: common.courseAplus,
-    generationPreferHigherSentiment: common.generationPreferHigherSentiment,
-    courseSentiment: common.courseSentiment,
+    ...buildSharedGenerationRequestFields(common),
   };
 }
 

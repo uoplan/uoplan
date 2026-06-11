@@ -13,9 +13,10 @@ import {
   DEFAULT_CONSTRAINTS,
 } from "../../generation/tests/golden/fixtures";
 import { buildDataCache } from "../../dataCache";
-import type { Catalogue, SchedulesData } from "../../dataTypes";
+import type { SchedulesData } from "../../dataTypes";
 import { buildTimetableCourse, lazyCourseCombos } from "./lazyCombos";
 import { arrangementFingerprint, enumerateArrangements } from "./enumerator";
+import { makeRelaxationCatalogue } from "../../tests/engineTestHelpers";
 import { normalizeCourseCode } from "../../utils/courseUtils";
 
 const cache = buildFixtureCache();
@@ -23,6 +24,53 @@ const ctx: ConstraintContext = { cache, completed: new Set(), prereqEligible: ne
 
 function pipeline(extra = DEFAULT_CONSTRAINTS) {
   return new ConstraintPipeline([overlapConstraint, timeWindowConstraint(extra)]);
+}
+
+function twoCourseCache(
+  aaaTimes: Parameters<typeof makeSection>[2][],
+  bbbTimes: Parameters<typeof makeSection>[2][],
+) {
+  const schedules: SchedulesData = {
+    termId: "0",
+    schedules: [
+      makeSchedule(normalizeCourseCode("AAA 1000"), {
+        LEC: aaaTimes.map((times, index) =>
+          makeSection("LEC", String.fromCharCode(65 + index), times),
+        ),
+      }),
+      makeSchedule(normalizeCourseCode("BBB 1000"), {
+        LEC: bbbTimes.map((times, index) =>
+          makeSection("LEC", String.fromCharCode(65 + index), times),
+        ),
+      }),
+    ],
+  };
+  return buildDataCache(makeRelaxationCatalogue(), schedules);
+}
+
+function twoNonOverlappingLectureTimes(day: "Mo" | "Tu"): Parameters<typeof makeSection>[2][] {
+  return [[{ day, start: 600, end: 690 }], [{ day, start: 720, end: 810 }]];
+}
+
+function contextFor(localCache: typeof cache): ConstraintContext {
+  return {
+    cache: localCache,
+    completed: new Set(),
+    prereqEligible: new Set(),
+  };
+}
+
+function timetableCourses(
+  localCache: typeof cache,
+  p: ConstraintPipeline,
+  localCtx: ConstraintContext,
+  seed: number,
+) {
+  const rng = createSeededRng(seed);
+  return [
+    buildTimetableCourse(normalizeCourseCode("AAA 1000"), localCache, p, localCtx, rng)!,
+    buildTimetableCourse(normalizeCourseCode("BBB 1000"), localCache, p, localCtx, rng)!,
+  ];
 }
 
 describe("lazyCourseCombos", () => {
@@ -57,42 +105,13 @@ describe("enumerateArrangements", () => {
   it("yields MULTIPLE distinct arrangements for the same course set (the bug fix)", () => {
     // Two single-LEC courses each with two non-conflicting section options =>
     // 2 x 2 = 4 distinct timetable arrangements.
-    const catalogue: Catalogue = {
-      courses: [
-        { code: normalizeCourseCode("AAA 1000"), title: "A", credits: 3, description: "" },
-        { code: normalizeCourseCode("BBB 1000"), title: "B", credits: 3, description: "" },
-      ],
-      programs: [],
-    };
-    const schedules: SchedulesData = {
-      termId: "0",
-      schedules: [
-        makeSchedule(normalizeCourseCode("AAA 1000"), {
-          LEC: [
-            makeSection("LEC", "A", [{ day: "Mo", start: 600, end: 690 }]),
-            makeSection("LEC", "B", [{ day: "Mo", start: 720, end: 810 }]),
-          ],
-        }),
-        makeSchedule(normalizeCourseCode("BBB 1000"), {
-          LEC: [
-            makeSection("LEC", "A", [{ day: "Tu", start: 600, end: 690 }]),
-            makeSection("LEC", "B", [{ day: "Tu", start: 720, end: 810 }]),
-          ],
-        }),
-      ],
-    };
-    const c = buildDataCache(catalogue, schedules);
-    const localCtx: ConstraintContext = {
-      cache: c,
-      completed: new Set(),
-      prereqEligible: new Set(),
-    };
+    const c = twoCourseCache(
+      twoNonOverlappingLectureTimes("Mo"),
+      twoNonOverlappingLectureTimes("Tu"),
+    );
+    const localCtx = contextFor(c);
     const p = new ConstraintPipeline([overlapConstraint]);
-    const rng = createSeededRng(42);
-    const courses = [
-      buildTimetableCourse(normalizeCourseCode("AAA 1000"), c, p, localCtx, rng)!,
-      buildTimetableCourse(normalizeCourseCode("BBB 1000"), c, p, localCtx, rng)!,
-    ];
+    const courses = timetableCourses(c, p, localCtx, 42);
 
     const arrangements = [...enumerateArrangements(courses, p, localCtx)];
     const fingerprints = new Set(arrangements.map(arrangementFingerprint));
@@ -102,79 +121,30 @@ describe("enumerateArrangements", () => {
 
   it("excludes arrangements that violate inter-course overlap", () => {
     // Both courses' only section meets Mo 600-690 => always conflict => none.
-    const catalogue: Catalogue = {
-      courses: [
-        { code: normalizeCourseCode("AAA 1000"), title: "A", credits: 3, description: "" },
-        { code: normalizeCourseCode("BBB 1000"), title: "B", credits: 3, description: "" },
-      ],
-      programs: [],
-    };
-    const schedules: SchedulesData = {
-      termId: "0",
-      schedules: [
-        makeSchedule(normalizeCourseCode("AAA 1000"), {
-          LEC: [makeSection("LEC", "A", [{ day: "Mo", start: 600, end: 690 }])],
-        }),
-        makeSchedule(normalizeCourseCode("BBB 1000"), {
-          LEC: [makeSection("LEC", "A", [{ day: "Mo", start: 660, end: 750 }])],
-        }),
-      ],
-    };
-    const c = buildDataCache(catalogue, schedules);
-    const localCtx: ConstraintContext = {
-      cache: c,
-      completed: new Set(),
-      prereqEligible: new Set(),
-    };
+    const c = twoCourseCache(
+      [[{ day: "Mo", start: 600, end: 690 }]],
+      [[{ day: "Mo", start: 660, end: 750 }]],
+    );
+    const localCtx = contextFor(c);
     const p = new ConstraintPipeline([overlapConstraint]);
-    const rng = createSeededRng(1);
-    const courses = [
-      buildTimetableCourse(normalizeCourseCode("AAA 1000"), c, p, localCtx, rng)!,
-      buildTimetableCourse(normalizeCourseCode("BBB 1000"), c, p, localCtx, rng)!,
-    ];
+    const courses = timetableCourses(c, p, localCtx, 1);
     expect([...enumerateArrangements(courses, p, localCtx)]).toHaveLength(0);
   });
 
   it("is exhaustive and order varies with the seed but the SET of arrangements is stable", () => {
-    const catalogue: Catalogue = {
-      courses: [
-        { code: normalizeCourseCode("AAA 1000"), title: "A", credits: 3, description: "" },
-        { code: normalizeCourseCode("BBB 1000"), title: "B", credits: 3, description: "" },
+    const c = twoCourseCache(
+      [
+        [{ day: "Mo", start: 600, end: 690 }],
+        [{ day: "Mo", start: 720, end: 810 }],
+        [{ day: "Mo", start: 900, end: 990 }],
       ],
-      programs: [],
-    };
-    const schedules: SchedulesData = {
-      termId: "0",
-      schedules: [
-        makeSchedule(normalizeCourseCode("AAA 1000"), {
-          LEC: [
-            makeSection("LEC", "A", [{ day: "Mo", start: 600, end: 690 }]),
-            makeSection("LEC", "B", [{ day: "Mo", start: 720, end: 810 }]),
-            makeSection("LEC", "C", [{ day: "Mo", start: 900, end: 990 }]),
-          ],
-        }),
-        makeSchedule(normalizeCourseCode("BBB 1000"), {
-          LEC: [
-            makeSection("LEC", "A", [{ day: "Tu", start: 600, end: 690 }]),
-            makeSection("LEC", "B", [{ day: "Tu", start: 720, end: 810 }]),
-          ],
-        }),
-      ],
-    };
-    const c = buildDataCache(catalogue, schedules);
-    const localCtx: ConstraintContext = {
-      cache: c,
-      completed: new Set(),
-      prereqEligible: new Set(),
-    };
+      twoNonOverlappingLectureTimes("Tu"),
+    );
+    const localCtx = contextFor(c);
     const p = new ConstraintPipeline([overlapConstraint]);
 
     function setFor(seed: number): string[] {
-      const rng = createSeededRng(seed);
-      const courses = [
-        buildTimetableCourse(normalizeCourseCode("AAA 1000"), c, p, localCtx, rng)!,
-        buildTimetableCourse(normalizeCourseCode("BBB 1000"), c, p, localCtx, rng)!,
-      ];
+      const courses = timetableCourses(c, p, localCtx, seed);
       return [...enumerateArrangements(courses, p, localCtx)].map(arrangementFingerprint);
     }
 

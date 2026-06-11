@@ -1,5 +1,5 @@
 import type { CourseGradesData, GradeDistribution } from "./dataTypes";
-import { GRADE_POINTS, aPlusPercent, distributionGpa } from "./gradeDistribution";
+import { aPlusPercent, countedMass, distributionGpa } from "./gradeDistribution";
 import { disciplineOf, levelOf, normalizeCourseCode } from "./utils/courseUtils";
 import type { ProgramCourseFilter } from "./programTrends";
 import { programFilterMatches } from "./programTrends";
@@ -55,21 +55,11 @@ export function decodeTermMeta(termId: number): TermMeta {
   return { termId: n, year, seasonDigit, season, sortKey };
 }
 
-/** Letter grades that count toward GPA / graded totals (the 10-point scale). */
-const COUNTED_GRADES = Object.keys(GRADE_POINTS);
 /** Failing letter grades within the counted set (E = supplemental, F = fail). */
 const FAILING_GRADES = ["E", "F"] as const;
 const A_RANGE_GRADES = ["A-", "A", "A+"] as const;
 
-/** Summed count of grades that contribute to GPA/averages (excludes P/S/ABS/EIN…). */
-export function countedMass(dist: GradeDistribution): number {
-  let total = 0;
-  for (const letter of COUNTED_GRADES) {
-    const n = Number(dist[letter] ?? 0);
-    if (Number.isFinite(n) && n > 0) total += n;
-  }
-  return total;
-}
+export { countedMass };
 
 function sumGrades(dist: GradeDistribution, grades: readonly string[]): number {
   let total = 0;
@@ -86,6 +76,126 @@ export function addInto(target: GradeDistribution, source: GradeDistribution): v
     if (!Number.isFinite(n)) continue;
     target[k] = (target[k] ?? 0) + n;
   }
+}
+
+/** Reject zero / non-finite PeopleSoft term ids. */
+export function isValidTermId(termId: number): boolean {
+  return Number.isFinite(termId) && termId !== 0;
+}
+
+/**
+ * Validate a single professor offering against the standard aggregation filters
+ * (finite non-zero term id, matching `season`, present object distribution) and
+ * return its decoded term id + distribution, or `null` when it should be
+ * skipped. Single source of truth for "is this offering in scope?" — shared by
+ * every per-offering aggregation loop in {@link gradeTrends} and gradeAnalytics.
+ */
+export function usableOffering(
+  prof: { termId?: number | string | null; distribution?: GradeDistribution | null },
+  season: TermSeason | null,
+): { termId: number; distribution: GradeDistribution } | null {
+  const termId = Number(prof.termId);
+  if (!isValidTermId(termId)) return null;
+  if (season && decodeTermMeta(termId).season !== season) return null;
+  const distribution = prof.distribution;
+  if (!distribution || typeof distribution !== "object") return null;
+  return { termId, distribution };
+}
+
+/** Get-or-create the distribution accumulator at `key`, merging `dist` into it. */
+export function mergeDistributionInto<K>(
+  map: Map<K, GradeDistribution>,
+  key: K,
+  dist: GradeDistribution,
+): void {
+  let acc = map.get(key);
+  if (!acc) {
+    acc = {};
+    map.set(key, acc);
+  }
+  addInto(acc, dist);
+}
+
+/** Two-level variant of {@link mergeDistributionInto}: `key → termId → distribution`. */
+export function mergeDistributionByTerm<K>(
+  map: Map<K, Map<number, GradeDistribution>>,
+  key: K,
+  termId: number,
+  dist: GradeDistribution,
+): void {
+  let terms = map.get(key);
+  if (!terms) {
+    terms = new Map();
+    map.set(key, terms);
+  }
+  mergeDistributionInto(terms, termId, dist);
+}
+
+type GradeCourse = CourseGradesData["courses"][number];
+
+/**
+ * Walk every usable offering, yielding the bucket key (via `keyFor`) plus its
+ * term id and distribution. Offerings whose `keyFor` returns `null` are skipped.
+ * Shared iteration core for {@link aggregateByKey} / {@link aggregateByKeyAndTerm}.
+ */
+function* keyedOfferings<K>(
+  grades: CourseGradesData,
+  season: TermSeason | null,
+  keyFor: (course: GradeCourse, termId: number) => K | null,
+): Generator<{ key: K; termId: number; distribution: GradeDistribution }> {
+  for (const course of grades.courses) {
+    for (const prof of course.professors) {
+      const off = usableOffering(prof, season);
+      if (!off) continue;
+      const key = keyFor(course, off.termId);
+      if (key == null) continue;
+      yield { key, termId: off.termId, distribution: off.distribution };
+    }
+  }
+}
+
+/**
+ * Aggregate every usable offering into one distribution per bucket key. For each
+ * in-scope offering, `keyFor(course, termId)` returns the bucket key, or `null`
+ * to skip it (used for per-course / per-season inclusion filters). Single source
+ * of truth for the one-level "iterate offerings → accumulate by key" loop.
+ */
+export function aggregateByKey<K>(
+  grades: CourseGradesData,
+  season: TermSeason | null,
+  keyFor: (course: GradeCourse, termId: number) => K | null,
+): Map<K, GradeDistribution> {
+  const map = new Map<K, GradeDistribution>();
+  for (const { key, distribution } of keyedOfferings(grades, season, keyFor)) {
+    mergeDistributionInto(map, key, distribution);
+  }
+  return map;
+}
+
+/** Two-level variant of {@link aggregateByKey}: `key → termId → distribution`. */
+export function aggregateByKeyAndTerm<K>(
+  grades: CourseGradesData,
+  season: TermSeason | null,
+  keyFor: (course: GradeCourse, termId: number) => K | null,
+): Map<K, Map<number, GradeDistribution>> {
+  const map = new Map<K, Map<number, GradeDistribution>>();
+  for (const { key, termId, distribution } of keyedOfferings(grades, season, keyFor)) {
+    mergeDistributionByTerm(map, key, termId, distribution);
+  }
+  return map;
+}
+
+/**
+ * Bucket-key factory for aggregations keyed by a course's discipline, honoring an
+ * optional course-level filter. Shared by the discipline comparison + leaderboard.
+ */
+export function disciplineKeyFor(level: number | null): (course: GradeCourse) => string | null {
+  return (course) => {
+    const discipline = disciplineOf(course.code);
+    if (!discipline) return null;
+    if (level != null && levelOf(course.code) !== level) return null;
+    return discipline;
+  };
 }
 
 export interface TrendFilters {
@@ -167,26 +277,9 @@ export function computeGradeTrends(
 ): TrendSeries {
   const season = filters.season ?? null;
 
-  const byTerm = new Map<number, GradeDistribution>();
-
-  for (const course of grades.courses) {
-    if (!courseMatchesTrendFilters(course.code, filters)) continue;
-
-    for (const prof of course.professors) {
-      const termId = Number(prof.termId);
-      if (!Number.isFinite(termId) || termId === 0) continue;
-      const meta = decodeTermMeta(termId);
-      if (season && meta.season !== season) continue;
-      if (!prof.distribution || typeof prof.distribution !== "object") continue;
-
-      let acc = byTerm.get(termId);
-      if (!acc) {
-        acc = {};
-        byTerm.set(termId, acc);
-      }
-      addInto(acc, prof.distribution);
-    }
-  }
+  const byTerm = aggregateByKey(grades, season, (course, termId) =>
+    courseMatchesTrendFilters(course.code, filters) ? termId : null,
+  );
 
   const points: TrendPoint[] = [];
   for (const [termId, dist] of byTerm) {
@@ -318,30 +411,7 @@ export function computeDisciplineLeaderboard(
   const season = options.season ?? null;
 
   // discipline → termId → summed distribution
-  const byDiscipline = new Map<string, Map<number, GradeDistribution>>();
-
-  for (const course of grades.courses) {
-    const discipline = disciplineOf(course.code);
-    if (!discipline) continue;
-    if (level != null && levelOf(course.code) !== level) continue;
-    for (const prof of course.professors) {
-      const termId = Number(prof.termId);
-      if (!Number.isFinite(termId) || termId === 0) continue;
-      if (season && decodeTermMeta(termId).season !== season) continue;
-      if (!prof.distribution || typeof prof.distribution !== "object") continue;
-      let terms = byDiscipline.get(discipline);
-      if (!terms) {
-        terms = new Map();
-        byDiscipline.set(discipline, terms);
-      }
-      let acc = terms.get(termId);
-      if (!acc) {
-        acc = {};
-        terms.set(termId, acc);
-      }
-      addInto(acc, prof.distribution);
-    }
-  }
+  const byDiscipline = aggregateByKeyAndTerm(grades, season, disciplineKeyFor(level));
 
   const out: DisciplineTrend[] = [];
   for (const [discipline, terms] of byDiscipline) {
@@ -375,29 +445,9 @@ export function computeCourseLeaderboard(
   const season = filters.season ?? null;
 
   // normalized course code → termId → summed distribution
-  const byCourse = new Map<string, Map<number, GradeDistribution>>();
-
-  for (const course of grades.courses) {
-    if (!courseMatchesTrendFilters(course.code, filters)) continue;
-    const code = normalizeCourseCode(course.code);
-    for (const prof of course.professors) {
-      const termId = Number(prof.termId);
-      if (!Number.isFinite(termId) || termId === 0) continue;
-      if (season && decodeTermMeta(termId).season !== season) continue;
-      if (!prof.distribution || typeof prof.distribution !== "object") continue;
-      let terms = byCourse.get(code);
-      if (!terms) {
-        terms = new Map();
-        byCourse.set(code, terms);
-      }
-      let acc = terms.get(termId);
-      if (!acc) {
-        acc = {};
-        terms.set(termId, acc);
-      }
-      addInto(acc, prof.distribution);
-    }
-  }
+  const byCourse = aggregateByKeyAndTerm(grades, season, (course) =>
+    courseMatchesTrendFilters(course.code, filters) ? normalizeCourseCode(course.code) : null,
+  );
 
   const out: CourseTrend[] = [];
   for (const [code, terms] of byCourse) {

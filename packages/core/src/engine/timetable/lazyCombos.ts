@@ -25,21 +25,11 @@ import {
   canonicalCourseCode,
   enrollmentForPicker,
   getEnrollmentsForCourse,
+  sectionHasTimes,
+  sectionsHaveInternalOverlap,
 } from "../../generation/sectionCombos";
-import { timesOverlap } from "../../generation/overlaps";
-import { collectTimes, sectionHasTimes } from "../../generation/sectionCombos";
 import type { ConstraintContext } from "../constraints/types";
 import type { ConstraintPipeline } from "../constraints/pipeline";
-
-function comboHasInternalOverlap(sections: ComponentSection[]): boolean {
-  const times = collectTimes(sections);
-  for (let i = 0; i < times.length; i++) {
-    for (let j = i + 1; j < times.length; j++) {
-      if (timesOverlap(times[i], times[j])) return true;
-    }
-  }
-  return false;
-}
 
 /**
  * Lazily yields valid {@link PrecomputedCombo}s for a single course, in an order
@@ -82,7 +72,7 @@ export function* lazyCourseCombos(
   const total = sectionArrays.reduce((n, a) => n * a.length, 1);
   for (let produced = 0; produced < total; produced++) {
     const sections = sectionArrays.map((arr, i) => arr[indices[i]]);
-    if (!comboHasInternalOverlap(sections)) {
+    if (!sectionsHaveInternalOverlap(sections)) {
       const obj: Record<string, { section: ComponentSection }> = {};
       componentKeys.forEach((key, idx) => {
         obj[key] = { section: sections[idx] };

@@ -11,6 +11,7 @@ import {
   normalizeCourseCode,
   normalizeGradeVizDistribution,
   sectionHasTimes,
+  sectionsHaveInternalOverlap,
   timesOverlap,
   type ComponentSection,
   type CourseSchedule,
@@ -218,15 +219,10 @@ export function ExploreCourseSchedulePage({
     .map((c) => getSection(c))
     .filter((s): s is ComponentSection => s !== null);
 
-  const hasConflict = useMemo(() => {
-    const times = collectTimes(selectedSections);
-    for (let i = 0; i < times.length; i++) {
-      for (let j = i + 1; j < times.length; j++) {
-        if (timesOverlap(times[i], times[j])) return true;
-      }
-    }
-    return false;
-  }, [selectedSections]);
+  const hasConflict = useMemo(
+    () => sectionsHaveInternalOverlap(selectedSections),
+    [selectedSections],
+  );
 
   const previewSchedule = useMemo<GeneratedSchedule | null>(() => {
     if (!course || selectedSections.length === 0) return null;

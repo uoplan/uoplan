@@ -561,6 +561,14 @@ function parsePrereqConjunction(
   }
   if (!allBoundariesValid) return undefined;
 
+  return parsePrereqPartsAsGroup(parts, "and_group", inner);
+}
+
+function parsePrereqPartsAsGroup(
+  parts: string[],
+  type: "and_group" | "or_group",
+  text: string,
+): CoursePrereqNode | undefined {
   const children: CoursePrereqNode[] = [];
   for (const part of parts) {
     const trimmed = part.trim();
@@ -570,7 +578,7 @@ function parsePrereqConjunction(
   }
   if (children.length === 0) return undefined;
   if (children.length === 1) return children[0];
-  return { type: "and_group", text: inner, children };
+  return { type, text, children };
 }
 
 function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
@@ -621,18 +629,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
     }
     outside += inner.slice(lastIndex);
     if (outside.replace(/[,\s]+/g, "") === "") {
-      const children: CoursePrereqNode[] = [];
-      for (const g of groupContents) {
-        const node = parsePrereqClause(g);
-        if (node) children.push(node);
-      }
-      if (children.length === 0) return undefined;
-      if (children.length === 1) return children[0];
-      return {
-        type: "and_group",
-        text: inner,
-        children,
-      };
+      return parsePrereqPartsAsGroup(groupContents, "and_group", inner);
     }
   }
 
@@ -642,20 +639,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
   if (inner.includes(",") && (inner.includes("(") || /,\s*equivalent\.?\s+or\s+/i.test(inner))) {
     const commaParts = splitTopLevel(inner, /,/);
     if (commaParts.length > 1) {
-      const children: CoursePrereqNode[] = [];
-      for (const part of commaParts) {
-        const trimmed = part.trim();
-        if (!trimmed) continue;
-        const node = parsePrereqClause(trimmed);
-        if (node) children.push(node);
-      }
-      if (children.length === 0) return undefined;
-      if (children.length === 1) return children[0];
-      return {
-        type: "and_group",
-        text: inner,
-        children,
-      };
+      return parsePrereqPartsAsGroup(commaParts, "and_group", inner);
     }
   }
 
