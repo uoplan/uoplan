@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  // Migrated from knip.json, then audited against fallow's analysis.
+  // Fallow auto-discovers pnpm workspaces from pnpm-workspace.yaml and most
+  // entry points from package.json + framework plugins; only genuine roots
+  // that fallow does not auto-detect are listed here. apps/cli is a pure Rust
+  // crate (no JS/TS) so it is excluded entirely.
+  "ignorePatterns": ["apps/cli/**"],
+  "entry": [
+    "apps/web/src/main.tsx",
+    "apps/web/src/workers/sw.ts",
+    "apps/web/src/test/browserSetup.ts",
+    "apps/web/src/test/engineSetup.ts",
+    "apps/web/scripts/**/*.mjs",
+    "apps/web/vite.config.ts",
+    "apps/web/lingui.config.ts",
+    "apps/web/vite/**",
+    "apps/worker/scripts/og-image.ts",
+    "apps/scraper/src/cli/verifyCatalogue.ts",
+    "apps/scraper/src/cli/verifyScheduleDates.ts",
+    "oxfmt.config.ts"
+  ],
+  // Only deps genuinely used indirectly (not via a source import fallow can
+  // see): @bufbuild/protobuf is imported by git-ignored generated proto code;
+  // ts-proto is a protoc codegen plugin invoked by the generate:proto script.
+  // (knip's @vitest/browser + wrangler ignores were redundant under fallow, and
+  // its @marsidev/react-turnstile ignore masked a real unused dep in the
+  // worker — all three were dropped.)
+  "ignoreDependencies": ["@bufbuild/protobuf", "ts-proto"]
+}

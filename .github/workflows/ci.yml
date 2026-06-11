@@ -136,6 +136,8 @@ jobs:
         run: pnpm check:arch
       - name: Check translations
         run: pnpm check:i18n
+      - name: Check dead code, duplication & health (fallow)
+        run: pnpm fallow --fail-on-issues
 
   test:
     runs-on: ubuntu-latest
