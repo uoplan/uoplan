@@ -24,6 +24,7 @@ import {
 import {
   applyOptionSelections,
   collectRequirementIdsWithCandidateCourse,
+  courseMatchesElectiveLevelBuckets,
 } from "../../../lib/requirements/requirementUtils";
 import { buildExplicitExemptSet, buildSwapConstraints } from "./swapContext";
 
@@ -286,18 +287,8 @@ export function getSwapCandidates(
       poolRequirementType === "faculty_elective" ||
       poolRequirementType === "elective";
     if (isElectiveType && !isWithinElectiveLevelCap(code)) continue;
-    if (isGenericElective && electiveLevelBuckets.length > 0) {
-      const match = code.match(/\d{4}/);
-      if (match) {
-        const num = parseInt(match[0], 10);
-        if (!Number.isNaN(num)) {
-          const bucket = Math.floor(num / 1000) * 1000;
-          if (!electiveLevelBuckets.includes(bucket)) {
-            continue;
-          }
-        }
-      }
-    }
+    if (isGenericElective && !courseMatchesElectiveLevelBuckets(code, electiveLevelBuckets))
+      continue;
     const possibleEnrollments = getValidEnrollmentsFor(code);
     if (possibleEnrollments.length === 0) continue;
 

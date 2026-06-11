@@ -1,42 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
-  deburr as coreDeburr,
-  pickCanonicalProfessorName as corePick,
-  professorMatchKey as coreMatchKey,
-  professorNameTokens as coreTokens,
-  slugifyProfessor as coreSlug,
-} from "@uoplan/core";
-import {
-  __buildRegistryTest as __test,
   buildProfessorRegistry,
   createResolverFromRegistry,
   type RegistryInputs,
 } from "./buildRegistry.ts";
-
-const SAMPLE_NAMES = [
-  "Geneviève Tellier",
-  "Genevieve Tellier",
-  "Alain Saint-Amant",
-  "Alain St-Amant",
-  "Andrea Siebra Vinet",
-  "Andréa Vinet",
-  "O'Brien, Renée",
-  "Staff",
-  "",
-  "Cher",
-];
-
-describe("scraper identity helpers stay in parity with @uoplan/core", () => {
-  it("deburr / tokens / matchKey / slug / canonical match core", () => {
-    for (const name of SAMPLE_NAMES) {
-      expect(__test.deburr(name)).toBe(coreDeburr(name));
-      expect(__test.professorNameTokens(name)).toEqual(coreTokens(name));
-      expect(__test.professorMatchKey(name)).toBe(coreMatchKey(name));
-      expect(__test.slugifyProfessor(name)).toBe(coreSlug(name));
-    }
-    expect(__test.pickCanonicalProfessorName(SAMPLE_NAMES)).toBe(corePick(SAMPLE_NAMES));
-  });
-});
 
 describe("buildProfessorRegistry", () => {
   const inputs: RegistryInputs = {

@@ -140,6 +140,44 @@ const eslMinorProgram: Program = {
   ],
 };
 
+function testProgram(requirements: Program["requirements"]): Program {
+  return { title: "Test", url: "", requirements };
+}
+
+function eslOrProgram(title?: string): Program {
+  const requirement = {
+    type: "or_group" as const,
+    options: [
+      { type: "course" as const, code: normalizeCourseCode("ESL 2100") },
+      { type: "course" as const, code: normalizeCourseCode("ESL 2121") },
+    ],
+  };
+  return testProgram([title === undefined ? requirement : { ...requirement, title }]);
+}
+
+function eslThreeCourseGroupProgram(): Program {
+  return testProgram([
+    {
+      type: "group",
+      credits: 9,
+      options: [
+        { type: "course", code: normalizeCourseCode("ESL 2181") },
+        { type: "course", code: normalizeCourseCode("ESL 2332") },
+        { type: "course", code: normalizeCourseCode("ESL 3181") },
+      ],
+    },
+  ]);
+}
+
+function expectCandidateCourses(
+  remaining: ReturnType<typeof computeRemainingRequirements>,
+  codes: string[],
+) {
+  for (const code of codes) {
+    expect(remaining[0].candidateCourses).toContain(normalizeCourseCode(code));
+  }
+}
+
 describe("computeRemainingRequirements", () => {
   const cache = buildDataCache(minimalCatalogue, emptySchedules);
 
@@ -173,48 +211,19 @@ describe("computeRemainingRequirements", () => {
 
   describe("or_course", () => {
     it("returns slot with candidates when none done", () => {
-      const program: Program = {
-        title: "Test",
-        url: "",
-        requirements: [
-          {
-            type: "or_group",
-            title: "One of",
-            options: [
-              { type: "course", code: normalizeCourseCode("ESL 2100") },
-              { type: "course", code: normalizeCourseCode("ESL 2121") },
-            ],
-          },
-        ],
-      };
-      const remaining = computeRemainingRequirements(program, [], cache);
+      const remaining = computeRemainingRequirements(eslOrProgram("One of"), [], cache);
       expect(remaining).toHaveLength(1);
-      expect(remaining[0].candidateCourses).toContain(normalizeCourseCode("ESL 2100"));
-      expect(remaining[0].candidateCourses).toContain(normalizeCourseCode("ESL 2121"));
+      expectCandidateCourses(remaining, ["ESL 2100", "ESL 2121"]);
     });
 
     it("still returns one remaining slot when one option completed (user assigns explicitly)", () => {
-      const program: Program = {
-        title: "Test",
-        url: "",
-        requirements: [
-          {
-            type: "or_group",
-            options: [
-              { type: "course", code: normalizeCourseCode("ESL 2100") },
-              { type: "course", code: normalizeCourseCode("ESL 2121") },
-            ],
-          },
-        ],
-      };
       const remaining = computeRemainingRequirements(
-        program,
+        eslOrProgram(),
         [normalizeCourseCode("ESL 2100")],
         cache,
       );
       expect(remaining).toHaveLength(1);
-      expect(remaining[0].candidateCourses).toContain(normalizeCourseCode("ESL 2100"));
-      expect(remaining[0].candidateCourses).toContain(normalizeCourseCode("ESL 2121"));
+      expectCandidateCourses(remaining, ["ESL 2100", "ESL 2121"]);
     });
   });
 
@@ -291,23 +300,8 @@ describe("computeRemainingRequirements", () => {
     });
 
     it("still returns one slot with full credits needed when courses completed (user assigns explicitly)", () => {
-      const program: Program = {
-        title: "Test",
-        url: "",
-        requirements: [
-          {
-            type: "group",
-            credits: 9,
-            options: [
-              { type: "course", code: normalizeCourseCode("ESL 2181") },
-              { type: "course", code: normalizeCourseCode("ESL 2332") },
-              { type: "course", code: normalizeCourseCode("ESL 3181") },
-            ],
-          },
-        ],
-      };
       const remaining = computeRemainingRequirements(
-        program,
+        eslThreeCourseGroupProgram(),
         [
           normalizeCourseCode("ESL 2181"),
           normalizeCourseCode("ESL 2332"),
@@ -321,23 +315,8 @@ describe("computeRemainingRequirements", () => {
     });
 
     it("shows full credits needed when partially completed (user assigns explicitly)", () => {
-      const program: Program = {
-        title: "Test",
-        url: "",
-        requirements: [
-          {
-            type: "group",
-            credits: 9,
-            options: [
-              { type: "course", code: normalizeCourseCode("ESL 2181") },
-              { type: "course", code: normalizeCourseCode("ESL 2332") },
-              { type: "course", code: normalizeCourseCode("ESL 3181") },
-            ],
-          },
-        ],
-      };
       const remaining = computeRemainingRequirements(
-        program,
+        eslThreeCourseGroupProgram(),
         [normalizeCourseCode("ESL 2181")],
         cache,
       );

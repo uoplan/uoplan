@@ -20,6 +20,19 @@ function normalizeTitleForCompare(title: string | undefined): string {
   return (title ?? "").trim().replace(/\s+/g, " ").toLowerCase();
 }
 
+export function courseMatchesElectiveLevelBuckets(code: string, buckets: number[]): boolean {
+  if (buckets.length === 0) return true;
+  const match = code.match(/\d{4}/);
+  if (match) {
+    const num = parseInt(match[0], 10);
+    if (!Number.isNaN(num)) {
+      const bucket = Math.floor(num / 1000) * 1000;
+      return buckets.includes(bucket);
+    }
+  }
+  return true;
+}
+
 /**
  * UX helper: reduce "dropdown inside dropdown" when a node is just a wrapper
  * around a single child. Matches {@link RequirementNode} behavior.
@@ -551,15 +564,11 @@ export function getConstrainMultiSelectOptions(
         if (isElectiveType && !isWithinElectiveLevelCap(c)) {
           return false;
         }
-        if (isElectiveWithExclusions && ctx.electiveLevelBuckets.length > 0) {
-          const match = c.match(/\d{4}/);
-          if (match) {
-            const num = parseInt(match[0], 10);
-            if (!Number.isNaN(num)) {
-              const bucket = Math.floor(num / 1000) * 1000;
-              if (!ctx.electiveLevelBuckets.includes(bucket)) return false;
-            }
-          }
+        if (
+          isElectiveWithExclusions &&
+          !courseMatchesElectiveLevelBuckets(c, ctx.electiveLevelBuckets)
+        ) {
+          return false;
         }
         return true;
       }) ?? [];

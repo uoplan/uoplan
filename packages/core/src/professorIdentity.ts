@@ -95,7 +95,7 @@ export function slugifyProfessor(name: string): ProfessorSlug {
 }
 
 /** Trim whitespace and any leading/trailing stray periods or commas from a display name. */
-function cleanDisplayName(value: string): string {
+export function cleanDisplayName(value: string): string {
   return String(value ?? "")
     .replace(/\s+/g, " ")
     .trim()

@@ -220,6 +220,38 @@ function readSourceFiles(dir) {
 }
 
 /**
+ * Invoke `onFile(src, rel, file)` for every non-test `.ts`/`.tsx` source file
+ * under `dir`, where `src` is the file contents and `rel` is the repo-relative
+ * path. Centralises the read-and-skip-tests loop used by the layering checks.
+ * @param {string} dir
+ * @param {(src: string, rel: string, file: string) => void} onFile
+ */
+function forEachSourceFile(dir, onFile) {
+  for (const file of readSourceFiles(dir)) {
+    if (/\.test\.tsx?$/.test(file)) continue;
+    const src = readFileSync(file, "utf8");
+    const rel = file.replace(repoRoot + "/", "");
+    onFile(src, rel, file);
+  }
+}
+
+/**
+ * Invoke `onImport(spec, statement, rel)` for every `import/export ... from
+ * "spec"` statement in every non-test source file under `dir`. `statement` is
+ * the full matched text (for matching default-import names etc.).
+ * @param {string} dir
+ * @param {(spec: string, statement: string, rel: string) => void} onImport
+ */
+function forEachSourceImport(dir, onImport) {
+  const importRe = /(?:import|export)[^"']*from\s*["']([^"']+)["']/g;
+  forEachSourceFile(dir, (src, rel) => {
+    for (const m of src.matchAll(importRe)) {
+      onImport(m[1], m[0], rel);
+    }
+  });
+}
+
+/**
  * Intra-app layering for `apps/web`. These guardrails codify the Phase 4 store
  * seams so the refactor can't silently regress:
  *   - the Zustand store must not import React components (dependency direction);
@@ -228,37 +260,24 @@ function readSourceFiles(dir) {
 function checkWebInternalLayering() {
   /** @type {string[]} */
   const errors = [];
-  const importRe = /(?:import|export)[^"']*from\s*["']([^"']+)["']/g;
 
   const storeDir = join(repoRoot, "apps/web/src/store");
-  for (const file of readSourceFiles(storeDir)) {
-    if (/\.test\.tsx?$/.test(file)) continue;
-    const src = readFileSync(file, "utf8");
-    for (const m of src.matchAll(importRe)) {
-      const spec = m[1];
-      if (/(^|\/)components\//.test(spec)) {
-        errors.push(
-          `apps/web store must not import components: "${file.replace(repoRoot + "/", "")}" imports "${spec}".`,
-        );
-      }
+  forEachSourceImport(storeDir, (spec, _statement, rel) => {
+    if (/(^|\/)components\//.test(spec)) {
+      errors.push(`apps/web store must not import components: "${rel}" imports "${spec}".`);
     }
-  }
+  });
 
   // Store slices must not import navigation/router modules directly; navigation is injected
   // via the `AppServices` seam (store/services.ts) so slices stay framework/route-agnostic.
   const slicesDir = join(repoRoot, "apps/web/src/store/slices");
-  for (const file of readSourceFiles(slicesDir)) {
-    if (/\.test\.tsx?$/.test(file)) continue;
-    const src = readFileSync(file, "utf8");
-    for (const m of src.matchAll(importRe)) {
-      const spec = m[1];
-      if (/(^|\/)(appNavigation|routerRef)$/.test(spec)) {
-        errors.push(
-          `store slices must not import navigation/router (inject via AppServices): "${file.replace(repoRoot + "/", "")}" imports "${spec}".`,
-        );
-      }
+  forEachSourceImport(slicesDir, (spec, _statement, rel) => {
+    if (/(^|\/)(appNavigation|routerRef)$/.test(spec)) {
+      errors.push(
+        `store slices must not import navigation/router (inject via AppServices): "${rel}" imports "${spec}".`,
+      );
     }
-  }
+  });
 
   // Rendered code (components + hooks) must use the provider-bound store seam, never the
   // singleton: no `defaultAppStore` import and no static `useAppStore.getState/setState/subscribe`
@@ -269,38 +288,28 @@ function checkWebInternalLayering() {
   ];
   const staticStoreRe = /\buseAppStore\s*\.\s*(getState|setState|subscribe|getInitialState)\b/;
   for (const dir of renderedDirs) {
-    for (const file of readSourceFiles(dir)) {
-      if (/\.test\.tsx?$/.test(file)) continue;
-      const src = readFileSync(file, "utf8");
-      const rel = file.replace(repoRoot + "/", "");
+    forEachSourceFile(dir, (src, rel) => {
       if (staticStoreRe.test(src)) {
         errors.push(
           `${rel}: rendered code must not call useAppStore.getState/setState/subscribe; use useAppStoreApi() or a store action.`,
         );
       }
-      for (const m of src.matchAll(importRe)) {
-        if (/\bdefaultAppStore\b/.test(m[0])) {
-          errors.push(
-            `${rel}: rendered code must not import defaultAppStore (the singleton); use the provider-bound useAppStore/useAppStoreApi.`,
-          );
-        }
+    });
+    forEachSourceImport(dir, (_spec, statement, rel) => {
+      if (/\bdefaultAppStore\b/.test(statement)) {
+        errors.push(
+          `${rel}: rendered code must not import defaultAppStore (the singleton); use the provider-bound useAppStore/useAppStoreApi.`,
+        );
       }
-    }
+    });
   }
 
   const reqDir = join(repoRoot, "apps/web/src/lib/requirements");
-  for (const file of readSourceFiles(reqDir)) {
-    if (/\.test\.tsx?$/.test(file)) continue;
-    const src = readFileSync(file, "utf8");
-    for (const m of src.matchAll(importRe)) {
-      const spec = m[1];
-      if (spec === "react" || spec.startsWith("react/") || /@mantine\//.test(spec)) {
-        errors.push(
-          `lib/requirements must stay framework-neutral: "${file.replace(repoRoot + "/", "")}" imports "${spec}".`,
-        );
-      }
+  forEachSourceImport(reqDir, (spec, _statement, rel) => {
+    if (spec === "react" || spec.startsWith("react/") || /@mantine\//.test(spec)) {
+      errors.push(`lib/requirements must stay framework-neutral: "${rel}" imports "${spec}".`);
     }
-  }
+  });
 
   return errors;
 }

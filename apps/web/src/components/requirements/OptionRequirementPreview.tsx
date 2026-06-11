@@ -5,21 +5,28 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from "react";
-import { Stack, Text, Paper, Badge, Group, Box, Tooltip } from "@mantine/core";
+import { Stack, Text, Paper, Group, Box, Tooltip } from "@mantine/core";
 import type { PaperProps } from "@mantine/core";
 import type { RequirementWithStatus } from "@uoplan/core";
 import {
   getOptionSecondarySummaryLine,
   simplifySingleChildChain,
 } from "../../lib/requirements/requirementUtils";
-import { REQUIREMENT_INDENT_PX } from "./RequirementNode";
-import { getNodeDisplayTitle, getStableNodeKey } from "../../lib/requirements/requirementNodeUtils";
+import { getNodeDisplayTitle } from "../../lib/requirements/requirementNodeUtils";
 import { tr } from "../../i18n";
-
-const REQUIREMENT_BASE_PADDING_PX = 10;
-
-const TITLE_FLEX = { flex: 1, minWidth: 0 } as const;
-const BADGE_NO_SHRINK = { flexShrink: 0 } as const;
+import {
+  RequirementChildStack,
+  RequirementChoiceGroupBody,
+  RequirementCompleteCard,
+  RequirementGroupTitleRow,
+  RequirementSectionHeading,
+} from "./requirementRenderUtils";
+import {
+  TITLE_FLEX,
+  getRequirementChoiceGroupState,
+  getRequirementRenderMeta,
+  requirementIndentStyle,
+} from "./requirementRenderPrimitives";
 
 const OPTION_CARD_BORDER_UNSELECTED = "var(--app-border)";
 const OPTION_CARD_BORDER_SELECTED = "var(--app-accent)";
@@ -213,127 +220,68 @@ export function OptionRequirementPreview({
 
   const node = radioSafeMerge ?? (radio ? rawNode : simplifySingleChildChain(rawNode).node);
 
-  const hasOptions = node.options && node.options.length > 0;
-  const rawTitle = (node.title ?? "").trim();
-  const title = rawTitle || node.code || `${node.type} requirement`;
-  const isOrGroup = node.type === "or_group";
-  const isOptionsGroup = node.type === "options_group";
-  const isAnd = node.type === "and";
-  const isSection = node.type === "section";
-
-  const creditsNeeded = node.creditsNeeded ?? 0;
-  const hasRequirementId = node.requirementId != null;
+  const {
+    hasOptions,
+    rawTitle,
+    title,
+    isOrGroup,
+    isOptionsGroup,
+    isAnd,
+    isSection,
+    creditsNeeded,
+    hasRequirementId,
+  } = getRequirementRenderMeta(node);
   const showAsComplete = node.complete && node.satisfiedBy.length > 0;
   const creditsRemaining = creditsNeeded;
 
   if (isSection) {
-    return (
-      <Text fw={600} size="sm" c="dimmed" mt={depth > 0 ? "md" : 0} mb="xs">
-        {title}
-      </Text>
-    );
+    return <RequirementSectionHeading title={title} depth={depth} />;
   }
 
   // Compact read-only "Complete" card for tree-matched leaves (no dropdown).
   if (node.complete && node.satisfiedBy.length > 0 && !hasOptions) {
-    return (
-      <Paper
-        p="sm"
-        withBorder
-        radius="var(--app-radius)"
-        mt="xs"
-        style={{
-          paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
-          backgroundColor: "var(--app-bg)",
-        }}
-      >
-        <Group gap="xs" wrap="nowrap" align="center">
-          <Tooltip label={title} multiline maw={320} withArrow disabled={!title}>
-            <Text size="sm" c="dimmed" lineClamp={1} style={TITLE_FLEX}>
-              {title}
-            </Text>
-          </Tooltip>
-          <Text size="xs" c="dimmed" style={{ minWidth: 0 }}>
-            {[...new Set(node.satisfiedBy)].sort().join(", ")}
-          </Text>
-          <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-            Complete
-          </Badge>
-        </Group>
-      </Paper>
-    );
+    return <RequirementCompleteCard title={title} satisfiedBy={node.satisfiedBy} depth={depth} />;
   }
 
   if ((isOrGroup || isOptionsGroup) && hasOptions) {
-    const selectedOptionIndex = node.satisfiedOptionIndex;
-    const showError =
-      activeBranch && node.requirementId != null && selectedOptionIndex == null && !node.complete;
-
-    const useGenericLabel = isOrGroup && (rawTitle === "" || rawTitle.toLowerCase() === "or");
-    const groupLabel = useGenericLabel ? "One of the following must be completed" : title;
+    const { selectedOptionIndex, showError, groupLabel, satisfiedSummaryCourses } =
+      getRequirementChoiceGroupState({
+        node,
+        activeBranch,
+        rawTitle,
+        title,
+        isOrGroup,
+      });
 
     const groupBody = (
-      <>
-        {radio && !optionsStepHideCardTitle && (
-          <Group justify="space-between" align="center" wrap="nowrap" mb={4}>
-            <Text fw={500} size="sm" lh={1.25} style={{ minWidth: 0 }}>
-              {groupLabel}
-            </Text>
-            {node.complete && (
-              <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-                Complete
-              </Badge>
-            )}
-          </Group>
+      <RequirementChoiceGroupBody
+        titleRow={
+          radio && !optionsStepHideCardTitle ? (
+            <RequirementGroupTitleRow
+              label={groupLabel}
+              complete={node.complete}
+              mb={4}
+              compactTitle
+            />
+          ) : undefined
+        }
+        node={node}
+        activeBranch={activeBranch}
+        selectedOptionIndex={selectedOptionIndex}
+        showError={showError}
+        satisfiedBy={satisfiedSummaryCourses}
+        showSummaryLine
+        hideCardTitle={optionsStepHideCardTitle}
+        includeSatisfiedOptionBadge
+        renderChild={(opt, _idx, childActiveBranch) => (
+          <OptionRequirementPreview
+            node={opt}
+            activeBranch={childActiveBranch}
+            depth={depth + 1}
+            optionsStepHideCardTitle={optionsStepHideCardTitle}
+          />
         )}
-        {showError && (
-          <Text size="xs" c="red" mt={4}>
-            {tr("optionsDrilldown.selectOneError")}
-          </Text>
-        )}
-        {node.complete && node.satisfiedOptionIndex != null && (
-          <Text size="xs" c="dimmed" mb="xs">
-            {tr("requirementNode.satisfiedBy", { courses: node.satisfiedBy.join(", ") })}
-          </Text>
-        )}
-        <Stack gap="xs">
-          {node.options!.map((opt, idx) => {
-            const isSatisfiedOption = node.satisfiedOptionIndex === idx && opt.complete;
-            const childActiveBranch =
-              activeBranch &&
-              (!node.requirementId || selectedOptionIndex == null || selectedOptionIndex === idx);
-            const childKey = getStableNodeKey(
-              opt,
-              `${getStableNodeKey(node, "parent")}:opt:${idx}`,
-            );
-            const summaryLine = !optionsStepHideCardTitle
-              ? getOptionSecondarySummaryLine(opt)
-              : null;
-            return (
-              <Box key={childKey}>
-                {summaryLine && (
-                  <Text size="xs" c="dimmed" mb={4}>
-                    {summaryLine}
-                  </Text>
-                )}
-                <OptionRequirementPreview
-                  node={opt}
-                  activeBranch={childActiveBranch}
-                  depth={depth + 1}
-                  optionsStepHideCardTitle={optionsStepHideCardTitle}
-                />
-                {isSatisfiedOption && opt.satisfiedBy.length > 0 && (
-                  <Box pl="sm" mt={4}>
-                    <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-                      {tr("requirementNode.satisfiedBy", { courses: opt.satisfiedBy.join(", ") })}
-                    </Badge>
-                  </Box>
-                )}
-              </Box>
-            );
-          })}
-        </Stack>
-      </>
+      />
     );
 
     if (radio) {
@@ -346,7 +294,7 @@ export function OptionRequirementPreview({
           p="sm"
           mt="xs"
           data-missing-selection={showError ? "true" : undefined}
-          style={{ paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX }}
+          style={requirementIndentStyle(depth, OPTION_CARD_IDLE_BG)}
         >
           {groupBody}
         </SelectableOptionPaper>
@@ -360,21 +308,9 @@ export function OptionRequirementPreview({
         radius="var(--app-radius)"
         mt="xs"
         data-missing-selection={showError ? "true" : undefined}
-        style={{
-          paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
-          backgroundColor: "var(--app-surface)",
-        }}
+        style={requirementIndentStyle(depth, "var(--app-surface)")}
       >
-        <Group justify="space-between" align="center" wrap="nowrap" mb={0}>
-          <Text fw={500} size="sm" lh={1.25} style={TITLE_FLEX}>
-            {groupLabel}
-          </Text>
-          {node.complete && (
-            <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-              Complete
-            </Badge>
-          )}
-        </Group>
+        <RequirementGroupTitleRow label={groupLabel} complete={node.complete} />
         {groupBody}
       </Paper>
     );
@@ -382,23 +318,17 @@ export function OptionRequirementPreview({
 
   if (isAnd && hasOptions) {
     const andChildren = (
-      <Stack gap="xs">
-        {node.options!.map((child, idx) => {
-          const childKey = getStableNodeKey(
-            child,
-            `${getStableNodeKey(node, "parent")}:child:${idx}`,
-          );
-          return (
-            <OptionRequirementPreview
-              key={childKey}
-              node={child}
-              activeBranch={activeBranch}
-              depth={depth + 1}
-              optionsStepHideCardTitle={optionsStepHideCardTitle}
-            />
-          );
-        })}
-      </Stack>
+      <RequirementChildStack
+        node={node}
+        renderChild={(child) => (
+          <OptionRequirementPreview
+            node={child}
+            activeBranch={activeBranch}
+            depth={depth + 1}
+            optionsStepHideCardTitle={optionsStepHideCardTitle}
+          />
+        )}
+      />
     );
 
     if (radio) {
@@ -410,19 +340,10 @@ export function OptionRequirementPreview({
           optionsStepOptionOrdinal={optionsStepOptionOrdinal}
           p="sm"
           mt="xs"
-          style={{ paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX }}
+          style={requirementIndentStyle(depth, OPTION_CARD_IDLE_BG)}
         >
           {title && !optionsStepHideCardTitle && (
-            <Group justify="space-between" align="center" wrap="nowrap" mb={4}>
-              <Text fw={500} size="sm" lh={1.25} style={{ minWidth: 0 }}>
-                {title}
-              </Text>
-              {node.complete && (
-                <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-                  Complete
-                </Badge>
-              )}
-            </Group>
+            <RequirementGroupTitleRow label={title} complete={node.complete} mb={4} compactTitle />
           )}
           {andChildren}
         </SelectableOptionPaper>
@@ -435,23 +356,9 @@ export function OptionRequirementPreview({
         withBorder
         radius="var(--app-radius)"
         mt="xs"
-        style={{
-          paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
-          backgroundColor: "var(--app-surface)",
-        }}
+        style={requirementIndentStyle(depth, "var(--app-surface)")}
       >
-        {title && (
-          <Group justify="space-between" align="center" wrap="nowrap" mb={0}>
-            <Text fw={500} size="sm" lh={1.25} style={TITLE_FLEX}>
-              {title}
-            </Text>
-            {node.complete && (
-              <Badge color="green" variant="light" size="sm" style={BADGE_NO_SHRINK}>
-                Complete
-              </Badge>
-            )}
-          </Group>
-        )}
+        {title && <RequirementGroupTitleRow label={title} complete={node.complete} />}
         {andChildren}
       </Paper>
     );
@@ -465,23 +372,18 @@ export function OptionRequirementPreview({
 
   const pickChildren =
     hasOptions && (node.type === "pick" || node.type === "group") ? (
-      <Stack gap="xs" pl="xs">
-        {node.options!.map((child, idx) => {
-          const childKey = getStableNodeKey(
-            child,
-            `${getStableNodeKey(node, "parent")}:child:${idx}`,
-          );
-          return (
-            <OptionRequirementPreview
-              key={childKey}
-              node={child}
-              activeBranch={activeBranch}
-              depth={depth + 1}
-              optionsStepHideCardTitle={optionsStepHideCardTitle}
-            />
-          );
-        })}
-      </Stack>
+      <RequirementChildStack
+        node={node}
+        pl="xs"
+        renderChild={(child) => (
+          <OptionRequirementPreview
+            node={child}
+            activeBranch={activeBranch}
+            depth={depth + 1}
+            optionsStepHideCardTitle={optionsStepHideCardTitle}
+          />
+        )}
+      />
     ) : null;
 
   const primaryText = !optionsStepHideCardTitle ? (
@@ -526,10 +428,7 @@ export function OptionRequirementPreview({
         optionsStepOptionOrdinal={optionsStepOptionOrdinal}
         p="sm"
         mt="xs"
-        style={{
-          paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
-          backgroundColor: hasOptions ? paperBg : "var(--app-bg)",
-        }}
+        style={requirementIndentStyle(depth, hasOptions ? paperBg : "var(--app-bg)")}
       >
         <Stack gap="xs">
           <Group
@@ -553,10 +452,7 @@ export function OptionRequirementPreview({
       withBorder
       radius="var(--app-radius)"
       mt="xs"
-      style={{
-        paddingLeft: depth * REQUIREMENT_INDENT_PX + REQUIREMENT_BASE_PADDING_PX,
-        backgroundColor: hasOptions ? "var(--app-surface)" : "var(--app-bg)",
-      }}
+      style={requirementIndentStyle(depth, hasOptions ? "var(--app-surface)" : "var(--app-bg)")}
     >
       <Stack gap="xs">
         <Group justify="space-between" wrap="nowrap" align="flex-start">

@@ -37,6 +37,87 @@ function emptyScheduleCache(): DataCache {
   };
 }
 
+function testSchedule(code: string) {
+  const [subject, catalogNumber] = code.split(" ");
+  return {
+    subject,
+    catalogNumber,
+    title: "Test",
+    courseCode: testCourseCode(code),
+    timeZone: "America/Toronto",
+    components: {
+      LEC: [
+        {
+          section: "A00",
+          sectionCode: "A00",
+          component: "LEC",
+          session: null,
+          times: [{ day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false }],
+          status: "Open",
+        },
+      ],
+    },
+  } as NonNullable<ReturnType<DataCache["getSchedule"]>>;
+}
+
+function incompleteRequirementStatus() {
+  return { complete: false, satisfiedBy: [] as string[] };
+}
+
+function cacheWithSchedule(
+  scheduleFor: (code: string) => ReturnType<DataCache["getSchedule"]>,
+  title = "Test",
+): DataCache {
+  return {
+    getCourse: (code) =>
+      ({ code: testCourseCode(code), title, credits: 3 }) as NonNullable<
+        ReturnType<DataCache["getCourse"]>
+      >,
+    resolveToCanonical: (code) => testCourseCode(code),
+    getSchedule: scheduleFor,
+    getCoursesByDiscipline: () => [],
+    getAllCourses: () => [],
+    getAllSchedules: () => [],
+  };
+}
+
+function requirementCourseLeaf(id: string): RequirementWithStatus {
+  return {
+    type: "course",
+    title: id,
+    complete: false,
+    satisfiedBy: [],
+    requirementId: id,
+    candidateCourses: ["SEG 3100"],
+    creditsNeeded: 3,
+  };
+}
+
+function unresolvedOptionGroup(): RequirementWithStatus {
+  return {
+    type: "options_group",
+    requirementId: "g",
+    complete: false,
+    satisfiedBy: [],
+    options: [requirementCourseLeaf("leaf")],
+  };
+}
+
+function freeElectiveNode(
+  requirementId: string,
+  candidateCourses: string[],
+): RequirementWithStatus {
+  return {
+    type: "free_elective",
+    title: "Free",
+    complete: false,
+    satisfiedBy: [],
+    requirementId,
+    candidateCourses,
+    creditsNeeded: 3,
+  };
+}
+
 const defaultConstrainCtx = {
   cache: emptyScheduleCache(),
   completedCourses: new Set<string>(),
@@ -349,26 +430,8 @@ describe("applyOptionSelections", () => {
 });
 
 describe("pruneUnresolvedOptionGroups", () => {
-  const courseLeaf = (id: string): RequirementWithStatus => ({
-    type: "course",
-    title: id,
-    complete: false,
-    satisfiedBy: [],
-    requirementId: id,
-    candidateCourses: ["SEG 3100"],
-    creditsNeeded: 3,
-  });
-
   it("removes an unresolved option group (has requirementId, incomplete)", () => {
-    const tree: RequirementWithStatus[] = [
-      {
-        type: "options_group",
-        requirementId: "g",
-        complete: false,
-        satisfiedBy: [],
-        options: [courseLeaf("leaf")],
-      },
-    ];
+    const tree: RequirementWithStatus[] = [unresolvedOptionGroup()];
     expect(pruneUnresolvedOptionGroups(tree)).toHaveLength(0);
   });
 
@@ -380,7 +443,7 @@ describe("pruneUnresolvedOptionGroups", () => {
         complete: true,
         satisfiedBy: ["SEG 3100"],
         satisfiedOptionIndex: 0,
-        options: [courseLeaf("leaf")],
+        options: [requirementCourseLeaf("leaf")],
       },
     ];
     const out = pruneUnresolvedOptionGroups(tree);
@@ -390,7 +453,12 @@ describe("pruneUnresolvedOptionGroups", () => {
 
   it("keeps an option group that has no requirementId", () => {
     const tree: RequirementWithStatus[] = [
-      { type: "or_group", complete: false, satisfiedBy: [], options: [courseLeaf("leaf")] },
+      {
+        type: "or_group",
+        complete: false,
+        satisfiedBy: [],
+        options: [requirementCourseLeaf("leaf")],
+      },
     ];
     const out = pruneUnresolvedOptionGroups(tree);
     expect(out).toHaveLength(1);
@@ -409,7 +477,7 @@ describe("pruneUnresolvedOptionGroups", () => {
             requirementId: "g",
             complete: false,
             satisfiedBy: [],
-            options: [courseLeaf("leaf")],
+            options: [requirementCourseLeaf("leaf")],
           },
         ],
       },
@@ -426,15 +494,7 @@ describe("pruneUnresolvedOptionGroups", () => {
         requirementId: "keep-me",
         candidateCourses: ["CSI 1000"],
         creditsNeeded: 3,
-        options: [
-          {
-            type: "options_group",
-            requirementId: "g",
-            complete: false,
-            satisfiedBy: [],
-            options: [courseLeaf("leaf")],
-          },
-        ],
+        options: [unresolvedOptionGroup()],
       },
     ];
     const out = pruneUnresolvedOptionGroups(tree);
@@ -449,16 +509,7 @@ describe("pruneUnresolvedOptionGroups", () => {
         type: "and",
         complete: false,
         satisfiedBy: [],
-        options: [
-          courseLeaf("free"),
-          {
-            type: "options_group",
-            requirementId: "g",
-            complete: false,
-            satisfiedBy: [],
-            options: [courseLeaf("leaf")],
-          },
-        ],
+        options: [requirementCourseLeaf("free"), unresolvedOptionGroup()],
       },
     ];
     const out = pruneUnresolvedOptionGroups(tree);
@@ -469,44 +520,17 @@ describe("pruneUnresolvedOptionGroups", () => {
 
 describe("getConstrainMultiSelectOptions", () => {
   it("returns no options when the term has no schedule for candidates", () => {
-    const node: RequirementWithStatus = {
-      type: "free_elective",
-      title: "Free",
-      complete: false,
-      satisfiedBy: [],
-      requirementId: "req-1",
-      candidateCourses: ["SEG 3100"],
-      creditsNeeded: 3,
-    };
+    const node = freeElectiveNode("req-1", ["SEG 3100"]);
     const { options } = getConstrainMultiSelectOptions(node, {}, defaultConstrainCtx);
     expect(options).toHaveLength(0);
   });
 
   it("excludes 5000+ courses from elective dropdown options", () => {
-    const cacheWithSchedules: DataCache = {
-      getCourse: (code) =>
-        ({ code: testCourseCode(code), title: "Test", credits: 3 }) as NonNullable<
-          ReturnType<DataCache["getCourse"]>
-        >,
-      resolveToCanonical: (code) => testCourseCode(code),
-      getSchedule: (code) =>
-        ({
-          courseCode: testCourseCode(code),
-          components: {},
-        }) as NonNullable<ReturnType<DataCache["getSchedule"]>>,
-      getCoursesByDiscipline: () => [],
-      getAllCourses: () => [],
-      getAllSchedules: () => [],
-    };
-    const node: RequirementWithStatus = {
-      type: "free_elective",
-      title: "Free",
-      complete: false,
-      satisfiedBy: [],
-      requirementId: "req-free",
-      candidateCourses: ["SEG 4100", "SEG 5100"],
-      creditsNeeded: 3,
-    };
+    const cacheWithSchedules = cacheWithSchedule((code) => ({
+      ...testSchedule(code),
+      components: {},
+    }));
+    const node = freeElectiveNode("req-free", ["SEG 4100", "SEG 5100"]);
     const ctx = {
       ...defaultConstrainCtx,
       cache: cacheWithSchedules,
@@ -518,47 +542,12 @@ describe("getConstrainMultiSelectOptions", () => {
   });
 
   it("exempts explicitly picked electives from virtual-only filtering", () => {
-    const schedNonVirtualOnly = {
-      subject: "SEG",
-      catalogNumber: "3100",
-      title: "Test",
-      courseCode: testCourseCode("SEG 3100"),
-      timeZone: "America/Toronto",
-      components: {
-        LEC: [
-          {
-            section: "A00",
-            sectionCode: "A00",
-            component: "LEC",
-            session: null,
-            times: [{ day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false }],
-            status: "Open",
-          },
-        ],
-      },
-    } as NonNullable<ReturnType<DataCache["getSchedule"]>>;
+    const schedNonVirtualOnly = testSchedule("SEG 3100");
+    const cacheWithNonVirtual = cacheWithSchedule((code) =>
+      code === "SEG 3100" ? schedNonVirtualOnly : undefined,
+    );
 
-    const cacheWithNonVirtual: DataCache = {
-      getCourse: (code) =>
-        ({ code: testCourseCode(code), title: "Test", credits: 3 }) as NonNullable<
-          ReturnType<DataCache["getCourse"]>
-        >,
-      resolveToCanonical: (code) => testCourseCode(code),
-      getSchedule: (code) => (code === "SEG 3100" ? schedNonVirtualOnly : undefined),
-      getCoursesByDiscipline: () => [],
-      getAllCourses: () => [],
-      getAllSchedules: () => [],
-    };
-
-    const node: RequirementWithStatus = {
-      type: "free_elective",
-      title: "Free",
-      complete: false,
-      satisfiedBy: [],
-      requirementId: "req-1",
-      candidateCourses: ["SEG 3100"],
-      creditsNeeded: 3,
-    };
+    const node = freeElectiveNode("req-1", ["SEG 3100"]);
 
     const withoutExemptionCtx = {
       ...defaultConstrainCtx,
@@ -583,37 +572,10 @@ describe("getConstrainMultiSelectOptions", () => {
   });
 
   it("does not apply virtual-only filtering to discipline_elective (structured pool)", () => {
-    const schedNonVirtualOnly = {
-      subject: "SEG",
-      catalogNumber: "3100",
-      title: "Test",
-      courseCode: testCourseCode("SEG 3100"),
-      timeZone: "America/Toronto",
-      components: {
-        LEC: [
-          {
-            section: "A00",
-            sectionCode: "A00",
-            component: "LEC",
-            session: null,
-            times: [{ day: "Mo", startMinutes: 540, endMinutes: 630, virtual: false }],
-            status: "Open",
-          },
-        ],
-      },
-    } as NonNullable<ReturnType<DataCache["getSchedule"]>>;
-
-    const cacheWithNonVirtual: DataCache = {
-      getCourse: (code) =>
-        ({ code: testCourseCode(code), title: "Test", credits: 3 }) as NonNullable<
-          ReturnType<DataCache["getCourse"]>
-        >,
-      resolveToCanonical: (code) => testCourseCode(code),
-      getSchedule: (code) => (code === "SEG 3100" ? schedNonVirtualOnly : undefined),
-      getCoursesByDiscipline: () => [],
-      getAllCourses: () => [],
-      getAllSchedules: () => [],
-    };
+    const schedNonVirtualOnly = testSchedule("SEG 3100");
+    const cacheWithNonVirtual = cacheWithSchedule((code) =>
+      code === "SEG 3100" ? schedNonVirtualOnly : undefined,
+    );
 
     const node: RequirementWithStatus = {
       type: "discipline_elective",
@@ -638,32 +600,11 @@ describe("getConstrainMultiSelectOptions", () => {
 
   it("uses the bare code as option label (title is shown only in the dropdown render)", () => {
     const businessTitle = "Introduction to Business";
-    const cacheWithSchedules: DataCache = {
-      getCourse: () =>
-        ({
-          code: testCourseCode("ADM 1101"),
-          title: businessTitle,
-          credits: 3,
-        }) as NonNullable<ReturnType<DataCache["getCourse"]>>,
-      resolveToCanonical: (code) => testCourseCode(code),
-      getSchedule: (code) =>
-        ({
-          courseCode: testCourseCode(code),
-          components: {},
-        }) as NonNullable<ReturnType<DataCache["getSchedule"]>>,
-      getCoursesByDiscipline: () => [],
-      getAllCourses: () => [],
-      getAllSchedules: () => [],
-    };
-    const node: RequirementWithStatus = {
-      type: "free_elective",
-      title: "Free",
-      complete: false,
-      satisfiedBy: [],
-      requirementId: "req-adm",
-      candidateCourses: ["ADM 1101"],
-      creditsNeeded: 3,
-    };
+    const cacheWithSchedules = cacheWithSchedule(
+      (code) => ({ ...testSchedule(code), components: {} }),
+      businessTitle,
+    );
+    const node = freeElectiveNode("req-adm", ["ADM 1101"]);
     const ctx = {
       ...defaultConstrainCtx,
       cache: cacheWithSchedules,
@@ -677,6 +618,18 @@ describe("getConstrainMultiSelectOptions", () => {
 });
 
 describe("partitionIncompleteConstrainRoots", () => {
+  // Run the partition with no prereq-eligible courses and assert the tree
+  // collapses to a single root (the common shape of several cases below).
+  function expectSingleCollapsedRoot(tree: RequirementWithStatus[]) {
+    const ctx = {
+      ...defaultConstrainCtx,
+      prereqEligible: new Set<string>(),
+    };
+    const { primary, collapsed } = partitionIncompleteConstrainRoots(tree, {}, ctx);
+    expect(primary).toHaveLength(0);
+    expect(collapsed).toHaveLength(1);
+  }
+
   it("keeps or_group without a branch selection in primary", () => {
     const tree: RequirementWithStatus[] = [
       {
@@ -747,35 +700,26 @@ describe("partitionIncompleteConstrainRoots", () => {
       {
         type: "pick",
         title: "Pick",
-        complete: false,
-        satisfiedBy: [],
+        ...incompleteRequirementStatus(),
         options: [
           {
             type: "free_elective",
             requirementId: "a",
             candidateCourses: ["SEG 3100"],
             creditsNeeded: 3,
-            complete: false,
-            satisfiedBy: [],
+            ...incompleteRequirementStatus(),
           },
           {
             type: "free_elective",
             requirementId: "b",
             candidateCourses: ["SEG 3101"],
             creditsNeeded: 3,
-            complete: false,
-            satisfiedBy: [],
+            ...incompleteRequirementStatus(),
           },
         ],
       },
     ];
-    const ctx = {
-      ...defaultConstrainCtx,
-      prereqEligible: new Set<string>(),
-    };
-    const { primary, collapsed } = partitionIncompleteConstrainRoots(tree, {}, ctx);
-    expect(primary).toHaveLength(0);
-    expect(collapsed).toHaveLength(1);
+    expectSingleCollapsedRoot(tree);
   });
 
   it("collapses pick when the parent card has requirementId and an empty dropdown pool", () => {
@@ -783,8 +727,7 @@ describe("partitionIncompleteConstrainRoots", () => {
       {
         type: "pick",
         title: "Pool",
-        complete: false,
-        satisfiedBy: [],
+        ...incompleteRequirementStatus(),
         requirementId: "pick-root",
         candidateCourses: ["SEG 9999"],
         creditsNeeded: 3,
@@ -792,19 +735,12 @@ describe("partitionIncompleteConstrainRoots", () => {
           {
             type: "section",
             title: "Note",
-            complete: false,
-            satisfiedBy: [],
+            ...incompleteRequirementStatus(),
           },
         ],
       },
     ];
-    const ctx = {
-      ...defaultConstrainCtx,
-      prereqEligible: new Set<string>(),
-    };
-    const { primary, collapsed } = partitionIncompleteConstrainRoots(tree, {}, ctx);
-    expect(primary).toHaveLength(0);
-    expect(collapsed).toHaveLength(1);
+    expectSingleCollapsedRoot(tree);
   });
 });
 

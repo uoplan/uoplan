@@ -42,6 +42,21 @@ export function sectionHasTimes(section: ComponentSection): boolean {
   return Array.isArray(section.times) && section.times.some((t) => t.startMinutes < t.endMinutes);
 }
 
+/**
+ * True if any two time slots across the given sections overlap. Shared by the
+ * lazy combo enumerator and the explore-page conflict preview so the
+ * intra-combo clash rule has a single definition.
+ */
+export function sectionsHaveInternalOverlap(sections: ComponentSection[]): boolean {
+  const times = collectTimes(sections);
+  for (let i = 0; i < times.length; i++) {
+    for (let j = i + 1; j < times.length; j++) {
+      if (timesOverlap(times[i], times[j])) return true;
+    }
+  }
+  return false;
+}
+
 export function getValidSectionCombos(
   schedule: CourseSchedule,
   constraints?: GenerationConstraints,

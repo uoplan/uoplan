@@ -5,7 +5,7 @@ import type {
   SchedulesData,
 } from "./dataTypes";
 import type { InstructorNameKey, NormalizedCourseCode } from "./brand";
-import { normalizeCourseCode } from "./utils/courseUtils";
+import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 
 /**
  * Runtime grade-lookup contract — a direct port of the build-time enrichment in
@@ -74,6 +74,35 @@ export function hasGradeData(dist: GradeDistribution | null | undefined): boolea
 }
 
 /**
+ * Insert `dist` into the nested `course → term → instructor` map, merging it
+ * with any distribution already stored for that key (via {@link sumGradeDistributions}).
+ *
+ * Generic over the course- and instructor-key types so both the runtime path
+ * (branded `NormalizedCourseCode` / `InstructorNameKey`) and the build-time
+ * enricher (raw string codes) share one accumulation routine.
+ */
+export function accumulateInstructorDistribution<CodeKey, NameKey>(
+  byCourseTermName: Map<CodeKey, Map<number, Map<NameKey, GradeDistribution>>>,
+  code: CodeKey,
+  termId: number,
+  key: NameKey,
+  dist: GradeDistribution,
+): void {
+  let termMap = byCourseTermName.get(code);
+  if (!termMap) {
+    termMap = new Map();
+    byCourseTermName.set(code, termMap);
+  }
+  let profMap = termMap.get(termId);
+  if (!profMap) {
+    profMap = new Map();
+    termMap.set(termId, profMap);
+  }
+  const existing = profMap.get(key);
+  profMap.set(key, existing ? sumGradeDistributions([existing, dist]) : { ...dist });
+}
+
+/**
  * Build the per-course/term/instructor lookup and the per-course aggregate from
  * runtime grades data. Rows with a non-positive term id are skipped (matching
  * the build-time enricher's `termId === 0` guard).
@@ -104,19 +133,7 @@ export function buildGradeLookups(grades: CourseGradesData): GradeLookups {
       const key = normalizeInstructorName(name);
       if (!key) continue;
 
-      let termMap = byCourseTermName.get(code);
-      if (!termMap) {
-        termMap = new Map();
-        byCourseTermName.set(code, termMap);
-      }
-      let profMap = termMap.get(termId);
-      if (!profMap) {
-        profMap = new Map();
-        termMap.set(termId, profMap);
-      }
-
-      const existing = profMap.get(key);
-      profMap.set(key, existing ? sumGradeDistributions([existing, dist]) : { ...dist });
+      accumulateInstructorDistribution(byCourseTermName, code, termId, key, dist);
       allDists.push(dist);
     }
 

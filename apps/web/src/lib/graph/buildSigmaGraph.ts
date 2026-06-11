@@ -4,6 +4,7 @@ import {
   type ProfessorCoTeachingGraph,
   type ProfessorGraphNode,
 } from "@uoplan/core";
+import { colorWithAlpha } from "./colorWithAlpha";
 
 export type ProfessorNodeAttributes = {
   label: string | null;
@@ -29,19 +30,6 @@ const NODE_ALPHA = 0.72;
 const MIN_NODE_SIZE = 2.5;
 const MAX_NODE_SIZE = 5.5;
 
-function colorWithAlpha(color: string, alpha: number): string {
-  const hex = color.match(/^#([0-9a-f]{6})$/i);
-  if (hex) {
-    const n = parseInt(hex[1], 16);
-    const r = (n >> 16) & 255;
-    const g = (n >> 8) & 255;
-    const b = n & 255;
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  }
-  const rgba = color.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
-  if (rgba) return `rgba(${rgba[1]}, ${rgba[2]}, ${rgba[3]}, ${alpha})`;
-  return color;
-}
 const MIN_EDGE_SIZE = 0.25;
 const MAX_EDGE_SIZE = 1.1;
 

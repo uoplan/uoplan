@@ -1,19 +1,12 @@
 import { useState } from "react";
 import { ActionIcon, Group, Tooltip } from "@mantine/core";
-import {
-  IconCalendarDown,
-  IconCheck,
-  IconEraser,
-  IconFileImport,
-  IconShare,
-  IconTerminal,
-} from "@tabler/icons-react";
+import { IconCalendarDown, IconEraser, IconFileImport, IconTerminal } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { tr } from "../../i18n";
 import { SaveStatusIndicator } from "./SaveStatusIndicator";
-import { AnimatedIconSwap } from "../shared/AnimatedIconSwap";
 import { UEnrollImportModal } from "./UEnrollImportModal";
+import { CalendarShareAction } from "./CalendarShareAction";
 
 interface BasicCalendarHeaderActionsProps {
   cliCommand?: string | null;
@@ -53,28 +46,11 @@ export function BasicCalendarHeaderActions({
           </ActionIcon>
         </Tooltip>
         <SaveStatusIndicator />
-        {indices && (
-          <Tooltip
-            label={shareCopied ? tr("app.share.copied") : tr("calendarPage.share")}
-            opened={shareCopied || undefined}
-            position="right"
-            withArrow
-          >
-            <ActionIcon
-              variant="subtle"
-              color={shareCopied ? "teal" : "gray"}
-              size="md"
-              radius="md"
-              onClick={handleCopyShare}
-              aria-label={tr("calendarPage.share")}
-              style={{ transition: "color 0.2s ease" }}
-            >
-              <AnimatedIconSwap statusKey={shareCopied ? "copied" : "share"}>
-                {shareCopied ? <IconCheck size={16} /> : <IconShare size={16} />}
-              </AnimatedIconSwap>
-            </ActionIcon>
-          </Tooltip>
-        )}
+        <CalendarShareAction
+          show={Boolean(indices)}
+          copied={shareCopied}
+          onCopy={handleCopyShare}
+        />
         <Tooltip label={tr("basicCalendar.clear")} position="right" withArrow>
           <ActionIcon
             variant="subtle"

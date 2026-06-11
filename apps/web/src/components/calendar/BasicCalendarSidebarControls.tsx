@@ -1,20 +1,16 @@
 import { useMemo } from "react";
-import { Box, Button, MultiSelect, Stack, Text, type OptionsFilter } from "@mantine/core";
+import { Box, Button, MultiSelect, Stack, Text } from "@mantine/core";
 import { IconFileUpload } from "@tabler/icons-react";
-import { useShallow } from "zustand/react/shallow";
 import { getCourseCredits, normalizeCourseCode } from "@uoplan/core";
 import { useAppStore } from "../../store/appStore";
-import {
-  createCourseOptions,
-  renderCourseOption,
-  createCourseOptionsFilter,
-} from "../shared/CourseSelect";
+import { createCourseOptions } from "../shared/CourseSelect";
 import { GenerationOptionsFields } from "./generationOptions/GenerationOptionsFields";
 import { avoidedDaysFromBlocks } from "../../lib/blockedTimes";
 import { tr } from "../../i18n";
 import { navigateToWizardStep } from "../../lib/appNavigation";
 import { WizardStep } from "../../lib/wizardSteps";
 import { SCHEDULE_COURSE_COUNT_MAX } from "../../store/generationDefaults";
+import { useSharedGenerationOptions } from "./generationOptions/useSharedGenerationOptions";
 
 const FIRST_YEAR_CREDIT_CAP = 48;
 
@@ -39,96 +35,34 @@ export function BasicCalendarSidebarControls() {
     generationCompressedSchedule,
     generationPreferEasier,
     generationPreferHigherSentiment,
-  } = useAppStore(
-    useShallow((s) => ({
-      cache: s.cache,
-      basicPinnedCourses: s.basicPinnedCourses,
-      basicElectivesCount: s.basicElectivesCount,
-      basicExcludedCategories: s.basicExcludedCategories,
-      levelBuckets: s.levelBuckets,
-      languageBuckets: s.languageBuckets,
-      electiveLevelBuckets: s.electiveLevelBuckets,
-      includeClosedComponents: s.includeClosedComponents,
-      virtualSectionsOnly: s.virtualSectionsOnly,
-      completedCourses: s.completedCourses,
-      frenchImmersionStream: s.frenchImmersionStream,
-      blockedTimes: s.blockedTimes,
-      generationMinStartMinutes: s.generationMinStartMinutes,
-      generationMaxEndMinutes: s.generationMaxEndMinutes,
-      generationMinProfessorRating: s.generationMinProfessorRating,
-      generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
-      generationCompressedSchedule: s.generationCompressedSchedule,
-      generationPreferEasier: s.generationPreferEasier,
-      generationPreferHigherSentiment: s.generationPreferHigherSentiment,
-    })),
-  );
+    blacklistedCourses,
+    allCategories,
+    courseOptions,
+    courseOptionsFilter,
+    courseRenderOption,
+    desiredCourseOptions,
+    setFrenchImmersionStream,
+    setBlacklistedCourses,
+    setBasicPinnedCourses,
+    setBasicExcludedCategories,
+    setLevelBuckets,
+    setLanguageBuckets,
+    setElectiveLevelBuckets,
+    setIncludeClosedComponents,
+    setVirtualSectionsOnly,
+    setGenerationMinStartMinutes,
+    setGenerationMaxEndMinutes,
+    setAvoidedDays,
+    setGenerationMinProfessorRating,
+    setGenerationLimitFirstYearCredits,
+    setGenerationCompressedSchedule,
+    setGenerationPreferEasier,
+    setGenerationPreferHigherSentiment,
+  } = useSharedGenerationOptions();
 
-  const setFrenchImmersionStream = useAppStore((s) => s.setFrenchImmersionStream);
-  const blacklistedCourses = useAppStore((s) => s.blacklistedCourses);
-  const setBlacklistedCourses = useAppStore((s) => s.setBlacklistedCourses);
-  const setBasicPinnedCourses = useAppStore((s) => s.setBasicPinnedCourses);
   const setBasicElectivesCount = useAppStore((s) => s.setBasicElectivesCount);
-  const setBasicExcludedCategories = useAppStore((s) => s.setBasicExcludedCategories);
   const markBasicSettingsChanged = useAppStore((s) => s.markBasicSettingsChanged);
-  const setLevelBuckets = useAppStore((s) => s.setLevelBuckets);
-  const setLanguageBuckets = useAppStore((s) => s.setLanguageBuckets);
-  const setElectiveLevelBuckets = useAppStore((s) => s.setElectiveLevelBuckets);
-  const setIncludeClosedComponents = useAppStore((s) => s.setIncludeClosedComponents);
-  const setVirtualSectionsOnly = useAppStore((s) => s.setVirtualSectionsOnly);
   const setCompletedCourses = useAppStore((s) => s.setCompletedCourses);
-  const setGenerationMinStartMinutes = useAppStore((s) => s.setGenerationMinStartMinutes);
-  const setGenerationMaxEndMinutes = useAppStore((s) => s.setGenerationMaxEndMinutes);
-  const setAvoidedDays = useAppStore((s) => s.setAvoidedDays);
-  const setGenerationMinProfessorRating = useAppStore((s) => s.setGenerationMinProfessorRating);
-  const setGenerationLimitFirstYearCredits = useAppStore(
-    (s) => s.setGenerationLimitFirstYearCredits,
-  );
-  const setGenerationCompressedSchedule = useAppStore((s) => s.setGenerationCompressedSchedule);
-  const setGenerationPreferEasier = useAppStore((s) => s.setGenerationPreferEasier);
-  const setGenerationPreferHigherSentiment = useAppStore(
-    (s) => s.setGenerationPreferHigherSentiment,
-  );
-
-  const allCategories = useMemo(() => {
-    if (!cache) return [] as string[];
-    const categories = [
-      ...new Set(
-        cache.getAllCourses().map((c) => {
-          const match = c.code.match(/^([A-Z]{3,4})/i);
-          return match ? match[1].toUpperCase() : null;
-        }),
-      ),
-    ].filter((c): c is string => c !== null);
-    categories.sort();
-    return categories;
-  }, [cache]);
-
-  const requiredCourseOptions = useMemo(() => {
-    if (!cache) return [];
-    const seen = new Set<string>();
-    return cache
-      .getAllSchedules()
-      .flatMap((sched) => {
-        const course = cache.getCourse(sched.courseCode);
-        if (!course) return [];
-        if (seen.has(course.code)) return [];
-        seen.add(course.code);
-        return [{ value: course.code, label: course.code }];
-      })
-      .sort((a, b) => a.label.localeCompare(b.label));
-  }, [cache]);
-
-  const courseOptionsFilter = useMemo<OptionsFilter>(
-    () => createCourseOptionsFilter(cache),
-    [cache],
-  );
-
-  // The "courses you want" dropdown should not offer courses the student has already completed.
-  const desiredCourseOptions = useMemo(() => {
-    if (completedCourses.length === 0) return requiredCourseOptions;
-    const completed = new Set(completedCourses.map(normalizeCourseCode));
-    return requiredCourseOptions.filter((o) => !completed.has(normalizeCourseCode(o.value)));
-  }, [requiredCourseOptions, completedCourses]);
 
   const completedCourseOptions = useMemo(() => {
     if (!cache) return [];
@@ -163,7 +97,7 @@ export function BasicCalendarSidebarControls() {
           setBasicPinnedCourses(v);
           markBasicSettingsChanged();
         }}
-        renderCourseOption={renderCourseOption(cache)}
+        renderCourseOption={courseRenderOption}
         courseFilter={courseOptionsFilter}
         countValue={totalCount}
         onCountChange={(total) => {
@@ -250,13 +184,13 @@ export function BasicCalendarSidebarControls() {
           },
         }}
         excludeCourses={{
-          data: requiredCourseOptions,
+          data: courseOptions,
           value: blacklistedCourses,
           onChange: (v) => {
             setBlacklistedCourses(v);
             markBasicSettingsChanged();
           },
-          renderOption: renderCourseOption(cache),
+          renderOption: courseRenderOption,
           filter: courseOptionsFilter,
         }}
         frenchImmersionStream={frenchImmersionStream}
@@ -289,7 +223,7 @@ export function BasicCalendarSidebarControls() {
             }}
             searchable
             clearable
-            renderOption={renderCourseOption(cache)}
+            renderOption={courseRenderOption}
             filter={courseOptionsFilter}
             nothingFoundMessage={tr("basicCalendar.completed.notFound")}
             radius="md"

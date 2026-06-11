@@ -1,4 +1,5 @@
 import * as DataProto from "@uoplan/proto/data";
+import { dateStringToYyyymmdd } from "@uoplan/core/dataTypes/protoDates";
 import { CourseCodeIndexer, parseTermIdToNumber } from "./shared.ts";
 import type { ProfessorResolver } from "../professors/buildRegistry.ts";
 
@@ -39,12 +40,6 @@ export interface SchedulesJsonInput {
   totalCourses?: number;
   totalWithSchedules?: number;
   schedules?: CourseScheduleInput[];
-}
-
-function dateStringToYyyymmdd(value: string): number {
-  const compact = value.replaceAll("-", "");
-  const parsed = Number.parseInt(compact, 10);
-  return Number.isFinite(parsed) ? parsed : 0;
 }
 
 function dayToProto(day: string | undefined): number {

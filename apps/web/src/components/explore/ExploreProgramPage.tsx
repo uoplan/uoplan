@@ -1,4 +1,4 @@
-import { Accordion, Box, Group, Stack, Text, Title } from "@mantine/core";
+import { Box, Group, Stack, Text, Title } from "@mantine/core";
 import { useNavigate } from "@tanstack/react-router";
 import { m } from "framer-motion";
 import { useEffect, useMemo } from "react";
@@ -21,13 +21,11 @@ import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
 } from "../../lib/explore/accordionPadding";
-
-const EXPLORE_CHEVRON_RIGHT = {
-  base: "12px",
-  xs: "max(12px, calc((100vw - min(100vw, 1200px)) / 2 + 12px))",
-};
-
-const mobileMediaQuery = "@media (max-width: 540px)";
+import {
+  ExploreAccordion,
+  ExploreFullBleed,
+  EXPLORE_MOBILE_MEDIA_QUERY,
+} from "./ExploreEntityLayout";
 const EXPLORE_HISTOGRAM_WIDTH_PX = 288;
 
 /** True when a course group carries any counted grade data (vs schedule-only). */
@@ -56,7 +54,7 @@ function GrayedCourseRow({ code, title }: { code: string; title: string | null }
         paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
         paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
         borderBottom: "var(--app-border-width) solid var(--app-border)",
-        [mobileMediaQuery]: {
+        [EXPLORE_MOBILE_MEDIA_QUERY]: {
           flexDirection: "column",
           alignItems: "stretch",
           paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
@@ -83,7 +81,7 @@ function GrayedCourseRow({ code, title }: { code: string; title: string | null }
           width: EXPLORE_HISTOGRAM_WIDTH_PX,
           maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
           marginLeft: "auto",
-          [mobileMediaQuery]: { width: "100%", maxWidth: "100%", marginLeft: 0 },
+          [EXPLORE_MOBILE_MEDIA_QUERY]: { width: "100%", maxWidth: "100%", marginLeft: 0 },
         }}
       >
         <GradeDistributionHistogramPlaceholder />
@@ -194,65 +192,13 @@ export function ExploreProgramPage({
             </Text>
           </Box>
         ) : (
-          <Box
-            style={{
-              width: "100vw",
-              maxWidth: "100vw",
-              marginInline: "calc(50% - 50vw)",
-            }}
-          >
+          <ExploreFullBleed>
             {dataGroups.length > 0 ? (
-              <Accordion
-                multiple
-                radius="var(--app-radius)"
-                chevronPosition="right"
-                variant="default"
-                classNames={{ control: "explore-accordion-control" }}
-                styles={{
-                  root: {
-                    backgroundColor: "var(--app-bg)",
-                    borderTop: "var(--app-border-width) solid var(--app-border)",
-                  },
-                  item: {
-                    borderBottom: "var(--app-border-width) solid var(--app-border)",
-                    backgroundColor: "var(--app-surface-sunken)",
-                    "&:last-of-type": { borderBottom: "none" },
-                  },
-                  control: {
-                    position: "relative",
-                    paddingTop: "var(--mantine-spacing-lg)",
-                    paddingBottom: "var(--mantine-spacing-lg)",
-                    paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
-                    paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
-                    borderRadius: "var(--app-radius-sm)",
-                    backgroundColor: "var(--app-surface-sunken)",
-                    "@media (max-width: 540px)": {
-                      paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
-                      paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.base,
-                    },
-                  },
-                  label: { flex: 1, minWidth: 0, paddingRight: 0 },
-                  panel: { padding: 0, backgroundColor: "var(--app-bg)" },
-                  content: { padding: 0 },
-                  chevron: {
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    right: EXPLORE_CHEVRON_RIGHT.xs,
-                    display: "flex",
-                    alignItems: "center",
-                    marginLeft: 0,
-                    color: "var(--app-text-muted)",
-                    "@media (max-width: 540px)": {
-                      right: EXPLORE_CHEVRON_RIGHT.base,
-                    },
-                  },
-                }}
-              >
+              <ExploreAccordion>
                 {dataGroups.map((g) => (
                   <ExploreCourseItem key={g.groupId} group={g} currentEntry={backEntry} />
                 ))}
-              </Accordion>
+              </ExploreAccordion>
             ) : null}
 
             {noDataCodes.length > 0 ? (
@@ -273,7 +219,7 @@ export function ExploreProgramPage({
                 ))}
               </Box>
             ) : null}
-          </Box>
+          </ExploreFullBleed>
         )}
       </Stack>
     </m.div>

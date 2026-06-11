@@ -1,37 +1,15 @@
 import { describe, expect, it, vi } from "vitest";
-import {
-  DataProto,
-  normalizeCourseCode,
-  toProtoCatalogue,
-  toProtoSchedulesData,
-  type Catalogue,
-  type Course,
-  type SchedulesData,
-} from "@uoplan/core";
+import { DataProto, normalizeCourseCode, type Catalogue, type Course } from "@uoplan/core";
 import { createDataClient } from "../dataClient";
 import { dataAssetIds } from "../loaders";
-
-function course(code: string, title: string, credits = 3): Course {
-  return {
-    code: normalizeCourseCode(code),
-    title,
-    credits,
-    description: "",
-    component: "Lecture",
-  };
-}
-
-function encode(message: { finish(): Uint8Array }): Uint8Array {
-  return message.finish();
-}
-
-function catalogueBytes(catalogue: Catalogue): Uint8Array {
-  return encode(DataProto.Catalogue.encode(toProtoCatalogue(catalogue)));
-}
-
-function schedulesBytes(schedules: SchedulesData): Uint8Array {
-  return encode(DataProto.SchedulesData.encode(toProtoSchedulesData(schedules)));
-}
+import {
+  catalogueBytes,
+  course,
+  encode,
+  fetchFrom,
+  schedulesBytes,
+  schedulesFor,
+} from "./testFixtures";
 
 function gradesBytes(): Uint8Array {
   return encode(
@@ -70,51 +48,6 @@ function gradesBytes(): Uint8Array {
   );
 }
 
-function schedulesFor(termId: string): SchedulesData {
-  return {
-    termId,
-    schedules: [
-      {
-        subject: "CSI",
-        catalogNumber: "2110",
-        courseCode: normalizeCourseCode("CSI 2110"),
-        title: "Data Structures",
-        timeZone: "America/Toronto",
-        components: {
-          LEC: [
-            {
-              section: "A00",
-              sectionCode: "A00",
-              component: "LEC",
-              session: null,
-              status: "Open",
-              times: [
-                {
-                  day: "Mo",
-                  startMinutes: 600,
-                  endMinutes: 690,
-                  virtual: false,
-                  instructor: "Alice Smith",
-                  meetingDates: ["2026-01-12", "2026-04-10"],
-                },
-              ],
-            },
-          ],
-        },
-      },
-    ],
-  };
-}
-
-function fetchFrom(assets: Record<string, Uint8Array | Error>) {
-  return vi.fn(async (id: string) => {
-    const value = assets[id];
-    if (value === undefined) throw new Error(`Missing fixture for ${id}`);
-    if (value instanceof Error) throw value;
-    return value;
-  });
-}
-
 const latestCatalogue: Catalogue = {
   courses: [course("CSI 2110", "Data Structures"), course("MAT 1320", "Calculus I")],
   programs: [],
@@ -135,6 +68,30 @@ function mergeCatalogue(
     if (!byCode.has(yearCourse.code)) byCode.set(yearCourse.code, yearCourse);
   }
   return { ...latest, courses: [...byCode.values()] };
+}
+
+function makeEffectiveTransport({
+  years = [2026],
+  catalogues = [[2026, latestCatalogue]],
+  schedules = ["2261"],
+  grades = new Error("grades unavailable"),
+}: {
+  years?: number[];
+  catalogues?: Array<readonly [year: number, catalogue: Catalogue]>;
+  schedules?: string[];
+  grades?: Uint8Array | Error;
+} = {}): ReturnType<typeof fetchFrom> {
+  const assets: Record<string, Uint8Array | Error> = {
+    [dataAssetIds.manifest]: encode(DataProto.CatalogueManifest.encode({ years })),
+    [dataAssetIds.grades]: grades,
+  };
+  for (const [year, catalogue] of catalogues) {
+    assets[dataAssetIds.catalogue(year)] = catalogueBytes(catalogue);
+  }
+  for (const termId of schedules) {
+    assets[dataAssetIds.schedules(termId)] = schedulesBytes(schedulesFor(termId));
+  }
+  return fetchFrom(assets);
 }
 
 describe("createDataClient.loadEffectiveDataset", () => {
@@ -190,12 +147,7 @@ describe("createDataClient.loadEffectiveDataset", () => {
   });
 
   it("reuses the decoded latest catalogue when first year equals the manifest latest year", async () => {
-    const transport = fetchFrom({
-      [dataAssetIds.manifest]: encode(DataProto.CatalogueManifest.encode({ years: [2026] })),
-      [dataAssetIds.catalogue(2026)]: catalogueBytes(latestCatalogue),
-      [dataAssetIds.schedules("2261")]: schedulesBytes(schedulesFor("2261")),
-      [dataAssetIds.grades]: new Error("grades unavailable"),
-    });
+    const transport = makeEffectiveTransport();
     const merge = vi.fn(mergeCatalogue);
     const client = createDataClient({ transport, mergeCatalogue: merge });
 
@@ -214,12 +166,7 @@ describe("createDataClient.loadEffectiveDataset", () => {
   });
 
   it("treats grades as optional and leaves schedules unmodified when grades fail to load", async () => {
-    const transport = fetchFrom({
-      [dataAssetIds.manifest]: encode(DataProto.CatalogueManifest.encode({ years: [2026] })),
-      [dataAssetIds.catalogue(2026)]: catalogueBytes(latestCatalogue),
-      [dataAssetIds.schedules("2261")]: schedulesBytes(schedulesFor("2261")),
-      [dataAssetIds.grades]: new Error("not published yet"),
-    });
+    const transport = makeEffectiveTransport({ grades: new Error("not published yet") });
     const client = createDataClient({ transport, mergeCatalogue });
 
     const dataset = await client.loadEffectiveDataset({
@@ -246,13 +193,7 @@ describe("createDataClient.loadEffectiveDataset", () => {
   });
 
   it("evicts the least-recently-used effective dataset when the cache is full", async () => {
-    const transport = fetchFrom({
-      [dataAssetIds.manifest]: encode(DataProto.CatalogueManifest.encode({ years: [2026] })),
-      [dataAssetIds.catalogue(2026)]: catalogueBytes(latestCatalogue),
-      [dataAssetIds.schedules("2261")]: schedulesBytes(schedulesFor("2261")),
-      [dataAssetIds.schedules("2265")]: schedulesBytes(schedulesFor("2265")),
-      [dataAssetIds.grades]: new Error("grades unavailable"),
-    });
+    const transport = makeEffectiveTransport({ schedules: ["2261", "2265"] });
     const merge = vi.fn(mergeCatalogue);
     const client = createDataClient({ transport, mergeCatalogue: merge, cacheSize: 1 });
 

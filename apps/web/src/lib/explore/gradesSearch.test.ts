@@ -47,6 +47,15 @@ function sampleOffering(partial: OfferingPartial): ExploreOfferingFlat {
   };
 }
 
+function sampleScheduleOffering(partial: OfferingPartial): ExploreOfferingFlat {
+  return sampleOffering({
+    termId: 2261,
+    section: undefined,
+    distribution: {},
+    ...partial,
+  });
+}
+
 describe("searchExploreOfferings", () => {
   it("matches single-character queries within the capped pool", () => {
     const offerings: ExploreOfferingFlat[] = [
@@ -316,27 +325,39 @@ function scheduleData(termId: string, schedules: CourseSchedule[]): SchedulesDat
   return { termId, schedules };
 }
 
+function scheduleCourse(
+  courseCode: string,
+  title: string,
+  components: CourseSchedule["components"],
+): CourseSchedule {
+  const [subject, catalogNumber] = courseCode.split(" ");
+  return {
+    subject,
+    catalogNumber,
+    courseCode: testCourseCode(courseCode),
+    title,
+    timeZone: "America/Toronto",
+    components,
+  };
+}
+
+function scheduleOfferingsFor(
+  termId: string,
+  course: CourseSchedule,
+): ReturnType<typeof buildScheduleOfferings> {
+  return buildScheduleOfferings([scheduleData(termId, [course])], new Map());
+}
+
 describe("buildScheduleOfferings", () => {
   it("keeps a 'Staff' section as an unassigned offering instead of dropping it", () => {
-    const offerings = buildScheduleOfferings(
-      [
-        scheduleData("2271", [
-          {
-            subject: "ADM",
-            catalogNumber: "1100",
-            courseCode: testCourseCode("ADM 1100"),
-            title: "Intro to Business",
-            timeZone: "America/Toronto",
-            components: {
-              LEC: [
-                scheduleSection("A00-LEC FullSess.", "LEC", ["Real Prof"]),
-                scheduleSection("B00-LEC FullSess.", "LEC", ["Staff"]),
-              ],
-            },
-          },
-        ]),
-      ],
-      new Map(),
+    const offerings = scheduleOfferingsFor(
+      "2271",
+      scheduleCourse("ADM 1100", "Intro to Business", {
+        LEC: [
+          scheduleSection("A00-LEC FullSess.", "LEC", ["Real Prof"]),
+          scheduleSection("B00-LEC FullSess.", "LEC", ["Staff"]),
+        ],
+      }),
     );
 
     const real = offerings.filter((o) => !o.unassignedInstructor);
@@ -349,25 +370,14 @@ describe("buildScheduleOfferings", () => {
   });
 
   it("keeps a Staff-only course searchable with a single unassigned group", () => {
-    const offerings = buildScheduleOfferings(
-      [
-        scheduleData("2275", [
-          {
-            subject: "BIO",
-            catalogNumber: "3350",
-            courseCode: testCourseCode("BIO 3350"),
-            title: "Some Bio Course",
-            timeZone: "America/Toronto",
-            components: {
-              LEC: [
-                scheduleSection("A00-LEC FullSess.", "LEC", ["Staff"]),
-                scheduleSection("B00-LEC FullSess.", "LEC", ["Staff"]),
-              ],
-            },
-          },
-        ]),
-      ],
-      new Map(),
+    const offerings = scheduleOfferingsFor(
+      "2275",
+      scheduleCourse("BIO 3350", "Some Bio Course", {
+        LEC: [
+          scheduleSection("A00-LEC FullSess.", "LEC", ["Staff"]),
+          scheduleSection("B00-LEC FullSess.", "LEC", ["Staff"]),
+        ],
+      }),
     );
 
     // One unassigned offering survives, so the course is indexable.
@@ -385,26 +395,15 @@ describe("buildScheduleOfferings", () => {
   });
 
   it("combines multiple sections of the same prof/term into one section-less offering", () => {
-    const offerings = buildScheduleOfferings(
-      [
-        scheduleData("2271", [
-          {
-            subject: "ADM",
-            catalogNumber: "1100",
-            courseCode: testCourseCode("ADM 1100"),
-            title: "Intro to Business",
-            timeZone: "America/Toronto",
-            components: {
-              LEC: [
-                scheduleSection("A00-LEC FullSess.", "LEC", ["Alan O'Sullivan"]),
-                scheduleSection("B00-LEC FullSess.", "LEC", ["Alan O'Sullivan"]),
-              ],
-              DGD: [scheduleSection("D01-DGD FullSess.", "DGD", ["Alan O'Sullivan"])],
-            },
-          },
-        ]),
-      ],
-      new Map(),
+    const offerings = scheduleOfferingsFor(
+      "2271",
+      scheduleCourse("ADM 1100", "Intro to Business", {
+        LEC: [
+          scheduleSection("A00-LEC FullSess.", "LEC", ["Alan O'Sullivan"]),
+          scheduleSection("B00-LEC FullSess.", "LEC", ["Alan O'Sullivan"]),
+        ],
+        DGD: [scheduleSection("D01-DGD FullSess.", "DGD", ["Alan O'Sullivan"])],
+      }),
     );
     expect(offerings).toHaveLength(1);
     expect(offerings[0].professorName).toBe("Alan O'Sullivan");
@@ -413,44 +412,33 @@ describe("buildScheduleOfferings", () => {
   });
 
   it("unions predicted instructors across a course/term into one unassigned offering", () => {
-    const offerings = buildScheduleOfferings(
-      [
-        scheduleData("2271", [
-          {
-            subject: "ITI",
-            catalogNumber: "1120",
-            courseCode: testCourseCode("ITI 1120"),
-            title: "Intro to Computing",
-            timeZone: "America/Toronto",
-            components: {
-              LEC: [
-                scheduleSection(
-                  "A00-LEC FullSess.",
-                  "LEC",
-                  ["Staff"],
-                  [
-                    { name: "Ann Bee", legacyId: 1 },
-                    { name: "Cy Dee", legacyId: 3 },
-                  ],
-                ),
-                // Overlapping guess (Ann) plus a new one (Em) → all unioned.
-                scheduleSection(
-                  "C00-LEC FullSess.",
-                  "LEC",
-                  ["Staff"],
-                  [
-                    { name: "Ann Bee", legacyId: 1 },
-                    { name: "Em Eff", legacyId: 5 },
-                  ],
-                ),
-                // No guess of its own, but keeps the term unassigned.
-                scheduleSection("D00-LEC FullSess.", "LEC", ["Staff"]),
-              ],
-            },
-          },
-        ]),
-      ],
-      new Map(),
+    const offerings = scheduleOfferingsFor(
+      "2271",
+      scheduleCourse("ITI 1120", "Intro to Computing", {
+        LEC: [
+          scheduleSection(
+            "A00-LEC FullSess.",
+            "LEC",
+            ["Staff"],
+            [
+              { name: "Ann Bee", legacyId: 1 },
+              { name: "Cy Dee", legacyId: 3 },
+            ],
+          ),
+          // Overlapping guess (Ann) plus a new one (Em) → all unioned.
+          scheduleSection(
+            "C00-LEC FullSess.",
+            "LEC",
+            ["Staff"],
+            [
+              { name: "Ann Bee", legacyId: 1 },
+              { name: "Em Eff", legacyId: 5 },
+            ],
+          ),
+          // No guess of its own, but keeps the term unassigned.
+          scheduleSection("D00-LEC FullSess.", "LEC", ["Staff"]),
+        ],
+      }),
     );
 
     const unassigned = offerings.filter((o) => o.unassignedInstructor);
@@ -464,32 +452,21 @@ describe("buildScheduleOfferings", () => {
   });
 
   it("fans an unassigned offering out as a predicted row under each candidate prof", () => {
-    const offerings = buildScheduleOfferings(
-      [
-        scheduleData("2271", [
-          {
-            subject: "ITI",
-            catalogNumber: "1120",
-            courseCode: testCourseCode("ITI 1120"),
-            title: "Intro to Computing",
-            timeZone: "America/Toronto",
-            components: {
-              LEC: [
-                scheduleSection(
-                  "A00-LEC FullSess.",
-                  "LEC",
-                  ["Staff"],
-                  [
-                    { name: "Ann Bee", legacyId: 1 },
-                    { name: "Cy Dee", legacyId: 3 },
-                  ],
-                ),
-              ],
-            },
-          },
-        ]),
-      ],
-      new Map(),
+    const offerings = scheduleOfferingsFor(
+      "2271",
+      scheduleCourse("ITI 1120", "Intro to Computing", {
+        LEC: [
+          scheduleSection(
+            "A00-LEC FullSess.",
+            "LEC",
+            ["Staff"],
+            [
+              { name: "Ann Bee", legacyId: 1 },
+              { name: "Cy Dee", legacyId: 3 },
+            ],
+          ),
+        ],
+      }),
     );
 
     const groups = groupOfferingsByProfessor(offerings);
@@ -507,20 +484,11 @@ describe("buildScheduleOfferings", () => {
   });
 
   it("keeps a no-guess unassigned section in the shared unassigned group", () => {
-    const offerings = buildScheduleOfferings(
-      [
-        scheduleData("2271", [
-          {
-            subject: "ITI",
-            catalogNumber: "1120",
-            courseCode: testCourseCode("ITI 1120"),
-            title: "Intro to Computing",
-            timeZone: "America/Toronto",
-            components: { LEC: [scheduleSection("A00-LEC FullSess.", "LEC", ["Staff"])] },
-          },
-        ]),
-      ],
-      new Map(),
+    const offerings = scheduleOfferingsFor(
+      "2271",
+      scheduleCourse("ITI 1120", "Intro to Computing", {
+        LEC: [scheduleSection("A00-LEC FullSess.", "LEC", ["Staff"])],
+      }),
     );
     const groups = groupOfferingsByProfessor(offerings);
     expect(groups).toHaveLength(1);
@@ -672,21 +640,17 @@ describe("mergeOfferingsWithSchedule", () => {
       }),
     ];
     const scheduleOfferings: ExploreOfferingFlat[] = [
-      sampleOffering({
+      sampleScheduleOffering({
         id: "sched-dup",
         courseCode: testCourseCode("ADM 1100"),
         professorName: testProfessorName("Alan O'Sullivan"),
         termId: 2271,
-        section: undefined,
-        distribution: {},
       }),
-      sampleOffering({
+      sampleScheduleOffering({
         id: "sched-new",
         courseCode: testCourseCode("ADM 1100"),
         professorName: testProfessorName("New Prof"),
         termId: 2271,
-        section: undefined,
-        distribution: {},
       }),
     ];
     const merged = mergeOfferingsWithSchedule(gradeOfferings, scheduleOfferings);
@@ -705,13 +669,10 @@ describe("mergeOfferingsWithSchedule", () => {
       }),
     ];
     const scheduleOfferings: ExploreOfferingFlat[] = [
-      sampleOffering({
+      sampleScheduleOffering({
         id: "sched",
         courseCode: testCourseCode("CSI 3104"),
         professorName: testProfessorName("Miguel Garzon"),
-        termId: 2261,
-        section: undefined,
-        distribution: {},
       }),
     ];
     const merged = mergeOfferingsWithSchedule(gradeOfferings, scheduleOfferings);
@@ -735,13 +696,10 @@ describe("mergeOfferingsWithSchedule", () => {
       }),
     ];
     const scheduleOfferings: ExploreOfferingFlat[] = [
-      sampleOffering({
+      sampleScheduleOffering({
         id: "sched",
         courseCode: testCourseCode("CSI 9999"),
         professorName: testProfessorName("John Smith"),
-        termId: 2261,
-        section: undefined,
-        distribution: {},
       }),
     ];
     const merged = mergeOfferingsWithSchedule(gradeOfferings, scheduleOfferings);

@@ -48,6 +48,25 @@ function hasFlsCourse(courses: string[]): boolean {
   return courses.some((code) => parseCourseCode(code)?.discipline === "FLS");
 }
 
+function recomputeStateForSelectedOptions(
+  store: AppStore,
+  selectedOptionsPerRequirementNext: AppStore["selectedOptionsPerRequirement"],
+) {
+  return recomputeStateForProgram(
+    store.program,
+    store.minorProgram,
+    store.completedCourses,
+    store.cache,
+    store.selectedPerRequirement,
+    selectedOptionsPerRequirementNext,
+    store.levelBuckets,
+    store.languageBuckets,
+    store.includeClosedComponents,
+    store.studentPrograms,
+    store.requirementSlotsUserTouched,
+  );
+}
+
 interface SelectionSlice {
   setBasicPinnedCourses: AppStore["setBasicPinnedCourses"];
   setBasicElectivesCount: AppStore["setBasicElectivesCount"];
@@ -397,31 +416,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       ...get().selectedOptionsPerRequirement,
       [requirementId]: optionIndex,
     };
-    const {
-      program,
-      minorProgram,
-      cache,
-      completedCourses,
-      selectedPerRequirement,
-      levelBuckets,
-      languageBuckets,
-      includeClosedComponents,
-      studentPrograms,
-      requirementSlotsUserTouched,
-    } = get();
-    const state = recomputeStateForProgram(
-      program,
-      minorProgram,
-      completedCourses,
-      cache,
-      selectedPerRequirement,
-      selectedOptionsPerRequirementNext,
-      levelBuckets,
-      languageBuckets,
-      includeClosedComponents,
-      studentPrograms,
-      requirementSlotsUserTouched,
-    );
+    const state = recomputeStateForSelectedOptions(get(), selectedOptionsPerRequirementNext);
     set({ ...state, generationOptionsDirty: true });
   },
 
@@ -430,31 +425,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       get().selectedOptionsPerRequirement,
       requirementId,
     );
-    const {
-      program,
-      minorProgram,
-      cache,
-      completedCourses,
-      selectedPerRequirement,
-      levelBuckets,
-      languageBuckets,
-      includeClosedComponents,
-      studentPrograms,
-      requirementSlotsUserTouched,
-    } = get();
-    const state = recomputeStateForProgram(
-      program,
-      minorProgram,
-      completedCourses,
-      cache,
-      selectedPerRequirement,
-      selectedOptionsPerRequirementNext,
-      levelBuckets,
-      languageBuckets,
-      includeClosedComponents,
-      studentPrograms,
-      requirementSlotsUserTouched,
-    );
+    const state = recomputeStateForSelectedOptions(get(), selectedOptionsPerRequirementNext);
     set({ ...state, generationOptionsDirty: true });
   },
 

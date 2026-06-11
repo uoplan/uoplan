@@ -1,37 +1,7 @@
 import { z } from "zod";
+import type { CoursePrereqKind, CoursePrereqNode } from "@uoplan/core";
 
-export type CoursePrereqDisciplineLevel = {
-  discipline: string;
-  levels?: number[];
-};
-
-export type CoursePrereqKind =
-  | "permission"
-  | "audition"
-  | "language"
-  | "equivalent"
-  | "highschool"
-  | "standing"
-  | "topic"
-  | "coursework"
-  | "knowledge"
-  | "recommended";
-
-export type CoursePrereqNode = {
-  type: "course" | "or_group" | "and_group" | "non_course";
-  code?: string;
-  text?: string;
-  credits?: number;
-  disciplines?: string[];
-  levels?: number[];
-  disciplineLevels?: CoursePrereqDisciplineLevel[];
-  programs?: string[];
-  // For opaque `non_course` requirements (no credit pool): a coarse classification
-  // of the requirement so downstream consumers can decide whether it blocks
-  // scheduling (e.g. "permission"/"audition" are soft, "standing" is conservative).
-  kind?: CoursePrereqKind;
-  children?: CoursePrereqNode[];
-};
+export type { CoursePrereqKind, CoursePrereqNode };
 
 const CoursePrereqKindSchema = z.enum([
   "permission",

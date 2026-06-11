@@ -18,14 +18,12 @@ import {
   IconArrowBackUp,
   IconArrowsShuffle,
   IconCalendarDown,
-  IconCheck,
   IconChevronLeft,
   IconChevronRight,
   IconEraser,
   IconFileImport,
   IconInfoCircle,
   IconSettings,
-  IconShare,
   IconTerminal,
 } from "@tabler/icons-react";
 import { useAppStore, useAppStoreApi } from "../../store/appStore";
@@ -38,7 +36,7 @@ import { useShareUrl } from "../../hooks/useShareUrl";
 import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateRange";
 import { useGenerationErrorToast } from "../../hooks/useGenerationErrorToast";
 import { useGenerationSentiment } from "../../hooks/useGenerationSentiment";
-import { tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
 import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 import { CALENDAR_SIDEBAR_WIDTH_PX } from "./calendarLayout";
@@ -49,11 +47,61 @@ import { UEnrollImportModal } from "./UEnrollImportModal";
 import { AdvancedGenerationOptions } from "./AdvancedGenerationOptions";
 import { BasicGenerationOptions } from "./BasicGenerationOptions";
 import { SaveStatusIndicator } from "./SaveStatusIndicator";
-import { AnimatedIconSwap } from "../shared/AnimatedIconSwap";
+import { CalendarShareAction } from "./CalendarShareAction";
 import { encodeSchedulePayload } from "../../lib/encodeSchedulePayload";
 import { useScheduleWeeks } from "../../hooks/useScheduleWeeks";
 import { formatWeekLabel } from "../../lib/formatWeekCount";
 import { cancelScheduleGeneration } from "../../workers/scheduleWorkerClient";
+
+type ScheduleNavigationButtonsProps = {
+  canGoPrevious: boolean;
+  canUseSeedNavigation: boolean;
+  generationOptionsDirty: boolean;
+  nextLabel: string;
+  scheduleGenerating: boolean;
+  onNext: () => void;
+  onPrevious: () => void;
+};
+
+function ScheduleNavigationButtons({
+  canGoPrevious,
+  canUseSeedNavigation,
+  generationOptionsDirty,
+  nextLabel,
+  scheduleGenerating,
+  onNext,
+  onPrevious,
+}: ScheduleNavigationButtonsProps) {
+  useTr();
+  return (
+    <Button.Group>
+      <Button
+        variant="default"
+        size="sm"
+        radius="md"
+        style={{ flex: 1 }}
+        leftSection={<IconChevronLeft size={14} />}
+        disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
+        loading={scheduleGenerating}
+        onClick={onPrevious}
+      >
+        {tr("calendarPage.previous")}
+      </Button>
+      <Button
+        variant={generationOptionsDirty ? "filled" : "default"}
+        size="sm"
+        radius="md"
+        style={{ flex: 1 }}
+        rightSection={<IconChevronRight size={14} />}
+        disabled={scheduleGenerating || !canUseSeedNavigation}
+        loading={scheduleGenerating}
+        onClick={onNext}
+      >
+        {nextLabel}
+      </Button>
+    </Button.Group>
+  );
+}
 
 export function CalendarPage() {
   useEffect(() => {
@@ -371,32 +419,15 @@ export function CalendarPage() {
             downloadDisabled={!dateRangeOk || !currentSchedule}
           />
           {!isMobile && (
-            <Button.Group>
-              <Button
-                variant="default"
-                size="sm"
-                radius="md"
-                style={{ flex: 1 }}
-                leftSection={<IconChevronLeft size={14} />}
-                disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
-                loading={scheduleGenerating}
-                onClick={handlePrevious}
-              >
-                {tr("calendarPage.previous")}
-              </Button>
-              <Button
-                variant={generationOptionsDirty ? "filled" : "default"}
-                size="sm"
-                radius="md"
-                style={{ flex: 1 }}
-                rightSection={<IconChevronRight size={14} />}
-                disabled={scheduleGenerating || !canUseSeedNavigation}
-                loading={scheduleGenerating}
-                onClick={handleNext}
-              >
-                {nextLabel}
-              </Button>
-            </Button.Group>
+            <ScheduleNavigationButtons
+              canGoPrevious={canGoPrevious}
+              canUseSeedNavigation={canUseSeedNavigation}
+              generationOptionsDirty={generationOptionsDirty}
+              nextLabel={nextLabel}
+              scheduleGenerating={scheduleGenerating}
+              onNext={handleNext}
+              onPrevious={handlePrevious}
+            />
           )}
           <BasicGenerationOptions />
         </>
@@ -418,28 +449,11 @@ export function CalendarPage() {
               </ActionIcon>
             </Tooltip>
             <SaveStatusIndicator />
-            {indices && (
-              <Tooltip
-                label={shareCopied ? tr("app.share.copied") : tr("calendarPage.share")}
-                withArrow
-                position="right"
-                opened={shareCopied || undefined}
-              >
-                <ActionIcon
-                  variant="subtle"
-                  color={shareCopied ? "teal" : "gray"}
-                  size="md"
-                  radius="md"
-                  onClick={handleCopyShare}
-                  aria-label={tr("calendarPage.share")}
-                  style={{ transition: "color 0.2s ease" }}
-                >
-                  <AnimatedIconSwap statusKey={shareCopied ? "copied" : "share"}>
-                    {shareCopied ? <IconCheck size={16} /> : <IconShare size={16} />}
-                  </AnimatedIconSwap>
-                </ActionIcon>
-              </Tooltip>
-            )}
+            <CalendarShareAction
+              show={Boolean(indices)}
+              copied={shareCopied}
+              onCopy={handleCopyShare}
+            />
             <Tooltip label={tr("calendarPage.randomize")} withArrow position="right">
               <ActionIcon
                 variant="subtle"
@@ -496,32 +510,15 @@ export function CalendarPage() {
           {/* Prev/Next - desktop only */}
           {!isMobile && (
             <Stack gap={6}>
-              <Button.Group>
-                <Button
-                  variant="default"
-                  size="sm"
-                  radius="md"
-                  style={{ flex: 1 }}
-                  leftSection={<IconChevronLeft size={14} />}
-                  disabled={!canGoPrevious || scheduleGenerating || !canUseSeedNavigation}
-                  loading={scheduleGenerating}
-                  onClick={handlePrevious}
-                >
-                  {tr("calendarPage.previous")}
-                </Button>
-                <Button
-                  variant={generationOptionsDirty ? "filled" : "default"}
-                  size="sm"
-                  radius="md"
-                  style={{ flex: 1 }}
-                  rightSection={<IconChevronRight size={14} />}
-                  disabled={scheduleGenerating || !canUseSeedNavigation}
-                  loading={scheduleGenerating}
-                  onClick={handleNext}
-                >
-                  {nextLabel}
-                </Button>
-              </Button.Group>
+              <ScheduleNavigationButtons
+                canGoPrevious={canGoPrevious}
+                canUseSeedNavigation={canUseSeedNavigation}
+                generationOptionsDirty={generationOptionsDirty}
+                nextLabel={nextLabel}
+                scheduleGenerating={scheduleGenerating}
+                onNext={handleNext}
+                onPrevious={handlePrevious}
+              />
             </Stack>
           )}
 

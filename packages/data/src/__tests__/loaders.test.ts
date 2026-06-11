@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   DataProto,
   FeedbackProto,
@@ -6,7 +6,6 @@ import {
   toProtoCatalogue,
   toProtoSchedulesData,
   type Catalogue,
-  type SchedulesData,
 } from "@uoplan/core";
 import {
   dataAssetIds,
@@ -22,18 +21,7 @@ import {
   loadSchedules,
   loadTerms,
 } from "../loaders";
-
-function encode(message: { finish(): Uint8Array }): Uint8Array {
-  return message.finish();
-}
-
-function fetchFrom(assets: Record<string, Uint8Array>) {
-  return vi.fn(async (id: string) => {
-    const bytes = assets[id];
-    if (!bytes) throw new Error(`Missing fixture for ${id}`);
-    return bytes;
-  });
-}
+import { encode, fetchFrom, schedulesFor } from "./testFixtures";
 
 const catalogue: Catalogue = {
   courses: [
@@ -56,40 +44,10 @@ const catalogue: Catalogue = {
   ],
 };
 
-const schedules: SchedulesData = {
-  termId: "2261",
+const schedules = {
+  ...schedulesFor("2261"),
   totalCourses: 1,
   totalWithSchedules: 1,
-  schedules: [
-    {
-      subject: "CSI",
-      catalogNumber: "2110",
-      courseCode: normalizeCourseCode("CSI 2110"),
-      title: "Data Structures",
-      timeZone: "America/Toronto",
-      components: {
-        LEC: [
-          {
-            section: "A00",
-            sectionCode: "A00",
-            component: "LEC",
-            session: null,
-            status: "Open",
-            times: [
-              {
-                day: "Mo",
-                startMinutes: 600,
-                endMinutes: 690,
-                virtual: false,
-                instructor: "Alice Smith",
-                meetingDates: ["2026-01-12", "2026-04-10"],
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
 };
 
 const distribution = {

@@ -1,4 +1,4 @@
-import { Accordion, Box, Flex, Group, Stack, Text, Title } from "@mantine/core";
+import { Accordion, Box, Group, Stack, Text, Title } from "@mantine/core";
 import { useEffect, useMemo } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { m } from "framer-motion";
@@ -12,7 +12,6 @@ import { formatTermLabel } from "../../lib/term/termLabel";
 import {
   type ProfessorOfferingGroup,
   groupOfferingsByProfessor,
-  resolveComponentId,
 } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./exploreOfferingsContext";
 import { CatalogueLink } from "./CatalogueLink";
@@ -20,20 +19,19 @@ import { useCourseFeedbackViews } from "../../hooks/useFeedbackViews";
 import { FeedbackSummaryCard } from "./feedback/FeedbackSummaryCard";
 import type { BackState } from "../../lib/navigation/backState";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
-import { courseNormToPathParam, parseCoursePathParam } from "../../lib/explore/courseSearchParams";
+import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import {
   ExploreProfessorOfferingRows,
   ExploreProfessorSummaryBar,
 } from "./ExploreProfessorGradesLayout";
+import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
+import { useCourseAliasResolution } from "../../hooks/useCourseAliasResolution";
 import {
-  EXPLORE_ACCORDION_PAD_INLINE,
-  EXPLORE_ACCORDION_PAD_RIGHT,
-} from "../../lib/explore/accordionPadding";
-
-const EXPLORE_CHEVRON_RIGHT = {
-  base: `calc(12px)`,
-  xs: "max(12px, calc((100vw - min(100vw, 1200px)) / 2 + 12px))",
-};
+  ExploreAccordion,
+  ExploreEntityHeader,
+  ExploreFeedbackAside,
+  ExploreFullBleed,
+} from "./ExploreEntityLayout";
 
 function CourseProfessorItem({
   group,
@@ -74,12 +72,7 @@ export function ExploreCoursePage({
   const navigate = useNavigate();
   const terms = useAppStore(useShallow((s) => s.terms));
 
-  const urlNorm = useMemo(() => parseCoursePathParam(urlCourseParam), [urlCourseParam]);
-
-  const componentId = useMemo(
-    () => (urlNorm === null ? null : resolveComponentId(urlNorm, aliasGroups.componentByNorm)),
-    [urlNorm, aliasGroups],
-  );
+  const { urlNorm, componentId } = useCourseAliasResolution(urlCourseParam, aliasGroups);
 
   const courseOfferings = useMemo(() => {
     if (urlNorm === null || componentId === null) return [];
@@ -157,102 +150,90 @@ export function ExploreCoursePage({
     >
       <Stack gap={0}>
         {selectedCourseMeta ? (
-          <Box
-            pt={{ base: 4, md: 0 }}
-            pb="md"
-            style={{
-              paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
-              paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
-            }}
-          >
-            <Flex
-              direction={{ base: "column", md: "row" }}
-              gap="lg"
-              align={{ base: "stretch", md: "center" }}
-            >
-              <Box style={{ flex: 1, minWidth: 0 }}>
-                <Group gap={8} align="center" wrap="nowrap">
-                  <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
-                    {selectedCourseMeta.courseCode}
-                  </Title>
-                  {catalogueUrl ? (
-                    <CatalogueLink href={catalogueUrl} label={tr("explore.openInCatalogue")} />
-                  ) : null}
-                </Group>
-                {selectedCourseMeta.courseTitle ? (
-                  <Text size="sm" c="dimmed" lh={1.5} mt={8}>
-                    {selectedCourseMeta.courseTitle}
-                  </Text>
-                ) : null}
-                {aliasCodes.length > 0 ? (
-                  <Text size="sm" c="dimmed" lh={1.5} mt={8}>
-                    {tr("explore.alsoKnownAs")}{" "}
-                    {aliasCodes.map((code, i) => (
-                      <span key={code}>
-                        {i > 0 ? ", " : null}
-                        <Link
-                          to="/explore/course/$course"
-                          params={{ course: courseNormToPathParam(code) }}
-                          search={EMPTY_EXPLORE_SEARCH}
-                          state={{ back: courseEntry } as never}
-                          style={{
-                            color: "var(--app-text)",
-                            fontWeight: 500,
-                            textDecoration: "none",
-                          }}
-                        >
-                          {code}
-                        </Link>
-                      </span>
-                    ))}
-                  </Text>
-                ) : null}
-                {scheduleTerms.length > 0 ? (
-                  <Group gap={8} mt={12}>
-                    {scheduleTerms.map((termId) => (
-                      <Link
-                        key={termId}
-                        to="/explore/course/$course/schedule"
-                        params={{ course: urlCourseParam }}
-                        search={{ ...EMPTY_EXPLORE_SEARCH, term: termId }}
-                        state={{ back: courseEntry } as never}
-                        style={{ textDecoration: "none" }}
-                      >
-                        <Group
-                          gap={6}
-                          wrap="nowrap"
-                          px={12}
-                          py={6}
-                          className="soft-lift"
-                          style={{
-                            borderRadius: 9999,
-                            border: "var(--app-border-width) solid var(--app-border-strong)",
-                            backgroundColor: "var(--app-surface)",
-                            color: "var(--app-text)",
-                            fontWeight: 600,
-                            fontSize: "var(--mantine-font-size-sm)",
-                          }}
-                        >
-                          <IconClock size={14} stroke={1.7} />
-                          {formatTermLabel(termId)}
-                        </Group>
-                      </Link>
-                    ))}
-                  </Group>
-                ) : null}
-              </Box>
-              {showFeedback ? (
-                <Box style={{ width: "100%", maxWidth: 420 }}>
+          <ExploreEntityHeader
+            aside={
+              showFeedback ? (
+                <ExploreFeedbackAside>
                   <FeedbackSummaryCard
                     to="/explore/course/$course/feedback"
                     params={{ course: urlCourseParam }}
                     views={feedbackViews}
                     loading={feedbackLoading}
                   />
-                </Box>
+                </ExploreFeedbackAside>
+              ) : null
+            }
+          >
+            <Group gap={8} align="center" wrap="nowrap">
+              <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
+                {selectedCourseMeta.courseCode}
+              </Title>
+              {catalogueUrl ? (
+                <CatalogueLink href={catalogueUrl} label={tr("explore.openInCatalogue")} />
               ) : null}
-            </Flex>
-          </Box>
+            </Group>
+            {selectedCourseMeta.courseTitle ? (
+              <Text size="sm" c="dimmed" lh={1.5} mt={8}>
+                {selectedCourseMeta.courseTitle}
+              </Text>
+            ) : null}
+            {aliasCodes.length > 0 ? (
+              <Text size="sm" c="dimmed" lh={1.5} mt={8}>
+                {tr("explore.alsoKnownAs")}{" "}
+                {aliasCodes.map((code, i) => (
+                  <span key={code}>
+                    {i > 0 ? ", " : null}
+                    <Link
+                      to="/explore/course/$course"
+                      params={{ course: courseNormToPathParam(code) }}
+                      search={EMPTY_EXPLORE_SEARCH}
+                      state={{ back: courseEntry } as never}
+                      style={{
+                        color: "var(--app-text)",
+                        fontWeight: 500,
+                        textDecoration: "none",
+                      }}
+                    >
+                      {code}
+                    </Link>
+                  </span>
+                ))}
+              </Text>
+            ) : null}
+            {scheduleTerms.length > 0 ? (
+              <Group gap={8} mt={12}>
+                {scheduleTerms.map((termId) => (
+                  <Link
+                    key={termId}
+                    to="/explore/course/$course/schedule"
+                    params={{ course: urlCourseParam }}
+                    search={{ ...EMPTY_EXPLORE_SEARCH, term: termId }}
+                    state={{ back: courseEntry } as never}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Group
+                      gap={6}
+                      wrap="nowrap"
+                      px={12}
+                      py={6}
+                      className="soft-lift"
+                      style={{
+                        borderRadius: 9999,
+                        border: "var(--app-border-width) solid var(--app-border-strong)",
+                        backgroundColor: "var(--app-surface)",
+                        color: "var(--app-text)",
+                        fontWeight: 600,
+                        fontSize: "var(--mantine-font-size-sm)",
+                      }}
+                    >
+                      <IconClock size={14} stroke={1.7} />
+                      {formatTermLabel(termId)}
+                    </Group>
+                  </Link>
+                ))}
+              </Group>
+            ) : null}
+          </ExploreEntityHeader>
         ) : null}
 
         {professorGroups.length === 0 ? (
@@ -262,60 +243,8 @@ export function ExploreCoursePage({
             </Text>
           </Box>
         ) : (
-          <Box
-            style={{
-              width: "100vw",
-              maxWidth: "100vw",
-              marginInline: "calc(50% - 50vw)",
-            }}
-          >
-            <Accordion
-              multiple
-              radius="var(--app-radius)"
-              chevronPosition="right"
-              variant="default"
-              classNames={{ control: "explore-accordion-control" }}
-              styles={{
-                root: {
-                  backgroundColor: "var(--app-bg)",
-                  borderTop: "var(--app-border-width) solid var(--app-border)",
-                },
-                item: {
-                  borderBottom: "var(--app-border-width) solid var(--app-border)",
-                  backgroundColor: "var(--app-surface-sunken)",
-                  "&:last-of-type": { borderBottom: "none" },
-                },
-                control: {
-                  position: "relative",
-                  paddingTop: "var(--mantine-spacing-lg)",
-                  paddingBottom: "var(--mantine-spacing-lg)",
-                  paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
-                  paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
-                  borderRadius: "var(--app-radius-sm)",
-                  backgroundColor: "var(--app-surface-sunken)",
-                  "@media (max-width: 540px)": {
-                    paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
-                    paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.base,
-                  },
-                },
-                label: { flex: 1, minWidth: 0, paddingRight: 0 },
-                panel: { padding: 0, backgroundColor: "var(--app-bg)" },
-                content: { padding: 0 },
-                chevron: {
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  right: EXPLORE_CHEVRON_RIGHT.xs,
-                  display: "flex",
-                  alignItems: "center",
-                  marginLeft: 0,
-                  color: "var(--app-text-muted)",
-                  "@media (max-width: 540px)": {
-                    right: EXPLORE_CHEVRON_RIGHT.base,
-                  },
-                },
-              }}
-            >
+          <ExploreFullBleed>
+            <ExploreAccordion chevronRightBase="calc(12px)">
               {professorGroups.map((g) => (
                 <CourseProfessorItem
                   key={g.groupId}
@@ -324,8 +253,8 @@ export function ExploreCoursePage({
                   currentEntry={courseEntry}
                 />
               ))}
-            </Accordion>
-          </Box>
+            </ExploreAccordion>
+          </ExploreFullBleed>
         )}
       </Stack>
     </m.div>

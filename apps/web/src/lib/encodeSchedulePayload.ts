@@ -1,5 +1,6 @@
 import { SchedulePayload } from "@uoplan/proto/cli";
 import type { GeneratedSchedule } from "@uoplan/core/src/generation/types";
+import { encodeBytesBase64Url } from "./base64Url";
 
 export function encodeSchedulePayload(schedule: GeneratedSchedule, termId: string): string {
   const payload: SchedulePayload = {
@@ -18,9 +19,5 @@ export function encodeSchedulePayload(schedule: GeneratedSchedule, termId: strin
       })),
   };
 
-  const bytes = SchedulePayload.encode(payload).finish();
-
-  let binary = "";
-  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+  return encodeBytesBase64Url(SchedulePayload.encode(payload).finish());
 }

@@ -7,6 +7,18 @@ import { testCourseCode } from "../test/brands";
 
 const emptySchedules: SchedulesData = { termId: "2261", schedules: [] };
 
+function expectSelectedRequirementIncludes(
+  state: ReturnType<typeof recomputeStateForProgram>,
+  requirementId: string,
+  courseCode: string,
+) {
+  expect(
+    (state.selectedPerRequirement[requirementId] ?? []).some((c) =>
+      c.replace(/\s+/g, " ").trim().includes(courseCode),
+    ),
+  ).toBe(true);
+}
+
 function mkCourse(code: string, overrides?: Partial<{ credits: number; component: string }>) {
   return {
     code: testCourseCode(code),
@@ -52,6 +64,41 @@ const overlappingProgram: Program = {
     },
   ],
 };
+
+function optionsPlusFreeProgram(): Program {
+  return {
+    title: "Options + free",
+    url: "https://example.com",
+    requirements: [
+      {
+        type: "options_group",
+        title: "Choose track",
+        options: [
+          {
+            type: "and",
+            options: [
+              {
+                type: "discipline_elective",
+                title: "SEG 3000",
+                credits: 3,
+                disciplineLevels: [{ discipline: "SEG", levels: [3000] }],
+              },
+            ],
+          },
+          {
+            type: "and",
+            options: [{ type: "course", code: testCourseCode("ENG 1100"), credits: 3 }],
+          },
+        ],
+      },
+      {
+        type: "free_elective",
+        title: "Free",
+        credits: 3,
+      },
+    ],
+  };
+}
 
 describe("recomputeStateForProgram single-candidate schedule handling", () => {
   it("does not auto-assign the only schedulable candidate when no courses are completed", () => {
@@ -150,44 +197,7 @@ describe("recomputeStateForProgram completed-course auto-assignment", () => {
     };
     const cache = buildDataCache(catalogue, emptySchedules);
 
-    const program: Program = {
-      title: "Options + free",
-      url: "https://example.com",
-      requirements: [
-        {
-          type: "options_group",
-          title: "Choose track",
-          options: [
-            {
-              type: "and",
-              options: [
-                {
-                  type: "discipline_elective",
-                  title: "SEG 3000",
-                  credits: 3,
-                  disciplineLevels: [{ discipline: "SEG", levels: [3000] }],
-                },
-              ],
-            },
-            {
-              type: "and",
-              options: [
-                {
-                  type: "course",
-                  code: testCourseCode("ENG 1100"),
-                  credits: 3,
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: "free_elective",
-          title: "Free",
-          credits: 3,
-        },
-      ],
-    };
+    const program = optionsPlusFreeProgram();
 
     const state = recomputeStateForProgram(
       program,
@@ -204,11 +214,7 @@ describe("recomputeStateForProgram completed-course auto-assignment", () => {
     );
 
     expect(state.unassignedCompletedCourses).toEqual([]);
-    expect(
-      (state.selectedPerRequirement["req-0-0-0"] ?? []).some((c) =>
-        c.replace(/\s+/g, " ").trim().includes("SEG 3100"),
-      ),
-    ).toBe(true);
+    expectSelectedRequirementIncludes(state, "req-0-0-0", "SEG 3100");
     expect(state.selectedPerRequirement["req-1"] ?? []).toEqual([]);
   });
 
@@ -219,38 +225,7 @@ describe("recomputeStateForProgram completed-course auto-assignment", () => {
     };
     const cache = buildDataCache(catalogue, emptySchedules);
 
-    const program: Program = {
-      title: "Options + free",
-      url: "https://example.com",
-      requirements: [
-        {
-          type: "options_group",
-          title: "Choose track",
-          options: [
-            {
-              type: "and",
-              options: [
-                {
-                  type: "discipline_elective",
-                  title: "SEG 3000",
-                  credits: 3,
-                  disciplineLevels: [{ discipline: "SEG", levels: [3000] }],
-                },
-              ],
-            },
-            {
-              type: "and",
-              options: [{ type: "course", code: testCourseCode("ENG 1100"), credits: 3 }],
-            },
-          ],
-        },
-        {
-          type: "free_elective",
-          title: "Free",
-          credits: 3,
-        },
-      ],
-    };
+    const program = optionsPlusFreeProgram();
 
     const beforeOption = recomputeStateForProgram(
       program,
@@ -266,11 +241,7 @@ describe("recomputeStateForProgram completed-course auto-assignment", () => {
       {},
     );
 
-    expect(
-      (beforeOption.selectedPerRequirement["req-1"] ?? []).some((c) =>
-        c.replace(/\s+/g, " ").trim().includes("SEG 3100"),
-      ),
-    ).toBe(true);
+    expectSelectedRequirementIncludes(beforeOption, "req-1", "SEG 3100");
 
     const afterOption = recomputeStateForProgram(
       program,
@@ -286,11 +257,7 @@ describe("recomputeStateForProgram completed-course auto-assignment", () => {
       {},
     );
 
-    expect(
-      (afterOption.selectedPerRequirement["req-0-0-0"] ?? []).some((c) =>
-        c.replace(/\s+/g, " ").trim().includes("SEG 3100"),
-      ),
-    ).toBe(true);
+    expectSelectedRequirementIncludes(afterOption, "req-0-0-0", "SEG 3100");
     expect(afterOption.selectedPerRequirement["req-1"] ?? []).toEqual([]);
   });
 });

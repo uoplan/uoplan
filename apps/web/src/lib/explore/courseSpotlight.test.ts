@@ -117,9 +117,9 @@ describe("rankCoursesForSpotlight", () => {
     return spotlightIndexFrom(offerings, titleByCode);
   }
 
-  it("ranks hardest by lowest GPA", () => {
+  function basicDifficultyIndex() {
     const mass = SPOTLIGHT_MIN_GRADED_COUNT;
-    const index = buildIndex([
+    return buildIndex([
       sampleOffering({
         id: "easy",
         courseCode: "MAT 1341",
@@ -131,6 +131,10 @@ describe("rankCoursesForSpotlight", () => {
         distribution: distWithMass(mass, "low"),
       }),
     ]);
+  }
+
+  it("ranks hardest by lowest GPA", () => {
+    const index = basicDifficultyIndex();
     const ranked = rankCoursesForSpotlight(index, "hardest", 2);
     expect(ranked[0]?.entry.courseCode).toBe("PHY 2336");
     expect(ranked[0]?.stat).toEqual({ kind: "gpa", value: expect.any(Number) });
@@ -138,19 +142,7 @@ describe("rankCoursesForSpotlight", () => {
   });
 
   it("ranks easiest by highest GPA", () => {
-    const mass = SPOTLIGHT_MIN_GRADED_COUNT;
-    const index = buildIndex([
-      sampleOffering({
-        id: "easy",
-        courseCode: "MAT 1341",
-        distribution: distWithMass(mass, "high"),
-      }),
-      sampleOffering({
-        id: "hard",
-        courseCode: "PHY 2336",
-        distribution: distWithMass(mass, "low"),
-      }),
-    ]);
+    const index = basicDifficultyIndex();
     const ranked = rankCoursesForSpotlight(index, "easiest", 2);
     expect(ranked[0]?.entry.courseCode).toBe("MAT 1341");
   });

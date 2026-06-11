@@ -3,7 +3,7 @@
  * authenticated broadcast endpoint. Subscriptions are keyed in KV by a SHA-256
  * digest of their endpoint so the same browser can't pile up duplicates.
  */
-import type { Hono } from "hono";
+import type { Context, Hono } from "hono";
 import { sendPushNotification } from "./webpush.js";
 import type { Env } from "./index.js";
 
@@ -27,6 +27,22 @@ async function verifyTurnstile(token: string, secret: string, ip: string): Promi
   return data.success;
 }
 
+/**
+ * Validate the Turnstile token attached to a mutating request. Returns an error
+ * `Response` to send back directly, or `null` when verification succeeds.
+ */
+async function checkTurnstile(
+  c: Context<{ Bindings: Env }>,
+  token: string | undefined,
+): Promise<Response | null> {
+  if (!token) return c.json({ error: "Missing Turnstile token" }, 400);
+  const ip = c.req.header("CF-Connecting-IP") ?? "";
+  if (!(await verifyTurnstile(token, c.env.TURNSTILE_SECRET_KEY, ip))) {
+    return c.json({ error: "Turnstile verification failed" }, 403);
+  }
+  return null;
+}
+
 /** Register the `/api/subscribe`, `/api/unsubscribe`, and `/api/send` routes. */
 export function registerPushRoutes(app: PushApp): void {
   app.post("/api/subscribe", async (c) => {
@@ -39,11 +55,8 @@ export function registerPushRoutes(app: PushApp): void {
       return c.json({ error: "Invalid subscription" }, 400);
     }
     const token = sub["cf-turnstile-response"];
-    if (!token) return c.json({ error: "Missing Turnstile token" }, 400);
-    const ip = c.req.header("CF-Connecting-IP") ?? "";
-    if (!(await verifyTurnstile(token, c.env.TURNSTILE_SECRET_KEY, ip))) {
-      return c.json({ error: "Turnstile verification failed" }, 403);
-    }
+    const turnstileError = await checkTurnstile(c, token);
+    if (turnstileError) return turnstileError;
     const key = await endpointKey(sub.endpoint);
     await c.env.WEBPUSH_SUBSCRIPTIONS.put(
       key,
@@ -56,11 +69,8 @@ export function registerPushRoutes(app: PushApp): void {
     const body = await c.req.json<{ endpoint?: string; "cf-turnstile-response"?: string }>();
     if (!body?.endpoint) return c.json({ error: "Missing endpoint" }, 400);
     const token = body["cf-turnstile-response"];
-    if (!token) return c.json({ error: "Missing Turnstile token" }, 400);
-    const ip = c.req.header("CF-Connecting-IP") ?? "";
-    if (!(await verifyTurnstile(token, c.env.TURNSTILE_SECRET_KEY, ip))) {
-      return c.json({ error: "Turnstile verification failed" }, 403);
-    }
+    const turnstileError = await checkTurnstile(c, token);
+    if (turnstileError) return turnstileError;
     await c.env.WEBPUSH_SUBSCRIPTIONS.delete(await endpointKey(body.endpoint));
     return c.json({ ok: true });
   });

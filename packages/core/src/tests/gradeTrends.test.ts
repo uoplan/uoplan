@@ -76,6 +76,20 @@ const grades: CourseGradesData = {
   ],
 };
 
+const expectedCourseLeaderboardCodes = [
+  normalizeCourseCode("ADM 1100"),
+  normalizeCourseCode("PSY 1101"),
+  normalizeCourseCode("PSY 2301"),
+];
+
+function courseLeaderboard(options: Parameters<typeof computeCourseLeaderboard>[2] = {}) {
+  return computeCourseLeaderboard(grades, {}, options);
+}
+
+function expectAllGradeCoursesListed(board: ReturnType<typeof computeCourseLeaderboard>) {
+  expect(board.map((c) => c.code).sort()).toEqual(expectedCourseLeaderboardCodes);
+}
+
 describe("computeGradeTrends", () => {
   it("aggregates per term with 10-point GPA and percentages", () => {
     const { points } = computeGradeTrends(grades, { discipline: "PSY" });
@@ -166,12 +180,8 @@ describe("computeDisciplineLeaderboard", () => {
 
 describe("computeCourseLeaderboard", () => {
   it("groups by course code instead of discipline", () => {
-    const board = computeCourseLeaderboard(grades, {}, { minTermVolume: 50, minTerms: 2 });
-    expect(board.map((c) => c.code).sort()).toEqual([
-      normalizeCourseCode("ADM 1100"),
-      normalizeCourseCode("PSY 1101"),
-      normalizeCourseCode("PSY 2301"),
-    ]);
+    const board = courseLeaderboard({ minTermVolume: 50, minTerms: 2 });
+    expectAllGradeCoursesListed(board);
     const psy1101 = board.find((c) => c.code === normalizeCourseCode("PSY 1101"));
     // PSY 1101: Fall 2017 all A+ (10) → Winter 2023 half A+/half F (5) → delta -5.
     expect(psy1101?.earliestGpa).toBeCloseTo(10, 5);
@@ -180,7 +190,7 @@ describe("computeCourseLeaderboard", () => {
   });
 
   it("keeps a row with null delta when a course has a single term", () => {
-    const board = computeCourseLeaderboard(grades, {}, { minTermVolume: 50, minTerms: 2 });
+    const board = courseLeaderboard({ minTermVolume: 50, minTerms: 2 });
     const psy2301 = board.find((c) => c.code === normalizeCourseCode("PSY 2301"));
     expect(psy2301).toBeDefined();
     expect(psy2301?.qualifyingTerms).toBe(1);
@@ -189,13 +199,9 @@ describe("computeCourseLeaderboard", () => {
   });
 
   it("still lists matched courses below the per-term volume guard", () => {
-    const board = computeCourseLeaderboard(grades, {}, { minTermVolume: 10_000 });
+    const board = courseLeaderboard({ minTermVolume: 10_000 });
     // No term clears the guard, but every course with grade data still appears.
-    expect(board.map((c) => c.code).sort()).toEqual([
-      normalizeCourseCode("ADM 1100"),
-      normalizeCourseCode("PSY 1101"),
-      normalizeCourseCode("PSY 2301"),
-    ]);
+    expectAllGradeCoursesListed(board);
   });
 
   it("restricts to explicit program-filter course codes", () => {

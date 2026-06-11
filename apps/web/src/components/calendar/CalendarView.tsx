@@ -30,28 +30,9 @@ import type { CalendarEvent } from "../../hooks/useCalendarEvents";
 import type { WeekGroup } from "../../hooks/useScheduleWeeks";
 import { formatWeekLabel } from "../../lib/formatWeekCount";
 import { tr as staticTr } from "../../i18n";
+import { formatUtcDateRange } from "./calendarDateRange";
 
 const EMPTY_COLOR_MAP: Record<string, number> = {};
-
-function formatScheduleRange(start: string, end: string): string {
-  const s = new Date(`${start}T00:00:00Z`);
-  const e = new Date(`${end}T00:00:00Z`);
-  const startYear = s.getUTCFullYear();
-  const endYear = e.getUTCFullYear();
-  const fmtNoYear = new Intl.DateTimeFormat(undefined, {
-    month: "short",
-    day: "numeric",
-    timeZone: "UTC",
-  });
-  const fmtWithYear = new Intl.DateTimeFormat(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC",
-  });
-  const startStr = startYear === endYear ? fmtNoYear.format(s) : fmtWithYear.format(s);
-  return `${startStr} – ${fmtWithYear.format(e)}`;
-}
 
 interface CalendarViewProps {
   schedule: GeneratedSchedule | null;
@@ -342,7 +323,7 @@ export function CalendarView({
                 <Box style={{ padding: "6px 12px", textAlign: "center" }}>
                   {scheduleDateRange && (
                     <Text size="xs" c="dimmed">
-                      {formatScheduleRange(scheduleDateRange.start, scheduleDateRange.end)}
+                      {formatUtcDateRange(scheduleDateRange.start, scheduleDateRange.end)}
                     </Text>
                   )}
                   <Text size="xs" c="dimmed">

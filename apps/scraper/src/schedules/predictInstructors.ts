@@ -98,6 +98,26 @@ interface ScheduleCourseInput {
   components?: Record<string, ScheduleSectionInput[] | undefined>;
 }
 
+function* iterCourseSections(course: ScheduleCourseInput): Generator<ScheduleSectionInput> {
+  for (const sections of Object.values(course.components ?? {})) {
+    for (const section of sections ?? []) {
+      yield section;
+    }
+  }
+}
+
+function* iterCourseInstructorTimes(
+  course: ScheduleCourseInput,
+): Generator<{ time: ScheduleTimeInput; name: string; norm: string }> {
+  for (const section of iterCourseSections(course)) {
+    for (const time of section.times ?? []) {
+      const name = String(time.instructor ?? "").trim();
+      if (!name || isUnknownInstructorName(name)) continue;
+      yield { time, name, norm: normalizeInstructorName(name) };
+    }
+  }
+}
+
 export interface ScheduleFileInput {
   termId?: string | number;
   schedules?: ScheduleCourseInput[];
@@ -202,21 +222,14 @@ export function buildPredictionContext(args: {
     for (const course of file.schedules ?? []) {
       const code = String(course.courseCode ?? "").trim();
       if (!code) continue;
-      for (const sections of Object.values(course.components ?? {})) {
-        for (const section of sections ?? []) {
-          for (const time of section.times ?? []) {
-            const name = String(time.instructor ?? "").trim();
-            if (!name || isUnknownInstructorName(name)) continue;
-            const norm = normalizeInstructorName(name);
-            mergeRecord(poolFor(code), {
-              norm,
-              display: name,
-              legacyId: legacyByName.get(norm),
-              year,
-              fromGrades: false,
-            });
-          }
-        }
+      for (const { name, norm } of iterCourseInstructorTimes(course)) {
+        mergeRecord(poolFor(code), {
+          norm,
+          display: name,
+          legacyId: legacyByName.get(norm),
+          year,
+          fromGrades: false,
+        });
       }
     }
   }
@@ -255,22 +268,15 @@ export function predictInstructorsForTerm(
   const busy = new Map<string, BusyInterval[]>();
   const activeInTerm = new Set<string>();
   for (const course of targetFile.schedules ?? []) {
-    for (const sections of Object.values(course.components ?? {})) {
-      for (const section of sections ?? []) {
-        for (const time of section.times ?? []) {
-          const name = String(time.instructor ?? "").trim();
-          if (!name || isUnknownInstructorName(name)) continue;
-          const norm = normalizeInstructorName(name);
-          activeInTerm.add(norm);
-          const day = String(time.day ?? "");
-          const start = Number(time.startMinutes ?? 0);
-          const end = Number(time.endMinutes ?? 0);
-          if (!day || end <= start) continue;
-          const list = busy.get(norm);
-          if (list) list.push({ day, start, end });
-          else busy.set(norm, [{ day, start, end }]);
-        }
-      }
+    for (const { time, norm } of iterCourseInstructorTimes(course)) {
+      activeInTerm.add(norm);
+      const day = String(time.day ?? "");
+      const start = Number(time.startMinutes ?? 0);
+      const end = Number(time.endMinutes ?? 0);
+      if (!day || end <= start) continue;
+      const list = busy.get(norm);
+      if (list) list.push({ day, start, end });
+      else busy.set(norm, [{ day, start, end }]);
     }
   }
 

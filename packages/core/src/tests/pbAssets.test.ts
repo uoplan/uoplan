@@ -84,20 +84,34 @@ describe("committed .pb assets decode with current proto contract", () => {
   });
 
   it("decodes every catalogue.YYYY.pb", () => {
-    const files = listPb().filter((f) => /^catalogue\.\d{4}\.pb$/.test(f));
-    expect(files.length).toBeGreaterThan(0);
-    for (const file of files) {
-      const catalogue = fromProtoCatalogue(DataProto.Catalogue.decode(read(file)));
-      expect(catalogue.courses.length, file).toBeGreaterThan(0);
-    }
+    expectAllDecode(
+      /^catalogue\.\d{4}\.pb$/,
+      (buf) => fromProtoCatalogue(DataProto.Catalogue.decode(buf)),
+      (c) => c.courses.length,
+    );
   });
 
   it("decodes every schedules.NNNN.pb", () => {
-    const files = listPb().filter((f) => /^schedules\.\d+\.pb$/.test(f));
-    expect(files.length).toBeGreaterThan(0);
-    for (const file of files) {
-      const schedules = fromProtoSchedulesData(DataProto.SchedulesData.decode(read(file)));
-      expect(schedules.schedules.length, file).toBeGreaterThan(0);
-    }
+    expectAllDecode(
+      /^schedules\.\d+\.pb$/,
+      (buf) => fromProtoSchedulesData(DataProto.SchedulesData.decode(buf)),
+      (s) => s.schedules.length,
+    );
   });
 });
+
+/**
+ * Assert that every committed `.pb` file matching `pattern` decodes via `decode`
+ * and yields a non-empty collection (measured by `size`).
+ */
+function expectAllDecode<T>(
+  pattern: RegExp,
+  decode: (buf: Uint8Array) => T,
+  size: (decoded: T) => number,
+): void {
+  const files = listPb().filter((f) => pattern.test(f));
+  expect(files.length).toBeGreaterThan(0);
+  for (const file of files) {
+    expect(size(decode(read(file))), file).toBeGreaterThan(0);
+  }
+}

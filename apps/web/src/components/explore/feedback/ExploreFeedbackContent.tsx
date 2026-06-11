@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { Box, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { LineChart } from "@mantine/charts";
 import { m } from "framer-motion";
 import {
   feedbackQuestionSeries,
@@ -11,13 +10,10 @@ import {
   type FeedbackSectionView,
 } from "@uoplan/core";
 import { useTr, tr } from "../../../i18n";
-import { formatTermLabel, formatTermLabelShort } from "../../../lib/term/termLabel";
 import { AppCard } from "../../shared/AppCard";
-import { MiniChartTooltip } from "../../shared/MiniChartTooltip";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../../lib/explore/accordionPadding";
 import { FeedbackQuestionChart } from "./FeedbackQuestionChart";
-
-const RATE_COLOR = "var(--app-success)";
+import { FeedbackRateLineChart } from "./feedbackChartShared";
 
 function FeedbackStatCard({ label, value }: { label: string; value: string }) {
   return (
@@ -125,34 +121,11 @@ export function ExploreFeedbackContent({
                 <Text fw={600} size="sm" mb={8}>
                   {tr("explore.feedback.responseRateTrend")}
                 </Text>
-                <LineChart
-                  h={220}
-                  data={rateSeries.map((p) => ({
-                    term: formatTermLabelShort(p.termId),
-                    fullTerm: formatTermLabel(p.termId),
-                    rate: Math.round(p.rate * 100),
-                  }))}
-                  dataKey="term"
-                  series={[
-                    {
-                      name: "rate",
-                      label: tr("explore.feedback.stat.responseRate"),
-                      color: RATE_COLOR,
-                    },
-                  ]}
-                  curveType="monotone"
-                  connectNulls
+                <FeedbackRateLineChart
+                  height={220}
+                  points={rateSeries}
                   withDots={showScaleLabels && rateSeries.length <= 24}
-                  yAxisProps={{ domain: [0, 100] }}
-                  valueFormatter={(value) => `${value}%`}
-                  tooltipProps={{
-                    content: ({ payload }) => (
-                      <MiniChartTooltip
-                        payload={payload as never}
-                        format={(v) => `${String(Math.round(v))}%`}
-                      />
-                    ),
-                  }}
+                  withTooltip
                 />
               </AppCard>
             ) : null}

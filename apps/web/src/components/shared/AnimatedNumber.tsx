@@ -23,6 +23,21 @@ interface AnimatedNumberProps {
 // Strong ease-out (expo-like): ticks fast, then decelerates into the final value.
 const COUNT_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
+function animateDisplayValue(
+  start: number,
+  value: number,
+  duration: number,
+  updateDisplay: (latest: number) => void,
+) {
+  const controls = animate(start, value, {
+    duration,
+    ease: COUNT_EASE,
+    onUpdate: updateDisplay,
+    onComplete: () => updateDisplay(value),
+  });
+  return () => controls.stop();
+}
+
 /**
  * Animates a number with a "counting" effect: on each value change it rapidly
  * interpolates between the previously displayed value and the new target,
@@ -60,22 +75,14 @@ export function AnimatedNumber({
     hadValueRef.current = true;
 
     const isAppearance = isFirstRef.current || cameFromNull;
+    const updateDisplay = (latest: number) => {
+      displayedRef.current = latest;
+      setDisplay(latest);
+    };
 
     if (countOnLoad && isAppearance && !prefersReduced) {
       isFirstRef.current = false;
-      const controls = animate(from, value, {
-        duration,
-        ease: COUNT_EASE,
-        onUpdate: (latest) => {
-          displayedRef.current = latest;
-          setDisplay(latest);
-        },
-        onComplete: () => {
-          displayedRef.current = value;
-          setDisplay(value);
-        },
-      });
-      return () => controls.stop();
+      return animateDisplayValue(from, value, duration, updateDisplay);
     }
 
     if (isAppearance || prefersReduced) {
@@ -86,19 +93,7 @@ export function AnimatedNumber({
     }
 
     isFirstRef.current = false;
-    const controls = animate(displayedRef.current, value, {
-      duration,
-      ease: COUNT_EASE,
-      onUpdate: (latest) => {
-        displayedRef.current = latest;
-        setDisplay(latest);
-      },
-      onComplete: () => {
-        displayedRef.current = value;
-        setDisplay(value);
-      },
-    });
-    return () => controls.stop();
+    return animateDisplayValue(displayedRef.current, value, duration, updateDisplay);
   }, [value, prefersReduced, duration, countOnLoad, from]);
 
   return <>{value == null ? placeholder : format(display)}</>;

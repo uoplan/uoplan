@@ -84,6 +84,25 @@ function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
   };
 }
 
+function decodeInput(overrides: Partial<EncodeInput> = {}) {
+  const bytes = encodeState(makeInput(overrides), catalogue, indices);
+  expect(bytes).not.toBeNull();
+  return decodeBytes(bytes!);
+}
+
+function decodeEncodedInput(input: EncodeInput) {
+  const bytes = encodeState(input, catalogue, indices);
+  expect(bytes).not.toBeNull();
+  return decodeBytes(bytes!);
+}
+
+function decodeBytes(bytes: Uint8Array) {
+  const decoded = decodeState(bytes!, catalogue, indices);
+  expect("error" in decoded).toBe(false);
+  if ("error" in decoded) throw new Error(decoded.error);
+  return decoded;
+}
+
 // ── urlToSlug ─────────────────────────────────────────────────────────────────
 
 describe("urlToSlug", () => {
@@ -114,13 +133,7 @@ describe("urlToSlug", () => {
 
 describe("encodeState / decodeState roundtrip", () => {
   it("round-trips all basic fields", () => {
-    const input = makeInput();
-    const bytes = encodeState(input, catalogue, indices);
-    expect(bytes).not.toBeNull();
-
-    const decoded = decodeState(bytes!, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeInput();
 
     expect(decoded.selectedTermId).toBe("202509");
     expect(decoded.firstYear).toBeNull();
@@ -141,43 +154,27 @@ describe("encodeState / decodeState roundtrip", () => {
   });
 
   it("round-trips generationPreferEasier", () => {
-    const input = makeInput({ generationPreferEasier: true });
-    const bytes = encodeState(input, catalogue, indices)!;
-    const decoded = decodeState(bytes, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeInput({ generationPreferEasier: true });
     expect(decoded.generationPreferEasier).toBe(true);
   });
 
   it("round-trips generationPreferHigherSentiment", () => {
-    const input = makeInput({ generationPreferHigherSentiment: true });
-    const bytes = encodeState(input, catalogue, indices)!;
-    const decoded = decodeState(bytes, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeInput({ generationPreferHigherSentiment: true });
     expect(decoded.generationPreferHigherSentiment).toBe(true);
   });
 
   it("round-trips frenchImmersionStream", () => {
-    const input = makeInput({ frenchImmersionStream: true });
-    const bytes = encodeState(input, catalogue, indices)!;
-    const decoded = decodeState(bytes, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeInput({ frenchImmersionStream: true });
     expect(decoded.frenchImmersionStream).toBe(true);
   });
 
   it("round-trips blockedTimes", () => {
-    const input = makeInput({
+    const decoded = decodeInput({
       blockedTimes: [
         { day: "Mo", startMinutes: 600, endMinutes: 720 },
         { day: "We", startMinutes: 480, endMinutes: 540 },
       ],
     });
-    const bytes = encodeState(input, catalogue, indices)!;
-    const decoded = decodeState(bytes, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
     expect(decoded.blockedTimes).toEqual([
       { day: "Mo", startMinutes: 600, endMinutes: 720 },
       { day: "We", startMinutes: 480, endMinutes: 540 },
@@ -189,62 +186,38 @@ describe("encodeState / decodeState roundtrip", () => {
       { type: "group", requirementId: "req-a", complete: false, satisfiedBy: [] },
       { type: "group", requirementId: "req-b", complete: false, satisfiedBy: [] },
     ] as unknown as EncodeInput["requirementTreeWithStatus"];
-    const input = makeInput({
+    const decoded = decodeInput({
       requirementTreeWithStatus,
       requirementPriorities: { "req-a": 2, "req-b": 0 },
     });
-    const bytes = encodeState(input, catalogue, indices)!;
-    const decoded = decodeState(bytes, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
     // Only non-zero priorities are encoded; req-a is reqIndex 0.
     expect(decoded.requirementPrioritySelections).toEqual([{ reqIndex: 0, priority: 2 }]);
   });
 
   it("round-trips firstYear", () => {
-    const input = makeInput({ firstYear: 2023 });
-    const bytes = encodeState(input, catalogue, indices);
-    const decoded = decodeState(bytes!, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeInput({ firstYear: 2023 });
     expect(decoded.firstYear).toBe(2023);
   });
 
   it("encodes firstYear = null as 0 and decodes back to null", () => {
-    const input = makeInput({ firstYear: null });
-    const bytes = encodeState(input, catalogue, indices)!;
-    const decoded = decodeState(bytes, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeInput({ firstYear: null });
     expect(decoded.firstYear).toBeNull();
   });
 
   it("round-trips selectedTermId with various values", () => {
     for (const termId of ["202509", "20261", "111111"]) {
-      const input = makeInput({ selectedTermId: termId });
-      const bytes = encodeState(input, catalogue, indices)!;
-      const decoded = decodeState(bytes, catalogue, indices);
-      expect("error" in decoded).toBe(false);
-      if ("error" in decoded) return;
+      const decoded = decodeInput({ selectedTermId: termId });
       expect(decoded.selectedTermId).toBe(termId);
     }
   });
 
   it("round-trips null selectedTermId", () => {
-    const input = makeInput({ selectedTermId: null });
-    const bytes = encodeState(input, catalogue, indices)!;
-    const decoded = decodeState(bytes, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeInput({ selectedTermId: null });
     expect(decoded.selectedTermId).toBeNull();
   });
 
   it("round-trips null program", () => {
-    const input = makeInput({ program: null, completedCourses: [] });
-    const bytes = encodeState(input, catalogue, indices)!;
-    const decoded = decodeState(bytes, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeInput({ program: null, completedCourses: [] });
     expect(decoded.program).toBeNull();
   });
 
@@ -253,27 +226,17 @@ describe("encodeState / decodeState roundtrip", () => {
     const input = makeInput({ program: programB });
     const bytes = encodeState(input, catalogue, indices);
     expect(bytes).not.toBeNull();
-    const decoded = decodeState(bytes!, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeEncodedInput(input);
     expect(decoded.program?.title).toBe("BA English");
   });
 
   it("round-trips includeClosedComponents = true", () => {
-    const input = makeInput({ includeClosedComponents: true });
-    const bytes = encodeState(input, catalogue, indices)!;
-    const decoded = decodeState(bytes, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeInput({ includeClosedComponents: true });
     expect(decoded.includeClosedComponents).toBe(true);
   });
 
   it("round-trips virtualSectionsOnly = true", () => {
-    const input = makeInput({ virtualSectionsOnly: true });
-    const bytes = encodeState(input, catalogue, indices)!;
-    const decoded = decodeState(bytes, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeInput({ virtualSectionsOnly: true });
     expect(decoded.virtualSectionsOnly).toBe(true);
   });
 
@@ -391,12 +354,7 @@ describe("group token round-trip", () => {
       },
     });
 
-    const bytes = encodeState(input, catalogue, indices);
-    expect(bytes).not.toBeNull();
-
-    const decoded = decodeState(bytes!, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeEncodedInput(input);
 
     expect(decoded.constrainedGroupSelections).toHaveLength(1);
     expect(decoded.constrainedGroupSelections[0].groupPrefixes).toEqual(["CSI"]);
@@ -420,12 +378,7 @@ describe("group token round-trip", () => {
       constrainedPerRequirement: { "req-0": ["group:CSI", "group:CEG"] },
     });
 
-    const bytes = encodeState(input, catalogue, indices);
-    expect(bytes).not.toBeNull();
-
-    const decoded = decodeState(bytes!, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeEncodedInput(input);
 
     expect(decoded.constrainedGroupSelections[0].groupPrefixes).toEqual(["CSI", "CEG"]);
     // No real codes — constrainedSelections should be empty for this req
@@ -453,12 +406,7 @@ describe("group token round-trip", () => {
       },
     });
 
-    const bytes = encodeState(input, catalogue, indices);
-    expect(bytes).not.toBeNull();
-
-    const decoded = decodeState(bytes!, catalogue, indices);
-    expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    const decoded = decodeEncodedInput(input);
 
     expect(decoded.constrainedGroupSelections[0].groupPrefixes).toEqual(["CSI", "CSI"]);
   });
@@ -473,7 +421,7 @@ describe("encodeStateToBase64 / decodeStateFromBase64", () => {
     expect(base64).not.toBeNull();
     const decoded = decodeStateFromBase64(base64!, catalogue, indices);
     expect("error" in decoded).toBe(false);
-    if ("error" in decoded) return;
+    if ("error" in decoded) throw new Error(decoded.error);
     expect(decoded.selectedTermId).toBe("202501");
     expect(decoded.firstYear).toBe(2021);
   });

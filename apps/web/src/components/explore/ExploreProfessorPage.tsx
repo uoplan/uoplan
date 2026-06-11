@@ -1,4 +1,4 @@
-import { Accordion, Box, Flex, Group, Stack, Text, Title } from "@mantine/core";
+import { Box, Group, Stack, Text, Title } from "@mantine/core";
 import { useMemo } from "react";
 import { m } from "framer-motion";
 import { useShallow } from "zustand/react/shallow";
@@ -11,18 +11,15 @@ import { useExploreOfferings } from "./exploreOfferingsContext";
 import { useProfessorFeedbackViews } from "../../hooks/useFeedbackViews";
 import { FeedbackSummaryCard } from "./feedback/FeedbackSummaryCard";
 import { ExploreCourseItem } from "./ExploreProfessorGradesLayout";
-import {
-  EXPLORE_ACCORDION_PAD_INLINE,
-  EXPLORE_ACCORDION_PAD_RIGHT,
-} from "../../lib/explore/accordionPadding";
+import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { RatingBadge } from "../shared/RatingBadge";
-
-const EXPLORE_CHEVRON_RIGHT = {
-  base: "12px",
-  xs: "max(12px, calc((100vw - min(100vw, 1200px)) / 2 + 12px))",
-};
-
-const mobileMediaQuery = "@media (max-width: 540px)";
+import {
+  ExploreAccordion,
+  ExploreEntityHeader,
+  ExploreFeedbackAside,
+  ExploreFullBleed,
+  EXPLORE_MOBILE_MEDIA_QUERY,
+} from "./ExploreEntityLayout";
 
 export function ExploreProfessorPage({ slug }: { slug: string }) {
   useTr();
@@ -79,52 +76,40 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
     >
       <Stack gap={0}>
-        <Box
-          pt={{ base: 4, md: 0 }}
-          pb="md"
-          style={{
-            paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
-            paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
-          }}
-        >
-          <Flex
-            direction={{ base: "column", md: "row" }}
-            gap="lg"
-            align={{ base: "stretch", md: "center" }}
-          >
-            <Box style={{ flex: 1, minWidth: 0 }}>
-              <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
-                {displayName}
-              </Title>
-              {(hasRating || hasRmpLink) && (
-                <Group gap={6} align="center" mt={8} wrap="wrap">
-                  <RatingBadge
-                    kind="rmp"
-                    value={hasRating ? rating : null}
-                    count={hasRating ? numRatings : null}
-                    legacyId={rmpLegacyId}
-                  />
-                </Group>
-              )}
-            </Box>
-            {showFeedback ? (
-              <Box style={{ width: "100%", maxWidth: 420 }}>
+        <ExploreEntityHeader
+          aside={
+            showFeedback ? (
+              <ExploreFeedbackAside>
                 <FeedbackSummaryCard
                   to="/explore/professor/$slug/feedback"
                   params={{ slug: profRouteParam }}
                   views={feedbackViews}
                   loading={feedbackLoading}
                 />
-              </Box>
-            ) : null}
-          </Flex>
-        </Box>
+              </ExploreFeedbackAside>
+            ) : null
+          }
+        >
+          <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
+            {displayName}
+          </Title>
+          {(hasRating || hasRmpLink) && (
+            <Group gap={6} align="center" mt={8} wrap="wrap">
+              <RatingBadge
+                kind="rmp"
+                value={hasRating ? rating : null}
+                count={hasRating ? numRatings : null}
+                legacyId={rmpLegacyId}
+              />
+            </Group>
+          )}
+        </ExploreEntityHeader>
 
         {courseGroups.length === 0 ? (
           <Box
             style={{
               paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
-              [mobileMediaQuery]: {
+              [EXPLORE_MOBILE_MEDIA_QUERY]: {
                 paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
               },
             }}
@@ -134,60 +119,8 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
             </Text>
           </Box>
         ) : (
-          <Box
-            style={{
-              width: "100vw",
-              maxWidth: "100vw",
-              marginInline: "calc(50% - 50vw)",
-            }}
-          >
-            <Accordion
-              multiple
-              radius="var(--app-radius)"
-              chevronPosition="right"
-              variant="default"
-              classNames={{ control: "explore-accordion-control" }}
-              styles={{
-                root: {
-                  backgroundColor: "var(--app-bg)",
-                  borderTop: "var(--app-border-width) solid var(--app-border)",
-                },
-                item: {
-                  borderBottom: "var(--app-border-width) solid var(--app-border)",
-                  backgroundColor: "var(--app-surface-sunken)",
-                  "&:last-of-type": { borderBottom: "none" },
-                },
-                control: {
-                  position: "relative",
-                  paddingTop: "var(--mantine-spacing-lg)",
-                  paddingBottom: "var(--mantine-spacing-lg)",
-                  paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
-                  paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.xs,
-                  borderRadius: "var(--app-radius-sm)",
-                  backgroundColor: "var(--app-surface-sunken)",
-                  "@media (max-width: 540px)": {
-                    paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.base,
-                    paddingRight: EXPLORE_ACCORDION_PAD_RIGHT.base,
-                  },
-                },
-                label: { flex: 1, minWidth: 0, paddingRight: 0 },
-                panel: { padding: 0, backgroundColor: "var(--app-bg)" },
-                content: { padding: 0 },
-                chevron: {
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  right: EXPLORE_CHEVRON_RIGHT.xs,
-                  display: "flex",
-                  alignItems: "center",
-                  marginLeft: 0,
-                  color: "var(--app-text-muted)",
-                  "@media (max-width: 540px)": {
-                    right: EXPLORE_CHEVRON_RIGHT.base,
-                  },
-                },
-              }}
-            >
+          <ExploreFullBleed>
+            <ExploreAccordion>
               {courseGroups.map((g) => (
                 <ExploreCourseItem
                   key={g.groupId}
@@ -199,8 +132,8 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
                   }}
                 />
               ))}
-            </Accordion>
-          </Box>
+            </ExploreAccordion>
+          </ExploreFullBleed>
         )}
       </Stack>
     </m.div>

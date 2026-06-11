@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Accordion, Badge, Box, Group, HoverCard, Paper, Stack, Text } from "@mantine/core";
-import { useMemo } from "react";
-import type { CanonicalProfessorName, ProfessorRatingsMap } from "@uoplan/core";
+import { type ReactNode, useMemo } from "react";
+import type { CanonicalProfessorName, GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
 import {
   normalizeProfessorName,
   normalizeGradeVizDistribution,
@@ -37,6 +37,42 @@ const EXPLORE_HISTOGRAM_WIDTH_PX = 288;
 
 /** CSS media query for mobile stacking. */
 const mobileMediaQuery = `@media (max-width: ${MOBILE_BREAKPOINT_PX}px)`;
+
+function ExploreSummaryWithGradeViz({
+  children,
+  gradeViz,
+}: {
+  children: ReactNode;
+  gradeViz: GradeVizData | null;
+}) {
+  return (
+    <>
+      <Stack gap={4} style={{ minWidth: 0, flex: "1 1 auto" }}>
+        {children}
+        {gradeViz ? <GradeDistributionPassingSummary gradeViz={gradeViz} compact /> : null}
+      </Stack>
+      <Box
+        style={{
+          flex: "0 0 auto",
+          width: EXPLORE_HISTOGRAM_WIDTH_PX,
+          maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
+          marginLeft: "auto",
+          [mobileMediaQuery]: {
+            width: "100%",
+            maxWidth: "100%",
+            marginLeft: 0,
+          },
+        }}
+      >
+        {gradeViz ? (
+          <GradeDistributionHistogram gradeViz={gradeViz} variant="compact" showStudentCount />
+        ) : (
+          <GradeDistributionHistogramPlaceholder />
+        )}
+      </Box>
+    </>
+  );
+}
 
 function professorRatingLine(
   displayName: CanonicalProfessorName,
@@ -100,7 +136,7 @@ export function ExploreProfessorSummaryBar({
         },
       }}
     >
-      <Stack gap={4} style={{ minWidth: 0, flex: "1 1 auto" }}>
+      <ExploreSummaryWithGradeViz gradeViz={combinedViz}>
         {group.unassigned ? (
           <Text
             fw={600}
@@ -137,27 +173,7 @@ export function ExploreProfessorSummaryBar({
           </Link>
         )}
         {ratingLine}
-        {combinedViz ? <GradeDistributionPassingSummary gradeViz={combinedViz} compact /> : null}
-      </Stack>
-      <Box
-        style={{
-          flex: "0 0 auto",
-          width: EXPLORE_HISTOGRAM_WIDTH_PX,
-          maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
-          marginLeft: "auto",
-          [mobileMediaQuery]: {
-            width: "100%",
-            maxWidth: "100%",
-            marginLeft: 0,
-          },
-        }}
-      >
-        {combinedViz ? (
-          <GradeDistributionHistogram gradeViz={combinedViz} variant="compact" showStudentCount />
-        ) : (
-          <GradeDistributionHistogramPlaceholder />
-        )}
-      </Box>
+      </ExploreSummaryWithGradeViz>
     </Box>
   );
 }
@@ -192,7 +208,7 @@ export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSu
         },
       }}
     >
-      <Stack gap={4} style={{ minWidth: 0, flex: "1 1 auto" }}>
+      <ExploreSummaryWithGradeViz gradeViz={combinedViz}>
         <Link
           to="/explore/course/$course"
           params={{ course: courseNormToPathParam(group.groupId) }}
@@ -216,27 +232,7 @@ export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSu
             {group.courseTitles.join(" · ")}
           </Text>
         )}
-        {combinedViz ? <GradeDistributionPassingSummary gradeViz={combinedViz} compact /> : null}
-      </Stack>
-      <Box
-        style={{
-          flex: "0 0 auto",
-          width: EXPLORE_HISTOGRAM_WIDTH_PX,
-          maxWidth: EXPLORE_HISTOGRAM_WIDTH_PX,
-          marginLeft: "auto",
-          [mobileMediaQuery]: {
-            width: "100%",
-            maxWidth: "100%",
-            marginLeft: 0,
-          },
-        }}
-      >
-        {combinedViz ? (
-          <GradeDistributionHistogram gradeViz={combinedViz} variant="compact" showStudentCount />
-        ) : (
-          <GradeDistributionHistogramPlaceholder />
-        )}
-      </Box>
+      </ExploreSummaryWithGradeViz>
     </Box>
   );
 }

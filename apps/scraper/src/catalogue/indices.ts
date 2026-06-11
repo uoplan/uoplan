@@ -20,6 +20,19 @@ export function parseMissingByYear(value: unknown): Record<string, string[]> {
 
 const CATALOGUE_JSON_RE = /^catalogue\.(\d{4})\.json$/;
 
+export function parseCatalogueYears(
+  dirEntries: string[],
+  sortOrder: "ascending" | "descending" = "ascending",
+): number[] {
+  return dirEntries
+    .map((name) => {
+      const m = CATALOGUE_JSON_RE.exec(name);
+      return m ? Number(m[1]) : null;
+    })
+    .filter((y): y is number => y !== null)
+    .sort((a, b) => (sortOrder === "ascending" ? a - b : b - a));
+}
+
 export async function generateIndices(): Promise<void> {
   const indicesPath = path.join(SCRAPER_DATA_DIR, "indices.json");
   let existingCourses: string[] = [];
@@ -37,13 +50,7 @@ export async function generateIndices(): Promise<void> {
   }
 
   const dirEntries = await fs.readdir(CATALOGUE_DATA_DIR);
-  const catalogueYears = dirEntries
-    .map((name) => {
-      const m = CATALOGUE_JSON_RE.exec(name);
-      return m ? Number(m[1]) : null;
-    })
-    .filter((y): y is number => y !== null)
-    .sort((a, b) => a - b);
+  const catalogueYears = parseCatalogueYears(dirEntries);
 
   const seenCourses = new Set(existingCourses);
   const coursesOut = [...existingCourses];

@@ -41,6 +41,7 @@ import {
   toProtoProgramRequirement,
 } from "./prereqs";
 import { normalizeCourseCode } from "../utils/courseUtils";
+import { dateStringToYyyymmdd, yyyymmddToDateString } from "./protoDates";
 import type { NormalizedCourseCode } from "../brand";
 
 function protoDayToCode(day: ProtoDayOfWeek): DayOfWeekCode {
@@ -86,17 +87,6 @@ function codeDayToProto(day: DayOfWeekCode): ProtoDayOfWeek {
 function parseTermIdToNumber(termId: string): number {
   const parsed = Number.parseInt(termId, 10);
   return Number.isFinite(parsed) ? parsed : 0;
-}
-
-function dateStringToYyyymmdd(value: string): number {
-  const compact = value.replaceAll("-", "");
-  const parsed = Number.parseInt(compact, 10);
-  return Number.isFinite(parsed) ? parsed : 0;
-}
-
-function yyyymmddToDateString(value: number): string {
-  const s = String(Math.trunc(value)).padStart(8, "0");
-  return `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`;
 }
 
 function parseCourseCodeParts(courseCode: string): {

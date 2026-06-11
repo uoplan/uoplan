@@ -2,10 +2,13 @@ import { ActionIcon, Badge, Box, Group, Popover, Stack, Text, Tooltip } from "@m
 import { LineChart } from "@mantine/charts";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { tr, useTr } from "../../../i18n";
-import { formatTermLabel, formatTermLabelShort } from "../../../lib/term/termLabel";
-import { MiniChartTooltip } from "../../shared/MiniChartTooltip";
+import {
+  FEEDBACK_SENTIMENT_COLOR,
+  feedbackAverageChartData,
+  formatFeedbackAverage,
+} from "./feedbackChartData";
+import { FeedbackAverageTooltip } from "./feedbackChartShared";
 
-const SENTIMENT_COLOR = "var(--app-info)";
 const QUESTION_CHART_HEIGHT = 200;
 const CHART_PLOT_TOP = 5;
 const CHART_PLOT_BOTTOM = 35;
@@ -191,7 +194,7 @@ export function FeedbackQuestionChart({
   optionLabels,
   responsesTotal,
   showScaleLabels,
-  color = SENTIMENT_COLOR,
+  color = FEEDBACK_SENTIMENT_COLOR,
   showQuestionHeader = true,
   showResponsesBadge = true,
   showOptionsPopover = true,
@@ -221,11 +224,7 @@ export function FeedbackQuestionChart({
         <Box style={{ flex: "1 1 auto", minWidth: 0 }}>
           <LineChart
             h={QUESTION_CHART_HEIGHT}
-            data={points.map((p) => ({
-              term: formatTermLabelShort(p.termId),
-              fullTerm: formatTermLabel(p.termId),
-              average: Number(p.average.toFixed(2)),
-            }))}
+            data={feedbackAverageChartData(points)}
             dataKey="term"
             series={[{ name: "average", label: tr("explore.feedback.stat.sentiment"), color }]}
             curveType="monotone"
@@ -233,11 +232,9 @@ export function FeedbackQuestionChart({
             withDots={showScaleLabels && points.length <= 24}
             withYAxis={false}
             yAxisProps={{ domain: [1, 5] }}
-            valueFormatter={(value) => value.toFixed(2)}
+            valueFormatter={formatFeedbackAverage}
             tooltipProps={{
-              content: ({ payload }) => (
-                <MiniChartTooltip payload={payload as never} format={(v) => v.toFixed(2)} />
-              ),
+              content: ({ payload }) => <FeedbackAverageTooltip payload={payload as never} />,
             }}
           />
         </Box>

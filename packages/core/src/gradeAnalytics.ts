@@ -10,10 +10,14 @@ import {
   type TrendFilters,
   type TrendPoint,
   addInto,
+  aggregateByKey,
   countedMass,
   courseMatchesTrendFilters,
   decodeTermMeta,
+  disciplineKeyFor,
+  mergeDistributionByTerm,
   metricsForDistribution,
+  usableOffering,
 } from "./gradeTrends";
 import { disciplineOf, levelOf, normalizeCourseCode } from "./utils/courseUtils";
 
@@ -45,15 +49,6 @@ export function metricValue(metrics: DistributionMetrics, metric: AnalyticsMetri
     case "pass":
       return metrics.passPct;
   }
-}
-
-/** Reject zero / non-finite PeopleSoft term ids. */
-function isValidTermId(termId: number): boolean {
-  return Number.isFinite(termId) && termId !== 0;
-}
-
-function isUsableDistribution(dist: unknown): dist is GradeDistribution {
-  return !!dist && typeof dist === "object";
 }
 
 // ---------------------------------------------------------------------------
@@ -94,24 +89,7 @@ export function computeDisciplineComparison(
   const season = options.season ?? null;
   const minVolume = options.minVolume ?? DEFAULT_DISCIPLINE_MIN_VOLUME;
 
-  const byDiscipline = new Map<string, GradeDistribution>();
-  for (const course of grades.courses) {
-    const discipline = disciplineOf(course.code);
-    if (!discipline) continue;
-    if (level != null && levelOf(course.code) !== level) continue;
-    for (const prof of course.professors) {
-      const termId = Number(prof.termId);
-      if (!isValidTermId(termId)) continue;
-      if (season && decodeTermMeta(termId).season !== season) continue;
-      if (!isUsableDistribution(prof.distribution)) continue;
-      let acc = byDiscipline.get(discipline);
-      if (!acc) {
-        acc = {};
-        byDiscipline.set(discipline, acc);
-      }
-      addInto(acc, prof.distribution);
-    }
-  }
+  const byDiscipline = aggregateByKey(grades, season, disciplineKeyFor(level));
 
   const out: DisciplineComparisonRow[] = [];
   for (const [discipline, dist] of byDiscipline) {
@@ -157,17 +135,10 @@ export function computeGradeHistogram(
   filters: TrendFilters = {},
 ): GradeHistogram | null {
   const season = filters.season ?? null;
-  const total: GradeDistribution = {};
-  for (const course of grades.courses) {
-    if (!courseMatchesTrendFilters(course.code, filters)) continue;
-    for (const prof of course.professors) {
-      const termId = Number(prof.termId);
-      if (!isValidTermId(termId)) continue;
-      if (season && decodeTermMeta(termId).season !== season) continue;
-      if (!isUsableDistribution(prof.distribution)) continue;
-      addInto(total, prof.distribution);
-    }
-  }
+  const byScope = aggregateByKey(grades, season, (course) =>
+    courseMatchesTrendFilters(course.code, filters) ? 0 : null,
+  );
+  const total = byScope.get(0) ?? {};
   const viz = normalizeGradeVizDistribution(total);
   if (!viz) return null;
   return {
@@ -213,23 +184,9 @@ export function computeCourseScatter(
   const minVolume = options.minVolume ?? DEFAULT_SCATTER_MIN_VOLUME;
   const season = filters.season ?? null;
 
-  const byCourse = new Map<string, GradeDistribution>();
-  for (const course of grades.courses) {
-    if (!courseMatchesTrendFilters(course.code, filters)) continue;
-    const code = normalizeCourseCode(course.code);
-    for (const prof of course.professors) {
-      const termId = Number(prof.termId);
-      if (!isValidTermId(termId)) continue;
-      if (season && decodeTermMeta(termId).season !== season) continue;
-      if (!isUsableDistribution(prof.distribution)) continue;
-      let acc = byCourse.get(code);
-      if (!acc) {
-        acc = {};
-        byCourse.set(code, acc);
-      }
-      addInto(acc, prof.distribution);
-    }
-  }
+  const byCourse = aggregateByKey(grades, season, (course) =>
+    courseMatchesTrendFilters(course.code, filters) ? normalizeCourseCode(course.code) : null,
+  );
 
   const out: CourseScatterPoint[] = [];
   for (const [code, dist] of byCourse) {
@@ -266,23 +223,10 @@ export function computeSeasonComparison(
   grades: CourseGradesData,
   filters: TrendFilters = {},
 ): SeasonComparisonRow[] {
-  const bySeason = new Map<TermSeason, GradeDistribution>();
-  for (const course of grades.courses) {
-    if (!courseMatchesTrendFilters(course.code, { ...filters, season: null })) continue;
-    for (const prof of course.professors) {
-      const termId = Number(prof.termId);
-      if (!isValidTermId(termId)) continue;
-      const season = decodeTermMeta(termId).season;
-      if (!season) continue;
-      if (!isUsableDistribution(prof.distribution)) continue;
-      let acc = bySeason.get(season);
-      if (!acc) {
-        acc = {};
-        bySeason.set(season, acc);
-      }
-      addInto(acc, prof.distribution);
-    }
-  }
+  const bySeason = aggregateByKey(grades, null, (course, termId) => {
+    if (!courseMatchesTrendFilters(course.code, { ...filters, season: null })) return null;
+    return decodeTermMeta(termId).season;
+  });
 
   const out: SeasonComparisonRow[] = [];
   for (const season of SEASON_ORDER) {
@@ -341,25 +285,12 @@ export function computeLevelComparison(
   const season = options.season ?? null;
   const minVolume = options.minVolume ?? DEFAULT_LEVEL_MIN_VOLUME;
 
-  const byLevel = new Map<number, GradeDistribution>();
-  for (const course of grades.courses) {
-    if (discipline && disciplineOf(course.code) !== discipline) continue;
+  const byLevel = aggregateByKey(grades, season, (course) => {
+    if (discipline && disciplineOf(course.code) !== discipline) return null;
     const rawLevel = levelOf(course.code);
-    if (rawLevel == null) continue;
-    const level = Math.min(rawLevel, MAX_LEVEL_BUCKET);
-    for (const prof of course.professors) {
-      const termId = Number(prof.termId);
-      if (!isValidTermId(termId)) continue;
-      if (season && decodeTermMeta(termId).season !== season) continue;
-      if (!isUsableDistribution(prof.distribution)) continue;
-      let acc = byLevel.get(level);
-      if (!acc) {
-        acc = {};
-        byLevel.set(level, acc);
-      }
-      addInto(acc, prof.distribution);
-    }
-  }
+    if (rawLevel == null) return null;
+    return Math.min(rawLevel, MAX_LEVEL_BUCKET);
+  });
 
   const out: LevelComparisonRow[] = [];
   for (const [level, dist] of byLevel) {
@@ -438,24 +369,12 @@ export function computeDisciplineYearHeatmap(
     if (!discipline) continue;
     if (level != null && levelOf(course.code) !== level) continue;
     for (const prof of course.professors) {
-      const termId = Number(prof.termId);
-      if (!isValidTermId(termId)) continue;
-      const meta = decodeTermMeta(termId);
+      const off = usableOffering(prof, season);
+      if (!off) continue;
+      const meta = decodeTermMeta(off.termId);
       if (!meta.year) continue;
-      if (season && meta.season !== season) continue;
-      if (!isUsableDistribution(prof.distribution)) continue;
       yearSet.add(meta.year);
-      let years = byDiscipline.get(discipline);
-      if (!years) {
-        years = new Map();
-        byDiscipline.set(discipline, years);
-      }
-      let acc = years.get(meta.year);
-      if (!acc) {
-        acc = {};
-        years.set(meta.year, acc);
-      }
-      addInto(acc, prof.distribution);
+      mergeDistributionByTerm(byDiscipline, discipline, meta.year, off.distribution);
     }
   }
 
@@ -517,22 +436,9 @@ export function computeGradeBandComposition(
   filters: TrendFilters = {},
 ): GradeBandTerm[] {
   const season = filters.season ?? null;
-  const byTerm = new Map<number, GradeDistribution>();
-  for (const course of grades.courses) {
-    if (!courseMatchesTrendFilters(course.code, filters)) continue;
-    for (const prof of course.professors) {
-      const termId = Number(prof.termId);
-      if (!isValidTermId(termId)) continue;
-      if (season && decodeTermMeta(termId).season !== season) continue;
-      if (!isUsableDistribution(prof.distribution)) continue;
-      let acc = byTerm.get(termId);
-      if (!acc) {
-        acc = {};
-        byTerm.set(termId, acc);
-      }
-      addInto(acc, prof.distribution);
-    }
-  }
+  const byTerm = aggregateByKey(grades, season, (course, termId) =>
+    courseMatchesTrendFilters(course.code, filters) ? termId : null,
+  );
 
   const out: GradeBandTerm[] = [];
   for (const [termId, dist] of byTerm) {
@@ -593,10 +499,8 @@ export function computeProfessorSpread(
   for (const course of grades.courses) {
     if (!courseMatchesTrendFilters(course.code, filters)) continue;
     for (const prof of course.professors) {
-      const termId = Number(prof.termId);
-      if (!isValidTermId(termId)) continue;
-      if (season && decodeTermMeta(termId).season !== season) continue;
-      if (!isUsableDistribution(prof.distribution)) continue;
+      const off = usableOffering(prof, season);
+      if (!off) continue;
       const name = (prof.name ?? "").trim();
       if (!name) continue;
       let entry = byProf.get(name);
@@ -604,7 +508,7 @@ export function computeProfessorSpread(
         entry = { dist: {}, offerings: 0 };
         byProf.set(name, entry);
       }
-      addInto(entry.dist, prof.distribution);
+      addInto(entry.dist, off.distribution);
       entry.offerings += 1;
     }
   }

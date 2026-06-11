@@ -4,9 +4,9 @@ import {
   getRatingDetailsForInstructors,
   isUnknownInstructorName,
   normalizeCourseCode,
-  normalizeProfessorName,
   normalizeGradeVizDistribution,
   pickCanonicalProfessorName,
+  uniqueInstructors,
   unsafeBrand,
 } from "@uoplan/core";
 import type { CalendarEvent } from "./types";
@@ -137,11 +137,7 @@ function averageSentiment(
 ): number | null {
   let sum = 0;
   let n = 0;
-  const seen = new Set<string>();
-  for (const raw of instructors) {
-    const key = normalizeProfessorName(raw);
-    if (!key || seen.has(key)) continue;
-    seen.add(key);
+  for (const { key } of uniqueInstructors(instructors)) {
     const value = professorByName.get(key);
     if (value != null && Number.isFinite(value)) {
       sum += value;

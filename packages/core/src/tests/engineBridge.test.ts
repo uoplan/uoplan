@@ -17,57 +17,15 @@ import {
   TimetableRequest,
   Mode,
 } from "@uoplan/proto/engine";
-import type { DataCache } from "../dataCache";
-import type { CourseSchedule, ComponentSection } from "../dataTypes";
 import type { GenerationConstraints } from "../generation/types";
 import type { NormalizedCourseCode } from "../brand";
-import type { GenerationResponse as GenerationResponseType } from "@uoplan/proto/engine";
-
-/** Build a complete GenerationResponse (the generated protos only expose encode/decode). */
-function resp(over: Partial<GenerationResponseType>): GenerationResponseType {
-  return {
-    hasSchedule: false,
-    courses: [],
-    optionalPool: [],
-    pinned: [],
-    chosenCourseToRequirement: {},
-    poolDiagnostics: undefined,
-    error: undefined,
-    ...over,
-  };
-}
-
-function section(part: Partial<ComponentSection> & { section: string }): ComponentSection {
-  return {
-    sectionCode: null,
-    component: null,
-    session: null,
-    times: [],
-    status: null,
-    ...part,
-  };
-}
-
-function schedule(code: string, components: Record<string, ComponentSection[]>): CourseSchedule {
-  return {
-    subject: code.split(" ")[0],
-    catalogNumber: code.split(" ")[1] ?? "1000",
-    courseCode: code as NormalizedCourseCode,
-    title: code,
-    timeZone: "America/Toronto",
-    components,
-  };
-}
-
-/** Minimal DataCache double supporting only the methods engineBridge touches. */
-function fakeCache(schedules: CourseSchedule[]): DataCache {
-  const byCode = new Map(schedules.map((s) => [s.courseCode as string, s]));
-  return {
-    getAllSchedules: () => schedules,
-    getSchedule: (code: string) => byCode.get(code) ?? null,
-    resolveToCanonical: (code: string) => code as NormalizedCourseCode,
-  } as unknown as DataCache;
-}
+import {
+  engineCapturingGenerationMode,
+  fakeDataCache as fakeCache,
+  generationResponse as resp,
+  testCourseSchedule as schedule,
+  testSection as section,
+} from "./engineTestHelpers";
 
 const baseConstraints: GenerationConstraints = {
   minStartMinutes: 480,
@@ -347,16 +305,9 @@ describe("engine runners (encode → engine → decode)", () => {
   });
 
   it("runAdvancedGeneration sends a MODE_ADVANCED request", () => {
-    let mode: Mode | null = null;
-    const engine: ScheduleEngine = {
-      generate: (bytes) => {
-        mode = GenerationRequest.decode(bytes).mode;
-        return GenerationResponse.encode(resp({ hasSchedule: false })).finish();
-      },
-      timetable_fixed_set: () => new Uint8Array(),
-    };
+    const { engine, getMode } = engineCapturingGenerationMode();
     runAdvancedGeneration(engine, advancedInput(), fakeCache([]));
-    expect(mode).toBe(Mode.MODE_ADVANCED);
+    expect(getMode()).toBe(Mode.MODE_ADVANCED);
   });
 
   it("runTimetableFixedSet forwards a TimetableRequest with an unsigned seed", () => {
