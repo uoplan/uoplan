@@ -30,7 +30,7 @@ export * from "./requirements";
 export * as DataProto from "@uoplan/proto/data";
 export * from "./poolHelpers";
 export * from "./implicitHonours";
-export * from "./generateSchedule";
+export * from "./requirementExpansion";
 export * from "./engineBridge";
 export { arrangementFingerprint } from "./generation/fingerprint";
 export * from "./scheduleFromStateEngine";

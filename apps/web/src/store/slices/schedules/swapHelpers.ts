@@ -1,16 +1,15 @@
 import type { AppStore } from "../../types";
-import type { GeneratedSchedule, GenerationConstraints } from "@uoplan/core";
-import {
-  enrollmentsOverlap,
-  getEffectiveSchedule,
-  getEnrollmentsForCourse,
-  getValidSectionCombos,
-  normalizeCourseCode,
-  virtualScheduleFilterApplies,
-} from "@uoplan/core";
+import type { GeneratedSchedule } from "@uoplan/core";
+import { firstFittingEnrollment, getEffectiveSchedule, transferSwapColor } from "@uoplan/core";
 import type { ScheduleGenerationResult } from "./types";
+import {
+  buildExplicitExemptSet,
+  buildSwapConstraints,
+  resolveSwapVirtualOnly,
+  transferPoolEntry,
+} from "./swapContext";
 
-function tryApplyOneSwap(
+export function tryApplyOneSwap(
   schedule: GeneratedSchedule,
   enrollmentIndex: number,
   newCourseCode: string,
@@ -23,18 +22,7 @@ function tryApplyOneSwap(
   poolMap: Record<string, string>;
   colorMap: Record<string, number>;
 } | null {
-  const {
-    cache,
-    generationMinStartMinutes,
-    generationMaxEndMinutes,
-    generationMinProfessorRating,
-    professorRatings,
-    includeClosedComponents,
-    virtualSectionsOnly,
-    remainingRequirements,
-    constrainedPerRequirement,
-    selectedPerRequirement,
-  } = state;
+  const { cache, includeClosedComponents, virtualSectionsOnly, remainingRequirements } = state;
 
   if (!cache) return null;
 
@@ -42,34 +30,20 @@ function tryApplyOneSwap(
   if (!oldEnrollment) return null;
 
   const oldCode = oldEnrollment.courseCode;
-
-  const constraints: GenerationConstraints = {
-    minStartMinutes: generationMinStartMinutes,
-    maxEndMinutes: generationMaxEndMinutes,
-    minProfessorRating: generationMinProfessorRating ?? undefined,
-    professorRatings: professorRatings ?? undefined,
-    blockedTimes: state.blockedTimes,
-  };
-
-  const explicitExemptNormalized = new Set<string>();
-  for (const codes of Object.values(constrainedPerRequirement)) {
-    for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
-  }
-  for (const codes of Object.values(selectedPerRequirement)) {
-    for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
-  }
-
   const reqId = poolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
   const reqType = remainingRequirements.find((r) => r.requirementId === reqId)?.type;
-  const virtualOnly =
-    state.calendarMode === "basic"
-      ? virtualSectionsOnly
-      : virtualScheduleFilterApplies(
-          virtualSectionsOnly,
-          reqType,
-          newCourseCode,
-          explicitExemptNormalized,
-        );
+
+  const exempt = buildExplicitExemptSet(
+    state.constrainedPerRequirement,
+    state.selectedPerRequirement,
+  );
+  const virtualOnly = resolveSwapVirtualOnly(
+    state.calendarMode,
+    virtualSectionsOnly,
+    reqType,
+    newCourseCode,
+    exempt,
+  );
 
   const newScheduleData = getEffectiveSchedule(
     cache,
@@ -79,34 +53,18 @@ function tryApplyOneSwap(
   );
   if (!newScheduleData) return null;
 
-  const combos = getValidSectionCombos(newScheduleData, constraints);
   const others = schedule.enrollments.filter((_, i) => i !== enrollmentIndex);
+  const candidate = firstFittingEnrollment(newScheduleData, buildSwapConstraints(state), others);
+  if (!candidate) return null;
 
-  for (const combo of combos) {
-    const candidate = getEnrollmentsForCourse(newScheduleData, combo);
-    if (!others.some((e) => enrollmentsOverlap(e, candidate))) {
-      const newEnrollments = [...schedule.enrollments];
-      newEnrollments[enrollmentIndex] = candidate;
+  const newEnrollments = [...schedule.enrollments];
+  newEnrollments[enrollmentIndex] = candidate;
 
-      const poolId = poolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
-      const nextPoolMap = poolId != null ? { ...poolMap, [newCourseCode]: poolId } : poolMap;
-
-      const oldColorIdx = colorMap[oldCode];
-      const { [oldCode]: _, ...mapWithoutOld } = colorMap;
-      const nextColorMap =
-        oldColorIdx !== undefined
-          ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
-          : mapWithoutOld;
-
-      return {
-        schedule: { enrollments: newEnrollments },
-        poolMap: nextPoolMap,
-        colorMap: nextColorMap,
-      };
-    }
-  }
-
-  return null;
+  return {
+    schedule: { enrollments: newEnrollments },
+    poolMap: transferPoolEntry(poolMap, oldCode, newCourseCode, reqId),
+    colorMap: transferSwapColor(colorMap, oldCode, newCourseCode),
+  };
 }
 
 export function applySwapsToResult(

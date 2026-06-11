@@ -1,11 +1,7 @@
-export * from "./dataTypes/domain";
-export { fromProtoDistribution } from "./dataTypes/grades";
-export type {
-  CourseGradesData,
-  CourseGradesEntry,
-  CourseGradesProfessor,
-} from "./dataTypes/grades";
-export { fromProtoCourseGradesData } from "./dataTypes/grades";
+export * from "./domain";
+export { fromProtoDistribution } from "./grades";
+export type { CourseGradesData, CourseGradesEntry, CourseGradesProfessor } from "./grades";
+export { fromProtoCourseGradesData } from "./grades";
 export {
   fromProtoCatalogue,
   fromProtoCatalogueManifest,
@@ -21,4 +17,4 @@ export {
   toProtoRateMyProfessorsData,
   toProtoSchedulesData,
   toProtoTermsData,
-} from "./dataTypes/schedules";
+} from "./schedules";
