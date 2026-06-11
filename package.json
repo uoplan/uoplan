@@ -30,7 +30,7 @@
     "prepare": "lefthook install",
     "hooks:install": "lefthook install",
     "hooks:run": "lefthook run pre-commit",
-    "deadcode": "knip",
+    "fallow": "fallow",
     "size": "pnpm --filter web size",
     "analyze": "pnpm --filter web analyze",
     "scrape:catalogue": "pnpm --filter scraper scrape:catalogue",
@@ -46,7 +46,7 @@
   "devDependencies": {
     "@typescript/native-preview": "7.0.0-dev.20260512.1",
     "esbuild": "^0.28.0",
-    "knip": "^6.1.0",
+    "fallow": "^2.88.2",
     "lefthook": "^2.1.4",
     "oxfmt": "^0.48.0",
     "oxlint": "^1.64.0",

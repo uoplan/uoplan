@@ -25,7 +25,7 @@ pnpm format           # oxfmt   (pnpm format:check for the CI dry-run)
 pnpm check:arch       # Package-layering + worker-purity guardrails
 pnpm check:i18n       # Translation completeness / locale parity
 pnpm i18n:sync        # Scaffold missing msgids into both PO files
-pnpm deadcode         # knip
+pnpm fallow           # fallow — dead code + duplication + health (replaces knip)
 
 # Rust/WASM schedule engine (packages/engine)
 pnpm build:engine-wasm                   # wasm-pack build --release (run before vite/worker builds)
@@ -44,7 +44,7 @@ pnpm build:data-proto # Compile apps/scraper/data JSON → apps/web/public/data 
 Run a single test with vitest directly, e.g.
 `pnpm --filter @uoplan/core exec vitest run src/path/file.test.ts -t "case name"`.
 
-Tooling is **oxc-based** — `oxlint` (`oxlint.config.ts`), `oxfmt` (`oxfmt.config.ts`), and `tsgo` (TypeScript native preview) for typechecking, not eslint/prettier/tsc. Git hooks run via `lefthook` (`lefthook.yml`, installed by `pnpm prepare`). CI (`.github/workflows/ci.yml`) runs: install → setup Rust + wasm-pack → generate → build:engine-wasm → cargo test → lint → format:check → typecheck → check:arch → check:i18n → test → build. The engine WASM must be built before typecheck/test/build (web tests load it). `apps/cli/**` is excluded (it has its own workflow).
+Tooling is **oxc-based** — `oxlint` (`oxlint.config.ts`), `oxfmt` (`oxfmt.config.ts`), and `tsgo` (TypeScript native preview) for typechecking, not eslint/prettier/tsc. Git hooks run via `lefthook` (`lefthook.yml`, installed by `pnpm prepare`; pre-commit runs oxfmt, oxlint, typecheck, check:i18n, fallow, and cargo-clippy). CI (`.github/workflows/ci.yml`) runs: install → setup Rust + wasm-pack → generate → build:engine-wasm → cargo test → lint → format:check → typecheck → check:arch → check:i18n → fallow → test → build. The engine WASM must be built before typecheck/test/build (web tests load it). `apps/cli/**` is excluded (it has its own workflow).
 
 ## Architecture
 
