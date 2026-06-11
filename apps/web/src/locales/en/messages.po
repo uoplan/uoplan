@@ -2365,11 +2365,15 @@ msgstr "By discipline"
 
 #: apps/web/src/components/trends/DisciplineScatterCard.tsx:53
 msgid "trends.chart.disciplineScatter.desc"
-msgstr "Popularity versus average GPA, one point per discipline."
+msgstr "Average course-feedback satisfaction versus mean GPA, one point per discipline."
 
 #: apps/web/src/components/trends/DisciplineScatterCard.tsx:52
 msgid "trends.chart.disciplineScatter.title"
-msgstr "Popularity vs GPA"
+msgstr "Satisfaction vs GPA"
+
+#: apps/web/src/components/trends/DisciplineScatterCard.tsx:31
+msgid "trends.chart.disciplineScatter.tooltip"
+msgstr "Satisfaction {satisfaction} · GPA {gpa}"
 
 #: apps/web/src/components/trends/DisciplineBarCard.tsx:32
 #: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:51
@@ -2448,6 +2452,10 @@ msgstr "Professor grading spread"
 #: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:64
 msgid "trends.chart.scatter.axisGpa"
 msgstr "Average GPA"
+
+#: apps/web/src/components/trends/DisciplineScatterCard.tsx:74
+msgid "trends.chart.scatter.axisSatisfaction"
+msgstr "Satisfaction (1–5)"
 
 #: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:63
 msgid "trends.chart.scatter.axisVolume"

@@ -1,12 +1,14 @@
-import { Box, Group, SimpleGrid, Stack, Text } from "@mantine/core";
+import { Box, Collapse, Group, SimpleGrid, Stack, Text, UnstyledButton } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { LineChart } from "@mantine/charts";
+import { IconChevronDown } from "@tabler/icons-react";
 import {
   feedbackAllViews,
   feedbackOverallSeries,
   feedbackQuestionSeries,
   feedbackResponseRateSeries,
 } from "@uoplan/core";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { tr, useTr } from "../../i18n";
 import { formatTermLabel, formatTermLabelShort } from "../../lib/term/termLabel";
 import { colorForIndex } from "../../lib/trends/palette";
@@ -14,6 +16,7 @@ import { useFeedbackData } from "../../hooks/useFeedbackData";
 import { AppCard } from "../shared/AppCard";
 import { MiniChartTooltip } from "../shared/MiniChartTooltip";
 import { TrendsGridSkeleton } from "./TrendsSkeletons";
+import { FeedbackQuestionChart } from "../explore/feedback/FeedbackQuestionChart";
 
 const SENTIMENT_COLOR = "var(--app-info)";
 const RATE_COLOR = "var(--app-success)";
@@ -26,6 +29,10 @@ const RATE_COLOR = "var(--app-success)";
 export function TrendsFeedbackPage() {
   useTr();
   const { data, loading } = useFeedbackData();
+  const [openQuestionIds, setOpenQuestionIds] = useState<ReadonlySet<number>>(() => new Set());
+  const showScaleLabels = useMediaQuery("(min-width: 48em)", true, {
+    getInitialValueInEffect: false,
+  });
 
   const { sentiment, rate, questions } = useMemo(() => {
     if (!data) return { sentiment: [], rate: [], questions: [] };
@@ -48,6 +55,18 @@ export function TrendsFeedbackPage() {
       </Text>
     );
   }
+
+  const toggleQuestion = (questionId: number) => {
+    setOpenQuestionIds((current) => {
+      const next = new Set(current);
+      if (next.has(questionId)) {
+        next.delete(questionId);
+      } else {
+        next.add(questionId);
+      }
+      return next;
+    });
+  };
 
   return (
     <Stack gap="md">
@@ -116,6 +135,8 @@ export function TrendsFeedbackPage() {
             {questions.map((series, i) => {
               const color = colorForIndex(i);
               const current = series.points.at(-1)?.average ?? null;
+              const isOpen = openQuestionIds.has(series.questionId);
+              const panelId = `trends-feedback-question-${String(series.questionId)}`;
               const chartData = series.points.map((p) => ({
                 term: formatTermLabelShort(p.termId),
                 fullTerm: formatTermLabel(p.termId),
@@ -123,46 +144,91 @@ export function TrendsFeedbackPage() {
               }));
               return (
                 <AppCard key={series.questionId} p="sm">
-                  <Group wrap="nowrap" align="center" gap="md">
-                    <Text size="sm" style={{ flex: 1, minWidth: 0 }}>
-                      {series.text}
-                    </Text>
-                    <Text
-                      fw={700}
-                      size="lg"
-                      c={color}
-                      w={48}
-                      ta="right"
-                      style={{ flexShrink: 0, fontVariantNumeric: "tabular-nums" }}
-                    >
-                      {current != null ? current.toFixed(2) : "—"}
-                    </Text>
-                    <Box w={{ base: 104, xs: 140, sm: 176 }} style={{ flexShrink: 0 }}>
-                      <LineChart
-                        h={44}
-                        data={chartData}
-                        dataKey="term"
-                        series={[
-                          { name: "average", label: tr("trends.feedback.questionValue"), color },
-                        ]}
-                        withXAxis={false}
-                        withYAxis={false}
-                        gridAxis="none"
-                        withDots={false}
-                        curveType="monotone"
-                        connectNulls
-                        valueFormatter={(value) => value.toFixed(2)}
-                        tooltipProps={{
-                          content: ({ payload }) => (
-                            <MiniChartTooltip
-                              payload={payload as never}
-                              format={(v) => v.toFixed(2)}
-                            />
-                          ),
+                  <UnstyledButton
+                    aria-controls={panelId}
+                    aria-expanded={isOpen}
+                    onClick={() => {
+                      toggleQuestion(series.questionId);
+                    }}
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      borderRadius: "var(--app-radius-md)",
+                    }}
+                  >
+                    <Group wrap="nowrap" align="center" gap="md">
+                      <Text size="sm" style={{ flex: 1, minWidth: 0 }}>
+                        {series.text}
+                      </Text>
+                      <Text
+                        fw={700}
+                        size="lg"
+                        c={color}
+                        w={48}
+                        ta="right"
+                        style={{ flexShrink: 0, fontVariantNumeric: "tabular-nums" }}
+                      >
+                        {current != null ? current.toFixed(2) : "—"}
+                      </Text>
+                      <Box w={{ base: 104, xs: 140, sm: 176 }} style={{ flexShrink: 0 }}>
+                        <LineChart
+                          h={44}
+                          data={chartData}
+                          dataKey="term"
+                          series={[
+                            { name: "average", label: tr("trends.feedback.questionValue"), color },
+                          ]}
+                          withXAxis={false}
+                          withYAxis={false}
+                          gridAxis="none"
+                          withDots={false}
+                          curveType="monotone"
+                          connectNulls
+                          valueFormatter={(value) => value.toFixed(2)}
+                          tooltipProps={{
+                            content: ({ payload }) => (
+                              <MiniChartTooltip
+                                payload={payload as never}
+                                format={(v) => v.toFixed(2)}
+                              />
+                            ),
+                          }}
+                        />
+                      </Box>
+                      <IconChevronDown
+                        size={16}
+                        aria-hidden
+                        style={{
+                          flexShrink: 0,
+                          color: "var(--app-muted-fg)",
+                          transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                          transition: "transform 150ms ease",
                         }}
                       />
+                    </Group>
+                  </UnstyledButton>
+                  <Collapse expanded={isOpen}>
+                    <Box
+                      id={panelId}
+                      pt="sm"
+                      mt="sm"
+                      style={{
+                        borderTop: "1px solid var(--app-border)",
+                      }}
+                    >
+                      <FeedbackQuestionChart
+                        questionText={series.text}
+                        points={series.points}
+                        optionLabels={data?.questions[series.questionId]?.options ?? []}
+                        responsesTotal={series.points.reduce((sum, p) => sum + p.responses, 0)}
+                        showScaleLabels={showScaleLabels}
+                        color={color}
+                        showQuestionHeader={false}
+                        showResponsesBadge={false}
+                        showOptionsPopover={false}
+                      />
                     </Box>
-                  </Group>
+                  </Collapse>
                 </AppCard>
               );
             })}

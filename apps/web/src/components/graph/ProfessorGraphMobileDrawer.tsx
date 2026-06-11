@@ -38,7 +38,14 @@ export function ProfessorGraphMobileDrawer({
   const opened = node != null;
 
   return (
-    <Drawer.Root opened={opened} onClose={onClose} position="bottom" size="auto">
+    <Drawer.Root
+      opened={opened}
+      onClose={onClose}
+      position="bottom"
+      size="auto"
+      radius="md"
+      styles={{ inner: { top: "auto", bottom: 0, height: "auto", alignItems: "flex-end" } }}
+    >
       <Drawer.Overlay backgroundOpacity={0.45} />
       <Drawer.Content
         aria-label={tr("graph.nodeDetails")}

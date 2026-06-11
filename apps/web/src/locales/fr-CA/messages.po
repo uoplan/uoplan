@@ -2365,11 +2365,15 @@ msgstr "Par discipline"
 
 #: apps/web/src/components/trends/DisciplineScatterCard.tsx:53
 msgid "trends.chart.disciplineScatter.desc"
-msgstr "Popularité par rapport à la moyenne pondérée, un point par discipline."
+msgstr "Satisfaction moyenne des évaluations de cours par rapport à la MPC moyenne, un point par discipline."
 
 #: apps/web/src/components/trends/DisciplineScatterCard.tsx:52
 msgid "trends.chart.disciplineScatter.title"
-msgstr "Popularité c. moyenne"
+msgstr "Satisfaction et MPC"
+
+#: apps/web/src/components/trends/DisciplineScatterCard.tsx:31
+msgid "trends.chart.disciplineScatter.tooltip"
+msgstr "Satisfaction {satisfaction} · MPC {gpa}"
 
 #: apps/web/src/components/trends/DisciplineBarCard.tsx:32
 #: apps/web/src/components/trends/DisciplineHeatmapCard.tsx:51
@@ -2448,6 +2452,10 @@ msgstr "Écart de notation des professeurs"
 #: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:64
 msgid "trends.chart.scatter.axisGpa"
 msgstr "MPC moyenne"
+
+#: apps/web/src/components/trends/DisciplineScatterCard.tsx:74
+msgid "trends.chart.scatter.axisSatisfaction"
+msgstr "Satisfaction (1 à 5)"
 
 #: apps/web/src/components/trends/VolumeGpaScatterCard.tsx:63
 msgid "trends.chart.scatter.axisVolume"
