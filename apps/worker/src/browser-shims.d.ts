@@ -1,15 +1,15 @@
 // Minimal ambient declarations for browser globals used by @uoplan/core.
 // Workers have neither window nor document at runtime; we type them as `any`
 // so that conditional guards and property access in the library source compile.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 declare const window: any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 declare const document: any;
 
 // Workers expose crypto on globalThis; ESNext lib doesn't include this.
 // oxlint-disable-next-line no-shadow-restricted-names
 declare namespace globalThis {
-  // eslint-disable-next-line no-var
+  // oxlint-disable-next-line no-var
   var crypto: Crypto;
 }
 

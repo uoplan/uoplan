@@ -1,13 +1,9 @@
-import fs from "fs/promises";
-import path from "path";
-import { SCRAPER_DATA_DIR, CATALOGUE_DATA_DIR, SCHEDULES_DATA_DIR } from "../shared/paths.ts";
+import fs from "node:fs/promises";
+import path from "node:path";
+import { CATALOGUE_DATA_DIR, SCHEDULES_DATA_DIR, SCRAPER_DATA_DIR } from "../shared/paths.ts";
 import { getErrorMessage } from "../shared/errors.ts";
-import {
-  buildGradeLookups,
-  enrichSchedulesPayload,
-  formatGradeEnrichmentLine,
-  type GradeLookups,
-} from "./enrich.ts";
+import { buildGradeLookups, enrichSchedulesPayload, formatGradeEnrichmentLine } from "./enrich.ts";
+import type { GradeLookups } from "./enrich.ts";
 import type { CourseSchedule, ParsedCourseCode } from "./parse.ts";
 import { parseCourseCode } from "./parse.ts";
 import {
@@ -16,8 +12,8 @@ import {
   fetchSubjectSchedules,
   MAX_CONCURRENCY,
   USE_CACHE_ONLY,
-  type ClientInfo,
 } from "./search.ts";
+import type { ClientInfo } from "./search.ts";
 
 export { parseSearchResultsHtml } from "./parse.ts";
 

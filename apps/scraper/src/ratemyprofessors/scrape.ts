@@ -1,5 +1,5 @@
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
 import got from "got";
 import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
 
@@ -135,7 +135,7 @@ export async function main(): Promise<void> {
     const nodes = teachers.edges.map((e) => ({
       id: e.node.id,
       legacyId: e.node.legacyId,
-      name: `${e.node.firstName} ${e.node.lastName}`.trim().replace(/\s+/g, " "),
+      name: `${e.node.firstName} ${e.node.lastName}`.trim().replaceAll(/\s+/g, " "),
       rating: e.node.avgRating,
       numRatings: e.node.numRatings,
     }));
@@ -156,13 +156,13 @@ export async function main(): Promise<void> {
     }
 
     // Be nice to the API
-    await new Promise((r) => setTimeout(r, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
   }
 
   // Deduplicate by normalized name: weighted-average rating, summed numRatings, first entry wins
   const normalized = new Map<string, FormattedTeacherNode>();
   for (const prof of allTeachers) {
-    const key = prof.name.toLowerCase().replace(/\s+/g, " ").trim();
+    const key = prof.name.toLowerCase().replaceAll(/\s+/g, " ").trim();
     const existing = normalized.get(key);
     if (!existing) {
       normalized.set(key, { ...prof });

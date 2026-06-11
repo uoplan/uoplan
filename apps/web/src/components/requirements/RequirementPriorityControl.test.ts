@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { collectRequirementIds, gateRemainingByPriority } from "@uoplan/core";
 import type { RemainingRequirement, RequirementWithStatus } from "@uoplan/core";
 import { priorityForIds, stampPriorityForIds } from "../../lib/requirements/requirementPriority";

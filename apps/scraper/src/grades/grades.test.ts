@@ -3,10 +3,12 @@ import os from "node:os";
 import path from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { assembleGrades } from "./build.ts";
-import { readGradeRows, type GradeRow } from "./csv.ts";
+import { readGradeRows } from "./csv.ts";
+import type { GradeRow } from "./csv.ts";
 import { emptyDistribution, normalizeCode } from "./distribution.ts";
 import { feedbackKey } from "./feedbackProfs.ts";
-import { createProfessorResolver, normalizeName, type ProfessorResolver } from "./rmp.ts";
+import { createProfessorResolver, normalizeName } from "./rmp.ts";
+import type { ProfessorResolver } from "./rmp.ts";
 
 describe("normalizeCode", () => {
   it("inserts the canonical space and uppercases", () => {

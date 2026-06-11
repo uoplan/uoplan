@@ -1,15 +1,15 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { generateScheduleFromDecodedState } from "../scheduleFromStateEngine";
 import { Mode } from "@uoplan/proto/engine";
 import { buildDataCache } from "../dataCache";
 import type { Catalogue, Program, SchedulesData } from "../dataTypes";
 import { normalizeCourseCode } from "../utils/courseUtils";
 import {
+  testGenerationConstraints as constraints,
   decodedState as decoded,
   engineCapturingGenerationMode,
   engineReturning,
   fakeDataCache as fakeCache,
-  testGenerationConstraints as constraints,
   testLectureSchedule as lec,
 } from "./engineTestHelpers";
 

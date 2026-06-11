@@ -1,4 +1,4 @@
-import { normalizeCourseCode, isNonDegreeCourse } from "@uoplan/core";
+import { isNonDegreeCourse, normalizeCourseCode } from "@uoplan/core";
 import type { PdfPageText, TextItemWithPosition } from "./pdfExtraction";
 
 const COURSE_CODE_REGEX = /\b([A-Z]{3,4})\s*(\d{4,5}[A-Z]?)\b/gi;
@@ -82,14 +82,14 @@ export function collectTranscriptCourseCodes(pages: PdfPageText[]): string[] {
 
   for (const page of pages) {
     if (page.hasPosition && page.itemsWithPosition.length > 0) {
-      extractCodesFromPositions(page.itemsWithPosition, optCounters).forEach((code) =>
-        allCodes.add(code),
-      );
+      for (const code of extractCodesFromPositions(page.itemsWithPosition, optCounters)) {
+        allCodes.add(code);
+      }
     } else {
-      extractOptFromText(page.pageText, optCounters).forEach((code) => allCodes.add(code));
+      for (const code of extractOptFromText(page.pageText, optCounters)) allCodes.add(code);
     }
 
-    extractCodesFromText(page.pageText).forEach((code) => allCodes.add(code));
+    for (const code of extractCodesFromText(page.pageText)) allCodes.add(code);
   }
 
   return [...allCodes].filter((code) => !isNonDegreeCourse(code));

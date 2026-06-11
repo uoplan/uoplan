@@ -2,7 +2,8 @@ import * as cheerio from "cheerio";
 import { fetchHtml } from "../shared/http.ts";
 import { extractPreviouslyAliases } from "./aliases.ts";
 import { extractPrereqSentence, parseCoursePrerequisites } from "./prerequisites.ts";
-import { CourseSchema, type Course, type CoursePrereqNode } from "./schema.ts";
+import { CourseSchema } from "./schema.ts";
+import type { Course, CoursePrereqNode } from "./schema.ts";
 
 export async function scrapeCourses(url: string): Promise<Course[]> {
   const html = await fetchHtml(url);
@@ -10,9 +11,9 @@ export async function scrapeCourses(url: string): Promise<Course[]> {
   const courses: Course[] = [];
 
   $(".courseblock").each((_, el) => {
-    const titleBlock = $(el).find(".courseblocktitle").text().replace(/\s+/g, " ").trim();
-    const descBlock = $(el).find(".courseblockdesc").text().replace(/\s+/g, " ").trim();
-    const extraBlock = $(el).find(".courseblockextra").text().replace(/\s+/g, " ").trim();
+    const titleBlock = $(el).find(".courseblocktitle").text().replaceAll(/\s+/g, " ").trim();
+    const descBlock = $(el).find(".courseblockdesc").text().replaceAll(/\s+/g, " ").trim();
+    const extraBlock = $(el).find(".courseblockextra").text().replaceAll(/\s+/g, " ").trim();
 
     const prereqHighlight = $(el).find(".courseblockextra.highlight").first();
     let prereqText: string | undefined;
@@ -37,7 +38,7 @@ export async function scrapeCourses(url: string): Promise<Course[]> {
 
     const creditsMatch = title.match(/\(([^)]*?(?:units?|crédits?|crédit)[^)]*)\)$/i);
     if (creditsMatch) {
-      title = title.substring(0, creditsMatch.index).trim();
+      title = title.slice(0, creditsMatch.index).trim();
       const numMatch = creditsMatch[1].match(/(\d+(?:\.\d+)?)/);
       if (numMatch) {
         credits = parseFloat(numMatch[1]);

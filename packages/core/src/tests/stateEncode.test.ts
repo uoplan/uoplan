@@ -1,17 +1,15 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  encodeState,
   decodeState,
-  encodeStateToBase64,
   decodeStateFromBase64,
+  encodeState,
+  encodeStateToBase64,
   peekTermAndYear,
   peekTermAndYearFromBase64,
   urlToSlug,
-  type EncodeInput,
-  type CatalogueLike,
 } from "../stateEncode";
-import type { Indices } from "../dataTypes";
-import type { Program } from "../dataTypes";
+import type { CatalogueLike, EncodeInput } from "../stateEncode";
+import type { Indices, Program } from "../dataTypes";
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Box, Progress, Stack, Text } from "@mantine/core";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 
 type AppDataLoaderMode = "data" | "generating";
 

@@ -1,7 +1,7 @@
 import type {
+  CompletedRequirementItem,
   RemainingRequirement,
   RequirementWithStatus,
-  CompletedRequirementItem,
 } from "@uoplan/core";
 
 export interface RecomputedState {

@@ -1,10 +1,6 @@
 import { AreaChart } from "@mantine/charts";
-import {
-  computeGradeBandComposition,
-  GRADE_BAND_META,
-  type GradeVizBucketId,
-  type TermSeason,
-} from "@uoplan/core";
+import { computeGradeBandComposition, GRADE_BAND_META } from "@uoplan/core";
+import type { GradeVizBucketId, TermSeason } from "@uoplan/core";
 import { useMemo } from "react";
 import { formatLocaleNumber, tr } from "../../i18n";
 import { GRADE_BAND_TOKEN } from "../../lib/trends/palette";

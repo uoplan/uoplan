@@ -1,5 +1,5 @@
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
 import pLimit from "p-limit";
 import { CATALOGUE_DATA_DIR } from "../shared/paths.ts";
 import { getErrorMessage, NotFoundError } from "../shared/errors.ts";
@@ -15,7 +15,8 @@ import {
 import { scrapeCourses } from "./courses.ts";
 import { scrapeProgram } from "./programs.ts";
 import { processRequirements } from "./requirements.ts";
-import { CatalogueSchema, type Catalogue, type Course, type Program } from "./schema.ts";
+import { CatalogueSchema } from "./schema.ts";
+import type { Catalogue, Course, Program } from "./schema.ts";
 
 const OLDEST_YEAR = 2017;
 
@@ -138,8 +139,9 @@ async function scrapeYear(
 
   await fs.writeFile(outPath, JSON.stringify(catalogue, null, 2), "utf-8");
   console.log(
-    `Saved catalogue.${effectiveOutYear}.json (${catalogue.courses.length} courses, ${catalogue.programs.length} programs)` +
-      (missingUrls.length ? ` — ${missingUrls.length} missing (404)` : ""),
+    `Saved catalogue.${effectiveOutYear}.json (${catalogue.courses.length} courses, ${catalogue.programs.length} programs)${
+      missingUrls.length > 0 ? ` — ${missingUrls.length} missing (404)` : ""
+    }`,
   );
 
   return missingUrls;
@@ -171,13 +173,13 @@ export async function main() {
       console.warn(`Stopping archive scrape at ${year} (404)`);
       break;
     }
-    if (missing.length) missingByYear[String(year)] = missing.sort();
+    if (missing.length > 0) missingByYear[String(year)] = missing.sort();
   }
 
   // Always re-scrape the live (non-archived) site for the current academic year.
   // Write it under the academic year filename (e.g. catalogue.2025.json).
   const liveMissing = await scrapeYear(academicYear, dataDir, true);
-  if (liveMissing !== null && liveMissing.length) {
+  if (liveMissing !== null && liveMissing.length > 0) {
     missingByYear[String(academicYear)] = liveMissing.sort();
   } else {
     delete missingByYear[String(academicYear)];
@@ -223,9 +225,13 @@ export async function main() {
 }
 
 if (process.argv[1] && import.meta.url === `file://${process.argv[1]}`) {
-  main().catch((e) => {
-    console.error("\nScrape failed!");
-    console.error(e);
-    process.exit(1);
-  });
+  void (async () => {
+    try {
+      await main();
+    } catch (e) {
+      console.error("\nScrape failed!");
+      console.error(e);
+      process.exit(1);
+    }
+  })();
 }

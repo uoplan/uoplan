@@ -1,10 +1,8 @@
 import { page } from "vitest/browser";
 import { expect, test, vi } from "vitest";
 
-import {
-  AdvancedGenerationOptionsView,
-  type AdvancedGenerationOptionsViewProps,
-} from "./AdvancedGenerationOptionsView";
+import { AdvancedGenerationOptionsView } from "./AdvancedGenerationOptionsView";
+import type { AdvancedGenerationOptionsViewProps } from "./AdvancedGenerationOptionsView";
 import { makeGenerationOptionsProps } from "./generationOptions/testHelpers";
 import type { ConstrainStepProps } from "../requirements/ConstrainStep";
 import { renderWithProviders } from "../../test/renderWithProviders";

@@ -1,6 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { Program, ProgramRequirement } from "@uoplan/core";
-import type { DataCache } from "@uoplan/core";
+import type { DataCache, Program, ProgramRequirement } from "@uoplan/core";
 import { mergeProgramWithMinor } from "../minorMerge";
 
 // Mock schedule's computeRequirementsState so we don't have to build a complex cache

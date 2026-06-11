@@ -10,7 +10,7 @@ interface BuildShareUrlInput {
 }
 
 function toBase64Url(base64: string): string {
-  return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+  return base64.replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
 }
 
 export function buildShareUrl({

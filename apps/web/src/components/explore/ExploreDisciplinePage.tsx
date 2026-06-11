@@ -4,11 +4,8 @@ import { useEffect, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { m } from "framer-motion";
 import type { Discipline, ProfessorRatingsMap } from "@uoplan/core";
-import {
-  groupOfferingsByCourse,
-  groupOfferingsByProfessor,
-  type CourseOfferingGroup,
-} from "../../lib/explore/gradesSearch";
+import { groupOfferingsByCourse, groupOfferingsByProfessor } from "../../lib/explore/gradesSearch";
+import type { CourseOfferingGroup } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./exploreOfferingsContext";
 import type { BackState } from "../../lib/navigation/backState";
 import { tr } from "../../i18n";
@@ -22,9 +19,9 @@ import {
   EXPLORE_ACCORDION_PAD_RIGHT,
 } from "../../lib/explore/accordionPadding";
 import {
+  EXPLORE_MOBILE_MEDIA_QUERY,
   ExploreAccordion,
   ExploreFullBleed,
-  EXPLORE_MOBILE_MEDIA_QUERY,
 } from "./ExploreEntityLayout";
 
 function DisciplineProfessorRows({

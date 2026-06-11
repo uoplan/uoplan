@@ -1,7 +1,7 @@
 import { memo, useMemo } from "react";
 import { Popover } from "@mantine/core";
 import type { DataCache } from "@uoplan/core";
-import { COURSE_COLORS, COURSE_COLOR_OKLCH, ratingToColor } from "@uoplan/core";
+import { COURSE_COLOR_OKLCH, COURSE_COLORS, ratingToColor } from "@uoplan/core";
 import { ratingColorToCssVar } from "../../../lib/ratingColor";
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
 import { useTr } from "../../../i18n";

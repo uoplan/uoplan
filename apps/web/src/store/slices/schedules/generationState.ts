@@ -1,6 +1,7 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../../types";
-import { arrangementFingerprint, type GeneratedSchedule } from "@uoplan/core";
+import { arrangementFingerprint } from "@uoplan/core";
+import type { GeneratedSchedule } from "@uoplan/core";
 import { flushPersistedAppState } from "../../../lib/persistAppState";
 import { noteLowestVisitedSeed } from "../../../lib/seedNavigation";
 import type { ScheduleGenerationResult, SchedulesSlice } from "./types";

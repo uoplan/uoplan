@@ -11,10 +11,13 @@
 import fs from "node:fs/promises";
 import { GRADES_FILE, RAW_DATA_DIR } from "../shared/paths.ts";
 import { readCatalogueCodes } from "./catalogue.ts";
-import { readGradeRows, type GradeRow } from "./csv.ts";
-import { type Distribution, orderDistribution } from "./distribution.ts";
+import { readGradeRows } from "./csv.ts";
+import type { GradeRow } from "./csv.ts";
+import { orderDistribution } from "./distribution.ts";
+import type { Distribution } from "./distribution.ts";
 import { buildFeedbackProfIndex, feedbackKey } from "./feedbackProfs.ts";
-import { buildProfessorResolver, type ProfessorResolver } from "./rmp.ts";
+import { buildProfessorResolver } from "./rmp.ts";
+import type { ProfessorResolver } from "./rmp.ts";
 
 interface ProfessorGrades {
   name: string;

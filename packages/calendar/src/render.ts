@@ -1,6 +1,6 @@
-import { getCourseColorHex, hexToRgb, formatTimeRange24 } from "@uoplan/core";
+import { formatTimeRange24, getCourseColorHex, hexToRgb } from "@uoplan/core";
 import type { CalendarEvent } from "./types";
-import { assignLanes, CAL_START_MINUTES, CAL_END_MINUTES, WEEKDAY_CODES } from "./layout";
+import { assignLanes, CAL_END_MINUTES, CAL_START_MINUTES, WEEKDAY_CODES } from "./layout";
 
 const BG = "#111113";
 const GRID_LINE = "#2c2e33";
@@ -24,10 +24,10 @@ interface RenderOptions {
 
 function e(s: string): string {
   return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 }
 
 function componentKindOnly(componentSection: string): string {

@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
 import type { DataCache, RemainingRequirement } from "@uoplan/core";
 import {
-  getAutoSelectedForRequirements,
   compareReqPreference,
+  getAutoSelectedForRequirements,
   getAutoSelectedSingleEligibleCompleted,
-  type AutoAssignReqMeta,
 } from "../autoAssign";
+import type { AutoAssignReqMeta } from "../autoAssign";
 
 describe("autoAssign", () => {
   const mockCache = {
     getCourse: (code: string) => {
-      const codeNorm = code.toUpperCase().replace(/\s+/g, "");
+      const codeNorm = code.toUpperCase().replaceAll(/\s+/g, "");
       // Mock logic for simple course parsing
       const credits = codeNorm.includes("1000") ? 6 : 3;
       return { code: codeNorm, credits };

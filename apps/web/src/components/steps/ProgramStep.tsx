@@ -1,24 +1,23 @@
-import { useState, useRef, useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
-  Select,
-  MultiSelect,
-  Stack,
-  Text,
+  Alert,
+  Badge,
   Button,
   Group,
-  Alert,
   Loader,
-  Badge,
+  MultiSelect,
+  Select,
+  Stack,
   Switch,
+  Text,
 } from "@mantine/core";
-import { IconFileUpload, IconExternalLink } from "@tabler/icons-react";
+import { IconExternalLink, IconFileUpload } from "@tabler/icons-react";
 import { tr } from "../../i18n";
 import type { Program } from "@uoplan/core";
 import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
-import { parseTranscriptPdf, findBestMatchingProgram } from "@uoplan/transcript";
-import { isOptCourse } from "@uoplan/core";
-import { normalizeCourseCode } from "@uoplan/core";
+import { findBestMatchingProgram, parseTranscriptPdf } from "@uoplan/transcript";
+import { isOptCourse, normalizeCourseCode } from "@uoplan/core";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
 
 interface ProgramStepProps {
@@ -90,10 +89,10 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
         }
       }
       const valueToIndex = new Map<string, number>();
-      uniquePrograms.forEach((p, i) => valueToIndex.set(p.url, i));
+      for (const [i, p] of uniquePrograms.entries()) valueToIndex.set(p.url, i);
 
       const minorValueToIndex = new Map<string, number>();
-      minors.forEach((p, i) => minorValueToIndex.set(p.url, i));
+      for (const [i, p] of minors.entries()) minorValueToIndex.set(p.url, i);
 
       const titleCount = new Map<string, number>();
       const data = uniquePrograms.map((p, i) => {
@@ -201,6 +200,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
         minorMatched: minorMatched ?? null,
       });
     } catch (err) {
+      // oxlint-disable-next-line no-console -- intentional transcript import error logging
       console.error(err);
       setTranscriptError(
         err instanceof Error ? err.message : tr("programStep.transcript.parseFailed"),

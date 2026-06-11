@@ -1,7 +1,8 @@
 import { Alert, Box } from "@mantine/core";
-import { type ReactNode, useEffect } from "react";
+import { useEffect } from "react";
+import type { ReactNode } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { AppDataLoader } from "./AppDataLoader";
 import { AppCard } from "./AppCard";
@@ -62,9 +63,10 @@ export function AppDataRouteGate({
 
   useEffect(() => {
     if (!hasBooted || !prewarm || typeof window === "undefined") return;
-    void import("../../workers/scheduleWorkerClient").then(({ prewarmScheduleWorker }) =>
-      prewarmScheduleWorker(storeApi.getState()),
-    );
+    void (async () => {
+      const { prewarmScheduleWorker } = await import("../../workers/scheduleWorkerClient");
+      await prewarmScheduleWorker(storeApi.getState());
+    })();
   }, [hasBooted, prewarm, storeApi]);
 
   if (error) {

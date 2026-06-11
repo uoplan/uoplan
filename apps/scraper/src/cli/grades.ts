@@ -15,8 +15,12 @@
 
 import { runBuild } from "../grades/build.ts";
 
-runBuild().catch((err) => {
-  console.error("Grades scrape failed:");
-  console.error(err);
-  process.exit(1);
-});
+void (async () => {
+  try {
+    await runBuild();
+  } catch (err) {
+    console.error("Grades scrape failed:");
+    console.error(err);
+    process.exit(1);
+  }
+})();

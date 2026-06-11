@@ -22,7 +22,7 @@ describe("createFetchBytesTransport", () => {
 
   it("rejects unknown asset ids without calling fetch", async () => {
     const fetch = vi.fn();
-    const transport = createFetchBytesTransport({ resolve: () => undefined, fetch });
+    const transport = createFetchBytesTransport({ resolve: () => {}, fetch });
 
     await expect(transport("missing.pb")).rejects.toThrow("Unknown data asset: missing.pb");
     expect(fetch).not.toHaveBeenCalled();

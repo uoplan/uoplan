@@ -1,16 +1,14 @@
-import initWasm, { initSync, Engine } from "@uoplan/engine";
+import initWasm, { Engine, initSync } from "@uoplan/engine";
 // Vite resolves the package's "./wasm" export to the compiled module and `?url`
 // yields its asset URL, which the wasm-bindgen `web` glue fetches + instantiates.
 import wasmUrl from "@uoplan/engine/wasm?url";
 import { Catalogue, SchedulesData } from "@uoplan/proto/data";
-import {
-  type Catalogue as DomainCatalogue,
-  type DataCache,
-  type SchedulesData as DomainSchedulesData,
-  type ScheduleEngine,
-  normalizeCourseCode,
-  toProtoCatalogue,
-  toProtoSchedulesData,
+import { normalizeCourseCode, toProtoCatalogue, toProtoSchedulesData } from "@uoplan/core";
+import type {
+  DataCache,
+  Catalogue as DomainCatalogue,
+  SchedulesData as DomainSchedulesData,
+  ScheduleEngine,
 } from "@uoplan/core";
 import type { CacheDataKey } from "@uoplan/data";
 import { dataClient } from "../dataClient";
@@ -21,15 +19,16 @@ let wasmReady = false;
 function ensureWasm(): Promise<void> {
   if (wasmReady) return Promise.resolve();
   if (!initPromise) {
-    initPromise = initWasm({ module_or_path: wasmUrl })
-      .then(() => {
+    initPromise = (async () => {
+      try {
+        await initWasm({ module_or_path: wasmUrl });
         wasmReady = true;
-      })
-      .catch((err) => {
+      } catch (err) {
         // Allow a later call to retry rather than caching the rejected promise.
         initPromise = null;
         throw err;
-      });
+      }
+    })();
   }
   return initPromise;
 }

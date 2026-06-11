@@ -5,8 +5,8 @@ import {
   buildPoolCourseOptions,
   computeFirstYearCredits,
   countUniqueSelected,
-  type CourseCreditsLookup,
 } from "./advancedGenerationDerivations";
+import type { CourseCreditsLookup } from "./advancedGenerationDerivations";
 
 function req(candidateCourses: string[]): RemainingRequirement {
   return { candidateCourses } as RemainingRequirement;

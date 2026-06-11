@@ -1,8 +1,8 @@
 import Fuse from "fuse.js";
 import type { IFuseOptions } from "fuse.js";
 import type {
-  Catalogue,
   CanonicalProfessorName,
+  Catalogue,
   CourseGradesData,
   GradeVizData,
   NormalizedCourseCode,
@@ -10,32 +10,33 @@ import type {
   ProfessorRegistry,
 } from "@uoplan/core";
 import {
-  normalizeCourseCode,
-  normalizeProfessorName,
-  normalizeGradeVizDistribution,
   getCourseLanguageBucket,
+  normalizeCourseCode,
+  normalizeGradeVizDistribution,
+  normalizeProfessorName,
   professorIndexFromRef,
 } from "@uoplan/core";
-import { searchProfessorsScored, type ProfessorSearchEntry } from "../graph/professorGraphSearch";
+import { searchProfessorsScored } from "../graph/professorGraphSearch";
+import type { ProfessorSearchEntry } from "../graph/professorGraphSearch";
 import { formatTermLabelPlain } from "../term/termLabelPlain";
-import { getCourseLevel, getCourseDiscipline, type ExploreFilterLevel } from "./exploreFilters";
+import { getCourseDiscipline, getCourseLevel } from "./exploreFilters";
+import type { ExploreFilterLevel } from "./exploreFilters";
 import {
-  type ExploreOfferingFlat,
-  UNASSIGNED_GROUP_ID,
-  UNASSIGNED_INSTRUCTOR,
   isUnassignedInstructorName,
   isUnassignedOffering,
   professorGroupId,
   resolveCanonicalProfessor,
+  UNASSIGNED_GROUP_ID,
+  UNASSIGNED_INSTRUCTOR,
 } from "./offeringTypes";
+import type { ExploreOfferingFlat } from "./offeringTypes";
 import {
-  type ProfessorOfferingGroup,
-  type CourseOfferingGroup,
-  groupOfferingsByProfessor,
-  groupOfferingsByCourse,
   buildScheduleOfferings,
+  groupOfferingsByCourse,
+  groupOfferingsByProfessor,
   mergeOfferingsWithSchedule,
 } from "./offeringGroups";
+import type { CourseOfferingGroup, ProfessorOfferingGroup } from "./offeringGroups";
 
 export type { ExploreOfferingFlat } from "./offeringTypes";
 export type { ProfessorOfferingGroup, CourseOfferingGroup };
@@ -398,8 +399,8 @@ export function buildCourseSearchEntries(
     let max: number | null = null;
     for (const name of compProfessorNames.get(id) ?? []) {
       const entry = professorRatings[normalizeProfessorName(name)];
-      if (entry && Number.isFinite(entry.rating)) {
-        if (max === null || entry.rating > max) max = entry.rating;
+      if (entry && Number.isFinite(entry.rating) && (max === null || entry.rating > max)) {
+        max = entry.rating;
       }
     }
     return max;

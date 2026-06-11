@@ -1,9 +1,7 @@
 import type { DataCache, NormalizedCourseCode, RemainingRequirement } from "@uoplan/core";
-import { normalizeCourseCode, getCourseCredits, isGroupToken } from "@uoplan/core";
-import {
-  compareReqPreference,
-  type AutoAssignReqMeta,
-} from "../../store/requirementCompute/autoAssign";
+import { getCourseCredits, isGroupToken, normalizeCourseCode } from "@uoplan/core";
+import { compareReqPreference } from "../../store/requirementCompute/autoAssign";
+import type { AutoAssignReqMeta } from "../../store/requirementCompute/autoAssign";
 
 /**
  * Resolution of the unified "courses you want" list (advanced/transcript mode) against the

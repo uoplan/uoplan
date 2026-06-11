@@ -287,9 +287,8 @@ export function processRequirements(reqs: ProgramRequirement[]): ProgramRequirem
 
     if (r.type === "section") {
       if (r.title && r.title.toLowerCase() === "or") {
-        const currentContainer = sectionStack.length
-          ? sectionStack[sectionStack.length - 1].options!
-          : foldedSections;
+        const currentContainer =
+          sectionStack.length > 0 ? sectionStack[sectionStack.length - 1].options! : foldedSections;
         const last = currentContainer.pop();
         const orGroup: ProgramRequirement = {
           type: "or_group",

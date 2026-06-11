@@ -4,7 +4,7 @@ import { Box, Card, CopyButton, Group, Stack, Text, Title, Tooltip } from "@mant
 import { DonationJar } from "../components/donate/DonationJar";
 import { AnimatedNumber } from "../components/shared/AnimatedNumber";
 import { BackButton } from "../components/shared/BackButton";
-import { useTr, tr, formatLocaleNumber } from "../i18n";
+import { formatLocaleNumber, tr, useTr } from "../i18n";
 import { buildTabTitle } from "../lib/seo";
 
 const DONATION_EMAIL = "donate@uoplan.party";
@@ -37,17 +37,16 @@ function DonateRoute() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/donations")
-      .then((res) => {
+    void (async () => {
+      try {
+        const res = await fetch("/api/donations");
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json() as Promise<DonationSummary>;
-      })
-      .then((data) => {
+        const data = (await res.json()) as DonationSummary;
         if (!cancelled) setSummary(data);
-      })
-      .catch(() => {
+      } catch {
         if (!cancelled) setError(true);
-      });
+      }
+    })();
     return () => {
       cancelled = true;
     };

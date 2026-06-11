@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
-  expandConstrainedPerRequirement,
   buildPendingGroupPickCounts,
+  expandConstrainedPerRequirement,
 } from "../generateSchedulesAction";
 
 function expectExpandedSelections(

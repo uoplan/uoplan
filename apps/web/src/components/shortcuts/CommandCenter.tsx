@@ -1,15 +1,11 @@
 import { useEffect } from "react";
 import { Text } from "@mantine/core";
-import {
-  Spotlight,
-  spotlight,
-  type SpotlightActionGroupData,
-  type SpotlightFilterFunction,
-} from "@mantine/spotlight";
+import { Spotlight, spotlight } from "@mantine/spotlight";
+import type { SpotlightActionGroupData, SpotlightFilterFunction } from "@mantine/spotlight";
 import { useNavigate } from "@tanstack/react-router";
 import { APP_DESTINATIONS } from "../../lib/navigation/appDestinations";
 import { useCommandCenterStore } from "../../store/commandCenterStore";
-import { useTr, i18n, tr } from "../../i18n";
+import { i18n, tr, useTr } from "../../i18n";
 
 /** Lowercase, comma-joined keyword string for substring matching. */
 function keywordText(keywords: string | string[] | undefined): string {

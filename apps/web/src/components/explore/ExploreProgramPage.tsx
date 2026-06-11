@@ -4,13 +4,13 @@ import { m } from "framer-motion";
 import { useEffect, useMemo } from "react";
 import type { Catalogue, Program } from "@uoplan/core";
 import { buildProgramCourseFilter, normalizeCourseCode, programSlug } from "@uoplan/core";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
   groupOfferingsByCourse,
   mergeGradeDistributionCounts,
-  type CourseOfferingGroup,
 } from "../../lib/explore/gradesSearch";
+import type { CourseOfferingGroup } from "../../lib/explore/gradesSearch";
 import { programSlugToPathParam } from "../../lib/explore/programSearch";
 import type { BackState } from "../../lib/navigation/backState";
 import { GradeDistributionHistogramPlaceholder } from "../calendar/GradeDistributionViz";
@@ -22,9 +22,9 @@ import {
   EXPLORE_ACCORDION_PAD_RIGHT,
 } from "../../lib/explore/accordionPadding";
 import {
+  EXPLORE_MOBILE_MEDIA_QUERY,
   ExploreAccordion,
   ExploreFullBleed,
-  EXPLORE_MOBILE_MEDIA_QUERY,
 } from "./ExploreEntityLayout";
 const EXPLORE_HISTOGRAM_WIDTH_PX = 288;
 

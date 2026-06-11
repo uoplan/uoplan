@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  ProfessorGraphPage,
-  type ProfessorGraphNavigate,
-} from "../components/graph/ProfessorGraphPage";
+import { ProfessorGraphPage } from "../components/graph/ProfessorGraphPage";
+import type { ProfessorGraphNavigate } from "../components/graph/ProfessorGraphPage";
 import { AppDataRouteGate } from "../components/shared/AppDataRouteGate";
 import { buildTabTitle } from "../lib/seo";
 

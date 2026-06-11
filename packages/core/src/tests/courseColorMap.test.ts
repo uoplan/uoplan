@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { COURSE_COLORS, buildColorMap, transferSwapColor } from "../utils/uiUtils";
+import { buildColorMap, COURSE_COLORS, transferSwapColor } from "../utils/uiUtils";
 import type { GeneratedSchedule } from "../generation/types";
 
 function scheduleFromCodes(codes: string[]): GeneratedSchedule {

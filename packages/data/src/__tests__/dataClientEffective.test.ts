@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { DataProto, normalizeCourseCode, type Catalogue, type Course } from "@uoplan/core";
+import { DataProto, normalizeCourseCode } from "@uoplan/core";
+import type { Catalogue, Course } from "@uoplan/core";
 import { createDataClient } from "../dataClient";
 import { dataAssetIds } from "../loaders";
 import {

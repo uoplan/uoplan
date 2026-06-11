@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { Alert } from "@mantine/core";
 import { buildEffectiveRemainingRequirements } from "@uoplan/core";
 import { useAppStore } from "../../store/appStore";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { computeFirstYearCredits } from "../../lib/generation/advancedGenerationDerivations";
 import { AdvancedGenerationOptionsView } from "./AdvancedGenerationOptionsView";
 import { DesiredCourseWarnings } from "./generationOptions/DesiredCourseWarnings";
@@ -126,7 +126,7 @@ export function AdvancedGenerationOptions() {
   const assignedKey = JSON.stringify(resolution.assigned);
   useEffect(() => {
     applyDesiredAutoAssignments(resolution.assigned);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [assignedKey, applyDesiredAutoAssignments]);
 
   const advancedPicksCount = useMemo(

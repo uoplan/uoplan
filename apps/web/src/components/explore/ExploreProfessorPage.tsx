@@ -2,10 +2,11 @@ import { Box, Group, Stack, Text, Title } from "@mantine/core";
 import { useMemo } from "react";
 import { m } from "framer-motion";
 import { useShallow } from "zustand/react/shallow";
-import { pickCanonicalProfessorName, type CanonicalProfessorName } from "@uoplan/core";
-import { useTr, tr } from "../../i18n";
+import { pickCanonicalProfessorName } from "@uoplan/core";
+import type { CanonicalProfessorName } from "@uoplan/core";
+import { tr, useTr } from "../../i18n";
 import { groupOfferingsByCourse } from "../../lib/explore/gradesSearch";
-import { resolveProfessorRoute, professorRouteParam } from "../../lib/explore/professorRoute";
+import { professorRouteParam, resolveProfessorRoute } from "../../lib/explore/professorRoute";
 import { useAppStore } from "../../store/appStore";
 import { useExploreOfferings } from "./exploreOfferingsContext";
 import { useProfessorFeedbackViews } from "../../hooks/useFeedbackViews";
@@ -14,11 +15,11 @@ import { ExploreCourseItem } from "./ExploreProfessorGradesLayout";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { RatingBadge } from "../shared/RatingBadge";
 import {
+  EXPLORE_MOBILE_MEDIA_QUERY,
   ExploreAccordion,
   ExploreEntityHeader,
   ExploreFeedbackAside,
   ExploreFullBleed,
-  EXPLORE_MOBILE_MEDIA_QUERY,
 } from "./ExploreEntityLayout";
 
 export function ExploreProfessorPage({ slug }: { slug: string }) {

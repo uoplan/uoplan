@@ -93,7 +93,7 @@ function parseCourseCodeParts(courseCode: string): {
   subject: string;
   catalogNumber: string;
 } {
-  const normalized = courseCode.trim().replace(/\s+/g, " ");
+  const normalized = courseCode.trim().replaceAll(/\s+/g, " ");
   const [subject = "", catalogNumber = ""] = normalized.split(" ");
   return { subject, catalogNumber };
 }

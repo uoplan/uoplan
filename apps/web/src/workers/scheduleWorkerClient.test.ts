@@ -10,7 +10,7 @@ vi.mock("comlink", () => ({
       generateSchedulesCalls += 1;
       return new Promise(() => {});
     },
-    loadData: () => Promise.resolve(undefined),
+    loadData: () => Promise.resolve(),
   }),
 }));
 

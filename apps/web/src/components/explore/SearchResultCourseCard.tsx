@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Text } from "@mantine/core";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import { RatingBadge } from "../shared/RatingBadge";
 import type { ExploreCourseSearchEntry } from "../../lib/explore/gradesSearch";

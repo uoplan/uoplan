@@ -105,6 +105,7 @@ describe("computeGradeTrends", () => {
     // Winter 2023 PSY: A+ (50) + F (50) from 1101, B (80) from 2301 → mass 180
     const winter = points[1];
     expect(winter.volume).toBe(180);
+    // oxlint-disable-next-line oxc/erasing-op -- `0 * 50` documents the GPA×weight term for the F grade
     expect(winter.gpa).toBeCloseTo((10 * 50 + 0 * 50 + 6 * 80) / 180, 5);
     expect(winter.aPlusPct).toBeCloseTo((50 / 180) * 100, 5);
     expect(winter.passPct).toBeCloseTo(((180 - 50) / 180) * 100, 5);
@@ -127,7 +128,7 @@ describe("computeGradeTrends", () => {
   it("returns chronologically ordered points across all disciplines", () => {
     const { points } = computeGradeTrends(grades);
     expect(points.map((p) => p.sortKey)).toEqual(
-      [...points.map((p) => p.sortKey)].sort((a, b) => a - b),
+      points.map((p) => p.sortKey).sort((a, b) => a - b),
     );
   });
 });

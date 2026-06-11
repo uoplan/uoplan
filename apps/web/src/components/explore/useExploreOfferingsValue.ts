@@ -15,11 +15,13 @@ import {
   buildTermPresenceIndex,
   createExploreCourseFuse,
   mergeOfferingsWithSchedule,
-  type AliasGroups,
-  type ExploreCourseSearchEntry,
-  type ExploreOfferingFlat,
-  type ExploreProfessorSearchEntry,
-  type TermPresenceIndex,
+} from "../../lib/explore/gradesSearch";
+import type {
+  AliasGroups,
+  ExploreCourseSearchEntry,
+  ExploreOfferingFlat,
+  ExploreProfessorSearchEntry,
+  TermPresenceIndex,
 } from "../../lib/explore/gradesSearch";
 
 export type ExploreOfferingsValue = {

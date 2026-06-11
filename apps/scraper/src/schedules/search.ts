@@ -1,5 +1,5 @@
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
 import * as cheerio from "cheerio";
 import type { Got } from "got";
 import { getErrorMessage } from "../shared/errors.ts";
@@ -173,7 +173,7 @@ function classifyBanner(html: string): BannerKind {
   const text = cheerio
     .load(html)("span.PSERRORTEXT, div.PSERRORTEXT, span.SSSMSGALERTTEXT")
     .text()
-    .replace(/\s+/g, " ")
+    .replaceAll(/\s+/g, " ")
     .trim()
     .toLowerCase();
   if (!text) return "none";
@@ -201,7 +201,7 @@ async function performSearch(
   cacheLabel: string,
 ): Promise<{ banner: BannerKind; html: string }> {
   const { dataLang } = clientInfo;
-  const safeSubject = sp.subject.replace(/[^A-Za-z0-9]+/g, "_");
+  const safeSubject = sp.subject.replaceAll(/[^A-Za-z0-9]+/g, "_");
   const cacheFilename = `${safeSubject}-${cacheLabel}-${termId}-${sp.virtual ? "virtual" : "nonvirtual"}.html`;
   const cachePath = path.join(HTML_CACHE_DIR, cacheFilename);
   const label =
@@ -320,7 +320,7 @@ async function fetchCourseExact(
   course: ParsedCourseCode,
   virtual: boolean,
 ): Promise<CourseSchedule | null> {
-  const safeCatalog = course.catalogNbr.replace(/[^A-Za-z0-9]+/g, "_");
+  const safeCatalog = course.catalogNbr.replaceAll(/[^A-Za-z0-9]+/g, "_");
   const { banner, html } = await performSearch(
     clientInfo,
     termId,

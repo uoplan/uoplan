@@ -3,7 +3,8 @@ import type { NormalizedCourseCode } from "./brand";
 import type { GenerationConstraints } from "./generation";
 import { getValidSectionCombos } from "./generation";
 import { isHonoursProject, normalizeCourseCode } from "./utils/courseUtils";
-import { diagnoseByRelaxation, type RelaxationOutcome } from "./engine/diagnostics/relaxation";
+import { diagnoseByRelaxation } from "./engine/diagnostics/relaxation";
+import type { RelaxationOutcome } from "./engine/diagnostics/relaxation";
 
 export type TimetableFailureKind =
   | "no_section_combos"

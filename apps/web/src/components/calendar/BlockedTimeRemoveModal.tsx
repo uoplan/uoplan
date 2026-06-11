@@ -1,6 +1,6 @@
 import { Button, Group, Modal, Stack, Text } from "@mantine/core";
 import type { BlockedTime } from "../../store/types";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { DAY_LABELS } from "@uoplan/calendar";
 import { formatTimeRange } from "./calendarEventDisplayUtils";
 

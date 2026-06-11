@@ -13,14 +13,16 @@ import {
   sectionHasTimes,
   sectionsHaveInternalOverlap,
   timesOverlap,
-  type ComponentSection,
-  type CourseSchedule,
-  type GeneratedSchedule,
-  type SectionCombo,
+} from "@uoplan/core";
+import type {
+  ComponentSection,
+  CourseSchedule,
+  GeneratedSchedule,
+  SectionCombo,
 } from "@uoplan/core";
 import { DAY_LABELS } from "@uoplan/calendar";
 import { useShallow } from "zustand/react/shallow";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { useAppStore } from "../../store/appStore";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
@@ -232,7 +234,7 @@ export function ExploreCourseSchedulePage({
       if (section) combo[component] = { section };
     }
     return { enrollments: [getEnrollmentsForCourse(course, combo)] };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [course, componentKeys, selection]);
 
   const sentiment = useScheduleSentiment();

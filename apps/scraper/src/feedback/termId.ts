@@ -32,7 +32,7 @@ const LABEL_RE =
 export function parseTermLabel(label: string): ParsedTermLabel | null {
   const m = LABEL_RE.exec(label);
   if (!m) return null;
-  const season = m[1].toLowerCase().replace(/\s+/g, "");
+  const season = m[1].toLowerCase().replaceAll(/\s+/g, "");
   const year = Number(m[2]);
   const code = SEASON_CODE[season] ?? SEASON_CODE[season.replace("summer", "").replace("/", "")];
   if (code === undefined) return null;

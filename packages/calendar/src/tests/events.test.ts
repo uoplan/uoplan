@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { normalizeProfessorName, unsafeBrand, type CanonicalProfessorName } from "@uoplan/core";
+import { normalizeProfessorName, unsafeBrand } from "@uoplan/core";
+import type { CanonicalProfessorName } from "@uoplan/core";
 import { scheduleToEvents } from "../events";
 import { makeSchedule } from "./fixtures";
 

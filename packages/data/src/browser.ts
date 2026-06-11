@@ -1,4 +1,5 @@
-import { createFetchBytesTransport, type FetchBytes, type ResolveUrl } from "./transport";
+import { createFetchBytesTransport } from "./transport";
+import type { FetchBytes, ResolveUrl } from "./transport";
 
 /**
  * Browser transport using the global `fetch`. Asset ids are resolved to their

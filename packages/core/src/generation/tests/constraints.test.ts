@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
-  timeSlotSatisfiesConstraints,
   satisfiesCompressedConstraint,
   timeSlotOverlapsBlocked,
+  timeSlotSatisfiesConstraints,
 } from "../constraints";
 import type {
   BlockedTimeWindow,

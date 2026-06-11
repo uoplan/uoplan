@@ -113,8 +113,8 @@ function extractLines(html: string | null | undefined): string[] {
     .split(/<br\s*\/?>/i)
     .map((line) =>
       line
-        .replace(/<[^>]*>/g, "")
-        .replace(/\s+/g, " ")
+        .replaceAll(/<[^>]*>/g, "")
+        .replaceAll(/\s+/g, " ")
         .trim(),
     )
     .filter(Boolean);

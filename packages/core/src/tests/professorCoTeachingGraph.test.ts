@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  buildProfessorCoTeachingGraph,
-  professorGraphId,
-  type ProfessorCoTeachingGraph,
-} from "../professorCoTeachingGraph";
+import { buildProfessorCoTeachingGraph, professorGraphId } from "../professorCoTeachingGraph";
+import type { ProfessorCoTeachingGraph } from "../professorCoTeachingGraph";
 import type { CourseGradesData } from "../dataTypes";
 import { normalizeCourseCode } from "../utils/courseUtils";
 

@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import type { NormalizedCourseCode } from "@uoplan/core";
-import { type AliasGroups, resolveComponentId } from "../lib/explore/gradesSearch";
+import { resolveComponentId } from "../lib/explore/gradesSearch";
+import type { AliasGroups } from "../lib/explore/gradesSearch";
 import { parseCoursePathParam } from "../lib/explore/courseSearchParams";
 
 export function useCourseAliasResolution(

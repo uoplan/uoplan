@@ -177,10 +177,10 @@ for (const [category, codes] of Object.entries(CATEGORY_DISCIPLINES) as [
   DisciplineCategory,
   readonly string[],
 ][]) {
-  codes.forEach((code, index) => {
+  for (const [index, code] of codes.entries()) {
     DISCIPLINE_CATEGORY.set(code, category);
     DISCIPLINE_INDEX_IN_CATEGORY.set(code, index);
-  });
+  }
 }
 
 const DEFAULT_NODE_COLOR = "#868e96";

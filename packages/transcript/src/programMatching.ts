@@ -36,29 +36,29 @@ function extractProgramBetweenTermAndCourse(text: string): {
   main: string | null;
   minor: string | null;
 } {
-  const normalized = text.replace(/\s+/g, " ").trim();
+  const normalized = text.replaceAll(/\s+/g, " ").trim();
   const match = normalized.match(/Term\s+(.+?)\s+(Course|Transfer)\b/i);
   if (!match) return { main: null, minor: null };
-  const fullFragment = match[1].replace(/\s+/g, " ").trim();
+  const fullFragment = match[1].replaceAll(/\s+/g, " ").trim();
 
   let mainPart = fullFragment;
   let minorPart: string | null = null;
 
   const withIndex = fullFragment.toLowerCase().indexOf(" with ");
   if (withIndex !== -1) {
-    mainPart = fullFragment.substring(0, withIndex).trim();
-    minorPart = fullFragment.substring(withIndex + 6).trim();
+    mainPart = fullFragment.slice(0, withIndex).trim();
+    minorPart = fullFragment.slice(withIndex + 6).trim();
   }
 
   const formatMain = (fragment: string) => {
     const result = fragment
-      .replace(
+      .replaceAll(
         /\b(Honours)\s+(?:Bachelor(?:'s)?|Bachelors)\s+of\s+([A-Za-z]{2})[A-Za-z]*\b/gi,
         (_match, honours: string, two: string) =>
           `${honours} B${two[0]?.toUpperCase() ?? ""}${two[1]?.toLowerCase() ?? ""}`,
       )
-      .replace(/\bin\b/gi, " ")
-      .replace(/\s+/g, " ")
+      .replaceAll(/\bin\b/gi, " ")
+      .replaceAll(/\s+/g, " ")
       .trim();
     return result.length >= 5 ? result : null;
   };
@@ -81,7 +81,7 @@ function buildMultilineCandidates(text: string): string[] {
       const chunk = lines
         .slice(i, i + windowSize)
         .join(" ")
-        .replace(/\s+/g, " ")
+        .replaceAll(/\s+/g, " ")
         .trim();
       if (chunk.length >= 5 && chunk.length <= 250) {
         candidates.push(chunk);
@@ -96,14 +96,14 @@ function findClosestTitle<T extends { title: string }>(
   items: T[],
   minScore: number,
 ): T | null {
-  const fragmentLower = fragment.toLowerCase().replace(/\s+/g, " ").trim();
+  const fragmentLower = fragment.toLowerCase().replaceAll(/\s+/g, " ").trim();
   let best: T | null = null;
   let bestScore = 0;
 
   for (const item of items) {
     const title = item.title.trim();
     if (!title) continue;
-    const titleLower = title.toLowerCase().replace(/\s+/g, " ").trim();
+    const titleLower = title.toLowerCase().replaceAll(/\s+/g, " ").trim();
     const score = normalizedSimilarity(titleLower, fragmentLower);
 
     if (score > bestScore) {
@@ -122,7 +122,7 @@ function findProgramByMultilineFallback<T extends { title: string }>(
   let mainSearchText = searchText;
   const withIndex = searchText.toLowerCase().indexOf(" with ");
   if (withIndex !== -1) {
-    mainSearchText = searchText.substring(0, withIndex);
+    mainSearchText = searchText.slice(0, withIndex);
   }
 
   const candidates = buildMultilineCandidates(mainSearchText);
@@ -146,7 +146,7 @@ function findProgramByMultilineFallback<T extends { title: string }>(
       for (let i = 0; i <= mainSearchText.length - windowLen; i += 3) {
         const chunk = mainSearchText
           .slice(i, i + windowLen)
-          .replace(/\s+/g, " ")
+          .replaceAll(/\s+/g, " ")
           .trim();
         if (chunk.length >= 5) {
           const similarity = normalizedSimilarity(titleLower, chunk.toLowerCase());

@@ -1,4 +1,4 @@
-import { beforeAll, describe, it, expect } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { i18n } from "../i18n";
 import { formatWeekCount } from "./formatWeekCount";
 

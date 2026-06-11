@@ -28,7 +28,7 @@ describe("parseCoursePathParam", () => {
   });
 
   it("returns null for invalid input", () => {
-    expect(parseCoursePathParam(undefined)).toBeNull();
+    expect(parseCoursePathParam()).toBeNull();
     expect(parseCoursePathParam("")).toBeNull();
     expect(parseCoursePathParam("invalid")).toBeNull();
     expect(parseCoursePathParam("CS2110")).toBeNull();

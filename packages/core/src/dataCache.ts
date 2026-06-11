@@ -1,6 +1,5 @@
-import type { Course, Catalogue } from "./dataTypes";
-import type { CourseSchedule, SchedulesData } from "./dataTypes";
-import { normalizeCourseCode, isWorkTermCourse, getDiscipline } from "./utils/courseUtils";
+import type { Catalogue, Course, CourseSchedule, SchedulesData } from "./dataTypes";
+import { getDiscipline, isWorkTermCourse, normalizeCourseCode } from "./utils/courseUtils";
 import type { NormalizedCourseCode } from "./brand";
 
 // Re-export for backwards compatibility

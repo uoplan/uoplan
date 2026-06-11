@@ -1,9 +1,8 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import type { DataCache } from "../../dataCache";
 import { buildPrereqContext } from "../context";
-import type { Course } from "../../dataTypes";
-import { meetsCoursePrereq, canTakeCourse, prerequisitesContainNonCourse } from "../evaluator";
-import type { CoursePrereqNode } from "../../dataTypes";
+import type { Course, CoursePrereqNode } from "../../dataTypes";
+import { canTakeCourse, meetsCoursePrereq, prerequisitesContainNonCourse } from "../evaluator";
 import { normalizeCourseCode } from "../../utils/courseUtils";
 
 describe("prerequisites", () => {
@@ -29,7 +28,7 @@ describe("prerequisites", () => {
       resolveToCanonical: (c) => normalizeCourseCode(c),
       getAllCourses: () => courses,
       getCoursesByDiscipline: () => [],
-      getSchedule: () => undefined,
+      getSchedule: () => {},
       getAllSchedules: () => [],
     };
   });

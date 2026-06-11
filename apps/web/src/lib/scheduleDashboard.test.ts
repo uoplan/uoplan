@@ -4,8 +4,8 @@ import {
   getGenerateBlockers,
   getScheduleDashboardCards,
   resolveInitialOpenStep,
-  type ScheduleDashboardInput,
 } from "./scheduleDashboard";
+import type { ScheduleDashboardInput } from "./scheduleDashboard";
 import { dynamicActivate } from "../i18n";
 
 beforeAll(async () => {
@@ -101,17 +101,17 @@ describe("resolveInitialOpenStep", () => {
   it("opens the first non-gated step needing attention", () => {
     const cards = getScheduleDashboardCards(baseState({ firstYear: null, program: null }));
     // term ready, program needs attention → program opens.
-    expect(resolveInitialOpenStep(cards, undefined)).toBe("program");
+    expect(resolveInitialOpenStep(cards)).toBe("program");
   });
 
   it("opens the term step when the term is not ready", () => {
     const cards = getScheduleDashboardCards(baseState({ selectedTermId: null }));
-    expect(resolveInitialOpenStep(cards, undefined)).toBe("term");
+    expect(resolveInitialOpenStep(cards)).toBe("term");
   });
 
   it("opens nothing when every step is ready", () => {
     const cards = getScheduleDashboardCards(baseState());
-    expect(resolveInitialOpenStep(cards, undefined)).toBeNull();
+    expect(resolveInitialOpenStep(cards)).toBeNull();
   });
 
   it("prefers an explicit ?step deep link over the attention heuristic", () => {

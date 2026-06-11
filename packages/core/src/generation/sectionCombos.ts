@@ -118,9 +118,9 @@ export function getValidSectionCombos(
     }
     if (!hasOverlap) {
       const obj: SectionCombo = {};
-      componentKeys.forEach((key, idx) => {
+      for (const [idx, key] of componentKeys.entries()) {
         obj[key] = { section: sections[idx] };
-      });
+      }
       valid.push(obj);
     }
   }

@@ -2,7 +2,7 @@ import { Anchor, Box, Group, Kbd, Stack, Text, UnstyledButton } from "@mantine/c
 import { useMediaQuery, useOs } from "@mantine/hooks";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useCommandCenterStore } from "../../store/commandCenterStore";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { labelForPath } from "../../lib/navigation/backState";
 import { seasonalFlourish } from "../../lib/easterEggs/seasonal";
 

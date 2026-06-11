@@ -10,15 +10,15 @@ import {
   createExploreFuse,
   dedupeCourseEntriesByComponent,
   exploreProfessorsSectionFirst,
+  groupOfferingsByProfessor,
   mergeGradeDistributionCounts,
   mergeOfferingsWithSchedule,
   searchExplore,
   searchExploreCourses,
   searchExploreOfferings,
   searchExploreProfessors,
-  groupOfferingsByProfessor,
-  type ExploreOfferingFlat,
 } from "./gradesSearch";
+import type { ExploreOfferingFlat } from "./gradesSearch";
 import type { Catalogue, CourseSchedule, SchedulesData } from "@uoplan/core";
 import { testCourseCode, testProfessorName } from "../../test/brands";
 

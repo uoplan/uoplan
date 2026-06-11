@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 /**
  * Build-time prediction of instructors for sections that have no assigned
  * instructor (every meeting time is "Staff"/blank).
@@ -45,10 +43,10 @@ function termYear(termId: number): number {
 function normalizeInstructorName(value: string): string {
   return String(value)
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replaceAll(/[\u0300-\u036f]/g, "")
     .trim()
     .toLowerCase()
-    .replace(/\s+/g, " ");
+    .replaceAll(/\s+/g, " ");
 }
 
 const UNKNOWN_INSTRUCTOR_NAMES = new Set(["", "staff", "tba", "to be announced", "tbd"]);

@@ -1,11 +1,6 @@
-import {
-  useState,
-  type CSSProperties,
-  type MouseEvent,
-  type KeyboardEvent,
-  type ReactNode,
-} from "react";
-import { Stack, Text, Paper, Group, Box, Tooltip } from "@mantine/core";
+import { useState } from "react";
+import type { CSSProperties, KeyboardEvent, MouseEvent, ReactNode } from "react";
+import { Box, Group, Paper, Stack, Text, Tooltip } from "@mantine/core";
 import type { PaperProps } from "@mantine/core";
 import type { RequirementWithStatus } from "@uoplan/core";
 import {
@@ -22,10 +17,10 @@ import {
   RequirementSectionHeading,
 } from "./requirementRenderUtils";
 import {
-  TITLE_FLEX,
   getRequirementChoiceGroupState,
   getRequirementRenderMeta,
   requirementIndentStyle,
+  TITLE_FLEX,
 } from "./requirementRenderPrimitives";
 
 const OPTION_CARD_BORDER_UNSELECTED = "var(--app-border)";
@@ -129,7 +124,7 @@ function SelectableOptionPaper({
       {...paperProps}
       withBorder={false}
       radius="var(--app-radius)"
-      // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- rich selectable option card in a radiogroup; native <input type="radio"> can't wrap this content
+      // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- rich selectable option card in a radiogroup; native <input type="radio"> can't wrap this content
       role="radio"
       aria-checked={radio.checked}
       aria-disabled={radio.disabled}
@@ -213,7 +208,7 @@ export function OptionRequirementPreview({
       ...onlyChild,
       title: mergedTitle,
       complete: rawNode.complete && onlyChild.complete,
-      satisfiedBy: rawNode.satisfiedBy.length ? rawNode.satisfiedBy : onlyChild.satisfiedBy,
+      satisfiedBy: rawNode.satisfiedBy.length > 0 ? rawNode.satisfiedBy : onlyChild.satisfiedBy,
     };
     return merged;
   })();

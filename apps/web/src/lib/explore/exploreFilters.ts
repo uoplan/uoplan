@@ -313,11 +313,14 @@ export function filterCourseEntries(
   const byTerm = filters.termId !== null;
   const byFeedback = filters.minFeedback !== null && sentiment?.courseByNorm != null;
   return entries.filter((e) => {
-    if (filters.levels.length > 0) {
-      if (e.level === null || !filters.levels.includes(e.level)) return false;
+    if (filters.levels.length > 0 && (e.level === null || !filters.levels.includes(e.level))) {
+      return false;
     }
-    if (filters.languages.length > 0) {
-      if (e.language === null || !filters.languages.includes(e.language)) return false;
+    if (
+      filters.languages.length > 0 &&
+      (e.language === null || !filters.languages.includes(e.language))
+    ) {
+      return false;
     }
     if (filters.disciplines.length > 0) {
       const discipline = getCourseDiscipline(e.courseCode);
@@ -328,15 +331,18 @@ export function filterCourseEntries(
       if (gpa == null) return false;
       if (getDifficultyBucket(gpa) !== filters.difficulty) return false;
     }
-    if (filters.minRating !== null) {
-      if (e.maxProfessorRating === null || e.maxProfessorRating < filters.minRating) return false;
+    if (
+      filters.minRating !== null &&
+      (e.maxProfessorRating === null || e.maxProfessorRating < filters.minRating)
+    ) {
+      return false;
     }
     if (byFeedback) {
       const s = sentiment!.courseByNorm!.get(e.normCode);
       if (s == null || s < filters.minFeedback!) return false;
     }
-    if (byTerm) {
-      if (!termSets?.courseComponents?.has(e.componentId)) return false;
+    if (byTerm && !termSets?.courseComponents?.has(e.componentId)) {
+      return false;
     }
     return true;
   });

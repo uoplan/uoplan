@@ -15,9 +15,9 @@ import { buildDataCache } from "../../../dataCache";
 import type { DataCache } from "../../../dataCache";
 import type {
   Catalogue,
+  ComponentSection,
   Course,
   CourseSchedule,
-  ComponentSection,
   DayOfWeek,
   SchedulesData,
 } from "../../../dataTypes";

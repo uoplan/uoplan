@@ -1,9 +1,6 @@
 import Graph from "graphology";
-import {
-  blendProfessorDisciplineColor,
-  type ProfessorCoTeachingGraph,
-  type ProfessorGraphNode,
-} from "@uoplan/core";
+import { blendProfessorDisciplineColor } from "@uoplan/core";
+import type { ProfessorCoTeachingGraph, ProfessorGraphNode } from "@uoplan/core";
 import { colorWithAlpha } from "./colorWithAlpha";
 
 export type ProfessorNodeAttributes = {

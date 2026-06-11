@@ -1,12 +1,11 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import type { DataCache } from "@uoplan/core";
-import type { RequirementWithStatus } from "@uoplan/core";
+import type { DataCache, RequirementWithStatus } from "@uoplan/core";
 import { isGroupToken, normalizeCourseCode } from "@uoplan/core";
 import { i18n } from "../../i18n";
 import { testCourseCode } from "../../test/brands";
 import {
-  applyOptionSelections,
   appendCourseDedupedByNorm,
+  applyOptionSelections,
   collectRequirementIdsWithCandidateCourse,
   countSatisfiedTopLevelRoots,
   getConstrainMultiSelectOptions,
@@ -30,7 +29,7 @@ function emptyScheduleCache(): DataCache {
         ReturnType<DataCache["getCourse"]>
       >,
     resolveToCanonical: (code) => testCourseCode(code),
-    getSchedule: () => undefined,
+    getSchedule: () => {},
     getCoursesByDiscipline: () => [],
     getAllCourses: () => [],
     getAllSchedules: () => [],

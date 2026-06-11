@@ -1,4 +1,5 @@
-import { type TermSeason, decodeTermMeta } from "@uoplan/core";
+import { decodeTermMeta } from "@uoplan/core";
+import type { TermSeason } from "@uoplan/core";
 
 /** English season words, for non-localized contexts (search indexing, workers). */
 const SEASON_LABEL_EN: Record<TermSeason, string> = {

@@ -5,7 +5,7 @@ import MarkdownIt from "markdown-it";
 import type { Plugin } from "vite";
 
 const VIRTUAL_ID = "virtual:changelog-html";
-const RESOLVED_VIRTUAL_ID = "\0" + VIRTUAL_ID;
+const RESOLVED_VIRTUAL_ID = `\0${VIRTUAL_ID}`;
 
 function changelogMarkdownPath(): string {
   const here = path.dirname(fileURLToPath(import.meta.url));

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { defaultAppStore } from "../appStore";
 import { applySwapsToResult } from "../slices/schedules/swapHelpers";
 import { baseSwapResult, resetSwapStore } from "./scheduleTestHelpers";

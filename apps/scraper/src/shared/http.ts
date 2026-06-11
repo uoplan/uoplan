@@ -1,5 +1,5 @@
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
 import { getErrorMessage, NotFoundError } from "./errors.ts";
 
 const USE_CACHE_ONLY = process.argv.includes("use-cache");
@@ -9,7 +9,7 @@ export async function fetchHtml(url: string, retries = 3): Promise<string> {
   const cacheDir = ".cache/catalogue";
   await fs.mkdir(cacheDir, { recursive: true });
 
-  const filename = encodeURIComponent(url.replace(/^https?:\/\//, "")) + ".html";
+  const filename = `${encodeURIComponent(url.replace(/^https?:\/\//, ""))}.html`;
   const filePath = path.join(cacheDir, filename);
 
   if (USE_CACHE_ONLY) {
@@ -35,7 +35,7 @@ export async function fetchHtml(url: string, retries = 3): Promise<string> {
       if (err instanceof NotFoundError) throw err;
       if (i === retries - 1)
         throw new Error(`Failed to fetch ${url}: ${getErrorMessage(err)}`, { cause: err });
-      await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
+      await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1)));
     }
   }
   throw new Error(`Failed to fetch ${url}`);

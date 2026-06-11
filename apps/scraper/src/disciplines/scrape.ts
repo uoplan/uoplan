@@ -15,7 +15,7 @@ type DisciplineRow = {
 };
 
 function normalizeLabel(label: string): string {
-  return label.replace(/\s+/g, " ").trim();
+  return label.replaceAll(/\s+/g, " ").trim();
 }
 
 function parseDisciplineFromLabel(label: string): { code: string; name: string } | null {
@@ -24,7 +24,7 @@ function parseDisciplineFromLabel(label: string): { code: string; name: string }
   if (!codeMatch?.[1]) return null;
 
   const code = codeMatch[1].toUpperCase();
-  const name = normalized.replace(CODE_IN_PARENS_REGEX, "").replace(/\s+/g, " ").trim();
+  const name = normalized.replace(CODE_IN_PARENS_REGEX, "").replaceAll(/\s+/g, " ").trim();
   if (!name) return null;
 
   return { code, name };

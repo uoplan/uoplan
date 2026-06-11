@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Group, Text } from "@mantine/core";
 import type { ProfessorRatingsMap } from "@uoplan/core";
-import { normalizeProfessorName, hasProfessorRatings } from "@uoplan/core";
-import { useTr, tr } from "../../i18n";
+import { hasProfessorRatings, normalizeProfessorName } from "@uoplan/core";
+import { tr, useTr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import { RatingBadge } from "../shared/RatingBadge";
 import type { ExploreProfessorSearchEntry } from "../../lib/explore/gradesSearch";

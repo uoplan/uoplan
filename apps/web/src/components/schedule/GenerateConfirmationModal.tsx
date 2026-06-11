@@ -1,6 +1,6 @@
 import { Button, List, Modal, Stack, Text } from "@mantine/core";
 import type { GenerateBlocker } from "../../lib/scheduleDashboard";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 
 type GenerateConfirmationModalProps = {
   opened: boolean;

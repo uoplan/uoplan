@@ -1,4 +1,4 @@
-import type { CourseSchedule, ComponentSection } from "./dataTypes";
+import type { ComponentSection, CourseSchedule } from "./dataTypes";
 import type { DataCache } from "./dataCache";
 import type { NormalizedCourseCode } from "./brand";
 import { normalizeCourseCode } from "./utils/courseUtils";

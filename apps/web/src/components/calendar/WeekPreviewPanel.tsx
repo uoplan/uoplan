@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import type { GeneratedSchedule } from "@uoplan/core";
-import { COURSE_COLORS, COURSE_COLOR_OKLCH } from "@uoplan/core";
+import { COURSE_COLOR_OKLCH, COURSE_COLORS } from "@uoplan/core";
 import type { WeekGroup } from "../../hooks/useScheduleWeeks";
 import { slotActiveInWeek } from "../../hooks/useScheduleWeeks";
 import { formatWeekLabel } from "../../lib/formatWeekCount";

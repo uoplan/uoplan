@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { canProceedFromWizardStep, WizardStep, type WizardProceedContext } from "./wizardSteps";
+import { canProceedFromWizardStep, WizardStep } from "./wizardSteps";
+import type { WizardProceedContext } from "./wizardSteps";
 
 function baseProceedCtx(overrides: Partial<WizardProceedContext> = {}): WizardProceedContext {
   return {

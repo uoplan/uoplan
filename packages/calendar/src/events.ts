@@ -1,7 +1,7 @@
 import type { CanonicalProfessorName, GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/core";
 import {
-  getRatingsForInstructors,
   getRatingDetailsForInstructors,
+  getRatingsForInstructors,
   isUnknownInstructorName,
   normalizeCourseCode,
   normalizeGradeVizDistribution,

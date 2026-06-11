@@ -11,7 +11,8 @@ import {
   pickCanonicalProfessorName,
   professorGraphId,
 } from "@uoplan/core";
-import { mergeGradeDistributionCounts, type ExploreOfferingFlat } from "../explore/gradesSearch";
+import { mergeGradeDistributionCounts } from "../explore/gradesSearch";
+import type { ExploreOfferingFlat } from "../explore/gradesSearch";
 import { formatTermLabelPlain } from "../term/termLabelPlain";
 
 export type NeighborSortMode = "strength" | "name";

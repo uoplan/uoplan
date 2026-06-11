@@ -1,9 +1,5 @@
-import {
-  pickCanonicalProfessorName,
-  unsafeBrand,
-  type CanonicalProfessorName,
-  type NormalizedCourseCode,
-} from "@uoplan/core";
+import { pickCanonicalProfessorName, unsafeBrand } from "@uoplan/core";
+import type { CanonicalProfessorName, NormalizedCourseCode } from "@uoplan/core";
 
 export const testCourseCode = (value: string): NormalizedCourseCode =>
   unsafeBrand<NormalizedCourseCode>(value);

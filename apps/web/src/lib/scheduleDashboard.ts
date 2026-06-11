@@ -149,7 +149,7 @@ export function getScheduleDashboardCards(
  */
 export function resolveInitialOpenStep(
   cards: Pick<ScheduleDashboardCardState, "id" | "status" | "gateMessage">[],
-  requestedStep: ScheduleStepId | undefined,
+  requestedStep?: ScheduleStepId,
 ): ScheduleStepId | null {
   if (requestedStep && cards.some((card) => card.id === requestedStep)) {
     return requestedStep;

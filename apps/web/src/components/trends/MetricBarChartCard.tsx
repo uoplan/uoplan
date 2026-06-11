@@ -2,8 +2,8 @@ import { BarChart } from "@mantine/charts";
 import { useMemo } from "react";
 import { tr, useTr } from "../../i18n";
 import {
-  METRIC_COLOR,
   formatMetricValue,
+  METRIC_COLOR,
   metricDomain,
   pickMetric,
 } from "../../lib/trends/metrics";

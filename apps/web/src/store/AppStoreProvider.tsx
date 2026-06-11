@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { AppStoreContext, type AppStoreApi } from "./appStore";
+import { AppStoreContext } from "./appStore";
+import type { AppStoreApi } from "./appStore";
 
 /**
  * Provides an {@link AppStoreApi} instance to the React tree. Production wraps the app with the

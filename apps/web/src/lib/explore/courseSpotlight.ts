@@ -1,10 +1,6 @@
 import { distributionGpa, GRADE_POINTS } from "@uoplan/core";
-import {
-  countDistinctProfessors,
-  mergeGradeDistributionCounts,
-  type ExploreCourseSearchEntry,
-  type ExploreOfferingFlat,
-} from "./gradesSearch";
+import { countDistinctProfessors, mergeGradeDistributionCounts } from "./gradesSearch";
+import type { ExploreCourseSearchEntry, ExploreOfferingFlat } from "./gradesSearch";
 
 const SKIP_GRADES = new Set(["P", "S", "NS", "NC", "ABS", "EIN"]);
 const FAIL_GRADES = new Set(["F", "E", "ABS"]);

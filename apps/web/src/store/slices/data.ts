@@ -2,36 +2,34 @@ import type { StateCreator } from "zustand";
 import { notifications } from "@mantine/notifications";
 import type { AppStore } from "../types";
 import {
+  buildDataCache,
+  buildProfessorRatingsMap,
+  buildProfessorRegistry,
   DataProto,
+  decodeState,
+  decodeStateFromBase64,
+  defaultUpcomingTermId,
+  enrichSchedulesDataWithGrades,
   fromProtoCatalogue,
   fromProtoCatalogueManifest,
   fromProtoCourseGradesData,
   fromProtoDisciplinesData,
   fromProtoIndices,
   fromProtoProfessorsData,
-  buildProfessorRegistry,
   fromProtoRateMyProfessorsData,
   fromProtoSchedulesData,
   fromProtoTermsData,
-  type DataCache,
-  type Indices,
+  getGradeLookups,
+  parseStateFromUrl,
+  peekTermAndYear,
+  peekTermAndYearFromBase64,
+  urlToSlug,
 } from "@uoplan/core";
-import { buildDataCache } from "@uoplan/core";
-import { enrichSchedulesDataWithGrades, getGradeLookups } from "@uoplan/core";
+import type { DataCache, Indices } from "@uoplan/core";
 import { getMergedCatalogue } from "./catalogueUtils";
 import { fetchProtoBytes, optionalProtoBytes } from "../../lib/protoFetch";
 import { dataAssetIds } from "@uoplan/data";
 import { buildCacheWithOpt } from "../../lib/dataCacheLoader";
-import { buildProfessorRatingsMap } from "@uoplan/core";
-import {
-  parseStateFromUrl,
-  peekTermAndYear,
-  peekTermAndYearFromBase64,
-  decodeState,
-  decodeStateFromBase64,
-  urlToSlug,
-  defaultUpcomingTermId,
-} from "@uoplan/core";
 import { recomputeStateForProgram } from "../requirementCompute";
 import { LOCAL_STORAGE_KEY } from "../constants";
 import { applyHydrationNavigation } from "../../lib/hydrateNavigation";
@@ -179,6 +177,7 @@ export const createDataSlice =
           }
         } catch (err) {
           set({ yearCatalogueLoading: false });
+          // oxlint-disable-next-line no-console -- intentional error logging for catalogue load failures
           console.error("Failed to load year catalogue:", err);
           notifications.show({
             color: "red",
@@ -386,53 +385,56 @@ export const createDataSlice =
         if (get().courseGrades) return;
         if (gradesPromise) return gradesPromise;
         gradesPromise = (async () => {
-          set({ courseGradesLoading: true });
-          const bytes = await optionalProtoBytes(dataAssetIds.grades);
-          if (!bytes) {
-            set({
-              courseGradesLoading: false,
-              courseGradesError: "Failed to load grade history",
-            });
-            return;
-          }
-          let courseGrades = null;
-          let courseGradesError: string | null = null;
           try {
-            courseGrades = fromProtoCourseGradesData(DataProto.GradesData.decode(bytes));
-          } catch (err) {
-            courseGradesError =
-              err instanceof Error ? err.message : "Failed to parse grade history";
-          }
+            set({ courseGradesLoading: true });
+            const bytes = await optionalProtoBytes(dataAssetIds.grades);
+            if (!bytes) {
+              set({
+                courseGradesLoading: false,
+                courseGradesError: "Failed to load grade history",
+              });
+              return;
+            }
+            let courseGrades = null;
+            let courseGradesError: string | null = null;
+            try {
+              courseGrades = fromProtoCourseGradesData(DataProto.GradesData.decode(bytes));
+            } catch (err) {
+              courseGradesError =
+                err instanceof Error ? err.message : "Failed to parse grade history";
+            }
 
-          // Re-enrich the current term's schedules with the freshly loaded grade
-          // distributions and rebuild the cache so the calendar shows them.
-          const { schedulesData, selectedTermId } = get();
-          if (courseGrades && schedulesData && selectedTermId) {
-            const enriched = enrichSchedulesDataWithGrades(
-              schedulesData,
-              getGradeLookups(courseGrades),
-              Number(selectedTermId),
-            );
-            const effectiveCatalogue = effectiveCatalogueFromState();
+            // Re-enrich the current term's schedules with the freshly loaded grade
+            // distributions and rebuild the cache so the calendar shows them.
+            const { schedulesData, selectedTermId } = get();
+            if (courseGrades && schedulesData && selectedTermId) {
+              const enriched = enrichSchedulesDataWithGrades(
+                schedulesData,
+                getGradeLookups(courseGrades),
+                Number(selectedTermId),
+              );
+              const effectiveCatalogue = effectiveCatalogueFromState();
+              set({
+                courseGrades,
+                courseGradesError,
+                courseGradesLoading: false,
+                schedulesData: enriched,
+                cache: effectiveCatalogue
+                  ? buildCacheWithOpt(effectiveCatalogue, enriched, get().completedCourses)
+                  : get().cache,
+              });
+            } else {
+              set({ courseGrades, courseGradesError, courseGradesLoading: false });
+            }
+          } catch (err) {
+            gradesPromise = null;
             set({
-              courseGrades,
-              courseGradesError,
               courseGradesLoading: false,
-              schedulesData: enriched,
-              cache: effectiveCatalogue
-                ? buildCacheWithOpt(effectiveCatalogue, enriched, get().completedCourses)
-                : get().cache,
+              courseGradesError:
+                err instanceof Error ? err.message : "Failed to load grade history",
             });
-          } else {
-            set({ courseGrades, courseGradesError, courseGradesLoading: false });
           }
-        })().catch((err) => {
-          gradesPromise = null;
-          set({
-            courseGradesLoading: false,
-            courseGradesError: err instanceof Error ? err.message : "Failed to load grade history",
-          });
-        });
+        })();
         return gradesPromise;
       },
 
@@ -440,20 +442,22 @@ export const createDataSlice =
         if (get().professorRatings) return;
         if (ratingsPromise) return ratingsPromise;
         ratingsPromise = (async () => {
-          const bytes = await optionalProtoBytes(dataAssetIds.rateMyProfessors);
-          if (!bytes) return;
           try {
-            const rmpData = fromProtoRateMyProfessorsData(
-              DataProto.RateMyProfessorsData.decode(bytes),
-            );
-            set({ professorRatings: buildProfessorRatingsMap(rmpData) });
-          } catch {
-            // Ratings are optional; leave them null on a decode failure.
+            const bytes = await optionalProtoBytes(dataAssetIds.rateMyProfessors);
+            if (!bytes) return;
+            try {
+              const rmpData = fromProtoRateMyProfessorsData(
+                DataProto.RateMyProfessorsData.decode(bytes),
+              );
+              set({ professorRatings: buildProfessorRatingsMap(rmpData) });
+            } catch {
+              // Ratings are optional; leave them null on a decode failure.
+            }
+          } catch (err) {
+            ratingsPromise = null;
+            throw err;
           }
-        })().catch((err) => {
-          ratingsPromise = null;
-          throw err;
-        });
+        })();
         return ratingsPromise;
       },
 
@@ -461,20 +465,22 @@ export const createDataSlice =
         if (get().disciplines) return;
         if (disciplinesPromise) return disciplinesPromise;
         disciplinesPromise = (async () => {
-          const bytes = await optionalProtoBytes(dataAssetIds.disciplines);
-          if (!bytes) return;
           try {
-            set({
-              disciplines: fromProtoDisciplinesData(DataProto.DisciplinesData.decode(bytes))
-                .disciplines,
-            });
-          } catch {
-            // Disciplines are optional; leave them null on a decode failure.
+            const bytes = await optionalProtoBytes(dataAssetIds.disciplines);
+            if (!bytes) return;
+            try {
+              set({
+                disciplines: fromProtoDisciplinesData(DataProto.DisciplinesData.decode(bytes))
+                  .disciplines,
+              });
+            } catch {
+              // Disciplines are optional; leave them null on a decode failure.
+            }
+          } catch (err) {
+            disciplinesPromise = null;
+            throw err;
           }
-        })().catch((err) => {
-          disciplinesPromise = null;
-          throw err;
-        });
+        })();
         return disciplinesPromise;
       },
 
@@ -482,21 +488,23 @@ export const createDataSlice =
         if (get().professors) return;
         if (professorsPromise) return professorsPromise;
         professorsPromise = (async () => {
-          const bytes = await optionalProtoBytes(dataAssetIds.professors);
-          if (!bytes) return;
           try {
-            set({
-              professors: buildProfessorRegistry(
-                fromProtoProfessorsData(DataProto.ProfessorsData.decode(bytes)),
-              ),
-            });
-          } catch {
-            // Registry is optional; leave it null on a decode failure.
+            const bytes = await optionalProtoBytes(dataAssetIds.professors);
+            if (!bytes) return;
+            try {
+              set({
+                professors: buildProfessorRegistry(
+                  fromProtoProfessorsData(DataProto.ProfessorsData.decode(bytes)),
+                ),
+              });
+            } catch {
+              // Registry is optional; leave it null on a decode failure.
+            }
+          } catch (err) {
+            professorsPromise = null;
+            throw err;
           }
-        })().catch((err) => {
-          professorsPromise = null;
-          throw err;
-        });
+        })();
         return professorsPromise;
       },
 
@@ -506,36 +514,38 @@ export const createDataSlice =
         if (get().yearCatalogueCourses) return;
         if (yearCataloguePromise) return yearCataloguePromise;
         yearCataloguePromise = (async () => {
-          set({ yearCatalogueLoading: true });
-          const bytes = await fetchProtoBytes(dataAssetIds.catalogue(firstYear));
-          const parsed = fromProtoCatalogue(DataProto.Catalogue.decode(bytes));
-          set({
-            yearCataloguePrograms: parsed.programs,
-            yearCatalogueCourses: parsed.courses,
-            yearCatalogueLoading: false,
-          });
-          // Rebuild the cache + recompute requirement state with the year-specific
-          // courses merged in, without clearing the user's program selection.
-          const s = get();
-          const effectiveCatalogue = getMergedCatalogue(
-            s.catalogue ?? catalogue,
-            parsed.courses,
-            s.completedCourses,
-          );
-          if (effectiveCatalogue && s.schedulesData) {
-            const cache = buildCacheWithOpt(
-              effectiveCatalogue,
-              s.schedulesData,
+          try {
+            set({ yearCatalogueLoading: true });
+            const bytes = await fetchProtoBytes(dataAssetIds.catalogue(firstYear));
+            const parsed = fromProtoCatalogue(DataProto.Catalogue.decode(bytes));
+            set({
+              yearCataloguePrograms: parsed.programs,
+              yearCatalogueCourses: parsed.courses,
+              yearCatalogueLoading: false,
+            });
+            // Rebuild the cache + recompute requirement state with the year-specific
+            // courses merged in, without clearing the user's program selection.
+            const s = get();
+            const effectiveCatalogue = getMergedCatalogue(
+              s.catalogue ?? catalogue,
+              parsed.courses,
               s.completedCourses,
             );
-            const full = recomputeCurrentProgramState(cache);
-            set({ cache, ...full });
+            if (effectiveCatalogue && s.schedulesData) {
+              const cache = buildCacheWithOpt(
+                effectiveCatalogue,
+                s.schedulesData,
+                s.completedCourses,
+              );
+              const full = recomputeCurrentProgramState(cache);
+              set({ cache, ...full });
+            }
+          } catch (err) {
+            yearCataloguePromise = null;
+            set({ yearCatalogueLoading: false });
+            throw err;
           }
-        })().catch((err) => {
-          yearCataloguePromise = null;
-          set({ yearCatalogueLoading: false });
-          throw err;
-        });
+        })();
         return yearCataloguePromise;
       },
     };

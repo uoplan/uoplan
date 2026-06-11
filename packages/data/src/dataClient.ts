@@ -1,8 +1,4 @@
 import {
-  type Catalogue,
-  type Course,
-  type DataCache,
-  type SchedulesData,
   buildDataCache,
   enrichSchedulesDataWithGrades,
   getGradeLookups,
@@ -11,6 +7,7 @@ import {
   normalizeCourseCode,
   withExtraCourses,
 } from "@uoplan/core";
+import type { Catalogue, Course, DataCache, SchedulesData } from "@uoplan/core";
 import type { FetchBytes } from "./transport";
 import { loadCatalogue, loadCatalogueManifest, loadGrades, loadSchedules } from "./loaders";
 
@@ -115,24 +112,33 @@ export function createDataClient(options: DataClientOptions): DataClient {
   const fetchBytes: FetchBytes = (id) => {
     const hit = bytesMemo.get(id);
     if (hit) return hit;
-    const p = transport(id);
+    let p!: Promise<Uint8Array>;
+    p = (async () => {
+      try {
+        return await transport(id);
+      } catch (err) {
+        if (bytesMemo.get(id) === p) bytesMemo.delete(id);
+        throw err;
+      }
+    })();
     bytesMemo.set(id, p);
-    // Never memoize a rejection: a transient failure must not permanently
-    // disable an asset for the lifetime of the client.
-    p.catch(() => {
-      if (bytesMemo.get(id) === p) bytesMemo.delete(id);
-    });
     return p;
   };
 
   function load<T>(type: ProtoDecoder<T>, id: string): Promise<T> {
     const hit = decodedMemo.get(id);
     if (hit) return hit as Promise<T>;
-    const p = fetchBytes(id).then((bytes) => type.decode(bytes));
+    let p!: Promise<T>;
+    p = (async () => {
+      try {
+        const bytes = await fetchBytes(id);
+        return type.decode(bytes);
+      } catch (err) {
+        if (decodedMemo.get(id) === p) decodedMemo.delete(id);
+        throw err;
+      }
+    })();
     decodedMemo.set(id, p);
-    p.catch(() => {
-      if (decodedMemo.get(id) === p) decodedMemo.delete(id);
-    });
     return p;
   }
 

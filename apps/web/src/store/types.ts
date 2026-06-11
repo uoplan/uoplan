@@ -1,27 +1,27 @@
 import type {
   Catalogue,
+  CompletedRequirementItem,
   Course,
   CourseGradesData,
+  CourseLanguageBucket,
+  CourseLevelBucket,
+  DataCache,
+  DayOfWeek,
+  DecodedState,
+  Discipline,
+  GeneratedSchedule,
+  Indices,
+  LeadDescriptor,
   NormalizedCourseCode,
+  ProfessorRatingsMap,
+  ProfessorRegistry,
   Program,
-  SchedulesData,
-} from "@uoplan/core";
-import type {
   RemainingRequirement,
   RequirementWithStatus,
-  CompletedRequirementItem,
+  SchedulesData,
+  Term,
+  TimetableFailureDiagnostics,
 } from "@uoplan/core";
-import type { GeneratedSchedule } from "@uoplan/core";
-import type { DayOfWeek } from "@uoplan/core";
-import type { DataCache } from "@uoplan/core";
-import type { CourseLanguageBucket, CourseLevelBucket } from "@uoplan/core";
-import type { Indices } from "@uoplan/core";
-import type { Term } from "@uoplan/core";
-import type { ProfessorRatingsMap } from "@uoplan/core";
-import type { ProfessorRegistry } from "@uoplan/core";
-import type { Discipline } from "@uoplan/core";
-import type { DecodedState } from "@uoplan/core";
-import type { LeadDescriptor, TimetableFailureDiagnostics } from "@uoplan/core";
 
 /** A user-blocked recurring weekday window on the calendar. `id` is local-only (React keys). */
 export interface BlockedTime {

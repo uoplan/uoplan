@@ -1,19 +1,20 @@
-import { useState, useMemo, type MouseEvent } from "react";
-import { Stack, Text, Badge, Group, Collapse, Alert, Paper } from "@mantine/core";
+import { useMemo, useState } from "react";
+import type { MouseEvent } from "react";
+import { Alert, Badge, Collapse, Group, Paper, Stack, Text } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
-import type { DataCache } from "@uoplan/core";
 import type {
+  CompletedRequirementItem,
+  DataCache,
   RemainingRequirement,
   RequirementWithStatus,
-  CompletedRequirementItem,
 } from "@uoplan/core";
 import { collectRequirementIds } from "@uoplan/core";
 import { RequirementNode } from "./RequirementNode";
-import { getStableNodeKey, getNodeDisplayTitle } from "../../lib/requirements/requirementNodeUtils";
+import { getNodeDisplayTitle, getStableNodeKey } from "../../lib/requirements/requirementNodeUtils";
 import { RequirementPriorityControl } from "./RequirementPriorityControl";
 import {
-  applyOptionSelections,
   adjustNodeForAssignments,
+  applyOptionSelections,
   nodeHasOptionGroups,
   partitionIncompleteConstrainRoots,
   pruneUnresolvedOptionGroups,

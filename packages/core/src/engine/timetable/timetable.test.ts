@@ -1,16 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { createSeededRng } from "../../seededRandom";
-import {
-  ConstraintPipeline,
-  overlapConstraint,
-  timeWindowConstraint,
-  type ConstraintContext,
-} from "../constraints";
+import { ConstraintPipeline, overlapConstraint, timeWindowConstraint } from "../constraints";
+import type { ConstraintContext } from "../constraints";
 import {
   buildFixtureCache,
+  DEFAULT_CONSTRAINTS,
   makeSchedule,
   makeSection,
-  DEFAULT_CONSTRAINTS,
 } from "../../generation/tests/golden/fixtures";
 import { buildDataCache } from "../../dataCache";
 import type { SchedulesData } from "../../dataTypes";

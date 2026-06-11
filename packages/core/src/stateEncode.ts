@@ -1,18 +1,17 @@
 import { deflateSync, inflateSync } from "fflate";
-import type { Program, DayOfWeek as SchemaDayOfWeek } from "./dataTypes";
+import type { Indices, Program, DayOfWeek as SchemaDayOfWeek } from "./dataTypes";
 import { DAY_OF_WEEK_CODES } from "./dataTypes";
-import type { CourseLevelBucket, CourseLanguageBucket } from "./courseFilters";
+import type { CourseLanguageBucket, CourseLevelBucket } from "./courseFilters";
 import type { RemainingRequirement, RequirementWithStatus } from "./requirements";
-import type { Indices } from "./dataTypes";
 import type { BlockedTimeWindow } from "./generation";
-import { isOptCourse, getCourseLevel } from "./utils/courseUtils";
-import { isGroupToken, groupTokenPrefix } from "./utils/groupToken";
+import { getCourseLevel, isOptCourse } from "./utils/courseUtils";
+import { groupTokenPrefix, isGroupToken } from "./utils/groupToken";
 import type { DayOfWeek as ProtoDayOfWeek } from "@uoplan/proto/state";
 import {
+  CourseLanguageBucket as ProtoLang,
+  CourseLevelBucket as ProtoLevel,
   ShareableState,
   WizardMode,
-  CourseLevelBucket as ProtoLevel,
-  CourseLanguageBucket as ProtoLang,
 } from "@uoplan/proto/state";
 
 export function requirementIdsFromTree(nodes: RequirementWithStatus[]): string[] {
@@ -201,10 +200,10 @@ export function encodeState(
   if (input.minorProgram != null && minorProgramIndex < 0) return null;
 
   const courseCodeToIndex = new Map<string, number>();
-  indices.courses.forEach((code, i) => courseCodeToIndex.set(code, i));
+  for (const [i, code] of indices.courses.entries()) courseCodeToIndex.set(code, i);
 
   const disciplineToIndex = new Map<string, number>();
-  indices.disciplines.forEach((code, i) => disciplineToIndex.set(code, i));
+  for (const [i, code] of indices.disciplines.entries()) disciplineToIndex.set(code, i);
 
   const encodeDiscipline = (code: string): number | undefined =>
     disciplineToIndex.get(code.toUpperCase());
@@ -232,7 +231,7 @@ export function encodeState(
 
   const orderedReqIds = requirementIdsFromTree(input.requirementTreeWithStatus);
   const reqIdToIndex = new Map<string, number>();
-  orderedReqIds.forEach((id, i) => reqIdToIndex.set(id, i));
+  for (const [i, id] of orderedReqIds.entries()) reqIdToIndex.set(id, i);
 
   // Assemble State
   const state: ShareableState = {
@@ -321,7 +320,7 @@ export function encodeState(
     const reqIndex = reqIdToIndex.get(reqId);
     if (reqIndex !== undefined) {
       const courseIndices = codes.map(encodeCourseCode).filter((i): i is number => i !== undefined);
-      if (courseIndices.length) state.courseSelections.push({ reqIndex, courseIndices });
+      if (courseIndices.length > 0) state.courseSelections.push({ reqIndex, courseIndices });
     }
   }
 
@@ -337,17 +336,17 @@ export function encodeState(
           realCodes.push(c);
         }
       }
-      if (realCodes.length) {
+      if (realCodes.length > 0) {
         const courseIndices = realCodes
           .map(encodeCourseCode)
           .filter((i): i is number => i !== undefined);
-        if (courseIndices.length) state.constrainedSelections.push({ reqIndex, courseIndices });
+        if (courseIndices.length > 0) state.constrainedSelections.push({ reqIndex, courseIndices });
       }
-      if (groupPrefixes.length) {
+      if (groupPrefixes.length > 0) {
         const groupPrefixIndices = groupPrefixes
           .map(encodeDiscipline)
           .filter((i): i is number => i !== undefined);
-        if (groupPrefixIndices.length)
+        if (groupPrefixIndices.length > 0)
           state.constrainedGroupSelections.push({ reqIndex, groupPrefixIndices });
       }
     }
@@ -578,7 +577,7 @@ function base64ToBytes(base64: string): Uint8Array | null {
   try {
     // Normalize to standard base64: URLSearchParams.get() converts "+" to spaces,
     // and callers may pass base64url (which uses "-" and "_" instead of "+" and "/").
-    const normalized = base64.replace(/ /g, "+").replace(/-/g, "+").replace(/_/g, "/");
+    const normalized = base64.replaceAll(" ", "+").replaceAll("-", "+").replaceAll("_", "/");
     const padded =
       normalized.length % 4 === 0
         ? normalized

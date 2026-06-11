@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { parseCoursePrerequisites, extractPrereqSentence } from "./catalogue/prerequisites.ts";
+import { describe, expect, it } from "vitest";
+import { extractPrereqSentence, parseCoursePrerequisites } from "./catalogue/prerequisites.ts";
 
 describe("parseCoursePrerequisites", () => {
   it("parses nested OR before discipline OR (CSI/SDS) and merges unit requirement", () => {

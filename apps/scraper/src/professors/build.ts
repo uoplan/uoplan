@@ -18,13 +18,13 @@ import {
   SCHEDULES_DATA_DIR,
   SCRAPER_DATA_DIR,
 } from "../shared/paths.ts";
-import {
-  buildProfessorRegistry,
-  type NamedInput,
-  type ProfessorRegistryEntry,
-  type RegistryInputs,
-  type RegistryOverrides,
-  type RmpInput,
+import { buildProfessorRegistry } from "./buildRegistry.ts";
+import type {
+  NamedInput,
+  ProfessorRegistryEntry,
+  RegistryInputs,
+  RegistryOverrides,
+  RmpInput,
 } from "./buildRegistry.ts";
 
 export const PROFESSORS_FILE = path.join(SCRAPER_DATA_DIR, "professors.json");

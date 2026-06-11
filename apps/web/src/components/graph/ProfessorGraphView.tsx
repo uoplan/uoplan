@@ -7,8 +7,10 @@ import {
   getNeighborIds,
   GRAPH_EDGE_COLOR,
   randomInitialPosition,
-  type ProfessorEdgeAttributes,
-  type ProfessorNodeAttributes,
+} from "../../lib/graph/buildSigmaGraph";
+import type {
+  ProfessorEdgeAttributes,
+  ProfessorNodeAttributes,
 } from "../../lib/graph/buildSigmaGraph";
 import { drawProfessorNodeHover } from "../../lib/graph/drawProfessorNodeHover";
 import { animateCameraToHighlightedNodes } from "../../lib/graph/fitViewportToNodes";
@@ -251,7 +253,7 @@ function ProfessorGraphViewInner({
       graphRef.current = null;
       graphThemeRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- only rebuild layout when data changes
+    // oxlint-disable-next-line react/exhaustive-deps -- only rebuild layout when data changes
   }, [data, edgeReducer, nodeReducer]);
 
   return <div ref={containerRef} style={buildGraphContainerStyle()} />;

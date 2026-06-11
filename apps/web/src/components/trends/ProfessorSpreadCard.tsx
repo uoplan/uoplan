@@ -3,7 +3,7 @@ import { computeProfessorSpread } from "@uoplan/core";
 import { useMemo } from "react";
 import { tr } from "../../i18n";
 import { ChartCard } from "./ChartCard";
-import { METRIC_COLOR, formatMetricValue } from "../../lib/trends/metrics";
+import { formatMetricValue, METRIC_COLOR } from "../../lib/trends/metrics";
 import { colorForIndex } from "../../lib/trends/palette";
 import type { TrendsCardContext } from "./cardContext";
 

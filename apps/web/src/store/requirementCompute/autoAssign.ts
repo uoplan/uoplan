@@ -1,5 +1,5 @@
-import type { RemainingRequirement } from "@uoplan/core";
-import { normalizeCourseCode, type DataCache, getCourseCredits } from "@uoplan/core";
+import type { DataCache, RemainingRequirement } from "@uoplan/core";
+import { getCourseCredits, normalizeCourseCode } from "@uoplan/core";
 import { isStrictSubset } from "./utils";
 
 export function getAutoSelectedForRequirements(
@@ -16,7 +16,7 @@ export function getAutoSelectedForRequirements(
     const allCandidatesSet = new Set(req.candidateCourses);
     const prev = existing[req.requirementId] ?? [];
     const valid = prev.filter((c) => allCandidatesSet.has(c));
-    if (valid.length) out[req.requirementId] = valid;
+    if (valid.length > 0) out[req.requirementId] = valid;
   }
 
   return out;

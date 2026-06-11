@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
 import { IconBallFootball, IconDeviceDesktop, IconMoon, IconSun } from "@tabler/icons-react";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { useAppTheme } from "../../theme/appThemeContext";
-import { type ThemeSelection } from "../../theme/themes";
-import { PillSelect, type PillSelectOption } from "./PillSelect";
+import type { ThemeSelection } from "../../theme/themes";
+import { PillSelect } from "./PillSelect";
+import type { PillSelectOption } from "./PillSelect";
 import { pillIconStyle } from "./pillButtonStyle";
 
 function iconFor(selection: ThemeSelection): ReactNode {

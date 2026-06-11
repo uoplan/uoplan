@@ -5,8 +5,8 @@ import {
   normalizeCourseCode,
   toProtoCatalogue,
   toProtoSchedulesData,
-  type Catalogue,
 } from "@uoplan/core";
+import type { Catalogue } from "@uoplan/core";
 import {
   dataAssetIds,
   loadCatalogue,

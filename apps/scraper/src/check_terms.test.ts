@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { findNewTerms, parseTermDropdown, sortTerms, termsListsEqual } from "./terms/check.ts";
 
 describe("parseTermDropdown", () => {

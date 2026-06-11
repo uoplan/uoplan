@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Box, Stack, Title } from "@mantine/core";
 import changelogHtml from "virtual:changelog-html";
-import { useTr, tr } from "../i18n";
+import { tr, useTr } from "../i18n";
 import { buildTabTitle } from "../lib/seo";
 import { BackButton } from "../components/shared/BackButton";
 

@@ -1,16 +1,7 @@
 import {
-  type Catalogue,
-  type CourseGradesData,
-  type DisciplinesData,
-  type Indices,
-  type ProfessorRatingsMap,
-  type ProfessorRegistryEntry,
-  type RateMyProfessorsData,
-  type SchedulesData,
-  type TermsData,
+  buildProfessorRatingsMap,
   DataProto,
   FeedbackProto,
-  buildProfessorRatingsMap,
   fromProtoCatalogue,
   fromProtoCatalogueManifest,
   fromProtoCourseGradesData,
@@ -20,6 +11,17 @@ import {
   fromProtoRateMyProfessorsData,
   fromProtoSchedulesData,
   fromProtoTermsData,
+} from "@uoplan/core";
+import type {
+  Catalogue,
+  CourseGradesData,
+  DisciplinesData,
+  Indices,
+  ProfessorRatingsMap,
+  ProfessorRegistryEntry,
+  RateMyProfessorsData,
+  SchedulesData,
+  TermsData,
 } from "@uoplan/core";
 import type { FetchBytes } from "./transport";
 

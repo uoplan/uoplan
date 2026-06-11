@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { useCommandCenterStore } from "../../store/commandCenterStore";
 
 const CommandCenter = lazy(() =>
+  // oxlint-disable-next-line promise/prefer-await-to-then -- dynamic-import mapping for React.lazy; keeps the named-export usage traceable
   import("./CommandCenter").then((mod) => ({ default: mod.CommandCenter })),
 );
 

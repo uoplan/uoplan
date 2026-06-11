@@ -22,7 +22,7 @@ async function ensureWasm() {
 }
 
 function base64urlToBytes(s: string): Uint8Array {
-  const padded = s.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = s.replaceAll("-", "+").replaceAll("_", "/");
   const pad = (4 - (padded.length % 4)) % 4;
   const binary = atob(padded + "=".repeat(pad));
   const bytes = new Uint8Array(binary.length);
@@ -120,6 +120,7 @@ async function generatePng(
       fonts,
     );
   } catch (err) {
+    // oxlint-disable-next-line no-console -- intentional Worker OG image fallback logging
     console.error("[og-image] unexpected error:", err);
     return fallback();
   }

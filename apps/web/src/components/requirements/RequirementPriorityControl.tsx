@@ -1,4 +1,4 @@
-import { Group, NumberInput, Tooltip, ThemeIcon } from "@mantine/core";
+import { Group, NumberInput, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconHelpCircle } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { tr } from "../../i18n";

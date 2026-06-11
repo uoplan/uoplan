@@ -5,8 +5,8 @@ import {
   readStoredSelection,
   resolveTheme,
   THEME_STORAGE_KEY,
-  type ThemeSelection,
 } from "./themes";
+import type { ThemeSelection } from "./themes";
 
 afterEach(() => {
   vi.unstubAllGlobals();

@@ -18,7 +18,7 @@ export function mergeVirtualIntoBase(
     const baseSections = base.components[compKey];
 
     const baseSectionByKey = new Map<string, ComponentSection>();
-    baseSections.forEach((s) => baseSectionByKey.set(sectionKey(compKey, s), s));
+    for (const s of baseSections) baseSectionByKey.set(sectionKey(compKey, s), s);
 
     for (const vSection of vSections) {
       const key = sectionKey(compKey, vSection);
@@ -32,7 +32,7 @@ export function mergeVirtualIntoBase(
       }
 
       const baseTimeByKey = new Map<string, number>();
-      baseSection.times.forEach((t, idx) => baseTimeByKey.set(timeKey(t), idx));
+      for (const [idx, t] of baseSection.times.entries()) baseTimeByKey.set(timeKey(t), idx);
 
       for (const vt of vSection.times) {
         const tKey = timeKey(vt);
@@ -57,7 +57,7 @@ function mergeCourseInto(target: CourseSchedule, src: CourseSchedule): void {
     if (!target.components[compKey]) target.components[compKey] = [];
     const targetSections = target.components[compKey];
     const byKey = new Map<string, ComponentSection>();
-    targetSections.forEach((s) => byKey.set(sectionKey(compKey, s), s));
+    for (const s of targetSections) byKey.set(sectionKey(compKey, s), s);
     for (const srcSection of srcSections) {
       const key = sectionKey(compKey, srcSection);
       const existing = byKey.get(key);

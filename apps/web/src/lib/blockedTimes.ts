@@ -1,8 +1,9 @@
-import { mergeBlockedWindows, type BlockedTimeWindow, type DayOfWeek } from "@uoplan/core";
+import { mergeBlockedWindows } from "@uoplan/core";
+import type { BlockedTimeWindow, DayOfWeek } from "@uoplan/core";
 import type { BlockedTime } from "../store/types";
 import {
-  AVOID_DAY_START_MINUTES,
   AVOID_DAY_END_MINUTES,
+  AVOID_DAY_START_MINUTES,
   DEFAULT_AVOIDED_DAYS,
 } from "../store/generationDefaults";
 

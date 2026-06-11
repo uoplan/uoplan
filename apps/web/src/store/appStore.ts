@@ -1,17 +1,19 @@
-import { createStore, type StoreApi } from "zustand/vanilla";
+import { createStore } from "zustand/vanilla";
+import type { StoreApi } from "zustand/vanilla";
 import { useStore } from "zustand";
 import { createContext, useContext } from "react";
 import { generateRandomSeed } from "@uoplan/core";
 import type { AppStore } from "./types";
 import { LOCAL_STORAGE_KEY } from "./constants";
 import {
-  createUrlSlice,
-  createDataSlice,
   createConstraintsSlice,
+  createDataSlice,
   createSchedulesSlice,
   createSelectionSlice,
+  createUrlSlice,
 } from "./slices/index";
-import { type AppServices, createDefaultAppServices } from "./services";
+import { createDefaultAppServices } from "./services";
+import type { AppServices } from "./services";
 import { registerAppStore } from "./storeRegistry";
 import {
   DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS,

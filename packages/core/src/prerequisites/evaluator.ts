@@ -1,7 +1,7 @@
 import type { CoursePrereqKind, CoursePrereqNode } from "../dataTypes";
 import type { DataCache } from "../dataCache";
 import type { NormalizedCourseCode } from "../brand";
-import { normalizeCourseCode, getLanguageVariant } from "../utils/courseUtils";
+import { getLanguageVariant, normalizeCourseCode } from "../utils/courseUtils";
 import type { PrereqContext } from "./types";
 
 /**

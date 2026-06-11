@@ -1,6 +1,6 @@
 import { List, Stack, Text } from "@mantine/core";
 import type { GenerationErrorDetails } from "../store/types";
-import { useTr, tr } from "../i18n";
+import { tr, useTr } from "../i18n";
 import { formatFilterHint, formatSuggestions } from "../lib/generationDiagnosticsText";
 
 function formatCourseList(courses: string[]): string {

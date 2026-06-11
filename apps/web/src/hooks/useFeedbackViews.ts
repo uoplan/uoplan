@@ -1,11 +1,10 @@
 import { useMemo } from "react";
-import {
-  type CanonicalProfessorName,
-  type NormalizedCourseCode,
-  normalizeProfessorName,
-  pickCanonicalProfessorName,
-  type FeedbackQuestionMeta,
-  type FeedbackSectionView,
+import { normalizeProfessorName, pickCanonicalProfessorName } from "@uoplan/core";
+import type {
+  CanonicalProfessorName,
+  FeedbackQuestionMeta,
+  FeedbackSectionView,
+  NormalizedCourseCode,
 } from "@uoplan/core";
 import { useExploreOfferings } from "../components/explore/exploreOfferingsContext";
 import { useCourseAliasResolution } from "./useCourseAliasResolution";

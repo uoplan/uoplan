@@ -21,7 +21,7 @@ function applyExcludedDisciplines(codes: string[], excluded: string[] | undefine
 function matchesLevels(code: string, levels: number[]): boolean {
   const match = code.match(/\d{4,5}/);
   if (!match) return false;
-  const num = parseInt(match[0].replace(/\D/g, "").slice(0, 4), 10);
+  const num = parseInt(match[0].replaceAll(/\D/g, "").slice(0, 4), 10);
   return levels.some((l) => num >= l && num < l + 1000);
 }
 

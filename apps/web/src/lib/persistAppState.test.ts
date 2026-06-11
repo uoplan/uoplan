@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LOCAL_STORAGE_KEY } from "../store/constants";
 import { defaultAppStore } from "../store/appStore";
 import { flushPersistedAppState } from "./persistAppState";

@@ -1,4 +1,5 @@
-import { computeSeasonComparison, type TermSeason } from "@uoplan/core";
+import { computeSeasonComparison } from "@uoplan/core";
+import type { TermSeason } from "@uoplan/core";
 import { tr, useTr } from "../../i18n";
 import { SEASON_COLOR } from "../../lib/trends/palette";
 import type { TrendsCardContext } from "./cardContext";

@@ -1,5 +1,6 @@
 import { dataClient } from "./dataClient";
-import { optional, type ProtoDecoder } from "@uoplan/data";
+import { optional } from "@uoplan/data";
+import type { ProtoDecoder } from "@uoplan/data";
 
 /**
  * Fetch raw `.pb` bytes through the shared browser data client, by asset id

@@ -38,8 +38,8 @@ export async function scrapeDisciplineLinks(baseUrl: string): Promise<string[]> 
   const links: string[] = [];
   $("a").each((_, el) => {
     const href = $(el).attr("href");
-    if (href && pattern.test(href)) {
-      if (!links.includes(href)) links.push(href);
+    if (href && pattern.test(href) && !links.includes(href)) {
+      links.push(href);
     }
   });
   return links;
@@ -54,9 +54,10 @@ export async function scrapeProgramLinks(baseUrl: string): Promise<string[]> {
     const href = $(el).attr("href");
     if (
       href &&
-      (href.startsWith(`${prefix}/en/undergrad/`) || href.startsWith(`${prefix}/en/graduate/`))
+      (href.startsWith(`${prefix}/en/undergrad/`) || href.startsWith(`${prefix}/en/graduate/`)) &&
+      !links.includes(href)
     ) {
-      if (!links.includes(href)) links.push(href);
+      links.push(href);
     }
   });
   return links;

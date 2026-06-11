@@ -3,7 +3,8 @@ import { useMediaQuery } from "@mantine/hooks";
 import { m } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { tr } from "../../i18n";
-import { LandingTile, type LandingTileProps } from "./LandingTile";
+import { LandingTile } from "./LandingTile";
+import type { LandingTileProps } from "./LandingTile";
 
 const ADVANCE_MS = 6000;
 const SWIPE_THRESHOLD_PX = 40;

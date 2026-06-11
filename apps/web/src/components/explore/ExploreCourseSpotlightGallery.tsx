@@ -1,5 +1,6 @@
 import { Box, Stack, Text, UnstyledButton } from "@mantine/core";
-import { useMemo, type CSSProperties } from "react";
+import { useMemo } from "react";
+import type { CSSProperties } from "react";
 import { formatLocaleNumber, tr } from "../../i18n";
 import type {
   CourseSpotlightStat,

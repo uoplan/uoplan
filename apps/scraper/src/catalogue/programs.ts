@@ -2,17 +2,17 @@ import * as cheerio from "cheerio";
 import { fetchHtml } from "../shared/http.ts";
 import { urlToSlug } from "./links.ts";
 import { parseElectiveRequirement, parseUnits } from "./requirements.ts";
-import {
-  ProgramRequirementSchema,
-  ProgramSchema,
-  type Program,
-  type ProgramRequirement,
-} from "./schema.ts";
+import { ProgramRequirementSchema, ProgramSchema } from "./schema.ts";
+import type { Program, ProgramRequirement } from "./schema.ts";
 
 export async function scrapeProgram(url: string): Promise<Program> {
   const html = await fetchHtml(url);
   const $ = cheerio.load(html);
-  const title = $("#page-title-area>h1, h1.page-title").first().text().replace(/\s+/g, " ").trim();
+  const title = $("#page-title-area>h1, h1.page-title")
+    .first()
+    .text()
+    .replaceAll(/\s+/g, " ")
+    .trim();
 
   const requirements: ProgramRequirement[] = [];
   let currentGroup: ProgramRequirement | null = null;
@@ -42,32 +42,32 @@ export async function scrapeProgram(url: string): Promise<Program> {
 
     if (isHeaderRow) {
       if (isSectionHeader) {
-        pushSectionHeader($(el).text().replace(/\s+/g, " ").trim(), isIndented);
+        pushSectionHeader($(el).text().replaceAll(/\s+/g, " ").trim(), isIndented);
       }
       return;
     }
 
     if (isSectionHeader) {
-      pushSectionHeader($(el).text().replace(/\s+/g, " ").trim(), isIndented);
+      pushSectionHeader($(el).text().replaceAll(/\s+/g, " ").trim(), isIndented);
       return;
     }
 
-    let code = $(el).find("td.codecol").text().replace(/\s+/g, " ").trim();
-    const rowTitle = $(el).find("td.titlecol").text().replace(/\s+/g, " ").trim();
-    const hours = $(el).find("td.hourscol").text().replace(/\s+/g, " ").trim();
+    let code = $(el).find("td.codecol").text().replaceAll(/\s+/g, " ").trim();
+    const rowTitle = $(el).find("td.titlecol").text().replaceAll(/\s+/g, " ").trim();
+    const hours = $(el).find("td.hourscol").text().replaceAll(/\s+/g, " ").trim();
     const credits = hours ? parseUnits(hours) : undefined;
 
     let isOr = false;
     if ($(el).find(".orclass").length > 0) isOr = true;
     if (code.startsWith("or ")) {
       isOr = true;
-      code = code.substring(3).trim();
+      code = code.slice(3).trim();
     }
 
     const isComment = $(el).find(".courselistcomment").length > 0;
 
     if (isComment) {
-      const commentText = $(el).find(".courselistcomment").text().replace(/\s+/g, " ").trim();
+      const commentText = $(el).find(".courselistcomment").text().replaceAll(/\s+/g, " ").trim();
       const parsedNode = parseElectiveRequirement(commentText, credits);
       const parsedWithIndent: ProgramRequirement = {
         ...parsedNode,

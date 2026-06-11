@@ -3,10 +3,10 @@ import { tr, useTr } from "../../../i18n";
 import { MiniChartTooltip } from "../../shared/MiniChartTooltip";
 import {
   FEEDBACK_RATE_COLOR,
-  type FeedbackRatePoint,
   feedbackRateChartData,
   formatFeedbackRate,
 } from "./feedbackChartData";
+import type { FeedbackRatePoint } from "./feedbackChartData";
 
 export function FeedbackAverageTooltip({
   payload,

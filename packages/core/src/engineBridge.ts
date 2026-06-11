@@ -10,14 +10,16 @@
  * from the engine's compact `course -> {component: section}` choices.
  */
 import {
-  type ComponentChoice,
-  type RemainingRequirement as ProtoRemainingRequirement,
-  type RequirementWithStatus as ProtoRequirementWithStatus,
-  type StringList,
   GenerationRequest,
   GenerationResponse,
-  TimetableRequest,
   Mode,
+  TimetableRequest,
+} from "@uoplan/proto/engine";
+import type {
+  ComponentChoice,
+  RemainingRequirement as ProtoRemainingRequirement,
+  RequirementWithStatus as ProtoRequirementWithStatus,
+  StringList,
 } from "@uoplan/proto/engine";
 import type { DataCache } from "./dataCache";
 import type { NormalizedCourseCode } from "./brand";

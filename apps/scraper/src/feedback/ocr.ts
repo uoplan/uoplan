@@ -20,7 +20,8 @@
  */
 
 import fs from "node:fs/promises";
-import { createWorker, type Worker } from "tesseract.js";
+import { createWorker } from "tesseract.js";
+import type { Worker } from "tesseract.js";
 
 // "A: almost always (4)" -> letter, label, count. The label is non-greedy up to
 // the "(count)"; any bar-fill noise OCR'd after the count is ignored.

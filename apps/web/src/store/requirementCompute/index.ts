@@ -1,12 +1,11 @@
-import { computeRequirementsState } from "@uoplan/core";
-import { normalizeCourseCode, type DataCache } from "@uoplan/core";
-import { buildPrereqContext, canTakeCourse } from "@uoplan/core";
+import type { CourseLanguageBucket, CourseLevelBucket, DataCache, Program } from "@uoplan/core";
 import {
+  buildPrereqContext,
+  canTakeCourse,
+  computeRequirementsState,
   courseMatchesFilters,
-  type CourseLanguageBucket,
-  type CourseLevelBucket,
+  normalizeCourseCode,
 } from "@uoplan/core";
-import type { Program } from "@uoplan/core";
 import {
   getAutoSelectedForRequirements,
   getAutoSelectedSingleEligibleCompleted,
@@ -165,6 +164,7 @@ export function recomputeStateForProgram(
     typeof localStorage !== "undefined" &&
     localStorage.getItem("uoplanDebugAssignments") === "1"
   ) {
+    // oxlint-disable-next-line no-console -- intentional opt-in assignment debug logging
     console.debug("[uoplan assignments]", {
       selectedOptions: existingSelectedOptionsPerRequirement,
       requirementSlotsUserTouched,

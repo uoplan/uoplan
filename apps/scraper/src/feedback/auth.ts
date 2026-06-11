@@ -10,13 +10,16 @@
  * Local/dev only — never run in CI.
  */
 
-import { type Got, got } from "got";
+import { got } from "got";
+import type { Got } from "got";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { type Browser, type BrowserContext, chromium } from "playwright";
+import { chromium } from "playwright";
+import type { Browser, BrowserContext } from "playwright";
 import { CookieJar } from "tough-cookie";
 import { getErrorMessage } from "../shared/errors.ts";
-import { loadSession, saveSession, type StoredCookie, type StoredSession } from "./keychain.ts";
+import { loadSession, saveSession } from "./keychain.ts";
+import type { StoredCookie, StoredSession } from "./keychain.ts";
 
 export const S_REPORTS_URL = "https://uozone2.uottawa.ca/en/apps/s-reports";
 
@@ -109,7 +112,7 @@ async function waitForLogin(context: BrowserContext): Promise<void> {
   let stableUrl: string | null = null;
   let stableCount = 0;
   while (Date.now() < deadline) {
-    await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS));
+    await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
 
     const appUrl = currentAppUrl(context);
     if (!appUrl) {
@@ -126,7 +129,7 @@ async function waitForLogin(context: BrowserContext): Promise<void> {
       stableCount = 1;
     }
     if (stableCount >= 3 && (await appPageIsAuthenticated(context))) {
-      await new Promise((r) => setTimeout(r, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       return;
     }
   }

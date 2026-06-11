@@ -6,8 +6,8 @@ import {
   poolCourseCap,
   reorderGeneralPoolForDisciplineDiversity,
   weightedRandomPick,
-  type RequirementPool,
 } from "./scheduleHelpers";
+import type { RequirementPool } from "./scheduleHelpers";
 
 const cache = {} as import("@uoplan/core").DataCache;
 

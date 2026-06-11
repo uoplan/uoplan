@@ -1,24 +1,27 @@
-import { useMemo, type ReactNode } from "react";
+import { useMemo } from "react";
+import type { ReactNode } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { useShallow } from "zustand/react/shallow";
 import {
   availableDisciplines,
   availablePrograms,
   buildProgramCourseFilter,
-  programSlug,
   computeGradeTrends,
-  type TermSeason,
+  programSlug,
 } from "@uoplan/core";
+import type { TermSeason } from "@uoplan/core";
 import { i18n } from "@lingui/core";
 import { tr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useAppStore } from "../../store/appStore";
 import { createRankedOptionsFilter } from "../../lib/explore/optionRanking";
 import { formatMetricValue } from "../../lib/trends/metrics";
-import { toUrlSearch, type TrendsMetric, type TrendsSearch } from "../../lib/trends/searchParams";
+import { toUrlSearch } from "../../lib/trends/searchParams";
+import type { TrendsMetric, TrendsSearch } from "../../lib/trends/searchParams";
 import type { BackState } from "../../lib/navigation/backState";
 import type { TrendsCardContext } from "./cardContext";
-import { TrendsContext, type TrendsContextValue } from "./trendsContext";
+import { TrendsContext } from "./trendsContext";
+import type { TrendsContextValue } from "./trendsContext";
 
 type TrendsFilterProviderProps = {
   search: TrendsSearch;

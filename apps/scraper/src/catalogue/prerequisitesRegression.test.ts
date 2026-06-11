@@ -20,7 +20,7 @@ type OracleEntry = { prereqText: string; count: number; oldAst: CoursePrereqNode
 const corpus = oracle as OracleEntry[];
 
 function normCode(code: string | undefined): string | undefined {
-  return code ? code.replace(/\s+/g, " ").trim().toUpperCase() : code;
+  return code ? code.replaceAll(/\s+/g, " ").trim().toUpperCase() : code;
 }
 
 /** Collect every course code anywhere in an AST. */
@@ -67,7 +67,7 @@ describe("prerequisite parser regression (frozen corpus)", () => {
       const oldCodes = codesOf(entry.oldAst);
       const newCodes = codesOf(next);
       const dropped = [...oldCodes].filter((c) => !newCodes.has(c));
-      if (dropped.length) regressions.push({ text: entry.prereqText, dropped });
+      if (dropped.length > 0) regressions.push({ text: entry.prereqText, dropped });
     }
     expect(regressions).toEqual([]);
   });

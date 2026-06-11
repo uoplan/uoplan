@@ -1,7 +1,7 @@
 import { Box, Group, Stack, Text } from "@mantine/core";
 import { IconAlertCircle, IconCheck, IconChevronDown } from "@tabler/icons-react";
 import { AnimatePresence, m } from "framer-motion";
-import { type ReactNode } from "react";
+import type { ReactNode } from "react";
 import type { ScheduleDashboardCardStatus } from "../../lib/scheduleDashboard";
 import { AppCard } from "../shared/AppCard";
 import { useTr } from "../../i18n";

@@ -1,14 +1,11 @@
 import type { CourseGradesData, GradeDistribution } from "./dataTypes";
 import {
-  type GradeVizBucketId,
-  GRADE_VIZ_COLORS,
   distributionGpa,
+  GRADE_VIZ_COLORS,
   normalizeGradeVizDistribution,
 } from "./gradeDistribution";
+import type { GradeVizBucketId } from "./gradeDistribution";
 import {
-  type TermSeason,
-  type TrendFilters,
-  type TrendPoint,
   addInto,
   aggregateByKey,
   countedMass,
@@ -19,6 +16,7 @@ import {
   metricsForDistribution,
   usableOffering,
 } from "./gradeTrends";
+import type { TermSeason, TrendFilters, TrendPoint } from "./gradeTrends";
 import { disciplineOf, levelOf, normalizeCourseCode } from "./utils/courseUtils";
 
 /**

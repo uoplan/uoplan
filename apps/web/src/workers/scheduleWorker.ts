@@ -1,9 +1,9 @@
 import * as Comlink from "comlink";
-import { type CacheDataKey } from "../lib/dataCacheLoader";
-import {
-  generateSchedulesAction,
-  type GenerateSchedulesInput,
-  type GenerateSchedulesResult,
+import type { CacheDataKey } from "../lib/dataCacheLoader";
+import { generateSchedulesAction } from "../lib/generateSchedulesAction";
+import type {
+  GenerateSchedulesInput,
+  GenerateSchedulesResult,
 } from "../lib/generateSchedulesAction";
 import { getScheduleEngine } from "../lib/engine/engineHost";
 import type { ScheduleWorkerApi } from "./scheduleWorkerApi";

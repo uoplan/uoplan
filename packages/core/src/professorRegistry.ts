@@ -58,7 +58,7 @@ export function buildProfessorRegistry(entries: ProfessorRegistryEntry[]): Profe
   const bySlug = new Map<ProfessorSlug, number>();
   const byLegacyId = new Map<number, number>();
   const byMatchKey = new Map<ProfessorMatchKey, number>();
-  entries.forEach((entry, idx) => {
+  for (const [idx, entry] of entries.entries()) {
     if (entry.slug && !bySlug.has(entry.slug)) bySlug.set(entry.slug, idx);
     for (const id of entry.legacyIds) {
       if (!byLegacyId.has(id)) byLegacyId.set(id, idx);
@@ -67,7 +67,7 @@ export function buildProfessorRegistry(entries: ProfessorRegistryEntry[]): Profe
       const key = professorMatchKey(variant);
       if (key && !byMatchKey.has(key)) byMatchKey.set(key, idx);
     }
-  });
+  }
   return { entries, bySlug, byLegacyId, byMatchKey };
 }
 

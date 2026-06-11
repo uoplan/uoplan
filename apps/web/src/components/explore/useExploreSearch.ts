@@ -5,9 +5,8 @@ import {
   hasActiveFilters,
   parseExploreFiltersSearch,
   serializeExploreFiltersSearch,
-  type ExploreFilterState,
-  type ExploreSearchParams,
 } from "../../lib/explore/exploreFilters";
+import type { ExploreFilterState, ExploreSearchParams } from "../../lib/explore/exploreFilters";
 
 function buildSearchParams(
   nextFilters: ExploreFilterState,
@@ -54,7 +53,7 @@ export function useExploreSearch(onIndex: boolean) {
     setSearchEngaged(true);
     void navigate({
       to: "/explore",
-      search: buildSearchParams(filters, value) as any,
+      search: buildSearchParams(filters, value),
       replace: onIndex,
     });
   };
@@ -65,7 +64,7 @@ export function useExploreSearch(onIndex: boolean) {
       const updated = { ...prev, ...next };
       void navigate({
         to: "/explore",
-        search: buildSearchParams(updated, query) as any,
+        search: buildSearchParams(updated, query),
         replace: onIndex,
       });
       return updated;

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { GeneratedSchedule } from "@uoplan/core";
 import type { WeekGroup } from "@uoplan/calendar";
 import { computeWeekGroups } from "@uoplan/calendar";

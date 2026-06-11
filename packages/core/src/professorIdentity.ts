@@ -26,7 +26,7 @@ import type { CanonicalProfessorName, ProfessorMatchKey, ProfessorSlug } from ".
 export function deburr(value: string): string {
   return String(value ?? "")
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+    .replaceAll(/[\u0300-\u036f]/g, "");
 }
 
 /**
@@ -37,7 +37,7 @@ export function deburr(value: string): string {
 export function professorNameTokens(name: string): string[] {
   return deburr(name)
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
+    .replaceAll(/[^a-z0-9]+/g, " ")
     .trim()
     .split(" ")
     .filter(Boolean);
@@ -90,16 +90,16 @@ export function pickCanonicalProfessorName(variants: Iterable<string>): Canonica
 export function slugifyProfessor(name: string): ProfessorSlug {
   return deburr(name)
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "") as ProfessorSlug;
+    .replaceAll(/[^a-z0-9]+/g, "-")
+    .replaceAll(/^-+|-+$/g, "") as ProfessorSlug;
 }
 
 /** Trim whitespace and any leading/trailing stray periods or commas from a display name. */
 export function cleanDisplayName(value: string): string {
   return String(value ?? "")
-    .replace(/\s+/g, " ")
+    .replaceAll(/\s+/g, " ")
     .trim()
-    .replace(/^[.,]+|[.,]+$/g, "")
+    .replaceAll(/^[.,]+|[.,]+$/g, "")
     .trim();
 }
 

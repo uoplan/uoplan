@@ -13,8 +13,8 @@ import type {
   ProfessorRegistry,
 } from "@uoplan/core";
 import {
-  normalizeProfessorName,
   normalizeInstructorName,
+  normalizeProfessorName,
   pickCanonicalProfessorName,
   professorIndexByName,
   unsafeBrand,

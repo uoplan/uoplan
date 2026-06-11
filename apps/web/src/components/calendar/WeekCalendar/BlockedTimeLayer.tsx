@@ -3,12 +3,12 @@ import type { DayOfWeekCode } from "@uoplan/core";
 import type { BlockedTime } from "../../../store/types";
 import { tr } from "../../../i18n";
 import {
-  CAL_START_MINUTES,
   CAL_END_MINUTES,
+  CAL_START_MINUTES,
+  clampToCalendarRange,
   minutesToPercent,
   percentToMinutes,
   snapMinutes,
-  clampToCalendarRange,
 } from "./weekCalendarLayout";
 
 const MIN_BLOCK_MINUTES = 30;
@@ -314,7 +314,7 @@ export function BlockedTimeLayer({
             className="cal-blocked"
             data-block-id={b.id}
             style={{ top: `${top}%`, height: `${height}%` }}
-            // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- contains nested slider handles, so a native <button> can't be used
+            // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- contains nested slider handles, so a native <button> can't be used
             role="button"
             tabIndex={0}
             aria-label={tr("calendar.blockedTime.label")}
@@ -332,7 +332,7 @@ export function BlockedTimeLayer({
           >
             <div
               className="cal-blocked-handle cal-blocked-handle-top"
-              // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- custom drag-resize slider handle, not a native range input
+              // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- custom drag-resize slider handle, not a native range input
               role="slider"
               tabIndex={0}
               aria-label={tr(BLOCKED_TIME_RESIZE_START_LABEL_ID)}
@@ -348,7 +348,7 @@ export function BlockedTimeLayer({
             />
             <div
               className="cal-blocked-handle cal-blocked-handle-bottom"
-              // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- custom drag-resize slider handle, not a native range input
+              // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- custom drag-resize slider handle, not a native range input
               role="slider"
               tabIndex={0}
               aria-label={tr(BLOCKED_TIME_RESIZE_END_LABEL_ID)}

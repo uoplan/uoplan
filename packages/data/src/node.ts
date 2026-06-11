@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { createFetchBytesTransport, type FetchBytes } from "./transport";
+import { createFetchBytesTransport } from "./transport";
+import type { FetchBytes } from "./transport";
 
 /**
  * Node/test transport that reads assets straight off disk by id. `dir` points at

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { detectPreferredLocale, normalizeLocale, type AppLocale } from "./index";
+import { detectPreferredLocale, normalizeLocale } from "./index";
+import type { AppLocale } from "./index";
 
 describe("normalizeLocale", () => {
   it("maps fr and fr-* to fr-CA", () => {

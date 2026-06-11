@@ -2,14 +2,9 @@ import { useMemo } from "react";
 import { Box, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { m } from "framer-motion";
-import {
-  feedbackQuestionSeries,
-  feedbackResponseRateSeries,
-  feedbackSummary,
-  type FeedbackQuestionMeta,
-  type FeedbackSectionView,
-} from "@uoplan/core";
-import { useTr, tr } from "../../../i18n";
+import { feedbackQuestionSeries, feedbackResponseRateSeries, feedbackSummary } from "@uoplan/core";
+import type { FeedbackQuestionMeta, FeedbackSectionView } from "@uoplan/core";
+import { tr, useTr } from "../../../i18n";
 import { AppCard } from "../../shared/AppCard";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../../lib/explore/accordionPadding";
 import { FeedbackQuestionChart } from "./FeedbackQuestionChart";

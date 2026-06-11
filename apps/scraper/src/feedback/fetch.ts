@@ -23,7 +23,8 @@ import {
   writeListPage,
   writeReportHtml,
 } from "./cache.ts";
-import { fetchLandingTermLinks, type TermLink } from "./landing.ts";
+import { fetchLandingTermLinks } from "./landing.ts";
+import type { TermLink } from "./landing.ts";
 import { parseListRows, parseTotalReports, walkListPages } from "./list.ts";
 import { getErrorMessage } from "../shared/errors.ts";
 import type { StoredSession } from "./keychain.ts";

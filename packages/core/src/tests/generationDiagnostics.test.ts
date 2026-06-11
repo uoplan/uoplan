@@ -1,8 +1,7 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { diagnoseTimetableFailure } from "../generationDiagnostics";
 import { buildDataCache } from "../dataCache";
-import type { Catalogue } from "../dataTypes";
-import type { SchedulesData, CourseSchedule, DayOfWeek } from "../dataTypes";
+import type { Catalogue, CourseSchedule, DayOfWeek, SchedulesData } from "../dataTypes";
 import { normalizeCourseCode } from "../utils/courseUtils";
 
 const emptyCatalogue: Catalogue = { courses: [], programs: [] };
