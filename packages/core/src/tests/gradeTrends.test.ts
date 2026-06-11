@@ -5,11 +5,9 @@ import {
   computeDisciplineLeaderboard,
   computeGradeTrends,
   decodeTermMeta,
-  disciplineOf,
-  levelOf,
 } from "../gradeTrends";
 import type { CourseGradesData } from "../dataTypes";
-import { normalizeCourseCode } from "../utils/courseUtils";
+import { disciplineOf, levelOf, normalizeCourseCode } from "../utils/courseUtils";
 
 describe("decodeTermMeta", () => {
   it("decodes year and season from PeopleSoft term ids", () => {

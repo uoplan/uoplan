@@ -1,10 +1,8 @@
-import type { DataCache, RemainingRequirement } from "./index";
-import {
-  getEffectiveSchedule,
-  isHonoursProject,
-  normalizeCourseCode,
-  virtualScheduleFilterApplies,
-} from "./index";
+import type { DataCache } from "./dataCache";
+import { getEffectiveSchedule } from "./scheduleFilters";
+import { isHonoursProject, normalizeCourseCode } from "./utils/courseUtils";
+import { virtualScheduleFilterApplies } from "./poolHelpers";
+import type { RemainingRequirement } from "./requirements/types";
 
 export type ImplicitHonoursPick = { code: string; requirementId: string };
 

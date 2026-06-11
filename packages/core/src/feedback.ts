@@ -1,8 +1,8 @@
 import type { FeedbackProto } from "@uoplan/proto";
 import type { NormalizedCourseCode, ProfessorNameKey } from "./brand";
-import { normalizeCourseCode } from "./utils/courseUtils";
+import { normalizeCourseCode, disciplineOf, levelOf } from "./utils/courseUtils";
 import { normalizeProfessorName } from "./professorRatings";
-import { decodeTermMeta, disciplineOf, levelOf, type TermSeason } from "./gradeTrends";
+import { decodeTermMeta, type TermSeason } from "./gradeTrends";
 
 /** Metadata for one distinct survey question. */
 export interface FeedbackQuestionMeta {

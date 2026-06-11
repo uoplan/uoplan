@@ -60,9 +60,6 @@ export interface Constraint {
   /** Course-set scope: may this course fill the given requirement slot? */
   allowsCandidate?(courseCode: NormalizedCourseCode, ctx: CourseSetCtx): boolean;
 
-  /** Course-set scope: is a complete chosen multiset structurally valid? */
-  allowsCourseSet?(courseCodes: readonly NormalizedCourseCode[], ctx: ConstraintContext): boolean;
-
   /** Section scope: is this section of the course usable under the constraint? */
   allowsSection?(
     courseCode: NormalizedCourseCode,

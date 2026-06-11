@@ -13,11 +13,9 @@ import {
   countedMass,
   courseMatchesTrendFilters,
   decodeTermMeta,
-  disciplineOf,
-  levelOf,
   metricsForDistribution,
 } from "./gradeTrends";
-import { normalizeCourseCode } from "./utils/courseUtils";
+import { disciplineOf, levelOf, normalizeCourseCode } from "./utils/courseUtils";
 
 /**
  * Higher-level grade analytics derived from the runtime grades dataset

@@ -5,7 +5,7 @@ import {
   normalizeInstructorName as coreNormalize,
 } from "@uoplan/core";
 import {
-  __test,
+  __predictInstructorsTest as __test,
   buildPredictionContext,
   predictInstructorsForTerm,
   sectionKey,

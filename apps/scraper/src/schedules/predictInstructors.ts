@@ -342,4 +342,8 @@ export function predictInstructorsForTerm(
 export { sectionKey };
 
 /** Internal pure helpers, exported for parity tests against @uoplan/core. */
-export const __test = { termYear, normalizeInstructorName, isUnknownInstructorName };
+export const __predictInstructorsTest = {
+  termYear,
+  normalizeInstructorName,
+  isUnknownInstructorName,
+};

@@ -1,6 +1,6 @@
 import type { CourseGradesData, GradeDistribution } from "./dataTypes";
 import { GRADE_POINTS, aPlusPercent, distributionGpa } from "./gradeDistribution";
-import { getCourseLevel, normalizeCourseCode, parseCourseCode } from "./utils/courseUtils";
+import { disciplineOf, levelOf, normalizeCourseCode } from "./utils/courseUtils";
 import type { ProgramCourseFilter } from "./programTrends";
 import { programFilterMatches } from "./programTrends";
 
@@ -53,16 +53,6 @@ export function decodeTermMeta(termId: number): TermMeta {
   const season = SEASON_BY_DIGIT[seasonDigit] ?? null;
   const sortKey = season ? year * 10 + SEASON_RANK[season] : year * 10;
   return { termId: n, year, seasonDigit, season, sortKey };
-}
-
-/** Discipline (subject) prefix of a course code, e.g. `PSY 1101` → `PSY`. */
-export function disciplineOf(code: string): string | null {
-  return parseCourseCode(code)?.discipline ?? null;
-}
-
-/** Course level bucket (1000, 2000, …) of a course code, or null. */
-export function levelOf(code: string): number | null {
-  return getCourseLevel(code);
 }
 
 /** Letter grades that count toward GPA / graded totals (the 10-point scale). */

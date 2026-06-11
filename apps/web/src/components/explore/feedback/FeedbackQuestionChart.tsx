@@ -5,10 +5,10 @@ import { tr, useTr } from "../../../i18n";
 import { formatTermLabel, formatTermLabelShort } from "../../../lib/term/termLabel";
 import { MiniChartTooltip } from "../../shared/MiniChartTooltip";
 
-export const SENTIMENT_COLOR = "var(--app-info)";
-export const QUESTION_CHART_HEIGHT = 200;
-export const CHART_PLOT_TOP = 5;
-export const CHART_PLOT_BOTTOM = 35;
+const SENTIMENT_COLOR = "var(--app-info)";
+const QUESTION_CHART_HEIGHT = 200;
+const CHART_PLOT_TOP = 5;
+const CHART_PLOT_BOTTOM = 35;
 
 interface FeedbackQuestionPoint {
   termId: number;
@@ -39,7 +39,7 @@ function sentenceCase(label: string): string {
  * evenly spaced and aligned with the graph's plot area, with a success->danger
  * track. Rendered only when the option labels are known.
  */
-export function FeedbackScaleLegend({
+function FeedbackScaleLegend({
   options,
   showLabels,
 }: {
@@ -142,7 +142,7 @@ function optionScore(index: number, total: number): string {
  * are hidden) that opens a popover listing each response option best->worst with its
  * score on the 1-5 scale — the same values the legend implies on wide screens.
  */
-export function QuestionOptionsPopover({ options }: { options: readonly string[] }) {
+function QuestionOptionsPopover({ options }: { options: readonly string[] }) {
   useTr();
   if (options.length < 2) return null;
   return (

@@ -10,7 +10,7 @@ import type {
 import { unsafeBrand } from "@uoplan/core";
 import type { CalendarEvent } from "../types";
 
-export function courseCode(value: string): NormalizedCourseCode {
+function courseCode(value: string): NormalizedCourseCode {
   return unsafeBrand<NormalizedCourseCode>(value);
 }
 

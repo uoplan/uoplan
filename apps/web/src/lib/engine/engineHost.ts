@@ -129,6 +129,9 @@ export function getEngineSync(
   return engine;
 }
 
+// Consumed via a dynamic import() in workers/scheduleWorkerClient.ts, which
+// fallow's static analysis cannot trace.
+// fallow-ignore-next-line unused-export
 export async function getInMemoryEngine(
   catalogue: DomainCatalogue,
   schedulesData: DomainSchedulesData,
