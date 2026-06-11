@@ -31,6 +31,7 @@
     "hooks:install": "lefthook install",
     "hooks:run": "lefthook run pre-commit",
     "fallow": "fallow",
+    "check:fallow": "fallow --fail-on-issues --skip health",
     "size": "pnpm --filter web size",
     "analyze": "pnpm --filter web analyze",
     "scrape:catalogue": "pnpm --filter scraper scrape:catalogue",

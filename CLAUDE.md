@@ -26,6 +26,10 @@ pnpm check:arch       # Package-layering + worker-purity guardrails
 pnpm check:i18n       # Translation completeness / locale parity
 pnpm i18n:sync        # Scaffold missing msgids into both PO files
 pnpm fallow           # fallow — dead code + duplication + health (replaces knip)
+pnpm check:fallow     # CI/pre-commit gate: fallow --fail-on-issues --skip health
+                      # NOTE: `health` (complexity/CRAP) is TEMPORARILY DISABLED in the
+                      # gate (see below). The full advisory analysis incl. health is
+                      # still available on demand via `pnpm fallow health`.
 
 # Rust/WASM schedule engine (packages/engine)
 pnpm build:engine-wasm                   # wasm-pack build --release (run before vite/worker builds)
@@ -44,7 +48,16 @@ pnpm build:data-proto # Compile apps/scraper/data JSON → apps/web/public/data 
 Run a single test with vitest directly, e.g.
 `pnpm --filter @uoplan/core exec vitest run src/path/file.test.ts -t "case name"`.
 
-Tooling is **oxc-based** — `oxlint` (`oxlint.config.ts`), `oxfmt` (`oxfmt.config.ts`), and `tsgo` (TypeScript native preview) for typechecking, not eslint/prettier/tsc. Git hooks run via `lefthook` (`lefthook.yml`, installed by `pnpm prepare`; pre-commit runs oxfmt, oxlint, typecheck, check:i18n, fallow, and cargo-clippy). CI (`.github/workflows/ci.yml`) runs: install → setup Rust + wasm-pack → generate → build:engine-wasm → cargo test → lint → format:check → typecheck → check:arch → check:i18n → fallow → test → build. The engine WASM must be built before typecheck/test/build (web tests load it). `apps/cli/**` is excluded (it has its own workflow).
+Tooling is **oxc-based** — `oxlint` (`oxlint.config.ts`), `oxfmt` (`oxfmt.config.ts`), and `tsgo` (TypeScript native preview) for typechecking, not eslint/prettier/tsc. Git hooks run via `lefthook` (`lefthook.yml`, installed by `pnpm prepare`; pre-commit runs oxfmt, oxlint, typecheck, check:i18n, check:fallow, and cargo-clippy). CI (`.github/workflows/ci.yml`) runs: install → setup Rust + wasm-pack → generate → build:engine-wasm → cargo test → lint → format:check → typecheck → check:arch → check:i18n → check:fallow → test → build. The engine WASM must be built before typecheck/test/build (web tests load it). `apps/cli/**` is excluded (it has its own workflow).
+
+> **fallow `health` temporarily disabled in the gate.** Both the CI step and the
+> lefthook pre-commit hook run `pnpm check:fallow` (`fallow --fail-on-issues --skip
+> health`), which enforces only dead-code + duplication. The complexity/CRAP `health`
+> analysis is intentionally excluded for now because the codebase has a large backlog
+> of complexity/CRAP findings that need a dedicated refactoring + test-coverage effort
+> (tracked separately). It is **not** gated yet — run it manually with `pnpm fallow
+> health` to inspect the backlog. To re-enable gating later, drop `--skip health` from
+> the `check:fallow` script in `package.json`.
 
 ## Architecture
 
