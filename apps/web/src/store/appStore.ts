@@ -12,6 +12,7 @@ import {
   createSelectionSlice,
 } from "./slices/index";
 import { type AppServices, createDefaultAppServices } from "./services";
+import { registerAppStore } from "./storeRegistry";
 import {
   DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS,
   DEFAULT_BASIC_LANGUAGE_BUCKETS,
@@ -214,6 +215,7 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
 
 /** Default singleton store used by the running app and by non-React/imperative callers. */
 export const defaultAppStore = createAppStore();
+registerAppStore(defaultAppStore);
 
 /**
  * Context holding the active store instance. Provided by {@link AppStoreProvider}; there is no

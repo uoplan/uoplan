@@ -8,7 +8,7 @@
  *
  * Merge model — identical to `@uoplan/core` `professorIdentity` (the helpers are
  * inlined here because the scraper build cannot resolve core's directory barrel
- * at runtime; the `__test` export is parity-checked against core):
+ * at runtime; the `__buildRegistryTest` export is parity-checked against core):
  *   - group by `professorMatchKey` (first token + last token, diacritics
  *     stripped, middle names dropped);
  *   - the canonical display name is the fullest variant in the group;
@@ -416,7 +416,7 @@ export function createResolverFromRegistry(
 }
 
 /** Internal pure helpers, exported for parity tests against @uoplan/core. */
-export const __test = {
+export const __buildRegistryTest = {
   deburr,
   professorNameTokens,
   professorMatchKey,

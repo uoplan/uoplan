@@ -1,8 +1,7 @@
 import type { CourseGradesData, GradeDistribution, Program, ProgramRequirement } from "./dataTypes";
 import type { NormalizedCourseCode } from "./brand";
 import { GRADE_POINTS } from "./gradeDistribution";
-import { disciplineOf, levelOf } from "./gradeTrends";
-import { normalizeCourseCode } from "./utils/courseUtils";
+import { disciplineOf, levelOf, normalizeCourseCode } from "./utils/courseUtils";
 import { urlToSlug } from "./stateEncode";
 
 /**

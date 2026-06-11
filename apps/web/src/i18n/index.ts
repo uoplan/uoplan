@@ -3,7 +3,7 @@ import { useLingui } from "@lingui/react";
 import { detect, fromNavigator, fromStorage } from "@lingui/detect-locale";
 
 const LOCALE_STORAGE_KEY = "uoplan.lang";
-export const APP_LOCALES = ["en", "fr-CA"] as const;
+const APP_LOCALES = ["en", "fr-CA"] as const;
 export type AppLocale = (typeof APP_LOCALES)[number];
 
 const DEFAULT_LOCALE: AppLocale = "en";

@@ -133,7 +133,7 @@ function withGenerationTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
  * `termId` and the completed-course list (OPT subset matters); `firstYear`
  * picks the year-catalogue merge.
  */
-export function dataKeyFromState(state: AppState): CacheDataKey | null {
+function dataKeyFromState(state: AppState): CacheDataKey | null {
   if (!state.selectedTermId) return null;
   return {
     termId: state.selectedTermId,
@@ -146,10 +146,7 @@ export function dataKeyFromState(state: AppState): CacheDataKey | null {
  * Build the worker input from an AppState snapshot. Wraps
  * {@link pickGenerateSchedulesInput} with a sensible default for `mode`.
  */
-export function inputFromState(
-  state: AppState,
-  mode: GenerateSchedulesMode,
-): GenerateSchedulesInput {
+function inputFromState(state: AppState, mode: GenerateSchedulesMode): GenerateSchedulesInput {
   return pickGenerateSchedulesInput(state, mode);
 }
 

@@ -26,7 +26,6 @@
     "cheerio": "^1.2.0",
     "csv-parse": "^6.2.1",
     "got": "^14.6.6",
-    "jsdom": "^28.1.0",
     "p-limit": "^7.3.0",
     "playwright": "^1.60.0",
     "tough-cookie": "^6.0.1",

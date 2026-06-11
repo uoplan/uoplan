@@ -7,7 +7,7 @@ import {
   slugifyProfessor as coreSlug,
 } from "@uoplan/core";
 import {
-  __test,
+  __buildRegistryTest as __test,
   buildProfessorRegistry,
   createResolverFromRegistry,
   type RegistryInputs,

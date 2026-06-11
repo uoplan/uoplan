@@ -5,7 +5,10 @@
   // entry points from package.json + framework plugins; only genuine roots
   // that fallow does not auto-detect are listed here. apps/cli is a pure Rust
   // crate (no JS/TS) so it is excluded entirely.
-  "ignorePatterns": ["apps/cli/**"],
+  // The __fixtures__/*.html files are saved HTML pages used as scraper test
+  // fixtures (read from disk, never imported); fallow would otherwise report
+  // their inert <script>/<link> asset URLs as unresolved imports.
+  "ignorePatterns": ["apps/cli/**", "**/__fixtures__/**/*.html"],
   "entry": [
     "apps/web/src/main.tsx",
     "apps/web/src/workers/sw.ts",
@@ -20,11 +23,25 @@
     "apps/scraper/src/cli/verifyScheduleDates.ts",
     "oxfmt.config.ts"
   ],
-  // Only deps genuinely used indirectly (not via a source import fallow can
-  // see): @bufbuild/protobuf is imported by git-ignored generated proto code;
-  // ts-proto is a protoc codegen plugin invoked by the generate:proto script.
+  // Deps genuinely used but invisible to fallow's resolver:
+  // - @bufbuild/protobuf is imported by git-ignored generated proto code.
+  // - ts-proto is a protoc codegen plugin invoked by the generate:proto script.
+  // - @uoplan/proto: the apps import only subpaths (@uoplan/proto/cli|data|
+  //   feedback|state); fallow credits the bare-specifier usage to packages/core,
+  //   so each app's own dependency looks unused.
+  // - @uoplan/engine: bare-imported in apps/web (engineHost.ts), but its "."
+  //   export resolves to the git-ignored wasm-pack build artifact (pkg/), so
+  //   fallow can't see a resolvable import.
+  // - @size-limit/file: required at runtime by size-limit (the file checker for
+  //   .size-limit.json) but never imported from TS source.
   // (knip's @vitest/browser + wrangler ignores were redundant under fallow, and
   // its @marsidev/react-turnstile ignore masked a real unused dep in the
   // worker — all three were dropped.)
-  "ignoreDependencies": ["@bufbuild/protobuf", "ts-proto"]
+  "ignoreDependencies": [
+    "@bufbuild/protobuf",
+    "ts-proto",
+    "@uoplan/proto",
+    "@uoplan/engine",
+    "@size-limit/file"
+  ]
 }

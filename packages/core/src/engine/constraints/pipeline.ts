@@ -49,20 +49,6 @@ export class ConstraintPipeline {
     return true;
   }
 
-  allowsCourseSet(
-    courseCodes: readonly NormalizedCourseCode[],
-    ctx: ConstraintContext,
-    trace?: Tracer,
-  ): boolean {
-    for (const c of this.constraints) {
-      if (c.allowsCourseSet && !c.allowsCourseSet(courseCodes, ctx)) {
-        trace?.({ scope: "course-set", constraintId: c.id, subject: courseCodes.join(",") });
-        return false;
-      }
-    }
-    return true;
-  }
-
   allowsSection(
     courseCode: NormalizedCourseCode,
     section: ComponentSection,

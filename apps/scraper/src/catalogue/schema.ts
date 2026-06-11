@@ -101,7 +101,7 @@ const DisciplineLevelSchema = z.object({
   levels: z.array(z.number()).optional(), // e.g. [3000, 4000]
 });
 
-export const ProgramRequirementBaseSchema = z.object({
+const ProgramRequirementBaseSchema = z.object({
   type: RequirementTypeSchema,
   title: z.string().optional(),
   code: z.string().optional(),

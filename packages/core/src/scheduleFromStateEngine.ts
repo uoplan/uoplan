@@ -1,15 +1,13 @@
-import type { DataCache, DecodedState, GeneratedSchedule, GenerationConstraints } from "./index";
-import {
-  computeRequirementsState,
-  requirementIdsFromTree,
-  gateRemainingByPriority,
-  buildPrereqContext,
-  canTakeCourse,
-  getEffectiveSchedule,
-  firstFittingEnrollment,
-  buildColorMap,
-  transferSwapColor,
-} from "./index";
+import type { DataCache } from "./dataCache";
+import type { GeneratedSchedule, GenerationConstraints } from "./generation/types";
+import { firstFittingEnrollment } from "./generation/swap";
+import { type DecodedState, requirementIdsFromTree } from "./stateEncode";
+import { computeRequirementsState } from "./requirements";
+import { gateRemainingByPriority } from "./requirements/priority";
+import { buildPrereqContext } from "./prerequisites/context";
+import { canTakeCourse } from "./prerequisites/evaluator";
+import { getEffectiveSchedule } from "./scheduleFilters";
+import { buildColorMap, transferSwapColor } from "./utils/uiUtils";
 import {
   type AdvancedRequestInput,
   type BasicRequestInput,

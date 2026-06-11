@@ -1,5 +1,5 @@
-import type { RemainingRequirement, RequirementWithStatus } from "../index";
-import { canonicalGroupToken, groupTokenPrefix, isGroupToken } from "../index";
+import type { RemainingRequirement, RequirementWithStatus } from "../requirements/types";
+import { canonicalGroupToken, groupTokenPrefix, isGroupToken } from "../utils/groupToken";
 
 function collectRequirementsFromSelectedBranches(
   nodes: RequirementWithStatus[],

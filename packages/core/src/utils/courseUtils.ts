@@ -86,6 +86,16 @@ export function getCourseLevel(code: string): number | null {
   return Math.floor(num / 1000) * 1000;
 }
 
+/** Discipline (subject) prefix of a course code, e.g. `PSY 1101` → `PSY`. */
+export function disciplineOf(code: string): string | null {
+  return parseCourseCode(code)?.discipline ?? null;
+}
+
+/** Course level bucket (1000, 2000, …) of a course code, or null. */
+export function levelOf(code: string): number | null {
+  return getCourseLevel(code);
+}
+
 /**
  * Return the language variant of a course code, or null if none exists.
  * English courses (hundreds digit 1–4) map to French (+ 400) and vice versa.
