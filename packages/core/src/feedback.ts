@@ -2,6 +2,7 @@ import type { FeedbackProto } from "@uoplan/proto";
 import type { NormalizedCourseCode, ProfessorNameKey } from "./brand";
 import { normalizeCourseCode } from "./utils/courseUtils";
 import { normalizeProfessorName } from "./professorRatings";
+import { decodeTermMeta, disciplineOf, levelOf, type TermSeason } from "./gradeTrends";
 
 /** Metadata for one distinct survey question. */
 export interface FeedbackQuestionMeta {
@@ -293,6 +294,41 @@ export function courseSentimentByNorm(index: FeedbackIndex): Map<NormalizedCours
   for (const [norm, views] of index.byCourseNorm) {
     const avg = feedbackSummary(views).overallAverage;
     if (avg != null) out.set(norm, avg);
+  }
+  return out;
+}
+
+/**
+ * Per-discipline overall sentiment (response-weighted 1-5 average across every
+ * matching section), keyed by discipline code. Honors course-level and term-season
+ * filters; disciplines with no scale feedback are omitted.
+ */
+export function disciplineSentiment(
+  index: FeedbackIndex,
+  options: { level?: number | null; season?: TermSeason | null } = {},
+): Map<string, number> {
+  const level = options.level ?? null;
+  const season = options.season ?? null;
+  const byDiscipline = new Map<string, FeedbackSectionView[]>();
+  for (const [norm, views] of index.byCourseNorm) {
+    const discipline = disciplineOf(norm);
+    if (!discipline) continue;
+    if (level != null && levelOf(norm) !== level) continue;
+    for (const view of views) {
+      if (season && decodeTermMeta(view.termId).season !== season) continue;
+      let bucket = byDiscipline.get(discipline);
+      if (!bucket) {
+        bucket = [];
+        byDiscipline.set(discipline, bucket);
+      }
+      bucket.push(view);
+    }
+  }
+
+  const out = new Map<string, number>();
+  for (const [discipline, views] of byDiscipline) {
+    const avg = feedbackSummary(views).overallAverage;
+    if (avg != null) out.set(discipline, avg);
   }
   return out;
 }

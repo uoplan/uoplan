@@ -3,6 +3,7 @@ import type { FeedbackProto } from "@uoplan/proto";
 import { normalizeCourseCode } from "../utils/courseUtils";
 import {
   buildFeedbackIndex,
+  disciplineSentiment,
   feedbackAllViews,
   feedbackOverallSeries,
   feedbackQuestionSeries,
@@ -168,5 +169,139 @@ describe("feedback aggregation helpers", () => {
     const t2231 = overall.find((p) => p.termId === 2231)!;
     // (4.2*40 + 3.0*10) / 50 = 3.96
     expect(t2231.average).toBeCloseTo((4.2 * 40 + 3.0 * 10) / 50);
+  });
+});
+
+describe("disciplineSentiment", () => {
+  function disciplineData(): FeedbackProto.FeedbackData {
+    return {
+      questions: [
+        { text: "Overall, this course was good", scale: true, optionSet: 1 },
+        { text: "The workload was reasonable", scale: true, optionSet: 1 },
+        { text: "Non-scale category", scale: false, optionSet: 0 },
+      ],
+      professors: ["Ada Lovelace", "Alan Turing", "Grace Hopper"],
+      extraCourses: [],
+      indicesCourseCount: 4,
+      questionSets: [{ questions: [0, 1, 2] }],
+      optionSets: [{ options: ["strongly agree", "agree", "disagree", "strongly disagree"] }],
+      terms: [
+        {
+          termId: 2231,
+          courses: [
+            {
+              course: 0,
+              sections: [
+                {
+                  section: "A00",
+                  professor: 0,
+                  questionSet: 0,
+                  responses: [10, 30, 20],
+                  registered: [],
+                  averages: [40, 20, 0],
+                },
+              ],
+            },
+            {
+              course: 1,
+              sections: [
+                {
+                  section: "A00",
+                  professor: 1,
+                  questionSet: 0,
+                  responses: [10, 5, 5],
+                  registered: [],
+                  averages: [50, 0, 0],
+                },
+              ],
+            },
+            {
+              course: 2,
+              sections: [
+                {
+                  section: "A00",
+                  professor: 2,
+                  questionSet: 0,
+                  responses: [6, 6, 6],
+                  registered: [],
+                  averages: [35, 0, 0],
+                },
+              ],
+            },
+            {
+              course: 3,
+              sections: [
+                {
+                  section: "A00",
+                  professor: 2,
+                  questionSet: 0,
+                  responses: [8, 8, 8],
+                  registered: [],
+                  averages: [0, 0, 0],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          termId: 2239,
+          courses: [
+            {
+              course: 0,
+              sections: [
+                {
+                  section: "B00",
+                  professor: 0,
+                  questionSet: 0,
+                  responses: [20, 10, 10],
+                  registered: [],
+                  averages: [50, 30, 0],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    } as unknown as FeedbackProto.FeedbackData;
+  }
+
+  const disciplineIndices = [
+    normalizeCourseCode("CSI 2110"),
+    normalizeCourseCode("CSI 3105"),
+    normalizeCourseCode("MAT 1320"),
+    normalizeCourseCode("PHI 1101"),
+  ];
+
+  it("computes response-weighted sentiment per discipline", () => {
+    const index = buildFeedbackIndex(disciplineData(), disciplineIndices);
+    const byDiscipline = disciplineSentiment(index);
+
+    expect(byDiscipline.get("CSI")).toBeCloseTo(
+      (4.0 * 10 + 2.0 * 30 + 5.0 * 10 + 5.0 * 20 + 3.0 * 10) / 80,
+    );
+    expect(byDiscipline.get("MAT")).toBeCloseTo(3.5);
+  });
+
+  it("filters sentiment by course level", () => {
+    const index = buildFeedbackIndex(disciplineData(), disciplineIndices);
+    const byDiscipline = disciplineSentiment(index, { level: 3000 });
+
+    expect(byDiscipline.get("CSI")).toBeCloseTo(5.0);
+    expect(byDiscipline.has("MAT")).toBe(false);
+  });
+
+  it("filters sentiment by term season", () => {
+    const index = buildFeedbackIndex(disciplineData(), disciplineIndices);
+    const byDiscipline = disciplineSentiment(index, { season: "fall" });
+
+    expect(byDiscipline.get("CSI")).toBeCloseTo((5.0 * 20 + 3.0 * 10) / 30);
+    expect(byDiscipline.has("MAT")).toBe(false);
+  });
+
+  it("omits disciplines with no scale feedback", () => {
+    const index = buildFeedbackIndex(disciplineData(), disciplineIndices);
+    const byDiscipline = disciplineSentiment(index);
+
+    expect(byDiscipline.has("PHI")).toBe(false);
   });
 });
