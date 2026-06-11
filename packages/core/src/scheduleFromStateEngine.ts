@@ -6,9 +6,7 @@ import {
   buildPrereqContext,
   canTakeCourse,
   getEffectiveSchedule,
-  getValidSectionCombos,
-  getEnrollmentsForCourse,
-  enrollmentsOverlap,
+  firstFittingEnrollment,
   buildColorMap,
   transferSwapColor,
 } from "./index";
@@ -35,18 +33,13 @@ function applyOneSwap(
   const scheduleData = getEffectiveSchedule(cache, newCourseCode, false, false);
   if (!scheduleData) return null;
 
-  const combos = getValidSectionCombos(scheduleData, constraints);
   const others = schedule.enrollments.filter((_, i) => i !== enrollmentIndex);
+  const candidate = firstFittingEnrollment(scheduleData, constraints, others);
+  if (!candidate) return null;
 
-  for (const combo of combos) {
-    const candidate = getEnrollmentsForCourse(scheduleData, combo);
-    if (!others.some((e) => enrollmentsOverlap(e, candidate))) {
-      const newEnrollments = [...schedule.enrollments];
-      newEnrollments[enrollmentIndex] = candidate;
-      return { enrollments: newEnrollments };
-    }
-  }
-  return null;
+  const newEnrollments = [...schedule.enrollments];
+  newEnrollments[enrollmentIndex] = candidate;
+  return { enrollments: newEnrollments };
 }
 
 /**

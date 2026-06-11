@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { SCHEDULES_DATA_DIR } from "../shared/paths.ts";
-import type { SchedulesData } from "../../../../packages/core/src/dataTypes.ts";
+import type { SchedulesData } from "../../../../packages/core/src/dataTypes/index.ts";
 
 const DAY_INDEX: Record<string, number> = {
   Mo: 0,

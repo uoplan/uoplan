@@ -25,6 +25,7 @@ import {
   applyOptionSelections,
   collectRequirementIdsWithCandidateCourse,
 } from "../../../lib/requirements/requirementUtils";
+import { buildExplicitExemptSet, buildSwapConstraints } from "./swapContext";
 
 export function getSwapCandidates(
   enrollmentIndex: number,
@@ -45,10 +46,6 @@ export function getSwapCandidates(
     levelBuckets,
     languageBuckets,
     electiveLevelBuckets,
-    generationMinStartMinutes,
-    generationMaxEndMinutes,
-    generationMinProfessorRating,
-    professorRatings,
     includeClosedComponents,
     virtualSectionsOnly,
     filteredPrereqEligibleCourses,
@@ -80,13 +77,7 @@ export function getSwapCandidates(
     const prereqCtx = buildPrereqContext(completedCourses, cache, studentPrograms);
     const basicFilters = { levels: levelBuckets, languageBuckets };
     const alreadyInSchedule = new Set(schedule.enrollments.map((e) => e.courseCode));
-    const swapConstraints: GenerationConstraints = {
-      minStartMinutes: generationMinStartMinutes,
-      maxEndMinutes: generationMaxEndMinutes,
-      minProfessorRating: generationMinProfessorRating ?? undefined,
-      professorRatings: professorRatings ?? undefined,
-      blockedTimes: get().blockedTimes,
-    };
+    const swapConstraints: GenerationConstraints = buildSwapConstraints(get());
     // The other courses keep their currently-assigned sections; a candidate is
     // feasible if it has at least one section combo that satisfies the time
     // constraints and doesn't overlap any of them. This mirrors the advanced
@@ -217,13 +208,10 @@ export function getSwapCandidates(
     for (const c of filteredPrereqEligibleCourses) candidateSet.add(normalizeCourseCode(c));
   }
 
-  const explicitExemptNormalized = new Set<string>();
-  for (const codes of Object.values(constrainedPerRequirement)) {
-    for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
-  }
-  for (const codes of Object.values(selectedPerRequirement)) {
-    for (const code of codes) explicitExemptNormalized.add(normalizeCourseCode(code));
-  }
+  const explicitExemptNormalized = buildExplicitExemptSet(
+    constrainedPerRequirement,
+    selectedPerRequirement,
+  );
 
   const others = schedule.enrollments.filter(
     (e, i) => i !== enrollmentIndex && e.courseCode !== oldCode,
@@ -251,13 +239,7 @@ export function getSwapCandidates(
     : Infinity;
 
   const prereqEligibleSet = new Set(prereqEligibleCourses);
-  const swapConstraints: GenerationConstraints = {
-    minStartMinutes: generationMinStartMinutes,
-    maxEndMinutes: generationMaxEndMinutes,
-    minProfessorRating: generationMinProfessorRating ?? undefined,
-    professorRatings: professorRatings ?? undefined,
-    blockedTimes: get().blockedTimes,
-  };
+  const swapConstraints: GenerationConstraints = buildSwapConstraints(get());
 
   function getValidEnrollmentsFor(code: string): CourseEnrollment[] {
     const virtualOnly = virtualScheduleFilterApplies(

@@ -1,43 +1,36 @@
 import type { StateCreator } from "zustand";
-import type { AppStore } from "../types";
+import type { AppStore } from "../../types";
 import { getEffectiveSchedule, generateRandomSeed } from "@uoplan/core";
-import {
-  getValidSectionCombos,
-  getEnrollmentsForCourse,
-  enrollmentsOverlap,
-  runTimetableFixedSet,
-  type CourseEnrollment,
-  type GenerationConstraints,
-} from "@uoplan/core";
+import { runTimetableFixedSet, transferSwapColor, type CourseEnrollment } from "@uoplan/core";
 import { normalizeCourseCode } from "@uoplan/core";
-import { getEngineSync } from "../../lib/engine/engineHost";
-import { getEffectiveCatalogue } from "./catalogueUtils";
-import { basicElectivesAfterPinnedDelta } from "../../lib/basicCalendarPins";
-import { DEFAULT_BASIC_ELECTIVES_COUNT } from "../generationDefaults";
+import { getEngineSync } from "../../../lib/engine/engineHost";
+import { getEffectiveCatalogue } from "../catalogueUtils";
+import { basicElectivesAfterPinnedDelta } from "../../../lib/basicCalendarPins";
+import { DEFAULT_BASIC_ELECTIVES_COUNT } from "../../generationDefaults";
 import {
   DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS,
   DEFAULT_BASIC_LANGUAGE_BUCKETS,
   DEFAULT_BASIC_LEVEL_BUCKETS,
-  virtualScheduleFilterApplies,
-} from "../../lib/electiveEligibility";
+} from "../../../lib/electiveEligibility";
 import {
   appendCourseDedupedByNorm,
   resolveRequirementIdsForScheduleCourse,
-} from "../../lib/requirements/requirementUtils";
-import { compareReqPreference, type AutoAssignReqMeta } from "../requirementCompute/autoAssign";
-import { flushPersistedAppState } from "../../lib/persistAppState";
-import { nextSeed, repairSeedPosition } from "../../lib/seedNavigation";
-import { runScheduleGeneration } from "../../workers/scheduleWorkerClient";
-import type { GenerateSchedulesMode } from "../../lib/generateSchedulesInput";
-import { applySwapsToResult } from "./schedules/swapHelpers";
+} from "../../../lib/requirements/requirementUtils";
+import { compareReqPreference, type AutoAssignReqMeta } from "../../requirementCompute/autoAssign";
+import { flushPersistedAppState } from "../../../lib/persistAppState";
+import { nextSeed, repairSeedPosition } from "../../../lib/seedNavigation";
+import { runScheduleGeneration } from "../../../workers/scheduleWorkerClient";
+import type { GenerateSchedulesMode } from "../../../lib/generateSchedulesInput";
+import { applySwapsToResult, tryApplyOneSwap } from "./swapHelpers";
+import { buildSwapConstraints } from "./swapContext";
 import {
   applyScheduleGenerationResult,
   isFailurePreservingPrevious,
   scheduleFingerprint,
   withScheduleGenerating,
-} from "./schedules/generationState";
-import { getSwapCandidates } from "./schedules/swapCandidates";
-import type { ScheduleGenerationResult, SchedulesSlice } from "./schedules/types";
+} from "./generationState";
+import { getSwapCandidates } from "./swapCandidates";
+import type { ScheduleGenerationResult, SchedulesSlice } from "./types";
 
 export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice> = (set, get) => {
   // Per-store memo of valid section enrollments, invalidated via clearEnrollmentsCache.
@@ -272,6 +265,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     },
 
     swapCourseInSchedule: async (enrollmentIndex, newCourseCode) => {
+      const state = get();
       const {
         basicPinnedCourses,
         currentSchedule,
@@ -283,66 +277,37 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
         chosenCourseToRequirementId,
         currentPoolMap,
         currentColorMap,
-        generationMinStartMinutes,
-        generationMaxEndMinutes,
-        generationMinProfessorRating,
-        professorRatings,
         includeClosedComponents,
         virtualSectionsOnly,
-        remainingRequirements,
-        constrainedPerRequirement,
-        selectedPerRequirement,
-      } = get();
+      } = state;
       if (!cache || !currentSchedule) return;
 
       const schedule = currentSchedule;
       const oldEnrollment = schedule.enrollments[enrollmentIndex];
       if (!oldEnrollment) return;
+      const oldCode = oldEnrollment.courseCode;
 
-      const explicitExemptNormalized = new Set<string>();
-      for (const codes of Object.values(constrainedPerRequirement)) {
-        for (const code of codes) {
-          explicitExemptNormalized.add(normalizeCourseCode(code));
-        }
-      }
-      for (const codes of Object.values(selectedPerRequirement)) {
-        for (const code of codes) {
-          explicitExemptNormalized.add(normalizeCourseCode(code));
-        }
-      }
-
-      let virtualOnlyForNewCourse: boolean;
-      if (get().calendarMode === "basic") {
-        virtualOnlyForNewCourse = virtualSectionsOnly;
-      } else {
-        const oldCode = oldEnrollment.courseCode;
-        const reqId = currentPoolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
-        const reqType = remainingRequirements.find((r) => r.requirementId === reqId)?.type;
-        virtualOnlyForNewCourse = virtualScheduleFilterApplies(
-          virtualSectionsOnly,
-          reqType,
-          newCourseCode,
-          explicitExemptNormalized,
-        );
-      }
-
-      const newSchedule = getEffectiveSchedule(
-        cache,
-        newCourseCode,
-        includeClosedComponents,
-        virtualOnlyForNewCourse,
-      );
-      if (!newSchedule) return;
-
-      const constraints: GenerationConstraints = {
-        minStartMinutes: generationMinStartMinutes,
-        maxEndMinutes: generationMaxEndMinutes,
-        minProfessorRating: generationMinProfessorRating ?? undefined,
-        professorRatings: professorRatings ?? undefined,
-        blockedTimes: get().blockedTimes,
+      const appendSwap = (changes: Partial<AppStore>) => {
+        const newCurrentSwaps = [
+          ...get().currentSwaps,
+          { enrollmentIndex, courseCode: newCourseCode },
+        ];
+        set({
+          ...changes,
+          currentSwaps: newCurrentSwaps,
+          swapsPerSeed: { ...get().swapsPerSeed, [get().currentSeed]: newCurrentSwaps },
+        });
       };
 
-      if (get().calendarMode === "basic") {
+      if (state.calendarMode === "basic") {
+        const newSchedule = getEffectiveSchedule(
+          cache,
+          newCourseCode,
+          includeClosedComponents,
+          virtualSectionsOnly,
+        );
+        if (!newSchedule) return;
+
         const allCodes = schedule.enrollments.map((e) => e.courseCode);
         allCodes[enrollmentIndex] = newCourseCode;
 
@@ -359,7 +324,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
               engine,
               {
                 courseCodes: allCodes,
-                constraints,
+                constraints: buildSwapConstraints(state),
                 seed: get().currentSeed,
                 includeClosedComponents,
                 virtualSectionsOnly,
@@ -368,65 +333,30 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
               cache,
             )
           : null;
+        if (!newSched) return;
 
-        const validSchedules = newSched ? [newSched] : [];
-        if (validSchedules.length > 0) {
-          const oldColorIdx = currentColorMap[oldEnrollment.courseCode];
-          const { [oldEnrollment.courseCode]: _, ...mapWithoutOld } = currentColorMap;
-          const nextColorMap =
-            oldColorIdx !== undefined
-              ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
-              : mapWithoutOld;
-
-          const newCurrentSwaps = [
-            ...get().currentSwaps,
-            { enrollmentIndex, courseCode: newCourseCode },
-          ];
-          set({
-            currentSchedule: validSchedules[0],
-            currentColorMap: nextColorMap,
-            currentSwaps: newCurrentSwaps,
-            swapsPerSeed: { ...get().swapsPerSeed, [get().currentSeed]: newCurrentSwaps },
-          });
-        }
+        appendSwap({
+          currentSchedule: newSched,
+          currentColorMap: transferSwapColor(currentColorMap, oldCode, newCourseCode),
+        });
         return;
       }
 
-      const combos = getValidSectionCombos(newSchedule, constraints);
-      const others = schedule.enrollments.filter((_, i) => i !== enrollmentIndex);
-
-      for (const combo of combos) {
-        const candidate = getEnrollmentsForCourse(newSchedule, combo);
-        const conflicts = others.some((e) => enrollmentsOverlap(e, candidate));
-        if (!conflicts) {
-          const newEnrollments = [...schedule.enrollments];
-          newEnrollments[enrollmentIndex] = candidate;
-          const oldCode = oldEnrollment.courseCode;
-          const poolId = currentPoolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
-          const nextPoolMap =
-            poolId != null ? { ...currentPoolMap, [newCourseCode]: poolId } : currentPoolMap;
-
-          const oldColorIdx = currentColorMap[oldCode];
-          const { [oldCode]: _, ...mapWithoutOld } = currentColorMap;
-          const nextColorMap =
-            oldColorIdx !== undefined
-              ? { ...mapWithoutOld, [newCourseCode]: oldColorIdx }
-              : mapWithoutOld;
-
-          const newCurrentSwaps = [
-            ...get().currentSwaps,
-            { enrollmentIndex, courseCode: newCourseCode },
-          ];
-          set({
-            currentSchedule: { enrollments: newEnrollments },
-            currentPoolMap: nextPoolMap,
-            currentColorMap: nextColorMap,
-            currentSwaps: newCurrentSwaps,
-            swapsPerSeed: { ...get().swapsPerSeed, [get().currentSeed]: newCurrentSwaps },
-          });
-          return;
-        }
-      }
+      const applied = tryApplyOneSwap(
+        schedule,
+        enrollmentIndex,
+        newCourseCode,
+        currentPoolMap,
+        currentColorMap,
+        chosenCourseToRequirementId,
+        state,
+      );
+      if (!applied) return;
+      appendSwap({
+        currentSchedule: applied.schedule,
+        currentPoolMap: applied.poolMap,
+        currentColorMap: applied.colorMap,
+      });
     },
 
     undoLastSwap: () => {
