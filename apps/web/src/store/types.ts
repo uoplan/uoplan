@@ -1,4 +1,11 @@
-import type { Catalogue, Course, CourseGradesData, Program, SchedulesData } from "@uoplan/core";
+import type {
+  Catalogue,
+  Course,
+  CourseGradesData,
+  NormalizedCourseCode,
+  Program,
+  SchedulesData,
+} from "@uoplan/core";
 import type {
   RemainingRequirement,
   RequirementWithStatus,
@@ -140,9 +147,12 @@ export interface AppState {
   generationError: GenerationErrorState | null;
   unassignedCompletedCourses: string[];
   /** Swaps applied to current schedule, indexed by enrollment position. */
-  currentSwaps: Array<{ enrollmentIndex: number; courseCode: string }>;
+  currentSwaps: Array<{ enrollmentIndex: number; courseCode: NormalizedCourseCode }>;
   /** Per-seed swap history; preserved when navigating prev/next, cleared on randomize. */
-  swapsPerSeed: Record<number, Array<{ enrollmentIndex: number; courseCode: string }>>;
+  swapsPerSeed: Record<
+    number,
+    Array<{ enrollmentIndex: number; courseCode: NormalizedCourseCode }>
+  >;
   firstSeed: number;
   currentSeed: number;
   /** Earliest seed the user has generated at this session; drives Previous availability. */
@@ -165,7 +175,7 @@ export interface AppState {
    * built from the feedback dataset when {@link generationPreferHigherSentiment} is on.
    * Null until loaded; consumed only by schedule generation.
    */
-  courseSentimentByNorm: Map<string, number> | null;
+  courseSentimentByNorm: Map<NormalizedCourseCode, number> | null;
   frenchImmersionStream: boolean;
   /** The week group index the user last navigated to in the calendar, for URL sharing. */
   calendarWeekIndex: number | null;
@@ -253,13 +263,19 @@ export interface AppActions {
   goToPreviousSeed: () => Promise<void>;
   goToNextSeed: () => Promise<void>;
   randomizeSeed: () => Promise<void>;
-  swapCourseInSchedule: (enrollmentIndex: number, newCourseCode: string) => Promise<void>;
+  swapCourseInSchedule: (
+    enrollmentIndex: number,
+    newCourseCode: NormalizedCourseCode,
+  ) => Promise<void>;
   undoLastSwap: () => void;
   getSwapCandidates: (enrollmentIndex: number) => {
-    candidates: string[];
-    poolCourses: string[];
+    candidates: NormalizedCourseCode[];
+    poolCourses: NormalizedCourseCode[];
     requirementTitle?: string;
-    rejectedWithConflict: Array<{ code: string; conflictsWith: string }>;
+    rejectedWithConflict: Array<{
+      code: NormalizedCourseCode;
+      conflictsWith: NormalizedCourseCode;
+    }>;
   };
   /** Pin the course like "Pick specific courses" for its pool (no immediate regeneration). */
   lockCourseForAllSchedulesFromSwap: (enrollmentIndex: number) => void;
@@ -272,7 +288,7 @@ export interface AppActions {
   setGenerationCompressedSchedule: (v: boolean) => void;
   setGenerationPreferEasier: (v: boolean) => void;
   setGenerationPreferHigherSentiment: (v: boolean) => void;
-  setCourseSentimentByNorm: (map: Map<string, number> | null) => void;
+  setCourseSentimentByNorm: (map: Map<NormalizedCourseCode, number> | null) => void;
   setFrenchImmersionStream: (enabled: boolean) => void;
   setBlacklistedCourses: (courses: string[]) => void;
   blacklistCourseFromSwap: (enrollmentIndex: number) => void;

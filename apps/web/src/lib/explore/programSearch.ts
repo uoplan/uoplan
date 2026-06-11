@@ -1,6 +1,6 @@
 import Fuse from "fuse.js";
 import type { IFuseOptions } from "fuse.js";
-import type { Program } from "@uoplan/core";
+import type { NormalizedCourseCode, Program } from "@uoplan/core";
 import { buildProgramCourseFilter, programSlug } from "@uoplan/core";
 
 /** One row per distinct program — search index for explore. */
@@ -10,7 +10,7 @@ export type ExploreProgramSearchEntry = {
   /** Number of concrete required course codes (for the result card). */
   courseCount: number;
   /** Normalized core/required course codes (for the card's aggregate grade + satisfaction). */
-  coreCodes: string[];
+  coreCodes: NormalizedCourseCode[];
   searchText: string;
 };
 

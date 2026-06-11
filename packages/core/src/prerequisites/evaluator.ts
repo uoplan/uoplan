@@ -1,5 +1,6 @@
 import type { CoursePrereqKind, CoursePrereqNode } from "../dataTypes";
 import type { DataCache } from "../dataCache";
+import type { NormalizedCourseCode } from "../brand";
 import { normalizeCourseCode, getLanguageVariant } from "../utils/courseUtils";
 import type { PrereqContext } from "./types";
 
@@ -62,7 +63,7 @@ function evaluateCourseRequirement(node: CoursePrereqNode, ctx: PrereqContext): 
   return ctx.taken.some((c) => c.code === target || (variant !== null && c.code === variant));
 }
 
-function collectCourseCodes(node: CoursePrereqNode, codes: Set<string>): void {
+function collectCourseCodes(node: CoursePrereqNode, codes: Set<NormalizedCourseCode>): void {
   if (node.type === "course" && node.code) {
     const target = normalizeCourseCode(node.code);
     const variant = getLanguageVariant(target);
@@ -76,7 +77,7 @@ function collectCourseCodes(node: CoursePrereqNode, codes: Set<string>): void {
 }
 
 function creditsMatchingScopedChildren(node: CoursePrereqNode, ctx: PrereqContext): number {
-  const codes = new Set<string>();
+  const codes = new Set<NormalizedCourseCode>();
   for (const child of node.children ?? []) {
     collectCourseCodes(child, codes);
   }

@@ -3,12 +3,13 @@ import type { Catalogue, Program } from "@uoplan/core";
 import type { SchedulesData } from "@uoplan/core";
 import { buildDataCache } from "@uoplan/core";
 import { recomputeStateForProgram } from "./requirementCompute";
+import { testCourseCode } from "../test/brands";
 
 const emptySchedules: SchedulesData = { termId: "2261", schedules: [] };
 
 function mkCourse(code: string, overrides?: Partial<{ credits: number; component: string }>) {
   return {
-    code,
+    code: testCourseCode(code),
     title: code,
     credits: overrides?.credits ?? 3,
     description: "",
@@ -64,7 +65,7 @@ describe("recomputeStateForProgram single-candidate schedule handling", () => {
         {
           subject: "ENG",
           catalogNumber: "1100",
-          courseCode: "ENG 1100",
+          courseCode: testCourseCode("ENG 1100"),
           title: "Literature",
           timeZone: "America/Toronto",
           components: {
@@ -95,7 +96,7 @@ describe("recomputeStateForProgram single-candidate schedule handling", () => {
     const program: Program = {
       title: "One fixed course",
       url: "https://example.com",
-      requirements: [{ type: "course", code: "ENG 1100", credits: 3 }],
+      requirements: [{ type: "course", code: testCourseCode("ENG 1100"), credits: 3 }],
     };
 
     const state = recomputeStateForProgram(
@@ -173,7 +174,7 @@ describe("recomputeStateForProgram completed-course auto-assignment", () => {
               options: [
                 {
                   type: "course",
-                  code: "ENG 1100",
+                  code: testCourseCode("ENG 1100"),
                   credits: 3,
                 },
               ],
@@ -239,7 +240,7 @@ describe("recomputeStateForProgram completed-course auto-assignment", () => {
             },
             {
               type: "and",
-              options: [{ type: "course", code: "ENG 1100", credits: 3 }],
+              options: [{ type: "course", code: testCourseCode("ENG 1100"), credits: 3 }],
             },
           ],
         },

@@ -8,6 +8,7 @@ import {
   normalizeCourseCode,
   normalizeGradeVizDistribution,
   normalizeProfessorName,
+  pickCanonicalProfessorName,
   professorGraphId,
 } from "@uoplan/core";
 import { mergeGradeDistributionCounts, type ExploreOfferingFlat } from "../explore/gradesSearch";
@@ -73,7 +74,7 @@ export function buildOfferingsByProfessorId(
         }),
         courseCode: c.code,
         courseTitle: "",
-        professorName: p.name,
+        professorName: pickCanonicalProfessorName([p.name]),
         legacyId: p.legacyId,
         termId: p.termId,
         termLabel,

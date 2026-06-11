@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Badge, Box, Group, SegmentedControl, Stack, Text, UnstyledButton } from "@mantine/core";
 import { IconExternalLink } from "@tabler/icons-react";
 import { useMemo, type CSSProperties } from "react";
-import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/core";
+import type { CanonicalProfessorName, ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeProfessorName, hasProfessorRatings } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
@@ -101,7 +101,7 @@ function histogramBoxStyle(widthPx: number): CSSProperties {
 }
 
 function professorRatingLine(
-  displayName: string,
+  displayName: CanonicalProfessorName,
   professorRatings: ProfessorRatingsMap | null,
   legacyId: number | null,
 ) {

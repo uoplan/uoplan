@@ -1,4 +1,8 @@
-import type { DayOfWeek as DayOfWeekCode, GradeVizData } from "@uoplan/core";
+import type {
+  CanonicalProfessorName,
+  DayOfWeek as DayOfWeekCode,
+  GradeVizData,
+} from "@uoplan/core";
 
 export type { DayOfWeekCode };
 
@@ -11,12 +15,12 @@ export interface CalendarEvent {
   endMinutes: number;
   componentSection: string;
   virtual: boolean;
-  professor: string;
+  professor: CanonicalProfessorName;
   professorRatingValue?: number | null;
   professorRatingDetails?: Array<{
     id?: string;
     legacyId?: number;
-    name: string;
+    name: CanonicalProfessorName;
     rating: number;
     numRatings: number;
   }>;
@@ -35,7 +39,7 @@ export interface CalendarEvent {
    * Build-time guess of instructors, present only when the section has no known
    * instructor. Informational only — never used for ratings or generation.
    */
-  predictedInstructors?: Array<{ name: string; legacyId?: number | null }>;
+  predictedInstructors?: Array<{ name: CanonicalProfessorName; legacyId?: number | null }>;
   /**
    * RateMyProfessors rating details for the predicted candidates that have a
    * rating (same shape as `professorRatingDetails`). Only meaningful to display
@@ -45,7 +49,7 @@ export interface CalendarEvent {
   predictedRatingDetails?: Array<{
     id?: string;
     legacyId?: number;
-    name: string;
+    name: CanonicalProfessorName;
     rating: number;
     numRatings: number;
   }>;

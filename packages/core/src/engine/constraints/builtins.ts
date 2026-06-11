@@ -5,6 +5,7 @@
  */
 import type { ComponentSection } from "../../dataTypes";
 import type { CourseEnrollment, GenerationConstraints } from "../../generation";
+import type { NormalizedCourseCode } from "../../brand";
 import { enrollmentsOverlap } from "../../generation/overlaps";
 import { satisfiesCompressedConstraint } from "../../generation/constraints";
 import { timeSlotSatisfiesConstraints } from "../../generation/constraints";
@@ -88,7 +89,7 @@ export function compressedScheduleConstraint(constraints: GenerationConstraints)
 
 /** Excludes user-blacklisted courses everywhere (course scope, uniform). */
 export function blacklistConstraint(blacklistedCourses: readonly string[]): Constraint {
-  const set = new Set(blacklistedCourses.map(normalizeCourseCode));
+  const set = new Set<NormalizedCourseCode>(blacklistedCourses.map(normalizeCourseCode));
   return {
     id: "blacklist",
     label: "blacklist",

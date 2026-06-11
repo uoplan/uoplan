@@ -1,14 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { courseNormToPathParam, parseCoursePathParam } from "./courseSearchParams";
+import { testCourseCode } from "../../test/brands";
 
 describe("courseNormToPathParam", () => {
   it("encodes normalized code as compact lowercase", () => {
-    expect(courseNormToPathParam("CSI 2110")).toBe("csi2110");
-    expect(courseNormToPathParam("MAT 1341")).toBe("mat1341");
+    expect(courseNormToPathParam(testCourseCode("CSI 2110"))).toBe("csi2110");
+    expect(courseNormToPathParam(testCourseCode("MAT 1341"))).toBe("mat1341");
   });
 
   it("preserves letter suffix", () => {
-    expect(courseNormToPathParam("MAT 1341A")).toBe("mat1341a");
+    expect(courseNormToPathParam(testCourseCode("MAT 1341A"))).toBe("mat1341a");
   });
 });
 

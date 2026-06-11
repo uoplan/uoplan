@@ -12,6 +12,7 @@ import type { Catalogue, GeneratedSchedule, SchedulesData } from "@uoplan/core";
 
 import { CalendarPage } from "./CalendarPage";
 import { renderWithProviders } from "../../test/renderWithProviders";
+import { testCourseCode } from "../../test/brands";
 
 function buildRouter() {
   const rootRoute = createRootRoute();
@@ -36,13 +37,13 @@ function buildCache() {
   const catalogue: Catalogue = {
     courses: [
       {
-        code: "CSI 4900",
+        code: testCourseCode("CSI 4900"),
         title: "Honours Project",
         credits: 3,
         description: "",
       },
       {
-        code: "CSI 3105",
+        code: testCourseCode("CSI 3105"),
         title: "Design and Analysis of Algorithms",
         credits: 3,
         description: "",
@@ -57,12 +58,12 @@ function buildCache() {
 const schedule: GeneratedSchedule = {
   enrollments: [
     {
-      courseCode: "CSI 4900",
+      courseCode: testCourseCode("CSI 4900"),
       sectionCombo: {},
       times: [],
     },
     {
-      courseCode: "CSI 3105",
+      courseCode: testCourseCode("CSI 3105"),
       sectionCombo: {},
       times: [{ day: "Mo", startMinutes: 600, endMinutes: 690 }],
     },

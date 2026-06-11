@@ -9,6 +9,7 @@ import {
   levelOf,
 } from "../gradeTrends";
 import type { CourseGradesData } from "../dataTypes";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 describe("decodeTermMeta", () => {
   it("decodes year and season from PeopleSoft term ids", () => {
@@ -39,10 +40,10 @@ describe("decodeTermMeta", () => {
 
 describe("disciplineOf / levelOf", () => {
   it("extracts discipline and level from course codes", () => {
-    expect(disciplineOf("PSY 1101")).toBe("PSY");
+    expect(disciplineOf(normalizeCourseCode("PSY 1101"))).toBe("PSY");
     expect(disciplineOf("psy1101")).toBe("PSY");
-    expect(levelOf("PSY 1101")).toBe(1000);
-    expect(levelOf("ADM 4302")).toBe(4000);
+    expect(levelOf(normalizeCourseCode("PSY 1101"))).toBe(1000);
+    expect(levelOf(normalizeCourseCode("ADM 4302"))).toBe(4000);
     expect(disciplineOf("not a code")).toBeNull();
   });
 });
@@ -50,7 +51,7 @@ describe("disciplineOf / levelOf", () => {
 const grades: CourseGradesData = {
   courses: [
     {
-      code: "PSY 1101",
+      code: normalizeCourseCode("PSY 1101"),
       professors: [
         // Fall 2017: all A+ → GPA 10, 100% A+, 100% A-range, 100% pass
         { name: "P One", termId: 2179, distribution: { "A+": 100 } },
@@ -59,14 +60,14 @@ const grades: CourseGradesData = {
       ],
     },
     {
-      code: "PSY 2301",
+      code: normalizeCourseCode("PSY 2301"),
       professors: [
         // Winter 2023, level 2000: all B (6) → GPA 6
         { name: "P Three", termId: 2231, distribution: { B: 80 } },
       ],
     },
     {
-      code: "ADM 1100",
+      code: normalizeCourseCode("ADM 1100"),
       professors: [
         // Fall 2017: all C (4)
         { name: "A One", termId: 2179, distribution: { C: 60 } },
@@ -168,8 +169,12 @@ describe("computeDisciplineLeaderboard", () => {
 describe("computeCourseLeaderboard", () => {
   it("groups by course code instead of discipline", () => {
     const board = computeCourseLeaderboard(grades, {}, { minTermVolume: 50, minTerms: 2 });
-    expect(board.map((c) => c.code).sort()).toEqual(["ADM 1100", "PSY 1101", "PSY 2301"]);
-    const psy1101 = board.find((c) => c.code === "PSY 1101");
+    expect(board.map((c) => c.code).sort()).toEqual([
+      normalizeCourseCode("ADM 1100"),
+      normalizeCourseCode("PSY 1101"),
+      normalizeCourseCode("PSY 2301"),
+    ]);
+    const psy1101 = board.find((c) => c.code === normalizeCourseCode("PSY 1101"));
     // PSY 1101: Fall 2017 all A+ (10) → Winter 2023 half A+/half F (5) → delta -5.
     expect(psy1101?.earliestGpa).toBeCloseTo(10, 5);
     expect(psy1101?.currentGpa).toBeCloseTo(5, 5);
@@ -178,7 +183,7 @@ describe("computeCourseLeaderboard", () => {
 
   it("keeps a row with null delta when a course has a single term", () => {
     const board = computeCourseLeaderboard(grades, {}, { minTermVolume: 50, minTerms: 2 });
-    const psy2301 = board.find((c) => c.code === "PSY 2301");
+    const psy2301 = board.find((c) => c.code === normalizeCourseCode("PSY 2301"));
     expect(psy2301).toBeDefined();
     expect(psy2301?.qualifyingTerms).toBe(1);
     expect(psy2301?.gpaDelta).toBeNull();
@@ -188,16 +193,20 @@ describe("computeCourseLeaderboard", () => {
   it("still lists matched courses below the per-term volume guard", () => {
     const board = computeCourseLeaderboard(grades, {}, { minTermVolume: 10_000 });
     // No term clears the guard, but every course with grade data still appears.
-    expect(board.map((c) => c.code).sort()).toEqual(["ADM 1100", "PSY 1101", "PSY 2301"]);
+    expect(board.map((c) => c.code).sort()).toEqual([
+      normalizeCourseCode("ADM 1100"),
+      normalizeCourseCode("PSY 1101"),
+      normalizeCourseCode("PSY 2301"),
+    ]);
   });
 
   it("restricts to explicit program-filter course codes", () => {
     const board = computeCourseLeaderboard(
       grades,
-      { programFilter: { codes: new Set(["PSY 1101"]), pools: [] } },
+      { programFilter: { codes: new Set([normalizeCourseCode("PSY 1101")]), pools: [] } },
       { minTermVolume: 50 },
     );
-    expect(board.map((c) => c.code)).toEqual(["PSY 1101"]);
+    expect(board.map((c) => c.code)).toEqual([normalizeCourseCode("PSY 1101")]);
   });
 
   it("expands program-filter discipline pools to matching courses", () => {
@@ -206,12 +215,12 @@ describe("computeCourseLeaderboard", () => {
       { programFilter: { codes: new Set(), pools: [{ discipline: "ADM" }] } },
       { minTermVolume: 50 },
     );
-    expect(board.map((c) => c.code)).toEqual(["ADM 1100"]);
+    expect(board.map((c) => c.code)).toEqual([normalizeCourseCode("ADM 1100")]);
   });
 
   it("intersects discipline and level filters", () => {
     const board = computeCourseLeaderboard(grades, { discipline: "PSY", level: 2000 });
-    expect(board.map((c) => c.code)).toEqual(["PSY 2301"]);
+    expect(board.map((c) => c.code)).toEqual([normalizeCourseCode("PSY 2301")]);
   });
 });
 

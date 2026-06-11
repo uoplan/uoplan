@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildProfessorSearchEntries, searchProfessors } from "./professorGraphSearch";
 import type { ProfessorGraphNode } from "@uoplan/core";
+import { testProfessorName } from "../../test/brands";
 
 function node(
   partial: Partial<ProfessorGraphNode> & Pick<ProfessorGraphNode, "id" | "displayName">,
@@ -15,9 +16,9 @@ function node(
 
 describe("searchProfessors", () => {
   const entries = buildProfessorSearchEntries([
-    node({ id: "a", displayName: "Alice Anderson", legacyId: 100 }),
-    node({ id: "b", displayName: "Bob Smith" }),
-    node({ id: "c", displayName: "Carol Zhang" }),
+    node({ id: "a", displayName: testProfessorName("Alice Anderson"), legacyId: 100 }),
+    node({ id: "b", displayName: testProfessorName("Bob Smith") }),
+    node({ id: "c", displayName: testProfessorName("Carol Zhang") }),
   ]);
 
   it("returns empty for blank query", () => {

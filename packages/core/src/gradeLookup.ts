@@ -4,6 +4,8 @@ import type {
   GradeDistribution,
   SchedulesData,
 } from "./dataTypes";
+import type { InstructorNameKey, NormalizedCourseCode } from "./brand";
+import { normalizeCourseCode } from "./utils/courseUtils";
 
 /**
  * Runtime grade-lookup contract — a direct port of the build-time enrichment in
@@ -21,9 +23,12 @@ import type {
 
 export interface GradeLookups {
   /** courseCode → termId → normalized instructor name → merged distribution. */
-  byCourseTermName: Map<string, Map<number, Map<string, GradeDistribution>>>;
+  byCourseTermName: Map<
+    NormalizedCourseCode,
+    Map<number, Map<InstructorNameKey, GradeDistribution>>
+  >;
   /** courseCode → distribution summed across every professor row. */
-  aggregateByCourse: Map<string, GradeDistribution>;
+  aggregateByCourse: Map<NormalizedCourseCode, GradeDistribution>;
 }
 
 export type SectionGradeKind = "matched" | "fallback" | "none";
@@ -34,13 +39,13 @@ export interface SectionGradeResult {
 }
 
 /** Normalize an instructor name for matching: NFD, strip accents, lowercase, collapse spaces. */
-export function normalizeInstructorName(value: string): string {
+export function normalizeInstructorName(value: string): InstructorNameKey {
   return String(value)
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .trim()
     .toLowerCase()
-    .replace(/\s+/g, " ");
+    .replace(/\s+/g, " ") as InstructorNameKey;
 }
 
 /** Sum grade distributions bucket-by-bucket, ignoring non-finite values. */
@@ -74,12 +79,16 @@ export function hasGradeData(dist: GradeDistribution | null | undefined): boolea
  * the build-time enricher's `termId === 0` guard).
  */
 export function buildGradeLookups(grades: CourseGradesData): GradeLookups {
-  const byCourseTermName = new Map<string, Map<number, Map<string, GradeDistribution>>>();
-  const aggregateByCourse = new Map<string, GradeDistribution>();
+  const byCourseTermName = new Map<
+    NormalizedCourseCode,
+    Map<number, Map<InstructorNameKey, GradeDistribution>>
+  >();
+  const aggregateByCourse = new Map<NormalizedCourseCode, GradeDistribution>();
 
   for (const course of grades.courses) {
-    const code = course.code;
-    if (typeof code !== "string" || !code.trim()) continue;
+    const rawCode = course.code;
+    if (typeof rawCode !== "string" || !rawCode.trim()) continue;
+    const code = normalizeCourseCode(rawCode);
 
     const allDists: GradeDistribution[] = [];
 
@@ -123,11 +132,11 @@ export function buildGradeLookups(grades: CourseGradesData): GradeLookups {
  */
 export function distributionForSection(
   instructors: ReadonlyArray<string | null | undefined>,
-  profMap: Map<string, GradeDistribution> | undefined,
+  profMap: Map<InstructorNameKey, GradeDistribution> | undefined,
   courseAggregate: GradeDistribution | undefined,
 ): SectionGradeResult {
   const matchedParts: GradeDistribution[] = [];
-  const seen = new Set<string>();
+  const seen = new Set<InstructorNameKey>();
 
   for (const raw of instructors) {
     if (typeof raw !== "string") continue;
@@ -168,9 +177,10 @@ export function lookupSectionDistribution(
   termId: number,
   instructors: ReadonlyArray<string | null | undefined>,
 ): SectionGradeResult {
-  const termMap = lookups.byCourseTermName.get(courseCode);
+  const code = normalizeCourseCode(courseCode);
+  const termMap = lookups.byCourseTermName.get(code);
   const profMap = termId !== 0 ? termMap?.get(termId) : undefined;
-  const aggregate = lookups.aggregateByCourse.get(courseCode);
+  const aggregate = lookups.aggregateByCourse.get(code);
   return distributionForSection(instructors, profMap, aggregate);
 }
 
@@ -207,9 +217,10 @@ export function enrichSchedulesDataWithGrades(
   termId: number,
 ): SchedulesData {
   const schedules = data.schedules.map((course) => {
-    const termMap = lookups.byCourseTermName.get(course.courseCode);
+    const code = normalizeCourseCode(course.courseCode);
+    const termMap = lookups.byCourseTermName.get(code);
     const profMap = termId !== 0 ? termMap?.get(termId) : undefined;
-    const aggregate = lookups.aggregateByCourse.get(course.courseCode);
+    const aggregate = lookups.aggregateByCourse.get(code);
 
     const components: Record<string, ComponentSection[]> = {};
     for (const [component, sections] of Object.entries(course.components)) {

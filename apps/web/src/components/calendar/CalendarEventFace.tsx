@@ -1,4 +1,5 @@
 import { tr } from "../../i18n";
+import type { CanonicalProfessorName } from "@uoplan/core";
 
 type CalendarEventFaceLayout = {
   showSection: boolean;
@@ -12,7 +13,7 @@ type CalendarEventFaceProps = {
   /** Shown in the type row; already shortened if desired (e.g. `componentKindOnly`). */
   componentSectionDisplay: string;
   timeRange: string | null;
-  professor: string;
+  professor: CanonicalProfessorName;
   /** When true, the professor is a build-time prediction — render it italic. */
   professorPredicted?: boolean;
   virtual: boolean;

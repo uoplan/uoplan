@@ -284,7 +284,10 @@ export const createUrlSlice: StateCreator<AppStore, [], [], UrlSlice> = (set, ge
         decoded.firstSeed >>> 0,
         decoded.currentSeed >>> 0,
       ),
-      currentSwaps: decoded.swaps,
+      currentSwaps: decoded.swaps.map((swap) => ({
+        ...swap,
+        courseCode: normalizeCourseCode(swap.courseCode),
+      })),
       swapsPerSeed: {},
       includeClosedComponents: decoded.includeClosedComponents ?? false,
       virtualSectionsOnly: decoded.virtualSectionsOnly ?? false,

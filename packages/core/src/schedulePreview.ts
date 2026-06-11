@@ -1,10 +1,10 @@
 import type { SchedulePreview } from "@uoplan/proto/state";
+import type { NormalizedCourseCode } from "./brand";
 import type { ComponentSection, CourseSchedule, SchedulesData } from "./dataTypes";
 import { getEnrollmentsForCourse } from "./generation/sectionCombos";
 import type { GeneratedSchedule, SectionCombo } from "./generation/types";
 import type { ReconstructedPreview } from "./scheduleFromStateEngine";
 import { buildColorMap } from "./utils/uiUtils";
-import { normalizeCourseCode } from "./utils/courseUtils";
 
 /**
  * Index-based encoding of an already-generated schedule for the OG-image share
@@ -46,14 +46,14 @@ export function buildSchedulePreview(
   schedulesData: SchedulesData,
   termId: number,
 ): SchedulePreview {
-  const courseIndexByCode = new Map<string, number>();
+  const courseIndexByCode = new Map<NormalizedCourseCode, number>();
   schedulesData.schedules.forEach((s, i) => {
-    courseIndexByCode.set(normalizeCourseCode(s.courseCode), i);
+    courseIndexByCode.set(s.courseCode, i);
   });
 
   const courses: SchedulePreview["courses"] = [];
   for (const enrollment of schedule.enrollments) {
-    const courseIndex = courseIndexByCode.get(normalizeCourseCode(enrollment.courseCode));
+    const courseIndex = courseIndexByCode.get(enrollment.courseCode);
     if (courseIndex === undefined) continue;
     const courseSchedule = schedulesData.schedules[courseIndex];
     const keys = sortedComponentKeys(courseSchedule);

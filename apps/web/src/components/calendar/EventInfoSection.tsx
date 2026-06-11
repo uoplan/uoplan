@@ -3,6 +3,7 @@ import type { MouseEvent } from "react";
 import { Anchor, Badge, Box, Divider, Group, HoverCard, Stack, Text } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
 import { DAY_LABELS } from "@uoplan/calendar";
+import { pickCanonicalProfessorName, type CanonicalProfessorName } from "@uoplan/core";
 import type { CalendarEvent } from "../../hooks/useCalendarEvents";
 import { tr } from "../../i18n";
 import { GradeDistributionExpanded } from "./GradeDistributionViz";
@@ -38,7 +39,13 @@ interface EventInfoSectionProps {
  * the app text colour (not the default anchor colour) so it reads as a normal
  * name, and stops click propagation so following the link doesn't toggle the
  * swap overlay it lives inside. */
-function ProfessorLink({ name, legacyId }: { name: string; legacyId?: number | null }) {
+function ProfessorLink({
+  name,
+  legacyId,
+}: {
+  name: CanonicalProfessorName;
+  legacyId?: number | null;
+}) {
   return (
     <Anchor
       size="xs"
@@ -77,7 +84,9 @@ export function EventInfoSection({ event }: EventInfoSectionProps) {
   const instructors =
     ratingDetails.length > 0
       ? ratingDetails.map((d) => ({ name: d.name, legacyId: d.legacyId }))
-      : event.professor.split(", ").map((name) => ({ name, legacyId: undefined }));
+      : event.professor
+          .split(", ")
+          .map((name) => ({ name: pickCanonicalProfessorName([name]), legacyId: undefined }));
   const ratedInstructors = ratingDetails.filter((d) => d.numRatings > 0);
   // RMP detail for a *single* predicted instructor — a multi-candidate average
   // would be misleading, so we only surface a rating when there is one guess.

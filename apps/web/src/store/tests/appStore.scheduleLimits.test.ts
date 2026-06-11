@@ -4,17 +4,54 @@ import type { Catalogue, Program } from "@uoplan/core";
 import type { SchedulesData } from "@uoplan/core";
 import { computeRequirementsState } from "@uoplan/core";
 import { defaultAppStore } from "../appStore";
+import { testCourseCode } from "../../test/brands";
 
 const testCatalogue: Catalogue = {
   courses: [
     // CSI 4000-level candidates
-    { code: "CSI 4101", title: "CSI 4101", credits: 3, description: "", component: "LEC" },
-    { code: "CSI 4102", title: "CSI 4102", credits: 3, description: "", component: "LEC" },
-    { code: "CSI 4103", title: "CSI 4103", credits: 3, description: "", component: "LEC" },
+    {
+      code: testCourseCode("CSI 4101"),
+      title: "CSI 4101",
+      credits: 3,
+      description: "",
+      component: "LEC",
+    },
+    {
+      code: testCourseCode("CSI 4102"),
+      title: "CSI 4102",
+      credits: 3,
+      description: "",
+      component: "LEC",
+    },
+    {
+      code: testCourseCode("CSI 4103"),
+      title: "CSI 4103",
+      credits: 3,
+      description: "",
+      component: "LEC",
+    },
     // Non-computing non-math electives
-    { code: "ENG 2100", title: "ENG 2100", credits: 3, description: "", component: "LEC" },
-    { code: "ENG 2101", title: "ENG 2101", credits: 3, description: "", component: "LEC" },
-    { code: "HIS 2100", title: "HIS 2100", credits: 3, description: "", component: "LEC" },
+    {
+      code: testCourseCode("ENG 2100"),
+      title: "ENG 2100",
+      credits: 3,
+      description: "",
+      component: "LEC",
+    },
+    {
+      code: testCourseCode("ENG 2101"),
+      title: "ENG 2101",
+      credits: 3,
+      description: "",
+      component: "LEC",
+    },
+    {
+      code: testCourseCode("HIS 2100"),
+      title: "HIS 2100",
+      credits: 3,
+      description: "",
+      component: "LEC",
+    },
   ],
   programs: [],
 };
@@ -27,7 +64,7 @@ const simpleSchedules: SchedulesData = {
     {
       subject: "CSI",
       catalogNumber: "4101",
-      courseCode: "CSI 4101",
+      courseCode: testCourseCode("CSI 4101"),
       title: "CSI 4101",
       timeZone: "America/Toronto",
       components: {},
@@ -35,7 +72,7 @@ const simpleSchedules: SchedulesData = {
     {
       subject: "CSI",
       catalogNumber: "4102",
-      courseCode: "CSI 4102",
+      courseCode: testCourseCode("CSI 4102"),
       title: "CSI 4102",
       timeZone: "America/Toronto",
       components: {},
@@ -43,7 +80,7 @@ const simpleSchedules: SchedulesData = {
     {
       subject: "CSI",
       catalogNumber: "4103",
-      courseCode: "CSI 4103",
+      courseCode: testCourseCode("CSI 4103"),
       title: "CSI 4103",
       timeZone: "America/Toronto",
       components: {},
@@ -51,7 +88,7 @@ const simpleSchedules: SchedulesData = {
     {
       subject: "ENG",
       catalogNumber: "2100",
-      courseCode: "ENG 2100",
+      courseCode: testCourseCode("ENG 2100"),
       title: "ENG 2100",
       timeZone: "America/Toronto",
       components: {},
@@ -59,7 +96,7 @@ const simpleSchedules: SchedulesData = {
     {
       subject: "ENG",
       catalogNumber: "2101",
-      courseCode: "ENG 2101",
+      courseCode: testCourseCode("ENG 2101"),
       title: "ENG 2101",
       timeZone: "America/Toronto",
       components: {},
@@ -67,7 +104,7 @@ const simpleSchedules: SchedulesData = {
     {
       subject: "HIS",
       catalogNumber: "2100",
-      courseCode: "HIS 2100",
+      courseCode: testCourseCode("HIS 2100"),
       title: "HIS 2100",
       timeZone: "America/Toronto",
       components: {},
@@ -84,9 +121,9 @@ const programWithCsiAndElectives: Program = {
       title: "3 credits of CSI 4000",
       credits: 3,
       options: [
-        { type: "course", code: "CSI 4101" },
-        { type: "course", code: "CSI 4102" },
-        { type: "course", code: "CSI 4103" },
+        { type: "course", code: testCourseCode("CSI 4101") },
+        { type: "course", code: testCourseCode("CSI 4102") },
+        { type: "course", code: testCourseCode("CSI 4103") },
       ],
     },
     {
@@ -94,9 +131,9 @@ const programWithCsiAndElectives: Program = {
       title: "6 credits of non-computing electives",
       credits: 6,
       options: [
-        { type: "course", code: "ENG 2100" },
-        { type: "course", code: "ENG 2101" },
-        { type: "course", code: "HIS 2100" },
+        { type: "course", code: testCourseCode("ENG 2100") },
+        { type: "course", code: testCourseCode("ENG 2101") },
+        { type: "course", code: testCourseCode("HIS 2100") },
       ],
     },
   ],
@@ -168,9 +205,9 @@ describe("schedule generation respects per-category limits", () => {
           title: "6 credits of CSI 4000",
           credits: 6,
           options: [
-            { type: "course", code: "CSI 4101" },
-            { type: "course", code: "CSI 4102" },
-            { type: "course", code: "CSI 4103" },
+            { type: "course", code: testCourseCode("CSI 4101") },
+            { type: "course", code: testCourseCode("CSI 4102") },
+            { type: "course", code: testCourseCode("CSI 4103") },
           ],
         },
         {
@@ -178,9 +215,9 @@ describe("schedule generation respects per-category limits", () => {
           title: "6 credits of non-computing electives",
           credits: 6,
           options: [
-            { type: "course", code: "ENG 2100" },
-            { type: "course", code: "ENG 2101" },
-            { type: "course", code: "HIS 2100" },
+            { type: "course", code: testCourseCode("ENG 2100") },
+            { type: "course", code: testCourseCode("ENG 2101") },
+            { type: "course", code: testCourseCode("HIS 2100") },
           ],
         },
       ],
@@ -284,7 +321,7 @@ describe("schedule generation respects per-category limits", () => {
     const gradOnlyCatalogue: Catalogue = {
       courses: [
         {
-          code: "SEG 5100",
+          code: testCourseCode("SEG 5100"),
           title: "SEG 5100",
           credits: 3,
           description: "",
@@ -300,7 +337,7 @@ describe("schedule generation respects per-category limits", () => {
         {
           subject: "SEG",
           catalogNumber: "5100",
-          courseCode: "SEG 5100",
+          courseCode: testCourseCode("SEG 5100"),
           title: "SEG 5100",
           timeZone: "America/Toronto",
           components: {},
@@ -357,7 +394,13 @@ describe("schedule generation respects per-category limits", () => {
   it("keeps the previous schedule when a re-generation fails", async () => {
     const gradOnlyCatalogue: Catalogue = {
       courses: [
-        { code: "SEG 5100", title: "SEG 5100", credits: 3, description: "", component: "LEC" },
+        {
+          code: testCourseCode("SEG 5100"),
+          title: "SEG 5100",
+          credits: 3,
+          description: "",
+          component: "LEC",
+        },
       ],
       programs: [],
     };
@@ -367,7 +410,7 @@ describe("schedule generation respects per-category limits", () => {
         {
           subject: "SEG",
           catalogNumber: "5100",
-          courseCode: "SEG 5100",
+          courseCode: testCourseCode("SEG 5100"),
           title: "SEG 5100",
           timeZone: "America/Toronto",
           components: {},
@@ -426,21 +469,21 @@ describe("schedule generation respects per-category limits", () => {
     const scopedCatalogue: Catalogue = {
       courses: [
         {
-          code: "CSI 4101",
+          code: testCourseCode("CSI 4101"),
           title: "CSI 4101",
           credits: 3,
           description: "",
           component: "LEC",
         },
         {
-          code: "ENG 1100",
+          code: testCourseCode("ENG 1100"),
           title: "ENG 1100",
           credits: 3,
           description: "",
           component: "LEC",
         },
         {
-          code: "ENG 2100",
+          code: testCourseCode("ENG 2100"),
           title: "ENG 2100",
           credits: 3,
           description: "",
@@ -456,7 +499,7 @@ describe("schedule generation respects per-category limits", () => {
         {
           subject: "CSI",
           catalogNumber: "4101",
-          courseCode: "CSI 4101",
+          courseCode: testCourseCode("CSI 4101"),
           title: "CSI 4101",
           timeZone: "America/Toronto",
           components: {},
@@ -464,7 +507,7 @@ describe("schedule generation respects per-category limits", () => {
         {
           subject: "ENG",
           catalogNumber: "1100",
-          courseCode: "ENG 1100",
+          courseCode: testCourseCode("ENG 1100"),
           title: "ENG 1100",
           timeZone: "America/Toronto",
           components: {},
@@ -472,7 +515,7 @@ describe("schedule generation respects per-category limits", () => {
         {
           subject: "ENG",
           catalogNumber: "2100",
-          courseCode: "ENG 2100",
+          courseCode: testCourseCode("ENG 2100"),
           title: "ENG 2100",
           timeZone: "America/Toronto",
           components: {},
@@ -484,7 +527,7 @@ describe("schedule generation respects per-category limits", () => {
       title: "Scoped elective filter test",
       url: "",
       requirements: [
-        { type: "course", code: "CSI 4101" },
+        { type: "course", code: testCourseCode("CSI 4101") },
         { type: "free_elective", title: "3 elective credits", credits: 3 },
       ],
     };

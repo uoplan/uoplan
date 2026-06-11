@@ -17,6 +17,7 @@
  */
 import type { ComponentSection } from "../../dataTypes";
 import type { DataCache } from "../../dataCache";
+import type { NormalizedCourseCode } from "../../brand";
 import type { PrecomputedCombo } from "../../generation";
 import { isHonoursProject } from "../../utils/courseUtils";
 import { shuffleInPlace } from "../../poolHelpers";
@@ -98,7 +99,7 @@ export function* lazyCourseCombos(
 }
 
 export interface TimetableCourse {
-  code: string;
+  code: NormalizedCourseCode;
   combos: PrecomputedCombo[];
 }
 

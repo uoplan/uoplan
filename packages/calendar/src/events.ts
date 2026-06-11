@@ -1,4 +1,4 @@
-import type { GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/core";
+import type { CanonicalProfessorName, GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/core";
 import {
   getRatingsForInstructors,
   getRatingDetailsForInstructors,
@@ -6,8 +6,13 @@ import {
   normalizeCourseCode,
   normalizeProfessorName,
   normalizeGradeVizDistribution,
+  pickCanonicalProfessorName,
+  unsafeBrand,
 } from "@uoplan/core";
 import type { CalendarEvent } from "./types";
+
+// Em dash is the deliberate "no instructor assigned" display sentinel.
+const NO_PROFESSOR = unsafeBrand<CanonicalProfessorName>("—");
 
 /**
  * Optional course-evaluation sentiment maps (1-5), used to surface satisfaction
@@ -55,21 +60,26 @@ export function scheduleToEvents(
       // "Staff"/"TBA"/blank are placeholders, not real instructors — drop them
       // from the display so unassigned sections fall back to predictions.
       const knownInstructors = sectionInstructors.filter((name) => !isUnknownInstructorName(name));
-      const professor = knownInstructors.join(", ") || "—";
+      const professor =
+        knownInstructors.length > 0
+          ? pickCanonicalProfessorName([knownInstructors.join(", ")])
+          : NO_PROFESSOR;
       const ratings = getRatingsForInstructors(sectionInstructors, professorRatings);
       const professorRatingValue =
         ratings.length > 0
           ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10
           : null;
-      const professorRatingDetails = getRatingDetailsForInstructors(
-        sectionInstructors,
-        professorRatings,
+      const professorRatingDetails = canonicalizeRatingDetails(
+        getRatingDetailsForInstructors(sectionInstructors, professorRatings),
       );
       // Only surface guesses when there is no confirmed instructor.
       const hasKnownInstructor = knownInstructors.length > 0;
       const predictedInstructors =
         !hasKnownInstructor && section.predictedInstructors?.length
-          ? section.predictedInstructors
+          ? section.predictedInstructors.map((p) => ({
+              ...p,
+              name: pickCanonicalProfessorName([p.name]),
+            }))
           : undefined;
       // For predicted sections, the satisfaction signal is the average across
       // the guessed candidates (the section has no confirmed instructor);
@@ -84,9 +94,11 @@ export function scheduleToEvents(
       // a single guess (a multi-candidate average would be misleading). The
       // satisfaction signal above still pools across all guesses.
       const predictedRatingDetails = predictedInstructors
-        ? getRatingDetailsForInstructors(
-            predictedInstructors.map((p) => p.name),
-            professorRatings,
+        ? canonicalizeRatingDetails(
+            getRatingDetailsForInstructors(
+              predictedInstructors.map((p) => p.name),
+              professorRatings,
+            ),
           )
         : [];
 
@@ -137,4 +149,22 @@ function averageSentiment(
     }
   }
   return n > 0 ? sum / n : null;
+}
+
+function canonicalizeRatingDetails(
+  details: Array<{
+    id?: string;
+    legacyId?: number;
+    name: string;
+    rating: number;
+    numRatings: number;
+  }>,
+): Array<{
+  id?: string;
+  legacyId?: number;
+  name: CanonicalProfessorName;
+  rating: number;
+  numRatings: number;
+}> {
+  return details.map((d) => ({ ...d, name: pickCanonicalProfessorName([d.name]) }));
 }

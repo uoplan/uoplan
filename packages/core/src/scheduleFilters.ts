@@ -1,5 +1,7 @@
 import type { CourseSchedule, ComponentSection } from "./dataTypes";
 import type { DataCache } from "./dataCache";
+import type { NormalizedCourseCode } from "./brand";
+import { normalizeCourseCode } from "./utils/courseUtils";
 
 /**
  * Returns a new schedule with sections where status === "Closed" removed from each component.
@@ -104,17 +106,18 @@ export function cacheWithClosedFilter(
 export function cacheWithPerCourseVirtualFilter(
   cache: DataCache,
   includeClosed: boolean,
-  virtualFor: (code: string) => boolean,
+  virtualFor: (code: NormalizedCourseCode) => boolean,
 ): DataCache {
-  const memo = new Map<string, CourseSchedule | undefined>();
+  const memo = new Map<NormalizedCourseCode, CourseSchedule | undefined>();
   return {
     getCourse: (code) => cache.getCourse(code),
     resolveToCanonical: (code) => cache.resolveToCanonical(code),
     getSchedule: (code) => {
-      if (memo.has(code)) return memo.get(code);
-      const virtualOnly = virtualFor(code);
-      const s = getEffectiveSchedule(cache, code, includeClosed, virtualOnly);
-      memo.set(code, s);
+      const normalized = normalizeCourseCode(code);
+      if (memo.has(normalized)) return memo.get(normalized);
+      const virtualOnly = virtualFor(normalized);
+      const s = getEffectiveSchedule(cache, normalized, includeClosed, virtualOnly);
+      memo.set(normalized, s);
       return s;
     },
     getCoursesByDiscipline: (d) => cache.getCoursesByDiscipline(d),

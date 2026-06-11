@@ -1,9 +1,10 @@
 import { describe, it, expect } from "vitest";
 import type { Catalogue, Course, CoursePrereqNode } from "@uoplan/core";
 import { getMergedCatalogue } from "./catalogueUtils";
+import { testCourseCode } from "../../test/brands";
 
-const yearPrereq: CoursePrereqNode = { type: "course", code: "CSI 2110" };
-const latestPrereq: CoursePrereqNode = { type: "course", code: "CSI 2100" };
+const yearPrereq: CoursePrereqNode = { type: "course", code: testCourseCode("CSI 2110") };
+const latestPrereq: CoursePrereqNode = { type: "course", code: testCourseCode("CSI 2100") };
 
 function course(overrides: Partial<Course> & Pick<Course, "code">): Course {
   return {
@@ -21,24 +22,24 @@ function findCourse(catalogue: Catalogue | null, code: string): Course | undefin
 const latestCatalogue: Catalogue = {
   courses: [
     course({
-      code: "CSI 3131",
+      code: testCourseCode("CSI 3131"),
       title: "Latest CSI 3131",
       credits: 3,
       prerequisites: latestPrereq,
       prereqText: "CSI 2100",
     }),
     course({
-      code: "ANP 1111",
+      code: testCourseCode("ANP 1111"),
       title: "Latest ANP 1111",
       prerequisites: { type: "non_course", text: "Biology 4U" },
       prereqText: "Biology 4U",
     }),
-    course({ code: "NEW 1001", title: "New course", credits: 3 }),
+    course({ code: testCourseCode("NEW 1001"), title: "New course", credits: 3 }),
     course({
-      code: "CSI 4100",
+      code: testCourseCode("CSI 4100"),
       title: "Latest honours",
       credits: 6,
-      aliases: ["CSI 4100A"],
+      aliases: [testCourseCode("CSI 4100A")],
     }),
   ],
   programs: [],
@@ -46,16 +47,16 @@ const latestCatalogue: Catalogue = {
 
 const yearCatalogue: Course[] = [
   course({
-    code: "CSI 3131",
+    code: testCourseCode("CSI 3131"),
     title: "Year CSI 3131",
     credits: 3,
     prerequisites: yearPrereq,
     prereqText: "CSI 2110",
   }),
-  course({ code: "ANP 1111", title: "Year ANP 1111" }),
-  course({ code: "OLD 2001", title: "Dropped course", credits: 1.5 }),
+  course({ code: testCourseCode("ANP 1111"), title: "Year ANP 1111" }),
+  course({ code: testCourseCode("OLD 2001"), title: "Dropped course", credits: 1.5 }),
   course({
-    code: "CSI 4100",
+    code: testCourseCode("CSI 4100"),
     title: "Year honours",
     credits: 3,
     prerequisites: yearPrereq,
@@ -116,14 +117,18 @@ describe("getMergedCatalogue", () => {
   it("removes superseded alias-only rows from latest", () => {
     const catalogue: Catalogue = {
       courses: [
-        course({ code: "CSI 5000", title: "Canonical", aliases: ["CSI 5000A"] }),
-        course({ code: "CSI 5000A", title: "Legacy alias row" }),
+        course({
+          code: testCourseCode("CSI 5000"),
+          title: "Canonical",
+          aliases: [testCourseCode("CSI 5000A")],
+        }),
+        course({ code: testCourseCode("CSI 5000A"), title: "Legacy alias row" }),
       ],
       programs: [],
     };
     const year: Course[] = [
-      course({ code: "CSI 5000", title: "Year canonical" }),
-      course({ code: "CSI 5000A", title: "Year legacy" }),
+      course({ code: testCourseCode("CSI 5000"), title: "Year canonical" }),
+      course({ code: testCourseCode("CSI 5000A"), title: "Year legacy" }),
     ];
     const result = getMergedCatalogue(catalogue, year, []);
     const codes = result?.courses.map((c) => c.code).sort();

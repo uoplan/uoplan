@@ -2,6 +2,7 @@ import { Accordion, Box, Flex, Group, Stack, Text, Title } from "@mantine/core";
 import { useMemo } from "react";
 import { m } from "framer-motion";
 import { useShallow } from "zustand/react/shallow";
+import { pickCanonicalProfessorName, type CanonicalProfessorName } from "@uoplan/core";
 import { useTr, tr } from "../../i18n";
 import { groupOfferingsByCourse } from "../../lib/explore/gradesSearch";
 import { resolveProfessorRoute, professorRouteParam } from "../../lib/explore/professorRoute";
@@ -38,11 +39,11 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
     return allOfferings.filter((o) => o.professorName.toLowerCase() === nameLower);
   }, [allOfferings, index, legacyId, resolved.displayName]);
 
-  const displayName =
+  const displayName: CanonicalProfessorName =
     entry?.name ??
     professorOfferings[0]?.professorName ??
     resolved.displayName ??
-    tr("explore.professorFallback");
+    pickCanonicalProfessorName([tr("explore.professorFallback")]);
 
   const courseGroups = useMemo(
     () => groupOfferingsByCourse(professorOfferings),

@@ -10,6 +10,7 @@ import {
 } from "../gradeDistribution";
 import type { ComponentSection, CourseSchedule } from "../dataTypes";
 import type { DataCache } from "../dataCache";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 const minimalSection = (distribution: Record<string, number>): ComponentSection => ({
   section: "X",
@@ -43,7 +44,7 @@ describe("gradeDistribution", () => {
     const schedule: CourseSchedule = {
       subject: "ADM",
       catalogNumber: "1100",
-      courseCode: "ADM 1100",
+      courseCode: normalizeCourseCode("ADM 1100"),
       title: null,
       timeZone: "America/Toronto",
       components: {
@@ -93,7 +94,7 @@ describe("buildCourseDifficultyIndexFromCache", () => {
   const schedule: CourseSchedule = {
     subject: "ADM",
     catalogNumber: "1100",
-    courseCode: "ADM 1100",
+    courseCode: normalizeCourseCode("ADM 1100"),
     title: null,
     timeZone: "America/Toronto",
     components: {
@@ -106,19 +107,19 @@ describe("buildCourseDifficultyIndexFromCache", () => {
     const cache = {
       getSchedule: (code: string) => {
         lookups++;
-        return code === "ADM 1100" ? schedule : undefined;
+        return code === normalizeCourseCode("ADM 1100") ? schedule : undefined;
       },
     } as unknown as DataCache;
 
     const index = buildCourseDifficultyIndexFromCache(cache);
-    expect(index("ADM 1100")).toBe(courseAPlusPercent(schedule));
-    expect(index("ADM 1100")).toBe(courseAPlusPercent(schedule));
+    expect(index(normalizeCourseCode("ADM 1100"))).toBe(courseAPlusPercent(schedule));
+    expect(index(normalizeCourseCode("ADM 1100"))).toBe(courseAPlusPercent(schedule));
     expect(lookups).toBe(1); // second call served from memo
   });
 
   it("returns null for a course with no schedule data", () => {
     const cache = { getSchedule: () => undefined } as unknown as DataCache;
     const index = buildCourseDifficultyIndexFromCache(cache);
-    expect(index("MAT 0000")).toBeNull();
+    expect(index(normalizeCourseCode("MAT 0000"))).toBeNull();
   });
 });

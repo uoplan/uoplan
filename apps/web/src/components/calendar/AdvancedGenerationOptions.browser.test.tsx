@@ -5,13 +5,14 @@ import type { Catalogue, CourseSchedule, RemainingRequirement, SchedulesData } f
 
 import { AdvancedGenerationOptions } from "./AdvancedGenerationOptions";
 import { renderWithProviders } from "../../test/renderWithProviders";
+import { testCourseCode } from "../../test/brands";
 
 function mkSchedule(code: string): CourseSchedule {
   const [subject, catalogNumber] = code.split(/\s+/);
   return {
     subject,
     catalogNumber,
-    courseCode: code,
+    courseCode: testCourseCode(code),
     title: code,
     timeZone: "America/Toronto",
     components: {
@@ -35,7 +36,12 @@ const COURSES = ["CSI 2110", "CSI 2120"];
 
 function buildCache() {
   const catalogue: Catalogue = {
-    courses: COURSES.map((c) => ({ code: c, title: c, credits: 3, description: "" })),
+    courses: COURSES.map((c) => ({
+      code: testCourseCode(c),
+      title: c,
+      credits: 3,
+      description: "",
+    })),
     programs: [],
   };
   const schedules: SchedulesData = { termId: "0000", schedules: COURSES.map(mkSchedule) };

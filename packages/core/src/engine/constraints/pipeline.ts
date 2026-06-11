@@ -6,6 +6,7 @@
  */
 import type { ComponentSection } from "../../dataTypes";
 import type { CourseEnrollment } from "../../generation";
+import type { NormalizedCourseCode } from "../../brand";
 import type { Constraint, ConstraintContext, CourseSetCtx, RejectionTrace } from "./types";
 
 type Tracer = (trace: RejectionTrace) => void;
@@ -28,7 +29,7 @@ export class ConstraintPipeline {
     return new ConstraintPipeline(this.constraints.filter((c) => c.id !== constraintId));
   }
 
-  allowsCourse(courseCode: string, ctx: ConstraintContext, trace?: Tracer): boolean {
+  allowsCourse(courseCode: NormalizedCourseCode, ctx: ConstraintContext, trace?: Tracer): boolean {
     for (const c of this.constraints) {
       if (c.allowsCourse && !c.allowsCourse(courseCode, ctx)) {
         trace?.({ scope: "course", constraintId: c.id, subject: courseCode });
@@ -38,7 +39,7 @@ export class ConstraintPipeline {
     return true;
   }
 
-  allowsCandidate(courseCode: string, ctx: CourseSetCtx, trace?: Tracer): boolean {
+  allowsCandidate(courseCode: NormalizedCourseCode, ctx: CourseSetCtx, trace?: Tracer): boolean {
     for (const c of this.constraints) {
       if (c.allowsCandidate && !c.allowsCandidate(courseCode, ctx)) {
         trace?.({ scope: "candidate", constraintId: c.id, subject: courseCode });
@@ -48,7 +49,11 @@ export class ConstraintPipeline {
     return true;
   }
 
-  allowsCourseSet(courseCodes: readonly string[], ctx: ConstraintContext, trace?: Tracer): boolean {
+  allowsCourseSet(
+    courseCodes: readonly NormalizedCourseCode[],
+    ctx: ConstraintContext,
+    trace?: Tracer,
+  ): boolean {
     for (const c of this.constraints) {
       if (c.allowsCourseSet && !c.allowsCourseSet(courseCodes, ctx)) {
         trace?.({ scope: "course-set", constraintId: c.id, subject: courseCodes.join(",") });
@@ -59,7 +64,7 @@ export class ConstraintPipeline {
   }
 
   allowsSection(
-    courseCode: string,
+    courseCode: NormalizedCourseCode,
     section: ComponentSection,
     ctx: ConstraintContext,
     trace?: Tracer,
@@ -111,7 +116,7 @@ export class ConstraintPipeline {
   }
 
   /** Product of all soft ordering weights (>0). Neutral = 1. */
-  orderingWeight(courseCode: string, ctx: ConstraintContext): number {
+  orderingWeight(courseCode: NormalizedCourseCode, ctx: ConstraintContext): number {
     let w = 1;
     for (const c of this.constraints) {
       if (c.orderingWeight) {

@@ -1,5 +1,10 @@
 import type { AppStore } from "../../types";
-import type { CourseEnrollment, GenerationConstraints, RequirementWithStatus } from "@uoplan/core";
+import type {
+  CourseEnrollment,
+  GenerationConstraints,
+  NormalizedCourseCode,
+  RequirementWithStatus,
+} from "@uoplan/core";
 import {
   buildPrereqContext,
   canTakeCourse,
@@ -70,7 +75,7 @@ export function getSwapCandidates(
       return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
     }
 
-    const optionalPool: string[] = [];
+    const optionalPool: NormalizedCourseCode[] = [];
     const excludedPrefixes = basicExcludedCategories.map((c) => c.toLowerCase());
     const prereqCtx = buildPrereqContext(completedCourses, cache, studentPrograms);
     const basicFilters = { levels: levelBuckets, languageBuckets };
@@ -147,7 +152,7 @@ export function getSwapCandidates(
   }
 
   const poolId = currentPoolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
-  const candidateSet = new Set<string>();
+  const candidateSet = new Set<NormalizedCourseCode>();
   let poolRequirementType: string | undefined;
   let requirementTitle: string | undefined;
 
@@ -171,24 +176,24 @@ export function getSwapCandidates(
     if (req?.candidateCourses?.length) {
       poolRequirementType = req.type;
       requirementTitle = req.title;
-      for (const c of req.candidateCourses) candidateSet.add(c);
+      for (const c of req.candidateCourses) candidateSet.add(normalizeCourseCode(c));
     } else {
       const node = findReqNodeById(requirementTreeWithStatus, poolId);
       if (node?.candidateCourses?.length) {
         poolRequirementType = node.type;
         requirementTitle = node.title;
-        for (const c of node.candidateCourses) candidateSet.add(c);
+        for (const c of node.candidateCourses) candidateSet.add(normalizeCourseCode(c));
       }
     }
   }
   if (candidateSet.size === 0) {
-    const oldCodeNorm = normalizeCourseCode(oldCode);
+    const oldCodeNorm = oldCode;
     // Search remaining requirements
     for (const req of remainingRequirements) {
       if (!req.candidateCourses?.length) continue;
       const hasOld = req.candidateCourses.some((c) => normalizeCourseCode(c) === oldCodeNorm);
       if (hasOld) {
-        for (const c of req.candidateCourses) candidateSet.add(c);
+        for (const c of req.candidateCourses) candidateSet.add(normalizeCourseCode(c));
       }
     }
     // Also search the full tree (includes completed requirements)
@@ -203,13 +208,13 @@ export function getSwapCandidates(
         if (node?.candidateCourses?.length) {
           if (!poolRequirementType) poolRequirementType = node.type;
           if (!requirementTitle) requirementTitle = node.title;
-          for (const c of node.candidateCourses) candidateSet.add(c);
+          for (const c of node.candidateCourses) candidateSet.add(normalizeCourseCode(c));
         }
       }
     }
   }
   if (candidateSet.size === 0) {
-    for (const c of filteredPrereqEligibleCourses) candidateSet.add(c);
+    for (const c of filteredPrereqEligibleCourses) candidateSet.add(normalizeCourseCode(c));
   }
 
   const explicitExemptNormalized = new Set<string>();
@@ -277,8 +282,11 @@ export function getSwapCandidates(
 
   const filters = { levels: levelBuckets, languageBuckets };
 
-  const candidates: string[] = [];
-  const rejectedWithConflict: Array<{ code: string; conflictsWith: string }> = [];
+  const candidates: NormalizedCourseCode[] = [];
+  const rejectedWithConflict: Array<{
+    code: NormalizedCourseCode;
+    conflictsWith: NormalizedCourseCode;
+  }> = [];
   for (const code of candidateSet) {
     if (!prereqEligibleSet.has(code)) continue;
     if (code === oldCode) continue;

@@ -1,4 +1,4 @@
-import type { DataCache, RemainingRequirement } from "@uoplan/core";
+import type { DataCache, NormalizedCourseCode, RemainingRequirement } from "@uoplan/core";
 import { normalizeCourseCode, getCourseCredits, isGroupToken } from "@uoplan/core";
 import {
   compareReqPreference,
@@ -114,13 +114,13 @@ export function resolveDesiredCourses(
     assignedCodesByReq.set(reqId, set);
   }
 
-  const seen = new Set<string>();
-  const pending: { norm: string; code: string }[] = [];
+  const seen = new Set<NormalizedCourseCode>();
+  const pending: { norm: NormalizedCourseCode; code: NormalizedCourseCode }[] = [];
   for (const raw of desiredCourses) {
     const norm = cache.resolveToCanonical(raw);
     if (seen.has(norm)) continue;
     seen.add(norm);
-    pending.push({ norm, code: cache.getCourse(norm)?.code ?? raw });
+    pending.push({ norm, code: cache.getCourse(norm)?.code ?? norm });
   }
 
   // How many assignable requirements a course matches. Drives placement order: scarce courses are

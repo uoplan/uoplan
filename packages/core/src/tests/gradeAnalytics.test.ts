@@ -11,6 +11,8 @@ import {
   metricValue,
 } from "../gradeAnalytics";
 import type { CourseGradesData } from "../dataTypes";
+import type { NormalizedCourseCode } from "../brand";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 /** Build a grades dataset from compact offering tuples for readable fixtures. */
 function makeGrades(
@@ -21,12 +23,13 @@ function makeGrades(
     dist: Record<string, number>;
   }>,
 ): CourseGradesData {
-  const byCode = new Map<string, CourseGradesData["courses"][number]>();
+  const byCode = new Map<NormalizedCourseCode, CourseGradesData["courses"][number]>();
   for (const row of rows) {
-    let entry = byCode.get(row.code);
+    const code = normalizeCourseCode(row.code);
+    let entry = byCode.get(code);
     if (!entry) {
-      entry = { code: row.code, professors: [] };
-      byCode.set(row.code, entry);
+      entry = { code, professors: [] };
+      byCode.set(code, entry);
     }
     entry.professors.push({
       name: row.name ?? "Prof X",
@@ -40,11 +43,16 @@ function makeGrades(
 // A small, deterministic dataset spanning two disciplines, two levels, two
 // seasons (Fall 2023 = 2239, Winter 2024 = 2241, Fall 2024 = 2249) and two profs.
 const grades = makeGrades([
-  { code: "CSI 1101", name: "Easy", termId: 2239, dist: { "A+": 80, A: 20 } }, // GPA high
-  { code: "CSI 1101", name: "Hard", termId: 2241, dist: { C: 60, D: 40 } }, // GPA low
-  { code: "CSI 2110", name: "Mid", termId: 2249, dist: { B: 50, "B+": 30, F: 20 } },
-  { code: "PSY 1101", name: "Easy", termId: 2239, dist: { A: 100 } },
-  { code: "PSY 1101", name: "Easy", termId: 2249, dist: { A: 100 } },
+  { code: normalizeCourseCode("CSI 1101"), name: "Easy", termId: 2239, dist: { "A+": 80, A: 20 } }, // GPA high
+  { code: normalizeCourseCode("CSI 1101"), name: "Hard", termId: 2241, dist: { C: 60, D: 40 } }, // GPA low
+  {
+    code: normalizeCourseCode("CSI 2110"),
+    name: "Mid",
+    termId: 2249,
+    dist: { B: 50, "B+": 30, F: 20 },
+  },
+  { code: normalizeCourseCode("PSY 1101"), name: "Easy", termId: 2239, dist: { A: 100 } },
+  { code: normalizeCourseCode("PSY 1101"), name: "Easy", termId: 2249, dist: { A: 100 } },
 ]);
 
 describe("metricValue", () => {
@@ -96,15 +104,22 @@ describe("computeCourseScatter", () => {
   it("emits one point per course above minVolume", () => {
     const points = computeCourseScatter(grades, {}, { minVolume: 1 });
     const codes = points.map((p) => p.code).sort();
-    expect(codes).toEqual(["CSI 1101", "CSI 2110", "PSY 1101"]);
-    const psy = points.find((p) => p.code === "PSY 1101");
+    expect(codes).toEqual([
+      normalizeCourseCode("CSI 1101"),
+      normalizeCourseCode("CSI 2110"),
+      normalizeCourseCode("PSY 1101"),
+    ]);
+    const psy = points.find((p) => p.code === normalizeCourseCode("PSY 1101"));
     expect(psy?.volume).toBe(200);
     expect(psy?.gpa).toBe(9);
   });
 
   it("drops low-volume courses", () => {
     const points = computeCourseScatter(grades, {}, { minVolume: 150 });
-    expect(points.map((p) => p.code).sort()).toEqual(["CSI 1101", "PSY 1101"]);
+    expect(points.map((p) => p.code).sort()).toEqual([
+      normalizeCourseCode("CSI 1101"),
+      normalizeCourseCode("PSY 1101"),
+    ]);
   });
 });
 
@@ -129,9 +144,9 @@ describe("computeLevelComparison", () => {
 
   it("collapses levels at or above 5000 into a single 5000+ bucket", () => {
     const gradLevels = makeGrades([
-      { code: "CSI 5101", name: "Grad A", termId: 2239, dist: { A: 60 } },
-      { code: "CSI 6101", name: "Grad B", termId: 2239, dist: { B: 40 } },
-      { code: "CSI 8101", name: "Grad C", termId: 2239, dist: { C: 20 } },
+      { code: normalizeCourseCode("CSI 5101"), name: "Grad A", termId: 2239, dist: { A: 60 } },
+      { code: normalizeCourseCode("CSI 6101"), name: "Grad B", termId: 2239, dist: { B: 40 } },
+      { code: normalizeCourseCode("CSI 8101"), name: "Grad C", termId: 2239, dist: { C: 20 } },
     ]);
     const rows = computeLevelComparison(gradLevels, { discipline: "CSI", minVolume: 1 });
     expect(rows.map((r) => r.level)).toEqual([5000]);

@@ -32,7 +32,7 @@ import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { CalendarView } from "./CalendarView";
 import { BackButton } from "../shared/BackButton";
-import { buildScheduleIcs } from "@uoplan/core";
+import { buildScheduleIcs, normalizeCourseCode } from "@uoplan/core";
 import { downloadTextFile } from "../../lib/downloadFile";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateRange";
@@ -676,7 +676,9 @@ export function CalendarPage() {
             cache={cache}
             professorRatings={professorRatings}
             getSwapCandidates={getSwapCandidates}
-            onSwap={swapCourseInSchedule}
+            onSwap={(enrollmentIndex, newCourseCode) =>
+              void swapCourseInSchedule(enrollmentIndex, normalizeCourseCode(newCourseCode))
+            }
             colorMap={currentColorMap}
             weekGroups={weekGroups}
             weekIndex={weekIndex}

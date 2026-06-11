@@ -6,18 +6,25 @@
  * registry identity. Extracted so the two larger modules share one definition
  * without an import cycle.
  */
-import type { PredictedInstructor, ProfessorRegistry } from "@uoplan/core";
+import type {
+  CanonicalProfessorName,
+  NormalizedCourseCode,
+  PredictedInstructor,
+  ProfessorRegistry,
+} from "@uoplan/core";
 import {
   normalizeProfessorName,
   normalizeInstructorName,
+  pickCanonicalProfessorName,
   professorIndexByName,
+  unsafeBrand,
 } from "@uoplan/core";
 
 export type ExploreOfferingFlat = {
   id: string;
-  courseCode: string;
+  courseCode: NormalizedCourseCode;
   courseTitle: string;
-  professorName: string;
+  professorName: CanonicalProfessorName;
   legacyId?: number;
   /** 0-based canonical professor registry index; the primary identity key when present. */
   professorRef?: number;
@@ -46,7 +53,8 @@ export type ExploreOfferingFlat = {
  * Display name used for offerings without a real instructor. Kept empty so these
  * rows never surface "Staff" in search text, links, or professor indices.
  */
-export const UNASSIGNED_INSTRUCTOR = "";
+// Empty string is the deliberate "no instructor assigned" display sentinel, not a raw professor.
+export const UNASSIGNED_INSTRUCTOR = unsafeBrand<CanonicalProfessorName>("");
 
 /** Stable group id collecting every unassigned-instructor offering of a course. */
 export const UNASSIGNED_GROUP_ID = "unassigned";
@@ -90,14 +98,14 @@ export function resolveCanonicalProfessor(
   index: number | null | undefined,
   legacyId: number | undefined,
   name: string,
-): { professorRef?: number; professorName: string } {
-  if (!registry) return { professorName: name };
+): { professorRef?: number; professorName: CanonicalProfessorName } {
+  if (!registry) return { professorName: pickCanonicalProfessorName([name]) };
   let idx: number | null = index ?? null;
   if (idx == null && legacyId != null) idx = registry.byLegacyId.get(legacyId) ?? null;
   if (idx == null) idx = professorIndexByName(registry, name);
-  if (idx == null) return { professorName: name };
+  if (idx == null) return { professorName: pickCanonicalProfessorName([name]) };
   const entry = registry.entries[idx];
-  return { professorRef: idx, professorName: entry?.name ?? name };
+  return { professorRef: idx, professorName: entry?.name ?? pickCanonicalProfessorName([name]) };
 }
 
 /**

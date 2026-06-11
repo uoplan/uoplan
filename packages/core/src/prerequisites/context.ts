@@ -1,4 +1,5 @@
 import type { DataCache } from "../dataCache";
+import type { NormalizedCourseCode } from "../brand";
 import { getCourseLevel, getDiscipline } from "../utils/courseUtils";
 import type { PrereqContext, TakenCourse } from "./types";
 
@@ -10,7 +11,7 @@ export function buildPrereqContext(
   const taken: TakenCourse[] = [];
   let totalCredits = 0;
   const disciplineCredits: Record<string, number> = {};
-  const seenCanonical = new Set<string>();
+  const seenCanonical = new Set<NormalizedCourseCode>();
 
   for (const raw of completedCourseCodes) {
     const canonical = cache.resolveToCanonical(raw);

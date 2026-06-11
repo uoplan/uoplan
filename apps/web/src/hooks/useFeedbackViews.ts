@@ -1,7 +1,9 @@
 import { useMemo } from "react";
 import {
-  normalizeCourseCode,
+  type CanonicalProfessorName,
+  type NormalizedCourseCode,
   normalizeProfessorName,
+  pickCanonicalProfessorName,
   type FeedbackQuestionMeta,
   type FeedbackSectionView,
 } from "@uoplan/core";
@@ -70,8 +72,8 @@ export function useProfessorFeedbackViews(
   arg:
     | { professorRef: number; legacyId?: undefined; professorName?: undefined }
     | { legacyId: number; professorRef?: undefined; professorName?: undefined }
-    | { professorName: string; professorRef?: undefined; legacyId?: undefined },
-): FeedbackViews & { displayName: string } {
+    | { professorName: CanonicalProfessorName; professorRef?: undefined; legacyId?: undefined },
+): FeedbackViews & { displayName: CanonicalProfessorName } {
   const { professorRef, legacyId, professorName: professorNameProp } = arg;
   const { data: feedback, loading: feedbackLoading } = useFeedbackData();
   const { offerings, loading: offeringsLoading } = useExploreOfferings();
@@ -83,14 +85,15 @@ export function useProfessorFeedbackViews(
     return offerings.filter((o) => o.professorName.toLowerCase() === nameLower);
   }, [offerings, professorRef, legacyId, professorNameProp]);
 
-  const displayName = professorOfferings[0]?.professorName ?? professorNameProp ?? "";
+  const displayName =
+    professorOfferings[0]?.professorName ?? professorNameProp ?? pickCanonicalProfessorName([""]);
 
   const views = useMemo<FeedbackSectionView[]>(() => {
     if (!feedback) return [];
     const keySet = new Set<string>();
-    const courseNorms = new Set<string>();
+    const courseNorms = new Set<NormalizedCourseCode>();
     for (const o of professorOfferings) {
-      const norm = normalizeCourseCode(o.courseCode);
+      const norm = o.courseCode;
       courseNorms.add(norm);
       keySet.add(`${norm}|${o.termId}|${normSection(o.section)}`);
     }

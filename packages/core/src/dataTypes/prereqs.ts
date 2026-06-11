@@ -9,6 +9,7 @@ import type {
   ProgramRequirement as ProtoProgramRequirement,
 } from "@uoplan/proto/data";
 import type { CoursePrereqKind, CoursePrereqNode, ProgramRequirement } from "./domain";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 function reqTypeFromProto(value: RequirementType): ProgramRequirement["type"] {
   switch (value) {
@@ -164,7 +165,7 @@ export function fromProtoPrereq(node: ProtoCoursePrereqNode): CoursePrereqNode {
   const kind = node.kind !== undefined ? prereqKindFromProto(node.kind) : undefined;
   return {
     type: prereqTypeFromProto(node.type),
-    ...(node.code ? { code: node.code } : {}),
+    ...(node.code ? { code: normalizeCourseCode(node.code) } : {}),
     ...(node.text ? { text: node.text } : {}),
     ...(node.credits !== undefined ? { credits: node.credits } : {}),
     ...(node.disciplines.length > 0 ? { disciplines: node.disciplines } : {}),
@@ -211,7 +212,7 @@ export function fromProtoProgramRequirement(
   return {
     type: reqTypeFromProto(requirement.type),
     ...(requirement.title ? { title: requirement.title } : {}),
-    ...(requirement.code ? { code: requirement.code } : {}),
+    ...(requirement.code ? { code: normalizeCourseCode(requirement.code) } : {}),
     ...(requirement.credits !== undefined ? { credits: Number(requirement.credits) } : {}),
     ...(requirement.disciplineLevels.length > 0
       ? {

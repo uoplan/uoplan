@@ -1,8 +1,8 @@
-import type { ProfessorGraphNode } from "@uoplan/core";
+import type { CanonicalProfessorName, ProfessorGraphNode } from "@uoplan/core";
 
 export type ProfessorSearchEntry = {
   id: string;
-  displayName: string;
+  displayName: CanonicalProfessorName;
   legacyId?: number;
   /** Lowercased name + legacy id for fast substring search. */
   searchText: string;

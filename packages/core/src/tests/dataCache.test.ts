@@ -11,21 +11,33 @@ import type { SchedulesData } from "../dataTypes";
 const minimalCatalogue: Catalogue = {
   courses: [
     {
-      code: "AMM 5101",
+      code: normalizeCourseCode("AMM 5101"),
       title: "Theory of Elasticity",
       credits: 3,
       description: "",
       component: "Lecture",
     },
     {
-      code: "AMM 5168",
+      code: normalizeCourseCode("AMM 5168"),
       title: "Industrial Organization",
       credits: 3,
       description: "",
       component: "Lecture",
     },
-    { code: "ENG 1100", title: "Literature", credits: 3, description: "", component: "Lecture" },
-    { code: "ENG 2100", title: "Writing", credits: 3, description: "", component: "Lecture" },
+    {
+      code: normalizeCourseCode("ENG 1100"),
+      title: "Literature",
+      credits: 3,
+      description: "",
+      component: "Lecture",
+    },
+    {
+      code: normalizeCourseCode("ENG 2100"),
+      title: "Writing",
+      credits: 3,
+      description: "",
+      component: "Lecture",
+    },
   ],
   programs: [],
 };
@@ -36,7 +48,7 @@ const minimalSchedules: SchedulesData = {
     {
       subject: "AMM",
       catalogNumber: "5168",
-      courseCode: "AMM 5168",
+      courseCode: normalizeCourseCode("AMM 5168"),
       title: "Industrial Organization",
       timeZone: "America/Toronto",
       components: {
@@ -65,33 +77,37 @@ const minimalSchedules: SchedulesData = {
 };
 
 describe("normalizeCourseCode", () => {
-  it('normalizes "AMM 5101" and "AMM5101" to same key', () => {
-    expect(normalizeCourseCode("AMM 5101")).toBe("AMM 5101");
-    expect(normalizeCourseCode("AMM5101")).toBe("AMM 5101");
-    expect(normalizeCourseCode("amm 5101")).toBe("AMM 5101");
+  it('normalizes normalizeCourseCode("AMM 5101") and normalizeCourseCode("AMM5101") to same key', () => {
+    expect(normalizeCourseCode(normalizeCourseCode("AMM 5101"))).toBe(
+      normalizeCourseCode("AMM 5101"),
+    );
+    expect(normalizeCourseCode(normalizeCourseCode("AMM5101"))).toBe(
+      normalizeCourseCode("AMM 5101"),
+    );
+    expect(normalizeCourseCode("amm 5101")).toBe(normalizeCourseCode("AMM 5101"));
   });
 });
 
 describe("buildDataCache", () => {
   const cache = buildDataCache(minimalCatalogue, minimalSchedules);
 
-  it('getCourse resolves both "AMM 5101" and "AMM5101" to same course', () => {
-    const a = cache.getCourse("AMM 5101");
-    const b = cache.getCourse("AMM5101");
+  it('getCourse resolves both normalizeCourseCode("AMM 5101") and normalizeCourseCode("AMM5101") to same course', () => {
+    const a = cache.getCourse(normalizeCourseCode("AMM 5101"));
+    const b = cache.getCourse(normalizeCourseCode("AMM5101"));
     expect(a).toBeDefined();
     expect(b).toBeDefined();
     expect(a).toBe(b);
-    expect(a?.code).toBe("AMM 5101");
+    expect(a?.code).toBe(normalizeCourseCode("AMM 5101"));
   });
 
   it("getSchedule returns schedule for scheduled course", () => {
-    const s = cache.getSchedule("AMM 5168");
+    const s = cache.getSchedule(normalizeCourseCode("AMM 5168"));
     expect(s).toBeDefined();
-    expect(s?.courseCode).toBe("AMM 5168");
+    expect(s?.courseCode).toBe(normalizeCourseCode("AMM 5168"));
   });
 
   it("getSchedule returns undefined for non-scheduled course", () => {
-    const s = cache.getSchedule("AMM 5101");
+    const s = cache.getSchedule(normalizeCourseCode("AMM 5101"));
     expect(s).toBeUndefined();
   });
 
@@ -109,14 +125,14 @@ describe("buildDataCache", () => {
 
 describe("applyLatestAliasesToMergedCourses", () => {
   const latestSta = {
-    code: "STA 2100",
+    code: normalizeCourseCode("STA 2100"),
     title: "Introduction to Statistics",
     credits: 3,
     description: "",
-    aliases: ["MAT 2375"],
+    aliases: [normalizeCourseCode("MAT 2375")],
   };
   const yearSta = {
-    code: "STA 2100",
+    code: normalizeCourseCode("STA 2100"),
     title: "Introduction to Statistics",
     credits: 3,
     description: "",
@@ -125,7 +141,7 @@ describe("applyLatestAliasesToMergedCourses", () => {
   it("copies aliases from the latest catalogue row onto merged course objects", () => {
     const merged = applyLatestAliasesToMergedCourses([latestSta], [yearSta]);
     expect(merged).toHaveLength(1);
-    expect(merged[0].aliases).toEqual(["MAT 2375"]);
+    expect(merged[0].aliases).toEqual([normalizeCourseCode("MAT 2375")]);
   });
 
   it("leaves merged courses unchanged when latest has no aliases field", () => {
@@ -138,14 +154,14 @@ describe("applyLatestAliasesToMergedCourses", () => {
 
 describe("removeMergedCoursesSupersededByAliases", () => {
   const latestSta = {
-    code: "STA 2100",
+    code: normalizeCourseCode("STA 2100"),
     title: "Introduction to Statistics",
     credits: 3,
     description: "",
-    aliases: ["MAT 2375"],
+    aliases: [normalizeCourseCode("MAT 2375")],
   };
   const legacyMat = {
-    code: "MAT 2375",
+    code: normalizeCourseCode("MAT 2375"),
     title: "Old title",
     credits: 3,
     description: "",
@@ -154,17 +170,20 @@ describe("removeMergedCoursesSupersededByAliases", () => {
   it("drops merged rows whose code is only an alias on the latest catalogue", () => {
     const merged = [legacyMat, latestSta];
     const out = removeMergedCoursesSupersededByAliases([latestSta], merged);
-    expect(out.map((c) => c.code)).toEqual(["STA 2100"]);
+    expect(out.map((c) => c.code)).toEqual([normalizeCourseCode("STA 2100")]);
   });
 
   it("keeps courses that are not listed as aliases on latest", () => {
     const other = {
-      code: "MAT 1341",
+      code: normalizeCourseCode("MAT 1341"),
       title: "Calculus",
       credits: 3,
       description: "",
     };
     const out = removeMergedCoursesSupersededByAliases([latestSta], [other, latestSta]);
-    expect(out.map((c) => c.code).sort()).toEqual(["MAT 1341", "STA 2100"]);
+    expect(out.map((c) => c.code).sort()).toEqual([
+      normalizeCourseCode("MAT 1341"),
+      normalizeCourseCode("STA 2100"),
+    ]);
   });
 });

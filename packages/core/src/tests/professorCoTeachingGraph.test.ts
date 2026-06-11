@@ -5,6 +5,7 @@ import {
   type ProfessorCoTeachingGraph,
 } from "../professorCoTeachingGraph";
 import type { CourseGradesData } from "../dataTypes";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 function emptyDist() {
   return { "A+": 0, A: 0 };
@@ -14,7 +15,7 @@ function buildFixture(): CourseGradesData {
   return {
     courses: [
       {
-        code: "CSI 2110",
+        code: normalizeCourseCode("CSI 2110"),
         professors: [
           { name: "Alice Shared", legacyId: 1, termId: 2251, distribution: emptyDist() },
           { name: "Alice Shared", legacyId: 1, termId: 2241, distribution: emptyDist() },
@@ -22,7 +23,7 @@ function buildFixture(): CourseGradesData {
         ],
       },
       {
-        code: "MAT 1341",
+        code: normalizeCourseCode("MAT 1341"),
         professors: [
           { name: "Alice Shared", legacyId: 1, termId: 2251, distribution: emptyDist() },
           { name: "Bob Shared", legacyId: 2, termId: 2241, distribution: emptyDist() },
@@ -30,7 +31,7 @@ function buildFixture(): CourseGradesData {
         ],
       },
       {
-        code: "PHY 1121",
+        code: normalizeCourseCode("PHY 1121"),
         professors: [{ name: "Carol Solo", termId: 2251, distribution: emptyDist() }],
       },
     ],
@@ -87,7 +88,7 @@ describe("buildProfessorCoTeachingGraph", () => {
     const graph = buildProfessorCoTeachingGraph({
       courses: [
         {
-          code: "ADM 1100",
+          code: normalizeCourseCode("ADM 1100"),
           professors: [
             { name: "P1", legacyId: 10, termId: 1, distribution: emptyDist() },
             { name: "P1", legacyId: 10, termId: 2, distribution: emptyDist() },

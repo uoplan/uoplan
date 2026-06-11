@@ -5,8 +5,9 @@ import {
   sectionInstructors,
 } from "../instructorPrediction";
 import { fromProtoSchedulesData, toProtoSchedulesData } from "../dataTypes/schedules";
-import { distributionForSection } from "../gradeLookup";
+import { distributionForSection, normalizeInstructorName } from "../gradeLookup";
 import type { ComponentSection, GradeDistribution, SchedulesData } from "../dataTypes";
+import { normalizeCourseCode } from "../utils/courseUtils";
 
 function section(overrides: Partial<ComponentSection> = {}): ComponentSection {
   return {
@@ -111,7 +112,7 @@ describe("schedules proto round-trip carries predictedInstructors", () => {
         {
           subject: "CSI",
           catalogNumber: "2110",
-          courseCode: "CSI 2110",
+          courseCode: normalizeCourseCode("CSI 2110"),
           title: "Data Structures",
           timeZone: "America/Toronto",
           components: {
@@ -163,7 +164,7 @@ describe("schedules proto round-trip carries predictedInstructors", () => {
 
 describe("predictions are informational only", () => {
   it("grade lookups never match a predicted instructor name", () => {
-    const profMap = new Map<string, GradeDistribution>([["ada lovelace", { "A+": 50, A: 20 }]]);
+    const profMap = new Map([[normalizeInstructorName("Ada Lovelace"), { "A+": 50, A: 20 }]]);
     const aggregate: GradeDistribution = { "A+": 1, F: 1 };
 
     // A section whose only "instructor" is the Staff placeholder must fall back

@@ -2,13 +2,14 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { buildDataCache } from "@uoplan/core";
 import type { Catalogue, CourseSchedule, GeneratedSchedule, MeetingTime } from "@uoplan/core";
 import { defaultAppStore } from "../appStore";
+import { testCourseCode } from "../../test/brands";
 
 function time(day: MeetingTime["day"], startMinutes: number, endMinutes: number): MeetingTime {
   return { day, startMinutes, endMinutes, virtual: false };
 }
 
 function course(code: string): Catalogue["courses"][number] {
-  return { code, title: code, credits: 3, description: "", component: "LEC" };
+  return { code: testCourseCode(code), title: code, credits: 3, description: "", component: "LEC" };
 }
 
 function schedule(code: string, meetingTime: MeetingTime): CourseSchedule {
@@ -16,7 +17,7 @@ function schedule(code: string, meetingTime: MeetingTime): CourseSchedule {
   return {
     subject,
     catalogNumber,
-    courseCode: code,
+    courseCode: testCourseCode(code),
     title: code,
     timeZone: "America/Toronto",
     components: {
@@ -39,7 +40,7 @@ function enrollment(
   meetingTime: MeetingTime,
 ): GeneratedSchedule["enrollments"][number] {
   return {
-    courseCode: code,
+    courseCode: testCourseCode(code),
     sectionCombo: {
       LEC: {
         section: {

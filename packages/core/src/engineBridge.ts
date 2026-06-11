@@ -20,8 +20,8 @@ import {
   Mode,
 } from "@uoplan/proto/engine";
 import type { DataCache } from "./dataCache";
+import type { NormalizedCourseCode } from "./brand";
 import { courseAPlusPercent } from "./gradeDistribution";
-import { normalizeCourseCode } from "./utils/courseUtils";
 import { getEnrollmentsForCourse } from "./generation/sectionCombos";
 import type {
   CourseEnrollment,
@@ -59,7 +59,7 @@ interface CommonRequestInput {
    * supplied by the caller (built from the lazily-loaded feedback dataset). Only
    * consumed when {@link generationPreferHigherSentiment} is true.
    */
-  courseSentimentByNorm?: Map<string, number> | null;
+  courseSentimentByNorm?: Map<NormalizedCourseCode, number> | null;
   blacklistedCourses: string[];
   currentSeed: number;
   firstSeed: number;
@@ -165,11 +165,11 @@ function buildCourseAplusMap(cache: DataCache): Record<string, number> {
  */
 function buildCourseSentimentMap(
   cache: DataCache,
-  byNorm: Map<string, number>,
+  byNorm: Map<NormalizedCourseCode, number>,
 ): Record<string, number> {
   const out: Record<string, number> = {};
   for (const schedule of cache.getAllSchedules()) {
-    const s = byNorm.get(normalizeCourseCode(schedule.courseCode));
+    const s = byNorm.get(schedule.courseCode);
     if (s != null && Number.isFinite(s)) out[schedule.courseCode] = s;
   }
   return out;
@@ -350,7 +350,7 @@ function chosenToEnrollment(
 ): CourseEnrollment | null {
   if (components.length === 0) {
     // Honours project / timeless course: empty section combo, no meeting times.
-    return { courseCode, sectionCombo: {}, times: [] };
+    return { courseCode: cache.resolveToCanonical(courseCode), sectionCombo: {}, times: [] };
   }
   const schedule = cache.getSchedule(courseCode);
   if (!schedule) return null;
