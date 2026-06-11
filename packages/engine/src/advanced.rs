@@ -1578,3 +1578,273 @@ fn collect_implicit_honours(
     }
     picks
 }
+
+#[cfg(test)]
+mod tests {
+    use std::collections::HashMap;
+
+    use super::*;
+    use crate::proto::data::{
+        Catalogue, ComponentSection, ComponentSectionList, Course, CourseIndex, CourseSchedule,
+        DayOfWeek, MeetingTime, SchedulesData, SectionStatus,
+    };
+
+    fn scheduled_data(entries: &[(&str, Option<(u32, u32, bool)>)]) -> DataView {
+        let course_codes = entries
+            .iter()
+            .map(|(code, _)| (*code).to_string())
+            .collect::<Vec<_>>();
+        let courses = entries
+            .iter()
+            .enumerate()
+            .map(|(index, _)| Course {
+                code: Some(CourseIndex {
+                    index: index as u32,
+                }),
+                credits: 3.0,
+                ..Default::default()
+            })
+            .collect::<Vec<_>>();
+        let schedules = entries
+            .iter()
+            .enumerate()
+            .filter_map(|(index, (_, meeting))| {
+                meeting.map(|(start, end, virtual_time)| {
+                    let section = ComponentSection {
+                        section: "A".to_string(),
+                        times: vec![MeetingTime {
+                            day: DayOfWeek::Mo as i32,
+                            start_minutes: start,
+                            end_minutes: end,
+                            r#virtual: virtual_time,
+                            ..Default::default()
+                        }],
+                        status: SectionStatus::Open as i32,
+                        ..Default::default()
+                    };
+                    CourseSchedule {
+                        course: Some(CourseIndex {
+                            index: index as u32,
+                        }),
+                        components: HashMap::from([(
+                            "LEC".to_string(),
+                            ComponentSectionList {
+                                items: vec![section],
+                            },
+                        )]),
+                        ..Default::default()
+                    }
+                })
+            })
+            .collect();
+
+        DataView::new(
+            Catalogue {
+                course_codes: course_codes.clone(),
+                courses,
+                ..Default::default()
+            },
+            SchedulesData {
+                course_codes,
+                schedules,
+                ..Default::default()
+            },
+        )
+    }
+
+    fn constraints() -> Constraints {
+        Constraints {
+            max_end: 24 * 60,
+            ..Default::default()
+        }
+    }
+
+    fn base_params<'a>(
+        data: &'a DataView,
+        constraints: &'a Constraints,
+        course_aplus: &'a HashMap<String, f64>,
+        course_sentiment: &'a HashMap<String, f64>,
+    ) -> AdvancedParams<'a> {
+        AdvancedParams {
+            data,
+            constraints,
+            completed_courses: Vec::new(),
+            prereq_eligible_courses: Vec::new(),
+            remaining_requirements: Vec::new(),
+            requirement_tree: Vec::new(),
+            constrained_per_requirement_raw: BTreeMap::new(),
+            selected_per_requirement: BTreeMap::new(),
+            selected_options_per_requirement: BTreeMap::new(),
+            courses_this_semester: 0,
+            level_buckets: vec![LevelBucket::Undergrad, LevelBucket::Grad],
+            language_buckets: vec![
+                LanguageBucket::En,
+                LanguageBucket::Fr,
+                LanguageBucket::Other,
+            ],
+            elective_level_buckets: Vec::new(),
+            include_closed: false,
+            virtual_sections_only: false,
+            prefer_easier: false,
+            course_aplus,
+            prefer_higher_sentiment: false,
+            course_sentiment,
+            french_immersion_stream: false,
+            blacklisted_courses: Vec::new(),
+            basic_excluded_categories: Vec::new(),
+            forced_courses: Vec::new(),
+            current_seed: 1,
+            first_seed: 1,
+        }
+    }
+
+    fn remaining(id: &str, req_type: &str, candidates: Vec<&str>) -> RemainingRequirement {
+        RemainingRequirement {
+            requirement_id: id.to_string(),
+            req_type: req_type.to_string(),
+            title: Some(id.to_string()),
+            candidate_courses: candidates.into_iter().map(str::to_string).collect(),
+            credits_needed: 3.0,
+        }
+    }
+
+    #[test]
+    fn selected_requirement_tree_branch_is_added_to_effective_remaining() {
+        let existing = remaining("existing", "course", vec!["CSI 1100"]);
+        let tree = vec![RequirementWithStatus {
+            req_type: "or_group".to_string(),
+            title: Some("Choose one".to_string()),
+            requirement_id: Some("choice".to_string()),
+            complete: false,
+            candidate_courses: Vec::new(),
+            credits_needed: None,
+            options: vec![
+                RequirementWithStatus {
+                    req_type: "course".to_string(),
+                    title: Some("First".to_string()),
+                    requirement_id: Some("first".to_string()),
+                    complete: false,
+                    candidate_courses: vec!["MAT 1100".to_string()],
+                    credits_needed: Some(3.0),
+                    options: Vec::new(),
+                },
+                RequirementWithStatus {
+                    req_type: "course".to_string(),
+                    title: Some("Second".to_string()),
+                    requirement_id: Some("second".to_string()),
+                    complete: false,
+                    candidate_courses: vec!["PHY 1100".to_string()],
+                    credits_needed: Some(3.0),
+                    options: Vec::new(),
+                },
+            ],
+        }];
+        let selected = BTreeMap::from([("choice".to_string(), 1)]);
+
+        let effective = build_effective_remaining(vec![existing], &tree, &selected);
+        let ids = effective
+            .iter()
+            .map(|r| r.requirement_id.as_str())
+            .collect::<Vec<_>>();
+
+        assert_eq!(ids, vec!["existing", "second"]);
+    }
+
+    #[test]
+    fn forced_courses_are_pinned_and_timetabled_without_remaining_pools() {
+        let data = scheduled_data(&[("CSI 1100", Some((9 * 60, 10 * 60, false)))]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.forced_courses = vec!["CSI 1100".to_string()];
+        params.courses_this_semester = 1;
+
+        let result = generate_advanced(params);
+
+        assert_eq!(result.pinned, vec!["CSI 1100"]);
+        let schedule = result.schedule.expect("forced course should timetable");
+        assert_eq!(schedule.len(), 1);
+        assert_eq!(schedule[0].course_code, "CSI 1100");
+    }
+
+    #[test]
+    fn group_token_constraint_selects_matching_subject_from_pool() {
+        let data = scheduled_data(&[
+            ("CSI 1100", Some((9 * 60, 10 * 60, false))),
+            ("MAT 1100", Some((10 * 60, 11 * 60, false))),
+        ]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.courses_this_semester = 1;
+        params.prereq_eligible_courses = vec!["CSI 1100".to_string(), "MAT 1100".to_string()];
+        params.remaining_requirements = vec![remaining(
+            "free",
+            "free_elective",
+            vec!["CSI 1100", "MAT 1100"],
+        )];
+        params.constrained_per_requirement_raw =
+            BTreeMap::from([("free".to_string(), vec!["group:CSI~choice".to_string()])]);
+
+        let result = generate_advanced(params);
+
+        let schedule = result
+            .schedule
+            .expect("group-token constrained course should timetable");
+        assert_eq!(schedule.len(), 1);
+        assert_eq!(schedule[0].course_code, "CSI 1100");
+        assert_eq!(
+            result.chosen_to_requirement.get("CSI 1100"),
+            Some(&"free".to_string()),
+        );
+    }
+
+    #[test]
+    fn broad_elective_virtual_filter_selects_virtual_section_when_required() {
+        let data = scheduled_data(&[
+            ("CSI 1100", Some((9 * 60, 10 * 60, false))),
+            ("MAT 1100", Some((10 * 60, 11 * 60, true))),
+        ]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.courses_this_semester = 1;
+        params.virtual_sections_only = true;
+        params.prereq_eligible_courses = vec!["CSI 1100".to_string(), "MAT 1100".to_string()];
+        params.remaining_requirements = vec![remaining(
+            "free",
+            "free_elective",
+            vec!["CSI 1100", "MAT 1100"],
+        )];
+
+        let result = generate_advanced(params);
+
+        let schedule = result.schedule.expect("virtual elective should timetable");
+        assert_eq!(schedule.len(), 1);
+        assert_eq!(schedule[0].course_code, "MAT 1100");
+    }
+
+    #[test]
+    fn implicit_honours_project_is_pinned_when_it_is_the_only_schedulable_option() {
+        let data = scheduled_data(&[("HON 4900", None)]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.courses_this_semester = 1;
+        params.prereq_eligible_courses = vec!["HON 4900".to_string()];
+        params.remaining_requirements = vec![remaining("capstone", "course", vec!["HON 4900"])];
+
+        let result = generate_advanced(params);
+
+        assert_eq!(result.pinned, vec!["HON 4900"]);
+        let schedule = result
+            .schedule
+            .expect("honours project uses timeless combo");
+        assert_eq!(schedule.len(), 1);
+        assert_eq!(schedule[0].course_code, "HON 4900");
+    }
+}

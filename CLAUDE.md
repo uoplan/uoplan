@@ -11,7 +11,12 @@ pnpm dev              # Vite dev server (runs generate + engine-wasm:dev + data-
 pnpm build            # Production build (generate + engine-wasm + data-proto + vite + prerender)
 pnpm test             # Run all workspace tests once (vitest)
 pnpm test:watch       # Watch mode (apps/web)
-pnpm test:coverage    # Per-package Vitest coverage (v8; text + HTML in each pkg's coverage/)
+pnpm test:coverage    # Per-package Vitest coverage (v8; text + HTML in each pkg's coverage/).
+                      # apps/web merges BOTH the `unit` and `browser` projects (run without a
+                      # --project filter); use `pnpm --filter web test:coverage:unit` for a
+                      # fast unit-only coverage run. NOTE: a package's coverage only counts
+                      # tests that live in that package — e.g. core helpers exercised solely by
+                      # apps/web tests show 0% in @uoplan/core's own report.
 pnpm test:ui          # Interactive Vitest UI for apps/web (per-package: pnpm --filter <pkg> test:ui)
 pnpm typecheck        # tsgo typecheck across all packages (+ wrangler types)
 pnpm lint             # oxlint over apps/web, apps/scraper, packages/core

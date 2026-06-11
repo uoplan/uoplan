@@ -340,3 +340,124 @@ pub fn group_token_prefix(s: &str) -> String {
 pub fn canonical_group_token(s: &str) -> String {
     format!("{GROUP}{}", group_token_prefix(s))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn pool(id: &str, req_type: &str, credits_needed: f64, min_courses: usize) -> RequirementPool {
+        RequirementPool {
+            requirement_id: id.to_string(),
+            req_type: req_type.to_string(),
+            label: id.to_string(),
+            candidate_courses: vec![format!("{id} 1000")],
+            credits_needed,
+            min_courses,
+        }
+    }
+
+    #[test]
+    fn requirement_pools_skip_empty_requirements_and_dedupe_candidates() {
+        let pools = build_requirement_pools(&[
+            RemainingRequirement {
+                requirement_id: "core".to_string(),
+                req_type: "course".to_string(),
+                title: Some("Core requirement".to_string()),
+                candidate_courses: vec!["CSI 1100".to_string(), "CSI 1100".to_string()],
+                credits_needed: 3.0,
+            },
+            RemainingRequirement {
+                requirement_id: "empty".to_string(),
+                req_type: "course".to_string(),
+                title: None,
+                candidate_courses: Vec::new(),
+                credits_needed: 3.0,
+            },
+            RemainingRequirement {
+                requirement_id: "complete".to_string(),
+                req_type: "course".to_string(),
+                title: None,
+                candidate_courses: vec!["CSI 2100".to_string()],
+                credits_needed: 0.0,
+            },
+        ]);
+
+        assert_eq!(pools.len(), 1);
+        assert_eq!(pools[0].label, "Core requirement");
+        assert_eq!(pools[0].candidate_courses, vec!["CSI 1100"]);
+        assert_eq!(pools[0].min_courses, 1);
+    }
+
+    #[test]
+    fn courses_per_pool_prioritizes_structured_requirements_then_broad_electives() {
+        let pools = vec![
+            pool("core", "core", 6.0, 0),
+            pool("discipline", "discipline_elective", 9.0, 0),
+            pool("free", "free_elective", 3.0, 0),
+        ];
+
+        let allocation = compute_courses_per_pool(&pools, 4);
+
+        assert_eq!(allocation.get("core"), Some(&2));
+        assert_eq!(allocation.get("discipline"), Some(&1));
+        assert_eq!(allocation.get("free"), Some(&1));
+    }
+
+    #[test]
+    fn broad_elective_can_overflow_when_structured_caps_cannot_fill_semester() {
+        let pools = vec![
+            pool("core", "course", 3.0, 1),
+            pool("free", "free_elective", 3.0, 0),
+        ];
+
+        let allocation = compute_courses_per_pool(&pools, 3);
+
+        assert_eq!(allocation.get("core"), Some(&1));
+        assert_eq!(allocation.get("free"), Some(&2));
+    }
+
+    #[test]
+    fn redistributions_move_one_slot_from_structured_to_broad_with_remaining_cap() {
+        let pools = vec![
+            pool("core", "core", 6.0, 0),
+            pool("free", "free_elective", 3.0, 0),
+        ];
+        let current = BTreeMap::from([("core".to_string(), 2), ("free".to_string(), 0)]);
+        let caps = BTreeMap::from([("core".to_string(), 2), ("free".to_string(), 1)]);
+
+        let alternatives = enumerate_single_redistributions(&current, &pools, &caps);
+
+        assert_eq!(alternatives.len(), 1);
+        assert_eq!(alternatives[0].get("core"), Some(&1));
+        assert_eq!(alternatives[0].get("free"), Some(&1));
+    }
+
+    #[test]
+    fn elective_level_filters_apply_bucket_restrictions_and_global_cap() {
+        assert!(is_within_elective_level_buckets("CSI 1100", &[1000, 2000]));
+        assert!(!is_within_elective_level_buckets("CSI 3100", &[1000, 2000]));
+        assert!(is_within_elective_level_buckets("UNPARSEABLE", &[1000]));
+
+        assert!(is_within_elective_level_cap("CSI 4100"));
+        assert!(!is_within_elective_level_cap("CSI 5100"));
+    }
+
+    #[test]
+    fn candidate_pool_weight_prefers_lower_level_and_penalizes_hard_prerequisites() {
+        let first_year = candidate_pool_weight(1000, false);
+        let second_year = candidate_pool_weight(2000, false);
+        let hard_prereq = candidate_pool_weight(1000, true);
+        let unknown = candidate_pool_weight(999_000, false);
+
+        assert!(first_year > second_year);
+        assert!(hard_prereq < first_year);
+        assert!(unknown < hard_prereq);
+    }
+
+    #[test]
+    fn group_tokens_canonicalize_prefixes_independent_of_variant_suffixes() {
+        assert!(is_group_token("group:csi~1"));
+        assert_eq!(group_token_prefix("group:csi~1"), "CSI");
+        assert_eq!(canonical_group_token("group:csi~1"), "group:CSI");
+    }
+}

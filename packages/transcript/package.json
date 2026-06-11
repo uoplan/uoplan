@@ -9,6 +9,8 @@
     ".": "./src/index.ts"
   },
   "scripts": {
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "tsgo -b tsconfig.json"
   },
   "dependencies": {
@@ -16,6 +18,8 @@
     "pdfjs-dist": "^5.5.207"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0"
+    "@types/node": "^25.5.0",
+    "@vitest/coverage-v8": "4.1.7",
+    "vitest": "4.1.7"
   }
 }

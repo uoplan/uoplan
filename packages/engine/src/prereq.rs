@@ -269,3 +269,225 @@ pub fn prerequisites_contain_non_course(node: Option<&CoursePrereqNode>) -> bool
         .iter()
         .any(|c| prerequisites_contain_non_course(Some(c)))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::proto::data::{
+        Catalogue, Course, CourseIndex, CoursePrereqDisciplineLevel, CoursePrereqKind,
+        SchedulesData,
+    };
+
+    fn course_node(code: &str) -> CoursePrereqNode {
+        CoursePrereqNode {
+            r#type: CoursePrereqNodeType::Course as i32,
+            code: Some(code.to_string()),
+            ..Default::default()
+        }
+    }
+
+    fn and_node(children: Vec<CoursePrereqNode>) -> CoursePrereqNode {
+        CoursePrereqNode {
+            r#type: CoursePrereqNodeType::AndGroup as i32,
+            children,
+            ..Default::default()
+        }
+    }
+
+    fn or_node(children: Vec<CoursePrereqNode>) -> CoursePrereqNode {
+        CoursePrereqNode {
+            r#type: CoursePrereqNodeType::OrGroup as i32,
+            children,
+            ..Default::default()
+        }
+    }
+
+    fn non_course_node(credits: Option<f64>) -> CoursePrereqNode {
+        CoursePrereqNode {
+            r#type: CoursePrereqNodeType::NonCourse as i32,
+            credits,
+            ..Default::default()
+        }
+    }
+
+    fn soft_non_course(kind: CoursePrereqKind) -> CoursePrereqNode {
+        CoursePrereqNode {
+            r#type: CoursePrereqNodeType::NonCourse as i32,
+            kind: Some(kind as i32),
+            ..Default::default()
+        }
+    }
+
+    fn data_with_prereqs(courses: Vec<(&str, f64, Option<CoursePrereqNode>)>) -> DataView {
+        let course_codes = courses
+            .iter()
+            .map(|(code, _, _)| (*code).to_string())
+            .collect::<Vec<_>>();
+        let courses = courses
+            .into_iter()
+            .enumerate()
+            .map(|(index, (_, credits, prerequisites))| Course {
+                code: Some(CourseIndex {
+                    index: index as u32,
+                }),
+                credits,
+                prerequisites,
+                ..Default::default()
+            })
+            .collect();
+        DataView::new(
+            Catalogue {
+                course_codes,
+                courses,
+                ..Default::default()
+            },
+            SchedulesData::default(),
+        )
+    }
+
+    fn ctx(data: &DataView, completed: &[&str]) -> PrereqContext {
+        build_prereq_context(
+            &completed
+                .iter()
+                .map(|c| (*c).to_string())
+                .collect::<Vec<_>>(),
+            data,
+            &[],
+        )
+    }
+
+    #[test]
+    fn nested_course_prerequisites_accept_language_variants() {
+        let target_prereq = and_node(vec![
+            course_node("MAT 1500"),
+            or_node(vec![course_node("CSI 1100"), course_node("ITI 1120")]),
+        ]);
+        let data = data_with_prereqs(vec![
+            ("MAT 1100", 3.0, None),
+            ("MAT 1500", 3.0, None),
+            ("CSI 1100", 3.0, None),
+            ("ITI 1120", 3.0, None),
+            ("ADV 2500", 3.0, Some(target_prereq)),
+        ]);
+
+        assert!(can_take_course(
+            "ADV 2500",
+            &data,
+            &ctx(&data, &["MAT 1100", "CSI 1100"]),
+        ));
+        assert!(!can_take_course(
+            "ADV 2500",
+            &data,
+            &ctx(&data, &["MAT 1100"]),
+        ));
+    }
+
+    #[test]
+    fn scoped_credit_prerequisites_count_only_their_child_course_set() {
+        let mut six_credits_from_two_courses = non_course_node(Some(6.0));
+        six_credits_from_two_courses.children =
+            vec![course_node("MAT 1500"), course_node("CSI 1100")];
+
+        let data = data_with_prereqs(vec![
+            ("MAT 1100", 3.0, None),
+            ("MAT 1500", 3.0, None),
+            ("CSI 1100", 3.0, None),
+            ("ECO 1100", 3.0, None),
+            ("ADV 2500", 3.0, Some(six_credits_from_two_courses)),
+        ]);
+
+        assert!(can_take_course(
+            "ADV 2500",
+            &data,
+            &ctx(&data, &["MAT 1100", "CSI 1100", "ECO 1100"]),
+        ));
+        assert!(!can_take_course(
+            "ADV 2500",
+            &data,
+            &ctx(&data, &["MAT 1100", "ECO 1100"]),
+        ));
+    }
+
+    #[test]
+    fn non_course_credit_requirements_honour_discipline_level_and_program_gates() {
+        let mut csi_2000_credit_gate = non_course_node(Some(6.0));
+        csi_2000_credit_gate.discipline_levels = vec![CoursePrereqDisciplineLevel {
+            discipline: "csi".to_string(),
+            levels: vec![2000],
+        }];
+        csi_2000_credit_gate.programs = vec!["SEG".to_string()];
+
+        let data = data_with_prereqs(vec![
+            ("CSI 2100", 3.0, None),
+            ("CSI 2500", 3.0, None),
+            ("CSI 1100", 3.0, None),
+            ("ADV 3500", 3.0, Some(csi_2000_credit_gate.clone())),
+        ]);
+        let eligible = build_prereq_context(
+            &["CSI 2100".to_string(), "CSI 2500".to_string()],
+            &data,
+            &["SEG".to_string()],
+        );
+        let wrong_program = build_prereq_context(
+            &["CSI 2100".to_string(), "CSI 2500".to_string()],
+            &data,
+            &["CSI".to_string()],
+        );
+        let too_few_matching_credits = build_prereq_context(
+            &["CSI 2100".to_string(), "CSI 1100".to_string()],
+            &data,
+            &["SEG".to_string()],
+        );
+
+        assert!(can_take_course("ADV 3500", &data, &eligible));
+        assert!(!can_take_course("ADV 3500", &data, &wrong_program));
+        assert!(!can_take_course(
+            "ADV 3500",
+            &data,
+            &too_few_matching_credits
+        ));
+    }
+
+    #[test]
+    fn soft_non_course_gates_pass_alone_but_do_not_satisfy_an_or_group() {
+        let data = data_with_prereqs(vec![
+            ("CSI 1100", 3.0, None),
+            (
+                "ADM 2000",
+                3.0,
+                Some(soft_non_course(CoursePrereqKind::Permission)),
+            ),
+            (
+                "ADM 2001",
+                3.0,
+                Some(or_node(vec![
+                    soft_non_course(CoursePrereqKind::Permission),
+                    course_node("CSI 1100"),
+                ])),
+            ),
+        ]);
+
+        assert!(can_take_course("ADM 2000", &data, &ctx(&data, &[])));
+        assert!(!can_take_course("ADM 2001", &data, &ctx(&data, &[])));
+        assert!(can_take_course(
+            "ADM 2001",
+            &data,
+            &ctx(&data, &["CSI 1100"])
+        ));
+    }
+
+    #[test]
+    fn conservative_non_course_gates_block_and_are_reported_for_weighting() {
+        let hard_gate = soft_non_course(CoursePrereqKind::Standing);
+        let soft_gate = soft_non_course(CoursePrereqKind::Recommended);
+        let data = data_with_prereqs(vec![
+            ("ADV 3000", 3.0, Some(hard_gate.clone())),
+            ("ADV 3001", 3.0, Some(soft_gate.clone())),
+        ]);
+
+        assert!(!can_take_course("ADV 3000", &data, &ctx(&data, &[])));
+        assert!(can_take_course("ADV 3001", &data, &ctx(&data, &[])));
+        assert!(prerequisites_contain_non_course(Some(&hard_gate)));
+        assert!(!prerequisites_contain_non_course(Some(&soft_gate)));
+    }
+}

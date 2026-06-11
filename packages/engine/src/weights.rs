@@ -44,3 +44,65 @@ pub(crate) fn sentiment_weight(
         Some(&s) => SENTIMENT_BASE.powf((s - SENTIMENT_PIVOT) / SENTIMENT_SCALE),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn easier_preference_orders_courses_by_aplus_rate() {
+        let aplus = HashMap::from([
+            ("HARD 1000".to_string(), 10.0),
+            ("NEUT 1000".to_string(), 20.0),
+            ("EASY 1000".to_string(), 30.0),
+        ]);
+
+        let hard = easier_weight("HARD 1000", true, &aplus);
+        let neutral = easier_weight("NEUT 1000", true, &aplus);
+        let easy = easier_weight("EASY 1000", true, &aplus);
+
+        assert!(easy > neutral);
+        assert!(neutral > hard);
+        assert_eq!(easier_weight("UNKNOWN 1000", true, &aplus), 1.0);
+        assert_eq!(easier_weight("EASY 1000", false, &aplus), 1.0);
+    }
+
+    #[test]
+    fn sentiment_preference_orders_courses_by_feedback_rating() {
+        let sentiment = HashMap::from([
+            ("LOW 1000".to_string(), 2.5),
+            ("NEUT 1000".to_string(), 3.5),
+            ("HIGH 1000".to_string(), 4.5),
+        ]);
+
+        let low = sentiment_weight("LOW 1000", true, &sentiment);
+        let neutral = sentiment_weight("NEUT 1000", true, &sentiment);
+        let high = sentiment_weight("HIGH 1000", true, &sentiment);
+
+        assert!(high > neutral);
+        assert!(neutral > low);
+        assert_eq!(sentiment_weight("UNKNOWN 1000", true, &sentiment), 1.0);
+        assert_eq!(sentiment_weight("HIGH 1000", false, &sentiment), 1.0);
+    }
+
+    #[test]
+    fn easier_and_sentiment_multipliers_compose_for_combined_ranking() {
+        let aplus = HashMap::from([
+            ("BEST 1000".to_string(), 30.0),
+            ("MIXED 1000".to_string(), 30.0),
+            ("WORST 1000".to_string(), 10.0),
+        ]);
+        let sentiment = HashMap::from([
+            ("BEST 1000".to_string(), 4.5),
+            ("MIXED 1000".to_string(), 2.5),
+            ("WORST 1000".to_string(), 2.5),
+        ]);
+
+        let combined = |code: &str| {
+            easier_weight(code, true, &aplus) * sentiment_weight(code, true, &sentiment)
+        };
+
+        assert!(combined("BEST 1000") > combined("MIXED 1000"));
+        assert!(combined("MIXED 1000") > combined("WORST 1000"));
+    }
+}

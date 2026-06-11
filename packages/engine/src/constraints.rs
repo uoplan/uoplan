@@ -157,3 +157,173 @@ fn satisfies_compressed(chosen: &[Enrollment]) -> bool {
     }
     true
 }
+
+#[cfg(test)]
+mod tests {
+    use std::collections::{BTreeMap, HashMap};
+
+    use super::*;
+    use crate::proto::data::{Catalogue, Course, CourseIndex, SchedulesData};
+    use crate::types::WeekMask;
+
+    fn time(day: u8, start: u32, end: u32, instructor: Option<&str>) -> RtTime {
+        RtTime {
+            day,
+            start,
+            end,
+            is_virtual: false,
+            instructor: instructor.map(str::to_string),
+            dates: None,
+        }
+    }
+
+    fn section(times: Vec<RtTime>) -> RtSection {
+        RtSection {
+            section: "A".to_string(),
+            times,
+            closed: false,
+        }
+    }
+
+    fn enrollment(code: &str, times: Vec<RtTime>) -> Enrollment {
+        Enrollment {
+            course_code: code.to_string(),
+            sections: BTreeMap::new(),
+            mask: WeekMask::from_times(&times),
+            times,
+        }
+    }
+
+    fn data_with_credits(courses: &[(&str, f64)]) -> DataView {
+        let course_codes = courses
+            .iter()
+            .map(|(code, _)| (*code).to_string())
+            .collect::<Vec<_>>();
+        let courses = courses
+            .iter()
+            .enumerate()
+            .map(|(index, (_, credits))| Course {
+                code: Some(CourseIndex {
+                    index: index as u32,
+                }),
+                credits: *credits,
+                ..Default::default()
+            })
+            .collect();
+        DataView::new(
+            Catalogue {
+                course_codes,
+                courses,
+                ..Default::default()
+            },
+            SchedulesData::default(),
+        )
+    }
+
+    #[test]
+    fn time_window_and_blocked_slots_filter_sections() {
+        let constraints = Constraints {
+            min_start: 9 * 60,
+            max_end: 17 * 60,
+            blocked: vec![(0, 12 * 60, 13 * 60)],
+            ..Default::default()
+        };
+
+        assert!(constraints.allows_section(&section(vec![time(1, 10 * 60, 11 * 60, None)])));
+        assert!(!constraints.allows_section(&section(vec![time(1, 8 * 60 + 30, 10 * 60, None)])));
+        assert!(!constraints.allows_section(&section(vec![time(1, 16 * 60, 17 * 60 + 30, None)])));
+        assert!(!constraints.allows_section(&section(vec![time(0, 12 * 60 + 30, 14 * 60, None)])));
+        assert!(constraints.allows_section(&section(vec![time(0, 13 * 60, 14 * 60, None)])));
+    }
+
+    #[test]
+    fn unrated_professors_do_not_fail_min_rating_but_low_rated_ones_do() {
+        let constraints = Constraints {
+            min_start: 0,
+            max_end: 24 * 60,
+            min_professor_rating: Some(4.0),
+            professor_ratings: HashMap::from([
+                ("Prof Good".to_string(), 4.7),
+                ("Prof Low".to_string(), 3.2),
+            ]),
+            ..Default::default()
+        };
+
+        assert!(constraints.allows_section(&section(vec![time(
+            0,
+            9 * 60,
+            10 * 60,
+            Some("  Prof   Good  "),
+        )])));
+        assert!(constraints.allows_section(&section(vec![time(
+            0,
+            9 * 60,
+            10 * 60,
+            Some("Unknown Professor"),
+        )])));
+        assert!(!constraints.allows_section(&section(vec![time(
+            0,
+            9 * 60,
+            10 * 60,
+            Some("Prof Low"),
+        )])));
+        assert!(!constraints.allows_section(&section(vec![
+            time(0, 9 * 60, 10 * 60, Some("Prof Good")),
+            time(2, 9 * 60, 10 * 60, Some("Prof Low")),
+        ])));
+    }
+
+    #[test]
+    fn compressed_schedule_allows_one_short_gap_per_day_only() {
+        let data = data_with_credits(&[]);
+        let constraints = Constraints {
+            max_end: 24 * 60,
+            compressed: true,
+            ..Default::default()
+        };
+
+        let one_short_gap = vec![
+            enrollment("CSI 1100", vec![time(0, 9 * 60, 10 * 60, None)]),
+            enrollment("CSI 1101", vec![time(0, 11 * 60, 12 * 60, None)]),
+        ];
+        assert!(constraints.allows_final(&one_short_gap, &data));
+
+        let long_gap = vec![
+            enrollment("CSI 1100", vec![time(0, 9 * 60, 10 * 60, None)]),
+            enrollment("CSI 1101", vec![time(0, 12 * 60, 13 * 60, None)]),
+        ];
+        assert!(!constraints.allows_final(&long_gap, &data));
+
+        let two_gaps = vec![
+            enrollment("CSI 1100", vec![time(0, 9 * 60, 10 * 60, None)]),
+            enrollment("CSI 1101", vec![time(0, 10 * 60 + 30, 11 * 60, None)]),
+            enrollment("CSI 1102", vec![time(0, 11 * 60 + 30, 12 * 60, None)]),
+        ];
+        assert!(!constraints.allows_final(&two_gaps, &data));
+    }
+
+    #[test]
+    fn first_year_credit_cap_counts_only_sub_2000_level_courses() {
+        let data = data_with_credits(&[("CSI 1100", 3.0), ("CSI 1500", 6.0), ("CSI 2100", 3.0)]);
+        let constraints = Constraints {
+            max_end: 24 * 60,
+            max_first_year_credits: Some(6.0),
+            ..Default::default()
+        };
+
+        assert!(constraints.allows_final(
+            &[
+                enrollment("CSI 1100", Vec::new()),
+                enrollment("CSI 2100", Vec::new()),
+            ],
+            &data,
+        ));
+        assert!(!constraints.allows_final(
+            &[
+                enrollment("CSI 1100", Vec::new()),
+                enrollment("CSI 1500", Vec::new()),
+            ],
+            &data,
+        ));
+    }
+}

@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "test": "vitest run --project unit",
     "test:watch": "vitest --project unit",
-    "test:coverage": "vitest run --project unit --coverage",
+    "test:coverage": "vitest run --coverage",
+    "test:coverage:unit": "vitest run --project unit --coverage",
     "test:ui": "vitest --project unit --ui --coverage",
     "test:browser": "vitest run --project browser",
     "test:e2e": "playwright test"

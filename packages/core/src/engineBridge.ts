@@ -30,6 +30,7 @@ import type {
   SectionCombo,
 } from "./generation/types";
 import type { RemainingRequirement, RequirementWithStatus } from "./requirements/types";
+import { hasProfessorRatings } from "./professorRatings";
 
 export { Mode as EngineMode };
 
@@ -137,12 +138,19 @@ function constraintsToProto(c: GenerationConstraints): GenerationRequest["constr
   };
 }
 
+/**
+ * Flatten the {@link ProfessorRatingsMap} into the engine's
+ * `map<string, double>` shape (normalized professor name -> rating). Only
+ * genuinely rated professors are forwarded — unrated entries (`rating: 0,
+ * numRatings: 0`) are omitted so the engine treats them as "no rating", which
+ * it always allows (see `constraints.rs::section_allowed_by_min_rating`).
+ */
 function professorRatingsToProto(c: GenerationConstraints): Record<string, number> {
   const out: Record<string, number> = {};
   const ratings = c.professorRatings;
   if (!ratings) return out;
-  for (const [name, rating] of Object.entries(ratings)) {
-    if (typeof rating === "number" && Number.isFinite(rating)) out[name] = rating;
+  for (const [name, entry] of Object.entries(ratings)) {
+    if (hasProfessorRatings(entry)) out[name] = entry.rating;
   }
   return out;
 }

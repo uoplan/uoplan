@@ -86,6 +86,9 @@ export default defineConfig({
         "typescript/no-unsafe-argument": "off",
         "typescript/no-unsafe-return": "off",
         "typescript/consistent-type-imports": "off",
+        // Referencing mock methods (e.g. `expect(mock.put).toHaveBeenCalled()`)
+        // is the standard test pattern and a known unbound-method false positive.
+        "typescript/unbound-method": "off",
       },
     },
     {
