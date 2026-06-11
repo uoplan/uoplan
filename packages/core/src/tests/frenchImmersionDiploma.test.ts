@@ -1,11 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   analyzeFrenchImmersionProgress,
-  countsTowardFrenchImmersionBeforeCompanionCaps,
-  frenchImmersionExcludedByFifthDigit,
-  FLS_IMMERSION_CERT_CODE,
   completedCoursesIncludeFls3500,
+  countsTowardFrenchImmersionBeforeCompanionCaps,
+  FLS_IMMERSION_CERT_CODE,
   frenchImmersionBalancedObjective,
+  frenchImmersionExcludedByFifthDigit,
   frenchImmersionHeuristicPickWeight,
   frenchImmersionMarginalObjectiveDelta,
   frenchImmersionOverallVolumePercent,

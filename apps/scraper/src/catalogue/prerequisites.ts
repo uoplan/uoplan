@@ -132,7 +132,7 @@ function isGradeIndicator(text: string): boolean {
  * "at the 3000 or 4000 level" / "niveau 3000 ou 4000" must not split on the inner `or`/`ou`.
  */
 function normalizeLevelOrDisjunction(text: string): string {
-  return text.replace(/\b(\d{4})\s+(or|ou)\s+(\d{4})\b/gi, "$1/$3");
+  return text.replaceAll(/\b(\d{4})\s+(or|ou)\s+(\d{4})\b/gi, "$1/$3");
 }
 
 /**
@@ -141,8 +141,8 @@ function normalizeLevelOrDisjunction(text: string): string {
  */
 function normalizeDisciplineOrInCredits(text: string): string {
   return text
-    .replace(/\bin\s+([A-Z]{3,4})\s+or\s+([A-Z]{3,4})\b/gi, "in ($1) or ($2)")
-    .replace(/\bdans\s+([A-Z]{3,4})\s+ou\s+([A-Z]{3,4})\b/gi, "dans ($1) ou ($2)");
+    .replaceAll(/\bin\s+([A-Z]{3,4})\s+or\s+([A-Z]{3,4})\b/gi, "in ($1) or ($2)")
+    .replaceAll(/\bdans\s+([A-Z]{3,4})\s+ou\s+([A-Z]{3,4})\b/gi, "dans ($1) ou ($2)");
 }
 
 // Common abbreviations that shouldn't trigger splits
@@ -227,7 +227,7 @@ function prereqLabelRegex(source: string, flags = "i"): RegExp {
 }
 
 export function extractPrereqSentence(raw: string): string | undefined {
-  const normalized = raw.replace(/\s+/g, " ").trim();
+  const normalized = raw.replaceAll(/\s+/g, " ").trim();
   if (!normalized) return undefined;
 
   // Check if text has bilingual format (contains both French and English labels)
@@ -291,12 +291,13 @@ export function extractPrereqSentence(raw: string): string | undefined {
       const after = trimmed.slice(i + 1, Math.min(trimmed.length, i + 20));
 
       // Check for common abbreviations (single letter + period + optional more letters)
-      if (/\b[A-Z]$/.test(before) || /\b[A-Z]\.$/.test(before)) {
-        // Could be B., M., etc. - look ahead to see if it's followed by Com, A, Sc, etc.
-        if (/^[A-Za-z]/.test(after) && !/^[A-Z]/.test(after)) {
-          // Likely part of abbreviation like B.Com, M.Sc.
-          continue;
-        }
+      if (
+        (/\b[A-Z]$/.test(before) || /\b[A-Z]\.$/.test(before)) &&
+        /^[A-Za-z]/.test(after) &&
+        !/^[A-Z]/.test(after)
+      ) {
+        // Could be B., M., etc. - likely part of abbreviation like B.Com, M.Sc.
+        continue;
       }
 
       // Check if period is inside parentheses - likely abbreviation
@@ -582,7 +583,7 @@ function parsePrereqPartsAsGroup(
 }
 
 function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
-  let inner = clause.replace(/\s+/g, " ").trim();
+  let inner = clause.replaceAll(/\s+/g, " ").trim();
   if (!inner) return undefined;
   inner = inner.replace(/^(?:and|et)\s+/i, "").trim();
   if (!inner) return undefined;
@@ -628,7 +629,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
       lastIndex = range.end + 1;
     }
     outside += inner.slice(lastIndex);
-    if (outside.replace(/[,\s]+/g, "") === "") {
+    if (outside.replaceAll(/[,\s]+/g, "") === "") {
       return parsePrereqPartsAsGroup(groupContents, "and_group", inner);
     }
   }
@@ -721,7 +722,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
               type: "non_course",
               text: partTrim,
               credits,
-              disciplines: disciplines.length ? disciplines : undefined,
+              disciplines: disciplines.length > 0 ? disciplines : undefined,
             },
             partTrim,
           ),
@@ -789,7 +790,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
         type: "non_course",
         text: inner,
         credits,
-        disciplines: disciplines.length ? disciplines : undefined,
+        disciplines: disciplines.length > 0 ? disciplines : undefined,
       },
       inner,
     );
@@ -817,10 +818,7 @@ function parsePrereqClause(clause: string): CoursePrereqNode | undefined {
 export function parseCoursePrerequisites(text: string): CoursePrereqNode | undefined {
   // Strip U+00AD soft hyphens (invisible discretionary hyphens from the source HTML)
   // so they don't break token/parenthesis boundary detection (e.g. a trailing "…)\u00ad").
-  const body = text
-    .replace(/\u00ad/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
+  const body = text.replaceAll("­", "").replaceAll(/\s+/g, " ").trim();
   if (!body) return undefined;
 
   // Split on semicolons or periods, but not:

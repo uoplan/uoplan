@@ -1,6 +1,6 @@
 import { Divider, Stack, Text } from "@mantine/core";
 import { useAppStore } from "../../store/appStore";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { ProgramStep } from "../steps/ProgramStep";
 import { CompletedCoursesStep } from "../steps/CompletedCoursesStep";
 

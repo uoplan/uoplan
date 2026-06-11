@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
-  CAL_START_MINUTES,
   CAL_END_MINUTES,
+  CAL_START_MINUTES,
+  clampToCalendarRange,
   minutesToPercent,
   percentToMinutes,
   snapMinutes,
-  clampToCalendarRange,
 } from "@uoplan/calendar";
 
 describe("calendar layout helpers", () => {

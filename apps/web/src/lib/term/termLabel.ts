@@ -1,4 +1,4 @@
-import { type TermSeason } from "@uoplan/core";
+import type { TermSeason } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { decode, fallback, formatTermLabelPlain } from "./termLabelPlain";
 

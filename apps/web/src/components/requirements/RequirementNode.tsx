@@ -1,16 +1,16 @@
-import { useState, useMemo, memo, type KeyboardEvent, type ReactNode } from "react";
-import { Stack, Text, Paper, Badge, Group, Collapse, Tooltip, UnstyledButton } from "@mantine/core";
-import { IconCheck, IconChevronDown, IconX, IconChartCohort } from "@tabler/icons-react";
+import { memo, useMemo, useState } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
+import { Badge, Collapse, Group, Paper, Stack, Text, Tooltip, UnstyledButton } from "@mantine/core";
+import { IconChartCohort, IconCheck, IconChevronDown, IconX } from "@tabler/icons-react";
 import type { ComboboxItem } from "@mantine/core";
-import type { DataCache } from "@uoplan/core";
+import type { DataCache, RequirementWithStatus } from "@uoplan/core";
 import {
-  normalizeCourseCode,
-  isGroupToken,
-  groupTokenPrefix,
   canonicalGroupToken,
+  groupTokenPrefix,
+  isGroupToken,
   makeGroupTokenInstance,
+  normalizeCourseCode,
 } from "@uoplan/core";
-import type { RequirementWithStatus } from "@uoplan/core";
 import {
   getConstrainMultiSelectOptions,
   simplifySingleChildChain,
@@ -26,10 +26,10 @@ import {
 } from "./requirementRenderUtils";
 import {
   BADGE_NO_SHRINK,
-  TITLE_FLEX,
   getRequirementChoiceGroupState,
   getRequirementRenderMeta,
   requirementIndentStyle,
+  TITLE_FLEX,
 } from "./requirementRenderPrimitives";
 
 function handleKeyboardToggle(e: KeyboardEvent<HTMLElement>, toggle: () => void) {
@@ -128,6 +128,7 @@ export const RequirementNode = memo(
     levelBuckets,
     languageBuckets,
     electiveLevelBuckets,
+    // oxlint-disable-next-line oxc/only-used-in-recursion -- forwarded to nested RequirementNode renders
     unassignedCompletedSet,
     unassignedCompletedSetNormalized,
     allAssignedCoursesNormalized,

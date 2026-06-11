@@ -1,22 +1,22 @@
 import { describe, expect, it } from "vitest";
 import type { GradeVizData } from "@uoplan/core";
-import {
-  buildTermPresenceIndex,
-  type ExploreCourseSearchEntry,
-  type ExploreOfferingFlat,
-  type ExploreProfessorSearchEntry,
+import { buildTermPresenceIndex } from "./gradesSearch";
+import type {
+  ExploreCourseSearchEntry,
+  ExploreOfferingFlat,
+  ExploreProfessorSearchEntry,
 } from "./gradesSearch";
 import {
-  EMPTY_FILTERS,
   compareCourseEntries,
   compareProfessorEntries,
+  EMPTY_FILTERS,
   filterCourseEntries,
   filterProfessorEntries,
   getCourseDiscipline,
   parseExploreFiltersSearch,
   serializeExploreFiltersSearch,
-  type ExploreFilterState,
 } from "./exploreFilters";
+import type { ExploreFilterState } from "./exploreFilters";
 import { testCourseCode, testProfessorName } from "../../test/brands";
 
 function makeGradeViz(entries: Array<{ grade: string; count: number }>): GradeVizData {
@@ -390,7 +390,7 @@ describe("term presence filter", () => {
     const a = makeCourseEntry({ normCode: "csi1100", componentId: "csi1100" });
     const filters: ExploreFilterState = { ...EMPTY_FILTERS, termId: 2269 };
 
-    expect(filterCourseEntries([a], filters, undefined)).toHaveLength(0);
+    expect(filterCourseEntries([a], filters)).toHaveLength(0);
     expect(
       filterCourseEntries([a], filters, { courseComponents: null, profGroups: null }),
     ).toHaveLength(0);

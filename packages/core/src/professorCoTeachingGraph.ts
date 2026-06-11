@@ -34,7 +34,7 @@ export function professorGraphId(legacyId?: number, name?: string): string {
 function subjectFromCourseCode(code: string): string {
   const parsed = parseCourseCode(code);
   if (parsed) return parsed.discipline;
-  const [subject = ""] = code.trim().replace(/\s+/g, " ").split(" ");
+  const [subject = ""] = code.trim().replaceAll(/\s+/g, " ").split(" ");
   return subject.toUpperCase();
 }
 

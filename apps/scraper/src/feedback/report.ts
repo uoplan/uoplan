@@ -53,7 +53,7 @@ function stripOptionLetter(text: string): string {
 }
 
 function toNumber(text: string): number | null {
-  const cleaned = normalizeWhitespace(text).replace(/[,%]/g, "");
+  const cleaned = normalizeWhitespace(text).replaceAll(/[,%]/g, "");
   if (cleaned === "" || cleaned === "-" || cleaned.toUpperCase() === "N/A") return null;
   const n = Number(cleaned);
   return Number.isFinite(n) ? n : null;

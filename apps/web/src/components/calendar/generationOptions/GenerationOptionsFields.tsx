@@ -1,4 +1,5 @@
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
+import type { ReactNode } from "react";
 import {
   Alert,
   Badge,
@@ -15,9 +16,8 @@ import {
   Text,
   TextInput,
   UnstyledButton,
-  type MultiSelectProps,
-  type OptionsFilter,
 } from "@mantine/core";
+import type { MultiSelectProps, OptionsFilter } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import type { DayOfWeek } from "@uoplan/core";
 import { minutesToTime24 } from "@uoplan/core";

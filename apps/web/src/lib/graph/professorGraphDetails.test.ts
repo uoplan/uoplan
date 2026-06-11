@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  buildProfessorCoTeachingGraph,
-  professorGraphId,
-  type CourseGradesData,
-} from "@uoplan/core";
+import { buildProfessorCoTeachingGraph, professorGraphId } from "@uoplan/core";
+import type { CourseGradesData } from "@uoplan/core";
 import { testCourseCode, testProfessorName } from "../../test/brands";
 import {
   buildOfferingsByProfessorId,

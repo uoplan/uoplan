@@ -76,15 +76,14 @@ describe("runtime grade lookup reproduces scraper-enriched source distributions"
             if (section.distribution) {
               withEmbedded += 1;
               if (
-                res.kind === "none" ||
-                JSON.stringify(res.distribution) !== JSON.stringify(section.distribution)
+                (res.kind === "none" ||
+                  JSON.stringify(res.distribution) !== JSON.stringify(section.distribution)) &&
+                mismatches.length < 10
               ) {
-                if (mismatches.length < 10) {
-                  mismatches.push(
-                    `${file} ${courseCode}: ` +
-                      `source=${JSON.stringify(section.distribution)} lookup=${JSON.stringify(res.distribution)} (${res.kind})`,
-                  );
-                }
+                mismatches.push(
+                  `${file} ${courseCode}: ` +
+                    `source=${JSON.stringify(section.distribution)} lookup=${JSON.stringify(res.distribution)} (${res.kind})`,
+                );
               }
             } else {
               // No source distribution => enricher found none => lookup must agree.

@@ -12,5 +12,12 @@ export function registerServiceWorker(): void {
     return;
   }
   // Service worker registration is best-effort and intentionally not surfaced to users.
-  navigator.serviceWorker.register("/sw.js", { type: "classic" }).catch(console.error);
+  void (async () => {
+    try {
+      await navigator.serviceWorker.register("/sw.js", { type: "classic" });
+    } catch (err) {
+      // oxlint-disable-next-line no-console -- intentional best-effort service worker registration logging
+      console.error(err);
+    }
+  })();
 }

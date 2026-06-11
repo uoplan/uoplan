@@ -2,17 +2,14 @@ import { describe, expect, it } from "vitest";
 import type { ComponentSection } from "../../dataTypes";
 import type { CourseEnrollment, GenerationConstraints } from "../../generation";
 import {
-  ConstraintPipeline,
   blacklistConstraint,
   compressedScheduleConstraint,
+  ConstraintPipeline,
   minProfessorRatingConstraint,
   overlapConstraint,
   timeWindowConstraint,
-  type Constraint,
-  type ConstraintContext,
-  type CourseSetCtx,
-  type RejectionTrace,
 } from "./index";
+import type { Constraint, ConstraintContext, CourseSetCtx, RejectionTrace } from "./index";
 import { buildFixtureCache } from "../../generation/tests/golden/fixtures";
 import { normalizeCourseCode } from "../../utils/courseUtils";
 

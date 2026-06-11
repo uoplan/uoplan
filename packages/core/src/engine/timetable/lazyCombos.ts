@@ -68,15 +68,15 @@ export function* lazyCourseCombos(
   }
 
   // Lazy cartesian walk via index odometer over the shuffled section arrays.
-  const indices = new Array(sectionArrays.length).fill(0);
+  const indices = Array.from<number>({ length: sectionArrays.length }).fill(0);
   const total = sectionArrays.reduce((n, a) => n * a.length, 1);
   for (let produced = 0; produced < total; produced++) {
     const sections = sectionArrays.map((arr, i) => arr[indices[i]]);
     if (!sectionsHaveInternalOverlap(sections)) {
       const obj: Record<string, { section: ComponentSection }> = {};
-      componentKeys.forEach((key, idx) => {
+      for (const [idx, key] of componentKeys.entries()) {
         obj[key] = { section: sections[idx] };
-      });
+      }
       yield { combo: obj, enrollment: getEnrollmentsForCourse(schedule, obj) };
     }
     // advance odometer

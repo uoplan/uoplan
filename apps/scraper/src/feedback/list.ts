@@ -30,7 +30,7 @@ const SELECTED_ID_RE = /SelectedIDforPrint=([a-f0-9]+)/i;
 
 export function parseTotalReports(html: string): number | null {
   const m = /of\s+([\d,]+)\s+Item/i.exec(html);
-  return m ? Number(m[1].replace(/,/g, "")) : null;
+  return m ? Number(m[1].replaceAll(",", "")) : null;
 }
 
 interface ResultsRange {
@@ -49,7 +49,7 @@ interface ResultsRange {
 export function parseResultsRange(html: string): ResultsRange | null {
   const m = /Results:\s*([\d,]+)\s*-\s*([\d,]+)\s*of\s*([\d,]+)/i.exec(html);
   if (!m) return null;
-  const num = (s: string) => Number(s.replace(/,/g, ""));
+  const num = (s: string) => Number(s.replaceAll(",", ""));
   return { from: num(m[1]), to: num(m[2]), total: num(m[3]) };
 }
 
@@ -200,7 +200,7 @@ async function waitForEnabledNext(page: Page): Promise<Locator | null> {
   while (Date.now() < deadline) {
     const next = page.locator(NEXT_BUTTON_SELECTOR).last();
     if ((await next.count()) > 0) return next;
-    await new Promise((r) => setTimeout(r, 250));
+    await new Promise((resolve) => setTimeout(resolve, 250));
   }
   return null;
 }
@@ -226,7 +226,7 @@ async function waitForAdvance(
       const id = firstRowId(html);
       if (id && id !== previousId) return null;
     }
-    await new Promise((r) => setTimeout(r, 250));
+    await new Promise((resolve) => setTimeout(resolve, 250));
   }
   return "no-change";
 }

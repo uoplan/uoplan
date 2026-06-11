@@ -1,4 +1,4 @@
-import { Button, Group, Modal, Stack, Text, rem } from "@mantine/core";
+import { Button, Group, Modal, rem, Stack, Text } from "@mantine/core";
 
 const MODAL_PAD = rem(24);
 

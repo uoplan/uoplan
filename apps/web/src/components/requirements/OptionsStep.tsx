@@ -8,7 +8,7 @@ import {
   hasMissingOptionSelections,
   nodeHasOptionGroups,
 } from "../../lib/requirements/requirementUtils";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 
 const PAGER_INCOMPLETE_ID = "optionsStep.pager.incomplete";
 const PAGER_COMPLETE_ID = "optionsStep.pager.complete";

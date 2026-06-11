@@ -6,18 +6,17 @@ import {
   computeSeasonComparison,
   feedbackAllViews,
   feedbackOverallSeries,
-  type TermSeason,
-  type TrendPoint,
 } from "@uoplan/core";
+import type { TermSeason, TrendPoint } from "@uoplan/core";
 import { useMemo } from "react";
 import { formatLocaleNumber, tr, useTr } from "../../i18n";
 import { useFeedbackData } from "../../hooks/useFeedbackData";
 import { formatTermLabelShort } from "../../lib/term/termLabel";
-import { METRIC_COLOR, formatMetricValue, pickMetric } from "../../lib/trends/metrics";
+import { formatMetricValue, METRIC_COLOR, pickMetric } from "../../lib/trends/metrics";
 import type { TrendsMetric } from "../../lib/trends/searchParams";
 import { AppCard } from "../shared/AppCard";
 import { AnimatedNumber } from "../shared/AnimatedNumber";
-import { SEASON_COLOR, colorForIndex } from "../../lib/trends/palette";
+import { colorForIndex, SEASON_COLOR } from "../../lib/trends/palette";
 import { CATEGORY_PREVIEW_HEIGHT, TrendsCategoryCard } from "./TrendsCategoryCard";
 import { useTrends } from "./trendsContext";
 

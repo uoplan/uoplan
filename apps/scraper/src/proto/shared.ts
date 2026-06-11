@@ -4,7 +4,7 @@ export function parseTermIdToNumber(termId: string): number {
 }
 
 export function normalizeCode(value: unknown): string {
-  return (typeof value === "string" ? value : "").trim().replace(/\s+/g, " ");
+  return (typeof value === "string" ? value : "").trim().replaceAll(/\s+/g, " ");
 }
 
 export class CourseCodeIndexer {

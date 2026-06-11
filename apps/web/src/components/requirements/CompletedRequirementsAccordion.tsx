@@ -1,12 +1,12 @@
 import { useState } from "react";
 import {
-  Paper,
-  Group,
-  Text,
   Badge,
-  Collapse,
-  Stack,
   Box,
+  Collapse,
+  Group,
+  Paper,
+  Stack,
+  Text,
   Tooltip,
   UnstyledButton,
 } from "@mantine/core";

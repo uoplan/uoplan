@@ -2,11 +2,8 @@ import * as Comlink from "comlink";
 import { notifications } from "@mantine/notifications";
 import type { AppState } from "../store/types";
 import type { CacheDataKey } from "../lib/dataCacheLoader";
-import {
-  pickGenerateSchedulesInput,
-  type GenerateSchedulesInput,
-  type GenerateSchedulesMode,
-} from "../lib/generateSchedulesInput";
+import { pickGenerateSchedulesInput } from "../lib/generateSchedulesInput";
+import type { GenerateSchedulesInput, GenerateSchedulesMode } from "../lib/generateSchedulesInput";
 import type { GenerateSchedulesResult } from "../lib/generateSchedulesAction";
 import { tr } from "../i18n";
 import type { ScheduleWorkerApi } from "./scheduleWorkerApi";
@@ -115,16 +112,16 @@ function withGenerationTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
       settle();
       reject(new ScheduleGenerationCancelledError());
     };
-    promise.then(
-      (value) => {
+    void (async () => {
+      try {
+        const value = await promise;
         settle();
         resolve(value);
-      },
-      (err) => {
+      } catch (err) {
         settle();
         reject(err);
-      },
-    );
+      }
+    })();
   });
 }
 
@@ -161,46 +158,46 @@ export async function runScheduleGeneration(
   const input = inputFromState(state, mode);
   const dataKey = dataKeyFromState(state);
 
-  if (isWorkerAvailable()) {
-    if (dataKey) {
-      try {
-        return await withGenerationTimeout(
-          getRemote().generateSchedules(dataKey, input),
-          SCHEDULE_GENERATION_TIMEOUT_MS,
-        );
-      } catch (err) {
-        if (err instanceof ScheduleGenerationCancelledError) {
-          // The user changed a generation option mid-run; abandon this stale
-          // computation. Kill the worker (the comlink call can't be aborted) and
-          // pre-warm a fresh one. Return null so the caller applies nothing and
-          // simply resolves its loading state, leaving the previous schedule and
-          // the now-dirty options in place for a manual re-run.
-          terminateScheduleWorker();
-          void prewarmScheduleWorker(state);
-          return null;
-        }
-        if (err instanceof ScheduleGenerationTimeoutError) {
-          // The worker is stuck in a runaway generation; kill it so the hung
-          // computation is abandoned, then respawn a clean one for next time.
-          console.error("[scheduleWorker] generation timed out, terminating worker", err);
-          terminateScheduleWorker();
-          // Pre-warm a fresh worker in the background so the next run is ready.
-          // Do NOT fall back to in-process generation: that would freeze the
-          // main thread for the same runaway computation we just escaped.
-          void prewarmScheduleWorker(state);
-          // Return a structured error result (rather than null) so the caller
-          // resolves its loading state and surfaces the timeout to the user,
-          // instead of hanging forever on "Loading course data...".
-          return timeoutGenerationResult();
-        }
-        console.error("[scheduleWorker] generation failed, falling back in-process", err);
-        notifications.show({
-          color: "yellow",
-          title: tr(SCHEDULE_WORKER_FALLBACK_TITLE_ID),
-          message: tr(SCHEDULE_WORKER_FALLBACK_MESSAGE_ID),
-        });
-        // fall through to the in-process path so the user still gets a result
+  if (isWorkerAvailable() && dataKey) {
+    try {
+      return await withGenerationTimeout(
+        getRemote().generateSchedules(dataKey, input),
+        SCHEDULE_GENERATION_TIMEOUT_MS,
+      );
+    } catch (err) {
+      if (err instanceof ScheduleGenerationCancelledError) {
+        // The user changed a generation option mid-run; abandon this stale
+        // computation. Kill the worker (the comlink call can't be aborted) and
+        // pre-warm a fresh one. Return null so the caller applies nothing and
+        // simply resolves its loading state, leaving the previous schedule and
+        // the now-dirty options in place for a manual re-run.
+        terminateScheduleWorker();
+        void prewarmScheduleWorker(state);
+        return null;
       }
+      if (err instanceof ScheduleGenerationTimeoutError) {
+        // The worker is stuck in a runaway generation; kill it so the hung
+        // computation is abandoned, then respawn a clean one for next time.
+        // oxlint-disable-next-line no-console -- intentional schedule worker timeout logging
+        console.error("[scheduleWorker] generation timed out, terminating worker", err);
+        terminateScheduleWorker();
+        // Pre-warm a fresh worker in the background so the next run is ready.
+        // Do NOT fall back to in-process generation: that would freeze the
+        // main thread for the same runaway computation we just escaped.
+        void prewarmScheduleWorker(state);
+        // Return a structured error result (rather than null) so the caller
+        // resolves its loading state and surfaces the timeout to the user,
+        // instead of hanging forever on "Loading course data...".
+        return timeoutGenerationResult();
+      }
+      // oxlint-disable-next-line no-console -- intentional schedule worker fallback logging
+      console.error("[scheduleWorker] generation failed, falling back in-process", err);
+      notifications.show({
+        color: "yellow",
+        title: tr(SCHEDULE_WORKER_FALLBACK_TITLE_ID),
+        message: tr(SCHEDULE_WORKER_FALLBACK_MESSAGE_ID),
+      });
+      // fall through to the in-process path so the user still gets a result
     }
   }
 
@@ -236,6 +233,7 @@ export async function prewarmScheduleWorker(state: AppState): Promise<void> {
     await getRemote().loadData(dataKey);
   } catch (err) {
     // Worker prewarm is intentionally best-effort; generation can load data on demand.
+    // oxlint-disable-next-line no-console -- intentional best-effort worker prewarm logging
     console.warn("[scheduleWorker] prewarm failed", err);
   }
 }

@@ -6,28 +6,30 @@ import type {
   GenerationMessageDescriptor,
 } from "../store/types";
 import {
-  type DataCache,
-  type GeneratedSchedule,
-  type GenerationConstraints,
-  type RequirementWithStatus,
-  type ScheduleEngine,
-  type AdvancedRequestInput,
-  type BasicRequestInput,
-  type MappedGenerationResult,
+  buildEffectiveRemainingRequirements,
   cacheWithClosedFilter,
   cacheWithPerCourseVirtualFilter,
-  normalizeCourseCode,
   diagnoseTimetableFailure,
-  type TimetableFailureDiagnostics,
-  runBasicGeneration,
-  runAdvancedGeneration,
-  buildEffectiveRemainingRequirements,
   gateRemainingByPriority,
+  normalizeCourseCode,
+  runAdvancedGeneration,
+  runBasicGeneration,
+} from "@uoplan/core";
+import type {
+  AdvancedRequestInput,
+  BasicRequestInput,
+  DataCache,
+  GeneratedSchedule,
+  GenerationConstraints,
+  MappedGenerationResult,
+  RequirementWithStatus,
+  ScheduleEngine,
+  TimetableFailureDiagnostics,
 } from "@uoplan/core";
 import { buildColorMap } from "./colorMap";
 import { avoidedDaysFromBlocks } from "./blockedTimes";
 import { resolveDesiredCourses } from "./generation/resolveDesiredCourses";
-import { type GenerateSchedulesInput } from "./generateSchedulesInput";
+import type { GenerateSchedulesInput } from "./generateSchedulesInput";
 
 // Re-export helpers used by tests and other modules
 export { expandConstrainedPerRequirement, buildPendingGroupPickCounts } from "@uoplan/core";
@@ -227,9 +229,9 @@ export async function generateSchedulesAction(
   const missingOptionGroups: string[] = [];
   function walkNodes(
     nodes: RequirementWithStatus[],
-    parentRequirementId: string | undefined,
-    parentSelectedIndex: number | undefined,
-    parentChildIndex: number | undefined,
+    parentRequirementId?: string,
+    parentSelectedIndex?: number,
+    parentChildIndex?: number,
   ): void {
     for (let idx = 0; idx < nodes.length; idx++) {
       const node = nodes[idx];
@@ -263,7 +265,7 @@ export async function generateSchedulesAction(
       }
     }
   }
-  walkNodes(requirementTreeWithStatus, undefined, undefined, undefined);
+  walkNodes(requirementTreeWithStatus);
 
   if (missingOptionGroups.length > 0) {
     return {

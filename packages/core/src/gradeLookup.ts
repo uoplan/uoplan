@@ -42,10 +42,10 @@ export interface SectionGradeResult {
 export function normalizeInstructorName(value: string): InstructorNameKey {
   return String(value)
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replaceAll(/[\u0300-\u036f]/g, "")
     .trim()
     .toLowerCase()
-    .replace(/\s+/g, " ") as InstructorNameKey;
+    .replaceAll(/\s+/g, " ") as InstructorNameKey;
 }
 
 /** Sum grade distributions bucket-by-bucket, ignoring non-finite values. */

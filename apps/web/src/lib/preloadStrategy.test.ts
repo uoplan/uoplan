@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { shouldEnablePreload } from "./preloadStrategy";
 
 describe("shouldEnablePreload", () => {
@@ -20,6 +20,6 @@ describe("shouldEnablePreload", () => {
   });
 
   it("enables preloading when the Network Information API is unavailable", () => {
-    expect(shouldEnablePreload(undefined)).toBe("intent");
+    expect(shouldEnablePreload()).toBe("intent");
   });
 });

@@ -1,4 +1,5 @@
-import { createFetchBytesTransport, type FetchBytes } from "./transport";
+import { createFetchBytesTransport } from "./transport";
+import type { FetchBytes } from "./transport";
 import { dataManifest } from "./generated/dataManifest";
 
 /** Minimal shape of a Cloudflare `Fetcher` (e.g. `env.ASSETS`). */

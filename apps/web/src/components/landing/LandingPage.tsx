@@ -3,7 +3,8 @@ import { useMediaQuery } from "@mantine/hooks";
 import { IconAffiliate, IconCalendar, IconChartHistogram, IconCompass } from "@tabler/icons-react";
 import { m } from "framer-motion";
 import { useCallback, useState } from "react";
-import { useTr, dynamicActivate, tr, type AppLocale } from "../../i18n";
+import { dynamicActivate, tr, useTr } from "../../i18n";
+import type { AppLocale } from "../../i18n";
 import { ChromeControls } from "../shared/ChromeControls";
 import { DonationBanner } from "./DonationBanner";
 import { ExperimentalCarousel } from "./ExperimentalCarousel";
@@ -22,7 +23,7 @@ export function LandingPage() {
         return;
       }
       setIsLangTransitioning(true);
-      await new Promise((r) => setTimeout(r, 130));
+      await new Promise((resolve) => setTimeout(resolve, 130));
       await dynamicActivate(locale);
       setIsLangTransitioning(false);
     },

@@ -3,13 +3,9 @@ import { Alert, Button, List, Modal, Stack, Text, TextInput } from "@mantine/cor
 import { IconAlertCircle, IconCircleCheck, IconInfoCircle } from "@tabler/icons-react";
 import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
-import {
-  parseUEnrollUrl,
-  resolveUEnrollSchedule,
-  type ParsedUEnrollData,
-  type UEnrollResolveResult,
-} from "../../lib/importFromUEnroll";
-import { useTr, tr } from "../../i18n";
+import { parseUEnrollUrl, resolveUEnrollSchedule } from "../../lib/importFromUEnroll";
+import type { ParsedUEnrollData, UEnrollResolveResult } from "../../lib/importFromUEnroll";
+import { tr, useTr } from "../../i18n";
 import { formatTermLabel } from "../../lib/term/termLabel";
 
 interface UEnrollImportModalProps {

@@ -1,4 +1,5 @@
-import { createTheme, rem, type MantineColorsTuple } from "@mantine/core";
+import { createTheme, rem } from "@mantine/core";
+import type { MantineColorsTuple } from "@mantine/core";
 
 const accentBlue: MantineColorsTuple = [
   "oklch(0.9705 0.0142 254.6)",

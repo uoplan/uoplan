@@ -132,8 +132,12 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch((err) => {
-  console.error("feedback CLI failed:");
-  console.error(err);
-  process.exit(1);
-});
+void (async () => {
+  try {
+    await main();
+  } catch (err) {
+    console.error("feedback CLI failed:");
+    console.error(err);
+    process.exit(1);
+  }
+})();

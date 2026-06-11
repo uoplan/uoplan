@@ -1,7 +1,6 @@
-/* eslint-disable */
 import fs from "node:fs/promises";
 import path from "node:path";
-import * as FeedbackProto from "@uoplan/proto/feedback";
+import type * as FeedbackProto from "@uoplan/proto/feedback";
 import { optionsPath } from "../feedback/cache.ts";
 import { FEEDBACK_DATA_DIR, SCRAPER_DATA_DIR } from "../shared/paths.ts";
 import { readJson } from "../shared/json.ts";
@@ -176,14 +175,14 @@ export async function buildFeedbackData(
   // Resolve course codes against the shared `indices.pb` course list so their
   // strings are not duplicated here; codes absent from it go into `extraCourses`
   // and are addressed by `indicesCourseCount + extraIndex`.
-  const normalizeCode = (value: string): string => value.trim().replace(/\s+/g, " ");
+  const normalizeCode = (value: string): string => value.trim().replaceAll(/\s+/g, " ");
   const indices = await readJson<{ courses?: string[] }>(
     path.join(SCRAPER_DATA_DIR, "indices.json"),
   );
   const indicesCourses = indices.courses ?? [];
   const indicesCourseCount = indicesCourses.length;
   const globalCourseIndex = new Map<string, number>();
-  indicesCourses.forEach((code, i) => globalCourseIndex.set(normalizeCode(code), i));
+  for (const [i, code] of indicesCourses.entries()) globalCourseIndex.set(normalizeCode(code), i);
   const extraCourses = new Dict();
   const resolveCourse = (code: string): number => {
     const normalized = normalizeCode(code);

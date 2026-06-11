@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { buildFeedbackIndex, FeedbackProto, type FeedbackIndex } from "@uoplan/core";
+import { buildFeedbackIndex, FeedbackProto } from "@uoplan/core";
+import type { FeedbackIndex } from "@uoplan/core";
 import { dataAssetIds } from "@uoplan/data";
 import { useAppStore } from "../store/appStore";
 import { loadProto } from "../lib/protoFetch";
@@ -18,13 +19,15 @@ async function loadFeedbackIndex(indicesCourses: readonly string[]): Promise<Fee
   if (cachedIndex) return cachedIndex;
   if (!inFlight) {
     inFlight = (async () => {
-      const decoded = await loadProto(FeedbackProto.FeedbackData, dataAssetIds.feedback);
-      cachedIndex = buildFeedbackIndex(decoded, indicesCourses);
-      return cachedIndex;
-    })().catch((err) => {
-      inFlight = null; // allow a later retry
-      throw err;
-    });
+      try {
+        const decoded = await loadProto(FeedbackProto.FeedbackData, dataAssetIds.feedback);
+        cachedIndex = buildFeedbackIndex(decoded, indicesCourses);
+        return cachedIndex;
+      } catch (err) {
+        inFlight = null; // allow a later retry
+        throw err;
+      }
+    })();
   }
   return inFlight;
 }
@@ -50,11 +53,11 @@ export function useFeedbackData(enabled = true): FeedbackState {
     }
     let active = true;
     setState((prev) => ({ ...prev, loading: true, error: null }));
-    loadFeedbackIndex(indicesCourses)
-      .then((index) => {
+    void (async () => {
+      try {
+        const index = await loadFeedbackIndex(indicesCourses);
         if (active) setState({ loading: false, data: index, error: null });
-      })
-      .catch((err: unknown) => {
+      } catch (err: unknown) {
         if (active) {
           setState({
             loading: false,
@@ -62,7 +65,8 @@ export function useFeedbackData(enabled = true): FeedbackState {
             error: err instanceof Error ? err.message : "Failed to load feedback",
           });
         }
-      });
+      }
+    })();
     return () => {
       active = false;
     };

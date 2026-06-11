@@ -6,13 +6,11 @@ import { IconClock } from "@tabler/icons-react";
 import type { ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeCourseCode } from "@uoplan/core";
 import { useShallow } from "zustand/react/shallow";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { useAppStore } from "../../store/appStore";
 import { formatTermLabel } from "../../lib/term/termLabel";
-import {
-  type ProfessorOfferingGroup,
-  groupOfferingsByProfessor,
-} from "../../lib/explore/gradesSearch";
+import { groupOfferingsByProfessor } from "../../lib/explore/gradesSearch";
+import type { ProfessorOfferingGroup } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./exploreOfferingsContext";
 import { CatalogueLink } from "./CatalogueLink";
 import { useCourseFeedbackViews } from "../../hooks/useFeedbackViews";
@@ -125,7 +123,7 @@ export function ExploreCoursePage({
   }, [componentId, terms, getTermPresence]);
 
   const courseEntry = useMemo<BackState | undefined>(() => {
-    if (!selectedCourseMeta) return undefined;
+    if (!selectedCourseMeta) return;
     return {
       to: "/explore/course/$course",
       params: { course: urlCourseParam },

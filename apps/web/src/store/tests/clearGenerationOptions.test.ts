@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { createAppStore } from "../appStore";
 import {
   DEFAULT_COURSES_THIS_SEMESTER,

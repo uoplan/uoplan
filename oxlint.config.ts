@@ -1,7 +1,7 @@
 import { defineConfig } from "oxlint";
 
 export default defineConfig({
-  plugins: ["typescript", "react", "jsx-a11y"],
+  plugins: ["typescript", "react", "jsx-a11y", "unicorn", "oxc", "import", "promise", "node"],
   jsPlugins: ["./scripts/i18n/oxlint-plugin.mjs"],
   categories: {
     correctness: "error",
@@ -22,6 +22,7 @@ export default defineConfig({
     "apps/web/src/assets/data/**",
     "**/public/**",
     "**/src/generated/**",
+    "apps/web/src/routeTree.gen.ts",
     "apps/notifications/**",
     "worker-configuration.d.ts",
   ],
@@ -45,6 +46,42 @@ export default defineConfig({
         },
       },
     ],
+    "typescript/no-explicit-any": "error",
+
+    // Import hygiene
+    "import/no-duplicates": "error",
+    "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
+    "import/first": "error",
+    "import/no-self-import": "error",
+    "import/no-cycle": "error",
+    // Sort named members within an import statement (autofixable). Declaration
+    // ordering between statements is intentionally left off — oxlint cannot
+    // autofix it and it conflicts with grouped/side-effect imports.
+    "sort-imports": [
+      "error",
+      { ignoreDeclarationSort: true, ignoreCase: true, allowSeparatedGroups: true },
+    ],
+
+    // Promise safety
+    "promise/prefer-await-to-then": "error",
+    "promise/param-names": "error",
+
+    // Modern JS idioms (unicorn)
+    "unicorn/prefer-node-protocol": "error",
+    "unicorn/no-useless-undefined": "error",
+    "unicorn/no-array-for-each": "error",
+    "unicorn/prefer-string-replace-all": "error",
+    "unicorn/explicit-length-check": "error",
+    "unicorn/no-lonely-if": "error",
+    "unicorn/prefer-string-slice": "error",
+    "unicorn/prefer-array-some": "error",
+    "unicorn/prefer-array-flat-map": "error",
+    "unicorn/throw-new-error": "error",
+    "unicorn/prefer-date-now": "error",
+
+    // General
+    "no-console": "error",
+    "prefer-template": "error",
   },
   overrides: [
     {
@@ -89,6 +126,15 @@ export default defineConfig({
         // Referencing mock methods (e.g. `expect(mock.put).toHaveBeenCalled()`)
         // is the standard test pattern and a known unbound-method false positive.
         "typescript/unbound-method": "off",
+        "no-console": "off",
+      },
+    },
+    {
+      // The scraper is a Node CLI/tooling suite where stdout/stderr is the
+      // intended output channel, so `console` usage is expected here.
+      files: ["apps/scraper/**/*.{ts,tsx}"],
+      rules: {
+        "no-console": "off",
       },
     },
     {

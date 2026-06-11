@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createSeededRng } from "../../seededRandom";
-import { ConstraintPipeline, overlapConstraint, type ConstraintContext } from "../constraints";
+import { ConstraintPipeline, overlapConstraint } from "../constraints";
+import type { ConstraintContext } from "../constraints";
 import { buildDataCache } from "../../dataCache";
 import type { Catalogue, SchedulesData } from "../../dataTypes";
 import { makeSchedule, makeSection } from "../../generation/tests/golden/fixtures";

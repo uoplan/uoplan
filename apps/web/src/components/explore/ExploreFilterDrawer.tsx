@@ -1,6 +1,6 @@
 import { ActionIcon, Box, Divider, Stack, Text, Tooltip } from "@mantine/core";
 import { IconEraser } from "@tabler/icons-react";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { BottomDrawer } from "../shared/BottomDrawer";

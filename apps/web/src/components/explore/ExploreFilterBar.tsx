@@ -3,11 +3,11 @@ import { useMediaQuery } from "@mantine/hooks";
 import { IconArrowsSort, IconEraser } from "@tabler/icons-react";
 import { AnimatePresence, m } from "framer-motion";
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
-import { ExploreFilterPopoverContent, type DisciplineOption } from "./ExploreFilterPopoverContent";
-import type { TermOption } from "./ExploreFilterPopoverContent";
+import { ExploreFilterPopoverContent } from "./ExploreFilterPopoverContent";
+import type { DisciplineOption, TermOption } from "./ExploreFilterPopoverContent";
 import { ExploreFilterDrawer } from "./ExploreFilterDrawer";
 
 const FILTER_KEYS = [

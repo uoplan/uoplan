@@ -1,12 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
+  collectCompletedRequirements,
   computeRemainingRequirements,
   computeRequirementTreeWithStatus,
-  collectCompletedRequirements,
 } from "../requirements";
 import { buildDataCache } from "../dataCache";
-import type { Catalogue, Program } from "../dataTypes";
-import type { SchedulesData } from "../dataTypes";
+import type { Catalogue, Program, SchedulesData } from "../dataTypes";
 import { normalizeCourseCode } from "../utils/courseUtils";
 
 const minimalCatalogue: Catalogue = {

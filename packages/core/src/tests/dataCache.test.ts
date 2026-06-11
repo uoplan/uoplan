@@ -1,12 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   applyLatestAliasesToMergedCourses,
   buildDataCache,
   normalizeCourseCode,
   removeMergedCoursesSupersededByAliases,
 } from "../dataCache";
-import type { Catalogue } from "../dataTypes";
-import type { SchedulesData } from "../dataTypes";
+import type { Catalogue, SchedulesData } from "../dataTypes";
 
 const minimalCatalogue: Catalogue = {
   courses: [

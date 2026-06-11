@@ -13,7 +13,7 @@ export interface TranscriptParseResult {
 
 /** Lenient detection for transcript PDFs (EN/FR layout variants). */
 export function detectFrenchImmersionStreamHint(fullText: string): boolean {
-  const t = fullText.toLowerCase().replace(/\s+/g, " ");
+  const t = fullText.toLowerCase().replaceAll(/\s+/g, " ");
   if (/french\s+immersion/.test(t)) return true;
   if (/immersion\s+fran[cç]aise/.test(t)) return true;
   if (/immersion\s+stream/.test(t)) return true;

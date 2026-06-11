@@ -4,8 +4,8 @@ import { useMemo } from "react";
 import { tr } from "../../i18n";
 import { ChartCard } from "./ChartCard";
 import {
-  METRIC_COLOR,
   formatMetricValue,
+  METRIC_COLOR,
   metricDomain,
   pickMetric,
 } from "../../lib/trends/metrics";

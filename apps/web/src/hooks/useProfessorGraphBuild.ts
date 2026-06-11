@@ -85,14 +85,19 @@ export function useProfessorGraphBuild(grades: CourseGradesData | null | undefin
     };
 
     const runMainThreadFallback = () => {
-      void buildOnMainThread(grades, handleProgress, () => cancelled)
-        .then(({ graph, offeringsByProfessorId: offerings }) => {
+      void (async () => {
+        try {
+          const { graph, offeringsByProfessorId: offerings } = await buildOnMainThread(
+            grades,
+            handleProgress,
+            () => cancelled,
+          );
           handleDone(graph, offerings);
-        })
-        .catch((err: unknown) => {
+        } catch (err: unknown) {
           if (cancelled || (err instanceof Error && err.message === "cancelled")) return;
           setBuildError(err instanceof Error ? err.message : "Failed to build professor graph");
-        });
+        }
+      })();
     };
 
     let worker: Worker | null = null;

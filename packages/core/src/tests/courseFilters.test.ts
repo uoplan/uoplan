@@ -1,9 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  isGraduateCourse,
-  getCourseLevelBucket,
-  getCourseLanguageBucket,
   courseMatchesFilters,
+  getCourseLanguageBucket,
+  getCourseLevelBucket,
+  isGraduateCourse,
 } from "../courseFilters";
 
 describe("isGraduateCourse", () => {

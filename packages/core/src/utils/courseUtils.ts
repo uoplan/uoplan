@@ -151,7 +151,7 @@ const REPEATABLE_FLS_NUMBERS = new Set([2581, 3581, 4581, 4781]);
 export function isRepeatableCourse(code: string): boolean {
   const parsed = parseCourseCode(normalizeCourseCode(code));
   if (!parsed || parsed.discipline !== "FLS") return false;
-  const digits = parsed.number.replace(/[^0-9]/g, "");
+  const digits = parsed.number.replaceAll(/[^0-9]/g, "");
   const primary = parseInt(digits.slice(0, 4), 10);
   return !Number.isNaN(primary) && REPEATABLE_FLS_NUMBERS.has(primary);
 }

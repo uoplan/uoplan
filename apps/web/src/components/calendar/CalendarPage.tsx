@@ -597,7 +597,7 @@ export function CalendarPage() {
               {sidebarControls}
             </Box>
             <div
-              // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- WAI-ARIA window-splitter resize handle, not an <hr>
+              // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- WAI-ARIA window-splitter resize handle, not an <hr>
               role="separator"
               aria-label="Resize sidebar"
               aria-orientation="vertical"

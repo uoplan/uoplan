@@ -1,12 +1,12 @@
 import type { DataCache, RemainingRequirement, RequirementWithStatus } from "@uoplan/core";
 import {
-  normalizeCourseCode,
   courseMatchesFilters,
   getEffectiveSchedule,
-  isHonoursProject,
-  isGroupToken,
   groupTokenPrefix,
+  isGroupToken,
+  isHonoursProject,
   makeGroupToken,
+  normalizeCourseCode,
   subjectPrefix,
 } from "@uoplan/core";
 import {
@@ -17,7 +17,7 @@ import {
 import { tr } from "../../i18n";
 
 function normalizeTitleForCompare(title: string | undefined): string {
-  return (title ?? "").trim().replace(/\s+/g, " ").toLowerCase();
+  return (title ?? "").trim().replaceAll(/\s+/g, " ").toLowerCase();
 }
 
 export function courseMatchesElectiveLevelBuckets(code: string, buckets: number[]): boolean {
@@ -135,8 +135,8 @@ export function hasMissingOptionSelections(
       if (idx == null || idx < 0 || idx >= options.length) return true;
       const child = options[idx];
       if (child && hasMissingOptionSelections([child], selectedOptions)) return true;
-    } else if (node.options?.length) {
-      if (hasMissingOptionSelections(node.options, selectedOptions)) return true;
+    } else if (node.options?.length && hasMissingOptionSelections(node.options, selectedOptions)) {
+      return true;
     }
   }
   return false;

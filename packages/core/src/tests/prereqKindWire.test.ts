@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { Catalogue as ProtoCatalogue, CoursePrereqKind } from "@uoplan/proto/data";
+import { CoursePrereqKind, Catalogue as ProtoCatalogue } from "@uoplan/proto/data";
 
 import type { Catalogue, CoursePrereqKind as DomainKind } from "../dataTypes";
 import { fromProtoCatalogue, toProtoCatalogue } from "../dataTypes";

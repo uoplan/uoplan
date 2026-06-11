@@ -4,7 +4,7 @@ import type { ProfessorResolver } from "../professors/buildRegistry.ts";
 
 /** Convert a 0-based registry index (or null) to a 1-based proto ref (undefined = none). */
 function toProfessorRef(resolver: ProfessorResolver | undefined, name: string, legacyId?: number) {
-  if (!resolver) return undefined;
+  if (!resolver) return;
   const idx = resolver.index(name, legacyId);
   return idx == null ? undefined : idx + 1;
 }

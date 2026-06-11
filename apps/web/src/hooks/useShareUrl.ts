@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { flushPersistedAppState } from "../lib/persistAppState";
 
 export function useShareUrl(getShareUrl: () => string | null) {

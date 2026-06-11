@@ -5,9 +5,8 @@ import {
   enrichSchedulesDataWithGrades,
   fromProtoSchedulesData,
   getGradeLookups,
-  type CourseGradesData,
-  type SchedulesData,
 } from "@uoplan/core";
+import type { CourseGradesData, SchedulesData } from "@uoplan/core";
 import { dataAssetIds } from "@uoplan/data";
 import { useAppStore } from "../store/appStore";
 import { fetchProtoBytes } from "../lib/protoFetch";
@@ -23,12 +22,15 @@ const rawByTerm = new Map<number, Promise<SchedulesData>>();
 function loadRawTermSchedules(termId: number): Promise<SchedulesData> {
   let promise = rawByTerm.get(termId);
   if (!promise) {
-    promise = fetchProtoBytes(dataAssetIds.schedules(String(termId)))
-      .then((bytes) => fromProtoSchedulesData(DataProto.SchedulesData.decode(bytes)))
-      .catch((err) => {
+    promise = (async () => {
+      try {
+        const bytes = await fetchProtoBytes(dataAssetIds.schedules(String(termId)));
+        return fromProtoSchedulesData(DataProto.SchedulesData.decode(bytes));
+      } catch (err) {
         rawByTerm.delete(termId);
         throw err;
-      });
+      }
+    })();
     rawByTerm.set(termId, promise);
   }
   return promise;
@@ -82,15 +84,16 @@ export function useTermScheduleData(termId: number | null): TermScheduleState {
 
     let cancelled = false;
     setState((prev) => ({ data: prev.data, loading: true }));
-    loadRawTermSchedules(termId)
-      .then((raw) => {
+    void (async () => {
+      try {
+        const raw = await loadRawTermSchedules(termId);
         if (cancelled) return;
         setState({ data: enrich(raw, termId, courseGrades), loading: false });
-      })
-      .catch(() => {
+      } catch {
         if (cancelled) return;
         setState({ data: null, loading: false });
-      });
+      }
+    })();
 
     return () => {
       cancelled = true;

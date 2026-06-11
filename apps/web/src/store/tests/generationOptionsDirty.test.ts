@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 import { defaultAppStore } from "../appStore";
 import { emptyScheduleGenerationResult, resetStoreForSeedTests } from "./scheduleTestHelpers";
@@ -7,7 +7,7 @@ const generateSchedulesActionMock = vi.fn();
 
 vi.mock("../../workers/scheduleWorkerClient", () => ({
   runScheduleGeneration: (...args: unknown[]) => generateSchedulesActionMock(...args),
-  prewarmScheduleWorker: vi.fn().mockResolvedValue(undefined),
+  prewarmScheduleWorker: vi.fn(() => Promise.resolve()),
   dataKeyFromState: () => null,
   inputFromState: (s: unknown) => s,
 }));

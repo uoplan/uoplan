@@ -1,12 +1,12 @@
 import { useMemo } from "react";
-import { Stack, Text, Alert } from "@mantine/core";
-import type { DataCache } from "@uoplan/core";
-import { normalizeCourseCode } from "@uoplan/core";
+import { Alert, Stack, Text } from "@mantine/core";
 import type {
+  CompletedRequirementItem,
+  DataCache,
   RemainingRequirement,
   RequirementWithStatus,
-  CompletedRequirementItem,
 } from "@uoplan/core";
+import { normalizeCourseCode } from "@uoplan/core";
 import { useAppStore } from "../../store/appStore";
 import { RequirementNode } from "./RequirementNode";
 import { getStableNodeKey } from "../../lib/requirements/requirementNodeUtils";

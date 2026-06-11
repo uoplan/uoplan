@@ -1,22 +1,22 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
+  buildPoolCaps,
   buildRequirementPools,
+  candidatePoolWeight,
+  computeCoursesPerPool,
+  courseLevelSortKey,
+  enumerateSingleRedistributions,
   isBroadElectivePoolType,
   isElectiveRequirementType,
-  isWithinElectiveLevelCap,
   isWithinElectiveLevelBuckets,
-  virtualScheduleFilterApplies,
-  poolCourseCap,
-  buildPoolCaps,
-  enumerateSingleRedistributions,
-  computeCoursesPerPool,
-  shuffleInPlace,
-  weightedRandomPick,
-  courseLevelSortKey,
-  candidatePoolWeight,
+  isWithinElectiveLevelCap,
   LEVEL_WEIGHT_BASE,
-  type RequirementPool,
+  poolCourseCap,
+  shuffleInPlace,
+  virtualScheduleFilterApplies,
+  weightedRandomPick,
 } from "../poolHelpers";
+import type { RequirementPool } from "../poolHelpers";
 import type { RemainingRequirement } from "../requirements";
 import type { DataCache } from "../dataCache";
 
@@ -91,7 +91,7 @@ describe("elective type predicates", () => {
     }
     expect(isBroadElectivePoolType("discipline_elective")).toBe(false);
     expect(isBroadElectivePoolType("course")).toBe(false);
-    expect(isBroadElectivePoolType(undefined)).toBe(false);
+    expect(isBroadElectivePoolType()).toBe(false);
   });
 
   it("classifies elective requirement types (includes discipline_elective)", () => {

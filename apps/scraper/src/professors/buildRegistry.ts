@@ -320,7 +320,7 @@ export function createResolverFromRegistry(
   const byLegacyId = new Map<number, number>();
   // A match key shared by a split pair resolves to its primary (first) entry.
   const byKey = new Map<string, number>();
-  entries.forEach((entry, idx) => {
+  for (const [idx, entry] of entries.entries()) {
     for (const id of entry.legacyIds) {
       if (!byLegacyId.has(id)) byLegacyId.set(id, idx);
     }
@@ -328,7 +328,7 @@ export function createResolverFromRegistry(
       const key = professorMatchKey(name);
       if (key && !byKey.has(key)) byKey.set(key, idx);
     }
-  });
+  }
 
   return {
     indexForLegacyId(legacyId: number): number | null {

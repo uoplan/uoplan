@@ -1,31 +1,29 @@
-/* eslint-disable */
 import fs from "node:fs/promises";
 import path from "node:path";
 import * as DataProto from "@uoplan/proto/data";
 import * as FeedbackProto from "@uoplan/proto/feedback";
 import {
+  CATALOGUE_DATA_DIR,
+  DATA_MANIFEST_FILE,
+  SCHEDULES_DATA_DIR,
   SCRAPER_DATA_DIR,
   WEB_ASSETS_DATA_DIR,
-  DATA_MANIFEST_FILE,
-  CATALOGUE_DATA_DIR,
-  SCHEDULES_DATA_DIR,
 } from "../shared/paths.ts";
 import { readJson } from "../shared/json.ts";
 import { buildFeedbackData } from "./feedback.ts";
-import { mapCatalogue, type CatalogueJsonInput } from "./catalogue.ts";
+import { mapCatalogue } from "./catalogue.ts";
+import type { CatalogueJsonInput } from "./catalogue.ts";
 import { mapDisciplinesJson, mapGradesJson } from "./grades.ts";
-import { mapSchedules, type SchedulesJsonInput } from "./schedules.ts";
-import {
-  createResolverFromRegistry,
-  type ProfessorRegistryEntry,
-} from "../professors/buildRegistry.ts";
+import { mapSchedules } from "./schedules.ts";
+import type { SchedulesJsonInput } from "./schedules.ts";
+import { createResolverFromRegistry } from "../professors/buildRegistry.ts";
+import type { ProfessorRegistryEntry } from "../professors/buildRegistry.ts";
 import { PROFESSORS_FILE } from "../professors/build.ts";
 import {
   buildPredictionContext,
   predictInstructorsForTerm,
-  type GradesCourseInput,
-  type ScheduleFileInput,
 } from "../schedules/predictInstructors.ts";
+import type { GradesCourseInput, ScheduleFileInput } from "../schedules/predictInstructors.ts";
 import { parseTermIdToNumber } from "./shared.ts";
 
 interface RateMyProfessorInput {
@@ -224,8 +222,12 @@ export async function main(): Promise<void> {
   );
 }
 
-main().catch((err) => {
-  console.error("Failed to build protobuf data artifacts.");
-  console.error(err);
-  process.exit(1);
-});
+void (async () => {
+  try {
+    await main();
+  } catch (err) {
+    console.error("Failed to build protobuf data artifacts.");
+    console.error(err);
+    process.exit(1);
+  }
+})();

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import type { GeneratedSchedule } from "@uoplan/core";
 import { defaultAppStore } from "../appStore";
 

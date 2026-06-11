@@ -1,4 +1,5 @@
-import { type Got, got } from "got";
+import { got } from "got";
+import type { Got } from "got";
 import { CookieJar } from "tough-cookie";
 
 export const PEOPLESOFT_CLASS_SEARCH_URL =
@@ -29,6 +30,6 @@ export async function bootstrapPeopleSoft<T>(
     if (value) return { client, value, lastHtml };
   }
 
-  const preview = lastHtml.slice(0, 400).replace(/\s+/g, " ");
+  const preview = lastHtml.slice(0, 400).replaceAll(/\s+/g, " ");
   throw buildError(preview);
 }

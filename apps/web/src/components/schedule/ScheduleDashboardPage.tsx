@@ -7,13 +7,13 @@ import { useShallow } from "zustand/react/shallow";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { ResetModal } from "../shared/ResetModal";
 import { useAppStore, useAppStoreApi } from "../../store/appStore";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import {
   getGenerateBlockers,
   getScheduleDashboardCards,
   resolveInitialOpenStep,
-  type ScheduleStepId,
 } from "../../lib/scheduleDashboard";
+import type { ScheduleStepId } from "../../lib/scheduleDashboard";
 import { ScheduleDashboardCard } from "./ScheduleDashboardCard";
 import { GenerateConfirmationModal } from "./GenerateConfirmationModal";
 import { TermPicker } from "./TermPicker";
@@ -90,12 +90,13 @@ export function ScheduleDashboardPage() {
     const state = storeApi.getState();
     const generate =
       state.program === null ? state.generateBasicSchedules : state.generateSchedules;
-    void generate().then(() =>
-      navigate({
+    void (async () => {
+      await generate();
+      await navigate({
         to: "/schedule/calendar",
         state: { back: { to: "/schedule", label: tr("landing.schedule.title") } } as never,
-      }),
-    );
+      });
+    })();
   };
 
   const contentForStep = (id: ScheduleStepId) => {
@@ -121,7 +122,7 @@ export function ScheduleDashboardPage() {
       case "assign":
         return <AssignPanel />;
       default:
-        return undefined;
+        return;
     }
   };
 

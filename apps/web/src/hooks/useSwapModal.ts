@@ -1,11 +1,11 @@
-import { useState, useEffect, useMemo, useCallback, useRef } from "react";
-import type { DataCache, ProfessorRatingsMap, GradeVizData } from "@uoplan/core";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { DataCache, GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
 import {
+  aggregateCourseDistribution,
   courseAPlusPercent,
   distributionGpa,
   getRatingsForInstructors,
   normalizeCourseCode,
-  aggregateCourseDistribution,
   normalizeGradeVizDistribution,
 } from "@uoplan/core";
 

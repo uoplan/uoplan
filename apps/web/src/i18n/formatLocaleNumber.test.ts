@@ -14,7 +14,7 @@ describe("formatLocaleNumber", () => {
   it("formats thousands with grouping in French", () => {
     i18n.activate("fr-CA");
     const formatted = formatLocaleNumber(12000);
-    expect(formatted.replace(/\s|\u202f/g, " ")).toBe("12 000");
+    expect(formatted.replaceAll(/\s|\u202f/g, " ")).toBe("12 000");
   });
 
   it("formats decimals per locale", () => {

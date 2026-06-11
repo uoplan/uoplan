@@ -47,9 +47,9 @@ export function buildSchedulePreview(
   termId: number,
 ): SchedulePreview {
   const courseIndexByCode = new Map<NormalizedCourseCode, number>();
-  schedulesData.schedules.forEach((s, i) => {
+  for (const [i, s] of schedulesData.schedules.entries()) {
     courseIndexByCode.set(s.courseCode, i);
-  });
+  }
 
   const courses: SchedulePreview["courses"] = [];
   for (const enrollment of schedule.enrollments) {

@@ -1,10 +1,11 @@
 import { Badge, Box, Collapse, Group, Paper, Stack, Text, Tooltip } from "@mantine/core";
-import { Fragment, type ReactNode } from "react";
+import { Fragment } from "react";
+import type { ReactNode } from "react";
 import type { RequirementWithStatus } from "@uoplan/core";
 import { getOptionSecondarySummaryLine } from "../../lib/requirements/requirementUtils";
 import { getStableNodeKey } from "../../lib/requirements/requirementNodeUtils";
 import { tr } from "../../i18n";
-import { BADGE_NO_SHRINK, TITLE_FLEX, requirementIndentStyle } from "./requirementRenderPrimitives";
+import { BADGE_NO_SHRINK, requirementIndentStyle, TITLE_FLEX } from "./requirementRenderPrimitives";
 
 export function RequirementSectionHeading({ title, depth }: { title: string; depth: number }) {
   return (

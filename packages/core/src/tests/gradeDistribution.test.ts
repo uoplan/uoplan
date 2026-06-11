@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   aggregateCourseDistribution,
   buildCourseDifficultyIndexFromCache,
@@ -118,7 +118,7 @@ describe("buildCourseDifficultyIndexFromCache", () => {
   });
 
   it("returns null for a course with no schedule data", () => {
-    const cache = { getSchedule: () => undefined } as unknown as DataCache;
+    const cache = { getSchedule: () => {} } as unknown as DataCache;
     const index = buildCourseDifficultyIndexFromCache(cache);
     expect(index(normalizeCourseCode("MAT 0000"))).toBeNull();
   });

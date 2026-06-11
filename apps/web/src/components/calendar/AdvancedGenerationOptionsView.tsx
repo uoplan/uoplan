@@ -11,11 +11,10 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
-import { ConstrainStep, type ConstrainStepProps } from "../requirements/ConstrainStep";
-import {
-  GenerationOptionsFields,
-  type GenerationOptionsFieldsProps,
-} from "./generationOptions/GenerationOptionsFields";
+import { ConstrainStep } from "../requirements/ConstrainStep";
+import type { ConstrainStepProps } from "../requirements/ConstrainStep";
+import { GenerationOptionsFields } from "./generationOptions/GenerationOptionsFields";
+import type { GenerationOptionsFieldsProps } from "./generationOptions/GenerationOptionsFields";
 import { tr } from "../../i18n";
 
 export interface AdvancedGenerationOptionsViewProps {

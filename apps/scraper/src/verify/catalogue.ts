@@ -1,5 +1,5 @@
-import * as fs from "fs/promises";
-import * as path from "path";
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
 import { WEB_ASSETS_DATA_DIR } from "../shared/paths.ts";
 import { extractCourseCodes } from "../shared/text.ts";
 
@@ -34,7 +34,7 @@ function extractCourseCodesFromAst(node: CoursePrereqNode | undefined): string[]
       codes.push(n.code);
     }
     if (n.children) {
-      n.children.forEach(traverse);
+      for (const child of n.children) traverse(child);
     }
   }
 
@@ -138,7 +138,7 @@ function verifyCourse(course: Course): string[] {
   for (const pi of patternIssues) {
     issues.push(`[${course.code}] Pattern: ${pi}`);
     issues.push(
-      `  Text: "${course.prereqText.substring(0, 100)}${course.prereqText.length > 100 ? "..." : ""}"`,
+      `  Text: "${course.prereqText.slice(0, 100)}${course.prereqText.length > 100 ? "..." : ""}"`,
     );
   }
 
@@ -195,7 +195,7 @@ export async function main() {
     }
   }
 
-  console.log("\n" + "=".repeat(80));
+  console.log(`\n${"=".repeat(80)}`);
   console.log("STATISTICS:");
   console.log(`  Total courses: ${stats.totalCourses}`);
   console.log(`  Courses with prereqText: ${stats.coursesWithPrereqs}`);
@@ -204,7 +204,7 @@ export async function main() {
     `  Parsing coverage: ${((stats.coursesWithParsedPrereqs / stats.coursesWithPrereqs) * 100).toFixed(1)}%`,
   );
 
-  console.log("\n" + "=".repeat(80));
+  console.log(`\n${"=".repeat(80)}`);
   console.log("ISSUES FOUND:");
 
   if (allIssues.length === 0) {
@@ -217,12 +217,12 @@ export async function main() {
 
     if (missingCodes.length > 0) {
       console.log(`\n--- Missing Course Codes (${missingCodes.length} issues) ---`);
-      missingCodes.forEach((i) => console.log(i));
+      for (const i of missingCodes) console.log(i);
     }
 
     if (extraCodes.length > 0) {
       console.log(`\n--- Extra Course Codes in AST (${extraCodes.length} issues) ---`);
-      extraCodes.forEach((i) => console.log(i));
+      for (const i of extraCodes) console.log(i);
     }
 
     if (patterns.length > 0) {

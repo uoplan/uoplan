@@ -65,7 +65,7 @@ function primaryCourseNumber(code: string): number | null {
 export function frenchImmersionExcludedByFifthDigit(code: string): boolean {
   const p = parseCourseCode(normalizeCourseCode(code));
   if (!p) return false;
-  const digits = p.number.replace(/[^0-9]/g, "");
+  const digits = p.number.replaceAll(/[^0-9]/g, "");
   if (digits.length < 5) return false;
   const d = digits[4];
   return d === "0" || d === "9";

@@ -1,7 +1,6 @@
 import {
   Box,
   Checkbox,
-  type ComboboxItem,
   Group,
   MultiSelect,
   Radio,
@@ -9,8 +8,9 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
+import type { ComboboxItem } from "@mantine/core";
 import { useMemo } from "react";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { createRankedOptionsFilter } from "../../lib/explore/optionRanking";
 import type {
   ExploreFilterDifficulty,

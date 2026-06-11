@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { buildScheduleIcs } from "../ics";
 import type { GeneratedSchedule } from "../generation";
 import type { DataCache } from "../dataCache";
@@ -47,10 +47,10 @@ describe("buildScheduleIcs", () => {
             component: "Lecture",
           };
         }
-        return undefined;
+        return;
       },
       resolveToCanonical: (code) => normalizeCourseCode(code),
-      getSchedule: () => undefined,
+      getSchedule: () => {},
       getCoursesByDiscipline: () => [],
       getAllCourses: () => [],
       getAllSchedules: () => [],

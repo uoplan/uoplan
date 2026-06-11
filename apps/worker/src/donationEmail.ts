@@ -29,14 +29,14 @@ interface ParsedDonation {
 function parseAmountCents(text: string): number | null {
   const english = text.match(/\$\s*([\d,]+\.\d{2})\b/);
   if (english) {
-    const normalized = english[1].replace(/,/g, "");
+    const normalized = english[1].replaceAll(",", "");
     const value = Number.parseFloat(normalized);
     if (Number.isFinite(value)) return Math.round(value * 100);
   }
 
   const french = text.match(/(\d[\d\s.\u00a0]*,\d{2})\s*\$/);
   if (french) {
-    const normalized = french[1].replace(/[\s.\u00a0]/g, "").replace(",", ".");
+    const normalized = french[1].replaceAll(/[\s.\u00a0]/g, "").replace(",", ".");
     const value = Number.parseFloat(normalized);
     if (Number.isFinite(value)) return Math.round(value * 100);
   }
@@ -73,6 +73,7 @@ export async function handleDonationEmail(
   try {
     await inspectDonation(message, env);
   } catch (err) {
+    // oxlint-disable-next-line no-console -- intentional Worker email inspection logging
     console.error("Failed to inspect donation email from %s: %o", message.from, err);
   }
 
@@ -83,6 +84,7 @@ export async function handleDonationEmail(
   try {
     await message.forward(env.FORWARD_EMAIL);
   } catch (err) {
+    // oxlint-disable-next-line no-console -- intentional Worker email forwarding logging
     console.error(
       "Failed to forward email from %s to %s: %o",
       message.from,
@@ -102,6 +104,7 @@ async function inspectDonation(message: ForwardableEmailMessage, env: Env): Prom
 
   const amountCents = parseAmountCents(body);
   if (amountCents === null || amountCents <= 0) {
+    // oxlint-disable-next-line no-console -- intentional Worker donation parsing logging
     console.warn("No donation amount found in email; subject=%s", subject);
     return;
   }

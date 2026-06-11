@@ -47,7 +47,7 @@ test("copies a share link and re-hydrates the calendar from it", async ({ page, 
   // redirects to the client hydration route. The vite dev server doesn't run the
   // worker, so derive that client URL directly the same way the worker does.
   const stateBase64url = shareUrl.split("/api/share/")[1];
-  const base64 = stateBase64url.replace(/-/g, "+").replace(/_/g, "/");
+  const base64 = stateBase64url.replaceAll("-", "+").replaceAll("_", "/");
   const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
   const clientUrl = `/schedule/calendar/?s=${encodeURIComponent(padded)}`;
 

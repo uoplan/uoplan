@@ -67,7 +67,7 @@ function encodePreview(preview: Parameters<typeof SchedulePreview.encode>[0]): s
   const bytes = SchedulePreview.encode(preview).finish();
   let binary = "";
   for (const byte of bytes) binary += String.fromCharCode(byte);
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+  return btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
 }
 
 beforeEach(() => {
@@ -112,7 +112,7 @@ describe("handleOgImage", () => {
     expect(res.status).toBe(200);
     expect(res.headers.get("Content-Type")).toBe("image/png");
     expect(res.headers.get("Cache-Control")).toBe("public, max-age=86400, s-maxage=86400");
-    expect([...png.slice(0, 4)]).toEqual([137, 80, 78, 71]);
+    expect(Array.from(png.slice(0, 4))).toEqual([137, 80, 78, 71]);
     expect(resvgSvgInputs[0]).toContain("uoplan");
     expect(cache.put).toHaveBeenCalledWith(
       new Request("https://og-cache.internal/v2/nopayload/state123"),

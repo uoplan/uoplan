@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  assignLanes,
   CAL_END_MINUTES,
   CAL_START_MINUTES,
+  clampToCalendarRange,
   HALF_HOUR_PERCENTS,
   HOUR_LABELS,
-  assignLanes,
-  clampToCalendarRange,
   minutesToPercent,
   percentToMinutes,
   snapMinutes,

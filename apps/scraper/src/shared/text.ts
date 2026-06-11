@@ -1,5 +1,5 @@
 export function normalizeWhitespace(s: string): string {
-  return s.replace(/\s+/g, " ").trim();
+  return s.replaceAll(/\s+/g, " ").trim();
 }
 
 const COURSE_CODE_RE = /\b([A-Z]{3,4})\s*(\d{4,5}[A-Z]?)\b/g;
@@ -15,5 +15,5 @@ export function extractCourseCodes(text: string): string[] {
 }
 
 export function normalizeCodeKey(s: string): string {
-  return s.replace(/\s+/g, " ").trim().toUpperCase();
+  return s.replaceAll(/\s+/g, " ").trim().toUpperCase();
 }

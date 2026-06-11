@@ -1,6 +1,6 @@
-import { Button, Group, Modal, Stack, Text, rem } from "@mantine/core";
+import { Button, Group, Modal, rem, Stack, Text } from "@mantine/core";
 import { useAppStore } from "../../store/appStore";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 
 const MODAL_PAD = rem(24);
 

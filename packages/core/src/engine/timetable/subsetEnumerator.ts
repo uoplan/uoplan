@@ -15,7 +15,8 @@ import type { DataCache } from "../../dataCache";
 import type { CourseEnrollment, GeneratedSchedule } from "../../generation";
 import type { ConstraintContext } from "../constraints/types";
 import type { ConstraintPipeline } from "../constraints/pipeline";
-import { buildTimetableCourse, type TimetableCourse } from "./lazyCombos";
+import { buildTimetableCourse } from "./lazyCombos";
+import type { TimetableCourse } from "./lazyCombos";
 import { arrangementFingerprint } from "./enumerator";
 
 interface SubsetEnumerationInput {

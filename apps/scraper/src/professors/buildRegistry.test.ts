@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  buildProfessorRegistry,
-  createResolverFromRegistry,
-  type RegistryInputs,
-} from "./buildRegistry.ts";
+import { buildProfessorRegistry, createResolverFromRegistry } from "./buildRegistry.ts";
+import type { RegistryInputs } from "./buildRegistry.ts";
 
 describe("buildProfessorRegistry", () => {
   const inputs: RegistryInputs = {

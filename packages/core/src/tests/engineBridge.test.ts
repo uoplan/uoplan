@@ -1,21 +1,19 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  buildBasicRequest,
   buildAdvancedRequest,
-  mapGenerationResponse,
-  runBasicGeneration,
-  runAdvancedGeneration,
-  runTimetableFixedSet,
+  buildBasicRequest,
   EngineMode,
-  type BasicRequestInput,
-  type AdvancedRequestInput,
-  type ScheduleEngine,
+  mapGenerationResponse,
+  runAdvancedGeneration,
+  runBasicGeneration,
+  runTimetableFixedSet,
 } from "../engineBridge";
+import type { AdvancedRequestInput, BasicRequestInput, ScheduleEngine } from "../engineBridge";
 import {
   GenerationRequest,
   GenerationResponse,
-  TimetableRequest,
   Mode,
+  TimetableRequest,
 } from "@uoplan/proto/engine";
 import type { GenerationConstraints } from "../generation/types";
 import type { NormalizedCourseCode } from "../brand";

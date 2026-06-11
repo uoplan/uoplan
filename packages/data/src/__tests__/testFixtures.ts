@@ -4,10 +4,8 @@ import {
   normalizeCourseCode,
   toProtoCatalogue,
   toProtoSchedulesData,
-  type Catalogue,
-  type Course,
-  type SchedulesData,
 } from "@uoplan/core";
+import type { Catalogue, Course, SchedulesData } from "@uoplan/core";
 
 export function course(code: string, title: string, credits = 3): Course {
   return {

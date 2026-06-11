@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  buildGradeLookups,
-  enrichSchedulesPayload,
-  type SchedulesFilePayload,
-} from "./schedules/enrich.ts";
+import { buildGradeLookups, enrichSchedulesPayload } from "./schedules/enrich.ts";
+import type { SchedulesFilePayload } from "./schedules/enrich.ts";
 
 describe("buildGradeLookups", () => {
   it("keys distributions by course term and instructor name", () => {

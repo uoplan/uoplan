@@ -22,7 +22,8 @@ import {
 } from "./cache.ts";
 import { parseListRows } from "./list.ts";
 import { extractChartLabels, terminateOcr } from "./ocr.ts";
-import { parseReport, type ReportQuestionStats } from "./report.ts";
+import { parseReport } from "./report.ts";
+import type { ReportQuestionStats } from "./report.ts";
 import { ordinalOptionLabels } from "./scales.ts";
 import { parseReportTitle } from "./title.ts";
 

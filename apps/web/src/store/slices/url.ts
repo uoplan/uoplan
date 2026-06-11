@@ -2,17 +2,14 @@ import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
 import {
   encodeStateToBase64,
-  urlToSlug,
-  type Course,
-  type DecodedState,
-  type EncodeInput,
-  type Program,
-  requirementIdsFromTree,
-  withExtraCourses,
   isOptCourse,
-  normalizeCourseCode,
   makeGroupTokenInstance,
+  normalizeCourseCode,
+  requirementIdsFromTree,
+  urlToSlug,
+  withExtraCourses,
 } from "@uoplan/core";
+import type { Course, DecodedState, EncodeInput, Program } from "@uoplan/core";
 import { recomputeStateForProgram } from "../requirementCompute";
 import { inferLowestVisitedSeedFromPersisted } from "../../lib/seedNavigation";
 import { toBlockedWindows, withBlockedIds } from "../../lib/blockedTimes";
@@ -119,7 +116,7 @@ function buildRequirementIndex(
   );
   const orderedReqIds = requirementIdsFromTree(firstPass.requirementTreeWithStatus);
   const reqIndexToId = new Map<number, string>();
-  orderedReqIds.forEach((id, i) => reqIndexToId.set(i, id));
+  for (const [i, id] of orderedReqIds.entries()) reqIndexToId.set(i, id);
   return reqIndexToId;
 }
 
@@ -151,7 +148,7 @@ function mapCourseSelections(
     const reqId = reqIndexToId.get(reqIndex);
     if (reqId == null) continue;
     const valid = filterValidDecodedCodes(courseCodes, inCatalogue);
-    if (valid.length) byRequirement[reqId] = valid;
+    if (valid.length > 0) byRequirement[reqId] = valid;
   }
   return byRequirement;
 }

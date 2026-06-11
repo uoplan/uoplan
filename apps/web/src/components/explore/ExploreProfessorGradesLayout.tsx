@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { Accordion, Badge, Box, Group, HoverCard, Paper, Stack, Text } from "@mantine/core";
-import { type ReactNode, useMemo } from "react";
+import { useMemo } from "react";
+import type { ReactNode } from "react";
 import type { CanonicalProfessorName, GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
 import {
-  normalizeProfessorName,
-  normalizeGradeVizDistribution,
   hasProfessorRatings,
+  normalizeGradeVizDistribution,
+  normalizeProfessorName,
 } from "@uoplan/core";
 import {
   GradeDistributionHistogram,
@@ -16,11 +17,11 @@ import { tr, useTr } from "../../i18n";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import { formatTermLabel } from "../../lib/term/termLabel";
 import type { BackState } from "../../lib/navigation/backState";
-import {
-  mergeGradeDistributionCounts,
-  type CourseOfferingGroup,
-  type ExploreOfferingFlat,
-  type ProfessorOfferingGroup,
+import { mergeGradeDistributionCounts } from "../../lib/explore/gradesSearch";
+import type {
+  CourseOfferingGroup,
+  ExploreOfferingFlat,
+  ProfessorOfferingGroup,
 } from "../../lib/explore/gradesSearch";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { professorRouteParam } from "../../lib/explore/professorRoute";

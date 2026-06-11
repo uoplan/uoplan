@@ -1,10 +1,8 @@
-import { useMemo, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Box, FocusTrap, Text } from "@mantine/core";
 import { useLocalStorage, useMediaQuery } from "@mantine/hooks";
 import { AnimatePresence, m } from "framer-motion";
-import type { DataCache } from "@uoplan/core";
-import type { GeneratedSchedule } from "@uoplan/core";
-import type { ProfessorRatingsMap } from "@uoplan/core";
+import type { DataCache, GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/core";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
 import { useSwapModal } from "../../hooks/useSwapModal";
@@ -15,8 +13,8 @@ import { WeekCalendar } from "./WeekCalendar";
 import { WeekPreviewPanel } from "./WeekPreviewPanel";
 import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
 import { CalendarEventDetails } from "./CalendarEventDetails";
-import { SwapContextProvider, type SwapContextValue } from "./swapContext";
-import type { SwapDifficulty, SwapSortKey } from "./swapContext";
+import { SwapContextProvider } from "./swapContext";
+import type { SwapContextValue, SwapDifficulty, SwapSortKey } from "./swapContext";
 import { useAppStore } from "../../store/appStore";
 import { CALENDAR_HEADER_MIN_HEIGHT } from "./calendarHeaderLayout";
 import {
@@ -358,7 +356,7 @@ export function CalendarView({
                   barWidth={effectivePreviewWidth}
                 />
                 <div
-                  // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- WAI-ARIA window-splitter resize handle, not an <hr>
+                  // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- WAI-ARIA window-splitter resize handle, not an <hr>
                   role="separator"
                   aria-label={staticTr("calendarView.resizePreviewBar")}
                   aria-orientation="vertical"
@@ -429,7 +427,7 @@ export function CalendarView({
             >
               <FocusTrap active>
                 <m.div
-                  // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- animated modal dialog (framer-motion); native <dialog> can't be used here
+                  // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- animated modal dialog (framer-motion); native <dialog> can't be used here
                   role="dialog"
                   aria-modal="true"
                   aria-label={staticTr("calendar.swap.swapWith")}

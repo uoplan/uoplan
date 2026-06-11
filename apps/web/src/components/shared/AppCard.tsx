@@ -1,6 +1,7 @@
 import { Paper } from "@mantine/core";
 import type { PaperProps } from "@mantine/core";
-import { forwardRef, type ReactNode } from "react";
+import { forwardRef } from "react";
+import type { ReactNode } from "react";
 
 type AppCardVariant = "surface" | "sunken" | "overlay";
 

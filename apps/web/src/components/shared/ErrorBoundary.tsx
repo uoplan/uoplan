@@ -1,4 +1,5 @@
-import { Component, type ErrorInfo, type ReactNode } from "react";
+import { Component } from "react";
+import type { ErrorInfo, ReactNode } from "react";
 import { Box, Button, Stack, Text, Title } from "@mantine/core";
 import { tr, useTr } from "../../i18n";
 import { AppCard } from "./AppCard";
@@ -53,6 +54,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // oxlint-disable-next-line no-console -- intentional React error boundary logging
     console.error("Uncaught React error:", error, errorInfo);
   }
 

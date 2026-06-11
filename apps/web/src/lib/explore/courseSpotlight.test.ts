@@ -7,13 +7,10 @@ import {
   rankCoursesForSpotlight,
   SPOTLIGHT_MIN_GRADED_COUNT,
   SPOTLIGHT_VARIANTS,
-  type CourseSpotlightVariant,
 } from "./courseSpotlight";
-import {
-  buildCourseSearchEntries,
-  buildOfferingsByCourseNorm,
-  type ExploreOfferingFlat,
-} from "./gradesSearch";
+import type { CourseSpotlightVariant } from "./courseSpotlight";
+import { buildCourseSearchEntries, buildOfferingsByCourseNorm } from "./gradesSearch";
+import type { ExploreOfferingFlat } from "./gradesSearch";
 import { testCourseCode, testProfessorName } from "../../test/brands";
 
 /** Build the spotlight index from flat offerings the way the runtime context does. */

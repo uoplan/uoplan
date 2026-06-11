@@ -14,7 +14,7 @@ export type ProfessorRatingsMap = Record<string, ProfessorRatingsEntry>;
  * treated as "no rating" rather than a 0.0 average.
  */
 export function hasProfessorRatings(
-  entry: ProfessorRatingsEntry | null | undefined,
+  entry?: ProfessorRatingsEntry | null,
 ): entry is ProfessorRatingsEntry {
   return (
     entry != null &&
@@ -25,7 +25,7 @@ export function hasProfessorRatings(
 }
 
 export function normalizeProfessorName(name: string): ProfessorNameKey {
-  return (name ?? "").trim().replace(/\s+/g, " ") as ProfessorNameKey;
+  return (name ?? "").trim().replaceAll(/\s+/g, " ") as ProfessorNameKey;
 }
 
 /**

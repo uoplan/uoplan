@@ -2,7 +2,7 @@ import { Divider, Group, Kbd, Modal, Stack, Text } from "@mantine/core";
 import { useOs } from "@mantine/hooks";
 import { APP_DESTINATIONS } from "../../lib/navigation/appDestinations";
 import { useHelpModalStore } from "../../store/uiHelpStore";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 
 function ShortcutRow({ label, keys }: { label: string; keys: React.ReactNode }) {
   return (

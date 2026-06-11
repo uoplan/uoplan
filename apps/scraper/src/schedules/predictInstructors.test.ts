@@ -1,17 +1,16 @@
 import { describe, expect, it } from "vitest";
 import {
-  decodeTermMeta,
   isUnknownInstructorName as coreIsUnknown,
   normalizeInstructorName as coreNormalize,
+  decodeTermMeta,
 } from "@uoplan/core";
 import {
   __predictInstructorsTest as __test,
   buildPredictionContext,
   predictInstructorsForTerm,
   sectionKey,
-  type GradesCourseInput,
-  type ScheduleFileInput,
 } from "./predictInstructors.ts";
+import type { GradesCourseInput, ScheduleFileInput } from "./predictInstructors.ts";
 
 const TARGET_TERM = 2271; // Winter 2027 → year 2027
 

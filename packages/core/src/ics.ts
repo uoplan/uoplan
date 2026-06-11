@@ -128,7 +128,7 @@ export function buildScheduleIcs(args: {
       const instructors = uniqNonEmpty(
         section.times.map((t) => t.instructor).filter((i): i is string => i !== null),
       );
-      const professor = instructors.length ? instructors.join(", ") : "—";
+      const professor = instructors.length > 0 ? instructors.join(", ") : "—";
       const sectionCode = (section.sectionCode ?? section.section ?? "").trim();
       const sectionLabel = sectionCode ? `${component} - ${sectionCode}` : component;
 

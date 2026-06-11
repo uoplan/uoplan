@@ -1,7 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { renderDataManifestModule, type DataManifest } from "@uoplan/data/codegen";
+import { renderDataManifestModule } from "@uoplan/data/codegen";
+import type { DataManifest } from "@uoplan/data/codegen";
 import type { Plugin } from "vite";
 
 /**
@@ -34,7 +35,7 @@ function generatedManifestPath(): string {
 function assetIdsFromSource(originalNames: readonly string[]): string[] {
   const ids: string[] = [];
   for (const name of originalNames) {
-    const normalized = name.replace(/\\/g, "/");
+    const normalized = name.replaceAll("\\", "/");
     if (normalized.includes("/assets/data/") && normalized.endsWith(".pb")) {
       ids.push(path.posix.basename(normalized));
     }

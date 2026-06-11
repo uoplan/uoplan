@@ -1,7 +1,6 @@
-import { describe, it, expect } from "vitest";
-import { buildDataCache } from "@uoplan/core";
+import { describe, expect, it } from "vitest";
 import type { Catalogue, Program } from "@uoplan/core";
-import { computeRequirementsState } from "@uoplan/core";
+import { buildDataCache, computeRequirementsState } from "@uoplan/core";
 import { defaultAppStore } from "../appStore";
 import { testCourseCode } from "../../test/brands";
 import { testCourse, testSchedule, testSchedulesData } from "./scheduleTestHelpers";

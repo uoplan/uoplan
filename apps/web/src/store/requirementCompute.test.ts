@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Catalogue, Program } from "@uoplan/core";
-import type { SchedulesData } from "@uoplan/core";
+import type { Catalogue, Program, SchedulesData } from "@uoplan/core";
 import { buildDataCache } from "@uoplan/core";
 import { recomputeStateForProgram } from "./requirementCompute";
 import { testCourseCode } from "../test/brands";
@@ -14,7 +13,7 @@ function expectSelectedRequirementIncludes(
 ) {
   expect(
     (state.selectedPerRequirement[requirementId] ?? []).some((c) =>
-      c.replace(/\s+/g, " ").trim().includes(courseCode),
+      c.replaceAll(/\s+/g, " ").trim().includes(courseCode),
     ),
   ).toBe(true);
 }
@@ -186,8 +185,8 @@ describe("recomputeStateForProgram completed-course auto-assignment", () => {
     const narrow = state.selectedPerRequirement["req-0"] ?? [];
     const pick = state.selectedPerRequirement["req-1"] ?? [];
 
-    expect(narrow.map((c) => c.replace(/\s+/g, " ").trim())).toContain("CSI 4120");
-    expect(pick.map((c) => c.replace(/\s+/g, " ").trim())).toContain("CSI 3120");
+    expect(narrow.map((c) => c.replaceAll(/\s+/g, " ").trim())).toContain("CSI 4120");
+    expect(pick.map((c) => c.replaceAll(/\s+/g, " ").trim())).toContain("CSI 3120");
   });
 
   it("assigns SEG 3000 to a narrow elective inside a selected options_group branch, not only a top-level free elective", () => {

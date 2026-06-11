@@ -1,8 +1,13 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../../types";
-import { getEffectiveSchedule, generateRandomSeed } from "@uoplan/core";
-import { runTimetableFixedSet, transferSwapColor, type CourseEnrollment } from "@uoplan/core";
-import { normalizeCourseCode } from "@uoplan/core";
+import type { CourseEnrollment } from "@uoplan/core";
+import {
+  generateRandomSeed,
+  getEffectiveSchedule,
+  normalizeCourseCode,
+  runTimetableFixedSet,
+  transferSwapColor,
+} from "@uoplan/core";
 import { getEngineSync } from "../../../lib/engine/engineHost";
 import { getEffectiveCatalogue } from "../catalogueUtils";
 import { basicElectivesAfterPinnedDelta } from "../../../lib/basicCalendarPins";
@@ -16,7 +21,8 @@ import {
   appendCourseDedupedByNorm,
   resolveRequirementIdsForScheduleCourse,
 } from "../../../lib/requirements/requirementUtils";
-import { compareReqPreference, type AutoAssignReqMeta } from "../../requirementCompute/autoAssign";
+import { compareReqPreference } from "../../requirementCompute/autoAssign";
+import type { AutoAssignReqMeta } from "../../requirementCompute/autoAssign";
 import { flushPersistedAppState } from "../../../lib/persistAppState";
 import { nextSeed, repairSeedPosition } from "../../../lib/seedNavigation";
 import { runScheduleGeneration } from "../../../workers/scheduleWorkerClient";
@@ -543,9 +549,9 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
 
     importSchedule: (schedule) => {
       const colorMap: Record<string, number> = {};
-      schedule.enrollments.forEach((e, i) => {
+      for (const [i, e] of schedule.enrollments.entries()) {
         colorMap[e.courseCode] = i % 8;
-      });
+      }
       set({
         currentSchedule: schedule,
         currentSwaps: [],

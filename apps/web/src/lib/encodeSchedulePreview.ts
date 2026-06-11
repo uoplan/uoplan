@@ -1,5 +1,6 @@
 import { SchedulePreview } from "@uoplan/proto/state";
-import { buildSchedulePreview, type GeneratedSchedule, type SchedulesData } from "@uoplan/core";
+import { buildSchedulePreview } from "@uoplan/core";
+import type { GeneratedSchedule, SchedulesData } from "@uoplan/core";
 import { encodeBytesBase64Url } from "./base64Url";
 
 /**

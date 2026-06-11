@@ -1,6 +1,5 @@
 import { normalizeCourseCode } from "@uoplan/core";
-import type { RequirementWithStatus } from "@uoplan/core";
-import type { Program, ProgramRequirement } from "@uoplan/core";
+import type { Program, ProgramRequirement, RequirementWithStatus } from "@uoplan/core";
 
 export function collectAssignedFromExactRequirements(tree: RequirementWithStatus[]): Set<string> {
   const assigned = new Set<string>();

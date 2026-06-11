@@ -3,10 +3,8 @@ import { Box, Stack, Text } from "@mantine/core";
 import type { GradeVizData } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
-import {
-  programSlugToPathParam,
-  type ExploreProgramSearchEntry,
-} from "../../lib/explore/programSearch";
+import { programSlugToPathParam } from "../../lib/explore/programSearch";
+import type { ExploreProgramSearchEntry } from "../../lib/explore/programSearch";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import { RatingBadge } from "../shared/RatingBadge";
 import { EXPLORE_RESULT_CARD_STYLE, exploreCardBackState } from "./exploreResultCardShared";

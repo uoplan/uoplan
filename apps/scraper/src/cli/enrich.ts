@@ -9,14 +9,13 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { SCRAPER_DATA_DIR, SCHEDULES_DATA_DIR } from "../shared/paths.ts";
+import { SCHEDULES_DATA_DIR, SCRAPER_DATA_DIR } from "../shared/paths.ts";
 import {
   buildGradeLookups,
   enrichSchedulesPayload,
   formatGradeEnrichmentLine,
-  type GradeEnrichmentStats,
-  type SchedulesFilePayload,
 } from "../schedules/enrich.ts";
+import type { GradeEnrichmentStats, SchedulesFilePayload } from "../schedules/enrich.ts";
 
 function parseArgs(argv: string[]): { dryRun: boolean } {
   return { dryRun: argv.includes("--dry-run") };
@@ -78,8 +77,12 @@ export async function main(): Promise<void> {
   }
 }
 
-main().catch((err) => {
-  console.error("Schedule grade enrichment failed.");
-  console.error(err);
-  process.exit(1);
-});
+void (async () => {
+  try {
+    await main();
+  } catch (err) {
+    console.error("Schedule grade enrichment failed.");
+    console.error(err);
+    process.exit(1);
+  }
+})();

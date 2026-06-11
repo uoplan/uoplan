@@ -12,13 +12,14 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { useDebouncedValue, useMediaQuery } from "@mantine/hooks";
-import { IconSearch, IconExternalLink } from "@tabler/icons-react";
+import { IconExternalLink, IconSearch } from "@tabler/icons-react";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import type { ProfessorGraphNode } from "@uoplan/core";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useProfessorGraphBuild } from "../../hooks/useProfessorGraphBuild";
-import { getGraphNeighbors, type NeighborSortMode } from "../../lib/graph/professorGraphDetails";
+import { getGraphNeighbors } from "../../lib/graph/professorGraphDetails";
+import type { NeighborSortMode } from "../../lib/graph/professorGraphDetails";
 import {
   parseProfessorSearchParam,
   professorToSearchParam,
@@ -26,12 +27,13 @@ import {
 import {
   buildProfessorSearchEntries,
   searchProfessors,
-  type ProfessorSearchEntry,
 } from "../../lib/graph/professorGraphSearch";
+import type { ProfessorSearchEntry } from "../../lib/graph/professorGraphSearch";
 import { useAppStore } from "../../store/appStore";
 import { ProfessorGraphDesktopPanel } from "./ProfessorGraphDesktopPanel";
 import { ProfessorGraphMobileDrawer } from "./ProfessorGraphMobileDrawer";
-import { ProfessorGraphView, type ProfessorGraphPhase } from "./ProfessorGraphView";
+import { ProfessorGraphView } from "./ProfessorGraphView";
+import type { ProfessorGraphPhase } from "./ProfessorGraphView";
 import { BackButton } from "../shared/BackButton";
 
 type BuildPhase = "loading" | "ready" | "error";

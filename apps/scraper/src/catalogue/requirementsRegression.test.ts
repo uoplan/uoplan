@@ -49,7 +49,7 @@ function codesOf(node: ProgramRequirement | null | undefined): Set<string> {
   const out = new Set<string>();
   const walk = (n: ProgramRequirement | null | undefined): void => {
     if (!n) return;
-    if (n.code) out.add(n.code.replace(/\s+/g, " ").trim().toUpperCase());
+    if (n.code) out.add(n.code.replaceAll(/\s+/g, " ").trim().toUpperCase());
     for (const o of n.options ?? []) walk(o);
   };
   walk(node);
@@ -78,7 +78,7 @@ describe("program requirement parser regression (frozen corpus)", () => {
       const oldCodes = codesOf(entry.node);
       const newCodes = codesOf(next);
       const dropped = [...oldCodes].filter((c) => !newCodes.has(c));
-      if (dropped.length) {
+      if (dropped.length > 0) {
         regressions.push({ title: entry.title, reason: `dropped ${dropped.join(",")}` });
       }
       if ((entry.node.credits ?? null) !== (next.credits ?? null)) {

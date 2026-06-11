@@ -1,11 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   canGoToPreviousSeed,
+  hasPersistedGeneratedSchedule,
   inferLowestVisitedSeedFromPersisted,
   nextSeed,
   noteLowestVisitedSeed,
   repairSeedPosition,
-  hasPersistedGeneratedSchedule,
 } from "./seedNavigation";
 
 describe("seedNavigation", () => {

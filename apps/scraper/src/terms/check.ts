@@ -1,7 +1,7 @@
-import fs from "fs/promises";
+import fs from "node:fs/promises";
 import * as cheerio from "cheerio";
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
 import { bootstrapPeopleSoft, PEOPLESOFT_CLASS_SEARCH_URL } from "../shared/peoplesoft.ts";
 
@@ -32,7 +32,7 @@ export function parseTermDropdown(html: string): Term[] {
   const terms: Term[] = [];
   select.find("option").each((_, opt) => {
     const termId = ($(opt).attr("value") ?? "").trim();
-    const name = $(opt).text().replace(/\s+/g, " ").trim();
+    const name = $(opt).text().replaceAll(/\s+/g, " ").trim();
     if (termId && name) terms.push({ termId, name });
   });
   const seen = new Set<string>();
@@ -65,7 +65,7 @@ export async function main() {
   const sorted = sortTerms(currentTerms);
 
   if (!termsListsEqual(knownTerms, sorted)) {
-    await fs.writeFile(TERMS_JSON, JSON.stringify({ terms: sorted }, null, 2) + "\n", "utf-8");
+    await fs.writeFile(TERMS_JSON, `${JSON.stringify({ terms: sorted }, null, 2)}\n`, "utf-8");
   }
 
   console.log(JSON.stringify(newTerms));

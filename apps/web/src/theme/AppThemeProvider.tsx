@@ -4,15 +4,15 @@ import { MantineProvider } from "@mantine/core";
 import type { CSSVariablesResolver } from "@mantine/core";
 import { theme } from "../styles/theme";
 import {
-  type ColorSchemeBase,
-  type ThemeSelection,
-  THEME_LIST,
   getSystemBase,
   persistSelection,
   readStoredSelection,
   resolveTheme,
+  THEME_LIST,
 } from "./themes";
-import { AppThemeContext, type AppThemeContextValue } from "./appThemeContext";
+import type { ColorSchemeBase, ThemeSelection } from "./themes";
+import { AppThemeContext } from "./appThemeContext";
+import type { AppThemeContextValue } from "./appThemeContext";
 
 /**
  * Map Mantine's surface/text variables onto our semantic tokens so Mantine's

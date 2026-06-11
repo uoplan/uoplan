@@ -18,12 +18,12 @@ import { parse } from "csv-parse/sync";
 import { RAW_DATA_DIR } from "../shared/paths.ts";
 import {
   addDistribution,
-  type Distribution,
   emptyDistribution,
   GRADE_KEYS,
   isGradeKey,
   normalizeCode,
 } from "./distribution.ts";
+import type { Distribution } from "./distribution.ts";
 
 export interface GradeRow {
   termId: number;

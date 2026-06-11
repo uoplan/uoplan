@@ -28,13 +28,18 @@ export function printConsoleGreeting(): void {
   const textStyle = "color:#9aa0a6;font-family:monospace;";
   const linkStyle = "color:#74c0fc;font-family:monospace;font-weight:bold;";
 
+  // oxlint-disable-next-line no-console -- intentional easter-egg console art
   console.log(`%c${art}`, headingStyle);
+  // oxlint-disable-next-line no-console -- intentional easter-egg console greeting
   console.log(
     "%cBuilt by students, for students — at the University of Ottawa. 🐺\n" +
       "Conçu par des étudiants, pour des étudiants — à l'Université d'Ottawa.",
     textStyle,
   );
+  // oxlint-disable-next-line no-console -- intentional easter-egg open-source prompt
   console.log("%cLike poking around? uoplan is open source — come say hi:", textStyle);
+  // oxlint-disable-next-line no-console -- intentional easter-egg repository link
   console.log(`%c${REPO_URL}`, linkStyle);
+  // oxlint-disable-next-line no-console -- intentional easter-egg console message
   console.log("%cP.S. there are a few easter eggs hidden around here. Go Gee-Gees! 🎉", textStyle);
 }

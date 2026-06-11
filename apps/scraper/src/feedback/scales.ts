@@ -27,7 +27,7 @@ const CANONICAL_SCALES: string[][] = [
 
 // Space/punctuation-insensitive key so OCR noise like "almostnever" or "51-75%"
 // still matches "almost never" / "51 - 75%".
-const looseKey = (label: string): string => label.toLowerCase().replace(/[^a-z0-9]/g, "");
+const looseKey = (label: string): string => label.toLowerCase().replaceAll(/[^a-z0-9]/g, "");
 
 const CANONICAL_LOOKUP = CANONICAL_SCALES.map((scale) => ({
   scale,

@@ -4,12 +4,12 @@ import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
 import type { BlockedTime } from "../../../store/types";
 import { useAppStore } from "../../../store/appStore";
 import {
-  WEEKDAY_CODES,
-  FULL_WEEK_CODES,
-  DAY_LABELS,
-  HOUR_LABELS,
-  HALF_HOUR_PERCENTS,
   assignLanes,
+  DAY_LABELS,
+  FULL_WEEK_CODES,
+  HALF_HOUR_PERCENTS,
+  HOUR_LABELS,
+  WEEKDAY_CODES,
 } from "./weekCalendarLayout";
 import { WeekCalendarEvent } from "./WeekCalendarEvent";
 import { BlockedTimeLayer } from "./BlockedTimeLayer";

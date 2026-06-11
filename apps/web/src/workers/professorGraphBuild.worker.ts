@@ -1,8 +1,5 @@
-import {
-  buildProfessorCoTeachingGraph,
-  type CourseGradesData,
-  type ProfessorCoTeachingGraph,
-} from "@uoplan/core";
+import { buildProfessorCoTeachingGraph } from "@uoplan/core";
+import type { CourseGradesData, ProfessorCoTeachingGraph } from "@uoplan/core";
 import { buildOfferingsByProfessorId } from "../lib/graph/professorGraphDetails";
 import type { ExploreOfferingFlat } from "../lib/explore/gradesSearch";
 

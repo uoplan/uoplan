@@ -1,11 +1,11 @@
 import type { StateCreator } from "zustand";
 import type { AppStore } from "../types";
-import { recomputeStateForProgram, getDisciplineCodesForProgram } from "../requirementCompute";
+import { getDisciplineCodesForProgram, recomputeStateForProgram } from "../requirementCompute";
 import type { CourseLanguageBucket } from "@uoplan/core";
 import {
   generateRandomSeed,
-  normalizeCourseCode,
   isRepeatableCourse,
+  normalizeCourseCode,
   parseCourseCode,
 } from "@uoplan/core";
 import { getMergedCatalogue } from "./catalogueUtils";

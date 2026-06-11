@@ -11,8 +11,8 @@
  * playground/og-image.png.
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { initWasm, Resvg } from "@resvg/resvg-wasm";
 import {
@@ -35,7 +35,7 @@ const ROOT = join(_workerRoot, "../..");
 const DATA_DIR = join(ROOT, "apps/web/src/assets/data");
 
 function base64urlToBytes(s: string): Uint8Array {
-  const padded = s.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = s.replaceAll("-", "+").replaceAll("_", "/");
   const pad = (4 - (padded.length % 4)) % 4;
   return new Uint8Array(Buffer.from(padded + "=".repeat(pad), "base64"));
 }
@@ -59,6 +59,7 @@ function fallbackSvg(): string {
 async function run() {
   const payloadBase64url = process.argv.slice(2).find((a) => a !== "--");
   if (!payloadBase64url) {
+    // oxlint-disable-next-line no-console -- intentional CLI usage output
     console.error("Usage: pnpm og-image <base64url_schedule_payload>");
     process.exit(1);
   }
@@ -75,10 +76,12 @@ async function run() {
 
   const payload = SchedulePreview.decode(base64urlToBytes(payloadBase64url));
   const termId = String(payload.termId);
+  // oxlint-disable-next-line no-console -- intentional CLI progress output
   console.log("[og-image] termId:", termId, "courses:", payload.courses.length);
 
   const schedulesBytes = readData(`schedules.${termId}.pb`);
   if (!schedulesBytes || payload.courses.length === 0) {
+    // oxlint-disable-next-line no-console -- intentional CLI fallback output
     console.warn("[og-image] Missing schedules data or empty payload — using fallback");
     svg = fallbackSvg();
   } else {
@@ -93,6 +96,7 @@ async function run() {
 
     const reconstructed = reconstructScheduleFromPreview(payload, schedulesData);
     if (!reconstructed || reconstructed.schedule.enrollments.length === 0) {
+      // oxlint-disable-next-line no-console -- intentional CLI fallback output
       console.warn("[og-image] No schedule reconstructed — using fallback");
       svg = fallbackSvg();
     } else {
@@ -113,10 +117,16 @@ async function run() {
   mkdirSync(join(ROOT, "playground"), { recursive: true });
   const outPath = join(ROOT, "playground/og-image.png");
   writeFileSync(outPath, png);
+  // oxlint-disable-next-line no-console -- intentional CLI output path
   console.log(`Written to ${outPath}`);
 }
 
-run().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+void (async () => {
+  try {
+    await run();
+  } catch (err) {
+    // oxlint-disable-next-line no-console -- intentional CLI error output
+    console.error(err);
+    process.exit(1);
+  }
+})();

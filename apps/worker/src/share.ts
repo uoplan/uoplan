@@ -4,7 +4,7 @@
  * redirects the visitor to the in-app calendar view.
  */
 export function buildShareHtml(stateBase64url: string, schedulePayload?: string | null): string {
-  const base64 = stateBase64url.replace(/-/g, "+").replace(/_/g, "/");
+  const base64 = stateBase64url.replaceAll("-", "+").replaceAll("_", "/");
   const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
   const appUrl = `/schedule/calendar/?s=${encodeURIComponent(padded)}`;
   // The `p` payload (courses + sections of the already-generated schedule) lets

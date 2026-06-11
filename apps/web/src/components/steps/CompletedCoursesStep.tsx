@@ -1,13 +1,12 @@
-import { Alert, MultiSelect, Text, Stack, Group, ActionIcon } from "@mantine/core";
+import { ActionIcon, Alert, Group, MultiSelect, Stack, Text } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import {
   createCourseOptions,
   createCourseOptionsFilter,
   renderCourseOption,
 } from "../shared/CourseSelect";
-import type { DataCache } from "@uoplan/core";
-import type { RemainingRequirement } from "@uoplan/core";
-import { isRepeatableCourse, formatCourseWithTitle } from "@uoplan/core";
+import type { DataCache, RemainingRequirement } from "@uoplan/core";
+import { formatCourseWithTitle, isRepeatableCourse } from "@uoplan/core";
 import { tr } from "../../i18n";
 
 interface CompletedCoursesStepProps {

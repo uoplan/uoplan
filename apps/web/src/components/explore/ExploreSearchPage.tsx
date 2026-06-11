@@ -7,7 +7,7 @@ import {
   SPOTLIGHT_MIN_GALLERY_ITEMS,
   SPOTLIGHT_ROW_DURATIONS_SEC,
 } from "../../lib/explore/courseSpotlight";
-import { type ExploreCourseSearchEntry } from "../../lib/explore/gradesSearch";
+import type { ExploreCourseSearchEntry } from "../../lib/explore/gradesSearch";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { ExploreCourseSpotlightGallery } from "./ExploreCourseSpotlightGallery";

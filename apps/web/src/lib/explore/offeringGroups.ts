@@ -13,21 +13,21 @@ import type {
 } from "@uoplan/core";
 import {
   normalizeCourseCode,
-  normalizeProfessorName,
   normalizeInstructorName,
+  normalizeProfessorName,
   pickCanonicalProfessorName,
   sectionInstructors,
 } from "@uoplan/core";
 import { formatTermLabelPlain } from "../term/termLabelPlain";
 import {
-  type ExploreOfferingFlat,
-  UNASSIGNED_GROUP_ID,
-  UNASSIGNED_INSTRUCTOR,
   isUnassignedOffering,
   predictedComboKey,
   professorGroupId,
   resolveCanonicalProfessor,
+  UNASSIGNED_GROUP_ID,
+  UNASSIGNED_INSTRUCTOR,
 } from "./offeringTypes";
+import type { ExploreOfferingFlat } from "./offeringTypes";
 
 export type ProfessorOfferingGroup = {
   groupId: string;
@@ -284,7 +284,7 @@ export function buildScheduleOfferings(
         rawName: string,
         unassigned: boolean,
         combo: string,
-        predictedInstructors: PredictedInstructor[] | undefined,
+        predictedInstructors?: PredictedInstructor[],
       ) => {
         // Resolve real instructors to their canonical registry identity so two
         // spelling variants of one person collapse into a single offering/group.
@@ -316,14 +316,14 @@ export function buildScheduleOfferings(
       };
 
       for (const instructor of realInstructors) {
-        pushOffering(instructor, false, "", undefined);
+        pushOffering(instructor, false, "");
       }
       if (predictedByKey.size > 0) {
         const guesses = [...predictedByKey.values()];
         pushOffering(UNASSIGNED_INSTRUCTOR, true, predictedComboKey(guesses), guesses);
       }
       if (hasNoGuessSection) {
-        pushOffering(UNASSIGNED_INSTRUCTOR, true, "", undefined);
+        pushOffering(UNASSIGNED_INSTRUCTOR, true, "");
       }
     }
   }

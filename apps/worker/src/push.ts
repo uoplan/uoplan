@@ -117,6 +117,7 @@ export function registerPushRoutes(app: PushApp): void {
               cleaned++;
             } else {
               failed++;
+              // oxlint-disable-next-line no-console -- intentional Worker push delivery logging
               console.error("Failed to send notification (status=%s):", status ?? "unknown", err);
             }
           }

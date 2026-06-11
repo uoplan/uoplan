@@ -1,6 +1,6 @@
 import {
-  CoursePrereqKind as ProtoCoursePrereqKind,
   CoursePrereqNodeType,
+  CoursePrereqKind as ProtoCoursePrereqKind,
   RequirementType,
 } from "@uoplan/proto/data";
 import type {

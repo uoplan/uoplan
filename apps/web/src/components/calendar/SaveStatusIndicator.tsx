@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { ActionIcon, Tooltip } from "@mantine/core";
-import { IconDeviceFloppy, IconCloudCheck } from "@tabler/icons-react";
+import { IconCloudCheck, IconDeviceFloppy } from "@tabler/icons-react";
 import { useAppStore } from "../../store/appStore";
 import { flushPersistedAppState } from "../../lib/persistAppState";
-import { useTr, tr } from "../../i18n";
+import { tr, useTr } from "../../i18n";
 import { AnimatedIconSwap } from "../shared/AnimatedIconSwap";
 
 function formatRelativeTime(ts: number): string {

@@ -1,20 +1,16 @@
 import type { DataCache } from "./dataCache";
 import type { GeneratedSchedule, GenerationConstraints } from "./generation/types";
 import { firstFittingEnrollment } from "./generation/swap";
-import { type DecodedState, requirementIdsFromTree } from "./stateEncode";
+import { requirementIdsFromTree } from "./stateEncode";
+import type { DecodedState } from "./stateEncode";
 import { computeRequirementsState } from "./requirements";
 import { gateRemainingByPriority } from "./requirements/priority";
 import { buildPrereqContext } from "./prerequisites/context";
 import { canTakeCourse } from "./prerequisites/evaluator";
 import { getEffectiveSchedule } from "./scheduleFilters";
 import { buildColorMap, transferSwapColor } from "./utils/uiUtils";
-import {
-  type AdvancedRequestInput,
-  type BasicRequestInput,
-  type ScheduleEngine,
-  runAdvancedGeneration,
-  runBasicGeneration,
-} from "./engineBridge";
+import { runAdvancedGeneration, runBasicGeneration } from "./engineBridge";
+import type { AdvancedRequestInput, BasicRequestInput, ScheduleEngine } from "./engineBridge";
 
 export interface ReconstructedPreview {
   schedule: GeneratedSchedule;
@@ -126,7 +122,7 @@ function buildConstrainedPerRequirementRaw(
   for (const { reqIndex, courseCodes } of decoded.constrainedSelections) {
     const reqId = reqIndexToId.get(reqIndex);
     if (reqId == null) continue;
-    if (courseCodes.length) constrainedPerRequirementRaw[reqId] = courseCodes;
+    if (courseCodes.length > 0) constrainedPerRequirementRaw[reqId] = courseCodes;
   }
   for (const { reqIndex, groupPrefixes } of decoded.constrainedGroupSelections) {
     const reqId = reqIndexToId.get(reqIndex);

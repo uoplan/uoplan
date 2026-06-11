@@ -4,7 +4,7 @@ interface PushSubscription {
 }
 
 function b64UrlDecode(str: string): Uint8Array {
-  const base64 = str.replace(/-/g, "+").replace(/_/g, "/");
+  const base64 = str.replaceAll("-", "+").replaceAll("_", "/");
   const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
   return Uint8Array.from(atob(padded), (c) => c.charCodeAt(0));
 }
@@ -12,7 +12,7 @@ function b64UrlDecode(str: string): Uint8Array {
 function b64UrlEncode(bytes: Uint8Array): string {
   let binary = "";
   for (const byte of bytes) binary += String.fromCharCode(byte);
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+  return btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
 }
 
 function concat(...arrays: Uint8Array[]): Uint8Array {
@@ -103,7 +103,7 @@ async function encryptPayload(
   );
   const sharedSecretBits = await crypto.subtle.deriveBits(
     // CF Workers types incorrectly use $public; runtime expects public
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     { name: "ECDH", public: uaPublicKey } as any,
     serverKeyPair.privateKey,
     256,

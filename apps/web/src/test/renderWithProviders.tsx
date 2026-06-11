@@ -6,7 +6,8 @@ import { render } from "vitest-browser-react";
 import { i18n } from "../i18n";
 import { AppThemeProvider } from "../theme/AppThemeProvider";
 import { AppStoreProvider } from "../store/AppStoreProvider";
-import { type AppStoreApi, createAppStore } from "../store/appStore";
+import { createAppStore } from "../store/appStore";
+import type { AppStoreApi } from "../store/appStore";
 import type { AppServices } from "../store/services";
 import type { AppStore } from "../store/types";
 

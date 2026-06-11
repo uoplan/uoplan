@@ -1,7 +1,9 @@
 import { useLingui } from "@lingui/react";
 import { IconWorld } from "@tabler/icons-react";
-import { dynamicActivate, tr, type AppLocale } from "../../i18n";
-import { PillSelect, type PillSelectOption } from "./PillSelect";
+import { dynamicActivate, tr } from "../../i18n";
+import type { AppLocale } from "../../i18n";
+import { PillSelect } from "./PillSelect";
+import type { PillSelectOption } from "./PillSelect";
 import { pillIconStyle } from "./pillButtonStyle";
 
 const NATIVE_LABEL: Record<AppLocale, string> = {

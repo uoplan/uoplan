@@ -1,10 +1,10 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  isGroupToken,
-  isBareGroupToken,
-  groupTokenPrefix,
-  makeGroupToken,
   canonicalGroupToken,
+  groupTokenPrefix,
+  isBareGroupToken,
+  isGroupToken,
+  makeGroupToken,
   makeGroupTokenInstance,
   subjectPrefix,
 } from "../utils/groupToken";

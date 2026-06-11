@@ -7,8 +7,10 @@ import type { ComponentSection } from "../../dataTypes";
 import type { CourseEnrollment, GenerationConstraints } from "../../generation";
 import type { NormalizedCourseCode } from "../../brand";
 import { enrollmentsOverlap } from "../../generation/overlaps";
-import { satisfiesCompressedConstraint } from "../../generation/constraints";
-import { timeSlotSatisfiesConstraints } from "../../generation/constraints";
+import {
+  satisfiesCompressedConstraint,
+  timeSlotSatisfiesConstraints,
+} from "../../generation/constraints";
 import { isSectionAllowedByMinRating } from "../../professorRatings";
 import { normalizeCourseCode } from "../../utils/courseUtils";
 import type { Constraint } from "./types";

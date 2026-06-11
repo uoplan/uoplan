@@ -1,13 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { KeyboardEvent, ReactNode } from "react";
-import {
-  CloseButton,
-  Combobox,
-  type ComboboxItem,
-  Pill,
-  PillsInput,
-  useCombobox,
-} from "@mantine/core";
+import { CloseButton, Combobox, Pill, PillsInput, useCombobox } from "@mantine/core";
+import type { ComboboxItem } from "@mantine/core";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
 /**

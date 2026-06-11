@@ -14,13 +14,14 @@ import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import { LazyMotion, m, useAnimation } from "framer-motion";
 import { usePersistState } from "../hooks/usePersistState";
 import { useAppStore } from "../store/appStore";
-import { useTr, tr } from "../i18n";
+import { tr, useTr } from "../i18n";
 import { AppFooter } from "../components/shared/AppFooter";
 import { SharedScheduleModal } from "../components/shared/SharedScheduleModal";
 import { LazyCommandCenter } from "../components/shortcuts/LazyCommandCenter";
 import { HotkeysHelpModal } from "../components/shortcuts/HotkeysHelpModal";
 import { useGlobalHotkeys } from "../hooks/useGlobalHotkeys";
 
+// oxlint-disable-next-line promise/prefer-await-to-then -- dynamic-import mapping for LazyMotion; keeps the default-export usage traceable
 const loadMotionFeatures = () => import("../lib/motionFeatures").then((mod) => mod.default);
 
 export const Route = createRootRoute({

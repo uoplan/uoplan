@@ -6,9 +6,9 @@ import type {
 } from "@uoplan/core";
 import {
   pickCanonicalProfessorName,
-  professorBySlug,
   professorByLegacyId,
   professorByName,
+  professorBySlug,
   unsafeBrand,
 } from "@uoplan/core";
 

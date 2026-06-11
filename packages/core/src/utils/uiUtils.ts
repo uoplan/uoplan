@@ -113,9 +113,9 @@ export function getCourseColorOklch(index: number): string {
 export function buildColorMap(schedule: GeneratedSchedule): Record<string, number> {
   const codes = [...new Set(schedule.enrollments.map((e) => e.courseCode))].sort();
   const map: Record<string, number> = {};
-  codes.forEach((code, i) => {
+  for (const [i, code] of codes.entries()) {
     map[code] = i % COURSE_COLORS.length;
-  });
+  }
   return map;
 }
 
@@ -203,5 +203,5 @@ export function formatCredits(credits: number): string {
  */
 export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength - 1) + "…";
+  return `${text.slice(0, maxLength - 1)}…`;
 }

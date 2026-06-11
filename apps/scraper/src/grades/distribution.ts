@@ -60,7 +60,7 @@ export function orderDistribution(dist: Distribution): Distribution {
  * in uoplan data (e.g. `"adm1100"` / `"ADM 1100 "` -> `"ADM 1100"`).
  */
 export function normalizeCode(value: string): string {
-  const compact = value.trim().toUpperCase().replace(/\s+/g, " ");
+  const compact = value.trim().toUpperCase().replaceAll(/\s+/g, " ");
   // Insert the single canonical space between the subject letters and the
   // course number when the source omits it (e.g. "ADM1100").
   const match = /^([A-Z]{2,4})\s*([0-9]{3,5}[A-Z]?)$/.exec(compact);

@@ -5,20 +5,21 @@ import {
   normalizeProfessorName,
   professorSentimentByName,
 } from "@uoplan/core";
-import {
-  dedupeCourseEntriesByComponent,
-  searchExplore,
-  type ExploreCourseSearchEntry,
-  type ExploreProfessorSearchEntry,
+import { dedupeCourseEntriesByComponent, searchExplore } from "../../lib/explore/gradesSearch";
+import type {
+  ExploreCourseSearchEntry,
+  ExploreProfessorSearchEntry,
 } from "../../lib/explore/gradesSearch";
 import {
   compareCourseEntries,
   compareProfessorEntries,
   filterCourseEntries,
   filterProfessorEntries,
-  type ExploreFilterState,
-  type ExploreSentimentSets,
-  type ExploreTermSets,
+} from "../../lib/explore/exploreFilters";
+import type {
+  ExploreFilterState,
+  ExploreSentimentSets,
+  ExploreTermSets,
 } from "../../lib/explore/exploreFilters";
 import {
   buildProgramSearchEntries,
@@ -79,7 +80,7 @@ export function useExploreResults({
   }, [debouncedQuery, courseFuse, courseEntries, professorEntries]);
 
   const termSets = useMemo<ExploreTermSets | undefined>(() => {
-    if (filters.termId === null) return undefined;
+    if (filters.termId === null) return;
     const presence = getTermPresence();
     return {
       courseComponents: presence.courseComponentsByTerm.get(filters.termId) ?? null,
@@ -90,7 +91,7 @@ export function useExploreResults({
   const feedbackActive = filters.minFeedback !== null || filters.sortKey === "feedback";
   const { data: feedbackIndex } = useFeedbackData(feedbackActive);
   const sentimentSets = useMemo<ExploreSentimentSets | undefined>(() => {
-    if (!feedbackActive) return undefined;
+    if (!feedbackActive) return;
     if (!feedbackIndex) return { courseByNorm: null, professorByGroupId: null };
     const byName = professorSentimentByName(feedbackIndex);
     const professorByGroupId = new Map<string, number>();

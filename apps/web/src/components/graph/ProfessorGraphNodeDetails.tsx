@@ -1,21 +1,18 @@
 import { Link } from "@tanstack/react-router";
 import { Badge, Box, Group, SegmentedControl, Stack, Text, UnstyledButton } from "@mantine/core";
 import { IconExternalLink } from "@tabler/icons-react";
-import { useMemo, type CSSProperties } from "react";
+import { useMemo } from "react";
+import type { CSSProperties } from "react";
 import type { CanonicalProfessorName, ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/core";
-import { normalizeProfessorName, hasProfessorRatings } from "@uoplan/core";
+import { hasProfessorRatings, normalizeProfessorName } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
   GradeDistributionHistogram,
   GradeDistributionPassingSummary,
 } from "../calendar/GradeDistributionViz";
-import {
-  getAggregateGradeViz,
-  sortGraphNeighbors,
-  type GraphNeighbor,
-  type NeighborSortMode,
-} from "../../lib/graph/professorGraphDetails";
+import { getAggregateGradeViz, sortGraphNeighbors } from "../../lib/graph/professorGraphDetails";
+import type { GraphNeighbor, NeighborSortMode } from "../../lib/graph/professorGraphDetails";
 import type { ExploreOfferingFlat } from "../../lib/explore/gradesSearch";
 import { RatingBadge } from "../shared/RatingBadge";
 

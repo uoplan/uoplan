@@ -1,13 +1,13 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  hasProfessorRatings,
-  normalizeProfessorName,
   buildProfessorRatingsMap,
-  getRatingsForInstructors,
   getRatingDetailsForInstructors,
+  getRatingsForInstructors,
+  hasProfessorRatings,
   isSectionAllowedByMinRating,
-  type ProfessorRatingsMap,
+  normalizeProfessorName,
 } from "../professorRatings";
+import type { ProfessorRatingsMap } from "../professorRatings";
 
 describe("hasProfessorRatings", () => {
   it("accepts only entries with a positive, finite rating and at least one rating", () => {
@@ -17,7 +17,7 @@ describe("hasProfessorRatings", () => {
     expect(hasProfessorRatings({ rating: 0, numRatings: 3 })).toBe(false); // 0 average
     expect(hasProfessorRatings({ rating: Number.NaN, numRatings: 3 })).toBe(false);
     expect(hasProfessorRatings(null)).toBe(false);
-    expect(hasProfessorRatings(undefined)).toBe(false);
+    expect(hasProfessorRatings()).toBe(false);
   });
 });
 

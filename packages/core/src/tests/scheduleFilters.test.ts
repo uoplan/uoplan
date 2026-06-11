@@ -1,12 +1,12 @@
 import {
+  cacheWithPerCourseVirtualFilter,
   filterScheduleExcludingClosed,
   filterScheduleVirtualOnly,
   getEffectiveSchedule,
-  cacheWithPerCourseVirtualFilter,
 } from "../scheduleFilters";
 import type { CourseSchedule } from "../dataTypes";
 import type { DataCache } from "../dataCache";
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { normalizeCourseCode } from "../utils/courseUtils";
 
 function makeSection(
@@ -59,7 +59,7 @@ function cacheReturning(
   shouldReturnSchedule: (code: string) => boolean = () => true,
 ): DataCache {
   return {
-    getCourse: () => undefined,
+    getCourse: () => {},
     resolveToCanonical: (code) => normalizeCourseCode(code),
     getSchedule: (code) => (schedule && shouldReturnSchedule(code) ? schedule : undefined),
     getCoursesByDiscipline: () => [],

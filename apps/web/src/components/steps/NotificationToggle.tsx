@@ -2,7 +2,8 @@ import { useRef, useState } from "react";
 import { Box, Group, Loader, Switch, Text, Tooltip } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconAlertTriangle, IconBell, IconBellOff } from "@tabler/icons-react";
-import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { Turnstile } from "@marsidev/react-turnstile";
+import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { useTr } from "../../i18n";
 
 const VAPID_PUBLIC_KEY = (import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined) ?? "";
@@ -44,7 +45,7 @@ function saveState(state: NotifState): void {
 
 function urlBase64ToUint8Array(base64: string): Uint8Array {
   const padding = "=".repeat((4 - (base64.length % 4)) % 4);
-  const b64 = (base64 + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const b64 = (base64 + padding).replaceAll("-", "+").replaceAll("_", "/");
   const raw = atob(b64);
   return Uint8Array.from(raw, (c) => c.charCodeAt(0));
 }
@@ -65,7 +66,7 @@ export function NotificationToggle() {
   const [state, setState] = useState<NotifState>(loadState);
   const [loading, setLoading] = useState(false);
 
-  const turnstileRef = useRef<TurnstileInstance>(undefined);
+  const turnstileRef = useRef<TurnstileInstance | null>(null);
   const resolveTokenRef = useRef<((token: string) => void) | null>(null);
   const rejectTokenRef = useRef<(() => void) | null>(null);
 
@@ -95,6 +96,7 @@ export function NotificationToggle() {
 
   async function handleEnable() {
     if (!VAPID_PUBLIC_KEY) {
+      // oxlint-disable-next-line no-console -- intentional push setup configuration error logging
       console.error("VITE_VAPID_PUBLIC_KEY is not set");
       notifications.show({
         color: "red",
@@ -135,6 +137,7 @@ export function NotificationToggle() {
       saveState(next);
       setState(next);
     } catch (err) {
+      // oxlint-disable-next-line no-console -- intentional push subscription error logging
       console.error("Failed to subscribe to push notifications:", err);
       notifications.show({
         color: "red",
@@ -172,6 +175,7 @@ export function NotificationToggle() {
       saveState({ status: "disabled" });
       setState({ status: "disabled" });
     } catch (err) {
+      // oxlint-disable-next-line no-console -- intentional push unsubscribe error logging
       console.error("Failed to unsubscribe from push notifications:", err);
       notifications.show({
         color: "red",

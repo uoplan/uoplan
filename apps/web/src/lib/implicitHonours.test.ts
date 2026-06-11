@@ -1,7 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Course, CourseSchedule } from "@uoplan/core";
-import type { DataCache } from "@uoplan/core";
-import type { RemainingRequirement } from "@uoplan/core";
+import type { Course, CourseSchedule, DataCache, RemainingRequirement } from "@uoplan/core";
 import { normalizeCourseCode } from "@uoplan/core";
 import { collectImplicitHonoursForSchedule } from "./implicitHonours";
 

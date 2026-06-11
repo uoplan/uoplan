@@ -92,6 +92,7 @@ function ChosenBreadcrumb({
 export function OptionsDrilldown({
   nodeKeyPrefix,
   node: rawNode,
+  // oxlint-disable-next-line oxc/only-used-in-recursion -- forwarded to nested OptionsDrilldown renders
   completedCourses,
   selectedOptionsPerRequirement,
   onSelectOption,

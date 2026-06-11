@@ -1,7 +1,6 @@
 import type { DataCache } from "./dataCache";
-import { getCourseLevel } from "./utils/courseUtils";
+import { getCourseLevel, normalizeCourseCode } from "./utils/courseUtils";
 import type { RemainingRequirement } from "./requirements";
-import { normalizeCourseCode } from "./utils/courseUtils";
 
 export type RequirementPool = {
   requirementId: string;
@@ -44,7 +43,7 @@ export function buildRequirementPools(remaining: RemainingRequirement[]): Requir
 
 const DEFAULT_CREDITS_PER_COURSE = 3;
 
-export function isBroadElectivePoolType(type: string | undefined): boolean {
+export function isBroadElectivePoolType(type?: string): boolean {
   return (
     type === "elective" ||
     type === "free_elective" ||

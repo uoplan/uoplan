@@ -1,5 +1,5 @@
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
 import { urlToSlug } from "./links.ts";
 import { CatalogueSchema } from "./schema.ts";
 import { CATALOGUE_DATA_DIR, SCRAPER_DATA_DIR } from "../shared/paths.ts";

@@ -1,18 +1,18 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
+  buildColorMap,
   COURSE_COLORS,
+  formatCredits,
   getCourseColor,
   getCourseColorHex,
   getCourseColorOklch,
-  buildColorMap,
-  transferSwapColor,
+  getRequirementStatusColor,
   hexToRgb,
   ratingToColor,
-  getRequirementStatusColor,
-  formatCredits,
+  transferSwapColor,
   truncateText,
 } from "../utils/uiUtils";
-import type { GeneratedSchedule, CourseEnrollment } from "../generation/types";
+import type { CourseEnrollment, GeneratedSchedule } from "../generation/types";
 import type { NormalizedCourseCode } from "../brand";
 
 function enrollment(code: string): CourseEnrollment {
