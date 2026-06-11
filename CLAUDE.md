@@ -52,11 +52,11 @@ Tooling is **oxc-based** — `oxlint` (`oxlint.config.ts`), `oxfmt` (`oxfmt.conf
 
 > **fallow `health` temporarily disabled in the gate.** Both the CI step and the
 > lefthook pre-commit hook run `pnpm check:fallow` (`fallow --fail-on-issues --skip
-> health`), which enforces only dead-code + duplication. The complexity/CRAP `health`
+health`), which enforces only dead-code + duplication. The complexity/CRAP `health`
 > analysis is intentionally excluded for now because the codebase has a large backlog
 > of complexity/CRAP findings that need a dedicated refactoring + test-coverage effort
 > (tracked separately). It is **not** gated yet — run it manually with `pnpm fallow
-> health` to inspect the backlog. To re-enable gating later, drop `--skip health` from
+health` to inspect the backlog. To re-enable gating later, drop `--skip health` from
 > the `check:fallow` script in `package.json`.
 
 ## Architecture
