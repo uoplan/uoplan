@@ -147,9 +147,9 @@
 
   /* Status accents — "naturally-dark pastel": softened, lower-chroma tones that
      stay readable on the pale parchment (no harsh yellow). */
-  --app-info: oklch(0.6 0.13 240);
+  --app-info: oklch(0.5 0.13 240);
   --app-info-soft: color-mix(in oklab, var(--app-info) 12%, transparent);
-  --app-warning: oklch(0.64 0.14 58);
+  --app-warning: oklch(0.5 0.14 58);
   --app-warning-soft: color-mix(in oklab, var(--app-warning) 12%, transparent);
   --app-success: oklch(0.59 0.13 150);
   --app-success-soft: color-mix(in oklab, var(--app-success) 12%, transparent);
