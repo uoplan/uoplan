@@ -203,7 +203,7 @@ export function ExploreFilterBar({
   };
 
   const handleChange = (next: Partial<ExploreFilterState>) => {
-    onChange({ ...filters, ...next });
+    onChange(next);
   };
 
   const anyActive =
