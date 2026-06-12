@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Box, Group } from "@mantine/core";
+import { Box, Group, Tooltip } from "@mantine/core";
 import { useClickOutside } from "@mantine/hooks";
-import { IconSettings } from "@tabler/icons-react";
+import { Link } from "@tanstack/react-router";
+import { IconSettings, IconUserCircle } from "@tabler/icons-react";
 import { AnimatePresence, m } from "framer-motion";
 import { tr, useTr } from "../../i18n";
 import type { AppLocale } from "../../i18n";
@@ -27,6 +28,24 @@ export function ChromeControls({ onLangSwitch }: ChromeControlsProps) {
   return (
     <>
       <Group gap={8} visibleFrom="sm">
+        <Tooltip label={tr("app.nav.dest.personalize.label")} position="bottom" withArrow>
+          <Link
+            to="/personalize"
+            aria-label={tr("app.nav.dest.personalize.label")}
+            style={{
+              ...pillButtonStyle,
+              padding: 0,
+              width: 32,
+              height: 32,
+              justifyContent: "center",
+              textDecoration: "none",
+            }}
+            onMouseEnter={(e) => applyPillHover(e.currentTarget)}
+            onMouseLeave={(e) => resetPillHover(e.currentTarget)}
+          >
+            <IconUserCircle size={16} style={pillIconStyle} />
+          </Link>
+        </Tooltip>
         <ThemeSwitcher />
         <LanguageSwitcher onSwitch={onLangSwitch} />
       </Group>

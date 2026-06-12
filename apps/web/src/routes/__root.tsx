@@ -15,10 +15,13 @@ import { LazyMotion, m, useAnimation } from "framer-motion";
 import { usePersistState } from "../hooks/usePersistState";
 import { useAppStore } from "../store/appStore";
 import { tr, useTr } from "../i18n";
+import { recordLocation } from "../lib/navigation/navigationHistory";
 import { AppFooter } from "../components/shared/AppFooter";
 import { SharedScheduleModal } from "../components/shared/SharedScheduleModal";
 import { LazyCommandCenter } from "../components/shortcuts/LazyCommandCenter";
 import { HotkeysHelpModal } from "../components/shortcuts/HotkeysHelpModal";
+import { BasketFab } from "../components/basket/BasketFab";
+import { PersonalizeBanner } from "../components/shared/PersonalizeBanner";
 import { useGlobalHotkeys } from "../hooks/useGlobalHotkeys";
 
 // oxlint-disable-next-line promise/prefer-await-to-then -- dynamic-import mapping for LazyMotion; keeps the default-export usage traceable
@@ -66,15 +69,27 @@ function RootLayout() {
   const routerStatus = useRouterState({ select: (s) => s.status });
   const router = useRouter();
   const controls = useAnimation();
-  const isCalendarRoute = pathname.startsWith("/schedule/calendar");
+  const isCalendarRoute = pathname.startsWith("/schedule");
+  // Explore renders its own cart (inline top-right on desktop, floating on mobile)
+  // inside its layout, so it is excluded here. Personalize keeps a top-right cart;
+  // trends (chrome controls) and the graph (node panel) own that corner, so the
+  // cart floats bottom-right there.
+  const showBasketFab =
+    Boolean(indices) &&
+    !isCalendarRoute &&
+    ["/personalize", "/trends", "/graph"].some((prefix) => pathname.startsWith(prefix));
+  const basketDesktopPlacement = pathname.startsWith("/personalize") ? "top-right" : "bottom-right";
   const pendingAnimation = useRef(false);
   const lastNavAction = useRef<string>("PUSH");
 
   useGlobalHotkeys();
 
   useEffect(() => {
-    return router.history.subscribe(({ action }) => {
+    const seed = router.history.location;
+    recordLocation(seed.state.__TSR_index, seed.pathname, seed.search);
+    return router.history.subscribe(({ action, location }) => {
       lastNavAction.current = action.type;
+      recordLocation(location.state.__TSR_index, location.pathname, location.search);
     });
   }, [router.history]);
 
@@ -132,7 +147,9 @@ function RootLayout() {
         <HeadContent />
         <SharedScheduleModal />
         <LazyCommandCenter />
+        {showBasketFab && <BasketFab desktopPlacement={basketDesktopPlacement} />}
         <HotkeysHelpModal />
+        <PersonalizeBanner />
         <Box style={{ flex: 1, minHeight: 0 }}>
           <m.div animate={controls} style={isCalendarRoute ? { height: "100%" } : undefined}>
             <Outlet />

@@ -66,7 +66,7 @@ function unpackCoursePairs(packed: number[]): number[] {
 
 export interface EncodeInput {
   wizardMode: "basic" | "advanced" | null;
-  basicPinnedCourses: string[];
+  basketCourses: string[];
   basicElectivesCount: number;
   basicExcludedCategories: string[];
 
@@ -110,7 +110,7 @@ export interface EncodeInput {
 
 export interface DecodedState {
   wizardMode: "basic" | "advanced" | null;
-  basicPinnedCourses: string[];
+  basketCourses: string[];
   basicElectivesCount: number;
   basicExcludedCategories: string[];
 
@@ -212,7 +212,7 @@ export function encodeState(
   for (const code of input.completedCourses) {
     if (!isOptCourse(code) && !courseCodeToIndex.has(code)) return null;
   }
-  for (const code of input.basicPinnedCourses) {
+  for (const code of input.basketCourses) {
     if (!courseCodeToIndex.has(code)) return null;
   }
   for (const code of input.blacklistedCourses) {
@@ -241,7 +241,7 @@ export function encodeState(
         : input.wizardMode === "advanced"
           ? WizardMode.WIZARD_MODE_ADVANCED
           : WizardMode.WIZARD_MODE_UNSPECIFIED,
-    basicPinnedCourses: input.basicPinnedCourses
+    basicPinnedCourses: input.basketCourses
       .map(encodeCourseCode)
       .filter((i): i is number => i !== undefined),
     basicElectivesCount: input.basicElectivesCount,
@@ -387,6 +387,26 @@ export function peekTermAndYear(
   }
 }
 
+/**
+ * Whether the persisted state shows the user has personalized at all: a program
+ * is selected, completed courses were entered, or the basket is non-empty. Reads
+ * only proto fields, so it works WITHOUT the catalogue/indices needed to fully
+ * resolve the state (e.g. on the landing page, before app data loads).
+ */
+export function peekHasPersonalized(bytes: Uint8Array): boolean {
+  try {
+    const state = ShareableState.decode(bytes);
+    if (state.magic !== STATE_MAGIC) return false;
+    return (
+      state.programIndex !== undefined ||
+      state.completedCourses.length > 0 ||
+      state.basicPinnedCourses.length > 0
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function decodeState(
   buffer: Uint8Array,
   catalogue: CatalogueLike,
@@ -483,7 +503,7 @@ export function decodeState(
       .filter((c): c is string => c !== null),
   }));
 
-  const basicPinnedCourses = state.basicPinnedCourses
+  const basketCourses = state.basicPinnedCourses
     .map((idx) => (idx < indices.courses.length ? indices.courses[idx] : null))
     .filter((c): c is string => c !== null);
 
@@ -498,7 +518,7 @@ export function decodeState(
         : state.wizardMode === WizardMode.WIZARD_MODE_ADVANCED
           ? "advanced"
           : null,
-    basicPinnedCourses,
+    basketCourses,
     basicElectivesCount: state.basicElectivesCount,
     basicExcludedCategories: state.basicExcludedCategoryIndices
       .map((i) => (i < indices.disciplines.length ? indices.disciplines[i] : null))
@@ -633,4 +653,10 @@ export function peekTermAndYearFromBase64(
   const bytes = base64ToBytes(base64);
   if (!bytes) return null;
   return peekTermAndYear(bytes);
+}
+
+export function peekHasPersonalizedFromBase64(base64: string): boolean {
+  const bytes = base64ToBytes(base64);
+  if (!bytes) return false;
+  return peekHasPersonalized(bytes);
 }

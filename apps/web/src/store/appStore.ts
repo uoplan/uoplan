@@ -37,7 +37,7 @@ export type AppStoreApi = StoreApi<AppStore>;
 
 function createPlannerStateDefaults() {
   return {
-    basicPinnedCourses: [],
+    basketCourses: [],
     basicElectivesCount: DEFAULT_BASIC_ELECTIVES_COUNT,
     basicExcludedCategories: [],
     completedCourses: [],

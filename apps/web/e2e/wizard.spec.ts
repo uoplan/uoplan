@@ -1,15 +1,15 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * Wizard → calendar happy path.
+ * Personalize dashboard → schedule happy path.
  *
- * Drives the schedule dashboard to generation and asserts we land on the
- * calendar. Uses committed `.pb` data so it is deterministic without a network.
- * The dashboard lets the user generate even with outstanding blockers (via the
- * confirmation modal), so this path works without selecting a full program.
+ * Drives the personalize dashboard to generation and asserts we land on the
+ * schedule (calendar). Uses committed `.pb` data so it is deterministic without
+ * a network. The dashboard lets the user generate even with outstanding blockers
+ * (via the confirmation modal), so this path works without selecting a full program.
  */
-test("generates from the dashboard and lands on the calendar", async ({ page }) => {
-  await page.goto("/schedule");
+test("generates from the dashboard and lands on the schedule", async ({ page }) => {
+  await page.goto("/personalize");
 
   await expect(page.getByRole("heading", { name: /Build your schedule/i })).toBeVisible();
 
@@ -18,6 +18,6 @@ test("generates from the dashboard and lands on the calendar", async ({ page }) 
   // With no program selected there are blockers, so the confirmation modal opens.
   await page.getByRole("button", { name: "Generate anyway" }).click();
 
-  await page.waitForURL("**/schedule/calendar");
+  await page.waitForURL(/\/schedule\/?(?:[?#]|$)/);
   await expect(page.getByTestId("calendar-page")).toBeVisible();
 });

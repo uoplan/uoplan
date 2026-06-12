@@ -76,7 +76,7 @@ export type CalendarVariant = "basic" | "advanced";
 
 export interface AppState {
   pendingSharedState: DecodedState | null;
-  basicPinnedCourses: string[];
+  basketCourses: string[];
   basicElectivesCount: number;
   basicExcludedCategories: string[];
 
@@ -202,7 +202,15 @@ export interface AppState {
 }
 
 export interface AppActions {
-  setBasicPinnedCourses: (courses: string[]) => void;
+  setBasketCourses: (courses: string[]) => void;
+  /** Add a course code to the basket ("courses you want"); no-op if already present. */
+  addToBasket: (code: string) => void;
+  /** Remove a course code from the basket. */
+  removeFromBasket: (code: string) => void;
+  /** Toggle a course code's presence in the basket. */
+  toggleBasket: (code: string) => void;
+  /** Empty the basket. */
+  clearBasket: () => void;
   setBasicElectivesCount: (count: number) => void;
   setBasicExcludedCategories: (categories: string[]) => void;
   generateBasicSchedules: () => Promise<void>;

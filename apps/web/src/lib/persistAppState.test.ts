@@ -18,7 +18,7 @@ describe("flushPersistedAppState", () => {
       },
       clear: () => storage.clear(),
     });
-    vi.stubGlobal("window", { location: { pathname: "/schedule/calendar/advanced" } });
+    vi.stubGlobal("window", { location: { pathname: "/schedule" } });
   });
 
   afterEach(() => {

@@ -75,7 +75,7 @@ function buildBasicInput(
 ): BasicRequestInput {
   return {
     constraints,
-    basicPinnedCourses: decoded.basicPinnedCourses,
+    basketCourses: decoded.basketCourses,
     basicElectivesCount: decoded.basicElectivesCount,
     basicExcludedCategories: decoded.basicExcludedCategories ?? [],
     completedCourses: decoded.completedCourseCodes,

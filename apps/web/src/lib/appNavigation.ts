@@ -17,7 +17,7 @@ export function navigateToCalendar(options?: { replace?: boolean }): void {
   const router = getRouterInstance();
   if (!router) return;
   void router.navigate({
-    to: "/schedule/calendar",
+    to: "/schedule",
     replace: options?.replace ?? false,
   });
 }

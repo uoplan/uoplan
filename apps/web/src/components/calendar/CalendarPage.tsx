@@ -139,7 +139,7 @@ export function CalendarPage() {
     currentSeed,
     lowestVisitedSeed,
     scheduleGenerating,
-    basicPinnedCourses,
+    basketCourses,
     basicElectivesCount,
     scheduleNoVariety,
     generationOptionsDirty,
@@ -157,7 +157,7 @@ export function CalendarPage() {
       currentSeed: s.currentSeed,
       lowestVisitedSeed: s.lowestVisitedSeed,
       scheduleGenerating: s.scheduleGenerating,
-      basicPinnedCourses: s.basicPinnedCourses,
+      basketCourses: s.basketCourses,
       basicElectivesCount: s.basicElectivesCount,
       scheduleNoVariety: s.scheduleNoVariety,
       generationOptionsDirty: s.generationOptionsDirty,
@@ -203,7 +203,7 @@ export function CalendarPage() {
 
   const canGoPrevious = canGoToPreviousSeed(currentSeed, lowestVisitedSeed);
   const canUseSeedNavigation =
-    hasProgram || canGenerateBasicSchedule(basicPinnedCourses.length, basicElectivesCount);
+    hasProgram || canGenerateBasicSchedule(basketCourses.length, basicElectivesCount);
 
   const [controlsOpen, setControlsOpen] = useState(false);
   const [enrolCliOpen, setEnrolCliOpen] = useState(false);
@@ -359,7 +359,7 @@ export function CalendarPage() {
 
   const sidebarControls = (
     <>
-      <BackButton fallbackTo="/schedule" fallbackLabel={tr("landing.schedule.title")} />
+      <BackButton fallbackTo="/personalize" />
       <Title
         order={1}
         style={{

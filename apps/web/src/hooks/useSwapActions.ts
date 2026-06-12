@@ -44,7 +44,7 @@ export function useSwapActions({
   const blacklistCourseFromSwap = useAppStore((s) => s.blacklistCourseFromSwap);
   const unblacklistCourseFromSwap = useAppStore((s) => s.unblacklistCourseFromSwap);
   const blacklistedCourses = useAppStore((s) => s.blacklistedCourses);
-  const basicPinnedCourses = useAppStore((s) => s.basicPinnedCourses);
+  const basketCourses = useAppStore((s) => s.basketCourses);
   const constrainedPerRequirement = useAppStore((s) => s.constrainedPerRequirement);
   const selectedPerRequirement = useAppStore((s) => s.selectedPerRequirement);
   const currentPoolMap = useAppStore((s) => s.currentPoolMap);
@@ -82,10 +82,10 @@ export function useSwapActions({
   ]);
 
   const isGenerationPinned = useMemo(() => {
-    if (isBasic) return basicPinnedCourses.some((c) => normalizeCourseCode(c) === courseNorm);
+    if (isBasic) return basketCourses.some((c) => normalizeCourseCode(c) === courseNorm);
     if (isAdvanced) return isCourseInPerRequirementMaps(courseNorm, constrainedPerRequirement);
     return false;
-  }, [basicPinnedCourses, constrainedPerRequirement, courseNorm, isAdvanced, isBasic]);
+  }, [basketCourses, constrainedPerRequirement, courseNorm, isAdvanced, isBasic]);
 
   const isInAssignSelections = useMemo(() => {
     if (!isAdvanced) return false;

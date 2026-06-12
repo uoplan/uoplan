@@ -1,12 +1,11 @@
 import { useEffect, useMemo } from "react";
 import { Alert } from "@mantine/core";
-import { buildEffectiveRemainingRequirements } from "@uoplan/core";
 import { useAppStore } from "../../store/appStore";
 import { tr, useTr } from "../../i18n";
 import { computeFirstYearCredits } from "../../lib/generation/advancedGenerationDerivations";
 import { AdvancedGenerationOptionsView } from "./AdvancedGenerationOptionsView";
-import { DesiredCourseWarnings } from "./generationOptions/DesiredCourseWarnings";
-import { resolveDesiredCourses } from "../../lib/generation/resolveDesiredCourses";
+import { BasketContents } from "../basket/BasketContents";
+import { useBasketResolution } from "../../lib/generation/useBasketResolution";
 import { avoidedDaysFromBlocks } from "../../lib/blockedTimes";
 import { SCHEDULE_COURSE_COUNT_MAX } from "../../store/generationDefaults";
 import { useSharedGenerationOptions } from "./generationOptions/useSharedGenerationOptions";
@@ -17,7 +16,7 @@ export function AdvancedGenerationOptions() {
   const {
     cache,
     completedCourses,
-    basicPinnedCourses,
+    basketCourses,
     basicExcludedCategories,
     generationMinStartMinutes,
     generationMaxEndMinutes,
@@ -39,7 +38,7 @@ export function AdvancedGenerationOptions() {
     courseOptionsFilter,
     courseRenderOption,
     desiredCourseOptions,
-    setBasicPinnedCourses,
+    setBasketCourses,
     setBasicExcludedCategories,
     setGenerationMinProfessorRating,
     setGenerationMinStartMinutes,
@@ -67,7 +66,6 @@ export function AdvancedGenerationOptions() {
     selectedOptionsPerRequirement,
     filteredPrereqEligibleCourses,
   } = useRequirementAssignmentState();
-  const prereqEligibleCourses = useAppStore((s) => s.prereqEligibleCourses);
   const coursesThisSemester = useAppStore((s) => s.coursesThisSemester);
 
   const setCoursesThisSemester = useAppStore((s) => s.setCoursesThisSemester);
@@ -81,44 +79,8 @@ export function AdvancedGenerationOptions() {
   );
 
   // Resolve the unified "courses you want" list against the same requirement universe the engine
-  // schedules against, mirroring the generation adapter so warnings never diverge from results.
-  const { resolution, assignments } = useMemo(() => {
-    const effectiveRemainingRequirements = buildEffectiveRemainingRequirements(
-      remainingRequirements,
-      requirementTreeWithStatus,
-      selectedOptionsPerRequirement,
-    );
-    const resolved = resolveDesiredCourses(
-      effectiveRemainingRequirements,
-      basicPinnedCourses,
-      completedCourses,
-      constrainedPerRequirement,
-      selectedPerRequirement,
-      prereqEligibleCourses,
-      cache,
-    );
-    const titleByReqId = new Map(
-      effectiveRemainingRequirements.map((req, index) => [
-        req.requirementId,
-        req.title ?? tr("generationOptions.warn.assigned.fallbackTitle", { index: index + 1 }),
-      ]),
-    );
-    const assigned = Object.entries(resolved.assigned).map(([reqId, codes]) => ({
-      requirementTitle: titleByReqId.get(reqId) ?? reqId,
-      codes,
-    }));
-    return { resolution: resolved, assignments: assigned };
-  }, [
-    remainingRequirements,
-    requirementTreeWithStatus,
-    selectedOptionsPerRequirement,
-    basicPinnedCourses,
-    completedCourses,
-    constrainedPerRequirement,
-    selectedPerRequirement,
-    prereqEligibleCourses,
-    cache,
-  ]);
+  // schedules against, via the shared hook so the embedded cart and generation never diverge.
+  const { resolution } = useBasketResolution();
 
   // Reflect the resolved assignments into the constrained-picks map so each desired course shows up
   // as a locked course inside its requirement (just like a manual pick). The action preserves manual
@@ -138,11 +100,11 @@ export function AdvancedGenerationOptions() {
     <AdvancedGenerationOptionsView
       fields={{
         courseOptions: desiredCourseOptions,
-        desiredCourses: basicPinnedCourses,
-        onDesiredCoursesChange: setBasicPinnedCourses,
+        desiredCourses: basketCourses,
+        onDesiredCoursesChange: setBasketCourses,
         renderCourseOption: courseRenderOption,
         courseFilter: courseOptionsFilter,
-        belowCourses: <DesiredCourseWarnings resolution={resolution} assignments={assignments} />,
+        coursesSlot: <BasketContents variant="embedded" />,
         countValue: coursesThisSemester,
         onCountChange: (n) =>
           setCoursesThisSemester(Math.max(1, Math.min(SCHEDULE_COURSE_COUNT_MAX, n))),

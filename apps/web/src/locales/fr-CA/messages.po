@@ -114,12 +114,6 @@ msgstr "Retour à {course}"
 msgid "app.nav.backTrends"
 msgstr "Tendances"
 
-msgid "app.nav.dest.calendar.description"
-msgstr "Consultez et parcourez vos horaires générés."
-
-msgid "app.nav.dest.calendar.label"
-msgstr "Calendrier"
-
 msgid "app.nav.dest.changelog.description"
 msgstr "Découvrez les nouveautés et les mises à jour récentes."
 
@@ -144,11 +138,19 @@ msgstr "Revenir à la page d'accueil d'uoplan."
 msgid "app.nav.dest.home.label"
 msgstr "Accueil"
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "app.nav.dest.personalize.description"
+msgstr "Choisissez votre trimestre, programme et cours réussis."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "app.nav.dest.personalize.label"
+msgstr "Personnaliser"
+
 msgid "app.nav.dest.schedule.description"
-msgstr "Planifiez votre programme et générez des horaires sans conflit."
+msgstr "Générez et consultez des horaires sans conflit."
 
 msgid "app.nav.dest.schedule.label"
-msgstr "Générateur d'horaire"
+msgstr "Horaire"
 
 msgid "app.nav.dest.trends.description"
 msgstr "Suivez l'évolution des notes au fil du temps selon les disciplines."
@@ -291,6 +293,199 @@ msgstr "Options de cours à option"
 #: scripts/i18n/dynamic-keys.mjs
 msgid "basicCourseFilters.toggle"
 msgstr "Afficher ou masquer les filtres de cours"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.add"
+msgstr "Ajouter au panier"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.add.aria"
+msgstr "Ajouter au panier"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.added"
+msgstr "Dans le panier"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.added.aria"
+msgstr "Dans le panier"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.badge.pinned"
+msgstr "Épinglé"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.badge.placed"
+msgstr "Placé"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.assigned"
+msgstr "Compte pour des exigences"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.completed"
+msgstr "Déjà terminés"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.noRequirement"
+msgstr "Aucune exigence correspondante"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.overflow"
+msgstr "Exigence déjà remplie"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.prereqUnmet"
+msgstr "Préalables non satisfaits"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.standalone"
+msgstr "Obligatoires séparément"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.title"
+msgstr "Répartition"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.unavailable"
+msgstr "Non offerts cette session"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.credits"
+msgstr "{credits} cr"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.cta.viewSchedule"
+msgstr "Voir votre horaire"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.details.hide"
+msgstr "Masquer les détails"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.details.show"
+msgstr "Afficher les détails"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.empty.body"
+msgstr "Ajoutez des cours pendant l’exploration, puis revenez ici pour façonner votre horaire."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.empty.title"
+msgstr "Votre panier est vide"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.fab.label"
+msgstr "Panier"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.fab.open"
+msgstr "Ouvrir le panier avec {count} cours"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.fab.openEmpty"
+msgstr "Ouvrir le panier"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.noProgram.copy"
+msgstr "Configurez Personnaliser pour les répartir dans vos exigences."
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:200
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.noProgram.link"
+msgstr "Aller à Personnaliser"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.removeCourse"
+msgstr "Retirer {code}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stat.courseCount"
+msgstr "{count, plural, one {# cours} other {# cours}}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stat.creditsPlaced"
+msgstr "{placed}/{target} crédits placés"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stat.requirementsCovered"
+msgstr "{covered}/{total} exigences couvertes"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stat.requirementsRemaining"
+msgstr "{count, plural, one {# restante} other {# restantes}}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.assigned"
+msgstr "Compte pour {requirement}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.completed"
+msgstr "Déjà terminé"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.noRequirement"
+msgstr "Aucune exigence correspondante"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.overflow"
+msgstr "L’exigence correspondante est déjà remplie"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.prereqUnmet"
+msgstr "Préalables non satisfaits"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.required"
+msgstr "Traité comme un cours obligatoire"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.standalone"
+msgstr "Obligatoire séparément"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.unavailable"
+msgstr "Non offert cette session"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stillNeeded.empty"
+msgstr "Votre panier couvre les exigences suivies."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stillNeeded.noSuggestions"
+msgstr "Aucune suggestion admissible pour le moment."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stillNeeded.progress"
+msgstr "{covered}/{needed} crédits"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stillNeeded.title"
+msgstr "Encore nécessaire"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stillNeeded.untitled"
+msgstr "Autre exigence"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.summary.collapse"
+msgstr "Réduire le résumé du panier"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.summary.expand"
+msgstr "Développer le résumé du panier"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.summary.noProgramHint"
+msgstr "Cours traités comme obligatoires"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.summary.programHint"
+msgstr "Cours répartis dans vos exigences"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.title"
+msgstr "Votre panier"
 
 msgid "calendar.blockedTime.label"
 msgstr "Plage bloquée"
@@ -957,6 +1152,14 @@ msgstr "Bien (3,0+)"
 msgid "explore.filter.rating.great"
 msgstr "Très bien (3,5+)"
 
+#: apps/web/src/components/explore/ExploreFilterBar.tsx:186
+msgid "explore.filter.requirements"
+msgstr "Comble mes exigences"
+
+#: apps/web/src/components/explore/ExploreFilterBar.tsx:192
+msgid "explore.filter.requirements.hint"
+msgstr "Ajoutez votre programme dans Personnaliser pour filtrer les cours qui comptent pour ce qu'il reste."
+
 #: apps/web/src/components/explore/ExploreFilterBar.tsx:59
 #: apps/web/src/components/explore/ExploreFilterBar.tsx:61
 #: apps/web/src/components/explore/ExploreFilterPopoverContent.tsx:342
@@ -1050,6 +1253,22 @@ msgstr "Programmes"
 #: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:306
 msgid "explore.schedule.conflict"
 msgstr "Les sections sélectionnées se chevauchent"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:214
+msgid "explore.schedule.fit.counts"
+msgstr "Compte pour {requirement}"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:215
+msgid "explore.schedule.fit.countsMany"
+msgstr "Compte pour {count} de vos exigences"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:208
+msgid "explore.schedule.fit.none"
+msgstr "Ne fait pas partie de vos exigences restantes"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:198
+msgid "explore.schedule.fit.noProgram"
+msgstr "Ajoutez un programme dans Personnaliser pour voir comment ce cours s’intègre à votre plan."
 
 #: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:284
 msgid "explore.schedule.loading"
@@ -1449,33 +1668,6 @@ msgstr "Plus d’options"
 msgid "generationOptions.warn.assigned.fallbackTitle"
 msgstr "Exigence {index}"
 
-msgid "generationOptions.warn.assigned.title"
-msgstr "Comptent dans vos exigences"
-
-msgid "generationOptions.warn.noRequirement.body"
-msgstr "Ces cours seront planifiés, mais ils ne correspondent à aucune de vos exigences restantes; ils pourraient donc ne pas compter dans votre programme :"
-
-msgid "generationOptions.warn.noRequirement.title"
-msgstr "Ne comptera pour aucune exigence"
-
-msgid "generationOptions.warn.overflow.body"
-msgstr "Ces cours seront planifiés, mais l'exigence à laquelle ils correspondent est déjà comblée; ils pourraient donc ne pas compter dans votre programme :"
-
-msgid "generationOptions.warn.overflow.title"
-msgstr "Exigence déjà comblée"
-
-msgid "generationOptions.warn.prereqUnmet.body"
-msgstr "Ces cours seront planifiés, mais vous pourriez ne pas satisfaire les préalables. Vous aurez probablement besoin de la permission de l'enseignant pour vous inscrire :"
-
-msgid "generationOptions.warn.prereqUnmet.title"
-msgstr "Préalables possiblement non satisfaits"
-
-msgid "generationOptions.warn.unavailable.body"
-msgstr "Ces cours ne sont pas offerts ce trimestre; ils ne peuvent donc pas être ajoutés à votre horaire :"
-
-msgid "generationOptions.warn.unavailable.title"
-msgstr "Non offert ce trimestre"
-
 msgid "graph.building"
 msgstr "Construction du graphe de co-enseignement…"
 
@@ -1551,6 +1743,12 @@ msgstr "Recherchez des cours et des professeurs avec les distributions de notes.
 
 msgid "landing.graph.description"
 msgstr "Découvrez comment les professeurs sont liés par des cours communs."
+
+#: apps/web/src/components/calendar/CalendarPage.tsx:362
+#: apps/web/src/components/schedule/ScheduleDashboardPage.tsx:97
+#: apps/web/src/lib/navigation/backState.ts:18
+msgid "landing.personalize.title"
+msgstr "Personnaliser"
 
 msgid "landing.schedule.description"
 msgstr "Planifiez votre parcours et générez des horaires sans conflit."
@@ -1706,6 +1904,18 @@ msgstr "Choix {current} sur {total}"
 
 msgid "optionsStep.pager.prev"
 msgstr "Choix précédent"
+
+#: apps/web/src/components/shared/PersonalizeBanner.tsx:64
+msgid "personalizeBanner.dismiss"
+msgstr "Ignorer"
+
+#: apps/web/src/components/shared/PersonalizeBanner.tsx:50
+msgid "personalizeBanner.message"
+msgstr "Indique ton programme et tes cours réussis pour des résultats adaptés à toi."
+
+#: apps/web/src/components/shared/PersonalizeBanner.tsx:53
+msgid "personalizeBanner.messageShort"
+msgstr "Personnalise pour des résultats adaptés."
 
 msgid "programStep.disciplines.description"
 msgstr "Utilisé pour évaluer les préalables propres au programme. Rempli automatiquement à partir des cours de votre programme."
@@ -1936,7 +2146,7 @@ msgid "schedule.dashboard.term.loading"
 msgstr "Chargement des trimestres…"
 
 msgid "schedule.dashboard.title"
-msgstr "Construis ton horaire"
+msgstr "Personnalise ton plan"
 
 msgid "schedule.editor.back"
 msgstr "Retour au planificateur"

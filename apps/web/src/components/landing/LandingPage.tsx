@@ -2,9 +2,12 @@ import { Box, SimpleGrid, Stack, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconAffiliate, IconCalendar, IconChartHistogram, IconCompass } from "@tabler/icons-react";
 import { m } from "framer-motion";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { dynamicActivate, tr, useTr } from "../../i18n";
 import type { AppLocale } from "../../i18n";
+import { readPersistedPersonalized } from "../../lib/hasPersonalized";
+import { useAppStore } from "../../store/appStore";
 import { ChromeControls } from "../shared/ChromeControls";
 import { DonationBanner } from "./DonationBanner";
 import { ExperimentalCarousel } from "./ExperimentalCarousel";
@@ -15,6 +18,19 @@ export function LandingPage() {
 
   const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const [isLangTransitioning, setIsLangTransitioning] = useState(false);
+
+  // Send first-time visitors through Personalize so the scheduler isn't an empty
+  // shell; once they've set up a program, completed courses, or a basket, the tile
+  // jumps straight to the generated schedule. The store is only resolved in-session
+  // (app data isn't loaded on landing), so also peek persisted state for returning
+  // visitors arriving on a fresh page load.
+  const storePersonalized = useAppStore(
+    useShallow(
+      (s) => s.program !== null || s.completedCourses.length > 0 || s.basketCourses.length > 0,
+    ),
+  );
+  const persistedPersonalized = useMemo(() => readPersistedPersonalized(), []);
+  const scheduleTo = storePersonalized || persistedPersonalized ? "/schedule" : "/personalize";
 
   const handleLangSwitch = useCallback(
     async (locale: AppLocale) => {
@@ -114,7 +130,7 @@ export function LandingPage() {
 
           <SimpleGrid cols={{ base: 1, md: 3 }} spacing="lg" w="100%">
             <LandingTile
-              to="/schedule"
+              to={scheduleTo}
               title={tr("landing.schedule.title")}
               description={tr("landing.schedule.description")}
               icon={<IconCalendar size={32} stroke={1.5} />}

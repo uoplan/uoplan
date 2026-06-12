@@ -15,6 +15,7 @@ type ExploreLayoutHeaderProps = {
   loading: boolean;
   filters: ExploreFilterState;
   onFilterChange: (next: Partial<ExploreFilterState>) => void;
+  requirementsAvailable: boolean;
   disciplineOptions: { code: string; name: string }[];
   termOptions: { value: string; label: string }[];
 };
@@ -69,6 +70,7 @@ export function ExploreLayoutHeader({
   loading,
   filters,
   onFilterChange,
+  requirementsAvailable,
   disciplineOptions,
   termOptions,
 }: ExploreLayoutHeaderProps) {
@@ -85,10 +87,7 @@ export function ExploreLayoutHeader({
       }}
     >
       <Box mb={8}>
-        <BackButton
-          fallbackTo={onIndex ? "/" : "/explore"}
-          fallbackLabel={onIndex ? tr("app.nav.backHome") : tr("explore.title")}
-        />
+        <BackButton fallbackTo={onIndex ? "/" : "/explore"} />
       </Box>
       <Stack gap="md" maw={520}>
         <Title
@@ -129,6 +128,7 @@ export function ExploreLayoutHeader({
         <ExploreFilterBar
           filters={filters}
           onChange={onFilterChange}
+          requirementsAvailable={requirementsAvailable}
           disciplineOptions={disciplineOptions}
           termOptions={termOptions}
           padInline={EXPLORE_ACCORDION_PAD_INLINE.xs}

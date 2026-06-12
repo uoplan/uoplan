@@ -4,7 +4,7 @@ import type { ScheduleStepId } from "./scheduleDashboard";
 /**
  * Map a {@link WizardStep} to the dashboard accordion section it should open.
  * The standalone wizard sub-pages were removed in favour of inline collapsible
- * sections on `/schedule`, so navigation now targets `/schedule?step=<id>`.
+ * sections on `/personalize`, so navigation now targets `/personalize?step=<id>`.
  * "Completed courses" was merged into the Program & courses section.
  */
 function wizardStepToScheduleStep(step: WizardStep): ScheduleStepId | undefined {
@@ -24,10 +24,10 @@ function wizardStepToScheduleStep(step: WizardStep): ScheduleStepId | undefined 
 }
 
 type WizardStepNavigation = {
-  to: "/schedule";
+  to: "/personalize";
   search: { step?: ScheduleStepId };
 };
 
 export function wizardStepToNavigation(step: WizardStep): WizardStepNavigation {
-  return { to: "/schedule", search: { step: wizardStepToScheduleStep(step) } };
+  return { to: "/personalize", search: { step: wizardStepToScheduleStep(step) } };
 }

@@ -98,7 +98,7 @@ export const testGenerationConstraints: GenerationConstraints = {
 export function decodedState(over: Partial<DecodedState> = {}): DecodedState {
   return {
     wizardMode: "basic",
-    basicPinnedCourses: [],
+    basketCourses: [],
     basicElectivesCount: 0,
     basicExcludedCategories: [],
     selectedTermId: null,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { GradeVizData } from "@uoplan/core";
+import type { GradeVizData, RemainingRequirement } from "@uoplan/core";
 import { buildTermPresenceIndex } from "./gradesSearch";
 import type {
   ExploreCourseSearchEntry,
@@ -7,12 +7,14 @@ import type {
   ExploreProfessorSearchEntry,
 } from "./gradesSearch";
 import {
+  buildRequirementCandidateSet,
   compareCourseEntries,
   compareProfessorEntries,
   EMPTY_FILTERS,
   filterCourseEntries,
   filterProfessorEntries,
   getCourseDiscipline,
+  hasActiveFilters,
   parseExploreFiltersSearch,
   serializeExploreFiltersSearch,
 } from "./exploreFilters";
@@ -146,6 +148,7 @@ describe("serializeExploreFiltersSearch", () => {
       minRating: 4,
       minFeedback: null,
       termId: null,
+      contributesToRequirements: false,
       sortKey: "grade",
       sortDir: "desc",
     };
@@ -171,6 +174,26 @@ describe("serializeExploreFiltersSearch", () => {
     const params = serializeExploreFiltersSearch({ ...EMPTY_FILTERS, minFeedback: 3.5 });
     expect(params).toEqual({ feedback: 3.5 });
     expect(parseExploreFiltersSearch(params).minFeedback).toBe(3.5);
+  });
+
+  it("round-trips the contributes-to-requirements filter", () => {
+    const params = serializeExploreFiltersSearch({
+      ...EMPTY_FILTERS,
+      contributesToRequirements: true,
+    });
+    expect(params).toEqual({ reqs: "1" });
+    expect(parseExploreFiltersSearch(params).contributesToRequirements).toBe(true);
+  });
+
+  it("omits the requirements flag when off and defaults to false", () => {
+    expect(serializeExploreFiltersSearch(EMPTY_FILTERS).reqs).toBeUndefined();
+    expect(parseExploreFiltersSearch({}).contributesToRequirements).toBe(false);
+    expect(parseExploreFiltersSearch({ reqs: "0" }).contributesToRequirements).toBe(false);
+  });
+
+  it("treats the requirements flag as an active filter", () => {
+    expect(hasActiveFilters({ ...EMPTY_FILTERS, contributesToRequirements: true })).toBe(true);
+    expect(hasActiveFilters(EMPTY_FILTERS)).toBe(false);
   });
 
   it("ignores invalid feedback values", () => {
@@ -255,6 +278,59 @@ describe("filterCourseEntries difficulty (average CGPA)", () => {
   it("excludes courses without grade data", () => {
     const result = filterCourseEntries(all, withDifficulty("easy"));
     expect(result.map((e) => e.normCode)).not.toContain("none");
+  });
+});
+
+describe("filterCourseEntries contributes-to-requirements", () => {
+  const inPlan = makeCourseEntry({ normCode: "csi2110", courseCode: "CSI 2110" });
+  const alsoInPlan = makeCourseEntry({ normCode: "mat1320", courseCode: "MAT 1320" });
+  const offPlan = makeCourseEntry({ normCode: "phi1101", courseCode: "PHI 1101" });
+  const all = [inPlan, alsoInPlan, offPlan];
+  const candidates = new Set(["csi2110", "mat1320"]);
+  const filters: ExploreFilterState = { ...EMPTY_FILTERS, contributesToRequirements: true };
+
+  it("keeps only courses in the requirement candidate set", () => {
+    const result = filterCourseEntries(all, filters, undefined, undefined, candidates);
+    expect(result.map((e) => e.normCode)).toEqual(["csi2110", "mat1320"]);
+  });
+
+  it("is a no-op when no candidate set is supplied", () => {
+    expect(filterCourseEntries(all, filters)).toEqual(all);
+    expect(filterCourseEntries(all, filters, undefined, undefined, null)).toEqual(all);
+  });
+
+  it("ignores the candidate set when the flag is off", () => {
+    expect(filterCourseEntries(all, EMPTY_FILTERS, undefined, undefined, candidates)).toEqual(all);
+  });
+});
+
+describe("buildRequirementCandidateSet", () => {
+  const req = (requirementId: string, candidateCourses: string[]): RemainingRequirement => ({
+    requirementId,
+    type: "course",
+    candidateCourses,
+    satisfiedBy: [],
+  });
+
+  it("collects normalized candidate codes across requirements", () => {
+    const set = buildRequirementCandidateSet([
+      req("req-1", ["CSI 2110", "MAT 1320"]),
+      req("req-2", ["csi2120"]),
+    ]);
+    expect([...set].sort()).toEqual(["CSI 2110", "CSI 2120", "MAT 1320"]);
+  });
+
+  it("excludes courses the student has already taken (any code formatting)", () => {
+    const set = buildRequirementCandidateSet(
+      [req("req-1", ["CSI 2110", "MAT 1320", "CSI 2120"])],
+      ["csi2110", "MAT1320"],
+    );
+    expect([...set]).toEqual(["CSI 2120"]);
+  });
+
+  it("returns an empty set when every candidate is already completed", () => {
+    const set = buildRequirementCandidateSet([req("req-1", ["CSI 2110"])], ["CSI 2110"]);
+    expect(set.size).toBe(0);
   });
 });
 

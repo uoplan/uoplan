@@ -58,6 +58,14 @@ export interface GenerationOptionsFieldsProps {
   renderCourseOption?: MultiSelectProps["renderOption"];
   courseFilter?: OptionsFilter;
 
+  /**
+   * Optional replacement for the "courses you want" multiselect (and its `belowCourses` slot). When
+   * provided, this is rendered instead — the sidebars pass the embedded basket here so the cart is the
+   * single source of truth for desired courses (no duplicated state). The multiselect remains the
+   * fallback for the presentational component in isolation/tests.
+   */
+  coursesSlot?: ReactNode;
+
   /** Slot rendered directly under the "courses you want" multiselect (e.g. requirement warnings). */
   belowCourses?: ReactNode;
 
@@ -279,19 +287,23 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
 
   return (
     <Stack gap="md" data-testid="generation-options-fields">
-      <MultiSelect
-        label={tr("generationOptions.courses.label")}
-        placeholder={tr("generationOptions.courses.placeholder")}
-        searchable
-        data={props.courseOptions}
-        value={props.desiredCourses}
-        onChange={props.onDesiredCoursesChange}
-        renderOption={props.renderCourseOption}
-        filter={props.courseFilter}
-        radius="md"
-      />
+      {props.coursesSlot ?? (
+        <>
+          <MultiSelect
+            label={tr("generationOptions.courses.label")}
+            placeholder={tr("generationOptions.courses.placeholder")}
+            searchable
+            data={props.courseOptions}
+            value={props.desiredCourses}
+            onChange={props.onDesiredCoursesChange}
+            renderOption={props.renderCourseOption}
+            filter={props.courseFilter}
+            radius="md"
+          />
 
-      {props.belowCourses}
+          {props.belowCourses}
+        </>
+      )}
 
       <NumberInput
         label={tr("generationOptions.count.label")}

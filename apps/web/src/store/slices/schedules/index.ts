@@ -174,7 +174,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
 
     resetBasicCalendarSettings: () =>
       set({
-        basicPinnedCourses: [],
+        basketCourses: [],
         basicElectivesCount: DEFAULT_BASIC_ELECTIVES_COUNT,
         basicExcludedCategories: [],
         completedCourses: [],
@@ -280,7 +280,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     swapCourseInSchedule: async (enrollmentIndex, newCourseCode) => {
       const state = get();
       const {
-        basicPinnedCourses,
+        basketCourses,
         currentSchedule,
         cache,
         catalogue,
@@ -341,7 +341,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
                 seed: get().currentSeed,
                 includeClosedComponents,
                 virtualSectionsOnly,
-                virtualExemptCourses: basicPinnedCourses,
+                virtualExemptCourses: basketCourses,
               },
               cache,
             )
@@ -390,7 +390,7 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       const {
         currentSchedule,
         cache,
-        basicPinnedCourses,
+        basketCourses,
         basicElectivesCount,
         currentPoolMap,
         chosenCourseToRequirementId,
@@ -406,11 +406,11 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
       const canonical = cache?.getCourse(norm)?.code ?? code;
 
       if (get().calendarMode === "basic") {
-        if (basicPinnedCourses.some((c) => normalizeCourseCode(c) === norm)) {
+        if (basketCourses.some((c) => normalizeCourseCode(c) === norm)) {
           return;
         }
         set({
-          basicPinnedCourses: [...basicPinnedCourses, canonical],
+          basketCourses: [...basketCourses, canonical],
           basicElectivesCount: basicElectivesAfterPinnedDelta(basicElectivesCount, 1),
           generationError: null,
           generationOptionsDirty: true,
@@ -473,25 +473,21 @@ export const createSchedulesSlice: StateCreator<AppStore, [], [], SchedulesSlice
     },
 
     unlockCourseForAllSchedulesFromSwap: (enrollmentIndex) => {
-      const {
-        currentSchedule,
-        basicPinnedCourses,
-        basicElectivesCount,
-        constrainedPerRequirement,
-      } = get();
+      const { currentSchedule, basketCourses, basicElectivesCount, constrainedPerRequirement } =
+        get();
       if (!currentSchedule) return;
       const enrollment = currentSchedule.enrollments[enrollmentIndex];
       if (!enrollment) return;
       const norm = normalizeCourseCode(enrollment.courseCode);
 
       if (get().calendarMode === "basic") {
-        const next = basicPinnedCourses.filter((c) => normalizeCourseCode(c) !== norm);
-        if (next.length === basicPinnedCourses.length) return;
+        const next = basketCourses.filter((c) => normalizeCourseCode(c) !== norm);
+        if (next.length === basketCourses.length) return;
         set({
-          basicPinnedCourses: next,
+          basketCourses: next,
           basicElectivesCount: basicElectivesAfterPinnedDelta(
             basicElectivesCount,
-            next.length - basicPinnedCourses.length,
+            next.length - basketCourses.length,
           ),
           generationError: null,
           generationOptionsDirty: true,

@@ -71,7 +71,7 @@ function DonateRoute() {
       }}
     >
       <Stack gap="lg" maw={680} mx="auto">
-        <BackButton fallbackTo="/" fallbackLabel={tr("app.nav.backHome")} />
+        <BackButton fallbackTo="/" />
 
         <Stack gap={4}>
           <Title order={2} c="var(--app-text)" fw={600}>

@@ -18,7 +18,7 @@ describe("share route", () => {
     expect(res.status).toBe(200);
     expect(res.headers.get("Location")).toBeNull();
     expect(res.headers.get("Content-Type")).toContain("text/html");
-    expect(html).toContain('window.location.replace("/schedule/calendar/?s=QUJD%2B18%3D")');
+    expect(html).toContain('window.location.replace("/schedule/?s=QUJD%2B18%3D")');
     expect(html).toContain('content="https://uoplan.party/api/og-image/QUJD-18"');
     expect(html).toContain('content="https://uoplan.party/api/share/QUJD-18"');
   });
@@ -31,8 +31,8 @@ describe("share route", () => {
     expect(html).toContain(
       'content="https://uoplan.party/api/og-image/QUJD-18?p=preview%2F%2B%3D"',
     );
-    expect(html).toContain('window.location.replace("/schedule/calendar/?s=QUJD%2B18%3D")');
-    expect(html).not.toContain("/schedule/calendar/?s=QUJD%2B18%3D&p=");
+    expect(html).toContain('window.location.replace("/schedule/?s=QUJD%2B18%3D")');
+    expect(html).not.toContain("/schedule/?s=QUJD%2B18%3D&p=");
   });
 
   it("does not validate an invalid schedule payload on the share page", async () => {
@@ -41,6 +41,6 @@ describe("share route", () => {
 
     expect(res.status).toBe(200);
     expect(html).toContain('content="https://uoplan.party/api/og-image/QUJD-18?p=not-a-protobuf"');
-    expect(html).toContain('window.location.replace("/schedule/calendar/?s=QUJD%2B18%3D")');
+    expect(html).toContain('window.location.replace("/schedule/?s=QUJD%2B18%3D")');
   });
 });

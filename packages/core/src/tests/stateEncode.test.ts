@@ -4,6 +4,8 @@ import {
   decodeStateFromBase64,
   encodeState,
   encodeStateToBase64,
+  peekHasPersonalized,
+  peekHasPersonalizedFromBase64,
   peekTermAndYear,
   peekTermAndYearFromBase64,
   urlToSlug,
@@ -41,7 +43,7 @@ const indices: Indices = {
 function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
   return {
     wizardMode: null,
-    basicPinnedCourses: [],
+    basketCourses: [],
     basicElectivesCount: 0,
     basicExcludedCategories: [],
     selectedTermId: "202509",
@@ -307,6 +309,56 @@ describe("peekTermAndYearFromBase64", () => {
 
   it("returns null for invalid base64", () => {
     expect(peekTermAndYearFromBase64("!!!notbase64!!!")).toBeNull();
+  });
+});
+
+// ── peekHasPersonalized ───────────────────────────────────────────────────────
+
+describe("peekHasPersonalized", () => {
+  it("is true when a program is selected", () => {
+    const bytes = encodeState(
+      makeInput({ program: programA, completedCourses: [], basketCourses: [] }),
+      catalogue,
+      indices,
+    )!;
+    expect(peekHasPersonalized(bytes)).toBe(true);
+  });
+
+  it("is true when only completed courses are present", () => {
+    const bytes = encodeState(
+      makeInput({ program: null, completedCourses: ["MAT 1320"], basketCourses: [] }),
+      catalogue,
+      indices,
+    )!;
+    expect(peekHasPersonalized(bytes)).toBe(true);
+  });
+
+  it("is true when only basket courses are present", () => {
+    const bytes = encodeState(
+      makeInput({ program: null, completedCourses: [], basketCourses: ["CSI 2110"] }),
+      catalogue,
+      indices,
+    )!;
+    expect(peekHasPersonalized(bytes)).toBe(true);
+  });
+
+  it("is false when nothing has been personalized", () => {
+    const bytes = encodeState(
+      makeInput({ program: null, completedCourses: [], basketCourses: [] }),
+      catalogue,
+      indices,
+    )!;
+    expect(peekHasPersonalized(bytes)).toBe(false);
+  });
+
+  it("peeks from base64 and returns false for invalid input", () => {
+    const base64 = encodeStateToBase64(
+      makeInput({ program: programA, completedCourses: [], basketCourses: [] }),
+      catalogue,
+      indices,
+    )!;
+    expect(peekHasPersonalizedFromBase64(base64)).toBe(true);
+    expect(peekHasPersonalizedFromBase64("!!!notbase64!!!")).toBe(false);
   });
 });
 

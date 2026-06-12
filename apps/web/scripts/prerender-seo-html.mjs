@@ -152,3 +152,4 @@ writePrerenderedPage(template, "explore", path.join(distDir, "explore", "index.h
 writePrerenderedPage(template, "graph", path.join(distDir, "graph", "index.html"));
 writePrerenderedPage(template, "trends", path.join(distDir, "trends", "index.html"));
 writePrerenderedPage(template, "schedule", path.join(distDir, "schedule", "index.html"));
+writePrerenderedPage(template, "personalize", path.join(distDir, "personalize", "index.html"));

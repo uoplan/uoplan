@@ -19,6 +19,16 @@
     "noscriptTitle": "uoplan — uOttawa Course Planner & Schedule Generator",
     "noscriptBody": "Free course planner and timetable generator for University of Ottawa students. Build conflict-free schedules, check prerequisites, and plan your degree."
   },
+  "personalize": {
+    "canonicalPath": "/personalize/",
+    "tabTitle": "Personalize",
+    "title": "uoplan | Personalize Your uOttawa Degree Plan",
+    "description": "Set your term, program, and completed courses so uoplan can map your remaining University of Ottawa degree requirements and build conflict-free timetables around them.",
+    "keywords": "uottawa degree planner, uottawa program requirements, university of ottawa course planner, uottawa completed courses, uottawa transcript planner",
+    "structuredName": "Degree personalization",
+    "noscriptTitle": "uoplan — Personalize Your uOttawa Degree Plan",
+    "noscriptBody": "Set your term, program, and completed courses to map your remaining uOttawa degree requirements."
+  },
   "explore": {
     "canonicalPath": "/explore/",
     "tabTitle": "Explore",
