@@ -25,6 +25,7 @@ describe("fromProtoCourseGradesData", () => {
                 d: 0,
                 e: 0,
                 f: 0,
+                dr: 0,
                 ein: 0,
                 ns: 0,
                 nc: 0,

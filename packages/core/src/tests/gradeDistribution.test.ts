@@ -40,6 +40,17 @@ describe("gradeDistribution", () => {
     expect(distributionGpa({ F: 5 })).toBeCloseTo(0, 5);
   });
 
+  it("excludes DR (withdrawals) from GPA and from the visualization", () => {
+    // DR is a withdrawal bucket carried in the data but never an academic outcome:
+    // it must not move the GPA nor appear in any viz bucket / total.
+    expect(distributionGpa({ "A+": 5, DR: 100 })).toBeCloseTo(10, 5);
+    expect(distributionGpa({ DR: 5 })).toBeNull();
+
+    const viz = normalizeGradeVizDistribution({ A: 4, DR: 6 });
+    expect(viz?.total).toBe(4); // DR ignored, only A counted
+    expect(viz?.buckets.reduce((sum, b) => sum + b.count, 0)).toBe(4);
+  });
+
   it("aggregateCourseDistribution sums section distributions", () => {
     const schedule: CourseSchedule = {
       subject: "ADM",

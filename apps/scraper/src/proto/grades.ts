@@ -47,6 +47,7 @@ function mapLetterGradeDistributionToProto(dist: unknown): GradeDistribution {
     abs: n("ABS"),
     p: n("P"),
     s: n("S"),
+    dr: n("DR"),
   };
 }
 

@@ -219,6 +219,7 @@ message GradeDistribution {
   uint32 abs = 15;
   uint32 p = 16;
   uint32 s = 17;
+  uint32 dr = 18;
 }
 
 enum SectionStatus {

@@ -24,5 +24,7 @@ __screenshots__
 coverage/
 lcov.info
 
-# Raw, user-provided grade-distribution CSVs consumed by the grades scraper.
+# Raw grade-distribution data consumed by the grades scraper: the registrar
+# Excel exports under raw/xlsx/ plus the per-term CSVs generated from them by
+# `pnpm --filter scraper grades:convert`.
 apps/scraper/data/raw/

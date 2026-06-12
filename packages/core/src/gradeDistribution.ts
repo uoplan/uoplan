@@ -21,7 +21,7 @@ export const GRADE_POINTS: Record<string, number> = {
   F: 0,
 };
 
-const SKIP_GRADES = new Set(["P", "S", "NS", "NC", "ABS", "EIN"]);
+const SKIP_GRADES = new Set(["P", "S", "NS", "NC", "ABS", "EIN", "DR"]);
 
 /** Letter grades that count toward GPA / graded totals (the 10-point scale). */
 const COUNTED_GRADES = Object.keys(GRADE_POINTS);

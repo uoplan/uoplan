@@ -32,9 +32,9 @@ describe("readGradeRows", () => {
     await fs.writeFile(
       path.join(dir, "a.csv"),
       [
-        "Term,Course,Section,A+,A,F,EIN,NS,ABS,P,S,A-,B+,B,C+,C,D+,D,E",
-        "2259,ADM1100,A00,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0",
-        "2259,ADM 1100,A00,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+        "Term,Course,Section,A+,A,F,DR,EIN,NS,ABS,P,S,A-,B+,B,C+,C,D+,D,E",
+        "2259,ADM1100,A00,3,2,1,5,0,0,0,0,0,0,0,0,0,0,0,0,0",
+        "2259,ADM 1100,A00,1,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0",
       ].join("\n"),
       "utf-8",
     );
@@ -57,6 +57,7 @@ describe("readGradeRows", () => {
     expect(adm?.distribution["A+"]).toBe(4);
     expect(adm?.distribution["A"]).toBe(2);
     expect(adm?.distribution["F"]).toBe(1);
+    expect(adm?.distribution["DR"]).toBe(7); // withdrawals summed across rows
     expect(adm?.distribution["NC"]).toBe(0); // missing column defaults to 0
 
     const bio = rows.find((r) => r.code === "BIO 1530");
