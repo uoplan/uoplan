@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { ReactNode } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { useShallow } from "zustand/react/shallow";
@@ -145,16 +145,29 @@ export function TrendsFilterProvider({ search, onChange, children }: TrendsFilte
     };
   }, [grades, discipline, level, season, programFilter, activeMetric, metricLabel]);
 
-  const update = useMemo(
-    () => (patch: Partial<TrendsSearch>) => {
-      const next: Record<string, unknown> = { ...search, ...patch };
+  // The `search` prop is derived from URL params, which update asynchronously
+  // after a navigate. Merging patches against the prop drops changes when the
+  // user toggles filters faster than the router commits each navigation (the
+  // second patch reads stale params and overwrites the first). Track the latest
+  // intended search in a ref so successive `update` calls accumulate, while
+  // still adopting the prop when it changes externally (back/forward, route
+  // changes).
+  const searchRef = useRef<TrendsSearch>(search);
+  useEffect(() => {
+    searchRef.current = search;
+  }, [search]);
+
+  const update = useCallback(
+    (patch: Partial<TrendsSearch>) => {
+      const next: Record<string, unknown> = { ...searchRef.current, ...patch };
       for (const key of Object.keys(next)) {
         const value = next[key];
         if (value == null || value === "" || value === "all") delete next[key];
       }
+      searchRef.current = next as TrendsSearch;
       onChange(next as TrendsSearch);
     },
-    [search, onChange],
+    [onChange],
   );
 
   const trendsBack = useMemo<BackState>(
