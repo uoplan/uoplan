@@ -3,7 +3,7 @@ import { useMediaQuery, useOs } from "@mantine/hooks";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useCommandCenterStore } from "../../store/commandCenterStore";
 import { tr, useTr } from "../../i18n";
-import { labelForPath } from "../../lib/navigation/backState";
+import { locationLabel } from "../../lib/navigation/backState";
 import { seasonalFlourish } from "../../lib/easterEggs/seasonal";
 
 const ONTARIO_FIPPA_ACT_URL = "https://www.ontario.ca/laws/statute/90f31";
@@ -12,7 +12,9 @@ export function AppFooter() {
   useTr();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const pathname = useLocation({ select: (s) => s.pathname });
+  const { pathname, searchStr } = useLocation({
+    select: (s) => ({ pathname: s.pathname, searchStr: s.searchStr }),
+  });
   const os = useOs();
   const modLabel = os === "macos" ? "⌘" : "Ctrl";
   const flourish = seasonalFlourish();
@@ -55,7 +57,7 @@ export function AppFooter() {
             <Text
               component={Link}
               to="/changelog"
-              state={{ back: { to: pathname, label: labelForPath(pathname) } } as never}
+              state={{ back: { to: pathname, label: locationLabel(pathname, searchStr) } } as never}
               size="sm"
               c="dimmed"
               lh={1.45}

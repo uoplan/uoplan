@@ -14,16 +14,17 @@ import { Route as DonateRouteImport } from './routes/donate'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as TrendsRouteRouteImport } from './routes/trends/route'
 import { Route as ScheduleRouteRouteImport } from './routes/schedule/route'
+import { Route as PersonalizeRouteRouteImport } from './routes/personalize/route'
 import { Route as ExploreRouteRouteImport } from './routes/explore/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrendsIndexRouteImport } from './routes/trends/index'
 import { Route as ScheduleIndexRouteImport } from './routes/schedule/index'
+import { Route as PersonalizeIndexRouteImport } from './routes/personalize/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
 import { Route as TrendsLeaderboardRouteImport } from './routes/trends/leaderboard'
 import { Route as TrendsFeedbackRouteImport } from './routes/trends/feedback'
 import { Route as TrendsDisciplinesRouteImport } from './routes/trends/disciplines'
 import { Route as TrendsCoursesRouteImport } from './routes/trends/courses'
-import { Route as ScheduleCalendarIndexRouteImport } from './routes/schedule/calendar/index'
 import { Route as ExploreProgramSplatRouteImport } from './routes/explore/program/$'
 import { Route as ExploreDisciplineDisciplineRouteImport } from './routes/explore/discipline/$discipline'
 import { Route as ExploreProfessorSlugIndexRouteImport } from './routes/explore/professor/$slug/index'
@@ -57,6 +58,11 @@ const ScheduleRouteRoute = ScheduleRouteRouteImport.update({
   path: '/schedule',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PersonalizeRouteRoute = PersonalizeRouteRouteImport.update({
+  id: '/personalize',
+  path: '/personalize',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExploreRouteRoute = ExploreRouteRouteImport.update({
   id: '/explore',
   path: '/explore',
@@ -76,6 +82,11 @@ const ScheduleIndexRoute = ScheduleIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ScheduleRouteRoute,
+} as any)
+const PersonalizeIndexRoute = PersonalizeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PersonalizeRouteRoute,
 } as any)
 const ExploreIndexRoute = ExploreIndexRouteImport.update({
   id: '/',
@@ -101,11 +112,6 @@ const TrendsCoursesRoute = TrendsCoursesRouteImport.update({
   id: '/courses',
   path: '/courses',
   getParentRoute: () => TrendsRouteRoute,
-} as any)
-const ScheduleCalendarIndexRoute = ScheduleCalendarIndexRouteImport.update({
-  id: '/calendar/',
-  path: '/calendar/',
-  getParentRoute: () => ScheduleRouteRoute,
 } as any)
 const ExploreProgramSplatRoute = ExploreProgramSplatRouteImport.update({
   id: '/program/$',
@@ -152,6 +158,7 @@ const ExploreCourseCourseFeedbackRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/explore': typeof ExploreRouteRouteWithChildren
+  '/personalize': typeof PersonalizeRouteRouteWithChildren
   '/schedule': typeof ScheduleRouteRouteWithChildren
   '/trends': typeof TrendsRouteRouteWithChildren
   '/changelog': typeof ChangelogRoute
@@ -162,11 +169,11 @@ export interface FileRoutesByFullPath {
   '/trends/feedback': typeof TrendsFeedbackRoute
   '/trends/leaderboard': typeof TrendsLeaderboardRoute
   '/explore/': typeof ExploreIndexRoute
+  '/personalize/': typeof PersonalizeIndexRoute
   '/schedule/': typeof ScheduleIndexRoute
   '/trends/': typeof TrendsIndexRoute
   '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
   '/explore/program/$': typeof ExploreProgramSplatRoute
-  '/schedule/calendar/': typeof ScheduleCalendarIndexRoute
   '/explore/course/$course/feedback': typeof ExploreCourseCourseFeedbackRoute
   '/explore/course/$course/schedule': typeof ExploreCourseCourseScheduleRoute
   '/explore/professor/$slug/feedback': typeof ExploreProfessorSlugFeedbackRoute
@@ -183,11 +190,11 @@ export interface FileRoutesByTo {
   '/trends/feedback': typeof TrendsFeedbackRoute
   '/trends/leaderboard': typeof TrendsLeaderboardRoute
   '/explore': typeof ExploreIndexRoute
+  '/personalize': typeof PersonalizeIndexRoute
   '/schedule': typeof ScheduleIndexRoute
   '/trends': typeof TrendsIndexRoute
   '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
   '/explore/program/$': typeof ExploreProgramSplatRoute
-  '/schedule/calendar': typeof ScheduleCalendarIndexRoute
   '/explore/course/$course/feedback': typeof ExploreCourseCourseFeedbackRoute
   '/explore/course/$course/schedule': typeof ExploreCourseCourseScheduleRoute
   '/explore/professor/$slug/feedback': typeof ExploreProfessorSlugFeedbackRoute
@@ -198,6 +205,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/explore': typeof ExploreRouteRouteWithChildren
+  '/personalize': typeof PersonalizeRouteRouteWithChildren
   '/schedule': typeof ScheduleRouteRouteWithChildren
   '/trends': typeof TrendsRouteRouteWithChildren
   '/changelog': typeof ChangelogRoute
@@ -208,11 +216,11 @@ export interface FileRoutesById {
   '/trends/feedback': typeof TrendsFeedbackRoute
   '/trends/leaderboard': typeof TrendsLeaderboardRoute
   '/explore/': typeof ExploreIndexRoute
+  '/personalize/': typeof PersonalizeIndexRoute
   '/schedule/': typeof ScheduleIndexRoute
   '/trends/': typeof TrendsIndexRoute
   '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
   '/explore/program/$': typeof ExploreProgramSplatRoute
-  '/schedule/calendar/': typeof ScheduleCalendarIndexRoute
   '/explore/course/$course/feedback': typeof ExploreCourseCourseFeedbackRoute
   '/explore/course/$course/schedule': typeof ExploreCourseCourseScheduleRoute
   '/explore/professor/$slug/feedback': typeof ExploreProfessorSlugFeedbackRoute
@@ -224,6 +232,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/explore'
+    | '/personalize'
     | '/schedule'
     | '/trends'
     | '/changelog'
@@ -234,11 +243,11 @@ export interface FileRouteTypes {
     | '/trends/feedback'
     | '/trends/leaderboard'
     | '/explore/'
+    | '/personalize/'
     | '/schedule/'
     | '/trends/'
     | '/explore/discipline/$discipline'
     | '/explore/program/$'
-    | '/schedule/calendar/'
     | '/explore/course/$course/feedback'
     | '/explore/course/$course/schedule'
     | '/explore/professor/$slug/feedback'
@@ -255,11 +264,11 @@ export interface FileRouteTypes {
     | '/trends/feedback'
     | '/trends/leaderboard'
     | '/explore'
+    | '/personalize'
     | '/schedule'
     | '/trends'
     | '/explore/discipline/$discipline'
     | '/explore/program/$'
-    | '/schedule/calendar'
     | '/explore/course/$course/feedback'
     | '/explore/course/$course/schedule'
     | '/explore/professor/$slug/feedback'
@@ -269,6 +278,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/explore'
+    | '/personalize'
     | '/schedule'
     | '/trends'
     | '/changelog'
@@ -279,11 +289,11 @@ export interface FileRouteTypes {
     | '/trends/feedback'
     | '/trends/leaderboard'
     | '/explore/'
+    | '/personalize/'
     | '/schedule/'
     | '/trends/'
     | '/explore/discipline/$discipline'
     | '/explore/program/$'
-    | '/schedule/calendar/'
     | '/explore/course/$course/feedback'
     | '/explore/course/$course/schedule'
     | '/explore/professor/$slug/feedback'
@@ -294,6 +304,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExploreRouteRoute: typeof ExploreRouteRouteWithChildren
+  PersonalizeRouteRoute: typeof PersonalizeRouteRouteWithChildren
   ScheduleRouteRoute: typeof ScheduleRouteRouteWithChildren
   TrendsRouteRoute: typeof TrendsRouteRouteWithChildren
   ChangelogRoute: typeof ChangelogRoute
@@ -338,6 +349,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ScheduleRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/personalize': {
+      id: '/personalize'
+      path: '/personalize'
+      fullPath: '/personalize'
+      preLoaderRoute: typeof PersonalizeRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/explore': {
       id: '/explore'
       path: '/explore'
@@ -365,6 +383,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/schedule/'
       preLoaderRoute: typeof ScheduleIndexRouteImport
       parentRoute: typeof ScheduleRouteRoute
+    }
+    '/personalize/': {
+      id: '/personalize/'
+      path: '/'
+      fullPath: '/personalize/'
+      preLoaderRoute: typeof PersonalizeIndexRouteImport
+      parentRoute: typeof PersonalizeRouteRoute
     }
     '/explore/': {
       id: '/explore/'
@@ -400,13 +425,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/trends/courses'
       preLoaderRoute: typeof TrendsCoursesRouteImport
       parentRoute: typeof TrendsRouteRoute
-    }
-    '/schedule/calendar/': {
-      id: '/schedule/calendar/'
-      path: '/calendar'
-      fullPath: '/schedule/calendar/'
-      preLoaderRoute: typeof ScheduleCalendarIndexRouteImport
-      parentRoute: typeof ScheduleRouteRoute
     }
     '/explore/program/$': {
       id: '/explore/program/$'
@@ -486,14 +504,23 @@ const ExploreRouteRouteWithChildren = ExploreRouteRoute._addFileChildren(
   ExploreRouteRouteChildren,
 )
 
+interface PersonalizeRouteRouteChildren {
+  PersonalizeIndexRoute: typeof PersonalizeIndexRoute
+}
+
+const PersonalizeRouteRouteChildren: PersonalizeRouteRouteChildren = {
+  PersonalizeIndexRoute: PersonalizeIndexRoute,
+}
+
+const PersonalizeRouteRouteWithChildren =
+  PersonalizeRouteRoute._addFileChildren(PersonalizeRouteRouteChildren)
+
 interface ScheduleRouteRouteChildren {
   ScheduleIndexRoute: typeof ScheduleIndexRoute
-  ScheduleCalendarIndexRoute: typeof ScheduleCalendarIndexRoute
 }
 
 const ScheduleRouteRouteChildren: ScheduleRouteRouteChildren = {
   ScheduleIndexRoute: ScheduleIndexRoute,
-  ScheduleCalendarIndexRoute: ScheduleCalendarIndexRoute,
 }
 
 const ScheduleRouteRouteWithChildren = ScheduleRouteRoute._addFileChildren(
@@ -523,6 +550,7 @@ const TrendsRouteRouteWithChildren = TrendsRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExploreRouteRoute: ExploreRouteRouteWithChildren,
+  PersonalizeRouteRoute: PersonalizeRouteRouteWithChildren,
   ScheduleRouteRoute: ScheduleRouteRouteWithChildren,
   TrendsRouteRoute: TrendsRouteRouteWithChildren,
   ChangelogRoute: ChangelogRoute,

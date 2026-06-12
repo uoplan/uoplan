@@ -52,7 +52,7 @@ function basicInput(over: Partial<BasicRequestInput> = {}): BasicRequestInput {
     blacklistedCourses: ["MAT 9999"],
     currentSeed: 7,
     firstSeed: 1,
-    basicPinnedCourses: ["CSI 2110"],
+    basketCourses: ["CSI 2110"],
     basicElectivesCount: 2,
     basicExcludedCategories: ["seminar"],
     studentPrograms: ["CS"],

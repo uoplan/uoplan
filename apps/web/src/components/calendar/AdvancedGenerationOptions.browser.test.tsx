@@ -41,10 +41,11 @@ test("persists desired courses into constrainedPerRequirement without looping", 
     initialState: {
       cache,
       remainingRequirements,
+      studentPrograms: ["honours-cs"],
       requirementTreeWithStatus: [],
       prereqEligibleCourses: ["CSI 2110", "CSI 2120"],
       filteredPrereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      basicPinnedCourses: ["CSI 2110"],
+      basketCourses: ["CSI 2110"],
     },
   });
 
@@ -54,40 +55,13 @@ test("persists desired courses into constrainedPerRequirement without looping", 
     .toEqual(["CSI 2110"]);
   expect(store.getState().autoConstrainedPerRequirement).toEqual({ "req-csi": ["CSI 2110"] });
 
-  // The sidebar shows it counts toward the requirement.
-  await expect.element(page.getByText("CSI requirement", { exact: false })).toBeInTheDocument();
+  // The embedded basket shows it counts toward the requirement.
+  await expect
+    .element(page.getByText("Counts toward CSI requirement", { exact: false }))
+    .toBeInTheDocument();
 });
 
-test("excludes completed courses from the desired-courses dropdown", async () => {
-  const cache = buildCache();
-  await renderWithProviders(<AdvancedGenerationOptions />, {
-    initialState: {
-      cache,
-      remainingRequirements,
-      requirementTreeWithStatus: [],
-      prereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      filteredPrereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      completedCourses: ["CSI 2120"],
-      basicPinnedCourses: [],
-    },
-  });
-
-  const input = page.getByRole("combobox", { name: "Courses you want" });
-  await input.click();
-
-  // The not-yet-taken course is offered; the completed one is filtered out.
-  await expect.element(page.getByRole("option", { name: "CSI 2110" })).toBeInTheDocument();
-  // Scope to the course dropdown (other multiselects keep their options mounted too).
-  const inputEl = input.element() as HTMLInputElement;
-  const listbox = document.querySelector(`[role="listbox"][aria-labelledby="${inputEl.id}-label"]`);
-  const csiOptions = [...(listbox?.querySelectorAll('[role="option"]') ?? [])].map(
-    (el) => el.textContent ?? "",
-  );
-  expect(csiOptions.some((t) => t.includes("CSI 2110"))).toBe(true);
-  expect(csiOptions.some((t) => t.includes("CSI 2120"))).toBe(false);
-});
-
-test("surfaces an overflow warning when desired courses exceed a partly-consumed requirement", async () => {
+test("surfaces an overflow status when desired courses exceed a partly-consumed requirement", async () => {
   const cache = buildCache();
   // The single 3-credit requirement is already half-consumed by an auto-assigned completed course
   // (selectedPerRequirement). A second desired course matching the same requirement overflows.
@@ -105,14 +79,17 @@ test("surfaces an overflow warning when desired courses exceed a partly-consumed
     initialState: {
       cache,
       remainingRequirements: reqs,
+      studentPrograms: ["honours-cs"],
       requirementTreeWithStatus: [],
       prereqEligibleCourses: ["CSI 2110", "CSI 2120"],
       filteredPrereqEligibleCourses: ["CSI 2110", "CSI 2120"],
       selectedPerRequirement: { "req-csi": ["CSI 2110"] },
-      basicPinnedCourses: ["CSI 2120"],
+      basketCourses: ["CSI 2120"],
     },
   });
 
-  // The overflow warning is surfaced at the top, under the course selection.
-  await expect.element(page.getByText("Requirement already full")).toBeInTheDocument();
+  // The embedded basket flags the overflowing course inline.
+  await expect
+    .element(page.getByText("Matching requirement is already full", { exact: false }))
+    .toBeInTheDocument();
 });

@@ -1,4 +1,5 @@
-import { distributionGpa } from "@uoplan/core";
+import { distributionGpa, normalizeCourseCode } from "@uoplan/core";
+import type { RemainingRequirement } from "@uoplan/core";
 import type { ExploreCourseSearchEntry, ExploreProfessorSearchEntry } from "./gradesSearch";
 
 export type ExploreFilterLevel = 1000 | 2000 | 3000 | 4000 | 5000;
@@ -14,6 +15,7 @@ export type ExploreSearchParams = {
   rating: number | undefined;
   feedback: number | undefined;
   term: number | undefined;
+  reqs: string | undefined;
   sort: string | undefined;
   dir: string | undefined;
 };
@@ -41,6 +43,7 @@ export function validateExploreSearch(search: Record<string, unknown>): ExploreS
     rating: toFiniteNumber(search.rating),
     feedback: toFiniteNumber(search.feedback),
     term: toFiniteNumber(search.term),
+    reqs: search.reqs === "1" ? "1" : undefined,
     sort: typeof search.sort === "string" && search.sort.length > 0 ? search.sort : undefined,
     dir: typeof search.dir === "string" && search.dir.length > 0 ? search.dir : undefined,
   };
@@ -55,6 +58,7 @@ export const EMPTY_EXPLORE_SEARCH: ExploreSearchParams = {
   rating: undefined,
   feedback: undefined,
   term: undefined,
+  reqs: undefined,
   sort: undefined,
   dir: undefined,
 };
@@ -67,6 +71,7 @@ export type ExploreFilterState = {
   minRating: number | null;
   minFeedback: number | null;
   termId: number | null;
+  contributesToRequirements: boolean;
   sortKey: ExploreSortKey;
   sortDir: ExploreSortDir;
 };
@@ -79,6 +84,7 @@ export const EMPTY_FILTERS: ExploreFilterState = {
   minRating: null,
   minFeedback: null,
   termId: null,
+  contributesToRequirements: false,
   sortKey: "relevance",
   sortDir: "desc",
 };
@@ -91,7 +97,8 @@ export function hasActiveFilters(f: ExploreFilterState): boolean {
     f.difficulty !== null ||
     f.minRating !== null ||
     f.minFeedback !== null ||
-    f.termId !== null
+    f.termId !== null ||
+    f.contributesToRequirements
   );
 }
 
@@ -171,6 +178,8 @@ export function parseExploreFiltersSearch(search: Record<string, unknown>): Expl
   const termRaw = search.term != null ? Number(search.term) : null;
   const termId = termRaw != null && Number.isInteger(termRaw) && termRaw > 0 ? termRaw : null;
 
+  const contributesToRequirements = search.reqs === "1";
+
   const sortKey = parseSortKey(search.sort);
   const sortDir = parseSortDir(search.dir, sortKey);
 
@@ -182,6 +191,7 @@ export function parseExploreFiltersSearch(search: Record<string, unknown>): Expl
     minRating,
     minFeedback,
     termId,
+    contributesToRequirements,
     sortKey,
     sortDir,
   };
@@ -199,6 +209,7 @@ export function serializeExploreFiltersSearch(
   if (filters.minRating !== null) params.rating = filters.minRating;
   if (filters.minFeedback !== null) params.feedback = filters.minFeedback;
   if (filters.termId !== null) params.term = filters.termId;
+  if (filters.contributesToRequirements) params.reqs = "1";
 
   if (filters.sortKey !== "relevance") {
     params.sort = filters.sortKey;
@@ -304,14 +315,39 @@ export type ExploreSentimentSets = {
   professorByGroupId: Map<string, number> | null;
 };
 
+/**
+ * Builds the set of normalized course codes that count toward the student's remaining
+ * requirements, for the "fits my requirements" smart filter. Courses already on the
+ * student's transcript are excluded: a partially-satisfied requirement still lists every
+ * course in its pool (including ones already taken), and the filter exists to surface
+ * courses the student could still take, not ones they have already completed.
+ */
+export function buildRequirementCandidateSet(
+  remainingRequirements: RemainingRequirement[],
+  completedCourses: readonly string[] = [],
+): Set<string> {
+  const completed = new Set(completedCourses.map((code) => normalizeCourseCode(code)));
+  const set = new Set<string>();
+  for (const req of remainingRequirements) {
+    for (const candidate of req.candidateCourses ?? []) {
+      const norm = normalizeCourseCode(candidate);
+      if (completed.has(norm)) continue;
+      set.add(norm);
+    }
+  }
+  return set;
+}
+
 export function filterCourseEntries(
   entries: ExploreCourseSearchEntry[],
   filters: ExploreFilterState,
   termSets?: ExploreTermSets,
   sentiment?: ExploreSentimentSets,
+  requirementCandidateSet?: Set<string> | null,
 ): ExploreCourseSearchEntry[] {
   const byTerm = filters.termId !== null;
   const byFeedback = filters.minFeedback !== null && sentiment?.courseByNorm != null;
+  const byRequirements = filters.contributesToRequirements && requirementCandidateSet != null;
   return entries.filter((e) => {
     if (filters.levels.length > 0 && (e.level === null || !filters.levels.includes(e.level))) {
       return false;
@@ -342,6 +378,9 @@ export function filterCourseEntries(
       if (s == null || s < filters.minFeedback!) return false;
     }
     if (byTerm && !termSets?.courseComponents?.has(e.componentId)) {
+      return false;
+    }
+    if (byRequirements && !requirementCandidateSet!.has(e.normCode)) {
       return false;
     }
     return true;

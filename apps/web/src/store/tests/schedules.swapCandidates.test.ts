@@ -14,7 +14,7 @@ describe("basic getSwapCandidates", () => {
     defaultAppStore.setState({
       ...defaultAppStore.getState(),
       calendarMode: null,
-      basicPinnedCourses: [],
+      basketCourses: [],
       basicExcludedCategories: [],
       currentSchedule: null,
       cache: null,

@@ -82,7 +82,7 @@ describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwa
     defaultAppStore.setState({ calendarMode: null });
     defaultAppStore.setState({
       ...defaultAppStore.getState(),
-      basicPinnedCourses: [],
+      basketCourses: [],
       constrainedPerRequirement: {},
       selectedPerRequirement: {},
       currentSchedule: null,
@@ -98,15 +98,15 @@ describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwa
     });
 
     defaultAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
-    expect(defaultAppStore.getState().basicPinnedCourses).toEqual(["CSI 2132"]);
+    expect(defaultAppStore.getState().basketCourses).toEqual(["CSI 2132"]);
     expect(defaultAppStore.getState().basicElectivesCount).toBe(2);
 
     defaultAppStore.getState().lockCourseForAllSchedulesFromSwap(0);
-    expect(defaultAppStore.getState().basicPinnedCourses).toEqual(["CSI 2132"]);
+    expect(defaultAppStore.getState().basketCourses).toEqual(["CSI 2132"]);
     expect(defaultAppStore.getState().basicElectivesCount).toBe(2);
 
     defaultAppStore.getState().unlockCourseForAllSchedulesFromSwap(0);
-    expect(defaultAppStore.getState().basicPinnedCourses).toEqual([]);
+    expect(defaultAppStore.getState().basketCourses).toEqual([]);
     expect(defaultAppStore.getState().basicElectivesCount).toBe(3);
   });
 

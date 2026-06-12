@@ -68,7 +68,11 @@ function recomputeStateForSelectedOptions(
 }
 
 interface SelectionSlice {
-  setBasicPinnedCourses: AppStore["setBasicPinnedCourses"];
+  setBasketCourses: AppStore["setBasketCourses"];
+  addToBasket: AppStore["addToBasket"];
+  removeFromBasket: AppStore["removeFromBasket"];
+  toggleBasket: AppStore["toggleBasket"];
+  clearBasket: AppStore["clearBasket"];
   setBasicElectivesCount: AppStore["setBasicElectivesCount"];
   setBasicExcludedCategories: AppStore["setBasicExcludedCategories"];
   setProgram: AppStore["setProgram"];
@@ -92,8 +96,26 @@ interface SelectionSlice {
 }
 
 export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice> = (set, get) => ({
-  setBasicPinnedCourses: (courses) =>
-    set({ basicPinnedCourses: courses, generationOptionsDirty: true }),
+  setBasketCourses: (courses) => set({ basketCourses: courses, generationOptionsDirty: true }),
+  addToBasket: (code) => {
+    const { basketCourses } = get();
+    if (basketCourses.includes(code)) return;
+    get().setBasketCourses([...basketCourses, code]);
+  },
+  removeFromBasket: (code) => {
+    const { basketCourses } = get();
+    if (!basketCourses.includes(code)) return;
+    get().setBasketCourses(basketCourses.filter((c) => c !== code));
+  },
+  toggleBasket: (code) => {
+    const { basketCourses } = get();
+    get().setBasketCourses(
+      basketCourses.includes(code)
+        ? basketCourses.filter((c) => c !== code)
+        : [...basketCourses, code],
+    );
+  },
+  clearBasket: () => get().setBasketCourses([]),
   setBasicElectivesCount: (count) =>
     set({ basicElectivesCount: count, generationOptionsDirty: true }),
   setBasicExcludedCategories: (categories) =>
@@ -530,7 +552,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
 
     set({
       coursesThisSemester: DEFAULT_COURSES_THIS_SEMESTER,
-      basicPinnedCourses: [],
+      basketCourses: [],
       basicExcludedCategories: [],
       generationMinStartMinutes: DEFAULT_GENERATION_MIN_START_MINUTES,
       generationMaxEndMinutes: DEFAULT_GENERATION_MAX_END_MINUTES,

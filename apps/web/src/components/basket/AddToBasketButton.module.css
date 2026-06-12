@@ -1,0 +1,16 @@
+.iconButton {
+  color: var(--app-text-muted);
+}
+
+.iconButton:hover {
+  color: var(--app-text);
+  background: var(--app-surface);
+}
+
+.iconButton[data-in-basket="true"] {
+  color: var(--app-success);
+}
+
+.labeledButton {
+  font-weight: 600;
+}

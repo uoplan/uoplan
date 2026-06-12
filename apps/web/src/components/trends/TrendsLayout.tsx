@@ -48,13 +48,9 @@ export function TrendsLayout() {
         <Group align="flex-start" justify="space-between" wrap="nowrap">
           <Stack gap={4}>
             {onSubPage ? (
-              <BackButton
-                fallbackTo="/trends"
-                fallbackLabel={tr("app.nav.backTrends")}
-                fallbackSearch={toUrlSearch(search)}
-              />
+              <BackButton fallbackTo="/trends" fallbackSearch={toUrlSearch(search)} />
             ) : (
-              <BackButton fallbackTo="/" fallbackLabel={tr("app.nav.backHome")} />
+              <BackButton fallbackTo="/" />
             )}
             <Title
               order={1}

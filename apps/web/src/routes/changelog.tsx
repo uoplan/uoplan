@@ -24,7 +24,7 @@ function ChangelogRoute() {
       }}
     >
       <Stack gap="md" maw={900} mx="auto">
-        <BackButton fallbackTo="/" fallbackLabel={tr("app.nav.backHome")} />
+        <BackButton fallbackTo="/" />
         <Title order={2} c="var(--app-text)" fw={600}>
           {tr("app.changelog.title")}
         </Title>

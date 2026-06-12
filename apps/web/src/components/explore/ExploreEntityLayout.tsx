@@ -3,11 +3,12 @@ import { Accordion, Box, Flex } from "@mantine/core";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
+  EXPLORE_CENTER_REF_PX,
 } from "../../lib/explore/accordionPadding";
 
 export const EXPLORE_MOBILE_MEDIA_QUERY = "@media (max-width: 540px)";
 
-const EXPLORE_CHEVRON_RIGHT_XS = "max(12px, calc((100vw - min(100vw, 1200px)) / 2 + 12px))";
+const EXPLORE_CHEVRON_RIGHT_XS = `max(12px, calc((100vw - min(100vw, ${EXPLORE_CENTER_REF_PX}px)) / 2 + 12px))`;
 
 export function ExploreFullBleed({ children }: { children: ReactNode }) {
   return (

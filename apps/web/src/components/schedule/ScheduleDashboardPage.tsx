@@ -27,7 +27,7 @@ import "./scheduleDashboard.css";
 export function ScheduleDashboardPage() {
   useTr();
   const navigate = useNavigate();
-  const search = useSearch({ from: "/schedule/" });
+  const search = useSearch({ from: "/personalize/" });
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [openStep, setOpenStep] = useState<ScheduleStepId | null>(() => search.step ?? null);
@@ -77,7 +77,7 @@ export function ScheduleDashboardPage() {
     const next = openStep === id ? null : id;
     setOpenStep(next);
     void navigate({
-      to: "/schedule",
+      to: "/personalize",
       search: { step: next ?? undefined },
       replace: true,
     });
@@ -93,8 +93,8 @@ export function ScheduleDashboardPage() {
     void (async () => {
       await generate();
       await navigate({
-        to: "/schedule/calendar",
-        state: { back: { to: "/schedule", label: tr("landing.schedule.title") } } as never,
+        to: "/schedule",
+        state: { back: { to: "/personalize", label: tr("landing.personalize.title") } } as never,
       });
     })();
   };
@@ -147,7 +147,7 @@ export function ScheduleDashboardPage() {
         }}
       >
         <Stack gap="xs" maw={760} mx="auto" w="100%">
-          <BackButton fallbackTo="/" fallbackLabel={tr("app.nav.backHome")} />
+          <BackButton fallbackTo="/" />
           <Title
             order={1}
             c="var(--app-text)"

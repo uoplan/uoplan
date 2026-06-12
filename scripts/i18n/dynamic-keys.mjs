@@ -51,7 +51,7 @@ export const DYNAMIC_TR_IDS = [
   // apps/web/src/lib/navigation/appDestinations.ts: dest.labelId / dest.descriptionId
   ...cross(
     "app.nav.dest.",
-    ["home", "explore", "schedule", "calendar", "trends", "graph", "changelog"],
+    ["home", "explore", "personalize", "schedule", "trends", "graph", "changelog"],
     ["label", "description"],
   ),
 
@@ -150,5 +150,48 @@ export const DYNAMIC_TR_IDS = [
     "good",
     "nearExcellent",
     "excellent",
+  ]),
+
+  // apps/web/src/components/basket/BasketContents.tsx (I18N record), BasketFab.tsx, BasketDrawer.tsx,
+  // AddToBasketButton.tsx: ids routed through the local I18N constant maps or the `useTr()` result
+  // (member-access / hook binding, which the literal `tr(...)` scanner does not resolve).
+  "basket.title",
+  "basket.credits",
+  "basket.cta.viewSchedule",
+  "basket.removeCourse",
+  ...family("basket.add", ["", ".aria"]),
+  ...family("basket.added", ["", ".aria"]),
+  ...family("basket.fab.", ["open", "openEmpty", "label"]),
+  ...family("basket.summary.", ["programHint", "noProgramHint", "collapse", "expand"]),
+  ...family("basket.stat.", [
+    "creditsPlaced",
+    "requirementsCovered",
+    "requirementsRemaining",
+    "courseCount",
+  ]),
+  ...family("basket.noProgram.", ["copy", "link"]),
+  ...family("basket.empty.", ["title", "body"]),
+  ...family("basket.badge.", ["placed", "pinned"]),
+  ...family("basket.details.", ["hide", "show"]),
+  ...family("basket.breakdown.", [
+    "title",
+    "assigned",
+    "completed",
+    "unavailable",
+    "prereqUnmet",
+    "overflow",
+    "noRequirement",
+    "standalone",
+  ]),
+  ...family("basket.stillNeeded.", ["title", "empty", "progress", "noSuggestions", "untitled"]),
+  ...family("basket.status.", [
+    "assigned",
+    "completed",
+    "unavailable",
+    "prereqUnmet",
+    "overflow",
+    "noRequirement",
+    "required",
+    "standalone",
   ]),
 ];

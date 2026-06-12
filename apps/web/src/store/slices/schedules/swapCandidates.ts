@@ -34,7 +34,7 @@ export function getSwapCandidates(
   validEnrollmentsByCourseCode: Map<string, CourseEnrollment[]>,
 ): ReturnType<AppStore["getSwapCandidates"]> {
   const {
-    basicPinnedCourses,
+    basketCourses,
     basicExcludedCategories,
     studentPrograms,
     cache,
@@ -69,7 +69,7 @@ export function getSwapCandidates(
   const oldCode = enrollment.courseCode;
 
   if (get().calendarMode === "basic") {
-    if (basicPinnedCourses.includes(oldCode)) {
+    if (basketCourses.includes(oldCode)) {
       return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
     }
 
@@ -110,7 +110,7 @@ export function getSwapCandidates(
         if (course.prerequisites || course.prereqText) continue;
       }
 
-      if (basicPinnedCourses.includes(code)) continue;
+      if (basketCourses.includes(code)) continue;
       if (alreadyInSchedule.has(code)) continue;
 
       const cacheKey = `${code}:${includeClosedComponents}:${virtualOnly}`;

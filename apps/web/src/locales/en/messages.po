@@ -114,12 +114,6 @@ msgstr "Back to {course}"
 msgid "app.nav.backTrends"
 msgstr "Trends"
 
-msgid "app.nav.dest.calendar.description"
-msgstr "View and browse your generated timetables."
-
-msgid "app.nav.dest.calendar.label"
-msgstr "Calendar"
-
 msgid "app.nav.dest.changelog.description"
 msgstr "See what's new and recently updated."
 
@@ -144,11 +138,19 @@ msgstr "Return to the uoplan home page."
 msgid "app.nav.dest.home.label"
 msgstr "Home"
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "app.nav.dest.personalize.description"
+msgstr "Set your term, program, and completed courses."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "app.nav.dest.personalize.label"
+msgstr "Personalize"
+
 msgid "app.nav.dest.schedule.description"
-msgstr "Plan your degree and generate conflict-free timetables."
+msgstr "Generate and view conflict-free timetables."
 
 msgid "app.nav.dest.schedule.label"
-msgstr "Schedule generator"
+msgstr "Schedule"
 
 msgid "app.nav.dest.trends.description"
 msgstr "Track how grades shift over time across disciplines."
@@ -291,6 +293,199 @@ msgstr "Elective options"
 #: scripts/i18n/dynamic-keys.mjs
 msgid "basicCourseFilters.toggle"
 msgstr "Toggle course filters"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.add"
+msgstr "Add to basket"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.add.aria"
+msgstr "Add to basket"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.added"
+msgstr "In basket"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.added.aria"
+msgstr "In basket"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.badge.pinned"
+msgstr "Pinned"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.badge.placed"
+msgstr "Placed"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.assigned"
+msgstr "Counts toward requirements"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.completed"
+msgstr "Already completed"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.noRequirement"
+msgstr "No matching requirement"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.overflow"
+msgstr "Requirement already full"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.prereqUnmet"
+msgstr "Prereqs not met"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.standalone"
+msgstr "Required on their own"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.title"
+msgstr "Breakdown"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.breakdown.unavailable"
+msgstr "Not offered this term"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.credits"
+msgstr "{credits} cr"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.cta.viewSchedule"
+msgstr "View your schedule"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.details.hide"
+msgstr "Hide details"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.details.show"
+msgstr "Show details"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.empty.body"
+msgstr "Add courses while exploring, then come back here to shape your schedule."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.empty.title"
+msgstr "Your basket is empty"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.fab.label"
+msgstr "Basket"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.fab.open"
+msgstr "Open basket with {count} courses"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.fab.openEmpty"
+msgstr "Open basket"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.noProgram.copy"
+msgstr "Set up Personalize to sort these into requirements."
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:200
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.noProgram.link"
+msgstr "Go to Personalize"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.removeCourse"
+msgstr "Remove {code}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stat.courseCount"
+msgstr "{count, plural, one {# course} other {# courses}}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stat.creditsPlaced"
+msgstr "{placed}/{target} credits placed"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stat.requirementsCovered"
+msgstr "{covered}/{total} requirements covered"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stat.requirementsRemaining"
+msgstr "{count, plural, one {# remaining} other {# remaining}}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.assigned"
+msgstr "Counts toward {requirement}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.completed"
+msgstr "Already completed"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.noRequirement"
+msgstr "No matching requirement"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.overflow"
+msgstr "Matching requirement is already full"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.prereqUnmet"
+msgstr "Prereqs not met"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.required"
+msgstr "Treated as a required course"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.standalone"
+msgstr "Required on its own"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.status.unavailable"
+msgstr "Not offered this term"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stillNeeded.empty"
+msgstr "Your basket covers the tracked requirements."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stillNeeded.noSuggestions"
+msgstr "No eligible suggestions right now."
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stillNeeded.progress"
+msgstr "{covered}/{needed} credits"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stillNeeded.title"
+msgstr "Still needed"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.stillNeeded.untitled"
+msgstr "Other requirement"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.summary.collapse"
+msgstr "Collapse basket summary"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.summary.expand"
+msgstr "Expand basket summary"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.summary.noProgramHint"
+msgstr "Courses treated as required"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.summary.programHint"
+msgstr "Courses sorted into your requirements"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.title"
+msgstr "Your basket"
 
 msgid "calendar.blockedTime.label"
 msgstr "Blocked time"
@@ -957,6 +1152,14 @@ msgstr "Good (3.0+)"
 msgid "explore.filter.rating.great"
 msgstr "Great (3.5+)"
 
+#: apps/web/src/components/explore/ExploreFilterBar.tsx:186
+msgid "explore.filter.requirements"
+msgstr "Fits my requirements"
+
+#: apps/web/src/components/explore/ExploreFilterBar.tsx:192
+msgid "explore.filter.requirements.hint"
+msgstr "Add your program in Personalize to filter courses that count toward what's left."
+
 #: apps/web/src/components/explore/ExploreFilterBar.tsx:59
 #: apps/web/src/components/explore/ExploreFilterBar.tsx:61
 #: apps/web/src/components/explore/ExploreFilterPopoverContent.tsx:342
@@ -1050,6 +1253,22 @@ msgstr "Programs"
 #: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:306
 msgid "explore.schedule.conflict"
 msgstr "Selected sections overlap"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:214
+msgid "explore.schedule.fit.counts"
+msgstr "Counts toward {requirement}"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:215
+msgid "explore.schedule.fit.countsMany"
+msgstr "Counts toward {count} of your requirements"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:208
+msgid "explore.schedule.fit.none"
+msgstr "Not part of your remaining requirements"
+
+#: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:198
+msgid "explore.schedule.fit.noProgram"
+msgstr "Add a program in Personalize to see how this fits your plan."
 
 #: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:284
 msgid "explore.schedule.loading"
@@ -1449,33 +1668,6 @@ msgstr "More options"
 msgid "generationOptions.warn.assigned.fallbackTitle"
 msgstr "Requirement {index}"
 
-msgid "generationOptions.warn.assigned.title"
-msgstr "Counts toward your requirements"
-
-msgid "generationOptions.warn.noRequirement.body"
-msgstr "These courses will be scheduled, but they don't match any of your remaining requirements, so they may not count toward your program:"
-
-msgid "generationOptions.warn.noRequirement.title"
-msgstr "Won't count toward a requirement"
-
-msgid "generationOptions.warn.overflow.body"
-msgstr "These courses will be scheduled, but the requirement they match is already full, so they may not count toward your program:"
-
-msgid "generationOptions.warn.overflow.title"
-msgstr "Requirement already full"
-
-msgid "generationOptions.warn.prereqUnmet.body"
-msgstr "These courses will be scheduled, but you may not meet the prerequisites. You will likely need instructor permission to enrol:"
-
-msgid "generationOptions.warn.prereqUnmet.title"
-msgstr "Prerequisites may not be met"
-
-msgid "generationOptions.warn.unavailable.body"
-msgstr "These courses aren't offered this term, so they can't be added to your schedule:"
-
-msgid "generationOptions.warn.unavailable.title"
-msgstr "Not offered this term"
-
 msgid "graph.building"
 msgstr "Building co-teaching graph…"
 
@@ -1551,6 +1743,12 @@ msgstr "Search courses and professors with grade distributions."
 
 msgid "landing.graph.description"
 msgstr "See how professors connect through shared courses."
+
+#: apps/web/src/components/calendar/CalendarPage.tsx:362
+#: apps/web/src/components/schedule/ScheduleDashboardPage.tsx:97
+#: apps/web/src/lib/navigation/backState.ts:18
+msgid "landing.personalize.title"
+msgstr "Personalize"
 
 msgid "landing.schedule.description"
 msgstr "Plan your degree and generate conflict-free timetables."
@@ -1706,6 +1904,18 @@ msgstr "Choice {current} of {total}"
 
 msgid "optionsStep.pager.prev"
 msgstr "Previous choice"
+
+#: apps/web/src/components/shared/PersonalizeBanner.tsx:64
+msgid "personalizeBanner.dismiss"
+msgstr "Dismiss"
+
+#: apps/web/src/components/shared/PersonalizeBanner.tsx:50
+msgid "personalizeBanner.message"
+msgstr "Set your program and completed courses for results tailored to you."
+
+#: apps/web/src/components/shared/PersonalizeBanner.tsx:53
+msgid "personalizeBanner.messageShort"
+msgstr "Personalize for tailored results."
 
 msgid "programStep.disciplines.description"
 msgstr "Used to evaluate program-specific prerequisites. Auto-filled from your program's courses."
@@ -1936,7 +2146,7 @@ msgid "schedule.dashboard.term.loading"
 msgstr "Loading terms…"
 
 msgid "schedule.dashboard.title"
-msgstr "Build your schedule"
+msgstr "Personalize your plan"
 
 msgid "schedule.editor.back"
 msgstr "Back to planner"

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Catalogue, Discipline } from "@uoplan/core";
+import type { Catalogue, Discipline, RemainingRequirement } from "@uoplan/core";
 import {
   courseSentimentByNorm,
   normalizeProfessorName,
@@ -11,6 +11,7 @@ import type {
   ExploreProfessorSearchEntry,
 } from "../../lib/explore/gradesSearch";
 import {
+  buildRequirementCandidateSet,
   compareCourseEntries,
   compareProfessorEntries,
   filterCourseEntries,
@@ -50,6 +51,8 @@ type UseExploreResultsArgs = {
   activeFilters: boolean;
   catalogue: Catalogue | null;
   disciplines: Discipline[] | null;
+  remainingRequirements: RemainingRequirement[];
+  completedCourses: string[];
 };
 
 export function useExploreResults({
@@ -59,6 +62,8 @@ export function useExploreResults({
   activeFilters,
   catalogue,
   disciplines,
+  remainingRequirements,
+  completedCourses,
 }: UseExploreResultsArgs) {
   const { loading, getCourseEntries, getProfessorEntries, getTermPresence, getCourseFuse } =
     useExploreOfferings();
@@ -102,6 +107,11 @@ export function useExploreResults({
     return { courseByNorm: courseSentimentByNorm(feedbackIndex), professorByGroupId };
   }, [feedbackActive, feedbackIndex, professorEntries]);
 
+  const requirementCandidateSet = useMemo<Set<string> | null>(() => {
+    if (!filters.contributesToRequirements) return null;
+    return buildRequirementCandidateSet(remainingRequirements, completedCourses);
+  }, [filters.contributesToRequirements, remainingRequirements, completedCourses]);
+
   const searchResults = useMemo(() => {
     if (!rawSearchResults) return null;
     if (!activeFilters) return rawSearchResults;
@@ -110,6 +120,7 @@ export function useExploreResults({
       filters,
       termSets,
       sentimentSets,
+      requirementCandidateSet,
     );
     const filteredProfessors = filterProfessorEntries(
       rawSearchResults.professors,
@@ -149,14 +160,14 @@ export function useExploreResults({
             )
         : filteredProfessors,
     };
-  }, [rawSearchResults, activeFilters, filters, termSets, sentimentSets]);
+  }, [rawSearchResults, activeFilters, filters, termSets, sentimentSets, requirementCandidateSet]);
 
   const isFilterOnlyMode = debouncedQuery.trim().length === 0 && activeFilters;
 
   const filterOnlyCourses = useMemo(() => {
     if (!isFilterOnlyMode) return null;
     const filtered = dedupeCourseEntriesByComponent(
-      filterCourseEntries(courseEntries, filters, termSets, sentimentSets),
+      filterCourseEntries(courseEntries, filters, termSets, sentimentSets, requirementCandidateSet),
     );
     if (filters.sortKey === "relevance") return filtered.slice(0, 24);
     if (filters.sortKey === "rating") return filtered.slice(0, 24);
@@ -166,7 +177,7 @@ export function useExploreResults({
         compareCourseEntries(a, b, filters.sortKey, filters.sortDir, sentimentSets?.courseByNorm),
       )
       .slice(0, 24);
-  }, [isFilterOnlyMode, courseEntries, filters, termSets, sentimentSets]);
+  }, [isFilterOnlyMode, courseEntries, filters, termSets, sentimentSets, requirementCandidateSet]);
 
   const filterOnlyProfessors = useMemo(() => {
     if (!isFilterOnlyMode) return null;

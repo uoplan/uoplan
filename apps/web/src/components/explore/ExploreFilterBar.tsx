@@ -1,6 +1,6 @@
 import { ActionIcon, Box, Group, Tooltip, UnstyledButton } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconArrowsSort, IconEraser } from "@tabler/icons-react";
+import { IconArrowsSort, IconEraser, IconTargetArrow } from "@tabler/icons-react";
 import { AnimatePresence, m } from "framer-motion";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { tr, useTr } from "../../i18n";
@@ -143,15 +143,69 @@ const FilterPill = forwardRef<HTMLButtonElement, FilterPillProps>(
 );
 FilterPill.displayName = "FilterPill";
 
+/**
+ * Standalone toggle pill for the "fits my requirements" smart filter. Unlike the
+ * popover-backed pills it flips a boolean directly, and when the student has no
+ * program loaded it renders disabled with a hint pointing them to Personalize.
+ */
+function RequirementsFilterPill({
+  active,
+  available,
+  onToggle,
+}: {
+  active: boolean;
+  available: boolean;
+  onToggle: () => void;
+}) {
+  const pill = (
+    <UnstyledButton
+      onClick={available ? onToggle : undefined}
+      aria-pressed={active}
+      aria-disabled={!available}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 6,
+        paddingInline: 10,
+        paddingBlock: 4,
+        borderRadius: FILTER_PILL_RADIUS,
+        fontSize: "var(--mantine-font-size-xs)",
+        fontWeight: active ? 600 : 400,
+        color: active ? "var(--app-text)" : "var(--app-text-dim)",
+        backgroundColor: active ? "var(--app-info-soft)" : "var(--app-surface)",
+        border: `var(--app-border-width) solid ${active ? "var(--app-info)" : "var(--app-border)"}`,
+        transition:
+          "border-color var(--app-transition), background-color var(--app-transition), color var(--app-transition), transform var(--app-transition)",
+        whiteSpace: "nowrap",
+        userSelect: "none",
+        cursor: available ? "pointer" : "not-allowed",
+        opacity: available ? 1 : 0.55,
+      }}
+    >
+      <IconTargetArrow size={13} stroke={1.6} />
+      {tr("explore.filter.requirements")}
+    </UnstyledButton>
+  );
+
+  if (available) return pill;
+  return (
+    <Tooltip label={tr("explore.filter.requirements.hint")} withArrow multiline w={220}>
+      {pill}
+    </Tooltip>
+  );
+}
+
 export function ExploreFilterBar({
   filters,
   onChange,
+  requirementsAvailable,
   disciplineOptions = [],
   termOptions = [],
   padInline = "0px",
 }: {
   filters: ExploreFilterState;
   onChange: (next: Partial<ExploreFilterState>) => void;
+  requirementsAvailable: boolean;
   disciplineOptions?: DisciplineOption[];
   termOptions?: TermOption[];
   padInline?: string;
@@ -214,6 +268,7 @@ export function ExploreFilterBar({
     filters.minRating !== null ||
     filters.minFeedback !== null ||
     filters.termId !== null ||
+    filters.contributesToRequirements ||
     filters.sortKey !== "relevance";
 
   return (
@@ -223,6 +278,13 @@ export function ExploreFilterBar({
         style={{ overflowX: "auto", overflowY: "visible", scrollbarWidth: "none" }}
       >
         <Group gap={6} wrap="nowrap" style={{ width: "max-content", paddingInline: padInline }}>
+          <RequirementsFilterPill
+            active={filters.contributesToRequirements}
+            available={requirementsAvailable}
+            onToggle={() =>
+              onChange({ contributesToRequirements: !filters.contributesToRequirements })
+            }
+          />
           {FILTER_KEYS.map((key) => {
             const active = pillIsActive(key, filters);
             const { bg, border } = pillColors(key, filters);

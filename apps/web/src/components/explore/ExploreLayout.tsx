@@ -1,5 +1,6 @@
 import { useRouterState } from "@tanstack/react-router";
 import { Box } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
 import { AnimatePresence, m } from "framer-motion";
 import { useMemo } from "react";
@@ -7,8 +8,10 @@ import type { ReactNode } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useTr } from "../../i18n";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
+import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { formatTermLabel } from "../../lib/term/termLabel";
 import { useAppStore } from "../../store/appStore";
+import { BasketFab } from "../basket/BasketFab";
 import { ExploreLayoutHeader } from "./ExploreLayoutHeader";
 import { ExploreSearchResults } from "./ExploreSearchResults";
 import { useExploreResults } from "./useExploreResults";
@@ -28,13 +31,26 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
   });
   const onIndex = leafRouteId === EXPLORE_INDEX_ROUTE_ID;
   const showBackButton = !onIndex;
+  // Cart placement: on desktop it overlays the top-right of the content column
+  // (mirroring the landing page's controls position); on mobile it stays a
+  // thumb-reachable floating button.
+  const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });
 
-  const { catalogue, professorRatings, disciplines, terms } = useAppStore(
+  const {
+    catalogue,
+    professorRatings,
+    disciplines,
+    terms,
+    remainingRequirements,
+    completedCourses,
+  } = useAppStore(
     useShallow((s) => ({
       catalogue: s.catalogue,
       professorRatings: s.professorRatings,
       disciplines: s.disciplines,
       terms: s.terms,
+      remainingRequirements: s.remainingRequirements,
+      completedCourses: s.completedCourses,
     })),
   );
 
@@ -75,7 +91,16 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     disciplineCourseCount,
     hasResults,
     professorsFirst,
-  } = useExploreResults({ query, debouncedQuery, filters, activeFilters, catalogue, disciplines });
+  } = useExploreResults({
+    query,
+    debouncedQuery,
+    filters,
+    activeFilters,
+    catalogue,
+    disciplines,
+    remainingRequirements,
+    completedCourses,
+  });
 
   const showResults = searchEngaged && (debouncedQuery.trim().length > 0 || activeFilters);
   const renderResults = onIndex && showResults;
@@ -84,6 +109,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     <Box
       component="main"
       style={{
+        position: "relative",
         minHeight: "100vh",
         backgroundColor: "var(--app-bg)",
         boxSizing: "border-box",
@@ -92,6 +118,22 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
         overflowX: "hidden",
       }}
     >
+      {isMobile ? (
+        <BasketFab />
+      ) : (
+        <Box
+          style={{
+            position: "absolute",
+            top: 8,
+            right: 0,
+            paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
+            zIndex: 5,
+          }}
+        >
+          <BasketFab inline />
+        </Box>
+      )}
+
       <ExploreLayoutHeader
         onIndex={onIndex}
         showBackButton={showBackButton}
@@ -101,6 +143,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
         loading={loading}
         filters={filters}
         onFilterChange={handleFilterChange}
+        requirementsAvailable={remainingRequirements.length > 0}
         disciplineOptions={disciplineOptions}
         termOptions={termOptions}
       />

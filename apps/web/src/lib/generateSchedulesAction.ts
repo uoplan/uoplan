@@ -175,7 +175,7 @@ export async function generateSchedulesAction(
     constrainedPerRequirement: rawConstrainedPerRequirement,
     coursesThisSemester,
     completedCourses,
-    basicPinnedCourses,
+    basketCourses,
     basicExcludedCategories,
     prereqEligibleCourses,
     unassignedCompletedCourses,
@@ -303,7 +303,7 @@ export async function generateSchedulesAction(
   );
   const desiredResolution = resolveDesiredCourses(
     effectiveRemainingRequirements,
-    basicPinnedCourses,
+    basketCourses,
     completedCourses,
     rawConstrainedPerRequirement,
     selectedPerRequirement,
@@ -430,7 +430,7 @@ async function handleBasicGeneration(
   engine: ScheduleEngine,
 ): Promise<GenerateSchedulesResult | null> {
   const {
-    basicPinnedCourses,
+    basketCourses,
     basicElectivesCount,
     basicExcludedCategories,
     levelBuckets,
@@ -471,7 +471,7 @@ async function handleBasicGeneration(
 
   const basicInput: BasicRequestInput = {
     constraints,
-    basicPinnedCourses,
+    basketCourses,
     basicElectivesCount,
     basicExcludedCategories,
     completedCourses,
@@ -492,19 +492,19 @@ async function handleBasicGeneration(
 
   const { schedule, optionalPool } = runBasicGeneration(engine, basicInput, cache);
 
-  const swapPool = [...new Set([...basicPinnedCourses, ...optionalPool])];
+  const swapPool = [...new Set([...basketCourses, ...optionalPool])];
 
   if (!schedule) {
     const timetableFailure = diagnoseTimetableFailure({
-      pinnedCourseCodes: basicPinnedCourses,
+      pinnedCourseCodes: basketCourses,
       optionalCourseCodes: optionalPool,
-      targetCount: basicPinnedCourses.length + basicElectivesCount,
+      targetCount: basketCourses.length + basicElectivesCount,
       cache: cacheWithPerCourseVirtualFilter(
         cache,
         includeClosedComponents,
         (code) =>
           virtualSectionsOnly &&
-          !new Set(basicPinnedCourses.map(normalizeCourseCode)).has(normalizeCourseCode(code)),
+          !new Set(basketCourses.map(normalizeCourseCode)).has(normalizeCourseCode(code)),
       ),
       constraints,
     });
@@ -519,8 +519,8 @@ async function handleBasicGeneration(
         message: { kind: "lead", lead: timetableFailure.lead },
         details: {
           emptyPools: [],
-          totalAvailable: basicPinnedCourses.length + optionalPool.length,
-          totalNeeded: basicPinnedCourses.length + basicElectivesCount,
+          totalAvailable: basketCourses.length + optionalPool.length,
+          totalNeeded: basketCourses.length + basicElectivesCount,
           timetableFailure,
         },
       },

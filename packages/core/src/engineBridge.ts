@@ -69,7 +69,7 @@ interface CommonRequestInput {
 }
 
 export interface BasicRequestInput extends CommonRequestInput {
-  basicPinnedCourses: string[];
+  basketCourses: string[];
   basicElectivesCount: number;
   basicExcludedCategories: string[];
   studentPrograms: string[];
@@ -309,7 +309,7 @@ export function buildBasicRequest(input: BasicRequestInput, cache: DataCache): G
   const common = buildCommonGenerationRequestFields(input, cache);
   return {
     mode: Mode.MODE_BASIC,
-    basicPinnedCourses: input.basicPinnedCourses,
+    basicPinnedCourses: input.basketCourses,
     basicElectivesCount: input.basicElectivesCount,
     basicExcludedCategories: common.basicExcludedCategories,
     completedCourses: common.completedCourses,

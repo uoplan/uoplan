@@ -1,13 +1,18 @@
 import { Group, Text, UnstyledButton } from "@mantine/core";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { useCanGoBack, useLocation, useNavigate, useRouter } from "@tanstack/react-router";
+import { locationLabel } from "../../lib/navigation/backState";
 import type { BackState } from "../../lib/navigation/backState";
+import { usePreviousLocation } from "../../lib/navigation/navigationHistory";
 
 type BackButtonProps = {
   /** Logical parent to navigate to when there is no in-app history to pop. */
   fallbackTo: string;
-  /** Label shown when the originating page did not provide a back label. */
-  fallbackLabel: string;
+  /**
+   * Label for the no-history case. Defaults to the central name for `fallbackTo`,
+   * so callers only override it when the logical parent needs a custom name.
+   */
+  fallbackLabel?: string;
   fallbackParams?: Record<string, string>;
   fallbackSearch?: Record<string, unknown>;
 };
@@ -15,11 +20,13 @@ type BackButtonProps = {
 /**
  * Cohesive back affordance: chevron + label naming the destination.
  *
- * Prefers popping browser history (`router.history.back()`) when the current
- * entry was reached via an in-app forward navigation that attached
- * `state.back`. Otherwise (deep link / fresh load) it navigates to the logical
- * parent. Because `state.back` is set by the referrer, the label always matches
- * where the pop actually lands.
+ * When the current entry was reached via an in-app navigation it pops browser
+ * history (`router.history.back()`) so the exact prior URL — query, filters,
+ * scroll — is restored. The label prefers an explicit `state.back.label` from
+ * the referrer, then the central name of the globally-tracked previous location
+ * (so e.g. arriving at Personalize from Explore reads "Course explorer", not
+ * "Home"), then the fallback. Only a deep link / fresh load (no in-app history)
+ * navigates to the logical parent instead.
  */
 export function BackButton({
   fallbackTo,
@@ -33,11 +40,14 @@ export function BackButton({
   const back = useLocation({
     select: (s) => (s.state as { back?: BackState }).back,
   });
+  const previous = usePreviousLocation();
 
-  const label = back?.label ?? fallbackLabel;
+  const historyLabel =
+    canGoBack && previous ? locationLabel(previous.pathname, previous.search) : null;
+  const label = back?.label ?? historyLabel ?? fallbackLabel ?? locationLabel(fallbackTo);
 
   const onBack = () => {
-    if (back && canGoBack) {
+    if (canGoBack) {
       router.history.back();
       return;
     }

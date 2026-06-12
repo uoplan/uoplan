@@ -1,0 +1,105 @@
+.shell {
+  color: var(--app-text);
+}
+
+.embedded {
+  width: 100%;
+}
+
+.statTrack {
+  position: relative;
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--app-radius-pill);
+  background: color-mix(in oklch, var(--app-border) 65%, transparent);
+}
+
+.statFill {
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  border-radius: inherit;
+  background: var(--app-chart-1);
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .statFill {
+    transition: none;
+  }
+}
+
+.courseList {
+  display: flex;
+  flex-direction: column;
+}
+
+.courseRow {
+  padding: 8px 6px;
+  border-radius: var(--app-radius-sm);
+  transition: background-color var(--app-transition);
+}
+
+.courseRow + .courseRow {
+  border-top: var(--app-border-width) solid var(--app-border);
+}
+
+.courseRow:hover {
+  background: var(--app-surface-hover);
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.removeButton {
+  opacity: 0.5;
+  transition: opacity var(--app-transition);
+}
+
+.courseRow:hover .removeButton,
+.removeButton:focus-visible {
+  opacity: 1;
+}
+
+.detailPanel {
+  border-radius: var(--app-radius);
+  background: var(--app-surface-sunken);
+  padding: 12px;
+}
+
+.categoryBlock {
+  border-top: 1px solid var(--app-border);
+  padding-top: 10px;
+}
+
+.categoryBlock:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.suggestionButton {
+  border-color: color-mix(in oklch, var(--app-chart-1) 45%, var(--app-border) 55%);
+  color: var(--app-text);
+}
+
+.suggestionButton:hover {
+  background: color-mix(in oklch, var(--app-chart-1) 14%, transparent);
+}
+
+.emptyState {
+  border: var(--app-border-width) dashed var(--app-border);
+  border-radius: var(--app-radius-lg);
+  background: var(--app-surface-sunken);
+  padding: 22px 18px;
+  text-align: center;
+}
+
+@media (max-width: 48em) {
+  .courseRow {
+    padding: 8px 4px;
+  }
+}

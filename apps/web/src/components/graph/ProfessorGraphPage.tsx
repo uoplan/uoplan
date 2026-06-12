@@ -197,7 +197,7 @@ export function ProfessorGraphPage({
         <Group align="flex-start" justify="space-between" wrap="nowrap" gap="md">
           <Stack gap="xs" style={{ pointerEvents: "auto", maxWidth: 360, width: "100%" }}>
             <Group gap="xs" wrap="nowrap">
-              <BackButton fallbackTo="/" fallbackLabel={tr("app.nav.backHome")} />
+              <BackButton fallbackTo="/" />
               <Text size="sm" c="dimmed" fw={600}>
                 {tr("graph.title")}
               </Text>

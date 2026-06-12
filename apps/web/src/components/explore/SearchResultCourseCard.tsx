@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Text } from "@mantine/core";
+import { Box, Text } from "@mantine/core";
+import type { CSSProperties } from "react";
 import { tr, useTr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import { RatingBadge } from "../shared/RatingBadge";
@@ -12,6 +13,14 @@ import {
   SearchResultCardSpacer,
   SearchResultGradeSummary,
 } from "./SearchResultCardParts";
+
+const COURSE_CARD_LINK_STYLE: CSSProperties = {
+  display: "flex",
+  flex: 1,
+  flexDirection: "column",
+  color: "inherit",
+  textDecoration: "none",
+};
 
 export function SearchResultCourseCard({
   entry,
@@ -28,47 +37,48 @@ export function SearchResultCourseCard({
   const { gradeViz } = entry;
 
   return (
-    <Link
-      to="/explore/course/$course"
-      params={{ course: courseNormToPathParam(entry.normCode) }}
-      search={searchParams}
-      state={exploreCardBackState(searchParams, query) as never}
-      className="soft-lift"
-      style={EXPLORE_RESULT_CARD_STYLE}
-    >
-      <SearchResultCardBody>
-        <Text size="sm" fw={700} c="var(--app-text)" lh={1.3}>
-          {entry.courseCode}
-        </Text>
-        {entry.courseTitle ? (
-          <Text
-            size="xs"
-            c="dimmed"
-            lh={1.4}
-            style={{
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-            }}
-          >
-            {entry.courseTitle}
+    <Box className="soft-lift" style={EXPLORE_RESULT_CARD_STYLE}>
+      <Link
+        to="/explore/course/$course"
+        params={{ course: courseNormToPathParam(entry.normCode) }}
+        search={searchParams}
+        state={exploreCardBackState(searchParams, query) as never}
+        style={COURSE_CARD_LINK_STYLE}
+      >
+        <SearchResultCardBody>
+          <Text size="sm" fw={700} c="var(--app-text)" lh={1.3}>
+            {entry.courseCode}
           </Text>
-        ) : null}
-        <SearchResultCardSpacer />
-        {sentiment != null && sentiment > 0 ? (
-          <RatingBadge kind="satisfaction" value={sentiment} />
-        ) : null}
-        <SearchResultGradeSummary
-          gradeViz={gradeViz}
-          fallback={
-            <Text size="xs" c="dimmed" lh={1.3}>
-              {tr("search.noGradeData")}
+          {entry.courseTitle ? (
+            <Text
+              size="xs"
+              c="dimmed"
+              lh={1.4}
+              style={{
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+              }}
+            >
+              {entry.courseTitle}
             </Text>
-          }
-        />
-      </SearchResultCardBody>
-      <GradeDistributionBottomBar gradeViz={gradeViz} />
-    </Link>
+          ) : null}
+          <SearchResultCardSpacer />
+          {sentiment != null && sentiment > 0 ? (
+            <RatingBadge kind="satisfaction" value={sentiment} />
+          ) : null}
+          <SearchResultGradeSummary
+            gradeViz={gradeViz}
+            fallback={
+              <Text size="xs" c="dimmed" lh={1.3}>
+                {tr("search.noGradeData")}
+              </Text>
+            }
+          />
+        </SearchResultCardBody>
+        <GradeDistributionBottomBar gradeViz={gradeViz} />
+      </Link>
+    </Box>
   );
 }

@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 
 import { BackButton } from "./BackButton";
+import { __resetNavigationHistory, recordLocation } from "../../lib/navigation/navigationHistory";
 import { renderWithProviders } from "../../test/renderWithProviders";
 
 function buildRouter(initialEntries: string[]) {
@@ -63,4 +64,27 @@ test("pops browser history and uses the referrer label when state.back is presen
 
   // The label comes from the referrer-provided state.back, not the fallback.
   await expectBackButtonNavigatesHome(router, "Back to home");
+});
+
+test("labels from the globally-tracked previous page and pops when no state.back", async () => {
+  __resetNavigationHistory();
+  const router = buildRouter(["/"]);
+  // Mirror the root layout: feed every history change into the tracker.
+  const seed = router.history.location;
+  recordLocation(seed.state.__TSR_index, seed.pathname, seed.search);
+  const unsubscribe = router.history.subscribe(({ location }) =>
+    recordLocation(location.state.__TSR_index, location.pathname, location.search),
+  );
+
+  await renderWithProviders(<RouterProvider router={router} />);
+  await expect.element(page.getByText("HOME PAGE")).toBeInTheDocument();
+
+  // Forward nav with no state.back: the tracker knows the previous entry is "/".
+  await router.navigate({ to: "/detail" } as never);
+
+  // locationLabel("/") resolves to "Home" (not the "Home fallback" prop), proving
+  // the label came from the tracker, and clicking pops history back to "/".
+  await expectBackButtonNavigatesHome(router, "Home");
+  unsubscribe();
+  __resetNavigationHistory();
 });

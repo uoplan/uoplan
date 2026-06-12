@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { GradeVizData } from "@uoplan/core";
-import { tr } from "../../i18n";
+import { locationLabel } from "../../lib/navigation/backState";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 
 /**
@@ -11,6 +11,7 @@ import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 export const EXPLORE_RESULT_CARD_STYLE: CSSProperties = {
   width: 190,
   minWidth: 190,
+  position: "relative",
   flexShrink: 0,
   display: "flex",
   flexDirection: "column",
@@ -35,7 +36,7 @@ export function exploreCardBackState(search: ExploreSearchParams, query?: string
     back: {
       to: "/explore",
       search,
-      label: q ? tr("explore.backToSearch", { q }) : tr("explore.title"),
+      label: locationLabel("/explore", q ? `?q=${encodeURIComponent(q)}` : ""),
     },
   };
 }

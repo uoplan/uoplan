@@ -29,6 +29,7 @@ function buildSearchParams(
     rating: params.rating ?? undefined,
     feedback: params.feedback ?? undefined,
     term: params.term ?? undefined,
+    reqs: params.reqs ?? undefined,
     sort: params.sort ?? undefined,
     dir: params.dir ?? undefined,
   };

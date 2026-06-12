@@ -1,8 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Badge, Box, Flex, Group, Loader, Stack, Text, Title, UnstyledButton } from "@mantine/core";
+import {
+  Anchor,
+  Badge,
+  Box,
+  Flex,
+  Group,
+  Loader,
+  Stack,
+  Text,
+  Title,
+  UnstyledButton,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconAlertTriangle, IconVideo } from "@tabler/icons-react";
+import { IconAlertTriangle, IconTargetArrow, IconVideo } from "@tabler/icons-react";
 import {
   buildColorMap,
   collectTimes,
@@ -24,6 +35,7 @@ import { DAY_LABELS } from "@uoplan/calendar";
 import { useShallow } from "zustand/react/shallow";
 import { tr, useTr } from "../../i18n";
 import { useAppStore } from "../../store/appStore";
+import { AddToBasketButton } from "../basket/AddToBasketButton";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
 import { useTermScheduleData } from "../../hooks/useTermScheduleData";
@@ -175,6 +187,42 @@ function SectionOption({
   );
 }
 
+type RequirementFit = { hasProgram: boolean; matchCount: number; firstTitle: string | null };
+
+/** Inline hint showing how the course fits the student's remaining requirements. */
+function CourseFitHint({ fit }: { fit: RequirementFit }) {
+  useTr();
+  if (!fit.hasProgram) {
+    return (
+      <Text size="xs" c="dimmed" lh={1.4} mt={8}>
+        {tr("explore.schedule.fit.noProgram")}{" "}
+        <Anchor component={Link} to="/personalize" size="xs" fw={600}>
+          {tr("basket.noProgram.link")}
+        </Anchor>
+      </Text>
+    );
+  }
+  if (fit.matchCount === 0) {
+    return (
+      <Text size="xs" c="var(--app-text-muted)" lh={1.4} mt={8}>
+        {tr("explore.schedule.fit.none")}
+      </Text>
+    );
+  }
+  const label =
+    fit.matchCount === 1 && fit.firstTitle
+      ? tr("explore.schedule.fit.counts", { requirement: fit.firstTitle })
+      : tr("explore.schedule.fit.countsMany", { count: fit.matchCount });
+  return (
+    <Group gap={6} wrap="nowrap" mt={8} c="var(--app-success)">
+      <IconTargetArrow size={15} stroke={1.8} />
+      <Text size="xs" fw={600} lh={1.4}>
+        {label}
+      </Text>
+    </Group>
+  );
+}
+
 export function ExploreCourseSchedulePage({
   urlCourseParam,
   termId,
@@ -184,7 +232,13 @@ export function ExploreCourseSchedulePage({
 }) {
   useTr();
   const normCode = parseCoursePathParam(urlCourseParam);
-  const professorRatings = useAppStore(useShallow((s) => s.professorRatings));
+  const { professorRatings, cache, remainingRequirements } = useAppStore(
+    useShallow((s) => ({
+      professorRatings: s.professorRatings,
+      cache: s.cache,
+      remainingRequirements: s.remainingRequirements,
+    })),
+  );
   const { getCourseEntryByNorm } = useExploreOfferings();
   const { data: schedulesData, loading } = useTermScheduleData(termId);
   const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });
@@ -248,6 +302,32 @@ export function ExploreCourseSchedulePage({
   const courseTitle = course?.title ?? null;
   const headingCode = course?.courseCode ?? normCode ?? urlCourseParam.toUpperCase();
 
+  // Display code used for the basket (matches the codes added from explore cards).
+  const basketCode = useMemo(() => {
+    if (course?.courseCode) return course.courseCode;
+    if (!normCode) return null;
+    return cache?.getCourse(normCode)?.code ?? normCode;
+  }, [course, normCode, cache]);
+
+  // How this course fits the student's remaining requirements: which (if any) of
+  // their uncovered requirements list it as a candidate. Drives the inline hint.
+  const fit = useMemo(() => {
+    const hasProgram = remainingRequirements.length > 0;
+    if (!normCode) return { hasProgram, matchCount: 0, firstTitle: null as string | null };
+    const titles: string[] = [];
+    for (const req of remainingRequirements) {
+      if ((req.candidateCourses ?? []).some((c) => normalizeCourseCode(c) === normCode)) {
+        if (req.title) titles.push(req.title);
+        else titles.push("");
+      }
+    }
+    return {
+      hasProgram,
+      matchCount: titles.length,
+      firstTitle: titles.find((t) => t.length > 0) ?? null,
+    };
+  }, [normCode, remainingRequirements]);
+
   return (
     <Stack gap={0}>
       <Box
@@ -259,9 +339,14 @@ export function ExploreCourseSchedulePage({
         }}
       >
         <Box mb={8}>
-          <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
-            {headingCode}
-          </Title>
+          <Group justify="space-between" align="flex-start" gap="sm" wrap="nowrap">
+            <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
+              {headingCode}
+            </Title>
+            {basketCode ? (
+              <AddToBasketButton code={basketCode} variant="labeled" style={{ flexShrink: 0 }} />
+            ) : null}
+          </Group>
         </Box>
         {courseTitle ? (
           <Text size="sm" c="dimmed" lh={1.5} mt={8}>
@@ -273,6 +358,7 @@ export function ExploreCourseSchedulePage({
             {formatTermLabel(termId)}
           </Text>
         ) : null}
+        <CourseFitHint fit={fit} />
       </Box>
 
       <Box

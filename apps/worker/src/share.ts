@@ -6,7 +6,7 @@
 export function buildShareHtml(stateBase64url: string, schedulePayload?: string | null): string {
   const base64 = stateBase64url.replaceAll("-", "+").replaceAll("_", "/");
   const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-  const appUrl = `/schedule/calendar/?s=${encodeURIComponent(padded)}`;
+  const appUrl = `/schedule/?s=${encodeURIComponent(padded)}`;
   // The `p` payload (courses + sections of the already-generated schedule) lets
   // the OG-image worker render without re-running schedule generation. It is
   // only forwarded to the OG image; the redirect above uses the primary state.

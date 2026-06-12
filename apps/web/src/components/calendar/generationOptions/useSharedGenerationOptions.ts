@@ -9,7 +9,7 @@ export function useSharedGenerationOptions() {
     useShallow((s) => ({
       cache: s.cache,
       completedCourses: s.completedCourses,
-      basicPinnedCourses: s.basicPinnedCourses,
+      basketCourses: s.basketCourses,
       basicElectivesCount: s.basicElectivesCount,
       basicExcludedCategories: s.basicExcludedCategories,
       generationMinStartMinutes: s.generationMinStartMinutes,
@@ -30,7 +30,7 @@ export function useSharedGenerationOptions() {
     })),
   );
 
-  const setBasicPinnedCourses = useAppStore((s) => s.setBasicPinnedCourses);
+  const setBasketCourses = useAppStore((s) => s.setBasketCourses);
   const setBasicExcludedCategories = useAppStore((s) => s.setBasicExcludedCategories);
   const setGenerationMinProfessorRating = useAppStore((s) => s.setGenerationMinProfessorRating);
   const setGenerationMinStartMinutes = useAppStore((s) => s.setGenerationMinStartMinutes);
@@ -100,7 +100,7 @@ export function useSharedGenerationOptions() {
     courseOptionsFilter,
     courseRenderOption,
     desiredCourseOptions,
-    setBasicPinnedCourses,
+    setBasketCourses,
     setBasicExcludedCategories,
     setGenerationMinProfessorRating,
     setGenerationMinStartMinutes,

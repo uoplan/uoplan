@@ -29,7 +29,7 @@ function hasPersistedStateChange(next: AppStore, prev: AppStore): boolean {
     next.virtualSectionsOnly !== prev.virtualSectionsOnly ||
     next.studentPrograms !== prev.studentPrograms ||
     next.frenchImmersionStream !== prev.frenchImmersionStream ||
-    next.basicPinnedCourses !== prev.basicPinnedCourses ||
+    next.basketCourses !== prev.basketCourses ||
     next.basicElectivesCount !== prev.basicElectivesCount ||
     next.basicExcludedCategories !== prev.basicExcludedCategories ||
     next.generationMinStartMinutes !== prev.generationMinStartMinutes ||

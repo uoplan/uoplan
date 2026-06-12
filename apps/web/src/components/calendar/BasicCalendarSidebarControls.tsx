@@ -3,6 +3,7 @@ import { Box, Button, MultiSelect, Stack, Text } from "@mantine/core";
 import { IconFileUpload } from "@tabler/icons-react";
 import { getCourseCredits, normalizeCourseCode } from "@uoplan/core";
 import { useAppStore } from "../../store/appStore";
+import { BasketContents } from "../basket/BasketContents";
 import { createCourseOptions } from "../shared/CourseSelect";
 import { GenerationOptionsFields } from "./generationOptions/GenerationOptionsFields";
 import { avoidedDaysFromBlocks } from "../../lib/blockedTimes";
@@ -17,7 +18,7 @@ const FIRST_YEAR_CREDIT_CAP = 48;
 export function BasicCalendarSidebarControls() {
   const {
     cache,
-    basicPinnedCourses,
+    basketCourses,
     basicElectivesCount,
     basicExcludedCategories,
     levelBuckets,
@@ -43,7 +44,7 @@ export function BasicCalendarSidebarControls() {
     desiredCourseOptions,
     setFrenchImmersionStream,
     setBlacklistedCourses,
-    setBasicPinnedCourses,
+    setBasketCourses,
     setBasicExcludedCategories,
     setLevelBuckets,
     setLanguageBuckets,
@@ -75,7 +76,7 @@ export function BasicCalendarSidebarControls() {
     if (!cache) return 0;
     const seen = new Set<string>();
     let total = 0;
-    for (const code of [...completedCourses, ...basicPinnedCourses]) {
+    for (const code of [...completedCourses, ...basketCourses]) {
       const norm = normalizeCourseCode(code);
       if (seen.has(norm)) continue;
       seen.add(norm);
@@ -84,33 +85,34 @@ export function BasicCalendarSidebarControls() {
       total += getCourseCredits(norm, cache);
     }
     return total;
-  }, [cache, completedCourses, basicPinnedCourses]);
+  }, [cache, completedCourses, basketCourses]);
 
-  const totalCount = basicPinnedCourses.length + basicElectivesCount;
+  const totalCount = basketCourses.length + basicElectivesCount;
 
   return (
     <>
       <GenerationOptionsFields
         courseOptions={desiredCourseOptions}
-        desiredCourses={basicPinnedCourses}
+        desiredCourses={basketCourses}
         onDesiredCoursesChange={(v) => {
-          setBasicPinnedCourses(v);
+          setBasketCourses(v);
           markBasicSettingsChanged();
         }}
         renderCourseOption={courseRenderOption}
         courseFilter={courseOptionsFilter}
+        coursesSlot={<BasketContents variant="embedded" />}
         countValue={totalCount}
         onCountChange={(total) => {
           const next = Math.max(
             0,
-            Math.min(SCHEDULE_COURSE_COUNT_MAX, total - basicPinnedCourses.length),
+            Math.min(SCHEDULE_COURSE_COUNT_MAX, total - basketCourses.length),
           );
           if (next === basicElectivesCount) return;
           setBasicElectivesCount(next);
           markBasicSettingsChanged();
         }}
-        countMin={Math.max(1, basicPinnedCourses.length)}
-        countMax={basicPinnedCourses.length + SCHEDULE_COURSE_COUNT_MAX}
+        countMin={Math.max(1, basketCourses.length)}
+        countMax={basketCourses.length + SCHEDULE_COURSE_COUNT_MAX}
         totalFirstYearCredits={totalFirstYearCredits}
         warnFirstYearLimit={totalFirstYearCredits > FIRST_YEAR_CREDIT_CAP}
         limitFirstYearCredits={generationLimitFirstYearCredits}
