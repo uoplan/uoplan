@@ -23,6 +23,7 @@ export function fromProtoDistribution(
     D: Number(distribution.d),
     E: Number(distribution.e),
     F: Number(distribution.f),
+    DR: Number(distribution.dr),
     EIN: Number(distribution.ein),
     NS: Number(distribution.ns),
     NC: Number(distribution.nc),

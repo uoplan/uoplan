@@ -19,6 +19,7 @@ export const GRADE_KEYS = [
   "D",
   "E",
   "F",
+  "DR",
   "EIN",
   "NS",
   "NC",

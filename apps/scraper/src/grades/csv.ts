@@ -2,6 +2,10 @@
  * Stage 1 of the grades scraper: read and aggregate the raw grade-distribution
  * CSVs in `apps/scraper/data/raw`.
  *
+ * Those CSVs are not authored by hand — they are generated from the registrar
+ * Excel exports in `raw/xlsx/` by the converter (`pnpm --filter scraper
+ * grades:convert`, see `xlsxToCsv.ts`), which emits this exact column layout.
+ *
  * Aggregation rules:
  *   - grade columns (`A+`, `A`, ...) are matched verbatim; every other header is
  *     lowercased (so `Term`/`Course`/`Section` -> `term`/`course`/`section`);
@@ -122,14 +126,14 @@ export async function readGradeRows(dir: string = RAW_DATA_DIR): Promise<GradeRo
     entries = await fs.readdir(dir);
   } catch {
     throw new Error(
-      `Raw grade directory not found: ${dir}. Add the grade CSVs there before running the grades scraper.`,
+      `Raw grade directory not found: ${dir}. Run \`pnpm --filter scraper grades:convert\` to generate the per-term CSVs from the registrar xlsx in raw/xlsx/ first.`,
     );
   }
 
   const csvFiles = entries.filter((f) => f.toLowerCase().endsWith(".csv")).sort();
   if (csvFiles.length === 0) {
     throw new Error(
-      `No CSV files found in ${dir}. Add grade CSVs (term, course, section, grade columns) there first.`,
+      `No grade CSVs found in ${dir}. Run \`pnpm --filter scraper grades:convert\` to generate them from the registrar xlsx in raw/xlsx/ first.`,
     );
   }
 

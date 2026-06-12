@@ -1,7 +1,9 @@
 /**
  * Grades scraper orchestration.
  *
- * Pipeline: aggregate raw grade CSVs (`data/raw/*.csv`) -> attach professor(s) to
+ * Pipeline: aggregate raw grade CSVs (`data/raw/*.csv`, generated from the
+ * registrar Excel exports in `raw/xlsx/` by `pnpm --filter scraper grades:convert`)
+ * -> attach professor(s) to
  * each `(termId, code, section)` from the feedback datasets -> resolve each
  * feedback professor to a RateMyProfessors professor (canonical name + legacyId)
  * -> group by course code over the full catalogue. The result matches the shape

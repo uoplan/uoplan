@@ -8,9 +8,9 @@
  *
  * Usage: `pnpm --filter scraper scrape:grades`
  *
- * To seed `data/raw` from the existing `grades.json` for local testing, run the
- * throwaway helper at `playground/grades-reverse/reverseFromGrades.mjs` BEFORE
- * this overwrites `grades.json`.
+ * The raw CSVs are generated from the registrar Excel exports in `raw/xlsx/` by
+ * the converter — run `pnpm --filter scraper grades:convert` first whenever the
+ * xlsx sources change (see `grades/xlsxToCsv.ts`).
  */
 
 import { runBuild } from "../grades/build.ts";
