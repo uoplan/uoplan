@@ -13,6 +13,7 @@ type ProfessorGraphMobileDrawerProps = {
   onNeighborSortChange: (mode: NeighborSortMode) => void;
   offeringsByProfessorId: Map<string, ExploreOfferingFlat[]>;
   professorRatings: ProfessorRatingsMap | null;
+  professorSentiment: Map<string, number> | null;
   onSelectNode: (node: ProfessorGraphNode) => void;
   onClose: () => void;
 };
@@ -25,6 +26,7 @@ export function ProfessorGraphMobileDrawer({
   onNeighborSortChange,
   offeringsByProfessorId,
   professorRatings,
+  professorSentiment,
   onSelectNode,
   onClose,
 }: ProfessorGraphMobileDrawerProps) {
@@ -45,6 +47,7 @@ export function ProfessorGraphMobileDrawer({
           onNeighborSortChange={onNeighborSortChange}
           offeringsByProfessorId={offeringsByProfessorId}
           professorRatings={professorRatings}
+          professorSentiment={professorSentiment}
           onSelectNode={onSelectNode}
           showNeighbors
         />

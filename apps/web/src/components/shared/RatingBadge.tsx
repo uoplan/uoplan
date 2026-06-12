@@ -1,5 +1,5 @@
 import type { MouseEvent } from "react";
-import { Anchor, Group, HoverCard, Stack, Text } from "@mantine/core";
+import { Anchor, Divider, Group, HoverCard, Stack, Text } from "@mantine/core";
 import { IconExternalLink, IconMessage2, IconStar } from "@tabler/icons-react";
 import { useTr } from "../../i18n";
 
@@ -44,7 +44,7 @@ export function RatingBadge({
 
   return (
     <HoverCard
-      width={240}
+      width={260}
       shadow="md"
       radius="var(--app-radius-sm)"
       openDelay={80}
@@ -76,18 +76,47 @@ export function RatingBadge({
         onClick={(e: MouseEvent) => e.stopPropagation()}
         style={{ cursor: "default" }}
       >
-        <Stack gap={4}>
-          <Group gap={6} wrap="nowrap" align="center">
-            <Icon size={15} stroke={1.6} color="var(--app-text-muted)" aria-hidden />
-            <Text size="xs" fw={700} c="var(--app-text)">
-              {label}
-            </Text>
+        <Stack gap={8}>
+          <Group gap="sm" wrap="nowrap" align="center" justify="space-between">
+            <Group gap={6} wrap="nowrap" align="center" style={{ minWidth: 0 }}>
+              <Icon
+                size={15}
+                stroke={1.6}
+                color="var(--app-text-muted)"
+                aria-hidden
+                style={{ flexShrink: 0 }}
+              />
+              <Text
+                size="xs"
+                fw={700}
+                c="var(--app-text)"
+                lh={1.2}
+                style={{ whiteSpace: "nowrap" }}
+              >
+                {label}
+              </Text>
+            </Group>
+            <Group gap={2} wrap="nowrap" align="baseline" style={{ flexShrink: 0 }}>
+              <Text
+                size="md"
+                fw={700}
+                c="var(--app-text)"
+                lh={1}
+                style={{ fontVariantNumeric: "tabular-nums" }}
+              >
+                {display}
+              </Text>
+              <Text size="xs" c="dimmed" lh={1}>
+                /5
+              </Text>
+            </Group>
           </Group>
-          <Text size="xs" c="dimmed" lh={1.4}>
+          <Divider color="var(--app-border)" />
+          <Text size="xs" c="dimmed" lh={1.45}>
             {explain}
           </Text>
           {kind === "rmp" && count != null ? (
-            <Text size="xs" c="dimmed">
+            <Text size="xs" c="dimmed" lh={1.3}>
               {tr("rating.rmp.count", { count })}
             </Text>
           ) : null}

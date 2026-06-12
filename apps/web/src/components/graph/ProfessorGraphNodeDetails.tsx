@@ -101,11 +101,14 @@ function professorRatingLine(
   displayName: CanonicalProfessorName,
   professorRatings: ProfessorRatingsMap | null,
   legacyId: number | null,
+  sentiment: number | null,
 ) {
   const onRmp = legacyId != null && Number.isFinite(legacyId) && legacyId > 0;
   const entry = professorRatings?.[normalizeProfessorName(displayName)] ?? null;
   const rated = hasProfessorRatings(entry);
-  if (!rated && !onRmp) {
+  const showRmp = rated || onRmp;
+  const showSatisfaction = sentiment != null && sentiment > 0;
+  if (!showRmp && !showSatisfaction) {
     if (!professorRatings || !entry) return null;
     return (
       <Text size="xs" c="dimmed">
@@ -114,12 +117,22 @@ function professorRatingLine(
     );
   }
   return (
-    <RatingBadge
-      kind="rmp"
-      value={rated && entry ? entry.rating : null}
-      count={rated && entry ? entry.numRatings : null}
-      legacyId={legacyId}
-    />
+    <Group gap={6} wrap="nowrap" align="center">
+      {showSatisfaction ? <RatingBadge kind="satisfaction" value={sentiment} /> : null}
+      {showSatisfaction && showRmp ? (
+        <Text component="span" size="xs" c="dimmed">
+          ·
+        </Text>
+      ) : null}
+      {showRmp ? (
+        <RatingBadge
+          kind="rmp"
+          value={rated && entry ? entry.rating : null}
+          count={rated && entry ? entry.numRatings : null}
+          legacyId={legacyId}
+        />
+      ) : null}
+    </Group>
   );
 }
 
@@ -145,10 +158,12 @@ function ProfessorGradeSection({ offerings }: { offerings: ExploreOfferingFlat[]
 function NeighborRow({
   neighbor,
   offeringsByProfessorId,
+  sentiment,
   onSelect,
 }: {
   neighbor: GraphNeighbor;
   offeringsByProfessorId: Map<string, ExploreOfferingFlat[]>;
+  sentiment: number | null;
   onSelect: (node: ProfessorGraphNode) => void;
 }) {
   const neighborId = neighbor.node.id;
@@ -182,9 +197,14 @@ function NeighborRow({
               />
             ) : null}
           </Group>
-          <Text size="xs" c="dimmed">
-            {tr("graph.sharedCourses", { weight: neighbor.weight })}
-          </Text>
+          <Group gap={6} wrap="nowrap" align="center">
+            <Text size="xs" c="dimmed">
+              {tr("graph.sharedCourses", { weight: neighbor.weight })}
+            </Text>
+            {sentiment != null && sentiment > 0 ? (
+              <RatingBadge kind="satisfaction" value={sentiment} size={12} />
+            ) : null}
+          </Group>
         </Stack>
         {gradeViz ? (
           <Box style={histogramBoxStyle(HISTOGRAM_ROW_WIDTH_PX)}>
@@ -204,6 +224,7 @@ type ProfessorGraphNodeDetailsProps = {
   onNeighborSortChange: (mode: NeighborSortMode) => void;
   offeringsByProfessorId: Map<string, ExploreOfferingFlat[]>;
   professorRatings: ProfessorRatingsMap | null;
+  professorSentiment: Map<string, number> | null;
   onSelectNode: (node: ProfessorGraphNode) => void;
   showNeighbors: boolean;
 };
@@ -216,6 +237,7 @@ export function ProfessorGraphNodeDetails({
   onNeighborSortChange,
   offeringsByProfessorId,
   professorRatings,
+  professorSentiment,
   onSelectNode,
   showNeighbors,
 }: ProfessorGraphNodeDetailsProps) {
@@ -233,7 +255,12 @@ export function ProfessorGraphNodeDetails({
           </Text>
           {node.legacyId != null ? <ProfessorProfileLink legacyId={node.legacyId} /> : null}
         </Group>
-        {professorRatingLine(node.displayName, professorRatings, node.legacyId ?? null)}
+        {professorRatingLine(
+          node.displayName,
+          professorRatings,
+          node.legacyId ?? null,
+          professorSentiment?.get(normalizeProfessorName(node.displayName)) ?? null,
+        )}
         <Text size="xs" c="dimmed">
           {tr("graph.connections", { count: node.degree })}
         </Text>
@@ -273,6 +300,9 @@ export function ProfessorGraphNodeDetails({
                 key={neighbor.node.id}
                 neighbor={neighbor}
                 offeringsByProfessorId={offeringsByProfessorId}
+                sentiment={
+                  professorSentiment?.get(normalizeProfessorName(neighbor.node.displayName)) ?? null
+                }
                 onSelect={onSelectNode}
               />
             ))}
