@@ -2,9 +2,10 @@ import { Box, Group, Stack, Text, Title } from "@mantine/core";
 import { useMemo } from "react";
 import { m } from "framer-motion";
 import { useShallow } from "zustand/react/shallow";
-import { pickCanonicalProfessorName } from "@uoplan/core";
+import { normalizeProfessorName, pickCanonicalProfessorName } from "@uoplan/core";
 import type { CanonicalProfessorName } from "@uoplan/core";
 import { tr, useTr } from "../../i18n";
+import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
 import { groupOfferingsByCourse } from "../../lib/explore/gradesSearch";
 import { professorRouteParam, resolveProfessorRoute } from "../../lib/explore/professorRoute";
 import { useAppStore } from "../../store/appStore";
@@ -53,6 +54,11 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
   const hasRating = rating != null && Number.isFinite(rating);
   const rmpLegacyId = legacyId;
   const hasRmpLink = rmpLegacyId != null && Number.isFinite(rmpLegacyId) && rmpLegacyId > 0;
+  const showRmp = hasRating || hasRmpLink;
+
+  const { professorByName } = useScheduleSentiment();
+  const sentiment = professorByName?.get(normalizeProfessorName(displayName)) ?? null;
+  const showSatisfaction = sentiment != null && sentiment > 0;
 
   const profRouteParam = entry
     ? professorRouteParam({ slug: entry.slug, legacyId: legacyId ?? undefined, displayName })
@@ -94,14 +100,22 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
           <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
             {displayName}
           </Title>
-          {(hasRating || hasRmpLink) && (
+          {(showSatisfaction || showRmp) && (
             <Group gap={6} align="center" mt={8} wrap="wrap">
-              <RatingBadge
-                kind="rmp"
-                value={hasRating ? rating : null}
-                count={hasRating ? numRatings : null}
-                legacyId={rmpLegacyId}
-              />
+              {showSatisfaction ? <RatingBadge kind="satisfaction" value={sentiment} /> : null}
+              {showSatisfaction && showRmp ? (
+                <Text component="span" size="xs" c="dimmed">
+                  ·
+                </Text>
+              ) : null}
+              {showRmp ? (
+                <RatingBadge
+                  kind="rmp"
+                  value={hasRating ? rating : null}
+                  count={hasRating ? numRatings : null}
+                  legacyId={rmpLegacyId}
+                />
+              ) : null}
             </Group>
           )}
         </ExploreEntityHeader>

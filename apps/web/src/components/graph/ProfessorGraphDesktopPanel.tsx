@@ -14,6 +14,7 @@ type ProfessorGraphDesktopPanelProps = {
   onNeighborSortChange: (mode: NeighborSortMode) => void;
   offeringsByProfessorId: Map<string, ExploreOfferingFlat[]>;
   professorRatings: ProfessorRatingsMap | null;
+  professorSentiment: Map<string, number> | null;
   onSelectNode: (node: ProfessorGraphNode) => void;
   onClose: () => void;
 };
@@ -26,6 +27,7 @@ export function ProfessorGraphDesktopPanel({
   onNeighborSortChange,
   offeringsByProfessorId,
   professorRatings,
+  professorSentiment,
   onSelectNode,
   onClose,
 }: ProfessorGraphDesktopPanelProps) {
@@ -75,6 +77,7 @@ export function ProfessorGraphDesktopPanel({
             onNeighborSortChange={onNeighborSortChange}
             offeringsByProfessorId={offeringsByProfessorId}
             professorRatings={professorRatings}
+            professorSentiment={professorSentiment}
             onSelectNode={onSelectNode}
             showNeighbors
           />

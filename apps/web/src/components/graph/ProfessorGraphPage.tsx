@@ -18,6 +18,7 @@ import type { ProfessorGraphNode } from "@uoplan/core";
 import { tr, useTr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useProfessorGraphBuild } from "../../hooks/useProfessorGraphBuild";
+import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
 import { getGraphNeighbors } from "../../lib/graph/professorGraphDetails";
 import type { NeighborSortMode } from "../../lib/graph/professorGraphDetails";
 import {
@@ -54,6 +55,7 @@ export function ProfessorGraphPage({
 
   const isMobile = useMediaQuery("(max-width: 768px)");
   const professorRatings = useAppStore((s) => s.professorRatings);
+  const { professorByName: professorSentiment } = useScheduleSentiment();
 
   const { data: grades, error: gradesLoadError } = useCourseGradesPb();
   const { graphData, offeringsByProfessorId, buildProgress, buildError, isBuilding } =
@@ -298,6 +300,7 @@ export function ProfessorGraphPage({
           onNeighborSortChange={setNeighborSort}
           offeringsByProfessorId={offeringsByProfessorId}
           professorRatings={professorRatings}
+          professorSentiment={professorSentiment}
           onSelectNode={onNodeSelect}
           onClose={() => onNodeSelect(null)}
         />
@@ -311,6 +314,7 @@ export function ProfessorGraphPage({
             onNeighborSortChange={setNeighborSort}
             offeringsByProfessorId={offeringsByProfessorId}
             professorRatings={professorRatings}
+            professorSentiment={professorSentiment}
             onSelectNode={onNodeSelect}
             onClose={() => onNodeSelect(null)}
           />
