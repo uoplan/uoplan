@@ -20,6 +20,7 @@ const BAND_LABEL_KEY: Record<GradeVizBucketId, string> = {
   blue: "trends.band.good",
   teal: "trends.band.nearExcellent",
   green: "trends.band.excellent",
+  grey: "trends.band.withdrew",
 };
 
 /**

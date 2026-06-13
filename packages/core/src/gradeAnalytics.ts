@@ -413,10 +413,10 @@ export interface GradeBandTerm {
   bands: Record<GradeVizBucketId, number>;
 }
 
-const BAND_IDS: GradeVizBucketId[] = ["red", "amber", "yellow", "blue", "teal", "green"];
+const BAND_IDS: GradeVizBucketId[] = ["red", "amber", "yellow", "blue", "teal", "green", "grey"];
 
 function emptyBands(): Record<GradeVizBucketId, number> {
-  return { red: 0, amber: 0, yellow: 0, blue: 0, teal: 0, green: 0 };
+  return { red: 0, amber: 0, yellow: 0, blue: 0, teal: 0, green: 0, grey: 0 };
 }
 
 /** Ordered grade-band metadata (id → colour), for legends/series wiring. */

@@ -43,6 +43,7 @@ export const GRADE_VIZ_COLORS = {
   blue: "#3266ad",
   teal: "#5a9e7a",
   green: "#1D9E75",
+  grey: "#7A7A7A",
 } as const;
 
 export type GradeVizBucketId = keyof typeof GRADE_VIZ_COLORS;
@@ -56,6 +57,8 @@ export interface GradeVizBucket {
 
 export interface GradeVizData {
   total: number;
+  /** Graded students only (excludes withdrawals); denominator for passing% / A+%. */
+  gradedTotal: number;
   passingPercent: number;
   buckets: GradeVizBucket[];
   histogram: Array<{ grade: string; count: number; bucketId: GradeVizBucketId; color: string }>;
@@ -68,6 +71,7 @@ const GRADE_BUCKET_DEFS: Array<{ id: GradeVizBucketId; label: string; grades: st
   { id: "blue", label: "Good", grades: ["B", "B+", "S"] },
   { id: "teal", label: "Near excellent", grades: ["A-"] },
   { id: "green", label: "Excellent", grades: ["A", "A+", "P"] },
+  { id: "grey", label: "Withdrew", grades: ["DR"] },
 ];
 
 const GRADE_TO_BUCKET = new Map<string, GradeVizBucketId>(
@@ -75,6 +79,7 @@ const GRADE_TO_BUCKET = new Map<string, GradeVizBucketId>(
 );
 
 const HISTOGRAM_GRADE_ORDER = [
+  "DR",
   "NS",
   "EIN",
   "ABS",
@@ -221,7 +226,9 @@ export function normalizeGradeVizDistribution(
   });
 
   const failingCount = buckets.find((bucket) => bucket.id === "red")?.count ?? 0;
-  const passingPercent = ((total - failingCount) / total) * 100;
+  const withdrewCount = buckets.find((bucket) => bucket.id === "grey")?.count ?? 0;
+  const gradedTotal = total - withdrewCount;
+  const passingPercent = gradedTotal > 0 ? ((gradedTotal - failingCount) / gradedTotal) * 100 : 0;
 
   const histogram: GradeVizData["histogram"] = HISTOGRAM_GRADE_ORDER.map((grade) => {
     const bucketId = GRADE_TO_BUCKET.get(grade) ?? "red";
@@ -235,6 +242,7 @@ export function normalizeGradeVizDistribution(
 
   return {
     total,
+    gradedTotal,
     passingPercent,
     buckets,
     histogram,

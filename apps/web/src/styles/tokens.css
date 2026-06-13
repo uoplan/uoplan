@@ -122,6 +122,7 @@
   --app-chart-grade-blue: oklch(0.73 0.1 245);
   --app-chart-grade-teal: oklch(0.77 0.1 181);
   --app-chart-grade-green: oklch(0.76 0.115 150);
+  --app-chart-grade-grey: oklch(0.68 0.012 250);
 }
 
 [data-app-theme="light"] {
@@ -206,6 +207,7 @@
   --app-chart-grade-blue: oklch(0.56 0.14 250);
   --app-chart-grade-teal: oklch(0.58 0.11 186);
   --app-chart-grade-green: oklch(0.57 0.13 150);
+  --app-chart-grade-grey: oklch(0.56 0.012 250);
 }
 
 /* ----------------------------------------------------------------------------
@@ -291,4 +293,5 @@
   --app-chart-grade-blue: oklch(0.77 0.1 245);
   --app-chart-grade-teal: oklch(0.8 0.1 180);
   --app-chart-grade-green: oklch(0.79 0.115 150);
+  --app-chart-grade-grey: oklch(0.74 0.012 250);
 }

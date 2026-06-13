@@ -69,7 +69,7 @@
 
 .cal-grade-histogram {
   display: flex;
-  align-items: flex-end;
+  align-items: stretch;
   justify-content: flex-start;
   gap: 2px;
   min-height: 94px;

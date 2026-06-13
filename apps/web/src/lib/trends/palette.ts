@@ -37,4 +37,5 @@ export const GRADE_BAND_TOKEN: Record<GradeVizBucketId, string> = {
   blue: "var(--app-chart-grade-blue)",
   teal: "var(--app-chart-grade-teal)",
   green: "var(--app-chart-grade-green)",
+  grey: "var(--app-chart-grade-grey)",
 };

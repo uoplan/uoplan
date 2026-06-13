@@ -150,6 +150,7 @@ export const DYNAMIC_TR_IDS = [
     "good",
     "nearExcellent",
     "excellent",
+    "withdrew",
   ]),
 
   // apps/web/src/components/basket/BasketContents.tsx (I18N record), BasketFab.tsx, BasketDrawer.tsx,

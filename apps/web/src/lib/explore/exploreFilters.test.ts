@@ -19,8 +19,10 @@ import { testCourseCode, testProfessorName } from "../../test/brands";
 import { makeOffering } from "../../test/exploreFilterFixtures";
 
 function makeGradeViz(entries: Array<{ grade: string; count: number }>): GradeVizData {
+  const total = entries.reduce((sum, entry) => sum + entry.count, 0);
   return {
-    total: entries.reduce((sum, entry) => sum + entry.count, 0),
+    total,
+    gradedTotal: total,
     passingPercent: 0.8,
     buckets: [],
     histogram: entries.map((entry) => ({
