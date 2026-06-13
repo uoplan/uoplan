@@ -10,7 +10,6 @@ import { tr, useTr } from "../../i18n";
 import { useAppStore } from "../../store/appStore";
 import { formatTermLabel } from "../../lib/term/termLabel";
 import type {
-  ExploreOfferingFlat,
   ExploreProfessorSearchEntry,
   ProfessorOfferingGroup,
 } from "../../lib/explore/gradesSearch";
@@ -74,12 +73,10 @@ function TermPillChip({ label, hidden = false }: { label?: string; hidden?: bool
 function CourseProfessorItem({
   group,
   professorRatings,
-  aggregateOfferings,
   linkSearch,
 }: {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
-  aggregateOfferings?: ExploreOfferingFlat[];
   linkSearch?: ExploreSearchParams;
 }) {
   return (
@@ -89,7 +86,6 @@ function CourseProfessorItem({
           group={group}
           professorRatings={professorRatings}
           stopPropagation
-          aggregateOfferings={aggregateOfferings}
           linkSearch={linkSearch}
         />
       </Accordion.Control>
@@ -164,7 +160,7 @@ export function ExploreCoursePage({
     return new Map(getProfessorEntries().map((e) => [e.groupId, e] as const));
   }, [filters.minRating, filters.minFeedback, getProfessorEntries]);
 
-  const { groups: professorGroups, aggregateByGroupId } = useMemo(
+  const { groups: professorGroups } = useMemo(
     () =>
       filterCourseProfessorGroups(courseOfferings, filters, {
         profEntryByGroupId,
@@ -305,7 +301,6 @@ export function ExploreCoursePage({
                   key={g.groupId}
                   group={g}
                   professorRatings={professorRatings}
-                  aggregateOfferings={aggregateByGroupId?.get(g.groupId)}
                   linkSearch={linkSearch}
                 />
               ))}

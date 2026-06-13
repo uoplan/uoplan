@@ -111,8 +111,6 @@ type ExploreProfessorSummaryBarProps = {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
   stopPropagation?: boolean;
-  /** All-terms offerings for the histogram when the rows are term-filtered (defaults to group.offerings). */
-  aggregateOfferings?: ExploreOfferingFlat[];
   /** Search params carried into the professor link so active filters persist (defaults to none). */
   linkSearch?: ExploreSearchParams;
 };
@@ -121,17 +119,14 @@ export function ExploreProfessorSummaryBar({
   group,
   professorRatings,
   stopPropagation = false,
-  aggregateOfferings,
   linkSearch,
 }: ExploreProfessorSummaryBarProps) {
   const combinedViz = useMemo(
     () =>
       normalizeGradeVizDistribution(
-        mergeGradeDistributionCounts(
-          (aggregateOfferings ?? group.offerings).map((o) => o.distribution),
-        ),
+        mergeGradeDistributionCounts(group.offerings.map((o) => o.distribution)),
       ),
-    [aggregateOfferings, group.offerings],
+    [group.offerings],
   );
 
   const professorRatingsLoading = useAppStore((s) => s.professorRatingsLoading);
@@ -204,25 +199,17 @@ export function ExploreProfessorSummaryBar({
 
 type ExploreCourseSummaryBarProps = {
   group: CourseOfferingGroup;
-  /** All-terms offerings for the histogram when the rows are term-filtered (defaults to group.offerings). */
-  aggregateOfferings?: ExploreOfferingFlat[];
   /** Search params carried into the course link so active filters persist (defaults to none). */
   linkSearch?: ExploreSearchParams;
 };
 
-export function ExploreCourseSummaryBar({
-  group,
-  aggregateOfferings,
-  linkSearch,
-}: ExploreCourseSummaryBarProps) {
+export function ExploreCourseSummaryBar({ group, linkSearch }: ExploreCourseSummaryBarProps) {
   const combinedViz = useMemo(
     () =>
       normalizeGradeVizDistribution(
-        mergeGradeDistributionCounts(
-          (aggregateOfferings ?? group.offerings).map((o) => o.distribution),
-        ),
+        mergeGradeDistributionCounts(group.offerings.map((o) => o.distribution)),
       ),
-    [aggregateOfferings, group.offerings],
+    [group.offerings],
   );
 
   return (
@@ -271,23 +258,14 @@ export function ExploreCourseSummaryBar({
 
 type ExploreCourseItemProps = {
   group: CourseOfferingGroup;
-  aggregateOfferings?: ExploreOfferingFlat[];
   linkSearch?: ExploreSearchParams;
 };
 
-export function ExploreCourseItem({
-  group,
-  aggregateOfferings,
-  linkSearch,
-}: ExploreCourseItemProps) {
+export function ExploreCourseItem({ group, linkSearch }: ExploreCourseItemProps) {
   return (
     <Accordion.Item value={group.groupId}>
       <Accordion.Control>
-        <ExploreCourseSummaryBar
-          group={group}
-          aggregateOfferings={aggregateOfferings}
-          linkSearch={linkSearch}
-        />
+        <ExploreCourseSummaryBar group={group} linkSearch={linkSearch} />
       </Accordion.Control>
       <Accordion.Panel>
         <ExploreProfessorOfferingRows offerings={group.offerings} showCourseCode={false} />

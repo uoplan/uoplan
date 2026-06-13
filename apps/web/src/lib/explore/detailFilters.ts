@@ -2,14 +2,16 @@
  * Filtering for the Explore *detail* pages (single course → its professors, single
  * professor → their courses). The Explore index filters flat search-index rows
  * (`filterCourseEntries` / `filterProfessorEntries`); here we instead narrow the
- * already-grouped offering lists those pages render, while keeping each group's
- * summary grade histogram aggregated over **all** terms (not just the filtered one).
+ * already-grouped offering lists those pages render.
  *
- * Term is the only filter that removes offerings *within* a group (a professor may
- * teach the course in several terms); every other filter removes whole groups. So
- * the all-terms aggregate only diverges from the visible rows when a term filter is
- * active — callers pass the aggregate offerings through to the summary bar in that
- * case so the histogram still reflects the professor's / course's full record.
+ * The term filter only decides *which groups* are shown — a professor (or course)
+ * stays in the list when they have at least one offering in the active term. Once a
+ * group survives that selection it keeps **all** of its offerings across **every**
+ * term, since a prof's earlier terms / a course's earlier sections are useful
+ * context. Every other filter (rating / feedback / level / language / discipline /
+ * difficulty / requirements) removes whole groups too, never individual offerings —
+ * so the rendered rows always equal the group's full record, and the summary grade
+ * histogram is built straight from `group.offerings`.
  */
 import { normalizeCourseCode } from "@uoplan/core";
 import type { ProfessorRegistry } from "@uoplan/core";
@@ -24,24 +26,22 @@ import type {
 import { filterCourseEntries, filterProfessorEntries } from "./exploreFilters";
 import type { ExploreFilterState, ExploreSentimentSets } from "./exploreFilters";
 
-/** All-terms offerings per group id, used to keep summary histograms full while rows are filtered. */
-function aggregateOfferingsByProfessorGroup(
-  courseOfferings: ExploreOfferingFlat[],
-  registry: ProfessorRegistry | null | undefined,
-): Map<string, ExploreOfferingFlat[]> {
-  const byGroupId = new Map<string, ExploreOfferingFlat[]>();
-  for (const g of groupOfferingsByProfessor(courseOfferings, registry)) {
-    byGroupId.set(g.groupId, g.offerings);
-  }
-  return byGroupId;
-}
-
-function aggregateOfferingsByCourseGroup(
-  professorOfferings: ExploreOfferingFlat[],
-): Map<string, ExploreOfferingFlat[]> {
-  const byGroupId = new Map<string, ExploreOfferingFlat[]>();
-  for (const g of groupOfferingsByCourse(professorOfferings)) byGroupId.set(g.groupId, g.offerings);
-  return byGroupId;
+/**
+ * Keep only the groups that have at least one offering in the active term. The term
+ * slice is re-grouped with the same grouper so expected/predicted membership (which a
+ * raw `termId` scan would miss) is honoured; the surviving groups themselves are left
+ * untouched, so each keeps all of its offerings across every term.
+ */
+function selectGroupsPresentInTerm<G extends { groupId: string }>(
+  groups: G[],
+  offerings: ExploreOfferingFlat[],
+  termId: number,
+  group: (items: ExploreOfferingFlat[]) => G[],
+): G[] {
+  const termGroupIds = new Set(
+    group(offerings.filter((o) => o.termId === termId)).map((g) => g.groupId),
+  );
+  return groups.filter((g) => termGroupIds.has(g.groupId));
 }
 
 export type CourseProfessorFilterDeps = {
@@ -60,28 +60,34 @@ export type CourseProfessorFilterDeps = {
 
 export type FilteredProfessorGroups = {
   groups: ProfessorOfferingGroup[];
-  /** All-terms offerings per group id, or `null` when no term filter narrows the rows. */
-  aggregateByGroupId: Map<string, ExploreOfferingFlat[]> | null;
 };
 
 /**
  * Course-page professor list: filter a single course's offerings by the active
- * filters. The term filter narrows the offerings (dropping professors with none in
- * the term and trimming each remaining professor's rows); rating / feedback drop
- * whole professor groups via the same predicate the index uses. Course-level filters
- * (level / language / discipline / difficulty / requirements) describe the course
- * itself and are gated by the caller, not here.
+ * filters. The term filter only *selects* which professors appear (those teaching the
+ * course in the active term); each surviving professor keeps all of their offerings
+ * across every term. Rating / feedback drop whole professor groups via the same
+ * predicate the index uses. Course-level filters (level / language / discipline /
+ * difficulty / requirements) describe the course itself and are gated by the caller,
+ * not here.
  */
 export function filterCourseProfessorGroups(
   courseOfferings: ExploreOfferingFlat[],
   filters: ExploreFilterState,
   deps: CourseProfessorFilterDeps,
 ): FilteredProfessorGroups {
-  const byTerm = filters.termId !== null;
-  const base = byTerm
-    ? courseOfferings.filter((o) => o.termId === filters.termId)
-    : courseOfferings;
-  let groups = groupOfferingsByProfessor(base, deps.registry);
+  // Group every term so each surviving professor keeps their full record.
+  let groups = groupOfferingsByProfessor(courseOfferings, deps.registry);
+
+  if (filters.termId !== null) {
+    // Selection: keep only professors present in the active term. Grouping the term
+    // slice with the same registry preserves expected/predicted membership, so a
+    // predicted-but-unconfirmed instructor for the term stays visible (and keeps the
+    // confirmed past terms surfaced by the all-terms grouping above).
+    groups = selectGroupsPresentInTerm(groups, courseOfferings, filters.termId, (items) =>
+      groupOfferingsByProfessor(items, deps.registry),
+    );
+  }
 
   const byFeedback = filters.minFeedback !== null && deps.sentiment?.professorByGroupId != null;
   if (filters.minRating !== null || byFeedback) {
@@ -95,12 +101,7 @@ export function filterCourseProfessorGroups(
     });
   }
 
-  return {
-    groups,
-    aggregateByGroupId: byTerm
-      ? aggregateOfferingsByProfessorGroup(courseOfferings, deps.registry)
-      : null,
-  };
+  return { groups };
 }
 
 export type ProfessorCourseFilterDeps = {
@@ -112,27 +113,34 @@ export type ProfessorCourseFilterDeps = {
 
 export type FilteredCourseGroups = {
   groups: CourseOfferingGroup[];
-  aggregateByGroupId: Map<string, ExploreOfferingFlat[]> | null;
 };
 
 /**
  * Professor-page course list: filter a single professor's offerings by the active
- * filters. The term filter narrows the offerings (dropping courses with none in the
- * term and trimming each course's rows); the course-level filters (level / language /
- * discipline / difficulty / course-feedback / requirements) drop whole course groups
- * via the index course predicate. The professor-level rating filter is gated by the
- * caller (it describes the single professor, not individual courses).
+ * filters. The term filter only *selects* which courses appear (those the professor
+ * taught in the active term); each surviving course keeps all of its offerings across
+ * every term. The course-level filters (level / language / discipline / difficulty /
+ * course-feedback / requirements) drop whole course groups via the index course
+ * predicate. The professor-level rating filter is gated by the caller (it describes
+ * the single professor, not individual courses).
  */
 export function filterProfessorCourseGroups(
   professorOfferings: ExploreOfferingFlat[],
   filters: ExploreFilterState,
   deps: ProfessorCourseFilterDeps,
 ): FilteredCourseGroups {
-  const byTerm = filters.termId !== null;
-  const base = byTerm
-    ? professorOfferings.filter((o) => o.termId === filters.termId)
-    : professorOfferings;
-  let groups = groupOfferingsByCourse(base);
+  // Group every term so each surviving course keeps its full record.
+  let groups = groupOfferingsByCourse(professorOfferings);
+
+  if (filters.termId !== null) {
+    // Selection: keep only courses the professor taught in the active term.
+    groups = selectGroupsPresentInTerm(
+      groups,
+      professorOfferings,
+      filters.termId,
+      groupOfferingsByCourse,
+    );
+  }
 
   const byFeedback = filters.minFeedback !== null && deps.sentiment?.courseByNorm != null;
   const needsCourseFilter =
@@ -160,10 +168,7 @@ export function filterProfessorCourseGroups(
     });
   }
 
-  return {
-    groups,
-    aggregateByGroupId: byTerm ? aggregateOfferingsByCourseGroup(professorOfferings) : null,
-  };
+  return { groups };
 }
 
 /**

@@ -65,29 +65,21 @@ describe("filterCourseProfessorGroups", () => {
     makeOffering({ id: "b-winter", professorName: "Alan Turing", legacyId: 102, termId: 2261 }),
   ];
 
-  it("returns every professor group and no aggregate when no filters are active", () => {
-    const { groups, aggregateByGroupId } = filterCourseProfessorGroups(
-      courseOfferings,
-      filters({}),
-      { profEntryByGroupId: new Map() },
-    );
+  it("returns every professor group when no filters are active", () => {
+    const { groups } = filterCourseProfessorGroups(courseOfferings, filters({}), {
+      profEntryByGroupId: new Map(),
+    });
     expect(groups.map((g) => g.groupId).sort()).toEqual(["id:101", "id:102"]);
-    expect(aggregateByGroupId).toBeNull();
   });
 
-  it("term filter drops professors absent that term but keeps all-terms aggregates", () => {
-    const { groups, aggregateByGroupId } = filterCourseProfessorGroups(
-      courseOfferings,
-      filters({ termId: 2269 }),
-      { profEntryByGroupId: new Map() },
-    );
-    // Only Ada teaches in Fall (2269); her visible rows are trimmed to that term.
+  it("term filter drops professors absent that term but keeps survivors' full record", () => {
+    const { groups } = filterCourseProfessorGroups(courseOfferings, filters({ termId: 2269 }), {
+      profEntryByGroupId: new Map(),
+    });
+    // Only Ada teaches in Fall (2269); Alan (winter-only) is dropped.
     expect(groups.map((g) => g.groupId)).toEqual(["id:101"]);
-    expect(groups[0]!.offerings).toHaveLength(1);
-    // ...but the histogram aggregate still spans both of Ada's terms.
-    expect(aggregateByGroupId).not.toBeNull();
-    expect(aggregateByGroupId!.get("id:101")).toHaveLength(2);
-    expect(aggregateByGroupId!.get("id:102")).toHaveLength(1);
+    // ...but Ada keeps all of her offerings (both terms), not just the filtered one.
+    expect(groups[0]!.offerings).toHaveLength(2);
   });
 
   it("min-rating drops whole professor groups below the threshold", () => {
@@ -131,19 +123,18 @@ describe("filterCourseProfessorGroups", () => {
       }),
     ];
 
-    const { groups, aggregateByGroupId } = filterCourseProfessorGroups(
-      offerings,
-      filters({ termId: 2269 }),
-      { profEntryByGroupId: new Map(), registry },
-    );
+    const { groups } = filterCourseProfessorGroups(offerings, filters({ termId: 2269 }), {
+      profEntryByGroupId: new Map(),
+      registry,
+    });
 
     // The expected-only professor is still shown for the term, under her canonical
     // registry group id (not a split legacyId/name group)...
     expect(groups.map((g) => g.groupId)).toEqual(["ref:0"]);
     expect(groups[0]!.hasPredicted).toBe(true);
-    // ...and her all-terms aggregate (keyed by the same id) still covers the past
-    // confirmed term, so the grade histogram isn't blanked out.
-    expect(aggregateByGroupId!.get("ref:0")).toHaveLength(2);
+    // ...and she keeps her full record: the past confirmed term plus the expected
+    // future one, so the grade histogram isn't blanked out.
+    expect(groups[0]!.offerings).toHaveLength(2);
   });
 });
 
@@ -154,25 +145,26 @@ describe("filterProfessorCourseGroups", () => {
     makeOffering({ id: "mat-winter", courseCode: "MAT 2125", legacyId: 101, termId: 2261 }),
   ];
 
-  it("returns every course group and no aggregate when no filters are active", () => {
-    const { groups, aggregateByGroupId } = filterProfessorCourseGroups(
-      professorOfferings,
-      filters({}),
-      { courseEntryByNorm: new Map() },
-    );
+  it("returns every course group when no filters are active", () => {
+    const { groups } = filterProfessorCourseGroups(professorOfferings, filters({}), {
+      courseEntryByNorm: new Map(),
+    });
     expect(groups).toHaveLength(2);
-    expect(aggregateByGroupId).toBeNull();
   });
 
-  it("term filter narrows to courses taught that term, aggregate spans all terms", () => {
-    const { groups, aggregateByGroupId } = filterProfessorCourseGroups(
-      professorOfferings,
-      filters({ termId: 2269 }),
-      { courseEntryByNorm: new Map() },
-    );
+  it("term filter narrows to courses taught that term, survivors keep all terms", () => {
+    const offerings: ExploreOfferingFlat[] = [
+      ...professorOfferings,
+      // An earlier CSI 1100 section (different term) under the same professor.
+      makeOffering({ id: "csi-winter", courseCode: "CSI 1100", legacyId: 101, termId: 2261 }),
+    ];
+    const { groups } = filterProfessorCourseGroups(offerings, filters({ termId: 2269 }), {
+      courseEntryByNorm: new Map(),
+    });
+    // Only CSI 1100 was taught in Fall (2269); MAT 2125 (winter-only) is dropped.
     expect(groups.map((g) => g.courseCode)).toEqual([normalizeCourseCode("CSI 1100")]);
-    expect(aggregateByGroupId).not.toBeNull();
-    expect(aggregateByGroupId!.size).toBe(2);
+    // ...but CSI 1100 keeps both of its sections (Fall + the earlier Winter).
+    expect(groups[0]!.offerings).toHaveLength(2);
   });
 
   it("course-level filters drop whole course groups", () => {

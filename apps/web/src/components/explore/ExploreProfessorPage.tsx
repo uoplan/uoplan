@@ -68,7 +68,7 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
     return needsCourseIndex ? getCourseEntryByNorm() : new Map();
   }, [filters, getCourseEntryByNorm]);
 
-  const { groups: courseGroups, aggregateByGroupId } = useMemo(
+  const { groups: courseGroups } = useMemo(
     () =>
       filterProfessorCourseGroups(professorOfferings, filters, {
         courseEntryByNorm,
@@ -177,12 +177,7 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
           <ExploreFullBleed>
             <ExploreAccordion>
               {displayedCourseGroups.map((g) => (
-                <ExploreCourseItem
-                  key={g.groupId}
-                  group={g}
-                  aggregateOfferings={aggregateByGroupId?.get(g.groupId)}
-                  linkSearch={linkSearch}
-                />
+                <ExploreCourseItem key={g.groupId} group={g} linkSearch={linkSearch} />
               ))}
             </ExploreAccordion>
           </ExploreFullBleed>
