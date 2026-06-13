@@ -1,7 +1,7 @@
 import { Box, Stack, Text } from "@mantine/core";
 import { useMemo } from "react";
 import { AnimatePresence, m } from "framer-motion";
-import type { Discipline, GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
+import type { Discipline, Faculty, GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
 import {
   courseSentimentByNorm,
   normalizeProfessorName,
@@ -20,6 +20,7 @@ import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding
 import { useExploreOfferings } from "./exploreOfferingsContext";
 import { SearchResultCourseCard } from "./SearchResultCourseCard";
 import { SearchResultDisciplineCard } from "./SearchResultDisciplineCard";
+import { SearchResultFacultyCard } from "./SearchResultFacultyCard";
 import { SearchResultProfessorCard } from "./SearchResultProfessorCard";
 import { SearchResultProgramCard } from "./SearchResultProgramCard";
 import type { ReactNode } from "react";
@@ -48,6 +49,8 @@ type ExploreSearchResultsProps = {
   displayedCourses: ExploreCourseSearchEntry[];
   displayedProfessors: ExploreProfessorSearchEntry[];
   disciplineResults: Discipline[];
+  facultyResults: Faculty[];
+  disciplines: Discipline[] | null;
   programResults: ExploreProgramSearchEntry[];
   disciplineCourseCount: Map<string, number>;
   professorRatings: ProfessorRatingsMap | null;
@@ -67,6 +70,7 @@ function SearchCardSection({
 }) {
   return (
     <m.div
+      className="explore-search-section"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1], delay }}
@@ -117,6 +121,8 @@ export function ExploreSearchResults({
   displayedCourses,
   displayedProfessors,
   disciplineResults,
+  facultyResults,
+  disciplines,
   programResults,
   disciplineCourseCount,
   professorRatings,
@@ -176,6 +182,61 @@ export function ExploreSearchResults({
     return stats;
   }, [programResults, offeringsByCourseNorm, courseSentiment]);
 
+  // Per-faculty: the set of discipline prefixes it owns, plus discipline/course counts.
+  const facultyMeta = useMemo(() => {
+    const meta = new Map<
+      string,
+      { prefixes: Set<string>; disciplineCount: number; courseCount: number }
+    >();
+    for (const f of facultyResults) {
+      const prefixes = new Set<string>();
+      let disciplineCount = 0;
+      let courseCount = 0;
+      if (disciplines) {
+        for (const d of disciplines) {
+          if (d.facultyId !== f.id) continue;
+          const prefix = d.code.toUpperCase();
+          const count = disciplineCourseCount.get(prefix) ?? 0;
+          if (count === 0) continue;
+          prefixes.add(prefix);
+          disciplineCount += 1;
+          courseCount += count;
+        }
+      }
+      meta.set(f.id, { prefixes, disciplineCount, courseCount });
+    }
+    return meta;
+  }, [facultyResults, disciplines, disciplineCourseCount]);
+
+  // Aggregate grade distribution + satisfaction per faculty (all courses across its disciplines).
+  const facultyStats = useMemo(() => {
+    const stats = new Map<string, AggregateStats>();
+    for (const f of facultyResults) {
+      const prefixes = facultyMeta.get(f.id)?.prefixes;
+      if (!prefixes || prefixes.size === 0) {
+        stats.set(f.id, { gradeViz: null, sentiment: null });
+        continue;
+      }
+      const norms: string[] = [];
+      for (const key of offeringsByCourseNorm.keys()) {
+        const prefix = key.split(" ")[0];
+        if (prefix && prefixes.has(prefix)) norms.push(key);
+      }
+      const sentimentValues: number[] = [];
+      if (courseSentiment) {
+        for (const [norm, value] of courseSentiment) {
+          const prefix = norm.split(" ")[0];
+          if (prefix && prefixes.has(prefix)) sentimentValues.push(value);
+        }
+      }
+      stats.set(f.id, {
+        gradeViz: aggregateGradeVizForCourseNorms(offeringsByCourseNorm, norms),
+        sentiment: meanSentiment(sentimentValues),
+      });
+    }
+    return stats;
+  }, [facultyResults, facultyMeta, offeringsByCourseNorm, courseSentiment]);
+
   const coursesSection =
     displayedCourses.length > 0 ? (
       <SearchCardSection
@@ -207,6 +268,27 @@ export function ExploreSearchResults({
               courseCount={disciplineCourseCount.get(d.code) ?? 0}
               gradeViz={disciplineStats.get(d.code)?.gradeViz ?? null}
               sentiment={disciplineStats.get(d.code)?.sentiment ?? null}
+              searchParams={currentSearchParams}
+            />
+          ),
+        }))}
+      />
+    ) : null;
+
+  const facultiesSection =
+    facultyResults.length > 0 ? (
+      <SearchCardSection
+        label={tr("explore.resultsFaculties")}
+        delay={0.05}
+        items={facultyResults.map((f) => ({
+          key: f.id,
+          node: (
+            <SearchResultFacultyCard
+              faculty={f}
+              disciplineCount={facultyMeta.get(f.id)?.disciplineCount ?? 0}
+              courseCount={facultyMeta.get(f.id)?.courseCount ?? 0}
+              gradeViz={facultyStats.get(f.id)?.gradeViz ?? null}
+              sentiment={facultyStats.get(f.id)?.sentiment ?? null}
               searchParams={currentSearchParams}
             />
           ),
@@ -252,8 +334,8 @@ export function ExploreSearchResults({
     ) : null;
 
   const orderedSections = professorsFirst
-    ? [professorsSection, coursesSection, disciplinesSection, programsSection]
-    : [coursesSection, disciplinesSection, programsSection, professorsSection];
+    ? [professorsSection, coursesSection, disciplinesSection, facultiesSection, programsSection]
+    : [coursesSection, disciplinesSection, facultiesSection, programsSection, professorsSection];
 
   return (
     <m.div

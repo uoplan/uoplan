@@ -26,6 +26,7 @@ import { Route as TrendsFeedbackRouteImport } from './routes/trends/feedback'
 import { Route as TrendsDisciplinesRouteImport } from './routes/trends/disciplines'
 import { Route as TrendsCoursesRouteImport } from './routes/trends/courses'
 import { Route as ExploreProgramSplatRouteImport } from './routes/explore/program/$'
+import { Route as ExploreFacultyFacultyRouteImport } from './routes/explore/faculty/$faculty'
 import { Route as ExploreDisciplineDisciplineRouteImport } from './routes/explore/discipline/$discipline'
 import { Route as ExploreProfessorSlugIndexRouteImport } from './routes/explore/professor/$slug/index'
 import { Route as ExploreCourseCourseIndexRouteImport } from './routes/explore/course/$course/index'
@@ -118,6 +119,11 @@ const ExploreProgramSplatRoute = ExploreProgramSplatRouteImport.update({
   path: '/program/$',
   getParentRoute: () => ExploreRouteRoute,
 } as any)
+const ExploreFacultyFacultyRoute = ExploreFacultyFacultyRouteImport.update({
+  id: '/faculty/$faculty',
+  path: '/faculty/$faculty',
+  getParentRoute: () => ExploreRouteRoute,
+} as any)
 const ExploreDisciplineDisciplineRoute =
   ExploreDisciplineDisciplineRouteImport.update({
     id: '/discipline/$discipline',
@@ -173,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/schedule/': typeof ScheduleIndexRoute
   '/trends/': typeof TrendsIndexRoute
   '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
+  '/explore/faculty/$faculty': typeof ExploreFacultyFacultyRoute
   '/explore/program/$': typeof ExploreProgramSplatRoute
   '/explore/course/$course/feedback': typeof ExploreCourseCourseFeedbackRoute
   '/explore/course/$course/schedule': typeof ExploreCourseCourseScheduleRoute
@@ -194,6 +201,7 @@ export interface FileRoutesByTo {
   '/schedule': typeof ScheduleIndexRoute
   '/trends': typeof TrendsIndexRoute
   '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
+  '/explore/faculty/$faculty': typeof ExploreFacultyFacultyRoute
   '/explore/program/$': typeof ExploreProgramSplatRoute
   '/explore/course/$course/feedback': typeof ExploreCourseCourseFeedbackRoute
   '/explore/course/$course/schedule': typeof ExploreCourseCourseScheduleRoute
@@ -220,6 +228,7 @@ export interface FileRoutesById {
   '/schedule/': typeof ScheduleIndexRoute
   '/trends/': typeof TrendsIndexRoute
   '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
+  '/explore/faculty/$faculty': typeof ExploreFacultyFacultyRoute
   '/explore/program/$': typeof ExploreProgramSplatRoute
   '/explore/course/$course/feedback': typeof ExploreCourseCourseFeedbackRoute
   '/explore/course/$course/schedule': typeof ExploreCourseCourseScheduleRoute
@@ -247,6 +256,7 @@ export interface FileRouteTypes {
     | '/schedule/'
     | '/trends/'
     | '/explore/discipline/$discipline'
+    | '/explore/faculty/$faculty'
     | '/explore/program/$'
     | '/explore/course/$course/feedback'
     | '/explore/course/$course/schedule'
@@ -268,6 +278,7 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/trends'
     | '/explore/discipline/$discipline'
+    | '/explore/faculty/$faculty'
     | '/explore/program/$'
     | '/explore/course/$course/feedback'
     | '/explore/course/$course/schedule'
@@ -293,6 +304,7 @@ export interface FileRouteTypes {
     | '/schedule/'
     | '/trends/'
     | '/explore/discipline/$discipline'
+    | '/explore/faculty/$faculty'
     | '/explore/program/$'
     | '/explore/course/$course/feedback'
     | '/explore/course/$course/schedule'
@@ -433,6 +445,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExploreProgramSplatRouteImport
       parentRoute: typeof ExploreRouteRoute
     }
+    '/explore/faculty/$faculty': {
+      id: '/explore/faculty/$faculty'
+      path: '/faculty/$faculty'
+      fullPath: '/explore/faculty/$faculty'
+      preLoaderRoute: typeof ExploreFacultyFacultyRouteImport
+      parentRoute: typeof ExploreRouteRoute
+    }
     '/explore/discipline/$discipline': {
       id: '/explore/discipline/$discipline'
       path: '/discipline/$discipline'
@@ -481,6 +500,7 @@ declare module '@tanstack/react-router' {
 interface ExploreRouteRouteChildren {
   ExploreIndexRoute: typeof ExploreIndexRoute
   ExploreDisciplineDisciplineRoute: typeof ExploreDisciplineDisciplineRoute
+  ExploreFacultyFacultyRoute: typeof ExploreFacultyFacultyRoute
   ExploreProgramSplatRoute: typeof ExploreProgramSplatRoute
   ExploreCourseCourseFeedbackRoute: typeof ExploreCourseCourseFeedbackRoute
   ExploreCourseCourseScheduleRoute: typeof ExploreCourseCourseScheduleRoute
@@ -492,6 +512,7 @@ interface ExploreRouteRouteChildren {
 const ExploreRouteRouteChildren: ExploreRouteRouteChildren = {
   ExploreIndexRoute: ExploreIndexRoute,
   ExploreDisciplineDisciplineRoute: ExploreDisciplineDisciplineRoute,
+  ExploreFacultyFacultyRoute: ExploreFacultyFacultyRoute,
   ExploreProgramSplatRoute: ExploreProgramSplatRoute,
   ExploreCourseCourseFeedbackRoute: ExploreCourseCourseFeedbackRoute,
   ExploreCourseCourseScheduleRoute: ExploreCourseCourseScheduleRoute,

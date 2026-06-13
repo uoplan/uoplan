@@ -216,12 +216,12 @@ export function ExploreCoursePage({
     return `https://catalogue.uottawa.ca/search/?${params.toString()}`;
   }, [selectedCourseMeta]);
 
-  const facultyName = useMemo(() => {
+  const faculty = useMemo(() => {
     if (!selectedCourseMeta) return null;
     const subject = selectedCourseMeta.courseCode.split(/\s+/)[0] ?? "";
-    const faculty = facultyForDisciplineCode(disciplines, faculties, subject);
-    return faculty ? localizeFacultyName(faculty, i18n.locale) : null;
+    return facultyForDisciplineCode(disciplines, faculties, subject);
   }, [selectedCourseMeta, disciplines, faculties]);
+  const facultyName = faculty ? localizeFacultyName(faculty, i18n.locale) : null;
 
   return (
     <m.div
@@ -275,14 +275,22 @@ export function ExploreCoursePage({
                     </Badge>
                   </Tooltip>
                 ) : null}
-                {facultyName ? (
+                {faculty && facultyName ? (
                   <Badge
                     size="lg"
                     variant="light"
                     color="gray"
                     radius="sm"
                     maw="100%"
-                    style={{ textTransform: "none" }}
+                    style={{ textTransform: "none", cursor: "pointer" }}
+                    renderRoot={(props) => (
+                      <Link
+                        to="/explore/faculty/$faculty"
+                        params={{ faculty: faculty.id }}
+                        search={linkSearch}
+                        {...props}
+                      />
+                    )}
                   >
                     {facultyName}
                   </Badge>

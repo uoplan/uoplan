@@ -13,6 +13,7 @@ import {
   useCatalogue,
   useCompletedCourses,
   useDisciplines,
+  useFaculties,
   useProfessorRatings,
   useRequirementState,
   useTerms,
@@ -92,6 +93,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
   const catalogue = useCatalogue();
   const professorRatings = useProfessorRatings();
   const disciplines = useDisciplines();
+  const faculties = useFaculties();
   const terms = useTerms();
   const { remainingRequirements } = useRequirementState();
   const { completedCourses } = useCompletedCourses();
@@ -129,6 +131,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     displayedCourses,
     displayedProfessors,
     disciplineResults,
+    facultyResults,
     programResults,
     disciplineCourseCount,
     hasResults,
@@ -140,6 +143,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     activeFilters,
     catalogue,
     disciplines,
+    faculties,
     remainingRequirements,
     completedCourses,
   });
@@ -197,6 +201,8 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
                 displayedCourses={displayedCourses}
                 displayedProfessors={displayedProfessors}
                 disciplineResults={disciplineResults}
+                facultyResults={facultyResults}
+                disciplines={disciplines}
                 programResults={programResults}
                 disciplineCourseCount={disciplineCourseCount}
                 professorRatings={professorRatings}

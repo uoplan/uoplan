@@ -1012,6 +1012,12 @@ msgstr "Aucun cours trouvé pour cette discipline."
 msgid "explore.distributionHeading"
 msgstr "Répartition des notes"
 
+msgid "explore.facultyDisciplineCount"
+msgstr "{count, plural, one {# discipline} other {# disciplines}}"
+
+msgid "explore.facultyNoData"
+msgstr "Aucune discipline trouvée pour cette faculté."
+
 #: apps/web/src/components/explore/feedback/FeedbackSummaryCard.tsx:122
 msgid "explore.feedback.cardStat.rate"
 msgstr "Taux"
@@ -1264,6 +1270,9 @@ msgstr "Cours"
 
 msgid "explore.resultsDisciplines"
 msgstr "Disciplines"
+
+msgid "explore.resultsFaculties"
+msgstr "Facultés"
 
 msgid "explore.resultsProfessors"
 msgstr "Professeurs"
