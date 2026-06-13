@@ -1,5 +1,5 @@
 import * as DataProto from "@uoplan/proto/data";
-import { createExtraCodeAccumulator } from "@uoplan/core";
+import { createExtraCodeAccumulator } from "@uoplan/core/dataTypes/codeRef";
 import { CourseCodeIndexer, normalizeCode } from "./shared.ts";
 
 interface DisciplineLevelInput {
