@@ -30,7 +30,7 @@ import {
   searchProfessors,
 } from "../../lib/graph/professorGraphSearch";
 import type { ProfessorSearchEntry } from "../../lib/graph/professorGraphSearch";
-import { useAppStore } from "../../store/appStore";
+import { useProfessorRatings } from "../../store/hooks";
 import { ProfessorGraphDesktopPanel } from "./ProfessorGraphDesktopPanel";
 import { ProfessorGraphMobileDrawer } from "./ProfessorGraphMobileDrawer";
 import { ProfessorGraphView } from "./ProfessorGraphView";
@@ -54,7 +54,7 @@ export function ProfessorGraphPage({
   useTr();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const professorRatings = useAppStore((s) => s.professorRatings);
+  const professorRatings = useProfessorRatings();
   const { professorByName: professorSentiment } = useScheduleSentiment();
 
   const { data: grades, error: gradesLoadError } = useCourseGradesPb();

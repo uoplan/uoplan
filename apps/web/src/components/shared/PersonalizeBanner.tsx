@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Box, Text } from "@mantine/core";
 import { Link, useLocation } from "@tanstack/react-router";
 import { IconSparkles } from "@tabler/icons-react";
-import { useShallow } from "zustand/react/shallow";
-import { useAppStore } from "../../store/appStore";
+import { useActiveProgram, useCompletedCourses, useIndices } from "../../store/hooks";
 import { tr, useTr } from "../../i18n";
 import { TopBanner, TopBannerSlot } from "./TopBanner";
 import classes from "./PersonalizeBanner.module.css";
@@ -37,13 +36,10 @@ export function PersonalizeBanner({ variant = "floating" }: PersonalizeBannerPro
   useTr();
   const [dismissed, setDismissed] = useState(false);
   const pathname = useLocation({ select: (l) => l.pathname });
-  const { indices, program, completedCount } = useAppStore(
-    useShallow((s) => ({
-      indices: s.indices,
-      program: s.program,
-      completedCount: s.completedCourses.length,
-    })),
-  );
+  const indices = useIndices();
+  const program = useActiveProgram();
+  const { completedCourses } = useCompletedCourses();
+  const completedCount = completedCourses.length;
 
   const onNudgeRoute =
     variant === "sidebar" || NUDGE_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix));

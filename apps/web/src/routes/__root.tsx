@@ -13,7 +13,7 @@ import { Box, Text } from "@mantine/core";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import { LazyMotion, m, useAnimation } from "framer-motion";
 import { usePersistState } from "../hooks/usePersistState";
-import { useAppStore } from "../store/appStore";
+import { useIndices } from "../store/hooks";
 import { tr, useTr } from "../i18n";
 import { recordLocation } from "../lib/navigation/navigationHistory";
 import { AppFooter } from "../components/shared/AppFooter";
@@ -65,7 +65,7 @@ function NotFound() {
 }
 
 function RootLayout() {
-  const indices = useAppStore((s) => s.indices);
+  const indices = useIndices();
   const { pathname } = useLocation();
   const routerStatus = useRouterState({ select: (s) => s.status });
   const router = useRouter();

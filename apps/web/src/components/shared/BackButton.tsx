@@ -3,7 +3,7 @@ import { IconChevronLeft } from "@tabler/icons-react";
 import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
 import { locationLabel } from "../../lib/navigation/backState";
 import { usePreviousLocation } from "../../lib/navigation/navigationHistory";
-import { useAppStore } from "../../store/appStore";
+import { useProfessorRegistry } from "../../store/hooks";
 
 type BackButtonProps = {
   /** Logical parent to navigate to when there is no in-app history to pop. */
@@ -37,7 +37,7 @@ export function BackButton({
   const navigate = useNavigate();
   const canGoBack = useCanGoBack();
   const previous = usePreviousLocation();
-  const professors = useAppStore((s) => s.professors);
+  const professors = useProfessorRegistry();
 
   const historyLabel =
     canGoBack && previous ? locationLabel(previous.pathname, previous.search, professors) : null;

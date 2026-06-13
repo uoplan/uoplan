@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { ReactNode } from "react";
 import { useMediaQuery } from "@mantine/hooks";
-import { useShallow } from "zustand/react/shallow";
 import {
   availableDisciplines,
   availablePrograms,
@@ -13,7 +12,7 @@ import type { TermSeason } from "@uoplan/core";
 import { i18n } from "@lingui/core";
 import { tr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
-import { useAppStore } from "../../store/appStore";
+import { useCatalogue, useDisciplines } from "../../store/hooks";
 import { createRankedOptionsFilter } from "../../lib/explore/optionRanking";
 import { formatMetricValue } from "../../lib/trends/metrics";
 import type { TrendsMetric, TrendsSearch } from "../../lib/trends/searchParams";
@@ -34,8 +33,8 @@ type TrendsFilterProviderProps = {
  */
 export function TrendsFilterProvider({ search, onChange, children }: TrendsFilterProviderProps) {
   const { data: grades, error: gradesError } = useCourseGradesPb();
-  const disciplines = useAppStore(useShallow((s) => s.disciplines));
-  const catalogue = useAppStore((s) => s.catalogue);
+  const disciplines = useDisciplines();
+  const catalogue = useCatalogue();
   const isFr = i18n.locale.startsWith("fr");
   const isMobile = useMediaQuery("(max-width: 768px)", false, {
     getInitialValueInEffect: false,

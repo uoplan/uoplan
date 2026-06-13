@@ -5,7 +5,7 @@ import {
   frenchImmersionOverallVolumePercent,
   groupCountedFrenchImmersionCodesByCategory,
 } from "@uoplan/core";
-import { useAppStore } from "../../store/appStore";
+import { useCompletedCourses } from "../../store/hooks";
 import { tr } from "../../i18n";
 import { useFrenchImmersionProgressState } from "../shared/useFrenchImmersionProgressState";
 
@@ -19,7 +19,7 @@ function formatCodeList(codes: string[]): string {
 
 export function FrenchImmersionRequirementsReadout() {
   const { frenchImmersionStream, completedCourses, progress } = useFrenchImmersionProgressState();
-  const unassignedCompletedCourses = useAppStore((s) => s.unassignedCompletedCourses);
+  const { unassignedCompletedCourses } = useCompletedCourses();
 
   const grouped = useMemo(
     () => groupCountedFrenchImmersionCodesByCategory(progress.countedTowardVolumeCodes),

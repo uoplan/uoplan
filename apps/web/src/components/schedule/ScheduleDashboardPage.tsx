@@ -3,10 +3,19 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Box, Button, Group, Stack, Text, Title } from "@mantine/core";
 import { m } from "framer-motion";
 import { IconRefresh, IconSparkles } from "@tabler/icons-react";
-import { useShallow } from "zustand/react/shallow";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { ResetModal } from "../shared/ResetModal";
-import { useAppStore, useAppStoreApi } from "../../store/appStore";
+import {
+  useActiveProgram,
+  useCompletedCourses,
+  useDataCache,
+  useGlobalActions,
+  useRequirementState,
+  useScheduleGeneration,
+  useStoreApi,
+  useTermSelection,
+  useYearCatalogue,
+} from "../../store/hooks";
 import { tr, useTr } from "../../i18n";
 import {
   getGenerateBlockers,
@@ -33,23 +42,39 @@ export function ScheduleDashboardPage() {
   const [openStep, setOpenStep] = useState<ScheduleStepId | null>(() => search.step ?? null);
   const didInit = useRef(false);
 
-  const dashboardState = useAppStore(
-    useShallow((s) => ({
-      terms: s.terms,
-      selectedTermId: s.selectedTermId,
-      cacheLoaded: Boolean(s.cache),
-      firstYear: s.firstYear,
-      program: s.program,
-      completedCourses: s.completedCourses,
-      requirementTreeWithStatus: s.requirementTreeWithStatus,
-      selectedOptionsPerRequirement: s.selectedOptionsPerRequirement,
-      unassignedCompletedCourses: s.unassignedCompletedCourses,
-    })),
+  const { terms, selectedTermId, setSelectedTermId } = useTermSelection();
+  const cache = useDataCache();
+  const { firstYear } = useYearCatalogue();
+  const program = useActiveProgram();
+  const { completedCourses, unassignedCompletedCourses } = useCompletedCourses();
+  const { requirementTreeWithStatus, selectedOptionsPerRequirement } = useRequirementState();
+  const { resetToDefault } = useGlobalActions();
+  const { scheduleGenerating } = useScheduleGeneration();
+  const storeApi = useStoreApi();
+  const dashboardState = useMemo(
+    () => ({
+      terms,
+      selectedTermId,
+      cacheLoaded: Boolean(cache),
+      firstYear,
+      program,
+      completedCourses,
+      requirementTreeWithStatus,
+      selectedOptionsPerRequirement,
+      unassignedCompletedCourses,
+    }),
+    [
+      terms,
+      selectedTermId,
+      cache,
+      firstYear,
+      program,
+      completedCourses,
+      requirementTreeWithStatus,
+      selectedOptionsPerRequirement,
+      unassignedCompletedCourses,
+    ],
   );
-  const resetToDefault = useAppStore((s) => s.resetToDefault);
-  const scheduleGenerating = useAppStore((s) => s.scheduleGenerating);
-  const setSelectedTermId = useAppStore((s) => s.setSelectedTermId);
-  const storeApi = useAppStoreApi();
 
   const cards = useMemo(() => getScheduleDashboardCards(dashboardState), [dashboardState]);
   const blockers = useMemo(() => getGenerateBlockers(dashboardState), [dashboardState]);

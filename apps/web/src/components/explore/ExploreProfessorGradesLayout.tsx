@@ -32,7 +32,7 @@ import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { professorRouteParam } from "../../lib/explore/professorRoute";
 import { ProfessorRatingBadges } from "../shared/RatingBadge";
-import { useAppStore } from "../../store/appStore";
+import { useLazyData } from "../../store/hooks";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
@@ -108,7 +108,7 @@ export function ExploreProfessorSummaryBar({
     [group.offerings],
   );
 
-  const professorRatingsLoading = useAppStore((s) => s.professorRatingsLoading);
+  const { professorRatingsLoading } = useLazyData();
 
   // ⭐ RateMyProf + 💬 satisfaction badges — the same row the search-result cards use.
   let ratingBadges: ReactNode = null;

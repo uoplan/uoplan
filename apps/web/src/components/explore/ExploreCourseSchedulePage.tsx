@@ -32,9 +32,8 @@ import type {
   SectionCombo,
 } from "@uoplan/core";
 import { DAY_LABELS } from "@uoplan/calendar";
-import { useShallow } from "zustand/react/shallow";
 import { tr, useTr } from "../../i18n";
-import { useAppStore } from "../../store/appStore";
+import { useDataCache, useProfessorRatings, useRequirementState } from "../../store/hooks";
 import { usePublishBasketTarget } from "./exploreBasketTargetContext";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
@@ -232,13 +231,9 @@ export function ExploreCourseSchedulePage({
 }) {
   useTr();
   const normCode = parseCoursePathParam(urlCourseParam);
-  const { professorRatings, cache, remainingRequirements } = useAppStore(
-    useShallow((s) => ({
-      professorRatings: s.professorRatings,
-      cache: s.cache,
-      remainingRequirements: s.remainingRequirements,
-    })),
-  );
+  const professorRatings = useProfessorRatings();
+  const cache = useDataCache();
+  const { remainingRequirements } = useRequirementState();
   const { getCourseEntryByNorm } = useExploreOfferings();
   const { data: schedulesData, loading } = useTermScheduleData(termId);
   const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ExploreCoursePage } from "../../../../components/explore/ExploreCoursePage";
 import { parseCoursePathParam } from "../../../../lib/explore/courseSearchParams";
-import { useAppStore } from "../../../../store/appStore";
+import { useProfessorRatings } from "../../../../store/hooks";
 
 export const Route = createFileRoute("/explore/course/$course/")({
   head: ({ params }) => ({
@@ -11,7 +11,7 @@ export const Route = createFileRoute("/explore/course/$course/")({
 });
 
 function ExploreCourseRoute() {
-  const professorRatings = useAppStore((s) => s.professorRatings);
+  const professorRatings = useProfessorRatings();
 
   const { course } = Route.useParams();
 

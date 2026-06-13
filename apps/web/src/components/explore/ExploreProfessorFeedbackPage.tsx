@@ -1,15 +1,14 @@
 import { useMemo } from "react";
-import { useShallow } from "zustand/react/shallow";
 import { pickCanonicalProfessorName } from "@uoplan/core";
 import { resolveProfessorRoute } from "../../lib/explore/professorRoute";
-import { useAppStore } from "../../store/appStore";
+import { useProfessorRegistry } from "../../store/hooks";
 import { tr } from "../../i18n";
 import { useProfessorFeedbackViews } from "../../hooks/useFeedbackViews";
 import { useRedirectToExploreWhenNoFeedback } from "../../hooks/useRedirectToExploreWhenNoFeedback";
 import { ExploreFeedbackContent } from "./feedback/ExploreFeedbackContent";
 
 export function ExploreProfessorFeedbackPage({ slug }: { slug: string }) {
-  const registry = useAppStore(useShallow((s) => s.professors));
+  const registry = useProfessorRegistry();
   const resolved = useMemo(() => resolveProfessorRoute(registry, slug), [registry, slug]);
 
   const arg = useMemo(

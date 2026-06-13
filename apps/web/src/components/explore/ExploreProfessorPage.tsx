@@ -1,7 +1,6 @@
 import { Box, Group, Skeleton, Stack, Text, Title } from "@mantine/core";
 import { useMemo } from "react";
 import { m } from "framer-motion";
-import { useShallow } from "zustand/react/shallow";
 import { normalizeProfessorName, pickCanonicalProfessorName } from "@uoplan/core";
 import type { CanonicalProfessorName } from "@uoplan/core";
 import { tr, useTr } from "../../i18n";
@@ -12,7 +11,7 @@ import {
   professorMatchesRatingFilter,
 } from "../../lib/explore/detailFilters";
 import { professorRouteParam, resolveProfessorRoute } from "../../lib/explore/professorRoute";
-import { useAppStore } from "../../store/appStore";
+import { useLazyData } from "../../store/hooks";
 import { useExploreOfferings } from "./exploreOfferingsContext";
 import { useExploreDetailFilters } from "./useExploreDetailFilters";
 import { useProfessorFeedbackViews } from "../../hooks/useFeedbackViews";
@@ -31,8 +30,7 @@ import {
 export function ExploreProfessorPage({ slug }: { slug: string }) {
   useTr();
   const { offerings: allOfferings, getCourseEntryByNorm } = useExploreOfferings();
-  const registry = useAppStore(useShallow((s) => s.professors));
-  const professorsLoading = useAppStore((s) => s.professorsLoading);
+  const { professors: registry, professorsLoading } = useLazyData();
 
   const {
     filters,

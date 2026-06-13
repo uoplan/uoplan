@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useShallow } from "zustand/react/shallow";
 import { ExploreProfessorPage } from "../../../../components/explore/ExploreProfessorPage";
 import { resolveProfessorRoute } from "../../../../lib/explore/professorRoute";
-import { useAppStore } from "../../../../store/appStore";
+import { useProfessorRegistry } from "../../../../store/hooks";
 
 export const Route = createFileRoute("/explore/professor/$slug/")({
   head: ({ params }) => {
@@ -17,7 +16,7 @@ export const Route = createFileRoute("/explore/professor/$slug/")({
 
 function ExploreProfessorRoute() {
   const { slug } = Route.useParams();
-  const registry = useAppStore(useShallow((s) => s.professors));
+  const registry = useProfessorRegistry();
 
   useEffect(() => {
     const resolved = resolveProfessorRoute(registry, slug);

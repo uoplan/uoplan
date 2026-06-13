@@ -26,8 +26,22 @@ import {
   IconSettings,
   IconTerminal,
 } from "@tabler/icons-react";
-import { useAppStore, useAppStoreApi } from "../../store/appStore";
-import { useShallow } from "zustand/react/shallow";
+import {
+  useActiveProgram,
+  useBasicElectives,
+  useCalendarView,
+  useDataCache,
+  useGetShareUrl,
+  useIndices,
+  useProfessorRatings,
+  useScheduleGeneration,
+  useScheduleResultMaps,
+  useScheduleSwaps,
+  useSeedNavigation,
+  useStoreApi,
+  useTermSelection,
+} from "../../store/hooks";
+import { useBasketCourses } from "../../hooks/useBasket";
 import { CalendarView } from "./CalendarView";
 import { BackButton } from "../shared/BackButton";
 import { PersonalizeBanner } from "../shared/PersonalizeBanner";
@@ -112,7 +126,7 @@ export function CalendarPage() {
     };
   }, []);
 
-  const storeApi = useAppStoreApi();
+  const storeApi = useStoreApi();
   useEffect(() => {
     // Cancel an in-flight generation the moment the user changes a generation
     // option (any setter flips generationOptionsDirty to true). The previous
@@ -131,53 +145,40 @@ export function CalendarPage() {
 
   const {
     currentSchedule,
-    currentSwaps,
-    indices,
+    scheduleGenerating,
     generationError,
-    cache,
-    professorRatings,
-    currentColorMap,
+    generationOptionsDirty,
+    generateSchedules,
+    clearGenerationOptions,
+    resetBasicCalendarSettings,
+  } = useScheduleGeneration();
+  const { currentSwaps, getSwapCandidates, swapCourseInSchedule, undoLastSwap } =
+    useScheduleSwaps();
+  const { currentColorMap } = useScheduleResultMaps();
+  const {
     currentSeed,
     lowestVisitedSeed,
-    scheduleGenerating,
-    basketCourses,
-    basicElectivesCount,
     scheduleNoVariety,
-    generationOptionsDirty,
-    selectedTermId,
-    program,
-  } = useAppStore(
-    useShallow((s) => ({
-      currentSchedule: s.currentSchedule,
-      currentSwaps: s.currentSwaps,
-      indices: s.indices,
-      generationError: s.generationError,
-      cache: s.cache,
-      professorRatings: s.professorRatings,
-      currentColorMap: s.currentColorMap,
-      currentSeed: s.currentSeed,
-      lowestVisitedSeed: s.lowestVisitedSeed,
-      scheduleGenerating: s.scheduleGenerating,
-      basketCourses: s.basketCourses,
-      basicElectivesCount: s.basicElectivesCount,
-      scheduleNoVariety: s.scheduleNoVariety,
-      generationOptionsDirty: s.generationOptionsDirty,
-      selectedTermId: s.selectedTermId,
-      program: s.program,
-    })),
-  );
+    goToPreviousSeed,
+    goToNextSeed,
+    randomizeSeed,
+  } = useSeedNavigation();
+  const indices = useIndices();
+  const cache = useDataCache();
+  const professorRatings = useProfessorRatings();
+  const basketCourses = useBasketCourses();
+  const { basicElectivesCount } = useBasicElectives();
+  const { selectedTermId } = useTermSelection();
+  const program = useActiveProgram();
 
   const hasProgram = program !== null;
 
-  const setCalendarMode = useAppStore((s) => s.setCalendarMode);
+  const { setCalendarMode, calendarWeekIndex, setCalendarWeekIndex } = useCalendarView();
   // Sync the active calendar mode so generation logic knows which path is active.
   useEffect(() => {
     setCalendarMode(hasProgram ? "advanced" : "basic");
     return () => setCalendarMode(null);
   }, [hasProgram, setCalendarMode]);
-
-  const calendarWeekIndex = useAppStore((s) => s.calendarWeekIndex);
-  const setCalendarWeekIndex = useAppStore((s) => s.setCalendarWeekIndex);
 
   const { weekGroups, weekIndex, setWeekIndex } = useScheduleWeeks(
     currentSchedule,
@@ -191,16 +192,7 @@ export function CalendarPage() {
   useGenerationErrorToast(generationError);
   useGenerationSentiment();
 
-  const undoLastSwap = useAppStore((s) => s.undoLastSwap);
-  const getShareUrl = useAppStore((s) => s.getShareUrl);
-  const goToPreviousSeed = useAppStore((s) => s.goToPreviousSeed);
-  const goToNextSeed = useAppStore((s) => s.goToNextSeed);
-  const randomizeSeed = useAppStore((s) => s.randomizeSeed);
-  const getSwapCandidates = useAppStore((s) => s.getSwapCandidates);
-  const swapCourseInSchedule = useAppStore((s) => s.swapCourseInSchedule);
-  const clearGenerationOptions = useAppStore((s) => s.clearGenerationOptions);
-  const generateSchedules = useAppStore((s) => s.generateSchedules);
-  const resetBasicCalendarSettings = useAppStore((s) => s.resetBasicCalendarSettings);
+  const getShareUrl = useGetShareUrl();
 
   const canGoPrevious = canGoToPreviousSeed(currentSeed, lowestVisitedSeed);
   const canUseSeedNavigation =

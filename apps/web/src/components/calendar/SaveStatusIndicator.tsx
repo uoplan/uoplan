@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ActionIcon, Tooltip } from "@mantine/core";
 import { IconCloudCheck, IconDeviceFloppy } from "@tabler/icons-react";
-import { useAppStore } from "../../store/appStore";
+import { useSaveStatus } from "../../store/hooks";
 import { flushPersistedAppState } from "../../lib/persistAppState";
 import { tr, useTr } from "../../i18n";
 import { AnimatedIconSwap } from "../shared/AnimatedIconSwap";
@@ -17,8 +17,7 @@ function formatRelativeTime(ts: number): string {
 
 export function SaveStatusIndicator() {
   useTr();
-  const hasPendingSave = useAppStore((s) => s.hasPendingSave);
-  const lastSavedAt = useAppStore((s) => s.lastSavedAt);
+  const { hasPendingSave, lastSavedAt } = useSaveStatus();
   const [, setTick] = useState(0);
 
   useEffect(() => {

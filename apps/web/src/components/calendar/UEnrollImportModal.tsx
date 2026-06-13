@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { Alert, Button, List, Modal, Stack, Text, TextInput } from "@mantine/core";
 import { IconAlertCircle, IconCircleCheck, IconInfoCircle } from "@tabler/icons-react";
-import { useAppStore, useAppStoreApi } from "../../store/appStore";
-import { useShallow } from "zustand/react/shallow";
+import {
+  useDataCache,
+  useScheduleGeneration,
+  useStoreApi,
+  useTermSelection,
+} from "../../store/hooks";
 import { parseUEnrollUrl, resolveUEnrollSchedule } from "../../lib/importFromUEnroll";
 import type { ParsedUEnrollData, UEnrollResolveResult } from "../../lib/importFromUEnroll";
 import { tr, useTr } from "../../i18n";
@@ -21,15 +25,10 @@ type ParseState =
 export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps) {
   useTr();
 
-  const { cache, selectedTermId, setSelectedTermId, importSchedule } = useAppStore(
-    useShallow((s) => ({
-      cache: s.cache,
-      selectedTermId: s.selectedTermId,
-      setSelectedTermId: s.setSelectedTermId,
-      importSchedule: s.importSchedule,
-    })),
-  );
-  const storeApi = useAppStoreApi();
+  const cache = useDataCache();
+  const { selectedTermId, setSelectedTermId } = useTermSelection();
+  const { importSchedule } = useScheduleGeneration();
+  const storeApi = useStoreApi();
 
   const [input, setInput] = useState("");
   const [parseState, setParseState] = useState<ParseState>({ status: "idle" });

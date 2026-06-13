@@ -3,11 +3,11 @@ import { useMediaQuery } from "@mantine/hooks";
 import { IconAffiliate, IconCalendar, IconChartHistogram, IconCompass } from "@tabler/icons-react";
 import { m } from "framer-motion";
 import { useCallback, useMemo, useState } from "react";
-import { useShallow } from "zustand/react/shallow";
 import { dynamicActivate, tr, useTr } from "../../i18n";
 import type { AppLocale } from "../../i18n";
 import { readPersistedPersonalized } from "../../lib/hasPersonalized";
-import { useAppStore } from "../../store/appStore";
+import { useBasketCourses } from "../../hooks/useBasket";
+import { useActiveProgram, useCompletedCourses } from "../../store/hooks";
 import { ChromeControls } from "../shared/ChromeControls";
 import { PageContainer } from "../shared/PageContainer";
 import { ExperimentalCarousel } from "./ExperimentalCarousel";
@@ -24,11 +24,11 @@ export function LandingPage() {
   // jumps straight to the generated schedule. The store is only resolved in-session
   // (app data isn't loaded on landing), so also peek persisted state for returning
   // visitors arriving on a fresh page load.
-  const storePersonalized = useAppStore(
-    useShallow(
-      (s) => s.program !== null || s.completedCourses.length > 0 || s.basketCourses.length > 0,
-    ),
-  );
+  const program = useActiveProgram();
+  const { completedCourses } = useCompletedCourses();
+  const basketCourses = useBasketCourses();
+  const storePersonalized =
+    program !== null || completedCourses.length > 0 || basketCourses.length > 0;
   const persistedPersonalized = useMemo(() => readPersistedPersonalized(), []);
   const scheduleTo = storePersonalized || persistedPersonalized ? "/schedule" : "/personalize";
 

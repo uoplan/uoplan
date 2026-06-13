@@ -5,12 +5,18 @@ import { useLingui } from "@lingui/react";
 import { AnimatePresence, m } from "framer-motion";
 import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { useShallow } from "zustand/react/shallow";
 import { useTr } from "../../i18n";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { formatTermLabel } from "../../lib/term/termLabel";
-import { useAppStore } from "../../store/appStore";
+import {
+  useCatalogue,
+  useCompletedCourses,
+  useDisciplines,
+  useProfessorRatings,
+  useRequirementState,
+  useTerms,
+} from "../../store/hooks";
 import { AddToBasketButton } from "../basket/AddToBasketButton";
 import { BasketFab } from "../basket/BasketFab";
 import {
@@ -83,23 +89,12 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     [basketTargetCode],
   );
 
-  const {
-    catalogue,
-    professorRatings,
-    disciplines,
-    terms,
-    remainingRequirements,
-    completedCourses,
-  } = useAppStore(
-    useShallow((s) => ({
-      catalogue: s.catalogue,
-      professorRatings: s.professorRatings,
-      disciplines: s.disciplines,
-      terms: s.terms,
-      remainingRequirements: s.remainingRequirements,
-      completedCourses: s.completedCourses,
-    })),
-  );
+  const catalogue = useCatalogue();
+  const professorRatings = useProfessorRatings();
+  const disciplines = useDisciplines();
+  const terms = useTerms();
+  const { remainingRequirements } = useRequirementState();
+  const { completedCourses } = useCompletedCourses();
 
   const disciplineOptions = useMemo(() => {
     if (!disciplines) return [];

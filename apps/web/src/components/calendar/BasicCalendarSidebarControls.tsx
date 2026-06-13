@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Box, Button, MultiSelect, Stack, Text } from "@mantine/core";
 import { IconFileUpload } from "@tabler/icons-react";
 import { getCourseCredits, normalizeCourseCode } from "@uoplan/core";
-import { useAppStore } from "../../store/appStore";
+import { useBasicElectives, useCompletedCourses, useScheduleGeneration } from "../../store/hooks";
 import { BasketContents } from "../basket/BasketContents";
 import { createCourseOptions } from "../shared/CourseSelect";
 import { GenerationOptionsFields } from "./generationOptions/GenerationOptionsFields";
@@ -61,9 +61,9 @@ export function BasicCalendarSidebarControls() {
     setGenerationPreferHigherSentiment,
   } = useSharedGenerationOptions();
 
-  const setBasicElectivesCount = useAppStore((s) => s.setBasicElectivesCount);
-  const markBasicSettingsChanged = useAppStore((s) => s.markBasicSettingsChanged);
-  const setCompletedCourses = useAppStore((s) => s.setCompletedCourses);
+  const { setBasicElectivesCount } = useBasicElectives();
+  const { markBasicSettingsChanged } = useScheduleGeneration();
+  const { setCompletedCourses } = useCompletedCourses();
 
   const completedCourseOptions = useMemo(() => {
     if (!cache) return [];
