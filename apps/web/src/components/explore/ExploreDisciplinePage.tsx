@@ -4,9 +4,11 @@ import { useEffect, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { m } from "framer-motion";
 import type { Discipline, ProfessorRatingsMap } from "@uoplan/core";
+import { normalizeProfessorName } from "@uoplan/core";
 import { groupOfferingsByCourse, groupOfferingsByProfessor } from "../../lib/explore/gradesSearch";
 import type { CourseOfferingGroup } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./exploreOfferingsContext";
+import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
@@ -26,9 +28,11 @@ import {
 function DisciplineProfessorRows({
   group,
   professorRatings,
+  professorByName,
 }: {
   group: CourseOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
+  professorByName: Map<string, number> | null;
 }) {
   const professorGroups = useMemo(
     () => groupOfferingsByProfessor(group.offerings),
@@ -59,7 +63,11 @@ function DisciplineProfessorRows({
               },
             }}
           >
-            <ExploreProfessorSummaryBar group={pg} professorRatings={professorRatings} />
+            <ExploreProfessorSummaryBar
+              group={pg}
+              professorRatings={professorRatings}
+              sentiment={professorByName?.get(normalizeProfessorName(pg.displayName)) ?? null}
+            />
           </Paper>
         );
       })}
@@ -70,9 +78,11 @@ function DisciplineProfessorRows({
 function DisciplineCourseItem({
   group,
   professorRatings,
+  professorByName,
 }: {
   group: CourseOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
+  professorByName: Map<string, number> | null;
 }) {
   return (
     <Accordion.Item value={group.groupId}>
@@ -80,7 +90,11 @@ function DisciplineCourseItem({
         <ExploreCourseSummaryBar group={group} />
       </Accordion.Control>
       <Accordion.Panel>
-        <DisciplineProfessorRows group={group} professorRatings={professorRatings} />
+        <DisciplineProfessorRows
+          group={group}
+          professorRatings={professorRatings}
+          professorByName={professorByName}
+        />
       </Accordion.Panel>
     </Accordion.Item>
   );
@@ -98,6 +112,9 @@ export function ExploreDisciplinePage({
   const { i18n } = useLingui();
   const { loading, offerings } = useExploreOfferings();
   const navigate = useNavigate();
+
+  // Per-professor course-feedback satisfaction (1-5) for the RatingBadge row.
+  const { professorByName } = useScheduleSentiment();
 
   const normalizedCode = disciplineCode.toUpperCase();
 
@@ -179,6 +196,7 @@ export function ExploreDisciplinePage({
                   key={g.groupId}
                   group={g}
                   professorRatings={professorRatings}
+                  professorByName={professorByName}
                 />
               ))}
             </ExploreAccordion>

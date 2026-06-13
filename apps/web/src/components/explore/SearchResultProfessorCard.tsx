@@ -1,10 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Group, Text } from "@mantine/core";
+import { Text } from "@mantine/core";
 import type { ProfessorRatingsMap } from "@uoplan/core";
-import { hasProfessorRatings, normalizeProfessorName } from "@uoplan/core";
 import { tr, useTr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
-import { RatingBadge } from "../shared/RatingBadge";
+import { ProfessorRatingBadges } from "../shared/RatingBadge";
 import type { ExploreProfessorSearchEntry } from "../../lib/explore/gradesSearch";
 import { professorRouteParam } from "../../lib/explore/professorRoute";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
@@ -37,15 +36,6 @@ export function SearchResultProfessorCard({
   useTr();
   const { gradeViz } = entry;
 
-  const rmpEntry = professorRatings
-    ? professorRatings[normalizeProfessorName(entry.displayName)]
-    : null;
-  const hasRating = hasProfessorRatings(rmpEntry);
-  const isOnRmp = entry.legacyId != null && Number.isFinite(entry.legacyId) && entry.legacyId > 0;
-  const showRmp = hasRating || isOnRmp;
-  const showSatisfaction = sentiment != null && sentiment > 0;
-  const rmpLegacyId = entry.legacyId ?? rmpEntry?.legacyId ?? null;
-
   return (
     <Link
       to="/explore/professor/$slug"
@@ -64,26 +54,12 @@ export function SearchResultProfessorCard({
           })}
         </Text>
         <SearchResultCardSpacer />
-        {showSatisfaction || showRmp ? (
-          <Group gap={6} wrap="nowrap" align="center" component="span">
-            {showSatisfaction ? (
-              <RatingBadge kind="satisfaction" value={sentiment ?? null} />
-            ) : null}
-            {showSatisfaction && showRmp ? (
-              <Text component="span" size="xs" c="dimmed">
-                ·
-              </Text>
-            ) : null}
-            {showRmp ? (
-              <RatingBadge
-                kind="rmp"
-                value={hasRating && rmpEntry ? rmpEntry.rating : null}
-                count={hasRating && rmpEntry ? rmpEntry.numRatings : null}
-                legacyId={rmpLegacyId}
-              />
-            ) : null}
-          </Group>
-        ) : null}
+        <ProfessorRatingBadges
+          displayName={entry.displayName}
+          professorRatings={professorRatings}
+          legacyId={entry.legacyId}
+          sentiment={sentiment}
+        />
         <SearchResultGradeSummary gradeViz={gradeViz} />
       </SearchResultCardBody>
       <GradeDistributionBottomBar gradeViz={gradeViz} />

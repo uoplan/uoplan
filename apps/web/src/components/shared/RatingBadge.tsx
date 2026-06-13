@@ -1,6 +1,8 @@
 import type { MouseEvent } from "react";
 import { Anchor, Divider, Group, HoverCard, Stack, Text } from "@mantine/core";
 import { IconExternalLink, IconMessage2, IconStar } from "@tabler/icons-react";
+import type { CanonicalProfessorName, ProfessorRatingsMap } from "@uoplan/core";
+import { hasProfessorRatings, normalizeProfessorName } from "@uoplan/core";
 import { useTr } from "../../i18n";
 
 type RatingKind = "rmp" | "satisfaction";
@@ -139,5 +141,53 @@ export function RatingBadge({
         </Stack>
       </HoverCard.Dropdown>
     </HoverCard>
+  );
+}
+
+/**
+ * The shared ⭐ RateMyProf + 💬 satisfaction badge row for a professor, used by the
+ * explore search-result cards and the course/discipline/professor detail pages so
+ * they all surface ratings identically. Resolves the RMP entry from `professorRatings`
+ * by normalized name; shows the RMP badge when the professor has a rating or is on
+ * RMP, the satisfaction badge when feedback `sentiment` (1-5) exists, and renders
+ * nothing when neither applies.
+ */
+export function ProfessorRatingBadges({
+  displayName,
+  professorRatings,
+  legacyId,
+  sentiment,
+}: {
+  displayName: CanonicalProfessorName;
+  professorRatings: ProfessorRatingsMap | null;
+  legacyId?: number | null;
+  sentiment?: number | null;
+}) {
+  const rmpEntry = professorRatings ? professorRatings[normalizeProfessorName(displayName)] : null;
+  const hasRating = hasProfessorRatings(rmpEntry);
+  const isOnRmp = legacyId != null && Number.isFinite(legacyId) && legacyId > 0;
+  const showRmp = hasRating || isOnRmp;
+  const showSatisfaction = sentiment != null && sentiment > 0;
+  const rmpLegacyId = legacyId ?? rmpEntry?.legacyId ?? null;
+
+  if (!showSatisfaction && !showRmp) return null;
+
+  return (
+    <Group gap={6} wrap="nowrap" align="center" component="span">
+      {showSatisfaction ? <RatingBadge kind="satisfaction" value={sentiment ?? null} /> : null}
+      {showSatisfaction && showRmp ? (
+        <Text component="span" size="xs" c="dimmed">
+          ·
+        </Text>
+      ) : null}
+      {showRmp ? (
+        <RatingBadge
+          kind="rmp"
+          value={hasRating && rmpEntry ? rmpEntry.rating : null}
+          count={hasRating && rmpEntry ? rmpEntry.numRatings : null}
+          legacyId={rmpLegacyId}
+        />
+      ) : null}
+    </Group>
   );
 }
