@@ -21,6 +21,7 @@ import { SharedScheduleModal } from "../components/shared/SharedScheduleModal";
 import { LazyCommandCenter } from "../components/shortcuts/LazyCommandCenter";
 import { HotkeysHelpModal } from "../components/shortcuts/HotkeysHelpModal";
 import { BasketFab } from "../components/basket/BasketFab";
+import { DonationBanner } from "../components/shared/DonationBanner";
 import { PersonalizeBanner } from "../components/shared/PersonalizeBanner";
 import { useGlobalHotkeys } from "../hooks/useGlobalHotkeys";
 
@@ -149,6 +150,7 @@ function RootLayout() {
         <LazyCommandCenter />
         {showBasketFab && <BasketFab desktopPlacement={basketDesktopPlacement} />}
         <HotkeysHelpModal />
+        <DonationBanner />
         <PersonalizeBanner />
         <Box style={{ flex: 1, minHeight: 0 }}>
           <m.div animate={controls} style={isCalendarRoute ? { height: "100%" } : undefined}>
