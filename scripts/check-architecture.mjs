@@ -39,6 +39,9 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const LAYERS = {
   "@uoplan/proto": [],
   "@uoplan/engine": [],
+  "@uoplan/theme": [],
+  "@uoplan/i18n": [],
+  "@uoplan/ui": ["@uoplan/theme"],
   "@uoplan/core": ["@uoplan/proto"],
   "@uoplan/data": ["@uoplan/proto", "@uoplan/core"],
   "@uoplan/calendar": ["@uoplan/proto", "@uoplan/core"],
@@ -46,6 +49,9 @@ const LAYERS = {
   web: [
     "@uoplan/proto",
     "@uoplan/engine",
+    "@uoplan/theme",
+    "@uoplan/i18n",
+    "@uoplan/ui",
     "@uoplan/core",
     "@uoplan/data",
     "@uoplan/calendar",
@@ -53,6 +59,18 @@ const LAYERS = {
   ],
   worker: ["@uoplan/proto", "@uoplan/engine", "@uoplan/core", "@uoplan/data", "@uoplan/calendar"],
   scraper: ["@uoplan/proto", "@uoplan/core"],
+  // Native (Expo) app — a leaf like `web`. May consume the portable packages
+  // (NOT @uoplan/transcript: pdfjs is browser-only; native gets its own impl).
+  native: [
+    "@uoplan/proto",
+    "@uoplan/engine",
+    "@uoplan/theme",
+    "@uoplan/i18n",
+    "@uoplan/ui",
+    "@uoplan/core",
+    "@uoplan/data",
+    "@uoplan/calendar",
+  ],
 };
 
 const WORKSPACE_GLOBS = ["apps", "packages"];

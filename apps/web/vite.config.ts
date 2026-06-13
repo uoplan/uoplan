@@ -69,6 +69,23 @@ export default defineConfig({
   // (and any other hook-calling dep) shares the renderer's dispatcher in Browser Mode.
   resolve: {
     dedupe: ["react", "react-dom"],
+    // Cross-platform component contract (@uoplan/ui): prefer `*.web.tsx`
+    // implementations on web so Vite resolves the Mantine variant, while Metro
+    // resolves `*.native.tsx` for the Expo app. Keep the default extensions
+    // after the `.web.*` ones as fallbacks.
+    extensions: [
+      ".web.tsx",
+      ".web.ts",
+      ".web.jsx",
+      ".web.js",
+      ".mjs",
+      ".js",
+      ".mts",
+      ".ts",
+      ".jsx",
+      ".tsx",
+      ".json",
+    ],
   },
   optimizeDeps: {
     include: [

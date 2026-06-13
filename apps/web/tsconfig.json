@@ -5,7 +5,8 @@
     "types": [],
     "allowImportingTsExtensions": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "moduleSuffixes": [".web", ""]
   },
   "include": ["src"],
   "exclude": ["src/workers/sw.ts"],

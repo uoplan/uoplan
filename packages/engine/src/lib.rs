@@ -40,11 +40,82 @@ pub fn init() {
     console_error_panic_hook::set_once();
 }
 
-/// The schedule-generation engine. Decode the catalogue + schedule datasets
-/// once, then call [`Engine::generate`] with a serialized [`GenerationRequest`].
+/// Error type for the platform-agnostic engine core. Wraps a human-readable
+/// message; binding layers map this to their platform's error type (`JsError`
+/// for the WASM [`Engine`], a UniFFI/C-ABI error for the native iOS/Android
+/// binding).
+#[derive(Debug, Clone)]
+pub struct EngineError(pub String);
+
+impl std::fmt::Display for EngineError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(&self.0)
+    }
+}
+
+impl std::error::Error for EngineError {}
+
+/// The platform-agnostic schedule-generation engine. Contains **no**
+/// binding-specific types (no `wasm_bindgen`, no `JsError`), so it can be wrapped
+/// by the WASM glue ([`Engine`]) for the web app + OG-image worker, and by a
+/// native FFI binding (UniFFI / C-ABI via `cargo-ndk`) for the iOS/Android apps.
+///
+/// Decode the catalogue + schedule datasets once, then call
+/// [`EngineCore::generate`] with a serialized [`GenerationRequest`]. The whole
+/// surface is bytes-in/bytes-out (protobuf), which keeps every FFI boundary
+/// trivial.
+pub struct EngineCore {
+    data: DataView,
+}
+
+impl EngineCore {
+    /// Construct from the `catalogue.pb` and schedules `.pb` bytes.
+    pub fn new(catalogue: &[u8], schedules: &[u8]) -> Result<EngineCore, EngineError> {
+        let catalogue = proto::data::Catalogue::decode(catalogue)
+            .map_err(|e| EngineError(format!("failed to decode catalogue: {e}")))?;
+        let schedules = proto::data::SchedulesData::decode(schedules)
+            .map_err(|e| EngineError(format!("failed to decode schedules: {e}")))?;
+        Ok(EngineCore {
+            data: DataView::new(catalogue, schedules),
+        })
+    }
+
+    /// Generate a schedule for the given serialized [`GenerationRequest`],
+    /// returning a serialized [`GenerationResponse`].
+    pub fn generate(&self, request: &[u8]) -> Result<Vec<u8>, EngineError> {
+        let request = GenerationRequest::decode(request)
+            .map_err(|e| EngineError(format!("failed to decode request: {e}")))?;
+        let response = run_generation(&self.data, request);
+        Ok(response.encode_to_vec())
+    }
+
+    /// Re-timetable a FIXED set of courses (the UI swap feature). Decodes a
+    /// serialized [`TimetableRequest`] and returns a serialized
+    /// [`GenerationResponse`] (`has_schedule` + the chosen section per course).
+    pub fn timetable_fixed_set(&self, request: &[u8]) -> Result<Vec<u8>, EngineError> {
+        let req = proto::engine::TimetableRequest::decode(request)
+            .map_err(|e| EngineError(format!("failed to decode timetable request: {e}")))?;
+        let response = run_timetable_fixed_set(&self.data, req);
+        Ok(response.encode_to_vec())
+    }
+
+    /// Number of courses in the loaded catalogue (smoke-test accessor).
+    pub fn course_count(&self) -> usize {
+        self.data.course_count()
+    }
+
+    /// Number of course schedules loaded (smoke-test accessor).
+    pub fn schedule_count(&self) -> usize {
+        self.data.schedule_count()
+    }
+}
+
+/// WASM binding over [`EngineCore`]. A thin wrapper that maps [`EngineError`] to
+/// `JsError`; **all** generation logic lives in the platform-agnostic core so the
+/// native binding can share it verbatim.
 #[wasm_bindgen]
 pub struct Engine {
-    data: DataView,
+    core: EngineCore,
 }
 
 #[wasm_bindgen]
@@ -52,35 +123,28 @@ impl Engine {
     /// Construct an engine from the `catalogue.pb` and schedules `.pb` bytes.
     #[wasm_bindgen(constructor)]
     pub fn new(catalogue: &[u8], schedules: &[u8]) -> Result<Engine, JsError> {
-        let catalogue = proto::data::Catalogue::decode(catalogue)
-            .map_err(|e| JsError::new(&format!("failed to decode catalogue: {e}")))?;
-        let schedules = proto::data::SchedulesData::decode(schedules)
-            .map_err(|e| JsError::new(&format!("failed to decode schedules: {e}")))?;
-        Ok(Engine {
-            data: DataView::new(catalogue, schedules),
-        })
+        EngineCore::new(catalogue, schedules)
+            .map(|core| Engine { core })
+            .map_err(|e| JsError::new(&e.0))
     }
 
     /// Generate a schedule for the given serialized [`GenerationRequest`],
     /// returning a serialized [`GenerationResponse`].
     #[wasm_bindgen]
     pub fn generate(&self, request: &[u8]) -> Result<Vec<u8>, JsError> {
-        let request = GenerationRequest::decode(request)
-            .map_err(|e| JsError::new(&format!("failed to decode request: {e}")))?;
-        let response = run_generation(&self.data, request);
-        Ok(response.encode_to_vec())
+        self.core.generate(request).map_err(|e| JsError::new(&e.0))
     }
 
     /// Number of courses in the loaded catalogue (smoke-test accessor).
     #[wasm_bindgen(getter)]
     pub fn course_count(&self) -> usize {
-        self.data.course_count()
+        self.core.course_count()
     }
 
     /// Number of course schedules loaded (smoke-test accessor).
     #[wasm_bindgen(getter)]
     pub fn schedule_count(&self) -> usize {
-        self.data.schedule_count()
+        self.core.schedule_count()
     }
 
     /// Re-timetable a FIXED set of courses (the UI swap feature). Decodes a
@@ -88,10 +152,9 @@ impl Engine {
     /// [`GenerationResponse`] (`has_schedule` + the chosen section per course).
     #[wasm_bindgen]
     pub fn timetable_fixed_set(&self, request: &[u8]) -> Result<Vec<u8>, JsError> {
-        let req = proto::engine::TimetableRequest::decode(request)
-            .map_err(|e| JsError::new(&format!("failed to decode timetable request: {e}")))?;
-        let response = run_timetable_fixed_set(&self.data, req);
-        Ok(response.encode_to_vec())
+        self.core
+            .timetable_fixed_set(request)
+            .map_err(|e| JsError::new(&e.0))
     }
 }
 
@@ -422,6 +485,28 @@ mod tests {
         let resp = GenerationResponse::decode(resp_bytes.as_slice()).unwrap();
         // A default (basic, 0 electives) request yields a valid empty schedule.
         assert!(resp.courses.is_empty());
+    }
+
+    /// The platform-agnostic [`EngineCore`] is what the native iOS/Android binding
+    /// wraps, so exercise it directly (no `wasm_bindgen` involved) to guard the
+    /// seam the WASM [`Engine`] and the native binding both build on.
+    #[test]
+    fn engine_core_smoke() {
+        let cat = proto::data::Catalogue::default().encode_to_vec();
+        let sched = proto::data::SchedulesData::default().encode_to_vec();
+        let core = EngineCore::new(&cat, &sched).unwrap();
+        assert_eq!(core.course_count(), 0);
+        assert_eq!(core.schedule_count(), 0);
+
+        let resp_bytes = core
+            .generate(&GenerationRequest::default().encode_to_vec())
+            .unwrap();
+        let resp = GenerationResponse::decode(resp_bytes.as_slice()).unwrap();
+        assert!(resp.courses.is_empty());
+
+        // Decode failures surface as a plain `EngineError`, not a panic.
+        let bad = EngineCore::new(&[0xff, 0xff, 0xff], &sched);
+        assert!(bad.is_err());
     }
 
     /// End-to-end smoke test against the real committed `.pb` datasets: build the
