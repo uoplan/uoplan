@@ -248,3 +248,71 @@ export function normalizeGradeVizDistribution(
     histogram,
   };
 }
+
+// ---------------------------------------------------------------------------
+// Histogram display model (shared by the web + native grade charts)
+// ---------------------------------------------------------------------------
+
+/** Letter-grade failures merged into the single "Fail" bar (NS is shown via the S/NS bar). */
+const HISTOGRAM_FAIL_GRADES = ["F", "E", "ABS", "EIN"] as const;
+/** Individual letter bars shown after the combined "Fail" bar (low → high). */
+const HISTOGRAM_LETTER_BAR_ORDER = ["D", "D+", "C", "C+", "B", "B+", "A-", "A", "A+"] as const;
+
+/** One bar in the rendered grade histogram (before platform-specific labels). */
+export interface GradeHistogramDisplayBar {
+  /** Stable key: "DR" (withdrew), "FAIL" (merged failures) or a letter grade. */
+  key: string;
+  /** The underlying grade letter for letter bars; "DR"/"F" for the special bars. */
+  grade: string;
+  count: number;
+  bucketId: GradeVizBucketId;
+}
+
+/** Presentation model for the vertical grade histogram, derived purely from a
+ * {@link GradeVizData}. Platform leaves (web Mantine, native RN) render this the
+ * same way; only the localized labels are supplied per platform. */
+export interface GradeHistogramModel {
+  /** Withdrew (DR) + merged Fail + 9 letter bars, low → high. */
+  displayBars: GradeHistogramDisplayBar[];
+  /** Satisfactory (S) count for the trailing S/NS stacked bar. */
+  sCount: number;
+  /** Not-satisfactory (NS) count for the trailing S/NS stacked bar. */
+  nsCount: number;
+  /** S + NS total (denominator for the stacked S/NS bar). */
+  snsTotal: number;
+  /** Largest bar count (≥ 1), used to scale bar heights. */
+  maxHistogramCount: number;
+}
+
+/**
+ * Build the ordered display model for the grade histogram from a
+ * {@link GradeVizData}: a withdrew (DR) bar, a single merged "Fail" bar, the nine
+ * passing letter bars (D → A+), plus the S/NS aggregate. Pure + platform-neutral
+ * so the web and native charts stay pixel-equivalent.
+ */
+export function buildGradeHistogramModel(gradeViz: GradeVizData): GradeHistogramModel {
+  const byGrade = new Map(gradeViz.histogram.map((entry) => [entry.grade, entry]));
+  const countOf = (grade: string) => byGrade.get(grade)?.count ?? 0;
+
+  const sCount = countOf("S");
+  const nsCount = countOf("NS");
+  const snsTotal = sCount + nsCount;
+
+  const failCount = HISTOGRAM_FAIL_GRADES.reduce((sum, grade) => sum + countOf(grade), 0);
+
+  const displayBars: GradeHistogramDisplayBar[] = [
+    { key: "DR", grade: "DR", count: countOf("DR"), bucketId: "grey" },
+    { key: "FAIL", grade: "F", count: failCount, bucketId: "red" },
+    ...HISTOGRAM_LETTER_BAR_ORDER.map(
+      (grade): GradeHistogramDisplayBar => ({
+        key: grade,
+        grade,
+        count: countOf(grade),
+        bucketId: byGrade.get(grade)?.bucketId ?? "red",
+      }),
+    ),
+  ];
+
+  const maxHistogramCount = Math.max(...displayBars.map((bar) => bar.count), 1);
+  return { sCount, nsCount, snsTotal, displayBars, maxHistogramCount };
+}

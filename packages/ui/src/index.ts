@@ -135,3 +135,11 @@ export type { DrawerPosition, DrawerProps } from "./Drawer/Drawer.types";
 
 export type { Align, Justify, Radius, RadiusToken, Spacing, SpacingToken } from "./layout/style";
 export { resolveAlign, resolveJustify, resolveRadius, resolveSpacing } from "./layout/style";
+
+export { Icon } from "./Icon/Icon";
+export type { IconName, IconProps } from "./Icon/Icon.types";
+export { SF_SYMBOL_FOR_ICON } from "./Icon/Icon.types";
+
+export { AnimatePresence, Motion } from "./Motion/Motion";
+export type { MotionProps, MotionState } from "./Motion/Motion.types";
+export { DEFAULT_MOTION_DURATION, resolveMotionState } from "./Motion/Motion.types";

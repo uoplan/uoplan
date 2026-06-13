@@ -1,0 +1,128 @@
+import { useMemo, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import Svg, { Defs, LinearGradient, Path, Stop, Text as SvgText } from "react-native-svg";
+
+import { Surface } from "@/constants/theme";
+
+export interface AreaChartPoint {
+  label: string;
+  value: number;
+}
+
+export interface AreaChartProps {
+  data: AreaChartPoint[];
+  /** Plot height in px (excludes axis labels). Default 140. */
+  height?: number;
+  /** Explicit width; otherwise measured from the container via onLayout. */
+  width?: number;
+  domain?: [number, number];
+  color?: string;
+  formatValue?: (v: number) => string;
+}
+
+const PAD_LEFT = 30;
+const PAD_RIGHT = 10;
+const PAD_TOP = 10;
+const PAD_BOTTOM = 22;
+const Y_TICKS = 3;
+
+/**
+ * Area chart (react-native-svg) — the native analogue of the web
+ * `@mantine/charts` AreaChart (e.g. the Trends grade-band area). Renders a
+ * gradient-filled area under the value line plus y/x axis labels.
+ */
+export function AreaChart({
+  data,
+  height = 140,
+  width: widthProp,
+  domain,
+  color = Surface.accent,
+  formatValue = (v) => v.toFixed(1),
+}: AreaChartProps) {
+  const [measured, setMeasured] = useState(0);
+  const width = widthProp ?? measured;
+
+  const [minY, maxY] = useMemo<[number, number]>(() => {
+    if (domain) return domain;
+    if (data.length === 0) return [0, 1];
+    const values = data.map((d) => d.value);
+    const lo = Math.min(...values, 0);
+    const hi = Math.max(...values);
+    return [lo, hi * 1.1 || 1];
+  }, [data, domain]);
+
+  const plotW = Math.max(0, width - PAD_LEFT - PAD_RIGHT);
+  const plotH = height - PAD_TOP - PAD_BOTTOM;
+  const totalH = height;
+  const baseY = PAD_TOP + plotH;
+
+  const xFor = (i: number) =>
+    PAD_LEFT + (data.length <= 1 ? plotW / 2 : (i / (data.length - 1)) * plotW);
+  const yFor = (v: number) =>
+    PAD_TOP + (maxY === minY ? plotH / 2 : (1 - (v - minY) / (maxY - minY)) * plotH);
+
+  const { linePath, areaPath } = useMemo(() => {
+    if (data.length === 0 || width === 0) return { linePath: "", areaPath: "" };
+    const line = data
+      .map((d, i) => `${i === 0 ? "M" : "L"} ${xFor(i).toFixed(2)} ${yFor(d.value).toFixed(2)}`)
+      .join(" ");
+    const area = `${line} L ${xFor(data.length - 1).toFixed(2)} ${baseY.toFixed(2)} L ${xFor(0).toFixed(2)} ${baseY.toFixed(2)} Z`;
+    return { linePath: line, areaPath: area };
+  }, [data, width, minY, maxY, plotW, plotH, baseY]);
+
+  const ticks = useMemo(
+    () => Array.from({ length: Y_TICKS + 1 }, (_, i) => minY + ((maxY - minY) * i) / Y_TICKS),
+    [minY, maxY],
+  );
+
+  return (
+    <View
+      style={styles.wrap}
+      onLayout={(e) => setMeasured(e.nativeEvent.layout.width)}
+      testID="area-chart"
+    >
+      {width > 0 && (
+        <Svg width={width} height={totalH}>
+          <Defs>
+            <LinearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+              <Stop offset="0" stopColor={color} stopOpacity={0.35} />
+              <Stop offset="1" stopColor={color} stopOpacity={0.02} />
+            </LinearGradient>
+          </Defs>
+          {ticks.map((t, i) => (
+            <SvgText
+              key={`yl${i}`}
+              x={PAD_LEFT - 5}
+              y={yFor(t) + 3}
+              fontSize={9}
+              fill={Surface.dimmed}
+              textAnchor="end"
+            >
+              {formatValue(t)}
+            </SvgText>
+          ))}
+          {data.map((d, i) => (
+            <SvgText
+              key={`xl${i}`}
+              x={xFor(i)}
+              y={totalH - 6}
+              fontSize={9}
+              fill={Surface.dimmed}
+              textAnchor="middle"
+            >
+              {d.label}
+            </SvgText>
+          ))}
+          {areaPath !== "" && <Path d={areaPath} fill="url(#areaFill)" />}
+          {linePath !== "" && <Path d={linePath} stroke={color} strokeWidth={2} fill="none" />}
+        </Svg>
+      )}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  wrap: {
+    width: "100%",
+  },
+});

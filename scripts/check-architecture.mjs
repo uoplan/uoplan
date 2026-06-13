@@ -363,11 +363,41 @@ function checkWebInternalLayering() {
   return errors;
 }
 
+/**
+ * `@uoplan/app` write-once purity: shared screens must be authored ONLY against
+ * the abstract contract packages (ui/navigation/theme/i18n) + logic packages —
+ * never platform primitives or a concrete router. A leaked `@mantine/*`,
+ * `react-native`, or router import here would break the "implement each screen
+ * once, swap leaves per platform" guarantee (the linchpin of the whole design).
+ */
+function checkAppPurity() {
+  /** @type {string[]} */
+  const errors = [];
+  const appDir = join(repoRoot, "packages/app/src");
+  forEachSourceImport(appDir, (spec, _statement, rel) => {
+    if (
+      /@mantine\//.test(spec) ||
+      spec === "react-native" ||
+      spec.startsWith("react-native/") ||
+      spec.startsWith("react-native-") ||
+      spec === "@tanstack/react-router" ||
+      spec === "expo-router"
+    ) {
+      errors.push(
+        `@uoplan/app must stay platform-agnostic (use the ui/navigation contract, not platform ` +
+          `primitives or a router): "${rel}" imports "${spec}".`,
+      );
+    }
+  });
+  return errors;
+}
+
 function main() {
   const pkgs = readWorkspacePackages();
   const errors = [
     ...checkLayering(pkgs),
     ...checkWebInternalLayering(),
+    ...checkAppPurity(),
     ...checkProtoDrift(),
     ...checkWorkerBundle(),
   ];

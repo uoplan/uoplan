@@ -158,6 +158,31 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+  # Native (Expo) app: typecheck + jest-expo/RNTL render tests. No iOS toolchain
+  # is needed — these are pure TS + Metro-style resolution under Node, so they
+  # run on ubuntu like the rest. (Device/sim smoke stays manual for now.)
+  native:
+    runs-on: ubuntu-latest
+    needs: build-engine
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
+      - name: Download engine WASM artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: engine-pkg
+          path: packages/engine/pkg
+      - name: Run generator
+        run: pnpm generate
+      - name: Regenerate native changelog data
+        run: pnpm --filter native gen:changelog
+      - name: Typecheck native app
+        run: pnpm --filter native typecheck
+      - name: Run native tests
+        run: pnpm --filter native test
+
   build:
     runs-on: ubuntu-latest
     needs: build-engine

@@ -52,6 +52,10 @@
   //   fallow can't see a resolvable import.
   // - @size-limit/file: required at runtime by size-limit (the file checker for
   //   .size-limit.json) but never imported from TS source.
+  // - expo-symbols: imported only by packages/ui's `Icon.native.tsx` (the SF
+  //   Symbols Icon variant), which is in ignorePatterns above, so fallow's web
+  //   entry graph never sees the import. @tabler/icons-react + framer-motion are
+  //   used by the `.web.tsx` variants so they stay gated normally.
   // (knip's @vitest/browser + wrangler ignores were redundant under fallow, and
   // its @marsidev/react-turnstile ignore masked a real unused dep in the
   // worker — all three were dropped.)
@@ -60,7 +64,8 @@
     "ts-proto",
     "@uoplan/proto",
     "@uoplan/engine",
-    "@size-limit/file"
+    "@size-limit/file",
+    "expo-symbols"
   ],
   // The only clone shared by these two seed-navigation test files is the
   // hoisted `vi.mock("../../workers/scheduleWorkerClient", ...)` setup block

@@ -13,6 +13,17 @@ export type FetchBytes = (id: string) => Promise<Uint8Array>;
 /** Resolves an asset id to the URL it is served from, or `undefined` if unknown. */
 export type ResolveUrl = (id: string) => string | undefined;
 
+/**
+ * Stable, **unhashed** URL path of the build-time data-asset manifest the web
+ * build publishes as a static file (see `apps/web/vite/data-manifest-plugin.ts`).
+ * It maps every `.pb` asset id (its bare filename) to that asset's content-hashed
+ * URL. The native apps fetch this on launch to resolve assets and download them
+ * directly from the CDN — there is no worker proxy. Because it is not hashed, its
+ * URL is stable; its *contents* change as data is rebuilt, so clients must
+ * revalidate it (it is the only non-immutable data fetch).
+ */
+export const DATA_MANIFEST_PATH = "/data/manifest.json";
+
 export interface FetchResponse {
   ok: boolean;
   status: number;

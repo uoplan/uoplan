@@ -1,6 +1,7 @@
 import "./gradeDistribution.css";
 import { Stack, Text, Tooltip } from "@mantine/core";
-import type { GradeVizBucketId, GradeVizData } from "@uoplan/core";
+import { buildGradeHistogramModel } from "@uoplan/core";
+import type { GradeVizData } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { GRADE_BAND_TOKEN } from "../../lib/trends/palette";
 
@@ -11,43 +12,11 @@ const HIST_DIMS = {
 
 type GradeHistogramVariant = keyof typeof HIST_DIMS;
 
-/** Letter-grade failures merged into the single "Fail" bar (NS is shown via the S/NS bar). */
-const FAIL_GRADES = ["F", "E", "ABS", "EIN"] as const;
-/** Individual letter bars shown after the combined "Fail" bar (low → high). */
-const LETTER_BAR_ORDER = ["D", "D+", "C", "C+", "B", "B+", "A-", "A", "A+"] as const;
-
-interface DisplayBar {
-  key: string;
-  label: string;
-  count: number;
-  bucketId: GradeVizBucketId;
-}
-
-function buildHistogramModel(gradeViz: GradeVizData) {
-  const byGrade = new Map(gradeViz.histogram.map((entry) => [entry.grade, entry]));
-  const countOf = (grade: string) => byGrade.get(grade)?.count ?? 0;
-
-  const sCount = countOf("S");
-  const nsCount = countOf("NS");
-  const snsTotal = sCount + nsCount;
-
-  const failCount = FAIL_GRADES.reduce((sum, grade) => sum + countOf(grade), 0);
-
-  const displayBars: DisplayBar[] = [
-    { key: "DR", label: tr("calendar.grade.dropLabel"), count: countOf("DR"), bucketId: "grey" },
-    { key: "FAIL", label: "F", count: failCount, bucketId: "red" },
-    ...LETTER_BAR_ORDER.map(
-      (grade): DisplayBar => ({
-        key: grade,
-        label: grade,
-        count: countOf(grade),
-        bucketId: byGrade.get(grade)?.bucketId ?? "red",
-      }),
-    ),
-  ];
-
-  const maxHistogramCount = Math.max(...displayBars.map((bar) => bar.count), 1);
-  return { sCount, nsCount, snsTotal, displayBars, maxHistogramCount };
+/** Localized label for a {@link buildGradeHistogramModel} display bar. */
+function barLabel(key: string, grade: string): string {
+  if (key === "DR") return tr("calendar.grade.dropLabel");
+  if (key === "FAIL") return "F";
+  return grade;
 }
 
 export function GradeDistributionPassingSummary({
@@ -149,7 +118,7 @@ export function GradeDistributionHistogram({
 }) {
   const dims = HIST_DIMS[variant];
   const { sCount, nsCount, snsTotal, displayBars, maxHistogramCount } =
-    buildHistogramModel(gradeViz);
+    buildGradeHistogramModel(gradeViz);
 
   const histClass = [
     "cal-grade-histogram",
@@ -173,11 +142,12 @@ export function GradeDistributionHistogram({
     >
       {displayBars.map((bar) => {
         const percent = gradeViz.total > 0 ? (bar.count / gradeViz.total) * 100 : 0;
+        const label = barLabel(bar.key, bar.grade);
         return (
           <Tooltip
             key={bar.key}
             label={tr("calendar.grade.histogramTooltip", {
-              grade: bar.label,
+              grade: label,
               count: bar.count,
               percent: Math.round(percent),
             })}
@@ -203,7 +173,7 @@ export function GradeDistributionHistogram({
                   ta="center"
                   className="cal-grade-histogram-label"
                 >
-                  {bar.label}
+                  {label}
                 </Text>
               ) : null}
             </div>
