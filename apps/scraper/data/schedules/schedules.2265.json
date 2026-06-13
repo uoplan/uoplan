@@ -11964,7 +11964,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 450,
               "A": 334,
@@ -12227,7 +12227,7 @@
             "component": "REC",
             "session": null,
             "times": [],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }
@@ -12282,6 +12282,14 @@
           {
             "section": "A00-SEM Term",
             "sectionCode": "A00",
+            "component": "SEM",
+            "session": null,
+            "times": [],
+            "status": "Closed"
+          },
+          {
+            "section": "B00-SEM Term",
+            "sectionCode": "B00",
             "component": "SEM",
             "session": null,
             "times": [],
@@ -16284,31 +16292,8 @@
             "sectionCode": "Y00",
             "component": "LEC",
             "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1080,
-                "endMinutes": 1250,
-                "virtual": false,
-                "instructor": "Zubaida Al-Moselly",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 1080,
-                "endMinutes": 1250,
-                "virtual": false,
-                "instructor": "Zubaida Al-Moselly",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              }
-            ],
-            "status": "Open",
+            "times": [],
+            "status": "Closed",
             "distribution": {
               "A+": 14,
               "A": 12,
@@ -18412,7 +18397,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1130,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Dardia Garcelle Joseph",
                 "meetingDates": [
                   "2026-06-22",
                   "2026-07-31"
@@ -21619,7 +21604,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 81,
               "A": 65,
@@ -21798,7 +21783,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 454,
               "A": 678,
@@ -27455,7 +27440,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 213,
               "A": 72,
@@ -27497,7 +27482,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 213,
               "A": 72,
@@ -27643,7 +27628,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 311,
               "A": 196,
@@ -27682,7 +27667,7 @@
             "component": "SEM",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 38,
               "A": 28,
@@ -32403,7 +32388,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 290,
               "A": 228,
@@ -32465,7 +32450,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1142,
               "A": 200,
@@ -34828,7 +34813,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -46420,7 +46405,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 190,
               "A": 288,
@@ -49938,7 +49923,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 412,
               "A": 640,
@@ -52097,7 +52082,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 491,
               "A": 482,
@@ -52788,57 +52773,6 @@
               "P": 0,
               "S": 0
             }
-          },
-          {
-            "section": "P00-LEC Session C",
-            "sectionCode": "P00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 1040,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-06-22",
-                  "2026-07-31"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 110,
-              "A": 22,
-              "A-": 7,
-              "B+": 2,
-              "B": 3,
-              "C+": 2,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "DR": 2,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
           }
         ]
       }
@@ -53246,7 +53180,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 36,
               "A": 52,
