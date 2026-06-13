@@ -4,6 +4,45 @@ packages:
 
 minimumReleaseAge: 10080
 
+# Collapse the @lingui peer-resolution fan-out onto a single instance. The
+# build-time @lingui/format-po / vite-plugin pull @lingui/core/react 5.9.4 and a
+# macro@5.9.4(typescript@6.0.3) peer context, while a plain consumer (e.g.
+# @uoplan/i18n) resolves @lingui/core 5.9.3 with macro@5.9.3(typescript@5.9.3).
+# That yields *two* physical @lingui/core copies → two `i18n` singletons (a real
+# runtime bug, not just a type clash). The macro peer is optional and unused
+# (this app uses explicit message ids, not Lingui macros), so we pin every
+# disambiguating dimension to one value.
+overrides:
+  "@lingui/core@5.9.4": "5.9.3"
+  "@lingui/react@5.9.4": "5.9.3"
+  "@lingui/babel-plugin-lingui-macro": "5.9.4"
+  "@lingui/babel-plugin-lingui-macro>typescript": "6.0.3"
+
+# The 1-week release-age gate (supply-chain hardening) is incompatible with the
+# Expo SDK release cadence: a whole SDK ships at once and its packages are tightly
+# version-locked, so there is no week-old version to fall back to. Exclude ONLY the
+# first-party Expo / React Native / React families (trusted, high-visibility
+# publishers) so the native app (apps/native) can install the current SDK. Every
+# third-party dependency is still subject to the age gate.
+minimumReleaseAgeExclude:
+  - expo
+  - "expo-*"
+  - "@expo/*"
+  - react
+  - react-dom
+  - react-is
+  - scheduler
+  - react-native
+  - "react-native-*"
+  - "@react-native/*"
+  - "@react-native-community/*"
+  - "@react-native-async-storage/*"
+  - "@react-navigation/*"
+  - metro
+  - "metro-*"
+  - babel-preset-expo
+  - jest-expo
+
 onlyBuiltDependencies:
   - esbuild
   - lefthook

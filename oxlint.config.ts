@@ -24,6 +24,7 @@ export default defineConfig({
     "**/src/generated/**",
     "apps/web/src/routeTree.gen.ts",
     "apps/notifications/**",
+    "apps/native/**",
     "worker-configuration.d.ts",
   ],
   rules: {
@@ -133,6 +134,14 @@ export default defineConfig({
       // The scraper is a Node CLI/tooling suite where stdout/stderr is the
       // intended output channel, so `console` usage is expected here.
       files: ["apps/scraper/**/*.{ts,tsx}"],
+      rules: {
+        "no-console": "off",
+      },
+    },
+    {
+      // Package codegen/build scripts are Node CLI tooling where stdout/stderr
+      // is the intended output channel (same rationale as the scraper).
+      files: ["packages/*/scripts/**/*.{ts,tsx,mjs}"],
       rules: {
         "no-console": "off",
       },
