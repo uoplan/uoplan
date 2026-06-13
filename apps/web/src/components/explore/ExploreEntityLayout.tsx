@@ -27,17 +27,24 @@ export function ExploreFullBleed({ children }: { children: ReactNode }) {
 export function ExploreAccordion({
   children,
   chevronRightBase = "12px",
+  value,
+  onChange,
 }: {
   children: ReactNode;
   chevronRightBase?: string;
+  /** Controlled open items (multiple mode). Omit for uncontrolled behaviour. */
+  value?: string[];
+  onChange?: (value: string[]) => void;
 }) {
   return (
     <Accordion
       multiple
+      value={value}
+      onChange={onChange}
       radius="var(--app-radius)"
       chevronPosition="right"
       variant="default"
-      classNames={{ control: "explore-accordion-control" }}
+      classNames={{ control: "explore-accordion-control", item: "explore-accordion-item" }}
       styles={{
         root: {
           backgroundColor: "var(--app-bg)",

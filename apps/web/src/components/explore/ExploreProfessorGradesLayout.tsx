@@ -187,9 +187,19 @@ type ExploreCourseSummaryBarProps = {
   group: CourseOfferingGroup;
   /** Search params carried into the course link so active filters persist (defaults to none). */
   linkSearch?: ExploreSearchParams;
+  /**
+   * Render the course code as plain text instead of a link. Use when an ancestor
+   * (e.g. a whole-row link) already navigates to the course page, to avoid
+   * nesting anchors.
+   */
+  asPlainCode?: boolean;
 };
 
-export function ExploreCourseSummaryBar({ group, linkSearch }: ExploreCourseSummaryBarProps) {
+export function ExploreCourseSummaryBar({
+  group,
+  linkSearch,
+  asPlainCode = false,
+}: ExploreCourseSummaryBarProps) {
   const combinedViz = useMemo(
     () =>
       normalizeGradeVizDistribution(
@@ -215,23 +225,29 @@ export function ExploreCourseSummaryBar({ group, linkSearch }: ExploreCourseSumm
       }}
     >
       <ExploreSummaryWithGradeViz gradeViz={combinedViz}>
-        <Link
-          to="/explore/course/$course"
-          params={{ course: courseNormToPathParam(group.groupId) }}
-          search={linkSearch ?? EMPTY_EXPLORE_SEARCH}
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          className="explore-name-link"
-          style={{
-            fontWeight: 600,
-            color: "var(--app-text)",
-            display: "inline",
-            alignSelf: "flex-start",
-          }}
-        >
-          {group.courseCode}
-        </Link>
+        {asPlainCode ? (
+          <Text fw={600} c="var(--app-text)" style={{ alignSelf: "flex-start" }}>
+            {group.courseCode}
+          </Text>
+        ) : (
+          <Link
+            to="/explore/course/$course"
+            params={{ course: courseNormToPathParam(group.groupId) }}
+            search={linkSearch ?? EMPTY_EXPLORE_SEARCH}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            className="explore-name-link"
+            style={{
+              fontWeight: 600,
+              color: "var(--app-text)",
+              display: "inline",
+              alignSelf: "flex-start",
+            }}
+          >
+            {group.courseCode}
+          </Link>
+        )}
         {group.courseTitles.length > 0 && (
           <Text size="xs" c="dimmed" lineClamp={2}>
             {group.courseTitles.join(" · ")}

@@ -197,6 +197,34 @@ a {
   background-color: var(--app-translucent);
 }
 
+/* Flat, clickable course rows on the faculty page (whole row links to the
+   course page). Mirrors the accordion-control hover highlight. */
+.explore-course-row:hover {
+  background-color: var(--app-translucent);
+}
+
+/* Skip layout/paint for off-screen rows/items so long explore lists scroll
+   smoothly. `content-visibility: auto` lets the browser skip rendering work for
+   content outside the viewport; `contain-intrinsic-size: auto <h>` reserves an
+   approximate size (remembered once rendered) so the scrollbar stays stable.
+   The histogram-bearing course rows, accordion items (discipline/course/
+   professor/program/faculty pages) and search-result sections are the heaviest
+   explore surfaces, so they each opt in. */
+.explore-course-row {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 96px;
+}
+
+.explore-accordion-item {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 96px;
+}
+
+.explore-search-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 210px;
+}
+
 /* Soft lift effect for interactive cards/surfaces (cozy redesign).
    `.stamp-hover` is kept as an alias so existing markup keeps working. */
 .soft-lift,

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Catalogue, Discipline, RemainingRequirement } from "@uoplan/core";
+import type { Catalogue, Discipline, Faculty, RemainingRequirement } from "@uoplan/core";
 import {
   courseSentimentByNorm,
   normalizeProfessorName,
@@ -27,12 +27,14 @@ import {
   createExploreProgramFuse,
   searchExplorePrograms,
 } from "../../lib/explore/programSearch";
+import { filterFaculties } from "../../lib/explore/faculty";
 import { useFeedbackData } from "../../hooks/useFeedbackData";
 import { useExploreOfferings } from "./exploreOfferingsContext";
 
 const EMPTY_COURSE_ENTRIES: ExploreCourseSearchEntry[] = [];
 const EMPTY_PROFESSOR_ENTRIES: ExploreProfessorSearchEntry[] = [];
 const DISCIPLINE_MAX_RESULTS = 8;
+const FACULTY_MAX_RESULTS = 6;
 
 function buildDisciplineCourseCount(catalogue: Catalogue | null): Map<string, number> {
   const m = new Map<string, number>();
@@ -51,6 +53,7 @@ type UseExploreResultsArgs = {
   activeFilters: boolean;
   catalogue: Catalogue | null;
   disciplines: Discipline[] | null;
+  faculties: Faculty[] | null;
   remainingRequirements: RemainingRequirement[];
   completedCourses: string[];
 };
@@ -62,6 +65,7 @@ export function useExploreResults({
   activeFilters,
   catalogue,
   disciplines,
+  faculties,
   remainingRequirements,
   completedCourses,
 }: UseExploreResultsArgs) {
@@ -213,6 +217,11 @@ export function useExploreResults({
       .slice(0, DISCIPLINE_MAX_RESULTS);
   }, [debouncedQuery, disciplines]);
 
+  const facultyResults = useMemo(
+    () => filterFaculties(faculties, debouncedQuery, FACULTY_MAX_RESULTS),
+    [debouncedQuery, faculties],
+  );
+
   const programEntries = useMemo(
     () => (catalogue ? buildProgramSearchEntries(catalogue.programs) : []),
     [catalogue],
@@ -232,6 +241,7 @@ export function useExploreResults({
     displayedCourses.length > 0 ||
     displayedProfessors.length > 0 ||
     disciplineResults.length > 0 ||
+    facultyResults.length > 0 ||
     programResults.length > 0;
 
   return {
@@ -239,6 +249,7 @@ export function useExploreResults({
     displayedCourses,
     displayedProfessors,
     disciplineResults,
+    facultyResults,
     programResults,
     disciplineCourseCount,
     hasResults,
