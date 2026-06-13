@@ -15,7 +15,7 @@ import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
 import { CalendarEventDetails } from "./CalendarEventDetails";
 import { SwapContextProvider } from "./swapContext";
 import type { SwapContextValue, SwapDifficulty, SwapSortKey } from "./swapContext";
-import { useAppStore } from "../../store/appStore";
+import { useGenerationConstraints } from "../../store/hooks";
 import { CALENDAR_HEADER_MIN_HEIGHT } from "./calendarHeaderLayout";
 import {
   CALENDAR_PREVIEW_BAR_LARGE_QUERY,
@@ -219,7 +219,7 @@ export function CalendarView({
     [swap],
   );
 
-  const generationPreferEasier = useAppStore((s) => s.generationPreferEasier);
+  const { generationPreferEasier } = useGenerationConstraints();
 
   // The full event for the currently-open swap overlay (used by the mobile drawer).
   const activeEvent = useMemo<CalendarEvent | null>(() => {

@@ -1,12 +1,11 @@
 import { useMemo } from "react";
 import { useSearch } from "@tanstack/react-router";
-import { useShallow } from "zustand/react/shallow";
 import {
   courseSentimentByNorm,
   normalizeProfessorName,
   professorSentimentByName,
 } from "@uoplan/core";
-import { useAppStore } from "../../store/appStore";
+import { useCompletedCourses, useRequirementState } from "../../store/hooks";
 import { useFeedbackData } from "../../hooks/useFeedbackData";
 import {
   buildRequirementCandidateSet,
@@ -39,12 +38,8 @@ export function useExploreDetailFilters() {
   );
 
   const { getProfessorEntries } = useExploreOfferings();
-  const { remainingRequirements, completedCourses } = useAppStore(
-    useShallow((s) => ({
-      remainingRequirements: s.remainingRequirements,
-      completedCourses: s.completedCourses,
-    })),
-  );
+  const { remainingRequirements } = useRequirementState();
+  const { completedCourses } = useCompletedCourses();
 
   const feedbackActive = filters.minFeedback !== null;
   const { data: feedbackIndex } = useFeedbackData(feedbackActive);

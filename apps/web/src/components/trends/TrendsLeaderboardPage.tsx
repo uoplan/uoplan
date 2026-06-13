@@ -7,9 +7,8 @@ import {
   normalizeCourseCode,
 } from "@uoplan/core";
 import { useMemo } from "react";
-import { useShallow } from "zustand/react/shallow";
 import { formatLocaleNumber, tr, useTr } from "../../i18n";
-import { useAppStore } from "../../store/appStore";
+import { useCatalogue } from "../../store/hooks";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import { programSlugToPathParam } from "../../lib/explore/programSearch";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
@@ -54,7 +53,7 @@ export function TrendsLeaderboardPage() {
     search,
   } = useTrends();
 
-  const catalogue = useAppStore(useShallow((s) => s.catalogue));
+  const catalogue = useCatalogue();
 
   const verticalSegmented = isMobile ? ({ fullWidth: true, orientation: "vertical" } as const) : {};
 

@@ -25,12 +25,52 @@ Protobuf assets are loaded on demand, not all at once:
 - **Secondary assets** are pulled in by idempotent, memoized `ensureX` actions only when a consumer needs them: `ensureCourseGrades` (`grades.pb`, then re-enriches schedules + rebuilds the cache), `ensureProfessorRatings` (`ratemyprofessors.pb`), `ensureDisciplines` (`disciplines.pb`), and `ensureYearCatalogue` (`catalogue.<firstYear>.pb`). Routes declare what they need via `AppDataRouteGate`'s `requires` prop; hooks like `useCourseGradesPb` / `useFeedbackData` trigger their own fetch on first use. `feedback.pb` is lazy via `useFeedbackData`.
 - The schedule worker / WASM engine build their own dataset (including grades) via `@uoplan/data`'s `createDataClient`, so deferring store-side grades does not change generation results. Worker pre-warm is deferred to the `/schedule` route (`AppDataRouteGate prewarm`).
 
+## Consuming the store: the projection-hooks layer
+
+Components, routes, and `lib/` code **must not** call `useAppStore` / `useAppStoreApi`
+directly. Instead they consume small, domain-oriented **projection hooks** under
+`src/store/hooks/` (barrel: `src/store/hooks/index.ts`). Each hook is the single place
+that knows which store fields a domain needs; it groups related reads behind `useShallow`
+(so a component re-renders only when _its_ slice of state changes) and bundles the matching
+actions (which are stable references). Components import a domain hook instead of N raw
+selectors.
+
+```ts
+// ❌ before — every component coupled to raw field names + re-render concerns
+const currentSeed = useAppStore((s) => s.currentSeed);
+const goToNextSeed = useAppStore((s) => s.goToNextSeed);
+// …a dozen more selectors…
+
+// ✅ after — one domain hook
+const { currentSeed, goToNextSeed, goToPreviousSeed, randomizeSeed } = useSeedNavigation();
+```
+
+The hooks map roughly onto the store's domains — e.g. `useDataset`/`useDataCache`/
+`useIndices`/`useLazyData` (data slice), `useTermSelection` / `useProgramSelection` /
+`useCompletedCourses` (selection), `useRequirementState` / `useRequirementActions`
+(requirements), `useGenerationConstraints` (constraints), `useScheduleGeneration` /
+`useSeedNavigation` / `useScheduleSwaps` / `useScheduleResultMaps` (schedules),
+`useCalendarView`, `useShareState`, `useSaveStatus`, and `useGlobalActions`. Imperative
+`getState` / `subscribe` access goes through `useStoreApi()` (the sanctioned wrapper around
+`useAppStoreApi`), so even imperative consumers import from `store/hooks` rather than
+`store/appStore`.
+
+**Sanctioned direct consumers** of `useAppStore` / `useAppStoreApi` are limited to the
+`store/hooks/**` layer itself and the existing cross-cutting hooks under `src/hooks/**`
+(e.g. `useBasket`, `useSwapActions`, `usePersistState`). This is enforced by
+`scripts/check-architecture.mjs` (`pnpm check:arch`): a raw `useAppStore`/`useAppStoreApi`
+import from `store/appStore` anywhere under `components/**`, `routes/**`, or `lib/**` fails
+the build.
+
 ## How to change it
 
 1. Update `AppState` or `AppActions` in `src/store/types.ts` to add the new state/action definitions.
 2. Find the relevant slice in `src/store/slices/` (e.g. `selection.ts` if it relates to a user's chosen courses) and add the state defaults and action implementation there.
 3. Update `src/store/appStore.ts` with the default state values.
-4. If the new state needs to be serialized to the URL or localStorage, update the encoding logic in `packages/core/src/stateEncode.ts` and the store hydration/share logic in `src/store/slices/url.ts`.
+4. Expose the new field/action to the UI by adding it to the matching projection hook in
+   `src/store/hooks/` (or add a new domain hook + barrel export). Components consume that
+   hook, never `useAppStore` directly.
+5. If the new state needs to be serialized to the URL or localStorage, update the encoding logic in `packages/core/src/stateEncode.ts` and the store hydration/share logic in `src/store/slices/url.ts`.
 
 ## Configuration
 

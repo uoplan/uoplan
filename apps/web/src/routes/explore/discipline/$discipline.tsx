@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useShallow } from "zustand/react/shallow";
 import { ExploreDisciplinePage } from "../../../components/explore/ExploreDisciplinePage";
-import { useAppStore } from "../../../store/appStore";
+import { useDisciplines, useProfessorRatings } from "../../../store/hooks";
 
 export const Route = createFileRoute("/explore/discipline/$discipline")({
   head: ({ params }) => ({ meta: [{ title: params.discipline.toUpperCase() }] }),
@@ -9,12 +8,8 @@ export const Route = createFileRoute("/explore/discipline/$discipline")({
 });
 
 function ExploreDisciplineRoute() {
-  const { professorRatings, disciplines } = useAppStore(
-    useShallow((s) => ({
-      professorRatings: s.professorRatings,
-      disciplines: s.disciplines,
-    })),
-  );
+  const professorRatings = useProfessorRatings();
+  const disciplines = useDisciplines();
 
   const { discipline } = Route.useParams();
 

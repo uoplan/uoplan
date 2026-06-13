@@ -1,9 +1,8 @@
 import { Alert, Box } from "@mantine/core";
 import { useEffect } from "react";
 import type { ReactNode } from "react";
-import { useShallow } from "zustand/react/shallow";
 import { tr, useTr } from "../../i18n";
-import { useAppStore, useAppStoreApi } from "../../store/appStore";
+import { useDataset, useLazyData, useLoadData, useStoreApi } from "../../store/hooks";
 import { AppDataLoader } from "./AppDataLoader";
 import { AppCard } from "./AppCard";
 
@@ -25,20 +24,13 @@ export function AppDataRouteGate({
 }) {
   useTr();
 
-  const storeApi = useAppStoreApi();
-  const { loadProgress, error, hasBooted } = useAppStore(
-    useShallow((s) => ({
-      loadProgress: s.loadProgress,
-      error: s.error,
-      hasBooted: Boolean(s.cache),
-    })),
-  );
+  const storeApi = useStoreApi();
+  const { loadProgress, error, cache } = useDataset();
+  const hasBooted = Boolean(cache);
 
-  const loadData = useAppStore((s) => s.loadData);
-  const ensureCourseGrades = useAppStore((s) => s.ensureCourseGrades);
-  const ensureProfessorRatings = useAppStore((s) => s.ensureProfessorRatings);
-  const ensureDisciplines = useAppStore((s) => s.ensureDisciplines);
-  const ensureProfessors = useAppStore((s) => s.ensureProfessors);
+  const loadData = useLoadData();
+  const { ensureCourseGrades, ensureProfessorRatings, ensureDisciplines, ensureProfessors } =
+    useLazyData();
 
   useEffect(() => {
     void loadData();

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import type { DataCache, DayOfWeekCode } from "@uoplan/core";
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
 import type { BlockedTime } from "../../../store/types";
-import { useAppStore } from "../../../store/appStore";
+import { useBlockedTimes } from "../../../store/hooks";
 import {
   assignLanes,
   DAY_LABELS,
@@ -54,10 +54,7 @@ export function WeekCalendar({
     [showWeekends],
   );
 
-  const blockedTimes = useAppStore((s) => s.blockedTimes);
-  const addBlockedTime = useAppStore((s) => s.addBlockedTime);
-  const updateBlockedTime = useAppStore((s) => s.updateBlockedTime);
-  const removeBlockedTime = useAppStore((s) => s.removeBlockedTime);
+  const { blockedTimes, addBlockedTime, updateBlockedTime, removeBlockedTime } = useBlockedTimes();
   const [blockToRemove, setBlockToRemove] = useState<BlockedTime | null>(null);
 
   const blocksByDay = useMemo(() => {

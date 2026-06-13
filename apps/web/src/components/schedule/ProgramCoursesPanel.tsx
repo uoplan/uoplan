@@ -1,18 +1,20 @@
 import { Divider, Stack, Text } from "@mantine/core";
-import { useAppStore } from "../../store/appStore";
+import {
+  useCompletedCourses,
+  useDataset,
+  useProgramSelection,
+  useRequirementState,
+} from "../../store/hooks";
 import { tr, useTr } from "../../i18n";
 import { ProgramStep } from "../steps/ProgramStep";
 import { CompletedCoursesStep } from "../steps/CompletedCoursesStep";
 
 export function ProgramCoursesPanel() {
   useTr();
-  const catalogue = useAppStore((s) => s.catalogue);
-  const program = useAppStore((s) => s.program);
-  const setProgram = useAppStore((s) => s.setProgram);
-  const cache = useAppStore((s) => s.cache);
-  const remainingRequirements = useAppStore((s) => s.remainingRequirements);
-  const completedCourses = useAppStore((s) => s.completedCourses);
-  const setCompletedCourses = useAppStore((s) => s.setCompletedCourses);
+  const { catalogue, cache } = useDataset();
+  const { program, setProgram } = useProgramSelection();
+  const { remainingRequirements } = useRequirementState();
+  const { completedCourses, setCompletedCourses } = useCompletedCourses();
 
   const programs = catalogue?.programs ?? [];
   const hasProgram = !!program;

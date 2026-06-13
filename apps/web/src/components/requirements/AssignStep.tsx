@@ -7,7 +7,7 @@ import type {
   RequirementWithStatus,
 } from "@uoplan/core";
 import { normalizeCourseCode } from "@uoplan/core";
-import { useAppStore } from "../../store/appStore";
+import { useProgramSelection } from "../../store/hooks";
 import { RequirementNode } from "./RequirementNode";
 import { getStableNodeKey } from "../../lib/requirements/requirementNodeUtils";
 import {
@@ -54,7 +54,7 @@ export function AssignStep({
   includeClosedComponents = true,
   virtualSectionsOnly = false,
 }: AssignStepProps) {
-  const frenchImmersionStream = useAppStore((s) => s.frenchImmersionStream);
+  const { frenchImmersionStream } = useProgramSelection();
   const completedSet = new Set(completedCourses);
   const prereqEligible = new Set(prereqEligibleCourses);
   const unassignedCompletedSet = new Set(unassignedCompletedCourses);

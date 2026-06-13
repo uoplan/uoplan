@@ -1,6 +1,6 @@
 import { Group, NumberInput, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconHelpCircle } from "@tabler/icons-react";
-import { useAppStore } from "../../store/appStore";
+import { useRequirementActions, useRequirementState } from "../../store/hooks";
 import { tr } from "../../i18n";
 import { priorityForIds, stampPriorityForIds } from "../../lib/requirements/requirementPriority";
 
@@ -15,8 +15,8 @@ interface RequirementPriorityControlProps {
  * A help icon explains the ordering (lower number = scheduled first; 0 = scheduled together).
  */
 export function RequirementPriorityControl({ requirementIds }: RequirementPriorityControlProps) {
-  const priorities = useAppStore((s) => s.requirementPriorities);
-  const setRequirementPriorities = useAppStore((s) => s.setRequirementPriorities);
+  const { requirementPriorities: priorities } = useRequirementState();
+  const { setRequirementPriorities } = useRequirementActions();
 
   const current = priorityForIds(requirementIds, priorities);
 

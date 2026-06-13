@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { Alert } from "@mantine/core";
-import { useAppStore } from "../../store/appStore";
+import { useCoursesThisSemester, useRequirementActions } from "../../store/hooks";
 import { tr, useTr } from "../../i18n";
 import { computeFirstYearCredits } from "../../lib/generation/advancedGenerationDerivations";
 import { AdvancedGenerationOptionsView } from "./AdvancedGenerationOptionsView";
@@ -66,11 +66,8 @@ export function AdvancedGenerationOptions() {
     selectedOptionsPerRequirement,
     filteredPrereqEligibleCourses,
   } = useRequirementAssignmentState();
-  const coursesThisSemester = useAppStore((s) => s.coursesThisSemester);
-
-  const setCoursesThisSemester = useAppStore((s) => s.setCoursesThisSemester);
-  const setConstrainedForRequirement = useAppStore((s) => s.setConstrainedForRequirement);
-  const applyDesiredAutoAssignments = useAppStore((s) => s.applyDesiredAutoAssignments);
+  const { coursesThisSemester, setCoursesThisSemester } = useCoursesThisSemester();
+  const { setConstrainedForRequirement, applyDesiredAutoAssignments } = useRequirementActions();
 
   const { total: totalFirstYearCredits, warn: warnFirstYearLimit } = computeFirstYearCredits(
     cache,

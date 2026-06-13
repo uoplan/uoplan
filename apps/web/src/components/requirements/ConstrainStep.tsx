@@ -24,7 +24,7 @@ import { tr } from "../../i18n";
 
 import { CompletedRequirementsAccordion } from "./CompletedRequirementsAccordion";
 import { FrenchImmersionRequirementsReadout } from "./FrenchImmersionRequirementsReadout";
-import { useAppStore } from "../../store/appStore";
+import { useCompletedCourses, useProgramSelection } from "../../store/hooks";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -67,8 +67,9 @@ export function ConstrainStep({
 }: ConstrainStepProps) {
   const [collapsedUnavailableOpen, setCollapsedUnavailableOpen] = useState(false);
 
-  const frenchImmersionStream = useAppStore((s) => s.frenchImmersionStream);
-  const unassignedCount = useAppStore((s) => s.unassignedCompletedCourses.length);
+  const { frenchImmersionStream } = useProgramSelection();
+  const { unassignedCompletedCourses } = useCompletedCourses();
+  const unassignedCount = unassignedCompletedCourses.length;
 
   const completedSet = useMemo(() => new Set(completedCourses), [completedCourses]);
   const prereqEligible = useMemo(() => new Set(prereqEligibleCourses), [prereqEligibleCourses]);

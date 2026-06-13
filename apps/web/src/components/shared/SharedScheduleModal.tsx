@@ -1,14 +1,12 @@
 import { Button, Group, Modal, rem, Stack, Text } from "@mantine/core";
-import { useAppStore } from "../../store/appStore";
+import { useShareState } from "../../store/hooks";
 import { tr, useTr } from "../../i18n";
 
 const MODAL_PAD = rem(24);
 
 export function SharedScheduleModal() {
   useTr();
-  const pendingSharedState = useAppStore((s) => s.pendingSharedState);
-  const acceptSharedState = useAppStore((s) => s.acceptSharedState);
-  const dismissSharedState = useAppStore((s) => s.dismissSharedState);
+  const { pendingSharedState, acceptSharedState, dismissSharedState } = useShareState();
 
   return (
     <Modal

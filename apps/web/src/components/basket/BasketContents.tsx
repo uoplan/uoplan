@@ -22,12 +22,13 @@ import {
 } from "@tabler/icons-react";
 import type { DataCache } from "@uoplan/core";
 import { getCourseCredits } from "@uoplan/core";
-import { useAppStore } from "../../store/appStore";
+import { useBasketSelection } from "../../hooks/useBasket";
 import { tr, useTr } from "../../i18n";
 import { useBasketResolution } from "../../lib/generation/useBasketResolution";
 import { computeStillNeeded } from "../../lib/generation/computeStillNeeded";
 import type { StillNeededRequirement } from "../../lib/generation/computeStillNeeded";
 import type { DesiredCourseResolution } from "../../lib/generation/resolveDesiredCourses";
+import { useCompletedCourses, useDataCache, useRequirementState } from "../../store/hooks";
 import classes from "./BasketContents.module.css";
 
 interface BasketContentsProps {
@@ -192,14 +193,11 @@ function statusDotColor(kind: StatusKind): string {
 export function BasketContents({ variant = "popover", onNavigate }: BasketContentsProps) {
   const t = useTr();
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const basketCourses = useAppStore((s) => s.basketCourses);
-  const completedCourses = useAppStore((s) => s.completedCourses);
-  const constrainedPerRequirement = useAppStore((s) => s.constrainedPerRequirement);
-  const selectedPerRequirement = useAppStore((s) => s.selectedPerRequirement);
-  const prereqEligibleCourses = useAppStore((s) => s.prereqEligibleCourses);
-  const cache = useAppStore((s) => s.cache);
-  const addToBasket = useAppStore((s) => s.addToBasket);
-  const removeFromBasket = useAppStore((s) => s.removeFromBasket);
+  const { basketCourses, addToBasket, removeFromBasket } = useBasketSelection();
+  const { completedCourses } = useCompletedCourses();
+  const { constrainedPerRequirement, selectedPerRequirement, prereqEligibleCourses } =
+    useRequirementState();
+  const cache = useDataCache();
   const { resolution, assignments, effectiveRemainingRequirements, hasProgram } =
     useBasketResolution();
 

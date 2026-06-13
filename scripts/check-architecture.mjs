@@ -255,6 +255,8 @@ function forEachSourceImport(dir, onImport) {
  * Intra-app layering for `apps/web`. These guardrails codify the Phase 4 store
  * seams so the refactor can't silently regress:
  *   - the Zustand store must not import React components (dependency direction);
+ *   - components/routes/lib must consume the store via the `store/hooks/**`
+ *     projection hooks, never the raw `useAppStore`/`useAppStoreApi`;
  *   - `lib/requirements` must stay framework-neutral (no React/Mantine).
  */
 function checkWebInternalLayering() {
@@ -299,6 +301,29 @@ function checkWebInternalLayering() {
       if (/\bdefaultAppStore\b/.test(statement)) {
         errors.push(
           `${rel}: rendered code must not import defaultAppStore (the singleton); use the provider-bound useAppStore/useAppStoreApi.`,
+        );
+      }
+    });
+  }
+
+  // Projection-hooks layer: components/routes/lib must consume the store through the
+  // domain hooks in `store/hooks/**` (re-rendering + field-coupling are encapsulated there),
+  // never by importing the raw `useAppStore`/`useAppStoreApi` from `store/appStore`. The
+  // `store/hooks/**` layer and the existing cross-cutting `hooks/**` are the only sanctioned
+  // direct consumers (allowlisted by virtue of not being scanned here).
+  const projectionConsumerDirs = [
+    join(repoRoot, "apps/web/src/components"),
+    join(repoRoot, "apps/web/src/routes"),
+    join(repoRoot, "apps/web/src/lib"),
+  ];
+  const appStoreSpecRe = /(^|\/)store\/appStore$/;
+  const rawStoreHookRe = /\buseAppStore(Api)?\b/;
+  for (const dir of projectionConsumerDirs) {
+    forEachSourceImport(dir, (spec, statement, rel) => {
+      if (appStoreSpecRe.test(spec) && rawStoreHookRe.test(statement)) {
+        errors.push(
+          `${rel}: components/routes/lib must consume the store via the projection hooks in ` +
+            `store/hooks, not useAppStore/useAppStoreApi from "${spec}".`,
         );
       }
     });

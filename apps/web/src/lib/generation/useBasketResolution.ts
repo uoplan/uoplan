@@ -1,8 +1,14 @@
 import { useMemo } from "react";
 import type { RemainingRequirement } from "@uoplan/core";
 import { buildEffectiveRemainingRequirements } from "@uoplan/core";
-import { useAppStore } from "../../store/appStore";
+import { useBasketCourses } from "../../hooks/useBasket";
 import { tr } from "../../i18n";
+import {
+  useCompletedCourses,
+  useDataCache,
+  useProgramSelection,
+  useRequirementState,
+} from "../../store/hooks";
 import { useRequirementAssignmentState } from "../../components/requirements/useRequirementAssignmentState";
 import { resolveDesiredCourses } from "./resolveDesiredCourses";
 import type { DesiredCourseResolution } from "./resolveDesiredCourses";
@@ -32,12 +38,11 @@ export interface BasketResolution {
  * `resolveDesiredCourses` at the worker boundary).
  */
 export function useBasketResolution(): BasketResolution {
-  const cache = useAppStore((s) => s.cache);
-  const basketCourses = useAppStore((s) => s.basketCourses);
-  const completedCourses = useAppStore((s) => s.completedCourses);
-  const prereqEligibleCourses = useAppStore((s) => s.prereqEligibleCourses);
-  const program = useAppStore((s) => s.program);
-  const studentPrograms = useAppStore((s) => s.studentPrograms);
+  const cache = useDataCache();
+  const basketCourses = useBasketCourses();
+  const { completedCourses } = useCompletedCourses();
+  const { prereqEligibleCourses } = useRequirementState();
+  const { program, studentPrograms } = useProgramSelection();
   const {
     remainingRequirements,
     requirementTreeWithStatus,

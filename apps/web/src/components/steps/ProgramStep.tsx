@@ -14,8 +14,13 @@ import {
 import { IconExternalLink, IconFileUpload } from "@tabler/icons-react";
 import { tr } from "../../i18n";
 import type { Program } from "@uoplan/core";
-import { useAppStore, useAppStoreApi } from "../../store/appStore";
-import { useShallow } from "zustand/react/shallow";
+import {
+  useCompletedCourses,
+  useDataset,
+  useProgramSelection,
+  useStoreApi,
+  useYearCatalogue,
+} from "../../store/hooks";
 import { findBestMatchingProgram, parseTranscriptPdf } from "@uoplan/transcript";
 import { isOptCourse, normalizeCourseCode } from "@uoplan/core";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
@@ -27,36 +32,19 @@ interface ProgramStepProps {
 }
 
 export function ProgramStep({ programs: _programs, value, onChange }: ProgramStepProps) {
+  const { cache, indices } = useDataset();
+  const { completedCourses, setCompletedCourses } = useCompletedCourses();
   const {
-    cache,
-    indices,
-    completedCourses,
     studentPrograms,
-    availableYears,
-    firstYear,
-    yearCataloguePrograms,
-    yearCatalogueLoading,
-  } = useAppStore(
-    useShallow((s) => ({
-      cache: s.cache,
-      indices: s.indices,
-      completedCourses: s.completedCourses,
-      studentPrograms: s.studentPrograms,
-      availableYears: s.availableYears,
-      firstYear: s.firstYear,
-      yearCataloguePrograms: s.yearCataloguePrograms,
-      yearCatalogueLoading: s.yearCatalogueLoading,
-    })),
-  );
-
-  const setCompletedCourses = useAppStore((s) => s.setCompletedCourses);
-  const setStudentPrograms = useAppStore((s) => s.setStudentPrograms);
-  const minorProgram = useAppStore((s) => s.minorProgram);
-  const setMinorProgram = useAppStore((s) => s.setMinorProgram);
-  const setFirstYear = useAppStore((s) => s.setFirstYear);
-  const setFrenchImmersionStream = useAppStore((s) => s.setFrenchImmersionStream);
-  const frenchImmersionStream = useAppStore((s) => s.frenchImmersionStream);
-  const storeApi = useAppStoreApi();
+    minorProgram,
+    setMinorProgram,
+    setStudentPrograms,
+    frenchImmersionStream,
+    setFrenchImmersionStream,
+  } = useProgramSelection();
+  const { availableYears, firstYear, yearCataloguePrograms, yearCatalogueLoading, setFirstYear } =
+    useYearCatalogue();
+  const storeApi = useStoreApi();
   const [transcriptLoading, setTranscriptLoading] = useState(false);
   const [transcriptError, setTranscriptError] = useState<string | null>(null);
   const [transcriptFeedback, setTranscriptFeedback] = useState<{

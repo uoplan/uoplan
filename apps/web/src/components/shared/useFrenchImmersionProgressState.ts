@@ -1,22 +1,21 @@
 import { useMemo } from "react";
-import { useShallow } from "zustand/react/shallow";
 import {
   analyzeFrenchImmersionProgress,
   normalizeCourseCode,
   programTitleIndicatesNursing,
 } from "@uoplan/core";
-import { useAppStore } from "../../store/appStore";
+import {
+  useCompletedCourses,
+  useDataCache,
+  useProgramSelection,
+  useScheduleGeneration,
+} from "../../store/hooks";
 
 export function useFrenchImmersionProgressState() {
-  const { frenchImmersionStream, completedCourses, currentSchedule, cache, program } = useAppStore(
-    useShallow((s) => ({
-      frenchImmersionStream: s.frenchImmersionStream,
-      completedCourses: s.completedCourses,
-      currentSchedule: s.currentSchedule,
-      cache: s.cache,
-      program: s.program,
-    })),
-  );
+  const { frenchImmersionStream, program } = useProgramSelection();
+  const { completedCourses } = useCompletedCourses();
+  const { currentSchedule } = useScheduleGeneration();
+  const cache = useDataCache();
 
   const progress = useMemo(() => {
     const scheduleCodes = currentSchedule?.enrollments.map((e) => e.courseCode) ?? [];

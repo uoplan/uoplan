@@ -5,9 +5,8 @@ import { m } from "framer-motion";
 import { IconClock } from "@tabler/icons-react";
 import type { ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeCourseCode, normalizeProfessorName } from "@uoplan/core";
-import { useShallow } from "zustand/react/shallow";
 import { tr, useTr } from "../../i18n";
-import { useAppStore } from "../../store/appStore";
+import { useProfessorRegistry, useTerms } from "../../store/hooks";
 import { formatTermLabel } from "../../lib/term/termLabel";
 import type {
   ExploreProfessorSearchEntry,
@@ -118,8 +117,8 @@ export function ExploreCoursePage({
     getCourseEntryByNorm,
   } = useExploreOfferings();
   const navigate = useNavigate();
-  const terms = useAppStore(useShallow((s) => s.terms));
-  const registry = useAppStore(useShallow((s) => s.professors));
+  const terms = useTerms();
+  const registry = useProfessorRegistry();
 
   const { filters, sentiment, requirementCandidateSet, linkSearch } = useExploreDetailFilters();
 

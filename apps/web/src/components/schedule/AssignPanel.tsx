@@ -1,15 +1,19 @@
 import { Box } from "@mantine/core";
-import { useAppStore } from "../../store/appStore";
+import {
+  useCompletedCourses,
+  useDataCache,
+  useGenerationConstraints,
+  useRequirementActions,
+} from "../../store/hooks";
 import { AssignStep } from "../requirements/AssignStep";
 import { useRequirementAssignmentState } from "../requirements/useRequirementAssignmentState";
 
 export function AssignPanel() {
-  const cache = useAppStore((s) => s.cache);
-  const completedCourses = useAppStore((s) => s.completedCourses);
+  const cache = useDataCache();
+  const { completedCourses } = useCompletedCourses();
   const requirementAssignmentState = useRequirementAssignmentState();
-  const includeClosedComponents = useAppStore((s) => s.includeClosedComponents);
-  const virtualSectionsOnly = useAppStore((s) => s.virtualSectionsOnly);
-  const setSelectedForRequirement = useAppStore((s) => s.setSelectedForRequirement);
+  const { includeClosedComponents, virtualSectionsOnly } = useGenerationConstraints();
+  const { setSelectedForRequirement } = useRequirementActions();
 
   return (
     <Box p="lg">

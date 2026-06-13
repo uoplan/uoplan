@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ActionIcon, Group, Tooltip } from "@mantine/core";
 import { IconCalendarDown, IconEraser, IconFileImport, IconTerminal } from "@tabler/icons-react";
-import { useAppStore } from "../../store/appStore";
+import { useGetShareUrl, useIndices } from "../../store/hooks";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { tr } from "../../i18n";
 import { SaveStatusIndicator } from "./SaveStatusIndicator";
@@ -23,8 +23,8 @@ export function BasicCalendarHeaderActions({
   onDownloadIcs,
   downloadDisabled,
 }: BasicCalendarHeaderActionsProps) {
-  const indices = useAppStore((s) => s.indices);
-  const getShareUrl = useAppStore((s) => s.getShareUrl);
+  const indices = useIndices();
+  const getShareUrl = useGetShareUrl();
 
   const [uenrollImportOpen, setUenrollImportOpen] = useState(false);
   const { shareCopied, handleCopyShare } = useShareUrl(getShareUrl);
