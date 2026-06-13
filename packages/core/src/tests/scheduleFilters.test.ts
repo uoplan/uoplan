@@ -65,6 +65,10 @@ function cacheReturning(
     getCoursesByDiscipline: () => [],
     getAllCourses: () => [],
     getAllSchedules: () => (schedule ? [schedule] : []),
+    getFaculty: () => {},
+    getFacultyForDiscipline: () => {},
+    getDisciplinesByFaculty: () => [],
+    getCoursesByFaculty: () => [],
   };
 }
 

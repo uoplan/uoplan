@@ -30,6 +30,10 @@ describe("prerequisites", () => {
       getCoursesByDiscipline: () => [],
       getSchedule: () => {},
       getAllSchedules: () => [],
+      getFaculty: () => {},
+      getFacultyForDiscipline: () => {},
+      getDisciplinesByFaculty: () => [],
+      getCoursesByFaculty: () => [],
     };
   });
 

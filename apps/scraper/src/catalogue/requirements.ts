@@ -102,10 +102,18 @@ export function parseElectiveRequirement(text: string, credits?: number): Progra
   }
 
   if (/Faculty of/i.test(trimmed)) {
+    // Capture the faculty's proper name ("Faculty of Health Sciences") so candidate
+    // resolution can restrict the pool to that faculty's disciplines. We grab the
+    // run of capitalized words after "Faculty of", stopping at the first lowercase
+    // word ("courses", "at", "level") or punctuation.
+    const facultyMatch = trimmed.match(
+      /Faculty of\s+([A-Z][A-Za-z]*(?:\s+(?:and\s+)?[A-Z][A-Za-z]*)*)/,
+    );
     return {
       type: "faculty_elective",
       title: trimmed,
       credits: effectiveCredits,
+      ...(facultyMatch ? { faculty: `Faculty of ${facultyMatch[1].trim()}` } : {}),
       ...(fallbackLevels ? { levels: fallbackLevels } : {}),
     };
   }

@@ -7,7 +7,7 @@ import {
   normalizeCourseCode,
   withExtraCourses,
 } from "@uoplan/core";
-import type { Catalogue, Course, DataCache, SchedulesData } from "@uoplan/core";
+import type { Catalogue, Course, DataCache, DisciplinesData, SchedulesData } from "@uoplan/core";
 import type { FetchBytes } from "./transport";
 import { loadCatalogue, loadCatalogueManifest, loadGrades, loadSchedules } from "./loaders";
 
@@ -20,8 +20,9 @@ export function buildCacheWithOpt(
   catalogue: Catalogue,
   schedulesData: SchedulesData,
   completedCourses: readonly string[],
+  disciplinesData?: DisciplinesData,
 ): DataCache {
-  const base = buildDataCache(catalogue, schedulesData);
+  const base = buildDataCache(catalogue, schedulesData, disciplinesData);
   const optCodes = completedCourses.map(normalizeCourseCode).filter(isOptCourse);
   if (optCodes.length === 0) return base;
   return withExtraCourses(

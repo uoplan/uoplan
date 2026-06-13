@@ -1,4 +1,5 @@
 export * from "./brand";
+export * from "./facultyIdentity";
 export * from "./generation";
 export * from "./generationDiagnostics";
 export * from "./dataTypes";

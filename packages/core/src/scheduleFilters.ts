@@ -93,6 +93,10 @@ export function cacheWithClosedFilter(
     getCoursesByDiscipline: (d) => cache.getCoursesByDiscipline(d),
     getAllCourses: () => cache.getAllCourses(),
     getAllSchedules: () => cache.getAllSchedules(),
+    getFaculty: (id) => cache.getFaculty(id),
+    getFacultyForDiscipline: (d) => cache.getFacultyForDiscipline(d),
+    getDisciplinesByFaculty: (id) => cache.getDisciplinesByFaculty(id),
+    getCoursesByFaculty: (id) => cache.getCoursesByFaculty(id),
   };
 }
 
@@ -123,5 +127,9 @@ export function cacheWithPerCourseVirtualFilter(
     getCoursesByDiscipline: (d) => cache.getCoursesByDiscipline(d),
     getAllCourses: () => cache.getAllCourses(),
     getAllSchedules: () => cache.getAllSchedules(),
+    getFaculty: (id) => cache.getFaculty(id),
+    getFacultyForDiscipline: (d) => cache.getFacultyForDiscipline(d),
+    getDisciplinesByFaculty: (id) => cache.getDisciplinesByFaculty(id),
+    getCoursesByFaculty: (id) => cache.getCoursesByFaculty(id),
   };
 }

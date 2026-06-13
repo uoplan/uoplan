@@ -9,6 +9,7 @@ import type {
   DayOfWeek,
   DecodedState,
   Discipline,
+  Faculty,
   GeneratedSchedule,
   Indices,
   LeadDescriptor,
@@ -89,6 +90,8 @@ export interface AppState {
   /** True while the lazily-loaded {@link courseGrades} asset is being fetched/decoded. */
   courseGradesLoading: boolean;
   disciplines: Discipline[] | null;
+  /** Canonical faculty registry, loaded alongside {@link disciplines}. */
+  faculties: Faculty[] | null;
   /** Canonical professor registry (slug/legacyId lookups), lazily loaded from `professors.pb`. */
   professors: ProfessorRegistry | null;
   /** True while the lazily-loaded {@link professors} registry is being fetched/decoded. */

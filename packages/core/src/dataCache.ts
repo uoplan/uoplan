@@ -1,6 +1,14 @@
-import type { Catalogue, Course, CourseSchedule, SchedulesData } from "./dataTypes";
+import type {
+  Catalogue,
+  Course,
+  CourseSchedule,
+  Discipline,
+  DisciplinesData,
+  Faculty,
+  SchedulesData,
+} from "./dataTypes";
 import { getDiscipline, isWorkTermCourse, normalizeCourseCode } from "./utils/courseUtils";
-import type { NormalizedCourseCode } from "./brand";
+import type { FacultyId, NormalizedCourseCode } from "./brand";
 
 // Re-export for backwards compatibility
 export { normalizeCourseCode } from "./utils/courseUtils";
@@ -13,6 +21,44 @@ export interface DataCache {
   getCoursesByDiscipline(discipline: string): Course[];
   getAllCourses(): Course[];
   getAllSchedules(): CourseSchedule[];
+  /** Faculty for a faculty id, or undefined when unknown / no disciplines data was provided. */
+  getFaculty(facultyId: FacultyId | string): Faculty | undefined;
+  /** Faculty that offers a discipline (e.g. "CSI"), or undefined when unknown. */
+  getFacultyForDiscipline(discipline: string): Faculty | undefined;
+  /** Disciplines belonging to a faculty (empty when unknown / no disciplines data). */
+  getDisciplinesByFaculty(facultyId: FacultyId | string): Discipline[];
+  /** All courses whose discipline belongs to a faculty (empty when unknown). */
+  getCoursesByFaculty(facultyId: FacultyId | string): Course[];
+}
+
+/**
+ * Faculty lookup maps derived from {@link DisciplinesData}. When no disciplines
+ * data is provided every map is empty and the cache's faculty helpers degrade to
+ * "unknown" (so `faculty_elective` requirements fall back to broad candidates).
+ */
+interface FacultyMaps {
+  facultyById: Map<string, Faculty>;
+  disciplineToFacultyId: Map<string, FacultyId>;
+  facultyToDisciplines: Map<string, Discipline[]>;
+}
+
+function buildFacultyMaps(disciplinesData?: DisciplinesData): FacultyMaps {
+  const facultyById = new Map<string, Faculty>();
+  const disciplineToFacultyId = new Map<string, FacultyId>();
+  const facultyToDisciplines = new Map<string, Discipline[]>();
+  if (disciplinesData) {
+    for (const faculty of disciplinesData.faculties) {
+      facultyById.set(faculty.id, faculty);
+    }
+    for (const discipline of disciplinesData.disciplines) {
+      if (!discipline.facultyId) continue;
+      disciplineToFacultyId.set(discipline.code.toUpperCase().trim(), discipline.facultyId);
+      const list = facultyToDisciplines.get(discipline.facultyId) ?? [];
+      list.push(discipline);
+      facultyToDisciplines.set(discipline.facultyId, list);
+    }
+  }
+  return { facultyById, disciplineToFacultyId, facultyToDisciplines };
 }
 
 /**
@@ -140,14 +186,32 @@ export function withExtraCourses(base: DataCache, courses: Course[]): DataCache 
     getAllSchedules() {
       return base.getAllSchedules();
     },
+    getFaculty(facultyId) {
+      return base.getFaculty(facultyId);
+    },
+    getFacultyForDiscipline(discipline) {
+      return base.getFacultyForDiscipline(discipline);
+    },
+    getDisciplinesByFaculty(facultyId) {
+      return base.getDisciplinesByFaculty(facultyId);
+    },
+    getCoursesByFaculty(facultyId) {
+      return base.getCoursesByFaculty(facultyId);
+    },
   };
 }
 
-export function buildDataCache(catalogue: Catalogue, schedulesData: SchedulesData): DataCache {
+export function buildDataCache(
+  catalogue: Catalogue,
+  schedulesData: SchedulesData,
+  disciplinesData?: DisciplinesData,
+): DataCache {
   const courseMap = new Map<NormalizedCourseCode, Course>();
   const scheduleMap = new Map<NormalizedCourseCode, CourseSchedule>();
   const disciplineMap = new Map<string, Course[]>();
   const eligibleCourses: Course[] = [];
+  const { facultyById, disciplineToFacultyId, facultyToDisciplines } =
+    buildFacultyMaps(disciplinesData);
 
   for (const course of catalogue.courses) {
     const key = course.code;
@@ -196,6 +260,20 @@ export function buildDataCache(catalogue: Catalogue, schedulesData: SchedulesDat
     },
     getAllSchedules(): CourseSchedule[] {
       return schedulesData.schedules;
+    },
+    getFaculty(facultyId: FacultyId | string): Faculty | undefined {
+      return facultyById.get(facultyId);
+    },
+    getFacultyForDiscipline(discipline: string): Faculty | undefined {
+      const facultyId = disciplineToFacultyId.get(discipline.toUpperCase().trim());
+      return facultyId ? facultyById.get(facultyId) : undefined;
+    },
+    getDisciplinesByFaculty(facultyId: FacultyId | string): Discipline[] {
+      return facultyToDisciplines.get(facultyId) ?? [];
+    },
+    getCoursesByFaculty(facultyId: FacultyId | string): Course[] {
+      const disciplines = facultyToDisciplines.get(facultyId) ?? [];
+      return disciplines.flatMap((d) => disciplineMap.get(d.code.toUpperCase().trim()) ?? []);
     },
   };
 }

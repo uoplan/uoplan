@@ -1,5 +1,5 @@
 import { GRADE_KEYS, normalizeCode } from "./shared.ts";
-import type { CourseGradeEntry, GradesData } from "@uoplan/proto/data";
+import type { CourseGradeEntry, DisciplinesData, GradesData } from "@uoplan/proto/data";
 import type { ProfessorResolver } from "../professors/buildRegistry.ts";
 
 /** Convert a 0-based registry index (or null) to a 1-based proto ref (0 = none). */
@@ -118,22 +118,48 @@ export function mapGradesJson(rows: unknown[], resolver?: ProfessorResolver): Gr
   return { courses, professorNames };
 }
 
-export function mapDisciplinesJson(input: unknown): {
-  disciplines: Array<{ code: string; name: string; nameFr: string }>;
-} {
+export function mapDisciplinesJson(input: unknown): DisciplinesData {
   const obj = input && typeof input === "object" ? (input as Record<string, unknown>) : {};
-  const rows = Array.isArray(obj.disciplines) ? obj.disciplines : [];
+  const facultyRows = Array.isArray(obj.faculties) ? obj.faculties : [];
+  const disciplineRows = Array.isArray(obj.disciplines) ? obj.disciplines : [];
+
+  const faculties = facultyRows
+    .map((row) => {
+      const r = row && typeof row === "object" ? (row as Record<string, unknown>) : {};
+      const id = typeof r.id === "string" ? r.id.trim() : "";
+      const name = typeof r.name === "string" ? r.name.trim() : "";
+      const nameFr = typeof r.nameFr === "string" ? r.nameFr.trim() : "";
+      // `id` is kept only as the JSON↔discipline linking key (to build faculty_ref);
+      // it is not stored in the proto — it's re-derived from `name` at decode time.
+      if (!id || !name) return null;
+      return { id, name, nameFr };
+    })
+    .filter((row): row is { id: string; name: string; nameFr: string } => row != null);
+
+  // 1-based index into `faculties`; 0/absent = unknown faculty.
+  const facultyRefById = new Map<string, number>();
+  for (const [index, faculty] of faculties.entries()) {
+    facultyRefById.set(faculty.id, index + 1);
+  }
+
+  const disciplines = disciplineRows
+    .map((row) => {
+      const r = row && typeof row === "object" ? (row as Record<string, unknown>) : {};
+      const code = normalizeCode(r.code);
+      const name = typeof r.name === "string" ? r.name.trim() : "";
+      const nameFr = typeof r.nameFr === "string" ? r.nameFr.trim() : "";
+      const facultyId = typeof r.faculty === "string" ? r.faculty.trim() : "";
+      if (!code || !name) return null;
+      const facultyRef = facultyId ? facultyRefById.get(facultyId) : undefined;
+      return { code, name, nameFr, ...(facultyRef ? { facultyRef } : {}) };
+    })
+    .filter(
+      (row): row is { code: string; name: string; nameFr: string; facultyRef?: number } =>
+        row != null,
+    );
 
   return {
-    disciplines: rows
-      .map((row) => {
-        const r = row && typeof row === "object" ? (row as Record<string, unknown>) : {};
-        const code = normalizeCode(r.code);
-        const name = typeof r.name === "string" ? r.name.trim() : "";
-        const nameFr = typeof r.nameFr === "string" ? r.nameFr.trim() : "";
-        if (!code || !name) return null;
-        return { code, name, nameFr };
-      })
-      .filter((row): row is { code: string; name: string; nameFr: string } => row != null),
+    faculties: faculties.map(({ name, nameFr }) => ({ name, nameFr })),
+    disciplines,
   };
 }

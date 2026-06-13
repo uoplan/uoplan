@@ -23,6 +23,10 @@ function makeCache(schedules: Record<string, CourseSchedule | undefined>): DataC
     getCoursesByDiscipline: () => [],
     getAllCourses: () => [...courseByNorm.values()],
     getAllSchedules: () => Object.values(schedules).filter((s): s is CourseSchedule => s != null),
+    getFaculty: () => {},
+    getFacultyForDiscipline: () => {},
+    getDisciplinesByFaculty: () => [],
+    getCoursesByFaculty: () => [],
   };
 }
 

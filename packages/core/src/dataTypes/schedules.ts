@@ -9,6 +9,7 @@ import type {
   CourseSchedule as ProtoCourseSchedule,
   Discipline as ProtoDiscipline,
   DisciplinesData as ProtoDisciplinesData,
+  Faculty as ProtoFaculty,
   MeetingDateRange as ProtoMeetingDateRange,
   Program as ProtoProgram,
   RateMyProfessorsData as ProtoRateMyProfessorsData,
@@ -25,6 +26,7 @@ import type {
   DayOfWeekCode,
   Discipline,
   DisciplinesData,
+  Faculty,
   MeetingTime,
   Program,
   RateMyProfessorsData,
@@ -41,7 +43,9 @@ import {
 import { normalizeCourseCode } from "../utils/courseUtils";
 import { dateStringToYyyymmdd, yyyymmddToDateString } from "./protoDates";
 import { createExtraCodeAccumulator } from "./codeRef";
-import type { NormalizedCourseCode } from "../brand";
+import type { FacultyId, NormalizedCourseCode } from "../brand";
+import { unsafeBrand } from "../brand";
+import { facultyIdFromName } from "../facultyIdentity";
 
 function protoDayToCode(day: ProtoDayOfWeek): DayOfWeekCode {
   switch (day) {
@@ -425,24 +429,55 @@ export function fromProtoRateMyProfessorsData(
 }
 
 export function toProtoDisciplinesData(input: DisciplinesData): ProtoDisciplinesData {
+  const facultyIndexById = new Map<string, number>();
+  for (const [index, faculty] of input.faculties.entries()) {
+    facultyIndexById.set(faculty.id, index + 1);
+  }
   return {
-    disciplines: input.disciplines.map(
-      (discipline): ProtoDiscipline => ({
+    faculties: input.faculties.map(
+      (faculty): ProtoFaculty => ({
+        name: faculty.name,
+        nameFr: faculty.nameFr ?? "",
+      }),
+    ),
+    disciplines: input.disciplines.map((discipline): ProtoDiscipline => {
+      const facultyRef = discipline.facultyId
+        ? facultyIndexById.get(discipline.facultyId)
+        : undefined;
+      return {
         code: discipline.code,
         name: discipline.name,
         nameFr: discipline.nameFr ?? "",
-      }),
-    ),
+        ...(facultyRef ? { facultyRef } : {}),
+      };
+    }),
   };
 }
 
 export function fromProtoDisciplinesData(input: ProtoDisciplinesData): DisciplinesData {
+  // The faculty id (slug) is not stored in the proto — recompute it from the
+  // English name, mirroring how professor slugs are re-derived on decode.
+  const faculties: Faculty[] = input.faculties.map((faculty): Faculty => {
+    const id = facultyIdFromName(faculty.name) ?? unsafeBrand<FacultyId>("");
+    const result: Faculty = {
+      id,
+      name: faculty.name,
+      ...(faculty.nameFr ? { nameFr: faculty.nameFr } : {}),
+    };
+    return result;
+  });
   return {
+    faculties,
     disciplines: input.disciplines.map((discipline): Discipline => {
+      const facultyId =
+        discipline.facultyRef && discipline.facultyRef >= 1
+          ? faculties[discipline.facultyRef - 1]?.id
+          : undefined;
       const result: Discipline = {
         code: discipline.code,
         name: discipline.name,
         ...(discipline.nameFr ? { nameFr: discipline.nameFr } : {}),
+        ...(facultyId ? { facultyId } : {}),
       };
       return result;
     }),

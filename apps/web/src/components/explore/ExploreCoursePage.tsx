@@ -1,12 +1,13 @@
-import { Accordion, Box, Group, Stack, Text, Title } from "@mantine/core";
+import { Accordion, Badge, Box, Group, Stack, Text, Title, Tooltip } from "@mantine/core";
 import { useEffect, useMemo } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { m } from "framer-motion";
 import { IconClock } from "@tabler/icons-react";
 import type { ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeCourseCode, normalizeProfessorName } from "@uoplan/core";
-import { tr, useTr } from "../../i18n";
-import { useProfessorRegistry, useTerms } from "../../store/hooks";
+import { i18n, tr, useTr } from "../../i18n";
+import { useDisciplines, useFaculties, useProfessorRegistry, useTerms } from "../../store/hooks";
+import { facultyForDisciplineCode, localizeFacultyName } from "../../lib/explore/faculty";
 import { formatTermLabel } from "../../lib/term/termLabel";
 import type {
   ExploreProfessorSearchEntry,
@@ -119,6 +120,8 @@ export function ExploreCoursePage({
   const navigate = useNavigate();
   const terms = useTerms();
   const registry = useProfessorRegistry();
+  const disciplines = useDisciplines();
+  const faculties = useFaculties();
 
   const { filters, sentiment, requirementCandidateSet, linkSearch } = useExploreDetailFilters();
 
@@ -213,6 +216,13 @@ export function ExploreCoursePage({
     return `https://catalogue.uottawa.ca/search/?${params.toString()}`;
   }, [selectedCourseMeta]);
 
+  const facultyName = useMemo(() => {
+    if (!selectedCourseMeta) return null;
+    const subject = selectedCourseMeta.courseCode.split(/\s+/)[0] ?? "";
+    const faculty = facultyForDisciplineCode(disciplines, faculties, subject);
+    return faculty ? localizeFacultyName(faculty, i18n.locale) : null;
+  }, [selectedCourseMeta, disciplines, faculties]);
+
   return (
     <m.div
       initial={{ opacity: 0, y: 12 }}
@@ -243,10 +253,41 @@ export function ExploreCoursePage({
                 <CatalogueLink href={catalogueUrl} label={tr("explore.openInCatalogue")} />
               ) : null}
             </Group>
-            {selectedCourseMeta.courseTitle ? (
-              <Text size="sm" c="dimmed" lh={1.5} mt={8}>
-                {selectedCourseMeta.courseTitle}
-              </Text>
+            {selectedCourseMeta.courseTitle || facultyName ? (
+              <Group gap={8} mt={10} wrap="wrap">
+                {selectedCourseMeta.courseTitle ? (
+                  <Tooltip
+                    label={selectedCourseMeta.courseTitle}
+                    multiline
+                    w={320}
+                    withArrow
+                    position="bottom-start"
+                  >
+                    <Badge
+                      size="lg"
+                      variant="light"
+                      color="gray"
+                      radius="sm"
+                      maw={240}
+                      style={{ minWidth: 0, textTransform: "none", cursor: "help" }}
+                    >
+                      {selectedCourseMeta.courseTitle}
+                    </Badge>
+                  </Tooltip>
+                ) : null}
+                {facultyName ? (
+                  <Badge
+                    size="lg"
+                    variant="light"
+                    color="gray"
+                    radius="sm"
+                    maw="100%"
+                    style={{ textTransform: "none" }}
+                  >
+                    {facultyName}
+                  </Badge>
+                ) : null}
+              </Group>
             ) : null}
             {aliasCodes.length > 0 ? (
               <Text size="sm" c="dimmed" lh={1.5} mt={8}>

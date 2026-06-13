@@ -25,7 +25,7 @@ import {
   peekTermAndYearFromBase64,
   urlToSlug,
 } from "@uoplan/core";
-import type { DataCache, Indices } from "@uoplan/core";
+import type { DataCache, DisciplinesData, Indices } from "@uoplan/core";
 import { getMergedCatalogue } from "./catalogueUtils";
 import { fetchProtoBytes, optionalProtoBytes } from "../../lib/protoFetch";
 import { dataAssetIds } from "@uoplan/data";
@@ -73,6 +73,17 @@ export const createDataSlice =
       return getMergedCatalogue(catalogue, yearCatalogueCourses, completedCourses) ?? catalogue;
     };
 
+    /**
+     * Reassemble the {@link DisciplinesData} held in store state so cache rebuilds
+     * (term/year change) can re-thread faculty info. Returns undefined until the
+     * eager boot load (or {@link ensureDisciplines}) has populated `disciplines`.
+     */
+    const disciplinesDataFromState = (): DisciplinesData | undefined => {
+      const { disciplines, faculties } = get();
+      if (!disciplines) return undefined;
+      return { disciplines, faculties: faculties ?? [] };
+    };
+
     const recomputeCurrentProgramState = (cache: DataCache) => {
       const s = get();
       return recomputeStateForProgram(
@@ -118,6 +129,7 @@ export const createDataSlice =
             effectiveCatalogue ?? catalogue,
             parsedSchedules,
             completedCourses,
+            disciplinesDataFromState(),
           );
 
           const full = recomputeCurrentProgramState(cache);
@@ -153,7 +165,12 @@ export const createDataSlice =
             });
             const { schedulesData, completedCourses: cc } = get();
             if (catalogue && schedulesData) {
-              const cache = buildCacheWithOpt(catalogue, schedulesData, cc);
+              const cache = buildCacheWithOpt(
+                catalogue,
+                schedulesData,
+                cc,
+                disciplinesDataFromState(),
+              );
               set({ cache });
             }
           } else {
@@ -171,7 +188,12 @@ export const createDataSlice =
               completedCourses,
             );
             if (effectiveCatalogue && schedulesData) {
-              const cache = buildCacheWithOpt(effectiveCatalogue, schedulesData, completedCourses);
+              const cache = buildCacheWithOpt(
+                effectiveCatalogue,
+                schedulesData,
+                completedCourses,
+                disciplinesDataFromState(),
+              );
               set({ cache });
             }
           }
@@ -202,10 +224,11 @@ export const createDataSlice =
 
           set({ loading: true, error: null, loadProgress: 0 });
           try {
-            const [manifestBytes, termsBytes, indicesBytes] = await Promise.all([
+            const [manifestBytes, termsBytes, indicesBytes, disciplinesBytes] = await Promise.all([
               fetchProtoBytes(dataAssetIds.manifest),
               fetchProtoBytes(dataAssetIds.terms),
               optionalProtoBytes(dataAssetIds.indices),
+              optionalProtoBytes(dataAssetIds.disciplines),
             ]);
             bumpLoadProgress();
 
@@ -275,7 +298,22 @@ export const createDataSlice =
             const parsedSchedules = fromProtoSchedulesData(
               DataProto.SchedulesData.decode(schedulesBytes),
             );
-            const cache = buildDataCache(parsedCatalogue, parsedSchedules);
+
+            // Eager-load the tiny disciplines asset at boot so the requirement
+            // compute on the planner can resolve faculty-elective candidate pools
+            // (faculty info lives on the cache, built below). It's optional —
+            // boot proceeds without faculty data if the asset is absent/corrupt.
+            let parsedDisciplines: DisciplinesData | undefined;
+            if (disciplinesBytes) {
+              try {
+                parsedDisciplines = fromProtoDisciplinesData(
+                  DataProto.DisciplinesData.decode(disciplinesBytes),
+                );
+              } catch {
+                parsedDisciplines = undefined;
+              }
+            }
+            const cache = buildDataCache(parsedCatalogue, parsedSchedules, parsedDisciplines);
 
             bumpLoadProgress();
             set({
@@ -283,6 +321,8 @@ export const createDataSlice =
               indices,
               schedulesData: parsedSchedules,
               cache,
+              disciplines: parsedDisciplines?.disciplines ?? null,
+              faculties: parsedDisciplines?.faculties ?? null,
               terms: parsedTerms.terms,
               selectedTermId: initialTermId,
               firstYear: initialFirstYear,
@@ -420,7 +460,12 @@ export const createDataSlice =
                 courseGradesLoading: false,
                 schedulesData: enriched,
                 cache: effectiveCatalogue
-                  ? buildCacheWithOpt(effectiveCatalogue, enriched, get().completedCourses)
+                  ? buildCacheWithOpt(
+                      effectiveCatalogue,
+                      enriched,
+                      get().completedCourses,
+                      disciplinesDataFromState(),
+                    )
                   : get().cache,
               });
             } else {
@@ -475,10 +520,8 @@ export const createDataSlice =
             const bytes = await optionalProtoBytes(dataAssetIds.disciplines);
             if (!bytes) return;
             try {
-              set({
-                disciplines: fromProtoDisciplinesData(DataProto.DisciplinesData.decode(bytes))
-                  .disciplines,
-              });
+              const parsed = fromProtoDisciplinesData(DataProto.DisciplinesData.decode(bytes));
+              set({ disciplines: parsed.disciplines, faculties: parsed.faculties });
             } catch {
               // Disciplines are optional; leave them null on a decode failure.
             }
@@ -548,6 +591,7 @@ export const createDataSlice =
                 effectiveCatalogue,
                 s.schedulesData,
                 s.completedCourses,
+                disciplinesDataFromState(),
               );
               const full = recomputeCurrentProgramState(cache);
               set({ cache, ...full });

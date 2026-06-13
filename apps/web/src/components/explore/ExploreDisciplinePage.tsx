@@ -1,11 +1,12 @@
-import { Accordion, Box, Paper, Stack, Text, Title } from "@mantine/core";
+import { Accordion, Badge, Box, Paper, Stack, Text, Title } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { m } from "framer-motion";
-import type { Discipline, ProfessorRatingsMap } from "@uoplan/core";
+import type { Discipline, Faculty, ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeProfessorName } from "@uoplan/core";
 import { groupOfferingsByCourse, groupOfferingsByProfessor } from "../../lib/explore/gradesSearch";
+import { localizeFacultyName } from "../../lib/explore/faculty";
 import type { CourseOfferingGroup } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./exploreOfferingsContext";
 import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
@@ -103,10 +104,12 @@ function DisciplineCourseItem({
 export function ExploreDisciplinePage({
   disciplineCode,
   disciplines,
+  faculties,
   professorRatings,
 }: {
   disciplineCode: string;
   disciplines: Discipline[] | null;
+  faculties: Faculty[] | null;
   professorRatings: ProfessorRatingsMap | null;
 }) {
   const { i18n } = useLingui();
@@ -145,6 +148,12 @@ export function ExploreDisciplinePage({
   // Prefer the canonical code from the data (already uppercased), fall back to the URL param
   const titleCode = discipline?.code ?? normalizedCode;
 
+  const faculty = useMemo(() => {
+    if (!discipline?.facultyId || !faculties) return null;
+    return faculties.find((f) => f.id === discipline.facultyId) ?? null;
+  }, [discipline, faculties]);
+  const facultyName = faculty ? localizeFacultyName(faculty, i18n.locale) : null;
+
   const disciplineOfferings = useMemo(
     () => offerings.filter((o) => o.courseCode.split(/\s+/)[0]?.toUpperCase() === normalizedCode),
     [offerings, normalizedCode],
@@ -178,6 +187,19 @@ export function ExploreDisciplinePage({
               <Text size="sm" c="dimmed" lh={1.5} mt={8}>
                 {displayName}
               </Text>
+            ) : null}
+            {facultyName ? (
+              <Badge
+                size="lg"
+                variant="light"
+                color="gray"
+                radius="sm"
+                mt={10}
+                maw="100%"
+                style={{ textTransform: "none" }}
+              >
+                {facultyName}
+              </Badge>
             ) : null}
           </Box>
         ) : null}

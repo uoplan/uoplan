@@ -10,6 +10,7 @@ export {
   useProfessorRegistry,
   useProfessorRatings,
   useDisciplines,
+  useFaculties,
 } from "./useLazyData";
 export { useTermSelection, useTerms, useYearCatalogue } from "./useTermSelection";
 export { useProgramSelection, useActiveProgram } from "./useProgramSelection";

@@ -49,3 +49,8 @@ export function useProfessorRatings() {
 export function useDisciplines() {
   return useAppStore((s) => s.disciplines);
 }
+
+/** Canonical faculty registry, or null until `ensureDisciplines` settles. */
+export function useFaculties() {
+  return useAppStore((s) => s.faculties);
+}

@@ -104,6 +104,7 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
       // lazy `ensureCourseGrades` resolves it to false.
       courseGradesLoading: true,
       disciplines: null,
+      faculties: null,
       professors: null,
       // Defaults to true (like courseGradesLoading): the registry is lazily
       // loaded, so "not fetched yet" reads as loading until ensureProfessors
