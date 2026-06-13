@@ -136,7 +136,7 @@ function RootLayout() {
     <LazyMotion features={loadMotionFeatures} strict>
       <Box
         style={{
-          minHeight: isCalendarRoute ? undefined : "100vh",
+          minHeight: isCalendarRoute ? undefined : "100dvh",
           height: isCalendarRoute ? "100dvh" : undefined,
           overflow: isCalendarRoute ? "hidden" : undefined,
           display: "flex",
@@ -152,7 +152,7 @@ function RootLayout() {
         <HotkeysHelpModal />
         <DonationBanner />
         <PersonalizeBanner />
-        <Box style={{ flex: 1, minHeight: 0 }}>
+        <Box style={isCalendarRoute ? { flex: 1, minHeight: 0 } : { minHeight: "100dvh" }}>
           <m.div animate={controls} style={isCalendarRoute ? { height: "100%" } : undefined}>
             <Outlet />
           </m.div>

@@ -1,11 +1,30 @@
 import { Anchor, Box, Group, Kbd, Stack, Text, UnstyledButton } from "@mantine/core";
 import { useMediaQuery, useOs } from "@mantine/hooks";
 import { Link } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 import { useCommandCenterStore } from "../../store/commandCenterStore";
 import { tr, useTr } from "../../i18n";
 import { seasonalFlourish } from "../../lib/easterEggs/seasonal";
+import { PageContainer } from "./PageContainer";
 
-const ONTARIO_FIPPA_ACT_URL = "https://www.ontario.ca/laws/statute/90f31";
+const GITHUB_URL = "https://github.com/uoplan/uoplan";
+const FEEDBACK_EMAIL = "admin@uoplan.party";
+
+function ColumnHeading({ children }: { children: ReactNode }) {
+  return (
+    <Text
+      span
+      fz="xs"
+      fw={600}
+      lh={1.4}
+      style={{ color: "var(--app-text)", letterSpacing: "0.04em", opacity: 0.85 }}
+    >
+      {children}
+    </Text>
+  );
+}
+
+const footerLinkStyle = { textDecoration: "none", cursor: "pointer" } as const;
 
 export function AppFooter() {
   useTr();
@@ -15,145 +34,174 @@ export function AppFooter() {
   const modLabel = os === "macos" ? "⌘" : "Ctrl";
   const flourish = seasonalFlourish();
 
+  const buildBranch = (
+    typeof __BRANCH_NAME__ !== "undefined" && __BRANCH_NAME__
+      ? __BRANCH_NAME__
+      : tr("app.footer.buildBranchFallback")
+  ).toLowerCase();
+  const buildCommit = (
+    typeof __COMMIT_HASH__ !== "undefined" ? __COMMIT_HASH__ : "dev"
+  ).toLowerCase();
+
   return (
     <Box
       component="footer"
-      mt={isMobile ? 20 : 28}
-      pt={isMobile ? 14 : 18}
-      pb="max(14px, env(safe-area-inset-bottom))"
+      mt={isMobile ? 40 : 64}
+      pt={isMobile ? 28 : 40}
+      pb="max(20px, env(safe-area-inset-bottom))"
       style={{
         alignSelf: "stretch",
+        borderTop: "1px solid var(--app-border)",
+        backgroundColor: "var(--app-bg)",
       }}
     >
-      <Box
-        style={{
-          maxWidth: 1200,
-          margin: "0 auto",
-          paddingLeft: isMobile ? 12 : 20,
-          paddingRight: isMobile ? 12 : 20,
-        }}
-      >
-        <Stack gap="lg" align="center">
-          <Group gap={12} wrap="wrap" justify="center" align="baseline">
-            <Anchor
-              href="https://github.com/uoplan/uoplan"
-              target="_blank"
-              rel="noopener noreferrer"
-              size="sm"
-              c="dimmed"
-              underline="never"
-              lh={1.45}
-              className="app-footer-link"
-            >
-              github
-            </Anchor>
-            <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
-              ·
-            </Text>
-            <Text
-              component={Link}
-              to="/changelog"
-              size="sm"
-              c="dimmed"
-              lh={1.45}
-              className="app-footer-link"
-              style={{
-                textDecoration: "none",
-                cursor: "pointer",
-              }}
-            >
-              {tr("app.footer.changelog")}
-            </Text>
-            <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
-              ·
-            </Text>
-            <UnstyledButton
-              onClick={() => useCommandCenterStore.getState().requestOpen()}
-              aria-label={tr("app.footer.commandCenter")}
-              style={{ color: "var(--mantine-color-dimmed)" }}
-            >
-              <Group gap={6} align="center" wrap="nowrap">
-                <Text span size="sm" c="dimmed" lh={1.45}>
-                  {tr("app.footer.commandCenter")}
+      <PageContainer>
+        <Stack gap={isMobile ? 28 : 40}>
+          <Group justify="space-between" align="flex-start" wrap="wrap" gap={isMobile ? 28 : 48}>
+            <Stack gap={8} style={{ flex: "1 1 260px", maxWidth: 360 }}>
+              <Text
+                span
+                ff="var(--app-font-heading)"
+                fz="lg"
+                fw={400}
+                lh={1.2}
+                style={{ color: "var(--app-text)" }}
+              >
+                uoplan.party
+              </Text>
+              <Text size="sm" lh={1.55} style={{ color: "var(--app-text-dim)" }}>
+                {tr("app.footer.tagline")}
+              </Text>
+            </Stack>
+
+            <Group align="flex-start" wrap="wrap" gap={isMobile ? 28 : 64}>
+              <Stack gap={10} style={{ minWidth: 120 }}>
+                <ColumnHeading>{tr("app.footer.sectionNavigate")}</ColumnHeading>
+                <Text
+                  component={Link}
+                  to="/explore"
+                  size="sm"
+                  c="dimmed"
+                  lh={1.45}
+                  className="app-footer-link"
+                  style={footerLinkStyle}
+                >
+                  {tr("app.footer.explore")}
                 </Text>
-                <Kbd size="xs">{modLabel}</Kbd>
-                <Kbd size="xs">K</Kbd>
-              </Group>
-            </UnstyledButton>
-            <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
-              ·
-            </Text>
-            <Text span size="xs" c="dimmed" ff="monospace" lh={1.45}>
-              {(typeof __BRANCH_NAME__ !== "undefined" && __BRANCH_NAME__
-                ? __BRANCH_NAME__
-                : tr("app.footer.buildBranchFallback")
-              ).toLowerCase()}
-              {" · "}
-              {(typeof __COMMIT_HASH__ !== "undefined" ? __COMMIT_HASH__ : "dev").toLowerCase()}
-            </Text>
-            {flourish ? (
-              <>
-                <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
-                  ·
+                <Text
+                  component={Link}
+                  to="/graph"
+                  size="sm"
+                  c="dimmed"
+                  lh={1.45}
+                  className="app-footer-link"
+                  style={footerLinkStyle}
+                >
+                  {tr("app.footer.graph")}
                 </Text>
+                <Text
+                  component={Link}
+                  to="/trends"
+                  size="sm"
+                  c="dimmed"
+                  lh={1.45}
+                  className="app-footer-link"
+                  style={footerLinkStyle}
+                >
+                  {tr("app.footer.trends")}
+                </Text>
+                <Text
+                  component={Link}
+                  to="/donate"
+                  size="sm"
+                  c="dimmed"
+                  lh={1.45}
+                  className="app-footer-link"
+                  style={footerLinkStyle}
+                >
+                  {tr("app.footer.donate")}
+                </Text>
+              </Stack>
+
+              <Stack gap={10} style={{ minWidth: 120 }}>
+                <ColumnHeading>{tr("app.footer.sectionProject")}</ColumnHeading>
+                <Anchor
+                  href={GITHUB_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="sm"
+                  c="dimmed"
+                  underline="never"
+                  lh={1.45}
+                  className="app-footer-link"
+                >
+                  github
+                </Anchor>
+                <Text
+                  component={Link}
+                  to="/changelog"
+                  size="sm"
+                  c="dimmed"
+                  lh={1.45}
+                  className="app-footer-link"
+                  style={footerLinkStyle}
+                >
+                  {tr("app.footer.changelog")}
+                </Text>
+                <UnstyledButton
+                  onClick={() => useCommandCenterStore.getState().requestOpen()}
+                  aria-label={tr("app.footer.commandCenter")}
+                  style={{ color: "var(--mantine-color-dimmed)" }}
+                >
+                  <Group gap={6} align="center" wrap="nowrap">
+                    <Text span size="sm" c="dimmed" lh={1.45}>
+                      {tr("app.footer.commandCenter")}
+                    </Text>
+                    <Kbd size="xs">{modLabel}</Kbd>
+                    <Kbd size="xs">K</Kbd>
+                  </Group>
+                </UnstyledButton>
+                <Anchor
+                  href={`mailto:${FEEDBACK_EMAIL}`}
+                  size="sm"
+                  c="dimmed"
+                  underline="never"
+                  lh={1.45}
+                  className="app-footer-link"
+                  title={tr("app.footer.feedbackPrompt")}
+                >
+                  {FEEDBACK_EMAIL}
+                </Anchor>
+              </Stack>
+            </Group>
+          </Group>
+
+          <Stack
+            gap={12}
+            style={{
+              borderTop: "1px solid var(--app-border)",
+              paddingTop: isMobile ? 18 : 22,
+            }}
+          >
+            <Group justify="space-between" align="baseline" wrap="wrap" gap={12}>
+              <Text span size="xs" c="dimmed" ff="monospace" lh={1.45}>
+                {buildBranch}
+                {" · "}
+                {buildCommit}
+              </Text>
+              {flourish ? (
                 <Text span size="xs" c="dimmed" lh={1.45}>
                   <span aria-hidden>{flourish.emoji}</span> {tr(flourish.msgId)}
                 </Text>
-              </>
-            ) : null}
-            <Text span size="sm" c="dimmed" lh={1.45} style={{ opacity: 0.42 }}>
-              ·
-            </Text>
-            <Text span size="sm" c="dimmed" lh={1.45}>
-              {tr("app.footer.feedbackPrompt")}{" "}
-              <Anchor href="mailto:admin@uoplan.party" size="sm" c="dimmed" underline="hover">
-                admin@uoplan.party
-              </Anchor>
-            </Text>
-          </Group>
+              ) : null}
+            </Group>
 
-          <Box
-            role="note"
-            style={{
-              maxWidth: 720,
-              marginLeft: "auto",
-              marginRight: "auto",
-              paddingTop: 2,
-            }}
-          >
-            <Text
-              size="sm"
-              lh={1.65}
-              ta="center"
-              style={{
-                fontStyle: "italic",
-                letterSpacing: "0.01em",
-                color: "var(--app-text-dim)",
-              }}
-            >
-              {tr("app.footer.gradeDataAttribution.before")}
-              <Anchor
-                href={ONTARIO_FIPPA_ACT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                display="inline"
-                fz="sm"
-                lh={1.65}
-                underline="hover"
-                className="app-footer-link"
-                style={{
-                  fontStyle: "italic",
-                  letterSpacing: "0.01em",
-                  color: "var(--app-text-dim)",
-                }}
-              >
-                {tr("app.footer.gradeDataAttribution.actLink")}
-              </Anchor>
-              {tr("app.footer.gradeDataAttribution.after")}
+            <Text size="sm" lh={1.6} style={{ color: "var(--app-text-dim)", opacity: 0.62 }}>
+              {tr("app.footer.notAffiliated")}
             </Text>
-          </Box>
+          </Stack>
         </Stack>
-      </Box>
+      </PageContainer>
     </Box>
   );
 }

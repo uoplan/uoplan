@@ -17,7 +17,7 @@ function ChangelogRoute() {
     <Box
       component="main"
       style={{
-        minHeight: "100vh",
+        minHeight: "100dvh",
         padding: 24,
         backgroundColor: "var(--app-bg)",
         boxSizing: "border-box",

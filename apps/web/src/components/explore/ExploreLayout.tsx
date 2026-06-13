@@ -153,7 +153,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
         component="main"
         style={{
           position: "relative",
-          minHeight: "100vh",
+          minHeight: "100dvh",
           backgroundColor: "var(--app-bg)",
           boxSizing: "border-box",
           display: "flex",
