@@ -174,9 +174,10 @@ jobs:
       - name: Run generator
         run: pnpm generate
       # Build the web app directly (not the root `build`, which would rebuild the
-      # engine). The engine WASM comes from the artifact above.
-      - name: Build data proto + web app
-        run: pnpm --filter scraper build:proto && pnpm --filter web build
+      # engine). The engine WASM comes from the artifact above, and `pnpm generate`
+      # already produced the proto TS + data .pb assets.
+      - name: Build web app
+        run: pnpm --filter web build
       - name: Check bundle size budgets
         run: pnpm --filter web size
       - name: Upload web dist artifact

@@ -7,8 +7,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest --ui --coverage",
-    "og-image": "node scripts/og-image-runner.mjs"
+    "test:ui": "vitest --ui --coverage"
   },
   "dependencies": {
     "@resvg/resvg-wasm": "^2.6.2",
@@ -23,7 +22,6 @@
     "@types/node": "^25.5.0",
     "@vitest/coverage-v8": "4.1.7",
     "@vitest/ui": "4.1.7",
-    "esbuild": "^0.28.0",
     "typescript": "^5.8.3",
     "vitest": "^4.1.0",
     "wrangler": "^4.96.0"

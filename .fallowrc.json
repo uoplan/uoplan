@@ -20,9 +20,6 @@
     "apps/web/vite.config.ts",
     "apps/web/lingui.config.ts",
     "apps/web/vite/**",
-    "apps/worker/scripts/og-image.ts",
-    "apps/scraper/src/cli/verifyCatalogue.ts",
-    "apps/scraper/src/cli/verifyScheduleDates.ts",
     "oxfmt.config.ts"
   ],
   // Deps genuinely used but invisible to fallow's resolver:

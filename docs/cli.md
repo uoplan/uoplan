@@ -9,11 +9,14 @@ A command-line interface for managing your University of Ottawa course cart and 
 ## How to run
 
 ```bash
-# From the repo root
-node --experimental-transform-types apps/cli/src/index.ts <command>
+# From the repo root (the `cli` script wraps cargo)
+pnpm cli <command>
 
-# Or via pnpm filter
-pnpm --filter @uoplan/cli run dev <command>
+# Or run the Rust crate directly with cargo
+cargo run --manifest-path apps/cli/Cargo.toml -- <command>
+
+# End users (published binary)
+cargo install uoplan && uoplan <command>
 ```
 
 ## Commands

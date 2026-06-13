@@ -57,10 +57,10 @@ jobs:
 
       - name: Sync terms from uOttawa class search
         if: inputs.terms == ''
-        run: pnpm check:terms
+        run: pnpm --filter scraper check:terms
 
       - name: Run catalogue scraper
-        run: pnpm run scrape:catalogue
+        run: pnpm --filter scraper scrape:catalogue
 
       - name: Set terms matrix output
         id: set_terms
@@ -119,7 +119,7 @@ jobs:
       - name: Run schedule scraper for one term
         env:
           ONLY_TERM_ID: ${{ matrix.term }}
-        run: pnpm run scrape:schedules
+        run: pnpm --filter scraper scrape:schedules
 
       - name: Upload schedules for this term
         uses: actions/upload-artifact@v4
@@ -157,7 +157,7 @@ jobs:
         run: rm -rf .cache
 
       - name: Run RateMyProfessors scraper
-        run: pnpm run scrape:ratemyprofessors
+        run: pnpm --filter scraper scrape:ratemyprofessors
 
       - name: Upload RateMyProfessors data
         uses: actions/upload-artifact@v4
