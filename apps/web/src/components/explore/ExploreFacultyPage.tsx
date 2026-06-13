@@ -21,6 +21,7 @@ import {
   GradeDistributionHistogramPlaceholder,
 } from "../calendar/GradeDistributionViz";
 import { DisciplineCourseList } from "./DisciplineCourseList";
+import { ExploreEmptyState } from "./ExploreEmptyState";
 import { useExploreOfferings } from "./exploreOfferingsContext";
 import {
   EXPLORE_MOBILE_MEDIA_QUERY,
@@ -196,11 +197,12 @@ export function ExploreFacultyPage({
         ) : null}
 
         {facultyDisciplines.length === 0 ? (
-          <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs }}>
-            <Text c="dimmed" size="sm">
-              {faculty ? tr("explore.facultyNoData") : null}
-            </Text>
-          </Box>
+          faculty ? (
+            <ExploreEmptyState
+              title={tr("explore.facultyNoData")}
+              description={tr("explore.facultyNoDataDescription")}
+            />
+          ) : null
         ) : (
           <ExploreFullBleed>
             <ExploreAccordion value={openDisciplines} onChange={setOpenDisciplines}>
@@ -216,6 +218,7 @@ export function ExploreFacultyPage({
                     {openDisciplines.includes(entry.discipline.code) ? (
                       <DisciplineCourseList
                         disciplineCode={entry.discipline.code}
+                        catalogue={catalogue}
                         professorRatings={professorRatings}
                         fullBleed={false}
                         expandable={false}
