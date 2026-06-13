@@ -1,9 +1,9 @@
 import { useRouterState } from "@tanstack/react-router";
-import { Box } from "@mantine/core";
+import { Affix, Box, Group } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
 import { AnimatePresence, m } from "framer-motion";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useTr } from "../../i18n";
@@ -11,7 +11,12 @@ import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { formatTermLabel } from "../../lib/term/termLabel";
 import { useAppStore } from "../../store/appStore";
+import { AddToBasketButton } from "../basket/AddToBasketButton";
 import { BasketFab } from "../basket/BasketFab";
+import {
+  ExploreBasketTargetContext,
+  useExploreBasketTargetCode,
+} from "./exploreBasketTargetContext";
 import { ExploreLayoutHeader } from "./ExploreLayoutHeader";
 import { ExploreSearchResults } from "./ExploreSearchResults";
 import { useExploreResults } from "./useExploreResults";
@@ -23,6 +28,44 @@ type ExploreLayoutProps = {
 
 const EXPLORE_INDEX_ROUTE_ID = "/explore/";
 
+/**
+ * Top-right (desktop) / floating bottom-right (mobile) cluster holding the cart and,
+ * when a course page is mounted, the floating "add to basket" pill to its left.
+ */
+function ExploreCartCluster() {
+  const code = useExploreBasketTargetCode();
+  const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });
+  const pill = code ? <AddToBasketButton code={code} variant="pill" /> : null;
+
+  if (isMobile) {
+    return (
+      <Affix position={{ bottom: 24, right: 24 }} zIndex={150}>
+        <Group gap={10} align="center" wrap="nowrap">
+          {pill}
+          <BasketFab inline />
+        </Group>
+      </Affix>
+    );
+  }
+
+  return (
+    <Box
+      style={{
+        position: "absolute",
+        top: 8,
+        right: 0,
+        paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
+        zIndex: 5,
+      }}
+    >
+      <Group gap={8} align="center" wrap="nowrap">
+        {pill}
+        <BasketFab inline />
+      </Group>
+    </Box>
+  );
+}
+
 export function ExploreLayout({ children }: ExploreLayoutProps) {
   useTr();
   const { i18n } = useLingui();
@@ -31,10 +74,14 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
   });
   const onIndex = leafRouteId === EXPLORE_INDEX_ROUTE_ID;
   const showBackButton = !onIndex;
-  // Cart placement: on desktop it overlays the top-right of the content column
-  // (mirroring the landing page's controls position); on mobile it stays a
-  // thumb-reachable floating button.
-  const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });
+
+  // Course pages publish their code here so the cart cluster can show a floating
+  // "add to basket" pill next to the cart.
+  const [basketTargetCode, setBasketTargetCode] = useState<string | null>(null);
+  const basketTargetValue = useMemo(
+    () => ({ code: basketTargetCode, setCode: setBasketTargetCode }),
+    [basketTargetCode],
+  );
 
   const {
     catalogue,
@@ -106,87 +153,75 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
   const renderResults = onIndex && showResults;
 
   return (
-    <Box
-      component="main"
-      style={{
-        position: "relative",
-        minHeight: "100vh",
-        backgroundColor: "var(--app-bg)",
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        overflowX: "hidden",
-      }}
-    >
-      {isMobile ? (
-        <BasketFab />
-      ) : (
-        <Box
-          style={{
-            position: "absolute",
-            top: 8,
-            right: 0,
-            paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
-            zIndex: 5,
-          }}
-        >
-          <BasketFab inline />
-        </Box>
-      )}
-
-      <ExploreLayoutHeader
-        onIndex={onIndex}
-        showBackButton={showBackButton}
-        query={query}
-        onQueryChange={handleQueryChange}
-        onSearchFocus={() => setSearchEngaged(true)}
-        loading={loading}
-        filters={filters}
-        onFilterChange={handleFilterChange}
-        requirementsAvailable={remainingRequirements.length > 0}
-        disciplineOptions={disciplineOptions}
-        termOptions={termOptions}
-      />
-
+    <ExploreBasketTargetContext.Provider value={basketTargetValue}>
       <Box
+        component="main"
         style={{
-          flex: 1,
+          position: "relative",
+          minHeight: "100vh",
+          backgroundColor: "var(--app-bg)",
+          boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
-          paddingBottom: renderResults ? 48 : 0,
+          overflowX: "hidden",
         }}
       >
-        <AnimatePresence mode="wait" initial={false}>
-          {renderResults ? (
-            <ExploreSearchResults
-              hasResults={hasResults}
-              activeFilters={activeFilters}
-              query={query}
-              debouncedQuery={debouncedQuery}
-              onClearFilters={() => handleFilterChange(EMPTY_FILTERS)}
-              professorsFirst={professorsFirst}
-              displayedCourses={displayedCourses}
-              displayedProfessors={displayedProfessors}
-              disciplineResults={disciplineResults}
-              programResults={programResults}
-              disciplineCourseCount={disciplineCourseCount}
-              professorRatings={professorRatings}
-              currentSearchParams={currentSearchParams}
-            />
-          ) : (
-            <m.div
-              key="page-content"
-              initial={false}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.18 }}
-              style={{ flex: 1, display: "flex", flexDirection: "column" }}
-            >
-              {children}
-            </m.div>
-          )}
-        </AnimatePresence>
+        <ExploreCartCluster />
+
+        <ExploreLayoutHeader
+          onIndex={onIndex}
+          showBackButton={showBackButton}
+          query={query}
+          onQueryChange={handleQueryChange}
+          onSearchFocus={() => setSearchEngaged(true)}
+          loading={loading}
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          requirementsAvailable={remainingRequirements.length > 0}
+          disciplineOptions={disciplineOptions}
+          termOptions={termOptions}
+        />
+
+        <Box
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            paddingBottom: renderResults ? 48 : 0,
+          }}
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            {renderResults ? (
+              <ExploreSearchResults
+                hasResults={hasResults}
+                activeFilters={activeFilters}
+                query={query}
+                debouncedQuery={debouncedQuery}
+                onClearFilters={() => handleFilterChange(EMPTY_FILTERS)}
+                professorsFirst={professorsFirst}
+                displayedCourses={displayedCourses}
+                displayedProfessors={displayedProfessors}
+                disciplineResults={disciplineResults}
+                programResults={programResults}
+                disciplineCourseCount={disciplineCourseCount}
+                professorRatings={professorRatings}
+                currentSearchParams={currentSearchParams}
+              />
+            ) : (
+              <m.div
+                key="page-content"
+                initial={false}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.18 }}
+                style={{ flex: 1, display: "flex", flexDirection: "column" }}
+              >
+                {children}
+              </m.div>
+            )}
+          </AnimatePresence>
+        </Box>
       </Box>
-    </Box>
+    </ExploreBasketTargetContext.Provider>
   );
 }

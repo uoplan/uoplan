@@ -1,12 +1,12 @@
 import type { CSSProperties, MouseEventHandler } from "react";
-import { ActionIcon, Button } from "@mantine/core";
+import { ActionIcon, UnstyledButton } from "@mantine/core";
 import type { MantineSize } from "@mantine/core";
 import { IconCheck, IconShoppingCartPlus } from "@tabler/icons-react";
 import { useTr } from "../../i18n";
 import { useBasketMembership } from "../../hooks/useBasket";
 import classes from "./AddToBasketButton.module.css";
 
-type AddToBasketButtonVariant = "icon" | "labeled";
+type AddToBasketButtonVariant = "icon" | "pill";
 
 type AddToBasketButtonProps = {
   code: string;
@@ -36,22 +36,20 @@ export function AddToBasketButton({
     toggle();
   };
 
-  if (variant === "labeled") {
+  if (variant === "pill") {
     return (
-      <Button
+      <UnstyledButton
         type="button"
-        size={size ?? "sm"}
-        variant={inBasket ? "light" : "default"}
-        color={inBasket ? "teal" : "gray"}
-        leftSection={<Icon size={16} stroke={inBasket ? 2.5 : 1.8} aria-hidden="true" />}
-        className={[classes.labeledButton, className].filter(Boolean).join(" ")}
+        className={[classes.pillButton, className].filter(Boolean).join(" ")}
         aria-label={label}
         title={label}
+        data-in-basket={inBasket}
         onClick={handleClick}
         style={style}
       >
-        {label}
-      </Button>
+        <Icon size={16} stroke={inBasket ? 2.5 : 1.8} aria-hidden="true" />
+        <span className={classes.pillLabel}>{label}</span>
+      </UnstyledButton>
     );
   }
 

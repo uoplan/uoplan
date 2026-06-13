@@ -35,7 +35,7 @@ import { DAY_LABELS } from "@uoplan/calendar";
 import { useShallow } from "zustand/react/shallow";
 import { tr, useTr } from "../../i18n";
 import { useAppStore } from "../../store/appStore";
-import { AddToBasketButton } from "../basket/AddToBasketButton";
+import { usePublishBasketTarget } from "./exploreBasketTargetContext";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
 import { useTermScheduleData } from "../../hooks/useTermScheduleData";
@@ -309,6 +309,8 @@ export function ExploreCourseSchedulePage({
     return cache?.getCourse(normCode)?.code ?? normCode;
   }, [course, normCode, cache]);
 
+  usePublishBasketTarget(basketCode);
+
   // How this course fits the student's remaining requirements: which (if any) of
   // their uncovered requirements list it as a candidate. Drives the inline hint.
   const fit = useMemo(() => {
@@ -339,14 +341,9 @@ export function ExploreCourseSchedulePage({
         }}
       >
         <Box mb={8}>
-          <Group justify="space-between" align="flex-start" gap="sm" wrap="nowrap">
-            <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
-              {headingCode}
-            </Title>
-            {basketCode ? (
-              <AddToBasketButton code={basketCode} variant="labeled" style={{ flexShrink: 0 }} />
-            ) : null}
-          </Group>
+          <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
+            {headingCode}
+          </Title>
         </Box>
         {courseTitle ? (
           <Text size="sm" c="dimmed" lh={1.5} mt={8}>
