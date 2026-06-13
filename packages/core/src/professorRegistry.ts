@@ -1,7 +1,7 @@
 import type { ProfessorsData, ProfessorEntry as ProtoProfessorEntry } from "@uoplan/proto/data";
 import { unsafeBrand } from "./brand";
 import type { CanonicalProfessorName, ProfessorMatchKey, ProfessorSlug } from "./brand";
-import { professorMatchKey } from "./professorIdentity";
+import { professorMatchKey, slugifyProfessor } from "./professorIdentity";
 
 /**
  * Runtime view of the canonical professor registry (`professors.pb`). Datasets
@@ -44,7 +44,8 @@ export function professorIndexFromRef(ref: number | null | undefined): number | 
 /** Convert decoded `professors.pb` entries to the runtime registry shape. */
 export function fromProtoProfessorsData(data: ProfessorsData): ProfessorRegistryEntry[] {
   return (data.professors ?? []).map((p: ProtoProfessorEntry) => ({
-    slug: unsafeBrand<ProfessorSlug>(p.slug),
+    // `slug` is no longer stored in professors.pb; recompute it from the name.
+    slug: slugifyProfessor(p.name),
     name: unsafeBrand<CanonicalProfessorName>(p.name),
     legacyIds: (p.legacyIds ?? []).map((n) => Number(n)),
     ...(p.rating != null ? { rating: Number(p.rating) } : {}),

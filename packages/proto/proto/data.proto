@@ -7,9 +7,34 @@ message CatalogueManifest {
 }
 
 message Indices {
-  repeated string courses = 1;
-  repeated string programs = 2;
+  // Courses and programs are stored *columnar* (not as plain string arrays) to
+  // shrink the asset; `fromProtoIndices` reconstructs the string arrays in their
+  // original order (the load-bearing index space used by state/share-link
+  // encoding). Old string fields are retired:
+  reserved 1;  // was: repeated string courses
+  reserved 2;  // was: repeated string programs
+  // Discipline dictionary: distinct course subject prefixes (e.g. "CSI"), in
+  // first-occurrence order over `courses`. Doubles as the dictionary for the
+  // columnar course encoding and as the state-encoding discipline index space.
   repeated string disciplines = 3;
+  // Per-course discipline: index into `disciplines`. The sentinel value
+  // `disciplines.length` marks a literal-overflow course (see course_literal_*).
+  repeated uint32 course_discipline = 4 [packed = true];
+  // Per-course catalogue number, delta-encoded (zigzag) within each discipline
+  // (course order is append-order, not sorted, so deltas can be negative).
+  repeated sint32 course_number_delta = 5 [packed = true];
+  // Sparse single-letter code suffixes (e.g. "ADM 6385I"): parallel arrays of
+  // the course position and the suffix character code.
+  repeated uint32 course_suffix_pos = 6 [packed = true];
+  repeated uint32 course_suffix_char = 7 [packed = true];
+  // Front-coded programs: shared-prefix length with the previous program, plus
+  // the remaining suffix (program slugs share long path-like prefixes).
+  repeated uint32 program_prefix_len = 8 [packed = true];
+  repeated string program_suffix = 9;
+  // Sparse literal overflow for any course code that doesn't fit the
+  // "<DISC> <number><suffix?>" shape (none in current data; forward-compat).
+  repeated uint32 course_literal_pos = 10 [packed = true];
+  repeated string course_literal = 11;
 }
 
 // The canonical professor registry: one entry per real person, collapsing the
@@ -24,9 +49,11 @@ message ProfessorsData {
 }
 
 message ProfessorEntry {
-  // URL-safe public id derived from `name` (diacritics removed, kebab-case),
-  // unique across the registry. Used in shareable professor URLs.
-  string slug = 1;
+  // field 1 (slug) removed: the URL-safe public id is `slugifyProfessor(name)`,
+  // recomputed at decode time, so it is no longer stored (saves a high-entropy
+  // string per professor). Collision-disambiguation suffixes are NOT preserved.
+  reserved 1;
+  reserved "slug";
   // Canonical display name: the fullest variant (keeps accents and middle names).
   string name = 2;
   // Every RateMyProfessors legacyId merged into this person (combined reviews).
@@ -53,7 +80,10 @@ message RateMyProfessorsData {
 }
 
 message Professor {
-  string id = 1;
+  // field 1 (id) removed: the opaque RateMyProfessors GraphQL node id is unused at
+  // runtime (the ratings map keys on `legacy_id`), so it is no longer stored.
+  reserved 1;
+  reserved "id";
   optional uint32 legacy_id = 2;
   string name = 3;
   optional double rating = 4;
@@ -74,6 +104,10 @@ message Catalogue {
   repeated string course_codes = 1;
   repeated Course courses = 2;
   repeated Program programs = 3;
+  // Program-requirement code strings not present in `course_codes` (e.g.
+  // cross-year references). `ProgramRequirement.code_ref` values past
+  // `course_codes.length` index into this list. See ProgramRequirement.
+  repeated string extra_codes = 4;
 }
 
 message Course {
@@ -154,16 +188,23 @@ message DisciplineLevel {
 }
 
 message ProgramRequirement {
+  reserved 3, 4;
+  reserved "code", "credits";
   RequirementType type = 1;
   optional string title = 2;
-  optional string code = 3;
-  optional double credits = 4;
   repeated DisciplineLevel discipline_levels = 5;
   repeated string excluded_disciplines = 6;
   optional string faculty = 7;
   optional bool indented = 8;
   repeated ProgramRequirement options = 9;
   repeated uint32 levels = 10 [packed = true];
+  // 1-based reference to a course code. 0 = absent. Values in
+  // 1..=Catalogue.course_codes.length index `course_codes` (ref-1, 0-based);
+  // larger values index `Catalogue.extra_codes` (ref - course_codes.length - 1).
+  optional uint32 code_ref = 11;
+  // Credits scaled ×4 (all catalogue credits are exact quarter-multiples).
+  // Decoded as credits_x4 / 4.
+  optional uint32 credits_x4 = 12;
 }
 
 message Program {

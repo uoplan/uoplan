@@ -82,10 +82,10 @@ export function buildFeedbackIndex(
       }
       for (const section of course.sections) {
         const questionIds = data.questionSets[section.questionSet]?.questions ?? [];
-        const hasRegistered = section.registered.length > 0;
+        // `registered` is a single per-section invited count (0 = unavailable).
+        const registered = section.registered > 0 ? section.registered : null;
         const stats: FeedbackQuestionStat[] = questionIds.map((questionId, i) => {
           const scaled = section.averages[i] ?? 0;
-          const registered = hasRegistered ? (section.registered[i] ?? 0) : null;
           return {
             questionId,
             average: scaled > 0 ? scaled / 10 : null,
@@ -97,7 +97,7 @@ export function buildFeedbackIndex(
           termId: term.termId,
           section: section.section,
           professorName: data.professors[section.professor] ?? "",
-          registered: hasRegistered ? (section.registered[0] ?? null) : null,
+          registered,
           questions: stats,
         });
       }

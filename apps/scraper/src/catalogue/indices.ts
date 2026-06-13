@@ -78,12 +78,30 @@ export async function generateIndices(): Promise<void> {
 
   const newCourses = coursesOut.length - existingCourses.length;
   const newPrograms = programsOut.length - existingPrograms.length;
+
+  // Derive the discipline dictionary (distinct 3-letter subject prefixes) in
+  // first-occurrence order over the append-ordered course list. Stored in
+  // indices.json for the domain/state index space and used by the columnar
+  // indices.pb encoder.
+  const disciplinesOut: string[] = [];
+  const seenDisciplines = new Set<string>();
+  for (const code of coursesOut) {
+    const disc = /^([A-Za-z]+) /.exec(code)?.[1];
+    if (disc !== undefined && !seenDisciplines.has(disc)) {
+      seenDisciplines.add(disc);
+      disciplinesOut.push(disc);
+    }
+  }
   await fs.writeFile(
     indicesPath,
-    JSON.stringify({ courses: coursesOut, programs: programsOut }, null, 2),
+    JSON.stringify(
+      { courses: coursesOut, programs: programsOut, disciplines: disciplinesOut },
+      null,
+      2,
+    ),
     "utf-8",
   );
   console.log(
-    `\nWrote indices.json (${coursesOut.length} courses, ${programsOut.length} programs; +${newCourses} courses, +${newPrograms} programs appended from ${catalogueYears.length} catalogue file(s))`,
+    `\nWrote indices.json (${coursesOut.length} courses, ${programsOut.length} programs, ${disciplinesOut.length} disciplines; +${newCourses} courses, +${newPrograms} programs appended from ${catalogueYears.length} catalogue file(s))`,
   );
 }

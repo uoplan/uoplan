@@ -222,9 +222,10 @@ export async function buildFeedbackData(
         // scaled by 100 (0 when the question carries no ordinal average).
         const questionIdx: number[] = [];
         const responses: number[] = [];
-        const registered: number[] = [];
         const averages: number[] = [];
-        let anyRegistered = false;
+        // Invited count is uniform across the section's questions, so collapse it
+        // to a single value (0 = unavailable).
+        let registered = 0;
         for (const q of questions) {
           const hasOptions = q.options.length > 0;
           // The per-question average is the modern reports' reported mean
@@ -241,10 +242,7 @@ export async function buildFeedbackData(
           responses.push(responseCount);
           averages.push(scaledAverage);
           if (q.registeredStudents != null) {
-            anyRegistered = true;
-            registered.push(q.registeredStudents);
-          } else {
-            registered.push(0);
+            registered = q.registeredStudents;
           }
         }
         sections.push({
@@ -252,7 +250,7 @@ export async function buildFeedbackData(
           professor: professors.intern(section.professor),
           questionSet: internQuestionSet(questionIdx),
           responses,
-          registered: anyRegistered ? registered : [],
+          registered,
           averages,
         });
       }

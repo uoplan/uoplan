@@ -41,7 +41,17 @@ https://catalogue.uottawa.ca/archive/2024-2025/en/undergrad/bsc-cs/ → undergra
 
 The helper `urlToSlug(url)` in `packages/core/src/stateEncode.ts` performs this conversion. Programmes scraped via `apps/scraper/` have a `slug` field pre-computed; for old catalogue files without the field, the slug is derived on the fly.
 
-`apps/scraper/data/indices.json` stores slugs (not full URLs) in its `programs` array; the runtime app loads the protobuf form from `apps/web/public/data/indices.pb`.
+`apps/scraper/data/indices.json` stores slugs (not full URLs) in its `programs` array, the full course-code strings in `courses`, and the derived list of distinct 3-letter subject prefixes in `disciplines` (the discipline index space used by `encodeDiscipline`/`decodeDiscipline`). The runtime app loads the protobuf form from `apps/web/public/data/indices.pb`.
+
+### `indices.pb` columnar encoding
+
+The runtime `indices.pb` does **not** store course/program strings verbatim. `toProtoIndices`/`fromProtoIndices` ([`packages/core/src/dataTypes/indices.ts`](../packages/core/src/dataTypes/indices.ts)) encode it columnar to shrink the always-on-the-critical-path asset (≈186 KB → 60 KB raw, 23 KB → 17 KB brotli):
+
+- `disciplines` — distinct subject prefixes, derived from `courses` in first-occurrence order.
+- `course_discipline` + `course_number_delta` — each course is `DISC NNNN[suffix]`; the discipline is an index into `disciplines` and the number is **delta-encoded within each discipline** (zigzag `sint32`). Letter suffixes are stored sparsely (`course_suffix_pos`/`course_suffix_char`). Any code that does not round-trip the `DISC NNNN[suffix]` shape falls back to a literal (`course_literal_pos`/`course_literal`).
+- `program_prefix_len` + `program_suffix` — programs are front-coded (shared-prefix length + remainder) against the previous entry.
+
+The decoded `Indices.courses`/`programs` order (the state-encoding index space) is preserved exactly, so `?s=` links are unaffected. This is a build-time-only re-encoding; `indices.json` stays human-readable.
 
 ## Peeking term & year early
 

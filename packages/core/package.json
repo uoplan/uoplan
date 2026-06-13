@@ -14,6 +14,7 @@
     "./professorIdentity": "./src/professorIdentity.ts",
     "./gradeLookup": "./src/gradeLookup.ts",
     "./utils/courseUtils": "./src/utils/courseUtils.ts",
+    "./dataTypes/indices": "./src/dataTypes/indices.ts",
     "./dataTypes/protoDates": "./src/dataTypes/protoDates.ts"
   },
   "publishConfig": {
@@ -24,6 +25,7 @@
       "./professorIdentity": "./dist/professorIdentity.js",
       "./gradeLookup": "./dist/gradeLookup.js",
       "./utils/courseUtils": "./dist/utils/courseUtils.js",
+      "./dataTypes/indices": "./dist/dataTypes/indices.js",
       "./dataTypes/protoDates": "./dist/dataTypes/protoDates.js"
     },
     "main": "./dist/index.js",

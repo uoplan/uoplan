@@ -4,6 +4,7 @@ import {
   FeedbackProto,
   normalizeCourseCode,
   toProtoCatalogue,
+  toProtoIndices,
   toProtoSchedulesData,
 } from "@uoplan/core";
 import type { Catalogue } from "@uoplan/core";
@@ -90,11 +91,13 @@ describe("supporting dataset loaders", () => {
         DataProto.TermsData.encode({ terms: [{ termId: 2261, name: "Winter 2026" }] }),
       ),
       [dataAssetIds.indices]: encode(
-        DataProto.Indices.encode({
-          courses: ["CSI 2110"],
-          programs: ["Honours Computer Science"],
-          disciplines: ["CSI"],
-        }),
+        DataProto.Indices.encode(
+          toProtoIndices({
+            courses: ["CSI 2110"],
+            programs: ["Honours Computer Science"],
+            disciplines: ["CSI"],
+          }),
+        ),
       ),
       [dataAssetIds.disciplines]: encode(
         DataProto.DisciplinesData.encode({
@@ -105,7 +108,6 @@ describe("supporting dataset loaders", () => {
         DataProto.ProfessorsData.encode({
           professors: [
             {
-              slug: "alice-smith",
               name: "Alice Smith",
               legacyIds: [123],
               rating: 4.7,
@@ -118,9 +120,7 @@ describe("supporting dataset loaders", () => {
       [dataAssetIds.rateMyProfessors]: encode(
         DataProto.RateMyProfessorsData.encode({
           resultCount: 1,
-          professors: [
-            { id: "rmp-123", legacyId: 123, name: "Alice Smith", rating: 4.7, numRatings: 12 },
-          ],
+          professors: [{ legacyId: 123, name: "Alice Smith", rating: 4.7, numRatings: 12 }],
         }),
       ),
       [dataAssetIds.grades]: encode(
@@ -158,7 +158,7 @@ describe("supporting dataset loaders", () => {
                       professor: 0,
                       questionSet: 0,
                       responses: [10],
-                      registered: [50],
+                      registered: 50,
                       averages: [45],
                     },
                   ],
@@ -195,12 +195,10 @@ describe("supporting dataset loaders", () => {
     ]);
     await expect(loadRateMyProfessors(fetchBytes)).resolves.toEqual({
       resultCount: 1,
-      professors: [
-        { id: "rmp-123", legacyId: 123, name: "Alice Smith", rating: 4.7, numRatings: 12 },
-      ],
+      professors: [{ legacyId: 123, name: "Alice Smith", rating: 4.7, numRatings: 12 }],
     });
     await expect(loadProfessorRatings(fetchBytes)).resolves.toEqual({
-      "Alice Smith": { id: "rmp-123", legacyId: 123, rating: 4.7, numRatings: 12 },
+      "Alice Smith": { legacyId: 123, rating: 4.7, numRatings: 12 },
     });
     await expect(loadGrades(fetchBytes)).resolves.toMatchObject({
       courses: [
