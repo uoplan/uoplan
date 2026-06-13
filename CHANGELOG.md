@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.0.0-beta.33](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.32...uoplan-monorepo-v1.0.0-beta.33) (2026-06-13)
+
+
+### Features
+
+* add better personalization banner in sidebar ([f4ae2a8](https://github.com/uoplan/uoplan/commit/f4ae2a85e8348be10948f12a78285bd70f986a20))
+* add code coverage ([9295e31](https://github.com/uoplan/uoplan/commit/9295e31e7d0988881844c987943c286ec8b3ca8a))
+* add colour to home page ([856c95f](https://github.com/uoplan/uoplan/commit/856c95f56d68dfe1f4ad9006762ca4c22add03af))
+* add dropped count to grades ([1cb524e](https://github.com/uoplan/uoplan/commit/1cb524e9c2081c46643e9f82064db376e9ee2ef0))
+* add drops to grade viz, extend height of hover area ([1723fbf](https://github.com/uoplan/uoplan/commit/1723fbffe863e5006514bc38c05f7f4cae9b972f))
+* add filtering for explore course and prof pages ([687b241](https://github.com/uoplan/uoplan/commit/687b24125e567b9789e5170e5a0998d5f2400ab6))
+* add global course cart ([78bdd21](https://github.com/uoplan/uoplan/commit/78bdd21f85c5a7e96b2940b79fdedd5a9b9f1014))
+* add more consistent ratings for rmp and satisfaction ([e02569c](https://github.com/uoplan/uoplan/commit/e02569cdd1cbb2e92a84415cf2be8787afd98c1f))
+* add skeleton loaders to explore page ([fb21ffd](https://github.com/uoplan/uoplan/commit/fb21ffd01931e94df43725e10b654216c70f9657))
+* do not filter out terms from remaining profs ([bc9322c](https://github.com/uoplan/uoplan/commit/bc9322cdaecfd718f39aba80996a13bde2465b30))
+* improve add to basket button ([13ab53d](https://github.com/uoplan/uoplan/commit/13ab53d171e7991c5168e3ab12ff0bc6251817f8))
+* improve consistency and spacing of rating popovers ([b6c6a46](https://github.com/uoplan/uoplan/commit/b6c6a462a154f4ad85d9b47e11241ef91ad9fab1))
+* improve type safety with branded types ([6f0f755](https://github.com/uoplan/uoplan/commit/6f0f7550ed99a5150ce19f09d1917663ff554cad))
+* increase border radii ([9424344](https://github.com/uoplan/uoplan/commit/9424344cc79f742ae497ecfe5a53b0c177921751))
+* make layout more consistent ([a3078ca](https://github.com/uoplan/uoplan/commit/a3078ca317ee6d95acde030c8332767f8e4a85a0))
+* make ratings consistent on explore page ([53c9da2](https://github.com/uoplan/uoplan/commit/53c9da236cadd6f4351520d1f4fb8ce9c7899b1b))
+* reduce footprint of pb files by packing with soa ([cfc88a7](https://github.com/uoplan/uoplan/commit/cfc88a7acf2b8d06699bd6fcd4d3ad42c9be6d3d))
+* reduce size of proto data ([b166ac2](https://github.com/uoplan/uoplan/commit/b166ac286d6c0f016204d9500b351432697c576a))
+* use nicer colours ([5805d53](https://github.com/uoplan/uoplan/commit/5805d53422f30e77726c5cd5452040501dc02036))
+
+
+### Bug Fixes
+
+* ci ([d61c639](https://github.com/uoplan/uoplan/commit/d61c639d6fe8edac4e82f68a3d1ccd5b449b565f))
+* resolve race condition with option selections ([edf4755](https://github.com/uoplan/uoplan/commit/edf47554cbae9669c2512d85a7ad9982a59e3201))
+* show proper text for no program selected ([11b3ebc](https://github.com/uoplan/uoplan/commit/11b3ebcafa62b081103b3751b3506a2b82412081))
+* stay on page when changing trends options ([fdc5963](https://github.com/uoplan/uoplan/commit/fdc5963dd03957876df726921e9b3dd160555ad6))
+* sync lockfile after removing worker esbuild dep ([c18344c](https://github.com/uoplan/uoplan/commit/c18344ceb07dd42e0be44e137859a1576223e1b9))
+* use proper back button labels and handling ([9a5545c](https://github.com/uoplan/uoplan/commit/9a5545c7d4f94f7370e8cdda83b759f8f7afff82))
+* use proper colour for switch ring ([1e248cc](https://github.com/uoplan/uoplan/commit/1e248cca68eb5046373cceffef6966c3ed3b2dcd))
+* various mobile bug fixes ([4020e66](https://github.com/uoplan/uoplan/commit/4020e660cdb34e6a2eec3e7b205c64a7cf5e2dba))
+* **web:** shared BottomDrawer fixes full-width mobile sheet + bg leak ([40f2e55](https://github.com/uoplan/uoplan/commit/40f2e5521bf66340b43fee614d32f5263c6712e6))
+
 ## [1.0.0-beta.32](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.31...uoplan-monorepo-v1.0.0-beta.32) (2026-06-10)
 
 
