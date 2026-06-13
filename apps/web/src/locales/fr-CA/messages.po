@@ -527,6 +527,14 @@ msgstr "{passing} % de reussite · {aPlus} % A+"
 msgid "calendar.grade.distribution"
 msgstr "Distribution des notes"
 
+#: apps/web/src/components/calendar/GradeDistributionViz.tsx:37
+msgid "calendar.grade.dropLabel"
+msgstr "Abandon"
+
+#: apps/web/src/components/calendar/GradeDistributionViz.tsx:38
+msgid "calendar.grade.failLabel"
+msgstr "Échec"
+
 msgid "calendar.grade.histogramTooltip"
 msgstr "{grade} : {count} etudiant{count, plural, one {} other {s}} ({percent} %)"
 
@@ -2567,6 +2575,10 @@ msgstr "Passage moyen"
 #: scripts/i18n/dynamic-keys.mjs
 msgid "trends.band.nearExcellent"
 msgstr "Presque excellent"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "trends.band.withdrew"
+msgstr "Abandon"
 
 #: apps/web/src/components/trends/DisciplineBarCard.tsx:30
 msgid "trends.chart.disciplineBar.desc"

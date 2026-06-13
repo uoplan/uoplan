@@ -40,15 +40,19 @@ describe("gradeDistribution", () => {
     expect(distributionGpa({ F: 5 })).toBeCloseTo(0, 5);
   });
 
-  it("excludes DR (withdrawals) from GPA and from the visualization", () => {
-    // DR is a withdrawal bucket carried in the data but never an academic outcome:
-    // it must not move the GPA nor appear in any viz bucket / total.
+  it("keeps DR (withdrawals) out of GPA but surfaces it as a neutral viz bucket", () => {
+    // DR is a withdrawal: it must never move the GPA, and in the visualization it is a
+    // neutral "Withdrew" bucket — counted in the overall total but excluded from the
+    // graded total that drives passing% / A+%.
     expect(distributionGpa({ "A+": 5, DR: 100 })).toBeCloseTo(10, 5);
     expect(distributionGpa({ DR: 5 })).toBeNull();
 
     const viz = normalizeGradeVizDistribution({ A: 4, DR: 6 });
-    expect(viz?.total).toBe(4); // DR ignored, only A counted
-    expect(viz?.buckets.reduce((sum, b) => sum + b.count, 0)).toBe(4);
+    expect(viz?.total).toBe(10); // A + DR
+    expect(viz?.gradedTotal).toBe(4); // DR excluded from graded mass
+    expect(viz?.buckets.find((b) => b.id === "grey")?.count).toBe(6); // DR -> Withdrew bucket
+    expect(viz?.buckets.find((b) => b.id === "green")?.count).toBe(4); // A
+    expect(viz?.passingPercent).toBeCloseTo(100, 5); // 4 graded, 0 failing
   });
 
   it("aggregateCourseDistribution sums section distributions", () => {
@@ -88,9 +92,11 @@ describe("gradeDistribution", () => {
     if (!viz) return;
 
     expect(viz.total).toBe(18);
+    expect(viz.gradedTotal).toBe(18); // no withdrawals
     expect(viz.buckets.find((b) => b.id === "red")?.count).toBe(4); // F + EIN + NS
     expect(viz.buckets.find((b) => b.id === "blue")?.count).toBe(4); // B + S
     expect(viz.buckets.find((b) => b.id === "green")?.count).toBe(5); // A + P
+    expect(viz.buckets.find((b) => b.id === "grey")?.count).toBe(0); // no DR
     expect(viz.passingPercent).toBeCloseTo((14 / 18) * 100, 5);
   });
 

@@ -1,6 +1,6 @@
 import "./gradeDistribution.css";
 import { Stack, Text, Tooltip } from "@mantine/core";
-import type { GradeVizData } from "@uoplan/core";
+import type { GradeVizBucketId, GradeVizData } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { GRADE_BAND_TOKEN } from "../../lib/trends/palette";
 
@@ -11,15 +11,43 @@ const HIST_DIMS = {
 
 type GradeHistogramVariant = keyof typeof HIST_DIMS;
 
+/** Letter-grade failures merged into the single "Fail" bar (NS is shown via the S/NS bar). */
+const FAIL_GRADES = ["F", "E", "ABS", "EIN"] as const;
+/** Individual letter bars shown after the combined "Fail" bar (low → high). */
+const LETTER_BAR_ORDER = ["D", "D+", "C", "C+", "B", "B+", "A-", "A", "A+"] as const;
+
+interface DisplayBar {
+  key: string;
+  label: string;
+  count: number;
+  bucketId: GradeVizBucketId;
+}
+
 function buildHistogramModel(gradeViz: GradeVizData) {
-  const sCount = gradeViz.histogram.find((entry) => entry.grade === "S")?.count ?? 0;
-  const nsCount = gradeViz.histogram.find((entry) => entry.grade === "NS")?.count ?? 0;
+  const byGrade = new Map(gradeViz.histogram.map((entry) => [entry.grade, entry]));
+  const countOf = (grade: string) => byGrade.get(grade)?.count ?? 0;
+
+  const sCount = countOf("S");
+  const nsCount = countOf("NS");
   const snsTotal = sCount + nsCount;
-  const histogramEntries = gradeViz.histogram.filter(
-    (entry) => entry.grade !== "P" && entry.grade !== "S",
-  );
-  const maxHistogramCount = Math.max(...histogramEntries.map((h) => h.count), 1);
-  return { sCount, nsCount, snsTotal, histogramEntries, maxHistogramCount };
+
+  const failCount = FAIL_GRADES.reduce((sum, grade) => sum + countOf(grade), 0);
+
+  const displayBars: DisplayBar[] = [
+    { key: "DR", label: tr("calendar.grade.dropLabel"), count: countOf("DR"), bucketId: "grey" },
+    { key: "FAIL", label: tr("calendar.grade.failLabel"), count: failCount, bucketId: "red" },
+    ...LETTER_BAR_ORDER.map(
+      (grade): DisplayBar => ({
+        key: grade,
+        label: grade,
+        count: countOf(grade),
+        bucketId: byGrade.get(grade)?.bucketId ?? "red",
+      }),
+    ),
+  ];
+
+  const maxHistogramCount = Math.max(...displayBars.map((bar) => bar.count), 1);
+  return { sCount, nsCount, snsTotal, displayBars, maxHistogramCount };
 }
 
 export function GradeDistributionPassingSummary({
@@ -32,7 +60,8 @@ export function GradeDistributionPassingSummary({
   compact?: boolean;
 }) {
   const aPlusCount = gradeViz.histogram.find((entry) => entry.grade === "A+")?.count ?? 0;
-  const aPlusPercent = Math.round((aPlusCount / gradeViz.total) * 100);
+  const aPlusPercent =
+    gradeViz.gradedTotal > 0 ? Math.round((aPlusCount / gradeViz.gradedTotal) * 100) : 0;
   return (
     <Text
       size={compact ? "xs" : "sm"}
@@ -49,11 +78,9 @@ export function GradeDistributionPassingSummary({
   );
 }
 
-/** Bar heights (%) for the grayed-out "no grade data" placeholder. 15 bars to
- * match the real compact histogram (14 grade letters + 1 S/NS bar). */
-const HISTOGRAM_PLACEHOLDER_BARS = [
-  30, 52, 78, 64, 44, 28, 40, 58, 70, 48, 34, 62, 50, 38, 56,
-] as const;
+/** Bar heights (%) for the grayed-out "no grade data" placeholder. 12 bars to
+ * match the real compact histogram (Withdrew + Fail + 9 letter bars + 1 S/NS bar). */
+const HISTOGRAM_PLACEHOLDER_BARS = [34, 30, 52, 78, 64, 44, 58, 70, 48, 62, 38, 56] as const;
 
 /** Grayed-out stand-in shown in place of {@link GradeDistributionHistogram} when
  * a professor / term / section has no grade data. Mirrors the real histogram's
@@ -121,7 +148,7 @@ export function GradeDistributionHistogram({
   showStudentCount?: boolean;
 }) {
   const dims = HIST_DIMS[variant];
-  const { sCount, nsCount, snsTotal, histogramEntries, maxHistogramCount } =
+  const { sCount, nsCount, snsTotal, displayBars, maxHistogramCount } =
     buildHistogramModel(gradeViz);
 
   const histClass = [
@@ -144,14 +171,14 @@ export function GradeDistributionHistogram({
       }}
       aria-hidden
     >
-      {histogramEntries.map((entry) => {
-        const percent = (entry.count / gradeViz.total) * 100;
+      {displayBars.map((bar) => {
+        const percent = gradeViz.total > 0 ? (bar.count / gradeViz.total) * 100 : 0;
         return (
           <Tooltip
-            key={entry.grade}
+            key={bar.key}
             label={tr("calendar.grade.histogramTooltip", {
-              grade: entry.grade,
-              count: entry.count,
+              grade: bar.label,
+              count: bar.count,
               percent: Math.round(percent),
             })}
             withArrow
@@ -162,10 +189,10 @@ export function GradeDistributionHistogram({
               <div
                 className="cal-grade-histogram-bar"
                 style={{
-                  height: `${Math.max(4, (entry.count / maxHistogramCount) * dims.maxBarPx)}px`,
+                  height: `${Math.max(4, (bar.count / maxHistogramCount) * dims.maxBarPx)}px`,
                   backgroundColor:
-                    entry.count > 0
-                      ? GRADE_BAND_TOKEN[entry.bucketId]
+                    bar.count > 0
+                      ? GRADE_BAND_TOKEN[bar.bucketId]
                       : "var(--app-translucent-strong)",
                 }}
               />
@@ -176,7 +203,7 @@ export function GradeDistributionHistogram({
                   ta="center"
                   className="cal-grade-histogram-label"
                 >
-                  {entry.grade}
+                  {bar.label}
                 </Text>
               ) : null}
             </div>
