@@ -75,6 +75,13 @@ describe("committed .pb assets decode with current proto contract", () => {
       DataProto.DisciplinesData.decode(read("disciplines.pb")),
     );
     expect(disciplines.disciplines.length).toBeGreaterThan(0);
+    // The faculty registry must be populated and every discipline's facultyId (when
+    // present) must resolve to a registered faculty.
+    expect(disciplines.faculties.length).toBeGreaterThan(0);
+    const facultyIds = new Set(disciplines.faculties.map((f) => f.id));
+    const linked = disciplines.disciplines.filter((d) => d.facultyId);
+    expect(linked.length).toBeGreaterThan(0);
+    expect(linked.every((d) => facultyIds.has(d.facultyId!))).toBe(true);
   });
 
   it("decodes grades when present", () => {

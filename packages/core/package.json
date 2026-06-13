@@ -11,6 +11,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./src/generation/types": "./src/generation/types.ts",
+    "./facultyIdentity": "./src/facultyIdentity.ts",
     "./professorIdentity": "./src/professorIdentity.ts",
     "./gradeLookup": "./src/gradeLookup.ts",
     "./utils/courseUtils": "./src/utils/courseUtils.ts",
@@ -23,6 +24,7 @@
     "exports": {
       ".": "./dist/index.js",
       "./src/generation/types": "./dist/generation/types.js",
+      "./facultyIdentity": "./dist/facultyIdentity.js",
       "./professorIdentity": "./dist/professorIdentity.js",
       "./gradeLookup": "./dist/gradeLookup.js",
       "./utils/courseUtils": "./dist/utils/courseUtils.js",

@@ -90,14 +90,26 @@ message Professor {
   optional uint32 num_ratings = 5;
 }
 
-message Discipline {
-  string code = 1;
+message Faculty {
+  // field 1 (id) removed: the faculty slug is derivable from `name`
+  // (see facultyIdFromName), so it is recomputed at decode time rather than stored.
+  reserved 1;
+  reserved "id";
   string name = 2;
   string name_fr = 3;
 }
 
+message Discipline {
+  string code = 1;
+  string name = 2;
+  string name_fr = 3;
+  // 1-based index into DisciplinesData.faculties; 0/absent = unknown faculty.
+  optional uint32 faculty_ref = 4;
+}
+
 message DisciplinesData {
   repeated Discipline disciplines = 1;
+  repeated Faculty faculties = 2;
 }
 
 message Catalogue {

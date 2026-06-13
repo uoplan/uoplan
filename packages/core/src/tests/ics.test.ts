@@ -54,6 +54,10 @@ describe("buildScheduleIcs", () => {
       getCoursesByDiscipline: () => [],
       getAllCourses: () => [],
       getAllSchedules: () => [],
+      getFaculty: () => {},
+      getFacultyForDiscipline: () => {},
+      getDisciplinesByFaculty: () => [],
+      getCoursesByFaculty: () => [],
     };
 
     const ics = buildScheduleIcs({

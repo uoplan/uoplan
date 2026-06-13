@@ -33,6 +33,10 @@ function emptyScheduleCache(): DataCache {
     getCoursesByDiscipline: () => [],
     getAllCourses: () => [],
     getAllSchedules: () => [],
+    getFaculty: () => {},
+    getFacultyForDiscipline: () => {},
+    getDisciplinesByFaculty: () => [],
+    getCoursesByFaculty: () => [],
   };
 }
 
@@ -77,6 +81,10 @@ function cacheWithSchedule(
     getCoursesByDiscipline: () => [],
     getAllCourses: () => [],
     getAllSchedules: () => [],
+    getFaculty: () => {},
+    getFacultyForDiscipline: () => {},
+    getDisciplinesByFaculty: () => [],
+    getCoursesByFaculty: () => [],
   };
 }
 

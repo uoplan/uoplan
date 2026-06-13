@@ -5,6 +5,8 @@ import {
   normalizeCourseCode,
   removeMergedCoursesSupersededByAliases,
 } from "../dataCache";
+import { unsafeBrand } from "../brand";
+import type { FacultyId } from "../brand";
 import type { Catalogue, SchedulesData } from "../dataTypes";
 
 const minimalCatalogue: Catalogue = {
@@ -119,6 +121,53 @@ describe("buildDataCache", () => {
   it("getCoursesByDiscipline returns empty for unknown discipline", () => {
     const xyz = cache.getCoursesByDiscipline("XYZ");
     expect(xyz).toEqual([]);
+  });
+});
+
+describe("buildDataCache faculty helpers", () => {
+  const disciplinesData = {
+    faculties: [
+      { id: unsafeBrand<FacultyId>("engineering"), name: "Faculty of Engineering" },
+      { id: unsafeBrand<FacultyId>("arts"), name: "Faculty of Arts", nameFr: "Faculté des arts" },
+    ],
+    disciplines: [
+      { code: "AMM", name: "Advanced Materials", facultyId: unsafeBrand<FacultyId>("engineering") },
+      { code: "ENG", name: "English", facultyId: unsafeBrand<FacultyId>("arts") },
+    ],
+  };
+  const cache = buildDataCache(minimalCatalogue, minimalSchedules, disciplinesData);
+
+  it("getFaculty resolves a known faculty id", () => {
+    expect(cache.getFaculty("arts")?.name).toBe("Faculty of Arts");
+    expect(cache.getFaculty("unknown")).toBeUndefined();
+  });
+
+  it("getFacultyForDiscipline maps a discipline code to its faculty", () => {
+    expect(cache.getFacultyForDiscipline("ENG")?.id).toBe("arts");
+    expect(cache.getFacultyForDiscipline("eng")?.id).toBe("arts");
+    expect(cache.getFacultyForDiscipline("XYZ")).toBeUndefined();
+  });
+
+  it("getDisciplinesByFaculty lists the faculty's disciplines", () => {
+    expect(cache.getDisciplinesByFaculty("engineering").map((d) => d.code)).toEqual(["AMM"]);
+    expect(cache.getDisciplinesByFaculty("unknown")).toEqual([]);
+  });
+
+  it("getCoursesByFaculty flattens disciplines to their courses", () => {
+    const eng = cache.getCoursesByFaculty("engineering");
+    expect(eng.map((c) => c.code).sort()).toEqual([
+      normalizeCourseCode("AMM 5101"),
+      normalizeCourseCode("AMM 5168"),
+    ]);
+    const arts = cache.getCoursesByFaculty("arts");
+    expect(arts.every((c) => c.code.startsWith("ENG"))).toBe(true);
+  });
+
+  it("faculty helpers degrade to empty without disciplines data", () => {
+    const bare = buildDataCache(minimalCatalogue, minimalSchedules);
+    expect(bare.getFaculty("arts")).toBeUndefined();
+    expect(bare.getFacultyForDiscipline("ENG")).toBeUndefined();
+    expect(bare.getCoursesByFaculty("engineering")).toEqual([]);
   });
 });
 

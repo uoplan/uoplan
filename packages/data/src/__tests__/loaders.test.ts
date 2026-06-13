@@ -102,6 +102,7 @@ describe("supporting dataset loaders", () => {
       [dataAssetIds.disciplines]: encode(
         DataProto.DisciplinesData.encode({
           disciplines: [{ code: "CSI", name: "Computer Science", nameFr: "Informatique" }],
+          faculties: [],
         }),
       ),
       [dataAssetIds.professors]: encode(
@@ -182,6 +183,7 @@ describe("supporting dataset loaders", () => {
     });
     await expect(loadDisciplines(fetchBytes)).resolves.toEqual({
       disciplines: [{ code: "CSI", name: "Computer Science", nameFr: "Informatique" }],
+      faculties: [],
     });
     await expect(loadProfessors(fetchBytes)).resolves.toEqual([
       {

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ExploreDisciplinePage } from "../../../components/explore/ExploreDisciplinePage";
-import { useDisciplines, useProfessorRatings } from "../../../store/hooks";
+import { useDisciplines, useFaculties, useProfessorRatings } from "../../../store/hooks";
 
 export const Route = createFileRoute("/explore/discipline/$discipline")({
   head: ({ params }) => ({ meta: [{ title: params.discipline.toUpperCase() }] }),
@@ -10,6 +10,7 @@ export const Route = createFileRoute("/explore/discipline/$discipline")({
 function ExploreDisciplineRoute() {
   const professorRatings = useProfessorRatings();
   const disciplines = useDisciplines();
+  const faculties = useFaculties();
 
   const { discipline } = Route.useParams();
 
@@ -17,6 +18,7 @@ function ExploreDisciplineRoute() {
     <ExploreDisciplinePage
       disciplineCode={discipline}
       disciplines={disciplines}
+      faculties={faculties}
       professorRatings={professorRatings}
     />
   );

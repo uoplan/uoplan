@@ -51,3 +51,6 @@ export type InstructorNameKey = Brand<string, "InstructorNameKey">;
 
 /** Canonical professor display name (fullest variant; the name rendered in the UI). */
 export type CanonicalProfessorName = Brand<string, "CanonicalProfessorName">;
+
+/** Stable faculty slug (kebab-case, no diacritics, role-prefix stripped) — produced by `facultyIdFromName`. */
+export type FacultyId = Brand<string, "FacultyId">;

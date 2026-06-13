@@ -1,6 +1,7 @@
 import type { ProgramRequirement } from "../dataTypes";
 import type { DataCache } from "../dataCache";
 import { getDiscipline } from "../utils/courseUtils";
+import { facultyIdFromName } from "../facultyIdentity";
 function extractCourseCodes(req: ProgramRequirement): string[] {
   const codes: string[] = [];
   if (req.code) codes.push(req.code);
@@ -23,6 +24,19 @@ function matchesLevels(code: string, levels: number[]): boolean {
   if (!match) return false;
   const num = parseInt(match[0].replaceAll(/\D/g, "").slice(0, 4), 10);
   return levels.some((l) => num >= l && num < l + 1000);
+}
+
+/**
+ * Courses belonging to a requirement's faculty, or null when the faculty can't be
+ * resolved (no faculty string, no disciplines data loaded, or an unknown name) so
+ * the caller can fall back to the broad elective pool.
+ */
+function facultyCandidateCodes(cache: DataCache, faculty: string | undefined) {
+  if (!faculty) return null;
+  const facultyId = facultyIdFromName(faculty);
+  if (!facultyId) return null;
+  const courses = cache.getCoursesByFaculty(facultyId);
+  return courses.length > 0 ? courses : null;
 }
 
 export function resolveDisciplineElective(
@@ -58,7 +72,13 @@ export function resolveElectiveCandidates(
       const explicit = extractCourseCodes(req);
       if (explicit.length > 0) return applyExcludedDisciplines(explicit, req.excluded_disciplines);
       const creditsNeeded = credits ?? req.credits ?? 3;
-      const allCourses = cache.getAllCourses();
+      // A faculty_elective with a resolvable faculty is restricted to the courses
+      // whose discipline belongs to that faculty. When the faculty can't be
+      // resolved (no disciplines data / unknown name) we fall back to the broad
+      // pool below, preserving the previous behaviour.
+      const facultyCourses =
+        req.type === "faculty_elective" ? facultyCandidateCodes(cache, req.faculty) : null;
+      const allCourses = facultyCourses ?? cache.getAllCourses();
       let candidates = allCourses.filter((c) => c.credits <= creditsNeeded).map((c) => c.code);
       if (req.levels && req.levels.length > 0) {
         candidates = candidates.filter((code) => matchesLevels(code, req.levels!));

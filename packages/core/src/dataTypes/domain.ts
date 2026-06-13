@@ -1,4 +1,4 @@
-import type { NormalizedCourseCode } from "../brand";
+import type { FacultyId, NormalizedCourseCode } from "../brand";
 
 export type CoursePrereqDisciplineLevel = {
   discipline: string;
@@ -197,12 +197,20 @@ export type RateMyProfessorsData = {
   professors: Professor[];
 };
 
-export type Discipline = {
-  code: string;
+export type Faculty = {
+  id: FacultyId;
   name: string;
   nameFr?: string;
 };
 
+export type Discipline = {
+  code: string;
+  name: string;
+  nameFr?: string;
+  facultyId?: FacultyId;
+};
+
 export type DisciplinesData = {
   disciplines: Discipline[];
+  faculties: Faculty[];
 };

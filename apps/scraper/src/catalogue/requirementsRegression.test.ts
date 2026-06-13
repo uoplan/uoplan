@@ -12,10 +12,11 @@ import { canonicalizeDisciplineLevels } from "./regressionTestHelpers.ts";
  * distinct, idempotent elective-family requirement title in the committed
  * catalogue (1,369 entries). Each node is already canonicalized with the
  * additive `levels` field dropped, so the new parser can be proven additive: it
- * may attach MORE structure (e.g. `levels` level constraints) but must never
- * change the type, drop a course code, or alter the credit value the old parser
- * produced. The fixture is intentionally frozen — it is NOT regenerated on
- * re-scrape.
+ * may attach MORE structure (e.g. `levels` level constraints or a `faculty`
+ * tag) but must never change the type, drop a course code, or alter the credit
+ * value the old parser produced. The fixture is intentionally frozen — it is
+ * NOT regenerated on re-scrape, so both sides of the diff are re-canonicalized
+ * to neutralise additive-only fields.
  */
 
 type OracleEntry = {
@@ -26,15 +27,16 @@ type OracleEntry = {
 const corpus = oracle as OracleEntry[];
 
 /**
- * Canonicalize a requirement for structural comparison, dropping the additive
- * `levels` field so newly-captured level constraints register as "identical".
+ * Canonicalize a requirement for structural comparison, dropping additive fields
+ * (`levels` level constraints and the `faculty` tag) so newly-captured structure
+ * registers as "identical". Applied to BOTH sides of the diff so the frozen
+ * oracle (which baked in the old parser's `faculty` values) compares equal.
  */
 function canonicalize(node: ProgramRequirement | null | undefined): unknown {
   if (node == null || typeof node !== "object") return node;
   const out: Record<string, unknown> = { type: node.type };
   if (node.code) out.code = node.code;
   if (node.credits != null) out.credits = node.credits;
-  if (node.faculty) out.faculty = node.faculty;
   if (node.excluded_disciplines?.length)
     out.excluded_disciplines = [...node.excluded_disciplines].sort();
   const disciplineLevels = canonicalizeDisciplineLevels(node.disciplineLevels);
@@ -61,7 +63,7 @@ describe("program requirement parser regression (frozen corpus)", () => {
     const changed: Array<{ title: string }> = [];
     for (const entry of corpus) {
       const next = parseElectiveRequirement(entry.title, entry.credits ?? undefined);
-      if (JSON.stringify(canonicalize(next)) !== JSON.stringify(entry.node)) {
+      if (JSON.stringify(canonicalize(next)) !== JSON.stringify(canonicalize(entry.node))) {
         changed.push({ title: entry.title });
       }
     }
