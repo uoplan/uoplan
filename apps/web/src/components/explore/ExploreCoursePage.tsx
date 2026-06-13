@@ -4,7 +4,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { m } from "framer-motion";
 import { IconClock } from "@tabler/icons-react";
 import type { ProfessorRatingsMap } from "@uoplan/core";
-import { normalizeCourseCode } from "@uoplan/core";
+import { normalizeCourseCode, normalizeProfessorName } from "@uoplan/core";
 import { useShallow } from "zustand/react/shallow";
 import { tr, useTr } from "../../i18n";
 import { useAppStore } from "../../store/appStore";
@@ -31,6 +31,7 @@ import {
 } from "./ExploreProfessorGradesLayout";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { useCourseAliasResolution } from "../../hooks/useCourseAliasResolution";
+import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
 import { usePublishBasketTarget } from "./exploreBasketTargetContext";
 import {
   ExploreAccordion,
@@ -73,10 +74,12 @@ function TermPillChip({ label, hidden = false }: { label?: string; hidden?: bool
 function CourseProfessorItem({
   group,
   professorRatings,
+  sentiment,
   linkSearch,
 }: {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
+  sentiment?: number | null;
   linkSearch?: ExploreSearchParams;
 }) {
   return (
@@ -85,6 +88,7 @@ function CourseProfessorItem({
         <ExploreProfessorSummaryBar
           group={group}
           professorRatings={professorRatings}
+          sentiment={sentiment}
           stopPropagation
           linkSearch={linkSearch}
         />
@@ -118,6 +122,10 @@ export function ExploreCoursePage({
   const registry = useAppStore(useShallow((s) => s.professors));
 
   const { filters, sentiment, requirementCandidateSet, linkSearch } = useExploreDetailFilters();
+
+  // Per-professor course-feedback satisfaction (1-5) for the RatingBadge row, loaded
+  // lazily from the feedback dataset (independent of the active feedback filter).
+  const { professorByName } = useScheduleSentiment();
 
   const { urlNorm, componentId } = useCourseAliasResolution(urlCourseParam, aliasGroups);
 
@@ -301,6 +309,7 @@ export function ExploreCoursePage({
                   key={g.groupId}
                   group={g}
                   professorRatings={professorRatings}
+                  sentiment={professorByName?.get(normalizeProfessorName(g.displayName)) ?? null}
                   linkSearch={linkSearch}
                 />
               ))}

@@ -12,12 +12,8 @@ import {
 } from "@mantine/core";
 import { useMemo } from "react";
 import type { ReactNode } from "react";
-import type { CanonicalProfessorName, GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
-import {
-  hasProfessorRatings,
-  normalizeGradeVizDistribution,
-  normalizeProfessorName,
-} from "@uoplan/core";
+import type { GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
+import { normalizeGradeVizDistribution } from "@uoplan/core";
 import {
   GradeDistributionHistogram,
   GradeDistributionHistogramPlaceholder,
@@ -35,6 +31,7 @@ import type {
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { professorRouteParam } from "../../lib/explore/professorRoute";
+import { ProfessorRatingBadges } from "../shared/RatingBadge";
 import { useAppStore } from "../../store/appStore";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
@@ -86,33 +83,14 @@ function ExploreSummaryWithGradeViz({
   );
 }
 
-function professorRatingLine(
-  displayName: CanonicalProfessorName,
-  professorRatings: ProfessorRatingsMap | null,
-) {
-  if (!professorRatings) return null;
-  const entry = professorRatings[normalizeProfessorName(displayName)];
-  if (!entry) return null;
-  if (!hasProfessorRatings(entry)) {
-    return (
-      <Text component="span" size="xs" c="dimmed" style={{ whiteSpace: "nowrap" }}>
-        {tr("search.noRating")}
-      </Text>
-    );
-  }
-  return (
-    <Text component="span" size="xs" c="dimmed" style={{ whiteSpace: "nowrap" }}>
-      {entry.rating.toFixed(1)} · {entry.numRatings} ratings
-    </Text>
-  );
-}
-
 type ExploreProfessorSummaryBarProps = {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
   stopPropagation?: boolean;
   /** Search params carried into the professor link so active filters persist (defaults to none). */
   linkSearch?: ExploreSearchParams;
+  /** Overall course-feedback satisfaction (1-5) for this professor, when available. */
+  sentiment?: number | null;
 };
 
 export function ExploreProfessorSummaryBar({
@@ -120,6 +98,7 @@ export function ExploreProfessorSummaryBar({
   professorRatings,
   stopPropagation = false,
   linkSearch,
+  sentiment,
 }: ExploreProfessorSummaryBarProps) {
   const combinedViz = useMemo(
     () =>
@@ -131,13 +110,20 @@ export function ExploreProfessorSummaryBar({
 
   const professorRatingsLoading = useAppStore((s) => s.professorRatingsLoading);
 
-  let ratingLine: ReactNode = null;
+  // ⭐ RateMyProf + 💬 satisfaction badges — the same row the search-result cards use.
+  let ratingBadges: ReactNode = null;
   if (!group.unassigned) {
-    if (professorRatings) {
-      ratingLine = professorRatingLine(group.displayName, professorRatings);
-    } else if (professorRatingsLoading) {
-      ratingLine = <Skeleton height={12} width={90} radius="sm" aria-hidden />;
-    }
+    ratingBadges =
+      !professorRatings && professorRatingsLoading ? (
+        <Skeleton height={18} width={58} radius="sm" aria-hidden />
+      ) : (
+        <ProfessorRatingBadges
+          displayName={group.displayName}
+          professorRatings={professorRatings}
+          legacyId={group.legacyId}
+          sentiment={sentiment}
+        />
+      );
   }
 
   return (
@@ -191,7 +177,7 @@ export function ExploreProfessorSummaryBar({
             {group.displayName}
           </Link>
         )}
-        {ratingLine}
+        {ratingBadges}
       </ExploreSummaryWithGradeViz>
     </Box>
   );
