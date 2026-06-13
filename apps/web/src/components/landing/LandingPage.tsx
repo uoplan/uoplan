@@ -77,13 +77,13 @@ export function LandingPage() {
     <m.div
       animate={{ opacity: isLangTransitioning ? 0 : 1 }}
       transition={{ duration: 0.13 }}
-      style={{ width: "100%", minHeight: "100vh" }}
+      style={{ width: "100%", minHeight: "100dvh" }}
     >
       <Box
         component="main"
         style={{
           position: "relative",
-          minHeight: "100vh",
+          minHeight: "100dvh",
           paddingBlock: 24,
           backgroundColor: "var(--app-bg)",
           boxSizing: "border-box",

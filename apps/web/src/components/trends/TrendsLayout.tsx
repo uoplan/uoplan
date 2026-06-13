@@ -51,7 +51,7 @@ export function TrendsLayout() {
       component="main"
       style={{
         position: "relative",
-        minHeight: "100vh",
+        minHeight: "100dvh",
         paddingTop: isMobile ? 16 : 24,
         paddingBottom: isMobile ? "calc(88px + env(safe-area-inset-bottom))" : 24,
         backgroundColor: "var(--app-bg)",

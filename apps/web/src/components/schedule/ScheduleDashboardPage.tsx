@@ -154,7 +154,7 @@ export function ScheduleDashboardPage() {
     <Box
       component="main"
       style={{
-        minHeight: "100vh",
+        minHeight: "100dvh",
         backgroundColor: "var(--app-bg)",
         boxSizing: "border-box",
         display: "flex",
