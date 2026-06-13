@@ -41,6 +41,37 @@ import {
   ExploreFullBleed,
 } from "./ExploreEntityLayout";
 
+/**
+ * A single schedule-term chip (clock icon + term label) shown under the course
+ * title. Rendered `hidden` (occupying its normal height but invisible) to reserve
+ * the pill row's vertical space when a course has no schedule terms yet / at all,
+ * so the row never shifts the content below it when the terms load in.
+ */
+function TermPillChip({ label, hidden = false }: { label?: string; hidden?: boolean }) {
+  return (
+    <Group
+      gap={6}
+      wrap="nowrap"
+      px={12}
+      py={6}
+      className={hidden ? undefined : "soft-lift"}
+      aria-hidden={hidden || undefined}
+      style={{
+        borderRadius: 9999,
+        border: "var(--app-border-width) solid var(--app-border-strong)",
+        backgroundColor: "var(--app-surface)",
+        color: "var(--app-text)",
+        fontWeight: 600,
+        fontSize: "var(--mantine-font-size-sm)",
+        visibility: hidden ? "hidden" : undefined,
+      }}
+    >
+      <IconClock size={14} stroke={1.7} />
+      {hidden ? "\u00A0" : label}
+    </Group>
+  );
+}
+
 function CourseProfessorItem({
   group,
   professorRatings,
@@ -249,9 +280,9 @@ export function ExploreCoursePage({
                 ))}
               </Text>
             ) : null}
-            {scheduleTerms.length > 0 ? (
-              <Group gap={8} mt={12}>
-                {scheduleTerms.map((termId) => (
+            <Group gap={8} mt={12}>
+              {scheduleTerms.length > 0 ? (
+                scheduleTerms.map((termId) => (
                   <Link
                     key={termId}
                     to="/explore/course/$course/schedule"
@@ -260,28 +291,13 @@ export function ExploreCoursePage({
                     state={{ back: courseEntry } as never}
                     style={{ textDecoration: "none" }}
                   >
-                    <Group
-                      gap={6}
-                      wrap="nowrap"
-                      px={12}
-                      py={6}
-                      className="soft-lift"
-                      style={{
-                        borderRadius: 9999,
-                        border: "var(--app-border-width) solid var(--app-border-strong)",
-                        backgroundColor: "var(--app-surface)",
-                        color: "var(--app-text)",
-                        fontWeight: 600,
-                        fontSize: "var(--mantine-font-size-sm)",
-                      }}
-                    >
-                      <IconClock size={14} stroke={1.7} />
-                      {formatTermLabel(termId)}
-                    </Group>
+                    <TermPillChip label={formatTermLabel(termId)} />
                   </Link>
-                ))}
-              </Group>
-            ) : null}
+                ))
+              ) : (
+                <TermPillChip hidden />
+              )}
+            </Group>
           </ExploreEntityHeader>
         ) : null}
 

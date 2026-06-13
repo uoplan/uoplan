@@ -1,5 +1,15 @@
 import { Link } from "@tanstack/react-router";
-import { Accordion, Badge, Box, Group, HoverCard, Paper, Stack, Text } from "@mantine/core";
+import {
+  Accordion,
+  Badge,
+  Box,
+  Group,
+  HoverCard,
+  Paper,
+  Skeleton,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { useMemo } from "react";
 import type { ReactNode } from "react";
 import type { CanonicalProfessorName, GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
@@ -26,6 +36,7 @@ import type {
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { professorRouteParam } from "../../lib/explore/professorRoute";
+import { useAppStore } from "../../store/appStore";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,
@@ -126,9 +137,16 @@ export function ExploreProfessorSummaryBar({
     [aggregateOfferings, group.offerings],
   );
 
-  const ratingLine = group.unassigned
-    ? null
-    : professorRatingLine(group.displayName, professorRatings);
+  const professorRatingsLoading = useAppStore((s) => s.professorRatingsLoading);
+
+  let ratingLine: ReactNode = null;
+  if (!group.unassigned) {
+    if (professorRatings) {
+      ratingLine = professorRatingLine(group.displayName, professorRatings);
+    } else if (professorRatingsLoading) {
+      ratingLine = <Skeleton height={12} width={90} radius="sm" aria-hidden />;
+    }
+  }
 
   return (
     <Box

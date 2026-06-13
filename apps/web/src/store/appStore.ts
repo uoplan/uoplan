@@ -105,6 +105,10 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
       courseGradesLoading: true,
       disciplines: null,
       professors: null,
+      // Defaults to true (like courseGradesLoading): the registry is lazily
+      // loaded, so "not fetched yet" reads as loading until ensureProfessors
+      // settles (success or optional-asset-absent).
+      professorsLoading: true,
       loading: false,
       loadProgress: 0,
       error: null,
@@ -125,6 +129,10 @@ export function createAppStore(services: AppServices = createDefaultAppServices(
       generationMaxEndMinutes: DEFAULT_GENERATION_MAX_END_MINUTES,
       generationMinProfessorRating: DEFAULT_GENERATION_MIN_PROFESSOR_RATING,
       professorRatings: null,
+      // Defaults to true (like courseGradesLoading): ratings are lazily loaded,
+      // so "not fetched yet" reads as loading until ensureProfessorRatings
+      // settles (success or optional-asset-absent).
+      professorRatingsLoading: true,
       generationLimitFirstYearCredits: DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
       generationCompressedSchedule: DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
       generationPreferEasier: DEFAULT_GENERATION_PREFER_EASIER,

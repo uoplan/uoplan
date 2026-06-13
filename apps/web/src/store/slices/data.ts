@@ -439,8 +439,12 @@ export const createDataSlice =
       },
 
       ensureProfessorRatings: async () => {
-        if (get().professorRatings) return;
+        if (get().professorRatings) {
+          if (get().professorRatingsLoading) set({ professorRatingsLoading: false });
+          return;
+        }
         if (ratingsPromise) return ratingsPromise;
+        set({ professorRatingsLoading: true });
         ratingsPromise = (async () => {
           try {
             const bytes = await optionalProtoBytes(dataAssetIds.rateMyProfessors);
@@ -456,6 +460,8 @@ export const createDataSlice =
           } catch (err) {
             ratingsPromise = null;
             throw err;
+          } finally {
+            set({ professorRatingsLoading: false });
           }
         })();
         return ratingsPromise;
@@ -485,8 +491,12 @@ export const createDataSlice =
       },
 
       ensureProfessors: async () => {
-        if (get().professors) return;
+        if (get().professors) {
+          if (get().professorsLoading) set({ professorsLoading: false });
+          return;
+        }
         if (professorsPromise) return professorsPromise;
+        set({ professorsLoading: true });
         professorsPromise = (async () => {
           try {
             const bytes = await optionalProtoBytes(dataAssetIds.professors);
@@ -503,6 +513,8 @@ export const createDataSlice =
           } catch (err) {
             professorsPromise = null;
             throw err;
+          } finally {
+            set({ professorsLoading: false });
           }
         })();
         return professorsPromise;
