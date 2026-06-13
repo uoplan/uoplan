@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { ActionIcon, Box, Group, Text } from "@mantine/core";
+import { Box, Text } from "@mantine/core";
 import { Link, useLocation } from "@tanstack/react-router";
-import { IconArrowRight, IconSparkles, IconX } from "@tabler/icons-react";
+import { IconSparkles } from "@tabler/icons-react";
 import { useShallow } from "zustand/react/shallow";
 import { useAppStore } from "../../store/appStore";
 import { tr, useTr } from "../../i18n";
+import { TopBanner, TopBannerSlot } from "./TopBanner";
 import classes from "./PersonalizeBanner.module.css";
 
 // Routes where a not-yet-personalized user benefits from setting up their
@@ -72,57 +73,17 @@ export function PersonalizeBanner({ variant = "floating" }: PersonalizeBannerPro
   }
 
   return (
-    <Box className={classes.wrapper}>
-      <Box component="aside" role="note" className={classes.banner}>
-        <Box component={Link} to="/personalize" className={classes.pill}>
-          <Group wrap="nowrap" gap="sm" align="center" className={classes.row}>
-            <Box
-              aria-hidden
-              style={{ display: "flex", color: "var(--app-warning)", flexShrink: 0 }}
-            >
-              <IconSparkles size={18} />
-            </Box>
-
-            <Text
-              size="sm"
-              c="var(--app-text)"
-              className={classes.textFull}
-              style={{ flex: 1, minWidth: 0 }}
-            >
-              {tr("personalizeBanner.message")}
-            </Text>
-            <Text
-              size="sm"
-              c="var(--app-text)"
-              className={classes.textShort}
-              style={{ flex: 1, minWidth: 0 }}
-            >
-              {tr("personalizeBanner.messageShort")}
-            </Text>
-
-            <Box aria-hidden className={classes.cta}>
-              {tr("app.nav.dest.personalize.label")}
-              <IconArrowRight className={classes.arrow} size={16} stroke={2} />
-            </Box>
-          </Group>
-        </Box>
-
-        <ActionIcon
-          variant="subtle"
-          color="gray"
-          aria-label={tr("personalizeBanner.dismiss")}
-          onClick={() => setDismissed(true)}
-          style={{
-            position: "absolute",
-            top: "50%",
-            right: 12,
-            transform: "translateY(-50%)",
-            color: "var(--app-text-muted)",
-          }}
-        >
-          <IconX size={16} />
-        </ActionIcon>
-      </Box>
-    </Box>
+    <TopBannerSlot>
+      <TopBanner
+        to="/personalize"
+        variant="warning"
+        icon={<IconSparkles size={18} />}
+        text={tr("personalizeBanner.message")}
+        textShort={tr("personalizeBanner.messageShort")}
+        ctaLabel={tr("app.nav.dest.personalize.label")}
+        onDismiss={() => setDismissed(true)}
+        dismissLabel={tr("personalizeBanner.dismiss")}
+      />
+    </TopBannerSlot>
   );
 }

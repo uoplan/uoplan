@@ -1,21 +1,18 @@
+import { PAGE_CENTER_REF_PX, PAGE_GUTTER_PX } from "../layout/pageWidth";
+
 /** Space reserved beside content so accordion chevron does not shift histogram alignment. */
 const EXPLORE_CHEVRON_GUTTER_PX = 40;
 
 /** Minimum gutter between the explore content column and the viewport edge. */
-const EXPLORE_GUTTER_PX = 24;
+const EXPLORE_GUTTER_PX = PAGE_GUTTER_PX;
 
 /**
- * Width of the explore content column. Matches the landing page's content width
- * (maw 960) so explore reads at the same measure as the rest of the site.
+ * Centering reference width: the shared content width plus a gutter on each
+ * side. The padding formulas below center content to this width, so the visible
+ * column matches the rest of the site (home, trends) with at least
+ * `EXPLORE_GUTTER_PX` of edge spacing.
  */
-const EXPLORE_CONTENT_MAX_PX = 960;
-
-/**
- * Centering reference width: the content width plus a gutter on each side. The
- * padding formulas below center content to this width, so the visible column is
- * `EXPLORE_CONTENT_MAX_PX` with at least `EXPLORE_GUTTER_PX` of edge spacing.
- */
-export const EXPLORE_CENTER_REF_PX = EXPLORE_CONTENT_MAX_PX + EXPLORE_GUTTER_PX * 2;
+export const EXPLORE_CENTER_REF_PX = PAGE_CENTER_REF_PX;
 
 /** Padding inline for accordion - responsive: smaller on mobile. */
 export const EXPLORE_ACCORDION_PAD_INLINE = {

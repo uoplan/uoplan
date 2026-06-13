@@ -9,7 +9,7 @@ import type { AppLocale } from "../../i18n";
 import { readPersistedPersonalized } from "../../lib/hasPersonalized";
 import { useAppStore } from "../../store/appStore";
 import { ChromeControls } from "../shared/ChromeControls";
-import { DonationBanner } from "./DonationBanner";
+import { PageContainer } from "../shared/PageContainer";
 import { ExperimentalCarousel } from "./ExperimentalCarousel";
 import { LandingTile } from "./LandingTile";
 
@@ -84,7 +84,7 @@ export function LandingPage() {
         style={{
           position: "relative",
           minHeight: "100vh",
-          padding: 24,
+          paddingBlock: 24,
           backgroundColor: "var(--app-bg)",
           boxSizing: "border-box",
           display: "flex",
@@ -92,62 +92,51 @@ export function LandingPage() {
           alignItems: "center",
         }}
       >
-        <DonationBanner />
+        <PageContainer style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          <Box style={{ display: "flex", justifyContent: "flex-end", gap: 8, width: "100%" }}>
+            <ChromeControls onLangSwitch={handleLangSwitch} />
+          </Box>
 
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            gap: 8,
-            width: "100%",
-            maxWidth: 960,
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        >
-          <ChromeControls onLangSwitch={handleLangSwitch} />
-        </Box>
-
-        <Stack
-          gap="xl"
-          align="center"
-          w="100%"
-          maw={960}
-          pb={16}
-          style={{ flex: 1, justifyContent: "center" }}
-        >
-          <Title
-            order={1}
-            style={{
-              fontFamily: "var(--app-font-heading)",
-              color: "var(--app-text)",
-              fontWeight: 400,
-              fontSize: "clamp(1.75rem, 5vw, 2.25rem)",
-            }}
+          <Stack
+            gap="xl"
+            align="center"
+            w="100%"
+            pb={16}
+            style={{ flex: 1, justifyContent: "center" }}
           >
-            uoplan.party
-          </Title>
+            <Title
+              order={1}
+              style={{
+                fontFamily: "var(--app-font-heading)",
+                color: "var(--app-text)",
+                fontWeight: 400,
+                fontSize: "clamp(1.75rem, 5vw, 2.25rem)",
+              }}
+            >
+              uoplan.party
+            </Title>
 
-          <SimpleGrid cols={{ base: 1, md: 3 }} spacing="lg" w="100%">
-            <LandingTile
-              to={scheduleTo}
-              title={tr("landing.schedule.title")}
-              description={tr("landing.schedule.description")}
-              icon={<IconCalendar size={32} stroke={1.5} />}
-              iconColor="var(--app-chart-1)"
-              ariaLabel={tr("landing.schedule.title")}
-            />
-            <LandingTile
-              to="/explore"
-              title={tr("explore.title")}
-              description={tr("landing.explore.description")}
-              icon={<IconCompass size={32} stroke={1.5} />}
-              iconColor="var(--app-chart-3)"
-              ariaLabel={tr("explore.title")}
-            />
-            <ExperimentalCarousel items={experimentalFeatures} />
-          </SimpleGrid>
-        </Stack>
+            <SimpleGrid cols={{ base: 1, md: 3 }} spacing="lg" w="100%">
+              <LandingTile
+                to={scheduleTo}
+                title={tr("landing.schedule.title")}
+                description={tr("landing.schedule.description")}
+                icon={<IconCalendar size={32} stroke={1.5} />}
+                iconColor="var(--app-chart-1)"
+                ariaLabel={tr("landing.schedule.title")}
+              />
+              <LandingTile
+                to="/explore"
+                title={tr("explore.title")}
+                description={tr("landing.explore.description")}
+                icon={<IconCompass size={32} stroke={1.5} />}
+                iconColor="var(--app-chart-3)"
+                ariaLabel={tr("explore.title")}
+              />
+              <ExperimentalCarousel items={experimentalFeatures} />
+            </SimpleGrid>
+          </Stack>
+        </PageContainer>
       </Box>
     </m.div>
   );

@@ -6,6 +6,7 @@ import { tr, useTr } from "../../i18n";
 import { toUrlSearch } from "../../lib/trends/searchParams";
 import { BackButton } from "../shared/BackButton";
 import { ChromeControls } from "../shared/ChromeControls";
+import { PageContainer, PageFullBleed } from "../shared/PageContainer";
 import { CalendarMobileDrawer } from "../calendar/CalendarMobileDrawer";
 import { useTrends } from "./trendsContext";
 import { TrendsFilterControls } from "./TrendsFilterControls";
@@ -24,6 +25,20 @@ export function TrendsLayout() {
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 
+  // Full-bleed sticky filter bar: spans the viewport while its inner content
+  // re-centers to the shared page column via PageContainer.
+  const stickyFilterBarStyle = {
+    position: "sticky",
+    top: 0,
+    zIndex: 5,
+    backgroundColor: "color-mix(in srgb, var(--app-surface-sunken) 78%, transparent)",
+    backdropFilter: "blur(8px)",
+    WebkitBackdropFilter: "blur(8px)",
+    borderBottom: "var(--app-border-width) solid var(--app-border)",
+    paddingBlock: 20,
+    boxSizing: "border-box",
+  } as const;
+
   // The layout is shared across the hub and its sub-pages; on a sub-page the
   // back affordance should return to the trends hub (carrying current filters)
   // rather than all the way to the home page.
@@ -37,93 +52,73 @@ export function TrendsLayout() {
       style={{
         position: "relative",
         minHeight: "100vh",
-        padding: isMobile ? 16 : 24,
+        paddingTop: isMobile ? 16 : 24,
         paddingBottom: isMobile ? "calc(88px + env(safe-area-inset-bottom))" : 24,
         backgroundColor: "var(--app-bg)",
         boxSizing: "border-box",
         overflowX: "clip",
       }}
     >
-      <Stack gap="lg" w="100%" maw={1000} mx="auto">
-        <Group align="flex-start" justify="space-between" wrap="nowrap">
-          <Stack gap={4}>
-            {onSubPage ? (
-              <BackButton fallbackTo="/trends" fallbackSearch={toUrlSearch(search)} />
-            ) : (
-              <BackButton fallbackTo="/" />
-            )}
-            <Title
-              order={1}
-              style={{
-                fontFamily: "var(--app-font-heading)",
-                color: "var(--app-text)",
-                fontWeight: 400,
-                fontSize: "clamp(1.5rem, 4vw, 2rem)",
-              }}
-            >
-              {tr("trends.title")}
-            </Title>
-            <Text size="sm" c="dimmed" maw={620}>
-              {tr("trends.subtitle")}
-            </Text>
-          </Stack>
-          <ChromeControls />
-        </Group>
+      <Stack gap="lg" w="100%">
+        <PageContainer>
+          <Group align="flex-start" justify="space-between" wrap="nowrap">
+            <Stack gap={4}>
+              {onSubPage ? (
+                <BackButton fallbackTo="/trends" fallbackSearch={toUrlSearch(search)} />
+              ) : (
+                <BackButton fallbackTo="/" />
+              )}
+              <Title
+                order={1}
+                style={{
+                  fontFamily: "var(--app-font-heading)",
+                  color: "var(--app-text)",
+                  fontWeight: 400,
+                  fontSize: "clamp(1.5rem, 4vw, 2rem)",
+                }}
+              >
+                {tr("trends.title")}
+              </Title>
+              <Text size="sm" c="dimmed" maw={620}>
+                {tr("trends.subtitle")}
+              </Text>
+            </Stack>
+            <ChromeControls />
+          </Group>
+        </PageContainer>
 
         {gradesError ? (
-          <Alert color="red" title={tr("trends.error.title")}>
-            {gradesError}
-          </Alert>
+          <PageContainer>
+            <Alert color="red" title={tr("trends.error.title")}>
+              {gradesError}
+            </Alert>
+          </PageContainer>
         ) : !ready ? (
           <>
             {!isMobile ? (
-              <Box
-                style={{
-                  position: "sticky",
-                  top: 0,
-                  zIndex: 5,
-                  width: "100vw",
-                  marginInline: "calc(50% - 50vw)",
-                  backgroundColor: "color-mix(in srgb, var(--app-surface-sunken) 78%, transparent)",
-                  backdropFilter: "blur(8px)",
-                  WebkitBackdropFilter: "blur(8px)",
-                  borderBottom: "var(--app-border-width) solid var(--app-border)",
-                  padding: "20px 24px",
-                  boxSizing: "border-box",
-                }}
-              >
-                <Box w="100%" maw={1000} mx="auto">
+              <PageFullBleed style={stickyFilterBarStyle}>
+                <PageContainer>
                   <TrendsFilterBarSkeleton />
-                </Box>
-              </Box>
+                </PageContainer>
+              </PageFullBleed>
             ) : null}
-            <TrendsHubSkeleton isMobile={isMobile} />
+            <PageContainer>
+              <TrendsHubSkeleton isMobile={isMobile} />
+            </PageContainer>
           </>
         ) : (
           <>
             {!isMobile ? (
-              <Box
-                style={{
-                  position: "sticky",
-                  top: 0,
-                  zIndex: 5,
-                  width: "100vw",
-                  marginInline: "calc(50% - 50vw)",
-                  backgroundColor: "color-mix(in srgb, var(--app-surface-sunken) 78%, transparent)",
-                  backdropFilter: "blur(8px)",
-                  WebkitBackdropFilter: "blur(8px)",
-                  borderBottom: "var(--app-border-width) solid var(--app-border)",
-                  padding: "20px 24px",
-                  boxSizing: "border-box",
-                }}
-              >
-                <Box w="100%" maw={1000} mx="auto">
+              <PageFullBleed style={stickyFilterBarStyle}>
+                <PageContainer>
                   <TrendsFilterControls />
-                </Box>
-              </Box>
+                </PageContainer>
+              </PageFullBleed>
             ) : null}
 
-            <Outlet />
+            <PageContainer>
+              <Outlet />
+            </PageContainer>
 
             {isMobile ? (
               <>

@@ -1,0 +1,125 @@
+/* Shared pill for the top-of-page donation / personalize nudges. Colour is
+   driven by `data-variant`; everything else (size, padding, hover/press motion,
+   responsive text) is identical across both banners. Nested selectors live here
+   (not inline) because Mantine v9 drops them from `style`/`styles` objects. */
+
+.banner {
+  position: relative;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.banner[data-variant="accent"] {
+  --banner-soft: var(--app-accent-soft);
+  --banner-strong: var(--app-accent);
+  --banner-on-strong: var(--app-on-accent);
+  --banner-ring: color-mix(in srgb, var(--app-accent) 22%, transparent);
+  --banner-strong-hover: color-mix(in srgb, var(--app-accent) 88%, var(--app-text));
+}
+
+.banner[data-variant="warning"] {
+  --banner-soft: var(--app-warning-soft);
+  --banner-strong: var(--app-warning);
+  --banner-on-strong: var(--app-text-inverse);
+  --banner-ring: color-mix(in srgb, var(--app-warning) 24%, transparent);
+  --banner-strong-hover: color-mix(in srgb, var(--app-warning) 88%, var(--app-text));
+}
+
+.pill {
+  display: block;
+  text-decoration: none;
+  background: var(--banner-soft);
+  border-radius: var(--app-radius-lg);
+  transition:
+    transform var(--app-transition),
+    box-shadow var(--app-transition);
+  will-change: transform;
+}
+
+.pill:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--app-shadow-sm);
+}
+
+.pill:active {
+  transform: translateY(0);
+}
+
+.row {
+  padding: 10px 48px 10px 16px;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--banner-strong);
+}
+
+.cta {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--banner-strong);
+  color: var(--banner-on-strong);
+  border-radius: var(--app-radius-pill);
+  padding: 7px 16px;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    box-shadow var(--app-transition),
+    background-color var(--app-transition);
+}
+
+.pill:hover .cta {
+  box-shadow: 0 0 0 4px var(--banner-ring);
+  background-color: var(--banner-strong-hover);
+}
+
+.arrow {
+  transition: transform var(--app-transition);
+}
+
+.pill:hover .arrow {
+  transform: translateX(2px);
+}
+
+.textShort {
+  display: none;
+}
+
+@media (max-width: 47.99em) {
+  .row {
+    min-height: 56px;
+  }
+
+  .textFull {
+    display: none;
+  }
+
+  .textShort {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cta {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill,
+  .cta,
+  .arrow {
+    transition: box-shadow var(--app-transition);
+  }
+
+  .pill:hover,
+  .pill:hover .arrow {
+    transform: none;
+  }
+}
