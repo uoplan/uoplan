@@ -58,10 +58,8 @@ fn large_fixed_set_is_seed_stable() {
         if s.components.is_empty() {
             continue;
         }
-        if let Some(ci) = &s.course {
-            if let Some(code) = sched.course_codes.get(ci.index as usize) {
-                schedulable.push(code.clone());
-            }
+        if let Some(code) = sched.course_codes.get(s.course as usize) {
+            schedulable.push(code.clone());
         }
     }
     schedulable.sort();

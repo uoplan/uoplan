@@ -3,6 +3,10 @@ export function parseTermIdToNumber(termId: string): number {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+// Re-exported here so proto encoders depend on a single shared module rather than
+// reaching directly into the grades domain (which also exports a `normalizeCode`).
+export { GRADE_KEYS } from "../grades/distribution.ts";
+
 export function normalizeCode(value: unknown): string {
   return (typeof value === "string" ? value : "").trim().replaceAll(/\s+/g, " ");
 }

@@ -274,7 +274,7 @@ pub fn prerequisites_contain_non_course(node: Option<&CoursePrereqNode>) -> bool
 mod tests {
     use super::*;
     use crate::proto::data::{
-        Catalogue, Course, CourseIndex, CoursePrereqDisciplineLevel, CoursePrereqKind,
+        Catalogue, Course, CoursePrereqDisciplineLevel, CoursePrereqKind,
         SchedulesData,
     };
 
@@ -327,9 +327,7 @@ mod tests {
             .into_iter()
             .enumerate()
             .map(|(index, (_, credits, prerequisites))| Course {
-                code: Some(CourseIndex {
-                    index: index as u32,
-                }),
+                code: index as u32,
                 credits,
                 prerequisites,
                 ..Default::default()

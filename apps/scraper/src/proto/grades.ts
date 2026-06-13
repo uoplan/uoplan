@@ -1,12 +1,16 @@
-import { normalizeCode } from "./shared.ts";
-import type { GradeDistribution } from "@uoplan/proto/data";
+import { GRADE_KEYS, normalizeCode } from "./shared.ts";
+import type { CourseGradeEntry, GradesData } from "@uoplan/proto/data";
 import type { ProfessorResolver } from "../professors/buildRegistry.ts";
 
-/** Convert a 0-based registry index (or null) to a 1-based proto ref (undefined = none). */
-function toProfessorRef(resolver: ProfessorResolver | undefined, name: string, legacyId?: number) {
-  if (!resolver) return;
+/** Convert a 0-based registry index (or null) to a 1-based proto ref (0 = none). */
+function toProfessorRef(
+  resolver: ProfessorResolver | undefined,
+  name: string,
+  legacyId?: number,
+): number {
+  if (!resolver) return 0;
   const idx = resolver.index(name, legacyId);
-  return idx == null ? undefined : idx + 1;
+  return idx == null ? 0 : idx + 1;
 }
 
 interface GradeProfessorInput {
@@ -22,33 +26,13 @@ interface GradeCourseInput {
   professors?: unknown;
 }
 
-function mapLetterGradeDistributionToProto(dist: unknown): GradeDistribution {
+/** Flatten a distribution object into the 18 canonical `GRADE_KEYS` columns. */
+function distributionColumns(dist: unknown): number[] {
   const d = dist && typeof dist === "object" ? (dist as Record<string, unknown>) : {};
-  const n = (k: string): number => {
-    const v = d[k];
-    const num = Number(v);
+  return GRADE_KEYS.map((k) => {
+    const num = Number(d[k]);
     return Number.isFinite(num) ? num : 0;
-  };
-  return {
-    aPlus: n("A+"),
-    a: n("A"),
-    aMinus: n("A-"),
-    bPlus: n("B+"),
-    b: n("B"),
-    cPlus: n("C+"),
-    c: n("C"),
-    dPlus: n("D+"),
-    d: n("D"),
-    e: n("E"),
-    f: n("F"),
-    ein: n("EIN"),
-    ns: n("NS"),
-    nc: n("NC"),
-    abs: n("ABS"),
-    p: n("P"),
-    s: n("S"),
-    dr: n("DR"),
-  };
+  });
 }
 
 function parseLegacyId(value: unknown): number | undefined {
@@ -60,42 +44,78 @@ function parseLegacyId(value: unknown): number | undefined {
   return undefined;
 }
 
-function mapProfessor(p: unknown, resolver?: ProfessorResolver) {
+interface NormalizedOffering {
+  name: string;
+  legacyId?: number;
+  termId: number;
+  section: string;
+  distribution: number[];
+}
+
+function normalizeOffering(p: unknown): NormalizedOffering {
   const x = p as GradeProfessorInput;
   const termParsed = Number.parseInt(String(x.termId ?? ""), 10);
   const termId = Number.isFinite(termParsed) ? termParsed : 0;
-  const sec = typeof x.section === "string" && x.section.trim() ? x.section.trim() : undefined;
-  const legacyId = parseLegacyId(x.legacyId);
-  const name = String(x.name ?? "");
+  const section = typeof x.section === "string" && x.section.trim() ? x.section.trim() : "";
   return {
-    name,
-    ...(legacyId !== undefined ? { legacyId } : {}),
+    name: String(x.name ?? ""),
+    legacyId: parseLegacyId(x.legacyId),
     termId,
-    distribution: mapLetterGradeDistributionToProto(x.distribution),
-    section: sec,
-    professorRef: toProfessorRef(resolver, name, legacyId),
+    section,
+    distribution: distributionColumns(x.distribution),
   };
 }
 
-export function mapGradesJson(rows: unknown[], resolver?: ProfessorResolver) {
+/**
+ * Encode `grades.json` into the column-wise {@link GradesData}: one
+ * {@link CourseGradeEntry} per course with parallel offering columns, plus a
+ * shared `professorNames` dictionary referenced 0-based by `nameRefs`.
+ */
+export function mapGradesJson(rows: unknown[], resolver?: ProfessorResolver): GradesData {
   if (!Array.isArray(rows)) {
     throw new Error("grades.json: expected top-level array");
   }
 
-  return {
-    courses: rows
-      .map((row) => {
-        const r = row as GradeCourseInput;
-        const profs = Array.isArray(r.professors) ? r.professors : [];
-        return {
-          code: normalizeCode(r.code),
-          professors: profs
-            .map((p) => mapProfessor(p, resolver))
-            .filter((p) => p.termId !== 0 && String(p.name).trim().length > 0),
-        };
-      })
-      .filter((c) => c.professors.length > 0),
+  const professorNames: string[] = [];
+  const nameIndex = new Map<string, number>();
+  const nameRefOf = (name: string): number => {
+    const existing = nameIndex.get(name);
+    if (existing !== undefined) return existing;
+    const idx = professorNames.length;
+    professorNames.push(name);
+    nameIndex.set(name, idx);
+    return idx;
   };
+
+  const courses: CourseGradeEntry[] = [];
+  for (const row of rows) {
+    const r = row as GradeCourseInput;
+    const offerings = (Array.isArray(r.professors) ? r.professors : [])
+      .map(normalizeOffering)
+      .filter((o) => o.termId !== 0 && o.name.trim().length > 0);
+    if (offerings.length === 0) continue;
+
+    const entry: CourseGradeEntry = {
+      code: normalizeCode(r.code),
+      nameRefs: [],
+      termIds: [],
+      professorRefs: [],
+      legacyIds: [],
+      sections: [],
+      distributions: [],
+    };
+    for (const o of offerings) {
+      entry.nameRefs.push(nameRefOf(o.name));
+      entry.termIds.push(o.termId);
+      entry.professorRefs.push(toProfessorRef(resolver, o.name, o.legacyId));
+      entry.legacyIds.push(o.legacyId ?? 0);
+      entry.sections.push(o.section);
+      entry.distributions.push(...o.distribution);
+    }
+    courses.push(entry);
+  }
+
+  return { courses, professorNames };
 }
 
 export function mapDisciplinesJson(input: unknown): {

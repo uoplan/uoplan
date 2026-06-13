@@ -16,9 +16,13 @@ import type { Indices, Program } from "../dataTypes";
  *
  * Do NOT regenerate this string to make the test pass. A change here means a
  * wire-incompatible change that needs a migration path.
+ *
+ * (Regenerated once for the STATE_MAGIC bump to 0x554f504d — the deliberate
+ * clean break that moved `completed_courses` from the packed-pair hack to plain
+ * packed `repeated uint32` indices.)
  */
 const GOLDEN =
-  "E2JQYtDoXcdjweDFEMT8/z97FCNDEhMDUxbLC/YL/AWsDYzv/277yvuD8QOIWsTIsINxDssBxh0cpxiZGZhYLjAyvGA8s2DvKtZNTAwA";
+  "E2JQYtDoXcdjweDFxMAYxMgYxciQxMTAlMXygv0CfwFrA+P7v9u+8v5g/ACiFjEy7GCcw3KAcQfHKUaGF4xnF+xdxbqJiQEA";
 
 const programA: Program = {
   title: "BSc Computer Science",

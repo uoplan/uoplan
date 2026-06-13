@@ -3,11 +3,7 @@ syntax = "proto3";
 package scheduledata;
 
 message CatalogueManifest {
-  repeated uint32 years = 1;
-}
-
-message CourseIndex {
-  uint32 index = 1;
+  repeated uint32 years = 1 [packed = true];
 }
 
 message Indices {
@@ -34,7 +30,7 @@ message ProfessorEntry {
   // Canonical display name: the fullest variant (keeps accents and middle names).
   string name = 2;
   // Every RateMyProfessors legacyId merged into this person (combined reviews).
-  repeated uint32 legacy_ids = 3;
+  repeated uint32 legacy_ids = 3 [packed = true];
   // Response-weighted average rating across all merged RMP profiles, when rated.
   optional double rating = 4;
   optional uint32 num_ratings = 5;
@@ -81,11 +77,14 @@ message Catalogue {
 }
 
 message Course {
-  CourseIndex code = 1;
+  // 0-based index into `Catalogue.course_codes`.
+  uint32 code = 1;
   string title = 2;
   double credits = 3;
   optional string component = 4;
-  repeated CourseIndex aliases = 5;
+  // 0-based indices into `Catalogue.course_codes` (alternate codes for the
+  // same course). Packed so the common 0-alias case costs nothing.
+  repeated uint32 aliases = 5 [packed = true];
   bool has_prereq_text = 6;
   optional CoursePrereqNode prerequisites = 8;
 }
@@ -116,7 +115,7 @@ enum CoursePrereqKind {
 
 message CoursePrereqDisciplineLevel {
   string discipline = 1;
-  repeated uint32 levels = 2;
+  repeated uint32 levels = 2 [packed = true];
 }
 
 message CoursePrereqNode {
@@ -124,7 +123,7 @@ message CoursePrereqNode {
   optional string code = 2;
   optional double credits = 3;
   repeated string disciplines = 4;
-  repeated uint32 levels = 5;
+  repeated uint32 levels = 5 [packed = true];
   repeated CoursePrereqDisciplineLevel discipline_levels = 6;
   repeated string programs = 7;
   repeated CoursePrereqNode children = 8;
@@ -151,7 +150,7 @@ enum RequirementType {
 
 message DisciplineLevel {
   string discipline = 1;
-  repeated uint32 levels = 2;
+  repeated uint32 levels = 2 [packed = true];
 }
 
 message ProgramRequirement {
@@ -164,7 +163,7 @@ message ProgramRequirement {
   optional string faculty = 7;
   optional bool indented = 8;
   repeated ProgramRequirement options = 9;
-  repeated uint32 levels = 10;
+  repeated uint32 levels = 10 [packed = true];
 }
 
 message Program {
@@ -190,36 +189,22 @@ message MeetingTime {
   uint32 end_minutes = 3;
   bool virtual = 4;
   optional string instructor = 5;
-  optional MeetingDateRange meeting_dates = 6;
+  // field 6 reserved: per-meeting date ranges were inlined as a MeetingDateRange
+  // submessage; they are now dictionary-encoded via `meeting_dates_ref` (the same
+  // (start,end) range repeats across most meetings of a term).
+  reserved 6;
+  reserved "meeting_dates";
   // 1-based index into `ProfessorsData.professors`; absent when unassigned
   // ("Staff") or unresolved. 1-based so a present value is never the default 0.
   optional uint32 professor_ref = 7;
+  // 1-based index into `SchedulesData.meeting_date_ranges`; absent/0 when the
+  // meeting has no known date range.
+  optional uint32 meeting_dates_ref = 8;
 }
 
 message MeetingDateRange {
   uint32 start_yyyymmdd = 1;
   uint32 end_yyyymmdd = 2;
-}
-
-message GradeDistribution {
-  uint32 a_plus = 1;
-  uint32 a = 2;
-  uint32 a_minus = 3;
-  uint32 b_plus = 4;
-  uint32 b = 5;
-  uint32 c_plus = 6;
-  uint32 c = 7;
-  uint32 d_plus = 8;
-  uint32 d = 9;
-  uint32 e = 10;
-  uint32 f = 11;
-  uint32 ein = 12;
-  uint32 ns = 13;
-  uint32 nc = 14;
-  uint32 abs = 15;
-  uint32 p = 16;
-  uint32 s = 17;
-  uint32 dr = 18;
 }
 
 enum SectionStatus {
@@ -263,7 +248,8 @@ message ComponentSectionList {
 }
 
 message CourseSchedule {
-  CourseIndex course = 1;
+  // 0-based index into `SchedulesData.course_codes`.
+  uint32 course = 1;
   optional string title = 2;
   string time_zone = 3;
   map<string, ComponentSectionList> components = 4;
@@ -275,23 +261,40 @@ message SchedulesData {
   optional uint32 total_courses = 3;
   optional uint32 total_with_schedules = 4;
   repeated CourseSchedule schedules = 5;
+  // Dictionary of distinct meeting date ranges for this term, referenced
+  // (1-based) by `MeetingTime.meeting_dates_ref`. Most meetings of a term share
+  // a handful of ranges, so this avoids a per-meeting MeetingDateRange submessage.
+  repeated MeetingDateRange meeting_date_ranges = 6;
 }
 
+// Grade data is stored column-wise per course: every `repeated` field below is a
+// parallel array where index `i` describes one (professor, term, section)
+// offering of the course. This avoids a per-offering submessage and a per-cell
+// field tag, and lets the professor name be shared via a dictionary.
 message GradesData {
   repeated CourseGradeEntry courses = 1;
+  // Dictionary of distinct offering professor display names, referenced 0-based
+  // by `CourseGradeEntry.name_refs`. The same professor appears across many
+  // offerings, so the names are deduplicated here.
+  repeated string professor_names = 2;
 }
 
+// One course's grade offerings, stored as parallel columns. All `repeated`
+// fields have the same length N (the number of offerings); index `i` is one
+// offering. `distributions` is the only exception: it is N*18 values, row-major,
+// so offering `i` occupies `distributions[i*18 .. i*18+18]`.
 message CourseGradeEntry {
   string code = 1;
-  repeated GradeProfessorOffering professors = 2;
-}
-
-message GradeProfessorOffering {
-  string name = 1;
-  optional uint32 legacy_id = 2;
-  uint32 term_id = 3;
-  GradeDistribution distribution = 4;
-  optional string section = 5;
+  // 0-based index into `GradesData.professor_names`.
+  repeated uint32 name_refs = 2 [packed = true];
+  repeated uint32 term_ids = 3 [packed = true];
   // 1-based index into `ProfessorsData.professors` (0 = unresolved).
-  optional uint32 professor_ref = 6;
+  repeated uint32 professor_refs = 4 [packed = true];
+  // RateMyProfessors legacy id (0 = none).
+  repeated uint32 legacy_ids = 5 [packed = true];
+  // Per-offering section code ("" = none).
+  repeated string sections = 6;
+  // N*18 grade counts, row-major, in the canonical letter order:
+  // A+, A, A-, B+, B, C+, C, D+, D, E, F, DR, EIN, NS, NC, ABS, P, S.
+  repeated uint32 distributions = 7 [packed = true];
 }

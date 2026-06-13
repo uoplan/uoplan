@@ -1585,7 +1585,7 @@ mod tests {
 
     use super::*;
     use crate::proto::data::{
-        Catalogue, ComponentSection, ComponentSectionList, Course, CourseIndex, CourseSchedule,
+        Catalogue, ComponentSection, ComponentSectionList, Course, CourseSchedule,
         DayOfWeek, MeetingTime, SchedulesData, SectionStatus,
     };
 
@@ -1598,9 +1598,7 @@ mod tests {
             .iter()
             .enumerate()
             .map(|(index, _)| Course {
-                code: Some(CourseIndex {
-                    index: index as u32,
-                }),
+                code: index as u32,
                 credits: 3.0,
                 ..Default::default()
             })
@@ -1623,9 +1621,7 @@ mod tests {
                         ..Default::default()
                     };
                     CourseSchedule {
-                        course: Some(CourseIndex {
-                            index: index as u32,
-                        }),
+                        course: index as u32,
                         components: HashMap::from([(
                             "LEC".to_string(),
                             ComponentSectionList {

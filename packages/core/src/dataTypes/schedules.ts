@@ -6,11 +6,11 @@ import type {
   Catalogue as ProtoCatalogue,
   CatalogueManifest as ProtoCatalogueManifest,
   Course as ProtoCourse,
-  CourseIndex as ProtoCourseIndex,
   CourseSchedule as ProtoCourseSchedule,
   Discipline as ProtoDiscipline,
   DisciplinesData as ProtoDisciplinesData,
   Indices as ProtoIndices,
+  MeetingDateRange as ProtoMeetingDateRange,
   Program as ProtoProgram,
   RateMyProfessorsData as ProtoRateMyProfessorsData,
   SchedulesData as ProtoSchedulesData,
@@ -121,17 +121,13 @@ function createCourseCodeTable(courses: Course[]): {
 function courseIndexFromCode(
   indexByCode: Map<NormalizedCourseCode, number>,
   code: string,
-): ProtoCourseIndex | undefined {
-  const idx = indexByCode.get(normalizeCourseCode(code));
-  return idx === undefined ? undefined : { index: idx };
+): number | undefined {
+  return indexByCode.get(normalizeCourseCode(code));
 }
 
-function codeFromCourseIndex(
-  table: string[],
-  index: ProtoCourseIndex | undefined,
-): NormalizedCourseCode {
-  if (!index) return normalizeCourseCode("");
-  return normalizeCourseCode(table[index.index] ?? "");
+function codeFromCourseIndex(table: string[], index: number | undefined): NormalizedCourseCode {
+  if (index === undefined) return normalizeCourseCode("");
+  return normalizeCourseCode(table[index] ?? "");
 }
 
 function programKeyFromProgram(program: Program): string {
@@ -164,13 +160,13 @@ export function toProtoCatalogue(input: Catalogue): ProtoCatalogue {
     courseCodes: table,
     courses: input.courses.map(
       (course): ProtoCourse => ({
-        code: courseIndexFromCode(indexByCode, course.code),
+        code: courseIndexFromCode(indexByCode, course.code) ?? 0,
         title: course.title,
         credits: course.credits,
         component: course.component,
         aliases: (course.aliases ?? [])
           .map((alias) => courseIndexFromCode(indexByCode, alias))
-          .filter((v): v is ProtoCourseIndex => v !== undefined),
+          .filter((v): v is number => v !== undefined),
         hasPrereqText: Boolean(course.prereqText),
         prerequisites: course.prerequisites ? toProtoPrereq(course.prerequisites) : undefined,
       }),
@@ -220,20 +216,39 @@ export function fromProtoCatalogue(input: ProtoCatalogue): Catalogue {
 export function toProtoSchedulesData(input: SchedulesData): ProtoSchedulesData {
   const courseCodes: string[] = [];
   const indexByCode = new Map<NormalizedCourseCode, number>();
-  const addCode = (code: string): ProtoCourseIndex => {
+  const addCode = (code: string): number => {
     const normalized = normalizeCourseCode(code);
     const existing = indexByCode.get(normalized);
-    if (existing !== undefined) return { index: existing };
+    if (existing !== undefined) return existing;
     const index = courseCodes.length;
     courseCodes.push(normalized);
     indexByCode.set(normalized, index);
-    return { index };
+    return index;
   };
+
+  // Dictionary of distinct (start,end) meeting date ranges; each meeting stores a
+  // 1-based ref (0/absent = none) instead of an inline submessage.
+  const meetingDateRanges: ProtoMeetingDateRange[] = [];
+  const dateRangeRefByKey = new Map<string, number>();
+  const meetingDatesRefOf = (dates: [string, string] | null | undefined): number | undefined => {
+    if (!dates) return undefined;
+    const startYyyymmdd = dateStringToYyyymmdd(dates[0] ?? "");
+    const endYyyymmdd = dateStringToYyyymmdd(dates[1] ?? "");
+    const key = `${startYyyymmdd}-${endYyyymmdd}`;
+    const existing = dateRangeRefByKey.get(key);
+    if (existing !== undefined) return existing;
+    const ref = meetingDateRanges.length + 1;
+    meetingDateRanges.push({ startYyyymmdd, endYyyymmdd });
+    dateRangeRefByKey.set(key, ref);
+    return ref;
+  };
+
   return {
     termId: parseTermIdToNumber(input.termId),
     courseCodes,
     totalCourses: input.totalCourses,
     totalWithSchedules: input.totalWithSchedules,
+    meetingDateRanges,
     schedules: input.schedules.map(
       (schedule): ProtoCourseSchedule => ({
         course: addCode(schedule.courseCode),
@@ -255,12 +270,7 @@ export function toProtoSchedulesData(input: SchedulesData): ProtoSchedulesData {
                   virtual: time.virtual,
                   instructor: time.instructor ?? undefined,
                   professorRef: time.professorRef,
-                  meetingDates: time.meetingDates
-                    ? {
-                        startYyyymmdd: dateStringToYyyymmdd(time.meetingDates[0] ?? ""),
-                        endYyyymmdd: dateStringToYyyymmdd(time.meetingDates[1] ?? ""),
-                      }
-                    : undefined,
+                  meetingDatesRef: meetingDatesRefOf(time.meetingDates),
                 })),
                 status: statusToProto(section.status),
                 predictedInstructors: (section.predictedInstructors ?? []).map((p) => ({
@@ -279,6 +289,16 @@ export function toProtoSchedulesData(input: SchedulesData): ProtoSchedulesData {
 
 export function fromProtoSchedulesData(input: ProtoSchedulesData): SchedulesData {
   const courseCodeTable = input.courseCodes;
+  const dateRanges = input.meetingDateRanges ?? [];
+  const meetingDatesFromRef = (ref: number | undefined): [string, string] | null => {
+    if (!ref) return null;
+    const range = dateRanges[ref - 1];
+    if (!range) return null;
+    return [
+      yyyymmddToDateString(Number(range.startYyyymmdd)),
+      yyyymmddToDateString(Number(range.endYyyymmdd)),
+    ];
+  };
   return {
     termId: String(input.termId),
     ...(input.totalCourses !== undefined ? { totalCourses: Number(input.totalCourses) } : {}),
@@ -311,12 +331,7 @@ export function fromProtoSchedulesData(input: ProtoSchedulesData): SchedulesData
                     virtual: time.virtual,
                     instructor: time.instructor ?? null,
                     ...(time.professorRef ? { professorRef: time.professorRef } : {}),
-                    meetingDates: time.meetingDates
-                      ? [
-                          yyyymmddToDateString(Number(time.meetingDates.startYyyymmdd)),
-                          yyyymmddToDateString(Number(time.meetingDates.endYyyymmdd)),
-                        ]
-                      : null,
+                    meetingDates: meetingDatesFromRef(time.meetingDatesRef),
                   }),
                 ),
                 status: statusFromProto(section.status),

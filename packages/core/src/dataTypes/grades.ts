@@ -1,38 +1,49 @@
-import type {
-  GradeDistribution as ProtoGradeDistribution,
-  GradeProfessorOffering as ProtoGradeProfessorOffering,
-  GradesData as ProtoGradesData,
-} from "@uoplan/proto/data";
+import type { GradesData as ProtoGradesData } from "@uoplan/proto/data";
 import type { NormalizedCourseCode } from "../brand";
 import type { GradeDistribution } from "./domain";
 import { normalizeCourseCode } from "../utils/courseUtils";
 
-export function fromProtoDistribution(
-  distribution: ProtoGradeDistribution | undefined,
+/**
+ * Canonical letter order of the 18 columns packed into
+ * `CourseGradeEntry.distributions` (must match the scraper's GRADE_KEYS and the
+ * proto comment). Order is significant: the decode below and gradeLookupContract
+ * compare distributions via strict JSON.stringify.
+ */
+const GRADE_KEYS = [
+  "A+",
+  "A",
+  "A-",
+  "B+",
+  "B",
+  "C+",
+  "C",
+  "D+",
+  "D",
+  "E",
+  "F",
+  "DR",
+  "EIN",
+  "NS",
+  "NC",
+  "ABS",
+  "P",
+  "S",
+] as const;
+
+const GRADE_COLUMN_COUNT = GRADE_KEYS.length;
+
+export function distributionFromColumns(
+  columns: number[],
+  offset: number,
 ): GradeDistribution | undefined {
-  if (!distribution) return undefined;
-  const out: GradeDistribution = {
-    "A+": Number(distribution.aPlus),
-    A: Number(distribution.a),
-    "A-": Number(distribution.aMinus),
-    "B+": Number(distribution.bPlus),
-    B: Number(distribution.b),
-    "C+": Number(distribution.cPlus),
-    C: Number(distribution.c),
-    "D+": Number(distribution.dPlus),
-    D: Number(distribution.d),
-    E: Number(distribution.e),
-    F: Number(distribution.f),
-    DR: Number(distribution.dr),
-    EIN: Number(distribution.ein),
-    NS: Number(distribution.ns),
-    NC: Number(distribution.nc),
-    ABS: Number(distribution.abs),
-    P: Number(distribution.p),
-    S: Number(distribution.s),
-  };
-  if (Object.values(out).every((v) => v === 0)) return undefined;
-  return out;
+  const out = {} as GradeDistribution;
+  let nonZero = false;
+  for (let i = 0; i < GRADE_COLUMN_COUNT; i++) {
+    const v = Number(columns[offset + i] ?? 0);
+    out[GRADE_KEYS[i]] = v;
+    if (v !== 0) nonZero = true;
+  }
+  return nonZero ? out : undefined;
 }
 
 export type CourseGradesProfessor = {
@@ -55,31 +66,30 @@ export type CourseGradesData = {
 };
 
 export function fromProtoCourseGradesData(input: ProtoGradesData): CourseGradesData {
+  const names = input.professorNames ?? [];
   const courses: CourseGradesEntry[] = [];
   for (const c of input.courses ?? []) {
+    const count = c.termIds?.length ?? 0;
     const professors: CourseGradesProfessor[] = [];
-    for (const p of c.professors ?? []) {
-      const row = fromProtoGradeProfessorOfferingRow(p);
-      if (row) professors.push(row);
+    for (let i = 0; i < count; i++) {
+      const distribution = distributionFromColumns(c.distributions ?? [], i * GRADE_COLUMN_COUNT);
+      if (!distribution) continue;
+      const legacyId = c.legacyIds?.[i] ?? 0;
+      const professorRef = c.professorRefs?.[i] ?? 0;
+      const section = c.sections?.[i] ?? "";
+      const nameRef = c.nameRefs?.[i] ?? 0;
+      professors.push({
+        name: names[nameRef] ?? "",
+        ...(legacyId !== 0 ? { legacyId: Number(legacyId) } : {}),
+        ...(professorRef !== 0 ? { professorRef: Number(professorRef) } : {}),
+        termId: Number(c.termIds?.[i] ?? 0),
+        distribution,
+        ...(section ? { section } : {}),
+      });
     }
     if (professors.length > 0) {
       courses.push({ code: normalizeCourseCode(c.code), professors });
     }
   }
   return { courses };
-}
-
-function fromProtoGradeProfessorOfferingRow(
-  p: ProtoGradeProfessorOffering,
-): CourseGradesProfessor | null {
-  const distribution = fromProtoDistribution(p.distribution);
-  if (!distribution) return null;
-  return {
-    name: p.name,
-    ...(p.legacyId !== undefined ? { legacyId: Number(p.legacyId) } : {}),
-    ...(p.professorRef !== undefined ? { professorRef: Number(p.professorRef) } : {}),
-    termId: Number(p.termId),
-    distribution,
-    ...(p.section ? { section: p.section } : {}),
-  };
 }

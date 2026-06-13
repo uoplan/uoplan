@@ -15,35 +15,17 @@ import {
 function gradesBytes(): Uint8Array {
   return encode(
     DataProto.GradesData.encode({
+      professorNames: ["Alice Smith"],
       courses: [
         {
           code: "CSI 2110",
-          professors: [
-            {
-              name: "Alice Smith",
-              termId: 2261,
-              distribution: {
-                aPlus: 10,
-                a: 0,
-                aMinus: 0,
-                bPlus: 0,
-                b: 2,
-                cPlus: 0,
-                c: 0,
-                dPlus: 0,
-                d: 0,
-                e: 0,
-                f: 0,
-                dr: 0,
-                ein: 0,
-                ns: 0,
-                nc: 0,
-                abs: 0,
-                p: 0,
-                s: 0,
-              },
-            },
-          ],
+          nameRefs: [0],
+          termIds: [2261],
+          professorRefs: [0],
+          legacyIds: [0],
+          sections: [""],
+          // GRADE_KEYS order: A+ A A- B+ B C+ C D+ D E F DR EIN NS NC ABS P S
+          distributions: [10, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         },
       ],
     }),

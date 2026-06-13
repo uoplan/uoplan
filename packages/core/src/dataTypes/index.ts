@@ -1,7 +1,6 @@
 export * from "./domain";
-export { fromProtoDistribution } from "./grades";
 export type { CourseGradesData, CourseGradesEntry, CourseGradesProfessor } from "./grades";
-export { fromProtoCourseGradesData } from "./grades";
+export { distributionFromColumns, fromProtoCourseGradesData } from "./grades";
 export {
   fromProtoCatalogue,
   fromProtoCatalogueManifest,

@@ -3,38 +3,19 @@ import { DataProto, fromProtoCourseGradesData } from "../index";
 
 describe("fromProtoCourseGradesData", () => {
   it("round-trips encoded grades payload", () => {
+    // GRADE_KEYS order: A+ A A- B+ B C+ C D+ D E F DR EIN NS NC ABS P S
+    const distribution = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const message = {
+      professorNames: ["Test Prof"],
       courses: [
         {
           code: "CSI 2110",
-          professors: [
-            {
-              name: "Test Prof",
-              legacyId: 123,
-              termId: 2251,
-              section: "A00",
-              distribution: {
-                aPlus: 1,
-                a: 0,
-                aMinus: 0,
-                bPlus: 0,
-                b: 0,
-                cPlus: 0,
-                c: 0,
-                dPlus: 0,
-                d: 0,
-                e: 0,
-                f: 0,
-                dr: 0,
-                ein: 0,
-                ns: 0,
-                nc: 0,
-                abs: 0,
-                p: 0,
-                s: 0,
-              },
-            },
-          ],
+          nameRefs: [0],
+          termIds: [2251],
+          professorRefs: [0],
+          legacyIds: [123],
+          sections: ["A00"],
+          distributions: distribution,
         },
       ],
     };

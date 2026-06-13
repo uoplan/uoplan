@@ -179,13 +179,11 @@ export function mapCatalogue(input: CatalogueJsonInput) {
   return {
     courseCodes: indexer.courseCodes,
     courses: (input.courses ?? []).map((course) => ({
-      code: { index: indexer.add(String(course.code ?? "")) },
+      code: indexer.add(String(course.code ?? "")),
       title: course.title ?? "",
       credits: course.credits ?? 0,
       component: course.component,
-      aliases: (course.aliases ?? []).map((alias) => ({
-        index: indexer.add(String(alias ?? "")),
-      })),
+      aliases: (course.aliases ?? []).map((alias) => indexer.add(String(alias ?? ""))),
       hasPrereqText: Boolean(course.prereqText),
       prerequisites: course.prerequisites ? mapPrereq(course.prerequisites) : undefined,
     })),

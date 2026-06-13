@@ -455,11 +455,9 @@ mod tests {
             if s.components.is_empty() {
                 continue;
             }
-            if let Some(ci) = &s.course {
-                if let Some(code) = sched.course_codes.get(ci.index as usize) {
-                    pinned_code = Some(code.clone());
-                    break;
-                }
+            if let Some(code) = sched.course_codes.get(s.course as usize) {
+                pinned_code = Some(code.clone());
+                break;
             }
         }
         let pinned_code = pinned_code.expect("no schedulable course found in real data");
