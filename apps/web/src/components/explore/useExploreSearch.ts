@@ -1,4 +1,4 @@
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useLocation, useNavigate, useSearch } from "@tanstack/react-router";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -37,6 +37,11 @@ function buildSearchParams(
 
 export function useExploreSearch(onIndex: boolean) {
   const navigate = useNavigate();
+  // The filter bar lives in the shared `/explore` layout, so a relative ("." or
+  // un-`to`'d) navigate resolves against the layout route and bounces detail pages
+  // back to the search index. Pinning navigation to the live pathname keeps the
+  // active course/professor route while only the shared filter params change.
+  const pathname = useLocation({ select: (s) => s.pathname });
   const searchParams = useSearch({ from: "/explore" });
   const parsedFilters = useMemo(
     () => parseExploreFiltersSearch(searchParams ?? {}),
@@ -89,7 +94,9 @@ export function useExploreSearch(onIndex: boolean) {
     pendingFilterKeyRef.current = filterStateKey(updated);
     setFilters(updated);
     void navigate({
-      to: "/explore",
+      // Stay on the current route (course / professor detail or the index) so editing
+      // a filter re-filters in place instead of bouncing back to the search results.
+      to: pathname,
       search: buildSearchParams(updated, query),
       replace: onIndex,
     });

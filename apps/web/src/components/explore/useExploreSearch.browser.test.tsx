@@ -6,12 +6,17 @@ import { useExploreSearch } from "./useExploreSearch";
 // out-of-order URL param updates that cause the rapid-filter race.
 const routerMock = vi.hoisted(() => ({
   search: {} as Record<string, unknown>,
+  pathname: "/explore",
   navigate: vi.fn(),
 }));
 
 vi.mock("@tanstack/react-router", () => ({
   useNavigate: () => routerMock.navigate,
   useSearch: () => routerMock.search,
+  useLocation: (opts?: { select?: (s: { pathname: string }) => unknown }) => {
+    const state = { pathname: routerMock.pathname };
+    return opts?.select ? opts.select(state) : state;
+  },
 }));
 
 let api: ReturnType<typeof useExploreSearch>;
@@ -46,5 +51,19 @@ describe("useExploreSearch rapid filter changes", () => {
     routerMock.search = { levels: "3000" };
     await screen.rerender(<Harness />);
     await expect.poll(() => api.filters.levels).toEqual([3000]);
+  });
+
+  it("applies filter edits in place on a detail page (stays on the current pathname)", async () => {
+    routerMock.search = {};
+    routerMock.pathname = "/explore/course/CSI%201100";
+    routerMock.navigate.mockClear();
+    await render(<Harness />);
+
+    api.handleFilterChange({ termId: 2269 });
+
+    expect(routerMock.navigate).toHaveBeenCalledWith(
+      expect.objectContaining({ to: "/explore/course/CSI%201100" }),
+    );
+    routerMock.pathname = "/explore";
   });
 });
