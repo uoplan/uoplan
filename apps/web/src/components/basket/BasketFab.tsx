@@ -24,6 +24,19 @@ const cartButtonStyle = {
   boxShadow: "var(--app-shadow-sm)",
 };
 
+// Keep the count badge a perfect circle — Mantine's default pads the label and grows
+// it into a rounded rectangle, so we pin equal width/height and a 50% radius.
+const COUNT_BADGE_SIZE = 18;
+const countIndicatorStyles = {
+  indicator: {
+    width: COUNT_BADGE_SIZE,
+    minWidth: COUNT_BADGE_SIZE,
+    height: COUNT_BADGE_SIZE,
+    paddingInline: 0,
+    borderRadius: "50%",
+  },
+} as const;
+
 export function BasketFab({
   desktopPlacement = "top-right",
   inline = false,
@@ -66,33 +79,42 @@ export function BasketFab({
     </Group>
   );
 
-  // Mobile: floating circular FAB + shared bottom drawer.
+  // Mobile: floating circular FAB + shared bottom drawer. When `inline`, the parent
+  // owns positioning (e.g. the explore cart cluster), so skip the Affix wrapper.
   if (isMobile) {
+    const mobileButton = (
+      <Indicator
+        label={count}
+        size={COUNT_BADGE_SIZE}
+        offset={6}
+        color="var(--app-chart-1)"
+        withBorder
+        disabled={count === 0}
+        styles={countIndicatorStyles}
+      >
+        <ActionIcon
+          size={46}
+          radius="xl"
+          aria-label={label}
+          title={label}
+          onClick={() => setOpened(true)}
+          style={cartButtonStyle}
+          onMouseEnter={(e) => applyPillHover(e.currentTarget)}
+          onMouseLeave={(e) => resetPillHover(e.currentTarget)}
+        >
+          <IconShoppingCart size={22} aria-hidden />
+        </ActionIcon>
+      </Indicator>
+    );
     return (
       <>
-        <Affix position={{ bottom: 24, right: 24 }} zIndex={150}>
-          <Indicator
-            label={count}
-            size={18}
-            offset={6}
-            color="var(--app-chart-1)"
-            withBorder
-            disabled={count === 0}
-          >
-            <ActionIcon
-              size={46}
-              radius="xl"
-              aria-label={label}
-              title={label}
-              onClick={() => setOpened(true)}
-              style={cartButtonStyle}
-              onMouseEnter={(e) => applyPillHover(e.currentTarget)}
-              onMouseLeave={(e) => resetPillHover(e.currentTarget)}
-            >
-              <IconShoppingCart size={22} aria-hidden />
-            </ActionIcon>
-          </Indicator>
-        </Affix>
+        {inline ? (
+          mobileButton
+        ) : (
+          <Affix position={{ bottom: 24, right: 24 }} zIndex={150}>
+            {mobileButton}
+          </Affix>
+        )}
         <BottomDrawer
           opened={opened}
           onClose={close}
@@ -115,11 +137,12 @@ export function BasketFab({
   const desktopBody = (
     <Indicator
       label={count}
-      size={18}
+      size={COUNT_BADGE_SIZE}
       offset={6}
       color="var(--app-chart-1)"
       withBorder
       disabled={count === 0}
+      styles={countIndicatorStyles}
     >
       <Popover
         opened={opened}

@@ -19,7 +19,7 @@ test("toggles a course in the basket from the icon affordance", async () => {
 });
 
 test("renders labeled copy for page-level basket actions", async () => {
-  await renderWithProviders(<AddToBasketButton code="CSI 2110" variant="labeled" />);
+  await renderWithProviders(<AddToBasketButton code="CSI 2110" variant="pill" />);
 
   await expect.element(page.getByRole("button", { name: "Add to basket" })).toBeInTheDocument();
 });

@@ -32,7 +32,7 @@ import {
 } from "./ExploreProfessorGradesLayout";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { useCourseAliasResolution } from "../../hooks/useCourseAliasResolution";
-import { AddToBasketButton } from "../basket/AddToBasketButton";
+import { usePublishBasketTarget } from "./exploreBasketTargetContext";
 import {
   ExploreAccordion,
   ExploreEntityHeader,
@@ -147,6 +147,8 @@ export function ExploreCoursePage({
     return { courseCode, courseTitle };
   }, [loading, urlNorm, courseOfferings]);
 
+  usePublishBasketTarget(selectedCourseMeta?.courseCode ?? null);
+
   // Other codes in the same alias group that actually have data, for the "also known as" note.
   const aliasCodes = useMemo(() => {
     if (urlNorm == null || componentId == null) return [];
@@ -234,7 +236,6 @@ export function ExploreCoursePage({
               <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
                 {selectedCourseMeta.courseCode}
               </Title>
-              <AddToBasketButton code={selectedCourseMeta.courseCode} variant="labeled" />
               {catalogueUrl ? (
                 <CatalogueLink href={catalogueUrl} label={tr("explore.openInCatalogue")} />
               ) : null}
