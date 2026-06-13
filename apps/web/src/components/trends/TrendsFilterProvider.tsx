@@ -16,9 +16,7 @@ import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useAppStore } from "../../store/appStore";
 import { createRankedOptionsFilter } from "../../lib/explore/optionRanking";
 import { formatMetricValue } from "../../lib/trends/metrics";
-import { toUrlSearch } from "../../lib/trends/searchParams";
 import type { TrendsMetric, TrendsSearch } from "../../lib/trends/searchParams";
-import type { BackState } from "../../lib/navigation/backState";
 import type { TrendsCardContext } from "./cardContext";
 import { TrendsContext } from "./trendsContext";
 import type { TrendsContextValue } from "./trendsContext";
@@ -170,11 +168,6 @@ export function TrendsFilterProvider({ search, onChange, children }: TrendsFilte
     [onChange],
   );
 
-  const trendsBack = useMemo<BackState>(
-    () => ({ to: "/trends", search: toUrlSearch(search), label: tr("trends.title") }),
-    [search],
-  );
-
   const scopeSummary = useMemo(() => {
     const parts: string[] = [];
     if (programSlugValue) {
@@ -220,7 +213,6 @@ export function TrendsFilterProvider({ search, onChange, children }: TrendsFilte
       filteredMode,
       scopeSummary,
       activeFilterCount,
-      trendsBack,
       formatMetric: formatMetricValue,
     }),
     [
@@ -249,7 +241,6 @@ export function TrendsFilterProvider({ search, onChange, children }: TrendsFilte
       filteredMode,
       scopeSummary,
       activeFilterCount,
-      trendsBack,
     ],
   );
 

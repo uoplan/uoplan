@@ -7,7 +7,7 @@ import { RatingBadge } from "../shared/RatingBadge";
 import type { ExploreCourseSearchEntry } from "../../lib/explore/gradesSearch";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
-import { EXPLORE_RESULT_CARD_STYLE, exploreCardBackState } from "./exploreResultCardShared";
+import { EXPLORE_RESULT_CARD_STYLE } from "./exploreResultCardShared";
 import {
   SearchResultCardBody,
   SearchResultCardSpacer,
@@ -25,12 +25,10 @@ const COURSE_CARD_LINK_STYLE: CSSProperties = {
 export function SearchResultCourseCard({
   entry,
   sentiment,
-  query,
   searchParams,
 }: {
   entry: ExploreCourseSearchEntry;
   sentiment?: number | null;
-  query?: string;
   searchParams: ExploreSearchParams;
 }) {
   useTr();
@@ -42,7 +40,6 @@ export function SearchResultCourseCard({
         to="/explore/course/$course"
         params={{ course: courseNormToPathParam(entry.normCode) }}
         search={searchParams}
-        state={exploreCardBackState(searchParams, query) as never}
         style={COURSE_CARD_LINK_STYLE}
       >
         <SearchResultCardBody>

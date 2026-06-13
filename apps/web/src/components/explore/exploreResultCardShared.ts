@@ -1,7 +1,5 @@
 import type { CSSProperties } from "react";
 import type { GradeVizData } from "@uoplan/core";
-import { locationLabel } from "../../lib/navigation/backState";
-import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 
 /**
  * Shared chrome for the four Explore search-result cards (course, professor,
@@ -25,21 +23,6 @@ export const EXPLORE_RESULT_CARD_STYLE: CSSProperties = {
   transition:
     "background-color var(--app-transition), border-color var(--app-transition), transform var(--app-transition), box-shadow var(--app-transition)",
 };
-
-/**
- * The `state.back` payload that lets an Explore detail page link back to the
- * search results with the originating query/filters.
- */
-export function exploreCardBackState(search: ExploreSearchParams, query?: string) {
-  const q = query?.trim() ?? "";
-  return {
-    back: {
-      to: "/explore",
-      search,
-      label: locationLabel("/explore", q ? `?q=${encodeURIComponent(q)}` : ""),
-    },
-  };
-}
 
 const LETTER_GRADES = new Set(["F", "E", "D", "D+", "C", "C+", "B", "B+", "A-", "A", "A+"]);
 

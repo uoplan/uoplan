@@ -6,14 +6,13 @@ import { tr } from "../../i18n";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import { RatingBadge } from "../shared/RatingBadge";
-import { EXPLORE_RESULT_CARD_STYLE, exploreCardBackState } from "./exploreResultCardShared";
+import { EXPLORE_RESULT_CARD_STYLE } from "./exploreResultCardShared";
 
 type Props = {
   discipline: Discipline;
   courseCount: number;
   gradeViz?: GradeVizData | null;
   sentiment?: number | null;
-  query?: string;
   searchParams: ExploreSearchParams;
 };
 
@@ -22,7 +21,6 @@ export function SearchResultDisciplineCard({
   courseCount,
   gradeViz,
   sentiment,
-  query,
   searchParams,
 }: Props) {
   const { i18n } = useLingui();
@@ -34,7 +32,6 @@ export function SearchResultDisciplineCard({
       to="/explore/discipline/$discipline"
       params={{ discipline: discipline.code.toLowerCase() }}
       search={searchParams}
-      state={exploreCardBackState(searchParams, query) as never}
       className="soft-lift"
       style={EXPLORE_RESULT_CARD_STYLE}
     >

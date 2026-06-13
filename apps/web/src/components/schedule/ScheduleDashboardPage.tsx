@@ -94,7 +94,6 @@ export function ScheduleDashboardPage() {
       await generate();
       await navigate({
         to: "/schedule",
-        state: { back: { to: "/personalize", label: tr("landing.personalize.title") } } as never,
       });
     })();
   };

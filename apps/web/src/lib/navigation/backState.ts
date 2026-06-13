@@ -1,24 +1,35 @@
+import type { ProfessorRegistry } from "@uoplan/core";
 import { tr } from "../../i18n";
-
-/**
- * Describes where a "back" affordance should return to and how to label it.
- * Attached to router location `state` by forward navigations so the destination
- * page can render an accurate back button and pop browser history.
- */
-export type BackState = {
-  to: string;
-  params?: Record<string, string>;
-  search?: Record<string, unknown>;
-  label: string;
-};
+import { parseCoursePathParam } from "../explore/courseSearchParams";
+import { resolveProfessorRoute } from "../explore/professorRoute";
 
 /**
  * Clean, human label for the page a given URL points to, used for back buttons,
  * footer links, and anywhere else that names a navigation target. Matches on the
  * top-level section and can refine by query (e.g. an Explore search shows the
- * query it returns to), so every affordance names its destination consistently.
+ * query it returns to) or by path (an Explore course detail shows its code), so
+ * every affordance names its destination consistently from the URL alone.
+ *
+ * Professor detail pages encode only a slug/legacyId, which can't be turned into
+ * a display name by string-munging alone, so pass the (already-loaded) professor
+ * `registry` to resolve the canonical name; without it the label falls back to
+ * the generic Explore section name.
  */
-export function locationLabel(pathname: string, search?: string): string {
+export function locationLabel(
+  pathname: string,
+  search?: string,
+  registry?: ProfessorRegistry | null,
+): string {
+  if (pathname.startsWith("/explore/course/")) {
+    const param = pathname.slice("/explore/course/".length).split("/")[0];
+    const code = parseCoursePathParam(param);
+    if (code) return code;
+  }
+  if (pathname.startsWith("/explore/professor/")) {
+    const param = pathname.slice("/explore/professor/".length).split("/")[0];
+    const { entry } = resolveProfessorRoute(registry, param);
+    if (entry) return entry.name;
+  }
   if (pathname.startsWith("/explore")) {
     const q = search ? new URLSearchParams(search).get("q")?.trim() : null;
     return q ? tr("explore.backToSearch", { q }) : tr("explore.title");

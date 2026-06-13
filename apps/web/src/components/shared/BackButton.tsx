@@ -1,9 +1,9 @@
 import { Group, Text, UnstyledButton } from "@mantine/core";
 import { IconChevronLeft } from "@tabler/icons-react";
-import { useCanGoBack, useLocation, useNavigate, useRouter } from "@tanstack/react-router";
+import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
 import { locationLabel } from "../../lib/navigation/backState";
-import type { BackState } from "../../lib/navigation/backState";
 import { usePreviousLocation } from "../../lib/navigation/navigationHistory";
+import { useAppStore } from "../../store/appStore";
 
 type BackButtonProps = {
   /** Logical parent to navigate to when there is no in-app history to pop. */
@@ -22,11 +22,10 @@ type BackButtonProps = {
  *
  * When the current entry was reached via an in-app navigation it pops browser
  * history (`router.history.back()`) so the exact prior URL — query, filters,
- * scroll — is restored. The label prefers an explicit `state.back.label` from
- * the referrer, then the central name of the globally-tracked previous location
- * (so e.g. arriving at Personalize from Explore reads "Course explorer", not
- * "Home"), then the fallback. Only a deep link / fresh load (no in-app history)
- * navigates to the logical parent instead.
+ * scroll — is restored. The label is the central name of the globally-tracked
+ * previous location (so e.g. arriving at Personalize from Explore reads
+ * "Search results for …", not "Home"). Only a deep link / fresh load (no in-app
+ * history) navigates to the logical parent instead, labelled from it.
  */
 export function BackButton({
   fallbackTo,
@@ -37,14 +36,12 @@ export function BackButton({
   const router = useRouter();
   const navigate = useNavigate();
   const canGoBack = useCanGoBack();
-  const back = useLocation({
-    select: (s) => (s.state as { back?: BackState }).back,
-  });
   const previous = usePreviousLocation();
+  const professors = useAppStore((s) => s.professors);
 
   const historyLabel =
-    canGoBack && previous ? locationLabel(previous.pathname, previous.search) : null;
-  const label = back?.label ?? historyLabel ?? fallbackLabel ?? locationLabel(fallbackTo);
+    canGoBack && previous ? locationLabel(previous.pathname, previous.search, professors) : null;
+  const label = historyLabel ?? fallbackLabel ?? locationLabel(fallbackTo);
 
   const onBack = () => {
     if (canGoBack) {
@@ -52,9 +49,9 @@ export function BackButton({
       return;
     }
     void navigate({
-      to: back?.to ?? fallbackTo,
-      params: (back?.params ?? fallbackParams) as Record<string, string>,
-      search: (back?.search ?? fallbackSearch) as never,
+      to: fallbackTo,
+      params: fallbackParams as Record<string, string>,
+      search: fallbackSearch as never,
       replace: true,
     } as never);
   };

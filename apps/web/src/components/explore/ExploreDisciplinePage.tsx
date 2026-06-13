@@ -7,7 +7,6 @@ import type { Discipline, ProfessorRatingsMap } from "@uoplan/core";
 import { groupOfferingsByCourse, groupOfferingsByProfessor } from "../../lib/explore/gradesSearch";
 import type { CourseOfferingGroup } from "../../lib/explore/gradesSearch";
 import { useExploreOfferings } from "./exploreOfferingsContext";
-import type { BackState } from "../../lib/navigation/backState";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
@@ -27,11 +26,9 @@ import {
 function DisciplineProfessorRows({
   group,
   professorRatings,
-  currentEntry,
 }: {
   group: CourseOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
-  currentEntry?: BackState;
 }) {
   const professorGroups = useMemo(
     () => groupOfferingsByProfessor(group.offerings),
@@ -62,11 +59,7 @@ function DisciplineProfessorRows({
               },
             }}
           >
-            <ExploreProfessorSummaryBar
-              group={pg}
-              professorRatings={professorRatings}
-              currentEntry={currentEntry}
-            />
+            <ExploreProfessorSummaryBar group={pg} professorRatings={professorRatings} />
           </Paper>
         );
       })}
@@ -77,23 +70,17 @@ function DisciplineProfessorRows({
 function DisciplineCourseItem({
   group,
   professorRatings,
-  currentEntry,
 }: {
   group: CourseOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
-  currentEntry?: BackState;
 }) {
   return (
     <Accordion.Item value={group.groupId}>
       <Accordion.Control>
-        <ExploreCourseSummaryBar group={group} currentEntry={currentEntry} />
+        <ExploreCourseSummaryBar group={group} />
       </Accordion.Control>
       <Accordion.Panel>
-        <DisciplineProfessorRows
-          group={group}
-          professorRatings={professorRatings}
-          currentEntry={currentEntry}
-        />
+        <DisciplineProfessorRows group={group} professorRatings={professorRatings} />
       </Accordion.Panel>
     </Accordion.Item>
   );
@@ -151,15 +138,6 @@ export function ExploreDisciplinePage({
     [disciplineOfferings],
   );
 
-  const disciplineEntry = useMemo<BackState>(
-    () => ({
-      to: "/explore/discipline/$discipline",
-      params: { discipline: disciplineCode },
-      label: titleCode,
-    }),
-    [disciplineCode, titleCode],
-  );
-
   return (
     <m.div
       initial={{ opacity: 0, y: 12 }}
@@ -201,7 +179,6 @@ export function ExploreDisciplinePage({
                   key={g.groupId}
                   group={g}
                   professorRatings={professorRatings}
-                  currentEntry={disciplineEntry}
                 />
               ))}
             </ExploreAccordion>

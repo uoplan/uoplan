@@ -2,7 +2,6 @@ import { createContext, useContext } from "react";
 import type { CourseGradesData, ProgramCourseFilter, TermSeason, TrendPoint } from "@uoplan/core";
 import type { createRankedOptionsFilter } from "../../lib/explore/optionRanking";
 import type { TrendsMetric, TrendsSearch } from "../../lib/trends/searchParams";
-import type { BackState } from "../../lib/navigation/backState";
 import type { TrendsCardContext } from "./cardContext";
 
 export type SelectOption = { value: string; label: string };
@@ -42,7 +41,6 @@ export interface TrendsContextValue {
 
   scopeSummary: string;
   activeFilterCount: number;
-  trendsBack: BackState;
 
   formatMetric: (metric: TrendsMetric, value: number | null) => string;
 }

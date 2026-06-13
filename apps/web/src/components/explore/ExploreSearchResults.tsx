@@ -187,7 +187,6 @@ export function ExploreSearchResults({
             <SearchResultCourseCard
               entry={entry}
               sentiment={courseSentiment?.get(entry.normCode) ?? null}
-              query={debouncedQuery}
               searchParams={currentSearchParams}
             />
           ),
@@ -208,7 +207,6 @@ export function ExploreSearchResults({
               courseCount={disciplineCourseCount.get(d.code) ?? 0}
               gradeViz={disciplineStats.get(d.code)?.gradeViz ?? null}
               sentiment={disciplineStats.get(d.code)?.sentiment ?? null}
-              query={debouncedQuery}
               searchParams={currentSearchParams}
             />
           ),
@@ -228,7 +226,6 @@ export function ExploreSearchResults({
               entry={entry}
               professorRatings={professorRatings}
               sentiment={professorSentiment?.get(normalizeProfessorName(entry.displayName)) ?? null}
-              query={debouncedQuery}
               searchParams={currentSearchParams}
             />
           ),
@@ -248,7 +245,6 @@ export function ExploreSearchResults({
               program={program}
               gradeViz={programStats.get(program.slug)?.gradeViz ?? null}
               sentiment={programStats.get(program.slug)?.sentiment ?? null}
-              query={debouncedQuery}
             />
           ),
         }))}
