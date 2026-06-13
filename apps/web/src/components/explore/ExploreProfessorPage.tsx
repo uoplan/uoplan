@@ -6,10 +6,15 @@ import { normalizeProfessorName, pickCanonicalProfessorName } from "@uoplan/core
 import type { CanonicalProfessorName } from "@uoplan/core";
 import { tr, useTr } from "../../i18n";
 import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
-import { groupOfferingsByCourse } from "../../lib/explore/gradesSearch";
+import { hasActiveFilters } from "../../lib/explore/exploreFilters";
+import {
+  filterProfessorCourseGroups,
+  professorMatchesRatingFilter,
+} from "../../lib/explore/detailFilters";
 import { professorRouteParam, resolveProfessorRoute } from "../../lib/explore/professorRoute";
 import { useAppStore } from "../../store/appStore";
 import { useExploreOfferings } from "./exploreOfferingsContext";
+import { useExploreDetailFilters } from "./useExploreDetailFilters";
 import { useProfessorFeedbackViews } from "../../hooks/useFeedbackViews";
 import { FeedbackSummaryCard } from "./feedback/FeedbackSummaryCard";
 import { ExploreCourseItem } from "./ExploreProfessorGradesLayout";
@@ -25,8 +30,15 @@ import {
 
 export function ExploreProfessorPage({ slug }: { slug: string }) {
   useTr();
-  const { offerings: allOfferings } = useExploreOfferings();
+  const { offerings: allOfferings, getCourseEntryByNorm } = useExploreOfferings();
   const registry = useAppStore(useShallow((s) => s.professors));
+
+  const {
+    filters,
+    sentiment: sentimentSets,
+    requirementCandidateSet,
+    linkSearch,
+  } = useExploreDetailFilters();
 
   const resolved = useMemo(() => resolveProfessorRoute(registry, slug), [registry, slug]);
   const { index, entry, legacyId } = resolved;
@@ -44,14 +56,34 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
     resolved.displayName ??
     pickCanonicalProfessorName([tr("explore.professorFallback")]);
 
-  const courseGroups = useMemo(
-    () => groupOfferingsByCourse(professorOfferings),
-    [professorOfferings],
+  const courseEntryByNorm = useMemo(() => {
+    const needsCourseIndex =
+      filters.levels.length > 0 ||
+      filters.languages.length > 0 ||
+      filters.disciplines.length > 0 ||
+      filters.difficulty !== null ||
+      filters.minFeedback !== null ||
+      filters.contributesToRequirements;
+    return needsCourseIndex ? getCourseEntryByNorm() : new Map();
+  }, [filters, getCourseEntryByNorm]);
+
+  const { groups: courseGroups, aggregateByGroupId } = useMemo(
+    () =>
+      filterProfessorCourseGroups(professorOfferings, filters, {
+        courseEntryByNorm,
+        sentiment: sentimentSets,
+        requirementCandidateSet,
+      }),
+    [professorOfferings, filters, courseEntryByNorm, sentimentSets, requirementCandidateSet],
   );
 
   const rating = entry?.rating ?? null;
   const numRatings = entry?.numRatings ?? null;
   const hasRating = rating != null && Number.isFinite(rating);
+
+  // Min-rating describes the single professor, so it gates the whole course list.
+  const ratingGated = !professorMatchesRatingFilter(hasRating ? rating : null, filters.minRating);
+  const displayedCourseGroups = ratingGated ? [] : courseGroups;
   const rmpLegacyId = legacyId;
   const hasRmpLink = rmpLegacyId != null && Number.isFinite(rmpLegacyId) && rmpLegacyId > 0;
   const showRmp = hasRating || hasRmpLink;
@@ -120,7 +152,7 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
           )}
         </ExploreEntityHeader>
 
-        {courseGroups.length === 0 ? (
+        {displayedCourseGroups.length === 0 ? (
           <Box
             style={{
               paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
@@ -130,13 +162,15 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
             }}
           >
             <Text c="dimmed" size="sm">
-              {tr("explore.professorNoCourses")}
+              {hasActiveFilters(filters)
+                ? tr("explore.professorNoCoursesForFilters")
+                : tr("explore.professorNoCourses")}
             </Text>
           </Box>
         ) : (
           <ExploreFullBleed>
             <ExploreAccordion>
-              {courseGroups.map((g) => (
+              {displayedCourseGroups.map((g) => (
                 <ExploreCourseItem
                   key={g.groupId}
                   group={g}
@@ -145,6 +179,8 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
                     params: { slug: profRouteParam },
                     label: displayName,
                   }}
+                  aggregateOfferings={aggregateByGroupId?.get(g.groupId)}
+                  linkSearch={linkSearch}
                 />
               ))}
             </ExploreAccordion>

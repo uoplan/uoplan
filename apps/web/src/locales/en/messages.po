@@ -980,6 +980,10 @@ msgstr "Search results for \"{q}\""
 msgid "explore.courseNoProfessors"
 msgstr "No grade data found for this course."
 
+#: apps/web/src/components/explore/ExploreCoursePage.tsx:292
+msgid "explore.courseNoProfessorsForFilters"
+msgstr "No professors match the current filters."
+
 msgid "explore.disciplineCourseCount"
 msgstr "{count, plural, one {# course} other {# courses}}"
 
@@ -1209,6 +1213,10 @@ msgstr "Professor"
 
 msgid "explore.professorNoCourses"
 msgstr "No grade history found for this instructor."
+
+#: apps/web/src/components/explore/ExploreProfessorPage.tsx:161
+msgid "explore.professorNoCoursesForFilters"
+msgstr "No courses match the current filters."
 
 msgid "explore.profileLink"
 msgstr "Profile"

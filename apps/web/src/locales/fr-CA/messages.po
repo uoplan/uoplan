@@ -980,6 +980,10 @@ msgstr "Résultats pour \"{q}\""
 msgid "explore.courseNoProfessors"
 msgstr "Aucune donnée de notes pour ce cours."
 
+#: apps/web/src/components/explore/ExploreCoursePage.tsx:292
+msgid "explore.courseNoProfessorsForFilters"
+msgstr "Aucun professeur ne correspond aux filtres actuels."
+
 msgid "explore.disciplineCourseCount"
 msgstr "{count, plural, one {# cours} other {# cours}}"
 
@@ -1209,6 +1213,10 @@ msgstr "Professeur"
 
 msgid "explore.professorNoCourses"
 msgstr "Aucune donnée de notes pour ce professeur."
+
+#: apps/web/src/components/explore/ExploreProfessorPage.tsx:161
+msgid "explore.professorNoCoursesForFilters"
+msgstr "Aucun cours ne correspond aux filtres actuels."
 
 msgid "explore.profileLink"
 msgstr "Profil"

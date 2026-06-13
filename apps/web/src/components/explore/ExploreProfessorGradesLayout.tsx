@@ -24,6 +24,7 @@ import type {
   ProfessorOfferingGroup,
 } from "../../lib/explore/gradesSearch";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
+import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { professorRouteParam } from "../../lib/explore/professorRoute";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
@@ -101,6 +102,10 @@ type ExploreProfessorSummaryBarProps = {
   professorRatings: ProfessorRatingsMap | null;
   stopPropagation?: boolean;
   currentEntry?: BackState;
+  /** All-terms offerings for the histogram when the rows are term-filtered (defaults to group.offerings). */
+  aggregateOfferings?: ExploreOfferingFlat[];
+  /** Search params carried into the professor link so active filters persist (defaults to none). */
+  linkSearch?: ExploreSearchParams;
 };
 
 export function ExploreProfessorSummaryBar({
@@ -108,13 +113,17 @@ export function ExploreProfessorSummaryBar({
   professorRatings,
   stopPropagation = false,
   currentEntry,
+  aggregateOfferings,
+  linkSearch,
 }: ExploreProfessorSummaryBarProps) {
   const combinedViz = useMemo(
     () =>
       normalizeGradeVizDistribution(
-        mergeGradeDistributionCounts(group.offerings.map((o) => o.distribution)),
+        mergeGradeDistributionCounts(
+          (aggregateOfferings ?? group.offerings).map((o) => o.distribution),
+        ),
       ),
-    [group.offerings],
+    [aggregateOfferings, group.offerings],
   );
 
   const ratingLine = group.unassigned
@@ -157,7 +166,7 @@ export function ExploreProfessorSummaryBar({
                 displayName: group.displayName,
               }),
             }}
-            search={EMPTY_EXPLORE_SEARCH}
+            search={linkSearch ?? EMPTY_EXPLORE_SEARCH}
             state={currentEntry ? ({ back: currentEntry } as never) : undefined}
             onClick={(e) => {
               if (stopPropagation) e.stopPropagation();
@@ -182,15 +191,26 @@ export function ExploreProfessorSummaryBar({
 type ExploreCourseSummaryBarProps = {
   group: CourseOfferingGroup;
   currentEntry?: BackState;
+  /** All-terms offerings for the histogram when the rows are term-filtered (defaults to group.offerings). */
+  aggregateOfferings?: ExploreOfferingFlat[];
+  /** Search params carried into the course link so active filters persist (defaults to none). */
+  linkSearch?: ExploreSearchParams;
 };
 
-export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSummaryBarProps) {
+export function ExploreCourseSummaryBar({
+  group,
+  currentEntry,
+  aggregateOfferings,
+  linkSearch,
+}: ExploreCourseSummaryBarProps) {
   const combinedViz = useMemo(
     () =>
       normalizeGradeVizDistribution(
-        mergeGradeDistributionCounts(group.offerings.map((o) => o.distribution)),
+        mergeGradeDistributionCounts(
+          (aggregateOfferings ?? group.offerings).map((o) => o.distribution),
+        ),
       ),
-    [group.offerings],
+    [aggregateOfferings, group.offerings],
   );
 
   return (
@@ -213,7 +233,7 @@ export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSu
         <Link
           to="/explore/course/$course"
           params={{ course: courseNormToPathParam(group.groupId) }}
-          search={EMPTY_EXPLORE_SEARCH}
+          search={linkSearch ?? EMPTY_EXPLORE_SEARCH}
           state={currentEntry ? ({ back: currentEntry } as never) : undefined}
           onClick={(e) => {
             e.stopPropagation();
@@ -241,13 +261,25 @@ export function ExploreCourseSummaryBar({ group, currentEntry }: ExploreCourseSu
 type ExploreCourseItemProps = {
   group: CourseOfferingGroup;
   currentEntry?: BackState;
+  aggregateOfferings?: ExploreOfferingFlat[];
+  linkSearch?: ExploreSearchParams;
 };
 
-export function ExploreCourseItem({ group, currentEntry }: ExploreCourseItemProps) {
+export function ExploreCourseItem({
+  group,
+  currentEntry,
+  aggregateOfferings,
+  linkSearch,
+}: ExploreCourseItemProps) {
   return (
     <Accordion.Item value={group.groupId}>
       <Accordion.Control>
-        <ExploreCourseSummaryBar group={group} currentEntry={currentEntry} />
+        <ExploreCourseSummaryBar
+          group={group}
+          currentEntry={currentEntry}
+          aggregateOfferings={aggregateOfferings}
+          linkSearch={linkSearch}
+        />
       </Accordion.Control>
       <Accordion.Panel>
         <ExploreProfessorOfferingRows offerings={group.offerings} showCourseCode={false} />
