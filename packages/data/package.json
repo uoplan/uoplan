@@ -10,7 +10,9 @@
     "./browser": "./src/browser.ts",
     "./worker": "./src/worker.ts",
     "./node": "./src/node.ts",
-    "./codegen": "./src/codegen.ts"
+    "./codegen": "./src/codegen.ts",
+    "./transport": "./src/transport.ts",
+    "./nativeCache": "./src/nativeCache.ts"
   },
   "scripts": {
     "typecheck": "tsgo -b tsconfig.json",

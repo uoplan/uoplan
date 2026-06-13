@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   aggregateCourseDistribution,
   buildCourseDifficultyIndexFromCache,
+  buildGradeHistogramModel,
   courseAPlusPercent,
   courseGpa,
   distributionGpa,
@@ -138,5 +139,55 @@ describe("buildCourseDifficultyIndexFromCache", () => {
     const cache = { getSchedule: () => {} } as unknown as DataCache;
     const index = buildCourseDifficultyIndexFromCache(cache);
     expect(index(normalizeCourseCode("MAT 0000"))).toBeNull();
+  });
+
+  it("buildGradeHistogramModel orders bars DR → Fail → letters and merges failures", () => {
+    const viz = normalizeGradeVizDistribution({
+      DR: 3,
+      F: 2,
+      EIN: 1,
+      ABS: 1,
+      D: 4,
+      "C+": 5,
+      B: 6,
+      "A+": 10,
+      S: 8,
+      NS: 2,
+    });
+    expect(viz).not.toBeNull();
+    const model = buildGradeHistogramModel(viz!);
+
+    // 11 bars: DR + Fail + 9 letter bars (D..A+).
+    expect(model.displayBars.map((b) => b.key)).toEqual([
+      "DR",
+      "FAIL",
+      "D",
+      "D+",
+      "C",
+      "C+",
+      "B",
+      "B+",
+      "A-",
+      "A",
+      "A+",
+    ]);
+
+    const byKey = new Map(model.displayBars.map((b) => [b.key, b]));
+    expect(byKey.get("DR")?.count).toBe(3);
+    expect(byKey.get("DR")?.bucketId).toBe("grey");
+    // F + EIN + ABS merged into the single Fail bar.
+    expect(byKey.get("FAIL")?.count).toBe(4);
+    expect(byKey.get("FAIL")?.bucketId).toBe("red");
+    expect(byKey.get("A+")?.count).toBe(10);
+    expect(byKey.get("A+")?.bucketId).toBe("green");
+
+    // S/NS aggregated separately from the letter bars. Only NS appears in the
+    // normalized histogram (S folds into the "blue" bucket), mirroring the web.
+    expect(model.sCount).toBe(0);
+    expect(model.nsCount).toBe(2);
+    expect(model.snsTotal).toBe(2);
+
+    // Bar-height scaling uses the tallest bar (A+ = 10).
+    expect(model.maxHistogramCount).toBe(10);
   });
 });

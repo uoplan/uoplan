@@ -27,5 +27,6 @@ module.exports = {
     "^react$": "<rootDir>/node_modules/react",
     "^react/(.*)$": "<rootDir>/node_modules/react/$1",
     "^react-native$": "<rootDir>/node_modules/react-native",
+    "\\.css$": "<rootDir>/jest-style-mock.js",
   },
 };

@@ -13,17 +13,32 @@
   },
   "devDependencies": {
     "@mantine/core": "^9.2.0",
+    "@tabler/icons-react": "^3.40.0",
     "@types/react": "^19.2.14",
+    "expo-symbols": "~56.0.6",
+    "framer-motion": "^12.36.0",
     "react": "^19.2.4",
     "react-native": "0.85.3"
   },
   "peerDependencies": {
     "@mantine/core": "*",
+    "@tabler/icons-react": "*",
+    "expo-symbols": "*",
+    "framer-motion": "*",
     "react": "*",
     "react-native": "*"
   },
   "peerDependenciesMeta": {
     "@mantine/core": {
+      "optional": true
+    },
+    "@tabler/icons-react": {
+      "optional": true
+    },
+    "expo-symbols": {
+      "optional": true
+    },
+    "framer-motion": {
       "optional": true
     },
     "react-native": {

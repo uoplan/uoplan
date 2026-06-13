@@ -63,3 +63,27 @@ export const Spacing = {
 
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
 export const MaxContentWidth = 800;
+
+/**
+ * Warm light surface palette for the native app shell, aligned with the
+ * `@uoplan/ui` native primitive tones (which currently inline a light theme).
+ * Keeping the shell on the same warm-paper palette as the cards avoids the
+ * mismatch you'd get from following the system dark scheme while the primitives
+ * stay light. Mirrors the web app's paper aesthetic.
+ */
+export const Surface = {
+  /** App/page background (warm off-white). */
+  page: "#faf8f3",
+  /** Card / raised surface. */
+  card: "#fffdfa",
+  /** Header band / subtle fill. */
+  subtle: "#f3efe7",
+  /** Hairline borders. */
+  border: "#ebe6dd",
+  /** Primary text. */
+  label: "#2a2826",
+  /** Secondary / dimmed text. */
+  dimmed: "#5e5a52",
+  /** Brand accent (uoplan garnet). */
+  accent: "#8c1d40",
+} as const;
