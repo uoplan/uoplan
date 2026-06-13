@@ -35,7 +35,7 @@ function buildHistogramModel(gradeViz: GradeVizData) {
 
   const displayBars: DisplayBar[] = [
     { key: "DR", label: tr("calendar.grade.dropLabel"), count: countOf("DR"), bucketId: "grey" },
-    { key: "FAIL", label: tr("calendar.grade.failLabel"), count: failCount, bucketId: "red" },
+    { key: "FAIL", label: "F", count: failCount, bucketId: "red" },
     ...LETTER_BAR_ORDER.map(
       (grade): DisplayBar => ({
         key: grade,

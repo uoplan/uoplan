@@ -531,10 +531,6 @@ msgstr "Distribution des notes"
 msgid "calendar.grade.dropLabel"
 msgstr "Abandon"
 
-#: apps/web/src/components/calendar/GradeDistributionViz.tsx:38
-msgid "calendar.grade.failLabel"
-msgstr "Échec"
-
 msgid "calendar.grade.histogramTooltip"
 msgstr "{grade} : {count} etudiant{count, plural, one {} other {s}} ({percent} %)"
 
