@@ -996,6 +996,11 @@ msgstr "Also known as:"
 msgid "explore.backToSearch"
 msgstr "Search results for \"{q}\""
 
+#: apps/web/src/components/explore/DisciplineCourseList.tsx:254
+#: apps/web/src/components/explore/DisciplineCourseList.tsx:60
+msgid "explore.courseNoDataYet"
+msgstr "No grade or schedule data yet"
+
 msgid "explore.courseNoProfessors"
 msgstr "No grade data found for this course."
 
@@ -1009,6 +1014,10 @@ msgstr "{count, plural, one {# course} other {# courses}}"
 msgid "explore.disciplineNoData"
 msgstr "No courses found for this discipline."
 
+#: apps/web/src/components/explore/DisciplineCourseList.tsx:360
+msgid "explore.disciplineNoDataDescription"
+msgstr "This discipline doesn't have any course data yet — check back later."
+
 msgid "explore.distributionHeading"
 msgstr "Grade distribution"
 
@@ -1017,6 +1026,10 @@ msgstr "{count, plural, one {# discipline} other {# disciplines}}"
 
 msgid "explore.facultyNoData"
 msgstr "No disciplines found for this faculty."
+
+#: apps/web/src/components/explore/ExploreFacultyPage.tsx:203
+msgid "explore.facultyNoDataDescription"
+msgstr "This faculty doesn't have any disciplines with course data yet."
 
 #: apps/web/src/components/explore/feedback/FeedbackSummaryCard.tsx:122
 msgid "explore.feedback.cardStat.rate"

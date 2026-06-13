@@ -996,6 +996,11 @@ msgstr "Aussi connu sous le nom de :"
 msgid "explore.backToSearch"
 msgstr "Résultats pour \"{q}\""
 
+#: apps/web/src/components/explore/DisciplineCourseList.tsx:254
+#: apps/web/src/components/explore/DisciplineCourseList.tsx:60
+msgid "explore.courseNoDataYet"
+msgstr "Aucune donnée de notes ou d'horaire pour l'instant"
+
 msgid "explore.courseNoProfessors"
 msgstr "Aucune donnée de notes pour ce cours."
 
@@ -1009,6 +1014,10 @@ msgstr "{count, plural, one {# cours} other {# cours}}"
 msgid "explore.disciplineNoData"
 msgstr "Aucun cours trouvé pour cette discipline."
 
+#: apps/web/src/components/explore/DisciplineCourseList.tsx:360
+msgid "explore.disciplineNoDataDescription"
+msgstr "Cette discipline n'a pas encore de données de cours — revenez plus tard."
+
 msgid "explore.distributionHeading"
 msgstr "Répartition des notes"
 
@@ -1017,6 +1026,10 @@ msgstr "{count, plural, one {# discipline} other {# disciplines}}"
 
 msgid "explore.facultyNoData"
 msgstr "Aucune discipline trouvée pour cette faculté."
+
+#: apps/web/src/components/explore/ExploreFacultyPage.tsx:203
+msgid "explore.facultyNoDataDescription"
+msgstr "Cette faculté n'a pas encore de disciplines comportant des données de cours."
 
 #: apps/web/src/components/explore/feedback/FeedbackSummaryCard.tsx:122
 msgid "explore.feedback.cardStat.rate"

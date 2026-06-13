@@ -3,7 +3,7 @@ import { useLingui } from "@lingui/react";
 import { useEffect, useMemo } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { m } from "framer-motion";
-import type { Discipline, Faculty, ProfessorRatingsMap } from "@uoplan/core";
+import type { Catalogue, Discipline, Faculty, ProfessorRatingsMap } from "@uoplan/core";
 import { localizeFacultyName } from "../../lib/explore/faculty";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
@@ -13,11 +13,13 @@ export function ExploreDisciplinePage({
   disciplineCode,
   disciplines,
   faculties,
+  catalogue,
   professorRatings,
 }: {
   disciplineCode: string;
   disciplines: Discipline[] | null;
   faculties: Faculty[] | null;
+  catalogue: Catalogue | null;
   professorRatings: ProfessorRatingsMap | null;
 }) {
   const { i18n } = useLingui();
@@ -106,7 +108,11 @@ export function ExploreDisciplinePage({
           </Box>
         ) : null}
 
-        <DisciplineCourseList disciplineCode={normalizedCode} professorRatings={professorRatings} />
+        <DisciplineCourseList
+          disciplineCode={normalizedCode}
+          catalogue={catalogue}
+          professorRatings={professorRatings}
+        />
       </Stack>
     </m.div>
   );
