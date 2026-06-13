@@ -69,6 +69,41 @@
   transform: translateX(2px);
 }
 
+/* Sidebar variant: a compact single-row hint for embedding in a controls column
+   (the schedule generator), rather than the floating top-of-page pill. The
+   message truncates so the row stays one line in a narrow sidebar. */
+.sidebarPill {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  background: var(--app-warning-soft);
+  border-radius: var(--app-radius-lg);
+  padding: 10px 14px;
+  transition:
+    transform var(--app-transition),
+    box-shadow var(--app-transition);
+  will-change: transform;
+}
+
+.sidebarPill:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--app-shadow-sm);
+}
+
+.sidebarPill:active {
+  transform: translateY(0);
+}
+
+.sidebarText {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .textShort {
   display: none;
 }
@@ -96,12 +131,14 @@
 
 @media (prefers-reduced-motion: reduce) {
   .pill,
+  .sidebarPill,
   .cta,
   .arrow {
     transition: box-shadow var(--app-transition);
   }
 
   .pill:hover,
+  .sidebarPill:hover,
   .pill:hover .arrow {
     transform: none;
   }

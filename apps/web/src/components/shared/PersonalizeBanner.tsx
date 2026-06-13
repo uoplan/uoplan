@@ -8,19 +8,31 @@ import { tr, useTr } from "../../i18n";
 import classes from "./PersonalizeBanner.module.css";
 
 // Routes where a not-yet-personalized user benefits from setting up their
-// profile. Excludes home, trends, graph, changelog, and personalize itself.
-const NUDGE_ROUTE_PREFIXES = ["/explore", "/schedule"];
+// profile via the floating top banner. The schedule generator surfaces the same
+// nudge inside its sidebar instead (variant="sidebar"), so it is excluded here.
+const NUDGE_ROUTE_PREFIXES = ["/explore"];
+
+type PersonalizeBannerProps = {
+  /**
+   * "floating" (default) renders the slim, dismissible top-of-page pill,
+   * self-gated to the nudge routes. "sidebar" renders a compact stacked card
+   * for embedding in a controls column (e.g. the schedule generator), skipping
+   * the route gate so the host decides placement.
+   */
+  variant?: "floating" | "sidebar";
+};
 
 /**
- * A slim, dismissible top-of-page nudge shown on the planning routes when the
- * user has not set their program or completed courses yet. Pointing them at
- * /personalize unlocks requirement-aware schedules and recommendations.
+ * A dismissible nudge shown to users who have not set their program or completed
+ * courses yet. Pointing them at /personalize unlocks requirement-aware schedules
+ * and recommendations. Gates on app data being loaded and the user not being
+ * personalized, returning null when it should not appear.
  *
- * Rendered once in the root layout (always mounted), so a dismissal sticks
- * across in-session navigation. It self-gates on route + personalization state,
- * returning null when it should not appear.
+ * The floating variant is rendered once in the root layout (always mounted, so a
+ * dismissal sticks across navigation) and self-gates on route; the sidebar
+ * variant is placed explicitly by its host.
  */
-export function PersonalizeBanner() {
+export function PersonalizeBanner({ variant = "floating" }: PersonalizeBannerProps) {
   useTr();
   const [dismissed, setDismissed] = useState(false);
   const pathname = useLocation({ select: (l) => l.pathname });
@@ -32,12 +44,32 @@ export function PersonalizeBanner() {
     })),
   );
 
-  const onNudgeRoute = NUDGE_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+  const onNudgeRoute =
+    variant === "sidebar" || NUDGE_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix));
   const personalized = Boolean(program) || completedCount > 0;
 
   // Only render once app data is loaded, so the personalization signal is
   // reliable (program/completed courses resolve from the catalogue).
   if (!indices || dismissed || !onNudgeRoute || personalized) return null;
+
+  if (variant === "sidebar") {
+    return (
+      <Box
+        component={Link}
+        to="/personalize"
+        role="note"
+        className={classes.sidebarPill}
+        data-testid="personalize-sidebar-nudge"
+      >
+        <Box aria-hidden style={{ display: "flex", color: "var(--app-warning)", flexShrink: 0 }}>
+          <IconSparkles size={18} />
+        </Box>
+        <Text size="sm" c="var(--app-text)" className={classes.sidebarText}>
+          {tr("personalizeBanner.messageShort")}
+        </Text>
+      </Box>
+    );
+  }
 
   return (
     <Box className={classes.wrapper}>

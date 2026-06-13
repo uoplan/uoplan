@@ -30,6 +30,7 @@ import { useAppStore, useAppStoreApi } from "../../store/appStore";
 import { useShallow } from "zustand/react/shallow";
 import { CalendarView } from "./CalendarView";
 import { BackButton } from "../shared/BackButton";
+import { PersonalizeBanner } from "../shared/PersonalizeBanner";
 import { buildScheduleIcs, normalizeCourseCode } from "@uoplan/core";
 import { downloadTextFile } from "../../lib/downloadFile";
 import { useShareUrl } from "../../hooks/useShareUrl";
@@ -374,6 +375,8 @@ export function CalendarPage() {
       <Text size="sm" style={{ color: "var(--app-text-muted)", marginTop: isMobile ? 0 : -8 }}>
         {calendarSubtitle}
       </Text>
+
+      <PersonalizeBanner variant="sidebar" />
 
       {noTimeslotCourses.length > 0 && (
         <Alert
