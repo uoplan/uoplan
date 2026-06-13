@@ -87,5 +87,51 @@ export type { SegmentedControlProps } from "./SegmentedControl/SegmentedControl.
 export { Modal } from "./Modal/Modal";
 export type { ModalProps } from "./Modal/Modal.types";
 
+export { ActionIcon } from "./ActionIcon/ActionIcon";
+export type {
+  ActionIconProps,
+  ActionIconSize,
+  ActionIconVariant,
+} from "./ActionIcon/ActionIcon.types";
+
+export { ThemeIcon } from "./ThemeIcon/ThemeIcon";
+export type { ThemeIconProps, ThemeIconSize } from "./ThemeIcon/ThemeIcon.types";
+
+export { Indicator } from "./Indicator/Indicator";
+export type { IndicatorPosition, IndicatorProps } from "./Indicator/Indicator.types";
+
+export { Collapse } from "./Collapse/Collapse";
+export type { CollapseProps } from "./Collapse/Collapse.types";
+
+export { Tabs } from "./Tabs/Tabs";
+export type { TabItem, TabsProps } from "./Tabs/Tabs.types";
+
+export { Accordion } from "./Accordion/Accordion";
+export type { AccordionItem, AccordionProps } from "./Accordion/Accordion.types";
+
+export { Table } from "./Table/Table";
+export type { TableColumn, TableProps } from "./Table/Table.types";
+
+export { Notification } from "./Notification/Notification";
+export type { NotificationProps } from "./Notification/Notification.types";
+
+export { Tooltip } from "./Tooltip/Tooltip";
+export type { TooltipProps } from "./Tooltip/Tooltip.types";
+
+export { Popover } from "./Popover/Popover";
+export type { PopoverProps } from "./Popover/Popover.types";
+
+export { Menu } from "./Menu/Menu";
+export type { MenuOption, MenuProps } from "./Menu/Menu.types";
+
+export { Select } from "./Select/Select";
+export type { SelectProps } from "./Select/Select.types";
+
+export { MultiSelect } from "./MultiSelect/MultiSelect";
+export type { MultiSelectProps } from "./MultiSelect/MultiSelect.types";
+
+export { Drawer } from "./Drawer/Drawer";
+export type { DrawerPosition, DrawerProps } from "./Drawer/Drawer.types";
+
 export type { Align, Justify, Radius, RadiusToken, Spacing, SpacingToken } from "./layout/style";
 export { resolveAlign, resolveJustify, resolveRadius, resolveSpacing } from "./layout/style";

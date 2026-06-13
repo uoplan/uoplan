@@ -3,6 +3,8 @@ import { Platform, ScrollView, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
+  Accordion,
+  ActionIcon,
   Alert,
   Badge,
   Box,
@@ -10,26 +12,40 @@ import {
   Card,
   Center,
   Checkbox,
+  Collapse,
   Divider,
+  Drawer,
   Flex,
   Group,
+  Indicator,
   Loader,
+  Menu,
   Modal,
+  MultiSelect,
+  Notification,
   NumberInput,
   Paper,
   Pill,
+  Popover,
   Progress,
   Radio,
   SegmentedControl,
+  Select,
   SimpleGrid,
   Stack,
   Switch,
+  Table,
+  Tabs,
   Text,
   TextInput,
+  ThemeIcon,
   Title,
+  Tooltip,
 } from "@uoplan/ui";
+import { WelcomeScreen } from "@uoplan/app";
 
 import { ThemedView } from "@/components/themed-view";
+import { NativeNavigationProvider } from "@/navigation/NativeNavigationProvider";
 import { WebBadge } from "@/components/web-badge";
 import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
@@ -52,6 +68,13 @@ export default function HomeScreen() {
   const [campus, setCampus] = useState("main");
   const [credits, setCredits] = useState<number | undefined>(3);
   const [modalOpen, setModalOpen] = useState(false);
+  const [galleryTab, setGalleryTab] = useState("overview");
+  const [collapseOpen, setCollapseOpen] = useState(false);
+  const [selectVal, setSelectVal] = useState<string | null>(null);
+  const [multiVals, setMultiVals] = useState<string[]>(["mat"]);
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [notifVisible, setNotifVisible] = useState(true);
 
   const contentPlatformStyle = Platform.select({
     android: {
@@ -71,6 +94,9 @@ export default function HomeScreen() {
       contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}
     >
       <ThemedView style={styles.container}>
+        <NativeNavigationProvider>
+          <WelcomeScreen />
+        </NativeNavigationProvider>
         <Box px="md" py="md">
           <Stack gap="lg">
             <Stack gap="xs">
@@ -221,6 +247,178 @@ export default function HomeScreen() {
                 </Flex>
               </Stack>
             </Card>
+
+            <Card>
+              <Stack gap="sm">
+                <Title order={4}>Icons &amp; indicators</Title>
+                <Group gap="sm">
+                  <ActionIcon variant="filled" label="filled">
+                    <Text size="sm" weight="bold">
+                      ★
+                    </Text>
+                  </ActionIcon>
+                  <ActionIcon variant="light" label="light">
+                    <Text size="sm">☆</Text>
+                  </ActionIcon>
+                  <ActionIcon variant="default" label="default">
+                    <Text size="sm">↻</Text>
+                  </ActionIcon>
+                  <ThemeIcon tone="accent">
+                    <Text size="sm">A</Text>
+                  </ThemeIcon>
+                  <ThemeIcon tone="success">
+                    <Text size="sm">✓</Text>
+                  </ThemeIcon>
+                  <Indicator label={5} tone="danger">
+                    <ThemeIcon tone="neutral">
+                      <Text size="sm">N</Text>
+                    </ThemeIcon>
+                  </Indicator>
+                </Group>
+              </Stack>
+            </Card>
+
+            <Card>
+              <Stack gap="sm">
+                <Title order={4}>Tabs</Title>
+                <Tabs
+                  value={galleryTab}
+                  onChange={setGalleryTab}
+                  items={[
+                    {
+                      value: "overview",
+                      label: "Overview",
+                      content: <Text size="sm">Overview panel</Text>,
+                    },
+                    {
+                      value: "details",
+                      label: "Details",
+                      content: <Text size="sm">Details panel</Text>,
+                    },
+                  ]}
+                />
+              </Stack>
+            </Card>
+
+            <Card>
+              <Stack gap="sm">
+                <Title order={4}>Accordion &amp; collapse</Title>
+                <Accordion
+                  defaultOpen={["a"]}
+                  items={[
+                    {
+                      value: "a",
+                      label: "First section",
+                      content: <Text size="sm">First body</Text>,
+                    },
+                    {
+                      value: "b",
+                      label: "Second section",
+                      content: <Text size="sm">Second body</Text>,
+                    },
+                  ]}
+                />
+                <Button variant="subtle" onPress={() => setCollapseOpen((open) => !open)}>
+                  {collapseOpen ? "Hide details" : "Show details"}
+                </Button>
+                <Collapse open={collapseOpen}>
+                  <Text size="sm" dimmed>
+                    Collapsible content revealed via the Collapse primitive.
+                  </Text>
+                </Collapse>
+              </Stack>
+            </Card>
+
+            <Card>
+              <Stack gap="sm">
+                <Title order={4}>Selects &amp; overlays</Title>
+                <Select
+                  label="Term"
+                  placeholder="Pick a term…"
+                  value={selectVal}
+                  onChange={setSelectVal}
+                  data={[
+                    { value: "fall", label: "Fall 2025" },
+                    { value: "winter", label: "Winter 2026" },
+                    { value: "summer", label: "Summer 2026" },
+                  ]}
+                />
+                <MultiSelect
+                  label="Subjects"
+                  placeholder="Pick subjects…"
+                  value={multiVals}
+                  onChange={setMultiVals}
+                  data={[
+                    { value: "mat", label: "MAT" },
+                    { value: "iti", label: "ITI" },
+                    { value: "csi", label: "CSI" },
+                  ]}
+                />
+                <Group gap="sm" wrap>
+                  <Tooltip label="Web-only hover hint">
+                    <Button variant="default" onPress={() => {}}>
+                      Tooltip
+                    </Button>
+                  </Tooltip>
+                  <Menu
+                    target={
+                      <Button variant="light" onPress={() => {}}>
+                        Menu
+                      </Button>
+                    }
+                    items={[
+                      { value: "share", label: "Share", onSelect: () => {} },
+                      { value: "export", label: "Export ICS", onSelect: () => {} },
+                    ]}
+                  />
+                  <Popover
+                    opened={popoverOpen}
+                    onChange={setPopoverOpen}
+                    target={
+                      <Button variant="outline" onPress={() => setPopoverOpen((o) => !o)}>
+                        Popover
+                      </Button>
+                    }
+                  >
+                    <Text size="sm">Floating popover content.</Text>
+                  </Popover>
+                  <Button variant="subtle" onPress={() => setDrawerOpen(true)}>
+                    Open drawer
+                  </Button>
+                </Group>
+              </Stack>
+            </Card>
+
+            <Card>
+              <Stack gap="sm">
+                <Title order={4}>Table &amp; notification</Title>
+                <Table
+                  columns={[
+                    { key: "code", header: "Course" },
+                    { key: "section", header: "Section" },
+                    { key: "seats", header: "Seats" },
+                  ]}
+                  rows={[
+                    { code: "ITI 1120", section: "A00", seats: "12" },
+                    { code: "MAT 1320", section: "B00", seats: "3" },
+                    { code: "CSI 2110", section: "C00", seats: "0" },
+                  ]}
+                />
+                {notifVisible ? (
+                  <Notification
+                    title="Schedule generated"
+                    tone="success"
+                    onClose={() => setNotifVisible(false)}
+                  >
+                    3 conflict-free timetables found.
+                  </Notification>
+                ) : (
+                  <Button variant="subtle" onPress={() => setNotifVisible(true)}>
+                    Restore notification
+                  </Button>
+                )}
+              </Stack>
+            </Card>
           </Stack>
         </Box>
         <Modal opened={modalOpen} onClose={() => setModalOpen(false)} title="Modal primitive">
@@ -233,6 +431,21 @@ export default function HomeScreen() {
             </Button>
           </Stack>
         </Modal>
+        <Drawer
+          opened={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          title="Drawer primitive"
+          position="right"
+        >
+          <Stack gap="sm">
+            <Text size="sm" dimmed>
+              This side panel renders via the native Drawer variant.
+            </Text>
+            <Button variant="filled" onPress={() => setDrawerOpen(false)}>
+              Close
+            </Button>
+          </Stack>
+        </Drawer>
         {Platform.OS === "web" && <WebBadge />}
       </ThemedView>
     </ScrollView>

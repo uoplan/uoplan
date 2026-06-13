@@ -17,6 +17,8 @@
   },
   "dependencies": {
     "@expo/ui": "~56.0.17",
+    "@uoplan/app": "workspace:*",
+    "@uoplan/navigation": "workspace:*",
     "@uoplan/theme": "workspace:*",
     "@uoplan/ui": "workspace:*",
     "expo": "~56.0.11",
