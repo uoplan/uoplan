@@ -12,7 +12,11 @@ import {
   GradeDistributionPassingSummary,
 } from "../calendar/GradeDistributionViz";
 import { getAggregateGradeViz, sortGraphNeighbors } from "../../lib/graph/professorGraphDetails";
-import type { GraphNeighbor, NeighborSortMode } from "../../lib/graph/professorGraphDetails";
+import type {
+  GraphNeighbor,
+  NeighborSortMode,
+  ProfessorGraphDetailsData,
+} from "../../lib/graph/professorGraphDetails";
 import type { ExploreOfferingFlat } from "../../lib/explore/gradesSearch";
 import { RatingBadge } from "../shared/RatingBadge";
 
@@ -216,16 +220,8 @@ function NeighborRow({
   );
 }
 
-type ProfessorGraphNodeDetailsProps = {
+type ProfessorGraphNodeDetailsProps = ProfessorGraphDetailsData & {
   node: ProfessorGraphNode;
-  offerings: ExploreOfferingFlat[];
-  neighbors: GraphNeighbor[];
-  neighborSort: NeighborSortMode;
-  onNeighborSortChange: (mode: NeighborSortMode) => void;
-  offeringsByProfessorId: Map<string, ExploreOfferingFlat[]>;
-  professorRatings: ProfessorRatingsMap | null;
-  professorSentiment: Map<string, number> | null;
-  onSelectNode: (node: ProfessorGraphNode) => void;
   showNeighbors: boolean;
 };
 

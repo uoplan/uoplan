@@ -40,6 +40,7 @@ import {
 } from "./prereqs";
 import { normalizeCourseCode } from "../utils/courseUtils";
 import { dateStringToYyyymmdd, yyyymmddToDateString } from "./protoDates";
+import { createExtraCodeAccumulator } from "./codeRef";
 import type { NormalizedCourseCode } from "../brand";
 
 function protoDayToCode(day: ProtoDayOfWeek): DayOfWeekCode {
@@ -154,21 +155,12 @@ function statusFromProto(status: ProtoSectionStatus): string | null {
 
 export function toProtoCatalogue(input: Catalogue): ProtoCatalogue {
   const { table, indexByCode } = createCourseCodeTable(input.courses);
-  const extraCodes: string[] = [];
-  const extraIndexByCode = new Map<NormalizedCourseCode, number>();
+  const codeRefs = createExtraCodeAccumulator();
   const encodeCodeRef = (code: string | undefined): number | undefined => {
     if (!code) return undefined;
     const normalized = normalizeCourseCode(code);
     if (!normalized) return undefined;
-    const idx = indexByCode.get(normalized);
-    if (idx !== undefined) return idx + 1;
-    let extra = extraIndexByCode.get(normalized);
-    if (extra === undefined) {
-      extra = extraCodes.length;
-      extraCodes.push(normalized);
-      extraIndexByCode.set(normalized, extra);
-    }
-    return table.length + extra + 1;
+    return codeRefs.resolve(normalized, indexByCode.get(normalized), table.length);
   };
   const programs = input.programs.map(
     (program): ProtoProgram => ({
@@ -181,7 +173,7 @@ export function toProtoCatalogue(input: Catalogue): ProtoCatalogue {
   );
   return {
     courseCodes: table,
-    extraCodes,
+    extraCodes: codeRefs.extraCodes,
     courses: input.courses.map(
       (course): ProtoCourse => ({
         code: courseIndexFromCode(indexByCode, course.code) ?? 0,

@@ -1,4 +1,6 @@
 export * from "./domain";
+export type { ExtraCodeAccumulator } from "./codeRef";
+export { createExtraCodeAccumulator } from "./codeRef";
 export type { CourseGradesData, CourseGradesEntry, CourseGradesProfessor } from "./grades";
 export { distributionFromColumns, fromProtoCourseGradesData } from "./grades";
 export {

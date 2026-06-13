@@ -3,6 +3,7 @@ import type {
   GradeVizData,
   ProfessorCoTeachingGraph,
   ProfessorGraphNode,
+  ProfessorRatingsMap,
 } from "@uoplan/core";
 import {
   normalizeCourseCode,
@@ -20,6 +21,19 @@ export type NeighborSortMode = "strength" | "name";
 export type GraphNeighbor = {
   node: ProfessorGraphNode;
   weight: number;
+};
+
+/** Shared data props rendered by `ProfessorGraphNodeDetails` and the panel/drawer
+ * wrappers that host it. */
+export type ProfessorGraphDetailsData = {
+  offerings: ExploreOfferingFlat[];
+  neighbors: GraphNeighbor[];
+  neighborSort: NeighborSortMode;
+  onNeighborSortChange: (mode: NeighborSortMode) => void;
+  offeringsByProfessorId: Map<string, ExploreOfferingFlat[]>;
+  professorRatings: ProfessorRatingsMap | null;
+  professorSentiment: Map<string, number> | null;
+  onSelectNode: (node: ProfessorGraphNode) => void;
 };
 
 const OFFERINGS_BUILD_PROGRESS_EVERY = 64;
