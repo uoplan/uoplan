@@ -9,7 +9,6 @@ import type {
   CourseSchedule as ProtoCourseSchedule,
   Discipline as ProtoDiscipline,
   DisciplinesData as ProtoDisciplinesData,
-  Indices as ProtoIndices,
   MeetingDateRange as ProtoMeetingDateRange,
   Program as ProtoProgram,
   RateMyProfessorsData as ProtoRateMyProfessorsData,
@@ -26,7 +25,6 @@ import type {
   DayOfWeekCode,
   Discipline,
   DisciplinesData,
-  Indices,
   MeetingTime,
   Program,
   RateMyProfessorsData,
@@ -156,8 +154,34 @@ function statusFromProto(status: ProtoSectionStatus): string | null {
 
 export function toProtoCatalogue(input: Catalogue): ProtoCatalogue {
   const { table, indexByCode } = createCourseCodeTable(input.courses);
+  const extraCodes: string[] = [];
+  const extraIndexByCode = new Map<NormalizedCourseCode, number>();
+  const encodeCodeRef = (code: string | undefined): number | undefined => {
+    if (!code) return undefined;
+    const normalized = normalizeCourseCode(code);
+    if (!normalized) return undefined;
+    const idx = indexByCode.get(normalized);
+    if (idx !== undefined) return idx + 1;
+    let extra = extraIndexByCode.get(normalized);
+    if (extra === undefined) {
+      extra = extraCodes.length;
+      extraCodes.push(normalized);
+      extraIndexByCode.set(normalized, extra);
+    }
+    return table.length + extra + 1;
+  };
+  const programs = input.programs.map(
+    (program): ProtoProgram => ({
+      title: program.title,
+      programKey: programKeyFromProgram(program),
+      requirements: program.requirements.map((requirement) =>
+        toProtoProgramRequirement(requirement, encodeCodeRef),
+      ),
+    }),
+  );
   return {
     courseCodes: table,
+    extraCodes,
     courses: input.courses.map(
       (course): ProtoCourse => ({
         code: courseIndexFromCode(indexByCode, course.code) ?? 0,
@@ -171,18 +195,18 @@ export function toProtoCatalogue(input: Catalogue): ProtoCatalogue {
         prerequisites: course.prerequisites ? toProtoPrereq(course.prerequisites) : undefined,
       }),
     ),
-    programs: input.programs.map(
-      (program): ProtoProgram => ({
-        title: program.title,
-        programKey: programKeyFromProgram(program),
-        requirements: program.requirements.map(toProtoProgramRequirement),
-      }),
-    ),
+    programs,
   };
 }
 
 export function fromProtoCatalogue(input: ProtoCatalogue): Catalogue {
   const courseCodeTable = input.courseCodes;
+  const extraCodes = input.extraCodes;
+  const resolveCodeRef = (ref: number | undefined): string | undefined => {
+    if (ref === undefined || ref <= 0) return undefined;
+    if (ref <= courseCodeTable.length) return courseCodeTable[ref - 1];
+    return extraCodes[ref - courseCodeTable.length - 1];
+  };
   return {
     courses: input.courses.map(
       (course): Course => ({
@@ -207,7 +231,9 @@ export function fromProtoCatalogue(input: ProtoCatalogue): Catalogue {
         title: program.title,
         url: programUrlFromKey(program.programKey),
         slug: program.programKey,
-        requirements: program.requirements.map(fromProtoProgramRequirement),
+        requirements: program.requirements.map((requirement) =>
+          fromProtoProgramRequirement(requirement, resolveCodeRef),
+        ),
       }),
     ),
   };
@@ -353,14 +379,6 @@ export function fromProtoSchedulesData(input: ProtoSchedulesData): SchedulesData
   };
 }
 
-export function toProtoIndices(input: Indices): ProtoIndices {
-  return { courses: input.courses, programs: input.programs, disciplines: input.disciplines };
-}
-
-export function fromProtoIndices(input: ProtoIndices): Indices {
-  return { courses: input.courses, programs: input.programs, disciplines: input.disciplines };
-}
-
 export function toProtoTermsData(input: TermsData): ProtoTermsData {
   return {
     terms: input.terms.map(
@@ -392,7 +410,6 @@ export function toProtoRateMyProfessorsData(
   return {
     resultCount: input.resultCount,
     professors: input.professors.map((professor) => ({
-      id: professor.id ?? "",
       legacyId: professor.legacyId,
       name: professor.name,
       rating: professor.rating ?? undefined,
@@ -407,7 +424,6 @@ export function fromProtoRateMyProfessorsData(
   return {
     resultCount: Number(input.resultCount),
     professors: input.professors.map((professor) => ({
-      ...(professor.id ? { id: professor.id } : {}),
       ...(professor.legacyId !== undefined ? { legacyId: Number(professor.legacyId) } : {}),
       name: professor.name,
       rating: professor.rating ?? null,

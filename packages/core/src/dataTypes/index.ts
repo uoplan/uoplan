@@ -5,15 +5,14 @@ export {
   fromProtoCatalogue,
   fromProtoCatalogueManifest,
   fromProtoDisciplinesData,
-  fromProtoIndices,
   fromProtoRateMyProfessorsData,
   fromProtoSchedulesData,
   fromProtoTermsData,
   toProtoCatalogue,
   toProtoCatalogueManifest,
   toProtoDisciplinesData,
-  toProtoIndices,
   toProtoRateMyProfessorsData,
   toProtoSchedulesData,
   toProtoTermsData,
 } from "./schedules";
+export { fromProtoIndices, toProtoIndices } from "./indices";

@@ -24,4 +24,8 @@ export class CourseCodeIndexer {
     this.indexByCode.set(normalized, idx);
     return idx;
   }
+
+  indexOf(code: string): number | undefined {
+    return this.indexByCode.get(normalizeCode(code));
+  }
 }

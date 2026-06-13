@@ -36,7 +36,7 @@ function sampleData(): FeedbackProto.FeedbackData {
                 professor: 0,
                 questionSet: 0,
                 responses: [40, 38],
-                registered: [50, 50],
+                registered: 50,
                 averages: [42, 0], // 4.2 for scale q; categorical absent
               },
             ],
@@ -49,7 +49,7 @@ function sampleData(): FeedbackProto.FeedbackData {
                 professor: 1,
                 questionSet: 0,
                 responses: [10, 9],
-                registered: [],
+                registered: 0,
                 averages: [30, 0],
               },
             ],
@@ -67,7 +67,7 @@ function sampleData(): FeedbackProto.FeedbackData {
                 professor: 0,
                 questionSet: 0,
                 responses: [20, 20],
-                registered: [40, 40],
+                registered: 40,
                 averages: [48, 0], // 4.8
               },
             ],
@@ -109,7 +109,7 @@ describe("buildFeedbackIndex", () => {
     // extra_courses overflow code resolves too.
     expect(index.byCourseNorm.get(normalizeCourseCode("XYZ 9999"))).toHaveLength(1);
     const extra = index.byCourseNorm.get(normalizeCourseCode("XYZ 9999"))![0];
-    expect(extra.registered).toBeNull(); // empty registered array
+    expect(extra.registered).toBeNull(); // registered=0 -> unavailable
     expect(extra.questions[0].average).toBeCloseTo(3.0);
   });
 
@@ -197,7 +197,7 @@ describe("disciplineSentiment", () => {
                   professor: 0,
                   questionSet: 0,
                   responses: [10, 30, 20],
-                  registered: [],
+                  registered: 0,
                   averages: [40, 20, 0],
                 },
               ],
@@ -210,7 +210,7 @@ describe("disciplineSentiment", () => {
                   professor: 1,
                   questionSet: 0,
                   responses: [10, 5, 5],
-                  registered: [],
+                  registered: 0,
                   averages: [50, 0, 0],
                 },
               ],
@@ -223,7 +223,7 @@ describe("disciplineSentiment", () => {
                   professor: 2,
                   questionSet: 0,
                   responses: [6, 6, 6],
-                  registered: [],
+                  registered: 0,
                   averages: [35, 0, 0],
                 },
               ],
@@ -236,7 +236,7 @@ describe("disciplineSentiment", () => {
                   professor: 2,
                   questionSet: 0,
                   responses: [8, 8, 8],
-                  registered: [],
+                  registered: 0,
                   averages: [0, 0, 0],
                 },
               ],
@@ -254,7 +254,7 @@ describe("disciplineSentiment", () => {
                   professor: 0,
                   questionSet: 0,
                   responses: [20, 10, 10],
-                  registered: [],
+                  registered: 0,
                   averages: [50, 30, 0],
                 },
               ],

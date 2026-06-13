@@ -188,14 +188,18 @@ export function fromProtoPrereq(node: ProtoCoursePrereqNode): CoursePrereqNode {
   };
 }
 
+export type CodeRefEncoder = (code: string | undefined) => number | undefined;
+export type CodeRefResolver = (ref: number | undefined) => string | undefined;
+
 export function toProtoProgramRequirement(
   requirement: ProgramRequirement,
+  encodeCodeRef: CodeRefEncoder,
 ): ProtoProgramRequirement {
   return {
     type: reqTypeToProto(requirement.type),
     title: requirement.title,
-    code: requirement.code,
-    credits: requirement.credits,
+    codeRef: encodeCodeRef(requirement.code),
+    creditsX4: requirement.credits !== undefined ? Math.round(requirement.credits * 4) : undefined,
     disciplineLevels: (requirement.disciplineLevels ?? []).map(
       (d): ProtoDisciplineLevel => ({
         discipline: d.discipline,
@@ -206,18 +210,22 @@ export function toProtoProgramRequirement(
     faculty: requirement.faculty,
     indented: requirement.indented,
     levels: requirement.levels ?? [],
-    options: (requirement.options ?? []).map(toProtoProgramRequirement),
+    options: (requirement.options ?? []).map((option) =>
+      toProtoProgramRequirement(option, encodeCodeRef),
+    ),
   };
 }
 
 export function fromProtoProgramRequirement(
   requirement: ProtoProgramRequirement,
+  resolveCodeRef: CodeRefResolver,
 ): ProgramRequirement {
+  const code = resolveCodeRef(requirement.codeRef);
   return {
     type: reqTypeFromProto(requirement.type),
     ...(requirement.title ? { title: requirement.title } : {}),
-    ...(requirement.code ? { code: normalizeCourseCode(requirement.code) } : {}),
-    ...(requirement.credits !== undefined ? { credits: Number(requirement.credits) } : {}),
+    ...(code ? { code: normalizeCourseCode(code) } : {}),
+    ...(requirement.creditsX4 !== undefined ? { credits: Number(requirement.creditsX4) / 4 } : {}),
     ...(requirement.disciplineLevels.length > 0
       ? { disciplineLevels: disciplineLevelsFromProto(requirement.disciplineLevels) }
       : {}),
@@ -228,7 +236,11 @@ export function fromProtoProgramRequirement(
     ...(requirement.indented !== undefined ? { indented: requirement.indented } : {}),
     ...(requirement.levels.length > 0 ? { levels: requirement.levels.map((n) => Number(n)) } : {}),
     ...(requirement.options.length > 0
-      ? { options: requirement.options.map(fromProtoProgramRequirement) }
+      ? {
+          options: requirement.options.map((option) =>
+            fromProtoProgramRequirement(option, resolveCodeRef),
+          ),
+        }
       : {}),
   };
 }

@@ -1,5 +1,5 @@
 import * as DataProto from "@uoplan/proto/data";
-import { CourseCodeIndexer } from "./shared.ts";
+import { CourseCodeIndexer, normalizeCode } from "./shared.ts";
 
 interface DisciplineLevelInput {
   discipline?: string;
@@ -153,18 +153,23 @@ function mapPrereq(node: PrereqInput): DataProto.CoursePrereqNode {
   };
 }
 
-function mapRequirement(req: RequirementInput): DataProto.ProgramRequirement {
+type CodeRefEncoder = (code: string | undefined) => number | undefined;
+
+function mapRequirement(
+  req: RequirementInput,
+  encodeCodeRef: CodeRefEncoder,
+): DataProto.ProgramRequirement {
   return {
     type: requirementTypeToProto(String(req.type ?? "")),
     title: req.title,
-    code: req.code,
-    credits: req.credits,
+    codeRef: encodeCodeRef(req.code),
+    creditsX4: req.credits !== undefined ? Math.round(req.credits * 4) : undefined,
     disciplineLevels: mapDisciplineLevels(req.disciplineLevels),
     excludedDisciplines: req.excluded_disciplines ?? [],
     faculty: req.faculty,
     indented: req.indented,
     levels: req.levels ?? [],
-    options: (req.options ?? []).map(mapRequirement),
+    options: (req.options ?? []).map((option) => mapRequirement(option, encodeCodeRef)),
   };
 }
 
@@ -176,8 +181,36 @@ export function mapCatalogue(input: CatalogueJsonInput) {
     for (const alias of course.aliases ?? []) indexer.add(String(alias ?? ""));
   }
 
+  // Program-requirement codes reference the course-code dictionary by 1-based
+  // index; codes absent from it (cross-year refs) go into a small `extra_codes`
+  // list referenced past `course_codes.length`.
+  const extraCodes: string[] = [];
+  const extraIndexByCode = new Map<string, number>();
+  const encodeCodeRef: CodeRefEncoder = (code) => {
+    const normalized = normalizeCode(code ?? "");
+    if (!normalized) return;
+    const idx = indexer.indexOf(normalized);
+    if (idx !== undefined) return idx + 1;
+    let extra = extraIndexByCode.get(normalized);
+    if (extra === undefined) {
+      extra = extraCodes.length;
+      extraCodes.push(normalized);
+      extraIndexByCode.set(normalized, extra);
+    }
+    return indexer.courseCodes.length + extra + 1;
+  };
+
+  const programs = (input.programs ?? []).map((program) => ({
+    title: program.title ?? "",
+    programKey: program.slug ?? program.url ?? program.title ?? "",
+    requirements: (program.requirements ?? []).map((requirement) =>
+      mapRequirement(requirement, encodeCodeRef),
+    ),
+  }));
+
   return {
     courseCodes: indexer.courseCodes,
+    extraCodes,
     courses: (input.courses ?? []).map((course) => ({
       code: indexer.add(String(course.code ?? "")),
       title: course.title ?? "",
@@ -187,10 +220,6 @@ export function mapCatalogue(input: CatalogueJsonInput) {
       hasPrereqText: Boolean(course.prereqText),
       prerequisites: course.prerequisites ? mapPrereq(course.prerequisites) : undefined,
     })),
-    programs: (input.programs ?? []).map((program) => ({
-      title: program.title ?? "",
-      programKey: program.slug ?? program.url ?? program.title ?? "",
-      requirements: (program.requirements ?? []).map(mapRequirement),
-    })),
+    programs,
   };
 }

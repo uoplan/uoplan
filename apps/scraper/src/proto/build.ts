@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import * as DataProto from "@uoplan/proto/data";
 import * as FeedbackProto from "@uoplan/proto/feedback";
+import { toProtoIndices } from "@uoplan/core/dataTypes/indices";
 import {
   CATALOGUE_DATA_DIR,
   DATA_MANIFEST_FILE,
@@ -118,11 +119,13 @@ export async function main(): Promise<void> {
   );
   await writePb(
     path.join(WEB_ASSETS_DATA_DIR, "indices.pb"),
-    DataProto.Indices.encode({
-      courses: indices.courses ?? [],
-      programs: indices.programs ?? [],
-      disciplines: indices.disciplines ?? [],
-    }).finish(),
+    DataProto.Indices.encode(
+      toProtoIndices({
+        courses: indices.courses ?? [],
+        programs: indices.programs ?? [],
+        disciplines: indices.disciplines ?? [],
+      }),
+    ).finish(),
   );
 
   const rmp = await readJson<{ resultCount?: number; professors?: RateMyProfessorInput[] }>(
@@ -133,7 +136,6 @@ export async function main(): Promise<void> {
     DataProto.RateMyProfessorsData.encode({
       resultCount: rmp.resultCount ?? 0,
       professors: (rmp.professors ?? []).map((p) => ({
-        id: p.id ?? "",
         legacyId: p.legacyId,
         name: p.name ?? "",
         rating: p.rating ?? undefined,
@@ -159,7 +161,6 @@ export async function main(): Promise<void> {
     path.join(WEB_ASSETS_DATA_DIR, "professors.pb"),
     DataProto.ProfessorsData.encode({
       professors: registry.map((p) => ({
-        slug: p.slug,
         name: p.name,
         legacyIds: p.legacyIds,
         rating: p.rating,

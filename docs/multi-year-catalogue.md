@@ -56,3 +56,12 @@ Latest aliases are still applied after merge so renumbered courses resolve corre
 - `zod` — schema validation for scraped output
 - `apps/web/src/store/slices/data.ts` — loads and caches year-specific programme lists
 - `apps/scraper/src/proto/build.ts` — converts `apps/scraper/data/*.json` into `apps/web/public/data/*.pb`
+
+### Catalogue `.pb` encoding notes (build-time only)
+
+`mapCatalogue` ([`apps/scraper/src/proto/catalogue.ts`](../apps/scraper/src/proto/catalogue.ts)) and the core mirror `toProtoCatalogue`/`fromProtoCatalogue` compact the runtime `catalogue.{year}.pb` without touching the source JSON:
+
+- **Program-requirement course codes** are stored as `code_ref` — a 1-based index into the file's `course_codes` dictionary (`0` = absent). Codes absent from that dictionary (cross-year references) go into a small `Catalogue.extra_codes` list and are referenced by indices past `course_codes.length`.
+- **Program-requirement credits** are stored as `credits_x4` (`uint32`, the value ×4; all catalogue credits are exact quarter-multiples) instead of a `double`.
+
+These only affect `ProgramRequirement`; `Course.credits` and the prerequisite tree (`CoursePrereqNode`) keep their `double`/string fields because the Rust schedule engine decodes the same `data.proto` Catalogue and reads them directly.
