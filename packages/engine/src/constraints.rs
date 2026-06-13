@@ -163,7 +163,7 @@ mod tests {
     use std::collections::{BTreeMap, HashMap};
 
     use super::*;
-    use crate::proto::data::{Catalogue, Course, CourseIndex, SchedulesData};
+    use crate::proto::data::{Catalogue, Course, SchedulesData};
     use crate::types::WeekMask;
 
     fn time(day: u8, start: u32, end: u32, instructor: Option<&str>) -> RtTime {
@@ -203,9 +203,7 @@ mod tests {
             .iter()
             .enumerate()
             .map(|(index, (_, credits))| Course {
-                code: Some(CourseIndex {
-                    index: index as u32,
-                }),
+                code: index as u32,
                 credits: *credits,
                 ..Default::default()
             })

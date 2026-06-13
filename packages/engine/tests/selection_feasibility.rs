@@ -59,8 +59,7 @@ fn undergrad_schedulable(sched: &SchedulesData) -> Vec<String> {
         if s.components.is_empty() {
             continue;
         }
-        let Some(ci) = &s.course else { continue };
-        let Some(code) = sched.course_codes.get(ci.index as usize) else {
+        let Some(code) = sched.course_codes.get(s.course as usize) else {
             continue;
         };
         let first_digit = code

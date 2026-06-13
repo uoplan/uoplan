@@ -50,26 +50,8 @@ const schedules = {
   totalWithSchedules: 1,
 };
 
-const distribution = {
-  aPlus: 4,
-  a: 3,
-  aMinus: 0,
-  bPlus: 0,
-  b: 2,
-  cPlus: 0,
-  c: 0,
-  dPlus: 0,
-  d: 0,
-  e: 0,
-  f: 1,
-  dr: 0,
-  ein: 0,
-  ns: 0,
-  nc: 0,
-  abs: 0,
-  p: 0,
-  s: 0,
-};
+// GRADE_KEYS order: A+ A A- B+ B C+ C D+ D E F DR EIN NS NC ABS P S
+const distributionColumns = [4, 3, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0];
 
 describe("catalogue and schedule loaders", () => {
   it("loads canonical asset ids and decodes protobuf bytes into domain data", async () => {
@@ -143,10 +125,16 @@ describe("supporting dataset loaders", () => {
       ),
       [dataAssetIds.grades]: encode(
         DataProto.GradesData.encode({
+          professorNames: ["Alice Smith"],
           courses: [
             {
               code: "CSI 2110",
-              professors: [{ name: "Alice Smith", legacyId: 123, termId: 2261, distribution }],
+              nameRefs: [0],
+              termIds: [2261],
+              professorRefs: [0],
+              legacyIds: [123],
+              sections: [""],
+              distributions: distributionColumns,
             },
           ],
         }),

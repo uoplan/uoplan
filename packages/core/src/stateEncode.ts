@@ -32,37 +32,13 @@ export function urlToSlug(url: string): string {
     .replace(/\/$/, "");
 }
 
-export const STATE_MAGIC = 0x554f504c; // "UOPL" in ASCII hex
+export const STATE_MAGIC = 0x554f504d; // "UOPM" — bumped from "UOPL" (0x554f504c) for the v2 plain packed-uint32 completed-course encoding
 
 function programSlug(p: Program): string {
   return (p as Program & { slug?: string }).slug ?? urlToSlug(p.url);
 }
 
 const OPT_SENTINEL_BASE = 0xfffffff0; // Safely inside uint32 space
-
-// Packing two course indices into one uint32 (used for completedCourses).
-// Real indices top out at ~13197 (0x338D), so the 0xFFF_ range is free.
-const PACK_EMPTY = 0xffff; // padding slot when count is odd
-const OPT_16_BASE = 0xfff0; // OPT level/1000 stored as OPT_16_BASE + (level/1000)
-
-function packCoursePairs(vals: number[]): number[] {
-  const out: number[] = [];
-  for (let i = 0; i < vals.length; i += 2) {
-    const hi = vals[i];
-    const lo = i + 1 < vals.length ? vals[i + 1] : PACK_EMPTY;
-    out.push((hi & 0xffff) * 0x10000 + (lo & 0xffff));
-  }
-  return out;
-}
-
-function unpackCoursePairs(packed: number[]): number[] {
-  const out: number[] = [];
-  for (const p of packed) {
-    out.push((p >>> 16) & 0xffff);
-    out.push(p & 0xffff);
-  }
-  return out;
-}
 
 export interface EncodeInput {
   wizardMode: "basic" | "advanced" | null;
@@ -224,11 +200,6 @@ export function encodeState(
     return courseCodeToIndex.get(c);
   };
 
-  const encodeCourseCode16 = (c: string): number | undefined => {
-    if (isOptCourse(c)) return OPT_16_BASE + Math.floor((getCourseLevel(c) ?? 1000) / 1000);
-    return courseCodeToIndex.get(c);
-  };
-
   const orderedReqIds = requirementIdsFromTree(input.requirementTreeWithStatus);
   const reqIdToIndex = new Map<string, number>();
   for (const [i, id] of orderedReqIds.entries()) reqIdToIndex.set(id, i);
@@ -257,9 +228,9 @@ export function encodeState(
       .map(encodeDiscipline)
       .filter((i): i is number => i !== undefined),
 
-    completedCourses: packCoursePairs(
-      input.completedCourses.map(encodeCourseCode16).filter((i): i is number => i !== undefined),
-    ),
+    completedCourses: input.completedCourses
+      .map(encodeCourseCode)
+      .filter((i): i is number => i !== undefined),
     levelBuckets: input.levelBuckets.map(levelToProto),
     languageBuckets: input.languageBuckets.map(langToProto),
     electiveLevelBuckets: input.electiveLevelBuckets,
@@ -464,11 +435,10 @@ export function decodeState(
   };
 
   const completedOptCounters = new Map<number, number>();
-  const completedCourseCodes = unpackCoursePairs(state.completedCourses)
-    .filter((v) => v !== PACK_EMPTY)
+  const completedCourseCodes = state.completedCourses
     .map((v) => {
-      if (v >= OPT_16_BASE) {
-        const level = (v - OPT_16_BASE) * 1000;
+      if (v >= OPT_SENTINEL_BASE) {
+        const level = (v - OPT_SENTINEL_BASE) * 1000;
         const count = completedOptCounters.get(level) ?? 0;
         completedOptCounters.set(level, count + 1);
         return `OPT ${level + count}`;

@@ -36,7 +36,7 @@ message RequirementOptionSelection {
 
 message RequirementCourseSelection {
   uint32 req_index = 1;
-  repeated uint32 course_indices = 2;
+  repeated uint32 course_indices = 2 [packed = true];
 }
 
 message ScheduleSwap {
@@ -46,7 +46,7 @@ message ScheduleSwap {
 
 message RequirementGroupSelection {
   uint32 req_index = 1;
-  repeated uint32 group_prefix_indices = 2;
+  repeated uint32 group_prefix_indices = 2 [packed = true];
 }
 
 message RequirementPriority {
@@ -62,21 +62,24 @@ message BlockedTime {
 
 message ShareableState {
   WizardMode wizard_mode = 1;
-  repeated uint32 basic_pinned_courses = 2;
+  repeated uint32 basic_pinned_courses = 2 [packed = true];
   uint32 basic_electives_count = 3;
-  repeated uint32 basic_excluded_category_indices = 4;
+  repeated uint32 basic_excluded_category_indices = 4 [packed = true];
 
   optional uint32 selected_term_id = 5;
   optional uint32 first_year = 6;
   
   optional uint32 program_index = 7;
   optional uint32 minor_program_index = 8;
-  repeated uint32 student_program_indices = 9;
+  repeated uint32 student_program_indices = 9 [packed = true];
 
-  repeated uint32 completed_courses = 10;
-  repeated CourseLevelBucket level_buckets = 11;
-  repeated CourseLanguageBucket language_buckets = 12;
-  repeated uint32 elective_level_buckets = 13;
+  // Course indices into `indices.pb` (OPT_SENTINEL_BASE-offset values encode OPT
+  // courses). Plain packed indices: pre-2.x payloads bit-packed two 16-bit
+  // indices per uint32, which the bumped STATE_MAGIC now rejects.
+  repeated uint32 completed_courses = 10 [packed = true];
+  repeated CourseLevelBucket level_buckets = 11 [packed = true];
+  repeated CourseLanguageBucket language_buckets = 12 [packed = true];
+  repeated uint32 elective_level_buckets = 13 [packed = true];
 
   uint32 courses_this_semester = 14;
   // Obsolete: uint32 selected_schedule_index = 15;
@@ -86,14 +89,14 @@ message ShareableState {
   repeated RequirementOptionSelection option_selections = 17;
   repeated RequirementCourseSelection course_selections = 18;
   repeated RequirementCourseSelection constrained_selections = 19;
-  repeated uint32 touched_req_indices = 20;
+  repeated uint32 touched_req_indices = 20 [packed = true];
 
   bool include_closed_components = 21;
   bool virtual_sections_only = 22;
 
   uint32 generation_min_start_minutes = 23;
   uint32 generation_max_end_minutes = 24;
-  repeated DayOfWeek generation_allowed_days = 25;
+  repeated DayOfWeek generation_allowed_days = 25 [packed = true];
   optional uint32 generation_min_professor_rating = 26;
   bool generation_limit_first_year_credits = 27;
   bool generation_compressed_schedule = 28;
@@ -105,7 +108,7 @@ message ShareableState {
   bool generation_prefer_easier = 35;
   bool french_immersion_stream = 36;
   optional uint32 calendar_week_index = 37;
-  repeated uint32 blacklisted_courses = 38;
+  repeated uint32 blacklisted_courses = 38 [packed = true];
   repeated BlockedTime blocked_times = 39;
   repeated RequirementPriority requirement_priorities = 40;
   bool generation_prefer_higher_sentiment = 41;
@@ -126,8 +129,8 @@ message ShareableState {
 // framing to keep the share payload as small as possible.
 message PreviewCourseSelection {
   uint32 course_index = 1;
-  repeated uint32 component_indices = 2;
-  repeated uint32 section_indices = 3;
+  repeated uint32 component_indices = 2 [packed = true];
+  repeated uint32 section_indices = 3 [packed = true];
 }
 
 message SchedulePreview {

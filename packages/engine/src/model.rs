@@ -240,10 +240,9 @@ impl DataView {
         let mut eligible: Vec<usize> = Vec::new();
 
         for (i, course) in catalogue.courses.iter().enumerate() {
-            let code = course
-                .code
-                .as_ref()
-                .and_then(|ci| catalogue.course_codes.get(ci.index as usize))
+            let code = catalogue
+                .course_codes
+                .get(course.code as usize)
                 .cloned()
                 .unwrap_or_default();
             course_code_str.push(code.clone());
@@ -251,8 +250,8 @@ impl DataView {
             course_index
                 .entry(normalize_course_code(&code))
                 .or_insert(i);
-            for alias in &course.aliases {
-                if let Some(a) = catalogue.course_codes.get(alias.index as usize) {
+            for &alias in &course.aliases {
+                if let Some(a) = catalogue.course_codes.get(alias as usize) {
                     course_index.entry(normalize_course_code(a)).or_insert(i);
                 }
             }
@@ -266,10 +265,9 @@ impl DataView {
         let mut schedule_index: HashMap<String, usize> = HashMap::new();
         let mut rt_schedules: Vec<RtSchedule> = Vec::with_capacity(schedule_count);
         for schedule in &schedules.schedules {
-            let code = schedule
-                .course
-                .as_ref()
-                .and_then(|ci| schedules.course_codes.get(ci.index as usize))
+            let code = schedules
+                .course_codes
+                .get(schedule.course as usize)
                 .cloned()
                 .unwrap_or_default();
 
@@ -286,10 +284,12 @@ impl DataView {
                             end: t.end_minutes,
                             is_virtual: t.r#virtual,
                             instructor: t.instructor.clone(),
-                            dates: t
-                                .meeting_dates
-                                .as_ref()
-                                .map(|d| (d.start_yyyymmdd, d.end_yyyymmdd)),
+                            dates: t.meeting_dates_ref.and_then(|r| {
+                                schedules
+                                    .meeting_date_ranges
+                                    .get(r.wrapping_sub(1) as usize)
+                                    .map(|d| (d.start_yyyymmdd, d.end_yyyymmdd))
+                            }),
                         })
                         .collect();
                     sections.push(RtSection {

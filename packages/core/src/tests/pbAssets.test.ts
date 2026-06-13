@@ -81,6 +81,12 @@ describe("committed .pb assets decode with current proto contract", () => {
     if (!existsSync(join(dataDir, "grades.pb"))) return;
     const grades = fromProtoCourseGradesData(DataProto.GradesData.decode(read("grades.pb")));
     expect(grades.courses.length).toBeGreaterThan(0);
+    // The name dictionary must resolve: at least one offering has a non-empty
+    // professor name reconstructed from `professor_names` + `name_refs`.
+    const hasNamedOffering = grades.courses.some((c) =>
+      c.professors.some((p) => p.name.length > 0),
+    );
+    expect(hasNamedOffering).toBe(true);
   });
 
   it("decodes every catalogue.YYYY.pb", () => {
@@ -97,6 +103,23 @@ describe("committed .pb assets decode with current proto contract", () => {
       (buf) => fromProtoSchedulesData(DataProto.SchedulesData.decode(buf)),
       (s) => s.schedules.length,
     );
+  });
+
+  it("resolves the meeting-date dictionary for schedules", () => {
+    const files = listPb().filter((f) => /^schedules\.\d+\.pb$/.test(f));
+    if (files.length === 0) return;
+    // At least one section's meeting time across all terms must resolve a
+    // `(start, end)` date range via the `meeting_date_ranges` dictionary +
+    // `meeting_dates_ref` (some terms legitimately carry no dated meetings).
+    const hasResolvedDates = files.some((f) => {
+      const data = fromProtoSchedulesData(DataProto.SchedulesData.decode(read(f)));
+      return data.schedules.some((s) =>
+        Object.values(s.components).some((sections) =>
+          sections.some((section) => section.times.some((t) => t.meetingDates != null)),
+        ),
+      );
+    });
+    expect(hasResolvedDates).toBe(true);
   });
 });
 
