@@ -25,7 +25,6 @@ export function DonationBanner() {
       <Box
         component={Link}
         to="/donate"
-        state={{ back: { to: "/", label: tr("app.nav.backHome") } } as never}
         className={classes.banner}
         style={{
           display: "block",

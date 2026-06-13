@@ -7,22 +7,20 @@ import { programSlugToPathParam } from "../../lib/explore/programSearch";
 import type { ExploreProgramSearchEntry } from "../../lib/explore/programSearch";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import { RatingBadge } from "../shared/RatingBadge";
-import { EXPLORE_RESULT_CARD_STYLE, exploreCardBackState } from "./exploreResultCardShared";
+import { EXPLORE_RESULT_CARD_STYLE } from "./exploreResultCardShared";
 
 type Props = {
   program: ExploreProgramSearchEntry;
   gradeViz?: GradeVizData | null;
   sentiment?: number | null;
-  query?: string;
 };
 
-export function SearchResultProgramCard({ program, gradeViz, sentiment, query }: Props) {
+export function SearchResultProgramCard({ program, gradeViz, sentiment }: Props) {
   return (
     <Link
       to="/explore/program/$"
       params={{ _splat: programSlugToPathParam(program.slug) }}
       search={EMPTY_EXPLORE_SEARCH}
-      state={exploreCardBackState(EMPTY_EXPLORE_SEARCH, query) as never}
       className="soft-lift"
       style={EXPLORE_RESULT_CARD_STYLE}
     >

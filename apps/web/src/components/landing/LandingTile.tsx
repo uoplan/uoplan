@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Badge, Box, Stack, Text } from "@mantine/core";
 import type { ReactNode } from "react";
-import { tr } from "../../i18n";
 import { AppCard } from "../shared/AppCard";
 
 export type LandingTileProps = {
@@ -29,7 +28,6 @@ export function LandingTile({
   return (
     <Link
       to={to}
-      state={{ back: { to: "/", label: tr("app.nav.backHome") } } as never}
       aria-label={ariaLabel}
       style={{
         display: "block",

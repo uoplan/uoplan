@@ -8,7 +8,7 @@ import { RatingBadge } from "../shared/RatingBadge";
 import type { ExploreProfessorSearchEntry } from "../../lib/explore/gradesSearch";
 import { professorRouteParam } from "../../lib/explore/professorRoute";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
-import { EXPLORE_RESULT_CARD_STYLE, exploreCardBackState } from "./exploreResultCardShared";
+import { EXPLORE_RESULT_CARD_STYLE } from "./exploreResultCardShared";
 import {
   SearchResultCardBody,
   SearchResultCardSpacer,
@@ -27,13 +27,11 @@ export function SearchResultProfessorCard({
   entry,
   professorRatings,
   sentiment,
-  query,
   searchParams,
 }: {
   entry: ExploreProfessorSearchEntry;
   professorRatings: ProfessorRatingsMap | null;
   sentiment?: number | null;
-  query?: string;
   searchParams: ExploreSearchParams;
 }) {
   useTr();
@@ -53,7 +51,6 @@ export function SearchResultProfessorCard({
       to="/explore/professor/$slug"
       params={{ slug: professorLegacyParam(entry) }}
       search={searchParams}
-      state={exploreCardBackState(searchParams, query) as never}
       className="soft-lift"
       style={EXPLORE_RESULT_CARD_STYLE}
     >

@@ -26,7 +26,6 @@ import {
 import { tr, useTr } from "../../i18n";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import { formatTermLabel } from "../../lib/term/termLabel";
-import type { BackState } from "../../lib/navigation/backState";
 import { mergeGradeDistributionCounts } from "../../lib/explore/gradesSearch";
 import type {
   CourseOfferingGroup,
@@ -112,7 +111,6 @@ type ExploreProfessorSummaryBarProps = {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
   stopPropagation?: boolean;
-  currentEntry?: BackState;
   /** All-terms offerings for the histogram when the rows are term-filtered (defaults to group.offerings). */
   aggregateOfferings?: ExploreOfferingFlat[];
   /** Search params carried into the professor link so active filters persist (defaults to none). */
@@ -123,7 +121,6 @@ export function ExploreProfessorSummaryBar({
   group,
   professorRatings,
   stopPropagation = false,
-  currentEntry,
   aggregateOfferings,
   linkSearch,
 }: ExploreProfessorSummaryBarProps) {
@@ -185,7 +182,6 @@ export function ExploreProfessorSummaryBar({
               }),
             }}
             search={linkSearch ?? EMPTY_EXPLORE_SEARCH}
-            state={currentEntry ? ({ back: currentEntry } as never) : undefined}
             onClick={(e) => {
               if (stopPropagation) e.stopPropagation();
             }}
@@ -208,7 +204,6 @@ export function ExploreProfessorSummaryBar({
 
 type ExploreCourseSummaryBarProps = {
   group: CourseOfferingGroup;
-  currentEntry?: BackState;
   /** All-terms offerings for the histogram when the rows are term-filtered (defaults to group.offerings). */
   aggregateOfferings?: ExploreOfferingFlat[];
   /** Search params carried into the course link so active filters persist (defaults to none). */
@@ -217,7 +212,6 @@ type ExploreCourseSummaryBarProps = {
 
 export function ExploreCourseSummaryBar({
   group,
-  currentEntry,
   aggregateOfferings,
   linkSearch,
 }: ExploreCourseSummaryBarProps) {
@@ -252,7 +246,6 @@ export function ExploreCourseSummaryBar({
           to="/explore/course/$course"
           params={{ course: courseNormToPathParam(group.groupId) }}
           search={linkSearch ?? EMPTY_EXPLORE_SEARCH}
-          state={currentEntry ? ({ back: currentEntry } as never) : undefined}
           onClick={(e) => {
             e.stopPropagation();
           }}
@@ -278,14 +271,12 @@ export function ExploreCourseSummaryBar({
 
 type ExploreCourseItemProps = {
   group: CourseOfferingGroup;
-  currentEntry?: BackState;
   aggregateOfferings?: ExploreOfferingFlat[];
   linkSearch?: ExploreSearchParams;
 };
 
 export function ExploreCourseItem({
   group,
-  currentEntry,
   aggregateOfferings,
   linkSearch,
 }: ExploreCourseItemProps) {
@@ -294,7 +285,6 @@ export function ExploreCourseItem({
       <Accordion.Control>
         <ExploreCourseSummaryBar
           group={group}
-          currentEntry={currentEntry}
           aggregateOfferings={aggregateOfferings}
           linkSearch={linkSearch}
         />

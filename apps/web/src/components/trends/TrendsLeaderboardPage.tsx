@@ -49,7 +49,6 @@ export function TrendsLeaderboardPage() {
     filteredMode,
     disciplineNameByCode,
     programOptions,
-    trendsBack,
     formatMetric,
     update,
     search,
@@ -166,7 +165,6 @@ export function TrendsLeaderboardPage() {
           to="/explore/course/$course"
           params={{ course: courseNormToPathParam(normalizeCourseCode(row.key)) }}
           search={EMPTY_EXPLORE_SEARCH}
-          state={{ back: trendsBack } as never}
           style={{ textDecoration: "none" }}
         >
           {label}
@@ -178,7 +176,6 @@ export function TrendsLeaderboardPage() {
         to="/explore/discipline/$discipline"
         params={{ discipline: row.key.toLowerCase() }}
         search={EMPTY_EXPLORE_SEARCH}
-        state={{ back: trendsBack } as never}
         style={{ textDecoration: "none" }}
       >
         {label}
@@ -202,7 +199,6 @@ export function TrendsLeaderboardPage() {
                   to="/explore/program/$"
                   params={{ _splat: programSlugToPathParam(programSlugValue) }}
                   search={EMPTY_EXPLORE_SEARCH}
-                  state={{ back: trendsBack } as never}
                   style={{ textDecoration: "none" }}
                 >
                   <Text size="xs" c="var(--app-accent)" span>

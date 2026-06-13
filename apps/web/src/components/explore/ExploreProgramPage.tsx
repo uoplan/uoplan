@@ -11,8 +11,6 @@ import {
   mergeGradeDistributionCounts,
 } from "../../lib/explore/gradesSearch";
 import type { CourseOfferingGroup } from "../../lib/explore/gradesSearch";
-import { programSlugToPathParam } from "../../lib/explore/programSearch";
-import type { BackState } from "../../lib/navigation/backState";
 import { GradeDistributionHistogramPlaceholder } from "../calendar/GradeDistributionViz";
 import { CatalogueLink } from "./CatalogueLink";
 import { useExploreOfferings } from "./exploreOfferingsContext";
@@ -146,15 +144,6 @@ export function ExploreProgramPage({
     return { dataGroups: withData, noDataCodes: without };
   }, [offerings, coreCodeSet, coreCodes]);
 
-  const backEntry = useMemo<BackState>(
-    () => ({
-      to: "/explore/program/$",
-      params: { _splat: programSlugToPathParam(slug) },
-      label: program?.title ?? tr("explore.program.title"),
-    }),
-    [slug, program?.title],
-  );
-
   if (!program) return null;
 
   return (
@@ -196,7 +185,7 @@ export function ExploreProgramPage({
             {dataGroups.length > 0 ? (
               <ExploreAccordion>
                 {dataGroups.map((g) => (
-                  <ExploreCourseItem key={g.groupId} group={g} currentEntry={backEntry} />
+                  <ExploreCourseItem key={g.groupId} group={g} />
                 ))}
               </ExploreAccordion>
             ) : null}

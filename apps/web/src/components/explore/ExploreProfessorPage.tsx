@@ -180,11 +180,6 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
                 <ExploreCourseItem
                   key={g.groupId}
                   group={g}
-                  currentEntry={{
-                    to: "/explore/professor/$slug",
-                    params: { slug: profRouteParam },
-                    label: displayName,
-                  }}
                   aggregateOfferings={aggregateByGroupId?.get(g.groupId)}
                   linkSearch={linkSearch}
                 />

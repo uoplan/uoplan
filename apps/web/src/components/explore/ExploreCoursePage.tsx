@@ -25,7 +25,6 @@ import { useExploreDetailFilters } from "./useExploreDetailFilters";
 import { CatalogueLink } from "./CatalogueLink";
 import { useCourseFeedbackViews } from "../../hooks/useFeedbackViews";
 import { FeedbackSummaryCard } from "./feedback/FeedbackSummaryCard";
-import type { BackState } from "../../lib/navigation/backState";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import {
   ExploreProfessorOfferingRows,
@@ -75,13 +74,11 @@ function TermPillChip({ label, hidden = false }: { label?: string; hidden?: bool
 function CourseProfessorItem({
   group,
   professorRatings,
-  currentEntry,
   aggregateOfferings,
   linkSearch,
 }: {
   group: ProfessorOfferingGroup;
   professorRatings: ProfessorRatingsMap | null;
-  currentEntry?: BackState;
   aggregateOfferings?: ExploreOfferingFlat[];
   linkSearch?: ExploreSearchParams;
 }) {
@@ -92,7 +89,6 @@ function CourseProfessorItem({
           group={group}
           professorRatings={professorRatings}
           stopPropagation
-          currentEntry={currentEntry}
           aggregateOfferings={aggregateOfferings}
           linkSearch={linkSearch}
         />
@@ -203,15 +199,6 @@ export function ExploreCoursePage({
     return ids.sort((a, b) => b - a);
   }, [componentId, terms, getTermPresence]);
 
-  const courseEntry = useMemo<BackState | undefined>(() => {
-    if (!selectedCourseMeta) return;
-    return {
-      to: "/explore/course/$course",
-      params: { course: urlCourseParam },
-      label: selectedCourseMeta.courseCode,
-    };
-  }, [selectedCourseMeta, urlCourseParam]);
-
   const { views: feedbackViews, loading: feedbackLoading } = useCourseFeedbackViews(urlCourseParam);
   const showFeedback = feedbackLoading || feedbackViews.length > 0;
 
@@ -267,7 +254,6 @@ export function ExploreCoursePage({
                       to="/explore/course/$course"
                       params={{ course: courseNormToPathParam(code) }}
                       search={linkSearch}
-                      state={{ back: courseEntry } as never}
                       style={{
                         color: "var(--app-text)",
                         fontWeight: 500,
@@ -288,7 +274,6 @@ export function ExploreCoursePage({
                     to="/explore/course/$course/schedule"
                     params={{ course: urlCourseParam }}
                     search={{ ...EMPTY_EXPLORE_SEARCH, term: termId }}
-                    state={{ back: courseEntry } as never}
                     style={{ textDecoration: "none" }}
                   >
                     <TermPillChip label={formatTermLabel(termId)} />
@@ -319,7 +304,6 @@ export function ExploreCoursePage({
                   key={g.groupId}
                   group={g}
                   professorRatings={professorRatings}
-                  currentEntry={courseEntry}
                   aggregateOfferings={aggregateByGroupId?.get(g.groupId)}
                   linkSearch={linkSearch}
                 />
