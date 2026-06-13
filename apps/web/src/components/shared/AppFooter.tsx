@@ -46,7 +46,6 @@ export function AppFooter() {
   return (
     <Box
       component="footer"
-      mt={isMobile ? 40 : 64}
       pt={isMobile ? 28 : 40}
       pb="max(20px, env(safe-area-inset-bottom))"
       style={{
