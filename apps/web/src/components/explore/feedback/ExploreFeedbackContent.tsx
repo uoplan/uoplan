@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Box, SimpleGrid, Stack, Text, Title } from "@mantine/core";
+import { Box, SimpleGrid, Skeleton, Stack, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { m } from "framer-motion";
 import { feedbackQuestionSeries, feedbackResponseRateSeries, feedbackSummary } from "@uoplan/core";
@@ -26,6 +26,34 @@ function FeedbackStatCard({ label, value }: { label: string; value: string }) {
         </Text>
       </Stack>
     </AppCard>
+  );
+}
+
+/**
+ * Loading placeholder mirroring the loaded feedback layout (a 4-up stat-card grid
+ * plus a couple of chart cards) so the page doesn't shift when `feedback.pb`
+ * decodes and the real charts swap in.
+ */
+function FeedbackContentSkeleton() {
+  return (
+    <Stack gap="lg" aria-hidden>
+      <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="md">
+        {Array.from({ length: 4 }, (_, i) => (
+          <AppCard key={i} p="md">
+            <Stack gap={6}>
+              <Skeleton height={10} width="60%" radius="sm" />
+              <Skeleton height={20} width="45%" radius="sm" />
+            </Stack>
+          </AppCard>
+        ))}
+      </SimpleGrid>
+      {Array.from({ length: 2 }, (_, i) => (
+        <AppCard key={i} p="md">
+          <Skeleton height={12} width={160} radius="sm" mb={12} />
+          <Skeleton height={220} radius="sm" />
+        </AppCard>
+      ))}
+    </Stack>
   );
 }
 
@@ -83,9 +111,13 @@ export function ExploreFeedbackContent({
         </Box>
 
         {!hasData ? (
-          <Text c="dimmed" size="sm">
-            {loading ? tr("explore.feedback.loading") : tr("explore.feedback.empty")}
-          </Text>
+          loading ? (
+            <FeedbackContentSkeleton />
+          ) : (
+            <Text c="dimmed" size="sm">
+              {tr("explore.feedback.empty")}
+            </Text>
+          )
         ) : (
           <>
             <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="md">

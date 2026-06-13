@@ -1,4 +1,4 @@
-import { Box, Group, Stack, Text, Title } from "@mantine/core";
+import { Box, Group, Skeleton, Stack, Text, Title } from "@mantine/core";
 import { useMemo } from "react";
 import { m } from "framer-motion";
 import { useShallow } from "zustand/react/shallow";
@@ -32,6 +32,7 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
   useTr();
   const { offerings: allOfferings, getCourseEntryByNorm } = useExploreOfferings();
   const registry = useAppStore(useShallow((s) => s.professors));
+  const professorsLoading = useAppStore((s) => s.professorsLoading);
 
   const {
     filters,
@@ -132,7 +133,7 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
           <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
             {displayName}
           </Title>
-          {(showSatisfaction || showRmp) && (
+          {showSatisfaction || showRmp ? (
             <Group gap={6} align="center" mt={8} wrap="wrap">
               {showSatisfaction ? <RatingBadge kind="satisfaction" value={sentiment} /> : null}
               {showSatisfaction && showRmp ? (
@@ -149,7 +150,12 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
                 />
               ) : null}
             </Group>
-          )}
+          ) : professorsLoading || feedbackLoading ? (
+            <Group gap={6} align="center" mt={8} wrap="wrap" aria-hidden>
+              <Skeleton height={18} width={58} radius="sm" />
+              <Skeleton height={18} width={58} radius="sm" />
+            </Group>
+          ) : null}
         </ExploreEntityHeader>
 
         {displayedCourseGroups.length === 0 ? (

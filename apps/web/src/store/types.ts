@@ -91,6 +91,8 @@ export interface AppState {
   disciplines: Discipline[] | null;
   /** Canonical professor registry (slug/legacyId lookups), lazily loaded from `professors.pb`. */
   professors: ProfessorRegistry | null;
+  /** True while the lazily-loaded {@link professors} registry is being fetched/decoded. */
+  professorsLoading: boolean;
   loading: boolean;
   /** 0–100 while {@link loading} is true. */
   loadProgress: number;
@@ -161,6 +163,8 @@ export interface AppState {
   generationMaxEndMinutes: number;
   generationMinProfessorRating: number | null;
   professorRatings: ProfessorRatingsMap | null;
+  /** True while the lazily-loaded {@link professorRatings} asset is being fetched/decoded. */
+  professorRatingsLoading: boolean;
   includeClosedComponents: boolean;
   /** When true, only virtual meeting times are kept per section for scheduling. */
   virtualSectionsOnly: boolean;

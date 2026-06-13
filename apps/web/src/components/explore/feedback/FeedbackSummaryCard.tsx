@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Box, Flex, Group, Stack, Text } from "@mantine/core";
+import { Box, Flex, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { LineChart } from "@mantine/charts";
 import { Link } from "@tanstack/react-router";
 import { IconArrowRight } from "@tabler/icons-react";
@@ -56,6 +56,19 @@ function ChartTooltip({ payload }: { payload?: Array<{ value?: number | string }
   );
 }
 
+/** The card's header row: "Student evaluations" label with a trailing arrow. */
+function FeedbackCardHeader() {
+  useTr();
+  return (
+    <Group justify="space-between" wrap="nowrap" gap="xs">
+      <Text fw={600} size="sm" c="var(--app-text)">
+        {tr("explore.feedback.viewLink")}
+      </Text>
+      <IconArrowRight size={16} style={{ color: "var(--app-text-muted)" }} />
+    </Group>
+  );
+}
+
 /**
  * A short, clickable preview of a course/professor's student evaluations: the
  * "Student evaluations" title with an arrow, a small overall-sentiment sparkline,
@@ -93,15 +106,27 @@ export function FeedbackSummaryCard({
   if (loading && views.length === 0) {
     return (
       <AppCard p="sm">
-        <Group justify="space-between" wrap="nowrap" gap="xs">
-          <Text fw={600} size="sm" c="var(--app-text)">
-            {tr("explore.feedback.viewLink")}
-          </Text>
-          <IconArrowRight size={16} style={{ color: "var(--app-text-muted)" }} />
-        </Group>
-        <Text size="xs" c="dimmed" mt={8}>
-          {tr("explore.feedback.loading")}
-        </Text>
+        <Stack gap={8}>
+          <FeedbackCardHeader />
+          <Flex
+            direction={{ base: "column", xs: "row" }}
+            gap={{ base: 6, xs: "md" }}
+            align={{ base: "stretch", xs: "center" }}
+            aria-hidden
+          >
+            <Box flex={{ base: "0 0 auto", xs: "1 1 120px" }} style={{ minWidth: 110 }}>
+              <Skeleton height={44} radius="sm" />
+            </Box>
+            <Flex gap="md" wrap="nowrap" justify={{ base: "space-between", xs: "flex-start" }}>
+              {Array.from({ length: 3 }, (_, i) => (
+                <Stack key={i} gap={4} style={{ flexShrink: 0 }}>
+                  <Skeleton height={12} width={36} radius="sm" />
+                  <Skeleton height={9} width={48} radius="sm" />
+                </Stack>
+              ))}
+            </Flex>
+          </Flex>
+        </Stack>
       </AppCard>
     );
   }
@@ -141,12 +166,7 @@ export function FeedbackSummaryCard({
     >
       <AppCard p="sm" interactive>
         <Stack gap={8}>
-          <Group justify="space-between" wrap="nowrap" gap="xs">
-            <Text fw={600} size="sm" c="var(--app-text)">
-              {tr("explore.feedback.viewLink")}
-            </Text>
-            <IconArrowRight size={16} style={{ color: "var(--app-text-muted)" }} />
-          </Group>
+          <FeedbackCardHeader />
           <Flex
             direction={{ base: "column", xs: "row" }}
             gap={{ base: 6, xs: "md" }}

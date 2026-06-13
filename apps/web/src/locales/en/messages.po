@@ -1009,11 +1009,6 @@ msgstr "Sentiment"
 msgid "explore.feedback.empty"
 msgstr "No evaluation data is available yet."
 
-#: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:110
-#: apps/web/src/components/trends/TrendsFeedbackSection.tsx:42
-msgid "explore.feedback.loading"
-msgstr "Loading feedback…"
-
 #: apps/web/src/components/explore/feedback/ExploreFeedbackContent.tsx:174
 msgid "explore.feedback.noScaleQuestions"
 msgstr "No rated questions to chart."
