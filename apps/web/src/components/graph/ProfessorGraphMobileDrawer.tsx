@@ -1,34 +1,18 @@
-import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/core";
+import type { ProfessorGraphNode } from "@uoplan/core";
 import { tr } from "../../i18n";
-import type { ExploreOfferingFlat } from "../../lib/explore/gradesSearch";
-import type { GraphNeighbor, NeighborSortMode } from "../../lib/graph/professorGraphDetails";
+import type { ProfessorGraphDetailsData } from "../../lib/graph/professorGraphDetails";
 import { BottomDrawer } from "../shared/BottomDrawer";
 import { ProfessorGraphNodeDetails } from "./ProfessorGraphNodeDetails";
 
-type ProfessorGraphMobileDrawerProps = {
+type ProfessorGraphMobileDrawerProps = ProfessorGraphDetailsData & {
   node: ProfessorGraphNode | null;
-  offerings: ExploreOfferingFlat[];
-  neighbors: GraphNeighbor[];
-  neighborSort: NeighborSortMode;
-  onNeighborSortChange: (mode: NeighborSortMode) => void;
-  offeringsByProfessorId: Map<string, ExploreOfferingFlat[]>;
-  professorRatings: ProfessorRatingsMap | null;
-  professorSentiment: Map<string, number> | null;
-  onSelectNode: (node: ProfessorGraphNode) => void;
   onClose: () => void;
 };
 
 export function ProfessorGraphMobileDrawer({
   node,
-  offerings,
-  neighbors,
-  neighborSort,
-  onNeighborSortChange,
-  offeringsByProfessorId,
-  professorRatings,
-  professorSentiment,
-  onSelectNode,
   onClose,
+  ...details
 }: ProfessorGraphMobileDrawerProps) {
   return (
     <BottomDrawer
@@ -38,20 +22,7 @@ export function ProfessorGraphMobileDrawer({
       ariaLabel={tr("graph.nodeDetails")}
       maxHeight="70vh"
     >
-      {node ? (
-        <ProfessorGraphNodeDetails
-          node={node}
-          offerings={offerings}
-          neighbors={neighbors}
-          neighborSort={neighborSort}
-          onNeighborSortChange={onNeighborSortChange}
-          offeringsByProfessorId={offeringsByProfessorId}
-          professorRatings={professorRatings}
-          professorSentiment={professorSentiment}
-          onSelectNode={onSelectNode}
-          showNeighbors
-        />
-      ) : null}
+      {node ? <ProfessorGraphNodeDetails node={node} {...details} showNeighbors /> : null}
     </BottomDrawer>
   );
 }

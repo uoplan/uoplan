@@ -1,4 +1,5 @@
 import * as DataProto from "@uoplan/proto/data";
+import { createExtraCodeAccumulator } from "@uoplan/core";
 import { CourseCodeIndexer, normalizeCode } from "./shared.ts";
 
 interface DisciplineLevelInput {
@@ -184,20 +185,11 @@ export function mapCatalogue(input: CatalogueJsonInput) {
   // Program-requirement codes reference the course-code dictionary by 1-based
   // index; codes absent from it (cross-year refs) go into a small `extra_codes`
   // list referenced past `course_codes.length`.
-  const extraCodes: string[] = [];
-  const extraIndexByCode = new Map<string, number>();
+  const codeRefs = createExtraCodeAccumulator();
   const encodeCodeRef: CodeRefEncoder = (code) => {
     const normalized = normalizeCode(code ?? "");
     if (!normalized) return;
-    const idx = indexer.indexOf(normalized);
-    if (idx !== undefined) return idx + 1;
-    let extra = extraIndexByCode.get(normalized);
-    if (extra === undefined) {
-      extra = extraCodes.length;
-      extraCodes.push(normalized);
-      extraIndexByCode.set(normalized, extra);
-    }
-    return indexer.courseCodes.length + extra + 1;
+    return codeRefs.resolve(normalized, indexer.indexOf(normalized), indexer.courseCodes.length);
   };
 
   const programs = (input.programs ?? []).map((program) => ({
@@ -210,7 +202,7 @@ export function mapCatalogue(input: CatalogueJsonInput) {
 
   return {
     courseCodes: indexer.courseCodes,
-    extraCodes,
+    extraCodes: codeRefs.extraCodes,
     courses: (input.courses ?? []).map((course) => ({
       code: indexer.add(String(course.code ?? "")),
       title: course.title ?? "",

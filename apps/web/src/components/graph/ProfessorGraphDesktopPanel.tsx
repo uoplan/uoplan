@@ -1,35 +1,19 @@
 import { ActionIcon, Box, ScrollArea, Stack } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
-import type { ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/core";
+import type { ProfessorGraphNode } from "@uoplan/core";
 import { tr } from "../../i18n";
-import type { ExploreOfferingFlat } from "../../lib/explore/gradesSearch";
-import type { GraphNeighbor, NeighborSortMode } from "../../lib/graph/professorGraphDetails";
+import type { ProfessorGraphDetailsData } from "../../lib/graph/professorGraphDetails";
 import { ProfessorGraphNodeDetails } from "./ProfessorGraphNodeDetails";
 
-type ProfessorGraphDesktopPanelProps = {
+type ProfessorGraphDesktopPanelProps = ProfessorGraphDetailsData & {
   node: ProfessorGraphNode;
-  offerings: ExploreOfferingFlat[];
-  neighbors: GraphNeighbor[];
-  neighborSort: NeighborSortMode;
-  onNeighborSortChange: (mode: NeighborSortMode) => void;
-  offeringsByProfessorId: Map<string, ExploreOfferingFlat[]>;
-  professorRatings: ProfessorRatingsMap | null;
-  professorSentiment: Map<string, number> | null;
-  onSelectNode: (node: ProfessorGraphNode) => void;
   onClose: () => void;
 };
 
 export function ProfessorGraphDesktopPanel({
   node,
-  offerings,
-  neighbors,
-  neighborSort,
-  onNeighborSortChange,
-  offeringsByProfessorId,
-  professorRatings,
-  professorSentiment,
-  onSelectNode,
   onClose,
+  ...details
 }: ProfessorGraphDesktopPanelProps) {
   return (
     <Box
@@ -69,18 +53,7 @@ export function ProfessorGraphDesktopPanel({
           </ActionIcon>
         </Box>
         <ScrollArea style={{ flex: 1 }} type="auto" offsetScrollbars px="md" pb="md">
-          <ProfessorGraphNodeDetails
-            node={node}
-            offerings={offerings}
-            neighbors={neighbors}
-            neighborSort={neighborSort}
-            onNeighborSortChange={onNeighborSortChange}
-            offeringsByProfessorId={offeringsByProfessorId}
-            professorRatings={professorRatings}
-            professorSentiment={professorSentiment}
-            onSelectNode={onSelectNode}
-            showNeighbors
-          />
+          <ProfessorGraphNodeDetails node={node} {...details} showNeighbors />
         </ScrollArea>
       </Stack>
     </Box>

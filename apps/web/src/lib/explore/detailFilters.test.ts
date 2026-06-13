@@ -15,29 +15,7 @@ import type {
   ExploreProfessorSearchEntry,
 } from "./gradesSearch";
 import { testCourseCode, testProfessorName } from "../../test/brands";
-
-type OfferingPartial = Partial<Omit<ExploreOfferingFlat, "courseCode" | "professorName">> & {
-  courseCode?: string;
-  professorName?: string;
-};
-
-function makeOffering(partial: OfferingPartial): ExploreOfferingFlat {
-  return {
-    id: partial.id ?? "offering",
-    courseCode: testCourseCode(partial.courseCode ?? "CSI 1100"),
-    courseTitle: partial.courseTitle ?? "Intro",
-    professorName: testProfessorName(partial.professorName ?? "Ada Lovelace"),
-    legacyId: partial.legacyId,
-    professorRef: partial.professorRef,
-    unassignedInstructor: partial.unassignedInstructor,
-    predictedInstructors: partial.predictedInstructors,
-    termId: partial.termId ?? 2269,
-    termLabel: partial.termLabel ?? "Fall 2026",
-    section: partial.section,
-    fuseText: partial.fuseText ?? "",
-    distribution: partial.distribution ?? { "A+": 5 },
-  };
-}
+import { makeOffering } from "../../test/exploreFilterFixtures";
 
 function makeProfessorEntry(
   partial: Partial<Omit<ExploreProfessorSearchEntry, "displayName">> & { displayName?: string },

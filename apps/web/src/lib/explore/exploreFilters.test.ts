@@ -1,11 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { GradeVizData, RemainingRequirement } from "@uoplan/core";
 import { buildTermPresenceIndex } from "./gradesSearch";
-import type {
-  ExploreCourseSearchEntry,
-  ExploreOfferingFlat,
-  ExploreProfessorSearchEntry,
-} from "./gradesSearch";
+import type { ExploreCourseSearchEntry, ExploreProfessorSearchEntry } from "./gradesSearch";
 import {
   buildRequirementCandidateSet,
   compareCourseEntries,
@@ -20,6 +16,7 @@ import {
 } from "./exploreFilters";
 import type { ExploreFilterState } from "./exploreFilters";
 import { testCourseCode, testProfessorName } from "../../test/brands";
+import { makeOffering } from "../../test/exploreFilterFixtures";
 
 function makeGradeViz(entries: Array<{ grade: string; count: number }>): GradeVizData {
   return {
@@ -69,26 +66,6 @@ function makeProfessorEntry(
     disciplines: partial.disciplines ?? [],
     gradeViz: partial.gradeViz ?? null,
     maxRating: partial.maxRating ?? null,
-  };
-}
-
-type OfferingPartial = Partial<Omit<ExploreOfferingFlat, "courseCode" | "professorName">> & {
-  courseCode?: string;
-  professorName?: string;
-};
-
-function makeOffering(partial: OfferingPartial): ExploreOfferingFlat {
-  return {
-    id: partial.id ?? "offering",
-    courseCode: testCourseCode(partial.courseCode ?? "CSI 1100"),
-    courseTitle: partial.courseTitle ?? "Intro",
-    professorName: testProfessorName(partial.professorName ?? "Ada Lovelace"),
-    legacyId: partial.legacyId,
-    termId: partial.termId ?? 2269,
-    termLabel: partial.termLabel ?? "Fall 2026",
-    section: partial.section,
-    fuseText: partial.fuseText ?? "",
-    distribution: partial.distribution ?? {},
   };
 }
 
