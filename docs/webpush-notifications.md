@@ -25,7 +25,7 @@ No Worker requests happen on page load — state is read entirely from `localSto
 
 ### Notification delivery flow
 
-1. GitHub Action runs `pnpm check:terms` (fetches uOttawa's class search page, syncs `apps/scraper/data/terms.json` to match the live dropdown, and reports any newly added term IDs)
+1. GitHub Action runs `pnpm --filter scraper check:terms` (fetches uOttawa's class search page, syncs `apps/scraper/data/terms.json` to match the live dropdown, and reports any newly added term IDs)
 2. If new terms are found, dispatches `daily-scrape.yml` and waits for it to finish
 3. Polls `git ls-remote origin main` for the new HEAD SHA after the scrape commit
 4. Polls the GitHub check-run API until the Cloudflare Pages build for that SHA shows `completed/success`

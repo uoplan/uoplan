@@ -40,9 +40,14 @@ pnpm coverage:rust                       # cargo-llvm-cov HTML report (target/ll
 # (runs tests under --release; wall-clock timing asserts auto-relax under instrumentation)
 
 # Scraper / data
-pnpm scrape:catalogue # Scrape per-year course/program data (--force to re-scrape)
-pnpm scrape:schedules # Scrape PeopleSoft schedule data
-pnpm build:data-proto # Compile apps/scraper/data JSON → apps/web/public/data .pb
+# Granular scraper steps run via the scraper workspace (most are order-sensitive — see below):
+pnpm --filter scraper scrape:catalogue        # Scrape per-year course/program data (--force to re-scrape)
+pnpm --filter scraper scrape:schedules        # Scrape PeopleSoft schedule data
+pnpm --filter scraper check:terms             # Sync terms.json from uOttawa's live class-search dropdown
+pnpm build:data-proto                         # Compile apps/scraper/data JSON → runtime .pb assets
+# Orchestrators (auto-sequenced, unattended — no auth/browser needed):
+pnpm data:grades      # Refresh grades: grades:convert → scrape:grades → enrich:schedules → build:data-proto
+pnpm data:build       # Full derived rebuild from committed JSON: + build:professors before proto
 ```
 
 Run a single test with vitest directly, e.g.

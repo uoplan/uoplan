@@ -38,7 +38,7 @@ Latest aliases are still applied after merge so renumbered courses resolve corre
 
 ### How to change it
 
-- **Add an older year**: lower `OLDEST_YEAR` in `apps/scraper/src/catalogue/scrape.ts`. Run `pnpm scrape:catalogue` — the new source JSON file will be created and the manifest updated. Then run `pnpm build:data-proto` to refresh runtime `.pb` assets. Existing archive files are skipped unless you pass `--force`.
+- **Add an older year**: lower `OLDEST_YEAR` in `apps/scraper/src/catalogue/scrape.ts`. Run `pnpm --filter scraper scrape:catalogue` — the new source JSON file will be created and the manifest updated. Then run `pnpm build:data-proto` to refresh runtime `.pb` assets. Existing archive files are skipped unless you pass `--force`.
 - **Current year detection**: `getCurrentAcademicYear()` uses `new Date()`. No changes needed year-over-year.
 - **Oldest supported year**: the `OLDEST_YEAR = 2017` constant in `apps/scraper/src/catalogue/scrape.ts`.
 

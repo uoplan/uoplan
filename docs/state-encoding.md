@@ -50,8 +50,8 @@ The helper `urlToSlug(url)` in `packages/core/src/stateEncode.ts` performs this 
 ## How to change it
 
 - **Add a new field**: add it to `packages/proto/proto/state.proto`, regenerate `@uoplan/proto`, add to `EncodeInput` and `DecodedState`, encode/decode it in `encodeState`/`decodeState`, and update `getEncodedStateBase64` + `getShareUrl` in `src/store/slices/url.ts`. If the field is needed before catalogue load, also update `peekTermAndYear`.
-- **Change the program index format**: update `encodeState` (uses `programSlug()`), `decodeState` (uses slug lookup), and regenerate `indices.json` via `pnpm scrape:catalogue`.
-- **Regenerate indices.json**: run `pnpm scrape:catalogue` — [`apps/scraper/src/catalogue/scrape.ts`](../apps/scraper/src/catalogue/scrape.ts) calls `generateIndices()` after the scrape. It **merges** with any existing `indices.json`: existing entries keep their order and indices; for each `catalogue.YYYY.json` present under `apps/scraper/data` (academic years ascending), course codes and program slugs not already seen are **appended** in file order within each year (so encoded URLs and localStorage stay stable as catalogues grow). Years without a file are skipped.
+- **Change the program index format**: update `encodeState` (uses `programSlug()`), `decodeState` (uses slug lookup), and regenerate `indices.json` via `pnpm --filter scraper scrape:catalogue`.
+- **Regenerate indices.json**: run `pnpm --filter scraper scrape:catalogue` — [`apps/scraper/src/catalogue/scrape.ts`](../apps/scraper/src/catalogue/scrape.ts) calls `generateIndices()` after the scrape. It **merges** with any existing `indices.json`: existing entries keep their order and indices; for each `catalogue.YYYY.json` present under `apps/scraper/data` (academic years ascending), course codes and program slugs not already seen are **appended** in file order within each year (so encoded URLs and localStorage stay stable as catalogues grow). Years without a file are skipped.
 
 ## Dependencies
 

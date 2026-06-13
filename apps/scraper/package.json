@@ -8,7 +8,6 @@
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui --coverage",
     "scrape:catalogue": "node src/cli/catalogue.ts",
-    "backfill:aliases": "node src/cli/backfillAliases.ts",
     "scrape:schedules": "node src/cli/schedules.ts",
     "scrape:feedback": "node src/cli/feedback.ts",
     "scrape:disciplines": "node src/cli/disciplines.ts",
