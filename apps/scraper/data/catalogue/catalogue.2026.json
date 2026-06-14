@@ -178967,6 +178967,7 @@
                 {
                   "type": "faculty_elective",
                   "title": "Any other graduate course in the Faculty of Arts with permission of the School and the professor in charge of the course",
+                  "faculty": "Faculty of Arts",
                   "indented": true
                 }
               ]
@@ -185371,7 +185372,8 @@
             {
               "type": "faculty_elective",
               "title": "3 optional course units offered by the Faculty of Engineering at the graduate level",
-              "credits": 3
+              "credits": 3,
+              "faculty": "Faculty of Engineering"
             }
           ]
         },
@@ -197693,7 +197695,8 @@
             {
               "type": "faculty_elective",
               "title": "3 elective course units at the graduate level from across the Faculty of Health Sciences",
-              "credits": 3
+              "credits": 3,
+              "faculty": "Faculty of Health Sciences"
             }
           ]
         }
@@ -206170,6 +206173,7 @@
                   "type": "faculty_elective",
                   "title": "18 course units within the Faculty of Arts, of which at least 12 units must be at the 3000 or 4000 level.",
                   "credits": 18,
+                  "faculty": "Faculty of Arts",
                   "indented": true
                 }
               ]
@@ -206276,6 +206280,7 @@
                   "type": "faculty_elective",
                   "title": "30 course units within the Faculty of Arts, of which at least 12 units must be at the 3000 or 4000 level.",
                   "credits": 30,
+                  "faculty": "Faculty of Arts",
                   "indented": true
                 }
               ]
@@ -208716,7 +208721,8 @@
         {
           "type": "faculty_elective",
           "title": "12 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-          "credits": 12
+          "credits": 12,
+          "faculty": "Faculty of Arts"
         },
         {
           "type": "elective",
@@ -208881,7 +208887,8 @@
             {
               "type": "faculty_elective",
               "title": "One minor offered by the Faculty of Social Sciences",
-              "credits": 30
+              "credits": 30,
+              "faculty": "Faculty of Social Sciences"
             },
             {
               "type": "elective",
@@ -208972,7 +208979,8 @@
                 {
                   "type": "faculty_elective",
                   "title": "A minor offered by the Faculty of Social Sciences",
-                  "credits": 30
+                  "credits": 30,
+                  "faculty": "Faculty of Social Sciences"
                 },
                 {
                   "type": "and",
@@ -208981,7 +208989,8 @@
                     {
                       "type": "faculty_elective",
                       "title": "15 optional course units offered by the Faculty of Social Sciences",
-                      "credits": 15
+                      "credits": 15,
+                      "faculty": "Faculty of Social Sciences"
                     },
                     {
                       "type": "faculty_elective",
@@ -208990,7 +208999,8 @@
                       "levels": [
                         3000,
                         4000
-                      ]
+                      ],
+                      "faculty": "Faculty of Social Sciences"
                     }
                   ]
                 }
@@ -209075,12 +209085,14 @@
             {
               "type": "faculty_elective",
               "title": "A major offered by the Faculty of Social Sciences",
-              "credits": 42
+              "credits": 42,
+              "faculty": "Faculty of Social Sciences"
             },
             {
               "type": "faculty_elective",
               "title": "12 optional course units from the Faculty of Social Sciences",
-              "credits": 12
+              "credits": 12,
+              "faculty": "Faculty of Social Sciences"
             }
           ]
         },
@@ -209163,12 +209175,14 @@
             {
               "type": "faculty_elective",
               "title": "A major offered by the Faculty of Social Sciences",
-              "credits": 42
+              "credits": 42,
+              "faculty": "Faculty of Social Sciences"
             },
             {
               "type": "faculty_elective",
               "title": "12 optional course units from the Faculty of Social Sciences",
-              "credits": 12
+              "credits": 12,
+              "faculty": "Faculty of Social Sciences"
             }
           ]
         },
@@ -209341,7 +209355,8 @@
             {
               "type": "faculty_elective",
               "title": "A minor offered by the Faculty of Social Sciences",
-              "credits": 30
+              "credits": 30,
+              "faculty": "Faculty of Social Sciences"
             }
           ]
         },
@@ -209507,7 +209522,8 @@
             {
               "type": "faculty_elective",
               "title": "A minor offered by the Faculty of Social Sciences",
-              "credits": 30
+              "credits": 30,
+              "faculty": "Faculty of Social Sciences"
             }
           ]
         },
@@ -209593,7 +209609,8 @@
                 {
                   "type": "faculty_elective",
                   "title": "A minor offered by the Faculty of Social Sciences",
-                  "credits": 30
+                  "credits": 30,
+                  "faculty": "Faculty of Social Sciences"
                 },
                 {
                   "type": "and",
@@ -209602,7 +209619,8 @@
                     {
                       "type": "faculty_elective",
                       "title": "15 optional course units offered by the Faculty of Social Sciences",
-                      "credits": 15
+                      "credits": 15,
+                      "faculty": "Faculty of Social Sciences"
                     },
                     {
                       "type": "faculty_elective",
@@ -209611,7 +209629,8 @@
                       "levels": [
                         3000,
                         4000
-                      ]
+                      ],
+                      "faculty": "Faculty of Social Sciences"
                     }
                   ]
                 }
@@ -244410,7 +244429,8 @@
             {
               "type": "faculty_elective",
               "title": "3 optional course units in science offered by the Faculty of Science",
-              "credits": 3
+              "credits": 3,
+              "faculty": "Faculty of Science"
             }
           ]
         },
@@ -244774,7 +244794,8 @@
             {
               "type": "faculty_elective",
               "title": "3 science optional course units offered by the Faculty of Science",
-              "credits": 3
+              "credits": 3,
+              "faculty": "Faculty of Science"
             },
             {
               "type": "course",
@@ -245318,7 +245339,8 @@
             {
               "type": "faculty_elective",
               "title": "3 science optional course units offered by the Faculty of Science",
-              "credits": 3
+              "credits": 3,
+              "faculty": "Faculty of Science"
             },
             {
               "type": "course",
@@ -246201,7 +246223,8 @@
             {
               "type": "faculty_elective",
               "title": "3 science optional course units offered by the Faculty of Science",
-              "credits": 3
+              "credits": 3,
+              "faculty": "Faculty of Science"
             }
           ]
         },
@@ -246489,7 +246512,8 @@
             {
               "type": "faculty_elective",
               "title": "3 science optional course units offered by the Faculty of Science",
-              "credits": 3
+              "credits": 3,
+              "faculty": "Faculty of Science"
             }
           ]
         },
@@ -246757,7 +246781,8 @@
             {
               "type": "faculty_elective",
               "title": "3 science optional course units offered by the Faculty of Science",
-              "credits": 3
+              "credits": 3,
+              "faculty": "Faculty of Science"
             }
           ]
         },
@@ -254809,7 +254834,8 @@
             {
               "type": "faculty_elective",
               "title": "9 elective course units from the Faculty of Arts, Faculty of Education, Faculty of Law, Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 9
+              "credits": 9,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -255143,7 +255169,8 @@
             {
               "type": "faculty_elective",
               "title": "9 elective course units from the Faculty of Arts, Faculty of Education, Faculty of Law, Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 9
+              "credits": 9,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -255459,7 +255486,8 @@
             {
               "type": "faculty_elective",
               "title": "9 elective course units from the Faculty of Arts, Faculty of Education, Faculty of Law, Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 9
+              "credits": 9,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -255785,7 +255813,8 @@
             {
               "type": "faculty_elective",
               "title": "9 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management.",
-              "credits": 9
+              "credits": 9,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -256202,7 +256231,8 @@
             {
               "type": "faculty_elective",
               "title": "9 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 9
+              "credits": 9,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -256659,7 +256689,8 @@
             {
               "type": "faculty_elective",
               "title": "9 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 9
+              "credits": 9,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -257094,7 +257125,8 @@
             {
               "type": "faculty_elective",
               "title": "9 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 9
+              "credits": 9,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -257511,7 +257543,8 @@
             {
               "type": "faculty_elective",
               "title": "9 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 9
+              "credits": 9,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -257902,7 +257935,8 @@
             {
               "type": "faculty_elective",
               "title": "9 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 9
+              "credits": 9,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -258223,7 +258257,8 @@
             {
               "type": "faculty_elective",
               "title": "9 optional course units offered by the Faculty of Science",
-              "credits": 9
+              "credits": 9,
+              "faculty": "Faculty of Science"
             },
             {
               "type": "faculty_elective",
@@ -258232,7 +258267,8 @@
               "levels": [
                 3000,
                 4000
-              ]
+              ],
+              "faculty": "Faculty of Science"
             }
           ]
         },
@@ -258538,7 +258574,8 @@
               "levels": [
                 3000,
                 4000
-              ]
+              ],
+              "faculty": "Faculty of Science"
             }
           ]
         },
@@ -258904,7 +258941,8 @@
               "levels": [
                 3000,
                 4000
-              ]
+              ],
+              "faculty": "Faculty of Science"
             }
           ]
         },
@@ -259357,7 +259395,8 @@
               "levels": [
                 3000,
                 4000
-              ]
+              ],
+              "faculty": "Faculty of Science"
             }
           ]
         },
@@ -259697,7 +259736,8 @@
             {
               "type": "faculty_elective",
               "title": "6 elective course units from the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 6
+              "credits": 6,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -259816,7 +259856,8 @@
               "levels": [
                 3000,
                 4000
-              ]
+              ],
+              "faculty": "Faculty of Science"
             }
           ]
         },
@@ -259910,7 +259951,8 @@
               "levels": [
                 3000,
                 4000
-              ]
+              ],
+              "faculty": "Faculty of Science"
             }
           ]
         },
@@ -260578,7 +260620,8 @@
             {
               "type": "faculty_elective",
               "title": "12 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 12
+              "credits": 12,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -260842,7 +260885,8 @@
         {
           "type": "faculty_elective",
           "title": "12 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-          "credits": 12
+          "credits": 12,
+          "faculty": "Faculty of Arts"
         },
         {
           "type": "elective",
@@ -261255,7 +261299,8 @@
             {
               "type": "faculty_elective",
               "title": "12 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 12
+              "credits": 12,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -261840,7 +261885,8 @@
             {
               "type": "faculty_elective",
               "title": "9 elective course units offered by the University of Ottawa excluding courses offered by the Faculty of Science and the Faculty of Engineering",
-              "credits": 9
+              "credits": 9,
+              "faculty": "Faculty of Science"
             }
           ]
         }
@@ -262953,6 +262999,7 @@
                     3000,
                     4000
                   ],
+                  "faculty": "Faculty of Science",
                   "indented": true
                 }
               ]
@@ -262965,7 +263012,8 @@
             {
               "type": "faculty_elective",
               "title": "6 optional course units offered by the Faculty of Science or the Faculty of Engineering",
-              "credits": 6
+              "credits": 6,
+              "faculty": "Faculty of Science"
             }
           ]
         },
@@ -262976,7 +263024,8 @@
             {
               "type": "faculty_elective",
               "title": "12 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Managment",
-              "credits": 12
+              "credits": 12,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "course",
@@ -263028,7 +263077,8 @@
                 2000,
                 3000,
                 4000
-              ]
+              ],
+              "faculty": "Faculty of Science"
             },
             {
               "type": "elective",
@@ -263120,7 +263170,8 @@
                 2000,
                 3000,
                 4000
-              ]
+              ],
+              "faculty": "Faculty of Science"
             },
             {
               "type": "course",
@@ -263160,7 +263211,8 @@
                 2000,
                 3000,
                 4000
-              ]
+              ],
+              "faculty": "Faculty of Science"
             }
           ]
         },
@@ -263703,7 +263755,8 @@
             {
               "type": "faculty_elective",
               "title": "12 elective course units from the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 12
+              "credits": 12,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -265712,7 +265765,8 @@
             {
               "type": "faculty_elective",
               "title": "12 elective course units from the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 12
+              "credits": 12,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -266053,7 +266107,8 @@
             {
               "type": "faculty_elective",
               "title": "12 elective course units from the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 12
+              "credits": 12,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -266997,7 +267052,8 @@
             {
               "type": "faculty_elective",
               "title": "9 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 9
+              "credits": 9,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -268028,7 +268084,8 @@
             {
               "type": "faculty_elective",
               "title": "12 elective course units from the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 12
+              "credits": 12,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -268260,6 +268317,7 @@
                         3000,
                         4000
                       ],
+                      "faculty": "Faculty of Science",
                       "indented": true
                     }
                   ]
@@ -268275,7 +268333,8 @@
             {
               "type": "faculty_elective",
               "title": "12 elective course units from the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 12
+              "credits": 12,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -268535,7 +268594,8 @@
             {
               "type": "faculty_elective",
               "title": "12 elective course units from the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management.",
-              "credits": 12
+              "credits": 12,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -269355,7 +269415,8 @@
             {
               "type": "faculty_elective",
               "title": "12 elective course units from the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 12
+              "credits": 12,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -269923,7 +269984,8 @@
             {
               "type": "faculty_elective",
               "title": "9 elective course units offered by the Faculty of Arts, the Faculty of Education, the Faculty of Law, the Faculty of Social Sciences or the Telfer School of Management",
-              "credits": 9
+              "credits": 9,
+              "faculty": "Faculty of Arts"
             },
             {
               "type": "elective",
@@ -314446,17 +314508,20 @@
         {
           "type": "faculty_elective",
           "title": "6 optional course units from the list of optional courses offered at the Faculty of Arts",
-          "credits": 6
+          "credits": 6,
+          "faculty": "Faculty of Arts"
         },
         {
           "type": "faculty_elective",
           "title": "6 optional course units from the list of optional courses offered at the Faculty of Social Sciences",
-          "credits": 6
+          "credits": 6,
+          "faculty": "Faculty of Social Sciences"
         },
         {
           "type": "faculty_elective",
           "title": "12 optional course units from the lists of optional courses offered at the Faculty of Arts and the Faculty of Social Sciences",
-          "credits": 12
+          "credits": 12,
+          "faculty": "Faculty of Arts"
         },
         {
           "type": "and",
