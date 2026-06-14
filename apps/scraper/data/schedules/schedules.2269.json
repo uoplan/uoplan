@@ -1,7 +1,7 @@
 {
   "termId": "2269",
   "totalCourses": 11102,
-  "totalWithSchedules": 3227,
+  "totalWithSchedules": 3226,
   "schedules": [
     {
       "subject": "ADM",
@@ -2364,7 +2364,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 161,
               "A": 282,
@@ -9211,7 +9211,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 152,
               "A": 290,
@@ -15296,7 +15296,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 8,
               "A": 47,
@@ -29658,7 +29658,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Maziar Jafary",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -30387,25 +30387,6 @@
               "P": 0,
               "S": 0
             }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "API",
-      "catalogNumber": "6999",
-      "courseCode": "API 6999",
-      "title": "Major Research Paper",
-      "timeZone": "America/Toronto",
-      "components": {
-        "REC": [
-          {
-            "section": "F00-REC FullSess.",
-            "sectionCode": "F00",
-            "component": "REC",
-            "session": null,
-            "times": [],
-            "status": "Open"
           }
         ]
       }
@@ -66705,7 +66686,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "KELLY KEENAN",
+                "instructor": "Kelly Keenan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -103522,7 +103503,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Élysée Robert Cadet",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -103533,7 +103514,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Élysée Robert Cadet",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -103686,7 +103667,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Boussad Berrichi",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -115150,7 +115131,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 22,
               "A": 13,
@@ -123256,7 +123237,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 211,
               "A": 588,
@@ -155239,7 +155220,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 233,
               "A": 332,
@@ -173460,7 +173441,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -173471,7 +173452,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -174075,7 +174056,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -174086,7 +174067,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -269484,7 +269465,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ],
         "DGD": [
@@ -269586,7 +269567,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
