@@ -1585,8 +1585,8 @@ mod tests {
 
     use super::*;
     use crate::proto::data::{
-        Catalogue, ComponentSection, ComponentSectionList, Course, CourseSchedule,
-        DayOfWeek, MeetingTime, SchedulesData, SectionStatus,
+        Catalogue, ComponentSection, ComponentSectionList, Course, CourseSchedule, DayOfWeek,
+        MeetingTime, SchedulesData, SectionStatus,
     };
 
     fn scheduled_data(entries: &[(&str, Option<(u32, u32, bool)>)]) -> DataView {

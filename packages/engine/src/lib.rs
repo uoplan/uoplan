@@ -18,6 +18,9 @@ pub mod proto {
 mod advanced;
 mod basic;
 mod constraints;
+mod ffi;
+#[cfg(target_os = "android")]
+mod jni_android;
 mod model;
 mod pools;
 mod prereq;

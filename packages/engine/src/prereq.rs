@@ -274,8 +274,7 @@ pub fn prerequisites_contain_non_course(node: Option<&CoursePrereqNode>) -> bool
 mod tests {
     use super::*;
     use crate::proto::data::{
-        Catalogue, Course, CoursePrereqDisciplineLevel, CoursePrereqKind,
-        SchedulesData,
+        Catalogue, Course, CoursePrereqDisciplineLevel, CoursePrereqKind, SchedulesData,
     };
 
     fn course_node(code: &str) -> CoursePrereqNode {
