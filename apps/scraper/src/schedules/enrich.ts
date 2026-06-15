@@ -78,23 +78,30 @@ export function buildGradeLookups(gradesRaw: unknown): GradeLookups {
 
   for (const row of gradesRaw) {
     if (!row || typeof row !== "object") continue;
-    const r = row as { code?: unknown; professors?: unknown };
+    const r = row as { code?: unknown; sections?: unknown; professors?: unknown };
     const code = r.code;
     if (typeof code !== "string" || !code.trim()) continue;
-    const professors = Array.isArray(r.professors) ? r.professors : [];
+    const sections = Array.isArray(r.sections)
+      ? r.sections
+      : Array.isArray(r.professors)
+        ? r.professors
+        : [];
 
     const allDists: GradeDistribution[] = [];
 
-    for (const p of professors) {
+    for (const p of sections) {
       if (!p || typeof p !== "object") continue;
       const prof = p as { name?: unknown; distribution?: unknown; termId?: unknown };
-      const name = prof.name;
-      if (typeof name !== "string" || !name.trim()) continue;
       const dist = prof.distribution;
       if (!dist || typeof dist !== "object") continue;
 
       const termId = parseGradeRowTermId(prof.termId);
       if (termId === 0) continue;
+
+      allDists.push(dist as GradeDistribution);
+
+      const name = prof.name;
+      if (typeof name !== "string" || !name.trim()) continue;
 
       const key = normalizeInstructorName(name);
       if (!key) continue;
@@ -106,7 +113,6 @@ export function buildGradeLookups(gradesRaw: unknown): GradeLookups {
         key,
         dist as GradeDistribution,
       );
-      allDists.push(dist as GradeDistribution);
     }
 
     aggregateByCourse.set(code, sumGradeDistributions(allDists));

@@ -50,17 +50,8 @@ async function ensureWorker(): Promise<void> {
   workerInitialized = true;
 }
 
-export interface TextItemWithPosition {
-  str: string;
-  x: number;
-  y: number;
-}
-
-export interface PdfPageText {
-  pageText: string;
-  itemsWithPosition: TextItemWithPosition[];
-  hasPosition: boolean;
-}
+import type { PdfPageText, TextItemWithPosition } from "@uoplan/core/transcript";
+export type { PdfPageText } from "@uoplan/core/transcript";
 
 interface PdfTextContentItem {
   str?: string;

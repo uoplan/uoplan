@@ -50,7 +50,7 @@ const grades: CourseGradesData = {
   courses: [
     {
       code: normalizeCourseCode("PSY 1101"),
-      professors: [
+      sections: [
         // Fall 2017: all A+ → GPA 10, 100% A+, 100% A-range, 100% pass
         { name: "P One", termId: 2179, distribution: { "A+": 100 } },
         // Winter 2023: half A+, half F → GPA 5, 50% A+, 50% pass
@@ -59,14 +59,14 @@ const grades: CourseGradesData = {
     },
     {
       code: normalizeCourseCode("PSY 2301"),
-      professors: [
+      sections: [
         // Winter 2023, level 2000: all B (6) → GPA 6
         { name: "P Three", termId: 2231, distribution: { B: 80 } },
       ],
     },
     {
       code: normalizeCourseCode("ADM 1100"),
-      professors: [
+      sections: [
         // Fall 2017: all C (4)
         { name: "A One", termId: 2179, distribution: { C: 60 } },
         // Winter 2023: all A (9)

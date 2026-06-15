@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { collectTranscriptCourseCodes } from "./courseCodeMatching";
-import type { PdfPageText } from "./pdfExtraction";
+import type { PdfPageText } from "./types";
 
 function textPage(pageText: string): PdfPageText {
   return { pageText, itemsWithPosition: [], hasPosition: false };

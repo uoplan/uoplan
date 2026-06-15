@@ -144,7 +144,7 @@ function* keyedOfferings<K>(
   keyFor: (course: GradeCourse, termId: number) => K | null,
 ): Generator<{ key: K; termId: number; distribution: GradeDistribution }> {
   for (const course of grades.courses) {
-    for (const prof of course.professors) {
+    for (const prof of course.sections) {
       const off = usableOffering(prof, season);
       if (!off) continue;
       const key = keyFor(course, off.termId);
@@ -475,7 +475,7 @@ export function availableDisciplines(grades: CourseGradesData): DisciplineVolume
     const discipline = disciplineOf(course.code);
     if (!discipline) continue;
     let mass = 0;
-    for (const prof of course.professors) {
+    for (const prof of course.sections) {
       if (!prof.distribution || typeof prof.distribution !== "object") continue;
       mass += countedMass(prof.distribution);
     }

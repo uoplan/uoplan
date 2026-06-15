@@ -28,10 +28,10 @@ function makeGrades(
     const code = normalizeCourseCode(row.code);
     let entry = byCode.get(code);
     if (!entry) {
-      entry = { code, professors: [] };
+      entry = { code, sections: [] };
       byCode.set(code, entry);
     }
-    entry.professors.push({
+    entry.sections.push({
       name: row.name ?? "Prof X",
       termId: row.termId,
       distribution: row.dist,

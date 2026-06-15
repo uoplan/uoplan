@@ -69,7 +69,8 @@ export function buildProfessorCoTeachingGraph(
     const course = courses[courseIndex];
     const counts = new Map<string, number>();
 
-    for (const p of course.professors) {
+    for (const p of course.sections) {
+      if (!p.name?.trim()) continue;
       const id = professorGraphId(p.legacyId, p.name);
       counts.set(id, (counts.get(id) ?? 0) + 1);
 

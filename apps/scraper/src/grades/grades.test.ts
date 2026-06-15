@@ -88,29 +88,35 @@ describe("assembleGrades", () => {
     expect(codes).toEqual(["ADM 1100", "BIO 1530", "CSI 2110"]); // sorted
 
     const adm = output.find((c) => c.code === "ADM 1100")!;
-    expect(adm.professors.map((p) => p.name)).toEqual(["Jane Doe", "John Roe"]);
-    expect(adm.professors[0].legacyId).toBe(12345);
-    expect("legacyId" in adm.professors[1]).toBe(false); // John Roe not in RMP
+    expect(adm.sections.map((p) => p.name)).toEqual(["Jane Doe", "John Roe"]);
+    expect(adm.sections[0].legacyId).toBe(12345);
+    expect("legacyId" in adm.sections[1]).toBe(false); // John Roe not in RMP
 
-    // BIO 1530 C00 had no feedback match -> dropped (empty professors).
-    expect(output.find((c) => c.code === "BIO 1530")!.professors).toEqual([]);
+    // BIO 1530 C00 had no feedback match -> retained as a nameless section.
+    expect(output.find((c) => c.code === "BIO 1530")!.sections).toEqual([
+      {
+        termId: 2259,
+        section: "C00",
+        distribution: dist({ F: 1 }),
+      },
+    ]);
     // CSI 2110 is a catalogue code with no grade data.
-    expect(output.find((c) => c.code === "CSI 2110")!.professors).toEqual([]);
+    expect(output.find((c) => c.code === "CSI 2110")!.sections).toEqual([]);
 
     expect(stats.codes).toBe(3);
-    expect(stats.codesWithProfessors).toBe(1);
-    expect(stats.professorEntries).toBe(2);
+    expect(stats.codesWithProfessors).toBe(2);
+    expect(stats.sectionEntries).toBe(3);
     expect(stats.rowsWithoutFeedbackMatch).toBe(1);
     expect(stats.professorsWithoutLegacyId).toBe(1);
   });
 
   it("preserves canonical distribution key order", () => {
     const { output } = assembleGrades(rows, feedback, resolve, catalogue);
-    const keys = Object.keys(output.find((c) => c.code === "ADM 1100")!.professors[0].distribution);
+    const keys = Object.keys(output.find((c) => c.code === "ADM 1100")!.sections[0].distribution);
     expect(keys.slice(0, 4)).toEqual(["A+", "A", "A-", "B+"]);
   });
 
-  it("emits one professor entry per professor for team-taught sections", () => {
+  it("emits one section entry per professor for team-taught sections", () => {
     const teamRows: GradeRow[] = [
       { termId: 2259, code: "PHY 1100", section: "A00", distribution: dist({ "A+": 4 }) },
     ];
@@ -120,13 +126,13 @@ describe("assembleGrades", () => {
     const { output, stats } = assembleGrades(teamRows, teamFeedback, resolve, ["PHY 1100"]);
     const phy = output.find((c) => c.code === "PHY 1100")!;
 
-    expect(phy.professors.map((p) => p.name)).toEqual(["Jane Doe", "John Roe"]);
+    expect(phy.sections.map((p) => p.name)).toEqual(["Jane Doe", "John Roe"]);
     // Both professors carry the section's (single) distribution.
-    expect(phy.professors[0].distribution["A+"]).toBe(4);
-    expect(phy.professors[1].distribution["A+"]).toBe(4);
-    expect(phy.professors[0].legacyId).toBe(12345);
-    expect("legacyId" in phy.professors[1]).toBe(false);
-    expect(stats.professorEntries).toBe(2);
+    expect(phy.sections[0].distribution["A+"]).toBe(4);
+    expect(phy.sections[1].distribution["A+"]).toBe(4);
+    expect(phy.sections[0].legacyId).toBe(12345);
+    expect("legacyId" in phy.sections[1]).toBe(false);
+    expect(stats.sectionEntries).toBe(2);
     expect(stats.rowsWithoutFeedbackMatch).toBe(0);
   });
 
@@ -141,8 +147,8 @@ describe("assembleGrades", () => {
     ]);
     const { output, stats } = assembleGrades(dupRows, dupFeedback, remap, ["PHY 1100"]);
     const phy = output.find((c) => c.code === "PHY 1100")!;
-    expect(phy.professors.map((p) => p.name)).toEqual(["Jane Doe"]); // deduped
-    expect(stats.professorEntries).toBe(1);
+    expect(phy.sections.map((p) => p.name)).toEqual(["Jane Doe"]); // deduped
+    expect(stats.sectionEntries).toBe(1);
   });
 });
 

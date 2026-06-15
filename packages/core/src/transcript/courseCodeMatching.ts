@@ -1,5 +1,5 @@
-import { isNonDegreeCourse, normalizeCourseCode } from "@uoplan/core";
-import type { PdfPageText, TextItemWithPosition } from "./pdfExtraction";
+import { isNonDegreeCourse, normalizeCourseCode } from "../utils/courseUtils";
+import type { PdfPageText, TextItemWithPosition } from "./types";
 
 const COURSE_CODE_REGEX = /\b([A-Z]{3,4})\s*(\d{4,5}[A-Z]?)\b/gi;
 const OPT_PLACEHOLDER_REGEX = /\bOPT\s+([1-9])XXX\b/gi;

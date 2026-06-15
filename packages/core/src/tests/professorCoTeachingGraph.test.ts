@@ -13,7 +13,7 @@ function buildFixture(): CourseGradesData {
     courses: [
       {
         code: normalizeCourseCode("CSI 2110"),
-        professors: [
+        sections: [
           { name: "Alice Shared", legacyId: 1, termId: 2251, distribution: emptyDist() },
           { name: "Alice Shared", legacyId: 1, termId: 2241, distribution: emptyDist() },
           { name: "Bob Shared", legacyId: 2, termId: 2251, distribution: emptyDist() },
@@ -21,7 +21,7 @@ function buildFixture(): CourseGradesData {
       },
       {
         code: normalizeCourseCode("MAT 1341"),
-        professors: [
+        sections: [
           { name: "Alice Shared", legacyId: 1, termId: 2251, distribution: emptyDist() },
           { name: "Bob Shared", legacyId: 2, termId: 2241, distribution: emptyDist() },
           { name: "Bob Shared", legacyId: 2, termId: 2231, distribution: emptyDist() },
@@ -29,7 +29,7 @@ function buildFixture(): CourseGradesData {
       },
       {
         code: normalizeCourseCode("PHY 1121"),
-        professors: [{ name: "Carol Solo", termId: 2251, distribution: emptyDist() }],
+        sections: [{ name: "Carol Solo", termId: 2251, distribution: emptyDist() }],
       },
     ],
   };
@@ -86,7 +86,7 @@ describe("buildProfessorCoTeachingGraph", () => {
       courses: [
         {
           code: normalizeCourseCode("ADM 1100"),
-          professors: [
+          sections: [
             { name: "P1", legacyId: 10, termId: 1, distribution: emptyDist() },
             { name: "P1", legacyId: 10, termId: 2, distribution: emptyDist() },
             { name: "P2", legacyId: 20, termId: 1, distribution: emptyDist() },

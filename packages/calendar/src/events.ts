@@ -1,14 +1,16 @@
-import type { CanonicalProfessorName, GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/core";
+import type { CanonicalProfessorName } from "@uoplan/core/brand";
+import type { GeneratedSchedule } from "@uoplan/core/src/generation/types";
+import { isUnknownInstructorName } from "@uoplan/core/instructorPrediction";
+import { normalizeGradeVizDistribution } from "@uoplan/core/gradeDistribution";
+import { pickCanonicalProfessorName } from "@uoplan/core/professorIdentity";
+import type { ProfessorRatingsMap } from "@uoplan/core/professorRatings";
 import {
   getRatingDetailsForInstructors,
   getRatingsForInstructors,
-  isUnknownInstructorName,
-  normalizeCourseCode,
-  normalizeGradeVizDistribution,
-  pickCanonicalProfessorName,
   uniqueInstructors,
-  unsafeBrand,
-} from "@uoplan/core";
+} from "@uoplan/core/professorRatings";
+import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
+import { unsafeBrand } from "@uoplan/core/brand";
 import type { CalendarEvent } from "./types";
 
 // Em dash is the deliberate "no instructor assigned" display sentinel.

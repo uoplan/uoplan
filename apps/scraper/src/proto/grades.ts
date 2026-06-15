@@ -5,15 +5,16 @@ import type { ProfessorResolver } from "../professors/buildRegistry.ts";
 /** Convert a 0-based registry index (or null) to a 1-based proto ref (0 = none). */
 function toProfessorRef(
   resolver: ProfessorResolver | undefined,
-  name: string,
+  name?: string,
   legacyId?: number,
 ): number {
+  if (!name?.trim()) return 0;
   if (!resolver) return 0;
   const idx = resolver.index(name, legacyId);
   return idx == null ? 0 : idx + 1;
 }
 
-interface GradeProfessorInput {
+interface GradeSectionInput {
   name?: string;
   legacyId?: string | number;
   termId?: string | number;
@@ -23,6 +24,8 @@ interface GradeProfessorInput {
 
 interface GradeCourseInput {
   code?: string;
+  sections?: unknown;
+  /** Backward-compatible reader for committed legacy grades.json until regenerated. */
   professors?: unknown;
 }
 
@@ -45,7 +48,7 @@ function parseLegacyId(value: unknown): number | undefined {
 }
 
 interface NormalizedOffering {
-  name: string;
+  name?: string;
   legacyId?: number;
   termId: number;
   section: string;
@@ -53,12 +56,13 @@ interface NormalizedOffering {
 }
 
 function normalizeOffering(p: unknown): NormalizedOffering {
-  const x = p as GradeProfessorInput;
+  const x = p as GradeSectionInput;
   const termParsed = Number.parseInt(String(x.termId ?? ""), 10);
   const termId = Number.isFinite(termParsed) ? termParsed : 0;
   const section = typeof x.section === "string" && x.section.trim() ? x.section.trim() : "";
+  const name = typeof x.name === "string" && x.name.trim() ? x.name.trim() : undefined;
   return {
-    name: String(x.name ?? ""),
+    ...(name ? { name } : {}),
     legacyId: parseLegacyId(x.legacyId),
     termId,
     section,
@@ -69,20 +73,20 @@ function normalizeOffering(p: unknown): NormalizedOffering {
 /**
  * Encode `grades.json` into the column-wise {@link GradesData}: one
  * {@link CourseGradeEntry} per course with parallel offering columns, plus a
- * shared `professorNames` dictionary referenced 0-based by `nameRefs`.
+ * shared `sectionNames` dictionary referenced 0-based by `nameRefs`.
  */
 export function mapGradesJson(rows: unknown[], resolver?: ProfessorResolver): GradesData {
   if (!Array.isArray(rows)) {
     throw new Error("grades.json: expected top-level array");
   }
 
-  const professorNames: string[] = [];
+  const sectionNames: string[] = [];
   const nameIndex = new Map<string, number>();
   const nameRefOf = (name: string): number => {
     const existing = nameIndex.get(name);
     if (existing !== undefined) return existing;
-    const idx = professorNames.length;
-    professorNames.push(name);
+    const idx = sectionNames.length;
+    sectionNames.push(name);
     nameIndex.set(name, idx);
     return idx;
   };
@@ -90,9 +94,12 @@ export function mapGradesJson(rows: unknown[], resolver?: ProfessorResolver): Gr
   const courses: CourseGradeEntry[] = [];
   for (const row of rows) {
     const r = row as GradeCourseInput;
-    const offerings = (Array.isArray(r.professors) ? r.professors : [])
-      .map(normalizeOffering)
-      .filter((o) => o.termId !== 0 && o.name.trim().length > 0);
+    const source = Array.isArray(r.sections)
+      ? r.sections
+      : Array.isArray(r.professors)
+        ? r.professors
+        : [];
+    const offerings = source.map(normalizeOffering).filter((o) => o.termId !== 0);
     if (offerings.length === 0) continue;
 
     const entry: CourseGradeEntry = {
@@ -105,7 +112,7 @@ export function mapGradesJson(rows: unknown[], resolver?: ProfessorResolver): Gr
       distributions: [],
     };
     for (const o of offerings) {
-      entry.nameRefs.push(nameRefOf(o.name));
+      entry.nameRefs.push(nameRefOf(o.name ?? ""));
       entry.termIds.push(o.termId);
       entry.professorRefs.push(toProfessorRef(resolver, o.name, o.legacyId));
       entry.legacyIds.push(o.legacyId ?? 0);
@@ -115,7 +122,7 @@ export function mapGradesJson(rows: unknown[], resolver?: ProfessorResolver): Gr
     courses.push(entry);
   }
 
-  return { courses, professorNames };
+  return { courses, sectionNames };
 }
 
 export function mapDisciplinesJson(input: unknown): DisciplinesData {

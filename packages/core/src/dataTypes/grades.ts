@@ -46,8 +46,8 @@ export function distributionFromColumns(
   return nonZero ? out : undefined;
 }
 
-export type CourseGradesProfessor = {
-  name: string;
+export type CourseGradesSection = {
+  name?: string;
   legacyId?: number;
   /** 1-based ref into the canonical professor registry (`professors.pb`). */
   professorRef?: number;
@@ -58,7 +58,7 @@ export type CourseGradesProfessor = {
 
 export type CourseGradesEntry = {
   code: NormalizedCourseCode;
-  professors: CourseGradesProfessor[];
+  sections: CourseGradesSection[];
 };
 
 export type CourseGradesData = {
@@ -66,11 +66,11 @@ export type CourseGradesData = {
 };
 
 export function fromProtoCourseGradesData(input: ProtoGradesData): CourseGradesData {
-  const names = input.professorNames ?? [];
+  const names = input.sectionNames ?? [];
   const courses: CourseGradesEntry[] = [];
   for (const c of input.courses ?? []) {
     const count = c.termIds?.length ?? 0;
-    const professors: CourseGradesProfessor[] = [];
+    const sections: CourseGradesSection[] = [];
     for (let i = 0; i < count; i++) {
       const distribution = distributionFromColumns(c.distributions ?? [], i * GRADE_COLUMN_COUNT);
       if (!distribution) continue;
@@ -78,8 +78,9 @@ export function fromProtoCourseGradesData(input: ProtoGradesData): CourseGradesD
       const professorRef = c.professorRefs?.[i] ?? 0;
       const section = c.sections?.[i] ?? "";
       const nameRef = c.nameRefs?.[i] ?? 0;
-      professors.push({
-        name: names[nameRef] ?? "",
+      const name = names[nameRef] ?? "";
+      sections.push({
+        ...(name ? { name } : {}),
         ...(legacyId !== 0 ? { legacyId: Number(legacyId) } : {}),
         ...(professorRef !== 0 ? { professorRef: Number(professorRef) } : {}),
         termId: Number(c.termIds?.[i] ?? 0),
@@ -87,8 +88,8 @@ export function fromProtoCourseGradesData(input: ProtoGradesData): CourseGradesD
         ...(section ? { section } : {}),
       });
     }
-    if (professors.length > 0) {
-      courses.push({ code: normalizeCourseCode(c.code), professors });
+    if (sections.length > 0) {
+      courses.push({ code: normalizeCourseCode(c.code), sections });
     }
   }
   return { courses };

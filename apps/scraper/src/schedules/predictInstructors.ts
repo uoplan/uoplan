@@ -65,6 +65,12 @@ interface PredictedInstructor {
 /** Minimal shape of a grades.json entry (apps/scraper/data/grades.json). */
 export interface GradesCourseInput {
   code?: string;
+  sections?: Array<{
+    name?: string;
+    legacyId?: number | null;
+    termId?: number;
+  }>;
+  /** Backward-compatible reader for committed legacy grades.json until regenerated. */
   professors?: Array<{
     name?: string;
     legacyId?: number | null;
@@ -198,7 +204,7 @@ export function buildPredictionContext(args: {
   for (const course of grades) {
     const code = String(course.code ?? "").trim();
     if (!code) continue;
-    for (const prof of course.professors ?? []) {
+    for (const prof of course.sections ?? course.professors ?? []) {
       const name = String(prof.name ?? "").trim();
       if (!name || isUnknownInstructorName(name)) continue;
       addLegacy(name, prof.legacyId);
