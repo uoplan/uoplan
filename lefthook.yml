@@ -19,3 +19,11 @@ pre-commit:
     cargo-clippy:
       glob: "apps/cli/**"
       run: cargo clippy --manifest-path apps/cli/Cargo.toml -- -D warnings
+
+pre-push:
+  commands:
+    # Report-only Lighthouse audit of a production build (see scripts/lighthouse.mjs
+    # + apps/web/lighthouserc.cjs). `|| true` keeps it advisory: low scores or an
+    # audit hiccup never block the push. Skip ad-hoc with `git push --no-verify`.
+    lighthouse:
+      run: pnpm lighthouse || true

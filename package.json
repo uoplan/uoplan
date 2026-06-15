@@ -28,6 +28,7 @@
     "coverage:rust": "pnpm --filter @uoplan/engine coverage",
     "bench": "pnpm --filter @uoplan/core bench",
     "test:watch": "pnpm --filter web test:watch",
+    "lighthouse": "node scripts/lighthouse.mjs",
     "prepare": "lefthook install",
     "hooks:run": "lefthook run pre-commit",
     "fallow": "fallow",
@@ -40,6 +41,7 @@
     "cli": "cargo run --quiet --manifest-path apps/cli/Cargo.toml --"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
     "@typescript/native-preview": "7.0.0-dev.20260512.1",
     "esbuild": "^0.28.0",
     "fallow": "^2.88.2",
