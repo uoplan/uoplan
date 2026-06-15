@@ -1,9 +1,10 @@
 import { View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { ProgressProps } from "./Progress.types";
 
-const ACCENT = "#3673cb";
-const TRACK_COLOR = "#ebe6dd";
+const ACCENT = NativeColors.accent;
+const TRACK_COLOR = NativeColors.border;
 
 /** Native (React Native) implementation of the Progress contract. */
 export function Progress({ value, testID }: ProgressProps) {

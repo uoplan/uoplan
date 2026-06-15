@@ -1,10 +1,11 @@
 import { Pressable, Text as RNText, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { TabsProps } from "./Tabs.types";
 
-const BORDER_COLOR = "#ebe6dd";
-const ACTIVE = "#2a2826";
-const INACTIVE = "#5e5a52";
+const BORDER_COLOR = NativeColors.border;
+const ACTIVE = NativeColors.text;
+const INACTIVE = NativeColors.textMuted;
 
 /** Native (React Native) implementation of the Tabs contract. */
 export function Tabs({ value, onChange, items, testID }: TabsProps) {

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Pressable, Modal as RNModal, Text as RNText, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { MenuProps } from "./Menu.types";
 
-const BACKDROP = "rgba(0, 0, 0, 0.35)";
-const SURFACE_BG = "#fffdfa";
-const BORDER_COLOR = "#ebe6dd";
-const LABEL = "#2a2826";
+const BACKDROP = NativeColors.scrim;
+const SURFACE_BG = NativeColors.surface;
+const BORDER_COLOR = NativeColors.border;
+const LABEL = NativeColors.text;
 
 /** Native (React Native) implementation of the Menu contract. */
 export function Menu({ target, items, testID }: MenuProps) {

@@ -1,8 +1,9 @@
 import { ActivityIndicator } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { LoaderProps } from "./Loader.types";
 
-const ACCENT = "#3673cb";
+const ACCENT = NativeColors.accent;
 
 /** Native (React Native) implementation of the Loader contract. */
 export function Loader({ size = "md", testID }: LoaderProps) {

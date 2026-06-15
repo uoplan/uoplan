@@ -1,10 +1,11 @@
 import { Pressable, Modal as RNModal, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { PopoverProps } from "./Popover.types";
 
-const BACKDROP = "rgba(0, 0, 0, 0.35)";
-const SURFACE_BG = "#fffdfa";
-const BORDER_COLOR = "#ebe6dd";
+const BACKDROP = NativeColors.scrim;
+const SURFACE_BG = NativeColors.surface;
+const BORDER_COLOR = NativeColors.border;
 
 /** Native (React Native) implementation of the Popover contract. */
 export function Popover({ opened, onChange, target, children, testID }: PopoverProps) {

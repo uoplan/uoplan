@@ -1,5 +1,6 @@
 import { Text as RNText, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import { BADGE_TONES } from "../Badge/tones";
 import type { IndicatorPosition, IndicatorProps } from "./Indicator.types";
 
@@ -43,7 +44,9 @@ export function Indicator({
           ]}
         >
           {hasLabel && (
-            <RNText style={{ color: "#ffffff", fontSize: 10, fontWeight: "700" }}>{label}</RNText>
+            <RNText style={{ color: NativeColors.onAccent, fontSize: 10, fontWeight: "700" }}>
+              {label}
+            </RNText>
           )}
         </View>
       )}

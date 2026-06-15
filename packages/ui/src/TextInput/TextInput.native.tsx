@@ -1,12 +1,13 @@
 import { Text as RNText, TextInput as RNTextInput, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { TextInputProps } from "./TextInput.types";
 
-const TEXT_COLOR = "#2a2826";
-const LABEL_COLOR = "#5e5a52";
-const BORDER_COLOR = "#d2cdc2";
-const PLACEHOLDER_COLOR = "#9aa0a6";
-const SURFACE_BG = "#fffdfa";
+const TEXT_COLOR = NativeColors.text;
+const LABEL_COLOR = NativeColors.textMuted;
+const BORDER_COLOR = NativeColors.borderStrong;
+const PLACEHOLDER_COLOR = NativeColors.textDim;
+const SURFACE_BG = NativeColors.surface;
 
 /** Native (React Native) implementation of the TextInput contract. */
 export function TextInput({

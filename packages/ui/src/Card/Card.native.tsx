@@ -1,10 +1,11 @@
 import { View } from "react-native";
 
 import { resolveRadius, resolveSpacing } from "../layout/style";
+import { NativeColors } from "../nativeTheme";
 import type { CardProps } from "./Card.types";
 
-const SURFACE_BG = "#fffdfa";
-const BORDER_COLOR = "#ebe6dd";
+const SURFACE_BG = NativeColors.surface;
+const BORDER_COLOR = NativeColors.border;
 
 /** Native (React Native) implementation of the Card contract. */
 export function Card({ children, p = "md", radius = "md", withBorder = true, testID }: CardProps) {

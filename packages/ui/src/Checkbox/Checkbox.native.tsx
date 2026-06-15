@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Pressable, Text as RNText, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { CheckboxProps } from "./Checkbox.types";
 
-const ACCENT = "#3673cb";
-const BORDER_COLOR = "#d2cdc2";
-const LABEL_COLOR = "#2a2826";
+const ACCENT = NativeColors.accent;
+const BORDER_COLOR = NativeColors.borderStrong;
+const LABEL_COLOR = NativeColors.text;
 
 /** Native (React Native) implementation of the Checkbox contract. */
 export function Checkbox({
@@ -48,7 +49,9 @@ export function Checkbox({
         }}
       >
         {value ? (
-          <RNText style={{ color: "#fff", fontSize: 13, fontWeight: "700" }}>✓</RNText>
+          <RNText style={{ color: NativeColors.onAccent, fontSize: 13, fontWeight: "700" }}>
+            ✓
+          </RNText>
         ) : null}
       </View>
       {label ? <RNText style={{ color: LABEL_COLOR, fontSize: 14 }}>{label}</RNText> : null}

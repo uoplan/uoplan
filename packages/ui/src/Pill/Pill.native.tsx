@@ -1,9 +1,10 @@
 import { Text as RNText, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { PillProps } from "./Pill.types";
 
-const BG = "#f0ede8";
-const FG = "#2a2826";
+const BG = NativeColors.surfaceHover;
+const FG = NativeColors.text;
 
 /** Native (React Native) implementation of the Pill contract. */
 export function Pill({ children, testID }: PillProps) {

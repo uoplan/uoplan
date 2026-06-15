@@ -1,9 +1,10 @@
 import { View } from "react-native";
 import type { DimensionValue } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { SkeletonProps } from "./Skeleton.types";
 
-const MUTED = "#ebe6dd";
+const MUTED = NativeColors.surfaceHover;
 
 /** Native (React Native) implementation of the Skeleton contract. */
 export function Skeleton({ width, height = 16, radius = 4, testID }: SkeletonProps) {
