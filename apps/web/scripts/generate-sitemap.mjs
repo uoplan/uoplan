@@ -13,11 +13,12 @@ const professorsPath = path.join(dataRoot, "professors.json");
 const disciplinesPath = path.join(dataRoot, "disciplines.json");
 
 const SITE_ORIGIN = "https://uoplan.party";
+const SITEMAP_DIR = "sitemap";
 const SITEMAPS = [
-  "sitemap-courses.xml",
-  "sitemap-professors.xml",
-  "sitemap-programs.xml",
-  "sitemap-misc.xml",
+  `${SITEMAP_DIR}/courses.xml`,
+  `${SITEMAP_DIR}/professors.xml`,
+  `${SITEMAP_DIR}/programs.xml`,
+  `${SITEMAP_DIR}/misc.xml`,
 ];
 
 function readJson(filePath) {
@@ -173,6 +174,7 @@ function sitemapIndexXml(fileNames) {
 
 function writeFile(fileName, content) {
   const outPath = path.join(distDir, fileName);
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, content, "utf8");
   console.log(`generate-sitemap: wrote ${path.relative(webRoot, outPath)}`);
 }
@@ -191,11 +193,11 @@ const professorPaths = professorSlugs.map(
 );
 const programPaths = programSlugs.map((slug) => `/explore/program/${encodePath(slug)}`);
 
-writeFile("sitemap-courses.xml", urlsetXml(coursePaths));
-writeFile("sitemap-professors.xml", urlsetXml(professorPaths));
-writeFile("sitemap-programs.xml", urlsetXml(programPaths));
-writeFile("sitemap-misc.xml", urlsetXml(miscPaths));
-writeFile("sitemap-index.xml", sitemapIndexXml(SITEMAPS));
+writeFile(`${SITEMAP_DIR}/courses.xml`, urlsetXml(coursePaths));
+writeFile(`${SITEMAP_DIR}/professors.xml`, urlsetXml(professorPaths));
+writeFile(`${SITEMAP_DIR}/programs.xml`, urlsetXml(programPaths));
+writeFile(`${SITEMAP_DIR}/misc.xml`, urlsetXml(miscPaths));
+writeFile("sitemap.xml", sitemapIndexXml(SITEMAPS));
 
 console.log(
   [
