@@ -1,5 +1,5 @@
 {
-  "resultCount": 4565,
+  "resultCount": 4566,
   "professors": [
     {
       "id": "VGVhY2hlci04Nzk2OTM=",
@@ -17918,8 +17918,8 @@
       "id": "VGVhY2hlci0xMTg4MjU4",
       "legacyId": 1188258,
       "name": "Louise Edmonds",
-      "rating": 2.7,
-      "numRatings": 107
+      "rating": 2.6,
+      "numRatings": 109
     },
     {
       "id": "VGVhY2hlci0xNzQwMDM2",
@@ -20957,7 +20957,7 @@
       "legacyId": 2477390,
       "name": "Michael Organ",
       "rating": 2.4,
-      "numRatings": 27
+      "numRatings": 28
     },
     {
       "id": "VGVhY2hlci0yODMwNjg=",
@@ -22784,7 +22784,7 @@
       "legacyId": 2560401,
       "name": "Nathalie Le Marec",
       "rating": 3.2,
-      "numRatings": 49
+      "numRatings": 51
     },
     {
       "id": "VGVhY2hlci0yOTc1NjM=",
@@ -23310,6 +23310,13 @@
       "name": "Noële Racine",
       "rating": 2.7,
       "numRatings": 7
+    },
+    {
+      "id": "VGVhY2hlci01MDQ5OTc1",
+      "legacyId": 5049975,
+      "name": "Noëlle Buzohera",
+      "rating": 0,
+      "numRatings": 0
     },
     {
       "id": "VGVhY2hlci0yMjMyMjEz",
@@ -30526,7 +30533,7 @@
       "legacyId": 2949161,
       "name": "Vahideh Hassan-Zadeh",
       "rating": 1.8,
-      "numRatings": 167
+      "numRatings": 169
     },
     {
       "id": "VGVhY2hlci0xMTg2NTQ2",
@@ -30813,7 +30820,7 @@
       "legacyId": 1688740,
       "name": "Victor Emerson",
       "rating": 3,
-      "numRatings": 223
+      "numRatings": 227
     },
     {
       "id": "VGVhY2hlci0yODAzODgx",
