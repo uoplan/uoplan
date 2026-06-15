@@ -1,12 +1,13 @@
 import { Pressable, Text as RNText, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { SegmentedControlProps } from "./SegmentedControl.types";
 
-const TRACK_BG = "#f0ece4";
-const ACTIVE_BG = "#fffdfa";
-const ACTIVE_BORDER = "#ebe6dd";
-const ACTIVE_LABEL = "#2a2826";
-const INACTIVE_LABEL = "#5e5a52";
+const TRACK_BG = NativeColors.surfaceSunken;
+const ACTIVE_BG = NativeColors.surface;
+const ACTIVE_BORDER = NativeColors.border;
+const ACTIVE_LABEL = NativeColors.text;
+const INACTIVE_LABEL = NativeColors.textMuted;
 
 /** Native (React Native) implementation of the SegmentedControl contract. */
 export function SegmentedControl({

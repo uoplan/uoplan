@@ -1,8 +1,9 @@
 import { Text as RNText } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { AnchorProps } from "./Anchor.types";
 
-const ACCENT = "#3673cb";
+const ACCENT = NativeColors.accent;
 
 /** Native (React Native) implementation of the Anchor contract. */
 export function Anchor({ children, onPress, testID }: AnchorProps) {

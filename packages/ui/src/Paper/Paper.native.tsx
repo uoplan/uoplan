@@ -2,10 +2,11 @@ import { View } from "react-native";
 import type { ViewStyle } from "react-native";
 
 import { resolveRadius, resolveSpacing } from "../layout/style";
+import { NativeColors } from "../nativeTheme";
 import type { PaperProps, SurfaceShadow } from "./Paper.types";
 
-const SURFACE_BG = "#fffdfa";
-const BORDER_COLOR = "#ebe6dd";
+const SURFACE_BG = NativeColors.surface;
+const BORDER_COLOR = NativeColors.border;
 
 const SHADOW: Record<Exclude<SurfaceShadow, "none">, ViewStyle> = {
   sm: {

@@ -1,12 +1,13 @@
 import { Text as RNText, View } from "react-native";
 import type { ReactNode } from "react";
 
+import { NativeColors } from "../nativeTheme";
 import type { TableProps } from "./Table.types";
 
-const BORDER_COLOR = "#ebe6dd";
-const HEADER_BG = "#f7f4ef";
-const HEADER_FG = "#5e5a52";
-const CELL_FG = "#2a2826";
+const BORDER_COLOR = NativeColors.border;
+const HEADER_BG = NativeColors.surfaceSunken;
+const HEADER_FG = NativeColors.textMuted;
+const CELL_FG = NativeColors.text;
 
 function renderCell(value: ReactNode) {
   if (typeof value === "string" || typeof value === "number") {

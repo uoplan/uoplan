@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Switch as RNSwitch, Text as RNText, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { SwitchProps } from "./Switch.types";
 
-const ACCENT = "#3673cb";
-const LABEL_COLOR = "#2a2826";
+const ACCENT = NativeColors.accent;
+const LABEL_COLOR = NativeColors.text;
 
 /** Native (React Native) implementation of the Switch contract. */
 export function Switch({
@@ -31,7 +32,7 @@ export function Switch({
         value={value}
         onValueChange={handleChange}
         disabled={disabled}
-        trackColor={{ true: ACCENT, false: "#d2cdc2" }}
+        trackColor={{ true: ACCENT, false: NativeColors.borderStrong }}
       />
       {label ? <RNText style={{ color: LABEL_COLOR, fontSize: 14 }}>{label}</RNText> : null}
     </View>

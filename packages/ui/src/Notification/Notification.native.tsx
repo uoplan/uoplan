@@ -1,19 +1,20 @@
 import { Pressable, Text as RNText, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { AlertTone } from "../Alert/tones";
 import type { NotificationProps } from "./Notification.types";
 
 const ACCENT: Record<AlertTone, string> = {
-  info: "#2f5fa6",
-  success: "#2f7a4a",
-  warning: "#9a5a17",
-  danger: "#b4302d",
-  neutral: "#5e5a52",
+  info: NativeColors.tone.info.fg,
+  success: NativeColors.tone.success.fg,
+  warning: NativeColors.tone.warning.fg,
+  danger: NativeColors.tone.danger.fg,
+  neutral: NativeColors.textMuted,
 };
-const SURFACE = "#fffdfa";
-const BORDER_COLOR = "#ebe6dd";
-const LABEL = "#2a2826";
-const DIMMED = "#5e5a52";
+const SURFACE = NativeColors.surface;
+const BORDER_COLOR = NativeColors.border;
+const LABEL = NativeColors.text;
+const DIMMED = NativeColors.textMuted;
 
 /** Native (React Native) implementation of the Notification contract. */
 export function Notification({

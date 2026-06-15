@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { ButtonProps } from "./Button.types";
 
 /** Native (React Native) implementation of the Button contract. */
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 18,
     borderRadius: 8,
-    backgroundColor: "#1f1f1f",
+    backgroundColor: NativeColors.text,
   },
   subtle: {
     backgroundColor: "transparent",
@@ -53,11 +54,11 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   label: {
-    color: "#ffffff",
+    color: NativeColors.textInverse,
     fontSize: 15,
     fontWeight: "600",
   },
   subtleLabel: {
-    color: "#1f1f1f",
+    color: NativeColors.text,
   },
 });

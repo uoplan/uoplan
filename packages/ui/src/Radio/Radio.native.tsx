@@ -1,11 +1,12 @@
 import { Pressable, Text as RNText, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { RadioProps } from "./Radio.types";
 
-const ACCENT = "#3673cb";
-const BORDER_COLOR = "#d2cdc2";
-const LABEL_COLOR = "#2a2826";
-const GROUP_LABEL_COLOR = "#5e5a52";
+const ACCENT = NativeColors.accent;
+const BORDER_COLOR = NativeColors.borderStrong;
+const LABEL_COLOR = NativeColors.text;
+const GROUP_LABEL_COLOR = NativeColors.textMuted;
 
 /** Native (React Native) implementation of the Radio contract. */
 export function Radio({ value, onChange, data, label, disabled, testID }: RadioProps) {

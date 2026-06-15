@@ -1,6 +1,7 @@
 import { SymbolView } from "expo-symbols";
 import type { SFSymbol } from "expo-symbols";
 
+import { NativeColors } from "../nativeTheme";
 import { SF_SYMBOL_FOR_ICON } from "./Icon.types";
 import type { IconProps } from "./Icon.types";
 
@@ -9,7 +10,7 @@ import type { IconProps } from "./Icon.types";
  * Renders crisp vector glyphs (no emoji, no bitmaps) using the same symbol set
  * the native shell's tab bar and list rows use.
  */
-export function Icon({ name, size = 20, color = "#2a2826", label, testID }: IconProps) {
+export function Icon({ name, size = 20, color = NativeColors.text, label, testID }: IconProps) {
   return (
     <SymbolView
       name={SF_SYMBOL_FOR_ICON[name] as SFSymbol}

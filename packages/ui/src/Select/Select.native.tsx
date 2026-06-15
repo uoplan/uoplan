@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { Pressable, Modal as RNModal, Text as RNText, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { SelectProps } from "./Select.types";
 
-const BACKDROP = "rgba(0, 0, 0, 0.35)";
-const SURFACE_BG = "#fffdfa";
-const BORDER_COLOR = "#d2cdc2";
-const PANEL_BORDER = "#ebe6dd";
-const LABEL = "#2a2826";
-const DIMMED = "#5e5a52";
-const PLACEHOLDER = "#9aa0a6";
-const ACCENT = "#2f5fa6";
+const BACKDROP = NativeColors.scrim;
+const SURFACE_BG = NativeColors.surface;
+const BORDER_COLOR = NativeColors.borderStrong;
+const PANEL_BORDER = NativeColors.border;
+const LABEL = NativeColors.text;
+const DIMMED = NativeColors.textMuted;
+const PLACEHOLDER = NativeColors.textDim;
+const ACCENT = NativeColors.accent;
 
 /** Native (React Native) implementation of the Select contract. */
 export function Select({

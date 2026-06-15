@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Pressable, Text as RNText, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { AccordionProps } from "./Accordion.types";
 
-const BORDER_COLOR = "#ebe6dd";
-const LABEL = "#2a2826";
-const DIMMED = "#5e5a52";
+const BORDER_COLOR = NativeColors.border;
+const LABEL = NativeColors.text;
+const DIMMED = NativeColors.textMuted;
 
 /** Native (React Native) implementation of the Accordion contract. */
 export function Accordion({ items, multiple, defaultOpen = [], testID }: AccordionProps) {

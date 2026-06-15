@@ -1,6 +1,7 @@
 import { Text as RNText } from "react-native";
 import type { TextStyle } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import type { TextProps, TextSize, TextWeight } from "./Text.types";
 
 const FONT_SIZE: Record<TextSize, number> = {
@@ -18,8 +19,8 @@ const FONT_WEIGHT: Record<TextWeight, TextStyle["fontWeight"]> = {
   bold: "700",
 };
 
-const DEFAULT_COLOR = "#1f2933";
-const DIMMED_COLOR = "#6b7280";
+const DEFAULT_COLOR = NativeColors.text;
+const DIMMED_COLOR = NativeColors.textMuted;
 
 /** Native (React Native) implementation of the Text contract. */
 export function Text({
@@ -37,6 +38,7 @@ export function Text({
       testID={testID}
       numberOfLines={numberOfLines}
       style={{
+        fontFamily: weight === "bold" || weight === "semibold" ? "DM Mono Medium" : "DM Mono",
         fontSize: size ? FONT_SIZE[size] : FONT_SIZE.md,
         fontWeight: weight ? FONT_WEIGHT[weight] : undefined,
         color: color ?? (dimmed ? DIMMED_COLOR : DEFAULT_COLOR),

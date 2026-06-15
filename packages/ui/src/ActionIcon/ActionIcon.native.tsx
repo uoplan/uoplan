@@ -1,12 +1,13 @@
 import { Pressable, View } from "react-native";
 
+import { NativeColors } from "../nativeTheme";
 import { ACTION_ICON_SIZE } from "./ActionIcon.types";
 import type { ActionIconProps, ActionIconVariant } from "./ActionIcon.types";
 
-const FILLED_BG = "#2a2826";
-const LIGHT_BG = "#f0ede8";
-const DEFAULT_BG = "#fffdfa";
-const BORDER_COLOR = "#ebe6dd";
+const FILLED_BG = NativeColors.text;
+const LIGHT_BG = NativeColors.surfaceHover;
+const DEFAULT_BG = NativeColors.surface;
+const BORDER_COLOR = NativeColors.border;
 
 function background(variant: ActionIconVariant): string {
   switch (variant) {

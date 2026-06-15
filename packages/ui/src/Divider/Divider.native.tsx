@@ -1,9 +1,10 @@
 import { View } from "react-native";
 
 import { resolveSpacing } from "../layout/style";
+import { NativeColors } from "../nativeTheme";
 import type { DividerProps } from "./Divider.types";
 
-const BORDER_COLOR = "#ebe6dd";
+const BORDER_COLOR = NativeColors.border;
 
 /** Native (React Native) implementation of the Divider contract. */
 export function Divider({ orientation = "horizontal", my, mx, testID }: DividerProps) {
