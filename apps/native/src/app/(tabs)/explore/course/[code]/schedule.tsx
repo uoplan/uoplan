@@ -6,6 +6,7 @@ import { DAY_LABELS } from "@uoplan/calendar/layout";
 import type { CalendarEvent } from "@uoplan/calendar/types";
 import type { ComponentSection } from "@uoplan/core/dataTypes";
 import { normalizeGradeVizDistribution } from "@uoplan/core/gradeDistribution";
+import { buildProfessorRegistry } from "@uoplan/core/professorRegistry";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 import { Text } from "@uoplan/ui";
 
@@ -24,6 +25,12 @@ import {
   selectedCourseScheduleEvents,
   type CourseSectionSelection,
 } from "@/data/explore-detail";
+import {
+  explainUnpredictedInstructors,
+  professorSlugForUnpredicted,
+  type UnpredictedInstructor,
+  unpredictedReasonLabel,
+} from "@/data/course-schedule-prediction";
 import { formatTermLabel } from "@/data/trends-data";
 
 function paramKey(value: string | string[] | undefined): string {
@@ -59,31 +66,43 @@ function sectionInstructorNames(section: ComponentSection): string[] {
   return [...new Set(section.times.map((time) => time.instructor).filter(isKnownInstructor))];
 }
 
+function predictedInstructorNames(section: ComponentSection): string[] {
+  return [
+    ...new Set(
+      (section.predictedInstructors ?? [])
+        .map((instructor) => instructor.name.trim())
+        .filter((name) => name.length > 0),
+    ),
+  ];
+}
+
+function explanationKey(component: string, section: ComponentSection): string {
+  return `${component}:${courseScheduleSectionId(section)}`;
+}
+
+type UnpredictedInstructorLink = UnpredictedInstructor & { slug: string };
+
 function SectionOption({
   section,
   selected,
   overlaps,
   courseFallbackDistribution,
+  unpredictedInstructors,
+  onOpenProfessor,
   onPress,
 }: {
   section: ComponentSection;
   selected: boolean;
   overlaps: boolean;
   courseFallbackDistribution: Record<string, number> | null;
+  unpredictedInstructors: UnpredictedInstructorLink[];
+  onOpenProfessor: (slug: string) => void;
   onPress: () => void;
 }) {
+  const [showUnpredicted, setShowUnpredicted] = useState(false);
   const sectionCode = courseScheduleSectionId(section);
   const instructors = sectionInstructorNames(section);
-  const predictedNames =
-    instructors.length === 0
-      ? [
-          ...new Set(
-            (section.predictedInstructors ?? [])
-              .map((instructor) => instructor.name.trim())
-              .filter((name) => name.length > 0),
-          ),
-        ]
-      : [];
+  const predictedNames = instructors.length === 0 ? predictedInstructorNames(section) : [];
   const validTimes = section.times.filter((time) => time.startMinutes < time.endMinutes);
   const gradeViz =
     normalizeGradeVizDistribution(section.distribution ?? null) ??
@@ -140,6 +159,55 @@ function SectionOption({
           </View>
         ) : null}
 
+        {predictedNames.length > 0 && unpredictedInstructors.length > 0 ? (
+          <View style={styles.predictionDisclosure}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityState={{ expanded: showUnpredicted }}
+              onPress={(event) => {
+                event.stopPropagation();
+                setShowUnpredicted((current) => !current);
+              }}
+              style={({ pressed }) => [styles.whyButton, pressed && styles.whyButtonPressed]}
+            >
+              <Text size="xs" weight="semibold" color={Surface.accent}>
+                {showUnpredicted ? "Hide explanation" : "Why not others?"}
+              </Text>
+            </Pressable>
+
+            {showUnpredicted ? (
+              <View style={styles.unpredictedList}>
+                {unpredictedInstructors.map((instructor) => (
+                  <View
+                    key={`${instructor.slug}-${instructor.name}`}
+                    style={styles.unpredictedItem}
+                  >
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel={`View ${instructor.name}`}
+                      onPress={(event) => {
+                        event.stopPropagation();
+                        onOpenProfessor(instructor.slug);
+                      }}
+                      style={({ pressed }) => [
+                        styles.unpredictedNameLink,
+                        pressed && styles.whyButtonPressed,
+                      ]}
+                    >
+                      <Text size="xs" weight="bold" color={Surface.accent}>
+                        {instructor.name}
+                      </Text>
+                    </Pressable>
+                    <Text size="xs" color={Surface.dimmed}>
+                      {unpredictedReasonLabel(instructor.reason)}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            ) : null}
+          </View>
+        ) : null}
+
         {validTimes.length > 0 ? (
           <View style={styles.timeRows}>
             {validTimes.map((time, index) => (
@@ -172,6 +240,10 @@ export default function CourseScheduleScreen() {
   );
   const [selected, setSelected] = useState<{ event: CalendarEvent; color: string } | null>(null);
   const [selection, setSelection] = useState<CourseSectionSelection>({});
+  const professorRegistry = useMemo(
+    () => buildProfessorRegistry(bundle.professors),
+    [bundle.professors],
+  );
 
   const titleByCode = useMemo(
     () =>
@@ -202,6 +274,54 @@ export default function CourseScheduleScreen() {
         : [],
     [courseFallbackDistribution, detail, selection],
   );
+
+  const unpredictedBySection = useMemo(() => {
+    const bySection = new Map<string, UnpredictedInstructorLink[]>();
+    if (!detail) return bySection;
+
+    const courseCode = normalizeCourseCode(detail.course.courseCode);
+    const courseGrades =
+      bundle.grades.courses.find((entry) => normalizeCourseCode(entry.code) === courseCode)
+        ?.sections ?? [];
+    if (courseGrades.length === 0) return bySection;
+
+    const termIdNumber = Number(detail.termId);
+    const termSchedules = schedulesByTerm.get(String(detail.termId))?.schedules ?? [];
+    if (!Number.isFinite(termIdNumber) || termSchedules.length === 0) return bySection;
+
+    for (const [component, sections] of Object.entries(detail.course.components)) {
+      for (const section of sections) {
+        const predicted = section.predictedInstructors ?? [];
+        if (
+          sectionInstructorNames(section).length > 0 ||
+          predictedInstructorNames(section).length === 0
+        ) {
+          continue;
+        }
+
+        const explanations = explainUnpredictedInstructors({
+          courseCode,
+          section,
+          termSchedules,
+          termId: termIdNumber,
+          courseGrades,
+          predicted,
+          maxReasons: 6,
+        });
+        if (explanations.length === 0) continue;
+
+        bySection.set(
+          explanationKey(component, section),
+          explanations.map((instructor) => ({
+            ...instructor,
+            slug: professorSlugForUnpredicted(professorRegistry, instructor),
+          })),
+        );
+      }
+    }
+
+    return bySection;
+  }, [bundle.grades.courses, detail, professorRegistry, schedulesByTerm]);
 
   if (!detail) {
     return (
@@ -270,6 +390,15 @@ export default function CourseScheduleScreen() {
                       selected={isSelected}
                       overlaps={overlaps}
                       courseFallbackDistribution={courseFallbackDistribution}
+                      unpredictedInstructors={
+                        unpredictedBySection.get(explanationKey(component, section)) ?? []
+                      }
+                      onOpenProfessor={(slug) =>
+                        router.push({
+                          pathname: "/explore/professor/[slug]",
+                          params: { slug },
+                        })
+                      }
                       onPress={() =>
                         setSelection((current) => ({
                           ...current,
@@ -361,6 +490,37 @@ const styles = StyleSheet.create({
     backgroundColor: Surface.accentSoft,
     paddingHorizontal: Spacing.two,
     paddingVertical: 2,
+  },
+  predictionDisclosure: {
+    alignItems: "flex-start",
+    gap: Spacing.one,
+  },
+  whyButton: {
+    borderRadius: 999,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Surface.accent,
+    paddingHorizontal: Spacing.two,
+    paddingVertical: 3,
+  },
+  whyButtonPressed: {
+    opacity: 0.7,
+  },
+  unpredictedList: {
+    alignSelf: "stretch",
+    gap: Spacing.one,
+    paddingTop: 2,
+  },
+  unpredictedItem: {
+    gap: 2,
+    borderRadius: 10,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Surface.border,
+    backgroundColor: Surface.card,
+    paddingHorizontal: Spacing.two,
+    paddingVertical: Spacing.one,
+  },
+  unpredictedNameLink: {
+    alignSelf: "flex-start",
   },
   timeRows: {
     gap: 2,

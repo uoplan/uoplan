@@ -16,6 +16,7 @@ export * from "./gradeAnalytics";
 export * from "./programTrends";
 export * from "./gradeLookup";
 export * from "./instructorPrediction";
+export * from "./instructorPredictionExplain";
 export * from "./seededRandom";
 export * from "./dataCache";
 export * from "./utils/courseUtils";

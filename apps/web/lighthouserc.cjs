@@ -21,11 +21,11 @@ const ORIGIN = `http://localhost:${PORT}`;
 
 const ROUTES = [
   "/",
-  "/explore",
+  "/explore/",
   "/explore/course/iti1120",
   "/personalize",
   "/explore/professor/abdorrahim-bahrami",
-  "/trends",
+  "/trends/",
   "/trends/disciplines",
 ];
 

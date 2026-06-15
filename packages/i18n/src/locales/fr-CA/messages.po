@@ -1350,6 +1350,39 @@ msgstr "Sélectionnez une session pour voir l’horaire des cours."
 msgid "explore.schedule.viewGrades"
 msgstr "Voir l’historique des notes"
 
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:27
+msgid "explore.schedule.whyNot.conflict"
+msgstr "Enseigne {course} {section} au même moment ({time})"
+
+#: apps/web/src/lib/explore/whyNotPredicted.ts:46
+msgid "explore.schedule.whyNot.conflictGroup"
+msgstr "Enseigne un autre cours au même moment"
+
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:35
+msgid "explore.schedule.whyNot.inactive"
+msgstr "N'enseigne pas ce trimestre"
+
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:37
+msgid "explore.schedule.whyNot.lowerPriority"
+msgstr "Une personne plus récente a été prédite"
+
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:33
+msgid "explore.schedule.whyNot.stale"
+msgstr "N'a pas enseigné ce cours depuis {year}"
+
+#: apps/web/src/lib/explore/whyNotPredicted.ts:48
+msgid "explore.schedule.whyNot.staleGroup"
+msgstr "N'a pas enseigné récemment"
+
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:122
+msgid "explore.schedule.whyNot.title"
+msgstr "Pourquoi ces personnes ne sont-elles pas prédites?"
+
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:113
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:95
+msgid "explore.schedule.whyNot.trigger"
+msgstr "Pourquoi pas les autres?"
+
 msgid "explore.searchPlaceholder"
 msgstr "Rechercher des cours ou des professeurs…"
 

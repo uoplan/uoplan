@@ -59,7 +59,6 @@ export function LandingPage() {
       badgeColor: "orange" as const,
       icon: <IconChartHistogram size={32} stroke={1.5} />,
       iconColor: experimentalIconColor,
-      ariaLabel: `${tr("trends.title")}, ${betaLabel}`,
     },
     {
       to: "/graph",
@@ -69,7 +68,6 @@ export function LandingPage() {
       badgeColor: "orange" as const,
       icon: <IconAffiliate size={32} stroke={1.5} />,
       iconColor: experimentalIconColor,
-      ariaLabel: `${tr("graph.title")}, ${betaLabel}`,
     },
   ];
 
@@ -123,7 +121,6 @@ export function LandingPage() {
                 description={tr("landing.schedule.description")}
                 icon={<IconCalendar size={32} stroke={1.5} />}
                 iconColor="var(--app-chart-1)"
-                ariaLabel={tr("landing.schedule.title")}
               />
               <LandingTile
                 to="/explore"
@@ -131,7 +128,6 @@ export function LandingPage() {
                 description={tr("landing.explore.description")}
                 icon={<IconCompass size={32} stroke={1.5} />}
                 iconColor="var(--app-chart-3)"
-                ariaLabel={tr("explore.title")}
               />
               <ExperimentalCarousel items={experimentalFeatures} />
             </SimpleGrid>

@@ -1350,6 +1350,39 @@ msgstr "Select a term to view course times."
 msgid "explore.schedule.viewGrades"
 msgstr "View grade history"
 
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:27
+msgid "explore.schedule.whyNot.conflict"
+msgstr "Teaching {course} {section} at the same time ({time})"
+
+#: apps/web/src/lib/explore/whyNotPredicted.ts:46
+msgid "explore.schedule.whyNot.conflictGroup"
+msgstr "Teaching another class at the same time"
+
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:35
+msgid "explore.schedule.whyNot.inactive"
+msgstr "Not teaching this term"
+
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:37
+msgid "explore.schedule.whyNot.lowerPriority"
+msgstr "A more recent instructor was predicted"
+
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:33
+msgid "explore.schedule.whyNot.stale"
+msgstr "Hasn't taught this course since {year}"
+
+#: apps/web/src/lib/explore/whyNotPredicted.ts:48
+msgid "explore.schedule.whyNot.staleGroup"
+msgstr "Hasn't taught recently"
+
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:122
+msgid "explore.schedule.whyNot.title"
+msgstr "Why aren't these professors predicted?"
+
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:113
+#: apps/web/src/components/explore/WhyNotPredictedPopover.tsx:95
+msgid "explore.schedule.whyNot.trigger"
+msgstr "Why not others?"
+
 msgid "explore.searchPlaceholder"
 msgstr "Search courses or professors…"
 
