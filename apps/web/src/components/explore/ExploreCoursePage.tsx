@@ -6,7 +6,13 @@ import { IconClock } from "@tabler/icons-react";
 import type { ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeCourseCode, normalizeProfessorName } from "@uoplan/core";
 import { i18n, tr, useTr } from "../../i18n";
-import { useDisciplines, useFaculties, useProfessorRegistry, useTerms } from "../../store/hooks";
+import {
+  useDataCache,
+  useDisciplines,
+  useFaculties,
+  useProfessorRegistry,
+  useTerms,
+} from "../../store/hooks";
 import { facultyForDisciplineCode, localizeFacultyName } from "../../lib/explore/faculty";
 import { formatTermLabel } from "../../lib/term/termLabel";
 import type {
@@ -122,6 +128,7 @@ export function ExploreCoursePage({
   const registry = useProfessorRegistry();
   const disciplines = useDisciplines();
   const faculties = useFaculties();
+  const dataCache = useDataCache();
 
   const { filters, sentiment, requirementCandidateSet, linkSearch } = useExploreDetailFilters();
 
@@ -154,6 +161,16 @@ export function ExploreCoursePage({
   }, [loading, urlNorm, courseOfferings]);
 
   usePublishBasketTarget(selectedCourseMeta?.courseCode ?? null);
+
+  const catalogueCourse = useMemo(() => {
+    if (!dataCache) return;
+    const courseCode = selectedCourseMeta?.courseCode ?? urlNorm;
+    if (!courseCode) return;
+    return dataCache.getCourse(courseCode);
+  }, [dataCache, selectedCourseMeta?.courseCode, urlNorm]);
+
+  const courseCredits =
+    catalogueCourse && Number.isFinite(catalogueCourse.credits) ? catalogueCourse.credits : null;
 
   // Other codes in the same alias group that actually have data, for the "also known as" note.
   const aliasCodes = useMemo(() => {
@@ -253,7 +270,7 @@ export function ExploreCoursePage({
                 <CatalogueLink href={catalogueUrl} label={tr("explore.openInCatalogue")} />
               ) : null}
             </Group>
-            {selectedCourseMeta.courseTitle || facultyName ? (
+            {selectedCourseMeta.courseTitle || facultyName || courseCredits !== null ? (
               <Group gap={8} mt={10} wrap="wrap">
                 {selectedCourseMeta.courseTitle ? (
                   <Tooltip
@@ -293,6 +310,17 @@ export function ExploreCoursePage({
                     )}
                   >
                     {facultyName}
+                  </Badge>
+                ) : null}
+                {courseCredits !== null ? (
+                  <Badge
+                    size="lg"
+                    variant="light"
+                    color="gray"
+                    radius="sm"
+                    style={{ textTransform: "none" }}
+                  >
+                    {tr("explore.course.credits", { count: courseCredits })}
                   </Badge>
                 ) : null}
               </Group>

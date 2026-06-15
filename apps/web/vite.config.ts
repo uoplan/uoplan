@@ -1,13 +1,13 @@
 import { defineConfig } from "vitest/config";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import react from "@vitejs/plugin-react";
-import { lingui } from "@lingui/vite-plugin";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { playwright } from "@vitest/browser-playwright";
 import { visualizer } from "rollup-plugin-visualizer";
 import { changelogHtmlPlugin } from "./vite/changelog-html-plugin";
 import { dataManifestPlugin } from "./vite/data-manifest-plugin";
+import { dataDevServerPlugin } from "./vite/data-dev-server-plugin";
 
 const analyze = process.env.ANALYZE === "1";
 
@@ -15,6 +15,7 @@ export default defineConfig({
   plugins: [
     changelogHtmlPlugin(),
     dataManifestPlugin(),
+    dataDevServerPlugin(),
     analyze &&
       visualizer({
         filename: "dist/stats.html",
@@ -27,7 +28,6 @@ export default defineConfig({
       autoCodeSplitting: true,
     }),
     react(),
-    lingui(),
     VitePWA({
       strategies: "injectManifest",
       srcDir: "src/workers",
@@ -68,7 +68,13 @@ export default defineConfig({
   // Keep a single React instance across pre-bundled deps so zustand's `useStore`
   // (and any other hook-calling dep) shares the renderer's dispatcher in Browser Mode.
   resolve: {
-    dedupe: ["react", "react-dom"],
+    // `@lingui/core` / `@lingui/react` are deduped so the whole graph shares ONE
+    // `i18n` singleton + `I18nProvider` React context. pnpm resolves two physically
+    // distinct `@lingui/core@5.9.3` copies that differ only by their `typescript`
+    // peer context (apps/web → ts 5.9.3, packages/i18n / @uoplan/i18n → ts 6.0.3);
+    // without deduping, `tr()` and a test/component importing `@lingui/core`
+    // directly would touch different singletons (one never `activate()`d).
+    dedupe: ["react", "react-dom", "@lingui/core", "@lingui/react"],
     // Cross-platform component contract (@uoplan/ui): prefer `*.web.tsx`
     // implementations on web so Vite resolves the Mantine variant, while Metro
     // resolves `*.native.tsx` for the Expo app. Keep the default extensions

@@ -3,7 +3,7 @@ import { i18n } from "../../i18n";
 import { formatTermLabel, formatTermLabelPlain } from "./termLabel";
 
 beforeAll(async () => {
-  const { messages } = await import("../../locales/en/messages.po");
+  const { messages } = await import("@uoplan/i18n/catalogs/en");
   i18n.load("en", messages);
   i18n.activate("en");
 });
@@ -29,7 +29,7 @@ describe("formatTermLabel", () => {
   });
 
   it("localizes season names in French", async () => {
-    const { messages } = await import("../../locales/fr-CA/messages.po");
+    const { messages } = await import("@uoplan/i18n/catalogs/fr-CA");
     i18n.load("fr-CA", messages);
     i18n.activate("fr-CA");
     expect(formatTermLabel(2261)).toBe("Hiver 2026");

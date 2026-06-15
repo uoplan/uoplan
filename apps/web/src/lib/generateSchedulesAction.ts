@@ -12,6 +12,7 @@ import {
   diagnoseTimetableFailure,
   gateRemainingByPriority,
   normalizeCourseCode,
+  resolveDesiredCourses,
   runAdvancedGeneration,
   runBasicGeneration,
 } from "@uoplan/core";
@@ -28,7 +29,6 @@ import type {
 } from "@uoplan/core";
 import { buildColorMap } from "./colorMap";
 import { avoidedDaysFromBlocks } from "./blockedTimes";
-import { resolveDesiredCourses } from "./generation/resolveDesiredCourses";
 import type { GenerateSchedulesInput } from "./generateSchedulesInput";
 
 // Re-export helpers used by tests and other modules

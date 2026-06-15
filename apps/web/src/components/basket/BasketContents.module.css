@@ -4,6 +4,60 @@
 
 .embedded {
   width: 100%;
+  border: var(--app-border-width) solid var(--app-border);
+  border-radius: var(--app-radius);
+  background: var(--app-surface-sunken);
+  overflow: hidden;
+}
+
+.header {
+  border-radius: var(--app-radius);
+}
+
+/* Inside the card the header is padded; the popover variant gets its padding from
+   the surrounding dropdown instead. */
+.embedded .header {
+  padding: 12px;
+}
+
+.summaryToggle {
+  width: 100%;
+  border-radius: var(--app-radius);
+  color: inherit;
+  cursor: pointer;
+}
+
+.summaryToggle:focus-visible {
+  outline: 2px solid var(--app-focus-ring);
+  outline-offset: 2px;
+}
+
+.summaryChevron {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: var(--app-radius-pill);
+  background: var(--app-surface-sunken);
+  color: var(--app-text-muted);
+}
+
+/* Inside the sunken card the chevron pill uses the lighter surface so it stays
+   visible against the card background. */
+.embedded .summaryChevron {
+  background: var(--app-surface);
+}
+
+.body {
+  padding-top: 2px;
+}
+
+/* Inside the card the body is inset and split from the header by a hairline. The
+   divider only shows when expanded (Collapse hides the body when closed). */
+.embedded .body {
+  padding: 12px;
+  border-top: var(--app-border-width) solid var(--app-border);
 }
 
 .statTrack {
@@ -32,20 +86,30 @@
 .courseList {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
-.courseRow {
-  padding: 8px 6px;
+/* The row is a Mantine UnstyledButton whose root class resets padding to 0 at the
+   same specificity as a bare `.courseRow`; scoping under `.courseList` wins so the
+   hover highlight gets real internal padding. */
+.courseList .courseRow {
+  width: 100%;
+  padding: 9px 11px;
   border-radius: var(--app-radius-sm);
-  transition: background-color var(--app-transition);
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background-color var(--app-transition),
+    color var(--app-transition);
 }
 
-.courseRow + .courseRow {
-  border-top: var(--app-border-width) solid var(--app-border);
+.courseList .courseRow:hover {
+  background: var(--app-danger-soft);
 }
 
-.courseRow:hover {
-  background: var(--app-surface-hover);
+.courseList .courseRow:focus-visible {
+  outline: 2px solid var(--app-focus-ring);
+  outline-offset: -2px;
 }
 
 .statusDot {
@@ -55,14 +119,21 @@
   border-radius: 50%;
 }
 
-.removeButton {
-  opacity: 0.5;
-  transition: opacity var(--app-transition);
+.removeIcon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: var(--app-text-muted);
+  opacity: 0;
+  transition:
+    opacity var(--app-transition),
+    color var(--app-transition);
 }
 
-.courseRow:hover .removeButton,
-.removeButton:focus-visible {
+.courseList .courseRow:hover .removeIcon,
+.courseList .courseRow:focus-visible .removeIcon {
   opacity: 1;
+  color: var(--app-danger);
 }
 
 .detailPanel {
@@ -90,16 +161,27 @@
   background: color-mix(in oklch, var(--app-chart-1) 14%, transparent);
 }
 
-.emptyState {
+/* Ghost badge that trails the suggestion pills, indicating how many more candidate
+   courses exist in the requirement's pool beyond those shown. */
+.morePill {
+  background: transparent;
   border: var(--app-border-width) dashed var(--app-border);
-  border-radius: var(--app-radius-lg);
-  background: var(--app-surface-sunken);
-  padding: 22px 18px;
+  color: var(--app-text-muted);
+  font-weight: 600;
+  text-transform: none;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 12px 16px;
   text-align: center;
 }
 
 @media (max-width: 48em) {
-  .courseRow {
-    padding: 8px 4px;
+  .courseList .courseRow {
+    padding: 9px 9px;
   }
 }

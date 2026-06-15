@@ -14,7 +14,7 @@ function buildFixture(): CourseGradesData {
     courses: [
       {
         code: testCourseCode("CSI 2110"),
-        professors: [
+        sections: [
           {
             name: "Alice Shared",
             legacyId: 1,
@@ -26,7 +26,7 @@ function buildFixture(): CourseGradesData {
       },
       {
         code: testCourseCode("MAT 1341"),
-        professors: [
+        sections: [
           { name: "Alice Shared", legacyId: 1, termId: 2251, distribution: { B: 8, C: 2 } },
           { name: "Bob Shared", legacyId: 2, termId: 2241, distribution: { A: 12 } },
         ],

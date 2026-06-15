@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Box, Text } from "@mantine/core";
 import { Link, useLocation } from "@tanstack/react-router";
-import { IconSparkles } from "@tabler/icons-react";
+import { IconAdjustments, IconSparkles } from "@tabler/icons-react";
 import { useActiveProgram, useCompletedCourses, useIndices } from "../../store/hooks";
 import { tr, useTr } from "../../i18n";
 import { TopBanner, TopBannerSlot } from "./TopBanner";
@@ -23,14 +23,15 @@ type PersonalizeBannerProps = {
 };
 
 /**
- * A dismissible nudge shown to users who have not set their program or completed
- * courses yet. Pointing them at /personalize unlocks requirement-aware schedules
- * and recommendations. Gates on app data being loaded and the user not being
- * personalized, returning null when it should not appear.
+ * A nudge pointing users at /personalize, which unlocks requirement-aware
+ * schedules and recommendations. Gates on app data being loaded.
  *
- * The floating variant is rendered once in the root layout (always mounted, so a
- * dismissal sticks across navigation) and self-gates on route; the sidebar
- * variant is placed explicitly by its host.
+ * The floating variant is a dismissible top-of-page pill shown only to
+ * not-yet-personalized users (returns null once personalized): rendered once in
+ * the root layout (always mounted, so a dismissal sticks across navigation) and
+ * self-gates on route. The sidebar variant is placed explicitly by its host and
+ * persists after personalization, recast as a "change your personalization" link
+ * (e.g. so a user can revisit their program/courses after a transcript import).
  */
 export function PersonalizeBanner({ variant = "floating" }: PersonalizeBannerProps) {
   useTr();
@@ -47,26 +48,46 @@ export function PersonalizeBanner({ variant = "floating" }: PersonalizeBannerPro
 
   // Only render once app data is loaded, so the personalization signal is
   // reliable (program/completed courses resolve from the catalogue).
-  if (!indices || dismissed || !onNudgeRoute || personalized) return null;
+  if (!indices || dismissed || !onNudgeRoute) return null;
 
   if (variant === "sidebar") {
+    // Once personalized, keep the entry point in place but recast it as a way to
+    // revisit/change the saved program and completed courses (e.g. after a
+    // transcript import) rather than a first-time nudge.
     return (
       <Box
         component={Link}
         to="/personalize"
         role="note"
-        className={classes.sidebarPill}
+        className={
+          personalized
+            ? `${classes.sidebarPill} ${classes.sidebarPillNeutral}`
+            : classes.sidebarPill
+        }
         data-testid="personalize-sidebar-nudge"
       >
-        <Box aria-hidden style={{ display: "flex", color: "var(--app-warning)", flexShrink: 0 }}>
-          <IconSparkles size={18} />
+        <Box
+          aria-hidden
+          style={{
+            display: "flex",
+            color: personalized ? "var(--app-text-muted)" : "var(--app-warning)",
+            flexShrink: 0,
+          }}
+        >
+          {personalized ? <IconAdjustments size={18} /> : <IconSparkles size={18} />}
         </Box>
         <Text size="sm" c="var(--app-text)" className={classes.sidebarText}>
-          {tr("personalizeBanner.messageShort")}
+          {personalized
+            ? tr("personalizeBanner.changeShort")
+            : tr("personalizeBanner.messageShort")}
         </Text>
       </Box>
     );
   }
+
+  // The floating top-of-page variant stays a one-time nudge: hide it once the
+  // user is personalized so it never becomes a permanent banner.
+  if (personalized) return null;
 
   return (
     <TopBannerSlot>

@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { I18nProvider } from "@lingui/react";
 import { Notifications } from "@mantine/notifications";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { ErrorBoundary } from "./components/shared/ErrorBoundary";
@@ -13,7 +12,7 @@ import "@fontsource/dm-mono/400.css";
 import "@fontsource/dm-mono/500.css";
 import "@fontsource/dm-serif-display/400.css";
 import "./styles/global.css";
-import { i18n, initializeI18n } from "./i18n";
+import { i18n, I18nProvider, initializeI18n } from "./i18n";
 import { registerServiceWorker } from "./workers/serviceWorkerClient";
 import { printConsoleGreeting } from "./lib/easterEggs/consoleGreeting";
 import { AppStoreProvider } from "./store/AppStoreProvider";

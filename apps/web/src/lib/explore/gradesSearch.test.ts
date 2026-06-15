@@ -6,6 +6,7 @@ import {
   buildExploreProfessorSearchEntries,
   buildOfferingsByComponent,
   buildScheduleOfferings,
+  countDistinctProfessors,
   createExploreCourseFuse,
   createExploreFuse,
   dedupeCourseEntriesByComponent,
@@ -19,7 +20,7 @@ import {
   searchExploreProfessors,
 } from "./gradesSearch";
 import type { ExploreOfferingFlat } from "./gradesSearch";
-import type { Catalogue, CourseSchedule, SchedulesData } from "@uoplan/core";
+import type { Catalogue, CourseGradesData, CourseSchedule, SchedulesData } from "@uoplan/core";
 import { testCourseCode, testProfessorName } from "../../test/brands";
 
 type OfferingPartial = Partial<Omit<ExploreOfferingFlat, "courseCode" | "professorName">> & {
@@ -84,6 +85,66 @@ describe("searchExploreOfferings", () => {
     }
     const fuse = createExploreFuse(offerings);
     expect(searchExploreOfferings(fuse, offerings, "csi").length).toBeLessThanOrEqual(120);
+  });
+});
+
+describe("countDistinctProfessors", () => {
+  it("does not count unassigned grade sections as professors", () => {
+    expect(
+      countDistinctProfessors([
+        sampleOffering({
+          id: "unassigned",
+          professorName: testProfessorName(""),
+          unassignedInstructor: true,
+        }),
+        sampleOffering({
+          id: "assigned",
+          professorName: testProfessorName("Ada Lovelace"),
+        }),
+      ]),
+    ).toBe(1);
+  });
+});
+
+describe("buildExploreOfferings", () => {
+  it("routes nameless grade sections to the unassigned bucket and keeps them in course aggregates", () => {
+    const grades = {
+      courses: [
+        {
+          code: testCourseCode("CSI 2110"),
+          sections: [
+            {
+              termId: 2251,
+              section: "A00",
+              distribution: { "A+": 7 },
+            },
+          ],
+        },
+      ],
+    } as unknown as CourseGradesData;
+
+    const offerings = buildExploreOfferings(
+      grades,
+      new Map([[testCourseCode("CSI 2110"), "Data"]]),
+    );
+    expect(offerings).toHaveLength(1);
+    expect(offerings[0]).toMatchObject({
+      professorName: "",
+      legacyId: undefined,
+      unassignedInstructor: true,
+      distribution: { "A+": 7 },
+    });
+
+    const groups = groupOfferingsByProfessor(offerings);
+    expect(groups).toHaveLength(1);
+    expect(groups[0]).toMatchObject({
+      groupId: "unassigned:",
+      displayName: "",
+      unassigned: true,
+    });
+
+    const courses = buildCourseSearchEntries(offerings);
+    expect(courses[0]?.gradeViz?.total).toBe(7);
   });
 });
 
@@ -268,7 +329,7 @@ describe("buildExploreOfferings", () => {
         courses: [
           {
             code: testCourseCode("CSI 2110"),
-            professors: [
+            sections: [
               { name: "Ada Lovelace", termId: 2251, distribution: { "A+": 1 } },
               { name: "Staff", termId: 2251, distribution: { "A+": 1 } },
               { name: "  staff ", termId: 2251, distribution: { "A+": 1 } },

@@ -15,6 +15,7 @@ import {
 } from "@mantine/core";
 import { IconArrowsSort, IconCheck, IconFilter, IconSearch } from "@tabler/icons-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { difficultyBucket } from "@uoplan/core/generation/swapCandidates";
 import type { SwapCandidateOption, SwapModalState, SwapResult } from "../../hooks/useSwapModal";
 import { useTr } from "../../i18n";
 import { GradeDistributionHistogram } from "./GradeDistributionViz";
@@ -49,13 +50,6 @@ const SWAP_I18N = {
   difficultyModerate: "swapCourse.difficulty.moderate",
   difficultyTough: "swapCourse.difficulty.tough",
 } as const;
-
-/** Difficulty bucket from mean course GPA (matches the Explore thresholds). */
-function difficultyBucket(gpa: number): SwapDifficulty {
-  if (gpa >= 9) return "easy";
-  if (gpa >= 7.5) return "moderate";
-  return "tough";
-}
 
 function SwapCard({
   option,
