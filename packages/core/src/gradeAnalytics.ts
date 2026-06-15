@@ -366,7 +366,7 @@ export function computeDisciplineYearHeatmap(
     const discipline = disciplineOf(course.code);
     if (!discipline) continue;
     if (level != null && levelOf(course.code) !== level) continue;
-    for (const prof of course.professors) {
+    for (const prof of course.sections) {
       const off = usableOffering(prof, season);
       if (!off) continue;
       const meta = decodeTermMeta(off.termId);
@@ -496,7 +496,7 @@ export function computeProfessorSpread(
   const byProf = new Map<string, { dist: GradeDistribution; offerings: number }>();
   for (const course of grades.courses) {
     if (!courseMatchesTrendFilters(course.code, filters)) continue;
-    for (const prof of course.professors) {
+    for (const prof of course.sections) {
       const off = usableOffering(prof, season);
       if (!off) continue;
       const name = (prof.name ?? "").trim();

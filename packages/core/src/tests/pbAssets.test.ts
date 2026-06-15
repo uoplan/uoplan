@@ -89,10 +89,8 @@ describe("committed .pb assets decode with current proto contract", () => {
     const grades = fromProtoCourseGradesData(DataProto.GradesData.decode(read("grades.pb")));
     expect(grades.courses.length).toBeGreaterThan(0);
     // The name dictionary must resolve: at least one offering has a non-empty
-    // professor name reconstructed from `professor_names` + `name_refs`.
-    const hasNamedOffering = grades.courses.some((c) =>
-      c.professors.some((p) => p.name.length > 0),
-    );
+    // professor name reconstructed from `section_names` + `name_refs`.
+    const hasNamedOffering = grades.courses.some((c) => c.sections.some((p) => p.name?.length));
     expect(hasNamedOffering).toBe(true);
   });
 

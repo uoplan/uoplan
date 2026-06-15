@@ -121,20 +121,22 @@ export function buildGradeLookups(grades: CourseGradesData): GradeLookups {
 
     const allDists: GradeDistribution[] = [];
 
-    for (const prof of course.professors) {
-      const name = prof.name;
-      if (typeof name !== "string" || !name.trim()) continue;
+    for (const prof of course.sections) {
       const dist = prof.distribution;
       if (!dist || typeof dist !== "object") continue;
 
       const termId = Number(prof.termId);
       if (!Number.isFinite(termId) || termId === 0) continue;
 
+      allDists.push(dist);
+
+      const name = prof.name;
+      if (typeof name !== "string" || !name.trim()) continue;
+
       const key = normalizeInstructorName(name);
       if (!key) continue;
 
       accumulateInstructorDistribution(byCourseTermName, code, termId, key, dist);
-      allDists.push(dist);
     }
 
     aggregateByCourse.set(code, sumGradeDistributions(allDists));

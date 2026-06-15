@@ -35,6 +35,8 @@ interface RmpFile {
 }
 
 interface GradesCourse {
+  sections?: Array<{ name?: string; legacyId?: number }>;
+  /** Backward-compatible reader for committed legacy grades.json until regenerated. */
   professors?: Array<{ name?: string; legacyId?: number }>;
 }
 
@@ -69,7 +71,7 @@ async function collectRegistryInputs(): Promise<RegistryInputs> {
   const gradesJson = (await readJsonOptional<GradesCourse[]>(GRADES_FILE)) ?? [];
   const grades: NamedInput[] = [];
   for (const course of gradesJson) {
-    for (const prof of course.professors ?? []) {
+    for (const prof of course.sections ?? course.professors ?? []) {
       if (prof?.name) grades.push({ name: prof.name, legacyId: prof.legacyId });
     }
   }

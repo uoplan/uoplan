@@ -29,7 +29,7 @@ const grades: CourseGradesData = {
   courses: [
     {
       code: normalizeCourseCode("CSI 2110"),
-      professors: [
+      sections: [
         { name: "Alice Smith", termId: 2231, distribution: { "A+": 10, B: 2 } },
         { name: "Álice Smith", termId: 2231, distribution: { "A+": 5 } },
         { name: "Bob Jones", termId: 2231, distribution: { C: 4 } },
@@ -38,7 +38,7 @@ const grades: CourseGradesData = {
     },
     {
       code: normalizeCourseCode("MAT 1320"),
-      professors: [{ name: "Zoe Zero", termId: 2231, distribution: { F: 0 } }],
+      sections: [{ name: "Zoe Zero", termId: 2231, distribution: { F: 0 } }],
     },
   ],
 };

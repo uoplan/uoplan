@@ -5,3 +5,6 @@ export * from "./overlaps";
 export * from "./sectionCombos";
 export * from "./swap";
 export * from "./fingerprint";
+export * from "./requirementAutoAssign";
+export * from "./resolveDesiredCourses";
+export * from "./computeStillNeeded";

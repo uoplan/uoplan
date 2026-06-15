@@ -321,15 +321,15 @@ message SchedulesData {
 }
 
 // Grade data is stored column-wise per course: every `repeated` field below is a
-// parallel array where index `i` describes one (professor, term, section)
+// parallel array where index `i` describes one (section/professor, term, section)
 // offering of the course. This avoids a per-offering submessage and a per-cell
-// field tag, and lets the professor name be shared via a dictionary.
+// field tag, and lets the optional section professor name be shared via a dictionary.
 message GradesData {
   repeated CourseGradeEntry courses = 1;
-  // Dictionary of distinct offering professor display names, referenced 0-based
+  // Dictionary of distinct offering section/professor display names, referenced 0-based
   // by `CourseGradeEntry.name_refs`. The same professor appears across many
   // offerings, so the names are deduplicated here.
-  repeated string professor_names = 2;
+  repeated string section_names = 2;
 }
 
 // One course's grade offerings, stored as parallel columns. All `repeated`
@@ -338,7 +338,7 @@ message GradesData {
 // so offering `i` occupies `distributions[i*18 .. i*18+18]`.
 message CourseGradeEntry {
   string code = 1;
-  // 0-based index into `GradesData.professor_names`.
+  // 0-based index into `GradesData.section_names`.
   repeated uint32 name_refs = 2 [packed = true];
   repeated uint32 term_ids = 3 [packed = true];
   // 1-based index into `ProfessorsData.professors` (0 = unresolved).

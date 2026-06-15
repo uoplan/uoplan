@@ -126,7 +126,7 @@ describe("supporting dataset loaders", () => {
       ),
       [dataAssetIds.grades]: encode(
         DataProto.GradesData.encode({
-          professorNames: ["Alice Smith"],
+          sectionNames: ["Alice Smith"],
           courses: [
             {
               code: "CSI 2110",
@@ -206,7 +206,7 @@ describe("supporting dataset loaders", () => {
       courses: [
         {
           code: normalizeCourseCode("CSI 2110"),
-          professors: [{ name: "Alice Smith", termId: 2261, distribution: { "A+": 4, A: 3 } }],
+          sections: [{ name: "Alice Smith", termId: 2261, distribution: { "A+": 4, A: 3 } }],
         },
       ],
     });

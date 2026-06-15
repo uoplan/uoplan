@@ -107,7 +107,7 @@ export function availablePrograms(grades: CourseGradesData, programs: Program[])
   const gradedDisciplines = new Set<string>();
   for (const course of grades.courses) {
     let mass = 0;
-    for (const prof of course.professors) {
+    for (const prof of course.sections) {
       if (!prof.distribution || typeof prof.distribution !== "object") continue;
       mass += countedMass(prof.distribution);
     }

@@ -125,20 +125,20 @@ const grades: CourseGradesData = {
   courses: [
     {
       code: normalizeCourseCode("CSI 2110"),
-      professors: [{ name: "A", termId: 2179, distribution: { "A+": 100 } }],
+      sections: [{ name: "A", termId: 2179, distribution: { "A+": 100 } }],
     },
     {
       code: normalizeCourseCode("CSI 4120"),
-      professors: [{ name: "B", termId: 2179, distribution: { A: 50, F: 50 } }],
+      sections: [{ name: "B", termId: 2179, distribution: { A: 50, F: 50 } }],
     },
     {
       code: normalizeCourseCode("PSY 1101"),
-      professors: [{ name: "C", termId: 2179, distribution: { "A+": 80 } }],
+      sections: [{ name: "C", termId: 2179, distribution: { "A+": 80 } }],
     },
     {
       // No graded mass — should not make a program "available".
       code: normalizeCourseCode("BIO 1130"),
-      professors: [{ name: "D", termId: 2179, distribution: { P: 10 } }],
+      sections: [{ name: "D", termId: 2179, distribution: { P: 10 } }],
     },
   ],
 };

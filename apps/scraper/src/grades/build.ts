@@ -21,8 +21,8 @@ import { buildFeedbackProfIndex, feedbackKey } from "./feedbackProfs.ts";
 import { buildProfessorResolver } from "./rmp.ts";
 import type { ProfessorResolver } from "./rmp.ts";
 
-interface ProfessorGrades {
-  name: string;
+interface SectionGrades {
+  name?: string;
   legacyId?: number;
   termId: number;
   section: string;
@@ -31,13 +31,13 @@ interface ProfessorGrades {
 
 interface CourseGrades {
   code: string;
-  professors: ProfessorGrades[];
+  sections: SectionGrades[];
 }
 
 interface BuildStats {
   codes: number;
   codesWithProfessors: number;
-  professorEntries: number;
+  sectionEntries: number;
   rowsWithoutFeedbackMatch: number;
   professorsWithoutLegacyId: number;
 }
@@ -47,8 +47,12 @@ interface BuildResult {
   stats: BuildStats;
 }
 
-function compareProfessors(a: ProfessorGrades, b: ProfessorGrades): number {
-  return a.name.localeCompare(b.name) || a.termId - b.termId || a.section.localeCompare(b.section);
+function compareSections(a: SectionGrades, b: SectionGrades): number {
+  return (
+    (a.name ?? "").localeCompare(b.name ?? "") ||
+    a.termId - b.termId ||
+    a.section.localeCompare(b.section)
+  );
 }
 
 /**
@@ -60,7 +64,7 @@ export function assembleGrades(
   resolveProfessor: ProfessorResolver,
   catalogueCodes: Iterable<string>,
 ): BuildResult {
-  const byCode = new Map<string, ProfessorGrades[]>();
+  const byCode = new Map<string, SectionGrades[]>();
   const codes = new Set<string>(catalogueCodes);
 
   let rowsWithoutFeedbackMatch = 0;
@@ -69,13 +73,19 @@ export function assembleGrades(
   for (const row of rows) {
     codes.add(row.code);
     const names = feedbackIndex.get(feedbackKey(row.termId, row.code, row.section));
+    const distribution = orderDistribution(row.distribution);
+    const list = byCode.get(row.code) ?? [];
     if (!names || names.length === 0) {
       rowsWithoutFeedbackMatch++;
+      list.push({
+        termId: row.termId,
+        section: row.section,
+        distribution,
+      });
+      byCode.set(row.code, list);
       continue;
     }
 
-    const distribution = orderDistribution(row.distribution);
-    const list = byCode.get(row.code) ?? [];
     // Dedupe by resolved name within a section so multiple feedback names that
     // resolve to the same professor don't produce duplicate entries.
     const seen = new Set<string>();
@@ -98,16 +108,16 @@ export function assembleGrades(
   const output: CourseGrades[] = [...codes]
     .sort((a, b) => a.localeCompare(b))
     .map((code) => {
-      const professors = (byCode.get(code) ?? []).sort(compareProfessors);
-      return { code, professors };
+      const sections = (byCode.get(code) ?? []).sort(compareSections);
+      return { code, sections };
     });
 
-  let professorEntries = 0;
+  let sectionEntries = 0;
   let codesWithProfessors = 0;
   for (const course of output) {
-    if (course.professors.length > 0) {
+    if (course.sections.length > 0) {
       codesWithProfessors++;
-      professorEntries += course.professors.length;
+      sectionEntries += course.sections.length;
     }
   }
 
@@ -116,7 +126,7 @@ export function assembleGrades(
     stats: {
       codes: output.length,
       codesWithProfessors,
-      professorEntries,
+      sectionEntries,
       rowsWithoutFeedbackMatch,
       professorsWithoutLegacyId,
     },
@@ -139,7 +149,7 @@ export async function runBuild(): Promise<void> {
   await fs.writeFile(GRADES_FILE, `${JSON.stringify(output, null, 2)}\n`, "utf-8");
   console.log(`Wrote ${GRADES_FILE}`);
   console.log(`  codes: ${stats.codes} (${stats.codesWithProfessors} with professors)`);
-  console.log(`  professor entries: ${stats.professorEntries}`);
+  console.log(`  section entries: ${stats.sectionEntries}`);
   console.log(`  rows without a feedback professor match: ${stats.rowsWithoutFeedbackMatch}`);
   console.log(`  professor entries without a legacyId: ${stats.professorsWithoutLegacyId}`);
 }

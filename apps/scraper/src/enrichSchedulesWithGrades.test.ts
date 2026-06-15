@@ -7,7 +7,7 @@ describe("buildGradeLookups", () => {
     const lookups = buildGradeLookups([
       {
         code: "CSI 2110",
-        professors: [
+        sections: [
           {
             name: "Ada Lovelace",
             termId: 2251,
@@ -35,7 +35,7 @@ describe("buildGradeLookups", () => {
     const lookups = buildGradeLookups([
       {
         code: "MAT 1341",
-        professors: [
+        sections: [
           {
             name: "Alan Turing",
             termId: 2251,
@@ -55,6 +55,21 @@ describe("buildGradeLookups", () => {
     const merged = lookups.byCourseTermName.get("MAT 1341")?.get(2251)?.get("alan turing");
     expect(merged).toEqual({ "A+": 1, B: 2 });
   });
+
+  it("keeps nameless sections in the course aggregate but not instructor lookup", () => {
+    const lookups = buildGradeLookups([
+      {
+        code: "CSI 2110",
+        sections: [
+          { termId: 2251, section: "A00", distribution: { "A+": 3 } },
+          { name: "Ada Lovelace", termId: 2251, section: "B00", distribution: { B: 2 } },
+        ],
+      },
+    ]);
+
+    expect(lookups.byCourseTermName.get("CSI 2110")?.get(2251)?.has("")).toBe(false);
+    expect(lookups.aggregateByCourse.get("CSI 2110")).toEqual({ "A+": 3, B: 2 });
+  });
 });
 
 describe("enrichSchedulesPayload", () => {
@@ -62,7 +77,7 @@ describe("enrichSchedulesPayload", () => {
     const lookups = buildGradeLookups([
       {
         code: "CSI 2110",
-        professors: [
+        sections: [
           {
             name: "Grace Hopper",
             termId: 2251,

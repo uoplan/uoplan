@@ -15,7 +15,7 @@ import {
 function gradesBytes(): Uint8Array {
   return encode(
     DataProto.GradesData.encode({
-      professorNames: ["Alice Smith"],
+      sectionNames: ["Alice Smith"],
       courses: [
         {
           code: "CSI 2110",

@@ -8,6 +8,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./layout": "./src/layout.ts",
+    "./events": "./src/events.ts",
     "./types": "./src/types.ts"
   },
   "scripts": {
