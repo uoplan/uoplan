@@ -42,6 +42,7 @@
     "apps/web/scripts/**/*.mjs",
     "apps/web/vite.config.ts",
     "apps/web/vite/**",
+    "apps/web/lighthouserc.cjs",
     "oxfmt.config.ts",
     "packages/i18n/lingui.config.ts",
     "packages/theme/scripts/generate-native-tokens.ts"
@@ -64,6 +65,8 @@
   // - @uoplan/theme: in packages/ui only to back `nativeTheme.ts` (the shared
   //   native palette), which is in ignorePatterns above, so fallow's web entry
   //   graph never sees ui import it. (apps/web still uses @uoplan/theme directly.)
+  // - @lhci/cli: invoked as a CLI binary (`pnpm exec lhci`) by scripts/
+  //   lighthouse.mjs (the `pnpm lighthouse` / pre-push audit), never imported.
   // (knip's @vitest/browser + wrangler ignores were redundant under fallow, and
   // its @marsidev/react-turnstile ignore masked a real unused dep in the
   // worker — all three were dropped.)
@@ -74,7 +77,8 @@
     "@uoplan/engine",
     "@size-limit/file",
     "expo-symbols",
-    "@uoplan/theme"
+    "@uoplan/theme",
+    "@lhci/cli"
   ],
   // The only clone shared by these two seed-navigation test files is the
   // hoisted `vi.mock("../../workers/scheduleWorkerClient", ...)` setup block
