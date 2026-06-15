@@ -14,6 +14,7 @@ const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 
 /** @type {Record<string, {
  *   canonicalPath: string;
+ *   tabTitle: string;
  *   title: string;
  *   description: string;
  *   keywords: string;
@@ -107,12 +108,12 @@ ${appLd}
 }
 
 function injectPageMeta(html, page) {
-  const title = escapeHtml(page.title);
+  const tabTitle = escapeHtml(page.tabTitle);
   const description = escapeAttr(page.description);
   const headInjection = buildHeadInjection(page);
 
   let out = html
-    .replace(/<title>[\s\S]*?<\/title>/, `<title>${title}</title>`)
+    .replace(/<title>[\s\S]*?<\/title>/, `<title>${tabTitle}</title>`)
     .replace(
       /<meta\s+name="description"\s+content="[^"]*"\s*\/>/,
       `<meta name="description" content="${description}" />`,

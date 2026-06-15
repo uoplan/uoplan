@@ -3,9 +3,10 @@ import { ExploreCourseFeedbackPage } from "../../../../components/explore/Explor
 import { parseCoursePathParam } from "../../../../lib/explore/courseSearchParams";
 
 export const Route = createFileRoute("/explore/course/$course/feedback")({
-  head: ({ params }) => ({
-    meta: [{ title: parseCoursePathParam(params.course) ?? params.course.toUpperCase() }],
-  }),
+  head: ({ params }) => {
+    const code = parseCoursePathParam(params.course) ?? params.course.toUpperCase();
+    return { meta: [{ title: `${code} feedback` }] };
+  },
   component: ExploreCourseFeedbackRoute,
 });
 

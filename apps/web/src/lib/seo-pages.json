@@ -1,7 +1,7 @@
 {
   "home": {
     "canonicalPath": "/",
-    "tabTitle": "uoplan",
+    "tabTitle": "uoPlan",
     "title": "uOttawa course planner | uoplan",
     "description": "Free tools for University of Ottawa students: plan your degree, explore course grades, and browse the professor co-teaching network.",
     "keywords": "uottawa course planner, uottawa schedule planner, uottawa course grades, university of ottawa",
@@ -11,7 +11,7 @@
   },
   "schedule": {
     "canonicalPath": "/schedule/",
-    "tabTitle": "Schedule planner",
+    "tabTitle": "Schedule",
     "title": "uOttawa schedule generator | uoplan",
     "description": "Free course planner and timetable generator for University of Ottawa (uOttawa) students. Map your degree, check prerequisites, and generate conflict-free timetables in seconds.",
     "keywords": "uottawa course planner, uottawa schedule planner, uschedule, uottawa timetable, uottawa degree planner, university of ottawa schedule generator",
@@ -41,7 +41,7 @@
   },
   "graph": {
     "canonicalPath": "/graph",
-    "tabTitle": "Prof network",
+    "tabTitle": "Professor network",
     "title": "Professor network | uoplan",
     "description": "Explore how uOttawa professors connect through shared courses. Interactive network graph of co-teaching patterns and course overlap.",
     "keywords": "uottawa professors, uottawa co-teaching, university of ottawa faculty network, uottawa course overlap",

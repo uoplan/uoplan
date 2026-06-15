@@ -2,10 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ProfessorGraphPage } from "../components/graph/ProfessorGraphPage";
 import type { ProfessorGraphNavigate } from "../components/graph/ProfessorGraphPage";
 import { AppDataRouteGate } from "../components/shared/AppDataRouteGate";
-import { buildTabTitle } from "../lib/seo";
+import { buildPageHead } from "../lib/seo";
 
 export const Route = createFileRoute("/graph")({
-  head: () => buildTabTitle("Prof network"),
+  head: () => buildPageHead("graph"),
   validateSearch: (search: Record<string, unknown>) => ({
     prof:
       typeof search.prof === "string" && search.prof.trim().length > 0
