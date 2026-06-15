@@ -10,7 +10,7 @@ pre-commit:
       glob: "**/*.{ts,tsx,mts,cts}"
       run: pnpm typecheck
     check-i18n:
-      glob: "{**/locales/**/*.po,apps/web/src/**/*.{ts,tsx}}"
+      glob: "{**/locales/**/*.po,apps/web/src/**/*.{ts,tsx},apps/native/src/**/*.{ts,tsx}}"
       run: pnpm check:i18n
     fallow:
       glob: "**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}"

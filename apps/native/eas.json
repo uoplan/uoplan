@@ -1,0 +1,53 @@
+{
+  "cli": {
+    "version": ">= 15.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "base": {
+      "pnpm": "10.27.0",
+      "cache": {
+        "paths": [
+          "../../packages/engine/target",
+          "./modules/uoplan-engine/ios/UoplanEngine.xcframework"
+        ]
+      }
+    },
+    "preview": {
+      "extends": "base",
+      "distribution": "internal",
+      "environment": "preview",
+      "android": {
+        "buildType": "apk",
+        "distribution": "internal"
+      },
+      "ios": {
+        "distribution": "internal",
+        "simulator": true
+      }
+    },
+    "production": {
+      "extends": "base",
+      "autoIncrement": true,
+      "environment": "production",
+      "android": {
+        "buildType": "app-bundle",
+        "distribution": "store"
+      },
+      "ios": {
+        "distribution": "store"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "applicationId": "party.uoplan.native",
+        "track": "internal"
+      },
+      "ios": {
+        "bundleIdentifier": "party.uoplan.native"
+      }
+    }
+  }
+}

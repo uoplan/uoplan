@@ -1,13 +1,20 @@
 import { useRouter } from "expo-router";
-import { Linking, StyleSheet, View } from "react-native";
+import Constants from "expo-constants";
+import { Linking, Pressable, StyleSheet, View } from "react-native";
 
 import { Stack, Text } from "@uoplan/ui";
 
+import { ResponsiveColumns } from "@/components/layout";
 import { ListRow } from "@/components/list-row";
-import { ScreenScaffold } from "@/components/screen-scaffold";
+import { RedesignScreen, ScreenHeader } from "@/components/redesign";
 import { Spacing, Surface } from "@/constants/theme";
+import { useTr } from "@/i18n";
+import { useLocale } from "@/i18n/locale-provider";
 
 const WEBSITE = "https://uoplan.party";
+const GITHUB = "https://github.com/uoplan/uoplan";
+const CONTACT = "mailto:admin@uoplan.party";
+const APP_VERSION = Constants.expoConfig?.version ?? "1.0.0";
 
 function openUrl(url: string) {
   void Linking.openURL(url);
@@ -42,70 +49,90 @@ function Separator() {
  */
 export default function MoreScreen() {
   const router = useRouter();
+  const tr = useTr();
+  const { overrideLocale } = useLocale();
+
+  const languageDescription =
+    overrideLocale === "en"
+      ? tr("native.language.english")
+      : overrideLocale === "fr-CA"
+        ? tr("native.language.frenchCanada")
+        : tr("native.language.currentSystem");
 
   return (
-    <ScreenScaffold title="More" subtitle="Settings, about and developer tools">
-      <Section title="Planning">
-        <ListRow
-          icon="slider.horizontal.3"
-          title="Personalize"
-          description="Set your program and completed courses"
-          onPress={() => openUrl(`${WEBSITE}/personalize`)}
-        />
-      </Section>
+    <RedesignScreen gap={Spacing.three} backLabel="Back" onBack={() => router.back()}>
+      <ScreenHeader title="More" subtitle="Settings, about and developer tools" />
 
-      <Section title="Explore">
-        <ListRow
-          icon="point.3.connected.trianglepath.dotted"
-          title="Professor network"
-          description="Co-teaching graph of professors"
-          onPress={() => router.push("/more/graph")}
-        />
-      </Section>
+      <ResponsiveColumns gap={Spacing.three}>
+        <Section title={tr("native.more.settings")}>
+          <ListRow
+            icon="globe"
+            title={tr("native.language.title")}
+            description={languageDescription}
+            onPress={() => router.push("/more/language")}
+          />
+        </Section>
 
-      <Section title="About">
-        <ListRow
-          icon="heart.fill"
-          title="Support uoplan"
-          description="Help keep the project free"
-          onPress={() => openUrl(`${WEBSITE}/donate`)}
-        />
-        <Separator />
-        <ListRow
-          icon="doc.text"
-          title="Changelog"
-          description="What's new"
-          onPress={() => router.push("/more/changelog")}
-        />
-        <Separator />
-        <ListRow
-          icon="globe"
-          title="Visit uoplan.party"
-          description="Open the full web app"
-          onPress={() => openUrl(WEBSITE)}
-        />
-      </Section>
+        <Section title="About">
+          <ListRow
+            icon="doc.text"
+            title="Changelog"
+            description="What's new"
+            onPress={() => router.push("/more/changelog")}
+          />
+          <Separator />
+          <ListRow
+            icon="heart"
+            title="Support us"
+            description="Help keep uoplan running"
+            onPress={() => router.push("/donate")}
+          />
+          <Separator />
+          <ListRow
+            icon="globe"
+            title="Open the web app"
+            description="View the full uoplan website"
+            onPress={() => openUrl(WEBSITE)}
+          />
+        </Section>
 
-      <Section title="Developer">
-        <ListRow
-          icon="square.grid.2x2.fill"
-          title="Component gallery"
-          description="Shared @uoplan/ui primitives, native variants"
-          onPress={() => router.push("/more/gallery")}
-        />
-        <Separator />
-        <ListRow
-          icon="waveform.path.ecg"
-          title="Diagnostics"
-          description="Shared-core wiring proof"
-          onPress={() => router.push("/more/diagnostics")}
-        />
-      </Section>
+        <Section title="Developer">
+          <ListRow
+            icon="square.grid.2x2.fill"
+            title="Component gallery"
+            description="Shared @uoplan/ui primitives, native variants"
+            onPress={() => router.push("/more/gallery")}
+          />
+          <Separator />
+          <ListRow
+            icon="waveform.path.ecg"
+            title="Diagnostics"
+            description="Shared-core wiring proof"
+            onPress={() => router.push("/more/diagnostics")}
+          />
+          <Separator />
+          <ListRow
+            icon="chevron.left.forwardslash.chevron.right"
+            title="Source code"
+            description="github.com/uoplan/uoplan"
+            onPress={() => openUrl(GITHUB)}
+          />
+          <Separator />
+          <ListRow
+            icon="envelope"
+            title="Contact"
+            description="admin@uoplan.party"
+            onPress={() => openUrl(CONTACT)}
+          />
+        </Section>
+      </ResponsiveColumns>
 
-      <Text size="xs" dimmed align="center">
-        uoplan · made for uOttawa students
-      </Text>
-    </ScreenScaffold>
+      <Pressable style={styles.about} accessibilityRole="link" onPress={() => openUrl(WEBSITE)}>
+        <Text size="xs" color={Surface.faint}>
+          uoplan.party · v{APP_VERSION}
+        </Text>
+      </Pressable>
+    </RedesignScreen>
   );
 }
 
@@ -121,5 +148,10 @@ const styles = StyleSheet.create({
     height: StyleSheet.hairlineWidth,
     backgroundColor: Surface.border,
     marginLeft: Spacing.three + 28 + Spacing.three,
+  },
+  about: {
+    alignItems: "center",
+    paddingTop: Spacing.three,
+    paddingBottom: Spacing.one,
   },
 });

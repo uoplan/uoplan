@@ -75,6 +75,13 @@ export function AreaChart({
     [minY, maxY],
   );
 
+  // Thin the x-axis labels so dense term axes don't overlap (≈34px per label).
+  const labelStride = useMemo(() => {
+    if (data.length <= 1 || plotW <= 0) return 1;
+    const maxLabels = Math.max(1, Math.floor(plotW / 34));
+    return Math.ceil(data.length / maxLabels);
+  }, [data.length, plotW]);
+
   return (
     <View
       style={styles.wrap}
@@ -101,18 +108,22 @@ export function AreaChart({
               {formatValue(t)}
             </SvgText>
           ))}
-          {data.map((d, i) => (
-            <SvgText
-              key={`xl${i}`}
-              x={xFor(i)}
-              y={totalH - 6}
-              fontSize={9}
-              fill={Surface.dimmed}
-              textAnchor="middle"
-            >
-              {d.label}
-            </SvgText>
-          ))}
+          {data.map((d, i) => {
+            const show = i % labelStride === 0 || i === data.length - 1;
+            if (!show) return null;
+            return (
+              <SvgText
+                key={`xl${i}`}
+                x={xFor(i)}
+                y={totalH - 6}
+                fontSize={9}
+                fill={Surface.dimmed}
+                textAnchor="middle"
+              >
+                {d.label}
+              </SvgText>
+            );
+          })}
           {areaPath !== "" && <Path d={areaPath} fill="url(#areaFill)" />}
           {linePath !== "" && <Path d={linePath} stroke={color} strokeWidth={2} fill="none" />}
         </Svg>

@@ -1,0 +1,79 @@
+name: Native Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: "Platform to build"
+        type: choice
+        default: all
+        options:
+          - ios
+          - android
+          - all
+      profile:
+        description: "EAS build profile"
+        type: choice
+        default: production
+        options:
+          - production
+          - preview
+      submit:
+        description: "Submit latest completed production build to TestFlight / Play internal track"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-deploy-${{ github.workflow }}-${{ github.ref }}-${{ inputs.platform }}-${{ inputs.profile }}
+  cancel-in-progress: false
+
+jobs:
+  build-submit:
+    name: Build and submit native app
+    runs-on: ubuntu-latest
+    env:
+      PLATFORM: ${{ inputs.platform }}
+      PROFILE: ${{ inputs.profile }}
+      SHOULD_SUBMIT: ${{ inputs.submit }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          packager: pnpm
+          # Signing/submission credentials live in EAS Credentials; CI only needs this token.
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build selected platform(s)
+        working-directory: apps/native
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "$SHOULD_SUBMIT" == "true" && "$PROFILE" != "production" ]]; then
+            echo "::error::Store submission is only supported for the production profile. Re-run with submit=false for preview builds."
+            exit 1
+          fi
+
+          if [[ "$PLATFORM" == "all" ]]; then
+            platforms=(ios android)
+          else
+            platforms=("$PLATFORM")
+          fi
+
+          for platform in "${platforms[@]}"; do
+            eas build --platform "$platform" --profile "$PROFILE" --non-interactive
+
+            if [[ "$SHOULD_SUBMIT" == "true" ]]; then
+              eas submit --platform "$platform" --profile production --latest --non-interactive
+            fi
+          done

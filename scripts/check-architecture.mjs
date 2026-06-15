@@ -47,6 +47,7 @@ const LAYERS = {
   "@uoplan/data": ["@uoplan/proto", "@uoplan/core"],
   "@uoplan/calendar": ["@uoplan/proto", "@uoplan/core"],
   "@uoplan/transcript": ["@uoplan/proto", "@uoplan/core"],
+  "@uoplan/store": ["@uoplan/proto", "@uoplan/core", "@uoplan/data"],
   "@uoplan/app": ["@uoplan/ui", "@uoplan/navigation", "@uoplan/theme", "@uoplan/i18n"],
   web: [
     "@uoplan/proto",
@@ -60,6 +61,7 @@ const LAYERS = {
     "@uoplan/data",
     "@uoplan/calendar",
     "@uoplan/transcript",
+    "@uoplan/store",
   ],
   worker: ["@uoplan/proto", "@uoplan/engine", "@uoplan/core", "@uoplan/data", "@uoplan/calendar"],
   scraper: ["@uoplan/proto", "@uoplan/core"],
@@ -392,12 +394,57 @@ function checkAppPurity() {
   return errors;
 }
 
+/**
+ * `@uoplan/store` purity: planner state must stay reusable across web/native and
+ * safe to import during prerender. Platform UI, concrete routers, browser-only
+ * transcript code, and app-source backedges belong in app adapters, not here.
+ */
+function checkStorePurity() {
+  /** @type {string[]} */
+  const errors = [];
+  const storeDir = join(repoRoot, "packages/store/src");
+  forEachSourceImport(storeDir, (spec, _statement, rel) => {
+    if (
+      /@mantine\//.test(spec) ||
+      /@tanstack\//.test(spec) ||
+      spec === "pdfjs-dist" ||
+      spec.startsWith("pdfjs-dist/") ||
+      spec === "@uoplan/i18n" ||
+      spec.startsWith("@uoplan/i18n/") ||
+      spec === "react-native" ||
+      spec.startsWith("react-native/") ||
+      spec.startsWith("react-native-") ||
+      spec === "expo" ||
+      spec.startsWith("expo-")
+    ) {
+      errors.push(
+        `@uoplan/store must stay platform-agnostic and browser-safe: "${rel}" imports "${spec}".`,
+      );
+    }
+
+    if (spec.startsWith("apps/")) {
+      errors.push(`@uoplan/store must not import app source: "${rel}" imports "${spec}".`);
+      return;
+    }
+
+    if (spec.startsWith(".")) {
+      const resolved = resolve(dirname(join(repoRoot, rel)), spec);
+      const appsDir = join(repoRoot, "apps");
+      if (resolved === appsDir || resolved.startsWith(appsDir + "/")) {
+        errors.push(`@uoplan/store must not import app source: "${rel}" imports "${spec}".`);
+      }
+    }
+  });
+  return errors;
+}
+
 function main() {
   const pkgs = readWorkspacePackages();
   const errors = [
     ...checkLayering(pkgs),
     ...checkWebInternalLayering(),
     ...checkAppPurity(),
+    ...checkStorePurity(),
     ...checkProtoDrift(),
     ...checkWorkerBundle(),
   ];

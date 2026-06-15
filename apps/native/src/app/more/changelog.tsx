@@ -1,10 +1,11 @@
 import { useMemo } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
+import { StyleSheet, View } from "react-native";
 
 import { Badge, type BadgeTone, Paper, Stack, Text, Title } from "@uoplan/ui";
 
-import { BottomTabInset, MaxContentWidth, Spacing, Surface } from "@/constants/theme";
+import { RedesignScreen, ScreenHeader } from "@/components/redesign";
+import { Spacing, Surface } from "@/constants/theme";
 import { CHANGELOG_MD } from "@/data/changelog.generated";
 import { type ChangelogSection, parseChangelog } from "@/lib/changelog";
 
@@ -54,64 +55,37 @@ function SectionBlock({ section }: { section: ChangelogSection }) {
  * matching the native card aesthetic instead of dumping raw markup.
  */
 export default function ChangelogScreen() {
-  const insets = useSafeAreaInsets();
+  const router = useRouter();
   const releases = useMemo(() => parseChangelog(CHANGELOG_MD), []);
 
   return (
-    <ScrollView
-      style={styles.root}
-      contentContainerStyle={[
-        styles.content,
-        { paddingBottom: insets.bottom + BottomTabInset + Spacing.four },
-      ]}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.column}>
-        <Stack gap="md">
-          <View>
-            <Title order={3}>Changelog</Title>
-            <Text size="sm" dimmed>
-              Every release of uoplan, newest first.
-            </Text>
-          </View>
+    <RedesignScreen gap={Spacing.three} backLabel="More" onBack={() => router.back()}>
+      <ScreenHeader title="Changelog" subtitle="Every release of uoplan, newest first." />
 
-          {releases.map((release) => (
-            <Paper key={release.version} p="md" radius="lg" withBorder shadow="sm">
-              <Stack gap="sm">
-                <View style={styles.releaseHead}>
-                  <Title order={4}>{release.version}</Title>
-                  {release.date ? (
-                    <Text size="xs" dimmed>
-                      {release.date}
-                    </Text>
-                  ) : null}
-                </View>
-                {release.sections.map((section) => (
-                  <SectionBlock key={section.title} section={section} />
-                ))}
-              </Stack>
-            </Paper>
-          ))}
-        </Stack>
-      </View>
-    </ScrollView>
+      <Stack gap="md">
+        {releases.map((release) => (
+          <Paper key={release.version} p="md" radius="lg" withBorder shadow="sm">
+            <Stack gap="sm">
+              <View style={styles.releaseHead}>
+                <Title order={4}>{release.version}</Title>
+                {release.date ? (
+                  <Text size="xs" dimmed>
+                    {release.date}
+                  </Text>
+                ) : null}
+              </View>
+              {release.sections.map((section) => (
+                <SectionBlock key={section.title} section={section} />
+              ))}
+            </Stack>
+          </Paper>
+        ))}
+      </Stack>
+    </RedesignScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: Surface.page,
-  },
-  content: {
-    paddingTop: Spacing.three,
-    paddingHorizontal: Spacing.three,
-    alignItems: "center",
-  },
-  column: {
-    width: "100%",
-    maxWidth: MaxContentWidth,
-  },
   releaseHead: {
     flexDirection: "row",
     alignItems: "baseline",

@@ -9,12 +9,13 @@ import {
 import { Surface } from "@/constants/theme";
 
 /**
- * S/NS stacked-bar tones, approximating the web `--app-info` / `--app-warning`
- * tokens (oklch) as static hex for React Native.
+ * S/NS stacked-bar tones + empty-bar fill — the native equivalents of the web
+ * `--app-info` / `--app-warning` / `--app-translucent-strong` tokens, sourced
+ * from the shared theme so they match web and track dark mode.
  */
-const SNS_S_COLOR = "#5fa8cf";
-const SNS_NS_COLOR = "#d49a55";
-const EMPTY_BAR_COLOR = "#e7e1d6";
+const SNS_S_COLOR = Surface.info;
+const SNS_NS_COLOR = Surface.warning;
+const EMPTY_BAR_COLOR = Surface.translucentStrong;
 
 /** Localized-ish label for a histogram display bar (native has no i18n yet). */
 function barLabel(key: string, grade: string): string {

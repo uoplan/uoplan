@@ -21,11 +21,16 @@
   // by the bundler (Vite picks `.web`, Metro picks `.native`). fallow analyses
   // the web entry graph, so the `.native` variants always look unreachable —
   // exclude only those (the `.web.tsx` + shared `.types.ts` stay gated).
+  // `nativeTheme.ts` is the shared native-only palette imported solely by those
+  // `.native.tsx` variants; it is a plain `.ts` (not `.native.ts`, which would
+  // break ui's own `moduleSuffixes: [".web", ""]` typecheck) so it falls outside
+  // the `*.native.ts` glob and is listed explicitly.
   "ignorePatterns": [
     "apps/cli/**",
     "apps/native/**",
     "packages/ui/src/**/*.native.tsx",
     "packages/ui/src/**/*.native.ts",
+    "packages/ui/src/nativeTheme.ts",
     "**/__fixtures__/**/*.html",
     "**/routeTree.gen.ts"
   ],
@@ -36,9 +41,9 @@
     "apps/web/src/test/engineSetup.ts",
     "apps/web/scripts/**/*.mjs",
     "apps/web/vite.config.ts",
-    "apps/web/lingui.config.ts",
     "apps/web/vite/**",
     "oxfmt.config.ts",
+    "packages/i18n/lingui.config.ts",
     "packages/theme/scripts/generate-native-tokens.ts"
   ],
   // Deps genuinely used but invisible to fallow's resolver:
@@ -56,6 +61,9 @@
   //   Symbols Icon variant), which is in ignorePatterns above, so fallow's web
   //   entry graph never sees the import. @tabler/icons-react + framer-motion are
   //   used by the `.web.tsx` variants so they stay gated normally.
+  // - @uoplan/theme: in packages/ui only to back `nativeTheme.ts` (the shared
+  //   native palette), which is in ignorePatterns above, so fallow's web entry
+  //   graph never sees ui import it. (apps/web still uses @uoplan/theme directly.)
   // (knip's @vitest/browser + wrangler ignores were redundant under fallow, and
   // its @marsidev/react-turnstile ignore masked a real unused dep in the
   // worker — all three were dropped.)
@@ -65,7 +73,8 @@
     "@uoplan/proto",
     "@uoplan/engine",
     "@size-limit/file",
-    "expo-symbols"
+    "expo-symbols",
+    "@uoplan/theme"
   ],
   // The only clone shared by these two seed-navigation test files is the
   // hoisted `vi.mock("../../workers/scheduleWorkerClient", ...)` setup block

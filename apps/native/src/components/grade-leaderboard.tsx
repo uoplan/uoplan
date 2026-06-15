@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { distributionGpa } from "@uoplan/core/gradeDistribution";
 
-import { Surface } from "@/constants/theme";
+import { GradeBandColor, Surface } from "@/constants/theme";
 
 interface LeaderboardCourse {
   code: string;
@@ -23,12 +23,12 @@ interface RankedCourse {
   gpa: number;
 }
 
-/** GPA is on uOttawa's 10-point scale; colour each bar by tier. */
+/** GPA is on uOttawa's 10-point scale; colour each bar by tier (theme tokens). */
 function barColor(gpa: number): string {
-  if (gpa >= 8) return "#1D9E75"; // green
-  if (gpa >= 7) return "#3266ad"; // blue
-  if (gpa >= 6) return "#BA7517"; // amber
-  return "#A32D2D"; // red
+  if (gpa >= 8) return GradeBandColor.green;
+  if (gpa >= 7) return GradeBandColor.blue;
+  if (gpa >= 6) return GradeBandColor.amber;
+  return GradeBandColor.red;
 }
 
 /**

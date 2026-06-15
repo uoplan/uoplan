@@ -23,6 +23,7 @@ export default defineConfig({
     "**/public/**",
     "**/src/generated/**",
     "apps/web/src/routeTree.gen.ts",
+    "packages/i18n/src/locales/**/messages.ts",
     "apps/notifications/**",
     "apps/native/**",
     "worker-configuration.d.ts",
