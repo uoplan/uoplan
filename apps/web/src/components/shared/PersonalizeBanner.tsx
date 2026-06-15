@@ -85,9 +85,25 @@ export function PersonalizeBanner({ variant = "floating" }: PersonalizeBannerPro
     );
   }
 
-  // The floating top-of-page variant stays a one-time nudge: hide it once the
-  // user is personalized so it never becomes a permanent banner.
-  if (personalized) return null;
+  // Once personalized, the floating variant stays in place but switches to a
+  // high-contrast "change your personalization" band (mirrors the sidebar's
+  // change state) so the layout keeps its spacing instead of collapsing.
+  if (personalized) {
+    return (
+      <TopBannerSlot>
+        <TopBanner
+          to="/personalize"
+          variant="neutral"
+          icon={<IconAdjustments size={18} />}
+          text={tr("personalizeBanner.changeMessage")}
+          textShort={tr("personalizeBanner.changeShort")}
+          ctaLabel={tr("personalizeBanner.changeCta")}
+          onDismiss={() => setDismissed(true)}
+          dismissLabel={tr("personalizeBanner.dismiss")}
+        />
+      </TopBannerSlot>
+    );
+  }
 
   return (
     <TopBannerSlot>
