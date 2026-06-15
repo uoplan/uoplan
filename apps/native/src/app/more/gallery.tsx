@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Platform, ScrollView, StyleSheet } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
+import { Platform, StyleSheet } from "react-native";
 
 import {
   Accordion,
@@ -46,11 +46,11 @@ import {
 } from "@uoplan/ui";
 import { WelcomeScreen } from "@uoplan/app";
 
+import { RedesignScreen, ScreenHeader } from "@/components/redesign";
 import { ThemedView } from "@/components/themed-view";
 import { NativeNavigationProvider } from "@/navigation/NativeNavigationProvider";
 import { WebBadge } from "@/components/web-badge";
-import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
-import { useTheme } from "@/hooks/use-theme";
+import { MaxContentWidth, Spacing } from "@/constants/theme";
 
 /**
  * UI primitive gallery — renders every `@uoplan/ui` contract primitive via its
@@ -60,10 +60,7 @@ import { useTheme } from "@/hooks/use-theme";
  * under the More tab as a developer reference.
  */
 export default function GalleryScreen() {
-  const safeAreaInsets = useSafeAreaInsets();
-  const bottomInset = safeAreaInsets.bottom + BottomTabInset + Spacing.three;
-  const theme = useTheme();
-
+  const router = useRouter();
   const [segment, setSegment] = useState("week");
   const [campus, setCampus] = useState("main");
   const [credits, setCredits] = useState<number | undefined>(3);
@@ -76,29 +73,16 @@ export default function GalleryScreen() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notifVisible, setNotifVisible] = useState(true);
 
-  const contentPlatformStyle = Platform.select({
-    web: { paddingTop: Spacing.four, paddingBottom: Spacing.four },
-    default: { paddingTop: Spacing.three, paddingBottom: bottomInset },
-  });
-
   return (
-    <ScrollView
-      style={[styles.scrollView, { backgroundColor: theme.background }]}
-      contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}
-    >
+    <RedesignScreen gap={Spacing.three} backLabel="More" onBack={() => router.back()}>
+      <ScreenHeader title="Components" subtitle="Shared @uoplan/ui primitives, native variants" />
+
       <ThemedView style={styles.container}>
         <NativeNavigationProvider>
           <WelcomeScreen />
         </NativeNavigationProvider>
         <Box px="md" py="md">
           <Stack gap="lg">
-            <Stack gap="xs">
-              <Title order={2}>Components</Title>
-              <Text dimmed size="sm">
-                Shared @uoplan/ui primitives, native variants
-              </Text>
-            </Stack>
-
             <Card>
               <Stack gap="sm">
                 <Title order={4}>Typography</Title>
@@ -472,20 +456,15 @@ export default function GalleryScreen() {
         </Drawer>
         {Platform.OS === "web" && <WebBadge />}
       </ThemedView>
-    </ScrollView>
+    </RedesignScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-  },
-  contentContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
   container: {
+    width: "100%",
     maxWidth: MaxContentWidth,
+    alignSelf: "center",
     flexGrow: 1,
   },
 });

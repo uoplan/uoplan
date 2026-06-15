@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": {
+    "modules": ["UoplanEngineModule"]
+  },
+  "android": {
+    "modules": ["party.uoplan.engine.UoplanEngineModule"]
+  }
+}

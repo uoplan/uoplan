@@ -1,0 +1,19 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = "party.uoplan.engine"
+version = "1.0.0"
+
+android {
+  namespace "party.uoplan.engine"
+  defaultConfig {
+    minSdkVersion 24
+    versionCode 1
+    versionName '1.0.0'
+  }
+  // `libuoplan_engine.so` (the Rust engine compiled per-ABI by
+  // `pnpm build:engine-native-ffi-android`) lives in the default jniLibs dir
+  // (src/main/jniLibs/<abi>/) and is packaged into the APK automatically.
+}

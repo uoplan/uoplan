@@ -41,3 +41,13 @@ example
 # generated native folders
 /ios
 /android
+
+# Generated Rust engine XCFramework (build with `pnpm build:engine-native-ffi`)
+/modules/uoplan-engine/ios/UoplanEngine.xcframework/
+
+# Generated Rust engine shared libs (build with `pnpm build:engine-native-ffi-android`)
+/modules/uoplan-engine/android/src/main/jniLibs/
+
+# Gradle build artifacts for the local engine module
+/modules/uoplan-engine/android/build/
+/modules/uoplan-engine/android/.gradle/

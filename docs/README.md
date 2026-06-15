@@ -17,4 +17,5 @@
 | [week-preview-panel.md](./week-preview-panel.md)                                                                               | Visual week-group navigation panel — mini calendar cards for schedules with multiple week patterns |
 | [share-og-image.md](./share-og-image.md)                                                                                       | Share URL & OG image — `/api/share/:state` HTML redirect and `/api/og-image/:state` PNG preview    |
 | [deployment.md](./deployment.md)                                                                                               | Cloudflare Workers Builds deploy — caching the Rust→WASM engine build via `.pnpm-store`            |
+| [native-deploy.md](./native-deploy.md)                                                                                         | Expo/EAS native app deploy — manual GitHub Actions build and TestFlight / Play internal submit     |
 | [superpowers/specs/2026-04-29-webpush-notifications-design.md](./superpowers/specs/2026-04-29-webpush-notifications-design.md) | WebPush notification system — Cloudflare Worker, frontend toggle (Step 1), and GitHub Action       |

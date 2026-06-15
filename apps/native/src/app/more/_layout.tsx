@@ -3,22 +3,20 @@ import { Stack } from "expo-router";
 import { Surface } from "@/constants/theme";
 
 /**
- * Nested stack for the More tab so detail screens (settings, developer tools)
- * push with a native navigation header while the bottom tab bar stays visible.
+ * Nested stack for the More settings flow. The tab trigger is intentionally
+ * absent; `/more` stays pushable from in-content settings buttons, and every
+ * screen renders its own liquid-glass `ScreenHeader` controls.
  */
 export default function MoreLayout() {
   return (
     <Stack
       screenOptions={{
-        headerStyle: { backgroundColor: Surface.card },
-        headerTintColor: Surface.accent,
-        headerTitleStyle: { color: Surface.label },
+        headerShown: false,
         contentStyle: { backgroundColor: Surface.page },
-        headerShadowVisible: false,
       }}
     >
       <Stack.Screen name="index" options={{ headerShown: false, title: "More" }} />
-      <Stack.Screen name="graph" options={{ title: "Professor network" }} />
+      <Stack.Screen name="language" options={{ title: "Language" }} />
       <Stack.Screen name="changelog" options={{ title: "Changelog" }} />
       <Stack.Screen name="gallery" options={{ title: "Component gallery" }} />
       <Stack.Screen name="diagnostics" options={{ title: "Diagnostics" }} />

@@ -1,16 +1,17 @@
+import { useRouter } from "expo-router";
 import * as Device from "expo-device";
 import { Platform, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import { resolveTheme, THEME_LIST } from "@uoplan/theme";
 import { Button } from "@uoplan/ui";
 
 import { AnimatedIcon } from "@/components/animated-icon";
 import { HintRow } from "@/components/hint-row";
+import { RedesignScreen, ScreenHeader } from "@/components/redesign";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { WebBadge } from "@/components/web-badge";
-import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
+import { MaxContentWidth, Spacing } from "@/constants/theme";
 
 function getDevMenuHint() {
   if (Platform.OS === "web") {
@@ -39,9 +40,12 @@ const activeTheme = resolveTheme("system", "dark");
 const sharedThemeIds = THEME_LIST.map((theme) => theme.id).join(", ");
 
 export default function DiagnosticsScreen() {
+  const router = useRouter();
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView edges={["bottom"]} style={styles.safeArea}>
+    <RedesignScreen gap={Spacing.three} backLabel="More" onBack={() => router.back()}>
+      <ScreenHeader title="Diagnostics" subtitle="Shared-core wiring proof" />
+
+      <ThemedView style={styles.content}>
         <ThemedView style={styles.heroSection}>
           <AnimatedIcon />
           <ThemedText type="title" style={styles.title}>
@@ -77,31 +81,24 @@ export default function DiagnosticsScreen() {
         </Button>
 
         {Platform.OS === "web" && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+      </ThemedView>
+    </RedesignScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    flexDirection: "row",
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
+  content: {
+    width: "100%",
+    maxWidth: MaxContentWidth,
+    alignSelf: "center",
     alignItems: "center",
     gap: Spacing.three,
-    paddingTop: Spacing.four,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
   },
   heroSection: {
     alignItems: "center",
     justifyContent: "center",
-    flex: 1,
     paddingHorizontal: Spacing.four,
+    paddingVertical: Spacing.four,
     gap: Spacing.four,
   },
   title: {

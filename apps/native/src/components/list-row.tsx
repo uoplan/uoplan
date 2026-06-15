@@ -12,6 +12,11 @@ interface ListRowProps {
   icon?: IconName;
   /** Show a trailing chevron. Defaults to true. */
   chevron?: boolean;
+  /**
+   * Render a selection state: when defined, a trailing checkmark replaces the
+   * chevron for the selected row (used by pickers like the language switcher).
+   */
+  selected?: boolean;
   onPress?: () => void;
 }
 
@@ -20,13 +25,29 @@ interface ListRowProps {
  * leading icon, a title + optional description, and a trailing chevron. Used by
  * the More tab and other list surfaces.
  */
-export function ListRow({ title, description, icon, chevron = true, onPress }: ListRowProps) {
+export function ListRow({
+  title,
+  description,
+  icon,
+  chevron = true,
+  selected,
+  onPress,
+}: ListRowProps) {
+  const trailing =
+    selected !== undefined ? (
+      selected ? (
+        <AppIcon name="checkmark" size={16} color={Surface.accent} />
+      ) : null
+    ) : chevron ? (
+      <AppIcon name="chevron.right" size={14} color={Surface.dimmed} />
+    ) : null;
   return (
     <Pressable
       onPress={onPress}
       android_ripple={{ color: Surface.subtle }}
       style={({ pressed }) => [styles.row, pressed && styles.pressed]}
       accessibilityRole="button"
+      accessibilityState={selected === undefined ? undefined : { selected }}
     >
       {icon ? (
         <View style={styles.leading}>
@@ -43,7 +64,7 @@ export function ListRow({ title, description, icon, chevron = true, onPress }: L
           </Text>
         ) : null}
       </View>
-      {chevron ? <AppIcon name="chevron.right" size={14} color={Surface.dimmed} /> : null}
+      {trailing}
     </Pressable>
   );
 }

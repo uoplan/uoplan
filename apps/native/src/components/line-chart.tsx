@@ -76,6 +76,14 @@ export function LineChart({
     [minY, maxY],
   );
 
+  // Thin the x-axis labels so they never overlap: estimate how many fit across
+  // the plot (≈34px per label) and only draw every Nth (always keeping the last).
+  const labelStride = useMemo(() => {
+    if (data.length <= 1 || plotW <= 0) return 1;
+    const maxLabels = Math.max(1, Math.floor(plotW / 34));
+    return Math.ceil(data.length / maxLabels);
+  }, [data.length, plotW]);
+
   return (
     <View
       style={styles.wrap}
@@ -110,18 +118,24 @@ export function LineChart({
               {formatValue(t)}
             </SvgText>
           ))}
-          {data.map((d, i) => (
-            <SvgText
-              key={`x${i}`}
-              x={xFor(i)}
-              y={totalH - 6}
-              fontSize={9}
-              fill={Surface.dimmed}
-              textAnchor="middle"
-            >
-              {d.label}
-            </SvgText>
-          ))}
+          {data.map((d, i) => {
+            // Only render labels at the computed stride (plus the final one) so
+            // dense term axes (17+ terms) don't overlap into an unreadable smear.
+            const show = i % labelStride === 0 || i === data.length - 1;
+            if (!show) return null;
+            return (
+              <SvgText
+                key={`x${i}`}
+                x={xFor(i)}
+                y={totalH - 6}
+                fontSize={9}
+                fill={Surface.dimmed}
+                textAnchor="middle"
+              >
+                {d.label}
+              </SvgText>
+            );
+          })}
           {linePath !== "" && <Path d={linePath} stroke={color} strokeWidth={2} fill="none" />}
           {data.map((d, i) => (
             <Circle key={`c${i}`} cx={xFor(i)} cy={yFor(d.value)} r={3} fill={color} />
