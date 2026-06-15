@@ -3,8 +3,8 @@
  *
  * Re-exports the portable i18n core (`@uoplan/i18n`) so existing app imports of
  * `../i18n` keep working unchanged, and adds the web-specific bootstrap:
- * catalog loading (Vite `.po` import) + locale detection/persistence
- * (`localStorage` / `navigator`).
+ * catalog loading (the compiled `@uoplan/i18n` catalogs) + locale
+ * detection/persistence (`localStorage` / `navigator`).
  */
 import { detect, fromNavigator, fromStorage } from "@lingui/detect-locale";
 
@@ -37,11 +37,11 @@ function readNavigatorLocales(): string[] {
 async function loadCatalog(locale: AppLocale) {
   switch (locale) {
     case "fr-CA": {
-      return import("../locales/fr-CA/messages.po");
+      return import("@uoplan/i18n/catalogs/fr-CA");
     }
     case "en":
     default: {
-      return import("../locales/en/messages.po");
+      return import("@uoplan/i18n/catalogs/en");
     }
   }
 }

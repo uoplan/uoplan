@@ -19,7 +19,7 @@ export const LOCALES = ["en", "fr-CA"];
 
 /** @param {string} locale */
 export function catalogPath(locale) {
-  return resolve(repoRoot, "apps/web/src/locales", locale, "messages.po");
+  return resolve(repoRoot, "packages/i18n/src/locales", locale, "messages.po");
 }
 
 /**

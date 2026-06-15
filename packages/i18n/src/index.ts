@@ -16,7 +16,7 @@
  * identically under Vite and Metro.
  */
 import { i18n } from "@lingui/core";
-import { useLingui } from "@lingui/react";
+import { I18nProvider, useLingui } from "@lingui/react";
 
 export const APP_LOCALES = ["en", "fr-CA"] as const;
 export type AppLocale = (typeof APP_LOCALES)[number];
@@ -83,4 +83,14 @@ export function formatLocaleNumber(value: number, options?: Intl.NumberFormatOpt
   return new Intl.NumberFormat(locale, options).format(value);
 }
 
-export { i18n };
+/**
+ * Re-export Lingui's `<I18nProvider>` from the SAME `@lingui/react` module that
+ * `useTr`/`useLingui` (above) resolve. Every shell MUST mount the provider via
+ * this re-export rather than importing `@lingui/react` directly: under pnpm,
+ * `@lingui/react` is keyed per peer `react` version, so a shell that pins a
+ * different `react` (e.g. Expo's bundled copy vs the workspace's) would resolve
+ * a SECOND `@lingui/react` with its own React context — the provider it renders
+ * would then be invisible to `useLingui`, throwing "useLingui hook was used
+ * without I18nProvider". Sharing this single instance guarantees one context.
+ */
+export { i18n, I18nProvider };
