@@ -1,0 +1,64 @@
+{
+  "name": "@uoplan/store",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./appStore": "./src/appStore.ts",
+    "./AppStoreProvider": "./src/AppStoreProvider.tsx",
+    "./services": "./src/services.ts",
+    "./testServices": "./src/testServices.ts",
+    "./types": "./src/types.ts",
+    "./generationDefaults": "./src/generationDefaults.ts",
+    "./scheduleHelpers": "./src/scheduleHelpers.ts",
+    "./blockedTimes": "./src/blockedTimes.ts",
+    "./seedNavigation": "./src/seedNavigation.ts",
+    "./electiveEligibility": "./src/electiveEligibility.ts",
+    "./basicCalendarPins": "./src/basicCalendarPins.ts",
+    "./hooks": "./src/hooks/index.ts",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./requirements/selectionUtils": "./src/requirements/selectionUtils.ts",
+    "./requirementCompute": "./src/requirementCompute/index.ts",
+    "./requirementCompute/minorMerge": "./src/requirementCompute/minorMerge.ts",
+    "./requirementCompute/types": "./src/requirementCompute/types.ts",
+    "./requirementCompute/utils": "./src/requirementCompute/utils.ts",
+    "./slices": "./src/slices/index.ts",
+    "./slices/constraints": "./src/slices/constraints.ts",
+    "./slices/selection": "./src/slices/selection.ts",
+    "./slices/catalogueUtils": "./src/slices/catalogueUtils.ts",
+    "./slices/data": "./src/slices/data.ts",
+    "./slices/url": "./src/slices/url.ts",
+    "./slices/schedules": "./src/slices/schedules/index.ts",
+    "./slices/schedules/types": "./src/slices/schedules/types.ts",
+    "./slices/schedules/swapHelpers": "./src/slices/schedules/swapHelpers.ts",
+    "./slices/schedules/swapContext": "./src/slices/schedules/swapContext.ts",
+    "./slices/schedules/swapCandidates": "./src/slices/schedules/swapCandidates.ts",
+    "./slices/schedules/generationState": "./src/slices/schedules/generationState.ts",
+    "./generationInput": "./src/generationInput.ts",
+    "./hydrateNavigation": "./src/hydrateNavigation.ts",
+    "./tests/scheduleBuilders": "./src/tests/scheduleBuilders.ts"
+  },
+  "scripts": {
+    "typecheck": "tsgo -b tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@uoplan/core": "workspace:*",
+    "@uoplan/data": "workspace:*",
+    "react": "^19.2.4",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@vitest/coverage-v8": "4.1.7",
+    "vitest": "4.1.7"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "zustand": "*"
+  }
+}
