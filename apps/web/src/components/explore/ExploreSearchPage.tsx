@@ -67,7 +67,11 @@ export function ExploreSearchPage({ searchParams }: { searchParams: ExploreSearc
   };
 
   return !loading && spotlightRows.length > 0 ? (
-    <div style={{ marginTop: "auto", paddingBottom: 32 }}>
+    // The gallery is bottom-anchored (marginTop:auto) inside a 100dvh <main> that
+    // itself sits below the ~92px top banner, so its bottom otherwise lands ~92px
+    // under the fold. The banner is a fixed height (not viewport-relative), so a
+    // constant bottom offset keeps the rows fully on-screen at every viewport.
+    <div style={{ marginTop: "auto", paddingBottom: 120 }}>
       <ExploreCourseSpotlightGallery rows={spotlightRows} onSelectCourse={onSelectCourse} />
     </div>
   ) : null;

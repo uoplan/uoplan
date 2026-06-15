@@ -22,8 +22,12 @@ export function TopBannerSlot({ children }: { children: ReactNode }) {
 type TopBannerProps = {
   /** Destination the whole pill links to. */
   to: "/donate" | "/personalize";
-  /** Colour scheme: "accent" (donation) or "warning" (personalize). */
-  variant: "accent" | "warning";
+  /**
+   * Colour scheme: "accent" (donation), "warning" (personalize nudge), or
+   * "neutral" (a high-contrast filled pill, e.g. the post-personalization
+   * "change your personalization" banner).
+   */
+  variant: "accent" | "warning" | "neutral";
   /** Leading icon, coloured to the variant's strong tone. */
   icon: ReactNode;
   /** Full message shown on wider viewports. */
@@ -64,7 +68,7 @@ export function TopBanner({
 
           <Text
             size="sm"
-            c="var(--app-text)"
+            c="var(--banner-text)"
             className={classes.textFull}
             style={{ flex: 1, minWidth: 0 }}
           >
@@ -72,7 +76,7 @@ export function TopBanner({
           </Text>
           <Text
             size="sm"
-            c="var(--app-text)"
+            c="var(--banner-text)"
             className={classes.textShort}
             style={{ flex: 1, minWidth: 0 }}
           >
@@ -96,7 +100,7 @@ export function TopBanner({
           top: "50%",
           right: 12,
           transform: "translateY(-50%)",
-          color: "var(--app-text-muted)",
+          color: "var(--banner-dismiss)",
         }}
       >
         <IconX size={16} />

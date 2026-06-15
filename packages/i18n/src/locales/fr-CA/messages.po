@@ -1989,6 +1989,14 @@ msgstr "Choix {current} sur {total}"
 msgid "optionsStep.pager.prev"
 msgstr "Choix précédent"
 
+#: apps/web/src/components/shared/PersonalizeBanner.tsx:100
+msgid "personalizeBanner.changeCta"
+msgstr "Modifier"
+
+#: apps/web/src/components/shared/PersonalizeBanner.tsx:98
+msgid "personalizeBanner.changeMessage"
+msgstr "Modifie ta personnalisation — mets à jour ton programme et tes cours réussis."
+
 msgid "personalizeBanner.changeShort"
 msgstr "Modifier ta personnalisation"
 

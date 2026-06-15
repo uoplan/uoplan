@@ -13,6 +13,8 @@
   --banner-soft: var(--app-accent-soft);
   --banner-strong: var(--app-accent);
   --banner-on-strong: var(--app-on-accent);
+  --banner-text: var(--app-text);
+  --banner-dismiss: var(--app-text-muted);
   --banner-ring: color-mix(in srgb, var(--app-accent) 22%, transparent);
   --banner-strong-hover: color-mix(in srgb, var(--app-accent) 88%, var(--app-text));
 }
@@ -21,8 +23,24 @@
   --banner-soft: var(--app-warning-soft);
   --banner-strong: var(--app-warning);
   --banner-on-strong: var(--app-text-inverse);
+  --banner-text: var(--app-text);
+  --banner-dismiss: var(--app-text-muted);
   --banner-ring: color-mix(in srgb, var(--app-warning) 24%, transparent);
   --banner-strong-hover: color-mix(in srgb, var(--app-warning) 88%, var(--app-text));
+}
+
+/* Always-black high-contrast band, independent of theme: the persistent
+   "change your personalization" banner once a user is set up. Black surface +
+   white CTA in BOTH light and dark mode, by design (so it reads as a settled,
+   intentional band rather than a soft nudge). */
+.banner[data-variant="neutral"] {
+  --banner-soft: oklch(0.17 0.012 285);
+  --banner-strong: oklch(0.98 0 0);
+  --banner-on-strong: oklch(0.17 0.012 285);
+  --banner-text: oklch(0.97 0.004 285);
+  --banner-dismiss: color-mix(in srgb, oklch(0.97 0.004 285) 70%, transparent);
+  --banner-ring: color-mix(in srgb, oklch(0.98 0 0) 26%, transparent);
+  --banner-strong-hover: color-mix(in srgb, oklch(0.98 0 0) 90%, oklch(0.17 0.012 285));
 }
 
 .pill {
