@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.0.0-beta.34](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.33...uoplan-monorepo-v1.0.0-beta.34) (2026-06-15)
+
+
+### Features
+
+* add faculties ([8909e46](https://github.com/uoplan/uoplan/commit/8909e46e26fd74611c7265b75a1056c98a4bdb90))
+* add faculty explore page ([2cb484a](https://github.com/uoplan/uoplan/commit/2cb484a3911679f0d871ba195e04b4e9629f098c))
+* add more mobile functionality ([f1c184f](https://github.com/uoplan/uoplan/commit/f1c184f02668e84c0249b0a27f7554e6d5ad4e6c))
+* begin work on splitting up web and app ([2dbcdcd](https://github.com/uoplan/uoplan/commit/2dbcdcd317a92b62b7e0c36cf6599a06fb14dc81))
+* **engine:** native FFI bindings (iOS/Android) and rustfmt test imports ([c741434](https://github.com/uoplan/uoplan/commit/c741434153388aae545838f526539a309d03eb3d))
+* implement most shared components ([87681bf](https://github.com/uoplan/uoplan/commit/87681bfd030638941df7514afe594051fa6a3409))
+* improve footer ([95a98a1](https://github.com/uoplan/uoplan/commit/95a98a1cd31bf558790f062cbfa22a2f527edd8b))
+* include courses with no grade or schedule data ([551008a](https://github.com/uoplan/uoplan/commit/551008ad0096d9434d910da3e190298fedbe1a10))
+* **native:** iOS and Android app ([1257255](https://github.com/uoplan/uoplan/commit/1257255b708ac01ca2191dbbb2a322c14c3de0b3))
+* **ui:** cross-platform UI primitives shared by web and native ([b3428c1](https://github.com/uoplan/uoplan/commit/b3428c140cc4e6312618628b6dcadf74735d2666))
+* **web:** basket, course pages and schedule-sidebar improvements ([b7690f1](https://github.com/uoplan/uoplan/commit/b7690f1049aac9a2117d68476989bd2f01287f1e))
+* **web:** persistent black 'change personalization' banner on explore + lift spotlight rows ([5c13f64](https://github.com/uoplan/uoplan/commit/5c13f6421985faf6270da5669220dd6089cbc43c))
+
+
+### Bug Fixes
+
+* reduce footer gap ([898996d](https://github.com/uoplan/uoplan/commit/898996d8cc0c2fb30a524a9b299ebf8fff48d16b))
+
 ## [1.0.0-beta.33](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.32...uoplan-monorepo-v1.0.0-beta.33) (2026-06-13)
 
 
