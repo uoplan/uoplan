@@ -59,7 +59,6 @@ function SpotlightCard({
     <UnstyledButton
       className="soft-lift"
       onClick={() => onSelect(course.entry)}
-      aria-label={`${course.entry.courseCode}${title ? `, ${title}` : ""}`}
       style={{ flex: "0 0 auto" }}
     >
       <Box

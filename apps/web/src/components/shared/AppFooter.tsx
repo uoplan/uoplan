@@ -149,7 +149,6 @@ export function AppFooter() {
                 </Text>
                 <UnstyledButton
                   onClick={() => useCommandCenterStore.getState().requestOpen()}
-                  aria-label={tr("app.footer.commandCenter")}
                   style={{ color: "var(--mantine-color-dimmed)" }}
                 >
                   <Group gap={6} align="center" wrap="nowrap">
@@ -195,7 +194,7 @@ export function AppFooter() {
               ) : null}
             </Group>
 
-            <Text size="sm" lh={1.6} style={{ color: "var(--app-text-dim)", opacity: 0.62 }}>
+            <Text size="sm" lh={1.6} style={{ color: "var(--app-text-dim)" }}>
               {tr("app.footer.notAffiliated")}
             </Text>
           </Stack>

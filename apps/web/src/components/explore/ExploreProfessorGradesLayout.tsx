@@ -32,6 +32,7 @@ import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { professorRouteParam } from "../../lib/explore/professorRoute";
 import { ProfessorRatingBadges } from "../shared/RatingBadge";
+import { WhyNotPredictedHoverDetails } from "./WhyNotPredictedHoverDetails";
 import { useLazyData } from "../../store/hooks";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
@@ -349,7 +350,7 @@ export function ExploreProfessorOfferingRows({
                   ) : null}
                   {o.predicted ? (
                     <HoverCard
-                      width={260}
+                      width={300}
                       shadow="md"
                       radius="var(--app-radius-sm)"
                       openDelay={80}
@@ -367,10 +368,16 @@ export function ExploreProfessorOfferingRows({
                           {tr("explore.instructorPredictedHint")}
                         </Badge>
                       </HoverCard.Target>
-                      <HoverCard.Dropdown>
+                      <HoverCard.Dropdown p="xs">
                         <Text size="xs" c="dimmed">
                           {tr("explore.instructorPredictedExplain")}
                         </Text>
+                        {o.predictedInstructors?.length ? (
+                          <WhyNotPredictedHoverDetails
+                            courseCode={o.courseCode}
+                            termId={o.termId}
+                          />
+                        ) : null}
                       </HoverCard.Dropdown>
                     </HoverCard>
                   ) : null}

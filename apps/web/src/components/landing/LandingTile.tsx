@@ -12,7 +12,6 @@ export type LandingTileProps = {
   icon: ReactNode;
   /** CSS colour for the icon; falls back to the theme accent when omitted. */
   iconColor?: string;
-  ariaLabel: string;
 };
 
 export function LandingTile({
@@ -23,12 +22,10 @@ export function LandingTile({
   badgeColor = "blue",
   icon,
   iconColor,
-  ariaLabel,
 }: LandingTileProps) {
   return (
     <Link
       to={to}
-      aria-label={ariaLabel}
       style={{
         display: "block",
         height: "100%",

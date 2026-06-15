@@ -145,7 +145,7 @@ export function ExperimentalCarousel({ items }: ExperimentalCarouselProps) {
           right: 0,
           display: "flex",
           justifyContent: "center",
-          gap: 8,
+          gap: 0,
           marginTop: 12,
         }}
       >
@@ -161,32 +161,44 @@ export function ExperimentalCarousel({ items }: ExperimentalCarouselProps) {
               aria-label={tr("landing.carousel.goTo", { title: item.title })}
               onClick={() => goTo(i)}
               style={{
-                position: "relative",
-                overflow: "hidden",
-                width: isActive ? 22 : 8,
-                height: 8,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: isActive ? 44 : 24,
+                height: 24,
                 padding: 0,
                 border: "none",
-                borderRadius: "var(--app-radius-pill)",
+                background: "transparent",
                 cursor: "pointer",
-                backgroundColor: "var(--app-border)",
-                opacity: isActive ? 0.85 : 0.6,
-                transition:
-                  "width var(--app-transition), background-color var(--app-transition), opacity var(--app-transition)",
               }}
             >
-              {isActive && (
-                <span
-                  aria-hidden
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    transformOrigin: "left center",
-                    transform: `scaleX(${fill})`,
-                    backgroundColor: "var(--app-text)",
-                  }}
-                />
-              )}
+              <span
+                aria-hidden
+                style={{
+                  position: "relative",
+                  overflow: "hidden",
+                  display: "block",
+                  width: isActive ? 22 : 8,
+                  height: 8,
+                  borderRadius: "var(--app-radius-pill)",
+                  backgroundColor: "var(--app-border)",
+                  opacity: isActive ? 0.85 : 0.6,
+                  transition:
+                    "width var(--app-transition), background-color var(--app-transition), opacity var(--app-transition)",
+                }}
+              >
+                {isActive && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      transformOrigin: "left center",
+                      transform: `scaleX(${fill})`,
+                      backgroundColor: "var(--app-text)",
+                    }}
+                  />
+                )}
+              </span>
             </button>
           );
         })}

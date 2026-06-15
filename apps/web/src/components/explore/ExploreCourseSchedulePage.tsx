@@ -17,8 +17,10 @@ import { IconAlertTriangle, IconTargetArrow, IconVideo } from "@tabler/icons-rea
 import {
   buildColorMap,
   collectTimes,
+  explainUnpredictedInstructors,
   getEnrollmentsForCourse,
   getValidSectionCombos,
+  knownSectionInstructors,
   normalizeCourseCode,
   normalizeGradeVizDistribution,
   sectionHasTimes,
@@ -30,12 +32,19 @@ import type {
   CourseSchedule,
   GeneratedSchedule,
   SectionCombo,
+  UnpredictedInstructor,
 } from "@uoplan/core";
 import { DAY_LABELS } from "@uoplan/calendar";
 import { tr, useTr } from "../../i18n";
-import { useDataCache, useProfessorRatings, useRequirementState } from "../../store/hooks";
+import {
+  useDataCache,
+  useProfessorRatings,
+  useProfessorRegistry,
+  useRequirementState,
+} from "../../store/hooks";
 import { usePublishBasketTarget } from "./exploreBasketTargetContext";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
+import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
 import { useTermScheduleData } from "../../hooks/useTermScheduleData";
 import { parseCoursePathParam } from "../../lib/explore/courseSearchParams";
@@ -45,6 +54,7 @@ import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import { formatTermLabel } from "../../lib/term/termLabel";
 import { WeekCalendar } from "../calendar/WeekCalendar";
 import { useExploreOfferings } from "./exploreOfferingsContext";
+import { WhyNotPredictedPopover } from "./WhyNotPredictedPopover";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 
 function sectionId(section: ComponentSection): string {
@@ -232,7 +242,9 @@ export function ExploreCourseSchedulePage({
   useTr();
   const normCode = parseCoursePathParam(urlCourseParam);
   const professorRatings = useProfessorRatings();
+  const registry = useProfessorRegistry();
   const cache = useDataCache();
+  const { data: courseGrades } = useCourseGradesPb();
   const { remainingRequirements } = useRequirementState();
   const { getCourseEntryByNorm } = useExploreOfferings();
   const { data: schedulesData, loading } = useTermScheduleData(termId);
@@ -242,6 +254,34 @@ export function ExploreCourseSchedulePage({
     () => findCourseSchedule(schedulesData?.schedules, normCode),
     [schedulesData, normCode],
   );
+
+  // Per unassigned section: why the course's other historical instructors aren't
+  // the build-time prediction (time conflict, stale, not teaching this term…).
+  // Keyed by `${component}\u0000${sectionId}`; only populated when there's a
+  // prediction to contextualise and at least one excluded historical instructor.
+  const explanationsBySection = useMemo(() => {
+    const map = new Map<string, UnpredictedInstructor[]>();
+    if (!course || !schedulesData || termId == null) return map;
+    const grades = courseGrades?.courses.find((c) => c.code === course.courseCode)?.sections ?? [];
+    if (grades.length === 0) return map;
+    for (const [component, sections] of Object.entries(course.components)) {
+      for (const section of sections) {
+        const predicted = section.predictedInstructors ?? [];
+        if (predicted.length === 0 || knownSectionInstructors(section).length > 0) continue;
+        const items = explainUnpredictedInstructors({
+          courseCode: course.courseCode,
+          section,
+          termSchedules: schedulesData.schedules,
+          termId,
+          courseGrades: grades,
+          predicted,
+          maxReasons: 6,
+        });
+        if (items.length > 0) map.set(`${component}\u0000${sectionId(section)}`, items);
+      }
+    }
+    return map;
+  }, [course, schedulesData, courseGrades, termId]);
 
   const courseFallbackViz = useMemo(() => {
     if (!normCode) return null;
@@ -438,6 +478,7 @@ export function ExploreCourseSchedulePage({
                           <Box
                             key={sectionId(section)}
                             style={{
+                              position: "relative",
                               width: SECTION_CARD_SIZE,
                               height: SECTION_CARD_SIZE,
                               flexShrink: 0,
@@ -455,6 +496,14 @@ export function ExploreCourseSchedulePage({
                                 }))
                               }
                             />
+                            {(() => {
+                              const explanations = explanationsBySection.get(
+                                `${component}\u0000${sectionId(section)}`,
+                              );
+                              return explanations && explanations.length > 0 ? (
+                                <WhyNotPredictedPopover items={explanations} registry={registry} />
+                              ) : null;
+                            })()}
                           </Box>
                         );
                       })}
