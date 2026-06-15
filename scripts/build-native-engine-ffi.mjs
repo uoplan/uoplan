@@ -7,14 +7,10 @@
 // worker run it as WASM, the native apps link this XCFramework. Output is
 // git-ignored (a build artifact) — run this before `pod install` / `expo run:ios`
 // (or `pnpm build:engine-native-ffi`).
-import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, rmSync, copyFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
+import { engineDir, repoRoot, run } from "./lib/native-engine.mjs";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const repoRoot = join(__dirname, "..");
-const engineDir = join(repoRoot, "packages/engine");
 const includeDir = join(engineDir, "native/include");
 const moduleIosDir = join(repoRoot, "apps/native/modules/uoplan-engine/ios");
 const xcframeworkOut = join(moduleIosDir, "UoplanEngine.xcframework");
@@ -24,11 +20,6 @@ const TARGETS = [
   { triple: "aarch64-apple-ios", label: "device" },
   { triple: "aarch64-apple-ios-sim", label: "simulator" },
 ];
-
-function run(cmd, args, opts = {}) {
-  console.log(`$ ${cmd} ${args.join(" ")}`);
-  execFileSync(cmd, args, { stdio: "inherit", ...opts });
-}
 
 // 1. Build a static library for each apple target. `cargo rustc --crate-type
 //    staticlib` overrides the crate-type for this build only, so the WASM build

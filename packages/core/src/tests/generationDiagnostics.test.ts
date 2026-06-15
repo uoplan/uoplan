@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { diagnoseTimetableFailure } from "../generationDiagnostics";
 import { buildDataCache } from "../dataCache";
-import type { Catalogue, CourseSchedule, DayOfWeek, SchedulesData } from "../dataTypes";
-import { normalizeCourseCode } from "../utils/courseUtils";
+import type { Catalogue, DayOfWeek, SchedulesData } from "../dataTypes";
+import { lectureScheduleWithTimes as makeSchedule } from "./engineTestHelpers";
 
 const emptyCatalogue: Catalogue = { courses: [], programs: [] };
 
@@ -13,36 +13,6 @@ type ScheduleSpec = {
   start: number;
   end: number;
 };
-
-function makeSchedule(
-  courseCode: string,
-  times: { day: DayOfWeek; start: number; end: number }[],
-): CourseSchedule {
-  return {
-    subject: courseCode.split(" ")[0],
-    catalogNumber: courseCode.split(" ")[1],
-    courseCode: normalizeCourseCode(courseCode),
-    title: null,
-    timeZone: "America/Toronto",
-    components: {
-      LEC: [
-        {
-          section: "M00",
-          sectionCode: "M00",
-          component: "LEC",
-          session: null,
-          times: times.map((t) => ({
-            day: t.day,
-            startMinutes: t.start,
-            endMinutes: t.end,
-            virtual: false,
-          })),
-          status: null,
-        },
-      ],
-    },
-  };
-}
 
 function scheduledCourse(
   courseCode: string,

@@ -7,7 +7,6 @@ import type {
 } from "@uoplan/core";
 import {
   buildPrereqContext,
-  canTakeCourse,
   courseMatchesFilters,
   enrollmentsOverlap,
   getEffectiveSchedule,
@@ -21,6 +20,10 @@ import {
   normalizeCourseCode,
   virtualScheduleFilterApplies,
 } from "@uoplan/core";
+import {
+  courseFitsAroundOthers,
+  isSwapCandidateEligible,
+} from "@uoplan/core/generation/swapCandidates";
 import {
   applyOptionSelections,
   collectRequirementIdsWithCandidateCourse,
@@ -95,42 +98,30 @@ export function getSwapCandidates(
       if (code === oldCode) continue;
       if (!courseMatchesFilters(code, basicFilters)) continue;
       if (!isWithinElectiveLevelBuckets(code, electiveLevelBuckets)) continue;
-
-      const prefixMatch = code.match(/^([A-Z]{3,4})/i);
-      const prefix = prefixMatch ? prefixMatch[1].toLowerCase() : "";
-      if (excludedPrefixes.includes(prefix)) continue;
-
-      if (completedCourses.length > 0) {
-        if (course.prerequisites) {
-          if (!canTakeCourse(code, cache, prereqCtx)) continue;
-        } else if (course.prereqText) {
-          continue;
-        }
-      } else {
-        if (course.prerequisites || course.prereqText) continue;
-      }
-
+      if (
+        !isSwapCandidateEligible(
+          course,
+          cache,
+          prereqCtx,
+          completedCourses.length > 0,
+          excludedPrefixes,
+        )
+      )
+        continue;
       if (basketCourses.includes(code)) continue;
       if (alreadyInSchedule.has(code)) continue;
-
-      const cacheKey = `${code}:${includeClosedComponents}:${virtualOnly}`;
-      let possibleEnrollments = validEnrollmentsByCourseCode.get(cacheKey);
-      if (!possibleEnrollments) {
-        const sched = getEffectiveSchedule(cache, code, includeClosedComponents, virtualOnly);
-        if (!sched) {
-          possibleEnrollments = [];
-        } else {
-          const combos = getValidSectionCombos(sched, swapConstraints);
-          possibleEnrollments = combos.map((combo) => getEnrollmentsForCourse(sched, combo));
-        }
-        validEnrollmentsByCourseCode.set(cacheKey, possibleEnrollments);
-      }
-      if (possibleEnrollments.length === 0) continue;
-
-      const fits = possibleEnrollments.some(
-        (candidate) => !others.some((e) => enrollmentsOverlap(e, candidate)),
-      );
-      if (!fits) continue;
+      if (
+        !courseFitsAroundOthers(
+          cache,
+          code,
+          swapConstraints,
+          includeClosedComponents,
+          virtualOnly,
+          others,
+          validEnrollmentsByCourseCode,
+        )
+      )
+        continue;
 
       optionalPool.push(code);
     }

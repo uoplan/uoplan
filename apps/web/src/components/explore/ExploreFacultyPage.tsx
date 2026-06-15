@@ -1,8 +1,7 @@
-import { Accordion, Box, Stack, Text, Title } from "@mantine/core";
+import { Accordion, Box, Text, Title } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import { memo, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { m } from "framer-motion";
 import type {
   Catalogue,
   Discipline,
@@ -21,6 +20,7 @@ import {
   GradeDistributionHistogramPlaceholder,
 } from "../calendar/GradeDistributionViz";
 import { DisciplineCourseList } from "./DisciplineCourseList";
+import { ExplorePageTransition } from "./ExplorePageTransition";
 import { ExploreEmptyState } from "./ExploreEmptyState";
 import { useExploreOfferings } from "./exploreOfferingsContext";
 import {
@@ -172,65 +172,59 @@ export function ExploreFacultyPage({
   const facultyName = faculty ? localizeFacultyName(faculty, i18n.locale) : null;
 
   return (
-    <m.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <Stack gap={0}>
-        {faculty ? (
-          <Box
-            pt={4}
-            pb={32}
-            style={{
-              paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
-              paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
-            }}
-          >
-            <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
-              {facultyName}
-            </Title>
-            <Text size="sm" c="dimmed" lh={1.5} mt={8}>
-              {tr("explore.facultyDisciplineCount", { count: facultyDisciplines.length })}
-            </Text>
-          </Box>
-        ) : null}
+    <ExplorePageTransition>
+      {faculty ? (
+        <Box
+          pt={4}
+          pb={32}
+          style={{
+            paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
+            paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
+          }}
+        >
+          <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
+            {facultyName}
+          </Title>
+          <Text size="sm" c="dimmed" lh={1.5} mt={8}>
+            {tr("explore.facultyDisciplineCount", { count: facultyDisciplines.length })}
+          </Text>
+        </Box>
+      ) : null}
 
-        {facultyDisciplines.length === 0 ? (
-          faculty ? (
-            <ExploreEmptyState
-              title={tr("explore.facultyNoData")}
-              description={tr("explore.facultyNoDataDescription")}
-            />
-          ) : null
-        ) : (
-          <ExploreFullBleed>
-            <ExploreAccordion value={openDisciplines} onChange={setOpenDisciplines}>
-              {facultyDisciplines.map((entry) => (
-                <Accordion.Item key={entry.discipline.code} value={entry.discipline.code}>
-                  <Accordion.Control>
-                    <FacultyDisciplineControl
-                      entry={entry}
-                      gradeViz={gradeVizByDiscipline.get(entry.discipline.code) ?? null}
+      {facultyDisciplines.length === 0 ? (
+        faculty ? (
+          <ExploreEmptyState
+            title={tr("explore.facultyNoData")}
+            description={tr("explore.facultyNoDataDescription")}
+          />
+        ) : null
+      ) : (
+        <ExploreFullBleed>
+          <ExploreAccordion value={openDisciplines} onChange={setOpenDisciplines}>
+            {facultyDisciplines.map((entry) => (
+              <Accordion.Item key={entry.discipline.code} value={entry.discipline.code}>
+                <Accordion.Control>
+                  <FacultyDisciplineControl
+                    entry={entry}
+                    gradeViz={gradeVizByDiscipline.get(entry.discipline.code) ?? null}
+                  />
+                </Accordion.Control>
+                <Accordion.Panel>
+                  {openDisciplines.includes(entry.discipline.code) ? (
+                    <DisciplineCourseList
+                      disciplineCode={entry.discipline.code}
+                      catalogue={catalogue}
+                      professorRatings={professorRatings}
+                      fullBleed={false}
+                      expandable={false}
                     />
-                  </Accordion.Control>
-                  <Accordion.Panel>
-                    {openDisciplines.includes(entry.discipline.code) ? (
-                      <DisciplineCourseList
-                        disciplineCode={entry.discipline.code}
-                        catalogue={catalogue}
-                        professorRatings={professorRatings}
-                        fullBleed={false}
-                        expandable={false}
-                      />
-                    ) : null}
-                  </Accordion.Panel>
-                </Accordion.Item>
-              ))}
-            </ExploreAccordion>
-          </ExploreFullBleed>
-        )}
-      </Stack>
-    </m.div>
+                  ) : null}
+                </Accordion.Panel>
+              </Accordion.Item>
+            ))}
+          </ExploreAccordion>
+        </ExploreFullBleed>
+      )}
+    </ExplorePageTransition>
   );
 }

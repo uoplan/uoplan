@@ -57,12 +57,15 @@ export function WeekCalendarBlockedLayer({
   const startGridY = useSharedValue(0);
   const commitPending = useSharedValue(false);
 
-  const setDraft = useCallback((block: BlockedTimeWindow) => {
-    const box = blockTopHeight(block, layout);
-    draftTop.value = box.top;
-    draftHeight.value = box.height;
-    draftVisible.value = true;
-  }, [draftHeight, draftTop, draftVisible, layout]);
+  const setDraft = useCallback(
+    (block: BlockedTimeWindow) => {
+      const box = blockTopHeight(block, layout);
+      draftTop.value = box.top;
+      draftHeight.value = box.height;
+      draftVisible.value = true;
+    },
+    [draftHeight, draftTop, draftVisible, layout],
+  );
 
   const clearDraft = useCallback(() => {
     activeIndex.value = -2;

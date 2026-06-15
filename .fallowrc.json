@@ -82,10 +82,30 @@
   // cannot be extracted into a shared module — importing it would not apply the
   // mock. Everything else extractable (resetStoreForSeedTests,
   // emptyScheduleGenerationResult) already lives in scheduleTestHelpers.ts.
+  //
+  // The remaining ignored files are small, independent test fixtures/setup
+  // blocks that are intentionally local (for readability + test isolation) or
+  // span package boundaries, where a shared test-only helper would have to be
+  // exposed through a package's public surface just to dedupe a fixture:
+  //  - transcriptParser.test ↔ packages/core parseHelpers.test: a `textPage`
+  //    fixture plus a `detectFrenchImmersionStreamHint` describe block. That
+  //    helper is a core function re-exported by @uoplan/transcript, so it is
+  //    legitimately covered on both sides (core unit + transcript re-export).
+  //  - welcomeScreenContract ↔ BasketContents browser tests: TanStack Router
+  //    stub-route setup. The two routers differ (root component, paths, stub
+  //    labels) and a shared factory would fight TanStack's route generics.
+  //  - requirementUtils.test ↔ packages/core ics.test: a partial `DataCache`
+  //    no-op stub tail; each builds its own minimal stub.
+  //  - appStoreProvider.browser.test: two distinct test cases that both assert
+  //    the default (un-seeded) store value; kept inline for test independence.
   "duplicates": {
     "ignore": [
       "apps/web/src/store/tests/generationOptionsDirty.test.ts",
-      "apps/web/src/store/tests/schedules.seedNavigation.test.ts"
+      "apps/web/src/store/tests/schedules.seedNavigation.test.ts",
+      "packages/transcript/src/transcriptParser.test.ts",
+      "apps/web/src/test/welcomeScreenContract.browser.test.tsx",
+      "apps/web/src/lib/requirements/requirementUtils.test.ts",
+      "apps/web/src/test/appStoreProvider.browser.test.tsx"
     ]
   }
 }

@@ -76,6 +76,25 @@ export function getEffectiveSchedule(
 }
 
 /**
+ * The DataCache methods that delegate unchanged to the wrapped cache. The
+ * closed/virtual-filter wrappers below only override `getSchedule`, so they
+ * spread these passthroughs and add their own.
+ */
+function passthroughCache(cache: DataCache): Omit<DataCache, "getSchedule"> {
+  return {
+    getCourse: (code) => cache.getCourse(code),
+    resolveToCanonical: (code) => cache.resolveToCanonical(code),
+    getCoursesByDiscipline: (d) => cache.getCoursesByDiscipline(d),
+    getAllCourses: () => cache.getAllCourses(),
+    getAllSchedules: () => cache.getAllSchedules(),
+    getFaculty: (id) => cache.getFaculty(id),
+    getFacultyForDiscipline: (d) => cache.getFacultyForDiscipline(d),
+    getDisciplinesByFaculty: (id) => cache.getDisciplinesByFaculty(id),
+    getCoursesByFaculty: (id) => cache.getCoursesByFaculty(id),
+  };
+}
+
+/**
  * Returns a DataCache that delegates to cache but getSchedule returns the
  * effective schedule (filtering Closed when includeClosed is false, and/or
  * virtual-only times when virtualOnly is true).
@@ -87,16 +106,8 @@ export function cacheWithClosedFilter(
 ): DataCache {
   if (includeClosed && !virtualOnly) return cache;
   return {
-    getCourse: (code) => cache.getCourse(code),
-    resolveToCanonical: (code) => cache.resolveToCanonical(code),
+    ...passthroughCache(cache),
     getSchedule: (code) => getEffectiveSchedule(cache, code, includeClosed, virtualOnly),
-    getCoursesByDiscipline: (d) => cache.getCoursesByDiscipline(d),
-    getAllCourses: () => cache.getAllCourses(),
-    getAllSchedules: () => cache.getAllSchedules(),
-    getFaculty: (id) => cache.getFaculty(id),
-    getFacultyForDiscipline: (d) => cache.getFacultyForDiscipline(d),
-    getDisciplinesByFaculty: (id) => cache.getDisciplinesByFaculty(id),
-    getCoursesByFaculty: (id) => cache.getCoursesByFaculty(id),
   };
 }
 
@@ -114,8 +125,7 @@ export function cacheWithPerCourseVirtualFilter(
 ): DataCache {
   const memo = new Map<NormalizedCourseCode, CourseSchedule | undefined>();
   return {
-    getCourse: (code) => cache.getCourse(code),
-    resolveToCanonical: (code) => cache.resolveToCanonical(code),
+    ...passthroughCache(cache),
     getSchedule: (code) => {
       const normalized = normalizeCourseCode(code);
       if (memo.has(normalized)) return memo.get(normalized);
@@ -124,12 +134,5 @@ export function cacheWithPerCourseVirtualFilter(
       memo.set(normalized, s);
       return s;
     },
-    getCoursesByDiscipline: (d) => cache.getCoursesByDiscipline(d),
-    getAllCourses: () => cache.getAllCourses(),
-    getAllSchedules: () => cache.getAllSchedules(),
-    getFaculty: (id) => cache.getFaculty(id),
-    getFacultyForDiscipline: (d) => cache.getFacultyForDiscipline(d),
-    getDisciplinesByFaculty: (id) => cache.getDisciplinesByFaculty(id),
-    getCoursesByFaculty: (id) => cache.getCoursesByFaculty(id),
   };
 }

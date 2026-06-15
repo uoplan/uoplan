@@ -1,12 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Box, Stack, Text } from "@mantine/core";
 import { useLingui } from "@lingui/react";
 import type { Discipline, GradeVizData } from "@uoplan/core";
 import { tr } from "../../i18n";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
-import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
-import { RatingBadge } from "../shared/RatingBadge";
 import { EXPLORE_RESULT_CARD_STYLE } from "./exploreResultCardShared";
+import { SearchResultCardBody } from "./SearchResultCardBody";
 
 type Props = {
   discipline: Discipline;
@@ -35,32 +33,13 @@ export function SearchResultDisciplineCard({
       className="soft-lift"
       style={EXPLORE_RESULT_CARD_STYLE}
     >
-      <Stack gap={5} p={12} style={{ flex: 1 }}>
-        <Text size="sm" fw={700} c="var(--app-text)" lh={1.3}>
-          {discipline.code}
-        </Text>
-        <Text
-          size="xs"
-          c="dimmed"
-          lh={1.4}
-          style={{
-            display: "-webkit-box",
-            WebkitLineClamp: 3,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-          }}
-        >
-          {displayName}
-        </Text>
-        <Box style={{ flex: 1 }} />
-        {sentiment != null && sentiment > 0 ? (
-          <RatingBadge kind="satisfaction" value={sentiment} />
-        ) : null}
-        <Text size="xs" c="dimmed" lh={1.3}>
-          {tr("explore.disciplineCourseCount", { count: courseCount })}
-        </Text>
-      </Stack>
-      <GradeDistributionBottomBar gradeViz={gradeViz} />
+      <SearchResultCardBody
+        title={discipline.code}
+        subtitle={displayName}
+        sentiment={sentiment}
+        footer={tr("explore.disciplineCourseCount", { count: courseCount })}
+        gradeViz={gradeViz}
+      />
     </Link>
   );
 }

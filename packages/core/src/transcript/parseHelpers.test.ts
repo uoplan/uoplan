@@ -34,7 +34,9 @@ describe("parseStartingYear", () => {
 describe("processExtractedPages", () => {
   test("derives courses, full text, starting year, and stream hint from extracted pages", () => {
     const pages = [
-      textPage("Start of Transcript 2025 Winter\nProgram: French Immersion Stream\nCourse CSI 2101"),
+      textPage(
+        "Start of Transcript 2025 Winter\nProgram: French Immersion Stream\nCourse CSI 2101",
+      ),
       textPage("Second page has MAT1341 and repeated csi 2101 plus ITD 1100"),
     ];
 
@@ -47,14 +49,14 @@ describe("processExtractedPages", () => {
   });
 
   test("uses the fall transcript year directly and leaves missing stream hints unset", () => {
-    expect(processExtractedPages([textPage("Start of Transcript 2022 Fall\nCourse ADM 1300")])).toEqual(
-      {
-        courses: ["ADM 1300"],
-        fullText: "Start of Transcript 2022 Fall\nCourse ADM 1300",
-        startingYear: 2022,
-        frenchImmersionStreamHint: false,
-      },
-    );
+    expect(
+      processExtractedPages([textPage("Start of Transcript 2022 Fall\nCourse ADM 1300")]),
+    ).toEqual({
+      courses: ["ADM 1300"],
+      fullText: "Start of Transcript 2022 Fall\nCourse ADM 1300",
+      startingYear: 2022,
+      frenchImmersionStreamHint: false,
+    });
   });
 
   test("returns null starting year when no start-of-transcript line is present", () => {

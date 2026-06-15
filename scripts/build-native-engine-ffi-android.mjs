@@ -14,18 +14,11 @@
 // Rust Android targets (`rustup target add aarch64-linux-android
 // armv7-linux-androideabi x86_64-linux-android i686-linux-android`).
 // ANDROID_NDK_HOME (or ANDROID_HOME with an installed ndk) must be set.
-import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
+import { engineDir, repoRoot, run } from "./lib/native-engine.mjs";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const repoRoot = join(__dirname, "..");
-const engineDir = join(repoRoot, "packages/engine");
-const jniLibsOut = join(
-  repoRoot,
-  "apps/native/modules/uoplan-engine/android/src/main/jniLibs",
-);
+const jniLibsOut = join(repoRoot, "apps/native/modules/uoplan-engine/android/src/main/jniLibs");
 
 // cargo-ndk ABI names (it maps these to the corresponding Rust target triples).
 const ABIS = ["arm64-v8a", "armeabi-v7a", "x86_64", "x86"];
@@ -66,9 +59,7 @@ for (const abi of ABIS) {
 }
 args.push("--platform", MIN_SDK, "-o", jniLibsOut, "build", "--release", "-p", "uoplan-engine");
 
-console.log(`$ cargo ${args.join(" ")}`);
-execFileSync("cargo", args, {
-  stdio: "inherit",
+run("cargo", args, {
   cwd: engineDir,
   env: { ...process.env, ANDROID_NDK_HOME: ndkHome },
 });

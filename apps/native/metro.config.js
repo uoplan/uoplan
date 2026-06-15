@@ -42,11 +42,7 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
   }
   if (moduleName.startsWith(I18N_CATALOG_PREFIX)) {
     const locale = moduleName.slice(I18N_CATALOG_PREFIX.length);
-    return context.resolveRequest(
-      context,
-      `@uoplan/i18n/src/locales/${locale}/messages`,
-      platform,
-    );
+    return context.resolveRequest(context, `@uoplan/i18n/src/locales/${locale}/messages`, platform);
   }
   for (const pkg of LINGUI_SINGLETONS) {
     if (moduleName === pkg || moduleName.startsWith(`${pkg}/`)) {

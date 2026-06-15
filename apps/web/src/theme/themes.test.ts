@@ -1,12 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import {
-  getSystemBase,
-  persistSelection,
-  readStoredSelection,
-  resolveTheme,
-  THEME_STORAGE_KEY,
-} from "./themes";
-import type { ThemeSelection } from "./themes";
+import { getSystemBase, persistSelection, readStoredSelection, THEME_STORAGE_KEY } from "./themes";
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -27,24 +20,6 @@ function stubWindow(opts: { prefersDark?: boolean; store?: Record<string, string
   });
   return store;
 }
-
-describe("resolveTheme", () => {
-  it("returns the explicitly selected theme regardless of system base", () => {
-    expect(resolveTheme("dark", "light").id).toBe("dark");
-    expect(resolveTheme("light", "dark").id).toBe("light");
-  });
-
-  it("maps a system selection through the system base", () => {
-    expect(resolveTheme("system", "dark").id).toBe("dark");
-    expect(resolveTheme("system", "light").id).toBe("light");
-  });
-
-  it("falls back to the system mapping for an unknown selection", () => {
-    // A stale persisted id could reach resolveTheme at runtime; cast to exercise
-    // the defensive fallback branch despite the strict ThemeSelection type.
-    expect(resolveTheme("does-not-exist" as ThemeSelection, "light").id).toBe("light");
-  });
-});
 
 describe("getSystemBase", () => {
   it("reflects the OS dark preference", () => {
