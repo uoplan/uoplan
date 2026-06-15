@@ -6,13 +6,19 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./catalogs/en": "./src/locales/en/messages.ts",
+    "./catalogs/fr-CA": "./src/locales/fr-CA/messages.ts"
   },
   "scripts": {
+    "generate": "lingui compile --typescript --namespace es",
+    "i18n:compile": "lingui compile --typescript --namespace es",
     "typecheck": "tsgo --noEmit -p tsconfig.json",
     "test": "vitest run"
   },
   "devDependencies": {
+    "@lingui/cli": "^5.9.3",
+    "@lingui/format-po": "^5.9.4",
     "@types/react": "^19.2.14",
     "react": "^19.2.4",
     "typescript": "~6.0.3",

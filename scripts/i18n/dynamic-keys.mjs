@@ -32,6 +32,18 @@ const cross = (prefix, a, b) => a.flatMap((x) => b.map((y) => `${prefix}${x}.${y
 
 /** @type {string[]} */
 export const DYNAMIC_TR_IDS = [
+  // apps/native/src/app/more/index.tsx + apps/native/src/app/more/language.tsx:
+  // the settings language switcher resolves its labels through `const tr = useTr()`
+  // (hook binding, which the literal `tr(...)` scanner does not resolve).
+  "native.more.settings",
+  "native.language.title",
+  "native.language.subtitle",
+  "native.language.system",
+  "native.language.systemDescription",
+  "native.language.english",
+  "native.language.frenchCanada",
+  "native.language.currentSystem",
+
   // apps/web/src/components/explore/ExploreFilterPopoverContent.tsx (LEVELS/LANGUAGES/...)
   // + apps/web/src/components/explore/ExploreFilterBar.tsx
   ...family("explore.filter.level.", ["1000", "2000", "3000", "4000", "5000"]),
@@ -163,15 +175,16 @@ export const DYNAMIC_TR_IDS = [
   ...family("basket.add", ["", ".aria"]),
   ...family("basket.added", ["", ".aria"]),
   ...family("basket.fab.", ["open", "openEmpty", "label"]),
-  ...family("basket.summary.", ["programHint", "noProgramHint", "collapse", "expand"]),
+  ...family("basket.summary.", ["collapse", "expand"]),
   ...family("basket.stat.", [
-    "creditsPlaced",
-    "requirementsCovered",
-    "requirementsRemaining",
-    "courseCount",
+    "creditsPlaced.tip",
+    "requirementsCovered.tip",
+    "requirementsRemaining.tip",
+    "courseCount.tip",
+    "credits.tip",
   ]),
   ...family("basket.noProgram.", ["copy", "link"]),
-  ...family("basket.empty.", ["title", "body"]),
+  ...family("basket.empty.", ["title", "body", "cta"]),
   ...family("basket.badge.", ["placed", "pinned"]),
   ...family("basket.details.", ["hide", "show"]),
   ...family("basket.breakdown.", [
@@ -184,7 +197,14 @@ export const DYNAMIC_TR_IDS = [
     "noRequirement",
     "standalone",
   ]),
-  ...family("basket.stillNeeded.", ["title", "empty", "progress", "noSuggestions", "untitled"]),
+  ...family("basket.stillNeeded.", [
+    "title",
+    "empty",
+    "progress",
+    "noSuggestions",
+    "moreCourses",
+    "untitled",
+  ]),
   ...family("basket.status.", [
     "assigned",
     "completed",

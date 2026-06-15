@@ -16,13 +16,69 @@
  * Run: `pnpm check:i18n`. Exits non-zero when any problem is found.
  */
 
-import { LOCALES, isUntranslated, loadAllCatalogs, relPath } from "./i18n/catalog.mjs";
+import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { LOCALES, isUntranslated, loadAllCatalogs, relPath, repoRoot } from "./i18n/catalog.mjs";
 import { collectTrUsages } from "./i18n/tr-ids.mjs";
 import { DYNAMIC_TR_IDS } from "./i18n/dynamic-keys.mjs";
 
 /** @param {string} msg */
 function fail(lines) {
   console.error(lines.join("\n"));
+}
+
+/** Absolute path to a locale's committed compiled catalog. @param {string} locale */
+function compiledCatalogPath(locale) {
+  return resolve(repoRoot, "packages/i18n/src/locales", locale, "messages.ts");
+}
+
+/**
+ * Guard against compiled-catalog drift.
+ *
+ * The runtime catalogs (`packages/i18n/src/locales/{locale}/messages.ts`) are
+ * committed build artifacts compiled from the hand-maintained `.po` files (so a
+ * fresh checkout — e.g. Metro — has them without running `pnpm generate`). They
+ * can silently drift if a `.po` is edited without recompiling. To close that
+ * hole in BOTH CI and pre-commit (this check runs in both), recompile from the
+ * source `.po` and verify the committed `.ts` is byte-identical. The check is
+ * side-effect-free: any file the recompile rewrites is restored to its committed
+ * content before returning, so a stale catalog is reported, not silently fixed.
+ *
+ * @returns {string[]} repo-relative paths of stale compiled catalogs (empty = fresh)
+ */
+function collectStaleCompiledCatalogs() {
+  const targets = LOCALES.map((locale) => compiledCatalogPath(locale));
+  const before = targets.map((p) => (existsSync(p) ? readFileSync(p, "utf8") : null));
+
+  try {
+    execFileSync("pnpm", ["--filter", "@uoplan/i18n", "run", "i18n:compile"], {
+      cwd: repoRoot,
+      stdio: "pipe",
+    });
+  } catch (err) {
+    throw new Error(
+      `Failed to recompile message catalogs for the drift check: ${
+        err instanceof Error ? err.message : String(err)
+      }`,
+    );
+  }
+
+  /** @type {string[]} */
+  const stale = [];
+  targets.forEach((p, i) => {
+    const after = existsSync(p) ? readFileSync(p, "utf8") : null;
+    if (after === before[i]) return;
+    stale.push(relPath(p));
+    // Restore the committed content so the check leaves no working-tree changes.
+    if (before[i] === null) {
+      // The committed file was missing; the recompile created one — leave it
+      // reported as stale (a missing compiled catalog is drift too).
+    } else {
+      writeFileSync(p, before[i]);
+    }
+  });
+  return stale;
 }
 
 function main() {
@@ -113,11 +169,21 @@ function main() {
     ]);
   }
 
+  // 5. compiled-catalog drift — the committed runtime catalogs must match a fresh
+  //    compile of the `.po` source (see collectStaleCompiledCatalogs).
+  const staleCompiled = collectStaleCompiledCatalogs();
+  if (staleCompiled.length > 0) {
+    problems.push([
+      `✖ ${staleCompiled.length} compiled catalog(s) stale — run \`pnpm i18n:compile\` (or \`pnpm generate\`) and commit:`,
+      ...staleCompiled.map((p) => `    ${p}`),
+    ]);
+  }
+
   if (problems.length > 0) {
     fail([
       "Translation check failed.\n",
       ...problems.map((b) => b.join("\n")),
-      "\nAdd the missing msgid/msgstr entries to apps/web/src/locales/{en,fr-CA}/messages.po.",
+      "\nAdd the missing msgid/msgstr entries to packages/i18n/src/locales/{en,fr-CA}/messages.po.",
     ]);
     process.exit(1);
   }
