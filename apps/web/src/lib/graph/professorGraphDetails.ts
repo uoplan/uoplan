@@ -66,7 +66,8 @@ export function buildOfferingsByProfessorId(
     const c = courses[courseIndex];
     const norm = normalizeCourseCode(c.code);
 
-    for (const p of c.professors) {
+    for (const p of c.sections) {
+      if (!p.name?.trim()) continue;
       const termLabel = formatTermLabelPlain(p.termId);
       const fuseText = [
         c.code,

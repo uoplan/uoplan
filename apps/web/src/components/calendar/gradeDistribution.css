@@ -81,6 +81,10 @@
   gap: 2px;
 }
 
+.cal-grade-histogram--interactive {
+  padding-top: 0;
+}
+
 .cal-grade-histogram-count {
   line-height: 1.2;
   white-space: nowrap;
@@ -98,6 +102,10 @@
   align-items: center;
   justify-content: flex-end;
   gap: 4px;
+}
+
+.cal-grade-histogram--interactive .cal-grade-histogram-item {
+  padding-top: var(--cal-grade-histogram-pad-top, 0);
 }
 
 .cal-grade-histogram-bar {

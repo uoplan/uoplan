@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveDesiredCourses } from "./resolveDesiredCourses";
+import { resolveDesiredCourses } from "@uoplan/core";
 import { buildCache, req } from "../../test/generationFixtures";
 
 describe("resolveDesiredCourses", () => {

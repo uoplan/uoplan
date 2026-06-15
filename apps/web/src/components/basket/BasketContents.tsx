@@ -1,6 +1,5 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import {
-  ActionIcon,
   Anchor,
   Badge,
   Box,
@@ -10,25 +9,32 @@ import {
   Pill,
   Stack,
   Text,
-  ThemeIcon,
+  Tooltip,
+  UnstyledButton,
 } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
 import {
+  IconAward,
+  IconBooks,
   IconChevronDown,
   IconChevronUp,
+  IconCircleDashed,
   IconInfoCircle,
-  IconShoppingCart,
+  IconListCheck,
   IconTrash,
 } from "@tabler/icons-react";
-import type { DataCache } from "@uoplan/core";
-import { getCourseCredits } from "@uoplan/core";
+import type { DataCache, DesiredCourseResolution, StillNeededRequirement } from "@uoplan/core";
+import { computeStillNeeded, getCourseCredits } from "@uoplan/core";
 import { useBasketSelection } from "../../hooks/useBasket";
 import { tr, useTr } from "../../i18n";
+import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { useBasketResolution } from "../../lib/generation/useBasketResolution";
-import { computeStillNeeded } from "../../lib/generation/computeStillNeeded";
-import type { StillNeededRequirement } from "../../lib/generation/computeStillNeeded";
-import type { DesiredCourseResolution } from "../../lib/generation/resolveDesiredCourses";
-import { useCompletedCourses, useDataCache, useRequirementState } from "../../store/hooks";
+import {
+  useCompletedCourses,
+  useDataCache,
+  useRequirementState,
+  useTermSelection,
+} from "../../store/hooks";
 import classes from "./BasketContents.module.css";
 
 interface BasketContentsProps {
@@ -59,17 +65,19 @@ const STATUS_ORDER: StandaloneResolutionKey[] = [
 const I18N = {
   credits: "basket.credits",
   title: "basket.title",
-  summaryProgramHint: "basket.summary.programHint",
-  summaryNoProgramHint: "basket.summary.noProgramHint",
-  statCreditsPlaced: "basket.stat.creditsPlaced",
-  statRequirementsCovered: "basket.stat.requirementsCovered",
-  statRequirementsRemaining: "basket.stat.requirementsRemaining",
-  statCourseCount: "basket.stat.courseCount",
+  statCreditsPlacedTip: "basket.stat.creditsPlaced.tip",
+  statRequirementsCoveredTip: "basket.stat.requirementsCovered.tip",
+  statRequirementsRemainingTip: "basket.stat.requirementsRemaining.tip",
+  statCourseCountTip: "basket.stat.courseCount.tip",
+  statCreditsTip: "basket.stat.credits.tip",
   noProgramCopy: "basket.noProgram.copy",
   noProgramLink: "basket.noProgram.link",
   emptyTitle: "basket.empty.title",
   emptyBody: "basket.empty.body",
+  emptyCta: "basket.empty.cta",
   removeCourse: "basket.removeCourse",
+  summaryCollapse: "basket.summary.collapse",
+  summaryExpand: "basket.summary.expand",
   detailsHide: "basket.details.hide",
   detailsShow: "basket.details.show",
   breakdownTitle: "basket.breakdown.title",
@@ -77,6 +85,7 @@ const I18N = {
   stillNeededEmpty: "basket.stillNeeded.empty",
   stillNeededProgress: "basket.stillNeeded.progress",
   stillNeededNoSuggestions: "basket.stillNeeded.noSuggestions",
+  stillNeededMore: "basket.stillNeeded.moreCourses",
   stillNeededUntitled: "basket.stillNeeded.untitled",
   statusAssigned: "basket.status.assigned",
   statusCompleted: "basket.status.completed",
@@ -192,14 +201,26 @@ function statusDotColor(kind: StatusKind): string {
 
 export function BasketContents({ variant = "popover", onNavigate }: BasketContentsProps) {
   const t = useTr();
+  const bodyId = useId();
+  const [summaryOpen, setSummaryOpen] = useState(true);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const { basketCourses, addToBasket, removeFromBasket } = useBasketSelection();
   const { completedCourses } = useCompletedCourses();
   const { constrainedPerRequirement, selectedPerRequirement, prereqEligibleCourses } =
     useRequirementState();
   const cache = useDataCache();
+  const { selectedTermId } = useTermSelection();
   const { resolution, assignments, effectiveRemainingRequirements, hasProgram } =
     useBasketResolution();
+
+  const exploreSearch = useMemo(
+    () => ({
+      ...EMPTY_EXPLORE_SEARCH,
+      term: selectedTermId ? Number(selectedTermId) : undefined,
+      reqs: hasProgram ? "1" : undefined,
+    }),
+    [selectedTermId, hasProgram],
+  );
 
   const stillNeeded = useMemo(
     () =>
@@ -284,228 +305,297 @@ export function BasketContents({ variant = "popover", onNavigate }: BasketConten
     [assignments, resolution, t],
   );
 
-  if (basketCourses.length === 0) {
-    return (
-      <Stack
-        gap="sm"
-        className={`${classes.shell} ${variant === "embedded" ? classes.embedded : ""}`}
-      >
-        <Box className={classes.emptyState}>
-          <ThemeIcon variant="light" color="blue" radius="xl" size="lg" mb="sm">
-            <IconShoppingCart size={18} aria-hidden />
-          </ThemeIcon>
-          <Text fw={700}>{t(I18N.emptyTitle)}</Text>
-          <Text size="sm" c="dimmed" mt={4}>
-            {t(I18N.emptyBody)}
-          </Text>
-        </Box>
-      </Stack>
-    );
-  }
-
   return (
     <Stack
-      gap="sm"
+      gap={variant === "embedded" ? 0 : "sm"}
       className={`${classes.shell} ${variant === "embedded" ? classes.embedded : ""}`}
     >
-      <Stack gap={8} className={classes.header}>
-        <div>
-          <Text fw={700} size="sm" lh={1.2}>
-            {t(I18N.title)}
-          </Text>
-          <Text size="xs" c="dimmed" lh={1.3} mt={2}>
-            {hasProgram ? t(I18N.summaryProgramHint) : t(I18N.summaryNoProgramHint)}
-          </Text>
-        </div>
-        <Box className={classes.statTrack} aria-hidden>
-          <Box
-            className={classes.statFill}
-            style={{ transform: `scaleX(${progressPercent / 100})` }}
-          />
-        </Box>
-        <Group gap={6} wrap="wrap">
+      <UnstyledButton
+        className={`${classes.header} ${classes.summaryToggle}`}
+        onClick={() => setSummaryOpen((open) => !open)}
+        aria-expanded={summaryOpen}
+        aria-controls={bodyId}
+        aria-label={t(summaryOpen ? I18N.summaryCollapse : I18N.summaryExpand)}
+      >
+        <Stack gap={8}>
+          <Group justify="space-between" align="center" gap="sm" wrap="nowrap">
+            <Text fw={700} size="sm" lh={1.2}>
+              {t(I18N.title)}
+            </Text>
+            <Box className={classes.summaryChevron} aria-hidden>
+              {summaryOpen ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
+            </Box>
+          </Group>
+          <Group gap={6} wrap="wrap">
+            {hasProgram ? (
+              <>
+                <Tooltip label={t(I18N.statCreditsPlacedTip)} withArrow>
+                  <Badge
+                    variant="light"
+                    color="gray"
+                    leftSection={<IconAward size={12} aria-hidden />}
+                    aria-label={`${t(I18N.statCreditsPlacedTip)}: ${placedCredits}/${targetCredits}`}
+                  >
+                    {placedCredits}/{targetCredits}
+                  </Badge>
+                </Tooltip>
+                <Tooltip label={t(I18N.statRequirementsCoveredTip)} withArrow>
+                  <Badge
+                    variant="light"
+                    color="gray"
+                    leftSection={<IconListCheck size={12} aria-hidden />}
+                    aria-label={`${t(I18N.statRequirementsCoveredTip)}: ${coveredRequirements}/${totalTrackedRequirements}`}
+                  >
+                    {coveredRequirements}/{totalTrackedRequirements}
+                  </Badge>
+                </Tooltip>
+                {remainingRequirements > 0 ? (
+                  <Tooltip label={t(I18N.statRequirementsRemainingTip)} withArrow>
+                    <Badge
+                      variant="outline"
+                      color="gray"
+                      leftSection={<IconCircleDashed size={12} aria-hidden />}
+                      aria-label={`${t(I18N.statRequirementsRemainingTip)}: ${remainingRequirements}`}
+                    >
+                      {remainingRequirements}
+                    </Badge>
+                  </Tooltip>
+                ) : null}
+              </>
+            ) : (
+              <>
+                <Tooltip label={t(I18N.statCourseCountTip)} withArrow>
+                  <Badge
+                    variant="light"
+                    color="gray"
+                    leftSection={<IconBooks size={12} aria-hidden />}
+                    aria-label={`${t(I18N.statCourseCountTip)}: ${basketCourses.length}`}
+                  >
+                    {basketCourses.length}
+                  </Badge>
+                </Tooltip>
+                <Tooltip label={t(I18N.statCreditsTip)} withArrow>
+                  <Badge
+                    variant="light"
+                    color="gray"
+                    leftSection={<IconAward size={12} aria-hidden />}
+                    aria-label={`${t(I18N.statCreditsTip)}: ${totalCredits}`}
+                  >
+                    {totalCredits}
+                  </Badge>
+                </Tooltip>
+              </>
+            )}
+          </Group>
+          <Box className={classes.statTrack} aria-hidden>
+            <Box
+              className={classes.statFill}
+              style={{ transform: `scaleX(${progressPercent / 100})` }}
+            />
+          </Box>
+        </Stack>
+      </UnstyledButton>
+
+      <Collapse id={bodyId} expanded={summaryOpen}>
+        <Stack gap="sm" className={classes.body}>
+          {basketCourses.length === 0 ? (
+            <Box className={classes.emptyState}>
+              <Text fw={700} size="sm">
+                {t(I18N.emptyTitle)}
+              </Text>
+              <Text size="xs" c="dimmed" lh={1.35}>
+                {t(I18N.emptyBody)}
+              </Text>
+              <Button
+                size="xs"
+                radius="xl"
+                variant="light"
+                onClick={() => onNavigate?.()}
+                renderRoot={(props) => <Link to="/explore" search={exploreSearch} {...props} />}
+              >
+                {t(I18N.emptyCta)}
+              </Button>
+            </Box>
+          ) : (
+            <div className={classes.courseList}>
+              {courseDisplays.map((course) => {
+                const status = buildStatus(course.code, hasProgram, assignmentByCode, resolution);
+                return (
+                  <UnstyledButton
+                    key={course.code}
+                    className={classes.courseRow}
+                    aria-label={t(I18N.removeCourse, { code: course.code })}
+                    onClick={() => removeFromBasket(course.code)}
+                  >
+                    <Group wrap="nowrap" align="center" gap={10}>
+                      <Box
+                        className={classes.statusDot}
+                        style={{ background: statusDotColor(status.kind) }}
+                        aria-hidden
+                      />
+                      <Box style={{ minWidth: 0, flex: 1 }}>
+                        <Group gap={6} wrap="nowrap" align="baseline">
+                          <Text fw={700} size="sm" lh={1.2}>
+                            {course.code}
+                          </Text>
+                          {course.credits > 0 ? (
+                            <Text size="xs" c="dimmed" lh={1}>
+                              {formatCredits(course.credits)}
+                            </Text>
+                          ) : null}
+                        </Group>
+                        <Text
+                          size="xs"
+                          c="dimmed"
+                          lh={1.3}
+                          truncate
+                          title={course.title ?? status.label}
+                        >
+                          {course.title ? `${course.title} · ${status.label}` : status.label}
+                        </Text>
+                      </Box>
+                      <Box className={classes.removeIcon} aria-hidden>
+                        <IconTrash size={15} />
+                      </Box>
+                    </Group>
+                  </UnstyledButton>
+                );
+              })}
+            </div>
+          )}
+
+          {!hasProgram && basketCourses.length > 0 ? (
+            <Group gap={6} wrap="wrap">
+              <Text size="xs" c="dimmed" lh={1.35}>
+                {t(I18N.noProgramCopy)}
+              </Text>
+              <Anchor component={Link} to="/personalize" onClick={onNavigate} size="xs" fw={600}>
+                {t(I18N.noProgramLink)}
+              </Anchor>
+            </Group>
+          ) : null}
+
           {hasProgram ? (
             <>
-              <Badge variant="light" color="blue">
-                {t(I18N.statCreditsPlaced, { placed: placedCredits, target: targetCredits })}
-              </Badge>
-              <Badge variant="light" color="green">
-                {t(I18N.statRequirementsCovered, {
-                  covered: coveredRequirements,
-                  total: totalTrackedRequirements,
-                })}
-              </Badge>
-              {remainingRequirements > 0 ? (
-                <Badge variant="outline" color="gray">
-                  {t(I18N.statRequirementsRemaining, { count: remainingRequirements })}
-                </Badge>
-              ) : null}
-            </>
-          ) : (
-            <>
-              <Badge variant="light" color="blue">
-                {t(I18N.statCourseCount, { count: basketCourses.length })}
-              </Badge>
-              <Badge variant="light" color="green">
-                {formatCredits(totalCredits)}
-              </Badge>
-            </>
-          )}
-        </Group>
-        {!hasProgram ? (
-          <Text size="xs" c="dimmed" lh={1.35}>
-            {t(I18N.noProgramCopy)}{" "}
-            <Anchor component={Link} to="/personalize" onClick={onNavigate} size="xs" fw={600}>
-              {t(I18N.noProgramLink)}
-            </Anchor>
-          </Text>
-        ) : null}
-      </Stack>
-
-      <div className={classes.courseList}>
-        {courseDisplays.map((course) => {
-          const status = buildStatus(course.code, hasProgram, assignmentByCode, resolution);
-          return (
-            <Group
-              key={course.code}
-              className={classes.courseRow}
-              wrap="nowrap"
-              align="center"
-              gap={10}
-            >
-              <Box
-                className={classes.statusDot}
-                style={{ background: statusDotColor(status.kind) }}
-                aria-hidden
-              />
-              <Box style={{ minWidth: 0, flex: 1 }}>
-                <Group gap={6} wrap="nowrap" align="baseline">
-                  <Text fw={700} size="sm" lh={1.2}>
-                    {course.code}
-                  </Text>
-                  {course.credits > 0 ? (
-                    <Text size="xs" c="dimmed" lh={1}>
-                      {formatCredits(course.credits)}
-                    </Text>
-                  ) : null}
-                </Group>
-                <Text size="xs" c="dimmed" lh={1.3} truncate title={course.title ?? status.label}>
-                  {course.title ? `${course.title} · ${status.label}` : status.label}
-                </Text>
-              </Box>
-              <ActionIcon
-                className={classes.removeButton}
+              <Button
                 variant="subtle"
                 color="gray"
-                radius="xl"
-                size="sm"
-                aria-label={t(I18N.removeCourse, { code: course.code })}
-                onClick={() => removeFromBasket(course.code)}
+                size="xs"
+                radius="md"
+                rightSection={
+                  detailsOpen ? <IconChevronUp size={14} /> : <IconChevronDown size={14} />
+                }
+                onClick={() => setDetailsOpen((open) => !open)}
               >
-                <IconTrash size={15} aria-hidden />
-              </ActionIcon>
-            </Group>
-          );
-        })}
-      </div>
+                {detailsOpen ? t(I18N.detailsHide) : t(I18N.detailsShow)}
+              </Button>
 
-      {hasProgram ? (
-        <>
-          <Button
-            variant="subtle"
-            color="gray"
-            size="xs"
-            radius="md"
-            rightSection={detailsOpen ? <IconChevronUp size={14} /> : <IconChevronDown size={14} />}
-            onClick={() => setDetailsOpen((open) => !open)}
-          >
-            {detailsOpen ? t(I18N.detailsHide) : t(I18N.detailsShow)}
-          </Button>
-
-          <Collapse expanded={detailsOpen}>
-            <Stack gap="sm" className={classes.detailPanel}>
-              <Stack gap="xs">
-                <Group gap={6} wrap="nowrap">
-                  <IconInfoCircle size={16} color="var(--app-text-muted)" aria-hidden />
-                  <Text fw={800} size="sm">
-                    {t(I18N.breakdownTitle)}
-                  </Text>
-                </Group>
-                <Stack gap="xs">
-                  {categorized
-                    .filter((category) => category.codes.length > 0)
-                    .map((category) => (
-                      <Stack key={category.id} gap={5} className={classes.categoryBlock}>
-                        <Text size="xs" fw={700} c="dimmed">
-                          {category.title}
-                        </Text>
-                        <Group gap={5} wrap="wrap">
-                          {category.codes.map((code) => (
-                            <Pill key={`${category.id}-${code}`} size="sm">
-                              {code}
-                            </Pill>
-                          ))}
-                        </Group>
-                      </Stack>
-                    ))}
-                </Stack>
-              </Stack>
-
-              <Stack gap="xs">
-                <Text fw={800} size="sm">
-                  {t(I18N.stillNeededTitle)}
-                </Text>
-                {stillNeeded.length === 0 ? (
-                  <Text size="xs" c="dimmed">
-                    {t(I18N.stillNeededEmpty)}
-                  </Text>
-                ) : (
+              <Collapse expanded={detailsOpen}>
+                <Stack gap="sm" className={classes.detailPanel}>
                   <Stack gap="xs">
-                    {stillNeeded.map((requirement) => {
-                      const label = requirementDisplayLabel(requirement);
-                      return (
-                        <Stack key={requirement.requirementId} gap={5}>
-                          <Group justify="space-between" gap="sm" wrap="nowrap">
-                            <Text size="xs" fw={700} style={{ minWidth: 0 }} truncate title={label}>
-                              {label}
+                    <Group gap={6} wrap="nowrap">
+                      <IconInfoCircle size={16} color="var(--app-text-muted)" aria-hidden />
+                      <Text fw={800} size="sm">
+                        {t(I18N.breakdownTitle)}
+                      </Text>
+                    </Group>
+                    <Stack gap="xs">
+                      {categorized
+                        .filter((category) => category.codes.length > 0)
+                        .map((category) => (
+                          <Stack key={category.id} gap={5} className={classes.categoryBlock}>
+                            <Text size="xs" fw={700} c="dimmed">
+                              {category.title}
                             </Text>
-                            <Text size="xs" c="dimmed" style={{ flexShrink: 0 }}>
-                              {t(I18N.stillNeededProgress, {
-                                covered: requirement.creditsCovered,
-                                needed: requirement.creditsNeeded,
-                              })}
-                            </Text>
-                          </Group>
-                          {requirement.suggestions.length > 0 ? (
                             <Group gap={5} wrap="wrap">
-                              {requirement.suggestions.map((code) => (
-                                <Button
-                                  key={`${requirement.requirementId}-${code}`}
-                                  size="compact-xs"
-                                  variant="outline"
-                                  radius="xl"
-                                  className={classes.suggestionButton}
-                                  onClick={() => addToBasket(code)}
-                                >
+                              {category.codes.map((code) => (
+                                <Pill key={`${category.id}-${code}`} size="sm">
                                   {code}
-                                </Button>
+                                </Pill>
                               ))}
                             </Group>
-                          ) : (
-                            <Text size="xs" c="dimmed">
-                              {t(I18N.stillNeededNoSuggestions)}
-                            </Text>
-                          )}
-                        </Stack>
-                      );
-                    })}
+                          </Stack>
+                        ))}
+                    </Stack>
                   </Stack>
-                )}
-              </Stack>
-            </Stack>
-          </Collapse>
-        </>
-      ) : null}
+
+                  <Stack gap="xs">
+                    <Text fw={800} size="sm">
+                      {t(I18N.stillNeededTitle)}
+                    </Text>
+                    {stillNeeded.length === 0 ? (
+                      <Text size="xs" c="dimmed">
+                        {t(I18N.stillNeededEmpty)}
+                      </Text>
+                    ) : (
+                      <Stack gap="xs">
+                        {stillNeeded.map((requirement) => {
+                          const label = requirementDisplayLabel(requirement);
+                          return (
+                            <Stack key={requirement.requirementId} gap={5}>
+                              <Group justify="space-between" gap="sm" wrap="nowrap">
+                                <Text
+                                  size="xs"
+                                  fw={700}
+                                  style={{ minWidth: 0 }}
+                                  truncate
+                                  title={label}
+                                >
+                                  {label}
+                                </Text>
+                                <Text size="xs" c="dimmed" style={{ flexShrink: 0 }}>
+                                  {t(I18N.stillNeededProgress, {
+                                    covered: requirement.creditsCovered,
+                                    needed: requirement.creditsNeeded,
+                                  })}
+                                </Text>
+                              </Group>
+                              {requirement.suggestions.length > 0 ? (
+                                <Group gap={5} wrap="wrap" align="center">
+                                  {requirement.suggestions.map((code) => (
+                                    <Button
+                                      key={`${requirement.requirementId}-${code}`}
+                                      size="compact-xs"
+                                      variant="outline"
+                                      radius="xl"
+                                      className={classes.suggestionButton}
+                                      onClick={() => addToBasket(code)}
+                                    >
+                                      {code}
+                                    </Button>
+                                  ))}
+                                  {requirement.suggestionPoolSize >
+                                  requirement.suggestions.length ? (
+                                    <Badge
+                                      variant="default"
+                                      radius="xl"
+                                      className={classes.morePill}
+                                    >
+                                      {t(I18N.stillNeededMore, {
+                                        count:
+                                          requirement.suggestionPoolSize -
+                                          requirement.suggestions.length,
+                                      })}
+                                    </Badge>
+                                  ) : null}
+                                </Group>
+                              ) : (
+                                <Text size="xs" c="dimmed">
+                                  {t(I18N.stillNeededNoSuggestions)}
+                                </Text>
+                              )}
+                            </Stack>
+                          );
+                        })}
+                      </Stack>
+                    )}
+                  </Stack>
+                </Stack>
+              </Collapse>
+            </>
+          ) : null}
+        </Stack>
+      </Collapse>
     </Stack>
   );
 }

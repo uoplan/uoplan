@@ -6,9 +6,10 @@ import {
   useFaculties,
   useProfessorRatings,
 } from "../../../store/hooks";
+import { buildDisciplineHead } from "../../../lib/seo";
 
 export const Route = createFileRoute("/explore/discipline/$discipline")({
-  head: ({ params }) => ({ meta: [{ title: params.discipline.toUpperCase() }] }),
+  head: ({ params }) => buildDisciplineHead(params.discipline),
   component: ExploreDisciplineRoute,
 });
 

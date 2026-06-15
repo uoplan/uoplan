@@ -2,7 +2,6 @@ import Fuse from "fuse.js";
 import type { IFuseOptions } from "fuse.js";
 import type {
   CanonicalProfessorName,
-  Catalogue,
   CourseGradesData,
   GradeVizData,
   NormalizedCourseCode,
@@ -16,6 +15,8 @@ import {
   normalizeProfessorName,
   professorIndexFromRef,
 } from "@uoplan/core";
+import { buildAliasGroups, resolveComponentId } from "@uoplan/core/courseAlias";
+import type { AliasGroups } from "@uoplan/core/courseAlias";
 import { searchProfessorsScored } from "../graph/professorGraphSearch";
 import type { ProfessorSearchEntry } from "../graph/professorGraphSearch";
 import { formatTermLabelPlain } from "../term/termLabelPlain";
@@ -142,17 +143,18 @@ export function buildExploreOfferings(
   for (const c of grades.courses) {
     const norm = normalizeCourseCode(c.code);
     const title = titleByCode.get(norm) ?? "";
-    for (const p of c.professors) {
+    for (const p of c.sections) {
       // "Staff" is a placeholder for an unassigned instructor: keep the offering so the
       // course stays searchable, but strip the fake professor (no name, no legacyId).
-      const unassigned = isUnassignedInstructorName(p.name);
+      const sectionName = p.name ?? "";
+      const unassigned = isUnassignedInstructorName(sectionName);
       const canonical = unassigned
         ? { professorName: UNASSIGNED_INSTRUCTOR }
         : resolveCanonicalProfessor(
             registry,
             professorIndexFromRef(p.professorRef),
             p.legacyId,
-            p.name,
+            sectionName,
           );
       const professorName = canonical.professorName;
       const professorRef = canonical.professorRef;
@@ -221,91 +223,20 @@ export function buildOfferingsByCourseNorm(
 export function countDistinctProfessors(offerings: ExploreOfferingFlat[]): number {
   const ids = new Set<string>();
   for (const o of offerings) {
+    if (isUnassignedOffering(o)) continue;
     ids.add(professorGroupId(o.professorRef, o.legacyId, o.professorName));
   }
   return ids.size;
 }
 
-/** Connected-component grouping of course codes linked by catalogue aliases. */
-export type AliasGroups = {
-  /** Maps each member's normalized code to its component id. Standalone courses are absent. */
-  componentByNorm: Map<NormalizedCourseCode, NormalizedCourseCode>;
-  /** Maps a component id to its sorted member normalized codes (size >= 2). */
-  membersByComponent: Map<NormalizedCourseCode, NormalizedCourseCode[]>;
-};
-
 /**
- * Build connected components over the undirected alias graph. Each course is linked to
- * every code in its `aliases` list; the transitive closure forms a component that is
- * treated as one course. The component id is the lexicographically smallest member code
- * (deterministic). Courses with no alias relation are omitted (callers treat a missing
- * lookup as a standalone component keyed by the code itself).
+ * Connected-component grouping of course codes linked by catalogue aliases.
+ * The implementation lives in `@uoplan/core/courseAlias` so the web and native
+ * explore pages resolve aliases identically; re-exported here for existing
+ * web consumers.
  */
-export function buildAliasGroups(catalogue: Catalogue | null): AliasGroups {
-  const parent = new Map<NormalizedCourseCode, NormalizedCourseCode>();
-  const add = (x: NormalizedCourseCode) => {
-    if (!parent.has(x)) parent.set(x, x);
-  };
-  const find = (x: NormalizedCourseCode): NormalizedCourseCode => {
-    let root = x;
-    while (parent.get(root) !== root) root = parent.get(root) as NormalizedCourseCode;
-    let cur = x;
-    while (parent.get(cur) !== root) {
-      const next = parent.get(cur) as NormalizedCourseCode;
-      parent.set(cur, root);
-      cur = next;
-    }
-    return root;
-  };
-  const union = (a: NormalizedCourseCode, b: NormalizedCourseCode) => {
-    add(a);
-    add(b);
-    const ra = find(a);
-    const rb = find(b);
-    if (ra !== rb) parent.set(rb, ra);
-  };
-
-  if (catalogue) {
-    for (const c of catalogue.courses) {
-      const own = c.code;
-      add(own);
-      for (const a of c.aliases ?? []) {
-        const aliasNorm = normalizeCourseCode(a);
-        if (aliasNorm && aliasNorm !== own) union(own, aliasNorm);
-      }
-    }
-  }
-
-  const membersByRoot = new Map<NormalizedCourseCode, NormalizedCourseCode[]>();
-  for (const node of parent.keys()) {
-    const root = find(node);
-    let list = membersByRoot.get(root);
-    if (!list) {
-      list = [];
-      membersByRoot.set(root, list);
-    }
-    list.push(node);
-  }
-
-  const componentByNorm = new Map<NormalizedCourseCode, NormalizedCourseCode>();
-  const membersByComponent = new Map<NormalizedCourseCode, NormalizedCourseCode[]>();
-  for (const members of membersByRoot.values()) {
-    if (members.length < 2) continue;
-    members.sort((a, b) => a.localeCompare(b, "en"));
-    const id = members[0];
-    membersByComponent.set(id, members);
-    for (const m of members) componentByNorm.set(m, id);
-  }
-  return { componentByNorm, membersByComponent };
-}
-
-/** Resolve a normalized code to its alias-component id (the code itself when standalone). */
-export function resolveComponentId(
-  norm: NormalizedCourseCode,
-  componentByNorm: Map<NormalizedCourseCode, NormalizedCourseCode>,
-): NormalizedCourseCode {
-  return componentByNorm.get(norm) ?? norm;
-}
+export { buildAliasGroups, resolveComponentId };
+export type { AliasGroups };
 
 /** Bucket offerings by alias-component id so an alias group shares one merged offering list. */
 export function buildOfferingsByComponent(

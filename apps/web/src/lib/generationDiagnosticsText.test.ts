@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { i18n } from "@lingui/core";
-import { messages } from "../locales/en/messages.po";
-import { messages as frMessages } from "../locales/fr-CA/messages.po";
+import { messages } from "@uoplan/i18n/catalogs/en";
+import { messages as frMessages } from "@uoplan/i18n/catalogs/fr-CA";
 import { tr } from "../i18n";
 import {
   formatFilterHint,

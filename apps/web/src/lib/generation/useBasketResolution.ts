@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import type { RemainingRequirement } from "@uoplan/core";
-import { buildEffectiveRemainingRequirements } from "@uoplan/core";
+import type { DesiredCourseResolution, RemainingRequirement } from "@uoplan/core";
+import { buildEffectiveRemainingRequirements, resolveDesiredCourses } from "@uoplan/core";
 import { useBasketCourses } from "../../hooks/useBasket";
 import { tr } from "../../i18n";
 import {
@@ -10,8 +10,6 @@ import {
   useRequirementState,
 } from "../../store/hooks";
 import { useRequirementAssignmentState } from "../../components/requirements/useRequirementAssignmentState";
-import { resolveDesiredCourses } from "./resolveDesiredCourses";
-import type { DesiredCourseResolution } from "./resolveDesiredCourses";
 
 /** A requirement and the basket courses the resolver assigned to it, with a display title. */
 export interface BasketAssignment {

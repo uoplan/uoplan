@@ -1,0 +1,208 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const webRoot = path.join(__dirname, "..");
+const repoRoot = path.join(webRoot, "..", "..");
+const distDir = path.join(webRoot, "dist", "client");
+const dataRoot = path.join(repoRoot, "apps", "scraper", "data");
+const catalogueDir = path.join(dataRoot, "catalogue");
+const seoPagesPath = path.join(webRoot, "src", "lib", "seo-pages.json");
+const professorsPath = path.join(dataRoot, "professors.json");
+const disciplinesPath = path.join(dataRoot, "disciplines.json");
+
+const SITE_ORIGIN = "https://uoplan.party";
+const SITEMAPS = [
+  "sitemap-courses.xml",
+  "sitemap-professors.xml",
+  "sitemap-programs.xml",
+  "sitemap-misc.xml",
+];
+
+function readJson(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+}
+
+function escapeXml(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
+}
+
+function decodePathValue(value) {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+function encodePathSegment(value) {
+  return encodeURIComponent(decodePathValue(value));
+}
+
+function encodePath(pathValue) {
+  return pathValue.split("/").filter(Boolean).map(encodePathSegment).join("/");
+}
+
+function absoluteUrl(pathname) {
+  return pathname === "/" ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${pathname}`;
+}
+
+function uniqueSorted(values) {
+  return [...new Set(values)].sort((a, b) => a.localeCompare(b, "en"));
+}
+
+function normalizeCourseCode(rawCode) {
+  if (typeof rawCode !== "string") return null;
+  const trimmed = rawCode.trim();
+  if (!trimmed) return null;
+
+  const match = trimmed.match(/^([A-Z]{3,4})\s*(\d{4,5}[A-Z]?)$/i);
+  if (!match?.[1] || !match[2]) return trimmed;
+  return `${match[1].toUpperCase()} ${match[2]}`;
+}
+
+function courseNormToPathParam(courseCode) {
+  return courseCode.replaceAll(/\s+/g, "").toLowerCase();
+}
+
+function normalizeProgramSlug(rawSlug) {
+  if (typeof rawSlug !== "string") return null;
+  const slug = rawSlug.trim().replace(/^\/+/, "").replace(/\/+$/, "");
+  return slug || null;
+}
+
+function readCatalogueCollections() {
+  const catalogueFiles = fs
+    .readdirSync(catalogueDir)
+    .filter((name) => /^catalogue\.\d{4}\.json$/.test(name))
+    .sort((a, b) => b.localeCompare(a, "en"));
+
+  const courseCodes = new Set();
+  const programSlugs = new Set();
+
+  for (const fileName of catalogueFiles) {
+    const catalogue = readJson(path.join(catalogueDir, fileName));
+
+    for (const course of catalogue.courses ?? []) {
+      const courseCode = normalizeCourseCode(course?.code);
+      if (courseCode) courseCodes.add(courseCode);
+    }
+
+    for (const program of catalogue.programs ?? []) {
+      const slug = normalizeProgramSlug(program?.slug);
+      if (slug) programSlugs.add(slug);
+    }
+  }
+
+  return {
+    catalogueFiles,
+    courseCodes: uniqueSorted(courseCodes),
+    programSlugs: uniqueSorted(programSlugs),
+  };
+}
+
+function readProfessorSlugs() {
+  const data = readJson(professorsPath);
+  const slugs = [];
+
+  for (const professor of data.professors ?? []) {
+    if (typeof professor?.slug === "string" && professor.slug.trim()) {
+      slugs.push(professor.slug.trim());
+    }
+  }
+
+  return uniqueSorted(slugs);
+}
+
+function readDisciplineAndFacultyPaths() {
+  const data = readJson(disciplinesPath);
+  const paths = [];
+
+  for (const discipline of data.disciplines ?? []) {
+    if (typeof discipline?.code === "string" && discipline.code.trim()) {
+      paths.push(`/explore/discipline/${encodePathSegment(discipline.code.trim().toLowerCase())}`);
+    }
+  }
+
+  for (const faculty of data.faculties ?? []) {
+    if (typeof faculty?.id === "string" && faculty.id.trim()) {
+      paths.push(`/explore/faculty/${encodePathSegment(faculty.id.trim())}`);
+    }
+  }
+
+  return uniqueSorted(paths);
+}
+
+function readStaticPaths() {
+  const seoPages = readJson(seoPagesPath);
+  const paths = [];
+
+  for (const page of Object.values(seoPages)) {
+    if (typeof page?.canonicalPath === "string" && page.canonicalPath.trim()) {
+      paths.push(page.canonicalPath.trim());
+    }
+  }
+
+  return uniqueSorted(paths);
+}
+
+function urlsetXml(paths) {
+  const urls = paths
+    .map((pathname) => `  <url>\n    <loc>${escapeXml(absoluteUrl(pathname))}</loc>\n  </url>`)
+    .join("\n");
+
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
+}
+
+function sitemapIndexXml(fileNames) {
+  const entries = fileNames
+    .map(
+      (fileName) =>
+        `  <sitemap>\n    <loc>${escapeXml(`${SITE_ORIGIN}/${fileName}`)}</loc>\n  </sitemap>`,
+    )
+    .join("\n");
+
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</sitemapindex>\n`;
+}
+
+function writeFile(fileName, content) {
+  const outPath = path.join(distDir, fileName);
+  fs.writeFileSync(outPath, content, "utf8");
+  console.log(`generate-sitemap: wrote ${path.relative(webRoot, outPath)}`);
+}
+
+fs.mkdirSync(distDir, { recursive: true });
+
+const { catalogueFiles, courseCodes, programSlugs } = readCatalogueCollections();
+const professorSlugs = readProfessorSlugs();
+const miscPaths = uniqueSorted([...readStaticPaths(), ...readDisciplineAndFacultyPaths()]);
+
+const coursePaths = courseCodes.map(
+  (courseCode) => `/explore/course/${courseNormToPathParam(courseCode)}`,
+);
+const professorPaths = professorSlugs.map(
+  (slug) => `/explore/professor/${encodePathSegment(slug)}`,
+);
+const programPaths = programSlugs.map((slug) => `/explore/program/${encodePath(slug)}`);
+
+writeFile("sitemap-courses.xml", urlsetXml(coursePaths));
+writeFile("sitemap-professors.xml", urlsetXml(professorPaths));
+writeFile("sitemap-programs.xml", urlsetXml(programPaths));
+writeFile("sitemap-misc.xml", urlsetXml(miscPaths));
+writeFile("sitemap-index.xml", sitemapIndexXml(SITEMAPS));
+
+console.log(
+  [
+    `generate-sitemap: catalogues=${catalogueFiles.length}`,
+    `courses=${coursePaths.length}`,
+    `professors=${professorPaths.length}`,
+    `programs=${programPaths.length}`,
+    `misc=${miscPaths.length}`,
+  ].join(" "),
+);

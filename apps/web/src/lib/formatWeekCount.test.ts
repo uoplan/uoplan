@@ -3,7 +3,7 @@ import { i18n } from "../i18n";
 import { formatWeekCount } from "./formatWeekCount";
 
 beforeAll(async () => {
-  const { messages } = await import("../locales/en/messages.po");
+  const { messages } = await import("@uoplan/i18n/catalogs/en");
   i18n.load("en", messages);
   i18n.activate("en");
 });

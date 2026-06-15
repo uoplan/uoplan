@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-og-image.mjs && vite build && node scripts/prerender-seo-html.mjs",
+    "build": "node scripts/generate-og-image.mjs && vite build && node scripts/prerender-seo-html.mjs && node scripts/generate-sitemap.mjs",
     "analyze": "ANALYZE=1 vite build",
     "size": "size-limit",
     "typecheck": "tsgo --noEmit -p tsconfig.json && tsgo --noEmit -p tsconfig.node.json && tsgo --noEmit -p tsconfig.sw.json",
@@ -42,6 +42,7 @@
     "@uoplan/i18n": "workspace:^",
     "@uoplan/navigation": "workspace:^",
     "@uoplan/proto": "workspace:^",
+    "@uoplan/store": "workspace:^",
     "@uoplan/theme": "workspace:^",
     "@uoplan/transcript": "workspace:^",
     "@uoplan/ui": "workspace:^",
@@ -59,9 +60,6 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
     "@cloudflare/vite-plugin": "^1.39.1",
-    "@lingui/cli": "^5.9.3",
-    "@lingui/format-po": "^5.9.4",
-    "@lingui/vite-plugin": "^5.9.4",
     "@napi-rs/canvas": "^0.1.99",
     "@playwright/test": "^1.60.0",
     "@size-limit/file": "^12.1.0",

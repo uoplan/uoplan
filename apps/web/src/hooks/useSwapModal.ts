@@ -1,13 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { DataCache, GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
-import {
-  aggregateCourseDistribution,
-  courseAPlusPercent,
-  distributionGpa,
-  getRatingsForInstructors,
-  normalizeCourseCode,
-  normalizeGradeVizDistribution,
-} from "@uoplan/core";
+import { buildSwapOptionView } from "@uoplan/core/generation/swapCandidates";
 
 /**
  * Type for the swap candidates getter function.
@@ -104,31 +97,12 @@ export function useSwapModal(
     function buildOption(
       code: string,
     ): Omit<SwapCandidateOption, "value" | "disabled" | "conflictsWith"> {
-      const norm = normalizeCourseCode(code);
-      const course = cache?.getCourse(norm);
-      const title = (course?.title ?? "").trim() || null;
-      const sched = cache?.getSchedule(norm);
-      const aPlus = sched ? courseAPlusPercent(sched) : null;
-      const dist = sched ? aggregateCourseDistribution(sched) : null;
-      const gpa = dist ? distributionGpa(dist) : null;
-      const gradeViz = dist ? normalizeGradeVizDistribution(dist) : null;
-      const instructors = sched
-        ? [
-            ...new Set(
-              Object.values(sched.components ?? {})
-                .flat()
-                .flatMap((sec) => sec.times.map((t) => t.instructor))
-                .filter((i): i is string => typeof i === "string"),
-            ),
-          ]
-        : [];
-      const ratings = getRatingsForInstructors(instructors, professorRatings);
-      const avgRating =
-        ratings.length > 0
-          ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10
-          : null;
-      const label = title ? `${code} — ${title}` : code;
-      return { label, title, aPlusPercent: aPlus, avgRating, gpa, gradeViz };
+      const { label, title, aPlusPercent, avgRating, gpa, gradeViz } = buildSwapOptionView(
+        code,
+        cache,
+        professorRatings,
+      );
+      return { label, title, aPlusPercent, avgRating, gpa, gradeViz };
     }
 
     const valid = swapResult.candidates.map((code) => ({

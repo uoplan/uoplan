@@ -27,6 +27,12 @@
   transform: translateY(0);
 }
 
+/* "Change your personalization" state (already personalized): calmer surface so
+   it reads as a settings link rather than a warning nudge. */
+.sidebarPillNeutral {
+  background: var(--app-surface-sunken);
+}
+
 .sidebarText {
   flex: 1;
   min-width: 0;

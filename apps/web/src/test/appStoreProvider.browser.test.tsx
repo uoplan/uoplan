@@ -1,6 +1,7 @@
 import { page } from "vitest/browser";
 import { expect, test } from "vitest";
 
+import { createTestAppServices } from "@uoplan/store/testServices";
 import { useAppStore, useAppStoreApi } from "../store/appStore";
 import { renderWithProviders } from "./renderWithProviders";
 
@@ -34,6 +35,19 @@ test("selector reads seeded state and re-renders when an action mutates the stor
 test("each render is backed by an isolated store (no cross-test leakage)", async () => {
   const { store } = await renderWithProviders(<CourseCountProbe />);
   // Fresh store uses the default, not the value seeded by the previous test.
+  expect(store.getState().coursesThisSemester).toBe(5);
+  await expect.element(page.getByRole("button", { name: /count:/ })).toHaveTextContent("count: 5");
+});
+
+test("renderWithProviders accepts package test services", async () => {
+  const services = createTestAppServices({
+    navigation: {
+      toCalendar: () => {},
+    },
+  });
+
+  const { store } = await renderWithProviders(<CourseCountProbe />, { services });
+
   expect(store.getState().coursesThisSemester).toBe(5);
   await expect.element(page.getByRole("button", { name: /count:/ })).toHaveTextContent("count: 5");
 });

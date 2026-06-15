@@ -2,20 +2,21 @@ import type { ReactNode } from "react";
 import { I18nProvider } from "@lingui/react";
 import { domAnimation, LazyMotion, MotionConfig } from "framer-motion";
 import { render } from "vitest-browser-react";
+import { createTestAppServices } from "@uoplan/store/testServices";
+import type { AppServiceOverrides } from "@uoplan/store/services";
 
 import { i18n } from "../i18n";
 import { AppThemeProvider } from "../theme/AppThemeProvider";
 import { AppStoreProvider } from "../store/AppStoreProvider";
 import { createAppStore } from "../store/appStore";
 import type { AppStoreApi } from "../store/appStore";
-import type { AppServices } from "../store/services";
 import type { AppStore } from "../store/types";
 
 interface TestProviderOptions {
   /** A fresh store to back the tree. Defaults to a new isolated `createAppStore()`. */
   store?: AppStoreApi;
-  /** Services injected when constructing a default store (e.g. a fake navigation). */
-  services?: AppServices;
+  /** Service overrides merged into package test services when constructing a default store. */
+  services?: AppServiceOverrides;
   /** Partial state merged into the store before rendering, for seeding fixtures. */
   initialState?: Partial<AppStore>;
 }
@@ -48,7 +49,7 @@ function AppTestProviders({ children, store }: { children: ReactNode; store: App
  * store. Returns the render result plus the `store` so tests can seed/inspect state.
  */
 export async function renderWithProviders(ui: ReactNode, options: TestProviderOptions = {}) {
-  const store = options.store ?? createAppStore(options.services);
+  const store = options.store ?? createAppStore(createTestAppServices(options.services));
   if (options.initialState) {
     store.setState(options.initialState);
   }

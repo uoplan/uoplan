@@ -17,7 +17,7 @@ const grades: CourseGradesData = {
   courses: [
     {
       code: testCourseCode("CSI 1101"),
-      professors: [
+      sections: [
         { name: "Easy", termId: 2239, distribution: { "A+": 80, A: 20 } },
         { name: "Hard", termId: 2241, distribution: { C: 60, D: 40 } },
         { name: "Easy", termId: 2249, distribution: { A: 70, B: 30 } },
@@ -25,11 +25,11 @@ const grades: CourseGradesData = {
     },
     {
       code: testCourseCode("CSI 2110"),
-      professors: [{ name: "Mid", termId: 2249, distribution: { B: 50, "B+": 30, F: 20 } }],
+      sections: [{ name: "Mid", termId: 2249, distribution: { B: 50, "B+": 30, F: 20 } }],
     },
     {
       code: testCourseCode("PSY 1101"),
-      professors: [
+      sections: [
         { name: "Kind", termId: 2239, distribution: { A: 100 } },
         { name: "Kind", termId: 2249, distribution: { A: 90, "A-": 10 } },
       ],

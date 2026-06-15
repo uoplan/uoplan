@@ -1,12 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ExploreCoursePage } from "../../../../components/explore/ExploreCoursePage";
-import { parseCoursePathParam } from "../../../../lib/explore/courseSearchParams";
+import {
+  courseNormToPathParam,
+  parseCoursePathParam,
+} from "../../../../lib/explore/courseSearchParams";
+import { buildCourseHead } from "../../../../lib/seo";
 import { useProfessorRatings } from "../../../../store/hooks";
 
 export const Route = createFileRoute("/explore/course/$course/")({
-  head: ({ params }) => ({
-    meta: [{ title: parseCoursePathParam(params.course) ?? params.course.toUpperCase() }],
-  }),
+  head: ({ params }) => {
+    const courseCode = parseCoursePathParam(params.course);
+    return buildCourseHead({
+      courseCode: courseCode ?? params.course.toUpperCase(),
+      pathParam: courseCode ? courseNormToPathParam(courseCode) : params.course,
+    });
+  },
   component: ExploreCourseRoute,
 });
 

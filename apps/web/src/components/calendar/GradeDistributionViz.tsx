@@ -1,4 +1,5 @@
 import "./gradeDistribution.css";
+import type { CSSProperties } from "react";
 import { Stack, Text, Tooltip } from "@mantine/core";
 import { buildGradeHistogramModel } from "@uoplan/core";
 import type { GradeVizData } from "@uoplan/core";
@@ -122,6 +123,7 @@ export function GradeDistributionHistogram({
 
   const histClass = [
     "cal-grade-histogram",
+    "cal-grade-histogram--interactive",
     variant === "compact" ? "cal-grade-histogram--compact" : "",
     hideLabels ? "cal-grade-histogram--no-labels" : "",
   ]
@@ -134,10 +136,13 @@ export function GradeDistributionHistogram({
   const histogram = (
     <div
       className={histClass}
-      style={{
-        paddingTop: dims.padTopPx,
-        minHeight,
-      }}
+      style={
+        {
+          "--cal-grade-histogram-pad-top": `${dims.padTopPx}px`,
+          paddingTop: 0,
+          minHeight,
+        } as CSSProperties
+      }
       aria-hidden
     >
       {displayBars.map((bar) => {

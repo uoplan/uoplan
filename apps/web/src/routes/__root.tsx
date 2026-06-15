@@ -73,12 +73,12 @@ function RootLayout() {
   const isCalendarRoute = pathname.startsWith("/schedule");
   // Explore renders its own cart (inline top-right on desktop, floating on mobile)
   // inside its layout, so it is excluded here. Personalize keeps a top-right cart;
-  // trends (chrome controls) and the graph (node panel) own that corner, so the
-  // cart floats bottom-right there.
+  // schedule, trends (chrome controls), and the graph (node panel) own that corner,
+  // so the cart floats bottom-right there.
   const showBasketFab =
     Boolean(indices) &&
-    !isCalendarRoute &&
-    ["/personalize", "/trends", "/graph"].some((prefix) => pathname.startsWith(prefix));
+    (isCalendarRoute ||
+      ["/personalize", "/trends", "/graph"].some((prefix) => pathname.startsWith(prefix)));
   const basketDesktopPlacement = pathname.startsWith("/personalize") ? "top-right" : "bottom-right";
   const pendingAnimation = useRef(false);
   const lastNavAction = useRef<string>("PUSH");

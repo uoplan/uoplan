@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { computeStillNeeded } from "./computeStillNeeded";
-import type { ComputeStillNeededParams } from "./computeStillNeeded";
-import type { DesiredCourseResolution } from "./resolveDesiredCourses";
+import { computeStillNeeded } from "@uoplan/core";
+import type { ComputeStillNeededParams, DesiredCourseResolution } from "@uoplan/core";
 import { buildCache, req } from "../../test/generationFixtures";
 
 const EMPTY_RESOLUTION: DesiredCourseResolution = {
@@ -92,6 +91,7 @@ describe("computeStillNeeded", () => {
     });
 
     expect(result[0].suggestions).toHaveLength(2);
+    expect(result[0].suggestionPoolSize).toBe(5);
   });
 
   it("skips uncapped (non-positive credit) requirements", () => {
