@@ -103,6 +103,27 @@ export function accumulateInstructorDistribution<CodeKey, NameKey>(
 }
 
 /**
+ * Guard + normalize a raw instructor `name`, then accumulate `dist` under it via
+ * {@link accumulateInstructorDistribution}. Blank or non-string names are skipped.
+ * Shared by the runtime lookup builder ({@link buildGradeLookups}) and the
+ * build-time enricher (`apps/scraper/src/schedules/enrich.ts`). Generic over the
+ * name-key type so both the branded (`InstructorNameKey`) and raw-string maps
+ * reuse it; the normalized key is a normalized instructor name either way.
+ */
+export function accumulateInstructorDistributionByName<CodeKey, NameKey>(
+  byCourseTermName: Map<CodeKey, Map<number, Map<NameKey, GradeDistribution>>>,
+  code: CodeKey,
+  termId: number,
+  name: unknown,
+  dist: GradeDistribution,
+): void {
+  if (typeof name !== "string" || !name.trim()) return;
+  const key = normalizeInstructorName(name) as unknown as NameKey;
+  if (!key) return;
+  accumulateInstructorDistribution(byCourseTermName, code, termId, key, dist);
+}
+
+/**
  * Build the per-course/term/instructor lookup and the per-course aggregate from
  * runtime grades data. Rows with a non-positive term id are skipped (matching
  * the build-time enricher's `termId === 0` guard).
@@ -130,13 +151,7 @@ export function buildGradeLookups(grades: CourseGradesData): GradeLookups {
 
       allDists.push(dist);
 
-      const name = prof.name;
-      if (typeof name !== "string" || !name.trim()) continue;
-
-      const key = normalizeInstructorName(name);
-      if (!key) continue;
-
-      accumulateInstructorDistribution(byCourseTermName, code, termId, key, dist);
+      accumulateInstructorDistributionByName(byCourseTermName, code, termId, prof.name, dist);
     }
 
     aggregateByCourse.set(code, sumGradeDistributions(allDists));

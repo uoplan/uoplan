@@ -1,3 +1,5 @@
+import type { PdfPageText, TextItemWithPosition } from "@uoplan/core/transcript";
+
 interface CompatReadableStream {
   [Symbol.asyncIterator]: () => AsyncGenerator<Uint8Array, void, unknown>;
   getReader(): {
@@ -50,7 +52,6 @@ async function ensureWorker(): Promise<void> {
   workerInitialized = true;
 }
 
-import type { PdfPageText, TextItemWithPosition } from "@uoplan/core/transcript";
 export type { PdfPageText } from "@uoplan/core/transcript";
 
 interface PdfTextContentItem {

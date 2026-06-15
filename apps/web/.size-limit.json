@@ -6,7 +6,7 @@
   },
   {
     "name": "calendar route",
-    "path": "dist/client/assets/calendar-*.js",
+    "path": "dist/client/assets/WeekCalendar-*.js",
     "limit": "52 kB"
   },
   {

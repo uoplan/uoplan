@@ -2,16 +2,18 @@ import type { NormalizedCourseCode } from "../brand";
 import type { CourseFilters } from "../courseFilters";
 import { courseMatchesFilters } from "../courseFilters";
 import type { DataCache } from "../dataCache";
+import type { Course } from "../dataTypes";
 import {
   aggregateCourseDistribution,
   courseAPlusPercent,
   distributionGpa,
-  type GradeVizData,
   normalizeGradeVizDistribution,
 } from "../gradeDistribution";
+import type { GradeVizData } from "../gradeDistribution";
 import { isWithinElectiveLevelBuckets } from "../poolHelpers";
 import { buildPrereqContext } from "../prerequisites/context";
 import { canTakeCourse } from "../prerequisites/evaluator";
+import type { PrereqContext } from "../prerequisites/types";
 import type { ProfessorRatingsMap } from "../professorRatings";
 import { getRatingsForInstructors } from "../professorRatings";
 import { getEffectiveSchedule } from "../scheduleFilters";
@@ -114,44 +116,97 @@ export function findSwapCandidates(input: FindSwapCandidatesInput): NormalizedCo
     if (filters && !courseMatchesFilters(code, filters)) continue;
     if (!isWithinElectiveLevelBuckets(code, electiveLevelBuckets)) continue;
     if (isHonoursProject(code, cache)) continue;
-
-    const prefixMatch = code.match(/^([A-Z]{3,4})/i);
-    const prefix = prefixMatch ? prefixMatch[1].toLowerCase() : "";
-    if (excludedPrefixes.includes(prefix)) continue;
-
-    if (completedCourses.length > 0) {
-      if (course.prerequisites) {
-        if (!canTakeCourse(code, cache, prereqCtx)) continue;
-      } else if (course.prereqText) {
-        continue;
-      }
-    } else if (course.prerequisites || course.prereqText) {
+    if (
+      !isSwapCandidateEligible(
+        course,
+        cache,
+        prereqCtx,
+        completedCourses.length > 0,
+        excludedPrefixes,
+      )
+    )
       continue;
-    }
-
-    const cacheKey = `${code}:${includeClosedComponents}:${virtualSectionsOnly}`;
-    let possibleEnrollments = comboCache.get(cacheKey);
-    if (!possibleEnrollments) {
-      const sched = getEffectiveSchedule(cache, code, includeClosedComponents, virtualSectionsOnly);
-      if (!sched) {
-        possibleEnrollments = [];
-      } else {
-        const combos = getValidSectionCombos(sched, constraints);
-        possibleEnrollments = combos.map((combo) => getEnrollmentsForCourse(sched, combo));
-      }
-      comboCache.set(cacheKey, possibleEnrollments);
-    }
-    if (possibleEnrollments.length === 0) continue;
-
-    const fits = possibleEnrollments.some(
-      (candidate) => !others.some((e) => enrollmentsOverlap(e, candidate)),
-    );
-    if (!fits) continue;
+    if (
+      !courseFitsAroundOthers(
+        cache,
+        code,
+        constraints,
+        includeClosedComponents,
+        virtualSectionsOnly,
+        others,
+        comboCache,
+      )
+    )
+      continue;
 
     candidates.push(code);
   }
 
   return candidates;
+}
+
+/**
+ * Shared eligibility gate for swap candidates: rejects courses whose prefix is
+ * excluded, and applies the prerequisite rules (when the student has completed
+ * courses, structured prerequisites are evaluated and free-text prereqs are
+ * rejected; otherwise any course with prerequisites is rejected).
+ */
+export function isSwapCandidateEligible(
+  course: Course,
+  cache: DataCache,
+  prereqCtx: PrereqContext,
+  hasCompletedCourses: boolean,
+  excludedPrefixes: readonly string[],
+): boolean {
+  const code = course.code;
+  const prefixMatch = code.match(/^([A-Z]{3,4})/i);
+  const prefix = prefixMatch ? prefixMatch[1].toLowerCase() : "";
+  if (excludedPrefixes.includes(prefix)) return false;
+
+  if (hasCompletedCourses) {
+    if (course.prerequisites) {
+      if (!canTakeCourse(code, cache, prereqCtx)) return false;
+    } else if (course.prereqText) {
+      return false;
+    }
+  } else if (course.prerequisites || course.prereqText) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Returns true when `code` has at least one valid section combo (under the given
+ * constraints) that doesn't overlap any of the `others` enrollments. Memoizes the
+ * possible enrollments per course/component flags into `comboCache`.
+ */
+export function courseFitsAroundOthers(
+  cache: DataCache,
+  code: NormalizedCourseCode,
+  constraints: GenerationConstraints,
+  includeClosedComponents: boolean,
+  virtualSectionsOnly: boolean,
+  others: readonly CourseEnrollment[],
+  comboCache: Map<string, CourseEnrollment[]>,
+): boolean {
+  const cacheKey = `${code}:${includeClosedComponents}:${virtualSectionsOnly}`;
+  let possibleEnrollments = comboCache.get(cacheKey);
+  if (!possibleEnrollments) {
+    const sched = getEffectiveSchedule(cache, code, includeClosedComponents, virtualSectionsOnly);
+    if (!sched) {
+      possibleEnrollments = [];
+    } else {
+      const combos = getValidSectionCombos(sched, constraints);
+      possibleEnrollments = combos.map((combo) => getEnrollmentsForCourse(sched, combo));
+    }
+    comboCache.set(cacheKey, possibleEnrollments);
+  }
+  if (possibleEnrollments.length === 0) return false;
+
+  return possibleEnrollments.some(
+    (candidate) => !others.some((e) => enrollmentsOverlap(e, candidate)),
+  );
 }
 
 /** A swap candidate enriched with the display data the swap UI shows. */

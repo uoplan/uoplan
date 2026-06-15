@@ -1,7 +1,4 @@
-import {
-  parseLocaleOverride,
-  serializeLocaleOverride,
-} from "@/i18n/locale-storage";
+import { parseLocaleOverride, serializeLocaleOverride } from "@/i18n/locale-storage";
 
 describe("parseLocaleOverride", () => {
   it("reads a stored app locale", () => {

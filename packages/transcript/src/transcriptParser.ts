@@ -1,8 +1,5 @@
-import {
-  detectFrenchImmersionStreamHint,
-  processExtractedPages,
-  type TranscriptParseResult,
-} from "@uoplan/core/transcript";
+import { detectFrenchImmersionStreamHint, processExtractedPages } from "@uoplan/core/transcript";
+import type { TranscriptParseResult } from "@uoplan/core/transcript";
 import { extractTranscriptPdfPages } from "./pdfExtraction";
 
 export { findBestMatchingProgram } from "@uoplan/core/transcript";

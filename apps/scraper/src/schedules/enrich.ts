@@ -9,9 +9,8 @@
  */
 
 import {
-  accumulateInstructorDistribution,
+  accumulateInstructorDistributionByName,
   distributionForSection,
-  normalizeInstructorName,
   sumGradeDistributions,
 } from "@uoplan/core/gradeLookup";
 import type { InstructorNameKey } from "@uoplan/core";
@@ -100,17 +99,11 @@ export function buildGradeLookups(gradesRaw: unknown): GradeLookups {
 
       allDists.push(dist as GradeDistribution);
 
-      const name = prof.name;
-      if (typeof name !== "string" || !name.trim()) continue;
-
-      const key = normalizeInstructorName(name);
-      if (!key) continue;
-
-      accumulateInstructorDistribution(
+      accumulateInstructorDistributionByName(
         byCourseTermName,
         code,
         termId,
-        key,
+        prof.name,
         dist as GradeDistribution,
       );
     }

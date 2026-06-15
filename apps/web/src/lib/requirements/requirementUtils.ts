@@ -23,7 +23,6 @@ export {
   pruneOptionSelectionsForClear,
   resolveRequirementIdsForScheduleCourse,
 } from "@uoplan/store/requirements/selectionUtils";
-export { courseMatchesElectiveLevelBuckets };
 
 function normalizeTitleForCompare(title: string | undefined): string {
   return (title ?? "").trim().replaceAll(/\s+/g, " ").toLowerCase();

@@ -74,6 +74,42 @@ export function testLectureSchedule(
   });
 }
 
+/**
+ * Builds a single-LEC (`M00`) {@link CourseSchedule} from a list of meeting
+ * times. Shared fixture for generation tests that need a course meeting at
+ * several specific day/time slots.
+ */
+export function lectureScheduleWithTimes(
+  courseCode: string,
+  times: { day: DayOfWeekCode; start: number; end: number }[],
+): CourseSchedule {
+  const [subject, catalogNumber] = courseCode.split(" ");
+  return {
+    subject,
+    catalogNumber,
+    courseCode: normalizeCourseCode(courseCode),
+    title: null,
+    timeZone: "America/Toronto",
+    components: {
+      LEC: [
+        {
+          section: "M00",
+          sectionCode: "M00",
+          component: "LEC",
+          session: null,
+          times: times.map((t) => ({
+            day: t.day,
+            startMinutes: t.start,
+            endMinutes: t.end,
+            virtual: false,
+          })),
+          status: null,
+        },
+      ],
+    },
+  };
+}
+
 export function fakeDataCache(schedules: CourseSchedule[]): DataCache {
   const byCode = new Map(schedules.map((s) => [s.courseCode as string, s]));
   return {

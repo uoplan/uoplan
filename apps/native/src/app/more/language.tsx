@@ -41,7 +41,11 @@ export default function LanguageScreen() {
   ];
 
   return (
-    <RedesignScreen gap={Spacing.three} backLabel={tr("native.language.title")} onBack={() => router.back()}>
+    <RedesignScreen
+      gap={Spacing.three}
+      backLabel={tr("native.language.title")}
+      onBack={() => router.back()}
+    >
       <ScreenHeader title={tr("native.language.title")} subtitle={tr("native.language.subtitle")} />
 
       <Stack gap="xs">

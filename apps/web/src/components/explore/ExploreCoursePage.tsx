@@ -1,7 +1,6 @@
-import { Accordion, Badge, Box, Group, Stack, Text, Title, Tooltip } from "@mantine/core";
+import { Accordion, Badge, Box, Group, Text, Title, Tooltip } from "@mantine/core";
 import { useEffect, useMemo } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { m } from "framer-motion";
 import { IconClock } from "@tabler/icons-react";
 import type { ProfessorRatingsMap } from "@uoplan/core";
 import { normalizeCourseCode, normalizeProfessorName } from "@uoplan/core";
@@ -28,6 +27,7 @@ import {
 import { useExploreOfferings } from "./exploreOfferingsContext";
 import { useExploreDetailFilters } from "./useExploreDetailFilters";
 import { CatalogueLink } from "./CatalogueLink";
+import { ExplorePageTransition } from "./ExplorePageTransition";
 import { useCourseFeedbackViews } from "../../hooks/useFeedbackViews";
 import { FeedbackSummaryCard } from "./feedback/FeedbackSummaryCard";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
@@ -241,158 +241,152 @@ export function ExploreCoursePage({
   const facultyName = faculty ? localizeFacultyName(faculty, i18n.locale) : null;
 
   return (
-    <m.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <Stack gap={0}>
-        {selectedCourseMeta ? (
-          <ExploreEntityHeader
-            aside={
-              showFeedback ? (
-                <ExploreFeedbackAside>
-                  <FeedbackSummaryCard
-                    to="/explore/course/$course/feedback"
-                    params={{ course: urlCourseParam }}
-                    views={feedbackViews}
-                    loading={feedbackLoading}
-                  />
-                </ExploreFeedbackAside>
-              ) : null
-            }
-          >
-            <Group gap={8} align="center" wrap="nowrap">
-              <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
-                {selectedCourseMeta.courseCode}
-              </Title>
-              {catalogueUrl ? (
-                <CatalogueLink href={catalogueUrl} label={tr("explore.openInCatalogue")} />
+    <ExplorePageTransition>
+      {selectedCourseMeta ? (
+        <ExploreEntityHeader
+          aside={
+            showFeedback ? (
+              <ExploreFeedbackAside>
+                <FeedbackSummaryCard
+                  to="/explore/course/$course/feedback"
+                  params={{ course: urlCourseParam }}
+                  views={feedbackViews}
+                  loading={feedbackLoading}
+                />
+              </ExploreFeedbackAside>
+            ) : null
+          }
+        >
+          <Group gap={8} align="center" wrap="nowrap">
+            <Title order={2} c="var(--app-text)" fw={600} fz={{ base: "h3", sm: "h2" }}>
+              {selectedCourseMeta.courseCode}
+            </Title>
+            {catalogueUrl ? (
+              <CatalogueLink href={catalogueUrl} label={tr("explore.openInCatalogue")} />
+            ) : null}
+          </Group>
+          {selectedCourseMeta.courseTitle || facultyName || courseCredits !== null ? (
+            <Group gap={8} mt={10} wrap="wrap">
+              {selectedCourseMeta.courseTitle ? (
+                <Tooltip
+                  label={selectedCourseMeta.courseTitle}
+                  multiline
+                  w={320}
+                  withArrow
+                  position="bottom-start"
+                >
+                  <Badge
+                    size="lg"
+                    variant="light"
+                    color="gray"
+                    radius="sm"
+                    maw={240}
+                    style={{ minWidth: 0, textTransform: "none", cursor: "help" }}
+                  >
+                    {selectedCourseMeta.courseTitle}
+                  </Badge>
+                </Tooltip>
+              ) : null}
+              {faculty && facultyName ? (
+                <Badge
+                  size="lg"
+                  variant="light"
+                  color="gray"
+                  radius="sm"
+                  maw="100%"
+                  style={{ textTransform: "none", cursor: "pointer" }}
+                  renderRoot={(props) => (
+                    <Link
+                      to="/explore/faculty/$faculty"
+                      params={{ faculty: faculty.id }}
+                      search={linkSearch}
+                      {...props}
+                    />
+                  )}
+                >
+                  {facultyName}
+                </Badge>
+              ) : null}
+              {courseCredits !== null ? (
+                <Badge
+                  size="lg"
+                  variant="light"
+                  color="gray"
+                  radius="sm"
+                  style={{ textTransform: "none" }}
+                >
+                  {tr("explore.course.credits", { count: courseCredits })}
+                </Badge>
               ) : null}
             </Group>
-            {selectedCourseMeta.courseTitle || facultyName || courseCredits !== null ? (
-              <Group gap={8} mt={10} wrap="wrap">
-                {selectedCourseMeta.courseTitle ? (
-                  <Tooltip
-                    label={selectedCourseMeta.courseTitle}
-                    multiline
-                    w={320}
-                    withArrow
-                    position="bottom-start"
-                  >
-                    <Badge
-                      size="lg"
-                      variant="light"
-                      color="gray"
-                      radius="sm"
-                      maw={240}
-                      style={{ minWidth: 0, textTransform: "none", cursor: "help" }}
-                    >
-                      {selectedCourseMeta.courseTitle}
-                    </Badge>
-                  </Tooltip>
-                ) : null}
-                {faculty && facultyName ? (
-                  <Badge
-                    size="lg"
-                    variant="light"
-                    color="gray"
-                    radius="sm"
-                    maw="100%"
-                    style={{ textTransform: "none", cursor: "pointer" }}
-                    renderRoot={(props) => (
-                      <Link
-                        to="/explore/faculty/$faculty"
-                        params={{ faculty: faculty.id }}
-                        search={linkSearch}
-                        {...props}
-                      />
-                    )}
-                  >
-                    {facultyName}
-                  </Badge>
-                ) : null}
-                {courseCredits !== null ? (
-                  <Badge
-                    size="lg"
-                    variant="light"
-                    color="gray"
-                    radius="sm"
-                    style={{ textTransform: "none" }}
-                  >
-                    {tr("explore.course.credits", { count: courseCredits })}
-                  </Badge>
-                ) : null}
-              </Group>
-            ) : null}
-            {aliasCodes.length > 0 ? (
-              <Text size="sm" c="dimmed" lh={1.5} mt={8}>
-                {tr("explore.alsoKnownAs")}{" "}
-                {aliasCodes.map((code, i) => (
-                  <span key={code}>
-                    {i > 0 ? ", " : null}
-                    <Link
-                      to="/explore/course/$course"
-                      params={{ course: courseNormToPathParam(code) }}
-                      search={linkSearch}
-                      style={{
-                        color: "var(--app-text)",
-                        fontWeight: 500,
-                        textDecoration: "none",
-                      }}
-                    >
-                      {code}
-                    </Link>
-                  </span>
-                ))}
-              </Text>
-            ) : null}
-            <Group gap={8} mt={12}>
-              {scheduleTerms.length > 0 ? (
-                scheduleTerms.map((termId) => (
+          ) : null}
+          {aliasCodes.length > 0 ? (
+            <Text size="sm" c="dimmed" lh={1.5} mt={8}>
+              {tr("explore.alsoKnownAs")}{" "}
+              {aliasCodes.map((code, i) => (
+                <span key={code}>
+                  {i > 0 ? ", " : null}
                   <Link
-                    key={termId}
-                    to="/explore/course/$course/schedule"
-                    params={{ course: urlCourseParam }}
-                    search={{ ...EMPTY_EXPLORE_SEARCH, term: termId }}
-                    style={{ textDecoration: "none" }}
+                    to="/explore/course/$course"
+                    params={{ course: courseNormToPathParam(code) }}
+                    search={linkSearch}
+                    style={{
+                      color: "var(--app-text)",
+                      fontWeight: 500,
+                      textDecoration: "none",
+                    }}
                   >
-                    <TermPillChip label={formatTermLabel(termId)} />
+                    {code}
                   </Link>
-                ))
-              ) : (
-                <TermPillChip hidden />
-              )}
-            </Group>
-          </ExploreEntityHeader>
-        ) : null}
-
-        {displayedProfessorGroups.length === 0 ? (
-          <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs }}>
-            <Text c="dimmed" size="sm">
-              {loading
-                ? null
-                : hasActiveFilters(filters)
-                  ? tr("explore.courseNoProfessorsForFilters")
-                  : tr("explore.courseNoProfessors")}
-            </Text>
-          </Box>
-        ) : (
-          <ExploreFullBleed>
-            <ExploreAccordion chevronRightBase="calc(12px)">
-              {displayedProfessorGroups.map((g) => (
-                <CourseProfessorItem
-                  key={g.groupId}
-                  group={g}
-                  professorRatings={professorRatings}
-                  sentiment={professorByName?.get(normalizeProfessorName(g.displayName)) ?? null}
-                  linkSearch={linkSearch}
-                />
+                </span>
               ))}
-            </ExploreAccordion>
-          </ExploreFullBleed>
-        )}
-      </Stack>
-    </m.div>
+            </Text>
+          ) : null}
+          <Group gap={8} mt={12}>
+            {scheduleTerms.length > 0 ? (
+              scheduleTerms.map((termId) => (
+                <Link
+                  key={termId}
+                  to="/explore/course/$course/schedule"
+                  params={{ course: urlCourseParam }}
+                  search={{ ...EMPTY_EXPLORE_SEARCH, term: termId }}
+                  style={{ textDecoration: "none" }}
+                >
+                  <TermPillChip label={formatTermLabel(termId)} />
+                </Link>
+              ))
+            ) : (
+              <TermPillChip hidden />
+            )}
+          </Group>
+        </ExploreEntityHeader>
+      ) : null}
+
+      {displayedProfessorGroups.length === 0 ? (
+        <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs }}>
+          <Text c="dimmed" size="sm">
+            {loading
+              ? null
+              : hasActiveFilters(filters)
+                ? tr("explore.courseNoProfessorsForFilters")
+                : tr("explore.courseNoProfessors")}
+          </Text>
+        </Box>
+      ) : (
+        <ExploreFullBleed>
+          <ExploreAccordion chevronRightBase="calc(12px)">
+            {displayedProfessorGroups.map((g) => (
+              <CourseProfessorItem
+                key={g.groupId}
+                group={g}
+                professorRatings={professorRatings}
+                sentiment={professorByName?.get(normalizeProfessorName(g.displayName)) ?? null}
+                linkSearch={linkSearch}
+              />
+            ))}
+          </ExploreAccordion>
+        </ExploreFullBleed>
+      )}
+    </ExplorePageTransition>
   );
 }

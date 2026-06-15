@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { buildDataCache } from "../dataCache";
-import type { Catalogue, Course, CourseSchedule, DayOfWeek, SchedulesData } from "../dataTypes";
+import type { Catalogue, Course, SchedulesData } from "../dataTypes";
 import { getEffectiveSchedule } from "../scheduleFilters";
 import { getEnrollmentsForCourse, getValidSectionCombos } from "./sectionCombos";
 import type { CourseEnrollment, GenerationConstraints } from "./types";
 import { normalizeCourseCode } from "../utils/courseUtils";
+import { lectureScheduleWithTimes as makeSchedule } from "../tests/engineTestHelpers";
 import { buildSwapOptionView, difficultyBucket, findSwapCandidates } from "./swapCandidates";
 
 const CONSTRAINTS: GenerationConstraints = {
@@ -19,37 +20,6 @@ function course(code: string, over: Partial<Course> = {}): Course {
     credits: 3,
     ...over,
   } as Course;
-}
-
-function makeSchedule(
-  courseCode: string,
-  times: { day: DayOfWeek; start: number; end: number }[],
-): CourseSchedule {
-  const [subject, catalogNumber] = courseCode.split(" ");
-  return {
-    subject,
-    catalogNumber,
-    courseCode: normalizeCourseCode(courseCode),
-    title: null,
-    timeZone: "America/Toronto",
-    components: {
-      LEC: [
-        {
-          section: "M00",
-          sectionCode: "M00",
-          component: "LEC",
-          session: null,
-          times: times.map((t) => ({
-            day: t.day,
-            startMinutes: t.start,
-            endMinutes: t.end,
-            virtual: false,
-          })),
-          status: null,
-        },
-      ],
-    },
-  };
 }
 
 function enrollmentFor(cache: ReturnType<typeof buildDataCache>, code: string): CourseEnrollment {
