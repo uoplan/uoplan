@@ -1,0 +1,4 @@
+module UoplanEngineFFI {
+  header "uoplan_engine.h"
+  export *
+}

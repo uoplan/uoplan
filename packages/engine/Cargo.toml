@@ -15,6 +15,11 @@ wasm-bindgen = "0.2"
 prost = "0.14"
 console_error_panic_hook = { version = "0.1", optional = true }
 
+# Android-only: JNI binding for the native engine (see src/jni_android.rs). Target-
+# gated so it is never pulled into the WASM or iOS (apple) builds.
+[target.'cfg(target_os = "android")'.dependencies]
+jni = { version = "0.21", default-features = false }
+
 [features]
 # Off by default so release WASM doesn't pay for the panic hook (~3 KB). The dev
 # WASM build re-enables it (see scripts/build-engine-wasm.sh) for readable panics.
