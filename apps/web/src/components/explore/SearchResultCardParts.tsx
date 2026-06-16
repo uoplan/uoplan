@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { Box, Stack, Text } from "@mantine/core";
 import type { GradeVizData } from "@uoplan/core";
+import { gpaToLetterGrade, gradeVizGpa } from "@uoplan/core";
 import { tr, useTr } from "../../i18n";
-import { mostCommonGrade } from "./exploreResultCardShared";
 
 export function SearchResultCardBody({ children }: { children: ReactNode }) {
   return (
@@ -24,7 +24,7 @@ export function SearchResultGradeSummary({
   fallback?: ReactNode;
 }) {
   useTr();
-  const grade = gradeViz ? mostCommonGrade(gradeViz) : null;
+  const grade = gradeViz ? gpaToLetterGrade(gradeVizGpa(gradeViz)) : null;
   const passing = gradeViz ? Math.round(gradeViz.passingPercent) : null;
 
   if (!gradeViz) return <>{fallback}</>;

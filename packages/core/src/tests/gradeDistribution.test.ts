@@ -6,7 +6,9 @@ import {
   courseAPlusPercent,
   courseGpa,
   distributionGpa,
+  gpaToLetterGrade,
   GRADE_POINTS,
+  gradeVizGpa,
   normalizeGradeVizDistribution,
 } from "../gradeDistribution";
 import type { ComponentSection, CourseSchedule } from "../dataTypes";
@@ -189,5 +191,57 @@ describe("buildCourseDifficultyIndexFromCache", () => {
 
     // Bar-height scaling uses the tallest bar (A+ = 10).
     expect(model.maxHistogramCount).toBe(10);
+  });
+
+  describe("gpaToLetterGrade", () => {
+    it("maps each grade point exactly back to its letter", () => {
+      for (const [letter, points] of Object.entries(GRADE_POINTS)) {
+        expect(gpaToLetterGrade(points)).toBe(letter);
+      }
+    });
+
+    it("rounds to the nearest letter and breaks .5 ties toward the better grade", () => {
+      // 8.4 is closest to A- (8) vs A (9) -> A- ; 8.6 closer to A.
+      expect(gpaToLetterGrade(8.4)).toBe("A-");
+      expect(gpaToLetterGrade(8.6)).toBe("A");
+      // Exactly between B+ (7) and A- (8) rounds up to A-.
+      expect(gpaToLetterGrade(7.5)).toBe("A-");
+    });
+
+    it("is monotonic non-decreasing so a higher mean never maps to a lower letter", () => {
+      let prev = -1;
+      for (let gpa = 0; gpa <= 10.0001; gpa += 0.1) {
+        const letter = gpaToLetterGrade(gpa);
+        expect(letter).not.toBeNull();
+        const points = GRADE_POINTS[letter as string];
+        expect(points).toBeGreaterThanOrEqual(prev);
+        prev = points;
+      }
+    });
+
+    it("returns null for nullish / non-finite input", () => {
+      const missing: number | undefined = undefined;
+      expect(gpaToLetterGrade(null)).toBeNull();
+      expect(gpaToLetterGrade(missing)).toBeNull();
+      expect(gpaToLetterGrade(Number.NaN)).toBeNull();
+    });
+  });
+
+  describe("gradeVizGpa", () => {
+    it("matches distributionGpa over the same distribution", () => {
+      const dist = { "A+": 5, A: 10, "B+": 4, F: 3, DR: 7, P: 2 };
+      const viz = normalizeGradeVizDistribution(dist);
+      expect(gradeVizGpa(viz)).toBeCloseTo(distributionGpa(dist) ?? Number.NaN, 5);
+    });
+
+    it("returns null for null gradeViz", () => {
+      expect(gradeVizGpa(null)).toBeNull();
+    });
+
+    it("excludes withdrawals (DR) from the mean, mirroring distributionGpa", () => {
+      const withDr = normalizeGradeVizDistribution({ A: 4, F: 4, DR: 100 });
+      const withoutDr = normalizeGradeVizDistribution({ A: 4, F: 4 });
+      expect(gradeVizGpa(withDr)).toBeCloseTo(gradeVizGpa(withoutDr) ?? Number.NaN, 5);
+    });
   });
 });

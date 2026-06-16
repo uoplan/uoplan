@@ -1,5 +1,4 @@
 import type { CSSProperties } from "react";
-import type { GradeVizData } from "@uoplan/core";
 
 /**
  * Shared chrome for the four Explore search-result cards (course, professor,
@@ -23,17 +22,3 @@ export const EXPLORE_RESULT_CARD_STYLE: CSSProperties = {
   transition:
     "background-color var(--app-transition), border-color var(--app-transition), transform var(--app-transition), box-shadow var(--app-transition)",
 };
-
-const LETTER_GRADES = new Set(["F", "E", "D", "D+", "C", "C+", "B", "B+", "A-", "A", "A+"]);
-
-/** The single most-awarded letter grade in a distribution, or null when empty. */
-export function mostCommonGrade(gradeViz: GradeVizData): string | null {
-  return (
-    gradeViz.histogram
-      .filter((h) => LETTER_GRADES.has(h.grade) && h.count > 0)
-      .reduce<{ grade: string; count: number } | null>(
-        (best, h) => (best === null || h.count > best.count ? h : best),
-        null,
-      )?.grade ?? null
-  );
-}

@@ -133,6 +133,36 @@ export function distributionGpa(dist: Record<string, number> | null | undefined)
   return weighted / mass;
 }
 
+/**
+ * Maps a mean GPA on the 10-point scale back to the nearest letter grade in
+ * `GRADE_POINTS`. Ties round up toward the better grade, and the mapping is
+ * monotonic non-decreasing in `gpa` — so sorting by mean GPA never shows a
+ * strictly lower letter above a higher one. Returns null for nullish/non-finite input.
+ */
+export function gpaToLetterGrade(gpa: number | null | undefined): string | null {
+  if (gpa == null || !Number.isFinite(gpa)) return null;
+  let best: { letter: string; diff: number } | null = null;
+  for (const [letter, points] of Object.entries(GRADE_POINTS)) {
+    const diff = Math.abs(points - gpa);
+    if (best === null || diff < best.diff) best = { letter, diff };
+  }
+  return best?.letter ?? null;
+}
+
+/**
+ * Mean GPA for a `GradeVizData` (reconstructs the distribution from its histogram
+ * and reuses `distributionGpa`). This is the value the Explore "average grade" sort
+ * ranks by, kept here so the sort and the card badge use an identical number.
+ */
+export function gradeVizGpa(gradeViz: GradeVizData | null | undefined): number | null {
+  if (!gradeViz) return null;
+  const dist: Record<string, number> = {};
+  for (const entry of gradeViz.histogram) {
+    dist[entry.grade] = (dist[entry.grade] ?? 0) + entry.count;
+  }
+  return distributionGpa(dist);
+}
+
 /** Sum every section's optional `distribution` across all components. */
 export function aggregateCourseDistribution(schedule: CourseSchedule): Record<string, number> {
   const parts: GradeDistribution[] = [];
