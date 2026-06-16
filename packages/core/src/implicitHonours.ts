@@ -12,6 +12,10 @@ export type ImplicitHonoursPick = { code: string; requirementId: string };
  * requirement has timetable-eligible honours candidates but no timetable-eligible
  * non-honours candidates.
  *
+ * `maxPicks` caps how many implicit theses may be inferred — callers pass the
+ * leftover "courses this semester" budget after explicit picks so an auto-inferred
+ * thesis never exceeds the count or crowds out a course the student chose.
+ *
  * Mutates `seenHonoursNorm` with normalized codes for added implicit honours.
  */
 export function collectImplicitHonoursForSchedule(
@@ -24,8 +28,10 @@ export function collectImplicitHonoursForSchedule(
   virtualSectionsOnly: boolean,
   explicitExemptNormalized: Set<string>,
   seenHonoursNorm: Set<string>,
+  maxPicks: number,
 ): ImplicitHonoursPick[] {
   const picks: ImplicitHonoursPick[] = [];
+  if (maxPicks <= 0) return picks;
 
   for (const req of effectiveRemainingRequirements) {
     const reqId = req.requirementId;
@@ -74,6 +80,7 @@ export function collectImplicitHonoursForSchedule(
     if (seenHonoursNorm.has(norm)) continue;
     seenHonoursNorm.add(norm);
     picks.push({ code: only, requirementId: reqId });
+    if (picks.length >= maxPicks) break;
   }
 
   return picks;

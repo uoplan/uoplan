@@ -45,6 +45,8 @@ describe("collectImplicitHonoursForSchedule", () => {
   const eligible = new Set(["ABC 4900", "DEF 4900", "CSI 1111"]);
   const completed = new Set<string>();
   const seen = new Set<string>();
+  // Generous cap for cases that aren't exercising the budget limit.
+  const UNCAPPED = 99;
 
   it("infers a single honours candidate when no non-honours course has schedule data", () => {
     const cache = makeCache({
@@ -61,6 +63,7 @@ describe("collectImplicitHonoursForSchedule", () => {
       false,
       new Set<string>(),
       seen,
+      UNCAPPED,
     );
     expect(picks).toEqual([{ code: "ABC 4900", requirementId: "honours-req" }]);
   });
@@ -78,6 +81,7 @@ describe("collectImplicitHonoursForSchedule", () => {
       false,
       new Set<string>(),
       s,
+      UNCAPPED,
     );
     expect(picks).toEqual([]);
   });
@@ -101,6 +105,7 @@ describe("collectImplicitHonoursForSchedule", () => {
       false,
       new Set<string>(),
       s,
+      UNCAPPED,
     );
     expect(picks).toEqual([]);
   });
@@ -118,6 +123,7 @@ describe("collectImplicitHonoursForSchedule", () => {
       false,
       new Set<string>(),
       s,
+      UNCAPPED,
     );
     expect(picks).toEqual([]);
   });
@@ -137,6 +143,7 @@ describe("collectImplicitHonoursForSchedule", () => {
       false,
       new Set<string>(),
       s,
+      UNCAPPED,
     );
     expect(picks).toEqual([]);
   });
@@ -154,7 +161,45 @@ describe("collectImplicitHonoursForSchedule", () => {
       false,
       new Set<string>(),
       s,
+      UNCAPPED,
     );
     expect(picks).toEqual([]);
+  });
+
+  it("infers nothing when the leftover budget is zero", () => {
+    const s = new Set<string>();
+    const cache = makeCache({});
+    const picks = collectImplicitHonoursForSchedule(
+      [req("honours-req", ["ABC 4900"])],
+      {},
+      completed,
+      eligible,
+      cache,
+      false,
+      false,
+      new Set<string>(),
+      s,
+      0,
+    );
+    expect(picks).toEqual([]);
+    expect(s.size).toBe(0);
+  });
+
+  it("caps the number of inferred theses to the leftover budget", () => {
+    const s = new Set<string>();
+    const cache = makeCache({});
+    const picks = collectImplicitHonoursForSchedule(
+      [req("r1", ["ABC 4900"]), req("r2", ["DEF 4900"])],
+      {},
+      completed,
+      eligible,
+      cache,
+      false,
+      false,
+      new Set<string>(),
+      s,
+      1,
+    );
+    expect(picks).toEqual([{ code: "ABC 4900", requirementId: "r1" }]);
   });
 });
