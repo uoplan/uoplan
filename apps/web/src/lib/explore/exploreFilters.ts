@@ -1,4 +1,4 @@
-import { distributionGpa, normalizeCourseCode } from "@uoplan/core";
+import { gradeVizGpa, normalizeCourseCode } from "@uoplan/core";
 import type { RemainingRequirement } from "@uoplan/core";
 import type { ExploreCourseSearchEntry, ExploreProfessorSearchEntry } from "./gradesSearch";
 
@@ -234,15 +234,6 @@ export function getCourseLevel(code: string): ExploreFilterLevel | null {
   const bucket = Math.floor(n / 1000) * 1000;
   if (bucket >= 1000 && bucket <= 4000) return bucket as ExploreFilterLevel;
   return null;
-}
-
-function gradeVizGpa(gradeViz: ExploreCourseSearchEntry["gradeViz"]): number | null {
-  if (!gradeViz) return null;
-  const dist: Record<string, number> = {};
-  for (const entry of gradeViz.histogram) {
-    dist[entry.grade] = (dist[entry.grade] ?? 0) + entry.count;
-  }
-  return distributionGpa(dist);
 }
 
 function compareNullableNumber(a: number | null, b: number | null, dir: ExploreSortDir): number {

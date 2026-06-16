@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, View } from "react-native";
 
 import type { GradeVizData } from "@uoplan/core/gradeDistribution";
+import { gpaToLetterGrade, gradeVizGpa } from "@uoplan/core/gradeDistribution";
 import { Text } from "@uoplan/ui";
 
 import { GradeVizBar } from "@/components/grade-viz-bar";
@@ -15,20 +16,6 @@ import type {
 } from "@/data/explore-index";
 
 export const CARD_WIDTH = 200;
-
-const LETTER_GRADES = new Set(["F", "E", "D", "D+", "C", "C+", "B", "B+", "A-", "A", "A+"]);
-
-/** The single most-awarded letter grade in a distribution (mirrors web `mostCommonGrade`). */
-function mostCommonGrade(gradeViz: GradeVizData): string | null {
-  return (
-    gradeViz.histogram
-      .filter((h) => LETTER_GRADES.has(h.grade) && h.count > 0)
-      .reduce<{ grade: string; count: number } | null>(
-        (best, h) => (best === null || h.count > best.count ? h : best),
-        null,
-      )?.grade ?? null
-  );
-}
 
 function formatThousands(value: number): string {
   return Math.round(value)
@@ -45,7 +32,7 @@ function GradeSummary({ gradeViz }: { gradeViz: GradeVizData | null }) {
       </Text>
     );
   }
-  const grade = mostCommonGrade(gradeViz);
+  const grade = gpaToLetterGrade(gradeVizGpa(gradeViz));
   const passing = Math.round(gradeViz.passingPercent);
   return (
     <Text size="xs" color={Surface.dimmed}>
