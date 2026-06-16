@@ -23,12 +23,22 @@ function buildRouter(onNavigate?: () => void) {
     path: "/explore",
     component: () => <div>Explore page</div>,
   });
+  const exploreCourseRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/explore/course/$course",
+    component: () => <div>Course page</div>,
+  });
   const personalizeRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/personalize",
     component: () => <div>Personalize page</div>,
   });
-  const routeTree = rootRoute.addChildren([basketRoute, exploreRoute, personalizeRoute]);
+  const routeTree = rootRoute.addChildren([
+    basketRoute,
+    exploreRoute,
+    exploreCourseRoute,
+    personalizeRoute,
+  ]);
   return createRouter({
     routeTree,
     history: createMemoryHistory({ initialEntries: ["/basket"] }),
@@ -72,17 +82,48 @@ test("basket body starts expanded with courses and collapses from the summary he
   await expect.element(page.getByLabelText("Courses in your basket: 1")).toBeInTheDocument();
 });
 
-test("clicking a basket course row removes it", async () => {
+test("clicking a basket course row navigates to its explore page", async () => {
+  const onNavigate = vi.fn();
+  const router = buildRouter(onNavigate);
+
+  await renderWithProviders(<RouterProvider router={router} />, {
+    initialState: { basketCourses: ["CSI 2110"] },
+  });
+
+  await page.getByRole("link", { name: "View CSI 2110" }).click();
+
+  expect(onNavigate).toHaveBeenCalledOnce();
+  expect(router.state.location.pathname).toBe("/explore/course/csi2110");
+});
+
+test("trash button asks to confirm before removing; cancel keeps the course", async () => {
   const router = buildRouter();
 
   await renderWithProviders(<RouterProvider router={router} />, {
     initialState: { basketCourses: ["CSI 2110"] },
   });
 
-  const row = page.getByRole("button", { name: "Remove CSI 2110" });
-  await expect.element(row).toBeInTheDocument();
+  await page.getByRole("button", { name: "Remove CSI 2110" }).click();
 
-  await row.click();
+  // Inline confirm appears; the course is still present.
+  await expect.element(page.getByText("Remove?", { exact: true })).toBeVisible();
+  await expect.element(page.getByText("CSI 2110", { exact: true })).toBeVisible();
+
+  await page.getByRole("button", { name: "Cancel" }).click();
+
+  await expect.element(page.getByText("Remove?", { exact: true })).not.toBeInTheDocument();
+  await expect.element(page.getByRole("button", { name: "Remove CSI 2110" })).toBeInTheDocument();
+});
+
+test("confirming the inline prompt removes the course", async () => {
+  const router = buildRouter();
+
+  await renderWithProviders(<RouterProvider router={router} />, {
+    initialState: { basketCourses: ["CSI 2110"] },
+  });
+
+  await page.getByRole("button", { name: "Remove CSI 2110" }).click();
+  await page.getByRole("button", { name: "Confirm removing CSI 2110" }).click();
 
   await expect.element(page.getByText("Your basket is empty", { exact: true })).toBeInTheDocument();
 });
