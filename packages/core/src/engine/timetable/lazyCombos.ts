@@ -19,7 +19,7 @@ import type { ComponentSection } from "../../dataTypes";
 import type { DataCache } from "../../dataCache";
 import type { NormalizedCourseCode } from "../../brand";
 import type { PrecomputedCombo } from "../../generation";
-import { isHonoursProject } from "../../utils/courseUtils";
+import { isTimelessCourse } from "../../utils/courseUtils";
 import { shuffleInPlace } from "../../poolHelpers";
 import {
   canonicalCourseCode,
@@ -36,7 +36,9 @@ import type { ConstraintPipeline } from "../constraints/pipeline";
  * randomised by `rng` (so repeated enumerations across seeds surface different
  * section/time arrangements first).
  *
- * Honours projects yield exactly one empty combo (they are not timetabled).
+ * Timeless courses (no schedulable meeting time anywhere — honours theses,
+ * placements, co-op, research/seminar requirements) yield exactly one empty
+ * combo (they are not timetabled).
  */
 export function* lazyCourseCombos(
   code: string,
@@ -45,7 +47,7 @@ export function* lazyCourseCombos(
   ctx: ConstraintContext,
   rng: () => number,
 ): Generator<PrecomputedCombo> {
-  if (isHonoursProject(code, cache)) {
+  if (isTimelessCourse(code, cache)) {
     const combo = {};
     yield { combo, enrollment: enrollmentForPicker(code, combo, cache) };
     return;

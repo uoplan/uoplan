@@ -2,7 +2,7 @@ import type { ComponentSection, CourseSchedule } from "../dataTypes";
 import type { DataCache } from "../dataCache";
 import type { NormalizedCourseCode } from "../brand";
 import { isSectionAllowedByMinRating } from "../professorRatings";
-import { isHonoursProject, normalizeCourseCode } from "../utils/courseUtils";
+import { isTimelessCourse, normalizeCourseCode } from "../utils/courseUtils";
 import { timeSlotSatisfiesConstraints } from "./constraints";
 import { timesOverlap } from "./overlaps";
 import type { CourseEnrollment, GenerationConstraints, SectionCombo, TimeSlot } from "./types";
@@ -151,7 +151,7 @@ export function enrollmentForPicker(
   combo: SectionCombo,
   cache: DataCache,
 ): CourseEnrollment {
-  if (isHonoursProject(code, cache)) {
+  if (isTimelessCourse(code, cache)) {
     return {
       courseCode: canonicalCourseCode(code, cache),
       sectionCombo: combo,

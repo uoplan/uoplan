@@ -69,8 +69,10 @@ impl<'a, F: Fn(&str) -> bool> ScheduleResolver for FnResolver<'a, F> {
     }
 }
 
-/// Builds the seeded combos for one course. Honours projects yield a single
-/// empty (timeless) combo. Returns None if the course cannot be scheduled.
+/// Builds the seeded combos for one course. Timeless courses (no schedulable
+/// meeting time anywhere — honours theses, placements, co-op, research/seminar
+/// requirements) yield a single empty combo. Returns None if the course has
+/// real meeting times but no conflict-free section combo survives the filters.
 pub fn build_timetable_course(
     code: &str,
     data: &DataView,
@@ -78,7 +80,7 @@ pub fn build_timetable_course(
     constraints: &Constraints,
     rng: &mut Rng,
 ) -> Option<TimetableCourse> {
-    if data.is_honours_project(code) {
+    if data.is_timeless_course(code) {
         return Some(TimetableCourse {
             combos: vec![Enrollment {
                 course_code: data.canonical_code_str(code),

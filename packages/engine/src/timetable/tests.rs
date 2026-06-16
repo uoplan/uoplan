@@ -202,3 +202,154 @@ fn proves_overconstrained_unsat_quickly() {
         "unsat proof should be cheap, used {effort} expansions"
     );
 }
+
+// --- build_timetable_course: timeless (no-meeting-time) courses ---------------
+
+/// Builds a `DataView` where each course maps to a list of components, each with
+/// a single section carrying the given (start, end) meeting times on Monday. An
+/// empty time slice makes that section (hence the course) timeless.
+fn data_with_schedules(courses: &[(&str, &[(&str, &[(u32, u32)])])]) -> DataView {
+    use crate::proto::data::{
+        Catalogue, ComponentSection, ComponentSectionList, Course, CourseSchedule, DayOfWeek,
+        MeetingTime, SchedulesData, SectionStatus,
+    };
+    let course_codes: Vec<String> = courses.iter().map(|(c, _)| (*c).to_string()).collect();
+    let cat_courses: Vec<Course> = (0..courses.len())
+        .map(|i| Course {
+            code: i as u32,
+            credits: 3.0,
+            ..Default::default()
+        })
+        .collect();
+    let schedules: Vec<CourseSchedule> = courses
+        .iter()
+        .enumerate()
+        .map(|(i, (_, comps))| {
+            let mut components = std::collections::HashMap::new();
+            for (key, slots) in comps.iter() {
+                let times: Vec<MeetingTime> = slots
+                    .iter()
+                    .map(|&(start, end)| MeetingTime {
+                        day: DayOfWeek::Mo as i32,
+                        start_minutes: start,
+                        end_minutes: end,
+                        ..Default::default()
+                    })
+                    .collect();
+                components.insert(
+                    (*key).to_string(),
+                    ComponentSectionList {
+                        items: vec![ComponentSection {
+                            section: "A".to_string(),
+                            times,
+                            status: SectionStatus::Open as i32,
+                            ..Default::default()
+                        }],
+                    },
+                );
+            }
+            CourseSchedule {
+                course: i as u32,
+                components,
+                ..Default::default()
+            }
+        })
+        .collect();
+
+    DataView::new(
+        Catalogue {
+            course_codes: course_codes.clone(),
+            courses: cat_courses,
+            ..Default::default()
+        },
+        SchedulesData {
+            course_codes,
+            schedules,
+            ..Default::default()
+        },
+    )
+}
+
+#[test]
+fn timeless_course_with_empty_times_builds_single_empty_combo() {
+    // A non-"900" course whose only section carries no meeting time (e.g. an STG
+    // placement / thesis / co-op) must be schedulable as a single timeless combo
+    // instead of returning None (which would make any schedule containing it
+    // unbuildable).
+    let data = data_with_schedules(&[("ADM 3996", &[("STG", &[])])]);
+    let constraints = crate::constraints::Constraints {
+        max_end: 24 * 60,
+        ..Default::default()
+    };
+    let resolver = FnResolver {
+        data: &data,
+        include_closed: true,
+        virtual_for: |_| false,
+    };
+    let mut rng = crate::rng::Rng::new(1);
+
+    assert!(data.is_timeless_course("ADM 3996"));
+    assert!(!data.is_honours_project("ADM 3996"));
+    let tc = build_timetable_course("ADM 3996", &data, &resolver, &constraints, &mut rng)
+        .expect("timeless course should build a combo");
+    assert_eq!(tc.combos.len(), 1);
+    assert!(tc.combos[0].times.is_empty());
+}
+
+#[test]
+fn honours_course_with_stray_time_stays_timeless() {
+    // A "900" honours/research course must stay timeless even when the registrar
+    // lists a stray meeting time. Forcing it onto the timetable (scheduling it
+    // with real times) could make an otherwise feasible schedule unbuildable —
+    // this is the regression guard for the committed term-2271 elective pool.
+    let data = data_with_schedules(&[("PHY 4900", &[("SEM", &[(540, 600)])])]);
+    let constraints = crate::constraints::Constraints {
+        max_end: 24 * 60,
+        ..Default::default()
+    };
+    let resolver = FnResolver {
+        data: &data,
+        include_closed: true,
+        virtual_for: |_| false,
+    };
+    let mut rng = crate::rng::Rng::new(1);
+
+    assert!(data.is_honours_project("PHY 4900"));
+    assert!(data.is_timeless_course("PHY 4900"));
+    let tc = build_timetable_course("PHY 4900", &data, &resolver, &constraints, &mut rng)
+        .expect("honours course should build a combo");
+    assert_eq!(tc.combos.len(), 1);
+    assert!(
+        tc.combos[0].times.is_empty(),
+        "honours course must not occupy a timetable slot"
+    );
+}
+
+#[test]
+fn non_honours_course_missing_from_schedule_is_not_timeless() {
+    let data = data_with_schedules(&[("CSI 2101", &[("LEC", &[(540, 600)])])]);
+    // A non-honours code with no schedule entry is NOT timeless — it keeps
+    // failing the normal resolve path rather than becoming a silent free pick.
+    assert!(!data.is_timeless_course("PHI 1234"));
+}
+
+#[test]
+fn course_with_real_times_is_not_timeless_and_builds_real_combos() {
+    let data = data_with_schedules(&[("CSI 2101", &[("LEC", &[(540, 600)])])]);
+    let constraints = crate::constraints::Constraints {
+        max_end: 24 * 60,
+        ..Default::default()
+    };
+    let resolver = FnResolver {
+        data: &data,
+        include_closed: true,
+        virtual_for: |_| false,
+    };
+    let mut rng = crate::rng::Rng::new(1);
+
+    assert!(!data.is_timeless_course("CSI 2101"));
+    let tc = build_timetable_course("CSI 2101", &data, &resolver, &constraints, &mut rng)
+        .expect("timed course should build a combo");
+    assert_eq!(tc.combos.len(), 1);
+    assert_eq!(tc.combos[0].times.len(), 1);
+}
