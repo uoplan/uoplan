@@ -1,5 +1,6 @@
 import { useId, useMemo, useState } from "react";
 import {
+  ActionIcon,
   Anchor,
   Badge,
   Box,
@@ -16,17 +17,20 @@ import { Link } from "@tanstack/react-router";
 import {
   IconAward,
   IconBooks,
+  IconCheck,
   IconChevronDown,
   IconChevronUp,
   IconCircleDashed,
   IconInfoCircle,
   IconListCheck,
   IconTrash,
+  IconX,
 } from "@tabler/icons-react";
 import type { DataCache, DesiredCourseResolution, StillNeededRequirement } from "@uoplan/core";
-import { computeStillNeeded, getCourseCredits } from "@uoplan/core";
+import { computeStillNeeded, getCourseCredits, normalizeCourseCode } from "@uoplan/core";
 import { useBasketSelection } from "../../hooks/useBasket";
 import { tr, useTr } from "../../i18n";
+import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { useBasketResolution } from "../../lib/generation/useBasketResolution";
 import {
@@ -76,6 +80,10 @@ const I18N = {
   emptyBody: "basket.empty.body",
   emptyCta: "basket.empty.cta",
   removeCourse: "basket.removeCourse",
+  viewCourse: "basket.viewCourse",
+  removePrompt: "basket.removePrompt",
+  confirmRemove: "basket.confirmRemove",
+  cancelRemove: "basket.cancelRemove",
   summaryCollapse: "basket.summary.collapse",
   summaryExpand: "basket.summary.expand",
   detailsHide: "basket.details.hide",
@@ -204,6 +212,7 @@ export function BasketContents({ variant = "popover", onNavigate }: BasketConten
   const bodyId = useId();
   const [summaryOpen, setSummaryOpen] = useState(true);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [pendingRemoval, setPendingRemoval] = useState<string | null>(null);
   const { basketCourses, addToBasket, removeFromBasket } = useBasketSelection();
   const { completedCourses } = useCompletedCourses();
   const { constrainedPerRequirement, selectedPerRequirement, prereqEligibleCourses } =
@@ -420,14 +429,17 @@ export function BasketContents({ variant = "popover", onNavigate }: BasketConten
             <div className={classes.courseList}>
               {courseDisplays.map((course) => {
                 const status = buildStatus(course.code, hasProgram, assignmentByCode, resolution);
+                const confirming = pendingRemoval === course.code;
                 return (
-                  <UnstyledButton
-                    key={course.code}
-                    className={classes.courseRow}
-                    aria-label={t(I18N.removeCourse, { code: course.code })}
-                    onClick={() => removeFromBasket(course.code)}
-                  >
-                    <Group wrap="nowrap" align="center" gap={10}>
+                  <div key={course.code} className={classes.courseRow}>
+                    <Link
+                      to="/explore/course/$course"
+                      params={{ course: courseNormToPathParam(normalizeCourseCode(course.code)) }}
+                      search={exploreSearch}
+                      className={classes.courseLink}
+                      aria-label={t(I18N.viewCourse, { code: course.code })}
+                      onClick={() => onNavigate?.()}
+                    >
                       <Box
                         className={classes.statusDot}
                         style={{ background: statusDotColor(status.kind) }}
@@ -454,11 +466,48 @@ export function BasketContents({ variant = "popover", onNavigate }: BasketConten
                           {course.title ? `${course.title} · ${status.label}` : status.label}
                         </Text>
                       </Box>
-                      <Box className={classes.removeIcon} aria-hidden>
+                    </Link>
+                    {confirming ? (
+                      <Group gap={4} wrap="nowrap" className={classes.confirmGroup}>
+                        <Text size="xs" c="dimmed" fw={600}>
+                          {t(I18N.removePrompt)}
+                        </Text>
+                        <ActionIcon
+                          size="sm"
+                          variant="subtle"
+                          color="red"
+                          className={classes.confirmRemove}
+                          aria-label={t(I18N.confirmRemove, { code: course.code })}
+                          onClick={() => {
+                            removeFromBasket(course.code);
+                            setPendingRemoval(null);
+                          }}
+                        >
+                          <IconCheck size={15} />
+                        </ActionIcon>
+                        <ActionIcon
+                          size="sm"
+                          variant="subtle"
+                          color="gray"
+                          aria-label={t(I18N.cancelRemove)}
+                          onClick={() => setPendingRemoval(null)}
+                        >
+                          <IconX size={15} />
+                        </ActionIcon>
+                      </Group>
+                    ) : (
+                      <ActionIcon
+                        size="sm"
+                        variant="subtle"
+                        color="gray"
+                        className={classes.removeButton}
+                        aria-label={t(I18N.removeCourse, { code: course.code })}
+                        onClick={() => setPendingRemoval(course.code)}
+                      >
                         <IconTrash size={15} />
-                      </Box>
-                    </Group>
-                  </UnstyledButton>
+                      </ActionIcon>
+                    )}
+                  </div>
                 );
               })}
             </div>

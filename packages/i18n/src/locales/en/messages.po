@@ -366,6 +366,14 @@ msgid "basket.breakdown.unavailable"
 msgstr "Not offered this term"
 
 #: scripts/i18n/dynamic-keys.mjs
+msgid "basket.cancelRemove"
+msgstr "Cancel"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.confirmRemove"
+msgstr "Confirm removing {code}"
+
+#: scripts/i18n/dynamic-keys.mjs
 msgid "basket.credits"
 msgstr "{credits} cr"
 
@@ -417,6 +425,10 @@ msgstr "Go to Personalize"
 #: scripts/i18n/dynamic-keys.mjs
 msgid "basket.removeCourse"
 msgstr "Remove {code}"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.removePrompt"
+msgstr "Remove?"
 
 #: scripts/i18n/dynamic-keys.mjs
 msgid "basket.stat.courseCount.tip"
@@ -505,6 +517,10 @@ msgstr "Expand basket summary"
 #: scripts/i18n/dynamic-keys.mjs
 msgid "basket.title"
 msgstr "Your basket"
+
+#: scripts/i18n/dynamic-keys.mjs
+msgid "basket.viewCourse"
+msgstr "View {code}"
 
 msgid "calendar.blockedTime.label"
 msgstr "Blocked time"

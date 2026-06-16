@@ -89,25 +89,38 @@
   gap: 2px;
 }
 
-/* The row is a Mantine UnstyledButton whose root class resets padding to 0 at the
-   same specificity as a bare `.courseRow`; scoping under `.courseList` wins so the
-   hover highlight gets real internal padding. */
-.courseList .courseRow {
-  width: 100%;
+/* Each row is a flex container: a primary navigation link (the course info) and a
+   trailing delete control. The link area gets a neutral hover; the trash control
+   carries the destructive (red) affordance on its own. */
+.courseRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--app-radius-sm);
+  padding-right: 6px;
+}
+
+.courseLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
   padding: 9px 11px;
   border-radius: var(--app-radius-sm);
   color: inherit;
+  text-decoration: none;
   cursor: pointer;
   transition:
     background-color var(--app-transition),
     color var(--app-transition);
 }
 
-.courseList .courseRow:hover {
-  background: var(--app-danger-soft);
+.courseLink:hover {
+  background: var(--app-surface);
 }
 
-.courseList .courseRow:focus-visible {
+.courseLink:focus-visible {
   outline: 2px solid var(--app-focus-ring);
   outline-offset: -2px;
 }
@@ -119,20 +132,26 @@
   border-radius: 50%;
 }
 
-.removeIcon {
-  display: grid;
-  place-items: center;
+/* The trash control stays visible at rest (muted) and turns destructive on
+   hover/focus. Scoped under `.courseRow` so it out-specifies Mantine's ActionIcon
+   root rules (a bare `.removeButton` would tie and lose by source order). */
+.courseRow .removeButton {
   flex-shrink: 0;
   color: var(--app-text-muted);
-  opacity: 0;
-  transition:
-    opacity var(--app-transition),
-    color var(--app-transition);
 }
 
-.courseList .courseRow:hover .removeIcon,
-.courseList .courseRow:focus-visible .removeIcon {
-  opacity: 1;
+.courseRow .removeButton:hover,
+.courseRow .removeButton:focus-visible {
+  color: var(--app-danger);
+  background: var(--app-danger-soft);
+}
+
+.confirmGroup {
+  flex-shrink: 0;
+  padding-left: 4px;
+}
+
+.courseRow .confirmRemove {
   color: var(--app-danger);
 }
 
@@ -181,7 +200,7 @@
 }
 
 @media (max-width: 48em) {
-  .courseList .courseRow {
+  .courseLink {
     padding: 9px 9px;
   }
 }
