@@ -6,7 +6,7 @@
 use std::collections::{BTreeMap, HashMap};
 
 use crate::proto::data::{Catalogue, Course, DayOfWeek, SchedulesData, SectionStatus};
-use crate::types::{RtSchedule, RtSection, RtTime};
+use crate::types::{section_has_times, RtSchedule, RtSection, RtTime};
 
 /// Normalize a course code: "amm5101" / "AMM 5101" -> "AMM 5101". Returns the
 /// trimmed input unchanged when it does not match the `PREFIX NUMBER` shape.
@@ -405,6 +405,40 @@ impl DataView {
     pub fn is_honours_project(&self, code: &str) -> bool {
         match self.course_index.get(&normalize_course_code(code)) {
             Some(&idx) => self.course_code_str[idx].ends_with("900"),
+            None => false,
+        }
+    }
+
+    /// Whether a course cannot be placed on a timetable: it is an honours/
+    /// research project (the legacy `ends_with("900")` rule, kept so those
+    /// courses stay timeless even when the registrar lists a stray orientation
+    /// time), OR it has a schedule entry whose sections (across every component)
+    /// carry no real meeting time. Such courses — honours theses, STG
+    /// placements, co-op/work terms, research/seminar requirements, etc. —
+    /// satisfy a requirement without occupying a timetable slot, so the
+    /// timetabler emits a single empty ("timeless") combo for them instead of
+    /// failing the whole arrangement.
+    ///
+    /// This is a strict superset of the old `is_honours_project` override on the
+    /// scheduling path: it additionally covers the ~900 no-time courses that do
+    /// not end in 900 (placements, theses, co-op) which would otherwise make any
+    /// schedule that includes them unbuildable. `is_honours_project` is retained
+    /// on its own for implicit-honours *inference* (auto-pinning a thesis), a
+    /// distinct concern from schedulability.
+    ///
+    /// A course with no schedule entry at all is treated as timeless only when
+    /// it is an honours project (preserving prior behaviour); other missing
+    /// courses keep failing the normal resolve path rather than silently
+    /// becoming free picks.
+    pub fn is_timeless_course(&self, code: &str) -> bool {
+        if self.is_honours_project(code) {
+            return true;
+        }
+        match self.raw_schedule(code) {
+            Some(schedule) => !schedule
+                .components
+                .values()
+                .any(|sections| sections.iter().any(section_has_times)),
             None => false,
         }
     }

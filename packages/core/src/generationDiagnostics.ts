@@ -2,7 +2,7 @@ import type { DataCache } from "./dataCache";
 import type { NormalizedCourseCode } from "./brand";
 import type { GenerationConstraints } from "./generation";
 import { getValidSectionCombos } from "./generation";
-import { isHonoursProject, normalizeCourseCode } from "./utils/courseUtils";
+import { isHonoursProject, isTimelessCourse, normalizeCourseCode } from "./utils/courseUtils";
 import { diagnoseByRelaxation } from "./engine/diagnostics/relaxation";
 import type { RelaxationOutcome } from "./engine/diagnostics/relaxation";
 
@@ -76,13 +76,13 @@ function canonicalDisplayCode(code: string, cache: DataCache): string {
   return cache.getCourse(normalized)?.code ?? normalized;
 }
 
-/** Combo count for generation: honours always schedulable (empty times); else valid section combos. */
+/** Combo count for generation: timeless courses always schedulable (empty times); else valid section combos. */
 export function countValidCombosForCourse(
   code: string,
   cache: DataCache,
   constraints?: GenerationConstraints,
 ): number {
-  if (isHonoursProject(code, cache)) return 1;
+  if (isTimelessCourse(code, cache)) return 1;
   const schedule = cache.getSchedule(code);
   if (!schedule) return 0;
   return getValidSectionCombos(schedule, constraints).length;

@@ -24,6 +24,34 @@ export function isHonoursProject(code: string, cache: DataCache | null): boolean
 }
 
 /**
+ * Whether a course cannot be placed on a timetable: it is an honours/research
+ * project (the legacy `endsWith("900")` rule, kept so those courses stay
+ * timeless even when the registrar lists a stray orientation time), OR it has a
+ * schedule entry whose sections (across every component) carry no real meeting
+ * time. Such courses — honours theses, STG placements, co-op/work terms,
+ * research or seminar requirements — satisfy a requirement without occupying a
+ * timetable slot, so the generator emits a single empty ("timeless") combo.
+ *
+ * This mirrors the Rust engine's `DataView::is_timeless_course` and is a strict
+ * superset of the old `isHonoursProject` override on the scheduling path (it
+ * additionally covers the many no-time placements/theses/co-op courses that do
+ * not end in 900). {@link isHonoursProject} is retained on its own for
+ * implicit-honours inference, a distinct concern from schedulability.
+ */
+export function isTimelessCourse(code: string, cache: DataCache | null): boolean {
+  if (!cache) return false;
+  if (isHonoursProject(code, cache)) return true;
+  const schedule = cache.getSchedule(code);
+  if (!schedule) return false;
+  return !Object.values(schedule.components).some((sections) =>
+    sections.some(
+      (section) =>
+        Array.isArray(section.times) && section.times.some((t) => t.startMinutes < t.endMinutes),
+    ),
+  );
+}
+
+/**
  * Check if a course is a work term / stage course.
  * These are typically excluded from scheduling.
  */
