@@ -123,6 +123,7 @@ export const DYNAMIC_TR_IDS = [
   "calendar.event.ariaLabel",
   "calendar.blockedTime.resizeStart",
   "calendar.blockedTime.resizeEnd",
+  "calendar.blockedTime.remove",
   "calendarView.previousWeek",
   "calendarView.nextWeek",
   "enrolCli.modal.copyCode",
