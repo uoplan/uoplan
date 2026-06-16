@@ -58,7 +58,6 @@ export function PersonalizeBanner({ variant = "floating" }: PersonalizeBannerPro
       <Box
         component={Link}
         to="/personalize"
-        role="note"
         className={
           personalized
             ? `${classes.sidebarPill} ${classes.sidebarPillNeutral}`

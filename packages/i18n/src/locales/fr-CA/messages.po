@@ -509,6 +509,10 @@ msgstr "Votre panier"
 msgid "calendar.blockedTime.label"
 msgstr "Plage bloquée"
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "calendar.blockedTime.remove"
+msgstr "Retirer la plage bloquée"
+
 msgid "calendar.blockedTime.removeBody"
 msgstr "Retirer la plage bloquée le {range}? Les horaires générés pourront de nouveau utiliser cette période."
 

@@ -142,6 +142,19 @@
   opacity: 0.85;
 }
 
+.cal-blocked-body {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: move;
+  touch-action: none;
+}
+
 .cal-blocked-handle {
   position: absolute;
   left: 0;
@@ -160,7 +173,7 @@
 }
 
 .cal-event:focus-visible,
-.cal-blocked:focus-visible,
+.cal-blocked-body:focus-visible,
 .cal-blocked-handle:focus-visible {
   outline: 2px solid var(--mantine-color-accentBlue-4);
   outline-offset: 2px;

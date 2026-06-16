@@ -509,6 +509,10 @@ msgstr "Your basket"
 msgid "calendar.blockedTime.label"
 msgstr "Blocked time"
 
+#: scripts/i18n/dynamic-keys.mjs
+msgid "calendar.blockedTime.remove"
+msgstr "Remove blocked time"
+
 msgid "calendar.blockedTime.removeBody"
 msgstr "Remove the blocked time on {range}? Generated schedules will be allowed to use this period again."
 

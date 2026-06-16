@@ -16,6 +16,7 @@ const MOVE_THRESHOLD_PX = 6;
 const LONG_PRESS_MS = 350;
 const BLOCKED_TIME_RESIZE_START_LABEL_ID = "calendar.blockedTime.resizeStart";
 const BLOCKED_TIME_RESIZE_END_LABEL_ID = "calendar.blockedTime.resizeEnd";
+const BLOCKED_TIME_REMOVE_LABEL_ID = "calendar.blockedTime.remove";
 
 type GestureKind = "create" | "move" | "resize-top" | "resize-bottom";
 
@@ -314,22 +315,26 @@ export function BlockedTimeLayer({
             className="cal-blocked"
             data-block-id={b.id}
             style={{ top: `${top}%`, height: `${height}%` }}
-            // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- contains nested slider handles, so a native <button> can't be used
-            role="button"
-            tabIndex={0}
+            // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- semantic grouping wrapper for the resize sliders + remove button; not a fieldset
+            role="group"
             aria-label={tr("calendar.blockedTime.label")}
             onPointerDown={(e) => {
               const block = blocks.find((bl) => bl.id === b.id);
               if (block) startGesture(e, "move", block);
             }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                const block = blocks.find((bl) => bl.id === b.id);
-                if (block) onRequestRemove(block);
-              }
-            }}
           >
+            <button
+              type="button"
+              className="cal-blocked-body"
+              aria-label={tr(BLOCKED_TIME_REMOVE_LABEL_ID)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  const block = blocks.find((bl) => bl.id === b.id);
+                  if (block) onRequestRemove(block);
+                }
+              }}
+            />
             <div
               className="cal-blocked-handle cal-blocked-handle-top"
               // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- custom drag-resize slider handle, not a native range input
