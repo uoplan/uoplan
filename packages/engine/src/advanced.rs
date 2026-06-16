@@ -335,28 +335,8 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
         }
     }
 
-    // implicit honours
-    let mut implicit_honours_req_id: HashMap<String, String> = HashMap::new();
-    {
-        let picks = collect_implicit_honours(
-            &effective_remaining,
-            &params.selected_per_requirement,
-            &completed_set,
-            &prereq_eligible_set,
-            data,
-            include_closed,
-            virtual_sections_only,
-            &explicit_exempt,
-            &mut seen_honours,
-        );
-        for (code, req_id) in picks {
-            honours_selected.push(code.clone());
-            implicit_honours_req_id.insert(normalize_course_code(&code), req_id);
-        }
-    }
-
-    let honours_count = honours_selected.len();
-    let effective_target = params.courses_this_semester.saturating_sub(honours_count);
+    // Explicit non-honours picks claim budget before any implicit honours thesis.
+    let explicit_honours_count = honours_selected.len();
 
     // explicit union (non-honours constrained, schedulable, eligible)
     let mut explicit_union: Vec<String> = Vec::new();
@@ -377,10 +357,9 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
         }
     }
 
-    let pin_all_explicit = !explicit_union.is_empty() && explicit_union.len() < effective_target;
-    let explicit_only = explicit_union.len() >= effective_target && effective_target > 0;
-
-    // forced courses
+    // Forced (standalone) non-honours courses. Built here so they can claim
+    // budget ahead of implicit honours; the `explicit_exempt` mutation stays
+    // below to keep the virtual-filter inputs the implicit pass sees unchanged.
     let mut forced_pinned: Vec<String> = Vec::new();
     let mut forced_seen: HashSet<String> = HashSet::new();
     for code in &params.forced_courses {
@@ -400,6 +379,50 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
         }
         forced_seen.insert(norm.clone());
         forced_pinned.push(code.clone());
+    }
+
+    // Implicit honours yields to explicit picks and may only fill leftover budget.
+    let non_honours_explicit_count = {
+        let mut norms: HashSet<String> = HashSet::new();
+        for code in explicit_union.iter().chain(forced_pinned.iter()) {
+            norms.insert(normalize_course_code(code));
+        }
+        norms.len()
+    };
+    let implicit_budget = params
+        .courses_this_semester
+        .saturating_sub(explicit_honours_count + non_honours_explicit_count);
+
+    // implicit honours (capped to leftover budget)
+    let mut implicit_honours_req_id: HashMap<String, String> = HashMap::new();
+    {
+        let picks = collect_implicit_honours(
+            &effective_remaining,
+            &params.selected_per_requirement,
+            &completed_set,
+            &prereq_eligible_set,
+            data,
+            include_closed,
+            virtual_sections_only,
+            &explicit_exempt,
+            &mut seen_honours,
+            implicit_budget,
+        );
+        for (code, req_id) in picks {
+            honours_selected.push(code.clone());
+            implicit_honours_req_id.insert(normalize_course_code(&code), req_id);
+        }
+    }
+
+    let honours_count = honours_selected.len();
+    let effective_target = params.courses_this_semester.saturating_sub(honours_count);
+
+    let pin_all_explicit = !explicit_union.is_empty() && explicit_union.len() < effective_target;
+    let explicit_only = explicit_union.len() >= effective_target && effective_target > 0;
+
+    // Mark forced courses as virtual-filter exempt now that the implicit pass has run.
+    for code in &forced_pinned {
+        let norm = normalize_course_code(code);
         if !explicit_exempt.contains(&norm) {
             explicit_exempt.push(norm);
         }
@@ -1498,8 +1521,12 @@ fn collect_implicit_honours(
     virtual_sections_only: bool,
     explicit_exempt: &[String],
     seen_honours: &mut HashSet<String>,
+    max_picks: usize,
 ) -> Vec<(String, String)> {
     let mut picks: Vec<(String, String)> = Vec::new();
+    if max_picks == 0 {
+        return picks;
+    }
     for req in effective_remaining {
         let req_id = &req.requirement_id;
         if req_id.is_empty() || req.candidate_courses.is_empty() {
@@ -1575,6 +1602,9 @@ fn collect_implicit_honours(
         }
         seen_honours.insert(norm);
         picks.push((only.clone(), req_id.clone()));
+        if picks.len() >= max_picks {
+            break;
+        }
     }
     picks
 }
@@ -1842,5 +1872,96 @@ mod tests {
             .expect("honours project uses timeless combo");
         assert_eq!(schedule.len(), 1);
         assert_eq!(schedule[0].course_code, "HON 4900");
+    }
+
+    #[test]
+    fn implicit_honours_yields_to_explicit_constrained_course_within_budget() {
+        // count=1 + a constrained non-honours course (ADM 1340) must produce just
+        // that course, never an auto-injected thesis from a thesis-only requirement.
+        let data = scheduled_data(&[
+            ("ADM 1340", Some((9 * 60, 10 * 60, false))),
+            ("HON 4900", None),
+        ]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.courses_this_semester = 1;
+        params.prereq_eligible_courses = vec!["ADM 1340".to_string(), "HON 4900".to_string()];
+        params.remaining_requirements = vec![
+            remaining("adm-req", "course", vec!["ADM 1340"]),
+            remaining("thesis", "course", vec!["HON 4900"]),
+        ];
+        params.constrained_per_requirement_raw =
+            BTreeMap::from([("adm-req".to_string(), vec!["ADM 1340".to_string()])]);
+
+        let result = generate_advanced(params);
+
+        assert!(
+            !result.pinned.iter().any(|c| c == "HON 4900"),
+            "implicit thesis must not be pinned when budget is filled by an explicit pick",
+        );
+        let schedule = result
+            .schedule
+            .expect("constrained course should timetable");
+        assert_eq!(schedule.len(), 1);
+        assert_eq!(schedule[0].course_code, "ADM 1340");
+    }
+
+    #[test]
+    fn implicit_honours_yields_to_forced_course_within_budget() {
+        // The reported bug: count=1 + a basket course resolved as a forced/standalone
+        // course must not also pull in an honours thesis.
+        let data = scheduled_data(&[
+            ("ADM 1340", Some((9 * 60, 10 * 60, false))),
+            ("HON 4900", None),
+        ]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.courses_this_semester = 1;
+        params.prereq_eligible_courses = vec!["ADM 1340".to_string(), "HON 4900".to_string()];
+        params.remaining_requirements = vec![remaining("thesis", "course", vec!["HON 4900"])];
+        params.forced_courses = vec!["ADM 1340".to_string()];
+
+        let result = generate_advanced(params);
+
+        assert!(
+            !result.pinned.iter().any(|c| c == "HON 4900"),
+            "implicit thesis must not be pinned when budget is filled by a forced course",
+        );
+        let schedule = result.schedule.expect("forced course should timetable");
+        assert_eq!(schedule.len(), 1);
+        assert_eq!(schedule[0].course_code, "ADM 1340");
+    }
+
+    #[test]
+    fn implicit_honours_fills_leftover_budget_above_explicit_picks() {
+        // count=2 with one explicit pick leaves a slot the thesis-only requirement may fill.
+        let data = scheduled_data(&[
+            ("ADM 1340", Some((9 * 60, 10 * 60, false))),
+            ("HON 4900", None),
+        ]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.courses_this_semester = 2;
+        params.prereq_eligible_courses = vec!["ADM 1340".to_string(), "HON 4900".to_string()];
+        params.remaining_requirements = vec![remaining("thesis", "course", vec!["HON 4900"])];
+        params.forced_courses = vec!["ADM 1340".to_string()];
+
+        let result = generate_advanced(params);
+
+        assert!(
+            result.pinned.iter().any(|c| c == "HON 4900"),
+            "thesis should fill the leftover slot when budget allows",
+        );
+        let schedule = result.schedule.expect("both courses should timetable");
+        let codes: HashSet<&str> = schedule.iter().map(|e| e.course_code.as_str()).collect();
+        assert_eq!(schedule.len(), 2);
+        assert!(codes.contains("ADM 1340"));
+        assert!(codes.contains("HON 4900"));
     }
 }
