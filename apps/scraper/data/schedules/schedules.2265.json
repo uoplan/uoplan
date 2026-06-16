@@ -6428,7 +6428,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 258,
               "A": 252,
@@ -7373,7 +7373,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 113,
               "A": 162,
@@ -9016,7 +9016,7 @@
                 "startMinutes": 600,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Fabien Avaron",
                 "meetingDates": [
                   "2026-05-12",
                   "2026-06-11"
@@ -9027,7 +9027,7 @@
                 "startMinutes": 600,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Valérie Cardin",
                 "meetingDates": [
                   "2026-05-12",
                   "2026-06-11"
@@ -9047,7 +9047,7 @@
                 "startMinutes": 600,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Fabien Avaron",
                 "meetingDates": [
                   "2026-05-12",
                   "2026-06-11"
@@ -9058,7 +9058,7 @@
                 "startMinutes": 600,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Valérie Cardin",
                 "meetingDates": [
                   "2026-05-12",
                   "2026-06-11"
@@ -9078,7 +9078,7 @@
                 "startMinutes": 600,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Fabien Avaron",
                 "meetingDates": [
                   "2026-05-12",
                   "2026-06-11"
@@ -9089,7 +9089,7 @@
                 "startMinutes": 600,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Valérie Cardin",
                 "meetingDates": [
                   "2026-05-12",
                   "2026-06-11"
@@ -12244,7 +12244,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 996,
               "A": 628,
@@ -14083,7 +14083,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 753,
               "A": 1072,
@@ -18833,7 +18833,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 23,
               "A": 43,
@@ -22403,7 +22403,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 798,
               "A": 1248,
@@ -22504,7 +22504,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 642,
               "A": 714,
@@ -23140,7 +23140,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 15,
               "A": 9,
@@ -25386,7 +25386,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Peggy Kleinplatz",
+                "instructor": "Vivien Slezak",
                 "meetingDates": [
                   "2026-06-22",
                   "2026-07-31"
@@ -26769,7 +26769,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -33248,7 +33248,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 401,
               "A": 405,
@@ -34601,7 +34601,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 182,
               "A": 280,
@@ -35631,7 +35631,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -44926,7 +44926,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 52,
               "A": 49,
@@ -47765,7 +47765,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 334,
               "A": 495,
@@ -51283,7 +51283,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 608,
               "A": 991,
@@ -51458,7 +51458,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 545,
               "A": 1017,
@@ -52301,7 +52301,7 @@
                 "startMinutes": 540,
                 "endMinutes": 710,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Falk Litane Petegou",
                 "meetingDates": [
                   "2026-06-22",
                   "2026-07-31"
@@ -52312,14 +52312,14 @@
                 "startMinutes": 540,
                 "endMinutes": 710,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Falk Litane Petegou",
                 "meetingDates": [
                   "2026-06-22",
                   "2026-07-31"
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 13,
               "A": 60,
@@ -52898,7 +52898,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3043,
               "A": 2673,
@@ -53462,7 +53462,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 751,
               "A": 826,
