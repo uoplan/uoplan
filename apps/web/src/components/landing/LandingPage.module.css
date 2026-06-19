@@ -1,0 +1,16 @@
+/* Landing hero column. On narrow screens the tiles stack (cols=1) and fill the
+   height, so centring them vertically looks balanced. From `md` up the tiles
+   collapse to a single short row, and centring leaves a large gap above the
+   title — so anchor the block near the top with a modest offset instead. The
+   breakpoint matches the SimpleGrid `md` (62em) switch to 3 columns. */
+.hero {
+  flex: 1;
+  justify-content: center;
+}
+
+@media (min-width: 62em) {
+  .hero {
+    justify-content: flex-start;
+    padding-top: clamp(2rem, 9vh, 6rem);
+  }
+}

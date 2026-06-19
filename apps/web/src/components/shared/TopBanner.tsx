@@ -19,15 +19,14 @@ export function TopBannerSlot({ children }: { children: ReactNode }) {
   );
 }
 
-type TopBannerProps = {
-  /** Destination the whole pill links to. */
-  to: "/donate" | "/personalize";
+type TopBannerBaseProps = {
   /**
-   * Colour scheme: "accent" (donation), "warning" (personalize nudge), or
+   * Colour scheme: "accent" (donation), "warning" (personalize nudge),
    * "neutral" (a high-contrast filled pill, e.g. the post-personalization
-   * "change your personalization" banner).
+   * "change your personalization" banner), or "success" (green, e.g. the
+   * Android closed-test recruitment banner).
    */
-  variant: "accent" | "warning" | "neutral";
+  variant: "accent" | "warning" | "neutral" | "success";
   /** Leading icon, coloured to the variant's strong tone. */
   icon: ReactNode;
   /** Full message shown on wider viewports. */
@@ -41,6 +40,14 @@ type TopBannerProps = {
 };
 
 /**
+ * The destination is either an internal route (`to`, a TanStack Router link) or
+ * an external/`mailto:` URL (`href`, a plain anchor). The two are mutually
+ * exclusive.
+ */
+type TopBannerProps = TopBannerBaseProps &
+  ({ to: "/donate" | "/personalize"; href?: never } | { href: string; to?: never });
+
+/**
  * The shared top-of-page banner pill used by both the donation and personalize
  * nudges. Layout, sizing, hover/press motion, responsive text and the dismiss
  * affordance are identical across both; only the colour scheme differs, driven
@@ -50,6 +57,7 @@ type TopBannerProps = {
  */
 export function TopBanner({
   to,
+  href,
   variant,
   icon,
   text,
@@ -58,37 +66,55 @@ export function TopBanner({
   onDismiss,
   dismissLabel,
 }: TopBannerProps) {
+  // mailto links never open a new tab, so target/rel are reserved for http(s).
+  const isExternalHttp = href !== undefined && /^https?:/i.test(href);
+
+  const pillContent = (
+    <Group wrap="nowrap" gap="sm" align="center" className={classes.row}>
+      <Box aria-hidden className={classes.icon}>
+        {icon}
+      </Box>
+
+      <Text
+        size="sm"
+        c="var(--banner-text)"
+        className={classes.textFull}
+        style={{ flex: 1, minWidth: 0 }}
+      >
+        {text}
+      </Text>
+      <Text
+        size="sm"
+        c="var(--banner-text)"
+        className={classes.textShort}
+        style={{ flex: 1, minWidth: 0 }}
+      >
+        {textShort}
+      </Text>
+
+      <Box aria-hidden className={classes.cta}>
+        {ctaLabel}
+        <IconArrowRight className={classes.arrow} size={16} stroke={2} />
+      </Box>
+    </Group>
+  );
+
   return (
     <Box component="aside" role="note" className={classes.banner} data-variant={variant}>
-      <Box component={Link} to={to} className={classes.pill}>
-        <Group wrap="nowrap" gap="sm" align="center" className={classes.row}>
-          <Box aria-hidden className={classes.icon}>
-            {icon}
-          </Box>
-
-          <Text
-            size="sm"
-            c="var(--banner-text)"
-            className={classes.textFull}
-            style={{ flex: 1, minWidth: 0 }}
-          >
-            {text}
-          </Text>
-          <Text
-            size="sm"
-            c="var(--banner-text)"
-            className={classes.textShort}
-            style={{ flex: 1, minWidth: 0 }}
-          >
-            {textShort}
-          </Text>
-
-          <Box aria-hidden className={classes.cta}>
-            {ctaLabel}
-            <IconArrowRight className={classes.arrow} size={16} stroke={2} />
-          </Box>
-        </Group>
-      </Box>
+      {href ? (
+        <Box
+          component="a"
+          href={href}
+          {...(isExternalHttp ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          className={classes.pill}
+        >
+          {pillContent}
+        </Box>
+      ) : (
+        <Box component={Link} to={to} className={classes.pill}>
+          {pillContent}
+        </Box>
+      )}
 
       <ActionIcon
         variant="subtle"

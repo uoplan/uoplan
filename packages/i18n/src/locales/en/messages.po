@@ -1869,6 +1869,22 @@ msgstr "Plan your degree and generate conflict-free timetables."
 msgid "landing.schedule.title"
 msgstr "Schedule generator"
 
+#: apps/web/src/components/shared/TesterBanner.tsx:34
+msgid "landing.tester.cta"
+msgstr "Email us"
+
+#: apps/web/src/components/shared/TesterBanner.tsx:36
+msgid "landing.tester.dismiss"
+msgstr "Dismiss"
+
+#: apps/web/src/components/shared/TesterBanner.tsx:32
+msgid "landing.tester.text"
+msgstr "Help launch our Android app by joining the closed test."
+
+#: apps/web/src/components/shared/TesterBanner.tsx:33
+msgid "landing.tester.textShort"
+msgstr "Join the Android closed test."
+
 msgid "landing.trends.description"
 msgstr "Track how grades shift over time across disciplines."
 

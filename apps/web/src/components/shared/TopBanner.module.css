@@ -29,6 +29,18 @@
   --banner-strong-hover: color-mix(in srgb, var(--app-warning) 88%, var(--app-text));
 }
 
+/* Green band, e.g. the Android closed-test recruitment banner. Mirrors the
+   warning variant's structure, swapped onto the success (green) tokens. */
+.banner[data-variant="success"] {
+  --banner-soft: var(--app-success-soft);
+  --banner-strong: var(--app-success);
+  --banner-on-strong: var(--app-text-inverse);
+  --banner-text: var(--app-text);
+  --banner-dismiss: var(--app-text-muted);
+  --banner-ring: color-mix(in srgb, var(--app-success) 24%, transparent);
+  --banner-strong-hover: color-mix(in srgb, var(--app-success) 88%, var(--app-text));
+}
+
 /* Always-black high-contrast band, independent of theme: the persistent
    "change your personalization" banner once a user is set up. Black surface +
    white CTA in BOTH light and dark mode, by design (so it reads as a settled,

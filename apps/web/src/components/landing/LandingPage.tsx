@@ -12,6 +12,7 @@ import { ChromeControls } from "../shared/ChromeControls";
 import { PageContainer } from "../shared/PageContainer";
 import { ExperimentalCarousel } from "./ExperimentalCarousel";
 import { LandingTile } from "./LandingTile";
+import classes from "./LandingPage.module.css";
 
 export function LandingPage() {
   useTr();
@@ -82,7 +83,8 @@ export function LandingPage() {
         style={{
           position: "relative",
           minHeight: "100dvh",
-          paddingBlock: 24,
+          paddingBlockStart: 8,
+          paddingBlockEnd: 24,
           backgroundColor: "var(--app-bg)",
           boxSizing: "border-box",
           display: "flex",
@@ -95,13 +97,7 @@ export function LandingPage() {
             <ChromeControls onLangSwitch={handleLangSwitch} />
           </Box>
 
-          <Stack
-            gap="xl"
-            align="center"
-            w="100%"
-            pb={16}
-            style={{ flex: 1, justifyContent: "center" }}
-          >
+          <Stack gap="xl" align="center" w="100%" pb={16} className={classes.hero}>
             <Title
               order={1}
               style={{

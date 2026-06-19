@@ -1869,6 +1869,22 @@ msgstr "Planifiez votre parcours et générez des horaires sans conflit."
 msgid "landing.schedule.title"
 msgstr "Générateur d'horaires"
 
+#: apps/web/src/components/shared/TesterBanner.tsx:34
+msgid "landing.tester.cta"
+msgstr "Écrivez-nous"
+
+#: apps/web/src/components/shared/TesterBanner.tsx:36
+msgid "landing.tester.dismiss"
+msgstr "Fermer"
+
+#: apps/web/src/components/shared/TesterBanner.tsx:32
+msgid "landing.tester.text"
+msgstr "Aidez-nous à lancer notre application Android en joignant le test fermé."
+
+#: apps/web/src/components/shared/TesterBanner.tsx:33
+msgid "landing.tester.textShort"
+msgstr "Joignez le test fermé Android."
+
 msgid "landing.trends.description"
 msgstr "Suivez l'évolution des notes au fil du temps par discipline."
 
