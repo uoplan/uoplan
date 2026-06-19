@@ -64,6 +64,8 @@ export interface AppData {
   schedulesByTerm: Map<string, SchedulesData>;
   feedback: FeedbackIndex;
   aliasGroups: AliasGroups;
+  /** Every catalogue year published in the manifest (`catalogue.<year>.pb`). */
+  catalogueYears: number[];
 }
 
 /**
@@ -94,6 +96,9 @@ async function buildAppData(manifest: DataAssetManifest, fetchBytes: FetchBytes)
       ? Math.max(...catalogueManifest.years)
       : plan.latestCatalogueYear;
   if (latestYear == null) throw new Error("No catalogue years available in the data manifest");
+
+  const catalogueYears =
+    catalogueManifest.years.length > 0 ? catalogueManifest.years : plan.catalogueYears;
 
   const catalogue = await load(`catalogue.${latestYear}.pb`, decodeCatalogue);
 
@@ -137,7 +142,7 @@ async function buildAppData(manifest: DataAssetManifest, fetchBytes: FetchBytes)
   ]);
   void Promise.allSettled(deferredAssetIds(manifest, eager).map((id) => fetchBytes(id)));
 
-  return { bundle, index, schedulesByTerm, feedback, aliasGroups };
+  return { bundle, index, schedulesByTerm, feedback, aliasGroups, catalogueYears };
 }
 
 type AppDataState =
