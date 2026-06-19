@@ -33,12 +33,12 @@ export function BannerPill({ label, variant = "accent", icon, onPress, onClose }
     >
       <View style={styles.labelRow}>
         {icon ? <AppIcon name={icon} size={15} color={v.fg} /> : null}
-        <Text size="sm" color={v.fg}>
+        <Text size="sm" color={v.fg} numberOfLines={1}>
           {label}
         </Text>
       </View>
       {onClose ? (
-        <Pressable onPress={onClose} accessibilityRole="button" hitSlop={10}>
+        <Pressable onPress={onClose} accessibilityRole="button" hitSlop={10} style={styles.close}>
           <AppIcon name="xmark" size={14} color={v.fg} />
         </Pressable>
       ) : null}
@@ -62,5 +62,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: Spacing.two,
     flexShrink: 1,
+  },
+  close: {
+    flexShrink: 0,
   },
 });
