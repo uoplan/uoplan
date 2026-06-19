@@ -8,7 +8,7 @@ Manual GitHub Actions deployment for the Expo app in `apps/native` uses EAS Buil
 - EAS config: `apps/native/eas.json`
 - App IDs:
   - iOS bundle ID: `party.uoplan.native`
-  - Android package: `party.uoplan.native`
+  - Android package: `party.uoplan.app`
 - `apps/native/app.json` does **not** have `owner` or `extra.eas.projectId` yet. Create the real EAS project before running CI.
 - Build numbers use `cli.appVersionSource = "remote"` with production `autoIncrement`, so EAS manages iOS build numbers and Android version codes.
 - No EAS `development` build profile is checked in yet because `expo-dev-client` is not installed. Add that dependency before adding a `developmentClient: true` profile.
@@ -65,7 +65,7 @@ Choose the `production` profile, then configure **App Store Connect: Manage your
 
 In Google Play Console:
 
-- Create the app with package `party.uoplan.native`.
+- Create the app with package `party.uoplan.app`.
 - Create a Google Play service account JSON key.
 - Grant it release permissions for the app.
 - Upload the JSON key in the EAS dashboard under the project’s Android credentials, or via `eas credentials --platform android`.
@@ -85,12 +85,73 @@ The current `eas.json` uses EAS-managed submit credentials and targets the `inte
 
 Preview builds are internal install builds (`apk` on Android, simulator build on iOS) and are not submitted to stores.
 
+## First Android release (manual Play upload)
+
+For the **very first** Play Store release you upload the `.aab` by hand — EAS Submit's Play API is not authorized until at least one build has been uploaded manually, and Play Console shows a "drop app bundles here" uploader for this. Do **not** use `--auto-submit` or `--platform all` (iOS needs separate Apple credentials) for this first build.
+
+Prereqs: the EAS project id is already set in `app.json` (`extra.eas.projectId`). Authenticate first — either `export EXPO_TOKEN=<expo.dev access token>` or run `pnpm --dir apps/native dlx eas-cli@latest login`.
+
+```bash
+# 1. (once) reconcile owner/slug with the linked project
+pnpm --dir apps/native dlx eas-cli@latest init --id 9324474b-4ac4-4f5d-871d-5eebea45fbb6
+
+# 2. Build the signed app bundle (EAS auto-generates + stores the Android
+#    upload keystore on this first run). buildType=app-bundle comes from the
+#    production profile in eas.json.
+pnpm --dir apps/native dlx eas-cli@latest build --platform android --profile production --non-interactive
+
+# 3. Download the resulting .aab (the build page prints a URL; or:)
+pnpm --dir apps/native dlx eas-cli@latest build:download --platform android --latest
+
+# 4. Upload that .aab in Play Console → Production (or Internal testing) → Create release.
+```
+
+After the first manual upload succeeds and the Play Developer API is authorized for the app, later releases can use `eas build --platform android --profile production --auto-submit` (the production submit profile targets the `internal` track) or the **Native Deploy** GitHub workflow with `submit: true`.
+
 ## Monorepo and native engine notes
 
 EAS runs the Expo build remotely, so generated artifacts must be recreated on the EAS worker. The native package's guarded `postinstall` script runs `apps/native/scripts/eas-postinstall.mjs` only when `EAS_BUILD=true`, which:
 
 - runs `pnpm generate` at the monorepo root so `@uoplan/proto/src/generated/*` exists;
-- installs Rust via rustup on EAS iOS workers if needed;
-- builds the iOS Rust engine XCFramework with `pnpm build:engine-native-ffi`.
+- installs Rust via rustup if needed (both platforms);
+- on **iOS** builds the Rust engine XCFramework with `pnpm build:engine-native-ffi`;
+- on **Android** adds the Rust Android targets, installs `cargo-ndk` if missing, and builds the per-ABI `libuoplan_engine.so` with `pnpm build:engine-native-ffi-android`.
 
-The native app does not currently import the web `@uoplan/engine` WASM package during Expo builds. iOS links the native `UoplanEngine.xcframework`; Android currently has no native engine module configured.
+The native app does not import the web `@uoplan/engine` WASM package during Expo builds. iOS links the native `UoplanEngine.xcframework`; Android loads the per-ABI `libuoplan_engine.so` (JNI exports in `packages/engine/src/jni_android.rs`) from the `uoplan-engine` Expo module's git-ignored `jniLibs`. Because those `.so` files are build artifacts, the EAS Android build must compile them on the worker (see the `EAS_BUILD_PLATFORM === "android"` branch above) or the app crashes with `UnsatisfiedLinkError` on schedule generation. The Android build requires an NDK on the worker (`ANDROID_NDK_HOME`, or `ANDROID_HOME/ndk/<version>`).
+
+## Android R8 / ProGuard (code + resource shrinking)
+
+Release Android builds enable R8 minification and resource shrinking via the
+`expo-build-properties` config plugin in `apps/native/app.json`:
+
+```jsonc
+[
+  "expo-build-properties",
+  {
+    "android": {
+      "enableMinifyInReleaseBuilds": true, // R8 code shrink + obfuscation
+      "enableShrinkResourcesInReleaseBuilds": true,
+      "extraProguardRules": "-keep class party.uoplan.engine.** { *; } ...",
+    },
+  },
+]
+```
+
+**Why the keep rules are mandatory.** The Rust engine is reached through JNI:
+`party.uoplan.engine.UoplanEngineModule` declares `external` native methods whose
+implementations are resolved _by C symbol name_ (`Java_party_uoplan_engine_UoplanEngineModule_*`
+in `packages/engine/src/jni_android.rs`). If R8 renames that class or its native
+methods, the symbol no longer matches and the app crashes with
+`UnsatisfiedLinkError` the moment a schedule is generated. The `extraProguardRules`
+therefore `-keep` the whole `party.uoplan.engine.**` package and keep the names of
+any class that declares `native <methods>`. React Native, Hermes and the Expo
+modules ship their own consumer ProGuard rules, so only the custom engine module
+needs an explicit rule here.
+
+> **Verify before shipping the next release.** R8 changes only take effect in a
+> release build, so they cannot be exercised by the dev client. Before submitting
+> the next build, run a production build and **generate a schedule on a real
+> device/emulator** to confirm the engine still links (no `UnsatisfiedLinkError`)
+> and that resource shrinking didn't drop anything user-visible. To deobfuscate
+> future crash reports, upload the `mapping.txt` that EAS produces with the build
+> (Play Console → App bundle explorer → Downloads), or let EAS auto-upload it.

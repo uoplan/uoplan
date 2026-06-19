@@ -1,8 +1,13 @@
 {
   "expo": {
     "name": "uoPlan",
-    "slug": "native",
+    "slug": "uoplan",
     "version": "1.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "9324474b-4ac4-4f5d-871d-5eebea45fbb6"
+      }
+    },
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "uoplan",
@@ -35,12 +40,19 @@
           "action": "VIEW",
           "autoVerify": true,
           "data": [
-            { "scheme": "https", "host": "uoplan.party" },
-            { "scheme": "https", "host": "www.uoplan.party" }
+            {
+              "scheme": "https",
+              "host": "uoplan.party"
+            },
+            {
+              "scheme": "https",
+              "host": "www.uoplan.party"
+            }
           ],
           "category": ["BROWSABLE", "DEFAULT"]
         }
-      ]
+      ],
+      "permissions": ["android.permission.READ_CALENDAR", "android.permission.WRITE_CALENDAR"]
     },
     "web": {
       "output": "static",
@@ -67,11 +79,22 @@
             "backgroundColor": "#1b1a20"
           }
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true,
+            "extraProguardRules": "# Rust schedule engine JNI bridge: its native methods are resolved by C\n# symbol name (Java_party_uoplan_engine_UoplanEngineModule_*), so the class\n# and method names must never be renamed or stripped by R8 or linking fails\n# at runtime with UnsatisfiedLinkError.\n-keep class party.uoplan.engine.** { *; }\n\n# Generic JNI safety net: keep the names of any class declaring native methods.\n-keepclasseswithmembernames,includedescriptorclasses class * {\n    native <methods>;\n}\n"
+          }
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "owner": "uoplan"
   }
 }
