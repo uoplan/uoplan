@@ -13571,10 +13571,7 @@
       "description": "Réalisation indépendante de projets avancés en arts médiatiques électroniques et lectures dirigées dans le domaine de recherche de l'étudiant. Ce cours de type atelier comprend des ateliers de technique avancée, et des discussions et des critiques régulières. Réservé aux étudiants et étudiantes inscrits au Baccalauréat en arts visuels. Une connaissance passive de l'anglais est requise. (P). / Advanced independent projects in electronic media art and guided readings related to the students' art research. Studio-based class format includes advanced technique workshops, regular critiques and discussions.",
       "component": "Laboratoire / LaboratoryPréalables : 3 crédits parmi ART 2941, ART 2942 et ART 2943 et 3 crédits de niveau 2000 en média ou sculpture. Antérieurement ART 3041. / Prerequisites: 3 units from ART 2941, ART 2942 and ART 2943 and 3 units at the 2000 level in Media or Sculpture. Reserved for students registered in the Bachelor of Fine Arts. Previously ART 3041. A passive knowledge of French is required. (P).",
       "aliases": [
-        "ART 3041",
-        "ART 2941",
-        "ART 2942",
-        "ART 2943"
+        "ART 3041"
       ],
       "prereqText": "3 crédits parmi ART 2941, ART 2942 et ART 2943 et 3 crédits de niveau 2000 en média ou sculpture",
       "prerequisites": {
@@ -22572,8 +22569,7 @@
       "component": "Recherche / ResearchPréalable: CHM 40101. Antérieurement CHM 4006 et CHM 4910. Permission du Département est requise. / Prerequisite: CHM 40101. Previously CHM 4006 and CHM 4910. Permission of the Department is required.",
       "aliases": [
         "CHM 4006",
-        "CHM 4910",
-        "CHM 40101"
+        "CHM 4910"
       ],
       "prereqText": "CHM 40101",
       "prerequisites": {
@@ -82321,8 +82317,7 @@
       "description": "Introduction to discrete structures as a foundation to computing. Propositional logic. Fundamental structures: functions, relations, sets. The basics of counting: counting arguments, the pigeonhole principle, permutations and combinations. Introduction to proofs: direct, by contradiction, by cases, induction. Topics in graph theory: isomorphism, cycles, trees, directed graphs. Whenever possible applications from computing and information technology will be included.",
       "component": "Discussion Group, LecturePrerequisite: MAT 1318 or Ontario 4U Advanced Functions (MHF4U) or equivalent. This course cannot be taken for units by any student who has previously received units for MAT 2348. Courses MAT 1348, MAT 1362 cannot be combined for units..",
       "aliases": [
-        "MAT 2348",
-        "MAT 1362"
+        "MAT 2348"
       ],
       "prereqText": "MAT 1318 or Ontario 4U Advanced Functions (MHF4U) or equivalent",
       "prerequisites": {
@@ -97058,10 +97053,7 @@
       "description": "(septembre-avril). Réservé aux étudiants et étudiantes inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique. (Partie 1 de 2)",
       "component": "Cours magistralPréalable : 3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594. Antérieurement MUS 2990. Ce cours est équivalent à MUS 2592, MUS 2593 et MUS 2594.",
       "aliases": [
-        "MUS 2990",
-        "MUS 2592",
-        "MUS 2593",
-        "MUS 2594"
+        "MUS 2990"
       ],
       "prereqText": "3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594",
       "prerequisites": {
@@ -97112,10 +97104,7 @@
       "description": "(septembre-avril). Réservé aux étudiants et étudiantes inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique.",
       "component": "Cours magistralPréalable : 3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594. Antérieurement MUS 2990. Ce cours est équivalent à MUS 2591, MUS 2593 et MUS 2594.",
       "aliases": [
-        "MUS 2990",
-        "MUS 2591",
-        "MUS 2593",
-        "MUS 2594"
+        "MUS 2990"
       ],
       "prereqText": "3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594",
       "prerequisites": {
@@ -97153,10 +97142,7 @@
       "description": "(septembre-avril). Réservé aux étudiants et étudiantes inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique. (Part 1 of 2)",
       "component": "Cours magistralPréalable : 3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594. Antérieurement MUS 2990. Ce cours est équivalent à MUS 2591, MUS 2593 et MUS 2594.",
       "aliases": [
-        "MUS 2990",
-        "MUS 2591",
-        "MUS 2593",
-        "MUS 2594"
+        "MUS 2990"
       ],
       "prereqText": "3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594",
       "prerequisites": {
@@ -97194,10 +97180,7 @@
       "description": "(septembre-avril). Réservé aux étudiants et étudiantes inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique. (Part 2 of 2)",
       "component": "Cours magistralPréalable : 3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594. Antérieurement MUS 2990. Ce cours est équivalent à MUS 2591, MUS 2593 et MUS 2594.",
       "aliases": [
-        "MUS 2990",
-        "MUS 2591",
-        "MUS 2593",
-        "MUS 2594"
+        "MUS 2990"
       ],
       "prereqText": "3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594",
       "prerequisites": {
@@ -97235,10 +97218,7 @@
       "description": "(septembre-avril). Réservé aux étudiants et étudiantes inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique.",
       "component": "Cours magistralPréalable : 3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594. Antérieurement MUS 2990. Ce cours est équivalent à MUS 2591, MUS 2592 et MUS 2594.",
       "aliases": [
-        "MUS 2990",
-        "MUS 2591",
-        "MUS 2592",
-        "MUS 2594"
+        "MUS 2990"
       ],
       "prereqText": "3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594",
       "prerequisites": {
@@ -97276,10 +97256,7 @@
       "description": "(septembre-avril). Réservé aux étudiants et étudiantes inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique. (Partie 1 de 2)",
       "component": "Cours magistralPréalable : 3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594. Antérieurement MUS 2990. Ce cours est équivalent à MUS 2591, MUS 2592 et MUS 2594.",
       "aliases": [
-        "MUS 2990",
-        "MUS 2591",
-        "MUS 2592",
-        "MUS 2594"
+        "MUS 2990"
       ],
       "prereqText": "3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594",
       "prerequisites": {
@@ -97317,10 +97294,7 @@
       "description": "(septembre-avril). Réservé aux étudiants et étudiantes inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique. (Partie 2 de 2)",
       "component": "Cours magistralPréalable : 3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594. Antérieurement MUS 2990. Ce cours est équivalent à MUS 2591, MUS 2592 et MUS 2594.",
       "aliases": [
-        "MUS 2990",
-        "MUS 2591",
-        "MUS 2592",
-        "MUS 2594"
+        "MUS 2990"
       ],
       "prereqText": "3 crédits parmi MUS 1990, MUS 1591, MUS 1592, MUS 1593, MUS 1594",
       "prerequisites": {

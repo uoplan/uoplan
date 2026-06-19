@@ -9,16 +9,13 @@ export function extractPreviouslyAliases(combined: string, ownCode: string): str
   let m: RegExpExecArray | null;
   while ((m = re.exec(normalized)) !== null) {
     const rest = normalized.slice(m.index + m[0].length);
-    let segment: string;
-    const boundaryWithSentence = rest.match(
-      /^([\s\S]*?)(?=\.\s+(?:They|The|Students|Reserved|Priority|Consult|Supplemental|It |Also |The courses |Réservé|Les cours ))/,
-    );
-    if (boundaryWithSentence) {
-      segment = boundaryWithSentence[1];
-    } else {
-      const dotIdx = rest.indexOf(".");
-      segment = dotIdx === -1 ? rest : rest.slice(0, dotIdx);
-    }
+    // The "Previously"/"Antérieurement" clause is a single sentence, so it ends
+    // at the first sentence-terminating period. Scanning past that boundary would
+    // incorrectly absorb course codes from neighbouring sentences (e.g. the
+    // prerequisite list or a bilingual "/ Previously …" repetition), producing
+    // bogus transitive aliases.
+    const dotIdx = rest.indexOf(".");
+    const segment = dotIdx === -1 ? rest : rest.slice(0, dotIdx);
     let segmentTrim = segment
       .replace(/^\(\s*/, "")
       .replace(/\s*\)\s*$/, "")

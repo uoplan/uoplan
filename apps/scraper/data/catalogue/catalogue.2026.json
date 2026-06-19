@@ -15371,11 +15371,7 @@
       "description": "Exploration des systèmes de représentation en peinture par rapport au sujet et aux stratégies picturales; symbolisme et iconographie; appropriation, culture et médiation; réalisme; texte et image. L'enseignement et les discussions se font dans les deux langues officielles. Les compétences linguistiques minimales recommandées sont de pouvoir comprendre, lire et interagir oralement en classe dans la langue seconde officielle. (P) / The exploration of systems of representation in painting in relation to subject matter and pictorial strategies; symbolism and iconography; appropriation, culture and mediation; realism; text and image. Teaching and discussion take place in the two official languages. Recommended minimum language skills include the ability to understand, read and interact orally in class in your second official language. (P)",
       "component": "Laboratoire / LaboratoryPréalables : ART 1711, 6 crédits de cours parmi (ART 1721, ART 1731, ART 1741). Réservé aux étudiants et étudiantes inscrits au Baccalauréat en arts visuels ou à la majeure en arts visuels. Antérieurement ART 3016. / Prerequisites: ART 1311, 6 course units from (ART 1321, ART 1331, ART 1341). Reserved for students registered in the Bachelor of Fine Arts or in the Major in Visual Arts. Previously ART 3016.",
       "aliases": [
-        "ART 3016",
-        "ART 1311",
-        "ART 1321",
-        "ART 1331",
-        "ART 1341"
+        "ART 3016"
       ],
       "prereqText": "ART 1711, 6 crédits de cours parmi (ART 1721, ART 1731, ART 1741)",
       "prerequisites": {
@@ -15416,11 +15412,7 @@
       "description": "La construction de la signification par l'utilisation de structures narratives et de séries en peinture, en tant qu exploration de l'expérience personnelle, de la pensée, des événements, des idées, du récit et de l'histoire, des médias de masse et de la culture populaire. L'enseignement et les discussions se font dans les deux langues officielles. Les compétences linguistiques minimales recommandées sont de pouvoir comprendre, lire et interagir oralement en classe dans la langue seconde officielle. (P) / The construction of meaning through the use of narrative and series in painting, as the exploration of personal experience, thought, event, idea, story and history, mass media and popular culture. Teaching and discussion take place in the two official languages. Recommended minimum language skills include the ability to understand, read and interact orally in class in your second official language. (P)",
       "component": "Laboratoire / LaboratoryPréalables : ART 1711, 6 crédits de cours parmi (ART 1721, ART 1731, ART 1741). Réservé aux étudiants et étudiantes inscrits au Baccalauréat en arts visuels ou à la majeure en arts visuels. Antérieurement ART 3016. / Prerequisites: ART 1311, 6 course units from (ART 1321, ART 1331, ART 1341). Reserved for students registered in the Bachelor of Fine Arts or in the Major in Visual Arts. Previously ART 3016.",
       "aliases": [
-        "ART 3016",
-        "ART 1311",
-        "ART 1321",
-        "ART 1331",
-        "ART 1341"
+        "ART 3016"
       ],
       "prereqText": "ART 1711, 6 crédits de cours parmi (ART 1721, ART 1731, ART 1741)",
       "prerequisites": {
@@ -16330,8 +16322,7 @@
       "description": "Recherche artistique individuelle et sur les critiques collectives effectuées sous la direction d'un professeur. L'enseignement et les discussions se font dans les deux langues officielles. Les compétences linguistiques minimales recommandées sont de pouvoir comprendre, lire et interagir oralement en classe dans la langue seconde officielle. (P) / Individual artistic research and collective critiques under the direction of a professor. Teaching and discussion take place in the two official languages. Recommended minimum language skills include the ability to understand, read and interact orally in class in your second official language. (P)",
       "component": "Laboratoire / LaboratoryPréalable : ART 49861. Réservé aux étudiants et étudiantes inscrits au Baccalauréat en arts visuels. Antérieurement ART 4988. / Prerequisite: ART 49861. Reserved for students registered in the Bachelor of Fine Arts. Previously ART 4988.",
       "aliases": [
-        "ART 4988",
-        "ART 49861"
+        "ART 4988"
       ],
       "prereqText": "ART 49861",
       "prerequisites": {
@@ -26503,8 +26494,7 @@
       "component": "Recherche / ResearchPréalable: CHM 40101. Antérieurement CHM 4006 et CHM 4910. Permission du Département est requise. / Prerequisite: CHM 40101. Previously CHM 4006 and CHM 4910. Permission of the Department is required.",
       "aliases": [
         "CHM 4006",
-        "CHM 4910",
-        "CHM 40101"
+        "CHM 4910"
       ],
       "prereqText": "CHM 40101",
       "prerequisites": {
@@ -91919,8 +91909,7 @@
       "description": "Introduction to discrete structures as a foundation to computing. Propositional logic. Fundamental structures: functions, relations, sets. The basics of counting: counting arguments, the pigeonhole principle, permutations and combinations. Introduction to proofs: direct, by contradiction, by cases, induction. Topics in graph theory: isomorphism, cycles, trees, directed graphs. Whenever possible applications from computing and information technology will be included.",
       "component": "Discussion Group, LecturePrerequisite: MAT 1318 or Ontario 4U Advanced Functions (MHF4U) or equivalent. This course cannot be taken for units by any student who has previously received units for MAT 2348. Courses MAT 1348, MAT 1362 cannot be combined for units..",
       "aliases": [
-        "MAT 2348",
-        "MAT 1362"
+        "MAT 2348"
       ],
       "prereqText": "MAT 1318 or Ontario 4U Advanced Functions (MHF4U) or equivalent",
       "prerequisites": {
