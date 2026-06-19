@@ -37,14 +37,6 @@ const UOZONE = "https://uozone2.uottawa.ca/";
 
 type Step = "program" | "requirements" | null;
 
-function academicYearFromTermName(name: string): number | null {
-  const match = name.match(/\b(19|20)\d{2}\b/);
-  if (!match) return null;
-  const year = Number(match[0]);
-  if (!Number.isFinite(year)) return null;
-  return /winter|spring|summer/i.test(name) ? year - 1 : year;
-}
-
 export function programOptionsFromEntries(
   programs: readonly ExploreProgramEntry[],
 ): SearchableSelectOption[] {
@@ -83,7 +75,7 @@ export function programOptionsFromEntries(
  */
 export default function PersonalizeScreen() {
   const router = useRouter();
-  const { bundle, schedulesByTerm } = useAppData();
+  const { bundle, schedulesByTerm, catalogueYears } = useAppData();
   const index = useExploreIndex();
   const basket = useBasket();
   const { personalization, setPersonalization, resetPersonalization } = useScheduleOptions();
@@ -105,16 +97,13 @@ export default function PersonalizeScreen() {
     [bundle.terms],
   );
 
-  const startYearOptions = useMemo<SearchableSelectOption[]>(() => {
-    const years = new Set<number>();
-    for (const term of bundle.terms) {
-      const year = academicYearFromTermName(term.name);
-      if (year !== null) years.add(year);
-    }
-    return [...years]
-      .sort((a, b) => b - a)
-      .map((year) => ({ value: String(year), label: `${year}–${year + 1}` }));
-  }, [bundle.terms]);
+  const startYearOptions = useMemo<SearchableSelectOption[]>(
+    () =>
+      [...new Set(catalogueYears)]
+        .sort((a, b) => b - a)
+        .map((year) => ({ value: String(year), label: `${year}–${year + 1}` })),
+    [catalogueYears],
+  );
 
   const programOptions = useMemo(() => programOptionsFromEntries(index.programs), [index.programs]);
 
