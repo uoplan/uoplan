@@ -195,7 +195,13 @@ export default function CourseDetailScreen() {
         </View>
       ) : null}
 
-      <ResponsiveColumns gap={Spacing.three}>
+      {/*
+        Force a single column even on wide tablets: the professors list is
+        unbounded in height, so a 2-column split pairs it in a row with a short
+        summary card and stretches that card's column to match — leaving a large
+        empty gap. A single vertical flow reads cleanly at every width.
+      */}
+      <ResponsiveColumns maxColumns={1}>
         {scheduleTerms.length > 0 ? (
           <SectionCard title="Weekly schedule">
             <View style={styles.termList}>
