@@ -89,6 +89,10 @@ msgstr "graph"
 msgid "app.footer.notAffiliated"
 msgstr "We are an independent, student-run project and are not affiliated with, endorsed by, or sponsored by the University of Ottawa."
 
+#: apps/web/src/components/shared/AppFooter.tsx:207
+msgid "app.footer.privacy"
+msgstr "privacy"
+
 #: apps/web/src/components/shared/AppFooter.tsx:81
 msgid "app.footer.sectionNavigate"
 msgstr "Navigate"
@@ -100,6 +104,10 @@ msgstr "Project"
 #: apps/web/src/components/shared/AppFooter.tsx:75
 msgid "app.footer.tagline"
 msgstr "A requirement-first course planner for uOttawa students."
+
+#: apps/web/src/components/shared/AppFooter.tsx:218
+msgid "app.footer.terms"
+msgstr "terms"
 
 #: apps/web/src/components/shared/AppFooter.tsx:113
 msgid "app.footer.trends"

@@ -194,6 +194,31 @@ export function AppFooter() {
               ) : null}
             </Group>
 
+            <Group gap={20} wrap="wrap">
+              <Text
+                component={Link}
+                to="/privacy"
+                size="sm"
+                c="dimmed"
+                lh={1.45}
+                className="app-footer-link"
+                style={footerLinkStyle}
+              >
+                {tr("app.footer.privacy")}
+              </Text>
+              <Text
+                component={Link}
+                to="/terms"
+                size="sm"
+                c="dimmed"
+                lh={1.45}
+                className="app-footer-link"
+                style={footerLinkStyle}
+              >
+                {tr("app.footer.terms")}
+              </Text>
+            </Group>
+
             <Text size="sm" lh={1.6} style={{ color: "var(--app-text-dim)" }}>
               {tr("app.footer.notAffiliated")}
             </Text>

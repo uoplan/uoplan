@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as GraphRouteImport } from './routes/graph'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as ChangelogRouteImport } from './routes/changelog'
@@ -34,6 +36,16 @@ import { Route as ExploreProfessorSlugFeedbackRouteImport } from './routes/explo
 import { Route as ExploreCourseCourseScheduleRouteImport } from './routes/explore/course/$course/schedule'
 import { Route as ExploreCourseCourseFeedbackRouteImport } from './routes/explore/course/$course/feedback'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GraphRoute = GraphRouteImport.update({
   id: '/graph',
   path: '/graph',
@@ -170,6 +182,8 @@ export interface FileRoutesByFullPath {
   '/changelog': typeof ChangelogRoute
   '/donate': typeof DonateRoute
   '/graph': typeof GraphRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/trends/courses': typeof TrendsCoursesRoute
   '/trends/disciplines': typeof TrendsDisciplinesRoute
   '/trends/feedback': typeof TrendsFeedbackRoute
@@ -192,6 +206,8 @@ export interface FileRoutesByTo {
   '/changelog': typeof ChangelogRoute
   '/donate': typeof DonateRoute
   '/graph': typeof GraphRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/trends/courses': typeof TrendsCoursesRoute
   '/trends/disciplines': typeof TrendsDisciplinesRoute
   '/trends/feedback': typeof TrendsFeedbackRoute
@@ -219,6 +235,8 @@ export interface FileRoutesById {
   '/changelog': typeof ChangelogRoute
   '/donate': typeof DonateRoute
   '/graph': typeof GraphRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/trends/courses': typeof TrendsCoursesRoute
   '/trends/disciplines': typeof TrendsDisciplinesRoute
   '/trends/feedback': typeof TrendsFeedbackRoute
@@ -247,6 +265,8 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/donate'
     | '/graph'
+    | '/privacy'
+    | '/terms'
     | '/trends/courses'
     | '/trends/disciplines'
     | '/trends/feedback'
@@ -269,6 +289,8 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/donate'
     | '/graph'
+    | '/privacy'
+    | '/terms'
     | '/trends/courses'
     | '/trends/disciplines'
     | '/trends/feedback'
@@ -295,6 +317,8 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/donate'
     | '/graph'
+    | '/privacy'
+    | '/terms'
     | '/trends/courses'
     | '/trends/disciplines'
     | '/trends/feedback'
@@ -322,10 +346,26 @@ export interface RootRouteChildren {
   ChangelogRoute: typeof ChangelogRoute
   DonateRoute: typeof DonateRoute
   GraphRoute: typeof GraphRoute
+  PrivacyRoute: typeof PrivacyRoute
+  TermsRoute: typeof TermsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/graph': {
       id: '/graph'
       path: '/graph'
@@ -577,6 +617,8 @@ const rootRouteChildren: RootRouteChildren = {
   ChangelogRoute: ChangelogRoute,
   DonateRoute: DonateRoute,
   GraphRoute: GraphRoute,
+  PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
