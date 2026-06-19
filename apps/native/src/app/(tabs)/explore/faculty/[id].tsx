@@ -7,7 +7,7 @@ import { Text } from "@uoplan/ui";
 import { DetailRow } from "@/components/detail-row";
 import { type CollapsibleEntry, CollapsibleList } from "@/components/explore/collapsible-list";
 import { GradeHistogram } from "@/components/grade-histogram";
-import { BasketHeaderButton } from "@/components/basket-header-button";
+import { BasketFab } from "@/components/basket-fab";
 import { ResponsiveColumns } from "@/components/layout";
 import { RedesignScreen, ScreenHeader } from "@/components/redesign";
 import { Spacing, Surface } from "@/constants/theme";
@@ -92,7 +92,7 @@ export default function FacultyDetailScreen() {
         gap={Spacing.three}
         backLabel="Explore"
         onBack={() => router.back()}
-        cart={<BasketHeaderButton />}
+        cart={<BasketFab />}
         onSettings={() => router.push("/more")}
       >
         <ScreenHeader title="Faculty" />
@@ -108,7 +108,7 @@ export default function FacultyDetailScreen() {
       gap={Spacing.three}
       backLabel="Explore"
       onBack={() => router.back()}
-      cart={<BasketHeaderButton />}
+      cart={<BasketFab />}
       onSettings={() => router.push("/more")}
     >
       <ScreenHeader title={faculty.name} />

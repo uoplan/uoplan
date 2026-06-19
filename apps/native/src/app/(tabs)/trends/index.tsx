@@ -8,7 +8,7 @@ import { BarChart } from "@/components/bar-chart";
 import { LineChart } from "@/components/line-chart";
 import { ResponsiveColumns } from "@/components/layout";
 import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
-import { BasketHeaderButton } from "@/components/basket-header-button";
+import { BasketFab } from "@/components/basket-fab";
 import { chartColorForIndex, SeasonColor, Spacing, Surface } from "@/constants/theme";
 import { useFeedback, useTrends } from "@/data/data-provider";
 import { trendsFeedbackData } from "@/data/feedback-data";
@@ -58,7 +58,7 @@ export default function TrendsHubScreen() {
   return (
     <RedesignScreen
       gap={Spacing.three}
-      cart={<BasketHeaderButton />}
+      cart={<BasketFab />}
       onSettings={() => router.push("/more")}
     >
       <ScreenHeader

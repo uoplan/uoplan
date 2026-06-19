@@ -1,32 +1,59 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import type { ReactNode } from "react";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Text } from "@uoplan/ui";
 
 import { AppIcon, type IconName } from "@/components/app-icon";
-import { GlassSurface } from "@/components/glass-surface";
-import { Surface } from "@/constants/theme";
+import { GlassSurface, glassAvailable } from "@/components/glass-surface";
+import { Spacing, Surface } from "@/constants/theme";
 
 interface FabProps {
-  icon?: IconName;
+  icon: IconName;
   onPress: () => void;
+  /** Required: the FAB shows no visible text, so it needs an a11y label. */
+  accessibilityLabel: string;
   /** Optional count badge (e.g. basket items). */
   badge?: number;
-  /** Distance from the bottom — raise it above a bottom control bar. */
-  bottom?: number;
+  /**
+   * Accent (filled) styling for a primary action like "Add to basket". The
+   * default is a neutral Liquid-Glass surface that matches the floating tab bar.
+   */
+  accent?: boolean;
 }
 
 /**
- * Floating action button (bottom-right), e.g. the explore/trends basket. Rendered
- * on Liquid Glass (iOS 26+) so it matches the native tab bar; degrades to a solid
- * card surface elsewhere.
+ * Floating action button — a 56pt circular control. The default renders on
+ * Apple's Liquid Glass (iOS 26+) so it matches the native tab bar, degrading to
+ * a solid card surface elsewhere; the `accent` variant is a filled accent circle
+ * for a primary call to action (e.g. "Add to basket"), making it stand out.
+ *
+ * The FAB is **presentational and not positioned** — wrap it in {@link FabStack}
+ * (or another absolutely-positioned container) to anchor it on screen.
  */
-export function Fab({ icon = "cart", onPress, badge, bottom = 24 }: FabProps) {
+export function Fab({ icon, onPress, accessibilityLabel, badge, accent = false }: FabProps) {
   const showBadge = badge != null && badge > 0;
+  const glyphColor = accent ? Surface.onAccent : Surface.label;
+  const button = (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      style={styles.pressable}
+      hitSlop={8}
+    >
+      <AppIcon name={icon} size={24} color={glyphColor} />
+    </Pressable>
+  );
   return (
-    <GlassSurface interactive style={[styles.fab, { bottom }]}>
-      <Pressable onPress={onPress} accessibilityRole="button" style={styles.pressable} hitSlop={8}>
-        <AppIcon name={icon} size={22} color={Surface.label} />
-      </Pressable>
+    <View style={styles.fab}>
+      {accent ? (
+        <View style={[styles.surface, styles.accentSurface]}>{button}</View>
+      ) : (
+        <GlassSurface interactive style={styles.surface}>
+          {button}
+        </GlassSurface>
+      )}
       {showBadge ? (
         <View style={styles.badge} pointerEvents="none">
           <Text size="xs" weight="bold" color={Surface.onAccent}>
@@ -34,20 +61,67 @@ export function Fab({ icon = "cart", onPress, badge, bottom = 24 }: FabProps) {
           </Text>
         </View>
       ) : null}
-    </GlassSurface>
+    </View>
   );
 }
 
+interface FabStackProps {
+  children: ReactNode;
+}
+
+/**
+ * Bottom-right anchor for one or more {@link Fab}s. It clears the bottom tab bar
+ * so the FAB is never hidden behind it:
+ *
+ * - On iOS 26+ the tab bar is a floating capsule centred at the bottom, leaving
+ *   the bottom-right corner free, so the stack tucks into that corner.
+ * - On Android (and pre-26 iOS) the tab bar spans the full width, so the stack
+ *   floats above it.
+ *
+ * Children stack vertically, so the first child sits highest and the last child
+ * rests nearest the screen's bottom edge (the primary, thumb-reachable slot).
+ */
+export function FabStack({ children }: FabStackProps) {
+  const insets = useSafeAreaInsets();
+  // Full-width bars need the FAB lifted above them; the floating iOS 26 capsule
+  // leaves the corner clear, so no extra lift is needed there.
+  const barClearance = glassAvailable ? 0 : Platform.OS === "android" ? 56 : 49;
+  const bottom = insets.bottom + barClearance + Spacing.three;
+  return (
+    <View pointerEvents="box-none" style={[styles.stack, { bottom }]}>
+      {children}
+    </View>
+  );
+}
+
+const SIZE = 56;
+
 const styles = StyleSheet.create({
-  fab: {
+  stack: {
     position: "absolute",
-    right: 20,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    right: Spacing.three,
+    alignItems: "flex-end",
+    gap: Spacing.two,
+  },
+  fab: {
+    width: SIZE,
+    height: SIZE,
+  },
+  surface: {
+    width: SIZE,
+    height: SIZE,
+    borderRadius: SIZE / 2,
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
+  },
+  accentSurface: {
+    backgroundColor: Surface.accent,
+    shadowColor: "#000",
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 5,
   },
   pressable: {
     position: "absolute",
@@ -60,14 +134,16 @@ const styles = StyleSheet.create({
   },
   badge: {
     position: "absolute",
-    top: 6,
-    right: 6,
-    minWidth: 18,
-    height: 18,
-    borderRadius: 9,
-    paddingHorizontal: 4,
+    top: 2,
+    right: 2,
+    minWidth: 20,
+    height: 20,
+    borderRadius: 10,
+    paddingHorizontal: 5,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Surface.accent,
+    borderWidth: 1.5,
+    borderColor: Surface.page,
   },
 });

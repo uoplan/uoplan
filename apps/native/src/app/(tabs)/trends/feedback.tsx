@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 
 import { Text } from "@uoplan/ui";
 
-import { BasketHeaderButton } from "@/components/basket-header-button";
+import { BasketFab } from "@/components/basket-fab";
 import { LineChart } from "@/components/line-chart";
 import { ResponsiveColumns } from "@/components/layout";
 import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
@@ -28,7 +28,7 @@ export default function TrendsFeedbackScreen() {
       gap={Spacing.three}
       backLabel="Trends"
       onBack={() => router.back()}
-      cart={<BasketHeaderButton />}
+      cart={<BasketFab />}
       onSettings={() => router.push("/more")}
     >
       <ScreenHeader title="Course feedback" subtitle="University-wide satisfaction over time" />

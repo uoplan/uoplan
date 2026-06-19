@@ -13,8 +13,8 @@ import { SectionOfferingsList } from "@/components/explore/section-offerings-lis
 import { GradeHistogram } from "@/components/grade-histogram";
 import { ResponsiveColumns } from "@/components/layout";
 import { RatingBadgeRow } from "@/components/rating-badge";
-import { BasketHeaderButton } from "@/components/basket-header-button";
-import { GlassIconButton, RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
+import { BasketFab } from "@/components/basket-fab";
+import { Fab, RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
 import { Spacing, Surface } from "@/constants/theme";
 import { useBasket } from "@/data/basket-provider";
 import { useAppData, useFeedback } from "@/data/data-provider";
@@ -97,7 +97,7 @@ export default function CourseDetailScreen() {
         gap={Spacing.three}
         backLabel="Explore"
         onBack={() => router.back()}
-        cart={<BasketHeaderButton />}
+        cart={<BasketFab />}
         onSettings={() => router.push("/more")}
       >
         <ScreenHeader title={code || "Course"} />
@@ -123,12 +123,13 @@ export default function CourseDetailScreen() {
       onBack={() => router.back()}
       cart={
         <>
-          <GlassIconButton
+          <Fab
             icon={inBasket ? "checkmark" : "cart.badge.plus"}
+            accent
             onPress={() => basket.toggle(course.code)}
             accessibilityLabel={inBasket ? "Remove from basket" : "Add to basket"}
           />
-          <BasketHeaderButton />
+          <BasketFab />
         </>
       }
       onSettings={() => router.push("/more")}
