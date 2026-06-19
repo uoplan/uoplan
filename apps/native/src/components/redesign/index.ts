@@ -2,7 +2,7 @@ export { BannerPill } from "./banner-pill";
 export { BottomControlBar } from "./bottom-control-bar";
 export { Chip, type ChipOption } from "./chip";
 export { ChipRow } from "./chip-row";
-export { Fab } from "./fab";
+export { Fab, FabStack } from "./fab";
 export { GlassButton, GlassIconButton } from "./glass-button";
 export { RedesignScreen } from "./screen";
 export { ScreenHeader } from "./screen-header";

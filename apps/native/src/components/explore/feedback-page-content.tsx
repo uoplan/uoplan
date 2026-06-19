@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 
 import { Text } from "@uoplan/ui";
 
-import { BasketHeaderButton } from "@/components/basket-header-button";
+import { BasketFab } from "@/components/basket-fab";
 import { LineChart } from "@/components/line-chart";
 import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
 import { Spacing, Surface } from "@/constants/theme";
@@ -90,7 +90,7 @@ export function FeedbackPageContent({
         gap={Spacing.three}
         backLabel={backLabel}
         onBack={onBack}
-        cart={<BasketHeaderButton />}
+        cart={<BasketFab />}
         onSettings={() => router.push("/more")}
       >
         <ScreenHeader title="Student evaluations" />
@@ -104,7 +104,7 @@ export function FeedbackPageContent({
       gap={Spacing.three}
       backLabel={backLabel}
       onBack={onBack}
-      cart={<BasketHeaderButton />}
+      cart={<BasketFab />}
       onSettings={() => router.push("/more")}
     >
       <ScreenHeader title="Student evaluations" subtitle={title} />

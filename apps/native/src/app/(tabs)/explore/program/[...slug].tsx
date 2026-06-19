@@ -5,7 +5,7 @@ import { Linking, Pressable, StyleSheet, View } from "react-native";
 import { Text } from "@uoplan/ui";
 
 import { AppIcon } from "@/components/app-icon";
-import { BasketHeaderButton } from "@/components/basket-header-button";
+import { BasketFab } from "@/components/basket-fab";
 import { type CollapsibleEntry, CollapsibleList } from "@/components/explore/collapsible-list";
 import { ResponsiveColumns } from "@/components/layout";
 import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
@@ -32,7 +32,7 @@ export default function ProgramDetailScreen() {
         gap={Spacing.three}
         backLabel="Explore"
         onBack={() => router.back()}
-        cart={<BasketHeaderButton />}
+        cart={<BasketFab />}
         onSettings={() => router.push("/more")}
       >
         <ScreenHeader title={fallbackTitle} />
@@ -84,7 +84,7 @@ export default function ProgramDetailScreen() {
       gap={Spacing.three}
       backLabel="Explore"
       onBack={() => router.back()}
-      cart={<BasketHeaderButton />}
+      cart={<BasketFab />}
       onSettings={() => router.push("/more")}
     >
       <ScreenHeader
