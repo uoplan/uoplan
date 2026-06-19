@@ -85,7 +85,11 @@ export function FabStack({ children }: FabStackProps) {
   const insets = useSafeAreaInsets();
   // Full-width bars need the FAB lifted above them; the floating iOS 26 capsule
   // leaves the corner clear, so no extra lift is needed there.
-  const barClearance = glassAvailable ? 0 : Platform.OS === "android" ? 56 : 49;
+  const barClearance = glassAvailable
+    ? 0
+    : Platform.OS === "android"
+      ? ANDROID_TAB_BAR_HEIGHT
+      : IOS_LEGACY_TAB_BAR_HEIGHT;
   const bottom = insets.bottom + barClearance + Spacing.three;
   return (
     <View pointerEvents="box-none" style={[styles.stack, { bottom }]}>
@@ -95,6 +99,9 @@ export function FabStack({ children }: FabStackProps) {
 }
 
 const SIZE = 56;
+/** Full-width tab-bar heights (above the safe-area inset) the FAB must clear. */
+const ANDROID_TAB_BAR_HEIGHT = 56;
+const IOS_LEGACY_TAB_BAR_HEIGHT = 49;
 
 const styles = StyleSheet.create({
   stack: {
