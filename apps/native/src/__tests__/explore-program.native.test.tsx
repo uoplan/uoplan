@@ -18,8 +18,8 @@ jest.mock("@/data/data-provider", () => ({
   useAppData: jest.fn(),
 }));
 
-jest.mock("@/components/basket-header-button", () => ({
-  BasketHeaderButton: () => null,
+jest.mock("@/components/basket-fab", () => ({
+  BasketFab: () => null,
 }));
 
 const metrics = {

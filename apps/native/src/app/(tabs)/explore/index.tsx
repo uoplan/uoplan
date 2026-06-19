@@ -33,7 +33,7 @@ import {
   ScreenHeader,
   SearchField,
 } from "@/components/redesign";
-import { BasketHeaderButton } from "@/components/basket-header-button";
+import { BasketFab } from "@/components/basket-fab";
 import { Spacing, Surface } from "@/constants/theme";
 import { useBasket } from "@/data/basket-provider";
 import { useAppData, useExploreIndex, useFeedback } from "@/data/data-provider";
@@ -424,7 +424,7 @@ export default function ExploreScreen() {
   return (
     <RedesignScreen
       gap={Spacing.three}
-      cart={<BasketHeaderButton />}
+      cart={<BasketFab />}
       onSettings={() => router.push("/more")}
     >
       <ScreenHeader title="Course explorer" subtitle="Search courses, programs and professors" />

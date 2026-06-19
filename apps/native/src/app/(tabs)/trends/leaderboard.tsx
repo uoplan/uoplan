@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { Text } from "@uoplan/ui";
 
 import { AppIcon } from "@/components/app-icon";
-import { BasketHeaderButton } from "@/components/basket-header-button";
+import { BasketFab } from "@/components/basket-fab";
 import { ResponsiveColumns } from "@/components/layout";
 import {
   type ChipOption,
@@ -94,7 +94,7 @@ export default function TrendsLeaderboardScreen() {
       gap={Spacing.three}
       backLabel="Trends"
       onBack={() => router.back()}
-      cart={<BasketHeaderButton />}
+      cart={<BasketFab />}
       onSettings={() => router.push("/more")}
     >
       <ScreenHeader

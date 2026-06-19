@@ -7,6 +7,7 @@ import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 import { BottomTabInset, MaxContentWidth, Spacing, Surface } from "@/constants/theme";
 
 import { GlassIconButton } from "./glass-button";
+import { FabStack } from "./fab";
 
 /** Diameter of the sticky-bar glass buttons + the vertical padding around them. */
 const BAR_BUTTON = 40;
@@ -29,7 +30,11 @@ interface RedesignScreenProps {
   backLabel?: string;
   /** Extra leading control rendered on the left when there is no back arrow. */
   leading?: ReactNode;
-  /** Sticky-bar trailing control directly left of the settings gear (e.g. cart). */
+  /**
+   * Floating action button(s) — e.g. the basket / "add to basket" controls.
+   * Rendered in a bottom-right {@link FabStack} (clearing the tab bar), NOT in
+   * the sticky top bar, so they're easy to spot and reach on mobile.
+   */
   cart?: ReactNode;
   /** Sticky-bar trailing control: renders a glass settings gear on the right. */
   onSettings?: () => void;
@@ -40,13 +45,17 @@ interface RedesignScreenProps {
  * tab-bar insets, a centred max-width column, and an optional absolute overlay
  * for FABs / control bars.
  *
- * The header chrome (back arrow on the left, a `[cart][settings]` cluster on the
- * right) is rendered as a **sticky top bar** that floats over the scrolling
- * content: the glass buttons stay pinned while the page title (rendered by
- * `ScreenHeader` as the first scroll child) scrolls underneath. A full-width
- * top-down gradient scrim fades in as content scrolls beneath the bar — opaque
- * behind the buttons and fading to transparent below them — so the floating
- * buttons stay legible over content without a hard solid band.
+ * The header chrome (back arrow on the left, a settings gear on the right) is
+ * rendered as a **sticky top bar** that floats over the scrolling content: the
+ * glass buttons stay pinned while the page title (rendered by `ScreenHeader` as
+ * the first scroll child) scrolls underneath. A full-width top-down gradient
+ * scrim fades in as content scrolls beneath the bar — opaque behind the buttons
+ * and fading to transparent below them — so the floating buttons stay legible
+ * over content without a hard solid band.
+ *
+ * The `cart` prop (basket / "add to basket" controls) is rendered separately as
+ * a bottom-right {@link FabStack} so those primary actions are easy to spot and
+ * thumb-reach on mobile.
  */
 export function RedesignScreen({
   children,
@@ -63,7 +72,7 @@ export function RedesignScreen({
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const hasLeading = Boolean(onBack || leading);
-  const hasTrailing = Boolean(cart || onSettings);
+  const hasTrailing = Boolean(onSettings);
   const hasBar = hasLeading || hasTrailing;
 
   const edgeOpacity = scrollY.interpolate({
@@ -137,7 +146,6 @@ export function RedesignScreen({
                 )}
               </View>
               <View pointerEvents="box-none" style={styles.barSideEnd}>
-                {cart}
                 {onSettings ? (
                   <GlassIconButton
                     icon="gearshape"
@@ -150,6 +158,8 @@ export function RedesignScreen({
           </View>
         </View>
       ) : null}
+
+      {cart ? <FabStack>{cart}</FabStack> : null}
 
       {overlay}
     </View>

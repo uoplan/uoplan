@@ -7,7 +7,7 @@ import { Text } from "@uoplan/ui";
 import { distributionGpa } from "@uoplan/core/gradeDistribution";
 
 import { BarChart } from "@/components/bar-chart";
-import { BasketHeaderButton } from "@/components/basket-header-button";
+import { BasketFab } from "@/components/basket-fab";
 import { DisciplineHeatmapChart } from "@/components/heatmap";
 import { ResponsiveColumns } from "@/components/layout";
 import { ScatterChart } from "@/components/scatter-chart";
@@ -47,7 +47,7 @@ export default function TrendsDisciplinesScreen() {
       gap={Spacing.three}
       backLabel="Trends"
       onBack={() => router.back()}
-      cart={<BasketHeaderButton />}
+      cart={<BasketFab />}
       onSettings={() => router.push("/more")}
     >
       <ScreenHeader title="Disciplines" subtitle="How grading differs across subjects" />

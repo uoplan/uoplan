@@ -15,7 +15,7 @@ import { AppIcon } from "@/components/app-icon";
 import { CalendarEventDrawer } from "@/components/calendar-event-drawer";
 import { BottomControlBar, GlassIconButton } from "@/components/redesign";
 import { PillButton } from "@/components/redesign/pill-button";
-import { BasketHeaderButton } from "@/components/basket-header-button";
+import { BasketDrawer } from "@/components/basket-drawer";
 import { ScheduleSettingsSheet } from "@/components/schedule-settings-sheet";
 import { WeekCalendar } from "@/components/week-calendar";
 import { Spacing, Surface } from "@/constants/theme";
@@ -56,6 +56,7 @@ export default function ScheduleScreen() {
 
   const [variant, setVariant] = useState(0);
   const [prefsOpen, setPrefsOpen] = useState(false);
+  const [basketOpen, setBasketOpen] = useState(false);
   const [selected, setSelected] = useState<{ event: CalendarEvent; color: string } | null>(null);
   const [swap, setSwap] = useState<{ loading: boolean; options: SwapOption[] }>({
     loading: false,
@@ -221,7 +222,12 @@ export default function ScheduleScreen() {
   return (
     <View style={styles.root}>
       <View style={[styles.headerCluster, { top: insets.top + Spacing.two }]}>
-        <BasketHeaderButton />
+        <GlassIconButton
+          icon="cart"
+          accessibilityLabel="Basket"
+          badge={count}
+          onPress={() => setBasketOpen(true)}
+        />
         <GlassIconButton
           icon="gearshape"
           accessibilityLabel="Settings"
@@ -269,6 +275,8 @@ export default function ScheduleScreen() {
           nextDisabled={variant === variants.length - 1}
         />
       ) : null}
+
+      <BasketDrawer opened={basketOpen} onClose={() => setBasketOpen(false)} />
 
       <ScheduleSettingsSheet
         opened={prefsOpen}

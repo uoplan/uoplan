@@ -10,7 +10,7 @@ import { buildProfessorRegistry } from "@uoplan/core/professorRegistry";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 import { Text } from "@uoplan/ui";
 
-import { BasketHeaderButton } from "@/components/basket-header-button";
+import { BasketFab } from "@/components/basket-fab";
 import { CalendarEventDrawer } from "@/components/calendar-event-drawer";
 import { GradeVizBar } from "@/components/grade-viz-bar";
 import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
@@ -329,7 +329,7 @@ export default function CourseScheduleScreen() {
         gap={Spacing.three}
         backLabel="Explore"
         onBack={() => router.back()}
-        cart={<BasketHeaderButton />}
+        cart={<BasketFab />}
         onSettings={() => router.push("/more")}
       >
         <ScreenHeader title={code || "Course schedule"} />
@@ -346,7 +346,7 @@ export default function CourseScheduleScreen() {
       gap={Spacing.three}
       backLabel="Explore"
       onBack={() => router.back()}
-      cart={<BasketHeaderButton />}
+      cart={<BasketFab />}
       onSettings={() => router.push("/more")}
     >
       <ScreenHeader title={course.courseCode} subtitle={course.title ?? "Course schedule"} />

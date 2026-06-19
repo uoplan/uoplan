@@ -7,7 +7,7 @@ import { Text } from "@uoplan/ui";
 
 import { AreaChart } from "@/components/area-chart";
 import { BarChart } from "@/components/bar-chart";
-import { BasketHeaderButton } from "@/components/basket-header-button";
+import { BasketFab } from "@/components/basket-fab";
 import { GradeHistogram } from "@/components/grade-histogram";
 import { GradeLeaderboard } from "@/components/grade-leaderboard";
 import { LineChart } from "@/components/line-chart";
@@ -96,7 +96,7 @@ export default function TrendsCoursesScreen() {
       gap={Spacing.three}
       backLabel="Trends"
       onBack={() => router.back()}
-      cart={<BasketHeaderButton />}
+      cart={<BasketFab />}
       onSettings={() => router.push("/more")}
     >
       <ScreenHeader title="Choosing courses" subtitle="Per-course grade signals" />
