@@ -21,6 +21,7 @@ export function SearchField({ value, onChangeText, placeholder }: SearchFieldPro
         placeholder={placeholder ?? "Search by code or title…"}
         placeholderTextColor={Surface.dimmed}
         style={styles.input}
+        numberOfLines={1}
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType="search"
