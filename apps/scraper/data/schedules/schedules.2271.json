@@ -1,7 +1,7 @@
 {
   "termId": "2271",
   "totalCourses": 11102,
-  "totalWithSchedules": 3195,
+  "totalWithSchedules": 3194,
   "schedules": [
     {
       "subject": "ADM",
@@ -20341,7 +20341,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 34,
               "A": 72,
@@ -20494,7 +20494,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 34,
               "A": 72,
@@ -35329,7 +35329,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Thomas Lagace",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -38670,7 +38670,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 490,
               "A": 615,
@@ -59973,7 +59973,7 @@
                 "startMinutes": 780,
                 "endMinutes": 890,
                 "virtual": false,
-                "instructor": "Steve Lorteau",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -59984,7 +59984,7 @@
                 "startMinutes": 780,
                 "endMinutes": 890,
                 "virtual": false,
-                "instructor": "Steve Lorteau",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -60179,7 +60179,7 @@
                 "startMinutes": 900,
                 "endMinutes": 1010,
                 "virtual": false,
-                "instructor": "Steve Lorteau",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -60190,7 +60190,7 @@
                 "startMinutes": 480,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Steve Lorteau",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -60888,7 +60888,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 11,
@@ -62271,7 +62271,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -65510,7 +65510,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -68839,7 +68839,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -72047,7 +72047,7 @@
                 "startMinutes": 900,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Steve Lorteau",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-02-01",
                   "2027-04-14"
@@ -89810,57 +89810,6 @@
               }
             ],
             "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "CTM",
-      "catalogNumber": "71012",
-      "courseCode": "CTM 71012",
-      "title": "MSc Seminar (Part 2 of 2) (+1 combined)",
-      "timeZone": "America/Toronto",
-      "components": {
-        "SEM": [
-          {
-            "section": "A00-SEM FullSess.",
-            "sectionCode": "A00",
-            "component": "SEM",
-            "session": null,
-            "times": [
-              {
-                "day": "Th",
-                "startMinutes": 720,
-                "endMinutes": 800,
-                "virtual": false,
-                "instructor": "Emilio Alarcon",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open",
-            "distribution": {
-              "A+": 5,
-              "A": 2,
-              "A-": 1,
-              "B+": 0,
-              "B": 0,
-              "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "DR": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
           },
           {
             "section": "B00-SEM FullSess.",
@@ -89873,34 +89822,14 @@
                 "startMinutes": 720,
                 "endMinutes": 800,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Emilio Alarcon",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
                 ]
               }
             ],
-            "status": "Open",
-            "distribution": {
-              "A+": 5,
-              "A": 2,
-              "A-": 1,
-              "B+": 0,
-              "B": 0,
-              "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "DR": 0,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
+            "status": "Open"
           }
         ]
       }
@@ -89933,7 +89862,7 @@
       "components": {
         "REC": [
           {
-            "section": "A00-REC Term",
+            "section": "A00-REC FullSess.",
             "sectionCode": "A00",
             "component": "REC",
             "session": null,
@@ -89964,9 +89893,9 @@
     },
     {
       "subject": "CTM",
-      "catalogNumber": "81022",
-      "courseCode": "CTM 81022",
-      "title": "PhD Seminar (Part 2 of 2) (+1 combined)",
+      "catalogNumber": "8102",
+      "courseCode": "CTM 8102",
+      "title": "PhD Seminar",
       "timeZone": "America/Toronto",
       "components": {
         "SEM": [
@@ -89980,7 +89909,7 @@
                 "day": "Th",
                 "startMinutes": 720,
                 "endMinutes": 800,
-                "virtual": false,
+                "virtual": true,
                 "instructor": "Emilio Alarcon",
                 "meetingDates": [
                   "2027-01-11",
@@ -90050,7 +89979,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Thomas Lagace",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -90670,7 +90599,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 79,
               "A": 112,
@@ -90967,7 +90896,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 73,
               "A": 78,
@@ -112822,6 +112751,25 @@
     },
     {
       "subject": "ECO",
+      "catalogNumber": "6131",
+      "courseCode": "ECO 6131",
+      "title": "Public Economics: Taxation",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "I00-LEC FullSess.",
+            "sectionCode": "I00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ECO",
       "catalogNumber": "6133",
       "courseCode": "ECO 6133",
       "title": "Topics in the Theory of Public Economy",
@@ -112867,25 +112815,6 @@
               "P": 0,
               "S": 2
             }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "ECO",
-      "catalogNumber": "6134",
-      "courseCode": "ECO 6134",
-      "title": "Topics in Environmental and Resource Economics",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "I00-LEC FullSess.",
-            "sectionCode": "I00",
-            "component": "LEC",
-            "session": null,
-            "times": [],
-            "status": "Open"
           }
         ]
       }
@@ -113007,25 +112936,6 @@
               "P": 0,
               "S": 1
             }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "ECO",
-      "catalogNumber": "6176",
-      "courseCode": "ECO 6176",
-      "title": "Time-Series Econometrics",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "I00-LEC FullSess.",
-            "sectionCode": "I00",
-            "component": "LEC",
-            "session": null,
-            "times": [],
-            "status": "Open"
           }
         ]
       }
@@ -118764,7 +118674,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 95,
               "A": 76,
@@ -118888,7 +118798,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 95,
               "A": 76,
@@ -119032,7 +118942,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 279,
               "A": 208,
@@ -124777,7 +124687,7 @@
             "session": null,
             "times": [
               {
-                "day": "Th",
+                "day": "Mo",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
@@ -125474,7 +125384,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Gefen Bar-On Santor",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -125485,7 +125395,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Gefen Bar-On Santor",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -127867,7 +127777,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Gefen Bar-On Santor",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -129325,7 +129235,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Sean R. Moreland",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -129376,7 +129286,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jennifer Gayle Baker",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -129387,7 +129297,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jennifer Gayle Baker",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -129551,7 +129461,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Sean R. Moreland",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -129562,7 +129472,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Sean R. Moreland",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -129593,7 +129503,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Stephanie Kain",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -129635,7 +129545,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Stephanie Kain",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -129675,7 +129585,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Stephanie Kain",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -129859,7 +129769,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jennifer Gayle Baker",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -129901,7 +129811,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jennifer Gayle Baker",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -129941,7 +129851,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jennifer Gayle Baker",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -129992,7 +129902,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Stephanie Kain",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -130034,7 +129944,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Stephanie Kain",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -130074,7 +129984,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Stephanie Kain",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -130362,7 +130272,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kimberly Andrews",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -130404,7 +130314,7 @@
                 "startMinutes": 1230,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kimberly Andrews",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -130444,7 +130354,7 @@
                 "startMinutes": 1230,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kimberly Andrews",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -130495,7 +130405,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jennifer Gayle Baker",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -130537,7 +130447,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jennifer Gayle Baker",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -130577,7 +130487,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jennifer Gayle Baker",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -131031,7 +130941,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Sean R. Moreland",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -131042,7 +130952,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Sean R. Moreland",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -148335,7 +148245,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 111,
               "A": 210,
@@ -149843,7 +149753,7 @@
             "session": null,
             "times": [
               {
-                "day": "Th",
+                "day": "Mo",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
@@ -160974,7 +160884,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 179,
               "A": 135,
@@ -170023,7 +169933,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 930,
               "A": 391,
@@ -178081,14 +177991,25 @@
             "session": null,
             "times": [
               {
-                "day": "We",
+                "day": "Fr",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
-                  "2027-01-06",
-                  "2027-02-10"
+                  "2027-01-08",
+                  "2027-01-08"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-02-08"
                 ]
               }
             ],
@@ -180009,7 +179930,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 82,
               "A": 84,
@@ -204399,6 +204320,25 @@
     },
     {
       "subject": "ORA",
+      "catalogNumber": "5527",
+      "courseCode": "ORA 5527",
+      "title": "Principes d’entrée en pratique I",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC Term",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ORA",
       "catalogNumber": "5529",
       "courseCode": "ORA 5529",
       "title": "Stage I A - Domaine d’étude",
@@ -208928,7 +208868,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -208979,7 +208919,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 161,
               "A": 247,
@@ -215638,7 +215578,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -216552,7 +216492,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -225590,8 +225530,8 @@
               },
               {
                 "day": "Tu",
-                "startMinutes": 750,
-                "endMinutes": 860,
+                "startMinutes": 780,
+                "endMinutes": 890,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -225711,8 +225651,8 @@
               },
               {
                 "day": "Tu",
-                "startMinutes": 750,
-                "endMinutes": 860,
+                "startMinutes": 780,
+                "endMinutes": 890,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -226215,8 +226155,8 @@
               },
               {
                 "day": "Tu",
-                "startMinutes": 870,
-                "endMinutes": 980,
+                "startMinutes": 900,
+                "endMinutes": 1010,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -226237,8 +226177,8 @@
               },
               {
                 "day": "Tu",
-                "startMinutes": 870,
-                "endMinutes": 980,
+                "startMinutes": 900,
+                "endMinutes": 1010,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -226259,8 +226199,8 @@
               },
               {
                 "day": "Tu",
-                "startMinutes": 870,
-                "endMinutes": 980,
+                "startMinutes": 900,
+                "endMinutes": 1010,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -226365,8 +226305,8 @@
               },
               {
                 "day": "We",
-                "startMinutes": 810,
-                "endMinutes": 920,
+                "startMinutes": 795,
+                "endMinutes": 905,
                 "virtual": false,
                 "instructor": "Pierre Giguère",
                 "meetingDates": [
@@ -227327,8 +227267,8 @@
               },
               {
                 "day": "Fr",
-                "startMinutes": 690,
-                "endMinutes": 860,
+                "startMinutes": 750,
+                "endMinutes": 920,
                 "virtual": false,
                 "instructor": "Sarah Tessier",
                 "meetingDates": [
@@ -227338,8 +227278,8 @@
               },
               {
                 "day": "Fr",
-                "startMinutes": 840,
-                "endMinutes": 870,
+                "startMinutes": 930,
+                "endMinutes": 960,
                 "virtual": false,
                 "instructor": "Sarah Tessier",
                 "meetingDates": [
@@ -229915,7 +229855,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 370,
               "A": 308,
@@ -230251,7 +230191,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 370,
               "A": 308,
@@ -235931,7 +235871,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 219,
               "A": 130,
@@ -236183,7 +236123,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 219,
               "A": 130,
@@ -246709,7 +246649,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 477,
               "A": 364,
@@ -264822,7 +264762,7 @@
             "component": "LAB",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 3,
               "A": 11,

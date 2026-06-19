@@ -1,5 +1,5 @@
 {
-  "resultCount": 4566,
+  "resultCount": 4568,
   "professors": [
     {
       "id": "VGVhY2hlci04Nzk2OTM=",
@@ -1531,6 +1531,13 @@
       "id": "VGVhY2hlci03NTQ0NjY=",
       "legacyId": 754466,
       "name": "Allain Rhal",
+      "rating": 0,
+      "numRatings": 0
+    },
+    {
+      "id": "VGVhY2hlci01MDUwNjgw",
+      "legacyId": 5050680,
+      "name": "Allan Charbonneau",
       "rating": 0,
       "numRatings": 0
     },
@@ -7790,7 +7797,7 @@
       "legacyId": 2879963,
       "name": "Didier Bilodeau",
       "rating": 3.5,
-      "numRatings": 35
+      "numRatings": 36
     },
     {
       "id": "VGVhY2hlci0yNTAzNDAw",
@@ -18597,8 +18604,8 @@
       "id": "VGVhY2hlci0zMTIyMTQy",
       "legacyId": 3122142,
       "name": "Manal Beydoun",
-      "rating": 2,
-      "numRatings": 1
+      "rating": 3,
+      "numRatings": 2
     },
     {
       "id": "VGVhY2hlci0zMDEzMzM5",
@@ -21439,8 +21446,8 @@
       "id": "VGVhY2hlci0zMTU3NDcx",
       "legacyId": 3157471,
       "name": "Mihir Deo",
-      "rating": 3.9,
-      "numRatings": 13
+      "rating": 3.7,
+      "numRatings": 14
     },
     {
       "id": "VGVhY2hlci0zMDgwMDM1",
@@ -23028,6 +23035,13 @@
       "id": "VGVhY2hlci0yNzcxMzI4",
       "legacyId": 2771328,
       "name": "Nicholas Berniquez",
+      "rating": 0,
+      "numRatings": 0
+    },
+    {
+      "id": "VGVhY2hlci01MDUwNjc5",
+      "legacyId": 5050679,
+      "name": "Nicholas Goulet",
       "rating": 0,
       "numRatings": 0
     },
@@ -27865,8 +27879,8 @@
       "id": "VGVhY2hlci0xMDM3MDU0",
       "legacyId": 1037054,
       "name": "Scott Simon",
-      "rating": 3.8,
-      "numRatings": 21
+      "rating": 3.9,
+      "numRatings": 22
     },
     {
       "id": "VGVhY2hlci0xMDY0NTUy",
@@ -28230,7 +28244,7 @@
       "legacyId": 2010338,
       "name": "Sharon Lee",
       "rating": 3.5,
-      "numRatings": 97
+      "numRatings": 98
     },
     {
       "id": "VGVhY2hlci00NDE3NDQ=",
@@ -28874,7 +28888,7 @@
       "legacyId": 1061337,
       "name": "Stephan Larose",
       "rating": 4.5,
-      "numRatings": 310
+      "numRatings": 311
     },
     {
       "id": "VGVhY2hlci0xOTY0MTgw",
