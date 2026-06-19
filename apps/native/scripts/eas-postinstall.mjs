@@ -57,10 +57,44 @@ function ensureRustup() {
   return { PATH: `${resolve(cargoHome, "bin")}:${process.env.PATH ?? ""}` };
 }
 
+function cargoNdkInstalled(extraEnv) {
+  return (
+    spawnSync("cargo", ["ndk", "--version"], {
+      stdio: "ignore",
+      env: { ...process.env, ...extraEnv },
+    }).status === 0
+  );
+}
+
 run("pnpm", ["generate"]);
 
 if (process.env.EAS_BUILD_PLATFORM === "ios") {
   const rustEnv = ensureRustup();
   run("rustup", ["target", "add", "aarch64-apple-ios", "aarch64-apple-ios-sim"], repoRoot, rustEnv);
   run("pnpm", ["build:engine-native-ffi"], repoRoot, rustEnv);
+} else if (process.env.EAS_BUILD_PLATFORM === "android") {
+  // Android loads the Rust engine as a per-ABI `libuoplan_engine.so` (JNI). The
+  // jniLibs are git-ignored build artifacts, so they must be compiled on the EAS
+  // worker before Gradle packages the app — otherwise the APK/AAB ships without
+  // the engine and crashes (UnsatisfiedLinkError) on schedule generation.
+  const rustEnv = ensureRustup();
+  run(
+    "rustup",
+    [
+      "target",
+      "add",
+      "aarch64-linux-android",
+      "armv7-linux-androideabi",
+      "x86_64-linux-android",
+      "i686-linux-android",
+    ],
+    repoRoot,
+    rustEnv,
+  );
+  // `build:engine-native-ffi-android` invokes `cargo ndk`; install it if the EAS
+  // Android image doesn't already provide it.
+  if (!cargoNdkInstalled(rustEnv)) {
+    run("cargo", ["install", "cargo-ndk", "--locked"], repoRoot, rustEnv);
+  }
+  run("pnpm", ["build:engine-native-ffi-android"], repoRoot, rustEnv);
 }
