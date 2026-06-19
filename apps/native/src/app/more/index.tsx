@@ -14,6 +14,8 @@ import { useLocale } from "@/i18n/locale-provider";
 const WEBSITE = "https://uoplan.party";
 const GITHUB = "https://github.com/uoplan/uoplan";
 const CONTACT = "mailto:admin@uoplan.party";
+const PRIVACY_URL = "https://uoplan.party/privacy";
+const TERMS_URL = "https://uoplan.party/terms";
 const APP_VERSION = Constants.expoConfig?.version ?? "1.0.0";
 
 function openUrl(url: string) {
@@ -125,13 +127,35 @@ export default function MoreScreen() {
             onPress={() => openUrl(CONTACT)}
           />
         </Section>
+
+        <Section title="Legal">
+          <ListRow
+            icon="hand.raised"
+            title="Privacy Policy"
+            description="How your data is handled"
+            onPress={() => openUrl(PRIVACY_URL)}
+          />
+          <Separator />
+          <ListRow
+            icon="doc.text"
+            title="Terms of Service"
+            description="Terms of use"
+            onPress={() => openUrl(TERMS_URL)}
+          />
+        </Section>
       </ResponsiveColumns>
 
-      <Pressable style={styles.about} accessibilityRole="link" onPress={() => openUrl(WEBSITE)}>
-        <Text size="xs" color={Surface.faint}>
-          uoplan.party · v{APP_VERSION}
+      <View style={styles.about}>
+        <Text size="xs" color={Surface.faint} align="center">
+          Independent, student-run project. Not affiliated with, endorsed by, or sponsored by the
+          University of Ottawa.
         </Text>
-      </Pressable>
+        <Pressable accessibilityRole="link" onPress={() => openUrl(WEBSITE)}>
+          <Text size="xs" color={Surface.faint}>
+            uoplan.party · v{APP_VERSION}
+          </Text>
+        </Pressable>
+      </View>
     </RedesignScreen>
   );
 }
@@ -151,6 +175,7 @@ const styles = StyleSheet.create({
   },
   about: {
     alignItems: "center",
+    gap: Spacing.two,
     paddingTop: Spacing.three,
     paddingBottom: Spacing.one,
   },
