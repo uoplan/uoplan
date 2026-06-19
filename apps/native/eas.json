@@ -42,7 +42,7 @@
   "submit": {
     "production": {
       "android": {
-        "applicationId": "party.uoplan.native",
+        "applicationId": "party.uoplan.app",
         "track": "internal"
       },
       "ios": {
