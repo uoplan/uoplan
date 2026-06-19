@@ -49,7 +49,9 @@ export function OnboardingScreen() {
         <View style={styles.features} accessibilityLabel="Setup highlights">
           {FEATURES.map((feature) => (
             <View key={feature.label} style={styles.feature}>
-              <AppIcon name={feature.icon} size={16} color={Surface.accent} />
+              <View style={styles.featureIcon}>
+                <AppIcon name={feature.icon} size={16} color={Surface.accent} />
+              </View>
               <Text size="sm" weight="medium">
                 {feature.label}
               </Text>
@@ -110,17 +112,18 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
   },
   feature: {
-    minHeight: 44,
     flexDirection: "row",
     alignItems: "center",
+    gap: Spacing.three,
+    paddingVertical: Spacing.one,
+  },
+  featureIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: "center",
     justifyContent: "center",
-    gap: Spacing.two,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: 10,
-    borderRadius: 999,
-    backgroundColor: Surface.subtle,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Surface.border,
+    backgroundColor: Surface.accentSoft,
   },
   actions: {
     gap: Spacing.two,
