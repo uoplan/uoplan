@@ -152,7 +152,9 @@
   --app-info-soft: color-mix(in oklab, var(--app-info) 12%, transparent);
   --app-warning: oklch(0.5 0.14 58);
   --app-warning-soft: color-mix(in oklab, var(--app-warning) 12%, transparent);
-  --app-success: oklch(0.59 0.13 150);
+  /* Kept dark enough that white text on a solid `--app-success` fill (e.g. the
+     green TopBanner CTA) clears the WCAG AA 4.5:1 ratio — don't re-lighten. */
+  --app-success: oklch(0.54 0.13 150);
   --app-success-soft: color-mix(in oklab, var(--app-success) 12%, transparent);
   --app-danger: oklch(0.59 0.16 22);
   --app-danger-soft: color-mix(in oklab, var(--app-danger) 12%, transparent);
