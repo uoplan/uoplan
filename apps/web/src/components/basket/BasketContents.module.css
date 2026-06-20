@@ -53,6 +53,17 @@
   padding-top: 2px;
 }
 
+/* The always-visible "courses you want" add-search sits between the header and the
+   collapsible body. Inside the card it is inset and split from the header by a hairline. */
+.courseField {
+  padding: 0;
+}
+
+.embedded .courseField {
+  padding: 12px;
+  border-top: var(--app-border-width) solid var(--app-border);
+}
+
 /* Inside the card the body is inset and split from the header by a hairline. The
    divider only shows when expanded (Collapse hides the body when closed). */
 .embedded .body {

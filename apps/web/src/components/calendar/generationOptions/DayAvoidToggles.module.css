@@ -1,0 +1,44 @@
+.row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+  border: var(--app-border-width) solid var(--app-border);
+  border-radius: var(--app-radius-sm);
+  background: var(--app-surface);
+  color: var(--app-text-muted);
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color var(--app-transition),
+    background-color var(--app-transition),
+    color var(--app-transition);
+}
+
+.toggle:hover {
+  border-color: var(--app-border-strong);
+  color: var(--app-text);
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--app-focus-ring);
+  outline-offset: 2px;
+}
+
+/* Pressed = "avoid this day". Uses the accent fill so it reads as an active selection. */
+.toggle[data-active] {
+  border-color: var(--app-accent);
+  background: var(--app-accent);
+  color: var(--app-on-accent);
+}
+
+.toggle[data-active]:hover {
+  color: var(--app-on-accent);
+}

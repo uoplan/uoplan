@@ -27,3 +27,17 @@ export function useBlockedTimes() {
   const removeBlockedTime = useAppStore((s) => s.removeBlockedTime);
   return { blockedTimes, addBlockedTime, updateBlockedTime, removeBlockedTime };
 }
+
+/**
+ * Read-only schedule-generation time window (earliest start / latest end minutes) used by
+ * the week calendar to shade the "outside class hours" regions on every day, mirroring the
+ * "class times between X and Y" constraint so it reads like the blocked times / avoided days.
+ */
+export function useGenerationTimeWindow() {
+  return useAppStore(
+    useShallow((s) => ({
+      minStartMinutes: s.generationMinStartMinutes,
+      maxEndMinutes: s.generationMaxEndMinutes,
+    })),
+  );
+}

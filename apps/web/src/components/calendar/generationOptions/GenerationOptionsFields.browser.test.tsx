@@ -7,38 +7,62 @@ import { renderWithProviders } from "../../../test/renderWithProviders";
 
 function baseProps() {
   return makeGenerationOptionsProps({
-    courseOptions: [{ value: "CSI 2110", label: "CSI 2110" }],
     countMax: 8,
     minStartMinutes: 8 * 60,
     maxEndMinutes: 18 * 60,
   });
 }
 
-test("surfaces common scheduling options and tucks filters behind a disclosure", async () => {
+const OPEN_ADVANCED = {
+  collapseId: "test-advanced-options-collapse",
+  defaultOpen: true,
+} as const;
+
+test("tucks every lower-priority control behind a single Advanced options disclosure", async () => {
   await renderWithProviders(
     <GenerationOptionsFields
       {...baseProps()}
-      secondaryOptionsDisclosure={{
-        heading: "More options",
-        badgeLabel: "Optional",
-        collapseId: "test-more-options-collapse",
+      advancedOptions={{
+        collapseId: "test-advanced-options-collapse",
+        badge: { label: "Optional", color: "gray" },
       }}
     />,
   );
 
-  await expect.element(page.getByText("Courses you want")).toBeInTheDocument();
+  // Always-visible: the course count input.
   await expect.element(page.getByText("Electives this semester (additional)")).toBeInTheDocument();
-  await expect.element(page.getByText("Class times between")).toBeInTheDocument();
-  await expect.element(page.getByText("Smart options")).toBeInTheDocument();
-  await expect.element(page.getByText("Compressed schedule")).not.toBeVisible();
 
-  const toggle = page.getByRole("button", { name: /More options/i });
+  // Collapsed disclosure: heading + bullet summary visible, controls hidden.
+  const toggle = page.getByRole("button", { name: /Advanced options/i });
   await expect.element(toggle).toHaveAttribute("aria-expanded", "false");
-  await expect.element(toggle).toHaveAttribute("aria-controls", "test-more-options-collapse");
+  await expect.element(toggle).toHaveAttribute("aria-controls", "test-advanced-options-collapse");
+  await expect.element(page.getByText(/Class times$/)).toBeInTheDocument();
+  await expect.element(page.getByText(/Days to avoid$/)).toBeInTheDocument();
+  await expect.element(page.getByText("Class times between")).not.toBeVisible();
 
   await toggle.click();
   await expect.element(toggle).toHaveAttribute("aria-expanded", "true");
-  await expect.element(page.getByText("French immersion stream")).toBeInTheDocument();
+  await expect.element(page.getByText("Class times between")).toBeVisible();
+  await expect.element(page.getByText("Days of the week to avoid")).toBeVisible();
+  await expect.element(page.getByText("French immersion stream")).toBeVisible();
+});
+
+test("renders extra disclosure content and an extra summary bullet", async () => {
+  await renderWithProviders(
+    <GenerationOptionsFields
+      {...baseProps()}
+      advancedOptions={{
+        collapseId: "test-advanced-options-collapse",
+        extraSummaryItem: "Pick specific courses",
+        extraContent: <div data-testid="extra-panel">extra panel</div>,
+      }}
+    />,
+  );
+
+  await expect.element(page.getByText(/Pick specific courses$/)).toBeInTheDocument();
+
+  await page.getByRole("button", { name: /Advanced options/i }).click();
+  await expect.element(page.getByTestId("extra-panel")).toBeVisible();
 });
 
 test("smart options expands child preferences and toggles them as a group", async () => {
@@ -50,6 +74,7 @@ test("smart options expands child preferences and toggles them as a group", asyn
   await renderWithProviders(
     <GenerationOptionsFields
       {...baseProps()}
+      advancedOptions={OPEN_ADVANCED}
       compressedSchedule={false}
       preferEasierCourses={false}
       preferHigherSentiment={false}
@@ -81,6 +106,7 @@ test("smart options clears the lenient professor-rating baseline when toggled of
   await renderWithProviders(
     <GenerationOptionsFields
       {...baseProps()}
+      advancedOptions={OPEN_ADVANCED}
       compressedSchedule
       preferEasierCourses
       preferHigherSentiment
@@ -100,6 +126,7 @@ test("professor-rating smart option maps to the lenient minimum rating", async (
   await renderWithProviders(
     <GenerationOptionsFields
       {...baseProps()}
+      advancedOptions={OPEN_ADVANCED}
       minProfessorRating={null}
       onMinProfessorRatingChange={onMinProfessorRatingChange}
     />,

@@ -6,9 +6,6 @@ export function makeGenerationOptionsProps(
   overrides: Partial<GenerationOptionsFieldsProps> = {},
 ): GenerationOptionsFieldsProps {
   return {
-    courseOptions: [],
-    desiredCourses: [],
-    onDesiredCoursesChange: vi.fn(),
     countValue: 5,
     onCountChange: vi.fn(),
     countMin: 1,
@@ -45,6 +42,7 @@ export function makeGenerationOptionsProps(
     excludeCourses: { data: [], value: [], onChange: vi.fn() },
     frenchImmersionStream: false,
     onFrenchImmersionStreamChange: vi.fn(),
+    advancedOptions: { collapseId: "test-advanced-options-collapse" },
     ...overrides,
   };
 }

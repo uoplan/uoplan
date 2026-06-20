@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   ActionIcon,
   Alert,
+  Badge,
   Box,
   Button,
   Divider,
@@ -243,6 +244,38 @@ export function CalendarPage() {
         };
       }) ?? [];
 
+  const noTimeslotBanner =
+    noTimeslotCourses.length > 0 ? (
+      <Alert
+        icon={<IconInfoCircle size={16} />}
+        radius="md"
+        py="xs"
+        data-testid="no-timeslot-banner"
+        style={{
+          flexShrink: 0,
+          backgroundColor: "var(--app-info-soft)",
+          border: "1px solid var(--app-info)",
+        }}
+      >
+        <Group gap={6} align="center" wrap="wrap">
+          <Text size="xs" fw={600} style={{ color: "var(--app-text)" }}>
+            {tr("calendarPage.noTimeslotCourses.title")}
+          </Text>
+          {noTimeslotCourses.map((course) => (
+            <Badge
+              key={course.code}
+              size="sm"
+              variant="light"
+              color="gray"
+              title={course.title ? `${course.code}: ${course.title}` : course.code}
+            >
+              {course.code}
+            </Badge>
+          ))}
+        </Group>
+      </Alert>
+    ) : null;
+
   const startOk =
     Boolean(timetableStartDate) && !Number.isNaN(Date.parse(`${timetableStartDate}T00:00:00Z`));
   const endOk =
@@ -370,40 +403,6 @@ export function CalendarPage() {
 
       <PersonalizeBanner variant="sidebar" />
 
-      {noTimeslotCourses.length > 0 && (
-        <Alert
-          icon={<IconInfoCircle size={16} />}
-          radius="md"
-          py="xs"
-          style={{
-            flexShrink: 0,
-            backgroundColor: "var(--app-info-soft)",
-            border: "1px solid var(--app-info)",
-          }}
-        >
-          <Stack gap={6}>
-            <Text size="sm" fw={700} style={{ color: "var(--app-text)" }}>
-              {tr("calendarPage.noTimeslotCourses.title")}
-            </Text>
-            <Text size="xs" style={{ color: "var(--app-text-muted)" }}>
-              {tr("calendarPage.noTimeslotCourses.description")}
-            </Text>
-            <Stack component="ul" gap={4} style={{ margin: 0, paddingInlineStart: 18 }}>
-              {noTimeslotCourses.map((course) => (
-                <Text
-                  component="li"
-                  key={course.code}
-                  size="xs"
-                  style={{ color: "var(--app-text)" }}
-                >
-                  {course.title ? `${course.code}: ${course.title}` : course.code}
-                </Text>
-              ))}
-            </Stack>
-          </Stack>
-        </Alert>
-      )}
-
       {!hasProgram ? (
         <>
           <BasicCalendarHeaderActions
@@ -424,6 +423,7 @@ export function CalendarPage() {
               onPrevious={handlePrevious}
             />
           )}
+          {noTimeslotBanner}
           <BasicGenerationOptions />
         </>
       ) : (
@@ -518,6 +518,8 @@ export function CalendarPage() {
           )}
 
           <Divider color="var(--app-border)" />
+
+          {noTimeslotBanner}
 
           <AdvancedGenerationOptions />
 

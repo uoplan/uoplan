@@ -4,7 +4,10 @@ import { existsSync, rmSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-if (process.env.EAS_BUILD !== "true") {
+// EAS Build workers set EAS_BUILD="true"; the local-build plugin
+// (`eas build --local`) sets EAS_BUILD="1". Accept both so generated artifacts
+// (i18n catalogs, proto, bundled data, the engine .so) are produced either way.
+if (process.env.EAS_BUILD !== "true" && process.env.EAS_BUILD !== "1") {
   process.exit(0);
 }
 

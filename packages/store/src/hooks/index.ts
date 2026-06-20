@@ -25,7 +25,7 @@ export {
 } from "./useScheduleGeneration";
 export { useSeedNavigation } from "./useSeedNavigation";
 export { useScheduleSwaps } from "./useScheduleSwaps";
-export { useCalendarView, useBlockedTimes } from "./useCalendarView";
+export { useCalendarView, useBlockedTimes, useGenerationTimeWindow } from "./useCalendarView";
 export { useShareState, useGetShareUrl } from "./useShareState";
 export { useSaveStatus } from "./useSaveStatus";
 export { useGlobalActions } from "./useGlobalActions";

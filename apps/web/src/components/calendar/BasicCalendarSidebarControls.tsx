@@ -41,10 +41,8 @@ export function BasicCalendarSidebarControls() {
     courseOptions,
     courseOptionsFilter,
     courseRenderOption,
-    desiredCourseOptions,
     setFrenchImmersionStream,
     setBlacklistedCourses,
-    setBasketCourses,
     setBasicExcludedCategories,
     setLevelBuckets,
     setLanguageBuckets,
@@ -108,14 +106,6 @@ export function BasicCalendarSidebarControls() {
   return (
     <>
       <GenerationOptionsFields
-        courseOptions={desiredCourseOptions}
-        desiredCourses={basketCourses}
-        onDesiredCoursesChange={(v) => {
-          setBasketCourses(v);
-          markBasicSettingsChanged();
-        }}
-        renderCourseOption={courseRenderOption}
-        courseFilter={courseOptionsFilter}
         coursesSlot={<BasketContents variant="embedded" />}
         countValue={basicElectivesCount}
         onCountChange={(count) => {
@@ -213,10 +203,9 @@ export function BasicCalendarSidebarControls() {
           setFrenchImmersionStream(checked);
           markBasicSettingsChanged();
         }}
-        secondaryOptionsDisclosure={{
-          heading: tr("generationOptions.moreOptions.heading"),
-          badgeLabel: tr("app.constraints.optional"),
-          collapseId: "basic-more-options-collapse",
+        advancedOptions={{
+          collapseId: "basic-advanced-options-collapse",
+          badge: { label: tr("app.constraints.optional"), color: "gray" },
         }}
       />
 

@@ -8,6 +8,7 @@ import {
   Collapse,
   Group,
   Pill,
+  Select,
   Stack,
   Text,
   Tooltip,
@@ -23,6 +24,7 @@ import {
   IconCircleDashed,
   IconInfoCircle,
   IconListCheck,
+  IconSearch,
   IconTrash,
   IconX,
 } from "@tabler/icons-react";
@@ -39,11 +41,14 @@ import {
   useRequirementState,
   useTermSelection,
 } from "../../store/hooks";
+import { useCourseSelectOptions } from "../shared/useCourseSelectOptions";
 import classes from "./BasketContents.module.css";
 
 interface BasketContentsProps {
   variant?: "popover" | "embedded";
   onNavigate?: () => void;
+  /** Show the inline "courses you want" add-search field. Defaults to the embedded (sidebar) card. */
+  showCourseField?: boolean;
 }
 
 type StatusKind = "assigned" | "standalone" | "warning" | "muted";
@@ -81,6 +86,8 @@ const I18N = {
   emptyCta: "basket.empty.cta",
   removeCourse: "basket.removeCourse",
   viewCourse: "basket.viewCourse",
+  coursesPlaceholder: "basket.addCourse.placeholder",
+  coursesNotFound: "completedCourses.notFound",
   removePrompt: "basket.removePrompt",
   confirmRemove: "basket.confirmRemove",
   cancelRemove: "basket.cancelRemove",
@@ -207,13 +214,20 @@ function statusDotColor(kind: StatusKind): string {
   }
 }
 
-export function BasketContents({ variant = "popover", onNavigate }: BasketContentsProps) {
+export function BasketContents({
+  variant = "popover",
+  onNavigate,
+  showCourseField = variant === "embedded",
+}: BasketContentsProps) {
   const t = useTr();
   const bodyId = useId();
   const [summaryOpen, setSummaryOpen] = useState(true);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [pendingRemoval, setPendingRemoval] = useState<string | null>(null);
+  const [courseSearch, setCourseSearch] = useState("");
   const { basketCourses, addToBasket, removeFromBasket } = useBasketSelection();
+  const { desiredCourseOptions, courseOptionsFilter, courseRenderOption } =
+    useCourseSelectOptions();
   const { completedCourses } = useCompletedCourses();
   const { constrainedPerRequirement, selectedPerRequirement, prereqEligibleCourses } =
     useRequirementState();
@@ -270,6 +284,13 @@ export function BasketContents({ variant = "popover", onNavigate }: BasketConten
     () => basketCourses.map((code) => getCourseDisplay(code, cache)),
     [basketCourses, cache],
   );
+
+  // The add-search only offers courses not already in the basket, so picking one always adds.
+  const addableCourseOptions = useMemo(() => {
+    if (basketCourses.length === 0) return desiredCourseOptions;
+    const inBasket = new Set(basketCourses.map((code) => normalizeCourseCode(code)));
+    return desiredCourseOptions.filter((o) => !inBasket.has(normalizeCourseCode(o.value)));
+  }, [desiredCourseOptions, basketCourses]);
 
   const totalCredits = courseDisplays.reduce((sum, course) => sum + course.credits, 0);
   const placedCredits = assignments.reduce(
@@ -404,6 +425,32 @@ export function BasketContents({ variant = "popover", onNavigate }: BasketConten
           </Box>
         </Stack>
       </UnstyledButton>
+
+      {showCourseField ? (
+        <Box className={classes.courseField}>
+          <Select
+            aria-label={t(I18N.coursesPlaceholder)}
+            placeholder={t(I18N.coursesPlaceholder)}
+            leftSection={<IconSearch size={15} />}
+            searchable
+            data={addableCourseOptions}
+            value={null}
+            searchValue={courseSearch}
+            onSearchChange={setCourseSearch}
+            onChange={(value) => {
+              if (!value) return;
+              addToBasket(value);
+              setCourseSearch("");
+            }}
+            renderOption={courseRenderOption}
+            filter={courseOptionsFilter}
+            nothingFoundMessage={t(I18N.coursesNotFound)}
+            size="sm"
+            radius="md"
+            comboboxProps={{ withinPortal: true }}
+          />
+        </Box>
+      ) : null}
 
       <Collapse id={bodyId} expanded={summaryOpen}>
         <Stack gap="sm" className={classes.body}>

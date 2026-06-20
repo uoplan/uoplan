@@ -80,11 +80,10 @@ test("surfaces scheduled courses that have no calendar time slots in the sidebar
 
   await page.getByRole("button", { name: "Options" }).click();
 
+  const banner = page.getByTestId("no-timeslot-banner");
   await expect
-    .element(page.getByText("Some courses don't appear on the schedule"))
+    .element(banner.getByText("Some courses don't appear on the schedule"))
     .toBeInTheDocument();
-  await expect.element(page.getByText("CSI 4900: Honours Project")).toBeInTheDocument();
-  await expect
-    .element(page.getByText("CSI 3105: Design and Analysis of Algorithms"))
-    .not.toBeInTheDocument();
+  await expect.element(banner.getByText("CSI 4900", { exact: true })).toBeInTheDocument();
+  await expect.element(banner.getByText("CSI 3105", { exact: true })).not.toBeInTheDocument();
 });

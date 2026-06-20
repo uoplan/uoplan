@@ -52,7 +52,6 @@ export function AdvancedGenerationOptions() {
   const {
     cache,
     completedCourses,
-    basketCourses,
     basicExcludedCategories,
     generationMinStartMinutes,
     generationMaxEndMinutes,
@@ -73,8 +72,6 @@ export function AdvancedGenerationOptions() {
     courseOptions,
     courseOptionsFilter,
     courseRenderOption,
-    desiredCourseOptions,
-    setBasketCourses,
     setBasicExcludedCategories,
     setGenerationMinProfessorRating,
     setGenerationMinStartMinutes,
@@ -175,11 +172,6 @@ export function AdvancedGenerationOptions() {
   return (
     <AdvancedGenerationOptionsView
       fields={{
-        courseOptions: desiredCourseOptions,
-        desiredCourses: basketCourses,
-        onDesiredCoursesChange: setBasketCourses,
-        renderCourseOption: courseRenderOption,
-        courseFilter: courseOptionsFilter,
         coursesSlot: <BasketContents variant="embedded" />,
         countValue: additionalElectivesCount,
         onCountChange: (n) => {

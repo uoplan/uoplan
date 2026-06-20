@@ -4,7 +4,10 @@ import { createTestAppServices } from "../testServices";
 import {
   DEFAULT_COURSES_THIS_SEMESTER,
   DEFAULT_GENERATION_MAX_END_MINUTES,
+  DEFAULT_GENERATION_MIN_PROFESSOR_RATING,
   DEFAULT_GENERATION_MIN_START_MINUTES,
+  DEFAULT_GENERATION_PREFER_EASIER,
+  DEFAULT_GENERATION_PREFER_HIGHER_SENTIMENT,
 } from "../generationDefaults";
 import { avoidedDaysFromBlocks, defaultBlockedTimes } from "../blockedTimes";
 
@@ -20,7 +23,8 @@ describe("clearGenerationOptions", () => {
       generationMinProfessorRating: 4,
       generationLimitFirstYearCredits: false,
       generationCompressedSchedule: true,
-      generationPreferEasier: true,
+      generationPreferEasier: false,
+      generationPreferHigherSentiment: false,
       blacklistedCourses: ["CSI 2110"],
       includeClosedComponents: true,
       virtualSectionsOnly: true,
@@ -36,10 +40,11 @@ describe("clearGenerationOptions", () => {
     expect(s.generationMaxEndMinutes).toBe(DEFAULT_GENERATION_MAX_END_MINUTES);
     expect(s.blockedTimes).toEqual(defaultBlockedTimes());
     expect(avoidedDaysFromBlocks(s.blockedTimes).sort()).toEqual(["Sa", "Su"]);
-    expect(s.generationMinProfessorRating).toBeNull();
+    expect(s.generationMinProfessorRating).toBe(DEFAULT_GENERATION_MIN_PROFESSOR_RATING);
     expect(s.generationLimitFirstYearCredits).toBe(true);
     expect(s.generationCompressedSchedule).toBe(false);
-    expect(s.generationPreferEasier).toBe(false);
+    expect(s.generationPreferEasier).toBe(DEFAULT_GENERATION_PREFER_EASIER);
+    expect(s.generationPreferHigherSentiment).toBe(DEFAULT_GENERATION_PREFER_HIGHER_SENTIMENT);
     expect(s.blacklistedCourses).toEqual([]);
     expect(s.includeClosedComponents).toBe(false);
     expect(s.virtualSectionsOnly).toBe(false);
