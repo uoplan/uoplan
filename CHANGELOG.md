@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.0.0-beta.35](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.34...uoplan-monorepo-v1.0.0-beta.35) (2026-06-20)
+
+
+### Features
+
+* add prof prediction reasoning ([f119729](https://github.com/uoplan/uoplan/commit/f11972950ba0250b272fa27e819b85fce8bb5db2))
+* enhance cart options ([8920efa](https://github.com/uoplan/uoplan/commit/8920efa7b55dbd9c58f7b25c54a8a56cc34cf591))
+* improve document titles ([630886e](https://github.com/uoplan/uoplan/commit/630886e6f76c7d5bb9c798779f6439f06bcf9a3d))
+* make explore page show average grade instead of mode ([0f73eb4](https://github.com/uoplan/uoplan/commit/0f73eb423951ba2adba539208acf52cc7ad20a75))
+* **mobile:** improve ux and fix bugs ([509ba27](https://github.com/uoplan/uoplan/commit/509ba273e56ca03383cb343a0a6724d824ec770e))
+* **mobile:** make native cart and add-to-cart buttons floating ([#64](https://github.com/uoplan/uoplan/issues/64)) ([2cf5baa](https://github.com/uoplan/uoplan/commit/2cf5baa5dd813e1257eff9f1a1104746df61f82f))
+* **native:** ship not-affiliated disclaimer + Legal links; align submit appId ([93d2d74](https://github.com/uoplan/uoplan/commit/93d2d74583497c43f099470e73e60869863acee6))
+* **web:** add Android closed-test recruitment banner + raise home hero ([09663c5](https://github.com/uoplan/uoplan/commit/09663c57737a914bd6641f6814e9d77da03080c4))
+* **web:** host privacy policy and terms pages with footer links ([40e8201](https://github.com/uoplan/uoplan/commit/40e82014a5b61c2aa32b97d4f5527a638fe0edd2))
+
+
+### Bug Fixes
+
+* avoid priority of honours over chosen course ([0462574](https://github.com/uoplan/uoplan/commit/0462574865b31e095b0f21722a340d27f9f329b1))
+* **engine:** schedule timeless courses by data, not just *900 honours rule ([c938ba6](https://github.com/uoplan/uoplan/commit/c938ba6d2c7e2336a86f9630665d205f3a220e80))
+* **mobile:** restyle onboarding setup highlights to not look like buttons ([#62](https://github.com/uoplan/uoplan/issues/62)) ([700b86c](https://github.com/uoplan/uoplan/commit/700b86cdc7e78efc63e89460354e828e187d41bc))
+* **mobile:** source native program year selector from catalogue years ([#61](https://github.com/uoplan/uoplan/issues/61)) ([8559a82](https://github.com/uoplan/uoplan/commit/8559a8238fafae3e858af1f94a62d36b671a2843))
+* **native:** keep course detail single-column on wide tablets ([4579c46](https://github.com/uoplan/uoplan/commit/4579c46c0f0e25393035f6869383fbf36ce8b9f9))
+* **native:** single-line search placeholder and non-overlapping banner close button ([#63](https://github.com/uoplan/uoplan/issues/63)) ([2b9043e](https://github.com/uoplan/uoplan/commit/2b9043e68425daa957ed3face341089dd947d5dd))
+* stop previously-alias parser from absorbing codes from neighbouring sentences ([#65](https://github.com/uoplan/uoplan/issues/65)) ([16d712f](https://github.com/uoplan/uoplan/commit/16d712ff9a94a38e2462689c0e7f9a84d6114d09))
+
 ## [1.0.0-beta.34](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.33...uoplan-monorepo-v1.0.0-beta.34) (2026-06-15)
 
 
