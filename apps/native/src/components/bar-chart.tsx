@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Svg, { Line, Rect, Text as SvgText } from "react-native-svg";
 
-import { Surface } from "@/constants/theme";
+import { Fonts, Surface } from "@/constants/theme";
 
 export interface BarChartDatum {
   label: string;
@@ -90,6 +90,7 @@ export function BarChart({
               key={`tl${i}`}
               x={PAD_LEFT - 5}
               y={yFor(t) + 3}
+              fontFamily={Fonts.mono}
               fontSize={9}
               fill={Surface.dimmed}
               textAnchor="end"
@@ -117,6 +118,7 @@ export function BarChart({
               key={`xl${i}`}
               x={PAD_LEFT + i * slot + slot / 2}
               y={totalH - 8}
+              fontFamily={Fonts.mono}
               fontSize={9}
               fill={Surface.dimmed}
               textAnchor="middle"

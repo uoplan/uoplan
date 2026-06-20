@@ -1,5 +1,26 @@
 import { describe, expect, it } from "vitest";
-import { findNewTerms, parseTermDropdown, sortTerms, termsListsEqual } from "./terms/check.ts";
+import {
+  findNewTerms,
+  normalizeTermName,
+  parseTermDropdown,
+  sortTerms,
+  termsListsEqual,
+} from "./terms/check.ts";
+
+describe("normalizeTermName", () => {
+  it("collapses Spring/Summer to Summer", () => {
+    expect(normalizeTermName("2026 Spring/Summer Term")).toBe("2026 Summer Term");
+  });
+
+  it("tolerates spacing around the slash and is case-insensitive", () => {
+    expect(normalizeTermName("2026 spring / summer Term")).toBe("2026 Summer Term");
+  });
+
+  it("leaves other term names unchanged", () => {
+    expect(normalizeTermName("2026 Fall Term")).toBe("2026 Fall Term");
+    expect(normalizeTermName("2027 Winter Term")).toBe("2027 Winter Term");
+  });
+});
 
 describe("parseTermDropdown", () => {
   it("extracts term IDs and names from a select element", () => {
@@ -12,7 +33,7 @@ describe("parseTermDropdown", () => {
     `;
     expect(parseTermDropdown(html)).toEqual([
       { termId: "2261", name: "2026 Winter Term" },
-      { termId: "2265", name: "2026 Spring/Summer Term" },
+      { termId: "2265", name: "2026 Summer Term" },
     ]);
   });
 

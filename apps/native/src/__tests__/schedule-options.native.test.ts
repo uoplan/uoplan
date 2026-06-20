@@ -39,6 +39,7 @@ describe("schedule-options", () => {
         preferEasier: true,
         preferHigherSentiment: true,
         minProfessorRating: 4,
+        electiveLevelBuckets: [3000, 4000],
         includeClosedComponents: true,
         virtualSectionsOnly: true,
       };
@@ -59,6 +60,38 @@ describe("schedule-options", () => {
       expect(parsed.blockedTimes).toEqual([]);
       expect(parsed.minProfessorRating).toBeNull();
       expect(parsed.compressedSchedule).toBe(false);
+      expect(parsed.electiveLevelBuckets).toEqual(DEFAULT_SCHEDULE_OPTIONS.electiveLevelBuckets);
+    });
+
+    it("defaults elective level buckets for old persisted options", () => {
+      const parsed = parseScheduleOptions(
+        JSON.stringify({
+          minStartMinutes: 9 * 60,
+          maxEndMinutes: 18 * 60,
+        }),
+      );
+
+      expect(parsed.electiveLevelBuckets).toEqual([1000, 2000]);
+    });
+
+    it("filters persisted elective level buckets independently", () => {
+      const parsed = parseScheduleOptions(
+        JSON.stringify({
+          electiveLevelBuckets: [2000, 2000, 5000, "bad", 9999],
+        }),
+      );
+
+      expect(parsed.electiveLevelBuckets).toEqual([2000, 5000]);
+    });
+
+    it("defaults elective level buckets when persisted values are all invalid", () => {
+      const parsed = parseScheduleOptions(
+        JSON.stringify({
+          electiveLevelBuckets: [0, 7000, "bad"],
+        }),
+      );
+
+      expect(parsed.electiveLevelBuckets).toEqual(DEFAULT_SCHEDULE_OPTIONS.electiveLevelBuckets);
     });
 
     it("normalizes persisted blocked-time windows and drops malformed entries", () => {

@@ -2,19 +2,15 @@ import { useMemo } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
 import { Text } from "@uoplan/ui";
-import type { RemainingRequirement, RequirementWithStatus } from "@uoplan/core/requirements";
+import type { RemainingRequirement } from "@uoplan/core/requirements";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 
 import { AppIcon } from "@/components/app-icon";
-import { PersonalizeRequirementsReadoutView } from "@/components/personalize-requirements-readout";
 import { Spacing, Surface } from "@/constants/theme";
 import {
-  clearSelectedOptionForRequirement,
   getRequirementPriorityForIds,
-  requirementIdsForNode,
   setCoursesThisSemester,
   setRequirementPriorityForIds,
-  setSelectedOptionForRequirement,
   toggleRequirementCourse,
   type PersonalizeRequirementSelections,
   type PersonalizeRequirementsReadout,
@@ -60,31 +56,6 @@ function remainingSubtitle(req: RemainingRequirement): string {
       `${req.candidateCourses.length} eligible course${req.candidateCourses.length === 1 ? "" : "s"}`,
     );
   }
-  return parts.join(" · ");
-}
-
-function nodeHasOptionGroups(node: RequirementWithStatus): boolean {
-  if (node.complete) return false;
-  if ((node.type === "or_group" || node.type === "options_group") && node.requirementId) {
-    return true;
-  }
-  return node.options?.some(nodeHasOptionGroups) ?? false;
-}
-
-function optionTitle(node: RequirementWithStatus, index: number): string {
-  return node.title ?? node.code ?? `Option ${index + 1}`;
-}
-
-function optionSummary(node: RequirementWithStatus): string {
-  const parts: string[] = [];
-  if (node.creditsNeeded != null && node.creditsNeeded > 0) {
-    parts.push(`${node.creditsNeeded} credit${node.creditsNeeded === 1 ? "" : "s"}`);
-  }
-  const candidates = node.candidateCourses?.length ?? 0;
-  if (candidates > 0) {
-    parts.push(`${candidates} course${candidates === 1 ? "" : "s"}`);
-  }
-  if (nodeHasOptionGroups(node)) parts.push("More choices");
   return parts.join(" · ");
 }
 
@@ -191,7 +162,7 @@ function CoursesThisSemesterControl({
           Courses to schedule
         </Text>
         <Text size="xs" dimmed>
-          Advanced generation fills this many courses from pinned picks and remaining requirements.
+          Set the course load for the schedule generator.
         </Text>
       </View>
       <View style={styles.stepper}>
@@ -199,6 +170,7 @@ function CoursesThisSemesterControl({
           accessibilityRole="button"
           accessibilityLabel="Schedule fewer courses"
           onPress={() => onChange(setCoursesThisSemester(selections, count - 1))}
+          hitSlop={5}
           style={styles.stepperButton}
         >
           <AppIcon name="minus" size={14} color={Surface.label} weight="semibold" />
@@ -210,129 +182,12 @@ function CoursesThisSemesterControl({
           accessibilityRole="button"
           accessibilityLabel="Schedule more courses"
           onPress={() => onChange(setCoursesThisSemester(selections, count + 1))}
+          hitSlop={5}
           style={styles.stepperButton}
         >
           <AppIcon name="plus" size={14} color={Surface.label} weight="semibold" />
         </Pressable>
       </View>
-    </View>
-  );
-}
-
-function OptionsGroup({
-  node,
-  selections,
-  onChange,
-}: {
-  node: RequirementWithStatus;
-  selections: PersonalizeRequirementSelections;
-  onChange: (selections: PersonalizeRequirementSelections) => void;
-}) {
-  const isOptionGroup =
-    (node.type === "or_group" || node.type === "options_group") && node.requirementId;
-  if (isOptionGroup) {
-    const selected = selections.selectedOptionsPerRequirement[node.requirementId!];
-    const options = node.options ?? [];
-    return (
-      <View style={styles.optionGroup}>
-        <View style={styles.cardHeader}>
-          <View style={styles.cardHeaderCopy}>
-            <Text size="sm" weight="bold">
-              {node.title ?? "Choose an option"}
-            </Text>
-            <Text size="xs" dimmed>
-              Pick the branch you want requirements and generation to follow.
-            </Text>
-          </View>
-          {selected != null ? (
-            <Pressable
-              accessibilityRole="button"
-              onPress={() =>
-                onChange(clearSelectedOptionForRequirement(selections, node.requirementId!))
-              }
-              style={styles.clearInline}
-            >
-              <Text size="xs" color={Surface.accent} weight="bold">
-                Clear
-              </Text>
-            </Pressable>
-          ) : null}
-        </View>
-
-        <View style={styles.optionChoices}>
-          {options.map((option, index) => {
-            const selectedOption = selected === index;
-            const summary = optionSummary(option);
-            return (
-              <Pressable
-                key={`${node.requirementId}-${index}`}
-                accessibilityRole="button"
-                accessibilityState={{ selected: selectedOption }}
-                onPress={() =>
-                  onChange(
-                    selectedOption
-                      ? clearSelectedOptionForRequirement(selections, node.requirementId!)
-                      : setSelectedOptionForRequirement(selections, node.requirementId!, index),
-                  )
-                }
-                style={({ pressed }) => [
-                  styles.optionChoice,
-                  selectedOption ? styles.optionChoiceSelected : null,
-                  pressed ? styles.pressed : null,
-                ]}
-              >
-                <View style={styles.optionChoiceCopy}>
-                  <Text size="sm" weight={selectedOption ? "bold" : "semibold"}>
-                    {optionTitle(option, index)}
-                  </Text>
-                  {summary ? (
-                    <Text size="xs" dimmed>
-                      {summary}
-                    </Text>
-                  ) : null}
-                </View>
-                <AppIcon
-                  name={selectedOption ? "checkmark.circle.fill" : "circle"}
-                  size={18}
-                  color={selectedOption ? Surface.accent : Surface.dimmed}
-                  weight="semibold"
-                />
-              </Pressable>
-            );
-          })}
-        </View>
-
-        {selected != null && options[selected] ? (
-          <NestedOptions nodes={[options[selected]!]} selections={selections} onChange={onChange} />
-        ) : null}
-      </View>
-    );
-  }
-
-  return <NestedOptions nodes={node.options ?? []} selections={selections} onChange={onChange} />;
-}
-
-function NestedOptions({
-  nodes,
-  selections,
-  onChange,
-}: {
-  nodes: readonly RequirementWithStatus[];
-  selections: PersonalizeRequirementSelections;
-  onChange: (selections: PersonalizeRequirementSelections) => void;
-}) {
-  const groups = nodes.filter(nodeHasOptionGroups);
-  if (groups.length === 0) return null;
-  return (
-    <View style={styles.nestedOptions}>
-      {groups.map((node, index) => (
-        <OptionsGroup
-          key={node.requirementId ?? `${node.type}-${index}`}
-          node={node}
-          selections={selections}
-          onChange={onChange}
-        />
-      ))}
     </View>
   );
 }
@@ -458,59 +313,39 @@ export function RequirementPlanner({
     () => new Set(completedCourses.map((code) => normalizeCourseCode(code))),
     [completedCourses],
   );
-  const requirementTree = readout.requirementTreeWithStatus ?? [];
-  const optionRoots = requirementTree.filter(nodeHasOptionGroups);
-  const priorityRootIds = requirementTree.flatMap(requirementIdsForNode);
 
   return (
     <View style={styles.container}>
-      <PersonalizeRequirementsReadoutView readout={readout} />
-      <View style={styles.notice}>
-        <AppIcon name="sparkles" size={16} color={Surface.accent} weight="semibold" />
-        <Text size="xs" dimmed>
-          Assigned courses count as already completed. Pinned courses are forced into generated
-          schedules.
-        </Text>
-      </View>
-
       <CoursesThisSemesterControl selections={selections} onChange={onChange} />
-
-      {optionRoots.length > 0 ? (
-        <View style={styles.section}>
-          <Text size="xs" weight="bold" color={Surface.dimmed}>
-            Options
-          </Text>
-          <NestedOptions nodes={optionRoots} selections={selections} onChange={onChange} />
-        </View>
-      ) : null}
-
-      {priorityRootIds.length > 1 ? (
-        <View style={styles.priorityHelp}>
-          <AppIcon name="flag" size={14} color={Surface.dimmed} weight="semibold" />
-          <Text size="xs" dimmed>
-            Priority 0 schedules together. Higher numbers wait until lower-priority requirements are
-            satisfied.
-          </Text>
-        </View>
-      ) : null}
 
       {readout.remaining.length > 0 ? (
         <View style={styles.section}>
-          <Text size="xs" weight="bold" color={Surface.dimmed}>
-            Assign and pin
+          <Text size="xs" weight="bold" color={Surface.accent}>
+            Needs a choice
           </Text>
-          {readout.remaining.map((requirement) => (
-            <RequirementCard
-              key={requirement.requirementId}
-              requirement={requirement}
-              selections={selections}
-              completedSet={completedSet}
-              titleForCourse={titleForCourse}
-              onChange={onChange}
-            />
-          ))}
+          <View style={styles.requirementList}>
+            {readout.remaining.map((requirement) => (
+              <RequirementCard
+                key={requirement.requirementId}
+                requirement={requirement}
+                selections={selections}
+                completedSet={completedSet}
+                titleForCourse={titleForCourse}
+                onChange={onChange}
+              />
+            ))}
+          </View>
         </View>
-      ) : null}
+      ) : (
+        <View style={styles.allSet}>
+          <Text size="sm" weight="bold">
+            All set
+          </Text>
+          <Text size="xs" dimmed>
+            There are no missing requirements left to choose.
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
@@ -519,23 +354,13 @@ const styles = StyleSheet.create({
   container: {
     gap: Spacing.three,
   },
-  notice: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: Spacing.two,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Surface.border,
-    borderRadius: 14,
-    backgroundColor: Surface.subtle,
-    padding: Spacing.three,
-  },
   loadControl: {
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.three,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: Surface.border,
-    borderRadius: 16,
+    borderRadius: 20,
     backgroundColor: Surface.card,
     padding: Spacing.three,
   },
@@ -550,8 +375,8 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
   },
   stepperButton: {
-    width: 34,
-    height: 34,
+    width: 38,
+    height: 38,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: StyleSheet.hairlineWidth,
@@ -562,16 +387,16 @@ const styles = StyleSheet.create({
   section: {
     gap: Spacing.two,
   },
-  nestedOptions: {
-    gap: Spacing.two,
+  requirementList: {
+    gap: Spacing.three,
   },
-  optionGroup: {
-    gap: Spacing.two,
+  allSet: {
+    gap: Spacing.one,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: Surface.border,
-    borderRadius: 16,
-    backgroundColor: Surface.card,
-    padding: Spacing.three,
+    borderRadius: 20,
+    backgroundColor: Surface.subtle,
+    padding: Spacing.four,
   },
   cardHeader: {
     flexDirection: "row",
@@ -584,41 +409,8 @@ const styles = StyleSheet.create({
     minWidth: 0,
     gap: Spacing.half,
   },
-  clearInline: {
-    paddingHorizontal: Spacing.two,
-    paddingVertical: Spacing.one,
-  },
-  optionChoices: {
-    gap: Spacing.two,
-  },
-  optionChoice: {
-    minHeight: 52,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.two,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Surface.border,
-    borderRadius: 14,
-    backgroundColor: Surface.subtle,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.two,
-  },
-  optionChoiceSelected: {
-    borderColor: Surface.accent,
-    backgroundColor: Surface.accentSoft,
-  },
-  optionChoiceCopy: {
-    flex: 1,
-    minWidth: 0,
-    gap: Spacing.half,
-  },
-  priorityHelp: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: Spacing.two,
-  },
   priorityRow: {
-    alignItems: "flex-end",
+    alignItems: "flex-start",
     gap: Spacing.one,
   },
   priorityChips: {
@@ -626,13 +418,13 @@ const styles = StyleSheet.create({
     gap: Spacing.one,
   },
   priorityChip: {
-    minWidth: 28,
-    height: 28,
+    minWidth: 34,
+    height: 34,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: Surface.border,
-    borderRadius: 999,
+    borderRadius: 12,
     backgroundColor: Surface.subtle,
   },
   priorityChipSelected: {
@@ -643,7 +435,7 @@ const styles = StyleSheet.create({
     gap: Spacing.three,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: Surface.border,
-    borderRadius: 16,
+    borderRadius: 22,
     backgroundColor: Surface.card,
     padding: Spacing.three,
   },
@@ -651,10 +443,16 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
   },
   candidateRow: {
-    minHeight: 48,
+    minHeight: 58,
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.two,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Surface.border,
+    borderRadius: 16,
+    backgroundColor: Surface.subtle,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
   },
   courseCopy: {
     flex: 1,
@@ -667,15 +465,15 @@ const styles = StyleSheet.create({
     gap: Spacing.one,
   },
   chip: {
-    minHeight: 32,
+    minHeight: 36,
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.one,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: Surface.border,
-    borderRadius: 999,
-    backgroundColor: Surface.subtle,
-    paddingHorizontal: Spacing.two,
+    borderRadius: 14,
+    backgroundColor: Surface.card,
+    paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.one,
   },
   chipSelected: {

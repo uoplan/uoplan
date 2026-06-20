@@ -58,7 +58,7 @@ export default function DonateScreen() {
   const router = useRouter();
 
   return (
-    <RedesignScreen gap={Spacing.three} backLabel="More" onBack={() => router.back()}>
+    <RedesignScreen gap={Spacing.three} backLabel="Settings" onBack={() => router.back()}>
       <ScreenHeader title="Support us" subtitle="Help keep uoplan free and running." />
 
       <SectionCard title="How to donate" subtitle="Send an Interac e-Transfer to this address.">

@@ -10,6 +10,15 @@ const SEARCH_URL = PEOPLESOFT_CLASS_SEARCH_URL;
 
 type Term = { termId: string; name: string };
 
+/**
+ * uOttawa labels the May–August term "Spring/Summer Term", which is too long for
+ * our term pickers. Collapse the "Spring/Summer" segment down to just "Summer"
+ * (e.g. "2026 Spring/Summer Term" → "2026 Summer Term").
+ */
+export function normalizeTermName(name: string): string {
+  return name.replaceAll(/spring\s*\/\s*summer/gi, "Summer");
+}
+
 export function sortTerms(terms: Term[]): Term[] {
   return [...terms].sort((a, b) => a.termId.localeCompare(b.termId));
 }
@@ -32,7 +41,7 @@ export function parseTermDropdown(html: string): Term[] {
   const terms: Term[] = [];
   select.find("option").each((_, opt) => {
     const termId = ($(opt).attr("value") ?? "").trim();
-    const name = $(opt).text().replaceAll(/\s+/g, " ").trim();
+    const name = normalizeTermName($(opt).text().replaceAll(/\s+/g, " ").trim());
     if (termId && name) terms.push({ termId, name });
   });
   const seen = new Set<string>();

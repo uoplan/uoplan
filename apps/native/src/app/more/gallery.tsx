@@ -74,7 +74,7 @@ export default function GalleryScreen() {
   const [notifVisible, setNotifVisible] = useState(true);
 
   return (
-    <RedesignScreen gap={Spacing.three} backLabel="More" onBack={() => router.back()}>
+    <RedesignScreen gap={Spacing.three} backLabel="Settings" onBack={() => router.back()}>
       <ScreenHeader title="Components" subtitle="Shared @uoplan/ui primitives, native variants" />
 
       <ThemedView style={styles.container}>

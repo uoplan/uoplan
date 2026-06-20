@@ -13,7 +13,6 @@ import { SectionOfferingsList } from "@/components/explore/section-offerings-lis
 import { GradeHistogram } from "@/components/grade-histogram";
 import { ResponsiveColumns } from "@/components/layout";
 import { RatingBadgeRow } from "@/components/rating-badge";
-import { BasketFab } from "@/components/basket-fab";
 import { Fab, RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
 import { Spacing, Surface } from "@/constants/theme";
 import { useBasket } from "@/data/basket-provider";
@@ -21,6 +20,7 @@ import { useAppData, useFeedback } from "@/data/data-provider";
 import { courseDetail, courseScheduleTerms } from "@/data/explore-detail";
 import { feedbackViewsForCourse, professorSentimentByName } from "@/data/feedback-data";
 import { formatTermLabel } from "@/data/trends-data";
+import { useCourseStatus } from "@/lib/use-basket-status";
 
 /** Course detail — grade distribution + professors who have taught it. */
 export default function CourseDetailScreen() {
@@ -30,6 +30,7 @@ export default function CourseDetailScreen() {
   const { bundle, index, schedulesByTerm, aliasGroups } = useAppData();
   const feedback = useFeedback();
   const basket = useBasket();
+  const courseStatus = useCourseStatus({ code });
   const detail = useMemo(
     () => courseDetail(bundle, index, code, aliasGroups),
     [bundle, index, code, aliasGroups],
@@ -59,7 +60,7 @@ export default function CourseDetailScreen() {
         ),
         headerExtra: prof.gradeViz ? (
           <View style={styles.professorHistogram}>
-            <GradeHistogram gradeViz={prof.gradeViz} maxBarPx={72} showSummary />
+            <GradeHistogram gradeViz={prof.gradeViz} maxBarPx={72} showSummary density="compact" />
           </View>
         ) : null,
         body: (
@@ -93,13 +94,7 @@ export default function CourseDetailScreen() {
 
   if (!detail) {
     return (
-      <RedesignScreen
-        gap={Spacing.three}
-        backLabel="Explore"
-        onBack={() => router.back()}
-        cart={<BasketFab />}
-        onSettings={() => router.push("/more")}
-      >
+      <RedesignScreen gap={Spacing.three} backLabel="Explore" onBack={() => router.back()}>
         <ScreenHeader title={code || "Course"} />
         <Text dimmed>This course isn’t in the loaded catalogue.</Text>
       </RedesignScreen>
@@ -115,6 +110,12 @@ export default function CourseDetailScreen() {
       ? (index.faculties.find((entry) => entry.id === discipline.facultyId) ?? null)
       : null;
   const inBasket = basket.has(course.code);
+  // Only block adding when the planner has academic grounding to judge against —
+  // a program/year picked or other completed courses in the basket. With none of
+  // that, `courseStatus.prerequisite` resolves to "unknown" (never "not_met"),
+  // so we never disable and assume the user knows what they're doing.
+  const prereqsUnmet = courseStatus.prerequisite === "not_met";
+  const addDisabled = !inBasket && prereqsUnmet;
 
   return (
     <RedesignScreen
@@ -122,17 +123,20 @@ export default function CourseDetailScreen() {
       backLabel="Explore"
       onBack={() => router.back()}
       cart={
-        <>
-          <Fab
-            icon={inBasket ? "checkmark" : "cart.badge.plus"}
-            accent
-            onPress={() => basket.toggle(course.code)}
-            accessibilityLabel={inBasket ? "Remove from basket" : "Add to basket"}
-          />
-          <BasketFab />
-        </>
+        <Fab
+          icon={inBasket ? "checkmark" : "cart.badge.plus"}
+          accent
+          disabled={addDisabled}
+          onPress={() => basket.toggle(course.code)}
+          accessibilityLabel={
+            addDisabled
+              ? "Add to basket — prerequisites not met"
+              : inBasket
+                ? "Remove from basket"
+                : "Add to basket"
+          }
+        />
       }
-      onSettings={() => router.push("/more")}
     >
       <ScreenHeader title={course.code} subtitle={course.title} />
 
@@ -193,6 +197,18 @@ export default function CourseDetailScreen() {
               </Text>
             </Pressable>
           ))}
+        </View>
+      ) : null}
+
+      {addDisabled ? (
+        <View style={styles.prereqNotice}>
+          <AppIcon name="exclamationmark.triangle" size={15} color={Surface.warning} />
+          <View style={styles.prereqNoticeText}>
+            <Text size="sm" color={Surface.label}>
+              You don't meet the prerequisites for this course yet, so it can't be added to your
+              basket.
+            </Text>
+          </View>
         </View>
       ) : null}
 
@@ -315,6 +331,18 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: Spacing.two,
     paddingVertical: Spacing.one,
+  },
+  prereqNotice: {
+    alignItems: "center",
+    backgroundColor: Surface.warningSoft,
+    borderRadius: 12,
+    flexDirection: "row",
+    gap: Spacing.two,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
+  },
+  prereqNoticeText: {
+    flex: 1,
   },
   professorsSection: {
     gap: Spacing.two,

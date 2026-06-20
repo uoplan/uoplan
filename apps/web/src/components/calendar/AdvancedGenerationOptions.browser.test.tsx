@@ -1,5 +1,6 @@
+import type { AnchorHTMLAttributes, ReactNode } from "react";
 import { page } from "vitest/browser";
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
 import { buildDataCache } from "@uoplan/core";
 import type { Catalogue, RemainingRequirement, SchedulesData } from "@uoplan/core";
 
@@ -7,6 +8,26 @@ import { AdvancedGenerationOptions } from "./AdvancedGenerationOptions";
 import { renderWithProviders } from "../../test/renderWithProviders";
 import { testCourseCode } from "../../test/brands";
 import { testScheduledCourse } from "../../test/courseScheduleFixtures";
+import { SCHEDULE_COURSE_COUNT_MAX } from "../../store/generationDefaults";
+
+interface MockLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  children?: ReactNode;
+  params?: unknown;
+  search?: unknown;
+  to?: string;
+}
+
+vi.mock("@tanstack/react-router", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@tanstack/react-router")>();
+  return {
+    ...actual,
+    Link: ({ children, params: _params, search: _search, to, ...props }: MockLinkProps) => (
+      <a href={to ?? "#"} {...props}>
+        {children}
+      </a>
+    ),
+  };
+});
 
 const COURSES = ["CSI 2110", "CSI 2120"];
 
@@ -92,4 +113,94 @@ test("surfaces an overflow status when desired courses exceed a partly-consumed 
   await expect
     .element(page.getByText("Matching requirement is already full", { exact: false }))
     .toBeInTheDocument();
+});
+
+test("counts desired advanced courses toward the displayed semester total", async () => {
+  const cache = buildCache();
+  const { store } = await renderWithProviders(<AdvancedGenerationOptions />, {
+    initialState: {
+      cache,
+      remainingRequirements,
+      studentPrograms: ["honours-cs"],
+      requirementTreeWithStatus: [],
+      prereqEligibleCourses: ["CSI 2110", "CSI 2120"],
+      filteredPrereqEligibleCourses: ["CSI 2110", "CSI 2120"],
+      basketCourses: ["CSI 2110"],
+      coursesThisSemester: 1,
+    },
+  });
+
+  const count = page.getByLabelText("Electives this semester (additional)");
+  await expect.element(count).toHaveValue("1");
+
+  await count.fill("0");
+
+  expect(store.getState().coursesThisSemester).toBe(0);
+});
+
+test("does not clamp additional electives during basket auto-assignment reconciliation", async () => {
+  const cache = buildCache();
+  const { store } = await renderWithProviders(<AdvancedGenerationOptions />, {
+    initialState: {
+      cache,
+      remainingRequirements,
+      studentPrograms: ["honours-cs"],
+      requirementTreeWithStatus: [],
+      prereqEligibleCourses: ["CSI 2110", "CSI 2120"],
+      filteredPrereqEligibleCourses: ["CSI 2110", "CSI 2120"],
+      basketCourses: ["CSI 2120"],
+      constrainedPerRequirement: { "req-csi": ["CSI 2110"] },
+      autoConstrainedPerRequirement: { "req-csi": ["CSI 2110"] },
+      coursesThisSemester: 1,
+    },
+  });
+
+  await expect
+    .poll(() => store.getState().constrainedPerRequirement["req-csi"])
+    .toEqual(["CSI 2120"]);
+  expect(store.getState().coursesThisSemester).toBe(1);
+});
+
+test("caps additional electives at zero when there are no remaining requirement pools", async () => {
+  const cache = buildCache();
+  const { store } = await renderWithProviders(<AdvancedGenerationOptions />, {
+    initialState: {
+      cache,
+      remainingRequirements: [],
+      studentPrograms: ["honours-cs"],
+      requirementTreeWithStatus: [],
+      prereqEligibleCourses: ["CSI 2110", "CSI 2120"],
+      filteredPrereqEligibleCourses: ["CSI 2110", "CSI 2120"],
+      coursesThisSemester: 2,
+    },
+  });
+
+  await expect.poll(() => store.getState().coursesThisSemester).toBe(0);
+  await expect
+    .element(page.getByLabelText("Electives this semester (additional)"))
+    .toHaveValue("0");
+});
+
+test("counts group-token picks against the advanced additional-elective cap", async () => {
+  const cache = buildCache();
+  const highCapacityRequirement: RemainingRequirement[] = [
+    {
+      ...remainingRequirements[0],
+      creditsNeeded: 30,
+    },
+  ];
+  const { store } = await renderWithProviders(<AdvancedGenerationOptions />, {
+    initialState: {
+      cache,
+      remainingRequirements: highCapacityRequirement,
+      studentPrograms: ["honours-cs"],
+      requirementTreeWithStatus: [],
+      prereqEligibleCourses: ["CSI 2110", "CSI 2120"],
+      filteredPrereqEligibleCourses: ["CSI 2110", "CSI 2120"],
+      constrainedPerRequirement: { "req-csi": ["group:CSI~a", "group:CSI~b"] },
+      coursesThisSemester: SCHEDULE_COURSE_COUNT_MAX,
+    },
+  });
+
+  await expect.poll(() => store.getState().coursesThisSemester).toBe(8);
 });

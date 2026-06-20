@@ -4,7 +4,7 @@ import { Text } from "@uoplan/ui";
 
 import { AppIcon } from "@/components/app-icon";
 import { GlassSurface } from "@/components/glass-surface";
-import { Surface } from "@/constants/theme";
+import { Spacing, Surface } from "@/constants/theme";
 
 interface BottomControlBarProps {
   /** Leading schedule-options button (generation preferences, not app settings). */
@@ -37,30 +37,37 @@ export function BottomControlBar({
   return (
     <View style={[styles.wrap, { bottom }]} pointerEvents="box-none">
       {onSettings ? (
-        <GlassSurface interactive style={styles.gear}>
-          <Pressable onPress={onSettings} accessibilityRole="button" style={styles.gearPressable}>
-            <AppIcon name="slider.horizontal.3" size={20} color={Surface.label} />
-          </Pressable>
-        </GlassSurface>
-      ) : (
-        <View style={styles.gearSpacer} />
-      )}
+        <View style={styles.gearAnchor} pointerEvents="box-none">
+          <GlassSurface interactive style={styles.gear}>
+            <Pressable
+              onPress={onSettings}
+              accessibilityRole="button"
+              accessibilityLabel="Schedule options"
+              style={styles.gearPressable}
+              hitSlop={8}
+            >
+              <AppIcon name="slider.horizontal.3" size={24} color={Surface.label} />
+            </Pressable>
+          </GlassSurface>
+        </View>
+      ) : null}
 
       <GlassSurface style={styles.pager}>
         <Pressable
           onPress={onPrev}
           disabled={prevDisabled}
           accessibilityRole="button"
+          accessibilityLabel="Previous schedule"
           style={styles.pagerBtn}
         >
           <AppIcon
             name="chevron.left"
-            size={18}
+            size={22}
             color={prevDisabled ? Surface.faint : Surface.label}
           />
         </Pressable>
         {label ? (
-          <Text size="sm" weight="bold">
+          <Text size="md" weight="bold">
             {label}
           </Text>
         ) : null}
@@ -68,17 +75,16 @@ export function BottomControlBar({
           onPress={onNext}
           disabled={nextDisabled}
           accessibilityRole="button"
+          accessibilityLabel="Next schedule"
           style={styles.pagerBtn}
         >
           <AppIcon
             name="chevron.right"
-            size={18}
+            size={22}
             color={nextDisabled ? Surface.faint : Surface.label}
           />
         </Pressable>
       </GlassSurface>
-
-      <View style={styles.gearSpacer} />
     </View>
   );
 }
@@ -86,16 +92,23 @@ export function BottomControlBar({
 const styles = StyleSheet.create({
   wrap: {
     position: "absolute",
-    left: 16,
-    right: 16,
+    left: 0,
+    right: 0,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
+  },
+  gearAnchor: {
+    position: "absolute",
+    left: Spacing.three,
+    top: 0,
+    bottom: 0,
+    justifyContent: "center",
   },
   gear: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
@@ -109,21 +122,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  gearSpacer: {
-    width: 48,
-  },
   pager: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 14,
-    height: 48,
-    paddingHorizontal: 18,
-    borderRadius: 24,
+    gap: Spacing.one,
+    height: 56,
+    paddingHorizontal: Spacing.two,
+    borderRadius: 28,
     overflow: "hidden",
   },
   pagerBtn: {
-    width: 32,
-    height: 32,
+    width: 44,
+    height: 44,
     alignItems: "center",
     justifyContent: "center",
   },

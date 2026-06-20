@@ -8,6 +8,7 @@ import type {
 } from "@uoplan/core/dataTypes";
 import {
   distributionGpa,
+  failingFraction,
   GRADE_POINTS,
   type GradeVizData,
   normalizeGradeVizDistribution,
@@ -18,7 +19,6 @@ import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 
 /** Grades excluded from the GPA denominator (mirrors web `gradedHeadcount`). */
 const SKIP_GRADES = new Set(["P", "S", "NS", "NC", "ABS", "EIN"]);
-const FAIL_GRADES = new Set(["F", "E", "ABS"]);
 
 /** Minimum graded headcount for a course/prof to appear in a spotlight carousel. */
 export const SPOTLIGHT_MIN_GRADED = 40;
@@ -145,15 +145,6 @@ export function gradedHeadcount(dist: Distribution): number {
   return mass;
 }
 
-/** F + E + ABS headcount (mirrors web `failHeadcount`). */
-export function failHeadcount(dist: Distribution): number {
-  let fail = 0;
-  for (const [letter, count] of Object.entries(dist)) {
-    if (FAIL_GRADES.has(letter) && count > 0) fail += count;
-  }
-  return fail;
-}
-
 function mergeInto(target: Distribution, source: Distribution): void {
   for (const [letter, count] of Object.entries(source)) {
     if (!count) continue;
@@ -226,7 +217,7 @@ export function buildExploreIndex(
       gradeViz: normalizeGradeVizDistribution(distribution),
       gpa: distributionGpa(distribution),
       graded,
-      failRate: graded > 0 ? failHeadcount(distribution) / graded : 0,
+      failRate: failingFraction(distribution),
       termIds: [...(offeredTermsByCourse.get(normalizeCourseCode(code)) ?? [])].sort(),
     });
   }

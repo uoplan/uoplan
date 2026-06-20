@@ -14,6 +14,8 @@ import {
   buildBasicRequest,
   mapGenerationResponse,
 } from "@uoplan/core/engineBridge";
+import { countValidCombosForCourse } from "@uoplan/core/generationDiagnostics";
+import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 import type { NormalizedCourseCode } from "@uoplan/core/brand";
 import type { GeneratedSchedule, GenerationConstraints } from "@uoplan/core";
 import type { ProfessorRatingsMap } from "@uoplan/core/professorRatings";
@@ -34,6 +36,7 @@ import {
   getActiveScheduleRequirementContext,
   type NativeScheduleRequirementContext,
 } from "@/lib/personalize-requirements";
+import { getBasketCourseStatus } from "@/lib/basket-status";
 
 /** A single generated, conflict-free weekly arrangement of the basket. */
 export interface ScheduleVariant {
@@ -46,6 +49,31 @@ export interface ScheduleVariant {
   schedule: GeneratedSchedule;
   courseCount: number;
   fingerprint: string;
+}
+
+/** Why a basket course was automatically excluded from generation. */
+export type SkippedCourseReason = "prerequisite" | "offering";
+
+/** A basket course excluded from generation, with the reason it was left out. */
+export interface SkippedCourse {
+  /** The course's display code (e.g. "CSI 2101"). */
+  code: string;
+  /**
+   * `"prerequisite"` — the student doesn't meet the prerequisites yet (given
+   * their completed courses: transcript import + personalize "completed
+   * courses"). `"offering"` — no schedulable section this term (not offered, all
+   * sections filtered out, or outside the time window).
+   */
+  reason: SkippedCourseReason;
+}
+
+/** The result of a generation run: the conflict-free arrangements plus any
+ * basket courses that were automatically excluded because they're ineligible
+ * (prerequisites unmet) or have no schedulable section this term. */
+export interface GenerateScheduleResult {
+  variants: ScheduleVariant[];
+  /** Basket courses skipped, each with the reason it was left out. */
+  skippedCourses: SkippedCourse[];
 }
 
 /** The async engine bridge (the native Rust engine module); injected for testability. */
@@ -72,6 +100,22 @@ export interface GenerateScheduleInput {
   sentiment?: ScheduleSentiment | null;
   /** Course codes pinned into every schedule (the basket). */
   basketCodes: string[];
+  /**
+   * The user's completed courses (transcript + personalize "completed
+   * courses"). Used as the prerequisite context when deciding which basket
+   * courses to skip, and as the completed-course set for advanced requirements.
+   * Separate from {@link basketCodes} — the cart and the completed set are
+   * distinct.
+   */
+  completedCourses?: readonly string[];
+  /**
+   * Whether the user has given the planner academic grounding — a program
+   * selected or a start year picked. Gates prerequisite-based skipping the same
+   * way the cart "!" badge does: with no profile context (and no completed
+   * courses), a basket course is never skipped for unmet prerequisites — we
+   * assume the user knows what they're doing.
+   */
+  hasProfileContext?: boolean;
   /** Program requirement state from the Personalize wizard. Enables advanced generation. */
   requirements?: NativeScheduleRequirementContext;
   /** User-tunable generation options (time window, avoided days, preferences, …). */
@@ -200,8 +244,10 @@ function fingerprintSchedule(events: CalendarEvent[]): string {
  */
 export async function generateScheduleVariants(
   input: GenerateScheduleInput,
-): Promise<ScheduleVariant[]> {
+): Promise<GenerateScheduleResult> {
   const { catalogue, disciplines, ratings, sentiment, basketCodes, engine } = input;
+  const hasProfileContext = input.hasProfileContext ?? false;
+  const completedCourses = input.completedCourses ?? [];
 
   const options = input.options ?? DEFAULT_SCHEDULE_OPTIONS;
   // Enrich sections with grade distributions so calendar events carry gradeViz
@@ -215,11 +261,50 @@ export async function generateScheduleVariants(
         catalogue,
         cache,
         programUrl: requirementContext.programUrl,
-        completedCourses: requirementContext.completedCourses ?? basketCodes,
+        completedCourses: requirementContext.completedCourses ?? completedCourses,
         selections: requirementContext.selections,
       })
     : null;
-  if (basketCodes.length === 0 && !advancedRequirements) return [];
+  const advancedRequirementsForRequest = advancedRequirements
+    ? Object.assign({}, advancedRequirements, {
+        electiveLevelBuckets: options.electiveLevelBuckets,
+      })
+    : null;
+
+  // RateMyProfessors rating filtering needs the ratings map alongside the
+  // threshold; only attach it when the user set a minimum (web parity).
+  const constraints: GenerationConstraints = buildGenerationConstraints(options, ratings);
+
+  // Intelligently drop basket courses we can't actually put on a timetable so
+  // pinning them doesn't fail the whole generation. Two reasons:
+  //   • prerequisite — the student doesn't meet the prereqs yet (evaluated the
+  //     same way as the basket "!" badge: against the user's completed courses).
+  //   • offering — no schedulable section under the current filters this term
+  //     (not offered, all sections filtered out, or outside the time window).
+  // We surface every skip (with its reason) so the UI can explain what was left
+  // out and how to fix it, while the rest of the basket still schedules.
+  const schedulableBasket: string[] = [];
+  const skippedCourses: SkippedCourse[] = [];
+  for (const code of basketCodes) {
+    const displayCode = cache.getCourse(normalizeCourseCode(code))?.code ?? code;
+    const prerequisite = getBasketCourseStatus({
+      course: { code },
+      completedCodes: completedCourses,
+      cache,
+      hasProfileContext,
+    }).prerequisite;
+    if (prerequisite === "not_met") {
+      skippedCourses.push({ code: displayCode, reason: "prerequisite" });
+    } else if (countValidCombosForCourse(code, cache, constraints) > 0) {
+      schedulableBasket.push(code);
+    } else {
+      skippedCourses.push({ code: displayCode, reason: "offering" });
+    }
+  }
+
+  if (schedulableBasket.length === 0 && !advancedRequirements) {
+    return { variants: [], skippedCourses };
+  }
 
   await engine.loadDataset(input.datasetKey, catalogueBytes(catalogue), schedulesBytes(schedules));
 
@@ -227,18 +312,14 @@ export async function generateScheduleVariants(
   const seen = new Set<string>();
   const variants: ScheduleVariant[] = [];
 
-  // RateMyProfessors rating filtering needs the ratings map alongside the
-  // threshold; only attach it when the user set a minimum (web parity).
-  const constraints: GenerationConstraints = buildGenerationConstraints(options, ratings);
-
   for (let seed = 0; seed < variantCount; seed++) {
     const courseSentimentByNorm = options.preferHigherSentiment
       ? ((sentiment?.courseByNorm ?? null) as Map<NormalizedCourseCode, number> | null)
       : null;
-    const request = advancedRequirements
+    const request = advancedRequirementsForRequest
       ? buildAdvancedRequest(
           buildAdvancedRequestInputFromPersonalize({
-            requirements: advancedRequirements,
+            requirements: advancedRequirementsForRequest,
             constraints,
             includeClosedComponents: options.includeClosedComponents,
             virtualSectionsOnly: options.virtualSectionsOnly,
@@ -253,7 +334,7 @@ export async function generateScheduleVariants(
         )
       : buildBasicRequest(
           {
-            basketCourses: basketCodes,
+            basketCourses: schedulableBasket,
             basicElectivesCount: 0,
             basicExcludedCategories: [],
             studentPrograms: [],
@@ -262,7 +343,7 @@ export async function generateScheduleVariants(
             completedCourses: [],
             levelBuckets: [],
             languageBuckets: [],
-            electiveLevelBuckets: [],
+            electiveLevelBuckets: options.electiveLevelBuckets,
             includeClosedComponents: options.includeClosedComponents,
             virtualSectionsOnly: options.virtualSectionsOnly,
             generationPreferEasier: options.preferEasier,
@@ -291,5 +372,5 @@ export async function generateScheduleVariants(
     });
   }
 
-  return variants;
+  return { variants, skippedCourses };
 }

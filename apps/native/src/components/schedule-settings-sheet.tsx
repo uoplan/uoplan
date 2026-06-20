@@ -34,6 +34,13 @@ const LATEST_MIN = 14 * 60;
 const LATEST_MAX = 23 * 60;
 const STEP = 30;
 
+const ELECTIVE_LEVEL_PRESETS: { label: string; buckets: number[] }[] = [
+  { label: "1000–2000", buckets: [1000, 2000] },
+  { label: "1000–4000", buckets: [1000, 2000, 3000, 4000] },
+  { label: "Any level", buckets: [1000, 2000, 3000, 4000, 5000, 6000] },
+  { label: "Graduate 5000–6000", buckets: [5000, 6000] },
+];
+
 /** Minimum-professor-rating presets (null = no minimum). */
 const RATING_OPTIONS: { value: number | null; label: string }[] = [
   { value: null, label: "Any" },
@@ -64,10 +71,11 @@ interface ScheduleSettingsSheetProps {
  * Native schedule-settings bottom sheet — the native analogue of the web
  * generation-options panel (`GenerationOptionsFields`, basic mode). Surfaces the
  * SAME options the web exposes and drives generation through them: time window,
- * avoided days, compressed schedule, prefer-easier / prefer-better-feedback,
- * minimum professor rating, and closed / virtual-only section filters — all
- * persisted via {@link useScheduleOptions}. A contextual header reflects the
- * basket (basic mode) and links to Personalize for requirement-based schedules.
+ * avoided days, elective levels, compressed schedule, prefer-easier /
+ * prefer-better-feedback, minimum professor rating, and closed / virtual-only
+ * section filters — all persisted via {@link useScheduleOptions}. A contextual
+ * header reflects the basket (basic mode) and links to Personalize for
+ * requirement-based schedules.
  */
 export function ScheduleSettingsSheet({
   opened,
@@ -162,19 +170,25 @@ export function ScheduleSettingsSheet({
             bounces={false}
           >
             {/* Contextual header — basic (basket) mode + personalize CTA. */}
-            <Pressable style={styles.context} onPress={onPersonalize}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.contextTitle}>
-                  {basketCount > 0
-                    ? `Generating from your basket (${basketCount} course${basketCount === 1 ? "" : "s"})`
-                    : "Add courses to your basket"}
-                </Text>
-                <Text style={styles.contextSub}>
-                  Pick a program & completed courses to generate requirement-based schedules
-                </Text>
+            <View style={styles.contextGroup}>
+              <View style={styles.context}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.contextTitle}>
+                    {basketCount > 0
+                      ? `Generating from your basket (${basketCount} course${basketCount === 1 ? "" : "s"})`
+                      : "Add courses to your basket"}
+                  </Text>
+                  <Text style={styles.contextSub}>
+                    Use the cart to review or edit the courses used for basket schedules.
+                  </Text>
+                </View>
+                <AppIcon name="cart" size={16} color={Surface.dimmed} />
               </View>
-              <AppIcon name="chevron.right" size={14} color={Surface.dimmed} />
-            </Pressable>
+              <Pressable style={styles.personalizeLink} onPress={onPersonalize}>
+                <Text style={styles.personalizeText}>Set up requirement-based schedules</Text>
+                <AppIcon name="chevron.right" size={13} color={Surface.accent} />
+              </Pressable>
+            </View>
 
             {/* Time window */}
             <Section title="Time window">
@@ -213,6 +227,29 @@ export function ScheduleSettingsSheet({
                           0,
                           day === "Th" || day === "Su" || day === "Sa" ? 2 : 1,
                         )}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            </Section>
+
+            {/* Elective options */}
+            <Section
+              title="Elective options"
+              description="Choose which course levels can fill open elective requirements."
+            >
+              <View style={styles.pillRow}>
+                {ELECTIVE_LEVEL_PRESETS.map((preset) => {
+                  const active = sameBuckets(options.electiveLevelBuckets, preset.buckets);
+                  return (
+                    <Pressable
+                      key={preset.label}
+                      onPress={() => set("electiveLevelBuckets", [...preset.buckets])}
+                      style={[styles.pill, active && styles.pillActive]}
+                    >
+                      <Text style={[styles.pillText, active && styles.pillTextActive]}>
+                        {preset.label}
                       </Text>
                     </Pressable>
                   );
@@ -399,6 +436,12 @@ function Stepper({
   );
 }
 
+function sameBuckets(a: readonly number[], b: readonly number[]): boolean {
+  if (a.length !== b.length) return false;
+  const values = new Set(a);
+  return b.every((bucket) => values.has(bucket));
+}
+
 const styles = StyleSheet.create({
   root: {
     flex: 1,
@@ -459,6 +502,9 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.four,
     gap: Spacing.four,
   },
+  contextGroup: {
+    gap: Spacing.two,
+  },
   context: {
     flexDirection: "row",
     alignItems: "center",
@@ -479,6 +525,19 @@ const styles = StyleSheet.create({
     color: Surface.dimmed,
     marginTop: 2,
     lineHeight: 16,
+  },
+  personalizeLink: {
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.one,
+    paddingHorizontal: Spacing.one,
+    paddingVertical: Spacing.one,
+  },
+  personalizeText: {
+    fontFamily: Fonts.monoMedium,
+    fontSize: 12,
+    color: Surface.accent,
   },
   section: {
     gap: Spacing.one,

@@ -6,6 +6,9 @@ import type { SwitchProps } from "./Switch.types";
 
 const ACCENT = NativeColors.accent;
 const LABEL_COLOR = NativeColors.text;
+/** Switches use a white thumb in every scheme (matches the iOS/Android default);
+ *  without an explicit thumbColor, Android renders a stray teal/green thumb. */
+const THUMB = "#ffffff";
 
 /** Native (React Native) implementation of the Switch contract. */
 export function Switch({
@@ -33,8 +36,12 @@ export function Switch({
         onValueChange={handleChange}
         disabled={disabled}
         trackColor={{ true: ACCENT, false: NativeColors.borderStrong }}
+        thumbColor={THUMB}
+        ios_backgroundColor={NativeColors.borderStrong}
       />
-      {label ? <RNText style={{ color: LABEL_COLOR, fontSize: 14 }}>{label}</RNText> : null}
+      {label ? (
+        <RNText style={{ color: LABEL_COLOR, fontFamily: "DM Mono", fontSize: 14 }}>{label}</RNText>
+      ) : null}
     </View>
   );
 }

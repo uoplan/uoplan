@@ -1,5 +1,8 @@
 import { Stack } from "expo-router";
+import { View } from "react-native";
 
+import { GlobalBasketCart } from "@/components/global-basket-cart";
+import { GlobalSettingsButton } from "@/components/global-settings-button";
 import { Surface } from "@/constants/theme";
 
 /**
@@ -9,14 +12,18 @@ import { Surface } from "@/constants/theme";
  */
 export default function ScheduleLayout() {
   return (
-    <Stack
-      screenOptions={{
-        contentStyle: { backgroundColor: Surface.page },
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="index" />
-      <Stack.Screen name="basket" />
-    </Stack>
+    <View style={{ flex: 1 }}>
+      <Stack
+        screenOptions={{
+          contentStyle: { backgroundColor: Surface.page },
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="index" />
+        <Stack.Screen name="basket" />
+      </Stack>
+      <GlobalBasketCart />
+      <GlobalSettingsButton />
+    </View>
   );
 }

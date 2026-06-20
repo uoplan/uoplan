@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AppIcon, type IconName } from "@/components/app-icon";
 import { Surface } from "@/constants/theme";
-import { useBasket } from "@/data/basket-provider";
+import { useCompletedCourses } from "@/data/completed-courses-provider";
 import { useScheduleOptions } from "@/data/schedule-options-provider";
 import { isPersonalizationIncomplete } from "@/lib/personalization";
 
@@ -70,11 +70,11 @@ const TabButton = forwardRef(function TabButton(
 export default function AndroidTabs() {
   const insets = useSafeAreaInsets();
   const { personalization } = useScheduleOptions();
-  const basket = useBasket();
+  const completed = useCompletedCourses();
   const personalizeIncomplete = isPersonalizationIncomplete({
     programUrl: personalization.programUrl,
     startYear: personalization.startYear,
-    completedCourseCount: basket.codes.length,
+    completedCourseCount: completed.codes.length,
   });
 
   return (

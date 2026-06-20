@@ -4,7 +4,6 @@ import { StyleSheet, View } from "react-native";
 
 import { Text } from "@uoplan/ui";
 
-import { BasketFab } from "@/components/basket-fab";
 import { LineChart } from "@/components/line-chart";
 import { ResponsiveColumns } from "@/components/layout";
 import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
@@ -24,13 +23,7 @@ export default function TrendsFeedbackScreen() {
     data.sentiment.length > 0 || data.rate.length > 0 || data.questions.length > 0;
 
   return (
-    <RedesignScreen
-      gap={Spacing.three}
-      backLabel="Trends"
-      onBack={() => router.back()}
-      cart={<BasketFab />}
-      onSettings={() => router.push("/more")}
-    >
+    <RedesignScreen gap={Spacing.three} backLabel="Trends" onBack={() => router.back()}>
       <ScreenHeader title="Course feedback" subtitle="University-wide satisfaction over time" />
 
       {hasFeedback ? (

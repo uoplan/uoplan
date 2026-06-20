@@ -7,7 +7,6 @@ import { Text } from "@uoplan/ui";
 import { DetailRow } from "@/components/detail-row";
 import { type CollapsibleEntry, CollapsibleList } from "@/components/explore/collapsible-list";
 import { GradeHistogram } from "@/components/grade-histogram";
-import { BasketFab } from "@/components/basket-fab";
 import { ResponsiveColumns } from "@/components/layout";
 import { RedesignScreen, ScreenHeader } from "@/components/redesign";
 import { Spacing, Surface } from "@/constants/theme";
@@ -48,6 +47,7 @@ export default function FacultyDetailScreen() {
                   maxBarPx={56}
                   showSummary
                   hideLabels
+                  density="compact"
                 />
               </View>
             ) : (
@@ -88,13 +88,7 @@ export default function FacultyDetailScreen() {
 
   if (!detail) {
     return (
-      <RedesignScreen
-        gap={Spacing.three}
-        backLabel="Explore"
-        onBack={() => router.back()}
-        cart={<BasketFab />}
-        onSettings={() => router.push("/more")}
-      >
+      <RedesignScreen gap={Spacing.three} backLabel="Explore" onBack={() => router.back()}>
         <ScreenHeader title="Faculty" />
         <Text dimmed>This faculty isn’t in the loaded catalogue.</Text>
       </RedesignScreen>
@@ -104,13 +98,7 @@ export default function FacultyDetailScreen() {
   const { faculty } = detail;
 
   return (
-    <RedesignScreen
-      gap={Spacing.three}
-      backLabel="Explore"
-      onBack={() => router.back()}
-      cart={<BasketFab />}
-      onSettings={() => router.push("/more")}
-    >
+    <RedesignScreen gap={Spacing.three} backLabel="Explore" onBack={() => router.back()}>
       <ScreenHeader title={faculty.name} />
 
       <ResponsiveColumns gap={Spacing.three}>

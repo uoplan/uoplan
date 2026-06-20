@@ -84,6 +84,13 @@ export interface PersonalizeRequirementsReadout {
   remaining: RemainingRequirement[];
   completed: CompletedRequirementItem[];
   remainingCount: number;
+  /**
+   * Completed courses that are still eligible candidates for a remaining
+   * requirement but have not been assigned (or auto-satisfied) yet — i.e. the
+   * courses the planner still shows an "Assign" prompt for. The final CTA gates
+   * on this being empty, not on every requirement being met.
+   */
+  unassignedCompletedCourses: string[];
   requirementTreeWithStatus?: RequirementWithStatus[];
   selectedOptionsPerRequirement?: Record<string, number>;
   selectedPerRequirement?: Record<string, string[]>;
@@ -252,6 +259,108 @@ export function getRequirementPriorityForIds(
 
 export function requirementIdsForNode(node: RequirementWithStatus): string[] {
   return collectRequirementIds(node);
+}
+
+/** True when an incomplete node (or any descendant) is an unresolved option group. */
+export function nodeHasOptionGroups(node: RequirementWithStatus): boolean {
+  if (node.complete) return false;
+  if ((node.type === "or_group" || node.type === "options_group") && node.requirementId != null) {
+    return true;
+  }
+  return node.options?.some(nodeHasOptionGroups) ?? false;
+}
+
+/** True when the program tree exposes at least one path/option choice to make. */
+export function programHasOptionGroups(nodes: readonly RequirementWithStatus[]): boolean {
+  return nodes.some(nodeHasOptionGroups);
+}
+
+/**
+ * True when any incomplete option group (or a selected branch's nested option
+ * group) still lacks a valid selection. Mirrors web's `hasMissingOptionSelections`
+ * so the final CTA stays gated until every path is chosen.
+ */
+export function hasMissingProgramOptions(
+  nodes: readonly RequirementWithStatus[],
+  selectedOptions: Record<string, number>,
+): boolean {
+  for (const node of nodes) {
+    if (node.complete) continue;
+    const isOptionType = node.type === "or_group" || node.type === "options_group";
+    if (isOptionType && node.requirementId != null) {
+      const idx = selectedOptions[node.requirementId];
+      const options = node.options ?? [];
+      if (idx == null || idx < 0 || idx >= options.length) return true;
+      const child = options[idx];
+      if (child && hasMissingProgramOptions([child], selectedOptions)) return true;
+    } else if (node.options?.length && hasMissingProgramOptions(node.options, selectedOptions)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function normalizeTitleForCompare(title: string | undefined): string {
+  return (title ?? "").trim().replaceAll(/\s+/g, " ").toLowerCase();
+}
+
+/**
+ * Collapse "wrapper around a single child" chains so the option tree doesn't
+ * render a stack of redundant one-child groups. Ported from web's
+ * `simplifySingleChildChain`.
+ */
+export function simplifySingleChildChain(node: RequirementWithStatus): RequirementWithStatus {
+  let current = node;
+  while (
+    current.requirementId == null &&
+    current.options &&
+    current.options.length === 1 &&
+    current.options[0] &&
+    (current.options[0].options?.length ?? 0) > 0 &&
+    (() => {
+      const parentT = normalizeTitleForCompare(current.title);
+      const childT = normalizeTitleForCompare(current.options[0]!.title);
+      const parentGeneric = parentT === "" || parentT === "or";
+      const childGeneric = childT === "" || childT === "or";
+      return parentGeneric || childGeneric || parentT === childT;
+    })()
+  ) {
+    const child = current.options[0]!;
+    current = {
+      ...child,
+      title: (current.title ?? "").trim() ? current.title : child.title,
+      code: current.code ?? child.code,
+    };
+  }
+  return current;
+}
+
+/** Human-readable title for a requirement node. Ported from web. */
+export function getNodeDisplayTitle(node: RequirementWithStatus): string {
+  const rawTitle = (node.title ?? "").trim();
+  const fallback = rawTitle || node.code || `${node.type} requirement`;
+  if (node.type === "or_group") {
+    const useGenericLabel = rawTitle === "" || rawTitle.toLowerCase() === "or";
+    return useGenericLabel ? "One of the following" : fallback;
+  }
+  return fallback;
+}
+
+/** One-line hint under an option (credits, pool size, nested groups). Ported from web. */
+export function getOptionSecondarySummaryLine(node: RequirementWithStatus): string | null {
+  const parts: string[] = [];
+  const credits = node.creditsNeeded ?? 0;
+  if (credits > 0) {
+    parts.push(`${credits} credit${credits === 1 ? "" : "s"} required`);
+  }
+  const n = node.candidateCourses?.length ?? 0;
+  if (n > 0) {
+    parts.push(`${n} possible course${n === 1 ? "" : "s"}`);
+  }
+  if (nodeHasOptionGroups(node)) {
+    parts.push("further choices below");
+  }
+  return parts.length > 0 ? parts.join(" · ") : null;
 }
 
 function requirementLabel(type: string): string {
@@ -424,6 +533,42 @@ function applySelectionsToRemainingReadout(
   return { remaining: nextRemaining, completed: plannedCompleted };
 }
 
+/**
+ * Completed courses that are still listed as an eligible candidate for one of the
+ * outstanding requirements yet have not been assigned (manually or auto) to any
+ * requirement. These are exactly the courses the planner surfaces an "Assign"
+ * chip for; the final CTA stays gated until the list is empty so the student
+ * isn't forced to satisfy every degree requirement before generating.
+ */
+function computeUnassignedCompletedCourses(
+  remaining: RemainingRequirement[],
+  completed: CompletedRequirementItem[],
+  selections: PersonalizeRequirementSelections,
+  completedCourses: readonly string[],
+  cache: DataCache,
+): string[] {
+  const assigned = new Set<string>();
+  for (const requirement of remaining) {
+    for (const code of requirement.satisfiedBy) assigned.add(normalizeCourseCode(code));
+  }
+  for (const item of completed) {
+    for (const code of item.satisfiedBy) assigned.add(normalizeCourseCode(code));
+  }
+  for (const codes of Object.values(selections.selectedPerRequirement)) {
+    for (const code of codes) assigned.add(normalizeCourseCode(code));
+  }
+
+  const completedNorm = new Set(completedCourses.map((code) => normalizeCourseCode(code)));
+  const unassigned = new Set<string>();
+  for (const requirement of remaining) {
+    for (const candidate of requirement.candidateCourses ?? []) {
+      const norm = normalizeCourseCode(candidate);
+      if (completedNorm.has(norm) && !assigned.has(norm)) unassigned.add(norm);
+    }
+  }
+  return [...unassigned].map((norm) => cache.getCourse(norm)?.code ?? norm);
+}
+
 function buildPrereqEligibleCourses(input: {
   program: Program;
   remainingRequirements: RemainingRequirement[];
@@ -480,6 +625,13 @@ export function computePersonalizeRequirements(
     remaining: adjusted.remaining,
     completed: adjusted.completed,
     remainingCount: adjusted.remaining.length,
+    unassignedCompletedCourses: computeUnassignedCompletedCourses(
+      adjusted.remaining,
+      adjusted.completed,
+      selections,
+      input.completedCourses,
+      cache,
+    ),
     requirementTreeWithStatus: state.tree,
     selectedOptionsPerRequirement: selections.selectedOptionsPerRequirement,
     selectedPerRequirement: selections.selectedPerRequirement,
@@ -560,7 +712,8 @@ export function buildAdvancedRequestInputFromPersonalize(input: {
     forcedCourses: [],
     levelBuckets: ["undergrad", "grad"] satisfies CourseLevelBucket[],
     languageBuckets: ["en", "fr", "other"] satisfies CourseLanguageBucket[],
-    electiveLevelBuckets: [],
+    electiveLevelBuckets:
+      (requirements as { electiveLevelBuckets?: number[] }).electiveLevelBuckets ?? [],
     includeClosedComponents: input.includeClosedComponents,
     virtualSectionsOnly: input.virtualSectionsOnly,
     generationPreferEasier: input.generationPreferEasier,

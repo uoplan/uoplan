@@ -1,6 +1,7 @@
 import { createNativeCachingTransport } from "@uoplan/data/nativeCache";
 import type { FetchBytes } from "@uoplan/data/transport";
 import Constants from "expo-constants";
+import { Platform } from "react-native";
 
 import { fileSystemStorage, fileSystemTextCache } from "./file-system-storage";
 import { loadDataAssetManifest, parseDataManifest } from "./manifest";
@@ -9,15 +10,35 @@ import type { DataAssetManifest } from "./manifest";
 /** Production origin the app fetches `.pb` data from in release builds. */
 const PROD_DATA_BASE_URL = "https://uoplan.party";
 
-/** Port the web app's Vite dev server listens on (`pnpm dev`). */
-const DEV_WEB_PORT = 5173;
+/**
+ * Port the web app's Vite dev server listens on (`pnpm dev`). Defaults to Vite's
+ * `5173`, but is overridable with `EXPO_PUBLIC_DEV_WEB_PORT` for when that port is
+ * taken (e.g. another local project) and uoplan's dev server lands on `5174`.
+ */
+const DEV_WEB_PORT = process.env.EXPO_PUBLIC_DEV_WEB_PORT ?? "5173";
+
+/**
+ * Maps the Expo dev-server host to one the current platform can actually reach.
+ * The Android emulator's loopback is the emulator itself, so the host machine
+ * (where Vite runs) is only reachable via the special `10.0.2.2` alias;
+ * `localhost`/`127.0.0.1` must be rewritten. iOS simulators and physical devices
+ * (which report a LAN IP) reach the host as-is. Exported for unit testing.
+ */
+export function resolveDevDataHost(rawHost: string, platformOS: string): string {
+  const host = rawHost.length > 0 ? rawHost : "localhost";
+  if (platformOS === "android" && (host === "localhost" || host === "127.0.0.1")) {
+    return "10.0.2.2";
+  }
+  return host;
+}
 
 /**
  * Resolves the dev web app's origin so a debug build fetches data from a running
  * `pnpm dev` instead of production. The Expo dev server's `hostUri` (e.g.
- * `192.168.1.5:8081` on a device, `localhost:8081` on the simulator) shares the
+ * `192.168.1.5:8081` on a device, `127.0.0.1:8081` on a simulator) shares the
  * host with the Vite dev server — only the port differs — so we reuse the host
- * and swap in {@link DEV_WEB_PORT}. Returns `null` outside `__DEV__`.
+ * (mapped for reachability via {@link resolveDevDataHost}) and swap in
+ * {@link DEV_WEB_PORT}. Returns `null` outside `__DEV__`.
  */
 function devDataBaseUrl(): string | null {
   if (!__DEV__) return null;
@@ -25,15 +46,16 @@ function devDataBaseUrl(): string | null {
     Constants.expoConfig?.hostUri ??
     (Constants.expoGoConfig as { debuggerHost?: string } | undefined)?.debuggerHost ??
     "";
-  const host = hostUri.split(":")[0];
-  return `http://${host.length > 0 ? host : "localhost"}:${DEV_WEB_PORT}`;
+  const host = resolveDevDataHost(hostUri.split(":")[0] ?? "", Platform.OS);
+  return `http://${host}:${DEV_WEB_PORT}`;
 }
 
 /**
  * Origin the native app fetches `.pb` data from. Precedence:
  *
  * 1. `EXPO_PUBLIC_DATA_URL` — explicit override (any build).
- * 2. The dev web server (`http://<dev-host>:5173`) in `__DEV__`.
+ * 2. The dev web server (`http://<dev-host>:<EXPO_PUBLIC_DEV_WEB_PORT ?? 5173>`)
+ *    in `__DEV__`.
  * 3. Production (`https://uoplan.party`).
  *
  * Assets change daily, so they are NOT bundled into the binary — they are fetched

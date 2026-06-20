@@ -5,6 +5,8 @@ import {
   clearSelectedOptionForRequirement,
   computePersonalizeRequirements,
   DEFAULT_REQUIREMENT_SELECTIONS,
+  hasMissingProgramOptions,
+  programHasOptionGroups,
   setSelectedOptionForRequirement,
   toggleRequirementCourse,
 } from "@/lib/personalize-requirements";
@@ -94,6 +96,36 @@ describe("native personalize requirement selections", () => {
     ).toEqual(["PHY 1121"]);
   });
 
+  it("flags an unresolved option group and clears once a branch is chosen", () => {
+    const unselected = computePersonalizeRequirements({
+      catalogue,
+      schedules,
+      programUrl: PROGRAM_URL,
+      completedCourses: [],
+      selections: DEFAULT_REQUIREMENT_SELECTIONS,
+    });
+    expect(unselected).not.toBeNull();
+    const tree = unselected!.requirementTreeWithStatus ?? [];
+    expect(programHasOptionGroups(tree)).toBe(true);
+    expect(hasMissingProgramOptions(tree, {})).toBe(true);
+
+    const selections = setSelectedOptionForRequirement(DEFAULT_REQUIREMENT_SELECTIONS, "req-0", 1);
+    const selected = computePersonalizeRequirements({
+      catalogue,
+      schedules,
+      programUrl: PROGRAM_URL,
+      completedCourses: [],
+      selections,
+    });
+    expect(selected).not.toBeNull();
+    expect(
+      hasMissingProgramOptions(
+        selected!.requirementTreeWithStatus ?? [],
+        selections.selectedOptionsPerRequirement,
+      ),
+    ).toBe(false);
+  });
+
   it("clears descendant option choices when an option group is cleared", () => {
     const selected = setSelectedOptionForRequirement(
       {
@@ -124,5 +156,29 @@ describe("native personalize requirement selections", () => {
     expect(assignedAgain.selectedPerRequirement["req-1"]).toBeUndefined();
     expect(pinned.constrainedPerRequirement["req-1"]).toEqual(["CSI 2110"]);
     expect(pinnedDuplicate.constrainedPerRequirement["req-1"]).toBeUndefined();
+  });
+
+  it("treats a completed elective candidate as unassigned until it is assigned", () => {
+    const selections = setSelectedOptionForRequirement(DEFAULT_REQUIREMENT_SELECTIONS, "req-0", 0);
+    const beforeAssign = computePersonalizeRequirements({
+      catalogue,
+      schedules,
+      programUrl: PROGRAM_URL,
+      completedCourses: ["CSI 2110"],
+      selections,
+    });
+    expect(beforeAssign).not.toBeNull();
+    expect(beforeAssign!.unassignedCompletedCourses).toEqual(["CSI 2110"]);
+
+    const assigned = toggleRequirementCourse(selections, "req-1", "CSI 2110", "assigned");
+    const afterAssign = computePersonalizeRequirements({
+      catalogue,
+      schedules,
+      programUrl: PROGRAM_URL,
+      completedCourses: ["CSI 2110"],
+      selections: assigned,
+    });
+    expect(afterAssign).not.toBeNull();
+    expect(afterAssign!.unassignedCompletedCourses).toEqual([]);
   });
 });

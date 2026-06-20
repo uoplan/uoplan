@@ -83,6 +83,52 @@ function componentKind(componentSection: string): string {
   return (i >= 0 ? componentSection.slice(0, i) : componentSection).trim();
 }
 
+function slotKey(event: CalendarEvent): string {
+  return JSON.stringify([
+    event.courseCode,
+    event.componentSection,
+    event.day,
+    event.startMinutes,
+    event.endMinutes,
+  ]);
+}
+
+function mergeMeetingDates(
+  a: CalendarEvent["meetingDates"],
+  b: CalendarEvent["meetingDates"],
+): CalendarEvent["meetingDates"] {
+  if (a == null) {
+    return b ?? null;
+  }
+  if (b == null) {
+    return a;
+  }
+  return [a[0] < b[0] ? a[0] : b[0], a[1] > b[1] ? a[1] : b[1]];
+}
+
+export function dedupeWeeklySlots(events: CalendarEvent[]): CalendarEvent[] {
+  const indices = new Map<string, number>();
+  const deduped: CalendarEvent[] = [];
+
+  events.forEach((event) => {
+    const key = slotKey(event);
+    const index = indices.get(key);
+    if (index == null) {
+      indices.set(key, deduped.length);
+      deduped.push(event);
+      return;
+    }
+
+    const current = deduped[index]!;
+    deduped[index] = {
+      ...current,
+      meetingDates: mergeMeetingDates(current.meetingDates, event.meetingDates),
+    };
+  });
+
+  return deduped;
+}
+
 export interface WeekCalendarProps {
   events: CalendarEvent[];
   /** Override the per-hour row height (defaults to 40); used to fill the screen. */
@@ -146,9 +192,11 @@ export function WeekCalendar({
     [startHour, endHour],
   );
 
+  const dedupedEvents = useMemo(() => dedupeWeeklySlots(events), [events]);
+
   const eventsByDay = useMemo(() => {
-    return WEEKDAY_CODES.map((day) => assignLanes(events.filter((e) => e.day === day)));
-  }, [events]);
+    return WEEKDAY_CODES.map((day) => assignLanes(dedupedEvents.filter((e) => e.day === day)));
+  }, [dedupedEvents]);
 
   const blocksByDay = useMemo(
     () =>

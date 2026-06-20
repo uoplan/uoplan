@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Box, Button, MultiSelect, Stack, Text } from "@mantine/core";
 import { IconFileUpload } from "@tabler/icons-react";
 import { getCourseCredits, normalizeCourseCode } from "@uoplan/core";
@@ -86,8 +86,24 @@ export function BasicCalendarSidebarControls() {
     }
     return total;
   }, [cache, completedCourses, basketCourses]);
+  const additionalElectivesMax = Math.max(0, SCHEDULE_COURSE_COUNT_MAX - basketCourses.length);
+  const additionalElectivesMin = basketCourses.length > 0 ? 0 : 1;
 
-  const totalCount = basketCourses.length + basicElectivesCount;
+  useEffect(() => {
+    const next = Math.max(
+      additionalElectivesMin,
+      Math.min(additionalElectivesMax, basicElectivesCount),
+    );
+    if (next === basicElectivesCount) return;
+    setBasicElectivesCount(next);
+    markBasicSettingsChanged();
+  }, [
+    additionalElectivesMax,
+    additionalElectivesMin,
+    basicElectivesCount,
+    markBasicSettingsChanged,
+    setBasicElectivesCount,
+  ]);
 
   return (
     <>
@@ -101,18 +117,15 @@ export function BasicCalendarSidebarControls() {
         renderCourseOption={courseRenderOption}
         courseFilter={courseOptionsFilter}
         coursesSlot={<BasketContents variant="embedded" />}
-        countValue={totalCount}
-        onCountChange={(total) => {
-          const next = Math.max(
-            0,
-            Math.min(SCHEDULE_COURSE_COUNT_MAX, total - basketCourses.length),
-          );
+        countValue={basicElectivesCount}
+        onCountChange={(count) => {
+          const next = Math.max(additionalElectivesMin, Math.min(additionalElectivesMax, count));
           if (next === basicElectivesCount) return;
           setBasicElectivesCount(next);
           markBasicSettingsChanged();
         }}
-        countMin={Math.max(1, basketCourses.length)}
-        countMax={basketCourses.length + SCHEDULE_COURSE_COUNT_MAX}
+        countMin={additionalElectivesMin}
+        countMax={additionalElectivesMax}
         totalFirstYearCredits={totalFirstYearCredits}
         warnFirstYearLimit={totalFirstYearCredits > FIRST_YEAR_CREDIT_CAP}
         limitFirstYearCredits={generationLimitFirstYearCredits}

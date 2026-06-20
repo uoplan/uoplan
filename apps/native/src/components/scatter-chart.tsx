@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Svg, { Circle, Line, Text as SvgText } from "react-native-svg";
 
-import { Surface } from "@/constants/theme";
+import { Fonts, Surface } from "@/constants/theme";
 
 export interface ScatterPoint {
   x: number;
@@ -107,6 +107,7 @@ export function ScatterChart({
               key={`yl${i}`}
               x={PAD_LEFT - 5}
               y={yFor(t) + 3}
+              fontFamily={Fonts.mono}
               fontSize={9}
               fill={Surface.dimmed}
               textAnchor="end"
@@ -119,6 +120,7 @@ export function ScatterChart({
               key={`xl${i}`}
               x={xFor(t)}
               y={totalH - 6}
+              fontFamily={Fonts.mono}
               fontSize={9}
               fill={Surface.dimmed}
               textAnchor="middle"

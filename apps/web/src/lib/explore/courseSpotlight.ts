@@ -1,9 +1,8 @@
-import { distributionGpa, GRADE_POINTS } from "@uoplan/core";
+import { distributionGpa, failingFraction, GRADE_POINTS } from "@uoplan/core";
 import { countDistinctProfessors, mergeGradeDistributionCounts } from "./gradesSearch";
 import type { ExploreCourseSearchEntry, ExploreOfferingFlat } from "./gradesSearch";
 
 const SKIP_GRADES = new Set(["P", "S", "NS", "NC", "ABS", "EIN"]);
-const FAIL_GRADES = new Set(["F", "E", "ABS"]);
 
 /** Minimum countable graded students before a course can appear in spotlight lists. */
 export const SPOTLIGHT_MIN_GRADED_COUNT = 40;
@@ -80,18 +79,6 @@ export function gradedHeadcount(dist: Record<string, number>): number {
   return mass;
 }
 
-/** F + E + ABS counts for fail-rate spotlight. */
-function failHeadcount(dist: Record<string, number>): number {
-  let fail = 0;
-  for (const [letter, count] of Object.entries(dist)) {
-    if (!FAIL_GRADES.has(letter)) continue;
-    const n = Number(count);
-    if (!Number.isFinite(n) || n <= 0) continue;
-    fail += n;
-  }
-  return fail;
-}
-
 export function buildCourseSpotlightIndex(
   offeringsByCourseNorm: Map<string, ExploreOfferingFlat[]>,
   courseEntryByNorm: Map<string, ExploreCourseSearchEntry>,
@@ -103,7 +90,7 @@ export function buildCourseSpotlightIndex(
     const gradedCount = gradedHeadcount(mergedDist);
     if (gpa == null || gradedCount < SPOTLIGHT_MIN_GRADED_COUNT) continue;
 
-    const failRate = failHeadcount(mergedDist) / gradedCount;
+    const failRate = failingFraction(mergedDist);
     const professorCount = countDistinctProfessors(courseOfferings);
     const entry = courseEntryByNorm.get(norm);
     if (!entry) continue;

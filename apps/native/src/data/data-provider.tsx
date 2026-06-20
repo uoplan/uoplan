@@ -13,6 +13,7 @@ import {
 } from "react";
 
 import { planDataAssets } from "./asset-plan";
+import { BUNDLED_DATA_MANIFEST, createBundledDataTransport } from "./bundled-data";
 import { type DataAssetManifest } from "./manifest";
 import {
   createTransportForManifest,
@@ -184,11 +185,15 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     loadAppDataWithFallback<DataAssetManifest, AppData>({
       loadManifest: () => loadAssetManifest(),
       build: (manifest) => buildAppData(manifest, createTransportForManifest(manifest)),
+      buildBundled: () => buildAppData(BUNDLED_DATA_MANIFEST, createBundledDataTransport()),
       readKnownGood: readKnownGoodManifest,
       writeKnownGood: writeKnownGoodManifest,
       sameManifest: (a, b) => JSON.stringify(a) === JSON.stringify(b),
       onFallback: (err) => {
         console.warn("[data] fresh dataset failed to decode; serving last known-good data", err);
+      },
+      onBundledFallback: (err) => {
+        console.warn("[data] live and known-good data failed; serving bundled fallback data", err);
       },
     })
       .then((data) => {

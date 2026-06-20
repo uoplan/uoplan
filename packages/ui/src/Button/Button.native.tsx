@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
   },
   label: {
     color: NativeColors.textInverse,
+    fontFamily: "DM Mono Medium",
     fontSize: 15,
     fontWeight: "600",
   },

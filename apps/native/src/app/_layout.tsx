@@ -8,6 +8,7 @@ import { LoadingErrorScreen, LoadingScreen } from "@/components/loading-screen";
 import { OnboardingScreen } from "@/components/onboarding-screen";
 import { Surface } from "@/constants/theme";
 import { BasketProvider } from "@/data/basket-provider";
+import { CompletedCoursesProvider } from "@/data/completed-courses-provider";
 import { AppDataProvider, useAppDataState } from "@/data/data-provider";
 import { OnboardingProvider, useOnboarding } from "@/data/onboarding-provider";
 import { ScheduleOptionsProvider } from "@/data/schedule-options-provider";
@@ -80,11 +81,13 @@ export default function TabLayout() {
         <AnimatedSplashOverlay />
         <AppDataProvider>
           <BasketProvider>
-            <ScheduleOptionsProvider>
-              <OnboardingProvider>
-                <DataGate />
-              </OnboardingProvider>
-            </ScheduleOptionsProvider>
+            <CompletedCoursesProvider>
+              <ScheduleOptionsProvider>
+                <OnboardingProvider>
+                  <DataGate />
+                </OnboardingProvider>
+              </ScheduleOptionsProvider>
+            </CompletedCoursesProvider>
           </BasketProvider>
         </AppDataProvider>
       </LocaleProvider>

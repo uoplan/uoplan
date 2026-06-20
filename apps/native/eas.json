@@ -46,7 +46,7 @@
         "track": "internal"
       },
       "ios": {
-        "bundleIdentifier": "party.uoplan.native"
+        "bundleIdentifier": "party.uoplan.app"
       }
     }
   }

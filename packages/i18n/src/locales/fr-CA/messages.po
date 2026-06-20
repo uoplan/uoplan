@@ -310,6 +310,24 @@ msgstr "Les options s'appliquent aux cours à option générés."
 msgid "basicCourseFilters.levels.label"
 msgstr "Niveaux"
 
+msgid "basicCourseFilters.levelPreset.custom"
+msgstr "Niveaux personnalisés"
+
+msgid "basicCourseFilters.levelPreset.grad"
+msgstr "Cycles supérieurs seulement"
+
+msgid "basicCourseFilters.levelPreset.all"
+msgstr "Tous les niveaux"
+
+msgid "basicCourseFilters.levelPreset.upper"
+msgstr "3000–4000"
+
+msgid "basicCourseFilters.levelPreset.lower"
+msgstr "1000–2000"
+
+msgid "basicCourseFilters.levelPreset.undergradAny"
+msgstr "Tous les niveaux 1000–4000"
+
 msgid "basicCourseFilters.title"
 msgstr "Options de cours à option"
 
@@ -1766,7 +1784,10 @@ msgid "gen.suggest.widenOrChangePicks"
 msgstr "Élargissez les heures de cours ou modifiez vos choix Contraindre / Assigner."
 
 msgid "generationOptions.count.label"
-msgstr "Cours ce trimestre"
+msgstr "Cours optionnels ce trimestre (en plus)"
+
+msgid "generationOptions.count.description"
+msgstr "Les cours déjà choisis comptent d’abord; ceci ajuste seulement les cours optionnels supplémentaires que le planificateur peut ajouter."
 
 msgid "generationOptions.courses.label"
 msgstr "Cours souhaités"
@@ -2449,6 +2470,24 @@ msgstr "Lors de la génération, les cours ayant de meilleures évaluations glob
 msgid "scheduleCount.preferSentiment.label"
 msgstr "Préférer les cours mieux évalués"
 
+msgid "scheduleCount.preferProfessorRating.description"
+msgstr "Applique un seuil RateMyProfessors souple de 2,0+. Les professeurs sans note restent permis."
+
+msgid "scheduleCount.smartOptions.hide"
+msgstr "Masquer les options intelligentes"
+
+msgid "scheduleCount.smartOptions.show"
+msgstr "Afficher les options intelligentes"
+
+msgid "scheduleCount.smartOptions.description"
+msgstr "Laissez le planificateur favoriser légèrement les horaires plus compacts, plus faciles et mieux évalués."
+
+msgid "scheduleCount.smartOptions.label"
+msgstr "Options intelligentes"
+
+msgid "scheduleCount.preferProfessorRating.label"
+msgstr "Préférer les professeurs mieux évalués"
+
 msgid "scheduleCount.rating.description"
 msgstr "Les professeurs sans note sont toujours permis."
 
@@ -2463,6 +2502,12 @@ msgstr "Début de cours le plus tôt"
 
 msgid "scheduleCount.time.latest"
 msgstr "Fin de cours la plus tard"
+
+msgid "scheduleCount.time.and"
+msgstr "et"
+
+msgid "scheduleCount.time.rangeLabel"
+msgstr "Cours entre"
 
 msgid "search.noGradeData"
 msgstr "Pas de données"

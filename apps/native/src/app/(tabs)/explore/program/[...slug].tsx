@@ -5,7 +5,6 @@ import { Linking, Pressable, StyleSheet, View } from "react-native";
 import { Text } from "@uoplan/ui";
 
 import { AppIcon } from "@/components/app-icon";
-import { BasketFab } from "@/components/basket-fab";
 import { type CollapsibleEntry, CollapsibleList } from "@/components/explore/collapsible-list";
 import { ResponsiveColumns } from "@/components/layout";
 import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
@@ -28,13 +27,7 @@ export default function ProgramDetailScreen() {
 
   if (!detail) {
     return (
-      <RedesignScreen
-        gap={Spacing.three}
-        backLabel="Explore"
-        onBack={() => router.back()}
-        cart={<BasketFab />}
-        onSettings={() => router.push("/more")}
-      >
+      <RedesignScreen gap={Spacing.three} backLabel="Explore" onBack={() => router.back()}>
         <ScreenHeader title={fallbackTitle} />
         <Text dimmed>This program isn’t in the loaded catalogue.</Text>
       </RedesignScreen>
@@ -80,13 +73,7 @@ export default function ProgramDetailScreen() {
   }));
 
   return (
-    <RedesignScreen
-      gap={Spacing.three}
-      backLabel="Explore"
-      onBack={() => router.back()}
-      cart={<BasketFab />}
-      onSettings={() => router.push("/more")}
-    >
+    <RedesignScreen gap={Spacing.three} backLabel="Explore" onBack={() => router.back()}>
       <ScreenHeader
         title={program.title}
         subtitle={`${requirementCount.toLocaleString()} requirement rows`}

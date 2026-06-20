@@ -6,6 +6,7 @@ import {
   courseAPlusPercent,
   courseGpa,
   distributionGpa,
+  failingFraction,
   gpaToLetterGrade,
   GRADE_POINTS,
   gradeVizGpa,
@@ -108,6 +109,26 @@ describe("gradeDistribution", () => {
     expect(normalizeGradeVizDistribution({ XYZ: 10 })).toBeNull();
     expect(normalizeGradeVizDistribution(null)).toBeNull();
   });
+
+  it("failingFraction is the exact complement of passingPercent", () => {
+    // Mix of letter fails (F), administrative fail (EIN), pass/fail fail (NS),
+    // passes (A) and withdrawals (DR) — DR must be excluded from the denominator.
+    const dist = { A: 40, F: 50, EIN: 10, NS: 5, DR: 20 };
+    const viz = normalizeGradeVizDistribution(dist);
+    expect(viz).not.toBeNull();
+    if (!viz) return;
+
+    // red = F + EIN + NS = 65; gradedTotal = total(125) - DR(20) = 105.
+    expect(failingFraction(dist)).toBeCloseTo(65 / 105, 5);
+    // The two figures always sum to 1 (i.e. "% fail" + "% passing" = 100%).
+    expect(failingFraction(dist) + viz.passingPercent / 100).toBeCloseTo(1, 5);
+  });
+
+  it("failingFraction returns 0 when there is no graded mass", () => {
+    expect(failingFraction({})).toBe(0);
+    expect(failingFraction({ DR: 10 })).toBe(0); // only withdrawals
+    expect(failingFraction(null)).toBe(0);
+  });
 });
 
 describe("buildCourseDifficultyIndexFromCache", () => {
@@ -183,14 +204,44 @@ describe("buildCourseDifficultyIndexFromCache", () => {
     expect(byKey.get("A+")?.count).toBe(10);
     expect(byKey.get("A+")?.bucketId).toBe("green");
 
-    // S/NS aggregated separately from the letter bars. Only NS appears in the
-    // normalized histogram (S folds into the "blue" bucket), mirroring the web.
-    expect(model.sCount).toBe(0);
+    // S/NS aggregated separately from the letter bars. S must remain in the
+    // normalized histogram so pass/fail mass matches passingPercent.
+    expect(model.sCount).toBe(8);
     expect(model.nsCount).toBe(2);
-    expect(model.snsTotal).toBe(2);
+    expect(model.snsTotal).toBe(10);
 
     // Bar-height scaling uses the tallest bar (A+ = 10).
     expect(model.maxHistogramCount).toBe(10);
+  });
+
+  it("keeps satisfactory grades visible in the S/NS histogram bar", () => {
+    const viz = normalizeGradeVizDistribution({ F: 2, S: 21 });
+
+    expect(viz).not.toBeNull();
+    if (!viz) return;
+
+    expect(Math.round(viz.passingPercent)).toBe(91);
+    expect(viz.histogram.find((entry) => entry.grade === "S")?.count).toBe(21);
+
+    const model = buildGradeHistogramModel(viz);
+    const failBar = model.displayBars.find((bar) => bar.key === "FAIL");
+    expect(model.sCount).toBe(21);
+    expect(model.snsTotal).toBe(21);
+    expect(failBar?.count).toBe(2);
+  });
+
+  it("keeps pass grades visible in the S/NS histogram bar", () => {
+    const viz = normalizeGradeVizDistribution({ P: 55 });
+
+    expect(viz).not.toBeNull();
+    if (!viz) return;
+
+    expect(viz.passingPercent).toBe(100);
+    expect(viz.histogram.find((entry) => entry.grade === "P")?.count).toBe(55);
+
+    const model = buildGradeHistogramModel(viz);
+    expect(model.sCount).toBe(55);
+    expect(model.snsTotal).toBe(55);
   });
 
   describe("gpaToLetterGrade", () => {

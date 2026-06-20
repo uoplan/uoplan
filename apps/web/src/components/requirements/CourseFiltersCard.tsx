@@ -3,6 +3,7 @@ import {
   Group,
   MultiSelect,
   Paper,
+  SegmentedControl,
   Stack,
   Switch,
   Text,
@@ -14,6 +15,50 @@ import { IconChevronDown } from "@tabler/icons-react";
 import { tr } from "../../i18n";
 
 const BASIC_COURSE_FILTERS_TOGGLE_ID = "basicCourseFilters.toggle";
+
+const UNDERGRAD_LEVELS = [1000, 2000, 3000, 4000];
+const LOWER_UNDERGRAD_LEVELS = [1000, 2000];
+const UPPER_UNDERGRAD_LEVELS = [3000, 4000];
+const GRAD_LEVELS = [5000, 6000];
+const ALL_LEVELS = [...UNDERGRAD_LEVELS, ...GRAD_LEVELS];
+
+type ElectiveLevelPreset = "undergrad-any" | "lower" | "upper" | "all" | "grad" | "custom";
+
+function sameLevels(a: number[], b: number[]): boolean {
+  if (a.length !== b.length) return false;
+  const sortedA = [...a].sort((x, y) => x - y);
+  const sortedB = [...b].sort((x, y) => x - y);
+  return sortedA.every((value, index) => value === sortedB[index]);
+}
+
+function electiveLevelPresetFor(
+  buckets: number[],
+  showGraduateElectiveLevels: boolean,
+): ElectiveLevelPreset {
+  if (buckets.length === 0 || sameLevels(buckets, UNDERGRAD_LEVELS)) return "undergrad-any";
+  if (sameLevels(buckets, LOWER_UNDERGRAD_LEVELS)) return "lower";
+  if (sameLevels(buckets, UPPER_UNDERGRAD_LEVELS)) return "upper";
+  if (showGraduateElectiveLevels && sameLevels(buckets, ALL_LEVELS)) return "all";
+  if (showGraduateElectiveLevels && sameLevels(buckets, GRAD_LEVELS)) return "grad";
+  return "custom";
+}
+
+function bucketsForElectiveLevelPreset(preset: ElectiveLevelPreset): number[] | null {
+  switch (preset) {
+    case "undergrad-any":
+      return [];
+    case "lower":
+      return LOWER_UNDERGRAD_LEVELS;
+    case "upper":
+      return UPPER_UNDERGRAD_LEVELS;
+    case "all":
+      return ALL_LEVELS;
+    case "grad":
+      return GRAD_LEVELS;
+    case "custom":
+      return null;
+  }
+}
 
 interface ExcludeElectiveSubjectsProps {
   data: { value: string; label: string }[];
@@ -66,25 +111,21 @@ export function BasicCourseFiltersCard({
 }: BasicCourseFiltersCardProps) {
   const [filtersOpen, { toggle: toggleFilters }] = useDisclosure(!defaultCollapsed);
 
-  const electiveLevelOptions = showGraduateElectiveLevels
-    ? [
-        { value: "1000", label: "1XXX" },
-        { value: "2000", label: "2XXX" },
-        { value: "3000", label: "3XXX" },
-        { value: "4000", label: "4XXX" },
-        { value: "5000", label: "5XXX" },
-        { value: "6000", label: "6XXX" },
-      ]
-    : [
-        { value: "1000", label: "1XXX" },
-        { value: "2000", label: "2XXX" },
-        { value: "3000", label: "3XXX" },
-        { value: "4000", label: "4XXX" },
-      ];
-
-  const allowedElectiveLevels = showGraduateElectiveLevels
-    ? new Set([1000, 2000, 3000, 4000, 5000, 6000])
-    : new Set([1000, 2000, 3000, 4000]);
+  const levelPreset = electiveLevelPresetFor(electiveLevelBuckets, showGraduateElectiveLevels);
+  const levelPresetOptions = [
+    { value: "undergrad-any", label: tr("basicCourseFilters.levelPreset.undergradAny") },
+    { value: "lower", label: tr("basicCourseFilters.levelPreset.lower") },
+    { value: "upper", label: tr("basicCourseFilters.levelPreset.upper") },
+    ...(showGraduateElectiveLevels
+      ? [
+          { value: "all", label: tr("basicCourseFilters.levelPreset.all") },
+          { value: "grad", label: tr("basicCourseFilters.levelPreset.grad") },
+        ]
+      : []),
+    ...(levelPreset === "custom"
+      ? [{ value: "custom", label: tr("basicCourseFilters.levelPreset.custom") }]
+      : []),
+  ];
 
   const headerContent = (
     <>
@@ -159,18 +200,23 @@ export function BasicCourseFiltersCard({
           clearable={false}
           w="100%"
         />
-        <MultiSelect
-          label={tr("basicCourseFilters.levels.label")}
-          data={electiveLevelOptions}
-          value={electiveLevelBuckets.map((v) => String(v))}
-          onChange={(vals) =>
-            onChangeElectiveLevelBuckets(
-              vals.map((v) => parseInt(v, 10)).filter((n) => allowedElectiveLevels.has(n)),
-            )
-          }
-          clearable={false}
-          w="100%"
-        />
+        <Stack gap={6} style={{ width: "100%" }}>
+          <Text size="sm" fw={500}>
+            {tr("basicCourseFilters.levels.label")}
+          </Text>
+          <SegmentedControl
+            aria-label={tr("basicCourseFilters.levels.label")}
+            value={levelPreset}
+            onChange={(value) => {
+              const buckets = bucketsForElectiveLevelPreset(value as ElectiveLevelPreset);
+              if (buckets == null) return;
+              onChangeElectiveLevelBuckets(buckets);
+            }}
+            data={levelPresetOptions}
+            size="xs"
+            radius="var(--app-radius-sm)"
+          />
+        </Stack>
         <Switch
           label={tr("constrainStep.includeClosedSections")}
           checked={includeClosedComponents}

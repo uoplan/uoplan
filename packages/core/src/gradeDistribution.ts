@@ -81,6 +81,8 @@ const GRADE_TO_BUCKET = new Map<string, GradeVizBucketId>(
 const HISTOGRAM_GRADE_ORDER = [
   "DR",
   "NS",
+  "S",
+  "P",
   "EIN",
   "ABS",
   "F",
@@ -279,6 +281,22 @@ export function normalizeGradeVizDistribution(
   };
 }
 
+/**
+ * Fraction (0–1) of graded students who did NOT pass — the exact complement of
+ * {@link normalizeGradeVizDistribution}'s `passingPercent`, so a course's "% fail"
+ * and "% passing" always sum to 100%. Uses the same failing set (the red "Failing"
+ * bucket: F/E/ABS/EIN/NS) and the same graded denominator (every outcome except DR
+ * withdrawals). Returns 0 when there is no graded mass, mirroring `passingPercent`.
+ *
+ * This is the single source of truth for the Explore "% fail" spotlight stat on
+ * both web and native, so it can never drift from the "% passing" shown elsewhere.
+ */
+export function failingFraction(distribution: Record<string, number> | null | undefined): number {
+  const viz = normalizeGradeVizDistribution(distribution);
+  if (!viz || viz.gradedTotal <= 0) return 0;
+  return (100 - viz.passingPercent) / 100;
+}
+
 // ---------------------------------------------------------------------------
 // Histogram display model (shared by the web + native grade charts)
 // ---------------------------------------------------------------------------
@@ -324,7 +342,7 @@ export function buildGradeHistogramModel(gradeViz: GradeVizData): GradeHistogram
   const byGrade = new Map(gradeViz.histogram.map((entry) => [entry.grade, entry]));
   const countOf = (grade: string) => byGrade.get(grade)?.count ?? 0;
 
-  const sCount = countOf("S");
+  const sCount = countOf("S") + countOf("P");
   const nsCount = countOf("NS");
   const snsTotal = sCount + nsCount;
 
