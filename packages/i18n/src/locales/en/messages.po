@@ -310,6 +310,24 @@ msgstr "Options apply to generated electives."
 msgid "basicCourseFilters.levels.label"
 msgstr "Levels"
 
+msgid "basicCourseFilters.levelPreset.custom"
+msgstr "Custom levels"
+
+msgid "basicCourseFilters.levelPreset.grad"
+msgstr "Graduate only"
+
+msgid "basicCourseFilters.levelPreset.all"
+msgstr "Any level"
+
+msgid "basicCourseFilters.levelPreset.upper"
+msgstr "3000–4000"
+
+msgid "basicCourseFilters.levelPreset.lower"
+msgstr "1000–2000"
+
+msgid "basicCourseFilters.levelPreset.undergradAny"
+msgstr "Any 1000–4000"
+
 msgid "basicCourseFilters.title"
 msgstr "Elective options"
 
@@ -1766,7 +1784,10 @@ msgid "gen.suggest.widenOrChangePicks"
 msgstr "Widen class hours or change Constrain / Assign picks."
 
 msgid "generationOptions.count.label"
-msgstr "Courses this semester"
+msgstr "Electives this semester (additional)"
+
+msgid "generationOptions.count.description"
+msgstr "Courses you already picked count first; this adjusts only the extra electives the planner can add."
 
 msgid "generationOptions.courses.label"
 msgstr "Courses you want"
@@ -2449,6 +2470,24 @@ msgstr "When generating, courses with higher overall student-feedback ratings ar
 msgid "scheduleCount.preferSentiment.label"
 msgstr "Prefer courses with better feedback"
 
+msgid "scheduleCount.preferProfessorRating.description"
+msgstr "Applies a lenient 2.0+ RateMyProfessors baseline. Professors without ratings are still allowed."
+
+msgid "scheduleCount.smartOptions.hide"
+msgstr "Hide smart options"
+
+msgid "scheduleCount.smartOptions.show"
+msgstr "Show smart options"
+
+msgid "scheduleCount.smartOptions.description"
+msgstr "Let the planner softly bias schedules toward easier, better-rated, and more compact choices."
+
+msgid "scheduleCount.smartOptions.label"
+msgstr "Smart options"
+
+msgid "scheduleCount.preferProfessorRating.label"
+msgstr "Prefer professors with better ratings"
+
 msgid "scheduleCount.rating.description"
 msgstr "Professors without a rating are always allowed."
 
@@ -2463,6 +2502,12 @@ msgstr "Earliest class start"
 
 msgid "scheduleCount.time.latest"
 msgstr "Latest class end"
+
+msgid "scheduleCount.time.and"
+msgstr "and"
+
+msgid "scheduleCount.time.rangeLabel"
+msgstr "Class times between"
 
 msgid "search.noGradeData"
 msgstr "No grade data"

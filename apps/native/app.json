@@ -13,7 +13,7 @@
     "scheme": "uoplan",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "bundleIdentifier": "party.uoplan.native",
+      "bundleIdentifier": "party.uoplan.app",
       "supportsTablet": true,
       "associatedDomains": ["applinks:uoplan.party", "applinks:www.uoplan.party"],
       "infoPlist": {
@@ -91,6 +91,9 @@
         }
       ]
     ],
+    "updates": {
+      "assetPatternsToBeBundled": ["assets/**/*"]
+    },
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true

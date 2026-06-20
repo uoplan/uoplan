@@ -67,6 +67,7 @@ function cargoNdkInstalled(extraEnv) {
 }
 
 run("pnpm", ["generate"]);
+run("node", ["scripts/copy-bundled-data.mjs"], nativeDir);
 
 if (process.env.EAS_BUILD_PLATFORM === "ios") {
   const rustEnv = ensureRustup();

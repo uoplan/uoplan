@@ -50,7 +50,23 @@ jest.mock("expo-file-system", () => {
 });
 
 import { fileSystemStorage } from "@/data/file-system-storage";
-import { createDataTransport } from "@/data/data-client";
+import { createDataTransport, resolveDevDataHost } from "@/data/data-client";
+
+describe("resolveDevDataHost", () => {
+  it("rewrites the Android emulator loopback to 10.0.2.2", () => {
+    expect(resolveDevDataHost("127.0.0.1", "android")).toBe("10.0.2.2");
+    expect(resolveDevDataHost("localhost", "android")).toBe("10.0.2.2");
+  });
+
+  it("leaves a LAN IP untouched on Android (physical device)", () => {
+    expect(resolveDevDataHost("192.168.1.5", "android")).toBe("192.168.1.5");
+  });
+
+  it("uses the host as-is on iOS simulators and falls back to localhost when empty", () => {
+    expect(resolveDevDataHost("127.0.0.1", "ios")).toBe("127.0.0.1");
+    expect(resolveDevDataHost("", "ios")).toBe("localhost");
+  });
+});
 
 describe("fileSystemStorage", () => {
   it("round-trips bytes by key", async () => {

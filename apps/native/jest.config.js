@@ -36,6 +36,7 @@ module.exports = {
     "^@lingui/core/(.*)$": "<rootDir>/node_modules/@lingui/core/$1",
     "^@lingui/react$": "<rootDir>/node_modules/@lingui/react",
     "^@lingui/react/(.*)$": "<rootDir>/node_modules/@lingui/react/$1",
+    "\\.pb$": "<rootDir>/jest-binary-asset-mock.js",
     "\\.css$": "<rootDir>/jest-style-mock.js",
   },
 };

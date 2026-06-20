@@ -82,6 +82,8 @@ function setGenerationFixture({
     selectedPerRequirement: {},
     requirementSlotsUserTouched: {},
     selectedOptionsPerRequirement: {},
+    constrainedPerRequirement: {},
+    autoConstrainedPerRequirement: {},
     prereqEligibleCourses: catalogue.courses.map((c) => c.code),
     filteredPrereqEligibleCourses: catalogue.courses.map((c) => c.code),
     levelBuckets: ["undergrad"],
@@ -200,9 +202,9 @@ describe("schedule generation respects per-category limits", () => {
     const csiReqId = remaining[0]?.requirementId ?? "req-0";
 
     // Pin CSI 4101 via constrainedPerRequirement to simulate the user explicitly
-    // choosing it. The generator should treat it as pinned and only pull one
-    // additional CSI course from the pools, plus enough non-computing courses
-    // to reach the term target. Use 3 courses so: 1 pinned CSI + 2 from pools.
+    // choosing it. The generator should treat it as pinned and pull enough
+    // additional courses from the pools to reach the term target. The advanced
+    // store count is additional electives, so 2 means: 1 pinned CSI + 2 from pools.
     setGenerationFixture({
       catalogue: testCatalogue,
       schedulesData: simpleSchedules,
@@ -210,7 +212,7 @@ describe("schedule generation respects per-category limits", () => {
       program: programWithCsiAndElectives,
       completedCourses,
       remaining,
-      coursesThisSemester: 3,
+      coursesThisSemester: 2,
       state: {
         constrainedPerRequirement: { [csiReqId]: ["CSI 4101"] },
         electiveLevelBuckets: [1000, 2000, 3000, 4000],

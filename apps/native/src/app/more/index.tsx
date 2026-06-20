@@ -63,10 +63,10 @@ export default function MoreScreen() {
 
   return (
     <RedesignScreen gap={Spacing.three} backLabel="Back" onBack={() => router.back()}>
-      <ScreenHeader title="More" subtitle="Settings, about and developer tools" />
+      <ScreenHeader title="Settings" subtitle="About, support and developer tools" />
 
       <ResponsiveColumns gap={Spacing.three}>
-        <Section title={tr("native.more.settings")}>
+        <Section title="Preferences">
           <ListRow
             icon="globe"
             title={tr("native.language.title")}

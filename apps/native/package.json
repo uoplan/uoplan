@@ -4,9 +4,13 @@
   "private": true,
   "main": "expo-router/entry",
   "scripts": {
+    "prebuild:data": "node ./scripts/copy-bundled-data.mjs",
+    "prestart": "pnpm prebuild:data",
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
+    "preandroid": "pnpm prebuild:data",
     "android": "expo run:android",
+    "preios": "pnpm prebuild:data",
     "ios": "expo run:ios",
     "web": "expo start --web",
     "postinstall": "node ./scripts/eas-postinstall.mjs",

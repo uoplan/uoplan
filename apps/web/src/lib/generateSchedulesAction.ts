@@ -11,6 +11,7 @@ import {
   cacheWithPerCourseVirtualFilter,
   diagnoseTimetableFailure,
   gateRemainingByPriority,
+  isGroupToken,
   normalizeCourseCode,
   resolveDesiredCourses,
   runAdvancedGeneration,
@@ -30,6 +31,7 @@ import type {
 import { buildColorMap } from "./colorMap";
 import { avoidedDaysFromBlocks } from "./blockedTimes";
 import type { GenerateSchedulesInput } from "./generateSchedulesInput";
+import { SCHEDULE_COURSE_COUNT_MAX } from "../store/generationDefaults";
 
 // Re-export helpers used by tests and other modules
 export { expandConstrainedPerRequirement, buildPendingGroupPickCounts } from "@uoplan/core";
@@ -41,6 +43,7 @@ type PoolDiagnostics = NonNullable<MappedGenerationResult["poolDiagnostics"]>;
 const DEFAULT_MIN_START_MINUTES = 8 * 60 + 30;
 const DEFAULT_MAX_END_MINUTES = 22 * 60;
 const DEFAULT_LANGUAGE_BUCKETS = ["en", "other"];
+const LENIENT_PROFESSOR_RATING_MIN = 2;
 
 function sumCompletedFirstYearCredits(
   completedCourses: readonly string[],
@@ -52,6 +55,42 @@ function sumCompletedFirstYearCredits(
     const course = cache.getCourse(code);
     return sum + (course?.credits ?? 3);
   }, 0);
+}
+
+function countSelectedGenerationCourses(
+  constrainedPerRequirement: Record<string, string[]>,
+  standaloneCourses: readonly string[],
+  completedCourses: readonly string[],
+): number {
+  const completed = new Set(completedCourses.map((code) => normalizeCourseCode(code)));
+  const selected = new Set<string>();
+  let groupTokenSlots = 0;
+  const add = (code: string) => {
+    if (isGroupToken(code)) {
+      groupTokenSlots += 1;
+      return;
+    }
+    const norm = normalizeCourseCode(code);
+    if (completed.has(norm)) return;
+    selected.add(norm);
+  };
+  for (const codes of Object.values(constrainedPerRequirement)) {
+    for (const code of codes) add(code);
+  }
+  for (const code of standaloneCourses) add(code);
+  return selected.size + groupTokenSlots;
+}
+
+function normalizedProfessorRatingPreference(
+  rating: number | null | undefined,
+): number | undefined {
+  return rating != null ? LENIENT_PROFESSOR_RATING_MIN : undefined;
+}
+
+function clampAdditionalElectiveCount(count: number, selectedCount: number): number {
+  const max = Math.max(0, SCHEDULE_COURSE_COUNT_MAX - selectedCount);
+  const min = selectedCount > 0 ? 0 : 1;
+  return Math.max(min, Math.min(max, count));
 }
 
 function buildActiveFilterHints(opts: {
@@ -279,11 +318,14 @@ export async function generateSchedulesAction(
   }
 
   const completedFirstYearCredits = sumCompletedFirstYearCredits(completedCourses, cache);
+  const effectiveMinProfessorRating = normalizedProfessorRatingPreference(
+    generationMinProfessorRating,
+  );
 
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,
     maxEndMinutes: generationMaxEndMinutes,
-    minProfessorRating: generationMinProfessorRating ?? undefined,
+    minProfessorRating: effectiveMinProfessorRating,
     professorRatings: professorRatings ?? undefined,
     maxFirstYearCredits: generationLimitFirstYearCredits
       ? Math.max(0, 48 - (completedFirstYearCredits ?? 0))
@@ -325,6 +367,13 @@ export async function generateSchedulesAction(
     effectiveConstrainedPerRequirement[reqId] = out;
   }
 
+  const selectedElectivesCount = countSelectedGenerationCourses(
+    effectiveConstrainedPerRequirement,
+    desiredResolution.standalone,
+    completedCourses,
+  );
+  const advancedCoursesThisSemester = coursesThisSemester + selectedElectivesCount;
+
   const advancedInput: AdvancedRequestInput = {
     constraints,
     completedCourses,
@@ -334,7 +383,7 @@ export async function generateSchedulesAction(
     constrainedPerRequirementRaw: effectiveConstrainedPerRequirement,
     selectedPerRequirement,
     selectedOptionsPerRequirement,
-    coursesThisSemester,
+    coursesThisSemester: advancedCoursesThisSemester,
     forcedCourses: desiredResolution.standalone,
     levelBuckets,
     languageBuckets,
@@ -363,13 +412,13 @@ export async function generateSchedulesAction(
     generationMinStartMinutes,
     generationMaxEndMinutes,
     blockedTimes: input.blockedTimes,
-    generationMinProfessorRating,
+    generationMinProfessorRating: effectiveMinProfessorRating,
     virtualSectionsOnly,
     includeClosedComponents,
     languageBuckets,
   });
 
-  const optionalSlotsNeeded = coursesThisSemester - pinned.length;
+  const optionalSlotsNeeded = advancedCoursesThisSemester - pinned.length;
   if (filteredOptionalPool.length < optionalSlotsNeeded) {
     const swapPool = [...new Set([...pinned, ...filteredOptionalPool])];
     return {
@@ -383,7 +432,7 @@ export async function generateSchedulesAction(
         {
           emptyPools: poolDiagnostics?.emptyPools ?? [],
           totalAvailable: poolDiagnostics?.totalAvailable ?? swapPool.length,
-          totalNeeded: poolDiagnostics?.totalNeeded ?? coursesThisSemester,
+          totalNeeded: poolDiagnostics?.totalNeeded ?? advancedCoursesThisSemester,
           timetableFailure: null as unknown as TimetableFailureDiagnostics,
           activeFilterHints: filterHints,
         },
@@ -397,7 +446,7 @@ export async function generateSchedulesAction(
       poolDiagnostics,
       pinned,
       filteredOptionalPool,
-      coursesThisSemester,
+      advancedCoursesThisSemester,
       diagCache,
       constraints,
       filterHints,
@@ -456,11 +505,18 @@ async function handleBasicGeneration(
   } = input;
 
   const completedFirstYearCredits = sumCompletedFirstYearCredits(completedCourses, cache);
+  const effectiveMinProfessorRating = normalizedProfessorRatingPreference(
+    generationMinProfessorRating,
+  );
+  const effectiveBasicElectivesCount = clampAdditionalElectiveCount(
+    basicElectivesCount,
+    basketCourses.length,
+  );
 
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,
     maxEndMinutes: generationMaxEndMinutes,
-    minProfessorRating: generationMinProfessorRating ?? undefined,
+    minProfessorRating: effectiveMinProfessorRating,
     professorRatings: professorRatings ?? undefined,
     maxFirstYearCredits: generationLimitFirstYearCredits
       ? Math.max(0, 48 - completedFirstYearCredits)
@@ -472,7 +528,7 @@ async function handleBasicGeneration(
   const basicInput: BasicRequestInput = {
     constraints,
     basketCourses,
-    basicElectivesCount,
+    basicElectivesCount: effectiveBasicElectivesCount,
     basicExcludedCategories,
     completedCourses,
     studentPrograms,
@@ -498,7 +554,7 @@ async function handleBasicGeneration(
     const timetableFailure = diagnoseTimetableFailure({
       pinnedCourseCodes: basketCourses,
       optionalCourseCodes: optionalPool,
-      targetCount: basketCourses.length + basicElectivesCount,
+      targetCount: basketCourses.length + effectiveBasicElectivesCount,
       cache: cacheWithPerCourseVirtualFilter(
         cache,
         includeClosedComponents,
@@ -520,7 +576,7 @@ async function handleBasicGeneration(
         details: {
           emptyPools: [],
           totalAvailable: basketCourses.length + optionalPool.length,
-          totalNeeded: basketCourses.length + basicElectivesCount,
+          totalNeeded: basketCourses.length + effectiveBasicElectivesCount,
           timetableFailure,
         },
       },

@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { distributionGpa } from "@uoplan/core/gradeDistribution";
 
-import { GradeBandColor, Surface } from "@/constants/theme";
+import { Fonts, GradeBandColor, Surface } from "@/constants/theme";
 
 interface LeaderboardCourse {
   code: string;
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
   rank: {
     width: 18,
     textAlign: "center",
+    fontFamily: Fonts.monoMedium,
     fontSize: 13,
     fontWeight: "700",
     color: Surface.dimmed,
@@ -114,11 +115,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   code: {
+    fontFamily: Fonts.monoMedium,
     fontSize: 13,
     fontWeight: "600",
     color: Surface.label,
   },
   gpa: {
+    fontFamily: Fonts.monoMedium,
     fontSize: 13,
     fontWeight: "700",
     color: Surface.label,

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 import {
+  ActionIcon,
   Alert,
   Badge,
   Box,
@@ -10,7 +11,6 @@ import {
   MultiSelect,
   NumberInput,
   Paper,
-  Select,
   Stack,
   Switch,
   Text,
@@ -24,6 +24,8 @@ import { minutesToTime24 } from "@uoplan/core";
 import { BasicCourseFiltersCard } from "../../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../../i18n";
+
+const LENIENT_PROFESSOR_RATING_MIN = 2;
 
 /** Parse HH:mm from input type="time" to minutes since midnight. */
 function timeStringToMinutes(value: string): number {
@@ -131,14 +133,7 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
   const [secondaryOptionsOpen, setSecondaryOptionsOpen] = useState(
     props.secondaryOptionsDisclosure?.defaultOpen ?? false,
   );
-  const ratingOptions = [
-    { value: "2", label: "2.0+" },
-    { value: "2.5", label: "2.5+" },
-    { value: "3", label: "3.0+" },
-    { value: "3.5", label: "3.5+" },
-    { value: "4", label: "4.0+" },
-    { value: "4.5", label: "4.5+" },
-  ];
+  const [smartOptionsOpen, setSmartOptionsOpen] = useState(false);
   const dayOptions: { value: DayOfWeek; label: string }[] = [
     { value: "Mo", label: tr("scheduleCount.day.monday") },
     { value: "Tu", label: tr("scheduleCount.day.tuesday") },
@@ -150,32 +145,47 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
   ];
 
   const timeWindowControl = (
-    <Group align="flex-end" gap="md">
-      <TextInput
-        label={tr("scheduleCount.time.earliest")}
-        type="time"
-        value={minutesToTime24(props.minStartMinutes)}
-        onChange={(e) => props.onMinStartMinutesChange(timeStringToMinutes(e.currentTarget.value))}
-      />
-      <TextInput
-        label={tr("scheduleCount.time.latest")}
-        type="time"
-        value={minutesToTime24(props.maxEndMinutes)}
-        onChange={(e) => props.onMaxEndMinutesChange(timeStringToMinutes(e.currentTarget.value))}
-      />
-    </Group>
-  );
-
-  const professorRatingControl = (
-    <Select
-      label={tr("scheduleCount.rating.label")}
-      description={tr("scheduleCount.rating.description")}
-      placeholder={tr("scheduleCount.rating.placeholder")}
-      data={ratingOptions}
-      value={props.minProfessorRating == null ? null : String(props.minProfessorRating)}
-      onChange={(v) => props.onMinProfessorRatingChange(v == null ? null : Number(v))}
-      clearable
-    />
+    <Paper
+      withBorder
+      radius="md"
+      p="sm"
+      style={{
+        backgroundColor: "var(--app-surface-sunken)",
+      }}
+    >
+      <Stack gap="xs">
+        <Text size="sm" fw={500}>
+          {tr("scheduleCount.time.rangeLabel")}
+        </Text>
+        <Group gap="xs" wrap="nowrap" align="center">
+          <TextInput
+            aria-label={tr("scheduleCount.time.earliest")}
+            type="time"
+            value={minutesToTime24(props.minStartMinutes)}
+            onChange={(e) =>
+              props.onMinStartMinutesChange(timeStringToMinutes(e.currentTarget.value))
+            }
+            radius="md"
+            style={{ flex: 1 }}
+            styles={{ input: { fontVariantNumeric: "tabular-nums", textAlign: "center" } }}
+          />
+          <Text size="sm" c="dimmed">
+            {tr("scheduleCount.time.and")}
+          </Text>
+          <TextInput
+            aria-label={tr("scheduleCount.time.latest")}
+            type="time"
+            value={minutesToTime24(props.maxEndMinutes)}
+            onChange={(e) =>
+              props.onMaxEndMinutesChange(timeStringToMinutes(e.currentTarget.value))
+            }
+            radius="md"
+            style={{ flex: 1 }}
+            styles={{ input: { fontVariantNumeric: "tabular-nums", textAlign: "center" } }}
+          />
+        </Group>
+      </Stack>
+    </Paper>
   );
 
   const avoidedDaysControl = (
@@ -217,6 +227,103 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
     />
   );
 
+  const professorRatingPreferenceControl = (
+    <Checkbox
+      label={tr("scheduleCount.preferProfessorRating.label")}
+      description={tr("scheduleCount.preferProfessorRating.description")}
+      checked={props.minProfessorRating != null}
+      onChange={(e) =>
+        props.onMinProfessorRatingChange(
+          e.currentTarget.checked ? LENIENT_PROFESSOR_RATING_MIN : null,
+        )
+      }
+    />
+  );
+
+  const firstYearLimitControl =
+    props.totalFirstYearCredits > 0 ? (
+      <Checkbox
+        label={tr("scheduleCount.firstYear.limitLabel")}
+        description={tr("scheduleCount.firstYear.limitDescription", {
+          credits: props.totalFirstYearCredits,
+          suffix: props.totalFirstYearCredits === 1 ? "" : "s",
+        })}
+        checked={props.limitFirstYearCredits}
+        onChange={(e) => props.onLimitFirstYearCreditsChange(e.currentTarget.checked)}
+      />
+    ) : null;
+
+  const smartOptionValues = [
+    props.compressedSchedule,
+    props.preferEasierCourses,
+    props.preferHigherSentiment,
+    props.minProfessorRating != null,
+    ...(props.totalFirstYearCredits > 0 ? [props.limitFirstYearCredits] : []),
+  ];
+  const smartOptionsChecked = smartOptionValues.every(Boolean);
+  const smartOptionsIndeterminate = !smartOptionsChecked && smartOptionValues.some(Boolean);
+  const setAllSmartOptions = (checked: boolean) => {
+    props.onCompressedScheduleChange(checked);
+    props.onPreferEasierCoursesChange(checked);
+    props.onPreferHigherSentimentChange(checked);
+    props.onMinProfessorRatingChange(checked ? LENIENT_PROFESSOR_RATING_MIN : null);
+    if (props.totalFirstYearCredits > 0) props.onLimitFirstYearCreditsChange(checked);
+  };
+
+  const smartOptionsControl = (
+    <Paper
+      withBorder
+      radius="md"
+      p="sm"
+      style={{
+        backgroundColor: smartOptionsOpen ? "var(--app-surface)" : "var(--app-surface-sunken)",
+      }}
+    >
+      <Stack gap="sm">
+        <Group justify="space-between" align="flex-start" wrap="nowrap">
+          <Checkbox
+            label={tr("scheduleCount.smartOptions.label")}
+            description={tr("scheduleCount.smartOptions.description")}
+            checked={smartOptionsChecked}
+            indeterminate={smartOptionsIndeterminate}
+            onChange={() => setAllSmartOptions(!smartOptionsChecked)}
+          />
+          <ActionIcon
+            variant="subtle"
+            color="gray"
+            radius="md"
+            aria-label={tr(
+              smartOptionsOpen
+                ? "scheduleCount.smartOptions.hide"
+                : "scheduleCount.smartOptions.show",
+            )}
+            aria-expanded={smartOptionsOpen}
+            aria-controls="generation-smart-options-collapse"
+            onClick={() => setSmartOptionsOpen((open) => !open)}
+          >
+            <IconChevronDown
+              size={16}
+              aria-hidden="true"
+              style={{
+                transform: smartOptionsOpen ? "rotate(0deg)" : "rotate(-90deg)",
+                transition: "transform 150ms ease",
+              }}
+            />
+          </ActionIcon>
+        </Group>
+        <Collapse id="generation-smart-options-collapse" expanded={smartOptionsOpen}>
+          <Stack gap="sm" pt="xs">
+            {compressedControl}
+            {preferEasierControl}
+            {preferHigherSentimentControl}
+            {professorRatingPreferenceControl}
+            {firstYearLimitControl}
+          </Stack>
+        </Collapse>
+      </Stack>
+    </Paper>
+  );
+
   const courseFiltersControl = (
     <BasicCourseFiltersCard
       levelBuckets={props.levelBuckets}
@@ -254,9 +361,7 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
   const fineTuningControls = (
     <>
       {timeWindowControl}
-      {compressedControl}
-      {preferEasierControl}
-      {preferHigherSentimentControl}
+      {smartOptionsControl}
       {avoidedDaysControl}
     </>
   );
@@ -264,7 +369,6 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
   // Bulkier / nicher controls kept behind the disclosure in basic mode.
   const disclosureControls = (
     <>
-      {professorRatingControl}
       {courseFiltersControl}
       {frenchImmersionControl}
     </>
@@ -274,12 +378,9 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
   const secondaryOptionsInline = (
     <>
       {timeWindowControl}
-      {professorRatingControl}
       {avoidedDaysControl}
       {courseFiltersControl}
-      {compressedControl}
-      {preferEasierControl}
-      {preferHigherSentimentControl}
+      {smartOptionsControl}
       {frenchImmersionControl}
     </>
   );
@@ -304,6 +405,7 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
 
       <NumberInput
         label={tr("generationOptions.count.label")}
+        description={tr("generationOptions.count.description")}
         value={props.countValue}
         onChange={(v) => {
           if (typeof v !== "number" || Number.isNaN(v)) return;
@@ -320,17 +422,6 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
         <Alert color="yellow" variant="light" radius="md">
           {tr("scheduleCount.firstYear.warning", { credits: props.totalFirstYearCredits })}
         </Alert>
-      )}
-      {props.totalFirstYearCredits > 0 && (
-        <Checkbox
-          label={tr("scheduleCount.firstYear.limitLabel")}
-          description={tr("scheduleCount.firstYear.limitDescription", {
-            credits: props.totalFirstYearCredits,
-            suffix: props.totalFirstYearCredits === 1 ? "" : "s",
-          })}
-          checked={props.limitFirstYearCredits}
-          onChange={(e) => props.onLimitFirstYearCreditsChange(e.currentTarget.checked)}
-        />
       )}
 
       {props.secondaryOptionsDisclosure ? (

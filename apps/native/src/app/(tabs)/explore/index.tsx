@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
-import { Linking, ScrollView, StyleSheet, View } from "react-native";
+import { Linking, StyleSheet, View } from "react-native";
 
 import {
   courseSentimentByNorm,
@@ -29,13 +29,13 @@ import {
   BannerPill,
   type ChipOption,
   ChipRow,
+  EdgeFadeCarousel,
   RedesignScreen,
   ScreenHeader,
   SearchField,
 } from "@/components/redesign";
-import { BasketFab } from "@/components/basket-fab";
 import { Spacing, Surface } from "@/constants/theme";
-import { useBasket } from "@/data/basket-provider";
+import { useCompletedCourses } from "@/data/completed-courses-provider";
 import { useAppData, useExploreIndex, useFeedback } from "@/data/data-provider";
 import {
   DIFFICULTY_VALUES,
@@ -196,13 +196,7 @@ function ResultSection({ title, children }: { title: string; children: React.Rea
       {useGrid ? (
         <ResponsiveColumns gap={Spacing.two}>{children}</ResponsiveColumns>
       ) : (
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.carousel}
-        >
-          {children}
-        </ScrollView>
+        <EdgeFadeCarousel gutter={Spacing.three}>{children}</EdgeFadeCarousel>
       )}
     </View>
   );
@@ -226,7 +220,7 @@ export default function ExploreScreen() {
   const { bundle, schedulesByTerm } = useAppData();
   const index = useExploreIndex();
   const feedback = useFeedback();
-  const basket = useBasket();
+  const completed = useCompletedCourses();
   const { personalization } = useScheduleOptions();
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<ExploreFilterState>(() => createEmptyFilters());
@@ -359,16 +353,22 @@ export default function ExploreScreen() {
       schedules,
       disciplines: { disciplines: bundle.disciplines, faculties: bundle.faculties },
       programUrl: personalization.programUrl,
-      completedCourses: basket.codes,
+      completedCourses: completed.codes,
     });
-  }, [basket.codes, bundle, personalization.programUrl, personalization.termId, schedulesByTerm]);
+  }, [
+    completed.codes,
+    bundle,
+    personalization.programUrl,
+    personalization.termId,
+    schedulesByTerm,
+  ]);
 
   const requirementCandidateSet = useMemo(
     () =>
       filters.contributesToRequirements && requirements
-        ? buildRequirementCandidateSet(requirements.remaining, basket.codes)
+        ? buildRequirementCandidateSet(requirements.remaining, completed.codes)
         : null,
-    [basket.codes, filters.contributesToRequirements, requirements],
+    [completed.codes, filters.contributesToRequirements, requirements],
   );
 
   const searchFilters = useMemo<ExploreSearchFilters>(
@@ -422,11 +422,7 @@ export default function ExploreScreen() {
   };
 
   return (
-    <RedesignScreen
-      gap={Spacing.three}
-      cart={<BasketFab />}
-      onSettings={() => router.push("/more")}
-    >
+    <RedesignScreen gap={Spacing.three}>
       <ScreenHeader title="Course explorer" subtitle="Search courses, programs and professors" />
 
       {showBanner ? (
@@ -445,7 +441,12 @@ export default function ExploreScreen() {
         placeholder="Search courses, profs, programs…"
       />
 
-      <ChipRow options={filterChips} value={activeFilterKeys} onSelect={openFilterDrawer} />
+      <ChipRow
+        options={filterChips}
+        value={activeFilterKeys}
+        onSelect={openFilterDrawer}
+        gutter={Spacing.three}
+      />
 
       {searching ? (
         totalResults > 0 ? (
@@ -569,11 +570,6 @@ const styles = StyleSheet.create({
   },
   section: {
     gap: Spacing.two,
-  },
-  carousel: {
-    flexDirection: "row",
-    gap: Spacing.two,
-    paddingVertical: 2,
   },
   empty: {
     paddingVertical: Spacing.five,

@@ -274,6 +274,16 @@ export const ICON_PATHS: Record<string, TablerIconPaths> = {
     ],
     filled: true,
   },
+  trash: {
+    paths: [
+      "M4 7l16 0",
+      "M10 11l0 6",
+      "M14 11l0 6",
+      "M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12",
+      "M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3",
+    ],
+    filled: false,
+  },
   "waveform.path.ecg": { paths: ["M3 12h4.5l1.5 -6l4 12l2 -9l1.5 3h4.5"], filled: false },
   xmark: { paths: ["M18 6l-12 12", "M6 6l12 12"], filled: false },
 };

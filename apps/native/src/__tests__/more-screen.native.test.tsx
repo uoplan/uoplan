@@ -49,10 +49,10 @@ beforeEach(() => {
   mockPush.mockClear();
 });
 
-it("does not show Personalize in More because it is a tab", async () => {
+it("does not show Personalize in settings because it is a tab", async () => {
   const { getByText, queryByText } = await renderMore();
 
-  expect(getByText("More")).toBeTruthy();
+  expect(getByText("Settings")).toBeTruthy();
   expect(queryByText("Planning")).toBeNull();
   expect(queryByText("Personalize")).toBeNull();
 });

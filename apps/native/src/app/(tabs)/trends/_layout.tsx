@@ -1,5 +1,8 @@
 import { Stack } from "expo-router";
+import { View } from "react-native";
 
+import { GlobalBasketCart } from "@/components/global-basket-cart";
+import { GlobalSettingsButton } from "@/components/global-settings-button";
 import { Surface } from "@/constants/theme";
 
 /**
@@ -9,17 +12,21 @@ import { Surface } from "@/constants/theme";
  */
 export default function TrendsLayout() {
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        contentStyle: { backgroundColor: Surface.page },
-      }}
-    >
-      <Stack.Screen name="index" options={{ title: "Trends" }} />
-      <Stack.Screen name="courses" options={{ title: "Choosing courses" }} />
-      <Stack.Screen name="disciplines" options={{ title: "Disciplines" }} />
-      <Stack.Screen name="feedback" options={{ title: "Course feedback" }} />
-      <Stack.Screen name="leaderboard" options={{ title: "Leaderboard" }} />
-    </Stack>
+    <View style={{ flex: 1 }}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: Surface.page },
+        }}
+      >
+        <Stack.Screen name="index" options={{ title: "Trends" }} />
+        <Stack.Screen name="courses" options={{ title: "Choosing courses" }} />
+        <Stack.Screen name="disciplines" options={{ title: "Disciplines" }} />
+        <Stack.Screen name="feedback" options={{ title: "Course feedback" }} />
+        <Stack.Screen name="leaderboard" options={{ title: "Leaderboard" }} />
+      </Stack>
+      <GlobalBasketCart />
+      <GlobalSettingsButton />
+    </View>
   );
 }

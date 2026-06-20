@@ -1,7 +1,10 @@
 // Learn more https://docs.expo.dev/guides/customizing-metro
 const { getDefaultConfig } = require("expo/metro-config");
+const path = require("node:path");
 
 const config = getDefaultConfig(__dirname);
+
+config.resolver.assetExts = Array.from(new Set([...config.resolver.assetExts, "pb"]));
 
 // Metro does not honor the package `exports` subpath map for our workspace
 // packages, so deep imports like `@uoplan/core/gradeDistribution` fail to
@@ -35,7 +38,16 @@ const I18N_CATALOG_PREFIX = "@uoplan/i18n/catalogs/";
 // app-relative `require.resolve` so the rewrite tracks the installed version.
 const LINGUI_SINGLETONS = ["@lingui/react", "@lingui/core"];
 
+// Expo SDK 56 includes `expo-asset` transitively through `expo`, but pnpm does
+// not expose transitive packages at apps/native/node_modules. Resolve it from
+// Expo's package directory without adding a duplicate direct dependency.
+const EXPO_PACKAGE_DIR = path.dirname(require.resolve("expo/package.json"));
+const EXPO_ASSET_ENTRY = require.resolve("expo-asset", { paths: [EXPO_PACKAGE_DIR] });
+
 config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (moduleName === "expo-asset") {
+    return context.resolveRequest(context, EXPO_ASSET_ENTRY, platform);
+  }
   if (moduleName.startsWith(PROTO_PREFIX) && !moduleName.startsWith(`${PROTO_PREFIX}src/`)) {
     const sub = moduleName.slice(PROTO_PREFIX.length);
     return context.resolveRequest(context, `@uoplan/proto/src/generated/${sub}`, platform);

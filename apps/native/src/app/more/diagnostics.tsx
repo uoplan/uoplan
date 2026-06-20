@@ -42,7 +42,7 @@ const sharedThemeIds = THEME_LIST.map((theme) => theme.id).join(", ");
 export default function DiagnosticsScreen() {
   const router = useRouter();
   return (
-    <RedesignScreen gap={Spacing.three} backLabel="More" onBack={() => router.back()}>
+    <RedesignScreen gap={Spacing.three} backLabel="Settings" onBack={() => router.back()}>
       <ScreenHeader title="Diagnostics" subtitle="Shared-core wiring proof" />
 
       <ThemedView style={styles.content}>

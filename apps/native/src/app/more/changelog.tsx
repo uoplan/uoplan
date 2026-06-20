@@ -2,70 +2,62 @@ import { useMemo } from "react";
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 
-import { Badge, type BadgeTone, Paper, Stack, Text, Title } from "@uoplan/ui";
+import { Stack, Text, Title } from "@uoplan/ui";
 
 import { RedesignScreen, ScreenHeader } from "@/components/redesign";
 import { Spacing, Surface } from "@/constants/theme";
 import { CHANGELOG_MD } from "@/data/changelog.generated";
 import { type ChangelogSection, parseChangelog } from "@/lib/changelog";
 
-/** Map a conventional-changelog section heading to a badge tone. */
-function sectionTone(title: string): BadgeTone {
-  const lower = title.toLowerCase();
-  if (lower.includes("feature")) return "success";
-  if (lower.includes("fix")) return "danger";
-  if (lower.includes("performance")) return "accent";
-  return "neutral";
+/** Sentence-case a conventional-changelog heading (e.g. "Bug Fixes" -> "Bug fixes"). */
+function sentenceCase(title: string): string {
+  return title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
 }
 
 function SectionBlock({ section }: { section: ChangelogSection }) {
   return (
-    <Stack gap="xs">
-      <View style={styles.sectionHead}>
-        <Badge tone={sectionTone(section.title)}>{section.title}</Badge>
-        <Text size="xs" dimmed>
-          {section.entries.length}
-        </Text>
-      </View>
-      <Stack gap="xs">
-        {section.entries.map((entry, i) => (
-          <View key={`${entry.text}-${i}`} style={styles.entryRow}>
-            <View style={styles.bullet} />
-            <View style={styles.entryText}>
-              <Text size="sm">
-                {entry.scope ? (
-                  <Text size="sm" weight="semibold" color={Surface.accent}>
-                    {entry.scope}:{" "}
-                  </Text>
-                ) : null}
-                {entry.text}
-              </Text>
-            </View>
+    <View style={styles.section}>
+      <Text size="xs" weight="semibold" color={Surface.dimmed}>
+        {sentenceCase(section.title)}
+      </Text>
+      {section.entries.map((entry, i) => (
+        <View key={`${entry.text}-${i}`} style={styles.entryRow}>
+          <View style={styles.bullet} />
+          <View style={styles.entryText}>
+            <Text size="sm">
+              {entry.scope ? (
+                <Text size="sm" weight="semibold" color={Surface.accent}>
+                  {entry.scope}:{" "}
+                </Text>
+              ) : null}
+              {entry.text}
+            </Text>
           </View>
-        ))}
-      </Stack>
-    </Stack>
+        </View>
+      ))}
+    </View>
   );
 }
 
 /**
  * Changelog screen — the native analogue of the web `/changelog` page. The web
  * app renders compiled HTML; here we parse the same conventional `CHANGELOG.md`
- * into structured release cards with section badges and a tidy commit list,
- * matching the native card aesthetic instead of dumping raw markup.
+ * into a quiet, inline list (no cards, no badges): each release is a version +
+ * date heading followed by its sections, separated by hairline rules.
  */
 export default function ChangelogScreen() {
   const router = useRouter();
   const releases = useMemo(() => parseChangelog(CHANGELOG_MD), []);
 
   return (
-    <RedesignScreen gap={Spacing.three} backLabel="More" onBack={() => router.back()}>
+    <RedesignScreen gap={Spacing.three} backLabel="Settings" onBack={() => router.back()}>
       <ScreenHeader title="Changelog" subtitle="Every release of uoplan, newest first." />
 
-      <Stack gap="md">
-        {releases.map((release) => (
-          <Paper key={release.version} p="md" radius="lg" withBorder shadow="sm">
-            <Stack gap="sm">
+      <Stack gap="lg">
+        {releases.map((release, index) => (
+          <View key={release.version}>
+            {index > 0 ? <View style={styles.divider} /> : null}
+            <View style={styles.release}>
               <View style={styles.releaseHead}>
                 <Title order={4}>{release.version}</Title>
                 {release.date ? (
@@ -77,8 +69,8 @@ export default function ChangelogScreen() {
               {release.sections.map((section) => (
                 <SectionBlock key={section.title} section={section} />
               ))}
-            </Stack>
-          </Paper>
+            </View>
+          </View>
         ))}
       </Stack>
     </RedesignScreen>
@@ -86,15 +78,21 @@ export default function ChangelogScreen() {
 }
 
 const styles = StyleSheet.create({
+  divider: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: Surface.border,
+    marginBottom: Spacing.three,
+  },
+  release: {
+    gap: Spacing.two,
+  },
   releaseHead: {
     flexDirection: "row",
     alignItems: "baseline",
     justifyContent: "space-between",
   },
-  sectionHead: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.two,
+  section: {
+    gap: Spacing.one,
   },
   entryRow: {
     flexDirection: "row",

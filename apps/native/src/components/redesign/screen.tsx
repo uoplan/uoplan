@@ -7,7 +7,7 @@ import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 import { BottomTabInset, MaxContentWidth, Spacing, Surface } from "@/constants/theme";
 
 import { GlassIconButton } from "./glass-button";
-import { FabStack } from "./fab";
+import { FAB_SLOT, FabStack } from "./fab";
 
 /** Diameter of the sticky-bar glass buttons + the vertical padding around them. */
 const BAR_BUTTON = 40;
@@ -31,13 +31,13 @@ interface RedesignScreenProps {
   /** Extra leading control rendered on the left when there is no back arrow. */
   leading?: ReactNode;
   /**
-   * Floating action button(s) — e.g. the basket / "add to basket" controls.
-   * Rendered in a bottom-right {@link FabStack} (clearing the tab bar), NOT in
-   * the sticky top bar, so they're easy to spot and reach on mobile.
+   * Screen-specific floating action button(s) — e.g. course detail's "add to
+   * basket" control. They float in the bottom-right {@link FabStack} ONE slot
+   * above the always-present global basket cart (mounted per tab stack), so they
+   * sit just above the cart and never overlap it. Leave undefined for screens
+   * that only need the global cart.
    */
   cart?: ReactNode;
-  /** Sticky-bar trailing control: renders a glass settings gear on the right. */
-  onSettings?: () => void;
 }
 
 /**
@@ -45,13 +45,14 @@ interface RedesignScreenProps {
  * tab-bar insets, a centred max-width column, and an optional absolute overlay
  * for FABs / control bars.
  *
- * The header chrome (back arrow on the left, a settings gear on the right) is
- * rendered as a **sticky top bar** that floats over the scrolling content: the
- * glass buttons stay pinned while the page title (rendered by `ScreenHeader` as
- * the first scroll child) scrolls underneath. A full-width top-down gradient
- * scrim fades in as content scrolls beneath the bar — opaque behind the buttons
- * and fading to transparent below them — so the floating buttons stay legible
- * over content without a hard solid band.
+ * The header chrome (a back arrow on the left) is rendered as a **sticky top
+ * bar** that floats over the scrolling content: the glass back button stays
+ * pinned while the page title (rendered by `ScreenHeader` as the first scroll
+ * child) scrolls underneath. A full-width top-down gradient scrim fades in as
+ * content scrolls beneath the bar — opaque behind the button and fading to
+ * transparent below it — so the floating button stays legible over content
+ * without a hard solid band. The settings gear (top-right) is mounted globally
+ * per tab stack via {@link GlobalSettingsButton}, not here.
  *
  * The `cart` prop (basket / "add to basket" controls) is rendered separately as
  * a bottom-right {@link FabStack} so those primary actions are easy to spot and
@@ -66,14 +67,12 @@ export function RedesignScreen({
   backLabel,
   leading,
   cart,
-  onSettings,
 }: RedesignScreenProps) {
   const insets = useSafeAreaInsets();
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const hasLeading = Boolean(onBack || leading);
-  const hasTrailing = Boolean(onSettings);
-  const hasBar = hasLeading || hasTrailing;
+  const hasBar = hasLeading;
 
   const edgeOpacity = scrollY.interpolate({
     inputRange: [0, 28],
@@ -145,21 +144,18 @@ export function RedesignScreen({
                   leading
                 )}
               </View>
-              <View pointerEvents="box-none" style={styles.barSideEnd}>
-                {onSettings ? (
-                  <GlassIconButton
-                    icon="gearshape"
-                    onPress={onSettings}
-                    accessibilityLabel="Settings"
-                  />
-                ) : null}
-              </View>
             </View>
           </View>
         </View>
       ) : null}
 
-      {cart ? <FabStack>{cart}</FabStack> : null}
+      {/*
+       * Screen-specific FABs (e.g. course detail's "add to basket") float ONE
+       * slot above the always-present global basket cart (mounted per tab stack
+       * in the tab `_layout`), so they sit just above the cart without
+       * overlapping it. Most screens pass no `cart` and rely on the global cart.
+       */}
+      {cart ? <FabStack bottomOffset={FAB_SLOT}>{cart}</FabStack> : null}
 
       {overlay}
     </View>
@@ -212,10 +208,5 @@ const styles = StyleSheet.create({
   barSide: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  barSideEnd: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.two,
   },
 });

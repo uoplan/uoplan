@@ -1,41 +1,39 @@
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Alert, Linking, Pressable, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as DocumentPicker from "expo-document-picker";
 import { File } from "expo-file-system";
 
-import { Button, Text } from "@uoplan/ui";
 import type { SchedulesData } from "@uoplan/core/dataTypes";
 import { isOptCourse, normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 
-import { AppIcon } from "@/components/app-icon";
 import { NotificationToggle } from "@/components/notification-toggle";
-import { RequirementPlanner } from "@/components/personalize/requirement-planner";
-import { PillButton } from "@/components/redesign/pill-button";
-import { RedesignScreen, ScreenHeader, StepCard, type StepStatus } from "@/components/redesign";
+import { OptionsStep } from "@/components/personalize/options-step";
+import { ProgramOptionsStep } from "@/components/personalize/program-options-step";
+import { RequirementsStep } from "@/components/personalize/requirements-step";
+import { TermStep } from "@/components/personalize/term-step";
 import {
-  SearchableMultiSelect,
-  SearchableSelect,
-  type SearchableSelectOption,
-} from "@/components/searchable-select";
-import { Spacing, Surface } from "@/constants/theme";
-import { useBasket } from "@/data/basket-provider";
+  TranscriptStep,
+  type TranscriptImportSummary,
+} from "@/components/personalize/transcript-step";
+import { PagedStepper, type PagedStep } from "@/components/paged-stepper";
+import { type SearchableSelectOption } from "@/components/searchable-select";
+import { Surface } from "@/constants/theme";
+import { useCompletedCourses } from "@/data/completed-courses-provider";
 import { useAppData, useExploreIndex } from "@/data/data-provider";
 import type { ExploreProgramEntry } from "@/data/explore-index";
 import { useScheduleOptions } from "@/data/schedule-options-provider";
-import TranscriptExtractor from "@/lib/transcript-extractor.dom";
 import { findBestMatchingProgram, processExtractedPages } from "@/lib/parseTranscriptNative";
 import type { PdfPageText } from "@/lib/parseTranscriptNative";
 import {
   computePersonalizeRequirements,
   DEFAULT_REQUIREMENT_SELECTIONS,
+  hasMissingProgramOptions,
+  programHasOptionGroups,
   setActiveScheduleRequirementContext,
   type PersonalizeRequirementSelections,
 } from "@/lib/personalize-requirements";
-
-const UOZONE = "https://uozone2.uottawa.ca/";
-
-type Step = "program" | "requirements" | null;
 
 export function programOptionsFromEntries(
   programs: readonly ExploreProgramEntry[],
@@ -65,25 +63,22 @@ export function programOptionsFromEntries(
 }
 
 /**
- * Personalize wizard — the native analogue of the web /personalize page: a
- * step-accordion (Term → Program & courses → Fill requirements) with status
- * icons + an active-step accent bar, term/year/program selects, transcript
- * actions, a reminders toggle, and Reset / Generate. Mirrors the web mobile
- * layout. This is its own bottom-tab root; Generate switches to the Schedule
- * tab, where the native engine builds timetables from the persisted basket.
- * Transcript import opens the web flow until on-device parsing ships.
+ * Personalize wizard, the native analogue of the web /personalize page: a
+ * guided, swipeable flow for term, transcript import, manual options, and
+ * requirements. Generate switches to the Schedule tab, where the native engine
+ * builds timetables from the persisted basket and requirement context.
  */
 export default function PersonalizeScreen() {
   const router = useRouter();
   const { bundle, schedulesByTerm, catalogueYears } = useAppData();
   const index = useExploreIndex();
-  const basket = useBasket();
-  const { personalization, setPersonalization, resetPersonalization } = useScheduleOptions();
-  const [openStep, setOpenStep] = useState<Step>("program");
+  const completed = useCompletedCourses();
+  const { personalization, setPersonalization } = useScheduleOptions();
   const [requirementSelections, setRequirementSelections] =
     useState<PersonalizeRequirementSelections>(DEFAULT_REQUIREMENT_SELECTIONS);
   const [pdfBase64, setPdfBase64] = useState<string | null>(null);
   const [transcriptLoading, setTranscriptLoading] = useState(false);
+  const [transcriptSummary, setTranscriptSummary] = useState<TranscriptImportSummary | null>(null);
 
   const termOptions = useMemo<SearchableSelectOption[]>(
     () =>
@@ -133,9 +128,6 @@ export default function PersonalizeScreen() {
   const startYear = personalization.startYear;
   const program = personalization.programUrl;
   const selectedProgramLabel = programOptions.find((p) => p.value === program)?.label ?? null;
-  const ready = [term, program, basket.codes.length > 0 ? "courses" : null].filter(Boolean).length;
-
-  const toggle = (step: Step) => setOpenStep((current) => (current === step ? null : step));
 
   const requirements = useMemo(() => {
     const schedules =
@@ -147,10 +139,10 @@ export default function PersonalizeScreen() {
       schedules,
       disciplines: { disciplines: bundle.disciplines, faculties: bundle.faculties },
       programUrl: program,
-      completedCourses: basket.codes,
+      completedCourses: completed.codes,
       selections: requirementSelections,
     });
-  }, [bundle, schedulesByTerm, term, program, basket.codes, requirementSelections]);
+  }, [bundle, schedulesByTerm, term, program, completed.codes, requirementSelections]);
 
   useEffect(() => {
     if (!program) {
@@ -159,31 +151,31 @@ export default function PersonalizeScreen() {
     }
     setActiveScheduleRequirementContext({
       programUrl: program,
-      completedCourses: basket.codes,
+      completedCourses: completed.codes,
       selections: requirementSelections,
     });
-  }, [program, basket.codes, requirementSelections]);
+  }, [program, completed.codes, requirementSelections]);
 
-  const programStatus: StepStatus = program ? "done" : "active";
-  const requirementsStatus: StepStatus = !program
-    ? "pending"
-    : requirements && requirements.remainingCount === 0
-      ? "done"
-      : "active";
+  const unassignedCount = requirements?.unassignedCompletedCourses.length ?? 0;
   const requirementsTitle = !program
     ? "Pick a program first"
-    : !requirements
+    : !requirements || unassignedCount === 0
       ? "Ready to generate"
-      : requirements.remainingCount === 0
-        ? "All requirements met"
-        : `${requirements.remainingCount} requirement${requirements.remainingCount === 1 ? "" : "s"} remaining`;
+      : `${unassignedCount} course${unassignedCount === 1 ? "" : "s"} to assign`;
+  const programOptionRoots = requirements?.requirementTreeWithStatus ?? [];
+  const showProgramOptions = programHasOptionGroups(programOptionRoots);
+  const missingProgramOptions = hasMissingProgramOptions(
+    programOptionRoots,
+    requirementSelections.selectedOptionsPerRequirement,
+  );
+  const canGenerate = requirements == null || (unassignedCount === 0 && !missingProgramOptions);
 
   const goToSchedule = () => {
     setActiveScheduleRequirementContext(
       program
         ? {
             programUrl: program,
-            completedCourses: basket.codes,
+            completedCourses: completed.codes,
             selections: requirementSelections,
           }
         : null,
@@ -191,22 +183,8 @@ export default function PersonalizeScreen() {
     router.navigate("/schedule");
   };
 
-  const updateBasketCourses = (nextCodes: string[]) => {
-    const next = new Set(nextCodes);
-    for (const code of basket.codes) {
-      if (!next.has(code)) basket.remove(code);
-    }
-    for (const code of nextCodes) {
-      if (!basket.codes.includes(code)) basket.add(code);
-    }
-  };
-
-  const reset = () => {
-    resetPersonalization();
-    setRequirementSelections(DEFAULT_REQUIREMENT_SELECTIONS);
-    setActiveScheduleRequirementContext(null);
-    basket.clear();
-    setOpenStep("program");
+  const updateCompletedCourses = (nextCodes: string[]) => {
+    completed.set(nextCodes);
   };
 
   // Transcript import (on-device): the document picker hands us a PDF, which we
@@ -219,6 +197,7 @@ export default function PersonalizeScreen() {
       const result = await DocumentPicker.getDocumentAsync({ type: "application/pdf" });
       if (result.canceled || !result.assets[0]) return;
       setTranscriptLoading(true);
+      setTranscriptSummary(null);
       const base64 = await new File(result.assets[0].uri).base64();
       setPdfBase64(base64);
     } catch (error) {
@@ -238,12 +217,19 @@ export default function PersonalizeScreen() {
       const inCatalogue = parsed.courses.filter(
         (code) => isOptCourse(normalizeCourseCode(code)) || coursesByCode.has(code),
       );
+      const alreadySelected = new Set(completed.codes);
+      let addedCount = 0;
       for (const code of inCatalogue) {
-        if (!basket.codes.includes(code)) basket.add(code);
+        if (!alreadySelected.has(code)) {
+          completed.add(code);
+          alreadySelected.add(code);
+          addedCount += 1;
+        }
       }
 
+      const nextStartYear = parsed.startingYear !== null ? String(parsed.startingYear) : null;
       if (parsed.startingYear !== null) {
-        setPersonalization({ startYear: String(parsed.startingYear) });
+        setPersonalization({ startYear: nextStartYear });
       }
 
       const { program: matched } = findBestMatchingProgram(parsed.fullText, index.programs);
@@ -251,17 +237,15 @@ export default function PersonalizeScreen() {
         setPersonalization({ programUrl: matched.url });
         setRequirementSelections(DEFAULT_REQUIREMENT_SELECTIONS);
       }
-
       setPdfBase64(null);
       setTranscriptLoading(false);
-      Alert.alert(
-        "Transcript imported",
-        matched
-          ? `Added ${inCatalogue.length} course${inCatalogue.length === 1 ? "" : "s"} and matched ${matched.title}.`
-          : `Added ${inCatalogue.length} course${inCatalogue.length === 1 ? "" : "s"}. Pick your program manually if it wasn't detected.`,
-      );
+      setTranscriptSummary({
+        courseCount: addedCount,
+        startYear: nextStartYear,
+        programTitle: matched?.title ?? null,
+      });
     },
-    [basket, coursesByCode, index.programs, setPersonalization],
+    [completed, coursesByCode, index.programs, setPersonalization],
   );
 
   const handleTranscriptError = useCallback(async (message: string) => {
@@ -273,206 +257,111 @@ export default function PersonalizeScreen() {
     );
   }, []);
 
+  const insets = useSafeAreaInsets();
+
   return (
-    <RedesignScreen gap={Spacing.three}>
-      <ScreenHeader title="Personalize your plan" subtitle={`${ready} of 3 inputs ready`} />
-
-      <NotificationToggle />
-
-      <StepCard
-        stepLabel="Term"
-        title={termOptions.find((t) => t.value === term)?.label ?? "Select a term"}
-        status={term ? "done" : "active"}
-        expanded={openStep === null}
-        onToggle={() => toggle(null)}
-      >
-        <SearchableSelect
-          title="Term"
-          options={termOptions}
-          value={term}
-          onChange={(termId) => setPersonalization({ termId })}
-          placeholder="Select your term…"
-          searchPlaceholder="Search terms"
-          emptyMessage="No terms match your search."
-          clearable={false}
-        />
-      </StepCard>
-
-      <StepCard
-        stepLabel="Program & courses"
-        title={selectedProgramLabel ?? "Program not selected"}
-        status={programStatus}
-        expanded={openStep === "program"}
-        onToggle={() => toggle("program")}
-      >
-        <View style={styles.field}>
-          <Text size="md" weight="bold">
-            First year of study
-          </Text>
-          <Text size="sm" dimmed>
-            Determines which program requirements apply to you.
-          </Text>
-          <SearchableSelect
-            title="First year of study"
-            options={startYearOptions}
-            value={startYear}
-            onChange={(nextStartYear) => setPersonalization({ startYear: nextStartYear })}
-            placeholder="Select your starting year…"
-            searchPlaceholder="Search years"
-            emptyMessage="No start years are available for this data set."
-          />
-        </View>
-
-        <View style={styles.field}>
-          <Text size="md" weight="bold">
-            Select your program
-          </Text>
-          <SearchableSelect
-            title="Program"
-            options={programOptions}
-            value={program}
-            onChange={(programUrl) => {
-              setPersonalization({ programUrl });
-              setRequirementSelections(DEFAULT_REQUIREMENT_SELECTIONS);
-            }}
-            placeholder="Search for your program…"
-            searchPlaceholder="Search programs"
-            emptyMessage="No programs match your search."
-          />
-        </View>
-
-        <View style={styles.field}>
-          <Text size="md" weight="bold">
-            Completed courses
-          </Text>
-          <Text size="sm" dimmed>
-            Select courses from the real catalogue. They are saved to your basket for schedule
-            generation.
-          </Text>
-          <SearchableMultiSelect
-            title="Completed courses"
-            options={courseOptions}
-            values={basket.codes}
-            onChange={updateBasketCourses}
-            placeholder="Search for completed courses…"
-            searchPlaceholder="Search by course code or title"
-            emptyMessage="No courses match your search."
-          />
-          {basket.codes.length > 0 ? (
-            <View style={styles.courseChips}>
-              {basket.codes.map((code) => (
-                <Pressable
-                  key={code}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Remove ${code}`}
-                  onPress={() => basket.remove(code)}
-                  style={styles.courseChip}
-                >
-                  <View style={styles.courseChipCopy}>
-                    <Text size="xs" weight="bold" color={Surface.accent}>
-                      {code}
-                    </Text>
-                    <Text size="xs" dimmed numberOfLines={1}>
-                      {coursesByCode.get(code)?.title ?? "Selected course"}
-                    </Text>
-                  </View>
-                  <AppIcon name="xmark" size={12} color={Surface.dimmed} weight="semibold" />
-                </Pressable>
-              ))}
-            </View>
-          ) : null}
-        </View>
-
-        <Button
-          variant="default"
-          onPress={() => void handleTranscriptPick()}
-          disabled={transcriptLoading}
-        >
-          {transcriptLoading ? "Parsing transcript…" : "Choose transcript"}
-        </Button>
-        <TranscriptExtractor
-          dom={{ matchContents: true }}
-          pdfBase64={pdfBase64}
-          onResult={handleTranscriptResult}
-          onError={handleTranscriptError}
-        />
-        <Pressable
-          onPress={() => void Linking.openURL(UOZONE)}
-          accessibilityRole="link"
-          style={styles.uozone}
-        >
-          <Text size="sm" weight="bold">
-            Request transcript on uoZone
-          </Text>
-          <AppIcon name="arrow.up.right" size={13} color={Surface.label} />
-        </Pressable>
-      </StepCard>
-
-      <StepCard
-        stepLabel="Fill requirements"
-        title={requirementsTitle}
-        status={requirementsStatus}
-        expanded={openStep === "requirements" && program != null}
-        onToggle={() => (program ? toggle("requirements") : undefined)}
-        disabled={!program}
-      >
-        {requirements ? (
-          <View style={styles.field}>
-            <RequirementPlanner
-              readout={requirements}
-              selections={requirementSelections}
-              completedCourses={basket.codes}
-              titleForCourse={(code) => coursesByCode.get(code)?.title}
-              onChange={setRequirementSelections}
-            />
-          </View>
-        ) : (
-          <Text size="sm" dimmed>
-            Pick a program above to see which requirements your completed courses satisfy.
-          </Text>
-        )}
-      </StepCard>
-
-      <View style={styles.actions}>
-        <PillButton label="Generate" variant="primary" onPress={goToSchedule} />
-        <PillButton label="Reset" variant="destructive" onPress={reset} />
-      </View>
-    </RedesignScreen>
+    <View style={[styles.screen, { paddingTop: insets.top }]}>
+      <PagedStepper
+        steps={[
+          {
+            key: "term",
+            title: "Choose a term",
+            description: "Start with the semester you want to plan.",
+            content: (
+              <TermStep
+                options={termOptions}
+                value={term}
+                onChange={(termId) => setPersonalization({ termId })}
+                reminders={<NotificationToggle />}
+              />
+            ),
+          },
+          {
+            key: "transcript",
+            title: "Upload transcript",
+            description: "Skip this if you prefer to enter courses manually.",
+            content: (
+              <TranscriptStep
+                pdfBase64={pdfBase64}
+                loading={transcriptLoading}
+                summary={transcriptSummary}
+                onPick={() => void handleTranscriptPick()}
+                onResult={handleTranscriptResult}
+                onError={handleTranscriptError}
+              />
+            ),
+          },
+          {
+            key: "options",
+            title: "Program & courses",
+            description: "Review your year, program, and completed courses.",
+            content: (
+              <OptionsStep
+                startYearOptions={startYearOptions}
+                programOptions={programOptions}
+                courseOptions={courseOptions}
+                coursesByCode={coursesByCode}
+                startYear={startYear}
+                program={program}
+                selectedProgramLabel={selectedProgramLabel}
+                courseCodes={completed.codes}
+                transcriptSummary={transcriptSummary}
+                onStartYearChange={(nextStartYear) =>
+                  setPersonalization({ startYear: nextStartYear })
+                }
+                onProgramChange={(programUrl) => {
+                  setPersonalization({ programUrl });
+                  setRequirementSelections(DEFAULT_REQUIREMENT_SELECTIONS);
+                }}
+                onCourseCodesChange={updateCompletedCourses}
+                onRemoveCourse={completed.remove}
+              />
+            ),
+          },
+          ...(showProgramOptions
+            ? [
+                {
+                  key: "program-options",
+                  title: "Program options",
+                  description: "Pick the path that matches your plan.",
+                  content: (
+                    <ProgramOptionsStep
+                      program={program}
+                      readout={requirements ?? null}
+                      selections={requirementSelections}
+                      onChange={setRequirementSelections}
+                    />
+                  ),
+                } satisfies PagedStep,
+              ]
+            : []),
+          {
+            key: "requirements",
+            title: "Fill requirements",
+            description: requirementsTitle,
+            content: (
+              <RequirementsStep
+                program={program}
+                readout={requirements ?? null}
+                selections={requirementSelections}
+                completedCourses={completed.codes}
+                titleForCourse={(code) => coursesByCode.get(code)?.title}
+                onChange={setRequirementSelections}
+                generateLabel="Show me my schedule"
+                canGenerate={canGenerate}
+                onGenerate={goToSchedule}
+              />
+            ),
+          },
+        ]}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  field: {
-    gap: Spacing.two,
-  },
-  courseChips: {
-    gap: Spacing.one,
-  },
-  courseChip: {
-    minHeight: 46,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.two,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Surface.border,
-    borderRadius: 14,
-    backgroundColor: Surface.card,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.two,
-  },
-  courseChipCopy: {
+  screen: {
     flex: 1,
-    minWidth: 0,
-    gap: 2,
-  },
-  uozone: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    alignSelf: "flex-start",
-    paddingVertical: Spacing.one,
-  },
-  actions: {
-    gap: Spacing.two,
+    backgroundColor: Surface.page,
   },
 });

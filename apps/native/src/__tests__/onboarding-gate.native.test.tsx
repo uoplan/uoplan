@@ -45,6 +45,10 @@ jest.mock("@/data/basket-provider", () => ({
   BasketProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
+jest.mock("@/data/completed-courses-provider", () => ({
+  CompletedCoursesProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
 jest.mock("@/data/schedule-options-provider", () => ({
   ScheduleOptionsProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));

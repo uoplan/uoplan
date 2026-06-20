@@ -10,7 +10,6 @@ import { buildProfessorRegistry } from "@uoplan/core/professorRegistry";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 import { Text } from "@uoplan/ui";
 
-import { BasketFab } from "@/components/basket-fab";
 import { CalendarEventDrawer } from "@/components/calendar-event-drawer";
 import { GradeVizBar } from "@/components/grade-viz-bar";
 import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
@@ -325,13 +324,7 @@ export default function CourseScheduleScreen() {
 
   if (!detail) {
     return (
-      <RedesignScreen
-        gap={Spacing.three}
-        backLabel="Explore"
-        onBack={() => router.back()}
-        cart={<BasketFab />}
-        onSettings={() => router.push("/more")}
-      >
+      <RedesignScreen gap={Spacing.three} backLabel="Explore" onBack={() => router.back()}>
         <ScreenHeader title={code || "Course schedule"} />
         <Text dimmed>This course has no loaded meeting schedule for the selected term.</Text>
       </RedesignScreen>
@@ -342,13 +335,7 @@ export default function CourseScheduleScreen() {
   const components = Object.entries(course.components).sort(([a], [b]) => a.localeCompare(b, "en"));
 
   return (
-    <RedesignScreen
-      gap={Spacing.three}
-      backLabel="Explore"
-      onBack={() => router.back()}
-      cart={<BasketFab />}
-      onSettings={() => router.push("/more")}
-    >
+    <RedesignScreen gap={Spacing.three} backLabel="Explore" onBack={() => router.back()}>
       <ScreenHeader title={course.courseCode} subtitle={course.title ?? "Course schedule"} />
 
       <Text size="xs" color={Surface.dimmed}>

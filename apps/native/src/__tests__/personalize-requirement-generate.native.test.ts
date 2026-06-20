@@ -114,7 +114,7 @@ function baseInput(overrides: Partial<GenerateScheduleInput> = {}): GenerateSche
 describe("generateScheduleVariants advanced requirements", () => {
   it("uses an advanced request when program requirements are available, even with no basket pins", async () => {
     const engine = recordingEngine();
-    const variants = await generateScheduleVariants(baseInput({ engine }));
+    const { variants } = await generateScheduleVariants(baseInput({ engine }));
 
     expect(engine.generate).toHaveBeenCalledTimes(1);
     expect(variants).toHaveLength(1);

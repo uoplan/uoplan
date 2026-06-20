@@ -16,6 +16,8 @@ import type {
 } from "@/data/explore-index";
 
 export const CARD_WIDTH = 200;
+/** Card corner radius — shared with the flush grade strip so it hugs the curve. */
+const CARD_RADIUS = 16;
 
 function formatThousands(value: number): string {
   return Math.round(value)
@@ -79,7 +81,9 @@ function BaseCard({
       style={[styles.card, { width }, selected && styles.cardSelected]}
     >
       <View style={styles.body}>{children}</View>
-      {showGradeBar ? <GradeVizBar gradeViz={gradeViz} height={4} flush /> : null}
+      {showGradeBar ? (
+        <GradeVizBar gradeViz={gradeViz} height={5} flush bottomRadius={CARD_RADIUS} />
+      ) : null}
     </Pressable>
   );
 }
@@ -251,7 +255,7 @@ export function ProgramResultCard({
 const styles = StyleSheet.create({
   card: {
     minHeight: 168,
-    borderRadius: 16,
+    borderRadius: CARD_RADIUS,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: Surface.border,
     backgroundColor: Surface.card,

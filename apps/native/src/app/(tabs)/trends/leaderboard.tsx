@@ -5,7 +5,6 @@ import { useRouter } from "expo-router";
 import { Text } from "@uoplan/ui";
 
 import { AppIcon } from "@/components/app-icon";
-import { BasketFab } from "@/components/basket-fab";
 import { ResponsiveColumns } from "@/components/layout";
 import {
   type ChipOption,
@@ -90,13 +89,7 @@ export default function TrendsLeaderboardScreen() {
     : "University-wide, filtered for enough graded volume.";
 
   return (
-    <RedesignScreen
-      gap={Spacing.three}
-      backLabel="Trends"
-      onBack={() => router.back()}
-      cart={<BasketFab />}
-      onSettings={() => router.push("/more")}
-    >
+    <RedesignScreen gap={Spacing.three} backLabel="Trends" onBack={() => router.back()}>
       <ScreenHeader
         title="Leaderboard"
         subtitle="Grade risers, easiest subjects, and hardest subjects on the 10-point scale."

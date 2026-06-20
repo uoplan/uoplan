@@ -98,4 +98,91 @@ describe("loadAppDataWithFallback", () => {
 
     await expect(loadAppDataWithFallback(deps)).rejects.toThrow("fresh decode failure");
   });
+
+  it("serves bundled data when fresh data fails and the known-good cache is unavailable", async () => {
+    const fresh = { "grades.pb": "/assets/grades-new.pb" };
+    const buildBundled = jest.fn(async () => "built:bundled");
+    const onBundledFallback = jest.fn();
+    const { deps } = makeDeps({
+      loadManifest: jest.fn(async () => fresh),
+      build: jest.fn(async () => {
+        throw new Error("fresh decode failure");
+      }),
+      readKnownGood: jest.fn(async () => null),
+      buildBundled,
+      onBundledFallback,
+    });
+
+    const data = await loadAppDataWithFallback(deps);
+
+    expect(data).toBe("built:bundled");
+    expect(buildBundled).toHaveBeenCalledTimes(1);
+    expect(onBundledFallback).toHaveBeenCalledTimes(1);
+    expect(deps.writeKnownGood).not.toHaveBeenCalled();
+  });
+
+  it("serves bundled data when loading the fresh manifest fails on first launch", async () => {
+    const buildBundled = jest.fn(async () => "built:bundled");
+    const onBundledFallback = jest.fn();
+    const { deps } = makeDeps({
+      loadManifest: jest.fn(async () => {
+        throw new Error("offline before manifest cache exists");
+      }),
+      buildBundled,
+      onBundledFallback,
+    });
+
+    const data = await loadAppDataWithFallback(deps);
+
+    expect(data).toBe("built:bundled");
+    expect(deps.build).not.toHaveBeenCalled();
+    expect(deps.readKnownGood).toHaveBeenCalledTimes(1);
+    expect(onBundledFallback).toHaveBeenCalledTimes(1);
+  });
+
+  it("serves bundled data when the known-good fallback cannot be decoded", async () => {
+    const fresh = { "grades.pb": "/assets/grades-new.pb" };
+    const good = { "grades.pb": "/assets/grades-old.pb" };
+    const buildBundled = jest.fn(async () => "built:bundled");
+    const { deps } = makeDeps({
+      loadManifest: jest.fn(async () => fresh),
+      build: jest.fn(async () => {
+        throw new Error("decode failure");
+      }),
+      readKnownGood: jest.fn(async () => good),
+      buildBundled,
+    });
+
+    const data = await loadAppDataWithFallback(deps);
+
+    expect(data).toBe("built:bundled");
+    expect(deps.build).toHaveBeenCalledTimes(2);
+    expect(buildBundled).toHaveBeenCalledTimes(1);
+  });
+
+  it("rethrows the original error when bundled data is unavailable too", async () => {
+    const { deps } = makeDeps({
+      build: jest.fn(async () => {
+        throw new Error("fresh decode failure");
+      }),
+      readKnownGood: jest.fn(async () => null),
+      buildBundled: jest.fn(async () => null),
+    });
+
+    await expect(loadAppDataWithFallback(deps)).rejects.toThrow("fresh decode failure");
+  });
+
+  it("rethrows the original error when bundled data also fails to build", async () => {
+    const { deps } = makeDeps({
+      build: jest.fn(async () => {
+        throw new Error("fresh decode failure");
+      }),
+      readKnownGood: jest.fn(async () => null),
+      buildBundled: jest.fn(async () => {
+        throw new Error("bundled asset missing");
+      }),
+    });
+
+    await expect(loadAppDataWithFallback(deps)).rejects.toThrow("fresh decode failure");
+  });
 });

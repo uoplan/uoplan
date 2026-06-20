@@ -16,10 +16,21 @@ interface FabProps {
   /** Optional count badge (e.g. basket items). */
   badge?: number;
   /**
+   * Show a warning "!" badge instead of the count — used when the basket has a
+   * problem (e.g. a course with unmet prerequisites or not offered this term).
+   * Takes precedence over {@link badge}.
+   */
+  alert?: boolean;
+  /**
    * Accent (filled) styling for a primary action like "Add to basket". The
    * default is a neutral Liquid-Glass surface that matches the floating tab bar.
    */
   accent?: boolean;
+  /**
+   * Dim the FAB and ignore presses — used when the action isn't available, e.g.
+   * the viewed course's prerequisites aren't met (so it can't be added).
+   */
+  disabled?: boolean;
 }
 
 /**
@@ -31,14 +42,24 @@ interface FabProps {
  * The FAB is **presentational and not positioned** — wrap it in {@link FabStack}
  * (or another absolutely-positioned container) to anchor it on screen.
  */
-export function Fab({ icon, onPress, accessibilityLabel, badge, accent = false }: FabProps) {
-  const showBadge = badge != null && badge > 0;
+export function Fab({
+  icon,
+  onPress,
+  accessibilityLabel,
+  badge,
+  alert = false,
+  accent = false,
+  disabled = false,
+}: FabProps) {
+  const showBadge = alert || (badge != null && badge > 0);
   const glyphColor = accent ? Surface.onAccent : Surface.label;
   const button = (
     <Pressable
       onPress={onPress}
+      disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
+      accessibilityState={{ disabled }}
       style={styles.pressable}
       hitSlop={8}
     >
@@ -46,7 +67,7 @@ export function Fab({ icon, onPress, accessibilityLabel, badge, accent = false }
     </Pressable>
   );
   return (
-    <View style={styles.fab}>
+    <View style={[styles.fab, disabled && styles.fabDisabled]}>
       {accent ? (
         <View style={[styles.surface, styles.accentSurface]}>{button}</View>
       ) : (
@@ -55,9 +76,9 @@ export function Fab({ icon, onPress, accessibilityLabel, badge, accent = false }
         </GlassSurface>
       )}
       {showBadge ? (
-        <View style={styles.badge} pointerEvents="none">
+        <View style={[styles.badge, alert && styles.badgeAlert]} pointerEvents="none">
           <Text size="xs" weight="bold" color={Surface.onAccent}>
-            {badge > 99 ? "99+" : badge}
+            {alert ? "!" : badge != null && badge > 99 ? "99+" : badge}
           </Text>
         </View>
       ) : null}
@@ -67,30 +88,26 @@ export function Fab({ icon, onPress, accessibilityLabel, badge, accent = false }
 
 interface FabStackProps {
   children: ReactNode;
+  /**
+   * Extra px to lift the stack above its baseline — used to clear the always-on
+   * global basket cart that occupies the bottom slot, so a screen-specific FAB
+   * (e.g. "add to basket") floats ABOVE it instead of overlapping.
+   */
+  bottomOffset?: number;
 }
 
 /**
  * Bottom-right anchor for one or more {@link Fab}s. It clears the bottom tab bar
- * so the FAB is never hidden behind it:
- *
- * - On iOS 26+ the tab bar is a floating capsule centred at the bottom, leaving
- *   the bottom-right corner free, so the stack tucks into that corner.
- * - On Android (and pre-26 iOS) the tab bar spans the full width, so the stack
- *   floats above it.
+ * so the FAB floats just above it, never hidden behind it. The exact offset is
+ * platform-specific because Android's custom bar sits in normal flow below the
+ * content while iOS's `UITabBar` overlays it — see
+ * {@link useFloatingControlsBottom} for the per-platform reasoning.
  *
  * Children stack vertically, so the first child sits highest and the last child
  * rests nearest the screen's bottom edge (the primary, thumb-reachable slot).
  */
-export function FabStack({ children }: FabStackProps) {
-  const insets = useSafeAreaInsets();
-  // Full-width bars need the FAB lifted above them; the floating iOS 26 capsule
-  // leaves the corner clear, so no extra lift is needed there.
-  const barClearance = glassAvailable
-    ? 0
-    : Platform.OS === "android"
-      ? ANDROID_TAB_BAR_HEIGHT
-      : IOS_LEGACY_TAB_BAR_HEIGHT;
-  const bottom = insets.bottom + barClearance + Spacing.three;
+export function FabStack({ children, bottomOffset = 0 }: FabStackProps) {
+  const bottom = useFloatingControlsBottom() + bottomOffset;
   return (
     <View pointerEvents="box-none" style={[styles.stack, { bottom }]}>
       {children}
@@ -98,21 +115,61 @@ export function FabStack({ children }: FabStackProps) {
   );
 }
 
+/**
+ * The bottom offset (px) for floating controls that must rest just above the tab
+ * bar — shared by {@link FabStack} and the schedule screen's `BottomControlBar`
+ * so the cart FAB and the pager/options bar sit on the SAME baseline on each
+ * platform (otherwise they float at different heights).
+ *
+ * The FAB floats a small gap above each platform's tab bar, but the two bars
+ * are anchored differently, so the math differs:
+ *
+ * - Android (`app-tabs-android.tsx`) is a flat custom bar laid out as a normal
+ *   flow sibling BELOW the screen content (`TabSlot` is `flex: 1`, the bar
+ *   sits under it). This screen's content area therefore already ENDS at the
+ *   bar's top edge — `bottom: 0` is that edge — and the bar absorbs the bottom
+ *   safe-area inset via its own padding. So the controls only need a small gap;
+ *   adding the bar height or the inset here would double-count and float them
+ *   far too high.
+ * - iOS uses a real `UITabBar` that overlays the content (content runs full
+ *   bleed underneath it), so `bottom: 0` is the screen's bottom edge, under the
+ *   bar. On iOS 26+ the bar is a floating capsule that leaves the bottom-right
+ *   corner clear, so the controls just clear the home-indicator inset. On legacy
+ *   iOS the full-width bar must additionally be cleared.
+ */
+export function useFloatingControlsBottom(): number {
+  const insets = useSafeAreaInsets();
+  return Platform.OS === "android"
+    ? Spacing.three
+    : glassAvailable
+      ? insets.bottom + Spacing.three
+      : insets.bottom + IOS_LEGACY_TAB_BAR_HEIGHT + Spacing.three;
+}
+
 const SIZE = 56;
-/** Full-width tab-bar heights (above the safe-area inset) the FAB must clear. */
-const ANDROID_TAB_BAR_HEIGHT = 56;
+/** Legacy iOS `UITabBar` height (above the safe-area inset) the FAB must clear. */
 const IOS_LEGACY_TAB_BAR_HEIGHT = 49;
+
+/**
+ * Vertical distance one FAB occupies in a {@link FabStack} (button + the stack's
+ * gap). Pass as `bottomOffset` to lift a screen-specific FAB above the global
+ * basket cart that always sits in the bottom slot.
+ */
+export const FAB_SLOT = SIZE + Spacing.three;
 
 const styles = StyleSheet.create({
   stack: {
     position: "absolute",
     right: Spacing.three,
     alignItems: "flex-end",
-    gap: Spacing.two,
+    gap: Spacing.three,
   },
   fab: {
     width: SIZE,
     height: SIZE,
+  },
+  fabDisabled: {
+    opacity: 0.4,
   },
   surface: {
     width: SIZE,
@@ -152,5 +209,13 @@ const styles = StyleSheet.create({
     backgroundColor: Surface.accent,
     borderWidth: 1.5,
     borderColor: Surface.page,
+    // On Android, sibling stacking follows `elevation`, not JSX paint order, so
+    // the glass/card surface (elevation 4) would otherwise cover the badge. Lift
+    // the badge above it; `zIndex` keeps the same order on iOS/web.
+    zIndex: 1,
+    elevation: 8,
+  },
+  badgeAlert: {
+    backgroundColor: Surface.warning,
   },
 });

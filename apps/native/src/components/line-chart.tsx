@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Svg, { Circle, Line, Path, Text as SvgText } from "react-native-svg";
 
-import { Surface } from "@/constants/theme";
+import { Fonts, Surface } from "@/constants/theme";
 
 export interface LineChartPoint {
   label: string;
@@ -111,6 +111,7 @@ export function LineChart({
               key={`t${i}`}
               x={PAD_LEFT - 5}
               y={yFor(t) + 3}
+              fontFamily={Fonts.mono}
               fontSize={9}
               fill={Surface.dimmed}
               textAnchor="end"
@@ -128,6 +129,7 @@ export function LineChart({
                 key={`x${i}`}
                 x={xFor(i)}
                 y={totalH - 6}
+                fontFamily={Fonts.mono}
                 fontSize={9}
                 fill={Surface.dimmed}
                 textAnchor="middle"

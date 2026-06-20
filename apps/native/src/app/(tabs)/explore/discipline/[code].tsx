@@ -7,7 +7,6 @@ import { Text } from "@uoplan/ui";
 import { DetailRow } from "@/components/detail-row";
 import { type CollapsibleEntry, CollapsibleList } from "@/components/explore/collapsible-list";
 import { GradeHistogram } from "@/components/grade-histogram";
-import { BasketFab } from "@/components/basket-fab";
 import { ResponsiveColumns } from "@/components/layout";
 import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
 import { Spacing, Surface } from "@/constants/theme";
@@ -39,13 +38,7 @@ export default function DisciplineDetailScreen() {
 
   if (!detail) {
     return (
-      <RedesignScreen
-        gap={Spacing.three}
-        backLabel="Explore"
-        onBack={() => router.back()}
-        cart={<BasketFab />}
-        onSettings={() => router.push("/more")}
-      >
+      <RedesignScreen gap={Spacing.three} backLabel="Explore" onBack={() => router.back()}>
         <ScreenHeader title={code || "Discipline"} />
         <Text dimmed>This discipline isn’t in the loaded catalogue.</Text>
       </RedesignScreen>
@@ -108,13 +101,7 @@ export default function DisciplineDetailScreen() {
   });
 
   return (
-    <RedesignScreen
-      gap={Spacing.three}
-      backLabel="Explore"
-      onBack={() => router.back()}
-      cart={<BasketFab />}
-      onSettings={() => router.push("/more")}
-    >
+    <RedesignScreen gap={Spacing.three} backLabel="Explore" onBack={() => router.back()}>
       <ScreenHeader title={discipline.code} subtitle={discipline.name} />
 
       <View style={styles.metaRow}>
@@ -140,7 +127,7 @@ export default function DisciplineDetailScreen() {
       <ResponsiveColumns gap={Spacing.three}>
         <SectionCard title="Grade distribution">
           {headerGradeViz ? (
-            <GradeHistogram gradeViz={headerGradeViz} showSummary showStudentCount maxBarPx={88} />
+            <GradeHistogram gradeViz={headerGradeViz} showSummary showStudentCount maxBarPx={112} />
           ) : (
             <View style={styles.noData}>
               <Text size="sm" dimmed>

@@ -25,6 +25,8 @@ export interface ScheduleOptions {
   preferHigherSentiment: boolean;
   /** Minimum RateMyProfessors rating (professors without a rating are always allowed). */
   minProfessorRating: number | null;
+  /** Course-level buckets allowed for elective requirement pools. */
+  electiveLevelBuckets: number[];
   /** Allow sections that are already full. */
   includeClosedComponents: boolean;
   /** Only sections with a virtual meeting time. */
@@ -34,6 +36,7 @@ export interface ScheduleOptions {
 // Web parity — see apps/web/src/store/generationDefaults.ts.
 export const DEFAULT_GENERATION_MIN_START_MINUTES = 8 * 60 + 30; // 8:30
 export const DEFAULT_GENERATION_MAX_END_MINUTES = 22 * 60; // 22:00
+export const DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS = [1000, 2000];
 /** A day is "avoided" when a blocked window covers this full span. */
 const AVOID_DAY_START_MINUTES = 8 * 60 + 30; // 8:30
 const AVOID_DAY_END_MINUTES = 22 * 60; // 22:00
@@ -47,11 +50,13 @@ export const DEFAULT_SCHEDULE_OPTIONS: ScheduleOptions = {
   preferEasier: false,
   preferHigherSentiment: false,
   minProfessorRating: null,
+  electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
   includeClosedComponents: false,
   virtualSectionsOnly: false,
 };
 
 const VALID_DAYS: readonly DayOfWeek[] = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+const VALID_ELECTIVE_LEVEL_BUCKETS = new Set([1000, 2000, 3000, 4000, 5000, 6000]);
 
 /**
  * Map avoided weekdays to full-day blocked windows the engine treats as
@@ -106,9 +111,22 @@ export function parseScheduleOptions(text: string): ScheduleOptions {
     preferEasier: bool(o.preferEasier, false),
     preferHigherSentiment: bool(o.preferHigherSentiment, false),
     minProfessorRating: typeof rating === "number" && Number.isFinite(rating) ? rating : null,
+    electiveLevelBuckets: parseElectiveLevelBuckets(o.electiveLevelBuckets),
     includeClosedComponents: bool(o.includeClosedComponents, false),
     virtualSectionsOnly: bool(o.virtualSectionsOnly, false),
   };
+}
+
+function parseElectiveLevelBuckets(value: unknown): number[] {
+  if (!Array.isArray(value)) return [...DEFAULT_SCHEDULE_OPTIONS.electiveLevelBuckets];
+  const buckets = new Set<number>();
+  for (const raw of value) {
+    if (typeof raw === "number" && Number.isFinite(raw) && VALID_ELECTIVE_LEVEL_BUCKETS.has(raw)) {
+      buckets.add(raw);
+    }
+  }
+  if (buckets.size === 0) return [...DEFAULT_SCHEDULE_OPTIONS.electiveLevelBuckets];
+  return [...buckets].sort((a, b) => a - b);
 }
 
 function parseBlockedTimes(value: unknown): BlockedTimeWindow[] {

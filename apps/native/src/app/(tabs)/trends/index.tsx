@@ -8,7 +8,6 @@ import { BarChart } from "@/components/bar-chart";
 import { LineChart } from "@/components/line-chart";
 import { ResponsiveColumns } from "@/components/layout";
 import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
-import { BasketFab } from "@/components/basket-fab";
 import { chartColorForIndex, SeasonColor, Spacing, Surface } from "@/constants/theme";
 import { useFeedback, useTrends } from "@/data/data-provider";
 import { trendsFeedbackData } from "@/data/feedback-data";
@@ -56,11 +55,7 @@ export default function TrendsHubScreen() {
   const overview = trends.overview;
 
   return (
-    <RedesignScreen
-      gap={Spacing.three}
-      cart={<BasketFab />}
-      onSettings={() => router.push("/more")}
-    >
+    <RedesignScreen gap={Spacing.three}>
       <ScreenHeader
         title="Grade trends"
         subtitle="How grades have shifted over time, across every course and professor on record."

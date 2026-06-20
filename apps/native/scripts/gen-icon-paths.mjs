@@ -69,6 +69,7 @@ const MAP = {
   "square.and.arrow.up": ["share", 0],
   "square.grid.2x2.fill": ["layout-grid", 1],
   "star.fill": ["star", 1],
+  trash: ["trash", 0],
   "waveform.path.ecg": ["activity-heartbeat", 0],
   xmark: ["x", 0],
 };

@@ -10,7 +10,6 @@ import { FeedbackSummaryCard } from "@/components/explore/feedback-summary-card"
 import { SectionOfferingsList } from "@/components/explore/section-offerings-list";
 import { GradeHistogram } from "@/components/grade-histogram";
 import { ResponsiveColumns } from "@/components/layout";
-import { BasketFab } from "@/components/basket-fab";
 import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
 import { Spacing, Surface } from "@/constants/theme";
 import { useAppData, useFeedback } from "@/data/data-provider";
@@ -33,13 +32,7 @@ export default function ProfessorDetailScreen() {
 
   if (!detail) {
     return (
-      <RedesignScreen
-        gap={Spacing.three}
-        backLabel="Explore"
-        onBack={() => router.back()}
-        cart={<BasketFab />}
-        onSettings={() => router.push("/more")}
-      >
+      <RedesignScreen gap={Spacing.three} backLabel="Explore" onBack={() => router.back()}>
         <ScreenHeader title="Professor" />
         <Text dimmed>This professor isn’t in the loaded registry.</Text>
       </RedesignScreen>
@@ -65,7 +58,7 @@ export default function ProfessorDetailScreen() {
     ),
     headerExtra: course.gradeViz ? (
       <View style={styles.courseHistogram}>
-        <GradeHistogram gradeViz={course.gradeViz} maxBarPx={72} showSummary />
+        <GradeHistogram gradeViz={course.gradeViz} maxBarPx={72} showSummary density="compact" />
       </View>
     ) : null,
     body: (
@@ -98,13 +91,7 @@ export default function ProfessorDetailScreen() {
   ].filter((s): s is string => s != null);
 
   return (
-    <RedesignScreen
-      gap={Spacing.three}
-      backLabel="Explore"
-      onBack={() => router.back()}
-      cart={<BasketFab />}
-      onSettings={() => router.push("/more")}
-    >
+    <RedesignScreen gap={Spacing.three} backLabel="Explore" onBack={() => router.back()}>
       <ScreenHeader
         title={professor.name}
         subtitle={professor.numRatings ? `${professor.numRatings} ratings` : undefined}

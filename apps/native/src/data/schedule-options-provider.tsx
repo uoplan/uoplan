@@ -40,10 +40,10 @@ const DEFAULT_PERSONALIZATION: SchedulePersonalization = {
 
 /**
  * Holds the user's schedule-generation options (time window, avoided days,
- * prefer-easier / prefer-higher-sentiment, min professor rating, compressed,
- * closed/virtual sections) — the native analogue of the web generation-options
- * store slice. Persisted to a JSON file in the document dir and reloaded on
- * launch so preferences survive restarts.
+ * prefer-easier / prefer-higher-sentiment, min professor rating, elective
+ * levels, compressed, closed/virtual sections) — the native analogue of the web
+ * generation-options store slice. Persisted to a JSON file in the document dir
+ * and reloaded on launch so preferences survive restarts.
  */
 export function ScheduleOptionsProvider({ children }: { children: ReactNode }) {
   const [options, setOptionsState] = useState<ScheduleOptions>(DEFAULT_SCHEDULE_OPTIONS);

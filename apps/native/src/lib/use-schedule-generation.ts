@@ -1,5 +1,6 @@
 import {
   diagnoseTimetableFailure,
+  countValidCombosForCourse,
   type TimetableFailureDiagnostics,
 } from "@uoplan/core/generationDiagnostics";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
@@ -8,6 +9,7 @@ import { courseSentimentByNorm, professorSentimentByName } from "@uoplan/core/fe
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 
 import { useBasket } from "@/data/basket-provider";
+import { useCompletedCourses } from "@/data/completed-courses-provider";
 import { useAppData } from "@/data/data-provider";
 import { useScheduleOptions } from "@/data/schedule-options-provider";
 import { engineController } from "@/lib/engine/native-engine";
@@ -16,6 +18,7 @@ import {
   buildScheduleDataCache,
   generateScheduleVariants,
   type ScheduleVariant,
+  type SkippedCourse,
 } from "@/lib/generate-schedule";
 import {
   getActiveScheduleRequirementContext,
@@ -35,6 +38,13 @@ export interface GenerationState {
    * requirement-driven case and whenever generation succeeds.
    */
   diagnostics?: TimetableFailureDiagnostics | null;
+  /**
+   * Basket courses automatically excluded from generation — each with the
+   * reason it was left out (prerequisites unmet, or no schedulable section this
+   * term). Surfaced so the UI can tell the user what was left out and how to fix
+   * it — even when generation otherwise succeeds.
+   */
+  skippedCourses?: SkippedCourse[];
   error?: string;
 }
 
@@ -67,7 +77,8 @@ function pickTerm(schedulesByTerm: Map<string, SchedulesData>, codes: string[]):
 export function useScheduleGeneration(): GenerationState & { regenerate: () => void } {
   const { bundle, schedulesByTerm, feedback } = useAppData();
   const { codes } = useBasket();
-  const { options } = useScheduleOptions();
+  const { codes: completedCodes } = useCompletedCourses();
+  const { options, personalization } = useScheduleOptions();
   const [nonce, setNonce] = useState(0);
   const [state, setState] = useState<GenerationState>({
     status: "empty",
@@ -86,8 +97,13 @@ export function useScheduleGeneration(): GenerationState & { regenerate: () => v
   );
 
   const key = codes.join(",");
+  const completedKey = completedCodes.join(",");
   // Re-generate whenever any option changes (a stable signature of the options).
   const optionsKey = JSON.stringify(options);
+  // The planner has academic grounding once a program or start year is set; it
+  // gates prerequisite-based skipping during generation (see generate-schedule).
+  const hasProfileContext =
+    Boolean(personalization.programUrl) || Boolean(personalization.startYear);
   const requirementKey = useSyncExternalStore(
     subscribeScheduleRequirementContext,
     () => JSON.stringify(getActiveScheduleRequirementContext()),
@@ -127,15 +143,25 @@ export function useScheduleGeneration(): GenerationState & { regenerate: () => v
       grades: bundle.grades,
       sentiment,
       basketCodes: codes,
+      completedCourses: completedCodes,
+      hasProfileContext,
       ...(activeRequirements ? { requirements: activeRequirements } : {}),
       options,
       variantCount: 8,
       engine: engineController,
     })
-      .then((variants) => {
+      .then((result) => {
         if (cancelled) return;
+        const { variants, skippedCourses } = result;
+        const skipped = skippedCourses.length > 0 ? skippedCourses : undefined;
         if (variants.length > 0) {
-          setState({ status: "ready", variants, termId, diagnostics: null });
+          setState({
+            status: "ready",
+            variants,
+            termId,
+            diagnostics: null,
+            skippedCourses: skipped,
+          });
           return;
         }
         // No conflict-free timetable. For the basket case, run the SAME core
@@ -152,18 +178,31 @@ export function useScheduleGeneration(): GenerationState & { regenerate: () => v
               { disciplines: bundle.disciplines, faculties: bundle.faculties },
               bundle.grades,
             );
-            diagnostics = diagnoseTimetableFailure({
-              pinnedCourseCodes: codes,
-              optionalCourseCodes: [],
-              targetCount: codes.length,
-              cache,
-              constraints: buildGenerationConstraints(options, bundle.ratings),
-            });
+            const constraints = buildGenerationConstraints(options, bundle.ratings);
+            // Diagnose only the courses that are actually schedulable this term;
+            // every skipped course (prerequisites unmet or no open section) is
+            // reported separately, so the suggestions should be about real
+            // conflicts among the remaining basket, not the excluded ones.
+            const skippedNorm = new Set((skipped ?? []).map((s) => normalizeCourseCode(s.code)));
+            const schedulable = codes.filter(
+              (c) =>
+                !skippedNorm.has(normalizeCourseCode(c)) &&
+                countValidCombosForCourse(c, cache, constraints) > 0,
+            );
+            if (schedulable.length > 0) {
+              diagnostics = diagnoseTimetableFailure({
+                pinnedCourseCodes: schedulable,
+                optionalCourseCodes: [],
+                targetCount: schedulable.length,
+                cache,
+                constraints,
+              });
+            }
           } catch {
             diagnostics = null;
           }
         }
-        setState({ status: "none", variants, termId, diagnostics });
+        setState({ status: "none", variants, termId, diagnostics, skippedCourses: skipped });
       })
       .catch((err: unknown) => {
         if (cancelled) return;
@@ -180,7 +219,17 @@ export function useScheduleGeneration(): GenerationState & { regenerate: () => v
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, nonce, schedulesByTerm, bundle, sentiment, optionsKey, requirementKey]);
+  }, [
+    key,
+    completedKey,
+    nonce,
+    schedulesByTerm,
+    bundle,
+    sentiment,
+    optionsKey,
+    requirementKey,
+    hasProfileContext,
+  ]);
 
   return { ...state, regenerate: () => setNonce((n) => n + 1) };
 }

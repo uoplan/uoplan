@@ -15,7 +15,7 @@ export default function MoreLayout() {
         contentStyle: { backgroundColor: Surface.page },
       }}
     >
-      <Stack.Screen name="index" options={{ headerShown: false, title: "More" }} />
+      <Stack.Screen name="index" options={{ headerShown: false, title: "Settings" }} />
       <Stack.Screen name="language" options={{ title: "Language" }} />
       <Stack.Screen name="changelog" options={{ title: "Changelog" }} />
       <Stack.Screen name="gallery" options={{ title: "Component gallery" }} />

@@ -13,26 +13,27 @@ import { Button, Text } from "@uoplan/ui";
 
 import { AppIcon } from "@/components/app-icon";
 import { CalendarEventDrawer } from "@/components/calendar-event-drawer";
-import { BottomControlBar, GlassIconButton } from "@/components/redesign";
+import { BottomControlBar, useFloatingControlsBottom } from "@/components/redesign";
 import { PillButton } from "@/components/redesign/pill-button";
-import { BasketDrawer } from "@/components/basket-drawer";
 import { ScheduleSettingsSheet } from "@/components/schedule-settings-sheet";
 import { WeekCalendar } from "@/components/week-calendar";
 import { Spacing, Surface } from "@/constants/theme";
 import { useAppData } from "@/data/data-provider";
 import { useBasket } from "@/data/basket-provider";
+import { useCompletedCourses } from "@/data/completed-courses-provider";
 import { useScheduleOptions } from "@/data/schedule-options-provider";
 import { addScheduleToCalendar } from "@/lib/add-to-calendar";
 import { exportScheduleIcs } from "@/lib/share-ics";
 import { computeSwapOptions, type SwapOption } from "@/lib/swap-course";
 import { formatGenerationLead, formatSuggestions } from "@/lib/generation-messages";
 import { useScheduleGeneration } from "@/lib/use-schedule-generation";
+import type { SkippedCourse } from "@/lib/generate-schedule";
 
 /** Height of the floating {@link BottomControlBar} pill (gear + pager). */
-const CONTROL_BAR_HEIGHT = 48;
+const CONTROL_BAR_HEIGHT = 56;
 
-/** Diameter of the floating global-settings glass button (top-right header). */
-const SETTINGS_BUTTON = 40;
+/** Top space reserved to clear the global settings gear (mounted per tab stack). */
+const SETTINGS_BUTTON = 48;
 const TERM_START_DATE = "2025-09-03";
 const TERM_END_DATE = "2025-12-05";
 
@@ -50,13 +51,14 @@ export default function ScheduleScreen() {
   const { height } = useWindowDimensions();
   const basket = useBasket();
   const { count } = basket;
+  const completed = useCompletedCourses();
   const { bundle, schedulesByTerm, feedback } = useAppData();
   const { options, setOptions } = useScheduleOptions();
-  const { status, variants, termId, diagnostics, regenerate } = useScheduleGeneration();
+  const { status, variants, termId, diagnostics, skippedCourses, regenerate } =
+    useScheduleGeneration();
 
   const [variant, setVariant] = useState(0);
   const [prefsOpen, setPrefsOpen] = useState(false);
-  const [basketOpen, setBasketOpen] = useState(false);
   const [selected, setSelected] = useState<{ event: CalendarEvent; color: string } | null>(null);
   const [swap, setSwap] = useState<{ loading: boolean; options: SwapOption[] }>({
     loading: false,
@@ -83,6 +85,7 @@ export default function ScheduleScreen() {
   // generator used so suggestions keep every other class at its current section.
   const activeVariant = variants[variant];
   const basketCodes = basket.codes;
+  const completedCodes = completed.codes;
   useEffect(() => {
     if (!selected) {
       setSwap({ loading: false, options: [] });
@@ -112,6 +115,7 @@ export default function ScheduleScreen() {
         courseCode: selected.event.courseCode,
         options,
         basketCodes,
+        completedCourses: completedCodes,
         courseSentimentByNorm: courseSentiment,
       });
       if (!cancelled) setSwap({ loading: false, options: result.options });
@@ -128,6 +132,7 @@ export default function ScheduleScreen() {
     bundle,
     options,
     basketCodes,
+    completedCodes,
     courseSentiment,
   ]);
 
@@ -158,10 +163,10 @@ export default function ScheduleScreen() {
 
   // The floating control bar sits just above the native tab bar; the calendar
   // fills the space between the safe-area top and the control bar so it never
-  // scrolls off the page. NOTE: with the iOS native (floating) tab bar,
-  // `insets.bottom` already clears the tab bar, so we only add a small gap — no
-  // extra BottomTabInset (that double-counts the bar and floats the controls up).
-  const controlBarBottom = insets.bottom + Spacing.two;
+  // scrolls off the page. Both the control bar and the cart FAB use the SAME
+  // platform-aware bottom offset (`useFloatingControlsBottom`) so they rest on a
+  // single baseline instead of floating at different heights.
+  const controlBarBottom = useFloatingControlsBottom();
   // Reserve a top strip for the floating global-settings button so the calendar
   // header never sits beneath it.
   const calendarTop = insets.top + Spacing.two + SETTINGS_BUTTON + Spacing.two;
@@ -221,19 +226,6 @@ export default function ScheduleScreen() {
 
   return (
     <View style={styles.root}>
-      <View style={[styles.headerCluster, { top: insets.top + Spacing.two }]}>
-        <GlassIconButton
-          icon="cart"
-          accessibilityLabel="Basket"
-          badge={count}
-          onPress={() => setBasketOpen(true)}
-        />
-        <GlassIconButton
-          icon="gearshape"
-          accessibilityLabel="Settings"
-          onPress={() => router.push("/more")}
-        />
-      </View>
       {status === "ready" ? (
         <View
           style={{
@@ -241,6 +233,9 @@ export default function ScheduleScreen() {
             paddingHorizontal: Spacing.two,
           }}
         >
+          {skippedCourses && skippedCourses.length > 0 ? (
+            <SkippedCoursesBanner courses={skippedCourses} />
+          ) : null}
           <WeekCalendar
             events={events}
             availableHeight={calendarHeight}
@@ -256,10 +251,11 @@ export default function ScheduleScreen() {
         <ScheduleEmptyState
           status={status}
           diagnostics={diagnostics ?? null}
+          skippedCourses={skippedCourses ?? []}
           basketCount={count}
           paddingTop={insets.top}
           onBrowse={() => router.push("/explore")}
-          onOpenBasket={() => router.push("/schedule/basket")}
+          onAdjustFilters={() => setPrefsOpen(true)}
           onRetry={regenerate}
         />
       )}
@@ -275,8 +271,6 @@ export default function ScheduleScreen() {
           nextDisabled={variant === variants.length - 1}
         />
       ) : null}
-
-      <BasketDrawer opened={basketOpen} onClose={() => setBasketOpen(false)} />
 
       <ScheduleSettingsSheet
         opened={prefsOpen}
@@ -307,25 +301,105 @@ export default function ScheduleScreen() {
   );
 }
 
+/** Split skipped courses by reason and build short, accurate phrases for each. */
+function skipPhrases(courses: SkippedCourse[]): string[] {
+  const prereq = courses.filter((c) => c.reason === "prerequisite").map((c) => c.code);
+  const offering = courses.filter((c) => c.reason === "offering").map((c) => c.code);
+  const phrases: string[] = [];
+  if (prereq.length > 0) {
+    phrases.push(`${prereq.join(", ")} — you don’t meet the prerequisites yet`);
+  }
+  if (offering.length > 0) {
+    phrases.push(`${offering.join(", ")} — no open sections this term`);
+  }
+  return phrases;
+}
+
+/** A compact list of basket courses that couldn't be placed, with a short why. */
+function SkippedCoursesNotice({ courses }: { courses: SkippedCourse[] }) {
+  const single = courses.length === 1;
+  return (
+    <View style={styles.skipNotice}>
+      <View style={styles.skipNoticeHead}>
+        <AppIcon name="exclamationmark.circle" size={15} color={Surface.dimmed} />
+        <Text dimmed size="sm" weight="medium">
+          Left out this term
+        </Text>
+      </View>
+      <View style={styles.skipChips}>
+        {courses.map((c) => (
+          <View key={c.code} style={styles.skipChip}>
+            <Text size="sm" weight="medium">
+              {c.code}
+            </Text>
+          </View>
+        ))}
+      </View>
+      {skipPhrases(courses).map((phrase) => (
+        <Text key={phrase} dimmed size="sm" align="center">
+          {phrase}
+        </Text>
+      ))}
+      <Text dimmed size="sm" align="center">
+        We built your schedule without {single ? "it" : "them"}.
+      </Text>
+    </View>
+  );
+}
+
+/** Slim inline banner shown above a generated calendar when courses were skipped. */
+function SkippedCoursesBanner({ courses }: { courses: SkippedCourse[] }) {
+  return (
+    <View style={styles.skipBanner}>
+      <AppIcon name="exclamationmark.circle" size={15} color={Surface.dimmed} />
+      <View style={styles.skipBannerText}>
+        <Text dimmed size="sm">
+          Left out {skipPhrases(courses).join("; ")}.
+        </Text>
+      </View>
+    </View>
+  );
+}
+
 /** Centered states for when there is no schedule to show. */
 function ScheduleEmptyState({
   status,
   diagnostics,
+  skippedCourses,
   basketCount,
   paddingTop,
   onBrowse,
-  onOpenBasket,
+  onAdjustFilters,
   onRetry,
 }: {
   status: "empty" | "generating" | "none" | "error";
   diagnostics: TimetableFailureDiagnostics | null;
+  skippedCourses: SkippedCourse[];
   basketCount: number;
   paddingTop: number;
   onBrowse: () => void;
-  onOpenBasket: () => void;
+  onAdjustFilters: () => void;
   onRetry: () => void;
 }) {
-  const tips = status === "none" && diagnostics ? formatSuggestions(diagnostics) : [];
+  const tips =
+    status === "none" && diagnostics
+      ? formatSuggestions(diagnostics).filter((t) => t.trim().length > 0)
+      : [];
+  // Everything in the basket was unschedulable this term (each course skipped),
+  // so there is no conflict to "adjust" — just tell the user plainly why.
+  const allSkipped = status === "none" && !diagnostics && skippedCourses.length > 0;
+  const allSkippedHeading = (() => {
+    const hasPrereq = skippedCourses.some((c) => c.reason === "prerequisite");
+    const hasOffering = skippedCourses.some((c) => c.reason === "offering");
+    const single = skippedCourses.length === 1;
+    if (hasPrereq && !hasOffering) return "You don’t meet the prerequisites yet";
+    if (hasOffering && !hasPrereq) {
+      return single
+        ? "That course isn’t offered this term"
+        : "Those courses aren’t offered this term";
+    }
+    return single ? "That course can’t be scheduled yet" : "Those courses can’t be scheduled yet";
+  })();
   return (
     <View style={[styles.center, { paddingTop: paddingTop + 120 }]}>
       {status === "generating" ? (
@@ -341,35 +415,52 @@ function ScheduleEmptyState({
             <AppIcon name="calendar.badge.exclamationmark" size={26} color={Surface.dimmed} />
           </View>
           <Text weight="bold" align="center">
-            {diagnostics ? formatGenerationLead(diagnostics.lead) : "No conflict-free schedule"}
+            {allSkipped
+              ? allSkippedHeading
+              : diagnostics
+                ? formatGenerationLead(diagnostics.lead)
+                : "No conflict-free schedule"}
           </Text>
-          <View style={styles.copy}>
-            {tips.length > 0 ? (
-              <View style={styles.tips}>
-                {tips.map((tip) => (
-                  <View key={tip} style={styles.tipRow}>
-                    <Text dimmed>•</Text>
-                    <View style={styles.tipText}>
-                      <Text dimmed>{tip}</Text>
+          {skippedCourses.length > 0 ? <SkippedCoursesNotice courses={skippedCourses} /> : null}
+          {!allSkipped ? (
+            <View style={styles.copy}>
+              {tips.length > 0 ? (
+                <View style={styles.tips}>
+                  {tips.map((tip) => (
+                    <View key={tip} style={styles.tipRow}>
+                      <AppIcon name="arrow.right" size={13} color={Surface.dimmed} />
+                      <View style={styles.tipText}>
+                        <Text dimmed size="sm">
+                          {tip}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                ))}
-              </View>
-            ) : (
-              <Text dimmed align="center">
-                {basketCount} basket course{basketCount === 1 ? "" : "s"} can&apos;t all be
-                scheduled together this term. Try removing one.
-              </Text>
-            )}
-          </View>
+                  ))}
+                </View>
+              ) : (
+                <Text dimmed align="center">
+                  {basketCount} basket course{basketCount === 1 ? "" : "s"} can&apos;t all be
+                  scheduled together this term. Try relaxing your filters.
+                </Text>
+              )}
+            </View>
+          ) : null}
           <View style={styles.actions}>
-            <PillButton
-              label="Edit basket"
-              variant="secondary"
-              icon="cart"
-              onPress={onOpenBasket}
-            />
-            <PillButton label="Try again" variant="primary" onPress={onRetry} />
+            {allSkipped ? (
+              <PillButton
+                label="Browse courses"
+                variant="primary"
+                icon="magnifyingglass"
+                onPress={onBrowse}
+              />
+            ) : (
+              <PillButton
+                label="Adjust filters"
+                variant="primary"
+                icon="slider.horizontal.3"
+                onPress={onAdjustFilters}
+              />
+            )}
           </View>
         </>
       ) : status === "error" ? (
@@ -403,14 +494,6 @@ function ScheduleEmptyState({
               icon="magnifyingglass"
               onPress={onBrowse}
             />
-            {basketCount > 0 ? (
-              <PillButton
-                label="Open basket"
-                variant="secondary"
-                icon="cart"
-                onPress={onOpenBasket}
-              />
-            ) : null}
           </View>
         </>
       )}
@@ -422,14 +505,6 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: Surface.page,
-  },
-  headerCluster: {
-    position: "absolute",
-    right: Spacing.three,
-    zIndex: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.two,
   },
   center: {
     flex: 1,
@@ -464,5 +539,50 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: Spacing.two,
     marginTop: Spacing.one,
+  },
+  skipNotice: {
+    width: "100%",
+    maxWidth: 360,
+    gap: Spacing.two,
+    padding: Spacing.three,
+    borderRadius: 16,
+    backgroundColor: Surface.subtle,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Surface.border,
+    alignItems: "center",
+  },
+  skipNoticeHead: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.one,
+  },
+  skipChips: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: Spacing.one,
+  },
+  skipChip: {
+    paddingHorizontal: Spacing.two,
+    paddingVertical: Spacing.one / 2,
+    borderRadius: 999,
+    backgroundColor: Surface.card,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Surface.border,
+  },
+  skipBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.one,
+    marginBottom: Spacing.two,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
+    borderRadius: 12,
+    backgroundColor: Surface.subtle,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Surface.border,
+  },
+  skipBannerText: {
+    flex: 1,
   },
 });
