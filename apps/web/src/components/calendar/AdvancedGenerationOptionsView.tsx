@@ -1,16 +1,4 @@
-import { useState } from "react";
-import {
-  Alert,
-  Badge,
-  Box,
-  Collapse,
-  Group,
-  Paper,
-  Stack,
-  Text,
-  UnstyledButton,
-} from "@mantine/core";
-import { IconChevronDown } from "@tabler/icons-react";
+import { Alert, Stack, Text } from "@mantine/core";
 import { ConstrainStep } from "../requirements/ConstrainStep";
 import type { ConstrainStepProps } from "../requirements/ConstrainStep";
 import { GenerationOptionsFields } from "./generationOptions/GenerationOptionsFields";
@@ -18,84 +6,50 @@ import type { GenerationOptionsFieldsProps } from "./generationOptions/Generatio
 import { tr } from "../../i18n";
 
 export interface AdvancedGenerationOptionsViewProps {
-  /** The unified generation-option field set (shared with the basic sidebar). */
-  fields: GenerationOptionsFieldsProps;
+  /** The unified generation-option field set (shared with the basic sidebar), minus the disclosure. */
+  fields: Omit<GenerationOptionsFieldsProps, "advancedOptions">;
   /** Everything the per-requirement "pick specific courses" panel needs. */
   constrain: ConstrainStepProps;
-  /** Number of requirements with manual course picks (drives the "N picks active" badge). */
+  /** Number of requirements with manual course picks (drives the "N picks" badge). */
   advancedPicksCount: number;
 }
 
 /**
- * Advanced (transcript) generation sidebar. Renders the same unified options as the basic sidebar,
- * plus the advanced-only "pick specific courses" panel tucked behind a collapsed "Advanced options"
- * disclosure. Holds only the local collapse UI state.
+ * Advanced (transcript) generation sidebar. Renders the same unified options as the basic sidebar;
+ * the advanced-only "pick specific courses" step is appended inside the shared "Advanced options"
+ * disclosure, and the picks count drives the disclosure's badge.
  */
 export function AdvancedGenerationOptionsView({
   fields,
   constrain,
   advancedPicksCount,
 }: AdvancedGenerationOptionsViewProps) {
-  const [advancedOpen, setAdvancedOpen] = useState(false);
+  const badge =
+    advancedPicksCount > 0
+      ? {
+          label: tr("advancedOptions.picksActive", { count: advancedPicksCount }),
+          color: "accentBlue",
+        }
+      : { label: tr("app.constraints.optional"), color: "gray" };
 
   return (
     <Stack gap="md" data-testid="advanced-generation-options">
-      <GenerationOptionsFields {...fields} />
-
-      <Paper
-        withBorder
-        radius="md"
-        data-testid="constraints-panel"
-        style={{
-          backgroundColor: advancedOpen ? "var(--app-surface)" : "var(--app-surface-sunken)",
+      <GenerationOptionsFields
+        {...fields}
+        advancedOptions={{
+          collapseId: "advanced-options-collapse",
+          badge,
+          extraSummaryItem: tr("app.constraints.heading"),
+          extraContent: (
+            <Stack gap="sm" data-testid="constraints-panel">
+              <Alert color="blue" variant="light" radius="md" style={{ border: "none" }}>
+                <Text size="sm">{tr("advancedOptions.description")}</Text>
+              </Alert>
+              <ConstrainStep {...constrain} />
+            </Stack>
+          ),
         }}
-      >
-        <UnstyledButton
-          w="100%"
-          p="sm"
-          onClick={() => setAdvancedOpen((o) => !o)}
-          aria-expanded={advancedOpen}
-          aria-controls="advanced-options-collapse"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            cursor: "pointer",
-          }}
-        >
-          <Group gap="xs" align="center">
-            <IconChevronDown
-              size={14}
-              aria-hidden="true"
-              style={{
-                flexShrink: 0,
-                transform: advancedOpen ? "rotate(0deg)" : "rotate(-90deg)",
-                transition: "transform 150ms ease",
-              }}
-            />
-            <Text fw={600} size="sm">
-              {tr("advancedOptions.heading")}
-            </Text>
-          </Group>
-          {advancedPicksCount > 0 ? (
-            <Badge size="sm" variant="light" color="accentBlue">
-              {tr("advancedOptions.picksActive", { count: advancedPicksCount })}
-            </Badge>
-          ) : (
-            <Badge size="sm" variant="light" color="gray">
-              {tr("app.constraints.optional")}
-            </Badge>
-          )}
-        </UnstyledButton>
-        <Collapse id="advanced-options-collapse" expanded={advancedOpen}>
-          <Box p="sm" pt={0}>
-            <Alert color="blue" variant="light" radius="md" mb="sm" style={{ border: "none" }}>
-              <Text size="sm">{tr("advancedOptions.description")}</Text>
-            </Alert>
-            <ConstrainStep {...constrain} />
-          </Box>
-        </Collapse>
-      </Paper>
+      />
     </Stack>
   );
 }

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import type { DataCache, DayOfWeekCode } from "@uoplan/core";
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
 import type { BlockedTime } from "../../../store/types";
-import { useBlockedTimes } from "../../../store/hooks";
+import { useBlockedTimes, useGenerationTimeWindow } from "../../../store/hooks";
 import {
   assignLanes,
   DAY_LABELS,
@@ -13,6 +13,7 @@ import {
 } from "./weekCalendarLayout";
 import { WeekCalendarEvent } from "./WeekCalendarEvent";
 import { BlockedTimeLayer } from "./BlockedTimeLayer";
+import { GenerationWindowLayer } from "./GenerationWindowLayer";
 import { BlockedTimeRemoveModal } from "../BlockedTimeRemoveModal";
 import "./weekCalendar.css";
 
@@ -55,6 +56,7 @@ export function WeekCalendar({
   );
 
   const { blockedTimes, addBlockedTime, updateBlockedTime, removeBlockedTime } = useBlockedTimes();
+  const { minStartMinutes, maxEndMinutes } = useGenerationTimeWindow();
   const [blockToRemove, setBlockToRemove] = useState<BlockedTime | null>(null);
 
   const blocksByDay = useMemo(() => {
@@ -111,6 +113,10 @@ export function WeekCalendar({
                     aria-hidden
                   />
                 ))}
+                <GenerationWindowLayer
+                  minStartMinutes={minStartMinutes}
+                  maxEndMinutes={maxEndMinutes}
+                />
                 <BlockedTimeLayer
                   day={day}
                   blocks={blocksByDay.get(day) ?? []}

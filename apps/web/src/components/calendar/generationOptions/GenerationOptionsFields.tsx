@@ -8,31 +8,23 @@ import {
   Checkbox,
   Collapse,
   Group,
-  MultiSelect,
   NumberInput,
   Paper,
   Stack,
   Switch,
   Text,
-  TextInput,
   UnstyledButton,
 } from "@mantine/core";
-import type { MultiSelectProps, OptionsFilter } from "@mantine/core";
+import type { MultiSelectProps } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import type { DayOfWeek } from "@uoplan/core";
-import { minutesToTime24 } from "@uoplan/core";
 import { BasicCourseFiltersCard } from "../../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../../i18n";
+import { DayAvoidToggles } from "./DayAvoidToggles";
+import { TimeRangeSelect } from "./TimeRangeSelect";
 
 const LENIENT_PROFESSOR_RATING_MIN = 2;
-
-/** Parse HH:mm from input type="time" to minutes since midnight. */
-function timeStringToMinutes(value: string): number {
-  const [h, m] = value.split(":").map(Number);
-  if (Number.isNaN(h) || Number.isNaN(m)) return 0;
-  return Math.max(0, Math.min(24 * 60 - 1, h * 60 + m));
-}
 
 interface SimpleMultiSelectProps {
   data: { value: string; label: string }[];
@@ -45,30 +37,23 @@ interface ExcludeCoursesProps extends SimpleMultiSelectProps {
   filter?: MultiSelectProps["filter"];
 }
 
-interface SecondaryOptionsDisclosure {
-  heading: string;
-  badgeLabel?: string;
+interface AdvancedOptionsDisclosure {
   collapseId: string;
   defaultOpen?: boolean;
+  /** Right-aligned badge shown in the disclosure header. */
+  badge?: { label: string; color: string };
+  /** Extra content appended inside the panel (e.g. the transcript "pick specific courses" step). */
+  extraContent?: ReactNode;
+  /** Extra bullet appended to the collapsed summary (e.g. "Pick specific courses"). */
+  extraSummaryItem?: string;
 }
 
 export interface GenerationOptionsFieldsProps {
-  /** "Courses you want" multiselect. */
-  courseOptions: { value: string; label: string }[];
-  desiredCourses: string[];
-  onDesiredCoursesChange: (value: string[]) => void;
-  renderCourseOption?: MultiSelectProps["renderOption"];
-  courseFilter?: OptionsFilter;
-
   /**
-   * Optional supplementary content rendered directly below the "courses you want" multiselect.
-   * The sidebars pass the embedded basket here so the old courses dropdown and the cart coexist;
-   * both write the same desired-courses state, so they stay in sync.
+   * Supplementary content rendered above the count input — the sidebars pass the embedded basket
+   * here, which now hosts the "courses you want" add-search field.
    */
   coursesSlot?: ReactNode;
-
-  /** Slot rendered directly under the "courses you want" multiselect (e.g. requirement warnings). */
-  belowCourses?: ReactNode;
 
   /** "How many courses this semester" number input. */
   countValue: number;
@@ -119,84 +104,34 @@ export interface GenerationOptionsFieldsProps {
   frenchImmersionStream: boolean;
   onFrenchImmersionStreamChange: (v: boolean) => void;
 
-  /** Optional disclosure wrapper for the lower-priority fine-tuning controls. */
-  secondaryOptionsDisclosure?: SecondaryOptionsDisclosure;
+  /** The single "Advanced options" disclosure that houses every lower-priority control. */
+  advancedOptions: AdvancedOptionsDisclosure;
 }
 
 /**
- * The unified generation-option field set shared by both calendar sidebars. Purely presentational and
- * prop-driven — each mode supplies its own change handlers, count semantics, and optional grouping for
- * lower-priority controls. Mode-specific extras (desired-course warnings, the per-requirement "pick
- * specific courses" panel, the basic completed-courses editor) are composed around this by the wrappers.
+ * The unified generation-option field set shared by both calendar sidebars. Always-visible controls
+ * (the basket-hosted "courses you want" field and the course count) sit on top; every lower-priority
+ * control — class times, days to avoid, smart options, course filters, French immersion, and the
+ * optional transcript-only "pick specific courses" step — lives inside one collapsible "Advanced
+ * options" disclosure whose collapsed state lists what it contains.
  */
 export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
-  const [secondaryOptionsOpen, setSecondaryOptionsOpen] = useState(
-    props.secondaryOptionsDisclosure?.defaultOpen ?? false,
-  );
+  const [advancedOpen, setAdvancedOpen] = useState(props.advancedOptions.defaultOpen ?? false);
   const [smartOptionsOpen, setSmartOptionsOpen] = useState(false);
-  const dayOptions: { value: DayOfWeek; label: string }[] = [
-    { value: "Mo", label: tr("scheduleCount.day.monday") },
-    { value: "Tu", label: tr("scheduleCount.day.tuesday") },
-    { value: "We", label: tr("scheduleCount.day.wednesday") },
-    { value: "Th", label: tr("scheduleCount.day.thursday") },
-    { value: "Fr", label: tr("scheduleCount.day.friday") },
-    { value: "Sa", label: tr("scheduleCount.day.saturday") },
-    { value: "Su", label: tr("scheduleCount.day.sunday") },
-  ];
 
   const timeWindowControl = (
-    <Paper
-      withBorder
-      radius="md"
-      p="sm"
-      style={{
-        backgroundColor: "var(--app-surface-sunken)",
-      }}
-    >
-      <Stack gap="xs">
-        <Text size="sm" fw={500}>
-          {tr("scheduleCount.time.rangeLabel")}
-        </Text>
-        <Group gap="xs" wrap="nowrap" align="center">
-          <TextInput
-            aria-label={tr("scheduleCount.time.earliest")}
-            type="time"
-            value={minutesToTime24(props.minStartMinutes)}
-            onChange={(e) =>
-              props.onMinStartMinutesChange(timeStringToMinutes(e.currentTarget.value))
-            }
-            radius="md"
-            style={{ flex: 1 }}
-            styles={{ input: { fontVariantNumeric: "tabular-nums", textAlign: "center" } }}
-          />
-          <Text size="sm" c="dimmed">
-            {tr("scheduleCount.time.and")}
-          </Text>
-          <TextInput
-            aria-label={tr("scheduleCount.time.latest")}
-            type="time"
-            value={minutesToTime24(props.maxEndMinutes)}
-            onChange={(e) =>
-              props.onMaxEndMinutesChange(timeStringToMinutes(e.currentTarget.value))
-            }
-            radius="md"
-            style={{ flex: 1 }}
-            styles={{ input: { fontVariantNumeric: "tabular-nums", textAlign: "center" } }}
-          />
-        </Group>
-      </Stack>
-    </Paper>
+    <TimeRangeSelect
+      minStartMinutes={props.minStartMinutes}
+      maxEndMinutes={props.maxEndMinutes}
+      onMinStartMinutesChange={props.onMinStartMinutesChange}
+      onMaxEndMinutesChange={props.onMaxEndMinutesChange}
+    />
   );
 
   const avoidedDaysControl = (
-    <MultiSelect
-      label={tr("scheduleCount.avoidDays.label")}
-      description={tr("scheduleCount.avoidDays.description")}
-      placeholder={tr("scheduleCount.avoidDays.placeholder")}
-      data={dayOptions}
-      value={props.avoidedDays}
-      onChange={(values) => props.onAvoidedDaysChange(values as DayOfWeek[])}
-      clearable
+    <DayAvoidToggles
+      avoidedDays={props.avoidedDays}
+      onAvoidedDaysChange={props.onAvoidedDaysChange}
     />
   );
 
@@ -357,51 +292,17 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
     </>
   );
 
-  // Common scheduling preferences worth surfacing directly in the basic sidebar.
-  const fineTuningControls = (
-    <>
-      {timeWindowControl}
-      {smartOptionsControl}
-      {avoidedDaysControl}
-    </>
-  );
-
-  // Bulkier / nicher controls kept behind the disclosure in basic mode.
-  const disclosureControls = (
-    <>
-      {courseFiltersControl}
-      {frenchImmersionControl}
-    </>
-  );
-
-  // Advanced mode renders every secondary control inline in its original order.
-  const secondaryOptionsInline = (
-    <>
-      {timeWindowControl}
-      {avoidedDaysControl}
-      {courseFiltersControl}
-      {smartOptionsControl}
-      {frenchImmersionControl}
-    </>
-  );
+  const summaryItems = [
+    tr("advancedOptions.summary.times"),
+    tr("advancedOptions.summary.days"),
+    tr("advancedOptions.summary.filters"),
+    tr("advancedOptions.summary.frenchImmersion"),
+    ...(props.advancedOptions.extraSummaryItem ? [props.advancedOptions.extraSummaryItem] : []),
+  ];
 
   return (
     <Stack gap="md" data-testid="generation-options-fields">
       {props.coursesSlot}
-
-      <MultiSelect
-        label={tr("generationOptions.courses.label")}
-        placeholder={tr("generationOptions.courses.placeholder")}
-        searchable
-        data={props.courseOptions}
-        value={props.desiredCourses}
-        onChange={props.onDesiredCoursesChange}
-        renderOption={props.renderCourseOption}
-        filter={props.courseFilter}
-        radius="md"
-      />
-
-      {props.belowCourses}
 
       <NumberInput
         label={tr("generationOptions.count.label")}
@@ -424,65 +325,74 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
         </Alert>
       )}
 
-      {props.secondaryOptionsDisclosure ? (
-        <>
-          {fineTuningControls}
-          <Paper
-            withBorder
-            radius="md"
-            data-testid="generation-options-secondary-panel"
-            style={{
-              backgroundColor: secondaryOptionsOpen
-                ? "var(--app-surface)"
-                : "var(--app-surface-sunken)",
-            }}
-          >
-            <UnstyledButton
-              w="100%"
-              p="sm"
-              onClick={() => setSecondaryOptionsOpen((o) => !o)}
-              aria-expanded={secondaryOptionsOpen}
-              aria-controls={props.secondaryOptionsDisclosure.collapseId}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-            >
-              <Group gap="xs" align="center">
+      {smartOptionsControl}
+
+      <Paper
+        withBorder
+        radius="md"
+        data-testid="generation-options-secondary-panel"
+        style={{
+          backgroundColor: advancedOpen ? "var(--app-surface)" : "var(--app-surface-sunken)",
+        }}
+      >
+        <UnstyledButton
+          w="100%"
+          p="sm"
+          onClick={() => setAdvancedOpen((o) => !o)}
+          aria-expanded={advancedOpen}
+          aria-controls={props.advancedOptions.collapseId}
+          style={{ cursor: "pointer" }}
+        >
+          <Stack gap={advancedOpen ? 0 : 8}>
+            <Group justify="space-between" align="center" wrap="nowrap">
+              <Group gap="xs" align="center" wrap="nowrap" style={{ minWidth: 0 }}>
                 <IconChevronDown
                   size={14}
                   aria-hidden="true"
                   style={{
                     flexShrink: 0,
-                    transform: secondaryOptionsOpen ? "rotate(0deg)" : "rotate(-90deg)",
+                    transform: advancedOpen ? "rotate(0deg)" : "rotate(-90deg)",
                     transition: "transform 150ms ease",
                   }}
                 />
-                <Text fw={600} size="sm">
-                  {props.secondaryOptionsDisclosure.heading}
+                <Text fw={600} size="sm" truncate>
+                  {tr("advancedOptions.heading")}
                 </Text>
               </Group>
-              {props.secondaryOptionsDisclosure.badgeLabel ? (
-                <Badge size="sm" variant="light" color="gray">
-                  {props.secondaryOptionsDisclosure.badgeLabel}
+              {props.advancedOptions.badge ? (
+                <Badge
+                  size="sm"
+                  variant="light"
+                  color={props.advancedOptions.badge.color}
+                  style={{ flexShrink: 0 }}
+                >
+                  {props.advancedOptions.badge.label}
                 </Badge>
               ) : null}
-            </UnstyledButton>
-            <Collapse
-              id={props.secondaryOptionsDisclosure.collapseId}
-              expanded={secondaryOptionsOpen}
-            >
-              <Box p="sm" pt={0}>
-                <Stack gap="md">{disclosureControls}</Stack>
-              </Box>
-            </Collapse>
-          </Paper>
-        </>
-      ) : (
-        secondaryOptionsInline
-      )}
+            </Group>
+            {!advancedOpen ? (
+              <Group gap="xs" wrap="wrap" pl={22}>
+                {summaryItems.map((item) => (
+                  <Text key={item} size="xs" c="dimmed" component="span">
+                    • {item}
+                  </Text>
+                ))}
+              </Group>
+            ) : null}
+          </Stack>
+        </UnstyledButton>
+        <Collapse id={props.advancedOptions.collapseId} expanded={advancedOpen}>
+          <Box p="sm" pt={0}>
+            <Stack gap="md">
+              {timeWindowControl}
+              {avoidedDaysControl}
+              {courseFiltersControl}
+              {frenchImmersionControl}
+              {props.advancedOptions.extraContent}
+            </Stack>
+          </Box>
+        </Collapse>
+      </Paper>
     </Stack>
   );
 }

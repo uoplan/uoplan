@@ -1,0 +1,68 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 11px;
+  border: var(--app-border-width) solid var(--app-border);
+  border-radius: var(--mantine-radius-md);
+  background: var(--app-surface);
+  color: var(--app-text);
+  cursor: pointer;
+  transition:
+    border-color var(--app-transition),
+    background-color var(--app-transition);
+}
+
+.trigger:hover {
+  border-color: var(--app-border-strong);
+}
+
+.trigger:focus-visible {
+  outline: none;
+  border-color: var(--app-focus-ring);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--app-focus-ring) 35%, transparent);
+}
+
+.triggerIcon {
+  flex-shrink: 0;
+  color: var(--app-text-muted);
+}
+
+.triggerValue {
+  flex: 1;
+  text-align: center;
+  font-size: var(--mantine-font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.optionList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 96px;
+}
+
+.option {
+  padding: 6px 12px;
+  border-radius: var(--mantine-radius-sm);
+  font-size: var(--mantine-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  color: var(--app-text);
+  cursor: pointer;
+}
+
+.option:hover {
+  background: var(--app-surface-hover);
+}
+
+.option[data-selected] {
+  background: var(--app-accent-soft);
+  font-weight: 600;
+}
+
+.option:focus-visible {
+  outline: 2px solid var(--app-focus-ring);
+  outline-offset: -2px;
+}

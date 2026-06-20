@@ -31,7 +31,19 @@ msgid "advancedOptions.heading"
 msgstr "Advanced options"
 
 msgid "advancedOptions.picksActive"
-msgstr "{count, plural, one {# advanced pick} other {# advanced picks}} active"
+msgstr "{count, plural, one {# pick} other {# picks}}"
+
+msgid "advancedOptions.summary.days"
+msgstr "Days to avoid"
+
+msgid "advancedOptions.summary.filters"
+msgstr "Course filters"
+
+msgid "advancedOptions.summary.frenchImmersion"
+msgstr "French immersion"
+
+msgid "advancedOptions.summary.times"
+msgstr "Class times"
 
 msgid "app.beta"
 msgstr "Beta"
@@ -338,6 +350,9 @@ msgstr "Toggle course filters"
 #: scripts/i18n/dynamic-keys.mjs
 msgid "basket.add"
 msgstr "Add to basket"
+
+msgid "basket.addCourse.placeholder"
+msgstr "Add a course…"
 
 #: scripts/i18n/dynamic-keys.mjs
 msgid "basket.add.aria"

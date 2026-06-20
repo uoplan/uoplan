@@ -108,6 +108,18 @@
   min-height: 0;
 }
 
+/* Read-only mirror of the generation time window ("class times between X and Y"). Sits
+   behind the interactive blocked-time layer, with a softer flat tint so it reads as a
+   dimmed/unavailable band rather than a hard, draggable blocked block. */
+.cal-outside-hours {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-color: color-mix(in srgb, var(--app-text-dim) 7%, transparent);
+}
+
 /* Blocked-time overlay layer */
 .cal-blocked-layer {
   position: absolute;
