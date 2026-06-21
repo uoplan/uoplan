@@ -41,7 +41,6 @@ export type FilterHintDescriptor =
   | { code: "start-after"; time: string }
   | { code: "end-before"; time: string }
   | { code: "days-excluded"; days: string[] }
-  | { code: "prof-rating"; rating: number }
   | { code: "virtual-only" }
   | { code: "closed-excluded" }
   | { code: "language-filter"; langs: string[] };
@@ -164,7 +163,8 @@ export interface AppState {
   lowestVisitedSeed: number | null;
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
-  generationMinProfessorRating: number | null;
+  /** Soft preference: bias section selection toward higher-rated professors (unrated treated as ~4.0). */
+  generationPreferHigherProfessorRating: boolean;
   professorRatings: ProfessorRatingsMap | null;
   /** True while the lazily-loaded {@link professorRatings} asset is being fetched/decoded. */
   professorRatingsLoading: boolean;
@@ -266,7 +266,7 @@ export interface AppActions {
   setGenerationMaxEndMinutes: (minutes: number) => void;
   /** Set which weekdays are avoided; reconciled into full-day blocked windows. */
   setAvoidedDays: (days: DayOfWeek[]) => void;
-  setGenerationMinProfessorRating: (rating: number | null) => void;
+  setGenerationPreferHigherProfessorRating: (value: boolean) => void;
   setIncludeClosedComponents: (value: boolean) => void;
   setVirtualSectionsOnly: (value: boolean) => void;
   generateSchedules: () => Promise<void>;

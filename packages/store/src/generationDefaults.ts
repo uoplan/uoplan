@@ -12,8 +12,8 @@ export const DEFAULT_GENERATION_MAX_END_MINUTES = 22 * 60; // 22:00
 export const AVOID_DAY_START_MINUTES = 8 * 60 + 30; // 8:30
 export const AVOID_DAY_END_MINUTES = 22 * 60; // 22:00
 export const DEFAULT_AVOIDED_DAYS: DayOfWeek[] = ["Sa", "Su"];
-/** Lenient default minimum professor rating — "prefer profs with a better rating" is on by default (profs without a rating are always allowed). */
-export const DEFAULT_GENERATION_MIN_PROFESSOR_RATING: number | null = 2;
+/** "Prefer professors with better ratings" — a soft preference that biases section selection toward higher-rated profs (unrated treated as ~4.0). On by default. */
+export const DEFAULT_GENERATION_PREFER_HIGHER_PROFESSOR_RATING = true;
 export const DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS = true;
 export const DEFAULT_GENERATION_COMPRESSED_SCHEDULE = false;
 export const DEFAULT_GENERATION_PREFER_EASIER = true;

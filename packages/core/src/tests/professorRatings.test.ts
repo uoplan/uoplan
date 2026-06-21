@@ -4,7 +4,6 @@ import {
   getRatingDetailsForInstructors,
   getRatingsForInstructors,
   hasProfessorRatings,
-  isSectionAllowedByMinRating,
   normalizeProfessorName,
 } from "../professorRatings";
 import type { ProfessorRatingsMap } from "../professorRatings";
@@ -84,51 +83,5 @@ describe("getRatingDetailsForInstructors", () => {
       { id: undefined, legacyId: undefined, name: "Jane Doe", rating: 4.5, numRatings: 10 },
       { id: undefined, legacyId: undefined, name: "Unrated", rating: 0, numRatings: 0 },
     ]);
-  });
-});
-
-describe("isSectionAllowedByMinRating", () => {
-  it("allows everything when no usable minimum is set", () => {
-    expect(
-      isSectionAllowedByMinRating({
-        instructors: ["John Roe"],
-        minRating: null,
-        professorRatings: map,
-      }),
-    ).toBe(true);
-    expect(
-      isSectionAllowedByMinRating({
-        instructors: ["John Roe"],
-        minRating: Number.NaN,
-        professorRatings: map,
-      }),
-    ).toBe(true);
-  });
-
-  it("allows sections whose instructors are all unrated (no rating => allowed)", () => {
-    expect(
-      isSectionAllowedByMinRating({
-        instructors: ["Unrated", "Nobody"],
-        minRating: 4,
-        professorRatings: map,
-      }),
-    ).toBe(true);
-  });
-
-  it("requires every rated instructor to meet the minimum", () => {
-    expect(
-      isSectionAllowedByMinRating({
-        instructors: ["Jane Doe"],
-        minRating: 4,
-        professorRatings: map,
-      }),
-    ).toBe(true);
-    expect(
-      isSectionAllowedByMinRating({
-        instructors: ["Jane Doe", "John Roe"],
-        minRating: 4,
-        professorRatings: map,
-      }),
-    ).toBe(false); // John Roe is 2.0
   });
 });

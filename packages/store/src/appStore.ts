@@ -20,9 +20,9 @@ import {
   DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
   DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
   DEFAULT_GENERATION_MAX_END_MINUTES,
-  DEFAULT_GENERATION_MIN_PROFESSOR_RATING,
   DEFAULT_GENERATION_MIN_START_MINUTES,
   DEFAULT_GENERATION_PREFER_EASIER,
+  DEFAULT_GENERATION_PREFER_HIGHER_PROFESSOR_RATING,
   DEFAULT_GENERATION_PREFER_HIGHER_SENTIMENT,
 } from "./generationDefaults";
 import { defaultBlockedTimes } from "./blockedTimes";
@@ -119,7 +119,7 @@ export function createAppStore(services: AppServices): AppStoreApi {
       // currentSeed will be set to firstSeed when first generated.
       generationMinStartMinutes: DEFAULT_GENERATION_MIN_START_MINUTES,
       generationMaxEndMinutes: DEFAULT_GENERATION_MAX_END_MINUTES,
-      generationMinProfessorRating: DEFAULT_GENERATION_MIN_PROFESSOR_RATING,
+      generationPreferHigherProfessorRating: DEFAULT_GENERATION_PREFER_HIGHER_PROFESSOR_RATING,
       professorRatings: null,
       // Defaults to true (like courseGradesLoading): ratings are lazily loaded,
       // so "not fetched yet" reads as loading until ensureProfessorRatings

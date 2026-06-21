@@ -5,7 +5,6 @@ import {
   blacklistConstraint,
   compressedScheduleConstraint,
   ConstraintPipeline,
-  minProfessorRatingConstraint,
   overlapConstraint,
   timeWindowConstraint,
 } from "./index";
@@ -71,18 +70,6 @@ describe("section-scope constraints", () => {
 
   it("time window is inert when the window is unrestricted", () => {
     expect(timeWindowConstraint(FULL_DAY).active).toBe(false);
-  });
-
-  it("min professor rating gates on the ratings map", () => {
-    const c = minProfessorRatingConstraint({
-      ...FULL_DAY,
-      minProfessorRating: 4,
-      professorRatings: { "Jane Doe": { rating: 3, numRatings: 10 } },
-    });
-    const s = section([
-      { day: "Mo", startMinutes: 600, endMinutes: 690, virtual: false, instructor: "Jane Doe" },
-    ]);
-    expect(c.allowsSection?.(normalizeCourseCode("CSI 2110"), s, ctx)).toBe(false);
   });
 });
 

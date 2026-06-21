@@ -32,7 +32,7 @@ export function urlToSlug(url: string): string {
     .replace(/\/$/, "");
 }
 
-export const STATE_MAGIC = 0x554f504d; // "UOPM" — bumped from "UOPL" (0x554f504c) for the v2 plain packed-uint32 completed-course encoding
+export const STATE_MAGIC = 0x554f504e; // "UOPN" — bumped from "UOPM" (0x554f504d) when the hard min-professor-rating field was removed in favour of the soft prefer-higher-professor-rating preference
 
 function programSlug(p: Program): string {
   return (p as Program & { slug?: string }).slug ?? urlToSlug(p.url);
@@ -71,7 +71,7 @@ export interface EncodeInput {
   requirementSlotsUserTouched: Record<string, true>;
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
-  generationMinProfessorRating: number | null;
+  generationPreferHigherProfessorRating: boolean;
   generationLimitFirstYearCredits: boolean;
   generationCompressedSchedule: boolean;
   generationPreferEasier: boolean;
@@ -114,7 +114,7 @@ export interface DecodedState {
   touchedReqIndices: number[];
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
-  generationMinProfessorRating: number | null;
+  generationPreferHigherProfessorRating: boolean;
   generationLimitFirstYearCredits: boolean;
   generationCompressedSchedule: boolean;
   generationPreferEasier: boolean;
@@ -256,10 +256,7 @@ export function encodeState(
     generationMinStartMinutes: input.generationMinStartMinutes,
     generationMaxEndMinutes: input.generationMaxEndMinutes,
     generationAllowedDays: [],
-    generationMinProfessorRating:
-      input.generationMinProfessorRating !== null
-        ? Math.round(input.generationMinProfessorRating * 10)
-        : undefined,
+    generationPreferHigherProfessorRating: input.generationPreferHigherProfessorRating,
     generationLimitFirstYearCredits: input.generationLimitFirstYearCredits,
     generationCompressedSchedule: input.generationCompressedSchedule,
     generationPreferEasier: input.generationPreferEasier,
@@ -533,10 +530,7 @@ export function decodeState(
 
     generationMinStartMinutes: state.generationMinStartMinutes,
     generationMaxEndMinutes: state.generationMaxEndMinutes,
-    generationMinProfessorRating:
-      state.generationMinProfessorRating !== undefined
-        ? state.generationMinProfessorRating / 10
-        : null,
+    generationPreferHigherProfessorRating: state.generationPreferHigherProfessorRating ?? false,
     generationLimitFirstYearCredits: state.generationLimitFirstYearCredits,
     generationCompressedSchedule: state.generationCompressedSchedule,
     generationPreferEasier: state.generationPreferEasier,

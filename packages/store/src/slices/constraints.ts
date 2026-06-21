@@ -6,7 +6,7 @@ interface ConstraintsSlice {
   setGenerationMinStartMinutes: AppStore["setGenerationMinStartMinutes"];
   setGenerationMaxEndMinutes: AppStore["setGenerationMaxEndMinutes"];
   setAvoidedDays: AppStore["setAvoidedDays"];
-  setGenerationMinProfessorRating: AppStore["setGenerationMinProfessorRating"];
+  setGenerationPreferHigherProfessorRating: AppStore["setGenerationPreferHigherProfessorRating"];
   setIncludeClosedComponents: AppStore["setIncludeClosedComponents"];
   setVirtualSectionsOnly: AppStore["setVirtualSectionsOnly"];
   setGenerationLimitFirstYearCredits: AppStore["setGenerationLimitFirstYearCredits"];
@@ -45,11 +45,8 @@ export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsS
     set({ blockedTimes: next, generationOptionsDirty: true });
   },
 
-  setGenerationMinProfessorRating: (rating) =>
-    set({
-      generationMinProfessorRating: rating == null ? null : Number(rating),
-      generationOptionsDirty: true,
-    }),
+  setGenerationPreferHigherProfessorRating: (v) =>
+    set({ generationPreferHigherProfessorRating: v, generationOptionsDirty: true }),
 
   setGenerationLimitFirstYearCredits: (v) =>
     set({ generationLimitFirstYearCredits: v, generationOptionsDirty: true }),

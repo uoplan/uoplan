@@ -4,7 +4,7 @@ import { useAppStore } from "../appStore";
 /**
  * The schedule-generation constraint/preference values and their setters — the
  * cluster shared by both calendar sidebars (time window, avoided days via
- * `blockedTimes`, min professor rating, level/language/elective buckets, closed/
+ * `blockedTimes`, prefer-higher-professor-rating, level/language/elective buckets, closed/
  * virtual section filters, first-year credit cap, compressed schedule, the prefer-
  * easier / prefer-higher-sentiment soft biases, the blacklist, and the basic-mode
  * excluded subject categories). Reads grouped behind {@link useShallow}; actions are
@@ -19,7 +19,7 @@ export function useGenerationConstraints() {
       generationMinStartMinutes: s.generationMinStartMinutes,
       generationMaxEndMinutes: s.generationMaxEndMinutes,
       blockedTimes: s.blockedTimes,
-      generationMinProfessorRating: s.generationMinProfessorRating,
+      generationPreferHigherProfessorRating: s.generationPreferHigherProfessorRating,
       levelBuckets: s.levelBuckets,
       languageBuckets: s.languageBuckets,
       electiveLevelBuckets: s.electiveLevelBuckets,
@@ -37,7 +37,9 @@ export function useGenerationConstraints() {
   const setGenerationMinStartMinutes = useAppStore((s) => s.setGenerationMinStartMinutes);
   const setGenerationMaxEndMinutes = useAppStore((s) => s.setGenerationMaxEndMinutes);
   const setAvoidedDays = useAppStore((s) => s.setAvoidedDays);
-  const setGenerationMinProfessorRating = useAppStore((s) => s.setGenerationMinProfessorRating);
+  const setGenerationPreferHigherProfessorRating = useAppStore(
+    (s) => s.setGenerationPreferHigherProfessorRating,
+  );
   const setLevelBuckets = useAppStore((s) => s.setLevelBuckets);
   const setLanguageBuckets = useAppStore((s) => s.setLanguageBuckets);
   const setElectiveLevelBuckets = useAppStore((s) => s.setElectiveLevelBuckets);
@@ -59,7 +61,7 @@ export function useGenerationConstraints() {
     setGenerationMinStartMinutes,
     setGenerationMaxEndMinutes,
     setAvoidedDays,
-    setGenerationMinProfessorRating,
+    setGenerationPreferHigherProfessorRating,
     setLevelBuckets,
     setLanguageBuckets,
     setElectiveLevelBuckets,

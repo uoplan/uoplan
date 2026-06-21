@@ -54,7 +54,7 @@ function buildEncodeInput(s: AppStore): EncodeInput {
     requirementSlotsUserTouched: s.requirementSlotsUserTouched,
     generationMinStartMinutes: s.generationMinStartMinutes,
     generationMaxEndMinutes: s.generationMaxEndMinutes,
-    generationMinProfessorRating: s.generationMinProfessorRating,
+    generationPreferHigherProfessorRating: s.generationPreferHigherProfessorRating,
     generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
     generationCompressedSchedule: s.generationCompressedSchedule,
     generationPreferEasier: s.generationPreferEasier,
@@ -295,7 +295,8 @@ export const createUrlSlice =
         basicExcludedCategories: decoded.basicExcludedCategories,
         generationMinStartMinutes: decoded.generationMinStartMinutes,
         generationMaxEndMinutes: decoded.generationMaxEndMinutes,
-        generationMinProfessorRating: decoded.generationMinProfessorRating,
+        generationPreferHigherProfessorRating:
+          decoded.generationPreferHigherProfessorRating ?? false,
         generationLimitFirstYearCredits: decoded.generationLimitFirstYearCredits,
         generationCompressedSchedule: decoded.generationCompressedSchedule,
         generationPreferEasier: decoded.generationPreferEasier,
