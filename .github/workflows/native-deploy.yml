@@ -22,6 +22,25 @@ on:
         description: "Submit latest completed production build to TestFlight / Play internal track"
         type: boolean
         default: true
+  # Reusable entry point so release automation (release-please) can trigger a
+  # production build + store submission on every new app release.
+  workflow_call:
+    inputs:
+      platform:
+        description: "Platform to build (ios | android | all)"
+        type: string
+        default: all
+      profile:
+        description: "EAS build profile"
+        type: string
+        default: production
+      submit:
+        description: "Submit the build to TestFlight / Play internal track"
+        type: boolean
+        default: true
+    secrets:
+      EXPO_TOKEN:
+        required: true
 
 permissions:
   contents: read
