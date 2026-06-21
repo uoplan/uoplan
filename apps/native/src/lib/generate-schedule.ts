@@ -122,6 +122,19 @@ export interface GenerateScheduleInput {
   options?: ScheduleOptions;
   /** Number of distinct arrangements to attempt (seeds 0..N-1). */
   variantCount?: number;
+  /**
+   * Aborts generation between seeds. The native engine call already in flight
+   * can't be interrupted, but a superseded run stops issuing further seeds
+   * instead of grinding through all of them (so changing options/basket
+   * mid-generation cancels promptly rather than blocking ~20s).
+   */
+  signal?: AbortSignal;
+  /**
+   * Called with the running list of unique variants as each new one is found,
+   * so the UI can show the first conflict-free timetable immediately instead of
+   * waiting for every seed (8 sequential native calls) to finish.
+   */
+  onVariant?: (variants: ScheduleVariant[], skippedCourses: SkippedCourse[]) => void;
   engine: EngineBridge;
 }
 
@@ -336,6 +349,7 @@ export async function generateScheduleVariants(
   const variants: ScheduleVariant[] = [];
 
   for (let seed = 0; seed < variantCount; seed++) {
+    if (input.signal?.aborted) break;
     const courseSentimentByNorm = options.preferHigherSentiment
       ? ((sentiment?.courseByNorm ?? null) as Map<NormalizedCourseCode, number> | null)
       : null;
@@ -384,6 +398,7 @@ export async function generateScheduleVariants(
         );
 
     const respBytes = await engine.generate(GenerationRequest.encode(request).finish());
+    if (input.signal?.aborted) break;
     const mapped = mapGenerationResponse(GenerationResponse.decode(respBytes), cache);
     if (!mapped.schedule) continue;
 
@@ -397,6 +412,7 @@ export async function generateScheduleVariants(
       courseCount: mapped.schedule.enrollments.length,
       fingerprint,
     });
+    input.onVariant?.([...variants], skippedCourses);
   }
 
   return { variants, skippedCourses };

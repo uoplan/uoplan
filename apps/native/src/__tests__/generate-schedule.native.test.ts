@@ -134,6 +134,59 @@ describe("generateScheduleVariants", () => {
     expect(variants).toHaveLength(1);
   });
 
+  it("emits each unique variant progressively via onVariant", async () => {
+    const engine = cannedEngine();
+    const onVariant = jest.fn();
+    await generateScheduleVariants(baseInput({ engine, variantCount: 5, onVariant }));
+    // The canned engine yields one unique arrangement, so onVariant fires once
+    // (duplicate seeds are not re-emitted) with the running variant list.
+    expect(onVariant).toHaveBeenCalledTimes(1);
+    expect(onVariant.mock.calls[0]![0]).toHaveLength(1);
+  });
+
+  it("does not touch the engine when the signal is already aborted", async () => {
+    const engine = cannedEngine();
+    const controller = new AbortController();
+    controller.abort();
+    const { variants } = await generateScheduleVariants(
+      baseInput({ engine, variantCount: 5, signal: controller.signal }),
+    );
+    expect(engine.generate).not.toHaveBeenCalled();
+    expect(variants).toEqual([]);
+  });
+
+  it("stops issuing further seeds once the signal aborts mid-loop", async () => {
+    // Each seed returns a distinct arrangement so every seed would otherwise add
+    // a new unique variant; aborting after the first one must break the loop.
+    let call = 0;
+    const engine: EngineBridge = {
+      loadDataset: jest.fn(async () => {}),
+      generate: jest.fn(async () => {
+        const section = `A0${call++}`;
+        return GenerationResponse.encode({
+          hasSchedule: true,
+          courses: [{ courseCode: CODE, components: [{ component: "LEC", section }] }],
+          optionalPool: [],
+          pinned: [CODE],
+          chosenCourseToRequirement: {},
+        }).finish();
+      }),
+    };
+    const controller = new AbortController();
+    const { variants } = await generateScheduleVariants(
+      baseInput({
+        engine,
+        variantCount: 8,
+        signal: controller.signal,
+        onVariant: () => controller.abort(),
+      }),
+    );
+    // Aborting in the first onVariant breaks before the next seed runs: one
+    // native call, one variant — not all 8.
+    expect(engine.generate).toHaveBeenCalledTimes(1);
+    expect(variants).toHaveLength(1);
+  });
+
   it("skips basket courses with no schedulable section and reports them", async () => {
     const engine = cannedEngine();
     const CSI = normalizeCourseCode("CSI 2101");

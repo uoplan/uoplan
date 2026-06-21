@@ -135,6 +135,8 @@ export function useScheduleGeneration(): GenerationState & { regenerate: () => v
     const schedules = schedulesByTerm.get(termId)!;
     setState((s) => ({ ...s, status: "generating", termId, diagnostics: null }));
 
+    const controller = new AbortController();
+
     void generateScheduleVariants({
       datasetKey: termId,
       catalogue: bundle.catalogue,
@@ -149,6 +151,21 @@ export function useScheduleGeneration(): GenerationState & { regenerate: () => v
       ...(activeRequirements ? { requirements: activeRequirements } : {}),
       options,
       variantCount: 8,
+      signal: controller.signal,
+      // Paint the first conflict-free timetable as soon as it's found instead of
+      // waiting for all 8 seeds (sequential native calls, ~20s worst case); the
+      // remaining variants stream in afterward and the final `.then` settles the
+      // complete set.
+      onVariant: (variants, skippedCourses) => {
+        if (cancelled) return;
+        setState({
+          status: "ready",
+          variants,
+          termId,
+          diagnostics: null,
+          skippedCourses: skippedCourses.length > 0 ? skippedCourses : undefined,
+        });
+      },
       engine: engineController,
     })
       .then((result) => {
@@ -222,6 +239,7 @@ export function useScheduleGeneration(): GenerationState & { regenerate: () => v
 
     return () => {
       cancelled = true;
+      controller.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
