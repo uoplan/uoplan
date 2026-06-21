@@ -270,7 +270,7 @@ export function BasketDrawer({ opened, onClose }: BasketDrawerProps) {
 
   const go = (path: "/explore" | "/schedule") => {
     onClose();
-    router.push(path);
+    router.navigate(path);
   };
 
   const handleSearchResultPress = (course: ExploreCourseEntry) => {

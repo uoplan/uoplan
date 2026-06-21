@@ -84,7 +84,7 @@ export default function BasketScreen() {
           <PillButton
             label="Generate schedule"
             variant="primary"
-            onPress={() => router.push("/schedule")}
+            onPress={() => router.navigate("/schedule")}
           />
 
           <PillButton label="Clear basket" variant="destructive" onPress={clear} />
