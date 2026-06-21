@@ -11,7 +11,7 @@ import { expect, test } from "@playwright/test";
 test("generates from the dashboard and lands on the schedule", async ({ page }) => {
   await page.goto("/personalize");
 
-  await expect(page.getByRole("heading", { name: /Build your schedule/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Personalize your plan/i })).toBeVisible();
 
   await page.getByRole("button", { name: "Generate", exact: true }).click();
 

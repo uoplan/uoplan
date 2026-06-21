@@ -172,14 +172,14 @@ describe("rankCoursesForSpotlight", () => {
         courseCode: "CSI 2110",
         professorName: testProfessorName("Prof A"),
         legacyId: 1,
-        distribution: { A: 20 },
+        distribution: dist,
       }),
       sampleOffering({
         id: "a2",
         courseCode: "CSI 2110",
         professorName: testProfessorName("Prof B"),
         legacyId: 2,
-        distribution: { A: 20 },
+        distribution: dist,
       }),
       sampleOffering({
         id: "b1",

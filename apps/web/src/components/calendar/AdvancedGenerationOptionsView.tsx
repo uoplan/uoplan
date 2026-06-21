@@ -30,7 +30,7 @@ export function AdvancedGenerationOptionsView({
           label: tr("advancedOptions.picksActive", { count: advancedPicksCount }),
           color: "accentBlue",
         }
-      : { label: tr("app.constraints.optional"), color: "gray" };
+      : undefined;
 
   return (
     <Stack gap="md" data-testid="advanced-generation-options">

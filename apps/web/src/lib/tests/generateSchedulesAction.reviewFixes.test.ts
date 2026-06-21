@@ -77,7 +77,7 @@ function baseInput(overrides: Partial<GenerateSchedulesInput> = {}): GenerateSch
     electiveLevelBuckets: [],
     generationMinStartMinutes: 8 * 60 + 30,
     generationMaxEndMinutes: 22 * 60,
-    generationMinProfessorRating: null,
+    generationPreferHigherProfessorRating: false,
     professorRatings: null,
     currentSeed: 1,
     firstSeed: 1,
@@ -137,32 +137,32 @@ describe("generateSchedulesAction review fixes", () => {
     expect(engine.requests[0]?.basicElectivesCount).toBe(SCHEDULE_COURSE_COUNT_MAX - 2);
   });
 
-  it("normalizes legacy hard professor-rating values to the lenient basic toggle value", async () => {
+  it("forwards the professor-rating preference to the basic engine request", async () => {
     const engine = new RecordingEngine();
 
     await generateSchedulesAction(
       baseInput({
         mode: "basic",
-        generationMinProfessorRating: 4.5,
+        generationPreferHigherProfessorRating: true,
       }),
       cache,
       engine,
     );
 
-    expect(engine.requests[0]?.constraints?.minProfessorRating).toBe(2);
+    expect(engine.requests[0]?.generationPreferHigherProfessorRating).toBe(true);
   });
 
-  it("normalizes legacy hard professor-rating values to the lenient advanced toggle value", async () => {
+  it("forwards the professor-rating preference to the advanced engine request", async () => {
     const engine = new RecordingEngine();
 
     await generateSchedulesAction(
       baseInput({
-        generationMinProfessorRating: 4.5,
+        generationPreferHigherProfessorRating: true,
       }),
       cache,
       engine,
     );
 
-    expect(engine.requests[0]?.constraints?.minProfessorRating).toBe(2);
+    expect(engine.requests[0]?.generationPreferHigherProfessorRating).toBe(true);
   });
 });

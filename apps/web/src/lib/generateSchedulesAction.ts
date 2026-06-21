@@ -43,7 +43,6 @@ type PoolDiagnostics = NonNullable<MappedGenerationResult["poolDiagnostics"]>;
 const DEFAULT_MIN_START_MINUTES = 8 * 60 + 30;
 const DEFAULT_MAX_END_MINUTES = 22 * 60;
 const DEFAULT_LANGUAGE_BUCKETS = ["en", "other"];
-const LENIENT_PROFESSOR_RATING_MIN = 2;
 
 function sumCompletedFirstYearCredits(
   completedCourses: readonly string[],
@@ -81,12 +80,6 @@ function countSelectedGenerationCourses(
   return selected.size + groupTokenSlots;
 }
 
-function normalizedProfessorRatingPreference(
-  rating: number | null | undefined,
-): number | undefined {
-  return rating != null ? LENIENT_PROFESSOR_RATING_MIN : undefined;
-}
-
 function clampAdditionalElectiveCount(count: number, selectedCount: number): number {
   const max = Math.max(0, SCHEDULE_COURSE_COUNT_MAX - selectedCount);
   const min = selectedCount > 0 ? 0 : 1;
@@ -97,7 +90,6 @@ function buildActiveFilterHints(opts: {
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
   blockedTimes: readonly BlockedTime[];
-  generationMinProfessorRating: number | null | undefined;
   virtualSectionsOnly: boolean;
   includeClosedComponents: boolean;
   languageBuckets: string[];
@@ -107,7 +99,6 @@ function buildActiveFilterHints(opts: {
     generationMinStartMinutes,
     generationMaxEndMinutes,
     blockedTimes,
-    generationMinProfessorRating,
     virtualSectionsOnly,
     includeClosedComponents,
     languageBuckets,
@@ -128,10 +119,6 @@ function buildActiveFilterHints(opts: {
   const avoidedDays = avoidedDaysFromBlocks(blockedTimes);
   if (avoidedDays.length > 0) {
     hints.push({ code: "days-excluded", days: avoidedDays });
-  }
-
-  if (generationMinProfessorRating != null) {
-    hints.push({ code: "prof-rating", rating: generationMinProfessorRating });
   }
 
   if (virtualSectionsOnly) {
@@ -223,7 +210,6 @@ export async function generateSchedulesAction(
     electiveLevelBuckets,
     generationMinStartMinutes,
     generationMaxEndMinutes,
-    generationMinProfessorRating,
     professorRatings,
     currentSeed,
     firstSeed,
@@ -233,6 +219,7 @@ export async function generateSchedulesAction(
     generationCompressedSchedule,
     generationPreferEasier,
     generationPreferHigherSentiment,
+    generationPreferHigherProfessorRating,
     courseSentimentByNorm,
     frenchImmersionStream,
   } = input;
@@ -318,14 +305,11 @@ export async function generateSchedulesAction(
   }
 
   const completedFirstYearCredits = sumCompletedFirstYearCredits(completedCourses, cache);
-  const effectiveMinProfessorRating = normalizedProfessorRatingPreference(
-    generationMinProfessorRating,
-  );
 
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,
     maxEndMinutes: generationMaxEndMinutes,
-    minProfessorRating: effectiveMinProfessorRating,
+    generationPreferHigherProfessorRating,
     professorRatings: professorRatings ?? undefined,
     maxFirstYearCredits: generationLimitFirstYearCredits
       ? Math.max(0, 48 - (completedFirstYearCredits ?? 0))
@@ -412,7 +396,6 @@ export async function generateSchedulesAction(
     generationMinStartMinutes,
     generationMaxEndMinutes,
     blockedTimes: input.blockedTimes,
-    generationMinProfessorRating: effectiveMinProfessorRating,
     virtualSectionsOnly,
     includeClosedComponents,
     languageBuckets,
@@ -487,7 +470,6 @@ async function handleBasicGeneration(
     electiveLevelBuckets,
     generationMinStartMinutes,
     generationMaxEndMinutes,
-    generationMinProfessorRating,
     professorRatings,
     currentSeed,
     firstSeed,
@@ -495,6 +477,7 @@ async function handleBasicGeneration(
     virtualSectionsOnly,
     generationPreferEasier,
     generationPreferHigherSentiment,
+    generationPreferHigherProfessorRating,
     courseSentimentByNorm,
     generationCompressedSchedule,
     generationLimitFirstYearCredits,
@@ -505,9 +488,6 @@ async function handleBasicGeneration(
   } = input;
 
   const completedFirstYearCredits = sumCompletedFirstYearCredits(completedCourses, cache);
-  const effectiveMinProfessorRating = normalizedProfessorRatingPreference(
-    generationMinProfessorRating,
-  );
   const effectiveBasicElectivesCount = clampAdditionalElectiveCount(
     basicElectivesCount,
     basketCourses.length,
@@ -516,7 +496,7 @@ async function handleBasicGeneration(
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,
     maxEndMinutes: generationMaxEndMinutes,
-    minProfessorRating: effectiveMinProfessorRating,
+    generationPreferHigherProfessorRating,
     professorRatings: professorRatings ?? undefined,
     maxFirstYearCredits: generationLimitFirstYearCredits
       ? Math.max(0, 48 - completedFirstYearCredits)

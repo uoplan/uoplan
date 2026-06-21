@@ -5,7 +5,7 @@ import type { ExploreCourseSearchEntry, ExploreOfferingFlat } from "./gradesSear
 const SKIP_GRADES = new Set(["P", "S", "NS", "NC", "ABS", "EIN"]);
 
 /** Minimum countable graded students before a course can appear in spotlight lists. */
-export const SPOTLIGHT_MIN_GRADED_COUNT = 40;
+export const SPOTLIGHT_MIN_GRADED_COUNT = 50;
 
 /** Max courses returned per spotlight variant. */
 const SPOTLIGHT_TOP_N = 16;

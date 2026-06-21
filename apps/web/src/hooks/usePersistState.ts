@@ -34,7 +34,7 @@ function hasPersistedStateChange(next: AppStore, prev: AppStore): boolean {
     next.basicExcludedCategories !== prev.basicExcludedCategories ||
     next.generationMinStartMinutes !== prev.generationMinStartMinutes ||
     next.generationMaxEndMinutes !== prev.generationMaxEndMinutes ||
-    next.generationMinProfessorRating !== prev.generationMinProfessorRating ||
+    next.generationPreferHigherProfessorRating !== prev.generationPreferHigherProfessorRating ||
     next.generationLimitFirstYearCredits !== prev.generationLimitFirstYearCredits ||
     next.generationCompressedSchedule !== prev.generationCompressedSchedule ||
     next.generationPreferEasier !== prev.generationPreferEasier ||
