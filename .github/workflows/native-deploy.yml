@@ -81,6 +81,9 @@ jobs:
     env:
       # eas-cli authenticates with this token; no Expo username/password needed.
       EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      # The app uses custom native modules (e.g. the JNI schedule engine) and is
+      # never run via Expo Go, so silence EAS's "you use Expo Go" heuristic warning.
+      EAS_BUILD_NO_EXPO_GO_WARNING: "true"
       PLATFORM: ${{ matrix.platform }}
       PROFILE: ${{ inputs.profile }}
       SHOULD_SUBMIT: ${{ inputs.submit }}
