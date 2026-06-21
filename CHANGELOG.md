@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.0.0-beta.36](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.35...uoplan-monorepo-v1.0.0-beta.36) (2026-06-21)
+
+
+### Features
+
+* **native:** add week navigation to the schedule control bar ([9704ef5](https://github.com/uoplan/uoplan/commit/9704ef55518de55d928b133a5c554476c6942435))
+* **native:** generate schedules lazily with an unbounded next ([d9a4f4c](https://github.com/uoplan/uoplan/commit/d9a4f4c9880dd661f38160b480169714e370ec5c))
+* **native:** reach web parity on generation options and restructure the schedule drawer ([b6aaaee](https://github.com/uoplan/uoplan/commit/b6aaaee83bdbb82c3c27474ebb0de8885adc0cf1))
+* **schedule:** rework professor rating into a soft section-weighting preference ([595d174](https://github.com/uoplan/uoplan/commit/595d174b234fd288be2c898d82d32dad9db67c55))
+* **web:** polish generation options sidebar and raise explore spotlight minimum to 50 students ([3cadf59](https://github.com/uoplan/uoplan/commit/3cadf59b904a065ee53dc4ffbe8b96bff11504cd))
+
+
+### Bug Fixes
+
+* **a11y:** darken light-theme success green so white CTA text meets WCAG AA ([d59bc70](https://github.com/uoplan/uoplan/commit/d59bc70fd83ebbe3e9d092948e1ee82c7e8911b0))
+* **native:** cancel superseded schedule generation and stream variants progressively ([abf93d5](https://github.com/uoplan/uoplan/commit/abf93d5c72d8a5d0cbacb34665e3d10aebad003a))
+* **native:** clear basket drawer search when it closes ([dfecfa9](https://github.com/uoplan/uoplan/commit/dfecfa93b39d7e9c833b52ce90e93baa2c57dec3))
+* **native:** navigate to existing schedule page instead of pushing a duplicate ([e5736d5](https://github.com/uoplan/uoplan/commit/e5736d53f7c5a42cf3d85e2144352f610396c6da))
+
 ## [1.0.0-beta.35](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.34...uoplan-monorepo-v1.0.0-beta.35) (2026-06-20)
 
 
