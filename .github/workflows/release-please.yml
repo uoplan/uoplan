@@ -12,6 +12,8 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     outputs:
+      app_release_created: ${{ steps.release.outputs['.--release_created'] }}
+      app_tag_name: ${{ steps.release.outputs['.--tag_name'] }}
       cli_release_created: ${{ steps.release.outputs['apps/cli--release_created'] }}
       cli_tag_name: ${{ steps.release.outputs['apps/cli--tag_name'] }}
     steps:
@@ -28,3 +30,16 @@ jobs:
       tag: ${{ needs.release-please.outputs.cli_tag_name }}
     permissions:
       contents: write
+
+  native-release:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.app_release_created == 'true' }}
+    uses: ./.github/workflows/native-deploy.yml
+    with:
+      platform: all
+      profile: production
+      submit: true
+    secrets:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+    permissions:
+      contents: read
