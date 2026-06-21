@@ -23,7 +23,6 @@ export const BUNDLED_DATA_MODULES = {
   "indices.pb": require("../../assets/data/indices.pb"),
   "professors.pb": require("../../assets/data/professors.pb"),
   "ratemyprofessors.pb": require("../../assets/data/ratemyprofessors.pb"),
-  "schedules.2261.pb": require("../../assets/data/schedules.2261.pb"),
   "schedules.2265.pb": require("../../assets/data/schedules.2265.pb"),
   "schedules.2269.pb": require("../../assets/data/schedules.2269.pb"),
   "schedules.2271.pb": require("../../assets/data/schedules.2271.pb"),

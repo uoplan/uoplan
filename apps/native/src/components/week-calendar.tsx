@@ -3,13 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import type { CalendarEvent } from "@uoplan/calendar/types";
-import {
-  assignLanes,
-  CAL_END_MINUTES,
-  CAL_START_MINUTES,
-  DAY_LABELS,
-  WEEKDAY_CODES,
-} from "@uoplan/calendar/layout";
+import { assignLanes, DAY_LABELS, WEEKDAY_CODES } from "@uoplan/calendar/layout";
 import { mergeBlockedWindows, type BlockedTimeWindow } from "@uoplan/core";
 import { COURSE_COLOR_HEX, COURSE_COLORS } from "@uoplan/core/utils/uiUtils";
 
@@ -20,11 +14,24 @@ import { useAdaptiveLayout } from "@/lib/adaptive-layout";
 
 const TIME_AXIS_W = 42;
 const HEIGHT_PER_HOUR = 40;
-const DEFAULT_END_MINUTES = 18 * 60; // 18:00
+// The native timetable shows a FIXED window (08:30 → 22:00) matching uOttawa's
+// standard lecture blocks, so the grid never reflows as events change (the web
+// calendar is likewise static). Events outside this window are rare and clip.
+const WINDOW_START_MINUTES = 8 * 60 + 30; // 08:30
+const WINDOW_END_MINUTES = 22 * 60; // 22:00
+// Whole-hour gridlines that fall inside the window (09:00 … 22:00).
+const HOUR_LINES = Array.from(
+  { length: Math.floor(WINDOW_END_MINUTES / 60) - Math.ceil(WINDOW_START_MINUTES / 60) + 1 },
+  (_, i) => Math.ceil(WINDOW_START_MINUTES / 60) + i,
+);
 // Day-header row (label + bottom margin) reserved above the grid.
 const HEADER_BLOCK_PX = 28;
 // Floor for a single hour row so events stay legible on tall windows.
 const MIN_HOUR_PX = 34;
+
+const pad2 = (n: number) => String(n).padStart(2, "0");
+const formatAxisLabel = (minutes: number) =>
+  `${pad2(Math.floor(minutes / 60))}:${pad2(minutes % 60)}`;
 
 // Web parity (tokens.css): the event fill mixes the bright course colour with a
 // base (dark → app bg @ 38%, light → white @ 60%) for a translucent card; the
@@ -152,9 +159,9 @@ export interface WeekCalendarProps {
  * Read-only native week timetable. Reuses the shared `@uoplan/calendar` layout
  * math (`assignLanes` for overlap lanes, `WEEKDAY_CODES`/`DAY_LABELS`) and
  * positions events as absolutely-placed RN Views — no SVG, so it needs no native
- * rebuild. The vertical window auto-fits the events (08:00 → latest class,
- * minimum 18:00) within the shared calendar bounds; when `availableHeight` is
- * given the grid is sized to fill exactly that space.
+ * rebuild. The vertical window is a FIXED 08:30 → 22:00 (matching uOttawa's
+ * standard lecture blocks) so the grid never reflows as events change; when
+ * `availableHeight` is given the grid is sized to fill exactly that space.
  */
 export function WeekCalendar({
   events,
@@ -167,15 +174,9 @@ export function WeekCalendar({
   const { isTablet, contentMaxWidth } = useAdaptiveLayout();
   const colors = useMemo(() => buildCourseColors(events), [events]);
 
-  const windowEnd = useMemo(() => {
-    const latestEvent = events.reduce((max, e) => Math.max(max, e.endMinutes), DEFAULT_END_MINUTES);
-    const latest = blockedTimes.reduce((max, b) => Math.max(max, b.endMinutes), latestEvent);
-    const roundedUp = Math.ceil(latest / 60) * 60;
-    return Math.min(CAL_END_MINUTES, Math.max(DEFAULT_END_MINUTES, roundedUp));
-  }, [blockedTimes, events]);
-
-  const startHour = CAL_START_MINUTES / 60;
-  const endHour = windowEnd / 60;
+  const windowEnd = WINDOW_END_MINUTES;
+  const startHour = WINDOW_START_MINUTES / 60;
+  const endHour = WINDOW_END_MINUTES / 60;
 
   const hourPx = useMemo(() => {
     if (availableHeight != null) {
@@ -185,12 +186,7 @@ export function WeekCalendar({
     return heightPerHour ?? HEIGHT_PER_HOUR;
   }, [availableHeight, endHour, startHour, heightPerHour]);
 
-  const gridHeight = ((windowEnd - CAL_START_MINUTES) / 60) * hourPx;
-
-  const hourLines = useMemo(
-    () => Array.from({ length: endHour - startHour + 1 }, (_, i) => startHour + i),
-    [startHour, endHour],
-  );
+  const gridHeight = ((WINDOW_END_MINUTES - WINDOW_START_MINUTES) / 60) * hourPx;
 
   const dedupedEvents = useMemo(() => dedupeWeeklySlots(events), [events]);
 
@@ -209,7 +205,7 @@ export function WeekCalendar({
   );
 
   const gestureLayout = useMemo(
-    () => ({ startMinutes: CAL_START_MINUTES, endMinutes: windowEnd, heightPx: gridHeight }),
+    () => ({ startMinutes: WINDOW_START_MINUTES, endMinutes: windowEnd, heightPx: gridHeight }),
     [gridHeight, windowEnd],
   );
 
@@ -246,18 +242,22 @@ export function WeekCalendar({
       {/* Grid body */}
       <View style={[styles.body, { height: gridHeight }]}>
         {/* Hour gridlines spanning full width */}
-        {hourLines.map((h) => {
+        {HOUR_LINES.map((h) => {
           const top = (h - startHour) * hourPx;
           return <View key={h} style={[styles.hourLine, { top }]} pointerEvents="none" />;
         })}
 
-        {/* Time axis labels */}
+        {/* Time axis labels — the fixed 08:30 start plus each whole hour (the
+            22:00 bottom line is omitted so it doesn't clip at the grid edge). */}
         <View style={[styles.timeAxis, { width: TIME_AXIS_W }]}>
-          {hourLines.slice(0, -1).map((h) => {
+          <Text style={[styles.timeLabel, { top: -6 }]}>
+            {formatAxisLabel(WINDOW_START_MINUTES)}
+          </Text>
+          {HOUR_LINES.slice(0, -1).map((h) => {
             const top = (h - startHour) * hourPx;
             return (
               <Text key={h} style={[styles.timeLabel, { top: top - 6 }]}>
-                {String(h).padStart(2, "0")}:00
+                {formatAxisLabel(h * 60)}
               </Text>
             );
           })}
@@ -276,7 +276,7 @@ export function WeekCalendar({
                 onUpdate={updateBlockedTime}
               />
               {dayEvents.map(({ event, laneIndex, laneCount }) => {
-                const top = ((event.startMinutes - CAL_START_MINUTES) / 60) * hourPx;
+                const top = ((event.startMinutes - WINDOW_START_MINUTES) / 60) * hourPx;
                 const height = ((event.endMinutes - event.startMinutes) / 60) * hourPx;
                 const widthPct = 100 / laneCount;
                 const leftPct = laneIndex * widthPct;

@@ -694,6 +694,10 @@ export function buildAdvancedRequestInputFromPersonalize(input: {
   generationPreferEasier: boolean;
   generationPreferHigherSentiment: boolean;
   courseSentimentByNorm: AdvancedRequestInput["courseSentimentByNorm"];
+  levelBuckets?: CourseLevelBucket[];
+  languageBuckets?: CourseLanguageBucket[];
+  basicExcludedCategories?: string[];
+  frenchImmersionStream?: boolean;
   blacklistedCourses: string[];
   currentSeed: number;
   firstSeed: number;
@@ -710,8 +714,9 @@ export function buildAdvancedRequestInputFromPersonalize(input: {
     selectedOptionsPerRequirement: requirements.selectedOptionsPerRequirement,
     coursesThisSemester: requirements.coursesThisSemester,
     forcedCourses: [],
-    levelBuckets: ["undergrad", "grad"] satisfies CourseLevelBucket[],
-    languageBuckets: ["en", "fr", "other"] satisfies CourseLanguageBucket[],
+    levelBuckets: input.levelBuckets ?? (["undergrad", "grad"] satisfies CourseLevelBucket[]),
+    languageBuckets:
+      input.languageBuckets ?? (["en", "fr", "other"] satisfies CourseLanguageBucket[]),
     electiveLevelBuckets:
       (requirements as { electiveLevelBuckets?: number[] }).electiveLevelBuckets ?? [],
     includeClosedComponents: input.includeClosedComponents,
@@ -719,9 +724,9 @@ export function buildAdvancedRequestInputFromPersonalize(input: {
     generationPreferEasier: input.generationPreferEasier,
     generationPreferHigherSentiment: input.generationPreferHigherSentiment,
     courseSentimentByNorm: input.courseSentimentByNorm,
-    frenchImmersionStream: false,
+    frenchImmersionStream: input.frenchImmersionStream ?? false,
     blacklistedCourses: input.blacklistedCourses,
-    basicExcludedCategories: [],
+    basicExcludedCategories: input.basicExcludedCategories ?? [],
     currentSeed: input.currentSeed,
     firstSeed: input.firstSeed,
   };

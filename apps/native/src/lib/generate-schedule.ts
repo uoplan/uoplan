@@ -177,25 +177,43 @@ export function buildScheduleDataCache(
  * Build the engine {@link GenerationConstraints} from the user's schedule
  * options. Shared by generation and the swap-candidate feasibility check so a
  * swapped-in course honours the same time window / blocked times / rating
- * filter as the rest of the timetable.
+ * filter as the rest of the timetable. `maxFirstYearCredits` caps the first-year
+ * (1xxx) credit budget when the user keeps the first-year limit on (web parity).
  */
 export function buildGenerationConstraints(
   options: ScheduleOptions,
   ratings: ProfessorRatingsMap | null,
+  maxFirstYearCredits?: number,
 ): GenerationConstraints {
-  const useRatingFilter = options.minProfessorRating != null && ratings != null;
   return {
     minStartMinutes: options.minStartMinutes,
     maxEndMinutes: options.maxEndMinutes,
     compressedSchedule: options.compressedSchedule,
     blockedTimes: blockedTimesForScheduleOptions(options),
-    ...(useRatingFilter
-      ? {
-          minProfessorRating: options.minProfessorRating ?? undefined,
-          professorRatings: ratings,
-        }
-      : {}),
+    generationPreferHigherProfessorRating: options.preferHigherProfessorRating,
+    ...(maxFirstYearCredits != null ? { maxFirstYearCredits } : {}),
+    ...(ratings != null ? { professorRatings: ratings } : {}),
   };
+}
+
+/**
+ * The first-year (1xxx) credit cap to apply, or `undefined` when the limit is
+ * off. Mirrors the web `sumCompletedFirstYearCredits` math: 48 minus the
+ * first-year credits the student has already completed.
+ */
+export function firstYearCreditCapFor(
+  options: ScheduleOptions,
+  completedCourses: readonly string[],
+  cache: DataCache,
+): number | undefined {
+  if (!options.limitFirstYearCredits) return undefined;
+  let completed = 0;
+  for (const code of completedCourses) {
+    const m = code.match(/\d{4}/);
+    if (!m || Number(m[0]) >= 2000) continue;
+    completed += cache.getCourse(code)?.credits ?? 3;
+  }
+  return Math.max(0, 48 - completed);
 }
 
 function dataCacheFor(
@@ -271,9 +289,14 @@ export async function generateScheduleVariants(
       })
     : null;
 
-  // RateMyProfessors rating filtering needs the ratings map alongside the
-  // threshold; only attach it when the user set a minimum (web parity).
-  const constraints: GenerationConstraints = buildGenerationConstraints(options, ratings);
+  // The professor-rating preference biases section selection toward higher-rated
+  // instructors; attach the ratings map whenever we have it so the engine can
+  // weight by it (web parity).
+  const constraints: GenerationConstraints = buildGenerationConstraints(
+    options,
+    ratings,
+    firstYearCreditCapFor(options, completedCourses, cache),
+  );
 
   // Intelligently drop basket courses we can't actually put on a timetable so
   // pinning them doesn't fail the whole generation. Two reasons:
@@ -326,7 +349,11 @@ export async function generateScheduleVariants(
             generationPreferEasier: options.preferEasier,
             generationPreferHigherSentiment: options.preferHigherSentiment,
             courseSentimentByNorm,
-            blacklistedCourses: [],
+            levelBuckets: options.levelBuckets,
+            languageBuckets: options.languageBuckets,
+            basicExcludedCategories: options.basicExcludedCategories,
+            frenchImmersionStream: options.frenchImmersionStream,
+            blacklistedCourses: options.blacklistedCourses,
             currentSeed: seed,
             firstSeed: 0,
           }),
@@ -335,21 +362,21 @@ export async function generateScheduleVariants(
       : buildBasicRequest(
           {
             basketCourses: schedulableBasket,
-            basicElectivesCount: 0,
-            basicExcludedCategories: [],
+            basicElectivesCount: options.basicElectivesCount,
+            basicExcludedCategories: options.basicExcludedCategories,
             studentPrograms: [],
-            frenchImmersionStream: false,
+            frenchImmersionStream: options.frenchImmersionStream,
             constraints,
-            completedCourses: [],
-            levelBuckets: [],
-            languageBuckets: [],
+            completedCourses: [...completedCourses],
+            levelBuckets: options.levelBuckets,
+            languageBuckets: options.languageBuckets,
             electiveLevelBuckets: options.electiveLevelBuckets,
             includeClosedComponents: options.includeClosedComponents,
             virtualSectionsOnly: options.virtualSectionsOnly,
             generationPreferEasier: options.preferEasier,
             generationPreferHigherSentiment: options.preferHigherSentiment,
             courseSentimentByNorm,
-            blacklistedCourses: [],
+            blacklistedCourses: options.blacklistedCourses,
             currentSeed: seed,
             firstSeed: 0,
           },

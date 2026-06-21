@@ -14,8 +14,8 @@ describe("WeekCalendar (native)", () => {
     expect(getByText("Mon")).toBeTruthy();
     expect(getByText("Fri")).toBeTruthy();
 
-    // An hour label from the time axis.
-    expect(getByText("08:00")).toBeTruthy();
+    // The fixed time axis always starts at 08:30.
+    expect(getByText("08:30")).toBeTruthy();
 
     // Course codes from the sample week (ITI runs Mon + Wed + Fri; MAT Tue + Thu).
     expect(getAllByText("ITI 1120").length).toBeGreaterThanOrEqual(2);
