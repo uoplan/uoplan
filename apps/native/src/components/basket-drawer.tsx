@@ -228,7 +228,12 @@ export function BasketDrawer({ opened, onClose }: BasketDrawerProps) {
         easing: Easing.in(Easing.cubic),
         useNativeDriver: true,
       }).start(({ finished }) => {
-        if (finished) setMounted(false);
+        if (finished) {
+          setMounted(false);
+          // Reset the search once the drawer is fully closed so reopening never
+          // shows stale results (cleared post-animation to avoid a mid-close flash).
+          setSearchQuery("");
+        }
       });
     }
   }, [opened, mounted, progress]);
