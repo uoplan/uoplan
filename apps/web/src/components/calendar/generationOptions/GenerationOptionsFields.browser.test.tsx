@@ -69,7 +69,7 @@ test("smart options expands child preferences and toggles them as a group", asyn
   const onCompressedScheduleChange = vi.fn();
   const onPreferEasierCoursesChange = vi.fn();
   const onPreferHigherSentimentChange = vi.fn();
-  const onMinProfessorRatingChange = vi.fn();
+  const onPreferHigherProfessorRatingChange = vi.fn();
 
   await renderWithProviders(
     <GenerationOptionsFields
@@ -78,15 +78,15 @@ test("smart options expands child preferences and toggles them as a group", asyn
       compressedSchedule={false}
       preferEasierCourses={false}
       preferHigherSentiment={false}
-      minProfessorRating={null}
+      preferHigherProfessorRating={false}
       onCompressedScheduleChange={onCompressedScheduleChange}
       onPreferEasierCoursesChange={onPreferEasierCoursesChange}
       onPreferHigherSentimentChange={onPreferHigherSentimentChange}
-      onMinProfessorRatingChange={onMinProfessorRatingChange}
+      onPreferHigherProfessorRatingChange={onPreferHigherProfessorRatingChange}
     />,
   );
 
-  const expand = page.getByRole("button", { name: /Show smart options/i });
+  const expand = page.getByRole("button", { name: /Smart options/i });
   await expand.click();
   await expect.element(page.getByText("Compressed schedule")).toBeInTheDocument();
   await expect.element(page.getByText("Prefer professors with better ratings")).toBeInTheDocument();
@@ -97,11 +97,11 @@ test("smart options expands child preferences and toggles them as a group", asyn
   expect(onCompressedScheduleChange).toHaveBeenCalledWith(true);
   expect(onPreferEasierCoursesChange).toHaveBeenCalledWith(true);
   expect(onPreferHigherSentimentChange).toHaveBeenCalledWith(true);
-  expect(onMinProfessorRatingChange).toHaveBeenCalledWith(2);
+  expect(onPreferHigherProfessorRatingChange).toHaveBeenCalledWith(true);
 });
 
-test("smart options clears the lenient professor-rating baseline when toggled off", async () => {
-  const onMinProfessorRatingChange = vi.fn();
+test("smart options clears the professor-rating preference when toggled off", async () => {
+  const onPreferHigherProfessorRatingChange = vi.fn();
 
   await renderWithProviders(
     <GenerationOptionsFields
@@ -110,30 +110,30 @@ test("smart options clears the lenient professor-rating baseline when toggled of
       compressedSchedule
       preferEasierCourses
       preferHigherSentiment
-      minProfessorRating={2}
-      onMinProfessorRatingChange={onMinProfessorRatingChange}
+      preferHigherProfessorRating
+      onPreferHigherProfessorRatingChange={onPreferHigherProfessorRatingChange}
     />,
   );
 
   await page.getByRole("checkbox", { name: "Smart options" }).click();
 
-  expect(onMinProfessorRatingChange).toHaveBeenCalledWith(null);
+  expect(onPreferHigherProfessorRatingChange).toHaveBeenCalledWith(false);
 });
 
-test("professor-rating smart option maps to the lenient minimum rating", async () => {
-  const onMinProfessorRatingChange = vi.fn();
+test("professor-rating smart option toggles the preference flag", async () => {
+  const onPreferHigherProfessorRatingChange = vi.fn();
 
   await renderWithProviders(
     <GenerationOptionsFields
       {...baseProps()}
       advancedOptions={OPEN_ADVANCED}
-      minProfessorRating={null}
-      onMinProfessorRatingChange={onMinProfessorRatingChange}
+      preferHigherProfessorRating={false}
+      onPreferHigherProfessorRatingChange={onPreferHigherProfessorRatingChange}
     />,
   );
 
-  await page.getByRole("button", { name: /Show smart options/i }).click();
+  await page.getByRole("button", { name: /Smart options/i }).click();
   await page.getByRole("checkbox", { name: "Prefer professors with better ratings" }).click();
 
-  expect(onMinProfessorRatingChange).toHaveBeenCalledWith(2);
+  expect(onPreferHigherProfessorRatingChange).toHaveBeenCalledWith(true);
 });

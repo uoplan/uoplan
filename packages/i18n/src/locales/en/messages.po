@@ -1687,9 +1687,6 @@ msgstr "End time restricted to before {time}"
 msgid "gen.hint.languageFilter"
 msgstr "Language filter: {langs} only"
 
-msgid "gen.hint.profRating"
-msgstr "Professor rating ≥ {rating}"
-
 msgid "gen.hint.startAfter"
 msgstr "Start time restricted to after {time}"
 
@@ -1768,9 +1765,6 @@ msgstr "Quick fixes"
 msgid "gen.slots.summary"
 msgstr "Only {available} of {needed} course slots can be filled with your current filters"
 
-msgid "gen.suggest.clearMinRating"
-msgstr "Clear minimum professor rating."
-
 msgid "gen.suggest.combinedBlockersIntro"
 msgstr "No single filter is the culprit — relaxing several together helps:"
 
@@ -1800,9 +1794,6 @@ msgstr "Widen class hours or change Constrain / Assign picks."
 
 msgid "generationOptions.count.label"
 msgstr "Electives this semester (additional)"
-
-msgid "generationOptions.count.description"
-msgstr "Courses you already picked count first; this adjusts only the extra electives the planner can add."
 
 msgid "generationOptions.courses.label"
 msgstr "Courses you want"
@@ -2486,7 +2477,7 @@ msgid "scheduleCount.preferSentiment.label"
 msgstr "Prefer courses with better feedback"
 
 msgid "scheduleCount.preferProfessorRating.description"
-msgstr "Applies a lenient 2.0+ RateMyProfessors baseline. Professors without ratings are still allowed."
+msgstr "Favours sections taught by higher-rated professors. Professors without ratings are treated as average."
 
 msgid "scheduleCount.smartOptions.hide"
 msgstr "Hide smart options"
@@ -2499,6 +2490,21 @@ msgstr "Let the planner softly bias schedules toward easier, better-rated, and m
 
 msgid "scheduleCount.smartOptions.label"
 msgstr "Smart options"
+
+msgid "scheduleCount.smartOptions.summary.compressed"
+msgstr "Compressed schedule"
+
+msgid "scheduleCount.smartOptions.summary.easier"
+msgstr "Easier courses"
+
+msgid "scheduleCount.smartOptions.summary.feedback"
+msgstr "Better course feedback"
+
+msgid "scheduleCount.smartOptions.summary.firstYear"
+msgstr "1000-level credit cap"
+
+msgid "scheduleCount.smartOptions.summary.professors"
+msgstr "Higher-rated professors"
 
 msgid "scheduleCount.preferProfessorRating.label"
 msgstr "Prefer professors with better ratings"

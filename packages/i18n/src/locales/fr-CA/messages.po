@@ -1687,9 +1687,6 @@ msgstr "Fin limitée à avant {time}"
 msgid "gen.hint.languageFilter"
 msgstr "Filtre de langue : {langs} seulement"
 
-msgid "gen.hint.profRating"
-msgstr "Note du professeur ≥ {rating}"
-
 msgid "gen.hint.startAfter"
 msgstr "Début limité à après {time}"
 
@@ -1768,9 +1765,6 @@ msgstr "Solutions rapides"
 msgid "gen.slots.summary"
 msgstr "Seulement {available} des {needed} places de cours peuvent être remplies avec vos filtres actuels"
 
-msgid "gen.suggest.clearMinRating"
-msgstr "Retirez la note minimale du professeur."
-
 msgid "gen.suggest.combinedBlockersIntro"
 msgstr "Aucun filtre unique n'est en cause — en assouplir plusieurs ensemble aide :"
 
@@ -1800,9 +1794,6 @@ msgstr "Élargissez les heures de cours ou modifiez vos choix Contraindre / Assi
 
 msgid "generationOptions.count.label"
 msgstr "Cours optionnels ce trimestre (en plus)"
-
-msgid "generationOptions.count.description"
-msgstr "Les cours déjà choisis comptent d’abord; ceci ajuste seulement les cours optionnels supplémentaires que le planificateur peut ajouter."
 
 msgid "generationOptions.courses.label"
 msgstr "Cours souhaités"
@@ -2486,7 +2477,7 @@ msgid "scheduleCount.preferSentiment.label"
 msgstr "Préférer les cours mieux évalués"
 
 msgid "scheduleCount.preferProfessorRating.description"
-msgstr "Applique un seuil RateMyProfessors souple de 2,0+. Les professeurs sans note restent permis."
+msgstr "Favorise les sections données par des professeurs mieux évalués. Les professeurs sans note sont considérés comme moyens."
 
 msgid "scheduleCount.smartOptions.hide"
 msgstr "Masquer les options intelligentes"
@@ -2499,6 +2490,21 @@ msgstr "Laissez le planificateur favoriser légèrement les horaires plus compac
 
 msgid "scheduleCount.smartOptions.label"
 msgstr "Options intelligentes"
+
+msgid "scheduleCount.smartOptions.summary.compressed"
+msgstr "Horaire compact"
+
+msgid "scheduleCount.smartOptions.summary.easier"
+msgstr "Cours plus faciles"
+
+msgid "scheduleCount.smartOptions.summary.feedback"
+msgstr "Meilleurs avis de cours"
+
+msgid "scheduleCount.smartOptions.summary.firstYear"
+msgstr "Plafond de crédits 1000"
+
+msgid "scheduleCount.smartOptions.summary.professors"
+msgstr "Professeurs mieux évalués"
 
 msgid "scheduleCount.preferProfessorRating.label"
 msgstr "Préférer les professeurs mieux évalués"

@@ -88,7 +88,6 @@ export const DYNAMIC_TR_IDS = [
     "relaxFilters",
     "tryDifferentCourse",
     "turnOffCompressed",
-    "clearMinRating",
     "widenHoursDays",
     "relaxFyCap",
     "unBlacklist",

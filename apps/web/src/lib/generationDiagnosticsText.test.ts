@@ -16,7 +16,6 @@ const ALL_SUGGESTION_CODES: SuggestionCode[] = [
   "relax-filters",
   "try-different-course",
   "turn-off-compressed",
-  "clear-min-rating",
   "widen-hours-days",
   "relax-fy-cap",
   "un-blacklist",
@@ -63,11 +62,11 @@ describe("generationDiagnosticsText", () => {
 
   it("formats suggestions from a diagnostics object in order", () => {
     const tf = {
-      suggestions: ["turn-off-compressed", "clear-min-rating"],
+      suggestions: ["turn-off-compressed", "widen-hours-days"],
     } as unknown as TimetableFailureDiagnostics;
     expect(formatSuggestions(tf)).toEqual([
       "Turn off Compressed schedule.",
-      "Clear minimum professor rating.",
+      "Widen class hours or allow more weekdays.",
     ]);
   });
 
@@ -126,7 +125,6 @@ describe("generationDiagnosticsText", () => {
     expect(formatFilterHint({ code: "days-excluded", days: ["Mo", "Fr"] })).toBe(
       "Days excluded: Mon, Fri",
     );
-    expect(formatFilterHint({ code: "prof-rating", rating: 3.5 })).toBe("Professor rating ≥ 3.5");
     expect(formatFilterHint({ code: "virtual-only" })).toBe("Virtual sections only");
     expect(formatFilterHint({ code: "language-filter", langs: ["fr", "other"] })).toBe(
       "Language filter: French, Other only",

@@ -31,7 +31,7 @@ export function BasicCalendarSidebarControls() {
     blockedTimes,
     generationMinStartMinutes,
     generationMaxEndMinutes,
-    generationMinProfessorRating,
+    generationPreferHigherProfessorRating,
     generationLimitFirstYearCredits,
     generationCompressedSchedule,
     generationPreferEasier,
@@ -52,7 +52,7 @@ export function BasicCalendarSidebarControls() {
     setGenerationMinStartMinutes,
     setGenerationMaxEndMinutes,
     setAvoidedDays,
-    setGenerationMinProfessorRating,
+    setGenerationPreferHigherProfessorRating,
     setGenerationLimitFirstYearCredits,
     setGenerationCompressedSchedule,
     setGenerationPreferEasier,
@@ -150,9 +150,9 @@ export function BasicCalendarSidebarControls() {
         }}
         avoidedDays={avoidedDaysFromBlocks(blockedTimes)}
         onAvoidedDaysChange={(days) => setAvoidedDays(days)}
-        minProfessorRating={generationMinProfessorRating}
-        onMinProfessorRatingChange={(r) => {
-          setGenerationMinProfessorRating(r);
+        preferHigherProfessorRating={generationPreferHigherProfessorRating}
+        onPreferHigherProfessorRatingChange={(v) => {
+          setGenerationPreferHigherProfessorRating(v);
           markBasicSettingsChanged();
         }}
         levelBuckets={levelBuckets}
@@ -205,7 +205,6 @@ export function BasicCalendarSidebarControls() {
         }}
         advancedOptions={{
           collapseId: "basic-advanced-options-collapse",
-          badge: { label: tr("app.constraints.optional"), color: "gray" },
         }}
       />
 

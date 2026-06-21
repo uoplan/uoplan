@@ -35,7 +35,6 @@ const SUGGESTION_KEY: Record<SuggestionCode, string> = {
   "relax-filters": "gen.suggest.relaxFilters",
   "try-different-course": "gen.suggest.tryDifferentCourse",
   "turn-off-compressed": "gen.suggest.turnOffCompressed",
-  "clear-min-rating": "gen.suggest.clearMinRating",
   "widen-hours-days": "gen.suggest.widenHoursDays",
   "relax-fy-cap": "gen.suggest.relaxFyCap",
   "un-blacklist": "gen.suggest.unBlacklist",
@@ -111,8 +110,6 @@ export function formatFilterHint(hint: FilterHintDescriptor): string {
       return tr("gen.hint.endBefore", { time: hint.time });
     case "days-excluded":
       return tr("gen.hint.daysExcluded", { days: formatDays(hint.days) });
-    case "prof-rating":
-      return tr("gen.hint.profRating", { rating: hint.rating });
     case "virtual-only":
       return tr("gen.hint.virtualOnly");
     case "closed-excluded":

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 import {
-  ActionIcon,
   Alert,
   Badge,
   Box,
@@ -16,15 +15,13 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import type { MultiSelectProps } from "@mantine/core";
-import { IconChevronDown } from "@tabler/icons-react";
+import { IconAdjustmentsHorizontal, IconChevronDown } from "@tabler/icons-react";
 import type { DayOfWeek } from "@uoplan/core";
 import { BasicCourseFiltersCard } from "../../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../../i18n";
 import { DayAvoidToggles } from "./DayAvoidToggles";
 import { TimeRangeSelect } from "./TimeRangeSelect";
-
-const LENIENT_PROFESSOR_RATING_MIN = 2;
 
 interface SimpleMultiSelectProps {
   data: { value: string; label: string }[];
@@ -83,8 +80,8 @@ export interface GenerationOptionsFieldsProps {
   onMaxEndMinutesChange: (minutes: number) => void;
   avoidedDays: DayOfWeek[];
   onAvoidedDaysChange: (days: DayOfWeek[]) => void;
-  minProfessorRating: number | null;
-  onMinProfessorRatingChange: (rating: number | null) => void;
+  preferHigherProfessorRating: boolean;
+  onPreferHigherProfessorRatingChange: (v: boolean) => void;
 
   /** Course filters (shared card with exclude-subjects + exclude-courses). */
   levelBuckets: ("undergrad" | "grad")[];
@@ -166,12 +163,8 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
     <Checkbox
       label={tr("scheduleCount.preferProfessorRating.label")}
       description={tr("scheduleCount.preferProfessorRating.description")}
-      checked={props.minProfessorRating != null}
-      onChange={(e) =>
-        props.onMinProfessorRatingChange(
-          e.currentTarget.checked ? LENIENT_PROFESSOR_RATING_MIN : null,
-        )
-      }
+      checked={props.preferHigherProfessorRating}
+      onChange={(e) => props.onPreferHigherProfessorRatingChange(e.currentTarget.checked)}
     />
   );
 
@@ -192,7 +185,7 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
     props.compressedSchedule,
     props.preferEasierCourses,
     props.preferHigherSentiment,
-    props.minProfessorRating != null,
+    props.preferHigherProfessorRating,
     ...(props.totalFirstYearCredits > 0 ? [props.limitFirstYearCredits] : []),
   ];
   const smartOptionsChecked = smartOptionValues.every(Boolean);
@@ -201,61 +194,80 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
     props.onCompressedScheduleChange(checked);
     props.onPreferEasierCoursesChange(checked);
     props.onPreferHigherSentimentChange(checked);
-    props.onMinProfessorRatingChange(checked ? LENIENT_PROFESSOR_RATING_MIN : null);
+    props.onPreferHigherProfessorRatingChange(checked);
     if (props.totalFirstYearCredits > 0) props.onLimitFirstYearCreditsChange(checked);
   };
+  const smartSummaryItems = [
+    tr("scheduleCount.smartOptions.summary.compressed"),
+    tr("scheduleCount.smartOptions.summary.easier"),
+    tr("scheduleCount.smartOptions.summary.feedback"),
+    tr("scheduleCount.smartOptions.summary.professors"),
+    ...(props.totalFirstYearCredits > 0
+      ? [tr("scheduleCount.smartOptions.summary.firstYear")]
+      : []),
+  ];
 
   const smartOptionsControl = (
     <Paper
       withBorder
       radius="md"
-      p="sm"
       style={{
         backgroundColor: smartOptionsOpen ? "var(--app-surface)" : "var(--app-surface-sunken)",
       }}
     >
-      <Stack gap="sm">
-        <Group justify="space-between" align="flex-start" wrap="nowrap">
-          <Checkbox
-            label={tr("scheduleCount.smartOptions.label")}
-            description={tr("scheduleCount.smartOptions.description")}
-            checked={smartOptionsChecked}
-            indeterminate={smartOptionsIndeterminate}
-            onChange={() => setAllSmartOptions(!smartOptionsChecked)}
-          />
-          <ActionIcon
-            variant="subtle"
-            color="gray"
-            radius="md"
-            aria-label={tr(
-              smartOptionsOpen
-                ? "scheduleCount.smartOptions.hide"
-                : "scheduleCount.smartOptions.show",
-            )}
-            aria-expanded={smartOptionsOpen}
-            aria-controls="generation-smart-options-collapse"
-            onClick={() => setSmartOptionsOpen((open) => !open)}
-          >
-            <IconChevronDown
-              size={16}
-              aria-hidden="true"
-              style={{
-                transform: smartOptionsOpen ? "rotate(0deg)" : "rotate(-90deg)",
-                transition: "transform 150ms ease",
-              }}
-            />
-          </ActionIcon>
-        </Group>
-        <Collapse id="generation-smart-options-collapse" expanded={smartOptionsOpen}>
-          <Stack gap="sm" pt="xs">
+      <Group wrap="nowrap" align="flex-start" gap="xs" pl="sm" py="sm">
+        <Checkbox
+          mt={2}
+          checked={smartOptionsChecked}
+          indeterminate={smartOptionsIndeterminate}
+          onChange={() => setAllSmartOptions(!smartOptionsChecked)}
+          aria-label={tr("scheduleCount.smartOptions.label")}
+        />
+        <UnstyledButton
+          pr="sm"
+          onClick={() => setSmartOptionsOpen((open) => !open)}
+          aria-expanded={smartOptionsOpen}
+          aria-controls="generation-smart-options-collapse"
+          style={{ flex: 1, minWidth: 0, cursor: "pointer" }}
+        >
+          <Stack gap={0}>
+            <Group justify="space-between" align="center" wrap="nowrap">
+              <Text fw={600} size="sm" truncate>
+                {tr("scheduleCount.smartOptions.label")}
+              </Text>
+              <IconChevronDown
+                size={16}
+                aria-hidden="true"
+                style={{
+                  flexShrink: 0,
+                  transform: smartOptionsOpen ? "rotate(0deg)" : "rotate(-90deg)",
+                  transition: "transform 150ms ease",
+                }}
+              />
+            </Group>
+            <Collapse expanded={!smartOptionsOpen} keepMounted={false}>
+              <Group gap="xs" wrap="wrap" pt={8}>
+                {smartSummaryItems.map((item) => (
+                  <Text key={item} size="xs" c="dimmed" component="span">
+                    • {item}
+                  </Text>
+                ))}
+              </Group>
+            </Collapse>
+          </Stack>
+        </UnstyledButton>
+      </Group>
+      <Collapse id="generation-smart-options-collapse" expanded={smartOptionsOpen}>
+        <Box p="sm" pt={0}>
+          <Stack gap="sm">
             {compressedControl}
             {preferEasierControl}
             {preferHigherSentimentControl}
             {professorRatingPreferenceControl}
             {firstYearLimitControl}
           </Stack>
-        </Collapse>
-      </Stack>
+        </Box>
+      </Collapse>
     </Paper>
   );
 
@@ -306,7 +318,6 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
 
       <NumberInput
         label={tr("generationOptions.count.label")}
-        description={tr("generationOptions.count.description")}
         value={props.countValue}
         onChange={(v) => {
           if (typeof v !== "number" || Number.isNaN(v)) return;
@@ -343,42 +354,47 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
           aria-controls={props.advancedOptions.collapseId}
           style={{ cursor: "pointer" }}
         >
-          <Stack gap={advancedOpen ? 0 : 8}>
+          <Stack gap={0}>
             <Group justify="space-between" align="center" wrap="nowrap">
               <Group gap="xs" align="center" wrap="nowrap" style={{ minWidth: 0 }}>
-                <IconChevronDown
-                  size={14}
+                <IconAdjustmentsHorizontal
+                  size={18}
                   aria-hidden="true"
-                  style={{
-                    flexShrink: 0,
-                    transform: advancedOpen ? "rotate(0deg)" : "rotate(-90deg)",
-                    transition: "transform 150ms ease",
-                  }}
+                  style={{ flexShrink: 0, color: "var(--app-text-muted)" }}
                 />
                 <Text fw={600} size="sm" truncate>
                   {tr("advancedOptions.heading")}
                 </Text>
+                {props.advancedOptions.badge ? (
+                  <Badge
+                    size="sm"
+                    variant="light"
+                    color={props.advancedOptions.badge.color}
+                    style={{ flexShrink: 0 }}
+                  >
+                    {props.advancedOptions.badge.label}
+                  </Badge>
+                ) : null}
               </Group>
-              {props.advancedOptions.badge ? (
-                <Badge
-                  size="sm"
-                  variant="light"
-                  color={props.advancedOptions.badge.color}
-                  style={{ flexShrink: 0 }}
-                >
-                  {props.advancedOptions.badge.label}
-                </Badge>
-              ) : null}
+              <IconChevronDown
+                size={16}
+                aria-hidden="true"
+                style={{
+                  flexShrink: 0,
+                  transform: advancedOpen ? "rotate(0deg)" : "rotate(-90deg)",
+                  transition: "transform 150ms ease",
+                }}
+              />
             </Group>
-            {!advancedOpen ? (
-              <Group gap="xs" wrap="wrap" pl={22}>
+            <Collapse expanded={!advancedOpen} keepMounted={false}>
+              <Group gap="xs" wrap="wrap" pl={28} pt={8}>
                 {summaryItems.map((item) => (
                   <Text key={item} size="xs" c="dimmed" component="span">
                     • {item}
                   </Text>
                 ))}
               </Group>
-            ) : null}
+            </Collapse>
           </Stack>
         </UnstyledButton>
         <Collapse id={props.advancedOptions.collapseId} expanded={advancedOpen}>
