@@ -6177,7 +6177,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 269,
               "A": 784,
@@ -20290,7 +20290,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 34,
               "A": 72,
@@ -34969,7 +34969,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 262,
               "A": 203,
@@ -91702,7 +91702,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 127,
               "A": 61,
@@ -118775,7 +118775,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 95,
               "A": 76,
@@ -118899,7 +118899,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 95,
               "A": 76,
@@ -130205,7 +130205,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 14,
               "A": 44,
@@ -148146,7 +148146,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 111,
               "A": 210,
@@ -176005,7 +176005,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -176016,7 +176016,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -176027,7 +176027,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -176038,7 +176038,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
