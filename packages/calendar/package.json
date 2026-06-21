@@ -9,7 +9,8 @@
     ".": "./src/index.ts",
     "./layout": "./src/layout.ts",
     "./events": "./src/events.ts",
-    "./types": "./src/types.ts"
+    "./types": "./src/types.ts",
+    "./weeks": "./src/weeks.ts"
   },
   "scripts": {
     "test": "vitest run",

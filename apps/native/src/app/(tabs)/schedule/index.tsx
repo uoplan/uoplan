@@ -7,6 +7,7 @@ import { courseSentimentByNorm } from "@uoplan/core/feedback";
 import type { TimetableFailureDiagnostics } from "@uoplan/core/generationDiagnostics";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 import type { CalendarEvent } from "@uoplan/calendar/types";
+import { computeWeekGroups, slotActiveInWeek, type WeekGroup } from "@uoplan/calendar/weeks";
 import type { BlockedTimeWindow } from "@uoplan/core";
 
 import { Button, Text } from "@uoplan/ui";
@@ -32,10 +33,31 @@ import type { SkippedCourse } from "@/lib/generate-schedule";
 /** Height of the floating {@link BottomControlBar} pill (gear + pager). */
 const CONTROL_BAR_HEIGHT = 56;
 
+/** Extra reserved space when the week pager pill (40px) + its gap sit above. */
+const WEEK_PAGER_BLOCK = 48;
+
 /** Top space reserved to clear the global settings gear (mounted per tab stack). */
 const SETTINGS_BUTTON = 48;
 const TERM_START_DATE = "2025-09-03";
 const TERM_END_DATE = "2025-12-05";
+
+/**
+ * Filter a variant's calendar events down to the ones that actually meet during
+ * the given week group. Whole-term slots (no `meetingDates`) always show; dated
+ * slots (labs/tutorials with limited runs) show only when their occurrence falls
+ * inside the week. Mirrors the web `CalendarView` week filter.
+ */
+function eventsForWeek(events: CalendarEvent[], group: WeekGroup | null): CalendarEvent[] {
+  if (!group) return events;
+  return events.filter(
+    (e) => !e.meetingDates || slotActiveInWeek(e.day, e.meetingDates, group.startDate),
+  );
+}
+
+/** Compact "Week X / N" pager label (the user's requested week format). */
+function weekPagerLabel(index: number, total: number): string {
+  return `Week ${index + 1} / ${total}`;
+}
 
 /**
  * Schedule tab — a full-bleed weekly timetable matching the web mobile schedule.
@@ -77,6 +99,9 @@ export default function ScheduleScreen() {
   });
   const [exporting, setExporting] = useState(false);
   const [addingToCalendar, setAddingToCalendar] = useState(false);
+  // Which distinct week pattern of the term is shown. Defaults to the busiest
+  // week (most class time) of the active variant — see the reset effect below.
+  const [weekIndex, setWeekIndex] = useState(0);
 
   const titleByCode = useMemo(
     () => new Map(bundle.catalogue.courses.map((c) => [c.code, c.title] as const)),
@@ -90,6 +115,26 @@ export default function ScheduleScreen() {
   // shared `computeSwapOptions` core runs against the exact term cache the
   // generator used so suggestions keep every other class at its current section.
   const activeVariant = variants[index];
+
+  // Distinct week patterns of the active variant. Consecutive weeks with the
+  // same timetable collapse into one group, so most variants yield a single
+  // group (every week identical) and only date-bounded sections (labs starting
+  // late, reading-week gaps) split the term into navigable weeks.
+  const { groups: weekGroups, busiestIndex } = useMemo(
+    () =>
+      activeVariant
+        ? computeWeekGroups(activeVariant.schedule)
+        : { groups: [] as WeekGroup[], busiestIndex: 0 },
+    [activeVariant],
+  );
+  // Reset to the busiest week whenever the active variant (and thus its week
+  // groups) changes, so each new schedule opens on its fullest week.
+  useEffect(() => {
+    setWeekIndex(busiestIndex);
+  }, [busiestIndex, activeVariant]);
+  const hasWeekNav = weekGroups.length > 1;
+  const currentWeek = hasWeekNav ? (weekGroups[weekIndex] ?? null) : null;
+
   const basketCodes = basket.codes;
   const completedCodes = completed.codes;
   useEffect(() => {
@@ -157,6 +202,9 @@ export default function ScheduleScreen() {
   );
 
   const events = variants[index]?.events ?? [];
+  // The calendar shows only the selected week's meetings; whole-term slots always
+  // appear. The ICS/add-to-calendar args below keep the FULL term events.
+  const displayedEvents = useMemo(() => eventsForWeek(events, currentWeek), [events, currentWeek]);
   const calendarArgs = useMemo(
     () => ({
       events,
@@ -177,8 +225,14 @@ export default function ScheduleScreen() {
   // header never sits beneath it.
   const calendarTop = insets.top + Spacing.two + SETTINGS_BUTTON + Spacing.two;
   const calendarHeight = useMemo(
-    () => height - calendarTop - controlBarBottom - CONTROL_BAR_HEIGHT - Spacing.three,
-    [height, calendarTop, controlBarBottom],
+    () =>
+      height -
+      calendarTop -
+      controlBarBottom -
+      CONTROL_BAR_HEIGHT -
+      Spacing.three -
+      (hasWeekNav ? WEEK_PAGER_BLOCK : 0),
+    [height, calendarTop, controlBarBottom, hasWeekNav],
   );
 
   const handleExport = async () => {
@@ -243,7 +297,7 @@ export default function ScheduleScreen() {
             <SkippedCoursesBanner courses={skippedCourses} />
           ) : null}
           <WeekCalendar
-            events={events}
+            events={displayedEvents}
             availableHeight={calendarHeight}
             blockedTimes={options.blockedTimes}
             onBlockedTimesChange={handleBlockedTimesChange}
@@ -276,6 +330,11 @@ export default function ScheduleScreen() {
           prevDisabled={!hasPrev}
           nextDisabled={!hasNext}
           nextLoading={loadingMore}
+          weekLabel={hasWeekNav ? weekPagerLabel(weekIndex, weekGroups.length) : undefined}
+          onWeekPrev={() => setWeekIndex((w) => Math.max(0, w - 1))}
+          onWeekNext={() => setWeekIndex((w) => Math.min(weekGroups.length - 1, w + 1))}
+          weekPrevDisabled={weekIndex === 0}
+          weekNextDisabled={weekIndex >= weekGroups.length - 1}
         />
       ) : null}
 
