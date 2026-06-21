@@ -54,10 +54,21 @@ export default function ScheduleScreen() {
   const completed = useCompletedCourses();
   const { bundle, schedulesByTerm, feedback } = useAppData();
   const { options, setOptions } = useScheduleOptions();
-  const { status, variants, termId, diagnostics, skippedCourses, regenerate } =
-    useScheduleGeneration();
+  const {
+    status,
+    variants,
+    termId,
+    diagnostics,
+    skippedCourses,
+    regenerate,
+    index,
+    hasPrev,
+    hasNext,
+    loadingMore,
+    next,
+    prev,
+  } = useScheduleGeneration();
 
-  const [variant, setVariant] = useState(0);
   const [prefsOpen, setPrefsOpen] = useState(false);
   const [selected, setSelected] = useState<{ event: CalendarEvent; color: string } | null>(null);
   const [swap, setSwap] = useState<{ loading: boolean; options: SwapOption[] }>({
@@ -74,16 +85,11 @@ export default function ScheduleScreen() {
 
   const courseSentiment = useMemo(() => courseSentimentByNorm(feedback), [feedback]);
 
-  // Keep the paging index in range as the variant set changes.
-  useEffect(() => {
-    setVariant((v) => (v >= variants.length ? 0 : v));
-  }, [variants.length]);
-
   // Compute swap candidates for the selected event after the drawer animates in
   // (the catalogue scan is synchronous and can hitch the open transition). The
   // shared `computeSwapOptions` core runs against the exact term cache the
   // generator used so suggestions keep every other class at its current section.
-  const activeVariant = variants[variant];
+  const activeVariant = variants[index];
   const basketCodes = basket.codes;
   const completedCodes = completed.codes;
   useEffect(() => {
@@ -150,7 +156,7 @@ export default function ScheduleScreen() {
     [selected, basket],
   );
 
-  const events = variants[variant]?.events ?? [];
+  const events = variants[index]?.events ?? [];
   const calendarArgs = useMemo(
     () => ({
       events,
@@ -264,11 +270,12 @@ export default function ScheduleScreen() {
         <BottomControlBar
           bottom={controlBarBottom}
           onSettings={() => setPrefsOpen(true)}
-          label={`${variant + 1} / ${variants.length}`}
-          onPrev={() => setVariant((v) => Math.max(0, v - 1))}
-          onNext={() => setVariant((v) => Math.min(variants.length - 1, v + 1))}
-          prevDisabled={variant === 0}
-          nextDisabled={variant === variants.length - 1}
+          label={`Schedule ${index + 1}`}
+          onPrev={prev}
+          onNext={next}
+          prevDisabled={!hasPrev}
+          nextDisabled={!hasNext}
+          nextLoading={loadingMore}
         />
       ) : null}
 

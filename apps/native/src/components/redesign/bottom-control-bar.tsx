@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";
 
 import { Text } from "@uoplan/ui";
 
@@ -12,10 +12,12 @@ interface BottomControlBarProps {
   /** Pager. */
   onPrev?: () => void;
   onNext?: () => void;
-  /** Centre label, e.g. "3 / 12". */
+  /** Centre label, e.g. "Schedule 3". */
   label?: string;
   prevDisabled?: boolean;
   nextDisabled?: boolean;
+  /** Show a spinner in place of the next chevron while the next item generates. */
+  nextLoading?: boolean;
   bottom?: number;
 }
 
@@ -23,7 +25,8 @@ interface BottomControlBarProps {
  * Floating bottom control bar for the schedule screen: a schedule-options button
  * on the left (opens generation preferences) and a prev/next pager pill in the
  * centre, used to page through generated schedules. Mirrors the web mobile
- * schedule control bar.
+ * schedule control bar. The next chevron can show a spinner ({@link
+ * BottomControlBarProps.nextLoading}) while the next schedule is generated lazily.
  */
 export function BottomControlBar({
   onSettings,
@@ -32,6 +35,7 @@ export function BottomControlBar({
   label,
   prevDisabled,
   nextDisabled,
+  nextLoading,
   bottom = 24,
 }: BottomControlBarProps) {
   return (
@@ -73,16 +77,20 @@ export function BottomControlBar({
         ) : null}
         <Pressable
           onPress={onNext}
-          disabled={nextDisabled}
+          disabled={nextDisabled || nextLoading}
           accessibilityRole="button"
           accessibilityLabel="Next schedule"
           style={styles.pagerBtn}
         >
-          <AppIcon
-            name="chevron.right"
-            size={22}
-            color={nextDisabled ? Surface.faint : Surface.label}
-          />
+          {nextLoading ? (
+            <ActivityIndicator size="small" color={Surface.label} />
+          ) : (
+            <AppIcon
+              name="chevron.right"
+              size={22}
+              color={nextDisabled ? Surface.faint : Surface.label}
+            />
+          )}
         </Pressable>
       </GlassSurface>
     </View>

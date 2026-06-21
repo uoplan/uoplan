@@ -268,15 +268,15 @@ function fingerprintSchedule(events: CalendarEvent[]): string {
 }
 
 /**
- * Generate conflict-free weekly schedules pinning every basket course, using the
- * real Rust engine (the native binding — the same crate the web app runs as
- * WASM). Seeds 0..N-1 produce distinct arrangements; identical results are
- * de-duplicated.
+ * Prepare everything generation needs that is *independent of the seed*: the
+ * enriched schedules + data cache, the advanced-requirement request payload, the
+ * generation constraints, and the schedulable/skipped basket split. Shared by
+ * the batch {@link generateScheduleVariants} and the lazy
+ * {@link createScheduleGenerator} so a single code path decides what's
+ * schedulable and how each per-seed request is built.
  */
-export async function generateScheduleVariants(
-  input: GenerateScheduleInput,
-): Promise<GenerateScheduleResult> {
-  const { catalogue, disciplines, ratings, sentiment, basketCodes, engine } = input;
+function prepareGeneration(input: GenerateScheduleInput) {
+  const { catalogue, disciplines, ratings, sentiment, basketCodes } = input;
   const hasProfileContext = input.hasProfileContext ?? false;
   const completedCourses = input.completedCourses ?? [];
 
@@ -338,11 +338,122 @@ export async function generateScheduleVariants(
     }
   }
 
-  if (schedulableBasket.length === 0 && !advancedRequirements) {
-    return { variants: [], skippedCourses };
-  }
+  const courseSentimentByNorm = options.preferHigherSentiment
+    ? ((sentiment?.courseByNorm ?? null) as Map<NormalizedCourseCode, number> | null)
+    : null;
 
-  await engine.loadDataset(input.datasetKey, catalogueBytes(catalogue), schedulesBytes(schedules));
+  return {
+    catalogue,
+    schedules,
+    cache,
+    options,
+    ratings,
+    sentiment: sentiment ?? null,
+    completedCourses,
+    advancedRequirementsForRequest,
+    constraints,
+    schedulableBasket,
+    skippedCourses,
+    courseSentimentByNorm,
+    datasetKey: input.datasetKey,
+    // Nothing to schedule (no pinnable basket course and no advanced
+    // requirements) means we never touch the engine — matching the early return.
+    canGenerate: schedulableBasket.length > 0 || Boolean(advancedRequirementsForRequest),
+  };
+}
+
+type GenerationPrep = ReturnType<typeof prepareGeneration>;
+
+/** Build the engine request for a single seed from the shared prep. */
+function buildSeedRequest(prep: GenerationPrep, seed: number) {
+  const o = prep.options;
+  if (prep.advancedRequirementsForRequest) {
+    return buildAdvancedRequest(
+      buildAdvancedRequestInputFromPersonalize({
+        requirements: prep.advancedRequirementsForRequest,
+        constraints: prep.constraints,
+        includeClosedComponents: o.includeClosedComponents,
+        virtualSectionsOnly: o.virtualSectionsOnly,
+        generationPreferEasier: o.preferEasier,
+        generationPreferHigherSentiment: o.preferHigherSentiment,
+        courseSentimentByNorm: prep.courseSentimentByNorm,
+        levelBuckets: o.levelBuckets,
+        languageBuckets: o.languageBuckets,
+        basicExcludedCategories: o.basicExcludedCategories,
+        frenchImmersionStream: o.frenchImmersionStream,
+        blacklistedCourses: o.blacklistedCourses,
+        currentSeed: seed,
+        firstSeed: 0,
+      }),
+      prep.cache,
+    );
+  }
+  return buildBasicRequest(
+    {
+      basketCourses: prep.schedulableBasket,
+      basicElectivesCount: o.basicElectivesCount,
+      basicExcludedCategories: o.basicExcludedCategories,
+      studentPrograms: [],
+      frenchImmersionStream: o.frenchImmersionStream,
+      constraints: prep.constraints,
+      completedCourses: [...prep.completedCourses],
+      levelBuckets: o.levelBuckets,
+      languageBuckets: o.languageBuckets,
+      electiveLevelBuckets: o.electiveLevelBuckets,
+      includeClosedComponents: o.includeClosedComponents,
+      virtualSectionsOnly: o.virtualSectionsOnly,
+      generationPreferEasier: o.preferEasier,
+      generationPreferHigherSentiment: o.preferHigherSentiment,
+      courseSentimentByNorm: prep.courseSentimentByNorm,
+      blacklistedCourses: o.blacklistedCourses,
+      currentSeed: seed,
+      firstSeed: 0,
+    },
+    prep.cache,
+  );
+}
+
+/** Run one seed through the engine, returning its variant (or null if no schedule). */
+async function runSeed(
+  engine: EngineBridge,
+  prep: GenerationPrep,
+  seed: number,
+): Promise<ScheduleVariant | null> {
+  const request = buildSeedRequest(prep, seed);
+  const respBytes = await engine.generate(GenerationRequest.encode(request).finish());
+  const mapped = mapGenerationResponse(GenerationResponse.decode(respBytes), prep.cache);
+  if (!mapped.schedule) return null;
+  const events = scheduleToEvents(mapped.schedule, prep.ratings, prep.sentiment);
+  return {
+    events,
+    schedule: mapped.schedule,
+    courseCount: mapped.schedule.enrollments.length,
+    fingerprint: fingerprintSchedule(events),
+  };
+}
+
+function loadDatasetFor(engine: EngineBridge, prep: GenerationPrep): Promise<void> {
+  return engine.loadDataset(
+    prep.datasetKey,
+    catalogueBytes(prep.catalogue),
+    schedulesBytes(prep.schedules),
+  );
+}
+
+/**
+ * Generate conflict-free weekly schedules pinning every basket course, using the
+ * real Rust engine (the native binding — the same crate the web app runs as
+ * WASM). Seeds 0..N-1 produce distinct arrangements; identical results are
+ * de-duplicated. Prefer {@link createScheduleGenerator} for the interactive
+ * (lazy, unbounded) pager; this eager batch form backs tests and one-shot use.
+ */
+export async function generateScheduleVariants(
+  input: GenerateScheduleInput,
+): Promise<GenerateScheduleResult> {
+  const prep = prepareGeneration(input);
+  if (!prep.canGenerate) return { variants: [], skippedCourses: prep.skippedCourses };
+
+  await loadDatasetFor(input.engine, prep);
 
   const variantCount = Math.max(1, input.variantCount ?? 6);
   const seen = new Set<string>();
@@ -350,70 +461,70 @@ export async function generateScheduleVariants(
 
   for (let seed = 0; seed < variantCount; seed++) {
     if (input.signal?.aborted) break;
-    const courseSentimentByNorm = options.preferHigherSentiment
-      ? ((sentiment?.courseByNorm ?? null) as Map<NormalizedCourseCode, number> | null)
-      : null;
-    const request = advancedRequirementsForRequest
-      ? buildAdvancedRequest(
-          buildAdvancedRequestInputFromPersonalize({
-            requirements: advancedRequirementsForRequest,
-            constraints,
-            includeClosedComponents: options.includeClosedComponents,
-            virtualSectionsOnly: options.virtualSectionsOnly,
-            generationPreferEasier: options.preferEasier,
-            generationPreferHigherSentiment: options.preferHigherSentiment,
-            courseSentimentByNorm,
-            levelBuckets: options.levelBuckets,
-            languageBuckets: options.languageBuckets,
-            basicExcludedCategories: options.basicExcludedCategories,
-            frenchImmersionStream: options.frenchImmersionStream,
-            blacklistedCourses: options.blacklistedCourses,
-            currentSeed: seed,
-            firstSeed: 0,
-          }),
-          cache,
-        )
-      : buildBasicRequest(
-          {
-            basketCourses: schedulableBasket,
-            basicElectivesCount: options.basicElectivesCount,
-            basicExcludedCategories: options.basicExcludedCategories,
-            studentPrograms: [],
-            frenchImmersionStream: options.frenchImmersionStream,
-            constraints,
-            completedCourses: [...completedCourses],
-            levelBuckets: options.levelBuckets,
-            languageBuckets: options.languageBuckets,
-            electiveLevelBuckets: options.electiveLevelBuckets,
-            includeClosedComponents: options.includeClosedComponents,
-            virtualSectionsOnly: options.virtualSectionsOnly,
-            generationPreferEasier: options.preferEasier,
-            generationPreferHigherSentiment: options.preferHigherSentiment,
-            courseSentimentByNorm,
-            blacklistedCourses: options.blacklistedCourses,
-            currentSeed: seed,
-            firstSeed: 0,
-          },
-          cache,
-        );
-
-    const respBytes = await engine.generate(GenerationRequest.encode(request).finish());
+    const variant = await runSeed(input.engine, prep, seed);
     if (input.signal?.aborted) break;
-    const mapped = mapGenerationResponse(GenerationResponse.decode(respBytes), cache);
-    if (!mapped.schedule) continue;
-
-    const events = scheduleToEvents(mapped.schedule, ratings, sentiment ?? null);
-    const fingerprint = fingerprintSchedule(events);
-    if (seen.has(fingerprint)) continue;
-    seen.add(fingerprint);
-    variants.push({
-      events,
-      schedule: mapped.schedule,
-      courseCount: mapped.schedule.enrollments.length,
-      fingerprint,
-    });
-    input.onVariant?.([...variants], skippedCourses);
+    if (!variant || seen.has(variant.fingerprint)) continue;
+    seen.add(variant.fingerprint);
+    variants.push(variant);
+    input.onVariant?.([...variants], prep.skippedCourses);
   }
 
-  return { variants, skippedCourses };
+  return { variants, skippedCourses: prep.skippedCourses };
+}
+
+/** A lazy, unbounded source of unique schedule variants (one seed at a time). */
+export interface ScheduleGenerator {
+  /** Basket courses excluded before generation (prereq/offering), known upfront. */
+  skippedCourses: SkippedCourse[];
+  /**
+   * Resolve the next *unique* conflict-free arrangement, or `null` once
+   * generation is exhausted (no further distinct schedule). Advances the seed
+   * lazily and de-duplicates against everything returned so far, so the caller
+   * can keep pressing "next" until this yields null.
+   */
+  next(signal?: AbortSignal): Promise<ScheduleVariant | null>;
+}
+
+/** Consecutive fruitless seeds (empty or duplicate) before we declare exhaustion. */
+const NEXT_VARIANT_MISS_BUDGET = 16;
+/** Hard ceiling on total seeds attempted by a generator (safety net). */
+const MAX_SEED_ATTEMPTS = 240;
+
+/**
+ * Create a lazy generator that produces unique schedule variants on demand. The
+ * dataset load + basket prep run once; each {@link ScheduleGenerator.next} call
+ * advances the seed cursor until it finds a not-yet-seen arrangement, giving up
+ * (returning null, permanently) after {@link NEXT_VARIANT_MISS_BUDGET}
+ * consecutive misses or {@link MAX_SEED_ATTEMPTS} total seeds. This backs the
+ * schedule pager's unbounded "next" without pre-computing a fixed batch.
+ */
+export async function createScheduleGenerator(
+  input: GenerateScheduleInput,
+): Promise<ScheduleGenerator> {
+  const prep = prepareGeneration(input);
+  if (prep.canGenerate) await loadDatasetFor(input.engine, prep);
+
+  const seen = new Set<string>();
+  let seed = 0;
+  let exhausted = !prep.canGenerate;
+
+  const next = async (signal?: AbortSignal): Promise<ScheduleVariant | null> => {
+    if (exhausted) return null;
+    let misses = 0;
+    while (seed < MAX_SEED_ATTEMPTS && misses < NEXT_VARIANT_MISS_BUDGET) {
+      if (signal?.aborted) return null;
+      const variant = await runSeed(input.engine, prep, seed++);
+      if (signal?.aborted) return null;
+      if (!variant || seen.has(variant.fingerprint)) {
+        misses++;
+        continue;
+      }
+      seen.add(variant.fingerprint);
+      return variant;
+    }
+    exhausted = true;
+    return null;
+  };
+
+  return { skippedCourses: prep.skippedCourses, next };
 }
