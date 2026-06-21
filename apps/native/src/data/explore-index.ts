@@ -21,7 +21,7 @@ import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 const SKIP_GRADES = new Set(["P", "S", "NS", "NC", "ABS", "EIN"]);
 
 /** Minimum graded headcount for a course/prof to appear in a spotlight carousel. */
-export const SPOTLIGHT_MIN_GRADED = 40;
+export const SPOTLIGHT_MIN_GRADED = 50;
 
 type Distribution = Record<string, number>;
 

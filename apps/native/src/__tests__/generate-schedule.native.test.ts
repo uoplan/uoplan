@@ -433,6 +433,13 @@ describe("generateScheduleVariants", () => {
           avoidedDays: ["Fr"],
           blockedTimes: [{ day: "Mo", startMinutes: 11 * 60, endMinutes: 12 * 60 }],
           electiveLevelBuckets: [1000, 2000, 5000],
+          basicElectivesCount: 2,
+          basicExcludedCategories: ["PHI"],
+          blacklistedCourses: ["MAT 1320"],
+          levelBuckets: ["undergrad"],
+          languageBuckets: ["en"],
+          frenchImmersionStream: true,
+          limitFirstYearCredits: true,
           compressedSchedule: true,
           preferEasier: true,
           includeClosedComponents: true,
@@ -445,6 +452,8 @@ describe("generateScheduleVariants", () => {
     expect(req.constraints?.minStartMinutes).toBe(9 * 60);
     expect(req.constraints?.maxEndMinutes).toBe(17 * 60);
     expect(req.constraints?.compressedSchedule).toBe(true);
+    // First-year limit on with no completed courses → full 48-credit budget.
+    expect(req.constraints?.maxFirstYearCredits).toBe(48);
     // "Fr" → engine day index 4, full-day avoid window 8:30–22:00.
     expect(req.constraints?.blockedTimes).toEqual([
       { day: 4, startMinutes: 8 * 60 + 30, endMinutes: 22 * 60 },
@@ -454,22 +463,28 @@ describe("generateScheduleVariants", () => {
     expect(req.virtualSectionsOnly).toBe(true);
     expect(req.generationPreferEasier).toBe(true);
     expect(req.electiveLevelBuckets).toEqual([1000, 2000, 5000]);
+    expect(req.basicElectivesCount).toBe(2);
+    expect(req.basicExcludedCategories).toEqual(["PHI"]);
+    expect(req.blacklistedCourses).toEqual(["MAT 1320"]);
+    expect(req.levelBuckets).toEqual(["undergrad"]);
+    expect(req.languageBuckets).toEqual(["en"]);
+    expect(req.frenchImmersionStream).toBe(true);
   });
 
-  it("forwards the min professor rating + ratings map only when a minimum is set", async () => {
+  it("forwards the professor-rating preference + ratings map when the preference is on", async () => {
     const engine = cannedEngine();
     await generateScheduleVariants(
       baseInput({
         engine,
         variantCount: 1,
         ratings: { "ada lovelace": { rating: 4.2, numRatings: 12 } },
-        options: { ...DEFAULT_SCHEDULE_OPTIONS, minProfessorRating: 3.5 },
+        options: { ...DEFAULT_SCHEDULE_OPTIONS, preferHigherProfessorRating: true },
       }),
     );
     const req = GenerationRequest.decode(
       (engine.generate as jest.Mock).mock.calls[0]![0] as Uint8Array,
     );
-    expect(req.constraints?.minProfessorRating).toBeCloseTo(3.5);
+    expect(req.generationPreferHigherProfessorRating).toBe(true);
     expect(req.professorRatings).toEqual({ "ada lovelace": 4.2 });
   });
 });

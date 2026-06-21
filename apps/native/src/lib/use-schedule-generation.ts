@@ -16,6 +16,7 @@ import { engineController } from "@/lib/engine/native-engine";
 import {
   buildGenerationConstraints,
   buildScheduleDataCache,
+  firstYearCreditCapFor,
   generateScheduleVariants,
   type ScheduleVariant,
   type SkippedCourse,
@@ -178,7 +179,11 @@ export function useScheduleGeneration(): GenerationState & { regenerate: () => v
               { disciplines: bundle.disciplines, faculties: bundle.faculties },
               bundle.grades,
             );
-            const constraints = buildGenerationConstraints(options, bundle.ratings);
+            const constraints = buildGenerationConstraints(
+              options,
+              bundle.ratings,
+              firstYearCreditCapFor(options, completedCodes, cache),
+            );
             // Diagnose only the courses that are actually schedulable this term;
             // every skipped course (prerequisites unmet or no open section) is
             // reported separately, so the suggestions should be about real

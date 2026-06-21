@@ -16,7 +16,6 @@ const ALL_SUGGESTION_CODES: SuggestionCode[] = [
   "relax-filters",
   "try-different-course",
   "turn-off-compressed",
-  "clear-min-rating",
   "widen-hours-days",
   "relax-fy-cap",
   "un-blacklist",

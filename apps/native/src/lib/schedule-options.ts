@@ -1,4 +1,9 @@
-import { mergeBlockedWindows, type BlockedTimeWindow } from "@uoplan/core";
+import {
+  type CourseLanguageBucket,
+  type CourseLevelBucket,
+  mergeBlockedWindows,
+  type BlockedTimeWindow,
+} from "@uoplan/core";
 import type { DayOfWeek } from "@uoplan/core/dataTypes";
 
 /**
@@ -23,20 +28,40 @@ export interface ScheduleOptions {
   preferEasier: boolean;
   /** Prefer courses with better student-feedback ratings from each pool. */
   preferHigherSentiment: boolean;
-  /** Minimum RateMyProfessors rating (professors without a rating are always allowed). */
-  minProfessorRating: number | null;
+  /** Prefer courses taught by higher-rated professors (unrated treated as ~4.0). */
+  preferHigherProfessorRating: boolean;
   /** Course-level buckets allowed for elective requirement pools. */
   electiveLevelBuckets: number[];
+  /**
+   * Additional elective courses to schedule beyond the pinned basket (web's
+   * "how many courses this semester" minus the basket). 0 keeps the native
+   * default of scheduling the basket only.
+   */
+  basicElectivesCount: number;
+  /** Subject categories (e.g. "CSI", "MAT") excluded from elective picking. */
+  basicExcludedCategories: string[];
+  /** Specific course codes the generator must never schedule. */
+  blacklistedCourses: string[];
+  /** Course-level buckets (undergrad / grad) allowed when picking electives. */
+  levelBuckets: CourseLevelBucket[];
+  /** Course language buckets (en / fr / other) allowed when picking electives. */
+  languageBuckets: CourseLanguageBucket[];
+  /** Bias elective picking toward the French immersion diploma. */
+  frenchImmersionStream: boolean;
+  /** Cap first-year (1xxx) credits at 48 minus those already completed. */
+  limitFirstYearCredits: boolean;
   /** Allow sections that are already full. */
   includeClosedComponents: boolean;
   /** Only sections with a virtual meeting time. */
   virtualSectionsOnly: boolean;
 }
 
-// Web parity — see apps/web/src/store/generationDefaults.ts.
+// Web parity — see packages/store/src/generationDefaults.ts + electiveEligibility.ts.
 export const DEFAULT_GENERATION_MIN_START_MINUTES = 8 * 60 + 30; // 8:30
 export const DEFAULT_GENERATION_MAX_END_MINUTES = 22 * 60; // 22:00
 export const DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS = [1000, 2000];
+export const DEFAULT_BASIC_LEVEL_BUCKETS: CourseLevelBucket[] = ["undergrad"];
+export const DEFAULT_BASIC_LANGUAGE_BUCKETS: CourseLanguageBucket[] = ["en", "other"];
 /** A day is "avoided" when a blocked window covers this full span. */
 const AVOID_DAY_START_MINUTES = 8 * 60 + 30; // 8:30
 const AVOID_DAY_END_MINUTES = 22 * 60; // 22:00
@@ -49,14 +74,25 @@ export const DEFAULT_SCHEDULE_OPTIONS: ScheduleOptions = {
   compressedSchedule: false,
   preferEasier: false,
   preferHigherSentiment: false,
-  minProfessorRating: null,
+  preferHigherProfessorRating: false,
   electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
+  basicElectivesCount: 0,
+  basicExcludedCategories: [],
+  blacklistedCourses: [],
+  levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
+  languageBuckets: [...DEFAULT_BASIC_LANGUAGE_BUCKETS],
+  frenchImmersionStream: false,
+  limitFirstYearCredits: true,
   includeClosedComponents: false,
   virtualSectionsOnly: false,
 };
 
 const VALID_DAYS: readonly DayOfWeek[] = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 const VALID_ELECTIVE_LEVEL_BUCKETS = new Set([1000, 2000, 3000, 4000, 5000, 6000]);
+const VALID_LEVEL_BUCKETS = new Set<CourseLevelBucket>(["undergrad", "grad"]);
+const VALID_LANGUAGE_BUCKETS = new Set<CourseLanguageBucket>(["en", "fr", "other"]);
+/** Web caps the total course count (basket + electives) at this. */
+export const SCHEDULE_COURSE_COUNT_MAX = 50;
 
 /**
  * Map avoided weekdays to full-day blocked windows the engine treats as
@@ -95,13 +131,14 @@ export function parseScheduleOptions(text: string): ScheduleOptions {
   const num = (v: unknown, d: number): number =>
     typeof v === "number" && Number.isFinite(v) ? v : d;
   const bool = (v: unknown, d: boolean): boolean => (typeof v === "boolean" ? v : d);
+  const strArray = (v: unknown): string[] =>
+    Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : [];
   const avoidedDays = Array.isArray(o.avoidedDays)
     ? o.avoidedDays.filter(
         (d): d is DayOfWeek => typeof d === "string" && VALID_DAYS.includes(d as DayOfWeek),
       )
     : [...DEFAULT_SCHEDULE_OPTIONS.avoidedDays];
   const blockedTimes = parseBlockedTimes(o.blockedTimes);
-  const rating = o.minProfessorRating;
   return {
     minStartMinutes: num(o.minStartMinutes, DEFAULT_SCHEDULE_OPTIONS.minStartMinutes),
     maxEndMinutes: num(o.maxEndMinutes, DEFAULT_SCHEDULE_OPTIONS.maxEndMinutes),
@@ -110,11 +147,44 @@ export function parseScheduleOptions(text: string): ScheduleOptions {
     compressedSchedule: bool(o.compressedSchedule, false),
     preferEasier: bool(o.preferEasier, false),
     preferHigherSentiment: bool(o.preferHigherSentiment, false),
-    minProfessorRating: typeof rating === "number" && Number.isFinite(rating) ? rating : null,
+    preferHigherProfessorRating: bool(o.preferHigherProfessorRating, false),
     electiveLevelBuckets: parseElectiveLevelBuckets(o.electiveLevelBuckets),
+    basicElectivesCount: Math.max(
+      0,
+      Math.round(num(o.basicElectivesCount, DEFAULT_SCHEDULE_OPTIONS.basicElectivesCount)),
+    ),
+    basicExcludedCategories: strArray(o.basicExcludedCategories),
+    blacklistedCourses: strArray(o.blacklistedCourses),
+    levelBuckets: parseBucketSet(o.levelBuckets, VALID_LEVEL_BUCKETS, DEFAULT_BASIC_LEVEL_BUCKETS),
+    languageBuckets: parseBucketSet(
+      o.languageBuckets,
+      VALID_LANGUAGE_BUCKETS,
+      DEFAULT_BASIC_LANGUAGE_BUCKETS,
+    ),
+    frenchImmersionStream: bool(o.frenchImmersionStream, false),
+    limitFirstYearCredits: bool(o.limitFirstYearCredits, true),
     includeClosedComponents: bool(o.includeClosedComponents, false),
     virtualSectionsOnly: bool(o.virtualSectionsOnly, false),
   };
+}
+
+/**
+ * Parse a persisted string-enum bucket array, keeping only recognised values and
+ * falling back to the default set when nothing valid remains.
+ */
+function parseBucketSet<T extends string>(
+  value: unknown,
+  valid: ReadonlySet<T>,
+  fallback: readonly T[],
+): T[] {
+  if (!Array.isArray(value)) return [...fallback];
+  const out: T[] = [];
+  for (const raw of value) {
+    if (typeof raw === "string" && valid.has(raw as T) && !out.includes(raw as T)) {
+      out.push(raw as T);
+    }
+  }
+  return out.length > 0 ? out : [...fallback];
 }
 
 function parseElectiveLevelBuckets(value: unknown): number[] {

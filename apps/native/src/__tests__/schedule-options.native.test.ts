@@ -38,12 +38,52 @@ describe("schedule-options", () => {
         compressedSchedule: true,
         preferEasier: true,
         preferHigherSentiment: true,
-        minProfessorRating: 4,
+        preferHigherProfessorRating: true,
         electiveLevelBuckets: [3000, 4000],
+        basicElectivesCount: 3,
+        basicExcludedCategories: ["CSI", "MAT"],
+        blacklistedCourses: ["PHI 1101"],
+        levelBuckets: ["undergrad", "grad"],
+        languageBuckets: ["en", "fr"],
+        frenchImmersionStream: true,
+        limitFirstYearCredits: false,
         includeClosedComponents: true,
         virtualSectionsOnly: true,
       };
       expect(parseScheduleOptions(serializeScheduleOptions(options))).toEqual(options);
+    });
+
+    it("defaults the new parity fields for old persisted options", () => {
+      const parsed = parseScheduleOptions(
+        JSON.stringify({ minStartMinutes: 9 * 60, maxEndMinutes: 18 * 60 }),
+      );
+      expect(parsed.basicElectivesCount).toBe(0);
+      expect(parsed.basicExcludedCategories).toEqual([]);
+      expect(parsed.blacklistedCourses).toEqual([]);
+      expect(parsed.levelBuckets).toEqual(["undergrad"]);
+      expect(parsed.languageBuckets).toEqual(["en", "other"]);
+      expect(parsed.frenchImmersionStream).toBe(false);
+      expect(parsed.limitFirstYearCredits).toBe(true);
+    });
+
+    it("filters invalid level / language buckets and falls back when empty", () => {
+      const parsed = parseScheduleOptions(
+        JSON.stringify({
+          levelBuckets: ["grad", "bogus", "grad"],
+          languageBuckets: ["nope", 42],
+        }),
+      );
+      expect(parsed.levelBuckets).toEqual(["grad"]);
+      expect(parsed.languageBuckets).toEqual(["en", "other"]);
+    });
+
+    it("coerces a bogus elective count to a non-negative integer default", () => {
+      expect(
+        parseScheduleOptions(JSON.stringify({ basicElectivesCount: -4 })).basicElectivesCount,
+      ).toBe(0);
+      expect(
+        parseScheduleOptions(JSON.stringify({ basicElectivesCount: 2.7 })).basicElectivesCount,
+      ).toBe(3);
     });
 
     it("falls back per-field for partial / invalid data and drops bogus days", () => {
@@ -51,14 +91,14 @@ describe("schedule-options", () => {
         JSON.stringify({
           minStartMinutes: "oops",
           avoidedDays: ["Mo", "XX", 5],
-          minProfessorRating: "high",
+          preferHigherProfessorRating: "high",
           compressedSchedule: 1,
         }),
       );
       expect(parsed.minStartMinutes).toBe(DEFAULT_SCHEDULE_OPTIONS.minStartMinutes);
       expect(parsed.avoidedDays).toEqual(["Mo"]);
       expect(parsed.blockedTimes).toEqual([]);
-      expect(parsed.minProfessorRating).toBeNull();
+      expect(parsed.preferHigherProfessorRating).toBe(false);
       expect(parsed.compressedSchedule).toBe(false);
       expect(parsed.electiveLevelBuckets).toEqual(DEFAULT_SCHEDULE_OPTIONS.electiveLevelBuckets);
     });

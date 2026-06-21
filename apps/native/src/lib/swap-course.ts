@@ -18,6 +18,7 @@ import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 import {
   buildGenerationConstraints,
   buildScheduleDataCache,
+  firstYearCreditCapFor,
   type ScheduleVariant,
 } from "@/lib/generate-schedule";
 import type { ScheduleOptions } from "@/lib/schedule-options";
@@ -87,7 +88,11 @@ export function computeSwapOptions(input: ComputeSwapOptionsInput): SwapOptionsR
     { disciplines: dataset.disciplines, faculties: dataset.faculties },
     dataset.grades,
   );
-  const constraints = buildGenerationConstraints(options, dataset.ratings);
+  const constraints = buildGenerationConstraints(
+    options,
+    dataset.ratings,
+    firstYearCreditCapFor(options, completedCourses, cache),
+  );
 
   const candidates = findSwapCandidates({
     cache,
