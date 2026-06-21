@@ -1,7 +1,22 @@
 # Deployment & Cloudflare build caching
 
 uoplan deploys to Cloudflare Workers Builds (git-connected). The deploy runs the
-repo build, then `wrangler deploy -c apps/web/dist/uoplan/wrangler.json`.
+repo build (`pnpm build:cf`), then deploys with the **compiled** wrangler config
+that the build emits at `apps/web/dist/uoplan/wrangler.json`:
+
+- **Production branch:** `pnpm run deploy:cf`
+  (`wrangler deploy -c apps/web/dist/uoplan/wrangler.json`)
+- **Non-production branches** (previews, incl. the `release-please` PR branch):
+  `pnpm run upload:cf`
+  (`wrangler versions upload -c apps/web/dist/uoplan/wrangler.json`)
+
+> **Both commands must pass `-c apps/web/dist/uoplan/wrangler.json`.** The repo-root
+> `wrangler.json` deliberately omits `assets.directory` — `@cloudflare/vite-plugin`
+> injects it at build time into the compiled config (`"directory": "../client"`,
+> i.e. `apps/web/dist/client`). Running a bare `wrangler deploy` / `wrangler versions
+upload` loads the root config instead and fails with
+> `The 'assets' property in your configuration is missing the required 'directory'
+property.`
 
 ## Why the build is slow by default
 
@@ -44,8 +59,11 @@ In the Cloudflare dashboard → your Worker project → **Settings → Build**:
 
 1. **Build command** → `pnpm build:cf`
 2. **Build cache** → **Enable**
+3. **Deploy command (production branch)** → `pnpm run deploy:cf`
+4. **Deploy command (non-production branches)** → `pnpm run upload:cf`
 
-The deploy command is unchanged.
+Both deploy commands pass the compiled config (`-c apps/web/dist/uoplan/wrangler.json`)
+— see the note at the top of this doc for why that is required.
 
 ## Notes / caveats
 
