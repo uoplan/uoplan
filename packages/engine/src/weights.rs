@@ -19,6 +19,16 @@ const SENTIMENT_PIVOT: f64 = 3.5;
 const SENTIMENT_BASE: f64 = 2.0;
 const SENTIMENT_SCALE: f64 = 1.0;
 
+// "Prefer higher professor rating" soft weighting over the 0-5 RateMyProfessors
+// scale, biasing *section* selection by the section's professor rating. Same
+// exponential shape as sentiment (pivot 3.5 neutral; +1 ≈ 2x, -1 ≈ 0.5x).
+// Unrated professors are treated as `PROFESSOR_RATING_UNRATED` (slightly above
+// neutral) so rated-but-mediocre profs don't outrank the great unknown.
+const PROFESSOR_RATING_PIVOT: f64 = 3.5;
+const PROFESSOR_RATING_BASE: f64 = 2.0;
+const PROFESSOR_RATING_SCALE: f64 = 1.0;
+pub(crate) const PROFESSOR_RATING_UNRATED: f64 = 4.0;
+
 /// Prefer-easier soft multiplier for `code` (1.0 when disabled or unknown).
 pub(crate) fn easier_weight(code: &str, prefer_easier: bool, aplus: &HashMap<String, f64>) -> f64 {
     if !prefer_easier {
@@ -43,6 +53,20 @@ pub(crate) fn sentiment_weight(
         None => 1.0,
         Some(&s) => SENTIMENT_BASE.powf((s - SENTIMENT_PIVOT) / SENTIMENT_SCALE),
     }
+}
+
+/// Prefer-higher-professor-rating soft multiplier for a section's representative
+/// rating (1.0 when disabled). `rating` is `None` for an unrated/instructor-less
+/// section, which is treated as [`PROFESSOR_RATING_UNRATED`].
+pub(crate) fn professor_rating_weight(rating: Option<f64>, prefer: bool) -> f64 {
+    if !prefer {
+        return 1.0;
+    }
+    let r = match rating {
+        Some(r) if r.is_finite() => r,
+        _ => PROFESSOR_RATING_UNRATED,
+    };
+    PROFESSOR_RATING_BASE.powf((r - PROFESSOR_RATING_PIVOT) / PROFESSOR_RATING_SCALE)
 }
 
 #[cfg(test)]
@@ -104,5 +128,23 @@ mod tests {
 
         assert!(combined("BEST 1000") > combined("MIXED 1000"));
         assert!(combined("MIXED 1000") > combined("WORST 1000"));
+    }
+
+    #[test]
+    fn professor_rating_preference_orders_sections_and_defaults_unrated() {
+        // Disabled => neutral.
+        assert_eq!(professor_rating_weight(Some(4.5), false), 1.0);
+
+        let high = professor_rating_weight(Some(4.5), true);
+        let neutral = professor_rating_weight(Some(PROFESSOR_RATING_PIVOT), true);
+        let low = professor_rating_weight(Some(2.5), true);
+        let unrated = professor_rating_weight(None, true);
+
+        assert!(high > neutral);
+        assert!(neutral > low);
+        // Unrated is treated as ~4.0 — above neutral but below a top-rated prof.
+        assert_eq!(unrated, professor_rating_weight(Some(PROFESSOR_RATING_UNRATED), true));
+        assert!(unrated > neutral);
+        assert!(high > unrated);
     }
 }

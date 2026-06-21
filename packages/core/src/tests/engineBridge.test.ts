@@ -28,7 +28,7 @@ import {
 const baseConstraints: GenerationConstraints = {
   minStartMinutes: 480,
   maxEndMinutes: 1200,
-  minProfessorRating: 3,
+  generationPreferHigherProfessorRating: true,
   maxFirstYearCredits: 24,
   professorRatings: {
     "Jane Doe": { rating: 4.5, numRatings: 10 },
@@ -125,14 +125,27 @@ describe("buildBasicRequest", () => {
     expect(req.forcedCourses).toEqual([]);
   });
 
-  it("maps constraints, day codes, and filters non-finite professor ratings", () => {
+  it("maps constraints, day codes, and forwards professor ratings when the preference is on", () => {
     const req = buildBasicRequest(basicInput(), fakeCache([]));
     expect(req.constraints?.minStartMinutes).toBe(480);
     expect(req.constraints?.compressedSchedule).toBe(false);
     // "We" -> index 2
     expect(req.constraints?.blockedTimes).toEqual([{ day: 2, startMinutes: 600, endMinutes: 660 }]);
-    // unrated professors (numRatings 0) are dropped; only real ratings forwarded
+    // prefer-higher-professor-rating is on: unrated professors (numRatings 0) are
+    // dropped; only real ratings forwarded, and the request flag is set.
+    expect(req.generationPreferHigherProfessorRating).toBe(true);
     expect(req.professorRatings).toEqual({ "Jane Doe": 4.5 });
+  });
+
+  it("omits professor ratings when the prefer-higher-rating preference is off", () => {
+    const req = buildBasicRequest(
+      basicInput({
+        constraints: { ...baseConstraints, generationPreferHigherProfessorRating: false },
+      }),
+      fakeCache([]),
+    );
+    expect(req.generationPreferHigherProfessorRating).toBe(false);
+    expect(req.professorRatings).toEqual({});
   });
 
   it("only computes the courseAplus map when 'prefer easier' is enabled", () => {

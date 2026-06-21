@@ -129,7 +129,6 @@ function constraintsToProto(c: GenerationConstraints): GenerationRequest["constr
   return {
     minStartMinutes: c.minStartMinutes,
     maxEndMinutes: c.maxEndMinutes,
-    minProfessorRating: c.minProfessorRating,
     maxFirstYearCredits: c.maxFirstYearCredits,
     compressedSchedule: c.compressedSchedule ?? false,
     blockedTimes: (c.blockedTimes ?? []).map((b) => ({
@@ -144,8 +143,9 @@ function constraintsToProto(c: GenerationConstraints): GenerationRequest["constr
  * Flatten the {@link ProfessorRatingsMap} into the engine's
  * `map<string, double>` shape (normalized professor name -> rating). Only
  * genuinely rated professors are forwarded — unrated entries (`rating: 0,
- * numRatings: 0`) are omitted so the engine treats them as "no rating", which
- * it always allows (see `constraints.rs::section_allowed_by_min_rating`).
+ * numRatings: 0`) are omitted so the engine treats them as "no rating" and
+ * applies the unrated default (~4.0) when weighting (see
+ * `weights.rs::professor_rating_weight`).
  */
 function professorRatingsToProto(c: GenerationConstraints): Record<string, number> {
   const out: Record<string, number> = {};
@@ -245,6 +245,7 @@ type CommonGenerationRequestFields = Pick<
   | "courseAplus"
   | "generationPreferHigherSentiment"
   | "courseSentiment"
+  | "generationPreferHigherProfessorRating"
 >;
 
 type SharedGenerationRequestFields = Omit<
@@ -273,13 +274,17 @@ function buildCommonGenerationRequestFields(
     constraints: constraintsToProto(input.constraints),
     currentSeed: input.currentSeed,
     firstSeed: input.firstSeed,
-    professorRatings: professorRatingsToProto(input.constraints),
+    professorRatings: input.constraints.generationPreferHigherProfessorRating
+      ? professorRatingsToProto(input.constraints)
+      : {},
     courseAplus: input.generationPreferEasier ? buildCourseAplusMap(cache) : {},
     generationPreferHigherSentiment: input.generationPreferHigherSentiment,
     courseSentiment:
       input.generationPreferHigherSentiment && input.courseSentimentByNorm
         ? buildCourseSentimentMap(cache, input.courseSentimentByNorm)
         : {},
+    generationPreferHigherProfessorRating:
+      input.constraints.generationPreferHigherProfessorRating ?? false,
   };
 }
 
@@ -302,6 +307,7 @@ function buildSharedGenerationRequestFields(
     courseAplus: common.courseAplus,
     generationPreferHigherSentiment: common.generationPreferHigherSentiment,
     courseSentiment: common.courseSentiment,
+    generationPreferHigherProfessorRating: common.generationPreferHigherProfessorRating,
   };
 }
 
@@ -428,9 +434,13 @@ function buildTimetableRequest(input: TimetableFixedSetInput): TimetableRequest 
     includeClosedComponents: input.includeClosedComponents,
     virtualSectionsOnly: input.virtualSectionsOnly,
     virtualExemptCourses: input.virtualExemptCourses ?? [],
-    professorRatings: professorRatingsToProto(input.constraints),
+    professorRatings: input.constraints.generationPreferHigherProfessorRating
+      ? professorRatingsToProto(input.constraints)
+      : {},
     applyBlacklist: input.applyBlacklist ?? false,
     blacklistedCourses: input.blacklistedCourses ?? [],
+    generationPreferHigherProfessorRating:
+      input.constraints.generationPreferHigherProfessorRating ?? false,
   };
 }
 

@@ -70,7 +70,7 @@ function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
     requirementSlotsUserTouched: {},
     generationMinStartMinutes: 480,
     generationMaxEndMinutes: 1320,
-    generationMinProfessorRating: null,
+    generationPreferHigherProfessorRating: false,
     generationLimitFirstYearCredits: false,
     generationCompressedSchedule: false,
     generationPreferEasier: false,
@@ -161,6 +161,11 @@ describe("encodeState / decodeState roundtrip", () => {
   it("round-trips generationPreferHigherSentiment", () => {
     const decoded = decodeInput({ generationPreferHigherSentiment: true });
     expect(decoded.generationPreferHigherSentiment).toBe(true);
+  });
+
+  it("round-trips generationPreferHigherProfessorRating", () => {
+    const decoded = decodeInput({ generationPreferHigherProfessorRating: true });
+    expect(decoded.generationPreferHigherProfessorRating).toBe(true);
   });
 
   it("round-trips frenchImmersionStream", () => {

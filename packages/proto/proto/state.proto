@@ -97,7 +97,7 @@ message ShareableState {
   uint32 generation_min_start_minutes = 23;
   uint32 generation_max_end_minutes = 24;
   repeated DayOfWeek generation_allowed_days = 25 [packed = true];
-  optional uint32 generation_min_professor_rating = 26;
+  reserved 26; // was generation_min_professor_rating (replaced by the soft preference below)
   bool generation_limit_first_year_credits = 27;
   bool generation_compressed_schedule = 28;
   uint32 magic = 29;
@@ -112,6 +112,9 @@ message ShareableState {
   repeated BlockedTime blocked_times = 39;
   repeated RequirementPriority requirement_priorities = 40;
   bool generation_prefer_higher_sentiment = 41;
+  // Scales each section's selection probability by its professor's rating
+  // (unrated treated as ~4.0). Replaces the removed hard min-rating field.
+  bool generation_prefer_higher_professor_rating = 42;
 }
 
 // --- OG-image share preview -------------------------------------------------

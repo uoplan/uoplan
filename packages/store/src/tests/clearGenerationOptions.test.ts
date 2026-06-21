@@ -4,9 +4,9 @@ import { createTestAppServices } from "../testServices";
 import {
   DEFAULT_COURSES_THIS_SEMESTER,
   DEFAULT_GENERATION_MAX_END_MINUTES,
-  DEFAULT_GENERATION_MIN_PROFESSOR_RATING,
   DEFAULT_GENERATION_MIN_START_MINUTES,
   DEFAULT_GENERATION_PREFER_EASIER,
+  DEFAULT_GENERATION_PREFER_HIGHER_PROFESSOR_RATING,
   DEFAULT_GENERATION_PREFER_HIGHER_SENTIMENT,
 } from "../generationDefaults";
 import { avoidedDaysFromBlocks, defaultBlockedTimes } from "../blockedTimes";
@@ -20,7 +20,7 @@ describe("clearGenerationOptions", () => {
       generationMinStartMinutes: 10 * 60,
       generationMaxEndMinutes: 16 * 60,
       blockedTimes: [{ id: "Mo-510-1320", day: "Mo", startMinutes: 510, endMinutes: 1320 }],
-      generationMinProfessorRating: 4,
+      generationPreferHigherProfessorRating: false,
       generationLimitFirstYearCredits: false,
       generationCompressedSchedule: true,
       generationPreferEasier: false,
@@ -40,7 +40,9 @@ describe("clearGenerationOptions", () => {
     expect(s.generationMaxEndMinutes).toBe(DEFAULT_GENERATION_MAX_END_MINUTES);
     expect(s.blockedTimes).toEqual(defaultBlockedTimes());
     expect(avoidedDaysFromBlocks(s.blockedTimes).sort()).toEqual(["Sa", "Su"]);
-    expect(s.generationMinProfessorRating).toBe(DEFAULT_GENERATION_MIN_PROFESSOR_RATING);
+    expect(s.generationPreferHigherProfessorRating).toBe(
+      DEFAULT_GENERATION_PREFER_HIGHER_PROFESSOR_RATING,
+    );
     expect(s.generationLimitFirstYearCredits).toBe(true);
     expect(s.generationCompressedSchedule).toBe(false);
     expect(s.generationPreferEasier).toBe(DEFAULT_GENERATION_PREFER_EASIER);

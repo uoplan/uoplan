@@ -36,7 +36,7 @@ export type GenerateSchedulesInput = Pick<
   | "electiveLevelBuckets"
   | "generationMinStartMinutes"
   | "generationMaxEndMinutes"
-  | "generationMinProfessorRating"
+  | "generationPreferHigherProfessorRating"
   | "professorRatings"
   | "currentSeed"
   | "firstSeed"
@@ -82,7 +82,7 @@ export function pickGenerateSchedulesInput(
     electiveLevelBuckets: state.electiveLevelBuckets,
     generationMinStartMinutes: state.generationMinStartMinutes,
     generationMaxEndMinutes: state.generationMaxEndMinutes,
-    generationMinProfessorRating: state.generationMinProfessorRating,
+    generationPreferHigherProfessorRating: state.generationPreferHigherProfessorRating,
     professorRatings: state.professorRatings,
     currentSeed: state.currentSeed,
     firstSeed: state.firstSeed,

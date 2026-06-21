@@ -106,15 +106,3 @@ export function getRatingDetailsForInstructors(
   }
   return out;
 }
-
-export function isSectionAllowedByMinRating(args: {
-  instructors: string[] | null | undefined;
-  minRating: number | null | undefined;
-  professorRatings: ProfessorRatingsMap | null | undefined;
-}): boolean {
-  const { instructors, minRating, professorRatings } = args;
-  if (minRating == null || !Number.isFinite(minRating)) return true;
-  const ratings = getRatingsForInstructors(instructors, professorRatings);
-  if (ratings.length === 0) return true; // no rating => always allowed
-  return ratings.every((r) => r >= minRating);
-}

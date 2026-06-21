@@ -13,13 +13,15 @@ use crate::types::{Enrollment, RtSection, RtTime};
 pub struct Constraints {
     pub min_start: u32,
     pub max_end: u32,
-    pub min_professor_rating: Option<f64>,
     pub max_first_year_credits: Option<f64>,
     pub compressed: bool,
     /// (day 0-6 Monday, start, end)
     pub blocked: Vec<(u8, u32, u32)>,
     /// normalized professor name -> rating (only rated profs present).
     pub professor_ratings: HashMap<String, f64>,
+    /// When set, section selection is biased toward higher-rated professors
+    /// (soft preference; see `timetable::combos`). Not a hard filter.
+    pub prefer_professor_rating: bool,
 }
 
 impl Constraints {
@@ -46,7 +48,8 @@ impl Constraints {
             && !(!self.blocked.is_empty() && self.slot_overlaps_blocked(t))
     }
 
-    /// Section-scope check: time window + min professor rating.
+    /// Section-scope check: time window only. Professor rating is a soft
+    /// selection preference (see `timetable::combos`), not a hard filter.
     pub fn allows_section(&self, section: &RtSection) -> bool {
         if self.time_window_active() {
             for t in &section.times {
@@ -58,34 +61,7 @@ impl Constraints {
                 }
             }
         }
-        self.section_allowed_by_min_rating(section)
-    }
-
-    fn section_allowed_by_min_rating(&self, section: &RtSection) -> bool {
-        let min = match self.min_professor_rating {
-            Some(m) if m > 0.0 && m.is_finite() => m,
-            _ => return true,
-        };
-        let mut seen: Vec<String> = Vec::new();
-        let mut ratings: Vec<f64> = Vec::new();
-        for t in &section.times {
-            if let Some(name) = &t.instructor {
-                let key = normalize_professor_name(name);
-                if key.is_empty() || seen.contains(&key) {
-                    continue;
-                }
-                seen.push(key.clone());
-                if let Some(&r) = self.professor_ratings.get(&key) {
-                    if r.is_finite() {
-                        ratings.push(r);
-                    }
-                }
-            }
-        }
-        if ratings.is_empty() {
-            return true; // no rating => always allowed
-        }
-        ratings.iter().all(|&r| r >= min)
+        true
     }
 
     /// Final-timetable check: compressed schedule + first-year credit cap.
@@ -160,7 +136,7 @@ fn satisfies_compressed(chosen: &[Enrollment]) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::{BTreeMap, HashMap};
+    use std::collections::BTreeMap;
 
     use super::*;
     use crate::proto::data::{Catalogue, Course, SchedulesData};
@@ -232,43 +208,6 @@ mod tests {
         assert!(!constraints.allows_section(&section(vec![time(1, 16 * 60, 17 * 60 + 30, None)])));
         assert!(!constraints.allows_section(&section(vec![time(0, 12 * 60 + 30, 14 * 60, None)])));
         assert!(constraints.allows_section(&section(vec![time(0, 13 * 60, 14 * 60, None)])));
-    }
-
-    #[test]
-    fn unrated_professors_do_not_fail_min_rating_but_low_rated_ones_do() {
-        let constraints = Constraints {
-            min_start: 0,
-            max_end: 24 * 60,
-            min_professor_rating: Some(4.0),
-            professor_ratings: HashMap::from([
-                ("Prof Good".to_string(), 4.7),
-                ("Prof Low".to_string(), 3.2),
-            ]),
-            ..Default::default()
-        };
-
-        assert!(constraints.allows_section(&section(vec![time(
-            0,
-            9 * 60,
-            10 * 60,
-            Some("  Prof   Good  "),
-        )])));
-        assert!(constraints.allows_section(&section(vec![time(
-            0,
-            9 * 60,
-            10 * 60,
-            Some("Unknown Professor"),
-        )])));
-        assert!(!constraints.allows_section(&section(vec![time(
-            0,
-            9 * 60,
-            10 * 60,
-            Some("Prof Low"),
-        )])));
-        assert!(!constraints.allows_section(&section(vec![
-            time(0, 9 * 60, 10 * 60, Some("Prof Good")),
-            time(2, 9 * 60, 10 * 60, Some("Prof Low")),
-        ])));
     }
 
     #[test]

@@ -21,9 +21,9 @@ import {
   DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
   DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
   DEFAULT_GENERATION_MAX_END_MINUTES,
-  DEFAULT_GENERATION_MIN_PROFESSOR_RATING,
   DEFAULT_GENERATION_MIN_START_MINUTES,
   DEFAULT_GENERATION_PREFER_EASIER,
+  DEFAULT_GENERATION_PREFER_HIGHER_PROFESSOR_RATING,
   DEFAULT_GENERATION_PREFER_HIGHER_SENTIMENT,
 } from "../generationDefaults";
 import { defaultBlockedTimes } from "../blockedTimes";
@@ -556,7 +556,7 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       basicExcludedCategories: [],
       generationMinStartMinutes: DEFAULT_GENERATION_MIN_START_MINUTES,
       generationMaxEndMinutes: DEFAULT_GENERATION_MAX_END_MINUTES,
-      generationMinProfessorRating: DEFAULT_GENERATION_MIN_PROFESSOR_RATING,
+      generationPreferHigherProfessorRating: DEFAULT_GENERATION_PREFER_HIGHER_PROFESSOR_RATING,
       generationLimitFirstYearCredits: DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
       generationCompressedSchedule: DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
       generationPreferEasier: DEFAULT_GENERATION_PREFER_EASIER,

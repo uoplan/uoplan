@@ -185,15 +185,21 @@ fn language_buckets_from(strings: &[String]) -> Vec<LanguageBucket> {
 }
 
 fn build_constraints(req: &GenerationRequest) -> Constraints {
-    constraints_from(req.constraints.as_ref(), &req.professor_ratings)
+    constraints_from(
+        req.constraints.as_ref(),
+        &req.professor_ratings,
+        req.generation_prefer_higher_professor_rating,
+    )
 }
 
 fn constraints_from(
     gc: Option<&proto::engine::GenerationConstraints>,
     professor_ratings: &HashMap<String, f64>,
+    prefer_professor_rating: bool,
 ) -> Constraints {
     let mut c = Constraints {
         professor_ratings: professor_ratings.clone(),
+        prefer_professor_rating,
         ..Default::default()
     };
     if let Some(gc) = gc {
@@ -203,7 +209,6 @@ fn constraints_from(
         } else {
             gc.max_end_minutes
         };
-        c.min_professor_rating = gc.min_professor_rating;
         c.max_first_year_credits = gc.max_first_year_credits;
         c.compressed = gc.compressed_schedule;
         c.blocked = gc
@@ -221,7 +226,11 @@ fn run_timetable_fixed_set(
     data: &DataView,
     req: proto::engine::TimetableRequest,
 ) -> GenerationResponse {
-    let constraints = constraints_from(req.constraints.as_ref(), &req.professor_ratings);
+    let constraints = constraints_from(
+        req.constraints.as_ref(),
+        &req.professor_ratings,
+        req.generation_prefer_higher_professor_rating,
+    );
 
     // Apply the blacklist as a hard course-scope check (parity with
     // `buildTimetablePipeline({ applyBlacklist })`): a fixed set containing a

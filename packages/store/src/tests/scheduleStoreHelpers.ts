@@ -49,7 +49,7 @@ export function resetSwapStore(calendarMode: "basic" | "advanced" = "basic") {
     cache: buildSwapCache(),
     generationMinStartMinutes: 0,
     generationMaxEndMinutes: 24 * 60,
-    generationMinProfessorRating: null,
+    generationPreferHigherProfessorRating: false,
     professorRatings: null,
     includeClosedComponents: true,
     virtualSectionsOnly: false,

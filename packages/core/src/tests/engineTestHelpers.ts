@@ -125,7 +125,7 @@ export function fakeDataCache(schedules: CourseSchedule[]): DataCache {
 export const testGenerationConstraints: GenerationConstraints = {
   minStartMinutes: 0,
   maxEndMinutes: 1440,
-  minProfessorRating: 0,
+  generationPreferHigherProfessorRating: false,
   maxFirstYearCredits: 24,
   professorRatings: {},
   blockedTimes: [],
@@ -160,7 +160,7 @@ export function decodedState(over: Partial<DecodedState> = {}): DecodedState {
     touchedReqIndices: [],
     generationMinStartMinutes: 0,
     generationMaxEndMinutes: 1440,
-    generationMinProfessorRating: null,
+    generationPreferHigherProfessorRating: false,
     generationLimitFirstYearCredits: false,
     generationCompressedSchedule: false,
     generationPreferEasier: false,

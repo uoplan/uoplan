@@ -13,7 +13,6 @@ export type TimetableFailureKind =
 
 export interface ActiveConstraintsSummary {
   compressedSchedule: boolean;
-  minProfessorRating: boolean;
   maxFirstYearCredits: boolean;
 }
 
@@ -26,7 +25,6 @@ export type SuggestionCode =
   | "relax-filters"
   | "try-different-course"
   | "turn-off-compressed"
-  | "clear-min-rating"
   | "widen-hours-days"
   | "relax-fy-cap"
   | "un-blacklist"
@@ -94,14 +92,11 @@ function buildActiveConstraintsSummary(
   if (!constraints) {
     return {
       compressedSchedule: false,
-      minProfessorRating: false,
       maxFirstYearCredits: false,
     };
   }
   return {
     compressedSchedule: !!constraints.compressedSchedule,
-    minProfessorRating:
-      constraints.minProfessorRating != null && constraints.minProfessorRating > 0,
     maxFirstYearCredits: constraints.maxFirstYearCredits != null,
   };
 }
@@ -129,7 +124,6 @@ function buildTimetableFailureDiagnostics(
 
 const RELAX_SUGGESTION_BY_ID: Record<string, SuggestionCode> = {
   "compressed-schedule": "turn-off-compressed",
-  "min-professor-rating": "clear-min-rating",
   "time-window": "widen-hours-days",
   "max-first-year-credits": "relax-fy-cap",
   blacklist: "un-blacklist",
@@ -179,9 +173,6 @@ function buildSuggestions(
   if (kind === "no_conflict_free_assignment") {
     if (summary.compressedSchedule) {
       suggestions.push("turn-off-compressed");
-    }
-    if (summary.minProfessorRating) {
-      suggestions.push("clear-min-rating");
     }
     if (summary.maxFirstYearCredits) {
       suggestions.push("relax-fy-cap");

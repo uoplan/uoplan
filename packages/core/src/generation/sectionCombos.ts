@@ -1,7 +1,6 @@
 import type { ComponentSection, CourseSchedule } from "../dataTypes";
 import type { DataCache } from "../dataCache";
 import type { NormalizedCourseCode } from "../brand";
-import { isSectionAllowedByMinRating } from "../professorRatings";
 import { isTimelessCourse, normalizeCourseCode } from "../utils/courseUtils";
 import { timeSlotSatisfiesConstraints } from "./constraints";
 import { timesOverlap } from "./overlaps";
@@ -67,17 +66,6 @@ export function getValidSectionCombos(
     return sections.filter((section) => {
       if (!sectionHasTimes(section)) return false;
       if (!constraints) return true;
-      if (
-        !isSectionAllowedByMinRating({
-          instructors: section.times
-            .map((t) => t.instructor)
-            .filter((i): i is string => i !== null),
-          minRating: constraints.minProfessorRating,
-          professorRatings: constraints.professorRatings,
-        })
-      ) {
-        return false;
-      }
 
       const times = section.times
         .filter((t) => t.startMinutes < t.endMinutes)

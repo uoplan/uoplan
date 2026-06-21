@@ -33,7 +33,12 @@ export interface BlockedTimeWindow {
 export interface GenerationConstraints {
   minStartMinutes: number;
   maxEndMinutes: number;
-  minProfessorRating?: number;
+  /**
+   * Soft preference: when true, section selection is biased toward higher-rated
+   * professors (unrated treated as ~4.0). Not a hard filter — every section is
+   * still eligible. See the engine (`weights.rs::professor_rating_weight`).
+   */
+  generationPreferHigherProfessorRating?: boolean;
   professorRatings?: ProfessorRatingsMap;
   /** Max credits from 1000-level courses allowed in the schedule (48 - already completed). */
   maxFirstYearCredits?: number;

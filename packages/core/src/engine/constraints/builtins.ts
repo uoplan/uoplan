@@ -11,7 +11,6 @@ import {
   satisfiesCompressedConstraint,
   timeSlotSatisfiesConstraints,
 } from "../../generation/constraints";
-import { isSectionAllowedByMinRating } from "../../professorRatings";
 import { normalizeCourseCode } from "../../utils/courseUtils";
 import type { Constraint } from "./types";
 
@@ -56,23 +55,6 @@ export function timeWindowConstraint(constraints: GenerationConstraints): Constr
         }
       }
       return true;
-    },
-  };
-}
-
-/** Every instructor of a section must meet the minimum professor rating. */
-export function minProfessorRatingConstraint(constraints: GenerationConstraints): Constraint {
-  const active = constraints.minProfessorRating != null && constraints.minProfessorRating > 0;
-  return {
-    id: "min-professor-rating",
-    label: "min-professor-rating",
-    active,
-    allowsSection(_courseCode: string, section: ComponentSection): boolean {
-      return isSectionAllowedByMinRating({
-        instructors: section.times.map((t) => t.instructor).filter((i): i is string => i != null),
-        minRating: constraints.minProfessorRating,
-        professorRatings: constraints.professorRatings,
-      });
     },
   };
 }
@@ -143,7 +125,6 @@ export function buildHardConstraintPipeline(
   return [
     overlapConstraint,
     timeWindowConstraint(constraints),
-    minProfessorRatingConstraint(constraints),
     compressedScheduleConstraint(constraints),
     maxFirstYearCreditsConstraint(constraints),
     blacklistConstraint(blacklistedCourses),
