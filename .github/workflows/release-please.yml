@@ -36,7 +36,11 @@ jobs:
     if: ${{ needs.release-please.outputs.app_release_created == 'true' }}
     uses: ./.github/workflows/native-deploy.yml
     with:
-      platform: all
+      # iOS CI is fully implemented in native-deploy.yml but kept OFF the
+      # automatic release trigger for now. Switch this to `all` (or `ios`) to
+      # also build + submit iOS on every release; iOS can still be built
+      # on-demand via the Native Deploy workflow_dispatch in the meantime.
+      platform: android
       profile: production
       submit: true
     secrets:
