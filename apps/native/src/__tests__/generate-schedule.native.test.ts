@@ -3,6 +3,7 @@ import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 import { GenerationRequest, GenerationResponse } from "@uoplan/proto/engine";
 
 import {
+  createScheduleGenerator,
   type EngineBridge,
   generateScheduleVariants,
   type GenerateScheduleInput,
@@ -539,5 +540,95 @@ describe("generateScheduleVariants", () => {
     );
     expect(req.generationPreferHigherProfessorRating).toBe(true);
     expect(req.professorRatings).toEqual({ "ada lovelace": 4.2 });
+  });
+});
+
+/** A canned response pinning TST 1000's LEC to a specific section. */
+function sectionResponse(section: string): Uint8Array {
+  return GenerationResponse.encode({
+    hasSchedule: true,
+    courses: [{ courseCode: CODE, components: [{ component: "LEC", section }] }],
+    optionalPool: [],
+    pinned: [CODE],
+    chosenCourseToRequirement: {},
+  }).finish();
+}
+
+/** Two LEC sections (Mon A00 / Tue B00) so the engine can return two arrangements. */
+function twoSectionSchedules(): SchedulesData {
+  const base = buildSchedules();
+  base.schedules[0]!.components.LEC!.push({
+    section: "B00",
+    sectionCode: "B00",
+    component: "LEC",
+    session: null,
+    status: "Open",
+    times: [
+      {
+        day: "Tu",
+        startMinutes: 9 * 60,
+        endMinutes: 10 * 60 + 30,
+        virtual: false,
+        instructor: "Ada Lovelace",
+      },
+    ],
+  });
+  return base;
+}
+
+/** Engine returning A00 on even calls and B00 on odd ones (two distinct variants). */
+function alternatingEngine(): EngineBridge {
+  let i = 0;
+  return {
+    loadDataset: jest.fn(async () => {}),
+    generate: jest.fn(async () => sectionResponse(i++ % 2 === 0 ? "A00" : "B00")),
+  };
+}
+
+describe("createScheduleGenerator", () => {
+  it("yields the first variant lazily, then null once arrangements are exhausted", async () => {
+    const engine = cannedEngine();
+    const gen = await createScheduleGenerator(
+      baseInput({ engine, catalogue: buildCatalogue(), schedules: buildSchedules() }),
+    );
+    expect(gen.skippedCourses).toEqual([]);
+    const first = await gen.next();
+    expect(first).not.toBeNull();
+    expect(first!.events[0]!.courseCode).toBe(CODE);
+    // The canned engine repeats one arrangement, so the next call dedups through
+    // the miss budget and then reports exhaustion (null) permanently.
+    expect(await gen.next()).toBeNull();
+  });
+
+  it("streams distinct arrangements across next() calls", async () => {
+    const engine = alternatingEngine();
+    const gen = await createScheduleGenerator(
+      baseInput({ engine, catalogue: buildCatalogue(), schedules: twoSectionSchedules() }),
+    );
+    const a = await gen.next();
+    const b = await gen.next();
+    expect(a).not.toBeNull();
+    expect(b).not.toBeNull();
+    expect(a!.fingerprint).not.toBe(b!.fingerprint);
+    // Only two distinct sections exist → the third call exhausts.
+    expect(await gen.next()).toBeNull();
+  });
+
+  it("returns null without touching the engine for an empty basket", async () => {
+    const engine = cannedEngine();
+    const gen = await createScheduleGenerator(baseInput({ engine, basketCodes: [] }));
+    expect(await gen.next()).toBeNull();
+    expect(engine.generate).not.toHaveBeenCalled();
+    expect(engine.loadDataset).not.toHaveBeenCalled();
+  });
+
+  it("stops yielding when the signal is aborted", async () => {
+    const engine = cannedEngine();
+    const gen = await createScheduleGenerator(
+      baseInput({ engine, catalogue: buildCatalogue(), schedules: buildSchedules() }),
+    );
+    const controller = new AbortController();
+    controller.abort();
+    expect(await gen.next(controller.signal)).toBeNull();
   });
 });

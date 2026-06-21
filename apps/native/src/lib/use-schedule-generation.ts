@@ -6,7 +6,7 @@ import {
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 import type { SchedulesData } from "@uoplan/core/dataTypes";
 import { courseSentimentByNorm, professorSentimentByName } from "@uoplan/core/feedback";
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 
 import { useBasket } from "@/data/basket-provider";
 import { useCompletedCourses } from "@/data/completed-courses-provider";
@@ -16,8 +16,9 @@ import { engineController } from "@/lib/engine/native-engine";
 import {
   buildGenerationConstraints,
   buildScheduleDataCache,
+  createScheduleGenerator,
   firstYearCreditCapFor,
-  generateScheduleVariants,
+  type ScheduleGenerator,
   type ScheduleVariant,
   type SkippedCourse,
 } from "@/lib/generate-schedule";
@@ -49,6 +50,30 @@ export interface GenerationState {
   error?: string;
 }
 
+/**
+ * The schedule-generation hook result: the current generation {@link
+ * GenerationState} plus an unbounded pager over the lazily-generated variants.
+ * Variants are produced one at a time (seed by seed) — {@link
+ * ScheduleGenerationResult.hasNext} stays true until the engine can't produce
+ * another distinct arrangement, at which point {@link next} stops advancing.
+ */
+export interface ScheduleGenerationResult extends GenerationState {
+  /** Index of the variant currently shown (0-based). */
+  index: number;
+  /** Whether there's an earlier already-generated variant to step back to. */
+  hasPrev: boolean;
+  /** Whether another variant exists (cached or still generatable). */
+  hasNext: boolean;
+  /** True while the next variant is being generated on demand. */
+  loadingMore: boolean;
+  /** Show the next variant, generating it lazily if it isn't cached yet. */
+  next: () => void;
+  /** Show the previous already-generated variant. */
+  prev: () => void;
+  /** Force a fresh generation run (e.g. a manual retry). */
+  regenerate: () => void;
+}
+
 /** Pick the schedule term offering the most basket courses (ties → newest). */
 function pickTerm(schedulesByTerm: Map<string, SchedulesData>, codes: string[]): string | null {
   const terms = [...schedulesByTerm.keys()].sort().reverse();
@@ -75,17 +100,27 @@ function pickTerm(schedulesByTerm: Map<string, SchedulesData>, codes: string[]):
  * changes or {@link regenerate} is called. The engine memoises its per-term
  * dataset load, so subsequent generations within a term are fast.
  */
-export function useScheduleGeneration(): GenerationState & { regenerate: () => void } {
+export function useScheduleGeneration(): ScheduleGenerationResult {
   const { bundle, schedulesByTerm, feedback } = useAppData();
   const { codes } = useBasket();
   const { codes: completedCodes } = useCompletedCourses();
   const { options, personalization } = useScheduleOptions();
   const [nonce, setNonce] = useState(0);
-  const [state, setState] = useState<GenerationState>({
-    status: "empty",
-    variants: [],
-    termId: null,
-  });
+
+  const [status, setStatus] = useState<GenerationStatus>("empty");
+  const [variants, setVariants] = useState<ScheduleVariant[]>([]);
+  const [index, setIndex] = useState(0);
+  const [termId, setTermId] = useState<string | null>(null);
+  const [diagnostics, setDiagnostics] = useState<TimetableFailureDiagnostics | null>(null);
+  const [skippedCourses, setSkippedCourses] = useState<SkippedCourse[] | undefined>(undefined);
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [canLoadMore, setCanLoadMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  // The live generator + its abort controller for the current run, replaced on
+  // every regeneration. `next()` pulls additional variants from the generator.
+  const generatorRef = useRef<ScheduleGenerator | null>(null);
+  const controllerRef = useRef<AbortController | null>(null);
 
   // Per-course / per-professor satisfaction (1-5) maps from the loaded feedback
   // dataset — surfaced inline on calendar events and in the event detail drawer.
@@ -113,81 +148,93 @@ export function useScheduleGeneration(): GenerationState & { regenerate: () => v
 
   useEffect(() => {
     let cancelled = false;
+    const controller = new AbortController();
+    controllerRef.current = controller;
+    generatorRef.current = null;
+    setLoadingMore(false);
+    setIndex(0);
+
     const activeRequirements = getActiveScheduleRequirementContext();
 
     if (codes.length === 0 && !activeRequirements?.programUrl) {
-      setState({ status: "empty", variants: [], termId: null, diagnostics: null });
-      return;
+      setStatus("empty");
+      setVariants([]);
+      setTermId(null);
+      setDiagnostics(null);
+      setSkippedCourses(undefined);
+      setError(undefined);
+      setCanLoadMore(false);
+      return () => {
+        cancelled = true;
+        controller.abort();
+      };
     }
 
-    const termId = pickTerm(schedulesByTerm, codes);
-    if (!termId) {
-      setState({
-        status: "error",
-        variants: [],
-        termId: null,
-        diagnostics: null,
-        error: "No schedule data",
-      });
-      return;
+    const term = pickTerm(schedulesByTerm, codes);
+    if (!term) {
+      setStatus("error");
+      setVariants([]);
+      setTermId(null);
+      setDiagnostics(null);
+      setSkippedCourses(undefined);
+      setError("No schedule data");
+      setCanLoadMore(false);
+      return () => {
+        cancelled = true;
+        controller.abort();
+      };
     }
 
-    const schedules = schedulesByTerm.get(termId)!;
-    setState((s) => ({ ...s, status: "generating", termId, diagnostics: null }));
+    const schedules = schedulesByTerm.get(term)!;
+    setStatus("generating");
+    setTermId(term);
+    setDiagnostics(null);
+    setVariants([]);
+    setError(undefined);
+    setCanLoadMore(false);
 
-    const controller = new AbortController();
-
-    void generateScheduleVariants({
-      datasetKey: termId,
-      catalogue: bundle.catalogue,
-      schedules,
-      disciplines: { disciplines: bundle.disciplines, faculties: bundle.faculties },
-      ratings: bundle.ratings,
-      grades: bundle.grades,
-      sentiment,
-      basketCodes: codes,
-      completedCourses: completedCodes,
-      hasProfileContext,
-      ...(activeRequirements ? { requirements: activeRequirements } : {}),
-      options,
-      variantCount: 8,
-      signal: controller.signal,
-      // Paint the first conflict-free timetable as soon as it's found instead of
-      // waiting for all 8 seeds (sequential native calls, ~20s worst case); the
-      // remaining variants stream in afterward and the final `.then` settles the
-      // complete set.
-      onVariant: (variants, skippedCourses) => {
-        if (cancelled) return;
-        setState({
-          status: "ready",
-          variants,
-          termId,
-          diagnostics: null,
-          skippedCourses: skippedCourses.length > 0 ? skippedCourses : undefined,
+    void (async () => {
+      try {
+        const generator = await createScheduleGenerator({
+          datasetKey: term,
+          catalogue: bundle.catalogue,
+          schedules,
+          disciplines: { disciplines: bundle.disciplines, faculties: bundle.faculties },
+          ratings: bundle.ratings,
+          grades: bundle.grades,
+          sentiment,
+          basketCodes: codes,
+          completedCourses: completedCodes,
+          hasProfileContext,
+          ...(activeRequirements ? { requirements: activeRequirements } : {}),
+          options,
+          signal: controller.signal,
+          engine: engineController,
         });
-      },
-      engine: engineController,
-    })
-      .then((result) => {
         if (cancelled) return;
-        const { variants, skippedCourses } = result;
-        const skipped = skippedCourses.length > 0 ? skippedCourses : undefined;
-        if (variants.length > 0) {
-          setState({
-            status: "ready",
-            variants,
-            termId,
-            diagnostics: null,
-            skippedCourses: skipped,
-          });
+        generatorRef.current = generator;
+        const skipped = generator.skippedCourses.length > 0 ? generator.skippedCourses : undefined;
+
+        // Paint the first conflict-free timetable as soon as it's found; further
+        // variants are pulled lazily on demand by `next()` (unbounded — until the
+        // engine can't produce another distinct arrangement).
+        const first = await generator.next(controller.signal);
+        if (cancelled) return;
+        if (first) {
+          setVariants([first]);
+          setIndex(0);
+          setSkippedCourses(skipped);
+          setCanLoadMore(true);
+          setStatus("ready");
           return;
         }
-        // No conflict-free timetable. For the basket case, run the SAME core
-        // diagnostics the web app uses (pinned = basket, no optional pool) so
-        // the UI can show a friendly lead + quick-fix suggestions instead of a
-        // generic error. Requirement-driven generation (no basket courses)
-        // falls back to a generic shared message in the UI (diagnostics null).
-        let diagnostics: TimetableFailureDiagnostics | null = null;
+
+        // No conflict-free timetable at all. For the basket case, run the SAME
+        // core diagnostics the web app uses (pinned = basket, no optional pool)
+        // so the UI can show a friendly lead + quick-fix suggestions instead of a
+        // generic error. Requirement-driven generation (no basket courses) falls
+        // back to a generic shared message in the UI (diagnostics null).
+        let diag: TimetableFailureDiagnostics | null = null;
         if (codes.length > 0) {
           try {
             const { cache } = buildScheduleDataCache(
@@ -212,7 +259,7 @@ export function useScheduleGeneration(): GenerationState & { regenerate: () => v
                 countValidCombosForCourse(c, cache, constraints) > 0,
             );
             if (schedulable.length > 0) {
-              diagnostics = diagnoseTimetableFailure({
+              diag = diagnoseTimetableFailure({
                 pinnedCourseCodes: schedulable,
                 optionalCourseCodes: [],
                 targetCount: schedulable.length,
@@ -221,21 +268,23 @@ export function useScheduleGeneration(): GenerationState & { regenerate: () => v
               });
             }
           } catch {
-            diagnostics = null;
+            diag = null;
           }
         }
-        setState({ status: "none", variants, termId, diagnostics, skippedCourses: skipped });
-      })
-      .catch((err: unknown) => {
+        setVariants([]);
+        setSkippedCourses(skipped);
+        setDiagnostics(diag);
+        setCanLoadMore(false);
+        setStatus("none");
+      } catch (err: unknown) {
         if (cancelled) return;
-        setState({
-          status: "error",
-          variants: [],
-          termId,
-          diagnostics: null,
-          error: err instanceof Error ? err.message : String(err),
-        });
-      });
+        setVariants([]);
+        setDiagnostics(null);
+        setCanLoadMore(false);
+        setError(err instanceof Error ? err.message : String(err));
+        setStatus("error");
+      }
+    })();
 
     return () => {
       cancelled = true;
@@ -254,5 +303,48 @@ export function useScheduleGeneration(): GenerationState & { regenerate: () => v
     hasProfileContext,
   ]);
 
-  return { ...state, regenerate: () => setNonce((n) => n + 1) };
+  const next = useCallback(() => {
+    if (index < variants.length - 1) {
+      setIndex(index + 1);
+      return;
+    }
+    // At the end of the cached variants — lazily pull the next one (if any).
+    if (!canLoadMore || loadingMore) return;
+    const generator = generatorRef.current;
+    if (!generator) return;
+    setLoadingMore(true);
+    void generator
+      .next(controllerRef.current?.signal)
+      .then((variant) => {
+        setLoadingMore(false);
+        if (variant) {
+          setVariants((vs) => [...vs, variant]);
+          setIndex((i) => i + 1);
+        } else {
+          setCanLoadMore(false);
+        }
+      })
+      .catch(() => {
+        setLoadingMore(false);
+        setCanLoadMore(false);
+      });
+  }, [index, variants.length, canLoadMore, loadingMore]);
+
+  const prev = useCallback(() => setIndex((i) => Math.max(0, i - 1)), []);
+
+  return {
+    status,
+    variants,
+    termId,
+    diagnostics,
+    skippedCourses,
+    error,
+    index,
+    hasPrev: index > 0,
+    hasNext: index < variants.length - 1 || canLoadMore,
+    loadingMore,
+    next,
+    prev,
+    regenerate: () => setNonce((n) => n + 1),
+  };
 }
