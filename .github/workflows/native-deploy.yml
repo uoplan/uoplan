@@ -50,11 +50,38 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-submit:
-    name: Build and submit native app
+  # Resolve the platform matrix so each platform runs on the right OS:
+  # Android builds on Linux, iOS builds on macOS.
+  prepare:
+    name: Resolve build matrix
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.value }}
+    steps:
+      - name: Build matrix from selected platform
+        id: matrix
+        shell: bash
+        run: |
+          case "${{ inputs.platform }}" in
+            ios)
+              echo 'value={"include":[{"platform":"ios","runner":"macos-latest"}]}' >> "$GITHUB_OUTPUT" ;;
+            android)
+              echo 'value={"include":[{"platform":"android","runner":"ubuntu-latest"}]}' >> "$GITHUB_OUTPUT" ;;
+            *)
+              echo 'value={"include":[{"platform":"android","runner":"ubuntu-latest"},{"platform":"ios","runner":"macos-latest"}]}' >> "$GITHUB_OUTPUT" ;;
+          esac
+
+  build-submit:
+    name: ${{ matrix.platform }} (${{ inputs.profile }})
+    needs: prepare
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     env:
-      PLATFORM: ${{ inputs.platform }}
+      # eas-cli authenticates with this token; no Expo username/password needed.
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      PLATFORM: ${{ matrix.platform }}
       PROFILE: ${{ inputs.profile }}
       SHOULD_SUBMIT: ${{ inputs.submit }}
     steps:
@@ -64,15 +91,50 @@ jobs:
       - name: Setup Node + pnpm
         uses: ./.github/actions/setup-node-pnpm
 
-      - name: Setup EAS
+      - name: Setup Java (Android)
+        if: matrix.platform == 'android'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Android NDK
+        if: matrix.platform == 'android'
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Matches the NDK the React Native Gradle plugin (Expo SDK) pins; also
+          # used by cargo-ndk when the postinstall compiles the JNI engine .so.
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;27.1.12297006"
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/27.1.12297006" >> "$GITHUB_ENV"
+          echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/27.1.12297006" >> "$GITHUB_ENV"
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install protoc
+        shell: bash
+        run: |
+          set -euo pipefail
+          # `pnpm generate` (run by the EAS postinstall) compiles the protobufs.
+          # The protoc npm package usually provides the binary, but install a
+          # system protoc as a guaranteed fallback.
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y --no-install-recommends protobuf-compiler
+          else
+            brew list protobuf >/dev/null 2>&1 || brew install protobuf
+          fi
+
+      - name: Setup EAS CLI
         uses: expo/expo-github-action@v8
         with:
           eas-version: latest
           packager: pnpm
-          # Signing/submission credentials live in EAS Credentials; CI only needs this token.
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Build selected platform(s)
+      - name: Build on the runner (no EAS cloud)
+        id: build
         working-directory: apps/native
         shell: bash
         run: |
@@ -83,16 +145,31 @@ jobs:
             exit 1
           fi
 
-          if [[ "$PLATFORM" == "all" ]]; then
-            platforms=(ios android)
-          else
-            platforms=("$PLATFORM")
+          ext=aab
+          if [[ "$PLATFORM" == "ios" ]]; then
+            ext=ipa
           fi
+          out="${RUNNER_TEMP}/uoplan-${PLATFORM}.${ext}"
 
-          for platform in "${platforms[@]}"; do
-            eas build --platform "$platform" --profile "$PROFILE" --non-interactive
+          # --local runs the entire build on this GitHub runner (zero EAS Build
+          # cloud minutes); signing credentials are still fetched from EAS.
+          eas build \
+            --local \
+            --non-interactive \
+            --platform "$PLATFORM" \
+            --profile "$PROFILE" \
+            --output "$out"
 
-            if [[ "$SHOULD_SUBMIT" == "true" ]]; then
-              eas submit --platform "$platform" --profile production --latest --non-interactive
-            fi
-          done
+          echo "artifact=$out" >> "$GITHUB_OUTPUT"
+
+      - name: Submit to the store (eas submit)
+        if: ${{ inputs.submit }}
+        working-directory: apps/native
+        shell: bash
+        run: |
+          set -euo pipefail
+          eas submit \
+            --non-interactive \
+            --platform "$PLATFORM" \
+            --profile production \
+            --path "${{ steps.build.outputs.artifact }}"
