@@ -17,7 +17,12 @@
 # Cloudflare setup (dashboard, one-time):
 #   * Settings > Build > Build command:  pnpm build:cf
 #   * Settings > Build > Build cache:     Enable
-# Deploy command is unchanged.
+#   * Deploy command (production branch):      pnpm run deploy:cf
+#   * Deploy command (non-production branches): pnpm run upload:cf
+# Both deploy commands pass the build-emitted config
+# (-c apps/web/dist/uoplan/wrangler.json); the repo-root wrangler.json omits
+# assets.directory, so a bare `wrangler deploy`/`versions upload` fails. See
+# docs/deployment.md.
 set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

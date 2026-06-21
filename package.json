@@ -7,6 +7,8 @@
     "dev": "pnpm generate && pnpm build:engine-wasm && pnpm --filter web dev",
     "build": "pnpm generate && pnpm build:engine-wasm && pnpm --filter web build",
     "deploy": "pnpm build && wrangler deploy -c apps/web/dist/uoplan/wrangler.json",
+    "deploy:cf": "wrangler deploy -c apps/web/dist/uoplan/wrangler.json",
+    "upload:cf": "wrangler versions upload -c apps/web/dist/uoplan/wrangler.json",
     "generate": "pnpm -r generate && pnpm build:data-proto",
     "typecheck": "pnpm wrangler types && pnpm -r typecheck",
     "lint": "oxlint",
