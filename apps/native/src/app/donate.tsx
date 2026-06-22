@@ -12,6 +12,7 @@ import {
   SectionCard,
 } from "@/components/redesign";
 import { Spacing, Surface } from "@/constants/theme";
+import { useAnalytics } from "@/lib/analytics";
 
 const DONATION_EMAIL = "donate@uoplan.party";
 const DONATION_URL = `mailto:${DONATION_EMAIL}`;
@@ -56,6 +57,7 @@ function InfoRow({
 
 export default function DonateScreen() {
   const router = useRouter();
+  const analytics = useAnalytics();
 
   return (
     <RedesignScreen gap={Spacing.three} backLabel="Settings" onBack={() => router.back()}>
@@ -78,7 +80,14 @@ export default function DonateScreen() {
             <Pill>CAD</Pill>
           </View>
 
-          <GlassButton label="Donate" icon="heart.fill" onPress={openDonation} />
+          <GlassButton
+            label="Donate"
+            icon="heart.fill"
+            onPress={() => {
+              analytics.capture("donation_cta_clicked", { location: "donate_button" });
+              openDonation();
+            }}
+          />
         </Stack>
       </SectionCard>
 

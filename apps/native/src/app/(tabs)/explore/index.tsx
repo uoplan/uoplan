@@ -410,7 +410,10 @@ export default function ExploreScreen() {
     }
   };
 
-  const applyFilters = (next: ExploreSearchFilters) => setFilters(normalizeFilters(next));
+  const applyFilters = (next: ExploreSearchFilters) => {
+    setFilters(normalizeFilters(next));
+    analytics.capture("explore_filter_applied", { filter: activeDrawerFilter ?? "unknown" });
+  };
 
   const openCourse = (code: string) =>
     router.push({ pathname: "/explore/course/[code]", params: { code } });
