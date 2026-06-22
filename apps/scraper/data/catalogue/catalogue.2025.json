@@ -158735,6 +158735,60 @@
   ],
   "programs": [
     {
+      "title": "Graduate Diploma for Nurse Practitioners",
+      "url": "https://catalogue.uottawa.ca/en/graduate/diploma-nurse-practitioners/",
+      "slug": "graduate/diploma-nurse-practitioners",
+      "requirements": [
+        {
+          "type": "and",
+          "title": "Compulsory Courses:",
+          "options": [
+            {
+              "type": "course",
+              "code": "NSG 5350",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5360",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5370",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5375",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5380",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5385",
+              "credits": 3
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Practicum:",
+          "options": [
+            {
+              "type": "course",
+              "code": "NSG 5401",
+              "credits": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
       "title": "Doctorate in Philosophy Biochemistry and Specialization Bioinformatics",
       "url": "https://catalogue.uottawa.ca/en/graduate/doctor-philosophy-biochemistry-specialization-bioinformatics/",
       "slug": "graduate/doctor-philosophy-biochemistry-specialization-bioinformatics",
@@ -200326,6 +200380,158 @@
               "type": "course",
               "code": "MED 5900",
               "credits": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Master of Science Nursing with Graduate Diploma for Nurse Practitioners",
+      "url": "https://catalogue.uottawa.ca/en/graduate/master-science-nursing-diploma-nurse-practitioners/",
+      "slug": "graduate/master-science-nursing-diploma-nurse-practitioners",
+      "requirements": [
+        {
+          "type": "and",
+          "title": "Compulsory Courses:",
+          "options": [
+            {
+              "type": "course",
+              "code": "NSG 5130",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5140",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5192",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5350",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5360",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5370",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5375",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5380",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5385",
+              "credits": 3
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Practicum:",
+          "options": [
+            {
+              "type": "course",
+              "code": "NSG 5401",
+              "credits": 12
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Thesis:",
+          "options": [
+            {
+              "type": "course",
+              "code": "THM 7999"
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Compulsory Courses:",
+          "options": [
+            {
+              "type": "course",
+              "code": "NSG 5130",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5140",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5192",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5350",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5360",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5370",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5375",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5380",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "NSG 5385",
+              "credits": 3
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Clinical Project:",
+          "options": [
+            {
+              "type": "course",
+              "code": "NSG 6401",
+              "credits": 6
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Practicum:",
+          "options": [
+            {
+              "type": "course",
+              "code": "NSG 5401",
+              "credits": 12
             }
           ]
         }
