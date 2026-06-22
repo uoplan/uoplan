@@ -1,4 +1,4 @@
-// AUTO-GENERATED from the repo-root CHANGELOG.md by scripts/generate-changelog.mjs.
+// AUTO-GENERATED from the repo-root CHANGELOG.md by scripts/generate-changelog.mts.
 // Do not edit by hand — run `pnpm --filter native gen:changelog`.
 export const CHANGELOG_MD = `# Changelog
 

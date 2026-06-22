@@ -21,11 +21,25 @@ const INTEROP_HELPER_COLLISIONS = [
   "interopRequireWildcard",
 ];
 
+// Minimal shapes of the Babel APIs this config touches, declared inline so the
+// config typechecks without pulling in `@babel/core` type packages.
+interface BabelScope {
+  getBinding(name: string): unknown;
+  rename(oldName: string, newName?: string): void;
+  generateUid(name?: string): string;
+}
+interface BabelNodePath {
+  scope: BabelScope;
+}
+interface BabelConfigApi {
+  cache(forever: boolean): void;
+}
+
 function fixBabelInteropHelperCollision() {
   return {
     name: "fix-babel-interop-helper-collision",
     visitor: {
-      Program(path) {
+      Program(path: BabelNodePath) {
         for (const name of INTEROP_HELPER_COLLISIONS) {
           if (path.scope.getBinding(name)) {
             path.scope.rename(name, path.scope.generateUid(`safe_${name}`));
@@ -36,10 +50,10 @@ function fixBabelInteropHelperCollision() {
   };
 }
 
-module.exports = function babelConfig(api) {
+export default function babelConfig(api: BabelConfigApi) {
   api.cache(true);
   return {
     presets: ["babel-preset-expo"],
     plugins: [fixBabelInteropHelperCollision],
   };
-};
+}

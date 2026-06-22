@@ -1,6 +1,10 @@
 // Learn more https://docs.expo.dev/guides/customizing-metro
-const { getDefaultConfig } = require("expo/metro-config");
-const path = require("node:path");
+// Metro (>=0.84) loads `metro.config.ts` directly under Node 24's native
+// TypeScript support. This file stays CommonJS (`require`/`module.exports`) so
+// Metro's `require()`-based config loader returns the config object directly;
+// an ESM default export would be mis-read through its `__esModule` check.
+const { getDefaultConfig } = require("expo/metro-config") as typeof import("expo/metro-config");
+const path = require("node:path") as typeof import("node:path");
 
 const config = getDefaultConfig(__dirname);
 
@@ -44,7 +48,9 @@ const LINGUI_SINGLETONS = ["@lingui/react", "@lingui/core"];
 const EXPO_PACKAGE_DIR = path.dirname(require.resolve("expo/package.json"));
 const EXPO_ASSET_ENTRY = require.resolve("expo-asset", { paths: [EXPO_PACKAGE_DIR] });
 
-config.resolver.resolveRequest = (context, moduleName, platform) => {
+type ResolveRequest = NonNullable<(typeof config.resolver)["resolveRequest"]>;
+
+const resolveRequest: ResolveRequest = (context, moduleName, platform) => {
   if (moduleName === "expo-asset") {
     return context.resolveRequest(context, EXPO_ASSET_ENTRY, platform);
   }
@@ -75,5 +81,7 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
   }
   return context.resolveRequest(context, moduleName, platform);
 };
+
+(config.resolver as { resolveRequest?: ResolveRequest }).resolveRequest = resolveRequest;
 
 module.exports = config;

@@ -110,7 +110,7 @@ After the first manual upload succeeds and the Play Developer API is authorized 
 
 ## Monorepo and native engine notes
 
-EAS runs the Expo build remotely, so generated artifacts must be recreated on the EAS worker. The native package's guarded `postinstall` script runs `apps/native/scripts/eas-postinstall.mjs` only when `EAS_BUILD=true`, which:
+EAS runs the Expo build remotely, so generated artifacts must be recreated on the EAS worker. The native package's guarded `postinstall` script runs `apps/native/scripts/eas-postinstall.mts` only when `EAS_BUILD=true`, which:
 
 - runs `pnpm generate` at the monorepo root so `@uoplan/proto/src/generated/*` exists;
 - installs Rust via rustup if needed (both platforms);
