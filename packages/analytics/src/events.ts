@@ -30,16 +30,40 @@ export interface AnalyticsEventMap {
   preferences_updated: { field: string };
 
   // --- Schedule generation ------------------------------------------------
-  schedule_generate_started: { termCode?: string; mode?: GenerationMode };
+  // `programId`/`completedCount`/`requirementCount` are optional, non-PII
+  // segmentation dimensions (catalog program id + counts) so funnels and
+  // drop-off can be broken down by program and academic load.
+  schedule_generate_started: {
+    termCode?: string;
+    mode?: GenerationMode;
+    programId?: string;
+    completedCount?: number;
+    requirementCount?: number;
+  };
   schedule_generated: {
     resultCount: number;
     durationMs?: number;
     hasConflicts?: boolean;
     relaxationsApplied?: boolean;
     termCode?: string;
+    programId?: string;
+    completedCount?: number;
+    requirementCount?: number;
   };
-  schedule_generate_empty: { termCode?: string; reason?: string };
-  schedule_generate_failed: { termCode?: string; reason?: string };
+  schedule_generate_empty: {
+    termCode?: string;
+    reason?: string;
+    programId?: string;
+    completedCount?: number;
+    requirementCount?: number;
+  };
+  schedule_generate_failed: {
+    termCode?: string;
+    reason?: string;
+    programId?: string;
+    completedCount?: number;
+    requirementCount?: number;
+  };
 
   // --- Schedule interaction ----------------------------------------------
   schedule_viewed: { index?: number; total?: number };

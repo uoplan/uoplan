@@ -188,6 +188,12 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
 
     const schedules = schedulesByTerm.get(term)!;
     const startedAt = Date.now();
+    // Non-PII segmentation dimensions shared across every generation event so
+    // the funnel/drop-off can be broken down by program and academic load.
+    const segment = {
+      programId: activeRequirements?.programUrl ?? personalization.programUrl ?? undefined,
+      completedCount: completedCodes.length,
+    };
     setStatus("generating");
     setTermId(term);
     setDiagnostics(null);
@@ -197,6 +203,7 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
     getAnalytics().capture("schedule_generate_started", {
       termCode: term,
       mode: activeRequirements ? "advanced" : "basic",
+      ...segment,
     });
 
     void (async () => {
@@ -238,6 +245,7 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
             hasConflicts: false,
             relaxationsApplied: Boolean(skipped?.length),
             termCode: term,
+            ...segment,
           });
           return;
         }
@@ -292,6 +300,7 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
         getAnalytics().capture("schedule_generate_empty", {
           termCode: term,
           reason: skipped && skipped.length > 0 && !diag ? "all_courses_skipped" : "no_schedule",
+          ...segment,
         });
       } catch (err: unknown) {
         if (cancelled) return;
@@ -303,6 +312,7 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
         getAnalytics().capture("schedule_generate_failed", {
           termCode: term,
           reason: err instanceof Error && err.name ? err.name : "error",
+          ...segment,
         });
       }
     })();

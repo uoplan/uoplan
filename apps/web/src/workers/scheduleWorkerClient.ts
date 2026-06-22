@@ -166,8 +166,15 @@ export async function runScheduleGeneration(
 ): Promise<GenerateSchedulesResult | null> {
   const analytics = getAnalytics();
   const termCode = state.selectedTermId ?? undefined;
+  // Non-PII segmentation dimensions shared across every generation event so the
+  // funnel/drop-off can be broken down by program and academic load.
+  const segment = {
+    programId: state.program?.slug ?? state.program?.url ?? undefined,
+    completedCount: state.completedCourses.length,
+    requirementCount: state.remainingRequirements.length,
+  };
   const startedAt = nowMs();
-  analytics.capture("schedule_generate_started", { termCode, mode });
+  analytics.capture("schedule_generate_started", { termCode, mode, ...segment });
 
   try {
     const result = await runScheduleGenerationInternal(state, mode);
@@ -177,16 +184,19 @@ export async function runScheduleGeneration(
         resultCount: 1,
         durationMs,
         termCode,
+        ...segment,
       });
     } else if (result?.generationError) {
       analytics.capture("schedule_generate_empty", {
         termCode,
         reason: generationErrorReason(result),
+        ...segment,
       });
     } else {
       analytics.capture("schedule_generate_failed", {
         termCode,
         reason: "cancelled",
+        ...segment,
       });
     }
     return result;
@@ -194,6 +204,7 @@ export async function runScheduleGeneration(
     analytics.capture("schedule_generate_failed", {
       termCode,
       reason: "error",
+      ...segment,
     });
     throw err;
   }
