@@ -173,6 +173,7 @@ export default function PersonalizeScreen() {
   const canGenerate = requirements == null || (unassignedCount === 0 && !missingProgramOptions);
 
   const goToSchedule = () => {
+    analytics.capture("requirements_viewed", { programId: program ?? undefined });
     setActiveScheduleRequirementContext(
       program
         ? {
@@ -187,6 +188,7 @@ export default function PersonalizeScreen() {
 
   const updateCompletedCourses = (nextCodes: string[]) => {
     completed.set(nextCodes);
+    analytics.capture("completed_courses_updated", { count: nextCodes.length, source: "manual" });
   };
 
   // Transcript import (on-device): the document picker hands us a PDF, which we
@@ -279,7 +281,10 @@ export default function PersonalizeScreen() {
               <TermStep
                 options={termOptions}
                 value={term}
-                onChange={(termId) => setPersonalization({ termId })}
+                onChange={(termId) => {
+                  setPersonalization({ termId });
+                  if (termId) analytics.capture("term_selected", { termCode: termId });
+                }}
                 reminders={<NotificationToggle />}
               />
             ),
@@ -314,12 +319,14 @@ export default function PersonalizeScreen() {
                 selectedProgramLabel={selectedProgramLabel}
                 courseCodes={completed.codes}
                 transcriptSummary={transcriptSummary}
-                onStartYearChange={(nextStartYear) =>
-                  setPersonalization({ startYear: nextStartYear })
-                }
+                onStartYearChange={(nextStartYear) => {
+                  setPersonalization({ startYear: nextStartYear });
+                  analytics.capture("preferences_updated", { field: "start_year" });
+                }}
                 onProgramChange={(programUrl) => {
                   setPersonalization({ programUrl });
                   setRequirementSelections(DEFAULT_REQUIREMENT_SELECTIONS);
+                  if (programUrl) analytics.capture("program_selected", { programId: programUrl });
                 }}
                 onCourseCodesChange={updateCompletedCourses}
                 onRemoveCourse={completed.remove}
