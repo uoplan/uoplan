@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
-import { dumpCoverage } from "./_coverage-util.ts";
+import { dumpCoverage } from "./_coverage-util";
 
 /**
  * Runtime-coverage crawl (runs only under playwright.coverage.config.ts against
