@@ -46,7 +46,7 @@ msgid "advancedOptions.summary.times"
 msgstr "Heures de cours"
 
 msgid "analytics.optout.description"
-msgstr "Aidez à améliorer uoplan grâce à des statistiques d'utilisation anonymes et sans témoins. Aucun renseignement personnel n'est recueilli."
+msgstr "Aidez à améliorer uoplan grâce à des statistiques d'utilisation anonymes et respectueuses de la vie privée. Aucun renseignement personnel n'est recueilli."
 
 msgid "analytics.optout.privacyDetails"
 msgstr "Détails de confidentialité :"

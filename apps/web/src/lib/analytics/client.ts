@@ -92,8 +92,8 @@ export function buildWebAnalyticsClient({
         const options: Partial<PostHogConfig> = {
           api_host: config.host,
           ui_host: config.uiHost,
-          person_profiles: "identified_only",
-          persistence: "memory",
+          person_profiles: "always",
+          persistence: "localStorage+cookie",
           disable_session_recording: true,
           autocapture: true,
           capture_pageview: false,

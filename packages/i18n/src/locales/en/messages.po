@@ -46,7 +46,7 @@ msgid "advancedOptions.summary.times"
 msgstr "Class times"
 
 msgid "analytics.optout.description"
-msgstr "Help improve uoplan with privacy-friendly, cookieless usage analytics. No personal data is collected."
+msgstr "Help improve uoplan with privacy-friendly, anonymous usage analytics. No personal data is collected."
 
 msgid "analytics.optout.privacyDetails"
 msgstr "Privacy details:"

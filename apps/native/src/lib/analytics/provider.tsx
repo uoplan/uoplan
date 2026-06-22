@@ -156,7 +156,8 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
       apiKey={analyticsConfig.key}
       options={{
         host: analyticsConfig.host,
-        persistence: "memory",
+        persistence: "file",
+        personProfiles: "always",
         enableSessionReplay: false,
         defaultOptIn: loaded && !optedOut,
         disabled: !enabled,
