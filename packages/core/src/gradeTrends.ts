@@ -55,6 +55,24 @@ export function decodeTermMeta(termId: number): TermMeta {
   return { termId: n, year, seasonDigit, season, sortKey };
 }
 
+/** English season words for analytics term names (locale-independent). */
+const SEASON_NAME_EN: Record<TermSeason, string> = {
+  winter: "Winter",
+  springSummer: "Summer",
+  fall: "Fall",
+};
+
+/**
+ * Canonical English term name for analytics dashboards, e.g. `Fall 2026`.
+ * Locale-independent so breakdown values stay stable across platforms and UI
+ * locales. Returns `undefined` for ids that can't be decoded.
+ */
+export function formatTermNameEn(termId: number | string): string | undefined {
+  const meta = decodeTermMeta(Number(termId));
+  if (!meta.season || meta.year <= 0) return undefined;
+  return `${SEASON_NAME_EN[meta.season]} ${meta.year}`;
+}
+
 /** Failing letter grades within the counted set (E = supplemental, F = fail). */
 const FAILING_GRADES = ["E", "F"] as const;
 const A_RANGE_GRADES = ["A-", "A", "A+"] as const;

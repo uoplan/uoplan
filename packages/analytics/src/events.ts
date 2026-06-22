@@ -23,7 +23,7 @@ export type ScheduleExportTarget = "ics" | "calendar";
  */
 export interface AnalyticsEventMap {
   // --- Planner flow -------------------------------------------------------
-  term_selected: { termCode: string };
+  term_selected: { termId: string; termName?: string };
   program_selected: { programId: string; level?: string };
   completed_courses_updated: { count: number; source?: CompletedCoursesSource };
   requirements_viewed: { programId?: string };
@@ -34,7 +34,8 @@ export interface AnalyticsEventMap {
   // segmentation dimensions (catalog program id + counts) so funnels and
   // drop-off can be broken down by program and academic load.
   schedule_generate_started: {
-    termCode?: string;
+    termId?: string;
+    termName?: string;
     mode?: GenerationMode;
     programId?: string;
     completedCount?: number;
@@ -45,20 +46,23 @@ export interface AnalyticsEventMap {
     durationMs?: number;
     hasConflicts?: boolean;
     relaxationsApplied?: boolean;
-    termCode?: string;
+    termId?: string;
+    termName?: string;
     programId?: string;
     completedCount?: number;
     requirementCount?: number;
   };
   schedule_generate_empty: {
-    termCode?: string;
+    termId?: string;
+    termName?: string;
     reason?: string;
     programId?: string;
     completedCount?: number;
     requirementCount?: number;
   };
   schedule_generate_failed: {
-    termCode?: string;
+    termId?: string;
+    termName?: string;
     reason?: string;
     programId?: string;
     completedCount?: number;

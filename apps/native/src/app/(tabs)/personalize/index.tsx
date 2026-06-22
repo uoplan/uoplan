@@ -7,6 +7,7 @@ import { File } from "expo-file-system";
 
 import type { SchedulesData } from "@uoplan/core/dataTypes";
 import { isOptCourse, normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
+import { formatTermNameEn } from "@uoplan/core/gradeTrends";
 
 import { NotificationToggle } from "@/components/notification-toggle";
 import { OptionsStep } from "@/components/personalize/options-step";
@@ -289,7 +290,11 @@ export default function PersonalizeScreen() {
                 value={term}
                 onChange={(termId) => {
                   setPersonalization({ termId });
-                  if (termId) analytics.capture("term_selected", { termCode: termId });
+                  if (termId)
+                    analytics.capture("term_selected", {
+                      termId,
+                      termName: formatTermNameEn(termId),
+                    });
                 }}
                 reminders={<NotificationToggle />}
               />

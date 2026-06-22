@@ -11,6 +11,7 @@ import { parseUEnrollUrl, resolveUEnrollSchedule } from "../../lib/importFromUEn
 import type { ParsedUEnrollData, UEnrollResolveResult } from "../../lib/importFromUEnroll";
 import { tr, useTr } from "../../i18n";
 import { formatTermLabel } from "../../lib/term/termLabel";
+import { formatTermNameEn } from "@uoplan/core";
 import { useAnalytics } from "../../lib/analytics";
 
 interface UEnrollImportModalProps {
@@ -59,7 +60,10 @@ export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps)
       let activeCache = cache;
 
       if (parsed.termId && parsed.termId !== selectedTermId) {
-        analytics.capture("term_selected", { termCode: parsed.termId });
+        analytics.capture("term_selected", {
+          termId: parsed.termId,
+          termName: formatTermNameEn(parsed.termId),
+        });
         await setSelectedTermId(parsed.termId);
         activeCache = storeApi.getState().cache;
       }
