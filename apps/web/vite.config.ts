@@ -8,8 +8,15 @@ import { visualizer } from "rollup-plugin-visualizer";
 import { changelogHtmlPlugin } from "./vite/changelog-html-plugin";
 import { dataManifestPlugin } from "./vite/data-manifest-plugin";
 import { dataDevServerPlugin } from "./vite/data-dev-server-plugin";
+import { coverageCollectorPlugin } from "./vite/coverage-collector-plugin";
+import istanbul from "vite-plugin-istanbul";
 
 const analyze = process.env.ANALYZE === "1";
+// Opt-in runtime-coverage instrumentation for dead-code hunting. Enabled only
+// when COVERAGE=1 (the `coverage:dev` script), so the normal `pnpm dev` server
+// is byte-for-byte unaffected — the plugins aren't even in the array otherwise.
+// Runs on its own port (see package.json) to coexist with the main dev server.
+const coverage = process.env.COVERAGE === "1";
 
 export default defineConfig({
   plugins: [
@@ -28,6 +35,26 @@ export default defineConfig({
       autoCodeSplitting: true,
     }),
     react(),
+    coverage &&
+      istanbul({
+        // Instrument the web app source (the largest bucket: ~36k LOC). The
+        // shared workspace packages can be added here later (e.g.
+        // "../../packages/core/src/**") with cwd set to the repo root, once the
+        // app-only pass is validated.
+        include: ["src/**"],
+        exclude: [
+          "src/**/*.test.{ts,tsx}",
+          "src/**/*.browser.test.{ts,tsx}",
+          "src/**/*.d.ts",
+          "src/test/**",
+          "src/workers/**",
+          "src/routeTree.gen.ts",
+        ],
+        extension: [".ts", ".tsx", ".js", ".jsx"],
+        requireEnv: true,
+        forceBuildInstrument: false,
+      }),
+    coverage && coverageCollectorPlugin(),
     VitePWA({
       strategies: "injectManifest",
       srcDir: "src/workers",
