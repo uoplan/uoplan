@@ -2,7 +2,7 @@ import { defineConfig } from "oxlint";
 
 export default defineConfig({
   plugins: ["typescript", "react", "jsx-a11y", "unicorn", "oxc", "import", "promise", "node"],
-  jsPlugins: ["./scripts/i18n/oxlint-plugin.mjs"],
+  jsPlugins: ["./scripts/i18n/oxlint-plugin.ts"],
   categories: {
     correctness: "error",
   },
@@ -143,6 +143,16 @@ export default defineConfig({
       // Package codegen/build scripts are Node CLI tooling where stdout/stderr
       // is the intended output channel (same rationale as the scraper).
       files: ["packages/*/scripts/**/*.{ts,tsx,mjs}"],
+      rules: {
+        "no-console": "off",
+      },
+    },
+    {
+      // Repo-root + web build/check scripts are Node CLI tooling run via Node 24's
+      // native TypeScript support, where stdout/stderr is the intended output
+      // channel (same rationale as the scraper). `apps/native/scripts` is covered
+      // by the `apps/native/**` ignore above.
+      files: ["scripts/**/*.{ts,tsx}", "apps/web/scripts/**/*.{ts,tsx}"],
       rules: {
         "no-console": "off",
       },

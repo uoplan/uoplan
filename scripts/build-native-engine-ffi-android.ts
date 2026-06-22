@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Builds the uoplan schedule-generation engine (packages/engine) as a native
 // shared library (`libuoplan_engine.so`) for every Android ABI and stages it in
 // the Expo local module's jniLibs dir (`apps/native/modules/uoplan-engine/
@@ -16,7 +15,7 @@
 // ANDROID_NDK_HOME (or ANDROID_HOME with an installed ndk) must be set.
 import { existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { engineDir, repoRoot, run } from "./lib/native-engine.mjs";
+import { engineDir, repoRoot, run } from "./lib/native-engine.ts";
 
 const jniLibsOut = join(repoRoot, "apps/native/modules/uoplan-engine/android/src/main/jniLibs");
 
@@ -25,7 +24,7 @@ const ABIS = ["arm64-v8a", "armeabi-v7a", "x86_64", "x86"];
 // minSdk of the Expo module (android/build.gradle).
 const MIN_SDK = "24";
 
-function resolveNdkHome() {
+function resolveNdkHome(): string | undefined {
   if (process.env.ANDROID_NDK_HOME) {
     return process.env.ANDROID_NDK_HOME;
   }

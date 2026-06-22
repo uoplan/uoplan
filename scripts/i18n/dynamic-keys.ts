@@ -1,12 +1,11 @@
-// @ts-check
 /**
  * Registry of translation ids reached only through *dynamic* `tr()` calls.
  *
- * The AST scanner in `tr-ids.mjs` resolves string-literal and conditional
+ * The AST scanner in `tr-ids.ts` resolves string-literal and conditional
  * `tr()` arguments, but it cannot resolve template literals
  * (`tr(`explore.sort.${k}`)`) or variable/record lookups (`tr(SUGGESTION_KEY[code])`).
  * Those ids are enumerated here so the tooling can:
- *   1. verify they exist in every locale (`check-i18n.mjs`), and
+ *   1. verify they exist in every locale (`check-i18n.ts`), and
  *   2. treat them as used so `i18n:sync --prune` never removes them.
  *
  * Each family cites its source enum. These enums change rarely; when they do,
@@ -15,23 +14,13 @@
  * key that has no resolvable usage.
  */
 
-/**
- * @param {string} prefix
- * @param {readonly string[]} suffixes
- * @returns {string[]}
- */
-const family = (prefix, suffixes) => suffixes.map((s) => `${prefix}${s}`);
+const family = (prefix: string, suffixes: readonly string[]): string[] =>
+  suffixes.map((s) => `${prefix}${s}`);
 
-/**
- * @param {string} prefix
- * @param {readonly string[]} a
- * @param {readonly string[]} b
- * @returns {string[]}
- */
-const cross = (prefix, a, b) => a.flatMap((x) => b.map((y) => `${prefix}${x}.${y}`));
+const cross = (prefix: string, a: readonly string[], b: readonly string[]): string[] =>
+  a.flatMap((x) => b.map((y) => `${prefix}${x}.${y}`));
 
-/** @type {string[]} */
-export const DYNAMIC_TR_IDS = [
+export const DYNAMIC_TR_IDS: string[] = [
   // apps/native/src/app/more/index.tsx + apps/native/src/app/more/language.tsx:
   // the settings language switcher resolves its labels through `const tr = useTr()`
   // (hook binding, which the literal `tr(...)` scanner does not resolve).

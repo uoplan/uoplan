@@ -173,11 +173,11 @@ msgstr "Revenir à la page d'accueil d'uoplan."
 msgid "app.nav.dest.home.label"
 msgstr "Accueil"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "app.nav.dest.personalize.description"
 msgstr "Choisissez votre trimestre, programme et cours réussis."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "app.nav.dest.personalize.label"
 msgstr "Personnaliser"
 
@@ -343,230 +343,230 @@ msgstr "Tous les niveaux 1000–4000"
 msgid "basicCourseFilters.title"
 msgstr "Options de cours à option"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basicCourseFilters.toggle"
 msgstr "Afficher ou masquer les filtres de cours"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.add"
 msgstr "Ajouter au panier"
 
 msgid "basket.addCourse.placeholder"
 msgstr "Ajouter un cours…"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.add.aria"
 msgstr "Ajouter au panier"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.added"
 msgstr "Dans le panier"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.added.aria"
 msgstr "Dans le panier"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.badge.pinned"
 msgstr "Épinglé"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.badge.placed"
 msgstr "Placé"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.assigned"
 msgstr "Compte pour des exigences"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.completed"
 msgstr "Déjà terminés"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.noRequirement"
 msgstr "Aucune exigence correspondante"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.overflow"
 msgstr "Exigence déjà remplie"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.prereqUnmet"
 msgstr "Préalables non satisfaits"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.standalone"
 msgstr "Obligatoires séparément"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.title"
 msgstr "Répartition"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.unavailable"
 msgstr "Non offerts cette session"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.cancelRemove"
 msgstr "Annuler"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.confirmRemove"
 msgstr "Confirmer le retrait de {code}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.credits"
 msgstr "{credits} cr"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.cta.viewSchedule"
 msgstr "Voir votre horaire"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.details.hide"
 msgstr "Masquer les détails"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.details.show"
 msgstr "Afficher les détails"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.empty.body"
 msgstr "Ajoutez des cours dans Explorer."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.empty.cta"
 msgstr "Parcourir les cours"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.empty.title"
 msgstr "Votre panier est vide"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.fab.label"
 msgstr "Panier"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.fab.open"
 msgstr "Ouvrir le panier avec {count} cours"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.fab.openEmpty"
 msgstr "Ouvrir le panier"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.noProgram.copy"
 msgstr "Configurez Personnaliser pour les répartir dans vos exigences."
 
 #: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:200
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.noProgram.link"
 msgstr "Aller à Personnaliser"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.removeCourse"
 msgstr "Retirer {code}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.removePrompt"
 msgstr "Retirer ?"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stat.courseCount.tip"
 msgstr "Cours dans votre panier"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stat.credits.tip"
 msgstr "Total des crédits"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stat.creditsPlaced.tip"
 msgstr "Crédits affectés aux exigences"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stat.requirementsCovered.tip"
 msgstr "Exigences couvertes"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stat.requirementsRemaining.tip"
 msgstr "Exigences restantes"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.assigned"
 msgstr "Compte pour {requirement}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.completed"
 msgstr "Déjà terminé"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.noRequirement"
 msgstr "Aucune exigence correspondante"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.overflow"
 msgstr "L’exigence correspondante est déjà remplie"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.prereqUnmet"
 msgstr "Préalables non satisfaits"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.required"
 msgstr "Traité comme un cours obligatoire"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.standalone"
 msgstr "Obligatoire séparément"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.unavailable"
 msgstr "Non offert cette session"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stillNeeded.empty"
 msgstr "Votre panier couvre les exigences suivies."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stillNeeded.moreCourses"
 msgstr "{count, plural, one {+# cours} other {+# cours}}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stillNeeded.noSuggestions"
 msgstr "Aucune suggestion admissible pour le moment."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stillNeeded.progress"
 msgstr "{covered}/{needed} crédits"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stillNeeded.title"
 msgstr "Encore nécessaire"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stillNeeded.untitled"
 msgstr "Autre exigence"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.summary.collapse"
 msgstr "Réduire le résumé du panier"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.summary.expand"
 msgstr "Développer le résumé du panier"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.title"
 msgstr "Votre panier"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.viewCourse"
 msgstr "Voir {code}"
 
 msgid "calendar.blockedTime.label"
 msgstr "Plage bloquée"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "calendar.blockedTime.remove"
 msgstr "Retirer la plage bloquée"
 
@@ -582,15 +582,15 @@ msgstr "Retirer"
 msgid "calendar.blockedTime.removeTitle"
 msgstr "Retirer la plage bloquée?"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "calendar.blockedTime.resizeEnd"
 msgstr "Ajuster la fin du bloc de temps indisponible"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "calendar.blockedTime.resizeStart"
 msgstr "Ajuster le début du bloc de temps indisponible"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "calendar.event.ariaLabel"
 msgstr "{courseCode} {component}, {timeRange}"
 
@@ -852,11 +852,11 @@ msgstr "Horaire semaine {current}/{total}"
 msgid "calendarView.empty"
 msgstr "Aucun horaire n'à encore ete généré. Completez les étapes ci-dessus et cliquez sur Générer."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "calendarView.nextWeek"
 msgstr "Semaine suivante"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "calendarView.previousWeek"
 msgstr "Semaine précédente"
 
@@ -974,11 +974,11 @@ msgstr "Nous soutenir"
 msgid "donate.unavailable"
 msgstr "Le total en direct est temporairement indisponible."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.command.geegees.description"
 msgstr "Débloquez le thème caché des Gee-Gees"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.command.geegees.label"
 msgstr "Thème Grenat et Gris"
 
@@ -986,31 +986,31 @@ msgstr "Thème Grenat et Gris"
 msgid "easterEgg.command.group"
 msgstr "Secrets"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.aprilFools"
 msgstr "aucun œuf de Pâques ici, promis"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.canadaDay"
 msgstr "Bonne fête du Canada !"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.examSeason"
 msgstr "bonne chance aux examens"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.halloween"
 msgstr "saison frissons"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.holidays"
 msgstr "joyeuses fêtes"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.newYear"
 msgstr "Bonne année !"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.winter"
 msgstr "couvrez-vous, c'est le froid d'Ottawa"
 
@@ -1023,7 +1023,7 @@ msgstr "Copié !"
 msgid "enrolCli.modal.copy"
 msgstr "Copier"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "enrolCli.modal.copyCode"
 msgstr "Copier le code"
 
@@ -1042,15 +1042,15 @@ msgstr "2. S'inscrire"
 msgid "enrolCli.modal.title"
 msgstr "Inscrire via CLI"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "errorBoundary.message"
 msgstr "uoplan a rencontré une erreur inattendue. Rechargez l’application pour réessayer."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "errorBoundary.reload"
 msgstr "Recharger"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "errorBoundary.title"
 msgstr "Une erreur est survenue"
 
@@ -1204,15 +1204,15 @@ msgstr "Rechercher des disciplines"
 msgid "explore.filter.feedback"
 msgstr "Commentaires"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "explore.filter.feedback.excellent"
 msgstr "Excellent (4,0+)"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "explore.filter.feedback.good"
 msgstr "Bien (3,0+)"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "explore.filter.feedback.great"
 msgstr "Très bien (3,5+)"
 
@@ -1942,97 +1942,97 @@ msgstr "Sélectionnez rapidement des cours obligatoires et des cours au choix po
 msgid "modeStep.basic.title"
 msgstr "Mode de base"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.currentSystem"
 msgstr "Système"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.english"
 msgstr "English"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.frenchCanada"
 msgstr "Français (Canada)"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.subtitle"
 msgstr "Choisissez la langue utilisée par uoplan."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.system"
 msgstr "Par défaut du système"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.systemDescription"
 msgstr "Suivre la langue de votre appareil"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.title"
 msgstr "Langue"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.more.settings"
 msgstr "Paramètres"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.pushSetupMissing.message"
 msgstr "Les notifications poussées ne sont pas disponibles dans cette version."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.pushSetupMissing.title"
 msgstr "Les notifications ne sont pas configurées"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.pushSubscribeFailed.message"
 msgstr "Veuillez réessayer dans un instant."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.pushSubscribeFailed.title"
 msgstr "Impossible d’activer les notifications"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.pushUnsubscribeFailed.message"
 msgstr "Veuillez réessayer dans un instant."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.pushUnsubscribeFailed.title"
 msgstr "Impossible de désactiver les notifications"
 
 #: apps/web/src/components/calendar/CalendarPage.tsx:80
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.scheduleGenerationCancelled.message"
 msgstr "Vous avez modifié une option de génération, donc la génération en cours a été arrêtée. Générez de nouveau pour appliquer vos changements."
 
 #: apps/web/src/components/calendar/CalendarPage.tsx:79
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.scheduleGenerationCancelled.title"
 msgstr "Génération annulée"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.scheduleWorkerFallback.message"
 msgstr "Le travailleur en arrière-plan a échoué; uoplan termine donc la génération dans l’application."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.scheduleWorkerFallback.title"
 msgstr "La génération d’horaire est plus lente"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.warning.blocked"
 msgstr "Notifications bloquées dans les paramètres du navigateur"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.warning.iosHomeScreen"
 msgstr "Ajoutez uoplan à votre écran d'accueil pour activer les notifications"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.warning.unsupported"
 msgstr "Les notifications push ne sont pas prises en charge par ce navigateur"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.yearCatalogueLoadFailed.message"
 msgstr "Essayez une autre année, ou rechargez la page et réessayez."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.yearCatalogueLoadFailed.title"
 msgstr "Impossible de charger cette année du catalogue"
 
@@ -2069,18 +2069,18 @@ msgstr "Aucune option à configurer pour ce programme."
 msgid "optionsStep.note"
 msgstr "Choisissez une option pour chaque choix ci-dessous. Votre sélection révèle les choix suivants; utilisez Modifier pour changer de parcours."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "optionsStep.pager.complete"
 msgstr "terminé"
 
 msgid "optionsStep.pager.goTo"
 msgstr "Aller au choix {number}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "optionsStep.pager.goToWithStatus"
 msgstr "Aller au choix {number} sur {total}, {status}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "optionsStep.pager.incomplete"
 msgstr "incomplet"
 
@@ -2650,95 +2650,95 @@ msgstr "Choisir la session"
 msgid "stepNav.title"
 msgstr "Étapes"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.conflictsWith"
 msgstr "En conflit avec {course}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.difficulty.all"
 msgstr "Toutes les difficultés"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.difficulty.easy"
 msgstr "Facile"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.difficulty.moderate"
 msgstr "Modéré"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.difficulty.tough"
 msgstr "Difficile"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.filter.label"
 msgstr "Difficulté"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.group.bestMatches"
 msgstr "Meilleurs choix"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.group.otherOptions"
 msgstr "Autres options"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.loading"
 msgstr "Recherche d’options de remplacement…"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.noAlternatives"
 msgstr "Aucun cours de remplacement compatible avec votre horaire."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.noMatches"
 msgstr "Aucun résultat"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.option.conflictAria"
 msgstr "{course} est en conflit avec {conflict}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.option.selectAria"
 msgstr "Remplacer par {course}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.poolHad"
 msgstr "Le groupe contenait {count} cours"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.searchPlaceholder"
 msgstr "Rechercher des cours…"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.sort.alpha"
 msgstr "A–Z"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.sort.aplus"
 msgstr "Plus facile"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.sort.best"
 msgstr "Meilleur choix"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.sort.label"
 msgstr "Trier"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.sort.rating"
 msgstr "Mieux noté"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "term.season.fall"
 msgstr "Automne"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "term.season.summer"
 msgstr "Été"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "term.season.winter"
 msgstr "Hiver"
 
@@ -2754,7 +2754,7 @@ msgstr "Choisir une session..."
 msgid "theme.dark"
 msgstr "Sombre"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "theme.geegees"
 msgstr "Gee-Gees"
 
@@ -2779,31 +2779,31 @@ msgstr "Suivant"
 msgid "tour.progress"
 msgstr "{{current}} sur {{total}}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.excellent"
 msgstr "Excellent"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.failing"
 msgstr "Échec"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.good"
 msgstr "Bon"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.lowPass"
 msgstr "Passage faible"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.midPass"
 msgstr "Passage moyen"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.nearExcellent"
 msgstr "Presque excellent"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.withdrew"
 msgstr "Abandon"
 

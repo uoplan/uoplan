@@ -39,10 +39,9 @@
     "apps/web/src/workers/sw.ts",
     "apps/web/src/test/browserSetup.ts",
     "apps/web/src/test/engineSetup.ts",
-    "apps/web/scripts/**/*.mjs",
+    "apps/web/scripts/**/*.ts",
     "apps/web/vite.config.ts",
     "apps/web/vite/**",
-    "apps/web/lighthouserc.cjs",
     "oxfmt.config.ts",
     "packages/i18n/lingui.config.ts",
     "packages/theme/scripts/generate-native-tokens.ts"
@@ -66,7 +65,7 @@
   //   native palette), which is in ignorePatterns above, so fallow's web entry
   //   graph never sees ui import it. (apps/web still uses @uoplan/theme directly.)
   // - @lhci/cli: invoked as a CLI binary (`pnpm exec lhci`) by scripts/
-  //   lighthouse.mjs (the `pnpm lighthouse` / pre-push audit), never imported.
+  //   lighthouse.ts (the `pnpm lighthouse` / pre-push audit), never imported.
   // (knip's @vitest/browser + wrangler ignores were redundant under fallow, and
   // its @marsidev/react-turnstile ignore masked a real unused dep in the
   // worker — all three were dropped.)

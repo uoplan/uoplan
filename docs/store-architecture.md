@@ -58,7 +58,7 @@ The hooks map roughly onto the store's domains — e.g. `useDataset`/`useDataCac
 **Sanctioned direct consumers** of `useAppStore` / `useAppStoreApi` are limited to the
 `store/hooks/**` layer itself and the existing cross-cutting hooks under `src/hooks/**`
 (e.g. `useBasket`, `useSwapActions`, `usePersistState`). This is enforced by
-`scripts/check-architecture.mjs` (`pnpm check:arch`): a raw `useAppStore`/`useAppStoreApi`
+`scripts/check-architecture.ts` (`pnpm check:arch`): a raw `useAppStore`/`useAppStoreApi`
 import from `store/appStore` anywhere under `components/**`, `routes/**`, or `lib/**` fails
 the build.
 
