@@ -93,7 +93,14 @@ export interface AnalyticsEventMap {
   graph_node_selected: { courseCode?: string };
 
   // --- Imports ------------------------------------------------------------
-  transcript_imported: { ok: boolean; courseCount?: number };
+  transcript_upload_started: Record<string, never>;
+  transcript_imported: {
+    ok: boolean;
+    courseCount?: number;
+    programMatched?: boolean;
+    termMatched?: boolean;
+    minorMatched?: boolean;
+  };
   uenroll_imported: { ok: boolean; courseCount?: number };
 
   // --- Misc ---------------------------------------------------------------
