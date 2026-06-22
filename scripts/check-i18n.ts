@@ -1,4 +1,3 @@
-// @ts-check
 /**
  * Translation completeness checker for apps/web.
  *
@@ -19,17 +18,17 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { LOCALES, isUntranslated, loadAllCatalogs, relPath, repoRoot } from "./i18n/catalog.mjs";
-import { collectTrUsages } from "./i18n/tr-ids.mjs";
-import { DYNAMIC_TR_IDS } from "./i18n/dynamic-keys.mjs";
+import type { Catalog } from "./i18n/catalog.ts";
+import { isUntranslated, loadAllCatalogs, LOCALES, relPath, repoRoot } from "./i18n/catalog.ts";
+import { DYNAMIC_TR_IDS } from "./i18n/dynamic-keys.ts";
+import { collectTrUsages } from "./i18n/tr-ids.ts";
 
-/** @param {string} msg */
-function fail(lines) {
+function fail(lines: string[]): void {
   console.error(lines.join("\n"));
 }
 
-/** Absolute path to a locale's committed compiled catalog. @param {string} locale */
-function compiledCatalogPath(locale) {
+/** Absolute path to a locale's committed compiled catalog. */
+function compiledCatalogPath(locale: string): string {
   return resolve(repoRoot, "packages/i18n/src/locales", locale, "messages.ts");
 }
 
@@ -45,9 +44,9 @@ function compiledCatalogPath(locale) {
  * side-effect-free: any file the recompile rewrites is restored to its committed
  * content before returning, so a stale catalog is reported, not silently fixed.
  *
- * @returns {string[]} repo-relative paths of stale compiled catalogs (empty = fresh)
+ * @returns repo-relative paths of stale compiled catalogs (empty = fresh)
  */
-function collectStaleCompiledCatalogs() {
+function collectStaleCompiledCatalogs(): string[] {
   const targets = LOCALES.map((locale) => compiledCatalogPath(locale));
   const before = targets.map((p) => (existsSync(p) ? readFileSync(p, "utf8") : null));
 
@@ -64,11 +63,10 @@ function collectStaleCompiledCatalogs() {
     );
   }
 
-  /** @type {string[]} */
-  const stale = [];
-  targets.forEach((p, i) => {
+  const stale: string[] = [];
+  for (const [i, p] of targets.entries()) {
     const after = existsSync(p) ? readFileSync(p, "utf8") : null;
-    if (after === before[i]) return;
+    if (after === before[i]) continue;
     stale.push(relPath(p));
     // Restore the committed content so the check leaves no working-tree changes.
     if (before[i] === null) {
@@ -77,30 +75,28 @@ function collectStaleCompiledCatalogs() {
     } else {
       writeFileSync(p, before[i]);
     }
-  });
+  }
   return stale;
 }
 
-function main() {
+function main(): void {
   const catalogs = loadAllCatalogs();
-  const byLocale = new Map(catalogs.map((c) => [c.locale, c]));
+  const byLocale = new Map<string, Catalog>(catalogs.map((c) => [c.locale, c]));
   // Static tr() ids resolved from source, plus dynamic ids that the AST scanner cannot resolve.
   const usages = [
     ...collectTrUsages(),
     ...DYNAMIC_TR_IDS.map((id) => ({
       id,
-      file: "scripts/i18n/dynamic-keys.mjs",
+      file: "scripts/i18n/dynamic-keys.ts",
       line: 0,
       column: 0,
     })),
   ];
 
-  /** @type {string[][]} grouped problem blocks */
-  const problems = [];
+  const problems: string[][] = [];
 
   // 1. missing — every resolved tr() id must exist in every locale.
-  /** @type {Map<string, { locales: string[], at: string }>} */
-  const missing = new Map();
+  const missing = new Map<string, { locales: string[]; at: string }>();
   for (const u of usages) {
     const absent = LOCALES.filter((loc) => !byLocale.get(loc)?.entries.has(u.id));
     if (absent.length === 0) continue;
@@ -121,11 +117,9 @@ function main() {
   }
 
   // 2. parity — union of all keys must exist in every locale.
-  /** @type {Set<string>} */
-  const allKeys = new Set();
+  const allKeys = new Set<string>();
   for (const c of catalogs) for (const id of c.entries.keys()) allKeys.add(id);
-  /** @type {Map<string, string[]>} id -> locales missing it */
-  const parityGaps = new Map();
+  const parityGaps = new Map<string, string[]>();
   for (const id of allKeys) {
     const absent = LOCALES.filter((loc) => !byLocale.get(loc)?.entries.has(id));
     if (absent.length > 0 && absent.length < LOCALES.length) parityGaps.set(id, absent);
@@ -139,8 +133,7 @@ function main() {
   }
 
   // 3. empty — entries with no usable translation.
-  /** @type {string[]} */
-  const emptyLines = [];
+  const emptyLines: string[] = [];
   for (const c of catalogs) {
     for (const entry of c.entries.values()) {
       if (isUntranslated(entry)) {
@@ -155,8 +148,7 @@ function main() {
   // 4. obsolete — `#~` entries indicate catalog corruption. This hand-maintained, id-based
   //    workflow never uses `lingui extract`, so obsolete markers only appear when a stray CLI run
   //    comments out the catalog (entries excluded from runtime would silently render raw ids).
-  /** @type {string[]} */
-  const obsoleteLines = [];
+  const obsoleteLines: string[] = [];
   for (const c of catalogs) {
     for (const id of c.obsoleteIds) {
       obsoleteLines.push(`    [${c.locale}] "${id}"  (${relPath(c.path)})`);

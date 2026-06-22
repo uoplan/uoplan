@@ -1,4 +1,3 @@
-// @ts-check
 /**
  * Catalog sync for the hand-maintained, id-based Lingui workflow.
  *
@@ -7,8 +6,8 @@
  * messages and obsoletes the entire catalog. This script is the replacement.
  *
  * It computes the full set of used translation ids from source — statically
- * resolvable `tr()` calls (via the TS AST scan in `i18n/tr-ids.mjs`) plus the
- * dynamic-key registry (`i18n/dynamic-keys.mjs`) — and reconciles every locale
+ * resolvable `tr()` calls (via the TS AST scan in `i18n/tr-ids.ts`) plus the
+ * dynamic-key registry (`i18n/dynamic-keys.ts`) — and reconciles every locale
  * catalog against it:
  *
  *   - adds missing ids with an empty `msgstr` and `#:` source references, and
@@ -20,35 +19,34 @@
  * ICU plurals and comments) are preserved untouched.
  *
  * Usage:
- *   node scripts/i18n-sync.mjs            # apply additions
- *   node scripts/i18n-sync.mjs --prune    # apply additions and delete unused ids
- *   node scripts/i18n-sync.mjs --check    # report drift, write nothing, exit 1 if any
- *   node scripts/i18n-sync.mjs --check --prune
+ *   node scripts/i18n-sync.ts            # apply additions
+ *   node scripts/i18n-sync.ts --prune    # apply additions and delete unused ids
+ *   node scripts/i18n-sync.ts --check    # report drift, write nothing, exit 1 if any
+ *   node scripts/i18n-sync.ts --check --prune
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
 import PO from "pofile";
-import { LOCALES, catalogPath, relPath } from "./i18n/catalog.mjs";
-import { DYNAMIC_TR_IDS } from "./i18n/dynamic-keys.mjs";
-import { collectTrUsages } from "./i18n/tr-ids.mjs";
+import { catalogPath, LOCALES, relPath } from "./i18n/catalog.ts";
+import { DYNAMIC_TR_IDS } from "./i18n/dynamic-keys.ts";
+import { collectTrUsages } from "./i18n/tr-ids.ts";
 
 const MAX_REFS = 8;
 
 /**
  * The full set of used translation ids, with source references for each.
- * @returns {Map<string, string[]>} id -> sorted, de-duplicated `file:line` refs
+ * @returns id -> sorted, de-duplicated `file:line` refs
  */
-function collectUsedIds() {
-  /** @type {Map<string, Set<string>>} */
-  const refs = new Map();
-  const add = (/** @type {string} */ id, /** @type {string} */ ref) => {
-    const set = refs.get(id) ?? new Set();
+function collectUsedIds(): Map<string, string[]> {
+  const refs = new Map<string, Set<string>>();
+  const add = (id: string, ref: string): void => {
+    const set = refs.get(id) ?? new Set<string>();
     set.add(ref);
     refs.set(id, set);
   };
 
   for (const u of collectTrUsages()) add(u.id, `${u.file}:${u.line}`);
-  for (const id of DYNAMIC_TR_IDS) add(id, "scripts/i18n/dynamic-keys.mjs");
+  for (const id of DYNAMIC_TR_IDS) add(id, "scripts/i18n/dynamic-keys.ts");
 
   return new Map(
     [...refs].map(([id, set]) => [
@@ -58,19 +56,24 @@ function collectUsedIds() {
   );
 }
 
-/**
- * @param {string} locale
- * @param {Map<string, string[]>} used
- * @param {boolean} prune
- */
-function reconcileLocale(locale, used, prune) {
+interface ReconcileResult {
+  path: string;
+  po: PO;
+  added: string[];
+  removed: string[];
+}
+
+function reconcileLocale(
+  locale: string,
+  used: Map<string, string[]>,
+  prune: boolean,
+): ReconcileResult {
   const path = catalogPath(locale);
   const po = PO.parse(readFileSync(path, "utf8"));
 
   const present = new Set(po.items.filter((i) => i.msgid && !i.obsolete).map((i) => i.msgid));
 
-  /** @type {string[]} */
-  const added = [];
+  const added: string[] = [];
   for (const [id, refs] of used) {
     if (present.has(id)) continue;
     const item = new PO.Item();
@@ -81,8 +84,7 @@ function reconcileLocale(locale, used, prune) {
     added.push(id);
   }
 
-  /** @type {string[]} */
-  const removed = [];
+  const removed: string[] = [];
   if (prune) {
     po.items = po.items.filter((item) => {
       if (!item.msgid || item.obsolete) return true;
@@ -99,7 +101,7 @@ function reconcileLocale(locale, used, prune) {
   return { path, po, added: added.sort(), removed: removed.sort() };
 }
 
-function main() {
+function main(): void {
   const args = new Set(process.argv.slice(2));
   const check = args.has("--check");
   const prune = args.has("--prune");

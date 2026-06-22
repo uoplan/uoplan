@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-// @ts-check
 /**
  * Architecture guardrails for the uoplan monorepo.
  *
@@ -20,7 +18,7 @@
  */
 
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, readdirSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -33,10 +31,8 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  * on anything in its list; depending on anything else (or forming a cycle)
  * fails the check. App packages (web/worker/scraper) are leaves: nothing may
  * depend on them.
- *
- * @type {Record<string, string[]>}
  */
-const LAYERS = {
+const LAYERS: Record<string, string[]> = {
   "@uoplan/proto": [],
   "@uoplan/engine": [],
   "@uoplan/theme": [],
@@ -64,7 +60,6 @@ const LAYERS = {
     "@uoplan/store",
   ],
   worker: ["@uoplan/proto", "@uoplan/engine", "@uoplan/core", "@uoplan/data", "@uoplan/calendar"],
-  scraper: ["@uoplan/proto", "@uoplan/core"],
   // Native (Expo) app — a leaf like `web`. May consume the portable packages
   // (NOT @uoplan/transcript: pdfjs is browser-only; native gets its own impl).
   native: [
@@ -79,22 +74,32 @@ const LAYERS = {
     "@uoplan/data",
     "@uoplan/calendar",
   ],
+  scraper: ["@uoplan/proto", "@uoplan/core"],
 };
 
 const WORKSPACE_GLOBS = ["apps", "packages"];
 
-/** @returns {Record<string, { name: string; workspaceDeps: string[] }>} */
-function readWorkspacePackages() {
-  /** @type {Record<string, { name: string; workspaceDeps: string[] }>} */
-  const pkgs = {};
+interface WorkspacePkg {
+  name: string;
+  workspaceDeps: string[];
+}
+
+interface PackageManifest {
+  name: string;
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+}
+
+function readWorkspacePackages(): Record<string, WorkspacePkg> {
+  const pkgs: Record<string, WorkspacePkg> = {};
   for (const base of WORKSPACE_GLOBS) {
     const baseDir = join(repoRoot, base);
     for (const entry of readdirSync(baseDir, { withFileTypes: true })) {
       if (!entry.isDirectory()) continue;
       const pkgPath = join(baseDir, entry.name, "package.json");
-      let json;
+      let json: PackageManifest;
       try {
-        json = JSON.parse(readFileSync(pkgPath, "utf8"));
+        json = JSON.parse(readFileSync(pkgPath, "utf8")) as PackageManifest;
       } catch {
         continue;
       }
@@ -106,15 +111,13 @@ function readWorkspacePackages() {
   return pkgs;
 }
 
-/** @param {Record<string, { name: string; workspaceDeps: string[] }>} pkgs */
-function checkLayering(pkgs) {
-  /** @type {string[]} */
-  const errors = [];
+function checkLayering(pkgs: Record<string, WorkspacePkg>): string[] {
+  const errors: string[] = [];
 
   for (const { name, workspaceDeps } of Object.values(pkgs)) {
     const allowed = LAYERS[name];
     if (allowed === undefined) {
-      errors.push(`Package "${name}" is not declared in LAYERS (scripts/check-architecture.mjs).`);
+      errors.push(`Package "${name}" is not declared in LAYERS (scripts/check-architecture.ts).`);
       continue;
     }
     for (const dep of workspaceDeps) {
@@ -127,10 +130,9 @@ function checkLayering(pkgs) {
   }
 
   // Generic cycle detection over the actual declared edges.
-  const visiting = new Set();
-  const visited = new Set();
-  /** @param {string} node @param {string[]} path */
-  function dfs(node, path) {
+  const visiting = new Set<string>();
+  const visited = new Set<string>();
+  function dfs(node: string, path: string[]): void {
     if (visiting.has(node)) {
       const cycle = [...path.slice(path.indexOf(node)), node].join(" -> ");
       errors.push(`Dependency cycle detected: ${cycle}`);
@@ -149,9 +151,8 @@ function checkLayering(pkgs) {
   return errors;
 }
 
-function checkWorkerBundle() {
-  /** @type {string[]} */
-  const errors = [];
+function checkWorkerBundle(): string[] {
+  const errors: string[] = [];
 
   // `assets.directory` is no longer set in wrangler.json (the Cloudflare Vite
   // plugin populates it at build time). This standalone bundle isn't a real
@@ -180,7 +181,7 @@ function checkWorkerBundle() {
       { cwd: repoRoot, stdio: "pipe" },
     );
   } catch (err) {
-    const out = /** @type {{ stdout?: Buffer; stderr?: Buffer }} */ (err);
+    const out = err as { stdout?: Buffer; stderr?: Buffer };
     const detail = `${out.stdout?.toString() ?? ""}${out.stderr?.toString() ?? ""}`;
     errors.push(`Failed to bundle the worker for the purity check:\n${detail}`);
     return errors;
@@ -200,20 +201,17 @@ function checkWorkerBundle() {
   return errors;
 }
 
-function checkProtoDrift() {
-  /** @type {string[]} */
-  const errors = [];
+function checkProtoDrift(): string[] {
+  const errors: string[] = [];
   const canonical = join(repoRoot, "packages/proto/proto/cli.proto");
   const vendored = join(repoRoot, "apps/cli/proto/cli.proto");
-  let canonicalSrc;
-  let vendoredSrc;
+  let canonicalSrc: string;
+  let vendoredSrc: string;
   try {
     canonicalSrc = readFileSync(canonical, "utf8");
     vendoredSrc = readFileSync(vendored, "utf8");
   } catch (err) {
-    errors.push(
-      `Could not read a cli.proto copy for the drift check: ${/** @type {Error} */ (err).message}`,
-    );
+    errors.push(`Could not read a cli.proto copy for the drift check: ${(err as Error).message}`);
     return errors;
   }
   if (canonicalSrc !== vendoredSrc) {
@@ -225,9 +223,8 @@ function checkProtoDrift() {
   return errors;
 }
 
-function readSourceFiles(dir) {
-  /** @type {string[]} */
-  const files = [];
+function readSourceFiles(dir: string): string[] {
+  const files: string[] = [];
   let entries;
   try {
     entries = readdirSync(dir, { withFileTypes: true });
@@ -249,14 +246,15 @@ function readSourceFiles(dir) {
  * Invoke `onFile(src, rel, file)` for every non-test `.ts`/`.tsx` source file
  * under `dir`, where `src` is the file contents and `rel` is the repo-relative
  * path. Centralises the read-and-skip-tests loop used by the layering checks.
- * @param {string} dir
- * @param {(src: string, rel: string, file: string) => void} onFile
  */
-function forEachSourceFile(dir, onFile) {
+function forEachSourceFile(
+  dir: string,
+  onFile: (src: string, rel: string, file: string) => void,
+): void {
   for (const file of readSourceFiles(dir)) {
     if (/\.test\.tsx?$/.test(file)) continue;
     const src = readFileSync(file, "utf8");
-    const rel = file.replace(repoRoot + "/", "");
+    const rel = file.replace(`${repoRoot}/`, "");
     onFile(src, rel, file);
   }
 }
@@ -265,10 +263,11 @@ function forEachSourceFile(dir, onFile) {
  * Invoke `onImport(spec, statement, rel)` for every `import/export ... from
  * "spec"` statement in every non-test source file under `dir`. `statement` is
  * the full matched text (for matching default-import names etc.).
- * @param {string} dir
- * @param {(spec: string, statement: string, rel: string) => void} onImport
  */
-function forEachSourceImport(dir, onImport) {
+function forEachSourceImport(
+  dir: string,
+  onImport: (spec: string, statement: string, rel: string) => void,
+): void {
   const importRe = /(?:import|export)[^"']*from\s*["']([^"']+)["']/g;
   forEachSourceFile(dir, (src, rel) => {
     for (const m of src.matchAll(importRe)) {
@@ -285,9 +284,8 @@ function forEachSourceImport(dir, onImport) {
  *     projection hooks, never the raw `useAppStore`/`useAppStoreApi`;
  *   - `lib/requirements` must stay framework-neutral (no React/Mantine).
  */
-function checkWebInternalLayering() {
-  /** @type {string[]} */
-  const errors = [];
+function checkWebInternalLayering(): string[] {
+  const errors: string[] = [];
 
   const storeDir = join(repoRoot, "apps/web/src/store");
   forEachSourceImport(storeDir, (spec, _statement, rel) => {
@@ -372,9 +370,8 @@ function checkWebInternalLayering() {
  * `react-native`, or router import here would break the "implement each screen
  * once, swap leaves per platform" guarantee (the linchpin of the whole design).
  */
-function checkAppPurity() {
-  /** @type {string[]} */
-  const errors = [];
+function checkAppPurity(): string[] {
+  const errors: string[] = [];
   const appDir = join(repoRoot, "packages/app/src");
   forEachSourceImport(appDir, (spec, _statement, rel) => {
     if (
@@ -399,9 +396,8 @@ function checkAppPurity() {
  * safe to import during prerender. Platform UI, concrete routers, browser-only
  * transcript code, and app-source backedges belong in app adapters, not here.
  */
-function checkStorePurity() {
-  /** @type {string[]} */
-  const errors = [];
+function checkStorePurity(): string[] {
+  const errors: string[] = [];
   const storeDir = join(repoRoot, "packages/store/src");
   forEachSourceImport(storeDir, (spec, _statement, rel) => {
     if (
@@ -430,7 +426,7 @@ function checkStorePurity() {
     if (spec.startsWith(".")) {
       const resolved = resolve(dirname(join(repoRoot, rel)), spec);
       const appsDir = join(repoRoot, "apps");
-      if (resolved === appsDir || resolved.startsWith(appsDir + "/")) {
+      if (resolved === appsDir || resolved.startsWith(`${appsDir}/`)) {
         errors.push(`@uoplan/store must not import app source: "${rel}" imports "${spec}".`);
       }
     }
@@ -438,7 +434,7 @@ function checkStorePurity() {
   return errors;
 }
 
-function main() {
+function main(): void {
   const pkgs = readWorkspacePackages();
   const errors = [
     ...checkLayering(pkgs),

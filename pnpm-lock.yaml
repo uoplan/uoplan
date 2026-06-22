@@ -17,6 +17,9 @@ importers:
       '@lhci/cli':
         specifier: ^0.15.1
         version: 0.15.1
+      '@types/node':
+        specifier: ^25.5.0
+        version: 25.5.0
       '@typescript/native-preview':
         specifier: 7.0.0-dev.20260512.1
         version: 7.0.0-dev.20260512.1
@@ -12580,9 +12583,7 @@ snapshots:
       metro-runtime: 0.84.4
     transitivePeerDependencies:
       - '@babel/core'
-      - bufferutil
       - supports-color
-      - utf-8-validate
 
   '@react-native/normalize-colors@0.74.89': {}
 

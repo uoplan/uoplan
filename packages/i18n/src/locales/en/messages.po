@@ -173,11 +173,11 @@ msgstr "Return to the uoplan home page."
 msgid "app.nav.dest.home.label"
 msgstr "Home"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "app.nav.dest.personalize.description"
 msgstr "Set your term, program, and completed courses."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "app.nav.dest.personalize.label"
 msgstr "Personalize"
 
@@ -343,230 +343,230 @@ msgstr "Any 1000–4000"
 msgid "basicCourseFilters.title"
 msgstr "Elective options"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basicCourseFilters.toggle"
 msgstr "Toggle course filters"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.add"
 msgstr "Add to basket"
 
 msgid "basket.addCourse.placeholder"
 msgstr "Add a course…"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.add.aria"
 msgstr "Add to basket"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.added"
 msgstr "In basket"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.added.aria"
 msgstr "In basket"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.badge.pinned"
 msgstr "Pinned"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.badge.placed"
 msgstr "Placed"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.assigned"
 msgstr "Counts toward requirements"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.completed"
 msgstr "Already completed"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.noRequirement"
 msgstr "No matching requirement"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.overflow"
 msgstr "Requirement already full"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.prereqUnmet"
 msgstr "Prereqs not met"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.standalone"
 msgstr "Required on their own"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.title"
 msgstr "Breakdown"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.breakdown.unavailable"
 msgstr "Not offered this term"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.cancelRemove"
 msgstr "Cancel"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.confirmRemove"
 msgstr "Confirm removing {code}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.credits"
 msgstr "{credits} cr"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.cta.viewSchedule"
 msgstr "View your schedule"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.details.hide"
 msgstr "Hide details"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.details.show"
 msgstr "Show details"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.empty.body"
 msgstr "Add courses from Explore."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.empty.cta"
 msgstr "Browse courses"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.empty.title"
 msgstr "Your basket is empty"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.fab.label"
 msgstr "Basket"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.fab.open"
 msgstr "Open basket with {count} courses"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.fab.openEmpty"
 msgstr "Open basket"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.noProgram.copy"
 msgstr "Set up Personalize to sort these into requirements."
 
 #: apps/web/src/components/explore/ExploreCourseSchedulePage.tsx:200
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.noProgram.link"
 msgstr "Go to Personalize"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.removeCourse"
 msgstr "Remove {code}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.removePrompt"
 msgstr "Remove?"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stat.courseCount.tip"
 msgstr "Courses in your basket"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stat.credits.tip"
 msgstr "Total credits"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stat.creditsPlaced.tip"
 msgstr "Credits placed into requirements"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stat.requirementsCovered.tip"
 msgstr "Requirements covered"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stat.requirementsRemaining.tip"
 msgstr "Requirements remaining"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.assigned"
 msgstr "Counts toward {requirement}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.completed"
 msgstr "Already completed"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.noRequirement"
 msgstr "No matching requirement"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.overflow"
 msgstr "Matching requirement is already full"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.prereqUnmet"
 msgstr "Prereqs not met"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.required"
 msgstr "Treated as a required course"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.standalone"
 msgstr "Required on its own"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.status.unavailable"
 msgstr "Not offered this term"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stillNeeded.empty"
 msgstr "Your basket covers the tracked requirements."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stillNeeded.moreCourses"
 msgstr "{count, plural, one {+# course} other {+# courses}}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stillNeeded.noSuggestions"
 msgstr "No eligible suggestions right now."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stillNeeded.progress"
 msgstr "{covered}/{needed} credits"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stillNeeded.title"
 msgstr "Still needed"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.stillNeeded.untitled"
 msgstr "Other requirement"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.summary.collapse"
 msgstr "Collapse basket summary"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.summary.expand"
 msgstr "Expand basket summary"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.title"
 msgstr "Your basket"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "basket.viewCourse"
 msgstr "View {code}"
 
 msgid "calendar.blockedTime.label"
 msgstr "Blocked time"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "calendar.blockedTime.remove"
 msgstr "Remove blocked time"
 
@@ -582,15 +582,15 @@ msgstr "Remove"
 msgid "calendar.blockedTime.removeTitle"
 msgstr "Remove blocked time?"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "calendar.blockedTime.resizeEnd"
 msgstr "Resize blocked time end"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "calendar.blockedTime.resizeStart"
 msgstr "Resize blocked time start"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "calendar.event.ariaLabel"
 msgstr "{courseCode} {component}, {timeRange}"
 
@@ -852,11 +852,11 @@ msgstr "Week schedule {current}/{total}"
 msgid "calendarView.empty"
 msgstr "No schedules generated yet. Complete the steps above and click Generate."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "calendarView.nextWeek"
 msgstr "Next week"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "calendarView.previousWeek"
 msgstr "Previous week"
 
@@ -974,11 +974,11 @@ msgstr "Support us"
 msgid "donate.unavailable"
 msgstr "The live total is temporarily unavailable."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.command.geegees.description"
 msgstr "Unlock the hidden Gee-Gees theme"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.command.geegees.label"
 msgstr "Garnet & Grey theme"
 
@@ -986,31 +986,31 @@ msgstr "Garnet & Grey theme"
 msgid "easterEgg.command.group"
 msgstr "Secrets"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.aprilFools"
 msgstr "no easter eggs here, we promise"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.canadaDay"
 msgstr "Happy Canada Day!"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.examSeason"
 msgstr "good luck on exams"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.halloween"
 msgstr "spooky season"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.holidays"
 msgstr "happy holidays"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.newYear"
 msgstr "Happy New Year!"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "easterEgg.seasonal.winter"
 msgstr "bundle up, it's Ottawa cold"
 
@@ -1023,7 +1023,7 @@ msgstr "Copied!"
 msgid "enrolCli.modal.copy"
 msgstr "Copy"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "enrolCli.modal.copyCode"
 msgstr "Copy code"
 
@@ -1042,15 +1042,15 @@ msgstr "2. Enrol"
 msgid "enrolCli.modal.title"
 msgstr "Enrol via CLI"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "errorBoundary.message"
 msgstr "uoplan hit an unexpected error. Reload the app to try again."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "errorBoundary.reload"
 msgstr "Reload"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "errorBoundary.title"
 msgstr "Something went wrong"
 
@@ -1204,15 +1204,15 @@ msgstr "Search disciplines"
 msgid "explore.filter.feedback"
 msgstr "Feedback"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "explore.filter.feedback.excellent"
 msgstr "Excellent (4.0+)"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "explore.filter.feedback.good"
 msgstr "Good (3.0+)"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "explore.filter.feedback.great"
 msgstr "Great (3.5+)"
 
@@ -1942,97 +1942,97 @@ msgstr "Quickly select required courses and electives to generate a schedule. Be
 msgid "modeStep.basic.title"
 msgstr "Basic Mode"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.currentSystem"
 msgstr "System"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.english"
 msgstr "English"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.frenchCanada"
 msgstr "Français (Canada)"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.subtitle"
 msgstr "Choose the language uoplan uses."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.system"
 msgstr "System default"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.systemDescription"
 msgstr "Follow your device language"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.language.title"
 msgstr "Language"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "native.more.settings"
 msgstr "Settings"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.pushSetupMissing.message"
 msgstr "Push notifications are unavailable in this build."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.pushSetupMissing.title"
 msgstr "Notifications are not configured"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.pushSubscribeFailed.message"
 msgstr "Please try again in a moment."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.pushSubscribeFailed.title"
 msgstr "Could not enable notifications"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.pushUnsubscribeFailed.message"
 msgstr "Please try again in a moment."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.pushUnsubscribeFailed.title"
 msgstr "Could not disable notifications"
 
 #: apps/web/src/components/calendar/CalendarPage.tsx:80
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.scheduleGenerationCancelled.message"
 msgstr "You changed a generation option, so the running generation was stopped. Generate again to apply your changes."
 
 #: apps/web/src/components/calendar/CalendarPage.tsx:79
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.scheduleGenerationCancelled.title"
 msgstr "Generation cancelled"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.scheduleWorkerFallback.message"
 msgstr "The background worker failed, so uoplan is finishing the generation in the app."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.scheduleWorkerFallback.title"
 msgstr "Schedule generation is running more slowly"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.warning.blocked"
 msgstr "Notifications blocked in browser settings"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.warning.iosHomeScreen"
 msgstr "Add uoplan to your Home Screen to enable notifications"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.warning.unsupported"
 msgstr "Push notifications are not supported in this browser"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.yearCatalogueLoadFailed.message"
 msgstr "Try another year, or reload and try again."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "notifications.yearCatalogueLoadFailed.title"
 msgstr "Could not load that catalogue year"
 
@@ -2069,18 +2069,18 @@ msgstr "No options to configure for this program."
 msgid "optionsStep.note"
 msgstr "Pick one option for each choice below. Your selection reveals any follow-up choices; use Change to switch a path."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "optionsStep.pager.complete"
 msgstr "complete"
 
 msgid "optionsStep.pager.goTo"
 msgstr "Go to choice {number}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "optionsStep.pager.goToWithStatus"
 msgstr "Go to choice {number} of {total}, {status}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "optionsStep.pager.incomplete"
 msgstr "incomplete"
 
@@ -2650,95 +2650,95 @@ msgstr "Choose term"
 msgid "stepNav.title"
 msgstr "Steps"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.conflictsWith"
 msgstr "Conflicts with {course}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.difficulty.all"
 msgstr "All difficulties"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.difficulty.easy"
 msgstr "Easy"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.difficulty.moderate"
 msgstr "Moderate"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.difficulty.tough"
 msgstr "Tough"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.filter.label"
 msgstr "Difficulty"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.group.bestMatches"
 msgstr "Best matches"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.group.otherOptions"
 msgstr "Other options"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.loading"
 msgstr "Finding swap options…"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.noAlternatives"
 msgstr "No alternative courses available that fit your schedule."
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.noMatches"
 msgstr "No matches"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.option.conflictAria"
 msgstr "{course} conflicts with {conflict}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.option.selectAria"
 msgstr "Swap to {course}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.poolHad"
 msgstr "Pool had {count} course(s)"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.searchPlaceholder"
 msgstr "Search courses…"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.sort.alpha"
 msgstr "A–Z"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.sort.aplus"
 msgstr "Easiest"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.sort.best"
 msgstr "Best match"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.sort.label"
 msgstr "Sort"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "swapCourse.sort.rating"
 msgstr "Highest rated"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "term.season.fall"
 msgstr "Fall"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "term.season.summer"
 msgstr "Summer"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "term.season.winter"
 msgstr "Winter"
 
@@ -2754,7 +2754,7 @@ msgstr "Choose a term..."
 msgid "theme.dark"
 msgstr "Dark"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "theme.geegees"
 msgstr "Gee-Gees"
 
@@ -2779,31 +2779,31 @@ msgstr "Next"
 msgid "tour.progress"
 msgstr "{{current}} of {{total}}"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.excellent"
 msgstr "Excellent"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.failing"
 msgstr "Failing"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.good"
 msgstr "Good"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.lowPass"
 msgstr "Low pass"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.midPass"
 msgstr "Mid pass"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.nearExcellent"
 msgstr "Near excellent"
 
-#: scripts/i18n/dynamic-keys.mjs
+#: scripts/i18n/dynamic-keys.ts
 msgid "trends.band.withdrew"
 msgstr "Withdrew"
 

@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Builds the uoplan schedule-generation engine (packages/engine) as a native
 // static library for iOS and packages it as an XCFramework consumed by the Expo
 // local module `apps/native/modules/uoplan-engine`.
@@ -7,9 +6,9 @@
 // worker run it as WASM, the native apps link this XCFramework. Output is
 // git-ignored (a build artifact) — run this before `pod install` / `expo run:ios`
 // (or `pnpm build:engine-native-ffi`).
-import { existsSync, mkdirSync, rmSync, copyFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { engineDir, repoRoot, run } from "./lib/native-engine.mjs";
+import { engineDir, repoRoot, run } from "./lib/native-engine.ts";
 
 const includeDir = join(engineDir, "native/include");
 const moduleIosDir = join(repoRoot, "apps/native/modules/uoplan-engine/ios");

@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * `pnpm lighthouse` — runs Lighthouse CI (@lhci/cli) against a production build
  * of the web app and prints a per-URL score summary. Wired into lefthook as a
@@ -11,7 +10,8 @@
  *      already a dev dependency, for consistency with CI; falls back to system
  *      Chrome via lhci's default search).
  *   3. Run `lhci autorun` (collect → upload), serving the build via
- *      `vite preview` per apps/web/lighthouserc.cjs.
+ *      `vite preview`. The lhci config is generated as a temp JSON file from
+ *      LH_CONFIG below (lhci cannot load a `.ts` config).
  *   4. Read `.lighthouseci/manifest.json` and print a category score table.
  *
  * Env:
@@ -20,7 +20,9 @@
  */
 
 import { spawnSync } from "node:child_process";
+import type { SpawnSyncOptions } from "node:child_process";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -31,18 +33,63 @@ const MANIFEST = path.join(WEB_DIR, ".lighthouseci", "manifest.json");
 
 const CATEGORIES = ["performance", "accessibility", "best-practices", "seo"];
 
-function run(command, args, opts = {}) {
+// Lighthouse CI config (previously apps/web/lighthouserc.cjs). Audits a
+// production build served via `vite preview`, reusing the same
+// `E2E_SERVER=preview` static-serve path the accessibility CI job uses (the
+// Cloudflare vite plugin is disabled in that mode, so preview serves the static
+// `dist/client` bundle). Report-only: there is intentionally NO `assert` block,
+// so Lighthouse score regressions never fail the run. PWA category was removed
+// in Lighthouse 12 (bundled with @lhci/cli >= 0.15), so only the four remaining
+// categories are collected.
+const LH_PORT = 4178;
+const LH_ORIGIN = `http://localhost:${LH_PORT}`;
+const LH_ROUTES = [
+  "/",
+  "/explore/",
+  "/explore/course/iti1120",
+  "/personalize",
+  "/explore/professor/abdorrahim-bahrami",
+  "/trends/",
+  "/trends/disciplines",
+];
+
+const LH_CONFIG = {
+  ci: {
+    collect: {
+      // `E2E_SERVER=preview` disables the Cloudflare plugin so `vite preview`
+      // serves the static client bundle (see apps/web/vite.config.ts). The
+      // client bundle lives in `dist/client`; `--strictPort` fails loudly
+      // instead of silently picking another port.
+      startServerCommand: `E2E_SERVER=preview pnpm exec vite preview --outDir dist/client --port ${LH_PORT} --strictPort`,
+      startServerReadyPattern: "Local:",
+      startServerReadyTimeout: 60_000,
+      url: LH_ROUTES.map((route) => `${LH_ORIGIN}${route}`),
+      numberOfRuns: 1,
+      settings: {
+        // PWA removed in Lighthouse 12; audit the four available categories.
+        onlyCategories: ["performance", "accessibility", "best-practices", "seo"],
+      },
+    },
+    upload: {
+      target: "filesystem",
+      outputDir: ".lighthouseci",
+      reportFilenamePattern: "%%PATHNAME%%-%%DATETIME%%.report.%%EXTENSION%%",
+    },
+  },
+};
+
+function run(command: string, args: string[], opts: SpawnSyncOptions = {}): number {
   const result = spawnSync(command, args, { stdio: "inherit", ...opts });
   if (result.error) throw result.error;
   return result.status ?? 1;
 }
 
-function die(message) {
+function die(message: string): never {
   console.error(`\n✗ ${message}`);
   process.exit(1);
 }
 
-function buildWebApp() {
+function buildWebApp(): void {
   if (process.env.LH_SKIP_BUILD === "1") {
     console.log("• LH_SKIP_BUILD=1 — auditing the existing dist/client build.");
     return;
@@ -62,7 +109,7 @@ function buildWebApp() {
   }
 }
 
-function resolveChrome() {
+function resolveChrome(): void {
   if (process.env.CHROME_PATH) {
     console.log(`• Using CHROME_PATH=${process.env.CHROME_PATH}`);
     return;
@@ -92,11 +139,22 @@ function resolveChrome() {
   console.log("• Falling back to system Chrome (lhci default search).");
 }
 
-function audit() {
+function audit(): void {
   console.log("• Running Lighthouse CI…\n");
-  const status = run("pnpm", ["exec", "lhci", "autorun", "--config=lighthouserc.cjs"], {
-    cwd: WEB_DIR,
-  });
+  // lhci cannot load a `.ts` config, so materialise LH_CONFIG as a temp JSON
+  // file. Relative paths inside it (dist/client, .lighthouseci) resolve against
+  // the lhci cwd (WEB_DIR), not the config location.
+  const configDir = fs.mkdtempSync(path.join(os.tmpdir(), "uoplan-lhci-"));
+  const configPath = path.join(configDir, "lighthouserc.json");
+  fs.writeFileSync(configPath, JSON.stringify(LH_CONFIG, null, 2));
+
+  let status: number;
+  try {
+    status = run("pnpm", ["exec", "lhci", "autorun", `--config=${configPath}`], { cwd: WEB_DIR });
+  } finally {
+    fs.rmSync(configDir, { recursive: true, force: true });
+  }
+
   // Report-only: a completed run (even with low scores) is success. lhci only
   // returns non-zero here on a genuine failure (bad config, server/Chrome
   // launch failure), in which case there's no manifest to summarise.
@@ -105,21 +163,27 @@ function audit() {
   }
 }
 
-function pct(value) {
+function pct(value: number | undefined): string {
   return typeof value === "number" ? `${Math.round(value * 100)}`.padStart(3) : "  -";
 }
 
-function printSummary() {
+interface ManifestEntry {
+  url: string;
+  isRepresentativeRun?: boolean;
+  summary?: Record<string, number>;
+  htmlPath?: string;
+}
+
+function printSummary(): void {
   if (!fs.existsSync(MANIFEST)) {
     console.log("\n(no manifest found — nothing to summarise)");
     return;
   }
 
-  /** @type {Array<{url:string,isRepresentativeRun:boolean,summary:Record<string,number>,htmlPath?:string}>} */
-  const entries = JSON.parse(fs.readFileSync(MANIFEST, "utf8"));
+  const entries = JSON.parse(fs.readFileSync(MANIFEST, "utf8")) as ManifestEntry[];
   const rows = entries.filter((e) => e.isRepresentativeRun !== false);
 
-  const labels = {
+  const labels: Record<string, string> = {
     performance: "Perf",
     accessibility: "A11y",
     "best-practices": "BestPr",
@@ -131,7 +195,7 @@ function printSummary() {
   console.log(header);
   console.log("-".repeat(header.length));
   for (const row of rows) {
-    let route;
+    let route: string;
     try {
       route = new URL(row.url).pathname;
     } catch {
@@ -143,7 +207,7 @@ function printSummary() {
   console.log(`\nFull HTML reports: ${path.relative(ROOT, path.dirname(MANIFEST))}/`);
 }
 
-function main() {
+function main(): void {
   // Stale reports from a previous run would otherwise be mixed in.
   fs.rmSync(path.dirname(MANIFEST), { recursive: true, force: true });
 
