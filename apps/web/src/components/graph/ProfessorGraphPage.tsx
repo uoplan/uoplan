@@ -19,6 +19,7 @@ import { tr, useTr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useProfessorGraphBuild } from "../../hooks/useProfessorGraphBuild";
 import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
+import { useAnalytics } from "../../lib/analytics";
 import { getGraphNeighbors } from "../../lib/graph/professorGraphDetails";
 import type { NeighborSortMode } from "../../lib/graph/professorGraphDetails";
 import {
@@ -52,6 +53,8 @@ export function ProfessorGraphPage({
   navigateGraph: ProfessorGraphNavigate;
 }) {
   useTr();
+  const analytics = useAnalytics();
+  const capturedGraphViewed = useRef(false);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
   const professorRatings = useProfessorRatings();
@@ -137,11 +140,12 @@ export function ProfessorGraphPage({
   const onNodeSelect = useCallback(
     (node: ProfessorGraphNode | null) => {
       setPreviewNodeId(null);
+      if (node) analytics.capture("graph_node_selected");
       void navigateGraph({
         search: { prof: node ? professorToSearchParam(node) : undefined },
       });
     },
-    [navigateGraph],
+    [analytics, navigateGraph],
   );
 
   const onPickProfessor = useCallback(
@@ -154,10 +158,14 @@ export function ProfessorGraphPage({
 
   useEffect(() => {
     if (!graphData || buildPhase !== "ready") return;
+    if (!capturedGraphViewed.current) {
+      capturedGraphViewed.current = true;
+      analytics.capture("graph_viewed");
+    }
     if (!urlProfParam) return;
     if (urlNodeId) return;
     void navigateGraph({ search: { prof: undefined }, replace: true });
-  }, [urlProfParam, urlNodeId, graphData, buildPhase, navigateGraph]);
+  }, [analytics, urlProfParam, urlNodeId, graphData, buildPhase, navigateGraph]);
 
   const showDataLoadingOverlay = buildPhase === "loading" && !gradesLoadError;
   const showLayoutOverlay = buildPhase === "ready" && layoutPhase === "layout";

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useRouter } from "expo-router";
 
@@ -27,6 +27,7 @@ import {
   Surface,
 } from "@/constants/theme";
 import { useTrends } from "@/data/data-provider";
+import { useAnalytics } from "@/lib/analytics";
 
 /**
  * Trends → Choosing courses. The per-course signal explorer: pick a course to
@@ -36,6 +37,7 @@ import { useTrends } from "@/data/data-provider";
  */
 export default function TrendsCoursesScreen() {
   const router = useRouter();
+  const analytics = useAnalytics();
   const trends = useTrends();
 
   // The chip row + leaderboard show the most-graded courses (so there is real,
@@ -84,6 +86,12 @@ export default function TrendsCoursesScreen() {
     [trends, course],
   );
   const courseDiscipline = course?.code.split(/\s+/)[0] ?? "this discipline";
+
+  useEffect(() => {
+    if (course?.code) {
+      analytics.capture("trends_course_viewed", { courseCode: course.code });
+    }
+  }, [analytics, course?.code]);
 
   const courseChips: ChipOption[] = useMemo(
     () => topCourses.map((c) => ({ value: c.code, label: c.code })),

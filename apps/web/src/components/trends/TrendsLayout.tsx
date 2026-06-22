@@ -1,8 +1,9 @@
 import { Alert, Badge, Box, Button, Group, Stack, Text, Title } from "@mantine/core";
 import { IconAdjustmentsHorizontal } from "@tabler/icons-react";
 import { Outlet, useLocation } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { tr, useTr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import { toUrlSearch } from "../../lib/trends/searchParams";
 import { BackButton } from "../shared/BackButton";
 import { ChromeControls } from "../shared/ChromeControls";
@@ -20,6 +21,8 @@ import { TrendsFilterBarSkeleton, TrendsHubSkeleton } from "./TrendsSkeletons";
  */
 export function TrendsLayout() {
   useTr();
+  const analytics = useAnalytics();
+  const capturedViewed = useRef(false);
   const { isMobile, ready, gradesError, scopeSummary, metricLabel, activeFilterCount, search } =
     useTrends();
 
@@ -45,6 +48,12 @@ export function TrendsLayout() {
   const onSubPage = useLocation({
     select: (s) => s.pathname.replace(/\/+$/, "") !== "/trends",
   });
+
+  useEffect(() => {
+    if (!ready || capturedViewed.current) return;
+    capturedViewed.current = true;
+    analytics.capture("trends_viewed");
+  }, [analytics, ready]);
 
   return (
     <Box

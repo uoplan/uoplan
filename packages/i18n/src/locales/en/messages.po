@@ -45,6 +45,18 @@ msgstr "French immersion"
 msgid "advancedOptions.summary.times"
 msgstr "Class times"
 
+msgid "analytics.optout.description"
+msgstr "Help improve uoplan with privacy-friendly, cookieless usage analytics. No personal data is collected."
+
+msgid "analytics.optout.privacyDetails"
+msgstr "Privacy details:"
+
+msgid "analytics.optout.title"
+msgstr "Anonymous analytics"
+
+msgid "analytics.optout.toggle"
+msgstr "Share anonymous usage data"
+
 msgid "app.beta"
 msgstr "Beta"
 

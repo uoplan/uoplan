@@ -9,6 +9,8 @@ import {
 } from "react";
 import type { File as FileType, Paths as PathsType } from "expo-file-system";
 
+import { getAnalytics } from "@/lib/analytics/client";
+
 /** File under the persistent document dir that stores the first-run flag. */
 export const ONBOARDING_FILE = "uoplan-onboarding.json";
 
@@ -106,7 +108,10 @@ export function OnboardingProvider({
     [storage],
   );
 
-  const complete = useCallback(() => persistCompleted(true), [persistCompleted]);
+  const complete = useCallback(() => {
+    persistCompleted(true);
+    getAnalytics().capture("onboarding_completed");
+  }, [persistCompleted]);
   const reset = useCallback(() => persistCompleted(false), [persistCompleted]);
 
   const value = useMemo<OnboardingContextValue>(

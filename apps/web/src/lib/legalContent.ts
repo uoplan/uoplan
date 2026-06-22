@@ -51,14 +51,14 @@ const privacyEn: LegalDoc = {
         "Your planning choices: the term, program, completed courses, and preferences you enter are stored locally on your device. They are encoded into a share link only when you choose to create one, and are not tied to any account.",
         "Transcript import: if you import a transcript PDF, it is parsed entirely on your device to read your completed courses. The file and its contents are never uploaded to us.",
         "Notifications (optional): if you turn on schedule reminders, we store only what is needed to deliver them — on the web, your browser's push subscription; in the app, a device notification token. You can turn these off at any time.",
-        "Technical data: like most websites, our hosting provider (Cloudflare) processes standard request information such as IP address and browser type to operate and secure the service. Cloudflare Turnstile is used to prevent abuse of the notification feature.",
+        "Technical data: like most websites, our hosting provider (Cloudflare) processes standard request information such as IP address and browser type to operate and secure the service. Cloudflare Turnstile is used to prevent abuse of the notification feature. We also use anonymous, cookieless PostHog product analytics, hosted in the EU and ingested through our first-party proxy at https://t.uoplan.party, to understand which features are used; analytics captures only anonymized feature-usage events and standard technical metadata, uses no cookies or localStorage identity, creates no person profiles, and collects no personal data.",
       ],
     },
     {
       heading: "What we do not do",
       bullets: [
         "No advertising and no advertising identifiers.",
-        "No third-party analytics or tracking SDKs.",
+        "No analytics cookies, cross-site tracking, personal analytics profiles, or session recording/replay.",
         "No selling, renting, or trading of personal information.",
         "No user accounts or behavioural profiles.",
       ],
@@ -81,6 +81,7 @@ const privacyEn: LegalDoc = {
       bullets: [
         "Clear your local planning data at any time from your browser or device.",
         "Unsubscribe from reminders to remove any stored notification subscription.",
+        "Opt out of anonymous product analytics at any time from the footer/settings toggle.",
         `Contact us at ${CONTACT_EMAIL} with any privacy question or request.`,
       ],
     },
@@ -120,14 +121,14 @@ const privacyFr: LegalDoc = {
         "Vos choix de planification : le trimestre, le programme, les cours réussis et les préférences que vous saisissez sont stockés localement sur votre appareil. Ils sont encodés dans un lien de partage uniquement lorsque vous choisissez d'en créer un, et ne sont liés à aucun compte.",
         "Importation de relevé : si vous importez un relevé en PDF, il est analysé entièrement sur votre appareil afin de lire vos cours réussis. Le fichier et son contenu ne nous sont jamais transmis.",
         "Notifications (facultatives) : si vous activez les rappels d'horaire, nous ne stockons que ce qui est nécessaire à leur envoi — sur le Web, l'abonnement push de votre navigateur; dans l'application, un jeton de notification de l'appareil. Vous pouvez les désactiver à tout moment.",
-        "Données techniques : comme la plupart des sites Web, notre hébergeur (Cloudflare) traite des renseignements de requête standard tels que l'adresse IP et le type de navigateur pour exploiter et sécuriser le service. Cloudflare Turnstile sert à prévenir l'utilisation abusive de la fonction de notification.",
+        "Données techniques : comme la plupart des sites Web, notre hébergeur (Cloudflare) traite des renseignements de requête standard tels que l'adresse IP et le type de navigateur pour exploiter et sécuriser le service. Cloudflare Turnstile sert à prévenir l'utilisation abusive de la fonction de notification. Nous utilisons aussi l'analyse de produit anonyme et sans témoins de PostHog, hébergée dans l'UE et transmise par notre proxy de première partie à https://t.uoplan.party, pour comprendre quelles fonctionnalités sont utilisées; l'analyse ne saisit que des événements d'utilisation anonymisés et des métadonnées techniques standard, n'utilise aucun témoin ni stockage local pour l'identité, ne crée aucun profil de personne et ne recueille aucun renseignement personnel.",
       ],
     },
     {
       heading: "Ce que nous ne faisons pas",
       bullets: [
         "Aucune publicité ni identifiant publicitaire.",
-        "Aucun outil d'analyse ou de pistage tiers.",
+        "Aucun témoin d'analyse, pistage intersite, profil d'analyse personnel ni enregistrement ou rediffusion de session.",
         "Aucune vente, location ou échange de renseignements personnels.",
         "Aucun compte d'utilisateur ni profil comportemental.",
       ],
@@ -150,6 +151,7 @@ const privacyFr: LegalDoc = {
       bullets: [
         "Effacez vos données de planification locales à tout moment depuis votre navigateur ou votre appareil.",
         "Désabonnez-vous des rappels pour supprimer tout abonnement de notification stocké.",
+        "Désactivez l'analyse de produit anonyme à tout moment au moyen du commutateur dans le pied de page ou les paramètres de l'application.",
         `Écrivez-nous à ${CONTACT_EMAIL} pour toute question ou demande relative à la confidentialité.`,
       ],
     },

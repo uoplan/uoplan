@@ -5,6 +5,7 @@ import { IconAlertTriangle, IconBell, IconBellOff } from "@tabler/icons-react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { useTr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 
 const VAPID_PUBLIC_KEY = (import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined) ?? "";
 const PUSH_SETUP_MISSING_TITLE_ID = "notifications.pushSetupMissing.title";
@@ -63,6 +64,7 @@ function getUnsupportedReasonId(): string | null {
 
 export function NotificationToggle() {
   const tr = useTr();
+  const analytics = useAnalytics();
   const [state, setState] = useState<NotifState>(loadState);
   const [loading, setLoading] = useState(false);
 
@@ -136,6 +138,7 @@ export function NotificationToggle() {
       const next: NotifState = { status: "subscribed", subscription: sub.toJSON() };
       saveState(next);
       setState(next);
+      analytics.capture("notification_subscribed");
     } catch (err) {
       // oxlint-disable-next-line no-console -- intentional push subscription error logging
       console.error("Failed to subscribe to push notifications:", err);
@@ -174,6 +177,7 @@ export function NotificationToggle() {
 
       saveState({ status: "disabled" });
       setState({ status: "disabled" });
+      analytics.capture("notification_unsubscribed");
     } catch (err) {
       // oxlint-disable-next-line no-console -- intentional push unsubscribe error logging
       console.error("Failed to unsubscribe from push notifications:", err);

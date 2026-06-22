@@ -17,6 +17,7 @@ import {
   useYearCatalogue,
 } from "../../store/hooks";
 import { tr, useTr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import {
   getGenerateBlockers,
   getScheduleDashboardCards,
@@ -41,6 +42,7 @@ export function ScheduleDashboardPage() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [openStep, setOpenStep] = useState<ScheduleStepId | null>(() => search.step ?? null);
   const didInit = useRef(false);
+  const analytics = useAnalytics();
 
   const { terms, selectedTermId, setSelectedTermId } = useTermSelection();
   const cache = useDataCache();
@@ -101,6 +103,9 @@ export function ScheduleDashboardPage() {
   const toggleStep = (id: ScheduleStepId) => {
     const next = openStep === id ? null : id;
     setOpenStep(next);
+    if (next === "assign") {
+      analytics.capture("requirements_viewed", { programId: program?.url });
+    }
     void navigate({
       to: "/personalize",
       search: { step: next ?? undefined },
@@ -131,6 +136,7 @@ export function ScheduleDashboardPage() {
             terms={dashboardState.terms}
             value={dashboardState.selectedTermId}
             onChange={(termId) => {
+              analytics.capture("term_selected", { termCode: termId });
               void setSelectedTermId(termId);
             }}
           />

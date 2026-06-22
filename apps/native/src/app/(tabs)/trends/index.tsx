@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { Text } from "@uoplan/ui";
@@ -11,6 +11,7 @@ import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign
 import { chartColorForIndex, SeasonColor, Spacing, Surface } from "@/constants/theme";
 import { useFeedback, useTrends } from "@/data/data-provider";
 import { trendsFeedbackData } from "@/data/feedback-data";
+import { useAnalytics } from "@/lib/analytics";
 
 function Metric({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
@@ -49,10 +50,15 @@ function FeedbackWave({ points }: { points: { value: number }[] }) {
  */
 export default function TrendsHubScreen() {
   const router = useRouter();
+  const analytics = useAnalytics();
   const trends = useTrends();
   const feedback = useFeedback();
   const feedbackTrends = useMemo(() => trendsFeedbackData(feedback), [feedback]);
   const overview = trends.overview;
+
+  useEffect(() => {
+    analytics.capture("trends_viewed");
+  }, [analytics]);
 
   return (
     <RedesignScreen gap={Spacing.three}>

@@ -11,6 +11,7 @@ import { parseUEnrollUrl, resolveUEnrollSchedule } from "../../lib/importFromUEn
 import type { ParsedUEnrollData, UEnrollResolveResult } from "../../lib/importFromUEnroll";
 import { tr, useTr } from "../../i18n";
 import { formatTermLabel } from "../../lib/term/termLabel";
+import { useAnalytics } from "../../lib/analytics";
 
 interface UEnrollImportModalProps {
   opened: boolean;
@@ -26,6 +27,7 @@ export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps)
   useTr();
 
   const cache = useDataCache();
+  const analytics = useAnalytics();
   const { selectedTermId, setSelectedTermId } = useTermSelection();
   const { importSchedule } = useScheduleGeneration();
   const storeApi = useStoreApi();
@@ -57,16 +59,27 @@ export function UEnrollImportModal({ opened, onClose }: UEnrollImportModalProps)
       let activeCache = cache;
 
       if (parsed.termId && parsed.termId !== selectedTermId) {
+        analytics.capture("term_selected", { termCode: parsed.termId });
         await setSelectedTermId(parsed.termId);
         activeCache = storeApi.getState().cache;
       }
 
-      if (!activeCache) return;
+      if (!activeCache) {
+        analytics.capture("uenroll_imported", { ok: false });
+        return;
+      }
 
       const resolved = resolveUEnrollSchedule(parsed.courses, activeCache);
-      if (!resolved.ok) return;
+      if (!resolved.ok) {
+        analytics.capture("uenroll_imported", { ok: false });
+        return;
+      }
 
       importSchedule(resolved.schedule);
+      analytics.capture("uenroll_imported", {
+        ok: true,
+        courseCount: resolved.schedule.enrollments.length,
+      });
       setInput("");
       setParseState({ status: "idle" });
       onClose();

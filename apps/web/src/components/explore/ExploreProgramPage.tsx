@@ -1,10 +1,11 @@
 import { Box, Group, Stack, Text, Title } from "@mantine/core";
 import { useNavigate } from "@tanstack/react-router";
 import { m } from "framer-motion";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import type { Catalogue, Program } from "@uoplan/core";
 import { buildProgramCourseFilter, normalizeCourseCode, programSlug } from "@uoplan/core";
 import { tr, useTr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
   groupOfferingsByCourse,
@@ -96,6 +97,8 @@ export function ExploreProgramPage({
   catalogue: Catalogue | null;
 }) {
   useTr();
+  const analytics = useAnalytics();
+  const lastViewedProgram = useRef<string | null>(null);
   const navigate = useNavigate();
   const { offerings } = useExploreOfferings();
 
@@ -111,6 +114,13 @@ export function ExploreProgramPage({
       void navigate({ to: "/explore", search: EMPTY_EXPLORE_SEARCH, replace: true });
     }
   }, [catalogue, program, navigate]);
+
+  useEffect(() => {
+    if (!program) return;
+    if (lastViewedProgram.current === program.url) return;
+    lastViewedProgram.current = program.url;
+    analytics.capture("explore_program_viewed", { programId: program.url });
+  }, [analytics, program]);
 
   const courseTitleByCode = useMemo(() => {
     const map = new Map<string, string>();

@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Linking, StyleSheet, View } from "react-native";
 
 import {
@@ -61,6 +61,7 @@ import {
   computePersonalizeRequirements,
 } from "@/lib/personalize-requirements";
 import { useAdaptiveLayout } from "@/lib/adaptive-layout";
+import { useAnalytics } from "@/lib/analytics";
 
 const FILTER_KEYS: ExploreFilterKey[] = [
   "level",
@@ -216,6 +217,7 @@ const REGULAR_CARD_WIDTH = 360;
  */
 export default function ExploreScreen() {
   const router = useRouter();
+  const analytics = useAnalytics();
   const layout = useAdaptiveLayout();
   const { bundle, schedulesByTerm } = useAppData();
   const index = useExploreIndex();
@@ -393,6 +395,14 @@ export default function ExploreScreen() {
     results.faculties.length +
     results.programs.length;
   const cardWidth = layout.columns === 2 ? REGULAR_CARD_WIDTH : CARD_WIDTH;
+
+  useEffect(() => {
+    if (!searching) return;
+    analytics.capture("explore_search", {
+      hasQuery: query.trim().length > 0,
+      resultCount: totalResults,
+    });
+  }, [analytics, query, searching, totalResults]);
 
   const openFilterDrawer = (value: string) => {
     if (FILTER_KEYS.includes(value as ExploreFilterKey)) {

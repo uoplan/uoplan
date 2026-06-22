@@ -2,6 +2,7 @@ import { useLingui } from "@lingui/react";
 import { IconWorld } from "@tabler/icons-react";
 import { dynamicActivate, tr } from "../../i18n";
 import type { AppLocale } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import { PillSelect } from "./PillSelect";
 import type { PillSelectOption } from "./PillSelect";
 import { pillIconStyle } from "./pillButtonStyle";
@@ -17,6 +18,7 @@ interface LanguageSwitcherProps {
 
 export function LanguageSwitcher({ onSwitch }: LanguageSwitcherProps) {
   const { i18n } = useLingui();
+  const analytics = useAnalytics();
   const locale = (i18n.locale || "en") as AppLocale;
 
   const options: PillSelectOption<AppLocale>[] = (Object.keys(NATIVE_LABEL) as AppLocale[]).map(
@@ -32,6 +34,7 @@ export function LanguageSwitcher({ onSwitch }: LanguageSwitcherProps) {
       options={options}
       value={locale}
       onChange={(next) => {
+        analytics.capture("locale_changed", { locale: next });
         if (onSwitch) void onSwitch(next);
         else void dynamicActivate(next);
       }}

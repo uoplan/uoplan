@@ -1,6 +1,8 @@
 import { File, Paths } from "expo-file-system";
 import { Share } from "react-native";
 
+import { getAnalytics } from "@/lib/analytics/client";
+
 import { buildScheduleIcs, type BuildIcsArgs } from "./ics";
 
 export interface ExportScheduleIcsArgs extends BuildIcsArgs {
@@ -19,5 +21,9 @@ export async function exportScheduleIcs({ fileName, ...buildArgs }: ExportSchedu
   const file = new File(Paths.cache, fileName ?? "uoplan-schedule.ics");
   if (file.exists) file.delete();
   file.write(ics);
-  return Share.share({ url: file.uri, title: "uoplan schedule" });
+  const result = await Share.share({ url: file.uri, title: "uoplan schedule" });
+  if (result.action === Share.sharedAction) {
+    getAnalytics().capture("schedule_shared", { method: "native_share_sheet" });
+  }
+  return result;
 }

@@ -24,6 +24,7 @@ import { useCompletedCourses } from "@/data/completed-courses-provider";
 import { useAppData, useExploreIndex } from "@/data/data-provider";
 import type { ExploreProgramEntry } from "@/data/explore-index";
 import { useScheduleOptions } from "@/data/schedule-options-provider";
+import { useAnalytics } from "@/lib/analytics";
 import { findBestMatchingProgram, processExtractedPages } from "@/lib/parseTranscriptNative";
 import type { PdfPageText } from "@/lib/parseTranscriptNative";
 import {
@@ -70,6 +71,7 @@ export function programOptionsFromEntries(
  */
 export default function PersonalizeScreen() {
   const router = useRouter();
+  const analytics = useAnalytics();
   const { bundle, schedulesByTerm, catalogueYears } = useAppData();
   const index = useExploreIndex();
   const completed = useCompletedCourses();
@@ -203,12 +205,13 @@ export default function PersonalizeScreen() {
     } catch (error) {
       setTranscriptLoading(false);
       setPdfBase64(null);
+      analytics.capture("transcript_imported", { ok: false });
       Alert.alert(
         "Couldn't read transcript",
         error instanceof Error ? error.message : "Please choose a different PDF and try again.",
       );
     }
-  }, []);
+  }, [analytics]);
 
   const handleTranscriptResult = useCallback(
     async (pages: PdfPageText[]) => {
@@ -244,18 +247,23 @@ export default function PersonalizeScreen() {
         startYear: nextStartYear,
         programTitle: matched?.title ?? null,
       });
+      analytics.capture("transcript_imported", { ok: true, courseCount: addedCount });
     },
-    [completed, coursesByCode, index.programs, setPersonalization],
+    [analytics, completed, coursesByCode, index.programs, setPersonalization],
   );
 
-  const handleTranscriptError = useCallback(async (message: string) => {
-    setPdfBase64(null);
-    setTranscriptLoading(false);
-    Alert.alert(
-      "Couldn't read transcript",
-      message || "Please choose a different PDF and try again.",
-    );
-  }, []);
+  const handleTranscriptError = useCallback(
+    async (message: string) => {
+      setPdfBase64(null);
+      setTranscriptLoading(false);
+      analytics.capture("transcript_imported", { ok: false });
+      Alert.alert(
+        "Couldn't read transcript",
+        message || "Please choose a different PDF and try again.",
+      );
+    },
+    [analytics],
+  );
 
   const insets = useSafeAreaInsets();
 

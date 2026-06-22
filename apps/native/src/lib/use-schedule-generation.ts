@@ -26,6 +26,7 @@ import {
   getActiveScheduleRequirementContext,
   subscribeScheduleRequirementContext,
 } from "@/lib/personalize-requirements";
+import { getAnalytics } from "@/lib/analytics/client";
 
 type GenerationStatus = "empty" | "generating" | "ready" | "none" | "error";
 
@@ -186,12 +187,17 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
     }
 
     const schedules = schedulesByTerm.get(term)!;
+    const startedAt = Date.now();
     setStatus("generating");
     setTermId(term);
     setDiagnostics(null);
     setVariants([]);
     setError(undefined);
     setCanLoadMore(false);
+    getAnalytics().capture("schedule_generate_started", {
+      termCode: term,
+      mode: activeRequirements ? "advanced" : "basic",
+    });
 
     void (async () => {
       try {
@@ -226,6 +232,13 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
           setSkippedCourses(skipped);
           setCanLoadMore(true);
           setStatus("ready");
+          getAnalytics().capture("schedule_generated", {
+            resultCount: 1,
+            durationMs: Date.now() - startedAt,
+            hasConflicts: false,
+            relaxationsApplied: Boolean(skipped?.length),
+            termCode: term,
+          });
           return;
         }
 
@@ -276,6 +289,10 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
         setDiagnostics(diag);
         setCanLoadMore(false);
         setStatus("none");
+        getAnalytics().capture("schedule_generate_empty", {
+          termCode: term,
+          reason: skipped && skipped.length > 0 && !diag ? "all_courses_skipped" : "no_schedule",
+        });
       } catch (err: unknown) {
         if (cancelled) return;
         setVariants([]);
@@ -283,6 +300,10 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
         setCanLoadMore(false);
         setError(err instanceof Error ? err.message : String(err));
         setStatus("error");
+        getAnalytics().capture("schedule_generate_failed", {
+          termCode: term,
+          reason: err instanceof Error && err.name ? err.name : "error",
+        });
       }
     })();
 

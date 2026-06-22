@@ -20,6 +20,7 @@ import type { DayOfWeek } from "@uoplan/core";
 import { BasicCourseFiltersCard } from "../../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../../i18n";
+import { useAnalytics } from "../../../lib/analytics";
 import { DayAvoidToggles } from "./DayAvoidToggles";
 import { TimeRangeSelect } from "./TimeRangeSelect";
 
@@ -113,22 +114,35 @@ export interface GenerationOptionsFieldsProps {
  * options" disclosure whose collapsed state lists what it contains.
  */
 export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
+  const analytics = useAnalytics();
   const [advancedOpen, setAdvancedOpen] = useState(props.advancedOptions.defaultOpen ?? false);
   const [smartOptionsOpen, setSmartOptionsOpen] = useState(false);
+  const capturePreference = (field: string) => {
+    analytics.capture("preferences_updated", { field });
+  };
 
   const timeWindowControl = (
     <TimeRangeSelect
       minStartMinutes={props.minStartMinutes}
       maxEndMinutes={props.maxEndMinutes}
-      onMinStartMinutesChange={props.onMinStartMinutesChange}
-      onMaxEndMinutesChange={props.onMaxEndMinutesChange}
+      onMinStartMinutesChange={(minutes) => {
+        capturePreference("min_start_time");
+        props.onMinStartMinutesChange(minutes);
+      }}
+      onMaxEndMinutesChange={(minutes) => {
+        capturePreference("max_end_time");
+        props.onMaxEndMinutesChange(minutes);
+      }}
     />
   );
 
   const avoidedDaysControl = (
     <DayAvoidToggles
       avoidedDays={props.avoidedDays}
-      onAvoidedDaysChange={props.onAvoidedDaysChange}
+      onAvoidedDaysChange={(days) => {
+        capturePreference("avoided_days");
+        props.onAvoidedDaysChange(days);
+      }}
     />
   );
 
@@ -137,7 +151,10 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
       label={tr("scheduleCount.compressed.label")}
       description={tr("scheduleCount.compressed.description")}
       checked={props.compressedSchedule}
-      onChange={(e) => props.onCompressedScheduleChange(e.currentTarget.checked)}
+      onChange={(e) => {
+        capturePreference("compressed_schedule");
+        props.onCompressedScheduleChange(e.currentTarget.checked);
+      }}
     />
   );
 
@@ -146,7 +163,10 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
       label={tr("scheduleCount.preferEasier.label")}
       description={tr("scheduleCount.preferEasier.description")}
       checked={props.preferEasierCourses}
-      onChange={(e) => props.onPreferEasierCoursesChange(e.currentTarget.checked)}
+      onChange={(e) => {
+        capturePreference("prefer_easier_courses");
+        props.onPreferEasierCoursesChange(e.currentTarget.checked);
+      }}
     />
   );
 
@@ -155,7 +175,10 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
       label={tr("scheduleCount.preferSentiment.label")}
       description={tr("scheduleCount.preferSentiment.description")}
       checked={props.preferHigherSentiment}
-      onChange={(e) => props.onPreferHigherSentimentChange(e.currentTarget.checked)}
+      onChange={(e) => {
+        capturePreference("prefer_higher_sentiment");
+        props.onPreferHigherSentimentChange(e.currentTarget.checked);
+      }}
     />
   );
 
@@ -164,7 +187,10 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
       label={tr("scheduleCount.preferProfessorRating.label")}
       description={tr("scheduleCount.preferProfessorRating.description")}
       checked={props.preferHigherProfessorRating}
-      onChange={(e) => props.onPreferHigherProfessorRatingChange(e.currentTarget.checked)}
+      onChange={(e) => {
+        capturePreference("prefer_higher_professor_rating");
+        props.onPreferHigherProfessorRatingChange(e.currentTarget.checked);
+      }}
     />
   );
 
@@ -177,7 +203,10 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
           suffix: props.totalFirstYearCredits === 1 ? "" : "s",
         })}
         checked={props.limitFirstYearCredits}
-        onChange={(e) => props.onLimitFirstYearCreditsChange(e.currentTarget.checked)}
+        onChange={(e) => {
+          capturePreference("limit_first_year_credits");
+          props.onLimitFirstYearCreditsChange(e.currentTarget.checked);
+        }}
       />
     ) : null;
 
@@ -191,6 +220,7 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
   const smartOptionsChecked = smartOptionValues.every(Boolean);
   const smartOptionsIndeterminate = !smartOptionsChecked && smartOptionValues.some(Boolean);
   const setAllSmartOptions = (checked: boolean) => {
+    capturePreference("smart_options");
     props.onCompressedScheduleChange(checked);
     props.onPreferEasierCoursesChange(checked);
     props.onPreferHigherSentimentChange(checked);
@@ -280,13 +310,40 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
       virtualSectionsOnly={props.virtualSectionsOnly}
       showGraduateElectiveLevels
       collapsible
-      excludeElectiveSubjects={props.excludeSubjects}
-      excludeCourses={props.excludeCourses}
-      onChangeLevelBuckets={props.onChangeLevelBuckets}
-      onChangeLanguageBuckets={props.onChangeLanguageBuckets}
-      onChangeElectiveLevelBuckets={props.onChangeElectiveLevelBuckets}
-      onIncludeClosedComponentsChange={props.onIncludeClosedComponentsChange}
-      onVirtualSectionsOnlyChange={props.onVirtualSectionsOnlyChange}
+      excludeElectiveSubjects={{
+        ...props.excludeSubjects,
+        onChange: (value) => {
+          capturePreference("exclude_subjects");
+          props.excludeSubjects.onChange(value);
+        },
+      }}
+      excludeCourses={{
+        ...props.excludeCourses,
+        onChange: (value) => {
+          capturePreference("exclude_courses");
+          props.excludeCourses.onChange(value);
+        },
+      }}
+      onChangeLevelBuckets={(buckets) => {
+        capturePreference("level_buckets");
+        props.onChangeLevelBuckets(buckets);
+      }}
+      onChangeLanguageBuckets={(buckets) => {
+        capturePreference("language_buckets");
+        props.onChangeLanguageBuckets(buckets);
+      }}
+      onChangeElectiveLevelBuckets={(buckets) => {
+        capturePreference("elective_level_buckets");
+        props.onChangeElectiveLevelBuckets(buckets);
+      }}
+      onIncludeClosedComponentsChange={(value) => {
+        capturePreference("include_closed_components");
+        props.onIncludeClosedComponentsChange(value);
+      }}
+      onVirtualSectionsOnlyChange={(value) => {
+        capturePreference("virtual_sections_only");
+        props.onVirtualSectionsOnlyChange(value);
+      }}
     />
   );
 
@@ -296,7 +353,10 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
         label={tr("frenchImmersion.toggle.label")}
         description={tr("frenchImmersion.toggle.description")}
         checked={props.frenchImmersionStream}
-        onChange={(e) => props.onFrenchImmersionStreamChange(e.currentTarget.checked)}
+        onChange={(e) => {
+          capturePreference("french_immersion");
+          props.onFrenchImmersionStreamChange(e.currentTarget.checked);
+        }}
         radius="md"
         styles={{ description: { color: "var(--app-text-muted)" } }}
       />
@@ -321,6 +381,7 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
         value={props.countValue}
         onChange={(v) => {
           if (typeof v !== "number" || Number.isNaN(v)) return;
+          capturePreference("course_count");
           props.onCountChange(Math.trunc(v));
         }}
         min={props.countMin}

@@ -6,6 +6,7 @@ import {
 } from "../lib/requirements/requirementUtils";
 import { useAppStore } from "../store/appStore";
 import { tr } from "../i18n";
+import { useAnalytics } from "../lib/analytics";
 
 interface SwapActions {
   showLockedIcon: boolean;
@@ -38,6 +39,7 @@ export function useSwapActions({
   closeModal: () => void;
 }): SwapActions {
   const lockCourseForAllSchedulesFromSwap = useAppStore((s) => s.lockCourseForAllSchedulesFromSwap);
+  const analytics = useAnalytics();
   const unlockCourseForAllSchedulesFromSwap = useAppStore(
     (s) => s.unlockCourseForAllSchedulesFromSwap,
   );
@@ -146,11 +148,13 @@ export function useSwapActions({
 
   const handleLockToggle = () => {
     if (canUnlock) {
+      analytics.capture("schedule_pinned", { courseCode, pinned: false });
       unlockCourseForAllSchedulesFromSwap(enrollmentIndex);
       closeModal();
       return;
     }
     if (!canLock) return;
+    analytics.capture("schedule_pinned", { courseCode, pinned: true });
     lockCourseForAllSchedulesFromSwap(enrollmentIndex);
     closeModal();
   };

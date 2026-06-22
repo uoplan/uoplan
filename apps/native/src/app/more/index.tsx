@@ -1,15 +1,17 @@
 import { useRouter } from "expo-router";
 import Constants from "expo-constants";
-import { Linking, Pressable, StyleSheet, View } from "react-native";
+import { Linking, Pressable, StyleSheet, Switch, View } from "react-native";
 
 import { Stack, Text } from "@uoplan/ui";
 
+import { AppIcon } from "@/components/app-icon";
 import { ResponsiveColumns } from "@/components/layout";
 import { ListRow } from "@/components/list-row";
 import { RedesignScreen, ScreenHeader } from "@/components/redesign";
 import { Spacing, Surface } from "@/constants/theme";
 import { useTr } from "@/i18n";
 import { useLocale } from "@/i18n/locale-provider";
+import { useAnalyticsPreference } from "@/lib/analytics";
 
 const WEBSITE = "https://uoplan.party";
 const GITHUB = "https://github.com/uoplan/uoplan";
@@ -43,6 +45,47 @@ function Separator() {
   return <View style={styles.separator} />;
 }
 
+function AnalyticsOptOutRow() {
+  const tr = useTr();
+  const { optedOut, setOptedOut } = useAnalyticsPreference();
+
+  return (
+    <View style={styles.analyticsBlock}>
+      <View style={styles.analyticsRow}>
+        <View style={styles.leading}>
+          <AppIcon name="chart.bar" size={20} color={Surface.accent} />
+        </View>
+        <View style={styles.analyticsCopy}>
+          <Text size="md" weight="medium">
+            {tr("analytics.optout.title")}
+          </Text>
+          <Text size="sm" dimmed>
+            {tr("analytics.optout.description")}
+          </Text>
+        </View>
+        <Switch
+          testID="analytics-opt-out-switch"
+          value={!optedOut}
+          onValueChange={(enabled) => setOptedOut(!enabled)}
+          accessibilityLabel={tr("analytics.optout.toggle")}
+        />
+      </View>
+      <Pressable
+        accessibilityRole="link"
+        onPress={() => openUrl(PRIVACY_URL)}
+        style={styles.analyticsPrivacy}
+      >
+        <Text size="xs" color={Surface.dimmed}>
+          {tr("analytics.optout.privacyDetails")}
+        </Text>
+        <Text size="xs" color={Surface.accent} weight="semibold">
+          uoplan.party/privacy
+        </Text>
+      </Pressable>
+    </View>
+  );
+}
+
 /**
  * The More tab: grouped settings/about/developer destinations that aren't in the
  * bottom tab bar. Web-only features link out to uoplan.party until their native
@@ -73,6 +116,8 @@ export default function MoreScreen() {
             description={languageDescription}
             onPress={() => router.push("/more/language")}
           />
+          <Separator />
+          <AnalyticsOptOutRow />
         </Section>
 
         <Section title="About">
@@ -172,6 +217,31 @@ const styles = StyleSheet.create({
     height: StyleSheet.hairlineWidth,
     backgroundColor: Surface.border,
     marginLeft: Spacing.three + 28 + Spacing.three,
+  },
+  analyticsBlock: {
+    backgroundColor: Surface.card,
+  },
+  analyticsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.three,
+    paddingVertical: Spacing.three,
+    paddingHorizontal: Spacing.three,
+  },
+  leading: {
+    width: 28,
+    alignItems: "center",
+  },
+  analyticsCopy: {
+    flex: 1,
+    gap: 2,
+  },
+  analyticsPrivacy: {
+    flexDirection: "row",
+    gap: Spacing.one,
+    paddingHorizontal: Spacing.three,
+    paddingBottom: Spacing.three,
+    paddingLeft: Spacing.three + 28 + Spacing.three,
   },
   about: {
     alignItems: "center",

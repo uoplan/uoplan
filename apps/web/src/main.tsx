@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { Notifications } from "@mantine/notifications";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { ErrorBoundary } from "./components/shared/ErrorBoundary";
+import { AnalyticsProvider } from "./lib/analytics";
 import { shouldEnablePreload } from "./lib/preloadStrategy";
 import { routeTree } from "./routeTree.gen";
 import { setRouterInstance } from "./routerRef";
@@ -43,9 +44,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <AppThemeProvider>
         <Notifications />
         <AppStoreProvider store={defaultAppStore}>
-          <ErrorBoundary>
-            <RouterProvider router={router} />
-          </ErrorBoundary>
+          <AnalyticsProvider>
+            <ErrorBoundary>
+              <RouterProvider router={router} />
+            </ErrorBoundary>
+          </AnalyticsProvider>
         </AppStoreProvider>
       </AppThemeProvider>
     </I18nProvider>

@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Linking, Pressable, StyleSheet, View } from "react-native";
 
 import { Text } from "@uoplan/ui";
@@ -11,6 +11,7 @@ import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign
 import { Spacing, Surface } from "@/constants/theme";
 import { useAppData } from "@/data/data-provider";
 import { parseProgramSlugParam, programDetail } from "@/data/explore-detail";
+import { useAnalytics } from "@/lib/analytics";
 
 function slugKey(slug: string | string[] | undefined): string {
   return Array.isArray(slug) ? slug.join("/") : (slug ?? "");
@@ -19,11 +20,19 @@ function slugKey(slug: string | string[] | undefined): string {
 /** Program detail, backed by the native catalogue requirement tree. */
 export default function ProgramDetailScreen() {
   const router = useRouter();
+  const analytics = useAnalytics();
   const params = useLocalSearchParams<{ slug?: string | string[] }>();
   const { bundle, index } = useAppData();
   const slug = slugKey(params.slug);
   const detail = useMemo(() => programDetail(bundle, index, params.slug), [bundle, index, slug]);
   const fallbackTitle = parseProgramSlugParam(params.slug) ?? "Program";
+  const viewedProgramId = detail?.program.url ?? slug;
+
+  useEffect(() => {
+    if (viewedProgramId) {
+      analytics.capture("explore_program_viewed", { programId: viewedProgramId });
+    }
+  }, [analytics, viewedProgramId]);
 
   if (!detail) {
     return (

@@ -80,3 +80,10 @@ it("shows 'System' as the language description when following the device", async
 
   expect(getByText("System")).toBeTruthy();
 });
+
+it("shows the anonymous analytics opt-out control and privacy link", async () => {
+  const { getByTestId, getByText } = await renderMore(null);
+
+  expect(getByTestId("analytics-opt-out-switch")).toBeTruthy();
+  expect(getByText("uoplan.party/privacy")).toBeTruthy();
+});

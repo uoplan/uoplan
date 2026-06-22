@@ -19,6 +19,7 @@ import {
   i18n,
 } from "@/i18n";
 import { readLocaleOverride, writeLocaleOverride } from "@/i18n/locale-storage";
+import { getAnalytics } from "@/lib/analytics/client";
 
 /** Persistence seam so tests can inject an in-memory override store. */
 export interface LocaleStorage {
@@ -99,9 +100,11 @@ export function LocaleProvider({
 
   const setOverrideLocale = useCallback(
     (next: AppLocale | null) => {
+      const effectiveLocale = next ?? detectNativeLocale(null);
       setOverrideState(next);
       void storage.write(next).catch(() => {});
-      applyLocale(next ?? detectNativeLocale(null));
+      applyLocale(effectiveLocale);
+      getAnalytics().capture("locale_changed", { locale: effectiveLocale });
     },
     [storage, applyLocale],
   );
