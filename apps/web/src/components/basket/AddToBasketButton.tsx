@@ -4,6 +4,7 @@ import type { MantineSize } from "@mantine/core";
 import { IconCheck, IconShoppingCartPlus } from "@tabler/icons-react";
 import { useTr } from "../../i18n";
 import { useBasketMembership } from "../../hooks/useBasket";
+import { useAnalytics } from "../../lib/analytics";
 import classes from "./AddToBasketButton.module.css";
 
 type AddToBasketButtonVariant = "icon" | "pill";
@@ -26,6 +27,7 @@ export function AddToBasketButton({
   style,
 }: AddToBasketButtonProps) {
   const tr = useTr();
+  const analytics = useAnalytics();
   const { inBasket, toggle } = useBasketMembership(code);
   const label = inBasket ? tr("basket.added") : tr("basket.add");
   const ariaLabel = inBasket ? tr("basket.added.aria") : tr("basket.add.aria");
@@ -33,6 +35,9 @@ export function AddToBasketButton({
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     onClick?.(event);
+    analytics.capture(inBasket ? "basket_course_removed" : "basket_course_added", {
+      courseCode: code,
+    });
     toggle();
   };
 

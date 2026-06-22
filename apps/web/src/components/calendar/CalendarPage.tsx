@@ -53,6 +53,7 @@ import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateR
 import { useGenerationErrorToast } from "../../hooks/useGenerationErrorToast";
 import { useGenerationSentiment } from "../../hooks/useGenerationSentiment";
 import { tr, useTr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
 import { canGoToPreviousSeed } from "../../lib/seedNavigation";
 import { CALENDAR_SIDEBAR_WIDTH_PX } from "./calendarLayout";
@@ -120,6 +121,9 @@ function ScheduleNavigationButtons({
 }
 
 export function CalendarPage() {
+  const analytics = useAnalytics();
+  const viewedScheduleKey = useRef<string | null>(null);
+
   useEffect(() => {
     document.documentElement.classList.add("calendar-no-scrollbar-gutter");
     return () => {
@@ -173,6 +177,14 @@ export function CalendarPage() {
   const program = useActiveProgram();
 
   const hasProgram = program !== null;
+
+  useEffect(() => {
+    if (!currentSchedule) return;
+    const key = `${selectedTermId ?? "unknown"}:${currentSeed}`;
+    if (viewedScheduleKey.current === key) return;
+    viewedScheduleKey.current = key;
+    analytics.capture("schedule_viewed");
+  }, [analytics, currentSchedule, currentSeed, selectedTermId]);
 
   const { setCalendarMode, calendarWeekIndex, setCalendarWeekIndex } = useCalendarView();
   // Sync the active calendar mode so generation logic knows which path is active.
@@ -316,6 +328,7 @@ export function CalendarPage() {
 
   const handleDownloadIcs = () => {
     if (!currentSchedule) return;
+    analytics.capture("schedule_exported", { target: "ics" });
     const ics = buildScheduleIcs({
       schedule: currentSchedule,
       cache,
@@ -670,9 +683,10 @@ export function CalendarPage() {
             cache={cache}
             professorRatings={professorRatings}
             getSwapCandidates={getSwapCandidates}
-            onSwap={(enrollmentIndex, newCourseCode) =>
-              void swapCourseInSchedule(enrollmentIndex, normalizeCourseCode(newCourseCode))
-            }
+            onSwap={(enrollmentIndex, newCourseCode) => {
+              analytics.capture("schedule_swapped_course", { courseCode: newCourseCode });
+              void swapCourseInSchedule(enrollmentIndex, normalizeCourseCode(newCourseCode));
+            }}
             colorMap={currentColorMap}
             weekGroups={weekGroups}
             weekIndex={weekIndex}

@@ -24,6 +24,7 @@ import {
 import { findBestMatchingProgram, parseTranscriptPdf } from "@uoplan/transcript";
 import { isOptCourse, normalizeCourseCode } from "@uoplan/core";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
+import { useAnalytics } from "../../lib/analytics";
 
 interface ProgramStepProps {
   programs: Program[];
@@ -45,6 +46,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
   const { availableYears, firstYear, yearCataloguePrograms, yearCatalogueLoading, setFirstYear } =
     useYearCatalogue();
   const storeApi = useStoreApi();
+  const analytics = useAnalytics();
   const [transcriptLoading, setTranscriptLoading] = useState(false);
   const [transcriptError, setTranscriptError] = useState<string | null>(null);
   const [transcriptFeedback, setTranscriptFeedback] = useState<{
@@ -150,6 +152,10 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
       }
       const merged = [...new Set([...completedCourses, ...inCatalogue])];
       setCompletedCourses(merged);
+      analytics.capture("completed_courses_updated", {
+        count: merged.length,
+        source: "transcript",
+      });
 
       if (frenchImmersionStreamHint) {
         setFrenchImmersionStream(true);
@@ -187,7 +193,9 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
         programMatched: programMatched ?? null,
         minorMatched: minorMatched ?? null,
       });
+      analytics.capture("transcript_imported", { ok: true, courseCount: inCatalogue.length });
     } catch (err) {
+      analytics.capture("transcript_imported", { ok: false });
       // oxlint-disable-next-line no-console -- intentional transcript import error logging
       console.error(err);
       setTranscriptError(
@@ -207,7 +215,10 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
         placeholder={tr("programStep.firstYear.placeholder")}
         data={yearSelectData}
         value={firstYear !== null ? String(firstYear) : null}
-        onChange={(v) => setFirstYear(v !== null ? Number(v) : null)}
+        onChange={(v) => {
+          analytics.capture("preferences_updated", { field: "first_year" });
+          void setFirstYear(v !== null ? Number(v) : null);
+        }}
         rightSection={yearCatalogueLoading ? <Loader size="xs" /> : undefined}
         disabled={yearCatalogueLoading}
         clearable
@@ -240,11 +251,13 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
           value={minorSelectValue}
           onChange={(v) => {
             if (v == null) {
+              analytics.capture("preferences_updated", { field: "minor_program" });
               setMinorProgram(null);
               return;
             }
             const i = parseInt(v.replace(/^minor-/, ""), 10);
             const selected = minors[i] ?? null;
+            analytics.capture("preferences_updated", { field: "minor_program" });
             setMinorProgram(selected);
           }}
           searchable
@@ -259,7 +272,10 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
           description={tr("programStep.disciplines.description")}
           data={allDisciplineCodes}
           value={studentPrograms}
-          onChange={setStudentPrograms}
+          onChange={(next) => {
+            analytics.capture("preferences_updated", { field: "student_disciplines" });
+            setStudentPrograms(next);
+          }}
           searchable
           size="md"
         />
@@ -270,7 +286,10 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
             label={tr("frenchImmersion.toggle.label")}
             description={tr("frenchImmersion.toggle.description")}
             checked={frenchImmersionStream}
-            onChange={(e) => setFrenchImmersionStream(e.currentTarget.checked)}
+            onChange={(e) => {
+              analytics.capture("preferences_updated", { field: "french_immersion" });
+              setFrenchImmersionStream(e.currentTarget.checked);
+            }}
             size="md"
             radius="md"
           />
@@ -371,6 +390,10 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
                       ...new Set([...completedCourses, ...transcriptFeedback.skippedCodes]),
                     ];
                     setCompletedCourses(merged);
+                    analytics.capture("completed_courses_updated", {
+                      count: merged.length,
+                      source: "transcript",
+                    });
                     setTranscriptFeedback({ ...transcriptFeedback, skippedCodes: [] });
                   }}
                 >

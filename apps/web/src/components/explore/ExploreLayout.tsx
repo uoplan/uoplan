@@ -3,9 +3,10 @@ import { Affix, Box, Group } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
 import { AnimatePresence, m } from "framer-motion";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { useTr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { formatTermLabel } from "../../lib/term/termLabel";
@@ -75,7 +76,9 @@ function ExploreCartCluster() {
 
 export function ExploreLayout({ children }: ExploreLayoutProps) {
   useTr();
+  const analytics = useAnalytics();
   const { i18n } = useLingui();
+  const lastSearchSignature = useRef<string | null>(null);
   const leafRouteId = useRouterState({
     select: (s) => s.matches[s.matches.length - 1]?.routeId as string | undefined,
   });
@@ -150,6 +153,28 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
 
   const showResults = searchEngaged && (debouncedQuery.trim().length > 0 || activeFilters);
   const renderResults = onIndex && showResults;
+  const exploreResultCount =
+    displayedCourses.length +
+    displayedProfessors.length +
+    disciplineResults.length +
+    facultyResults.length +
+    programResults.length;
+
+  useEffect(() => {
+    if (!renderResults || loading) return;
+    const hasQuery = debouncedQuery.trim().length > 0;
+    const signature = JSON.stringify({
+      hasQuery,
+      count: exploreResultCount,
+      search: currentSearchParams,
+    });
+    if (lastSearchSignature.current === signature) return;
+    lastSearchSignature.current = signature;
+    analytics.capture("explore_search", {
+      hasQuery,
+      resultCount: exploreResultCount,
+    });
+  }, [analytics, currentSearchParams, debouncedQuery, exploreResultCount, loading, renderResults]);
 
   return (
     <ExploreBasketTargetContext.Provider value={basketTargetValue}>

@@ -45,6 +45,18 @@ msgstr "Immersion française"
 msgid "advancedOptions.summary.times"
 msgstr "Heures de cours"
 
+msgid "analytics.optout.description"
+msgstr "Aidez à améliorer uoplan grâce à des statistiques d'utilisation anonymes et sans témoins. Aucun renseignement personnel n'est recueilli."
+
+msgid "analytics.optout.privacyDetails"
+msgstr "Détails de confidentialité :"
+
+msgid "analytics.optout.title"
+msgstr "Analytique anonyme"
+
+msgid "analytics.optout.toggle"
+msgstr "Partager des données d'utilisation anonymes"
+
 msgid "app.beta"
 msgstr "Beta"
 

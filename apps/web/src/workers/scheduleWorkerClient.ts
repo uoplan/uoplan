@@ -6,6 +6,7 @@ import { pickGenerateSchedulesInput } from "../lib/generateSchedulesInput";
 import type { GenerateSchedulesInput, GenerateSchedulesMode } from "../lib/generateSchedulesInput";
 import type { GenerateSchedulesResult } from "../lib/generateSchedulesAction";
 import { tr } from "../i18n";
+import { getAnalytics } from "../lib/analytics";
 import type { ScheduleWorkerApi } from "./scheduleWorkerApi";
 
 const SCHEDULE_WORKER_FALLBACK_TITLE_ID = "notifications.scheduleWorkerFallback.title";
@@ -147,11 +148,58 @@ function inputFromState(state: AppState, mode: GenerateSchedulesMode): GenerateS
   return pickGenerateSchedulesInput(state, mode);
 }
 
+function nowMs(): number {
+  return typeof performance !== "undefined" ? performance.now() : Date.now();
+}
+
+function generationErrorReason(result: GenerateSchedulesResult | null): string {
+  return result?.generationError?.message.kind ?? "empty";
+}
+
 /**
  * Run schedule generation. Uses the worker when available; otherwise falls
  * back to running the pure action in-process (SSR/tests).
  */
 export async function runScheduleGeneration(
+  state: AppState,
+  mode: GenerateSchedulesMode,
+): Promise<GenerateSchedulesResult | null> {
+  const analytics = getAnalytics();
+  const termCode = state.selectedTermId ?? undefined;
+  const startedAt = nowMs();
+  analytics.capture("schedule_generate_started", { termCode, mode });
+
+  try {
+    const result = await runScheduleGenerationInternal(state, mode);
+    const durationMs = Math.round(nowMs() - startedAt);
+    if (result?.currentSchedule) {
+      analytics.capture("schedule_generated", {
+        resultCount: 1,
+        durationMs,
+        termCode,
+      });
+    } else if (result?.generationError) {
+      analytics.capture("schedule_generate_empty", {
+        termCode,
+        reason: generationErrorReason(result),
+      });
+    } else {
+      analytics.capture("schedule_generate_failed", {
+        termCode,
+        reason: "cancelled",
+      });
+    }
+    return result;
+  } catch (err) {
+    analytics.capture("schedule_generate_failed", {
+      termCode,
+      reason: "error",
+    });
+    throw err;
+  }
+}
+
+async function runScheduleGenerationInternal(
   state: AppState,
   mode: GenerateSchedulesMode,
 ): Promise<GenerateSchedulesResult | null> {

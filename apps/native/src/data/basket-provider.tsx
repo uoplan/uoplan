@@ -9,6 +9,8 @@ import {
   type ReactNode,
 } from "react";
 
+import { getAnalytics } from "@/lib/analytics/client";
+
 import { readBasket, toggleCode, writeBasket } from "./basket-storage";
 
 interface BasketContextValue {
@@ -56,9 +58,28 @@ export function BasketProvider({ children }: { children: ReactNode }) {
       codes,
       count: codes.length,
       has: (code) => codes.includes(code),
-      add: (code) => setCodes((current) => (current.includes(code) ? current : [...current, code])),
-      remove: (code) => setCodes((current) => current.filter((c) => c !== code)),
-      toggle: (code) => setCodes((current) => toggleCode(current, code)),
+      add: (code) =>
+        setCodes((current) => {
+          if (current.includes(code)) return current;
+          getAnalytics().capture("basket_course_added", { courseCode: code });
+          return [...current, code];
+        }),
+      remove: (code) =>
+        setCodes((current) => {
+          if (!current.includes(code)) return current;
+          getAnalytics().capture("basket_course_removed", { courseCode: code });
+          return current.filter((c) => c !== code);
+        }),
+      toggle: (code) =>
+        setCodes((current) => {
+          getAnalytics().capture(
+            current.includes(code) ? "basket_course_removed" : "basket_course_added",
+            {
+              courseCode: code,
+            },
+          );
+          return toggleCode(current, code);
+        }),
       clear: () => setCodes([]),
     }),
     [codes],

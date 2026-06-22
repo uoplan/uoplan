@@ -4,6 +4,7 @@ import { IconArrowsSort, IconEraser, IconTargetArrow } from "@tabler/icons-react
 import { AnimatePresence, m } from "framer-motion";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { tr, useTr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { ExploreFilterPopoverContent } from "./ExploreFilterPopoverContent";
@@ -211,6 +212,7 @@ export function ExploreFilterBar({
   padInline?: string;
 }) {
   useTr();
+  const analytics = useAnalytics();
   const isMobile = useMediaQuery("(max-width: 539px)", false, {
     getInitialValueInEffect: false,
   });
@@ -257,6 +259,7 @@ export function ExploreFilterBar({
   };
 
   const handleChange = (next: Partial<ExploreFilterState>) => {
+    analytics.capture("explore_filter_applied", { filter: Object.keys(next)[0] ?? "unknown" });
     onChange(next);
   };
 
@@ -281,9 +284,10 @@ export function ExploreFilterBar({
           <RequirementsFilterPill
             active={filters.contributesToRequirements}
             available={requirementsAvailable}
-            onToggle={() =>
-              onChange({ contributesToRequirements: !filters.contributesToRequirements })
-            }
+            onToggle={() => {
+              analytics.capture("explore_filter_applied", { filter: "requirements" });
+              onChange({ contributesToRequirements: !filters.contributesToRequirements });
+            }}
           />
           {FILTER_KEYS.map((key) => {
             const active = pillIsActive(key, filters);
@@ -311,7 +315,10 @@ export function ExploreFilterBar({
                 color="gray"
                 size="md"
                 radius="md"
-                onClick={() => onChange(EMPTY_FILTERS)}
+                onClick={() => {
+                  analytics.capture("explore_filter_applied", { filter: "clear_all" });
+                  onChange(EMPTY_FILTERS);
+                }}
                 aria-label={tr("explore.filter.clearAll")}
               >
                 <IconEraser size={16} />

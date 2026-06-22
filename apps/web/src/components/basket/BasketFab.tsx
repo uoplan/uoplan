@@ -5,6 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { IconArrowRight, IconShoppingCart } from "@tabler/icons-react";
 import { useBasketCount } from "../../hooks/useBasket";
 import { tr, useTr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import { BottomDrawer } from "../shared/BottomDrawer";
 import { applyPillHover, resetPillHover } from "../shared/pillButtonStyle";
 import { BasketContents } from "./BasketContents";
@@ -48,6 +49,7 @@ export function BasketFab({
   const [opened, setOpened] = useState(false);
   const count = useBasketCount();
   const navigate = useNavigate();
+  const analytics = useAnalytics();
   // Mobile: a thumb-reachable floating button that opens the shared bottom drawer.
   // Desktop: a popover anchored to the cart, top-right on pages whose corner is free
   // (explore renders this inline; personalize floats it) and bottom-right where the
@@ -56,6 +58,12 @@ export function BasketFab({
 
   const label = count === 0 ? tr(I18N.openEmpty) : tr(I18N.open, { count });
   const close = () => setOpened(false);
+  const toggleOpened = () => {
+    setOpened((value) => {
+      if (!value) analytics.capture("basket_opened");
+      return !value;
+    });
+  };
   const viewSchedule = () => {
     close();
     void navigate({ to: "/schedule" });
@@ -97,7 +105,10 @@ export function BasketFab({
           radius="xl"
           aria-label={label}
           title={label}
-          onClick={() => setOpened(true)}
+          onClick={() => {
+            analytics.capture("basket_opened");
+            setOpened(true);
+          }}
           style={cartButtonStyle}
           onMouseEnter={(e) => applyPillHover(e.currentTarget)}
           onMouseLeave={(e) => resetPillHover(e.currentTarget)}
@@ -170,7 +181,7 @@ export function BasketFab({
             radius="xl"
             aria-label={label}
             title={label}
-            onClick={() => setOpened((o) => !o)}
+            onClick={toggleOpened}
             style={cartButtonStyle}
             onMouseEnter={(e) => applyPillHover(e.currentTarget)}
             onMouseLeave={(e) => resetPillHover(e.currentTarget)}

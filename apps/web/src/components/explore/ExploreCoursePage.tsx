@@ -1,5 +1,5 @@
 import { Accordion, Badge, Box, Group, Text, Title, Tooltip } from "@mantine/core";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { IconClock } from "@tabler/icons-react";
 import type { ProfessorRatingsMap } from "@uoplan/core";
@@ -38,6 +38,7 @@ import {
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { useCourseAliasResolution } from "../../hooks/useCourseAliasResolution";
 import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
+import { useAnalytics } from "../../lib/analytics";
 import { usePublishBasketTarget } from "./exploreBasketTargetContext";
 import {
   ExploreAccordion,
@@ -114,6 +115,8 @@ export function ExploreCoursePage({
   professorRatings: ProfessorRatingsMap | null;
 }) {
   useTr();
+  const analytics = useAnalytics();
+  const lastViewedCourse = useRef<string | null>(null);
   const {
     loading,
     offeringsByCourseNorm,
@@ -159,6 +162,13 @@ export function ExploreCoursePage({
     const courseTitle = requested?.courseTitle ?? courseOfferings[0].courseTitle;
     return { courseCode, courseTitle };
   }, [loading, urlNorm, courseOfferings]);
+
+  useEffect(() => {
+    if (!selectedCourseMeta) return;
+    if (lastViewedCourse.current === selectedCourseMeta.courseCode) return;
+    lastViewedCourse.current = selectedCourseMeta.courseCode;
+    analytics.capture("explore_course_viewed", { courseCode: selectedCourseMeta.courseCode });
+  }, [analytics, selectedCourseMeta]);
 
   usePublishBasketTarget(selectedCourseMeta?.courseCode ?? null);
 

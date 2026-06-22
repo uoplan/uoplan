@@ -13,6 +13,7 @@ import { AppDataProvider, useAppDataState } from "@/data/data-provider";
 import { OnboardingProvider, useOnboarding } from "@/data/onboarding-provider";
 import { ScheduleOptionsProvider } from "@/data/schedule-options-provider";
 import { LocaleProvider } from "@/i18n/locale-provider";
+import { AnalyticsProvider } from "@/lib/analytics";
 
 /**
  * The app's root navigator: a Stack whose first screen is the `(tabs)` group
@@ -77,20 +78,22 @@ export default function TabLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <LocaleProvider>
-        <AnimatedSplashOverlay />
-        <AppDataProvider>
-          <BasketProvider>
-            <CompletedCoursesProvider>
-              <ScheduleOptionsProvider>
-                <OnboardingProvider>
-                  <DataGate />
-                </OnboardingProvider>
-              </ScheduleOptionsProvider>
-            </CompletedCoursesProvider>
-          </BasketProvider>
-        </AppDataProvider>
-      </LocaleProvider>
+      <AnalyticsProvider>
+        <LocaleProvider>
+          <AnimatedSplashOverlay />
+          <AppDataProvider>
+            <BasketProvider>
+              <CompletedCoursesProvider>
+                <ScheduleOptionsProvider>
+                  <OnboardingProvider>
+                    <DataGate />
+                  </OnboardingProvider>
+                </ScheduleOptionsProvider>
+              </CompletedCoursesProvider>
+            </BasketProvider>
+          </AppDataProvider>
+        </LocaleProvider>
+      </AnalyticsProvider>
     </ThemeProvider>
   );
 }

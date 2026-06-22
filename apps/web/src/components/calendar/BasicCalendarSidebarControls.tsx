@@ -8,6 +8,7 @@ import { createCourseOptions } from "../shared/CourseSelect";
 import { GenerationOptionsFields } from "./generationOptions/GenerationOptionsFields";
 import { avoidedDaysFromBlocks } from "../../lib/blockedTimes";
 import { tr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import { navigateToWizardStep } from "../../lib/appNavigation";
 import { WizardStep } from "../../lib/wizardSteps";
 import { SCHEDULE_COURSE_COUNT_MAX } from "../../store/generationDefaults";
@@ -62,6 +63,7 @@ export function BasicCalendarSidebarControls() {
   const { setBasicElectivesCount } = useBasicElectives();
   const { markBasicSettingsChanged } = useScheduleGeneration();
   const { setCompletedCourses } = useCompletedCourses();
+  const analytics = useAnalytics();
 
   const completedCourseOptions = useMemo(() => {
     if (!cache) return [];
@@ -222,6 +224,7 @@ export function BasicCalendarSidebarControls() {
             value={completedCourses}
             onChange={(v) => {
               setCompletedCourses(v);
+              analytics.capture("completed_courses_updated", { count: v.length, source: "manual" });
               markBasicSettingsChanged();
             }}
             searchable

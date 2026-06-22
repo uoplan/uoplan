@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { useCommandCenterStore } from "../../store/commandCenterStore";
 import { tr, useTr } from "../../i18n";
 import { seasonalFlourish } from "../../lib/easterEggs/seasonal";
+import { AnalyticsOptOutControl } from "./AnalyticsOptOutControl";
 import { PageContainer } from "./PageContainer";
 
 const GITHUB_URL = "https://github.com/uoplan/uoplan";
@@ -217,6 +218,7 @@ export function AppFooter() {
               >
                 {tr("app.footer.terms")}
               </Text>
+              <AnalyticsOptOutControl />
             </Group>
 
             <Text size="sm" lh={1.6} style={{ color: "var(--app-text-dim)" }}>

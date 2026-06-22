@@ -1,5 +1,7 @@
 import { SimpleGrid } from "@mantine/core";
+import { useEffect, useRef } from "react";
 import { tr, useTr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import { ChartCard } from "./ChartCard";
 import { GradeBandAreaCard } from "./GradeBandAreaCard";
 import { GradeHistogramCard } from "./GradeHistogramCard";
@@ -17,7 +19,14 @@ import { useTrends } from "./trendsContext";
  */
 export function TrendsCoursesPage() {
   useTr();
+  const analytics = useAnalytics();
+  const capturedViewed = useRef(false);
   const { cardContext, filteredMode } = useTrends();
+  useEffect(() => {
+    if (capturedViewed.current) return;
+    capturedViewed.current = true;
+    analytics.capture("trends_course_viewed");
+  }, [analytics]);
   if (!cardContext) return null;
 
   return (

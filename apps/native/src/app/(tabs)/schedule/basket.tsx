@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
 import { Text } from "@uoplan/ui";
@@ -11,6 +11,7 @@ import { PillButton } from "@/components/redesign/pill-button";
 import { Spacing, Surface } from "@/constants/theme";
 import { useBasket } from "@/data/basket-provider";
 import { useAppData } from "@/data/data-provider";
+import { useAnalytics } from "@/lib/analytics";
 
 /**
  * The basket — the courses the user has gathered to schedule (the native
@@ -20,6 +21,7 @@ import { useAppData } from "@/data/data-provider";
  */
 export default function BasketScreen() {
   const router = useRouter();
+  const analytics = useAnalytics();
   const { codes, remove, clear, count } = useBasket();
   const { index } = useAppData();
 
@@ -27,6 +29,10 @@ export default function BasketScreen() {
     const byCode = new Map(index.courses.map((c) => [c.code, c] as const));
     return codes.map((code) => ({ code, course: byCode.get(code) ?? null }));
   }, [codes, index]);
+
+  useEffect(() => {
+    analytics.capture("basket_opened");
+  }, [analytics]);
 
   return (
     <RedesignScreen gap={Spacing.three} backLabel="Back" onBack={() => router.back()}>

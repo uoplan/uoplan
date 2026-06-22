@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Linking, Pressable, StyleSheet, View } from "react-native";
 
 import { Text } from "@uoplan/ui";
@@ -20,11 +20,13 @@ import { useAppData, useFeedback } from "@/data/data-provider";
 import { courseDetail, courseScheduleTerms } from "@/data/explore-detail";
 import { feedbackViewsForCourse, professorSentimentByName } from "@/data/feedback-data";
 import { formatTermLabel } from "@/data/trends-data";
+import { useAnalytics } from "@/lib/analytics";
 import { useCourseStatus } from "@/lib/use-basket-status";
 
 /** Course detail — grade distribution + professors who have taught it. */
 export default function CourseDetailScreen() {
   const router = useRouter();
+  const analytics = useAnalytics();
   const params = useLocalSearchParams<{ code: string }>();
   const code = String(params.code ?? "");
   const { bundle, index, schedulesByTerm, aliasGroups } = useAppData();
@@ -41,6 +43,13 @@ export default function CourseDetailScreen() {
     () => courseScheduleTerms(schedulesByTerm, code),
     [schedulesByTerm, code],
   );
+  const viewedCourseCode = detail?.course.code;
+
+  useEffect(() => {
+    if (viewedCourseCode) {
+      analytics.capture("explore_course_viewed", { courseCode: viewedCourseCode });
+    }
+  }, [analytics, viewedCourseCode]);
 
   const professorEntries = useMemo<CollapsibleEntry[]>(() => {
     if (!detail) return [];

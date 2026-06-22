@@ -24,6 +24,7 @@ import { BasketFab } from "../components/basket/BasketFab";
 import { HomeBanner } from "../components/shared/HomeBanner";
 import { PersonalizeBanner } from "../components/shared/PersonalizeBanner";
 import { useGlobalHotkeys } from "../hooks/useGlobalHotkeys";
+import { useAnalytics } from "../lib/analytics";
 
 // oxlint-disable-next-line promise/prefer-await-to-then -- dynamic-import mapping for LazyMotion; keeps the default-export usage traceable
 const loadMotionFeatures = () => import("../lib/motionFeatures").then((mod) => mod.default);
@@ -82,15 +83,23 @@ function RootLayout() {
   const basketDesktopPlacement = pathname.startsWith("/personalize") ? "top-right" : "bottom-right";
   const pendingAnimation = useRef(false);
   const lastNavAction = useRef<string>("PUSH");
+  const analytics = useAnalytics();
+  const analyticsRef = useRef(analytics);
 
   useGlobalHotkeys();
 
   useEffect(() => {
+    analyticsRef.current = analytics;
+  }, [analytics]);
+
+  useEffect(() => {
     const seed = router.history.location;
     recordLocation(seed.state.__TSR_index, seed.pathname, seed.search);
+    analyticsRef.current.capturePageview({ path: seed.pathname });
     return router.history.subscribe(({ action, location }) => {
       lastNavAction.current = action.type;
       recordLocation(location.state.__TSR_index, location.pathname, location.search);
+      analyticsRef.current.capturePageview({ path: location.pathname });
     });
   }, [router.history]);
 

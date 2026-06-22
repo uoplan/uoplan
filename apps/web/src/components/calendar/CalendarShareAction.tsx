@@ -1,6 +1,7 @@
 import { ActionIcon, Tooltip } from "@mantine/core";
 import { IconCheck, IconShare } from "@tabler/icons-react";
 import { tr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import { AnimatedIconSwap } from "../shared/AnimatedIconSwap";
 
 interface CalendarShareActionProps {
@@ -10,6 +11,7 @@ interface CalendarShareActionProps {
 }
 
 export function CalendarShareAction({ show, copied, onCopy }: CalendarShareActionProps) {
+  const analytics = useAnalytics();
   if (!show) return null;
 
   return (
@@ -24,7 +26,10 @@ export function CalendarShareAction({ show, copied, onCopy }: CalendarShareActio
         color={copied ? "teal" : "gray"}
         size="md"
         radius="md"
-        onClick={onCopy}
+        onClick={() => {
+          analytics.capture("schedule_shared", { method: "copy_link" });
+          onCopy();
+        }}
         aria-label={tr("calendarPage.share")}
         style={{ transition: "color 0.2s ease" }}
       >

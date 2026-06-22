@@ -1,6 +1,7 @@
 import { Group, Select } from "@mantine/core";
 import type { TermSeason } from "@uoplan/core";
 import { tr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import type { TrendsMetric } from "../../lib/trends/searchParams";
 import { useTrends } from "./trendsContext";
 
@@ -12,6 +13,7 @@ import { useTrends } from "./trendsContext";
  * the user moves between the hub and sub-routes.
  */
 export function TrendsFilterControls() {
+  const analytics = useAnalytics();
   const {
     update,
     discipline,
@@ -50,7 +52,10 @@ export function TrendsFilterControls() {
         placeholder={tr("trends.filter.allDisciplines")}
         data={disciplineOptions}
         value={discipline}
-        onChange={(value) => update({ discipline: value ?? undefined })}
+        onChange={(value) => {
+          analytics.capture("trends_discipline_viewed", { discipline: value ?? undefined });
+          update({ discipline: value ?? undefined });
+        }}
         disabled={programSlugValue != null}
         searchable
         clearable

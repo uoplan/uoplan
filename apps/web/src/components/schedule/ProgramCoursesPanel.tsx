@@ -6,6 +6,7 @@ import {
   useRequirementState,
 } from "../../store/hooks";
 import { tr, useTr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import { ProgramStep } from "../steps/ProgramStep";
 import { CompletedCoursesStep } from "../steps/CompletedCoursesStep";
 
@@ -15,13 +16,23 @@ export function ProgramCoursesPanel() {
   const { program, setProgram } = useProgramSelection();
   const { remainingRequirements } = useRequirementState();
   const { completedCourses, setCompletedCourses } = useCompletedCourses();
+  const analytics = useAnalytics();
 
   const programs = catalogue?.programs ?? [];
   const hasProgram = !!program;
 
   return (
     <Stack gap="lg" p="lg">
-      <ProgramStep programs={programs} value={program?.url ?? null} onChange={setProgram} />
+      <ProgramStep
+        programs={programs}
+        value={program?.url ?? null}
+        onChange={(nextProgram) => {
+          setProgram(nextProgram);
+          if (nextProgram) {
+            analytics.capture("program_selected", { programId: nextProgram.url });
+          }
+        }}
+      />
 
       {hasProgram ? (
         <>
@@ -38,7 +49,13 @@ export function ProgramCoursesPanel() {
             cache={cache}
             remainingRequirements={remainingRequirements}
             completedCourses={completedCourses}
-            onChange={setCompletedCourses}
+            onChange={(courses) => {
+              setCompletedCourses(courses);
+              analytics.capture("completed_courses_updated", {
+                count: courses.length,
+                source: "manual",
+              });
+            }}
             hasProgram={hasProgram}
           />
         </>

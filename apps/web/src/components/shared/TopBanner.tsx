@@ -35,6 +35,7 @@ type TopBannerBaseProps = {
   textShort: string;
   /** Call-to-action pill label. */
   ctaLabel: string;
+  onClick?: () => void;
   onDismiss: () => void;
   dismissLabel: string;
 };
@@ -63,6 +64,7 @@ export function TopBanner({
   text,
   textShort,
   ctaLabel,
+  onClick,
   onDismiss,
   dismissLabel,
 }: TopBannerProps) {
@@ -107,11 +109,12 @@ export function TopBanner({
           href={href}
           {...(isExternalHttp ? { target: "_blank", rel: "noopener noreferrer" } : {})}
           className={classes.pill}
+          onClick={onClick}
         >
           {pillContent}
         </Box>
       ) : (
-        <Box component={Link} to={to} className={classes.pill}>
+        <Box component={Link} to={to} className={classes.pill} onClick={onClick}>
           {pillContent}
         </Box>
       )}

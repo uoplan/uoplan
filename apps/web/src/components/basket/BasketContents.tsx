@@ -32,6 +32,7 @@ import type { DataCache, DesiredCourseResolution, StillNeededRequirement } from 
 import { computeStillNeeded, getCourseCredits, normalizeCourseCode } from "@uoplan/core";
 import { useBasketSelection } from "../../hooks/useBasket";
 import { tr, useTr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import { useBasketResolution } from "../../lib/generation/useBasketResolution";
@@ -226,6 +227,7 @@ export function BasketContents({
   const [pendingRemoval, setPendingRemoval] = useState<string | null>(null);
   const [courseSearch, setCourseSearch] = useState("");
   const { basketCourses, addToBasket, removeFromBasket } = useBasketSelection();
+  const analytics = useAnalytics();
   const { desiredCourseOptions, courseOptionsFilter, courseRenderOption } =
     useCourseSelectOptions();
   const { completedCourses } = useCompletedCourses();
@@ -440,6 +442,7 @@ export function BasketContents({
             onChange={(value) => {
               if (!value) return;
               addToBasket(value);
+              analytics.capture("basket_course_added", { courseCode: value });
               setCourseSearch("");
             }}
             renderOption={courseRenderOption}
@@ -527,6 +530,7 @@ export function BasketContents({
                           aria-label={t(I18N.confirmRemove, { code: course.code })}
                           onClick={() => {
                             removeFromBasket(course.code);
+                            analytics.capture("basket_course_removed", { courseCode: course.code });
                             setPendingRemoval(null);
                           }}
                         >
@@ -655,7 +659,12 @@ export function BasketContents({
                                       variant="outline"
                                       radius="xl"
                                       className={classes.suggestionButton}
-                                      onClick={() => addToBasket(code)}
+                                      onClick={() => {
+                                        addToBasket(code);
+                                        analytics.capture("basket_course_added", {
+                                          courseCode: code,
+                                        });
+                                      }}
                                     >
                                       {code}
                                     </Button>

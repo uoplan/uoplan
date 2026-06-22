@@ -5,6 +5,7 @@ import { DonationJar } from "../components/donate/DonationJar";
 import { AnimatedNumber } from "../components/shared/AnimatedNumber";
 import { BackButton } from "../components/shared/BackButton";
 import { formatLocaleNumber, tr, useTr } from "../i18n";
+import { useAnalytics } from "../lib/analytics";
 import { buildTabTitle } from "../lib/seo";
 
 const DONATION_EMAIL = "donate@uoplan.party";
@@ -32,6 +33,7 @@ function formatCurrency(cents: number, currency: string): string {
 
 function DonateRoute() {
   useTr();
+  const analytics = useAnalytics();
   const [summary, setSummary] = useState<DonationSummary | null>(null);
   const [error, setError] = useState(false);
 
@@ -129,7 +131,10 @@ function DonateRoute() {
                 <Tooltip label={copied ? tr("donate.copied") : tr("donate.copy")} withArrow>
                   <Box
                     component="button"
-                    onClick={copy}
+                    onClick={() => {
+                      analytics.capture("donation_cta_clicked", { location: "donate_copy_email" });
+                      copy();
+                    }}
                     style={{
                       display: "flex",
                       alignItems: "center",

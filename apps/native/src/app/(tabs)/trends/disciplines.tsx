@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import { useRouter } from "expo-router";
 
@@ -13,6 +13,7 @@ import { ScatterChart } from "@/components/scatter-chart";
 import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
 import { chartColorForIndex, Spacing, Surface } from "@/constants/theme";
 import { useTrends } from "@/data/data-provider";
+import { useAnalytics } from "@/lib/analytics";
 
 /**
  * Trends → Disciplines. Compares grading across subjects (average-GPA bars),
@@ -22,6 +23,7 @@ import { useTrends } from "@/data/data-provider";
  */
 export default function TrendsDisciplinesScreen() {
   const router = useRouter();
+  const analytics = useAnalytics();
   const trends = useTrends();
 
   // Scatter: each point is a graded course (class size vs average grade). Use
@@ -40,6 +42,10 @@ export default function TrendsDisciplinesScreen() {
         .filter((p) => p.y > 0),
     [trends.courses],
   );
+
+  useEffect(() => {
+    analytics.capture("trends_discipline_viewed");
+  }, [analytics]);
 
   return (
     <RedesignScreen gap={Spacing.three} backLabel="Trends" onBack={() => router.back()}>

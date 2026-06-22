@@ -1,5 +1,6 @@
 import { IconHeartFilled } from "@tabler/icons-react";
 import { tr } from "../../i18n";
+import { useAnalytics } from "../../lib/analytics";
 import { DismissibleHomeBanner } from "./DismissibleHomeBanner";
 import { TopBanner } from "./TopBanner";
 
@@ -9,6 +10,7 @@ import { TopBanner } from "./TopBanner";
  * the home page via {@link DismissibleHomeBanner}.
  */
 export function DonationBanner() {
+  const analytics = useAnalytics();
   return (
     <DismissibleHomeBanner>
       {(dismiss) => (
@@ -19,6 +21,7 @@ export function DonationBanner() {
           text={tr("landing.donate.text")}
           textShort={tr("landing.donate.textShort")}
           ctaLabel={tr("landing.donate.cta")}
+          onClick={() => analytics.capture("donation_cta_clicked", { location: "home_banner" })}
           onDismiss={dismiss}
           dismissLabel={tr("landing.donate.dismiss")}
         />

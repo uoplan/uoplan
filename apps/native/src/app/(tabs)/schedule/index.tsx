@@ -24,6 +24,7 @@ import { useBasket } from "@/data/basket-provider";
 import { useCompletedCourses } from "@/data/completed-courses-provider";
 import { useScheduleOptions } from "@/data/schedule-options-provider";
 import { addScheduleToCalendar } from "@/lib/add-to-calendar";
+import { useAnalytics } from "@/lib/analytics";
 import { exportScheduleIcs } from "@/lib/share-ics";
 import { computeSwapOptions, type SwapOption } from "@/lib/swap-course";
 import { formatGenerationLead, formatSuggestions } from "@/lib/generation-messages";
@@ -69,6 +70,7 @@ function weekPagerLabel(index: number, total: number): string {
  */
 export default function ScheduleScreen() {
   const router = useRouter();
+  const analytics = useAnalytics();
   const insets = useSafeAreaInsets();
   const { height } = useWindowDimensions();
   const basket = useBasket();
@@ -115,6 +117,10 @@ export default function ScheduleScreen() {
   // shared `computeSwapOptions` core runs against the exact term cache the
   // generator used so suggestions keep every other class at its current section.
   const activeVariant = variants[index];
+  useEffect(() => {
+    if (status !== "ready" || !activeVariant) return;
+    analytics.capture("schedule_viewed", { index: index + 1, total: variants.length });
+  }, [activeVariant, analytics, index, status, variants.length]);
 
   // Distinct week patterns of the active variant. Consecutive weeks with the
   // same timetable collapse into one group, so most variants yield a single
@@ -196,9 +202,10 @@ export default function ScheduleScreen() {
         if (stored) basket.remove(stored);
       }
       basket.add(newCode);
+      analytics.capture("schedule_swapped_course", { courseCode: newCode });
       setSelected(null);
     },
-    [selected, basket],
+    [selected, basket, analytics],
   );
 
   const events = variants[index]?.events ?? [];
@@ -239,6 +246,7 @@ export default function ScheduleScreen() {
     setExporting(true);
     try {
       await exportScheduleIcs(calendarArgs);
+      analytics.capture("schedule_exported", { target: "ics" });
     } catch {
       // User dismissed the share sheet, or export failed — nothing to surface.
     } finally {
@@ -258,6 +266,7 @@ export default function ScheduleScreen() {
         return;
       }
 
+      analytics.capture("schedule_exported", { target: "calendar" });
       Alert.alert(
         "Added to calendar",
         `Added ${result.createdCount} recurring meeting${

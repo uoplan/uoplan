@@ -16,6 +16,16 @@
 
 AI was used to create this project.
 
+### Analytics
+
+uoPlan uses anonymous, cookieless PostHog analytics to understand feature usage. Events are hosted in PostHog's EU region and ingested through the first-party reverse proxy at `https://t.uoplan.party`; no session replay is used.
+
+For web builds, `VITE_POSTHOG_KEY`, `VITE_POSTHOG_HOST`, `VITE_POSTHOG_UI_HOST`, and `VITE_POSTHOG_DEBUG` are optional because defaults are committed in `@uoplan/analytics`. The key is publishable and safe in the client bundle. Capture is production-gated by default; set `VITE_POSTHOG_DEBUG=1` to test locally.
+
+Native builds use optional `EXPO_PUBLIC_POSTHOG_KEY`, `EXPO_PUBLIC_POSTHOG_HOST`, and `EXPO_PUBLIC_POSTHOG_DEBUG` variables with the same production/debug gating.
+
+The Cloudflare Worker does not need the key at runtime: the web key is baked into the Vite client bundle. Set `VITE_POSTHOG_KEY` in the Cloudflare Workers Build environment only if you prefer build-time injection over the committed default. One-time maintainer setup: create the PostHog EU project, enable the managed reverse proxy, and point `t.uoplan.party` DNS at it.
+
 ### Acknowledgements
 
 - [uo.zone / uo.grades.zone](https://github.com/alexander-azizi-martin/uo.zone) — inspiration for the explore page.
