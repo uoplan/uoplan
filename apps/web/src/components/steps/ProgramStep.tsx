@@ -125,7 +125,9 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
 
   const handleTranscriptFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file || !cache) return;
+    if (!file) return;
+    analytics.capture("transcript_upload_started");
+    if (!cache) return;
     setTranscriptError(null);
     setTranscriptFeedback(null);
     setTranscriptLoading(true);
@@ -193,7 +195,13 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
         programMatched: programMatched ?? null,
         minorMatched: minorMatched ?? null,
       });
-      analytics.capture("transcript_imported", { ok: true, courseCount: inCatalogue.length });
+      analytics.capture("transcript_imported", {
+        ok: true,
+        courseCount: inCatalogue.length,
+        programMatched: programMatched != null,
+        termMatched: startingYear !== null,
+        minorMatched: minorMatched != null,
+      });
     } catch (err) {
       analytics.capture("transcript_imported", { ok: false });
       // oxlint-disable-next-line no-console -- intentional transcript import error logging

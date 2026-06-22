@@ -200,6 +200,7 @@ export default function PersonalizeScreen() {
     try {
       const result = await DocumentPicker.getDocumentAsync({ type: "application/pdf" });
       if (result.canceled || !result.assets[0]) return;
+      analytics.capture("transcript_upload_started");
       setTranscriptLoading(true);
       setTranscriptSummary(null);
       const base64 = await new File(result.assets[0].uri).base64();
@@ -249,7 +250,12 @@ export default function PersonalizeScreen() {
         startYear: nextStartYear,
         programTitle: matched?.title ?? null,
       });
-      analytics.capture("transcript_imported", { ok: true, courseCount: addedCount });
+      analytics.capture("transcript_imported", {
+        ok: true,
+        courseCount: addedCount,
+        programMatched: matched != null,
+        termMatched: parsed.startingYear !== null,
+      });
     },
     [analytics, completed, coursesByCode, index.programs, setPersonalization],
   );
