@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import libCoverage from "istanbul-lib-coverage";
-import type { CoverageMap, FileCoverage, Range } from "istanbul-lib-coverage";
+import type { CoverageMap, CoverageMapData, FileCoverage, Range } from "istanbul-lib-coverage";
 
 /**
  * Reads every runtime-coverage snapshot in `apps/web/.nyc_output/` (written by
@@ -113,10 +113,7 @@ function loadCoverageMap(nycDir: string): { map: CoverageMap; snapshots: number 
   for (const name of fs.readdirSync(nycDir)) {
     if (!name.endsWith(".json")) continue;
     try {
-      const raw = JSON.parse(fs.readFileSync(path.join(nycDir, name), "utf8")) as Record<
-        string,
-        unknown
-      >;
+      const raw = JSON.parse(fs.readFileSync(path.join(nycDir, name), "utf8")) as CoverageMapData;
       map.merge(raw);
       snapshots++;
     } catch {
