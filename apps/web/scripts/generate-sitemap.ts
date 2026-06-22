@@ -21,11 +21,26 @@ const SITEMAPS = [
   `${SITEMAP_DIR}/misc.xml`,
 ];
 
-function readJson(filePath) {
-  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+interface Catalogue {
+  courses?: { code?: unknown }[];
+  programs?: { slug?: unknown }[];
+}
+interface ProfessorsData {
+  professors?: { slug?: unknown }[];
+}
+interface DisciplinesData {
+  disciplines?: { code?: unknown }[];
+  faculties?: { id?: unknown }[];
+}
+interface SeoPage {
+  canonicalPath?: unknown;
 }
 
-function escapeXml(value) {
+function readJson<T>(filePath: string): T {
+  return JSON.parse(fs.readFileSync(filePath, "utf8")) as T;
+}
+
+function escapeXml(value: string): string {
   return value
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
@@ -34,7 +49,7 @@ function escapeXml(value) {
     .replaceAll("'", "&apos;");
 }
 
-function decodePathValue(value) {
+function decodePathValue(value: string): string {
   try {
     return decodeURIComponent(value);
   } catch {
@@ -42,23 +57,23 @@ function decodePathValue(value) {
   }
 }
 
-function encodePathSegment(value) {
+function encodePathSegment(value: string): string {
   return encodeURIComponent(decodePathValue(value));
 }
 
-function encodePath(pathValue) {
+function encodePath(pathValue: string): string {
   return pathValue.split("/").filter(Boolean).map(encodePathSegment).join("/");
 }
 
-function absoluteUrl(pathname) {
+function absoluteUrl(pathname: string): string {
   return pathname === "/" ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${pathname}`;
 }
 
-function uniqueSorted(values) {
+function uniqueSorted(values: Iterable<string>): string[] {
   return [...new Set(values)].sort((a, b) => a.localeCompare(b, "en"));
 }
 
-function normalizeCourseCode(rawCode) {
+function normalizeCourseCode(rawCode: unknown): string | null {
   if (typeof rawCode !== "string") return null;
   const trimmed = rawCode.trim();
   if (!trimmed) return null;
@@ -68,27 +83,31 @@ function normalizeCourseCode(rawCode) {
   return `${match[1].toUpperCase()} ${match[2]}`;
 }
 
-function courseNormToPathParam(courseCode) {
+function courseNormToPathParam(courseCode: string): string {
   return courseCode.replaceAll(/\s+/g, "").toLowerCase();
 }
 
-function normalizeProgramSlug(rawSlug) {
+function normalizeProgramSlug(rawSlug: unknown): string | null {
   if (typeof rawSlug !== "string") return null;
   const slug = rawSlug.trim().replace(/^\/+/, "").replace(/\/+$/, "");
   return slug || null;
 }
 
-function readCatalogueCollections() {
+function readCatalogueCollections(): {
+  catalogueFiles: string[];
+  courseCodes: string[];
+  programSlugs: string[];
+} {
   const catalogueFiles = fs
     .readdirSync(catalogueDir)
     .filter((name) => /^catalogue\.\d{4}\.json$/.test(name))
     .sort((a, b) => b.localeCompare(a, "en"));
 
-  const courseCodes = new Set();
-  const programSlugs = new Set();
+  const courseCodes = new Set<string>();
+  const programSlugs = new Set<string>();
 
   for (const fileName of catalogueFiles) {
-    const catalogue = readJson(path.join(catalogueDir, fileName));
+    const catalogue = readJson<Catalogue>(path.join(catalogueDir, fileName));
 
     for (const course of catalogue.courses ?? []) {
       const courseCode = normalizeCourseCode(course?.code);
@@ -108,9 +127,9 @@ function readCatalogueCollections() {
   };
 }
 
-function readProfessorSlugs() {
-  const data = readJson(professorsPath);
-  const slugs = [];
+function readProfessorSlugs(): string[] {
+  const data = readJson<ProfessorsData>(professorsPath);
+  const slugs: string[] = [];
 
   for (const professor of data.professors ?? []) {
     if (typeof professor?.slug === "string" && professor.slug.trim()) {
@@ -121,9 +140,9 @@ function readProfessorSlugs() {
   return uniqueSorted(slugs);
 }
 
-function readDisciplineAndFacultyPaths() {
-  const data = readJson(disciplinesPath);
-  const paths = [];
+function readDisciplineAndFacultyPaths(): string[] {
+  const data = readJson<DisciplinesData>(disciplinesPath);
+  const paths: string[] = [];
 
   for (const discipline of data.disciplines ?? []) {
     if (typeof discipline?.code === "string" && discipline.code.trim()) {
@@ -140,9 +159,9 @@ function readDisciplineAndFacultyPaths() {
   return uniqueSorted(paths);
 }
 
-function readStaticPaths() {
-  const seoPages = readJson(seoPagesPath);
-  const paths = [];
+function readStaticPaths(): string[] {
+  const seoPages = readJson<Record<string, SeoPage>>(seoPagesPath);
+  const paths: string[] = [];
 
   for (const page of Object.values(seoPages)) {
     if (typeof page?.canonicalPath === "string" && page.canonicalPath.trim()) {
@@ -153,7 +172,7 @@ function readStaticPaths() {
   return uniqueSorted(paths);
 }
 
-function urlsetXml(paths) {
+function urlsetXml(paths: string[]): string {
   const urls = paths
     .map((pathname) => `  <url>\n    <loc>${escapeXml(absoluteUrl(pathname))}</loc>\n  </url>`)
     .join("\n");
@@ -161,7 +180,7 @@ function urlsetXml(paths) {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }
 
-function sitemapIndexXml(fileNames) {
+function sitemapIndexXml(fileNames: string[]): string {
   const entries = fileNames
     .map(
       (fileName) =>
@@ -172,7 +191,7 @@ function sitemapIndexXml(fileNames) {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</sitemapindex>\n`;
 }
 
-function writeFile(fileName, content) {
+function writeFile(fileName: string, content: string): void {
   const outPath = path.join(distDir, fileName);
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, content, "utf8");
