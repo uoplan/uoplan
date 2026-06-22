@@ -51,7 +51,7 @@ describe("noopAnalytics", () => {
   it("never throws and reports opted-in", () => {
     expect(() => {
       noopAnalytics.capture("trends_viewed");
-      noopAnalytics.capture("term_selected", { termCode: "2271" });
+      noopAnalytics.capture("term_selected", { termId: "2271", termName: "Winter 2027" });
       noopAnalytics.capturePageview({ path: "/" });
       noopAnalytics.optIn();
       noopAnalytics.optOut();

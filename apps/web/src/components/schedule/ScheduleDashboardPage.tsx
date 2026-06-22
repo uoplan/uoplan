@@ -3,6 +3,7 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Box, Button, Group, Stack, Text, Title } from "@mantine/core";
 import { m } from "framer-motion";
 import { IconRefresh, IconSparkles } from "@tabler/icons-react";
+import { formatTermNameEn } from "@uoplan/core";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { ResetModal } from "../shared/ResetModal";
 import {
@@ -136,7 +137,7 @@ export function ScheduleDashboardPage() {
             terms={dashboardState.terms}
             value={dashboardState.selectedTermId}
             onChange={(termId) => {
-              analytics.capture("term_selected", { termCode: termId });
+              analytics.capture("term_selected", { termId, termName: formatTermNameEn(termId) });
               void setSelectedTermId(termId);
             }}
           />

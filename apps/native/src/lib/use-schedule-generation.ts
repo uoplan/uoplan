@@ -6,6 +6,7 @@ import {
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 import type { SchedulesData } from "@uoplan/core/dataTypes";
 import { courseSentimentByNorm, professorSentimentByName } from "@uoplan/core/feedback";
+import { formatTermNameEn } from "@uoplan/core/gradeTrends";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 
 import { useBasket } from "@/data/basket-provider";
@@ -194,6 +195,7 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
       programId: activeRequirements?.programUrl ?? personalization.programUrl ?? undefined,
       completedCount: completedCodes.length,
     };
+    const termName = formatTermNameEn(term);
     setStatus("generating");
     setTermId(term);
     setDiagnostics(null);
@@ -201,7 +203,8 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
     setError(undefined);
     setCanLoadMore(false);
     getAnalytics().capture("schedule_generate_started", {
-      termCode: term,
+      termId: term,
+      termName,
       mode: activeRequirements ? "advanced" : "basic",
       ...segment,
     });
@@ -244,7 +247,8 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
             durationMs: Date.now() - startedAt,
             hasConflicts: false,
             relaxationsApplied: Boolean(skipped?.length),
-            termCode: term,
+            termId: term,
+            termName,
             ...segment,
           });
           return;
@@ -298,7 +302,8 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
         setCanLoadMore(false);
         setStatus("none");
         getAnalytics().capture("schedule_generate_empty", {
-          termCode: term,
+          termId: term,
+          termName,
           reason: skipped && skipped.length > 0 && !diag ? "all_courses_skipped" : "no_schedule",
           ...segment,
         });
@@ -310,7 +315,8 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
         setError(err instanceof Error ? err.message : String(err));
         setStatus("error");
         getAnalytics().capture("schedule_generate_failed", {
-          termCode: term,
+          termId: term,
+          termName,
           reason: err instanceof Error && err.name ? err.name : "error",
           ...segment,
         });

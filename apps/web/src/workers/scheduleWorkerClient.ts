@@ -6,6 +6,7 @@ import { pickGenerateSchedulesInput } from "../lib/generateSchedulesInput";
 import type { GenerateSchedulesInput, GenerateSchedulesMode } from "../lib/generateSchedulesInput";
 import type { GenerateSchedulesResult } from "../lib/generateSchedulesAction";
 import { tr } from "../i18n";
+import { formatTermNameEn } from "@uoplan/core";
 import { getAnalytics } from "../lib/analytics";
 import type { ScheduleWorkerApi } from "./scheduleWorkerApi";
 
@@ -165,7 +166,8 @@ export async function runScheduleGeneration(
   mode: GenerateSchedulesMode,
 ): Promise<GenerateSchedulesResult | null> {
   const analytics = getAnalytics();
-  const termCode = state.selectedTermId ?? undefined;
+  const termId = state.selectedTermId ?? undefined;
+  const termName = termId ? formatTermNameEn(termId) : undefined;
   // Non-PII segmentation dimensions shared across every generation event so the
   // funnel/drop-off can be broken down by program and academic load.
   const segment = {
@@ -174,7 +176,7 @@ export async function runScheduleGeneration(
     requirementCount: state.remainingRequirements.length,
   };
   const startedAt = nowMs();
-  analytics.capture("schedule_generate_started", { termCode, mode, ...segment });
+  analytics.capture("schedule_generate_started", { termId, termName, mode, ...segment });
 
   try {
     const result = await runScheduleGenerationInternal(state, mode);
@@ -183,18 +185,21 @@ export async function runScheduleGeneration(
       analytics.capture("schedule_generated", {
         resultCount: 1,
         durationMs,
-        termCode,
+        termId,
+        termName,
         ...segment,
       });
     } else if (result?.generationError) {
       analytics.capture("schedule_generate_empty", {
-        termCode,
+        termId,
+        termName,
         reason: generationErrorReason(result),
         ...segment,
       });
     } else {
       analytics.capture("schedule_generate_failed", {
-        termCode,
+        termId,
+        termName,
         reason: "cancelled",
         ...segment,
       });
@@ -202,7 +207,8 @@ export async function runScheduleGeneration(
     return result;
   } catch (err) {
     analytics.capture("schedule_generate_failed", {
-      termCode,
+      termId,
+      termName,
       reason: "error",
       ...segment,
     });
