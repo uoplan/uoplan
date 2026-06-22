@@ -12,31 +12,32 @@ const SITE_ORIGIN = "https://uoplan.party";
 const SITE_NAME = "uoplan";
 const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 
-/** @type {Record<string, {
- *   canonicalPath: string;
- *   tabTitle: string;
- *   title: string;
- *   description: string;
- *   keywords: string;
- *   structuredName: string;
- *   noscriptTitle: string;
- *   noscriptBody: string;
- * }>} */
-const seoPages = JSON.parse(fs.readFileSync(seoPagesPath, "utf8"));
+interface SeoPage {
+  canonicalPath: string;
+  tabTitle: string;
+  title: string;
+  description: string;
+  keywords: string;
+  structuredName: string;
+  noscriptTitle: string;
+  noscriptBody: string;
+}
 
-function pageUrl(canonicalPath) {
+const seoPages = JSON.parse(fs.readFileSync(seoPagesPath, "utf8")) as Record<string, SeoPage>;
+
+function pageUrl(canonicalPath: string): string {
   return canonicalPath === "/" ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${canonicalPath}`;
 }
 
-function escapeHtml(value) {
+function escapeHtml(value: string): string {
   return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 }
 
-function escapeAttr(value) {
+function escapeAttr(value: string): string {
   return escapeHtml(value);
 }
 
@@ -75,7 +76,7 @@ function buildWebApplicationJsonLd() {
   };
 }
 
-function buildHeadInjection(page) {
+function buildHeadInjection(page: SeoPage): string {
   const canonical = pageUrl(page.canonicalPath);
   const title = escapeHtml(page.title);
   const description = escapeAttr(page.description);
@@ -107,12 +108,12 @@ ${appLd}
     </script>`;
 }
 
-function injectPageMeta(html, page) {
+function injectPageMeta(html: string, page: SeoPage): string {
   const tabTitle = escapeHtml(page.tabTitle);
   const description = escapeAttr(page.description);
   const headInjection = buildHeadInjection(page);
 
-  let out = html
+  const out = html
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${tabTitle}</title>`)
     .replace(
       /<meta\s+name="description"\s+content="[^"]*"\s*\/>/,
@@ -130,7 +131,7 @@ function injectPageMeta(html, page) {
   return out;
 }
 
-function writePrerenderedPage(template, pageId, outFile) {
+function writePrerenderedPage(template: string, pageId: string, outFile: string): void {
   const page = seoPages[pageId];
   if (!page) {
     throw new Error(`Unknown SEO page id: ${pageId}`);

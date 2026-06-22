@@ -1,15 +1,26 @@
 import { createCanvas } from "@napi-rs/canvas";
-import { writeFileSync, readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const dataDir = resolve(__dirname, "../../scraper/data");
 
+interface Term {
+  name: string;
+}
+
 // Load real data
-const { terms } = JSON.parse(readFileSync(join(dataDir, "terms.json"), "utf8"));
-const { courses, programs } = JSON.parse(readFileSync(join(dataDir, "indices.json"), "utf8"));
-const { professors } = JSON.parse(readFileSync(join(dataDir, "ratemyprofessors.json"), "utf8"));
+const { terms } = JSON.parse(readFileSync(join(dataDir, "terms.json"), "utf8")) as {
+  terms: Term[];
+};
+const { courses, programs } = JSON.parse(readFileSync(join(dataDir, "indices.json"), "utf8")) as {
+  courses: unknown[];
+  programs: unknown[];
+};
+const { professors } = JSON.parse(readFileSync(join(dataDir, "ratemyprofessors.json"), "utf8")) as {
+  professors: unknown[];
+};
 
 const W = 1200;
 const H = Math.round(630 * 0.7); // 441 — shorter OG card
@@ -18,7 +29,6 @@ const ctx = canvas.getContext("2d");
 
 // Theme
 const BG = "#141414";
-const DARK2 = "#1E1E1E";
 const CREAM = "#F5F2EC";
 const CREAM2 = "#B8B2A6";
 const PURPLE = "#BE4BDB";
@@ -148,15 +158,6 @@ for (const { value, label } of stats) {
   ctx.font = "bold 32px monospace";
 
   statX += numW + statGap + ctx.measureText(label).width * 0.5 + 40;
-}
-
-// Dots between stats
-ctx.font = "300 14px monospace";
-statX = PAD;
-ctx.fillStyle = PURPLE;
-for (let i = 0; i < stats.length - 1; i++) {
-  const numW_n = ctx.measureText(stats[i].value).width + 40;
-  // approximate dot position — just draw a sep line instead
 }
 
 // ── Bottom row ────────────────────────────────────────────────────────────────

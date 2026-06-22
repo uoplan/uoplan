@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-og-image.mjs && vite build && node scripts/prerender-seo-html.mjs && node scripts/generate-sitemap.mjs",
+    "build": "node scripts/generate-og-image.ts && vite build && node scripts/prerender-seo-html.ts && node scripts/generate-sitemap.ts",
     "analyze": "ANALYZE=1 vite build",
     "size": "size-limit",
     "typecheck": "tsgo --noEmit -p tsconfig.json && tsgo --noEmit -p tsconfig.node.json && tsgo --noEmit -p tsconfig.sw.json",
