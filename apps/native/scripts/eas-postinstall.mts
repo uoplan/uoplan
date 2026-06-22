@@ -15,11 +15,16 @@ const scriptsDir = dirname(fileURLToPath(import.meta.url));
 const nativeDir = resolve(scriptsDir, "..");
 const repoRoot = resolve(nativeDir, "../..");
 
-function commandExists(command) {
+function commandExists(command: string): boolean {
   return spawnSync(command, ["--version"], { stdio: "ignore" }).status === 0;
 }
 
-function run(command, args, cwd = repoRoot, extraEnv = {}) {
+function run(
+  command: string,
+  args: string[],
+  cwd: string = repoRoot,
+  extraEnv: NodeJS.ProcessEnv = {},
+): void {
   const result = spawnSync(command, args, {
     cwd,
     env: { ...process.env, ...extraEnv },
@@ -35,7 +40,7 @@ function run(command, args, cwd = repoRoot, extraEnv = {}) {
   }
 }
 
-function ensureRustup() {
+function ensureRustup(): NodeJS.ProcessEnv {
   if (commandExists("rustup")) return {};
 
   const cargoHome = resolve(process.env.HOME ?? repoRoot, ".cargo");
@@ -60,7 +65,7 @@ function ensureRustup() {
   return { PATH: `${resolve(cargoHome, "bin")}:${process.env.PATH ?? ""}` };
 }
 
-function cargoNdkInstalled(extraEnv) {
+function cargoNdkInstalled(extraEnv: NodeJS.ProcessEnv): boolean {
   return (
     spawnSync("cargo", ["ndk", "--version"], {
       stdio: "ignore",
@@ -70,7 +75,7 @@ function cargoNdkInstalled(extraEnv) {
 }
 
 run("pnpm", ["generate"]);
-run("node", ["scripts/copy-bundled-data.mjs"], nativeDir);
+run("node", ["scripts/copy-bundled-data.mts"], nativeDir);
 
 if (process.env.EAS_BUILD_PLATFORM === "ios") {
   const rustEnv = ensureRustup();

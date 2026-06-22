@@ -22,28 +22,31 @@ const REQUIRED_ASSETS = [
   "catalogue.pb",
 ];
 
-function bytesToMiB(bytes) {
+function bytesToMiB(bytes: number): string {
   return `${(bytes / 1024 / 1024).toFixed(2)} MiB`;
 }
 
-function quote(value) {
+function quote(value: string): string {
   return JSON.stringify(value);
 }
 
-async function readJsonIfExists(filePath) {
+async function readJsonIfExists(filePath: string): Promise<unknown> {
   try {
     return JSON.parse(await readFile(filePath, "utf8"));
   } catch (error) {
-    if (error?.code === "ENOENT") return null;
+    if (error !== null && typeof error === "object" && "code" in error && error.code === "ENOENT") {
+      return null;
+    }
     throw error;
   }
 }
 
-function manifestForAssets(rawManifest, assetFiles) {
-  const manifest = {};
+function manifestForAssets(rawManifest: unknown, assetFiles: string[]): Record<string, string> {
+  const manifest: Record<string, string> = {};
   if (rawManifest !== null && typeof rawManifest === "object" && !Array.isArray(rawManifest)) {
+    const record = rawManifest as Record<string, unknown>;
     for (const id of assetFiles) {
-      const value = rawManifest[id];
+      const value = record[id];
       if (typeof value === "string") manifest[id] = value;
     }
   }
@@ -53,7 +56,7 @@ function manifestForAssets(rawManifest, assetFiles) {
   return manifest;
 }
 
-function generatedAssetMap(assetFiles) {
+function generatedAssetMap(assetFiles: string[]): string {
   const entries = assetFiles.map(
     (id) => `  ${quote(id)}: require(${quote(`../../assets/data/${id}`)}),`,
   );

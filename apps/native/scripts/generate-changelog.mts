@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Generates `src/data/changelog.generated.ts` from the repo-root CHANGELOG.md.
  *
@@ -21,7 +20,7 @@ const md = readFileSync(source, "utf8");
 const escaped = md.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$\{/g, "\\${");
 
 const banner =
-  "// AUTO-GENERATED from the repo-root CHANGELOG.md by scripts/generate-changelog.mjs.\n" +
+  "// AUTO-GENERATED from the repo-root CHANGELOG.md by scripts/generate-changelog.mts.\n" +
   "// Do not edit by hand — run `pnpm --filter native gen:changelog`.\n";
 
 writeFileSync(out, `${banner}export const CHANGELOG_MD = \`${escaped}\`;\n`, "utf8");
