@@ -39,14 +39,22 @@ export interface FileStats {
   fullyCold: boolean;
 }
 
+export interface NeverLoadedFile {
+  file: string;
+  loc: number;
+}
+
 export interface DeadCandidateReport {
   generatedAt: string;
   snapshotCount: number;
   instrumentedFiles: number;
+  diskFiles: number;
+  neverLoadedFiles: NeverLoadedFile[];
   fullyColdFiles: FileStats[];
   coldFunctions: ColdFunction[];
   partialFiles: FileStats[];
   totals: {
+    neverLoadedLoc: number;
     fullyColdFileLoc: number;
     coldFunctionLoc: number;
     estimatedDeadLoc: number;
@@ -55,6 +63,41 @@ export interface DeadCandidateReport {
 
 function rel(file: string): string {
   return path.relative(repoRoot, file).replaceAll(path.sep, "/");
+}
+
+const INSTRUMENT_EXT = new Set([".ts", ".tsx", ".js", ".jsx"]);
+
+/** Mirrors the istanbul include/exclude in vite.config.ts. */
+function isInstrumentable(absPath: string): boolean {
+  const r = path.relative(path.join(webRoot, "src"), absPath).replaceAll(path.sep, "/");
+  if (r.startsWith("..")) return false;
+  if (!INSTRUMENT_EXT.has(path.extname(absPath))) return false;
+  if (/\.(test|browser\.test)\.[tj]sx?$/.test(r)) return false;
+  if (r.endsWith(".d.ts")) return false;
+  if (r === "routeTree.gen.ts") return false;
+  if (r.startsWith("test/") || r.startsWith("workers/")) return false;
+  return true;
+}
+
+function walkSrc(dir: string, out: string[]): void {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      walkSrc(full, out);
+    } else if (entry.isFile() && isInstrumentable(full)) {
+      out.push(full);
+    }
+  }
+}
+
+function countLines(absPath: string): number {
+  try {
+    const text = fs.readFileSync(absPath, "utf8");
+    if (text.length === 0) return 0;
+    return text.split("\n").length;
+  } catch {
+    return 0;
+  }
 }
 
 function rangeLoc(loc: Range): number {
@@ -142,6 +185,19 @@ export function analyze(nycDir: string): DeadCandidateReport {
   partialFiles.sort((a, b) => b.coldFnLoc - a.coldFnLoc);
   coldFunctions.sort((a, b) => b.loc - a.loc);
 
+  // Files that exist on disk but never appeared in ANY snapshot = never imported
+  // by a crawled route. With on-demand dev instrumentation these are invisible
+  // to the coverage map entirely, so we diff against the disk universe — this is
+  // the strongest whole-file dead candidate signal.
+  const loaded = new Set(map.files().map((f) => path.resolve(f)));
+  const diskFiles: string[] = [];
+  walkSrc(path.join(webRoot, "src"), diskFiles);
+  const neverLoadedFiles: NeverLoadedFile[] = diskFiles
+    .filter((f) => !loaded.has(path.resolve(f)))
+    .map((f) => ({ file: rel(f), loc: countLines(f) }))
+    .sort((a, b) => b.loc - a.loc);
+
+  const neverLoadedLoc = neverLoadedFiles.reduce((acc, f) => acc + f.loc, 0);
   const fullyColdFileLoc = fullyColdFiles.reduce((acc, f) => acc + f.fileLoc, 0);
   const coldFunctionLoc = coldFunctions.reduce((acc, f) => acc + f.loc, 0);
 
@@ -149,13 +205,16 @@ export function analyze(nycDir: string): DeadCandidateReport {
     generatedAt: new Date().toISOString(),
     snapshotCount: snapshots,
     instrumentedFiles: map.files().length,
+    diskFiles: diskFiles.length,
+    neverLoadedFiles,
     fullyColdFiles,
     coldFunctions,
     partialFiles,
     totals: {
+      neverLoadedLoc,
       fullyColdFileLoc,
       coldFunctionLoc,
-      estimatedDeadLoc: fullyColdFileLoc + coldFunctionLoc,
+      estimatedDeadLoc: neverLoadedLoc + fullyColdFileLoc + coldFunctionLoc,
     },
   };
 }
@@ -166,16 +225,21 @@ function renderMarkdown(report: DeadCandidateReport): string {
   lines.push("");
   lines.push(`Generated: ${report.generatedAt}`);
   lines.push(
-    `Snapshots merged: ${report.snapshotCount} · instrumented files: ${report.instrumentedFiles}`,
+    `Snapshots merged: ${report.snapshotCount} · loaded files: ${report.instrumentedFiles} / ${report.diskFiles} on disk`,
   );
   lines.push("");
-  lines.push("> ⚠️ Uncovered ≠ dead. These are functions/files that never ran during the");
-  lines.push("> recorded sessions. Confirm intent + static reachability before deleting.");
+  lines.push("> ⚠️ Uncovered ≠ dead. These are files/functions that never ran during the");
+  lines.push("> recorded sessions (here: an automated route crawl). A never-loaded file may");
+  lines.push("> just be reachable only through UI the crawl didn't drive. Confirm intent +");
+  lines.push("> static reachability (imports across ALL workspaces) before deleting.");
   lines.push("");
   lines.push("## Headline");
   lines.push("");
   lines.push(
-    `- Fully-cold files: **${report.fullyColdFiles.length}** (~${report.totals.fullyColdFileLoc} LOC)`,
+    `- Never-loaded files (never imported by any crawled route): **${report.neverLoadedFiles.length}** (~${report.totals.neverLoadedLoc} LOC)`,
+  );
+  lines.push(
+    `- Fully-cold loaded files (imported, 0% executed): **${report.fullyColdFiles.length}** (~${report.totals.fullyColdFileLoc} LOC)`,
   );
   lines.push(
     `- Cold functions in live files: **${report.coldFunctions.length}** (~${report.totals.coldFunctionLoc} LOC)`,
@@ -183,7 +247,20 @@ function renderMarkdown(report: DeadCandidateReport): string {
   lines.push(`- Estimated never-executed LOC: **~${report.totals.estimatedDeadLoc}**`);
   lines.push("");
 
-  lines.push("## Fully-cold files (0% executed — highest confidence)");
+  lines.push("## Never-loaded files (never imported — top dead-file candidates)");
+  lines.push("");
+  if (report.neverLoadedFiles.length === 0) {
+    lines.push("_none_");
+  } else {
+    lines.push("| file | ~LOC |");
+    lines.push("| --- | ---: |");
+    for (const f of report.neverLoadedFiles) {
+      lines.push(`| ${f.file} | ${f.loc} |`);
+    }
+  }
+  lines.push("");
+
+  lines.push("## Fully-cold loaded files (imported but 0% executed)");
   lines.push("");
   if (report.fullyColdFiles.length === 0) {
     lines.push("_none_");
@@ -233,7 +310,7 @@ function main(): void {
     );
   }
   console.info(
-    `[coverage] ${report.snapshotCount} snapshot(s) · ${report.fullyColdFiles.length} fully-cold files · ${report.coldFunctions.length} cold functions · ~${report.totals.estimatedDeadLoc} never-executed LOC`,
+    `[coverage] ${report.snapshotCount} snapshot(s) · ${report.neverLoadedFiles.length} never-loaded + ${report.fullyColdFiles.length} fully-cold files · ${report.coldFunctions.length} cold functions · ~${report.totals.estimatedDeadLoc} never-executed LOC`,
   );
   console.info("[coverage] wrote coverage-runtime/dead-candidates.{md,json}");
 }
