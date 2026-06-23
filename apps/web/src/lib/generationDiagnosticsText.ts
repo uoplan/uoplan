@@ -77,6 +77,18 @@ export function formatGenerationMessage(message: GenerationMessageDescriptor): s
   }
 }
 
+/**
+ * Short, toast-safe variant of {@link formatGenerationMessage}. Long branches
+ * (currently `unassigned-completed`, which inlines a course list) collapse to a
+ * one-line headline; the full message + details are shown in the error modal.
+ */
+export function formatGenerationToastTitle(message: GenerationMessageDescriptor): string {
+  if (message.kind === "unassigned-completed") {
+    return tr("gen.error.unassignedCompletedShort", { count: message.count });
+  }
+  return formatGenerationMessage(message);
+}
+
 const DAY_SHORT_KEY: Record<string, string> = {
   Mo: "gen.day.mon",
   Tu: "gen.day.tue",

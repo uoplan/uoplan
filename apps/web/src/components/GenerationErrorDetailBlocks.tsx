@@ -2,6 +2,7 @@ import { List, Stack, Text } from "@mantine/core";
 import type { GenerationErrorDetails } from "../store/types";
 import { tr, useTr } from "../i18n";
 import { formatFilterHint, formatSuggestions } from "../lib/generationDiagnosticsText";
+import { hasDetailContent } from "../lib/generationErrorDetail";
 
 function formatCourseList(courses: string[]): string {
   if (courses.length === 0) return "";
@@ -16,16 +17,6 @@ function formatCourseList(courses: string[]): string {
   const last = courses[courses.length - 1];
   const rest = courses.slice(0, -1);
   return tr("gen.list.many", { rest: rest.join(", "), last });
-}
-
-function hasDetailContent(errorDetails: GenerationErrorDetails): boolean {
-  if (errorDetails.totalAvailable < errorDetails.totalNeeded) return true;
-  if (errorDetails.emptyPools.length > 0) return true;
-  const tf = errorDetails.timetableFailure;
-  if (!tf) return false;
-  if (tf.coursesWithNoCombo.length > 0) return true;
-  if (tf.suggestions.length > 0) return true;
-  return false;
 }
 
 export function GenerationErrorDetailBlocks({

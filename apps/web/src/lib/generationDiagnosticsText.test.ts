@@ -7,6 +7,7 @@ import {
   formatFilterHint,
   formatGenerationLead,
   formatGenerationMessage,
+  formatGenerationToastTitle,
   formatSuggestion,
   formatSuggestions,
 } from "./generationDiagnosticsText";
@@ -113,6 +114,32 @@ describe("generationDiagnosticsText", () => {
       overflow: 2,
     });
     expect(overflowMsg).toContain("A 1, B 2 (+2 more)");
+  });
+
+  it("shortens the unassigned-completed message for the toast title", () => {
+    const full = formatGenerationMessage({
+      kind: "unassigned-completed",
+      count: 3,
+      preview: ["CSI 2110", "MAT 1320", "ITI 1120"],
+      overflow: 0,
+    });
+    const short = formatGenerationToastTitle({
+      kind: "unassigned-completed",
+      count: 3,
+      preview: ["CSI 2110", "MAT 1320", "ITI 1120"],
+      overflow: 0,
+    });
+    // The toast title is a concise headline: no inlined course list, and
+    // shorter than the full modal message.
+    expect(short).not.toContain("CSI 2110");
+    expect(short.length).toBeLessThan(full.length);
+    expect(short).toContain("3");
+  });
+
+  it("falls back to the full message for non-truncated toast titles", () => {
+    expect(formatGenerationToastTitle({ kind: "not-enough-courses" })).toBe(
+      formatGenerationMessage({ kind: "not-enough-courses" }),
+    );
   });
 
   it("formats every active-filter hint variant", () => {
