@@ -1,5 +1,6 @@
 import type {
   Catalogue,
+  CompareRef,
   CompletedRequirementItem,
   Course,
   CourseGradesData,
@@ -14,6 +15,8 @@ import type {
   Indices,
   LeadDescriptor,
   NormalizedCourseCode,
+  OptimizationKind,
+  OptimizationPriority,
   ProfessorRatingsMap,
   ProfessorRegistry,
   Program,
@@ -77,6 +80,12 @@ export type CalendarVariant = "basic" | "advanced";
 export interface AppState {
   pendingSharedState: DecodedState | null;
   basketCourses: string[];
+  /**
+   * Transient, session-only "add to compare" selection backing the compare tray.
+   * Homogeneous + capped (see `@uoplan/core` compareSelection). NOT persisted to
+   * share-state or localStorage — compare ids travel in the compare route URL.
+   */
+  compareRefs: CompareRef[];
   basicElectivesCount: number;
   basicExcludedCategories: string[];
 
@@ -163,8 +172,6 @@ export interface AppState {
   lowestVisitedSeed: number | null;
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
-  /** Soft preference: bias section selection toward higher-rated professors (unrated treated as ~4.0). */
-  generationPreferHigherProfessorRating: boolean;
   professorRatings: ProfessorRatingsMap | null;
   /** True while the lazily-loaded {@link professorRatings} asset is being fetched/decoded. */
   professorRatingsLoading: boolean;
@@ -172,14 +179,16 @@ export interface AppState {
   /** When true, only virtual meeting times are kept per section for scheduling. */
   virtualSectionsOnly: boolean;
   generationLimitFirstYearCredits: boolean;
-  generationCompressedSchedule: boolean;
-  /** Bias pool picks toward courses with higher historical grade averages. */
-  generationPreferEasier: boolean;
-  /** Bias pool picks toward courses with higher overall feedback sentiment. */
-  generationPreferHigherSentiment: boolean;
+  /**
+   * Ordered, individually-toggleable schedule-optimization objectives (the shared
+   * `@uoplan/core` model). Order = priority (higher first); a disabled entry is
+   * removed from the objective entirely. Replaces the legacy prefer/compressed
+   * booleans and is the single source of truth across web + native.
+   */
+  optimizationPriorities: OptimizationPriority[];
   /**
    * Overall course-feedback sentiment (1-5) keyed by normalized course code, lazily
-   * built from the feedback dataset when {@link generationPreferHigherSentiment} is on.
+   * built from the feedback dataset when the `prefer_sentiment` objective is on.
    * Null until loaded; consumed only by schedule generation.
    */
   courseSentimentByNorm: Map<NormalizedCourseCode, number> | null;
@@ -218,6 +227,14 @@ export interface AppActions {
   toggleBasket: (code: string) => void;
   /** Empty the basket. */
   clearBasket: () => void;
+  /** Add a ref to the compare tray (transient). No-op if present; capped + kind-homogeneous. */
+  addToCompare: (ref: CompareRef) => void;
+  /** Remove a ref from the compare tray. */
+  removeFromCompare: (ref: CompareRef) => void;
+  /** Toggle a ref's presence in the compare tray. */
+  toggleCompare: (ref: CompareRef) => void;
+  /** Empty the compare tray. */
+  clearCompare: () => void;
   setBasicElectivesCount: (count: number) => void;
   setBasicExcludedCategories: (categories: string[]) => void;
   generateBasicSchedules: () => Promise<void>;
@@ -266,7 +283,6 @@ export interface AppActions {
   setGenerationMaxEndMinutes: (minutes: number) => void;
   /** Set which weekdays are avoided; reconciled into full-day blocked windows. */
   setAvoidedDays: (days: DayOfWeek[]) => void;
-  setGenerationPreferHigherProfessorRating: (value: boolean) => void;
   setIncludeClosedComponents: (value: boolean) => void;
   setVirtualSectionsOnly: (value: boolean) => void;
   generateSchedules: () => Promise<void>;
@@ -300,9 +316,16 @@ export interface AppActions {
   setLanguageBuckets: (buckets: CourseLanguageBucket[]) => void;
   setElectiveLevelBuckets: (buckets: number[]) => void;
   setGenerationLimitFirstYearCredits: (v: boolean) => void;
-  setGenerationCompressedSchedule: (v: boolean) => void;
-  setGenerationPreferEasier: (v: boolean) => void;
-  setGenerationPreferHigherSentiment: (v: boolean) => void;
+  /** Replace the entire ordered optimization-priority list. */
+  setOptimizationPriorities: (list: OptimizationPriority[]) => void;
+  /** Move the priority at `fromIndex` to `toIndex` (reorder = re-rank). */
+  reorderOptimizationPriorities: (fromIndex: number, toIndex: number) => void;
+  /** Enable/disable a single objective by kind (disabled = removed from generation). */
+  setOptimizationPriorityEnabled: (kind: OptimizationKind, enabled: boolean) => void;
+  /** Flip a single objective's enabled flag. */
+  toggleOptimizationPriority: (kind: OptimizationKind) => void;
+  /** Update the `good_breaks` break-count / target-length parameters. */
+  setGoodBreaksParams: (params: { breakCount?: number; breakTargetMinutes?: number }) => void;
   setCourseSentimentByNorm: (map: Map<NormalizedCourseCode, number> | null) => void;
   setFrenchImmersionStream: (enabled: boolean) => void;
   setBlacklistedCourses: (courses: string[]) => void;

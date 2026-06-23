@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { GenerationRequest, GenerationResponse } from "@uoplan/proto/engine";
 import type { Catalogue, ScheduleEngine, SchedulesData } from "@uoplan/core";
-import { buildDataCache } from "@uoplan/core";
+import { buildDataCache, defaultOptimizationPriorities } from "@uoplan/core";
 import { generateSchedulesAction } from "../generateSchedulesAction";
 import type { GenerateSchedulesInput } from "../generateSchedulesAction";
 import { SCHEDULE_COURSE_COUNT_MAX } from "../../store/generationDefaults";
@@ -77,16 +77,13 @@ function baseInput(overrides: Partial<GenerateSchedulesInput> = {}): GenerateSch
     electiveLevelBuckets: [],
     generationMinStartMinutes: 8 * 60 + 30,
     generationMaxEndMinutes: 22 * 60,
-    generationPreferHigherProfessorRating: false,
     professorRatings: null,
     currentSeed: 1,
     firstSeed: 1,
     includeClosedComponents: false,
     virtualSectionsOnly: false,
     generationLimitFirstYearCredits: true,
-    generationCompressedSchedule: false,
-    generationPreferEasier: false,
-    generationPreferHigherSentiment: false,
+    optimizationPriorities: defaultOptimizationPriorities(),
     courseSentimentByNorm: null,
     frenchImmersionStream: false,
     blacklistedCourses: [],
@@ -137,32 +134,50 @@ describe("generateSchedulesAction review fixes", () => {
     expect(engine.requests[0]?.basicElectivesCount).toBe(SCHEDULE_COURSE_COUNT_MAX - 2);
   });
 
-  it("forwards the professor-rating preference to the basic engine request", async () => {
+  it("forwards the professor-rating map to the basic engine request when enabled", async () => {
     const engine = new RecordingEngine();
 
     await generateSchedulesAction(
       baseInput({
         mode: "basic",
-        generationPreferHigherProfessorRating: true,
+        professorRatings: { "ada lovelace": { rating: 4.2, numRatings: 12 } },
       }),
       cache,
       engine,
     );
 
-    expect(engine.requests[0]?.generationPreferHigherProfessorRating).toBe(true);
+    expect(engine.requests[0]?.professorRatings).toEqual({ "ada lovelace": 4.2 });
   });
 
-  it("forwards the professor-rating preference to the advanced engine request", async () => {
+  it("forwards the professor-rating map to the advanced engine request when enabled", async () => {
     const engine = new RecordingEngine();
 
     await generateSchedulesAction(
       baseInput({
-        generationPreferHigherProfessorRating: true,
+        professorRatings: { "ada lovelace": { rating: 4.2, numRatings: 12 } },
       }),
       cache,
       engine,
     );
 
-    expect(engine.requests[0]?.generationPreferHigherProfessorRating).toBe(true);
+    expect(engine.requests[0]?.professorRatings).toEqual({ "ada lovelace": 4.2 });
+  });
+
+  it("omits the professor-rating map when the objective is disabled", async () => {
+    const engine = new RecordingEngine();
+
+    await generateSchedulesAction(
+      baseInput({
+        mode: "basic",
+        professorRatings: { "ada lovelace": { rating: 4.2, numRatings: 12 } },
+        optimizationPriorities: defaultOptimizationPriorities().map((p) =>
+          p.kind === "prefer_professor_rating" ? { ...p, enabled: false } : p,
+        ),
+      }),
+      cache,
+      engine,
+    );
+
+    expect(engine.requests[0]?.professorRatings).toEqual({});
   });
 });

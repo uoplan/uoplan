@@ -19,9 +19,23 @@ import {
   analyzeFrenchImmersionProgress,
   completedCoursesIncludeFls3500,
   frenchImmersionOverallVolumePercent,
+  hasBreakParams,
+  MAX_GOOD_BREAKS_COUNT,
+  MAX_GOOD_BREAKS_TARGET_MINUTES,
+  MIN_GOOD_BREAKS_COUNT,
+  MIN_GOOD_BREAKS_TARGET_MINUTES,
+  reorderOptimizationPriorities,
+  setGoodBreaksParams,
+  setOptimizationPriorityEnabled,
 } from "@uoplan/core";
 import { buildDataCache } from "@uoplan/core/dataCache";
-import type { CourseLanguageBucket, CourseLevelBucket, DataCache } from "@uoplan/core";
+import type {
+  CourseLanguageBucket,
+  CourseLevelBucket,
+  DataCache,
+  OptimizationKind,
+  OptimizationPriority,
+} from "@uoplan/core";
 import type { DayOfWeek } from "@uoplan/core/dataTypes";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 
@@ -35,6 +49,7 @@ import { useBasket } from "@/data/basket-provider";
 import { useCompletedCourses } from "@/data/completed-courses-provider";
 import { useScheduleOptions } from "@/data/schedule-options-provider";
 import { useAdaptiveLayout } from "@/lib/adaptive-layout";
+import { getAnalytics } from "@/lib/analytics";
 import {
   formatTimeLabel,
   SCHEDULE_COURSE_COUNT_MAX,
@@ -62,8 +77,7 @@ const LANGUAGE_BUCKET_OPTIONS: { value: CourseLanguageBucket; label: string }[] 
   { value: "other", label: "Other" },
 ];
 
-const TRACK_OFF = ACTIVE_SCHEME === "dark" ? "#3a3a3c" : "#d9d4cc";
-const KNOB_COLOR = "#ffffff";
+const TRACK_OFF = ACTIVE_SCHEME === "dark" ? "#39393D" : "#E9E9EA";
 const FORM_SHEET_MAX_WIDTH = 540;
 const FORM_SHEET_MARGIN = Spacing.four;
 const FORM_SHEET_MAX_HEIGHT_RATIO = 0.88;
@@ -80,6 +94,31 @@ const ELECTIVE_LEVEL_PRESETS: { label: string; buckets: number[] }[] = [
   { label: "Any level", buckets: [1000, 2000, 3000, 4000, 5000, 6000] },
   { label: "Graduate 5000–6000", buckets: [5000, 6000] },
 ];
+
+/** Display label + description for each optimization objective (web parity). */
+const OPTIMIZATION_META: Record<OptimizationKind, { label: string; description: string }> = {
+  free_days: {
+    label: "Most free days",
+    description: "Pack classes into fewer weekdays so more days stay completely free.",
+  },
+  good_breaks: {
+    label: "Good breaks",
+    description: "Aim for a set number of breaks of roughly the length you choose each day.",
+  },
+  prefer_easier: {
+    label: "Prefer easier courses",
+    description: "Courses with higher past A+ rates are more likely to be picked.",
+  },
+  prefer_sentiment: {
+    label: "Prefer courses with better feedback",
+    description: "Courses with higher student-feedback ratings are more likely to be picked.",
+  },
+  prefer_professor_rating: {
+    label: "Prefer professors with better ratings",
+    description:
+      "Sections taught by higher-rated professors are favoured. Professors without a rating are treated as average.",
+  },
+};
 
 interface ScheduleSettingsSheetProps {
   opened: boolean;
@@ -188,39 +227,55 @@ export function ScheduleSettingsSheet({
   const additionalElectivesMin = basketCount > 0 ? 0 : 1;
   const additionalElectivesMax = Math.max(0, SCHEDULE_COURSE_COUNT_MAX - basketCount);
 
-  // "Smart options" master toggle — mirrors the web tri-state checkbox: ON when
-  // every soft preference is enabled, OFF when none are, and "mixed" otherwise.
-  // The first-year credit cap only participates when there are 1000-level
-  // credits to limit (same condition the web uses).
+  // First-year credit cap only applies when there are 1000-level credits to limit
+  // (same condition the web uses); it lives in the Advanced card.
   const hasFirstYearCredits = totalFirstYearCredits > 0;
-  const smartOptionValues = [
-    options.compressedSchedule,
-    options.preferEasier,
-    options.preferHigherSentiment,
-    options.preferHigherProfessorRating,
-    ...(hasFirstYearCredits ? [options.limitFirstYearCredits] : []),
-  ];
-  const allSmartOn = smartOptionValues.every(Boolean);
-  const smartState: TriState = allSmartOn
-    ? "on"
-    : smartOptionValues.some(Boolean)
-      ? "mixed"
-      : "off";
-  const setAllSmartOptions = (on: boolean) =>
-    setOptions({
-      compressedSchedule: on,
-      preferEasier: on,
-      preferHigherSentiment: on,
-      preferHigherProfessorRating: on,
-      ...(hasFirstYearCredits ? { limitFirstYearCredits: on } : {}),
-    });
-  const smartSummary = [
-    "Compressed schedule",
-    "Easier courses",
-    "Better course feedback",
-    "Higher-rated professors",
-    ...(hasFirstYearCredits ? ["1000-level credit cap"] : []),
-  ];
+
+  const reorderPriority = (from: number, to: number) => {
+    getAnalytics().capture("preferences_updated", { field: "optimization_priorities_reorder" });
+    set(
+      "optimizationPriorities",
+      reorderOptimizationPriorities(options.optimizationPriorities, from, to),
+    );
+  };
+  const setPriorityEnabled = (kind: OptimizationKind, enabled: boolean) => {
+    getAnalytics().capture("optimization_priority_changed", { kind, enabled });
+    set(
+      "optimizationPriorities",
+      setOptimizationPriorityEnabled(options.optimizationPriorities, kind, enabled),
+    );
+  };
+  const setBreakParams = (params: { breakCount?: number; breakTargetMinutes?: number }) => {
+    getAnalytics().capture("preferences_updated", { field: "good_breaks_params" });
+    set("optimizationPriorities", setGoodBreaksParams(options.optimizationPriorities, params));
+  };
+
+  const enabledPriorityLabels = options.optimizationPriorities
+    .filter((p) => p.enabled)
+    .map((p) => OPTIMIZATION_META[p.kind].label);
+  const disabledPriorityLabels = options.optimizationPriorities
+    .filter((p) => !p.enabled)
+    .map((p) => OPTIMIZATION_META[p.kind].label);
+  const prioritySummaryNode = (
+    <>
+      {enabledPriorityLabels.length > 0 ? (
+        enabledPriorityLabels.map((label, i) => (
+          <View key={label} style={styles.prioritySummaryRow}>
+            <Text style={styles.prioritySummaryNum}>{i + 1}.</Text>
+            <Text style={styles.cardSummaryItem}>{label}</Text>
+          </View>
+        ))
+      ) : (
+        <Text style={styles.cardSummaryItem}>No optimizations on</Text>
+      )}
+      {disabledPriorityLabels.length > 0 ? (
+        <View style={styles.prioritySummaryDisabledGroup}>
+          <Text style={styles.prioritySummaryDisabledHeading}>Disabled</Text>
+          <Text style={styles.prioritySummaryDisabled}>{disabledPriorityLabels.join(" · ")}</Text>
+        </View>
+      ) : null}
+    </>
+  );
   const advancedSummary = ["Class times", "Days to avoid", "Course filters", "French immersion"];
 
   useEffect(() => {
@@ -343,50 +398,30 @@ export function ScheduleSettingsSheet({
               ) : null}
             </Section>
 
-            {/* Smart options — soft preferences. */}
+            {/* Optimization priorities — ordered, individually-toggleable objectives. */}
             <CollapsibleCard
-              title="Smart options"
+              title="Optimization priorities"
               defaultOpen
-              summary={smartSummary}
-              leading={
-                <TriStateToggle
-                  state={smartState}
-                  onPress={() => setAllSmartOptions(smartState !== "on")}
-                />
-              }
+              summaryContent={prioritySummaryNode}
+              leading={<AppIcon name="slider.horizontal.3" size={16} color={Surface.dimmed} />}
             >
-              <ToggleRow
-                label="Compressed schedule"
-                description="At most one break per day, up to 90 minutes."
-                value={options.compressedSchedule}
-                onChange={(v) => set("compressedSchedule", v)}
-              />
-              <ToggleRow
-                label="Prefer easier courses"
-                description="Courses with higher past A+ rates are more likely to be picked."
-                value={options.preferEasier}
-                onChange={(v) => set("preferEasier", v)}
-              />
-              <ToggleRow
-                label="Prefer courses with better feedback"
-                description="Courses with higher student-feedback ratings are more likely to be picked."
-                value={options.preferHigherSentiment}
-                onChange={(v) => set("preferHigherSentiment", v)}
-              />
-              <ToggleRow
-                label="Prefer professors with better ratings"
-                description="Sections taught by higher-rated professors are more likely to be picked. Professors without a rating are treated as average."
-                value={options.preferHigherProfessorRating}
-                onChange={(v) => set("preferHigherProfessorRating", v)}
-              />
-              <ToggleRow
-                label="Limit 1000-level courses to 48 credits"
-                description={`You currently have ${totalFirstYearCredits} credit${
-                  totalFirstYearCredits === 1 ? "" : "s"
-                } of 1000-level courses (completed + selected). The undergraduate limit is 48.`}
-                value={options.limitFirstYearCredits}
-                onChange={(v) => set("limitFirstYearCredits", v)}
-              />
+              <Text style={styles.sectionDesc}>
+                Move higher-priority goals to the top. When goals conflict, the engine satisfies the
+                ones nearer the top first. Turn a goal off to skip it — it keeps its place in the
+                list.
+              </Text>
+              {options.optimizationPriorities.map((priority, index) => (
+                <PriorityRow
+                  key={priority.kind}
+                  priority={priority}
+                  index={index}
+                  count={options.optimizationPriorities.length}
+                  onMoveUp={() => reorderPriority(index, index - 1)}
+                  onMoveDown={() => reorderPriority(index, index + 1)}
+                  onToggle={(v) => setPriorityEnabled(priority.kind, v)}
+                  onBreakParamsChange={setBreakParams}
+                />
+              ))}
             </CollapsibleCard>
 
             {/* Advanced options — hard filters. */}
@@ -395,6 +430,18 @@ export function ScheduleSettingsSheet({
               summary={advancedSummary}
               leading={<AppIcon name="slider.horizontal.3" size={16} color={Surface.dimmed} />}
             >
+              {hasFirstYearCredits ? (
+                <SubSection title="Course credits">
+                  <ToggleRow
+                    label="Limit 1000-level courses to 48 credits"
+                    description={`You currently have ${totalFirstYearCredits} credit${
+                      totalFirstYearCredits === 1 ? "" : "s"
+                    } of 1000-level courses (completed + selected). The undergraduate limit is 48.`}
+                    value={options.limitFirstYearCredits}
+                    onChange={(v) => set("limitFirstYearCredits", v)}
+                  />
+                </SubSection>
+              ) : null}
               <SubSection title="Time window">
                 <Stepper
                   label="Earliest class start"
@@ -621,39 +668,91 @@ function ToggleRow({
   );
 }
 
-type TriState = "on" | "off" | "mixed";
-
 /**
- * A switch-style master control with three positions — the native analogue of
- * the web "Smart options" tri-state checkbox. The knob sits left (off), centre
- * (mixed) or right (on); the track tints accordingly. It owns its own touch
- * (nested inside the card header's expand Pressable) so tapping it toggles all
- * options without expanding/collapsing the card.
+ * One row of the "Optimization priorities" list: a reorder control (up/down —
+ * drag is unreliable inside a scroll sheet, so the native list uses explicit
+ * move buttons), the objective label/description, and an enable switch. The
+ * `good_breaks` objective reveals inline "N breaks of ~M minutes" steppers when
+ * enabled.
  */
-function TriStateToggle({ state, onPress }: { state: TriState; onPress: () => void }) {
-  const target = state === "on" ? 2 : state === "mixed" ? 1 : 0;
-  const x = useRef(new Animated.Value(target)).current;
-  useEffect(() => {
-    Animated.timing(x, {
-      toValue: target,
-      duration: 160,
-      easing: Easing.out(Easing.cubic),
-      useNativeDriver: true,
-    }).start();
-  }, [target, x]);
-  const translateX = x.interpolate({ inputRange: [0, 1, 2], outputRange: [0, 9, 18] });
-  const trackColor =
-    state === "on" ? Surface.accent : state === "mixed" ? Surface.accentSoft : TRACK_OFF;
+function PriorityRow({
+  priority,
+  index,
+  count,
+  onMoveUp,
+  onMoveDown,
+  onToggle,
+  onBreakParamsChange,
+}: {
+  priority: OptimizationPriority;
+  index: number;
+  count: number;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+  onToggle: (v: boolean) => void;
+  onBreakParamsChange: (params: { breakCount?: number; breakTargetMinutes?: number }) => void;
+}) {
+  const meta = OPTIMIZATION_META[priority.kind];
+  const showBreaks = hasBreakParams(priority.kind) && priority.enabled;
+  const breakCount = priority.breakCount ?? MIN_GOOD_BREAKS_COUNT;
   return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="switch"
-      accessibilityState={{ checked: state === "on" }}
-      hitSlop={8}
-      style={[styles.triTrack, { backgroundColor: trackColor }]}
-    >
-      <Animated.View style={[styles.triKnob, { transform: [{ translateX }] }]} />
-    </Pressable>
+    <View style={styles.priorityRow}>
+      <View style={styles.priorityHeader}>
+        <View style={styles.priorityReorder}>
+          <Pressable
+            onPress={onMoveUp}
+            disabled={index === 0}
+            hitSlop={6}
+            accessibilityLabel={`Move ${meta.label} up`}
+            style={[styles.reorderBtn, index === 0 && styles.stepBtnDisabled]}
+          >
+            <AppIcon name="chevron.up" size={12} color={Surface.label} />
+          </Pressable>
+          <Pressable
+            onPress={onMoveDown}
+            disabled={index === count - 1}
+            hitSlop={6}
+            accessibilityLabel={`Move ${meta.label} down`}
+            style={[styles.reorderBtn, index === count - 1 && styles.stepBtnDisabled]}
+          >
+            <AppIcon name="chevron.down" size={12} color={Surface.label} />
+          </Pressable>
+        </View>
+        <View style={styles.toggleText}>
+          <Text style={styles.toggleLabel}>{meta.label}</Text>
+        </View>
+        <RNSwitch
+          value={priority.enabled}
+          onValueChange={onToggle}
+          trackColor={{ true: Surface.accent, false: TRACK_OFF }}
+          ios_backgroundColor={TRACK_OFF}
+        />
+      </View>
+      {showBreaks ? (
+        <View style={styles.priorityBreaks}>
+          <Stepper
+            label="Breaks per day"
+            value={breakCount}
+            min={MIN_GOOD_BREAKS_COUNT}
+            max={MAX_GOOD_BREAKS_COUNT}
+            step={1}
+            format={(v) => `${v}`}
+            onChange={(v) => onBreakParamsChange({ breakCount: v })}
+          />
+          {breakCount > 0 ? (
+            <Stepper
+              label="Break length"
+              value={priority.breakTargetMinutes ?? MIN_GOOD_BREAKS_TARGET_MINUTES}
+              min={MIN_GOOD_BREAKS_TARGET_MINUTES}
+              max={MAX_GOOD_BREAKS_TARGET_MINUTES}
+              step={15}
+              format={(v) => `${v} min`}
+              onChange={(v) => onBreakParamsChange({ breakTargetMinutes: v })}
+            />
+          ) : null}
+        </View>
+      ) : null}
+    </View>
   );
 }
 
@@ -718,12 +817,14 @@ function CollapsibleCard({
   defaultOpen = false,
   leading,
   summary,
+  summaryContent,
   children,
 }: {
   title: string;
   defaultOpen?: boolean;
   leading?: React.ReactNode;
   summary?: string[];
+  summaryContent?: React.ReactNode;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -748,7 +849,11 @@ function CollapsibleCard({
             color={Surface.dimmed}
           />
         </View>
-        {!open && summary && summary.length > 0 ? (
+        {!open && summaryContent ? (
+          <View style={[styles.cardSummaryContent, leading ? styles.cardSummaryIndent : null]}>
+            {summaryContent}
+          </View>
+        ) : !open && summary && summary.length > 0 ? (
           <View style={[styles.cardSummary, leading ? styles.cardSummaryIndent : null]}>
             {summary.map((item) => (
               <Text key={item} style={styles.cardSummaryItem}>
@@ -1018,24 +1123,64 @@ const styles = StyleSheet.create({
     fontSize: 11.5,
     color: Surface.dimmed,
   },
-  triTrack: {
-    width: 44,
-    height: 26,
-    borderRadius: 999,
-    paddingHorizontal: 2,
+  cardSummaryContent: {
+    gap: Spacing.one,
+  },
+  prioritySummaryRow: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    gap: Spacing.one,
+  },
+  prioritySummaryNum: {
+    fontFamily: Fonts.sans,
+    fontSize: 11.5,
+    fontWeight: "700",
+    color: Surface.accent,
+  },
+  prioritySummaryDisabledGroup: {
+    gap: 2,
+    marginTop: Spacing.one,
+  },
+  prioritySummaryDisabledHeading: {
+    fontFamily: Fonts.sans,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
+    color: Surface.dimmed,
+  },
+  prioritySummaryDisabled: {
+    fontFamily: Fonts.sans,
+    fontSize: 11.5,
+    color: Surface.dimmed,
+  },
+  priorityRow: {
+    paddingVertical: Spacing.two,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: Surface.border,
+  },
+  priorityHeader: {
     flexDirection: "row",
     alignItems: "center",
+    gap: Spacing.three,
   },
-  triKnob: {
-    width: 22,
+  priorityReorder: {
+    gap: 4,
+  },
+  reorderBtn: {
+    width: 26,
     height: 22,
-    borderRadius: 999,
-    backgroundColor: KNOB_COLOR,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.5,
-    elevation: 2,
+    borderRadius: 6,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Surface.subtle,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Surface.border,
+  },
+  priorityBreaks: {
+    marginTop: Spacing.two,
+    paddingLeft: 26 + Spacing.three,
+    gap: Spacing.two,
   },
   cardBody: {
     paddingHorizontal: Spacing.three,

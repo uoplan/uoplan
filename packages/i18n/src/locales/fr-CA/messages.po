@@ -331,8 +331,8 @@ msgstr "Carrières"
 msgid "basicCourseFilters.hint"
 msgstr "Les options s'appliquent aux cours à option générés."
 
-msgid "basicCourseFilters.levels.label"
-msgstr "Niveaux"
+msgid "basicCourseFilters.levelPreset.all"
+msgstr "Tous les niveaux"
 
 msgid "basicCourseFilters.levelPreset.custom"
 msgstr "Niveaux personnalisés"
@@ -340,17 +340,17 @@ msgstr "Niveaux personnalisés"
 msgid "basicCourseFilters.levelPreset.grad"
 msgstr "Cycles supérieurs seulement"
 
-msgid "basicCourseFilters.levelPreset.all"
-msgstr "Tous les niveaux"
-
-msgid "basicCourseFilters.levelPreset.upper"
-msgstr "3000–4000"
-
 msgid "basicCourseFilters.levelPreset.lower"
 msgstr "1000–2000"
 
 msgid "basicCourseFilters.levelPreset.undergradAny"
 msgstr "Tous les niveaux 1000–4000"
+
+msgid "basicCourseFilters.levelPreset.upper"
+msgstr "3000–4000"
+
+msgid "basicCourseFilters.levels.label"
+msgstr "Niveaux"
 
 msgid "basicCourseFilters.title"
 msgstr "Options de cours à option"
@@ -363,12 +363,12 @@ msgstr "Afficher ou masquer les filtres de cours"
 msgid "basket.add"
 msgstr "Ajouter au panier"
 
-msgid "basket.addCourse.placeholder"
-msgstr "Ajouter un cours…"
-
 #: scripts/i18n/dynamic-keys.ts
 msgid "basket.add.aria"
 msgstr "Ajouter au panier"
+
+msgid "basket.addCourse.placeholder"
+msgstr "Ajouter un cours…"
 
 #: scripts/i18n/dynamic-keys.ts
 msgid "basket.added"
@@ -874,6 +874,81 @@ msgstr "Semaine précédente"
 
 msgid "calendarView.resizePreviewBar"
 msgstr "Redimensionner la barre d'aperçu des semaines"
+
+msgid "compare.add"
+msgstr "Ajouter au comparateur"
+
+msgid "compare.added"
+msgstr "Ajouté au comparateur"
+
+msgid "compare.clear"
+msgstr "Effacer"
+
+msgid "compare.cta"
+msgstr "Comparer ({count})"
+
+msgid "compare.empty.body"
+msgstr "Ajoutez des cours depuis l'explorateur pour les comparer côte à côte."
+
+msgid "compare.empty.title"
+msgstr "Choisissez au moins 2 éléments à comparer"
+
+msgid "compare.kind.course"
+msgstr "Cours"
+
+msgid "compare.limitReached"
+msgstr "Comparez jusqu'à {max} éléments à la fois"
+
+msgid "compare.open"
+msgstr "Comparer"
+
+msgid "compare.page.title"
+msgstr "Comparer les cours"
+
+msgid "compare.remove"
+msgstr "Retirer"
+
+msgid "compare.remove.aria"
+msgstr "Retirer {name} de la comparaison"
+
+msgid "compare.row.avgGpa"
+msgstr "Note moyenne"
+
+msgid "compare.row.credits"
+msgstr "Crédits"
+
+msgid "compare.row.faculty"
+msgstr "Faculté"
+
+msgid "compare.row.grades"
+msgstr "Répartition des notes"
+
+msgid "compare.row.language"
+msgstr "Langue"
+
+msgid "compare.row.level"
+msgstr "Niveau"
+
+msgid "compare.row.passing"
+msgstr "Taux de réussite"
+
+msgid "compare.row.prereqs"
+msgstr "Préalables"
+
+msgid "compare.row.sentiment"
+msgstr "Avis des étudiants"
+
+msgid "compare.row.terms"
+msgstr "Offert"
+
+msgid "compare.row.topRating"
+msgstr "Meilleure évaluation"
+
+msgid "compare.value.none"
+msgstr "—"
+
+msgid "compare.value.noPrereqs"
+msgstr "Aucun"
 
 msgid "completedCourses.description"
 msgstr "Cours que vous avez terminés ou que vous suivez. Vous pouvez aussi téléverser votre relevé à l'étape 1."
@@ -1687,6 +1762,9 @@ msgstr "La génération d’horaire a été trop longue et a été interrompue. 
 msgid "gen.error.unassignedCompleted"
 msgstr "Vous avez {count, plural, one {# cours complété} other {# cours complétés}} non assigné(s) à une exigence : {courses}. Vous devez {count, plural, one {l'assigner} other {les assigner}} à des exigences, ou les déplacer vers la section Exclus."
 
+msgid "gen.error.unassignedCompletedShort"
+msgstr "{count, plural, one {# cours complété n'est pas assigné} other {# cours complétés ne sont pas assignés}} à une exigence."
+
 msgid "gen.hint.closedExcluded"
 msgstr "Sections fermées exclues — essayez d'activer « Inclure les sections fermées »"
 
@@ -1803,6 +1881,9 @@ msgstr "Élargissez les heures de cours ou permettez plus de jours."
 
 msgid "gen.suggest.widenOrChangePicks"
 msgstr "Élargissez les heures de cours ou modifiez vos choix Contraindre / Assigner."
+
+msgid "gen.viewDetails"
+msgstr "Voir les détails"
 
 msgid "generationOptions.count.label"
 msgstr "Cours optionnels ce trimestre (en plus)"
@@ -2047,6 +2128,54 @@ msgstr "Essayez une autre année, ou rechargez la page et réessayez."
 #: scripts/i18n/dynamic-keys.ts
 msgid "notifications.yearCatalogueLoadFailed.title"
 msgstr "Impossible de charger cette année du catalogue"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:78
+msgid "optimize.description"
+msgstr "Glissez pour classer ces objectifs. En cas de conflit, les plus hauts l'emportent. Désactivez ceux que vous ne voulez pas."
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:398
+msgid "optimize.disabledHeading"
+msgstr "Désactivées"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:41
+msgid "optimize.freeDays.description"
+msgstr "Regroupez les cours sur moins de jours pour garder plus de journées entièrement libres."
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:24
+msgid "optimize.freeDays.label"
+msgstr "Plus de journées libres"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:153
+msgid "optimize.goodBreaks.countLabel"
+msgstr "Pauses par jour"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:43
+msgid "optimize.goodBreaks.description"
+msgstr "Visez un nombre déterminé de pauses d'environ la durée que vous choisissez chaque jour."
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:26
+msgid "optimize.goodBreaks.label"
+msgstr "Bonnes pauses"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:165
+msgid "optimize.goodBreaks.minutesLabel"
+msgstr "Durée des pauses (min)"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:75
+msgid "optimize.heading"
+msgstr "Priorités d'optimisation"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:135
+msgid "optimize.moveDown"
+msgstr "Descendre"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:125
+msgid "optimize.moveUp"
+msgstr "Monter"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:291
+msgid "optimize.summary.allOff"
+msgstr "Aucune optimisation activée"
 
 msgid "optionsDrilldown.change"
 msgstr "Modifier"
@@ -2482,26 +2611,38 @@ msgstr "Lors de la génération, les cours avec un taux historique de A+ plus é
 msgid "scheduleCount.preferEasier.label"
 msgstr "Préférer les cours plus faciles (taux de A+ passés)"
 
+msgid "scheduleCount.preferProfessorRating.description"
+msgstr "Favorise les sections données par des professeurs mieux évalués. Les professeurs sans note sont considérés comme moyens."
+
+msgid "scheduleCount.preferProfessorRating.label"
+msgstr "Préférer les professeurs mieux évalués"
+
 msgid "scheduleCount.preferSentiment.description"
 msgstr "Lors de la génération, les cours ayant de meilleures évaluations globales des étudiants ont plus de chances d’être choisis dans chaque bassin d’exigences."
 
 msgid "scheduleCount.preferSentiment.label"
 msgstr "Préférer les cours mieux évalués"
 
-msgid "scheduleCount.preferProfessorRating.description"
-msgstr "Favorise les sections données par des professeurs mieux évalués. Les professeurs sans note sont considérés comme moyens."
+msgid "scheduleCount.rating.description"
+msgstr "Les professeurs sans note sont toujours permis."
 
-msgid "scheduleCount.smartOptions.hide"
-msgstr "Masquer les options intelligentes"
+msgid "scheduleCount.rating.label"
+msgstr "Note minimale RateMyProfessors"
 
-msgid "scheduleCount.smartOptions.show"
-msgstr "Afficher les options intelligentes"
+msgid "scheduleCount.rating.placeholder"
+msgstr "Aucun minimum"
 
 msgid "scheduleCount.smartOptions.description"
 msgstr "Laissez le planificateur favoriser légèrement les horaires plus compacts, plus faciles et mieux évalués."
 
+msgid "scheduleCount.smartOptions.hide"
+msgstr "Masquer les options intelligentes"
+
 msgid "scheduleCount.smartOptions.label"
 msgstr "Options intelligentes"
+
+msgid "scheduleCount.smartOptions.show"
+msgstr "Afficher les options intelligentes"
 
 msgid "scheduleCount.smartOptions.summary.compressed"
 msgstr "Horaire compact"
@@ -2518,26 +2659,14 @@ msgstr "Plafond de crédits 1000"
 msgid "scheduleCount.smartOptions.summary.professors"
 msgstr "Professeurs mieux évalués"
 
-msgid "scheduleCount.preferProfessorRating.label"
-msgstr "Préférer les professeurs mieux évalués"
-
-msgid "scheduleCount.rating.description"
-msgstr "Les professeurs sans note sont toujours permis."
-
-msgid "scheduleCount.rating.label"
-msgstr "Note minimale RateMyProfessors"
-
-msgid "scheduleCount.rating.placeholder"
-msgstr "Aucun minimum"
+msgid "scheduleCount.time.and"
+msgstr "et"
 
 msgid "scheduleCount.time.earliest"
 msgstr "Début de cours le plus tôt"
 
 msgid "scheduleCount.time.latest"
 msgstr "Fin de cours la plus tard"
-
-msgid "scheduleCount.time.and"
-msgstr "et"
 
 msgid "scheduleCount.time.rangeLabel"
 msgstr "Cours entre"

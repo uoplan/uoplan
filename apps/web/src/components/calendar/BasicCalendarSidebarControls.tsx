@@ -32,11 +32,8 @@ export function BasicCalendarSidebarControls() {
     blockedTimes,
     generationMinStartMinutes,
     generationMaxEndMinutes,
-    generationPreferHigherProfessorRating,
     generationLimitFirstYearCredits,
-    generationCompressedSchedule,
-    generationPreferEasier,
-    generationPreferHigherSentiment,
+    optimizationPriorities,
     blacklistedCourses,
     allCategories,
     courseOptions,
@@ -53,11 +50,11 @@ export function BasicCalendarSidebarControls() {
     setGenerationMinStartMinutes,
     setGenerationMaxEndMinutes,
     setAvoidedDays,
-    setGenerationPreferHigherProfessorRating,
     setGenerationLimitFirstYearCredits,
-    setGenerationCompressedSchedule,
-    setGenerationPreferEasier,
-    setGenerationPreferHigherSentiment,
+    setOptimizationPriorities,
+    reorderOptimizationPriorities,
+    setOptimizationPriorityEnabled,
+    setGoodBreaksParams,
   } = useSharedGenerationOptions();
 
   const { setBasicElectivesCount } = useBasicElectives();
@@ -125,19 +122,21 @@ export function BasicCalendarSidebarControls() {
           setGenerationLimitFirstYearCredits(v);
           markBasicSettingsChanged();
         }}
-        compressedSchedule={generationCompressedSchedule}
-        onCompressedScheduleChange={(v) => {
-          setGenerationCompressedSchedule(v);
+        optimizationPriorities={optimizationPriorities}
+        onReorderPriorities={(from, to) => {
+          reorderOptimizationPriorities(from, to);
           markBasicSettingsChanged();
         }}
-        preferEasierCourses={generationPreferEasier}
-        onPreferEasierCoursesChange={(v) => {
-          setGenerationPreferEasier(v);
+        onSetPriorities={(next) => {
+          setOptimizationPriorities(next);
           markBasicSettingsChanged();
         }}
-        preferHigherSentiment={generationPreferHigherSentiment}
-        onPreferHigherSentimentChange={(v) => {
-          setGenerationPreferHigherSentiment(v);
+        onTogglePriority={(kind, enabled) => {
+          setOptimizationPriorityEnabled(kind, enabled);
+          markBasicSettingsChanged();
+        }}
+        onGoodBreaksParamsChange={(params) => {
+          setGoodBreaksParams(params);
           markBasicSettingsChanged();
         }}
         minStartMinutes={generationMinStartMinutes}
@@ -152,11 +151,6 @@ export function BasicCalendarSidebarControls() {
         }}
         avoidedDays={avoidedDaysFromBlocks(blockedTimes)}
         onAvoidedDaysChange={(days) => setAvoidedDays(days)}
-        preferHigherProfessorRating={generationPreferHigherProfessorRating}
-        onPreferHigherProfessorRatingChange={(v) => {
-          setGenerationPreferHigherProfessorRating(v);
-          markBasicSettingsChanged();
-        }}
         levelBuckets={levelBuckets}
         languageBuckets={languageBuckets}
         electiveLevelBuckets={electiveLevelBuckets}

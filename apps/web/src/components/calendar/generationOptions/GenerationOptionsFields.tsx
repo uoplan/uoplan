@@ -16,12 +16,13 @@ import {
 } from "@mantine/core";
 import type { MultiSelectProps } from "@mantine/core";
 import { IconAdjustmentsHorizontal, IconChevronDown } from "@tabler/icons-react";
-import type { DayOfWeek } from "@uoplan/core";
+import type { DayOfWeek, OptimizationKind, OptimizationPriority } from "@uoplan/core";
 import { BasicCourseFiltersCard } from "../../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../../i18n";
 import { useAnalytics } from "../../../lib/analytics";
 import { DayAvoidToggles } from "./DayAvoidToggles";
+import { OptimizationPrioritiesCard } from "./OptimizationPrioritiesCard";
 import { TimeRangeSelect } from "./TimeRangeSelect";
 
 interface SimpleMultiSelectProps {
@@ -68,21 +69,18 @@ export interface GenerationOptionsFieldsProps {
   limitFirstYearCredits: boolean;
   onLimitFirstYearCreditsChange: (v: boolean) => void;
 
-  /** Schedule preferences. */
-  compressedSchedule: boolean;
-  onCompressedScheduleChange: (v: boolean) => void;
-  preferEasierCourses: boolean;
-  onPreferEasierCoursesChange: (v: boolean) => void;
-  preferHigherSentiment: boolean;
-  onPreferHigherSentimentChange: (v: boolean) => void;
+  /** Schedule optimization priorities (ordered, individually toggleable). */
+  optimizationPriorities: OptimizationPriority[];
+  onReorderPriorities: (fromIndex: number, toIndex: number) => void;
+  onSetPriorities: (next: OptimizationPriority[]) => void;
+  onTogglePriority: (kind: OptimizationKind, enabled: boolean) => void;
+  onGoodBreaksParamsChange: (params: { breakCount?: number; breakTargetMinutes?: number }) => void;
   minStartMinutes: number;
   onMinStartMinutesChange: (minutes: number) => void;
   maxEndMinutes: number;
   onMaxEndMinutesChange: (minutes: number) => void;
   avoidedDays: DayOfWeek[];
   onAvoidedDaysChange: (days: DayOfWeek[]) => void;
-  preferHigherProfessorRating: boolean;
-  onPreferHigherProfessorRatingChange: (v: boolean) => void;
 
   /** Course filters (shared card with exclude-subjects + exclude-courses). */
   levelBuckets: ("undergrad" | "grad")[];
@@ -116,7 +114,6 @@ export interface GenerationOptionsFieldsProps {
 export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
   const analytics = useAnalytics();
   const [advancedOpen, setAdvancedOpen] = useState(props.advancedOptions.defaultOpen ?? false);
-  const [smartOptionsOpen, setSmartOptionsOpen] = useState(false);
   const capturePreference = (field: string) => {
     analytics.capture("preferences_updated", { field });
   };
@@ -146,50 +143,24 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
     />
   );
 
-  const compressedControl = (
-    <Checkbox
-      label={tr("scheduleCount.compressed.label")}
-      description={tr("scheduleCount.compressed.description")}
-      checked={props.compressedSchedule}
-      onChange={(e) => {
-        capturePreference("compressed_schedule");
-        props.onCompressedScheduleChange(e.currentTarget.checked);
+  const optimizationPrioritiesControl = (
+    <OptimizationPrioritiesCard
+      priorities={props.optimizationPriorities}
+      onReorder={(from, to) => {
+        capturePreference("optimization_priorities_reorder");
+        props.onReorderPriorities(from, to);
       }}
-    />
-  );
-
-  const preferEasierControl = (
-    <Checkbox
-      label={tr("scheduleCount.preferEasier.label")}
-      description={tr("scheduleCount.preferEasier.description")}
-      checked={props.preferEasierCourses}
-      onChange={(e) => {
-        capturePreference("prefer_easier_courses");
-        props.onPreferEasierCoursesChange(e.currentTarget.checked);
+      onSetPriorities={(next) => {
+        capturePreference("optimization_priorities_reorder");
+        props.onSetPriorities(next);
       }}
-    />
-  );
-
-  const preferHigherSentimentControl = (
-    <Checkbox
-      label={tr("scheduleCount.preferSentiment.label")}
-      description={tr("scheduleCount.preferSentiment.description")}
-      checked={props.preferHigherSentiment}
-      onChange={(e) => {
-        capturePreference("prefer_higher_sentiment");
-        props.onPreferHigherSentimentChange(e.currentTarget.checked);
+      onToggle={(kind, enabled) => {
+        analytics.capture("optimization_priority_changed", { kind, enabled });
+        props.onTogglePriority(kind, enabled);
       }}
-    />
-  );
-
-  const professorRatingPreferenceControl = (
-    <Checkbox
-      label={tr("scheduleCount.preferProfessorRating.label")}
-      description={tr("scheduleCount.preferProfessorRating.description")}
-      checked={props.preferHigherProfessorRating}
-      onChange={(e) => {
-        capturePreference("prefer_higher_professor_rating");
-        props.onPreferHigherProfessorRatingChange(e.currentTarget.checked);
+      onGoodBreaksParamsChange={(params) => {
+        capturePreference("good_breaks_params");
+        props.onGoodBreaksParamsChange(params);
       }}
     />
   );
@@ -209,97 +180,6 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
         }}
       />
     ) : null;
-
-  const smartOptionValues = [
-    props.compressedSchedule,
-    props.preferEasierCourses,
-    props.preferHigherSentiment,
-    props.preferHigherProfessorRating,
-    ...(props.totalFirstYearCredits > 0 ? [props.limitFirstYearCredits] : []),
-  ];
-  const smartOptionsChecked = smartOptionValues.every(Boolean);
-  const smartOptionsIndeterminate = !smartOptionsChecked && smartOptionValues.some(Boolean);
-  const setAllSmartOptions = (checked: boolean) => {
-    capturePreference("smart_options");
-    props.onCompressedScheduleChange(checked);
-    props.onPreferEasierCoursesChange(checked);
-    props.onPreferHigherSentimentChange(checked);
-    props.onPreferHigherProfessorRatingChange(checked);
-    if (props.totalFirstYearCredits > 0) props.onLimitFirstYearCreditsChange(checked);
-  };
-  const smartSummaryItems = [
-    tr("scheduleCount.smartOptions.summary.compressed"),
-    tr("scheduleCount.smartOptions.summary.easier"),
-    tr("scheduleCount.smartOptions.summary.feedback"),
-    tr("scheduleCount.smartOptions.summary.professors"),
-    ...(props.totalFirstYearCredits > 0
-      ? [tr("scheduleCount.smartOptions.summary.firstYear")]
-      : []),
-  ];
-
-  const smartOptionsControl = (
-    <Paper
-      withBorder
-      radius="md"
-      style={{
-        backgroundColor: smartOptionsOpen ? "var(--app-surface)" : "var(--app-surface-sunken)",
-      }}
-    >
-      <Group wrap="nowrap" align="flex-start" gap="xs" pl="sm" py="sm">
-        <Checkbox
-          mt={2}
-          checked={smartOptionsChecked}
-          indeterminate={smartOptionsIndeterminate}
-          onChange={() => setAllSmartOptions(!smartOptionsChecked)}
-          aria-label={tr("scheduleCount.smartOptions.label")}
-        />
-        <UnstyledButton
-          pr="sm"
-          onClick={() => setSmartOptionsOpen((open) => !open)}
-          aria-expanded={smartOptionsOpen}
-          aria-controls="generation-smart-options-collapse"
-          style={{ flex: 1, minWidth: 0, cursor: "pointer" }}
-        >
-          <Stack gap={0}>
-            <Group justify="space-between" align="center" wrap="nowrap">
-              <Text fw={600} size="sm" truncate>
-                {tr("scheduleCount.smartOptions.label")}
-              </Text>
-              <IconChevronDown
-                size={16}
-                aria-hidden="true"
-                style={{
-                  flexShrink: 0,
-                  transform: smartOptionsOpen ? "rotate(0deg)" : "rotate(-90deg)",
-                  transition: "transform 150ms ease",
-                }}
-              />
-            </Group>
-            <Collapse expanded={!smartOptionsOpen} keepMounted={false}>
-              <Group gap="xs" wrap="wrap" pt={8}>
-                {smartSummaryItems.map((item) => (
-                  <Text key={item} size="xs" c="dimmed" component="span">
-                    • {item}
-                  </Text>
-                ))}
-              </Group>
-            </Collapse>
-          </Stack>
-        </UnstyledButton>
-      </Group>
-      <Collapse id="generation-smart-options-collapse" expanded={smartOptionsOpen}>
-        <Box p="sm" pt={0}>
-          <Stack gap="sm">
-            {compressedControl}
-            {preferEasierControl}
-            {preferHigherSentimentControl}
-            {professorRatingPreferenceControl}
-            {firstYearLimitControl}
-          </Stack>
-        </Box>
-      </Collapse>
-    </Paper>
-  );
 
   const courseFiltersControl = (
     <BasicCourseFiltersCard
@@ -397,7 +277,7 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
         </Alert>
       )}
 
-      {smartOptionsControl}
+      {optimizationPrioritiesControl}
 
       <Paper
         withBorder
@@ -463,6 +343,7 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
             <Stack gap="md">
               {timeWindowControl}
               {avoidedDaysControl}
+              {firstYearLimitControl}
               {courseFiltersControl}
               {frenchImmersionControl}
               {props.advancedOptions.extraContent}

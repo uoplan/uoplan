@@ -6,13 +6,61 @@ import type { RemainingRequirement, RequirementWithStatus } from "./requirements
 import type { BlockedTimeWindow } from "./generation";
 import { getCourseLevel, isOptCourse } from "./utils/courseUtils";
 import { groupTokenPrefix, isGroupToken } from "./utils/groupToken";
-import type { DayOfWeek as ProtoDayOfWeek } from "@uoplan/proto/state";
+import type {
+  DayOfWeek as ProtoDayOfWeek,
+  OptimizationPriority as ProtoOptimizationPriority,
+} from "@uoplan/proto/state";
 import {
   CourseLanguageBucket as ProtoLang,
   CourseLevelBucket as ProtoLevel,
+  OptimizationKind as ProtoOptimizationKind,
   ShareableState,
   WizardMode,
 } from "@uoplan/proto/state";
+import { hasBreakParams, normalizeOptimizationPriorities } from "./optimizationPriorities";
+import type { OptimizationKind, OptimizationPriority } from "./optimizationPriorities";
+
+const OPTIMIZATION_KIND_TO_STATE_PROTO: Record<OptimizationKind, ProtoOptimizationKind> = {
+  free_days: ProtoOptimizationKind.OPTIMIZATION_KIND_FREE_DAYS,
+  good_breaks: ProtoOptimizationKind.OPTIMIZATION_KIND_GOOD_BREAKS,
+  prefer_easier: ProtoOptimizationKind.OPTIMIZATION_KIND_PREFER_EASIER,
+  prefer_sentiment: ProtoOptimizationKind.OPTIMIZATION_KIND_PREFER_SENTIMENT,
+  prefer_professor_rating: ProtoOptimizationKind.OPTIMIZATION_KIND_PREFER_PROFESSOR_RATING,
+};
+
+const STATE_PROTO_TO_OPTIMIZATION_KIND: Partial<Record<ProtoOptimizationKind, OptimizationKind>> = {
+  [ProtoOptimizationKind.OPTIMIZATION_KIND_FREE_DAYS]: "free_days",
+  [ProtoOptimizationKind.OPTIMIZATION_KIND_GOOD_BREAKS]: "good_breaks",
+  [ProtoOptimizationKind.OPTIMIZATION_KIND_PREFER_EASIER]: "prefer_easier",
+  [ProtoOptimizationKind.OPTIMIZATION_KIND_PREFER_SENTIMENT]: "prefer_sentiment",
+  [ProtoOptimizationKind.OPTIMIZATION_KIND_PREFER_PROFESSOR_RATING]: "prefer_professor_rating",
+};
+
+function optimizationPriorityToStateProto(p: OptimizationPriority): ProtoOptimizationPriority {
+  return {
+    kind: OPTIMIZATION_KIND_TO_STATE_PROTO[p.kind],
+    enabled: p.enabled,
+    breakCount: hasBreakParams(p.kind) ? (p.breakCount ?? 0) : 0,
+    breakTargetMinutes: hasBreakParams(p.kind) ? (p.breakTargetMinutes ?? 0) : 0,
+  };
+}
+
+function optimizationPrioritiesFromStateProto(
+  raw: ProtoOptimizationPriority[] | undefined,
+): OptimizationPriority[] {
+  const mapped: OptimizationPriority[] = [];
+  for (const p of raw ?? []) {
+    const kind = STATE_PROTO_TO_OPTIMIZATION_KIND[p.kind as ProtoOptimizationKind];
+    if (!kind) continue;
+    mapped.push({
+      kind,
+      enabled: p.enabled,
+      breakCount: p.breakCount,
+      breakTargetMinutes: p.breakTargetMinutes || undefined,
+    });
+  }
+  return normalizeOptimizationPriorities(mapped);
+}
 
 export function requirementIdsFromTree(nodes: RequirementWithStatus[]): string[] {
   const out: string[] = [];
@@ -71,11 +119,8 @@ export interface EncodeInput {
   requirementSlotsUserTouched: Record<string, true>;
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
-  generationPreferHigherProfessorRating: boolean;
   generationLimitFirstYearCredits: boolean;
-  generationCompressedSchedule: boolean;
-  generationPreferEasier: boolean;
-  generationPreferHigherSentiment: boolean;
+  optimizationPriorities: OptimizationPriority[];
   activeStep: number;
   showCalendar: boolean;
   frenchImmersionStream: boolean;
@@ -114,11 +159,8 @@ export interface DecodedState {
   touchedReqIndices: number[];
   generationMinStartMinutes: number;
   generationMaxEndMinutes: number;
-  generationPreferHigherProfessorRating: boolean;
   generationLimitFirstYearCredits: boolean;
-  generationCompressedSchedule: boolean;
-  generationPreferEasier: boolean;
-  generationPreferHigherSentiment: boolean;
+  optimizationPriorities: OptimizationPriority[];
   activeStep: number;
   showCalendar: boolean;
   frenchImmersionStream: boolean;
@@ -256,11 +298,8 @@ export function encodeState(
     generationMinStartMinutes: input.generationMinStartMinutes,
     generationMaxEndMinutes: input.generationMaxEndMinutes,
     generationAllowedDays: [],
-    generationPreferHigherProfessorRating: input.generationPreferHigherProfessorRating,
     generationLimitFirstYearCredits: input.generationLimitFirstYearCredits,
-    generationCompressedSchedule: input.generationCompressedSchedule,
-    generationPreferEasier: input.generationPreferEasier,
-    generationPreferHigherSentiment: input.generationPreferHigherSentiment,
+    optimizationPriorities: input.optimizationPriorities.map(optimizationPriorityToStateProto),
     frenchImmersionStream: input.frenchImmersionStream,
     magic: STATE_MAGIC,
     activeStep: input.activeStep,
@@ -530,11 +569,8 @@ export function decodeState(
 
     generationMinStartMinutes: state.generationMinStartMinutes,
     generationMaxEndMinutes: state.generationMaxEndMinutes,
-    generationPreferHigherProfessorRating: state.generationPreferHigherProfessorRating ?? false,
     generationLimitFirstYearCredits: state.generationLimitFirstYearCredits,
-    generationCompressedSchedule: state.generationCompressedSchedule,
-    generationPreferEasier: state.generationPreferEasier,
-    generationPreferHigherSentiment: state.generationPreferHigherSentiment ?? false,
+    optimizationPriorities: optimizationPrioritiesFromStateProto(state.optimizationPriorities),
     activeStep: state.activeStep ?? 0,
     showCalendar: state.showCalendar ?? false,
     frenchImmersionStream: state.frenchImmersionStream ?? false,

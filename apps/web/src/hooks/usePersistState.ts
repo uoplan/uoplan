@@ -34,11 +34,8 @@ function hasPersistedStateChange(next: AppStore, prev: AppStore): boolean {
     next.basicExcludedCategories !== prev.basicExcludedCategories ||
     next.generationMinStartMinutes !== prev.generationMinStartMinutes ||
     next.generationMaxEndMinutes !== prev.generationMaxEndMinutes ||
-    next.generationPreferHigherProfessorRating !== prev.generationPreferHigherProfessorRating ||
     next.generationLimitFirstYearCredits !== prev.generationLimitFirstYearCredits ||
-    next.generationCompressedSchedule !== prev.generationCompressedSchedule ||
-    next.generationPreferEasier !== prev.generationPreferEasier ||
-    next.generationPreferHigherSentiment !== prev.generationPreferHigherSentiment ||
+    next.optimizationPriorities !== prev.optimizationPriorities ||
     next.blacklistedCourses !== prev.blacklistedCourses ||
     next.blockedTimes !== prev.blockedTimes ||
     next.requirementSlotsUserTouched !== prev.requirementSlotsUserTouched ||

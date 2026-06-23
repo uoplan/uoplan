@@ -1,16 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  satisfiesCompressedConstraint,
-  timeSlotOverlapsBlocked,
-  timeSlotSatisfiesConstraints,
-} from "../constraints";
-import type {
-  BlockedTimeWindow,
-  CourseEnrollment,
-  GenerationConstraints,
-  TimeSlot,
-} from "../types";
-import { normalizeCourseCode } from "../../utils/courseUtils";
+import { timeSlotOverlapsBlocked, timeSlotSatisfiesConstraints } from "../constraints";
+import type { BlockedTimeWindow, GenerationConstraints, TimeSlot } from "../types";
 
 describe("constraints", () => {
   it("timeSlotSatisfiesConstraints respects time bounds (day no longer constrained)", () => {
@@ -72,44 +62,5 @@ describe("constraints", () => {
     expect(
       timeSlotOverlapsBlocked({ day: "We", startMinutes: 700, endMinutes: 760 }, blocked),
     ).toBe(false);
-  });
-
-  it("satisfiesCompressedConstraint allows at most one gap <= 90 mins", () => {
-    const validEnrollments: CourseEnrollment[] = [
-      {
-        courseCode: normalizeCourseCode("A"),
-        sectionCombo: {},
-        times: [
-          { day: "Mo", startMinutes: 600, endMinutes: 690 }, // 10:00 - 11:30
-          { day: "Mo", startMinutes: 720, endMinutes: 810 }, // 12:00 - 13:30 (30 min gap)
-        ],
-      },
-    ];
-    expect(satisfiesCompressedConstraint(validEnrollments)).toBe(true);
-
-    const tooLongGap: CourseEnrollment[] = [
-      {
-        courseCode: normalizeCourseCode("A"),
-        sectionCombo: {},
-        times: [
-          { day: "Mo", startMinutes: 600, endMinutes: 690 }, // 10:00 - 11:30
-          { day: "Mo", startMinutes: 800, endMinutes: 890 }, // 13:20 - 14:50 (110 min gap)
-        ],
-      },
-    ];
-    expect(satisfiesCompressedConstraint(tooLongGap)).toBe(false);
-
-    const tooManyGaps: CourseEnrollment[] = [
-      {
-        courseCode: normalizeCourseCode("A"),
-        sectionCombo: {},
-        times: [
-          { day: "Mo", startMinutes: 600, endMinutes: 690 }, // 10:00 - 11:30
-          { day: "Mo", startMinutes: 720, endMinutes: 810 }, // 12:00 - 13:30 (30 min gap)
-          { day: "Mo", startMinutes: 840, endMinutes: 930 }, // 14:00 - 15:30 (30 min gap)
-        ],
-      },
-    ];
-    expect(satisfiesCompressedConstraint(tooManyGaps)).toBe(false);
   });
 });

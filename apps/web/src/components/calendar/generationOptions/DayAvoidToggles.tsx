@@ -10,13 +10,13 @@ interface DayConfig {
 }
 
 const DAYS: DayConfig[] = [
+  { value: "Su", fullLabelId: "scheduleCount.day.sunday", shortLabelId: "gen.day.sun" },
   { value: "Mo", fullLabelId: "scheduleCount.day.monday", shortLabelId: "gen.day.mon" },
   { value: "Tu", fullLabelId: "scheduleCount.day.tuesday", shortLabelId: "gen.day.tue" },
   { value: "We", fullLabelId: "scheduleCount.day.wednesday", shortLabelId: "gen.day.wed" },
   { value: "Th", fullLabelId: "scheduleCount.day.thursday", shortLabelId: "gen.day.thu" },
   { value: "Fr", fullLabelId: "scheduleCount.day.friday", shortLabelId: "gen.day.fri" },
   { value: "Sa", fullLabelId: "scheduleCount.day.saturday", shortLabelId: "gen.day.sat" },
-  { value: "Su", fullLabelId: "scheduleCount.day.sunday", shortLabelId: "gen.day.sun" },
 ];
 
 export interface DayAvoidTogglesProps {

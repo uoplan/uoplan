@@ -58,7 +58,6 @@ export function buildSwapConstraints(state: AppStore): GenerationConstraints {
   return {
     minStartMinutes: state.generationMinStartMinutes,
     maxEndMinutes: state.generationMaxEndMinutes,
-    generationPreferHigherProfessorRating: state.generationPreferHigherProfessorRating,
     professorRatings: state.professorRatings ?? undefined,
     blockedTimes: state.blockedTimes,
   };

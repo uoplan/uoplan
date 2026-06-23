@@ -12,6 +12,13 @@ import {
 } from "../stateEncode";
 import type { CatalogueLike, EncodeInput } from "../stateEncode";
 import type { Indices, Program } from "../dataTypes";
+import {
+  defaultOptimizationPriorities,
+  isOptimizationEnabled,
+  reorderOptimizationPriorities,
+  setGoodBreaksParams,
+  setOptimizationPriorityEnabled,
+} from "../optimizationPriorities";
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -70,11 +77,8 @@ function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
     requirementSlotsUserTouched: {},
     generationMinStartMinutes: 480,
     generationMaxEndMinutes: 1320,
-    generationPreferHigherProfessorRating: false,
     generationLimitFirstYearCredits: false,
-    generationCompressedSchedule: false,
-    generationPreferEasier: false,
-    generationPreferHigherSentiment: false,
+    optimizationPriorities: defaultOptimizationPriorities(),
     activeStep: 0,
     showCalendar: false,
     frenchImmersionStream: false,
@@ -149,23 +153,43 @@ describe("encodeState / decodeState roundtrip", () => {
     expect(decoded.includeClosedComponents).toBe(false);
     expect(decoded.virtualSectionsOnly).toBe(false);
     expect(decoded.studentPrograms).toEqual(["CSI", "MAT"]);
-    expect(decoded.generationPreferEasier).toBe(false);
+    expect(decoded.optimizationPriorities.map((p) => p.kind)).toEqual(
+      defaultOptimizationPriorities().map((p) => p.kind),
+    );
     expect(decoded.frenchImmersionStream).toBe(false);
   });
 
-  it("round-trips generationPreferEasier", () => {
-    const decoded = decodeInput({ generationPreferEasier: true });
-    expect(decoded.generationPreferEasier).toBe(true);
+  it("round-trips optimization priority order and enabled flags", () => {
+    const priorities = setOptimizationPriorityEnabled(
+      defaultOptimizationPriorities(),
+      "free_days",
+      true,
+    );
+    const reordered = reorderOptimizationPriorities(priorities, 0, priorities.length - 1);
+    const decoded = decodeInput({ optimizationPriorities: reordered });
+    expect(decoded.optimizationPriorities.map((p) => p.kind)).toEqual(reordered.map((p) => p.kind));
+    expect(isOptimizationEnabled(decoded.optimizationPriorities, "free_days")).toBe(true);
   });
 
-  it("round-trips generationPreferHigherSentiment", () => {
-    const decoded = decodeInput({ generationPreferHigherSentiment: true });
-    expect(decoded.generationPreferHigherSentiment).toBe(true);
+  it("round-trips good_breaks params", () => {
+    const priorities = setGoodBreaksParams(
+      setOptimizationPriorityEnabled(defaultOptimizationPriorities(), "good_breaks", true),
+      { breakCount: 2, breakTargetMinutes: 90 },
+    );
+    const decoded = decodeInput({ optimizationPriorities: priorities });
+    const goodBreaks = decoded.optimizationPriorities.find((p) => p.kind === "good_breaks");
+    expect(goodBreaks?.breakCount).toBe(2);
+    expect(goodBreaks?.breakTargetMinutes).toBe(90);
   });
 
-  it("round-trips generationPreferHigherProfessorRating", () => {
-    const decoded = decodeInput({ generationPreferHigherProfessorRating: true });
-    expect(decoded.generationPreferHigherProfessorRating).toBe(true);
+  it("round-trips a zero good_breaks count (no breaks)", () => {
+    const priorities = setGoodBreaksParams(
+      setOptimizationPriorityEnabled(defaultOptimizationPriorities(), "good_breaks", true),
+      { breakCount: 0 },
+    );
+    const decoded = decodeInput({ optimizationPriorities: priorities });
+    const goodBreaks = decoded.optimizationPriorities.find((p) => p.kind === "good_breaks");
+    expect(goodBreaks?.breakCount).toBe(0);
   });
 
   it("round-trips frenchImmersionStream", () => {

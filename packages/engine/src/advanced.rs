@@ -12,6 +12,7 @@ use crate::model::{
     course_level_sort_key, course_matches_filters, first_four_digit_number, normalize_course_code,
     subject_prefix, DataView, LanguageBucket, LevelBucket,
 };
+use crate::objectives::Objectives;
 use crate::pools::{
     build_pool_caps, build_requirement_pools, candidate_pool_weight, canonical_group_token,
     compute_courses_per_pool, enumerate_single_redistributions, group_token_prefix,
@@ -22,8 +23,9 @@ use crate::pools::{
 use crate::prereq::prerequisites_contain_non_course;
 use crate::rng::{scramble_seed, shuffle_in_place, weighted_random_pick_index, Rng};
 use crate::timetable::{
-    allows_enrollment, arrange_prebuilt_with_budget, build_timetable_course,
-    first_seeded_arrangement, has_valid_section_combos, passes_final, FnResolver, TimetableCourse,
+    allows_enrollment, arrange_prebuilt_with_budget, best_seeded_arrangement,
+    build_timetable_course, first_seeded_arrangement, has_valid_section_combos, passes_final,
+    FnResolver, TimetableCourse,
 };
 use crate::types::{Enrollment, WeekMask};
 use crate::weights::{easier_weight, sentiment_weight};
@@ -43,6 +45,7 @@ pub struct RequirementWithStatus {
 pub struct AdvancedParams<'a> {
     pub data: &'a DataView,
     pub constraints: &'a Constraints,
+    pub objectives: &'a Objectives<'a>,
     pub completed_courses: Vec<String>,
     pub prereq_eligible_courses: Vec<String>,
     pub remaining_requirements: Vec<RemainingRequirement>,
@@ -66,6 +69,10 @@ pub struct AdvancedParams<'a> {
     pub forced_courses: Vec<String>,
     pub current_seed: u32,
     pub first_seed: u32,
+    /// Total selection work (global-budget units) this generation may spend. When
+    /// a shape objective engages best-of-K, this single budget is SHARED across all
+    /// K internal attempts (rather than multiplying latency by K).
+    pub work_budget: u64,
 }
 
 pub struct EmptyPool {
@@ -205,6 +212,20 @@ fn build_pending_group_picks(
     out
 }
 
+/// Derive a per-attempt seed for best-of-K. Attempt 0 keeps the caller's seed
+/// (so K=1 / shape-objective-off behaviour is byte-for-byte unchanged); later
+/// attempts mix in the index to explore different selections/arrangements.
+fn derive_attempt_seed(base_seed: u32, attempt: u32) -> u32 {
+    if attempt == 0 {
+        base_seed
+    } else {
+        base_seed
+            .wrapping_mul(0x0100_0193)
+            .wrapping_add(attempt.wrapping_mul(0x9e37_79b1))
+            | 1
+    }
+}
+
 pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
     let data = params.data;
     let constraints = params.constraints;
@@ -217,8 +238,6 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
     } else {
         params.first_seed
     };
-    let mut rng = Rng::new(scramble_seed(effective_seed));
-    let mut arrangement_rng = Rng::new(scramble_seed(effective_seed) ^ 0x9e37_79b9);
 
     let effective_remaining = build_effective_remaining(
         params.remaining_requirements,
@@ -469,10 +488,21 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
         .count();
     let remaining_needed = effective_target.saturating_sub(non_honours_pinned_count);
 
-    let mut filtered_optional_pool: Vec<String> = Vec::new();
-    let mut found_schedule: Option<Vec<Enrollment>> = None;
-    let mut pool_diagnostics: Option<PoolDiagnostics> = None;
-    let mut chosen_to_requirement: BTreeMap<String, String> = BTreeMap::new();
+    // Seed-independent selection context. Building `sel_candidates` (the eligibility
+    // scan over every elective candidate) is ~99% of a generation's cost, and it
+    // does NOT depend on the seed — so it is computed ONCE here and the best-of-K
+    // attempt loop below reuses it, only repeating the cheap seed-dependent tail
+    // (candidate shuffle + combo arena + pick pass + objective-aware arrangement).
+    let mut sel_pools: Vec<RequirementPool> = Vec::new();
+    let mut sel_candidates: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    let mut sel_pinned_placed: Vec<(String, bool)> = Vec::new();
+    let mut sel_allocations: Vec<BTreeMap<String, usize>> = Vec::new();
+    let mut sel_pending_base: BTreeMap<String, BTreeMap<String, usize>> = BTreeMap::new();
+    let mut sel_empty_pools: Vec<RequirementPool> = Vec::new();
+    let mut has_selection = false;
+    // Selection budget shared across allocation tries AND across the best-of-K
+    // attempts. Each run_pool_pick_pass call draws from and writes back to this pot.
+    let mut work_budget = params.work_budget;
 
     let is_eligible_candidate = |code: &str, pool_type: Option<&str>| -> bool {
         let norm = normalize_course_code(code);
@@ -493,9 +523,6 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
         {
             return false;
         }
-        if data.is_honours_project(code) {
-            return false;
-        }
         if is_elective_requirement_type(pool_type.unwrap_or(""))
             && !is_within_elective_level_cap(code)
         {
@@ -511,6 +538,17 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
             return false;
         }
         true
+    };
+
+    // Pinned courses are always part of the timetable; their (code, virtual-only)
+    // feasibility keys are seed-independent.
+    let vo_for = |code: &str, req_type: Option<&str>| -> bool {
+        virtual_schedule_filter_applies(
+            virtual_sections_only,
+            req_type,
+            &normalize_course_code(code),
+            &explicit_exempt,
+        )
     };
 
     if remaining_needed > 0 {
@@ -627,9 +665,6 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
                         }
                     }
                 }
-                if data.is_honours_project(code) {
-                    continue;
-                }
                 if blacklisted_set.contains(&norm) {
                     continue;
                 }
@@ -681,40 +716,12 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
 
         let pending_base = build_pending_group_picks(&group_token_selections);
 
-        let mut last_filtered_pool: Vec<String> = Vec::new();
-
-        // Seeded one-time shuffle of candidate lists (per-seed value-ordering variety).
-        for list in candidates_by_requirement.values_mut() {
-            if !french_immersion_stream {
-                shuffle_in_place(list, &mut rng);
-            }
-        }
-
-        // Pinned courses are always part of the timetable; precompute their
-        // (code, virtual-only) feasibility keys once.
-        let vo_for = |code: &str, req_type: Option<&str>| -> bool {
-            virtual_schedule_filter_applies(
-                virtual_sections_only,
-                req_type,
-                &normalize_course_code(code),
-                &explicit_exempt,
-            )
-        };
         let mut pinned_placed: Vec<(String, bool)> = Vec::with_capacity(pinned.len());
         for code in &pinned {
             let req_type = requirement_id_for_pinned(code)
                 .and_then(|r| requirement_type_by_id.get(&r).cloned());
             pinned_placed.push((code.clone(), vo_for(code, req_type.as_deref())));
         }
-
-        // Combos are probed many times during feasibility-aware selection; build
-        // them lazily once and reuse across allocations.
-        let mut arena = ComboArena::new(
-            data,
-            constraints,
-            include_closed,
-            scramble_seed(effective_seed) ^ 0x5151_5151,
-        );
 
         // Deterministic allocation order: primary courses_per_pool first, then the
         // high-level redistributions, then the remaining single redistributions.
@@ -730,44 +737,189 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
             }
         }
 
-        for alloc in &allocations {
-            if found_schedule.is_some() {
-                break;
+        sel_pools = pools;
+        sel_candidates = candidates_by_requirement;
+        sel_pinned_placed = pinned_placed;
+        sel_allocations = allocations;
+        sel_pending_base = pending_base;
+        sel_empty_pools = pools_with_no_candidates;
+        has_selection = true;
+    }
+
+    // Best-of-K over the cheap seed-dependent tail. The expensive eligibility scan
+    // (sel_candidates) was built once above; each attempt only reshuffles a clone,
+    // rebuilds the combo arena, runs the feasibility pick pass, and re-timetables
+    // for the active objectives — together <2ms — so latency is a function of the
+    // inputs, never of K. Attempt 0 keeps the caller's seed (objective-off path is
+    // unchanged); the priority comparator (`objectives.better`) keeps the best.
+    let mut best: Option<(
+        Vec<f64>,
+        Vec<Enrollment>,
+        BTreeMap<String, String>,
+        Vec<String>,
+    )> = None;
+    let mut fallback_filtered: Vec<String> = Vec::new();
+    let candidate_count = params.objectives.candidate_count();
+    for attempt in 0..candidate_count {
+        if attempt > 0 && work_budget == 0 {
+            break;
+        }
+        let seed = derive_attempt_seed(effective_seed, attempt);
+        let mut rng = Rng::new(scramble_seed(seed));
+        let mut arrangement_rng = Rng::new(scramble_seed(seed) ^ 0x9e37_79b9);
+        let mut attempt_schedule: Option<Vec<Enrollment>> = None;
+        let mut attempt_chosen: BTreeMap<String, String> = BTreeMap::new();
+        let mut attempt_filtered: Vec<String> = Vec::new();
+
+        if has_selection {
+            // Per-seed value-ordering variety: shuffle a clone of the shared scan.
+            let mut candidates = sel_candidates.clone();
+            for list in candidates.values_mut() {
+                if !french_immersion_stream {
+                    shuffle_in_place(list, &mut rng);
+                }
             }
-            if let Some((chosen_map, arranged)) = run_pool_pick_pass(
-                alloc,
-                &pools,
-                &candidates_by_requirement,
-                &constrained_per_requirement,
-                &pinned,
-                &pinned_placed,
-                &explicit_set,
-                explicit_only,
-                &pending_base,
-                &requirement_id_for_pinned,
+            let mut arena = ComboArena::new(
                 data,
-                &is_eligible_candidate,
-                params.prefer_easier,
-                params.course_aplus,
-                params.prefer_higher_sentiment,
-                params.course_sentiment,
-                &vo_for,
-                &mut arena,
-                &mut rng,
+                constraints,
+                include_closed,
+                scramble_seed(seed) ^ 0x5151_5151,
+            );
+            for alloc in &sel_allocations {
+                if attempt_schedule.is_some() {
+                    break;
+                }
+                if let Some((chosen_map, arranged)) = run_pool_pick_pass(
+                    alloc,
+                    &sel_pools,
+                    &candidates,
+                    &constrained_per_requirement,
+                    &pinned,
+                    &sel_pinned_placed,
+                    &explicit_set,
+                    explicit_only,
+                    &sel_pending_base,
+                    &requirement_id_for_pinned,
+                    data,
+                    &is_eligible_candidate,
+                    params.prefer_easier,
+                    params.course_aplus,
+                    params.prefer_higher_sentiment,
+                    params.course_sentiment,
+                    &vo_for,
+                    &mut arena,
+                    &mut rng,
+                    &mut work_budget,
+                ) {
+                    attempt_filtered = chosen_map
+                        .keys()
+                        .filter(|code| !pinned.contains(*code))
+                        .cloned()
+                        .collect();
+                    attempt_chosen = chosen_map;
+                    attempt_schedule = Some(arranged);
+                }
+            }
+        } else if remaining_needed == 0 {
+            let resolver = FnResolver {
+                data,
+                include_closed,
+                virtual_for: |_code: &str| false,
+            };
+            if let Some(arranged) = first_seeded_arrangement(
+                &pinned,
+                data,
+                &resolver,
+                constraints,
+                &mut arrangement_rng,
             ) {
-                last_filtered_pool = chosen_map
-                    .keys()
-                    .filter(|code| !pinned.contains(*code))
-                    .cloned()
-                    .collect();
-                chosen_to_requirement = chosen_map;
-                found_schedule = Some(arranged);
+                for code in &pinned {
+                    if let Some(rid) = requirement_id_for_pinned(code) {
+                        if !data.is_honours_project(code) {
+                            attempt_chosen.insert(code.clone(), rid);
+                        }
+                    }
+                }
+                attempt_schedule = Some(arranged);
             }
         }
 
-        filtered_optional_pool = last_filtered_pool;
-        pool_diagnostics = Some(PoolDiagnostics {
-            empty_pools: pools_with_no_candidates
+        // Objective-aware final timetabling. Selection fixes the chosen course SET
+        // but timetables it feasibility-first; when a timetable-shape objective is
+        // active, re-timetable that exact set to the arrangement the priority
+        // comparator prefers, so the #1 priority is honored whenever the set admits
+        // it. Falls back to the feasibility arrangement if the optimizer finds
+        // nothing — never worse.
+        if params.objectives.needs_best_of_k() {
+            if let Some(current) = &attempt_schedule {
+                let codes: Vec<String> = current.iter().map(|e| e.course_code.clone()).collect();
+                let mut type_by_norm: HashMap<String, String> = HashMap::new();
+                for (code, rid) in &attempt_chosen {
+                    if let Some(t) = requirement_type_by_id.get(rid) {
+                        type_by_norm.insert(normalize_course_code(code), t.clone());
+                    }
+                }
+                let virtual_for = |code: &str| -> bool {
+                    let norm = normalize_course_code(code);
+                    let req_type = type_by_norm.get(&norm).map(String::as_str);
+                    virtual_schedule_filter_applies(
+                        virtual_sections_only,
+                        req_type,
+                        &norm,
+                        &explicit_exempt,
+                    )
+                };
+                let resolver = FnResolver {
+                    data,
+                    include_closed,
+                    virtual_for,
+                };
+                if let Some(optimized) = best_seeded_arrangement(
+                    &codes,
+                    data,
+                    &resolver,
+                    constraints,
+                    &mut arrangement_rng,
+                    &|chosen| params.objectives.score(chosen),
+                    &|a, b| params.objectives.better(a, b),
+                ) {
+                    attempt_schedule = Some(optimized);
+                }
+            }
+        }
+
+        match &attempt_schedule {
+            Some(sched) => {
+                let scores = params.objectives.score(sched);
+                let take = match &best {
+                    Some((best_scores, _, _, _)) => params.objectives.better(&scores, best_scores),
+                    None => true,
+                };
+                if take {
+                    best = Some((
+                        scores,
+                        sched.clone(),
+                        std::mem::take(&mut attempt_chosen),
+                        std::mem::take(&mut attempt_filtered),
+                    ));
+                }
+            }
+            None => {
+                if fallback_filtered.is_empty() {
+                    fallback_filtered = std::mem::take(&mut attempt_filtered);
+                }
+            }
+        }
+    }
+
+    let (found_schedule, chosen_to_requirement, filtered_optional_pool) = match best {
+        Some((_, sched, chosen, filtered)) => (Some(sched), chosen, filtered),
+        None => (None, BTreeMap::new(), fallback_filtered),
+    };
+
+    let pool_diagnostics = if has_selection {
+        Some(PoolDiagnostics {
+            empty_pools: sel_empty_pools
                 .into_iter()
                 .map(|p| EmptyPool {
                     label: p.label,
@@ -777,29 +929,10 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
                 .collect(),
             total_available: pinned.len() + filtered_optional_pool.len(),
             total_needed: params.courses_this_semester,
-        });
-    }
-
-    if remaining_needed == 0 {
-        filtered_optional_pool = Vec::new();
-        let resolver = FnResolver {
-            data,
-            include_closed,
-            virtual_for: |_code: &str| false,
-        };
-        let arranged =
-            first_seeded_arrangement(&pinned, data, &resolver, constraints, &mut arrangement_rng);
-        if let Some(arranged) = arranged {
-            for code in &pinned {
-                if let Some(rid) = requirement_id_for_pinned(code) {
-                    if !data.is_honours_project(code) {
-                        chosen_to_requirement.insert(code.clone(), rid);
-                    }
-                }
-            }
-            found_schedule = Some(arranged);
-        }
-    }
+        })
+    } else {
+        None
+    };
 
     AdvancedResult {
         schedule: found_schedule,
@@ -915,11 +1048,13 @@ const SELECTION_RESTARTS: u32 = 100_000;
 /// quickly instead of grinding into the worker's wall-clock kill. Sized so the
 /// worst case stays well under the 3 s worker timeout even as WASM (~1.5-2x this
 /// native build), while leaving comfortable headroom above the work a genuinely
-/// feasible near-capacity request (~24 courses) needs: the worst feasible seed
-/// finishes in well under a tenth of this budget, so feasibility never hinges on
-/// the seed stumbling onto a packing just under the cap. An infeasible request
-/// burns the whole budget (~0.5 s native / ~1 s WASM) before fast-failing.
-const SELECTION_GLOBAL_WORK_BUDGET: u64 = 1_000_000_000;
+/// feasible near-capacity request needs. Empirically (this build) ~5 ns/unit
+/// native: the worst feasible seed across the basket-fill (~23 courses) and
+/// degree-program feasibility suites consumes ≤ ~46M units, so this cap leaves
+/// >5x headroom — feasibility never hinges on the seed stumbling onto a packing
+/// just under the cap. An infeasible request burns the whole budget (~1.25 s
+/// native / ~2-2.5 s WASM) before fast-failing, well inside the worker timeout.
+pub(crate) const SELECTION_GLOBAL_WORK_BUDGET: u64 = 250_000_000;
 
 /// Global cap on full timetable re-solves across the WHOLE generation call.
 /// Cheap fixed-arrangement placement (see [`Search::try_place`]) is both the
@@ -1293,6 +1428,7 @@ fn run_pool_pick_pass(
     vo_for: &dyn Fn(&str, Option<&str>) -> bool,
     arena: &mut ComboArena,
     rng: &mut Rng,
+    work_budget: &mut u64,
 ) -> Option<(BTreeMap<String, String>, Vec<Enrollment>)> {
     let chosen_codes: HashSet<String> = pinned.iter().cloned().collect();
 
@@ -1472,7 +1608,11 @@ fn run_pool_pick_pass(
     let placement_budget = SELECTION_PLACEMENT_BUDGET;
     let arrange_nodes = SELECTION_ARRANGE_NODE_BUDGET;
     let mut resolve_total = SELECTION_RESOLVE_TOTAL;
-    let mut global = SELECTION_GLOBAL_WORK_BUDGET;
+    // Draw from the shared selection budget (threaded across allocation tries and
+    // best-of-K attempts) rather than a fresh per-call budget, so total selection
+    // work — and thus latency — is bounded by one generation's budget even when a
+    // shape objective fans this out across K attempts.
+    let mut global = *work_budget;
     for restart in 0..restarts {
         if global == 0 {
             break;
@@ -1499,6 +1639,7 @@ fn run_pool_pick_pass(
             agg_mask: WeekMask::EMPTY,
         };
         if search.run() {
+            *work_budget = search.global;
             return Some((search.assign, search.arrangement));
         }
         // Carry the remaining global budgets into the next restart so total work
@@ -1507,6 +1648,7 @@ fn run_pool_pick_pass(
         resolve_total = search.resolve_budget;
         global = search.global;
     }
+    *work_budget = global;
     None
 }
 
@@ -1691,9 +1833,16 @@ mod tests {
         course_aplus: &'a HashMap<String, f64>,
         course_sentiment: &'a HashMap<String, f64>,
     ) -> AdvancedParams<'a> {
+        // No timetable-shape objective: needs_best_of_k() is false, so the
+        // objective-aware re-timetable pass is a no-op for these selection tests.
+        // Leaked (test-only) so the reference satisfies the params lifetime.
+        let empty: &'static HashMap<String, f64> = Box::leak(Box::new(HashMap::new()));
+        let objectives: &'static Objectives<'static> =
+            Box::leak(Box::new(Objectives::from_request(&[], empty, empty, empty)));
         AdvancedParams {
             data,
             constraints,
+            objectives,
             completed_courses: Vec::new(),
             prereq_eligible_courses: Vec::new(),
             remaining_requirements: Vec::new(),
@@ -1721,6 +1870,7 @@ mod tests {
             forced_courses: Vec::new(),
             current_seed: 1,
             first_seed: 1,
+            work_budget: SELECTION_GLOBAL_WORK_BUDGET,
         }
     }
 

@@ -17,6 +17,7 @@ import {
 import { countValidCombosForCourse } from "@uoplan/core/generationDiagnostics";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 import type { NormalizedCourseCode } from "@uoplan/core/brand";
+import { isOptimizationEnabled } from "@uoplan/core";
 import type { GeneratedSchedule, GenerationConstraints } from "@uoplan/core";
 import type { ProfessorRatingsMap } from "@uoplan/core/professorRatings";
 import {
@@ -201,9 +202,7 @@ export function buildGenerationConstraints(
   return {
     minStartMinutes: options.minStartMinutes,
     maxEndMinutes: options.maxEndMinutes,
-    compressedSchedule: options.compressedSchedule,
     blockedTimes: blockedTimesForScheduleOptions(options),
-    generationPreferHigherProfessorRating: options.preferHigherProfessorRating,
     ...(maxFirstYearCredits != null ? { maxFirstYearCredits } : {}),
     ...(ratings != null ? { professorRatings: ratings } : {}),
   };
@@ -338,7 +337,10 @@ function prepareGeneration(input: GenerateScheduleInput) {
     }
   }
 
-  const courseSentimentByNorm = options.preferHigherSentiment
+  const courseSentimentByNorm = isOptimizationEnabled(
+    options.optimizationPriorities,
+    "prefer_sentiment",
+  )
     ? ((sentiment?.courseByNorm ?? null) as Map<NormalizedCourseCode, number> | null)
     : null;
 
@@ -374,8 +376,7 @@ function buildSeedRequest(prep: GenerationPrep, seed: number) {
         constraints: prep.constraints,
         includeClosedComponents: o.includeClosedComponents,
         virtualSectionsOnly: o.virtualSectionsOnly,
-        generationPreferEasier: o.preferEasier,
-        generationPreferHigherSentiment: o.preferHigherSentiment,
+        optimizationPriorities: o.optimizationPriorities,
         courseSentimentByNorm: prep.courseSentimentByNorm,
         levelBuckets: o.levelBuckets,
         languageBuckets: o.languageBuckets,
@@ -402,8 +403,7 @@ function buildSeedRequest(prep: GenerationPrep, seed: number) {
       electiveLevelBuckets: o.electiveLevelBuckets,
       includeClosedComponents: o.includeClosedComponents,
       virtualSectionsOnly: o.virtualSectionsOnly,
-      generationPreferEasier: o.preferEasier,
-      generationPreferHigherSentiment: o.preferHigherSentiment,
+      optimizationPriorities: o.optimizationPriorities,
       courseSentimentByNorm: prep.courseSentimentByNorm,
       blacklistedCourses: o.blacklistedCourses,
       currentSeed: seed,

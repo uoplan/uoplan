@@ -16,9 +16,7 @@ use crate::model::DataView;
 use crate::types::Enrollment;
 
 pub use combos::{build_timetable_course, has_valid_section_combos, FnResolver, TimetableCourse};
-pub use search::{
-    arrange_prebuilt_with_budget, first_seeded_arrangement, first_seeded_subset_arrangement,
-};
+pub use search::{arrange_prebuilt_with_budget, best_seeded_arrangement, first_seeded_arrangement};
 pub(crate) use solver::{allows_enrollment, passes_final};
 
 pub fn arrange_prebuilt(

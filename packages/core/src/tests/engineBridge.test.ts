@@ -2,33 +2,35 @@ import { describe, expect, it } from "vitest";
 import {
   buildAdvancedRequest,
   buildBasicRequest,
-  EngineMode,
   mapGenerationResponse,
   runAdvancedGeneration,
   runBasicGeneration,
   runTimetableFixedSet,
 } from "../engineBridge";
 import type { AdvancedRequestInput, BasicRequestInput, ScheduleEngine } from "../engineBridge";
-import {
-  GenerationRequest,
-  GenerationResponse,
-  Mode,
-  TimetableRequest,
-} from "@uoplan/proto/engine";
+import { GenerationRequest, GenerationResponse, TimetableRequest } from "@uoplan/proto/engine";
 import type { GenerationConstraints } from "../generation/types";
 import type { NormalizedCourseCode } from "../brand";
+import type { OptimizationKind } from "../optimizationPriorities";
 import {
-  engineCapturingGenerationMode,
+  defaultOptimizationPriorities,
+  setOptimizationPriorityEnabled,
+} from "../optimizationPriorities";
+import {
   fakeDataCache as fakeCache,
   generationResponse as resp,
   testCourseSchedule as schedule,
   testSection as section,
 } from "./engineTestHelpers";
 
+/** Default priority list with a single objective's enabled flag overridden. */
+function prioritiesWith(kind: OptimizationKind, enabled: boolean) {
+  return setOptimizationPriorityEnabled(defaultOptimizationPriorities(), kind, enabled);
+}
+
 const baseConstraints: GenerationConstraints = {
   minStartMinutes: 480,
   maxEndMinutes: 1200,
-  generationPreferHigherProfessorRating: true,
   maxFirstYearCredits: 24,
   professorRatings: {
     "Jane Doe": { rating: 4.5, numRatings: 10 },
@@ -46,8 +48,7 @@ function basicInput(over: Partial<BasicRequestInput> = {}): BasicRequestInput {
     electiveLevelBuckets: [1000, 2000],
     includeClosedComponents: false,
     virtualSectionsOnly: false,
-    generationPreferEasier: false,
-    generationPreferHigherSentiment: false,
+    optimizationPriorities: defaultOptimizationPriorities(),
     courseSentimentByNorm: null,
     blacklistedCourses: ["MAT 9999"],
     currentSeed: 7,
@@ -70,8 +71,7 @@ function advancedInput(over: Partial<AdvancedRequestInput> = {}): AdvancedReques
     electiveLevelBuckets: [],
     includeClosedComponents: true,
     virtualSectionsOnly: true,
-    generationPreferEasier: false,
-    generationPreferHigherSentiment: false,
+    optimizationPriorities: defaultOptimizationPriorities(),
     courseSentimentByNorm: null,
     blacklistedCourses: [],
     currentSeed: 3,
@@ -110,10 +110,8 @@ function advancedInput(over: Partial<AdvancedRequestInput> = {}): AdvancedReques
 }
 
 describe("buildBasicRequest", () => {
-  it("produces a MODE_BASIC request with basic fields populated and advanced fields empty", () => {
+  it("produces a basket request with basic fields populated and advanced fields empty", () => {
     const req = buildBasicRequest(basicInput(), fakeCache([]));
-    expect(req.mode).toBe(Mode.MODE_BASIC);
-    expect(EngineMode).toBe(Mode);
     expect(req.basicPinnedCourses).toEqual(["CSI 2110"]);
     expect(req.basicElectivesCount).toBe(2);
     expect(req.studentPrograms).toEqual(["CS"]);
@@ -128,23 +126,20 @@ describe("buildBasicRequest", () => {
   it("maps constraints, day codes, and forwards professor ratings when the preference is on", () => {
     const req = buildBasicRequest(basicInput(), fakeCache([]));
     expect(req.constraints?.minStartMinutes).toBe(480);
-    expect(req.constraints?.compressedSchedule).toBe(false);
     // "We" -> index 2
     expect(req.constraints?.blockedTimes).toEqual([{ day: 2, startMinutes: 600, endMinutes: 660 }]);
-    // prefer-higher-professor-rating is on: unrated professors (numRatings 0) are
-    // dropped; only real ratings forwarded, and the request flag is set.
-    expect(req.generationPreferHigherProfessorRating).toBe(true);
+    // prefer-higher-professor-rating objective is enabled by default: unrated professors
+    // (numRatings 0) are dropped; only real ratings forwarded.
     expect(req.professorRatings).toEqual({ "Jane Doe": 4.5 });
   });
 
   it("omits professor ratings when the prefer-higher-rating preference is off", () => {
     const req = buildBasicRequest(
       basicInput({
-        constraints: { ...baseConstraints, generationPreferHigherProfessorRating: false },
+        optimizationPriorities: prioritiesWith("prefer_professor_rating", false),
       }),
       fakeCache([]),
     );
-    expect(req.generationPreferHigherProfessorRating).toBe(false);
     expect(req.professorRatings).toEqual({});
   });
 
@@ -154,9 +149,15 @@ describe("buildBasicRequest", () => {
     });
     const cache = fakeCache([sched]);
     expect(
-      buildBasicRequest(basicInput({ generationPreferEasier: false }), cache).courseAplus,
+      buildBasicRequest(
+        basicInput({ optimizationPriorities: prioritiesWith("prefer_easier", false) }),
+        cache,
+      ).courseAplus,
     ).toEqual({});
-    const on = buildBasicRequest(basicInput({ generationPreferEasier: true }), cache);
+    const on = buildBasicRequest(
+      basicInput({ optimizationPriorities: prioritiesWith("prefer_easier", true) }),
+      cache,
+    );
     expect(on.courseAplus["CSI 2110"]).toBeCloseTo(50);
   });
 
@@ -168,12 +169,18 @@ describe("buildBasicRequest", () => {
     ]);
     expect(
       buildBasicRequest(
-        basicInput({ generationPreferHigherSentiment: false, courseSentimentByNorm: byNorm }),
+        basicInput({
+          optimizationPriorities: prioritiesWith("prefer_sentiment", false),
+          courseSentimentByNorm: byNorm,
+        }),
         cache,
       ).courseSentiment,
     ).toEqual({});
     const on = buildBasicRequest(
-      basicInput({ generationPreferHigherSentiment: true, courseSentimentByNorm: byNorm }),
+      basicInput({
+        optimizationPriorities: prioritiesWith("prefer_sentiment", true),
+        courseSentimentByNorm: byNorm,
+      }),
       cache,
     );
     expect(on.courseSentiment["CSI 2110"]).toBeCloseTo(4.2);
@@ -181,9 +188,8 @@ describe("buildBasicRequest", () => {
 });
 
 describe("buildAdvancedRequest", () => {
-  it("produces a MODE_ADVANCED request and maps requirement structures", () => {
+  it("produces an advanced request and maps requirement structures", () => {
     const req = buildAdvancedRequest(advancedInput(), fakeCache([]));
-    expect(req.mode).toBe(Mode.MODE_ADVANCED);
     // basic-only fields zeroed
     expect(req.basicPinnedCourses).toEqual([]);
     expect(req.basicElectivesCount).toBe(0);
@@ -311,14 +317,24 @@ describe("engine runners (encode → engine → decode)", () => {
       timetable_fixed_set: () => new Uint8Array(),
     };
     const result = runBasicGeneration(engine, basicInput(), fakeCache([sched]));
-    expect(received!.mode).toBe(Mode.MODE_BASIC);
+    expect(received!.basicPinnedCourses).toEqual(["CSI 2110"]);
+    expect(received!.basicElectivesCount).toBe(2);
     expect(result.schedule?.enrollments[0].courseCode).toBe("CSI 2110");
   });
 
-  it("runAdvancedGeneration sends a MODE_ADVANCED request", () => {
-    const { engine, getMode } = engineCapturingGenerationMode();
+  it("runAdvancedGeneration sends an advanced request with empty basket fields", () => {
+    let received: GenerationRequest | null = null;
+    const engine: ScheduleEngine = {
+      generate: (bytes) => {
+        received = GenerationRequest.decode(bytes);
+        return GenerationResponse.encode(resp({ hasSchedule: false })).finish();
+      },
+      timetable_fixed_set: () => new Uint8Array(),
+    };
     runAdvancedGeneration(engine, advancedInput(), fakeCache([]));
-    expect(getMode()).toBe(Mode.MODE_ADVANCED);
+    expect(received!.basicPinnedCourses).toEqual([]);
+    expect(received!.basicElectivesCount).toBe(0);
+    expect(received!.remainingRequirements).toHaveLength(1);
   });
 
   it("runTimetableFixedSet forwards a TimetableRequest with an unsigned seed", () => {
@@ -343,6 +359,7 @@ describe("engine runners (encode → engine → decode)", () => {
         seed: -1, // becomes unsigned 0xffffffff
         includeClosedComponents: false,
         virtualSectionsOnly: false,
+        optimizationPriorities: defaultOptimizationPriorities(),
       },
       fakeCache([sched]),
     );

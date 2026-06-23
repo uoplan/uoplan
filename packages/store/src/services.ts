@@ -4,6 +4,7 @@ import type {
   DataCache,
   GeneratedSchedule,
   GenerationConstraints,
+  OptimizationPriority,
   SchedulesData,
 } from "@uoplan/core";
 import type { AppState, GenerationErrorState } from "./types";
@@ -79,6 +80,8 @@ export interface RetimetableFixedSetInput {
   virtualExemptCourses?: readonly string[];
   applyBlacklist?: boolean;
   blacklistedCourses?: readonly string[];
+  /** Ordered optimization objectives — shape + professor objectives apply to swaps. */
+  optimizationPriorities: OptimizationPriority[];
 }
 
 export interface EngineService {

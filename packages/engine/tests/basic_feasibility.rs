@@ -28,7 +28,7 @@
 use std::time::{Duration, Instant};
 
 use prost::Message;
-use uoplan_engine::proto::engine::{GenerationRequest, GenerationResponse, Mode};
+use uoplan_engine::proto::engine::{GenerationRequest, GenerationResponse};
 use uoplan_engine::Engine;
 
 const CATALOGUE_PB: &str = concat!(
@@ -63,7 +63,6 @@ fn coverage_instrumented() -> bool {
 /// repro (term 2271, 23 electives, default options, no transcript).
 fn default_basic_request(electives: u32) -> GenerationRequest {
     GenerationRequest {
-        mode: Mode::Basic as i32,
         basic_electives_count: electives,
         include_closed_components: false,
         level_buckets: vec!["undergrad".to_string()],

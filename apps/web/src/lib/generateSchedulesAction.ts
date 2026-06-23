@@ -216,10 +216,7 @@ export async function generateSchedulesAction(
     includeClosedComponents,
     virtualSectionsOnly,
     generationLimitFirstYearCredits,
-    generationCompressedSchedule,
-    generationPreferEasier,
-    generationPreferHigherSentiment,
-    generationPreferHigherProfessorRating,
+    optimizationPriorities,
     courseSentimentByNorm,
     frenchImmersionStream,
   } = input;
@@ -309,12 +306,10 @@ export async function generateSchedulesAction(
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,
     maxEndMinutes: generationMaxEndMinutes,
-    generationPreferHigherProfessorRating,
     professorRatings: professorRatings ?? undefined,
     maxFirstYearCredits: generationLimitFirstYearCredits
       ? Math.max(0, 48 - (completedFirstYearCredits ?? 0))
       : undefined,
-    compressedSchedule: generationCompressedSchedule,
     blockedTimes: input.blockedTimes,
   };
 
@@ -374,8 +369,7 @@ export async function generateSchedulesAction(
     electiveLevelBuckets,
     includeClosedComponents,
     virtualSectionsOnly,
-    generationPreferEasier,
-    generationPreferHigherSentiment,
+    optimizationPriorities,
     courseSentimentByNorm,
     frenchImmersionStream,
     blacklistedCourses: input.blacklistedCourses ?? [],
@@ -475,11 +469,8 @@ async function handleBasicGeneration(
     firstSeed,
     includeClosedComponents,
     virtualSectionsOnly,
-    generationPreferEasier,
-    generationPreferHigherSentiment,
-    generationPreferHigherProfessorRating,
+    optimizationPriorities,
     courseSentimentByNorm,
-    generationCompressedSchedule,
     generationLimitFirstYearCredits,
     completedCourses,
     studentPrograms,
@@ -496,12 +487,10 @@ async function handleBasicGeneration(
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,
     maxEndMinutes: generationMaxEndMinutes,
-    generationPreferHigherProfessorRating,
     professorRatings: professorRatings ?? undefined,
     maxFirstYearCredits: generationLimitFirstYearCredits
       ? Math.max(0, 48 - completedFirstYearCredits)
       : undefined,
-    compressedSchedule: generationCompressedSchedule,
     blockedTimes: input.blockedTimes,
   };
 
@@ -517,8 +506,7 @@ async function handleBasicGeneration(
     electiveLevelBuckets,
     includeClosedComponents,
     virtualSectionsOnly,
-    generationPreferEasier,
-    generationPreferHigherSentiment,
+    optimizationPriorities,
     courseSentimentByNorm,
     frenchImmersionStream,
     blacklistedCourses: basicBlacklistedCourses ?? [],

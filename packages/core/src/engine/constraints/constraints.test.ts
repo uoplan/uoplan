@@ -3,7 +3,6 @@ import type { ComponentSection } from "../../dataTypes";
 import type { CourseEnrollment, GenerationConstraints } from "../../generation";
 import {
   blacklistConstraint,
-  compressedScheduleConstraint,
   ConstraintPipeline,
   overlapConstraint,
   timeWindowConstraint,
@@ -90,13 +89,6 @@ describe("timetable-scope constraints", () => {
     const c = mk("Tu", 600, 690);
     expect(overlapConstraint.allowsEnrollment?.(b, [a], ctx)).toBe(false);
     expect(overlapConstraint.allowsEnrollment?.(c, [a], ctx)).toBe(true);
-  });
-
-  it("compressed constraint is inert unless enabled", () => {
-    expect(compressedScheduleConstraint(FULL_DAY).active).toBe(false);
-    expect(compressedScheduleConstraint({ ...FULL_DAY, compressedSchedule: true }).active).toBe(
-      true,
-    );
   });
 });
 

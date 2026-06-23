@@ -12,7 +12,6 @@ export type TimetableFailureKind =
   | "no_conflict_free_assignment";
 
 export interface ActiveConstraintsSummary {
-  compressedSchedule: boolean;
   maxFirstYearCredits: boolean;
 }
 
@@ -91,12 +90,10 @@ function buildActiveConstraintsSummary(
 ): ActiveConstraintsSummary {
   if (!constraints) {
     return {
-      compressedSchedule: false,
       maxFirstYearCredits: false,
     };
   }
   return {
-    compressedSchedule: !!constraints.compressedSchedule,
     maxFirstYearCredits: constraints.maxFirstYearCredits != null,
   };
 }
@@ -171,9 +168,6 @@ function buildSuggestions(
   }
 
   if (kind === "no_conflict_free_assignment") {
-    if (summary.compressedSchedule) {
-      suggestions.push("turn-off-compressed");
-    }
     if (summary.maxFirstYearCredits) {
       suggestions.push("relax-fy-cap");
     }

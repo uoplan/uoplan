@@ -13,11 +13,6 @@ package engine;
 // existing `GeneratedSchedule` shape by looking section ids up in its cache.
 // ---------------------------------------------------------------------------
 
-enum Mode {
-  MODE_BASIC = 0;
-  MODE_ADVANCED = 1;
-}
-
 // proto3 maps cannot have `repeated` values, so wrap string lists.
 message StringList {
   repeated string values = 1;
@@ -34,8 +29,30 @@ message GenerationConstraints {
   uint32 max_end_minutes = 2;
   // Max credits from 1000-level courses allowed (48 - already completed).
   optional double max_first_year_credits = 3;
-  bool compressed_schedule = 4;
+  reserved 4; // was bool compressed_schedule (now the soft `compact` objective)
   repeated BlockedTime blocked_times = 5;
+}
+
+// A schedule-generation objective. The engine optimizes for the enabled
+// objectives in list order (index 0 = highest priority) via a quantized
+// lexicographic comparator. Mirrors the shared TS model
+// (`@uoplan/core` optimizationPriorities.ts).
+enum OptimizationKind {
+  OPTIMIZATION_KIND_UNSPECIFIED = 0;
+  OPTIMIZATION_KIND_FREE_DAYS = 1;
+  OPTIMIZATION_KIND_GOOD_BREAKS = 2;
+  OPTIMIZATION_KIND_COMPACT = 3;
+  OPTIMIZATION_KIND_PREFER_EASIER = 4;
+  OPTIMIZATION_KIND_PREFER_SENTIMENT = 5;
+  OPTIMIZATION_KIND_PREFER_PROFESSOR_RATING = 6;
+}
+
+message OptimizationPriority {
+  OptimizationKind kind = 1;
+  bool enabled = 2;
+  // `good_breaks` only: aim for ~`break_count` gaps of ~`break_target_minutes`.
+  uint32 break_count = 3;
+  uint32 break_target_minutes = 4;
 }
 
 message DisciplineLevel {
@@ -74,9 +91,14 @@ message RequirementWithStatus {
 }
 
 message GenerationRequest {
-  Mode mode = 1;
+  // Field 1 was `Mode mode` — generation is now a single unified path (basket
+  // requests are modelled as a synthesized `free_elective` requirement pool), so
+  // there is no longer a mode discriminator. The `basic_*` fields below are the
+  // pure-basket selection inputs feeding that synthesis.
+  reserved 1;
+  reserved "mode";
 
-  // --- Basic mode selection ---
+  // --- Basket selection (no degree program active) ---
   repeated string basic_pinned_courses = 2;
   uint32 basic_electives_count = 3;
   repeated string basic_excluded_categories = 4;
@@ -86,7 +108,7 @@ message GenerationRequest {
   repeated string student_programs = 6;
   optional string program_title = 7;
 
-  // --- Advanced mode selection (requirement tree computed in TS) ---
+  // --- Program selection (requirement tree computed in TS) ---
   repeated RemainingRequirement remaining_requirements = 8;
   repeated RequirementWithStatus requirement_tree = 9;
   map<string, StringList> selected_per_requirement = 10;
@@ -103,7 +125,7 @@ message GenerationRequest {
   repeated uint32 elective_level_buckets = 19;
   bool include_closed_components = 20;
   bool virtual_sections_only = 21;
-  bool generation_prefer_easier = 22;
+  reserved 22; // was bool generation_prefer_easier (now optimization_priorities)
   bool french_immersion_stream = 23;
   repeated string blacklisted_courses = 24;
 
@@ -118,21 +140,23 @@ message GenerationRequest {
   optional uint32 term_id = 28;
 
   // Normalized professor name -> RateMyProfessors rating (only rated profs).
-  // Used by the "prefer higher professor rating" soft section weighting.
+  // Used by the `prefer_professor_rating` objective's section weighting.
   map<string, double> professor_ratings = 29;
 
-  // Course code -> A+ percentage, used by the "prefer easier" soft weighting.
+  // Course code -> A+ percentage, used by the `prefer_easier` objective.
   map<string, double> course_aplus = 30;
 
-  // Soft "prefer higher sentiment" preference (course-feedback overall rating).
-  bool generation_prefer_higher_sentiment = 31;
+  reserved 31; // was bool generation_prefer_higher_sentiment
   // Course code -> overall feedback sentiment (1-5). Used by the
-  // "prefer higher sentiment" soft selection weighting.
+  // `prefer_sentiment` objective's soft selection weighting.
   map<string, double> course_sentiment = 32;
 
-  // Soft "prefer higher professor rating" preference: scales each section's
-  // selection probability by its professor's rating (unrated treated as ~4.0).
-  bool generation_prefer_higher_professor_rating = 33;
+  reserved 33; // was bool generation_prefer_higher_professor_rating
+
+  // Ordered optimization objectives (index 0 = highest priority). The single
+  // source of truth for which soft objectives are active and how they rank;
+  // replaces the old per-preference booleans and `compressed_schedule`.
+  repeated OptimizationPriority optimization_priorities = 34;
 }
 
 // Re-timetable a FIXED set of courses (the UI swap feature): given an exact set
@@ -148,8 +172,11 @@ message TimetableRequest {
   map<string, double> professor_ratings = 7;
   bool apply_blacklist = 8;
   repeated string blacklisted_courses = 9;
-  // Soft "prefer higher professor rating" preference (see GenerationRequest).
-  bool generation_prefer_higher_professor_rating = 10;
+  reserved 10; // was bool generation_prefer_higher_professor_rating
+  // Ordered optimization objectives that apply to re-timetabling a fixed course
+  // set (timetable-shape + professor-rating objectives; selection objectives are
+  // ignored here since the course set is fixed). See GenerationRequest.
+  repeated OptimizationPriority optimization_priorities = 11;
 }
 
 // A component -> section choice for a chosen course. The TS side rebuilds the

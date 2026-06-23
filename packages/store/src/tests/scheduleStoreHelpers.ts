@@ -1,5 +1,6 @@
 import type { Mock } from "vitest";
 import { vi } from "vitest";
+import { defaultOptimizationPriorities } from "@uoplan/core";
 import { createAppStore } from "../appStore";
 import { createTestAppServices } from "../testServices";
 import type { AppStore } from "../types";
@@ -49,7 +50,7 @@ export function resetSwapStore(calendarMode: "basic" | "advanced" = "basic") {
     cache: buildSwapCache(),
     generationMinStartMinutes: 0,
     generationMaxEndMinutes: 24 * 60,
-    generationPreferHigherProfessorRating: false,
+    optimizationPriorities: defaultOptimizationPriorities(),
     professorRatings: null,
     includeClosedComponents: true,
     virtualSectionsOnly: false,
