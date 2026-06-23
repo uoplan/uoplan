@@ -51,6 +51,8 @@ import { downloadTextFile } from "../../lib/downloadFile";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateRange";
 import { useGenerationErrorToast } from "../../hooks/useGenerationErrorToast";
+import { GenerationErrorModal } from "../GenerationErrorModal";
+import type { GenerationErrorState } from "../../store/types";
 import { useGenerationSentiment } from "../../hooks/useGenerationSentiment";
 import { tr, useTr } from "../../i18n";
 import { useAnalytics } from "../../lib/analytics";
@@ -202,7 +204,13 @@ export function CalendarPage() {
     setCalendarWeekIndex(weekIndex);
   }, [weekIndex, setCalendarWeekIndex]);
 
-  useGenerationErrorToast(generationError);
+  const [generationErrorDetail, setGenerationErrorDetail] = useState<GenerationErrorState | null>(
+    null,
+  );
+  useGenerationErrorToast(generationError, (error) => {
+    analytics.capture("generation_error_details_opened", { kind: error.message.kind });
+    setGenerationErrorDetail(error);
+  });
   useGenerationSentiment();
 
   const getShareUrl = useGetShareUrl();
@@ -794,6 +802,10 @@ export function CalendarPage() {
           </Box>
         )}
       </Box>
+      <GenerationErrorModal
+        error={generationErrorDetail}
+        onClose={() => setGenerationErrorDetail(null)}
+      />
     </>
   );
 }

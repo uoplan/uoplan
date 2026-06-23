@@ -14,6 +14,7 @@ import { Button, Text } from "@uoplan/ui";
 
 import { AppIcon } from "@/components/app-icon";
 import { CalendarEventDrawer } from "@/components/calendar-event-drawer";
+import { GenerationErrorDetailsSheet } from "@/components/generation-error-details-sheet";
 import { BottomControlBar, useFloatingControlsBottom } from "@/components/redesign";
 import { PillButton } from "@/components/redesign/pill-button";
 import { ScheduleSettingsSheet } from "@/components/schedule-settings-sheet";
@@ -24,7 +25,7 @@ import { useBasket } from "@/data/basket-provider";
 import { useCompletedCourses } from "@/data/completed-courses-provider";
 import { useScheduleOptions } from "@/data/schedule-options-provider";
 import { addScheduleToCalendar } from "@/lib/add-to-calendar";
-import { useAnalytics } from "@/lib/analytics";
+import { useAnalytics, getAnalytics } from "@/lib/analytics";
 import { exportScheduleIcs } from "@/lib/share-ics";
 import { computeSwapOptions, type SwapOption } from "@/lib/swap-course";
 import { formatGenerationLead, formatSuggestions } from "@/lib/generation-messages";
@@ -456,6 +457,7 @@ function ScheduleEmptyState({
   onAdjustFilters: () => void;
   onRetry: () => void;
 }) {
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const tips =
     status === "none" && diagnostics
       ? formatSuggestions(diagnostics).filter((t) => t.trim().length > 0)
@@ -536,6 +538,18 @@ function ScheduleEmptyState({
                 onPress={onAdjustFilters}
               />
             )}
+            {!allSkipped && diagnostics ? (
+              <PillButton
+                label="View details"
+                variant="secondary"
+                onPress={() => {
+                  getAnalytics().capture("generation_error_details_opened", {
+                    kind: diagnostics.lead.code,
+                  });
+                  setDetailsOpen(true);
+                }}
+              />
+            ) : null}
           </View>
         </>
       ) : status === "error" ? (
@@ -572,6 +586,11 @@ function ScheduleEmptyState({
           </View>
         </>
       )}
+      <GenerationErrorDetailsSheet
+        visible={detailsOpen}
+        diagnostics={diagnostics}
+        onClose={() => setDetailsOpen(false)}
+      />
     </View>
   );
 }
