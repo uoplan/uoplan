@@ -1,0 +1,53 @@
+.iconButton {
+  color: var(--app-text-muted);
+}
+
+.iconButton:hover {
+  color: var(--app-text);
+  background: var(--app-surface);
+}
+
+.iconButton[data-in-compare="true"] {
+  color: var(--app-accent);
+}
+
+.pillButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  box-shadow: var(--app-shadow-sm);
+  color: var(--app-text);
+  font-weight: 600;
+  font-size: var(--mantine-font-size-sm);
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.pillButton:hover {
+  background: color-mix(in srgb, var(--app-accent) 10%, var(--app-surface));
+  border-color: var(--app-border-strong);
+}
+
+.pillButton[data-in-compare="true"] {
+  color: var(--app-accent);
+  border-color: color-mix(in srgb, var(--app-accent) 35%, var(--app-border));
+  background: color-mix(in srgb, var(--app-accent) 10%, var(--app-surface));
+}
+
+.pillButton[data-at-limit="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.pillLabel {
+  display: inline-block;
+}

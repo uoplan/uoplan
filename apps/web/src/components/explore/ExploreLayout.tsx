@@ -21,6 +21,8 @@ import {
 } from "../../store/hooks";
 import { AddToBasketButton } from "../basket/AddToBasketButton";
 import { BasketFab } from "../basket/BasketFab";
+import { AddToCompareButton } from "./compare/AddToCompareButton";
+import { CompareTray } from "./compare/CompareTray";
 import {
   ExploreBasketTargetContext,
   useExploreBasketTargetCode,
@@ -44,11 +46,13 @@ function ExploreCartCluster() {
   const code = useExploreBasketTargetCode();
   const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });
   const pill = code ? <AddToBasketButton code={code} variant="pill" /> : null;
+  const compare = code ? <AddToCompareButton code={code} variant="icon" size="lg" /> : null;
 
   if (isMobile) {
     return (
       <Affix position={{ bottom: 24, right: 24 }} zIndex={150}>
         <Group gap={10} align="center" wrap="nowrap">
+          {compare}
           {pill}
           <BasketFab inline />
         </Group>
@@ -67,6 +71,7 @@ function ExploreCartCluster() {
       }}
     >
       <Group gap={8} align="center" wrap="nowrap">
+        {compare}
         {pill}
         <BasketFab inline />
       </Group>
@@ -191,6 +196,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
         }}
       >
         <ExploreCartCluster />
+        <CompareTray />
 
         <ExploreLayoutHeader
           onIndex={onIndex}

@@ -4,6 +4,7 @@ import { Linking, Pressable, StyleSheet, View } from "react-native";
 
 import { Text } from "@uoplan/ui";
 
+import { MAX_COMPARE_ITEMS, compareIdsForKind, type CompareRef } from "@uoplan/core";
 import { normalizeProfessorName } from "@uoplan/core/professorRatings";
 
 import { AppIcon } from "@/components/app-icon";
@@ -16,10 +17,12 @@ import { RatingBadgeRow } from "@/components/rating-badge";
 import { Fab, RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
 import { Spacing, Surface } from "@/constants/theme";
 import { useBasket } from "@/data/basket-provider";
+import { useCompare } from "@/data/compare-provider";
 import { useAppData, useFeedback } from "@/data/data-provider";
 import { courseDetail, courseScheduleTerms } from "@/data/explore-detail";
 import { feedbackViewsForCourse, professorSentimentByName } from "@/data/feedback-data";
 import { formatTermLabel } from "@/data/trends-data";
+import { useTr } from "@/i18n";
 import { useAnalytics } from "@/lib/analytics";
 import { useCourseStatus } from "@/lib/use-basket-status";
 
@@ -27,11 +30,13 @@ import { useCourseStatus } from "@/lib/use-basket-status";
 export default function CourseDetailScreen() {
   const router = useRouter();
   const analytics = useAnalytics();
+  const tr = useTr();
   const params = useLocalSearchParams<{ code: string }>();
   const code = String(params.code ?? "");
   const { bundle, index, schedulesByTerm, aliasGroups } = useAppData();
   const feedback = useFeedback();
   const basket = useBasket();
+  const compare = useCompare();
   const courseStatus = useCourseStatus({ code });
   const detail = useMemo(
     () => courseDetail(bundle, index, code, aliasGroups),
@@ -44,6 +49,18 @@ export default function CourseDetailScreen() {
     [schedulesByTerm, code],
   );
   const viewedCourseCode = detail?.course.code;
+  const compareRef = useMemo<CompareRef>(
+    () => ({ kind: "course", id: viewedCourseCode ?? code }),
+    [viewedCourseCode, code],
+  );
+  const courseCompareIds = compareIdsForKind(compare.refs, "course");
+  const compareCount = courseCompareIds.length;
+  const inCompare = compare.has(compareRef);
+  const compareLimitReached =
+    !inCompare &&
+    compare.refs.length > 0 &&
+    compare.refs[0]?.kind === "course" &&
+    compareCount >= MAX_COMPARE_ITEMS;
 
   useEffect(() => {
     if (viewedCourseCode) {
@@ -125,6 +142,13 @@ export default function CourseDetailScreen() {
   // so we never disable and assume the user knows what they're doing.
   const prereqsUnmet = courseStatus.prerequisite === "not_met";
   const addDisabled = !inBasket && prereqsUnmet;
+  const openCompare = () => {
+    analytics.capture("compare_opened", { kind: "course", count: compareCount });
+    router.push({
+      pathname: "/explore/compare/[resource]",
+      params: { resource: "course", ids: courseCompareIds.join(",") },
+    });
+  };
 
   return (
     <RedesignScreen
@@ -132,19 +156,32 @@ export default function CourseDetailScreen() {
       backLabel="Explore"
       onBack={() => router.back()}
       cart={
-        <Fab
-          icon={inBasket ? "checkmark" : "cart.badge.plus"}
-          accent
-          disabled={addDisabled}
-          onPress={() => basket.toggle(course.code)}
-          accessibilityLabel={
-            addDisabled
-              ? "Add to basket — prerequisites not met"
-              : inBasket
-                ? "Remove from basket"
-                : "Add to basket"
-          }
-        />
+        <View style={styles.actionFabRow}>
+          <Fab
+            icon={inCompare ? "checkmark" : "plus"}
+            accent={inCompare}
+            disabled={compareLimitReached}
+            onPress={() => compare.toggle(compareRef)}
+            accessibilityLabel={
+              compareLimitReached
+                ? tr("compare.limitReached", { max: MAX_COMPARE_ITEMS })
+                : tr(inCompare ? "compare.added" : "compare.add")
+            }
+          />
+          <Fab
+            icon={inBasket ? "checkmark" : "cart.badge.plus"}
+            accent
+            disabled={addDisabled}
+            onPress={() => basket.toggle(course.code)}
+            accessibilityLabel={
+              addDisabled
+                ? "Add to basket — prerequisites not met"
+                : inBasket
+                  ? "Remove from basket"
+                  : "Add to basket"
+            }
+          />
+        </View>
       }
     >
       <ScreenHeader title={course.code} subtitle={course.title} />
@@ -185,6 +222,22 @@ export default function CourseDetailScreen() {
             Open in catalogue
           </Text>
         </Pressable>
+        {compareCount > 0 ? (
+          <Pressable
+            accessibilityRole="button"
+            onPress={openCompare}
+            style={({ pressed }) => [
+              styles.metadataBadge,
+              styles.compareBadge,
+              pressed && styles.metadataBadgePressed,
+            ]}
+          >
+            <AppIcon name="square.grid.2x2.fill" size={13} color={Surface.accent} />
+            <Text size="sm" weight="semibold" color={Surface.accent}>
+              {tr("compare.cta", { count: compareCount })}
+            </Text>
+          </Pressable>
+        ) : null}
       </View>
 
       {detail.aliasCodes.length > 0 ? (
@@ -218,6 +271,15 @@ export default function CourseDetailScreen() {
               basket.
             </Text>
           </View>
+        </View>
+      ) : null}
+
+      {compareLimitReached ? (
+        <View style={styles.compareNotice}>
+          <AppIcon name="exclamationmark.triangle" size={15} color={Surface.warning} />
+          <Text size="sm" color={Surface.label}>
+            {tr("compare.limitReached", { max: MAX_COMPARE_ITEMS })}
+          </Text>
         </View>
       ) : null}
 
@@ -288,6 +350,10 @@ export default function CourseDetailScreen() {
 }
 
 const styles = StyleSheet.create({
+  actionFabRow: {
+    flexDirection: "row",
+    gap: Spacing.two,
+  },
   termList: {
     gap: Spacing.one,
   },
@@ -327,6 +393,9 @@ const styles = StyleSheet.create({
   catalogueBadge: {
     gap: Spacing.one,
   },
+  compareBadge: {
+    gap: Spacing.one,
+  },
   aliasRow: {
     alignItems: "center",
     flexDirection: "row",
@@ -352,6 +421,15 @@ const styles = StyleSheet.create({
   },
   prereqNoticeText: {
     flex: 1,
+  },
+  compareNotice: {
+    alignItems: "center",
+    backgroundColor: Surface.warningSoft,
+    borderRadius: 12,
+    flexDirection: "row",
+    gap: Spacing.two,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
   },
   professorsSection: {
     gap: Spacing.two,
