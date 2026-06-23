@@ -21,6 +21,7 @@ export default function ExploreLayout() {
         }}
       >
         <Stack.Screen name="index" />
+        <Stack.Screen name="compare/[resource]" />
         <Stack.Screen name="course/[code]/index" />
         <Stack.Screen name="course/[code]/feedback" />
         <Stack.Screen name="course/[code]/schedule" />

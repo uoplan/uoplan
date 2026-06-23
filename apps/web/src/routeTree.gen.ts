@@ -30,6 +30,7 @@ import { Route as TrendsCoursesRouteImport } from './routes/trends/courses'
 import { Route as ExploreProgramSplatRouteImport } from './routes/explore/program/$'
 import { Route as ExploreFacultyFacultyRouteImport } from './routes/explore/faculty/$faculty'
 import { Route as ExploreDisciplineDisciplineRouteImport } from './routes/explore/discipline/$discipline'
+import { Route as ExploreCompareResourceRouteImport } from './routes/explore/compare/$resource'
 import { Route as ExploreProfessorSlugIndexRouteImport } from './routes/explore/professor/$slug/index'
 import { Route as ExploreCourseCourseIndexRouteImport } from './routes/explore/course/$course/index'
 import { Route as ExploreProfessorSlugFeedbackRouteImport } from './routes/explore/professor/$slug/feedback'
@@ -142,6 +143,11 @@ const ExploreDisciplineDisciplineRoute =
     path: '/discipline/$discipline',
     getParentRoute: () => ExploreRouteRoute,
   } as any)
+const ExploreCompareResourceRoute = ExploreCompareResourceRouteImport.update({
+  id: '/compare/$resource',
+  path: '/compare/$resource',
+  getParentRoute: () => ExploreRouteRoute,
+} as any)
 const ExploreProfessorSlugIndexRoute =
   ExploreProfessorSlugIndexRouteImport.update({
     id: '/professor/$slug/',
@@ -192,6 +198,7 @@ export interface FileRoutesByFullPath {
   '/personalize/': typeof PersonalizeIndexRoute
   '/schedule/': typeof ScheduleIndexRoute
   '/trends/': typeof TrendsIndexRoute
+  '/explore/compare/$resource': typeof ExploreCompareResourceRoute
   '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
   '/explore/faculty/$faculty': typeof ExploreFacultyFacultyRoute
   '/explore/program/$': typeof ExploreProgramSplatRoute
@@ -216,6 +223,7 @@ export interface FileRoutesByTo {
   '/personalize': typeof PersonalizeIndexRoute
   '/schedule': typeof ScheduleIndexRoute
   '/trends': typeof TrendsIndexRoute
+  '/explore/compare/$resource': typeof ExploreCompareResourceRoute
   '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
   '/explore/faculty/$faculty': typeof ExploreFacultyFacultyRoute
   '/explore/program/$': typeof ExploreProgramSplatRoute
@@ -245,6 +253,7 @@ export interface FileRoutesById {
   '/personalize/': typeof PersonalizeIndexRoute
   '/schedule/': typeof ScheduleIndexRoute
   '/trends/': typeof TrendsIndexRoute
+  '/explore/compare/$resource': typeof ExploreCompareResourceRoute
   '/explore/discipline/$discipline': typeof ExploreDisciplineDisciplineRoute
   '/explore/faculty/$faculty': typeof ExploreFacultyFacultyRoute
   '/explore/program/$': typeof ExploreProgramSplatRoute
@@ -275,6 +284,7 @@ export interface FileRouteTypes {
     | '/personalize/'
     | '/schedule/'
     | '/trends/'
+    | '/explore/compare/$resource'
     | '/explore/discipline/$discipline'
     | '/explore/faculty/$faculty'
     | '/explore/program/$'
@@ -299,6 +309,7 @@ export interface FileRouteTypes {
     | '/personalize'
     | '/schedule'
     | '/trends'
+    | '/explore/compare/$resource'
     | '/explore/discipline/$discipline'
     | '/explore/faculty/$faculty'
     | '/explore/program/$'
@@ -327,6 +338,7 @@ export interface FileRouteTypes {
     | '/personalize/'
     | '/schedule/'
     | '/trends/'
+    | '/explore/compare/$resource'
     | '/explore/discipline/$discipline'
     | '/explore/faculty/$faculty'
     | '/explore/program/$'
@@ -499,6 +511,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExploreDisciplineDisciplineRouteImport
       parentRoute: typeof ExploreRouteRoute
     }
+    '/explore/compare/$resource': {
+      id: '/explore/compare/$resource'
+      path: '/compare/$resource'
+      fullPath: '/explore/compare/$resource'
+      preLoaderRoute: typeof ExploreCompareResourceRouteImport
+      parentRoute: typeof ExploreRouteRoute
+    }
     '/explore/professor/$slug/': {
       id: '/explore/professor/$slug/'
       path: '/professor/$slug'
@@ -539,6 +558,7 @@ declare module '@tanstack/react-router' {
 
 interface ExploreRouteRouteChildren {
   ExploreIndexRoute: typeof ExploreIndexRoute
+  ExploreCompareResourceRoute: typeof ExploreCompareResourceRoute
   ExploreDisciplineDisciplineRoute: typeof ExploreDisciplineDisciplineRoute
   ExploreFacultyFacultyRoute: typeof ExploreFacultyFacultyRoute
   ExploreProgramSplatRoute: typeof ExploreProgramSplatRoute
@@ -551,6 +571,7 @@ interface ExploreRouteRouteChildren {
 
 const ExploreRouteRouteChildren: ExploreRouteRouteChildren = {
   ExploreIndexRoute: ExploreIndexRoute,
+  ExploreCompareResourceRoute: ExploreCompareResourceRoute,
   ExploreDisciplineDisciplineRoute: ExploreDisciplineDisciplineRoute,
   ExploreFacultyFacultyRoute: ExploreFacultyFacultyRoute,
   ExploreProgramSplatRoute: ExploreProgramSplatRoute,

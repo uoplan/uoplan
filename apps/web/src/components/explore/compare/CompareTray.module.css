@@ -1,0 +1,33 @@
+.tray {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  box-shadow: var(--app-shadow-md);
+  padding: 4px 6px 4px 4px;
+}
+
+.openButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  color: var(--app-text);
+  font-weight: 600;
+  font-size: var(--mantine-font-size-sm);
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.openButton:hover {
+  background: color-mix(in srgb, var(--app-accent) 10%, var(--app-surface));
+  color: var(--app-accent);
+}
+
+.label {
+  display: inline-block;
+}
