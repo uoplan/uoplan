@@ -7,10 +7,7 @@ import type { ComponentSection } from "../../dataTypes";
 import type { CourseEnrollment, GenerationConstraints } from "../../generation";
 import type { NormalizedCourseCode } from "../../brand";
 import { enrollmentsOverlap } from "../../generation/overlaps";
-import {
-  satisfiesCompressedConstraint,
-  timeSlotSatisfiesConstraints,
-} from "../../generation/constraints";
+import { timeSlotSatisfiesConstraints } from "../../generation/constraints";
 import { normalizeCourseCode } from "../../utils/courseUtils";
 import type { Constraint } from "./types";
 
@@ -55,18 +52,6 @@ export function timeWindowConstraint(constraints: GenerationConstraints): Constr
         }
       }
       return true;
-    },
-  };
-}
-
-/** Compressed-schedule preference: at most one ≤90-min gap per day. */
-export function compressedScheduleConstraint(constraints: GenerationConstraints): Constraint {
-  return {
-    id: "compressed-schedule",
-    label: "compressed-schedule",
-    active: !!constraints.compressedSchedule,
-    allowsFinalTimetable(enrollments: readonly CourseEnrollment[]): boolean {
-      return satisfiesCompressedConstraint([...enrollments]);
     },
   };
 }
@@ -125,7 +110,6 @@ export function buildHardConstraintPipeline(
   return [
     overlapConstraint,
     timeWindowConstraint(constraints),
-    compressedScheduleConstraint(constraints),
     maxFirstYearCreditsConstraint(constraints),
     blacklistConstraint(blacklistedCourses),
   ];

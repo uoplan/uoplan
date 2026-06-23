@@ -14,7 +14,6 @@ pub struct Constraints {
     pub min_start: u32,
     pub max_end: u32,
     pub max_first_year_credits: Option<f64>,
-    pub compressed: bool,
     /// (day 0-6 Monday, start, end)
     pub blocked: Vec<(u8, u32, u32)>,
     /// normalized professor name -> rating (only rated profs present).
@@ -64,12 +63,10 @@ impl Constraints {
         true
     }
 
-    /// Final-timetable check: compressed schedule + first-year credit cap.
+    /// Final-timetable check: the first-year credit cap. The compressed-schedule
+    /// rule was replaced by the soft `compact` optimization objective.
     /// Operates on enrollments by reference (no per-call allocation).
     pub fn allows_final(&self, chosen: &[Enrollment], data: &DataView) -> bool {
-        if self.compressed && !satisfies_compressed(chosen) {
-            return false;
-        }
         if let Some(cap) = self.max_first_year_credits {
             let mut total = 0.0;
             for e in chosen {
@@ -102,36 +99,6 @@ fn first_year_credits(code: &str, credits: Option<f64>) -> f64 {
         Some(n) if n < 2000 => credits.unwrap_or(3.0),
         _ => 0.0,
     }
-}
-
-fn satisfies_compressed(chosen: &[Enrollment]) -> bool {
-    let mut by_day: HashMap<u8, Vec<(u32, u32)>> = HashMap::new();
-    for e in chosen {
-        for t in &e.times {
-            by_day.entry(t.day).or_default().push((t.start, t.end));
-        }
-    }
-    for times in by_day.values_mut() {
-        if times.len() <= 1 {
-            continue;
-        }
-        times.sort_by_key(|&(s, _)| s);
-        let mut gap_count = 0;
-        for i in 0..times.len() - 1 {
-            let cur_end = times[i].1;
-            let next_start = times[i + 1].0;
-            if next_start > cur_end {
-                let gap = next_start - cur_end;
-                if gap > 0 {
-                    gap_count += 1;
-                    if gap_count > 1 || gap > 90 {
-                        return false;
-                    }
-                }
-            }
-        }
-    }
-    true
 }
 
 #[cfg(test)]
@@ -208,35 +175,6 @@ mod tests {
         assert!(!constraints.allows_section(&section(vec![time(1, 16 * 60, 17 * 60 + 30, None)])));
         assert!(!constraints.allows_section(&section(vec![time(0, 12 * 60 + 30, 14 * 60, None)])));
         assert!(constraints.allows_section(&section(vec![time(0, 13 * 60, 14 * 60, None)])));
-    }
-
-    #[test]
-    fn compressed_schedule_allows_one_short_gap_per_day_only() {
-        let data = data_with_credits(&[]);
-        let constraints = Constraints {
-            max_end: 24 * 60,
-            compressed: true,
-            ..Default::default()
-        };
-
-        let one_short_gap = vec![
-            enrollment("CSI 1100", vec![time(0, 9 * 60, 10 * 60, None)]),
-            enrollment("CSI 1101", vec![time(0, 11 * 60, 12 * 60, None)]),
-        ];
-        assert!(constraints.allows_final(&one_short_gap, &data));
-
-        let long_gap = vec![
-            enrollment("CSI 1100", vec![time(0, 9 * 60, 10 * 60, None)]),
-            enrollment("CSI 1101", vec![time(0, 12 * 60, 13 * 60, None)]),
-        ];
-        assert!(!constraints.allows_final(&long_gap, &data));
-
-        let two_gaps = vec![
-            enrollment("CSI 1100", vec![time(0, 9 * 60, 10 * 60, None)]),
-            enrollment("CSI 1101", vec![time(0, 10 * 60 + 30, 11 * 60, None)]),
-            enrollment("CSI 1102", vec![time(0, 11 * 60 + 30, 12 * 60, None)]),
-        ];
-        assert!(!constraints.allows_final(&two_gaps, &data));
     }
 
     #[test]

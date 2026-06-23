@@ -28,11 +28,20 @@ export interface AnalyticsEventMap {
   completed_courses_updated: { count: number; source?: CompletedCoursesSource };
   requirements_viewed: { programId?: string };
   preferences_updated: { field: string };
+  // Reorder/toggle/break-config edits to the optimization-priorities list.
+  // `kind` is an OptimizationKind; `position` is its index after the change.
+  optimization_priority_changed: { kind: string; enabled?: boolean; position?: number };
+  // Fired when the user opens the generation-error details modal from the toast.
+  // `kind` is the structured GenerationMessageDescriptor kind.
+  generation_error_details_opened: { kind: string };
 
   // --- Schedule generation ------------------------------------------------
   // `programId`/`completedCount`/`requirementCount` are optional, non-PII
   // segmentation dimensions (catalog program id + counts) so funnels and
   // drop-off can be broken down by program and academic load.
+  // `optimizations` is the ordered list of enabled optimization-priority kinds
+  // (single source of truth = packages/core optimizationPriorities) so funnels
+  // can break generation outcomes down by which optimizations users picked.
   schedule_generate_started: {
     termId?: string;
     termName?: string;
@@ -40,6 +49,7 @@ export interface AnalyticsEventMap {
     programId?: string;
     completedCount?: number;
     requirementCount?: number;
+    optimizations?: string[];
   };
   schedule_generated: {
     resultCount: number;
@@ -51,6 +61,7 @@ export interface AnalyticsEventMap {
     programId?: string;
     completedCount?: number;
     requirementCount?: number;
+    optimizations?: string[];
   };
   schedule_generate_empty: {
     termId?: string;
@@ -59,6 +70,7 @@ export interface AnalyticsEventMap {
     programId?: string;
     completedCount?: number;
     requirementCount?: number;
+    optimizations?: string[];
   };
   schedule_generate_failed: {
     termId?: string;
@@ -67,6 +79,7 @@ export interface AnalyticsEventMap {
     programId?: string;
     completedCount?: number;
     requirementCount?: number;
+    optimizations?: string[];
   };
 
   // --- Schedule interaction ----------------------------------------------
@@ -86,6 +99,16 @@ export interface AnalyticsEventMap {
   explore_course_viewed: { courseCode?: string };
   explore_program_viewed: { programId?: string };
   explore_filter_applied: { filter: string };
+
+  // --- Compare ------------------------------------------------------------
+  // Side-by-side comparison of explore resources (courses first). `kind` is a
+  // CompareKind; `id` is the catalog id (e.g. course code); `count` is the
+  // current tray size; `ids` is the compared set (catalog ids, non-PII).
+  compare_added: { kind: string; id?: string; count?: number };
+  compare_removed: { kind: string; id?: string; count?: number };
+  compare_cleared: { kind?: string; count?: number };
+  compare_opened: { kind: string; count?: number };
+  compare_viewed: { kind: string; count?: number; ids?: string[] };
 
   // --- Trends -------------------------------------------------------------
   trends_viewed: Record<string, never>;

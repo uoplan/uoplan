@@ -16,12 +16,13 @@ pub mod proto {
 }
 
 mod advanced;
-mod basic;
 mod constraints;
+mod electives;
 mod ffi;
 #[cfg(target_os = "android")]
 mod jni_android;
 mod model;
+mod objectives;
 mod pools;
 mod prereq;
 mod rng;
@@ -31,8 +32,9 @@ mod weights;
 
 use constraints::Constraints;
 use model::{DataView, LanguageBucket, LevelBucket};
+use objectives::Objectives;
 use proto::engine::{
-    ChosenCourse, ComponentChoice, EmptyPool, GenerationRequest, GenerationResponse, Mode,
+    ChosenCourse, ComponentChoice, EmptyPool, GenerationRequest, GenerationResponse,
     PoolDiagnostics,
 };
 use types::Enrollment;
@@ -184,11 +186,11 @@ fn language_buckets_from(strings: &[String]) -> Vec<LanguageBucket> {
         .collect()
 }
 
-fn build_constraints(req: &GenerationRequest) -> Constraints {
+fn build_constraints(req: &GenerationRequest, prefer_professor_rating: bool) -> Constraints {
     constraints_from(
         req.constraints.as_ref(),
         &req.professor_ratings,
-        req.generation_prefer_higher_professor_rating,
+        prefer_professor_rating,
     )
 }
 
@@ -210,7 +212,6 @@ fn constraints_from(
             gc.max_end_minutes
         };
         c.max_first_year_credits = gc.max_first_year_credits;
-        c.compressed = gc.compressed_schedule;
         c.blocked = gc
             .blocked_times
             .iter()
@@ -226,10 +227,20 @@ fn run_timetable_fixed_set(
     data: &DataView,
     req: proto::engine::TimetableRequest,
 ) -> GenerationResponse {
+    // Timetabling a fixed set: only the timetable-shape + professor objectives
+    // apply (course selection is fixed), so the A+/sentiment maps are empty.
+    let empty_aplus: HashMap<String, f64> = HashMap::new();
+    let empty_sentiment: HashMap<String, f64> = HashMap::new();
+    let objectives = Objectives::from_request(
+        &req.optimization_priorities,
+        &req.professor_ratings,
+        &empty_aplus,
+        &empty_sentiment,
+    );
     let constraints = constraints_from(
         req.constraints.as_ref(),
         &req.professor_ratings,
-        req.generation_prefer_higher_professor_rating,
+        objectives.prefer_professor_rating(),
     );
 
     // Apply the blacklist as a hard course-scope check (parity with
@@ -268,15 +279,33 @@ fn run_timetable_fixed_set(
         },
     };
 
+    // Objective-aware timetabling. The course set is fixed, so rather than
+    // sampling K feasibility-first arrangements and ranking them, search the
+    // arrangement space directly for the one the priority comparator prefers —
+    // this makes the #1 priority a guarantee whenever the set admits it (e.g. a
+    // swap that keeps "1 good break"). With no timetable-shape objective active
+    // the comparator is irrelevant, so keep the cheap first-feasible arrangement
+    // (byte-for-byte unchanged behaviour).
     let mut rng = rng::Rng::new(rng::scramble_seed(req.seed) ^ 0x9e37_79b9);
-    let schedule = timetable::first_seeded_arrangement(
-        &req.course_codes,
-        data,
-        &resolver,
-        &constraints,
-        &mut rng,
-    );
-
+    let schedule = if objectives.needs_best_of_k() {
+        timetable::best_seeded_arrangement(
+            &req.course_codes,
+            data,
+            &resolver,
+            &constraints,
+            &mut rng,
+            &|chosen| objectives.score(chosen),
+            &|a, b| objectives.better(a, b),
+        )
+    } else {
+        timetable::first_seeded_arrangement(
+            &req.course_codes,
+            data,
+            &resolver,
+            &constraints,
+            &mut rng,
+        )
+    };
     let has_schedule = schedule.is_some();
     GenerationResponse {
         has_schedule,
@@ -354,57 +383,107 @@ fn generation_response(
 }
 
 fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse {
-    let constraints = build_constraints(&req);
+    let objectives = Objectives::from_request(
+        &req.optimization_priorities,
+        &req.professor_ratings,
+        &req.course_aplus,
+        &req.course_sentiment,
+    );
+    let constraints = build_constraints(&req, objectives.prefer_professor_rating());
     let course_aplus = &req.course_aplus;
     let course_sentiment = &req.course_sentiment;
 
-    if req.mode == Mode::Basic as i32 {
-        let result = basic::generate_basic(basic::BasicParams {
-            data,
-            constraints: &constraints,
-            pinned: req.basic_pinned_courses.clone(),
-            completed_courses: req.completed_courses.clone(),
-            student_programs: req.student_programs.clone(),
-            level_buckets: level_buckets_from(&req.level_buckets),
-            language_buckets: language_buckets_from(&req.language_buckets),
-            elective_level_buckets: req.elective_level_buckets.clone(),
-            basic_excluded_categories: req.basic_excluded_categories.clone(),
-            basic_electives_count: req.basic_electives_count as usize,
-            include_closed: req.include_closed_components,
-            virtual_sections_only: req.virtual_sections_only,
-            prefer_easier: req.generation_prefer_easier,
-            course_aplus,
-            prefer_higher_sentiment: req.generation_prefer_higher_sentiment,
-            course_sentiment,
-            blacklisted_courses: req.blacklisted_courses.clone(),
-            current_seed: req.current_seed,
-            first_seed: req.first_seed,
-        });
+    let effective_base = if req.current_seed != 0 {
+        req.current_seed
+    } else {
+        req.first_seed
+    };
 
-        return generation_response(
-            result.schedule,
-            result.optional_pool,
-            req.basic_pinned_courses.clone(),
-            HashMap::new(),
-            None,
-            Some("no_schedule".to_string()),
-        );
+    // Unified basket synthesis. A pure-basket request (pinned courses + "fill N
+    // electives", no degree program) is modelled as the advanced requirement-pool
+    // path: pinned courses become forced courses, and the N electives become a
+    // single synthesized `free_elective` pool whose candidates are the filtered
+    // catalogue scan (the old basic-mode candidate logic, now in `electives`).
+    // This removes the separate basic generation branch — there is one code path.
+    let level_buckets = level_buckets_from(&req.level_buckets);
+    let language_buckets = language_buckets_from(&req.language_buckets);
+    let basket_mode = !req.basic_pinned_courses.is_empty() || req.basic_electives_count > 0;
+
+    let mut forced_courses = req.forced_courses.clone();
+    let mut remaining_requirements: Vec<pools::RemainingRequirement> = req
+        .remaining_requirements
+        .iter()
+        .map(|r| pools::RemainingRequirement {
+            requirement_id: r.requirement_id.clone(),
+            req_type: r.r#type.clone(),
+            title: r.title.clone(),
+            candidate_courses: r.candidate_courses.clone(),
+            credits_needed: r.credits_needed.unwrap_or(0.0),
+        })
+        .collect();
+    let mut prereq_eligible_courses = req.prereq_eligible_courses.clone();
+    let mut courses_this_semester = req.courses_this_semester as usize;
+
+    if basket_mode {
+        for code in &req.basic_pinned_courses {
+            if !forced_courses.iter().any(|c| c == code) {
+                forced_courses.push(code.clone());
+            }
+        }
+        courses_this_semester = req.basic_pinned_courses.len() + req.basic_electives_count as usize;
+
+        if req.basic_electives_count > 0 {
+            let pool = electives::expand_elective_pool(&electives::ElectivePoolParams {
+                data,
+                constraints: &constraints,
+                pinned: &req.basic_pinned_courses,
+                completed_courses: &req.completed_courses,
+                student_programs: &req.student_programs,
+                level_buckets: &level_buckets,
+                language_buckets: &language_buckets,
+                elective_level_buckets: &req.elective_level_buckets,
+                excluded_categories: &req.basic_excluded_categories,
+                blacklisted_courses: &req.blacklisted_courses,
+                include_closed: req.include_closed_components,
+                virtual_sections_only: req.virtual_sections_only,
+            });
+            for code in &pool {
+                if !prereq_eligible_courses.iter().any(|c| c == code) {
+                    prereq_eligible_courses.push(code.clone());
+                }
+            }
+            remaining_requirements.push(pools::RemainingRequirement {
+                requirement_id: "__basket_electives__".to_string(),
+                req_type: "free_elective".to_string(),
+                title: Some("Electives".to_string()),
+                candidate_courses: pool,
+                credits_needed: req.basic_electives_count as f64
+                    * pools::DEFAULT_CREDITS_PER_COURSE,
+            });
+        }
     }
 
+    // Generation runs best-of-K internally (in `generate_advanced`) when a
+    // timetable-shape objective is active: the expensive seed-independent
+    // eligibility scan is built ONCE and only the cheap seed-dependent tail
+    // (shuffle + arena + pick pass + objective-aware arrangement) repeats per
+    // attempt, all sharing one selection budget. So enabling an objective can't
+    // multiply latency past the worker's wall-clock kill, and the priority
+    // comparator already keeps the schedule that best satisfies the priorities.
     let result = advanced::generate_advanced(advanced::AdvancedParams {
         data,
         constraints: &constraints,
+        objectives: &objectives,
         completed_courses: req.completed_courses.clone(),
-        prereq_eligible_courses: req.prereq_eligible_courses.clone(),
-        remaining_requirements: req
-            .remaining_requirements
+        prereq_eligible_courses: prereq_eligible_courses.clone(),
+        remaining_requirements: remaining_requirements
             .iter()
             .map(|r| pools::RemainingRequirement {
                 requirement_id: r.requirement_id.clone(),
-                req_type: r.r#type.clone(),
+                req_type: r.req_type.clone(),
                 title: r.title.clone(),
                 candidate_courses: r.candidate_courses.clone(),
-                credits_needed: r.credits_needed.unwrap_or(0.0),
+                credits_needed: r.credits_needed,
             })
             .collect(),
         requirement_tree: req
@@ -419,22 +498,23 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
             .iter()
             .map(|(k, v)| (k.clone(), *v))
             .collect(),
-        courses_this_semester: req.courses_this_semester as usize,
-        level_buckets: level_buckets_from(&req.level_buckets),
-        language_buckets: language_buckets_from(&req.language_buckets),
+        courses_this_semester,
+        level_buckets: level_buckets.clone(),
+        language_buckets: language_buckets.clone(),
         elective_level_buckets: req.elective_level_buckets.clone(),
         include_closed: req.include_closed_components,
         virtual_sections_only: req.virtual_sections_only,
-        prefer_easier: req.generation_prefer_easier,
+        prefer_easier: objectives.prefer_easier(),
         course_aplus,
-        prefer_higher_sentiment: req.generation_prefer_higher_sentiment,
+        prefer_higher_sentiment: objectives.prefer_sentiment(),
         course_sentiment,
         french_immersion_stream: req.french_immersion_stream,
         blacklisted_courses: req.blacklisted_courses.clone(),
         basic_excluded_categories: req.basic_excluded_categories.clone(),
-        forced_courses: req.forced_courses.clone(),
-        current_seed: req.current_seed,
+        forced_courses: forced_courses.clone(),
+        current_seed: effective_base,
         first_seed: req.first_seed,
+        work_budget: advanced::SELECTION_GLOBAL_WORK_BUDGET,
     });
 
     generation_response(
@@ -464,12 +544,11 @@ fn convert_requirement_node(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use proto::engine::{GenerationRequest, GenerationResponse, Mode};
+    use proto::engine::{GenerationRequest, GenerationResponse};
 
     #[test]
     fn request_response_roundtrip() {
         let req = GenerationRequest {
-            mode: Mode::Advanced as i32,
             basic_electives_count: 3,
             completed_courses: vec!["ITI 1120".to_string()],
             current_seed: 7,
@@ -477,7 +556,6 @@ mod tests {
         };
         let bytes = req.encode_to_vec();
         let decoded = GenerationRequest::decode(bytes.as_slice()).unwrap();
-        assert_eq!(decoded.mode, Mode::Advanced as i32);
         assert_eq!(decoded.basic_electives_count, 3);
         assert_eq!(decoded.completed_courses, vec!["ITI 1120".to_string()]);
         assert_eq!(decoded.current_seed, 7);
@@ -522,9 +600,9 @@ mod tests {
     }
 
     /// End-to-end smoke test against the real committed `.pb` datasets: build the
-    /// engine, pin a real course in basic mode, and assert the engine produces a
-    /// conflict-free schedule containing it. Skipped when the build artifacts are
-    /// absent (they are generated by `pnpm build:data-proto`).
+    /// engine, pin a real course as a basket course, and assert the engine
+    /// produces a conflict-free schedule containing it. Skipped when the build
+    /// artifacts are absent (they are generated by `pnpm build:data-proto`).
     #[test]
     fn real_data_basic_generation() {
         let cat_path = concat!(
@@ -564,7 +642,6 @@ mod tests {
         assert!(engine.schedule_count() > 0);
 
         let req = GenerationRequest {
-            mode: Mode::Basic as i32,
             basic_pinned_courses: vec![pinned_code.clone()],
             basic_electives_count: 0,
             include_closed_components: true,
@@ -582,9 +659,8 @@ mod tests {
         assert_eq!(resp.courses.len(), 1, "expected exactly the pinned course");
         assert!(!resp.courses[0].components.is_empty());
 
-        // Advanced mode: force the same course as a standalone pick.
+        // Advanced path: force the same course as a standalone pick.
         let adv = GenerationRequest {
-            mode: Mode::Advanced as i32,
             forced_courses: vec![pinned_code.clone()],
             courses_this_semester: 1,
             include_closed_components: true,

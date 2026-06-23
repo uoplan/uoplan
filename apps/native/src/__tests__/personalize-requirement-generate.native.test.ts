@@ -1,6 +1,6 @@
 import type { Catalogue, DisciplinesData, SchedulesData } from "@uoplan/core/dataTypes";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
-import { GenerationRequest, GenerationResponse, Mode } from "@uoplan/proto/engine";
+import { GenerationRequest, GenerationResponse } from "@uoplan/proto/engine";
 
 import {
   type EngineBridge,
@@ -121,7 +121,6 @@ describe("generateScheduleVariants advanced requirements", () => {
 
     const sent = (engine.generate as jest.Mock).mock.calls[0]![0] as Uint8Array;
     const request = GenerationRequest.decode(sent);
-    expect(request.mode).toBe(Mode.MODE_ADVANCED);
     expect(request.basicPinnedCourses).toEqual([]);
     expect(request.remainingRequirements.map((req) => req.requirementId)).toEqual(["req-0"]);
     expect(request.constrainedPerRequirement["req-0"]?.values).toEqual([CODE]);

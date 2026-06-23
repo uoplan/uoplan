@@ -1,3 +1,4 @@
+use super::search::best_arrangement;
 use super::solver::ArrangeSolver;
 use super::*;
 use std::collections::BTreeMap;
@@ -352,4 +353,96 @@ fn course_with_real_times_is_not_timeless_and_builds_real_combos() {
         .expect("timed course should build a combo");
     assert_eq!(tc.combos.len(), 1);
     assert_eq!(tc.combos[0].times.len(), 1);
+}
+
+// --- best_arrangement: objective-aware fixed-set timetabling -----------------
+
+/// Total minutes of idle gaps within a single day across the chosen enrollments
+/// (a tiny stand-in for the real "good breaks"/compact objectives). Lower = more
+/// compact; the test scorer turns it into a higher-is-better score.
+fn idle_minutes(chosen: &[Enrollment]) -> u32 {
+    let mut slots: Vec<(u32, u32)> = chosen
+        .iter()
+        .flat_map(|e| e.times.iter().map(|t| (t.start, t.end)))
+        .collect();
+    slots.sort_unstable();
+    if slots.is_empty() {
+        return 0;
+    }
+    let span = slots.last().unwrap().1 - slots[0].0;
+    let busy: u32 = slots.iter().map(|(s, e)| e - s).sum();
+    span - busy
+}
+
+fn compact_score(chosen: &[Enrollment]) -> Vec<f64> {
+    vec![1.0 / (1.0 + f64::from(idle_minutes(chosen)))]
+}
+
+fn strictly_greater(a: &[f64], b: &[f64]) -> bool {
+    a.first().copied().unwrap_or(0.0) > b.first().copied().unwrap_or(0.0) + 1e-9
+}
+
+fn best(courses: &[TimetableCourse]) -> Option<Vec<Enrollment>> {
+    let data = DataView::new(Catalogue::default(), SchedulesData::default());
+    let constraints = default_constraints();
+    let refs: Vec<&TimetableCourse> = courses.iter().collect();
+    best_arrangement(
+        &refs,
+        &constraints,
+        &data,
+        &compact_score,
+        &strictly_greater,
+        1_000_000,
+        100_000,
+    )
+}
+
+#[test]
+fn best_arrangement_picks_zero_gap_over_long_gap() {
+    // B is fixed to 10-11. A can sit at 09-10 (back-to-back with B, zero gap) or
+    // at 13-14 (a 2h gap after B). A first-solution solver would take whichever
+    // combo is listed first; best_arrangement must pick the zero-gap one even
+    // though the long-gap combo is listed first.
+    const A_EARLY: (u8, u32, u32) = (0, 540, 600); // 09-10
+    const A_LATE: (u8, u32, u32) = (0, 780, 840); // 13-14
+    let courses = vec![
+        course("A", vec![enr("A", &[A_LATE]), enr("A", &[A_EARLY])]),
+        course("B", vec![enr("B", &[S2])]), // 10-11
+    ];
+    let sol = best(&courses).expect("a conflict-free arrangement exists");
+    assert_eq!(sol.len(), 2);
+    assert!(!has_conflict(&sol));
+    assert_eq!(
+        idle_minutes(&sol),
+        0,
+        "best_arrangement should choose the back-to-back (zero-gap) arrangement"
+    );
+}
+
+#[test]
+fn best_arrangement_returns_none_when_unsatisfiable() {
+    // Three courses all competing for the same two slots: no arrangement exists.
+    let courses = vec![
+        course("A", vec![enr("A", &[S1]), enr("A", &[S2])]),
+        course("B", vec![enr("B", &[S1]), enr("B", &[S2])]),
+        course("C", vec![enr("C", &[S1]), enr("C", &[S2])]),
+    ];
+    assert!(best(&courses).is_none());
+}
+
+#[test]
+fn best_arrangement_keeps_first_among_tied() {
+    // Two equally-good (zero-gap) arrangements exist; the first one enumerated
+    // (seeded combo order) must be kept so per-seed variety is preserved.
+    let courses = vec![
+        course("A", vec![enr("A", &[S1]), enr("A", &[S3])]),
+        course("B", vec![enr("B", &[S2])]),
+    ];
+    let sol = best(&courses).expect("a conflict-free arrangement exists");
+    assert_eq!(sol.len(), 2);
+    let a = sol.iter().find(|e| e.course_code == "A").unwrap();
+    assert_eq!(
+        a.times[0].start, S1.1,
+        "first-among-tied combo should be kept"
+    );
 }

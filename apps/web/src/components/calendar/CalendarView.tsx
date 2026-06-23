@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Box, FocusTrap, Text } from "@mantine/core";
 import { useLocalStorage, useMediaQuery } from "@mantine/hooks";
 import { AnimatePresence, m } from "framer-motion";
+import { isOptimizationEnabled } from "@uoplan/core";
 import type { DataCache, GeneratedSchedule, ProfessorRatingsMap } from "@uoplan/core";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
@@ -219,7 +220,8 @@ export function CalendarView({
     [swap],
   );
 
-  const { generationPreferEasier } = useGenerationConstraints();
+  const { optimizationPriorities } = useGenerationConstraints();
+  const generationPreferEasier = isOptimizationEnabled(optimizationPriorities, "prefer_easier");
 
   // The full event for the currently-open swap overlay (used by the mobile drawer).
   const activeEvent = useMemo<CalendarEvent | null>(() => {

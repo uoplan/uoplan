@@ -2,6 +2,8 @@ export * from "./brand";
 export * from "./facultyIdentity";
 export * from "./generation";
 export * from "./generationDiagnostics";
+export * from "./optimizationPriorities";
+export * from "./compareSelection";
 export * from "./dataTypes";
 export * from "./scheduleFilters";
 export * from "./courseFilters";

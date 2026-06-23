@@ -78,40 +78,4 @@ describe("diagnoseTimetableFailure", () => {
     expect(d.kind).toBe("no_section_combos");
     expect(d.coursesWithNoCombo).toContain("B 2000");
   });
-
-  it("does NOT blame Compressed when the courses themselves overlap (structural)", () => {
-    // A and B overlap on Monday, so no filter change can help — turning off
-    // Compressed would be misleading. Relaxation must report this honestly.
-    const d = diagnoseWithSchedules(
-      [scheduledCourse("A 1000", "Mo", 480, 570), scheduledCourse("B 2000", "Mo", 510, 600)],
-      {
-        constraints: {
-          minStartMinutes: 8 * 60,
-          maxEndMinutes: 22 * 60,
-          compressedSchedule: true,
-        },
-      },
-    );
-    expect(d.relaxation?.kind).toBe("structural_conflict");
-    expect(d.suggestions).not.toContain("turn-off-compressed");
-    expect(d.suggestions).toContain("structural-conflict");
-    expect(d.lead.code).toBe("structural-conflict");
-  });
-
-  it("blames Compressed only when removing it actually unblocks a timetable", () => {
-    // A (08:00-09:30) and B (13:20-14:50) on Monday are conflict-free but leave a
-    // long mid-day gap, so Compressed rejects them; removing it lets them fit.
-    const d = diagnoseWithSchedules(
-      [scheduledCourse("A 1000", "Mo", 480, 570), scheduledCourse("B 2000", "Mo", 800, 890)],
-      {
-        constraints: {
-          minStartMinutes: 8 * 60,
-          maxEndMinutes: 22 * 60,
-          compressedSchedule: true,
-        },
-      },
-    );
-    expect(d.relaxation?.kind).toBe("single_blockers");
-    expect(d.suggestions).toContain("turn-off-compressed");
-  });
 });

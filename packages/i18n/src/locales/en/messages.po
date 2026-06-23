@@ -331,8 +331,8 @@ msgstr "Careers"
 msgid "basicCourseFilters.hint"
 msgstr "Options apply to generated electives."
 
-msgid "basicCourseFilters.levels.label"
-msgstr "Levels"
+msgid "basicCourseFilters.levelPreset.all"
+msgstr "Any level"
 
 msgid "basicCourseFilters.levelPreset.custom"
 msgstr "Custom levels"
@@ -340,17 +340,17 @@ msgstr "Custom levels"
 msgid "basicCourseFilters.levelPreset.grad"
 msgstr "Graduate only"
 
-msgid "basicCourseFilters.levelPreset.all"
-msgstr "Any level"
-
-msgid "basicCourseFilters.levelPreset.upper"
-msgstr "3000–4000"
-
 msgid "basicCourseFilters.levelPreset.lower"
 msgstr "1000–2000"
 
 msgid "basicCourseFilters.levelPreset.undergradAny"
 msgstr "Any 1000–4000"
+
+msgid "basicCourseFilters.levelPreset.upper"
+msgstr "3000–4000"
+
+msgid "basicCourseFilters.levels.label"
+msgstr "Levels"
 
 msgid "basicCourseFilters.title"
 msgstr "Elective options"
@@ -363,12 +363,12 @@ msgstr "Toggle course filters"
 msgid "basket.add"
 msgstr "Add to basket"
 
-msgid "basket.addCourse.placeholder"
-msgstr "Add a course…"
-
 #: scripts/i18n/dynamic-keys.ts
 msgid "basket.add.aria"
 msgstr "Add to basket"
+
+msgid "basket.addCourse.placeholder"
+msgstr "Add a course…"
 
 #: scripts/i18n/dynamic-keys.ts
 msgid "basket.added"
@@ -874,6 +874,81 @@ msgstr "Previous week"
 
 msgid "calendarView.resizePreviewBar"
 msgstr "Resize week preview bar"
+
+msgid "compare.add"
+msgstr "Add to compare"
+
+msgid "compare.added"
+msgstr "Added to compare"
+
+msgid "compare.clear"
+msgstr "Clear"
+
+msgid "compare.cta"
+msgstr "Compare ({count})"
+
+msgid "compare.empty.body"
+msgstr "Add courses from the explorer to see them side by side."
+
+msgid "compare.empty.title"
+msgstr "Pick at least 2 to compare"
+
+msgid "compare.kind.course"
+msgstr "Courses"
+
+msgid "compare.limitReached"
+msgstr "Compare up to {max} at a time"
+
+msgid "compare.open"
+msgstr "Compare"
+
+msgid "compare.page.title"
+msgstr "Compare courses"
+
+msgid "compare.remove"
+msgstr "Remove"
+
+msgid "compare.remove.aria"
+msgstr "Remove {name} from comparison"
+
+msgid "compare.row.avgGpa"
+msgstr "Average grade"
+
+msgid "compare.row.credits"
+msgstr "Credits"
+
+msgid "compare.row.faculty"
+msgstr "Faculty"
+
+msgid "compare.row.grades"
+msgstr "Grade distribution"
+
+msgid "compare.row.language"
+msgstr "Language"
+
+msgid "compare.row.level"
+msgstr "Level"
+
+msgid "compare.row.passing"
+msgstr "Passing rate"
+
+msgid "compare.row.prereqs"
+msgstr "Prerequisites"
+
+msgid "compare.row.sentiment"
+msgstr "Student feedback"
+
+msgid "compare.row.terms"
+msgstr "Offered"
+
+msgid "compare.row.topRating"
+msgstr "Top professor rating"
+
+msgid "compare.value.none"
+msgstr "—"
+
+msgid "compare.value.noPrereqs"
+msgstr "None"
 
 msgid "completedCourses.description"
 msgstr "Courses you have completed or are taking. You can also upload your transcript in Step 1."
@@ -1687,6 +1762,9 @@ msgstr "Schedule generation took too long and was stopped. Try fewer courses or 
 msgid "gen.error.unassignedCompleted"
 msgstr "You have {count, plural, one {# completed course} other {# completed courses}} not assigned to a requirement: {courses}. You must assign {count, plural, one {it} other {them}} to requirements, or move them to the Excluded section."
 
+msgid "gen.error.unassignedCompletedShort"
+msgstr "{count, plural, one {# completed course isn't} other {# completed courses aren't}} assigned to a requirement."
+
 msgid "gen.hint.closedExcluded"
 msgstr "Closed sections excluded — try enabling \"Include closed sections\""
 
@@ -1803,6 +1881,9 @@ msgstr "Widen class hours or allow more weekdays."
 
 msgid "gen.suggest.widenOrChangePicks"
 msgstr "Widen class hours or change Constrain / Assign picks."
+
+msgid "gen.viewDetails"
+msgstr "View details"
 
 msgid "generationOptions.count.label"
 msgstr "Electives this semester (additional)"
@@ -2047,6 +2128,54 @@ msgstr "Try another year, or reload and try again."
 #: scripts/i18n/dynamic-keys.ts
 msgid "notifications.yearCatalogueLoadFailed.title"
 msgstr "Could not load that catalogue year"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:78
+msgid "optimize.description"
+msgstr "Drag to rank these goals. When they conflict, higher ones win. Turn off any you don't want."
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:398
+msgid "optimize.disabledHeading"
+msgstr "Disabled"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:41
+msgid "optimize.freeDays.description"
+msgstr "Pack classes into fewer days so more weekdays stay completely free."
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:24
+msgid "optimize.freeDays.label"
+msgstr "Most free days"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:153
+msgid "optimize.goodBreaks.countLabel"
+msgstr "Breaks per day"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:43
+msgid "optimize.goodBreaks.description"
+msgstr "Aim for a set number of breaks of about the length you choose each day."
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:26
+msgid "optimize.goodBreaks.label"
+msgstr "Good breaks"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:165
+msgid "optimize.goodBreaks.minutesLabel"
+msgstr "Break length (min)"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:75
+msgid "optimize.heading"
+msgstr "Optimization priorities"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:135
+msgid "optimize.moveDown"
+msgstr "Move down"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:125
+msgid "optimize.moveUp"
+msgstr "Move up"
+
+#: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:291
+msgid "optimize.summary.allOff"
+msgstr "No optimizations on"
 
 msgid "optionsDrilldown.change"
 msgstr "Change"
@@ -2482,26 +2611,38 @@ msgstr "When generating, courses with a higher historical A+ rate are more likel
 msgid "scheduleCount.preferEasier.label"
 msgstr "Prefer easier courses (past A+ rates)"
 
+msgid "scheduleCount.preferProfessorRating.description"
+msgstr "Favours sections taught by higher-rated professors. Professors without ratings are treated as average."
+
+msgid "scheduleCount.preferProfessorRating.label"
+msgstr "Prefer professors with better ratings"
+
 msgid "scheduleCount.preferSentiment.description"
 msgstr "When generating, courses with higher overall student-feedback ratings are more likely to be picked from each requirement pool."
 
 msgid "scheduleCount.preferSentiment.label"
 msgstr "Prefer courses with better feedback"
 
-msgid "scheduleCount.preferProfessorRating.description"
-msgstr "Favours sections taught by higher-rated professors. Professors without ratings are treated as average."
+msgid "scheduleCount.rating.description"
+msgstr "Professors without a rating are always allowed."
 
-msgid "scheduleCount.smartOptions.hide"
-msgstr "Hide smart options"
+msgid "scheduleCount.rating.label"
+msgstr "Minimum RateMyProfessors rating"
 
-msgid "scheduleCount.smartOptions.show"
-msgstr "Show smart options"
+msgid "scheduleCount.rating.placeholder"
+msgstr "No minimum"
 
 msgid "scheduleCount.smartOptions.description"
 msgstr "Let the planner softly bias schedules toward easier, better-rated, and more compact choices."
 
+msgid "scheduleCount.smartOptions.hide"
+msgstr "Hide smart options"
+
 msgid "scheduleCount.smartOptions.label"
 msgstr "Smart options"
+
+msgid "scheduleCount.smartOptions.show"
+msgstr "Show smart options"
 
 msgid "scheduleCount.smartOptions.summary.compressed"
 msgstr "Compressed schedule"
@@ -2518,26 +2659,14 @@ msgstr "1000-level credit cap"
 msgid "scheduleCount.smartOptions.summary.professors"
 msgstr "Higher-rated professors"
 
-msgid "scheduleCount.preferProfessorRating.label"
-msgstr "Prefer professors with better ratings"
-
-msgid "scheduleCount.rating.description"
-msgstr "Professors without a rating are always allowed."
-
-msgid "scheduleCount.rating.label"
-msgstr "Minimum RateMyProfessors rating"
-
-msgid "scheduleCount.rating.placeholder"
-msgstr "No minimum"
+msgid "scheduleCount.time.and"
+msgstr "and"
 
 msgid "scheduleCount.time.earliest"
 msgstr "Earliest class start"
 
 msgid "scheduleCount.time.latest"
 msgstr "Latest class end"
-
-msgid "scheduleCount.time.and"
-msgstr "and"
 
 msgid "scheduleCount.time.rangeLabel"
 msgstr "Class times between"

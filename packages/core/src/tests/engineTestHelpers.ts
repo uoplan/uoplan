@@ -5,7 +5,8 @@ import type { Catalogue, ComponentSection, CourseSchedule, DayOfWeekCode } from 
 import type { GenerationConstraints } from "../generation/types";
 import type { DecodedState } from "../stateEncode";
 import type { ScheduleEngine } from "../engineBridge";
-import { GenerationRequest, GenerationResponse, Mode } from "@uoplan/proto/engine";
+import { GenerationRequest, GenerationResponse } from "@uoplan/proto/engine";
+import { defaultOptimizationPriorities } from "../optimizationPriorities";
 import { normalizeCourseCode } from "../utils/courseUtils";
 
 export function generationResponse(over: Partial<GenerationResponseType>): GenerationResponseType {
@@ -125,7 +126,6 @@ export function fakeDataCache(schedules: CourseSchedule[]): DataCache {
 export const testGenerationConstraints: GenerationConstraints = {
   minStartMinutes: 0,
   maxEndMinutes: 1440,
-  generationPreferHigherProfessorRating: false,
   maxFirstYearCredits: 24,
   professorRatings: {},
   blockedTimes: [],
@@ -160,11 +160,8 @@ export function decodedState(over: Partial<DecodedState> = {}): DecodedState {
     touchedReqIndices: [],
     generationMinStartMinutes: 0,
     generationMaxEndMinutes: 1440,
-    generationPreferHigherProfessorRating: false,
     generationLimitFirstYearCredits: false,
-    generationCompressedSchedule: false,
-    generationPreferEasier: false,
-    generationPreferHigherSentiment: false,
+    optimizationPriorities: defaultOptimizationPriorities(),
     activeStep: 0,
     showCalendar: false,
     frenchImmersionStream: false,
@@ -187,18 +184,18 @@ export function engineReturning(
   };
 }
 
-export function engineCapturingGenerationMode(
+export function engineCapturingRequest(
   response: Partial<GenerationResponseType> = { hasSchedule: false },
-): { engine: ScheduleEngine; getMode: () => Mode | null } {
-  let mode: Mode | null = null;
+): { engine: ScheduleEngine; getRequest: () => GenerationRequest | null } {
+  let request: GenerationRequest | null = null;
   return {
     engine: {
       generate: (bytes) => {
-        mode = GenerationRequest.decode(bytes).mode;
+        request = GenerationRequest.decode(bytes);
         return GenerationResponse.encode(generationResponse(response)).finish();
       },
       timetable_fixed_set: () => new Uint8Array(),
     },
-    getMode: () => mode,
+    getRequest: () => request,
   };
 }

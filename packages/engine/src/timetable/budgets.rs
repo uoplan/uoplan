@@ -5,17 +5,21 @@
 /// gives up deterministically (returns `None`).
 pub(super) const ARRANGEMENT_NODE_BUDGET: u64 = 5_000_000;
 
-/// Work-unit budget for the basic-mode randomized-restart greedy fill (see
-/// `first_seeded_subset_arrangement`). Charged by *actual overlap work* — every
-/// combo scanned costs `placed + 1` units, an overlap scan being O(placed) — so
-/// it is a true wall-clock bound regardless of how large or permissive the
-/// optional pool is, rather than a node count that hides O(pool) work per node.
-/// Sized so any realistically packable request resolves far below it (the
-/// term-2271 23-elective repro tops out at ~5M work units across 64 seeds, a
-/// >10x margin) while an infeasible request — which always consumes the whole
-/// budget — fails fast and deterministically for every seed. Kept well under
-/// `advanced.rs`'s `SELECTION_GLOBAL_WORK_BUDGET` so the infeasible worst case
-/// stays comfortably below the 3 s worker termination even as WASM (~1.5-2x this
-/// native build) on slow CI hardware, where 200M measured ~2.3 s natively
-/// (≈4 s WASM).
-pub(super) const SUBSET_WORK_BUDGET: u64 = 60_000_000;
+/// Combo-expansion budget for the objective-aware [`best_arrangement`] enumerator.
+/// Unlike the first-solution solvers, this one must visit *leaves* to score them,
+/// so it cannot prune as aggressively — it enumerates every conflict-free
+/// arrangement of the (small, already-selected) final course set and keeps the
+/// lexicographic-best. Sized generously so a realistic timetable (≤ ~7 courses,
+/// each a handful of section combos) is enumerated EXHAUSTIVELY — which is what
+/// makes the #1 optimization priority a hard guarantee whenever the chosen set
+/// admits it — while still bounding the pathological cross-product. Returns the
+/// best found so far if the budget is hit (best-effort, never worse than the
+/// first feasible arrangement).
+pub(super) const BEST_ARRANGEMENT_NODE_BUDGET: u64 = 6_000_000;
+
+/// Cap on the number of complete arrangements scored by [`best_arrangement`].
+/// Bounds the cost of scoring (each leaf runs the objective scorers) independently
+/// of the node budget. Comfortably above the leaf count of any realistic final
+/// course set, so typical baskets are scored exhaustively; a pathological set is
+/// scored best-effort up to this many arrangements.
+pub(super) const BEST_ARRANGEMENT_LEAF_CAP: u64 = 250_000;

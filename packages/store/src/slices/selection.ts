@@ -3,6 +3,7 @@ import type { AppStore } from "../types";
 import { getDisciplineCodesForProgram, recomputeStateForProgram } from "../requirementCompute";
 import type { CourseLanguageBucket } from "@uoplan/core";
 import {
+  defaultOptimizationPriorities,
   generateRandomSeed,
   isRepeatableCourse,
   normalizeCourseCode,
@@ -18,13 +19,9 @@ import {
 } from "../electiveEligibility";
 import {
   DEFAULT_COURSES_THIS_SEMESTER,
-  DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
   DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
   DEFAULT_GENERATION_MAX_END_MINUTES,
   DEFAULT_GENERATION_MIN_START_MINUTES,
-  DEFAULT_GENERATION_PREFER_EASIER,
-  DEFAULT_GENERATION_PREFER_HIGHER_PROFESSOR_RATING,
-  DEFAULT_GENERATION_PREFER_HIGHER_SENTIMENT,
 } from "../generationDefaults";
 import { defaultBlockedTimes } from "../blockedTimes";
 
@@ -556,11 +553,8 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
       basicExcludedCategories: [],
       generationMinStartMinutes: DEFAULT_GENERATION_MIN_START_MINUTES,
       generationMaxEndMinutes: DEFAULT_GENERATION_MAX_END_MINUTES,
-      generationPreferHigherProfessorRating: DEFAULT_GENERATION_PREFER_HIGHER_PROFESSOR_RATING,
       generationLimitFirstYearCredits: DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
-      generationCompressedSchedule: DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
-      generationPreferEasier: DEFAULT_GENERATION_PREFER_EASIER,
-      generationPreferHigherSentiment: DEFAULT_GENERATION_PREFER_HIGHER_SENTIMENT,
+      optimizationPriorities: defaultOptimizationPriorities(),
       blacklistedCourses: [],
       blockedTimes: defaultBlockedTimes(),
       levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],

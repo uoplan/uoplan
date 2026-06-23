@@ -36,16 +36,13 @@ export type GenerateSchedulesInput = Pick<
   | "electiveLevelBuckets"
   | "generationMinStartMinutes"
   | "generationMaxEndMinutes"
-  | "generationPreferHigherProfessorRating"
   | "professorRatings"
   | "currentSeed"
   | "firstSeed"
   | "includeClosedComponents"
   | "virtualSectionsOnly"
   | "generationLimitFirstYearCredits"
-  | "generationCompressedSchedule"
-  | "generationPreferEasier"
-  | "generationPreferHigherSentiment"
+  | "optimizationPriorities"
   | "courseSentimentByNorm"
   | "frenchImmersionStream"
   | "blacklistedCourses"
@@ -82,16 +79,13 @@ export function pickGenerateSchedulesInput(
     electiveLevelBuckets: state.electiveLevelBuckets,
     generationMinStartMinutes: state.generationMinStartMinutes,
     generationMaxEndMinutes: state.generationMaxEndMinutes,
-    generationPreferHigherProfessorRating: state.generationPreferHigherProfessorRating,
     professorRatings: state.professorRatings,
     currentSeed: state.currentSeed,
     firstSeed: state.firstSeed,
     includeClosedComponents: state.includeClosedComponents,
     virtualSectionsOnly: state.virtualSectionsOnly,
     generationLimitFirstYearCredits: state.generationLimitFirstYearCredits,
-    generationCompressedSchedule: state.generationCompressedSchedule,
-    generationPreferEasier: state.generationPreferEasier,
-    generationPreferHigherSentiment: state.generationPreferHigherSentiment,
+    optimizationPriorities: state.optimizationPriorities,
     courseSentimentByNorm: state.courseSentimentByNorm,
     frenchImmersionStream: state.frenchImmersionStream,
     blacklistedCourses: state.blacklistedCourses,

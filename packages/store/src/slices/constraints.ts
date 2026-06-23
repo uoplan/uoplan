@@ -1,4 +1,10 @@
 import type { StateCreator } from "zustand";
+import {
+  reorderOptimizationPriorities as reorderPriorities,
+  setGoodBreaksParams as setBreakParams,
+  setOptimizationPriorityEnabled as setEnabled,
+  toggleOptimizationPriority as togglePriority,
+} from "@uoplan/core";
 import type { AppStore } from "../types";
 import { normalizeBlockedTimes, reconcileAvoidedDays } from "../blockedTimes";
 
@@ -6,13 +12,14 @@ interface ConstraintsSlice {
   setGenerationMinStartMinutes: AppStore["setGenerationMinStartMinutes"];
   setGenerationMaxEndMinutes: AppStore["setGenerationMaxEndMinutes"];
   setAvoidedDays: AppStore["setAvoidedDays"];
-  setGenerationPreferHigherProfessorRating: AppStore["setGenerationPreferHigherProfessorRating"];
   setIncludeClosedComponents: AppStore["setIncludeClosedComponents"];
   setVirtualSectionsOnly: AppStore["setVirtualSectionsOnly"];
   setGenerationLimitFirstYearCredits: AppStore["setGenerationLimitFirstYearCredits"];
-  setGenerationCompressedSchedule: AppStore["setGenerationCompressedSchedule"];
-  setGenerationPreferEasier: AppStore["setGenerationPreferEasier"];
-  setGenerationPreferHigherSentiment: AppStore["setGenerationPreferHigherSentiment"];
+  setOptimizationPriorities: AppStore["setOptimizationPriorities"];
+  reorderOptimizationPriorities: AppStore["reorderOptimizationPriorities"];
+  setOptimizationPriorityEnabled: AppStore["setOptimizationPriorityEnabled"];
+  toggleOptimizationPriority: AppStore["toggleOptimizationPriority"];
+  setGoodBreaksParams: AppStore["setGoodBreaksParams"];
   setCourseSentimentByNorm: AppStore["setCourseSentimentByNorm"];
   setBlacklistedCourses: AppStore["setBlacklistedCourses"];
   addBlockedTime: AppStore["addBlockedTime"];
@@ -45,20 +52,35 @@ export const createConstraintsSlice: StateCreator<AppStore, [], [], ConstraintsS
     set({ blockedTimes: next, generationOptionsDirty: true });
   },
 
-  setGenerationPreferHigherProfessorRating: (v) =>
-    set({ generationPreferHigherProfessorRating: v, generationOptionsDirty: true }),
-
   setGenerationLimitFirstYearCredits: (v) =>
     set({ generationLimitFirstYearCredits: v, generationOptionsDirty: true }),
 
-  setGenerationCompressedSchedule: (v) =>
-    set({ generationCompressedSchedule: v, generationOptionsDirty: true }),
+  setOptimizationPriorities: (list) =>
+    set({ optimizationPriorities: list, generationOptionsDirty: true }),
 
-  setGenerationPreferEasier: (v) =>
-    set({ generationPreferEasier: v, generationOptionsDirty: true }),
+  reorderOptimizationPriorities: (fromIndex, toIndex) =>
+    set({
+      optimizationPriorities: reorderPriorities(get().optimizationPriorities, fromIndex, toIndex),
+      generationOptionsDirty: true,
+    }),
 
-  setGenerationPreferHigherSentiment: (v) =>
-    set({ generationPreferHigherSentiment: v, generationOptionsDirty: true }),
+  setOptimizationPriorityEnabled: (kind, enabled) =>
+    set({
+      optimizationPriorities: setEnabled(get().optimizationPriorities, kind, enabled),
+      generationOptionsDirty: true,
+    }),
+
+  toggleOptimizationPriority: (kind) =>
+    set({
+      optimizationPriorities: togglePriority(get().optimizationPriorities, kind),
+      generationOptionsDirty: true,
+    }),
+
+  setGoodBreaksParams: (params) =>
+    set({
+      optimizationPriorities: setBreakParams(get().optimizationPriorities, params),
+      generationOptionsDirty: true,
+    }),
 
   setCourseSentimentByNorm: (map) => set({ courseSentimentByNorm: map }),
 

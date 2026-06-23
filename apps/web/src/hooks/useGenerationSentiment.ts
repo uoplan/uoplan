@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { courseSentimentByNorm } from "@uoplan/core";
+import { courseSentimentByNorm, isOptimizationEnabled } from "@uoplan/core";
 import { useAppStore } from "../store/appStore";
 import { useFeedbackData } from "./useFeedbackData";
 
@@ -11,7 +11,9 @@ import { useFeedbackData } from "./useFeedbackData";
  * never pass stale weights to the engine.
  */
 export function useGenerationSentiment(): void {
-  const enabled = useAppStore((s) => s.generationPreferHigherSentiment);
+  const enabled = useAppStore((s) =>
+    isOptimizationEnabled(s.optimizationPriorities, "prefer_sentiment"),
+  );
   const setCourseSentimentByNorm = useAppStore((s) => s.setCourseSentimentByNorm);
   const { data: feedbackIndex } = useFeedbackData(enabled);
 

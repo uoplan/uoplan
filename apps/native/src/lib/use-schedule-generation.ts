@@ -194,6 +194,7 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
     const segment = {
       programId: activeRequirements?.programUrl ?? personalization.programUrl ?? undefined,
       completedCount: completedCodes.length,
+      optimizations: options.optimizationPriorities.filter((p) => p.enabled).map((p) => p.kind),
     };
     const termName = formatTermNameEn(term);
     setStatus("generating");

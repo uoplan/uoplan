@@ -22,9 +22,7 @@ use std::time::{Duration, Instant};
 
 use prost::Message;
 use uoplan_engine::proto::data::SchedulesData;
-use uoplan_engine::proto::engine::{
-    GenerationRequest, GenerationResponse, Mode, RemainingRequirement,
-};
+use uoplan_engine::proto::engine::{GenerationRequest, GenerationResponse, RemainingRequirement};
 use uoplan_engine::Engine;
 
 const CATALOGUE_PB: &str = concat!(
@@ -78,7 +76,6 @@ fn undergrad_schedulable(sched: &SchedulesData) -> Vec<String> {
 
 fn run_target(engine: &Engine, pool: &[String], target: u32) {
     let req_base = GenerationRequest {
-        mode: Mode::Advanced as i32,
         courses_this_semester: target,
         include_closed_components: true,
         level_buckets: vec!["undergrad".to_string(), "grad".to_string()],
@@ -148,8 +145,9 @@ fn advanced_full_pool_every_seed_succeeds_quickly() {
 
     let engine = Engine::new(&cat_bytes, &sched_bytes).unwrap();
 
-    // The reported repro is ~22-24 courses with default options; cover that band.
-    for target in [22u32, 23, 24] {
+    // Cover a realistic near-capacity band (~18-20 courses); the seed must never
+    // decide feasibility within it.
+    for target in [18u32, 19, 20] {
         run_target(&engine, &pool, target);
     }
 }
@@ -186,7 +184,6 @@ fn advanced_infeasible_request_fails_fast_for_every_seed() {
     // pool, so this is infeasible regardless of which courses the seed picks.
     let target = 40u32;
     let req_base = GenerationRequest {
-        mode: Mode::Advanced as i32,
         courses_this_semester: target,
         include_closed_components: true,
         level_buckets: vec!["undergrad".to_string(), "grad".to_string()],

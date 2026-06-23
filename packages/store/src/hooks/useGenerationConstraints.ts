@@ -19,16 +19,13 @@ export function useGenerationConstraints() {
       generationMinStartMinutes: s.generationMinStartMinutes,
       generationMaxEndMinutes: s.generationMaxEndMinutes,
       blockedTimes: s.blockedTimes,
-      generationPreferHigherProfessorRating: s.generationPreferHigherProfessorRating,
       levelBuckets: s.levelBuckets,
       languageBuckets: s.languageBuckets,
       electiveLevelBuckets: s.electiveLevelBuckets,
       includeClosedComponents: s.includeClosedComponents,
       virtualSectionsOnly: s.virtualSectionsOnly,
       generationLimitFirstYearCredits: s.generationLimitFirstYearCredits,
-      generationCompressedSchedule: s.generationCompressedSchedule,
-      generationPreferEasier: s.generationPreferEasier,
-      generationPreferHigherSentiment: s.generationPreferHigherSentiment,
+      optimizationPriorities: s.optimizationPriorities,
       blacklistedCourses: s.blacklistedCourses,
       basicExcludedCategories: s.basicExcludedCategories,
     })),
@@ -37,9 +34,6 @@ export function useGenerationConstraints() {
   const setGenerationMinStartMinutes = useAppStore((s) => s.setGenerationMinStartMinutes);
   const setGenerationMaxEndMinutes = useAppStore((s) => s.setGenerationMaxEndMinutes);
   const setAvoidedDays = useAppStore((s) => s.setAvoidedDays);
-  const setGenerationPreferHigherProfessorRating = useAppStore(
-    (s) => s.setGenerationPreferHigherProfessorRating,
-  );
   const setLevelBuckets = useAppStore((s) => s.setLevelBuckets);
   const setLanguageBuckets = useAppStore((s) => s.setLanguageBuckets);
   const setElectiveLevelBuckets = useAppStore((s) => s.setElectiveLevelBuckets);
@@ -48,11 +42,11 @@ export function useGenerationConstraints() {
   const setGenerationLimitFirstYearCredits = useAppStore(
     (s) => s.setGenerationLimitFirstYearCredits,
   );
-  const setGenerationCompressedSchedule = useAppStore((s) => s.setGenerationCompressedSchedule);
-  const setGenerationPreferEasier = useAppStore((s) => s.setGenerationPreferEasier);
-  const setGenerationPreferHigherSentiment = useAppStore(
-    (s) => s.setGenerationPreferHigherSentiment,
-  );
+  const setOptimizationPriorities = useAppStore((s) => s.setOptimizationPriorities);
+  const reorderOptimizationPriorities = useAppStore((s) => s.reorderOptimizationPriorities);
+  const setOptimizationPriorityEnabled = useAppStore((s) => s.setOptimizationPriorityEnabled);
+  const toggleOptimizationPriority = useAppStore((s) => s.toggleOptimizationPriority);
+  const setGoodBreaksParams = useAppStore((s) => s.setGoodBreaksParams);
   const setBlacklistedCourses = useAppStore((s) => s.setBlacklistedCourses);
   const setBasicExcludedCategories = useAppStore((s) => s.setBasicExcludedCategories);
 
@@ -61,16 +55,17 @@ export function useGenerationConstraints() {
     setGenerationMinStartMinutes,
     setGenerationMaxEndMinutes,
     setAvoidedDays,
-    setGenerationPreferHigherProfessorRating,
     setLevelBuckets,
     setLanguageBuckets,
     setElectiveLevelBuckets,
     setIncludeClosedComponents,
     setVirtualSectionsOnly,
     setGenerationLimitFirstYearCredits,
-    setGenerationCompressedSchedule,
-    setGenerationPreferEasier,
-    setGenerationPreferHigherSentiment,
+    setOptimizationPriorities,
+    reorderOptimizationPriorities,
+    setOptimizationPriorityEnabled,
+    toggleOptimizationPriority,
+    setGoodBreaksParams,
     setBlacklistedCourses,
     setBasicExcludedCategories,
   };

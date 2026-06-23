@@ -27,6 +27,7 @@ const fakeState = {
   firstYear: 2024,
   completedCourses: [],
   remainingRequirements: [],
+  optimizationPriorities: [],
   program: null,
   cache: null,
 } as unknown as Parameters<typeof import("./scheduleWorkerClient").runScheduleGeneration>[0];

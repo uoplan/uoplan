@@ -1,13 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { generateScheduleFromDecodedState } from "../scheduleFromStateEngine";
-import { Mode } from "@uoplan/proto/engine";
 import { buildDataCache } from "../dataCache";
 import type { Catalogue, Program, SchedulesData } from "../dataTypes";
 import { normalizeCourseCode } from "../utils/courseUtils";
 import {
   testGenerationConstraints as constraints,
   decodedState as decoded,
-  engineCapturingGenerationMode,
+  engineCapturingRequest,
   engineReturning,
   fakeDataCache as fakeCache,
   testLectureSchedule as lec,
@@ -44,15 +43,20 @@ describe("generateScheduleFromDecodedState — mode selection", () => {
     expect(result).toBeNull();
   });
 
-  it("sends a MODE_BASIC request in basic mode", () => {
-    const { engine, getMode } = engineCapturingGenerationMode();
+  it("forwards basket inputs to the engine in basic mode", () => {
+    const { engine, getRequest } = engineCapturingRequest();
     generateScheduleFromDecodedState(
       engine,
-      decoded({ wizardMode: "basic" }),
+      decoded({
+        wizardMode: "basic",
+        basicElectivesCount: 3,
+        basketCourses: [normalizeCourseCode("CSI 2110")],
+      }),
       fakeCache([]),
       constraints,
     );
-    expect(getMode()).toBe(Mode.MODE_BASIC);
+    expect(getRequest()!.basicElectivesCount).toBe(3);
+    expect(getRequest()!.basicPinnedCourses).toEqual(["CSI 2110"]);
   });
 });
 
@@ -168,7 +172,7 @@ describe("generateScheduleFromDecodedState — advanced mode with a real program
 
   it("builds an advanced request and reconstructs the engine's schedule", () => {
     const cache = buildDataCache(catalogue, schedulesData);
-    const { engine, getMode } = engineCapturingGenerationMode({
+    const { engine, getRequest } = engineCapturingRequest({
       hasSchedule: true,
       courses: [generatedCourse("CSI 1000")],
     });
@@ -178,7 +182,8 @@ describe("generateScheduleFromDecodedState — advanced mode with a real program
       cache,
       constraints,
     );
-    expect(getMode()).toBe(Mode.MODE_ADVANCED);
+    expect(getRequest()!.remainingRequirements.length).toBeGreaterThan(0);
+    expect(getRequest()!.basicElectivesCount).toBe(0);
     expect(result).not.toBeNull();
     expect(result!.schedule.enrollments.map((e) => e.courseCode)).toEqual(["CSI 1000"]);
     expect(result!.colorMap).toEqual({ "CSI 1000": 0 });

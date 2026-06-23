@@ -691,8 +691,7 @@ export function buildAdvancedRequestInputFromPersonalize(input: {
   constraints: AdvancedRequestInput["constraints"];
   includeClosedComponents: boolean;
   virtualSectionsOnly: boolean;
-  generationPreferEasier: boolean;
-  generationPreferHigherSentiment: boolean;
+  optimizationPriorities: AdvancedRequestInput["optimizationPriorities"];
   courseSentimentByNorm: AdvancedRequestInput["courseSentimentByNorm"];
   levelBuckets?: CourseLevelBucket[];
   languageBuckets?: CourseLanguageBucket[];
@@ -721,8 +720,7 @@ export function buildAdvancedRequestInputFromPersonalize(input: {
       (requirements as { electiveLevelBuckets?: number[] }).electiveLevelBuckets ?? [],
     includeClosedComponents: input.includeClosedComponents,
     virtualSectionsOnly: input.virtualSectionsOnly,
-    generationPreferEasier: input.generationPreferEasier,
-    generationPreferHigherSentiment: input.generationPreferHigherSentiment,
+    optimizationPriorities: input.optimizationPriorities,
     courseSentimentByNorm: input.courseSentimentByNorm,
     frenchImmersionStream: input.frenchImmersionStream ?? false,
     blacklistedCourses: input.blacklistedCourses,

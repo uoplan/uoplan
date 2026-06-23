@@ -35,10 +35,13 @@ describe("schedule-options", () => {
         maxEndMinutes: 18 * 60,
         avoidedDays: ["Fr"],
         blockedTimes: [{ day: "Mo", startMinutes: 10 * 60, endMinutes: 11 * 60 }],
-        compressedSchedule: true,
-        preferEasier: true,
-        preferHigherSentiment: true,
-        preferHigherProfessorRating: true,
+        optimizationPriorities: [
+          { kind: "good_breaks", enabled: true, breakCount: 2, breakTargetMinutes: 90 },
+          { kind: "free_days", enabled: true },
+          { kind: "prefer_easier", enabled: false },
+          { kind: "prefer_sentiment", enabled: true },
+          { kind: "prefer_professor_rating", enabled: false },
+        ],
         electiveLevelBuckets: [3000, 4000],
         basicElectivesCount: 3,
         basicExcludedCategories: ["CSI", "MAT"],
@@ -91,15 +94,15 @@ describe("schedule-options", () => {
         JSON.stringify({
           minStartMinutes: "oops",
           avoidedDays: ["Mo", "XX", 5],
-          preferHigherProfessorRating: "high",
-          compressedSchedule: 1,
+          optimizationPriorities: "high",
         }),
       );
       expect(parsed.minStartMinutes).toBe(DEFAULT_SCHEDULE_OPTIONS.minStartMinutes);
       expect(parsed.avoidedDays).toEqual(["Mo"]);
       expect(parsed.blockedTimes).toEqual([]);
-      expect(parsed.preferHigherProfessorRating).toBe(false);
-      expect(parsed.compressedSchedule).toBe(false);
+      expect(parsed.optimizationPriorities).toEqual(
+        DEFAULT_SCHEDULE_OPTIONS.optimizationPriorities,
+      );
       expect(parsed.electiveLevelBuckets).toEqual(DEFAULT_SCHEDULE_OPTIONS.electiveLevelBuckets);
     });
 

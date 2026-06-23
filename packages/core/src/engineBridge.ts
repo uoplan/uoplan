@@ -12,11 +12,12 @@
 import {
   GenerationRequest,
   GenerationResponse,
-  Mode,
+  OptimizationKind as ProtoOptimizationKind,
   TimetableRequest,
 } from "@uoplan/proto/engine";
 import type {
   ComponentChoice,
+  OptimizationPriority as ProtoOptimizationPriority,
   RemainingRequirement as ProtoRemainingRequirement,
   RequirementWithStatus as ProtoRequirementWithStatus,
   StringList,
@@ -33,8 +34,28 @@ import type {
 } from "./generation/types";
 import type { RemainingRequirement, RequirementWithStatus } from "./requirements/types";
 import { hasProfessorRatings } from "./professorRatings";
+import { isOptimizationEnabled } from "./optimizationPriorities";
+import type { OptimizationKind, OptimizationPriority } from "./optimizationPriorities";
 
-export { Mode as EngineMode };
+const OPTIMIZATION_KIND_TO_PROTO: Record<OptimizationKind, ProtoOptimizationKind> = {
+  free_days: ProtoOptimizationKind.OPTIMIZATION_KIND_FREE_DAYS,
+  good_breaks: ProtoOptimizationKind.OPTIMIZATION_KIND_GOOD_BREAKS,
+  prefer_easier: ProtoOptimizationKind.OPTIMIZATION_KIND_PREFER_EASIER,
+  prefer_sentiment: ProtoOptimizationKind.OPTIMIZATION_KIND_PREFER_SENTIMENT,
+  prefer_professor_rating: ProtoOptimizationKind.OPTIMIZATION_KIND_PREFER_PROFESSOR_RATING,
+};
+
+/** Map the shared ordered priority list onto the engine's proto repeated field. */
+function optimizationPrioritiesToProto(
+  priorities: readonly OptimizationPriority[],
+): ProtoOptimizationPriority[] {
+  return priorities.map((p) => ({
+    kind: OPTIMIZATION_KIND_TO_PROTO[p.kind],
+    enabled: p.enabled,
+    breakCount: p.breakCount ?? 0,
+    breakTargetMinutes: p.breakTargetMinutes ?? 0,
+  }));
+}
 
 /**
  * Minimal interface implemented by the WASM `Engine` (and any test double).
@@ -54,13 +75,17 @@ interface CommonRequestInput {
   electiveLevelBuckets: number[];
   includeClosedComponents: boolean;
   virtualSectionsOnly: boolean;
-  generationPreferEasier: boolean;
-  /** Soft "prefer higher sentiment" (course-feedback overall rating) preference. */
-  generationPreferHigherSentiment: boolean;
+  /**
+   * The ordered, individually-enabled optimization objectives (shared model).
+   * Drives which soft objectives are active (prefer-easier/sentiment/professor
+   * + the timetable-shape objectives) and their priority — replaces the old
+   * per-preference booleans and the compressed-schedule flag.
+   */
+  optimizationPriorities: OptimizationPriority[];
   /**
    * Overall course-feedback sentiment (1-5) keyed by normalized course code,
    * supplied by the caller (built from the lazily-loaded feedback dataset). Only
-   * consumed when {@link generationPreferHigherSentiment} is true.
+   * consumed when the `prefer_sentiment` objective is enabled.
    */
   courseSentimentByNorm?: Map<NormalizedCourseCode, number> | null;
   blacklistedCourses: string[];
@@ -99,6 +124,8 @@ export interface TimetableFixedSetInput {
   virtualExemptCourses?: string[];
   applyBlacklist?: boolean;
   blacklistedCourses?: string[];
+  /** Ordered optimization objectives — shape + professor objectives apply to swaps. */
+  optimizationPriorities: OptimizationPriority[];
 }
 
 /** Mapped {@link GenerationResponse} in the shapes the app store consumes. */
@@ -130,7 +157,6 @@ function constraintsToProto(c: GenerationConstraints): GenerationRequest["constr
     minStartMinutes: c.minStartMinutes,
     maxEndMinutes: c.maxEndMinutes,
     maxFirstYearCredits: c.maxFirstYearCredits,
-    compressedSchedule: c.compressedSchedule ?? false,
     blockedTimes: (c.blockedTimes ?? []).map((b) => ({
       day: DAY_CODE_TO_INDEX[b.day] ?? 0,
       startMinutes: b.startMinutes,
@@ -235,7 +261,6 @@ type CommonGenerationRequestFields = Pick<
   | "electiveLevelBuckets"
   | "includeClosedComponents"
   | "virtualSectionsOnly"
-  | "generationPreferEasier"
   | "frenchImmersionStream"
   | "blacklistedCourses"
   | "constraints"
@@ -243,9 +268,8 @@ type CommonGenerationRequestFields = Pick<
   | "firstSeed"
   | "professorRatings"
   | "courseAplus"
-  | "generationPreferHigherSentiment"
   | "courseSentiment"
-  | "generationPreferHigherProfessorRating"
+  | "optimizationPriorities"
 >;
 
 type SharedGenerationRequestFields = Omit<
@@ -260,6 +284,12 @@ function buildCommonGenerationRequestFields(
   input: InputWithCommonGenerationFields,
   cache: DataCache,
 ): CommonGenerationRequestFields {
+  const preferEasier = isOptimizationEnabled(input.optimizationPriorities, "prefer_easier");
+  const preferSentiment = isOptimizationEnabled(input.optimizationPriorities, "prefer_sentiment");
+  const preferProfessorRating = isOptimizationEnabled(
+    input.optimizationPriorities,
+    "prefer_professor_rating",
+  );
   return {
     basicExcludedCategories: input.basicExcludedCategories,
     completedCourses: input.completedCourses,
@@ -268,23 +298,18 @@ function buildCommonGenerationRequestFields(
     electiveLevelBuckets: input.electiveLevelBuckets,
     includeClosedComponents: input.includeClosedComponents,
     virtualSectionsOnly: input.virtualSectionsOnly,
-    generationPreferEasier: input.generationPreferEasier,
     frenchImmersionStream: input.frenchImmersionStream,
     blacklistedCourses: input.blacklistedCourses,
     constraints: constraintsToProto(input.constraints),
     currentSeed: input.currentSeed,
     firstSeed: input.firstSeed,
-    professorRatings: input.constraints.generationPreferHigherProfessorRating
-      ? professorRatingsToProto(input.constraints)
-      : {},
-    courseAplus: input.generationPreferEasier ? buildCourseAplusMap(cache) : {},
-    generationPreferHigherSentiment: input.generationPreferHigherSentiment,
+    professorRatings: preferProfessorRating ? professorRatingsToProto(input.constraints) : {},
+    courseAplus: preferEasier ? buildCourseAplusMap(cache) : {},
     courseSentiment:
-      input.generationPreferHigherSentiment && input.courseSentimentByNorm
+      preferSentiment && input.courseSentimentByNorm
         ? buildCourseSentimentMap(cache, input.courseSentimentByNorm)
         : {},
-    generationPreferHigherProfessorRating:
-      input.constraints.generationPreferHigherProfessorRating ?? false,
+    optimizationPriorities: optimizationPrioritiesToProto(input.optimizationPriorities),
   };
 }
 
@@ -297,7 +322,6 @@ function buildSharedGenerationRequestFields(
     electiveLevelBuckets: common.electiveLevelBuckets,
     includeClosedComponents: common.includeClosedComponents,
     virtualSectionsOnly: common.virtualSectionsOnly,
-    generationPreferEasier: common.generationPreferEasier,
     frenchImmersionStream: common.frenchImmersionStream,
     blacklistedCourses: common.blacklistedCourses,
     constraints: common.constraints,
@@ -305,16 +329,14 @@ function buildSharedGenerationRequestFields(
     firstSeed: common.firstSeed,
     professorRatings: common.professorRatings,
     courseAplus: common.courseAplus,
-    generationPreferHigherSentiment: common.generationPreferHigherSentiment,
     courseSentiment: common.courseSentiment,
-    generationPreferHigherProfessorRating: common.generationPreferHigherProfessorRating,
+    optimizationPriorities: common.optimizationPriorities,
   };
 }
 
 export function buildBasicRequest(input: BasicRequestInput, cache: DataCache): GenerationRequest {
   const common = buildCommonGenerationRequestFields(input, cache);
   return {
-    mode: Mode.MODE_BASIC,
     basicPinnedCourses: input.basketCourses,
     basicElectivesCount: input.basicElectivesCount,
     basicExcludedCategories: common.basicExcludedCategories,
@@ -339,7 +361,6 @@ export function buildAdvancedRequest(
 ): GenerationRequest {
   const common = buildCommonGenerationRequestFields(input, cache);
   return {
-    mode: Mode.MODE_ADVANCED,
     basicPinnedCourses: [],
     basicElectivesCount: 0,
     basicExcludedCategories: common.basicExcludedCategories,
@@ -427,6 +448,10 @@ function mapTimetableResponse(
 }
 
 function buildTimetableRequest(input: TimetableFixedSetInput): TimetableRequest {
+  const preferProfessorRating = isOptimizationEnabled(
+    input.optimizationPriorities,
+    "prefer_professor_rating",
+  );
   return {
     courseCodes: input.courseCodes,
     constraints: constraintsToProto(input.constraints),
@@ -434,13 +459,10 @@ function buildTimetableRequest(input: TimetableFixedSetInput): TimetableRequest 
     includeClosedComponents: input.includeClosedComponents,
     virtualSectionsOnly: input.virtualSectionsOnly,
     virtualExemptCourses: input.virtualExemptCourses ?? [],
-    professorRatings: input.constraints.generationPreferHigherProfessorRating
-      ? professorRatingsToProto(input.constraints)
-      : {},
+    professorRatings: preferProfessorRating ? professorRatingsToProto(input.constraints) : {},
     applyBlacklist: input.applyBlacklist ?? false,
     blacklistedCourses: input.blacklistedCourses ?? [],
-    generationPreferHigherProfessorRating:
-      input.constraints.generationPreferHigherProfessorRating ?? false,
+    optimizationPriorities: optimizationPrioritiesToProto(input.optimizationPriorities),
   };
 }
 

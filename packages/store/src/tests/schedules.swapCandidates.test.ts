@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { buildDataCache } from "@uoplan/core";
+import { buildDataCache, defaultOptimizationPriorities } from "@uoplan/core";
 import {
   testCatalogue,
   testEnrollment,
@@ -25,7 +25,7 @@ describe("basic getSwapCandidates", () => {
       electiveLevelBuckets: [],
       generationMinStartMinutes: 0,
       generationMaxEndMinutes: 24 * 60,
-      generationPreferHigherProfessorRating: false,
+      optimizationPriorities: defaultOptimizationPriorities(),
       professorRatings: null,
       includeClosedComponents: false,
       virtualSectionsOnly: false,

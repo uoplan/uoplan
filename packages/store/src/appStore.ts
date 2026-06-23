@@ -2,9 +2,9 @@ import { createStore } from "zustand/vanilla";
 import type { StoreApi } from "zustand/vanilla";
 import { useStore } from "zustand";
 import { createContext, useContext } from "react";
-import { generateRandomSeed } from "@uoplan/core";
+import { defaultOptimizationPriorities, generateRandomSeed } from "@uoplan/core";
 import type { AppStore } from "./types";
-import { createConstraintsSlice, createSelectionSlice } from "./slices/index";
+import { createCompareSlice, createConstraintsSlice, createSelectionSlice } from "./slices/index";
 import { createDataSlice } from "./slices/data";
 import { createUrlSlice } from "./slices/url";
 import { createSchedulesSlice } from "./slices/schedules";
@@ -17,13 +17,9 @@ import {
 import {
   DEFAULT_BASIC_ELECTIVES_COUNT,
   DEFAULT_COURSES_THIS_SEMESTER,
-  DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
   DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
   DEFAULT_GENERATION_MAX_END_MINUTES,
   DEFAULT_GENERATION_MIN_START_MINUTES,
-  DEFAULT_GENERATION_PREFER_EASIER,
-  DEFAULT_GENERATION_PREFER_HIGHER_PROFESSOR_RATING,
-  DEFAULT_GENERATION_PREFER_HIGHER_SENTIMENT,
 } from "./generationDefaults";
 import { defaultBlockedTimes } from "./blockedTimes";
 
@@ -32,6 +28,7 @@ export type AppStoreApi = StoreApi<AppStore>;
 function createPlannerStateDefaults() {
   return {
     basketCourses: [],
+    compareRefs: [],
     basicElectivesCount: DEFAULT_BASIC_ELECTIVES_COUNT,
     basicExcludedCategories: [],
     completedCourses: [],
@@ -80,6 +77,7 @@ export function createAppStore(services: AppServices): AppStoreApi {
       ...createDataSlice(services)(...a),
       ...createUrlSlice(services)(...a),
       ...createSelectionSlice(...a),
+      ...createCompareSlice(...a),
       ...createConstraintsSlice(...a),
       ...createSchedulesSlice(services)(...a),
 
@@ -119,16 +117,13 @@ export function createAppStore(services: AppServices): AppStoreApi {
       // currentSeed will be set to firstSeed when first generated.
       generationMinStartMinutes: DEFAULT_GENERATION_MIN_START_MINUTES,
       generationMaxEndMinutes: DEFAULT_GENERATION_MAX_END_MINUTES,
-      generationPreferHigherProfessorRating: DEFAULT_GENERATION_PREFER_HIGHER_PROFESSOR_RATING,
       professorRatings: null,
       // Defaults to true (like courseGradesLoading): ratings are lazily loaded,
       // so "not fetched yet" reads as loading until ensureProfessorRatings
       // settles (success or optional-asset-absent).
       professorRatingsLoading: true,
       generationLimitFirstYearCredits: DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
-      generationCompressedSchedule: DEFAULT_GENERATION_COMPRESSED_SCHEDULE,
-      generationPreferEasier: DEFAULT_GENERATION_PREFER_EASIER,
-      generationPreferHigherSentiment: DEFAULT_GENERATION_PREFER_HIGHER_SENTIMENT,
+      optimizationPriorities: defaultOptimizationPriorities(),
       courseSentimentByNorm: null,
       calendarMode: null,
       scheduleNoVariety: false,

@@ -174,6 +174,7 @@ export async function runScheduleGeneration(
     programId: state.program?.slug ?? state.program?.url ?? undefined,
     completedCount: state.completedCourses.length,
     requirementCount: state.remainingRequirements.length,
+    optimizations: state.optimizationPriorities.filter((p) => p.enabled).map((p) => p.kind),
   };
   const startedAt = nowMs();
   analytics.capture("schedule_generate_started", { termId, termName, mode, ...segment });

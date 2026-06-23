@@ -1,6 +1,8 @@
 import { page } from "vitest/browser";
 import { expect, test, vi } from "vitest";
 
+import { defaultOptimizationPriorities } from "@uoplan/core";
+
 import { GenerationOptionsFields } from "./GenerationOptionsFields";
 import { makeGenerationOptionsProps } from "./testHelpers";
 import { renderWithProviders } from "../../../test/renderWithProviders";
@@ -12,11 +14,6 @@ function baseProps() {
     maxEndMinutes: 18 * 60,
   });
 }
-
-const OPEN_ADVANCED = {
-  collapseId: "test-advanced-options-collapse",
-  defaultOpen: true,
-} as const;
 
 test("tucks every lower-priority control behind a single Advanced options disclosure", async () => {
   await renderWithProviders(
@@ -65,75 +62,64 @@ test("renders extra disclosure content and an extra summary bullet", async () =>
   await expect.element(page.getByTestId("extra-panel")).toBeVisible();
 });
 
-test("smart options expands child preferences and toggles them as a group", async () => {
-  const onCompressedScheduleChange = vi.fn();
-  const onPreferEasierCoursesChange = vi.fn();
-  const onPreferHigherSentimentChange = vi.fn();
-  const onPreferHigherProfessorRatingChange = vi.fn();
+test("renders an optimization-priorities row per objective and toggles one", async () => {
+  const onTogglePriority = vi.fn();
 
   await renderWithProviders(
     <GenerationOptionsFields
       {...baseProps()}
-      advancedOptions={OPEN_ADVANCED}
-      compressedSchedule={false}
-      preferEasierCourses={false}
-      preferHigherSentiment={false}
-      preferHigherProfessorRating={false}
-      onCompressedScheduleChange={onCompressedScheduleChange}
-      onPreferEasierCoursesChange={onPreferEasierCoursesChange}
-      onPreferHigherSentimentChange={onPreferHigherSentimentChange}
-      onPreferHigherProfessorRatingChange={onPreferHigherProfessorRatingChange}
+      optimizationPriorities={defaultOptimizationPriorities()}
+      onTogglePriority={onTogglePriority}
     />,
   );
 
-  const expand = page.getByRole("button", { name: /Smart options/i });
-  await expand.click();
-  await expect.element(page.getByText("Compressed schedule")).toBeInTheDocument();
-  await expect.element(page.getByText("Prefer professors with better ratings")).toBeInTheDocument();
-  await expect.element(page.getByText("Minimum RateMyProfessors rating")).not.toBeInTheDocument();
+  // The card is always visible (not behind the Advanced disclosure).
+  await expect.element(page.getByTestId("optimization-priorities-card")).toBeInTheDocument();
+  await expect.element(page.getByTestId("optimization-priority-free_days")).toBeInTheDocument();
+  await expect.element(page.getByTestId("optimization-priority-good_breaks")).toBeInTheDocument();
+  await expect
+    .element(page.getByTestId("optimization-priority-prefer_professor_rating"))
+    .toBeInTheDocument();
 
-  await page.getByRole("checkbox", { name: "Smart options" }).click();
-
-  expect(onCompressedScheduleChange).toHaveBeenCalledWith(true);
-  expect(onPreferEasierCoursesChange).toHaveBeenCalledWith(true);
-  expect(onPreferHigherSentimentChange).toHaveBeenCalledWith(true);
-  expect(onPreferHigherProfessorRatingChange).toHaveBeenCalledWith(true);
+  // free_days is off by default → toggling its switch enables it. (Mantine's
+  // visible track overlays the hidden input, so force the click.)
+  await page
+    .getByTestId("optimization-priority-free_days")
+    .getByRole("switch")
+    .click({ force: true });
+  expect(onTogglePriority).toHaveBeenCalledWith("free_days", true);
 });
 
-test("smart options clears the professor-rating preference when toggled off", async () => {
-  const onPreferHigherProfessorRatingChange = vi.fn();
+test("moves an enabled priority down via its reorder control", async () => {
+  const onReorderPriorities = vi.fn();
 
   await renderWithProviders(
     <GenerationOptionsFields
       {...baseProps()}
-      advancedOptions={OPEN_ADVANCED}
-      compressedSchedule
-      preferEasierCourses
-      preferHigherSentiment
-      preferHigherProfessorRating
-      onPreferHigherProfessorRatingChange={onPreferHigherProfessorRatingChange}
+      optimizationPriorities={defaultOptimizationPriorities()}
+      onReorderPriorities={onReorderPriorities}
     />,
   );
 
-  await page.getByRole("checkbox", { name: "Smart options" }).click();
+  // prefer_easier is the first *enabled* priority (stored index 3); the timetable-shape
+  // objectives are off by default and sink, dimmed, to the bottom. Its "move down" control
+  // swaps it with the next enabled priority (stored index 4).
+  await page
+    .getByTestId("optimization-priority-prefer_easier")
+    .getByRole("button", { name: /move down/i })
+    .click();
 
-  expect(onPreferHigherProfessorRatingChange).toHaveBeenCalledWith(false);
+  expect(onReorderPriorities).toHaveBeenCalledWith(3, 4);
 });
 
-test("professor-rating smart option toggles the preference flag", async () => {
-  const onPreferHigherProfessorRatingChange = vi.fn();
-
-  await renderWithProviders(
-    <GenerationOptionsFields
-      {...baseProps()}
-      advancedOptions={OPEN_ADVANCED}
-      preferHigherProfessorRating={false}
-      onPreferHigherProfessorRatingChange={onPreferHigherProfessorRatingChange}
-    />,
+test("reveals break inputs only when good breaks is enabled", async () => {
+  const enabledBreaks = defaultOptimizationPriorities().map((p) =>
+    p.kind === "good_breaks" ? { ...p, enabled: true } : p,
   );
 
-  await page.getByRole("button", { name: /Smart options/i }).click();
-  await page.getByRole("checkbox", { name: "Prefer professors with better ratings" }).click();
+  await renderWithProviders(
+    <GenerationOptionsFields {...baseProps()} optimizationPriorities={enabledBreaks} />,
+  );
 
-  expect(onPreferHigherProfessorRatingChange).toHaveBeenCalledWith(true);
+  await expect.element(page.getByText("Breaks per day")).toBeVisible();
 });

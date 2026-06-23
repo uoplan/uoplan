@@ -34,16 +34,13 @@ export interface GenerationConstraints {
   minStartMinutes: number;
   maxEndMinutes: number;
   /**
-   * Soft preference: when true, section selection is biased toward higher-rated
-   * professors (unrated treated as ~4.0). Not a hard filter — every section is
-   * still eligible. See the engine (`weights.rs::professor_rating_weight`).
+   * Normalized professor-name -> rating map (data only). The `prefer_professor_rating`
+   * optimization objective decides whether it's applied; see the engine
+   * (`weights.rs::professor_rating_weight`).
    */
-  generationPreferHigherProfessorRating?: boolean;
   professorRatings?: ProfessorRatingsMap;
   /** Max credits from 1000-level courses allowed in the schedule (48 - already completed). */
   maxFirstYearCredits?: number;
-  /** If true, each day may have at most one gap between classes, and that gap must be ≤ 90 minutes. */
-  compressedSchedule?: boolean;
   /** Recurring per-weekday windows that no course meeting time may overlap. */
   blockedTimes?: BlockedTimeWindow[];
 }

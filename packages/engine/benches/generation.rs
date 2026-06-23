@@ -9,8 +9,7 @@ use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Through
 use prost::Message;
 use uoplan_engine::proto::data::SchedulesData;
 use uoplan_engine::proto::engine::{
-    BlockedTime, GenerationConstraints, GenerationRequest, Mode, RemainingRequirement,
-    TimetableRequest,
+    BlockedTime, GenerationConstraints, GenerationRequest, RemainingRequirement, TimetableRequest,
 };
 use uoplan_engine::Engine;
 
@@ -44,10 +43,8 @@ fn load_dataset() -> Option<Dataset> {
         if s.components.is_empty() {
             continue;
         }
-        if let Some(ci) = &s.course {
-            if let Some(code) = sched.course_codes.get(ci.index as usize) {
-                schedulable.push(code.clone());
-            }
+        if let Some(code) = sched.course_codes.get(s.course as usize) {
+            schedulable.push(code.clone());
         }
     }
     schedulable.sort();
@@ -85,7 +82,6 @@ fn undergrad_pool(schedulable: &[String]) -> Vec<String> {
 /// each) from a single "core" requirement spanning the whole `pool`.
 fn advanced_request(pool: &[String], target: u32, seed: u32) -> Vec<u8> {
     GenerationRequest {
-        mode: Mode::Advanced as i32,
         courses_this_semester: target,
         include_closed_components: true,
         level_buckets: vec!["undergrad".to_string(), "grad".to_string()],
@@ -127,15 +123,6 @@ fn configs() -> Vec<Config> {
             name: "default",
             constraints: GenerationConstraints {
                 max_end_minutes: 24 * 60,
-                ..Default::default()
-            },
-            virtual_sections_only: false,
-        },
-        Config {
-            name: "compressed",
-            constraints: GenerationConstraints {
-                max_end_minutes: 24 * 60,
-                compressed_schedule: true,
                 ..Default::default()
             },
             virtual_sections_only: false,
@@ -228,8 +215,8 @@ fn bench_timetable_amounts(c: &mut Criterion) {
 }
 
 /// Bench: timetabling a fixed 12-course set under each hard-constraint config, to
-/// show the relative cost of compressed schedules, time windows, blocked times,
-/// and virtual-only filtering.
+/// show the relative cost of time windows, blocked times, and virtual-only
+/// filtering.
 fn bench_timetable_configs(c: &mut Criterion) {
     const N: usize = 12;
     let Some(ds) = load_dataset() else {
@@ -266,7 +253,6 @@ fn bench_basic_pinned(c: &mut Criterion) {
         }
         let pinned: Vec<String> = ds.schedulable.iter().take(n).cloned().collect();
         let request = GenerationRequest {
-            mode: Mode::Basic as i32,
             basic_pinned_courses: pinned,
             basic_electives_count: 0,
             include_closed_components: true,
@@ -295,7 +281,6 @@ fn bench_basic_electives(c: &mut Criterion) {
     group.sample_size(30);
     for &n in &[1u32, 3, 5, 10] {
         let request = GenerationRequest {
-            mode: Mode::Basic as i32,
             basic_electives_count: n,
             level_buckets: vec!["undergrad".to_string()],
             language_buckets: vec!["en".to_string(), "other".to_string()],

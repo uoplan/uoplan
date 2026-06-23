@@ -1,8 +1,11 @@
 import {
   type CourseLanguageBucket,
   type CourseLevelBucket,
+  defaultOptimizationPriorities,
   mergeBlockedWindows,
+  normalizeOptimizationPriorities,
   type BlockedTimeWindow,
+  type OptimizationPriority,
 } from "@uoplan/core";
 import type { DayOfWeek } from "@uoplan/core/dataTypes";
 
@@ -22,14 +25,13 @@ export interface ScheduleOptions {
   avoidedDays: DayOfWeek[];
   /** Custom blocked windows created by dragging on the native week calendar. */
   blockedTimes: BlockedTimeWindow[];
-  /** At most one ≤90-minute gap per day. */
-  compressedSchedule: boolean;
-  /** Prefer courses with higher historical A+ rates from each pool. */
-  preferEasier: boolean;
-  /** Prefer courses with better student-feedback ratings from each pool. */
-  preferHigherSentiment: boolean;
-  /** Prefer courses taught by higher-rated professors (unrated treated as ~4.0). */
-  preferHigherProfessorRating: boolean;
+  /**
+   * Ordered, individually-toggleable schedule-optimization objectives (the shared
+   * `@uoplan/core` model). Order = priority (higher first); a disabled entry is
+   * removed from the objective entirely. Replaces the legacy compressed/prefer
+   * booleans and is shared with the web app.
+   */
+  optimizationPriorities: OptimizationPriority[];
   /** Course-level buckets allowed for elective requirement pools. */
   electiveLevelBuckets: number[];
   /**
@@ -71,10 +73,7 @@ export const DEFAULT_SCHEDULE_OPTIONS: ScheduleOptions = {
   maxEndMinutes: DEFAULT_GENERATION_MAX_END_MINUTES,
   avoidedDays: ["Sa", "Su"],
   blockedTimes: [],
-  compressedSchedule: false,
-  preferEasier: false,
-  preferHigherSentiment: false,
-  preferHigherProfessorRating: false,
+  optimizationPriorities: defaultOptimizationPriorities(),
   electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
   basicElectivesCount: 0,
   basicExcludedCategories: [],
@@ -144,10 +143,7 @@ export function parseScheduleOptions(text: string): ScheduleOptions {
     maxEndMinutes: num(o.maxEndMinutes, DEFAULT_SCHEDULE_OPTIONS.maxEndMinutes),
     avoidedDays,
     blockedTimes,
-    compressedSchedule: bool(o.compressedSchedule, false),
-    preferEasier: bool(o.preferEasier, false),
-    preferHigherSentiment: bool(o.preferHigherSentiment, false),
-    preferHigherProfessorRating: bool(o.preferHigherProfessorRating, false),
+    optimizationPriorities: normalizeOptimizationPriorities(o.optimizationPriorities),
     electiveLevelBuckets: parseElectiveLevelBuckets(o.electiveLevelBuckets),
     basicElectivesCount: Math.max(
       0,

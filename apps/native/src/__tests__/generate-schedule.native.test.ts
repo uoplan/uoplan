@@ -1,6 +1,6 @@
 import type { Catalogue, DisciplinesData, SchedulesData } from "@uoplan/core/dataTypes";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
-import { GenerationRequest, GenerationResponse } from "@uoplan/proto/engine";
+import { GenerationRequest, GenerationResponse, OptimizationKind } from "@uoplan/proto/engine";
 
 import {
   createScheduleGenerator,
@@ -494,8 +494,13 @@ describe("generateScheduleVariants", () => {
           languageBuckets: ["en"],
           frenchImmersionStream: true,
           limitFirstYearCredits: true,
-          compressedSchedule: true,
-          preferEasier: true,
+          optimizationPriorities: [
+            { kind: "prefer_easier", enabled: true },
+            { kind: "free_days", enabled: false },
+            { kind: "good_breaks", enabled: false, breakCount: 1, breakTargetMinutes: 60 },
+            { kind: "prefer_sentiment", enabled: false },
+            { kind: "prefer_professor_rating", enabled: false },
+          ],
           includeClosedComponents: true,
           virtualSectionsOnly: true,
         },
@@ -505,7 +510,20 @@ describe("generateScheduleVariants", () => {
     const req = GenerationRequest.decode(sent);
     expect(req.constraints?.minStartMinutes).toBe(9 * 60);
     expect(req.constraints?.maxEndMinutes).toBe(17 * 60);
-    expect(req.constraints?.compressedSchedule).toBe(true);
+    // The ordered optimization priorities are forwarded verbatim (index 0 =
+    // highest), and individual enabled flags are preserved.
+    expect(req.optimizationPriorities.map((p) => p.kind)).toEqual([
+      OptimizationKind.OPTIMIZATION_KIND_PREFER_EASIER,
+      OptimizationKind.OPTIMIZATION_KIND_FREE_DAYS,
+      OptimizationKind.OPTIMIZATION_KIND_GOOD_BREAKS,
+      OptimizationKind.OPTIMIZATION_KIND_PREFER_SENTIMENT,
+      OptimizationKind.OPTIMIZATION_KIND_PREFER_PROFESSOR_RATING,
+    ]);
+    expect(
+      req.optimizationPriorities.find(
+        (p) => p.kind === OptimizationKind.OPTIMIZATION_KIND_PREFER_EASIER,
+      )?.enabled,
+    ).toBe(true);
     // First-year limit on with no completed courses → full 48-credit budget.
     expect(req.constraints?.maxFirstYearCredits).toBe(48);
     // "Fr" → engine day index 4, full-day avoid window 8:30–22:00.
@@ -515,7 +533,6 @@ describe("generateScheduleVariants", () => {
     ]);
     expect(req.includeClosedComponents).toBe(true);
     expect(req.virtualSectionsOnly).toBe(true);
-    expect(req.generationPreferEasier).toBe(true);
     expect(req.electiveLevelBuckets).toEqual([1000, 2000, 5000]);
     expect(req.basicElectivesCount).toBe(2);
     expect(req.basicExcludedCategories).toEqual(["PHI"]);
@@ -525,20 +542,25 @@ describe("generateScheduleVariants", () => {
     expect(req.frenchImmersionStream).toBe(true);
   });
 
-  it("forwards the professor-rating preference + ratings map when the preference is on", async () => {
+  it("forwards the professor-rating ratings map when the objective is enabled", async () => {
     const engine = cannedEngine();
     await generateScheduleVariants(
       baseInput({
         engine,
         variantCount: 1,
         ratings: { "ada lovelace": { rating: 4.2, numRatings: 12 } },
-        options: { ...DEFAULT_SCHEDULE_OPTIONS, preferHigherProfessorRating: true },
+        // prefer_professor_rating is enabled in the default priority list.
+        options: { ...DEFAULT_SCHEDULE_OPTIONS },
       }),
     );
     const req = GenerationRequest.decode(
       (engine.generate as jest.Mock).mock.calls[0]![0] as Uint8Array,
     );
-    expect(req.generationPreferHigherProfessorRating).toBe(true);
+    expect(
+      req.optimizationPriorities.find(
+        (p) => p.kind === OptimizationKind.OPTIMIZATION_KIND_PREFER_PROFESSOR_RATING,
+      )?.enabled,
+    ).toBe(true);
     expect(req.professorRatings).toEqual({ "ada lovelace": 4.2 });
   });
 });

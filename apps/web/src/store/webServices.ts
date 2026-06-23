@@ -61,6 +61,7 @@ function retimetableFixedSet(input: RetimetableFixedSetInput) {
         virtualExemptCourses: [...(input.virtualExemptCourses ?? [])],
         applyBlacklist: input.applyBlacklist,
         blacklistedCourses: [...(input.blacklistedCourses ?? [])],
+        optimizationPriorities: input.optimizationPriorities,
       },
       input.cache,
     ),

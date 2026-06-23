@@ -1,5 +1,7 @@
 import { vi } from "vitest";
 
+import { defaultOptimizationPriorities } from "@uoplan/core";
+
 import type { GenerationOptionsFieldsProps } from "./GenerationOptionsFields";
 
 export function makeGenerationOptionsProps(
@@ -14,20 +16,17 @@ export function makeGenerationOptionsProps(
     warnFirstYearLimit: false,
     limitFirstYearCredits: false,
     onLimitFirstYearCreditsChange: vi.fn(),
-    compressedSchedule: false,
-    onCompressedScheduleChange: vi.fn(),
-    preferEasierCourses: false,
-    onPreferEasierCoursesChange: vi.fn(),
-    preferHigherSentiment: false,
-    onPreferHigherSentimentChange: vi.fn(),
+    optimizationPriorities: defaultOptimizationPriorities(),
+    onReorderPriorities: vi.fn(),
+    onSetPriorities: vi.fn(),
+    onTogglePriority: vi.fn(),
+    onGoodBreaksParamsChange: vi.fn(),
     minStartMinutes: 0,
     onMinStartMinutesChange: vi.fn(),
     maxEndMinutes: 1440,
     onMaxEndMinutesChange: vi.fn(),
     avoidedDays: [],
     onAvoidedDaysChange: vi.fn(),
-    preferHigherProfessorRating: false,
-    onPreferHigherProfessorRatingChange: vi.fn(),
     levelBuckets: [],
     languageBuckets: [],
     electiveLevelBuckets: [],

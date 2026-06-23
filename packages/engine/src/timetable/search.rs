@@ -1,9 +1,11 @@
 use crate::constraints::Constraints;
 use crate::model::DataView;
-use crate::rng::{shuffle_in_place, Rng};
+use crate::rng::Rng;
 use crate::types::{Enrollment, WeekMask};
 
-use super::budgets::{ARRANGEMENT_NODE_BUDGET, SUBSET_WORK_BUDGET};
+use super::budgets::{
+    ARRANGEMENT_NODE_BUDGET, BEST_ARRANGEMENT_LEAF_CAP, BEST_ARRANGEMENT_NODE_BUDGET,
+};
 use super::combos::{build_timetable_course, ScheduleResolver, TimetableCourse};
 use super::solver::{allows_enrollment, passes_final, ArrangeSolver};
 
@@ -67,146 +69,143 @@ pub fn arrange_prebuilt_with_budget(
     }
 }
 
-/// Find the first combo of `course` compatible with the current partial
-/// assignment, charging `placed + 1` work units per combo scanned (an overlap
-/// scan is O(placed)). `chosen_mask` is the incrementally-maintained union of the
-/// chosen enrollments' occupancy masks: a combo whose mask is disjoint from it
-/// shares no time slot with anything placed and therefore fits immediately (an
-/// exact O(1) accept), so only mask-intersecting combos pay the precise scan.
-/// Returns `None` if the budget runs out or nothing fits.
-fn first_fit_combo(
-    course: &TimetableCourse,
-    chosen: &[Enrollment],
-    chosen_mask: &WeekMask,
-    work: &mut u64,
-) -> Option<Enrollment> {
-    for combo in &course.combos {
-        if *work == 0 {
-            return None;
-        }
-        *work = work.saturating_sub(chosen.len() as u64 + 1);
-        let fits = if combo.mask.intersects(chosen_mask) {
-            allows_enrollment(combo, chosen)
-        } else {
-            true
-        };
-        if fits {
-            return Some(combo.clone());
-        }
-    }
-    None
+/// Objective-aware bounded-exhaustive enumerator over a *prebuilt* fixed course
+/// set: visits every conflict-free arrangement (one section combo per course) and
+/// returns the one that maximizes the caller's lexicographic objective comparator
+/// (`better`), scoring each complete arrangement with `score`.
+///
+/// Where [`arrange_prebuilt`] returns the *first* feasible arrangement (objective-
+/// blind), this returns the *best* one — which is what makes timetable-shape
+/// objectives (good breaks / free days / compact) actually honored: because the
+/// comparator is quantized-lexicographic, an arrangement with a strictly better
+/// #1 score always wins, so the top-priority objective is satisfied whenever the
+/// chosen course set admits it.
+///
+/// Combos are visited in their incoming (seeded) order and ties are *not* taken
+/// (`better` is strict), so the first arrangement among equal-best is kept —
+/// preserving per-seed variety exactly like the first-solution solvers. Bounded
+/// by `node_budget` (combo expansions) and `leaf_cap` (arrangements scored);
+/// returns the best found so far if either is exhausted (best-effort, never worse
+/// than the first feasible arrangement).
+pub fn best_arrangement(
+    courses: &[&TimetableCourse],
+    constraints: &Constraints,
+    data: &DataView,
+    score: &dyn Fn(&[Enrollment]) -> Vec<f64>,
+    better: &dyn Fn(&[f64], &[f64]) -> bool,
+    node_budget: u64,
+    leaf_cap: u64,
+) -> Option<Vec<Enrollment>> {
+    // Smallest domains first: prunes infeasible branches earliest, shrinking the
+    // enumerated tree. Deterministic (stable) so the seeded combo order within a
+    // course still decides ties.
+    let mut ordered: Vec<&TimetableCourse> = courses.to_vec();
+    ordered.sort_by_key(|c| c.combos.len());
+
+    let mut search = BestArrange {
+        courses: &ordered,
+        constraints,
+        data,
+        score,
+        better,
+        budget: node_budget,
+        leaves: leaf_cap,
+        best: None,
+    };
+    let mut partial: Vec<Enrollment> = Vec::with_capacity(ordered.len());
+    search.rec(0, &mut partial, &WeekMask::EMPTY);
+    search.best.map(|(_, arr)| arr)
 }
 
-/// First seeded subset timetable that pins all `pinned` and fills to
-/// `target_count` from `optional`, or None if no conflict-free arrangement is
-/// found within the work budget.
-///
-/// Implemented as a **randomized-restart greedy** with a work-charged global
-/// budget (mirroring `advanced.rs`). The previous exhaustive chronological DFS
-/// scanned the whole remaining pool at every node and bounded node *count* (not
-/// work), so on a permissive pool a single run did billions of overlap checks
-/// and most seeds exhausted the budget and returned a *false negative* even when
-/// a packing existed — making success depend on the RNG seed. Each restart here
-/// reshuffles the placement order and greedily seats a compatible combo per
-/// course; charging the budget by real overlap work makes latency a function of
-/// the inputs, and the restarts make a feasible packing discoverable for EVERY
-/// seed (the seed only reorders which valid schedule is returned first).
+/// Like [`best_arrangement`] but resolves `course_codes` to their seeded combos
+/// first (mirrors [`first_seeded_arrangement`]). Returns None if any course has
+/// no buildable combos, or no conflict-free arrangement exists.
 #[allow(clippy::too_many_arguments)]
-pub fn first_seeded_subset_arrangement(
-    pinned: &[String],
-    optional: &[String],
-    target_count: usize,
+pub fn best_seeded_arrangement(
+    course_codes: &[String],
     data: &DataView,
     resolver: &dyn ScheduleResolver,
     constraints: &Constraints,
     rng: &mut Rng,
+    score: &dyn Fn(&[Enrollment]) -> Vec<f64>,
+    better: &dyn Fn(&[f64], &[f64]) -> bool,
 ) -> Option<Vec<Enrollment>> {
-    if pinned.len() > target_count {
-        return None;
+    let mut courses: Vec<TimetableCourse> = Vec::with_capacity(course_codes.len());
+    for code in course_codes {
+        courses.push(build_timetable_course(
+            code,
+            data,
+            resolver,
+            constraints,
+            rng,
+        )?);
     }
+    let refs: Vec<&TimetableCourse> = courses.iter().collect();
+    best_arrangement(
+        &refs,
+        constraints,
+        data,
+        score,
+        better,
+        BEST_ARRANGEMENT_NODE_BUDGET,
+        BEST_ARRANGEMENT_LEAF_CAP,
+    )
+}
 
-    let mut pinned_courses: Vec<TimetableCourse> = Vec::new();
-    for code in pinned {
-        let tc = build_timetable_course(code, data, resolver, constraints, rng)?;
-        pinned_courses.push(tc);
-    }
+struct BestArrange<'a> {
+    courses: &'a [&'a TimetableCourse],
+    constraints: &'a Constraints,
+    data: &'a DataView,
+    score: &'a dyn Fn(&[Enrollment]) -> Vec<f64>,
+    better: &'a dyn Fn(&[f64], &[f64]) -> bool,
+    budget: u64,
+    leaves: u64,
+    best: Option<(Vec<f64>, Vec<Enrollment>)>,
+}
 
-    let mut optional_courses: Vec<TimetableCourse> = Vec::new();
-    for code in optional {
-        if pinned.contains(code) {
-            continue;
-        }
-        if let Some(tc) = build_timetable_course(code, data, resolver, constraints, rng) {
-            optional_courses.push(tc);
-        }
-    }
-
-    let slots = target_count - pinned_courses.len();
-    if optional_courses.len() < slots {
-        return None;
-    }
-
-    let mut work: u64 = SUBSET_WORK_BUDGET;
-    let mut pinned_order: Vec<usize> = (0..pinned_courses.len()).collect();
-    let mut optional_order: Vec<usize> = (0..optional_courses.len()).collect();
-
-    let mut restart = 0u64;
-    loop {
-        if work == 0 {
-            return None;
-        }
-        // The first attempt keeps the incoming seeded order (per-seed variety);
-        // later restarts reshuffle to escape a greedy dead-end.
-        if restart > 0 {
-            shuffle_in_place(&mut pinned_order, rng);
-            shuffle_in_place(&mut optional_order, rng);
-        }
-        restart += 1;
-
-        let mut chosen: Vec<Enrollment> = Vec::with_capacity(target_count);
-        let mut chosen_mask = WeekMask::EMPTY;
-
-        // Seat every pinned course; abandon the restart if one can't be placed.
-        let mut pinned_ok = true;
-        for &pi in &pinned_order {
-            if let Some(combo) =
-                first_fit_combo(&pinned_courses[pi], &chosen, &chosen_mask, &mut work)
-            {
-                chosen_mask.union_with(&combo.mask);
-                chosen.push(combo);
-            } else {
-                if work == 0 {
-                    return None;
+impl BestArrange<'_> {
+    /// Depth-first enumeration. Returns `false` once a budget is exhausted so the
+    /// caller unwinds and keeps the best found so far.
+    fn rec(&mut self, idx: usize, partial: &mut Vec<Enrollment>, mask: &WeekMask) -> bool {
+        if idx == self.courses.len() {
+            if self.leaves == 0 {
+                return false;
+            }
+            self.leaves -= 1;
+            if passes_final(partial, self.constraints, self.data) {
+                let scores = (self.score)(partial);
+                let take = match &self.best {
+                    None => true,
+                    Some((best_scores, _)) => (self.better)(&scores, best_scores),
+                };
+                if take {
+                    self.best = Some((scores, partial.clone()));
                 }
-                pinned_ok = false;
-                break;
+            }
+            return self.leaves > 0;
+        }
+        for combo in &self.courses[idx].combos {
+            if self.budget == 0 {
+                return false;
+            }
+            self.budget -= 1;
+            let fits = if combo.mask.intersects(mask) {
+                allows_enrollment(combo, partial)
+            } else {
+                true
+            };
+            if !fits {
+                continue;
+            }
+            let mut next_mask = *mask;
+            next_mask.union_with(&combo.mask);
+            partial.push(combo.clone());
+            let keep_going = self.rec(idx + 1, partial, &next_mask);
+            partial.pop();
+            if !keep_going {
+                return false;
             }
         }
-        if !pinned_ok {
-            continue;
-        }
-
-        // Greedily fill the remaining slots from the optional pool.
-        let mut filled = 0usize;
-        for &oi in &optional_order {
-            if filled == slots {
-                break;
-            }
-            if work == 0 {
-                return None;
-            }
-            if let Some(combo) =
-                first_fit_combo(&optional_courses[oi], &chosen, &chosen_mask, &mut work)
-            {
-                chosen_mask.union_with(&combo.mask);
-                chosen.push(combo);
-                filled += 1;
-            }
-        }
-
-        if filled == slots && passes_final(&chosen, constraints, data) {
-            return Some(chosen);
-        }
-        // Otherwise reshuffle and retry until the work budget is exhausted.
+        true
     }
 }

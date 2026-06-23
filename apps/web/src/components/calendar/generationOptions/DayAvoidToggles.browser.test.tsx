@@ -19,7 +19,7 @@ test("marks avoided days as pressed and toggles them on click", async () => {
     .toHaveAttribute("aria-pressed", "false");
 
   await page.getByRole("button", { name: "Monday" }).click();
-  expect(onAvoidedDaysChange).toHaveBeenCalledWith(["Mo", "Sa", "Su"]);
+  expect(onAvoidedDaysChange).toHaveBeenCalledWith(["Su", "Mo", "Sa"]);
 });
 
 test("clicking an already-avoided day removes it from the set", async () => {

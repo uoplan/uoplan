@@ -143,7 +143,10 @@ mod tests {
         assert!(high > neutral);
         assert!(neutral > low);
         // Unrated is treated as ~4.0 — above neutral but below a top-rated prof.
-        assert_eq!(unrated, professor_rating_weight(Some(PROFESSOR_RATING_UNRATED), true));
+        assert_eq!(
+            unrated,
+            professor_rating_weight(Some(PROFESSOR_RATING_UNRATED), true)
+        );
         assert!(unrated > neutral);
         assert!(high > unrated);
     }
