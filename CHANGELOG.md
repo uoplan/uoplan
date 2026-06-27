@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.0.0-beta.37](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.36...uoplan-monorepo-v1.0.0-beta.37) (2026-06-27)
+
+
+### Features
+
+* **analytics:** add @uoplan/analytics shared package and posthog deps ([f09e560](https://github.com/uoplan/uoplan/commit/f09e5605ec53bbc21e87c579bfeff82c5c52480e))
+* **analytics:** add anonymous posthog product analytics across web and native ([e989493](https://github.com/uoplan/uoplan/commit/e9894936bd50d15da306fbf3dc37c1429da30f2d))
+* **analytics:** add native event parity for wizard, explore filters, and donation ([d9fabe6](https://github.com/uoplan/uoplan/commit/d9fabe6ac60749a8fa4d025727ef939e75d822df))
+* **analytics:** emit termId and English termName on term events ([253e1a5](https://github.com/uoplan/uoplan/commit/253e1a5ceb27c5be72c281760e8375e5529df7b2))
+* **analytics:** emit transcript upload event and track autofill matches ([a3d9ae7](https://github.com/uoplan/uoplan/commit/a3d9ae77d646ca15dd1a39e6ae02c18585e8fc7b))
+* **analytics:** enable cross-visit anonymous profiles via persistent storage ([3271024](https://github.com/uoplan/uoplan/commit/3271024b7384f89625560560293bd9dc14dd474f))
+* **analytics:** segment generation events by program and academic load ([22fb080](https://github.com/uoplan/uoplan/commit/22fb080a3459e81905b7f8d4df946aedeb058c26))
+* **explore:** add course comparison across web and native ([a811977](https://github.com/uoplan/uoplan/commit/a81197755095629280733fccea8415e726e2d39d))
+* **schedule:** move generation error details into a dialog ([2f79c67](https://github.com/uoplan/uoplan/commit/2f79c675702edd03ccc81687775443f8fc6e6bb5))
+* **schedule:** replace smart options with ordered optimization priorities and unify generation ([e23de13](https://github.com/uoplan/uoplan/commit/e23de1376b109a152a637e405ccafa9935070cf3))
+* **web:** add runtime coverage harness for dead-code analysis ([aea1a2e](https://github.com/uoplan/uoplan/commit/aea1a2e4069e773dd7170f0f32cd8458f664f76f))
+
+
+### Bug Fixes
+
+* **deploy:** use compiled wrangler config for non-prod versions upload ([c8c6c77](https://github.com/uoplan/uoplan/commit/c8c6c7755eb0d39f7aafa031dc6535ed27e27d45))
+* **native:** blank launch splash, publish release-please version, enable iOS+Android release CI ([903dec5](https://github.com/uoplan/uoplan/commit/903dec54fcd89ff669dbeedae6f020c8a6edcf9d))
+* resolve various mobile bugs ([8ca769b](https://github.com/uoplan/uoplan/commit/8ca769bbd66dd5746c520938381ba7c39c2383d8))
+* **web:** resolve node-project typecheck errors in coverage tooling ([84bf51e](https://github.com/uoplan/uoplan/commit/84bf51e2bd0bd7de068e888aa10baa741902a162))
+
 ## [1.0.0-beta.36](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.35...uoplan-monorepo-v1.0.0-beta.36) (2026-06-21)
 
 
