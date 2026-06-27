@@ -374,7 +374,6 @@ export default function PersonalizeScreen() {
                 program={program}
                 readout={requirements ?? null}
                 selections={requirementSelections}
-                completedCourses={completed.codes}
                 titleForCourse={(code) => coursesByCode.get(code)?.title}
                 onChange={setRequirementSelections}
                 generateLabel="Show me my schedule"

@@ -12,7 +12,6 @@ interface RequirementsStepProps {
   program: string | null;
   readout: PersonalizeRequirementsReadout | null;
   selections: PersonalizeRequirementSelections;
-  completedCourses: readonly string[];
   titleForCourse: (code: string) => string | undefined;
   onChange: (selections: PersonalizeRequirementSelections) => void;
   generateLabel: string;
@@ -24,7 +23,6 @@ export function RequirementsStep({
   program,
   readout,
   selections,
-  completedCourses,
   titleForCourse,
   onChange,
   generateLabel,
@@ -71,7 +69,6 @@ export function RequirementsStep({
           <RequirementPlanner
             readout={readout}
             selections={selections}
-            completedCourses={completedCourses}
             titleForCourse={titleForCourse}
             onChange={onChange}
           />
