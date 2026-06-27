@@ -91,9 +91,7 @@ export function ExploreProfessorPage({ slug }: { slug: string }) {
   const sentiment = professorByName?.get(normalizeProfessorName(displayName)) ?? null;
   const showSatisfaction = sentiment != null && sentiment > 0;
 
-  const profRouteParam = entry
-    ? professorRouteParam({ slug: entry.slug, legacyId: legacyId ?? undefined, displayName })
-    : professorRouteParam({ legacyId: legacyId ?? undefined, displayName });
+  const profRouteParam = professorRouteParam({ slug: entry?.slug, displayName });
 
   const feedbackArg = useMemo(
     () =>

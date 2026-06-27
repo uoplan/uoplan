@@ -17,6 +17,7 @@
       "supportsTablet": true,
       "associatedDomains": ["applinks:uoplan.party", "applinks:www.uoplan.party"],
       "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
         "UIRequiresFullScreen": true,
         "UISupportedInterfaceOrientations~ipad": [
           "UIInterfaceOrientationPortrait",

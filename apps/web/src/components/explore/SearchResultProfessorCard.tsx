@@ -5,7 +5,6 @@ import { tr, useTr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import { ProfessorRatingBadges } from "../shared/RatingBadge";
 import type { ExploreProfessorSearchEntry } from "../../lib/explore/gradesSearch";
-import { professorRouteParam } from "../../lib/explore/professorRoute";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { EXPLORE_RESULT_CARD_STYLE } from "./exploreResultCardShared";
 import {
@@ -13,14 +12,6 @@ import {
   SearchResultCardSpacer,
   SearchResultGradeSummary,
 } from "./SearchResultCardParts";
-
-function professorLegacyParam(entry: ExploreProfessorSearchEntry): string {
-  return professorRouteParam({
-    slug: entry.slug,
-    legacyId: entry.legacyId,
-    displayName: entry.displayName,
-  });
-}
 
 export function SearchResultProfessorCard({
   entry,
@@ -39,7 +30,7 @@ export function SearchResultProfessorCard({
   return (
     <Link
       to="/explore/professor/$slug"
-      params={{ slug: professorLegacyParam(entry) }}
+      params={{ slug: entry.slug }}
       search={searchParams}
       className="soft-lift"
       style={EXPLORE_RESULT_CARD_STYLE}

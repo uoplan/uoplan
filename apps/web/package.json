@@ -17,6 +17,7 @@
     "test:ui": "vitest --project unit --ui --coverage",
     "test:browser": "vitest run --project browser",
     "test:e2e": "playwright test",
+    "coverage:crawl": "playwright test --config playwright.coverage.config.ts",
     "coverage:dev": "COVERAGE=1 VITE_COVERAGE=true vite --port 5274 --strictPort",
     "coverage:report": "node scripts/runtime-coverage/report.ts",
     "coverage:clean": "node scripts/runtime-coverage/report.ts --clean"

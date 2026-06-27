@@ -322,6 +322,38 @@ describe("groupOfferingsByProfessor", () => {
   });
 });
 
+describe("professor slug is always a kebab-case slug", () => {
+  it("derives a kebab-case slug from the name when no registry is available", () => {
+    const groups = groupOfferingsByProfessor([
+      sampleScheduleOffering({
+        id: "a",
+        professorName: testProfessorName("José Ramírez"),
+        courseCode: testCourseCode("CSI 2110"),
+      }),
+    ]);
+    const prof = groups.find((g) => g.displayName === "José Ramírez");
+    expect(prof?.slug).toBe("jose-ramirez");
+    expect(prof?.slug).not.toMatch(/[%\s]/);
+  });
+
+  it("never produces a percent-encoded search-entry slug for a schedule-only professor", () => {
+    const offerings = buildScheduleOfferings(
+      [
+        scheduleData("2271", [
+          scheduleCourse("CSI 2110", "Data Structures", {
+            LEC: [scheduleSection("A00-LEC FullSess.", "LEC", ["Renée O'Brien"])],
+          }),
+        ]),
+      ],
+      new Map(),
+    );
+    const entries = buildExploreProfessorSearchEntries(offerings);
+    const renee = entries.find((e) => e.displayName === "Renée O'Brien");
+    expect(renee?.slug).toBe("renee-o-brien");
+    expect(renee?.slug).not.toMatch(/[%\s]/);
+  });
+});
+
 describe("buildExploreOfferings", () => {
   it("keeps the 'Staff' placeholder as an unassigned offering (no professor)", () => {
     const offerings = buildExploreOfferings(

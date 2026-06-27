@@ -45,6 +45,13 @@ function buildRouter(onNavigate?: () => void) {
   });
 }
 
+async function renderBasketAndClickRemove() {
+  await renderWithProviders(<RouterProvider router={buildRouter()} />, {
+    initialState: { basketCourses: ["CSI 2110"] },
+  });
+  await page.getByRole("button", { name: "Remove CSI 2110" }).click();
+}
+
 test("empty basket keeps summary stats visible and links to explore", async () => {
   const onNavigate = vi.fn();
   const router = buildRouter(onNavigate);
@@ -97,13 +104,7 @@ test("clicking a basket course row navigates to its explore page", async () => {
 });
 
 test("trash button asks to confirm before removing; cancel keeps the course", async () => {
-  const router = buildRouter();
-
-  await renderWithProviders(<RouterProvider router={router} />, {
-    initialState: { basketCourses: ["CSI 2110"] },
-  });
-
-  await page.getByRole("button", { name: "Remove CSI 2110" }).click();
+  await renderBasketAndClickRemove();
 
   // Inline confirm appears; the course is still present.
   await expect.element(page.getByText("Remove?", { exact: true })).toBeVisible();
@@ -116,13 +117,8 @@ test("trash button asks to confirm before removing; cancel keeps the course", as
 });
 
 test("confirming the inline prompt removes the course", async () => {
-  const router = buildRouter();
+  await renderBasketAndClickRemove();
 
-  await renderWithProviders(<RouterProvider router={router} />, {
-    initialState: { basketCourses: ["CSI 2110"] },
-  });
-
-  await page.getByRole("button", { name: "Remove CSI 2110" }).click();
   await page.getByRole("button", { name: "Confirm removing CSI 2110" }).click();
 
   await expect.element(page.getByText("Your basket is empty", { exact: true })).toBeInTheDocument();

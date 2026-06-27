@@ -26,7 +26,13 @@ export interface AnalyticsEventMap {
   term_selected: { termId: string; termName?: string };
   program_selected: { programId: string; level?: string };
   completed_courses_updated: { count: number; source?: CompletedCoursesSource };
-  requirements_viewed: { programId?: string };
+  requirements_viewed: {
+    programId?: string;
+    /** Completed courses the auto-assign pass placed into requirements on the user's behalf. */
+    autoAssignedCount?: number;
+    /** Completed courses still needing manual assignment when proceeding to schedule. */
+    unassignedCount?: number;
+  };
   preferences_updated: { field: string };
   // Reorder/toggle/break-config edits to the optimization-priorities list.
   // `kind` is an OptimizationKind; `position` is its index after the change.

@@ -1,0 +1,19 @@
+diff --git a/dist/ios/credentials/keychain.js b/dist/ios/credentials/keychain.js
+index 74384e40abb4244de5e85dbc01a86e38c7881e2f..252dd9bd8700c4fe777e7c53bab3563a47ddd305 100644
+--- a/dist/ios/credentials/keychain.js
++++ b/dist/ios/credentials/keychain.js
+@@ -86,7 +86,13 @@ class Keychain {
+         }
+     }
+     async findIdentitiesByTeamId(teamId) {
+-        const { output } = await (0, turtle_spawn_1.default)('security', ['find-identity', '-v', '-s', `(${teamId})`, this.keychainPath], {
++        // PATCH (expo/eas-cli#3678, #3645): dropped the `-v` ("valid identities
++        // only") flag. On macOS Tahoe (26) `-v` requires the full Apple trust chain
++        // (dist cert -> WWDR -> Apple Root) to resolve, which the ephemeral build
++        // keychain doesn't hold, so it falsely reports 0 identities and aborts the
++        // local build even though the cert+key imported fine. Without `-v` this is a
++        // correct presence check; codesign still resolves trust downstream.
++        const { output } = await (0, turtle_spawn_1.default)('security', ['find-identity', '-s', `(${teamId})`, this.keychainPath], {
+             stdio: 'pipe',
+         });
+         return output.join('');

@@ -174,7 +174,11 @@ export default function PersonalizeScreen() {
   const canGenerate = requirements == null || (unassignedCount === 0 && !missingProgramOptions);
 
   const goToSchedule = () => {
-    analytics.capture("requirements_viewed", { programId: program ?? undefined });
+    analytics.capture("requirements_viewed", {
+      programId: program ?? undefined,
+      autoAssignedCount: requirements?.autoAssignedCount,
+      unassignedCount,
+    });
     setActiveScheduleRequirementContext(
       program
         ? {

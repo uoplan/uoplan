@@ -12,6 +12,7 @@
     "android": "expo run:android",
     "preios": "pnpm prebuild:data",
     "ios": "expo run:ios",
+    "eas:build:local": "node ./scripts/eas-build-local.mts",
     "web": "expo start --web",
     "postinstall": "node ./scripts/eas-postinstall.mts",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.scripts.json",
@@ -73,6 +74,7 @@
     "@types/jest": "29.5.14",
     "@types/react": "~19.2.2",
     "babel-preset-expo": "~56.0.15",
+    "eas-cli-local-build-plugin": "20.1.0",
     "jest": "~29.7.0",
     "jest-expo": "~56.0.5",
     "typescript": "~6.0.3"

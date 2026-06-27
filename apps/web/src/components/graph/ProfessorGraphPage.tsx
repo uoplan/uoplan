@@ -15,6 +15,7 @@ import { useDebouncedValue, useMediaQuery } from "@mantine/hooks";
 import { IconExternalLink, IconSearch } from "@tabler/icons-react";
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import type { ProfessorGraphNode } from "@uoplan/core";
+import { slugifyProfessor } from "@uoplan/core";
 import { tr, useTr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useProfessorGraphBuild } from "../../hooks/useProfessorGraphBuild";
@@ -265,7 +266,7 @@ export function ProfessorGraphPage({
                         {entry.legacyId != null && (
                           <Link
                             to="/explore/professor/$slug"
-                            params={{ slug: String(entry.legacyId) }}
+                            params={{ slug: slugifyProfessor(entry.displayName) }}
                             search={EMPTY_EXPLORE_SEARCH}
                             onClick={(e) => e.stopPropagation()}
                             target="_blank"

@@ -9,22 +9,23 @@ import {
   professorByLegacyId,
   professorByName,
   professorBySlug,
+  slugifyProfessor,
   unsafeBrand,
 } from "@uoplan/core";
 
 /**
- * Build the URL path-segment used to link to a professor. Prefers the canonical
- * registry slug; falls back to a legacyId or the URL-encoded display name so
- * links still work before the registry has loaded or for unregistered profs.
+ * Build the URL path-segment used to link to a professor. Always a kebab-case
+ * slug: the canonical registry slug when known, otherwise one derived from the
+ * display name. `slugifyProfessor` is deterministic and matches the registry's
+ * own slug (bar rare dedup suffixes), so a slug is always available — even
+ * before the registry has loaded or for profs only present in schedule data —
+ * and `resolveProfessorRoute` resolves it back via the first+last match key.
  */
 export function professorRouteParam(entry: {
   slug?: string;
-  legacyId?: number;
   displayName: CanonicalProfessorName;
 }): string {
-  if (entry.slug) return entry.slug;
-  if (entry.legacyId != null) return String(entry.legacyId);
-  return encodeURIComponent(entry.displayName);
+  return entry.slug ?? slugifyProfessor(entry.displayName);
 }
 
 interface ResolvedProfessorRoute {

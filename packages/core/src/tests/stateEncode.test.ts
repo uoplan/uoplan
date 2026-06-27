@@ -107,6 +107,16 @@ function decodeBytes(bytes: Uint8Array) {
   return decoded;
 }
 
+function decodeGoodBreaks(params: { breakCount?: number; breakTargetMinutes?: number }) {
+  const priorities = setGoodBreaksParams(
+    setOptimizationPriorityEnabled(defaultOptimizationPriorities(), "good_breaks", true),
+    params,
+  );
+  return decodeInput({ optimizationPriorities: priorities }).optimizationPriorities.find(
+    (p) => p.kind === "good_breaks",
+  );
+}
+
 // ── urlToSlug ─────────────────────────────────────────────────────────────────
 
 describe("urlToSlug", () => {
@@ -172,23 +182,13 @@ describe("encodeState / decodeState roundtrip", () => {
   });
 
   it("round-trips good_breaks params", () => {
-    const priorities = setGoodBreaksParams(
-      setOptimizationPriorityEnabled(defaultOptimizationPriorities(), "good_breaks", true),
-      { breakCount: 2, breakTargetMinutes: 90 },
-    );
-    const decoded = decodeInput({ optimizationPriorities: priorities });
-    const goodBreaks = decoded.optimizationPriorities.find((p) => p.kind === "good_breaks");
+    const goodBreaks = decodeGoodBreaks({ breakCount: 2, breakTargetMinutes: 90 });
     expect(goodBreaks?.breakCount).toBe(2);
     expect(goodBreaks?.breakTargetMinutes).toBe(90);
   });
 
   it("round-trips a zero good_breaks count (no breaks)", () => {
-    const priorities = setGoodBreaksParams(
-      setOptimizationPriorityEnabled(defaultOptimizationPriorities(), "good_breaks", true),
-      { breakCount: 0 },
-    );
-    const decoded = decodeInput({ optimizationPriorities: priorities });
-    const goodBreaks = decoded.optimizationPriorities.find((p) => p.kind === "good_breaks");
+    const goodBreaks = decodeGoodBreaks({ breakCount: 0 });
     expect(goodBreaks?.breakCount).toBe(0);
   });
 

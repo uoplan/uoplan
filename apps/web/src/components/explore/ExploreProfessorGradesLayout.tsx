@@ -30,7 +30,6 @@ import type {
 } from "../../lib/explore/gradesSearch";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
-import { professorRouteParam } from "../../lib/explore/professorRoute";
 import { ProfessorRatingBadges } from "../shared/RatingBadge";
 import { WhyNotPredictedHoverDetails } from "./WhyNotPredictedHoverDetails";
 import { useLazyData } from "../../store/hooks";
@@ -156,13 +155,7 @@ export function ExploreProfessorSummaryBar({
         ) : (
           <Link
             to="/explore/professor/$slug"
-            params={{
-              slug: professorRouteParam({
-                slug: group.slug,
-                legacyId: group.legacyId,
-                displayName: group.displayName,
-              }),
-            }}
+            params={{ slug: group.slug }}
             search={linkSearch ?? EMPTY_EXPLORE_SEARCH}
             onClick={(e) => {
               if (stopPropagation) e.stopPropagation();

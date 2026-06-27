@@ -10,13 +10,12 @@ import { Spacing, Surface } from "@/constants/theme";
 import {
   getRequirementPriorityForIds,
   setCoursesThisSemester,
+  setRequirementAssignment,
   setRequirementPriorityForIds,
-  toggleRequirementCourse,
   type PersonalizeRequirementSelections,
   type PersonalizeRequirementsReadout,
 } from "@/lib/personalize-requirements";
 
-const MAX_CANDIDATES_PER_REQUIREMENT = 12;
 const PRIORITIES = [0, 1, 2, 3] as const;
 
 interface RequirementPlannerProps {
@@ -25,6 +24,13 @@ interface RequirementPlannerProps {
   completedCourses: readonly string[];
   titleForCourse: (code: string) => string | undefined;
   onChange: (selections: PersonalizeRequirementSelections) => void;
+}
+
+/** A completed course that's an eligible candidate for a remaining requirement. */
+interface CompletedCandidate {
+  code: string;
+  norm: string;
+  assigned: boolean;
 }
 
 function requirementLabel(type: string): string {
@@ -43,35 +49,47 @@ function requirementLabel(type: string): string {
   }
 }
 
-function remainingSubtitle(req: RemainingRequirement): string {
+function remainingSubtitle(req: RemainingRequirement, completedCandidateCount: number): string {
   const parts: string[] = [];
   if (req.creditsNeeded != null && req.creditsNeeded > 0) {
     parts.push(`${req.creditsNeeded} credit${req.creditsNeeded === 1 ? "" : "s"} needed`);
   }
-  if (req.satisfiedBy.length > 0) {
-    parts.push(`${req.satisfiedBy.length} completed so far`);
-  }
-  if (parts.length === 0 && req.candidateCourses.length > 0) {
+  if (completedCandidateCount > 0) {
     parts.push(
-      `${req.candidateCourses.length} eligible course${req.candidateCourses.length === 1 ? "" : "s"}`,
+      `${completedCandidateCount} completed course${completedCandidateCount === 1 ? "" : "s"}`,
     );
   }
   return parts.join(" · ");
 }
 
-function compactCourseSet(record: Record<string, string[]>, requirementId: string): Set<string> {
-  return new Set((record[requirementId] ?? []).map((code) => normalizeCourseCode(code)));
+/**
+ * Completed courses that are eligible candidates for `requirement`, flagged with
+ * whether they're already assigned (auto or manually). Only completed courses are
+ * selectable — pinning future courses happens through the cart, not here.
+ */
+function completedCandidatesFor(
+  requirement: RemainingRequirement,
+  completedSet: Set<string>,
+  assignedSet: Set<string>,
+): CompletedCandidate[] {
+  const out: CompletedCandidate[] = [];
+  const seen = new Set<string>();
+  for (const code of requirement.candidateCourses) {
+    const norm = normalizeCourseCode(code);
+    if (!completedSet.has(norm) || seen.has(norm)) continue;
+    seen.add(norm);
+    out.push({ code, norm, assigned: assignedSet.has(norm) });
+  }
+  return out;
 }
 
 function SelectionChip({
   label,
-  icon,
   selected,
   disabled = false,
   onPress,
 }: {
   label: string;
-  icon: "checkmark" | "pin" | "flag";
   selected: boolean;
   disabled?: boolean;
   onPress: () => void;
@@ -90,7 +108,7 @@ function SelectionChip({
       ]}
     >
       <AppIcon
-        name={icon}
+        name="checkmark"
         size={12}
         color={selected ? Surface.onAccent : Surface.dimmed}
         weight="semibold"
@@ -194,23 +212,21 @@ function CoursesThisSemesterControl({
 
 function RequirementCard({
   requirement,
+  candidates,
+  assignedCodes,
   selections,
-  completedSet,
   titleForCourse,
   onChange,
 }: {
   requirement: RemainingRequirement;
+  candidates: CompletedCandidate[];
+  assignedCodes: string[];
   selections: PersonalizeRequirementSelections;
-  completedSet: Set<string>;
   titleForCourse: (code: string) => string | undefined;
   onChange: (selections: PersonalizeRequirementSelections) => void;
 }) {
   const title = requirement.title ?? requirementLabel(requirement.type);
-  const subtitle = remainingSubtitle(requirement);
-  const assigned = compactCourseSet(selections.selectedPerRequirement, requirement.requirementId);
-  const pinned = compactCourseSet(selections.constrainedPerRequirement, requirement.requirementId);
-  const candidates = requirement.candidateCourses.slice(0, MAX_CANDIDATES_PER_REQUIREMENT);
-  const hiddenCount = Math.max(0, requirement.candidateCourses.length - candidates.length);
+  const subtitle = remainingSubtitle(requirement, candidates.length);
 
   return (
     <View style={styles.requirementCard}>
@@ -232,72 +248,32 @@ function RequirementCard({
         />
       </View>
 
-      {candidates.length > 0 ? (
-        <View style={styles.candidates}>
-          {candidates.map((code) => {
-            const norm = normalizeCourseCode(code);
-            const completed = completedSet.has(norm);
-            const isAssigned = assigned.has(norm);
-            const isPinned = pinned.has(norm);
-            return (
-              <View key={code} style={styles.candidateRow}>
-                <View style={styles.courseCopy}>
-                  <Text size="xs" weight="bold" color={Surface.accent}>
-                    {code}
-                  </Text>
-                  <Text size="xs" dimmed numberOfLines={1}>
-                    {titleForCourse(code) ?? "Eligible course"}
-                  </Text>
-                </View>
-                <View style={styles.courseActions}>
-                  {completed ? (
-                    <SelectionChip
-                      label={isAssigned ? "Assigned" : "Assign"}
-                      icon="checkmark"
-                      selected={isAssigned}
-                      onPress={() =>
-                        onChange(
-                          toggleRequirementCourse(
-                            selections,
-                            requirement.requirementId,
-                            code,
-                            "assigned",
-                          ),
-                        )
-                      }
-                    />
-                  ) : (
-                    <SelectionChip
-                      label={isPinned ? "Pinned" : "Pin"}
-                      icon="pin"
-                      selected={isPinned}
-                      onPress={() =>
-                        onChange(
-                          toggleRequirementCourse(
-                            selections,
-                            requirement.requirementId,
-                            code,
-                            "pinned",
-                          ),
-                        )
-                      }
-                    />
-                  )}
-                </View>
-              </View>
-            );
-          })}
-          {hiddenCount > 0 ? (
-            <Text size="xs" dimmed>
-              {hiddenCount} more eligible course{hiddenCount === 1 ? "" : "s"} hidden.
-            </Text>
-          ) : null}
-        </View>
-      ) : (
-        <Text size="xs" dimmed>
-          No candidate courses are available for this requirement in the loaded catalogue.
-        </Text>
-      )}
+      <View style={styles.candidates}>
+        {candidates.map(({ code, norm, assigned }) => (
+          <View key={code} style={styles.candidateRow}>
+            <View style={styles.courseCopy}>
+              <Text size="xs" weight="bold" color={Surface.accent}>
+                {code}
+              </Text>
+              <Text size="xs" dimmed numberOfLines={1}>
+                {titleForCourse(code) ?? "Completed course"}
+              </Text>
+            </View>
+            <View style={styles.courseActions}>
+              <SelectionChip
+                label={assigned ? "Assigned" : "Assign"}
+                selected={assigned}
+                onPress={() => {
+                  const next = assigned
+                    ? assignedCodes.filter((entry) => normalizeCourseCode(entry) !== norm)
+                    : [...assignedCodes, code];
+                  onChange(setRequirementAssignment(selections, requirement.requirementId, next));
+                }}
+              />
+            </View>
+          </View>
+        ))}
+      </View>
     </View>
   );
 }
@@ -314,22 +290,40 @@ export function RequirementPlanner({
     [completedCourses],
   );
 
+  // The effective assignment is what's already placed (auto-assignment + any
+  // manual edits); the planner only surfaces completed courses to assign.
+  const effectiveSelected = readout.selectedPerRequirement ?? selections.selectedPerRequirement;
+
+  // Only requirements that have completed courses to place are actionable here.
+  // Everything else (future courses, or already auto-satisfied) needs no input.
+  const actionable = useMemo(() => {
+    return readout.remaining
+      .map((requirement) => {
+        const assignedCodes = effectiveSelected[requirement.requirementId] ?? [];
+        const assignedSet = new Set(assignedCodes.map((code) => normalizeCourseCode(code)));
+        const candidates = completedCandidatesFor(requirement, completedSet, assignedSet);
+        return { requirement, candidates, assignedCodes };
+      })
+      .filter((entry) => entry.candidates.length > 0);
+  }, [readout.remaining, effectiveSelected, completedSet]);
+
   return (
     <View style={styles.container}>
       <CoursesThisSemesterControl selections={selections} onChange={onChange} />
 
-      {readout.remaining.length > 0 ? (
+      {actionable.length > 0 ? (
         <View style={styles.section}>
           <Text size="xs" weight="bold" color={Surface.accent}>
-            Needs a choice
+            Place your completed courses
           </Text>
           <View style={styles.requirementList}>
-            {readout.remaining.map((requirement) => (
+            {actionable.map(({ requirement, candidates, assignedCodes }) => (
               <RequirementCard
                 key={requirement.requirementId}
                 requirement={requirement}
+                candidates={candidates}
+                assignedCodes={assignedCodes}
                 selections={selections}
-                completedSet={completedSet}
                 titleForCourse={titleForCourse}
                 onChange={onChange}
               />
@@ -342,7 +336,8 @@ export function RequirementPlanner({
             All set
           </Text>
           <Text size="xs" dimmed>
-            There are no missing requirements left to choose.
+            Your completed courses are placed automatically. Adjust the course load above, then
+            generate.
           </Text>
         </View>
       )}

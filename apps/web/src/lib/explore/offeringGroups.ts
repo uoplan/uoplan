@@ -17,6 +17,7 @@ import {
   normalizeProfessorName,
   pickCanonicalProfessorName,
   sectionInstructors,
+  slugifyProfessor,
 } from "@uoplan/core";
 import { formatTermLabelPlain } from "../term/termLabelPlain";
 import {
@@ -34,8 +35,8 @@ export type ProfessorOfferingGroup = {
   legacyId?: number;
   /** 0-based canonical registry index of this group's professor, when resolved. */
   professorRef?: number;
-  /** Canonical URL slug for this group's professor, when resolved from the registry. */
-  slug?: string;
+  /** Canonical URL slug for this group's professor (kebab-case, always set). */
+  slug: string;
   displayName: CanonicalProfessorName;
   offerings: ExploreOfferingFlat[];
   /** True for a synthetic group collecting sections with no real instructor. */
@@ -188,9 +189,9 @@ export function groupOfferingsByProfessor(
       groupId,
       legacyId: m.legacyId,
       professorRef: m.professorRef,
-      ...(m.professorRef != null && registry?.entries[m.professorRef]?.slug
-        ? { slug: registry.entries[m.professorRef]!.slug }
-        : {}),
+      slug:
+        (m.professorRef != null ? registry?.entries[m.professorRef]?.slug : undefined) ??
+        slugifyProfessor(m.displayName),
       displayName: m.displayName,
       offerings,
       unassigned: m.unassigned,
