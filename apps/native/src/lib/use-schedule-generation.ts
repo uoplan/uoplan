@@ -8,6 +8,7 @@ import type { SchedulesData } from "@uoplan/core/dataTypes";
 import { courseSentimentByNorm, professorSentimentByName } from "@uoplan/core/feedback";
 import { formatTermNameEn } from "@uoplan/core/gradeTrends";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useIsFocused } from "expo-router";
 
 import { useBasket } from "@/data/basket-provider";
 import { useCompletedCourses } from "@/data/completed-courses-provider";
@@ -148,7 +149,23 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
     () => "null",
   );
 
+  // The schedule screen stays mounted while the user edits on the Personalize
+  // tab (a bottom-tab navigator keeps both screens alive on the single JS
+  // thread). Regenerating on every requirement / completed-course edit ran the
+  // engine, re-sent the ~2.6 MB dataset across the native bridge, and re-rendered
+  // the calendar — all of which janked the *visible* Personalize tab for several
+  // seconds per edit. We therefore only generate while this screen is actually
+  // focused, and only when the inputs changed since the last run (so returning
+  // to an unchanged schedule doesn't needlessly regenerate). `regenerate()`
+  // forces a run by bumping the nonce.
+  const isFocused = useIsFocused();
+  const generationSignature = `${key}|${completedKey}|${optionsKey}|${requirementKey}|${hasProfileContext}|${nonce}`;
+  const lastRunSignatureRef = useRef<string | null>(null);
+
   useEffect(() => {
+    if (!isFocused) return;
+    if (generationSignature === lastRunSignatureRef.current) return;
+
     let cancelled = false;
     const controller = new AbortController();
     controllerRef.current = controller;
@@ -159,6 +176,7 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
     const activeRequirements = getActiveScheduleRequirementContext();
 
     if (codes.length === 0 && !activeRequirements?.programUrl) {
+      lastRunSignatureRef.current = generationSignature;
       setStatus("empty");
       setVariants([]);
       setTermId(null);
@@ -174,6 +192,7 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
 
     const term = pickTerm(schedulesByTerm, codes);
     if (!term) {
+      lastRunSignatureRef.current = generationSignature;
       setStatus("error");
       setVariants([]);
       setTermId(null);
@@ -321,6 +340,11 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
           reason: err instanceof Error && err.name ? err.name : "error",
           ...segment,
         });
+      } finally {
+        // Mark this input signature as run so re-focusing an unchanged schedule
+        // doesn't regenerate. Aborted runs (the user navigated away mid-flight)
+        // are left unmarked so returning re-runs them.
+        if (!cancelled) lastRunSignatureRef.current = generationSignature;
       }
     })();
 
@@ -329,17 +353,7 @@ export function useScheduleGeneration(): ScheduleGenerationResult {
       controller.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    key,
-    completedKey,
-    nonce,
-    schedulesByTerm,
-    bundle,
-    sentiment,
-    optionsKey,
-    requirementKey,
-    hasProfileContext,
-  ]);
+  }, [isFocused, generationSignature, schedulesByTerm, bundle, sentiment]);
 
   const next = useCallback(() => {
     if (index < variants.length - 1) {
