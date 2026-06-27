@@ -173,7 +173,6 @@ describe("RequirementsStep CTA", () => {
         program="program-url"
         readout={incompleteReadout}
         selections={DEFAULT_REQUIREMENT_SELECTIONS}
-        completedCourses={[]}
         titleForCourse={() => "Eligible course"}
         onChange={jest.fn()}
         generateLabel="Show me my schedule"
@@ -196,7 +195,6 @@ describe("RequirementsStep CTA", () => {
         program="program-url"
         readout={completeReadout}
         selections={DEFAULT_REQUIREMENT_SELECTIONS}
-        completedCourses={[]}
         titleForCourse={() => "Eligible course"}
         onChange={jest.fn()}
         generateLabel="Show me my schedule"

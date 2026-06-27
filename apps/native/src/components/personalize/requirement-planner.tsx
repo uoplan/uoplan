@@ -21,16 +21,14 @@ const PRIORITIES = [0, 1, 2, 3] as const;
 interface RequirementPlannerProps {
   readout: PersonalizeRequirementsReadout;
   selections: PersonalizeRequirementSelections;
-  completedCourses: readonly string[];
   titleForCourse: (code: string) => string | undefined;
   onChange: (selections: PersonalizeRequirementSelections) => void;
 }
 
-/** A completed course that's an eligible candidate for a remaining requirement. */
+/** A completed course that still needs to be assigned to a remaining requirement. */
 interface CompletedCandidate {
   code: string;
   norm: string;
-  assigned: boolean;
 }
 
 function requirementLabel(type: string): string {
@@ -63,22 +61,23 @@ function remainingSubtitle(req: RemainingRequirement, completedCandidateCount: n
 }
 
 /**
- * Completed courses that are eligible candidates for `requirement`, flagged with
- * whether they're already assigned (auto or manually). Only completed courses are
- * selectable — pinning future courses happens through the cart, not here.
+ * Completed courses eligible for `requirement` that are not yet assigned to ANY
+ * requirement (auto or manual). Courses already placed — including those auto-
+ * assigned to the specific requirement that requires them — are intentionally
+ * omitted so the planner only surfaces what still needs the student's input.
+ * Pinning future courses happens through the cart, not here.
  */
 function completedCandidatesFor(
   requirement: RemainingRequirement,
-  completedSet: Set<string>,
-  assignedSet: Set<string>,
+  unassignedSet: Set<string>,
 ): CompletedCandidate[] {
   const out: CompletedCandidate[] = [];
   const seen = new Set<string>();
   for (const code of requirement.candidateCourses) {
     const norm = normalizeCourseCode(code);
-    if (!completedSet.has(norm) || seen.has(norm)) continue;
+    if (!unassignedSet.has(norm) || seen.has(norm)) continue;
     seen.add(norm);
-    out.push({ code, norm, assigned: assignedSet.has(norm) });
+    out.push({ code, norm });
   }
   return out;
 }
@@ -249,7 +248,7 @@ function RequirementCard({
       </View>
 
       <View style={styles.candidates}>
-        {candidates.map(({ code, norm, assigned }) => (
+        {candidates.map(({ code }) => (
           <View key={code} style={styles.candidateRow}>
             <View style={styles.courseCopy}>
               <Text size="xs" weight="bold" color={Surface.accent}>
@@ -261,13 +260,15 @@ function RequirementCard({
             </View>
             <View style={styles.courseActions}>
               <SelectionChip
-                label={assigned ? "Assigned" : "Assign"}
-                selected={assigned}
+                label="Assign"
+                selected={false}
                 onPress={() => {
-                  const next = assigned
-                    ? assignedCodes.filter((entry) => normalizeCourseCode(entry) !== norm)
-                    : [...assignedCodes, code];
-                  onChange(setRequirementAssignment(selections, requirement.requirementId, next));
+                  onChange(
+                    setRequirementAssignment(selections, requirement.requirementId, [
+                      ...assignedCodes,
+                      code,
+                    ]),
+                  );
                 }}
               />
             </View>
@@ -281,31 +282,33 @@ function RequirementCard({
 export function RequirementPlanner({
   readout,
   selections,
-  completedCourses,
   titleForCourse,
   onChange,
 }: RequirementPlannerProps) {
-  const completedSet = useMemo(
-    () => new Set(completedCourses.map((code) => normalizeCourseCode(code))),
-    [completedCourses],
+  // Completed courses still unplaced after auto-assignment — the only ones that
+  // need the student's input. Anything already assigned (auto-matched to the
+  // requirement that requires it, auto-selected, or manually placed) is excluded
+  // so the list isn't buried under already-placed courses.
+  const unassignedSet = useMemo(
+    () => new Set(readout.unassignedCompletedCourses.map((code) => normalizeCourseCode(code))),
+    [readout.unassignedCompletedCourses],
   );
 
   // The effective assignment is what's already placed (auto-assignment + any
-  // manual edits); the planner only surfaces completed courses to assign.
+  // manual edits); we extend it when the student assigns a leftover course.
   const effectiveSelected = readout.selectedPerRequirement ?? selections.selectedPerRequirement;
 
-  // Only requirements that have completed courses to place are actionable here.
-  // Everything else (future courses, or already auto-satisfied) needs no input.
+  // Only requirements that still have unassigned completed courses to place are
+  // actionable here. Everything else is already satisfied and needs no input.
   const actionable = useMemo(() => {
     return readout.remaining
       .map((requirement) => {
         const assignedCodes = effectiveSelected[requirement.requirementId] ?? [];
-        const assignedSet = new Set(assignedCodes.map((code) => normalizeCourseCode(code)));
-        const candidates = completedCandidatesFor(requirement, completedSet, assignedSet);
+        const candidates = completedCandidatesFor(requirement, unassignedSet);
         return { requirement, candidates, assignedCodes };
       })
       .filter((entry) => entry.candidates.length > 0);
-  }, [readout.remaining, effectiveSelected, completedSet]);
+  }, [readout.remaining, effectiveSelected, unassignedSet]);
 
   return (
     <View style={styles.container}>
