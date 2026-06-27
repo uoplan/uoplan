@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
+import { usePagedStepperContentInset } from "@/components/paged-stepper";
 import { RequirementPlanner } from "@/components/personalize/requirement-planner";
 import { PillButton } from "@/components/redesign/pill-button";
 import { Fonts, Spacing, Surface } from "@/constants/theme";
@@ -52,11 +53,13 @@ export function RequirementsStep({
     if (canGenerate) onGenerate();
   };
 
+  const contentInset = usePagedStepperContentInset();
+
   return (
     <View style={styles.root}>
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingBottom: contentInset }]}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
@@ -103,7 +106,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     gap: Spacing.three,
-    paddingBottom: Spacing.three,
   },
   summary: {
     gap: Spacing.two,

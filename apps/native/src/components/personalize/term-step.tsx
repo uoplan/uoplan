@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
+import { usePagedStepperContentInset } from "@/components/paged-stepper";
 import { SearchableSelect, type SearchableSelectOption } from "@/components/searchable-select";
 import { Fonts, Spacing, Surface } from "@/constants/theme";
 
@@ -12,11 +13,12 @@ interface TermStepProps {
 }
 
 export function TermStep({ options, value, onChange, reminders }: TermStepProps) {
+  const contentInset = usePagedStepperContentInset();
   const selected = options.find((option) => option.value === value) ?? null;
   const featured = options.slice(0, 4);
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, { paddingBottom: contentInset }]}>
       <View style={styles.hero}>
         <Text style={styles.eyebrow}>Planning term</Text>
         <Text style={styles.current}>{selected?.label ?? "Select a term"}</Text>
