@@ -46,7 +46,8 @@
         "track": "internal"
       },
       "ios": {
-        "bundleIdentifier": "party.uoplan.app"
+        "bundleIdentifier": "party.uoplan.app",
+        "ascAppId": "6784867164"
       }
     }
   }

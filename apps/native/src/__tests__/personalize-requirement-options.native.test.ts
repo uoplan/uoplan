@@ -158,18 +158,24 @@ describe("native personalize requirement selections", () => {
     expect(pinnedDuplicate.constrainedPerRequirement["req-1"]).toBeUndefined();
   });
 
-  it("treats a completed elective candidate as unassigned until it is assigned", () => {
+  it("auto-assigns a completed elective candidate without manual selection", () => {
     const selections = setSelectedOptionForRequirement(DEFAULT_REQUIREMENT_SELECTIONS, "req-0", 0);
-    const beforeAssign = computePersonalizeRequirements({
+    const readout = computePersonalizeRequirements({
       catalogue,
       schedules,
       programUrl: PROGRAM_URL,
       completedCourses: ["CSI 2110"],
       selections,
     });
-    expect(beforeAssign).not.toBeNull();
-    expect(beforeAssign!.unassignedCompletedCourses).toEqual(["CSI 2110"]);
+    expect(readout).not.toBeNull();
+    // Mirrors the web planner: the completed elective is placed automatically, so
+    // nothing is left for the student to assign and the slot is filled.
+    expect(readout!.unassignedCompletedCourses).toEqual([]);
+    expect(readout!.selectedPerRequirement?.["req-1"]).toContain(normalizeCourseCode("CSI 2110"));
+  });
 
+  it("keeps a manual assignment override and leaves nothing unassigned", () => {
+    const selections = setSelectedOptionForRequirement(DEFAULT_REQUIREMENT_SELECTIONS, "req-0", 0);
     const assigned = toggleRequirementCourse(selections, "req-1", "CSI 2110", "assigned");
     const afterAssign = computePersonalizeRequirements({
       catalogue,
@@ -180,5 +186,8 @@ describe("native personalize requirement selections", () => {
     });
     expect(afterAssign).not.toBeNull();
     expect(afterAssign!.unassignedCompletedCourses).toEqual([]);
+    expect(afterAssign!.selectedPerRequirement?.["req-1"]).toContain(
+      normalizeCourseCode("CSI 2110"),
+    );
   });
 });

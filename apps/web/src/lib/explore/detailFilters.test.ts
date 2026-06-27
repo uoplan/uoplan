@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { buildProfessorRegistry, normalizeCourseCode, unsafeBrand } from "@uoplan/core";
+import {
+  buildProfessorRegistry,
+  normalizeCourseCode,
+  slugifyProfessor,
+  unsafeBrand,
+} from "@uoplan/core";
 import type { ProfessorSlug } from "@uoplan/core";
 import {
   courseMatchesCourseLevelFilters,
@@ -23,6 +28,7 @@ function makeProfessorEntry(
   return {
     groupId: partial.groupId ?? "id:101",
     legacyId: partial.legacyId,
+    slug: partial.slug ?? slugifyProfessor(partial.displayName ?? "Ada Lovelace"),
     displayName: testProfessorName(partial.displayName ?? "Ada Lovelace"),
     searchText: partial.searchText ?? "",
     uniqueCourseCount: partial.uniqueCourseCount ?? 1,

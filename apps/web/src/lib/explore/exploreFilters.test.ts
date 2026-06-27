@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { GradeVizData, RemainingRequirement } from "@uoplan/core";
+import { slugifyProfessor } from "@uoplan/core";
 import { buildTermPresenceIndex } from "./gradesSearch";
 import type { ExploreCourseSearchEntry, ExploreProfessorSearchEntry } from "./gradesSearch";
 import {
@@ -62,6 +63,7 @@ function makeProfessorEntry(
   return {
     groupId: partial.groupId ?? "prof-1",
     legacyId: partial.legacyId,
+    slug: partial.slug ?? slugifyProfessor(partial.displayName ?? "Prof One"),
     displayName: testProfessorName(partial.displayName ?? "Prof One"),
     searchText: partial.searchText ?? "prof one",
     uniqueCourseCount: partial.uniqueCourseCount ?? 2,

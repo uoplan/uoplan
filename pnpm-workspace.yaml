@@ -46,5 +46,20 @@ minimumReleaseAgeExclude:
 onlyBuiltDependencies:
   - esbuild
   - lefthook
-  - sharp
   - workerd
+# NOTE: `sharp` is intentionally NOT listed here. Modern sharp (0.34, the @img/*
+# era) ships prebuilt platform binaries (@img/sharp-<platform>) that install as
+# plain optional deps with no build step. Its `install` script
+# (`node install/check.js || npm run build`) otherwise falls back to a node-gyp
+# source build that fails ("Please add node-addon-api to your dependencies") on
+# fresh CI/EAS workers, breaking the workspace-wide `pnpm install` that EAS runs
+# for the native app (which doesn't even use sharp — it's an apps/web build tool).
+
+# Patch the EAS local-build plugin's keychain helper to drop the macOS-Tahoe-broken
+# `security find-identity -v` flag (see expo/eas-cli#3678, #3645): on macOS 26 `-v`
+# needs the full Apple trust chain, which the ephemeral build keychain lacks, so it
+# falsely reports 0 identities and aborts `eas build --local`. @expo/build-tools is
+# pulled via the eas-cli-local-build-plugin devDependency in apps/native; the
+# eas:build:local script points EAS_LOCAL_BUILD_PLUGIN_PATH at this patched copy.
+patchedDependencies:
+  "@expo/build-tools@20.1.0": patches/@expo__build-tools@20.1.0.patch

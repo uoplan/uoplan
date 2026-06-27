@@ -33,15 +33,19 @@ export function LoadingScreen({
   onExitComplete?: () => void;
 }) {
   const progress = useSharedValue(0);
+  const intro = useSharedValue(0);
   const exit = useSharedValue(0);
 
   useEffect(() => {
+    // Quick fade/scale-in so the mark materialises rather than popping in at
+    // full opacity, then settles into the gentle pulse loop below.
+    intro.value = withTiming(1, { duration: 360, easing: Easing.out(Easing.quad) });
     progress.value = withRepeat(
       withTiming(1, { duration: 1100, easing: Easing.inOut(Easing.quad) }),
       -1,
       true,
     );
-  }, [progress]);
+  }, [progress, intro]);
 
   useEffect(() => {
     if (!exiting) return;
@@ -52,8 +56,11 @@ export function LoadingScreen({
 
   const rootStyle = useAnimatedStyle(() => ({ opacity: 1 - exit.value }));
   const logoStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: 0.92 + progress.value * 0.08 }, { translateY: exit.value * -48 }],
-    opacity: 0.65 + progress.value * 0.35,
+    transform: [
+      { scale: (0.92 + progress.value * 0.08) * (0.96 + intro.value * 0.04) },
+      { translateY: exit.value * -48 },
+    ],
+    opacity: (0.65 + progress.value * 0.35) * intro.value,
   }));
 
   return (

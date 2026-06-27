@@ -101,15 +101,15 @@ test("moves an enabled priority down via its reorder control", async () => {
     />,
   );
 
-  // prefer_easier is the first *enabled* priority (stored index 3); the timetable-shape
-  // objectives are off by default and sink, dimmed, to the bottom. Its "move down" control
-  // swaps it with the next enabled priority (stored index 4).
+  // prefer_easier is the first *enabled* priority (stored index 2); the timetable-shape
+  // objectives (free_days, good_breaks) are off by default and sink, dimmed, to the bottom.
+  // Its "move down" control swaps it with the next enabled priority (stored index 3).
   await page
     .getByTestId("optimization-priority-prefer_easier")
     .getByRole("button", { name: /move down/i })
     .click();
 
-  expect(onReorderPriorities).toHaveBeenCalledWith(3, 4);
+  expect(onReorderPriorities).toHaveBeenCalledWith(2, 3);
 });
 
 test("reveals break inputs only when good breaks is enabled", async () => {

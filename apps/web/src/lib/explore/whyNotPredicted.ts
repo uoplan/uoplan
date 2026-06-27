@@ -89,7 +89,6 @@ export function professorLinkParam(
   }
   return professorRouteParam({
     slug: entry?.slug,
-    legacyId: prof.legacyId ?? undefined,
     displayName: entry?.name ?? unsafeBrand<CanonicalProfessorName>(prof.name),
   });
 }

@@ -56,19 +56,24 @@ const remainingRequirements: RemainingRequirement[] = [
   },
 ];
 
-test("persists desired courses into constrainedPerRequirement without looping", async () => {
-  const cache = buildCache();
-  const { store } = await renderWithProviders(<AdvancedGenerationOptions />, {
+type AdvancedInitialState = NonNullable<Parameters<typeof renderWithProviders>[1]>["initialState"];
+
+function renderAdvanced(extraState?: AdvancedInitialState) {
+  return renderWithProviders(<AdvancedGenerationOptions />, {
     initialState: {
-      cache,
+      cache: buildCache(),
       remainingRequirements,
       studentPrograms: ["honours-cs"],
       requirementTreeWithStatus: [],
       prereqEligibleCourses: ["CSI 2110", "CSI 2120"],
       filteredPrereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      basketCourses: ["CSI 2110"],
+      ...extraState,
     },
   });
+}
+
+test("persists desired courses into constrainedPerRequirement without looping", async () => {
+  const { store } = await renderAdvanced({ basketCourses: ["CSI 2110"] });
 
   // The effect reconciles the desired course into the requirement and then stabilises.
   await expect
@@ -83,7 +88,6 @@ test("persists desired courses into constrainedPerRequirement without looping", 
 });
 
 test("surfaces an overflow status when desired courses exceed a partly-consumed requirement", async () => {
-  const cache = buildCache();
   // The single 3-credit requirement is already half-consumed by an auto-assigned completed course
   // (selectedPerRequirement). A second desired course matching the same requirement overflows.
   const reqs: RemainingRequirement[] = [
@@ -96,17 +100,10 @@ test("surfaces an overflow status when desired courses exceed a partly-consumed 
       satisfiedBy: [],
     },
   ];
-  await renderWithProviders(<AdvancedGenerationOptions />, {
-    initialState: {
-      cache,
-      remainingRequirements: reqs,
-      studentPrograms: ["honours-cs"],
-      requirementTreeWithStatus: [],
-      prereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      filteredPrereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      selectedPerRequirement: { "req-csi": ["CSI 2110"] },
-      basketCourses: ["CSI 2120"],
-    },
+  await renderAdvanced({
+    remainingRequirements: reqs,
+    selectedPerRequirement: { "req-csi": ["CSI 2110"] },
+    basketCourses: ["CSI 2120"],
   });
 
   // The embedded basket flags the overflowing course inline.
@@ -116,19 +113,7 @@ test("surfaces an overflow status when desired courses exceed a partly-consumed 
 });
 
 test("counts desired advanced courses toward the displayed semester total", async () => {
-  const cache = buildCache();
-  const { store } = await renderWithProviders(<AdvancedGenerationOptions />, {
-    initialState: {
-      cache,
-      remainingRequirements,
-      studentPrograms: ["honours-cs"],
-      requirementTreeWithStatus: [],
-      prereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      filteredPrereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      basketCourses: ["CSI 2110"],
-      coursesThisSemester: 1,
-    },
-  });
+  const { store } = await renderAdvanced({ basketCourses: ["CSI 2110"], coursesThisSemester: 1 });
 
   const count = page.getByLabelText("Electives this semester (additional)");
   await expect.element(count).toHaveValue("1");
@@ -139,20 +124,11 @@ test("counts desired advanced courses toward the displayed semester total", asyn
 });
 
 test("does not clamp additional electives during basket auto-assignment reconciliation", async () => {
-  const cache = buildCache();
-  const { store } = await renderWithProviders(<AdvancedGenerationOptions />, {
-    initialState: {
-      cache,
-      remainingRequirements,
-      studentPrograms: ["honours-cs"],
-      requirementTreeWithStatus: [],
-      prereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      filteredPrereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      basketCourses: ["CSI 2120"],
-      constrainedPerRequirement: { "req-csi": ["CSI 2110"] },
-      autoConstrainedPerRequirement: { "req-csi": ["CSI 2110"] },
-      coursesThisSemester: 1,
-    },
+  const { store } = await renderAdvanced({
+    basketCourses: ["CSI 2120"],
+    constrainedPerRequirement: { "req-csi": ["CSI 2110"] },
+    autoConstrainedPerRequirement: { "req-csi": ["CSI 2110"] },
+    coursesThisSemester: 1,
   });
 
   await expect
@@ -162,18 +138,7 @@ test("does not clamp additional electives during basket auto-assignment reconcil
 });
 
 test("caps additional electives at zero when there are no remaining requirement pools", async () => {
-  const cache = buildCache();
-  const { store } = await renderWithProviders(<AdvancedGenerationOptions />, {
-    initialState: {
-      cache,
-      remainingRequirements: [],
-      studentPrograms: ["honours-cs"],
-      requirementTreeWithStatus: [],
-      prereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      filteredPrereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      coursesThisSemester: 2,
-    },
-  });
+  const { store } = await renderAdvanced({ remainingRequirements: [], coursesThisSemester: 2 });
 
   await expect.poll(() => store.getState().coursesThisSemester).toBe(0);
   await expect
@@ -182,24 +147,16 @@ test("caps additional electives at zero when there are no remaining requirement 
 });
 
 test("counts group-token picks against the advanced additional-elective cap", async () => {
-  const cache = buildCache();
   const highCapacityRequirement: RemainingRequirement[] = [
     {
       ...remainingRequirements[0],
       creditsNeeded: 30,
     },
   ];
-  const { store } = await renderWithProviders(<AdvancedGenerationOptions />, {
-    initialState: {
-      cache,
-      remainingRequirements: highCapacityRequirement,
-      studentPrograms: ["honours-cs"],
-      requirementTreeWithStatus: [],
-      prereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      filteredPrereqEligibleCourses: ["CSI 2110", "CSI 2120"],
-      constrainedPerRequirement: { "req-csi": ["group:CSI~a", "group:CSI~b"] },
-      coursesThisSemester: SCHEDULE_COURSE_COUNT_MAX,
-    },
+  const { store } = await renderAdvanced({
+    remainingRequirements: highCapacityRequirement,
+    constrainedPerRequirement: { "req-csi": ["group:CSI~a", "group:CSI~b"] },
+    coursesThisSemester: SCHEDULE_COURSE_COUNT_MAX,
   });
 
   await expect.poll(() => store.getState().coursesThisSemester).toBe(8);

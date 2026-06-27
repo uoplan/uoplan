@@ -1,6 +1,7 @@
 import { useFonts } from "expo-font";
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
-import { useState } from "react";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect, useState } from "react";
 import { useColorScheme, View } from "react-native";
 
 import { AnimatedSplashOverlay } from "@/components/animated-icon";
@@ -15,6 +16,12 @@ import { OnboardingProvider, useOnboarding } from "@/data/onboarding-provider";
 import { ScheduleOptionsProvider } from "@/data/schedule-options-provider";
 import { LocaleProvider } from "@/i18n/locale-provider";
 import { AnalyticsProvider } from "@/lib/analytics";
+
+// Keep the native splash up (no auto-hide) until our fonts are ready, so the very
+// first JS frame is already the themed background + animated logo rather than a
+// blank/white window. The native splash background is configured to the same
+// paper/dark colour as `Surface.page`, so the hand-off is seamless.
+void SplashScreen.preventAutoHideAsync();
 
 /**
  * The app's root navigator: a Stack whose first screen is the `(tabs)` group
@@ -75,7 +82,17 @@ export default function TabLayout() {
     "DM Serif Display": require("../../assets/fonts/DMSerifDisplay-Regular.ttf"),
   });
 
-  if (!fontsLoaded) return null;
+  // Once fonts are ready the JS tree below renders the themed background +
+  // animated splash overlay, so it's safe to drop the native splash.
+  useEffect(() => {
+    if (fontsLoaded) void SplashScreen.hideAsync();
+  }, [fontsLoaded]);
+
+  // While fonts load, hold a solid themed background (not `null`, which would
+  // expose the white window) underneath the still-visible native splash.
+  if (!fontsLoaded) {
+    return <View style={{ flex: 1, backgroundColor: Surface.page }} />;
+  }
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>

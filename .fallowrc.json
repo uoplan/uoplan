@@ -101,6 +101,12 @@
   //    no-op stub tail; each builds its own minimal stub.
   //  - appStoreProvider.browser.test: two distinct test cases that both assert
   //    the default (un-seeded) store value; kept inline for test independence.
+  //  - BasicCalendarSidebarControls.browser.test ↔ AdvancedGenerationOptions
+  //    browser test: the hoisted `vi.mock("@tanstack/react-router")` Link stub
+  //    (+ its MockLinkProps). `vi.mock` is file-scoped and hoisted by Vitest, so
+  //    importing a shared module would not apply the mock — it cannot be
+  //    extracted. Ignore the sidebar test (its only clone is this stub); the
+  //    AdvancedGenerationOptions side stays analysed so its own dupes still gate.
   "duplicates": {
     "ignore": [
       "apps/web/src/store/tests/generationOptionsDirty.test.ts",
@@ -108,7 +114,8 @@
       "packages/transcript/src/transcriptParser.test.ts",
       "apps/web/src/test/welcomeScreenContract.browser.test.tsx",
       "apps/web/src/lib/requirements/requirementUtils.test.ts",
-      "apps/web/src/test/appStoreProvider.browser.test.tsx"
+      "apps/web/src/test/appStoreProvider.browser.test.tsx",
+      "apps/web/src/components/calendar/BasicCalendarSidebarControls.browser.test.tsx"
     ]
   }
 }

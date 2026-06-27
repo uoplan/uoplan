@@ -61,6 +61,38 @@ function grades(
   }));
 }
 
+function staffCsi(): CourseSchedule {
+  return course("CSI 2110", [section({ times: [meeting({ instructor: "Staff" })] })]);
+}
+
+function matZ00(instructor: string, time: Partial<MeetingTime> = {}): CourseSchedule {
+  return course("MAT 1320", [
+    section({ section: "Z00", sectionCode: "Z00", times: [meeting({ instructor, ...time })] }),
+  ]);
+}
+
+function phyY00(instructor: string, time: Partial<MeetingTime> = {}): CourseSchedule {
+  return course("PHY 1100", [
+    section({ section: "Y00", sectionCode: "Y00", times: [meeting({ instructor, ...time })] }),
+  ]);
+}
+
+/** Expected `explain` result: Busy Prof flagged as a MAT 1320 Z00 time conflict. */
+const BUSY_PROF_CONFLICT: UnpredictedInstructor = {
+  name: "Busy Prof",
+  legacyId: 2,
+  lastYear: 2026,
+  reason: {
+    kind: "conflict",
+    courseCode: normalizeCourseCode("MAT 1320"),
+    component: "LEC",
+    section: "Z00",
+    day: "Mo",
+    startMinutes: 600,
+    endMinutes: 690,
+  },
+};
+
 const CSI = normalizeCourseCode("CSI 2110");
 
 function explain(
@@ -103,54 +135,22 @@ describe("explainUnpredictedInstructors", () => {
   it("flags a candidate teaching an overlapping section as a time conflict", () => {
     const out = explain({
       // Busy Prof teaches MAT 1320 Mo 10:00–11:30 in the target term.
-      termSchedules: [
-        course("CSI 2110", [section({ times: [meeting({ instructor: "Staff" })] })]),
-        course("MAT 1320", [
-          section({
-            section: "Z00",
-            sectionCode: "Z00",
-            times: [meeting({ instructor: "Busy Prof", startMinutes: 600, endMinutes: 690 })],
-          }),
-        ]),
-      ],
+      termSchedules: [staffCsi(), matZ00("Busy Prof", { startMinutes: 600, endMinutes: 690 })],
       // Unassigned CSI section meets Mo 10:30–12:00 → overlaps Busy Prof.
       section: section({
         times: [meeting({ instructor: "Staff", startMinutes: 630, endMinutes: 720 })],
       }),
       courseGrades: grades([{ name: "Busy Prof", termId: 2261, legacyId: 2 }]),
     });
-    expect(out).toEqual([
-      {
-        name: "Busy Prof",
-        legacyId: 2,
-        lastYear: 2026,
-        reason: {
-          kind: "conflict",
-          courseCode: normalizeCourseCode("MAT 1320"),
-          component: "LEC",
-          section: "Z00",
-          day: "Mo",
-          startMinutes: 600,
-          endMinutes: 690,
-        },
-      },
-    ]);
+    expect(out).toEqual([BUSY_PROF_CONFLICT]);
   });
 
   it("flags an absent recent prof as inactive when an active candidate exists", () => {
     const out = explain({
+      // Active Prof teaches something (non-overlapping) in the target term.
       termSchedules: [
-        course("CSI 2110", [section({ times: [meeting({ instructor: "Staff" })] })]),
-        // Active Prof teaches something (non-overlapping) in the target term.
-        course("MAT 1320", [
-          section({
-            section: "Z00",
-            sectionCode: "Z00",
-            times: [
-              meeting({ instructor: "Active Prof", day: "Fr", startMinutes: 540, endMinutes: 630 }),
-            ],
-          }),
-        ]),
+        staffCsi(),
+        matZ00("Active Prof", { day: "Fr", startMinutes: 540, endMinutes: 630 }),
       ],
       // Active Prof is predicted; Absent Prof is recent but not in the term.
       courseGrades: grades([
@@ -167,7 +167,7 @@ describe("explainUnpredictedInstructors", () => {
   it("flags a recent non-conflicting prof as lowerPriority when nobody is active", () => {
     const out = explain({
       // Only a Staff section exists in the term → nobody active.
-      termSchedules: [course("CSI 2110", [section({ times: [meeting({ instructor: "Staff" })] })])],
+      termSchedules: [staffCsi()],
       courseGrades: grades([{ name: "Recent Prof", termId: 2261, legacyId: 5 }]),
     });
     expect(out).toEqual([
@@ -183,25 +183,11 @@ describe("explainUnpredictedInstructors", () => {
   it("orders results conflict → inactive → stale → lowerPriority, then by recency", () => {
     const out = explain({
       termSchedules: [
-        course("CSI 2110", [section({ times: [meeting({ instructor: "Staff" })] })]),
+        staffCsi(),
         // Conflict prof overlaps the Staff section's Mo 10:00–11:30 slot.
-        course("MAT 1320", [
-          section({
-            section: "Z00",
-            sectionCode: "Z00",
-            times: [meeting({ instructor: "Conflict Prof", startMinutes: 600, endMinutes: 690 })],
-          }),
-        ]),
+        matZ00("Conflict Prof", { startMinutes: 600, endMinutes: 690 }),
         // Active-but-non-overlapping prof to make inactive classification fire.
-        course("PHY 1100", [
-          section({
-            section: "Y00",
-            sectionCode: "Y00",
-            times: [
-              meeting({ instructor: "Active Prof", day: "Th", startMinutes: 540, endMinutes: 600 }),
-            ],
-          }),
-        ]),
+        phyY00("Active Prof", { day: "Th", startMinutes: 540, endMinutes: 600 }),
       ],
       courseGrades: grades([
         { name: "Conflict Prof", termId: 2261, legacyId: 1 },
@@ -265,6 +251,26 @@ function csiCourse(sections: ComponentSection[]): CourseSchedule {
   return course("CSI 2110", sections);
 }
 
+/**
+ * Scenario fixture: Busy Prof teaches MAT 1320 Z00 (Mo 10:00–11:30) and Active Prof
+ * teaches PHY 1100 Y00 (Fr 09:00–10:30) — both active in the target term — alongside
+ * the given CSI course. Used to assert how a busy candidate is classified per CSI shape.
+ */
+function explainBusyVsActive(csi: CourseSchedule): UnpredictedInstructor[] {
+  const mat = matZ00("Busy Prof", { startMinutes: 600, endMinutes: 690 });
+  const phy = phyY00("Active Prof", { day: "Fr", startMinutes: 540, endMinutes: 630 });
+  return explainUnpredictedInstructorsForCourse({
+    courseCode: CSI,
+    course: csi,
+    termSchedules: [csi, mat, phy],
+    termId: TARGET_TERM,
+    courseGrades: grades([
+      { name: "Busy Prof", termId: 2261, legacyId: 2 },
+      { name: "Active Prof", termId: 2261, legacyId: 1 },
+    ]),
+  });
+}
+
 describe("explainUnpredictedInstructorsForCourse", () => {
   it("returns nothing when no section has a prediction", () => {
     const csi = csiCourse([section({ times: [meeting({ instructor: "Staff" })] })]);
@@ -286,48 +292,8 @@ describe("explainUnpredictedInstructorsForCourse", () => {
         predictedInstructors: predicted(["Active Prof"]),
       }),
     ]);
-    const mat = course("MAT 1320", [
-      section({
-        section: "Z00",
-        sectionCode: "Z00",
-        times: [meeting({ instructor: "Busy Prof", startMinutes: 600, endMinutes: 690 })],
-      }),
-    ]);
-    const phy = course("PHY 1100", [
-      section({
-        section: "Y00",
-        sectionCode: "Y00",
-        times: [
-          meeting({ instructor: "Active Prof", day: "Fr", startMinutes: 540, endMinutes: 630 }),
-        ],
-      }),
-    ]);
-    const out = explainUnpredictedInstructorsForCourse({
-      courseCode: CSI,
-      course: csi,
-      termSchedules: [csi, mat, phy],
-      termId: TARGET_TERM,
-      courseGrades: grades([
-        { name: "Busy Prof", termId: 2261, legacyId: 2 },
-        { name: "Active Prof", termId: 2261, legacyId: 1 },
-      ]),
-    });
-    expect(out).toEqual([
-      {
-        name: "Busy Prof",
-        legacyId: 2,
-        lastYear: 2026,
-        reason: {
-          kind: "conflict",
-          courseCode: normalizeCourseCode("MAT 1320"),
-          component: "LEC",
-          section: "Z00",
-          day: "Mo",
-          startMinutes: 600,
-          endMinutes: 690,
-        },
-      },
-    ]);
+    const out = explainBusyVsActive(csi);
+    expect(out).toEqual([BUSY_PROF_CONFLICT]);
   });
 
   it("keeps the least-blocking reason: conflict in one section but free in another → lowerPriority", () => {
@@ -346,33 +312,7 @@ describe("explainUnpredictedInstructorsForCourse", () => {
         predictedInstructors: predicted(["Active Prof"]),
       }),
     ]);
-    // Busy Prof teaches MAT Mo 10:00–11:30 (overlaps A00, not B00) → active in term.
-    const mat = course("MAT 1320", [
-      section({
-        section: "Z00",
-        sectionCode: "Z00",
-        times: [meeting({ instructor: "Busy Prof", startMinutes: 600, endMinutes: 690 })],
-      }),
-    ]);
-    const phy = course("PHY 1100", [
-      section({
-        section: "Y00",
-        sectionCode: "Y00",
-        times: [
-          meeting({ instructor: "Active Prof", day: "Fr", startMinutes: 540, endMinutes: 630 }),
-        ],
-      }),
-    ]);
-    const out = explainUnpredictedInstructorsForCourse({
-      courseCode: CSI,
-      course: csi,
-      termSchedules: [csi, mat, phy],
-      termId: TARGET_TERM,
-      courseGrades: grades([
-        { name: "Busy Prof", termId: 2261, legacyId: 2 },
-        { name: "Active Prof", termId: 2261, legacyId: 1 },
-      ]),
-    });
+    const out = explainBusyVsActive(csi);
     expect(out).toEqual([
       {
         name: "Busy Prof",

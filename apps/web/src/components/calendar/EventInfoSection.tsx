@@ -3,7 +3,7 @@ import type { MouseEvent } from "react";
 import { Anchor, Badge, Box, Divider, Group, HoverCard, Stack, Text } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
 import { DAY_LABELS } from "@uoplan/calendar";
-import { pickCanonicalProfessorName } from "@uoplan/core";
+import { pickCanonicalProfessorName, slugifyProfessor } from "@uoplan/core";
 import type { CanonicalProfessorName } from "@uoplan/core";
 import type { CalendarEvent } from "../../hooks/useCalendarEvents";
 import { tr } from "../../i18n";
@@ -15,18 +15,12 @@ interface EventInfoSectionProps {
   event: CalendarEvent;
 }
 
-/** A professor name linked to its explore page — by numeric legacyId when
- * known, otherwise by URL-encoded name (the route handles both). Rendered in
+/** A professor name linked to its explore page by kebab-case slug (derived from
+ * the name; the route resolves it via the professor match key). Rendered in
  * the app text colour (not the default anchor colour) so it reads as a normal
  * name, and stops click propagation so following the link doesn't toggle the
  * swap overlay it lives inside. */
-function ProfessorLink({
-  name,
-  legacyId,
-}: {
-  name: CanonicalProfessorName;
-  legacyId?: number | null;
-}) {
+function ProfessorLink({ name }: { name: CanonicalProfessorName }) {
   return (
     <Anchor
       size="xs"
@@ -34,11 +28,7 @@ function ProfessorLink({
       c="var(--app-text)"
       onClick={(e: MouseEvent) => e.stopPropagation()}
       renderRoot={(props) => (
-        <Link
-          to="/explore/professor/$slug"
-          params={{ slug: legacyId != null ? String(legacyId) : encodeURIComponent(name) }}
-          {...props}
-        />
+        <Link to="/explore/professor/$slug" params={{ slug: slugifyProfessor(name) }} {...props} />
       )}
     >
       {name}
@@ -218,7 +208,7 @@ export function EventInfoSection({ event }: EventInfoSectionProps) {
             >
               {instructors.map((p, i, arr) => (
                 <Fragment key={p.name}>
-                  <ProfessorLink name={p.name} legacyId={p.legacyId} />
+                  <ProfessorLink name={p.name} />
                   {i < arr.length - 1 ? (
                     <Text span size="xs" c="dimmed">
                       {", "}
@@ -280,7 +270,7 @@ export function EventInfoSection({ event }: EventInfoSectionProps) {
                         textAlign: "right",
                       }}
                     >
-                      <ProfessorLink name={first.name} legacyId={first.legacyId} />
+                      <ProfessorLink name={first.name} />
                     </Box>
                     {rest.length > 0 ? (
                       <HoverCard
@@ -308,11 +298,7 @@ export function EventInfoSection({ event }: EventInfoSectionProps) {
                               {tr("calendar.hover.instructorPredictedOthers")}
                             </Text>
                             {rest.map((p) => (
-                              <ProfessorLink
-                                key={`${p.name}-${p.legacyId ?? "x"}`}
-                                name={p.name}
-                                legacyId={p.legacyId}
-                              />
+                              <ProfessorLink key={`${p.name}-${p.legacyId ?? "x"}`} name={p.name} />
                             ))}
                           </Stack>
                         </HoverCard.Dropdown>

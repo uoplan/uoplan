@@ -4,7 +4,7 @@ import { IconExternalLink } from "@tabler/icons-react";
 import { useMemo } from "react";
 import type { CSSProperties } from "react";
 import type { CanonicalProfessorName, ProfessorGraphNode, ProfessorRatingsMap } from "@uoplan/core";
-import { hasProfessorRatings, normalizeProfessorName } from "@uoplan/core";
+import { hasProfessorRatings, normalizeProfessorName, slugifyProfessor } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import {
@@ -37,16 +37,16 @@ function sortedDisciplines(disciplineWeights: Readonly<Record<string, number>>):
 }
 
 function ProfessorProfileLink({
-  legacyId,
+  displayName,
   onClick,
 }: {
-  legacyId: number;
+  displayName: CanonicalProfessorName;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 }) {
   return (
     <Link
       to="/explore/professor/$slug"
-      params={{ slug: String(legacyId) }}
+      params={{ slug: slugifyProfessor(displayName) }}
       search={EMPTY_EXPLORE_SEARCH}
       onClick={onClick}
       target="_blank"
@@ -196,7 +196,7 @@ function NeighborRow({
             </Text>
             {neighbor.node.legacyId != null ? (
               <ProfessorProfileLink
-                legacyId={neighbor.node.legacyId}
+                displayName={neighbor.node.displayName}
                 onClick={(e) => e.stopPropagation()}
               />
             ) : null}
@@ -249,7 +249,7 @@ export function ProfessorGraphNodeDetails({
           <Text fw={600} c="var(--app-text)" size="lg" lineClamp={3} style={{ minWidth: 0 }}>
             {node.displayName}
           </Text>
-          {node.legacyId != null ? <ProfessorProfileLink legacyId={node.legacyId} /> : null}
+          {node.legacyId != null ? <ProfessorProfileLink displayName={node.displayName} /> : null}
         </Group>
         {professorRatingLine(
           node.displayName,

@@ -47,8 +47,8 @@ export function RequirementsStep({
         ? "This program has no extra requirement choices in the loaded catalogue."
         : "Once your program is selected, this step shows only the choices that still need attention."
       : unassignedCount === 0
-        ? "Every completed course is placed. Fine-tune priorities or course load, then generate."
-        : "Assign each completed course to a requirement to continue. You don't need to fill every requirement.";
+        ? "Your completed courses are placed automatically. Fine-tune priorities or course load, then generate."
+        : "Place the remaining completed courses below to continue. You don't need to fill every requirement.";
 
   const handleGenerate = () => {
     if (canGenerate) onGenerate();
@@ -61,7 +61,6 @@ export function RequirementsStep({
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
-        scrollIndicatorInsets={{ bottom: CTA_SCROLL_GUTTER }}
       >
         <View style={styles.summary}>
           <Text style={styles.summaryTitle}>{summaryTitle}</Text>
@@ -84,9 +83,7 @@ export function RequirementsStep({
             </Text>
           </View>
         )}
-      </ScrollView>
 
-      <View style={styles.footer}>
         <PillButton
           label={generateLabel}
           onPress={handleGenerate}
@@ -95,24 +92,21 @@ export function RequirementsStep({
           accessibilityLabel={generateLabel}
           style={styles.generateButton}
         />
-      </View>
+      </ScrollView>
     </View>
   );
 }
 
-const CTA_SCROLL_GUTTER = 96;
-
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    position: "relative",
   },
   scroll: {
     flex: 1,
   },
   scrollContent: {
     gap: Spacing.three,
-    paddingBottom: CTA_SCROLL_GUTTER,
+    paddingBottom: Spacing.three,
   },
   summary: {
     gap: Spacing.two,
@@ -134,19 +128,9 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: Surface.dimmed,
   },
-  footer: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Surface.border,
-    borderRadius: 24,
-    backgroundColor: Surface.page,
-    padding: Spacing.two,
-  },
   generateButton: {
     alignSelf: "stretch",
+    marginTop: Spacing.one,
   },
   empty: {
     gap: Spacing.two,

@@ -14,6 +14,7 @@ import {
   normalizeGradeVizDistribution,
   normalizeProfessorName,
   professorIndexFromRef,
+  slugifyProfessor,
 } from "@uoplan/core";
 import { buildAliasGroups, resolveComponentId } from "@uoplan/core/courseAlias";
 import type { AliasGroups } from "@uoplan/core/courseAlias";
@@ -86,8 +87,8 @@ export type ExploreProfessorSearchEntry = {
   legacyId?: number;
   /** 0-based canonical registry index, when resolved. */
   professorRef?: number;
-  /** URL slug for the canonical professor, when resolved from the registry. */
-  slug?: string;
+  /** URL slug for the canonical professor (kebab-case, always set). */
+  slug: string;
   displayName: CanonicalProfessorName;
   searchText: string;
   uniqueCourseCount: number;
@@ -414,7 +415,7 @@ export function buildExploreProfessorSearchEntries(
         groupId: g.groupId,
         legacyId: g.legacyId,
         ...(g.professorRef != null ? { professorRef: g.professorRef } : {}),
-        ...(entry?.slug ? { slug: entry.slug } : {}),
+        slug: entry?.slug ?? slugifyProfessor(g.displayName),
         displayName: g.displayName,
         searchText: [g.displayName, g.legacyId != null ? String(g.legacyId) : ""]
           .filter(Boolean)
