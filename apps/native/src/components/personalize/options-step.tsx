@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import { AppIcon } from "@/components/app-icon";
+import { usePagedStepperContentInset } from "@/components/paged-stepper";
 import {
   SearchableMultiSelect,
   SearchableSelect,
@@ -87,6 +88,7 @@ export function OptionsStep({
   onCourseCodesChange,
   onRemoveCourse,
 }: OptionsStepProps) {
+  const contentInset = usePagedStepperContentInset();
   const transcriptResolvedEssentials = Boolean(transcriptSummary && startYear && program);
   const [coursesExpanded, setCoursesExpanded] = useState(false);
   const toggleCourses = () => {
@@ -95,7 +97,7 @@ export function OptionsStep({
   };
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, { paddingBottom: contentInset }]}>
       <View style={styles.summary}>
         <Text style={styles.summaryTitle}>
           {transcriptResolvedEssentials ? "Confirm your details" : "Fill the missing details"}

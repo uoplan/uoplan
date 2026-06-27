@@ -39,19 +39,31 @@ function clampIndex(index: number, count: number): number {
 const DOTS_PILL_HEIGHT = 34;
 
 /**
+ * Bottom inset (px) a paged step should reserve so its content clears the
+ * floating dots pill (and the global basket cart, which shares the same bottom
+ * anchor). Scrolling steps apply this to their scroll content's `paddingBottom`
+ * so content scrolls *under* the floating controls instead of stopping above an
+ * opaque band; short, non-scrolling steps apply it as their container's
+ * `paddingBottom`.
+ */
+export function usePagedStepperContentInset(): number {
+  return useFloatingControlsBottom() + DOTS_PILL_HEIGHT + Spacing.three;
+}
+
+/**
  * Full-screen, swipe-driven step carousel. Each step is a full-height page that
  * carries its own title + content, so swiping moves the WHOLE page (title and
  * all) rather than swapping a fixed header. There are no Back/Next buttons — the
  * dots **float** over the bottom of the page (a Liquid-Glass pill on iOS, a solid
  * pill elsewhere) and double as a jump control.
  *
- * Pages reserve bottom padding so their content clears the floating dots; a page
- * whose content overflows can render its own vertical ScrollView (several steps
- * do) and that scroll area simply ends above the floating pill.
+ * Steps own their bottom clearance via {@link usePagedStepperContentInset}: the
+ * page body fills the full height so scrolling steps can flow their content
+ * *under* the floating dots/cart (no opaque band cutting content off), padding
+ * their scroll content by the inset so the last item still clears the controls.
  */
 export function PagedStepper({ steps, initialIndex = 0, onIndexChange }: PagedStepperProps) {
   const floatingBottom = useFloatingControlsBottom();
-  const pageBottomInset = floatingBottom + DOTS_PILL_HEIGHT + Spacing.three;
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [activeIndex, setActiveIndex] = useState(() => clampIndex(initialIndex, steps.length));
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -122,7 +134,7 @@ export function PagedStepper({ steps, initialIndex = 0, onIndexChange }: PagedSt
               importantForAccessibility={index === activeIndex ? "auto" : "no-hide-descendants"}
               style={{ width: size.width, height: size.height }}
             >
-              <View style={[styles.page, { paddingBottom: pageBottomInset }]}>
+              <View style={styles.page}>
                 <View style={styles.pageHeader}>
                   <Text style={styles.title}>{step.title}</Text>
                   {step.description ? (

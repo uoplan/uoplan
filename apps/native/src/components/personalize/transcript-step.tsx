@@ -1,6 +1,7 @@
 import { ActivityIndicator, Linking, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { AppIcon } from "@/components/app-icon";
+import { usePagedStepperContentInset } from "@/components/paged-stepper";
 import TranscriptExtractor from "@/lib/transcript-extractor.dom";
 import type { PdfPageText } from "@/lib/parseTranscriptNative";
 import { Fonts, Spacing, Surface } from "@/constants/theme";
@@ -45,8 +46,9 @@ export function TranscriptStep({
   onResult,
   onError,
 }: TranscriptStepProps) {
+  const contentInset = usePagedStepperContentInset();
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, { paddingBottom: contentInset }]}>
       {summary ? (
         <View style={styles.summary}>
           <View style={styles.summaryHead}>

@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
+import { usePagedStepperContentInset } from "@/components/paged-stepper";
 import { OptionTree } from "@/components/personalize/option-tree";
 import { Fonts, Spacing, Surface } from "@/constants/theme";
 import {
@@ -15,8 +16,6 @@ interface ProgramOptionsStepProps {
   onChange: (selections: PersonalizeRequirementSelections) => void;
 }
 
-const CTA_SCROLL_GUTTER = 24;
-
 /**
  * The native "Program options" step, mirroring web's Program-options screen.
  * Every branch shows its real contents — the requirement it covers, credit
@@ -29,6 +28,7 @@ export function ProgramOptionsStep({
   selections,
   onChange,
 }: ProgramOptionsStepProps) {
+  const contentInset = usePagedStepperContentInset();
   const tree = readout?.requirementTreeWithStatus ?? [];
   const optionRoots = tree.filter(nodeHasOptionGroups);
 
@@ -46,7 +46,7 @@ export function ProgramOptionsStep({
   return (
     <ScrollView
       style={styles.scroll}
-      contentContainerStyle={styles.scrollContent}
+      contentContainerStyle={[styles.scrollContent, { paddingBottom: contentInset }]}
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
     >
@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     gap: Spacing.three,
-    paddingBottom: CTA_SCROLL_GUTTER,
   },
   rootCard: {
     gap: Spacing.three,
