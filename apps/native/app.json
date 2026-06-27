@@ -2,7 +2,6 @@
   "expo": {
     "name": "uoPlan",
     "slug": "uoplan",
-    "version": "1.0.0",
     "extra": {
       "eas": {
         "projectId": "9324474b-4ac4-4f5d-871d-5eebea45fbb6"
@@ -74,8 +73,8 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#f7f5f2",
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 120,
+          "image": "./assets/images/splash-transparent.png",
+          "imageWidth": 200,
           "dark": {
             "backgroundColor": "#1b1a20"
           }
