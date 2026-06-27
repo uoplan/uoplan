@@ -34,6 +34,9 @@ export interface AnalyticsEventMap {
     unassignedCount?: number;
   };
   preferences_updated: { field: string };
+  // Fired when the user resets the whole personalization wizard (clears term,
+  // program, completed courses, requirement choices, and transcript state).
+  personalization_reset: Record<string, never>;
   // Reorder/toggle/break-config edits to the optimization-priorities list.
   // `kind` is an OptimizationKind; `position` is its index after the change.
   optimization_priority_changed: { kind: string; enabled?: boolean; position?: number };
