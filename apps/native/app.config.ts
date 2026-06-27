@@ -1,4 +1,5 @@
 import type { ConfigContext, ExpoConfig } from "expo/config";
+import { AndroidConfig, type ConfigPlugin, withStringsXml } from "expo/config-plugins";
 
 // release-please owns the app version: it bumps the monorepo root package.json
 // (the `.` package in release-please-config.json) on every release. That value
@@ -16,9 +17,30 @@ import type { ConfigContext, ExpoConfig } from "expo/config";
 const rootVersion = (require("../../package.json") as { version: string }).version;
 const marketingVersion = rootVersion.split("-")[0];
 
-export default ({ config }: ConfigContext): ExpoConfig => ({
-  ...config,
-  name: config.name ?? "uoPlan",
-  slug: config.slug ?? "uoplan",
-  version: marketingVersion,
-});
+// The user-facing app name is "uoPlan", but `expo.name` also seeds every
+// generated native identifier (iOS Xcode project/scheme/folder + PRODUCT_NAME,
+// Android rootProject.name). We keep `expo.name` lowercase ("uoplan") so those
+// internals stay lowercase, then restore the "uoPlan" launcher/display label per
+// platform:
+//   - iOS: ios.infoPlist.CFBundleDisplayName/CFBundleName in app.json — Expo's
+//     name plugins respect a user-provided infoPlist value over `expo.name`.
+//   - Android: the `app_name` string resource has no such guard, so we override
+//     it here via a strings.xml config plugin.
+const DISPLAY_NAME = "uoPlan";
+
+const withAndroidDisplayName: ConfigPlugin = (config) =>
+  withStringsXml(config, (cfg) => {
+    cfg.modResults = AndroidConfig.Strings.setStringItem(
+      [AndroidConfig.Resources.buildResourceItem({ name: "app_name", value: DISPLAY_NAME })],
+      cfg.modResults,
+    );
+    return cfg;
+  });
+
+export default ({ config }: ConfigContext): ExpoConfig =>
+  withAndroidDisplayName({
+    ...config,
+    name: config.name ?? "uoplan",
+    slug: config.slug ?? "uoplan",
+    version: marketingVersion,
+  });

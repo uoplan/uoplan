@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "uoPlan",
+    "name": "uoplan",
     "slug": "uoplan",
     "extra": {
       "eas": {
@@ -16,6 +16,8 @@
       "supportsTablet": true,
       "associatedDomains": ["applinks:uoplan.party", "applinks:www.uoplan.party"],
       "infoPlist": {
+        "CFBundleDisplayName": "uoPlan",
+        "CFBundleName": "uoPlan",
         "ITSAppUsesNonExemptEncryption": false,
         "UIRequiresFullScreen": true,
         "UISupportedInterfaceOrientations~ipad": [
