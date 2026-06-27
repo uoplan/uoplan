@@ -12,8 +12,13 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     outputs:
-      app_release_created: ${{ steps.release.outputs['.--release_created'] }}
-      app_tag_name: ${{ steps.release.outputs['.--tag_name'] }}
+      # The root component (path ".", the "uoplan-monorepo" package whose version
+      # the native app tracks) exposes UN-prefixed outputs (release_created /
+      # tag_name). Only non-root paths (e.g. apps/cli) get the "<path>--" prefix.
+      # Using ".--release_created" here previously always resolved to "" and the
+      # native deploy was silently skipped even on a real root release.
+      app_release_created: ${{ steps.release.outputs.release_created }}
+      app_tag_name: ${{ steps.release.outputs.tag_name }}
       cli_release_created: ${{ steps.release.outputs['apps/cli--release_created'] }}
       cli_tag_name: ${{ steps.release.outputs['apps/cli--tag_name'] }}
     steps:
@@ -33,6 +38,9 @@ jobs:
 
   native-release:
     needs: release-please
+    # The native app's version is the root "uoplan-monorepo" package version, so
+    # deploy it whenever that root component is released — i.e. on every
+    # release-please release PR merge that bumps the app (the normal case).
     if: ${{ needs.release-please.outputs.app_release_created == 'true' }}
     uses: ./.github/workflows/native-deploy.yml
     with:
