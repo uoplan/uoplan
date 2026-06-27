@@ -19,8 +19,10 @@ import {
   type TranscriptImportSummary,
 } from "@/components/personalize/transcript-step";
 import { PagedStepper, type PagedStep } from "@/components/paged-stepper";
+import { useFloatingControlsBottom } from "@/components/redesign/fab";
+import { GlassIconButton } from "@/components/redesign/glass-button";
 import { type SearchableSelectOption } from "@/components/searchable-select";
-import { Surface } from "@/constants/theme";
+import { Spacing, Surface } from "@/constants/theme";
 import { useCompletedCourses } from "@/data/completed-courses-provider";
 import { useAppData, useExploreIndex } from "@/data/data-provider";
 import type { ExploreProgramEntry } from "@/data/explore-index";
@@ -76,12 +78,13 @@ export default function PersonalizeScreen() {
   const { bundle, schedulesByTerm, catalogueYears } = useAppData();
   const index = useExploreIndex();
   const completed = useCompletedCourses();
-  const { personalization, setPersonalization } = useScheduleOptions();
+  const { personalization, setPersonalization, resetPersonalization } = useScheduleOptions();
   const [requirementSelections, setRequirementSelections] =
     useState<PersonalizeRequirementSelections>(DEFAULT_REQUIREMENT_SELECTIONS);
   const [pdfBase64, setPdfBase64] = useState<string | null>(null);
   const [transcriptLoading, setTranscriptLoading] = useState(false);
   const [transcriptSummary, setTranscriptSummary] = useState<TranscriptImportSummary | null>(null);
+  const [resetNonce, setResetNonce] = useState(0);
 
   const termOptions = useMemo<SearchableSelectOption[]>(
     () =>
@@ -279,10 +282,36 @@ export default function PersonalizeScreen() {
   );
 
   const insets = useSafeAreaInsets();
+  const floatingBottom = useFloatingControlsBottom();
+
+  const handleReset = useCallback(() => {
+    Alert.alert(
+      "Reset personalization?",
+      "This clears your term, program, completed courses, and requirement choices.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Reset",
+          style: "destructive",
+          onPress: () => {
+            resetPersonalization();
+            completed.clear();
+            setRequirementSelections(DEFAULT_REQUIREMENT_SELECTIONS);
+            setTranscriptSummary(null);
+            setPdfBase64(null);
+            setTranscriptLoading(false);
+            setResetNonce((nonce) => nonce + 1);
+            analytics.capture("personalization_reset");
+          },
+        },
+      ],
+    );
+  }, [analytics, completed, resetPersonalization]);
 
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
       <PagedStepper
+        key={resetNonce}
         steps={[
           {
             key: "term",
@@ -384,6 +413,13 @@ export default function PersonalizeScreen() {
           },
         ]}
       />
+      <View pointerEvents="box-none" style={[styles.resetWrap, { bottom: floatingBottom }]}>
+        <GlassIconButton
+          icon="arrow.triangle.2.circlepath"
+          accessibilityLabel="Reset personalization"
+          onPress={handleReset}
+        />
+      </View>
     </View>
   );
 }
@@ -392,5 +428,9 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: Surface.page,
+  },
+  resetWrap: {
+    position: "absolute",
+    left: Spacing.three,
   },
 });
