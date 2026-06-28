@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Questions & discussion
+    url: https://github.com/uoplan/uoplan/discussions
+    about: Ask questions, share ideas, or get help using uoplan.
+  - name: 🔒 Report a security vulnerability
+    url: https://github.com/uoplan/uoplan/security/advisories/new
+    about: Report security issues privately — please do not open a public issue.
