@@ -78,9 +78,11 @@ export default function TrendsDisciplinesScreen() {
           <View style={styles.riserList}>
             {trends.risers.map((riser) => (
               <View key={riser.code} style={styles.riserRow}>
-                <Text size="sm" numberOfLines={1} color={Surface.label}>
-                  {riser.prefix} · {riser.title}
-                </Text>
+                <View style={styles.riserLabel}>
+                  <Text size="sm" numberOfLines={1} color={Surface.label}>
+                    {riser.prefix} · {riser.title}
+                  </Text>
+                </View>
                 <Text size="sm" weight="bold" color={Surface.accent}>
                   +{riser.delta.toFixed(1)}
                 </Text>
@@ -102,5 +104,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: Spacing.two,
+  },
+  riserLabel: {
+    flex: 1,
   },
 });

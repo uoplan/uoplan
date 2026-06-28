@@ -1,10 +1,12 @@
 import { useRouter } from "expo-router";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { Text } from "@uoplan/ui";
 
 import { BarChart } from "@/components/bar-chart";
+import { ChartTooltip, useChartScrub } from "@/components/chart-interaction";
 import { LineChart } from "@/components/line-chart";
 import { ResponsiveColumns } from "@/components/layout";
 import { RedesignScreen, ScreenHeader, SectionCard } from "@/components/redesign";
@@ -47,6 +49,73 @@ function RiserRow({
         +{riser.delta.toFixed(1)}
       </Text>
     </View>
+  );
+}
+
+/**
+ * The "Choosing courses" season chart: full-height colour bars per season with
+ * tap/drag scrubbing (mirrors the SVG charts). Tapping or dragging across a bar
+ * reveals that season's volume-weighted mean GPA in a floating tooltip.
+ */
+function SeasonBars({
+  seasons,
+}: {
+  seasons: { label: string; value: number; season: keyof typeof SeasonColor }[];
+}) {
+  const [measured, setMeasured] = useState(0);
+  const locate = useCallback(
+    (x: number) => {
+      if (seasons.length === 0 || measured <= 0) return null;
+      const slot = measured / seasons.length;
+      const idx = Math.floor(x / slot);
+      return Math.max(0, Math.min(seasons.length - 1, idx));
+    },
+    [seasons.length, measured],
+  );
+  const { active, gesture } = useChartScrub(locate);
+  const activeIndex = active != null && active >= 0 && active < seasons.length ? active : null;
+  const activeDatum = activeIndex != null ? seasons[activeIndex] : null;
+  const slot = measured > 0 ? measured / seasons.length : 0;
+  const activeX = activeIndex != null ? activeIndex * slot + slot / 2 : 0;
+
+  return (
+    <GestureHandlerRootView>
+      <GestureDetector gesture={gesture}>
+        <View
+          collapsable={false}
+          style={styles.seasonRow}
+          onLayout={(e) => setMeasured(e.nativeEvent.layout.width)}
+        >
+          {seasons.map((season, i) => (
+            <View key={season.label} style={styles.season}>
+              <View style={styles.seasonBarTrack}>
+                <View
+                  style={[
+                    styles.seasonBar,
+                    {
+                      height: `${(season.value / 10) * 100}%`,
+                      backgroundColor: SeasonColor[season.season],
+                      opacity: activeIndex == null || activeIndex === i ? 1 : 0.4,
+                    },
+                  ]}
+                />
+              </View>
+              <Text size="xs" dimmed align="center">
+                {season.label}
+              </Text>
+            </View>
+          ))}
+        </View>
+      </GestureDetector>
+      {activeIndex != null && activeDatum != null && (
+        <ChartTooltip
+          x={activeX}
+          chartWidth={measured}
+          title={activeDatum.label}
+          value={activeDatum.value.toFixed(1)}
+        />
+      )}
+    </GestureHandlerRootView>
   );
 }
 
@@ -138,26 +207,7 @@ export default function TrendsHubScreen() {
           subtitle="Signals to help you pick electives, sections, and the right term."
           onPressHeader={() => router.push("/trends/courses")}
         >
-          <View style={styles.seasonRow}>
-            {trends.seasonGpa.map((season) => (
-              <View key={season.label} style={styles.season}>
-                <View style={styles.seasonBarTrack}>
-                  <View
-                    style={[
-                      styles.seasonBar,
-                      {
-                        height: `${(season.value / 10) * 100}%`,
-                        backgroundColor: SeasonColor[season.season],
-                      },
-                    ]}
-                  />
-                </View>
-                <Text size="xs" dimmed align="center">
-                  {season.label}
-                </Text>
-              </View>
-            ))}
-          </View>
+          <SeasonBars seasons={trends.seasonGpa} />
         </SectionCard>
 
         <SectionCard
