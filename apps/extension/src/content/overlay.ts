@@ -60,7 +60,15 @@ let lastSig = "";
  */
 async function apply(doc: Document, log?: (m: string) => void): Promise<void> {
   const rows = rowsWithCodes(doc);
-  if (rows.length === 0) return;
+  if (rows.length === 0) {
+    // Probe: surface candidate course-row ids so we can fix selectors remotely.
+    const ids = [...doc.querySelectorAll<HTMLElement>("[id]")]
+      .map((el) => el.id)
+      .filter((id) => /CLASS|CRSE|REGFORM|MTG|SUBJECT|P_/i.test(id))
+      .slice(0, 25);
+    log?.(`overlay: 0 rows (probe ids: ${ids.join(", ") || "none"})`);
+    return;
+  }
   const codes = [...new Set(rows.map((r) => r.courseCode as string))];
   const byCode = await fetchBadges(codes);
   log?.(
