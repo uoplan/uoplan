@@ -105,6 +105,7 @@ function RowBody(props: RowBodyProps) {
       <Group wrap="nowrap" gap="xs" align="center" p="xs">
         <Box
           {...handleProps}
+          aria-label={tr("optimize.dragHandle", { label: optimizationLabel(priority.kind) })}
           style={{
             display: "flex",
             cursor: "grab",
