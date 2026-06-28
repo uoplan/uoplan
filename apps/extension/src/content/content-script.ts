@@ -67,7 +67,7 @@ reporter.info(`content script attached (${inFrame ? "iframe" : "top"}): ${locati
 function scheduleInitialDumps(): void {
   dumpDom();
   setTimeout(dumpDom, 1500);
-  startGradeOverlay(document);
+  startGradeOverlay(document, (m) => reporter.info(m));
 }
 
 if (document.readyState === "complete" || document.readyState === "interactive") {

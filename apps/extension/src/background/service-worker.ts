@@ -145,9 +145,14 @@ async function handleCommand(command: Command): Promise<unknown> {
           const badge = badgeFor(grades, code);
           if (badge) byCode[normalizeCourseCode(code)] = badge;
         }
+        reporter.info(
+          `grades-for-courses: ${command.codes.length} codes → ${Object.keys(byCode).length} matched (src ${grades.baseUrl})`,
+        );
         return { ok: true, baseUrl: grades.baseUrl, byCode } satisfies GradesForCoursesResult;
       } catch (err) {
-        return { ok: false, error: (err as Error).message } satisfies GradesForCoursesResult;
+        const message = (err as Error).message;
+        reporter.error(`grades-for-courses failed: ${message}`);
+        return { ok: false, error: message } satisfies GradesForCoursesResult;
       }
     }
   }

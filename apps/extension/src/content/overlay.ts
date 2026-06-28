@@ -55,15 +55,23 @@ async function fetchBadges(codes: string[]): Promise<Record<string, GradeBadge>>
 }
 
 let scheduled = false;
+let lastSig = "";
 
-/** Scan the frame, request grades, and inject badges. Idempotent per row. */
-async function apply(doc: Document): Promise<void> {
+/**
+ * Scan the frame, request grades, and inject badges. Idempotent per row.
+ * `log` reports diagnostics to the sink so progress is visible while debugging.
+ */
+async function apply(doc: Document, log?: (m: string) => void): Promise<void> {
   const rows = rowsWithCodes(doc);
   if (rows.length === 0) return;
   const codes = [...new Set(rows.map((r) => r.courseCode as string))];
   const byCode = await fetchBadges(codes);
+  log?.(
+    `overlay: ${rows.length} rows, ${codes.length} codes [${codes.slice(0, 8).join(",")}] → ${Object.keys(byCode).length} matched`,
+  );
   if (Object.keys(byCode).length === 0) return;
 
+  let injected = 0;
   for (const row of rows) {
     const code = row.courseCode as string;
     const badge = byCode[code];
@@ -73,22 +81,31 @@ async function apply(doc: Document): Promise<void> {
     if (anchor.getAttribute(DONE_ATTR)) continue;
     anchor.setAttribute(DONE_ATTR, "1");
     anchor.append(makeBadge(code, badge));
+    injected++;
   }
+  if (injected > 0) log?.(`overlay: injected ${injected} badges`);
 }
 
 /** Debounced re-apply so PeopleSoft partial-page reloads keep their badges. */
-function reapply(doc: Document): void {
+function reapply(doc: Document, log?: (m: string) => void): void {
   if (scheduled) return;
   scheduled = true;
   setTimeout(() => {
     scheduled = false;
-    void apply(doc);
+    // Only re-run when the section set changed, to avoid log/lookup spam.
+    const sig = scanSections(doc)
+      .map((r) => r.courseCode)
+      .join(",");
+    if (sig && sig !== lastSig) {
+      lastSig = sig;
+      void apply(doc, log);
+    }
   }, 400);
 }
 
 /** Start the overlay: initial pass + observe DOM mutations. */
-export function startGradeOverlay(doc: Document): void {
-  void apply(doc);
-  const observer = new MutationObserver(() => reapply(doc));
+export function startGradeOverlay(doc: Document, log?: (m: string) => void): void {
+  void apply(doc, log);
+  const observer = new MutationObserver(() => reapply(doc, log));
   if (doc.body) observer.observe(doc.body, { childList: true, subtree: true });
 }
