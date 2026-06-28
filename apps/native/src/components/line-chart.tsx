@@ -1,7 +1,9 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import Svg, { Circle, Line, Path, Text as SvgText } from "react-native-svg";
 
+import { ChartTooltip, useChartScrub } from "@/components/chart-interaction";
 import { Fonts, Surface } from "@/constants/theme";
 
 export interface LineChartPoint {
@@ -20,6 +22,8 @@ export interface LineChartProps {
   color?: string;
   /** Format a y value for the axis labels. Default: 1 decimal. */
   formatValue?: (v: number) => string;
+  /** Format a value for the scrub tooltip. Defaults to the axis formatter. */
+  formatTooltipValue?: (v: number) => string;
 }
 
 const PAD_LEFT = 30;
@@ -41,6 +45,7 @@ export function LineChart({
   domain,
   color = Surface.accent,
   formatValue = (v) => v.toFixed(1),
+  formatTooltipValue,
 }: LineChartProps) {
   const [measured, setMeasured] = useState(0);
   const width = widthProp ?? measured;
@@ -84,67 +89,120 @@ export function LineChart({
     return Math.ceil(data.length / maxLabels);
   }, [data.length, plotW]);
 
+  const locate = useCallback(
+    (x: number) => {
+      if (data.length === 0) return null;
+      if (data.length === 1) return 0;
+      if (plotW <= 0) return null;
+      const idx = Math.round(((x - PAD_LEFT) / plotW) * (data.length - 1));
+      return Math.max(0, Math.min(data.length - 1, idx));
+    },
+    [data.length, plotW],
+  );
+  const { active, gesture } = useChartScrub(locate);
+  const activeIndex = active != null && active >= 0 && active < data.length ? active : null;
+  const activeDatum = activeIndex != null ? data[activeIndex] : null;
+  const activeX = activeIndex != null ? xFor(activeIndex) : 0;
+  const tooltipFmt = formatTooltipValue ?? formatValue;
+
   return (
-    <View
+    <GestureHandlerRootView
       style={styles.wrap}
       onLayout={(e) => setMeasured(e.nativeEvent.layout.width)}
       testID="line-chart"
     >
       {width > 0 && (
-        <Svg width={width} height={totalH}>
-          {ticks.map((t, i) => {
-            const y = yFor(t);
-            return (
-              <Line
-                key={`g${i}`}
-                x1={PAD_LEFT}
-                y1={y}
-                x2={width - PAD_RIGHT}
-                y2={y}
-                stroke={Surface.border}
-                strokeWidth={1}
-              />
-            );
-          })}
-          {ticks.map((t, i) => (
-            <SvgText
-              key={`t${i}`}
-              x={PAD_LEFT - 5}
-              y={yFor(t) + 3}
-              fontFamily={Fonts.mono}
-              fontSize={9}
-              fill={Surface.dimmed}
-              textAnchor="end"
-            >
-              {formatValue(t)}
-            </SvgText>
-          ))}
-          {data.map((d, i) => {
-            // Only render labels at the computed stride (plus the final one) so
-            // dense term axes (17+ terms) don't overlap into an unreadable smear.
-            const show = i % labelStride === 0 || i === data.length - 1;
-            if (!show) return null;
-            return (
-              <SvgText
-                key={`x${i}`}
-                x={xFor(i)}
-                y={totalH - 6}
-                fontFamily={Fonts.mono}
-                fontSize={9}
-                fill={Surface.dimmed}
-                textAnchor="middle"
-              >
-                {d.label}
-              </SvgText>
-            );
-          })}
-          {linePath !== "" && <Path d={linePath} stroke={color} strokeWidth={2} fill="none" />}
-          {data.map((d, i) => (
-            <Circle key={`c${i}`} cx={xFor(i)} cy={yFor(d.value)} r={3} fill={color} />
-          ))}
-        </Svg>
+        <>
+          <GestureDetector gesture={gesture}>
+            <View collapsable={false}>
+              <Svg width={width} height={totalH}>
+                {ticks.map((t, i) => {
+                  const y = yFor(t);
+                  return (
+                    <Line
+                      key={`g${i}`}
+                      x1={PAD_LEFT}
+                      y1={y}
+                      x2={width - PAD_RIGHT}
+                      y2={y}
+                      stroke={Surface.border}
+                      strokeWidth={1}
+                    />
+                  );
+                })}
+                {ticks.map((t, i) => (
+                  <SvgText
+                    key={`t${i}`}
+                    x={PAD_LEFT - 5}
+                    y={yFor(t) + 3}
+                    fontFamily={Fonts.mono}
+                    fontSize={9}
+                    fill={Surface.dimmed}
+                    textAnchor="end"
+                  >
+                    {formatValue(t)}
+                  </SvgText>
+                ))}
+                {data.map((d, i) => {
+                  // Only render labels at the computed stride (plus the final one)
+                  // so dense term axes (17+ terms) don't overlap into a smear.
+                  const show = i % labelStride === 0 || i === data.length - 1;
+                  if (!show) return null;
+                  return (
+                    <SvgText
+                      key={`x${i}`}
+                      x={xFor(i)}
+                      y={totalH - 6}
+                      fontFamily={Fonts.mono}
+                      fontSize={9}
+                      fill={Surface.dimmed}
+                      textAnchor="middle"
+                    >
+                      {d.label}
+                    </SvgText>
+                  );
+                })}
+                {activeIndex != null && (
+                  <Line
+                    x1={activeX}
+                    y1={PAD_TOP}
+                    x2={activeX}
+                    y2={PAD_TOP + plotH}
+                    stroke={Surface.accent}
+                    strokeWidth={1}
+                    strokeDasharray="3 3"
+                  />
+                )}
+                {linePath !== "" && (
+                  <Path d={linePath} stroke={color} strokeWidth={2} fill="none" />
+                )}
+                {data.map((d, i) => (
+                  <Circle key={`c${i}`} cx={xFor(i)} cy={yFor(d.value)} r={3} fill={color} />
+                ))}
+                {activeIndex != null && activeDatum != null && (
+                  <Circle
+                    cx={activeX}
+                    cy={yFor(activeDatum.value)}
+                    r={5}
+                    fill={color}
+                    stroke={Surface.page}
+                    strokeWidth={1.5}
+                  />
+                )}
+              </Svg>
+            </View>
+          </GestureDetector>
+          {activeIndex != null && activeDatum != null && (
+            <ChartTooltip
+              x={activeX}
+              chartWidth={width}
+              title={activeDatum.label}
+              value={tooltipFmt(activeDatum.value)}
+            />
+          )}
+        </>
       )}
-    </View>
+    </GestureHandlerRootView>
   );
 }
 
