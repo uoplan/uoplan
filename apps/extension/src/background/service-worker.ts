@@ -1,8 +1,16 @@
 import browser from "webextension-polyfill";
 import { SINK_URL } from "../shared/config";
 import { createReporter } from "../shared/log";
-import type { Command, SinkEvent } from "../shared/messages";
+import type { Command, GradeBadge, GradesForCoursesResult, SinkEvent } from "../shared/messages";
 import { loadGrades } from "../shared/grades";
+import type { LoadedGrades } from "../shared/grades";
+import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
+import {
+  aPlusPercent,
+  countedMass,
+  distributionGpa,
+  gpaToLetterGrade,
+} from "@uoplan/core/gradeDistribution";
 
 /**
  * Background service worker — the extension's hub.
@@ -54,6 +62,33 @@ function enqueue(event: SinkEvent): void {
 
 const reporter = createReporter({ source: "background", dispatch: enqueue });
 
+/** Memoize the in-flight/loaded grade payload so concurrent overlays share one fetch. */
+let gradesPromise: Promise<LoadedGrades> | undefined;
+async function getGrades(): Promise<LoadedGrades> {
+  if (gradesPromise) return gradesPromise;
+  gradesPromise = loadGrades();
+  try {
+    return await gradesPromise;
+  } catch (err) {
+    gradesPromise = undefined; // allow retry on failure
+    throw err;
+  }
+}
+
+/** Build a {@link GradeBadge} from a course-aggregate distribution, or null. */
+function badgeFor(grades: LoadedGrades, code: string): GradeBadge | undefined {
+  const dist = grades.lookups.aggregateByCourse.get(normalizeCourseCode(code));
+  if (!dist) return undefined;
+  const count = countedMass(dist);
+  if (count <= 0) return undefined;
+  return {
+    gpa: distributionGpa(dist),
+    letter: gpaToLetterGrade(distributionGpa(dist)),
+    aPlusPct: aPlusPercent(dist),
+    count,
+  };
+}
+
 function isSinkEvent(value: unknown): value is SinkEvent {
   const type = (value as { type?: string }).type;
   return type === "log" || type === "net" || type === "dom";
@@ -83,7 +118,7 @@ async function handleCommand(command: Command): Promise<unknown> {
 
     case "load-grades": {
       try {
-        const result = await loadGrades();
+        const result = await getGrades();
         const summary = {
           baseUrl: result.baseUrl,
           fromCache: result.fromCache,
@@ -99,6 +134,20 @@ async function handleCommand(command: Command): Promise<unknown> {
         const message = (err as Error).message;
         reporter.error(`grade load failed: ${message}`);
         return { ok: false, error: message };
+      }
+    }
+
+    case "grades-for-courses": {
+      try {
+        const grades = await getGrades();
+        const byCode: Record<string, GradeBadge> = {};
+        for (const code of command.codes) {
+          const badge = badgeFor(grades, code);
+          if (badge) byCode[normalizeCourseCode(code)] = badge;
+        }
+        return { ok: true, baseUrl: grades.baseUrl, byCode } satisfies GradesForCoursesResult;
+      } catch (err) {
+        return { ok: false, error: (err as Error).message } satisfies GradesForCoursesResult;
       }
     }
   }

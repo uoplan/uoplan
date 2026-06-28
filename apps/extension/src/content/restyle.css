@@ -27,3 +27,18 @@ table.PSLEVEL1GRIDNBO {
   max-width: 100%;
   overflow-x: auto;
 }
+
+/* uoPlan grade badge injected beside class-search section names. */
+.uoplan-grade-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: #8ec5ff;
+  color: #102a43;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  vertical-align: middle;
+}

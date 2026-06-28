@@ -89,7 +89,7 @@ function rowText(doc: Document, id: string): string {
  * rows keyed by `MTG_CLASS_NBR$N` (+ `MTG_CLASSNAME/DAYTIME/INSTR$N`, status img),
  * component sub-tables as `tr[id^='trSSR_CLS_TBL_R*']` with ≥7 cells.
  */
-function scanSections(doc: Document): SectionRow[] {
+export function scanSections(doc: Document): SectionRow[] {
   const rows: SectionRow[] = [];
 
   for (const a of Array.from(doc.querySelectorAll<HTMLElement>("a[id^='MTG_CLASS_NBR$']"))) {

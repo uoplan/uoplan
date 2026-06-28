@@ -2,6 +2,7 @@ import browser from "webextension-polyfill";
 import { createReporter } from "../shared/log";
 import type { NetEvent, SinkEvent } from "../shared/messages";
 import { collectDom } from "./collect";
+import { startGradeOverlay } from "./overlay";
 
 /**
  * Isolated-world content script (runs in EVERY frame — PeopleSoft nests the real
@@ -66,6 +67,7 @@ reporter.info(`content script attached (${inFrame ? "iframe" : "top"}): ${locati
 function scheduleInitialDumps(): void {
   dumpDom();
   setTimeout(dumpDom, 1500);
+  startGradeOverlay(document);
 }
 
 if (document.readyState === "complete" || document.readyState === "interactive") {

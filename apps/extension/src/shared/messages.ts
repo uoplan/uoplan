@@ -80,8 +80,30 @@ export interface DomEvent extends EventContext {
 /** Anything the background relays to the dev log-sink. */
 export type SinkEvent = LogEvent | NetEvent | DomEvent;
 
+/** Compact grade summary for one course code, sent content ← background. */
+export interface GradeBadge {
+  /** Mean GPA across all professor rows for the course, or null. */
+  gpa: number | null;
+  /** Letter grade for `gpa` (e.g. "A-"), or null. */
+  letter: string | null;
+  /** Percentage of A+ grades, 0–100, or null. */
+  aPlusPct: number | null;
+  /** Total counted grade mass behind the distribution. */
+  count: number;
+}
+
 /** Commands sent toward the background or content scripts. */
 export type Command =
   | { type: "cmd"; name: "dump-dom" }
   | { type: "cmd"; name: "load-grades" }
+  | { type: "cmd"; name: "grades-for-courses"; codes: string[] }
   | { type: "cmd"; name: "ping" };
+
+/** Background reply to a `grades-for-courses` command. */
+export interface GradesForCoursesResult {
+  ok: boolean;
+  error?: string;
+  baseUrl?: string;
+  /** Normalized course code → badge (only codes with data are present). */
+  byCode?: Record<string, GradeBadge>;
+}
