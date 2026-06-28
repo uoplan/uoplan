@@ -14,6 +14,10 @@ jest.mock("expo-router", () => ({
   useRouter: () => ({ replace: mockReplace }),
 }));
 
+jest.mock("@/components/loading-screen", () => ({
+  LoadingScreen: () => null,
+}));
+
 function createStorage(initialCompleted = false): OnboardingStorage {
   let completed = initialCompleted;
   return {
@@ -80,6 +84,8 @@ describe("OnboardingScreen", () => {
     fireEvent.press(getByTestId("onboarding-personalize"));
 
     expect(mockReplace).toHaveBeenCalledWith(PERSONALIZE_ROUTE);
+    // `complete()` is deferred to the next frame (so the loading overlay paints
+    // before the heavy navigator mount), so wait for the persisted flag.
     await waitFor(() => expect(storage.write).toHaveBeenCalledWith(true));
   });
 
