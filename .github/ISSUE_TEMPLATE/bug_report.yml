@@ -1,0 +1,97 @@
+name: 🐛 Bug report
+description: Report something that isn't working in uoplan
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug! Please search
+        [existing issues](https://github.com/uoplan/uoplan/issues) first to avoid duplicates.
+
+        If this is a **security vulnerability**, do not file it here — see
+        [SECURITY.md](https://github.com/uoplan/uoplan/blob/main/.github/SECURITY.md).
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear and concise description of the bug.
+      placeholder: When I generate a schedule for the Fall 2026 term, ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce it? Be as specific as possible.
+      placeholder: |
+        1. Go to '...'
+        2. Pick program '...'
+        3. Click 'Generate'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What did you expect to happen instead?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which area is affected?
+      description: Pick the part of the project that best matches.
+      options:
+        - Web app (planner UI)
+        - Native app (iOS / Android)
+        - Schedule generation / engine
+        - Explore (courses, professors, grades)
+        - Data (course / schedule / grade / prerequisite data)
+        - CLI (enrolment)
+        - Sharing / OG image / web-push
+        - Internationalisation (English / French)
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: Share link or URL
+      description: If applicable, a share link or the page URL where it happens (remove anything private).
+      placeholder: https://uoplan.party/...
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Where did you see this? (browser/OS, or device for the native app, app version)
+      placeholder: |
+        - Device/OS: macOS 15 / iPhone 16 (iOS 18)
+        - Browser: Chrome 130
+        - uoplan version (if known):
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console output / screenshots
+      description: Paste any relevant console errors or attach screenshots. This will be automatically formatted as code.
+      render: shell
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and didn't find a duplicate.
+          required: true
+        - label: This is not a security vulnerability (those go through SECURITY.md).
+          required: true

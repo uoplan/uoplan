@@ -1,0 +1,66 @@
+name: ✨ Feature request
+description: Suggest an idea or improvement for uoplan
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion! Please search
+        [existing issues](https://github.com/uoplan/uoplan/issues) first in case it's
+        already been proposed.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the problem or pain point. "I'm always frustrated when ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What would you like to happen? Describe the feature or change.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any alternative solutions or workarounds you've thought about.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which area does this relate to?
+      options:
+        - Web app (planner UI)
+        - Native app (iOS / Android)
+        - Schedule generation / engine
+        - Explore (courses, professors, grades)
+        - Data (course / schedule / grade / prerequisite data)
+        - CLI (enrolment)
+        - Sharing / OG image / web-push
+        - Internationalisation (English / French)
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Mockups, screenshots, links, or anything else that helps explain the idea.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and didn't find a duplicate.
+          required: true
+        - label: I'd be willing to help work on this.
+          required: false
