@@ -2165,6 +2165,9 @@ msgstr "Durée des pauses (min)"
 msgid "optimize.heading"
 msgstr "Priorités d'optimisation"
 
+msgid "optimize.dragHandle"
+msgstr "Réorganiser {label}"
+
 #: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:135
 msgid "optimize.moveDown"
 msgstr "Descendre"

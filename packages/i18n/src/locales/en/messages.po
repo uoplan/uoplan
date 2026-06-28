@@ -2165,6 +2165,9 @@ msgstr "Break length (min)"
 msgid "optimize.heading"
 msgstr "Optimization priorities"
 
+msgid "optimize.dragHandle"
+msgstr "Reorder {label}"
+
 #: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:135
 msgid "optimize.moveDown"
 msgstr "Move down"
