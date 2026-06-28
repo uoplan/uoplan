@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.0.0-beta.39](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.38...uoplan-monorepo-v1.0.0-beta.39) (2026-06-28)
+
+
+### Features
+
+* **native:** interactive choosing-courses chart and truncate biggest-risers label ([85692cd](https://github.com/uoplan/uoplan/commit/85692cdf271ceac2d0ff3505d327271c654c0c4e))
+* **native:** make trend charts interactive with tap/drag value tooltips ([80d58d8](https://github.com/uoplan/uoplan/commit/80d58d8dd68852e2197a35cd513d1c3fce1fd124))
+
+
+### Bug Fixes
+
+* **cli:** match release-please tag scheme (uoplan-v*) for self-update ([5c2403b](https://github.com/uoplan/uoplan/commit/5c2403bcaa172ddae96a66c4960192544f29a7f6))
+* **native:** defer onboarding exit with a loading overlay so Skip doesn't freeze ([5700936](https://github.com/uoplan/uoplan/commit/57009362d8c2fa2093517e9179799559da5b0ecd))
+* **native:** fix iOS black screen and remove expo-asset metro hack ([8dd8449](https://github.com/uoplan/uoplan/commit/8dd8449cbdff16407e21ba8c70bc604a3f67ae17))
+* **native:** show a skeleton on the explore tab while heavy data is deferred ([bd17ff6](https://github.com/uoplan/uoplan/commit/bd17ff6ce633ab203454adf649f3e48570095f9e))
+* **native:** truncate leaderboard discipline name so the delta isn't pushed off-screen ([11e6237](https://github.com/uoplan/uoplan/commit/11e62372b7be55984e03917dbbc774a72a70df5f))
+* share canonical-aware requirement auto-assignment between web and native ([5a7e7f2](https://github.com/uoplan/uoplan/commit/5a7e7f276324b5940bdea3e1c352d37af7700d6f))
+
 ## [1.0.0-beta.38](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.37...uoplan-monorepo-v1.0.0-beta.38) (2026-06-28)
 
 

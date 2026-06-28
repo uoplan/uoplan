@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/uoplan/uoplan/compare/uoplan-v1.0.0...uoplan-v1.0.1) (2026-06-28)
+
+
+### Bug Fixes
+
+* **cli:** match release-please tag scheme (uoplan-v*) for self-update ([5c2403b](https://github.com/uoplan/uoplan/commit/5c2403bcaa172ddae96a66c4960192544f29a7f6))
+
 ## [1.0.0](https://github.com/uoplan/uoplan/compare/uoplan-v0.4.2...uoplan-v1.0.0) (2026-05-29)
 
 
