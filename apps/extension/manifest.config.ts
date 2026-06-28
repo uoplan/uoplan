@@ -24,11 +24,11 @@ export default defineManifest({
     "Improves the uoCampus (PeopleSoft) layout and overlays uoPlan grade data beside courses.",
   version: pkg.version,
   action: { default_popup: "src/popup/index.html", default_title: "uoPlan" },
-  background: { service_worker: "src/background/index.ts", type: "module" },
+  background: { service_worker: "src/background/service-worker.ts", type: "module" },
   content_scripts: [
     {
       matches: UOTTAWA_MATCHES,
-      js: ["src/content/index.ts"],
+      js: ["src/content/content-script.ts"],
       css: ["src/content/restyle.css"],
       all_frames: true,
       run_at: "document_start",
