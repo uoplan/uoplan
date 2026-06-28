@@ -1,7 +1,17 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import Svg, { Defs, LinearGradient, Path, Stop, Text as SvgText } from "react-native-svg";
+import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
+import Svg, {
+  Circle,
+  Defs,
+  Line,
+  LinearGradient,
+  Path,
+  Stop,
+  Text as SvgText,
+} from "react-native-svg";
 
+import { ChartTooltip, useChartScrub } from "@/components/chart-interaction";
 import { Fonts, Surface } from "@/constants/theme";
 
 export interface AreaChartPoint {
@@ -18,6 +28,8 @@ export interface AreaChartProps {
   domain?: [number, number];
   color?: string;
   formatValue?: (v: number) => string;
+  /** Format a value for the scrub tooltip. Defaults to the axis formatter. */
+  formatTooltipValue?: (v: number) => string;
 }
 
 const PAD_LEFT = 30;
@@ -38,6 +50,7 @@ export function AreaChart({
   domain,
   color = Surface.accent,
   formatValue = (v) => v.toFixed(1),
+  formatTooltipValue,
 }: AreaChartProps) {
   const [measured, setMeasured] = useState(0);
   const width = widthProp ?? measured;
@@ -82,55 +95,108 @@ export function AreaChart({
     return Math.ceil(data.length / maxLabels);
   }, [data.length, plotW]);
 
+  const locate = useCallback(
+    (x: number) => {
+      if (data.length === 0) return null;
+      if (data.length === 1) return 0;
+      if (plotW <= 0) return null;
+      const idx = Math.round(((x - PAD_LEFT) / plotW) * (data.length - 1));
+      return Math.max(0, Math.min(data.length - 1, idx));
+    },
+    [data.length, plotW],
+  );
+  const { active, gesture } = useChartScrub(locate);
+  const activeIndex = active != null && active >= 0 && active < data.length ? active : null;
+  const activeDatum = activeIndex != null ? data[activeIndex] : null;
+  const activeX = activeIndex != null ? xFor(activeIndex) : 0;
+  const tooltipFmt = formatTooltipValue ?? formatValue;
+
   return (
-    <View
+    <GestureHandlerRootView
       style={styles.wrap}
       onLayout={(e) => setMeasured(e.nativeEvent.layout.width)}
       testID="area-chart"
     >
       {width > 0 && (
-        <Svg width={width} height={totalH}>
-          <Defs>
-            <LinearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
-              <Stop offset="0" stopColor={color} stopOpacity={0.35} />
-              <Stop offset="1" stopColor={color} stopOpacity={0.02} />
-            </LinearGradient>
-          </Defs>
-          {ticks.map((t, i) => (
-            <SvgText
-              key={`yl${i}`}
-              x={PAD_LEFT - 5}
-              y={yFor(t) + 3}
-              fontFamily={Fonts.mono}
-              fontSize={9}
-              fill={Surface.dimmed}
-              textAnchor="end"
-            >
-              {formatValue(t)}
-            </SvgText>
-          ))}
-          {data.map((d, i) => {
-            const show = i % labelStride === 0 || i === data.length - 1;
-            if (!show) return null;
-            return (
-              <SvgText
-                key={`xl${i}`}
-                x={xFor(i)}
-                y={totalH - 6}
-                fontFamily={Fonts.mono}
-                fontSize={9}
-                fill={Surface.dimmed}
-                textAnchor="middle"
-              >
-                {d.label}
-              </SvgText>
-            );
-          })}
-          {areaPath !== "" && <Path d={areaPath} fill="url(#areaFill)" />}
-          {linePath !== "" && <Path d={linePath} stroke={color} strokeWidth={2} fill="none" />}
-        </Svg>
+        <>
+          <GestureDetector gesture={gesture}>
+            <View collapsable={false}>
+              <Svg width={width} height={totalH}>
+                <Defs>
+                  <LinearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+                    <Stop offset="0" stopColor={color} stopOpacity={0.35} />
+                    <Stop offset="1" stopColor={color} stopOpacity={0.02} />
+                  </LinearGradient>
+                </Defs>
+                {ticks.map((t, i) => (
+                  <SvgText
+                    key={`yl${i}`}
+                    x={PAD_LEFT - 5}
+                    y={yFor(t) + 3}
+                    fontFamily={Fonts.mono}
+                    fontSize={9}
+                    fill={Surface.dimmed}
+                    textAnchor="end"
+                  >
+                    {formatValue(t)}
+                  </SvgText>
+                ))}
+                {data.map((d, i) => {
+                  const show = i % labelStride === 0 || i === data.length - 1;
+                  if (!show) return null;
+                  return (
+                    <SvgText
+                      key={`xl${i}`}
+                      x={xFor(i)}
+                      y={totalH - 6}
+                      fontFamily={Fonts.mono}
+                      fontSize={9}
+                      fill={Surface.dimmed}
+                      textAnchor="middle"
+                    >
+                      {d.label}
+                    </SvgText>
+                  );
+                })}
+                {areaPath !== "" && <Path d={areaPath} fill="url(#areaFill)" />}
+                {linePath !== "" && (
+                  <Path d={linePath} stroke={color} strokeWidth={2} fill="none" />
+                )}
+                {activeIndex != null && (
+                  <Line
+                    x1={activeX}
+                    y1={PAD_TOP}
+                    x2={activeX}
+                    y2={PAD_TOP + plotH}
+                    stroke={Surface.accent}
+                    strokeWidth={1}
+                    strokeDasharray="3 3"
+                  />
+                )}
+                {activeIndex != null && activeDatum != null && (
+                  <Circle
+                    cx={activeX}
+                    cy={yFor(activeDatum.value)}
+                    r={5}
+                    fill={color}
+                    stroke={Surface.page}
+                    strokeWidth={1.5}
+                  />
+                )}
+              </Svg>
+            </View>
+          </GestureDetector>
+          {activeIndex != null && activeDatum != null && (
+            <ChartTooltip
+              x={activeX}
+              chartWidth={width}
+              title={activeDatum.label}
+              value={tooltipFmt(activeDatum.value)}
+            />
+          )}
+        </>
       )}
-    </View>
+    </GestureHandlerRootView>
   );
 }
 

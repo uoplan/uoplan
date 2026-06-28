@@ -1,7 +1,9 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import Svg, { Line, Rect, Text as SvgText } from "react-native-svg";
 
+import { ChartTooltip, useChartScrub } from "@/components/chart-interaction";
 import { Fonts, Surface } from "@/constants/theme";
 
 export interface BarChartDatum {
@@ -20,6 +22,8 @@ export interface BarChartProps {
   maxValue?: number;
   color?: string;
   formatValue?: (v: number) => string;
+  /** Format a value for the scrub tooltip. Defaults to 1 decimal. */
+  formatTooltipValue?: (v: number) => string;
 }
 
 const PAD_LEFT = 30;
@@ -41,6 +45,7 @@ export function BarChart({
   maxValue,
   color = Surface.accent,
   formatValue = (v) => v.toFixed(1),
+  formatTooltipValue = (v) => v.toFixed(1),
 }: BarChartProps) {
   const [measured, setMeasured] = useState(0);
   const width = widthProp ?? measured;
@@ -66,69 +71,108 @@ export function BarChart({
     [maxY],
   );
 
+  const locate = useCallback(
+    (x: number) => {
+      if (data.length === 0 || slot <= 0) return null;
+      const idx = Math.floor((x - PAD_LEFT) / slot);
+      return Math.max(0, Math.min(data.length - 1, idx));
+    },
+    [data.length, slot],
+  );
+  const { active, gesture } = useChartScrub(locate);
+  const activeIndex = active != null && active >= 0 && active < data.length ? active : null;
+  const activeDatum = activeIndex != null ? data[activeIndex] : null;
+  const activeCursorX = activeIndex != null ? PAD_LEFT + activeIndex * slot + slot / 2 : 0;
+
   return (
-    <View
+    <GestureHandlerRootView
       style={styles.wrap}
       onLayout={(e) => setMeasured(e.nativeEvent.layout.width)}
       testID="bar-chart"
     >
       {width > 0 && (
-        <Svg width={width} height={totalH}>
-          {ticks.map((t, i) => (
-            <Line
-              key={`g${i}`}
-              x1={PAD_LEFT}
-              y1={yFor(t)}
-              x2={width - PAD_RIGHT}
-              y2={yFor(t)}
-              stroke={Surface.border}
-              strokeWidth={1}
+        <>
+          <GestureDetector gesture={gesture}>
+            <View collapsable={false}>
+              <Svg width={width} height={totalH}>
+                {ticks.map((t, i) => (
+                  <Line
+                    key={`g${i}`}
+                    x1={PAD_LEFT}
+                    y1={yFor(t)}
+                    x2={width - PAD_RIGHT}
+                    y2={yFor(t)}
+                    stroke={Surface.border}
+                    strokeWidth={1}
+                  />
+                ))}
+                {ticks.map((t, i) => (
+                  <SvgText
+                    key={`tl${i}`}
+                    x={PAD_LEFT - 5}
+                    y={yFor(t) + 3}
+                    fontFamily={Fonts.mono}
+                    fontSize={9}
+                    fill={Surface.dimmed}
+                    textAnchor="end"
+                  >
+                    {formatValue(t)}
+                  </SvgText>
+                ))}
+                {data.map((d, i) => {
+                  const x = PAD_LEFT + i * slot + (slot - barW) / 2;
+                  const y = yFor(d.value);
+                  return (
+                    <Rect
+                      key={`b${i}`}
+                      x={x}
+                      y={y}
+                      width={barW}
+                      height={Math.max(0, PAD_TOP + plotH - y)}
+                      rx={3}
+                      fill={d.color ?? color}
+                      fillOpacity={activeIndex == null || activeIndex === i ? 1 : 0.4}
+                    />
+                  );
+                })}
+                {data.map((d, i) => (
+                  <SvgText
+                    key={`xl${i}`}
+                    x={PAD_LEFT + i * slot + slot / 2}
+                    y={totalH - 8}
+                    fontFamily={Fonts.mono}
+                    fontSize={9}
+                    fill={Surface.dimmed}
+                    textAnchor="middle"
+                  >
+                    {d.label}
+                  </SvgText>
+                ))}
+                {activeIndex != null && activeDatum != null && (
+                  <Line
+                    x1={activeCursorX}
+                    y1={PAD_TOP}
+                    x2={activeCursorX}
+                    y2={PAD_TOP + plotH}
+                    stroke={Surface.accent}
+                    strokeWidth={1}
+                    strokeDasharray="3 3"
+                  />
+                )}
+              </Svg>
+            </View>
+          </GestureDetector>
+          {activeIndex != null && activeDatum != null && (
+            <ChartTooltip
+              x={activeCursorX}
+              chartWidth={width}
+              title={activeDatum.label}
+              value={formatTooltipValue(activeDatum.value)}
             />
-          ))}
-          {ticks.map((t, i) => (
-            <SvgText
-              key={`tl${i}`}
-              x={PAD_LEFT - 5}
-              y={yFor(t) + 3}
-              fontFamily={Fonts.mono}
-              fontSize={9}
-              fill={Surface.dimmed}
-              textAnchor="end"
-            >
-              {formatValue(t)}
-            </SvgText>
-          ))}
-          {data.map((d, i) => {
-            const x = PAD_LEFT + i * slot + (slot - barW) / 2;
-            const y = yFor(d.value);
-            return (
-              <Rect
-                key={`b${i}`}
-                x={x}
-                y={y}
-                width={barW}
-                height={Math.max(0, PAD_TOP + plotH - y)}
-                rx={3}
-                fill={d.color ?? color}
-              />
-            );
-          })}
-          {data.map((d, i) => (
-            <SvgText
-              key={`xl${i}`}
-              x={PAD_LEFT + i * slot + slot / 2}
-              y={totalH - 8}
-              fontFamily={Fonts.mono}
-              fontSize={9}
-              fill={Surface.dimmed}
-              textAnchor="middle"
-            >
-              {d.label}
-            </SvgText>
-          ))}
-        </Svg>
+          )}
+        </>
       )}
-    </View>
+    </GestureHandlerRootView>
   );
 }
 

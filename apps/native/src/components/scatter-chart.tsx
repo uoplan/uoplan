@@ -1,7 +1,9 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import Svg, { Circle, Line, Text as SvgText } from "react-native-svg";
 
+import { ChartTooltip, useChartScrub } from "@/components/chart-interaction";
 import { Fonts, Surface } from "@/constants/theme";
 
 export interface ScatterPoint {
@@ -83,64 +85,114 @@ export function ScatterChart({
     [minX, maxX],
   );
 
+  // Nearest point by screen-space (euclidean) distance, so a tap/drag anywhere
+  // near a point selects it — scatter has no single axis to bucket along.
+  const locate = useCallback(
+    (px: number, py: number) => {
+      if (data.length === 0 || width === 0) return null;
+      let best = -1;
+      let bestDist = Infinity;
+      for (let i = 0; i < data.length; i++) {
+        const dx = xFor(data[i].x) - px;
+        const dy = yFor(data[i].y) - py;
+        const dist = dx * dx + dy * dy;
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = i;
+        }
+      }
+      return best < 0 ? null : best;
+    },
+    [data, width, minX, maxX, minY, maxY, plotW, plotH],
+  );
+  const { active, gesture } = useChartScrub(locate);
+  const activeIndex = active != null && active >= 0 && active < data.length ? active : null;
+  const activeDatum = activeIndex != null ? data[activeIndex] : null;
+  const activeX = activeDatum != null ? xFor(activeDatum.x) : 0;
+  const activeY = activeDatum != null ? yFor(activeDatum.y) : 0;
+
   return (
-    <View
+    <GestureHandlerRootView
       style={styles.wrap}
       onLayout={(e) => setMeasured(e.nativeEvent.layout.width)}
       testID="scatter-chart"
     >
       {width > 0 && (
-        <Svg width={width} height={totalH}>
-          {yTicks.map((t, i) => (
-            <Line
-              key={`gy${i}`}
-              x1={PAD_LEFT}
-              y1={yFor(t)}
-              x2={width - PAD_RIGHT}
-              y2={yFor(t)}
-              stroke={Surface.border}
-              strokeWidth={1}
+        <>
+          <GestureDetector gesture={gesture}>
+            <View collapsable={false}>
+              <Svg width={width} height={totalH}>
+                {yTicks.map((t, i) => (
+                  <Line
+                    key={`gy${i}`}
+                    x1={PAD_LEFT}
+                    y1={yFor(t)}
+                    x2={width - PAD_RIGHT}
+                    y2={yFor(t)}
+                    stroke={Surface.border}
+                    strokeWidth={1}
+                  />
+                ))}
+                {yTicks.map((t, i) => (
+                  <SvgText
+                    key={`yl${i}`}
+                    x={PAD_LEFT - 5}
+                    y={yFor(t) + 3}
+                    fontFamily={Fonts.mono}
+                    fontSize={9}
+                    fill={Surface.dimmed}
+                    textAnchor="end"
+                  >
+                    {formatY(t)}
+                  </SvgText>
+                ))}
+                {xTicks.map((t, i) => (
+                  <SvgText
+                    key={`xl${i}`}
+                    x={xFor(t)}
+                    y={totalH - 6}
+                    fontFamily={Fonts.mono}
+                    fontSize={9}
+                    fill={Surface.dimmed}
+                    textAnchor="middle"
+                  >
+                    {formatX(t)}
+                  </SvgText>
+                ))}
+                {data.map((d, i) => (
+                  <Circle
+                    key={`p${i}`}
+                    cx={xFor(d.x)}
+                    cy={yFor(d.y)}
+                    r={5}
+                    fill={d.color ?? color}
+                    fillOpacity={activeIndex != null && activeIndex !== i ? 0.3 : 0.75}
+                  />
+                ))}
+                {activeIndex != null && activeDatum != null && (
+                  <Circle
+                    cx={activeX}
+                    cy={activeY}
+                    r={7}
+                    fill="none"
+                    stroke={activeDatum.color ?? color}
+                    strokeWidth={2}
+                  />
+                )}
+              </Svg>
+            </View>
+          </GestureDetector>
+          {activeIndex != null && activeDatum != null && (
+            <ChartTooltip
+              x={activeX}
+              chartWidth={width}
+              title={activeDatum.label ?? formatX(activeDatum.x)}
+              value={`${formatX(activeDatum.x)} · ${formatY(activeDatum.y)}`}
             />
-          ))}
-          {yTicks.map((t, i) => (
-            <SvgText
-              key={`yl${i}`}
-              x={PAD_LEFT - 5}
-              y={yFor(t) + 3}
-              fontFamily={Fonts.mono}
-              fontSize={9}
-              fill={Surface.dimmed}
-              textAnchor="end"
-            >
-              {formatY(t)}
-            </SvgText>
-          ))}
-          {xTicks.map((t, i) => (
-            <SvgText
-              key={`xl${i}`}
-              x={xFor(t)}
-              y={totalH - 6}
-              fontFamily={Fonts.mono}
-              fontSize={9}
-              fill={Surface.dimmed}
-              textAnchor="middle"
-            >
-              {formatX(t)}
-            </SvgText>
-          ))}
-          {data.map((d, i) => (
-            <Circle
-              key={`p${i}`}
-              cx={xFor(d.x)}
-              cy={yFor(d.y)}
-              r={5}
-              fill={d.color ?? color}
-              fillOpacity={0.75}
-            />
-          ))}
-        </Svg>
+          )}
+        </>
       )}
-    </View>
+    </GestureHandlerRootView>
   );
 }
 
