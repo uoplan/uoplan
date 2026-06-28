@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.0-beta.38](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.37...uoplan-monorepo-v1.0.0-beta.38) (2026-06-28)
+
+
+### Features
+
+* **native:** add a reset button to the personalize wizard ([2d0565c](https://github.com/uoplan/uoplan/commit/2d0565c49bd11124e4d43b25ad6a589926e8fb05))
+
+
+### Bug Fixes
+
+* **ci:** trigger native deploy on root release_created output (release-please root component is unprefixed) ([4d58ca2](https://github.com/uoplan/uoplan/commit/4d58ca2eb0ba84739f4c304ec08450fe99e0112c))
+* **native:** float personalize controls over content instead of an opaque bottom band ([6034aca](https://github.com/uoplan/uoplan/commit/6034aca36bc9415ea18deda4f48294a638093906))
+* **native:** only regenerate schedules while the schedule screen is focused ([42b625d](https://github.com/uoplan/uoplan/commit/42b625db3a23888a925dd2fcf3ff3312bd00361e))
+* **native:** only show unassigned completed courses on fill-requirements page ([5237620](https://github.com/uoplan/uoplan/commit/5237620f9fe2d9b52c597742e3f9d4c59f95bf0f))
+* **web:** give optimization-priority drag handles an accessible name ([c454fc6](https://github.com/uoplan/uoplan/commit/c454fc69ec3002de43a1b39f67324e3c4284457c))
+
 ## [1.0.0-beta.37](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.36...uoplan-monorepo-v1.0.0-beta.37) (2026-06-27)
 
 
