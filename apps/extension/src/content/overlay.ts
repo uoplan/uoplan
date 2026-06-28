@@ -29,12 +29,9 @@ function makeBadge(code: string, b: GradeBadge): HTMLElement {
   return el;
 }
 
-/** Element to attach the badge to for a given row (search rows only). */
+/** Element to attach the badge to for a given row (those with an anchor id). */
 function anchorFor(doc: Document, row: SectionRow): HTMLElement | null {
-  if (row.kind === "search") {
-    return doc.querySelector<HTMLElement>(`[id='MTG_CLASSNAME$${row.index}']`);
-  }
-  return null;
+  return row.anchorId ? doc.getElementById(row.anchorId) : null;
 }
 
 function rowsWithCodes(doc: Document): SectionRow[] {

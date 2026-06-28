@@ -108,6 +108,7 @@ export function scanSections(doc: Document): SectionRow[] {
       days: rowText(doc, `MTG_DAYTIME$${index}`),
       instructor: rowText(doc, `MTG_INSTR$${index}`),
       status: statusImg?.alt ?? "",
+      anchorId: `MTG_CLASSNAME$${index}`,
     });
   }
 
@@ -126,6 +127,27 @@ export function scanSections(doc: Document): SectionRow[] {
       days: cell(3),
       instructor: cell(5),
       status: cells[6]?.querySelector("img")?.getAttribute("alt") ?? "",
+    });
+  }
+
+  // Enrollment cart / schedule rows (mirrors apps/cli cart.rs): a course row has
+  // a `P_CLASS_NAME$buf` label; bufnum comes from the `trSSR_REGFORM_VW` ancestor.
+  for (const nameEl of Array.from(doc.querySelectorAll<HTMLElement>("[id^='P_CLASS_NAME$']"))) {
+    const buf = nameEl.id.split("$")[1] ?? "";
+    if (!buf) continue;
+    const name = (nameEl.textContent ?? "").replaceAll(/\s+/g, " ").trim();
+    const code = COURSE_CODE_RE.exec(name)?.slice(1, 3).join("") || undefined;
+    if (!code) continue;
+    rows.push({
+      kind: "cart",
+      index: rows.length,
+      classNbr: "",
+      name,
+      courseCode: code,
+      days: "",
+      instructor: rowText(doc, `DERIVED_REGFRM1_SSR_INSTR_LONG$${buf}`),
+      status: "",
+      anchorId: nameEl.id,
     });
   }
 

@@ -51,8 +51,8 @@ export interface NetEvent extends EventContext {
  * `MTG_DAYTIME$N`, `MTG_INSTR$N`, plus companion rows `trSSR_CLS_TBL_R*`.
  */
 export interface SectionRow {
-  /** Origin: search results (`MTG_*`) or a component sub-table (`SSR_CLS_TBL`). */
-  kind: "search" | "component";
+  /** Origin: search results, a component sub-table, or the enrollment cart. */
+  kind: "search" | "component" | "cart";
   index: number;
   classNbr: string;
   /** Raw section label, e.g. "ADM1100-A LEC". */
@@ -62,6 +62,8 @@ export interface SectionRow {
   days: string;
   instructor: string;
   status: string;
+  /** Element id the grade badge should attach to, when known. */
+  anchorId?: string;
 }
 
 /** A serialized DOM/iframe structure snapshot of a single frame. */
