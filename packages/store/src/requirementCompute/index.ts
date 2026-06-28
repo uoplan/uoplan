@@ -2,29 +2,16 @@ import type { CourseLanguageBucket, CourseLevelBucket, DataCache, Program } from
 import {
   buildPrereqContext,
   canTakeCourse,
+  computeRequirementAutoAssignment,
   computeRequirementsState,
   courseMatchesFilters,
-  getAutoSelectedForRequirements,
-  getAutoSelectedSingleEligibleCompleted,
-  normalizeCourseCode,
 } from "@uoplan/core";
 import { mergeProgramWithMinor } from "./minorMerge";
 import type { RecomputedState } from "./types";
-import { collectAssignedFromExactRequirements } from "./utils";
 
 export * from "./types";
 export * from "./utils";
 export * from "./minorMerge";
-
-const GROUP_STYLE_TYPES = [
-  "group",
-  "pick",
-  "elective",
-  "discipline_elective",
-  "faculty_elective",
-  "free_elective",
-  "non_discipline_elective",
-] as const;
 
 export function recomputeStateForProgram(
   program: Program | null,
@@ -63,48 +50,15 @@ export function recomputeStateForProgram(
     existingSelectedOptionsPerRequirement,
   );
 
-  const userLockedSelections: Record<string, string[]> = {};
-  for (const [reqId, codes] of Object.entries(existingSelectedPerRequirement)) {
-    if (requirementSlotsUserTouched[reqId]) {
-      userLockedSelections[reqId] = codes;
-    }
-  }
-
-  const autoSelected = getAutoSelectedForRequirements(remaining, userLockedSelections, cache);
-
-  // Unassigned completed = completed minus exact-match minus courses locked to user-touched slots.
-  const assignedFromExact = collectAssignedFromExactRequirements(tree);
-  const assignedFromSelected = new Set<string>();
-  for (const [reqId, codes] of Object.entries(existingSelectedPerRequirement)) {
-    if (!requirementSlotsUserTouched[reqId]) continue;
-    for (const code of codes) {
-      assignedFromSelected.add(normalizeCourseCode(code));
-    }
-  }
-  const completedNormalized = new Set(completedCourses.map((c) => cache.resolveToCanonical(c)));
-  const isWorkTerm = (normCode: string): boolean => {
-    const course = cache.getCourse(normCode);
-    const component = course?.component?.trim().toLowerCase() ?? "";
-    return component.startsWith("stage / work term");
-  };
-  const unassignedCompleted = [...completedNormalized].filter(
-    (norm) => !assignedFromExact.has(norm) && !assignedFromSelected.has(norm) && !isWorkTerm(norm),
-  );
-
-  // For group-style requirements, augment candidate list with unassigned completed (eligible) first.
-  const augmentedRemaining = remaining.map((req) => {
-    if (
-      !req.candidateCourses?.length ||
-      !GROUP_STYLE_TYPES.includes(req.type as (typeof GROUP_STYLE_TYPES)[number])
-    ) {
-      return req;
-    }
-    const eligibleSet = new Set(req.candidateCourses.map(normalizeCourseCode));
-    const unassignedEligible = unassignedCompleted.filter((norm) => eligibleSet.has(norm));
-    const displayCodes = unassignedEligible.map((norm) => cache.getCourse(norm)?.code ?? norm);
-    const candidateCourses = [...new Set([...displayCodes, ...req.candidateCourses])];
-    return { ...req, candidateCourses };
+  const autoAssignment = computeRequirementAutoAssignment({
+    remaining,
+    tree,
+    completedCourses,
+    cache,
+    selectedPerRequirement: existingSelectedPerRequirement,
+    requirementSlotsUserTouched,
   });
+  const augmentedRemaining = autoAssignment.augmentedRemaining;
 
   const ctx = buildPrereqContext(completedCourses, cache, studentPrograms);
   const candidateSet = new Set<string>();
@@ -128,43 +82,14 @@ export function recomputeStateForProgram(
     courseMatchesFilters(code, filters),
   );
 
-  // Auto-assign completed courses using type tier, specificity, MRV order, and credit caps.
-  const autoSelectedCompleted = getAutoSelectedSingleEligibleCompleted(
-    augmentedRemaining,
-    unassignedCompleted,
-    cache,
-    { ...userLockedSelections, ...autoSelected },
-    requirementSlotsUserTouched,
-  );
-
-  const selectedPerRequirement = {
-    ...userLockedSelections,
-    ...autoSelected,
-    ...autoSelectedCompleted,
-  };
-
-  // Recompute unassigned using the final merged selections so the warning is immediately accurate.
-  const finalAssignedFromSelected = new Set<string>();
-  for (const codes of Object.values(selectedPerRequirement)) {
-    for (const code of codes) {
-      finalAssignedFromSelected.add(normalizeCourseCode(code));
-    }
-  }
-  const finalUnassignedCompletedCourses = [...completedNormalized]
-    .filter(
-      (norm) =>
-        !assignedFromExact.has(norm) && !finalAssignedFromSelected.has(norm) && !isWorkTerm(norm),
-    )
-    .map((norm) => cache.getCourse(norm)?.code ?? norm);
-
   return {
     remainingRequirements: augmentedRemaining,
     requirementTreeWithStatus: tree,
     completedRequirementsList: completedList,
-    selectedPerRequirement,
+    selectedPerRequirement: autoAssignment.selectedPerRequirement,
     selectedOptionsPerRequirement: existingSelectedOptionsPerRequirement,
     prereqEligibleCourses,
     filteredPrereqEligibleCourses,
-    unassignedCompletedCourses: finalUnassignedCompletedCourses,
+    unassignedCompletedCourses: autoAssignment.unassignedCompletedCourses,
   };
 }

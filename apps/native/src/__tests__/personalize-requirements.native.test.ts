@@ -101,4 +101,38 @@ describe("computePersonalizeRequirements", () => {
       "CSI 2120",
     ]);
   });
+
+  it("matches a renumbered/aliased completed course to a requirement under its old code", () => {
+    // STA 2391 is the canonical course; MAT 2377 is its former code (an alias). The program
+    // still lists the requirement under the old code, while the student completed it under
+    // either code. Web resolves both sides to canonical and matches; native must too — so the
+    // requirement is satisfied and the completed course is never left "unassigned".
+    const renameCatalogue: Catalogue = {
+      courses: [
+        {
+          ...course("STA 2391", "Probability and Statistics for Engineers"),
+          aliases: [normalizeCourseCode("MAT 2377")],
+        },
+      ],
+      programs: [
+        {
+          title: "Rename program",
+          url: PROGRAM_URL,
+          requirements: [{ type: "course", code: normalizeCourseCode("MAT 2377"), credits: 3 }],
+        },
+      ],
+    };
+
+    for (const completed of ["MAT 2377", "STA 2391"]) {
+      const readout = computePersonalizeRequirements({
+        catalogue: renameCatalogue,
+        schedules,
+        programUrl: PROGRAM_URL,
+        completedCourses: [completed],
+      });
+      expect(readout).not.toBeNull();
+      expect(readout!.remainingCount).toBe(0);
+      expect(readout!.unassignedCompletedCourses).toHaveLength(0);
+    }
+  });
 });

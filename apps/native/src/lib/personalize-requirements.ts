@@ -1,19 +1,13 @@
 import { buildDataCache, type DataCache } from "@uoplan/core/dataCache";
-import type {
-  Catalogue,
-  DisciplinesData,
-  Program,
-  ProgramRequirement,
-  SchedulesData,
-} from "@uoplan/core/dataTypes";
+import type { Catalogue, DisciplinesData, Program, SchedulesData } from "@uoplan/core/dataTypes";
 import {
   buildEffectiveRemainingRequirements,
   buildPrereqContext,
   canTakeCourse,
   collectRequirementIds,
+  computeRequirementAutoAssignment,
   gateRemainingByPriority,
-  getAutoSelectedForRequirements,
-  getAutoSelectedSingleEligibleCompleted,
+  getDisciplineCodesForProgram,
   type AdvancedRequestInput,
   type CourseLanguageBucket,
   type CourseLevelBucket,
@@ -462,26 +456,6 @@ function findProgram(catalogue: Catalogue, programUrl: string | null): Program |
   return catalogue.programs.find((entry) => entry.url === programUrl) ?? null;
 }
 
-// TODO(native parity): This pure helper lives in apps/web/src/store/requirementCompute/utils.ts.
-// Move it to @uoplan/core so web and native stop carrying separate copies.
-function getDisciplineCodesForProgram(program: Program | null): string[] {
-  const codes = new Set<string>();
-  if (!program) return [];
-
-  function walk(node: ProgramRequirement): void {
-    if (node.type === "course" && node.code) {
-      const match = node.code.match(/^([a-zA-Z]+)\s/);
-      if (match) codes.add(match[1]!.toUpperCase());
-    }
-    if (node.options) {
-      for (const option of node.options) walk(option);
-    }
-  }
-
-  for (const requirement of program.requirements) walk(requirement);
-  return [...codes];
-}
-
 // TODO(native parity): Mirrors apps/web/src/lib/requirements/requirementUtils.ts.
 // Keep this tiny projection local until the option/assignment tree helpers move to @uoplan/core.
 function projectedNodeComplete(
@@ -580,135 +554,6 @@ function applySelectionsToRemainingReadout(
   return { remaining: nextRemaining, completed: plannedCompleted };
 }
 
-/**
- * Completed courses that are still listed as an eligible candidate for one of the
- * outstanding requirements yet have not been assigned (manually or auto) to any
- * requirement. These are exactly the courses the planner surfaces an "Assign"
- * chip for; the final CTA stays gated until the list is empty so the student
- * isn't forced to satisfy every degree requirement before generating.
- */
-/** Requirement types whose candidate lists are augmented + auto-filled (web parity). */
-const AUTO_ASSIGN_GROUP_TYPES = new Set([
-  "group",
-  "pick",
-  "elective",
-  "discipline_elective",
-  "faculty_elective",
-  "free_elective",
-  "non_discipline_elective",
-]);
-
-/**
- * Courses pinned to exact `course` / `or_course` requirement slots by the core
- * evaluator. Mirrors web's `collectAssignedFromExactRequirements`.
- */
-function collectAssignedFromExactRequirements(tree: RequirementWithStatus[]): Set<string> {
-  const assigned = new Set<string>();
-  const walk = (nodes: RequirementWithStatus[]): void => {
-    for (const node of nodes) {
-      if ((node.type === "course" || node.type === "or_course") && node.satisfiedBy?.length) {
-        for (const code of node.satisfiedBy) assigned.add(normalizeCourseCode(code));
-      }
-      if (node.options?.length) walk(node.options);
-    }
-  };
-  walk(tree);
-  return assigned;
-}
-
-export interface RequirementAutoAssignment {
-  /** Remaining requirements with group-style candidate lists augmented (unassigned-completed first). */
-  augmentedRemaining: RemainingRequirement[];
-  /** User-touched selections merged with the auto-assigned completed courses. */
-  mergedSelectedPerRequirement: Record<string, string[]>;
-  /** Completed courses still eligible for a remaining requirement but left unplaced. */
-  unassignedCompletedCourses: string[];
-  /** Count of completed courses the greedy pass auto-placed (before vs after unassigned). */
-  autoAssignedCount: number;
-}
-
-/**
- * Auto-assign completed courses to the outstanding requirements, mirroring web's
- * `recomputeStateForProgram`. Slots the student manually edited
- * (`requirementSlotsUserTouched`) are locked and never overwritten; every other
- * eligible requirement is filled greedily by the shared core helpers so the
- * student only has to resolve the genuinely ambiguous leftovers.
- */
-function computeAutoAssignment(
-  remaining: RemainingRequirement[],
-  tree: RequirementWithStatus[],
-  selections: PersonalizeRequirementSelections,
-  completedCourses: readonly string[],
-  cache: DataCache,
-): RequirementAutoAssignment {
-  const touched = selections.requirementSlotsUserTouched;
-  const userLocked: Record<string, string[]> = {};
-  for (const [reqId, codes] of Object.entries(selections.selectedPerRequirement)) {
-    if (touched[reqId]) userLocked[reqId] = codes;
-  }
-
-  const autoSelected = getAutoSelectedForRequirements(remaining, userLocked, cache);
-
-  const assignedFromExact = collectAssignedFromExactRequirements(tree);
-  const assignedFromUser = new Set<string>();
-  for (const [reqId, codes] of Object.entries(selections.selectedPerRequirement)) {
-    if (!touched[reqId]) continue;
-    for (const code of codes) assignedFromUser.add(normalizeCourseCode(code));
-  }
-
-  const isWorkTerm = (norm: string): boolean => {
-    const component = cache.getCourse(norm)?.component?.trim().toLowerCase() ?? "";
-    return component.startsWith("stage / work term");
-  };
-
-  const completedNorm = new Set(completedCourses.map((code) => normalizeCourseCode(code)));
-  const unassignedCompleted = [...completedNorm].filter(
-    (norm) => !assignedFromExact.has(norm) && !assignedFromUser.has(norm) && !isWorkTerm(norm),
-  );
-
-  // Surface unassigned-completed-eligible courses first in group-style candidate lists.
-  const augmentedRemaining = remaining.map((req) => {
-    if (!req.candidateCourses?.length || !AUTO_ASSIGN_GROUP_TYPES.has(req.type)) return req;
-    const eligibleSet = new Set(req.candidateCourses.map((code) => normalizeCourseCode(code)));
-    const unassignedEligible = unassignedCompleted.filter((norm) => eligibleSet.has(norm));
-    if (unassignedEligible.length === 0) return req;
-    const displayCodes = unassignedEligible.map((norm) => cache.getCourse(norm)?.code ?? norm);
-    const candidateCourses = [...new Set([...displayCodes, ...req.candidateCourses])];
-    return { ...req, candidateCourses };
-  });
-
-  const autoSelectedCompleted = getAutoSelectedSingleEligibleCompleted(
-    augmentedRemaining,
-    unassignedCompleted,
-    cache,
-    { ...userLocked, ...autoSelected },
-    touched,
-  );
-
-  const mergedSelectedPerRequirement = {
-    ...userLocked,
-    ...autoSelected,
-    ...autoSelectedCompleted,
-  };
-
-  const finalAssigned = new Set<string>();
-  for (const codes of Object.values(mergedSelectedPerRequirement)) {
-    for (const code of codes) finalAssigned.add(normalizeCourseCode(code));
-  }
-  const unassignedCompletedCourses = unassignedCompleted
-    .filter((norm) => !finalAssigned.has(norm))
-    .map((norm) => cache.getCourse(norm)?.code ?? norm);
-
-  const autoAssignedCount = unassignedCompleted.length - unassignedCompletedCourses.length;
-
-  return {
-    augmentedRemaining,
-    mergedSelectedPerRequirement,
-    unassignedCompletedCourses,
-    autoAssignedCount,
-  };
-}
-
 function buildPrereqEligibleCourses(input: {
   program: Program;
   remainingRequirements: RemainingRequirement[];
@@ -757,16 +602,17 @@ export function computePersonalizeRequirements(
   // Auto-assign completed courses to the outstanding requirements (web parity),
   // then evaluate the readout against those merged selections so the planner
   // reflects what's already placed and only prompts for the leftovers.
-  const autoAssignment = computeAutoAssignment(
-    state.remaining,
-    state.tree,
-    selections,
-    input.completedCourses,
+  const autoAssignment = computeRequirementAutoAssignment({
+    remaining: state.remaining,
+    tree: state.tree,
+    completedCourses: input.completedCourses,
     cache,
-  );
+    selectedPerRequirement: selections.selectedPerRequirement,
+    requirementSlotsUserTouched: selections.requirementSlotsUserTouched,
+  });
   const mergedSelections: PersonalizeRequirementSelections = {
     ...selections,
-    selectedPerRequirement: autoAssignment.mergedSelectedPerRequirement,
+    selectedPerRequirement: autoAssignment.selectedPerRequirement,
   };
   const adjusted = applySelectionsToRemainingReadout(
     autoAssignment.augmentedRemaining,
@@ -784,7 +630,7 @@ export function computePersonalizeRequirements(
     autoAssignedCount: autoAssignment.autoAssignedCount,
     requirementTreeWithStatus: state.tree,
     selectedOptionsPerRequirement: selections.selectedOptionsPerRequirement,
-    selectedPerRequirement: autoAssignment.mergedSelectedPerRequirement,
+    selectedPerRequirement: autoAssignment.selectedPerRequirement,
     constrainedPerRequirement: selections.constrainedPerRequirement,
     requirementPriorities: selections.requirementPriorities,
     coursesThisSemester: selections.coursesThisSemester,
@@ -813,13 +659,14 @@ export function buildPersonalizeAdvancedRequirements(input: {
 
   // Mirror the planner's auto-assignment so the engine request pins exactly the
   // completed courses the student saw auto-placed (plus any manual edits).
-  const autoAssignment = computeAutoAssignment(
-    state.remaining,
-    state.tree,
-    selections,
+  const autoAssignment = computeRequirementAutoAssignment({
+    remaining: state.remaining,
+    tree: state.tree,
     completedCourses,
-    input.cache,
-  );
+    cache: input.cache,
+    selectedPerRequirement: selections.selectedPerRequirement,
+    requirementSlotsUserTouched: selections.requirementSlotsUserTouched,
+  });
 
   const priorityGated = gateRemainingByPriority(state.remaining, selections.requirementPriorities);
   const effectiveRemaining = buildEffectiveRemainingRequirements(
@@ -834,7 +681,7 @@ export function buildPersonalizeAdvancedRequirements(input: {
     remainingRequirements: priorityGated,
     requirementTreeWithStatus: state.tree,
     selectedOptionsPerRequirement: selections.selectedOptionsPerRequirement,
-    selectedPerRequirement: autoAssignment.mergedSelectedPerRequirement,
+    selectedPerRequirement: autoAssignment.selectedPerRequirement,
     constrainedPerRequirement: selections.constrainedPerRequirement,
     requirementPriorities: selections.requirementPriorities,
     coursesThisSemester: selections.coursesThisSemester,
