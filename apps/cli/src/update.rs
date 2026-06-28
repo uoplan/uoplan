@@ -6,6 +6,10 @@ use serde::{Deserialize, Serialize};
 const REPO_OWNER: &str = "uoplan";
 const REPO_NAME: &str = "uoplan";
 const CHECK_INTERVAL_SECS: u64 = 3600;
+// Must match the CLI release tag scheme owned by release-please
+// (`tag-name: "uoplan-v${version}"` for the `apps/cli` package in
+// release-please-config.json; cli-release.yml also triggers on `uoplan-v*`).
+const TAG_PREFIX: &str = "uoplan-v";
 
 #[derive(Serialize, Deserialize)]
 pub struct UpdateCache {
@@ -53,6 +57,12 @@ fn is_newer(latest: &str, current: &str) -> bool {
     }
 }
 
+fn version_from_tag(tag: &str) -> Option<&str> {
+    let version = tag.strip_prefix(TAG_PREFIX)?;
+    parse_version(version)?;
+    Some(version)
+}
+
 pub fn is_cache_fresh(cache: &UpdateCache, now: u64) -> bool {
     now.saturating_sub(cache.last_checked) < CHECK_INTERVAL_SECS
 }
@@ -85,9 +95,7 @@ pub async fn check_for_update() -> Option<String> {
 
     let latest_version = releases
         .iter()
-        .filter_map(|r| r.tag_name.strip_prefix("cli/v"))
-        .find(|v| parse_version(v).is_some())
-        .map(str::to_owned)?;
+        .find_map(|r| version_from_tag(&r.tag_name).map(str::to_owned))?;
 
     write_cache(&UpdateCache {
         last_checked: now,
@@ -102,7 +110,7 @@ pub async fn check_for_update() -> Option<String> {
 }
 
 pub async fn do_update(version: &str) -> Result<()> {
-    let tag = format!("cli/v{version}");
+    let tag = format!("{TAG_PREFIX}{version}");
     tokio::task::spawn_blocking(move || {
         self_update::backends::github::Update::configure()
             .repo_owner(REPO_OWNER)
@@ -130,6 +138,17 @@ mod tests {
         assert_eq!(parse_version("1.2.3"), Some((1, 2, 3)));
         assert_eq!(parse_version("0.1.0"), Some((0, 1, 0)));
         assert_eq!(parse_version("10.0.100"), Some((10, 0, 100)));
+    }
+
+    #[test]
+    fn version_from_release_please_tag() {
+        // release-please tags CLI releases as `uoplan-v${version}`.
+        assert_eq!(version_from_tag("uoplan-v1.0.0"), Some("1.0.0"));
+        assert_eq!(version_from_tag("uoplan-v0.4.2"), Some("0.4.2"));
+        // The legacy `cli/v` scheme and the root app's tags must be ignored.
+        assert_eq!(version_from_tag("cli/v0.2.0"), None);
+        assert_eq!(version_from_tag("uoplan-monorepo-v1.0.0-beta.37"), None);
+        assert_eq!(version_from_tag("uoplan-vabc"), None);
     }
 
     #[test]
