@@ -23,17 +23,17 @@ first so we can agree on the approach before you invest time in a PR.
 
 uoplan is a pnpm monorepo (`apps/*`, `packages/*`):
 
-| Path                  | What it is                                                        |
-| --------------------- | ----------------------------------------------------------------- |
-| `apps/web`            | Vite + React 19 SPA (the planner UI)                              |
-| `apps/worker`         | Cloudflare Worker (share redirect, OG image, web-push)            |
-| `apps/scraper`        | Node scrapers that produce the source JSON datasets               |
-| `apps/native`         | Expo / React Native app                                           |
-| `apps/cli`            | Rust enrolment CLI (`npx @uoplan/cli`)                            |
-| `packages/proto`      | protobuf schemas + generated TS (single source of truth)          |
-| `packages/engine`     | Rust → WASM schedule-generation engine                            |
-| `packages/core`       | requirements, prerequisites, state encoding, the TS↔engine bridge |
-| `packages/*`          | data, calendar, transcript, ui, theme, store, i18n, analytics, …  |
+| Path              | What it is                                                        |
+| ----------------- | ----------------------------------------------------------------- |
+| `apps/web`        | Vite + React 19 SPA (the planner UI)                              |
+| `apps/worker`     | Cloudflare Worker (share redirect, OG image, web-push)            |
+| `apps/scraper`    | Node scrapers that produce the source JSON datasets               |
+| `apps/native`     | Expo / React Native app                                           |
+| `apps/cli`        | Rust enrolment CLI (`npx @uoplan/cli`)                            |
+| `packages/proto`  | protobuf schemas + generated TS (single source of truth)          |
+| `packages/engine` | Rust → WASM schedule-generation engine                            |
+| `packages/core`   | requirements, prerequisites, state encoding, the TS↔engine bridge |
+| `packages/*`      | data, calendar, transcript, ui, theme, store, i18n, analytics, …  |
 
 Dependencies only point "downward" (`proto ← core ← {data, calendar, transcript} ←
 apps`); `pnpm check:arch` enforces this. The deeper subsystems are documented under

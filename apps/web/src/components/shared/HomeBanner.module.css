@@ -1,0 +1,23 @@
+/* Rotating home-page banner. The pills themselves are the shared TopBanner
+   (sized/coloured by TopBanner.module.css); this module only owns the rotator
+   viewport: a clipped, position:relative stage whose height is reserved by a
+   hidden copy of the active banner so the page below never shifts as slides
+   absolutely cross-fade/slide over it. */
+
+.viewport {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hidden, non-interactive copy of the active banner that holds the viewport
+   open at the banner's natural (responsive) height. visibility:hidden keeps it
+   out of the tab order; aria-hidden (set in JSX) keeps it out of the a11y tree. */
+.reserve {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+}

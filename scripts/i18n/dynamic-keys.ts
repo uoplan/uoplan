@@ -21,6 +21,16 @@ const cross = (prefix: string, a: readonly string[], b: readonly string[]): stri
   a.flatMap((x) => b.map((y) => `${prefix}${x}.${y}`));
 
 export const DYNAMIC_TR_IDS: string[] = [
+  // apps/web/src/components/shared/HomeBanner.tsx: tr(`${banner.idBase}.text|.textShort|.cta`)
+  // where banner.idBase comes from HOME_BANNERS (apps/web/src/components/shared/homeBanners.tsx),
+  // plus the shared dismiss label.
+  ...cross(
+    "landing.banner.",
+    ["donate", "android", "ios", "github", "feedback"],
+    ["text", "textShort", "cta"],
+  ),
+  "landing.banner.dismiss",
+
   // apps/native/src/app/more/index.tsx + apps/native/src/app/more/language.tsx:
   // the settings language switcher resolves its labels through `const tr = useTr()`
   // (hook binding, which the literal `tr(...)` scanner does not resolve).

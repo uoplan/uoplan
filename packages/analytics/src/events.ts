@@ -143,6 +143,8 @@ export interface AnalyticsEventMap {
   notification_subscribed: Record<string, never>;
   notification_unsubscribed: Record<string, never>;
   donation_cta_clicked: { location?: string };
+  home_banner_cta_clicked: { banner: string };
+  home_banner_dismissed: { banner: string };
   locale_changed: { locale: AnalyticsLocale };
   onboarding_completed: Record<string, never>;
   analytics_opted_out: Record<string, never>;

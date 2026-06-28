@@ -1955,21 +1955,69 @@ msgstr "Show {title}"
 msgid "landing.carousel.label"
 msgstr "Experimental features"
 
-#: apps/web/src/components/landing/DonationBanner.tsx:71
-msgid "landing.donate.cta"
-msgstr "Donate"
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.android.cta"
+msgstr "Email us"
 
-#: apps/web/src/components/landing/DonationBanner.tsx:80
-msgid "landing.donate.dismiss"
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.android.text"
+msgstr "Help launch our Android app by joining the closed test."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.android.textShort"
+msgstr "Join the Android closed test."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.dismiss"
 msgstr "Dismiss"
 
-#: apps/web/src/components/landing/DonationBanner.tsx:51
-msgid "landing.donate.text"
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.donate.cta"
+msgstr "Donate"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.donate.text"
 msgstr "We're free and student-run. Help keep us running."
 
-#: apps/web/src/components/landing/DonationBanner.tsx:60
-msgid "landing.donate.textShort"
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.donate.textShort"
 msgstr "Help keep us free & running."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.feedback.cta"
+msgstr "Share feedback"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.feedback.text"
+msgstr "Got feedback or a feature idea? We'd love to hear it."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.feedback.textShort"
+msgstr "Send us feedback."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.github.cta"
+msgstr "Star"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.github.text"
+msgstr "Enjoying the app? Star us on GitHub."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.github.textShort"
+msgstr "Star us on GitHub."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.ios.cta"
+msgstr "Open TestFlight"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.ios.text"
+msgstr "Now on iOS — join the TestFlight beta."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.ios.textShort"
+msgstr "Join the iOS beta."
 
 msgid "landing.explore.description"
 msgstr "Search courses and professors with grade distributions."
@@ -1988,22 +2036,6 @@ msgstr "Plan your degree and generate conflict-free timetables."
 
 msgid "landing.schedule.title"
 msgstr "Schedule generator"
-
-#: apps/web/src/components/shared/TesterBanner.tsx:34
-msgid "landing.tester.cta"
-msgstr "Email us"
-
-#: apps/web/src/components/shared/TesterBanner.tsx:36
-msgid "landing.tester.dismiss"
-msgstr "Dismiss"
-
-#: apps/web/src/components/shared/TesterBanner.tsx:32
-msgid "landing.tester.text"
-msgstr "Help launch our Android app by joining the closed test."
-
-#: apps/web/src/components/shared/TesterBanner.tsx:33
-msgid "landing.tester.textShort"
-msgstr "Join the Android closed test."
 
 msgid "landing.trends.description"
 msgstr "Track how grades shift over time across disciplines."

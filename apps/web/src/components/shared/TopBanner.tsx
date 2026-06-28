@@ -19,14 +19,18 @@ export function TopBannerSlot({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Colour scheme for {@link TopBanner}: "accent" (donation), "warning"
+ * (personalize nudge / feedback), "neutral" (a high-contrast filled pill, e.g.
+ * the post-personalization "change your personalization" banner or the GitHub
+ * star nudge), "success" (green, e.g. the Android closed-test banner), or "info"
+ * (blue, e.g. the iOS TestFlight banner).
+ */
+export type TopBannerVariant = "accent" | "warning" | "neutral" | "success" | "info";
+
 type TopBannerBaseProps = {
-  /**
-   * Colour scheme: "accent" (donation), "warning" (personalize nudge),
-   * "neutral" (a high-contrast filled pill, e.g. the post-personalization
-   * "change your personalization" banner), or "success" (green, e.g. the
-   * Android closed-test recruitment banner).
-   */
-  variant: "accent" | "warning" | "neutral" | "success";
+  /** Colour scheme; see {@link TopBannerVariant}. */
+  variant: TopBannerVariant;
   /** Leading icon, coloured to the variant's strong tone. */
   icon: ReactNode;
   /** Full message shown on wider viewports. */

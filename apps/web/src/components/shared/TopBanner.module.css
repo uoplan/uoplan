@@ -41,6 +41,18 @@
   --banner-strong-hover: color-mix(in srgb, var(--app-success) 88%, var(--app-text));
 }
 
+/* Blue band, e.g. the iOS TestFlight banner. Mirrors the success variant's
+   structure, swapped onto the info (blue) tokens. */
+.banner[data-variant="info"] {
+  --banner-soft: var(--app-info-soft);
+  --banner-strong: var(--app-info);
+  --banner-on-strong: var(--app-text-inverse);
+  --banner-text: var(--app-text);
+  --banner-dismiss: var(--app-text-muted);
+  --banner-ring: color-mix(in srgb, var(--app-info) 24%, transparent);
+  --banner-strong-hover: color-mix(in srgb, var(--app-info) 88%, var(--app-text));
+}
+
 /* Always-black high-contrast band, independent of theme: the persistent
    "change your personalization" banner once a user is set up. Black surface +
    white CTA in BOTH light and dark mode, by design (so it reads as a settled,
