@@ -1,4 +1,4 @@
-import type { DomEvent } from "../shared/messages";
+import type { DomEvent, SectionRow } from "../shared/messages";
 
 /**
  * Serializes a compact, depth-limited outline of the current frame's DOM so the
@@ -7,9 +7,9 @@ import type { DomEvent } from "../shared/messages";
  * truncated text, capped in depth, breadth, and total size.
  */
 
-const MAX_DEPTH = 14;
-const MAX_CHILDREN_PER_NODE = 40;
-const MAX_OUTLINE_CHARS = 24_000;
+const MAX_DEPTH = 16;
+const MAX_CHILDREN_PER_NODE = 60;
+const MAX_OUTLINE_CHARS = 40_000;
 const SKIP_TAGS = new Set(["SCRIPT", "STYLE", "NOSCRIPT", "SVG", "PATH", "LINK", "META"]);
 
 function describe(el: Element): string {
@@ -75,8 +75,66 @@ function countMarkers(doc: Document): Record<string, number> {
   };
 }
 
+/** Course code embedded in a section label, e.g. "ADM1100-A LEC" → "ADM1100". */
+const COURSE_CODE_RE = /\b([A-Z]{2,4})\s?(\d{3,4})\b/;
+
+function rowText(doc: Document, id: string): string {
+  const el = doc.querySelector(`[id='${CSS.escape(id)}']`);
+  return el ? (el.textContent ?? "").replaceAll(/\s+/g, " ").trim() : "";
+}
+
+/**
+ * Parse PeopleSoft class-search/result/component rows into the structured shape
+ * the grade overlay anchors to. Mirrors apps/cli (src/api/search.rs): search
+ * rows keyed by `MTG_CLASS_NBR$N` (+ `MTG_CLASSNAME/DAYTIME/INSTR$N`, status img),
+ * component sub-tables as `tr[id^='trSSR_CLS_TBL_R*']` with ≥7 cells.
+ */
+function scanSections(doc: Document): SectionRow[] {
+  const rows: SectionRow[] = [];
+
+  for (const a of Array.from(doc.querySelectorAll<HTMLElement>("a[id^='MTG_CLASS_NBR$']"))) {
+    const index = Number.parseInt(a.id.split("$")[1] ?? "", 10);
+    if (Number.isNaN(index)) continue;
+    const name = rowText(doc, `MTG_CLASSNAME$${index}`);
+    const statusImg = doc.querySelector<HTMLImageElement>(
+      `[id*='SSR_STATUS_LONG$${index}'] img, img[id*='STATUS$${index}']`,
+    );
+    rows.push({
+      kind: "search",
+      index,
+      classNbr: (a.textContent ?? "").trim(),
+      name,
+      courseCode: COURSE_CODE_RE.exec(name)?.slice(1, 3).join("") || undefined,
+      days: rowText(doc, `MTG_DAYTIME$${index}`),
+      instructor: rowText(doc, `MTG_INSTR$${index}`),
+      status: statusImg?.alt ?? "",
+    });
+  }
+
+  for (const tr of Array.from(doc.querySelectorAll("tr[id^='trSSR_CLS_TBL_R']"))) {
+    const cells = Array.from(tr.querySelectorAll("td"));
+    if (cells.length < 7) continue;
+    const cell = (i: number): string =>
+      (cells[i]?.textContent ?? "").replaceAll(/\s+/g, " ").trim();
+    const name = cell(2);
+    rows.push({
+      kind: "component",
+      index: rows.length,
+      classNbr: cell(1),
+      name,
+      courseCode: COURSE_CODE_RE.exec(name)?.slice(1, 3).join("") || undefined,
+      days: cell(3),
+      instructor: cell(5),
+      status: cells[6]?.querySelector("img")?.getAttribute("alt") ?? "",
+    });
+  }
+
+  return rows;
+}
+
 /** Produce a full {@link DomEvent} snapshot for `doc`. */
 export function collectDom(doc: Document, inFrame: boolean): DomEvent {
+  const sections = scanSections(doc);
   return {
     type: "dom",
     ts: Date.now(),
@@ -86,5 +144,6 @@ export function collectDom(doc: Document, inFrame: boolean): DomEvent {
     title: doc.title,
     outline: doc.documentElement ? outlineFrame(doc.documentElement) : "(no document element)",
     markers: countMarkers(doc),
+    sections: sections.length > 0 ? sections : undefined,
   };
 }

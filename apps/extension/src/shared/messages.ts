@@ -45,6 +45,25 @@ export interface NetEvent extends EventContext {
   error?: string;
 }
 
+/**
+ * A parsed class-search / component row — the grade-overlay's anchor point.
+ * Mirrors the ids apps/cli parses: `MTG_CLASS_NBR$N`, `MTG_CLASSNAME$N`,
+ * `MTG_DAYTIME$N`, `MTG_INSTR$N`, plus companion rows `trSSR_CLS_TBL_R*`.
+ */
+export interface SectionRow {
+  /** Origin: search results (`MTG_*`) or a component sub-table (`SSR_CLS_TBL`). */
+  kind: "search" | "component";
+  index: number;
+  classNbr: string;
+  /** Raw section label, e.g. "ADM1100-A LEC". */
+  name: string;
+  /** Normalized course code parsed from `name`, e.g. "ADM1100". */
+  courseCode?: string;
+  days: string;
+  instructor: string;
+  status: string;
+}
+
 /** A serialized DOM/iframe structure snapshot of a single frame. */
 export interface DomEvent extends EventContext {
   type: "dom";
@@ -54,6 +73,8 @@ export interface DomEvent extends EventContext {
   outline: string;
   /** Count of notable PeopleSoft markers found (iframes, win0 forms, tables). */
   markers: Record<string, number>;
+  /** Parsed class rows, when the frame is a class-search/results/component page. */
+  sections?: SectionRow[];
 }
 
 /** Anything the background relays to the dev log-sink. */

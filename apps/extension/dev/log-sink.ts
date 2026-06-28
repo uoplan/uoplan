@@ -76,6 +76,15 @@ function render(e: SinkEvent): void {
     `${time} ${C.magenta}DOM${C.reset}   ${frameTag(e.inFrame)} ${e.title} ${C.dim}${e.url ?? ""}${C.reset}`,
   );
   if (markers) console.log(`${C.dim}        markers: ${markers}${C.reset}`);
+  if (e.sections?.length) {
+    console.log(`${C.cyan}        sections (${e.sections.length}):${C.reset}`);
+    for (const s of e.sections) {
+      const code = s.courseCode ? `${C.yellow}${s.courseCode}${C.reset} ` : "";
+      console.log(
+        `${C.dim}          ${s.kind[0]}#${s.classNbr} ${code}${s.name} | ${s.days} | ${s.instructor} | ${s.status}${C.reset}`,
+      );
+    }
+  }
   if (e.outline) {
     console.log(
       `${C.dim}${e.outline
