@@ -9,7 +9,7 @@ import {
 } from "@uoplan/core/feedback";
 import { normalizeProfessorName } from "@uoplan/core/professorRatings";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
-import { Text } from "@uoplan/ui";
+import { Skeleton, Text } from "@uoplan/ui";
 
 import {
   CourseResultCard,
@@ -203,6 +203,32 @@ function ResultSection({ title, children }: { title: string; children: React.Rea
   );
 }
 
+const SKELETON_SECTIONS = [0, 1, 2];
+const SKELETON_CARDS = [0, 1, 2];
+
+/**
+ * Lightweight placeholder shown while the explore tab's heavy derived state
+ * (spotlights, sentiment maps, search) is deferred past the first paint — so
+ * switching to this tab shows shimmering card rows instead of a blank grey
+ * screen while the JS thread catches up.
+ */
+function ExploreSkeleton({ cardWidth }: { cardWidth: number }) {
+  return (
+    <View style={styles.results}>
+      {SKELETON_SECTIONS.map((section) => (
+        <View key={section} style={styles.section}>
+          <Skeleton width={140} height={12} radius={6} />
+          <View style={styles.skeletonRow}>
+            {SKELETON_CARDS.map((card) => (
+              <Skeleton key={card} width={cardWidth} height={176} radius={20} />
+            ))}
+          </View>
+        </View>
+      ))}
+    </View>
+  );
+}
+
 const CARD_WIDTH = 210;
 const REGULAR_CARD_WIDTH = 360;
 
@@ -228,6 +254,21 @@ export default function ExploreScreen() {
   const [filters, setFilters] = useState<ExploreFilterState>(() => createEmptyFilters());
   const [activeDrawerFilter, setActiveDrawerFilter] = useState<ExploreFilterKey | null>(null);
   const [showBanner, setShowBanner] = useState(true);
+  // Defer the explore tab's heavy derived state (spotlights, sentiment maps,
+  // search) to the frame AFTER the first paint so switching to this tab — e.g.
+  // tapping "Skip" in onboarding, which mounts this default tab — paints a
+  // skeleton immediately instead of blocking the JS thread on a grey screen.
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    let inner = 0;
+    const outer = requestAnimationFrame(() => {
+      inner = requestAnimationFrame(() => setReady(true));
+    });
+    return () => {
+      cancelAnimationFrame(outer);
+      if (inner) cancelAnimationFrame(inner);
+    };
+  }, []);
 
   const termOptions = useMemo<ExploreFilterOption<string>[]>(
     () =>
@@ -254,7 +295,10 @@ export default function ExploreScreen() {
     [filters, requirementsAvailable],
   );
   const searching = query.trim().length > 0 || activeFilterKeys.some((key) => key !== "sort");
-  const spotlights = useMemo(() => courseSpotlights(index), [index]);
+  const spotlights = useMemo<ReturnType<typeof courseSpotlights>>(
+    () => (ready ? courseSpotlights(index) : []),
+    [index, ready],
+  );
   const levelOptions = useMemo<ExploreFilterOption<ExploreCourseLevel>[]>(() => {
     const available = new Set(
       index.courses
@@ -339,9 +383,18 @@ export default function ExploreScreen() {
 
   // Response-weighted 1-5 satisfaction signals (shared @uoplan/core analytics),
   // surfaced as the web cards' satisfaction badge.
-  const courseSentiment = useMemo(() => courseSentimentByNorm(feedback), [feedback]);
-  const professorSentiment = useMemo(() => professorSentimentByName(feedback), [feedback]);
-  const disciplineSentimentMap = useMemo(() => disciplineSentiment(feedback), [feedback]);
+  const courseSentiment = useMemo<ReturnType<typeof courseSentimentByNorm>>(
+    () => (ready ? courseSentimentByNorm(feedback) : new Map()),
+    [feedback, ready],
+  );
+  const professorSentiment = useMemo<ReturnType<typeof professorSentimentByName>>(
+    () => (ready ? professorSentimentByName(feedback) : new Map()),
+    [feedback, ready],
+  );
+  const disciplineSentimentMap = useMemo<ReturnType<typeof disciplineSentiment>>(
+    () => (ready ? disciplineSentiment(feedback) : new Map()),
+    [feedback, ready],
+  );
 
   const requirements = useMemo(() => {
     if (!personalization.programUrl) return null;
@@ -383,9 +436,12 @@ export default function ExploreScreen() {
     }),
     [courseSentiment, filters, professorSentiment, requirementCandidateSet, requirementsAvailable],
   );
-  const results = useMemo(
-    () => searchExplore(index, query, searchFilters),
-    [index, query, searchFilters],
+  const results = useMemo<ReturnType<typeof searchExplore>>(
+    () =>
+      ready
+        ? searchExplore(index, query, searchFilters)
+        : { courses: [], professors: [], disciplines: [], faculties: [], programs: [] },
+    [index, query, ready, searchFilters],
   );
 
   const totalResults =
@@ -461,7 +517,9 @@ export default function ExploreScreen() {
         gutter={Spacing.three}
       />
 
-      {searching ? (
+      {!ready ? (
+        <ExploreSkeleton cardWidth={cardWidth} />
+      ) : searching ? (
         totalResults > 0 ? (
           <View style={styles.results}>
             {results.courses.length > 0 ? (
@@ -583,6 +641,10 @@ const styles = StyleSheet.create({
   },
   section: {
     gap: Spacing.two,
+  },
+  skeletonRow: {
+    flexDirection: "row",
+    gap: Spacing.three,
   },
   empty: {
     paddingVertical: Spacing.five,
