@@ -26,6 +26,30 @@ function Metric({ label, value, accent }: { label: string; value: string; accent
   );
 }
 
+/**
+ * A single riser row (discipline/course label + grade delta). The label flexes
+ * and truncates to one line so a long discipline name can't push the delta
+ * (e.g. "+2.3") off the right edge of the card.
+ */
+function RiserRow({
+  riser,
+}: {
+  riser: { code: string; prefix: string; title: string; delta: number };
+}) {
+  return (
+    <View style={styles.riserRow}>
+      <View style={styles.riserLabel}>
+        <Text size="sm" numberOfLines={1} color={Surface.label}>
+          {riser.prefix} · {riser.title}
+        </Text>
+      </View>
+      <Text size="sm" weight="bold" color={Surface.accent}>
+        +{riser.delta.toFixed(1)}
+      </Text>
+    </View>
+  );
+}
+
 /** Tiny gradient-free "wave" preview for the feedback card (no axis labels). */
 function FeedbackWave({ points }: { points: { value: number }[] }) {
   const series = points.length > 0 ? points : [{ value: 0 }];
@@ -143,14 +167,7 @@ export default function TrendsHubScreen() {
         >
           <View style={styles.riserList}>
             {trends.risers.slice(0, 4).map((riser) => (
-              <View key={riser.code} style={styles.riserRow}>
-                <Text size="sm" numberOfLines={1} color={Surface.label}>
-                  {riser.prefix} · {riser.title}
-                </Text>
-                <Text size="sm" weight="bold" color={Surface.accent}>
-                  +{riser.delta.toFixed(1)}
-                </Text>
-              </View>
+              <RiserRow key={riser.code} riser={riser} />
             ))}
           </View>
         </SectionCard>
@@ -162,14 +179,7 @@ export default function TrendsHubScreen() {
         >
           <View style={styles.riserList}>
             {trends.risers.slice(0, 3).map((riser) => (
-              <View key={riser.code} style={styles.riserRow}>
-                <Text size="sm" numberOfLines={1} color={Surface.label}>
-                  {riser.prefix} · {riser.title}
-                </Text>
-                <Text size="sm" weight="bold" color={Surface.accent}>
-                  +{riser.delta.toFixed(1)}
-                </Text>
-              </View>
+              <RiserRow key={riser.code} riser={riser} />
             ))}
           </View>
         </SectionCard>
@@ -233,6 +243,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: Spacing.two,
+  },
+  riserLabel: {
+    flex: 1,
   },
   wave: {
     flexDirection: "row",
