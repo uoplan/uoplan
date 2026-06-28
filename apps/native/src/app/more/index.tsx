@@ -89,8 +89,7 @@ function AnalyticsOptOutRow() {
 /**
  * The More tab: grouped settings/about/developer destinations that aren't in the
  * bottom tab bar. Web-only features link out to uoplan.party until their native
- * screens are ported; the developer rows push the on-device component gallery
- * and shared-core diagnostics.
+ * screens are ported.
  */
 export default function MoreScreen() {
   const router = useRouter();
@@ -144,20 +143,6 @@ export default function MoreScreen() {
         </Section>
 
         <Section title="Developer">
-          <ListRow
-            icon="square.grid.2x2.fill"
-            title="Component gallery"
-            description="Shared @uoplan/ui primitives, native variants"
-            onPress={() => router.push("/more/gallery")}
-          />
-          <Separator />
-          <ListRow
-            icon="waveform.path.ecg"
-            title="Diagnostics"
-            description="Shared-core wiring proof"
-            onPress={() => router.push("/more/diagnostics")}
-          />
-          <Separator />
           <ListRow
             icon="chevron.left.forwardslash.chevron.right"
             title="Source code"
