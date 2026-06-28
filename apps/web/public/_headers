@@ -6,9 +6,19 @@
 # every visit. For Vite's content-hashed build output under /assets/* the URL
 # changes whenever the bytes change, so those files are safe to cache forever —
 # this eliminates a per-asset revalidation round-trip on repeat visits.
+#
+# Access-Control-Allow-Origin: * lets the uoPlan browser extension (and any other
+# cross-origin reader) fetch the public, read-only data assets. These are
+# no-credentials simple GETs of an arrayBuffer, so `*` alone is sufficient (no
+# preflight, and deliberately no Access-Control-Allow-Credentials).
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
 
 # NOTE: /data/*.pb and /fonts/* use stable (non-hashed) filenames whose content
 # can change on redeploy, so they intentionally keep Cloudflare's default
 # revalidating cache (ETag/If-None-Match → 304, no re-download when unchanged).
+# /data/* also carries the CORS header because it serves the data manifest.json
+# the extension reads before fetching the hashed .pb under /assets/*.
+/data/*
+  Access-Control-Allow-Origin: *

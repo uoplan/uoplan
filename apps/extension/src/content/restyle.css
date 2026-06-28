@@ -1,0 +1,29 @@
+/*
+ * Phase-1 proof-of-injection styling. Deliberately tiny, scoped, and obviously
+ * reversible — it only confirms the content script's CSS is applied on uoCampus.
+ * The real responsive redesign lands in a later phase.
+ *
+ * A thin uoPlan accent strip is pinned to the top of every frame, and long
+ * PeopleSoft content tables are allowed to scroll horizontally instead of
+ * overflowing the viewport (a small, safe responsiveness win).
+ */
+
+html::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #8ec5ff;
+  z-index: 2147483647;
+  pointer-events: none;
+}
+
+/* Let wide PeopleSoft grids scroll rather than blow out the page width. */
+table.PSLEVEL1GRID,
+table.PSLEVEL1GRIDNBO {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}

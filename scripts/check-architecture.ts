@@ -78,6 +78,9 @@ const LAYERS: Record<string, string[]> = {
     "@uoplan/calendar",
   ],
   scraper: ["@uoplan/proto", "@uoplan/core"],
+  // Browser (Chrome/Firefox MV3) extension — a leaf. Consumes the data layer to
+  // overlay uoPlan grades on uoCampus.
+  extension: ["@uoplan/proto", "@uoplan/core", "@uoplan/data"],
   // Isolated Remotion launch-video project (deliberately NOT a pnpm workspace
   // member); it must never depend on any @uoplan/* package, so its allow-list is empty.
   marketing: [],

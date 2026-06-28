@@ -141,6 +141,15 @@ export default defineConfig({
       },
     },
     {
+      // The browser extension is a dev-diagnostics tool: its reporter mirrors
+      // logs to the page/worker DevTools console, and `dev/log-sink.ts` is a Node
+      // CLI where stdout is the intended output channel.
+      files: ["apps/extension/**/*.{ts,tsx}"],
+      rules: {
+        "no-console": "off",
+      },
+    },
+    {
       // Package codegen/build scripts are Node CLI tooling where stdout/stderr
       // is the intended output channel (same rationale as the scraper).
       files: ["packages/*/scripts/**/*.{ts,tsx,mjs}"],

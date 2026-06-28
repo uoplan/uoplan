@@ -1,0 +1,9 @@
+# Build output
+dist/
+dist-firefox/
+
+# crxjs cache
+.crxjs/
+
+# Local live-log captures from the dev log-sink server
+.logs/
