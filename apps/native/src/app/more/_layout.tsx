@@ -18,8 +18,6 @@ export default function MoreLayout() {
       <Stack.Screen name="index" options={{ headerShown: false, title: "Settings" }} />
       <Stack.Screen name="language" options={{ title: "Language" }} />
       <Stack.Screen name="changelog" options={{ title: "Changelog" }} />
-      <Stack.Screen name="gallery" options={{ title: "Component gallery" }} />
-      <Stack.Screen name="diagnostics" options={{ title: "Diagnostics" }} />
     </Stack>
   );
 }
