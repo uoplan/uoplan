@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.0.0-beta.40](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.39...uoplan-monorepo-v1.0.0-beta.40) (2026-06-29)
+
+
+### Features
+
+* **marketing:** continuous spin/scroll, page settle, dual explore search ([13890d6](https://github.com/uoplan/uoplan/commit/13890d67529d6ca3202605afcc40846a9958943d))
+* **marketing:** rework launch ad into 45s multi-device piece with live app video ([0305b54](https://github.com/uoplan/uoplan/commit/0305b54b1d3cbc14ace7b8ad76700cdb3d1ba13f))
+* **marketing:** unify store listings and add deterministic capture harness ([50d7cae](https://github.com/uoplan/uoplan/commit/50d7cae60831d21d752ff6a189a6a39c65b576be))
+* **native:** allow zero electives and add swipe hint to personalize wizard ([5a51b5d](https://github.com/uoplan/uoplan/commit/5a51b5d930ce4cff043caf2a7d0cb0adc929f7e6))
+* **native:** polish personalize wizard, calendar cart, trends labels, iOS tab bar ([d5d511f](https://github.com/uoplan/uoplan/commit/d5d511f4fc33bb4c269acef0cf8dd9c7233015cf))
+* **schedule:** unify courses-this-semester cap and additional electives ([1096311](https://github.com/uoplan/uoplan/commit/1096311692acef0c5b5423d27fcc991014d39912))
+* **web:** rotate home banner through donation, tester, star, and feedback nudges ([f85a99d](https://github.com/uoplan/uoplan/commit/f85a99d128c2953b672e08fcd62318206899b204))
+
+
+### Bug Fixes
+
+* **i18n:** label the May-August season as Summer in web trends ([c724844](https://github.com/uoplan/uoplan/commit/c724844e8053adf2a22fbcc4a6370b64c612e4ab))
+* **marketing:** device poses, captions, materials, and CC BY 4.0 model credits ([2c83bd5](https://github.com/uoplan/uoplan/commit/2c83bd5f08e4c210a7e437fde93522f32bd25817))
+* **marketing:** static iOS clip, upright bigger poses, preload to kill mac flash ([d27ea85](https://github.com/uoplan/uoplan/commit/d27ea85f12fb01ef572215aaa3dc6afe91a1a8ae))
+
 ## [1.0.0-beta.39](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.38...uoplan-monorepo-v1.0.0-beta.39) (2026-06-28)
 
 
