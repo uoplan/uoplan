@@ -76,11 +76,12 @@ function gradeValue(model: CourseCompareModel, fallback: string): ReactNode {
   return (
     <GradeHistogram
       gradeViz={model.gradeViz}
-      maxBarPx={54}
+      maxBarPx={48}
       showSummary={false}
       density="compact"
       hideLabels
       showLegend={false}
+      fitWidth
     />
   );
 }
@@ -295,8 +296,8 @@ export default function CompareScreen() {
   );
 }
 
-const LABEL_WIDTH = 112;
-const COLUMN_WIDTH = 176;
+const LABEL_WIDTH = 92;
+const COLUMN_WIDTH = 124;
 
 const styles = StyleSheet.create({
   emptyState: {

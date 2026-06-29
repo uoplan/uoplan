@@ -25,10 +25,13 @@ interface PagedStepperProps {
   steps: readonly PagedStep[];
   initialIndex?: number;
   onIndexChange?: (index: number) => void;
-  /** Deprecated: page content owns any primary CTA so it can swipe with the page. */
-  primaryLabel?: string;
-  /** Deprecated: page content owns any primary CTA so it can control disabled state. */
-  onPrimary?: () => void;
+  /**
+   * Bump this number to jump the pager back to the first step without
+   * remounting it. Used by the personalize Reset action: a remount would reset
+   * the pager's measured `size` to 0 and flash every page stacked at x=0, so we
+   * just scroll back to page 0 instead.
+   */
+  resetSignal?: number;
 }
 
 function clampIndex(index: number, count: number): number {
@@ -62,7 +65,12 @@ export function usePagedStepperContentInset(): number {
  * *under* the floating dots/cart (no opaque band cutting content off), padding
  * their scroll content by the inset so the last item still clears the controls.
  */
-export function PagedStepper({ steps, initialIndex = 0, onIndexChange }: PagedStepperProps) {
+export function PagedStepper({
+  steps,
+  initialIndex = 0,
+  onIndexChange,
+  resetSignal,
+}: PagedStepperProps) {
   const floatingBottom = useFloatingControlsBottom();
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [activeIndex, setActiveIndex] = useState(() => clampIndex(initialIndex, steps.length));
@@ -81,6 +89,18 @@ export function PagedStepper({ steps, initialIndex = 0, onIndexChange }: PagedSt
     },
     [onIndexChange, pageWidth, steps.length],
   );
+
+  // Jump back to the first step when the parent bumps `resetSignal` (e.g. the
+  // personalize Reset action). Skip the initial mount so we don't fight
+  // `initialIndex`.
+  const didMountReset = useRef(false);
+  useEffect(() => {
+    if (!didMountReset.current) {
+      didMountReset.current = true;
+      return;
+    }
+    moveTo(0, false);
+  }, [resetSignal, moveTo]);
 
   // Re-pin the scroll offset to the active page whenever the pager is (re)measured.
   useEffect(() => {

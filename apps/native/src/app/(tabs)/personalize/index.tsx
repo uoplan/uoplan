@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Alert, InteractionManager, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as DocumentPicker from "expo-document-picker";
 import { File } from "expo-file-system";
@@ -22,7 +22,7 @@ import { PagedStepper, type PagedStep } from "@/components/paged-stepper";
 import { useFloatingControlsBottom } from "@/components/redesign/fab";
 import { GlassIconButton } from "@/components/redesign/glass-button";
 import { type SearchableSelectOption } from "@/components/searchable-select";
-import { Spacing, Surface } from "@/constants/theme";
+import { Fonts, Spacing, Surface } from "@/constants/theme";
 import { useCompletedCourses } from "@/data/completed-courses-provider";
 import { useAppData, useExploreIndex } from "@/data/data-provider";
 import type { ExploreProgramEntry } from "@/data/explore-index";
@@ -85,6 +85,7 @@ export default function PersonalizeScreen() {
   const [transcriptLoading, setTranscriptLoading] = useState(false);
   const [transcriptSummary, setTranscriptSummary] = useState<TranscriptImportSummary | null>(null);
   const [resetNonce, setResetNonce] = useState(0);
+  const [resetting, setResetting] = useState(false);
 
   const termOptions = useMemo<SearchableSelectOption[]>(
     () =>
@@ -284,6 +285,17 @@ export default function PersonalizeScreen() {
   const insets = useSafeAreaInsets();
   const floatingBottom = useFloatingControlsBottom();
 
+  const performReset = useCallback(() => {
+    resetPersonalization();
+    completed.clear();
+    setRequirementSelections(DEFAULT_REQUIREMENT_SELECTIONS);
+    setTranscriptSummary(null);
+    setPdfBase64(null);
+    setTranscriptLoading(false);
+    setResetNonce((nonce) => nonce + 1);
+    analytics.capture("personalization_reset");
+  }, [analytics, completed, resetPersonalization]);
+
   const handleReset = useCallback(() => {
     Alert.alert(
       "Reset personalization?",
@@ -294,24 +306,26 @@ export default function PersonalizeScreen() {
           text: "Reset",
           style: "destructive",
           onPress: () => {
-            resetPersonalization();
-            completed.clear();
-            setRequirementSelections(DEFAULT_REQUIREMENT_SELECTIONS);
-            setTranscriptSummary(null);
-            setPdfBase64(null);
-            setTranscriptLoading(false);
-            setResetNonce((nonce) => nonce + 1);
-            analytics.capture("personalization_reset");
+            // Show the loading overlay first, then run the (synchronous, somewhat
+            // heavy) state reset + requirement recompute after the overlay has
+            // painted. The native ActivityIndicator keeps spinning on the UI
+            // thread even while that work briefly blocks JS, so the user sees a
+            // clear loading state instead of a frozen screen that snaps back.
+            setResetting(true);
+            InteractionManager.runAfterInteractions(() => {
+              performReset();
+              setResetting(false);
+            });
           },
         },
       ],
     );
-  }, [analytics, completed, resetPersonalization]);
+  }, [performReset]);
 
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
       <PagedStepper
-        key={resetNonce}
+        resetSignal={resetNonce}
         steps={[
           {
             key: "term",
@@ -420,6 +434,12 @@ export default function PersonalizeScreen() {
           onPress={handleReset}
         />
       </View>
+      {resetting ? (
+        <View style={styles.resetOverlay}>
+          <ActivityIndicator size="large" color={Surface.accent} />
+          <Text style={styles.resetOverlayText}>Resetting…</Text>
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -432,5 +452,23 @@ const styles = StyleSheet.create({
   resetWrap: {
     position: "absolute",
     left: Spacing.three,
+  },
+  resetOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.three,
+    backgroundColor: Surface.page,
+    zIndex: 10,
+  },
+  resetOverlayText: {
+    fontFamily: Fonts.monoMedium,
+    fontSize: 14,
+    fontWeight: "700",
+    color: Surface.dimmed,
   },
 });

@@ -32,6 +32,12 @@ interface BaseSearchablePickerProps {
   emptyMessage?: string;
   disabled?: boolean;
   clearable?: boolean;
+  /**
+   * Only reveal options once the user starts typing. Used for very large lists
+   * (programs, every course) so the sheet opens to a calm "search" prompt
+   * instead of dumping hundreds of rows the moment it appears.
+   */
+  searchOnly?: boolean;
   testID?: string;
 }
 
@@ -197,6 +203,7 @@ function SearchablePickerSheet({
   searchPlaceholder,
   emptyMessage,
   clearable = true,
+  searchOnly = false,
   onClose,
   onExited,
   onSelect,
@@ -232,21 +239,24 @@ function SearchablePickerSheet({
     }
   }, [opened, mounted, onExited, progress]);
 
+  const needle = normalize(query);
   const filtered = useMemo(() => {
-    const needle = normalize(query);
-    if (!needle) return options;
+    if (!needle) return searchOnly ? [] : options;
     return options.filter((option) => optionHaystack(option).includes(needle));
-  }, [options, query]);
+  }, [options, needle, searchOnly]);
 
   if (!mounted) return null;
 
   const translateY = progress.interpolate({ inputRange: [0, 1], outputRange: [screenHeight, 0] });
   const canClear = selectedValues.length > 0;
+  const awaitingQuery = searchOnly && !needle;
   const subtitle = multiple
     ? selectedValues.length === 0
       ? "No options selected"
       : `${selectedValues.length} selected`
-    : `${options.length} options`;
+    : awaitingQuery
+      ? "Type to search"
+      : `${options.length} options`;
 
   const renderItem: ListRenderItem<SearchableSelectOption> = ({ item }) => (
     <OptionRow
@@ -306,7 +316,9 @@ function SearchablePickerSheet({
             ListEmptyComponent={
               <View style={styles.empty}>
                 <Text size="sm" dimmed align="center">
-                  {emptyMessage ?? "No matching options found."}
+                  {awaitingQuery
+                    ? "Start typing to search."
+                    : (emptyMessage ?? "No matching options found.")}
                 </Text>
               </View>
             }

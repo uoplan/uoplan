@@ -132,6 +132,14 @@ export interface GradeHistogramProps {
   density?: GradeHistogramDensity;
   /** Override the special-bar legend visibility. Defaults to expanded charts only. */
   showLegend?: boolean;
+  /**
+   * Let the bars flex to fill a narrow container instead of holding their
+   * intrinsic minimum width. Used by the compare table, where each histogram
+   * must fit inside a thin fixed-width column (otherwise the 12 bars overflow
+   * the column and bleed into the neighbour). Opt-in so the full-width compact
+   * histograms on the course/professor screens keep their comfortable bar width.
+   */
+  fitWidth?: boolean;
 }
 
 function StatHeader({
@@ -201,6 +209,7 @@ export function GradeHistogram({
   hideLabels = false,
   density = "expanded",
   showLegend,
+  fitWidth = false,
 }: GradeHistogramProps) {
   const { isTablet } = useAdaptiveLayout();
   const { sCount, nsCount, snsTotal, displayBars, maxHistogramCount } =
@@ -225,12 +234,14 @@ export function GradeHistogram({
           compact && styles.chartCardCompact,
         ]}
       >
-        <View style={[styles.chart, { minHeight: maxBarPx + labelRoom }]}>
+        <View
+          style={[styles.chart, fitWidth && styles.chartFit, { minHeight: maxBarPx + labelRoom }]}
+        >
           {displayBars.map((bar) => {
             const height =
               bar.count > 0 ? Math.max(minBarPx, (bar.count / scaleMax) * maxBarPx) : 0;
             return (
-              <View key={bar.key} style={styles.item}>
+              <View key={bar.key} style={[styles.item, fitWidth && styles.itemFit]}>
                 <View style={[styles.barSlot, { height: maxBarPx }]}>
                   {height > 0 ? (
                     <View
@@ -256,7 +267,7 @@ export function GradeHistogram({
             );
           })}
 
-          <View style={[styles.item, styles.snsItem]}>
+          <View style={[styles.item, styles.snsItem, fitWidth && styles.itemFit]}>
             <View style={[styles.barSlot, { height: maxBarPx }]}>
               {snsTotal > 0 ? (
                 <View
@@ -393,11 +404,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 7,
   },
+  chartFit: {
+    gap: 3,
+  },
   item: {
     flex: 1,
     minWidth: 14,
     alignItems: "center",
     justifyContent: "flex-end",
+  },
+  itemFit: {
+    minWidth: 0,
   },
   snsItem: {
     flex: 1.35,

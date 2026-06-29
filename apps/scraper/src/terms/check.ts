@@ -4,20 +4,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
 import { bootstrapPeopleSoft, PEOPLESOFT_CLASS_SEARCH_URL } from "../shared/peoplesoft.ts";
+import { normalizeTermName } from "./normalize.ts";
 
 const TERMS_JSON = path.join(SCRAPER_DATA_DIR, "terms.json");
 const SEARCH_URL = PEOPLESOFT_CLASS_SEARCH_URL;
 
 type Term = { termId: string; name: string };
-
-/**
- * uOttawa labels the May–August term "Spring/Summer Term", which is too long for
- * our term pickers. Collapse the "Spring/Summer" segment down to just "Summer"
- * (e.g. "2026 Spring/Summer Term" → "2026 Summer Term").
- */
-export function normalizeTermName(name: string): string {
-  return name.replaceAll(/spring\s*\/\s*summer/gi, "Summer");
-}
 
 export function sortTerms(terms: Term[]): Term[] {
   return [...terms].sort((a, b) => a.termId.localeCompare(b.termId));

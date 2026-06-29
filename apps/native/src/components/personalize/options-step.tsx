@@ -1,16 +1,8 @@
 import { useState } from "react";
-import {
-  LayoutAnimation,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  UIManager,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { AppIcon } from "@/components/app-icon";
+import { CompletedCoursesSheet } from "@/components/personalize/completed-courses-sheet";
 import { usePagedStepperContentInset } from "@/components/paged-stepper";
 import {
   SearchableMultiSelect,
@@ -20,15 +12,6 @@ import {
 import type { TranscriptImportSummary } from "@/components/personalize/transcript-step";
 import type { ExploreCourseEntry } from "@/data/explore-index";
 import { Fonts, Spacing, Surface } from "@/constants/theme";
-
-// LayoutAnimation needs an opt-in on old-architecture Android; under Fabric the
-// setter is a no-op that warns, so guard on the architecture.
-const IS_FABRIC = Boolean(
-  (globalThis as { nativeFabricUIManager?: unknown }).nativeFabricUIManager,
-);
-if (Platform.OS === "android" && !IS_FABRIC && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 interface OptionsStepProps {
   startYearOptions: SearchableSelectOption[];
@@ -44,33 +27,6 @@ interface OptionsStepProps {
   onProgramChange: (programUrl: string | null) => void;
   onCourseCodesChange: (codes: string[]) => void;
   onRemoveCourse: (code: string) => void;
-}
-
-function CourseChip({
-  code,
-  title,
-  onRemove,
-}: {
-  code: string;
-  title: string;
-  onRemove: () => void;
-}) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={`Remove ${code}`}
-      onPress={onRemove}
-      style={({ pressed }) => [styles.courseChip, pressed ? styles.pressed : null]}
-    >
-      <View style={styles.courseChipCopy}>
-        <Text style={styles.courseCode}>{code}</Text>
-        <Text style={styles.courseTitle} numberOfLines={1}>
-          {title}
-        </Text>
-      </View>
-      <AppIcon name="xmark" size={12} color={Surface.dimmed} weight="semibold" />
-    </Pressable>
-  );
 }
 
 export function OptionsStep({
@@ -90,11 +46,28 @@ export function OptionsStep({
 }: OptionsStepProps) {
   const contentInset = usePagedStepperContentInset();
   const transcriptResolvedEssentials = Boolean(transcriptSummary && startYear && program);
-  const [coursesExpanded, setCoursesExpanded] = useState(false);
-  const toggleCourses = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setCoursesExpanded((value) => !value);
-  };
+  const [coursesOpen, setCoursesOpen] = useState(false);
+  const completedCourses = courseCodes.map((code) => ({
+    code,
+    title: coursesByCode.get(code)?.title ?? "Selected course",
+  }));
+  const summaryFacts = [
+    {
+      key: "year",
+      label: startYear ? "Start year ready" : "Start year needed",
+      ready: !!startYear,
+    },
+    {
+      key: "program",
+      label: selectedProgramLabel ? "Program ready" : "Program needed",
+      ready: !!selectedProgramLabel,
+    },
+    {
+      key: "courses",
+      label: `${courseCodes.length} course${courseCodes.length === 1 ? "" : "s"} selected`,
+      ready: courseCodes.length > 0,
+    },
+  ];
 
   return (
     <View style={[styles.root, { paddingBottom: contentInset }]}>
@@ -108,13 +81,25 @@ export function OptionsStep({
             : "Choose anything the transcript did not detect, or complete this step manually."}
         </Text>
         <View style={styles.summaryFacts}>
-          <Text style={styles.fact}>{startYear ? "Start year ready" : "Start year needed"}</Text>
-          <Text style={styles.fact}>
-            {selectedProgramLabel ? "Program ready" : "Program needed"}
-          </Text>
-          <Text style={styles.fact}>
-            {courseCodes.length} course{courseCodes.length === 1 ? "" : "s"} selected
-          </Text>
+          {summaryFacts.map((fact) => (
+            <View
+              key={fact.key}
+              style={[styles.factChip, fact.ready ? styles.factChipReady : styles.factChipPending]}
+            >
+              <AppIcon
+                name={fact.ready ? "checkmark.circle.fill" : "exclamationmark.circle"}
+                size={12}
+                color={fact.ready ? Surface.accent : Surface.dimmed}
+                weight="semibold"
+              />
+              <Text
+                style={[styles.fact, fact.ready ? styles.factReady : styles.factPending]}
+                numberOfLines={1}
+              >
+                {fact.label}
+              </Text>
+            </View>
+          ))}
         </View>
       </View>
 
@@ -141,6 +126,7 @@ export function OptionsStep({
           placeholder="Search for your program…"
           searchPlaceholder="Search programs"
           emptyMessage="No programs match your search."
+          searchOnly
         />
       </View>
 
@@ -154,47 +140,32 @@ export function OptionsStep({
           placeholder="Search for completed courses…"
           searchPlaceholder="Search by course code or title"
           emptyMessage="No courses match your search."
+          searchOnly
         />
         {courseCodes.length > 0 ? (
-          <View>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityState={{ expanded: coursesExpanded }}
-              accessibilityLabel={`${coursesExpanded ? "Hide" : "Show"} completed courses`}
-              onPress={toggleCourses}
-              style={({ pressed }) => [styles.disclosure, pressed ? styles.pressed : null]}
-            >
-              <Text style={styles.disclosureLabel}>
-                {courseCodes.length} completed course{courseCodes.length === 1 ? "" : "s"}
-              </Text>
-              <AppIcon
-                name={coursesExpanded ? "chevron.down" : "chevron.right"}
-                size={12}
-                color={Surface.dimmed}
-                weight="semibold"
-              />
-            </Pressable>
-            {coursesExpanded ? (
-              <ScrollView
-                style={styles.courseScroll}
-                contentContainerStyle={styles.courseChips}
-                showsVerticalScrollIndicator
-                nestedScrollEnabled
-                keyboardShouldPersistTaps="handled"
-              >
-                {courseCodes.map((code) => (
-                  <CourseChip
-                    key={code}
-                    code={code}
-                    title={coursesByCode.get(code)?.title ?? "Selected course"}
-                    onRemove={() => onRemoveCourse(code)}
-                  />
-                ))}
-              </ScrollView>
-            ) : null}
-          </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Manage completed courses"
+            onPress={() => setCoursesOpen(true)}
+            style={({ pressed }) => [styles.manageButton, pressed ? styles.pressed : null]}
+          >
+            <Text style={styles.manageLabel}>
+              {courseCodes.length} completed course{courseCodes.length === 1 ? "" : "s"}
+            </Text>
+            <View style={styles.manageMeta}>
+              <Text style={styles.manageAction}>Manage</Text>
+              <AppIcon name="chevron.right" size={12} color={Surface.dimmed} weight="semibold" />
+            </View>
+          </Pressable>
         ) : null}
       </View>
+
+      <CompletedCoursesSheet
+        open={coursesOpen}
+        courses={completedCourses}
+        onRemove={onRemoveCourse}
+        onClose={() => setCoursesOpen(false)}
+      />
     </View>
   );
 }
@@ -224,13 +195,38 @@ const styles = StyleSheet.create({
     color: Surface.dimmed,
   },
   summaryFacts: {
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: Spacing.one,
+    marginTop: Spacing.half,
+  },
+  factChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.one,
+    borderRadius: 999,
+    borderWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: Spacing.two,
+    paddingVertical: Spacing.half,
+  },
+  factChipReady: {
+    borderColor: Surface.accentSoft,
+    backgroundColor: Surface.accentSoft,
+  },
+  factChipPending: {
+    borderColor: Surface.border,
+    backgroundColor: Surface.subtle,
   },
   fact: {
     fontFamily: Fonts.monoMedium,
     fontSize: 12,
     fontWeight: "700",
+  },
+  factReady: {
     color: Surface.accent,
+  },
+  factPending: {
+    color: Surface.dimmed,
   },
   field: {
     gap: Spacing.two,
@@ -241,10 +237,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: Surface.label,
   },
-  courseChips: {
-    gap: Spacing.one,
-  },
-  disclosure: {
+  manageButton: {
     minHeight: 46,
     flexDirection: "row",
     alignItems: "center",
@@ -257,45 +250,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.two,
   },
-  disclosureLabel: {
+  manageLabel: {
     fontFamily: Fonts.monoMedium,
     fontSize: 13,
     fontWeight: "700",
     color: Surface.label,
   },
-  courseScroll: {
-    maxHeight: 196,
-    marginTop: Spacing.one,
-  },
-  courseChip: {
-    minHeight: 46,
+  manageMeta: {
     flexDirection: "row",
     alignItems: "center",
-    gap: Spacing.two,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Surface.border,
-    borderRadius: 14,
-    backgroundColor: Surface.card,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.two,
+    gap: Spacing.one,
   },
-  pressed: {
-    opacity: 0.82,
-  },
-  courseChipCopy: {
-    flex: 1,
-    minWidth: 0,
-    gap: 2,
-  },
-  courseCode: {
+  manageAction: {
     fontFamily: Fonts.monoMedium,
     fontSize: 12,
     fontWeight: "700",
     color: Surface.accent,
   },
-  courseTitle: {
-    fontFamily: Fonts.sans,
-    fontSize: 12,
-    color: Surface.dimmed,
+  pressed: {
+    opacity: 0.82,
   },
 });

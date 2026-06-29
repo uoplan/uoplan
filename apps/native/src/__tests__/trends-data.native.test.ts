@@ -75,7 +75,7 @@ describe("trends-data", () => {
   it("formats PeopleSoft term ids into season + year labels", () => {
     expect(formatTermLabel(2179)).toBe("Fall 2017");
     expect(formatTermLabel(2191)).toBe("Winter 2019");
-    expect(formatTermLabel(2195)).toBe("Spring/Summer 2019");
+    expect(formatTermLabel(2195)).toBe("Summer 2019");
     expect(formatTermLabelShort(2179)).toBe("F17");
     expect(formatTermLabelShort(2191)).toBe("W19");
     // Unrecognised ids fall back to the raw string.
@@ -108,7 +108,7 @@ describe("trends-data", () => {
 
   it("computes a season signal for every season", () => {
     const seasons = seasonGpa(grades);
-    expect(seasons.map((s) => s.label)).toEqual(["Fall", "Winter", "Spring/Summer"]);
+    expect(seasons.map((s) => s.label)).toEqual(["Fall", "Winter", "Summer"]);
     expect(seasons.every((s) => s.value >= 0)).toBe(true);
   });
 

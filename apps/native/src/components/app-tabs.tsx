@@ -2,6 +2,7 @@ import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { Platform } from "react-native";
 
 import AndroidTabs from "@/components/app-tabs-android";
+import { glassAvailable } from "@/components/glass-surface";
 import { Surface } from "@/constants/theme";
 import { useCompletedCourses } from "@/data/completed-courses-provider";
 import { useScheduleOptions } from "@/data/schedule-options-provider";
@@ -31,6 +32,11 @@ export default function AppTabs() {
  * while the user hasn't provided any personalization data (no program, start
  * year, or completed courses), nudging them to set up requirement-aware
  * schedules.
+ *
+ * On iOS 26+ the bar is a floating Liquid-Glass capsule. On older iOS (no Liquid
+ * Glass) UIKit's scroll-edge appearance otherwise makes the bar transparent
+ * (looking "background-less") — `disableTransparentOnScrollEdge` keeps the solid
+ * `backgroundColor`, with a hairline `shadowColor` separating it from content.
  */
 function IosTabs() {
   const { personalization } = useScheduleOptions();
@@ -50,6 +56,9 @@ function IosTabs() {
       labelStyle={{ selected: { color: Surface.accent } }}
       tintColor={Surface.accent}
       badgeBackgroundColor={Surface.accent}
+      {...(glassAvailable
+        ? null
+        : { disableTransparentOnScrollEdge: true, shadowColor: Surface.border })}
     >
       <NativeTabs.Trigger name="explore">
         <NativeTabs.Trigger.Label hidden>Explore</NativeTabs.Trigger.Label>
