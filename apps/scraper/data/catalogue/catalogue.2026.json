@@ -167462,7 +167462,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Cours obligatoires :",
+          "title": "Cours obligatoires",
           "options": [
             {
               "type": "course",
@@ -167488,7 +167488,7 @@
         },
         {
           "type": "and",
-          "title": "Projet de thèse :",
+          "title": "Projet de thèse",
           "options": [
             {
               "type": "course",
@@ -167498,7 +167498,7 @@
         },
         {
           "type": "and",
-          "title": "Thèse :",
+          "title": "Thèse",
           "options": [
             {
               "type": "course",
@@ -167508,7 +167508,7 @@
         },
         {
           "type": "and",
-          "title": "Cours obligatoires :",
+          "title": "Cours obligatoires",
           "options": [
             {
               "type": "course",
@@ -167534,7 +167534,7 @@
         },
         {
           "type": "and",
-          "title": "Mémoire :",
+          "title": "Mémoire",
           "options": [
             {
               "type": "course",
@@ -167544,7 +167544,7 @@
         },
         {
           "type": "and",
-          "title": "Cours obligatoires :",
+          "title": "Cours obligatoires",
           "options": [
             {
               "type": "course",
@@ -167560,7 +167560,7 @@
         },
         {
           "type": "and",
-          "title": "Cours optionnels :",
+          "title": "Cours optionnels",
           "options": [
             {
               "type": "discipline_elective",
@@ -170497,17 +170497,10 @@
               "type": "elective",
               "title": "6 classical language course units at the undergraduate level",
               "credits": 6
-            }
-          ]
-        },
-        {
-          "type": "and",
-          "title": "Research Paper:",
-          "options": [
+            },
             {
               "type": "course",
-              "code": "CLA 5999",
-              "credits": 6
+              "code": "MRP 6999"
             }
           ]
         },
@@ -182550,17 +182543,10 @@
                   "discipline": "EDU"
                 }
               ]
-            }
-          ]
-        },
-        {
-          "type": "and",
-          "title": "Research Paper :",
-          "options": [
+            },
             {
               "type": "course",
-              "code": "EDU 6999",
-              "credits": 6
+              "code": "MRP 6999"
             }
           ]
         }
