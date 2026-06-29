@@ -1,17 +1,74 @@
 # Native EAS deploy runbook
 
-Manual GitHub Actions deployment for the Expo app in `apps/native` uses EAS Build and, for production builds, EAS Submit.
+GitHub Actions deployment for the Expo app in `apps/native`. Release builds run
+`eas build --local` **on the GitHub runner** (zero EAS Build cloud minutes — see the
+strategy note below), and production builds are shipped with EAS Submit.
+
+## Recommended build strategy
+
+The app is **never** run via Expo Go — it links a custom native module
+(`modules/uoplan-engine`, the Rust schedule engine), so all builds are real native
+builds. The standing approach is **EAS as a credential manager + build orchestrator,
+not a cloud-compute dependency**:
+
+- **Credentials:** EAS manages signing (iOS distribution cert + provisioning profile,
+  Android upload keystore). This is the main reason to keep EAS — it gives reproducible
+  signing locally _and_ in CI with only an `EXPO_TOKEN`, instead of hand-managing
+  fastlane `match`, ASC API keys and keystore custody across machines.
+- **Builds:** `eas build --local` everywhere — locally
+  (`pnpm --filter native eas:build:local`) and in CI (`native-deploy.yml`). Same recipe,
+  reproducible, no cloud minutes. iOS must build on macOS; Android builds anywhere.
+- **Submission:** `eas submit` from a local machine or CI.
 
 ## Current repository state
 
-- Workflow: `.github/workflows/native-deploy.yml`
+- Workflows:
+  - `.github/workflows/native-build-check.yml` — PR/push **build smoke**: a no-signing
+    debug compile of both platforms (Android `assembleDebug` on Linux, iOS simulator
+    build on macOS). Needs no credentials; catches native breakage before release.
+  - `.github/workflows/native-deploy.yml` — release build + store submission.
 - EAS config: `apps/native/eas.json`
 - App IDs:
-  - iOS bundle ID: `party.uoplan.native`
+  - iOS bundle ID: `party.uoplan.app`
   - Android package: `party.uoplan.app`
-- `apps/native/app.json` does **not** have `owner` or `extra.eas.projectId` yet. Create the real EAS project before running CI.
+- `apps/native/app.json` carries the real `owner` (`uoplan`) and
+  `extra.eas.projectId` (`9324474b-4ac4-4f5d-871d-5eebea45fbb6`).
 - Build numbers use `cli.appVersionSource = "remote"` with production `autoIncrement`, so EAS manages iOS build numbers and Android version codes.
-- No EAS `development` build profile is checked in yet because `expo-dev-client` is not installed. Add that dependency before adding a `developmentClient: true` profile.
+- Build profiles in `eas.json`: `development` (`developmentClient: true`, internal
+  distribution, iOS simulator — `expo-dev-client` is installed), `preview` (internal
+  apk / iOS simulator), `production` (store).
+
+## Local development (development build)
+
+`expo-dev-client` is installed, so debug builds are full development builds (custom dev
+menu + launcher, network inspector). Run them on a simulator/emulator with:
+
+```bash
+pnpm --filter native start     # Metro (port 8081)
+pnpm --filter native ios       # expo run:ios     → dev client on the iOS simulator
+pnpm --filter native android   # expo run:android → dev client on an Android emulator
+```
+
+Or produce an installable dev-client build via EAS with no store credentials:
+
+```bash
+eas build --local --profile development --platform android   # dev-client APK
+eas build --local --profile development --platform ios       # iOS simulator dev client
+```
+
+## Local release builds
+
+Same recipe as CI, on your machine (signing pulled from EAS; `eas login` or
+`EXPO_TOKEN` first):
+
+```bash
+pnpm --filter native eas:build:local -- --profile production --platform ios
+pnpm --filter native eas:build:local -- --profile production --platform android
+```
+
+The `eas:build:local` wrapper forces our pnpm-patched local build plugin (drops the
+macOS-Tahoe-breaking `security find-identity -v` flag — see
+`apps/native/scripts/eas-build-local.mts`).
 
 ## One-time setup checklist
 
@@ -49,7 +106,7 @@ Use EAS-managed credentials unless there is a reason to keep local signing files
 
 In Apple Developer / App Store Connect:
 
-- Create the App Store Connect app record for bundle ID `party.uoplan.native`.
+- Create the App Store Connect app record for bundle ID `party.uoplan.app`.
 - Note the numeric App Store Connect app ID (`ascAppId`) from App Information.
 - Create an App Store Connect API key (`.p8`), Key ID, and Issuer ID.
 

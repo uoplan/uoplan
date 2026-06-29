@@ -1,56 +1,98 @@
-# Welcome to your Expo app 👋
+# uoPlan native app
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+The uoPlan iOS + Android app — an [Expo](https://expo.dev) (SDK 56) / React Native
+client in the `uoplan.party` monorepo. It shares the schedule engine, requirements
+logic, data layer and UI primitives with the web app via the workspace packages.
 
-## Get started
+> **Not Expo Go.** The app links a custom native module (`modules/uoplan-engine` — the
+> Rust schedule engine, a JNI `libuoplan_engine.so` on Android and a
+> `UoplanEngine.xcframework` on iOS). Expo Go only bundles the stock Expo SDK modules,
+> so it **cannot** run this app. All development uses **development builds** (your own
+> debug build of the app, with `expo-dev-client`), never Expo Go.
 
-1. Install dependencies
+## Prerequisites
 
-   ```bash
-   npm install
-   ```
+- **pnpm** (the repo package manager) and Node 24.
+- **Rust** (stable) — the schedule engine compiles to a native lib per platform.
+- **iOS:** macOS + Xcode (+ CocoaPods, bundled with Xcode).
+- **Android:** Android Studio with the SDK + **NDK `27.1.12297006`**, and **JDK 17**
+  (Temurin / Homebrew `openjdk@17` — Android Studio's bundled JBR fails the Gradle
+  toolchain check).
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## First-time setup
 
 ```bash
-npm run reset-project
+pnpm install                 # from the repo root
+pnpm generate                # proto TS + bundled .pb data (needed by typecheck/tests/build)
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+The native Rust engine artifacts are git-ignored and must be built before a native
+compile (rebuild them whenever `packages/engine` changes):
 
-### Other setup steps
+```bash
+pnpm build:engine-native-ffi            # iOS  → modules/uoplan-engine/ios/UoplanEngine.xcframework
+ANDROID_NDK_HOME=$ANDROID_HOME/ndk/27.1.12297006 \
+  pnpm build:engine-native-ffi-android  # Android → per-ABI libuoplan_engine.so
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Run on a simulator / emulator (development build)
 
-## Learn more
+```bash
+pnpm --filter native start     # Metro dev server (port 8081)
+pnpm --filter native ios       # expo run:ios     — build + launch the dev client on the iOS simulator
+pnpm --filter native android   # expo run:android — build + launch the dev client on an Android emulator
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+`expo run:*` runs `expo prebuild` (regenerating the git-ignored `ios/` + `android/`
+projects from `app.config.ts`) and then a native debug build. Edit JS/TS and it
+hot-reloads against Metro; you only rebuild when native config or dependencies change.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+> On iOS, build for the **simulator** (plain `pnpm --filter native ios`). Targeting a
+> _booted_ simulator with `expo run:ios --device <udid>` is misdetected as a physical
+> device and fails code signing — build via the simulator path instead.
 
-## Join the community
+## Build a release locally (EAS, no cloud minutes)
 
-Join our community of developers creating universal apps.
+Builds and signing are managed by EAS, but run entirely on your machine with
+`--local` — the same recipe CI uses, with zero EAS Build cloud minutes. EAS holds the
+signing credentials (iOS distribution cert + provisioning profile, Android keystore),
+so you only need to be logged in (`eas login`, or set `EXPO_TOKEN`).
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+# convenience wrapper (forces our pnpm-patched local build plugin):
+pnpm --filter native eas:build:local -- --profile production --platform ios
+pnpm --filter native eas:build:local -- --profile production --platform android
+
+# or call eas directly:
+eas build --local --profile development --platform android   # dev-client APK, no store creds
+eas build --local --profile preview     --platform ios       # internal/simulator build
+eas build --local --profile production  --platform ios       # signed store build (.ipa)
+```
+
+Build profiles live in [`eas.json`](./eas.json): `development` (dev client, internal),
+`preview` (internal apk / iOS simulator), `production` (store).
+
+## Submit to the stores
+
+```bash
+eas submit --profile production --platform ios      --path <build.ipa>   # → TestFlight
+eas submit --profile production --platform android  --path <build.aab>   # → Play internal track
+```
+
+The very first Android release must be uploaded to Play Console by hand before the Play
+API is authorized — see the runbook.
+
+## CI
+
+- **`.github/workflows/native-build-check.yml`** — PR/push smoke: no-signing debug
+  compile of both platforms (Android `assembleDebug` on Linux, iOS simulator build on
+  macOS). Catches native breakage before release; needs no credentials.
+- **`.github/workflows/native-deploy.yml`** — release: `eas build --local` on GitHub
+  runners + `eas submit`. Auto-triggered by release-please, or on-demand via
+  `workflow_dispatch`. Needs the `EXPO_TOKEN` secret.
+
+## More
+
+The full deployment runbook — credentials, store setup, the monorepo/native-engine
+build steps, and Android R8/ProGuard notes — is in
+[`docs/native-deploy.md`](../../docs/native-deploy.md).

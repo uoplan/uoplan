@@ -1,0 +1,173 @@
+name: Native Build Check
+
+# Compile-only smoke for the Expo app in `apps/native`. The existing `native`
+# job in ci.yml runs the TS typecheck + jest-expo render tests under Node, but it
+# never compiles the actual native projects — so a broken config plugin, a Gradle
+# change, or a JNI/xcframework regression in the Rust engine would only surface at
+# release time (Native Deploy). This workflow catches that earlier by doing a
+# no-signing debug build of both platforms on every native-affecting PR.
+#
+# It deliberately uses NO store credentials: Android builds a debug APK (auto
+# debug keystore) and iOS builds for the simulator with code signing disabled, so
+# it needs neither EXPO_TOKEN nor Apple/Play credentials. Release builds + store
+# submission stay in .github/workflows/native-deploy.yml (eas build --local).
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/native/**"
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/native-build-check.yml"
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - "apps/native/**"
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/native-build-check.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-build-check-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    name: Android debug compile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Android NDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Matches the NDK the React Native Gradle plugin (Expo SDK) pins and that
+          # cargo-ndk uses to cross-compile the JNI engine .so.
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;27.1.12297006"
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/27.1.12297006" >> "$GITHUB_ENV"
+          echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/27.1.12297006" >> "$GITHUB_ENV"
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android,i686-linux-android
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            packages/engine/target
+          key: cargo-native-android-${{ hashFiles('packages/engine/Cargo.lock') }}
+          restore-keys: cargo-native-android-
+
+      - name: Install cargo-ndk
+        shell: bash
+        run: cargo ndk --version >/dev/null 2>&1 || cargo install cargo-ndk --locked
+
+      - name: Install protoc
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends protobuf-compiler
+
+      - name: Generate proto + bundled data
+        shell: bash
+        run: |
+          set -euo pipefail
+          pnpm generate
+          pnpm --filter native prebuild:data
+
+      - name: Build JNI engine (libuoplan_engine.so per ABI)
+        run: pnpm build:engine-native-ffi-android
+
+      - name: Prebuild Android project (CNG)
+        run: pnpm --filter native exec expo prebuild --platform android --no-install
+
+      - name: Compile debug APK (no signing)
+        working-directory: apps/native/android
+        run: ./gradlew :app:assembleDebug --no-daemon
+
+  ios:
+    name: iOS simulator compile
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios,aarch64-apple-ios-sim
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            packages/engine/target
+          key: cargo-native-ios-${{ hashFiles('packages/engine/Cargo.lock') }}
+          restore-keys: cargo-native-ios-
+
+      - name: Install protoc
+        shell: bash
+        run: brew list protobuf >/dev/null 2>&1 || brew install protobuf
+
+      - name: Generate proto + bundled data
+        shell: bash
+        run: |
+          set -euo pipefail
+          pnpm generate
+          pnpm --filter native prebuild:data
+
+      - name: Build engine XCFramework
+        run: pnpm build:engine-native-ffi
+
+      - name: Prebuild iOS project (CNG)
+        run: pnpm --filter native exec expo prebuild --platform ios --no-install
+
+      - name: Pod install
+        working-directory: apps/native/ios
+        run: pod install
+
+      - name: Compile for simulator (no signing)
+        working-directory: apps/native/ios
+        shell: bash
+        run: |
+          set -euo pipefail
+          # `expo prebuild` writes a lowercase `uoplan` scheme/workspace (the
+          # generated native identifiers track the lowercase expo.name).
+          xcodebuild build \
+            -workspace uoplan.xcworkspace \
+            -scheme uoplan \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            COMPILER_INDEX_STORE_ENABLE=NO
